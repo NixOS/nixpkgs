@@ -7,12 +7,13 @@ rec {
       , mobyRev, mobyHash
       , runcRev, runcHash
       , containerdRev, containerdHash
-      , tiniRev, tiniHash, buildxSupport ? true, composeSupport ? true
+      , tiniRev, tiniHash
+      , buildxSupport ? true, composeSupport ? true, sbomSupport ? false
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, docker-buildx, docker-compose
+      , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
@@ -159,7 +160,8 @@ rec {
     });
 
     plugins = lib.optional buildxSupport docker-buildx
-      ++ lib.optional composeSupport docker-compose;
+      ++ lib.optional composeSupport docker-compose
+      ++ lib.optional sbomSupport docker-sbom;
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
   buildGoPackage (lib.optionalAttrs (!clientOnly) {
@@ -273,7 +275,7 @@ rec {
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline vdemeester periklis maxeaubrey ];
+      maintainers = with maintainers; [ offline vdemeester periklis amaxine ];
       mainProgram = "docker";
     };
   });

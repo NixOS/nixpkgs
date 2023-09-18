@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-IEB9AFEt8U2zXYfbChfL/UH1rNSLPnfS396/cPE8UdE=";
   };
 
-  vendorSha256 = "sha256-w86/XCMRGBmXM+oQ5+0qiX0fdwiKXvsmEkApuRLUOiA=";
+  vendorHash = "sha256-w86/XCMRGBmXM+oQ5+0qiX0fdwiKXvsmEkApuRLUOiA=";
 
   subPackages = [ "cmd/temporalite" ];
 

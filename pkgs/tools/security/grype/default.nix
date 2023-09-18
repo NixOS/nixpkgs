@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.66.0";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-oZSXUwWucSyd2JYx0TkYfxgP6NZjjA2bhTrlOJSNh8c=";
+    hash = "sha256-im7dEKkWs63AUxLa659ceKremmubK7eM2rSskEEKiww=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-Ur68es1eXsIldXqZjBbtMoK2fjvTIZ+ae2cWaiNzfBg=";
+  vendorHash = "sha256-r/1UlU0DU5gSX1aW7Jdk7BR6+rt/4/88eYp5ycLI9Wk=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,18 +45,18 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/anchore/grype/internal/version.version=${version}"
-    "-X=github.com/anchore/grype/internal/version.gitDescription=v${version}"
-    "-X=github.com/anchore/grype/internal/version.gitTreeState=clean"
+    "-X=main.version=${version}"
+    "-X=main.gitDescription=v${version}"
+    "-X=main.gitTreeState=clean"
   ];
 
   preBuild = ''
     # grype version also displays the version of the syft library used
     # we need to grab it from the go.sum and add an ldflag for it
     SYFT_VERSION="$(grep "github.com/anchore/syft" go.sum -m 1 | awk '{print $2}')"
-    ldflags+=" -X github.com/anchore/grype/internal/version.syftVersion=$SYFT_VERSION"
-    ldflags+=" -X github.com/anchore/grype/internal/version.gitCommit=$(cat COMMIT)"
-    ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X main.syftVersion=$SYFT_VERSION"
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
   preCheck = ''

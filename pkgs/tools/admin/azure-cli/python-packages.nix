@@ -215,8 +215,10 @@ let
         propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
       });
 
-      azure-mgmt-maps = overrideAzureMgmtPackage super.azure-mgmt-maps "2.0.0" "zip"
-        "sha256-OE4X92potwCk+YhHiUXDqXIXEcBAByWv38tjz4ToXw4=";
+      azure-mgmt-maps = (overrideAzureMgmtPackage super.azure-mgmt-maps "2.0.0" "zip"
+        "sha256-OE4X92potwCk+YhHiUXDqXIXEcBAByWv38tjz4ToXw4=").overridePythonAttrs (attrs: {
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
+      });
 
       azure-mgmt-managedservices = overrideAzureMgmtPackage super.azure-mgmt-managedservices "1.0.0" "zip"
         "sha256-/tg5n8Z3Oq2jfB0ElqRvWUENd8lJTQyllnxTHDN2rRk=";
@@ -289,8 +291,8 @@ let
       azure-mgmt-containerregistry = overrideAzureMgmtPackage super.azure-mgmt-containerregistry "10.1.0" "zip"
         "sha256-VrX9YfYNvlA8+eNqHCp35BAeQZzQKakZs7ZZKwT8oYc=";
 
-      azure-mgmt-monitor = (overrideAzureMgmtPackage super.azure-mgmt-monitor "5.0.0" "zip"
-        "sha256-eL9KJowxTF7hZJQQQCNJZ7l+rKPFM8wP5vEigt3ZFGE=").overridePythonAttrs (attrs: {
+      azure-mgmt-monitor = (overrideAzureMgmtPackage super.azure-mgmt-monitor "6.0.2" "tar.gz"
+        "sha256-X/v1AOSZq3kSsbptJs7yZIDZrkEVMgGbt41yViGW4Hs=").overridePythonAttrs (attrs: {
         propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
       });
 

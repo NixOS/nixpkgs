@@ -32,7 +32,8 @@ Again, it's possible to launch the interpreter from the shell. The Ruby interpre
 
 #### Load Ruby environment from `.nix` expression {#load-ruby-environment-from-.nix-expression}
 
-As explained in the Nix manual, `nix-shell` can also load an expression from a `.nix` file. Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
+As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
+Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
 ```nix
 with import <nixpkgs> {};
@@ -118,6 +119,16 @@ One common issue that you might have is that you have Ruby 2.6, but also `bundle
 ```nix
 # ...
 mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
+```
+
+Sometimes a Gemfile references other files. Such as `.ruby-version` or vendored gems. When copying the Gemfile to the nix store we need to copy those files alongside. This can be done using `extraConfigPaths`. For example:
+
+```nix
+  gems = bundlerEnv {
+    name = "gems-for-some-project";
+    gemdir = ./.;
+    extraConfigPaths = [ "${./.}/.ruby-version" ];
+  };
 ```
 
 ### Gem-specific configurations and workarounds {#gem-specific-configurations-and-workarounds}

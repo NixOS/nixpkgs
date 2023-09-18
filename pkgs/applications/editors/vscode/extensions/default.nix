@@ -700,8 +700,8 @@ let
         mktplcRef = {
           name = "ruff";
           publisher = "charliermarsh";
-          version = "2023.34.0";
-          sha256 = "sha256-KOntjiE+n1yf9047XDldGg2pT+zknI/aEg6h71LwEB8=";
+          version = "2023.38.0";
+          sha256 = "sha256-Gcw+X8e8MrTflotHUwkrdP/DD/6AX/kEgtRiqvqyqRM=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -1224,8 +1224,8 @@ let
         mktplcRef = {
           name = "elixir-ls";
           publisher = "JakeBecker";
-          version = "0.15.2";
-          sha256 = "sha256-Zu/AcV0KY3QV0hyZsGrQdbc/Qc0pKNHVkHZVJ3PL0ps=";
+          version = "0.16.0";
+          sha256 = "sha256-PZUyOZ/U6OkGid+PYY2G/pAe5R5eumUibKNel9HBI+s=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/JakeBecker.elixir-ls/changelog";
@@ -3108,8 +3108,8 @@ let
         mktplcRef = {
           publisher = "shd101wyy";
           name = "markdown-preview-enhanced";
-          version = "0.6.8";
-          sha256 = "9NRaHgtyiZJ0ic6h1B01MWzYhDABAl3Jm2IUPogYWr0=";
+          version = "0.6.10";
+          sha256 = "sha256-nCsl7ZYwuTvNZSTUMR6jEywClmcPm8xW6ABu9220wJI=";
         };
         meta = {
           description = "Provides a live preview of markdown using either markdown-it or pandoc";
@@ -3253,8 +3253,8 @@ let
         mktplcRef = {
           name = "code-spell-checker";
           publisher = "streetsidesoftware";
-          version = "2.20.5";
-          sha256 = "sha256-IR/mwEmiSPN/ZRiazclRSOie9RAjdNM0zXexVzImOs8=";
+          version = "3.0.1";
+          sha256 = "sha256-KeYE6/yO2n3RHPjnJOnOyHsz4XW81y9AbkSC/I975kQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker/changelog";

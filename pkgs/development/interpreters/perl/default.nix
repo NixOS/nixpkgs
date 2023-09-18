@@ -69,13 +69,4 @@ in rec {
     sha256 = "sha256-IT71gInS8sly6jU1F9xg7DZW8FDcwCdmbhGLUIQj5Rc=";
     inherit passthruFun;
   };
-
-  # the latest Devel version
-  perldevel = callPackage ./intepreter.nix {
-    self = perldevel;
-    perlAttr = "perldevel";
-    version = "5.38.0";
-    sha256 = "sha256-IT71gInS8sly6jU1F9xg7DZW8FDcwCdmbhGLUIQj5Rc=";
-    inherit passthruFun;
-  };
 }

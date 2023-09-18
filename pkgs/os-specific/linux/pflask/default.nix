@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, waf }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "pflask";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ python3 waf.hook ];
+  nativeBuildInputs = [ python3 wafHook ];
 
   postInstall = ''
     mkdir -p $out/bin

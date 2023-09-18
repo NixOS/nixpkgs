@@ -10,7 +10,7 @@
 .Sh SYNOPSIS
 .Nm
 .Bro
-.Cm switch | boot | test | build | dry-build | dry-activate | edit | build-vm | build-vm-with-bootloader
+.Cm switch | boot | test | build | dry-build | dry-activate | edit | build-vm | build-vm-with-bootloader | list-generations Op Fl -json
 .Brc
 .br
 .Op Fl -upgrade | -upgrade-all
@@ -196,6 +196,14 @@ The boot loader is installed on an automatically generated virtual disk
 containing a
 .Pa /boot
 partition.
+.
+.It Cm list-generations Op Fl -json
+List the available generations in a similar manner to the boot loader
+menu. It shows the generation number, build date and time, NixOS version,
+kernel version and the configuration revision. This is useful to get
+information e.g. for which generation to roll back to with
+.Ic nixos-rebuild switch Fl -generation Ar N
+There is also a json version of output available.
 .El
 .
 .

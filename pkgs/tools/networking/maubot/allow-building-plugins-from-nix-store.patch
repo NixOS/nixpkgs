@@ -1,0 +1,13 @@
+diff --git a/maubot/cli/commands/build.py b/maubot/cli/commands/build.py
+index ec3ac26..4de85f2 100644
+--- a/maubot/cli/commands/build.py
++++ b/maubot/cli/commands/build.py
+@@ -84,7 +84,7 @@ def read_output_path(output: str, meta: PluginMeta) -> str | None:
+ 
+ 
+ def write_plugin(meta: PluginMeta, output: str | IO) -> None:
+-    with zipfile.ZipFile(output, "w") as zip:
++    with zipfile.ZipFile(output, "w", strict_timestamps=False) as zip:
+         meta_dump = BytesIO()
+         yaml.dump(meta.serialize(), meta_dump)
+         zip.writestr("maubot.yaml", meta_dump.getvalue())

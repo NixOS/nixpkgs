@@ -39,6 +39,14 @@ let
   };
 
   extraDisabledTests = {
+    mqtt = [
+      # Assert None is not None
+      "test_handle_logging_on_writing_the_entity_state"
+    ];
+    shell_command = [
+      # tries to retrieve file from github
+      "test_non_text_stdout_capture"
+    ];
     vesync = [
       # homeassistant.components.vesync:config_validation.py:863 The 'vesync' option has been removed, please remove it from your configuration
       "test_async_get_config_entry_diagnostics__single_humidifier"

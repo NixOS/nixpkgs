@@ -9,6 +9,7 @@
 , jansson
 , whereami
 , lua
+, lz4
 , Foundation
 , AppKit
 , withGui ? true, wrapQtAppsHook, qtbase
@@ -24,13 +25,13 @@
 assert withBlueshark -> stdenv.hostPlatform.isLinux;
 stdenv.mkDerivation rec {
   pname = "proxmark3";
-  version = "4.16717";
+  version = "4.17140";
 
   src = fetchFromGitHub {
     owner = "RfidResearchGroup";
     repo = "proxmark3";
     rev = "v${version}";
-    sha256 = "sha256-rkfVgT+9fqlWvUXzLH28Nzd8HldJnU+IZz8conY8Mis=";
+    hash = "sha256-l66syIpTM4P0733eJKEjnEYHvQlIc7KKxXLcc7XBnHE=";
   };
 
   patches = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
     bzip2
     openssl
     jansson
+    lz4
     whereami
     lua
   ] ++ lib.optional withGui qtbase

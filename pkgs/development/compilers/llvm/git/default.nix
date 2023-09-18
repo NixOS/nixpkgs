@@ -184,11 +184,28 @@ in let
       inherit llvm_meta;
     };
 
-    lldb = callPackage ./lldb {
+    lldb = callPackage ../common/lldb.nix {
+      src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/lldb "$out"
+      '') { };
+      patches =
+        let
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
+        in
+        [
+          ./lldb/procfs.patch # FIXME: do we need this?
+          resourceDirPatch
+          ./lldb/gnu-install-dirs.patch
+        ];
       inherit llvm_meta;
-      inherit (darwin) libobjc bootstrap_cmds;
-      inherit (darwin.apple_sdk.libs) xpc;
-      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -198,7 +215,7 @@ in let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;

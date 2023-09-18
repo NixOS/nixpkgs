@@ -19,7 +19,7 @@ buildGoModule rec {
     echo nixpkgs     > build/version/package.txt
   '';
 
-  vendorSha256 = "sha256-mzgj5VBggAqCFlLUcNE03B9jFHLKgfTzH6LI9wTe6Io=";
+  vendorHash = "sha256-mzgj5VBggAqCFlLUcNE03B9jFHLKgfTzH6LI9wTe6Io=";
 
   CGO_ENABLED = 0;
 

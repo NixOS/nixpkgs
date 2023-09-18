@@ -156,6 +156,7 @@ let
       description = "Software implementation of a telephone private branch exchange (PBX)";
       homepage = "https://www.asterisk.org/";
       license = licenses.gpl2Only;
+      mainProgram = "asterisk";
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };
   };

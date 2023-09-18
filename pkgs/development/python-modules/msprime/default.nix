@@ -10,7 +10,7 @@
 , newick
 , tskit
 , demes
-, pytest
+, pytestCheckHook
 , pytest-xdist
 , scipy
 }:
@@ -45,33 +45,29 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     pytest-xdist
     scipy
   ];
+  disabledTests = [
+    "tests/test_ancestry.py::TestSimulator::test_debug_logging"
+    "tests/test_ancestry.py::TestSimulator::test_debug_logging_dtw"
+  ];
+  disabledTestPaths = [
+    "tests/test_demography.py"
+    "tests/test_algorithms.py"
+    "tests/test_provenance.py"
+    "tests/test_dict_encoding.py"
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-
-    # avoid adding the current directory to sys.path
-    # https://docs.pytest.org/en/7.1.x/explanation/pythonpath.html#invoking-pytest-versus-python-m-pytest
-    # need pythonPackages.stdpopsim
-    # need pythonPackages.bintrees
-    # need pythonPachages.python_jsonschema_objects
-    # ModuleNotFoundError: No module named 'lwt_interface.dict_encoding_testlib'
-    # fails for python311
-    # fails for python311
-    pytest -v --import-mode append \
-      --ignore=tests/test_demography.py \
-      --ignore=tests/test_algorithms.py \
-      --ignore=tests/test_provenance.py \
-      --ignore=tests/test_dict_encoding.py \
-      --deselect=tests/test_ancestry.py::TestSimulator::test_debug_logging \
-      --deselect=tests/test_ancestry.py::TestSimulator::test_debug_logging_dtwf
-
-    runHook postCheck
+  # `python -m pytest` puts $PWD in sys.path, which causes the extension
+  # modules imported as `msprime._msprime` to be unavailable, failing the
+  # tests. This deletes the `msprime` folder such that only what's installed in
+  # $out is used for the imports. See also discussion at:
+  # https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    rm -r msprime
   '';
-
   pythonImportsCheck = [
     "msprime"
   ];

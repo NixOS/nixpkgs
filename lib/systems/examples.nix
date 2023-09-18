@@ -313,6 +313,11 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  ucrt64 = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
+  };
+
   # BSDs
 
   x86_64-freebsd = {

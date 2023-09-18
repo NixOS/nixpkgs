@@ -40,22 +40,18 @@ assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been renam
 assert lib.assertMsg (!hidpiXWayland) "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "unstable-2023-08-15";
+  version = "0.29.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
-    rev = "91e28bbe9df85e2e94fbcc0137106362aea14ab5";
-    hash = "sha256-1vLms49ZgDOC9y1uTjfph3WrUpatKRLnKAvFmSNre20=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-j9ypIwZkotNZMyk8R/W002OzDHd0C0OHSKE7uOFpf2k=";
   };
 
   patches = [
     # make meson use the provided dependencies instead of the git submodules
     "${finalAttrs.src}/nix/patches/meson-build.patch"
-    # look into $XDG_DESKTOP_PORTAL_DIR instead of /usr; runtime checks for conflicting portals
-    # NOTE: revert back to the patch inside SRC on the next version bump
-    # "${finalAttrs.src}/nix/patches/portals.patch"
-    ./portals.patch
   ];
 
   postPatch = ''

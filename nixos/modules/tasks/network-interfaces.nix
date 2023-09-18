@@ -1396,14 +1396,12 @@ in
     security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
       /run/wrappers/bin/ping {
         include <abstractions/base>
-        include <nixos/security.wrappers>
+        include <nixos/security.wrappers/ping>
         rpx /run/wrappers/wrappers.*/ping,
       }
       /run/wrappers/wrappers.*/ping {
         include <abstractions/base>
-        include <nixos/security.wrappers>
-        r /run/wrappers/wrappers.*/ping.real,
-        mrpx ${config.security.wrappers.ping.source},
+        include <nixos/security.wrappers/ping>
         capability net_raw,
         capability setpcap,
       }

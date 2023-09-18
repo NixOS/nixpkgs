@@ -3,10 +3,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "3dad580f2d4b40815c64da602e37d874bef03bdf50bd70ce63efb4005006cf19",
-      "url": "https://download.jetbrains.com/cpp/CLion-2023.2.1.tar.gz",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "941036313c618dcfc62cc36b605ce680a36add52a7e37ee9b1981e52e35e52a3",
+      "url": "https://download.jetbrains.com/cpp/CLion-2023.2.2.tar.gz",
+      "build_number": "232.9921.42"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -43,18 +43,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "2a11cd6d8f245e4afb99286255e50b7b84a55dbbfaba3bdb7c0f7027803a0e8d",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2023.2.1.tar.gz",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "cf647137394e27b3011072e463dc2e4bcdd54dc6ea9406e487a47648fc77bd26",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.2.2.tar.gz",
+      "build_number": "232.9921.47"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "8ac0a30e2a063f606e0fcfcd49ab59f9c851c3daed942134c81886bca35212d9",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2023.2.1.tar.gz",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "8a0dc4c495b8547fafa90eb81b6fdfc4a9fbbc7b5806d20ebb2f6538330cd3a5",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.2.2.tar.gz",
+      "build_number": "232.9921.47"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -118,10 +118,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "170ab58942894ff483419329501b000b69ce01895b36d8ed2b1b7587af25538d",
-      "url": "https://download.jetbrains.com/cpp/CLion-2023.2.1.dmg",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "a4049fd02a9ebe459634ceb47f389a6f8536fcdeb162587d6896991b94023c3f",
+      "url": "https://download.jetbrains.com/cpp/CLion-2023.2.2.dmg",
+      "build_number": "232.9921.42"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -158,18 +158,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "6c1eb5c4ef27c2cb16643befd11497b280ca782109748c9fa1a9badbd9a519ca",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2023.2.1.dmg",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "a59590af2bef95562f3b7a066016d22f347d59b71e136d3dd739d626f1594636",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.2.2.dmg",
+      "build_number": "232.9921.47"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "f9f27923136f89acb2401dd13d2d26b195ccc7506679117e11135d931935ef4d",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2023.2.1.dmg",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "f420cc60d925415a7059b3283176b4aafef3555c06746b9617cf50edef62fe69",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.2.2.dmg",
+      "build_number": "232.9921.47"
     },
     "mps": {
       "update-channel": "MPS RELEASE",
@@ -233,10 +233,10 @@
     "clion": {
       "update-channel": "CLion RELEASE",
       "url-template": "https://download.jetbrains.com/cpp/CLion-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "a90477becb838162cd4cb3df9975f4d763897de959b9da84b086b99343aeb858",
-      "url": "https://download.jetbrains.com/cpp/CLion-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "2820b59efbb028a861c3912b83a659fc22a136396a7199dd887f7dc28d6fba61",
+      "url": "https://download.jetbrains.com/cpp/CLion-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.42"
     },
     "datagrip": {
       "update-channel": "DataGrip RELEASE",
@@ -273,18 +273,18 @@
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIC-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "f168e3d751f3f638a38ab9f9d974ca721e21a23e52e928ef297fc7a5026a30c6",
-      "url": "https://download.jetbrains.com/idea/ideaIC-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "b3c126636d2096933672d1c1359fe32ad04d35057090363ad1812951f2ada7d9",
+      "url": "https://download.jetbrains.com/idea/ideaIC-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.47"
     },
     "idea-ultimate": {
       "update-channel": "IntelliJ IDEA RELEASE",
       "url-template": "https://download.jetbrains.com/idea/ideaIU-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "7f2f1113c1056fb7f6bfbe66f685b74b4e5546ad518820371ac6d50ead994cdf",
-      "url": "https://download.jetbrains.com/idea/ideaIU-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "b649cb8c82190ca8682bad9b37da93f10981d35850f501c196ad106edf96cd44",
+      "url": "https://download.jetbrains.com/idea/ideaIU-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.47"
     },
     "mps": {
       "update-channel": "MPS RELEASE",

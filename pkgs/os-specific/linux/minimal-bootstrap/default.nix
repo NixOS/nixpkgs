@@ -19,6 +19,7 @@ lib.makeScope
       bootBash = bash_2_05;
       gcc = gcc2;
       glibc = glibc22;
+      gawk = gawk-mes;
     };
 
     binutils = callPackage ./binutils {
@@ -27,11 +28,13 @@ lib.makeScope
       binutils = binutils-mes;
       glibc = glibc22;
       sed = heirloom.sed;
+      gawk = gawk-mes;
     };
     binutils-mes = callPackage ./binutils {
       bash = bash_2_05;
       tinycc = tinycc-mes;
       sed = heirloom.sed;
+      gawk = gawk-mes;
       mesBootstrap = true;
     };
 
@@ -46,18 +49,27 @@ lib.makeScope
       bash = bash_2_05;
       gcc = gcc2;
       glibc = glibc22;
+      gawk = gawk-mes;
     };
 
     findutils = callPackage ./findutils {
       bash = bash_2_05;
       gcc = gcc2;
       glibc = glibc22;
+      gawk = gawk-mes;
+    };
+
+    gawk-mes = callPackage ./gawk/mes.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+      gnused = gnused-mes;
     };
 
     gawk = callPackage ./gawk {
       bash = bash_2_05;
-      tinycc = tinycc-mes;
-      gnused = gnused-mes;
+      gcc = gcc2;
+      glibc = glibc22;
+      bootGawk = gawk-mes;
     };
 
     gcc2 = callPackage ./gcc/2.nix {
@@ -76,11 +88,13 @@ lib.makeScope
     gcc46 = callPackage ./gcc/4.6.nix {
       gcc = gcc2;
       glibc = glibc22;
+      gawk = gawk-mes;
     };
 
     inherit (callPackage ./glibc {
       bash = bash_2_05;
       gnused = gnused-mes;
+      gawk = gawk-mes;
     }) glibc22;
 
     gnugrep = callPackage ./gnugrep {
@@ -130,6 +144,11 @@ lib.makeScope
     mes = lib.recurseIntoAttrs (callPackage ./mes { });
     mes-libc = callPackage ./mes/libc.nix { };
 
+    musl = callPackage ./musl {
+      gcc = gcc46;
+      gawk = gawk-mes;
+    };
+
     stage0-posix = callPackage ./stage0-posix { };
 
     inherit (self.stage0-posix) kaem m2libc mescc-tools mescc-tools-extra;
@@ -140,6 +159,7 @@ lib.makeScope
     xz = callPackage ./xz {
       bash = bash_2_05;
       tinycc = tinycc-mes;
+      gawk = gawk-mes;
       inherit (heirloom) sed;
     };
 
@@ -153,6 +173,7 @@ lib.makeScope
       echo ${bzip2.tests.get-version}
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
+      echo ${gawk-mes.tests.get-version}
       echo ${gawk.tests.get-version}
       echo ${gcc2.tests.get-version}
       echo ${gcc2-mes.tests.get-version}
@@ -164,6 +185,7 @@ lib.makeScope
       echo ${gzip.tests.get-version}
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
+      echo ${musl.tests.hello-world}
       echo ${tinycc-mes.compiler.tests.chain}
       echo ${xz.tests.get-version}
       mkdir ''${out}

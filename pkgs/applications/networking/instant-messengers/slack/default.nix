@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.33.84";
-  x86_64-darwin-sha256 = "1qkcj0w5rqfdj8l7p7gv2ck0rgkm5sc8490f8mnbflgvjj9y0gsb";
+  x86_64-darwin-version = "4.34.115";
+  x86_64-darwin-sha256 = "1l2swrjxm47xyb8skwzy7clmr3qdckx9xs1x204jbrz1xk7yd7l5";
 
-  x86_64-linux-version = "4.33.84";
-  x86_64-linux-sha256 = "0cjl3m9gprxkm57889l1avkl21pyc7bzhcgm4j5yf938dp699zhd";
+  x86_64-linux-version = "4.34.115";
+  x86_64-linux-sha256 = "0gyyjyvrvn13i5308fg34z6b3yzr7vmmh1148a9xh79ngq2pqv47";
 
-  aarch64-darwin-version = "4.33.84";
-  aarch64-darwin-sha256 = "0aw4wn4xx304dyzz7v9lmdgwg1345lhizil8yq9cjqy5kas3zj34";
+  aarch64-darwin-version = "4.34.115";
+  aarch64-darwin-sha256 = "09qcz57yxjfw8sdqbvmkd25hs4c7frmpf6v94hr4d1szy1rfv11k";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -81,9 +81,10 @@ let
   meta = with lib; {
     description = "Desktop client for Slack";
     homepage = "https://slack.com";
+    changelog = "https://slack.com/release-notes";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut maxeaubrey ];
+    maintainers = with maintainers; [ mmahut amaxine ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
     mainProgram = "slack";
   };

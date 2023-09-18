@@ -248,6 +248,7 @@ in {
             # setup
             ${cfg.package}/createdb.sh
             ${cfg.package}/migrate.sh
+            ${cfg.package}/bin/plausible eval "(Plausible.Release.prepare() ; Plausible.Auth.create_user(\"$ADMIN_USER_NAME\", \"$ADMIN_USER_EMAIL\", \"$ADMIN_USER_PWD\"))"
             ${optionalString cfg.adminUser.activate ''
               if ! ${cfg.package}/init-admin.sh | grep 'already exists'; then
                 psql -d plausible <<< "UPDATE users SET email_verified=true;"

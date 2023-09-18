@@ -257,7 +257,8 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # PHP interpreter, packages, extensions, tests and documentation
 /doc/languages-frameworks/php.section.md          @aanderse @drupol @etu @globin @ma27 @talyz
 /nixos/tests/php                                  @aanderse @drupol @etu @globin @ma27 @talyz
-/pkgs/build-support/build-pecl.nix                @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @etu @globin @ma27 @talyz
+/pkgs/build-support/php                                     @drupol @etu
 /pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/development/php-packages                    @aanderse @drupol @etu @globin @ma27 @talyz
 /pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @etu @globin @ma27 @talyz
@@ -304,6 +305,10 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/misc/heisenbridge.nix              @piegamesde
 /nixos/modules/services/misc/matrix-conduit.nix            @piegamesde
 /nixos/tests/matrix-conduit.nix                            @piegamesde
+
+# Forgejo
+nixos/modules/services/misc/forgejo.nix      @bendlas @emilylange
+pkgs/applications/version-management/forgejo @bendlas @emilylange
 
 # Dotnet
 /pkgs/build-support/dotnet                  @IvarWithoutBones

@@ -57,6 +57,7 @@ mapAliases {
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
+  inherit (pkgs) clubhouse-cli; # added 2023-08-18
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
@@ -92,11 +93,16 @@ mapAliases {
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
+  inherit (pkgs) near-cli; # added 2023-09-09
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
+  parcel-bundler = parcel; # added 2023-09-04
+  prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
+  inherit (pkgs) quicktype; # added 2023-09-09
   inherit (pkgs) react-static; # added 2023-08-21
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
+  inherit (pkgs) redoc-cli; # added 2023-09-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
@@ -104,11 +110,18 @@ mapAliases {
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
   ssb-server = throw "ssb-server was removed because it was broken"; # added 2023-08-21
   stf = throw "stf was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) stylelint; # added 2023-09-13
+  surge = pkgs.surge-cli; # Added 2023-09-08
+  swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
+  inherit (pkgs) terser; # Added 2023-08-31
   thelounge = pkgs.thelounge; # Added 2023-05-22
+  three = throw "three was removed because it was no longer needed"; # Added 2023-09-08
   inherit (pkgs) titanium; # added 2023-08-17
   triton = pkgs.triton; # Added 2023-05-06
   typescript = pkgs.typescript; # Added 2023-06-21
   inherit (pkgs) ungit; # added 2023-08-20
+  inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
   vscode-langservers-extracted = pkgs.vscode-langservers-extracted; # Added 2023-05-27
   vue-cli = self."@vue/cli"; # added 2023-08-18
   vue-language-server = self.vls; # added 2023-08-20

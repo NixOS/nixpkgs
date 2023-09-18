@@ -9,13 +9,13 @@
 
 let
   pname = "photofield-ui";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "SmilyOrg";
     repo = "photofield";
     rev = "v${version}";
-    hash = "sha256-kcKnE4U+XWYfKw5nZSk+xCtYdagHBMZS3hvukEL8p4M=";
+    hash = "sha256-AqOhagqH0wRKjwcRHFVw0izC0DBv9uY3B5MMDBJoFVE=";
   };
 
   webui = buildNpmPackage {
@@ -37,7 +37,7 @@ buildGoModule rec {
   pname = "photofield";
   inherit version src;
 
-  vendorHash = "sha256-g6jRfPALBAgZVuljq/JiCpea7gZl/8akiabxjRmDsFs=";
+  vendorHash = "sha256-0rrBHkKZfStwzIv5Us/8Db6z3ZSqassCMWQMpScZq7Y=";
 
   preBuild = ''
     cp -r ${webui}/share/photofield-ui ui/dist

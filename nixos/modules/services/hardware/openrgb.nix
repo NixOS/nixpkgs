@@ -17,7 +17,14 @@ in {
 
     motherboard = mkOption {
       type = types.nullOr (types.enum [ "amd" "intel" ]);
-      default = null;
+      default = if config.hardware.cpu.intel.updateMicrocode then "intel"
+        else if config.hardware.cpu.amd.updateMicrocode then "amd"
+        else null;
+      defaultText = literalMD ''
+        if config.hardware.cpu.intel.updateMicrocode then "intel"
+        else if config.hardware.cpu.amd.updateMicrocode then "amd"
+        else null;
+      '';
       description = lib.mdDoc "CPU family of motherboard. Allows for addition motherboard i2c support.";
     };
 

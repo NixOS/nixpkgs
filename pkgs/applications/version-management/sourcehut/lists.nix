@@ -27,7 +27,7 @@ buildPythonPackage rec {
     inherit src version;
     pname = "listssrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
+    vendorHash = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   postPatch = ''

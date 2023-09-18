@@ -23064,12 +23064,12 @@ with self; {
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "9.4.0";
+    version = "9.7.0";
     src = fetchFromGitLab {
       owner = "libvirt";
       repo = "libvirt-perl";
       rev = "v${version}";
-      hash = "sha256-3ER6kcUfNM5ULhN/MlOil4Rx3O84fLnIvH+Cb/oXTFM=";
+      hash = "sha256-tXXB6Gj27oFZv9WD4dXWdY55jDDLrGYbud4qoyjNe5A=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
@@ -26614,6 +26614,11 @@ with self; {
       url = "mirror://cpan/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz";
       hash = "sha256-Mqpycaa9/twzMBGbOCXa3dCqS1yTb4StdOq7kyogCl4=";
     };
+    patches = [
+      # Fix failing configure test due to implicit int return value of main, which results
+      # in an error with clang 16.
+      ../development/perl-modules/tk-configure-implicit-int-fix.patch
+    ];
     makeMakerFlags = [ "X11INC=${pkgs.xorg.libX11.dev}/include" "X11LIB=${pkgs.xorg.libX11.out}/lib" ];
     buildInputs = [ pkgs.xorg.libX11 pkgs.libpng ];
     doCheck = false;            # Expects working X11.

@@ -32,15 +32,6 @@ in {
       the hiding of direnv logging
     '');
 
-    persistDerivations =
-      (lib.mkEnableOption (lib.mdDoc ''
-        setting keep-derivations and keep-outputs to true
-        to prevent shells from getting garbage collected
-      ''))
-      // {
-        default = true;
-      };
-
     loadInNixShell =
       lib.mkEnableOption (lib.mdDoc ''
         loading direnv in `nix-shell` `nix shell` or `nix develop`
@@ -61,6 +52,10 @@ in {
       package = lib.mkPackageOptionMD pkgs "nix-direnv" {};
     };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule ["programs" "direnv" "persistDerivations"] "persistDerivations was removed as it is on longer necessary")
+  ];
 
   config = lib.mkIf cfg.enable {
 
@@ -85,11 +80,6 @@ in {
          ${lib.getExe cfg.package} hook fish | source
         end
       '';
-    };
-
-    nix.settings = lib.mkIf cfg.persistDerivations {
-      keep-outputs = true;
-      keep-derivations = true;
     };
 
     environment = {

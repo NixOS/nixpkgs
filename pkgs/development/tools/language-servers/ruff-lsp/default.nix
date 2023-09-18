@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.38";
-  format = "pyproject";
+  version = "0.0.39";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "v${version}";
-    hash = "sha256-JWobbaXmIcd+c/EikiuUva5aHm3VDdeAQK60Krl6tVE=";
+    hash = "sha256-hbnSx59uSzXHeAhZPZnCzxl+mCZIdr29uUPfQCsm/Ww=";
   };
 
   postPatch = ''

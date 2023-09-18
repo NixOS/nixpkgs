@@ -20,7 +20,7 @@ buildGoModule rec {
     hash = "sha256-BdhbHAFqyQc8UbVm6eakbVmLS5QgXhr06oxoc6vYtsM=";
   };
 
-  vendorSha256 = "sha256-SNF46uUTRCaa9qeGCfkHBjyo4BWOlpRaTDq+Uha08y8=";
+  vendorHash = "sha256-SNF46uUTRCaa9qeGCfkHBjyo4BWOlpRaTDq+Uha08y8=";
 
   passthru.ui = stdenv.mkDerivation {
     pname = "alice-lg-ui";

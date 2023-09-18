@@ -134,6 +134,8 @@ buildPythonPackage rec {
     # AttributeError: 'str' object has no attribute 'decode'
     "test_read_dir_nometa"
   ] ++ [
+    # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
+    "test_concat_categorical"
     # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
     "test_dot"
     "test_dot_nan"

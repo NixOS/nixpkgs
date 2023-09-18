@@ -1,4 +1,4 @@
-{ python3, lib, overlay ? (_: _: {}) }:
+{ python3, fetchPypi, lib, overlay ? (_: _: {}) }:
 
 python3.override {
   packageOverrides = lib.composeExtensions
@@ -19,6 +19,16 @@ python3.override {
         [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
       */
       django = super.django_3;
+
+      # https://gitlab.com/mailman/hyperkitty/-/merge_requests/541
+      mistune = super.mistune.overridePythonAttrs (old: rec {
+        version = "2.0.5";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+        };
+      });
     })
 
     overlay;

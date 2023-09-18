@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-icon-theme";
-  version = "2021.11.24";
+  version = "2023.04.03";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-UC3PbqolcCbVrIEDqMovfJ4oeofMUGJag1A6u7X3Ml8=";
+    hash = "sha256-YRmpJr3tvBxomgb7yJPTqE3u4tXQKE5HHOP0CpjbQEg=";
   };
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Deepin Icon Theme provides the base icon themes on Deepin";
+    description = "Provides the base icon themes on deepin";
     homepage = "https://github.com/linuxdeepin/deepin-icon-theme";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

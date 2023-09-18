@@ -22,11 +22,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "23.08";
+  version = "23.08.1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "sha256-kersWWGytZmdVbpgezrWyjfb4jeG5dShk/CUb5hpiqA=";
+    sha256 = "sha256-Pongzgr+VMrp8nrpnR0QCarMWUBPPjTdoebvpWrSy6w=";
   };
 
   # when building on darwin we need dawin.cctools to provide the correct libtool
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
       tools/generate-wire.py \
       tools/update-mocks.sh \
       tools/mockup.sh \
-      devtools/sql-rewrite.py
+      devtools/sql-rewrite.py \
+      plugins/clnrest/clnrest.py
   '' else ''
     substituteInPlace external/libwally-core/tools/autogen.sh --replace gsed sed && \
     substituteInPlace external/libwally-core/configure.ac --replace gsed sed

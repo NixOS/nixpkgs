@@ -28,12 +28,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "23.02";
+  version = "23.07";
 
   src = fetchurl {
-    url =
-      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal-${version}+deps.tar.xz";
-    sha256 = "sha256-5vEWTkEXIMG/re7Ex+YKh+ETLDuc2nihTPpYSg5LdRo=";
+    url = "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
+    hash = "sha256-Ng2E6ML9lffmdGgn9piIF3ko4uvV/uLDb3d7ytrfcLU=";
   };
 
   prePatch = ''
@@ -51,6 +50,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     python3
   ];
+
   buildInputs = [
     dbus
     fftwFloat
@@ -74,6 +74,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/Cardinal \
+    --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
+
+    wrapProgram $out/bin/CardinalMini \
     --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
 
     # this doesn't work and is mainly just a test tool for the developers anyway.

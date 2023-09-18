@@ -224,6 +224,7 @@ rec {
               gtkSupport = false;
               sdlSupport = false;
               pulseSupport = false;
+              pipewireSupport = false;
               smbdSupport = false;
               seccompSupport = false;
               enableDocs = false;

@@ -9,20 +9,24 @@
 , curl
 , gtkmm3
 , libhandy
+, libopus
 , libsecret
+, libsodium
 , nlohmann_json
+, pcre2
+, spdlog
 , sqlite
 }:
 
 stdenv.mkDerivation rec {
   pname = "abaddon";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "uowuo";
     repo = "abaddon";
     rev = "v${version}";
-    hash = "sha256-84DrPx0e3pZjg87dHZO4y/z7KfIYNyAibE7/J7oYwXA=";
+    hash = "sha256-KrBZESYab7QFwUfpTl40cgKn/if31oqA9oCe0PwoYbs=";
     fetchSubmodules = true;
   };
 
@@ -37,8 +41,12 @@ stdenv.mkDerivation rec {
     curl
     gtkmm3
     libhandy
+    libopus
     libsecret
+    libsodium
     nlohmann_json
+    pcre2
+    spdlog
     sqlite
   ];
 

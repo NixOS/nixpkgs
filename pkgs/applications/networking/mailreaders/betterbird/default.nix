@@ -102,6 +102,7 @@ in ((buildMozillaMach {
   meta = with lib; {
     description = "Betterbird is a fine-tuned version of Mozilla Thunderbird, Thunderbird on steroids, if you will";
     homepage = "https://www.betterbird.eu/";
+    mainProgram = "betterbird";
     maintainers = with maintainers; [ SuperSandro2000 ];
     inherit (thunderbird-unwrapped.meta) platforms badPlatforms broken license;
   };

@@ -29,5 +29,7 @@ mkDerivation {
   homepage = "https://github.com/tibbe/ekg-core";
   description = "Tracking of system metrics";
   license = lib.licenses.bsd3;
+  hydraPlatforms = lib.platforms.none;
   maintainers = with lib.maintainers; [ lassulus ];
+  broken = true;
 }

@@ -6,7 +6,7 @@
 , pipewire
 , libpulseaudio
 , xdg-utils
-, electron_26
+, electron_25
 , makeDesktopItem
 , nix-update-script
 }:
@@ -56,7 +56,7 @@ buildNpmPackage rec {
     install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
     # Add xdg-utils to path via suffix, per PR #181171
-    makeWrapper '${electron_26}/bin/electron' $out/bin/webcord \
+    makeWrapper '${electron_25}/bin/electron' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
