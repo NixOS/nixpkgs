@@ -15,7 +15,7 @@
 
 buildGoModule rec {
   pname = "coder";
-  version = "2.1.5";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = pname;
