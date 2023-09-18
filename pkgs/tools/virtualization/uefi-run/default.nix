@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     description = "Directly run UEFI applications in qemu";
     homepage = "https://github.com/Richard-W/uefi-run";
     license = licenses.mit;
-    maintainers = [ maintainers.maddiethecafebabe ];
+    maintainers = with maintainers; [ ];
   };
 }
