@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
-  version = "1.1.rc";
+  version = "1.1.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
-    sha256 = "ZuXaMjAoVI/8kNeizipMJlkHHy+0dQyVksq+G7qSVgg=";
+    sha256 = "sw7GDrlQEMXSyTz6vMVqqUOIEZ34fe2cR3HER/4RDoY=";
   };
 
   nativeBuildInputs = [
