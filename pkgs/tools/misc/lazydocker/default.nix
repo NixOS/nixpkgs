@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, lazydocker, testers }:
 
 buildGoModule rec {
   pname = "lazydocker";
@@ -20,6 +20,10 @@ buildGoModule rec {
   excludedPackages = [ "scripts" "test/printrandom" ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = lazydocker;
+  };
 
   meta = with lib; {
     description = "A simple terminal UI for both docker and docker-compose";
