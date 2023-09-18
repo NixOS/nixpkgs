@@ -80,6 +80,11 @@ let
       "-Dprotobuf_ABSL_PROVIDER=package"
     ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
       "-Dprotobuf_BUILD_SHARED_LIBS=ON"
+    ] ++ lib.optionals (stdenv.isDarwin) [
+      # on darwin stdenv.cc is clang which defaults to 11.0 which
+      # uses c++11 by default
+      # protobuf's minimum c++ version should be 14
+      "-DCMAKE_CXX_STANDARD=14"
     ]
     # Tests fail to build on 32-bit platforms; fixed in 3.22
     # https://github.com/protocolbuffers/protobuf/issues/10418
