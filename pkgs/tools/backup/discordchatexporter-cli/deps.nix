@@ -6,6 +6,7 @@
   (fetchNuGet { pname = "AngleSharp"; version = "1.0.4"; sha256 = "1b4qd0z27fdkgy5l8fqcbpzwm29gmmjm2h0mqb9ac94rv6ynq510"; })
   (fetchNuGet { pname = "AsyncKeyedLock"; version = "6.2.1"; sha256 = "0281mj9ppz6q454li6xyllb1hdfkl59bh3psbj4z6l9xjbhnjhz0"; })
   (fetchNuGet { pname = "CliFx"; version = "2.3.4"; sha256 = "14nj8w3j0hbsr5cghj39jx2sh5cg3wsvl517dk8whva5kgy3q1mf"; })
+  (fetchNuGet { pname = "CSharpier.MsBuild"; version = "0.25.0"; sha256 = "0xpdb2mss9zhdpks9ajm2h611khhw69xjwxv1k6qf7qrbkb0rgr3"; })
   (fetchNuGet { pname = "Deorcify"; version = "1.0.2"; sha256 = "0nwxyrl4rd5x621i2hs5fl3w7fxpm13lkdssxr9fd5042px2gqbm"; })
   (fetchNuGet { pname = "DotnetRuntimeBootstrapper"; version = "2.5.1"; sha256 = "192795akjmdxvp8p52g256rg0nzriipfsr8j808h69j6himhp4d7"; })
   (fetchNuGet { pname = "Gress"; version = "2.1.1"; sha256 = "1svz1flhyl26h3xjch0acjjinympgf6bhj5vpb188njfih3ip4ck"; })
