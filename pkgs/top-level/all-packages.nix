@@ -9875,8 +9875,6 @@ with pkgs;
 
   leocad = libsForQt5.callPackage ../applications/graphics/leocad { };
 
-  less = callPackage ../tools/misc/less { };
-
   lha = callPackage ../tools/archivers/lha { };
 
   lhasa = callPackage ../tools/compression/lhasa { };
