@@ -21,6 +21,7 @@
 , libpanel
 , libpeas2
 , libportal-gtk4
+, libsysprof-capture
 , libxml2
 , meson
 , ninja
@@ -41,13 +42,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "45.rc";
+  version = "45.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "6HaJEW8IUwua3FyVV929ID7T0u0IJPfTbMtketnv5hw=";
+    sha256 = "JC2gJZMpPUVuokEIpFk0cwoeMW2NxbGNnfDoZNt7pZY=";
   };
 
   patches = [
@@ -94,12 +95,12 @@ stdenv.mkDerivation rec {
     libadwaita
     libdex
     libpanel
+    libsysprof-capture
     libxml2
     ostree
     d-spy
     pcre2
     python3
-    sysprof
     template-glib
     vala
     webkitgtk_6_0
@@ -142,6 +143,8 @@ stdenv.mkDerivation rec {
     buildPythonPath "$out $pythonPath"
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "$program_PYTHONPATH"
+      # For sysprof-agent
+      --prefix PATH : "${sysprof}/bin"
     )
 
     # Ensure that all plugins get their interpreter paths fixed up.
