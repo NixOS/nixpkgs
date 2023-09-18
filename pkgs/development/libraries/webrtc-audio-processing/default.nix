@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
+  # Unconditionally uses SSE intrinsics on i686:
+  #   https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2";
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
@@ -36,8 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/blob/master/webrtc/rtc_base/system/arch.h
     platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.mips ++ platforms.riscv ++ platforms.x86);
-    # attempts to inline 256bit AVX instructions on x86
-    # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
-    broken = stdenv.isx86_32;
   };
 }
