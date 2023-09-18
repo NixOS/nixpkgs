@@ -97,6 +97,7 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = [ maintainers.imalison ];
+    knownVulnerabilities = [ "CVE-2023-4863" ];
     platforms = [ "x86_64-linux" ];
   };
 }
