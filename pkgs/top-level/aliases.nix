@@ -1261,6 +1261,7 @@ mapAliases ({
   openbazaar = throw "openbazzar has been removed from nixpkgs as upstream has abandoned the project"; # Added 2022-01-06
   openbazaar-client = throw "openbazzar-client has been removed from nixpkgs as upstream has abandoned the project"; # Added 2022-01-06
   opencascade_oce = throw "'opencascade_oce' has been renamed to/replaced by 'opencascade'"; # Converted to throw 2022-02-22
+  opencascade = throw "'opencascade' has been removed as it is unmaintained; consider opencascade-occt instead'"; # Added 2023-09-18
   opencl-icd = throw "'opencl-icd' has been renamed to/replaced by 'ocl-icd'"; # Converted to throw 2022-02-22
   openconnect_head = openconnect_unstable; # Added 2022-03-29
   openconnect_gnutls = openconnect; # Added 2022-03-29

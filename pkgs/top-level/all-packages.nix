@@ -24457,9 +24457,6 @@ with pkgs;
     python = python3;
   };
 
-  opencascade = callPackage ../development/libraries/opencascade {
-    inherit (darwin.apple_sdk.frameworks) OpenCL Cocoa;
-  };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
