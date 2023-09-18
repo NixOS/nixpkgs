@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "45.rc";
+  version = "45.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-tZuecjh5Av5l0njvRPHUIJXOP522j7GY9AIpjgTVpYA=";
+    sha256 = "sha256-Bcssmma6FYcPRzWM1MHOZw8X5MiyLgUNYn1yj/iLV7o=";
   };
 
   patches = [
