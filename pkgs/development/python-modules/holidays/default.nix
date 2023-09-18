@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.31";
+  version = "0.32";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
