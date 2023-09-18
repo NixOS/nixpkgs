@@ -4122,6 +4122,8 @@ self: super: with self; {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
+  fschat = callPackage ../development/python-modules/fschat { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   fst-pso = callPackage ../development/python-modules/fst-pso { };
@@ -11893,6 +11895,8 @@ self: super: with self; {
   simple-rlp = callPackage ../development/python-modules/simple-rlp { };
 
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
+
+  simple-websocket = callPackage ../development/python-modules/simple-websocket { };
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
 

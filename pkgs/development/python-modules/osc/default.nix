@@ -1,16 +1,23 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, bashInteractive
-, rpm, urllib3, cryptography, diffstat
+{ stdenv
+, bashInteractive
+, buildPythonPackage
+, cryptography
+, diffstat
+, fetchFromGitHub
+, lib
+, rpm
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    sha256 = "sha256-gHcPqo3AuSrVprYUGLenC0kw9hKNmjabZ1m6YVMsNPs=";
+    sha256 = "sha256-pywSXGM3IX3cTr1uJIP7pNGIYE/skMIoJeoaMU75zwc=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper

@@ -22,6 +22,7 @@
 , libsndfile
 , vulkan-headers
 , vulkan-loader
+, webrtc-audio-processing
 , webrtc-audio-processing_1
 , ncurses
 , readline # meson can't find <7 as those versions don't have a .pc file
@@ -115,6 +116,12 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
+
+      # backport fix for building with webrtc-audio-processing 0.3 on platforms where we don't have 1.x
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1f1c308c9766312e684f0b53fc2d1422c7414d31.patch";
+        hash = "sha256-ECM7/84G99yzXsg5A2DkFnXFGJSV9lz3vD0IRSzR8vU=";
+      })
     ];
 
     strictDeps = true;
@@ -142,9 +149,9 @@ let
       udev
       vulkan-headers
       vulkan-loader
-      webrtc-audio-processing_1
       tinycompress
     ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
     ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
