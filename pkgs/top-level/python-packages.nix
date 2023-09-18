@@ -4122,6 +4122,8 @@ self: super: with self; {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
+  fschat = callPackage ../development/python-modules/fschat { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   fst-pso = callPackage ../development/python-modules/fst-pso { };
