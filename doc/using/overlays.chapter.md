@@ -2,11 +2,14 @@
 
 This chapter describes how to extend and change Nixpkgs using overlays.  Overlays are used to add layers in the fixed-point used by Nixpkgs to compose the set of all packages.
 
-## Applying overlays
+## Applying overlays {#sec-overlays-applying}
 
-There are various ways of applying overlays.
+In order to define overlays, you need to know where to put them so they get applied.
+See [here](#sec-overlays-definition) for how to define overlays.
 
-### Applying overlays when importing Nixpkgs
+There are various ways of applying overlays, but by default none are applied.
+
+### Applying overlays when importing Nixpkgs {#sec-overlays-applying-nixpkgs}
 
 When importing Nixpkgs, a list of overlays can be specified using the `overlays` attribute in the argument:
 ```nix
@@ -19,40 +22,75 @@ pkgs = import <nixpkgs> {
 ```
 
 If the `overlays` argument is not passed, these defaults are used:
-- If the Nix path entry `<nixpkgs-overlays>` exists, we look for overlays at that path, as described below.
 
-    See the section on `NIX_PATH` in the Nix manual for more details on how to set a value for `<nixpkgs-overlays>.`
-- If one of `~/.config/nixpkgs/overlays.nix` and `~/.config/nixpkgs/overlays/` exists, then we look for overlays at that path, as described below. It is an error if both exist.
+- If the [path expression](https://nixos.org/manual/nix/stable/language/values#type-path) `<nixpkgs-overlays>` points to an existing path, we look for overlays there, as described in [the below section](#sec-overlays-applying-nixpkgs-paths).
 
-#### How paths get turned into overlays
+  Where such path expressions point is defined with the [`NIX_PATH`](https://nixos.org/manual/nix/stable/command-ref/env-common.html#env-NIX_PATH) environment variable.
+
+  On a NixOS system, this variable can be set using the [`nix.nixPath` option](https://search.nixos.org/options?query=nix.nixPath).
+  On non-NixOS systems, see [here](https://wiki.archlinux.org/title/Environment_variables) for how to set environment variables.
+
+- If either `~/.config/nixpkgs/overlays.nix` or `~/.config/nixpkgs/overlays/` exist, then we look for overlays at that path, as described in [the below section](#sec-overlays-applying-nixpkgs-paths).
+  It is an error if both exist.
+
+#### How paths get turned into overlays {#sec-overlays-applying-nixpkgs-paths}
+
 - If the path is a file, then the file is imported as a Nix expression and used as the list of overlays.
+  Here is an example:
+  ```nix
+  # overlays.nix
+  [
+    # first overlay
+    (final: prev: { ... })
 
-- If the path is a directory, then we take the content of the directory, order it lexicographically, and attempt to interpret each as an overlay by:
+    # second overlay
+    (final: prev: { ... })
+  ]
+  ```
+
+- If the path is a directory, then we take the entries of the directory, order them alphabetically, and attempt to interpret each as an overlay by:
 
   - Importing the file, if it is a `.nix` file.
 
   - Importing a top-level `default.nix` file, if it is a directory.
 
+  Here's an example of a suitable directory structure:
+  ```
+  overlays
+  ├── 50-firstOverlay.nix
+  └── 60-secondOverlay
+     └── default.nix
+  ```
+
 ### Applying further overlays on top of an imported Nixpkgs
 
-If you already have an imported Nixpkgs, you can apply further overlays on top using:
+If you already have an imported Nixpkgs (often in a variable called `pkgs`),
+you can apply a list of overlays on top using `pkgs.appendOverlays`:
+
 ```nix
-pkgs.appendOverlays [
+pkgsModified = pkgs.appendOverlays [
   firstAdditionalOverlay
   secondAdditionalOverlay
 ]
 ```
 
-Or for just a single overlay:
+Or just a single overlay using `pkgs.extend`:
 ```nix
-pkgs.extend additionalOverlay
+pkgsModified = pkgs.extend additionalOverlay
 ```
 
+Both the overlays of original `pkgs` and the new ones will be applied, in this order.
+
 :::{.warning}
-These functions recompute the Nixpkgs fixpoint, which is somewhat expensive to do.
+The `pkgsModified` result cannot re-use any values already computed for the `pkgs` values,
+so these functions may be expensive.
+
+This should not be used in Nixpkgs.
 :::
 
 ### Setting overlays for a NixOS configuration
+
+NixOS evaluations do not use
 
 (link to nixpkgs.overlays option in the NixOS manual)
 
