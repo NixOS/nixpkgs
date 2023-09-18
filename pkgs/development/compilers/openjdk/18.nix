@@ -109,6 +109,12 @@ let
 
     buildFlags = [ "images" ];
 
+    postBuild = ''
+      cd build/linux*
+      make images
+      cd -
+    '';
+
     installPhase = ''
       mkdir -p $out/lib
 
