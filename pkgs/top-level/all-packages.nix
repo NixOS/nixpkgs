@@ -3831,8 +3831,6 @@ with pkgs;
 
   gistyc = with python3Packages; toPythonApplication gistyc;
 
-  gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
-
   gjs = callPackage ../development/libraries/gjs { };
 
   gjo = callPackage ../tools/text/gjo { };
