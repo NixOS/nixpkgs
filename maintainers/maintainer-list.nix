@@ -14457,6 +14457,12 @@
     githubId = 816465;
     name = "Redvers Davies";
   };
+  redxtech = {
+    email = "gabe@gabedunn.dev";
+    github = "redxtech";
+    githubId = 18155001;
+    name = "Gabe Dunn";
+  };
   reedrw = {
     email = "reedrw5601@gmail.com";
     github = "reedrw";
