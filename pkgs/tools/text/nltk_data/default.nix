@@ -48,4 +48,9 @@ lib.makeScope newScope (self: {
     location = "taggers";
     hash = "sha256-ilTs4HWPUoHxQb4kWEy3wJ6QsE/98+EQya44gtV2inw=";
   });
+  stopwords = makeNltkDataPackage ({
+    pname = "stopwords";
+    location = "corpora";
+    hash = "sha256-Rj1jnt6IDEmBbSIHHueyEvPmdE4EZ6/bJ3qehniebbk=";
+  });
 })
