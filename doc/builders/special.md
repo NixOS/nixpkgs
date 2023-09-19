@@ -6,6 +6,7 @@ This chapter describes several special builders.
 special/fhs-environments.section.md
 special/makesetuphook.section.md
 special/mkshell.section.md
+special/runinmkshell.section.md
 special/darwin-builder.section.md
 special/vm-tools.section.md
 ```

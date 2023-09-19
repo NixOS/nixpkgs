@@ -1306,6 +1306,12 @@ with pkgs;
   mkBinaryCache = callPackage ../build-support/binary-cache { };
 
   mkShell = callPackage ../build-support/mkshell { };
+
+  runInMkShell = (callPackage ../build-support/runinmkshell { })
+    // {
+      tests = pkgs.tests.runInMkShell;
+    };
+
   mkShellNoCC = mkShell.override { stdenv = stdenvNoCC; };
 
   mokutil = callPackage ../tools/security/mokutil { };
