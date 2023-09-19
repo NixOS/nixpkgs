@@ -21687,6 +21687,8 @@ with pkgs;
 
   skaffold = callPackage ../development/tools/skaffold { };
 
+  skia = callPackage ../development/libraries/skia { };
+
   skjold = callPackage ../development/tools/skjold { };
 
   skalibs = skawarePackages.skalibs;
