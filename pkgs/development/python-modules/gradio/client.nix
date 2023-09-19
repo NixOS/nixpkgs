@@ -41,7 +41,7 @@ in
 
 buildPythonPackage rec {
   pname = "gradio_client";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -51,9 +51,9 @@ buildPythonPackage rec {
     owner = "gradio-app";
     repo = "gradio";
     #rev = "refs/tags/v${gradio.version}";
-    rev = "ba4c6d9e65138c97062d1757d2a588c4fc449daa"; # v3.43.1 is not tagged...
+    rev = "51a0a2e5578329d77c507725feb2c9c30b59deb7"; # v3.44.4 is not tagged...
     sparseCheckout = [ "client/python" ];
-    hash = "sha256-savka4opyZKSWPeBqc2LZqvwVXLYIZz5dS1OWJSwvHo=";
+    hash = "sha256-lCr2kL20IeyoHMYg5iJh2HnrSDOFJmJRAVvXUA++aQw=";
   };
   prePatch = ''
     cd client/python
