@@ -42,8 +42,8 @@ lib.makeScope
 
     findutils = callPackage ./findutils {
       bash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
+      tinycc = tinycc-musl;
+      musl = musl11;
     };
 
     gawk-mes = callPackage ./gawk/mes.nix {
