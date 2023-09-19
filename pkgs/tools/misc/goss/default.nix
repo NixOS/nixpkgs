@@ -1,8 +1,14 @@
-{ buildGoModule
+{ bash
+, buildGoModule
 , fetchFromGitHub
+, getent
 , goss
-, nix-update-script
 , lib
+, makeWrapper
+, nix-update-script
+, nixosTests
+, stdenv
+, systemd
 , testers
 }:
 
@@ -26,11 +32,21 @@ buildGoModule rec {
     "-s" "-w" "-X main.version=v${version}"
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   checkFlags = [
     # Prometheus tests are skipped upstream
     # See https://github.com/goss-org/goss/blob/master/ci/go-test.sh
     "-skip" "^TestPrometheus"
   ];
+
+  postInstall = let
+    runtimeDependencies = [ bash getent ]
+      ++ lib.optionals stdenv.isLinux [ systemd ];
+  in ''
+    wrapProgram $out/bin/goss \
+      --prefix PATH : "${lib.makeBinPath runtimeDependencies}"
+  '';
 
   passthru = {
     tests.version = testers.testVersion {
