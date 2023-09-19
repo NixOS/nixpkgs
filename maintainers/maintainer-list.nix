@@ -11591,6 +11591,13 @@
     githubId = 1001112;
     name = "Marcin Janczyk";
   };
+  mjm = {
+    email = "matt@mattmoriarity.com";
+    github = "mjm";
+    githubId = 1181;
+    matrix = "@mjm:beeper.com";
+    name = "Matt Moriarity";
+  };
   mjp = {
     email = "mike@mythik.co.uk";
     github = "MikePlayle";
