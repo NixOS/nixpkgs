@@ -1,21 +1,27 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "podcastparser";
-  version = "0.6.5";
+  version = "0.6.10";
 
   src = fetchFromGitHub {
     owner = "gpodder";
     repo = "podcastparser";
-    rev = version;
-    sha256 = "1s83iq0mxcikxv6gi003iyavl1ai3siw1d7arijh0g28l0fff23a";
+    rev = "refs/tags/${version}";
+    hash = "sha256-P9wVyxTO0nz/DfuBhCE+VjhH1uYx4jBd30Ca26yBzbo=";
   };
 
-  nativeCheckInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests test_*.py
+  postPatch = ''
+    rm pytest.ini
   '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "podcastparser is a simple, fast and efficient podcast parser written in Python.";
