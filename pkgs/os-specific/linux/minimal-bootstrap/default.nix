@@ -149,8 +149,8 @@ lib.makeScope
 
     xz = callPackage ./xz {
       bash = bash_2_05;
-      tinycc = tinycc-mes;
-      inherit (heirloom) sed;
+      tinycc = tinycc-musl;
+      musl = musl11;
     };
 
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
