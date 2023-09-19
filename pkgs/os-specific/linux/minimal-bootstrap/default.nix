@@ -19,14 +19,12 @@ lib.makeScope
       bootBash = bash_2_05;
       gcc = gcc2;
       glibc = glibc22;
-      gawk = gawk-mes;
     };
 
     binutils = callPackage ./binutils {
       bash = bash_2_05;
       tinycc = tinycc-musl;
       musl = musl11;
-      gawk = gawk-mes;
     };
 
     bzip2 = callPackage ./bzip2 {
@@ -40,14 +38,12 @@ lib.makeScope
       bash = bash_2_05;
       tinycc = tinycc-musl;
       musl = musl11;
-      gawk = gawk-mes;
     };
 
     findutils = callPackage ./findutils {
       bash = bash_2_05;
       gcc = gcc2;
       glibc = glibc22;
-      gawk = gawk-mes;
     };
 
     gawk-mes = callPackage ./gawk/mes.nix {
@@ -58,8 +54,8 @@ lib.makeScope
 
     gawk = callPackage ./gawk {
       bash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
+      tinycc = tinycc-musl;
+      musl = musl11;
       bootGawk = gawk-mes;
     };
 
@@ -77,13 +73,11 @@ lib.makeScope
     gcc46 = callPackage ./gcc/4.6.nix {
       gcc = gcc2;
       glibc = glibc22;
-      gawk = gawk-mes;
     };
 
     inherit (callPackage ./glibc {
       bash = bash_2_05;
       gnused = gnused-mes;
-      gawk = gawk-mes;
     }) glibc22;
 
     gnugrep = callPackage ./gnugrep {
@@ -156,7 +150,6 @@ lib.makeScope
     xz = callPackage ./xz {
       bash = bash_2_05;
       tinycc = tinycc-mes;
-      gawk = gawk-mes;
       inherit (heirloom) sed;
     };
 
