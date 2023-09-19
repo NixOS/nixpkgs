@@ -7518,7 +7518,12 @@ self: super: with self; {
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
   onnx = callPackage ../development/python-modules/onnx {
-    protobuf = protobuf3;
+    # in linux c++ defaults to 17
+    # on darwin clang is on an old version so c++ defaults to 11
+    abseil-cpp = if stdenv.isLinux then
+        pkgs.abseil-cpp_202301
+      else
+        pkgs.abseil-cpp_202301.override { cxxStandard = "17"; };
   };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
@@ -8499,6 +8504,8 @@ self: super: with self; {
   plyvel = callPackage ../development/python-modules/plyvel { };
 
   pmw = callPackage ../development/python-modules/pmw { };
+
+  pmdarima = callPackage ../development/python-modules/pmdarima { };
 
   pmdsky-debug-py = callPackage ../development/python-modules/pmdsky-debug-py { };
 

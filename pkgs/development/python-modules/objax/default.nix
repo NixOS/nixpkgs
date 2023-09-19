@@ -1,5 +1,5 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , jax
 , jaxlib
@@ -14,17 +14,11 @@ buildPythonPackage rec {
   pname = "objax";
   version = "1.7.0";
 
-  # The latest release (1.7.0) has not been tagged on GitHub. Thus, we fallback to fetchPypi.
-  # An issue has been opened upstream: https://github.com/google/objax/issues/263
-  # src = fetchFromGitHub {
-  #   owner = "google";
-  #   repo = "objax";
-  #   rev = "v${version}";
-  #   hash = "";
-  # };
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-92Z5RxYoWkMAqyF7H/MagPnC4pfXks5k9zmjvo+Z2Mc=";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "objax";
+    rev = "v${version}";
+    hash = "sha256-1/XmxFZfU+XMD0Mlcv4xTUYZDwltAx1bZOlPuKWQQC0=";
   };
 
   # Avoid propagating the dependency on `jaxlib`, see

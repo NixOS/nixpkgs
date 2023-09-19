@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fx";
-  version = "24.1.0";
+  version = "30.0.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = pname;
     rev = version;
-    hash = "sha256-X6wuCAiQa1coHMz96aAXKGZFnius1vHJpk+EhbXqoMA=";
+    hash = "sha256-MRWDitL9nATi6+oaOJ/A+iaNLztWBZ+Mrs7Hkt0lhL8=";
   };
 
-  vendorHash = "sha256-J19MhLvjxcxvcub888UFKI0iIf7OG3dmP5v40ElHCU4=";
+  vendorHash = "sha256-cIyh/FC1lcUgPeUZKrh+kCZmSKGE7Bo411eI0dZeMx4=";
 
   meta = with lib; {
     description = "Terminal JSON viewer";
