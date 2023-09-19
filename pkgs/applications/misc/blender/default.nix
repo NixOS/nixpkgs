@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional cudaSupport cudaPackages.cudatoolkit
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional spaceNavSupport libspnav;
-  pythonPath = with python310Packages; [ numpy requests ];
+  pythonPath = with python310Packages; [ numpy requests zstandard ];
 
   postPatch = ''
     # allow usage of dynamically linked embree
