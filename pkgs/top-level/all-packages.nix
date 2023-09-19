@@ -18541,6 +18541,8 @@ with pkgs;
 
   teller = callPackage ../development/tools/teller { };
 
+  yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
+
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
   ansible-language-server = callPackage ../development/tools/language-servers/ansible-language-server { };
