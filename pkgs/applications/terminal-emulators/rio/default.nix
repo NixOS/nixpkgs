@@ -78,6 +78,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    install -D -m 644 misc/rio.desktop -t $out/share/applications
+    install -D -m 644 rio/src/screen/window/resources/images/logo.png \
+                      $out/share/icons/hicolor/scalable/apps/rio.png
+
     install -dm 755 "$terminfo/share/terminfo/r/"
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
