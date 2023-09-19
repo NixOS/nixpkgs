@@ -19,5 +19,8 @@
         # For screen sharing
         pkgs.xdg-desktop-portal-wlr
       ];
+
+      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
+      config.default = mkDefault [ "wlr" "gtk" ];
     };
 }
