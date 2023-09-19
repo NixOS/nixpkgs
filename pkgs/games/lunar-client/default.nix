@@ -5,11 +5,11 @@
 
 let
   pname = "lunar-client";
-  version = "3.0.7";
+  version = "3.0.10";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha256-JpgKxCFXO+oK9D7gpk6AfiZLWzgFlijVWKhvfkBrJwY=";
+    hash = "sha256-mbEV+iciL4+PtfvStyXZXK5Zb91N9H1VJ5amZj+2EyA=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };

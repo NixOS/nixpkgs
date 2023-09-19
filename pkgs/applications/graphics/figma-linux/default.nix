@@ -8,12 +8,12 @@
 , ...
 }:
 with lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
   version = "0.10.0";
 
   src = fetchurl {
-    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${version}/figma-linux_${version}_linux_amd64.deb";
+    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
     sha256 = "sha256-+xiXEwSSxpt1/Eu9g57/L+Il/Av+a/mgGBQl/4LKR74=";
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/share/applications/figma-linux.desktop \
-          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${pname}"
+          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${finalAttrs.pname}"
   '';
 
   meta = {
@@ -73,6 +73,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ercao ];
+    maintainers = with maintainers; [ ercao kashw2 ];
   };
-}
+})

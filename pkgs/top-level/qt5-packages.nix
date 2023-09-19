@@ -207,7 +207,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
+    inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreFoundation Security;
   };
 
   qtmpris = callPackage ../development/libraries/qtmpris { };

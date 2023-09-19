@@ -26,7 +26,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=v${version}"
+    "-X=github.com/aquasecurity/trivy/pkg/version.ver=v${version}"
   ];
 
   # Tests require network access
@@ -37,7 +37,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = trivy;
     command = "trivy --version";
-    version = "v${version}";
+    version = "Version: v${version}";
   };
 
   meta = with lib; {

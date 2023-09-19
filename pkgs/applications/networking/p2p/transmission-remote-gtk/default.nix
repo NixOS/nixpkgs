@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libmrss
     libproxy
     libsoup_3
-  ];
+  ] ++ libsoup_3.propagatedUserEnvPackages;
 
   doCheck = false; # Requires network access
 

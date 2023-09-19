@@ -3831,8 +3831,6 @@ with pkgs;
 
   gistyc = with python3Packages; toPythonApplication gistyc;
 
-  gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
-
   gjs = callPackage ../development/libraries/gjs { };
 
   gjo = callPackage ../tools/text/gjo { };
@@ -8932,7 +8930,9 @@ with pkgs;
 
   gssdp-tools = callPackage ../development/libraries/gssdp/tools.nix { };
 
-  grype = callPackage ../tools/security/grype { };
+  grype = callPackage ../tools/security/grype {
+    buildGoModule = buildGo121Module;
+   };
 
   gt5 = callPackage ../tools/system/gt5 { };
 
@@ -10796,8 +10796,6 @@ with pkgs;
 
   mfoc = callPackage ../tools/security/mfoc { };
 
-  mfoc-hardnested = callPackage ../tools/security/mfoc-hardnested { };
-
   microbin = callPackage ../servers/microbin { };
 
   microdnf = callPackage ../tools/package-management/microdnf { };
@@ -11683,9 +11681,7 @@ with pkgs;
 
   optifine = optifinePackages.optifine-latest;
 
-  optipng = callPackage ../tools/graphics/optipng {
-    libpng = libpng12;
-  };
+  optipng = callPackage ../tools/graphics/optipng { };
 
   olsrd = callPackage ../tools/networking/olsrd { };
 
@@ -11781,6 +11777,8 @@ with pkgs;
   page = callPackage ../tools/misc/page { };
 
   PageEdit = libsForQt5.callPackage ../applications/office/PageEdit { };
+
+  pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
   paging-calculator  = callPackage ../development/tools/paging-calculator { };
 
@@ -14291,6 +14289,8 @@ with pkgs;
   urdfdom = callPackage ../development/libraries/urdfdom { };
 
   urdfdom-headers = callPackage ../development/libraries/urdfdom-headers { };
+
+  urlencode = callPackage ../tools/misc/urlencode {};
 
   uriparser = callPackage ../development/libraries/uriparser { };
 
@@ -17164,6 +17164,22 @@ with pkgs;
   rustPackages = rustPackages_1_72;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
+
+  # https://github.com/NixOS/nixpkgs/issues/89426
+  rustc-wasm32 = (rustc.override {
+    stdenv = stdenv.override {
+      targetPlatform = stdenv.targetPlatform // {
+        parsed = {
+          cpu.name = "wasm32";
+          vendor.name = "unknown";
+          kernel.name = "unknown";
+          abi.name = "unknown";
+        };
+      };
+    };
+  }).overrideAttrs (old: {
+    configureFlags = old.configureFlags ++ ["--set=build.docs=false"];
+  });
 
   makeRustPlatform = callPackage ../development/compilers/rust/make-rust-platform.nix { };
 
@@ -33860,6 +33876,8 @@ with pkgs;
 
   meld = callPackage ../applications/version-management/meld { };
 
+  meli = callPackage ../applications/networking/mailreaders/meli { };
+
   melmatcheq.lv2 = callPackage ../applications/audio/melmatcheq.lv2 { };
 
   melody = callPackage ../tools/misc/melody { };
@@ -36586,7 +36604,9 @@ with pkgs;
 
   waon = callPackage ../applications/audio/waon { };
 
-  warp = callPackage ../applications/networking/warp { };
+  warp = callPackage ../applications/networking/warp {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
 
   warpd = callPackage ../applications/misc/warpd { };
 

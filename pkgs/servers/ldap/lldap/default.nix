@@ -7,6 +7,7 @@
 , nixosTests
 , rustPlatform
 , rustc
+, rustc-wasm32
 , stdenv
 , wasm-bindgen-cli
 , wasm-pack
@@ -14,23 +15,6 @@
 }:
 
 let
-
-  # replace with upstream wasm rustc, after resolution of
-  # https://github.com/NixOS/nixpkgs/issues/89426
-  rustc-wasm = (rustc.override {
-    stdenv = stdenv.override {
-      targetPlatform = stdenv.targetPlatform // {
-        parsed = {
-          cpu.name = "wasm32";
-          vendor.name = "unknown";
-          kernel.name = "unknown";
-          abi.name = "unknown";
-        };
-      };
-    };
-  }).overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags ++ ["--set=build.docs=false"];
-  });
 
   wasm-bindgen-84 = wasm-bindgen-cli.override {
     version = "0.2.84";
@@ -64,7 +48,7 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
-      wasm-pack wasm-bindgen-84 binaryen which rustc-wasm rustc-wasm.llvmPackages.lld
+      wasm-pack wasm-bindgen-84 binaryen which rustc-wasm32 rustc-wasm32.llvmPackages.lld
     ];
 
     buildPhase = ''

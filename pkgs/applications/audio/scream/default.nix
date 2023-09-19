@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/duncanthrax/scream";
     license = licenses.mspl;
     platforms = platforms.linux;
+    mainProgram = "scream";
     maintainers = with maintainers; [ arcnmx ];
   };
 }

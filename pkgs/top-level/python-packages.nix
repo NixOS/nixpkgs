@@ -4122,6 +4122,8 @@ self: super: with self; {
 
   fs-s3fs = callPackage ../development/python-modules/fs-s3fs { };
 
+  fschat = callPackage ../development/python-modules/fschat { };
+
   fsspec = callPackage ../development/python-modules/fsspec { };
 
   fst-pso = callPackage ../development/python-modules/fst-pso { };
@@ -5880,6 +5882,8 @@ self: super: with self; {
 
   langdetect = callPackage ../development/python-modules/langdetect { };
 
+  langid = callPackage ../development/python-modules/langid { };
+
   langsmith = callPackage ../development/python-modules/langsmith { };
 
   language-data = callPackage ../development/python-modules/language-data { };
@@ -7514,7 +7518,12 @@ self: super: with self; {
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
   onnx = callPackage ../development/python-modules/onnx {
-    protobuf = protobuf3;
+    # in linux c++ defaults to 17
+    # on darwin clang is on an old version so c++ defaults to 11
+    abseil-cpp = if stdenv.isLinux then
+        pkgs.abseil-cpp_202301
+      else
+        pkgs.abseil-cpp_202301.override { cxxStandard = "17"; };
   };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
@@ -8495,6 +8504,8 @@ self: super: with self; {
   plyvel = callPackage ../development/python-modules/plyvel { };
 
   pmw = callPackage ../development/python-modules/pmw { };
+
+  pmdarima = callPackage ../development/python-modules/pmdarima { };
 
   pmdsky-debug-py = callPackage ../development/python-modules/pmdsky-debug-py { };
 
@@ -11891,6 +11902,8 @@ self: super: with self; {
   simple-rlp = callPackage ../development/python-modules/simple-rlp { };
 
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
+
+  simple-websocket = callPackage ../development/python-modules/simple-websocket { };
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
 

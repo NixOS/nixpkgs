@@ -32,14 +32,14 @@
 , zstd
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
   version = "8.3.0";
 
-  src = with lib; fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-YHQtvp/AYMWme46yIc4lE/izjqVePnPxn3GY5RRfPq4=";
   };
 

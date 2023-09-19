@@ -20,18 +20,16 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.6.7.post1";
+  version = "1.8.0";
   format = "setuptools";
 
-  # Currently doesn't support 3.11:
-  # https://github.com/microsoft/debugpy/issues/1107
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zsF6XUSAAKhwmUZkroRWvOBWXjTWzWuRYOhnYuN3KrY=";
+    hash = "sha256-FW1RDmj4sDBS0q08C82ErUd16ofxJxgVaxfykn/wVBA=";
   };
 
   patches = [
@@ -50,13 +48,6 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
-
-    # Support disabling process timeouts when set to 0
-    # See https://github.com/microsoft/debugpy/pull/1286
-    (fetchpatch {
-      url = "https://github.com/microsoft/debugpy/commit/1569cc8319350afcc5ba8630660f599d514ac3bb.patch";
-      hash = "sha256-v4GKLb2M20F1egAGtix9cTkSzBnvSgSSphSQST5p63w=";
-    })
   ] ++ lib.optionals stdenv.isLinux [
     # Hard code GDB path (used to attach to process)
     (substituteAll {
@@ -121,6 +112,11 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/microsoft/debugpy/issues/1241
     "test_flask_breakpoint_multiproc"
+
+    # DeprecationWarning: pkg_resources is deprecated as an API
+    # Supposedly fixed in https://github.com/microsoft/debugpy/pull/1374,
+    # but still fails for a nix build
+    "test_gevent"
   ];
 
   pythonImportsCheck = [
