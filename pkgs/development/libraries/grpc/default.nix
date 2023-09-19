@@ -95,9 +95,9 @@ stdenv.mkDerivation rec {
   '';
 
   env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
-    [ ] ++ lib.lists.optionals stdenv.cc.isClang [
+    lib.optionals stdenv.cc.isClang [
       "-Wno-error=unknown-warning-option"
-    ] ++ lib.lists.optionals stdenv.isAarch64 [
+    ] ++ lib.optionals stdenv.isAarch64 [
       "-Wno-error=format-security"
     ]
   );
