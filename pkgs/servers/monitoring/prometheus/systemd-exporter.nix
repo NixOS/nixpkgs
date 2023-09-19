@@ -7,7 +7,7 @@ buildGoModule rec {
   vendorHash = "sha256-XkwBhj2M1poirPkWzS71NbRTshc8dTKwaHoDfFxpykU=";
 
   src = fetchFromGitHub {
-    owner = "povilasv";
+    owner = "prometheus-community";
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-q6rnD8JCtB1zTkUfZt6f2Uyo91uFi3HYI7WFlZdzpBM=";
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Exporter for systemd unit metrics";
-    homepage = "https://github.com/povilasv/systemd_exporter";
+    homepage = "https://github.com/prometheus-community/systemd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ chkno ];
   };
