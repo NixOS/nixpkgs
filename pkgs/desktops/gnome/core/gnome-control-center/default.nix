@@ -67,18 +67,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "45.rc";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-kiyRn4VMZZcXelwXK5Q5zLIB9OYerMVD4GGJmPuo63M=";
+    sha256 = "sha256-g99qkPmJFPLBmocs4GVirO9AknY39nnDgwmSZcz6Qs8=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      tecla = gnome-tecla;
       inherit glibc tzdata shadow;
       inherit cups networkmanagerapplet;
     })
@@ -112,6 +111,7 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     gnome-remote-desktop # optional, sharing panel
     gnome-settings-daemon
+    gnome-tecla
     gnome-user-share # optional, sharing panel
     gsettings-desktop-schemas
     gsound
