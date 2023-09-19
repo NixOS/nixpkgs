@@ -17,13 +17,13 @@
 }:
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.307.1";
+  version = "2.309.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-h/JcOw7p/loBD6aj7NeZyqK3GtapNkjWTYw0G6OCmVQ=";
+    hash = "sha256-P70kNcd5TjWsHj16y11SEYROGG+JUkpwE9eVpHzvTes=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -178,6 +178,7 @@ buildDotnetModule rec {
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
     ]
     ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
