@@ -8,13 +8,13 @@
 stdenvNoCC.mkDerivation {
   pname = "lunarml";
 
-  version = "unstable-2023-08-25";
+  version = "unstable-2023-09-16";
 
   src = fetchFromGitHub {
     owner = "minoki";
     repo = "LunarML";
-    rev = "69d09b47601f4041ca7e8a513c75f3e4835af9dd";
-    sha256 = "sha256-GXUcWI4/akOKIvCHrsOfceZEdyNZdIdalTc6wX+svS4=";
+    rev = "0fe97ebed71d6aa24c9e80436d45af1b3ef6abd3";
+    sha256 = "KSLQva4Lv+hZWrx2cMbLOj82ldodiGn/9j8ksB1FN+s=";
   };
 
   outputs = [ "out" "doc" ];

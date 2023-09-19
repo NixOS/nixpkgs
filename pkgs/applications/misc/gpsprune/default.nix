@@ -17,12 +17,17 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "gpsprune";
-      exec = "gpsprune";
+      exec = "gpsprune %F";
       icon = "gpsprune";
       desktopName = "GpsPrune";
       genericName = "GPS Data Editor";
       comment = meta.description;
       categories = [ "Education" "Geoscience" ];
+      mimeTypes = [
+        "application/gpx+xml"
+        "application/vnd.google-earth.kml+xml"
+        "application/vnd.google-earth.kmz"
+      ];
     })
   ];
 

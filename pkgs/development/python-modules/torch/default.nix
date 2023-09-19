@@ -51,7 +51,7 @@
 }:
 
 let
-  inherit (lib) lists strings trivial;
+  inherit (lib) attrsets lists strings trivial;
   inherit (cudaPackages) cudaFlags cudnn nccl;
 
   setBool = v: if v then "1" else "0";
@@ -104,6 +104,14 @@ let
       rocminfo rocm-thunk rocm-comgr rocm-device-libs
       rocm-runtime rocm-opencl-runtime hipify
     ];
+  };
+
+  brokenConditions = attrsets.filterAttrs (_: cond: cond) {
+    "CUDA and ROCm are not mutually exclusive" = cudaSupport && rocmSupport;
+    "CUDA is not targeting Linux" = cudaSupport && !stdenv.isLinux;
+    "Unsupported CUDA version" = cudaSupport && (cudaPackages.cudaMajorVersion != "11");
+    "MPI cudatoolkit does not match cudaPackages.cudatoolkit" = MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
+    "Magma cudaPackages does not match cudaPackages" = cudaSupport && (magma.cudaPackages != cudaPackages);
   };
 in buildPythonPackage rec {
   pname = "torch";
@@ -426,6 +434,8 @@ in buildPythonPackage rec {
     inherit cudaSupport cudaPackages;
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
     blasProvider = blas.provider;
+    # To help debug when a package is broken due to CUDA support
+    inherit brokenConditions;
   } // lib.optionalAttrs cudaSupport {
     # NOTE: supportedCudaCapabilities isn't computed unless cudaSupport is true, so we can't use
     #   it in the passthru set above because a downstream package might try to access it even
@@ -441,17 +451,6 @@ in buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
     platforms = with platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
-    broken = builtins.any trivial.id [
-      # CUDA and ROCm are mutually exclusive
-      (cudaSupport && rocmSupport)
-      # CUDA is only supported on Linux
-      (cudaSupport && !stdenv.isLinux)
-      # Only CUDA 11 is currently supported
-      (cudaSupport && (cudaPackages.cudaMajorVersion != "11"))
-      # MPI cudatoolkit does not match cudaPackages.cudatoolkit
-      (MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit))
-      # Magma cudaPackages does not match cudaPackages
-      (cudaSupport && (magma.cudaPackages != cudaPackages))
-    ];
+    broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
   };
 }

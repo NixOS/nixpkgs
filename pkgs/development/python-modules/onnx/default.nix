@@ -13,6 +13,7 @@
 , pythonOlder
 , tabulate
 , typing-extensions
+, abseil-cpp
 }:
 
 let
@@ -34,6 +35,10 @@ in buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     pybind11
+  ];
+
+  buildInputs = [
+    abseil-cpp
   ];
 
   propagatedBuildInputs = [
@@ -61,6 +66,10 @@ in buildPythonPackage rec {
       --replace 'include(googletest)' ""
     substituteInPlace cmake/unittest.cmake \
       --replace 'googletest)' ')'
+
+    # remove this override in 1.15 that will enable to set the CMAKE_CXX_STANDARD with cmakeFlags
+    substituteInPlace CMakeLists.txt \
+      --replace 'CMAKE_CXX_STANDARD 11' 'CMAKE_CXX_STANDARD 17'
   '';
 
   preConfigure = ''

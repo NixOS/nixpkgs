@@ -10796,8 +10796,6 @@ with pkgs;
 
   mfoc = callPackage ../tools/security/mfoc { };
 
-  mfoc-hardnested = callPackage ../tools/security/mfoc-hardnested { };
-
   microbin = callPackage ../servers/microbin { };
 
   microdnf = callPackage ../tools/package-management/microdnf { };
@@ -11683,9 +11681,7 @@ with pkgs;
 
   optifine = optifinePackages.optifine-latest;
 
-  optipng = callPackage ../tools/graphics/optipng {
-    libpng = libpng12;
-  };
+  optipng = callPackage ../tools/graphics/optipng { };
 
   olsrd = callPackage ../tools/networking/olsrd { };
 

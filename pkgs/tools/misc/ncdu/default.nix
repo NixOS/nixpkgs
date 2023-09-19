@@ -4,6 +4,7 @@
 , ncurses
 , zig_0_11
 , installShellFiles
+, testers
 , pie ? stdenv.isDarwin
 }:
 
@@ -30,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     installManPage ncdu.1
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = {
     homepage = "https://dev.yorhel.nl/ncdu";

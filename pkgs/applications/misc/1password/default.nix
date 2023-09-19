@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar }:
+{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar, _1password, testers }:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -62,6 +62,10 @@ stdenv.mkDerivation {
   installCheckPhase = ''
     $out/bin/${mainProgram} --version
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = _1password;
+  };
 
   meta = with lib; {
     description = "1Password command-line tool";
