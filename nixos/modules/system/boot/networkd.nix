@@ -2639,13 +2639,30 @@ let
     value.source = "${cfg.units.${name}.unit}/${name}";
   }) (attrNames cfg.units));
 
-  commonOptions = visible: {
+  commonOptions = { initrd ? false }: let visible = if initrd then "shallow" else true; in {
 
     enable = mkOption {
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
         Whether to enable networkd or not.
+      '';
+    };
+
+    useDHCP = mkOption {
+      default = config.networking.useDHCP;
+      defaultText = literalExpression "config.networking.useDHCP";
+      example = true;
+      visible = initrd;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to configure networkd to use DHCP to obtain an IP address and
+        other configuration for network interfaces that are not manually
+        configured.
+
+        This option is a duplicate of the primary systemd networking config, but
+        is necessary when using the networkd in initrd while managing the
+        primary (stage-2) using a different solution (e.g. NetworkManager)
       '';
     };
 
@@ -2946,8 +2963,8 @@ in
 
 {
   options = {
-    systemd.network = commonOptions true;
-    boot.initrd.systemd.network = commonOptions "shallow";
+    systemd.network = commonOptions {};
+    boot.initrd.systemd.network = commonOptions { initrd = true; };
   };
 
   config = mkMerge [
