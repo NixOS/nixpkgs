@@ -68,5 +68,15 @@
         },
         "sha256": "1phlx375ln5pslw5vjqm029cdv6pzf4ang10xlrf90x5sb4fgy93",
         "version": "6.4.15"
+    },
+    "6.5": {
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-6.5.3-hardened1.patch",
+            "sha256": "0p92x3f129hmk5r5xmxs5ihvg5cdl2bmqlhqza3wy4314f1kngl7",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.5.3-hardened1/linux-hardened-6.5.3-hardened1.patch"
+        },
+        "sha256": "0kzbcc3iar9i0hb99xf9k3b16lxb4f8qzmia0gwxrn3vn7vi7b2c",
+        "version": "6.5.3"
     }
 }
