@@ -49,10 +49,13 @@ buildGoModule rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      command = "goss --version";
-      package = goss;
-      version = "v${version}";
+    tests = {
+      inherit (nixosTests) goss;
+      version = testers.testVersion {
+        command = "goss --version";
+        package = goss;
+        version = "v${version}";
+      };
     };
     updateScript = nix-update-script { };
   };
@@ -67,7 +70,8 @@ buildGoModule rec {
       Once the test suite is written they can be executed, waited-on, or served as a health endpoint.
     '';
     license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "goss";
     maintainers = with maintainers; [ hyzual jk anthonyroussel ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
