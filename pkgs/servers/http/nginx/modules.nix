@@ -508,8 +508,8 @@ let self = {
     name = "njs";
     src = fetchhg {
       url = "https://hg.nginx.org/njs";
-      rev = "0.7.10";
-      sha256 = "sha256-/yKzY+BUFxLk8bWo+mqKfRVRsC2moe+WvhaRYIGdr6Y=";
+      rev = "0.8.1";
+      sha256 = "sha256-bFHrcA1ROMwYf+s0EWOXzkru6wvfRLvjvN8BV/r2tMc=";
       name = "nginx-njs";
     };
 
