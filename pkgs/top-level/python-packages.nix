@@ -12577,6 +12577,8 @@ self: super: with self; {
 
   svg-path = callPackage ../development/python-modules/svg-path { };
 
+  svgelements = callPackage ../development/python-modules/svgelements { };
+
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
   sv-ttk = callPackage ../development/python-modules/sv-ttk { };
