@@ -98,6 +98,7 @@ rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
+    mainProgram = "prismlauncher";
     homepage = "https://prismlauncher.org/";
     description = "A free, open source launcher for Minecraft";
     longDescription = ''

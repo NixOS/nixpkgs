@@ -52,21 +52,31 @@
     "6.1": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.1.52-hardened1.patch",
-            "sha256": "1xp8m9d927g3nb8l6pc4xzm0yspxxa0kpiv6hi1x0cal5a1bwnb3",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.1.52-hardened1/linux-hardened-6.1.52-hardened1.patch"
+            "name": "linux-hardened-6.1.53-hardened1.patch",
+            "sha256": "1v8k4rb3f24cpzvng7nyxllypmi8dc4cv0yj2jfvr64pxr7vzlkw",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.1.53-hardened1/linux-hardened-6.1.53-hardened1.patch"
         },
-        "sha256": "0lis73mxnl7hxz8lyja6sfgmbym944l3k1h7dab6b4mw1nckfxsn",
-        "version": "6.1.52"
+        "sha256": "0zpdg3fcc12iyjhfs5w7cw75700z4i8m9jcg38mlzlhh92hf0msz",
+        "version": "6.1.53"
     },
     "6.4": {
         "patch": {
             "extra": "-hardened1",
-            "name": "linux-hardened-6.4.15-hardened1.patch",
-            "sha256": "1r6c1yzr0cmfhqv0qirj9nbc2hgmmh43mwal1gmyhk5qisq7h1rf",
-            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.4.15-hardened1/linux-hardened-6.4.15-hardened1.patch"
+            "name": "linux-hardened-6.4.16-hardened1.patch",
+            "sha256": "10lydnnhhq9ynng1gfaqh1mncsb0dmr27zzcbygs1xigy2bl70n9",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.4.16-hardened1/linux-hardened-6.4.16-hardened1.patch"
         },
-        "sha256": "1phlx375ln5pslw5vjqm029cdv6pzf4ang10xlrf90x5sb4fgy93",
-        "version": "6.4.15"
+        "sha256": "0zgj1z97jyx7wf12zrnlcp0mj4cl43ais9qsy6dh1jwylf2fq9ln",
+        "version": "6.4.16"
+    },
+    "6.5": {
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-6.5.3-hardened1.patch",
+            "sha256": "0p92x3f129hmk5r5xmxs5ihvg5cdl2bmqlhqza3wy4314f1kngl7",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/6.5.3-hardened1/linux-hardened-6.5.3-hardened1.patch"
+        },
+        "sha256": "0kzbcc3iar9i0hb99xf9k3b16lxb4f8qzmia0gwxrn3vn7vi7b2c",
+        "version": "6.5.3"
     }
 }
