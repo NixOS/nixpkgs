@@ -94,8 +94,13 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option"
-    + lib.optionalString stdenv.isAarch64 "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
+    [ ] ++ lib.lists.optionals stdenv.cc.isClang [
+      "-Wno-error=unknown-warning-option"
+    ] ++ lib.lists.optionals stdenv.isAarch64 [
+      "-Wno-error=format-security"
+    ]
+  );
 
   enableParallelBuilds = true;
 
