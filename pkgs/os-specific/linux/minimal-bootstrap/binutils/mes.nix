@@ -10,14 +10,11 @@
 , gnutar
 , gawk
 , bzip2
-, gcc
-, glibc
-, binutilsBoot
-, linux-headers
+, tinycc
 }:
 
 let
-  pname = "binutils";
+  pname = "binutils-mes";
   version = "2.20.1";
   rev = "a";
 
@@ -61,7 +58,7 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    gcc
+    tinycc.compiler
     gnumake
     gnupatch
     gnused
@@ -69,7 +66,6 @@ bash.runCommand "${pname}-${version}" {
     gnutar
     gawk
     bzip2
-    binutilsBoot
   ];
 
   passthru.tests.get-version = result:
@@ -97,11 +93,8 @@ bash.runCommand "${pname}-${version}" {
   ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
   # Configure
-  export CC="gcc -B ${glibc}/lib -I${glibc}/include -I${linux-headers}/include"
-  export CPP="gcc -E -I${glibc}/include -I${linux-headers}/include"
-  export AR="ar"
-  export LIBRARY_PATH="${glibc}/lib"
-  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
+  export CC="tcc -B ${tinycc.libs}/lib -D __GLIBC_MINOR__=6 -D MES_BOOTSTRAP=1"
+  export AR="tcc -ar"
   bash ./configure ${lib.concatStringsSep " " configureFlags}
 
   # Build

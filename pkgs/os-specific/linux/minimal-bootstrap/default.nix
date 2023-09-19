@@ -25,17 +25,20 @@ lib.makeScope
     binutils = callPackage ./binutils {
       bash = bash_2_05;
       gcc = gcc2;
-      binutils = binutils-mes;
+      binutilsBoot = binutils-mes;
       glibc = glibc22;
-      sed = heirloom.sed;
       gawk = gawk-mes;
     };
-    binutils-mes = callPackage ./binutils {
+    binutils-mes = callPackage ./binutils/mes.nix {
       bash = bash_2_05;
       tinycc = tinycc-mes;
-      sed = heirloom.sed;
       gawk = gawk-mes;
-      mesBootstrap = true;
+    };
+    binutils-musl = callPackage ./binutils/musl.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-musl;
+      musl = musl11;
+      gawk = gawk-mes;
     };
 
     bzip2 = callPackage ./bzip2 {
@@ -178,6 +181,7 @@ lib.makeScope
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}
       echo ${binutils-mes.tests.get-version}
+      echo ${binutils-musl.tests.get-version}
       echo ${bzip2.tests.get-version}
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
