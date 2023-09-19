@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     $STRIP -S ena.ko
-    dest=$out/lib/modules/${kernel.modDirVersion}/misc
+    dest=$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/ethernet/amazon/ena/
     mkdir -p $dest
     cp ena.ko $dest/
     xz $dest/ena.ko
@@ -43,5 +43,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eelco sielicki ];
     platforms = platforms.linux;
+    priority = -1;
   };
 }
