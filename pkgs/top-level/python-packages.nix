@@ -13299,6 +13299,8 @@ self: super: with self; {
 
   typer = callPackage ../development/python-modules/typer { };
 
+  type-infer = callPackage ../development/python-modules/type-infer { };
+
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
 
   types-awscrt = callPackage ../development/python-modules/types-awscrt { };
