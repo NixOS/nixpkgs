@@ -40,7 +40,7 @@ let
         mvn dependency:get -Dartifact="$artifactId" -Dmaven.repo.local=$out/.m2
       done
     '' + lib.optionalString (!buildOffline) ''
-      mvn package -Dmaven.repo.local=$out/.m2 ${mvnDepsParameters}
+      mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}
     '' + ''
       runHook postBuild
     '';
