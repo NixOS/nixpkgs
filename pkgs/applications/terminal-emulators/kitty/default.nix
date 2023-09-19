@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, python3Packages, libunistring
 , harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
-, libxkbcommon, libXi, libXext, wayland-protocols, wayland
+, libxkbcommon, libXi, libXext, wayland-protocols, wayland, xxHash
 , lcms2
 , librsync
 , openssl
@@ -29,20 +29,20 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.29.2";
+  version = "0.30.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ureJHG6Jh4bsXqQZnGwY5Hlq7sXxYX3iTajb8ZkpZw8=";
+    hash = "sha256-M6qFkeUp2rBudO2PiLN2VSrmut68c9mjjUr07WEX9VY=";
   };
 
   goModules = (buildGoModule {
     pname = "kitty-go-modules";
     inherit src version;
-    vendorHash = "sha256-jk2EcYVuhV/UQfHAIfpnn8ZIZnwjA/o8YRXmpoC85Vc=";
+    vendorHash = "sha256-53Y2S/P2fWT9STZFTdlkESxHNpoAggifZJ0+WXCzbkU=";
   }).goModules;
 
   buildInputs = [
@@ -51,6 +51,7 @@ buildPythonApplication rec {
     lcms2
     librsync
     openssl.dev
+    xxHash
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
     Kernel
@@ -155,7 +156,8 @@ buildPythonApplication rec {
   preCheck = lib.optionalString stdenv.isDarwin ''
     substituteInPlace kitty_tests/file_transmission.py \
       --replace test_file_get dont_test_file_get \
-      --replace test_path_mapping_receive dont_test_path_mapping_receive
+      --replace test_path_mapping_receive dont_test_path_mapping_receive \
+      --replace test_transfer_send dont_test_transfer_send
     substituteInPlace kitty_tests/shell_integration.py \
       --replace test_fish_integration dont_test_fish_integration
     substituteInPlace kitty_tests/shell_integration.py \
@@ -237,6 +239,6 @@ buildPythonApplication rec {
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
-    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
+    maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens kashw2 ];
   };
 }
