@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.17";
+  version = "2.0.18";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hOnZ6oHLvunZL6MrCmR5GkROQNww34QQ3m4gYDaSpb4=";
+    sha256 = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
   };
 
   patches = lib.optionals stdenv.isDarwin [
