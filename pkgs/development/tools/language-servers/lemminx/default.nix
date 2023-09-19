@@ -1,8 +1,8 @@
 {
-  lib, fetchFromGitHub, makeWrapper, jre, maven
+  lib, fetchFromGitHub, makeWrapper, jre, maven, stdenv
 }:
 
-maven.buildMavenPackage rec {
+stdenv.mkDerivation rec {
   pname = "lemminx";
   version = "0.27.0";
 
@@ -11,6 +11,16 @@ maven.buildMavenPackage rec {
     repo = "lemminx";
     rev = version;
     hash = "sha256-8pHTfncM7N+IGB6NHQOZBqBKs6xKol9pvLDAbKTpPw4=";
+  };
+
+  mavenDeps = maven.fetchMvnDeps {
+    inherit src;
+    hash = "sha256-sIiCp1AorVQXt13Tq0vw9jGioG3zcQMqqKS/Q0Tf4MQ=";
+    mvnDepsParameters = "-Dmaven.gitcommitid.skip=true";
+    manualMvnArtifacts = [
+    "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
+    "org.junit.platform:junit-platform-launcher:1.10.0"
+    ];
   };
 
   prePatch = ''
@@ -22,20 +32,19 @@ maven.buildMavenPackage rec {
   EOF
   '';
 
-  mvnHash = "sha256-sIiCp1AorVQXt13Tq0vw9jGioG3zcQMqqKS/Q0Tf4MQ=";
+  buildPhase = ''
+    mvn package -o -nsu -Dmaven.repo.local="${mavenDeps}/.m2" \
+      -Dproject.build.outputTimestamp=1980-01-01T00:00:02Z \
+      -Dmaven.gitcommitid.skip=true \
+      -Dtest='!XMLValidationCommandTest' \
+  '';
 
-  buildOffline = true;
-  mvnDepsParameters = "-Dmaven.gitcommitid.skip=true";
-  mvnParameters = "-Dmaven.gitcommitid.skip=true -Dtest='!XMLValidationCommandTest, !XMLValidationExternalResourcesBasedOnDTDTest, !XMLSchemaPublishDiagnosticsTest'";
+  #mvnParameters = "-Dmaven.gitcommitid.skip=true -Dtest='!XMLValidationCommandTest, !XMLValidationExternalResourcesBasedOnDTDTest, !XMLSchemaPublishDiagnosticsTest'";
 
   # not needed for lemminx because we will disable tests as they are depending
   # on the .git folder which makes the package not deterministic. Just here
   # to showcase the usage.
 
-  manualMvnArtifacts = [
-    "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
-    "org.junit.platform:junit-platform-launcher:1.10.0"
-  ];
 
   installPhase = ''
     runHook preInstall
@@ -51,7 +60,7 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper maven ];
 
   meta = with lib; {
     description = "XML Language Server";
