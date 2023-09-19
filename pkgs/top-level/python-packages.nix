@@ -2247,6 +2247,8 @@ self: super: with self; {
 
   contourpy = callPackage ../development/python-modules/contourpy { };
 
+  controku = callPackage ../development/python-modules/controku { };
+
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
