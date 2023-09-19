@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dtools";
-  version = "2.103.1";
+  version = "2.105.2";
 
   src = fetchFromGitHub {
     owner = "dlang";
     repo = "tools";
     rev = "v${version}";
-    sha256 = "sha256-XM4gUxcarQCOBR8W/o0iWAI54PyLDkH6CsDce22Cnu4=";
+    sha256 = "sha256-Y8jSwd6tldCnq3yEuO/xUYrSV+lp7tBPMiheMA06f0M=";
     name = "dtools";
   };
 
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
-      $makeCmd test_rdmd
+    $makeCmd test_rdmd
     '';
 
   installPhase = ''
-      $makeCmd INSTALL_DIR=$out install
+    $makeCmd INSTALL_DIR=$out install
   '';
 
   meta = with lib; {
