@@ -51,7 +51,7 @@ buildGoModule rec {
       Once the test suite is written they can be executed, waited-on, or served as a health endpoint.
     '';
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ hyzual jk anthonyroussel ];
   };
 }
