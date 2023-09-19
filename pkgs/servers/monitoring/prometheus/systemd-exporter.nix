@@ -13,6 +13,16 @@ buildGoModule rec {
     sha256 = "sha256-q6rnD8JCtB1zTkUfZt6f2Uyo91uFi3HYI7WFlZdzpBM=";
   };
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Revision=unknown"
+    "-X github.com/prometheus/common/version.Branch=unknown"
+    "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
+    "-X github.com/prometheus/common/version.BuildDate=unknown"
+  ];
+
   passthru.tests = { inherit (nixosTests.prometheus-exporters) systemd; };
 
   meta = with lib; {
