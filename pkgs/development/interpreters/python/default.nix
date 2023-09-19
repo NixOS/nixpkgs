@@ -45,9 +45,9 @@ in {
       major = "2";
       minor = "7";
       patch = "18";
-      suffix = ".6"; # ActiveState's Python 2 extended support
+      suffix = ".7"; # ActiveState's Python 2 extended support
     };
-    hash = "sha256-+I0QOBkuTHMIQz71lgNn1X1vjPsjJMtFbgC0xcGTwWY=";
+    hash = "sha256-zcjAoSq6491ePiDySBCKrLIyYoO/5fdH6aBTNg/NH8s=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
