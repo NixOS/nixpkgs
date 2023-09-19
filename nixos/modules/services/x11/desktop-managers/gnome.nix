@@ -353,6 +353,7 @@ in
           buildPortalsInGnome = false;
         })
       ];
+      xdg.portal.configPackages = mkDefault [ pkgs.gnome.gnome-session ];
 
       networking.networkmanager.enable = mkDefault true;
 
