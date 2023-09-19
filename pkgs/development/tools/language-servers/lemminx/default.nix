@@ -10,24 +10,32 @@ maven.buildMavenPackage rec {
     owner = "eclipse";
     repo = "lemminx";
     rev = version;
-
     hash = "sha256-8pHTfncM7N+IGB6NHQOZBqBKs6xKol9pvLDAbKTpPw4=";
   };
 
-  mvnHash = "sha256-PVWqqdNiKc6anYYF8v5PaB/HfIcJI/3FFqxS4AERWXg=";
+  prePatch = ''
+  cat > ./org.eclipse.lemminx/src/main/resources/git.properties << EOF
+  git.build.version=${version}-
+  git.commit.id.abbrev=abcdefg
+  git.commit.message.short=Latest
+  git.branch=main
+  EOF
+  '';
+
+  mvnHash = "sha256-sIiCp1AorVQXt13Tq0vw9jGioG3zcQMqqKS/Q0Tf4MQ=";
 
   buildOffline = true;
   mvnDepsParameters = "-Dmaven.gitcommitid.skip=true";
-  mvnParameters = "-Dmaven.gitcommitid.skip=true -DskipTests";
+  mvnParameters = "-Dmaven.gitcommitid.skip=true -Dtest='!XMLValidationCommandTest, !XMLValidationExternalResourcesBasedOnDTDTest, !XMLSchemaPublishDiagnosticsTest'";
 
   # not needed for lemminx because we will disable tests as they are depending
   # on the .git folder which makes the package not deterministic. Just here
   # to showcase the usage.
 
-  #manualMvnArtifacts = [
-  #  "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
-  #  "org.junit.platfo:rm:junit-platform-launcher:1.9.3"
-  #];
+  manualMvnArtifacts = [
+    "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
+    "org.junit.platform:junit-platform-launcher:1.10.0"
+  ];
 
   installPhase = ''
     runHook preInstall
