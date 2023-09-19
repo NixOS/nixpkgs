@@ -8567,8 +8567,6 @@ self: super: with self; {
 
   poetry-semver = callPackage ../development/python-modules/poetry-semver { };
 
-  poezio = callPackage ../applications/networking/instant-messengers/poezio { };
-
   polars = callPackage ../development/python-modules/polars { };
 
   polarizationsolver = callPackage ../development/python-modules/polarizationsolver { };
