@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       fonts.
     '';
     homepage = "https://www.freetype.org/";
+    changelog = "https://gitlab.freedesktop.org/freetype/freetype/-/raw/VER-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}/docs/CHANGES";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
     pkgConfigModules = [ "freetype2" ];
