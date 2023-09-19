@@ -368,10 +368,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hyl35lyj5zz15l6kga1mj3wb4rn6rq5d1gbjxn38zv2770y644h";
+      sha256 = "0x05rqk5943n9sa6silbqvjycdkcs4a71hd42h92m49lwyb7m5qk";
       type = "gem";
     };
-    version = "2.215.0";
+    version = "2.215.1";
   };
   gh_inspector = {
     groups = ["default"];
