@@ -3,36 +3,30 @@
 , hostPlatform
 , fetchurl
 , bash
+, coreutils
 , gnumake
 , gnupatch
 , gnused
 , gnugrep
-, gnutar
 , gawk
-, bzip2
-, gcc
-, glibc
-, binutilsBoot
-, linux-headers
+, diffutils
+, gnutar
+, xz
+, tinycc
+, musl
 }:
 
 let
+  # Based on https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a1-static-binutils.nix
   pname = "binutils";
-  version = "2.20.1";
-  rev = "a";
+  version = "2.41";
 
   src = fetchurl {
-    url = "mirror://gnu/binutils/binutils-${version}${rev}.tar.bz2";
-    sha256 = "0r7dr0brfpchh5ic0z9r4yxqn4ybzmlh25sbp30cacqk8nb7rlvi";
+    url = "mirror://gnu/binutils/binutils-${version}.tar.xz";
+    hash = "sha256-rppXieI0WeWWBuZxRyPy0//DHAMXQZHvDQFb3wYAdFA=";
   };
 
   patches = [
-    # Enables building binutils using TCC and Mes C Library
-    (fetchurl {
-      url = "https://git.savannah.gnu.org/cgit/guix.git/plain/gnu/packages/patches/binutils-boot-2.20.1a.patch?id=50249cab3a98839ade2433456fe618acc6f804a5";
-      sha256 = "086sf6an2k56axvs4jlky5n3hs2l3rq8zq5d37h0b69cdyh7igpn";
-    })
-
     # Make binutils output deterministic by default.
     ./deterministic.patch
   ];
@@ -41,10 +35,10 @@ let
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
-    "--disable-nls"
-    "--disable-shared"
-    "--disable-werror"
     "--with-sysroot=/"
+    "--enable-deterministic-archives"
+    # depends on bison
+    "--disable-gprofng"
 
     # Turn on --enable-new-dtags by default to make the linker set
     # RUNPATH instead of RPATH on binaries.  This is important because
@@ -61,15 +55,15 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    gcc
+    tinycc.compiler
     gnumake
     gnupatch
     gnused
     gnugrep
-    gnutar
     gawk
-    bzip2
-    binutilsBoot
+    diffutils
+    gnutar
+    xz
   ];
 
   passthru.tests.get-version = result:
@@ -87,24 +81,33 @@ bash.runCommand "${pname}-${version}" {
   };
 } ''
   # Unpack
-  cp ${src} binutils.tar.bz2
-  bunzip2 binutils.tar.bz2
+  cp ${src} binutils.tar.xz
+  unxz binutils.tar.xz
   tar xf binutils.tar
   rm binutils.tar
   cd binutils-${version}
 
   # Patch
   ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
+  sed -i 's|/bin/sh|${bash}/bin/bash|' \
+    missing install-sh mkinstalldirs
+  # see libtool's 74c8993c178a1386ea5e2363a01d919738402f30
+  sed -i 's/| \$NL2SP/| sort | $NL2SP/' ltmain.sh
+  # alias makeinfo to true
+  mkdir aliases
+  ln -s ${coreutils}/bin/true aliases/makeinfo
+  export PATH="$(pwd)/aliases/:$PATH"
 
   # Configure
-  export CC="gcc -B ${glibc}/lib -I${glibc}/include -I${linux-headers}/include"
-  export CPP="gcc -E -I${glibc}/include -I${linux-headers}/include"
-  export AR="ar"
-  export LIBRARY_PATH="${glibc}/lib"
-  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
+  export CC="tcc -B ${musl}/lib"
+  export AR="tcc -ar"
+  export lt_cv_sys_max_cmd_len=32768
+  export CFLAGS="-D__LITTLE_ENDIAN__=1"
   bash ./configure ${lib.concatStringsSep " " configureFlags}
 
   # Build
+  make all-libiberty all-gas all-bfd all-libctf all-zlib all-gprof
+  make all-ld # race condition on ld/.deps/ldwrite.Po, serialize
   make
 
   # Install

@@ -24,18 +24,6 @@ lib.makeScope
 
     binutils = callPackage ./binutils {
       bash = bash_2_05;
-      gcc = gcc2;
-      binutilsBoot = binutils-mes;
-      glibc = glibc22;
-      gawk = gawk-mes;
-    };
-    binutils-mes = callPackage ./binutils/mes.nix {
-      bash = bash_2_05;
-      tinycc = tinycc-mes;
-      gawk = gawk-mes;
-    };
-    binutils-musl = callPackage ./binutils/musl.nix {
-      bash = bash_2_05;
       tinycc = tinycc-musl;
       musl = musl11;
       gawk = gawk-mes;
@@ -78,13 +66,11 @@ lib.makeScope
     gcc2 = callPackage ./gcc/2.nix {
       bash = bash_2_05;
       gcc = gcc2-mes;
-      binutils = binutils-mes;
       glibc = glibc22;
     };
     gcc2-mes = callPackage ./gcc/2.nix {
       bash = bash_2_05;
       tinycc = tinycc-mes;
-      binutils = binutils-mes;
       mesBootstrap = true;
     };
 
@@ -180,8 +166,6 @@ lib.makeScope
       echo ${bash.tests.get-version}
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}
-      echo ${binutils-mes.tests.get-version}
-      echo ${binutils-musl.tests.get-version}
       echo ${bzip2.tests.get-version}
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
