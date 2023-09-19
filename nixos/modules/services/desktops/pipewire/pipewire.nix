@@ -35,10 +35,11 @@ in {
       };
 
       socketActivation = mkOption {
-        default = true;
+        default = false;
         type = types.bool;
         description = lib.mdDoc ''
           Automatically run pipewire when connections are made to the pipewire socket.
+          Enabling this option may introduce connection issues with bluetooth audio devices.
         '';
       };
 
