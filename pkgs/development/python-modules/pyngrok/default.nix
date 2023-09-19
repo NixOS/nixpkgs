@@ -1,16 +1,20 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "pyngrok";
-  version = "6.0.0";
+  version = "6.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3YqHlEuOKFcuPRJr+yyBopSFlFdfUjfu/TZRrgtIcVU=";
+    hash = "sha256-9fT2fnntBQ7y+c52tuqHM7iVAqoLgwAs6izmuZRUNiI=";
   };
 
   propagatedBuildInputs = [
