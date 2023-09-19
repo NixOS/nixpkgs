@@ -331,8 +331,13 @@ developerToolsPackages_11_3_1 // macosPackages_11_0_1 // {
     # To enable splitting up the SDK bump into reviewable chunks before
     # switching to it wholesale.
     "10.13.6" = let applePackageMapping = namePath: applePackage''
-                      self."10.13.6" # Have packages depend on each other
-                                     # rather than previous versions.
+                      ( let callDarwin = pathInDarwin:
+                              self.newScope {} (./. + "/../${pathInDarwin}");
+                        in { darwin-stubs =
+                               callDarwin "darwin-stubs/10.13.6.nix" {};
+                        } // self."10.13.6" # Have packages depend on each other
+                                            # rather than previous versions.
+                      )
                       { }."${namePath}" or namePath;
                  in import ./macos-10.13.6.nix
                       { applePackage' = applePackageMapping; };
