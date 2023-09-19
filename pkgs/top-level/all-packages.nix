@@ -6077,6 +6077,8 @@ with pkgs;
 
   nfstrace = callPackage ../tools/networking/nfstrace { };
 
+  nfsserve = callPackage ../servers/nfsserve { };
+
   nitch = callPackage ../tools/misc/nitch { };
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
