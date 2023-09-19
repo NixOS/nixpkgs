@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
-  version = "2.8.9";
+  version = "2.9.1";
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
-    hash = "sha256-9Csrq9wM7Q99qPj7+NlnQgP6KcciNHMbAAb+Wg7eYAU=";
+    hash = "sha256-+dTRtFVEuoWhYojwBSJ/WASTvC/OjOQpRpmTQF3YQrM=";
   };
 
   hardeningDisable = [ "pic" ];
