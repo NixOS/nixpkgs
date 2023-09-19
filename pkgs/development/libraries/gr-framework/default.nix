@@ -1,17 +1,18 @@
-{ cairo
-, cmake
+{ lib
+, stdenv
 , fetchFromGitHub
+, nix-update-script
+
+, cairo
+, cmake
 , ffmpeg
 , freetype
 , ghostscript
 , glfw
-, lib
 , libjpeg
 , libtiff
-, nix-update-script
 , qhull
 , qtbase
-, stdenv
 , wrapQtAppsHook
 , xorg
 , zeromq
