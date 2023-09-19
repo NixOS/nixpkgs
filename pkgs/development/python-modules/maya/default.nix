@@ -1,28 +1,58 @@
-{ lib, fetchPypi, fetchpatch, buildPythonPackage
-, dateparser, humanize, pendulum, ruamel-yaml, tzlocal }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+
+# build-system
+, setuptools
+
+# dependencies
+, dateparser
+, humanize
+, tzlocal
+, pendulum
+, snaptime
+, pytz
+
+# tests
+, freezegun
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "maya";
   version = "0.6.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-f1PgbVoSNhPc58Jwy8ZHZDppQlkNunoZ7DYZTQM4w/Q=";
+  src = fetchFromGitHub {
+    owner = "kennethreitz";
+    repo = "maya";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4fUyUqVQk/AcQL3xMnU1cQlF5yiD/N9NPAsUPuDTTNY=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/kennethreitz/maya/issues/112
-      # Merged, so should be in next release.
-      url = "https://github.com/kennethreitz/maya/commit/f69a93b1103130139cdec30511777823957fb659.patch";
-      sha256 = "152ba7amv9dhhx1wcklfalsdzsxggik9f7rsrikms921lq9xqc8h";
-    })
+  postPatch = ''
+    # function was made private in humanize
+    substituteInPlace maya/core.py \
+      --replace "humanize.time.abs_timedelta" "humanize.time._abs_timedelta"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  propagatedBuildInputs = [ dateparser humanize pendulum ruamel-yaml tzlocal ];
+  propagatedBuildInputs = [
+    dateparser
+    humanize
+    pendulum
+    pytz
+    snaptime
+    tzlocal
+  ];
 
-  # No tests
-  doCheck = false;
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Datetimes for Humans";
