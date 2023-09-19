@@ -79,10 +79,6 @@ with lib;
     "ufs"
   ];
 
-  # Restrict ptrace() usage to processes with a pre-defined relationship
-  # (e.g., parent/child)
-  boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
-
   # Hide kptrs even for processes with CAP_SYSLOG
   boot.kernel.sysctl."kernel.kptr_restrict" = mkOverride 500 2;
 
