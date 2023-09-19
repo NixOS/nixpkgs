@@ -10,14 +10,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snagboot";
-  version = "1.1";
+  version = "1.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "bootlin";
     repo = "snagboot";
     rev = "v${version}";
-    hash = "sha256-MU6LzjH6s2MS7T3u1OUeJ5ZmWgL0otA/q0ylwTNH4fA=";
+    hash = "sha256-OuHY5+2puZAERtwmXduUW5Wjus6KeQLJLcGcl48umLA=";
   };
 
   passthru = {
