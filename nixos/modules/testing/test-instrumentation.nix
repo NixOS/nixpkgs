@@ -6,10 +6,15 @@
 with lib;
 
 let
+  cfg = config.testing;
+
   qemu-common = import ../../lib/qemu-common.nix { inherit lib pkgs; };
 
   backdoorService = {
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [ "sysinit.target" ];
+    unitConfig.DefaultDependencies = false;
+    conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
+    before = [ "shutdown.target" "initrd-switch-root.target" ];
     requires = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
     after = [ "dev-hvc0.device" "dev-${qemu-common.qemuSerialDevice}.device" ];
     script =
@@ -18,7 +23,9 @@ let
         export HOME=/root
         export DISPLAY=:0.0
 
-        source /etc/profile
+        if [[ -e /etc/profile ]]; then
+            source /etc/profile
+        fi
 
         # Don't use a pager when executing backdoor
         # actions. Because we use a tty, commands like systemctl
@@ -49,9 +56,59 @@ in
 
 {
 
+  options.testing = {
+
+    initrdBackdoor = lib.mkEnableOption (lib.mdDoc ''
+      enable backdoor.service in initrd. Requires
+      boot.initrd.systemd.enable to be enabled. Boot will pause in
+      stage 1 at initrd.target, and will listen for commands from the
+      Machine python interface, just like stage 2 normally does. This
+      enables commands to be sent to test and debug stage 1. Use
+      machine.switch_root() to leave stage 1 and proceed to stage 2.
+    '');
+
+  };
+
   config = {
 
-    systemd.services.backdoor = backdoorService
+    assertions = [
+      {
+        assertion = cfg.initrdBackdoor -> config.boot.initrd.systemd.enable;
+        message = ''
+          testing.initrdBackdoor requires boot.initrd.systemd.enable to be enabled.
+        '';
+      }
+    ];
+
+    systemd.services.backdoor = backdoorService;
+
+    boot.initrd.systemd = lib.mkMerge [
+      {
+        contents."/etc/systemd/journald.conf".text = ''
+          [Journal]
+          ForwardToConsole=yes
+          MaxLevelConsole=debug
+        '';
+
+        extraConfig = config.systemd.extraConfig;
+      }
+
+      (lib.mkIf cfg.initrdBackdoor {
+        # Implemented in machine.switch_root(). Suppress the unit by
+        # making it a noop without removing it, which would break
+        # initrd-parse-etc.service
+        services.initrd-cleanup.serviceConfig.ExecStart = [
+          # Reset
+          ""
+          # noop
+          "/bin/true"
+        ];
+
+        services.backdoor = backdoorService;
+
+        contents."/usr/bin/env".source = "${pkgs.coreutils}/bin/env";
+      })
+    ];
 
     # Prevent agetty from being instantiated on the serial device, since it
     # interferes with the backdoor (writes to it will randomly fail
@@ -107,12 +164,6 @@ in
         MaxLevelConsole=debug
       '';
 
-    boot.initrd.systemd.contents."/etc/systemd/journald.conf".text = ''
-      [Journal]
-      ForwardToConsole=yes
-      MaxLevelConsole=debug
-    '';
-
     systemd.extraConfig = ''
       # Don't clobber the console with duplicate systemd messages.
       ShowStatus=no
@@ -125,8 +176,6 @@ in
       DefaultTimeoutStartSec=300
       DefaultDeviceTimeoutSec=300
     '';
-
-    boot.initrd.systemd.extraConfig = config.systemd.extraConfig;
 
     boot.consoleLogLevel = 7;
 
