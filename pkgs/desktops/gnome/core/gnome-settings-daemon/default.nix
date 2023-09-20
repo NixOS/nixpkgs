@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/merge_requests/202
-    ./add-gnome-session-ctl-support.patch
+    ./add-gnome-session-ctl-option.patch
 
     (substituteAll {
       src = ./fix-paths.patch;
