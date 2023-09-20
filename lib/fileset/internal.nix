@@ -114,8 +114,10 @@ rec {
     # The one and only!
     _internalIsEmptyWithoutBase = true;
 
-    # Double __ to make it be evaluated and ordered first
-    __noEval = throw _noEvalMessage;
+    # Due to alphabetical ordering, this is evaluated last,
+    # which makes the nix repl output nicer than if it would be ordered first.
+    # It also allows evaluating it strictly up to this error, which could be useful
+    _noEval = throw _noEvalMessage;
   };
 
   # Create a fileset, see ./README.md#fileset
@@ -137,8 +139,10 @@ rec {
       _internalBaseComponents = components parts.subpath;
       _internalTree = tree;
 
-      # Double __ to make it be evaluated and ordered first
-      __noEval = throw _noEvalMessage;
+      # Due to alphabetical ordering, this is evaluated last,
+      # which makes the nix repl output nicer than if it would be ordered first.
+      # It also allows evaluating it strictly up to this error, which could be useful
+      _noEval = throw _noEvalMessage;
     };
 
   # Coerce a value to a fileset, erroring when the value cannot be coerced.

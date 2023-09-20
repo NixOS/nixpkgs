@@ -84,14 +84,14 @@ expectStorePath() {
     crudeUnquoteJSON <<< "$result"
 }
 
-# Check that a nix expression fails to evaluate (strictly, coercing to json, read-write-mode).
+# Check that a nix expression fails to evaluate (strictly, read-write-mode).
 # And check the received stderr against a regex
 # The expression has `lib.fileset` in scope.
 # Usage: expectFailure NIX REGEX
 expectFailure() {
     local expr=$1
     local expectedErrorRegex=$2
-    if result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace 2>"$tmp/stderr" \
+    if result=$(nix-instantiate --eval --strict --read-write-mode --show-trace 2>"$tmp/stderr" \
         --expr "$prefixExpression $expr"); then
         die "$expr evaluated successfully to $result, but it was expected to fail"
     fi
