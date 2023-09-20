@@ -1,4 +1,6 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }: {
+import ./make-test-python.nix ({ lib, pkgs, ... }: let
+  dbPasswordFile = pkgs.writeText "db-password" "db-secret";
+in {
   name = "freshrss";
   meta.maintainers = with lib.maintainers; [ etu stunkymonkey ];
 
@@ -12,24 +14,24 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         type = "pgsql";
         port = 5432;
         user = "freshrss";
-        passFile = pkgs.writeText "db-password" "db-secret";
+        passFile = dbPasswordFile;
       };
     };
 
     services.postgresql = {
       enable = true;
-      ensureDatabases = [ "freshrss" ];
+      ensureDatabases = [
+        {
+          name = "freshrss";
+          owner = "freshrss";
+        }
+      ];
       ensureUsers = [
         {
           name = "freshrss";
-          ensurePermissions = {
-            "DATABASE freshrss" = "ALL PRIVILEGES";
-          };
+          passwordFile = dbPasswordFile;
         }
       ];
-      initialScript = pkgs.writeText "postgresql-password" ''
-        CREATE ROLE freshrss WITH LOGIN PASSWORD 'db-secret' CREATEDB;
-      '';
     };
 
     systemd.services."freshrss-config" = {
