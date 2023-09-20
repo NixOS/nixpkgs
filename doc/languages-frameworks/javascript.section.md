@@ -219,7 +219,7 @@ sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 
 ### corepack {#javascript-corepack}
 
-This package puts the corepack wrappers for npm, pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
+This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
 
 ### node2nix {#javascript-node2nix}
 
