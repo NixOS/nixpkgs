@@ -7,11 +7,14 @@ let
     isString
     pathExists
     readDir
-    typeOf
+    seq
     split
+    trace
+    typeOf
     ;
 
   inherit (lib.attrsets)
+    attrNames
     attrValues
     mapAttrs
     setAttrByPath
@@ -241,7 +244,7 @@ rec {
       // value;
 
   /*
-    A normalisation of a filesetTree suitable for use in builtins.path-based filtering:
+    A normalisation of a filesetTree suitable filtering with `builtins.path`:
     - Replace all directories that have no files with `null`.
       This removes directories that would be empty
     - Replace all directories with all files with `"directory"`.
@@ -269,6 +272,108 @@ rec {
         normalisedSubtrees
     else
       tree;
+
+  /*
+    A minimal normalisation of a filesetTree, intended for pretty-printing:
+    - If all children of a path are recursively included or empty directories, the path itself is also recursively included
+    - If all children of a path are fully excluded or empty directories, the path itself is an empty directory
+    - Other empty directories are represented with the special "emptyDir" string
+      While these could be replaced with `null`, that would take another mapAttrs
+
+    Note that this function is partially lazy.
+
+    Type: Path -> filesetTree -> filesetTree (with "emptyDir"'s)
+  */
+  _normaliseTreeMinimal = path: tree:
+    if tree == "directory" || isAttrs tree then
+      let
+        entries = _directoryEntries path tree;
+        normalisedSubtrees = mapAttrs (name: _normaliseTreeMinimal (path + "/${name}")) entries;
+        subtreeValues = attrValues normalisedSubtrees;
+      in
+      # If there are no entries, or all entries are empty directories, return "emptyDir".
+      # After this branch we know that there's at least one file
+      if all (value: value == "emptyDir") subtreeValues then
+        "emptyDir"
+
+      # If all subtrees are fully included or empty directories
+      # (both of which are coincidentally represented as strings), return "directory".
+      # This takes advantage of the fact that empty directories can be represented as included directories.
+      # Note that the tree == "directory" check allows avoiding recursion
+      else if tree == "directory" || all (value: isString value) subtreeValues then
+        "directory"
+
+      # If all subtrees are fully excluded or empty directories, return null.
+      # This takes advantage of the fact that empty directories can be represented as excluded directories
+      else if all (value: isNull value || value == "emptyDir") subtreeValues then
+        null
+
+      # Mix of included and excluded entries
+      else
+        normalisedSubtrees
+    else
+      tree;
+
+  # Trace a filesetTree in a pretty way when the resulting value is evaluated.
+  # This can handle both normal filesetTree's, and ones returned from _normaliseTreeMinimal
+  # Type: Path -> filesetTree (with "emptyDir"'s) -> Null
+  _printMinimalTree = base: tree:
+    let
+      treeSuffix = tree:
+        if isAttrs tree then
+          ""
+        else if tree == "directory" then
+          " (all files in directory)"
+        else
+          # This does "leak" the file type strings of the internal representation,
+          # but this is the main reason these file type strings even are in the representation!
+          # TODO: Consider removing that information from the internal representation for performance.
+          # The file types can still be printed by querying them only during tracing
+          " (${tree})";
+
+      # Only for attribute set trees
+      traceTreeAttrs = prevLine: indent: tree:
+        foldl' (prevLine: name:
+          let
+            subtree = tree.${name};
+
+            # Evaluating this prints the line for this subtree
+            thisLine =
+              trace "${indent}- ${name}${treeSuffix subtree}" prevLine;
+          in
+          if subtree == null || subtree == "emptyDir" then
+            # Don't print anything at all if this subtree is empty
+            prevLine
+          else if isAttrs subtree then
+            # A directory with explicit entries
+            # Do print this node, but also recurse
+            traceTreeAttrs thisLine "${indent}  " subtree
+          else
+            # Either a file, or a recursively included directory
+            # Do print this node but no further recursion needed
+            thisLine
+        ) prevLine (attrNames tree);
+
+      # Evaluating this will print the first line
+      firstLine =
+        if tree == null || tree == "emptyDir" then
+          trace "(empty)" null
+        else
+          trace "${toString base}${treeSuffix tree}" null;
+    in
+    if isAttrs tree then
+      traceTreeAttrs firstLine "" tree
+    else
+      firstLine;
+
+  # Pretty-print a file set in a pretty way when the resulting value is evaluated
+  # Type: fileset -> Null
+  _printFileset = fileset:
+    if fileset._internalIsEmptyWithoutBase then
+      trace "(empty)" null
+    else
+      _printMinimalTree fileset._internalBase
+        (_normaliseTreeMinimal fileset._internalBase fileset._internalTree);
 
   # Turn a fileset into a source filter function suitable for `builtins.path`
   # Only directories recursively containing at least one files are recursed into
