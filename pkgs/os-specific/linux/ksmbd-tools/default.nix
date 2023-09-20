@@ -22,13 +22,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GZccOlp9zZMqtv3+u8JnKFfIe8sjwbZBLkDk8lt3CGk=";
   };
 
+  patches = [ ./fix-sample-config-install-dir.patch ];
+
   buildInputs = [ glib libnl ] ++ lib.optional withKerberos libkrb5;
 
   nativeBuildInputs = [ autoconf automake libtool pkg-config ];
 
   preConfigure = "./autogen.sh";
 
-  configureFlags = lib.optional withKerberos "--enable-krb5";
+  configureFlags = ["--with-rundir=/run" "--sysconfdir=/etc"] ++ lib.optionals withKerberos ["--enable-krb5"];
 
   meta = with lib; {
     description = "Userspace utilities for the ksmbd kernel SMB server";

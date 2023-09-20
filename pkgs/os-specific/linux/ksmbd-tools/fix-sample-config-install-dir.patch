@@ -1,0 +1,13 @@
+diff --git a/Makefile.am b/Makefile.am
+index 0014d7e..620477f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -11,7 +11,7 @@ EXTRA_DIST = include \
+ 	     meson.build \
+ 	     meson_options.txt
+
+-pkgsysconfdir = $(sysconfdir)/ksmbd
++pkgsysconfdir = $(out)$(sysconfdir)/ksmbd
+ dist_pkgsysconf_DATA = ksmbd.conf.example
+
+ man_MANS = ksmbd.conf.5 ksmbdpwd.db.5
