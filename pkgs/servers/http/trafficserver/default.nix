@@ -74,6 +74,18 @@ stdenv.mkDerivation rec {
     })
     ./9.1.4-CVE-2023-33933.patch
     ./9.1.4-CVE-2023-30631.patch
+
+    (fetchpatch {
+      name = "CVE-2022-47185.patch";
+      url = "https://github.com/apache/trafficserver/commit/5d0835ea5a57003798497d07331fa4f89823c750.patch";
+      sha256 = "sha256-h4vaa7UwWFmJ9ZOtZsHuExcZQMFG8IER4WFp1r7Ym+U=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-33934.patch";
+      url = "https://github.com/apache/trafficserver/commit/32d93ad084d18ee592754e3736d960a4fd8ddfd2.patch";
+      sha256 = "sha256-z3rCUe7MhKwnn8wzW6ba5ojdSAIhHkL/PNZqm04gNf4=";
+    })
+    ./9.1.4-CVE-2023-33934.supplemental.patch
   ];
 
   # NOTE: The upstream README indicates that flex is needed for some features,
