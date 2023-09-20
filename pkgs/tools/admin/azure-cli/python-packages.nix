@@ -115,8 +115,10 @@ let
       azure-batch = overrideAzureMgmtPackage super.azure-batch "14.0.0" "zip"
         "sha256-FlsembhvghAkxProX7NIadQHqg67DKS5b7JthZwmyTQ=";
 
-      azure-data-tables = overrideAzureMgmtPackage super.azure-data-tables "12.4.0" "zip"
-        "sha256-3V/I3pHi+JCO+kxkyn9jz4OzBoqbpCYpjeO1QTnpZlw=";
+      azure-data-tables = (overrideAzureMgmtPackage super.azure-data-tables "12.4.0" "zip"
+        "sha256-3V/I3pHi+JCO+kxkyn9jz4OzBoqbpCYpjeO1QTnpZlw=").overridePythonAttrs (attrs: {
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
+      });
 
       azure-mgmt-apimanagement = overrideAzureMgmtPackage super.azure-mgmt-apimanagement "4.0.0" "zip"
         "sha256-AiTjLJ28g80xnrRFLfPUevJgeaxLpuGmvkd3+FskNiw=";
