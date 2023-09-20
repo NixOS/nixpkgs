@@ -31670,7 +31670,10 @@ with pkgs;
   gpg-mdp = callPackage ../applications/misc/gpg-mdp { };
 
   greenfoot = callPackage ../applications/editors/greenfoot {
-    jdk = jetbrains.jdk;
+    openjdk = openjdk17.override {
+      enableJavaFX = true;
+      openjfx = openjfx17.override { withWebKit = true; };
+    };
   };
 
   gspeech = callPackage ../applications/audio/gspeech { };
