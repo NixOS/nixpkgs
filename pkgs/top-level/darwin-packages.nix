@@ -2,6 +2,7 @@
 , buildPackages, pkgs, targetPackages
 , generateSplicesForMkScope, makeScopeWithSplicing'
 , stdenv
+, overrideCC
 , preLibcCrossHeaders
 , config
 }:
@@ -79,8 +80,63 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0;
 
   stdenvNoCF = stdenv.override {
-    extraBuildInputs = [];
+    extraBuildInputs = [ apple_sdk.sdkRoot ];
   };
+
+  # Rewrapping clang is necessary to avoid infinite recursions while overriding Libsystem.
+  # This is used for building dependencies of Libsystem that require a working clang.
+  stdenvBootstrap = overrideCC buildPackages.targetPackages.darwin.stdenvNoCF (import ../build-support/cc-wrapper (
+    let
+      LibsystemNoResolv = buildPackages.targetPackages.darwin.Libsystem.override {
+        withCsu = false;
+        withLibresolv = false;
+      };
+    in
+    {
+      inherit lib;
+      inherit (buildPackages) stdenvNoCC coreutils gnugrep runtimeShell;
+
+      expand-response-params = "";
+
+      nativeTools = false;
+      nativeLibc = false;
+
+      cc = buildPackages.llvmPackages.clang-unwrapped;
+      libc = LibsystemNoResolv;
+
+      bintools = import ../build-support/bintools-wrapper {
+        inherit lib;
+        inherit (buildPackages) stdenvNoCC coreutils gnugrep runtimeShell;
+
+        expand-response-params = "";
+
+        libc = LibsystemNoResolv;
+
+        bintools = buildPackages.darwin.binutils-unwrapped;
+
+        nativeTools = false;
+        nativeLibc = false;
+      };
+
+      # Can’t rely on `release_version` because this may be used with the bootstrap compiler,
+      # which does not necessarily provide a correct `release_version`.
+      extraBuildCommands = ''
+        function clangResourceRootIncludePath() {
+          clangLib="$1/lib/clang"
+          if (( $(ls "$clangLib" | wc -l) > 1 )); then
+            echo "Multiple LLVM versions were found at "$clangLib", but there must only be one used when building the stdenv." >&2
+            exit 1
+          fi
+          echo "$clangLib/$(ls -1 "$clangLib")/include"
+        }
+
+        rsrc="$out/resource-root"
+        mkdir "$rsrc"
+        ln -s "$(clangResourceRootIncludePath "${buildPackages.llvmPackages.clang-unwrapped.lib}")" "$rsrc"
+        echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      '';
+    })
+  );
 
   binutils-unwrapped = callPackage ../os-specific/darwin/binutils {
     inherit (pkgs.llvmPackages) clang-unwrapped llvm llvm-manpages;
