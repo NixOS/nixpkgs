@@ -44,6 +44,6 @@ resholve.mkDerivation rec {
     license = licenses.asl20;
     mainProgram = "dgoss";
     maintainers = with maintainers; [ hyzual anthonyroussel ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
