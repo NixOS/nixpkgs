@@ -17445,12 +17445,12 @@ with pkgs;
     , nixSupport ? {}
     , ...
     } @ extraArgs:
-      callPackage ../build-support/cc-wrapper (let self = rec {
+      callPackage ../build-support/cc-wrapper (let self = {
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     noLibc = !self.nativeLibc && (self.libc == null);
-    propagateDoc = if nativeTools then false else ((stdenv.cc ? "man") && (cc ? "man"));
+    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? "man") && (cc ? "man"));
 
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
@@ -17467,11 +17467,11 @@ with pkgs;
     , libc ? if stdenv.targetPlatform != stdenv.hostPlatform then libcCross else stdenv.cc.libc
     , ...
     } @ extraArgs:
-      callPackage ../build-support/bintools-wrapper (let self = rec {
+      callPackage ../build-support/bintools-wrapper (let self = {
     nativeTools = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.targetPlatform == stdenv.hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    propagateDoc = if nativeTools then false else ((stdenv.cc ? "man") && (bintools ? "man"));
+    propagateDoc = if self.nativeTools then false else ((stdenv.cc ? "man") && (bintools ? "man"));
     noLibc = !self.nativeLibc && (self.libc == null);
 
     inherit bintools libc;
