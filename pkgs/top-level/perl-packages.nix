@@ -21442,6 +21442,13 @@ with self; {
       url = "mirror://cpan/authors/id/F/FR/FROGGS/SDL-2.548.tar.gz";
       hash = "sha256-JSoZK/qcIHCkiDcH0TnDpF2cRRjM1moeaZtbeVm9T7U=";
     };
+    patches = [
+      # https://github.com/PerlGameDev/SDL/pull/304
+      (fetchpatch {
+        url = "https://github.com/PerlGameDev/SDL/commit/d734d03862d7dcc776bd2fa3ba662cdd5879b32e.patch";
+        hash = "sha256-YjtnAbJxCvx5QckiatZjD8v7dKefG3DCnXeLaNnEO8U=";
+      })
+    ];
     perlPreHook = "export LD=$CC";
     preCheck = "rm t/core_audiospec.t";
     buildInputs = [ pkgs.SDL pkgs.SDL_gfx pkgs.SDL_mixer pkgs.SDL_image pkgs.SDL_ttf pkgs.SDL_Pango pkgs.SDL_net AlienSDL CaptureTiny TestDeep TestDifferences TestException TestMost TestWarn ];
