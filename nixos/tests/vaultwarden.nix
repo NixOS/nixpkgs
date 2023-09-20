@@ -53,11 +53,20 @@ let
           postgresql = {
             services.postgresql = {
               enable = true;
-              initialScript = pkgs.writeText "postgresql-init.sql" ''
-                CREATE DATABASE bitwarden;
-                CREATE USER bitwardenuser WITH PASSWORD '${dbPassword}';
-                GRANT ALL PRIVILEGES ON DATABASE bitwarden TO bitwardenuser;
-              '';
+
+              ensureDatabases = [
+                {
+                  name = "bitwarden";
+                  owner = "bitwardenuser";
+                }
+              ];
+
+              ensureUsers = [
+                {
+                  name = "bitwardenuser";
+                  passwordFile = pkgs.writeText "bitwardenuser-password" dbPassword;
+                }
+              ];
             };
 
             services.vaultwarden.config.databaseUrl = "postgresql://bitwardenuser:${dbPassword}@localhost/bitwarden";
