@@ -6,7 +6,7 @@
 
 let
   pname = "engage";
-  version = "0.1.3";
+  version = "0.2.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage {
   src = fetchgit {
     url = "https://or.computer.surgery/charles/${pname}";
     rev = "v${version}";
-    hash = "sha256-B7pDJDoQiigaxcia0LfG7zHEzYtvhCUNpbmfR2ny4ZE=";
+    hash = "sha256-niXh63xTpXSp9Wqwfi8hUBKJSClOUSvB+TPCTaqHfZk=";
   };
 
-  cargoHash = "sha256-Akk7fh7/eyN8gyuh3y3aeeKD2STtrEx+trOm5ww9lgw=";
+  cargoHash = "sha256-CKe0nb5JHi5+1UlVOl01Q3qSXQLlpEBdat/IzRKfaz0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
     + builtins.concatStringsSep
       " "
       (builtins.map
-        (shell: "--${shell} <($out/bin/${pname} self completions ${shell})")
+        (shell: "--${shell} <($out/bin/${pname} completions ${shell})")
         [
           "bash"
           "fish"
