@@ -108,6 +108,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests are flaky in the sandbox
     "test_remove_expired_responses"
+    # Tests that broke with urllib 2.0.5
+    "test_request_only_if_cached__stale_if_error__expired"
+    "test_stale_if_error__error_code"
   ];
 
   pythonImportsCheck = [
