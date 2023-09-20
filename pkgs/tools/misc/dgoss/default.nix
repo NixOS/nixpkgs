@@ -42,7 +42,8 @@ resholve.mkDerivation rec {
     changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Convenience wrapper around goss that aims to bring the simplicity of goss to docker containers";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    mainProgram = "dgoss";
     maintainers = with maintainers; [ hyzual anthonyroussel ];
+    platforms = platforms.linux;
   };
 }
