@@ -1,19 +1,20 @@
-{ docbook_xml_dtd_45
-, docbook_xsl
+{ lib
+, stdenv
 , fetchFromGitHub
+
+, docbook_xml_dtd_45
+, docbook_xsl
 , installShellFiles
-, lib
 , libxslt
 , pcre
 , pkg-config
 , python3
-, stdenv
 , which
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cppcheck";
-  version = "2.12.0";
+  version = "2.12.1";
 
   outputs = [ "out" "man" ];
 
@@ -21,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "danmar";
     repo = "cppcheck";
     rev = finalAttrs.version;
-    hash = "sha256-Rfm63ERmTsmmH8W6aiBMx+NiQjzGuoWHqHRRqWishhw=";
+    hash = "sha256-I1z4OZaWUD1sqPf7Z0ISoRl5mrGTFq0l5u2ct29fOmQ=";
   };
 
   nativeBuildInputs = [
