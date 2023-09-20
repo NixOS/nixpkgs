@@ -131,7 +131,7 @@ let
   strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
 
 , enableParallelBuilding ? config.enableParallelBuildingByDefault
-
+, enablePropagateMeta ? false
 , meta ? {}
 , passthru ? {}
 , pos ? # position used in error messages and for meta.position
@@ -296,6 +296,9 @@ else let
        "__impureHostDeps" "__propagatedImpureHostDeps"
        "sandboxProfile" "propagatedSandboxProfile"]
        ++ lib.optional (__structuredAttrs || envIsExportable) "env"))
+    // (lib.optionalAttrs (enablePropagateMeta && attrs ? meta)) {
+      metaJSON = builtins.toJSON attrs.meta;
+    }
     // (lib.optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
       name =
         let
