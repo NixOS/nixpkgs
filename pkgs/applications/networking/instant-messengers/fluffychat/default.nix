@@ -14,17 +14,17 @@ let
 in
 flutter.buildFlutterApplication rec {
   pname = "fluffychat";
-  version = "1.13.0";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "krille-chan";
     repo = "fluffychat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-w29Nxs/d0b18jMvWnrRUjEGqY4jGtuEGodg+ncCAaVc=";
+    hash = "sha256-VTpZvoyZXJ5SCKr3Ocfm4iT6Z/+AWg+SCw/xmp68kMg=";
   };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-dkH+iI1KLsAJtSt6ndc3ZRBllZ9n21RNONqeeUzNQCE=";
+  vendorHash = "sha256-uGrz7QwETZGlwLbfKr1vDo0p/emK1ZCjCX2w0nNVJsA=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";

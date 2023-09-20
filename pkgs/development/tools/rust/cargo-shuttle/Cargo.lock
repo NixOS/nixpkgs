@@ -1141,7 +1141,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-shuttle"
-version = "0.25.1"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -5352,7 +5352,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-admin"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -5369,7 +5369,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-auth"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5398,7 +5398,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-codegen"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "pretty_assertions",
  "proc-macro-error",
@@ -5415,7 +5415,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-common"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5438,7 +5438,6 @@ dependencies = [
  "opentelemetry-otlp",
  "pin-project",
  "proptest",
- "prost-types",
  "rand",
  "reqwest",
  "ring",
@@ -5464,20 +5463,23 @@ dependencies = [
 
 [[package]]
 name = "shuttle-common-tests"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "cargo-shuttle",
  "hyper",
  "portpicker",
  "reqwest",
  "shuttle-common",
+ "shuttle-proto",
  "tokio",
+ "tokio-stream",
+ "tonic",
  "tower",
 ]
 
 [[package]]
 name = "shuttle-deployer"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5500,11 +5502,13 @@ dependencies = [
  "opentelemetry-http",
  "pipe",
  "portpicker",
+ "prost-types",
  "rand",
  "rmp-serde",
  "serde",
  "serde_json",
  "shuttle-common",
+ "shuttle-common-tests",
  "shuttle-proto",
  "shuttle-service",
  "sqlx",
@@ -5513,6 +5517,7 @@ dependencies = [
  "tempfile",
  "thiserror",
  "tokio",
+ "tokio-stream",
  "toml 0.5.11",
  "tonic",
  "tower",
@@ -5528,7 +5533,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-gateway"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -5585,8 +5590,34 @@ dependencies = [
 ]
 
 [[package]]
+name = "shuttle-logger"
+version = "0.26.0"
+dependencies = [
+ "async-trait",
+ "chrono",
+ "clap",
+ "ctor",
+ "once_cell",
+ "portpicker",
+ "pretty_assertions",
+ "prost-types",
+ "serde_json",
+ "shuttle-common",
+ "shuttle-common-tests",
+ "shuttle-proto",
+ "sqlx",
+ "thiserror",
+ "tokio",
+ "tokio-stream",
+ "tonic",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
 name = "shuttle-proto"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "chrono",
@@ -5604,7 +5635,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-provisioner"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "aws-config",
  "aws-sdk-rds",
@@ -5630,7 +5661,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-resource-recorder"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "async-trait",
  "chrono",
@@ -5654,12 +5685,13 @@ dependencies = [
 
 [[package]]
 name = "shuttle-runtime"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "async-trait",
  "cap-std",
  "chrono",
+ "colored",
  "crossbeam-channel",
  "futures",
  "hyper",
@@ -5678,8 +5710,8 @@ dependencies = [
  "tokio-stream",
  "tonic",
  "tower",
- "tracing",
  "tracing-subscriber",
+ "uuid",
  "wasi-common",
  "wasmtime",
  "wasmtime-wasi",
@@ -5687,7 +5719,7 @@ dependencies = [
 
 [[package]]
 name = "shuttle-service"
-version = "0.25.0"
+version = "0.26.0"
 dependencies = [
  "anyhow",
  "async-trait",

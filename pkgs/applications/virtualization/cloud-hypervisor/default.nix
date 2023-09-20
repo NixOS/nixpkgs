@@ -37,7 +37,8 @@ rustPlatform.buildRustPackage rec {
   cargoTestFlags = [
     "--workspace"
     "--bins" "--lib" # Integration tests require root.
-    "--exclude" "net_util" # Tries to access /dev/net/tun
+    "--exclude" "net_util" # /dev/net/tun
+    "--exclude" "vmm"      # /dev/kvm
   ];
 
   meta = with lib; {
