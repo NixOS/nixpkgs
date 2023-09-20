@@ -44,13 +44,6 @@ stdenv.mkDerivation rec {
     libgweather
   ];
 
-  postPatch = ''
-    # Nothing is installed to $datadir/glib-2.0/schemas.
-    # https://gitlab.gnome.org/GNOME/loupe/-/merge_requests/280
-    substituteInPlace meson.build --replace \
-      "glib_compile_schemas: true," "glib_compile_schemas: false,"
-  '';
-
   preFixup = ''
     # Needed for the glycin crate to find loaders.
     # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
