@@ -241,22 +241,22 @@ rec {
       // value;
 
   /*
-    Simplify a filesetTree recursively:
-    - Replace all directories that have no files with `null`
+    A normalisation of a filesetTree suitable for use in builtins.path-based filtering:
+    - Replace all directories that have no files with `null`.
       This removes directories that would be empty
-    - Replace all directories with all files with `"directory"`
+    - Replace all directories with all files with `"directory"`.
       This speeds up the source filter function
 
     Note that this function is strict, it evaluates the entire tree
 
     Type: Path -> filesetTree -> filesetTree
   */
-  _simplifyTree = path: tree:
+  _normaliseTreeFilter = path: tree:
     if tree == "directory" || isAttrs tree then
       let
         entries = _directoryEntries path tree;
-        simpleSubtrees = mapAttrs (name: _simplifyTree (path + "/${name}")) entries;
-        subtreeValues = attrValues simpleSubtrees;
+        normalisedSubtrees = mapAttrs (name: _normaliseTreeFilter (path + "/${name}")) entries;
+        subtreeValues = attrValues normalisedSubtrees;
       in
       # This triggers either when all files in a directory are filtered out
       # Or when the directory doesn't contain any files at all
@@ -266,7 +266,7 @@ rec {
       else if all isString subtreeValues then
         "directory"
       else
-        simpleSubtrees
+        normalisedSubtrees
     else
       tree;
 
@@ -277,7 +277,7 @@ rec {
     let
       # Simplify the tree, necessary to make sure all empty directories are null
       # which has the effect that they aren't included in the result
-      tree = _simplifyTree fileset._internalBase fileset._internalTree;
+      tree = _normaliseTreeFilter fileset._internalBase fileset._internalTree;
 
       # The base path as a string with a single trailing slash
       baseString =
