@@ -1,4 +1,4 @@
-{ mkDerivation, freebsdSetupHook, pkgs }:
+{ mkDerivation, freebsdSetupHook, buildPackages, buildFreebsd, ... }:
 mkDerivation {
   path = "usr.bin/lorder";
   noCC = true;
@@ -9,7 +9,7 @@ mkDerivation {
     chmod +x "$out/bin/lorder"
     mv "lorder.1" "$man/share/man"
   '';
-  nativeBuildInputs = [ pkgs.bsdSetupHook freebsdSetupHook ];
+  nativeBuildInputs = [ buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook ];
   buildInputs = [];
   outputs = [ "out" "man" ];
 }

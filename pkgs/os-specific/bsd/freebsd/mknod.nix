@@ -1,4 +1,4 @@
-{ mkDerivation }:
+{ mkDerivation, ... }:
 mkDerivation {
   path = "sbin/mknod";
 }

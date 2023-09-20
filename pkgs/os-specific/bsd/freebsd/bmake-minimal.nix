@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook }:
+{ lib, stdenv, mkDerivation, bsdSetupHook, freebsdSetupHook, ... }:
 mkDerivation rec {
   path = "contrib/bmake";
 

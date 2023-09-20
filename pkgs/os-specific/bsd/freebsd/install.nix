@@ -1,18 +1,20 @@
-{ pkgs, install-wrapper, mkDerivation, mtree, buildPackages, compatIfNeeded, lib, stdenv, libnetbsd }:
-let binstall = pkgs.writeShellScript "binstall" (install-wrapper + ''
+{ install-wrapper, mkDerivation, mtree, buildPackages, buildFreebsd, compatIfNeeded, lib, stdenv, libmd, libnetbsd, ... }:
+let binstall = buildPackages.writeShellScript "binstall" (install-wrapper + ''
   @out@/bin/xinstall "''${args[@]}"
 ''); in mkDerivation {
   path = "usr.bin/xinstall";
   extraPaths = [ mtree.path ];
-  nativeBuildInputs = with buildPackages.freebsd; [
-    pkgs.bsdSetupHook freebsdSetupHook
-    makeMinimal pkgs.mandoc pkgs.groff
+  nativeBuildInputs = [
+    buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
+    buildFreebsd.makeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake??
     (if stdenv.hostPlatform == stdenv.buildPlatform
-     then boot-install
-     else install)
+     then buildFreebsd.boot-install
+     else buildFreebsd.install)
+    buildPackages.libmd
+    buildFreebsd.libnetbsd
   ];
   skipIncludesPhase = true;
-  buildInputs = compatIfNeeded ++ [ pkgs.libmd libnetbsd ];
+  buildInputs = compatIfNeeded ++ [libmd libnetbsd];  # TODO: WHAT is up with pkgs.libmd and libnetbsd
   makeFlags = [
     "STRIP=-s" # flag to install, not command
     "MK_WERROR=no"
@@ -25,4 +27,5 @@ let binstall = pkgs.writeShellScript "binstall" (install-wrapper + ''
     ln -s ./binstall $out/bin/install
   '';
   outputs = [ "out" "man" "test" ];
+  NIX_DEBUG=1;
 }

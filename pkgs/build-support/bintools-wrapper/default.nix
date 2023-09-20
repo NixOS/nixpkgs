@@ -23,7 +23,7 @@
   else
     lib.getLib libc
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, propagateDoc ? bintools != null && bintools ? man
+, propagateDoc ? bintools != null && bintools ? "man"
 , extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? bintools.isGNU or false
 , isLLVM ? bintools.isLLVM or false
@@ -61,6 +61,7 @@
 
 with lib;
 
+assert propagateDoc -> bintools ? "man";
 assert nativeTools -> !propagateDoc && nativePrefix != "";
 assert !nativeTools ->
   bintools != null && coreutils != null && gnugrep != null;

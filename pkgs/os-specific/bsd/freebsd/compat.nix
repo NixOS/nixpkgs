@@ -1,4 +1,5 @@
-{ mkDerivation, stdenv, lib, hostArchBsd, buildPackages, pkgs, patchesRoot, hostVersion }:
+{ mkDerivation, stdenv, lib, hostArchBsd, buildPackages, buildFreebsd, pkgs, patchesRoot, hostVersion, ... }:
+assert stdenv.hostPlatform == stdenv.targetPlatform;
 mkDerivation {
   pname = "compat";
   path = "tools/build";
@@ -67,6 +68,12 @@ mkDerivation {
     "sys/sys/font.h"
     "sys/sys/consio.h"
     "sys/sys/fnv_hash.h"
+    #"sys/sys/cdefs.h"
+    #"sys/sys/param.h"
+    "sys/sys/_null.h"
+    #"sys/sys/types.h"
+    "sys/sys/_pthreadtypes.h"
+    "sys/sys/_stdint.h"
 
     "sys/crypto/chacha20/_chacha.h"
     "sys/crypto/chacha20/chacha.h"
@@ -79,6 +86,7 @@ mkDerivation {
 
     "lib/libcapsicum"
     "lib/libcasper"
+    "lib/libmd"
   ];
 
   patches = [
@@ -105,14 +113,16 @@ mkDerivation {
     rm ''${!outputDev}/0-include/libelf.h
   '';
 
-  nativeBuildInputs = with buildPackages.freebsd; [
-    buildPackages.bsdSetupHook freebsdSetupHook
-    makeMinimal
-    boot-install
+  nativeBuildInputs = [
+    buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
+    buildFreebsd.makeMinimal  # TODO uhhhh bmake?
+    buildFreebsd.boot-install
 
-    pkgs.which
+    buildPackages.which
+    buildPackages.expat
+    buildPackages.zlib
   ];
-  buildInputs = with pkgs; [ expat zlib ];
+  buildInputs = [];
 
   makeFlags = [
     "STRIP=-s" # flag to install, not command

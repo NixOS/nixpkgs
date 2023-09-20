@@ -1,12 +1,12 @@
-{ mkDerivation, buildPackages, stdenv, lib, compatIfNeeded, pkgs }:
+{ mkDerivation, buildPackages, buildFreebsd, stdenv, lib, ... }:
 mkDerivation {
   path = "lib/libnetbsd";
-  nativeBuildInputs = with buildPackages.freebsd; [
-    pkgs.bsdSetupHook freebsdSetupHook
-    makeMinimal pkgs.mandoc pkgs.groff
+  nativeBuildInputs = [
+    buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
+    buildFreebsd.makeMinimal buildPackages.mandoc buildPackages.groff  # TODO bmake???
     (if stdenv.hostPlatform == stdenv.buildPlatform
-     then boot-install
-     else install)
+     then buildFreebsd.boot-install
+     else buildFreebsd.install)
   ];
   patches = lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
     ./libnetbsd-do-install.patch
@@ -16,5 +16,4 @@ mkDerivation {
     "STRIP=-s" # flag to install, not command
     "MK_WERROR=no"
   ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "INSTALL=boot-install";
-  buildInputs = compatIfNeeded;
 }

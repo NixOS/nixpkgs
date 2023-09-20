@@ -328,6 +328,7 @@ rec {
   };
   x86_64-freebsd14 = {
     config = "x86_64-unknown-freebsd14";
+    useLLVM = true;
   };
 
   x86_64-netbsd = {

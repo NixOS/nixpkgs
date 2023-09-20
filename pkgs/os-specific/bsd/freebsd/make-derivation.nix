@@ -1,11 +1,18 @@
-{ lib, stdenvNoCC, stdenv, hostVersion, runCommand, rsync, source, buildPackages, hostArchBsd, compatIfNeeded, pkgs, tsort, lorder }:
+{ lib, crossLibcStdenv, stdenv, hostVersion, runCommand, source, buildPackages, buildFreebsd, hostArchBsd, compatIfNeeded, pkgsBuildBuild, overrideCC, ... }:
 lib.makeOverridable (attrs: let
-  stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+  #crossLibcStdenv' = crossLibcStdenv // {
+  #  cc = crossLibcStdenv.cc.override {
+  #    cc = crossLibcStdenv.cc.cc.override {
+  #      enableShared = false;
+  #    };
+  #  };
+  #};
+  stdenv' = if attrs.isStatic or false then crossLibcStdenv else stdenv;  # TODO stdenvNoCC?
 in stdenv'.mkDerivation (rec {
   pname = "${attrs.pname or (baseNameOf attrs.path)}";
   version = hostVersion;
   src = runCommand "${pname}-filtered-src" {
-    nativeBuildInputs = [ rsync ];
+    nativeBuildInputs = [ pkgsBuildBuild.rsync ];
   } ''
     for p in ${lib.concatStringsSep " " ([ attrs.path ] ++ attrs.extraPaths or [])}; do
       set -x
@@ -20,12 +27,12 @@ in stdenv'.mkDerivation (rec {
 
   extraPaths = [ ];
 
-  nativeBuildInputs = with pkgs; with buildPackages.freebsd; [
-    bsdSetupHook freebsdSetupHook
-    makeMinimal
-    install tsort lorder mandoc groff #statHook # TODO remove gnugrep and coreutils
+  nativeBuildInputs = [
+    buildPackages.bsdSetupHook buildFreebsd.freebsdSetupHook
+    buildFreebsd.makeMinimal  # TODO bmake??
+    buildFreebsd.install buildFreebsd.tsort buildFreebsd.lorder buildPackages.mandoc buildPackages.groff #statHook
   ];
-  buildInputs = compatIfNeeded;
+  buildInputs = compatIfNeeded;  # TODO ?????
 
   HOST_SH = stdenv'.shell;
 
