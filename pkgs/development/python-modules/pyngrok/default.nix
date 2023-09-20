@@ -24,8 +24,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyngrok" ];
 
   meta = with lib; {
-    homepage = "https://github.com/alexdlaird/pyngrok";
     description = "A Python wrapper for ngrok";
+    homepage = "https://github.com/alexdlaird/pyngrok";
+    changelog = "https://github.com/alexdlaird/pyngrok/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ wegank ];
   };
