@@ -1,13 +1,14 @@
-{ docbook_xml_dtd_45
-, docbook_xsl
+{ lib
+, stdenv
 , fetchFromGitHub
+
+, docbook_xml_dtd_45
+, docbook_xsl
 , installShellFiles
-, lib
 , libxslt
 , pcre
 , pkg-config
 , python3
-, stdenv
 , which
 }:
 
