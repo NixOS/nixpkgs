@@ -1,6 +1,5 @@
 { version
 , dmdSha256
-, druntimeSha256
 , phobosSha256
 }:
 
@@ -21,7 +20,7 @@
 , installShellFiles
 , git
 , unzip
-, HOST_DMD ? "${callPackage ./bootstrap.nix { }}/bin/dmd"
+, dmd_bin ? "${callPackage ./bootstrap.nix { }}/bin"
 }:
 
 let
@@ -60,13 +59,6 @@ stdenv.mkDerivation rec {
     })
     (fetchFromGitHub {
       owner = "dlang";
-      repo = "druntime";
-      rev = "v${version}";
-      sha256 = druntimeSha256;
-      name = "druntime";
-    })
-    (fetchFromGitHub {
-      owner = "dlang";
       repo = "phobos";
       rev = "v${version}";
       sha256 = phobosSha256;
@@ -88,53 +80,36 @@ stdenv.mkDerivation rec {
       extraPrefix = "dmd/";
       sha256 = "sha256-N21mAPfaTo+zGCip4njejasraV5IsWVqlGR5eOdFZZE=";
     })
-  ] ++ lib.optionals (lib.versionOlder version "2.092.2") [
-    # Fixes C++ tests that compiled on older C++ but not on the current one
-    (fetchpatch {
-      url = "https://github.com/dlang/druntime/commit/438990def7e377ca1f87b6d28246673bb38022ab.patch";
-      stripLen = 1;
-      extraPrefix = "druntime/";
-      sha256 = "sha256-/pPKK7ZK9E/mBrxm2MZyBNhYExE8p9jz8JqBdZSE6uY=";
-    })
   ];
 
   postPatch = ''
-    patchShebangs dmd/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
+    patchShebangs dmd/compiler/test/{runnable,fail_compilation,compilable,tools}{,/extra-files}/*.sh
 
-    rm dmd/test/runnable/gdb1.d
-    rm dmd/test/runnable/gdb10311.d
-    rm dmd/test/runnable/gdb14225.d
-    rm dmd/test/runnable/gdb14276.d
-    rm dmd/test/runnable/gdb14313.d
-    rm dmd/test/runnable/gdb14330.d
-    rm dmd/test/runnable/gdb15729.sh
-    rm dmd/test/runnable/gdb4149.d
-    rm dmd/test/runnable/gdb4181.d
+    rm dmd/compiler/test/runnable/gdb1.d
+    rm dmd/compiler/test/runnable/gdb10311.d
+    rm dmd/compiler/test/runnable/gdb14225.d
+    rm dmd/compiler/test/runnable/gdb14276.d
+    rm dmd/compiler/test/runnable/gdb14313.d
+    rm dmd/compiler/test/runnable/gdb14330.d
+    rm dmd/compiler/test/runnable/gdb15729.sh
+    rm dmd/compiler/test/runnable/gdb4149.d
+    rm dmd/compiler/test/runnable/gdb4181.d
 
     # Disable tests that rely on objdump whitespace until fixed upstream:
     #   https://issues.dlang.org/show_bug.cgi?id=23317
-    rm dmd/test/runnable/cdvecfill.sh
-    rm dmd/test/compilable/cdcmp.d
-
-    # Grep'd string changed with gdb 12
-    #   https://issues.dlang.org/show_bug.cgi?id=23198
-    substituteInPlace druntime/test/exceptions/Makefile \
-      --replace 'in D main (' 'in _Dmain ('
-
-    # We're using gnused on all platforms
-    substituteInPlace druntime/test/coverage/Makefile \
-      --replace 'freebsd osx' 'none'
+    rm dmd/compiler/test/runnable/cdvecfill.sh
+    rm dmd/compiler/test/compilable/cdcmp.d
   ''
 
   + lib.optionalString (lib.versionOlder version "2.091.0") ''
     # This one has tested against a hardcoded year, then against a current year on
     # and off again. It just isn't worth it to patch all the historical versions
     # of it, so just remove it until the most recent change.
-    rm dmd/test/compilable/ddocYear.d
+    rm dmd/compiler/test/compilable/ddocYear.d
   '' + lib.optionalString (lib.versionAtLeast version "2.089.0" && lib.versionOlder version "2.092.2") ''
-    rm dmd/test/dshell/test6952.d
+    rm dmd/compiler/test/dshell/test6952.d
   '' + lib.optionalString (lib.versionAtLeast version "2.092.2") ''
-    substituteInPlace dmd/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
+    substituteInPlace dmd/compiler/test/dshell/test6952.d --replace "/usr/bin/env bash" "${bash}/bin/bash"
   ''
 
   + lib.optionalString stdenv.isLinux ''
@@ -179,8 +154,7 @@ stdenv.mkDerivation rec {
       buildJobs=1
     fi
 
-    make -C dmd -f posix.mak $buildFlags -j$buildJobs HOST_DMD=${HOST_DMD}
-    make -C druntime -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd}
+    ${dmd_bin}/rdmd dmd/compiler/src/build.d -j$buildJobs HOST_DMD=${dmd_bin}/dmd $buildFlags
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
     echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
     make -C phobos -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
@@ -205,10 +179,7 @@ stdenv.mkDerivation rec {
     fi
 
     NIX_ENFORCE_PURITY= \
-      make -C dmd/test $checkFlags CC=$CXX SHELL=$SHELL -j$checkJobs N=$checkJobs
-
-    NIX_ENFORCE_PURITY= \
-      make -C druntime -f posix.mak unittest $checkFlags -j$checkJobs
+      make -C dmd/compiler/test $checkFlags CC=$CXX SHELL=$SHELL -j$checkJobs N=$checkJobs
 
     NIX_ENFORCE_PURITY= \
       make -C phobos -f posix.mak unittest $checkFlags -j$checkJobs DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
@@ -244,7 +215,7 @@ stdenv.mkDerivation rec {
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
-    maintainers = with maintainers; [ ThomasMader lionello dukc ];
+    maintainers = with maintainers; [ ThomasMader lionello dukc jtbx ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

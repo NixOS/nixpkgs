@@ -9,13 +9,13 @@
 
 resholve.mkDerivation rec {
   pname = "dgoss";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = "goss";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dpMTUBMEG5tDi7E6ZRg1KHqIj5qDlvwfwJEgq/5z7RE=";
+    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
   };
 
   dontConfigure = true;
