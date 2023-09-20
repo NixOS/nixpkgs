@@ -35,6 +35,9 @@ if [[ "$progName" == swift ]]; then
     esac
 fi
 
+extraAfter=()
+extraBefore=()
+
 # These checks follow the first part of `run_driver`.
 #
 # NOTE: The original function short-circuits, but we can't here, because both

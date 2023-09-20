@@ -3,12 +3,12 @@
   workspaceStateFile = ./workspace-state.json;
   hashes = {
     "swift-argument-parser" = "1jph9w7lk9nr20fsv2c8p4hisx3dda817fh7pybd0r0j1jwa9nmw";
-    "swift-cmark" = "1qswlh6j9mlfq8qj7xfqspla7w7rrzvplgcs4mgllgi012yfgwnp";
+    "swift-cmark" = "02n7y24pwg52zv6ikcfb8zdkw4x6svs3qmw6ypd1c884zdkgmgj0";
     "swift-crypto" = "020b8q4ss2k7a65r5dgh59z40i6sn7ij1allxkh8c8a9d0jzn313";
     "swift-docc-plugin" = "11d6nhi139yzk1lxxrixsbgyj1bnvmh40wj30y725q83nqq49ljh";
-    "swift-docc-symbolkit" = "14w37wzbx1mygfwm4iv0ypj120n1axhk627rg5a7v8j0ln511r7s";
+    "swift-docc-symbolkit" = "16xlh46h9jv209niank87clyy99pjshws97ysr5bypz3518ir4f1";
     "swift-lmdb" = "0azmc24mnxn4pbda8w8v7hy3h0gqqm4br43pnr7lc4sfj3dcv43m";
-    "swift-markdown" = "1l4ydc0xyv88gnyc33p61qavdh8cv98c548n1icphrfd6i78yygw";
+    "swift-markdown" = "1b1y2ic2sshhja1vsjsiic8s3s4ldy5x2c0wdkdhk92d6pm3vij1";
     "swift-nio" = "04bvay94b34ynmlvgyl9a7f431l3cf8k2zr483spv8mvyh1hxiqn";
   };
 }

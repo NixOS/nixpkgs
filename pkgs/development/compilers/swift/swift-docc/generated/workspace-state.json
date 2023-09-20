@@ -29,8 +29,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "gfm",
-            "revision": "eb9a6a357b6816c68f4b194eaa5b67f3cd1fa5c3"
+            "branch": "release/5.9",
+            "revision": "86aeb491675de6f077a3a6df6cbcac1a25dcbee1"
           },
           "name": "sourceControlCheckout"
         },
@@ -80,8 +80,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
-            "revision": "b45d1f2ed151d057b54504d653e0da5552844e34"
+            "branch": "release/5.9",
+            "revision": "d42e3db1c0f97f4a3be9a4552f7003c2959268d5"
           },
           "name": "sourceControlCheckout"
         },
@@ -97,7 +97,7 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
+            "branch": "release/5.9",
             "revision": "584941b1236b15bad74d8163785d389c028b1ad8"
           },
           "name": "sourceControlCheckout"
@@ -114,8 +114,8 @@
         },
         "state": {
           "checkoutState": {
-            "branch": "main",
-            "revision": "d491147940587dbadfb3472354f4d0c6e063e061"
+            "branch": "release/5.9",
+            "revision": "bbeb362919d903eb722c913ad49a1b23d27bdc00"
           },
           "name": "sourceControlCheckout"
         },

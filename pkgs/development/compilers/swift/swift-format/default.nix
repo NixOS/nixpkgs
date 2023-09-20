@@ -19,10 +19,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ swift swiftpm ];
   buildInputs = [ Foundation ];
 
-  configurePhase = generated.configure + ''
-    swiftpmMakeMutable swift-tools-support-core
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${./patches/force-unwrap-file-handles.patch}
-  '';
+  configurePhase = generated.configure;
 
   # We only install the swift-format binary, so don't need the other products.
   swiftpmFlags = [ "--product swift-format" ];

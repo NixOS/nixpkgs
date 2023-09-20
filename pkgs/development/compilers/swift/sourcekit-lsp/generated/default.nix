@@ -2,16 +2,18 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "indexstore-db" = "0lf96m82s8f6lv67wbcnm9ii01fgw4bsr4vn2xp07ydfj1iqy8il";
-    "swift-argument-parser" = "1jph9w7lk9nr20fsv2c8p4hisx3dda817fh7pybd0r0j1jwa9nmw";
-    "swift-collections" = "1k6sjx5rqmp3gklny77b480hyzy6gkhpi23r0s8ljfbrcwawgnan";
-    "swift-crypto" = "0kllp7j0hd8k67l9b9zr2c3ddc5bvshldchzivhcz3q31qvq9ag8";
-    "swift-driver" = "0cbvddj54k3sbw0vzlmzhccs7h43hi5kq6i3n2i0mysz3bf0c6zg";
-    "swift-llbuild" = "106vnssh6pgy5s9dnq1hi1c9v2wkfydqgncg5dy7c9n23iisjy3s";
-    "swift-package-manager" = "1d1ngh7da42dm0rwkw7jzxa63a1rpc88wimm85w2j59cm446pk9k";
-    "swift-syntax" = "05394mzznmcrw246lyzsjsn1fmilj98jgkjyyxr2ynhnbgzp2jl2";
+    "indexstore-db" = "02al5rk807685ian3xckpdl00yplm8v92b7gq1prw7abll8k6hnq";
+    "swift-argument-parser" = "1463yiahwa8qwgzbbxfzj3srcr9yx8z71lniqqaj8hvav3dpfhm8";
+    "swift-asn1" = "0hlz76c2m3ifrxhqvch2h2zysnc6rn80s1y2scdwpkhdxh8kyi4d";
+    "swift-certificates" = "0fixqxb51vpipw081x92wznlrrdi0cpswbhwbjlfc9hgr2wbw77j";
+    "swift-collections" = "0i19czvb1j0xjbg238k802g72dpsa9mvxn9wf16jc3bgckvgbn2q";
+    "swift-crypto" = "1i9sshrkckq8kx8j9nap93xrnzmv1q9zwjjlmg6735x7vigf645w";
+    "swift-driver" = "1m02089427i3ln2663r270vzkcbydy24gy5pc2wd9j1sh7yp153d";
+    "swift-llbuild" = "03czswc2vwz2711qid7jc0l9119fcrqgq585j084v9a9x9i2j4n3";
+    "swift-package-manager" = "01d7d1az6xps1ini13sqhj1n3ddasvksnra0d9lak94im8zkz7mv";
+    "swift-syntax" = "1vggy5yv8sxdp1g0kcaiq2kr3g93rh526xw2jjym0x2mf0zfkkn9";
     "swift-system" = "0402hkx2q2dv27gccnn8ma79ngvwiwzkhcv4zlcdldmy6cgi0px7";
-    "swift-tools-support-core" = "1qvblyiazv58qwyxgyk2dh5ymbab3y70vm2q81qs6rmv43hs8ciz";
-    "Yams" = "0b4lprxl4f6yqq0djnp394mxgmsxm2pljr7fh4f6ihdhnpwfsfvl";
+    "swift-tools-support-core" = "0xh84x25ar5vfvjy58yzamphxm19g713nda5jqx9kjfssdpfv9rk";
+    "Yams" = "1jf3k2lm5b9i8m9bpnzhqa8mnc3qzj91icv5ykjplk3vy0idz3q1";
   };
 }
