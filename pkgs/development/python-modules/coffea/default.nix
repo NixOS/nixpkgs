@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "coffea";
-  version = "2023.6.0.rc1";
-  format = "pyproject";
+  version = "2023.7.0.rc0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
-    repo = pname;
+    repo = "coffea";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TEtQ2KnwcylQbprlRtgHv7HIFg7roDWD4TihrQE4icU=";
+    hash = "sha256-WIJw5NLVN6TrG/0mySqtlqvoNVinmpcWZchSqiNjQ9Q=";
   };
 
   postPatch = ''
