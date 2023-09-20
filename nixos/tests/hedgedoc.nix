@@ -35,10 +35,19 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         };
         postgresql = {
           enable = true;
-          initialScript = pkgs.writeText "pg-init-script.sql" ''
-            CREATE ROLE hedgedoc LOGIN PASSWORD 'snakeoilpassword';
-            CREATE DATABASE hedgedocdb OWNER hedgedoc;
-          '';
+          ensureDatabases = [
+            {
+              name = "hedgedocdb";
+              owner = "hedgedoc";
+            }
+          ];
+          ensureUsers = [
+            {
+              name = "hedgedoc";
+              passwordFile = pkgs.writeText "hedgedoc-password" "snakeoilpassword";
+              ensureClauses.login = true;
+            }
+          ];
         };
       };
     };
