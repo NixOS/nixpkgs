@@ -48,11 +48,12 @@ buildPythonPackage rec {
   pname = "twisted";
   version = "22.10.0";
   format = "setuptools";
+  wheelPname = "Twisted";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    pname = "Twisted";
+    pname = wheelPname;
     inherit version;
     extension = "tar.gz";
     hash = "sha256-Mqy9QKlPX0bntCwQm/riswIlCUVWF4Oot6BZBI8tTTE=";

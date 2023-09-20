@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "python-lz4";
+  pname = "lz4";
   version = "4.3.2";
   format = "setuptools";
 
