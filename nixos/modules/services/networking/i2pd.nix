@@ -254,7 +254,7 @@ in
       };
 
       logLevel = mkOption {
-        type = types.enum ["debug" "info" "warn" "error"];
+        type = types.enum ["debug" "info" "warn" "error" "critical" "none"];
         default = "error";
         description = lib.mdDoc ''
           The log level. {command}`i2pd` defaults to "info"
