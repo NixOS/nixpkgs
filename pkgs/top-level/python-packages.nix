@@ -8939,6 +8939,8 @@ self: super: with self; {
 
   pycarwings2 = callPackage ../development/python-modules/pycarwings2 { };
 
+  pycatch22 = callPackage ../development/python-modules/pycatch22 { };
+
   pycategories = callPackage ../development/python-modules/pycategories { };
 
   pycddl = callPackage ../development/python-modules/pycddl { };
