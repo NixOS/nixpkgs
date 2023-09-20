@@ -181,6 +181,8 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.pname}-${gtk3.version}"
   '';
 
+  passthru.updateScript = ./update.py;
+
   meta = with lib; {
     homepage = "https://www.microsoft.com/en-us/edge";
     description = "The web browser from Microsoft";
