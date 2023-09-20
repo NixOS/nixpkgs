@@ -21,7 +21,6 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 
@@ -33,11 +32,8 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     sip_4 (pyqt5.override { withWebSockets = true; })
     truststore
-  ];
-
-  pythonRelaxDeps = [
-    "jsonschema"
-    "sentry-sdk"
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   doCheck = false; # Failing

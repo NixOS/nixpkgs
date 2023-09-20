@@ -25,14 +25,6 @@ python3.pkgs.buildPythonApplication {
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "jsonschema"
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     aiofiles
     aiohttp
@@ -43,6 +35,7 @@ python3.pkgs.buildPythonApplication {
     jinja2
     jsonschema
     multidict
+    platformdirs
     prompt-toolkit
     psutil
     py-cpuinfo
