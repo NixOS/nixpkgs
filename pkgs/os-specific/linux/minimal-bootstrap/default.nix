@@ -87,6 +87,13 @@ lib.makeScope
 
     gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
 
+    gnumake-musl = callPackage ./gnumake/musl.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-musl;
+      gawk = gawk-mes;
+      gnumakeBoot = gnumake;
+    };
+
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
     gnused = callPackage ./gnused {
