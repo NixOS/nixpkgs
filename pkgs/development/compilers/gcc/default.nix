@@ -56,7 +56,6 @@ let
     "7"  =  "7.5.0";
     "6"  =  "6.5.0";
     "4.9"=  "4.9.4";
-    "4.8"=  "4.8.5";
   }."${majorMinorVersion}";
 
   majorVersion = lib.versions.major version;
@@ -78,7 +77,6 @@ let
   is7  = majorVersion == "7";
   is6  = majorVersion == "6";
   is49 = majorVersion == "4" && lib.versions.minor version == "9";
-  is48 = majorVersion == "4" && lib.versions.minor version == "8";
 in
 
 # We enable the isl cloog backend.
@@ -263,7 +261,6 @@ lib.pipe ((callFile ./common/builder.nix {}) ({
       "7.5.0"  = "0qg6kqc5l72hpnj4vr6l0p69qav0rh4anlkk3y55540zy3klc6dq";
       "6.5.0"  = "0i89fksfp6wr1xg9l8296aslcymv2idn60ip31wr9s4pwin7kwby";
       "4.9.4"  = "14l06m7nvcvb0igkbip58x59w3nq6315k6jcz3wr9ch1rn9d44bc";
-      "4.8.5"  = "08yggr18v373a1ihj0rg2vd6psnic42b518xcgp3r9k81xz1xyr2";
     }."${version}";
   };
 
@@ -414,7 +411,7 @@ ${""}          done
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
   } // lib.optionalAttrs (!atLeast12) {
-    hardeningUnsupportedFlags = lib.optionals is48 [ "stackprotector" ] ++ [ "fortify3" ];
+    hardeningUnsupportedFlags = [ "fortify3" ];
   };
 
   enableParallelBuilding = true;

@@ -15960,38 +15960,26 @@ with pkgs;
                   else if    atLeast "9"   then isl_0_20
                   else if    atLeast "7"   then isl_0_17
                   else if    atLeast "6"   then (if stdenv.targetPlatform.isRedox then isl_0_17 else isl_0_14)
-                  else if    atLeast "4.9" then isl_0_11
-                  else            /* "4.8" */   isl_0_14;
-          } // lib.optionalAttrs (majorMinorVersion == "4.8") {
-            texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
+                  else            /* "4.9" */   isl_0_11;
           } // lib.optionalAttrs (majorMinorVersion == "4.9") {
             # Build fails on Darwin with clang
             stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
           } // lib.optionalAttrs (!(atLeast "6")) {
             cloog = if stdenv.isDarwin
                     then null
-                    else if atLeast "4.9" then cloog_0_18_0
-                    else          /* 4.8 */    cloog;
+                    else          /* 4.9 */    cloog_0_18_0;
           } // lib.optionalAttrs (atLeast "6" && !(atLeast "9")) {
             # gcc 10 is too strict to cross compile gcc <= 8
             stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
           })));
       in lib.nameValuePair attrName pkg
-    ) [ "4.8" "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
-    gcc48 gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13;
+    ) [ "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
+    gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13;
 
   gcc_latest = gcc13;
 
   # Use the same GCC version as the one from stdenv by default
   gfortran = wrapCC (gcc.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
