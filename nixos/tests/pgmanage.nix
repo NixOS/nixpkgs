@@ -14,9 +14,16 @@ in
       services = {
         postgresql = {
           enable = true;
-          initialScript = pkgs.writeText "pg-init-script" ''
-            CREATE ROLE ${role} SUPERUSER LOGIN PASSWORD '${password}';
-          '';
+          ensureUsers = [
+            {
+              name = role;
+              passwordFile = pkgs.writeText "${role}-password" password;
+              ensureClauses = {
+                superuser = true;
+                login = true;
+              };
+            }
+          ];
         };
         pgmanage = {
           enable = true;
