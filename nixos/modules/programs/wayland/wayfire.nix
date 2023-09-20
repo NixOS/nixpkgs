@@ -44,7 +44,7 @@ in
       enable = lib.mkDefault true;
       wlr.enable = lib.mkDefault true;
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050914
-      config.default = lib.mkDefault [ "wlr" "gtk" ];
+      config.wayfire.default = lib.mkDefault [ "wlr" "gtk" ];
     };
   };
 }
