@@ -57,17 +57,34 @@ with lib.fileset;'
 expectEqual() {
     local actualExpr=$1
     local expectedExpr=$2
-    if ! actualResult=$(nix-instantiate --eval --strict --show-trace \
+    if actualResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/actualStderr \
         --expr "$prefixExpression ($actualExpr)"); then
-        die "$actualExpr failed to evaluate, but it was expected to succeed"
+        actualExitCode=$?
+    else
+        actualExitCode=$?
     fi
-    if ! expectedResult=$(nix-instantiate --eval --strict --show-trace \
+    actualStderr=$(< "$tmp"/actualStderr)
+
+    if expectedResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/expectedStderr \
         --expr "$prefixExpression ($expectedExpr)"); then
-        die "$expectedExpr failed to evaluate, but it was expected to succeed"
+        expectedExitCode=$?
+    else
+        expectedExitCode=$?
+    fi
+    expectedStderr=$(< "$tmp"/expectedStderr)
+
+    if [[ "$actualExitCode" != "$expectedExitCode" ]]; then
+        echo "$actualStderr" >&2
+        echo "$actualResult" >&2
+        die "$actualExpr should have exited with $expectedExitCode, but it exited with $actualExitCode"
     fi
 
     if [[ "$actualResult" != "$expectedResult" ]]; then
         die "$actualExpr should have evaluated to $expectedExpr:\n$expectedResult\n\nbut it evaluated to\n$actualResult"
+    fi
+
+    if [[ "$actualStderr" != "$expectedStderr" ]]; then
+        die "$actualExpr should have had this on stderr:\n$expectedStderr\n\nbut it was\n$actualStderr"
     fi
 }
 
