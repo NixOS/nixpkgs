@@ -21,10 +21,19 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
 
     services.postgresql = {
       enable = true;
-      initialScript = pkgs.writeText "psql-init" ''
-        CREATE ROLE documize WITH LOGIN PASSWORD 'documize';
-        CREATE DATABASE documize WITH OWNER documize;
-      '';
+      ensureDatabases = [
+        {
+          name = "documize";
+          owner = "documize";
+        }
+      ];
+      ensureUsers = [
+        {
+          name = "documize";
+          passwordFile = pkgs.writeText "documize-password" "documize";
+          ensureClauses.login = true;
+        }
+      ];
     };
   };
 
