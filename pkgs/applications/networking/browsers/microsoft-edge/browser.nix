@@ -52,7 +52,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name="${baseName}-${channel}-${version}";
+  pname="${baseName}-${channel}";
+  inherit version;
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/${baseName}-${channel}/${baseName}-${channel}_${version}-${revision}_amd64.deb";
