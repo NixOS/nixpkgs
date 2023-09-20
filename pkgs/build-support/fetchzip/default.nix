@@ -21,6 +21,9 @@
 # an appropriate unpacking tool.
 , extension ? null
 
+# put the archive timestamp into $out/nix-support/SOURCE_DATE_EPOCH
+, keepSourceDate ? false
+
 # the rest are given to fetchurl as is
 , ... } @ args:
 
@@ -67,6 +70,10 @@ fetchurl ({
       mv "$unpackDir/$fn" "$out"
     '' else ''
       mv "$unpackDir" "$out"
+    '') + (lib.optionalString keepSourceDate ''
+      stat -c '%Y' "$out" > SOURCE_DATE_EPOCH
+      mkdir -p $out/nix-support
+      mv SOURCE_DATE_EPOCH $out/nix-support
     '') + ''
       ${postFetch}
       ${extraPostFetch}
@@ -74,4 +81,4 @@ fetchurl ({
     '';
     # ^ Remove non-owner write permissions
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
-} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ])
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" "keepSourceDate" ])
