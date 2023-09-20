@@ -1029,7 +1029,7 @@ ugly, and we may want to deprecate them at some point. -->
 `disableCabalFlag flag drv`
 : Makes sure that the Cabal flag `flag` is disabled in Cabal's configure step.
 
-`appendBuildflags list drv`
+`appendBuildFlags list drv`
 : Adds the strings in `list` to the `buildFlags` argument for `drv`.
 
 <!-- TODO(@sternenseemann): removeConfigureFlag -->
