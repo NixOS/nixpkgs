@@ -29,21 +29,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  "@forge/cli" = prev."@forge/cli".override (old: {
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      libsecret
-      final.node-gyp-build
-      final.node-pre-gyp
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
-    meta = old.meta // {
-      license = lib.licenses.unfree; # unlicensed
-    };
-  });
-
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
