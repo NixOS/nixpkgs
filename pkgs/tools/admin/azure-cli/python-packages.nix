@@ -249,8 +249,10 @@ let
       azure-mgmt-redhatopenshift = overrideAzureMgmtPackage super.azure-mgmt-redhatopenshift "1.2.0" "zip"
         "sha256-ZU4mKTzny9tsKDrFSU+lll5v6oDivYJlXDriWJLAYec=";
 
-      azure-mgmt-redis = overrideAzureMgmtPackage super.azure-mgmt-redis "14.1.0" "zip"
-        "sha256-LO92Wc2+VvsEKiOjVSHXw2o3D69NQlL58m+YqWl6+ig=";
+      azure-mgmt-redis = (overrideAzureMgmtPackage super.azure-mgmt-redis "14.1.0" "zip"
+        "sha256-LO92Wc2+VvsEKiOjVSHXw2o3D69NQlL58m+YqWl6+ig=").overridePythonAttrs (attrs: {
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
+      });
 
       azure-mgmt-reservations = overrideAzureMgmtPackage super.azure-mgmt-reservations "2.0.0" "zip"
         "sha256-5vXdXiRubnzPk4uTFeNHR6rwiHSGbeUREX9eW1pqC3E=";
