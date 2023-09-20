@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pyngrok";
-  version = "6.1.2";
+  version = "7.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9fT2fnntBQ7y+c52tuqHM7iVAqoLgwAs6izmuZRUNiI=";
+    hash = "sha256-YOE9t/W4LsZqBFMbJRbyB6oQqrqW02iecqQYR6yZfV8=";
   };
 
   propagatedBuildInputs = [
