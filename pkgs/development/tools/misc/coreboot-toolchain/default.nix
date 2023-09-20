@@ -8,7 +8,7 @@ let
     , flex
     , getopt
     , git
-    , gnat11
+    , gnat
     , gcc
     , lib
     , perl
@@ -35,7 +35,7 @@ let
       };
 
       nativeBuildInputs = [ bison curl git perl ];
-      buildInputs = [ flex zlib (if withAda then gnat11 else gcc) ];
+      buildInputs = [ flex zlib (if withAda then gnat else gcc) ];
 
       enableParallelBuilding = true;
       dontConfigure = true;
