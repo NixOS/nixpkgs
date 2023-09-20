@@ -16,7 +16,6 @@
 , lib
 , libGL
 , mesa
-, openblas
 , ocl-icd
 , opencl-clhpp
 , pkg-config
@@ -33,11 +32,29 @@
   # OpenCL needs mesa which is broken on Darwin
 , openclSupport ? !stdenv.isDarwin
   # This argument lets one run CUDA & OpenCL tests on non-NixOS systems by
-  # telling Nix where to find the drivers.
+  # telling Nix where to find the drivers. If you know the version of the
+  # NVidia driver that is installed on your system, you can do:
+  #
+  # arrayfire.override {
+  #   nvidiaComputeDrivers =
+  #     callPackage
+  #       (prev.linuxPackages.nvidiaPackages.mkDriver {
+  #         version = cudaVersion; # our driver version
+  #         sha256_64bit = cudaHash; # sha256 of the .run binary
+  #         useGLVND = false;
+  #         useProfiles = false;
+  #         useSettings = false;
+  #         usePersistenced = false;
+  #         ...
+  #       })
+  #       { libsOnly = true; };
+  # }
 , nvidiaComputeDrivers ? null
 }:
 
-# assert blas.isILP64 == false;
+# ArrayFire compiles with 64-bit BLAS, but some tests segfault or throw
+# exceptions, which means that it isn't really supported yet...
+assert blas.isILP64 == false;
 
 stdenv.mkDerivation rec {
   pname = "arrayfire";
@@ -164,7 +181,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs = [
-    # blas
+    blas
     boost.dev
     boost.out
     clblast
@@ -175,11 +192,10 @@ stdenv.mkDerivation rec {
     forge
     freeimage
     gtest
-    # lapack
+    lapack
     libGL
     ocl-icd
     opencl-clhpp
-    openblas
     span-lite
   ]
   ++ lib.optionals cudaSupport [
