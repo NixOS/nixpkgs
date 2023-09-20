@@ -6824,6 +6824,8 @@ self: super: with self; {
 
   mock = callPackage ../development/python-modules/mock { };
 
+  mockfs = callPackage ../development/python-modules/mockfs { };
+
   mockito = callPackage ../development/python-modules/mockito { };
 
   mock-open = callPackage ../development/python-modules/mock-open { };
