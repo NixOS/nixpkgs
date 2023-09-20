@@ -20,19 +20,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-OuHY5+2puZAERtwmXduUW5Wjus6KeQLJLcGcl48umLA=";
   };
 
-  passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
-    };
-
-    tests.version = testers.testVersion {
-      package = snagboot;
-      command = "snagrecover --version";
-      version = "v${version}";
-    };
-  };
-
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
@@ -68,6 +55,19 @@ python3.pkgs.buildPythonApplication rec {
 
   # There are no tests
   doCheck = false;
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = ".(rc|beta).*";
+    };
+
+    tests.version = testers.testVersion {
+      package = snagboot;
+      command = "snagrecover --version";
+      version = "v${version}";
+    };
+  };
 
   meta = {
     homepage = "https://github.com/bootlin/snagboot";
