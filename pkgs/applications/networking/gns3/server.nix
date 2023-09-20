@@ -7,6 +7,7 @@
 , python3
 , fetchFromGitHub
 , pkgsStatic
+, stdenv
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -46,8 +47,8 @@ python3.pkgs.buildPythonApplication {
     zipstream
   ];
 
-  postInstall = ''
-    rm $out/bin/gns3loopback # For Windows only
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    rm $out/bin/gns3loopback
   '';
 
   doCheck = true;
