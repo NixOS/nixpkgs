@@ -134,8 +134,8 @@ in
 
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
-      # your system.  Help is available in the configuration.nix(5) man page
-      # and in the NixOS manual (accessible by running `nixos-help`).
+      # your system. Help is available in the configuration.nix(5) man page, on
+      # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
       { config, lib, pkgs, ... }:
 
