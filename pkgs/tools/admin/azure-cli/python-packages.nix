@@ -186,8 +186,10 @@ let
       azure-mgmt-imagebuilder = overrideAzureMgmtPackage super.azure-mgmt-imagebuilder "1.2.0" "zip"
         "sha256-XmGIzw+yGYgdaNGZJClFRl531BGsQUH+HESUXGVK6TI=";
 
-      azure-mgmt-iothub = overrideAzureMgmtPackage super.azure-mgmt-iothub "2.3.0" "zip"
-        "sha256-ml+koj52l5o0toAcnsGtsw0tGnO5F/LKq56ovzdmx/A=";
+      azure-mgmt-iothub = (overrideAzureMgmtPackage super.azure-mgmt-iothub "2.3.0" "zip"
+        "sha256-ml+koj52l5o0toAcnsGtsw0tGnO5F/LKq56ovzdmx/A=").overridePythonAttrs (attrs: {
+        propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ self.msrest ];
+      });
 
       azure-mgmt-iothubprovisioningservices = overrideAzureMgmtPackage super.azure-mgmt-iothubprovisioningservices "1.1.0" "zip"
         "sha256-04OoJuff93L62G6IozpmHpEaUbHHHD6nKlkMHVoJvJ4=";
