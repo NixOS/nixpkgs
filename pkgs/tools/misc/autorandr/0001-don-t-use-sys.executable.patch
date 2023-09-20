@@ -1,0 +1,33 @@
+From fdcc2f01441ec25104456022e6f8d3120709cede Mon Sep 17 00:00:00 2001
+From: Romanos Skiadas <rom.skiad@gmail.com>
+Date: Tue, 28 Jun 2022 06:16:10 +0300
+Subject: [PATCH] don't use sys.executable
+
+This is required for forking self in a nixpkgs environment,
+where arandr might be wrapped. In that case, the actual arandr command
+will be a bash script, not python.
+There is no real reason to keep this around, nixpkgs properly sets the
+interpreter in the shebang anyway.
+---
+ autorandr.py | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git autorandr.py autorandr.py
+index 35c15f6..1e84a2f 100755
+--- a/autorandr.py
++++ b/autorandr.py
+@@ -1192,10 +1192,7 @@ def dispatch_call_to_sessions(argv):
+             os.chdir(pwent.pw_dir)
+             os.environ.clear()
+             os.environ.update(process_environ)
+-            if sys.executable != "" and sys.executable != None:
+-                os.execl(sys.executable, sys.executable, autorandr_binary, *argv[1:])
+-            else:
+-                os.execl(autorandr_binary, autorandr_binary, *argv[1:])
++            os.execl(autorandr_binary, autorandr_binary, *argv[1:])
+             sys.exit(1)
+         os.waitpid(child_pid, 0)
+ 
+-- 
+2.36.1
+

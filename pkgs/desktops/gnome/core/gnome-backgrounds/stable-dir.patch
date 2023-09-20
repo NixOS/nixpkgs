@@ -1,0 +1,9 @@
+diff --git a/backgrounds/meson.build b/backgrounds/meson.build
+index 2175a16..cf521df 100644
+--- a/backgrounds/meson.build
++++ b/backgrounds/meson.build
+@@ -1,5 +1,5 @@
+ dataconf = configuration_data()
+-dataconf.set('BACKGROUNDDIR', backgrounddir)
++dataconf.set('BACKGROUNDDIR', '/run/current-system/sw/share/backgrounds/gnome')
+ dataconf.set('datadir', datadir)

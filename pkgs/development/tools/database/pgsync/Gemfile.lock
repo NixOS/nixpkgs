@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    parallel (1.22.1)
+    pg (1.4.6)
+    pgsync (0.7.4)
+      parallel
+      pg (>= 0.18.2)
+      slop (>= 4.10.1)
+      tty-spinner
+    slop (4.10.1)
+    tty-cursor (0.7.1)
+    tty-spinner (0.9.3)
+      tty-cursor (~> 0.7)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  pgsync
+
+BUNDLED WITH
+   2.4.6

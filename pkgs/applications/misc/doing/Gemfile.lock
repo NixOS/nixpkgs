@@ -1,0 +1,25 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    chronic (0.10.2)
+    deep_merge (1.2.1)
+    doing (1.0.10pre)
+      chronic (~> 0.10, >= 0.10.2)
+      deep_merge
+      gli (~> 2.17.1)
+      haml (= 4.0.3)
+      json (~> 1.8.1)
+    gli (2.17.1)
+    haml (4.0.3)
+      tilt
+    json (1.8.6)
+    tilt (2.0.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  doing (= 1.0.10pre)
+
+BUNDLED WITH
+   2.1.4

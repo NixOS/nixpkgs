@@ -1,0 +1,25 @@
+From 0eaef67b683683fb423fcb2d5096b3cdf9a4a9cd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Sun, 22 Mar 2020 12:26:10 +0100
+Subject: [PATCH] Patch plugindir to output
+
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 50edb74..639ee86 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -50,7 +50,7 @@ PKG_CHECK_MODULES([glib],     [glib-2.0 >= 2.40 gio-unix-2.0 gmodule-2.0 ])
+ PKG_CHECK_MODULES([cairo],    [cairo])
+ PKG_CHECK_MODULES([rofi],     [rofi >= 1.5.4])
+ 
+-[rofi_PLUGIN_INSTALL_DIR]="`$PKG_CONFIG --variable=pluginsdir rofi`"
++[rofi_PLUGIN_INSTALL_DIR]="`echo $out/lib/rofi`"
+ AC_SUBST([rofi_PLUGIN_INSTALL_DIR])
+ 
+ LT_INIT([disable-static])
+-- 
+2.25.1
+

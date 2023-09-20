@@ -1,0 +1,14 @@
+On NixOS, timezone data is located at /etc/zoneinfo
+diff --git a/Completion/Unix/Type/_time_zone b/Completion/Unix/Type/_time_zone
+index cd924bbc7..5d683291b 100644
+--- a/Completion/Unix/Type/_time_zone
++++ b/Completion/Unix/Type/_time_zone
+@@ -3,7 +3,7 @@
+ local expl
+ 
+ if (( ! $+_zoneinfo_dirs )); then
+-  _zoneinfo_dirs=( /usr/{share,lib,share/lib}/{zoneinfo*,locale/TZ}(/) )
++  _zoneinfo_dirs=( /etc/zoneinfo /usr/{share,lib,share/lib}/{zoneinfo*,locale/TZ}(/) )
+ fi
+ 
+ _wanted time-zones expl 'time zone' _files -W _zoneinfo_dirs "$@" -

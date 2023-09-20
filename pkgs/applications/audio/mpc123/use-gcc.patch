@@ -1,0 +1,13 @@
+Don't worry, just use GCC and everything's gonna be alright.
+
+--- mpc123-0.2.4/Makefile	2008-03-21 22:14:38.000000000 +0100
++++ mpc123-0.2.4/Makefile	2010-01-28 23:26:49.000000000 +0100
+@@ -17,7 +17,7 @@
+ # along with this program; if not, write to the Free Software Foundation,
+ # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ 
+-CC := $(shell which colorgcc || which cc)
++CC := gcc
+ 
+ TAGSPRG := ctags
+ 

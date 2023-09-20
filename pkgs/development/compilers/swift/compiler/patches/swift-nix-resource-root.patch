@@ -1,0 +1,67 @@
+Swift normally looks for the Clang resource dir in a subdir/symlink of its own
+resource dir. We provide a symlink to the Swift build-time Clang as a default
+there, but we also here patch two checks to try locate it via NIX_CC.
+
+The first (ClangImporter.cpp) happens when Swift code imports C modules. The
+second (ToolChains.cpp) happens when Swift is used to link the final product.
+
+--- a/lib/ClangImporter/ClangImporter.cpp
++++ b/lib/ClangImporter/ClangImporter.cpp
+@@ -73,6 +73,7 @@
+ #include "llvm/Support/FileSystem.h"
+ #include "llvm/Support/Memory.h"
+ #include "llvm/Support/Path.h"
++#include "llvm/Support/Process.h"
+ #include "llvm/Support/VirtualFileSystem.h"
+ #include "llvm/Support/YAMLParser.h"
+ #include <algorithm>
+@@ -786,6 +787,17 @@ importer::addCommonInvocationArguments(
+ 
+   const std::string &overrideResourceDir = importerOpts.OverrideResourceDir;
+   if (overrideResourceDir.empty()) {
++    // Prefer the Clang resource directory from NIX_CC, to allow swapping in a
++    // different stdenv.
++    // TODO: Figure out how to provide a user override for this. Probably a
++    // niche use case, though, and for now a user can unset NIX_CC to work
++    // around it if necessary.
++    if (auto nixCC = llvm::sys::Process::GetEnv("NIX_CC")) {
++      llvm::SmallString<128> resourceDir(nixCC.getValue());
++      llvm::sys::path::append(resourceDir, "resource-root");
++      invocationArgStrs.push_back("-resource-dir");
++      invocationArgStrs.push_back(std::string(resourceDir.str()));
++    } else {
+     llvm::SmallString<128> resourceDir(searchPathOpts.RuntimeResourcePath);
+ 
+     // Adjust the path to refer to our copy of the Clang resource directory
+@@ -801,6 +813,7 @@ importer::addCommonInvocationArguments(
+     // Set the Clang resource directory to the path we computed.
+     invocationArgStrs.push_back("-resource-dir");
+     invocationArgStrs.push_back(std::string(resourceDir.str()));
++    } // nixCC
+   } else {
+     invocationArgStrs.push_back("-resource-dir");
+     invocationArgStrs.push_back(overrideResourceDir);
+--- a/lib/Driver/ToolChains.cpp
++++ b/lib/Driver/ToolChains.cpp
+@@ -1393,10 +1393,20 @@ void ToolChain::getClangLibraryPath(const ArgList &Args,
+                                     SmallString<128> &LibPath) const {
+   const llvm::Triple &T = getTriple();
+ 
++  // Nix: We provide a `clang` symlink in the default Swift resource root, but
++  // prefer detecting the Clang resource root via NIX_CC, to allow swapping in
++  // a different stdenv. However, always honor a user-provided `-resource-dir`.
++  auto nixCC = llvm::sys::Process::GetEnv("NIX_CC");
++  if (nixCC && !Args.hasArgNoClaim(options::OPT_resource_dir)) {
++    LibPath.assign(nixCC.getValue());
++    llvm::sys::path::append(LibPath, "resource-root");
++  } else {
+   getResourceDirPath(LibPath, Args, /*Shared=*/true);
+   // Remove platform name.
+   llvm::sys::path::remove_filename(LibPath);
+-  llvm::sys::path::append(LibPath, "clang", "lib",
++  llvm::sys::path::append(LibPath, "clang");
++  } // nixCC
++  llvm::sys::path::append(LibPath, "lib",
+                           T.isOSDarwin() ? "darwin"
+                                          : getPlatformNameForTriple(T));
+ }

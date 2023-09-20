@@ -1,0 +1,202 @@
+diff --git a/Ghidra/Debug/Debugger-gadp/build.gradle b/Ghidra/Debug/Debugger-gadp/build.gradle
+index f4dbd3cd0..6108e8534 100644
+--- a/Ghidra/Debug/Debugger-gadp/build.gradle
++++ b/Ghidra/Debug/Debugger-gadp/build.gradle
+@@ -23,42 +23,18 @@ apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
+ 
+ apply plugin: 'eclipse'
++apply plugin: 'com.google.protobuf'
+ eclipse.project.name = 'Debug Debugger-gadp'
+ 
+-configurations {
+-	allProtocArtifacts
+-	protocArtifact
+-}
+-
+ def platform = getCurrentPlatformName()
+ 
+-dependencies {
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:windows-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:linux-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:linux-aarch_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:osx-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:osx-aarch_64@exe'
+-
+-	if (isCurrentWindows()) {
+-		protocArtifact 'com.google.protobuf:protoc:3.21.8:windows-x86_64@exe'
+-	}
+-	if (isCurrentLinux()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:linux-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:linux-aarch_64@exe'
+-		}
+-	}
+-	if (isCurrentMac()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:osx-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:osx-aarch_64@exe'
+-		}
++buildscript {
++	dependencies {
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
+ 	}
++}
+ 
++dependencies {
+ 	api project(':Framework-AsyncComm')
+ 	api project(':Framework-Debugging')
+ 	api project(':ProposedUtils')
+@@ -73,37 +49,3 @@ dependencies {
+ 	}
+ }*/
+ 
+-task generateProto {
+-	ext.srcdir = file("src/main/proto")
+-	ext.src = fileTree(srcdir) {
+-		include "**/*.proto"
+-	}
+-	ext.outdir = file("build/generated/source/proto/main/java")
+-	outputs.dir(outdir)
+-	inputs.files(src)
+-	dependsOn(configurations.protocArtifact)
+-	doLast {
+-		def exe = configurations.protocArtifact.first()
+-		if (!isCurrentWindows()) {
+-			exe.setExecutable(true)
+-		}
+-		exec {
+-			commandLine exe, "--java_out=$outdir", "-I$srcdir"
+-			args src
+-		}
+-	}
+-}
+-
+-tasks.compileJava.dependsOn(tasks.generateProto)
+-tasks.eclipse.dependsOn(tasks.generateProto)
+-rootProject.tasks.prepDev.dependsOn(tasks.generateProto)
+-
+-sourceSets {
+-	main {
+-		java {
+-			srcDir tasks.generateProto.outdir
+-		}
+-	}
+-}
+-zipSourceSubproject.dependsOn generateProto
+-
+diff --git a/Ghidra/Debug/Debugger-isf/build.gradle b/Ghidra/Debug/Debugger-isf/build.gradle
+index 6bf945c2e..3225d095d 100644
+--- a/Ghidra/Debug/Debugger-isf/build.gradle
++++ b/Ghidra/Debug/Debugger-isf/build.gradle
+@@ -20,42 +20,18 @@ apply from: "${rootProject.projectDir}/gradle/javaTestProject.gradle"
+ apply from: "${rootProject.projectDir}/gradle/distributableGhidraModule.gradle"
+ 
+ apply plugin: 'eclipse'
++apply plugin: 'com.google.protobuf'
+ eclipse.project.name = 'Debug Debugger-isf'
+ 
+-configurations {
+-	allProtocArtifacts
+-	protocArtifact
+-}
+-
+ def platform = getCurrentPlatformName()
+ 
+-dependencies {
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:windows-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:linux-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:linux-aarch_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:osx-x86_64@exe'
+-	allProtocArtifacts 'com.google.protobuf:protoc:3.21.8:osx-aarch_64@exe'
+-
+-	if (isCurrentWindows()) {
+-		protocArtifact 'com.google.protobuf:protoc:3.21.8:windows-x86_64@exe'
+-	}
+-	if (isCurrentLinux()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:linux-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:linux-aarch_64@exe'
+-		}
+-	}
+-	if (isCurrentMac()) {
+-		if (platform.endsWith("x86_64")) {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:osx-x86_64@exe'
+-		}
+-		else {
+-			protocArtifact 'com.google.protobuf:protoc:3.21.8:osx-aarch_64@exe'
+-		}
++buildscript {
++	dependencies {
++		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
+ 	}
++}
+ 
++dependencies {
+ 	api project(':Framework-AsyncComm')
+ 	api project(':Framework-Debugging')
+ 	api project(':ProposedUtils')
+@@ -64,40 +40,6 @@ dependencies {
+ 	testImplementation project(path: ':Framework-Debugging', configuration: 'testArtifacts')
+ }
+ 
+-task generateProto {
+-	ext.srcdir = file("src/main/proto")
+-	ext.src = fileTree(srcdir) {
+-		include "**/*.proto"
+-	}
+-	ext.outdir = file("build/generated/source/proto/main/java")
+-	outputs.dir(outdir)
+-	inputs.files(src)
+-	dependsOn(configurations.protocArtifact)
+-	doLast {
+-		def exe = configurations.protocArtifact.first()
+-		if (!isCurrentWindows()) {
+-			exe.setExecutable(true)
+-		}
+-		exec {
+-			commandLine exe, "--java_out=$outdir", "-I$srcdir"
+-			args src
+-		}
+-	}
+-}
+-
+-tasks.compileJava.dependsOn(tasks.generateProto)
+-tasks.eclipse.dependsOn(tasks.generateProto)
+-rootProject.tasks.prepDev.dependsOn(tasks.generateProto)
+-
+-sourceSets {
+-	main {
+-		java {
+-			srcDir tasks.generateProto.outdir
+-		}
+-	}
+-}
+-zipSourceSubproject.dependsOn generateProto
+-
+ // Include buildable native source in distribution
+ rootProject.assembleDistribution {
+     from (this.project.projectDir.toString()) {
+diff --git a/build.gradle b/build.gradle
+index b0c717fb1..5f56506a5 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -74,6 +74,12 @@ if (flatRepo.isDirectory()) {
+ 			jcenter()
+ 			flatDir name: "flat", dirs:["$flatRepo"]
+ 		}
++		buildscript {
++			repositories {
++				mavenLocal()
++				mavenCentral()
++			}
++		}
+ 	}
+ }
+ else {	

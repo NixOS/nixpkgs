@@ -1,0 +1,283 @@
+Index: usb-modeswitch-2.6.0/Makefile
+===================================================================
+--- usb-modeswitch-2.6.0.orig/Makefile
++++ usb-modeswitch-2.6.0/Makefile
+@@ -5,17 +5,24 @@ CFLAGS      += -Wall -Wno-deprecated-dec
+ LIBS        = `pkg-config --libs --cflags libusb-1.0`
+ RM          = /bin/rm -f
+ OBJS        = usb_modeswitch.c
+-PREFIX      = $(DESTDIR)/usr
+-ETCDIR      = $(DESTDIR)/etc
++PREFIX      = /usr/local
++ETCDIR      = $(PREFIX)/etc
+ SYSDIR      = $(ETCDIR)/systemd/system
+ UPSDIR      = $(ETCDIR)/init
+-UDEVDIR     = $(DESTDIR)/lib/udev
++UDEVDIR     = $(PREFIX)/lib/udev
+ SBINDIR     = $(PREFIX)/sbin
+ MANDIR      = $(PREFIX)/share/man/man1
+ 
++USE_UPSTART=$(shell if command -v initctl > /dev/null; then echo "true"; fi)
++USE_SYSTEMD=$(shell if command -v systemctl > /dev/null; then echo "true"; fi)
++
+ .PHONY: clean install install-common uninstall \
+ 	dispatcher-script dispatcher-dynlink dispatcher-statlink \
+-	install-script install-dynlink install-statlink
++	install-script install-dynlink install-statlink \
++	install-upstart install-systemd \
++	configure-dispatcher configure-script \
++	configure-upstart configure-systemd \
++	configure
+ 
+ all: all-with-script-dispatcher
+ 
+@@ -28,7 +35,25 @@ all-with-statlink-dispatcher: $(PROG) di
+ $(PROG): $(OBJS) usb_modeswitch.h
+ 	$(CC) -o $(PROG) $(OBJS) $(CFLAGS) $(LIBS) $(LDFLAGS)
+ 
+-dispatcher-script: usb_modeswitch_dispatcher.tcl
++configure-dispatcher:
++	sed -i \
++	  -e 's,^\(set setup(sbindir) \).*$$,\1$(SBINDIR),' \
++	  -e 's,^\(set setup(etcdir) \).*$$,\1$(ETCDIR),' \
++	  usb_modeswitch_dispatcher.tcl
++
++configure-script:
++	sed -i -e 's,^\(SBINDIR=\).*$$,\1$(SBINDIR),' usb_modeswitch.sh
++
++configure-systemd:
++	sed -i -e 's,@sbindir@,$(SBINDIR),' usb_modeswitch@.service
++
++configure-upstart:
++	sed -i -e 's,@sbindir@,$(SBINDIR),' usb-modeswitch-upstart.conf
++
++configure: configure-dispatcher configure-script \
++	configure-systemd configure-upstart
++
++dispatcher-script: configure-dispatcher usb_modeswitch_dispatcher.tcl
+ 	DISPATCH=dispatcher-script
+ 	cp -f usb_modeswitch_dispatcher.tcl usb_modeswitch_dispatcher
+ 
+@@ -53,16 +78,28 @@ distclean: clean
+ # If the systemd folder is present, install the service for starting the dispatcher
+ # If not, use the dispatcher directly from the udev rule as in previous versions
+ 
+-install-common: $(PROG) $(DISPATCH)
+-	install -D --mode=755 usb_modeswitch $(SBINDIR)/usb_modeswitch
+-	install -D --mode=755 usb_modeswitch.sh $(UDEVDIR)/usb_modeswitch
+-	install -D --mode=644 usb_modeswitch.conf $(ETCDIR)/usb_modeswitch.conf
+-	install -D --mode=644 usb_modeswitch.1 $(MANDIR)/usb_modeswitch.1
+-	install -D --mode=644 usb_modeswitch_dispatcher.1 $(MANDIR)/usb_modeswitch_dispatcher.1
+-	install -D --mode=755 usb_modeswitch_dispatcher $(SBINDIR)/usb_modeswitch_dispatcher
++install-common: $(PROG) configure $(DISPATCH)
++	install -D --mode=755 usb_modeswitch $(DESTDIR)$(SBINDIR)/usb_modeswitch
++	install -D --mode=755 usb_modeswitch.sh $(DESTDIR)$(UDEVDIR)/usb_modeswitch
++	install -D --mode=644 usb_modeswitch.conf $(DESTDIR)$(ETCDIR)/usb_modeswitch.conf
++	install -D --mode=644 usb_modeswitch.1 $(DESTDIR)$(MANDIR)/usb_modeswitch.1
++	install -D --mode=644 usb_modeswitch_dispatcher.1 $(DESTDIR)$(MANDIR)/usb_modeswitch_dispatcher.1
++	install -D --mode=755 usb_modeswitch_dispatcher $(DESTDIR)$(SBINDIR)/usb_modeswitch_dispatcher
+ 	install -d $(DESTDIR)/var/lib/usb_modeswitch
+-	test -d $(UPSDIR) -a -e /sbin/initctl && install --mode=644 usb-modeswitch-upstart.conf $(UPSDIR) || test 1
+-	test -d $(SYSDIR) -a \( -e /usr/bin/systemctl -o -e /bin/systemctl \) && install --mode=644 usb_modeswitch@.service $(SYSDIR) || test 1
++
++install-upstart:
++	install -D --mode=644 usb-modeswitch-upstart.conf $(DESTDIR)$(UPSDIR)/usb-modeswitch-upstart.conf
++
++install-systemd:
++	install -D --mode=644 usb_modeswitch@.service $(DESTDIR)$(SYSDIR)/usb_modeswitch@.service
++
++ifeq ($(USE_UPSTART),true)
++install-common: install-upstart
++endif
++
++ifeq ($(USE_SYSTEMD),true)
++install-common: install-systemd
++endif
+ 
+ install: install-script
+ 
+@@ -73,10 +110,10 @@ install-dynlink: dispatcher-dynlink inst
+ install-statlink: dispatcher-statlink install-common
+ 
+ uninstall:
+-	$(RM) $(SBINDIR)/usb_modeswitch
+-	$(RM) $(SBINDIR)/usb_modeswitch_dispatcher
+-	$(RM) $(UDEVDIR)/usb_modeswitch
+-	$(RM) $(ETCDIR)/usb_modeswitch.conf
+-	$(RM) $(MANDIR)/usb_modeswitch.1
++	$(RM) $(DESTDIR)$(SBINDIR)/usb_modeswitch
++	$(RM) $(DESTDIR)$(SBINDIR)/usb_modeswitch_dispatcher
++	$(RM) $(DESTDIR)$(UDEVDIR)/usb_modeswitch
++	$(RM) $(DESTDIR)$(ETCDIR)/usb_modeswitch.conf
++	$(RM) $(DESTDIR)$(MANDIR)/usb_modeswitch.1
+ 	$(RM) -R $(DESTDIR)/var/lib/usb_modeswitch
+-	$(RM) $(SYSDIR)/usb_modeswitch@.service
++	$(RM) $(DESTDIR)$(SYSDIR)/usb_modeswitch@.service
+Index: usb-modeswitch-2.6.0/usb-modeswitch-upstart.conf
+===================================================================
+--- usb-modeswitch-2.6.0.orig/usb-modeswitch-upstart.conf
++++ usb-modeswitch-2.6.0/usb-modeswitch-upstart.conf
+@@ -1,5 +1,5 @@
+ start on usb-modeswitch-upstart
+ task
+ script
+-	exec /usr/sbin/usb_modeswitch_dispatcher --switch-mode $UMS_PARAM
++	exec @sbindir@/usb_modeswitch_dispatcher --switch-mode $UMS_PARAM
+ end script
+Index: usb-modeswitch-2.6.0/usb_modeswitch.sh
+===================================================================
+--- usb-modeswitch-2.6.0.orig/usb_modeswitch.sh
++++ usb-modeswitch-2.6.0/usb_modeswitch.sh
+@@ -1,5 +1,9 @@
+ #!/bin/sh
+ # part of usb_modeswitch 2.6.0
++
++# Compile time configuration, injected by the Makefile
++SBINDIR=/usr/sbin
++
+ device_in()
+ {
+ 	if [ ! -e /var/lib/usb_modeswitch/$1 ]; then
+@@ -37,7 +41,7 @@ if [ $(expr "$1" : "--.*") ]; then
+ 		v_id=$3
+ 	fi
+ fi
+-PATH=/sbin:/usr/sbin:$PATH
++
+ case "$1" in
+ 	--driver-bind)
+ 		# driver binding code removed
+@@ -46,9 +50,7 @@ case "$1" in
+ 	--symlink-name)
+ 		device_in "link_list" $v_id $p_id
+ 		if [ "$?" = "1" ]; then
+-			if [ -e "/usr/sbin/usb_modeswitch_dispatcher" ]; then
+-				exec usb_modeswitch_dispatcher $1 $2 2>>/dev/null
+-			fi
++			exec $SBINDIR/usb_modeswitch_dispatcher $1 $2 2>>/dev/null
+ 		fi
+ 		exit 0
+ 		;;
+@@ -61,15 +63,13 @@ if [ "$p2" = "" -a "$p1" != "" ]; then
+ 	p2=$p1
+ fi
+ 
+-PATH=/bin:/sbin:/usr/bin:/usr/sbin
+-init_path=`readlink -f /sbin/init`
+-if [ `basename $init_path` = "systemd" ]; then
++if command -v systemctl > /dev/null; then
+ 	systemctl --no-block restart usb_modeswitch@$p2.service
+-elif [ -e "/etc/init/usb-modeswitch-upstart.conf" ]; then
++elif command -v initctl > /dev/null; then
+ 	initctl emit --no-wait usb-modeswitch-upstart UMS_PARAM=$p2
+ else
+ 	# only old distros, new udev will kill all subprocesses
+ 	exec 1<&- 2<&- 5<&- 7<&-
+-	exec usb_modeswitch_dispatcher --switch-mode $p2 &
++	exec $SBINDIR/usb_modeswitch_dispatcher --switch-mode $p2 &
+ fi
+ exit 0
+Index: usb-modeswitch-2.6.0/usb_modeswitch@.service
+===================================================================
+--- usb-modeswitch-2.6.0.orig/usb_modeswitch@.service
++++ usb-modeswitch-2.6.0/usb_modeswitch@.service
+@@ -3,6 +3,6 @@ Description=USB_ModeSwitch_%i
+ 
+ [Service]
+ Type=oneshot
+-ExecStart=/usr/sbin/usb_modeswitch_dispatcher --switch-mode %i
++ExecStart=@sbindir@/usb_modeswitch_dispatcher --switch-mode %i
+ #ExecStart=/bin/echo %i
+ 
+Index: usb-modeswitch-2.6.0/usb_modeswitch_dispatcher.tcl
+===================================================================
+--- usb-modeswitch-2.6.0.orig/usb_modeswitch_dispatcher.tcl
++++ usb-modeswitch-2.6.0/usb_modeswitch_dispatcher.tcl
+@@ -12,6 +12,16 @@
+ # Part of usb-modeswitch-2.6.0 package
+ # (C) Josua Dietze 2009-2019
+ 
++# Compile-time configuration, injected by the Makefile.
++set setup(sbindir) /usr/sbin
++set setup(etcdir) /etc
++
++# External dependency default location
++set setup(dbdir) /usr/share/usb_modeswitch
++
++# Derived configuration
++set setup(dbdir_etc) $setup(etcdir)/usb_modeswitch.d
++
+ set arg0 [lindex $argv 0]
+ if [regexp {\.tcl$} $arg0] {
+ 	if [file exists $arg0] {
+@@ -115,10 +125,8 @@ if {![regexp {(.*?):.*$} $arg1 d device]
+ 	}
+ }
+ 
+-set setup(dbdir) /usr/share/usb_modeswitch
+-set setup(dbdir_etc) /etc/usb_modeswitch.d
+ if {![file exists $setup(dbdir)] && ![file exists $setup(dbdir_etc)]} {
+-	Log "\nError: no config database found in /usr/share or /etc. Exit"
++	Log "\nError: no config database found in $setup(dbdir) or $setup(dbdir_etc). Exit"
+ 	SafeExit
+ }
+ 
+@@ -285,7 +293,7 @@ if {$config(NoMBIMCheck)==0 && $usb(bNum
+ 	if [CheckMBIM] {
+ 		Log " driver for MBIM devices is available"
+ 		Log "Find MBIM configuration number ..."
+-		if [catch {set cfgno [exec /usr/sbin/usb_modeswitch -j -Q $busParam $devParam -v $usb(idVendor) -p $usb(idProduct)]} err] {
++		if [catch {set cfgno [exec $setup(sbindir)/usb_modeswitch -j -Q $busParam $devParam -v $usb(idVendor) -p $usb(idProduct)]} err] {
+ 			Log "Error when trying to find MBIM configuration, switch to legacy modem mode"
+ 		} else {
+ 			set cfgno [string trim $cfgno]
+@@ -321,7 +329,7 @@ if {$report == ""} {
+ 	# Now we are actually switching
+ 	if $flags(logging) {
+ 		Log "Command line:\nusb_modeswitch -W -D $configParam $busParam $devParam -v $usb(idVendor) -p $usb(idProduct) -f \$flags(config)"
+-		catch {set report [exec /usr/sbin/usb_modeswitch -W -D $configParam $busParam $devParam -v $usb(idVendor) -p $usb(idProduct) -f "$flags(config)" 2>@1]} report
++		catch {set report [exec $setup(sbindir)/usb_modeswitch -W -D $configParam $busParam $devParam -v $usb(idVendor) -p $usb(idProduct) -f "$flags(config)" 2>@1]} report
+ 		Log "\nVerbose debug output of usb_modeswitch and libusb follows"
+ 		Log "(Note that some USB errors are to be expected in the process)"
+ 		Log "--------------------------------"
+@@ -329,7 +337,7 @@ if {$report == ""} {
+ 		Log "--------------------------------"
+ 		Log "(end of usb_modeswitch output)\n"
+ 	} else {
+-		catch {set report [exec /usr/sbin/usb_modeswitch -Q -D $configParam $busParam $devParam -v $usb(idVendor) -p $usb(idProduct) -f "$flags(config)" 2>@1]} report
++		catch {set report [exec $setup(sbindir)/usb_modeswitch -Q -D $configParam $busParam $devParam -v $usb(idVendor) -p $usb(idProduct) -f "$flags(config)" 2>@1]} report
+ 	}
+ }
+ 
+@@ -522,12 +530,12 @@ return 1
+ 
+ proc {ParseGlobalConfig} {path} {
+ 
+-global flags
++global flags setup
+ set configFile ""
+ if [string length $path] {
+ 	set places [list $path]
+ } else {
+-	set places [list /etc/usb_modeswitch.conf /etc/sysconfig/usb_modeswitch /etc/default/usb_modeswitch]
++	set places [list $setup(etcdir)/usb_modeswitch.conf $setup(etcdir)/sysconfig/usb_modeswitch $setup(etcdir)/default/usb_modeswitch]
+ }
+ foreach cfg $places {
+ 	if [file exists $cfg] {
+@@ -923,10 +931,12 @@ proc {SysLog} {msg} {
+ 
+ global flags
+ if {![info exists flags(logger)]} {
+-	set flags(logger) ""
+-	foreach fn {/bin/logger /usr/bin/logger} {
+-		if [file exists $fn] {
+-			set flags(logger) $fn
++	set flags(logger) [exec sh -c "command -v logger || true"]
++	if {$flags(logger) == ""} {
++		foreach fn {/bin/logger /usr/bin/logger} {
++			if [file exists $fn] {
++				set flags(logger) $fn
++			}
+ 		}
+ 	}
+ 	Log "Logger is $flags(logger)"

@@ -1,0 +1,11 @@
+{
+  "url": "https://github.com/rolandwalker/tree-sitter-pgn",
+  "rev": "e26ee30850f0cb81541480cf1e2c70385bdb013a",
+  "date": "2021-08-25T17:57:38-04:00",
+  "path": "/nix/store/fj882ab2hl3qrz45zvq366na6d2gqv8v-tree-sitter-pgn",
+  "sha256": "1c4602jmq3p7p7splzip76863l1z3rgbjlbksqv0diqjxp7c42gq",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
+}

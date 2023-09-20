@@ -1,0 +1,15 @@
+commit afaaa77b0a03811f86428cf264397b60dd795549
+Author: Nicolas Berbiche <nicolas@normie.dev>
+Date:   Thu May 6 00:10:37 2021 -0400
+
+    Add support for other Kinect device in udev
+
+diff --git a/contrib/55-kinect_audio.rules.in b/contrib/55-kinect_audio.rules.in
+index 25ea713..9e1b69f 100644
+--- a/contrib/55-kinect_audio.rules.in
++++ b/contrib/55-kinect_audio.rules.in
+@@ -1,2 +1,4 @@
+ # Rule to load the Kinect UAC firmware on the "generic" usb device
+ ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="02ad", RUN+="@LOADER_PATH@ @FIRMWARE_PATH@"
++# Rule to load the Kinect UAC firmware on another supported device
++ACTION=="add", SUBSYSTEMS=="usb", ATTRS{idVendor}=="045e", ATTRS{idProduct}=="02bb", RUN+="@LOADER_PATH@ @FIRMWARE_PATH@"

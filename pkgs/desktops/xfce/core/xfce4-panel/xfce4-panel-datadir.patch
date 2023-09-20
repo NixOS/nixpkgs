@@ -1,0 +1,24 @@
+diff --git a/panel/panel-module-factory.c b/panel/panel-module-factory.c
+index 529fe85..8c792b7 100644
+--- a/panel/panel-module-factory.c
++++ b/panel/panel-module-factory.c
+@@ -39,6 +39,7 @@
+ #include <panel/panel-module.h>
+ #include <panel/panel-module-factory.h>
+ 
++#define DATADIR "/run/current-system/sw/share/xfce4"
+ #define PANEL_PLUGINS_DATA_DIR     (DATADIR G_DIR_SEPARATOR_S "panel" G_DIR_SEPARATOR_S "plugins")
+ #define PANEL_PLUGINS_DATA_DIR_OLD (DATADIR G_DIR_SEPARATOR_S "panel-plugins")
+ 
+diff --git a/panel/panel-module.c b/panel/panel-module.c
+index ba39320..519440b 100644
+--- a/panel/panel-module.c
++++ b/panel/panel-module.c
+@@ -35,6 +35,7 @@
+ #include <panel/panel-plugin-external-wrapper.h>
+ #include <panel/panel-plugin-external-46.h>
+ 
++#define LIBDIR "/run/current-system/sw/lib/xfce4"
+ #define PANEL_PLUGINS_LIB_DIR (LIBDIR G_DIR_SEPARATOR_S "panel" G_DIR_SEPARATOR_S "plugins")
+ #define PANEL_PLUGINS_LIB_DIR_OLD (LIBDIR G_DIR_SEPARATOR_S "panel-plugins")
+ 

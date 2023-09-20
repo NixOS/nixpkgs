@@ -1,0 +1,40 @@
+--- a/tests/playTests.sh
++++ b/tests/playTests.sh
+@@ -112,29 +112,19 @@ case "$OS" in
+ esac
+ 
+ case "$UNAME" in
+-  Darwin) MD5SUM="md5 -r" ;;
+-  FreeBSD) MD5SUM="gmd5sum" ;;
+-  NetBSD) MD5SUM="md5 -n" ;;
+-  OpenBSD) MD5SUM="md5" ;;
+   *) MD5SUM="md5sum" ;;
+ esac
+ 
+ MTIME="stat -c %Y"
+-case "$UNAME" in
+-    Darwin | FreeBSD | OpenBSD | NetBSD) MTIME="stat -f %m" ;;
+-esac
+ 
+ assertSameMTime() {
+     MT1=$($MTIME "$1")
+     MT2=$($MTIME "$2")
+     echo MTIME $MT1 $MT2
+     [ "$MT1" = "$MT2" ] || die "mtime on $1 doesn't match mtime on $2 ($MT1 != $MT2)"
+ }
+ 
+ GET_PERMS="stat -c %a"
+-case "$UNAME" in
+-    Darwin | FreeBSD | OpenBSD | NetBSD) GET_PERMS="stat -f %Lp" ;;
+-esac
+ 
+ assertFilePermissions() {
+     STAT1=$($GET_PERMS "$1")
+@@ -967,7 +957,6 @@ $MD5SUM dirTestDict/* > tmph1
+ zstd -f --rm dirTestDict/* -D tmpDictC
+ zstd -d --rm dirTestDict/*.zst -D tmpDictC  # note : use internal checksum by default
+ case "$UNAME" in
+-  Darwin) println "md5sum -c not supported on OS-X : test skipped" ;;  # not compatible with OS-X's md5
+   *) $MD5SUM -c tmph1 ;;
+ esac
+ rm -rf dirTestDict

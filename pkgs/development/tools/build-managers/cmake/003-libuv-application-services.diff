@@ -1,0 +1,55 @@
+diff --git a/Utilities/cmlibuv/CMakeLists.txt b/Utilities/cmlibuv/CMakeLists.txt
+index 7625cf65d9..167903e309 100644
+--- a/Utilities/cmlibuv/CMakeLists.txt
++++ b/Utilities/cmlibuv/CMakeLists.txt
+@@ -193,6 +193,22 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+     src/unix/kqueue.c
+     src/unix/proctitle.c
+     )
++
++  include(CheckIncludeFile)
++
++  check_include_file("ApplicationServices/ApplicationServices.h" HAVE_ApplicationServices)
++  if (HAVE_ApplicationServices)
++    list(APPEND uv_defines
++      HAVE_APPLICATIONSERVICES_APPLICATIONSERVICES_H=1
++      )
++  endif()
++
++  check_include_file("CoreServices/CoreServices.h" HAVE_CoreServices)
++  if (HAVE_CoreServices)
++    list(APPEND uv_defines
++      HAVE_CORESERVICES_CORESERVICES_H=1
++      )
++  endif()
+ endif()
+ 
+ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+diff --git a/Utilities/cmlibuv/src/unix/fsevents.c b/Utilities/cmlibuv/src/unix/fsevents.c
+index a51f29b3f6..3f6bf01968 100644
+--- a/Utilities/cmlibuv/src/unix/fsevents.c
++++ b/Utilities/cmlibuv/src/unix/fsevents.c
+@@ -21,7 +21,7 @@
+ #include "uv.h"
+ #include "internal.h"
+ 
+-#if TARGET_OS_IPHONE || MAC_OS_X_VERSION_MAX_ALLOWED < 1070
++#if !HAVE_CORESERVICES_CORESERVICES_H || MAC_OS_X_VERSION_MAX_ALLOWED < 1070
+ 
+ /* iOS (currently) doesn't provide the FSEvents-API (nor CoreServices) */
+ /* macOS prior to 10.7 doesn't provide the full FSEvents API so use kqueue */
+@@ -39,7 +39,7 @@ int uv__fsevents_close(uv_fs_event_t* handle) {
+ void uv__fsevents_loop_delete(uv_loop_t* loop) {
+ }
+ 
+-#else /* TARGET_OS_IPHONE */
++#else /* !HAVE_CORESERVICES_CORESERVICES_H */
+ 
+ #include "darwin-stub.h"
+ 
+@@ -920,4 +920,4 @@ int uv__fsevents_close(uv_fs_event_t* handle) {
+   return 0;
+ }
+ 
+-#endif /* TARGET_OS_IPHONE */
++#endif /* !HAVE_CORESERVICES_CORESERVICES_H */

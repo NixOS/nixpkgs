@@ -1,0 +1,11 @@
+--- origsrc/setup.py.orig	2012-11-27 09:28:34.051770900 -0500
++++ src/setup.py	2012-11-27 09:28:47.239270900 -0500
+@@ -470,7 +470,7 @@
+ 
+         # Check for MacOS X, which doesn't need libm.a at all
+         math_libs = ['m']
+-        if host_platform in ['darwin', 'beos']:
++        if host_platform in ['darwin', 'beos', 'cygwin']:
+             math_libs = []
+ 
+         # XXX Omitted modules: gl, pure, dl, SGI-specific modules

@@ -1,0 +1,12 @@
+diff -u ms-sys-2.6.0/Makefile ms-sys-2.6.0-fixed/Makefile
+--- ms-sys-2.6.0/Makefile	2015-09-27 20:39:45.000000000 +0200
++++ ms-sys-2.6.0-fixed/Makefile2020-01-06 16:43:55.181477511 +0100
+@@ -121,7 +121,7 @@
+
+ $(DESTDIR)$(MANDIR)/%: $(MAN)/$(dir $(*D))/$(*F)
+ 	install -D -m 644 $(MAN)/$(dir $(*D))$(*F) $@
+-	gzip -f $@
++	gzip -n -f $@
+
+ #$(DESTDIR)$(MANDIR)/%: $(MAN)/$(*F)
+ #	echo t: $<

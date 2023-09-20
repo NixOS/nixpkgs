@@ -1,0 +1,57 @@
+diff --git a/Makefile.PL b/Makefile.PL
+index 55c485c..8501c02 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -124,14 +124,7 @@ if ($^O eq 'MSWin32' || $IS_W32API)
+ # Look for available libs
+ our @libdirs = qw
+ {
+-  -L/usr/lib
+-  -L/usr/lib/i386-linux-gnu
+-  -L/usr/X11R6/lib
+-  -L/opt/X11/lib
+-  -L/usr/local/lib
+-  -L/usr/openwin/lib
+-  -L/opt/csw/lib
+-  -L/usr/local/freeglut/lib
++  @@libpaths@@
+ };
+ 
+ our @check_libs = qw
+@@ -764,7 +759,6 @@ sub get_extensions
+   my $exc_file = 'gl_exclude.h';
+   unlink($exc_file) if (-e $exc_file);
+   my $glv_file = 'utils/glversion.txt';
+-  unlink($glv_file) if (-e $glv_file);
+ 
+   # Only run the rest if GLUT is installed
+   print "Testing GLUT version\n" if ($verbose);
+@@ -817,7 +811,7 @@ sub get_extensions
+     $make_ver = ";make -f Makefile " .  (length($lib) ? "GLUT_LIB=$lib " : "") . (length($def) ? "GLUT_DEF=$def " : "");
+     print "glversion: '$make_ver'\n" if $verbose>1;
+   }
+-  my $exec = 'cd utils'."$make_ver clean".$make_ver;
++  my $exec = 'cd utils'.$make_ver;
+   print "glversion: $exec\n" if ($verbose);
+   my $stat = `$exec`;
+   print "\n$stat\n\n" if ($verbose);
+diff --git a/utils/Makefile b/utils/Makefile
+index 910dcaf..1b1ac57 100644
+--- a/utils/Makefile
++++ b/utils/Makefile
+@@ -21,14 +21,13 @@ EXTRALIBS=-lGLU -lXi -lXmu -lXext -lX11 -lm
+ all: glversion.txt
+ 
+ glversion.txt: glversion
+-	./glversion > glversion.txt
++	echo "skipping build of glversion.txt"
+ 
+ glversion: glversion.o
+ 	${LINK} glversion.o ${LDFLAGS} ${EXTRALIBS} -o glversion
+ 	chmod u+x glversion
+ 
+ clean:
+-	rm -f glversion.txt
+ 	rm -f glversion
+ 	rm -f glversion.o
+ 
