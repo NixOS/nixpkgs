@@ -43,5 +43,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/printfn/fend";
     license = licenses.mit;
     maintainers = with maintainers; [ djanatyn ];
+    mainProgram = "fend";
   };
 }
