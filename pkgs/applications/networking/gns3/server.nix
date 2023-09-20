@@ -46,12 +46,30 @@ python3.pkgs.buildPythonApplication {
     zipstream
   ];
 
-  # Requires network access
-  doCheck = false;
-
   postInstall = ''
     rm $out/bin/gns3loopback # For Windows only
   '';
+
+  doCheck = true;
+
+  # Otherwise tests will fail to create directory
+  # Permission denied: '/homeless-shelter'
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = with python3.pkgs; [
+    pytest-aiohttp
+    pytest-rerunfailures
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # fails on ofborg because of lack of cpu vendor information
+    "--deselect=tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+    # Rerun failed tests up to three times (flaky tests)
+    "--reruns 3"
+  ];
 
   meta = with lib; {
     description = "Graphical Network Simulator 3 server (${channel} release)";
