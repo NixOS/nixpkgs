@@ -118,6 +118,24 @@ expectFailure() {
     fi
 }
 
+# Check that the traces of a Nix expression are as expected when evaluated.
+# The expression has `lib.fileset` in scope.
+# Usage: expectTrace NIX STR
+expectTrace() {
+    local expr=$1
+    local expectedTrace=$2
+
+    nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTrace \
+        --expr "$prefixExpression trace ($expr)" || true
+
+    actualTrace=$(sed -n 's/^trace: //p' "$tmp/stderrTrace")
+
+    if [[ "$actualTrace" != "$expectedTrace" ]]; then
+        cat "$tmp"/stderrTrace >&2
+        die "$expr should have traced this:\n\n$expectedTrace\n\nbut this was actually traced:\n\n$actualTrace"
+    fi
+}
+
 # We conditionally use inotifywait in checkFileset.
 # Check early whether it's available
 # TODO: Darwin support, though not crucial since we have Linux CI
@@ -517,6 +535,139 @@ done
 # Meanwhile, the test infra here is not the fastest, creating 10000 would be too slow.
 # So, just using 1000 files for now.
 checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
+
+## Tracing
+
+# The second trace argument is returned
+expectEqual 'trace ./. "some value"' 'builtins.trace "(empty)" "some value"'
+
+# The tracing happens before the final argument is needed
+expectEqual 'trace ./.' 'builtins.trace "(empty)" (x: x)'
+
+# Tracing an empty directory shows it as such
+expectTrace './.' '(empty)'
+
+# This also works if there are directories, but all recursively without files
+mkdir -p a/b/c
+expectTrace './.' '(empty)'
+rm -rf -- *
+
+# The empty file set without a base also prints as empty
+expectTrace '_emptyWithoutBase' '(empty)'
+expectTrace 'unions [ ]' '(empty)'
+
+# If a directory is fully included, print it as such
+touch a
+expectTrace './.' "$work"' (all files in directory)'
+rm -rf -- *
+
+# If a directory is not fully included, recurse
+mkdir a b
+touch a/{x,y} b/{x,y}
+expectTrace 'union ./a/x ./b' "$work"'
+- a
+  - x (regular)
+- b (all files in directory)'
+rm -rf -- *
+
+# If an included path is a file, print its type
+touch a x
+ln -s a b
+mkfifo c
+expectTrace 'unions [ ./a ./b ./c ]' "$work"'
+- a (regular)
+- b (symlink)
+- c (unknown)'
+rm -rf -- *
+
+# Do not print directories without any files recursively
+mkdir -p a/b/c
+touch b x
+expectTrace 'unions [ ./a ./b ]' "$work"'
+- b (regular)'
+rm -rf -- *
+
+# If all children are either fully included or empty directories,
+# the parent should be printed as fully included
+touch a
+mkdir b
+expectTrace 'union ./a ./b' "$work"' (all files in directory)'
+rm -rf -- *
+
+mkdir -p x/b x/c
+touch x/a
+touch a
+# If all children are either fully excluded or empty directories,
+# the parent should be shown (or rather not shown) as fully excluded
+expectTrace 'unions [ ./a ./x/b ./x/c ]' "$work"'
+- a (regular)'
+rm -rf -- *
+
+# Completely filtered out directories also print as empty
+touch a
+expectTrace '_create ./. {}' '(empty)'
+rm -rf -- *
+
+# A general test to make sure the resulting format makes sense
+# Such as indentation and ordering
+mkdir -p bar/{qux,someDir}
+touch bar/{baz,qux,someDir/a} foo
+touch bar/qux/x
+ln -s x bar/qux/a
+mkfifo bar/qux/b
+expectTrace 'unions [
+  ./bar/baz
+  ./bar/qux/a
+  ./bar/qux/b
+  ./bar/someDir/a
+  ./foo
+]' "$work"'
+- bar
+  - baz (regular)
+  - qux
+    - a (symlink)
+    - b (unknown)
+  - someDir (all files in directory)
+- foo (regular)'
+rm -rf -- *
+
+# For recursively included directories,
+# `(all files in directory)` should only be used if there's at least one file (otherwise it would be `(empty)`)
+# and this should be determined without doing a full search
+#
+# Create a 100 level deep path, which would cause a stack overflow with the below limit
+# if recursed into to figure out if the current directory is empty
+mkdir -p "b/$(seq -s/ 100)"
+# But that can be avoided by short-circuiting if the file a (here intentionally ordered before b) is checked first.
+# In a more realistic scenario, some directories might need to be recursed into,
+# but a file would be quickly found to trigger the short-circuit.
+touch a
+(
+    # Locally limit the stack to 100 * 1024 bytes, this would cause a stack overflow if the short-circuiting isn't implemented
+    ulimit -s 100
+    expectTrace './.' "$work"' (all files in directory)'
+)
+rm -rf -- *
+
+# Partially included directories trace entries as they are evaluated
+touch a b c
+expectTrace '_create ./. { a = null; b = "regular"; c = throw "b"; }' "$work"'
+- b (regular)'
+
+# Except entries that need to be evaluated to even figure out if it's only partially included:
+# Here the directory could be fully excluded or included just from seeing a and b,
+# so c needs to be evaluated before anything can be traced
+expectTrace '_create ./. { a = null; b = null; c = throw "c"; }' ''
+expectTrace '_create ./. { a = "regular"; b = "regular"; c = throw "c"; }' ''
+rm -rf -- *
+
+# We can trace large directories (10000 here) without any problems
+filesToCreate=({0..9}{0..9}{0..9}{0..9})
+expectedTrace=$work$'\n'$(printf -- '- %s (regular)\n' "${filesToCreate[@]}")
+# We need an excluded file so it doesn't print as `(all files in directory)`
+touch 0 "${filesToCreate[@]}"
+expectTrace 'unions (mapAttrsToList (n: _: ./. + "/${n}") (removeAttrs (builtins.readDir ./.) [ "0" ]))' "$expectedTrace"
+rm -rf -- *
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 
