@@ -21,6 +21,10 @@
 , stdenv
 , vcg
 , zstd
+, config
+, cudaSupport ? config.cudaSupport
+, cudatoolkit
+, addOpenGLRunpath
 }:
 
 let
@@ -41,7 +45,11 @@ stdenv.mkDerivation rec {
   };
 
   # SSE is enabled by default
-  cmakeFlags = lib.optional (!stdenv.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = lib.optionals (!stdenv.isx86_64) [
+    "-DOpenMVS_USE_SSE=OFF"
+  ] ++ lib.optionals cudaSupport [
+    "-DCMAKE_LIBRARY_PATH=${cudatoolkit}/lib/stubs"
+  ];
 
   buildInputs = [
     boostWithZstd
@@ -60,9 +68,13 @@ stdenv.mkDerivation rec {
     openmp
     python3
     vcg
+  ] ++ lib.optionals cudaSupport [
+    cudatoolkit
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals cudaSupport [
+    addOpenGLRunpath
+  ];
 
   postInstall = ''
     mv $out/bin/OpenMVS/* $out/bin
@@ -70,7 +82,12 @@ stdenv.mkDerivation rec {
     rm $out/bin/Tests
   '';
 
-  doCheck = true;
+  postFixup = lib.optionalString cudaSupport ''
+    addOpenGLRunpath $out/bin/*
+  '';
+
+  # We can't run the tests because they require the opengl run path to be available
+  doCheck = !cudaSupport;
   checkPhase = ''
     runHook preCheck
     ctest
