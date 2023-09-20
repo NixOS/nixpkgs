@@ -50,6 +50,7 @@ in {
       path = with pkgs; [ bash ];
       documentation = [ "https://github.com/rust-motd/rust-motd/blob/v${pkgs.rust-motd.version}/README.md" ];
       description = "motd generator";
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.writeShellScript "update-motd" ''
           ${pkgs.rust-motd}/bin/rust-motd ${format.generate "motd.conf" cfg.settings} > motd
