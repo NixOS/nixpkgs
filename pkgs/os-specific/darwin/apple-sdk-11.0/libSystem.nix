@@ -1,4 +1,11 @@
-{ stdenvNoCC, buildPackages, MacOSX-SDK }:
+{ stdenvNoCC
+, MacOSX-SDK
+, buildPackages
+# These are included for compatibility with the 10.12 SDK Libsystem derivation, so that the
+# bootstrap stdenv can override these unconditionally.
+, withCsu ? null
+, withLibresolv ? null
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "libSystem";
