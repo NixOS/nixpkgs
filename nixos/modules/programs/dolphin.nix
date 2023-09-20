@@ -4,6 +4,12 @@ with lib;
 
 let
   cfg = config.programs.dolphin;
+
+  # This is needed to select the Breeze theme
+  dolphin-stylized = pkgs.writeShellScriptBin "dolphin" ''
+    export QT_STYLE_OVERRIDE="${cfg.style}"
+    exec ${pkgs.libsForQt5.dolphin}/bin/dolphin
+  '';
 in
 {
   meta.maintainers = with maintainers; [ MakiseKurisu ];
@@ -16,6 +22,13 @@ in
       This option will install additional depencencies to mimic the experience
       of Dolphin in a normal KDE Plasma setup
     '');
+
+    style = mkOption {
+      type = types.str;
+      default = "breeze";
+      example = "breeze";
+      description = mdDoc "Set the style for Dolphin.";
+    };
 
     extraPackages = mkOption {
       type = with types; listOf package;
@@ -58,13 +71,8 @@ in
         "/share/konsole"
       ];
 
-      # This is needed to select the Breeze theme
-      variables = {
-        QT_STYLE_OVERRIDE = "breeze";
-      };
-
-      systemPackages = with pkgs.libsForQt5; [
-        dolphin
+      systemPackages = with pkgs; with libsForQt5; [
+        dolphin-stylized
         konsole # for terminal panel
         breeze-qt5 # for theme
         breeze-icons # for icons
