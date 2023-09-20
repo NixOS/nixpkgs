@@ -12478,12 +12478,6 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
-
-  qscintilla-qt6 = qt6Packages.callPackage ../development/libraries/qscintilla { };
-
   qrcp = callPackage ../tools/networking/qrcp { };
 
   qrscan = callPackage ../tools/misc/qrscan { };
