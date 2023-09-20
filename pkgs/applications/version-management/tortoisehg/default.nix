@@ -23,6 +23,10 @@ python3Packages.buildPythonApplication rec {
     qscintilla-qt5
     iniparse
   ];
+  buildInputs = [
+    # Makes wrapQtAppsHook add these qt libraries to the wrapper search paths
+    qt5.qtwayland
+  ];
 
   # In order to spare double wrapping, we use:
   preFixup = ''
