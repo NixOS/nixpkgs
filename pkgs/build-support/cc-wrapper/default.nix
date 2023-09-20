@@ -469,6 +469,7 @@ stdenv.mkDerivation {
     ''
     + optionalString (libcxx.isLLVM or false) ''
       echo "-isystem ${lib.getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      echo "-isystem ${lib.getDev libcxx.cxxabi}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
       echo "-l${libcxx.cxxabi.libName}" >> $out/nix-support/libcxx-ldflags
     ''
