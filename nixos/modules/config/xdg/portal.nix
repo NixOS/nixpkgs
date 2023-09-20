@@ -78,16 +78,28 @@ in
     };
 
     config = mkOption {
-      type = associationOptions;
+      type = types.attrsOf associationOptions;
       default = { };
       example = {
-        "default" = [ "xapp" "gtk" ];
-        "org.freedesktop.impl.portal.Screencast" = [ "gnome" ];
+        x-cinnamon = {
+          default = [ "xapp" "gtk" ];
+        };
+        pantheon = {
+          default = [ "pantheon" "gtk" ];
+          "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+        };
+        other = {
+          default = [ "gtk" ];
+        };
       };
       description = lib.mdDoc ''
-        Sets which portal backend should be used to provide the implementation for
-        the requested interface. For details check `portals.conf(5)` or
+        Sets which portal backend should be used to provide the implementation
+        for the requested interface. For details check `portals.conf(5)` or
         [this docs](https://github.com/flatpak/xdg-desktop-portal/blob/main/doc/portals-conf.rst).
+
+        Configs will be linked to `/etx/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
+        for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.other`
+        as an exception.
       '';
     };
 
@@ -133,7 +145,7 @@ in
         If you simply want to keep the behaviour in < 1.17, which uses the first
         portal implementation found in lexicographical order, use the following:
 
-        xdg.portal.config.default = "*";
+        xdg.portal.config.other.default = "*";
       '';
 
       assertions = [
@@ -160,11 +172,11 @@ in
           NIXOS_XDG_DESKTOP_PORTAL_CONFIG_DIR = mkIf (cfg.configPackages != [ ]) "${joinedPortalConfigs}/share/xdg-desktop-portal";
         };
 
-        etc."xdg/xdg-desktop-portal/portals.conf" = mkIf (cfg.config != { }) {
-          text = lib.generators.toINI { } {
-            "preferred" = cfg.config;
-          };
-        };
+        etc = lib.concatMapAttrs
+          (desktop: conf: lib.optionalAttrs (conf != { }) {
+            "xdg/xdg-desktop-portal/${lib.optionalString (desktop != "other") "${desktop}-"}portals.conf".text =
+              lib.generators.toINI { } { preferred = conf; };
+          }) cfg.config;
       };
     };
 }
