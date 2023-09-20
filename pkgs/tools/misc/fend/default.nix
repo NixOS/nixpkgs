@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     description = "Arbitrary-precision unit-aware calculator";
     homepage = "https://github.com/printfn/fend";
     license = licenses.mit;
-    maintainers = with maintainers; [ djanatyn ];
+    maintainers = with maintainers; [ djanatyn liff ];
     mainProgram = "fend";
   };
 }
