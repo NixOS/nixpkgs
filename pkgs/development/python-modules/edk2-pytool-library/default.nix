@@ -7,22 +7,21 @@
 , pyasn1
 , pyasn1-modules
 , cryptography
-, tinydb
 , joblib
-, tinyrecord
+, gitpython
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.17.0";
+  version = "0.18.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     rev = "v${version}";
-    hash = "sha256-US9m7weW11+VxX6ZsKP5tYKp+bQoiI+TZ3YWE97D/f0=";
+    hash = "sha256-O7K439nAIHHTWSoR8mZWEu9sXcrhYfZto3RTgHZcOuA=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +39,17 @@ buildPythonPackage rec {
     pyasn1
     pyasn1-modules
     cryptography
-    tinydb
     joblib
-    tinyrecord
+    gitpython
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # requires network access
+    "test_basic_parse"
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

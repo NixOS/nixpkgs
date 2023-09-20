@@ -1951,6 +1951,8 @@ with pkgs;
 
   polygon-cli = callPackage ../tools/networking/polygon-cli { };
 
+  pricehist = python3Packages.callPackage ../tools/misc/pricehist { };
+
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
 
   q = callPackage ../tools/networking/q { };
@@ -3002,7 +3004,7 @@ with pkgs;
   kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
-    go = go_1_20;
+    go = go_1_21;
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks)
@@ -10236,31 +10238,30 @@ with pkgs;
   nodenv = callPackage ../development/tools/nodenv { };
 
   nodejs = hiPrio nodejs_18;
-
   nodejs-slim = nodejs-slim_18;
+  corepack = hiPrio corepack_18;
 
-  nodejs_14 = callPackage ../development/web/nodejs/v14.nix {
-    openssl = openssl_1_1;
-  };
+  nodejs_14 = callPackage ../development/web/nodejs/v14.nix { openssl = openssl_1_1; };
   nodejs-slim_14 = callPackage ../development/web/nodejs/v14.nix {
     openssl = openssl_1_1;
     enableNpm = false;
   };
+
   nodejs_16 = callPackage ../development/web/nodejs/v16.nix { };
-  nodejs-slim_16 = callPackage ../development/web/nodejs/v16.nix {
-    enableNpm = false;
-  };
+  nodejs-slim_16 = callPackage ../development/web/nodejs/v16.nix { enableNpm = false; };
+
   nodejs_18 = callPackage ../development/web/nodejs/v18.nix { };
-  nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix {
-    enableNpm = false;
-  };
+  nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix { enableNpm = false; };
+  corepack_18 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_18; });
+
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
-  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix {
-    enableNpm = false;
-  };
+  nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
+  corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
+
   # Update this when adding the newest nodejs major version!
   nodejs_latest = nodejs_20;
   nodejs-slim_latest = nodejs-slim_20;
+  corepack_latest = hiPrio corepack_20;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -34633,6 +34634,8 @@ with pkgs;
   nimdow = callPackage ../applications/window-managers/nimdow { };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
+
+  normcap = callPackage ../applications/graphics/normcap { };
 
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
