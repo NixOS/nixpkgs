@@ -741,6 +741,7 @@ in {
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   stunnel = handleTest ./stunnel.nix {};
   sudo = handleTest ./sudo.nix {};
+  sudo-rs = handleTest ./sudo-rs.nix {};
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
   swap-random-encryption = handleTest ./swap-random-encryption.nix {};
