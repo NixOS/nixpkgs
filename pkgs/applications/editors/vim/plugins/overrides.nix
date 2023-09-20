@@ -866,6 +866,10 @@ self: super: {
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
 
+  nvim-navic = super.nvim-navic.overrideAttrs {
+    dependencies = with self; [ nvim-lspconfig ];
+  };
+
   nvim-spectre = super.nvim-spectre.overrideAttrs {
     dependencies = with self; [ plenary-nvim ];
   };
