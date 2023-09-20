@@ -1,24 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "fx";
-  version = "30.0.2";
+  version = "30.0.3";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = pname;
     rev = version;
-    hash = "sha256-dpIkWgABATDyG3pCdeDKVar53eBHFP3f9XNKkTrr96c=";
+    hash = "sha256-bTXxzGf7mXQ0VfAQhaKAOYtOVAEVC71R3eRJej0zfJs=";
   };
-
-  patches = [
-    # fix failing test
-    (fetchpatch {
-      name = "fix-dig-test.patch";
-      url = "https://github.com/antonmedv/fx/commit/adf3775828157d903e3f32ab4023fe750fa85e68.patch";
-      hash = "sha256-/6UfI0IW/+ZbgXi3W6BRTfVPko7V4s/NnaunvLDcw2A=";
-    })
-  ];
 
   vendorHash = "sha256-FyV3oaI4MKl0LKJf23XIeUmvFsa1DvQw2pq5Heza3Ws=";
 
