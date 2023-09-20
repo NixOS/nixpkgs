@@ -33,11 +33,20 @@ in
         authentication = ''
           hostnossl mastodon_local mastodon_test 192.168.2.201/32 md5
         '';
-        initialScript = pkgs.writeText "postgresql_init.sql" ''
-          CREATE ROLE mastodon_test LOGIN PASSWORD 'SoDTZcISc3f1M1LJsRLT';
-          CREATE DATABASE mastodon_local TEMPLATE template0 ENCODING UTF8;
-          GRANT ALL PRIVILEGES ON DATABASE mastodon_local TO mastodon_test;
-        '';
+        ensureDatabases = [
+          {
+            name = "mastodon_local";
+            template = "template0";
+            encoding = "UTF8";
+          }
+        ];
+        ensureUsers = [
+          {
+            name = "mastodon_test";
+            passwordFile = pkgs.writeText "mastodon_test-password" "SoDTZcISc3f1M1LJsRLT";
+            ensureClauses.login = true;
+          }
+        ];
       };
     };
 
