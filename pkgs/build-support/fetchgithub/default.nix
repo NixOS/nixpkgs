@@ -3,7 +3,7 @@
 lib.makeOverridable (
 { owner, repo, rev, name ? "source"
 , fetchSubmodules ? false, leaveDotGit ? null
-, deepClone ? false, private ? false, forceFetchGit ? false
+, deepClone ? false, private ? false, forceFetchGit ? false, keepSourceDate ? false
 , sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
 , meta ? { }
@@ -52,7 +52,7 @@ let
 
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
+      inherit rev deepClone keepSourceDate fetchSubmodules sparseCheckout; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
       url = "${baseUrl}/archive/${rev}.tar.gz";
