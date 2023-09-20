@@ -16,6 +16,7 @@
 , lib
 , libGL
 , mesa
+, openblas
 , ocl-icd
 , opencl-clhpp
 , pkg-config
@@ -36,7 +37,7 @@
 , nvidiaComputeDrivers ? null
 }:
 
-assert blas.isILP64 == false;
+# assert blas.isILP64 == false;
 
 stdenv.mkDerivation rec {
   pname = "arrayfire";
@@ -163,7 +164,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs = [
-    blas
+    # blas
     boost.dev
     boost.out
     clblast
@@ -174,10 +175,11 @@ stdenv.mkDerivation rec {
     forge
     freeimage
     gtest
-    lapack
+    # lapack
     libGL
     ocl-icd
     opencl-clhpp
+    openblas
     span-lite
   ]
   ++ lib.optionals cudaSupport [
