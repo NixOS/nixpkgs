@@ -28,7 +28,7 @@ let
       nativeBuildInputs = [ pkgs.remarshal pkgs.jq ];
     })
     ''
-      cat "$NIX_BUILD_TOP"/.attrs.json \
+      cat "$NIX_ATTRS_JSON_FILE" \
         | jq '${concatMapStringsSep " + " (key: ''."${key}"'') (attrNames orderedSections)}' \
         | json2toml /dev/stdin "$out"
     '';
