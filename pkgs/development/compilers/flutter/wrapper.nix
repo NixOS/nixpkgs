@@ -175,6 +175,7 @@ in
   passthru = flutter.passthru // {
     inherit (flutter) version;
     unwrapped = flutter;
+    inherit engineArtifacts;
   };
 
   inherit (flutter) meta;
