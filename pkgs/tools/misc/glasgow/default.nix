@@ -52,6 +52,11 @@ python3.pkgs.buildPythonApplication rec {
   # installCheck tries to build_ext again
   doInstallCheck = false;
 
+  postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
+    cp $src/config/99-glasgow.rules $out/etc/udev/rules.d
+  '';
+
   checkPhase = ''
     ${python3.interpreter} -W ignore::DeprecationWarning test.py
   '';
