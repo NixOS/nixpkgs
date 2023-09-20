@@ -6,6 +6,7 @@
 , numpy
 , pillow
 , pooch
+, pythonOlder
 , scooby
 , vtk
 }:
@@ -14,6 +15,8 @@ buildPythonPackage rec {
   pname = "pyvista";
   version = "0.42.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
