@@ -34636,6 +34636,8 @@ with pkgs;
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
 
+  normcap = callPackage ../applications/graphics/normcap { };
+
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
