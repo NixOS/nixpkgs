@@ -1,9 +1,8 @@
 { lib
 , beamPackages
+, buildNpmPackage
 , fetchFromGitHub
 , nodejs
-, npmHooks
-, fetchNpmDeps
 , nixosTests
 }:
 
@@ -24,21 +23,39 @@ let
     inherit src version;
     hash = "sha256-CAyZLpjmw1JreK3MopqI0XsWhP+fJEMpXlww7CibSaM=";
   };
+
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
+    inherit version;
+    src = "${src}/assets";
+    npmDepsHash = "sha256-2t1M6RQhBjZxx36qawVUVC+ob9SvQIq5dy4HgVeY2Eo=";
+    dontNpmBuild = true;
+    installPhase = ''
+      runHook preInstall
+      cp -r . "$out"
+      runHook postInstall
+    '';
+  };
+
+  tracker = buildNpmPackage {
+    pname = "${pname}-tracker";
+    inherit version;
+    src = "${src}/tracker";
+    npmDepsHash = "sha256-y09jVSwUrxF0nLpLqS1yQweYL+iMF6jVx0sUdQtvrpc=";
+    dontNpmBuild = true;
+    installPhase = ''
+      runHook preInstall
+      cp -r . "$out"
+      runHook postInstall
+    '';
+  };
 in
 beamPackages.mixRelease {
   inherit pname version src mixFodDeps;
 
   nativeBuildInputs = [
     nodejs
-    npmHooks.npmConfigHook
   ];
-
-  npmDeps = fetchNpmDeps {
-    src = "${src}/assets";
-    hash = "sha256-2t1M6RQhBjZxx36qawVUVC+ob9SvQIq5dy4HgVeY2Eo=";
-  };
-
-  npmRoot = "assets";
 
   passthru = {
     tests = { inherit (nixosTests) plausible; };
@@ -49,10 +66,16 @@ beamPackages.mixRelease {
     substituteInPlace lib/plausible_release.ex --replace 'defp prepare do' 'def prepare do'
   '';
 
+  preBuild = ''
+    rm -r assets tracker
+    cp -r ${assets} assets
+    cp -r ${tracker} tracker
+  '';
+
   postBuild = ''
-    export HOME=$TMPDIR
     export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
     npm run deploy --prefix ./assets
+    npm run deploy --prefix ./tracker
 
     # for external task you need a workaround for the no deps check flag
     # https://github.com/phoenixframework/phoenix/issues/2690
