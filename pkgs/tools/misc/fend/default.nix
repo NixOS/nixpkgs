@@ -7,6 +7,7 @@
 , installShellFiles
 , copyDesktopItems
 , makeDesktopItem
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,6 +57,8 @@ rustPlatform.buildRustPackage rec {
       categories = [ "Utility" "Calculator" "ConsoleOnly" ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";
