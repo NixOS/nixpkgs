@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "q";
-  version = "0.11.4";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "natesales";
     repo = "q";
     rev = "v${version}";
-    sha256 = "sha256-zoIHpj1i0X5SCVhcT3bl5xxsDcvD2trEVhlIC5YnIZo=";
+    sha256 = "sha256-Z62xxmbzouuP0ol0sJxlh3bQr/sysFSqo7Y5b26IJ1g=";
   };
 
-  vendorHash = "sha256-cZRaf5Ks6Y4PzeVN0Lf1TxXzrifb7uQzsMbZf6JbLK4=";
+  vendorHash = "sha256-uWPvUz8H9e/deZ3JmpRBNEG6UXAQa1068fZwQoeiKkc=";
 
   doCheck = false; # tries to resolve DNS
 
