@@ -5,6 +5,8 @@
 , darwin
 , pandoc
 , installShellFiles
+, copyDesktopItems
+, makeDesktopItem
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-oAkZHx33YrwRUUIoooqpy72QCq0ZkAgBZ8W8XDe2fNE=";
 
-  nativeBuildInputs = [ pandoc installShellFiles ];
+  nativeBuildInputs = [ pandoc installShellFiles copyDesktopItems ];
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postBuild = ''
@@ -37,6 +39,23 @@ rustPlatform.buildRustPackage rec {
   installCheckPhase = ''
     [[ "$($out/bin/fend "1 km to m")" = "1000 m" ]]
   '';
+
+  postInstall = ''
+    install -D -m 444 $src/icon/fend-icon-256.png $out/share/icons/hicolor/256x256/apps/fend.png
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "fend";
+      desktopName = "fend";
+      genericName = "Calculator";
+      comment = "Arbitrary-precision unit-aware calculator";
+      icon = "fend";
+      exec = "fend";
+      terminal = true;
+      categories = [ "Utility" "Calculator" "ConsoleOnly" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Arbitrary-precision unit-aware calculator";
