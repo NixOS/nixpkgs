@@ -31,11 +31,12 @@ in
           kdegraphics-thumbnailers
         ];
       '';
-      description = lib.mdDoc ''
+      description = mdDoc ''
         Extra packages that enhance Dolphin's functionality.
 
-        These packages are not strictly needed to resolve any UI inconsistency,
-        but are nice to have in most cases.
+        These packages are not strictly required to have dolphin basically work,
+        but add useful features such as thumbnails, network/device filesystem
+        access, and similar.
       '';
       example = literalExpression ''
         with pkgs.libsForQt5; [
