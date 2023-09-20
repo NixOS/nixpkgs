@@ -27,7 +27,36 @@ in
       type = types.str;
       default = "breeze";
       example = "breeze";
-      description = mdDoc "Set the style for Dolphin.";
+      description = mdDoc ''
+        Set the style for Dolphin.
+
+        This option should be used with `stylePackages` together.
+      '';
+    };
+
+    stylePackages = mkOption {
+      type = with types; listOf package;
+      default = with pkgs.libsForQt5; [
+          breeze-qt5
+          breeze-icons
+      ];
+      defaultText = literalExpression ''
+        with pkgs.libsForQt5; [
+          breeze-qt5
+          breeze-icons
+        ];
+      '';
+      description = mdDoc ''
+        Style packages for Dolphin.
+
+        This option should be used with `style` together.
+      '';
+      example = literalExpression ''
+        with pkgs.libsForQt5; [
+          breeze-qt5
+          breeze-icons
+        ];
+      '';
     };
 
     extraPackages = mkOption {
@@ -74,9 +103,8 @@ in
       systemPackages = with pkgs; with libsForQt5; [
         dolphin-stylized
         konsole # for terminal panel
-        breeze-qt5 # for theme
-        breeze-icons # for icons
-      ] ++ cfg.extraPackages;
+      ] ++ cfg.extraPackages
+      ++ cfg.stylePackages;
     };
 
     services = {
