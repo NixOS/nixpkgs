@@ -130,6 +130,17 @@ expectTrace() {
 
     actualTrace=$(sed -n 's/^trace: //p' "$tmp/stderrTrace")
 
+    nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTraceVal \
+        --expr "$prefixExpression traceVal ($expr)" || true
+
+    actualTraceVal=$(sed -n 's/^trace: //p' "$tmp/stderrTraceVal")
+
+    # Test that traceVal returns the same trace as trace
+    if [[ "$actualTrace" != "$actualTraceVal" ]]; then
+        cat "$tmp"/stderrTrace >&2
+        die "$expr traced this for lib.fileset.trace:\n\n$actualTrace\n\nand something different for lib.fileset.traceVal:\n\n$actualTraceVal"
+    fi
+
     if [[ "$actualTrace" != "$expectedTrace" ]]; then
         cat "$tmp"/stderrTrace >&2
         die "$expr should have traced this:\n\n$expectedTrace\n\nbut this was actually traced:\n\n$actualTrace"
@@ -540,6 +551,9 @@ checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.rea
 
 # The second trace argument is returned
 expectEqual 'trace ./. "some value"' 'builtins.trace "(empty)" "some value"'
+
+# The fileset traceVal argument is returned
+expectEqual 'traceVal ./.' 'builtins.trace "(empty)" (_create ./. "directory")'
 
 # The tracing happens before the final argument is needed
 expectEqual 'trace ./.' 'builtins.trace "(empty)" (x: x)'
