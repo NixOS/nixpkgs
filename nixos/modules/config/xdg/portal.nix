@@ -88,7 +88,7 @@ in
           default = [ "pantheon" "gtk" ];
           "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
         };
-        other = {
+        others = {
           default = [ "gtk" ];
         };
       };
@@ -98,7 +98,7 @@ in
         [this docs](https://github.com/flatpak/xdg-desktop-portal/blob/main/doc/portals-conf.rst).
 
         Configs will be linked to `/etx/xdg/xdg-desktop-portal/` with the name `$desktop-portals.conf`
-        for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.other`
+        for `xdg.portal.config.$desktop` and `portals.conf` for `xdg.portal.config.others`
         as an exception.
       '';
     };
@@ -145,7 +145,7 @@ in
         If you simply want to keep the behaviour in < 1.17, which uses the first
         portal implementation found in lexicographical order, use the following:
 
-        xdg.portal.config.other.default = "*";
+        xdg.portal.config.others.default = "*";
       '';
 
       assertions = [
@@ -174,7 +174,7 @@ in
 
         etc = lib.concatMapAttrs
           (desktop: conf: lib.optionalAttrs (conf != { }) {
-            "xdg/xdg-desktop-portal/${lib.optionalString (desktop != "other") "${desktop}-"}portals.conf".text =
+            "xdg/xdg-desktop-portal/${lib.optionalString (desktop != "others") "${desktop}-"}portals.conf".text =
               lib.generators.toINI { } { preferred = conf; };
           }) cfg.config;
       };
