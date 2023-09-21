@@ -6,8 +6,8 @@ let
     { pkgs, ... }:
     { virtualisation.fileSystems =
         { "/data" =
-           { # nfs4 exports the export with fsid=0 as a virtual root directory
-             device = if (version == 4) then "server:/" else "server:/data";
+           {
+             device = "server:/data";
              fsType = "nfs";
              options = [ "vers=${toString version}" ];
            };
@@ -32,7 +32,7 @@ in
         { services.nfs.server.enable = true;
           services.nfs.server.exports =
             ''
-              /data 192.168.1.0/255.255.255.0(rw,no_root_squash,no_subtree_check,fsid=0)
+              /data 192.168.1.0/255.255.255.0(rw,no_root_squash,no_subtree_check,fsid=1)
             '';
           services.nfs.server.createMountPoints = true;
           networking.firewall.enable = false; # FIXME: figure out what ports need to be allowed
