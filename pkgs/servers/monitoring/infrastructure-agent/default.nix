@@ -1,30 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
-, IOKit
-, CoreFoundation
-, Security
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
 }:
-
 buildGoModule rec {
   pname = "infrastructure-agent";
-  version = "1.42.0";
+  version = "1.47.1";
 
   src = fetchFromGitHub {
     owner = "newrelic";
     repo = "infrastructure-agent";
     rev = version;
-    hash = "sha256-0eq4igAqtzkb2bsNWPZCOeKd1X3mL3z5BiIs01BJPu8=";
+    hash = "sha256-+hgAMfMMbZQiqO8Sn+OtJDOCc6iZRWlQMH/q6EDGfXk=";
   };
 
-  vendorHash = "sha256-YOdNoUkPAGknv82RQRk36Be8uGfkrhNETJv54jnHAB8=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    IOKit
-    CoreFoundation
-    Security
-  ];
+  vendorHash = "sha256-izjfwwKHR0tSuO+bjU5NT8r+uu8EhWl20GIfMjytNHk=";
 
   ldflags = [
     "-s"
@@ -46,8 +37,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "New Relic Infrastructure Agent";
-    homepage = "https://github.com/newrelic/infrastructure-agent";
+    homepage = "https://github.com/newrelic/infrastructure-agent.git";
     license = licenses.asl20;
-    maintainers = with maintainers; [DavSanchez];
+    maintainers = with maintainers; [ DavSanchez ];
+    mainProgram = "newrelic-infra";
   };
 }
