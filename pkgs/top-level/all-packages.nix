@@ -1964,6 +1964,8 @@ with pkgs;
 
   supermin = callPackage ../tools/virtualization/supermin { };
 
+  supersonic = callPackage ../applications/audio/supersonic { };
+
   sx-go = callPackage ../tools/security/sx-go { };
 
   systeroid = callPackage ../tools/system/systeroid { };
