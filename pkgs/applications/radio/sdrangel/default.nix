@@ -24,7 +24,7 @@
 , libbladeRF
 , mbelib
 , ninja
-, opencv3
+, opencv4
 , pkg-config
 , qtcharts
 , qtdeclarative
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     limesuite
     mbelib
-    opencv3
+    opencv4
     qtcharts
     qtdeclarative
     qtgamepad
