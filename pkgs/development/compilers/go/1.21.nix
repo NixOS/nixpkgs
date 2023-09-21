@@ -9,16 +9,13 @@
 , xcbuild
 , mailcap
 , buildPackages
-, pkgsBuildTarget
-, threadsCross
 , testers
 , skopeo
 , buildGo121Module
 }:
 
 let
-  useGccGoBootstrap = stdenv.buildPlatform.isMusl;
-  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap121.nix { };
+  goBootstrap = buildPackages.callPackage ./bootstrap121.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo121Module; };
 
@@ -38,11 +35,12 @@ let
     "x86_64" = "amd64";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
-  # We need a target compiler which is still runnable at build time,
-  # to handle the cross-building case where build != host == target
-  targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
-
-  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+  buildGOOS = stdenv.buildPlatform.parsed.kernel.name;
+  buildGOARCH = goarch stdenv.buildPlatform;
+  hostGOOS = stdenv.hostPlatform.parsed.kernel.name;
+  hostGOARCH = goarch stdenv.hostPlatform;
+  targetGOOS = stdenv.targetPlatform.parsed.kernel.name;
+  targetGOARCH = goarch stdenv.targetPlatform;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
@@ -54,15 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];
-
-  depsBuildTarget = lib.optional isCross targetCC;
-
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
 
   patches = [
     (substituteAll {
@@ -85,30 +76,42 @@ stdenv.mkDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.21.patch
   ];
 
-  GOOS = stdenv.targetPlatform.parsed.kernel.name;
-  GOARCH = goarch stdenv.targetPlatform;
-  # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
-  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
-  GOHOSTARCH = goarch stdenv.buildPlatform;
+  # Go release builds are statically linked so we don’t need to patch
+  # interpreter or library paths.
+  dontPatchELF = true;
+  # Scripts in GOROOT are not used by the toolchain and in most cases are used
+  # during Go toolchain development to generate source code (e.g. for syscalls).
+  dontPatchShebangs = true;
+  # While this may be useful, make.bash builds releases with -trimpath, so there
+  # should be no references to $TMPDIR, and this spams build log with error
+  # messages like:
+  #   patchelf: wrong ELF type
+  #   patchelf: cannot find section '.dynamic'. The input file is most likely statically linked
+  noAuditTmpdir = true;
 
-  # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
-  # to be different from CC/CXX
-  CC_FOR_TARGET =
-    if isCross then
-      "${targetCC}/bin/${targetCC.targetPrefix}cc"
-    else
-      null;
-  CXX_FOR_TARGET =
-    if isCross then
-      "${targetCC}/bin/${targetCC.targetPrefix}c++"
-    else
-      null;
-
+  # Build configuration. Note that these variables are shadowed by passthru
+  # attributes on the final package, so they are only used when building Go.
+  #
+  # The following variables are omitted and defaults are used:
+  # • For GOARCH=amd64: GOAMD64 defaults to "v1".
+  # • For GOARCH=mips{,le}: GOMIPS defaults to "hardfloat".
+  # • For GOARCH=mips64{,le}: GOMIPS64 defaults to "hardfloat".
+  # • For GOARCH=ppc64{,le}: GOPPC64 defaults to "power8".
+  # • For GOARCH=wasm: GOWASM defaults to empty list.
+  #
+  # See `go help environment` for more information.
+  GOOS = hostGOOS;
+  GOARCH = hostGOARCH;
   GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
 
-  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
+  # NB starting with Go 1.21, the toolchain binaries are statically linked pure
+  # Go programs, with no references to glibc, and so they should work fine on
+  # musl buildPlatform.
+  #
+  # Note that GOROOT_FINAL is not embedded in the output for release builds. See
+  # https://go.dev/issue/62047
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   # Note that we use distpack to avoid moving around cross-compiled binaries.
   # The paths are slightly different when buildPlatform != hostPlatform and
@@ -117,14 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     export GOCACHE=$TMPDIR/go-cache
-    # this is compiled into the binary
-    export GOROOT_FINAL=$out/share/go
 
-    ${lib.optionalString isCross ''
-    # Independent from host/target, CC should produce code for the building system.
-    # We only set it when cross-compiling.
-    export CC=${buildPackages.stdenv.cc}/bin/cc
-    ''}
+    # Do not confuse Go build system with environment variables from
+    # stdenv.mkDerivation.
+    unset {CC,CXX}{,_FOR_TARGET}
+
     ulimit -a
 
     pushd src
@@ -153,6 +153,16 @@ stdenv.mkDerivation (finalAttrs: {
         version = "go${finalAttrs.version}";
       };
     };
+
+    # Exposed for compatibility with other packages that use these variables to
+    # find Go names for the platform.
+    GOOS = targetGOOS;
+    GOARCH = targetGOARCH;
+    GOHOSTOS = buildGOOS;
+    GOHOSTARCH = buildGOARCH;
+    # buildGoModule uses this to check whether Cgo should be enabled.
+    # Go release builds do not need Cgo or C compiler.
+    CGO_ENABLED = 1;
   };
 
   meta = with lib; {
