@@ -379,21 +379,21 @@ rec {
     };
 
   # Create a C binary
-  writeCBin = name: code:
-    runCommandCC name
+  writeCBin = pname: code:
+    runCommandCC pname
     {
-      inherit name code;
+      inherit pname code;
       executable = true;
       passAsFile = ["code"];
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
       meta = {
-        mainProgram = name;
+        mainProgram = pname;
       };
     }
     ''
-      n=$out/bin/$name
+      n=$out/bin/${pname}
       mkdir -p "$(dirname "$n")"
       mv "$codePath" code.c
       $CC -x c code.c -o "$n"
