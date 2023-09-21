@@ -54,23 +54,6 @@ index a2376f8a4..98769e08f 100644
  
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
-diff --git a/panels/keyboard/cc-input-list-box.c b/panels/keyboard/cc-input-list-box.c
-index 6c2cb5614..8f57159cc 100644
---- a/panels/keyboard/cc-input-list-box.c
-+++ b/panels/keyboard/cc-input-list-box.c
-@@ -223,10 +223,10 @@ row_layout_cb (CcInputListBox *self,
-   layout_variant = cc_input_source_get_layout_variant (source);
- 
-   if (layout_variant && layout_variant[0])
--    commandline = g_strdup_printf ("tecla \"%s+%s\"",
-+    commandline = g_strdup_printf ("@tecla@/bin/tecla \"%s+%s\"",
- 				   layout, layout_variant);
-   else
--    commandline = g_strdup_printf ("tecla %s",
-+    commandline = g_strdup_printf ("@tecla@/bin/tecla %s",
- 				   layout);
- 
-   g_spawn_command_line_async (commandline, NULL);
 diff --git a/panels/network/connection-editor/net-connection-editor.c b/panels/network/connection-editor/net-connection-editor.c
 index 505b8ee25..62e94009f 100644
 --- a/panels/network/connection-editor/net-connection-editor.c
