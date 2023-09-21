@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
   postInstall = ''
     mv $out/bin/*.scm $out/share/guile-ssh
     rmdir $out/bin
