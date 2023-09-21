@@ -1,25 +1,29 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, cython_3
 }:
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.0.5";
-  format = "setuptools";
+  version = "1.0.6";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wHVUQoTq3Fzdxw9HVzMdmdy8FrK71ISdFfiq5M820xw=";
+  src = fetchFromGitHub {
+    owner = "msgpack";
+    repo = "msgpack-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-x2/upux5CnHBoP0OjN6ffSJxOAhqDs+zWx0MeXVn8XA=";
   };
 
   nativeBuildInputs = [
     setuptools
+    cython_3
   ];
 
   nativeCheckInputs = [
