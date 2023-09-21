@@ -1,5 +1,5 @@
 # Some tests to ensure sudo is working properly.
-{ pkgs, ... }:
+{ pkgs, sudo-rs, ... }:
 let
   inherit (pkgs.lib) mkIf optionalString;
   password = "helloworld";
@@ -24,7 +24,7 @@ in
 
         security.sudo = {
           enable = true;
-          package = pkgs.sudo-rs;
+          package = sudo-rs;
           wheelNeedsPassword = false;
 
           extraRules = [
@@ -55,7 +55,7 @@ in
       };
 
       security.sudo = {
-        package = pkgs.sudo-rs;
+        package = sudo-rs;
         enable = true;
         wheelNeedsPassword = false;
         execWheelOnly = true;
@@ -93,5 +93,5 @@ in
 
         with subtest("non-wheel users should be unable to run sudo thanks to execWheelOnly"):
             strict.fail('faketty -- su - noadmin -c "sudo --help"')
-      '';
+      '';;
   })
