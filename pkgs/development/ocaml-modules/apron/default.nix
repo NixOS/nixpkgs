@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl
+, flint, pplite
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib perl ];
-  buildInputs = [ gmp mpfr ppl camlidl ];
+  buildInputs = [ gmp mpfr ppl camlidl flint pplite ];
   propagatedBuildInputs = [ mlgmpidl ];
 
   # TODO: Doesn't produce the library correctly if true
