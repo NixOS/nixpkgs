@@ -13409,8 +13409,6 @@ with pkgs;
 
   sunwait = callPackage ../applications/misc/sunwait { };
 
-  sunpaper = callPackage ../tools/X11/sunpaper { };
-
   surface-control = callPackage ../applications/misc/surface-control { };
 
   syntex = callPackage ../tools/graphics/syntex { };
