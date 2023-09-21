@@ -40,11 +40,12 @@ stdenvNoCC.mkDerivation rec {
     $out/bin/sunpaper --help > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A utility to change wallpaper based on local weather, sunrise and sunset times";
     homepage = "https://github.com/hexive/sunpaper";
-    license = lib.licenses.unfree;
-    maintainers = with maintainers; [ jevy ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    mainProgram = "sunpaper";
+    maintainers = with lib.maintainers; [ eclairevoyant jevy ];
+    platforms = lib.platforms.linux;
   };
 }
