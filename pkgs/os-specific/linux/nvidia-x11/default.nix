@@ -109,7 +109,7 @@ rec {
       # source: https://gist.github.com/joanbm/2ec3c512a1ac21f5f5c6b3c1a4dbef35
       (fetchpatch {
         url = "https://gist.github.com/joanbm/2ec3c512a1ac21f5f5c6b3c1a4dbef35/raw/615feaefed2de3a28bd12fe9783894b84a7c86e4/nvidia-470xx-fix-linux-6.6.patch";
-        hash = "sha256-pOYlL5wYfeJsq9EX8zhn/CkNm4ZocNSns5N5pAuIuow=";
+        hash = "sha256-gdV+a+JFzQX8MzRz9eb4gVbnOfTWN+Ds9sOeyIBN5y0=";
       })
     ];
   };
