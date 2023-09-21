@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , libpcap
+, testers
+, ubridge
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +33,13 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = ubridge;
+      command = "ubridge -v";
+    };
+  };
 
   meta = with lib; {
     description = "Bridge for UDP tunnels, Ethernet, TAP, and VMnet interfaces";
