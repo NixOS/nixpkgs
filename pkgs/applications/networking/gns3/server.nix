@@ -7,6 +7,7 @@
 , python3
 , fetchFromGitHub
 , pkgsStatic
+, stdenv
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -25,14 +26,6 @@ python3.pkgs.buildPythonApplication {
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [
-    "jsonschema"
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     aiofiles
     aiohttp
@@ -43,6 +36,7 @@ python3.pkgs.buildPythonApplication {
     jinja2
     jsonschema
     multidict
+    platformdirs
     prompt-toolkit
     psutil
     py-cpuinfo
@@ -53,12 +47,30 @@ python3.pkgs.buildPythonApplication {
     zipstream
   ];
 
-  # Requires network access
-  doCheck = false;
-
-  postInstall = ''
-    rm $out/bin/gns3loopback # For Windows only
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
+    rm $out/bin/gns3loopback
   '';
+
+  doCheck = true;
+
+  # Otherwise tests will fail to create directory
+  # Permission denied: '/homeless-shelter'
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = with python3.pkgs; [
+    pytest-aiohttp
+    pytest-rerunfailures
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # fails on ofborg because of lack of cpu vendor information
+    "--deselect=tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+    # Rerun failed tests up to three times (flaky tests)
+    "--reruns 3"
+  ];
 
   meta = with lib; {
     description = "Graphical Network Simulator 3 server (${channel} release)";
