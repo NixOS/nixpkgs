@@ -31559,10 +31559,7 @@ with pkgs;
 
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
-  infrastructure-agent = callPackages ../servers/monitoring/infrastructure-agent {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit Security;
-    buildGoModule = buildGo119Module;
-  };
+  infrastructure-agent = callPackages ../servers/monitoring/infrastructure-agent { };
 
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
