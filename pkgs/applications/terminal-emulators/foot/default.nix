@@ -102,6 +102,8 @@ stdenv.mkDerivation {
     hash = "sha256-jn/S0xjxZPnkGYpTRIpL3dKxGe7+Z+EmOGHiE0UkQqg=";
   };
 
+  separateDebugInfo = true;
+
   depsBuildBuild = [
     pkg-config
   ];

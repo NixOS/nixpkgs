@@ -15,26 +15,26 @@ let
     usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
   hasWorkers = cfg.workers != { };
 
+  listenerSupportsResource = resource: listener:
+    lib.any ({ names, ... }: builtins.elem resource names) listener.resources;
+
+  clientListener = findFirst
+    (listenerSupportsResource "client")
+    null
+    (cfg.settings.listeners
+      ++ concatMap ({ worker_listeners, ... }: worker_listeners) (attrValues cfg.workers));
+
   registerNewMatrixUser =
     let
-      isIpv6 = x: lib.length (lib.splitString ":" x) > 1;
-      listener =
-        lib.findFirst (
-          listener: lib.any (
-            resource: lib.any (
-              name: name == "client"
-            ) resource.names
-          ) listener.resources
-        ) (lib.last cfg.settings.listeners) cfg.settings.listeners;
-        # FIXME: Handle cases with missing client listener properly,
-        # don't rely on lib.last, this will not work.
+      isIpv6 = hasInfix ":";
 
       # add a tail, so that without any bind_addresses we still have a useable address
-      bindAddress = head (listener.bind_addresses ++ [ "127.0.0.1" ]);
-      listenerProtocol = if listener.tls
+      bindAddress = head (clientListener.bind_addresses ++ [ "127.0.0.1" ]);
+      listenerProtocol = if clientListener.tls
         then "https"
         else "http";
     in
+    assert assertMsg (clientListener != null) "No client listener found in synapse or one of its workers";
     pkgs.writeShellScriptBin "matrix-synapse-register_new_matrix_user" ''
       exec ${cfg.package}/bin/register_new_matrix_user \
         $@ \
@@ -44,7 +44,7 @@ let
             "[${bindAddress}]"
           else
             "${bindAddress}"
-        }:${builtins.toString listener.port}/"
+        }:${builtins.toString clientListener.port}/"
     '';
 
   defaultExtras = [
@@ -938,6 +938,13 @@ in {
   config = mkIf cfg.enable {
     assertions = [
       {
+        assertion = clientListener != null;
+        message = ''
+          At least one listener which serves the `client` resource via HTTP is required
+          by synapse in `services.matrix-synapse.settings.listeners` or in one of the workers!
+        '';
+      }
+      {
         assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
         message = ''
           Cannot deploy matrix-synapse with a configuration for a local postgresql database
@@ -969,13 +976,13 @@ in {
               (
                 listener:
                   listener.port == main.port
-                  && (lib.any (resource: builtins.elem "replication" resource.names) listener.resources)
+                  && listenerSupportsResource "replication" listener
                   && (lib.any (bind: bind == main.host || bind == "0.0.0.0" || bind == "::") listener.bind_addresses)
               )
               null
               cfg.settings.listeners;
           in
-          hasWorkers -> (listener != null);
+          hasWorkers -> (cfg.settings.instance_map ? main && listener != null);
         message = ''
           Workers for matrix-synapse require setting `services.matrix-synapse.settings.instance_map.main`
           to any listener configured in `services.matrix-synapse.settings.listeners` with a `"replication"`
