@@ -1,11 +1,12 @@
 # Nixpkgs pkgs/by-name checker
 
 This directory implements a program to check the [validity](#validity-checks) of the `pkgs/by-name` Nixpkgs directory once introduced.
+It is being used by [this GitHub Actions workflow](../../../.github/workflows/check-by-name.yml).
 This is part of the implementation of [RFC 140](https://github.com/NixOS/rfcs/pull/140).
 
 ## API
 
-This API may be changed over time if the CI making use of it is adjusted to deal with the change appropriately, see [Hydra builds](#hydra-builds).
+This API may be changed over time if the CI workflow making use of it is adjusted to deal with the change appropriately.
 
 - Command line: `nixpkgs-check-by-name <NIXPKGS>`
 - Arguments:
