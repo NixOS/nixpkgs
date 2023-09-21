@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
   # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
   doCheck = !stdenv.isDarwin;
+  separateDebugInfo = true;
 
   checkPhase = ''
     runHook preCheck
