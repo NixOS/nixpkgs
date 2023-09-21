@@ -22367,6 +22367,8 @@ with pkgs;
 
   intel-gmmlib = callPackage ../development/libraries/intel-gmmlib { };
 
+  intel-ipsec-mb = callPackage ../development/libraries/intel-ipsec-mb { };
+
   intel-media-driver = callPackage ../development/libraries/intel-media-driver { };
 
   intltool = callPackage ../development/tools/misc/intltool { };
