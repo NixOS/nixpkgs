@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ anthonyroussel ];
   };
 }
