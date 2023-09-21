@@ -17,14 +17,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    wallutils
     sunwait
+    wallutils
   ];
 
   postPatch = ''
     substituteInPlace sunpaper.sh \
-      --replace "sunwait" "${sunwait}/bin/sunwait" \
-      --replace "setwallpaper" "${wallutils}/bin/setwallpaper" \
+      --replace "sunwait" "${lib.getExe sunwait}" \
+      --replace "setwallpaper" "${lib.getExe' wallutils "setwallpaper"}" \
       --replace '$HOME/sunpaper/images/' "$out/share/sunpaper/images/"
   '';
 
