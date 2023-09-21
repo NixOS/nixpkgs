@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+set -euo pipefail
+
 script_dir="$(dirname $(readlink -f $0))"
 nixpkgs_root="$script_dir/../../../.."
 export NIX_PATH="nixpkgs=$nixpkgs_root"
