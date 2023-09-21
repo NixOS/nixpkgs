@@ -14,9 +14,9 @@
 , icu
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libspelling";
-  version = "unstable-2023-07-17";
+  version = "0.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "libspelling";
-    rev = "65185023db95ec464970aeaeab766fe3ba26ae7d";
+    rev = version;
     hash = "sha256-R3nPs16y8XGamQvMSF7wb52h0jxt17H2FZPwauLDI/c=";
   };
 
