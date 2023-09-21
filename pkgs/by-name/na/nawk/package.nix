@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/onetrueawk/awk";
+    homepage = "https://awk.dev";
     description = "The one, true implementation of AWK";
     longDescription = ''
       This is the version of awk described in "The AWK Programming Language",

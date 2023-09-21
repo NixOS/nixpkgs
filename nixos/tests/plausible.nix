@@ -30,6 +30,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     machine.succeed("curl -f localhost:8000 >&2")
 
+    machine.succeed("curl -f localhost:8000/js/script.js >&2")
+
     csrf_token = machine.succeed(
         "curl -c /tmp/cookies localhost:8000/login | grep '_csrf_token' | sed -E 's,.*value=\"(.*)\".*,\\1,g'"
     )
