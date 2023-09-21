@@ -21,8 +21,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libpcap ];
 
-  preInstall = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
+    install -Dm755 ubridge $out/bin/ubridge
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     changelog = "https://github.com/GNS3/ubridge/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
