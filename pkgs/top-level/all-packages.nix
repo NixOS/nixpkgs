@@ -24325,10 +24325,6 @@ with pkgs;
     ffmpeg = ffmpeg_4;
   };
 
-  opencv3WithoutCuda = opencv3.override {
-    enableCuda = false;
-  };
-
   opencv4 = callPackage ../development/libraries/opencv/4.x.nix {
     inherit (darwin.apple_sdk.frameworks)
       AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate;
