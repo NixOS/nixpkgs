@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gcc }:
+{ lib, stdenv, fetchFromGitHub, gcc, testers, vpcs }:
 
 stdenv.mkDerivation rec {
   pname = "vpcs";
@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = vpcs;
+      command = "vpcs -v";
+    };
+  };
 
   meta = with lib; {
     description = "A simple virtual PC simulator";
