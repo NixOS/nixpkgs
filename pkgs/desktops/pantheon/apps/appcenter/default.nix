@@ -16,7 +16,6 @@
 , meson
 , ninja
 , pkg-config
-, python3
 , vala
 , polkit
 , wrapGAppsHook
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -64,11 +62,6 @@ stdenv.mkDerivation rec {
     "-Dpayments=false"
     "-Dcurated=false"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
