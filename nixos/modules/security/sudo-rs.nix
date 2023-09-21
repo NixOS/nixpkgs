@@ -285,7 +285,7 @@ in
             src = pkgs.writeText "sudoers-in" cfg.configFile;
             preferLocalBuild = true;
           }
-          "${cfg.package}/bin/visudo -f $src -c && cp $src $out";
+          "${pkgs.buildPackages."${cfg.package.pname}"}/bin/visudo -f $src -c && cp $src $out";
         mode = "0440";
       };
 
