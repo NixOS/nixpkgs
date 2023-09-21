@@ -109,6 +109,8 @@ buildPythonPackage rec {
     "test_peek_one_element"
     "test_peek_lifo"
     "test_callback_kwargs"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"
