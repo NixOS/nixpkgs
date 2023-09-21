@@ -53,4 +53,8 @@ in
   networking.timeServers = [ "169.254.169.254" ];
 
   services.openssh.enable = true;
+
+  # Otherwise the instance may not have a working network-online.target,
+  # making the fetch-ssh-keys.service fail
+  networking.useNetworkd = true;
 }
