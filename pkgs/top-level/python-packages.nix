@@ -6429,6 +6429,8 @@ self: super: with self; {
 
   manuel = callPackage ../development/python-modules/manuel { };
 
+  manuf = callPackage ../development/python-modules/manuf { };
+
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
@@ -9052,6 +9054,8 @@ self: super: with self; {
   pydata-google-auth = callPackage ../development/python-modules/pydata-google-auth { };
 
   pydata-sphinx-theme = callPackage ../development/python-modules/pydata-sphinx-theme { };
+
+  pydateinfer = callPackage ../development/python-modules/pydateinfer { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
