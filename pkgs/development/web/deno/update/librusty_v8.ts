@@ -18,6 +18,15 @@ interface PrefetchResult {
   sha256: string;
 }
 
+const getDenoCoreVersion = async (
+  owner: string,
+  repo: string,
+  version: string
+) =>
+  fetch(`https://github.com/${owner}/${repo}/raw/${version}/Cargo.toml`)
+    .then((res) => res.text())
+    .then((txt) => toml.parse(txt).workspace.dependencies.deno_core.version
+
 const getLibrustyV8Version = async (
   owner: string,
   repo: string,
@@ -74,7 +83,8 @@ export async function updateLibrustyV8(
 ) {
   log("Starting librusty_v8 update");
   // 0.0.0
-  const version = await getLibrustyV8Version(owner, repo, denoVersion);
+  const denoCoreVersion = await getDenoCoreVersion(owner, repo, denoVersion);
+  const version = await getLibrustyV8Version(owner, "deno_core", denoCoreVersion);
   if (typeof version !== "string") {
     throw "no librusty_v8 version";
   }
