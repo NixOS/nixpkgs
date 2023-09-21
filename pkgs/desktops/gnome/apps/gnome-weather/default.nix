@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-weather";
-  version = "45.alpha";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-weather/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "rMHR8uN24vXbXdHZRaTaFlgITFB8YXJQWRNLa3r48es=";
+    sha256 = "MMAClwKIPcjYFg5t4dYRaHfNbCW8lQ1OSQKmq0Z7L6Q=";
   };
 
   nativeBuildInputs = [
