@@ -348,8 +348,10 @@ let
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
         acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
+          # See https://gist.github.com/mingderwang/bdf30ead416c9dc0b29710f864c88517 for source of this block
           # Hide /acme-challenge subdirectory and return 404 on all requests.
           # It is somewhat more secure than letting Nginx return 403.
+          # Ending slash is important!
           location = /.well-known/acme-challenge/ {
             return 404;
           }
