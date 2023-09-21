@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, gcc }:
 
 stdenv.mkDerivation rec {
   pname = "vpcs";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-OKi4sC4fmKtkJkkpHZ6OfeIDaBafVrJXGXh1R6gLPFY=";
   };
+
+  buildInputs = [ gcc ];
 
   buildPhase = ''(
     cd src
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
   };
 }
