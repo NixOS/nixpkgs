@@ -116,7 +116,7 @@ let
   k3sCNIPlugins = buildGoModule rec {
     pname = "k3s-cni-plugins";
     version = k3sCNIVersion;
-    vendorSha256 = null;
+    vendorHash = null;
 
     subPackages = [ "." ];
 
@@ -208,7 +208,7 @@ let
       rev = "v${containerdVersion}";
       sha256 = containerdSha256;
     };
-    vendorSha256 = null;
+    vendorHash = null;
     buildInputs = [ btrfs-progs ];
     subPackages = [ "cmd/containerd" "cmd/containerd-shim-runc-v2" ];
     ldflags = versionldflags;

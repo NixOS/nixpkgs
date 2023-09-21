@@ -16,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-wjbptcGy3wOZPm/11El7Xqz6NrR8G19V9zfU5pKFGuk=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "cmd/upterm" "cmd/uptermd" ];
 
