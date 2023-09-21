@@ -68,7 +68,7 @@ in
 buildGoModule rec {
   inherit src version;
   pname = "${provider}-vpn";
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     substituteInPlace pkg/pickle/helpers.go \

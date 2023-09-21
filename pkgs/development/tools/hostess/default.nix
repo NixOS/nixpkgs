@@ -13,7 +13,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "An idempotent command-line utility for managing your /etc/hosts* file.";
