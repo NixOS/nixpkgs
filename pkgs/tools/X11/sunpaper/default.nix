@@ -29,9 +29,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    mkdir -p "$out/bin" "$out/share/sunpaper/images"
-    cp sunpaper.sh $out/bin/sunpaper
+    runHook preInstall
+
+    install -Dm555 sunpaper.sh $out/bin/sunpaper
+    mkdir -p "$out/share/sunpaper/images"
     cp -R images $out/share/sunpaper/
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
