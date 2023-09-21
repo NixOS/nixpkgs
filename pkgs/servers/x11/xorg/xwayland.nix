@@ -39,15 +39,17 @@
 , xorgproto
 , xtrans
 , zlib
-, defaultFontPath ? "" }:
+, defaultFontPath ? ""
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
-  version = "23.2.0";
+  version = "23.2.1";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
-    sha256 = "sha256-fzPsKjTebmauG35Ehyw6IUYZKHLHGbms8ZKBTtur1MU=";
+    sha256 = "sha256-7rwmksOqgGF9eEKLxux7kbJUqYIU0qcOmXCYUDzW75A=";
   };
 
   depsBuildBuild = [
@@ -103,6 +105,12 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "xkb_output_dir" "${placeholder "out"}/share/X11/xkb/compiled")
     (lib.mesonBool "libunwind" (libunwind != null))
   ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://gitlab.freedesktop.org/xorg/xserver.git";
+    rev-prefix = "xwayland-";
+  };
 
   meta = with lib; {
     description = "An X server for interfacing X11 apps with the Wayland protocol";
