@@ -5,8 +5,8 @@ let
   # ./update-zen.py zen
   zenVariant = {
     version = "6.5.4"; #zen
-    suffix = "zen1"; #zen
-    sha256 = "1s0a2706xk60k9w6dr3zx2ma8bsny1dkvv0fmsk3kd8ghyg3xswh"; #zen
+    suffix = "zen2"; #zen
+    sha256 = "0p67v2rhkf0q61cvf310nkg08dpwgmkabid71qp01ig3sdp6rcsy"; #zen
     isLqx = false;
   };
   # ./update-zen.py lqx
