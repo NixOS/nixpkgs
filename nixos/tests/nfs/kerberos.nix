@@ -40,7 +40,7 @@ in
 
         virtualisation.fileSystems =
           { "/data" = {
-              device  = "server.nfs.test:/";
+              device  = "server.nfs.test:/data";
               fsType  = "nfs";
               options = [ "nfsvers=4" "sec=krb5p" "noauto" ];
             };
@@ -71,7 +71,7 @@ in
         services.nfs.server.createMountPoints = true;
         services.nfs.server.exports =
           ''
-            /data *(rw,no_root_squash,fsid=0,sec=krb5p)
+            /data *(rw,no_root_squash,fsid=1,sec=krb5p)
           '';
       };
   };
