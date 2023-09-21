@@ -121,6 +121,16 @@ buildPythonPackage rec {
     "mypy/test/testpep561.py"
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isi686 [
+    # i686's x86 arithmetics are not stable with default
+    # -mfpmath=387. As a result tests fail as:
+    #   AssertionError: actual for 1.7976931348623157e+308: 1.3407807929942597e+154,
+    #                   expected 1.3407807929942596e+154 (diff)
+    # Just skip the tests.
+    "testFloatOps"
+    "testMathOps"
+  ];
+
   meta = with lib; {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
