@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
 
   # HSTS tests fail.
   doCheck = false;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs libsoup/
