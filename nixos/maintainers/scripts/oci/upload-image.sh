@@ -18,8 +18,8 @@ EOF
 qcow="oci-image/nixos.qcow2"
 if [ ! -f "$qcow" ]; then
     echo "OCI image $qcow does not exist"
-    echo "Building image with create-image.sh"
-    "$script_dir/create-image.sh"
+    echo "Building image with create-image.sh for 'x86_64-linux'"
+    "$script_dir/create-image.sh" x86_64-linux
     [ -f "$qcow" ] || { echo "Build failed: image not present after build"; exit 1; }
 else
     echo "Using prebuilt image $qcow"
