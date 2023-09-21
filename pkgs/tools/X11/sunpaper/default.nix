@@ -5,15 +5,15 @@
 , wallutils
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sunpaper";
   version = "2.0";
 
   src = fetchFromGitHub {
     owner = "hexive";
     repo = "sunpaper";
-    rev = "v${version}";
-    sha256 = "sha256-8s7SS79wCS0nRR7IpkshP5QWJqqKEeBu6EtFPDM+2cM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8s7SS79wCS0nRR7IpkshP5QWJqqKEeBu6EtFPDM+2cM=";
   };
 
   buildInputs = [
@@ -48,4 +48,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ eclairevoyant jevy ];
     platforms = lib.platforms.linux;
   };
-}
+})
