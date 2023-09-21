@@ -110,7 +110,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "bmake";
     maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isAarch64; # failure on gnulib-tests
+    # ofborg: x86_64-linux builds the musl package, aarch64-linux doesn't
+    broken = stdenv.targetPlatform.isMusl && stdenv.buildPlatform.isAarch64;
   };
 })
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)
+# TODO: investigate Musl support
