@@ -21444,10 +21444,7 @@ with self; {
     };
     patches = [
       # https://github.com/PerlGameDev/SDL/pull/304
-      (fetchpatch {
-        url = "https://github.com/PerlGameDev/SDL/commit/d734d03862d7dcc776bd2fa3ba662cdd5879b32e.patch";
-        hash = "sha256-YjtnAbJxCvx5QckiatZjD8v7dKefG3DCnXeLaNnEO8U=";
-      })
+      ../development/perl-modules/sdl-modern-perl.patch
     ];
     perlPreHook = "export LD=$CC";
     preCheck = "rm t/core_audiospec.t";
