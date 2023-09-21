@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, autoreconfHook
 , guile
 , pkg-config
 , texinfo
@@ -16,12 +17,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    autoreconfHook
     pkg-config
   ];
   buildInputs = [
     guile
     texinfo
   ];
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'SITEDIR="$datadir/guile-lib"' 'SITEDIR=$datadir/guile/site/$GUILE_EFFECTIVE_VERSION' \
+      --replace 'SITECCACHEDIR="$libdir/guile-lib/guile/$GUILE_EFFECTIVE_VERSION/site-ccache"' 'SITECCACHEDIR="$libdir/guile/$GUILE_EFFECTIVE_VERSION/site-ccache"'
+  '';
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
