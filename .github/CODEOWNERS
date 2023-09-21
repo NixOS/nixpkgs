@@ -23,7 +23,7 @@
 
 # Libraries
 /lib                        @edolstra @infinisil
-/lib/systems                @alyssais @ericson2314 @matthewbauer @amjoseph-nixpkgs
+/lib/systems                @alyssais @ericson2314 @amjoseph-nixpkgs
 /lib/generators.nix         @edolstra @Profpatsch
 /lib/cli.nix                @edolstra @Profpatsch
 /lib/debug.nix              @edolstra @Profpatsch
@@ -36,12 +36,12 @@
 /default.nix                                     @Ericson2314
 /pkgs/top-level/default.nix                      @Ericson2314
 /pkgs/top-level/impure.nix                       @Ericson2314
-/pkgs/top-level/stage.nix                        @Ericson2314 @matthewbauer
-/pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
-/pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
-/pkgs/stdenv/generic                             @Ericson2314 @matthewbauer @amjoseph-nixpkgs
-/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @matthewbauer @piegamesde
-/pkgs/stdenv/cross                               @Ericson2314 @matthewbauer @amjoseph-nixpkgs
+/pkgs/top-level/stage.nix                        @Ericson2314
+/pkgs/top-level/splice.nix                       @Ericson2314
+/pkgs/top-level/release-cross.nix                @Ericson2314
+/pkgs/stdenv/generic                             @Ericson2314 @amjoseph-nixpkgs
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @piegamesde
+/pkgs/stdenv/cross                               @Ericson2314 @amjoseph-nixpkgs
 /pkgs/build-support/cc-wrapper                   @Ericson2314 @amjoseph-nixpkgs
 /pkgs/build-support/bintools-wrapper             @Ericson2314
 /pkgs/build-support/setup-hooks                  @Ericson2314
@@ -147,12 +147,8 @@
 /doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # C compilers
-/pkgs/development/compilers/gcc @matthewbauer @amjoseph-nixpkgs
-/pkgs/development/compilers/llvm @matthewbauer @RaitoBezarius
-
-# Compatibility stuff
-/pkgs/top-level/unix-tools.nix @matthewbauer
-/pkgs/development/tools/xcbuild @matthewbauer
+/pkgs/development/compilers/gcc @amjoseph-nixpkgs
+/pkgs/development/compilers/llvm @RaitoBezarius
 
 # Audio
 /nixos/modules/services/audio/botamusique.nix @mweinelt
