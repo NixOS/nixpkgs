@@ -291,6 +291,51 @@ let
       };
     });
 
+  buildRustRover = { pname, version, src, license, description, wmClass, buildNumber, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk buildNumber;
+      product = "RustRover";
+      meta = with lib; {
+        homepage = "https://www.jetbrains.com/rust/";
+        inherit description license platforms;
+        longDescription = description;
+      };
+    }).overrideAttrs (attrs: {
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
+        autoPatchelfHook
+      ];
+      buildInputs = (attrs.buildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
+        python3
+        stdenv.cc.cc
+        libdbusmenu
+        openssl.out
+        libxcrypt-legacy
+      ];
+      dontAutoPatchelf = true;
+      postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+        (
+          cd $out/rust-rover
+
+          # Copied over from clion (gdb seems to have a couple of patches)
+          ls -d $PWD/bin/gdb/linux/x64/lib/python3.8/lib-dynload/* |
+          xargs patchelf \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
+
+          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
+          xargs patchelf \
+            --replace-needed libssl.so.10 libssl.so \
+            --replace-needed libcrypto.so.10 libcrypto.so
+
+          autoPatchelf $PWD/bin
+
+          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+          patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
+          chmod +x $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
+        )
+      '';
+    });
+
   buildWebStorm = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
@@ -498,6 +543,20 @@ in
     };
     wmClass = "jetbrains-rubymine";
     update-channel = products.ruby-mine.update-channel;
+  };
+
+  rust-rover = buildRustRover rec {
+    pname = "rust-rover";
+    version = products.rust-rover.version;
+    buildNumber = products.rust-rover.build_number;
+    description = "Rust IDE";
+    license = lib.licenses.unfree;
+    src = fetchurl {
+      url = products.rust-rover.url;
+      sha256 = products.rust-rover.sha256;
+    };
+    wmClass = "jetbrains-rustrover";
+    update-channel = products.rust-rover.update-channel;
   };
 
   webstorm = buildWebStorm rec {

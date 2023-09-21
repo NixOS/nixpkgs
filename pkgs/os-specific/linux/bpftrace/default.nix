@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.18.1";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo  = "bpftrace";
     rev   = "v${version}";
-    hash  = "sha256-hwxArrTdjJoab7Twf57PRmRhghV/9EcjRXI0lKRQC0k=";
+    hash  = "sha256-+aU27mxK4R0SHSsdGQzv02fK0L/m9uCIv7AkLyLSGQY=";
   };
 
 
@@ -44,10 +44,14 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_BPF_BCC=ON"
   ];
 
+
   # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
   # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
   postInstall = ''
-    ln -s $out/share/bpftrace/tools/*.bt $out/bin/
+    ln -sr $out/share/bpftrace/tools/*.bt $out/bin/
+    # do not use /usr/bin/env for shipped tools
+    # If someone can get patchShebangs to work here please fix.
+    sed -i -e "1s:#!/usr/bin/env bpftrace:#!$out/bin/bpftrace:" $out/share/bpftrace/tools/*.bt
   '';
 
   outputs = [ "out" "man" ];

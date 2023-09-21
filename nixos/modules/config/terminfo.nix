@@ -6,12 +6,26 @@ with lib;
 
 {
 
-  options.environment.enableAllTerminfo = with lib; mkOption {
-    default = false;
-    type = types.bool;
-    description = lib.mdDoc ''
-      Whether to install all terminfo outputs
-    '';
+  options = with lib; {
+    environment.enableAllTerminfo = mkOption {
+      default = false;
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to install all terminfo outputs
+      '';
+    };
+
+    security.sudo.keepTerminfo = mkOption {
+      default = config.security.sudo.package.pname != "sudo-rs";
+      defaultText = literalMD ''
+        `true` unless using `sudo-rs`
+      '';
+      type = types.bool;
+      description = lib.mdDoc ''
+        Whether to preserve the `TERMINFO` and `TERMINFO_DIRS`
+        environment variables, for `root` and the `wheel` group.
+      '';
+    };
   };
 
   config = {
@@ -54,7 +68,7 @@ with lib;
       export TERM=$TERM
     '';
 
-    security.sudo.extraConfig = ''
+    security.sudo.extraConfig = mkIf config.security.sudo.keepTerminfo ''
 
       # Keep terminfo database for root and %wheel.
       Defaults:root,%wheel env_keep+=TERMINFO_DIRS
