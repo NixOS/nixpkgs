@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       for Guile".
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = with maintainers; [ vyp foo-dogsquared ];
     platforms = guile.meta.platforms;
   };
 }
