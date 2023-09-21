@@ -64,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows threadsCross.package;
 
+  postPatch = ''
+    patchShebangs .
+  '';
+
   patches = [
     (substituteAll {
       src = ./iana-etc-1.17.patch;
@@ -88,6 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
   GOOS = stdenv.targetPlatform.parsed.kernel.name;
   GOARCH = goarch stdenv.targetPlatform;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
+  # Go will nevertheless build a for host system that we will copy over in
+  # the install phase.
   GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
   GOHOSTARCH = goarch stdenv.buildPlatform;
 
@@ -110,15 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
 
-  # Note that we use distpack to avoid moving around cross-compiled binaries.
-  # The paths are slightly different when buildPlatform != hostPlatform and
-  # distpack handles assembling outputs in the right place, same as the official
-  # Go binary releases. See also https://pkg.go.dev/cmd/distpack
   buildPhase = ''
     runHook preBuild
     export GOCACHE=$TMPDIR/go-cache
     # this is compiled into the binary
     export GOROOT_FINAL=$out/share/go
+
+    export PATH=$(pwd)/bin:$PATH
 
     ${lib.optionalString isCross ''
     # Independent from host/target, CC should produce code for the building system.
@@ -128,16 +132,34 @@ stdenv.mkDerivation (finalAttrs: {
     ulimit -a
 
     pushd src
-    bash make.bash -no-banner -distpack
+    ./make.bash
     popd
     runHook postBuild
   '';
 
+  preInstall = ''
+    # Contains the wrong perl shebang when cross compiling,
+    # since it is not used for anything we can deleted as well.
+    rm src/regexp/syntax/make_perl_groups.pl
+  '' + (if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then ''
+    mv bin/*_*/* bin
+    rmdir bin/*_*
+    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
+    ''}
+  '' else lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
+    rm -rf bin/*_*
+    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+    ''}
+  '');
+
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{share,bin}
-    tar -C $out/share -x -z -f "pkg/distpack/go${finalAttrs.version}.$GOOS-$GOARCH.tar.gz"
-    ln -s $out/share/go/bin/* $out/bin
+    mkdir -p $GOROOT_FINAL
+    cp -a bin pkg src lib misc api doc go.env $GOROOT_FINAL
+    mkdir -p $out/bin
+    ln -s $GOROOT_FINAL/bin/* $out/bin
     runHook postInstall
   '';
 
