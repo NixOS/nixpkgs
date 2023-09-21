@@ -6,7 +6,7 @@ let
 
   inherit (pkgs) sudo sudo-rs;
 
-  cfg = config.security.sudo;
+  cfg = config.security.sudo-rs;
 
   enableSSHAgentAuth =
     with config.security;
@@ -37,7 +37,7 @@ in
 
   ###### interface
 
-  options.security.sudo = {
+  options.security.sudo-rs = {
 
     defaultOptions = mkOption {
       type = with types; listOf str;
@@ -53,7 +53,7 @@ in
 
     enable = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = mdDoc ''
         Whether to enable the {command}`sudo` command, which
         allows non-root users to execute commands as root.
@@ -62,8 +62,8 @@ in
 
     package = mkOption {
       type = types.package;
-      default = pkgs.sudo;
-      defaultText = literalExpression "pkgs.sudo";
+      default = pkgs.sudo-rs;
+      defaultText = literalExpression "pkgs.sudo-rs";
       description = mdDoc ''
         Which package to use for `sudo`.
       '';
@@ -208,7 +208,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    security.sudo.extraRules =
+    security.sudo-rs.extraRules =
       let
         defaultRule = { users ? [], groups ? [], opts ? [] }: [ {
           inherit users groups;
@@ -230,10 +230,10 @@ in
         }))
       ];
 
-    security.sudo.configFile = concatStringsSep "\n" (filter (s: s != "") [
+    security.sudo-rs.configFile = concatStringsSep "\n" (filter (s: s != "") [
       ''
-        # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
-        # or ‘security.sudo.extraRules’ instead.
+        # Don't edit this file. Set the NixOS options ‘security.sudo-rs.configFile’
+        # or ‘security.sudo-rs.extraRules’ instead.
       ''
       (optionalString enableSSHAgentAuth ''
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
