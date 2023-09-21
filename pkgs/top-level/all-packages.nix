@@ -24336,6 +24336,10 @@ with pkgs;
     ffmpeg = ffmpeg_4;
   };
 
+  opencv4WithoutCuda = opencv4.override {
+    enableCuda = false;
+  };
+
   opencv = opencv4;
 
   imath = callPackage ../development/libraries/imath { };
