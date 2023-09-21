@@ -42,7 +42,7 @@ buildPythonApplication rec {
       beautifying your logfiles or output of commands.
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 AndersonTorres peterhoeg ];
+    maintainers = with maintainers; [ azahi lovek323 AndersonTorres peterhoeg ];
     platforms = platforms.unix;
   };
 }
