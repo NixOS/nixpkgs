@@ -12,14 +12,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xorriso";
-  version = "1.5.6.pl02";
+  version = "1.5.7";
 
   src = fetchurl {
-    url = "mirror://gnu/xorriso/xorriso-${finalAttrs.version}.tar.gz";
-    hash = "sha256-eG+fXfmGXMWwwf7O49LA9eBMq4yahZvRycfM1JZP2uE=";
+    url = "https://www.gnu.org/software/xorriso/xorriso-${finalAttrs.version}.tar.gz";
+    hash = "sha256-hnV3w4f2tKmjIk60Qd7Y+xY432y8Bg+NGh5dAPMY9QI=";
   };
-
-  doCheck = true;
 
   buildInputs = [
     bzip2
@@ -33,7 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     attr
   ];
 
+  outputs = [ "out" "man" ];
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-include unistd.h";
+
+  doCheck = true;
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/xorriso/";
@@ -48,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       filesystems.
     '';
     license = lib.licenses.gpl3Plus;
+    mainProgram = "xorriso";
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
   };
