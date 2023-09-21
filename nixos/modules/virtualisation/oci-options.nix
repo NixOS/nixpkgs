@@ -3,7 +3,7 @@
   options = {
     oci = {
       efi = lib.mkOption {
-        default = pkgs.stdenv.hostPlatform.isAarch64;
+        default = true;
         internal = true;
         description = ''
           Whether the OCI instance is using EFI.
