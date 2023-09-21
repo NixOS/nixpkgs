@@ -6,16 +6,12 @@
     version = "8.0.0-rc.1.23421.29";
     srcs = {
       x86_64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/02f4c6c2-c137-448d-a189-9ee3a3f6f99f/192f2c750089fa0194f04f5a805bd21e/aspnetcore-runtime-8.0.0-rc.1.23421.29-linux-x64.tar.gz
-https://download.visualstudio.microsoft.com/download/pr/f54be620-7d5c-4d45-8457-8d55c71084e5/7ce19748b32677132fbd69e3a601f318/aspnetcore-runtime-composite-8.0.0-rc.1.23421.29-linux-x64.tar.gz";
-        sha512  = "d5f9e7bffbf2b48b26a317dd1d78bc866973b4a2cda448cd7a7ee64c0ffaf98fa3c4b8584d32528026674bdfd99f602f0fdac8242176815705e080df83825efa
-6e4ce9aa8825304196f8f05164f254cf62637756c2b297525ff0ae86582e1fc6758968d5111774986d5f3e06005ceac120f79ae5269c8c4de1185c54e56c0632";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/02f4c6c2-c137-448d-a189-9ee3a3f6f99f/192f2c750089fa0194f04f5a805bd21e/aspnetcore-runtime-8.0.0-rc.1.23421.29-linux-x64.tar.gz";
+        sha512  = "d5f9e7bffbf2b48b26a317dd1d78bc866973b4a2cda448cd7a7ee64c0ffaf98fa3c4b8584d32528026674bdfd99f602f0fdac8242176815705e080df83825efa";
       };
       aarch64-linux = {
-        url     = "https://download.visualstudio.microsoft.com/download/pr/de4037e0-6e5e-4a40-9c83-555d30d9c21f/f607c58db3f81aea2c7e56b0ddbf9ac6/aspnetcore-runtime-8.0.0-rc.1.23421.29-linux-arm64.tar.gz
-https://download.visualstudio.microsoft.com/download/pr/cf6dcaee-57ac-4d16-bf3d-ed6f68f1632b/a503511af3d1f2225a05d9106fce137d/aspnetcore-runtime-composite-8.0.0-rc.1.23421.29-linux-arm64.tar.gz";
-        sha512  = "ba8035da535cb3bffa720e962e6f9e0f88b36e1221b588f2a126ee4b43c02e4d8c27958017d29e5ab68121fab6a564fe0a27099c4103ee3d527f8554b4ab495e
-ad72f2336bea2334799eca5bc3962811a3b2c811ac9633044f0538df44cf97265c748a237222edebdfcdf7f8a38dcc68bab277932974ef193909e3a4d3096d22";
+        url     = "https://download.visualstudio.microsoft.com/download/pr/de4037e0-6e5e-4a40-9c83-555d30d9c21f/f607c58db3f81aea2c7e56b0ddbf9ac6/aspnetcore-runtime-8.0.0-rc.1.23421.29-linux-arm64.tar.gz";
+        sha512  = "ba8035da535cb3bffa720e962e6f9e0f88b36e1221b588f2a126ee4b43c02e4d8c27958017d29e5ab68121fab6a564fe0a27099c4103ee3d527f8554b4ab495e";
       };
       x86_64-darwin = {
         url     = "https://download.visualstudio.microsoft.com/download/pr/c3612fc1-f335-4b1c-a08a-08267100ff43/dd06c8e7021c27becdfed27838be253f/aspnetcore-runtime-8.0.0-rc.1.23421.29-osx-x64.tar.gz";

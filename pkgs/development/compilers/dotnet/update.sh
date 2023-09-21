@@ -23,7 +23,7 @@ release_platform_attr () {
   local platform="$2"
   local attr="$3"
 
-  jq -r '.[] | select(.rid == "'"$platform"'") | ."'"$attr"'"' <<< "$release_files"
+  jq -r '.[] | select(.rid == "'"$platform"'" and (.name | contains("runtime-composite") | not)) | ."'"$attr"'"' <<< "$release_files"
 }
 
 platform_sources () {
