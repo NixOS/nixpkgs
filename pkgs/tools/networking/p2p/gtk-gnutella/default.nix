@@ -1,9 +1,10 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , bison
-, pkg-config
-, gettext
 , desktop-file-utils
+, gettext
+, pkg-config
 , glib
 , gtk2
 , libxml2
@@ -13,14 +14,14 @@
 , enableGui ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-gnutella";
   version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "gtk-gnutella";
     repo = "gtk-gnutella";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LbSUdU+a9G8qL7gCZVJQ6UQMATpOMtktY6FeOkUuaYI=";
   };
 
@@ -36,24 +37,23 @@ stdenv.mkDerivation rec {
     libbfd
     libxml2
     zlib
-  ]
-  ++
-    lib.optionals enableGui [ gtk2 ]
-  ;
+  ] ++ lib.optionals enableGui [
+    gtk2
+  ];
 
   configureScript = "./build.sh";
   configureFlags = [
     "--configure-only"
     # See https://sourceforge.net/p/gtk-gnutella/bugs/555/
     "--disable-malloc"
-  ]
-    ++ lib.optionals (!enableGui) [ "--topless" ]
-  ;
+  ] ++ lib.optionals (!enableGui) [
+    "--topless"
+  ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    install -Dm0444 src/${pname}.man $out/share/man/man1/${pname}.1
+    install -Dm0444 src/gtk-gnutella.man $out/share/man/man1/gtk-gnutella.1
   '';
 
   meta = with lib; {
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})

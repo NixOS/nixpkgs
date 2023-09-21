@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, intltool, pkg-config, qmake, wrapQtAppsHook, libqalculate, qtbase, qttools, qtsvg, qtwayland }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
   version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7VlaoiY+HgHCMZCegUdy2wpgfx3fKaViMtkdNRleHaA=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})

@@ -14,6 +14,8 @@ let
   inherit (lib.attrsets)
     attrValues
     mapAttrs
+    setAttrByPath
+    zipAttrsWith
     ;
 
   inherit (lib.filesystem)
@@ -22,8 +24,16 @@ let
 
   inherit (lib.lists)
     all
+    commonPrefix
+    drop
     elemAt
+    filter
+    findFirstIndex
+    foldl'
+    head
     length
+    sublist
+    tail
     ;
 
   inherit (lib.path)
@@ -33,6 +43,7 @@ let
 
   inherit (lib.path.subpath)
     components
+    join
     ;
 
   inherit (lib.strings)
@@ -50,28 +61,61 @@ in
 rec {
 
   # If you change the internal representation, make sure to:
-  # - Update this version
-  # - Adjust _coerce to also accept and coerce older versions
+  # - Increment this version
+  # - Add an additional migration function below
   # - Update the description of the internal representation in ./README.md
-  _currentVersion = 0;
+  _currentVersion = 2;
+
+  # Migrations between versions. The 0th element converts from v0 to v1, and so on
+  migrations = [
+    # Convert v0 into v1: Add the _internalBase{Root,Components} attributes
+    (
+      filesetV0:
+      let
+        parts = splitRoot filesetV0._internalBase;
+      in
+      filesetV0 // {
+        _internalVersion = 1;
+        _internalBaseRoot = parts.root;
+        _internalBaseComponents = components parts.subpath;
+      }
+    )
+
+    # Convert v1 into v2: filesetTree's can now also omit attributes to signal paths not being included
+    (
+      filesetV1:
+      # This change is backwards compatible (but not forwards compatible, so we still need a new version)
+      filesetV1 // {
+        _internalVersion = 2;
+      }
+    )
+  ];
 
   # Create a fileset, see ./README.md#fileset
   # Type: path -> filesetTree -> fileset
-  _create = base: tree: {
-    _type = "fileset";
+  _create = base: tree:
+    let
+      # Decompose the base into its components
+      # See ../path/README.md for why we're not just using `toString`
+      parts = splitRoot base;
+    in
+    {
+      _type = "fileset";
 
-    _internalVersion = _currentVersion;
-    _internalBase = base;
-    _internalTree = tree;
+      _internalVersion = _currentVersion;
+      _internalBase = base;
+      _internalBaseRoot = parts.root;
+      _internalBaseComponents = components parts.subpath;
+      _internalTree = tree;
 
-    # Double __ to make it be evaluated and ordered first
-    __noEval = throw ''
-      lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
-  };
+      # Double __ to make it be evaluated and ordered first
+      __noEval = throw ''
+        lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
+    };
 
   # Coerce a value to a fileset, erroring when the value cannot be coerced.
   # The string gives the context for error messages.
-  # Type: String -> Path -> fileset
+  # Type: String -> (fileset | Path) -> fileset
   _coerce = context: value:
     if value._type or "" == "fileset" then
       if value._internalVersion > _currentVersion then
@@ -80,21 +124,52 @@ rec {
               - Internal version of the file set: ${toString value._internalVersion}
               - Internal version of the library: ${toString _currentVersion}
               Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.''
+      else if value._internalVersion < _currentVersion then
+        let
+          # Get all the migration functions necessary to convert from the old to the current version
+          migrationsToApply = sublist value._internalVersion (_currentVersion - value._internalVersion) migrations;
+        in
+        foldl' (value: migration: migration value) value migrationsToApply
       else
         value
     else if ! isPath value then
       if isStringLike value then
         throw ''
-          ${context} "${toString value}" is a string-like value, but it should be a path instead.
+          ${context} ("${toString value}") is a string-like value, but it should be a path instead.
               Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.''
       else
         throw ''
           ${context} is of type ${typeOf value}, but it should be a path instead.''
     else if ! pathExists value then
       throw ''
-        ${context} ${toString value} does not exist.''
+        ${context} (${toString value}) does not exist.''
     else
       _singleton value;
+
+  # Coerce many values to filesets, erroring when any value cannot be coerced,
+  # or if the filesystem root of the values doesn't match.
+  # Type: String -> [ { context :: String, value :: fileset | Path } ] -> [ fileset ]
+  _coerceMany = functionContext: list:
+    let
+      filesets = map ({ context, value }:
+        _coerce "${functionContext}: ${context}" value
+      ) list;
+
+      firstBaseRoot = (head filesets)._internalBaseRoot;
+
+      # Finds the first element with a filesystem root different than the first element, if any
+      differentIndex = findFirstIndex (fileset:
+        firstBaseRoot != fileset._internalBaseRoot
+      ) null filesets;
+    in
+    if differentIndex != null then
+      throw ''
+        ${functionContext}: Filesystem roots are not the same:
+            ${(head list).context}: root "${toString firstBaseRoot}"
+            ${(elemAt list differentIndex).context}: root "${toString (elemAt filesets differentIndex)._internalBaseRoot}"
+            Different roots are not supported.''
+    else
+      filesets;
 
   # Create a file set from a path.
   # Type: Path -> fileset
@@ -109,50 +184,23 @@ rec {
       # - _internalBase: ./.
       # - _internalTree: {
       #     "default.nix" = <type>;
-      #     # Other directory entries
-      #     <name> = null;
       #   }
       # See ./README.md#single-files
       _create (dirOf path)
-        (_nestTree
-          (dirOf path)
-          [ (baseNameOf path) ]
-          type
-        );
+        {
+          ${baseNameOf path} = type;
+        };
 
-  /*
-    Nest a filesetTree under some extra components, while filling out all the other directory entries that aren't included with null
-
-    _nestTree ./. [ "foo" "bar" ] tree == {
-      foo = {
-        bar = tree;
-        <other-entries> = null;
-      }
-      <other-entries> = null;
-    }
-
-    Type: Path -> [ String ] -> filesetTree -> filesetTree
-  */
-  _nestTree = targetBase: extraComponents: tree:
-    let
-      recurse = index: focusPath:
-        if index == length extraComponents then
-          tree
-        else
-          mapAttrs (_: _: null) (readDir focusPath)
-          // {
-            ${elemAt extraComponents index} = recurse (index + 1) (append focusPath (elemAt extraComponents index));
-          };
-    in
-    recurse 0 targetBase;
-
-  # Expand "directory" filesetTree representation to the equivalent { <name> = filesetTree; }
+  # Expand a directory representation to an equivalent one in attribute set form.
+  # All directory entries are included in the result.
   # Type: Path -> filesetTree -> { <name> = filesetTree; }
   _directoryEntries = path: value:
-    if isAttrs value then
-      value
+    if value == "directory" then
+      readDir path
     else
-      readDir path;
+      # Set all entries not present to null
+      mapAttrs (name: value: null) (readDir path)
+      // value;
 
   /*
     Simplify a filesetTree recursively:
@@ -193,17 +241,13 @@ rec {
       # which has the effect that they aren't included in the result
       tree = _simplifyTree fileset._internalBase fileset._internalTree;
 
-      # Decompose the base into its components
-      # See ../path/README.md for why we're not just using `toString`
-      baseComponents = components (splitRoot fileset._internalBase).subpath;
-
       # The base path as a string with a single trailing slash
       baseString =
-        if baseComponents == [] then
+        if fileset._internalBaseComponents == [] then
           # Need to handle the filesystem root specially
           "/"
         else
-          "/" + concatStringsSep "/" baseComponents + "/";
+          "/" + concatStringsSep "/" fileset._internalBaseComponents + "/";
 
       baseLength = stringLength baseString;
 
@@ -266,9 +310,73 @@ rec {
     in
     # Special case because the code below assumes that the _internalBase is always included in the result
     # which shouldn't be done when we have no files at all in the base
+    # This also forces the tree before returning the filter, leads to earlier error messages
     if tree == null then
       empty
     else
       nonEmpty;
 
+  # Computes the union of a list of filesets.
+  # The filesets must already be coerced and validated to be in the same filesystem root
+  # Type: [ Fileset ] -> Fileset
+  _unionMany = filesets:
+    let
+      first = head filesets;
+
+      # To be able to union filesetTree's together, they need to have the same base path.
+      # Base paths can be unioned by taking their common prefix,
+      # e.g. such that `union /foo/bar /foo/baz` has the base path `/foo`
+
+      # A list of path components common to all base paths.
+      # Note that commonPrefix can only be fully evaluated,
+      # so this cannot cause a stack overflow due to a build-up of unevaluated thunks.
+      commonBaseComponents = foldl'
+        (components: el: commonPrefix components el._internalBaseComponents)
+        first._internalBaseComponents
+        # We could also not do the `tail` here to avoid a list allocation,
+        # but then we'd have to pay for a potentially expensive
+        # but unnecessary `commonPrefix` call
+        (tail filesets);
+
+      # The common base path assembled from a filesystem root and the common components
+      commonBase = append first._internalBaseRoot (join commonBaseComponents);
+
+      # A list of filesetTree's that all have the same base path
+      # This is achieved by nesting the trees into the components they have over the common base path
+      # E.g. `union /foo/bar /foo/baz` has the base path /foo
+      # So the tree under `/foo/bar` gets nested under `{ bar = ...; ... }`,
+      # while the tree under `/foo/baz` gets nested under `{ baz = ...; ... }`
+      # Therefore allowing combined operations over them.
+      trees = map (fileset:
+        setAttrByPath
+          (drop (length commonBaseComponents) fileset._internalBaseComponents)
+          fileset._internalTree
+        ) filesets;
+
+      # Folds all trees together into a single one using _unionTree
+      # We do not use a fold here because it would cause a thunk build-up
+      # which could cause a stack overflow for a large number of trees
+      resultTree = _unionTrees trees;
+    in
+    _create commonBase resultTree;
+
+  # The union of multiple filesetTree's with the same base path.
+  # Later elements are only evaluated if necessary.
+  # Type: [ filesetTree ] -> filesetTree
+  _unionTrees = trees:
+    let
+      stringIndex = findFirstIndex isString null trees;
+      withoutNull = filter (tree: tree != null) trees;
+    in
+    if stringIndex != null then
+      # If there's a string, it's always a fully included tree (dir or file),
+      # no need to look at other elements
+      elemAt trees stringIndex
+    else if withoutNull == [ ] then
+      # If all trees are null, then the resulting tree is also null
+      null
+    else
+      # The non-null elements have to be attribute sets representing partial trees
+      # We need to recurse into those
+      zipAttrsWith (name: _unionTrees) withoutNull;
 }
