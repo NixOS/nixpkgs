@@ -13,6 +13,7 @@
 , makeDesktopItem
 , makeWrapper
 , moreutils
+, napi-rs-cli
 , nodejs_18
 , pkg-config
 , python3
@@ -37,24 +38,24 @@ let
   };
 in buildNpmPackage' rec {
   pname = "bitwarden";
-  version = "2023.8.3";
+  version = "2023.9.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-ZsAc9tC087Em/VzgaVm5fU+JnI4gIsSAphxicdJWztU=";
+    hash = "sha256-8rNJmDpKLzTre5c2wktle7tthp1owZK5WAQP80/2R0g=";
   };
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-ARq6iYOkL9CMyAX37g8+Wf+UQsH7hU1jCq/52I1qS9A=";
+  npmDepsHash = "sha256-0q3XoC87kfC2PYMsNse4DV8M8OXjckiLTdN3LK06lZY=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-ABMrFXOR0IwsMv0pxvkebzCUbs18BOGwiuGcEZFntd0=";
+    hash = "sha256-YF3UHQWCSuWAg2frE8bo1XrLn44P6+1A7YUh4RZxwo0=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -65,6 +66,7 @@ in buildNpmPackage' rec {
     jq
     makeWrapper
     moreutils
+    napi-rs-cli
     pkg-config
     python3
     rustc
