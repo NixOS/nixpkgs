@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, desktop-file-utils
 , meson
 , ninja
 , vala
@@ -11,7 +12,6 @@
 , gtk3
 , libhandy
 , gnome
-, python3
 , dconf
 , libxml2
 , gettext
@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "43.0";
+  version = "45.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-k1o8Lddswqk81a7ppU05R/sRHrOW9LY9xfC6j40JkTY=";
+    sha256 = "sha256-EYApdnju2uYhfMUUomOMGH0vHR7ycgy5B5t0DEKZQd0=";
   };
 
   patches = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
     vala
@@ -46,7 +47,6 @@ stdenv.mkDerivation rec {
     docbook-xsl-nons
     libxml2
     gobject-introspection
-    python3
   ];
 
   buildInputs = [
@@ -55,11 +55,6 @@ stdenv.mkDerivation rec {
     libhandy
     dconf
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
