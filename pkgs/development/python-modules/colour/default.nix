@@ -1,15 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, d2to1 }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "colour";
   version = "0.1.5";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "af20120fefd2afede8b001fbef2ea9da70ad7d49fafdb6489025dae8745c3aee";
+    hash = "sha256-ryASD+/Sr+3osAH77y6p2nCtfUn6/bZIkCXa6HRcOu4=";
   };
 
-  buildInputs = [ d2to1 ];
+  patches = [
+    # https://github.com/vaab/colour/pull/66 (but does not merge cleanly)
+    ./remove-unmaintained-d2to1.diff
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--doctest-glob=\"*.rst\""
+    "--doctest-modules"
+  ];
+
+  pythonImportsCheck = [
+    "colour"
+  ];
 
   meta = with lib; {
     description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";

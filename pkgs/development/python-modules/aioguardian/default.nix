@@ -2,29 +2,45 @@
 , aiohttp
 , async-timeout
 , asyncio-dgram
-, asynctest
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "2022.07.0";
+  version = "2023.08.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-87MumQ6MuhRRDHrcH1nmOPviKDaT4crYnq5Pd26qsLw=";
+    hash = "sha256-/UNSAfAkOXPJQDWBZIe/AYIhx83kPCjGzZjn4oh+gfY=";
   };
 
-  format = "pyproject";
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/aioguardian/pull/288
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/aioguardian/commit/ffaad4b396645f599815010995fb71ca976e761e.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -38,18 +54,12 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asyncio-dgram
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'docutils = "<0.18"' 'docutils = "*"'
-  '';
 
   disabledTestPaths = [
     "examples/"
@@ -62,10 +72,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = " Python library to interact with Elexa Guardian devices";
     longDescription = ''
-      aioguardian is a Pytho3, asyncio-focused library for interacting with the
+      aioguardian is an asyncio-focused library for interacting with the
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
+    changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

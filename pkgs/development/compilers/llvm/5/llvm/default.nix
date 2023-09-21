@@ -5,6 +5,7 @@
 , cmake
 , python3
 , libffi
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libxml2
 , ncurses
@@ -81,6 +82,8 @@ stdenv.mkDerivation (rec {
       sha256 = "0zjfjgavqzi2ypqwqnlvy6flyvdz8hi1anwv0ybwnm2zqixg7za3";
       stripLen = 1;
     })
+
+    ../../llvm-7-musl.patch
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''
@@ -168,10 +171,9 @@ stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ]
-  ++ lib.optional (!isDarwin)
+  ] ++ lib.optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ++ lib.optionals (isDarwin) [
+  ] ++ lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [

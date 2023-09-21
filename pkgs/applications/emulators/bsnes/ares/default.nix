@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
-, wrapGAppsHook
 , SDL2
 , alsa-lib
 , gtk3
@@ -12,34 +10,45 @@
 , libX11
 , libXv
 , libao
+, libicns
 , libpulseaudio
 , openal
+, pkg-config
 , udev
+, which
+, wrapGAppsHook
+, darwin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "129";
+  version = "133";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
-    rev = "v${version}";
-    hash = "sha256-prfvoGtbnsl/1ahx98jBOgT64W566GoUtE8rIOF7lYc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-KCpHiIdid5h5CU2uyMOo+p5h50h3Ki5/4mUpdTAPKQA=";
   };
 
   patches = [
-    ./dont-rebuild-on-install.patch
-    ./fix-ruby.patch
+    ./001-dont-rebuild-on-install.patch
+    ./002-fix-ruby.diff
+    ./003-darwin-specific.patch
   ];
 
   nativeBuildInputs = [
     pkg-config
+    which
     wrapGAppsHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    libicns
   ];
 
   buildInputs = [
     SDL2
+    libao
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     gtk3
     gtksourceview3
@@ -47,29 +56,37 @@ stdenv.mkDerivation rec {
     libGLU
     libX11
     libXv
-    libao
     libpulseaudio
     openal
     udev
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Cocoa
+    darwin.apple_sdk_11_0.frameworks.OpenAL
   ];
 
   enableParallelBuilding = true;
 
-  makeFlags = [
+  makeFlags = lib.optionals stdenv.isLinux [
     "hiro=gtk3"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "hiro=cocoa"
+    "lto=false"
+    "vulkan=false"
+  ] ++ [
     "local=false"
     "openmp=true"
     "prefix=$(out)"
-    "-C desktop-ui"
   ];
 
-  meta = with lib; {
-    homepage = "https://ares.dev";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.14";
+
+  meta = {
+    homepage = "https://ares-emu.net";
     description = "Open-source multi-system emulator with a focus on accuracy and preservation";
-    license = licenses.isc;
-    maintainers = with maintainers; [ Madouura AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
+    platforms = lib.platforms.unix;
+    broken = stdenv.isDarwin;
   };
-}
-# TODO: select between Qt, GTK2 and GTK3
-# TODO: support Darwin
+})
+# TODO: select between Qt and GTK3

@@ -8,52 +8,49 @@ let
   smokepingPidDir = "/run";
   configFile =
     if cfg.config == null
-      then
-        ''
-          *** General ***
-          cgiurl   = ${cfg.cgiUrl}
-          contact = ${cfg.ownerEmail}
-          datadir  = ${smokepingHome}/data
-          imgcache = ${smokepingHome}/cache
-          imgurl   = ${cfg.imgUrl}
-          linkstyle = ${cfg.linkStyle}
-          ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
-          owner = ${cfg.owner}
-          pagedir = ${smokepingHome}/cache
-          piddir  = ${smokepingPidDir}
-          ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
-          smokemail = ${cfg.smokeMailTemplate}
-          *** Presentation ***
-          template = ${cfg.presentationTemplate}
-          ${cfg.presentationConfig}
-          *** Alerts ***
-          ${cfg.alertConfig}
-          *** Database ***
-          ${cfg.databaseConfig}
-          *** Probes ***
-          ${cfg.probeConfig}
-          *** Targets ***
-          ${cfg.targetConfig}
-          ${cfg.extraConfig}
-        ''
-      else
-        cfg.config;
+    then
+      ''
+        *** General ***
+        cgiurl   = ${cfg.cgiUrl}
+        contact = ${cfg.ownerEmail}
+        datadir  = ${smokepingHome}/data
+        imgcache = ${smokepingHome}/cache
+        imgurl   = ${cfg.imgUrl}
+        linkstyle = ${cfg.linkStyle}
+        ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
+        owner = ${cfg.owner}
+        pagedir = ${smokepingHome}/cache
+        piddir  = ${smokepingPidDir}
+        ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
+        smokemail = ${cfg.smokeMailTemplate}
+        *** Presentation ***
+        template = ${cfg.presentationTemplate}
+        ${cfg.presentationConfig}
+        *** Alerts ***
+        ${cfg.alertConfig}
+        *** Database ***
+        ${cfg.databaseConfig}
+        *** Probes ***
+        ${cfg.probeConfig}
+        *** Targets ***
+        ${cfg.targetConfig}
+        ${cfg.extraConfig}
+      ''
+    else
+      cfg.config;
 
   configPath = pkgs.writeText "smokeping.conf" configFile;
   cgiHome = pkgs.writeScript "smokeping.fcgi" ''
     #!${pkgs.bash}/bin/bash
-    ${cfg.package}/bin/smokeping_cgi ${configPath}
+    ${cfg.package}/bin/smokeping_cgi /etc/smokeping.conf
   '';
 in
 
 {
   options = {
     services.smokeping = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc "Enable the smokeping service";
-      };
+      enable = mkEnableOption (lib.mdDoc "smokeping service");
+
       alertConfig = mkOption {
         type = types.lines;
         default = ''
@@ -144,7 +141,7 @@ in
         '';
       };
       linkStyle = mkOption {
-        type = types.enum ["original" "absolute" "relative"];
+        type = types.enum [ "original" "absolute" "relative" ];
         default = "relative";
         example = "absolute";
         description = lib.mdDoc "DNS name for the urls generated in the cgi.";
@@ -186,7 +183,7 @@ in
         '';
       };
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8081;
         description = lib.mdDoc "TCP port to use for the web server.";
       };
@@ -304,12 +301,14 @@ in
     ];
     security.wrappers = {
       fping =
-        { setuid = true;
+        {
+          setuid = true;
           owner = "root";
           group = "root";
           source = "${pkgs.fping}/bin/fping";
         };
     };
+    environment.etc."smokeping.conf".source = configPath;
     environment.systemPackages = [ pkgs.fping ];
     users.users.${cfg.user} = {
       isNormalUser = false;
@@ -318,28 +317,39 @@ in
       description = "smokeping daemon user";
       home = smokepingHome;
       createHome = true;
+      # When `cfg.webService` is enabled, `thttpd` makes SmokePing available
+      # under `${cfg.host}:${cfg.port}/smokeping.fcgi` as per the `ln -s` below.
+      # We also want that going to `${cfg.host}:${cfg.port}` without `smokeping.fcgi`
+      # makes it easy for the user to find SmokePing.
+      # However `thttpd` does not seem to support easy redirections from `/` to `smokeping.fcgi`
+      # and only allows directory listings or `/` -> `index.html` resolution if the directory
+      # has `chmod 755` (see https://acme.com/software/thttpd/thttpd_man.html#PERMISSIONS,
+      # " directories should be 755 if you want to allow indexing").
+      # Otherwise it shows `403 Forbidden` on `/`.
+      # Thus, we need to make `smokepingHome` (which is given to `thttpd -d` below) `755`.
+      homeMode = "755";
     };
-    users.groups.${cfg.user} = {};
+    users.groups.${cfg.user} = { };
     systemd.services.smokeping = {
-      requiredBy = [ "multi-user.target"];
+      reloadTriggers = [ configPath ];
+      requiredBy = [ "multi-user.target" ];
       serviceConfig = {
         User = cfg.user;
         Restart = "on-failure";
-        ExecStart = "${cfg.package}/bin/smokeping --config=${configPath} --nodaemon";
+        ExecStart = "${cfg.package}/bin/smokeping --config=/etc/smokeping.conf --nodaemon";
       };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
-        rm -f ${smokepingHome}/cropper
-        ln -s ${cfg.package}/htdocs/cropper ${smokepingHome}/cropper
-        rm -f ${smokepingHome}/smokeping.fcgi
-        ln -s ${cgiHome} ${smokepingHome}/smokeping.fcgi
+        ln -snf ${cfg.package}/htdocs/css ${smokepingHome}/css
+        ln -snf ${cfg.package}/htdocs/js ${smokepingHome}/js
+        ln -snf ${cgiHome} ${smokepingHome}/smokeping.fcgi
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
     };
     systemd.services.thttpd = mkIf cfg.webService {
-      requiredBy = [ "multi-user.target"];
-      requires = [ "smokeping.service"];
+      requiredBy = [ "multi-user.target" ];
+      requires = [ "smokeping.service" ];
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
       serviceConfig = {
         Restart = "always";

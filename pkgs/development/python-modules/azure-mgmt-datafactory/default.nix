@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datafactory";
-  version = "2.8.0";
+  version = "3.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-LH2YdWuRC5mzImF6ImkOixHBcgc7Yoi0Rai5m64/aiU=";
+    hash = "sha256-lsOUxDoXocf1fUIcY4q74/vd86LO7yumJg7rJ6i3zcg=";
   };
 
   propagatedBuildInputs = [

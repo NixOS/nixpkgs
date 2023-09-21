@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pysolcast";
-  version = "1.0.7";
+  version = "1.0.14";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "mcaulifn";
     repo = "solcast";
-    rev = "v${version}";
-    sha256 = "J4D7W89Qz1Nv4DeqOmHVAWfmThlY5puBjSClRkfwhVw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SI8lRihzJClciPLX9DXOO0K7YWgix74aM784j7fVu/g=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
@@ -53,9 +53,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for interacting with the Solcast API";
     homepage = "https://github.com/mcaulifn/solcast";
-    # No license statement present
-    # https://github.com/mcaulifn/solcast/issues/70
-    license = with licenses; [ unfree ];
+    changelog = "https://github.com/mcaulifn/solcast/releases/tag/v${version}";
+    license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
 }

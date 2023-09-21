@@ -24,7 +24,7 @@ buildPythonPackage rec {
     pyserial
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

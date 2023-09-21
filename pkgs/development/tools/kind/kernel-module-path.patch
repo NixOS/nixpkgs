@@ -23,7 +23,7 @@ diff --git a/pkg/cluster/internal/providers/docker/provision.go b/pkg/cluster/in
 index 97b05594..3aaa9830 100644
 --- a/pkg/cluster/internal/providers/docker/provision.go
 +++ b/pkg/cluster/internal/providers/docker/provision.go
-@@ -225,7 +225,7 @@ func runArgsForNode(node *config.Node, clusterIPFamily config.ClusterIPFamily, n
+@@ -230,7 +230,7 @@ func runArgsForNode(node *config.Node, clusterIPFamily config.ClusterIPFamily, n
  		// (please don't depend on doing this though!)
  		"--volume", "/var",
  		// some k8s things want to read /lib/modules
@@ -36,7 +36,7 @@ diff --git a/pkg/cluster/internal/providers/podman/provision.go b/pkg/cluster/in
 index 50aa7018..7e25a4de 100644
 --- a/pkg/cluster/internal/providers/podman/provision.go
 +++ b/pkg/cluster/internal/providers/podman/provision.go
-@@ -189,7 +189,7 @@ func runArgsForNode(node *config.Node, clusterIPFamily config.ClusterIPFamily, n
+@@ -203,7 +203,7 @@ func runArgsForNode(node *config.Node, clusterIPFamily config.ClusterIPFamily, n
  		// dev: devices on the volume will be able to be used by processes within the container
  		"--volume", fmt.Sprintf("%s:/var:suid,exec,dev", varVolume),
  		// some k8s things want to read /lib/modules

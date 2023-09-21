@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "devolo-home-control-api";
-  version = "0.18.2";
+  version = "0.18.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "2Fake";
     repo = "devolo_home_control_api";
     rev = "v${version}";
-    sha256 = "sha256-H4kLomHM0qq6LqsRMEp34oKy/4Me7AQi6dij2vraBS8=";
+    hash = "sha256-4AyC1DDYtKl8SwJf75BbzoOAhbZXmBZ05ma9YmLzksM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];

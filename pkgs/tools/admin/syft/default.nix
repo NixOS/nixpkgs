@@ -1,14 +1,14 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "syft";
-  version = "0.58.0";
+  version = "0.90.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fTF86gjP2a+KMI/Mz98xOM7f/U0CgkWQO1+joZ8gp3k=";
+    hash = "sha256-W1BLwoqo7sDRZ1LjAbfuuZpoJCWfAK8ekIFwfItkH4A=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +20,9 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-vx85Mn22mVrW3iALbE1+Iw601KJiN7bwoYnQx/qa+ho=";
+  # hash mismatch with darwin
+  proxyVendor = true;
+  vendorHash = "sha256-TG292RncaL/4kfuM02huEaIAsuUj7vrTre2aFnjqx3Y=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,14 +31,14 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/anchore/syft/internal/version.version=${version}"
-    "-X github.com/anchore/syft/internal/version.gitDescription=v${version}"
-    "-X github.com/anchore/syft/internal/version.gitTreeState=clean"
+    "-X main.version=${version}"
+    "-X main.gitDescription=v${version}"
+    "-X main.gitTreeState=clean"
   ];
 
   preBuild = ''
-    ldflags+=" -X github.com/anchore/syft/internal/version.gitCommit=$(cat COMMIT)"
-    ldflags+=" -X github.com/anchore/syft/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
   # tests require a running docker instance
@@ -73,6 +75,6 @@ buildGoModule rec {
       vulnerability detection when used with a scanner tool like Grype.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk developer-guy kashw2 ];
   };
 }

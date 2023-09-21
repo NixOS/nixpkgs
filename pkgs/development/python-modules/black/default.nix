@@ -3,16 +3,21 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, setuptools-scm
 , pytestCheckHook
 , aiohttp
 , aiohttp-cors
 , click
 , colorama
+, hatch-fancy-pypi-readme
+, hatch-vcs
+, hatchling
+, ipython
 , mypy-extensions
+, packaging
 , pathspec
 , parameterized
 , platformdirs
+, tokenize-rt
 , tomli
 , typed-ast
 , typing-extensions
@@ -21,22 +26,57 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "22.8.0";
+  version = "23.9.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eS9+tUC6mhfoZWU4cB0+sa/LE047RbcfILJcd6jbfm4=";
+    hash = "sha256-JLaz/1xtnqCKiIj2l36uhY4fNA1yYM9W1wpJgjI2ti0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    hatch-fancy-pypi-readme
+    hatch-vcs
+    hatchling
+  ];
+
+  propagatedBuildInputs = [
+    click
+    mypy-extensions
+    packaging
+    pathspec
+    platformdirs
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+    typing-extensions
+  ];
+
+  passthru.optional-dependencies = {
+    colorama = [
+      colorama
+    ];
+    d = [
+      aiohttp
+    ];
+    uvloop = [
+      uvloop
+    ];
+    jupyter = [
+      ipython
+      tokenize-rt
+    ];
+  };
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
   # Black starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
-  checkInputs = [ pytestCheckHook parameterized aiohttp ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    parameterized
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export PATH="$PATH:$out/bin"
@@ -62,26 +102,12 @@ buildPythonPackage rec {
   # multiple tests exceed max open files on hydra builders
   doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
-  propagatedBuildInputs = [
-    click
-    mypy-extensions
-    pathspec
-    platformdirs
-    tomli
-  ] ++ lib.optional (pythonOlder "3.8") typed-ast
-  ++ lib.optional (pythonOlder "3.10") typing-extensions;
-
-  passthru.optional-dependencies = {
-    d = [ aiohttp aiohttp-cors ];
-    colorama = [ colorama ];
-    uvloop = [ uvloop ];
-  };
-
   meta = with lib; {
     description = "The uncompromising Python code formatter";
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
+    mainProgram = "black";
     maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

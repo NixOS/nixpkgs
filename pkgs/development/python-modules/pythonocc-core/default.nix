@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    rev = version;
-    sha256 = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
   };
 
   postPatch = ''
@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
     "-DSMESH_LIB_PATH=${smesh}/lib"
     "-DPYTHONOCC_WRAP_SMESH=TRUE"
   ];
+
+  passthru = {
+    # `python3Packages.pythonocc-core` must be updated in tandem with
+    # `opencascade-occt`, and including it in the bulk updates often breaks it.
+    skipBulkUpdate = true;
+  };
 
   meta = with lib; {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";

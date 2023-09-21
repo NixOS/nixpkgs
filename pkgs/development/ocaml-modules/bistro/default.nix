@@ -7,7 +7,7 @@
 , bos
 , core
 , core_kernel
-, core_unix
+, core_unix ? null
 , lwt_react
 , ocamlgraph
 , ppx_sexp_conv
@@ -20,7 +20,7 @@ buildDunePackage rec {
   pname = "bistro";
   version = "unstable-2022-05-07";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "pveber";
@@ -28,6 +28,8 @@ buildDunePackage rec {
     rev = "d363bd2d8257babbcb6db15bd83fd6465df7c268";
     sha256 = "0g11324j1s2631zzf7zxc8s0nqd4fwvcni0kbvfpfxg96gy2wwfm";
   };
+
+  patches = [ ./janestreet-0.16.patch ];
 
   propagatedBuildInputs = [
     base64

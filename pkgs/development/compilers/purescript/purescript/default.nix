@@ -7,10 +7,7 @@ let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
   patchelf = libPath :
-    if stdenv.isDarwin
-      then ""
-      else
-        ''
+    lib.optionalString (!stdenv.isDarwin) ''
           chmod u+w $PURS
           patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
           chmod u-w $PURS
@@ -18,20 +15,27 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.15.5";
+  version = "0.15.10";
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
     if stdenv.isDarwin
     then
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "1q67yg1i8xd0pjx82lp2lkk95ah86r46gmxnliy0r4lllyr4x4fv";
-    }
+      (if stdenv.isAarch64
+      then
+      fetchurl {
+        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos-arm64.tar.gz";
+        sha256 = "1pk6mkjy09qvh8lsygb5gb77i2fqwjzz8jdjkxlyzynp3wpkcjp7";
+      }
+      else
+      fetchurl {
+        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+        sha256 = "14yd00v3dsnnwj2f645vy0apnp1843ms9ffd2ccv7bj5p4kxsdzg";
+      })
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "17cczln5gdbg274h16l82hgnnwfb1ylvxd2h7119ig834dcbppxn";
+      sha256 = "03p5f2m5xvrqgiacs4yfc2dgz6frlxy90h6z1nm6wan40p2vd41r";
     };
 
 
@@ -63,7 +67,7 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "purs";
     changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };

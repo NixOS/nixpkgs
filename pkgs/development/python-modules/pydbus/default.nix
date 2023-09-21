@@ -1,8 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, pygobject3 }:
+{ lib, buildPythonPackage, fetchPypi, pygobject3, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pydbus";
   version = "0.6.0";
+
+  # Python 3.11 changed the API of the `inspect` module and pydbus was never
+  # updated to adapt; last commit was in 2018.
+  disabled = pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;

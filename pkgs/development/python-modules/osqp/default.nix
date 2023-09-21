@@ -1,30 +1,37 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , cmake
+, cvxopt
+, fetchPypi
 , future
 , numpy
-, qdldl
-, setuptools-scm
-, scipy
-# check inputs
 , pytestCheckHook
-, cvxopt
+, pythonOlder
+, qdldl
+, scipy
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "osqp";
-  version = "0.6.2.post5";
+  version = "0.6.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b2fa17aae42a7ed498ec261b33f262bb4b3605e7e8464062159d9fae817f0d61";
+    hash = "sha256-A+Rg5oPsLOD4OTU936PEyP+lCauM9qKyr7tYb6RT4YA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  nativeBuildInputs = [ cmake setuptools-scm ];
   dontUseCmakeConfigure = true;
+
+  nativeBuildInputs = [
+    cmake
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     future
@@ -33,10 +40,18 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [ "osqp" ];
-  checkInputs = [ pytestCheckHook cvxopt ];
+  nativeCheckInputs = [
+    cvxopt
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "osqp"
+  ];
+
   disabledTests = [
-    "mkl_"
+    # Need an unfree license package - mkl
+    "test_issue14"
   ];
 
   meta = with lib; {

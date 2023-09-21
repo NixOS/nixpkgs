@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "flipr-api";
-  version = "1.4.2";
+  version = "1.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cnico";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-/G92WkWUr3T5T7VVzMERFVmLDfLz6m9rlZLQZCBQbCI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-IAxB3i/HkwO5sjDh2aBCtijOcG0VIbatQjTWIh0inoM=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     pytest-asyncio
     pytestCheckHook
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for Flipr API";
     homepage = "https://github.com/cnico/flipr-api";
+    changelog = "https://github.com/cnico/flipr-api/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

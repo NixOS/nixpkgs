@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   # pythonImportsCheck = [ "cirq" "cirq.Circuit" ];  # cirq's importlib hook doesn't work here
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

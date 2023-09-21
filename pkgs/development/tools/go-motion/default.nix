@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "motion";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "fatih";
     repo = "motion";
     rev = "v${version}";
-    sha256 = "sha256-bD6Mm9/LOzguoK/xMpVEeT7G8j1shCsMv14wFostlW4=";
+    sha256 = "sha256-7vkMhjO4JUAf0sUcKiMjqJ5GzLb//QoHd7Cagerx4/s=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 

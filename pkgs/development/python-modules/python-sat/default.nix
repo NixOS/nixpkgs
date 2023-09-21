@@ -8,12 +8,12 @@ buildPythonPackage rec {
     owner = "pysathq";
     repo = "pysat";
     rev = version;
-    sha256 = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
+    hash = "sha256-zGdgD+SgoMB7/zDQI/trmV70l91TB7OkDxaJ30W3dkI=";
   };
 
   propagatedBuildInputs = [ six pypblib ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # https://github.com/pysathq/pysat/pull/102
   postPatch = ''

@@ -1,18 +1,15 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../../.. -i bash -p wp4nix
+#!nix-shell -i bash -p wp4nix jq
 
 set -e
 set -u
 set -o pipefail
 set -x
 
-NIX_VERSION=$(nix --version|cut -d ' ' -f 3|cut -c -3)
-if [[ "$NIX_VERSION" > 2.3 ]]; then
-  nixFlags="--option experimental-features nix-command eval --raw --impure --expr"
-else
-  nixFlags="eval --raw"
-fi
+cd $(dirname "$0")
 
+nixFlags="--option experimental-features nix-command eval --raw --impure --expr"
+export NIX_PATH=nixpkgs=../../../../..
 export WP_VERSION=$(nix $nixFlags '(import <nixpkgs> {}).wordpress.version')
 
 PLUGINS=`cat wordpress-plugins.json | jq -r '.[]' | sed -z 's/\n/,/g;s/,$/\n/'`

@@ -1,20 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi, }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pyasn1";
-  version = "0.4.8";
+  version = "0.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba";
+    hash = "sha256-l7cpDKaOYqgyVY7Dl28Vy/kRv118cDnYuGHCoOzmn94=";
   };
 
-  pythonImportsCheck = [ "pyasn1" ];
+  pythonImportsCheck = [
+    "pyasn1"
+  ];
 
   meta = with lib; {
     description = "Generic ASN.1 library for Python";
-    homepage = "https://github.com/etingof/pyasn1";
+    homepage = "https://pyasn1.readthedocs.io";
+    changelog = "https://github.com/etingof/pyasn1/blob/master/CHANGES.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

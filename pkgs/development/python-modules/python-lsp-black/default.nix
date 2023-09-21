@@ -10,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-black";
-  version = "1.2.1";
+  version = "1.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-black";
-    rev = "v${version}";
-    sha256 = "sha256-qNA6Bj1VI0YEtRuvcMQZGWakQNNrJ2PqhozrLmQHPAg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-16HjNB0VfrXLyVa+u5HaFNjq/ER2yXIWokMFsPgejr8=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ black python-lsp-server toml ];
 

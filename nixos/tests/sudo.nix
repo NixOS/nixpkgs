@@ -2,17 +2,13 @@
 
 let
   password = "helloworld";
-
 in
-  import ./make-test-python.nix ({ pkgs, ...} : {
+  import ./make-test-python.nix ({ lib, pkgs, ...} : {
     name = "sudo";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ lschuermann ];
-    };
+    meta.maintainers = pkgs.sudo.meta.maintainers;
 
     nodes.machine =
       { lib, ... }:
-      with lib;
       {
         users.groups = { foobar = {}; barfoo = {}; baz = { gid = 1337; }; };
         users.users = {

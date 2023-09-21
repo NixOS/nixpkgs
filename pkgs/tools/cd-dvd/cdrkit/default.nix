@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
+{lib, stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl, iconv, darwin}:
 
 stdenv.mkDerivation rec {
   pname = "cdrkit";
@@ -10,12 +10,40 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libcap zlib bzip2 perl ];
+  buildInputs = [ zlib bzip2 perl ] ++
+    lib.optionals stdenv.isLinux [ libcap ] ++
+    lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Carbon IOKit iconv ]);
 
   hardeningDisable = [ "format" ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-D__THROW=";
 
   # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
   patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ./cdrkit-1.1.11-fno-common.patch ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace libusal/scsi-mac-iokit.c \
+      --replace "IOKit/scsi-commands/SCSITaskLib.h" "IOKit/scsi/SCSITaskLib.h"
+    substituteInPlace genisoimage/sha256.c \
+      --replace "<endian.h>" "<machine/endian.h>"
+    substituteInPlace genisoimage/sha512.c \
+      --replace "<endian.h>" "<machine/endian.h>"
+    substituteInPlace genisoimage/sha256.h \
+      --replace "__THROW" ""
+    substituteInPlace genisoimage/sha512.h \
+      --replace "__THROW" ""
+  '';
+
+  preConfigure = lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace include/xconfig.h.in \
+        --replace "#define HAVE_RCMD 1" "#undef HAVE_RCMD"
+  '';
+
+  postConfigure = lib.optionalString stdenv.isDarwin ''
+    for f in */CMakeFiles/*.dir/link.txt ; do
+      substituteInPlace "$f" \
+        --replace "-lrt" "-framework IOKit"
+    done
+  '';
 
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)
@@ -43,6 +71,6 @@ stdenv.mkDerivation rec {
 
     homepage = "http://cdrkit.org/";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pynina";
-  version = "0.1.8";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyNINA";
     inherit version;
-    sha256 = "sha256-U8/SzkkZJLRBpTQx8NRpFWUlckn4Jr0n9cHR4/plyb0=";
+    hash = "sha256-uiNUkNL/3FGGhqctE9AZNdSD4o7jTk829GAT5Gy2Xeo=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API wrapper to retrieve warnings from the german NINA app";
     homepage = "https://gitlab.com/DeerMaximum/pynina";
+    changelog = "https://gitlab.com/DeerMaximum/pynina/-/releases/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

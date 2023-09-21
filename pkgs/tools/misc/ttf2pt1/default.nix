@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "True Type to Postscript Type 3 converter, fpdf";
-    homepage = "http://ttf2pt1.sourceforge.net/index.html";
+    homepage = "https://ttf2pt1.sourceforge.net/index.html";
     license = "ttf2pt1";
     platforms = lib.platforms.linux;
   };

@@ -27,7 +27,7 @@ let
 in
 buildGoPackage rec {
   pname = "amazon-ssm-agent";
-  version = "3.0.755.0";
+  version = "3.2.1297.0";
 
   goPackagePath = "github.com/aws/${pname}";
 
@@ -37,7 +37,7 @@ buildGoPackage rec {
     rev = version;
     owner = "aws";
     repo = "amazon-ssm-agent";
-    hash = "sha256-yVQJL1MJ1JlAndlrXfEbNLQihlbLhSoQXTKzJMRzhao=";
+    hash = "sha256-zRs7RsShZPH3hb5MsADUNrTfHbJVwCELE9mCqEWaTng=";
   };
 
   patches = [
@@ -49,8 +49,23 @@ buildGoPackage rec {
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
   ];
 
+  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1297.0/makefile#L120-L138
+  # The updater is not built because it cannot work on NixOS
+  subPackages = [
+    "core"
+    "agent"
+    "agent/cli-main"
+    "agent/framework/processor/executer/outofproc/worker"
+    "agent/session/logging"
+    "agent/framework/processor/executer/outofproc/sessionworker"
+  ];
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
   preConfigure = ''
-    rm -r ./Tools/src/goreportcard
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
@@ -71,8 +86,6 @@ buildGoPackage rec {
   '';
 
   preBuild = ''
-    cp -r go/src/${goPackagePath}/vendor/src go
-
     pushd go/src/${goPackagePath}
 
     # Note: if this step fails, please patch the code to fix it! Please only skip
@@ -87,8 +100,6 @@ buildGoPackage rec {
 
   postBuild = ''
     pushd go/bin
-
-    rm integration-cli versiongenerator generator
 
     mv core amazon-ssm-agent
     mv agent ssm-agent-worker

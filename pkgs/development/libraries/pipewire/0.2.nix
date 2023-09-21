@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   # Workaround build on gcc-10+ and clang11+:
   #  spa/plugins/bluez5/libspa-bluez5.so.p/bluez5-monitor.c.o:(.bss+0x0):
   #    multiple definition of `spa_a2dp_sink_factory'
-  NIX_CFLAGS_COMPILE = [ "-fcommon" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fcommon" ];
 
   mesonFlags = [
     "-Ddocs=true"
@@ -49,6 +49,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://pipewire.org/";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

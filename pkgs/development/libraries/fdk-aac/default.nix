@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yehjDPnUM/POrXSQahUg0iI/ibzT+pJUhhAXRAuOsi8=";
   };
 
+  outputs = [ "out" "dev" ];
+
+  enableParallelBuilding = true;
+
   configureFlags = lib.optional exampleSupport "--enable-example";
 
   meta = with lib; {

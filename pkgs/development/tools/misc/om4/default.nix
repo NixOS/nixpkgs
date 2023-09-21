@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 bsd3 isc publicDomain ];
     mainProgram = "m4";
     platforms = platforms.unix;
-    maintainers = [ maintainers.ninjin ];
+    maintainers = [ ];
   };
 }

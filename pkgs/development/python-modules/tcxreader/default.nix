@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "tcxreader";
-  version = "0.4.2";
+  version = "0.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,10 +16,10 @@ buildPythonPackage rec {
     owner = "alenrajsp";
     repo = "tcxreader";
     rev = "v${version}";
-    hash = "sha256-YJDuyInO5FCIdz7xE29qOpuH6rPKvO4FZChjgXdc+Aw=";
+    hash = "sha256-UJ6F+GcdF0b2gALQWepLyCnWm+6RKBRnBt1eJNoRRzo=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

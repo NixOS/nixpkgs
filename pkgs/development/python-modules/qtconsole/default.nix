@@ -1,38 +1,59 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, isPy27
-, mock
-, traitlets
-, jupyter_core
-, jupyter-client
-, pygments
 , ipykernel
+, jupyter-core
+, jupyter-client
+, ipython_genutils
+, pygments
 , pyqt5
+, pytestCheckHook
+, pythonOlder
+, pyzmq
 , qtpy
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.3.2";
+  version = "5.4.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jq3wEug6sBgpWAPCR8arfqzT1aseHYig83/c/auSlaM=";
+    hash = "sha256-t/+1PXTyPO4p9M21Xdb6vI7DEtlPPEa6OOHd5FhpPfs=";
   };
 
-  checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
-  propagatedBuildInputs = [traitlets jupyter_core jupyter-client pygments ipykernel pyqt5 qtpy];
+  propagatedBuildInputs = [
+    ipykernel
+    ipython_genutils
+    jupyter-core
+    jupyter-client
+    pygments
+    pyqt5
+    pyzmq
+    qtpy
+    traitlets
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   # : cannot connect to X server
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "qtconsole"
+  ];
+
+  meta = with lib; {
     description = "Jupyter Qt console";
-    homepage = "https://jupyter.org/";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ fridh ];
+    homepage = "https://qtconsole.readthedocs.io/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
+    platforms = platforms.unix;
   };
 }

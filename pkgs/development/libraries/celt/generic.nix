@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  outputs = [ "out" "dev" ];
+
   inherit prePatch;
 
   buildInputs = []

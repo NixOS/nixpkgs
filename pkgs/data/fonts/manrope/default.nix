@@ -1,21 +1,34 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "manrope";
-  version = "3";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
-  owner = "sharanda";
-  repo = pname;
-  rev = "3bd68c0c325861e32704470a90dfc1868a5c37e9";
-  sha256 = "1h4chkfbp75hrrqqarf28ld4yb7hfrr7q4w5yz96ivg94lbwlnld";
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -Dm644 -t $out/share/fonts/opentype "desktop font"/*
+  version = "4.505";
+
+  src = fetchFromGitHub {
+    owner = "sharanda";
+    repo = pname;
+    rev = "d79b66b10608610692d59f4107791d249d244416"; # no tags in repo
+    hash = "sha256-dxnCOkPUEG0knSekolx2+SGJR81vRK0wUrbzGH4KGD0=";
+  };
+
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+  doCheck = false;
+  dontFixup = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/otf/*.otf -t $out/share/fonts/opentype
+    install -Dm644 fonts/ttf/*.ttf fonts/variable/*.ttf -t $out/share/fonts/truetype
+
+    runHook postInstall
   '';
+
   meta = with lib; {
     description = "Open-source modern sans-serif font family";
-    homepage = "https://github.com/sharanda/manrope";
+    homepage = "https://www.gent.media/manrope";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ dtzWill ];

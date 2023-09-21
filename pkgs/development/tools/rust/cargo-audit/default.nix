@@ -2,33 +2,37 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+, libgit2_1_5
 , openssl
+, zlib
 , stdenv
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.17.2";
+  version = "0.18.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fSdh8yCV+2AdAtF4eO2z8+uxOAf2N0IxqIFLw4B8dKE=";
+    hash = "sha256-XK2SsyT4CyDjCF56v/g7tX5SZKC3krBQNs/ddeFu35A=";
   };
 
-  cargoSha256 = "sha256-YCEQaUcTmZ9zTdGcDQkaVI0Dc8oIBvt840s3x9PUlrg=";
+  cargoHash = "sha256-1Uifk1W7NCmHAbUl83GpMUBD6WWUl1J/HjtGv4dEuiA=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
+    libgit2_1_5
     openssl
+    zlib
   ] ++ lib.optionals stdenv.isDarwin [
     Security
   ];
 
-  buildFeatures = [ "binary-scanning" "fix" ];
+  buildFeatures = [ "fix" ];
 
   # The tests require network access which is not available in sandboxed Nix builds.
   doCheck = false;

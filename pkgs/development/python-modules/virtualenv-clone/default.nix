@@ -14,12 +14,13 @@ buildPythonPackage rec {
     owner = "edwardgeorge";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
+    hash = "sha256-qrN74IwLRqiVPxU8gVhdiM34yBmiS/5ot07uroYPDVw=";
   };
 
   postPatch = ''
     substituteInPlace tests/__init__.py \
-      --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
+      --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'" \
+      --replace "'3.9', '3.10']" "'3.9', '3.10', '3.11']" # if the Python version used isn't in this list, tests fail
 
     substituteInPlace tests/test_virtualenv_sys.py \
       --replace "'virtualenv'" "'${virtualenv}/bin/virtualenv'"
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     virtualenv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

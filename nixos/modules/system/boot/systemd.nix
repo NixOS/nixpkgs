@@ -79,6 +79,8 @@ let
       # Filesystems.
       "systemd-fsck@.service"
       "systemd-fsck-root.service"
+      "systemd-growfs@.service"
+      "systemd-growfs-root.service"
       "systemd-remount-fs.service"
       "systemd-pstore.service"
       "local-fs.target"
@@ -151,6 +153,9 @@ let
     ] ++ optionals cfg.package.withHostnamed [
       "dbus-org.freedesktop.hostname1.service"
       "systemd-hostnamed.service"
+    ] ++ optionals cfg.package.withPortabled [
+      "dbus-org.freedesktop.portable1.service"
+      "systemd-portabled.service"
     ] ++ [
       "systemd-exit.service"
       "systemd-update-done.service"
@@ -390,7 +395,9 @@ in
       description = lib.mdDoc ''
         The amount of time which can elapse after a reboot has been triggered
         before a watchdog hardware device will automatically reboot the system.
-        Valid time units include "ms", "s", "min", "h", "d", and "w".
+        Valid time units include "ms", "s", "min", "h", "d", and "w". If left
+        `null`, systemd will use its default of `10min`; see also {command}`man
+        5 systemd-system.conf`.
       '';
     };
 
@@ -447,7 +454,7 @@ in
         (mkAfter [ "systemd" ])
       ]);
       group = (mkMerge [
-        (mkAfter [ "systemd" ])
+        (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
       ]);
     };
 
@@ -555,7 +562,8 @@ in
       # Environment of PID 1
       systemd.managerEnvironment = {
         # Doesn't contain systemd itself - everything works so it seems to use the compiled-in value for its tools
-        PATH = lib.makeBinPath config.system.fsPackages;
+        # util-linux is needed for the main fsck utility wrapping the fs-specific ones
+        PATH = lib.makeBinPath (config.system.fsPackages ++ [cfg.package.util-linux]);
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
         TZDIR = "/etc/zoneinfo";
         # If SYSTEMD_UNIT_PATH ends with an empty component (":"), the usual unit load path will be appended to the contents of the variable
@@ -581,7 +589,21 @@ in
     # Some overrides to upstream units.
     systemd.services."systemd-backlight@".restartIfChanged = false;
     systemd.services."systemd-fsck@".restartIfChanged = false;
-    systemd.services."systemd-fsck@".path = [ config.system.path ];
+    systemd.services."systemd-fsck@".path = [ pkgs.util-linux ] ++ config.system.fsPackages;
+    systemd.services."systemd-makefs@" = {
+      restartIfChanged = false;
+      path = [ pkgs.util-linux ] ++ config.system.fsPackages;
+      # Since there is no /etc/systemd/system/systemd-makefs@.service
+      # file, the units generated in /run/systemd/generator would
+      # override anything we put here. But by forcing the use of a
+      # drop-in in /etc, it does apply.
+      overrideStrategy = "asDropin";
+    };
+    systemd.services."systemd-mkswap@" = {
+      restartIfChanged = false;
+      path = [ pkgs.util-linux ];
+      overrideStrategy = "asDropin";
+    };
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
@@ -607,6 +629,10 @@ in
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.is64bit (lib.mkDefault 4194304);
 
     boot.kernelParams = optional (!cfg.enableUnifiedCgroupHierarchy) "systemd.unified_cgroup_hierarchy=0";
+
+    # Avoid potentially degraded system state due to
+    # "Userspace Out-Of-Memory (OOM) Killer was skipped because of a failed condition check (ConditionControlGroupController=v2)."
+    systemd.oomd.enable = mkIf (!cfg.enableUnifiedCgroupHierarchy) false;
 
     services.logrotate.settings = {
       "/var/log/btmp" = mapAttrs (_: mkDefault) {

@@ -56,6 +56,10 @@ in rec {
     url = "mirror://sourceforge/freedict/eng-fra.tar.gz";
     sha256 = "0fi6rrnbqnhc6lq8d0nmn30zdqkibrah0mxfg27hsn9z7alwbj3m";
   }) "eng-fra" "en_UK";
+  epo2eng = makeDictdDB (fetchurl {
+    url = "https://download.freedict.org/dictionaries/epo-eng/1.0.1/freedict-epo-eng-1.0.1.dictd.tar.xz";
+    sha256 = "095xwqfc43dnm0g74i83lg03542f064jy2xbn3qnjxiwysz9ksnz";
+  }) "epo-eng" "epo-eng" "eo";
   jpn2eng = makeDictdDB (fetchurl {
     url = let version = "0.1";
           in "mirror://sourceforge/freedict/jpn-eng/${version}/freedict-jpn-eng-${version}.dictd.tar.xz";

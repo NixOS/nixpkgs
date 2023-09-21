@@ -7,21 +7,13 @@ self: super:
 with self; with super; {
   attrs = callPackage ../development/python2-modules/attrs { };
 
-  bootstrapped-pip = callPackage ../development/python2-modules/bootstrapped-pip { };
+  backports-functools-lru-cache = callPackage ../development/python2-modules/backports-functools-lru-cache { };
 
-  boto3 = callPackage ../development/python2-modules/boto3 {};
+  bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
-  botocore = callPackage ../development/python2-modules/botocore {};
-
-  certifi = callPackage ../development/python2-modules/certifi { };
-
-  chardet = callPackage ../development/python2-modules/chardet { };
-
-  cheetah = callPackage ../development/python2-modules/cheetah { };
+  cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
 
   configparser = callPackage ../development/python2-modules/configparser { };
-
-  construct = callPackage ../development/python2-modules/construct { };
 
   contextlib2 = callPackage ../development/python2-modules/contextlib2 { };
 
@@ -33,25 +25,11 @@ with self; with super; {
 
   futures = callPackage ../development/python2-modules/futures { };
 
-  google-apputils = callPackage ../development/python2-modules/google-apputils { };
-
-  gtkme = callPackage ../development/python2-modules/gtkme { };
-
-  httpretty = callPackage ../development/python2-modules/httpretty { };
-
   hypothesis = callPackage ../development/python2-modules/hypothesis { };
-
-  idna = callPackage ../development/python2-modules/idna { };
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
-
-  marisa = callPackage ../development/python2-modules/marisa {
-    inherit (pkgs) marisa;
-  };
-
-  markdown = callPackage ../development/python2-modules/markdown { };
 
   markupsafe = callPackage ../development/python2-modules/markupsafe { };
 
@@ -59,45 +37,25 @@ with self; with super; {
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
-  mutagen = callPackage ../development/python2-modules/mutagen { };
-
-  numpy = callPackage ../development/python2-modules/numpy { };
+  # ninja python stub was created to help simplify python builds using PyPA's
+  # build tool in Python 3, but it does not yet support Python 2
+  ninja = pkgs.buildPackages.ninja;
 
   packaging = callPackage ../development/python2-modules/packaging { };
-
-  pillow = callPackage ../development/python2-modules/pillow {
-    inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
-    inherit (pkgs.xorg) libX11;
-  };
 
   pip = callPackage ../development/python2-modules/pip { };
 
   pluggy = callPackage ../development/python2-modules/pluggy { };
 
-  prettytable = callPackage ../development/python2-modules/prettytable { };
-
-  protobuf = callPackage ../development/python2-modules/protobuf {
-    disabled = isPyPy;
-    protobuf = pkgs.protobuf3_17; # last version compatible with Python 2
-  };
-
   pycairo = callPackage ../development/python2-modules/pycairo {
     inherit (pkgs.buildPackages) meson;
   };
 
-  pygments = callPackage ../development/python2-modules/Pygments { };
-
-  pygobject3 = callPackage ../development/python2-modules/pygobject {
-    inherit (pkgs) meson;
-  };
+  pygobject2 = callPackage ../development/python2-modules/pygobject { };
 
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
-
-  pyroma = callPackage ../development/python2-modules/pyroma { };
-
-  pysqlite = callPackage ../development/python2-modules/pysqlite { };
 
   pytest = pytest_4;
 
@@ -109,13 +67,7 @@ with self; with super; {
       };
     };
 
-  pytest-runner = callPackage ../development/python2-modules/pytest-runner { };
-
   pytest-xdist = callPackage ../development/python2-modules/pytest-xdist { };
-
-  pyyaml = callPackage ../development/python2-modules/pyyaml { };
-
-  qpid-python = callPackage ../development/python2-modules/qpid-python { };
 
   recoll = disabled super.recoll;
 
@@ -123,23 +75,23 @@ with self; with super; {
 
   rpm = disabled super.rpm;
 
-  s3transfer = callPackage ../development/python2-modules/s3transfer { };
-
   scandir = callPackage ../development/python2-modules/scandir { };
-
-  sequoia = disabled super.sequoia;
 
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
 
-  sphinxcontrib-websupport = callPackage ../development/python2-modules/sphinxcontrib-websupport { };
-
-  sphinx = callPackage ../development/python2-modules/sphinx { };
-
-  TurboCheetah = callPackage ../development/python2-modules/TurboCheetah { };
-
   typing = callPackage ../development/python2-modules/typing { };
+
+  six = super.six.overridePythonAttrs (_: {
+    doCheck = false;  # circular dependency with pytest
+  });
+
+  wcwidth = callPackage ../development/python2-modules/wcwidth {
+    inherit wcwidth;
+  };
+
+  wheel = callPackage ../development/python2-modules/wheel { };
 
   zeek = disabled super.zeek;
 

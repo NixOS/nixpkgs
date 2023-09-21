@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "1.3.224.1";
+  version = "12.3.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "sdk-${version}";
-    hash = "sha256-VEOENuy/VhYBBX52O4QHJFXUjsj6jL4vDD4cLDlQcIA=";
+    rev = version;
+    hash = "sha256-NP5ph598YSPbpzJJUR2r+EkqFmuItxgvOSDgDaN+Swg=";
   };
 
   # These get set at all-packages, keep onto them for child drvs
@@ -38,8 +38,11 @@ stdenv.mkDerivation rec {
 
   # Fix the paths in .pc, even though it's unclear if these .pc are really useful.
   postFixup = ''
-    substituteInPlace "$out"/lib/pkgconfig/SPIRV-Tools{,-shared}.pc \
+    substituteInPlace $out/lib/pkgconfig/*.pc \
       --replace '=''${prefix}//' '=/'
+
+    # add a symlink for backwards compatibility
+    ln -s $out/bin/glslang $out/bin/glslangValidator
   '';
 
   meta = with lib; {

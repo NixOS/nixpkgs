@@ -1,14 +1,20 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchgit, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, scorecard
+}:
 
 buildGoModule rec {
   pname = "scorecard";
-  version = "4.6.0";
+  version = "4.12.0";
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mEUJ42Da9br5BuZgtJBMeJGSESALoqaOwO/4Bvqj0IA=";
+    sha256 = "sha256-Ys7uO+xMSlcD8OGw7fV+aR0+Q1UXrxPKVLQbphV4rKk=";
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -22,7 +28,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-HvYUfr3ojmhO6AY6SypFOMP/vjlyLKunv1LvfLgBSjU=";
+  vendorHash = "sha256-L6HFZryniy3Gp8NKdjM4SK82ZG5eQPM7blkSE3YFhOw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -67,11 +73,17 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = scorecard;
+    command = "scorecard version";
+    version = "v${version}";
+  };
+
   meta = with lib; {
     homepage = "https://github.com/ossf/scorecard";
     changelog = "https://github.com/ossf/scorecard/releases/tag/v${version}";
     description = "Security health metrics for Open Source";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk developer-guy ];
   };
 }

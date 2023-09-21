@@ -1,18 +1,36 @@
-{ mkDerivation, lib, fetchurl, autoPatchelfHook, makeWrapper, xdg-utils, dbus
-, qtbase, qtwebkit, qtwebengine, qtx11extras, qtquickcontrols, getconf, glibc
-, libXrandr, libX11, libXext, libXdamage, libXtst, libSM, libXfixes, coreutils
+{ mkDerivation
+, lib
+, fetchurl
+, autoPatchelfHook
+, makeWrapper
+, xdg-utils
+, dbus
+, qtbase
+, qtwebengine
+, qtx11extras
+, getconf
+, glibc
+, libXrandr
+, libX11
+, libXext
+, libXdamage
+, libXtst
+, libSM
+, libXfixes
+, coreutils
 , wrapQtAppsHook
+, icu63
 }:
 
 mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [ "out" "dev" ];
-  version = "15.29.4";
+  version = "15.38.3";
 
   src = fetchurl {
-    url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-jkFqOtU+D62S7QmNPvz58Z8wJ79lkN11pWQrtNdD+Uk=";
+    url = "https://dl.tvcdn.de/download/linux/version_${lib.versions.major version}x/teamviewer_${version}_amd64.deb";
+    sha256 = "sha256-+GGpGV8rl15VQvPRA2PWngQI4VoxCrZ0ArEm9FgdOVE=";
   };
 
   unpackPhase = ''
@@ -21,8 +39,7 @@ mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ dbus getconf qtbase qtwebkit qtwebengine qtx11extras libX11 ];
-  propagatedBuildInputs = [ qtquickcontrols ];
+  buildInputs = [ qtbase qtwebengine qtx11extras icu63 ];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
@@ -30,9 +47,27 @@ mkDerivation rec {
     rm -R \
       $out/share/teamviewer/logfiles \
       $out/share/teamviewer/config \
-      $out/share/teamviewer/tv_bin/RTlib \
       $out/share/teamviewer/tv_bin/xdg-utils \
       $out/share/teamviewer/tv_bin/script/{teamviewer_setup,teamviewerd.sysv,teamviewerd.service,teamviewerd.*.conf,tv-delayed-start.sh}
+
+    # Teamviewer packages its own qt library files.
+    # Most of them can be replaced by nixpkgs libraries, but the following need to be used beginning at version 15.35.7
+    # because teamviewer will not start without them, either stalling at startup or even segfaulting. In the logfiles, some missing qt libraries
+    # can be observed, although they are present from nixpkgs. AutoPatchelfHook will automatically choose the included libraries, if present.
+    # See https://github.com/NixOS/nixpkgs/pull/202024
+
+    # delete all library files except "qt" folder
+    find $out/share/teamviewer/tv_bin/RTlib -depth  -maxdepth 1 ! -type d -execdir rm -rf {} +
+
+    # remove all other folders except "qml" and "plugins" from the qml directory
+    find $out/share/teamviewer/tv_bin/RTlib/qt -depth -maxdepth 1 -mindepth 1 -type d ! \( -name "qml" -o -name "plugins" \) -execdir rm -rf {} +
+
+    # keep "QtQuick" and "QtQuick.2" directory
+    find $out/share/teamviewer/tv_bin/RTlib/qt/qml -depth -maxdepth 1 -mindepth 1 -type d ! \( -name "QtQuick" -o -name "QtQuick.2" \) -execdir rm -rf {} +
+
+    # delete all folders except "platforms" from the plugins directory
+    # it contains libqxcb.so from qtbase which seems to be incompatible with our nixpkgs version
+    find $out/share/teamviewer/tv_bin/RTlib/qt/plugins -depth -maxdepth 1 -mindepth 1 -type d ! -name "platforms" -execdir rm -rf {} +
 
     ln -s $out/share/teamviewer/tv_bin/script/teamviewer $out/bin
     ln -s $out/share/teamviewer/tv_bin/teamviewerd $out/bin
@@ -79,7 +114,7 @@ mkDerivation rec {
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ getconf coreutils ]}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus icu63 ]}"
   ];
 
   postFixup = ''
@@ -100,6 +135,6 @@ mkDerivation rec {
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga jraygauthier ];
+    maintainers = with maintainers; [ jagajaga jraygauthier gador ];
   };
 }

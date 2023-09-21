@@ -16,8 +16,11 @@ let
   allowUnfree = config.allowUnfree
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
-  allowNonSource = config.allowNonSource or true
-    && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0";
+  allowNonSource = let
+    envVar = builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE";
+  in if envVar != ""
+     then envVar != "0"
+     else config.allowNonSource or true;
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];
@@ -54,9 +57,8 @@ let
 
   isMarkedBroken = attrs: attrs.meta.broken or false;
 
-  hasUnsupportedPlatform = attrs:
-    (!lib.lists.elem hostPlatform.system (attrs.meta.platforms or lib.platforms.all) ||
-      lib.lists.elem hostPlatform.system (attrs.meta.badPlatforms or []));
+  hasUnsupportedPlatform =
+    pkg: !(lib.meta.availableOn hostPlatform pkg);
 
   isMarkedInsecure = attrs: (attrs.meta.knownVulnerabilities or []) != [];
 
@@ -70,7 +72,7 @@ let
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
   # Check whether unfree packages are allowed and if not, whether the
-  # package has an unfree license and is not explicitely allowed by the
+  # package has an unfree license and is not explicitly allowed by the
   # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
     hasUnfreeLicense attrs &&
@@ -90,14 +92,14 @@ let
 
   hasNonSourceProvenance = attrs:
     (attrs ? meta.sourceProvenance) &&
-    isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
+    isNonSource attrs.meta.sourceProvenance;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
   # { pkgs, ... }:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
@@ -240,20 +242,20 @@ let
       remediationMsg = (builtins.getAttr reason remediation) attrs;
       msg = if inHydra then "Warning while evaluating ${getName attrs}: «${reason}»: ${errormsg}"
         else "Package ${getName attrs} in ${pos_str meta} ${errormsg}, continuing anyway."
-             + (if remediationMsg != "" then "\n${remediationMsg}" else "");
+             + (lib.optionalString (remediationMsg != "") "\n${remediationMsg}");
       isEnabled = lib.findFirst (x: x == reason) null showWarnings;
     in if isEnabled != null then builtins.trace msg true else true;
 
+  # Deep type-checking. Note that calling `type.check` is not enough: see `lib.mkOptionType`'s documentation.
+  # We don't include this in lib for now because this function is flawed: it accepts things like `mkIf true 42`.
+  typeCheck = type: value: let
+    merged = lib.mergeDefinitions [ ] type [
+      { file = lib.unknownModule; inherit value; }
+    ];
+    eval = builtins.tryEval (builtins.deepSeq merged.mergedValue null);
+  in eval.success;
 
-  # A shallow type check. We are using NixOS'
-  # option types here, which however have the major drawback
-  # of not providing full type checking (part of the type check is
-  # done by the module evaluation itself). Therefore, the checks
-  # will not recurse into attributes.
-  # We still provide the full type for documentation
-  # purposes and in the hope that they will be used eventually.
-  # See https://github.com/NixOS/nixpkgs/pull/191171 for an attempt
-  # to fix this, or mkOptionType in lib/types.nix for more information.
+  # TODO make this into a proper module and use the generic option documentation generation?
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
@@ -263,11 +265,14 @@ let
     homepage = either (listOf str) str;
     downloadPage = str;
     changelog = either (listOf str) str;
-    license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    sourceProvenance = either (listOf lib.types.attrs) lib.types.attrs;
-    maintainers = listOf (attrsOf str);
+    license = let
+      licenseType = either (attrsOf anything) str; # TODO disallow `str` licenses, use a module
+    in either licenseType (listOf licenseType);
+    sourceProvenance = listOf lib.types.attrs;
+    maintainers = listOf (attrsOf anything); # TODO use the maintainer type from lib/tests/maintainer-module.nix
     priority = int;
-    platforms = listOf str;
+    pkgConfigModules = listOf str;
+    platforms = listOf (either str (attrsOf anything));   # see lib.meta.platformMatch
     hydraPlatforms = listOf str;
     broken = bool;
     unfree = bool;
@@ -298,7 +303,7 @@ let
     executables = listOf str;
     outputsToInstall = listOf str;
     position = str;
-    available = bool;
+    available = unspecified;
     isBuildPythonPackage = platforms;
     schedulingPriority = int;
     isFcitxEngine = bool;
@@ -307,17 +312,17 @@ let
     badPlatforms = platforms;
   };
 
-  # WARNING: this does not check inner values of the attribute, like list elements or nested attributes.
-  # See metaTypes above and mkOptionType in lib/types.nix for more information
   checkMetaAttr = k: v:
     if metaTypes?${k} then
-      if metaTypes.${k}.check v then
+      if typeCheck metaTypes.${k} v then
         null
       else
-        "key 'meta.${k}' has a value of invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
+        "key 'meta.${k}' has invalid value; expected ${metaTypes.${k}.description}, got\n    ${
+          lib.generators.toPretty { indent = "    "; } v
+        }"
     else
-      "key 'meta.${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
-  checkMeta = meta: if config.checkMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
+      "key 'meta.${k}' is unrecognized; expected one of: \n  [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
+  checkMeta = meta: lib.optionals config.checkMeta (lib.remove null (lib.mapAttrsToList checkMetaAttr meta));
 
   checkOutputsToInstall = attrs: let
       expectedOutputs = attrs.meta.outputsToInstall or [];
@@ -330,25 +335,27 @@ let
   # Check if a derivation is valid, that is whether it passes checks for
   # e.g brokenness or license.
   #
-  # Return { valid: Bool } and additionally
+  # Return { valid: "yes", "warn" or "no" } and additionally
   # { reason: String; errormsg: String } if it is not valid, where
   # reason is one of "unfree", "blocklisted", "broken", "insecure", ...
+  # !!! reason strings are hardcoded into OfBorg, make sure to keep them in sync
   # Along with a boolean flag for each reason
   checkValidity = attrs:
-    {
+    # Check meta attribute types first, to make sure it is always called even when there are other issues
+    # Note that this is not a full type check and functions below still need to by careful about their inputs!
+    let res = checkMeta (attrs.meta or {}); in if res != [] then
+      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n  - " + x) res}\n";
+        unfree = false; nonSource = false; broken = false; unsupported = false; insecure = false;
+      }
+    else {
       unfree = hasUnfreeLicense attrs;
       nonSource = hasNonSourceProvenance attrs;
       broken = isMarkedBroken attrs;
       unsupported = hasUnsupportedPlatform attrs;
       insecure = isMarkedInsecure attrs;
-    }
-    // (
-    # Check meta attribute types first, to make sure it is always called even when there are other issues
-    # Note that this is not a full type check and functions below still need to by careful about their inputs!
-    let res = checkMeta (attrs.meta or {}); in if res != [] then
-      { valid = "no"; reason = "unknown-meta"; errormsg = "has an invalid meta attrset:${lib.concatMapStrings (x: "\n\t - " + x) res}"; }
+    } // (
     # --- Put checks that cannot be ignored here ---
-    else if checkOutputsToInstall attrs then
+    if checkOutputsToInstall attrs then
       { valid = "no"; reason = "broken-outputs"; errormsg = "has invalid meta.outputsToInstall"; }
 
     # --- Put checks that can be ignored here ---
@@ -361,7 +368,18 @@ let
     else if !allowBroken && attrs.meta.broken or false then
       { valid = "no"; reason = "broken"; errormsg = "is marked as broken"; }
     else if !allowUnsupportedSystem && hasUnsupportedPlatform attrs then
-      { valid = "no"; reason = "unsupported"; errormsg = "is not supported on ‘${hostPlatform.system}’"; }
+      let toPretty = lib.generators.toPretty {
+            allowPrettyValues = true;
+            indent = "  ";
+          };
+      in { valid = "no"; reason = "unsupported";
+           errormsg = ''
+             is not available on the requested hostPlatform:
+               hostPlatform.config = "${hostPlatform.config}"
+               package.meta.platforms = ${toPretty (attrs.meta.platforms or [])}
+               package.meta.badPlatforms = ${toPretty (attrs.meta.badPlatforms or [])}
+            '';
+         }
     else if !(hasAllowedInsecure attrs) then
       { valid = "no"; reason = "insecure"; errormsg = "is marked as insecure"; }
 
@@ -371,6 +389,55 @@ let
       { valid = "warn"; reason = "maintainerless"; errormsg = "has no maintainers"; }
     # -----
     else { valid = "yes"; });
+
+
+  # The meta attribute is passed in the resulting attribute set,
+  # but it's not part of the actual derivation, i.e., it's not
+  # passed to the builder and is not a dependency.  But since we
+  # include it in the result, it *is* available to nix-env for queries.
+  # Example:
+  #   meta = checkMeta.commonMeta { inherit validity attrs pos references; };
+  #   validity = checkMeta.assertValidity { inherit meta attrs; };
+  commonMeta = { validity, attrs, pos ? null, references ? [ ] }:
+    let
+      outputs = attrs.outputs or [ "out" ];
+    in
+    {
+      # `name` derivation attribute includes cross-compilation cruft,
+      # is under assert, and is sanitized.
+      # Let's have a clean always accessible version here.
+      name = attrs.name or "${attrs.pname}-${attrs.version}";
+
+      # If the packager hasn't specified `outputsToInstall`, choose a default,
+      # which is the name of `p.bin or p.out or p` along with `p.man` when
+      # present.
+      #
+      # If the packager has specified it, it will be overridden below in
+      # `// meta`.
+      #
+      #   Note: This default probably shouldn't be globally configurable.
+      #   Services and users should specify outputs explicitly,
+      #   unless they are comfortable with this default.
+      outputsToInstall =
+        let
+          hasOutput = out: builtins.elem out outputs;
+        in
+        [ (lib.findFirst hasOutput null ([ "bin" "out" ] ++ outputs)) ]
+        ++ lib.optional (hasOutput "man") "man";
+    }
+    // attrs.meta or { }
+    # Fill `meta.position` to identify the source location of the package.
+    // lib.optionalAttrs (pos != null) {
+      position = pos.file + ":" + toString pos.line;
+    } // {
+      # Expose the result of the checks for everyone to see.
+      inherit (validity) unfree broken unsupported insecure;
+
+      available = validity.valid != "no"
+      && (if config.checkMetaRecursively or false
+      then lib.all (d: d.meta.available or true) references
+      else true);
+    };
 
   assertValidity = { meta, attrs }: let
       validity = checkValidity attrs;
@@ -383,6 +450,7 @@ let
           warn = handleEvalWarning { inherit meta attrs; } { inherit (validity) reason errormsg; };
           yes = true;
         }.${validity.valid};
+
   };
 
-in assertValidity
+in { inherit assertValidity commonMeta; }

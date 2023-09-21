@@ -54,19 +54,6 @@ index a2376f8a4..98769e08f 100644
  
  typedef struct _TzDB TzDB;
  typedef struct _TzLocation TzLocation;
-diff --git a/panels/info-overview/cc-info-overview-panel.c b/panels/info-overview/cc-info-overview-panel.c
-index bd0e07762..0e71351f8 100644
---- a/panels/info-overview/cc-info-overview-panel.c
-+++ b/panels/info-overview/cc-info-overview-panel.c
-@@ -172,7 +172,7 @@ load_gnome_version (char **version,
-   gsize length;
-   g_autoptr(VersionData) data = NULL;
- 
--  if (!g_file_get_contents (DATADIR "/gnome/gnome-version.xml",
-+  if (!g_file_get_contents ("@gnome_desktop@/share/gnome/gnome-version.xml",
-                             &contents,
-                             &length,
-                             &error))
 diff --git a/panels/keyboard/cc-input-list-box.c b/panels/keyboard/cc-input-list-box.c
 index 6c2cb5614..8f57159cc 100644
 --- a/panels/keyboard/cc-input-list-box.c
@@ -179,6 +166,19 @@ index 86f53d4fc..0b052856f 100644
          argv[1] = NULL;
  
          envp = g_get_environ ();
+diff --git a/panels/user-accounts/user-utils.c b/panels/user-accounts/user-utils.c
+index 83d4cd091..e8784c722 100644
+--- a/panels/user-accounts/user-utils.c
++++ b/panels/user-accounts/user-utils.c
+@@ -486,7 +486,7 @@ is_valid_username_async (const gchar *username,
+          * future, so it would be nice to have some official way for this
+          * instead of relying on the current "--login" implementation.
+          */
+-        argv[0] = "/usr/sbin/usermod";
++        argv[0] = "@shadow@/bin/usermod";
+         argv[1] = "--login";
+         argv[2] = data->username;
+         argv[3] = "--";
 diff --git a/tests/datetime/test-endianess.c b/tests/datetime/test-endianess.c
 index 9cb92007a..84d2f0fa3 100644
 --- a/tests/datetime/test-endianess.c

@@ -1,7 +1,6 @@
 { stdenv
 , fetchurl
 , lib
-, unzip
 # To select only certain fonts, put a list of strings to `fonts`: every key in
 # ./shas.nix is an optional font
 , fonts ? []
@@ -32,21 +31,17 @@ let
     fName:
     fSha:
     (fetchurl {
-      url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.zip";
+      url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.tar.xz";
       sha256 = fSha;
     })
   ) selectedFontsShas;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
   inherit srcs;
   pname = "nerdfonts";
-  nativeBuildInputs = [
-    unzip
-  ];
   sourceRoot = ".";
-  unpackCmd = "unzip -o $curSrc";
   buildPhase = ''
     echo "selected fonts are ${toString selectedFonts}"
     ls *.otf *.ttf
@@ -59,6 +54,7 @@ stdenv.mkDerivation rec {
       rm -rfv $out/share/fonts/truetype/NerdFonts/*Windows\ Compatible.*
     ''}
   '';
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Iconic font aggregator, collection, & patcher. 3,600+ icons, 50+ patched fonts";
@@ -73,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     hydraPlatforms = []; # 'Output limit exceeded' on Hydra
   };
-}
+})

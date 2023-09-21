@@ -1,29 +1,48 @@
-{ lib, stdenv, fetchurl, zig, ncurses }:
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, zig_0_11
+, installShellFiles
+, testers
+, pie ? stdenv.isDarwin
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncdu";
-  version = "2.1.2";
+  version = "2.3";
 
   src = fetchurl {
-    url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ng1u8DYYo8MWcmv0khe37+Rc7HWLLJF86JLe10Myxtw=";
+    url = "https://dev.yorhel.nl/download/ncdu-${finalAttrs.version}.tar.gz";
+    hash = "sha256-u84dHHDxJHZxvk6iE12MUs0ppwivXtYs7Np9xqgACjw=";
   };
-
-  XDG_CACHE_HOME="Cache"; # FIXME This should be set in stdenv
 
   nativeBuildInputs = [
-    zig
+    zig_0_11.hook
+    installShellFiles
   ];
 
-  buildInputs = [ ncurses ];
+  buildInputs = [
+    ncurses
+  ];
 
-  PREFIX = placeholder "out";
+  zigBuildFlags = lib.optional pie "-Dpie=true";
 
-  meta = with lib; {
-    description = "Disk usage analyzer with an ncurses interface";
-    homepage = "https://dev.yorhel.nl/ncdu";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ pSub SuperSandro2000 ];
+  postInstall = ''
+    installManPage ncdu.1
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
   };
-}
+
+  meta = {
+    homepage = "https://dev.yorhel.nl/ncdu";
+    description = "Disk usage analyzer with an ncurses interface";
+    changelog = "https://dev.yorhel.nl/ncdu/changes2";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pSub rodrgz ];
+    inherit (zig_0_11.meta) platforms;
+    mainProgram = "ncdu";
+  };
+})

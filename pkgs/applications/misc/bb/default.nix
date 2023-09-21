@@ -18,10 +18,14 @@ stdenv.mkDerivation rec {
     sed -i -e '/^#include <malloc.h>$/d' *.c
   '';
 
+  # error: 'regparm' is not valid on this platform
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64)
+    "-D__STRICT_ANSI__";
+
   meta = with lib; {
     homepage    = "http://aa-project.sourceforge.net/bb";
     description = "AA-lib demo";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
     maintainers = [ maintainers.rnhmjoj ];
     platforms   = platforms.unix;
   };

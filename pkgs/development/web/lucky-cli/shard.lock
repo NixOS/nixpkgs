@@ -2,7 +2,7 @@ version: 2.0
 shards:
   ameba:
     git: https://github.com/crystal-ameba/ameba.git
-    version: 1.0.0
+    version: 1.1.0
 
   lucky_task:
     git: https://github.com/luckyframework/lucky_task.git
@@ -10,7 +10,7 @@ shards:
 
   nox:
     git: https://github.com/matthewmcgarvey/nox.git
-    version: 0.2.0
+    version: 0.2.2
 
   teeplate:
     git: https://github.com/luckyframework/teeplate.git

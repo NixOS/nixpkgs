@@ -28,7 +28,7 @@ in
     host = mkOption {
       type = types.str;
       description = mdDoc "External host name";
-      defaultText = lib.literalExpression "config.networking.domain or config.networking.hostName ";
+      defaultText = lib.literalExpression "config.networking.domain or config.networking.hostName";
       default =
         if domain == null then
           config.networking.hostName
@@ -44,7 +44,7 @@ in
 
     openFirewall = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = mdDoc "Whether to automatically open the specified ports in the firewall.";
     };
 

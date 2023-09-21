@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dex";
-  version = "2.35.1";
+  version = "2.37.0";
 
   src = fetchFromGitHub {
     owner = "dexidp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TiFjJCf9FBvVK6I7/zMOGCwOeVDbAwHWaizcbGSeTwA=";
+    sha256 = "sha256-2u9UHummUpPljTzPNCQfHwYVeWgDOGLcGx10aVHUAZM=";
   };
 
-  vendorSha256 = "sha256-ZJ7SO0lCJcDDWdf9/ecltNhs+zbqMXHqthQszJBTt5s=";
+  vendorHash = "sha256-sSn3qpbo04DjyPD+Ogx9JUdJ/++fNYb0bAmudQjchQ0=";
 
   subPackages = [
     "cmd/dex"
@@ -33,6 +33,5 @@ buildGoModule rec {
     homepage = "https://github.com/dexidp/dex";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley techknowlogick ];
-    platforms = platforms.unix;
   };
 }

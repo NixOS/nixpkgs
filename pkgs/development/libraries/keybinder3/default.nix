@@ -13,14 +13,25 @@ stdenv.mkDerivation rec {
     sha256 = "196ibn86j54fywfwwgyh89i9wygm4vh7ls19fn20vrnm6ijlzh9r";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    gnome.gnome-common
+    gtk-doc
+    gobject-introspection
+  ];
   buildInputs = [
-    gnome.gnome-common gtk-doc gtk3
-    libX11 libXext libXrender gobject-introspection
+    gtk3 libX11 libXext libXrender
   ];
 
   preConfigure = ''
-    ./autogen.sh --prefix="$out"
+    # NOCONFIGURE fixes 'If you meant to cross compile, use `--host'.'
+    NOCONFIGURE=1 ./autogen.sh --prefix="$out"
+    substituteInPlace ./configure \
+      --replace "dummy pkg-config" 'dummy ''${ac_tool_prefix}pkg-config'
   '';
 
   meta = with lib; {

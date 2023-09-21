@@ -3,12 +3,12 @@
 }:
 
 let
-  python3Env = python3.withPackages(ps: with ps; [ numpy ]);
+  python3Env = python3.withPackages(ps: with ps; [ numpy setuptools ]);
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "nov21a";
-  version = "20211101_a";
+  srcVersion = "aug23a";
+  version = "20230801_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "0fb6iqwh4hm7v7sib7sx98vxdavn3d6q2gq6y6vxg2z29g31f8g2";
+    sha256 = "sha256-jlyv2K1V+510C4uLek4oofm13d40nGJ46wqjW+tjfq4=";
   };
 
   nativeBuildInputs = [ pkg-config groff perl getopt gfortran which ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   NIX_LDFLAGS = lib.optionalString stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
@@ -38,19 +38,19 @@ stdenv.mkDerivation rec {
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
 
+  userExec = "astro class greg imager mapping sic";
+
   postInstall=''
     mkdir -p $out/bin
     cp -a ../gildas-exe-${srcVersion}/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
-    cp admin/wrapper.sh $out/bin/gildas-wrapper.sh
-    chmod 755 $out/bin/gildas-wrapper.sh
-    for i in $out/libexec/bin/* ; do
-      ln -s $out/bin/gildas-wrapper.sh $out/bin/$(basename "$i")
+    for i in ${userExec} ; do
+      cp admin/wrapper.sh $out/bin/$i
+      chmod 755 $out/bin/$i
     done
   '';
 
   meta = {
-    broken = stdenv.isDarwin;
     description = "Radioastronomy data analysis software";
     longDescription = ''
       GILDAS is a collection of state-of-the-art software
@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.bzizou lib.maintainers.smaret ];
     platforms = lib.platforms.all;
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 
 }

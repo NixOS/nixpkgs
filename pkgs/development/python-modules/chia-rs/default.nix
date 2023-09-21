@@ -7,14 +7,19 @@
 
 buildPythonPackage rec {
   pname = "chia-rs";
-  version = "0.1.5";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "chia-network";
     repo = "chia_rs";
     rev = version;
-    sha256 = "sha256-4TIRj7FMIArI/EvDARReC4MqDG44zjn/MKoUHAVqq5s=";
+    hash = "sha256-kjURkzynrrb5iD5s77Q3nETt71SCGGazm/2lt9HS5JU=";
   };
+
+  patches = [
+    # undo a hack from upstream that confuses our build hook
+    ./fix-build.patch
+  ];
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
@@ -34,7 +39,7 @@ buildPythonPackage rec {
     touch wheel/Cargo.lock
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

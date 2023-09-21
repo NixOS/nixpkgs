@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kalbasit ];
+    knownVulnerabilities = [ "CVE-2020-13151" ];
   };
 }

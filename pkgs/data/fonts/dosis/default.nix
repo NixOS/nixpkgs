@@ -1,19 +1,24 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-fetchFromGitHub rec {
-  name = "dosis-1.007";
+stdenvNoCC.mkDerivation rec {
+  pname = "dosis";
+  version = "1.007";
 
-  owner = "impallari";
-  repo = "Dosis";
-  rev = "12df1e13e58768f20e0d48ff15651b703f9dd9dc";
+  src = fetchFromGitHub {
+    owner = "impallari";
+    repo = "Dosis";
+    rev = "12df1e13e58768f20e0d48ff15651b703f9dd9dc";
+    hash = "sha256-rZ49uNBlI+NWkiZykpyXzOonXlbVB6Vf6a/8A56Plj4=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     find . -name '*.otf' -exec install -m444 -Dt $out/share/fonts/opentype {} \;
-    install -m444 -Dt $out/share/doc/${name} README.md FONTLOG.txt
-  '';
+    install -m444 -Dt $out/share/doc/${pname}-${version} README.md FONTLOG.txt
 
-  sha256 = "0vz25w45i8flfvppymr5h83pa2n1r37da20v7691p44018fdsdny";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A very simple, rounded, sans serif family";

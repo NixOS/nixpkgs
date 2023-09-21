@@ -25,9 +25,11 @@ in {
         default = {
           homeserver = {
             address = "http://localhost:8008";
+            software = "standard";
           };
 
           appservice = rec {
+            id = "facebook";
             address = "http://${hostname}:${toString port}";
             hostname = "localhost";
             port = 29319;
@@ -95,7 +97,7 @@ in {
         type = types.nullOr types.path;
         default = null;
         description = lib.mdDoc ''
-          File containing environment variables to be passed to the mautrix-telegram service.
+          File containing environment variables to be passed to the mautrix-facebook service.
 
           Any config variable can be overridden by setting `MAUTRIX_FACEBOOK_SOME_KEY` to override the `some.key` variable.
         '';
@@ -170,7 +172,7 @@ in {
 
     services.mautrix-facebook = {
       registrationData = {
-        id = "mautrix-facebook";
+        id = cfg.settings.appservice.id;
 
         namespaces = {
           users = [

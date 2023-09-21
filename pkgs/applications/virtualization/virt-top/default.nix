@@ -10,18 +10,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-IKIkqzx7YWki0L6D5WbwQiVWJfDFGdI2nsGgg212CcE=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     getopt
+    ocamlPackages.ocaml
+    ocamlPackages.findlib
   ];
-
   buildInputs = with ocamlPackages; [
+    ocamlPackages.ocaml
     calendar
     curses
-    findlib
     gettext-stub
-    ocaml
     ocaml_libvirt
   ] ++ [ libxml2 ];
 

@@ -1,48 +1,73 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy27
-, pytest
-, mock
+, datalad
 , dcm2niix
-, nibabel
-, pydicom
-, nipype
 , dcmstack
 , etelemetry
+, fetchPypi
 , filelock
+, git
+, nibabel
+, nipype
+, pydicom
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, versioningit
+, wheel
 }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
   pname = "heudiconv";
+  version = "0.13.1";
+  format = "pyproject";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    #sha256 = "0gzqqa4pzhywdbvks2qjniwhr89sgipl5k7h9hcjs7cagmy9gb05";
-    sha256 = "1r6y93125mc84c09970ifps5xysp8ffp62rwlzili3q2k1m3fh4v";
+    hash = "sha256-UUBRC6RToj4XVbJnxG+EKdue4NVpTAW31RNm9ieF1lU=";
   };
 
   postPatch = ''
-    # doesn't exist as a separate package with Python 3:
-    substituteInPlace heudiconv/info.py --replace "'pathlib'," ""
+    substituteInPlace pyproject.toml \
+      --replace "versioningit ~=" "versioningit >="
   '';
 
-  propagatedBuildInputs = [
-    dcm2niix nibabel pydicom nipype dcmstack etelemetry filelock
+  nativeBuildInputs = [
+    setuptools
+    versioningit
+    wheel
   ];
 
-  checkInputs = [ dcm2niix pytest mock ];
+  propagatedBuildInputs = [
+    nibabel
+    pydicom
+    nipype
+    dcmstack
+    etelemetry
+    filelock
+  ];
 
-  # test_monitor and test_dlad require 'inotify' and 'datalad' respectively,
-  # and these aren't in Nixpkgs
-  checkPhase = "pytest -k 'not test_dlad and not test_monitor' heudiconv/tests";
+  nativeCheckInputs = [
+    datalad
+    dcm2niix
+    pytestCheckHook
+    git
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [
+    "heudiconv"
+  ];
 
   meta = with lib; {
     homepage = "https://heudiconv.readthedocs.io";
     description = "Flexible DICOM converter for organizing imaging data";
+    changelog = "https://github.com/nipy/heudiconv/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

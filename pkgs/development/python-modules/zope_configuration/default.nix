@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_i18nmessageid
+, zope-i18nmessageid
 , zope_schema
 , zope_testrunner
 , manuel
@@ -13,12 +13,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-giPqSvU5hmznqccwrH6xjlHRfrUVk6p3c7NZPI1tdgg=";
+    hash = "sha256-giPqSvU5hmznqccwrH6xjlHRfrUVk6p3c7NZPI1tdgg=";
   };
 
-  checkInputs = [ zope_testrunner manuel ];
+  nativeCheckInputs = [ zope_testrunner manuel ];
 
-  propagatedBuildInputs = [ zope_i18nmessageid zope_schema ];
+  propagatedBuildInputs = [ zope-i18nmessageid zope_schema ];
 
   # Need to investigate how to run the tests with zope-testrunner
   doCheck = false;

@@ -1,10 +1,10 @@
-{ lib, python3Packages, jpegoptim, optipng }:
+{ lib, python3Packages, fetchPypi, jpegoptim, optipng }:
 
 python3Packages.buildPythonApplication rec {
   pname = "sacad";
   version = "2.4.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-KLVkyiXjpqskM67W9uPl9aPKc3pYMu0nAfwI0OpOniE=";
   };

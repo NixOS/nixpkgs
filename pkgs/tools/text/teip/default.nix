@@ -1,28 +1,50 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles, perl }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, perl
+, stdenv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "teip";
-  version = "2.0.0";
+  version = "2.3.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-fME+tS8wcC6mk5FjuDJpFWWhIsiXV4kuybSqj9awFUM=";
+  src = fetchFromGitHub {
+    owner = "greymd";
+    repo = "teip";
+    rev = "v${version}";
+    hash = "sha256-09IKAM1ha40CvF5hdQIlUab7EBBFourC70LAagrs5+4=";
   };
 
-  cargoSha256 = "sha256-wrfS+OEYF60nOhtrnmk7HKqVuAJQFaiT0GM+3OoZ3Wk=";
+  cargoHash = "sha256-cBFczgvLja6upuPnXphG2d9Rf1ZpNAVh16NHAHfXxHg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
+
+  # Cargo.lock is outdated
+  preConfigure = ''
+    cargo update --offline
+  '';
+
+  # tests are locale sensitive
+  preCheck = ''
+    export LANG=${if stdenv.isDarwin then "en_US.UTF-8" else "C.UTF-8"}
+  '';
 
   postInstall = ''
     installManPage man/teip.1
-    installShellCompletion --zsh completion/zsh/_teip
+    installShellCompletion \
+      --bash completion/bash/teip \
+      --fish completion/fish/teip.fish \
+      --zsh completion/zsh/_teip
   '';
 
   meta = with lib; {
     description = "A tool to bypass a partial range of standard input to any command";
     homepage = "https://github.com/greymd/teip";
+    changelog = "https://github.com/greymd/teip/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

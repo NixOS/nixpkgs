@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.2";
+  version = "2.4.4";
   pname = "weather";
 
   src = fetchurl {
     url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-qJl5rFDk31Fm+tmR6+Iiihcx6qyd9alHz2L672pNJsc=";
+    sha256 = "sha256-uBwcntmLmIAztbIOHEDx0Y0/kcoJqAHqBOM2yBiRHrU=";
   };
 
   nativeBuildInputs = [

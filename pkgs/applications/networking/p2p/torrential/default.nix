@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , nix-update-script
 , desktop-file-utils
@@ -7,11 +8,11 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook4
 , curl
 , dht
 , glib
-, gtk3
+, gtk4
 , libb64
 , libevent
 , libgee
@@ -25,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "torrential";
-  version = "2.0.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "davidmhewitt";
     repo = "torrential";
     rev = version;
-    sha256 = "sha256-W9Is6l8y5XSlPER2BLlf+cyMPPdEQuaP4xM59VhfDE0=";
+    sha256 = "sha256-uHc/VNtbhetmGyuhynZH1TvxJscVX17eWO6dzX6Ft3A=";
   };
 
   nativeBuildInputs = [
@@ -41,14 +42,14 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     curl
     dht
     glib
-    gtk3
+    gtk4
     libb64
     libevent
     libgee
@@ -57,18 +58,19 @@ stdenv.mkDerivation rec {
     libutp
     miniupnpc
     openssl
-    pantheon.granite
+    pantheon.granite7
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
+
+    substituteInPlace meson/post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

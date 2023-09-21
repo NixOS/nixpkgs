@@ -9,8 +9,6 @@ set -euo pipefail
 trap 'echo "Error at ${BASH_SOURCE[0]}:$LINENO"' ERR
 
 pkgName=$1
-depsFile=$2
-customFlags=$3
 
 : ${getVersionFromTags:=}
 : ${refetch:=}
@@ -42,7 +40,7 @@ fi
 if [[ $newVersion == $oldVersion && ! $refetch ]]; then
   echo "nixpkgs already has the latest version $newVersion"
   echo "Run this script with env var refetch=1 to re-verify the content hash via GPG"
-  echo "and to recreate $(basename "$depsFile"). This is useful for reviewing a version update."
+  echo "and to recreate deps.nix. This is useful for reviewing a version update."
   exit 0
 fi
 
@@ -75,5 +73,4 @@ fi
 echo
 
 # Create deps file
-storeSrc="$(nix-build "$nixpkgs" -A $pkgName.src --no-out-link)"
-. "$scriptDir"/create-deps.sh "$storeSrc" "$depsFile" "$customFlags"
+$(nix-build "$nixpkgs" -A $pkgName.fetch-deps --no-out-link)

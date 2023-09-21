@@ -1,7 +1,7 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "tuxguitar";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ asbachb ];
+    maintainers = [ ];
   };
 
   nodes.machine = { config, pkgs, ... }: {

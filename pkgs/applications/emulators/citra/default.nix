@@ -1,42 +1,42 @@
 { branch
-, libsForQt5
+, qt6Packages
 , fetchFromGitHub
 , fetchurl
 }:
 
 let
-  # Fetched from https://api.citra-emu.org/gamedb, last updated 2022-05-02
+  # Fetched from https://api.citra-emu.org/gamedb
   # Please make sure to update this when updating citra!
   compat-list = fetchurl {
     name = "citra-compat-list";
-    url = "https://web.archive.org/web/20220502114622/https://api.citra-emu.org/gamedb/";
-    sha256 = "sha256-blIlaYaUQjw7Azgg+Dd7ZPEQf+ddZMO++Yxinwe+VG0=";
+    url = "https://web.archive.org/web/20230807103651/https://api.citra-emu.org/gamedb/";
+    hash = "sha256-J+zqtWde5NgK2QROvGewtXGRAWUTNSKHNMG6iu9m1fU=";
   };
 in {
-  nightly = libsForQt5.callPackage ./generic.nix rec {
+  nightly = qt6Packages.callPackage ./generic.nix rec {
     pname = "citra-nightly";
-    version = "1765";
+    version = "1963";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-nightly";
       rev = "nightly-${version}";
-      sha256 = "0d3dfh63cmsy5idbypdz3ibydmb4a35sfv7qmxxlcpc390pp9cvq";
+      sha256 = "0ggi1l8327s43xaxs616g0s9vmal6q7vsv69bn07gp71gchhcmyi";
       fetchSubmodules = true;
     };
 
     inherit branch compat-list;
   };
 
-  canary = libsForQt5.callPackage ./generic.nix rec {
+  canary = qt6Packages.callPackage ./generic.nix rec {
     pname = "citra-canary";
-    version = "2146";
+    version = "2573";
 
     src = fetchFromGitHub {
       owner = "citra-emu";
       repo = "citra-canary";
       rev = "canary-${version}";
-      sha256 = "1wnym0nklngimf5gaaa2703nz4g5iy572wlgp88h67rrh9b4f04r";
+      sha256 = "sha256-tQJ3WcqGcnW9dOiwDrBgL0n3UNp1DGQ/FjCR28Xjdpc=";
       fetchSubmodules = true;
     };
 

@@ -1,33 +1,70 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , stdenv
-, CoreServices
-, Security
+, darwin
+  # tests
+, ruff-lsp
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.0.69";
+  version = "0.0.290";
 
   src = fetchFromGitHub {
-    owner = "charliermarsh";
+    owner = "astral-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5TAuWBb4RJGO7prliR+c1wAOmTRaJ/erwK9ISQTiaNA=";
+    hash = "sha256-w2RqT0n++ggeNoEcrZSAF0056ctDBKGkV+GAscQcwOc=";
   };
 
-  cargoSha256 = "sha256-bv51Hj/JMfFr9SLGQxAoWDCeLr4cI6jpYxnnncAQ6kU=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "unicode_names2-0.6.0" = "sha256-eWg9+ISm/vztB0KIdjhq5il2ZnwGJQCleCYfznCI3Wg=";
+    };
+  };
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    CoreServices
-    Security
+    darwin.apple_sdk.frameworks.CoreServices
   ];
+
+  cargoBuildFlags = [ "--package=ruff_cli" ];
+  cargoTestFlags = cargoBuildFlags;
+
+  preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    # See https://github.com/jemalloc/jemalloc/issues/1997
+    # Using a value of 48 should work on both emulated and native x86_64-darwin.
+    export JEMALLOC_SYS_WITH_LG_VADDR=48
+  '';
+
+  # tests expect no colors
+  preCheck = ''
+    export NO_COLOR=1
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd ruff \
+      --bash <($out/bin/ruff generate-shell-completion bash) \
+      --fish <($out/bin/ruff generate-shell-completion fish) \
+      --zsh <($out/bin/ruff generate-shell-completion zsh)
+  '';
+
+  passthru.tests = {
+    inherit ruff-lsp;
+  };
 
   meta = with lib; {
     description = "An extremely fast Python linter";
-    homepage = "https://github.com/charliermarsh/ruff";
+    homepage = "https://github.com/astral-sh/ruff";
+    changelog = "https://github.com/astral-sh/ruff/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "ruff";
     maintainers = with maintainers; [ figsoda ];
   };
 }

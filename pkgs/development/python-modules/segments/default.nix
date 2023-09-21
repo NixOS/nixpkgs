@@ -32,7 +32,7 @@ buildPythonPackage rec {
     clldutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     pytest-mock

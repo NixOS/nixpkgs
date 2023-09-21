@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, backendStdenv, fetchFromGitHub
 , cmake, addOpenGLRunpath
 , cudatoolkit
 , cutensor
@@ -35,13 +35,13 @@ let
 in
 
 {
-  cublas = stdenv.mkDerivation (commonAttrs // {
+  cublas = backendStdenv.mkDerivation (commonAttrs // {
     pname = "cuda-library-samples-cublas";
 
     src = "${src}/cuBLASLt";
   });
 
-  cusolver = stdenv.mkDerivation (commonAttrs // {
+  cusolver = backendStdenv.mkDerivation (commonAttrs // {
     pname = "cuda-library-samples-cusolver";
 
     src = "${src}/cuSOLVER";
@@ -49,10 +49,12 @@ in
     sourceRoot = "cuSOLVER/gesv";
   });
 
-  cutensor = stdenv.mkDerivation (commonAttrs // {
+  cutensor = backendStdenv.mkDerivation (commonAttrs // {
     pname = "cuda-library-samples-cutensor";
 
     src = "${src}/cuTENSOR";
+
+    buildInputs = [ cutensor ];
 
     cmakeFlags = [
       "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"

@@ -6,15 +6,19 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
-  version = "8.0.30";
+  version = "8.0.34";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-yYjVxrqaVmkqbNbpgTRltfyTaO1LRh35cFmi/BYMi4Q=";
+    hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+
+  patches = [
+    ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+  ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''

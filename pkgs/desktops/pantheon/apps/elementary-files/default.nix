@@ -7,7 +7,6 @@
 , meson
 , ninja
 , vala
-, python3
 , desktop-file-utils
 , libcanberra
 , gtk3
@@ -29,32 +28,31 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.1.4";
+  version = "6.5.0";
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    # Fix terminal critical warnings and possible crash when removing bookmark
-    # https://github.com/elementary/files/pull/2062
-    (fetchpatch {
-      url = "https://github.com/elementary/files/commit/daa5ab244b45aafdd7be49eb0bd6f052ded5b5a7.patch";
-      sha256 = "sha256-crGvbo9Ye9656cOy6YqNreMLE2pEMO0Rg8oz81OfJkw=";
-    })
-  ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-3j0b+hExUe6OBmEHQVmd2uBkbOGxMdpgDmymuCiph80=";
+    sha256 = "sha256-E1e2eXGpycl2VXEUvUir5G3MRLz/4TQMvmOuWgU9JNc=";
   };
+
+  patches = [
+    # meson: Don't run gtk-update-icon-cache
+    # https://github.com/elementary/files/pull/2294
+    (fetchpatch {
+      url = "https://github.com/elementary/files/commit/758ece9fb29eb4a25f47065710dad4ac547ca2ce.patch";
+      hash = "sha256-+OASDsOPH0g5Cyxw4JmVxA70zQHhcpqLMKKYP4VLTO0=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook
   ];
@@ -77,15 +75,8 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
-
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

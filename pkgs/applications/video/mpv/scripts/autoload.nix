@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation rec {
   passthru.scriptName = "autoload.lua";
 
   meta = {
-    description = "This script automatically loads playlist entries before and after the the currently played file";
+    description = "This script automatically loads playlist entries before and after the currently played file";
     homepage = "https://github.com/mpv-player/mpv/blob/master/TOOLS/lua/autoload.lua";
     maintainers = [ lib.maintainers.dawidsowa ];
     license = lib.licenses.gpl2Plus;

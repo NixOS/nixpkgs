@@ -1,18 +1,17 @@
-{ lib, fetchFromGitHub, buildDunePackage, cmdliner, ppxlib }:
+{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, cmdliner, ppxlib }:
 
 buildDunePackage rec {
   pname = "bisect_ppx";
-  version = "2.8.1";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "bisect_ppx";
     rev = version;
-    sha256 = "sha256-pOeeSxzUF1jXQjA71atSZALdgQ2NB9qpKo5iaDnPwhQ=";
+    hash = "sha256-3qXobZLPivFDtls/3WNqDuAgWgO+tslJV47kjQPoi6o=";
   };
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.11";
 
   buildInputs = [
     cmdliner

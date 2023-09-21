@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "libgen-cli";
-  version = "1.0.9";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ga9C4h1dcjIdsLJLgZ9s1Fnq4ejI5q0gUtapg/FpLcM=";
+    sha256 = "sha256-EscXn+di1BXJSoc1Eml654/ieRuIOfryd5b7f+vcAOA=";
   };
 
-  vendorSha256 = "sha256-uHu0BfF26COL/S/yswdcVJVYwozl8Pl3RXHSctYQi+s=";
+  vendorHash = "sha256-WAGFZ2HKnhS5gStJW8orF45vsrHaTmUomzbHqFuAsFE=";
 
   doCheck = false;
 

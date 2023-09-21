@@ -6,19 +6,32 @@
 , prompt-toolkit
 , pycryptodome
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pykoplenti";
   version = "1.0.0";
+  format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "stegm";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "12nsyz8a49vhby1jp991vaky82fm93jrgcsjzwa2rixwg1zql4sw";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XBOKf3i8xywU/1Kzl+VI1Qnkp9ohpSuDX3AnotD32oo=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  postPatch = ''
+    # remove with 1.1.0
+    substituteInPlace setup.cfg \
+      --replace 'version = unreleased' 'version = ${version}'
+  '';
 
   propagatedBuildInputs = [
     aiohttp

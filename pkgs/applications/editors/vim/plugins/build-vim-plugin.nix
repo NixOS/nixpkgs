@@ -1,48 +1,56 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , rtpPath
-, vim
-, vimCommandCheckHook
-, vimGenDocHook
-, neovimRequireCheckHook
 , toVimPlugin
 }:
 
 rec {
-  buildVimPlugin = attrs@{
-    name ? "${attrs.pname}-${attrs.version}",
-    namePrefix ? "vimplugin-",
-    src,
-    unpackPhase ? "",
-    configurePhase ? "",
-    buildPhase ? "",
-    preInstall ? "",
-    postInstall ? "",
-    path ? ".",
-    addonInfo ? null,
-    ...
-  }:
-    let drv = stdenv.mkDerivation (attrs // {
-      name = namePrefix + name;
+  addRtp = drv:
+    drv // {
+      rtp = lib.warn "`rtp` attribute is deprecated, use `outPath` instead." drv.outPath;
+      overrideAttrs = f: addRtp (drv.overrideAttrs f);
+    };
 
-      inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
+  buildVimPlugin =
+    { name ? "${attrs.pname}-${attrs.version}"
+    , namePrefix ? "vimplugin-"
+    , src
+    , unpackPhase ? ""
+    , configurePhase ? ""
+    , buildPhase ? ""
+    , preInstall ? ""
+    , postInstall ? ""
+    , path ? "."
+    , addonInfo ? null
+    , meta ? { }
+    , ...
+    }@attrs:
+    let
+      drv = stdenv.mkDerivation (attrs // {
+        name = namePrefix + name;
 
-      installPhase = ''
-        runHook preInstall
+        inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 
-        target=$out/${rtpPath}/${path}
-        mkdir -p $out/${rtpPath}
-        cp -r . $target
+        installPhase = ''
+          runHook preInstall
 
-        runHook postInstall
-      '';
-    });
-    in toVimPlugin(drv.overrideAttrs(oa: {
-      rtp = "${drv}";
-    }));
+          target=$out/${rtpPath}/${path}
+          mkdir -p $out/${rtpPath}
+          cp -r . $target
+
+          runHook postInstall
+        '';
+
+        meta = {
+          platforms = lib.platforms.all;
+        } // meta;
+      });
+    in
+    addRtp (toVimPlugin drv);
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     # vim plugins may override this
     buildPhase = ":";
-    configurePhase =":";
+    configurePhase = ":";
   } // attrs);
 }

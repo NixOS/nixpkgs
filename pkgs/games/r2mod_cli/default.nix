@@ -8,20 +8,20 @@
 
 stdenv.mkDerivation rec {
   pname = "r2mod_cli";
-  version = "1.2.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "Foldex";
     repo = "r2mod_cli";
     rev = "v${version}";
-    sha256 = "sha256-FS9P/uTZU4d6zpM3TlEW6i6PLGHxqqO2fc8D7VsPCig=";
+    sha256 = "sha256-VtJtAyojFOkMLBfpQ6N+8fDDkcJtVCflWjwsdq8OD0w=";
   };
 
   buildInputs = [ bashInteractive ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
 
   postInstall = ''
     wrapProgram $out/bin/r2mod --prefix PATH : "${lib.makeBinPath [ jq p7zip ]}";

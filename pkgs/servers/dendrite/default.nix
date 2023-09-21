@@ -1,23 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub
+{ lib, buildGoModule, fetchFromGitHub, nix-update-script
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
-  version = "0.10.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
-    sha256 = "sha256-o+vdxjxbgTPhXtmjrMXf/kBGYaaF3nvVnrG+PGnaM70=";
+    hash = "sha256-I8k3E/7RXJFIaEX1Zw6oFDT6UkQvZBZuyTxUZZQYr+s=";
   };
 
-  vendorSha256 = "sha256-sd2frDxtMd0YUVCCQGaNYU7KopZQC1Ld5OHnjttTrgA=";
+  vendorHash = "sha256-H2wtGjGTzqN8OXAI2ksCBgTJsmJYLQu5aFu9OP03/DA=";
 
-  # some tests are racy, re-enable once upstream has fixed them
-  doCheck = false;
+  subPackages = [
+    # The server
+    "cmd/dendrite"
+    # admin tools
+    "cmd/create-account"
+    "cmd/generate-config"
+    "cmd/generate-keys"
+    "cmd/resolve-state"
+    ## curl, but for federation requests, only useful for developers
+    # "cmd/furl"
+    ## an internal tool for upgrading ci tests, only relevant for developers
+    # "cmd/dendrite-upgrade-tests"
+    ## tech demos
+    # "cmd/dendrite-demo-pinecone"
+    # "cmd/dendrite-demo-yggdrasil"
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     postgresqlTestHook
     postgresql
   ];
@@ -33,10 +47,14 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) dendrite;
   };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex" "v(.+)" ];
+  };
 
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";
     description = "A second-generation Matrix homeserver written in Go";
+    changelog = "https://github.com/matrix-org/dendrite/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     platforms = platforms.unix;

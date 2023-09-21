@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "unstable-2022-06-03";
+  version = "unstable-2023-07-23";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "03da251c76ea1005b42625825c39181e12d75693";
-    sha256 = "0l5ysp4x5wzrn48sfjv3rciqhq5ldcmk86b9x6j9775zjj7yw8hw";
+    rev = "9b6fe04a741a6b0a1edc5ca134927784bff033a5";
+    hash = "sha256-OzaIy+WTrljwAhC73wEIRUXrkz1NrGNJAS3zofQyV6E=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -30,12 +30,12 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "The newest Realtek rtlwifi codes";
+    description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";
     homepage = "https://github.com/lwfinger/rtw88";
     license = with licenses; [ bsd3 gpl2Only ];
     maintainers = with maintainers; [ tvorog atila ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.14";
+    broken = kernel.kernelOlder "4.20";
     priority = -1;
   };
 }

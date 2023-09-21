@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Sholofly";
     repo = "geocachingapi-python";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-C4nj4KFEwsY5V5f0Q1x+9sD8Ihz5m7b3jg2pOyB/pDg=";
+    hash = "sha256-C4nj4KFEwsY5V5f0Q1x+9sD8Ihz5m7b3jg2pOyB/pDg=";
   };
 
   nativeBuildInputs = [

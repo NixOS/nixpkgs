@@ -1,24 +1,24 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, gtk, glib, pcre, libappindicator, libpthreadstubs, libXdmcp
+, gtk, glib, pcre, libappindicator, libpthreadstubs, xorg
 , libxkbcommon, libepoxy, at-spi2-core, dbus, libdbusmenu
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "gromit-mpx";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
     rev = version;
-    sha256 = "sha256-2inmcKSdvHs7WaU095liH12Og9ezsNSs2qygltWOclw=";
+    sha256 = "sha256-nbSyWcccu07FZbvOESFhlnuxgTNgJ+/6ujVQvEyQGGo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
   buildInputs = [
     gtk glib pcre libappindicator libpthreadstubs
-    libXdmcp libxkbcommon libepoxy at-spi2-core
+    xorg.libXdmcp libxkbcommon libepoxy at-spi2-core
     dbus libdbusmenu
   ];
 

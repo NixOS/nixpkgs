@@ -62,6 +62,8 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `config` is used to specify the configuration of the containers that will be started off the built image in Docker. The available options are listed in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
+- `architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
+
 - `diskSize` is used to specify the disk size of the VM used to build the image in megabytes. By default it's 1024 MiB.
 
 - `buildVMMemorySize` is used to specify the memory size of the VM to build the image in megabytes. By default it's 512 MiB.
@@ -141,7 +143,9 @@ Create a Docker image with many of the store paths being on their own layer to i
 
 `config` _optional_
 
-: Run-time configuration of the container. A full list of the options are available at in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
+`architecture` is _optional_ and used to specify the image architecture, this is useful for multi-architecture builds that don't need cross compiling. If not specified it will default to `hostPlatform`.
+
+: Run-time configuration of the container. A full list of the options available is in the [Docker Image Specification v1.2.0](https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions).
 
     *Default:* `{}`
 
@@ -245,10 +249,10 @@ Its parameters are described in the example below:
 pullImage {
   imageName = "nixos/nix";
   imageDigest =
-    "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
+    "sha256:473a2b527958665554806aea24d0131bacec46d23af09fef4598eeab331850fa";
   finalImageName = "nix";
-  finalImageTag = "1.11";
-  sha256 = "0mqjy3zq2v6rrhizgb9nvhczl87lcfphq9601wcprdika2jz7qh8";
+  finalImageTag = "2.11.1";
+  sha256 = "sha256-qvhj+Hlmviz+KEBVmsyPIzTB3QlVAFzwAY1zDPIBGxc=";
   os = "linux";
   arch = "x86_64";
 }
@@ -394,3 +398,142 @@ buildImage {
   };
 }
 ```
+
+## buildNixShellImage {#ssec-pkgs-dockerTools-buildNixShellImage}
+
+Create a Docker image that sets up an environment similar to that of running `nix-shell` on a derivation.
+When run in Docker, this environment somewhat resembles the Nix sandbox typically used by `nix-build`, with a major difference being that access to the internet is allowed.
+It additionally also behaves like an interactive `nix-shell`, running things like `shellHook` and setting an interactive prompt.
+If the derivation is fully buildable (i.e. `nix-build` can be used on it), running `buildDerivation` inside such a Docker image will build the derivation, with all its outputs being available in the correct `/nix/store` paths, pointed to by the respective environment variables like `$out`, etc.
+
+::: {.warning}
+The behavior doesn't match `nix-shell` or `nix-build` exactly and this function is known not to work correctly for e.g. fixed-output derivations, content-addressed derivations, impure derivations and other special types of derivations.
+:::
+
+### Arguments {#ssec-pkgs-dockerTools-buildNixShellImage-arguments}
+
+`drv`
+
+: The derivation on which to base the Docker image.
+
+    Adding packages to the Docker image is possible by e.g. extending the list of `nativeBuildInputs` of this derivation like
+
+    ```nix
+    buildNixShellImage {
+      drv = someDrv.overrideAttrs (old: {
+        nativeBuildInputs = old.nativeBuildInputs or [] ++ [
+          somethingExtra
+        ];
+      });
+      # ...
+    }
+    ```
+
+    Similarly, you can extend the image initialization script by extending `shellHook`
+
+`name` _optional_
+
+: The name of the resulting image.
+
+    *Default:* `drv.name + "-env"`
+
+`tag` _optional_
+
+: Tag of the generated image.
+
+    *Default:* the resulting image derivation output path's hash
+
+`uid`/`gid` _optional_
+
+: The user/group ID to run the container as. This is like a `nixbld` build user.
+
+    *Default:* 1000/1000
+
+`homeDirectory` _optional_
+
+: The home directory of the user the container is running as
+
+    *Default:* `/build`
+
+`shell` _optional_
+
+: The path to the `bash` binary to use as the shell. This shell is started when running the image.
+
+    *Default:* `pkgs.bashInteractive + "/bin/bash"`
+
+`command` _optional_
+
+: Run this command in the environment of the derivation, in an interactive shell. See the `--command` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
+
+    *Default:* (none)
+
+`run` _optional_
+
+: Same as `command`, but runs the command in a non-interactive shell instead. See the `--run` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
+
+    *Default:* (none)
+
+### Example {#ssec-pkgs-dockerTools-buildNixShellImage-example}
+
+The following shows how to build the `pkgs.hello` package inside a Docker container built with `buildNixShellImage`.
+
+```nix
+with import <nixpkgs> {};
+dockerTools.buildNixShellImage {
+  drv = hello;
+}
+```
+
+Build the derivation:
+
+```console
+nix-build hello.nix
+```
+
+    these 8 derivations will be built:
+      /nix/store/xmw3a5ln29rdalavcxk1w3m4zb2n7kk6-nix-shell-rc.drv
+    ...
+    Creating layer 56 from paths: ['/nix/store/crpnj8ssz0va2q0p5ibv9i6k6n52gcya-stdenv-linux']
+    Creating layer 57 with customisation...
+    Adding manifests...
+    Done.
+    /nix/store/cpyn1lc897ghx0rhr2xy49jvyn52bazv-hello-2.12-env.tar.gz
+
+Load the image:
+
+```console
+docker load -i result
+```
+
+    0d9f4c4cd109: Loading layer [==================================================>]   2.56MB/2.56MB
+    ...
+    ab1d897c0697: Loading layer [==================================================>]  10.24kB/10.24kB
+    Loaded image: hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+
+Run the container:
+
+```console
+docker run -it hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+```
+
+    [nix-shell:/build]$
+
+In the running container, run the build:
+
+```console
+buildDerivation
+```
+
+    unpacking sources
+    unpacking source archive /nix/store/8nqv6kshb3vs5q5bs2k600xpj5bkavkc-hello-2.12.tar.gz
+    ...
+    patching script interpreter paths in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12
+    checking for references to /build/ in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12...
+
+Check the build result:
+
+```console
+$out/bin/hello
+```
+
+    Hello, world!

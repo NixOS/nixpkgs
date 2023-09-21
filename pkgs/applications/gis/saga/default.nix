@@ -1,13 +1,13 @@
 { stdenv
-, mkDerivation
 , lib
 , fetchurl
 # native
-, autoreconfHook
+, cmake
+, desktopToDarwinBundle
 , pkg-config
 # not native
 , gdal
-, wxGTK31-gtk3
+, wxGTK32
 , proj
 , dxflib
 , curl
@@ -20,7 +20,6 @@
 , Cocoa
 , unixODBC
 , poppler
-, hdf4
 , hdf5
 , netcdf
 , sqlite
@@ -30,26 +29,22 @@
 , fftw
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "saga";
-  version = "7.9.1";
+  version = "9.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/saga-gis/SAGA%20-%20${lib.versions.major version}/SAGA%20-%20${version}/saga-${version}.tar.gz";
-    sha256 = "sha256-Jq1LhBSeJuq9SlNl/ko5I8+jnjZnLMfGYNNUnzVWo7w=";
+    url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
+    sha256 = "sha256-VXupgjoiexZZ1kLXAbbQMW7XQ7FWjd1ejZPeeTffUhM=";
   };
 
+  sourceRoot = "saga-${version}/saga-gis";
+
   nativeBuildInputs = [
-    # Upstream's gnerated ./configure is not reliable
-    autoreconfHook
+    cmake
     pkg-config
-  ];
-  configureFlags = [
-    "--with-system-svm"
-    # hdf is no detected otherwise
-    "HDF5_LIBS=-l${hdf5}/lib"
-    "HDF5_CFLAGS=-I${hdf5.dev}/include"
-  ];
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+
   buildInputs = [
     curl
     dxflib
@@ -57,7 +52,7 @@ mkDerivation rec {
     libsvm
     hdf5
     gdal
-    wxGTK31-gtk3
+    wxGTK32
     proj
     libharu
     opencv
@@ -78,15 +73,15 @@ mkDerivation rec {
     sqlite
   ];
 
-  enableParallelBuilding = true;
-
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
+  cmakeFlags = [
+    "-DOpenMP_SUPPORT=${if stdenv.isDarwin then "OFF" else "ON"}"
+  ];
 
   meta = with lib; {
     description = "System for Automated Geoscientific Analyses";
-    homepage = "http://www.saga-gis.org";
+    homepage = "https://saga-gis.sourceforge.io";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ michelk mpickering ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ michelk mpickering ];
     platforms = with platforms; unix;
   };
 }

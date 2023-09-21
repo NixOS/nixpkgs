@@ -8,24 +8,26 @@
 , pytestCheckHook
 , json5
 , babel
-, jupyter_server
+, jupyter-server
 , tomli
 , openapi-core
-, pytest-timeout
-, pytest-tornasync
+, pytest-jupyter
+, requests-mock
 , ruamel-yaml
+, strict-rfc3339
 , importlib-metadata
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.15.2";
+  version = "2.24.0";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wLzdRgbmQObxbSNs6sVTNtyL+Yy7zgZ68nUkzML7JkA=";
+    hash = "sha256-Tm+Z4KVXm7vDLkScTbsDlWHU8aeCfVczJz7VZzjyHwc=";
   };
 
   nativeBuildInputs = [
@@ -37,25 +39,24 @@ buildPythonPackage rec {
     jsonschema
     json5
     babel
-    jupyter_server
+    jupyter-server
     tomli
-  ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     openapi-core
     pytestCheckHook
-    pytest-timeout
-    pytest-tornasync
+    pytest-jupyter
+    requests-mock
     ruamel-yaml
+    strict-rfc3339
   ];
 
   postPatch = ''
-    # translation tests try to install additional packages into read only paths
-    rm -r tests/translations/
+    sed -i "/timeout/d" pyproject.toml
   '';
-
-  # https://github.com/jupyterlab/jupyterlab_server/blob/v2.15.2/pyproject.toml#L61
-  doCheck = false;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -67,12 +68,24 @@ buildPythonPackage rec {
     "-W ignore::DeprecationWarning"
   ];
 
+  disabledTestPaths = [
+    "tests/test_settings_api.py"
+    "tests/test_themes_api.py"
+    "tests/test_translation_api.py"
+    "tests/test_workspaces_api.py"
+  ];
+
+  disabledTests = [
+    "test_get_listing"
+  ];
+
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A set of server components for JupyterLab and JupyterLab like applications";
-    homepage = "https://jupyter.org";
+    homepage = "https://jupyterlab-server.readthedocs.io/";
+    changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = lib.teams.jupyter.members;
   };
 }

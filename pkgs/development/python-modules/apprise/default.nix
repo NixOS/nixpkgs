@@ -7,31 +7,29 @@
 , gntp
 , installShellFiles
 , markdown
-, mock
 , paho-mqtt
+, pytest-mock
+, pytest-xdist
 , pytestCheckHook
 , pythonOlder
 , pyyaml
 , requests
 , requests-oauthlib
-, six
-, slixmpp
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "1.1.0";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-92eoBwp3fcKb9zCBeeC2ndLeZeZpM+2JsZmef/5yO2A=";
+    hash = "sha256-PFgRQQd6EBeQ7eDKsW+ig60DKpsvl9xtNWX7LZGBP9c=";
   };
 
   nativeBuildInputs = [
-    babel
     installShellFiles
   ];
 
@@ -42,20 +40,25 @@ buildPythonPackage rec {
     pyyaml
     requests
     requests-oauthlib
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    babel
     gntp
-    mock
     paho-mqtt
+    pytest-mock
+    pytest-xdist
     pytestCheckHook
-    slixmpp
   ];
 
   disabledTests = [
     "test_apprise_cli_nux_env"
     "test_plugin_mqtt_general"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
+    "test/test_plugin_bulksms.py"
   ];
 
   postInstall = ''
@@ -69,7 +72,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
-    license = licenses.mit;
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
   };
 }

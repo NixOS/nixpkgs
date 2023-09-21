@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , alsa-lib
 , cmake
 , doxygen
@@ -12,6 +13,7 @@
 , libXrandr
 , pkg-config
 , zlib
+, Accelerate
 , AGL
 , Cocoa
 , Foundation
@@ -19,14 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenshot-audio";
-  version = "0.2.2";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${version}";
-    sha256 = "sha256-XtwTZsj/L/sw/28E7Qr5UyghGlBFFXvbmZLGXBB8vg0=";
+    sha256 = "sha256-PLpB9sy9xehipN5S9okCHm1mPm5MaZMVaFqCBvFUiTw=";
   };
+
+  patches = [
+    # https://forum.juce.com/t/juce-and-macos-11-arm/40285/24
+    ./undef-fpret-on-aarch64-darwin.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,18 +44,19 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isLinux [
     alsa-lib
   ] ++ (if stdenv.isDarwin then [
-      AGL
-      Cocoa
-      Foundation
-      zlib
-    ] else [
-      libX11
-      libXcursor
-      libXext
-      libXft
-      libXinerama
-      libXrandr
-    ]);
+    Accelerate
+    AGL
+    Cocoa
+    Foundation
+    zlib
+  ] else [
+    libX11
+    libXcursor
+    libXext
+    libXft
+    libXinerama
+    libXrandr
+  ]);
 
   doCheck = false;
 

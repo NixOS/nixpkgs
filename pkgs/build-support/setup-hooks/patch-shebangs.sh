@@ -11,11 +11,12 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 # Run patch shebangs on a directory or file.
 # Can take multiple paths as arguments.
-# patchShebangs [--build | --host] PATH...
+# patchShebangs [--build | --host | --update] [--] PATH...
 
 # Flags:
 # --build : Lookup commands available at build-time
 # --host  : Lookup commands available at runtime
+# --update : Update shebang paths that are in Nix store
 
 # Example use cases,
 # $ patchShebangs --host /nix/store/...-hello-1.0/bin
@@ -23,14 +24,35 @@ fixupOutputHooks+=(patchShebangsAuto)
 
 patchShebangs() {
     local pathName
+    local update
 
-    if [[ "$1" == "--host" ]]; then
-        pathName=HOST_PATH
-        shift
-    elif [[ "$1" == "--build" ]]; then
-        pathName=PATH
-        shift
-    fi
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+        --host)
+            pathName=HOST_PATH
+            shift
+            ;;
+        --build)
+            pathName=PATH
+            shift
+            ;;
+        --update)
+            update=true
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*|--*)
+            echo "Unknown option $1 supplied to patchShebangs" >&2
+            return 1
+            ;;
+        *)
+            break
+            ;;
+        esac
+    done
 
     echo "patching script interpreter paths in $@"
     local f
@@ -53,7 +75,7 @@ patchShebangs() {
         read -r oldInterpreterLine < "$f"
         read -r oldPath arg0 args <<< "${oldInterpreterLine:2}"
 
-        if [[ -z "$pathName" ]]; then
+        if [[ -z "${pathName:-}" ]]; then
             if [[ -n $strictDeps && $f == "$NIX_STORE"* ]]; then
                 pathName=HOST_PATH
             else
@@ -62,15 +84,21 @@ patchShebangs() {
         fi
 
         if [[ "$oldPath" == *"/bin/env" ]]; then
+            if [[ $arg0 == "-S" ]]; then
+                arg0=${args%% *}
+                args=${args#* }
+                newPath="$(PATH="${!pathName}" command -v "env" || true)"
+                args="-S $(PATH="${!pathName}" command -v "$arg0" || true) $args"
+
             # Check for unsupported 'env' functionality:
-            # - options: something starting with a '-'
+            # - options: something starting with a '-' besides '-S'
             # - environment variables: foo=bar
-            if [[ $arg0 == "-"* || $arg0 == *"="* ]]; then
+            elif [[ $arg0 == "-"* || $arg0 == *"="* ]]; then
                 echo "$f: unsupported interpreter directive \"$oldInterpreterLine\" (set dontPatchShebangs=1 and handle shebang patching yourself)" >&2
                 exit 1
+            else
+                newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
             fi
-
-            newPath="$(PATH="${!pathName}" command -v "$arg0" || true)"
         else
             if [[ -z $oldPath ]]; then
                 # If no interpreter is specified linux will use /bin/sh. Set
@@ -87,7 +115,7 @@ patchShebangs() {
         newInterpreterLine="$newPath $args"
         newInterpreterLine=${newInterpreterLine%${newInterpreterLine##*[![:space:]]}}
 
-        if [[ -n "$oldPath" && "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ]]; then
+        if [[ -n "$oldPath" && ( "$update" == true || "${oldPath:0:${#NIX_STORE}}" != "$NIX_STORE" ) ]]; then
             if [[ -n "$newPath" && "$newPath" != "$oldPath" ]]; then
                 echo "$f: interpreter directive changed from \"$oldInterpreterLine\" to \"$newInterpreterLine\""
                 # escape the escape chars so that sed doesn't interpret them
@@ -100,8 +128,6 @@ patchShebangs() {
             fi
         fi
     done < <(find "$@" -type f -perm -0100 -print0)
-
-    stopNest
 }
 
 patchShebangsAuto () {

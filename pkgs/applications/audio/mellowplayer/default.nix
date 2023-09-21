@@ -10,6 +10,7 @@
 , qtquickcontrols2
 , qttools
 , qtwebengine
+, stdenv
 }:
 
 mkDerivation rec {
@@ -61,6 +62,7 @@ mkDerivation rec {
 
   meta = with lib; {
     inherit (qtbase.meta) platforms;
+    broken = stdenv.isDarwin; # test build fails, but the project is not maintained anymore
 
     description = "Cloud music integration for your desktop";
     homepage = "https://gitlab.com/ColinDuquesnoy/MellowPlayer";

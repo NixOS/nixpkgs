@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, tcl, tk, Cocoa, xlibsWrapper, makeWrapper }:
+{ lib, stdenv, fetchurl, tcl, tk, Cocoa, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "3.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ tcl tk xlibsWrapper ]
+  buildInputs = [ tcl tk ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   hardeningDisable = [ "format" ];
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/wishwn --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
     wrapProgram $out/bin/wnb    --prefix PATH : "$out/bin"
   '';
 
@@ -50,5 +49,6 @@ stdenv.mkDerivation rec {
     };
     maintainers = [ ];
     platforms = with lib.platforms; linux ++ darwin;
+    mainProgram = "wn";
   };
 }

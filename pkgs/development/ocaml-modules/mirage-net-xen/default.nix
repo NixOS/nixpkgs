@@ -20,6 +20,8 @@ buildDunePackage {
     meta
     ;
 
+  duneVersion = "3";
+
   nativeBuildInputs = [
     ppx_sexp_conv
   ];

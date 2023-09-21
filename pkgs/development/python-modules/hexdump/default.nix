@@ -6,12 +6,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-14GkOwwWrOP5Nmqt5z6K06e9UTfVjwtFqy0/VIdvINs=";
+    hash = "sha256-14GkOwwWrOP5Nmqt5z6K06e9UTfVjwtFqy0/VIdvINs=";
     extension = "zip";
   };
 
   # the source zip has no prefix, so everything gets unpacked to /build otherwise
-  sourceRoot = "source";
   unpackPhase = ''
     runHook preUnpack
     mkdir source
@@ -20,6 +19,8 @@ buildPythonPackage rec {
     popd
     runHook postUnpack
   '';
+
+  sourceRoot = "source";
 
   pythonImportsCheck = [ "hexdump" ];
 

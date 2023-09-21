@@ -16,7 +16,7 @@ buildPythonPackage rec {
     fetchSubmodules = false;
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

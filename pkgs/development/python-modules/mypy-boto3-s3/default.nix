@@ -1,6 +1,7 @@
 { lib
 , boto3
 , buildPythonPackage
+, cython_3
 , fetchPypi
 , pythonOlder
 , typing-extensions
@@ -8,18 +9,23 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-s3";
-  version = "1.24.76";
+  version = "1.28.52";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ciU2L9bw2JS1IWFf4SSVWFb/jx7NrlN1rCCzNL60rZw=";
+    hash = "sha256-F5y3VCzF72VvEyOtUesjevy6d9Hl7QfSGgE/427/uLI=";
   };
+
+  nativeBuildInputs = [
+    cython_3
+  ];
 
   propagatedBuildInputs = [
     boto3
+  ] ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
   ];
 
@@ -31,9 +37,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Type annotations for boto3";
-    homepage = "https://vemel.github.io/boto3_stubs_docs/mypy_boto3_s3/";
-    license = with licenses; [ bsd3 ];
+    description = "Type annotations for boto3.s3";
+    homepage = "https://github.com/youtype/mypy_boto3_builder";
+    changelog = "https://github.com/youtype/mypy_boto3_builder/releases/tag/${version}";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
 }

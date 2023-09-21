@@ -1,4 +1,4 @@
-{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv, tiling_wm ? false }:
+{ callPackage, makeFontsConf, gnome2, buildFHSEnv, tiling_wm ? false }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -6,20 +6,20 @@ let
       fontDirectories = [];
     };
     inherit (gnome2) GConf gnome_vfs;
-    inherit buildFHSUserEnv;
+    inherit buildFHSEnv;
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2021.3.1.16"; # "Android Studio Dolphin (2021.3.1)"
-    sha256Hash = "GnJbWFeG9DuUQzbK9wM2BEbj9LXm4jQFf/Eh5Q75HZo=";
+    version = "2022.3.1.19"; # "Android Studio Giraffe (2022.3.1)"
+    sha256Hash = "sha256-JQYl3KsYPgxo6/Eu+KUir3NpUn128e/HBPk8BbAv+p4=";
   };
   betaVersion = {
-    version = "2022.1.1.12"; # "Android Studio Electric Eel (2022.1.1) Beta 2"
-    sha256Hash = "8iSFPH0PTQkzV1t8bEq7CBtOU8pzdnD/PrpVcgPnO6Q=";
+    version = "2023.1.1.17"; # "Android Studio Hedgehog (2023.3.1)"
+    sha256Hash = "sha256-0sN+B1RxxlbgxXrEs8gft4qjvIYtazJS6DllHZ2h768=";
   };
-  latestVersion = { # canary & dev
-    version = "2022.2.1.2"; # "Android Studio Flamingo (2022.2.1) Canary 2"
-    sha256Hash = "hlHlgyl9If2LH4aExpElx0rqmWeoFX+qx4w6RRb5e8U=";
+  latestVersion = {
+    version = "2023.2.1.1"; # Android Studio Iguana (2023.2.1) Canary 1
+    sha256Hash = "sha256-7ub9GkJd9J37nG2drXOuU7r4w/gI+m9nlWANqIk2ddk=";
   };
 in {
   # Attributes are named by their corresponding release channels

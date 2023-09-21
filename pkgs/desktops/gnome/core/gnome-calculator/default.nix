@@ -11,12 +11,12 @@
 , gtk4
 , glib
 , gtksourceview5
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
 , gnome
 , mpfr
 , gmp
-, libsoup
+, libsoup_3
 , libmpc
 , libadwaita
 , gsettings-desktop-schemas
@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calculator";
-  version = "42.2";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calculator/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "M9qxvKQ2WNZlIJWLD2dMsK0xhc/TDBLkWef2lIHFxqA=";
+    sha256 = "FOdjMp+IMJp+FSeA1XNhtUMQDjI5BrNOBlX9wxW3EEM=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    wrapGAppsHook
+    wrapGAppsHook4
     gobject-introspection # for finding vapi files
   ];
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     gmp
     libgee
     gsettings-desktop-schemas
-    libsoup
+    libsoup_3
     libmpc
     libadwaita
   ];
@@ -76,6 +76,6 @@ stdenv.mkDerivation rec {
     description = "Application that solves mathematical equations and is suitable as a default application in a Desktop environment";
     maintainers = teams.gnome.members;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

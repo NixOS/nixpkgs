@@ -9,19 +9,21 @@
 , inkscape
 , imagemagick
 , pytestCheckHook
+, typed-ast
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.22.0";
+  version = "0.23.3";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-LUuClvBJeOxtrg+S+lYLpP7T1RXCy5dNjFYQO3H54QE=";
+    hash = "sha256-4b+jmR56y2VV0XxD6FCmNpDB0UKH9+FqcTQuU2jRCXo=";
   };
 
   postPatch = ''
@@ -40,20 +42,33 @@ buildPythonPackage rec {
     ./remove-black-requirement.patch
   ];
 
-  checkInputs = [ pytestCheckHook ];
-
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
-  nativeBuildInputs = [ inkscape imagemagick jinja2 poetry-core round ];
+  nativeBuildInputs = [
+    inkscape imagemagick
+    jinja2
+    poetry-core
+    round
+  ];
 
-  propagatedBuildInputs = [ graphviz ];
+  propagatedBuildInputs = [
+    graphviz
+    typed-ast
+  ];
 
-  pythonImportsCheck = [ "diagrams" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "diagrams"
+  ];
 
   meta = with lib; {
     description = "Diagram as Code";
-    homepage    = "https://diagrams.mingrammer.com/";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ addict3d ];
+    homepage = "https://diagrams.mingrammer.com/";
+    changelog = "https://github.com/mingrammer/diagrams/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ addict3d ];
   };
 }

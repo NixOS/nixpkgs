@@ -22,6 +22,7 @@ let
       ln -s ${wpConfig hostName cfg} $out/share/wordpress/wp-config.php
       # symlink uploads directory
       ln -s ${cfg.uploadsDir} $out/share/wordpress/wp-content/uploads
+      ln -s ${cfg.fontsDir} $out/share/wordpress/wp-content/fonts
 
       # https://github.com/NixOS/nixpkgs/pull/53399
       #
@@ -31,35 +32,59 @@ let
       # Since hard linking directories is not allowed, copying is the next best thing.
 
       # copy additional plugin(s), theme(s) and language(s)
-      ${concatMapStringsSep "\n" (theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${theme.name}") cfg.themes}
-      ${concatMapStringsSep "\n" (plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${plugin.name}") cfg.plugins}
+      ${concatStringsSep "\n" (mapAttrsToList (name: theme: "cp -r ${theme} $out/share/wordpress/wp-content/themes/${name}") cfg.themes)}
+      ${concatStringsSep "\n" (mapAttrsToList (name: plugin: "cp -r ${plugin} $out/share/wordpress/wp-content/plugins/${name}") cfg.plugins)}
       ${concatMapStringsSep "\n" (language: "cp -r ${language} $out/share/wordpress/wp-content/languages/") cfg.languages}
     '';
   };
 
-  wpConfig = hostName: cfg: pkgs.writeText "wp-config-${hostName}.php" ''
-    <?php
-      define('DB_NAME', '${cfg.database.name}');
-      define('DB_HOST', '${cfg.database.host}:${if cfg.database.socket != null then cfg.database.socket else toString cfg.database.port}');
-      define('DB_USER', '${cfg.database.user}');
-      ${optionalString (cfg.database.passwordFile != null) "define('DB_PASSWORD', file_get_contents('${cfg.database.passwordFile}'));"}
-      define('DB_CHARSET', 'utf8');
-      $table_prefix  = '${cfg.database.tablePrefix}';
+  mergeConfig = cfg: {
+    # wordpress is installed onto a read-only file system
+    DISALLOW_FILE_EDIT = true;
+    AUTOMATIC_UPDATER_DISABLED = true;
+    DB_NAME = cfg.database.name;
+    DB_HOST = "${cfg.database.host}:${if cfg.database.socket != null then cfg.database.socket else toString cfg.database.port}";
+    DB_USER = cfg.database.user;
+    DB_CHARSET = "utf8";
+    # Always set DB_PASSWORD even when passwordFile is not set. This is the
+    # default Wordpress behaviour.
+    DB_PASSWORD =  if (cfg.database.passwordFile != null) then { _file = cfg.database.passwordFile; } else "";
+  } // cfg.settings;
 
-      require_once('${stateDir hostName}/secret-keys.php');
+  wpConfig = hostName: cfg: let
+    conf_gen = c: mapAttrsToList (k: v: "define('${k}', ${mkPhpValue v});") cfg.mergedConfig;
+  in pkgs.writeTextFile {
+    name = "wp-config-${hostName}.php";
+    text = ''
+      <?php
+        $table_prefix  = '${cfg.database.tablePrefix}';
 
-      # wordpress is installed onto a read-only file system
-      define('DISALLOW_FILE_EDIT', true);
-      define('AUTOMATIC_UPDATER_DISABLED', true);
+        require_once('${stateDir hostName}/secret-keys.php');
 
-      ${cfg.extraConfig}
+        ${cfg.extraConfig}
+        ${concatStringsSep "\n" (conf_gen cfg.mergedConfig)}
 
-      if ( !defined('ABSPATH') )
-        define('ABSPATH', dirname(__FILE__) . '/');
+        if ( !defined('ABSPATH') )
+          define('ABSPATH', dirname(__FILE__) . '/');
 
-      require_once(ABSPATH . 'wp-settings.php');
-    ?>
-  '';
+        require_once(ABSPATH . 'wp-settings.php');
+      ?>
+    '';
+    checkPhase = "${pkgs.php81}/bin/php --syntax-check $target";
+  };
+
+  mkPhpValue = v: let
+    isHasAttr = s: isAttrs v && hasAttr s v;
+  in
+    if isString v then escapeShellArg v
+    # NOTE: If any value contains a , (comma) this will not get escaped
+    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isInt v then toString v
+    else if isBool v then boolToString v
+    else if isHasAttr "_file" then "trim(file_get_contents(${lib.escapeShellArg v._file}))"
+    else if isHasAttr "_raw" then v._raw
+    else abort "The Wordpress config value ${lib.generators.toPretty {} v} can not be encoded."
+  ;
 
   secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
   secretsScript = hostStateDir: ''
@@ -76,7 +101,7 @@ let
     fi
   '';
 
-  siteOpts = { lib, name, ... }:
+  siteOpts = { lib, name, config, ... }:
     {
       options = {
         package = mkOption {
@@ -95,63 +120,55 @@ let
           '';
         };
 
-        plugins = mkOption {
-          type = types.listOf types.path;
-          default = [];
+        fontsDir = mkOption {
+          type = types.path;
+          default = "/var/lib/wordpress/${name}/fonts";
           description = lib.mdDoc ''
-            List of path(s) to respective plugin(s) which are copied from the 'plugins' directory.
+            This directory is used to download fonts from a remote location, e.g.
+            to host google fonts locally.
+          '';
+        };
+
+        plugins = mkOption {
+          type = with types; coercedTo
+            (listOf path)
+            (l: warn "setting this option with a list is deprecated"
+              listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
+            (attrsOf path);
+          default = {};
+          description = lib.mdDoc ''
+            Path(s) to respective plugin(s) which are copied from the 'plugins' directory.
 
             ::: {.note}
             These plugins need to be packaged before use, see example.
             :::
           '';
           example = literalExpression ''
-            let
-              # Wordpress plugin 'embed-pdf-viewer' installation example
-              embedPdfViewerPlugin = pkgs.stdenv.mkDerivation {
-                name = "embed-pdf-viewer-plugin";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/plugin/embed-pdf-viewer.2.0.3.zip";
-                  sha256 = "1rhba5h5fjlhy8p05zf0p14c9iagfh96y91r36ni0rmk6y891lyd";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ embedPdfViewerPlugin ]
+            {
+              inherit (pkgs.wordpressPackages.plugins) embed-pdf-viewer-plugin;
+            }
           '';
         };
 
         themes = mkOption {
-          type = types.listOf types.path;
-          default = [];
+          type = with types; coercedTo
+            (listOf path)
+            (l: warn "setting this option with a list is deprecated"
+              listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
+            (attrsOf path);
+          default = { inherit (pkgs.wordpressPackages.themes) twentytwentythree; };
+          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentythree; }";
           description = lib.mdDoc ''
-            List of path(s) to respective theme(s) which are copied from the 'theme' directory.
+            Path(s) to respective theme(s) which are copied from the 'theme' directory.
 
             ::: {.note}
             These themes need to be packaged before use, see example.
             :::
           '';
           example = literalExpression ''
-            let
-              # Let's package the responsive theme
-              responsiveTheme = pkgs.stdenv.mkDerivation {
-                name = "responsive-theme";
-                # Download the theme from the wordpress site
-                src = pkgs.fetchurl {
-                  url = "https://downloads.wordpress.org/theme/responsive.3.14.zip";
-                  sha256 = "0rjwm811f4aa4q43r77zxlpklyb85q08f9c8ns2akcarrvj5ydx3";
-                };
-                # We need unzip to build this package
-                nativeBuildInputs = [ pkgs.unzip ];
-                # Installing simply means copying all files to the output directory
-                installPhase = "mkdir -p $out; cp -R * $out/";
-              };
-            # And then pass this theme to the themes list like this:
-            in [ responsiveTheme ]
+            {
+              inherit (pkgs.wordpressPackages.themes) responsive-theme;
+            }
           '';
         };
 
@@ -273,6 +290,42 @@ let
           '';
         };
 
+        settings = mkOption {
+          type = types.attrsOf types.anything;
+          default = {};
+          description = lib.mdDoc ''
+            Structural Wordpress configuration.
+            Refer to <https://developer.wordpress.org/apis/wp-config-php>
+            for details and supported values.
+          '';
+          example = literalExpression ''
+            {
+              WP_DEFAULT_THEME = "twentytwentytwo";
+              WP_SITEURL = "https://example.org";
+              WP_HOME = "https://example.org";
+              WP_DEBUG = true;
+              WP_DEBUG_DISPLAY = true;
+              WPLANG = "de_DE";
+              FORCE_SSL_ADMIN = true;
+              AUTOMATIC_UPDATER_DISABLED = true;
+            }
+          '';
+        };
+
+        mergedConfig = mkOption {
+          readOnly = true;
+          default = mergeConfig config;
+          defaultText = literalExpression ''
+            {
+              DISALLOW_FILE_EDIT = true;
+              AUTOMATIC_UPDATER_DISABLED = true;
+            }
+          '';
+          description = lib.mdDoc ''
+            Read only representation of the final configuration.
+          '';
+        };
+
         extraConfig = mkOption {
           type = types.lines;
           default = "";
@@ -280,11 +333,16 @@ let
             Any additional text to be appended to the wp-config.php
             configuration file. This is a PHP script. For configuration
             settings, see <https://codex.wordpress.org/Editing_wp-config.php>.
+
+            **Note**: Please pass structured settings via
+            `services.wordpress.sites.${name}.settings` instead.
           '';
           example = ''
-            define( 'AUTOSAVE_INTERVAL', 60 ); // Seconds
+            @ini_set( 'log_errors', 'Off' );
+            @ini_set( 'display_errors', 'On' );
           '';
         };
+
       };
 
       config.virtualHost.hostName = mkDefault name;
@@ -399,6 +457,8 @@ in
       "d '${stateDir hostName}' 0750 ${user} ${webserver.group} - -"
       "d '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
       "Z '${cfg.uploadsDir}' 0750 ${user} ${webserver.group} - -"
+      "d '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
+      "Z '${cfg.fontsDir}' 0750 ${user} ${webserver.group} - -"
     ]) eachSite);
 
     systemd.services = mkMerge [

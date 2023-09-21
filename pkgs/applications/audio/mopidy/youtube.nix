@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     mopidy
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     vcrpy
     pytestCheckHook
   ];
@@ -52,6 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Mopidy extension for playing music from YouTube";
     homepage = "https://github.com/natumbri/mopidy-youtube";
     license = licenses.asl20;
-    maintainers = with maintainers; [ spwhitt ];
+    maintainers = with maintainers; [ ];
   };
 }

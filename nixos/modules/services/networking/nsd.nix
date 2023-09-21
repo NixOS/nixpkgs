@@ -137,8 +137,8 @@ let
   '';
 
   yesOrNo = b: if b then "yes" else "no";
-  maybeString = prefix: x: if x == null then "" else ''${prefix} "${x}"'';
-  maybeToString = prefix: x: if x == null then "" else ''${prefix} ${toString x}'';
+  maybeString = prefix: x: optionalString (x != null) ''${prefix} "${x}"'';
+  maybeToString = prefix: x: optionalString (x != null) ''${prefix} ${toString x}'';
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
 
@@ -371,7 +371,7 @@ let
         default = null;
         example = "2000::1@1234";
         description = lib.mdDoc ''
-          This address will be used for zone-transfere requests if configured
+          This address will be used for zone-transfer requests if configured
           as a secondary server or notifications in case of a primary server.
           Supply either a plain IPv4 or IPv6 address with an optional port
           number (ip@port).
@@ -588,7 +588,7 @@ in
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
       description = lib.mdDoc ''
         Port the service should bind do.
@@ -825,7 +825,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 8952;
         description = lib.mdDoc ''
           Port number for remote control operations (uses TLS over TCP).

@@ -1,37 +1,44 @@
-{ mkDerivation
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
 , cmake
-, qtquickcontrols
+, wrapQtAppsHook
+, qtbase
 , qtquickcontrols2
 , qtkeychain
 , qtmultimedia
 , qttools
 , libquotient
 , libsecret
+, olm
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.95.1";
+  version = "0.0.96-beta4";
 
   src = fetchFromGitHub {
-    owner = "QMatrixClient";
+    owner = "quotient-im";
     repo = "Quaternion";
-    rev = version;
-    sha256 = "sha256-6FLj/hVY13WO7sMgHCHV57eMJu39cwQHXQX7m0lmv4I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yItl31Ze48lRIIey+FlRLMVAkg4mHu8G1sFOceHvTJw=";
   };
 
   buildInputs = [
-    qtmultimedia
-    qtquickcontrols2
-    qtkeychain
     libquotient
     libsecret
+    olm
+    qtbase
+    qtkeychain
+    qtmultimedia
+    qtquickcontrols2
   ];
 
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+
+  cmakeFlags = [
+    "-DBUILD_WITH_QT6=OFF"
+  ];
 
   postInstall =
     if stdenv.isDarwin then ''

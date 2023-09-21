@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "cmctl";
-  version = "1.9.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
-    rev = "4486c01f726f17d2790a8a563ae6bc6e98465505";
-    sha256 = "1rzm6dn88nc2c8kayg1y9r7gkmbx42s0ph93ji7z56gqqpbqjmk7";
+    rev = "4767427a40e0e193c976fd6bc228f50de8950572";
+    sha256 = "128s5vd4hp5mr0rnb21grzmijzx0ibpv71as36dcgw7z4v3gq7lx";
   };
 
-  vendorSha256 = "sha256-45+tZZAEHaLdTN1NQCueJVTx5x2IanwDl+Y9MELqdBE=";
+  vendorHash = "sha256-+r0QpD97r6dokUr07Qjb9kvoK+oz2rvml0cIebtYuHg=";
 
   subPackages = [ "cmd/ctl" ];
 
@@ -32,6 +32,8 @@ buildGoModule rec {
       --fish <($out/bin/cmctl completion fish) \
       --zsh <($out/bin/cmctl completion zsh)
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "A CLI tool for managing cert-manager service on Kubernetes clusters";

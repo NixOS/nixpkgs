@@ -1,27 +1,57 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv, Security, openssl, pkg-config }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, libgit2
+, openssl
+, stdenv
+, curl
+, darwin
+, git
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-release";
-  version = "0.21.2";
+  version = "0.24.12";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = "cargo-release";
-    rev = "v${version}";
-    sha256 = "sha256-4iuJRwJeHmofJ1iwzeu4YkGaN+MZBdyzsJmdzncDmZo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dB5gpaY6OB/IjMvqLUMH41l6Q/xMookxfVGXRcdhcBM=";
   };
 
-  cargoSha256 = "sha256-LD+bEA4/PCEY+EvV2ysHFmJKBWT83bXuGUtgyiK/6i0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "cargo-test-macro-0.1.0" = "sha256-jXWdCc3wxcF02uL2OyMepJ+DmINAHRYtAUH6L16bCjI=";
+    };
+  };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [
+    libgit2
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [
+    git
+  ];
+
+  # disable vendored-libgit2 and vendored-openssl
+  buildNoDefaultFeatures = true;
 
   meta = with lib; {
     description = ''Cargo subcommand "release": everything about releasing a rust crate'';
-    homepage = "https://github.com/sunng87/cargo-release";
+    homepage = "https://github.com/crate-ci/cargo-release";
+    changelog = "https://github.com/crate-ci/cargo-release/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ gerschtli ];
+    maintainers = with maintainers; [ figsoda gerschtli ];
   };
 }

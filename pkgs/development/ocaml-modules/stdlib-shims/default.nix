@@ -1,14 +1,13 @@
 { buildDunePackage, lib, fetchurl, ocaml }:
 
-buildDunePackage rec {
+buildDunePackage (rec {
   pname = "stdlib-shims";
   version = "0.3.0";
   src = fetchurl {
     url = "https://github.com/ocaml/${pname}/releases/download/${version}/${pname}-${version}.tbz";
     sha256 = "0jnqsv6pqp5b5g7lcjwgd75zqqvcwcl5a32zi03zg1kvj79p5gxs";
   };
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
-  minimumOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.02";
   doCheck = true;
   meta = {
     description = "Shims for forward-compatibility between versions of the OCaml standard library";
@@ -16,4 +15,6 @@ buildDunePackage rec {
     inherit (ocaml.meta) license;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+} // lib.optionalAttrs (!lib.versionAtLeast ocaml.version "4.08") {
+  duneVersion = "1";
+})

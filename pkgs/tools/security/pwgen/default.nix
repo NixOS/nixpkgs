@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tytso/pwgen";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pwgen";
     platforms = platforms.all;
   };
 }

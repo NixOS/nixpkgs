@@ -2,49 +2,54 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , ruby
 , which
+, nix-update-script
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.12.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "FnUUX7qQWVZMHtWvneTLzBL1YYwF8v4e1913Op4Lvbw=";
+    hash = "sha256-NshDX7sbXnmK6k/EDD5thUcNKvSV4bNdJ5N2hNLlsnA=";
   };
 
-  cargoSha256 = "98vmUoWSehX/9rMlHNSvKHJvJxW99pOhS08FI3OeLGo=";
+  cargoHash = "sha256-JzspNL4T28awa/1Uajw0gLM3bYyUBYTjnfCXn9qG7SY=";
+
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config
+  '';
+
   doCheck = true;
 
-  patches = [
-    # Backport rust 1.62 support. Should be removed in the next rbspy release.
-    (fetchpatch {
-      name = "rust-1.62.patch";
-      url = "https://github.com/rbspy/rbspy/commit/f5a8eecfbf2ad0b3ff9105115988478fb760d54d.patch";
-      sha256 = "sha256-+04rvEXU7/lx5IQkk3Bhe+KLN8PwxZ0j4nH5ySnS154=";
-    })
-  ];
-
-  # Tests in initialize.rs rely on specific PIDs being queried and attaching
-  # tracing to forked processes, which don't work well with the isolated build.
+  # The current implementation of rbspy fails to detect the version of ruby
+  # from nixpkgs during tests.
   preCheck = ''
     substituteInPlace src/core/process.rs \
       --replace /usr/bin/which '${which}/bin/which'
     substituteInPlace src/sampler/mod.rs \
       --replace /usr/bin/which '${which}/bin/which'
-    substituteInPlace src/core/initialize.rs \
-      --replace 'fn test_initialize_with_disallowed_process(' '#[ignore] fn test_initialize_with_disallowed_process(' \
-      --replace 'fn test_get_exec_trace(' '#[ignore] fn test_get_exec_trace(' \
   '';
 
-  nativeBuildInputs = [ ruby which ];
+  checkFlags = [
+    "--skip=test_get_trace"
+    "--skip=test_get_trace_when_process_has_exited"
+    "--skip=test_sample_single_process"
+    "--skip=test_sample_single_process_with_time_limit"
+    "--skip=test_sample_subprocesses"
+  ];
+
+  nativeBuildInputs = [ ruby which ]
+    ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://rbspy.github.io/";
     description = ''
       A Sampling CPU Profiler for Ruby.

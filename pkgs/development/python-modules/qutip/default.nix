@@ -4,8 +4,8 @@
 , cvxopt
 , cvxpy
 , cython
-, doCheck ? true
 , fetchFromGitHub
+, ipython
 , matplotlib
 , numpy
 , packaging
@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "4.7.0";
+  version = "4.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-wGr6uTM6pFL2nvN4zdqPdEO8O3kjrRtKWx8luL1t9Sw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cpzUHjZBpAbNEnYRuY1wUZouAEAgBaN9rWdxRSfI3bs=";
   };
 
   nativeBuildInputs = [
@@ -40,13 +40,13 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
-  ] ++ passthru.optional-dependencies.graphics;
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Disabling OpenMP support on Darwin.
-  setupPyGlobalFlags = lib.optional (!stdenv.isDarwin) [
+  setupPyGlobalFlags = lib.optionals (!stdenv.isDarwin) [
     "--with-openmp"
   ];
 
@@ -75,6 +75,9 @@ buildPythonPackage rec {
     graphics = [
       matplotlib
     ];
+    ipython = [
+      ipython
+    ];
     semidefinite = [
       cvxpy
       cvxopt
@@ -82,9 +85,9 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
+    changelog = "https://github.com/qutip/qutip/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fabiangd ];
   };

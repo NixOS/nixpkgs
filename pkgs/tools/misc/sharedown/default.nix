@@ -12,18 +12,19 @@
 , makeDesktopItem
 , copyDesktopItems
 , yarn2nix-moretea
+, fetchYarnDeps
 , chromium
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
-  version = "5.0.2";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = pname;
     rev = version;
-    sha256 = "sha256-N5jnjiD3R+uTRgHHocVVxYQ7GzUTz0fZAQGIXzcVTtA=";
+    sha256 = "sha256-llQt3m/qu7v5uQIfA1yxl2JZiFafk6sPgcvrIpQy/DI=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +52,7 @@ stdenvNoCC.mkDerivation rec {
         yt-dlp
       ]);
 
-      modules = yarn2nix-moretea.mkYarnModules {
+      modules = yarn2nix-moretea.mkYarnModules rec {
         name = "${pname}-modules-${version}";
         inherit pname version;
 
@@ -87,7 +88,11 @@ stdenvNoCC.mkDerivation rec {
 
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
-        yarnNix = ./yarndeps.nix;
+
+        offlineCache = fetchYarnDeps {
+          inherit yarnLock;
+          hash = "sha256-NzWzkZbf5R1R72K7KVJbZUCzso1UZ0p3+lRYZE2M/dI=";
+        };
       };
     in
     ''
@@ -117,7 +122,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/kylon/Sharedown";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jtojnar
     ];
     platforms = platforms.unix;
   };

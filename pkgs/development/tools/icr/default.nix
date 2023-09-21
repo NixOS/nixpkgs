@@ -13,13 +13,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "icr";
-  version = "unstable-2021-03-14";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "crystal-community";
     repo = "icr";
-    rev = "b6b335f40aff4c2c07d21250949935e8259f7d1b";
-    sha256 = "sha256-Qoy37lCdHFnMAuuqyB9uT15/RLllksFyApYAGy+RmDs=";
+    rev = "v${version}";
+    hash = "sha256-29B/i8oEjwNOYjnc78QcYTl6fC/M9VfAVCCBjLBKp0Q=";
   };
 
   shardsFile = ./shards.nix;
@@ -33,7 +33,7 @@ crystal.buildCrystalPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/icr \
-      --prefix PATH : ${lib.makeBinPath [ crystal shards makeWrapper which ]}
+      --prefix PATH : ${lib.makeBinPath [ crystal shards which ]}
   '';
 
   meta = with lib; {

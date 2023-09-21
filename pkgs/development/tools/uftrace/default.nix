@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uftrace";
-  version = "0.12";
+  version = "0.14";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
     rev = "v${version}";
-    sha256 = "sha256-YjeZGjSctnhbHqWikdVhiEl0hr/qrA4S4JbCJscXe7A=";
+    sha256 = "sha256-f0R3EbLd0sJ1kcsRquFZRrl8jXi0msIz2SZ0oJzoWUE=";
   };
 
   postUnpack = ''

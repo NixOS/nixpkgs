@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "shirok";
     repo = pname;
-    rev = "release${lib.replaceChars [ "." ] [ "_" ] version}";
+    rev = "release${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "0ki1w7sa10ivmg51sqjskby0gsznb0d3738nz80x589033km5hmb";
   };
 
@@ -45,6 +45,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mnacamura ];
     license = licenses.bsd3;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
   };
 }

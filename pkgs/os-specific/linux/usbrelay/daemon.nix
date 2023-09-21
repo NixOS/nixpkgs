@@ -5,7 +5,7 @@ in
 # This is a separate derivation, not just an additional output of
 # usbrelay, because otherwise, we have a cyclic dependency between
 # usbrelay (default.nix) and the python module (python.nix).
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "usbrelayd";
 
   inherit (usbrelay) src version;

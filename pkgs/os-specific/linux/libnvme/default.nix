@@ -1,7 +1,7 @@
 { fetchFromGitHub
 , json_c
+, keyutils
 , lib
-, libuuid
 , meson
 , ninja
 , openssl
@@ -9,20 +9,23 @@
 , pkg-config
 , python3
 , stdenv
+, swig
 , systemd
+# ImportError: cannot import name 'mlog' from 'mesonbuild'
+, withDocs ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnvme";
-  version = "1.1";
+  version = "1.4";
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${version}";
-    sha256 = "EPAPWY6/Bh8I1eLslKJAofLn0IAizmGn00Q5PJPtdRw=";
+    sha256 = "sha256-8DlEQ4LH6UhIHr0znJGqkuCosLHqA6hkJjmiCawNE1k=";
   };
 
   postPatch = ''
@@ -36,27 +39,33 @@ stdenv.mkDerivation rec {
     ninja
     perl # for kernel-doc
     pkg-config
+    python3.pythonForBuild
+    swig
   ];
 
   buildInputs = [
+    keyutils
     json_c
-    libuuid
     openssl
-    python3
     systemd
+    python3
   ];
 
   mesonFlags = [
     "-Ddocs=man"
-    "-Ddocs-build=true"
+    (lib.mesonBool "docs-build" withDocs)
   ];
+
+  preConfigure = ''
+    export KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH)"
+  '';
 
   doCheck = true;
 
   meta = with lib; {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
-    maintainers = with maintainers; [ zseri ];
+    maintainers = [ maintainers.fogti ];
     license = with licenses; [ lgpl21Plus ];
     platforms = platforms.linux;
   };

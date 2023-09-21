@@ -6,15 +6,13 @@
 , gtk-mac-integration
 }:
 
-with lib;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.4.9";
+  version = "0.5.2";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "0msy7s57mlx0wya99qpia4fpcy40pbj253kmx2y97nb0sqnc8c7w";
+    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
+    sha256 = "15314m9chmh5jkrd9vk2h2gwcwkcffv2kjcxkd4v3wmckz5sfjy6";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
@@ -23,32 +21,32 @@ stdenv.mkDerivation rec {
   # https://github.com/pwmt/zathura/blob/master/meson_options.txt
   mesonFlags = [
     "-Dsqlite=enabled"
-    "-Dmagic=enabled"
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     # Make sure tests are enabled for doCheck
-    "-Dtests=enabled"
-  ] ++ optional (!stdenv.isLinux) "-Dseccomp=disabled";
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
+  ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
-    gettext wrapGAppsHook libxml2 check appstream-glib
+    meson ninja pkg-config desktop-file-utils python3.pythonForBuild.pkgs.sphinx
+    gettext wrapGAppsHook libxml2 appstream-glib
   ];
 
   buildInputs = [
-    gtk girara libintl sqlite glib file librsvg
+    gtk girara libintl sqlite glib file librsvg check
     texlive.bin.core
-  ] ++ optional stdenv.isLinux libseccomp
-    ++ optional stdenv.isDarwin gtk-mac-integration;
+  ] ++ lib.optional stdenv.isLinux libseccomp
+    ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/zathura";
     description = "A core component for zathura PDF viewer";
     license = licenses.zlib;
     platforms = platforms.unix;
     maintainers = with maintainers; [ globin ];
   };
-}
+})

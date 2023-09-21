@@ -4,12 +4,9 @@
 , wrapQtAppsHook
 , qtmultimedia
 , qttools
-, qtscript
 , qtdeclarative
 , qtnetworkauth
 , qtbase
-, autogen
-, automake
 , makeWrapper
 , catch2
 , nodejs
@@ -21,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imgbrd-grabber";
-  version = "7.9.1";
+  version = "7.10.0";
 
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
     rev = "v${version}";
-    sha256 = "sha256-0CceSXH1GJbWKOnxZkjmbuyj7NBOQ6tpCYrCl7z4Vrw=";
+    sha256 = "sha256-AT6pN2do0LlH6xAXKcFQv+oderD88/EiG1JnCw6kOOg=";
     fetchSubmodules = true;
   };
 
@@ -70,8 +67,10 @@ stdenv.mkDerivation rec {
 
     # link the catch2 sources from nixpkgs
     ln -sf ${catch2.src} tests/src/vendor/catch
+  '';
 
-    sed "s|strict\": true|strict\": false|g" -i ./sites/tsconfig.json
+  preBuild = ''
+    export HOME=$TMPDIR
   '';
 
   postInstall = ''
@@ -88,7 +87,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/Grabber/Grabber-cli $out/bin/Grabber-cli
   '';
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   meta = with lib; {
     description = "Very customizable imageboard/booru downloader with powerful filenaming features";

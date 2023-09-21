@@ -11,6 +11,7 @@
 , libXcursor
 , freetype
 , alsa-lib
+, Accelerate
 , Cocoa
 , WebKit
 , CoreServices
@@ -76,6 +77,7 @@ stdenv.mkDerivation rec {
     freetype
     alsa-lib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Accelerate
     Cocoa
     WebKit
     CoreServices
@@ -103,7 +105,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Fails to find fp.h on its own
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

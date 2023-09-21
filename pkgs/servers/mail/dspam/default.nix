@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper
 , gawk, gnused, gnugrep, coreutils, which
 , perlPackages
-, withMySQL ? false, zlib, mysql57
+, withMySQL ? false, zlib, mariadb-connector-c
 , withPgSQL ? false, postgresql
 , withSQLite ? false, sqlite
 , withDB ? false, db
@@ -25,13 +25,21 @@ in stdenv.mkDerivation rec {
     url = "mirror://sourceforge/dspam/dspam/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
+  patches = [
+    # https://gist.github.com/WhiteAnthrax/613136c76882e0ead3cb3bdad6b3d551
+    ./mariadb.patch
+  ];
 
   buildInputs = [ perlPackages.perl ]
-                ++ lib.optionals withMySQL [ zlib mysql57.connector-c ]
+                ++ lib.optionals withMySQL [ zlib mariadb-connector-c.out ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withSQLite sqlite
                 ++ lib.optional withDB db;
   nativeBuildInputs = [ makeWrapper ];
+  # patch out libmysql >= 5 check, since mariadb-connector is at 3.x
+  postPatch = ''
+    sed -i 's/atoi(m) >= 5/1/g' configure m4/mysql_drv.m4
+  '';
 
   configureFlags = [
     "--with-storage-driver=${drivers}"
@@ -50,14 +58,17 @@ in stdenv.mkDerivation rec {
     "--enable-preferences-extension"
     "--enable-long-usernames"
     "--enable-external-lookup"
-  ] ++ lib.optional withMySQL "--with-mysql-includes=${mysql57.connector-c}/include/mysql"
+  ] ++ lib.optionals withMySQL [
+    "--with-mysql-includes=${mariadb-connector-c.dev}/include/mysql"
+    "--with-mysql-libraries=${mariadb-connector-c.out}/lib/mysql"
+  ]
     ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: .libs/hash_drv.o:/build/dspam-3.10.2/src/util.h:96: multiple definition of `verified_user';
   #     .libs/libdspam.o:/build/dspam-3.10.2/src/util.h:96: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"
   # and fix directory structure manually after that.
@@ -106,7 +117,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://dspam.sourceforge.net/";
+    homepage = "https://dspam.sourceforge.net/";
     description = "Community Driven Antispam Filter";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;

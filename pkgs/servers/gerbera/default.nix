@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , nixosTests
@@ -65,14 +66,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.11.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-pikzgbm962C7yFM67Z/LayLf4mpLV4HfqZJlBfebL8U=";
+    sha256 = "sha256-j5J0u0zIjHY2kP5P8IzN2h+QQSCwsel/iTspad6V48s=";
   };
+
+  patches = [
+    # Can be removed on the next bump, see:
+    # https://github.com/gerbera/gerbera/pull/2840.
+    (fetchpatch {
+      name = "gerbera-fmt10.patch";
+      url = "https://github.com/gerbera/gerbera/commit/37957aac0aea776e6f843af2358916f81056a405.patch";
+      hash = "sha256-U7dyFGEbelVZeHYX/4fLOC0k+9pUKZ8qP/LIVXWCMcU=";
+    })
+  ];
 
   postPatch = lib.optionalString enableMysql ''
     substituteInPlace cmake/FindMySQL.cmake \

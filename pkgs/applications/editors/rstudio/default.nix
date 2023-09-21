@@ -25,11 +25,12 @@
 , makeWrapper
 , pandoc
 , llvmPackages
-, libyamlcpp
+, yaml-cpp
 , soci
 , postgresql
 , nodejs
 , mkYarnModules
+, fetchYarnDeps
 , qmake
 , server ? false # build server version
 , sqlite
@@ -64,11 +65,14 @@ let
     sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
   };
 
-  panmirrorModules = mkYarnModules {
+  panmirrorModules = mkYarnModules rec {
     inherit pname version;
     packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarndeps.nix;
+    yarnLock = "${src}/src/gwt/panmirror/src/editor/yarn.lock";
+    offlineCache = fetchYarnDeps {
+      inherit yarnLock;
+      hash = "sha256-v05Up6VMlYlvgUYQVYo+YfpcsMohliNfMgyjq6QymCI=";
+    };
   };
 
   description = "Set of integrated tools for the R language";
@@ -85,7 +89,7 @@ in
       makeWrapper
       pandoc
       nodejs
-    ] ++ lib.optional (!server) [
+    ] ++ lib.optionals (!server) [
       copyDesktopItems
     ];
 
@@ -95,7 +99,7 @@ in
       openssl
       R
       libuuid
-      libyamlcpp
+      yaml-cpp
       soci
       postgresql
     ] ++ (if server then [
@@ -118,7 +122,7 @@ in
       "-DQUARTO_ENABLED=FALSE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
-    ] ++ lib.optional (!server) [
+    ] ++ lib.optionals (!server) [
       "-DQT_QMAKE_EXECUTABLE=${qmake}/bin/qmake"
     ];
 
@@ -148,6 +152,8 @@ in
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
         --replace '@pandoc@' ${pandoc}/bin/pandoc
+
+      sed '1i#include <set>' -i src/cpp/core/include/core/Thread.hpp
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
@@ -206,7 +212,7 @@ in
       homepage = "https://www.rstudio.com/";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [ ciil cfhammill ];
-      mainProgram = "rstudio" + optionalString server "-server";
+      mainProgram = "rstudio" + lib.optionalString server "-server";
       platforms = platforms.linux;
     };
 

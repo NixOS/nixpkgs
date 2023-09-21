@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross
 
   # Hack to make sure we never to the relaxation `$PATH` and hooks support for
-  # compatability. This will be replaced with something clearer in a future
+  # compatibility. This will be replaced with something clearer in a future
   # masss-rebuild.
   strictDeps = true;
 

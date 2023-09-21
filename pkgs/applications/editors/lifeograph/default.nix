@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, pkg-config, meson, ninja
+{ stdenv, lib, fetchgit, pkg-config, meson, ninja, wrapGAppsHook
 , enchant, gtkmm3, libchamplain, libgcrypt, shared-mime-info }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     shared-mime-info # for update-mime-database
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://lifeograph.sourceforge.net/wiki/Main_Page";
+    homepage = "https://lifeograph.sourceforge.net/wiki/Main_Page";
     description = "Lifeograph is an off-line and private journal and note taking application";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];

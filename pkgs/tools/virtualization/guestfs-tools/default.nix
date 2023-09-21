@@ -5,11 +5,15 @@
 , bison
 , cdrkit
 , cpio
+, curl
 , flex
 , getopt
+, glib
+, gnupg
 , hivex
 , jansson
 , libguestfs-with-appliance
+, libosinfo
 , libvirt
 , libxml2
 , makeWrapper
@@ -25,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guestfs-tools";
-  version = "1.48.2";
+  version = "1.50.1";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor version}-stable/guestfs-tools-${version}.tar.gz";
-    sha256 = "sha256-G9l5sG5g5kMlSXzg0GX8+Et7M9/k2dRLMBgsMI4MaxA=";
+    sha256 = "sha256-rH/MK9Xid+lb1bKnspCE3gATefBnHDZAQ3NRavhTvLA=";
   };
 
   nativeBuildInputs = [
@@ -59,9 +63,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash-completion
+    glib
     hivex
     jansson
     libguestfs-with-appliance
+    libosinfo
     libvirt
     libxml2
     ncurses
@@ -69,6 +75,14 @@ stdenv.mkDerivation rec {
     pcre2
     xz
   ];
+
+  postPatch = ''
+    # If it uses the executable name, then there's nothing we can do
+    # when wrapping to stop it looking in
+    # $out/etc/.virt-builder-wrapped, which won't exist.
+    substituteInPlace common/mlstdutils/std_utils.ml \
+        --replace Sys.executable_name '(Array.get Sys.argv 0)'
+  '';
 
   preConfigure = ''
     patchShebangs ocaml-dep.sh.in ocaml-link.sh.in run.in
@@ -85,6 +99,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
+    wrapProgram $out/bin/virt-builder \
+      --argv0 virt-builder \
+      --prefix PATH : ${lib.makeBinPath [ curl gnupg ]}:$out/bin \
+      --suffix VIRT_BUILDER_DIRS : /etc:$out/etc
     wrapProgram $out/bin/virt-win-reg \
       --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
   '';

@@ -109,8 +109,9 @@ rec {
    */
   dontCheck = overrideCabal (drv: { doCheck = false; });
 
-  /* doBenchmark enables dependency checking, compilation and execution
+  /* doBenchmark enables dependency checking and compilation
      for benchmarks listed in the package description file.
+     Benchmarks are, however, not executed at the moment.
    */
   doBenchmark = overrideCabal (drv: { doBenchmark = true; });
   /* dontBenchmark disables dependency checking, compilation and execution
@@ -355,7 +356,7 @@ rec {
    */
   triggerRebuild = i: overrideCabal (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
-  /* Override the sources for the package and optionaly the version.
+  /* Override the sources for the package and optionally the version.
      This also takes of removing editedCabalFile.
    */
   overrideSrc = { src, version ? null }: drv:
@@ -417,24 +418,11 @@ rec {
       in
         builtins.listToAttrs (map toKeyVal haskellPaths);
 
-  addOptparseApplicativeCompletionScripts = exeName: pkg:
-    builtins.trace "addOptparseApplicativeCompletionScripts is deprecated in favor of generateOptparseApplicativeCompletion. Please change ${pkg.name} to use the latter or its plural form."
-    (generateOptparseApplicativeCompletion exeName pkg);
-
   /*
-    Modify a Haskell package to add shell completion scripts for the
-    given executable produced by it. These completion scripts will be
-    picked up automatically if the resulting derivation is installed,
-    e.g. by `nix-env -i`.
-
-    Invocation:
-      generateOptparseApplicativeCompletion command pkg
-
-
-      command: name of an executable
-          pkg: Haskell package that builds the executables
+    INTERNAL function retained for backwards compatibility, use
+    haskell.packages.*.generateOptparseApplicativeCompletions instead!
   */
-  generateOptparseApplicativeCompletion = exeName: overrideCabal (drv: {
+  __generateOptparseApplicativeCompletion = exeName: overrideCabal (drv: {
     postInstall = (drv.postInstall or "") + ''
       bashCompDir="''${!outputBin}/share/bash-completion/completions"
       zshCompDir="''${!outputBin}/share/zsh/vendor-completions"
@@ -453,20 +441,22 @@ rec {
   });
 
   /*
-    Modify a Haskell package to add shell completion scripts for the
-    given executables produced by it. These completion scripts will be
-    picked up automatically if the resulting derivation is installed,
-    e.g. by `nix-env -i`.
-
-    Invocation:
-      generateOptparseApplicativeCompletions commands pkg
-
-
-     commands: name of an executable
-          pkg: Haskell package that builds the executables
+    Retained for backwards compatibility.
+    Use haskell.packages.*.generateOptparseApplicativeCompletions
+    which is cross aware instead.
   */
   generateOptparseApplicativeCompletions = commands: pkg:
-    pkgs.lib.foldr generateOptparseApplicativeCompletion pkg commands;
+    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletions is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+      (pkgs.lib.foldr __generateOptparseApplicativeCompletion pkg commands);
+
+  /*
+    Retained for backwards compatibility.
+    Use haskell.packages.*.generateOptparseApplicativeCompletions
+    which is cross aware instead.
+  */
+  generateOptparseApplicativeCompletion = command: pkg:
+    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletion is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions (plural!). Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+      (__generateOptparseApplicativeCompletion command pkg);
 
   # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
@@ -474,4 +464,44 @@ rec {
   allowInconsistentDependencies = overrideCabal (drv: {
     allowInconsistentDependencies = true;
   });
+
+  # Work around a Cabal bug requiring pkg-config --static --libs to work even
+  # when linking dynamically, affecting Cabal 3.8 and 3.9.
+  # https://github.com/haskell/cabal/issues/8455
+  #
+  # For this, we treat the runtime system/pkg-config dependencies of a Haskell
+  # derivation as if they were propagated from their dependencies which allows
+  # pkg-config --static to work in most cases.
+  #
+  # Warning: This function may change or be removed at any time, e.g. if we find
+  # a different workaround, upstream fixes the bug or we patch Cabal.
+  __CabalEagerPkgConfigWorkaround =
+    let
+      # Take list of derivations and return list of the transitive dependency
+      # closure, only taking into account buildInputs. Loosely based on
+      # closePropagationFast.
+      propagatedPlainBuildInputs = drvs:
+        builtins.map (i: i.val) (
+          builtins.genericClosure {
+            startSet = builtins.map (drv:
+              { key = drv.outPath; val = drv; }
+            ) drvs;
+            operator = { val, ... }:
+              if !lib.isDerivation val
+              then [ ]
+              else
+                builtins.concatMap (drv:
+                  if !lib.isDerivation drv
+                  then [ ]
+                  else [ { key = drv.outPath; val = drv; } ]
+                ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
+          }
+        );
+    in
+    overrideCabal (old: {
+      benchmarkPkgconfigDepends = propagatedPlainBuildInputs old.benchmarkPkgconfigDepends or [ ];
+      executablePkgconfigDepends = propagatedPlainBuildInputs old.executablePkgconfigDepends or [ ];
+      libraryPkgconfigDepends = propagatedPlainBuildInputs old.libraryPkgconfigDepends or [ ];
+      testPkgconfigDepends = propagatedPlainBuildInputs old.testPkgconfigDepends or [ ];
+    });
 }

@@ -30,6 +30,7 @@
 , libxkbcommon
 , udev
 , zlib
+, libkrb5
   # Runtime
 , coreutils
 , pciutils
@@ -47,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "5.12.0.11129";
-  versions.x86_64-darwin = "5.12.0.11129";
-  versions.x86_64-linux = "5.12.0.4682";
+  versions.aarch64-darwin = "5.15.12.22445";
+  versions.x86_64-darwin = "5.15.12.22445";
+  versions.x86_64-linux = "5.15.12.7665";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-0XhqJrls4X8wO9VNmmmUGexJkA9NDkwJkYRjmyV1kAU=";
+      hash = "sha256-pTpNbKmJGTxRIrfD/zWIrkouhCbErxu9Gjy9mDdTtHc=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-E7+zMrW4y1RfsR1LrxCJRRVlA+BuhzwMI/sfzqNHObo=";
+      hash = "sha256-EItKg22id/e7OfJaWxxJdl9B+3nDHNl6ENvfGR4QJ6Y=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-UNtxyR4SMCP9c1Dre/arfdSVZbAV8qoHyHlvj3ZbXIs=";
+      hash = "sha256-DMFMLwxPt1LV4Qhhrw6gdToe0z9743hGcxVWeR4O1YU=";
     };
   };
 
@@ -102,10 +103,13 @@ let
     xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     xorg.libXfixes
     xorg.libXtst
     udev
     zlib
+    libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
@@ -190,6 +194,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ danbst tadfisher doronbehar ];
+    maintainers = with maintainers; [ danbst tadfisher ];
+    mainProgram = "zoom";
   };
 }

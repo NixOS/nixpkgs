@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiogithubapi";
-  version = "22.3.1";
+  version = "23.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    hash = "sha256-5gKANZtDhIoyfyLdS15JDWTxHBFkaHDUlbVVhRs7MSE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-J6kcEVqADmVJZDbU9eqLCL0rohMSA/Ig7FSp/Ye5Sfk=";
   };
 
   postPatch = ''
@@ -43,14 +43,14 @@ buildPythonPackage rec {
     backoff
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "--asyncio-mode=legacy"
+    "--asyncio-mode=auto"
   ];
 
   pythonImportsCheck = [
@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the GitHub API";
     homepage = "https://github.com/ludeeus/aiogithubapi";
+    changelog = "https://github.com/ludeeus/aiogithubapi/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

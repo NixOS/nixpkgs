@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rnr";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "ismaelgv";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r1ahh8bmqrc7zb4bq5ka8bsngncf7im51nf5il49cvysij1i4q8";
+    sha256 = "sha256-g/PnvOZzlWzEHf3vvYANeJ2ogQ/6duNzhlKpKMBoBFU=";
   };
 
-  cargoSha256 = "sha256-qgKL+y+w+9ADClxLNwglHMufaysY0K9g29PyuXZ7x7g=";
+  cargoSha256 = "sha256-+oDRNBQ03MknhcTpZFKt0ipJY43LPOKbGF014rrs6dw=";
 
   meta = with lib; {
     description = "A command-line tool to batch rename files and directories";

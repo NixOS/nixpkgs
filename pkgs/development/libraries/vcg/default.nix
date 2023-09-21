@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vcg";
-  version = "1.0.1";
+  version = "2022.02";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "vcglib";
-    rev = "v${version}";
-    sha256 = "0jh8jc8rn7rci8qr3q03q574fk2hsc3rllysck41j8xkr3rmxz2f";
+    rev = version;
+    sha256 = "sha256-XCjbVlgE0C9UagPj4fraA7BNsM6ONKo66aKQ87gQOfE=";
   };
 
   propagatedBuildInputs = [ eigen ];

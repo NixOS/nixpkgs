@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vzbgz8y9gj4lszsx4iczfbrj373sl4wi43j7rp46zfcbw323d4r";
   };
 
+  strictDeps = true;
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {

@@ -69,7 +69,7 @@ in
         };
 
         listenPort = mkOption {
-          type = types.int;
+          type = types.port;
           default = 3000;
           description = lib.mdDoc ''
             Listen port for the virtualhost to use.
@@ -132,7 +132,7 @@ in
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = 25;
           description = lib.mdDoc ''
             Port used to connect to SMTP server.
@@ -263,8 +263,8 @@ in
       serviceConfig.RemainAfterExit = true;
 
       wantedBy = [ "multi-user.target" ];
-      requires = if cfg.database.host == null then [] else [ "postgresql.service" ];
-      after = [ "network.target" ] ++ (if cfg.database.host == null then [] else [ "postgresql.service" ]);
+      requires = lib.optional (cfg.database.host != null) "postgresql.service";
+      after = [ "network.target" ] ++ (lib.optional (cfg.database.host != null) "postgresql.service");
 
       script = ''
         rm -rf "${runDir}"

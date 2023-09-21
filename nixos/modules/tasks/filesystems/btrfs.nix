@@ -25,7 +25,7 @@ in
         type = types.listOf types.path;
         example = [ "/" ];
         description = lib.mdDoc ''
-          List of paths to btrfs filesystems to regularily call {command}`btrfs scrub` on.
+          List of paths to btrfs filesystems to regularly call {command}`btrfs scrub` on.
           Defaults to all mount points with btrfs filesystems.
           If you mount a filesystem multiple times or additionally mount subvolumes,
           you need to manually specify this list to avoid scrubbing multiple times.

@@ -1,44 +1,71 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, perl, fetchpatch }:
+{ lib, stdenv, fetchurl, perl
+# Update the enabled crypt scheme ids in passthru when the enabled hashes change
+, enableHashes ? "strong"
+, nixosTests
+, runCommand
+, python3
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxcrypt";
-  version = "4.4.28";
+  version = "4.4.36";
 
-  src = fetchFromGitHub {
-    owner = "besser82";
-    repo = "libxcrypt";
-    rev = "v${version}";
-    sha256 = "sha256-Ohf+RCOXnoCxAFnXXV9e2TCqpfZziQl+FGJTGDSQTF0=";
+  src = fetchurl {
+    url = "https://github.com/besser82/libxcrypt/releases/download/v${finalAttrs.version}/libxcrypt-${finalAttrs.version}.tar.xz";
+    hash = "sha256-5eH0yu4KAd4q7ibjE4gH1tPKK45nKHlm0f79ZeH9iUM=";
   };
 
-  patches = [
-    # Fix for tests on musl is being upstreamed:
-    # https://github.com/besser82/libxcrypt/pull/157
-    # Applied in all environments to prevent patchrot
-    (fetchpatch {
-      url = "https://github.com/besser82/libxcrypt/commit/a4228faa0b96986abc076125cf97d352a063d92f.patch";
-      sha256 = "sha256-iGNz8eer6OkA0yR74WisE6GbFTYyXKw7koXl/R7DhVE=";
-    })
+  outputs = [
+    "out"
+    "man"
   ];
 
-  preConfigure = ''
-    patchShebangs autogen.sh
-    ./autogen.sh
-  '';
-
   configureFlags = [
+    "--enable-hashes=${enableHashes}"
+    "--enable-obsolete-api=glibc"
+    "--disable-failure-tokens"
+    # required for musl, android, march=native
     "--disable-werror"
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config perl ];
+  # fixes: can't build x86_64-w64-mingw32 shared library unless -no-undefined is specified
+  makeFlags = lib.optionals stdenv.hostPlatform.isWindows [ "LDFLAGS=-no-undefined"] ;
+
+  nativeBuildInputs = [
+    perl
+  ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 
+  passthru = {
+    tests = {
+      inherit (nixosTests) login shadow;
+
+      passthruMatches = runCommand "libxcrypt-test-passthru-matches" { } ''
+        ${python3.interpreter} "${./check_passthru_matches.py}" ${lib.escapeShellArgs ([ finalAttrs.src enableHashes "--" ] ++ finalAttrs.passthru.enabledCryptSchemeIds)}
+        touch "$out"
+      '';
+    };
+    enabledCryptSchemeIds = [
+      # https://github.com/besser82/libxcrypt/blob/v4.4.35/lib/hashes.conf
+      "y"   # yescrypt
+      "gy"  # gost_yescrypt
+      "7"   # scrypt
+      "2b"  # bcrypt
+      "2y"  # bcrypt_y
+      "2a"  # bcrypt_a
+      "6"   # sha512crypt
+    ];
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/besser82/libxcrypt/blob/v${finalAttrs.version}/NEWS";
     description = "Extended crypt library for descrypt, md5crypt, bcrypt, and others";
     homepage = "https://github.com/besser82/libxcrypt/";
     platforms = platforms.all;
-    maintainers = with maintainers; [ dottedmag ];
+    maintainers = with maintainers; [ dottedmag hexa ];
     license = licenses.lgpl21Plus;
   };
-}
+})

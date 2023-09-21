@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "6.2.0";
+  version = "6.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RaRe-Technologies";
     repo = "smart_open";
-    rev = "v${version}";
-    sha256 = "sha256-AtFIluoI2QeHUX2dclEmOxsv/cEtusWq7GyViRBhL5g=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sVKrCph5M7xsE7gtzsP/eVEbZyFfoucW3p30YYpwVFI=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     moto
     paramiko
     pytestCheckHook

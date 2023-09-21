@@ -1,20 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pykira";
-  version = "0.1.2";
+  version = "0.1.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zxglzmd2k1nc4wri76ykra910fdgli027nw9d6541ic7xmw87vj";
+    hash = "sha256-MMjmA5N9Ms40eJP9fDDq+LIoPduAnqVrbNLXm+Vl5qw=";
   };
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "pykira" ];
+
+  pythonImportsCheck = [
+    "pykira"
+  ];
 
   meta = with lib; {
     description = "Python module to interact with Kira modules";

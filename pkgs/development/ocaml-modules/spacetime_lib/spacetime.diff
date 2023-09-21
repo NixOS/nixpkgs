@@ -1,0 +1,14 @@
+diff --git a/src/elf_locations.ml b/src/elf_locations.ml
+index a08b359..0db9274 100644
+--- a/src/elf_locations.ml
++++ b/src/elf_locations.ml
+@@ -37,7 +37,8 @@ let resolve_from_dwarf t ~program_counter =
+     | Some section ->
+       let body = Owee_buf.cursor (Owee_elf.section_body t.map section) in
+       let rec aux () =
+-        match Owee_debug_line.read_chunk body with
++        let pointers_to_other_sections = Owee_elf.debug_line_pointers t.map t.sections in
++        match Owee_debug_line.read_chunk body ~pointers_to_other_sections with
+         | None -> ()
+         | Some (header, chunk) ->
+           (* CR-soon mshinwell: fix owee .mli to note that [state] is

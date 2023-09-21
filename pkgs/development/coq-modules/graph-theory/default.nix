@@ -1,23 +1,23 @@
 { lib, mkCoqDerivation, coq, mathcomp-algebra, mathcomp-finmap, mathcomp-fingroup
-, hierarchy-builder, version ? null }:
-
-with lib;
+, fourcolor, hierarchy-builder, version ? null }:
 
 mkCoqDerivation {
   pname = "graph-theory";
 
   release."0.9".sha256 = "sha256-Hl3JS9YERD8QQziXqZ9DqLHKp63RKI9HxoFYWSkJQZI=";
+  release."0.9.1".sha256 = "sha256-lRRY+501x+DqNeItBnbwYIqWLDksinWIY4x/iojRNYU=";
 
   releaseRev = v: "v${v}";
 
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.13" "8.16"; out = "0.9"; }
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.14" "8.16"; out = "0.9.1"; }
+    { case = range "8.12" "8.12"; out = "0.9"; }
   ] null;
 
-  propagatedBuildInputs = [ mathcomp-algebra mathcomp-finmap mathcomp-fingroup hierarchy-builder ];
+  propagatedBuildInputs = [ mathcomp-algebra mathcomp-finmap mathcomp-fingroup fourcolor hierarchy-builder ];
 
-  meta = {
+  meta = with lib; {
     description = "Library of formalized graph theory results in Coq";
     longDescription = ''
       A library of formalized graph theory results, including various

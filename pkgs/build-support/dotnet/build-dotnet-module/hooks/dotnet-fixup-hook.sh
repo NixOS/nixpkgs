@@ -1,16 +1,26 @@
 # Inherit arguments from the derivation
-makeWrapperArgs=( ${makeWrapperArgs-} )
+declare -a derivationMakeWrapperArgs="( ${makeWrapperArgs-} )"
+makeWrapperArgs=( "${derivationMakeWrapperArgs[@]}" )
 
 # First argument is the executable you want to wrap,
 # the second is the destination for the wrapper.
 wrapDotnetProgram() {
+    local dotnetRootFlags=()
+
     if [ ! "${selfContainedBuild-}" ]; then
-        local -r dotnetRootFlag=("--set" "DOTNET_ROOT" "@dotnetRuntime@")
+        if [ "${useDotnetFromEnv-}" ]; then
+            # if dotnet CLI is available, set DOTNET_ROOT based on it. Otherwise set to default .NET runtime
+            dotnetRootFlags+=("--run" 'command -v dotnet &>/dev/null && export DOTNET_ROOT="$(@dirname@ "$(@realpath@ "$(@which@ dotnet)")")" || export DOTNET_ROOT="@dotnetRuntime@"')
+            dotnetRootFlags+=("--suffix" "PATH" ":" "@dotnetRuntime@/bin")
+        else
+            dotnetRootFlags+=("--set" "DOTNET_ROOT" "@dotnetRuntime@")
+            dotnetRootFlags+=("--prefix" "PATH" ":" "@dotnetRuntime@/bin")
+        fi
     fi
 
     makeWrapper "$1" "$2" \
         --suffix "LD_LIBRARY_PATH" : "@runtimeDeps@" \
-        "${dotnetRootFlag[@]}" \
+        "${dotnetRootFlags[@]}" \
         "${gappsWrapperArgs[@]}" \
         "${makeWrapperArgs[@]}"
 

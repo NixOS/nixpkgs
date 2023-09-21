@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "curlie";
-  version = "1.6.9";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3EKxuEpFm+lp2myMfymYYY9boSXGOF2iAdjtGKnjJK0=";
+    hash = "sha256-EHSFr05VXJuOjUnweEJngdnfSUZUF1HsO28ZBSLGlvE=";
   };
 
   patches = [
     ./bump-golang-x-sys.patch
   ];
 
-  vendorSha256 = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
+  vendorHash = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

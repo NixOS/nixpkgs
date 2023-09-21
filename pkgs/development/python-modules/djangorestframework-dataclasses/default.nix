@@ -2,18 +2,24 @@
 , buildPythonPackage
 , fetchFromGitHub
 , djangorestframework
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-dataclasses";
-  version = "1.1.1";
+  version = "1.3.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
-    rev = "v${version}";
-    sha256 = "sha256-wXgA/4Dik6yG0nKl9GbrHgb2lhrPsgS23+cEyaD9MRY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aUz+f8Q7RwQsoRpjq1AAmNtDzTA6KKxyc+MtBJEfyL8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   postPatch = ''
     patchShebangs manage.py
@@ -33,6 +39,6 @@ buildPythonPackage rec {
     description = " Dataclasses serializer for Django REST framework";
     homepage = "https://github.com/oxan/djangorestframework-dataclasses";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

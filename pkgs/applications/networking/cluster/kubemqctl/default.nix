@@ -2,19 +2,25 @@
 
 buildGoModule rec {
   pname = "kubemqctl";
-  version = "3.5.1";
+  version = "3.7.2";
+
   src = fetchFromGitHub {
     owner = "kubemq-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0daqvd1y6b87xvnpdl2k0sa91zdmp48r0pgp6dvnb2l44ml8a4z0";
+    hash = "sha256-PaB5+Sy2ccEQz+wuz88w/M4NXayKA41/ugSPJdtjfiE=";
   };
+
+  vendorHash = "sha256-rou4IC5wMIq7i/OGAvE28qke0X6C5S7Iw+gwCPf5Zdk=";
+
+  preBuild = ''
+    # The go.sum file is missing from the upstream.
+    cp ${./go.sum} go.sum
+  '';
 
   ldflags = [ "-w" "-s" "-X main.version=${version}" ];
 
   doCheck = false; # TODO tests are failing
-
-  vendorSha256 = "1agn6i7cnsb5igvvbjzlaa5fgssr5h7h25y440q44bk16jxk6s74";
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemqctl";

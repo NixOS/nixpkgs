@@ -1,12 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, cmake
+, qttools
+, perl
 , cpp-utilities
 , qtutilities
-, qttools
 , qtbase
-, cmake
-, perl
 }:
 
 let
@@ -16,27 +16,28 @@ let
     rev = "1.2.0";
     sha256 = "sha256-zG6/0dWjU7/y/oDZuSEv+54Mchng64LVyV8bluskYzc=";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "qtforkawesome";
-  version = "0.0.4";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-J3F+ikz6gQqV+JsOX8EpMOWoTmI6UK5KndFALUo4oiU=";
+    repo = "qtforkawesome";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9e2TCg3itYtHZSvzCoaiIZmgsCMIoebh6C/XWtKz/2Q=";
   };
 
-  buildInputs = [
-    qtbase
-    cpp-utilities
-    qtutilities
-  ];
   nativeBuildInputs = [
     cmake
     qttools
     perl
     perl.pkgs.YAML
+  ];
+
+  buildInputs = [
+    qtbase
+    cpp-utilities
+    qtutilities
   ];
   cmakeFlags = [
     # Current freetype used by NixOS users doesn't support the `.woff2` font
@@ -53,7 +54,7 @@ in stdenv.mkDerivation rec {
     description = "Library that bundles ForkAwesome for use within Qt applications";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ doronbehar ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
-}
+})
 

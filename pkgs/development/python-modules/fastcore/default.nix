@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "fastcore";
-  version = "1.5.27";
+  version = "1.5.29";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "fastai";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-LFkjxcotJoHIX0GdKKqUSFF4/HSWc/sLwb34iuBrQIg=";
+    hash = "sha256-yCPOF150TdkPHfLl8Jo2oow+91IzRKgnXo3eQMn5wK0=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Fast AI";
     homepage = "https://github.com/fastai/fastcore";
+    changelog = "https://github.com/fastai/fastcore/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

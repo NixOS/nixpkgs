@@ -36,7 +36,6 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   cron = linux;
   cups = linux;
   dbus = linux;
-  dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
   emacs = linux;
@@ -89,7 +88,7 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   man-pages = linux;
   mc = all;
   mdadm = linux;
-  mesa = mesaPlatforms;
+  mesa = linux;
   mingetty = linux;
   mktemp = all;
   monotone = linux;
@@ -150,5 +149,5 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   xfsprogs = linux;
   xkeyboard_config = linux;
   zip = all;
-
+  tests-stdenv-gcc-stageCompare = all;
 } ))

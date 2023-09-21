@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "stargateaudio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ds8JV2mtLRcKXBvPs84Hdj3MxxqpeV5muKCSlAFCj1A=";
+    hash = "sha256-Ds8JV2mtLRcKXBvPs84Hdj3MxxqpeV5muKCSlAFCj1A=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     bson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     bson
     pyyaml

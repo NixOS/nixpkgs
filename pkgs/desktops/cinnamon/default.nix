@@ -12,6 +12,16 @@ lib.makeScope pkgs.newScope (self: with self; {
     installPhase = "mv svg $out/share/iso-flags-svg";
   });
 
+  # Extensions added here will be shipped by default
+  # We keep this in sync with a default Mint installation
+  # Right now (only) nemo-share is missing
+  nemoExtensions = [
+    folder-color-switcher
+    nemo-emblems
+    nemo-fileroller
+    nemo-python
+  ];
+
   # blueberry -> pkgs/tools/bluetooth/blueberry/default.nix
   bulky = callPackage ./bulky { };
   cinnamon-common = callPackage ./cinnamon-common { };
@@ -24,8 +34,16 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-session = callPackage ./cinnamon-session { };
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
+  folder-color-switcher = callPackage ./folder-color-switcher { };
   nemo = callPackage ./nemo { };
+  nemo-emblems = callPackage ./nemo-extensions/nemo-emblems { };
+  nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
+  nemo-python = callPackage ./nemo-extensions/nemo-python { };
+  nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
   mint-artwork = callPackage ./mint-artwork { };
+  mint-cursor-themes = callPackage ./mint-cursor-themes { };
+  mint-l-icons = callPackage ./mint-l-icons { };
+  mint-l-theme = callPackage ./mint-l-theme { };
   mint-themes = callPackage ./mint-themes { };
   mint-x-icons = callPackage ./mint-x-icons { };
   mint-y-icons = callPackage ./mint-y-icons { };

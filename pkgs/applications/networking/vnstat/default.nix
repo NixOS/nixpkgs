@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.9";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "vergoh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AEpq3Pn/WUiPDxYk6WKb1Uur5tD+OBfFAzLUDWnZH/0=";
+    sha256 = "sha256-IO5B+jyY6izPpam3Qt4Hu8BOGwfO10ER/GFEbsQORK0=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gd ncurses sqlite ];
 
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
 
   doCheck = true;
 

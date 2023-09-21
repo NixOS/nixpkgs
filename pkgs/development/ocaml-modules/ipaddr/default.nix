@@ -1,6 +1,6 @@
 { lib, buildDunePackage
 , macaddr, domain-name, stdlib-shims
-, ounit, ppx_sexp_conv
+, ounit2, ppx_sexp_conv
 }:
 
 buildDunePackage rec {
@@ -8,9 +8,12 @@ buildDunePackage rec {
 
   inherit (macaddr) version src;
 
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
+
   propagatedBuildInputs = [ macaddr domain-name stdlib-shims ];
 
-  checkInputs = [ ppx_sexp_conv ounit ];
+  checkInputs = [ ppx_sexp_conv ounit2 ];
   doCheck = true;
 
   meta = macaddr.meta // {

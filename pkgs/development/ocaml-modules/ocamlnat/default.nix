@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ocaml findlib ];
-  buildInputs = [ ounit];
+  checkInputs = [ ounit ];
 
   strictDeps = true;
 

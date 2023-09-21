@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , darwin
 , fetchurl
 , makeWrapper
@@ -12,6 +13,8 @@
 , libiconv
 , makeFontsConf
 , gentium
+, runCommand
+, sile
 }:
 
 let
@@ -41,13 +44,13 @@ let
   ]);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.3";
+  version = "0.14.11";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "1n7nlrvhdp6ilpx6agb5w6flss5vbflbldv0495h19fy5fxkb5vz";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-JXlgiK1XyZZSe5QXz06zwEAnVYhiIZhhIaBmfxAgRS4=";
   };
 
   configureFlags = [
@@ -69,12 +72,20 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
-  checkInputs = [
-    poppler_utils
-  ];
   passthru = {
     # So it will be easier to inspect this environment, in comparison to others
     inherit luaEnv;
+    # Copied from Makefile.am
+    tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
+      runCommand "sile-test"
+        {
+          nativeBuildInputs = [ poppler_utils sile ];
+          inherit (finalAttrs) FONTCONFIG_FILE;
+        } ''
+        output=$(mktemp -t selfcheck-XXXXXX.pdf)
+        echo "<sile>foo</sile>" | sile -o $output -
+        pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
+      '');
   };
 
   postPatch = ''
@@ -91,8 +102,6 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  doCheck = true;
-
   enableParallelBuilding = true;
 
   preBuild = lib.optionalString stdenv.cc.isClang ''
@@ -100,13 +109,18 @@ stdenv.mkDerivation rec {
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
+  '';
 
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
@@ -119,9 +133,9 @@ stdenv.mkDerivation rec {
       such as InDesign.
     '';
     homepage = "https://sile-typesetter.org";
-    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sile-typesetter/sile/raw/v${finalAttrs.version}/CHANGELOG.md";
     platforms = platforms.unix;
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };
-}
+})

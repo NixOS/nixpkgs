@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "cytoolz";
-  version = "0.12.0";
+  version = "0.12.1";
   disabled = isPy27 || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wQWwX4XgP7zWAkQ3WWjmLkT+eYwVo1Mcki1TEBjSJBI=";
+    hash = "sha256-/DOQk5dIHJDePOyDG/uI2X4iDckZOdmWkgIC8YS0ZI4=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     homepage = "https://github.com/pytoolz/cytoolz/";

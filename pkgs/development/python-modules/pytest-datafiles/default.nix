@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-datafiles";
-  version = "2.0.1";
+  version = "3.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "omarkohl";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-M0Lnsqi05Xs0uN6LlafNS7HJZOut+nrMZyvGPMMhIkc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YFD8M5TG6VtLRX04R3u0jtYDDlaK32D4ArWxS6x2b/E=";
   };
 
   buildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

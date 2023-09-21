@@ -1,10 +1,10 @@
-{ mkDerivation
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , qmake
 , qttools
-, qttranslations
+, wrapQtAppsHook
 , gdal
 , proj
 , qtsvg
@@ -15,7 +15,7 @@
 , withZbar ? false, zbar
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "merkaartor";
   version = "0.19.0";
 
@@ -23,10 +23,18 @@ mkDerivation rec {
     owner = "openstreetmap";
     repo = "merkaartor";
     rev = version;
-    sha256 = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
+    hash = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  patches = [
+    (fetchpatch {
+      name = "exiv2-0.28.patch";
+      url = "https://github.com/openstreetmap/merkaartor/commit/1e20d2ccd743ea5f8c2358e4ae36fead8b9390fd.patch";
+      hash = "sha256-aHjJLKYvqz7V0QwUIg0SbentBe+DaCJusVqy4xRBVWo=";
+    })
+  ];
+
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
   buildInputs = [ gdal proj qtsvg qtwebengine ]
     ++ lib.optional withGeoimage exiv2
@@ -39,7 +47,6 @@ mkDerivation rec {
   '';
 
   qmakeFlags = [
-    "TRANSDIR_SYSTEM=${qttranslations}/translations"
     "USEWEBENGINE=1"
   ] ++ lib.optional withGeoimage "GEOIMAGE=1"
     ++ lib.optional withGpsdlib "GPSDLIB=1"

@@ -19,13 +19,13 @@
       # drop this service, we'd mount the /run tmpfs over the secret, making it
       # invisible in stage 2.
       script = ''
-        for secret in $(cd /.initrd-secrets; find . -type f); do
+        for secret in $(cd /.initrd-secrets; find . -type f -o -type l); do
           mkdir -p "$(dirname "/$secret")"
           cp "/.initrd-secrets/$secret" "/$secret"
         done
       '';
 
-      unitConfig = {
+      serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
       };

@@ -12,6 +12,7 @@
 , itemloaders
 , jmespath
 , lxml
+, packaging
 , parsel
 , protego
 , pydispatcher
@@ -30,15 +31,15 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.6.3";
+  version = "2.11.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-vf8arzVHwuVAQ206uGgLIQOTJ71dOi74nDQWWZLT5fM=";
+    hash = "sha256-PL3tzgw/DgSC1hvi10WGg758188UsO5q37rduA9bNqU=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     itemadapter
     itemloaders
     lxml
+    packaging
     parsel
     protego
     pydispatcher
@@ -63,7 +65,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     botocore
     glibcLocales
     jmespath
@@ -73,12 +75,6 @@ buildPythonPackage rec {
   ];
 
   LC_ALL = "en_US.UTF-8";
-
-  preCheck = ''
-    # Disable doctest plugin because it causes pytest to hang
-    substituteInPlace pytest.ini \
-      --replace "--doctest-modules" ""
-  '';
 
   disabledTestPaths = [
     "tests/test_proxy_connect.py"
@@ -93,6 +89,7 @@ buildPythonPackage rec {
     "test_nested_css"
     "test_nested_xpath"
     "test_flavor_detection"
+    "test_follow_whitespace"
     # Requires network access
     "AnonymousFTPTestCase"
     "FTPFeedStorageTest"
@@ -101,23 +98,35 @@ buildPythonPackage rec {
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
+    # Depends on uvloop
+    "test_asyncio_enabled_reactor_different_loop"
+    "test_asyncio_enabled_reactor_same_loop"
     # Fails with AssertionError
     "test_peek_fifo"
     "test_peek_one_element"
     "test_peek_lifo"
     "test_callback_kwargs"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"
     "test_reactor_default_twisted_reactor_select"
+    "URIParamsSettingTest"
+    "URIParamsFeedOptionTest"
+    # flaky on darwin-aarch64
+    "test_fixed_delay"
+    "test_start_requests_laziness"
   ];
 
   postInstall = ''
     installManPage extras/scrapy.1
-    install -m 644 -D extras/scrapy_bash_completion $out/share/bash-completion/completions/scrapy
-    install -m 644 -D extras/scrapy_zsh_completion $out/share/zsh/site-functions/_scrapy
+    installShellCompletion --cmd scrapy \
+      --zsh extras/scrapy_zsh_completion \
+      --bash extras/scrapy_bash_completion
   '';
 
   pythonImportsCheck = [
@@ -137,6 +146,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/scrapy/scrapy/raw/${version}/docs/news.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];
-    platforms = platforms.unix;
   };
 }

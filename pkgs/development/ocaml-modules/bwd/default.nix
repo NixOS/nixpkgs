@@ -2,15 +2,16 @@
 
 buildDunePackage rec {
   pname = "bwd";
-  version = "2.0.0";
+  version = "2.2.0";
 
   minimalOCamlVersion = "4.12";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "RedPRL";
     repo = "ocaml-bwd";
     rev = version;
-    sha256 = "sha256:0zgi8an53z6wr6nzz0zlmhx19zhqy1w2vfy1sq3sikjwh74jjq60";
+    hash = "sha256-4DttkEPI9yJtMsqzTNSnoDajcvMQPIiJAHk0kJl540Y=";
   };
 
   doCheck = true;
@@ -18,7 +19,8 @@ buildDunePackage rec {
 
   meta = {
     description = "Backward Lists";
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/RedPRL/ocaml-bwd";
+    changelog = "https://github.com/RedPRL/ocaml-bwd/blob/${version}/CHANGELOG.markdown";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.vbgl ];
   };

@@ -1,5 +1,5 @@
-{ coreutils, fetchFromGitHub, fetchpatch, file, gawk, gnugrep, gnused
-, installShellFiles, less, lib, libiconv, makeWrapper, nano, stdenv, ruby
+{ coreutils, fetchFromGitHub, file, gawk, gnugrep, gnused
+, installShellFiles, lib, libiconv, makeWrapper, stdenv, ruby
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.2";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
-  buildInputs = [ ruby ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ libiconv ruby ];
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";

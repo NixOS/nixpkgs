@@ -1,10 +1,12 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
+, cmake
 , pkg-config
 , gfortran
 , texinfo
-, python2
+, python3
 , boost
   # Select SIMD alignment width (in bytes) for vectorization.
 , simdWidth ? 1
@@ -23,35 +25,37 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blitz++";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "blitzpp";
     repo = "blitz";
-    rev = "1.0.1";
-    sha256 = "0nq84vwvvbq7m0my6h835ijfw53bxdp42qjc6kjhk436888qy9rh";
+    rev = version;
+    hash = "sha256-wZDg+4lCd9iHvxuQQE/qs58NorkxZ0+mf+8PKQ57CDE=";
   };
 
-  nativeBuildInputs = [ pkg-config python2 texinfo ];
+  patches = [
+    # https://github.com/blitzpp/blitz/pull/180
+    (fetchpatch {
+      name = "use-cmake-install-full-dir.patch";
+      url = "https://github.com/blitzpp/blitz/commit/020f1d768c7fa3265cec244dc28f3dc8572719c5.patch";
+      hash = "sha256-8hYFNyWrejjIWPN/HzIOphD4Aq6Soe0FFUBmwV4tpWQ=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+    texinfo
+  ];
+
   buildInputs = [ gfortran texinfo boost ];
 
-  configureFlags =
-    [
-      "--enable-shared"
-      "--disable-static"
-      "--enable-fortran"
-      "--enable-optimize"
-      "--with-pic=yes"
-      "--enable-html-docs"
-      "--disable-doxygen"
-      "--disable-dot"
-      "--disable-latex-docs"
-      "--enable-simd-width=${toString simdWidth}"
-      "--with-boost=${boost.dev}"
-      "--with-boost-libdir=${boost.out}/lib"
-    ] ++ optional enablePadding "--enable-array-length-padding"
-    ++ optional enableSerialization "--enable-serialization"
-    ++ optional stdenv.is64bit "--enable-64bit";
+  cmakeFlags = optional enablePadding "-DARRAY_LENGTH_PADDING=ON"
+    ++ optional enableSerialization "-DENABLE_SERIALISATION=ON"
+    ++ optional stdenv.is64bit "-DBZ_FULLY64BIT=ON";
+    # FIXME ++ optional doCheck "-DBUILD_TESTING=ON";
 
   # skip broken library name detection
   ax_boost_user_serialization_lib = lib.optionalString stdenv.isDarwin "boost_serialization";
@@ -59,12 +63,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   inherit doCheck;
-  checkTarget = "check-testsuite check-examples";
 
   meta = with lib; {
     description = "Fast multi-dimensional array library for C++";
     homepage = "https://sourceforge.net/projects/blitz/";
-    license = licenses.lgpl3;
+    license = with licenses; [ artistic2 /* or */ bsd3 /* or */ lgpl3Plus ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ ToxicFrog ];
     longDescription = ''

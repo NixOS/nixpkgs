@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "siobrultech-protocols";
-  version = "0.6.0";
+  version = "0.12.0";
 
   disabled = pythonOlder "3.8";
 
@@ -18,11 +18,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sdwilsh";
     repo = "siobrultech-protocols";
-    rev = "v${version}";
-    hash = "sha256-d4zAwcSCyC78dJZtxFkpdYurxDRon2cRgzInllP2qJQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-71iFZS5CLYXNw57psLXswNJKfvbeKOqSncLoSsNXqjc=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     pyyaml
@@ -33,10 +33,11 @@ buildPythonPackage rec {
     "siobrultech_protocols.gem.protocol"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "A Sans-I/O Python client library for Brultech Devices";
     homepage = "https://github.com/sdwilsh/siobrultech-protocols";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    changelog = "https://github.com/sdwilsh/siobrultech-protocols/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

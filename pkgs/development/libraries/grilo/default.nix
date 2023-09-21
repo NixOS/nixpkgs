@@ -5,6 +5,7 @@
 , mesonEmulatorHook
 , ninja
 , pkg-config
+, python3
 , gettext
 , vala
 , glib
@@ -16,13 +17,13 @@
 , libxml2
 , gnome
 , gobject-introspection
-, libsoup
+, libsoup_3
 , totem-pl-parser
 }:
 
 stdenv.mkDerivation rec {
   pname = "grilo";
-  version = "0.3.14"; # if you change minor, also change ./setup-hook.sh
+  version = "0.3.16"; # if you change minor, also change ./setup-hook.sh
 
   outputs = [ "out" "dev" "man" "devdoc" ];
   outputBin = "dev";
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "A2nQsAuw9Zul966oz8Zl843xSltBgtKMfB4s0VtRh0M=";
+    sha256 = "iEWA6MXs4oDfI6pj/1I0t9SJiKQE331r/M0ed7RzvZY=";
   };
 
   mesonFlags = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    python3
     gettext
     gobject-introspection
     vala
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     liboauth
     gtk3
     libxml2
-    libsoup
+    libsoup_3
     totem-pl-parser
   ];
 
@@ -73,6 +75,6 @@ stdenv.mkDerivation rec {
     description = "Framework that provides access to various sources of multimedia content, using a pluggable system";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

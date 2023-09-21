@@ -3,8 +3,10 @@
 , lib
 , mkDerivation
 , antiword
+, aspell
 , bison
 , catdoc
+, catdvi
 , chmlib
 , djvulibre
 , file
@@ -19,11 +21,14 @@
 , libwpd
 , libxslt
 , lyx
+, makeWrapper
 , perl
+, perlPackages
 , pkg-config
 , poppler_utils
 , python3Packages
 , qtbase
+, qttools
 , unrtf
 , untex
 , unzip
@@ -31,29 +36,101 @@
 , xapian
 , zlib
 , withGui ? true
+, withPython ? with stdenv; buildPlatform.canExecute hostPlatform
 }:
+
+let filters = {
+      # "binary-name = package" where:
+      #  - "${package}/bin/${binary-name}" is the full path to the binary
+      #  - occurrences of `"${binary-name}"` in recoll's filters should be fixed up
+      awk = gawk;
+      antiword = antiword;
+      catppt = catdoc;
+      catdvi = catdvi;
+      djvused = djvulibre;
+      djvutxt = djvulibre;
+      egrep = gnugrep;
+      groff = groff;
+      gunzip = gzip;
+      iconv = libiconv;
+      pdftotext = poppler_utils;
+      ps2ascii = ghostscript;
+      sed = gnused;
+      tar = gnutar;
+      unzip = unzip;
+      xls2csv = catdoc;
+      xsltproc = libxslt;
+      unrtf = unrtf;
+      untex = untex;
+      wpd2html = libwpd;
+      perl = perl.passthru.withPackages (p: [ p.ImageExifTool ]);
+    };
+    filterPath = lib.makeBinPath (map lib.getBin (builtins.attrValues filters));
+in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.32.7";
+  version = "1.35.0";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ygim9LsLUZv5FaBiqbeq3E80NHPMHweJVwggjWYzfbo=";
+    hash = "sha256-5msEeHCdrpPS0VMCVohYNllaFJJdXRn8laY6BNBt+UE=";
   };
 
-  configureFlags = [ "--enable-recollq" "--disable-webkit" "--without-systemd" ]
-    ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
-    ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
+  configureFlags = [
+    "--enable-recollq"
+    "--disable-webkit"
+    "--without-systemd"
+
+    # this leaks into the final `librecoll-*.so` binary, so we need
+    # to be sure it is taken from `pkgs.file` rather than `stdenv`,
+    # especially when cross-compiling
+    "--with-file-command=${file}/bin/file"
+
+  ] ++ lib.optionals (!withPython) [
+    "--disable-python-module"
+    "--disable-python-chm"
+  ] ++ lib.optionals (!withGui) [
+    "--disable-qtgui"
+    "--disable-x11mon"
+  ] ++ [
+    (lib.withFeature stdenv.isLinux "inotify")
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
+
+  patches = [
+    # fix "No/bad main configuration file" error
+    ./fix-datadir.patch
+  ];
 
   nativeBuildInputs = [
-    file pkg-config python3Packages.setuptools which
+    makeWrapper
+    pkg-config
+    which
+  ] ++ lib.optionals withGui [
+    qtbase
+    qttools
+  ] ++ lib.optionals withPython [
+    python3Packages.setuptools
   ];
 
   buildInputs = [
-    bison chmlib python3Packages.python xapian zlib
-  ] ++ lib.optional withGui qtbase
-    ++ lib.optional stdenv.isDarwin libiconv;
+    aspell
+    bison
+    chmlib
+  ] ++ lib.optionals withPython [
+    python3Packages.python
+    python3Packages.mutagen
+  ] ++ [
+    xapian
+    zlib
+    file
+  ] ++ lib.optionals withGui [
+    qtbase
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
 
   # the filters search through ${PATH} using a sh proc 'checkcmds' for the
   # filtering utils. Short circuit this by replacing the filtering command with
@@ -63,28 +140,19 @@ mkDerivation rec {
     substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
     for f in $out/share/recoll/filters/* ; do
       if [[ ! "$f" =~ \.zip$ ]]; then
-        substituteInPlace $f --replace '"antiword"'  '"${lib.getBin antiword}/bin/antiword"'
-        substituteInPlace $f --replace '"awk"'       '"${lib.getBin gawk}/bin/awk"'
-        substituteInPlace $f --replace '"catppt"'    '"${lib.getBin catdoc}/bin/catppt"'
-        substituteInPlace $f --replace '"djvused"'   '"${lib.getBin djvulibre}/bin/djvused"'
-        substituteInPlace $f --replace '"djvutxt"'   '"${lib.getBin djvulibre}/bin/djvutxt"'
-        substituteInPlace $f --replace '"egrep"'     '"${lib.getBin gnugrep}/bin/egrep"'
-        substituteInPlace $f --replace '"groff"'     '"${lib.getBin groff}/bin/groff"'
-        substituteInPlace $f --replace '"gunzip"'    '"${lib.getBin gzip}/bin/gunzip"'
-        substituteInPlace $f --replace '"iconv"'     '"${lib.getBin libiconv}/bin/iconv"'
-        substituteInPlace $f --replace '"pdftotext"' '"${lib.getBin poppler_utils}/bin/pdftotext"'
+  '' + lib.concatStrings (lib.mapAttrsToList (k: v: (''
+        substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
+  '')) filters) + ''
         substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
-        substituteInPlace $f --replace '"sed"'       '"${lib.getBin gnused}/bin/sed"'
-        substituteInPlace $f --replace '"tar"'       '"${lib.getBin gnutar}/bin/tar"'
-        substituteInPlace $f --replace '"unzip"'     '"${lib.getBin unzip}/bin/unzip"'
-        substituteInPlace $f --replace '"xls2csv"'   '"${lib.getBin catdoc}/bin/xls2csv"'
-        substituteInPlace $f --replace '"xsltproc"'  '"${lib.getBin libxslt}/bin/xsltproc"'
-        substituteInPlace $f --replace '"unrtf"'     '"${lib.getBin unrtf}/bin/unrtf"'
-        substituteInPlace $f --replace '"untex"'     '"${lib.getBin untex}/bin/untex"'
-        substituteInPlace $f --replace '"wpd2html"'  '"${lib.getBin libwpd}/bin/wpd2html"'
-        substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin perl}/bin/perl
+        substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin (perl.passthru.withPackages (p: [ p.ImageExifTool ]))}/bin/perl
       fi
     done
+    wrapProgram $out/bin/recoll      --prefix PATH : "${filterPath}"
+    wrapProgram $out/bin/recollindex --prefix PATH : "${filterPath}"
+    wrapProgram $out/share/recoll/filters/rclaudio.py \
+      --prefix PYTHONPATH : $PYTHONPATH
+    wrapProgram $out/share/recoll/filters/rclimg \
+      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
   '' + lib.optionalString (stdenv.isDarwin && withGui) ''
@@ -101,8 +169,12 @@ mkDerivation rec {
       members, email attachments.
     '';
     homepage = "https://www.lesbonscomptes.com/recoll/";
-    license = licenses.gpl2;
+    changelog = "https://www.lesbonscomptes.com/recoll/pages/release-${version}.html";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ jcumming ];
+    maintainers = with maintainers; [ jcumming ehmry ];
+
+    # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time
+    broken = withPython && (with stdenv; !buildPlatform.canExecute hostPlatform);
   };
 }

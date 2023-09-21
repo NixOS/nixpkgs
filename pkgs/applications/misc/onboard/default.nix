@@ -93,7 +93,7 @@ python3.pkgs.buildPythonApplication rec {
     dconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     # for Onboard.SpellChecker.aspell_cmd doctests
     (aspellWithDicts (dicts: with dicts; [ en ]))
 
@@ -107,9 +107,6 @@ python3.pkgs.buildPythonApplication rec {
 
     python3.pkgs.nose
   ];
-
-  # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   doCheck = false;
 

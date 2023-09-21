@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.9.1";
+  version = "4.9.3-3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/lxml-${version}";
-    sha256 = "sha256-5MJw3ciXYnfctSNcemJ/QJGKAaYpadvdbFhkc8+pmPM=";
+    hash = "sha256-Vrizi+6jUUEx7qODU4PAH5ZmvBIyT9H18+QpYB0m1f4=";
   };
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs

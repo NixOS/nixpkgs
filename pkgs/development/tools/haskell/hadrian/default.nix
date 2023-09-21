@@ -2,8 +2,12 @@
   ghcSrc ? null, ghcVersion ? null
 , mkDerivation, base, bytestring, Cabal, containers, directory
 , extra, filepath, lib, mtl, parsec, shake, text, transformers
-, unordered-containers
+, unordered-containers, cryptohash-sha256, base16-bytestring
 , userSettings ? null
+# Whether to pass --hyperlinked-source to haddock or not. This is a custom
+# workaround as we wait for this to be configurable via userSettings or similar.
+# https://gitlab.haskell.org/ghc/ghc/-/issues/23625
+, enableHyperlinkedSource ? true
 , writeText
 }:
 
@@ -18,6 +22,9 @@ mkDerivation {
   postUnpack = ''
     sourceRoot="$sourceRoot/hadrian"
   '';
+  patches = lib.optionals (!enableHyperlinkedSource) [
+    ./disable-hyperlinked-source.patch
+  ];
   # Overwrite UserSettings.hs with a provided custom one
   postPatch = lib.optionalString (userSettings != null) ''
     install -m644 "${writeText "UserSettings.hs" userSettings}" src/UserSettings.hs
@@ -35,6 +42,8 @@ mkDerivation {
   executableHaskellDepends = [
     base bytestring Cabal containers directory extra filepath mtl
     parsec shake text transformers unordered-containers
+  ] ++ lib.optionals (lib.versionAtLeast ghcVersion "9.7") [
+    cryptohash-sha256 base16-bytestring
   ];
   description = "GHC build system";
   license = lib.licenses.bsd3;

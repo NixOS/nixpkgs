@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git";
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git";
     rev = "v${version}";
     sha256 = "0jabgl2pxvfl780yvghq131ylpf82k7banjz0ksjhlm66ik8gb1i";
   };

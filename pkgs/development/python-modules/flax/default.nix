@@ -10,33 +10,25 @@
 , optax
 , pytest-xdist
 , pytestCheckHook
+, pythonRelaxDepsHook
 , tensorflow
+, tensorstore
 , fetchpatch
 , rich
 }:
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.6.0";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-egTYYFZxhE/Kk7jXRi1HmjCjyFia2LoRigH042isDu0=";
+    hash = "sha256-Vv68BK83gTIKj0r9x+twdhqmRYziD0vxQCdHkYSeTak=";
   };
 
-  patches = [
-    # Bump rich dependency, should be fixed in releases after 0.6.0
-    # https://github.com/google/flax/pull/2407
-    (fetchpatch {
-      url = "https://github.com/google/flax/commit/72189153f9779022b97858ae747c23fbaf571e3d.patch";
-      sha256 = "sha256-hKOn/M7qpBM6R1RIJpnXpRoZgIHqkwQZApN4L0fBzIE=";
-      name = "bump_rich_dependency.patch";
-    })
-  ];
-
-  buildInputs = [ jaxlib ];
+  nativeBuildInputs = [ jaxlib pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     jax
@@ -45,13 +37,17 @@ buildPythonPackage rec {
     numpy
     optax
     rich
+    tensorstore
   ];
+
+  # See https://github.com/google/flax/pull/2882.
+  pythonRemoveDeps = [ "orbax" ];
 
   pythonImportsCheck = [
     "flax"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     keras
     pytest-xdist
     pytestCheckHook
@@ -74,11 +70,34 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+
+    # See https://github.com/google/flax/issues/3232.
+    "tests/jax_utils_test.py"
+
+    # Requires orbax which is not packaged as of 2023-07-27.
+    "tests/checkpoints_test.py"
+  ];
+
+  disabledTests = [
+    # See https://github.com/google/flax/issues/2554.
+    "test_async_save_checkpoints"
+    "test_jax_array0"
+    "test_jax_array1"
+    "test_keep0"
+    "test_keep1"
+    "test_optimized_lstm_cell_matches_regular"
+    "test_overwrite_checkpoints"
+    "test_save_restore_checkpoints_target_empty"
+    "test_save_restore_checkpoints_target_none"
+    "test_save_restore_checkpoints_target_singular"
+    "test_save_restore_checkpoints_w_float_steps"
+    "test_save_restore_checkpoints"
   ];
 
   meta = with lib; {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
+    changelog = "https://github.com/google/flax/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };

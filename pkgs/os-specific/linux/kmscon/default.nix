@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O"
     + " -Wno-error=maybe-uninitialized"; # https://github.com/Aetf/kmscon/issues/49
 
   configureFlags = [

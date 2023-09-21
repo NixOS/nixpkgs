@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, pkgsBuildBuild, cmake, python3, ncurses }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtapi";
   version = "1100.0.11"; # determined by looking at VERSION.txt
 
@@ -11,13 +11,13 @@ stdenv.mkDerivation {
     sha256 = "1y1yl46msabfy14z0rln333a06087bk14f5h7q1cdawn8nmvbdbr";
   };
 
-  sourceRoot = "source/src/llvm";
+  sourceRoot = "${finalAttrs.src.name}/src/llvm";
 
   # Backported from newer llvm, fixes configure error when cross compiling.
   # Also means we don't have to manually fix the result with install_name_tool.
   patches = [
     ./disable-rpath.patch
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # TODO: make unconditional and rebuild the world
     # TODO: send upstream
     ./native-clang-tblgen.patch
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ]
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) [
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "-DCMAKE_CROSSCOMPILING=True"
       # This package could probably have a llvm_6 llvm-tblgen and clang-tblgen
       # provided to reduce some building. This package seems intended to
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Replaces the Mach-O Dynamic Library Stub files in Apple's SDKs to reduce the size";
     homepage = "https://github.com/tpoechtrager/apple-libtapi";
-    license = licenses.apsl20;
+    license = licenses.ncsa;
     maintainers = with maintainers; [ matthewbauer ];
   };
-}
+})

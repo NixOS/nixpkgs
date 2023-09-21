@@ -1,8 +1,8 @@
 { lib
 , attrs
 , buildPythonPackage
+, cbor2
 , fetchFromGitHub
-, fetchpatch
 , exceptiongroup
 , hypothesis
 , immutables
@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
-  version = "22.1.0";
+  version = "23.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,16 +30,8 @@ buildPythonPackage rec {
     owner = "python-attrs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-C8uIsewpgJfB1yYckWTwF5K32+2AAOrxFKB9I18RENg=";
+    hash = "sha256-YO4Clbo5fmXbysxwwM2qCHJwO5KwDC05VctRVFruJcw=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/python-attrs/cattrs/commit/290d162a589acf10ea63b825b7b283e23ca7698a.diff";
-      excludes = [ "poetry.lock" ];
-      hash = "sha256-n6c3qVg9umGKAxeTALq3QTJgO9DIj3SY0ZHhtsDeW94=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -49,11 +41,11 @@ buildPythonPackage rec {
     attrs
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
-  ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    cbor2
     hypothesis
     immutables
     motor
@@ -63,6 +55,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     tomlkit
+    typing-extensions
     ujson
   ];
 
@@ -103,6 +96,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
+    changelog = "https://github.com/python-attrs/cattrs/blob/${src.rev}/HISTORY.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

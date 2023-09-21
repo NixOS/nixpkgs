@@ -6,24 +6,16 @@
 , ninja
 , glib
 , gnome
-, nspr
 , gettext
 , gobject-introspection
 , vala
 , sqlite
-, libxml2
 , dbus-glib
-, libsoup
-, nss
 , dbus
 , libgee
-, evolution-data-server
-, libgdata
-, libsecret
-, db
+, evolution-data-server-gtk4
 , python3
 , readline
-, gtk3
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -35,41 +27,36 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.15.5";
+  version = "0.15.6";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "D/+KiWMwzYKu5FmDJPflQciE0DN1NiEnI7S+s4x1kIY=";
+    sha256 = "yGZjDFU/Kc6b4cemAmfLQICmvM9LjVUdxMfmI02EAkg=";
   };
 
   nativeBuildInputs = [
     gettext
     gobject-introspection
-    gtk3
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
     meson
     ninja
     pkg-config
-    python3
     vala
+  ] ++ lib.optionals telepathySupport [
+    python3
   ];
 
   buildInputs = [
-    db
     dbus-glib
-    evolution-data-server
-    libgdata # required for some backends transitively
-    libsecret
-    libsoup
-    libxml2
-    nspr
-    nss
+    evolution-data-server-gtk4 # UI part not needed, using gtk4 version to reduce system closure.
     readline
-  ] ++ lib.optional telepathySupport telepathy-glib;
+  ] ++ lib.optionals telepathySupport [
+    telepathy-glib
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -77,7 +64,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     (python3.withPackages (pp: with pp; [
       python-dbusmock
@@ -107,9 +94,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
+  postPatch = lib.optionalString telepathySupport ''
     patchShebangs tests/tools/manager-file.py
   '';
 
@@ -123,8 +108,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A library that aggregates people from multiple sources to create metacontacts";
     homepage = "https://wiki.gnome.org/Projects/Folks";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
+    platforms = platforms.unix;
   };
 }

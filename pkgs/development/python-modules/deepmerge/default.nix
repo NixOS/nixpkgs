@@ -9,20 +9,20 @@
 
 buildPythonPackage rec {
   pname = "deepmerge";
-  version = "1.0.1";
+  version = "1.1.0";
   disabled = isPy27;
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-S0R3ntPS+3kbsYH8JoNCNJb+pCirt683/rIyht5/Cho=";
+    hash = "sha256-TCeg213iheGnzqx9vBUx3qpVa2J96kkAyCRFgezf6i0=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,59 +1,83 @@
 { lib
 , stdenv
-, bokeh
 , buildPythonPackage
-, cloudpickle
-, distributed
-, fastparquet
 , fetchFromGitHub
-, fetchpatch
+
+# build-system
+, setuptools
+, wheel
+
+# dependencies
+, click
+, cloudpickle
 , fsspec
-, jinja2
-, numpy
+, importlib-metadata
 , packaging
-, pandas
 , partd
+, pyyaml
+, toolz
+
+# optional-dependencies
+, numpy
 , pyarrow
+, lz4
+, pandas
+, distributed
+, bokeh
+, jinja2
+
+# tests
+, arrow-cpp
+, hypothesis
+, pytest-asyncio
 , pytest-rerunfailures
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
-, pyyaml
-, scipy
-, toolz
-, zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.9.1";
-  format = "setuptools";
+  version = "2023.8.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
-    hash = "sha256-4Tok9eYhi2FF+8bpKnwKT3KIRGHIMtxczTkZ6qD8x7g=";
+    repo = "dask";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZKjfxTJCu3EUOKz16+VP8+cPqQliFNc7AU1FPC1gOXw=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
+
   propagatedBuildInputs = [
+    click
     cloudpickle
     fsspec
     packaging
     partd
     pyyaml
+    importlib-metadata
     toolz
   ];
 
-  passthru.optional-dependencies = {
+  passthru.optional-dependencies = lib.fix (self: {
     array = [
       numpy
     ];
     complete = [
-      distributed
-    ];
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
       numpy
       pandas
@@ -65,16 +89,17 @@ buildPythonPackage rec {
       bokeh
       jinja2
     ];
-  };
+  });
 
-  checkInputs = [
-    fastparquet
-    pyarrow
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
-    scipy
-    zarr
+    # from panda[test]
+    hypothesis
+    pytest-asyncio
+  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+    pyarrow
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -84,12 +109,15 @@ buildPythonPackage rec {
     echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
     substituteInPlace setup.py \
+      --replace "import versioneer" "" \
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
+      --replace ', "versioneer[toml]==0.28"' "" \
       --replace " --durations=10" "" \
-      --replace " -v" ""
+      --replace " --cov-config=pyproject.toml" "" \
+      --replace "\"-v" "\" "
   '';
 
   pytestFlagsArray = [
@@ -97,8 +125,6 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
-    # DeprecationWarning: The 'sym_pos' keyword is deprecated and should be replaced by using 'assume_a = "pos"'. 'sym_pos' will be removed in SciPy 1.11.0.
-    "-W" "ignore::DeprecationWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
@@ -108,7 +134,12 @@ buildPythonPackage rec {
     # AttributeError: 'str' object has no attribute 'decode'
     "test_read_dir_nometa"
   ] ++ [
-    "test_chunksize_files"
+    # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
+    "test_concat_categorical"
+    # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
+    "test_dot"
+    "test_dot_nan"
+    "test_merge_column_with_nulls"
   ];
 
   __darwinAllowLocalNetworking = true;

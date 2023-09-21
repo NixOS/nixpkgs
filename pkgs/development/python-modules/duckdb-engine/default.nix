@@ -7,13 +7,14 @@
 , hypothesis
 , ipython-sql
 , poetry-core
+, snapshottest
 , sqlalchemy
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.6.4";
+  version = "0.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "duckdb_engine";
     owner = "Mause";
-    rev = "v${version}";
-    hash = "sha256-7PfrI4bNz0XtBa/cb8T43j06BJ3B2S5zIyBZsEusyXc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Z9m1+Bc/csWKdPDuwf82xX0qOiD1Y5LBgJjUlLntAO8=";
   };
 
   nativeBuildInputs = [
@@ -38,15 +39,19 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  # this test tries to download the httpfs extension
   disabledTests = [
+    # this test tries to download the httpfs extension
     "test_preload_extension"
+    # test should be skipped based on sqlalchemy version but isn't and fails
+    "test_commit"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
     ipython-sql
+    # TODO(cpcloud): include pandas here when it supports sqlalchemy 2.0
+    snapshottest
     typing-extensions
   ];
 
@@ -57,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "SQLAlchemy driver for duckdb";
     homepage = "https://github.com/Mause/duckdb_engine";
+    changelog = "https://github.com/Mause/duckdb_engine/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

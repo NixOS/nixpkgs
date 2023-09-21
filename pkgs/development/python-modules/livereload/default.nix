@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tornado six ];
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
   # TODO: retry running all tests after v2.6.1
   checkPhase = "NOSE_EXCLUDE=test_watch_multiple_dirs nosetests -s";
 

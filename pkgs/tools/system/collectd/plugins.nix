@@ -1,6 +1,5 @@
 { lib, stdenv
 , curl
-, darwin
 , hiredis
 , iptables
 , jdk
@@ -19,7 +18,6 @@
 , libsigrok
 , libvirt
 , libxml2
-, libapparmor, libcap_ng, numactl
 , lua
 , lvm2
 , lm_sensors
@@ -31,7 +29,7 @@
 , perl
 , postgresql
 , protobufc
-, python2
+, python3
 , rabbitmq-c
 , rdkafka
 , riemann_c_client
@@ -102,7 +100,7 @@ let
     pinba.buildInputs = [ protobufc ];
     ping.buildInputs = [ liboping ];
     postgresql.buildInputs = [ postgresql ];
-    python.buildInputs = [ python2 ];
+    python.buildInputs = [ python3 ];
     redis.buildInputs = [ hiredis ];
     rrdcached.buildInputs = [ rrdtool libxml2 ];
     rrdtool.buildInputs = [ rrdtool libxml2 ];

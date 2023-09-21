@@ -1,15 +1,15 @@
-{ lib, appimageTools, fetchurl, nodePackages }: let
+{ lib, appimageTools, fetchurl, asar }: let
   pname = "flexoptix-app";
-  version = "5.12.2";
+  version = "5.16.0-latest";
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
-    hash = "sha256-XVswjIXnuWLRiXFc38lDhSvxYTQtYjs4V/AGdiNLX0g=";
+    hash = "sha256-A10r8IUB3zWKWmjen90vLXPF7V/Cgo+DhFn/Hsc1Nhg=";
   };
 
   udevRules = fetchurl {
-    url = "https://www.flexoptix.net/skin/udev_rules/99-tprogrammer.rules";
+    url = "https://www.flexoptix.net/static/frontend/Flexoptix/default/en_US/files/99-tprogrammer.rules";
     hash = "sha256-OZe5dV50xq99olImbo7JQxPjRd7hGyBIVwFvtR9cIVc=";
   };
 
@@ -18,9 +18,9 @@
       ${oA.buildCommand}
 
       # Get rid of the autoupdater
-      ${nodePackages.asar}/bin/asar extract $out/resources/app.asar app
+      ${asar}/bin/asar extract $out/resources/app.asar app
       sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
-      ${nodePackages.asar}/bin/asar pack app $out/resources/app.asar
+      ${asar}/bin/asar pack app $out/resources/app.asar
     '';
   });
 
@@ -28,7 +28,7 @@ in appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
-  multiPkgs = null; # no 32bit needed
+  multiArch = false; # no 32bit needed
   extraPkgs = { pkgs, ... }@args: [
     pkgs.hidapi
   ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;
@@ -47,7 +47,7 @@ in appimageTools.wrapAppImage {
   '';
 
   meta = {
-    description = "Configure FLEXOPTIX Universal Transcievers in seconds";
+    description = "Configure FLEXOPTIX Universal Transceivers in seconds";
     homepage = "https://www.flexoptix.net";
     changelog = "https://www.flexoptix.net/en/flexoptix-app/?os=linux#flexapp__modal__changelog";
     license = lib.licenses.unfree;

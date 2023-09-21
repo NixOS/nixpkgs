@@ -1,11 +1,11 @@
 { lib
+, fmt
 , stdenv
-, mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
+, doxygen
 , ninja
-, GitPython
+, gitpython
 , boost
 , coin3d
 , eigen
@@ -47,15 +47,15 @@
 , zlib
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "0.20.1";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
-    rev = version;
-    hash = "sha256-r2lhFv4ReASteoVxwwiW9TdSckpaju6QE8UegxeY4rE=";
+    rev = finalAttrs.version;
+    hash = "sha256-rwt81Z+Bp8uZlR4iuGQEDKBu/Dr9Rqg7d9SsCdofTUU=";
   };
 
   nativeBuildInputs = [
@@ -69,10 +69,12 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    GitPython # for addon manager
+    gitpython # for addon manager
     boost
     coin3d
+    doxygen
     eigen
+    fmt
     gts
     hdf5
     libGLU
@@ -135,6 +137,7 @@ mkDerivation rec {
   qtWrapperArgs = [
     "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
     "--prefix PATH : ${libredwg}/bin"
+    "--set QT_QPA_PLATFORM xcb"
   ];
 
   postFixup = ''
@@ -143,8 +146,8 @@ mkDerivation rec {
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
-  meta = with lib; {
-    homepage = "https://www.freecadweb.org/";
+  meta = {
+    homepage = "https://www.freecad.org";
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     longDescription = ''
       FreeCAD is an open-source parametric 3D modeler made primarily to design
@@ -162,8 +165,8 @@ mkDerivation rec {
       programmer, an experienced CAD user, a student or a teacher, you will feel
       right at home with FreeCAD.
     '';
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ viric gebner AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ viric gebner AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

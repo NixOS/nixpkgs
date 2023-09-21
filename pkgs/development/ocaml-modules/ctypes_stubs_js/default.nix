@@ -9,6 +9,7 @@ buildDunePackage rec {
   pname = "ctypes_stubs_js";
   version = "0.1";
 
+  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitLab {
@@ -19,11 +20,13 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ integers_stubs_js ];
+  nativeCheckInputs = [
+    nodejs
+    js_of_ocaml-compiler
+  ];
   checkInputs = [
     ctypes
-    js_of_ocaml-compiler
     ppx_expect
-    nodejs
   ];
   doCheck = true;
 

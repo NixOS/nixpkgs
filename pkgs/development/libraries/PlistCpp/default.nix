@@ -11,6 +11,10 @@ stdenv.mkDerivation {
     sha256 = "10jn6bvm9vn6492zix2pd724v5h4lccmkqg3lxfw8r0qg3av0yzv";
   };
 
+  postPatch = ''
+    sed -i "1i #include <algorithm>" src/Plist.cpp
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost NSPlist pugixml ];
 

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
-  version = "37.1";
+  version = "43";
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
     rev = "Release${version}";
-    sha256 = "sha256-fj9NA8HLF/FdYNoS2g9KKDvqr3m41P+VU0eiVm7ku8A=";
+    hash = "sha256-gwbyP2duUvZafMclPwP4uZh7A7OzAvSyqjl6Eg1N6Gg=";
   };
 
   buildInputs = [ openssl ];

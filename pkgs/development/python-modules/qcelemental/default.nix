@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.25.0";
+  version = "0.25.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v1yu6yBEtgVsheku/8YaIaXrsVgMzcFlWAuySPhYgyQ=";
+    hash = "sha256-4+DlP+BH0UdWcYRBBApdc3E18L2zPvsdY6GTW5WCGnQ=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

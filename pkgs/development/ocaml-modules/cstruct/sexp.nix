@@ -9,6 +9,7 @@ buildDunePackage rec {
   inherit (cstruct) version src meta;
 
   minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   doCheck = true;
   checkInputs = [ alcotest ];

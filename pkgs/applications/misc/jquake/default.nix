@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jquake";
-  version = "1.8.1";
+  version = "1.8.5";
 
   src = fetchurl {
-    url = "https://fleneindre.github.io/downloads/JQuake_${version}_linux.zip";
-    sha256 = "sha256-fIxCcqpv0KAXUBbyinTXr/fkAcufVtpr9FUTJkXSgTs=";
+    url = "https://github.com/fleneindre/fleneindre.github.io/raw/master/downloads/JQuake_${version}_linux.zip";
+    sha256 = "sha256-Q9R5Qhk8Qodw2d99nL2aG5WGpIyvKmjzfkRK7xJzoc0=";
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems ];
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Real-time earthquake map of Japan";
     homepage = "https://jquake.net";
-    downloadPage = "https://jquake.net/?down";
-    changelog = "https://jquake.net/?docu";
+    downloadPage = "https://jquake.net/en/terms.html?os=linux&arch=any";
+    changelog = "https://jquake.net/en/changelog.html";
     maintainers = with maintainers; [ nessdoor ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;

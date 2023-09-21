@@ -5,19 +5,19 @@
 , libsndfile, pkg-config, libpulseaudio, qtbase, qtsvg, redland
 , rubberband, serd, sord, vamp-plugin-sdk, fftwFloat
 , capnproto, liboggz, libfishsound, libid3tag, opusfile
-, wrapQtAppsHook
+, wrapQtAppsHook, meson, ninja, cmake
 }:
 
 stdenv.mkDerivation rec {
   pname = "sonic-visualiser";
-  version = "4.2";
+  version = "4.5.1";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/2755/${pname}-${version}.tar.gz";
-    sha256 = "1wsvranhvdl21ksbinbgb55qvs3g2d4i57ssj1vx2aln6m01ms9q";
+    url = "https://code.soundsoftware.ac.uk/attachments/download/2841/${pname}-${version}.tar.gz";
+    sha256 = "1sgg4m3035a03ldipgysz7zqfa9pqaqa4j024gyvvcwh4ml8iasr";
   };
 
-  nativeBuildInputs = [ pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [ meson ninja cmake pkg-config wrapQtAppsHook ];
   buildInputs =
     [ libsndfile qtbase qtsvg fftw fftwFloat bzip2 lrdf rubberband
       libsamplerate vamp-plugin-sdk alsa-lib librdf_raptor librdf_rasqal redland
@@ -36,11 +36,6 @@ stdenv.mkDerivation rec {
       libid3tag
       opusfile
     ];
-
-  # comment out the tests
-  preConfigure = ''
-    sed -i 's/sub_test_svcore_/#sub_test_svcore_/' sonic-visualiser.pro
-  '';
 
   enableParallelBuilding = true;
 

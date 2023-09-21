@@ -1,19 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, cmake, openmp }:
+{ stdenv, lib, fetchFromGitHub, cmake, gtest, openmp }:
 
 stdenv.mkDerivation rec {
   pname = "spglib";
-  version = "2.0.1"; # N.B: if you change this, please update: pythonPackages.spglib
+  version = "2.1.0"; # N.B: if you change this, please update: pythonPackages.spglib
 
   src = fetchFromGitHub {
     owner = "spglib";
     repo = "spglib";
     rev = "v${version}";
-    sha256 = "sha256-0M3GSnNvBNmE4ShW8NNkVrOBGEF9A0C5wd++xnyrcdI=";
+    hash = "sha256-EL3jkzyurc8fnzk9kAdTaEtLfLlLtmaVDFwChfCDOrQ=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake gtest ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ openmp ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "C library for finding and handling crystal symmetries";

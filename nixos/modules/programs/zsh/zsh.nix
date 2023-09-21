@@ -12,7 +12,7 @@ let
   opt = options.programs.zsh;
 
   zshAliases = concatStringsSep "\n" (
-    mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
+    mapAttrsFlatten (k: v: "alias -- ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
@@ -159,6 +159,14 @@ in
         type = types.bool;
       };
 
+      enableLsColors = mkOption {
+        default = true;
+        description = lib.mdDoc ''
+          Enable extra colors in directory listings (used by `ls` and `tree`).
+        '';
+        type = types.bool;
+      };
+
     };
 
   };
@@ -173,10 +181,10 @@ in
         # This file is read for all shells.
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
+        if [ -n "''${__ETC_ZSHENV_SOURCED-}" ]; then return; fi
         __ETC_ZSHENV_SOURCED=1
 
-        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+        if [ -z "''${__NIXOS_SET_ENVIRONMENT_DONE-}" ]; then
             . ${config.system.build.setEnvironment}
         fi
 
@@ -184,7 +192,7 @@ in
 
         # Tell zsh how to find installed completions.
         for p in ''${(z)NIX_PROFILES}; do
-            fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+            fpath=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions $fpath)
         done
 
         # Setup custom shell init stuff.
@@ -206,7 +214,7 @@ in
         ${zshStartupNotes}
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_ZPROFILE_SOURCED" ]; then return; fi
+        if [ -n "''${__ETC_ZPROFILE_SOURCED-}" ]; then return; fi
         __ETC_ZPROFILE_SOURCED=1
 
         # Setup custom login shell init stuff.
@@ -236,6 +244,9 @@ in
           setopt ${concatStringsSep " " cfg.setOptions}
         ''}
 
+        # Alternative method of determining short and full hostname.
+        HOST=${config.networking.fqdnOrHostName}
+
         # Setup command line history.
         # Don't export these, otherwise other shells (bash) will try to use same HISTFILE.
         SAVEHIST=${toString cfg.histSize}
@@ -259,6 +270,11 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${optionalString cfg.enableLsColors ''
+          # Extra colors for directory listings.
+          eval "$(${pkgs.coreutils}/bin/dircolors -b)"
+        ''}
 
         # Setup aliases.
         ${zshAliases}

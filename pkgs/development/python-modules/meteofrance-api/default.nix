@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -14,25 +13,17 @@
 
 buildPythonPackage rec {
   pname = "meteofrance-api";
-  version = "1.0.2";
+  version = "1.2.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "hacf-fr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-X8f0z9ZPXH7Wc3GqHmPptxpNxbHeezdOzw4gZCprumU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-W26R+L2ZJpycEQ9KwkHqVARKsd/5YkJCxMeciKnKAX8=";
   };
-
-  patches = [
-    (fetchpatch {
-      #  Switch to poetry-core
-      url = "https://github.com/hacf-fr/meteofrance-api/commit/7536993fe38dfe3d0833da3fd750be9277aeffa6.patch";
-      hash = "sha256-/4VgzoJxhaXoj1N1GNLJNvkQvv6IW9OcBJV6vg6kthM=";
-    })
-  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -41,21 +32,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pytz
     requests
-    urllib3
-  ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
+    urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];
-
-  postPatch = ''
-    # https://github.com/hacf-fr/meteofrance-api/pull/378
-    substituteInPlace pyproject.toml \
-      --replace 'pytz = ">=2020.4,<2022.0"' 'pytz = ">=2020.4,<2023.0"'
-  '';
 
   pythonImportsCheck = [
     "meteofrance_api"
@@ -72,12 +56,14 @@ buildPythonPackage rec {
     "test_places"
     "test_rain"
     "test_session"
+    "test_observation"
     "test_workflow"
   ];
 
   meta = with lib; {
     description = "Module to access information from the Meteo-France API";
     homepage = "https://github.com/hacf-fr/meteofrance-api";
+    changelog = "https://github.com/hacf-fr/meteofrance-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

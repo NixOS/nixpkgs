@@ -9,6 +9,7 @@ buildDunePackage rec {
   pname = "irmin-http";
 
   inherit (irmin) version src strictDeps;
+  duneVersion = "3";
 
 
   propagatedBuildInputs = [ astring cohttp-lwt cohttp-lwt-unix fmt jsonm logs lwt uri irmin webmachine ];

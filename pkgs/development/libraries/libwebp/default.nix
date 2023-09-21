@@ -27,14 +27,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-XX6qOWlIl8TqOQMiGpmmDVKwQnM1taG6lrqq1ZFVk5s=";
+    hash   = "sha256-Q94avvKjPdwdGt5ADo30cf2V4T7MCTubDHJxTtbG4xQ=";
   };
+
+  patches = [
+    # Commit 902bc919 from upstream, mangled slightly to apply onto 1.3.1.
+    # There is currently (2023-09-12) no confirmation that this is the fix for
+    # CVE-2023-4863, but it is linked to the right crbug, and matches the
+    # description of that (critical sev, exploited in the wild) CVE.
+    ./CVE-2023-4863.patch
+  ];
 
   configureFlags = [
     (lib.enableFeature threadingSupport "threading")

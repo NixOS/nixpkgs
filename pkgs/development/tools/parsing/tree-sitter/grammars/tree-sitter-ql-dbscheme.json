@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-ql-dbscheme",
-  "rev": "ad0c1485aa1e61b727a986d82c7fab4cd21ca723",
-  "date": "2022-07-22T15:14:16+00:00",
-  "path": "/nix/store/13yzcd1k87sfxdac4cdj8pvqv06wal6i-tree-sitter-ql-dbscheme",
-  "sha256": "0glj3j9m4wsmfgahsjzhzp34scxrwpwjqkzgj0i72rn23869xjip",
+  "rev": "6b66b9e6e3d36a49ce4def7abee2a286ac9ca289",
+  "date": "2022-08-29T08:49:16+02:00",
+  "path": "/nix/store/k58fls33kiwgbf8vn4488x5l79c9a18x-tree-sitter-ql-dbscheme",
+  "sha256": "1kpkjg97s5j1dx79r3fk0i2bxhpm9sdawgb1drqnjgz4qsshp7f2",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

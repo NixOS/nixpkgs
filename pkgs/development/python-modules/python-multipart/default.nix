@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace "yaml.load" "yaml.safe_load"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     pyyaml
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "A streaming multipart parser for Python";
     homepage = "https://github.com/andrew-d/python-multipart";
     license = licenses.asl20;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

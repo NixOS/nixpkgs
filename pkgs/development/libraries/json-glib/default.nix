@@ -7,6 +7,8 @@
 , nixosTests
 , pkg-config
 , gettext
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
 , gobject-introspection
 , gi-docgen
 , libxslt
@@ -18,7 +20,8 @@ stdenv.mkDerivation rec {
   pname = "json-glib";
   version = "1.6.6";
 
-  outputs = [ "out" "dev" "devdoc" "installedTests" ];
+  outputs = [ "out" "dev" "installedTests" ]
+    ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -43,13 +46,12 @@ stdenv.mkDerivation rec {
     gettext
     glib
     libxslt
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
     gi-docgen
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    fixDarwinDylibNames
   ];
-
-  buildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
     glib
@@ -57,6 +59,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "gtk_doc" withIntrospection)
   ];
 
   # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)

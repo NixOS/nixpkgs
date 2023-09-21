@@ -1,52 +1,49 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, cmake
+, pythonOlder
+, awkward-cpp
+, hatch-fancy-pypi-readme
+, hatchling
 , numba
 , numpy
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, rapidjson
+, packaging
 , setuptools
+, typing-extensions
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "1.10.1";
-  format = "setuptools";
+  version = "2.3.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xjlO0l+xSghtY2IdnYT9wij11CpkWG8hVzGzb94XA0s=";
+    hash = "sha256-NLROXEbh4MKvBFuj+4+Wa2u37P9vuQ0Ww8kK+CYWt5E=";
   };
 
   nativeBuildInputs = [
-    cmake
-  ];
-
-  buildInputs = [
-    pyyaml
-    rapidjson
+    hatch-fancy-pypi-readme
+    hatchling
   ];
 
   propagatedBuildInputs = [
+    awkward-cpp
     numpy
-    setuptools
+    packaging
+  ]  ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
   ];
 
   dontUseCmakeConfigure = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     numba
-  ];
-
-  disabledTests = [
-    # incomatible with numpy 1.23
-    "test_numpyarray"
+    setuptools
   ];
 
   disabledTestPaths = [
@@ -60,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
+    changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];
   };

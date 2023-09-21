@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
 , bleach
 , mt-940
 , requests
@@ -8,20 +11,22 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.1.0";
+  version = "4.0.0";
   pname = "fints";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
     rev = "v${version}";
-    hash = "sha256-3frJIEZgVnZD2spWYIuEtUt7MVsU/Zj82HOB9fKYQWE=";
+    hash = "sha256-SREprcrIdeKVpL22IViexwiKmFfbT2UbKEmxtVm6iu0=";
   };
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
 
-  checkInputs = [ pytestCheckHook pytest-mock ];
+  nativeCheckInputs = [ pytestCheckHook pytest-mock ];
 
   meta = with lib; {
     homepage = "https://github.com/raphaelm/python-fints/";

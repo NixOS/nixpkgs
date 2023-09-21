@@ -7,41 +7,34 @@
 
 { lib, fetchurl, unzip, glibcLocalesUtf8 }:
 
-{ # Optionally move the contents of the unpacked tree up one level.
-  stripRoot ? true
+{ name ? "source"
 , url ? ""
 , urls ? []
-, extraPostFetch ? ""
+, nativeBuildInputs ? []
 , postFetch ? ""
-, name ? "source"
-, pname ? ""
-, version ? ""
-, nativeBuildInputs ? [ ]
-, # Allows to set the extension for the intermediate downloaded
-  # file. This can be used as a hint for the unpackCmdHooks to select
-  # an appropriate unpacking tool.
-  extension ? null
+, extraPostFetch ? ""
+
+# Optionally move the contents of the unpacked tree up one level.
+, stripRoot ? true
+# Allows to set the extension for the intermediate downloaded
+# file. This can be used as a hint for the unpackCmdHooks to select
+# an appropriate unpacking tool.
+, extension ? null
+
+# the rest are given to fetchurl as is
 , ... } @ args:
 
+assert (extraPostFetch != "") -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'." true;
 
-lib.warnIf (extraPostFetch != "") "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'."
-
-(let
+let
   tmpFilename =
     if extension != null
     then "download.${extension}"
     else baseNameOf (if url != "" then url else builtins.head urls);
 in
 
-fetchurl ((
-  if (pname != "" && version != "") then
-    {
-      name = "${name}-${version}";
-      inherit pname version;
-    }
-  else
-    { inherit name; }
-) // {
+fetchurl ({
+  inherit name;
   recursiveHash = true;
 
   downloadToTemp = true;
@@ -61,30 +54,24 @@ fetchurl ((
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
       chmod -R +w "$unpackDir"
-    ''
-    + (if stripRoot then ''
-      if [ $(ls "$unpackDir" | wc -l) != 1 ]; then
+    '' + (if stripRoot then ''
+      if [ $(ls -A "$unpackDir" | wc -l) != 1 ]; then
         echo "error: zip file must contain a single file or directory."
         echo "hint: Pass stripRoot=false; to fetchzip to assume flat list of files."
         exit 1
       fi
-      fn=$(cd "$unpackDir" && echo *)
+      fn=$(cd "$unpackDir" && ls -A)
       if [ -f "$unpackDir/$fn" ]; then
         mkdir $out
       fi
       mv "$unpackDir/$fn" "$out"
     '' else ''
       mv "$unpackDir" "$out"
-    '')
-    + ''
+    '') + ''
       ${postFetch}
-    '' + ''
       ${extraPostFetch}
-    ''
-
-    # Remove non-owner write permissions
-    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
-    + ''
       chmod 755 "$out"
     '';
-} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ]))
+    # ^ Remove non-owner write permissions
+    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ])

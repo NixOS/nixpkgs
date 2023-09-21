@@ -1,38 +1,67 @@
 { lib
 , buildPythonPackage
+, cython
+, fetchpatch
 , fetchPypi
-, isPy27
-, nose
+, matplotlib
 , numpy
-, scipy
+, oldest-supported-numpy
 , pandas
 , patsy
-, cython
-, matplotlib
+, pythonOlder
+, scipy
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.13.2";
-  disabled = isPy27;
+  version = "0.14.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d9wpLJk5wDakdvF3D50Il2sFQ32qIpko2nMjEUfN59Q=";
+    hash = "sha256-aHXH1onpZtlI8V64FqtWFvSShwaxgM9HD9WQerb2R6Q=";
   };
 
-  nativeBuildInputs = [ cython ];
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ numpy scipy pandas patsy matplotlib ];
+  patches = [
+    # https://github.com/statsmodels/statsmodels/pull/8969
+    (fetchpatch {
+      name = "unpin-setuptools-scm.patch";
+      url = "https://github.com/statsmodels/statsmodels/commit/cfad8d81166e9b1392ba99763b95983afdb6d61b.patch";
+      hash = "sha256-l7cQHodkPm399a+3qIVmXPk/Ca+CqJDyWXWgjb062nM=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cython
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    pandas
+    patsy
+    matplotlib
+  ];
 
   # Huge test suites with several test failures
   doCheck = false;
-  pythonImportsCheck = [ "statsmodels" ];
 
-  meta = {
+  pythonImportsCheck = [
+    "statsmodels"
+  ];
+
+  meta = with lib; {
     description = "Statistical computations and models for use with SciPy";
     homepage = "https://www.github.com/statsmodels/statsmodels";
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh ];
   };
 }

@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, cmake, gfortran
-# Wether to build with ILP64 interface
+# Whether to build with ILP64 interface
 , blas64 ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "blas";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchurl {
     url = "http://www.netlib.org/blas/${pname}-${version}.tgz";
-    sha256 = "sha256-LjYNmcm9yEB6YYiMQKqFP7QhlCDruCZNtIbLiGBGirM=";
+    sha256 = "sha256-LZ/e59NhlU/uUyEApQ5gKCbJzBFT+M0Fe6pl7VfpAoM=";
   };
 
   passthru = { inherit blas64; };

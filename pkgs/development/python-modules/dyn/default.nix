@@ -3,16 +3,16 @@
 
 buildPythonPackage rec {
   pname = "dyn";
-  version = "1.8.1";
+  version = "1.8.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e112149d48b4500c18b3cfb6e0e6e780bb5aa0e56ff87cac412280200b9ec8bf";
+    sha256 = "sha256-933etYrKRgSqJfOMIuIDL4Uv4/RdSEFMNWFtW5qiPpA=";
   };
 
   buildInputs = [ glibcLocales ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytest-cov
     mock

@@ -1,0 +1,11 @@
+--- a/cmd/version.go
++++ b/cmd/version.go
+@@ -16,7 +16,7 @@ var versionCmd = &cobra.Command{
+ 			if sum == "" {
+ 				sum = "none"
+ 			}
+-			fmt.Printf("https://%s %s @ %s\n", info.Main.Path, info.Main.Version, sum)
++			fmt.Printf("https://%s %s @ %s\n", info.Main.Path, "@version@", sum)
+ 		} else {
+ 			fmt.Println("unknown")
+ 		}

@@ -1,4 +1,4 @@
-{ lib, stdenv, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
+{ lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
 let
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
@@ -12,13 +12,14 @@ let
   #     * update lsquic and boringssl if necessarry, lsquic.cr depends on
   #       the same version of lsquic and lsquic requires the boringssl
   #       commit mentioned in its README
-  versions = builtins.fromJSON (builtins.readFile ./versions.json);
+  versions = lib.importJSON ./versions.json;
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "gitea.invidious.io";
     owner = "iv-org";
     repo = pname;
     fetchSubmodules = true;
@@ -44,7 +45,7 @@ crystal.buildCrystalPackage rec {
       substituteInPlace src/invidious.cr \
           --replace ${lib.escapeShellArg branchTemplate} '"master"' \
           --replace ${lib.escapeShellArg commitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"' \
-          --replace ${lib.escapeShellArg versionTemplate} '"${lib.replaceChars ["-"] ["."] (lib.substring 9 10 version)}"' \
+          --replace ${lib.escapeShellArg versionTemplate} '"${lib.replaceStrings ["-"] ["."] (lib.substring 9 10 version)}"' \
           --replace ${lib.escapeShellArg assetCommitTemplate} '"${lib.substring 0 7 versions.invidious.rev}"'
 
       # Patch the assets and locales paths to be absolute
@@ -68,7 +69,14 @@ crystal.buildCrystalPackage rec {
   shardsFile = ./shards.nix;
   crystalBinaries.invidious = {
     src = "src/invidious.cr";
-    options = [ "--release" "--progress" "--verbose" "--no-debug" "-Dskip_videojs_download" ];
+    options = [
+      "--release"
+      "--progress"
+      "--verbose"
+      "--no-debug"
+      "-Dskip_videojs_download"
+      "-Ddisable_quic"
+    ];
   };
 
   postConfigure = ''
@@ -89,12 +97,16 @@ crystal.buildCrystalPackage rec {
     cp -r config/sql $out/share/invidious/config
   '';
 
-  # Invidious tries to open config/config.yml and connect to the database, even
-  # when running --help. This specifies a minimal configuration in an
-  # environment variable. Even though the database is bogus, --help still
-  # works.
+  # Invidious tries to open and validate config/config.yml, even when
+  # running --help. This specifies a minimal configuration in an
+  # environment variable. Even though the database and hmac_key are
+  # bogus, --help still works.
   installCheckPhase = ''
-    INVIDIOUS_CONFIG="database_url: sqlite3:///dev/null" $out/bin/invidious --help
+    INVIDIOUS_CONFIG="$(cat <<EOF
+    database_url: sqlite3:///dev/null
+    hmac_key: "this-is-required"
+    EOF
+    )" $out/bin/invidious --help
   '';
 
   passthru = {
@@ -108,6 +120,5 @@ crystal.buildCrystalPackage rec {
     homepage = "https://invidious.io/";
     license = licenses.agpl3;
     maintainers = with maintainers; [ infinisil sbruder ];
-    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

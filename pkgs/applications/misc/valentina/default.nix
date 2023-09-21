@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitLab, substituteAll, installShellFiles
+{ lib, stdenv, fetchFromGitLab, installShellFiles
 , qmake, qttools
-, qtsvg, qttranslations, qtxmlpatterns
+, qtsvg, qtxmlpatterns
 , wrapQtAppsHook
 }:
 
@@ -14,12 +14,6 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-N9fC2tCP4TVNncatHaz5W5Mp3jOmAcEWYCl30+0myaE=";
   };
-
-  patches = (substituteAll {
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    src = ./fix-qttranslations-path.patch;
-    inherit qttranslations;
-  });
 
   postPatch = ''
     substituteInPlace src/app/translations.pri \

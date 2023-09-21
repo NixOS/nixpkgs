@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "jjlawren";
     repo = "python-plexwebsocket";
     rev = "v${version}";
-    sha256 = "sha256-u9zO3d0d4Qg+u4ezVRGkNDpJqHkYIMrEMJzBK5WKk8Y=";
+    hash = "sha256-u9zO3d0d4Qg+u4ezVRGkNDpJqHkYIMrEMJzBK5WKk8Y=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

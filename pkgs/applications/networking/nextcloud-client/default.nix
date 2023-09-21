@@ -4,7 +4,6 @@
 , cmake
 , extra-cmake-modules
 , inotify-tools
-, installShellFiles
 , libcloudproviders
 , librsvg
 , libsecret
@@ -26,7 +25,7 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.6.0";
+  version = "3.10.0";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +33,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-wAxq5xFlofn2xEguvewMvGcel9O+CN/1AycR3tv/xMA=";
+    sha256 = "sha256-BNqMKL888DKuRiM537V7CBuCabg5YmGYGpWARtvs7go=";
   };
 
   patches = [
@@ -82,9 +81,13 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DBUILD_UPDATER=off"
     "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   postBuild = ''
     make doc-man

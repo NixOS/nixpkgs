@@ -1,7 +1,7 @@
 {fetchurl, lib, stdenv, dpkg, makeWrapper,
  alsa-lib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1,
  harfbuzz, libcap, libGL, libGLU, libpulseaudio, libxkbcommon, libxml2, libxslt,
- nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+ nspr, nss, openssl_1_1, systemd, wayland, xorg, zlib, ...
 }:
 
 stdenv.mkDerivation {
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
       libxslt
       nspr
       nss
-      openssl
+      openssl_1_1
       stdenv.cc.cc
       systemd
       wayland
@@ -80,6 +80,7 @@ stdenv.mkDerivation {
 
     # qt.conf is not working, so override everything using environment variables
     wrapProgram $out/opt/viber/Viber \
+      --set QT_QPA_PLATFORM "xcb" \
       --set QT_PLUGIN_PATH "$out/opt/viber/plugins" \
       --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
       --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale" \

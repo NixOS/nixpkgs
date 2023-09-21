@@ -73,28 +73,28 @@ in {
         error = sourceArgs.error or args.error or null;
         hasSource = lib.hasAttr variant args;
         pname = builtins.replaceStrings [ "@" ] [ "at" ] ename;
-        broken = ! isNull error;
+        broken = error != null;
       in
       if hasSource then
         lib.nameValuePair ename (
           self.callPackage ({ melpaBuild, fetchurl, ... }@pkgargs:
           melpaBuild {
             inherit pname ename commit;
-            version = if isNull version then "" else
-              lib.concatStringsSep "." (map toString
+            version = lib.optionalString (version != null)
+              (lib.concatStringsSep "." (map toString
                 # Hack: Melpa archives contains versions with parse errors such as [ 4 4 -4 413 ] which should be 4.4-413
                 # This filter method is still technically wrong, but it's computationally cheap enough and tapers over the issue
-                (builtins.filter (n: n >= 0) version));
+                (builtins.filter (n: n >= 0) version)));
             # TODO: Broken should not result in src being null (hack to avoid eval errors)
-            src = if (isNull sha256 || broken) then null else
+            src = if (sha256 == null || broken) then null else
               lib.getAttr fetcher (fetcherGenerators args sourceArgs);
-            recipe = if isNull commit then null else
+            recipe = if commit == null then null else
               fetchurl {
                 name = pname + "-recipe";
                 url = "https://raw.githubusercontent.com/melpa/melpa/${commit}/recipes/${ename}";
                 inherit sha256;
               };
-            packageRequires = lib.optionals (! isNull deps)
+            packageRequires = lib.optionals (deps != null)
               (map (dep: pkgargs.${dep} or self.${dep} or null)
                    deps);
             meta = (sourceArgs.meta or {}) // {

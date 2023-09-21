@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vgmplay-libvgm";
-  version = "unstable-2022-03-17";
+  version = "unstable-2023-04-12";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "a2c21cb134b58043a013ac2efc060144cdecf13d";
-    sha256 = "0g251laqjvvzblyflkg8xac424dbxm1v35ckfazsfchmcqiaqfw4";
+    rev = "813abab549e99bb7e936acbfa1199cf435c237c6";
+    sha256 = "sdQO+xk3a7AFXo3jpbcuNBkd19PjKoBMRhr4IK06oHg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

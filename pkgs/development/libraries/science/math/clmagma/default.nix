@@ -1,7 +1,5 @@
 { lib, stdenv, fetchurl, gfortran, opencl-headers, clblas, ocl-icd, mkl, intel-ocl }:
 
-with lib;
-
 let
   incfile = builtins.toFile "make.inc.custom" ''
     CC        = g++

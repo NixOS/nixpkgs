@@ -11,11 +11,14 @@ buildGoModule rec {
     sha256 = "sha256-SL3YHsNeFw8K8lPrzJXAoTkHxS+1sTREfzjawBxdnf0=";
   };
 
-  vendorSha256 = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
+  vendorHash = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
 
   excludedPackages = [ "test/e2e" ];
 
   ldflags = [ "-s" "-w" "-X github.com/Shopify/toxiproxy/v2.Version=${version}" ];
+
+  # Fixes tests on Darwin
+  __darwinAllowLocalNetworking = true;
 
   checkFlags = [ "-short" ];
 

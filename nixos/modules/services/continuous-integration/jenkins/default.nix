@@ -87,8 +87,8 @@ in {
       };
 
       packages = mkOption {
-        default = [ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ];
-        defaultText = literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk11 config.programs.ssh.package pkgs.nix ]";
+        default = [ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ];
+        defaultText = literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = lib.mdDoc ''
           Packages to add to PATH for the jenkins process.
@@ -210,9 +210,7 @@ in {
 
       preStart =
         let replacePlugins =
-              if cfg.plugins == null
-              then ""
-              else
+              optionalString (cfg.plugins != null) (
                 let pluginCmds = lib.attrsets.mapAttrsToList
                       (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
@@ -220,7 +218,7 @@ in {
                   rm -r ${cfg.home}/plugins || true
                   mkdir -p ${cfg.home}/plugins
                   ${lib.strings.concatStringsSep "\n" pluginCmds}
-                '';
+                '');
         in ''
           rm -rf ${cfg.home}/war
           ${replacePlugins}
@@ -228,7 +226,7 @@ in {
 
       # For reference: https://wiki.jenkins.io/display/JENKINS/JenkinsLinuxStartupScript
       script = ''
-        ${pkgs.jdk11}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
+        ${pkgs.jdk17}/bin/java ${concatStringsSep " " cfg.extraJavaOptions} -jar ${cfg.package}/webapps/jenkins.war --httpListenAddress=${cfg.listenAddress} \
                                                   --httpPort=${toString cfg.port} \
                                                   --prefix=${cfg.prefix} \
                                                   -Djava.awt.headless=true \

@@ -8,8 +8,10 @@
 , numpy
 , six
 , nose
-, Mako
-, cudaSupport ? false, cudaPackages
+, mako
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
 , openclSupport ? true, ocl-icd, clblas
 }:
 
@@ -59,7 +61,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     six
-    Mako
+    mako
   ];
 
   nativeBuildInputs = [

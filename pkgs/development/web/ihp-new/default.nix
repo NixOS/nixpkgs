@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ihp-new";
-  version = "0.20.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "digitallyinduced";
     repo = "ihp";
     rev = "v${version}";
-    sha256 = "sha256-fvFRBnMnFGsPleVv5aPfuoP1UzjnBel0NiNULFP+GkI=";
+    sha256 = "sha256-o0ZSDaDFgwbXqozHfcXKxW4FeF7JqaGprAh6r7NhvhE";
   };
 
   dontConfigure = true;
-  sourceRoot = "source/ProjectGenerator";
+  sourceRoot = "${src.name}/ProjectGenerator";
 
   nativeBuildInputs = [ makeWrapper ];
 

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
-  version = "3.42.0";
+  version = "3.44.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "IhmJpXyoKhJGfcQngizXZRsMrQOBQMkxAnvxB0IIJ2s=";
+    sha256 = "aUBqAlDQzFF1QIyufsqAwMa/rvxK4YMLNUwEM7zVzgY=";
   };
 
   nativeBuildInputs = [

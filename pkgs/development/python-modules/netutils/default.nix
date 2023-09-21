@@ -1,8 +1,9 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , jinja2
+, napalm
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -12,23 +13,27 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.2.0";
+  version = "1.6.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "networktocode";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-6FoadV5QMZCJnF/eD3FXRsyP4MymO5nayJ/54PJXOB4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ocajE7E4xIatEmv58/9gEpWF2plJdiZXjk6ajD2vTzw=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  propagatedBuildInputs = [
+    napalm
+  ];
+
+  nativeCheckInputs = [
     jinja2
     pytestCheckHook
     pyyaml
@@ -44,13 +49,20 @@ buildPythonPackage rec {
     "test_is_fqdn_resolvable"
     "test_fqdn_to_ip"
     "test_tcp_ping"
-    # Skip SPhinx test
+    # Skip Sphinx test
     "test_sphinx_build"
+    # OSError: [Errno 22] Invalid argument
+    "test_compare_type5"
+    "test_encrypt_type5"
+    "test_compare_cisco_type5"
+    "test_get_napalm_getters_napalm_installed_default"
+    "test_encrypt_cisco_type5"
   ];
 
   meta = with lib; {
     description = "Library that is a collection of objects for common network automation tasks";
     homepage = "https://github.com/networktocode/netutils";
+    changelog = "https://github.com/networktocode/netutils/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     broken = stdenv.isDarwin;

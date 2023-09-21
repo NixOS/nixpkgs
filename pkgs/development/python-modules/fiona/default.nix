@@ -1,28 +1,56 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
-, attrs, click, cligj, click-plugins, six, munch, enum34
-, pytestCheckHook, boto3, mock, giflib, pytz
-, gdal, certifi
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, cython
+, gdal
+, setuptools
+, wheel
+, attrs
+, certifi
+, click
+, click-plugins
+, cligj
+, munch
+, shapely
+, boto3
+, pytestCheckHook
+, pytz
 }:
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.8.21";
+  version = "1.9.4.post1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    pname = "Fiona";
-    inherit version;
-    sha256 = "sha256-Og7coqegcNtAXXEYchSkPSMzpXtAl1RKP8woIGali/w=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "Toblerity";
+    repo = "Fiona";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CeGdWAmWteVtL0BoBQ1sB/+1AWkmxogtK99bL5Fpdbw=";
   };
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
+  postPatch = ''
+    # Remove after https://github.com/Toblerity/Fiona/pull/1225 is released
+    sed -i '/"oldest-supported-numpy"/d' pyproject.toml
+
+    # Remove after https://github.com/Toblerity/Fiona/pull/1281 is released,
+    # after which cython also needs to be updated to cython_3
+    sed -i 's/Cython~=/Cython>=/' pyproject.toml
+  '';
 
   nativeBuildInputs = [
+    cython
     gdal # for gdal-config
+    setuptools
+    wheel
   ];
 
   buildInputs = [
     gdal
-  ] ++ lib.optionals stdenv.cc.isClang [ giflib ];
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -30,31 +58,50 @@ buildPythonPackage rec {
     click
     cligj
     click-plugins
-    six
     munch
-    pytz
-  ] ++ lib.optional (!isPy3k) enum34;
+  ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    calc = [ shapely ];
+    s3 = [ boto3 ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-    boto3
-  ] ++ lib.optional (pythonOlder "3.4") mock;
+    pytz
+  ] ++ passthru.optional-dependencies.s3;
 
   preCheck = ''
     rm -r fiona # prevent importing local fiona
-    # disable gdal deprecation warnings
-    export GDAL_ENABLE_DEPRECATED_DRIVER_GTM=YES
   '';
+
+  pytestFlagsArray = [
+    # Tests with gdal marker do not test the functionality of Fiona,
+    # but they are used to check GDAL driver capabilities.
+    "-m 'not gdal'"
+  ];
 
   disabledTests = [
     # Some tests access network, others test packaging
-    "http" "https" "wheel"
+    "http"
+    "https"
+    "wheel"
+
+    # see: https://github.com/Toblerity/Fiona/issues/1273
+    "test_append_memoryfile_drivers"
   ];
 
+  pythonImportsCheck = [
+    "fiona"
+  ];
+
+  doInstallCheck = true;
+
   meta = with lib; {
+    changelog = "https://github.com/Toblerity/Fiona/blob/${src.rev}/CHANGES.txt";
     description = "OGR's neat, nimble, no-nonsense API for Python";
     homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

@@ -7,6 +7,8 @@ buildDunePackage {
 
   inherit (alcotest) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ alcotest logs lwt fmt ];
 
   doCheck = true;

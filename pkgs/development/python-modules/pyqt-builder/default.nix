@@ -1,14 +1,27 @@
-{ lib, fetchPypi, buildPythonPackage, packaging, sip }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, packaging
+, setuptools
+, sip
+, wheel
+}:
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
-  version = "1.14.0";
+  version = "1.15.2";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "PyQt-builder";
     inherit version;
-    sha256 = "sha256-Z1WTHG0viUBVPgM00QyTPOXMGLZEJelP2hrM9P93T1k=";
+    hash = "sha256-dGz+g8A+v/RFjUeKHAZxR5Dvk+RY7NWii8KDe6yI63Q=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [ packaging sip ];
 

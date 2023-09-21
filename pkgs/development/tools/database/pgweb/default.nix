@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "pgweb";
-  version = "0.11.12";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5BFTvfTXsz5ZerSoAudavT/C+SA/xkmVBtAOhAixcAE=";
+    hash = "sha256-0wwDye7Iku9+brYoVqlCpnm+A3xsr8tL2dyWaBVvres=";
   };
 
   postPatch = ''
@@ -16,9 +16,18 @@ buildGoModule rec {
     rm -f pkg/client/{client,dump}_test.go
   '';
 
-  vendorSha256 = "sha256-pXV1BodOEZs5sv7UE/C58SAyIUZW5Cp2gJD7g8EuWog=";
+  vendorHash = "sha256-Jpvf6cST3kBvYzCQLoJ1fijUC/hP1ouptd2bQZ1J/Lo=";
 
   ldflags = [ "-s" "-w" ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # There is a `/tmp/foo` file on the test machine causing the test case to fail on macOS
+        "TestParseOptions"
+      ];
+    in
+    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
   meta = with lib; {
     description = "A web-based database browser for PostgreSQL";
@@ -28,6 +37,6 @@ buildGoModule rec {
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zupo ];
+    maintainers = with maintainers; [ zupo luisnquin ];
   };
 }

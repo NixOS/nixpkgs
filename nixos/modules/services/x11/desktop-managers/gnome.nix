@@ -66,7 +66,7 @@ in
 {
 
   meta = {
-    doc = ./gnome.xml;
+    doc = ./gnome.md;
     maintainers = teams.gnome.members;
   };
 
@@ -352,13 +352,6 @@ in
         })
       ];
 
-      # Harmonize Qt5 application style and also make them use the portal for file chooser dialog.
-      qt5 = {
-        enable = mkDefault true;
-        platformTheme = mkDefault "gnome";
-        style = mkDefault "adwaita";
-      };
-
       networking.networkmanager.enable = mkDefault true;
 
       services.xserver.updateDbusEnvironment = true;
@@ -389,8 +382,8 @@ in
         ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
 
       services.colord.enable = mkDefault true;
-      services.gnome.chrome-gnome-shell.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
+      services.gnome.gnome-browser-connector.enable = mkDefault true;
       services.gnome.gnome-initial-setup.enable = mkDefault true;
       services.gnome.gnome-remote-desktop.enable = mkDefault true;
       services.gnome.gnome-settings-daemon.enable = true;
@@ -432,7 +425,7 @@ in
         isSystem = true;
       };
 
-      fonts.fonts = with pkgs; [
+      fonts.packages = with pkgs; [
         cantarell-fonts
         dejavu_fonts
         source-code-pro # Default monospace font in 3.32
@@ -520,7 +513,7 @@ in
 
       # Let nautilus find extensions
       # TODO: Create nautilus-with-extensions package
-      environment.sessionVariables.NAUTILUS_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-3.0";
+      environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
 
       # Override default mimeapps for nautilus
       environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];

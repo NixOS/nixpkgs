@@ -1,53 +1,57 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , click
 , fetchFromGitHub
 , mock
+, prettytable
 , prompt-toolkit
 , ptable
 , pygments
 , pytestCheckHook
 , pythonOlder
 , requests
+, rich
 , sphinx
 , testtools
 , tkinter
 , urllib3
-, prettytable
-, rich
 , zeep
 }:
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.1.0";
-  disabled = pythonOlder "3.5";
+  version = "6.1.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "softlayer-python";
-    rev = "v${version}";
-    sha256 = "sha256-T49KVAsgcAZySkaJi47IrFcMHGZvEkGDjPWsdMarzwM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6LZ2vy6nkyWA7xbUl4aNi2ygRWDJTj7J9Af0GTvNLd4=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-        --replace 'rich == 12.3.0' 'rich >= 12.3.0'
+        --replace "rich ==" "rich >="
   '';
 
   propagatedBuildInputs = [
     click
+    prettytable
     prompt-toolkit
     ptable
     pygments
     requests
-    urllib3
-    prettytable
     rich
+    urllib3
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     mock
     pytestCheckHook
     sphinx
@@ -64,14 +68,17 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Test fails with ConnectionError trying to connect to api.softlayer.com
-    "tests/transports/soap_tests.py"
+    "tests/transports/soap_tests.py.unstable"
   ];
 
-  pythonImportsCheck = [ "SoftLayer" ];
+  pythonImportsCheck = [
+    "SoftLayer"
+  ];
 
   meta = with lib; {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
+    changelog = "https://github.com/softlayer/softlayer-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };

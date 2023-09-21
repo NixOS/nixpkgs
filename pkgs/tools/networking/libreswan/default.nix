@@ -11,6 +11,7 @@
 , pam
 , libevent
 , libcap_ng
+, libxcrypt
 , curl
 , nspr
 , bash
@@ -44,11 +45,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
-  version = "4.8";
+  version = "4.12";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-gEy5EX1/tBGYE7FVrJF+NFZY41ehOBim9t/Oikch4gs=";
+    hash = "sha256-roWr5BX3vs9LaiuYl+FxLyflqsnDXfvd28zgrX39mfc=";
   };
 
   strictDeps = true;
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     systemd coreutils
     gnused gawk gmp unbound pam libevent
-    libcap_ng curl nspr nss ldns
+    libcap_ng libxcrypt curl nspr nss ldns
     # needed to patch shebangs
     python3 bash
   ] ++ lib.optional stdenv.isLinux libselinux;
@@ -87,6 +88,11 @@ stdenv.mkDerivation rec {
     sed -e 's|systemctl|true|g' \
         -e 's|systemd-tmpfiles|true|g' \
         -i initsystems/systemd/Makefile
+
+    # Fix systemd detection on NixOS
+    sed -e 's|\(-a ! -x /bin/journalctl\)|\1 -a ! -x /run/current-system/sw/bin/journalctl|g' \
+        -e 's|\(-o ! -x /bin/journalctl\)|\1 -o ! -x /run/current-system/sw/bin/journalctl|g' \
+        -i programs/barf/barf.in
 
     # Fix the ipsec program from crushing the PATH
     sed -e 's|\(PATH=".*"\):.*$|\1:$PATH|' -i programs/ipsec/ipsec.in

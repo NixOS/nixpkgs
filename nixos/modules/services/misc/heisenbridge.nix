@@ -28,8 +28,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.heisenbridge;
-      defaultText = "pkgs.heisenbridge";
-      example = "pkgs.heisenbridge.override { … = …; }";
+      defaultText = lib.literalExpression "pkgs.heisenbridge";
       description = lib.mdDoc ''
         Package of the application to run, exposed for overriding purposes.
       '';
@@ -138,7 +137,7 @@ in
         mv -f ${registrationFile}.new ${registrationFile}
 
         # Grant Synapse access to the registration
-        if ${getBin pkgs.glibc}/bin/getent group matrix-synapse > /dev/null; then
+        if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then
           chgrp -v matrix-synapse ${registrationFile}
           chmod -v g+r ${registrationFile}
         fi

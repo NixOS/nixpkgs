@@ -18,10 +18,24 @@ stdenv.mkDerivation rec {
         inherit sha256;
       };
     in [
-      (fp "no_static_buffers"         "0yv90bhvqjj0v650gzn8fbzhdhzx5z0r1lh5h9nv39wnww435bd0")
+      (fetchpatch {
+        name = "no_static_buffers.patch";
+        url = "https://src.fedoraproject.org/rpms/libtar/raw/e25b692fc7ceaa387dafb865b472510754f51bd2/f/libtar-1.2.20-no-static-buffer.patch";
+        sha256 = "sha256-QcWOgdkNlALb+YDVneT1zCNAMf4d8IUm2kUUUy2VvJs=";
+      })
       (fp "no_maxpathlen"             "11riv231wpbdb1cm4nbdwdsik97wny5sxcwdgknqbp61ibk572b7")
       (fp "CVE-2013-4420"             "0d010190bqgr2ggy02qwxvjaymy9a22jmyfwdfh4086v876cbxpq")
       (fp "th_get_size-unsigned-int"  "1ravbs5yrfac98mnkrzciw9hd2fxq4dc07xl3wx8y2pv1bzkwm41")
+      (fetchpatch {
+        name = "CVE-2021-33643_CVE-2021-33644.patch";
+        url = "https://src.fedoraproject.org/rpms/libtar/raw/e25b692fc7ceaa387dafb865b472510754f51bd2/f/libtar-1.2.20-CVE-2021-33643-CVE-2021-33644.patch";
+        sha256 = "sha256-HdjotTvKJNntkdcV+kR08Ht/MyNeB6qUT0qo67BBOVA=";
+      })
+      (fetchpatch {
+        name = "CVE-2021-33645_CVE-2021-33646_CVE-2021-33640.patch";
+        url = "https://src.fedoraproject.org/rpms/libtar/raw/e25b692fc7ceaa387dafb865b472510754f51bd2/f/libtar-1.2.20-CVE-2021-33645-CVE-2021-33646.patch";
+        sha256 = "sha256-p9DEFAL5Y+Ldy5c9Wj9h/BSg4TDxIxCjCQJD+wGQ7oI=";
+      })
     ];
 
   nativeBuildInputs = [ autoreconfHook ];

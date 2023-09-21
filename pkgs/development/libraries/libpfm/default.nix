@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation (rec {
-  version = "4.12.0";
+  version = "4.13.0";
   pname = "libpfm";
 
   src = fetchurl {
     url = "mirror://sourceforge/perfmon2/libpfm4/${pname}-${version}.tar.gz";
-    sha256 = "sha256-SwwfU/OaYVJbab6/UyxoBAwbmE11RKiuCESxPNkeHuQ=";
+    sha256 = "sha256-0YuXdkx1VSjBBR03bjNUXQ62DG6/hWgENoE/pbBMw9E=";
   };
 
   makeFlags = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
     "SYS=${stdenv.hostPlatform.uname.system}"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   meta = with lib; {
     description = "Helper library to program the performance monitoring events";

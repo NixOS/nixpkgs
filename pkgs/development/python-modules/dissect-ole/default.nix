@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-ole";
-  version = "3.1";
+  version = "3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ole";
-    rev = version;
-    hash = "sha256-qnrbS+gdzBV/mQ08fQzpvevkDtrJ1qXpteW0lxJ+ZUI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4shxYKR6IrrMj2BIb5yFD7+C0SNyqsGOoBkWpad1EbI=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing a parser for the Object Linking & Embedding (OLE) format";
     homepage = "https://github.com/fox-it/dissect.ole";
+    changelog = "https://github.com/fox-it/dissect.ole/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

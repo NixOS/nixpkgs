@@ -9,7 +9,11 @@ buildDunePackage rec {
     sha256 = "13m9n8mdss6jfbiw7d5bybxn4n85vmg4zw7dc968qrgjfy0w9zhk";
   };
 
-  useDune2 = true;
+  preConfigure = ''
+    substituteInPlace src/dune --replace '(libraries bytes)' ""
+  '';
+
+  duneVersion = "3";
 
   meta = {
     description = "A pure OCaml library to read and write CSV files";

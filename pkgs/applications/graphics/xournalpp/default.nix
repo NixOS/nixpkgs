@@ -6,9 +6,11 @@
 , wrapGAppsHook
 , pkg-config
 
+, alsa-lib
 , glib
 , gsettings-desktop-schemas
 , gtk3
+, gtksourceview4
 , librsvg
 , libsndfile
 , libxml2
@@ -23,20 +25,23 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AzLkXGcTjtfBaPOZ/Tc+TwL63vm08G2tZw3pGzoo7po=";
+    sha256 = "sha256-dnFNGWPpK/eoW4Ib1E5w/kPy5okPxAja1v4rf0KpVKM=";
   };
 
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
   buildInputs =
-    [ glib
+    [
+      alsa-lib
+      glib
       gsettings-desktop-schemas
       gtk3
+      gtksourceview4
       librsvg
       libsndfile
       libxml2
@@ -48,7 +53,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optional withLua lua;
 
-  buildFlags = "translations";
+  buildFlags = [ "translations" ];
 
   hardeningDisable = [ "format" ];
 

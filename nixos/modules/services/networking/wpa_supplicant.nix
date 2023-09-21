@@ -121,11 +121,15 @@ let
         ''}
 
         # substitute environment variables
-        ${pkgs.gawk}/bin/awk '{
-          for(varname in ENVIRON)
-            gsub("@"varname"@", ENVIRON[varname])
-          print
-        }' "${configFile}" > "${finalConfig}"
+        if [ -f "${configFile}" ]; then
+          ${pkgs.gawk}/bin/awk '{
+            for(varname in ENVIRON)
+              gsub("@"varname"@", ENVIRON[varname])
+            print
+          }' "${configFile}" > "${finalConfig}"
+        else
+          touch "${finalConfig}"
+        fi
 
         iface_args="-s ${optionalString cfg.dbusControlled "-u"} -D${cfg.driver} ${configStr}"
 

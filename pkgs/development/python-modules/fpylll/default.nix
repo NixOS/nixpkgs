@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , buildPythonPackage
 , pkgconfig
 , gmp
@@ -16,22 +15,14 @@
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.5.7";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
     rev = version;
-    sha256 = "sha256-iUPreJ8BSB8LDisbJis0xn8ld6+Nf9Z4AP8SWJlCfZg=";
+    hash = "sha256-T6l6hKzRDevlLyLu5H+bnEdl0OhsPer1coCDiftbPAk=";
   };
-
-  patches = [
-   (fetchpatch {
-     name = "remove-strategies-doctest.patch";
-     url = "https://github.com/fplll/fpylll/commit/3edffcd189e9d827a322d83b0f84d32e5f067442.patch";
-     sha256 = "sha256-U7qOIbVzUNwYmjOPryjnE3J+MX/vMwm3T0UyOZ5ylLc=";
-   })
-  ];
 
   buildInputs = [
     gmp
@@ -50,7 +41,7 @@ buildPythonPackage rec {
     pkgconfig
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 

@@ -40,7 +40,7 @@ configuration use `pkgs` prefix (variable).
 To "uninstall" a package, simply remove it from
 [](#opt-environment.systemPackages) and run `nixos-rebuild switch`.
 
-```{=docbook}
-<xi:include href="customizing-packages.section.xml" />
-<xi:include href="adding-custom-packages.section.xml" />
+```{=include=} sections
+customizing-packages.section.md
+adding-custom-packages.section.md
 ```

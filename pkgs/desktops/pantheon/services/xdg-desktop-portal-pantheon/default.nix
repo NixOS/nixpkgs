@@ -6,24 +6,23 @@
 , ninja
 , pkg-config
 , vala
-, wrapGAppsHook
+, wrapGAppsHook4
 , glib
-, granite
-, gtk3
-, libhandy
+, granite7
+, gtk4
 , systemd
-, vte
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
-  version = "1.1.0";
+  version = "7.1.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     rev = version;
-    sha256 = "sha256-YICNOeNrpO2tJFyULjQEhZQCrrMyQau59EC7c5K9q40=";
+    sha256 = "sha256-JZ2VYsNAjNGCzKOEhHCZx2uNLHFs+ktjFmROLHdFjX4=";
   };
 
   nativeBuildInputs = [
@@ -31,16 +30,15 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    granite
-    gtk3
-    libhandy
+    granite7
+    gtk4
     systemd
-    vte
+    xorg.libX11
   ];
 
   mesonFlags = [
@@ -48,9 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

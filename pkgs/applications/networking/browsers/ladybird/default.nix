@@ -1,33 +1,38 @@
 { lib
-, gcc11Stdenv
+, stdenv
 , fetchFromGitHub
 , cmake
 , ninja
 , unzip
 , wrapQtAppsHook
+, libxcrypt
 , qtbase
-, qttools
 , nixosTests
 }:
 
-let serenity = fetchFromGitHub {
-  owner = "SerenityOS";
-  repo = "serenity";
-  rev = "a0f3e2c9a2b82117aa7c1a3444ad0d31baa070d5";
-  hash = "sha256-8Xde59ZfdkTD39mYSv0lfFjBHFDWTUwfozE+Q9Yq6C8=";
-};
-
-in gcc11Stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "unstable-2022-09-29";
+  version = "unstable-2023-01-17";
 
-  # Remember to update `serenity` too!
   src = fetchFromGitHub {
     owner = "SerenityOS";
-    repo = "ladybird";
-    rev = "d69ad7332477de33bfd1963026e057d55c6f222d";
-    hash = "sha256-XQj2Bohk8F6dGCAManOmmDP5b/SqEeZXZbLDYPfvi2E=";
+    repo = "serenity";
+    rev = "45e85d20b64862df119f643f24e2d500c76c58f3";
+    hash = "sha256-n2mLg9wNfdMGsJuGj+ukjto9qYjGOIz4cZjgvMGQUrY=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/Ladybird";
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "MACOSX_BUNDLE TRUE" "MACOSX_BUNDLE FALSE"
+    # https://github.com/SerenityOS/serenity/issues/17062
+    substituteInPlace main.cpp \
+      --replace "./SQLServer/SQLServer" "$out/bin/SQLServer"
+    # https://github.com/SerenityOS/serenity/issues/10055
+    substituteInPlace ../Meta/Lagom/CMakeLists.txt \
+      --replace "@rpath" "$out/lib"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -37,15 +42,22 @@ in gcc11Stdenv.mkDerivation {
   ];
 
   buildInputs = [
+    libxcrypt
     qtbase
   ];
 
   cmakeFlags = [
-    "-DSERENITY_SOURCE_DIR=${serenity}"
     # Disable network operations
     "-DENABLE_TIME_ZONE_DATABASE_DOWNLOAD=false"
     "-DENABLE_UNICODE_DATABASE_DOWNLOAD=false"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  # https://github.com/SerenityOS/serenity/issues/10055
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -add_rpath $out/lib $out/bin/ladybird
+  '';
 
   passthru.tests = {
     nixosTest = nixosTests.ladybird;
@@ -56,7 +68,6 @@ in gcc11Stdenv.mkDerivation {
     homepage = "https://github.com/awesomekling/ladybird";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
-    # SerenityOS only works on x86, and can only be built on unix systems.
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
-}
+})

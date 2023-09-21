@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, autoreconfHook, pkg-config, perl, docbook2x
-, docbook_xml_dtd_45, python3Packages, pam
+, docbook_xml_dtd_45, python3Packages, pam, fetchpatch
 
 # Optional Dependencies
 , libapparmor ? null, gnutls ? null, libselinux ? null, libseccomp ? null
@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./support-db2x.patch
+
+    # Backport of https://github.com/lxc/lxc/pull/4179 for glibc-2.36 build
+    (fetchpatch {
+      url = "https://github.com/lxc/lxc/commit/c1115e1503bf955c97f4cf3b925a6a9f619764c3.patch";
+      sha256 = "sha256-aC1XQesRJfkyQnloB3NvR4p/1WITrqkGYzw50PDxDrs=";
+      excludes = [ "meson.build" ];
+    })
   ];
 
   postPatch = ''

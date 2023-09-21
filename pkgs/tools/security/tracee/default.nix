@@ -2,7 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 
-, llvmPackages_13
+, clang
 , pkg-config
 
 , zlib
@@ -14,28 +14,28 @@
 , tracee
 }:
 
-let
-  inherit (llvmPackages_13) clang;
-in
 buildGoModule rec {
   pname = "tracee";
-  version = "0.8.3";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VxTJcl7gHRZEXpFbxU4iMwqxuR1r0BNSseWQ5ijWHU4=";
+    hash = "sha256-YO5u/hE5enoqh8niV4Zi+NFUsU+UXCCxdqvxolZImGk=";
   };
-  vendorSha256 = "sha256-szPoJUtzya3+8dOnkDxHEs3+a1LTVoMMLjUSrUlfiGg=";
+  vendorHash = "sha256-swMvJe+Dz/kwPIStPlQ7d6U/UwXSMcJ3eONxjzebXCc=";
+
+  patches = [
+    ./use-our-libbpf.patch
+  ];
 
   enableParallelBuilding = true;
   # needed to build bpf libs
   hardeningDisable = [ "stackprotector" ];
 
   nativeBuildInputs = [ pkg-config clang ];
-  # ensure libbpf version exactly matches the version added as a submodule
-  buildInputs = [ libbpf zlib elfutils ];
+  buildInputs = [ elfutils libbpf zlib ];
 
   makeFlags = [
     "VERSION=v${version}"
@@ -44,16 +44,9 @@ buildGoModule rec {
     "CMD_GIT=echo"
   ];
 
-  # TODO: patch tracee to take libbpf.a and headers via include path
-  preBuild = ''
-    mkdir -p 3rdparty/libbpf/src
-    mkdir -p ./dist
-    cp -r ${libbpf}/lib ./dist/libbpf
-    chmod +w ./dist/libbpf
-    cp -r ${libbpf}/include/bpf ./dist/libbpf/
-  '';
   buildPhase = ''
     runHook preBuild
+    mkdir -p ./dist
     make $makeFlags ''${enableParallelBuilding:+-j$NIX_BUILD_CORES} bpf-core all
     runHook postBuild
   '';
@@ -63,16 +56,16 @@ buildGoModule rec {
   # see passthru.tests.integration
   doCheck = false;
 
+  outputs = [ "out" "lib" "share" ];
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/tracee}
+    mkdir -p $out/bin $lib/lib/tracee $share/share/tracee
 
-    cp ./dist/tracee-ebpf $out/bin
-    cp ./dist/tracee-rules $out/bin
-
-    cp -r ./dist/rules $out/share/tracee/
-    cp -r ./cmd/tracee-rules/templates $out/share/tracee/
+    mv ./dist/tracee $out/bin/
+    mv ./dist/tracee.bpf.core.o $lib/lib/tracee/
+    mv ./cmd/tracee-rules/templates $share/share/tracee/
 
     runHook postInstall
   '';
@@ -81,10 +74,8 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/tracee-ebpf --help
-    $out/bin/tracee-ebpf --version | grep "v${version}"
-
-    $out/bin/tracee-rules --help
+    $out/bin/tracee --help
+    $out/bin/tracee --version | grep "v${version}"
 
     runHook postInstallCheck
   '';
@@ -94,7 +85,7 @@ buildGoModule rec {
     version = testers.testVersion {
       package = tracee;
       version = "v${version}";
-      command = "tracee-ebpf --version";
+      command = "tracee --version";
     };
   };
 
@@ -109,8 +100,14 @@ buildGoModule rec {
       is delivered as a Docker image that monitors the OS and detects suspicious
       behavior based on a pre-defined set of behavioral patterns.
     '';
-    license = licenses.asl20;
+    license = with licenses; [
+      # general license
+      asl20
+      # pkg/ebpf/c/*
+      gpl2Plus
+    ];
     maintainers = with maintainers; [ jk ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    outputsToInstall = [ "out" "share" ];
   };
 }

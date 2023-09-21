@@ -24,18 +24,18 @@ Some Xfce programs are not installed automatically. To install them
 manually (system wide), put them into your
 [](#opt-environment.systemPackages) from `pkgs.xfce`.
 
-## Thunar {#sec-xfce-thunar-plugins .unnumbered}
+## Thunar {#sec-xfce-thunar-plugins}
 
 Thunar (the Xfce file manager) is automatically enabled when Xfce is
 enabled. To enable Thunar without enabling Xfce, use the configuration
 option [](#opt-programs.thunar.enable) instead of simply adding
 `pkgs.xfce.thunar` to [](#opt-environment.systemPackages).
 
-If you\'d like to add extra plugins to Thunar, add them to
-[](#opt-programs.thunar.plugins). You shouldn\'t just add them to
+If you'd like to add extra plugins to Thunar, add them to
+[](#opt-programs.thunar.plugins). You shouldn't just add them to
 [](#opt-environment.systemPackages).
 
-## Troubleshooting {#sec-xfce-troubleshooting .unnumbered}
+## Troubleshooting {#sec-xfce-troubleshooting}
 
 Even after enabling udisks2, volume management might not work. Thunar
 and/or the desktop takes time to show up. Thunar will spit out this kind
@@ -46,7 +46,7 @@ Thunar:2410): GVFS-RemoteVolumeMonitor-WARNING **: remote volume monitor with db
 ```
 
 This is caused by some needed GNOME services not running. This is all
-fixed by enabling \"Launch GNOME services on startup\" in the Advanced
+fixed by enabling "Launch GNOME services on startup" in the Advanced
 tab of the Session and Startup settings panel. Alternatively, you can
 run this command to do the same thing.
 
@@ -54,4 +54,4 @@ run this command to do the same thing.
 $ xfconf-query -c xfce4-session -p /compat/LaunchGNOME -s true
 ```
 
-A log-out and re-log will be needed for this to take effect.
+It is necessary to log out and log in again for this to take effect.

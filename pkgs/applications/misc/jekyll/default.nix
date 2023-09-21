@@ -36,6 +36,8 @@ in bundlerApp {
     wrapProgram $out/bin/jekyll --prefix PATH : ${rubyWrapper}/bin
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "A blog-aware, static site generator, written in Ruby";
     longDescription = ''

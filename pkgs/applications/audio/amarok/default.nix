@@ -2,8 +2,8 @@
 , extra-cmake-modules, kdoctools
 , qca-qt5, qjson, qtquickcontrols2, qtscript, qtwebengine
 , karchive, kcmutils, kconfig, kdnssd, kguiaddons, kinit, kirigami2, knewstuff, knotifyconfig, ktexteditor, kwindowsystem
-, fftw, phonon, plasma-framework, threadweaver
-, curl, ffmpeg, gdk-pixbuf, libaio, liblastfm, libmtp, loudmouth, lzo, lz4, mysql57, pcre, snappy, taglib, taglib_extras
+, fftw, phonon, plasma-framework, threadweaver, breeze-icons
+, curl, ffmpeg, gdk-pixbuf, libaio, liblastfm, libmtp, loudmouth, lzo, lz4, mariadb-embedded, pcre, snappy, taglib, taglib_extras
 }:
 
 mkDerivation rec {
@@ -23,8 +23,8 @@ mkDerivation rec {
     qca-qt5 qjson qtquickcontrols2 qtscript qtwebengine
     karchive kcmutils kconfig kdnssd kguiaddons kinit kirigami2 knewstuff knotifyconfig ktexteditor kwindowsystem
     phonon plasma-framework threadweaver
-    curl fftw ffmpeg gdk-pixbuf libaio liblastfm libmtp loudmouth lz4 lzo mysql57.server mysql57.server.static
-    pcre snappy taglib taglib_extras
+    curl fftw ffmpeg gdk-pixbuf libaio liblastfm libmtp loudmouth lz4 lzo mariadb-embedded
+    pcre snappy taglib taglib_extras breeze-icons
   ];
 
   enableParallelBuilding = true;

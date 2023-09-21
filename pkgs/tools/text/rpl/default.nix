@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     ./remove-argparse-manpage.diff # quickfix for ImportError: No module named build_manpages.build_manpages
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     #python3Packages.argparse-manpage # TODO
     python3Packages.chardet
   ];

@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsdump";
-  version = "3.1.10";
+  version = "3.1.12";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-mqt6U6oFzUbtyXJp6/FFaqsrYKuMH/+q+KpJLwtfZRc=";
+    sha256 = "sha256-85xMGzBrLdfsl5wOlNYP5pCD0uz5rwUcrF7zvtdyx0o=";
   };
 
   nativeBuildInputs = [
@@ -32,11 +32,6 @@ stdenv.mkDerivation rec {
     libxfs
     ncurses
   ];
-
-  # fixes build against xfsprogs >= 5.18
-  # taken from https://lore.kernel.org/linux-xfs/20220203174540.GT8313@magnolia/
-  # should be included upsteam next release
-  patches = [ ./remove-dmapapi.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \

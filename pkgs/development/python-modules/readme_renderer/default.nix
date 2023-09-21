@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "readme-renderer";
-  version = "37.2";
+  version = "37.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "readme_renderer";
     inherit version;
-    sha256 = "sha256-6K0lKTyY94HbwsWjajCZKTkACfkC+Z4XmMdhqvBKeSM=";
+    hash = "sha256-zWUxht/HMFVlbwkPIn9csioEbX9xqEHfowX1XJpRMnM=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -43,6 +43,9 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/pypa/readme_renderer/issues/221
     "test_GFM_"
+    # https://github.com/pypa/readme_renderer/issues/274
+    "test_CommonMark_008.md"
+    "test_rst_008.rst"
     # Relies on old distutils behaviour removed by setuptools (TypeError: dist must be a Distribution instance)
     "test_valid_rst"
     "test_invalid_rst"

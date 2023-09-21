@@ -8,10 +8,10 @@ buildPythonPackage rec {
     owner = "perrygeo";
     repo = "simanneal";
     rev = version;
-    sha256 = "sha256-yKZHkrf6fM0WsHczIEK5Kxusz5dSBgydK3fLu1nDyvk=";
+    hash = "sha256-yKZHkrf6fM0WsHczIEK5Kxusz5dSBgydK3fLu1nDyvk=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = "pytest tests";
 
   meta = with lib; {

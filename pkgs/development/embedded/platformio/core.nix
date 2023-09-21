@@ -3,12 +3,22 @@
 , fetchPypi
 , git
 , spdx-license-list-data
-, version, src
 }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "platformio";
-  inherit version src;
+
+  version = "6.1.6";
+
+  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
+  src = fetchFromGitHub {
+    owner = "platformio";
+    repo = "platformio-core";
+    rev = "v${version}";
+    sha256 = "sha256-BEeMfdmAWqFbQUu8YKKrookQVgmhfZBqXnzeb2gfhms=";
+  };
+
+  outputs = [ "out" "udev" ];
 
   patches = [
     ./fix-searchpath.patch
@@ -21,8 +31,11 @@ with python3.pkgs; buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
-      --replace 'uvicorn==%s" % ("0.17.*"' 'uvicorn==%s" % ("0.18.*"' \
-      --replace 'wsproto==' 'wsproto>='
+      --replace 'aiofiles==%s" % ("0.8.0" if PY36 else "22.1.*")' 'aiofiles"' \
+      --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.23.*")' 'starlette"' \
+      --replace 'uvicorn==%s" % ("0.16.0" if PY36 else "0.20.*")' 'uvicorn"' \
+      --replace 'tabulate==%s" % ("0.8.10" if PY36 else "0.9.*")' 'tabulate>=0.8.10,<=0.9"' \
+      --replace 'wsproto==%s" % ("1.0.0" if PY36 else "1.2.*")' 'wsproto"'
   '';
 
   propagatedBuildInputs = [
@@ -52,10 +65,17 @@ with python3.pkgs; buildPythonApplication rec {
     export PATH=$PATH:$out/bin
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsondiff
     pytestCheckHook
   ];
+
+  # Install udev rules into a separate output so all of platformio-core is not a dependency if
+  # you want to use the udev rules on NixOS but not install platformio in your system packages.
+  postInstall = ''
+    mkdir -p $udev/lib/udev/rules.d
+    cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+  '';
 
   disabledTestPaths = [
     "tests/commands/pkg/test_install.py"
@@ -142,11 +162,14 @@ with python3.pkgs; buildPythonApplication rec {
     "test_pkgmanifest.py::test_packages"
   ]);
 
+  passthru = {
+    python = python3;
+  };
+
   meta = with lib; {
     description = "An open source ecosystem for IoT development";
     homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
-    broken = stdenv.isAarch64;
   };
 }

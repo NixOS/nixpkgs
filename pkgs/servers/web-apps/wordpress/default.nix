@@ -1,36 +1,15 @@
-{ lib, stdenv, fetchurl, nixosTests, writeScript }:
-
-stdenv.mkDerivation rec {
-  pname = "wordpress";
-  version = "6.0.2";
-
-  src = fetchurl {
-    url = "https://wordpress.org/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UG5FYlJowBy71DJHgoDE1/lIIndp0qx1yFlDIeMV0Og=";
+{ callPackage }: builtins.mapAttrs (_: callPackage ./generic.nix) rec {
+  wordpress = wordpress6_3;
+  wordpress6_3 = {
+    version = "6.3.1";
+    hash = "sha256-HVV7pANMimJN4P1PsuAyIAZFejvYMQESXmVpoxac8X8=";
   };
-
-  installPhase = ''
-    mkdir -p $out/share/wordpress
-    cp -r . $out/share/wordpress
-  '';
-
-  passthru.tests = {
-    inherit (nixosTests) wordpress;
+  wordpress6_2 = {
+    version = "6.2.2";
+    hash = "sha256-0qpvPauGbeP1MLHmz6gItJf80Erts7E7x28TM9AmAPk=";
   };
-
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p common-updater-scripts jq
-    set -eu -o pipefail
-    version=$(curl --globoff "https://api.wordpress.org/core/version-check/1.7/" | jq -r '.offers[0].version')
-    update-source-version wordpress $version
-  '';
-
-  meta = with lib; {
-    homepage = "https://wordpress.org";
-    description = "WordPress is open source software you can use to create a beautiful website, blog, or app";
-    license = [ licenses.gpl2 ];
-    maintainers = [ maintainers.basvandijk ];
-    platforms = platforms.all;
+  wordpress6_1 = {
+    version = "6.1.2";
+    hash = "sha256-ozpuCVeni71CUylmUBk8wVo5ygZAKY7IdZ12DKbpSrw=";
   };
 }

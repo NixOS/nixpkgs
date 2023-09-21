@@ -38,14 +38,20 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_5;
+  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
-  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
+  # These core package only exist for GHC >= 9.4. The best we can do is feign
+  # their existence to callPackages, but their is no shim for lower GHC versions.
+  system-cxx-std-lib = null;
+
+  # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
+  Cabal-syntax = self.Cabal-syntax_3_6_0_0;
 
   # GHC 8.8.x can build haddock version 2.23.*
   haddock = self.haddock_2_23_1;
@@ -54,17 +60,15 @@ self: super: {
   # This build needs a newer version of Cabal.
   cabal2spec = super.cabal2spec.override { Cabal = self.Cabal_3_2_1_0; };
 
-  # cabal-install needs most recent versions of Cabal and Cabal-syntax
-  cabal-install = super.cabal-install.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
-  });
-  cabal-install-solver = super.cabal-install-solver.overrideScope (self: super: {
-    Cabal = self.Cabal_3_8_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
-    process = self.process_1_6_15_0;
-  });
+  # Additionally depends on OneTuple for GHC < 9.0
+  base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
+
+  # For GHC < 9.4, some packages need data-array-byte as an extra dependency
+  primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+  hashable = addBuildDepends [
+    self.data-array-byte
+    self.base-orphans
+  ] super.hashable;
 
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
@@ -73,7 +77,6 @@ self: super: {
   chell = doJailbreak super.chell;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
-  hashable = doJailbreak super.hashable;
   hashable-time = doJailbreak super.hashable-time;
   hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
@@ -110,9 +113,6 @@ self: super: {
   # of issues with Cabal 3.x.
   darcs = dontDistribute super.darcs;
 
-  # cabal-fmt requires Cabal3
-  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_2_1_0; };
-
   # liquidhaskell does not support ghc version 8.8.x.
   liquid = markBroken super.liquid;
   liquid-base = markBroken super.liquid-base;
@@ -125,54 +125,35 @@ self: super: {
   liquid-vector = markBroken super.liquid-vector;
   liquidhaskell = markBroken super.liquidhaskell;
 
-  # This became a core library in ghc 8.10., so we don‘t have an "exception" attribute anymore.
-  exceptions = super.exceptions_0_10_5;
-
-  # ghc versions which don‘t match the ghc-lib-parser-ex version need the
-  # additional dependency to compile successfully.
-  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+  # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
+  exceptions = super.exceptions_0_10_7;
 
   ormolu = super.ormolu_0_2_0_0;
 
-  # vector 0.12.2 indroduced doctest checks that don‘t work on older compilers
-  vector = dontCheck super.vector;
-
-  ghc-api-compat = doDistribute super.ghc-api-compat_8_6;
+  ghc-api-compat = doDistribute (unmarkBroken super.ghc-api-compat_8_6);
 
   mime-string = disableOptimization super.mime-string;
 
-  haskell-language-server = addBuildDepend self.hls-brittany-plugin (super.haskell-language-server.overrideScope (lself: lsuper: {
-    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
-    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
-    # Pick old ormolu and fourmolu because ghc-lib-parser is not compatible
-    ormolu = doJailbreak lself.ormolu_0_1_4_1;
-    fourmolu = doJailbreak lself.fourmolu_0_3_0_0;
-    hlint = lself.hlint_3_2_8;
-    aeson = lself.aeson_1_5_6_0;
-    stylish-haskell = lself.stylish-haskell_0_13_0_0;
-    lsp-types = doJailbreak lsuper.lsp-types;
-  }));
+  haskell-language-server =  throw "haskell-language-server dropped support for ghc 8.8 in version 1.9.0.0 please use a newer ghc version or an older nixpkgs version";
 
-  hls-hlint-plugin = super.hls-hlint-plugin.overrideScope (lself: lsuper: {
-    # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
-    hlint = lself.hlint_3_2_8;
-    ghc-lib-parser = lself.ghc-lib-parser_8_10_7_20220219;
-    ghc-lib-parser-ex = addBuildDepend lself.ghc-lib-parser lself.ghc-lib-parser-ex_8_10_0_24;
-  });
+  hlint = self.hlint_3_2_8;
 
-  hls-brittany-plugin = super.hls-brittany-plugin.overrideScope (lself: lsuper: {
-    brittany = doJailbreak lself.brittany_0_13_1_2;
-    aeson = lself.aeson_1_5_6_0;
-    lsp-types = doJailbreak lsuper.lsp-types;
-  });
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_8_10_7_20220219;
+  ghc-lib = doDistribute self.ghc-lib_8_10_7_20220219;
+
+  # ghc versions which don’t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = doDistribute (addBuildDepend self.ghc-lib-parser self.ghc-lib-parser-ex_8_10_0_24);
 
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
 
-  # OneTuple needs hashable instead of ghc-prim for GHC < 9
-  OneTuple = super.OneTuple.override {
+  # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
+  OneTuple = addBuildDepends [
+    self.foldable1-classes-compat
+  ] (super.OneTuple.override {
     ghc-prim = self.hashable;
-  };
+  });
 
   # Temporarily disabled blaze-textual for GHC >= 9.0 causing hackage2nix ignoring it
   # https://github.com/paul-rouse/mysql-simple/blob/872604f87044ff6d1a240d9819a16c2bdf4ed8f5/Database/MySQL/Internal/Blaze.hs#L4-L10
@@ -192,4 +173,14 @@ self: super: {
   # Unnecessarily strict lower bound on base
   # https://github.com/mrkkrp/megaparsec/pull/485#issuecomment-1250051823
   megaparsec = doJailbreak super.megaparsec;
+
+  # Needs OneTuple for ghc < 9.2
+  binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
+  # Later versions only support GHC >= 9.2
+  ghc-exactprint = self.ghc-exactprint_0_6_4;
+  apply-refact = self.apply-refact_0_9_3_0;
+
+  # Requires GHC < 9.4
+  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
 }

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "motion";
-  version = "4.4.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner  = "Motion-Project";
     repo   = "motion";
     rev    = "release-${version}";
-    sha256 = "sha256-srL9F99HHq5cw82rnQpywkTuY4s6hqIO64Pw5CnaG5Q=";
+    sha256 = "sha256-3TmmLAU/muiI90hrYrctzgVbWS4rXjxzAa0ctVYKSSY=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -22,5 +22,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ puffnfresh veprbl ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

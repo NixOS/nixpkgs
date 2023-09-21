@@ -1,24 +1,27 @@
 { lib
-, stdenv
 , fetchFromGitHub
-, fetchzip
+, fetchYarnDeps
 , mkYarnPackage
 , baseUrl ? null
 }:
 
 mkYarnPackage rec {
   pname = "synapse-admin";
-  version = "0.8.5";
+  version = "0.8.7";
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0miHtEJ5e8MaqGc4ezPvwhGjoCZyOE7md0DUCC/ZOfk=";
+    sha256 = "sha256-kvQBzrCu1sgDccKhr0i2DgDmO5z6u6s+vw5KymttoK4=";
   };
 
-  yarnNix = ./yarn.nix;
   yarnLock = ./yarn.lock;
   packageJSON = ./package.json;
+
+  offlineCache = fetchYarnDeps {
+    inherit yarnLock;
+    hash = "sha256-f0ilsF3lA+134qUaX96mdntjpR4gRlmtRIh/xEFhtXQ=";
+  };
 
   NODE_ENV = "production";
   ${if baseUrl != null then "REACT_APP_SERVER" else null} = baseUrl;

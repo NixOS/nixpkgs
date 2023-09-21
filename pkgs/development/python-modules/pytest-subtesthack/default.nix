@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-67UEIDycAf3TedKvp0dofct7HtG+H8DD9Tmy3oEnYgA=";
+    hash = "sha256-67UEIDycAf3TedKvp0dofct7HtG+H8DD9Tmy3oEnYgA=";
   };
 
   buildInputs = [ pytest ];

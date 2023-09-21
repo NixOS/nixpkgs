@@ -1,20 +1,23 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "TT2020";
-  version = "2020-01-05";
-in
-fetchFromGitHub {
-  name = "${pname}-${version}";
-  owner = "ctrlcctrlv";
-  repo = pname;
-  rev = "2b418fab5f99f72a18b3b2e7e2745ac4e03aa612";
-  sha256 = "1z0nizvs0gp0xl7pn6xcjvsysxhnfm7aqfamplkyvya3fxvhncds";
+  version = "0.2.1";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  src = fetchFromGitHub {
+    owner = "ctrlcctrlv";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-eAJzaookHcQ/7QNq/HUKA/O2liyKynJNdo6QuZ1Bv6k=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
     install -Dm644 -t $out/share/fonts/truetype dist/*.ttf
     install -Dm644 -t $out/share/fonts/woff2 dist/*.woff2
+
+    runHook postInstall
   '';
 
   meta = with lib; {

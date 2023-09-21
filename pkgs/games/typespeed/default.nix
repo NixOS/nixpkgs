@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.6.5";
   buildInputs = [ ncurses ];
   src = fetchurl {
-    url = "http://typespeed.sourceforge.net/typespeed-${version}.tar.gz";
+    url = "https://typespeed.sourceforge.net/typespeed-${version}.tar.gz";
     sha256 = "5c860385ceed8a60f13217cc0192c4c2b4705c3e80f9866f7d72ff306eb72961";
   };
 
@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: typespeed-typespeed.o:/build/typespeed-0.6.5/src/typespeed.h:69: multiple definition of
   #     `opt'; typespeed-file.o:/build/typespeed-0.6.5/src/typespeed.h:69: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   configureFlags = [ "--datadir=\${out}/share/" ];
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   meta = with lib; {
     description = "A curses based typing game";
-    homepage = "http://typespeed.sourceforge.net/";
+    homepage = "https://typespeed.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.auntie ];

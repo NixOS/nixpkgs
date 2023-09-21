@@ -1,21 +1,30 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , bmake
+, docbook_xsl
+, libxslt
 }:
 
 stdenv.mkDerivation rec {
   pname = "libfsm";
-  version = "0.1pre2442_${builtins.substring 0 8 src.rev}";
+  version = "0.1pre2987_${builtins.substring 0 8 src.rev}";
 
   src = fetchFromGitHub {
     owner  = "katef";
     repo   = pname;
-    rev    = "9c5095f7364fa464efff6c81fad9b60b19dfcc99";
-    sha256 = "1bs51agvrrwqid0slq2svj2yj7kkjdsnv3xsrk8zmf1jbgza6jrm";
+    rev    = "087e3389ad2cd5e5c40caeb40387e632567d7258";
+    hash   = "sha256-XWrZxnRbMB609l+sYFf8VsXy3NxqBsBPUrHgKLIyu/I=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ bmake ];
+  nativeBuildInputs = [
+    bmake
+    docbook_xsl
+    libxslt # xsltproc
+  ];
   enableParallelBuilding = true;
+  enableParallelInstalling = false;
 
   # note: build checks value of '$CC' to add some extra cflags, but we don't
   # necessarily know which 'stdenv' someone chose, so we leave it alone (e.g.

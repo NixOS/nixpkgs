@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sed -i "s/version=versioneer.get_version(),/version=\"$version\",/g" setup.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook mock pytest-cov coverage
   ];
 

@@ -28,15 +28,15 @@ let
       "1.2.2.5" = {
         hash = "sha256-lU7iK4DWuC/U3s1Ct/rq2Gr3w4F2U7RYYgpmF05bibY=";
       };
-      "1.3.1.3" = {
-        hash = "sha256-mNlVnabB2IC3HnYY0mb06RLqQzDxN9ePGVeBy3hkBC8=";
+      "1.5.0.3" = {
+        hash = "sha256-T96+lPC6OTOkIs/z3QWg73oYVSyidN0SVkBWmT9VRx0=";
       };
     };
 
     inherit (final) cudaMajorMinorVersion cudaMajorVersion;
 
     cutensor = buildCuTensorPackage rec {
-      version = if cudaMajorMinorVersion == "10.1" then "1.2.2.5" else "1.3.1.3";
+      version = if cudaMajorMinorVersion == "10.1" then "1.2.2.5" else "1.5.0.3";
       inherit (cuTensorVersions.${version}) hash;
       # This can go into generic.nix
       libPath = "lib/${if cudaMajorVersion == "10" then cudaMajorMinorVersion else cudaMajorVersion}";
@@ -47,10 +47,12 @@ let
 
     nccl = final.callPackage ../development/libraries/science/math/nccl { };
 
+    nccl-tests = final.callPackage ../development/libraries/science/math/nccl/tests.nix { };
+
     autoAddOpenGLRunpathHook = final.callPackage ( { makeSetupHook, addOpenGLRunpath }:
       makeSetupHook {
         name = "auto-add-opengl-runpath-hook";
-        deps = [
+        propagatedBuildInputs = [
           addOpenGLRunpath
         ];
       } ../development/compilers/cudatoolkit/auto-add-opengl-runpath-hook.sh
@@ -70,4 +72,4 @@ let
     cutensorExtension
   ]);
 
-in (scope.overrideScope' composedExtension)
+in (scope.overrideScope composedExtension)

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "tk0miya";
     repo = "testing.postgresql";
     rev = "c81ded434d00ec8424de0f9e1f4063c778c6aaa8";
-    sha256 = "sha256-A4tahAaa98X66ZYa3QxIQDZkwAwVB6ZDRObEhkbUWKs=";
+    hash = "sha256-A4tahAaa98X66ZYa3QxIQDZkwAwVB6ZDRObEhkbUWKs=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pg8000
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     psycopg2
     sqlalchemy

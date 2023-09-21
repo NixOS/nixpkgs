@@ -1,24 +1,35 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
 buildGoModule rec {
   pname = "protoc-gen-connect-go";
-  version = "1.0.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner = "bufbuild";
+    owner = "connectrpc";
     repo = "connect-go";
-    rev = "v${version}";
-    sha256 = "sha256-SCTNgBOa8NnU+1OYEUXTHCCcDXVkzVj6wKkbBy+N9TI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sKAocI2zT2jbw42Oe7lX8J1wLVBh7RfJe1hP8aXRCuM=";
   };
 
-  vendorSha256 = "sha256-Bh2JCWTaML/QU/sLBsxLKMzzH++K22BTGusfcVW2GBw=";
+  vendorHash = "sha256-3opkr4kUD3NQNbNYOdSWIDqKbArv9OQUkBMzae1ccVY=";
 
-  subPackages = [ "cmd/protoc-gen-connect-go" ];
+  subPackages = [
+    "cmd/protoc-gen-connect-go"
+  ];
+
+  preCheck = ''
+    # test all paths
+    unset subPackages
+  '';
 
   meta = with lib; {
-    description = "Simple, reliable, interoperable. A better gRPC.";
-    homepage = "https://github.com/bufbuild/connect-go";
+    description = "Simple, reliable, interoperable, better gRPC";
+    homepage = "https://github.com/connectrpc/connect-go";
+    changelog = "https://github.com/connectrpc/connect-go/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kilimnik ];
+    maintainers = with maintainers; [ kilimnik jk ];
   };
 }

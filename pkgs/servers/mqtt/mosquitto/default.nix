@@ -10,26 +10,31 @@
 , libuv
 , libwebsockets
 , openssl
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , fetchpatch
 }:
 
 let
   # Mosquitto needs external poll enabled in libwebsockets.
-  libwebsockets' = libwebsockets.override {
+  libwebsockets' = (libwebsockets.override {
     withExternalPoll = true;
-  };
+  }).overrideAttrs (old: {
+    # Avoid bug in firefox preventing websockets being created over http/2 connections
+    # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
+    cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
+  });
+
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.14";
+  version = "2.0.17";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ns4dxywsy9hsmd3ybanxvzwdvzs0szc2rg43c310l4xb1sd8wm2";
+    sha256 = "sha256-hOnZ6oHLvunZL6MrCmR5GkROQNww34QQ3m4gYDaSpb4=";
   };
 
   patches = lib.optionals stdenv.isDarwin [

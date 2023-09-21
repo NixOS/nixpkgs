@@ -13,12 +13,7 @@ in
   options.services.grafana-agent = {
     enable = mkEnableOption (lib.mdDoc "grafana-agent");
 
-    package = mkOption {
-      type = types.package;
-      default = pkgs.grafana-agent;
-      defaultText = "pkgs.grafana-agent";
-      description = lib.mdDoc "The grafana-agent package to use.";
-    };
+    package = mkPackageOptionMD pkgs "grafana-agent" { };
 
     credentials = mkOption {
       description = lib.mdDoc ''
@@ -37,11 +32,22 @@ in
       };
     };
 
+    extraFlags = mkOption {
+      type = with types; listOf str;
+      default = [ ];
+      example = [ "-enable-features=integrations-next" "-disable-reporting" ];
+      description = lib.mdDoc ''
+        Extra command-line flags passed to {command}`grafana-agent`.
+
+        See <https://grafana.com/docs/agent/latest/static/configuration/flags/>
+      '';
+    };
+
     settings = mkOption {
       description = lib.mdDoc ''
-        Configuration for `grafana-agent`.
+        Configuration for {command}`grafana-agent`.
 
-        See https://grafana.com/docs/agent/latest/configuration/
+        See <https://grafana.com/docs/agent/latest/configuration/>
       '';
 
       type = types.submodule {
@@ -49,17 +55,18 @@ in
       };
 
       default = { };
-      defaultText = ''
-        metrics = {
-          wal_directory = "\''${STATE_DIRECTORY}";
-          global.scrape_interval = "5s";
-        };
-        integrations = {
-          agent.enabled = true;
-          agent.scrape_integration = true;
-          node_exporter.enabled = true;
-          replace_instance_label = true;
-        };
+      defaultText = lib.literalExpression ''
+        {
+          metrics = {
+            wal_directory = "\''${STATE_DIRECTORY}";
+            global.scrape_interval = "5s";
+          };
+          integrations = {
+            agent.enabled = true;
+            agent.scrape_integration = true;
+            node_exporter.enabled = true;
+          };
+        }
       '';
       example = {
         metrics.global.remote_write = [{
@@ -114,7 +121,6 @@ in
         agent.enabled = mkDefault true;
         agent.scrape_integration = mkDefault true;
         node_exporter.enabled = mkDefault true;
-        replace_instance_label = mkDefault true;
       };
     };
 
@@ -138,7 +144,7 @@ in
         # We can't use Environment=HOSTNAME=%H, as it doesn't include the domain part.
         export HOSTNAME=$(< /proc/sys/kernel/hostname)
 
-        exec ${cfg.package}/bin/agent -config.expand-env -config.file ${configFile}
+        exec ${lib.getExe cfg.package} -config.expand-env -config.file ${configFile} ${escapeShellArgs cfg.extraFlags}
       '';
       serviceConfig = {
         Restart = "always";

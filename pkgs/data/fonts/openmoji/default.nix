@@ -4,6 +4,7 @@
 , fetchpatch
 , scfbuild
 , fontforge
+, node-glob
 , libuninameslist
 , nodejs
 , nodePackages
@@ -59,9 +60,15 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     scfbuild-with-fontforge-20201107
     nodejs
-    nodePackages.glob
+    node-glob
     nodePackages.lodash
   ];
+
+  postPatch = ''
+    # this is API change in glob >9
+    substituteInPlace helpers/generate-font-glyphs.js \
+      --replace "require('glob').sync" "require('glob').globSync"
+  '';
 
   buildPhase = ''
     runHook preBuild

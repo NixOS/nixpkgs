@@ -8,6 +8,7 @@
 # the `.pc` file lists only the main output's lib dir.
 # If false, and if `{ static = true; }`, the .a stays in the main output.
 , splitStaticOutput ? shared && static
+, testers
 }:
 
 # Without either the build will actually still succeed because the build
@@ -21,16 +22,20 @@ assert shared || static;
 
 assert splitStaticOutput -> static;
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zlib";
-  version = "1.2.12";
+  version = "1.3";
 
-  src = fetchurl {
-    urls =
-      [ "https://www.zlib.net/fossils/zlib-${version}.tar.gz"  # stable archive path
-        "mirror://sourceforge/libpng/zlib/${version}/zlib-${version}.tar.gz"
-      ];
-    sha256 = "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9";
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
+    urls = [
+      # This URL works for 1.2.13 only; hopefully also for future releases.
+      "https://github.com/madler/zlib/releases/download/v${version}/zlib-${version}.tar.gz"
+      # Stable archive path, but captcha can be encountered, causing hash mismatch.
+      "https://www.zlib.net/fossils/zlib-${version}.tar.gz"
+    ];
+    hash = "sha256-/wukwpIBPbwnUws6geH5qBPNOd4Byl4Pi/NVcC76WT4=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -40,24 +45,19 @@ stdenv.mkDerivation (rec {
       --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
   '';
 
-  patches = [
-    ./fix-configure-issue-cross.patch
-    # Starting zlib 1.2.12, zlib is stricter to incorrect CRC inputs
-    # with bits set above the low 32.
-    # see https://github.com/madler/zlib/issues/618
-    # TODO: remove the patch if upstream releases https://github.com/madler/zlib/commit/ec3df00224d4b396e2ac6586ab5d25f673caa4c2
-    # see https://github.com/NixOS/nixpkgs/issues/170539 for history.
-    ./comprehensive-crc-validation-for-wrong-implementations.patch
-    ./CVE-2022-37434.patch
-  ];
-
   strictDeps = true;
   outputs = [ "out" "dev" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  # For zlib's ./configure (as of verion 1.2.11), the order
+  dontConfigure = stdenv.hostPlatform.isMinGW;
+
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export CHOST=${stdenv.hostPlatform.config}
+  '';
+
+  # For zlib's ./configure (as of version 1.2.11), the order
   # of --static/--shared flags matters!
   # `--shared --static` builds only static libs, while
   # `--static --shared` builds both.
@@ -96,20 +96,20 @@ stdenv.mkDerivation (rec {
   ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
-  + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt" && shared) ''
+  + lib.optionalString (stdenv.hostPlatform.isMinGW && shared) ''
     ln -s zlib1.dll $out/bin/libz.dll
   '';
 
   # As zlib takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-static-libgcc";
 
   # We don't strip on static cross-compilation because of reports that native
   # stripping corrupted the target library; see commit 12e960f5 for the report.
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
   configurePlatforms = [];
 
-  installFlags = lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+  installFlags = lib.optionals stdenv.hostPlatform.isMinGW [
     "BINARY_PATH=$(out)/bin"
     "INCLUDE_PATH=$(dev)/include"
     "LIBRARY_PATH=$(out)/lib"
@@ -120,7 +120,7 @@ stdenv.mkDerivation (rec {
 
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "-f" "win32/Makefile.gcc"
   ] ++ lib.optionals shared [
     # Note that as of writing (zlib 1.2.11), this flag only has an effect
@@ -128,20 +128,13 @@ stdenv.mkDerivation (rec {
     "SHARED_MODE=1"
   ];
 
-  passthru = {
-    inherit version;
-  };
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     homepage = "https://zlib.net";
     description = "Lossless data-compression library";
     license = licenses.zlib;
     platforms = platforms.all;
+    pkgConfigModules = [ "zlib" ];
   };
-} // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-  preConfigure = ''
-    export CHOST=${stdenv.hostPlatform.config}
-  '';
-} // lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
-  dontConfigure = true;
 })

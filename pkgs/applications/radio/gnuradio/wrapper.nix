@@ -28,6 +28,27 @@
 , extraPackages ? []
 # For Adding additional python packaages
 , extraPythonPackages ? []
+, soapysdr # For it's passthru.searchPath
+# soapysdr plugins we add by default. Ideally, we should have a
+# soapysdrPackages = soapysdr.pkgs attribute set, but until now this wasn't
+# crucial.
+, soapyairspy
+, soapyaudio
+, soapybladerf
+, soapyhackrf
+, soapyremote
+, soapyrtlsdr
+, soapyuhd
+# For adding / changing soapysdr packages, like soapsdr-with-plugins does
+, extraSoapySdrPackages ? [
+  soapyairspy
+  soapyaudio
+  soapybladerf
+  soapyhackrf
+  soapyremote
+  soapyrtlsdr
+  soapyuhd
+]
 # Allow to add whatever you want to the wrapper
 , extraMakeWrapperArgs ? []
 }:
@@ -41,12 +62,9 @@ let
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (lib.mapAttrsToList (
       feat: info: (
-        if unwrapped.hasFeature feat then
-          (if builtins.hasAttr "pythonRuntime" info then info.pythonRuntime else [])
-        else
-          []
+        lib.optionals ((unwrapped.hasFeature feat) && (builtins.hasAttr "pythonRuntime" info)) info.pythonRuntime
       )
-      ) unwrapped.featuresInfo)
+    ) unwrapped.featuresInfo)
   ;
   pythonEnv = unwrapped.python.withPackages(ps: pythonPkgs);
 
@@ -90,6 +108,10 @@ let
     ++ lib.optionals (extraPackages != []) [
       "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
     ]
+    ++ lib.optionals (extraSoapySdrPackages != []) [
+      "--prefix" "SOAPY_SDR_PLUGIN_PATH" ":" "${lib.makeSearchPath
+      soapysdr.passthru.searchPath extraSoapySdrPackages}"
+    ]
     ++ lib.optionals (unwrapped.hasFeature "gr-qtgui")
       # 3.7 builds with qt4
       (if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
@@ -98,19 +120,21 @@ let
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtPluginPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
           "--prefix" "QML2_IMPORT_PATH" ":"
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtQmlPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
         ]
       else

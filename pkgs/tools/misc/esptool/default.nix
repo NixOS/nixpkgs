@@ -1,19 +1,27 @@
-{ lib, fetchFromGitHub, python3, openssl }:
+{ lib
+, fetchFromGitHub
+, python3
+, softhsm
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "3.3.1";
+  version = "4.6.2";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    hash = "sha256-9WmiLji7Zoad5WIzgkpvkI9t96sfdkCtFh6zqVxF7qo=";
+    hash = "sha256-3uvTyJrGCpulu/MR/VfCgnIxibxJj2ehBIBSveq7EfI=";
   };
 
   postPatch = ''
-    substituteInPlace test/test_imagegen.py \
-      --replace "sys.executable, ESPTOOL_PY" "ESPTOOL_PY"
+    patchShebangs ci
+
+    substituteInPlace test/test_espsecure_hsm.py \
+      --replace "/usr/lib/softhsm" "${lib.getLib softhsm}/lib/softhsm"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,33 +30,30 @@ python3.pkgs.buildPythonApplication rec {
     ecdsa
     pyserial
     reedsolo
+    pyyaml
+    python-pkcs11
   ];
 
-  # wrapPythonPrograms will overwrite esptool.py with a bash script,
-  # but espefuse.py tries to import it. Since we don't add any binary paths,
-  # use patchPythonScript directly.
-  dontWrapPythonPrograms = true;
-  postFixup = ''
-    buildPythonPath "$out $pythonPath"
-    for f in $out/bin/*.py; do
-        echo "Patching $f"
-        patchPythonScript "$f"
-    done
-  '';
-
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pyelftools
+    pytestCheckHook
+    softhsm
   ];
 
   # tests mentioned in `.github/workflows/test_esptool.yml`
   checkPhase = ''
     runHook preCheck
 
-    export ESPTOOL_PY=$out/bin/esptool.py
-    ${python3.interpreter} test/test_imagegen.py
-    ${python3.interpreter} test/test_espsecure.py
-    ${python3.interpreter} test/test_merge_bin.py
-    ${python3.interpreter} test/test_modules.py
+    export SOFTHSM2_CONF=$(mktemp)
+    echo "directories.tokendir = $(mktemp -d)" > "$SOFTHSM2_CONF"
+    ./ci/setup_softhsm2.sh
+
+    pytest test/test_imagegen.py
+    pytest test/test_espsecure.py
+    pytest test/test_espsecure_hsm.py
+    pytest test/test_merge_bin.py
+    pytest test/test_image_info.py
+    pytest test/test_modules.py
 
     runHook postCheck
   '';
@@ -58,6 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dezgeg dotlambda ] ++ teams.lumiguide.members;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
+    mainProgram = "esptool.py";
   };
 }

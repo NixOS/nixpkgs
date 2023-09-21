@@ -1,23 +1,27 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook
-, ncurses5, zlib, gmp
-, makeWrapper
+{ lib
+, autoPatchelfHook
+, fetchurl
+, gmp
 , less
+, makeWrapper
+, ncurses6
+, stdenv
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  milestone_id = "M4";
-  version = "1.0.${milestone_id}-alpha";
+  version = "M5e";
 
-  src = if (stdenv.isDarwin) then
+  src = if stdenv.isDarwin then
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-macos.tar.gz";
-      sha256 = "A8i1jH9+W89M+XbmYx0knJsP5c/EdVE2T9L/EIL0USU=";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
+      hash = "sha256-jg8/DmIJru2OKZu5WfA7fatKcburPiXnoALifxL26kc=";
     }
   else
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/ucm-linux.tar.gz";
-      sha256 = "OqtJiKAsefw2fVjhtsYUe+qLPqXBPFkHUaMh26EJBJ4=";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux.tar.gz";
+      hash = "sha256-+2dIxqf9b8DfoTUakxA6Qrpb7cAQKCventxDS1sFxjM=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -25,8 +29,9 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  nativeBuildInputs = [ makeWrapper ] ++ (lib.optional (!stdenv.isDarwin) autoPatchelfHook);
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses6 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -41,7 +46,9 @@ stdenv.mkDerivation rec {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];
+    mainProgram = "ucm";
     maintainers = [ maintainers.virusdave ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

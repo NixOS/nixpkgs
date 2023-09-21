@@ -1,6 +1,15 @@
-{ lib, callPackage, python3Packages, fetchFromGitLab, cacert
-, rustPlatform, bubblewrap, git, perlPackages, imagemagick, fetchurl, fetchzip
-, jre, makeWrapper, tr-patcher, tes3cmd, openmw }:
+{ lib
+, bubblewrap
+, cacert
+, fetchFromGitLab
+, git
+, imagemagick
+, openmw
+, python3Packages
+, rustPlatform
+, tes3cmd
+, tr-patcher
+}:
 
 let
   version = "2.1.0";
@@ -9,7 +18,7 @@ let
     owner = "portmod";
     repo = "Portmod";
     rev = "v${version}";
-    sha256 = "sha256-b/ENApFovMPNUMbJhwY+TZCnSzpr1e/IKJ/5XAGTQjE=";
+    hash = "sha256-b/ENApFovMPNUMbJhwY+TZCnSzpr1e/IKJ/5XAGTQjE=";
   };
 
   portmod-rust = rustPlatform.buildRustPackage rec {
@@ -18,7 +27,9 @@ let
 
     cargoHash = "sha256-3EfMMpSWSYsB3nXaoGGDuKQ9duyCKzbrT6oeATnzqLE=";
 
-    nativeBuildInputs = [ python3Packages.python ];
+    nativeBuildInputs = [
+      python3Packages.python
+    ];
 
     doCheck = false;
   };
@@ -56,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     colorama
     restrictedpython
     appdirs
-    GitPython
+    gitpython
     progressbar2
     python-sat
     redbaron
@@ -65,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     fasteners
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ] ++ bin-programs;
 
@@ -94,10 +105,10 @@ python3Packages.buildPythonApplication rec {
       "--prefix" "PATH" ":" "${lib.makeBinPath bin-programs }")
   '';
 
-  meta = {
+  meta = with lib; {
     description = "mod manager for openMW based on portage";
     homepage = "https://gitlab.com/portmod/portmod";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ marius851000 ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ marius851000 ];
   };
 }

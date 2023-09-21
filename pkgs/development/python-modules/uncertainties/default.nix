@@ -8,11 +8,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gBEeCDnyOcWyM8tHcgF7SDoLehVzpYG5Krd0ajXm+qs=";
+    hash = "sha256-gBEeCDnyOcWyM8tHcgF7SDoLehVzpYG5Krd0ajXm+qs=";
   };
 
   propagatedBuildInputs = [ future ];
-  checkInputs = [ nose numpy ];
+  nativeCheckInputs = [ nose numpy ];
 
   checkPhase = ''
     nosetests -sv

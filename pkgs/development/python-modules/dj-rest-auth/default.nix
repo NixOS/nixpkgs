@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, django
 , django-allauth
 , djangorestframework
 , djangorestframework-simplejwt
 , responses
 , unittest-xml-reporting
+, python
 }:
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
-  version = "2.2.5";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
-    rev = version;
-    sha256 = "sha256-1oxkl7MJ2wIhcHlgxnCtj9Cp8o1puzNWs+vlMyi+3RM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+ladx0b/bvvUW8zLjtG8IiWWdfPTqqm/KYbEK9uiFaU=";
   };
 
   postPatch = ''
@@ -25,16 +27,35 @@ buildPythonPackage rec {
       --replace "==" ">="
   '';
 
+  buildInputs = [
+    django
+  ];
+
   propagatedBuildInputs = [
     djangorestframework
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies.with_social = [
     django-allauth
+  ];
+
+  nativeCheckInputs = [
     djangorestframework-simplejwt
     responses
     unittest-xml-reporting
-  ];
+  ] ++ passthru.optional-dependencies.with_social;
+
+  preCheck = ''
+    # connects to graph.facebook.com
+    substituteInPlace dj_rest_auth/tests/test_serializers.py \
+      --replace "def test_http_error" "def dont_test_http_error"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} runtests.py
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "dj_rest_auth" ];
 
@@ -42,6 +63,6 @@ buildPythonPackage rec {
     description = "Authentication for Django Rest Framework";
     homepage = "https://github.com/iMerica/dj-rest-auth";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

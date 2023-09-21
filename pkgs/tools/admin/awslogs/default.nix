@@ -24,13 +24,14 @@ python3.pkgs.buildPythonApplication rec {
     jmespath
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "jmespath>=0.7.1,<1.0.0" "jmespath>=0.7.1"
+      --replace "jmespath>=0.7.1,<1.0.0" "jmespath>=0.7.1" \
+      --replace '>=3.5.*' '>=3.5'
   '';
 
   disabledTests = [

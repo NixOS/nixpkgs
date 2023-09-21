@@ -8,9 +8,10 @@
 , Foundation
 , python3
 , fetchFromGitHub
-, fetchpatch
-, autoreconfHook
+, meson
+, ninja
 , gtk-doc
+, docbook-xsl-nons
 , gobject-introspection
   # Optional dependencies
 , libjpeg
@@ -21,7 +22,7 @@
 , libtiff
 , fftw
 , lcms2
-, libpng
+, libspng
 , libimagequant
 , imagemagick
 , pango
@@ -34,19 +35,20 @@
 , libjxl
 , openslide
 , libheif
+, cgif
 }:
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.13.2";
+  version = "8.14.4";
 
-  outputs = [ "bin" "out" "man" "dev" ];
+  outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "sha256-Tff+M2qJ/FPxU7Y5gUnuF+Kbwh8DIW5Tb7fe0Lbi0m4=";
+    hash = "sha256-y2Tyi8rxal3s3jLURRGPuCAUuHITRPl1+zJZDp557+I=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -56,9 +58,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
-    gtk-doc
+    meson
+    ninja
+    docbook-xsl-nons
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gtk-doc
   ];
 
   buildInputs = [
@@ -75,7 +80,7 @@ stdenv.mkDerivation rec {
     libtiff
     fftw
     lcms2
-    libpng
+    libspng
     libimagequant
     imagemagick
     pango
@@ -88,6 +93,7 @@ stdenv.mkDerivation rec {
     libjxl
     openslide
     libheif
+    cgif
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
@@ -95,11 +101,16 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
+  mesonFlags = [
+    "-Dpdfium=disabled"
+    "-Dnifti=disabled"
+  ]
+  ++ lib.optional (!stdenv.isDarwin) "-Dgtk_doc=true"
+  ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
+  ;
 
   meta = with lib; {
+    changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";
     homepage = "https://libvips.github.io/libvips/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;

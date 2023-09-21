@@ -1,4 +1,5 @@
 { lib
+, argcomplete
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.1.8";
+  version = "2.2.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "censys";
     repo = "censys-python";
-    rev = "v${version}";
-    hash = "sha256-iPCFflibEqA286j+7Vp4ZQaO9e6Bp+o7A/a7DELJcxA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-awe/6d6AryihS8vYCRtU8APbLUsqv9aKULBmjjaz3gM=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +36,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    argcomplete
     backoff
     requests
     rich
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytest-mock
     pytestCheckHook
@@ -73,6 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
+    changelog = "https://github.com/censys/censys-python/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

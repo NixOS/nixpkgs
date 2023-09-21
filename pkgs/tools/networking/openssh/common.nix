@@ -14,6 +14,7 @@
 , pkgs
 , fetchurl
 , fetchpatch
+, autoreconfHook
 , zlib
 , openssl
 , libedit
@@ -27,11 +28,11 @@
 , hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+, withPAM ? stdenv.hostPlatform.isLinux
 , linkOpenssl ? true
 }:
 
-with lib;
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version src;
 
   patches = [
@@ -44,6 +45,14 @@ stdenv.mkDerivation rec {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # Pull upstream zlib-1.3 support.
+    # The patch changes configure.ac, uses autoreconfHook.
+    (fetchpatch {
+      name = "zlib-1.3.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/cb4ed12ffc332d1f72d054ed92655b5f1c38f621.patch";
+      hash = "sha256-3Gx0/I2n9/XaWCIefVYtvk5f+VgH6MlhMBse+PMyf34=";
+    })
   ] ++ extraPatches;
 
   postPatch =
@@ -53,16 +62,17 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  nativeBuildInputs = [ pkg-config ]
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook pkg-config ]
     # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
-    ++ optional withKerberos pkgs.libkrb5
+    ++ lib.optional withKerberos pkgs.libkrb5
     ++ extraNativeBuildInputs;
   buildInputs = [ zlib openssl libedit ]
-    ++ optional withFIDO libfido2
-    ++ optional withKerberos libkrb5
-    ++ optional stdenv.isLinux pam;
+    ++ lib.optional withFIDO libfido2
+    ++ lib.optional withKerberos libkrb5
+    ++ lib.optional withPAM pam;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -79,12 +89,12 @@ stdenv.mkDerivation rec {
     "--with-mantype=man"
     "--with-libedit=yes"
     "--disable-strip"
-    (if stdenv.isLinux then "--with-pam" else "--without-pam")
-  ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
-    ++ optional withFIDO "--with-security-key-builtin=yes"
-    ++ optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
-    ++ optional stdenv.isDarwin "--disable-libutil"
-    ++ optional (!linkOpenssl) "--without-openssl"
+    (lib.withFeature withPAM "pam")
+  ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ lib.optional withFIDO "--with-security-key-builtin=yes"
+    ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
+    ++ lib.optional stdenv.isDarwin "--disable-libutil"
+    ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ extraConfigureFlags;
 
   ${if stdenv.hostPlatform.isStatic then "NIX_LDFLAGS" else null}= [ "-laudit" ] ++ lib.optionals withKerberos [ "-lkeyutils" ];
@@ -97,7 +107,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   enableParallelChecking = false;
-  checkInputs = optional (!stdenv.isDarwin) hostname;
+  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)
@@ -145,7 +155,7 @@ stdenv.mkDerivation rec {
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
-  checkTarget = optional (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
+  checkTarget = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
     # other tests are less demanding of the environment
     ++ [ "unit" "file-tests" "interop-tests" ];
 
@@ -165,7 +175,7 @@ stdenv.mkDerivation rec {
     borgbackup-integration = nixosTests.borgbackup;
   };
 
-  meta = {
+  meta = with lib; {
     description = "An implementation of the SSH protocol${extraDesc}";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";

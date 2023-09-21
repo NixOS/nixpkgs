@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook
 , autoreconfHook, pkg-config
 , p4est-sc-debugEnable ? true, p4est-sc-mpiSupport ? true
 , mpi, openssh, zlib
 }:
 
 let
-  dbg = if debugEnable then "-dbg" else "";
+  dbg = lib.optionalString debugEnable "-dbg";
   debugEnable = p4est-sc-debugEnable;
   mpiSupport = p4est-sc-mpiSupport;
   isOpenmpi = mpiSupport && mpi.pname == "openmpi";
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   '';
   preConfigure = ''
     echo "2.8.0" > .tarball-version
-    ${if mpiSupport then "unset CC" else ""}
+    ${lib.optionalString mpiSupport "unset CC"}
   '';
 
   configureFlags = [ "--enable-pthread=-pthread" ]
@@ -47,10 +47,10 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   makeFlags = [ "V=0" ];
 
-  preCheck = ''
-    export OMPI_MCA_rmaps_base_oversubscribe=1
-    export HYDRA_IFACE=lo
-  '';
+  nativeCheckInputs = lib.optionals mpiSupport [
+    mpiCheckPhaseHook
+    openssh
+  ];
 
   # disallow Darwin checks due to prototype incompatibility of qsort_r
   # to be fixed in a future version of the source code

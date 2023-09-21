@@ -15,12 +15,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4905";
+  version = "4912";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
-    sha256 = "sha256-EYUysLit/bO/IjVmAbxqIvVFm9Ub50+RKFn7ZdspapU=";
+    sha256 = "sha256-4A6N0bhRLKgpLXUSN1iAmIC4YX+BaiUow2YQqnxguRM=";
   };
 
   patches = [

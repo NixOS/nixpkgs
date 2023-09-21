@@ -18,7 +18,7 @@
 , nixosTests
   #
   # By default unbound will not be built with systemd support. Unbound is a very
-  # commmon dependency. The transitive dependency closure of systemd also
+  # common dependency. The transitive dependency closure of systemd also
   # contains unbound.
   # Since most (all?) (lib)unbound users outside of the unbound daemon usage do
   # not need the systemd integration it is likely best to just default to no
@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.16.3";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-6gxmZeLDMlt2nqwd/M1g/hgo1fz2YmUAOezLP2ftso4=";
+    hash = "sha256-PalUkKhc/2Qg8m+uC4Skn1ES3xvxt/w0+HJPAggstxI=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--with-libexpat=${expat.dev}"
@@ -75,7 +77,7 @@ stdenv.mkDerivation rec {
     "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
-  ] ++ lib.optional stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--disable-flto"
   ] ++ lib.optionals withSystemd [
     "--enable-systemd"
@@ -108,7 +110,7 @@ stdenv.mkDerivation rec {
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
 
-  checkInputs = [ bison ];
+  nativeCheckInputs = [ bison ];
 
   doCheck = true;
 
@@ -150,6 +152,7 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     inherit gnutls;
     nixos-test = nixosTests.unbound;
+    nixos-test-exporter = nixosTests.prometheus-exporters.unbound;
   };
 
   meta = with lib; {

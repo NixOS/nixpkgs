@@ -1,54 +1,101 @@
-{ lib, stdenv, fetchurl, alsa-lib, pkg-config, gtk2, gtk3, fltk13 }:
-# Comes from upstream as as bundle of several tools,
-# some use gtk2, some gtk3 (and some even fltk13).
+{ lib
+, stdenv
+, fetchurl
+, alsa-lib
+, fltk13
+, gtk2
+, gtk3
+, pkg-config
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-tools";
   version = "1.2.5";
 
   src = fetchurl {
-    url = "mirror://alsa/tools/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-NacQJ6AfTX3kci4iNSDpQN5os8VwtsZxaRVnrij5iT4=";
+    url = "mirror://alsa/tools/alsa-tools-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-NacQJ6AfTX3kci4iNSDpQN5os8VwtsZxaRVnrij5iT4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib gtk2 gtk3 fltk13 ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  patchPhase = ''
-    export tools="as10k1 hda-verb hdspmixer echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"
-    # export tools="as10k1 hda-verb hdspmixer qlo10k1 seq usx2yloader echomixer hdajackretask hdspconf hwmixvolume mixartloader rmedigicontrol sscape_ctl vxloader envy24control hdajacksensetest hdsploader ld10k1 pcxhrloader sb16_csp us428control"
-  '';
+  buildInputs = [
+    alsa-lib
+    fltk13
+    gtk2
+    gtk3
+  ];
+
+  env.TOOLSET = lib.concatStringsSep " " [
+    "as10k1"
+    "echomixer"
+    "envy24control"
+    "hda-verb"
+    "hdajackretask"
+    "hdajacksensetest"
+    "hdspconf"
+    "hdsploader"
+    "hdspmixer"
+    # "hwmixvolume" # Requires old, unmaintained, abandoned EOL Python 2
+    "ld10k1"
+    # "qlo10k1" # needs Qt
+    "mixartloader"
+    "pcxhrloader"
+    "rmedigicontrol"
+    "sb16_csp"
+    # "seq" # mysterious configure error
+    "sscape_ctl"
+    "us428control"
+    # "usx2yloader" # tries to create /etc/hotplug/usb
+    "vxloader"
+  ];
 
   configurePhase = ''
-    for tool in $tools; do
-      echo "Tool: $tool:"
-      cd "$tool"; ./configure --prefix="$out"; cd -
+    runHook preConfigure
+
+    for tool in $TOOLSET; do
+      echo "Configuring $tool:"
+      pushd "$tool"
+      ./configure --prefix="$out"
+      popd
     done
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
-    for tool in $tools; do
-      cd "$tool"; make; cd -
+    runHook preBuild
+
+    for tool in $TOOLSET; do
+      echo "Building $tool:"
+      pushd "$tool"
+      make
+      popd
     done
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    for tool in $tools; do
-      cd "$tool"; make install; cd -
+    runHook preInstall
+
+    for tool in $TOOLSET; do
+      echo "Installing $tool:"
+      pushd "$tool"
+      make install
+      popd
     done
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.alsa-project.org/";
-    description = "ALSA, the Advanced Linux Sound Architecture tools";
-
-    longDescription = ''
-      The Advanced Linux Sound Architecture (ALSA) provides audio and
-      MIDI functionality to the Linux-based operating system.
-    '';
-
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.fps ];
+    description = "ALSA Tools";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

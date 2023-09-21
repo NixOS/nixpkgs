@@ -9,7 +9,7 @@
 , makeWrapper
 , tesseract4
 , leptonica
-, ffmpeg
+, ffmpeg_4
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-usVAKBkdd8uz9cD5eLd0hnwGonOJLscRdc+iWDlNXVc=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    # https://github.com/CCExtractor/ccextractor/issues/1467
+    sed -i '/allheaders.h/a#include <leptonica/pix_internal.h>' src/lib_ccx/ocr.c
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/CMakeLists.txt \
     --replace 'add_definitions(-DGPAC_CONFIG_LINUX)' 'add_definitions(-DGPAC_CONFIG_DARWIN)'
   '';
@@ -34,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ]
     ++ lib.optional (!stdenv.isLinux) libiconv
-    ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg ];
+    ++ lib.optionals enableOcr [ leptonica tesseract4 ffmpeg_4 ];
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH:

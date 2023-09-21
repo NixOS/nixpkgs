@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ progress pyserial ];
 
-  checkInputs = [ pytest ] ++ lib.optional isPy27 mock;
+  nativeCheckInputs = [ pytest ] ++ lib.optional isPy27 mock;
 
   checkPhase = ''
     pytest --strict tests/unit

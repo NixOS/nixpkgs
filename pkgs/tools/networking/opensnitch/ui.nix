@@ -6,17 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "opensnitch-ui";
-  version = "1.5.2";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-MF7K3WasG1xLdw1kWz6xVYrdfuZW5GUq6dlS0pPOkHI=";
+    hash = "sha256-1ArwbewgZuoDF2lxY720yFQSsTuLR0WkS8vsTCr2FL4=";
   };
 
   postPatch = ''
-    substituteInPlace ui/opensnitch/utils.py \
+    substituteInPlace ui/opensnitch/utils/__init__.py \
       --replace /usr/lib/python3/dist-packages/data ${python3Packages.pyasn}/${python3Packages.python.sitePackages}/pyasn/data
   '';
 
@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     description = "An application firewall";
     homepage = "https://github.com/evilsocket/opensnitch/wiki";
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.raboof ];
+    maintainers = with maintainers; [ onny ];
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, jdk, python2 }:
+{ lib, stdenv, fetchurl, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "antlr";
@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   };
   patches = [ ./2.7.7-fixes.patch ];
   buildInputs = [ jdk ];
-  nativeBuildInputs = [ python2 ];
 
   meta = with lib; {
     description = "Powerful parser generator";

@@ -1,13 +1,22 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.7.0";
+  version = "1.8.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FRrsz2DCFkApMrUuQO5HepOfjViJiSc3igKrvoUsHDk=";
+    hash = "sha256-AuER0dxqUKu47ta/McPkjtiwgw0eoqG3jGF2XCUT/dg=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # tests are very targeted at individual linux distributions
   doCheck = false;

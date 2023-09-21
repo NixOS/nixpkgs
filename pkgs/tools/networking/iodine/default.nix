@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''sed -i "s,/sbin/route,${nettools}/bin/route," src/tun.c'';
 
-  NIX_CFLAGS_COMPILE = "-DIFCONFIGPATH=\"${nettools}/bin/\"";
+  env.NIX_CFLAGS_COMPILE = "-DIFCONFIGPATH=\"${nettools}/bin/\"";
 
   installFlags = [ "prefix=\${out}" ];
 

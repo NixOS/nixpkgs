@@ -1,5 +1,3 @@
-{ kernelPackages ? null }:
-
 let
   listenPort = 12345;
   socketNamespace = "foo";
@@ -15,7 +13,7 @@ let
 
 in
 
-import ../make-test-python.nix ({ pkgs, lib, ... } : {
+import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... } : {
   name = "wireguard-with-namespaces";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ asymmetric ];
@@ -41,6 +39,7 @@ import ../make-test-python.nix ({ pkgs, lib, ... } : {
         preSetup = ''
           ip netns add ${interfaceNamespace}
         '';
+        mtu = 1280;
         inherit interfaceNamespace;
       };
     };

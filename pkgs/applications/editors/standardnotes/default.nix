@@ -1,51 +1,48 @@
-{ lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
-, fetchurl, libsecret  }:
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, electron, libsecret
+, desktop-file-utils , callPackage }:
 
 let
-  version = "3.23.69";
-  pname = "standardnotes";
-  name = "${pname}-${version}";
+
+  srcjson = builtins.fromJSON (builtins.readFile ./src.json);
+
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
-  plat = {
-    i686-linux = "i386";
-    x86_64-linux = "x86_64";
-  }.${stdenv.hostPlatform.system} or throwSystem;
+in
 
-  sha256 = {
-    i686-linux = "sha256-/A2LjV8ky20bcKgs0ijwldryi5VkyROwz49vWYXYQus=";
-    x86_64-linux = "sha256-fA9WH9qUtvAHF9hTFRtxQdpz2dpK0joD0zX9VYBo10g=";
-  }.${stdenv.hostPlatform.system} or throwSystem;
+stdenv.mkDerivation rec {
 
-  src = fetchurl {
-    url = "https://github.com/standardnotes/app/releases/download/%40standardnotes%2Fdesktop%40${version}/standard-notes-${version}-linux-${plat}.AppImage";
-    inherit sha256;
-  };
+  pname = "standardnotes";
 
-  appimageContents = appimageTools.extract {
-    inherit name src;
-  };
+  src = fetchurl (srcjson.deb.${stdenv.hostPlatform.system} or throwSystem);
 
-  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
+  inherit (srcjson) version;
 
-in appimageTools.wrapType2 rec {
-  inherit name src;
+  dontConfigure = true;
 
-  extraPkgs = pkgs: with pkgs; [
-    libsecret
-  ];
+  dontBuild = true;
 
-  extraInstallCommands = ''
-    # directory in /nix/store so readonly
-    cd $out
-    chmod -R +w $out
-    mv $out/bin/${name} $out/bin/${pname}
+  nativeBuildInputs = [ makeWrapper dpkg desktop-file-utils ];
 
-    # fixup and install desktop file
+  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/share/standardnotes
+    cp -R usr/share/{applications,icons} $out/share
+    cp -R opt/Standard\ Notes/resources/app.asar $out/share/standardnotes/
+
+    makeWrapper ${electron}/bin/electron $out/bin/standardnotes \
+      --add-flags $out/share/standardnotes/app.asar \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret stdenv.cc.cc.lib ]}
+
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value ${pname} ${appimageContents}/standard-notes.desktop
-    ln -s ${appimageContents}/usr/share/icons share
+      --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop
+
+    runHook postInstall
   '';
+
+  passthru.updateScript = callPackage ./update.nix {};
 
   meta = with lib; {
     description = "A simple and private notes app";
@@ -55,8 +52,8 @@ in appimageTools.wrapType2 rec {
     '';
     homepage = "https://standardnotes.org";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ mgregoire chuangzhu ];
+    maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = builtins.attrNames srcjson.deb;
   };
 }

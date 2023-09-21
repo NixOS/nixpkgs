@@ -30,7 +30,7 @@ The first steps to all these are the same:
 
 1.  Switch to the NixOS channel:
 
-    If you\'ve just installed Nix on a non-NixOS distribution, you will
+    If you've just installed Nix on a non-NixOS distribution, you will
     be on the `nixpkgs` channel by default.
 
     ```ShellSession
@@ -49,10 +49,10 @@ The first steps to all these are the same:
 
 1.  Install the NixOS installation tools:
 
-    You\'ll need `nixos-generate-config` and `nixos-install`, but this
+    You'll need `nixos-generate-config` and `nixos-install`, but this
     also makes some man pages and `nixos-enter` available, just in case
     you want to chroot into your NixOS partition. NixOS installs these
-    by default, but you don\'t have NixOS yet..
+    by default, but you don't have NixOS yet..
 
     ```ShellSession
     $ nix-env -f '<nixpkgs>' -iA nixos-install-tools
@@ -70,7 +70,7 @@ The first steps to all these are the same:
     refer to the partitioning, file-system creation, and mounting steps
     of [](#sec-installation)
 
-    If you\'re about to install NixOS in place using `NIXOS_LUSTRATE`
+    If you're about to install NixOS in place using `NIXOS_LUSTRATE`
     there is nothing to do for this step.
 
 1.  Generate your NixOS configuration:
@@ -79,12 +79,12 @@ The first steps to all these are the same:
     $ sudo `which nixos-generate-config` --root /mnt
     ```
 
-    You\'ll probably want to edit the configuration files. Refer to the
+    You'll probably want to edit the configuration files. Refer to the
     `nixos-generate-config` step in [](#sec-installation) for more
     information.
 
     Consider setting up the NixOS bootloader to give you the ability to
-    boot on your existing Linux partition. For instance, if you\'re
+    boot on your existing Linux partition. For instance, if you're
     using GRUB and your existing distribution is running Ubuntu, you may
     want to add something like this to your `configuration.nix`:
 
@@ -148,19 +148,19 @@ The first steps to all these are the same:
     Generate your NixOS configuration:
 
     ```ShellSession
-    $ sudo `which nixos-generate-config` --root /
+    $ sudo `which nixos-generate-config`
     ```
 
     Note that this will place the generated configuration files in
-    `/etc/nixos`. You\'ll probably want to edit the configuration files.
+    `/etc/nixos`. You'll probably want to edit the configuration files.
     Refer to the `nixos-generate-config` step in
     [](#sec-installation) for more information.
 
-    You\'ll likely want to set a root password for your first boot using
-    the configuration files because you won\'t have a chance to enter a
-    password until after you reboot. You can initalize the root password
-    to an empty one with this line: (and of course don\'t forget to set
-    one once you\'ve rebooted or to lock the account with
+    You'll likely want to set a root password for your first boot using
+    the configuration files because you won't have a chance to enter a
+    password until after you reboot. You can initialize the root password
+    to an empty one with this line: (and of course don't forget to set
+    one once you've rebooted or to lock the account with
     `sudo passwd -l root` if you use `sudo`)
 
     ```nix
@@ -186,7 +186,7 @@ The first steps to all these are the same:
     bootup scripts require its presence).
 
     `/etc/NIXOS_LUSTRATE` tells the NixOS bootup scripts to move
-    *everything* that\'s in the root partition to `/old-root`. This will
+    *everything* that's in the root partition to `/old-root`. This will
     move your existing distribution out of the way in the very early
     stages of the NixOS bootup. There are exceptions (we do need to keep
     NixOS there after all), so the NixOS lustrate process will not
@@ -201,10 +201,10 @@ The first steps to all these are the same:
 
     ::: {.note}
     Support for `NIXOS_LUSTRATE` was added in NixOS 16.09. The act of
-    \"lustrating\" refers to the wiping of the existing distribution.
+    "lustrating" refers to the wiping of the existing distribution.
     Creating `/etc/NIXOS_LUSTRATE` can also be used on NixOS to remove
-    all mutable files from your root partition (anything that\'s not in
-    `/nix` or `/boot` gets \"lustrated\" on the next boot.
+    all mutable files from your root partition (anything that's not in
+    `/nix` or `/boot` gets "lustrated" on the next boot.
 
     lustrate /ˈlʌstreɪt/ verb.
 
@@ -212,14 +212,14 @@ The first steps to all these are the same:
     ritual action.
     :::
 
-    Let\'s create the files:
+    Let's create the files:
 
     ```ShellSession
     $ sudo touch /etc/NIXOS
     $ sudo touch /etc/NIXOS_LUSTRATE
     ```
 
-    Let\'s also make sure the NixOS configuration files are kept once we
+    Let's also make sure the NixOS configuration files are kept once we
     reboot on NixOS:
 
     ```ShellSession
@@ -233,7 +233,7 @@ The first steps to all these are the same:
 
     ::: {.warning}
     Once you complete this step, your current distribution will no
-    longer be bootable! If you didn\'t get all the NixOS configuration
+    longer be bootable! If you didn't get all the NixOS configuration
     right, especially those settings pertaining to boot loading and root
     partition, NixOS may not be bootable either. Have a USB rescue
     device ready in case this happens.
@@ -247,7 +247,7 @@ The first steps to all these are the same:
     Cross your fingers, reboot, hopefully you should get a NixOS prompt!
 
 1.  If for some reason you want to revert to the old distribution,
-    you\'ll need to boot on a USB rescue disk and do something along
+    you'll need to boot on a USB rescue disk and do something along
     these lines:
 
     ```ShellSession
@@ -264,14 +264,14 @@ The first steps to all these are the same:
     This may work as is or you might also need to reinstall the boot
     loader.
 
-    And of course, if you\'re happy with NixOS and no longer need the
+    And of course, if you're happy with NixOS and no longer need the
     old distribution:
 
     ```ShellSession
     sudo rm -rf /old-root
     ```
 
-1.  It\'s also worth noting that this whole process can be automated.
+1.  It's also worth noting that this whole process can be automated.
     This is especially useful for Cloud VMs, where provider do not
     provide NixOS. For instance,
     [nixos-infect](https://github.com/elitak/nixos-infect) uses the

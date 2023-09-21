@@ -31,27 +31,32 @@
 
 assert withMPI -> trilinos.withMPI;
 
+let
+  version = "7.6.0";
+
+  # useing fetchurl or fetchFromGitHub doesn't include the manuals
+  # due to .gitattributes files
+  xyce_src = fetchgit {
+    url = "https://github.com/Xyce/Xyce.git";
+    rev = "Release-${version}";
+    sha256 = "sha256-HYIzmODMWXBuVRZhcC7LntTysuyXN5A9lb2DeCQQtVw=";
+  };
+
+  regression_src = fetchFromGitHub {
+    owner = "Xyce";
+    repo = "Xyce_Regression";
+    rev = "Release-${version}";
+    sha256 = "sha256-uEoiKpYyHmdK7LZ1UNm2d3Jk8+sCwBwB0TCoHilIh74=";
+  };
+in
+
 stdenv.mkDerivation rec {
   pname = "xyce";
-  version = "7.4.0";
+  inherit version;
 
-  srcs = [
-    # useing fetchurl or fetchFromGitHub doesn't include the manuals
-    # due to .gitattributes files
-    (fetchgit {
-      url = "https://github.com/Xyce/Xyce.git";
-      rev = "Release-${version}";
-      sha256 = "sha256-sOHjQEo4FqlDseTtxFVdLa0SI/VAf2OkwQV7QSL7SNM=";
-    })
-    (fetchFromGitHub {
-      owner = "Xyce";
-      repo = "Xyce_Regression";
-      rev = "Release-${version}";
-      sha256 = "sha256-kSGUaFarOHDNJ8kA/TAGkmzicm9O7cfJ7mGFZcbqCZM=";
-    })
-  ];
+  srcs = [ xyce_src regression_src ];
 
-  sourceRoot = "./Xyce";
+  sourceRoot = xyce_src.name;
 
   preConfigure = "./bootstrap";
 
@@ -101,7 +106,7 @@ stdenv.mkDerivation rec {
   doCheck = enableTests;
 
   postPatch = ''
-    pushd ../source
+    pushd ../${regression_src.name}
     find Netlists -type f -regex ".*\.sh\|.*\.pl" -exec chmod ugo+x {} \;
     # some tests generate new files, some overwrite netlists
     find . -type d -exec chmod u+w {} \;
@@ -115,7 +120,7 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     bc
     perl
     (python3.withPackages (ps: with ps; [ numpy scipy ]))
@@ -124,7 +129,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     XYCE_BINARY="$(pwd)/src/Xyce"
     EXECSTRING="${lib.optionalString withMPI "mpirun -np 2 "}$XYCE_BINARY"
-    TEST_ROOT="$(pwd)/../source"
+    TEST_ROOT="$(pwd)/../${regression_src.name}"
 
     # Honor the TMP variable
     sed -i -E 's|/tmp|\$TMP|' $TEST_ROOT/TestScripts/suggestXyceTagList.sh

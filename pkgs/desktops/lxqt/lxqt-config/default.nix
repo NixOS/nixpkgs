@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , glib
@@ -20,13 +21,13 @@
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "ncoJLpKzE1tqOV+KuUiGLDWiDvzJg0le4m4BMKFw6Mg=";
+    sha256 = "Gm/Y/5i7Abob9eRdLZHpRma2+Mdh2LBZUGKM4mMZMFk=";
   };
 
   nativeBuildInputs = [

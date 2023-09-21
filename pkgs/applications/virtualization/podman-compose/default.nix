@@ -1,14 +1,14 @@
 { lib, buildPythonApplication, fetchFromGitHub, python-dotenv, pyyaml }:
 
 buildPythonApplication rec {
-  version = "1.0.3";
+  version = "1.0.6";
   pname = "podman-compose";
 
   src = fetchFromGitHub {
     repo = "podman-compose";
     owner = "containers";
     rev = "v${version}";
-    sha256 = "sha256-Si/O4dx9bqqRp/hTv3WbTXj46OM+PpyPBnQQWUqcZfs=";
+    sha256 = "sha256-TsNM5xORqwWge+UCijKptwbAcIz1uZFN9BuIOl28vIU=";
   };
 
   propagatedBuildInputs = [ pyyaml python-dotenv ];

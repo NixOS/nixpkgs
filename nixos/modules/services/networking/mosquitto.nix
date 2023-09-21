@@ -42,12 +42,15 @@ let
       };
 
       passwordFile = mkOption {
-        type = uniq (nullOr types.path);
+        type = uniq (nullOr path);
         example = "/path/to/file";
         default = null;
         description = lib.mdDoc ''
           Specifies the path to a file containing the
           clear text password for the MQTT user.
+          The file is securely passed to mosquitto by
+          leveraging systemd credentials. No special
+          permissions need to be set on this file.
         '';
       };
 
@@ -56,20 +59,26 @@ let
         default = null;
         description = mdDoc ''
           Specifies the hashed password for the MQTT User.
-          To generate hashed password install `mosquitto`
-          package and use `mosquitto_passwd`.
+          To generate hashed password install the `mosquitto`
+          package and use `mosquitto_passwd`, then extract
+          the second field (after the `:`) from the generated
+          file.
         '';
       };
 
       hashedPasswordFile = mkOption {
-        type = uniq (nullOr types.path);
+        type = uniq (nullOr path);
         example = "/path/to/file";
         default = null;
         description = mdDoc ''
           Specifies the path to a file containing the
           hashed password for the MQTT user.
-          To generate hashed password install `mosquitto`
-          package and use `mosquitto_passwd`.
+          To generate hashed password install the `mosquitto`
+          package and use `mosquitto_passwd`, then remove the
+          `username:` prefix from the generated file.
+          The file is securely passed to mosquitto by
+          leveraging systemd credentials. No special
+          permissions need to be set on this file.
         '';
       };
 
@@ -99,15 +108,43 @@ let
         message = "Cannot set more than one password option for user ${n} in ${prefix}";
       }) users;
 
-  makePasswordFile = users: path:
+  listenerScope = index: "listener-${toString index}";
+  userScope = prefix: index: "${prefix}-user-${toString index}";
+  credentialID = prefix: credential: "${prefix}-${credential}";
+
+  toScopedUsers = listenerScope: users: pipe users [
+    attrNames
+    (imap0 (index: user: nameValuePair user
+      (users.${user} // { scope = userScope listenerScope index; })
+    ))
+    listToAttrs
+  ];
+
+  userCredentials = user: credentials: pipe credentials [
+    (filter (credential: user.${credential} != null))
+    (map (credential: "${credentialID user.scope credential}:${user.${credential}}"))
+  ];
+  usersCredentials = listenerScope: users: credentials: pipe users [
+    (toScopedUsers listenerScope)
+    (mapAttrsToList (_: user: userCredentials user credentials))
+    concatLists
+  ];
+  systemdCredentials = listeners: listenerCredentials: pipe listeners [
+    (imap0 (index: listener: listenerCredentials (listenerScope index) listener))
+    concatLists
+  ];
+
+  makePasswordFile = listenerScope: users: path:
     let
-      makeLines = store: file:
+      makeLines = store: file: let
+        scopedUsers = toScopedUsers listenerScope users;
+      in
         mapAttrsToList
-          (n: u: "addLine ${escapeShellArg n} ${escapeShellArg u.${store}}")
-          (filterAttrs (_: u: u.${store} != null) users)
+          (name: user: ''addLine ${escapeShellArg name} "''$(systemd-creds cat ${credentialID user.scope store})"'')
+          (filterAttrs (_: user: user.${store} != null) scopedUsers)
         ++ mapAttrsToList
-          (n: u: "addFile ${escapeShellArg n} ${escapeShellArg "${u.${file}}"}")
-          (filterAttrs (_: u: u.${file} != null) users);
+          (name: user: ''addFile ${escapeShellArg name} "''${CREDENTIALS_DIRECTORY}/${credentialID user.scope file}"'')
+          (filterAttrs (_: user: user.${file} != null) scopedUsers);
       plainLines = makeLines "password" "passwordFile";
       hashedLines = makeLines "hashedPassword" "hashedPasswordFile";
     in
@@ -476,7 +513,7 @@ let
         Directories to be scanned for further config files to include.
         Directories will processed in the order given,
         `*.conf` files in the directory will be
-        read in case-sensistive alphabetical order.
+        read in case-sensitive alphabetical order.
       '';
       default = [];
     };
@@ -578,6 +615,19 @@ in
         ExecStart = "${cfg.package}/bin/mosquitto -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
+        # Credentials
+        SetCredential = let
+          listenerCredentials = listenerScope: listener:
+            usersCredentials listenerScope listener.users [ "password" "hashedPassword" ];
+        in
+          systemdCredentials cfg.listeners listenerCredentials;
+
+        LoadCredential = let
+          listenerCredentials = listenerScope: listener:
+            usersCredentials listenerScope listener.users [ "passwordFile" "hashedPasswordFile" ];
+        in
+          systemdCredentials cfg.listeners listenerCredentials;
+
         # Hardening
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
@@ -650,7 +700,7 @@ in
         concatStringsSep
           "\n"
           (imap0
-            (idx: listener: makePasswordFile listener.users "${cfg.dataDir}/passwd-${toString idx}")
+            (idx: listener: makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}")
             cfg.listeners);
     };
 
@@ -668,8 +718,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc mosquitto.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > mosquitto.xml`
-    doc = ./mosquitto.xml;
+    doc = ./mosquitto.md;
   };
 }

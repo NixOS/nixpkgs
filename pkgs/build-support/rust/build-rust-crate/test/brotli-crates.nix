@@ -1,6 +1,6 @@
-{ lib, buildPlatform, buildRustCrate, fetchgit }:
-let kernel = buildPlatform.parsed.kernel.name;
-    abi = buildPlatform.parsed.abi.name;
+{ lib, stdenv, buildRustCrate, fetchgit }:
+let kernel = stdenv.buildPlatform.parsed.kernel.name;
+    abi = stdenv.buildPlatform.parsed.abi.name;
     include = includedFiles: src: builtins.filterSource (path: type:
       lib.lists.any (f:
         let p = toString (src + ("/" + f)); in

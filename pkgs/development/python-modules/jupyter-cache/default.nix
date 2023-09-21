@@ -3,6 +3,7 @@
 , fetchPypi
 , attrs
 , click
+, flit-core
 , importlib-metadata
 , nbclient
 , nbformat
@@ -14,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "jupyter-cache";
-  version = "0.5.0";
+  version = "0.6.1";
+  format = "flit";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87408030a4c8c14fe3f8fe62e6ceeb24c84e544c7ced20bfee45968053d07801";
+    sha256 = "sha256-Jvg5ARQ+30ry8/9akeLSrSmORuLO4DyAcdN6I6Y8y/w=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "nbclient>=0.2,<0.6" "nbclient"
-  '';
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     attrs

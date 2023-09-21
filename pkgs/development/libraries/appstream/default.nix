@@ -3,6 +3,7 @@
 , substituteAll
 , fetchFromGitHub
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , gettext
@@ -28,9 +29,6 @@
 stdenv.mkDerivation rec {
   pname = "appstream";
   version = "0.15.5";
-  # When bumping this package, please also check whether
-  # fix-build-for-qt-olderthan-514.patch still applies by
-  # building libsForQt512.appstream-qt.
 
   outputs = [ "out" "dev" "installedTests" ];
 
@@ -52,6 +50,12 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -64,6 +68,9 @@ stdenv.mkDerivation rec {
     gobject-introspection
     itstool
     vala
+    gperf
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -74,7 +81,6 @@ stdenv.mkDerivation rec {
     libxml2
     libxmlb
     libyaml
-    gperf
     curl
   ];
 

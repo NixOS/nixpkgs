@@ -9,7 +9,7 @@
 , gtk3
 , atk
 , gobject-introspection
-, spidermonkey_91
+, spidermonkey_102
 , pango
 , cairo
 , readline
@@ -27,18 +27,17 @@
 
 let
   testDeps = [
-    gobject-introspection # for Gio and cairo typelibs
     gtk3 atk pango.out gdk-pixbuf harfbuzz
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.72.2";
+  version = "1.76.2";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-3e43m9xafTA6XYlL4rKBvrisVFCGBOfT8geBqGnaOXc=";
+    sha256 = "sha256-99jJ1lPqb9eK/kpQcg4EaqK/wHj9pjXdEwZ90ZnGJdQ=";
   };
 
   patches = [
@@ -66,10 +65,10 @@ in stdenv.mkDerivation rec {
     cairo
     readline
     libsysprof-capture
-    spidermonkey_91
+    spidermonkey_102
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
   ] ++ testDeps;
 
@@ -79,13 +78,18 @@ in stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ] ++ lib.optionals (!stdenv.isLinux || stdenv.hostPlatform.isMusl) [
+    "-Dprofiler=disabled"
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
     substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace installed-tests/js/meson.build \
+      --replace "'Encoding'," "#'Encoding',"
   '';
 
   preCheck = ''
@@ -139,6 +143,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

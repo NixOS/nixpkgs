@@ -1,20 +1,27 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ lib
+, stdenv
+, fetchurl
+, fetchFromGitHub
+, makeWrapper
 , meson
 , ninja
 , pkg-config
+, runtimeShell
 , installShellFiles
 
-, platform-tools
+, android-tools
 , ffmpeg
 , libusb1
 , SDL2
 }:
 
 let
-  version = "1.24";
+  version = "2.1.1";
   prebuilt_server = fetchurl {
+    name = "scrcpy-server";
+    inherit version;
     url = "https://github.com/Genymobile/scrcpy/releases/download/v${version}/scrcpy-server-v${version}";
-    sha256 = "sha256-rnSoHqecDcclDlhmJ8J4wKmoxd5GyftcOMFn+xo28FY=";
+    sha256 = "sha256-lVjbbFZ0Oh3AOzj1mAH7QOkcyJH4/AyJ5bCwZ3YfFI4=";
   };
 in
 stdenv.mkDerivation rec {
@@ -25,15 +32,14 @@ stdenv.mkDerivation rec {
     owner = "Genymobile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mL0lSZUPMMcLGq4iPp/IgYZLaTeey9Nv9vVwY1gaIRk=";
+    sha256 = "sha256-SRIQqmvqB1kudUvt0HTFPMdk7MLWEcK2jOT0on1rh+E=";
   };
 
-  # postPatch:
-  #   screen.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
+  #   display.c: When run without a hardware accelerator, this allows the command to continue working rather than failing unexpectedly.
   #   This can happen when running on non-NixOS because then scrcpy seems to have a hard time using the host OpenGL-supporting hardware.
   #   It would be better to fix the OpenGL problem, but that seems much more intrusive.
   postPatch = ''
-    substituteInPlace app/src/screen.c \
+    substituteInPlace app/src/display.c \
       --replace "SDL_RENDERER_ACCELERATED" "SDL_RENDERER_ACCELERATED || SDL_RENDERER_SOFTWARE"
   '';
 
@@ -51,7 +57,10 @@ stdenv.mkDerivation rec {
     ln -s "${prebuilt_server}" "$out/share/scrcpy/scrcpy-server"
 
     # runtime dep on `adb` to push the server
-    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${platform-tools}/bin"
+    wrapProgram "$out/bin/scrcpy" --prefix PATH : "${android-tools}/bin"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace $out/share/applications/scrcpy-console.desktop \
+      --replace "/bin/bash" "${runtimeShell}"
   '';
 
   meta = with lib; {
@@ -59,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Genymobile/scrcpy";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # server
+      binaryBytecode # server
     ];
     license = licenses.asl20;
     platforms = platforms.unix;

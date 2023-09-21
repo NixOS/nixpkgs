@@ -1,6 +1,18 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, fetchpatch, python
-, scripttest, pytz, pbr, tempita, decorator, sqlalchemy
-, six, sqlparse, testrepository
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, fetchpatch
+, python
+, scripttest
+, pytz
+, pbr
+, tempita
+, decorator
+, sqlalchemy
+, six
+, sqlparse
+, testrepository
 }:
 
 buildPythonPackage rec {
@@ -12,12 +24,13 @@ buildPythonPackage rec {
     sha256 = "1y0lcqii7b4vp7yh9dyxrl4i77hi8jkkw7d06mgdw2h458ljxh0b";
   };
 
-  # See: https://review.openstack.org/#/c/608382/
   patches = [
+    # See: https://review.openstack.org/#/c/608382/
     (fetchpatch {
       url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
       sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
     })
+    ./python3.11-comp.diff
   ];
 
   postPatch = ''
@@ -29,7 +42,7 @@ buildPythonPackage rec {
       --replace "pylint" ""
   '';
 
-  checkInputs = [ scripttest pytz testrepository ];
+  nativeCheckInputs = [ scripttest pytz testrepository ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   doCheck = !stdenv.isDarwin;
@@ -51,5 +64,6 @@ buildPythonPackage rec {
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
     maintainers = teams.openstack.members ++ (with maintainers; [ makefu ]);
+    broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
   };
 }

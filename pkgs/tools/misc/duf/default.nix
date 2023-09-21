@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "duf";
@@ -11,15 +11,20 @@ buildGoModule rec {
     sha256 = "sha256-bVuqX88KY+ky+fd1FU9GWP78jQc4fRDk9yRSeIesHyI=";
   };
 
-  vendorSha256 = "sha256-oihi7E67VQmym9U1gdD802AYxWRrSowhzBiKg0CBDPc=";
+  vendorHash = "sha256-oihi7E67VQmym9U1gdD802AYxWRrSowhzBiKg0CBDPc=";
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage duf.1
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/muesli/duf/";
     description = "Disk Usage/Free Utility";
     license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ penguwin SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda penguwin ];
   };
 }

@@ -12,12 +12,12 @@ buildPythonPackage rec {
     owner = "mapbox";
     repo = pname;
     rev = version;
-    sha256 = "sha256-DiDXO2XnD3We6NhP81z7aIHzHrHDi/nkqy98OT9986w=";
+    hash = "sha256-DiDXO2XnD3We6NhP81z7aIHzHrHDi/nkqy98OT9986w=";
   };
 
   propagatedBuildInputs = [ click ];
 
-  checkInputs = [ pytestCheckHook hypothesis ];
+  nativeCheckInputs = [ pytestCheckHook hypothesis ];
 
   meta = with lib; {
     description = "Spherical mercator tile and coordinate utilities";

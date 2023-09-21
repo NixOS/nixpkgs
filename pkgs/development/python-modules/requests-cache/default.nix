@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.9.6";
+  version = "0.9.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -34,8 +34,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "requests-cache";
     repo = "requests-cache";
-    rev = "v${version}";
-    hash = "sha256-oFI5Rv/MAiPHiZts0PrNS+YMDFD/RxnMJ6deTxZNkSM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Xbzbwz80xY8IDPDhZEUhmmiCFJZvSQMQ6EmE4EL7QGo=";
   };
 
   nativeBuildInputs = [
@@ -77,7 +77,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
     rich
@@ -107,6 +107,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Persistent cache for requests library";
     homepage = "https://github.com/reclosedev/requests-cache";
+    changelog = "https://github.com/requests-cache/requests-cache/blob/v${version}/HISTORY.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

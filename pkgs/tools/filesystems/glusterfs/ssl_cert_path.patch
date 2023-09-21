@@ -7,7 +7,7 @@ index fb8db11e9e..4c40683057 100644
  dnl Find out OpenSSL trusted certificates path
  AC_MSG_CHECKING([for OpenSSL trusted certificates path])
 -SSL_CERT_PATH=$(openssl version -d | sed -e 's|OPENSSLDIR: "\(.*\)".*|\1|')
--if test -d $SSL_CERT_PATH 1>/dev/null 2>&1; then
+-if test -d "${SSL_CERT_PATH}" 1>/dev/null 2>&1; then
 -   AC_MSG_RESULT([$SSL_CERT_PATH])
 -   AC_DEFINE_UNQUOTED(SSL_CERT_PATH, ["$SSL_CERT_PATH"], [Path to OpenSSL trusted certificates.])
 -   AC_SUBST(SSL_CERT_PATH)

@@ -2,18 +2,31 @@
 
 stdenv.mkDerivation rec {
   pname = "jhead";
-  version = "3.06.0.1";
+  version = "3.08";
 
   src = fetchFromGitHub {
     owner = "Matthias-Wandel";
     repo = "jhead";
     rev = version;
-    sha256 = "0zgh36486cpcnf7xg6dwf7rhz2h4gpayqvdk8hmrx6y418b2pfyf";
+    hash = "sha256-d1cuy4kkwY/21UcpNN6judrFxGVyEH+b+0TaZw9hP2E=";
   };
 
   buildInputs = [ libjpeg ];
 
   makeFlags = [ "CPPFLAGS=" "CFLAGS=-O3" "LDFLAGS=" ];
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    (
+      cd tests
+      patchShebangs runtests pretend-editor
+      ./runtests
+    )
+
+    runHook postCheck
+  '';
 
   installPhase = ''
     mkdir -p \
@@ -27,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://www.sentex.net/~mwandel/jhead/";
+    homepage = "https://www.sentex.net/~mwandel/jhead/";
     description = "Exif Jpeg header manipulation tool";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ rycee ];

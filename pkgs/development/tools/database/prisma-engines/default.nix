@@ -2,6 +2,7 @@
 , lib
 , Security
 , openssl
+, git
 , pkg-config
 , protobuf
 , rustPlatform
@@ -13,21 +14,29 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "4.4.0";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    sha256 = "sha256-gk+psYNSC5Xy6R3aUF0E9TyJgJ78+EMvz/xnPgN3+RY=";
+    sha256 = "sha256-7bZ6qy5AL7c2F6HfyM7/G36XTkSVsq+T+xxNlrBCXL4=";
   };
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  cargoSha256 = "sha256-BiQMoY2hd5q05YZBrTrHlKDtWlOkyfWjjNB/8F2+lXg=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "barrel-0.6.6-alpha.0" = "sha256-USh0lQ1z+3Spgc69bRFySUzhuY79qprLlEExTmYWFN8=";
+      "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
+      "mysql_async-0.31.3" = "sha256-QIO9s0Upc0/1W7ux1RNJNGKqzO4gB4gMV3NoakAbxkQ=";
+      "postgres-native-tls-0.5.0" = "sha256-150GAIccGDAD+t/iWkLbXe4SblrW/KUcxkTy4Mrie5U=";
+    };
+  };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config git ];
 
   buildInputs = [
     openssl
@@ -45,7 +54,12 @@ rustPlatform.buildRustPackage rec {
     export SQLITE_MAX_EXPR_DEPTH=10000
   '';
 
-  cargoBuildFlags = "-p query-engine -p query-engine-node-api -p migration-engine-cli -p introspection-core -p prisma-fmt";
+  cargoBuildFlags = [
+    "-p" "query-engine"
+    "-p" "query-engine-node-api"
+    "-p" "schema-engine-cli"
+    "-p" "prisma-fmt"
+  ];
 
   postInstall = ''
     mv $out/lib/libquery_engine${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libquery_engine.node
@@ -59,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pamplemousse pimeys tomhoule ];
+    maintainers = with maintainers; [ pimeys tomhoule ivan aqrln ];
   };
 }
 

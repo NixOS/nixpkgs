@@ -61,7 +61,7 @@ in
       checkPhase = optionalString cfg.checkConfig ''
         ln -s $out bird2.conf
         ${cfg.preCheckConfig}
-        ${pkgs.bird}/bin/bird -d -p -c bird2.conf
+        ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf
       '';
     };
 

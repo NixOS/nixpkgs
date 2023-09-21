@@ -34,13 +34,13 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
-  propagatedBuildInputs = lib.optional enablePython [
+  propagatedBuildInputs = lib.optionals enablePython [
     pythonPackages.numpy
     pythonPackages.cython
     pythonPackages.pytest
   ];
 
-  checkInputs = lib.optional enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
+  nativeCheckInputs = lib.optionals enablePython [ pythonPackages.scipy pythonPackages.pytest-cov ];
 
   preConfigure = ''
     mkdir -p build/external/src
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     ${if stdenv.isDarwin then "export DYLD_LIBRARY_PATH=$(pwd)/src/" else "export LD_LIBRARY_PATH=$(pwd)/src/"}
-    ${if enablePython then "sed -i -e 's|^#!.*|#!${stdenv.shell}|' python/py.test.sh" else ""}
+    ${lib.optionalString enablePython "sed -i -e 's|^#!.*|#!${stdenv.shell}|' python/py.test.sh"}
   '';
 
   cmakeFlags = lib.optionals enablePython [

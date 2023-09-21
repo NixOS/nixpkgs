@@ -1,19 +1,31 @@
-{ lib, rustPlatform, fetchCrate }:
+{ lib
+, rustPlatform
+, fetchCrate
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kind2";
-  version = "0.2.77";
+  version = "0.3.10";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-drWAWiSALq8rb3J2phNE/dt4e6xmJY7Ob8cES1kYEPo=";
+    hash = "sha256-X2sjfYrSSym289jDJV3hNmcwyQCMnrabmGCUKD5wfdY=";
   };
 
-  cargoSha256 = "sha256-rF0TvNWE90sUqslBGPnGmD6mZFPlCCkM1jyuFt8n8Nw=";
+  cargoHash = "sha256-KzoEh/kMKsHx9K3t1/uQZ7fdsZEM+v8UOft8JjEB1Zw=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Security
+  ];
+
+  # requires nightly features
+  RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
     description = "A functional programming language and proof assistant";
-    homepage = "https://github.com/kindelia/kind2";
+    homepage = "https://github.com/higherorderco/kind";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

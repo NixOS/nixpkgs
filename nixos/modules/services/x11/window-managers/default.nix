@@ -14,6 +14,7 @@ in
     ./bspwm.nix
     ./cwm.nix
     ./clfswm.nix
+    ./dk.nix
     ./dwm.nix
     ./e16.nix
     ./evilwm.nix
@@ -23,6 +24,7 @@ in
     ./fvwm3.nix
     ./hackedbox.nix
     ./herbstluftwm.nix
+    ./hypr.nix
     ./i3.nix
     ./jwm.nix
     ./leftwm.nix
@@ -33,6 +35,7 @@ in
     ./openbox.nix
     ./pekwm.nix
     ./notion.nix
+    ./ragnarwm.nix
     ./ratpoison.nix
     ./sawfish.nix
     ./smallwm.nix

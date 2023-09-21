@@ -23,8 +23,9 @@ with pkgs.lib;
 let tests = {
       alacritty.pkg = p: p.alacritty;
 
-      contour.pkg = p: p.contour;
-      contour.cmd = "contour $command";
+      # times out after spending many hours
+      #contour.pkg = p: p.contour;
+      #contour.cmd = "contour $command";
 
       cool-retro-term.pkg = p: p.cool-retro-term;
       cool-retro-term.colourTest = false; # broken by gloss effect
@@ -33,6 +34,8 @@ let tests = {
       ctx.pinkValue = "#FE0065";
 
       darktile.pkg = p: p.darktile;
+
+      deepin-terminal.pkg = p: p.deepin.deepin-terminal;
 
       eterm.pkg = p: p.eterm;
       eterm.executable = "Eterm";
@@ -71,6 +74,9 @@ let tests = {
       qterminal.pkg = p: p.lxqt.qterminal;
       qterminal.kill = true;
 
+      rio.pkg = p: p.rio;
+      rio.cmd = "rio -e $command";
+
       roxterm.pkg = p: p.roxterm;
       roxterm.cmd = "roxterm -e $command";
 
@@ -103,7 +109,8 @@ let tests = {
       wayst.pkg = p: p.wayst;
       wayst.pinkValue = "#FF0066";
 
-      wezterm.pkg = p: p.wezterm;
+      # times out after spending many hours
+      #wezterm.pkg = p: p.wezterm;
 
       xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
 
@@ -116,7 +123,7 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
     maintainers = [ jjjollyjim ];
   };
 
-  machine = { pkgsInner, ... }:
+  nodes.machine = { pkgsInner, ... }:
 
   {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

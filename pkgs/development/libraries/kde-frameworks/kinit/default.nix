@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib, writeScript,
+  mkDerivation, lib, stdenv, writeScript,
   extra-cmake-modules, kdoctools,
   kconfig, kcrash, ki18n, kio, kparts, kservice, kwindowsystem, plasma-framework
 }:
@@ -21,6 +21,7 @@ mkDerivation {
   CXXFLAGS = [
     ''-DNIXPKGS_KF5_KIOCORE=\"${getLib kio}/lib/libKF5KIOCore.so.5\"''
     ''-DNIXPKGS_KF5_PARTS=\"${getLib kparts}/lib/libKF5Parts.so.5\"''
+  ] ++ lib.optionals stdenv.isLinux [
     ''-DNIXPKGS_KF5_PLASMA=\"${getLib plasma-framework}/lib/libKF5Plasma.so.5\"''
   ];
   setupHook = writeScript "setup-hook.sh" ''

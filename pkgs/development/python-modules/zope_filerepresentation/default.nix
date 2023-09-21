@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zope.filerepresentation";
-  version = "5.0.0";
+  version = "6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mp2r80v6ns92j089l7ngh8l9fk95g2661vkp4vqw7c71irs9g1z";
+    hash = "sha256-yza3iGspJ2+C8WhfPykfQjXmac2HhdFHQtRl0Trvaqs=";
   };
 
   propagatedBuildInputs = [ zope_interface zope_schema ];

@@ -1,19 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, boost, libpulseaudio }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, boost
+, cxxopts
+, libpulseaudio
+, meson
+, ninja
+, pkg-config
+}:
 
 stdenv.mkDerivation rec {
   pname = "pamixer";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "cdemoulins";
     repo = "pamixer";
     rev = version;
-    sha256 = "sha256-7VNhHAQ1CecQPlqb8SMKK0U1SsFZxDuS+QkPqJfMqrQ=";
+    hash = "sha256-LbRhsW2MiTYWSH6X9Pz9XdJdH9Na0QCO8CFmlzZmDjQ=";
   };
 
-  buildInputs = [ boost libpulseaudio ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  buildInputs = [ boost cxxopts libpulseaudio ];
 
   meta = with lib; {
     description = "Pulseaudio command line mixer";

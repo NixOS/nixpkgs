@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     wrapQtAppsHook
     python3Packages.setuptools
     python3Packages.rfc3987
-    python3Packages.JPype1
+    python3Packages.jpype1
     python3Packages.pyqt5
   ];
 

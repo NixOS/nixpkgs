@@ -31,13 +31,15 @@ evalConfigArgs@
 , prefix ? []
 , lib ? import ../../lib
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
-                 in if e == "" then [] else [(import e)]
+                 in lib.optional (e != "") (import e)
 }:
 
 let pkgs_ = pkgs;
 in
 
 let
+  inherit (lib) optional;
+
   evalModulesMinimal = (import ./default.nix {
     inherit lib;
     # Implicit use of feature is noted in implementation.
@@ -47,15 +49,19 @@ let
   pkgsModule = rec {
     _file = ./eval-config.nix;
     key = _file;
-    config = {
-      # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
-      # this.  Since the latter defaults to the former, the former should
-      # default to the argument. That way this new default could propagate all
-      # they way through, but has the last priority behind everything else.
-      nixpkgs.system = lib.mkIf (system != null) (lib.mkDefault system);
-
-      _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
-    };
+    config = lib.mkMerge (
+      (optional (system != null) {
+        # Explicit `nixpkgs.system` or `nixpkgs.localSystem` should override
+        # this.  Since the latter defaults to the former, the former should
+        # default to the argument. That way this new default could propagate all
+        # they way through, but has the last priority behind everything else.
+        nixpkgs.system = lib.mkDefault system;
+      })
+      ++
+      (optional (pkgs_ != null) {
+        _module.args.pkgs = lib.mkForce pkgs_;
+      })
+    );
   };
 
   withWarnings = x:
@@ -103,8 +109,10 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
+  withExtraArgs = nixosSystem: nixosSystem // {
+    inherit extraArgs;
+    inherit (nixosSystem._module.args) pkgs;
+    extendModules = args: withExtraArgs (nixosSystem.extendModules args);
+  };
 in
-withWarnings nixosWithUserModules // {
-  inherit extraArgs;
-  inherit (nixosWithUserModules._module.args) pkgs;
-}
+withWarnings (withExtraArgs nixosWithUserModules)

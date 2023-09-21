@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://liblastfm.sourceforge.net";
+    homepage = "https://liblastfm.sourceforge.net";
     description = "Unofficial C lastfm library";
     license = lib.licenses.gpl3;
   };

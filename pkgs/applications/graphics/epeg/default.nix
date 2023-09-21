@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "epeg";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "mattes";
     repo = "epeg";
     rev = "v${version}";
-    sha256 = "14bjl9v6zzac4df25gm3bkw3n0mza5iazazsi65gg3m6661x6c5g";
+    sha256 = "sha256-lttqarR8gScNIlSrc5uU3FLfvwxxJ2A1S4oESUW7oIw=";
   };
 
   enableParallelBuilding = true;

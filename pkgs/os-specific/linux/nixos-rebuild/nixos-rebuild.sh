@@ -17,7 +17,7 @@ showSyntax() {
 
 # Parse the command line.
 origArgs=("$@")
-copyClosureFlags=()
+copyFlags=()
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=(--extra-experimental-features 'nix-command flakes')
@@ -28,13 +28,15 @@ rollback=
 upgrade=
 upgrade_all=
 profile=/nix/var/nix/profiles/system
-buildHost=localhost
+specialisation=
+buildHost=
 targetHost=
 remoteSudo=
 verboseScript=
 noFlake=
 # comma separated list of vars to preserve when using sudo
 preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
+json=
 
 # log the given argument to stderr
 log() {
@@ -47,7 +49,7 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
@@ -73,10 +75,10 @@ while [ "$#" -gt 0 ]; do
         upgrade=1
         upgrade_all=1
         ;;
-      --use-substitutes|-s)
-        copyClosureFlags+=("$i")
+      --use-substitutes|--substitute-on-destination|-s)
+        copyFlags+=("-s")
         ;;
-      -I|--max-jobs|-j|--cores|--builders)
+      -I|--max-jobs|-j|--cores|--builders|--log-format)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
@@ -105,6 +107,14 @@ while [ "$#" -gt 0 ]; do
             profile="/nix/var/nix/profiles/system-profiles/$1"
             mkdir -p -m 0755 "$(dirname "$profile")"
         fi
+        shift 1
+        ;;
+      --specialisation|-c)
+        if [ -z "$1" ]; then
+            log "$0: ‘--specialisation’ requires an argument"
+            exit 1
+        fi
+        specialisation="$1"
         shift 1
         ;;
       --build-host|h)
@@ -137,6 +147,9 @@ while [ "$#" -gt 0 ]; do
         k="$1"; shift 1
         lockFlags+=("$i" "$j" "$k")
         ;;
+      --json)
+        json=1
+        ;;
       *)
         log "$0: unknown option \`$i'"
         exit 1
@@ -146,16 +159,6 @@ done
 
 if [[ -n "$SUDO_USER" || -n $remoteSudo ]]; then
     maybeSudo=(sudo --preserve-env="$preservedSudoVars" --)
-fi
-
-if [[ -z "$buildHost" && -n "$targetHost" ]]; then
-    buildHost="$targetHost"
-fi
-if [ "$targetHost" = localhost ]; then
-    targetHost=
-fi
-if [ "$buildHost" = localhost ]; then
-    buildHost=
 fi
 
 # log the given argument to stderr if verbose mode is on
@@ -193,12 +196,12 @@ copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --from "$buildHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         else
-            buildHostCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+            buildHostCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         fi
     fi
 }
@@ -293,7 +296,7 @@ nixFlakeBuild() {
         drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
-            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv"
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             log "nix eval failed"
@@ -371,6 +374,10 @@ if [[ -n $flake ]]; then
     fi
 fi
 
+if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
+    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
+    exit 1
+fi
 
 tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
 
@@ -477,7 +484,7 @@ if [[ -n $buildNix && -z $flake ]]; then
     if [ -a "$nixDrv" ]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
-            nix-copy-closure "${copyClosureFlags[@]}" --to "$buildHost" "$nixDrv"
+            nix-copy-closure "${copyFlags[@]}" --to "$buildHost" "$nixDrv"
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
                 remoteNix="$remoteNix${remoteNix:+:}$p/bin"
@@ -502,6 +509,87 @@ fi
 
 if [ "$action" = dry-build ]; then
     extraBuildFlags+=(--dry-run)
+fi
+
+if [ "$action" = list-generations ]; then
+    if [ ! -L "$profile" ]; then
+        log "No profile \`$(basename "$profile")' found"
+        exit 1
+    fi
+
+    generation_from_dir() {
+        generation_dir="$1"
+        generation_base="$(basename "$generation_dir")" # Has the format "system-123-link" for generation 123
+        no_link_gen="${generation_base%-link}"  # remove the "-link"
+        echo "${no_link_gen##*-}" # remove everything before the last dash
+    }
+    describe_generation(){
+        generation_dir="$1"
+        generation_number="$(generation_from_dir "$generation_dir")"
+        nixos_version="$(cat "$generation_dir/nixos-version" 2> /dev/null || echo "Unknown")"
+
+        kernel_dir="$(dirname "$(realpath "$generation_dir/kernel")")"
+        kernel_version="$(ls "$kernel_dir/lib/modules" || echo "Unknown")"
+
+        configurationRevision="$("$generation_dir/sw/bin/nixos-version" --configuration-revision 2> /dev/null || true)"
+
+        # Old nixos-version output ignored unknown flags and just printed the version
+        # therefore the following workaround is done not to show the default output
+        nixos_version_default="$("$generation_dir/sw/bin/nixos-version")"
+        if [ "$configurationRevision" == "$nixos_version_default" ]; then
+             configurationRevision=""
+        fi
+
+        # jq automatically quotes the output => don't try to quote it in output!
+        build_date="$(stat "$generation_dir" --format=%W | jq 'todate')"
+
+        pushd "$generation_dir/specialisation/" > /dev/null || :
+        specialisation_list=(*)
+        popd > /dev/null || :
+
+        specialisations="$(jq --compact-output --null-input '$ARGS.positional' --args -- "${specialisation_list[@]}")"
+
+        if [ "$(basename "$generation_dir")" = "$(readlink "$profile")" ]; then
+            current_generation_tag="true"
+        else
+            current_generation_tag="false"
+        fi
+
+        # Escape userdefined strings
+        nixos_version="$(jq -aR <<< "$nixos_version")"
+        kernel_version="$(jq -aR <<< "$kernel_version")"
+        configurationRevision="$(jq -aR <<< "$configurationRevision")"
+        cat << EOF
+{
+  "generation": $generation_number,
+  "date": $build_date,
+  "nixosVersion": $nixos_version,
+  "kernelVersion": $kernel_version,
+  "configurationRevision": $configurationRevision,
+  "specialisations": $specialisations,
+  "current": $current_generation_tag
+}
+EOF
+    }
+
+    find "$(dirname "$profile")" -regex "$profile-[0-9]+-link" |
+        sort -Vr |
+        while read -r generation_dir; do
+            describe_generation "$generation_dir"
+        done |
+        if [ -z "$json" ]; then
+            jq --slurp -r '.[] | [
+                    ([.generation, (if .current == true then "current" else "" end)] | join(" ")),
+                    (.date | fromdate | strflocaltime("%Y-%m-%d %H:%M:%S")),
+                    .nixosVersion, .kernelVersion, .configurationRevision,
+                    (.specialisations | join(" "))
+                ] | @tsv' |
+                column --separator $'\t' --table --table-columns "Generation,Build-date,NixOS version,Kernel,Configuration Revision,Specialisation" |
+                ${PAGER:cat}
+        else
+            jq --slurp .
+        fi
+    exit 0
 fi
 
 
@@ -565,7 +653,18 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = dry-activate ]]; then
-    if ! targetHostCmd "$pathToConfig/bin/switch-to-configuration" "$action"; then
+    if [[ -z "$specialisation" ]]; then
+        cmd="$pathToConfig/bin/switch-to-configuration"
+    else
+        cmd="$pathToConfig/specialisation/$specialisation/bin/switch-to-configuration"
+
+        if [[ ! -f "$cmd" ]]; then
+            log "error: specialisation not found: $specialisation"
+            exit 1
+        fi
+    fi
+
+    if ! targetHostCmd "$cmd" "$action"; then
         log "warning: error(s) occurred while switching to the new configuration"
         exit 1
     fi

@@ -1,41 +1,48 @@
-{ absl-py
+{ lib
 , buildPythonPackage
-, dm-tree
+, pythonOlder
 , fetchFromGitHub
+, absl-py
+, cloudpickle
+, dm-tree
 , jax
 , jaxlib
-, lib
 , numpy
 , pytestCheckHook
 , toolz
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "chex";
-  version = "0.1.4";
+  version = "0.1.82";
   format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FiZElESyOVu1VJxUDNiN6HVADiaubDrGdQHYp2CN8f4=";
+    hash = "sha256-xBq22AaR2Tp1NSPefEyvCDeUYqRZlAf5LVHWo0luiXk=";
   };
 
   propagatedBuildInputs = [
     absl-py
-    dm-tree
+    jaxlib
     jax
     numpy
     toolz
+    typing-extensions
   ];
 
   pythonImportsCheck = [
     "chex"
   ];
 
-  checkInputs = [
-    jaxlib
+  nativeCheckInputs = [
+    cloudpickle
+    dm-tree
     pytestCheckHook
   ];
 

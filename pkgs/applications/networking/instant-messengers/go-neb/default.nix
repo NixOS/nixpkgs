@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, olm }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests, olm }:
 
 buildGoModule {
   pname = "go-neb";
@@ -14,13 +14,14 @@ buildGoModule {
 
   buildInputs = [ olm ];
 
-  vendorSha256 = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
+  vendorHash = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
 
   doCheck = false;
 
   passthru.tests.go-neb = nixosTests.go-neb;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Extensible matrix bot written in Go";
     homepage = "https://github.com/matrix-org/go-neb";
     license = licenses.asl20;

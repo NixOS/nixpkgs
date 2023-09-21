@@ -23,7 +23,7 @@ buildPythonPackage rec {
     fontpens
   ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "Boolean operations on paths";

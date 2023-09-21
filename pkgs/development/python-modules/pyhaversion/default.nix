@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "22.8.0";
+  version = "23.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,19 +20,8 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-30UHbxs0WZyIVyq0ai2PsoPTkvoYawS1OBhVbV0JVN8=";
+    hash = "sha256-HMJqZn0yzN2dP5WTRCbem1Xw8nyH2Hy7oVP4kEKHHAo=";
   };
-
-  propagatedBuildInputs = [
-    aiohttp
-    awesomeversion
-  ];
-
-  checkInputs = [
-    aresponses
-    pytest-asyncio
-    pytestCheckHook
-  ];
 
   postPatch = ''
     # Upstream doesn't set a version for the tagged releases
@@ -40,9 +29,25 @@ buildPythonPackage rec {
       --replace "main" ${version}
   '';
 
+  propagatedBuildInputs = [
+    aiohttp
+    awesomeversion
+  ];
+
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "pyhaversion"
+  ];
+
+  disabledTests = [
+    # Error fetching version information from HaVersionSource.SUPERVISOR Server disconnected
+    "test_stable_version"
+    "test_etag"
   ];
 
   meta = with lib; {

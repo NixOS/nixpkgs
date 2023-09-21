@@ -15,6 +15,7 @@ let
           hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
           sha256 = "";
         };
+        disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
       });
 
       jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {

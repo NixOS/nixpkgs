@@ -1,10 +1,10 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, copyDesktopItems, makeDesktopItem, qmake
-, qtbase, qtxmlpatterns, qttools, qtwebkit, libGL, fontconfig, openssl, poppler
+{ stdenv, lib, fetchFromGitHub, fetchpatch, copyDesktopItems, makeDesktopItem, qmake
+, qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
 , ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
-  importer = mkDerivation rec {
+  importer = stdenv.mkDerivation rec {
     pname = "openboard-importer";
     version = "unstable-2016-10-08";
 
@@ -16,44 +16,38 @@ let
     };
 
     nativeBuildInputs = [ qmake ];
+    buildInputs = [ qtbase ];
+    dontWrapQtApps = true;
 
     installPhase = ''
       install -Dm755 OpenBoardImporter $out/bin/OpenBoardImporter
     '';
   };
-in mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "openboard";
-  version = "1.6.1";
+  version = "unstable-2022-11-28";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
-    rev = "v${version}";
-    sha256 = "sha256-OlGXGIMghil/GG6eso20+CWo/hCjarXGs6edXX9pc/M=";
+    rev = "9de37af2df1a7c0d88f71c94ab2db1815d082862";
+    sha256 = "sha256-TiKrSyxtF1g1bepCoFxoxGOdREXhsMrS3g8uZKSiugg=";
   };
-
-  patches = [
-    # Fix build with poppler >= 22.01
-    (fetchpatch {
-      url = "https://github.com/OpenBoard-org/OpenBoard/commit/3a9b043e0fafec08e4123f362dcb7750f7476b59.patch";
-      sha256 = "sha256-yD163FK79HBU1W7m6sLxhfsRo4r/38zYTFWgeyqwU1o=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace OpenBoard.pro \
-      --replace '/usr/include/quazip' '${quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
+      --replace '/usr/include/quazip5' '${lib.getDev quazip}/include/QuaZip-Qt5-${quazip.version}/quazip' \
       --replace '-lquazip5' '-lquazip1-qt5' \
-      --replace '/usr/include/poppler' '${poppler.dev}/include/poppler'
+      --replace '/usr/include/poppler' '${lib.getDev poppler}/include/poppler'
   '';
 
-  nativeBuildInputs = [ qmake copyDesktopItems ];
+  nativeBuildInputs = [ qmake copyDesktopItems wrapQtAppsHook ];
 
   buildInputs = [
     qtbase
     qtxmlpatterns
     qttools
-    qtwebkit
+    qtwebengine
     libGL
     fontconfig
     openssl

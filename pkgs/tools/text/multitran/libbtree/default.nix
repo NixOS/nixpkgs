@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://multitran.sourceforge.net/";
+    homepage = "https://multitran.sourceforge.net/";
     description = "Multitran lib: library for reading Multitran's BTREE database format";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

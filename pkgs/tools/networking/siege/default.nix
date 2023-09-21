@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "siege";
-  version = "4.1.5";
+  version = "4.1.6";
 
   src = fetchurl {
     url = "http://download.joedog.org/siege/${pname}-${version}.tar.gz";
-    hash = "sha256-B235/Nt/Y8Rtb2YazCzMhAWTeunK5JCrip14qdLnuMs=";
+    hash = "sha256-MJ1Ym/yBm28V0uXoWRs8DG9pNiT1Bg7qwGek2ad1fek=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.isLinux [
@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "HTTP load tester";
     homepage = "https://www.joedog.org/siege-home/";
+    changelog = "https://github.com/JoeDog/siege/blob/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;

@@ -28,7 +28,6 @@
 , wirelesstools
 , libnl
 , i3
-, i3-gaps
 , jsoncpp
 
   # override the variables ending in 'Support' to enable or disable modules
@@ -39,7 +38,6 @@
 , iwSupport ? false
 , nlSupport ? true
 , i3Support ? false
-, i3GapsSupport ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +57,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3Packages.sphinx
     removeReferencesTo
-  ] ++ lib.optional (i3Support || i3GapsSupport) makeWrapper;
+  ] ++ lib.optional i3Support makeWrapper;
 
   buildInputs = [
     cairo
@@ -82,9 +80,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional pulseSupport libpulseaudio
   ++ lib.optional iwSupport wirelesstools
   ++ lib.optional nlSupport libnl
-  ++ lib.optional (i3Support || i3GapsSupport) jsoncpp
-  ++ lib.optional i3Support i3
-  ++ lib.optional i3GapsSupport i3-gaps;
+  ++ lib.optionals i3Support [ jsoncpp i3 ];
 
   patches = [ ./remove-hardcoded-etc.diff ];
 
@@ -95,16 +91,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    if i3Support then ''
+    lib.optionalString i3Support ''
       wrapProgram $out/bin/polybar \
         --prefix PATH : "${i3}/bin"
-    ''
-    else if i3GapsSupport
-    then ''
-      wrapProgram $out/bin/polybar \
-        --prefix PATH : "${i3-gaps}/bin"
-    ''
-    else "";
+    '';
 
   postFixup = ''
     remove-references-to -t ${stdenv.cc} $out/bin/polybar

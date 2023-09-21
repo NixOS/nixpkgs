@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, tzdata, fetchpatch }:
+{ lib, stdenv, fetchurl, autoreconfHook, tzdata }:
 
 stdenv.mkDerivation rec {
   version = "0.4.10";
@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     url = "https://bitbucket.org/hroptatyr/dateutils/downloads/${pname}-${version}.tar.xz";
     sha256 = "sha256-PFCOKIm51a7Kt9WdcyWnAIlZMRGhIwpJbasPWtZ3zew=";
   };
+
+  # https://github.com/hroptatyr/dateutils/issues/148
+  postPatch = "rm test/dzone.008.ctst";
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ tzdata ]; # needed for datezone

@@ -6,20 +6,22 @@
 , lz4
 , openssh
 , openssl
-, python3
+, python3Packages
+, xxHash
 , zstd
 , installShellFiles
 , nixosTests
+, fetchPypi
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.2";
+  version = "1.2.6";
   format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1zBodEPxvrYCsdcrrjYxj2+WVIGPzcUEWFQOxXnlcmA=";
+    hash = "sha256-t6b48IYDnu7HkHC5FPPGUe1/NhLJZTdK+RDSd8eiE50=";
   };
 
   postPatch = ''
@@ -28,9 +30,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3Packages; [
     cython
     setuptools-scm
+    pkgconfig
 
     # docs
     sphinxHook
@@ -45,24 +48,18 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     libb2
     lz4
+    xxHash
     zstd
     openssl
   ] ++ lib.optionals stdenv.isLinux [
     acl
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
-
-  preConfigure = ''
-    export BORG_OPENSSL_PREFIX="${openssl.dev}"
-    export BORG_LZ4_PREFIX="${lz4.dev}"
-    export BORG_LIBB2_PREFIX="${libb2}"
-    export BORG_LIBZSTD_PREFIX="${zstd.dev}"
-  '';
 
   makeWrapperArgs = [
     ''--prefix PATH ':' "${openssh}/bin"''
@@ -75,8 +72,9 @@ python3.pkgs.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     e2fsprogs
+    py
     python-dateutil
     pytest-benchmark
     pytest-xdist
@@ -117,11 +115,12 @@ python3.pkgs.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
+    changelog = "https://github.com/borgbackup/borg/blob/${version}/docs/changes.rst";
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
     mainProgram = "borg";
-    maintainers = with maintainers; [ flokli dotlambda globin ];
+    maintainers = with maintainers; [ dotlambda globin ];
   };
 }

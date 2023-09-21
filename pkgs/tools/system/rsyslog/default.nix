@@ -10,7 +10,7 @@
 , fastJson
 , withKrb5 ? true
 , libkrb5
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , withJemalloc ? true
 , jemalloc
@@ -49,7 +49,6 @@
 , withRdkafka ? true
 , rdkafka
 , withMongo ? true
-, libmongo-client
 , mongoc
 , withCzmq ? true
 , czmq
@@ -62,20 +61,24 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.2208.0";
+  version = "8.2308.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FN5o57jlqwxdc0+C4tyf/yLNf0cQrWkHJ+sQp7mz314=";
+    hash = "sha256-AghrkSHocs6mnl0PbI4tjr/zMjSzytVQNmU3jTry48k=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    docutils
+  ];
+
   buildInputs = [
     fastJson
     libestr
     json_c
     zlib
-    docutils
   ] ++ lib.optional withKrb5 libkrb5
   ++ lib.optional withJemalloc jemalloc
   ++ lib.optional withPostgres postgresql
@@ -93,7 +96,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withNet libnet
   ++ lib.optional withHadoop hadoop
   ++ lib.optional withRdkafka rdkafka
-  ++ lib.optionals withMongo [ libmongo-client mongoc ]
+  ++ lib.optionals withMongo [ mongoc ]
   ++ lib.optional withCzmq czmq
   ++ lib.optional withRabbitmq rabbitmq-c
   ++ lib.optional withHiredis hiredis
@@ -183,7 +186,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
     changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
   };

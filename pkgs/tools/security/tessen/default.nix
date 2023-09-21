@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tessen";
-  version = "unstable-2022-08-04";
+  version = "2.2.1";
 
   src = fetchFromSourcehut {
     owner = "~ayushnix";
     repo  = pname;
-    rev = "8758a09345f6eef24764de4a0efad737f12562c8";
-    sha256  = "sha256-U6obXpYzIprOJ+b3QiE+eDOq1s0DYiwM55qTga9/8TE=";
+    rev = "v${version}";
+    sha256  = "sha256-8hhYOd5h55kl7ChqdyRzsaxzWLpX41aqG8LfznmbFWw=";
   };
 
   nativeBuildInputs = [ makeWrapper installShellFiles scdoc ];

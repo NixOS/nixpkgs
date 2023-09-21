@@ -1,35 +1,41 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 buildGoModule rec {
   pname = "mimir";
-  version = "2.3.1";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
-    sha256 = "sha256-2Gg2SYH2cqSKXePEfUAwW4AXpiMGso3FeGTmHRNxtaU=";
+    hash = "sha256-4UBbtJRQ6F3Dm+G4OWZeWtD4MJWtq91yiSZNW7EhEto=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [
     "cmd/mimir"
     "cmd/mimirtool"
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) mimir;
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [ "--version-regex" "mimir-([0-9.]+)" ];
+    };
+    tests = {
+      inherit (nixosTests) mimir;
+    };
   };
 
-  ldflags = let t = "github.com/grafana/mimir/pkg/util/version";
-  in [
-    ''-extldflags "-static"''
-    "-s"
-    "-w"
-    "-X ${t}.Version=${version}"
-    "-X ${t}.Revision=unknown"
-    "-X ${t}.Branch=unknown"
-  ];
+  ldflags =
+    let t = "github.com/grafana/mimir/pkg/util/version";
+    in [
+      ''-extldflags "-static"''
+      "-s"
+      "-w"
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=unknown"
+      "-X ${t}.Branch=unknown"
+    ];
 
   meta = with lib; {
     description =
@@ -37,6 +43,5 @@ buildGoModule rec {
     homepage = "https://github.com/grafana/mimir";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ happysalada bryanhonof ];
-    platforms = platforms.unix;
   };
 }

@@ -6,6 +6,7 @@
 , pythonOlder
 , requests
 , pytestCheckHook
+, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -19,8 +20,16 @@ buildPythonPackage rec {
     owner = "csparpa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
+    hash = "sha256-cSOhm3aDksLBChZzgw1gjUjLQkElR2/xGFMOb9K9RME=";
   };
+
+  pythonRelaxDeps = [
+    "geojson"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     geojson
@@ -28,7 +37,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

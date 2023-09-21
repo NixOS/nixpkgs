@@ -3,20 +3,21 @@
 , pkg-config
 , glib
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , meson
 , ninja
-, python3
   # just for passthru
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "gsettings-desktop-schemas";
-  version = "42.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ZoYzWp7WI/euInb++lCkENTnHUIxiAgkcUBwyzFzI9I=";
+    sha256 = "6y3kXK2QWZSEnmQqYjret11BshsGJtQNKge46igf7A4=";
   };
 
   strictDeps = true;
@@ -26,14 +27,13 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
+  ] ++ lib.optionals withIntrospection [
     gobject-introspection
   ];
 
-  postPatch = ''
-    chmod +x build-aux/meson/post-install.py
-    patchShebangs build-aux/meson/post-install.py
-  '';
+  mesonFlags = [
+    (lib.mesonBool "introspection" withIntrospection)
+  ];
 
   preInstall = ''
     # Meson installs the schemas to share/glib-2.0/schemas
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/gsettings-desktop-schemas";
     description = "Collection of GSettings schemas for settings shared by various components of a desktop";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

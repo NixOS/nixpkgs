@@ -1,17 +1,17 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalPackages: {
   pname = "pipeworld";
-  version = "unstable-2022-04-03";
+  version = "unstable-2023-02-05";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "pipeworld";
-    rev = "f60d0b93fcd5462f47b1c928c109f5b4cbd74eef";
-    hash = "sha256-PNziP5LaUODZwtAHvg8uYt/EyoD3mB5aWIfp7n5a82E=";
+    rev = "58b2e9fe15ef0baa4b04c27079bfa386ec62b28e";
+    hash = "sha256-PbKejghMkLZdeQJD9fObw9xhGH24IX72X7pyjapTXJM=";
   };
 
   dontConfigure = true;

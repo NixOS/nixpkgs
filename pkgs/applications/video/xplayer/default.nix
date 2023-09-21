@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     yelp-tools
+    gobject-introspection
   ];
 
   buildInputs = [
     clutter-gst
     clutter-gtk
     glib
-    gobject-introspection
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     description = "A generic media player from Linux Mint";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     homepage = "https://github.com/linuxmint/xplayer";
-    maintainers = with maintainers; [ tu-maurice ];
+    maintainers = with maintainers; [ tu-maurice bobby285271 ];
     platforms = platforms.linux;
   };
 }

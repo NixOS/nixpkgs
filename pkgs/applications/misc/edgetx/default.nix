@@ -1,24 +1,24 @@
 { lib, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttranslations, SDL, gtest
+, qtbase, qtmultimedia, qttools, SDL, gtest
 , dfu-util
 }:
 
 mkDerivation rec {
   pname = "edgetx";
-  version = "2.7.1";
+  version = "2.7.2";
 
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-1l5EoDY17+2PDS3eRT3CHksVoZQgNLV9vRDu7nfzlrE=";
+    sha256 = "sha256-bKMAyONy1Udd+2nDVEMrtIsnfqrNuBVMWU7nCqvZ+3E=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
 
-  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
+  buildInputs = [ qtbase qtmultimedia SDL ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -27,7 +27,6 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
-    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
     "-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

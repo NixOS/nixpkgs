@@ -1,5 +1,5 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , isPy3k
 , daemonize
 , dbus-python
@@ -16,12 +16,18 @@
 let
   common = import ./common.nix { inherit lib fetchFromGitHub; };
 in
-buildPythonApplication (common // rec {
-  pname = "openrazer_daemon";
+buildPythonPackage (common // {
+  pname = "openrazer-daemon";
 
   disabled = !isPy3k;
 
   outputs = [ "out" "man" ];
+
+  sourceRoot = "${common.src.name}/daemon";
+
+  postPatch = ''
+    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
+  '';
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
 
@@ -35,17 +41,12 @@ buildPythonApplication (common // rec {
     setproctitle
   ];
 
-  prePatch = ''
-    cd daemon
+  postInstall = ''
+    DESTDIR="$out" PREFIX="" make manpages install-resources install-systemd
   '';
 
-  postPatch = ''
-    substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
-  '';
-
-  postBuild = ''
-    DESTDIR="$out" PREFIX="" make install manpages
-  '';
+  # no tests run
+  doCheck = false;
 
   meta = common.meta // {
     description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";

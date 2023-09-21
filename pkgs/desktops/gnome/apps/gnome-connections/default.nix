@@ -4,10 +4,9 @@
 , meson
 , ninja
 , pkg-config
-, vala_0_56
+, vala
 , gettext
 , itstool
-, python3
 , appstream-glib
 , desktop-file-utils
 , wrapGAppsHook
@@ -23,21 +22,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "42.1.2";
+  version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2ObnJ0EJHYkt/IQoH2JVUdBWjNSC1I21ik7bivoTd7Y=";
+    hash = "sha256-E2otkksHfVzEEAyEWCbUcURCMKFsjawnMhE2gBcaYms=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    vala_0_56
+    vala
     gettext
     itstool
-    python3
     appstream-glib
     desktop-file-utils
     glib # glib-compile-resources
@@ -53,11 +51,6 @@ stdenv.mkDerivation rec {
     libxml2
     gtk-frdp
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

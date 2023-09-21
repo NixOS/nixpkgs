@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
+{ lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook, python3, gfortran, blas, lapack
 , fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
-, libxsmm, spglib, which, pkg-config
+, libxsmm, spglib, which, pkg-config, plumed, zlib
 , enableElpa ? false
 , elpa
 } :
@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2022.2";
+  version = "2023.2";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-zDIsgPcLnA0ATJEN1vQClpkToqvIyW7KuXhyGiXJXDw=";
+    hash = "sha256-1TJorIjajWFO7i9vqSBDTAIukBdyvxbr5dargt4QB8M=";
     fetchSubmodules = true;
   };
 
@@ -34,6 +34,8 @@ in stdenv.mkDerivation rec {
     scalapack
     blas
     lapack
+    plumed
+    zlib
   ] ++ lib.optional enableElpa elpa;
 
   propagatedBuildInputs = [ mpi ];
@@ -64,7 +66,8 @@ in stdenv.mkDerivation rec {
     AR         = ar -r
     DFLAGS     = -D__FFTW3 -D__LIBXC -D__LIBINT -D__parallel -D__SCALAPACK \
                  -D__MPI_VERSION=3 -D__F2008 -D__LIBXSMM -D__SPGLIB \
-                 -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"}
+                 -D__MAX_CONTR=4 -D__LIBVORI ${lib.optionalString enableElpa "-D__ELPA"} \
+                 -D__PLUMED2
     CFLAGS    = -fopenmp
     FCFLAGS    = \$(DFLAGS) -O2 -ffree-form -ffree-line-length-none \
                  -ftree-vectorize -funroll-loops -msse2 \
@@ -77,19 +80,26 @@ in stdenv.mkDerivation rec {
                  -lxcf03 -lxc -lxsmmf -lxsmm -lsymspg \
                  -lint2 -lstdc++ -lvori \
                  -lgomp -lpthread -lm \
-                 -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"}
+                 -fopenmp ${lib.optionalString enableElpa "$(pkg-config --libs elpa)"} \
+                 -lz -ldl -lstdc++ ${lib.optionalString (mpi.pname == "openmpi") "$(mpicxx --showme:link)"} \
+                 -lplumed
     LDFLAGS    = \$(FCFLAGS) \$(LIBS)
+    include ${plumed}/lib/plumed/src/lib/Plumed.inc
     EOF
   '';
 
+  nativeCheckInputs = [
+    mpiCheckPhaseHook
+    openssh
+  ];
+
   checkPhase = ''
-    export OMP_NUM_THREADS=1
+    runHook preCheck
 
-    export HYDRA_IFACE=lo  # Fix to make mpich run in a sandbox
-    export OMPI_MCA_rmaps_base_oversubscribe=1
     export CP2K_DATA_DIR=data
-
     mpirun -np 2 exe/${arch}/libcp2k_unittest.${cp2kVersion}
+
+    runHook postCheck
   '';
 
   installPhase = ''

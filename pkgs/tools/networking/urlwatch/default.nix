@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urlwatch";
-  version = "2.25";
+  version = "2.28";
 
   src = fetchFromGitHub {
     owner = "thp";
     repo = "urlwatch";
     rev = version;
-    hash = "sha256-+ayHMY0gEAVhOgDDh+RfRrUpV0tSX8mMmfPzyg+YSv4=";
+    hash = "sha256-dGohG2+HrsuKegPAn1fmpLYPpovEEUsx+C/0sp2/cX0=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     markdown2
     matrix-client
     minidb
-    pushbullet
+    pushbullet-py
     pycodestyle
     pyppeteer
     pyyaml

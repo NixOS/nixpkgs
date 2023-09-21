@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, python3
 , glslang
 , libffi
 , libX11
@@ -21,22 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.3.224.1";
+  version = "1.3.261";
 
-  # It's not strictly necessary to have matching versions here, however
-  # since we're using the SDK version we may as well be consistent with
-  # the rest of nixpkgs.
-  src = (assert version == vulkan-headers.version;
-    fetchFromGitHub {
-      owner = "KhronosGroup";
-      repo = "Vulkan-Tools";
-      rev = "sdk-${version}";
-      hash = "sha256-Z+QJBd2LBdiJD1fHhBLbOfOoLhqTg0J3tq+XQRSiQaY=";
-    });
+  src = fetchFromGitHub {
+    owner = "KhronosGroup";
+    repo = "Vulkan-Tools";
+    rev = "v${version}";
+    hash = "sha256-C5FVkI9F/dgIS8qp7VaOn9J2zoNLb1PnmgAemsVO6zM=";
+  };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
   ];
 
   buildInputs = [
@@ -88,6 +86,7 @@ stdenv.mkDerivation rec {
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH
     "-DCMAKE_INSTALL_RPATH=${libraryPath}"
     "-DPKG_CONFIG_EXECUTABLE=${pkg-config}/bin/pkg-config"
+    "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
   ] ++ lib.optionals stdenv.isDarwin [

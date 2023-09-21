@@ -2,11 +2,10 @@
 
 buildDunePackage {
   pname = "lwt_ppx";
-  version = "2.0.2";
+  version = "2.1.0";
+  duneVersion = "3";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.04";
+  minimalOCamlVersion = "4.04";
 
   # `lwt_ppx` has a different release cycle than Lwt, but it's included in
   # one of its release bundles.
@@ -18,8 +17,8 @@ buildDunePackage {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "lwt";
-    rev = "5.4.0";
-    sha256 = "sha256-rRivROVbQbXkHWen1n8+9AwrRJaOK0Fhyilw29T7was=";
+    rev = "5.6.0";
+    hash = "sha256-DLQupCkZ14kOuSQatbb7j07I+jvvDCKpdlaR3rijT4s=";
   };
 
   propagatedBuildInputs = [ lwt ppxlib ];

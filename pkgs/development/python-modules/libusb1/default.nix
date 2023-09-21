@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   buildInputs = [ libusb1 ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     "usb1/testUSB1.py"

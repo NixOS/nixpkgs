@@ -3,6 +3,7 @@
 , sslSupport ? true, openssl ? null
 , static ? stdenv.hostPlatform.isStatic
 , shared ? !stdenv.hostPlatform.isStatic
+, bash
 }:
 
 assert compressionSupport -> zlib != null;
@@ -14,19 +15,21 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "0.32.3";
+  version = "0.32.5";
   pname = "neon";
 
   src = fetchurl {
     url = "https://notroj.github.io/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-lMuHXcbb/N7ljwObdjxnSwIyiGzf16Xekb5c36K3WWo=";
+    sha256 = "sha256-SHLhL4Alct7dSwL4cAZYFLLVFB99va9wju2rgmtRpYo=";
   };
 
   patches = optionals stdenv.isDarwin [ ./darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [libxml2 openssl]
+  buildInputs = [libxml2 openssl bash]
     ++ lib.optional compressionSupport zlib;
+
+  strictDeps = true;
 
   configureFlags = [
     (lib.enableFeature shared "shared")

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, wireguard-go, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wg-netmanager";
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   # Test 01 tries to create a wireguard interface, which requires sudo.
   doCheck = true;
-  checkFlags = "--skip device";
+  checkFlags = [ "--skip" "device" ];
 
   meta = with lib; {
     description = "Wireguard network manager";

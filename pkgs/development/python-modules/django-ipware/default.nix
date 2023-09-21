@@ -1,12 +1,20 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "django-ipware";
-  version = "4.0.2";
+  version = "5.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "602a58325a4808bd19197fef2676a0b2da2df40d0ecf21be414b2ff48c72ad05";
+    hash = "sha256-T6VgfuheEu5eFYvHVp/x4TT7FXloGqH/Pw7QS+Ib4VM=";
   };
 
   propagatedBuildInputs = [ django ];
@@ -20,6 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A Django application to retrieve user's IP address";
     homepage = "https://github.com/un33k/django-ipware";
+    changelog = "https://github.com/un33k/django-ipware/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

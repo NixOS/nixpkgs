@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.6.3";
+  version = "1.8.2";
 
   outputs = [
     "out"
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-R3iL01gE69M8sJkR6XU0TIQ1ngttlSCv0cgh66i6d/8=";
+    sha256 = "sha256-0RqizT5XCsbQ79ukbRcxR8EfRYJkV+kkwFmQuy4N+a0=";
   };
 
   depsBuildBuild = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     glade
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     at-spi2-atk
     at-spi2-core

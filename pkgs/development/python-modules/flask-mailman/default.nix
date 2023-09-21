@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "waynerv";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cfLtif+48M6fqOkBbi4PJRFpf9FRXCPesktFQky34eU=";
+    hash = "sha256-cfLtif+48M6fqOkBbi4PJRFpf9FRXCPesktFQky34eU=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     mkdocs-material-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

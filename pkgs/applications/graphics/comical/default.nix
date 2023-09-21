@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, wxGTK, util-linux, zlib }:
+{ lib
+, stdenv
+, fetchurl
+, hexdump
+, wxGTK32
+, zlib
+, Cocoa
+}:
 
 stdenv.mkDerivation rec {
   pname = "comical";
@@ -6,21 +13,40 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/comical/comical-${version}.tar.gz";
-    sha256 = "0b6527cc06b25a937041f1eb248d0fd881cf055362097036b939817f785ab85e";
+    hash = "sha256-C2UnzAayWpNwQfHrJI0P2IHPBVNiCXA2uTmBf3hauF4=";
   };
 
-  buildInputs = [ wxGTK util-linux zlib ];
-  makeFlags = [ "prefix=${placeholder "out"}" ];
+  patches = [
+    ./wxgtk-3.2.patch
+  ];
 
-  patches = [ ./wxgtk-2.8.patch ];
+  nativeBuildInputs = [
+    hexdump
+  ];
 
-  preInstall = "mkdir -pv $out/bin";
+  buildInputs = [
+    wxGTK32
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ];
+
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
+
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
 
   meta = {
     description = "Viewer of CBR and CBZ files, often used to store scanned comics";
-    homepage = "http://comical.sourceforge.net/";
+    homepage = "https://comical.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ viric ];
-    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ viric wegank ];
+    platforms = with lib.platforms; unix;
+    mainProgram = "comical";
   };
 }

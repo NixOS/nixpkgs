@@ -1,29 +1,66 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, pixman, libpthreadstubs, gtkmm3, libXau
-, libXdmcp, lcms2, libiptcdata, libcanberra-gtk3, fftw, expat, pcre, libsigcxx, wrapGAppsHook
-, lensfun, librsvg, gtk-mac-integration
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook
+, makeWrapper
+, pixman
+, libpthreadstubs
+, gtkmm3
+, libXau
+, libXdmcp
+, lcms2
+, libiptcdata
+, fftw
+, expat
+, pcre
+, libsigcxx
+, lensfun
+, librsvg
+, libcanberra-gtk3
+, gtk-mac-integration
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.8";
   pname = "rawtherapee";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "Beep6581";
     repo = "RawTherapee";
     rev = version;
-    sha256 = "0d644s4grfia6f3k6y0byd5pwajr12kai2kc280yxi8v3w1b12ik";
+    hash = "sha256-kdctfjss/DHEcaSDPXcmT20wXTwkI8moRX/i/5wT5Hg=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
+  postPatch = ''
+    echo "set(HG_VERSION ${version})" > ReleaseInfo.cmake
+    substituteInPlace tools/osx/Info.plist.in rtgui/config.h.in \
+      --replace "/Applications" "${placeholder "out"}/Applications"
+  '';
 
-  # This patch is upstream; remove it in 5.9.
-  patches = [ ./fix-6324.patch ]
-  # Disable upstream-enforced bundling on macOS.
-  ++ lib.optionals stdenv.isDarwin [ ./do-not-bundle.patch ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    makeWrapper
+  ];
 
   buildInputs = [
-    pixman libpthreadstubs gtkmm3 libXau libXdmcp
-    lcms2 libiptcdata fftw expat pcre libsigcxx lensfun librsvg
+    pixman
+    libpthreadstubs
+    gtkmm3
+    libXau
+    libXdmcp
+    lcms2
+    libiptcdata
+    fftw
+    expat
+    pcre
+    libsigcxx
+    lensfun
+    librsvg
   ] ++ lib.optionals stdenv.isLinux [
     libcanberra-gtk3
   ] ++ lib.optionals stdenv.isDarwin [
@@ -33,12 +70,22 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DPROC_TARGET_NUMBER=2"
     "-DCACHE_NAME_SUFFIX=\"\""
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
-  CMAKE_CXX_FLAGS = "-std=c++11 -Wno-deprecated-declarations -Wno-unused-result";
+  CMAKE_CXX_FLAGS = toString [
+    "-std=c++11"
+    "-Wno-deprecated-declarations"
+    "-Wno-unused-result"
+  ];
 
-  postUnpack = ''
-    echo "set(HG_VERSION $version)" > $sourceRoot/ReleaseInfo.cmake
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/RawTherapee.app $out/bin
+    cp -R Release $out/Applications/RawTherapee.app/Contents
+    for f in $out/Applications/RawTherapee.app/Contents/MacOS/*; do
+      makeWrapper $f $out/bin/$(basename $f)
+    done
   '';
 
   meta = {

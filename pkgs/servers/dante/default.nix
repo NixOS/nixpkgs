@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch, pam, libkrb5, cyrus_sasl, miniupnpc, autoreconfHook }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook
+, pam, libkrb5, cyrus_sasl, miniupnpc, libxcrypt }:
 
+let
+  remove_getaddrinfo_checks = stdenv.hostPlatform.isMips64 || !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+in
 stdenv.mkDerivation rec {
   pname = "dante";
   version = "1.4.3";
@@ -9,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pbahkj43rx7rmv2x40mf5p3g3x9d6i2sz7pzglarf54w5ghd2j1";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isMips64 autoreconfHook;
-  buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc libxcrypt ];
 
   configureFlags = if !stdenv.isDarwin
     then [ "--with-libc=libc.so.6" ]
@@ -18,7 +22,7 @@ stdenv.mkDerivation rec {
 
   dontAddDisableDepTrack = stdenv.isDarwin;
 
-  patches = lib.optional stdenv.hostPlatform.isMips64 [
+  patches = lib.optionals remove_getaddrinfo_checks [
     (fetchpatch {
       name = "0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";
       url = "https://raw.githubusercontent.com/buildroot/buildroot/master/package/dante/0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";

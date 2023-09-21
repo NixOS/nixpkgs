@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod, gnugrep, vmware-workstation }:
+{ lib, stdenv, fetchFromGitHub, kernel, kmod, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "vmware-modules";
-  version = "${vmware-workstation.version}-${kernel.version}";
+  version = "workstation-17.0.2-2023-08-12-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "mkubecek";
     repo = "vmware-host-modules";
-    rev = "w${vmware-workstation.version}-k5.18";
-    sha256 = "sha256-sAeCjaSrBXGP5szfCY5CpMrGwzCw4aM67EN+YfA3AWA=";
+    # Developer no longer provides tags for kernel compatibility fixes
+    # Commit hash for branch workstation-17.0.2 as of 2023-08-12
+    rev = "8b2d31498a8df9b1215f407c989b065953b73455";
+    sha256 = "sha256-R0nY4O3ASQkOop+ddU4k72HiIJU/aJz0l3lkJN/kuHc=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -20,14 +22,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace '/lib/modules/$(VM_UNAME)/misc' "$out/lib/modules/${kernel.modDirVersion}/misc" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/modinfo "${kmod}/bin/modinfo" \
       --replace 'test -z "$(DESTDIR)"' "0"
 
     for module in "vmmon-only" "vmnet-only"; do
       substituteInPlace "./$module/Makefile" \
         --replace '/lib/modules/' "${kernel.dev}/lib/modules/" \
-        --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
         --replace /bin/grep "${gnugrep}/bin/grep"
     done
   '';
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mkubecek/vmware-host-modules";
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    broken = (kernel.kernelOlder "5.5" && kernel.isHardened) || kernel.kernelAtLeast "5.19";
+    broken = (kernel.kernelOlder "5.5" && kernel.isHardened);
     maintainers = with maintainers; [ deinferno ];
   };
 }

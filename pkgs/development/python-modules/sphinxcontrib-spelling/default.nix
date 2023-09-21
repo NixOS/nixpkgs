@@ -5,23 +5,27 @@
 , importlib-metadata
 , sphinx
 , pyenchant
-, pbr
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-spelling";
-  version = "7.6.1";
-  format = "setuptools";
+  version = "8.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-REhXV53WGRTzlwrRBGx0v2dYE29+FEtGypwoEIhw9Qg=";
+    hash = "sha256-GZ0KFpAq2Aw4fClm3J6xD1ZbH7FczOFyEEAtt8JEPlw=";
   };
 
   nativeBuildInputs = [
-    pbr
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -41,6 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Sphinx spelling extension";
     homepage = "https://github.com/sphinx-contrib/spelling";
+    changelog = "https://github.com/sphinx-contrib/spelling/blob/${version}/docs/source/history.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
   };

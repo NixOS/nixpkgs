@@ -28,7 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
   };
 
-  checkInputs = [
+  # https://github.com/bamthomas/aioimaplib/issues/54
+  doCheck = pythonOlder "3.11";
+
+  nativeCheckInputs = [
     asynctest
     docutils
     imaplib2

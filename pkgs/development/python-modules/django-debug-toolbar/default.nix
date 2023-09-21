@@ -3,6 +3,7 @@
 , pythonOlder
 , buildPythonPackage
 , python
+, hatchling
 , django
 , jinja2
 , sqlparse
@@ -11,17 +12,21 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "3.5";
-  format = "setuptools";
+  version = "4.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OZWO3tXZ+p+zKtQHCkj0kGSXpDFHFV+HqSgiJvLmMTg=";
+    hash = "sha256-hPO2q3V69kpyahav4cgUHz/3WLxXnZYCyWGetyNS+2Q=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     django
@@ -34,7 +39,7 @@ buildPythonPackage rec {
   TEST_ARGS = "tests";
   DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     html5lib
   ];
 
@@ -54,5 +59,5 @@ buildPythonPackage rec {
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuu ];
-};
+  };
 }

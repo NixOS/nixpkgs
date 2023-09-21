@@ -7,11 +7,19 @@ python.pkgs.buildPythonApplication rec {
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/scons/${pname}-${version}.tar.gz";
+    url =
+      if lib.versionAtLeast version "4.3.0" then
+        "mirror://sourceforge/project/scons/scons/${version}/SCons-${version}.tar.gz"
+      else
+        "mirror://sourceforge/scons/scons-${version}.tar.gz";
     inherit sha256;
   };
 
   setupHook = ./setup-hook.sh;
+
+  patches = lib.optionals (lib.versionAtLeast version "4.3.0") [
+    ./env.patch
+  ];
 
   postPatch = lib.optionalString (lib.versionAtLeast version "4.0.0") ''
     substituteInPlace setup.cfg \

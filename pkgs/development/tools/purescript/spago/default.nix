@@ -1,5 +1,4 @@
 { haskell
-, haskellPackages
 , lib
 
 # The following are only needed for the passthru.tests:
@@ -12,14 +11,13 @@
 
 let
   spago =
-    haskell.lib.compose.justStaticExecutables
-      (haskell.lib.compose.overrideCabal (oldAttrs: {
-        maintainers = (oldAttrs.maintainers or []) ++ [
-          lib.maintainers.cdepillabout
-        ];
-        changelog =
-          "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
-      }) haskellPackages.spago);
+    lib.pipe
+      haskell.packages.ghc90.spago
+      [ haskell.lib.compose.justStaticExecutables
+        (haskell.lib.compose.overrideCabal (oldAttrs: {
+          changelog = "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
+        }))
+      ];
 in
 
 spago.overrideAttrs (oldAttrs: {
@@ -58,4 +56,3 @@ spago.overrideAttrs (oldAttrs: {
         '';
   };
 })
-

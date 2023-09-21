@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     description = "A very nice animated wallpaper daemon for Wayland compositors";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    inherit (wayland.meta) platforms;
+    broken = stdenv.isDarwin; # this should be enfoced by wayland platforms in the future
   };
 }

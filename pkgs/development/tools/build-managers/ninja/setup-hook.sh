@@ -53,8 +53,16 @@ ninjaCheckPhase() {
 ninjaInstallPhase() {
     runHook preInstall
 
+    local buildCores=1
+
+    # Parallel building is enabled by default.
+    if [ "${enableParallelInstalling-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
+    fi
+
     # shellcheck disable=SC2086
     local flagsArray=(
+        -j$buildCores
         $ninjaFlags "${ninjaFlagsArray[@]}"
         ${installTargets:-install}
     )

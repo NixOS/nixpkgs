@@ -1,5 +1,5 @@
 {
-  mkDerivation, propagate, wrapGAppsHook,
+  mkDerivation, lib, propagate, wrapGAppsHook,
   extra-cmake-modules, kdoctools,
   gsettings-desktop-schemas, kconfig, kcoreaddons, kcrash, kdbusaddons,
   kservice, qtbase,
@@ -18,4 +18,5 @@ mkDerivation {
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+  meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
 }

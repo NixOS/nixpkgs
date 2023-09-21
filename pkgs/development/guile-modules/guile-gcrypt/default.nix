@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-gcrypt";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitea {
     domain = "notabug.org";
     owner = "cwebber";
     repo = "guile-gcrypt";
     rev = "v${version}";
-    sha256 = "sha256-lAaiKBOdTFWEWsmwKgx0C67ACvtnEKUxti66dslzSVQ=";
+    hash = "sha256-vbm31EsOJiMeTs2tu5KPXckxPcAQbi3/PGJ5EHCC5VQ=";
   };
 
   nativeBuildInputs = [
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://notabug.org/cwebber/guile-gcrypt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

@@ -3,7 +3,7 @@ let
   cfg = config.security.tpm2;
 
   # This snippet is taken from tpm2-tss/dist/tpm-udev.rules, but modified to allow custom user/groups
-  # The idea is that the tssUser is allowed to acess the TPM and kernel TPM resource manager, while
+  # The idea is that the tssUser is allowed to access the TPM and kernel TPM resource manager, while
   # the tssGroup is only allowed to access the kernel resource manager
   # Therefore, if either of the two are null, the respective part isn't generated
   udevRules = tssUser: tssGroup: ''

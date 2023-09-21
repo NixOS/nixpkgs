@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p bash wget coreutils gnutar nix
+#!nix-shell -i bash -p bash wget coreutils nix
 version=$1
 
 if [[ -z $version ]]
@@ -11,9 +11,8 @@ fi
 allOutput=""
 
 dlDest=$(mktemp)
-exDest=$(mktemp -d)
 
-trap 'rm $dlDest; rm -r $exDest' EXIT
+trap 'rm $dlDest' EXIT
 
 for plat in osx linux; do
     for arch in x64 arm64; do
@@ -21,9 +20,7 @@ for plat in osx linux; do
         URL="https://github.com/PowerShell/PowerShell/releases/download/v$version/powershell-$version-$plat-$arch.tar.gz"
         wget $URL -O $dlDest >&2
 
-        tar -xzf $dlDest -C $exDest >&2
-
-        hash=$(nix hash path $exDest)
+        hash=$(nix hash file $dlDest)
 
         allOutput+="
 variant: $plat $arch

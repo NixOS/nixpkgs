@@ -2,11 +2,11 @@
 buildKodiAddon rec {
   pname = "idna";
   namespace = "script.module.idna";
-  version = "3.3.0+matrix.1";
+  version = "3.4.0";
 
   src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "gXW1BvM3CLKshVPaemjmzEoZekU0QjuxJY9zGbGwK18=";
+    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-wS1d1L18v4+RGwxDh7OpKRHB2A4qYwiq6b5mAz7l8Pk=";
   };
 
   passthru = {

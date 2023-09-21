@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
     (fetchpatch {
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
+      url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
       sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
   ];
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "Lisp implementation aiming to be small, fast and easy to embed";
     homepage = "https://common-lisp.net/project/ecl/";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
+    maintainers = lib.teams.lisp.members;
     platforms = platforms.unix;
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };

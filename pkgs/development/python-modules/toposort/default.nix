@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "toposort";
-  version = "1.7";
+  version = "1.10";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3cIYLEKRKkQFEb1/9dPmocq8Osy8Z0oyWMjEHL+7ISU=";
+    hash = "sha256-v7tHnFPQppbqdAJgH05pPJewNng3yImLxkca38o3pr0=";
   };
 
   nativeBuildInputs = [

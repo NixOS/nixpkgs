@@ -5,39 +5,37 @@
 , scipy
 , torch
 , autograd
-, nose2
 , matplotlib
-, tensorflow
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.0.1";
+  version = "2.1.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-VwCUqKI1PkR8nUVaa73bkTw67URKPaza3VU9g+rB+Mg=";
+    hash = "sha256-nbSxqMmYWi71s74bbB9LAlPKEslTqG/j266cLfNHrwg=";
   };
 
   propagatedBuildInputs = [ numpy scipy torch ];
-  checkInputs = [ nose2 autograd matplotlib tensorflow ];
+  nativeCheckInputs = [ autograd matplotlib pytestCheckHook ];
 
-  checkPhase = ''
-    runHook preCheck
-    # FIXME: Some numpy regression?
-    # Traceback (most recent call last):
-    #   File "/build/source/tests/manifolds/test_hyperbolic.py", line 270, in test_second_order_function_approximation
-    #     self.run_hessian_approximation_test()
-    #   File "/build/source/tests/manifolds/_manifold_tests.py", line 29, in run_hessian_approximation_test
-    #     assert np.allclose(np.linalg.norm(error), 0) or (2.95 <= slope <= 3.05)
-    # AssertionError
-    rm tests/manifolds/test_hyperbolic.py
-
-    nose2 tests -v
-    runHook postCheck
+  preCheck = ''
+    substituteInPlace "tests/conftest.py" \
+      --replace "import tensorflow as tf" ""
+    substituteInPlace "tests/conftest.py" \
+      --replace "tf.random.set_seed(seed)" ""
   '';
+
+  disabledTestPaths = [
+    "tests/test_examples.py"
+    "tests/backends/test_tensorflow.py"
+    "tests/test_problem.py"
+  ];
 
   pythonImportsCheck = [ "pymanopt" ];
 
@@ -46,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://www.pymanopt.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];
+    broken = lib.versionAtLeast scipy.version "1.10.0";
   };
 }

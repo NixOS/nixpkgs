@@ -8,13 +8,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "nrfutil";
-  version = "6.1.6";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "NordicSemiconductor";
     repo = "pc-nrfutil";
-    rev = "v${version}";
-    sha256 = "sha256-UiGNNJxNSpIzpeYMlzocLG2kuetl8xti5A3n6zz0lcY=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-WiXqeQObhXszDcLxJN8ABd2ZkxsOUvtZQSVP8cYlT2M=";
   };
 
   propagatedBuildInputs = [
@@ -32,14 +32,17 @@ buildPythonApplication rec {
     tqdm
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     behave
     nose
   ];
 
+  # Workaround: pythonRelaxDepsHook doesn't work for this.
   postPatch = ''
     mkdir test-reports
-    substituteInPlace requirements.txt --replace "libusb1==1.9.3" "libusb1"
+    substituteInPlace requirements.txt \
+      --replace "libusb1==1.9.3" "libusb1" \
+      --replace "protobuf >=3.17.3, < 4.0.0" "protobuf"
   '';
 
   meta = with lib; {

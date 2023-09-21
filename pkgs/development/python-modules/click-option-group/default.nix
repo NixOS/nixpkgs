@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.5";
+  version = "0.5.6";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -16,14 +16,14 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ur7ycioZmgWMp4N+MURj1ggYMzs2eauteg1B5eLkSvc=";
+    hash = "sha256-uR5rIZPPT6pRk/jJEy2rZciOXrHWVWN6BfGroQ3znas=";
   };
 
   propagatedBuildInputs = [
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -16,12 +16,12 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-usercheck" ];
 
-  NIX_CFLAGS_COMPILE = [ "-DALLOW_NON_TSS_CONFIG_FILE" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-DALLOW_NON_TSS_CONFIG_FILE" ];
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Trusted computing software stack";
-    homepage    = "http://trousers.sourceforge.net/";
+    homepage    = "https://trousers.sourceforge.net/";
     license     = licenses.bsd3;
     maintainers = [ maintainers.ak ];
     platforms   = platforms.linux;

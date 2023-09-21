@@ -2,7 +2,7 @@
 , mkDerivation
 , extra-cmake-modules, kdoctools
 , kinit, kcmutils, khtml, kdesu
-, qtbase, qtwebengine, qtx11extras, qtscript, qtwayland
+, qtwebengine, qtx11extras, qtscript, qtwayland
 }:
 
 mkDerivation {
@@ -25,7 +25,6 @@ mkDerivation {
     homepage = "https://apps.kde.org/konqueror/";
     description = "Web browser, file manager and viewer";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ ];
-    broken = lib.versionOlder qtbase.version "5.13";
+    maintainers = [ ];
   };
 }

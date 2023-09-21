@@ -10,7 +10,7 @@ mkDerivation {
   meta = {
     homepage = "https://apps.kde.org/kmix/";
     description = "Sound mixer";
-    license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
+    license = with lib.licenses; [ gpl2Plus lgpl21Plus fdl12Plus ];
     maintainers = [ lib.maintainers.rongcuid ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];

@@ -28,7 +28,7 @@ let
       sha256 = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
     };
 
-    vendorSha256 = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";
+    vendorHash = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";
 
     buildPhase = ''
       runHook preBuild
@@ -45,7 +45,7 @@ let
       mv bin/nomad-autoscaler $bin/bin
       ln -s $bin/bin/nomad-autoscaler $out/bin/nomad-autoscaler
 
-      for d in $outputs; do
+      for d in $(getAllOutputNames); do
         mkdir -p ''${!d}/share
       done
       rmdir $bin/share

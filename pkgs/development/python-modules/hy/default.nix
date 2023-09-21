@@ -1,20 +1,18 @@
 { lib
 , astor
 , buildPythonPackage
-, colorama
 , fetchFromGitHub
 , funcparserlib
 , hy
 , pytestCheckHook
 , python
 , pythonOlder
-, rply
 , testers
 }:
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.24.0";
+  version = "0.27.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,22 +20,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hylang";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-PmnYOniYqNHGTxpWuAc+zBhOsgRgMMbERHq81KpHheg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Emzz6m5voH3dCAw7/7d0XLlLEEOjnfrVNZ8WWKa38Ow=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
   HY_VERSION = version;
 
   propagatedBuildInputs = [
-    colorama
     funcparserlib
   ] ++
   lib.optionals (pythonOlder "3.9") [
     astor
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -45,11 +42,6 @@ buildPythonPackage rec {
     # For test_bin_hy
     export PATH="$out/bin:$PATH"
   '';
-
-  disabledTests = [
-    "test_circular_macro_require"
-    "test_macro_require"
-  ];
 
   pythonImportsCheck = [ "hy" ];
 
@@ -61,7 +53,14 @@ buildPythonPackage rec {
     # For backwards compatibility with removed pkgs/development/interpreters/hy
     # Example usage:
     #   hy.withPackages (ps: with ps; [ hyrule requests ])
-    withPackages = python-packages: python.withPackages (ps: (python-packages ps) ++ [ ps.hy ]);
+    withPackages = python-packages:
+      (python.withPackages
+        (ps: (python-packages ps) ++ [ ps.hy ])).overrideAttrs (old: {
+          name = "${hy.name}-env";
+          meta = lib.mergeAttrs (builtins.removeAttrs hy.meta [ "license" ]) {
+            mainProgram = "hy";
+          };
+        });
   };
 
   meta = with lib; {

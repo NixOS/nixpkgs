@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Fixes test failure of realpath test with glibc-2.36
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/libcdio/raw/d49ccdd9c8b4e9d57c01539f4c8948f28ce82bca/f/realpath-test-fix.patch";
+      sha256 = "sha256-ldAGlcf79uQ8QAt4Au8Iv6jsI6ICZXtXOKZBpyELtN8=";
+    })
+
     # pull pending upstream patch to fix build on ncurses-6.3:
     #  https://savannah.gnu.org/patch/index.php?10130
     (fetchpatch {
@@ -24,8 +30,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config help2man ];
-  buildInputs = [ libcddb ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Carbon IOKit ];
+  buildInputs = [ libcddb libiconv ncurses ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon IOKit ];
+
+  enableParallelBuilding = true;
 
   doCheck = !stdenv.isDarwin;
 
@@ -39,6 +47,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.gnu.org/software/libcdio/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

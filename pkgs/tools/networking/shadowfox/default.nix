@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, fetchpatch }:
 
 buildGoModule rec {
   pname = "shadowfox";
@@ -11,7 +11,16 @@ buildGoModule rec {
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
-  vendorSha256 = "sha256-llseW3k8ygTXwkSpnRfQEnX3OVj2zdL8JDpIoRcC9kE=";
+  patches = [
+    # get vendoring to work with go1.20
+    # https://github.com/arguablykomodo/shadowfox-updater/pull/70
+    (fetchpatch {
+      url = "https://github.com/arguablykomodo/shadowfox-updater/commit/c16be00829373e0de7de47d6fb4d4c341fc36f75.patch";
+      hash = "sha256-buijhFLI8Sf9qBDntf689Xcpr6me+aVDoRqwSIcKKEw=";
+    })
+  ];
+
+  vendorHash = "sha256-3pHwyktSGxNM7mt0nPOe6uixS+bBJH9R8xqCyY6tlb0=";
 
   doCheck = false;
 

@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     description = "Mirrors an output of a wlroots compositor to a window";
     homepage = "https://github.com/progandy/wdomirror";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ jpas ];
   };
 }

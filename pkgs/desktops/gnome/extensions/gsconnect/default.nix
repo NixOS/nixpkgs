@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
+, fetchpatch
 , substituteAll
 , openssl
 , gsound
@@ -13,13 +15,15 @@
 , gtk3
 , openssh
 , gnome
+, evolution-data-server-gtk4
 , gjs
 , nixosTests
+, desktop-file-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-gsconnect";
-  version = "50";
+  version = "55";
 
   outputs = [ "out" "installedTests" ];
 
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GSConnect";
     repo = "gnome-shell-extension-gsconnect";
     rev = "v${version}";
-    hash = "sha256-uUpdjBsVeS99AYDpGlXP9fMqGxWj+XfVubNoGJs76G0=";
+    hash = "sha256-n6NbNgl+2FOhly/BeR7I6BvPOYe7leAdeAegaqhcGJU=";
   };
 
   patches = [
@@ -47,6 +51,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection # for locating typelibs
     wrapGAppsHook # for wrapping daemons
+    desktop-file-utils # update-desktop-database
   ];
 
   buildInputs = [
@@ -55,25 +60,21 @@ stdenv.mkDerivation rec {
     gtk3
     gsound
     gjs # for running daemon
-    gnome.evolution-data-server # for libebook-contacts typelib
+    evolution-data-server-gtk4 # for libebook-contacts typelib
   ];
 
   mesonFlags = [
     "-Dgnome_shell_libdir=${gnome.gnome-shell}/lib"
-    "-Dgsettings_schemadir=${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}"
     "-Dchrome_nmhdir=${placeholder "out"}/etc/opt/chrome/native-messaging-hosts"
     "-Dchromium_nmhdir=${placeholder "out"}/etc/chromium/native-messaging-hosts"
     "-Dopenssl_path=${openssl}/bin/openssl"
     "-Dsshadd_path=${openssh}/bin/ssh-add"
     "-Dsshkeygen_path=${openssh}/bin/ssh-keygen"
     "-Dsession_bus_services_dir=${placeholder "out"}/share/dbus-1/services"
-    "-Dpost_install=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
 
   postPatch = ''
-    patchShebangs meson/nmh.sh
-    patchShebangs meson/post-install.sh
     patchShebangs installed-tests/prepare-tests.sh
 
     # TODO: do not include every typelib everywhere
@@ -82,6 +83,10 @@ stdenv.mkDerivation rec {
       substituteInPlace "$file" \
         --subst-var-by typelibPath "$GI_TYPELIB_PATH"
     done
+
+    # slightly janky fix for gsettings_schemadir being removed
+    substituteInPlace data/config.js.in \
+      --subst-var-by GSETTINGS_SCHEMA_DIR ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
   postFixup = ''

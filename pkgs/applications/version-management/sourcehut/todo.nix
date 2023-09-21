@@ -32,10 +32,8 @@ buildPythonPackage rec {
     inherit src version;
     pname = "todosrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
-  } // import ./fix-gqlgen-trimpath.nix {inherit unzip;});
-
-  nativeBuildInputs = srht.nativeBuildInputs;
+    vendorHash = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   propagatedBuildInputs = [
     srht
@@ -54,7 +52,7 @@ buildPythonPackage rec {
   '';
 
   # pytest tests fail
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     factory_boy
   ];

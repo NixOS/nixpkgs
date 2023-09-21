@@ -1,25 +1,42 @@
-{ lib
-, fetchFromGitHub
+{ stdenv
+, lib
 , buildPythonPackage
-, pytestCheckHook
-, untangle
-, psutil
-, trio
+, fetchFromGitHub
+, fetchpatch
 , numpy
+, psutil
+, pytestCheckHook
+, pythonOlder
+, trio
+, untangle
 }:
 
 buildPythonPackage rec {
   pname = "pydevd";
-  version = "2.8.0";
+  version = "2.9.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fabioz";
     repo = "PyDev.Debugger";
     rev = "pydev_debugger_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-+yRngN10654trB09ZZa8QQsTPdM7VxVj7r6jh7OcgAA=";
+    hash = "sha256-TDU/V7kY7zVxiP4OVjGqpsRVYplpkgCly2qAOqhZONo=";
   };
 
-  checkInputs = [
+  patches = [
+    # https://github.com/fabioz/PyDev.Debugger/pull/258
+    (fetchpatch {
+      name = "numpy-1.25-test-compatibility.patch";
+      url = "https://github.com/fabioz/PyDev.Debugger/commit/6f637d951cda62dc2202a2c7b6af526c4d1e8a00.patch";
+      hash = "sha256-DLzZZwQHtqGZGA8nsBLNQqamuI4xUfQ89Gd21sJa9/s=";
+    })
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     numpy
     psutil
     pytestCheckHook
@@ -44,9 +61,14 @@ buildPythonPackage rec {
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
     "test_tracing_other_threads"
     "test_tracing_basic"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_multiprocessing_simple"
+    "test_evaluate_exception_trace"
   ];
 
-  pythonImportsCheck = [ "pydevd" ];
+  pythonImportsCheck = [
+    "pydevd"
+  ];
 
   meta = with lib; {
     description = "PyDev.Debugger (used in PyDev, PyCharm and VSCode Python)";

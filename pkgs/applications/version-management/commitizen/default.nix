@@ -1,65 +1,63 @@
-{ buildPythonApplication
-, colorama
-, decli
+{ lib
+, commitizen
 , fetchFromGitHub
 , git
-, jinja2
-, lib
-, packaging
-, poetry
-, pytest-freezegun
-, pytest-mock
-, pytest-regressions
-, pytestCheckHook
-, pyyaml
-, questionary
-, termcolor
-, tomlkit
-, typing-extensions
-, argcomplete
+, python3
+, stdenv
+, installShellFiles
+, testers
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "2.35.0";
+  version = "3.7.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-9ek6m5k01sGVHwqWXjWYDsPmIeAgK+H23D9sF5hjrf0=";
-    deepClone = true;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KfPIGQ4kIjV/Vuza5wdzp0R62LUluJQ5tY6I8BPFmGk=";
   };
 
-  format = "pyproject";
+  pythonRelaxDeps = [
+    "decli"
+  ];
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+    installShellFiles
+  ];
 
-  propagatedBuildInputs = [
-    termcolor
-    questionary
+  propagatedBuildInputs = with python3.pkgs; [
+    argcomplete
+    charset-normalizer
     colorama
     decli
-    tomlkit
+    importlib-metadata
     jinja2
-    pyyaml
-    argcomplete
-    typing-extensions
     packaging
+    pyyaml
+    questionary
+    termcolor
+    tomlkit
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    argcomplete
+    deprecated
+    git
+    py
+    pytest-freezer
+    pytest-mock
+    pytest-regressions
+    pytestCheckHook
   ];
 
   doCheck = true;
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-freezegun
-    pytest-mock
-    pytest-regressions
-    argcomplete
-    git
-  ];
-
-  # the tests require a functional git installation
+  # The tests require a functional git installation
   # which requires a valid HOME directory.
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -78,11 +76,33 @@ buildPythonApplication rec {
     "test_bump_pre_commit_changelog"
     "test_bump_pre_commit_changelog_fails_always"
     "test_get_commits_with_signature"
+    # fatal: not a git repository (or any of the parent directories): .git
+    "test_commitizen_debug_excepthook"
   ];
+
+  postInstall =
+    let
+      argcomplete = lib.getExe' python3.pkgs.argcomplete "register-python-argcomplete";
+    in
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      ''
+        installShellCompletion --cmd cz \
+          --bash <(${argcomplete} --shell bash $out/bin/cz) \
+          --zsh <(${argcomplete} --shell zsh $out/bin/cz) \
+          --fish <(${argcomplete} --shell fish $out/bin/cz)
+      '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = commitizen;
+      command = "cz version";
+    };
+  };
 
   meta = with lib; {
     description = "Tool to create committing rules for projects, auto bump versions, and generate changelogs";
     homepage = "https://github.com/commitizen-tools/commitizen";
+    changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };

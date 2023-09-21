@@ -3,7 +3,6 @@
 , fetchFromGitLab
 , pkg-config
 , autoreconfHook
-, qmake
 , rake
 , boost
 , cmark
@@ -47,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "70.0.0";
+  version = "78.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "sha256-7ryLf/SKM5m7MdOd2K2XhJEdLF2H8xjV1aZMKUjm+Ok=";
+    sha256 = "sha256-iImcpuGZsRlwBTPyPUsfHAOkOIhc8eYs6rinl8O78oU=";
   };
 
   nativeBuildInputs = [
@@ -102,8 +101,9 @@ stdenv.mkDerivation rec {
     "--disable-precompiled-headers"
     "--disable-profiling"
     "--disable-static-qt"
+    "--disable-update-check"
     "--enable-optimization"
-    "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost-libdir=${lib.getLib boost}/lib"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"
     "--with-gettext"
     (enableFeature withGUI "gui")

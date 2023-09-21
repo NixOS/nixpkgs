@@ -8,6 +8,7 @@
 , boost
 , cmake
 , ffmpeg
+, fuzzylite
 , innoextract
 , luajit
 , minizip
@@ -15,7 +16,9 @@
 , pkg-config
 , python3
 , qtbase
+, qttools
 , tbb
+, unshield
 , wrapQtAppsHook
 , zlib
 , testers
@@ -24,20 +27,15 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.0.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-5PuFq6wDSj5Ye2fUjqcr/VRU0ocus6h2nn+myQTOrhU=";
+    hash = "sha256-F1g3ric23jKetl5aBG5NRpT4LnGXhBKZmGp2hg6Io9s=";
   };
-
-  postPatch = ''
-    substituteInPlace Version.cpp.in \
-      --subst-var-by GIT_SHA1 "0000000";
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -54,28 +52,35 @@ stdenv.mkDerivation rec {
     SDL2_ttf
     boost
     ffmpeg
+    fuzzylite
     luajit
     minizip
     qtbase
+    qttools
     tbb
     zlib
   ];
 
   cmakeFlags = [
-    "-DENABLE_TEST:BOOL=NO"
-    "-DENABLE_PCH:BOOL=NO"
-    # Make libvcmi.so discoverable in a non-standard location.
-    "-DCMAKE_INSTALL_RPATH:STRING=${placeholder "out"}/lib/vcmi"
-    # Upstream assumes relative value while Nixpkgs passes absolute.
-    # Both should be allowed: https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html
-    # Meanwhile work it around by passing a relative value.
+    "-DENABLE_LUA:BOOL=ON"
+    "-DENABLE_ERM:BOOL=ON"
+    "-DENABLE_GITVERSION:BOOL=OFF"
+    "-DENABLE_PCH:BOOL=OFF"
+    "-DENABLE_TEST:BOOL=OFF"
+    "-DFORCE_BUNDLED_MINIZIP:BOOL=OFF"
+    "-DFORCE_BUNDLED_FL:BOOL=OFF"
+    "-DCMAKE_INSTALL_RPATH:STRING=$out/lib/vcmi"
+    "-DCMAKE_INSTALL_BINDIR:STRING=bin"
     "-DCMAKE_INSTALL_LIBDIR:STRING=lib"
+    "-DCMAKE_INSTALL_DATAROOTDIR:STRING=share"
   ];
 
   postFixup = ''
     wrapProgram $out/bin/vcmibuilder \
-      --prefix PATH : "${lib.makeBinPath [ innoextract ]}"
+      --prefix PATH : "${lib.makeBinPath [ innoextract ffmpeg unshield ]}"
   '';
+
+  doCheck = true;
 
   passthru.tests.version = testers.testVersion {
     package = vcmi;
@@ -86,12 +91,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Open-source engine for Heroes of Might and Magic III";
+    description = "An open-source engine for Heroes of Might and Magic III";
     homepage = "https://vcmi.eu";
     changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog";
     license = with licenses; [ gpl2Only cc-by-sa-40 ];
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.linux;
-    mainProgram = "vcmiclient";
+    mainProgram = "vcmilauncher";
   };
 }

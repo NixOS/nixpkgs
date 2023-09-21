@@ -11,7 +11,6 @@ buildNimPackage rec {
   };
   propagatedBuildInputs = [ sqlite ];
   patches = [ ./nil.patch ];
-  doCheck = true;
   meta = with lib;
     src.meta // {
       description = "Spry virtual machine";

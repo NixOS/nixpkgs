@@ -21,6 +21,13 @@ in
     services.miniflux = {
       enable = mkEnableOption (lib.mdDoc "miniflux and creates a local postgres database for it");
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.miniflux;
+        defaultText = literalExpression "pkgs.miniflux";
+        description = lib.mdDoc "Miniflux package to use.";
+      };
+
       config = mkOption {
         type = types.attrsOf types.str;
         example = literalExpression ''
@@ -89,7 +96,7 @@ in
       after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.miniflux}/bin/miniflux";
+        ExecStart = "${cfg.package}/bin/miniflux";
         User = dbUser;
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
@@ -116,12 +123,24 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         UMask = "0077";
       };
 
       environment = cfg.config;
     };
-    environment.systemPackages = [ pkgs.miniflux ];
+    environment.systemPackages = [ cfg.package ];
+
+    security.apparmor.policies."bin.miniflux".profile = ''
+      include <tunables/global>
+      ${cfg.package}/bin/miniflux {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "miniflux"; } cfg.package}"
+        r ${cfg.package}/bin/miniflux,
+        r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
+      }
+    '';
   };
 }

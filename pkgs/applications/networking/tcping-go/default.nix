@@ -11,7 +11,7 @@ buildGoModule {
     sha256 = "sha256-GSkNfaGMJbBqDg8DKhDtLAuUg1yF3FbBdxcf4oG50rI=";
   };
 
-  vendorSha256 = "sha256-Q+aFgi7GCAn3AxDuGtRG4DdPhI7gQKEo7A9iu1YcTsQ=";
+  vendorHash = "sha256-Q+aFgi7GCAn3AxDuGtRG4DdPhI7gQKEo7A9iu1YcTsQ=";
 
   meta = with lib; {
     description = "Ping over TCP instead of ICMP, written in Go";

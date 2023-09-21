@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Commons of banal micro-functions for Python";
     homepage = "https://github.com/pudo/banal";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

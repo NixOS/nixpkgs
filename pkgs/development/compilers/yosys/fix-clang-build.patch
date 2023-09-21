@@ -1,8 +1,8 @@
 diff --git a/Makefile b/Makefile
-index 86abc6958..a72f7b792 100644
+index fa95b7b70..4d15ed721 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -187,7 +192,7 @@ endif
+@@ -215,7 +215,7 @@ ABC_ARCHFLAGS += "-DABC_NO_RLIMIT"
  endif
  
  ifeq ($(CONFIG),clang)
@@ -10,4 +10,26 @@ index 86abc6958..a72f7b792 100644
 +CXX = clang++
  LD = clang++
  CXXFLAGS += -std=$(CXXSTD) -Os
- ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H"
+ ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H -Wno-c++11-narrowing $(ABC_ARCHFLAGS)"
+diff --git a/tests/fmt/run-test.sh b/tests/fmt/run-test.sh
+index 914a72347..bc0b129d2 100644
+--- a/tests/fmt/run-test.sh
++++ b/tests/fmt/run-test.sh
+@@ -51,7 +51,7 @@ test_cxxrtl () {
+ 	local subtest=$1; shift
+ 
+ 	../../yosys -p "read_verilog ${subtest}.v; proc; clean; write_cxxrtl -print-output std::cerr yosys-${subtest}.cc"
+-	${CC:-gcc} -std=c++11 -o yosys-${subtest} -I../.. ${subtest}_tb.cc -lstdc++
++	${CXX:-gcc} -std=c++11 -o yosys-${subtest} -I../.. ${subtest}_tb.cc -lstdc++
+ 	./yosys-${subtest} 2>yosys-${subtest}.log
+ 	iverilog -o iverilog-${subtest} ${subtest}.v ${subtest}_tb.v
+ 	./iverilog-${subtest} |grep -v '\$finish called' >iverilog-${subtest}.log
+@@ -69,7 +69,7 @@ diff iverilog-always_full.log iverilog-always_full-1.log
+ 
+ ../../yosys -p "read_verilog display_lm.v" >yosys-display_lm.log
+ ../../yosys -p "read_verilog display_lm.v; write_cxxrtl yosys-display_lm.cc"
+-${CC:-gcc} -std=c++11 -o yosys-display_lm_cc -I../.. display_lm_tb.cc -lstdc++
++${CXX:-gcc} -std=c++11 -o yosys-display_lm_cc -I../.. display_lm_tb.cc -lstdc++
+ ./yosys-display_lm_cc >yosys-display_lm_cc.log
+ for log in yosys-display_lm.log yosys-display_lm_cc.log; do
+ 	grep "^%l: \\\\bot\$" "$log"

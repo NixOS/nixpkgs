@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
-, coloredlogs
+, deprecation
 , fetchFromGitHub
 , ghostscript
+, hypothesis
 , img2pdf
-, importlib-metadata
 , importlib-resources
 , jbig2enc
+, packaging
 , pdfminer-six
 , pikepdf
 , pillow
@@ -15,19 +16,25 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+, rich
 , reportlab
+, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
 , substituteAll
 , tesseract
 , tqdm
+, typing-extensions
 , unpaper
 , installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.7.0";
+  version = "14.4.0";
+
+  disabled = pythonOlder "3.8";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -39,7 +46,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-cw2wZMPhWzxRpeM90g9NmuYBYpU13R2iDzs7a8SS/CY=";
+    hash = "sha256-i1ZUBKR8dJXZkALUFwkzYcjtZ5Li66DfD2fupCGRQC4=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -56,27 +63,30 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools-scm-git-archive
+    setuptools
     setuptools-scm
     installShellFiles
   ];
 
   propagatedBuildInputs = [
-    coloredlogs
+    deprecation
     img2pdf
+    packaging
     pdfminer-six
     pikepdf
     pillow
     pluggy
     reportlab
+    rich
     tqdm
-  ] ++ (lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
-  ]) ++ (lib.optionals (pythonOlder "3.9") [
+  ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
-  ]);
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    hypothesis
     pytest-xdist
     pytestCheckHook
   ];

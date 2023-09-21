@@ -55,7 +55,6 @@ in {
         intel2200BGFirmware
         rtl8192su-firmware
         rt5677-firmware
-        rtl8723bs-firmware
         rtl8761b-firmware
         rtw88-firmware
         zd1211fw
@@ -65,8 +64,6 @@ in {
       ] ++ optional pkgs.stdenv.hostPlatform.isAarch raspberrypiWirelessFirmware
         ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "4.13") [
         rtl8723bs-firmware
-      ] ++ optionals (versionOlder config.boot.kernelPackages.kernel.version "5.16") [
-        rtw89-firmware
       ];
       hardware.wirelessRegulatoryDatabase = true;
     })

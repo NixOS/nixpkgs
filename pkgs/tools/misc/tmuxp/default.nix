@@ -1,40 +1,35 @@
-{ lib, python3Packages, installShellFiles }:
+{ lib, python3Packages, fetchPypi, installShellFiles }:
 
-let
-  pypkgs = python3Packages;
-
-in
-pypkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tmuxp";
-  version = "1.12.1";
+  version = "1.29.0";
+  format = "pyproject";
 
-  src = pypkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "078624c5ac7aa4142735f856fadb9281fcebb10e6b98d1be2b2f2bbd106613b9";
+    hash = "sha256-MiXG4MVzomyc4LjovPsvhmPngtJv85s6Ypo/Cm2Whho=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "libtmux>=0.12.0,<0.13.0" "libtmux"
-  '';
+  nativeBuildInputs = [
+    python3Packages.poetry-core
+    python3Packages.shtab
+    installShellFiles
+  ];
 
-  # No tests in archive
-  doCheck = false;
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  propagatedBuildInputs = with pypkgs; [
+  propagatedBuildInputs = with python3Packages; [
     click
     colorama
     kaptan
     libtmux
   ];
 
+  # No tests in archive
+  doCheck = false;
+
   postInstall = ''
     installShellCompletion --cmd tmuxp \
-      --bash <(_TMUXP_COMPLETE=bash_source $out/bin/tmuxp) \
-      --fish <(_TMUXP_COMPLETE=fish_source $out/bin/tmuxp) \
-      --zsh <(_TMUXP_COMPLETE=zsh_source $out/bin/tmuxp)
+      --bash <(shtab --shell=bash -u tmuxp.cli.create_parser) \
+      --zsh <(shtab --shell=zsh -u tmuxp.cli.create_parser)
   '';
 
   meta = with lib; {

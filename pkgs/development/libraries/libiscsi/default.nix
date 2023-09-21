@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   # This problem is gone on libiscsi master.
-  NIX_CFLAGS_COMPILE =
-    lib.optional stdenv.hostPlatform.is32bit "-Wno-error=sign-compare";
+  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.hostPlatform.is32bit "-Wno-error=sign-compare");
 
   meta = with lib; {
     description = "iscsi client library and utilities";

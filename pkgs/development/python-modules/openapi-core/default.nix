@@ -1,84 +1,99 @@
 { lib
-, attrs
+, aiohttp
+, asgiref
 , buildPythonPackage
-, dictpath
 , django
 , djangorestframework
 , falcon
 , fetchFromGitHub
 , flask
+, httpx
 , isodate
-, lazy-object-proxy
-, mock
+, jsonschema
+, jsonschema-spec
 , more-itertools
 , openapi-schema-validator
 , openapi-spec-validator
 , parse
+, poetry-core
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 , responses
-, six
+, requests
+, starlette
 , webob
 , werkzeug
-, python
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.14.2";
-  format = "setuptools";
+  version = "0.18.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
-    rev = version;
-    hash = "sha256-+VyNPSq7S1Oz4eGf+jaeRTx0lZ8pUA+G+KZ/5PyK+to=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2OcGaZQwzgxcwrXinmJjFc91620Ri0O79c8WZWfDdlQ=";
   };
 
   postPatch = ''
-    sed -i "/^addopts/d" setup.cfg
+    sed -i "/--cov/d" pyproject.toml
   '';
 
-  propagatedBuildInputs = [
-    attrs
-    dictpath
-    isodate
-    lazy-object-proxy
-    more-itertools
-    openapi-schema-validator
-    openapi-spec-validator
-    parse
-    six
-    werkzeug
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  checkInputs = [
-    django
-    djangorestframework
-    falcon
-    flask
-    mock
+  propagatedBuildInputs = [
+    isodate
+    more-itertools
+    parse
+    openapi-schema-validator
+    openapi-spec-validator
+    werkzeug
+    jsonschema-spec
+    asgiref
+    jsonschema
+  ];
+
+  passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
+    django = [
+      django
+    ];
+    falcon = [
+      falcon
+    ];
+    flask = [
+      flask
+    ];
+    requests = [
+      requests
+    ];
+    starlette = [
+      httpx
+      starlette
+    ];
+  };
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytest-aiohttp
     pytestCheckHook
     responses
     webob
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   disabledTestPaths = [
-    # AttributeError: 'str' object has no attribute '__name__'
-    "tests/integration/validation"
-    # requires secrets and additional configuration
-    "tests/integration/contrib/test_django.py"
-    # Unable to detect SECRET_KEY and ROOT_URLCONF
-    "tests/integration/contrib/test_django.py"
-  ];
-
-  disabledTests = [
-    # TypeError: Unexpected keyword arguments passed to pytest.raises: message
-    "test_string_format_invalid_value"
-    # Needs a fix for new PyYAML
-    "test_django_rest_framework_apiview"
+    # Requires secrets and additional configuration
+    "tests/integration/contrib/django/"
   ];
 
   pythonImportsCheck = [

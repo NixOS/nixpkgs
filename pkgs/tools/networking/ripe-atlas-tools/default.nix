@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ripe-atlas-tools";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "RIPE-NCC";
     repo = "ripe-atlas-tools";
-    rev = "v${version}";
-    sha256 = "sha256-5AMqBXxJZOtI0/2NrEjrUfNXWKc7sn6kZX26766LBUM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aETSDXCVteTruRKV/8Aw3R/bprB6txOsXrFvoZOxIus=";
   };
 
   postPatch = ''
@@ -29,19 +29,20 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    ipy
+    pyopenssl
+    python-dateutil
+    pyyaml
+    requests
     ripe-atlas-cousteau
     ripe-atlas-sagan
-    ujson
-    ipy
-    python-dateutil
-    requests
+    typing-extensions
     tzlocal
-    pyyaml
-    pyopenssl
+    ujson
   ];
 
   preBuild = ''
-    echo "RIPE Atlas Tools [NixOS ${lib.trivial.version}] ${version}" > ripe/atlas/tools/user-agent
+    echo "RIPE Atlas Tools [NixOS ${version}" > ripe/atlas/tools/user-agent
   '';
 
   postInstall = ''
@@ -52,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     "ripe.atlas.tools"
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -89,6 +90,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "RIPE ATLAS project tools";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-tools";
+    changelog = "https://github.com/RIPE-NCC/ripe-atlas-tools/blob/v${version}/CHANGES.rst";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ raitobezarius ];
   };

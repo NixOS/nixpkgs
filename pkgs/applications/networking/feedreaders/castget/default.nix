@@ -1,5 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook
+{ lib
+, stdenv
+, fetchurl
 , pkg-config
 , glib
 , ronn
@@ -9,16 +10,13 @@
 , glibcLocales
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "castget";
-  version = "2.0.0";
+  version = "2.0.1";
 
-  src = fetchFromGitHub {
-    owner = "mlj";
-    repo = pname;
-    # Upstream uses `_` instead of `.` for the version
-    rev = "rel_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1129x64rw587q3sdpa3lrgs0gni5f0siwbvmfz8ya4zkbhgi2ik7";
+  src = fetchurl {
+    url = "http://savannah.nongnu.org/download/castget/castget-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Q4tffsfjGkXtN1ZjD+RH9CAVrNpT7AkgL0hihya16HU=";
   };
 
   # without this, the build fails because of an encoding issue with the manual page.
@@ -29,12 +27,16 @@ stdenv.mkDerivation rec {
     export LC_ALL="en_US.UTF-8";
   '';
 
-  buildInputs = [ glib curl id3lib libxml2 ];
+  buildInputs = [
+    glib
+    curl
+    id3lib
+    libxml2
+  ];
   nativeBuildInputs = [
     ronn
     # See comment on locale above
     glibcLocales
-    autoreconfHook
     pkg-config
   ];
 
@@ -49,4 +51,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
   };
-}
+})

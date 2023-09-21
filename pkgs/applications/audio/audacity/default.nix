@@ -4,6 +4,7 @@
 , fetchpatch
 , cmake
 , makeWrapper
+, wrapGAppsHook
 , pkg-config
 , python3
 , gettext
@@ -52,37 +53,32 @@
 , libpng
 , libjpeg
 , AppKit
-, AudioToolbox
-, AudioUnit
-, Carbon
-, CoreAudio
 , CoreAudioKit
-, CoreServices
 }:
 
 # TODO
 # 1. detach sbsms
 
-let
-  inherit (lib) optionals;
-  pname = "audacity";
-  version = "3.2.1";
-in
 stdenv.mkDerivation rec {
-  inherit pname version;
+  pname = "audacity";
+  version = "3.3.3";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
-    sha256 = "sha256-7rfttp9LnfM2LBT5seupPyDckS7LEzWDZoqtLsGgqgI=";
+    hash = "sha256-m38Awdv2ew+MKqd68x/ZsRBwidM2KJ3BRykIKgnFSx4=";
   };
 
   postPatch = ''
     mkdir src/private
+    substituteInPlace scripts/build/macOS/fix_bundle.py \
+      --replace "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinMinVersion "11.0") ''
+    sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 
   nativeBuildInputs = [
@@ -91,7 +87,8 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
-  ] ++ optionals stdenv.isLinux [
+    wrapGAppsHook
+  ] ++ lib.optionals stdenv.isLinux [
     linuxHeaders
   ];
 
@@ -125,7 +122,7 @@ stdenv.mkDerivation rec {
     portaudio
     wavpack
     wxGTK32
-  ] ++ optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
@@ -138,31 +135,35 @@ stdenv.mkDerivation rec {
     libsepol
     libuuid
     util-linux
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     AppKit
-    CoreAudioKit
-    AudioUnit AudioToolbox CoreAudio CoreServices Carbon # for portaudio
+    CoreAudioKit # for portaudio
     libpng
     libjpeg
   ];
 
   cmakeFlags = [
+    "-DAUDACITY_BUILD_LEVEL=2"
     "-DAUDACITY_REV_LONG=nixpkgs"
     "-DAUDACITY_REV_TIME=nixpkgs"
     "-DDISABLE_DYNAMIC_LOADING_FFMPEG=ON"
     "-Daudacity_conan_enabled=Off"
     "-Daudacity_use_ffmpeg=loaded"
     "-Daudacity_has_vst3=Off"
+    "-Daudacity_has_crashreports=Off"
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+
+    # Fix duplicate store paths
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   # [ 57%] Generating LightThemeAsCeeCode.h...
   # ../../utils/image-compiler: error while loading shared libraries:
   # lib-theme.so: cannot open shared object file: No such file or directory
   preBuild = ''
-    export LD_LIBRARY_PATH=$PWD/utils
+    export LD_LIBRARY_PATH=$PWD/Release/lib/audacity
   '';
 
   doCheck = false; # Test fails
@@ -196,7 +197,5 @@ stdenv.mkDerivation rec {
     ];
     maintainers = with maintainers; [ lheckemann veprbl wegank ];
     platforms = platforms.unix;
-    # error: unknown type name 'NSAppearanceName'
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

@@ -1,38 +1,42 @@
 { lib
 , aiofiles
-, buildPythonApplication
-, cached-property
+, buildPythonPackage
+, colorama
 , fetchFromGitHub
 , git
-, pdm-pep517
+, jsonschema
+, pdm-backend
 , pytestCheckHook
 , pythonOlder
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "griffe";
-  version = "0.22.0";
+  version = "0.36.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = pname;
-    rev = version;
-    hash = "sha256-GqPXVi+SsfO0ufUJzEZ5eUzwJmM/wylLA1KMv+WaIsU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-21u6QnmFoa3rCeFMkxdEh4OYtE4QmBr5O9PwV5tKgxg=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
-    pdm-pep517
+    pdm-backend
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
-    cached-property
+  propagatedBuildInputs = [
+    colorama
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
+    jsonschema
     pytestCheckHook
   ];
 
@@ -42,11 +46,6 @@ buildPythonApplication rec {
     ];
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
-  '';
-
   pythonImportsCheck = [
     "griffe"
   ];
@@ -54,6 +53,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Signatures for entire Python programs";
     homepage = "https://github.com/mkdocstrings/griffe";
+    changelog = "https://github.com/mkdocstrings/griffe/blob/${version}/CHANGELOG.md";
     license = licenses.isc;
     maintainers = with maintainers; [ fab ];
   };

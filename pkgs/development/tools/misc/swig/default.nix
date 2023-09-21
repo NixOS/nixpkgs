@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
-    homepage = "http://swig.org/";
+    homepage = "https://swig.org/";
     # Different types of licenses available: http://www.swig.org/Release/LICENSE .
     license = licenses.gpl3Plus;
     platforms = with platforms; linux ++ darwin;

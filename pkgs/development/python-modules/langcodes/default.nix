@@ -31,7 +31,7 @@ buildPythonPackage rec {
     setuptools # pkg_resources import in language_data/util.py
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

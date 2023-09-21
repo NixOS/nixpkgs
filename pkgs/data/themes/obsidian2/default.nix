@@ -1,27 +1,45 @@
-{ lib, stdenv, fetchurl, gtk-engine-murrine }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, gtk-engine-murrine
+, jdupes
+, gitUpdater
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "theme-obsidian2";
-  version = "2.21";
+  version = "2.23";
 
   src = fetchurl {
     url = "https://github.com/madmaxms/theme-obsidian-2/releases/download/v${version}/obsidian-2-theme.tar.xz";
-    sha256 = "sha256-ptiJeb4ebfnH6HpTN1NsPAYbkLlPcZtn2aBKO0zW2Tw=";
+    sha256 = "sha256-yJoMS5XrHlMss+rdJ+xLJx0F9Hs1Cc+MFk+xyhRXaf0=";
   };
 
   sourceRoot = ".";
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  nativeBuildInputs = [
+    jdupes
+  ];
+
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes
     cp -a Obsidian-2* $out/share/themes
+    jdupes --quiet --link-soft --recurse $out/share
     runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/madmaxms/theme-obsidian-2";
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
-    description = "Gnome theme, based upon Adwaita-Maia dark skin";
+    description = "Gnome theme based upon Adwaita-Maia dark skin";
     homepage = "https://github.com/madmaxms/theme-obsidian-2";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;

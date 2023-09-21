@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab
+{ lib, stdenv, fetchFromGitHub
 , meson, ninja, nasm, pkg-config
 , xxHash
 , withTools ? false # "dav1d" binary
@@ -10,15 +10,16 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "1.0.0";
+  version = "1.2.1";
 
-  src = fetchFromGitLab {
-    domain = "code.videolan.org";
+  src = fetchFromGitHub {
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "sha256-RVr7NFVxY+6MBD8NV7eMW8TEWuCgcfqpula1o1VZe0o=";
+    hash = "sha256-RrEim3HXXjx2RUU7K3wPH3QbhNTRN9ZX/oAcyE9aV8I=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ meson ninja nasm pkg-config ];
   # TODO: doxygen (currently only HTML and not build by default).

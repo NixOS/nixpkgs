@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = "http://bs2b.sourceforge.net/";
+    homepage = "https://bs2b.sourceforge.net/";
     description = "Bauer stereophonic-to-binaural DSP library";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

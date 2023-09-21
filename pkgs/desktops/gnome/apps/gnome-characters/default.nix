@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -11,7 +10,6 @@
 , gtk4
 , pango
 , wrapGAppsHook4
-, python3
 , desktop-file-utils
 , gobject-introspection
 , gjs
@@ -23,19 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "42.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "XaD/uBb4prRPMDdEyoJ6NAgBGMHJONjXmvF7f+Z5gPg=";
+    sha256 = "BbFcAozBkK75LmCS/YT6jV8kSODpB2RGo1ZvOggf9Qs=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-characters/-/commit/3e28a6ad668e2239b14f2e05bc477ec1bfb210ba.patch";
-      sha256 = "sha256-2N4eewknhOXBABs6BPA5/YuqZMT8dyXW857iamrrtuA=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -43,7 +34,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     desktop-file-utils
     wrapGAppsHook4
   ];
@@ -59,15 +49,6 @@ stdenv.mkDerivation rec {
     libadwaita
     pango
   ];
-
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
-    # https://gitlab.gnome.org/GNOME/gnome-characters/-/merge_requests/70
-    substituteInPlace meson_post_install.py \
-      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
-  '';
 
   dontWrapGApps = true;
 

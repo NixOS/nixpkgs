@@ -46,7 +46,7 @@ in {
 
       port = mkOption {
         default = 8153;
-        type = types.int;
+        type = types.port;
         description = lib.mdDoc ''
           Specifies port number on which the Go.CD server HTTP interface listens.
         '';
@@ -106,6 +106,8 @@ in {
           "-Dcruise.config.file=${cfg.workDir}/conf/cruise-config.xml"
           "-Dcruise.server.port=${toString cfg.port}"
           "-Dcruise.server.ssl.port=${toString cfg.sslPort}"
+          "--add-opens=java.base/java.lang=ALL-UNNAMED"
+          "--add-opens=java.base/java.util=ALL-UNNAMED"
         ];
         defaultText = literalExpression ''
           [
@@ -119,6 +121,8 @@ in {
             "-Dcruise.config.file=''${config.${opt.workDir}}/conf/cruise-config.xml"
             "-Dcruise.server.port=''${toString config.${opt.port}}"
             "-Dcruise.server.ssl.port=''${toString config.${opt.sslPort}}"
+            "--add-opens=java.base/java.lang=ALL-UNNAMED"
+            "--add-opens=java.base/java.util=ALL-UNNAMED"
           ]
         '';
 
@@ -199,7 +203,7 @@ in {
         ${pkgs.git}/bin/git config --global --add http.sslCAinfo /etc/ssl/certs/ca-certificates.crt
         ${pkgs.jre}/bin/java -server ${concatStringsSep " " cfg.startupOptions} \
                                ${concatStringsSep " " cfg.extraOptions}  \
-                              -jar ${pkgs.gocd-server}/go-server/go.jar
+                              -jar ${pkgs.gocd-server}/go-server/lib/go.jar
       '';
 
       serviceConfig = {

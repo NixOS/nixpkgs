@@ -16,7 +16,9 @@ in
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
-        Whether to enable the systemd DNS resolver daemon.
+        Whether to enable the systemd DNS resolver daemon, `systemd-resolved`.
+
+        Search for `services.resolved` to see all options.
       '';
     };
 
@@ -64,7 +66,7 @@ in
     };
 
     services.resolved.dnssec = mkOption {
-      default = "allow-downgrade";
+      default = "false";
       example = "true";
       type = types.enum [ "true" "allow-downgrade" "false" ];
       description = lib.mdDoc ''
@@ -83,6 +85,12 @@ in
             synthesizing a DNS response that suggests DNSSEC was not
             supported.
         - `"false"`: DNS lookups are not DNSSEC validated.
+
+        At the time of September 2023, systemd upstream advise
+        to disable DNSSEC by default as the current code
+        is not robust enough to deal with "in the wild" non-compliant
+        servers, which will usually give you a broken bad experience
+        in addition of insecure.
       '';
     };
 

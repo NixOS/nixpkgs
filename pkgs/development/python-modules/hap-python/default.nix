@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , base36
 , chacha20poly1305-reuseable
@@ -16,18 +17,20 @@
 
 buildPythonPackage rec {
   pname = "hap-python";
-  version = "4.5.0";
+  version = "4.7.1";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ikalchev";
     repo = "HAP-python";
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-/XJvCL9hMIrOUwGPcrvSrJ6SZ/E6BQy+isFFlAniIM4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-M/STfco+Bx+KxBT1lUIrYyGSjBcPw2UVX02gNOROke4=";
   };
 
   propagatedBuildInputs = [
+    async-timeout
     chacha20poly1305-reuseable
     cryptography
     h11
@@ -40,7 +43,7 @@ buildPythonPackage rec {
     pyqrcode
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
@@ -64,11 +67,14 @@ buildPythonPackage rec {
     "test_migration_to_include_client_properties"
   ];
 
-  pythonImportsCheck = [ "pyhap" ];
+  pythonImportsCheck = [
+    "pyhap"
+  ];
 
   meta = with lib; {
+    description = "HomeKit Accessory Protocol implementation";
     homepage = "https://github.com/ikalchev/HAP-python";
-    description = "HomeKit Accessory Protocol implementation in python";
+    changelog = "https://github.com/ikalchev/HAP-python/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ oro ];
   };

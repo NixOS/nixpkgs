@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ adal msrest ];
 
-  checkInputs = [ httpretty mock pytest ]
+  nativeCheckInputs = [ httpretty mock pytest ]
                 ++ lib.optionals isPy3k [ pytest-asyncio ];
 
   checkPhase = ''

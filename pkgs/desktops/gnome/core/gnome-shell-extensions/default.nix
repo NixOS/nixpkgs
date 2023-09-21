@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extensions";
-  version = "42.3";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell-extensions/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "DsK+oy6fKKyAWJH2ExlNSPwMCR8JxIMTBlo4hPcic/w=";
+    sha256 = "jDRecvMaHjf1UGPgsVmXMBsBGU7WmHcv2HrrUMuxAas=";
   };
 
   patches = [
@@ -40,23 +40,23 @@ stdenv.mkDerivation rec {
   ];
 
   preFixup = ''
-    # The meson build doesn't compile the schemas.
-    # Fixup adapted from export-zips.sh in the source.
+    # Since we do not install the schemas to central location,
+    # let’s link them to where extensions installed
+    # through the extension portal would look for them.
+    # Adapted from export-zips.sh in the source.
 
     extensiondir=$out/share/gnome-shell/extensions
     schemadir=${glib.makeSchemaPath "$out" "$name"}
 
-    glib-compile-schemas $schemadir
-
     for f in $extensiondir/*; do
-      name=`basename ''${f%%@*}`
-      uuid=$name@gnome-shell-extensions.gcampax.github.com
+      name=$(basename "''${f%%@*}")
       schema=$schemadir/org.gnome.shell.extensions.$name.gschema.xml
+      schemas_compiled=$schemadir/gschemas.compiled
 
-      if [ -f $schema ]; then
-        mkdir $f/schemas
-        ln -s $schema $f/schemas;
-        glib-compile-schemas $f/schemas
+      if [[ -f $schema ]]; then
+        mkdir "$f/schemas"
+        ln -s "$schema" "$f/schemas"
+        ln -s "$schemas_compiled" "$f/schemas"
       fi
     done
   '';

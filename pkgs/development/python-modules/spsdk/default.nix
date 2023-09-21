@@ -1,14 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
-, dos2unix
 , pythonRelaxDepsHook
 , asn1crypto
 , astunparse
 , bincopy
 , bitstring
 , click
+, click-command-tree
 , click-option-group
 , cmsis-pack-manager
 , commentjson
@@ -17,56 +16,55 @@
 , deepmerge
 , fastjsonschema
 , hexdump
+, importlib-metadata
 , jinja2
 , libusbsio
 , oscrypto
 , pycryptodome
+, pyftdi
 , pylink-square
 , pyocd
 , pypemicro
 , pyserial
 , ruamel-yaml
 , sly
+, spsdk
+, testers
+, typing-extensions
 , pytestCheckHook
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "spsdk";
-  version = "1.6.3";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
-    owner = "NXPmicro";
+    owner = "nxp-mcuxpresso";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-JMhd2XdbjEN6SUzFgcBHd/dStiuYeXXis6pfijSfUso=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-B3qedAXSG3A8rcWu1O2GnZ1ZqHN+7fQK43qXzGnDEY0=";
   };
 
-  patches = [
-    # https://github.com/NXPmicro/spsdk/pull/43
-    (fetchpatch {
-      name = "cryptography-37-compat.patch";
-      url = "https://github.com/NXPmicro/spsdk/commit/a85b854de1093de593d27fa64de442224ab2e0fd.patch";
-      sha256 = "sha256-4pXV/8RaNuGl7KNdoGD/8YnPQ2ZmUQOjXWA/Yy0Kxu8=";
-    })
-    # https://github.com/NXPmicro/spsdk/pull/41
-    (fetchpatch {
-      name = "blhost-click-8-1-compat.patch";
-      url = "https://github.com/NXPmicro/spsdk/commit/5112b1b69aa681d265035475e73d28ea0c8cb6ab.patch";
-      sha256 = "sha256-Okz6Er6OVuAA5IlB5IabSa/gUSLa+E2Ltd+J3uoIg6o=";
-    })
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [
+    "bincopy"
+    "bitstring"
     "cmsis-pack-manager"
-    "cryptography"
     "deepmerge"
     "jinja2"
+    "pycryptodome"
     "pylink-square"
     "pyocd"
+    "typing-extensions"
   ];
-  pythonRemoveDeps = [ "pyocd-pemicro" ];
+
+  pythonRemoveDeps = [
+    "pyocd-pemicro"
+  ];
 
   propagatedBuildInputs = [
     asn1crypto
@@ -74,6 +72,7 @@ buildPythonPackage rec {
     bincopy
     bitstring
     click
+    click-command-tree
     click-option-group
     cmsis-pack-manager
     commentjson
@@ -82,6 +81,7 @@ buildPythonPackage rec {
     deepmerge
     fastjsonschema
     hexdump
+    importlib-metadata
     jinja2
     libusbsio
     oscrypto
@@ -92,25 +92,25 @@ buildPythonPackage rec {
     pyserial
     ruamel-yaml
     sly
+    typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pyftdi
     pytestCheckHook
     voluptuous
   ];
 
-  disabledTests = [
-    # tests also fail on debian, so presumable they are broken
-    "test_elftosb_mbi_signed"
-    "test_elftosb_sb31"
-  ];
-
   pythonImportsCheck = [ "spsdk" ];
 
+  passthru.tests.version = testers.testVersion { package = spsdk; };
+
   meta = with lib; {
+    changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
-    homepage = "https://github.com/NXPmicro/spsdk";
+    homepage = "https://github.com/nxp-mcuxpresso/spsdk";
     license = licenses.bsd3;
     maintainers = with maintainers; [ frogamic sbruder ];
+    mainProgram = "spsdk";
   };
 }

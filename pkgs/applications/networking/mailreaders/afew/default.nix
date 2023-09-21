@@ -1,10 +1,10 @@
-{ lib, python3Packages, notmuch }:
+{ lib, python3Packages, fetchPypi, notmuch }:
 
 python3Packages.buildPythonApplication rec {
   pname = "afew";
   version = "3.0.1";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0wpfqbqjlfb9z0hafvdhkm7qw56cr9kfy6n8vb0q42dwlghpz1ff";
   };
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools python3Packages.notmuch chardet dkimpy
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     freezegun notmuch
   ];
 
@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   outputs = [ "out" "doc" ];
 
   postBuild =  ''
-    ${python3Packages.python.interpreter} setup.py build_sphinx -b html,man
+    ${python3Packages.python.pythonForBuild.interpreter} setup.py build_sphinx -b html,man
   '';
 
   postInstall = ''

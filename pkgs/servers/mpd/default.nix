@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
+{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
 # Darwin inputs
 , AudioToolbox, AudioUnit
 # Inputs
@@ -116,13 +116,13 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.23.9";
+      version = "0.23.13";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-eYP4+WDYwAw7TboS9V8ncdQoAC0vbjSaZxmru1Unejw=";
+        sha256 = "sha256-OqSK4oo+Tx7zf7slHH/sRPCCUOBjyipsqDCPovw45Mo=";
       };
 
       buildInputs = [
@@ -147,6 +147,14 @@ let
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+      patches = [
+        (fetchpatch {
+          name = "mpd-systemd-paths.patch";
+          url = "https://github.com/MusicPlayerDaemon/MPD/commit/838af929a0ae07e238d30cd7afc96cd7311457ef.patch";
+          hash = "sha256-dqMxoeyRwRuhrbDxXyw1EyqPwXxJt48MdkdTweL7M/k=";
+        })
+      ];
+
       postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \
@@ -156,7 +164,7 @@ let
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
-      checkInputs = [ zip ];
+      nativeCheckInputs = [ zip ];
 
       doCheck = true;
 

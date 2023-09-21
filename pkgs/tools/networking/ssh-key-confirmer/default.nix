@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "benjojo";
     repo = "ssh-key-confirmer";
     rev = "v${version}";
-    sha256 = "18whj9ds3rpjj5b71lbadi37ps99v13nnmkn3vq28x6cqfdy6w09";
+    hash = "sha256-CXDjm8PMdCTwHnZWa0fYKel7Rmxq0XBWkfLmoVuSkKM=";
   };
 
-  vendorSha256 = "0v9yw6v8fj6dqgbkks4pnmvxx9b7jqdy7bn7ywddk396sbsxjiqa";
+  vendorHash = "sha256-CkfZ9dImjdka98eu4xuWZ6Xed7WX6DnXw81Ih7bhPm0=";
 
   ldflags = [ "-s" "-w" ];
 

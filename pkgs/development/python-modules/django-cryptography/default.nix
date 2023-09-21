@@ -3,6 +3,7 @@
 , django
 , django-appconf
 , fetchFromGitHub
+, fetchpatch
 , lib
 , python
 , pythonOlder
@@ -30,6 +31,11 @@ buildPythonPackage rec {
     cryptography
     django
     django-appconf
+  ];
+
+  patches = [
+    # See: https://github.com/georgemarshall/django-cryptography/pull/88
+    ./fix-setup-cfg.patch
   ];
 
   pythonImportsCheck = [ "django_cryptography" ];

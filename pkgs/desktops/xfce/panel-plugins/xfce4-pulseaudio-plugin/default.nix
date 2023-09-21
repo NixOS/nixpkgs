@@ -3,6 +3,7 @@
 , automakeAddFlags
 , exo
 , gtk3
+, libcanberra
 , libpulseaudio
 , libnotify
 , libxfce4ui
@@ -16,8 +17,8 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.4.5";
-  sha256 = "sha256-oRkvKSDEEepNwWIMDYLH/a034xxFhhOx+vp8O2UfTos=";
+  version = "0.4.7";
+  sha256 = "sha256-9fumaX4M6NTXHM1gGa4wB/Uq+CZIUnvm9kC+pJNbWXU=";
 
   nativeBuildInputs = [
     automakeAddFlags
@@ -32,6 +33,7 @@ mkXfceDerivation {
     glib
     gtk3
     keybinder3
+    libcanberra
     libnotify
     libpulseaudio
     libxfce4ui

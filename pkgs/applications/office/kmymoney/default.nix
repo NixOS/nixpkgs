@@ -3,13 +3,13 @@
 , autoPatchelfHook
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
-, kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
+, kcmutils, kcontacts, qtwebengine, kdiagram, kholidays, kidentitymanagement
 , kitemmodels, libical, libofx, qgpgme
 
 , sqlcipher
 
 # Needed for running tests:
-, qtbase, xvfb-run
+, xvfb-run
 
 , python3
 }:
@@ -23,8 +23,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OTi4B4tzkboy4Su0I5di+uE0aDoMLsGnUQXDAso+Xj8=";
   };
 
+  cmakeFlags = [
+    # Remove this when upgrading to a KMyMoney release that includes
+    # https://invent.kde.org/office/kmymoney/-/merge_requests/118
+    "-DENABLE_WEBENGINE=ON"
+  ];
+
   # Hidden dependency that wasn't included in CMakeLists.txt:
-  NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
+  env.NIX_CFLAGS_COMPILE = "-I${kitemmodels.dev}/include/KF5";
 
   nativeBuildInputs = [
     doxygen extra-cmake-modules graphviz kdoctools
@@ -33,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     akonadi alkimia aqbanking gmp gwenhywfar kactivities karchive kcmutils
-    kcontacts kdewebkit kdiagram kholidays kidentitymanagement kitemmodels
+    kcontacts qtwebengine kdiagram kholidays kidentitymanagement kitemmodels
     libical libofx qgpgme
     sqlcipher
 
@@ -54,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
-  installCheckInputs = [ xvfb-run ];
+  nativeInstallCheckInputs = [ xvfb-run ];
   installCheckPhase =
     lib.optionalString doInstallCheck ''
       xvfb-run -s '-screen 0 1024x768x24' make test \

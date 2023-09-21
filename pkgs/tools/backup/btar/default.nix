@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: listindex.o:/build/btar-1.1.1/loadindex.h:12: multiple definition of
   #     `ptr'; main.o:/build/btar-1.1.1/loadindex.h:12: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildInputs = [ librsync ];
 

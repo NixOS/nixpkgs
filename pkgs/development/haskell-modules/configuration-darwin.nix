@@ -40,6 +40,13 @@ self: super: ({
     darwin.apple_sdk.frameworks.ApplicationServices
   ] super.apecs-physics;
 
+  # Framework deps are hidden behind a flag
+  hmidi = addExtraLibraries [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.CoreAudio
+    darwin.apple_sdk.frameworks.CoreMIDI
+  ] super.hmidi;
+
   # "erf table" test fails on Darwin
   # https://github.com/bos/math-functions/issues/63
   math-functions = dontCheck super.math-functions;
@@ -109,6 +116,12 @@ self: super: ({
   }) super.llvm-hs;
 
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
+
+  yesod-core = super.yesod-core.overrideAttrs (drv: {
+    # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
+    # run tests that access localhost.
+    __darwinAllowLocalNetworking = true;
+  });
 
   hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
@@ -269,6 +282,12 @@ self: super: ({
     '' + drv.postPatch or "";
   }) super.http-client-tls;
 
+  http2 = super.http2.overrideAttrs (drv: {
+    # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
+    # that access localhost.
+    __darwinAllowLocalNetworking = true;
+  });
+
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
@@ -280,6 +299,15 @@ self: super: ({
       # full haskellPackages rebuild.
     '' + drv.postPatch or "";
   }) super.foldl;
+
+  # https://hydra.nixos.org/build/230964714/nixlog/1
+  inline-c-cpp = appendPatch (pkgs.fetchpatch {
+    url = "https://github.com/fpco/inline-c/commit/e8dc553b13bb847409fdced649a6a863323cff8a.patch";
+    name = "revert-use-system-cxx-std-lib.patch";
+    sha256 = "sha256-ql1/+8bvmWexyCdFR0VS4M4cY2lD0Px/9dHYLqlKyNA=";
+    revert = true;
+    stripLen = 1;
+  }) super.inline-c-cpp;
 
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
@@ -298,6 +326,18 @@ self: super: ({
 
   # https://github.com/haskell-crypto/cryptonite/issues/360
   cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
+
+  # Build segfaults unless `fixity-th` is disabled.
+  # https://github.com/tweag/ormolu/issues/927
+  ormolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.ormolu);
+  fourmolu = overrideCabal (drv: {
+    libraryHaskellDepends = drv.libraryHaskellDepends ++ [ self.file-embed ];
+  }) (disableCabalFlag "fixity-th" super.fourmolu);
+
+  # https://github.com/NixOS/nixpkgs/issues/149692
+  Agda = removeConfigureFlag "-foptimise-heavily" super.Agda;
 
 } // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
 

@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "goawk";
-  version = "1.20.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = "goawk";
     rev = "v${version}";
-    sha256 = "sha256-omUtMNB8VBTbihy+VksCduvOENhtPApPBwUIxjVL9fI=";
+    hash = "sha256-pce7g0MI23244t5ZK4UDOfQNt1m3tRpCahne0s+NRRE=";
   };
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = null;
 
-  checkInputs = [ gawk ];
+  nativeCheckInputs = [ gawk ];
 
   postPatch = ''
     substituteInPlace goawk_test.go \

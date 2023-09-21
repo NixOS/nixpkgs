@@ -8,7 +8,8 @@ let
   configFileProvided = cfg.configFile != null;
 
   format = pkgs.formats.json { };
-in {
+in
+{
   imports = [
     (mkRenamedOptionModule
       [ "services" "yggdrasil" "config" ]
@@ -21,7 +22,7 @@ in {
 
       settings = mkOption {
         type = format.type;
-        default = {};
+        default = { };
         example = {
           Peers = [
             "tcp://aa.bb.cc.dd:eeeee"
@@ -45,7 +46,7 @@ in {
 
           If no keys are specified then ephemeral keys are generated
           and the Yggdrasil interface will have a random IPv6 address
-          each time the service is started, this is the default.
+          each time the service is started. This is the default.
 
           If both {option}`configFile` and {option}`settings`
           are supplied, they will be combined, with values from
@@ -61,8 +62,13 @@ in {
         default = null;
         example = "/run/keys/yggdrasil.conf";
         description = lib.mdDoc ''
-          A file which contains JSON configuration for yggdrasil.
-          See the {option}`settings` option for more information.
+          A file which contains JSON or HJSON configuration for yggdrasil. See
+          the {option}`settings` option for more information.
+
+          Note: This file must not be larger than 1 MB because it is passed to
+          the yggdrasil process via systemd‘s LoadCredential mechanism. For
+          details, see <https://systemd.io/CREDENTIALS/> and `man 5
+          systemd.exec`.
         '';
       };
 
@@ -77,20 +83,20 @@ in {
         type = bool;
         default = false;
         description = lib.mdDoc ''
-          Whether to open the UDP port used for multicast peer
-          discovery. The NixOS firewall blocks link-local
-          communication, so in order to make local peering work you
-          will also need to set `LinkLocalTCPPort` in your
-          yggdrasil configuration ({option}`settings` or
-          {option}`configFile`) to a port number other than 0,
-          and then add that port to
-          {option}`networking.firewall.allowedTCPPorts`.
+          Whether to open the UDP port used for multicast peer discovery. The
+          NixOS firewall blocks link-local communication, so in order to make
+          incoming local peering work you will also need to configure
+          `MulticastInterfaces` in your Yggdrasil configuration
+          ({option}`settings` or {option}`configFile`). You will then have to
+          add the ports that you configure there to your firewall configuration
+          ({option}`networking.firewall.allowedTCPPorts` or
+          {option}`networking.firewall.interfaces.<name>.allowedTCPPorts`).
         '';
       };
 
       denyDhcpcdInterfaces = mkOption {
         type = listOf str;
-        default = [];
+        default = [ ];
         example = [ "tap*" ];
         description = lib.mdDoc ''
           Disable the DHCP client for any interface whose name matches
@@ -118,82 +124,104 @@ in {
     };
   };
 
-  config = mkIf cfg.enable (let binYggdrasil = cfg.package + "/bin/yggdrasil";
-  in {
-    assertions = [{
-      assertion = config.networking.enableIPv6;
-      message = "networking.enableIPv6 must be true for yggdrasil to work";
-    }];
+  config = mkIf cfg.enable (
+    let
+      binYggdrasil = "${cfg.package}/bin/yggdrasil";
+      binHjson = "${pkgs.hjson-go}/bin/hjson-cli";
+    in
+    {
+      assertions = [{
+        assertion = config.networking.enableIPv6;
+        message = "networking.enableIPv6 must be true for yggdrasil to work";
+      }];
 
-    system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
-      if [ ! -e ${keysPath} ]
-      then
-        mkdir --mode=700 -p ${builtins.dirOf keysPath}
-        ${binYggdrasil} -genconf -json \
-          | ${pkgs.jq}/bin/jq \
-              'to_entries|map(select(.key|endswith("Key")))|from_entries' \
-          > ${keysPath}
-      fi
-    '';
+      system.activationScripts.yggdrasil = mkIf cfg.persistentKeys ''
+        if [ ! -e ${keysPath} ]
+        then
+          mkdir --mode=700 -p ${builtins.dirOf keysPath}
+          ${binYggdrasil} -genconf -json \
+            | ${pkgs.jq}/bin/jq \
+                'to_entries|map(select(.key|endswith("Key")))|from_entries' \
+            > ${keysPath}
+        fi
+      '';
 
-    systemd.services.yggdrasil = {
-      description = "Yggdrasil Network Service";
-      after = [ "network-pre.target" ];
-      wants = [ "network.target" ];
-      before = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
+      systemd.services.yggdrasil = {
+        description = "Yggdrasil Network Service";
+        after = [ "network-pre.target" ];
+        wants = [ "network.target" ];
+        before = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
 
-      preStart =
-        (if settingsProvided || configFileProvided || cfg.persistentKeys then
-          "echo "
+        # This script first prepares the config file, then it starts Yggdrasil.
+        # The preparation could also be done in ExecStartPre/preStart but only
+        # systemd versions >= v252 support reading credentials in ExecStartPre. As
+        # of February 2023, systemd v252 is not yet in the stable branch of NixOS.
+        #
+        # This could be changed in the future once systemd version v252 has
+        # reached NixOS but it does not have to be. Config file preparation is
+        # fast enough, it does not need elevated privileges, and `set -euo
+        # pipefail` should make sure that the service is not started if the
+        # preparation fails. Therefore, it is not necessary to move the
+        # preparation to ExecStartPre.
+        script = ''
+          set -euo pipefail
 
-          + (lib.optionalString settingsProvided
-            "'${builtins.toJSON cfg.settings}'")
-          + (lib.optionalString configFileProvided "$(cat ${cfg.configFile})")
-          + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
-          + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
-        else
-          "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf";
+          # prepare config file
+          ${(if settingsProvided || configFileProvided || cfg.persistentKeys then
+            "echo "
 
-      serviceConfig = {
-        ExecStart =
-          "${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
-        Restart = "always";
+            + (lib.optionalString settingsProvided
+              "'${builtins.toJSON cfg.settings}'")
+            + (lib.optionalString configFileProvided
+              "$(${binHjson} -c \"$CREDENTIALS_DIRECTORY/yggdrasil.conf\")")
+            + (lib.optionalString cfg.persistentKeys "$(cat ${keysPath})")
+            + " | ${pkgs.jq}/bin/jq -s add | ${binYggdrasil} -normaliseconf -useconf"
+          else
+            "${binYggdrasil} -genconf") + " > /run/yggdrasil/yggdrasil.conf"}
 
-        DynamicUser = true;
-        StateDirectory = "yggdrasil";
-        RuntimeDirectory = "yggdrasil";
-        RuntimeDirectoryMode = "0750";
-        BindReadOnlyPaths = lib.optional configFileProvided cfg.configFile
-          ++ lib.optional cfg.persistentKeys keysPath;
-        ReadWritePaths = "/run/yggdrasil";
+          # start yggdrasil
+          ${binYggdrasil} -useconffile /run/yggdrasil/yggdrasil.conf
+        '';
 
-        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
-        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
-        MemoryDenyWriteExecute = true;
-        ProtectControlGroups = true;
-        ProtectHome = "tmpfs";
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
-      } // (if (cfg.group != null) then {
-        Group = cfg.group;
-      } else {});
-    };
+        serviceConfig = {
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          Restart = "always";
 
-    networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
-    networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [ 9001 ];
+          DynamicUser = true;
+          StateDirectory = "yggdrasil";
+          RuntimeDirectory = "yggdrasil";
+          RuntimeDirectoryMode = "0750";
+          BindReadOnlyPaths = lib.optional cfg.persistentKeys keysPath;
+          LoadCredential =
+            mkIf configFileProvided "yggdrasil.conf:${cfg.configFile}";
 
-    # Make yggdrasilctl available on the command line.
-    environment.systemPackages = [ cfg.package ];
-  });
+          AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+          CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+          MemoryDenyWriteExecute = true;
+          ProtectControlGroups = true;
+          ProtectHome = "tmpfs";
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6 AF_NETLINK";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [ "@system-service" "~@privileged @keyring" ];
+        } // (if (cfg.group != null) then {
+          Group = cfg.group;
+        } else { });
+      };
+
+      networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
+      networking.firewall.allowedUDPPorts = mkIf cfg.openMulticastPort [ 9001 ];
+
+      # Make yggdrasilctl available on the command line.
+      environment.systemPackages = [ cfg.package ];
+    }
+  );
   meta = {
-    doc = ./yggdrasil.xml;
+    doc = ./yggdrasil.md;
     maintainers = with lib.maintainers; [ gazally ehmry ];
   };
 }

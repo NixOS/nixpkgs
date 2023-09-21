@@ -1,29 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , pytestCheckHook
-, pytest-mypy
+, pythonOlder
 , redis
 }:
 
 buildPythonPackage rec {
-  version = "2.5.1";
   pname = "portalocker";
+  version = "2.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ro6cwmYNoEv0H6Gg7vfjALteSlhprfsabYVRYytVmys=";
+    hash = "sha256-Ay6B1TSojsFzbQP3gLoHPwR6BsR4sG4pN0hvM06VXFE=";
   };
 
   propagatedBuildInputs = [
     redis
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    pytest-mypy
   ];
 
   disabledTests = [
     "test_combined" # no longer compatible with setuptools>=58
+  ];
+
+  pythonImportsCheck = [
+    "portalocker"
   ];
 
   meta = with lib; {
@@ -31,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/WoLpH/portalocker";
     license = licenses.psfl;
     maintainers = with maintainers; [ jonringer ];
-    platforms = platforms.unix; # Windows has a dependency on pypiwin32
   };
 }

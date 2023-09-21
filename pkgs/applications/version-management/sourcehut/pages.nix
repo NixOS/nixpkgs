@@ -20,7 +20,7 @@ buildGoModule (rec {
       --replace "all: server" ""
   '';
 
-  vendorSha256 = "sha256-VOqY/nStqGyfWOXnJSZX8UYyp2kzcibQM2NRNysHYEc=";
+  vendorHash = "sha256-VOqY/nStqGyfWOXnJSZX8UYyp2kzcibQM2NRNysHYEc=";
 
   postInstall = ''
     mkdir -p $out/share/sql/

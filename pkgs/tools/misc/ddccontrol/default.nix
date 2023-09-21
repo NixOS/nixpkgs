@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ddccontrol";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol";
     rev = version;
-    sha256 = "00pmnzvd4l3w6chzw41mrf1pd7lrcwi1n7320bnq20rn8hsnbnxk";
+    sha256 = "sha256-0mvkIW0Xsi7co/INmlNeTclBxGoqoJliFanA/RFMaLM=";
   };
 
   nativeBuildInputs = [
@@ -46,10 +46,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/ddcpci/Makefile.am    \
        --replace "chmod 4711" "chmod 0711"
-  '' + lib.optionalString (lib.versionAtLeast "0.6.0" version) ''
-    # Upstream PR: https://github.com/ddccontrol/ddccontrol/pull/115
-    substituteInPlace src/lib/Makefile.am       \
-      --replace "/etc/" "\$""{sysconfdir}/"
   '';
 
   preConfigure = ''

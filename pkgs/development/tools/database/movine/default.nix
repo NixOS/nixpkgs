@@ -1,32 +1,32 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
-, stdenv
+{ lib
+, rustPlatform
+, fetchCrate
 , pkg-config
-, postgresql
-, sqlite
 , openssl
-, Security
-, libiconv
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "movine";
-  version = "0.11.0";
+  version = "0.11.4";
 
-  src = fetchFromGitHub {
-    owner = "byronwasti";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0rms8np8zd23xzrd5avhp2q1ndhdc8f49lfwpff9h0slw4rnzfnj";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-wa2GfV2Y8oX8G+1LbWnb2KH/+QbUYL9GXgOOVHpzbN8=";
   };
 
-  cargoSha256 = "sha256-4ghfenwmauR4Ft9n7dvBflwIMXPdFq1vh6FpIegHnZk=";
+  cargoHash = "sha256-brM6QObhl9W5SZ+79Kv9oNxnglO24BUgjPSQy9jV1/Q=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ postgresql sqlite ] ++ (
-    if !stdenv.isDarwin then [ openssl ] else [ Security libiconv ]
-  );
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "A migration manager written in Rust, that attempts to be smart yet minimal";

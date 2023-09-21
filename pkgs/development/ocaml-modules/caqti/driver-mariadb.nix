@@ -6,6 +6,8 @@ buildDunePackage {
 
   propagatedBuildInputs = [ caqti mariadb ];
 
+  duneVersion = "3";
+
   meta = caqti.meta // {
     description = "MariaDB driver for Caqti using C bindings";
   };

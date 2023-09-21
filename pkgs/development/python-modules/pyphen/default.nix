@@ -3,16 +3,19 @@
 , fetchPypi
 , flit
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyphen";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Boc86//WWo/KfCDA49wDJlXH7o3g9VIgXK07V0JlwpM=";
+    hash = "sha256-WWyLO+HBpwQRul9lF9nM/jCDx1iuK5SkXycHNG2OZvo=";
   };
 
   nativeBuildInputs = [
@@ -23,13 +26,18 @@ buildPythonPackage rec {
     sed -i '/addopts/d' pyproject.toml
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "pyphen"
+  ];
+
   meta = with lib; {
-    description = "Pure Python module to hyphenate text";
+    description = "Module to hyphenate text";
     homepage = "https://github.com/Kozea/Pyphen";
+    changelog = "https://github.com/Kozea/Pyphen/releases/tag/${version}";
     license = with licenses; [gpl2 lgpl21 mpl20];
     maintainers = with maintainers; [ rvl ];
   };

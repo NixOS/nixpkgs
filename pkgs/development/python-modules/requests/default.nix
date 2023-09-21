@@ -6,6 +6,7 @@
 , chardet
 , charset-normalizer
 , fetchPypi
+, fetchpatch
 , idna
 , pysocks
 , pytest-mock
@@ -17,20 +18,17 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.28.1";
+  version = "2.31.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fFWZsQL+3apmHIJsVqtP7ii/0X9avKHrvj5/GdfJeYM=";
+    hash = "sha256-lCxadY+Y15Dq7Ropy27vx/+w0c968Fw9J5Flbb1q0eE=";
   };
-
-  patches = [
-    # Use the default NixOS CA bundle from the certifi package
-    ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
-  ];
 
   propagatedBuildInputs = [
     brotlicffi
@@ -50,7 +48,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -89,6 +87,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP library for Python";
     homepage = "http://docs.python-requests.org/";
+    changelog = "https://github.com/psf/requests/blob/v${version}/HISTORY.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

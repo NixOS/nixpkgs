@@ -1,5 +1,4 @@
 { buildPackages
-, buildPlatform
 , fetchzip
 , javaOpts ? "-XX:+UseZGC"
 , jdk
@@ -11,19 +10,18 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "HentaiAtHome";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchzip {
     url = "https://repo.e-hentai.org/hath/HentaiAtHome_${version}_src.zip";
-    hash =
-      "sha512-j+B0kx6fjUibI3MjVJ5PVTq9xxtSOTTY/XizAJKjeNkpExJF9DIV4VCwf+sfLlg+7W4UBosnyb8hZNNoidRBKA==";
+    hash = "sha256-ioL/GcnbYjt1IETH8521d1TcLGtENdFzceJui1ywXTY=";
     stripRoot = false;
   };
 
   nativeBuildInputs = [ jdk makeWrapper ];
 
   LANG = "en_US.UTF-8";
-  LOCALE_ARCHIVE = lib.optionalString (buildPlatform.libc == "glibc")
+  LOCALE_ARCHIVE = lib.optionalString (stdenvNoCC.buildPlatform.libc == "glibc")
     "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   buildPhase = ''

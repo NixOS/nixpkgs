@@ -21,11 +21,24 @@ in
   options = {
 
     boot.kernel.sysctl = mkOption {
+      type = types.submodule {
+        freeformType = types.attrsOf sysctlOption;
+        options."net.core.rmem_max" = mkOption {
+          type = types.nullOr types.ints.unsigned // {
+            merge = loc: defs:
+              foldl
+                (a: b: if b.value == null then null else lib.max a b.value)
+                0
+                (filterOverrides defs);
+          };
+          default = null;
+          description = lib.mdDoc "The maximum socket receive buffer size. In case of conflicting values, the highest will be used.";
+        };
+      };
       default = {};
       example = literalExpression ''
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';
-      type = types.attrsOf sysctlOption;
       description = lib.mdDoc ''
         Runtime parameters of the Linux kernel, as set by
         {manpage}`sysctl(8)`.  Note that sysctl
@@ -35,6 +48,7 @@ in
         parameter may be a string, integer, boolean, or null
         (signifying the option will not appear at all).
       '';
+
     };
 
   };
@@ -58,5 +72,8 @@ in
     # Disable YAMA by default to allow easy debugging.
     boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkDefault 0;
 
+    # Improve compatibility with applications that allocate
+    # a lot of memory, like modern games
+    boot.kernel.sysctl."vm.max_map_count" = mkDefault 1048576;
   };
 }

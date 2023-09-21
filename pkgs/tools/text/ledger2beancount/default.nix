@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages, beancount }:
 
-with lib;
-
 let
   perlDeps = with perlPackages; [
     DateCalc
@@ -17,13 +15,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ledger2beancount";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "ledger2beancount";
     rev = version;
-    sha256 = "sha256-0Br+zuSUYrNP+ZL/FtNoaYoYBYho5kVfxu0tqKJSuBk=";
+    sha256 = "sha256-2LIP3ljK1HMAwjk2ueIf9pFL+UUnGDgx9GYNtRztdFY=";
   };
 
   dontBuild = true;
@@ -44,7 +42,7 @@ in stdenv.mkDerivation rec {
       --set PERL5LIB "${perlPackages.makeFullPerlPath perlDeps}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Ledger to Beancount text-based converter";
     longDescription = ''
       A script to automatically convert Ledger-based textual ledgers to Beancount ones.

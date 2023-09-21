@@ -1,19 +1,20 @@
 { lib
 , python3
+, fetchPypi
 , mailman
 }:
 
 with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman-hyperkitty";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EQBx1KX3z/Wv3QAHOi+s/ihLOjpiupIQBYyE6IPbJto=";
+    sha256 = "sha256-+Nad+8bMtYKJbUCpppRXqhB1zdbvvFXTTHlwJLQLzDg=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose2
   ];

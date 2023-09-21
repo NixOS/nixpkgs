@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , fetchPypi
 , substituteAll
 , ffmpeg_4
@@ -9,13 +8,12 @@
 
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
-  version = "0.4.7";
-
-  disabled = !isPy3k;
+  version = "0.4.8";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-egiDj5fzY+N8pBghuGT9P9yZqx/iQhBAx4619Wqecj4=";
+    hash = "sha256-/aoFrRD+Bwt/qOX2FcsNKPO5t5HQCvbSoR5pQVjRCqk=";
   };
 
   patches = [
@@ -24,6 +22,11 @@ buildPythonPackage rec {
       ffmpeg = "${ffmpeg_4}/bin/ffmpeg";
     })
   ];
+
+  # https://github.com/imageio/imageio-ffmpeg/issues/59
+  postPatch = ''
+    sed -i '/setup_requires=\["pip>19"\]/d' setup.py
+  '';
 
   checkPhase = ''
     runHook preCheck

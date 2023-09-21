@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ssh-to-age";
-  version = "1.0.2";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-age";
     rev = version;
-    sha256 = "sha256-sjiOmIoFyl1Kr4RKg1TqXJNIq2/HF91oxDLtRDa+eWw=";
+    sha256 = "sha256-vER4PG2LFi/NM9TmCffqsF3aR4ZycwWVeKls2fNupo0=";
   };
 
-  vendorSha256 = "sha256-Xi5aJAYgbtrDq7KBAfZR1LT5/jbslwEa70qaFqW4vcQ=";
+  vendorHash = "sha256-g8qVV2cd7nxBN/BGNz28gJbtNkCUDJDdSdupXxhFw9Q=";
 
   checkPhase = ''
     runHook preCheck
@@ -26,6 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/Mic92/ssh-to-age";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    mainProgram = "ssh-to-age";
   };
 }

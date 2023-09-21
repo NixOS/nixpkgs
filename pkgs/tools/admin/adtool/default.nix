@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: ../../src/lib/libactive_directory.a(active_directory.o):/build/adtool-1.3.3/src/lib/active_directory.h:31:
   #     multiple definition of `system_config_file'; adtool.o:/build/adtool-1.3.3/src/tools/../../src/lib/active_directory.h:31: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   enableParallelBuilding = true;
 

@@ -1,75 +1,62 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , stdenv
 , pkg-config
 , fontconfig
-, libXcursor
-, libXi
-, libXrandr
-, libxcb
+, xorg
 , libGL
-, libX11
 , openssl
-, AppKit
-, ApplicationServices
-, CoreFoundation
-, CoreGraphics
-, CoreServices
-, CoreText
-, CoreVideo
-, Foundation
-, Metal
-, QuartzCore
-, Security
-, libobjc
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "trimental";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1y8nxz20agmrdcl25wry8lnpg86zbkkkkiscljwd7g7a831hlb9z";
+    hash = "sha256-B+H3G4jVysqrzWIP+1hktSGnycZLizxhmBCO/lYIr0I=";
   };
 
-  cargoSha256 = "sha256-NXVwydEn4hX/4NorDx6eE+sWQXj1jwZgzpDE3wg8OkU=";
+  cargoHash = "sha256-LFL2DVKu/UM7effikZN/IhSD6DrlwO+CF+S60PXULa0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals stdenv.isLinux [
+    pkg-config
+  ];
 
   buildInputs = lib.optionals stdenv.isLinux [
     fontconfig
-    libXcursor
-    libXi
-    libXrandr
-    libxcb
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libxcb
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    ApplicationServices
-    CoreFoundation
-    CoreGraphics
-    CoreServices
-    CoreText
-    CoreVideo
-    Foundation
-    Metal
-    QuartzCore
-    Security
-    libobjc
+    darwin.apple_sdk_11_0.frameworks.AppKit
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd inlyne \
+      --bash <($out/bin/inlyne --gen-completions bash) \
+      --fish <($out/bin/inlyne --gen-completions fish) \
+      --zsh <($out/bin/inlyne --gen-completions zsh)
+  '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/inlyne \
-      --add-rpath ${lib.makeLibraryPath [ libGL libX11 ]}
+      --add-rpath ${lib.makeLibraryPath [ libGL xorg.libX11 ]}
   '';
 
   meta = with lib; {
     description = "A GPU powered browserless markdown viewer";
     homepage = "https://github.com/trimental/inlyne";
+    changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchpatch
 , fetchurl
 , fixDarwinDylibNames
@@ -11,6 +12,9 @@
 , szip
 , javaSupport ? false
 , jdk
+, fortranSupport ? false
+, gfortran
+, netcdfSupport ? false
 }:
 stdenv.mkDerivation rec {
   pname = "hdf";
@@ -49,7 +53,7 @@ stdenv.mkDerivation rec {
     cmake
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
-  ];
+  ] ++ lib.optional fortranSupport gfortran;
 
   buildInputs = [
     libjpeg
@@ -74,9 +78,8 @@ stdenv.mkDerivation rec {
     "-DHDF4_BUILD_UTILS=ON"
     "-DHDF4_BUILD_WITH_INSTALL_NAME=OFF"
     "-DHDF4_ENABLE_JPEG_LIB_SUPPORT=ON"
-    "-DHDF4_ENABLE_NETCDF=OFF"
+    "-DHDF4_ENABLE_NETCDF=${if netcdfSupport then "ON" else "OFF"}"
     "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
-    "-DHDF4_BUILD_FORTRAN=OFF"
     "-DJPEG_DIR=${libjpeg}"
   ] ++ lib.optionals javaSupport [
     "-DHDF4_BUILD_JAVA=ON"
@@ -84,7 +87,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals szipSupport [
     "-DHDF4_ENABLE_SZIP_ENCODING=ON"
     "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
-  ];
+  ] ++ (if fortranSupport
+  then [
+    "-DHDF4_BUILD_FORTRAN=ON"
+    "-DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch"
+  ]
+  else [ "-DHDF4_BUILD_FORTRAN=OFF" ]
+  );
 
   doCheck = true;
 
@@ -95,13 +104,15 @@ stdenv.mkDerivation rec {
     "NC_TEST-nctest"
   ];
 
-  checkPhase = let excludedTestsRegex = if (excludedTests != [])
-    then "(" + (lib.concatStringsSep "|" excludedTests) + ")"
-    else ""; in ''
-    runHook preCheck
-    ctest -E "${excludedTestsRegex}" --output-on-failure
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
+    in
+    ''
+      runHook preCheck
+      ctest -E "${excludedTestsRegex}" --output-on-failure
+      runHook postCheck
+    '';
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -117,7 +128,7 @@ stdenv.mkDerivation rec {
       szip
       javaSupport
       jdk
-    ;
+      ;
   };
 
   meta = with lib; {

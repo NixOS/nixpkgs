@@ -8,8 +8,10 @@
 , databases
 , fastapi
 , fetchFromGitHub
+, httpx
 , importlib-metadata
 , mysqlclient
+, nest-asyncio
 , orjson
 , poetry-core
 , psycopg2
@@ -18,13 +20,14 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, pythonRelaxDepsHook
 , sqlalchemy
 , typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.11.3";
+  version = "0.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -33,50 +36,84 @@ buildPythonPackage rec {
     owner = "collerek";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4tGwhgHLZmvsbaDjmmQ3tXBwUBIxb5EpQrT8VIu/XwY=";
+    hash = "sha256-7d0vmYDN1EjzNWmylb/As4ywo8YYzQ88UwigIsVnwMM=";
   };
+
+  pythonRelaxDeps = [
+    "databases"
+    "pydantic"
+    "SQLAlchemy"
+  ];
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
-    aiomysql
-    aiosqlite
-    asyncpg
-    cryptography
     databases
-    orjson
     psycopg2
     pydantic
     sqlalchemy
+    psycopg2
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
     importlib-metadata
   ];
 
-  checkInputs = [
-    aiomysql
-    aiopg
-    aiosqlite
-    asyncpg
-    fastapi
-    mysqlclient
-    psycopg2
-    pymysql
-    pytest-asyncio
+  passthru.optional-dependencies = {
+    postgresql = [
+      asyncpg
+    ];
+    postgres = [
+      asyncpg
+    ];
+    aiopg = [
+      aiopg
+    ];
+    mysql = [
+      aiomysql
+    ];
+    sqlite = [
+      aiosqlite
+    ];
+    orjson = [
+      orjson
+    ];
+    crypto = [
+      cryptography
+    ];
+    all = [
+      aiomysql
+      aiopg
+      aiosqlite
+      asyncpg
+      cryptography
+      mysqlclient
+      orjson
+      pymysql
+    ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'SQLAlchemy = ">=1.3.18,<1.4.42"' 'SQLAlchemy = ">=1.3.18"' \
-      --replace 'databases = ">=0.3.2,!=0.5.0,!=0.5.1,!=0.5.2,!=0.5.3,<0.6.2"' 'databases = ">=0.5.5"'
-  '';
+  checkInputs = [
+    fastapi
+    httpx
+    nest-asyncio
+    pytest-asyncio
+  ] ++ passthru.optional-dependencies.all;
+
+  disabledTestPaths = [
+    "benchmarks/test_benchmark_*.py"
+  ];
 
   disabledTests = [
     # TypeError: Object of type bytes is not JSON serializable
     "test_bulk_operations_with_json"
+    "test_all_endpoints"
     # Tests require a database
     "test_model_multiple_instances_of_same_table_in_schema"
     "test_load_all_multiple_instances_of_same_table_in_schema"
@@ -124,6 +161,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Async ORM with fastapi in mind and pydantic validation";
     homepage = "https://github.com/collerek/ormar";
+    changelog = "https://github.com/collerek/ormar/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
   };

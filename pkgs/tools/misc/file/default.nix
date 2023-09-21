@@ -7,15 +7,23 @@
 
 stdenv.mkDerivation rec {
   pname = "file";
-  version = "5.43";
+  version = "5.45";
 
   src = fetchurl {
     urls = [
       "https://astron.com/pub/file/${pname}-${version}.tar.gz"
       "https://distfiles.macports.org/file/${pname}-${version}.tar.gz"
     ];
-    sha256 = "sha256-jIAV6Rrg6NAyHZTHgjmJLvnbxwxK3gAIwOlYlKv7GZE=";
+    hash = "sha256-/Jf1ECm7DiyfTjv/79r2ePDgOe6HK53lwAKm0Jx4TYI=";
   };
+
+  outputs = [ "out" "dev" "man" ];
+
+  patches = [
+    # Upstream patch to fix 32-bit tests.
+    # Will be included in 5.46+ releases.
+    ./32-bit-time_t.patch
+  ];
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -25,7 +33,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;
 
   # https://bugs.astron.com/view.php?id=382
-  doCheck = !stdenv.hostPlatform.isMusl;
+  doCheck = !stdenv.buildPlatform.isMusl;
 
   makeFlags = lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 
@@ -35,5 +43,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     license = licenses.bsd2;
     platforms = platforms.all;
+    mainProgram = "file";
   };
 }

@@ -3,6 +3,7 @@
 , intltool
 , fetchFromGitLab
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , python3
@@ -18,14 +19,13 @@
 , docbook_xsl
 , docbook_xml_dtd_412
 , gsettings-desktop-schemas
-, callPackage
 , unzip
 , unicode-character-database
 , unihan-database
 , runCommand
 , symlinkJoin
 , gobject-introspection
-, nix-update-script
+, gitUpdater
 }:
 
 let
@@ -45,18 +45,19 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "gucharmap";
-  version = "15.0.0";
+  version = "15.0.4";
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
+    repo = "gucharmap";
     rev = version;
-    sha256 = "sha256-ymEtiOKdmQ1XWrGk40csX5O5BiwxH3aCPboVekcUukQ=";
+    sha256 = "sha256-lfWIaAr5FGWvDkNLOPe19hVQiFarbYVXwM78jZc5FFk=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -73,6 +74,8 @@ in stdenv.mkDerivation rec {
     libxml2
     desktop-file-utils
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -90,12 +93,13 @@ in stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
-    patchShebangs data/meson_desktopfile.py gucharmap/gen-guch-unicode-tables.pl gucharmap/meson_compileschemas.py
+    patchShebangs \
+      data/meson_desktopfile.py \
+      gucharmap/gen-guch-unicode-tables.pl
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gnome.gucharmap";
+    updateScript = gitUpdater {
     };
   };
 

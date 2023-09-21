@@ -1,23 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, lv2 }:
+{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "airwindows-lv2";
-  version = "5.0";
-  src = fetchFromGitHub {
-    owner = "hannesbraun";
+  version = "22.0";
+  src = fetchFromSourcehut {
+    owner = "~hannes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sLkcEEYez0Z3pkhMCC7raiwe/m9Tk/lFmOuybZvFqSk=";
+    sha256 = "sha256-u62wLRrJ45ap981Q8JmMnanc8AWQb1MJHK32PEr10I4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ lv2 ];
-
-  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/lv2" ];
 
   meta = with lib; {
     description = "Airwindows plugins (ported to LV2)";
-    homepage = "https://github.com/hannesbraun/airwindows-lv2";
+    homepage = "https://sr.ht/~hannes/airwindows-lv2";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;

@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "+FpJD5PEH2/HOSWDQEwMX2sV2JJH0kjcoohBolhSP1A=";
+    sha256 = "lnEi3Emwx3ykIx1ZlRMjRP3FAaYgIhsVpY9r0dT3DEE=";
   };
 
   nativeBuildInputs = [

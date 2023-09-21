@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "bmc0";
     repo = "dsp";
     rev = "v${version}";
-    sha256 = "sha256-S1pzVQ/ceNsx0vGmzdDWw2TjPVLiRgzR4edFblWsekY=";
+    hash = "sha256-S1pzVQ/ceNsx0vGmzdDWw2TjPVLiRgzR4edFblWsekY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

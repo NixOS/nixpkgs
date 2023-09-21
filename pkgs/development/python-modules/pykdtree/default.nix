@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pykdtree";
-  version = "1.3.5";
+  version = "1.3.7.post0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-c0L3XnMRA+ZT/B9rn9q8JBDPkrbnsGFggEp1eGybV0c=";
+    hash = "sha256-7KHWHTPbYh74An62ka6I25xl0ZarpLLMkMGQy5C7UI4=";
   };
 
   buildInputs = [ openmp ];
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     mv pykdtree tests
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "kd-tree implementation for fast nearest neighbour search in Python";

@@ -25,6 +25,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
               system.stateVersion = "18.03";
             };
           };
+
+          # The system is inherited from the host above.
+          # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+          system = null;
         };
       in with pkgs; [
         stdenv stdenvNoCC emptyContainer.config.containers.foo.path

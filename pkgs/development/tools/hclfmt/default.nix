@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "hclfmt";
-  version = "2.14.1";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcl";
     rev = "v${version}";
-    hash = "sha256-XH/qSl16LQThj9ghwlSGJuSsez7VxsZS9Sun7F2sT7Y=";
+    hash = "sha256-6OALbouj1b6Jbtv0znpkfgYS4MyBpxQ56Sen3OJYaHs=";
   };
 
-  vendorSha256 = "sha256-9IGHILgByNFviQcHJCFoEX9cZif1uuHCu4xvmGZYoXk=";
+  vendorHash = "sha256-SjewF3q4vQ3oWR+vxqpZVP6St8db/GXezTDWYUeK2g8=";
 
   # The code repository includes other tools which are not useful. Only build
   # hclfmt.
@@ -21,6 +21,7 @@ buildGoModule rec {
     description = "a code formatter for the Hashicorp Configuration Language (HCL) format";
     homepage = "https://github.com/hashicorp/hcl/tree/main/cmd/hclfmt";
     license = licenses.mpl20;
+    mainProgram = "hclfmt";
     maintainers = with maintainers; [ zimbatm ];
   };
 }

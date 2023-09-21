@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opentyrian";
-  version = "2.1.20220318";
+  version = "2.1.20221123";
 
   src = fetchFromGitHub {
     owner = "opentyrian";
     repo = "opentyrian";
     rev = "v${version}";
-    sha256 = "01z1zxpps4ils0bnwazl9lmqdbfhfd8fkacahnh6kqyczavg40xg";
+    sha256 = "sha256-fVcc8v1c9uU72X6afEo4VoMo6YuDECQSwDQ/TQjgwUY=";
   };
 
   data = fetchzip {

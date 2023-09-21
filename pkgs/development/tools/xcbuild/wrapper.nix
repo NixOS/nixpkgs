@@ -1,9 +1,10 @@
-{ lib, stdenv, makeWrapper, writeText, writeShellScriptBin, runCommand
+{ lib, stdenv, makeWrapper, writeText, writeTextFile, runCommand, callPackage
 , CoreServices, ImageIO, CoreGraphics
-, runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
 , xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1"
-, sdkVer ? stdenv.targetPlatform.darwinSdkVersion or "10.12" }:
+, sdkVer ? stdenv.targetPlatform.darwinSdkVersion or "10.12"
+, productBuildVer ? null
+}:
 
 let
 
@@ -24,8 +25,7 @@ let
   };
 
   sdks = callPackage ./sdks.nix {
-    inherit toolchainName sdkName xcodePlatform;
-    version = sdkVer;
+    inherit toolchainName sdkName xcodePlatform sdkVer productBuildVer;
   };
 
   platforms = callPackage ./platforms.nix {
@@ -37,7 +37,7 @@ let
   '';
 
   xcode-select = writeText "xcode-select" ''
-#!${runtimeShell}
+#!${stdenv.shell}
 while [ $# -gt 0 ]; do
    case "$1" in
          -h | --help) ;; # noop
@@ -51,7 +51,12 @@ while [ $# -gt 0 ]; do
 done
   '';
 
-  xcrun = writeShellScriptBin "xcrun" ''
+  xcrun = writeTextFile {
+    name = "xcrun";
+    executable = true;
+    destination = "/bin/xcrun";
+    text = ''
+#!${stdenv.shell}
 args=( "$@" )
 
 # If an SDK was requested, check that it matches.
@@ -73,7 +78,7 @@ while [ $# -gt 0 ]; do
          --toolchain | -toolchain) shift ;;
          --find | -find | -f)
            shift
-           command -v $1 ;;
+           command -v $1 || exit 1 ;;
          --log | -log) ;; # noop
          --verbose | -verbose) ;; # noop
          --no-cache | -no-cache) ;; # noop
@@ -94,7 +99,11 @@ done
 if ! [[ -z "$@" ]]; then
    exec "$@"
 fi
-  '';
+    '';
+    checkPhase = ''
+      ${stdenv.shellDryRun} "$target"
+    '';
+  };
 
 in
 

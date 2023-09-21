@@ -1,7 +1,7 @@
 { lib, runCommand }:
 
 rec {
-  runTest = name: body: runCommand name { } ''
+  runTest = name: body: runCommand name { strictDeps = true; } ''
     set -o errexit
     ${body}
     touch $out

@@ -11,6 +11,11 @@ buildPythonApplication rec {
     sha256 = "1miabaxd5pwxn0va4drzj1d4ppxvyqsrrd4xw1j6qr52yci0lms8";
   };
 
+  postPatch = ''
+    substituteInPlace imgp \
+      --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
+  '';
+
   propagatedBuildInputs = [ pillow ];
 
   installFlags = [

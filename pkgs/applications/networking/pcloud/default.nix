@@ -3,7 +3,7 @@
 # of applications.
 #
 # What Nix does, simplifying a bit, is that it extracts an AppImage and starts
-# it via buildFHSUserEnv - this is totally fine for majority of apps, but makes
+# it via buildFHSEnv - this is totally fine for majority of apps, but makes
 # it by-design *impossible* to launch SUID wrappers [^1]; in case of pCloud,
 # it's fusermount.
 # (so pCloud starts, but silently fails to mount the FUSE drive.)
@@ -15,23 +15,36 @@
 # ^1 https://github.com/NixOS/nixpkgs/issues/69338
 
 {
- # Build dependencies
- appimageTools, autoPatchelfHook, fetchzip, lib, stdenv
+  # Build dependencies
+  appimageTools
+, autoPatchelfHook
+, fetchzip
+, lib
+, stdenv
 
- # Runtime dependencies;
- # A few additional ones (e.g. Node) are already shipped together with the
- # AppImage, so we don't have to duplicate them here.
-, alsa-lib, dbus-glib, fuse, gnome, gsettings-desktop-schemas, gtk3, libdbusmenu-gtk2, libXdamage, nss, udev
+  # Runtime dependencies;
+  # A few additional ones (e.g. Node) are already shipped together with the
+  # AppImage, so we don't have to duplicate them here.
+, alsa-lib
+, dbus-glib
+, fuse
+, gsettings-desktop-schemas
+, gtk3
+, libdbusmenu-gtk2
+, libXdamage
+, nss
+, udev
 }:
 
 let
   pname = "pcloud";
-  version = "1.9.9";
-  code = "XZWTVkVZQM0GNXA4hrFGPkefzUUWVLKOpPIX";
+  version = "1.14.0";
+  code = "XZpL8AVZAqfCXz5TebJ2gcvAiHi15pYFKPey";
+
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
-    hash = "sha256-8566vKrE3/QCm4qW9KxEAO+r+YfMRYOhV2Da7qic48M=";
+    hash = "sha256-uirj/ASOrJyE728q+SB7zq0O9O58XDNzhokvNyca+2c=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -39,7 +52,8 @@ let
     src = "${src}/pcloud";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = appimageContents;

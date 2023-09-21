@@ -27,7 +27,7 @@ in stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE =
+  env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   nativeBuildInputs = [ unzip ];

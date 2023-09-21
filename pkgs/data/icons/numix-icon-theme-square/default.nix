@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme-square";
-  version = "22.10.05";
+  version = "23.09.11";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
-    sha256 = "sha256-uOS6oWcB+2A26u9NTT+xhLHWqaKy5WMSR6WddKS6gEw=";
+    sha256 = "sha256-YipdEvmQnqiuxheYS+y5t37uonzr/nH54PVLm4xp31E=";
   };
 
   nativeBuildInputs = [ gtk3 ];

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, writeText }:
 
-import ./versions.nix ({ version, sha256 }:
+import ./versions.nix ({ version, sha256, ... }:
   stdenv.mkDerivation rec {
     pname = "zabbix-web";
     inherit version;

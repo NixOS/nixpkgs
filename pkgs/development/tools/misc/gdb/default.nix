@@ -1,14 +1,16 @@
 { lib, stdenv, targetPackages
 
 # Build time
-, fetchurl, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, dejagnu, sourceHighlight
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight, libiconv
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, enableDebuginfod ? false, elfutils
+, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
+, hostCpuOnly ? false
+, enableSim ? false
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
@@ -27,12 +29,12 @@ in
 assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
-  pname = targetPrefix + basename;
-  version = "12.1";
+  pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
+  version = "13.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
-    hash = "sha256-DheTv48rVNU/Rt6oTM/URvSPgbKXsoxPf8AXuBjWn+0=";
+    hash = "sha256-/Vvrt74YM6vbbgI8L0mKNUSYKB350FUj2JFbq+uJPwo=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -49,18 +51,15 @@ stdenv.mkDerivation rec {
     ./debug-info-from-env.patch
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
-  # Does not nave to be conditional. We apply it conditionally
-  # to speed up inclusion to nearby nixos release.
-  ] ++ lib.optionals stdenv.is32bit [
-    ./32-bit-BFD_VMA-format.patch
   ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
 
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib guile sourceHighlight ]
+  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
-    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
+    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
+    ++ lib.optional stdenv.isDarwin libiconv;
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -71,12 +70,19 @@ stdenv.mkDerivation rec {
   # darwin build fails with format hardening since v7.12
   hardeningDisable = lib.optionals stdenv.isDarwin [ "format" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+  env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
   configurePlatforms = [ "build" "host" "target" ];
 
-  # GDB have to be built out of tree.
   preConfigure = ''
+    # remove precompiled docs, required for man gdbinit to mention /etc/gdb/gdbinit
+    rm gdb/doc/*.info*
+    rm gdb/doc/*.5
+    rm gdb/doc/*.1
+    # fix doc build https://sourceware.org/bugzilla/show_bug.cgi?id=27808
+    rm gdb/doc/GDBvn.texi
+
+    # GDB have to be built out of tree.
     mkdir _build
     cd _build
   '';
@@ -90,11 +96,16 @@ stdenv.mkDerivation rec {
     # subset of the platform description.
     "--program-prefix=${targetPrefix}"
 
-    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--disable-werror"
+  ] ++ lib.optional (!hostCpuOnly) "--enable-targets=all" ++ [
+    "--enable-64-bit-bfd"
     "--disable-install-libbfd"
     "--disable-shared" "--enable-static"
     "--with-system-zlib"
     "--with-system-readline"
+
+    "--with-system-gdbinit=/etc/gdb/gdbinit"
+    "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
 
     "--with-gmp=${gmp.dev}"
     "--with-mpfr=${mpfr.dev}"
@@ -103,7 +114,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
-    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
+    ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
+    ++ lib.optional (!enableSim) "--disable-sim";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.
@@ -140,7 +152,8 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.gpl3Plus;
 
-    platforms = with platforms; linux ++ cygwin ++ darwin;
+    # GDB upstream does not support ARM darwin
+    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
     maintainers = with maintainers; [ pierron globin lsix ];
   };
 }

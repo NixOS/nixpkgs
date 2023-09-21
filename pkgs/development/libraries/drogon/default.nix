@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib
+{ stdenv, fetchFromGitHub, cmake, jsoncpp, libossp_uuid, zlib, lib, fetchpatch
 # optional but of negligible size
 , openssl, brotli, c-ares
 # optional databases
@@ -7,22 +7,22 @@
 , redisSupport ? false, hiredis
 , mysqlSupport ? false, libmysqlclient, mariadb }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
-  version = "1.8.1";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
-    rev = "v${version}";
-    sha256 = "sha256-XzSJABYuZaYlNL12bi0ykQ1OyNsvB1AQiSTBPWiTNYU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-BYZoMesDquXaphZvnf2Vd/RuOC9jsOjZsGNbDmQ3u+c=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=${if doInstallCheck then "ON" else "OFF"}"
+    "-DBUILD_TESTING=${if finalAttrs.finalPackage.doInstallCheck then "ON" else "OFF"}"
     "-DBUILD_EXAMPLES=OFF"
   ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional postgresSupport postgresql
     ++ lib.optional redisSupport hiredis
     # drogon uses mariadb for mysql (see https://github.com/drogonframework/drogon/wiki/ENG-02-Installation#Library-Dependencies)
-    ++ lib.optional mysqlSupport [ libmysqlclient mariadb ];
+    ++ lib.optionals mysqlSupport [ libmysqlclient mariadb ];
 
   patches = [
     # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself
@@ -47,11 +47,15 @@ stdenv.mkDerivation rec {
 
   # modifying PATH here makes drogon_ctl visible to the test
   installCheckPhase = ''
-    cd ..
-    PATH=$PATH:$out/bin bash test.sh
+    (
+      cd ..
+      PATH=$PATH:$out/bin $SHELL test.sh
+    )
   '';
 
-  doInstallCheck = true;
+  # this excludes you, pkgsStatic (cmake wants to run built binaries
+  # in the buildPhase)
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://github.com/drogonframework/drogon";
@@ -60,4 +64,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ urlordjames ];
     platforms = platforms.all;
   };
-}
+})

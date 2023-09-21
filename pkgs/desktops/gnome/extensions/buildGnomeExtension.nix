@@ -36,7 +36,14 @@ let
         echo "${metadata}" | base64 --decode > $out/metadata.json
       '';
     };
-    dontBuild = true;
+    nativeBuildInputs = with pkgs; [ buildPackages.glib ];
+    buildPhase = ''
+      runHook preBuild
+      if [ -d schemas ]; then
+        glib-compile-schemas --strict schemas
+      fi
+      runHook postBuild
+    '';
     installPhase = ''
       runHook preInstall
       mkdir -p $out/share/gnome-shell/extensions/

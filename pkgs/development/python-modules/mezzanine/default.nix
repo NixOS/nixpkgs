@@ -4,7 +4,7 @@
 , buildPythonPackage
 , chardet
 , django
-, django_contrib_comments
+, django-contrib-comments
 , fetchPypi
 , filebrowser_safe
 , future
@@ -14,6 +14,7 @@
 , pillow
 , pyflakes
 , pythonOlder
+, pytz
 , requests
 , requests-oauthlib
 , tzlocal
@@ -24,7 +25,7 @@ buildPythonPackage rec {
   version = "6.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6" || isPyPy;
+  disabled = pythonOlder "3.7" || isPyPy;
 
   src = fetchPypi {
     pname = "Mezzanine";
@@ -42,19 +43,21 @@ buildPythonPackage rec {
     bleach
     chardet
     django
-    django_contrib_comments
+    django-contrib-comments
     filebrowser_safe
     future
     grappelli_safe
     pillow
+    pytz
     requests
     requests-oauthlib
     tzlocal
-  ];
+  ] ++ bleach.optional-dependencies.css;
 
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;
-  # sed calls will be unecessary in v3.1.11+
+
+  # sed calls will be unnecessary in v3.1.11+
   preConfigure = ''
     sed -i 's/==/>=/' setup.py
   '';

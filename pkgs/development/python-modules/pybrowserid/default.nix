@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [ mock ];
+  nativeCheckInputs = [ mock ];
 
   meta = with lib; {
     description = "Python library for the BrowserID Protocol";

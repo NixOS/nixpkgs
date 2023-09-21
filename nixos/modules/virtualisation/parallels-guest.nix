@@ -87,7 +87,6 @@ in
       bindsTo = [ "cups.service" ];
       path = [ prl-tools ];
       serviceConfig = {
-        Type = "forking";
         ExecStart = "${prl-tools}/bin/prlshprint";
         WorkingDirectory = "${prl-tools}/bin";
       };

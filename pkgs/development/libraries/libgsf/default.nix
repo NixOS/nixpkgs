@@ -1,6 +1,8 @@
-{ fetchurl
+{ fetchFromGitLab
 , lib
 , stdenv
+, autoreconfHook
+, gtk-doc
 , pkg-config
 , intltool
 , gettext
@@ -21,12 +23,26 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "bmwg0HeDOQadWDwNY3WdKX6BfqENDYl+u+ll8W4ujlI=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "libgsf";
+    rev = "LIBGSF_${lib.replaceStrings ["."] ["_"] version}";
+    hash = "sha256-6RP2DJWcDQ8dkKtcPxAkRsS7jSvvLoDNZHXiDJwR8Eg=";
   };
 
+  postPatch = ''
+    # Fix cross-compilation
+    substituteInPlace configure.ac \
+      --replace "AC_PATH_PROG(PKG_CONFIG, pkg-config, no)" \
+                "PKG_PROG_PKG_CONFIG"
+  '';
+
+  strictDeps = true;
+
   nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
     pkg-config
     intltool
     libintl
@@ -38,7 +54,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     perl
   ];
 

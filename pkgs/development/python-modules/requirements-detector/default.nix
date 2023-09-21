@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "requirements-detector";
-  version = "1.0.3";
+  version = "1.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "landscapeio";
     repo = pname;
-    rev = version;
-    hash = "sha256-AEXCguf5Q9lU5ygFJUlbc1F637hkQ0wJybbRK7uhB9s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qmrHFQRypBJOI1N6W/Dtc5ss9JGqoPhFlbqrLHcb6vc=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python tool to find and list requirements of a Python project";
     homepage = "https://github.com/landscapeio/requirements-detector";
+    changelog = "https://github.com/landscapeio/requirements-detector/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kamadorueda ];
   };

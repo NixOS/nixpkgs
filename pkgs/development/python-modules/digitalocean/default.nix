@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   dontUseSetuptoolsCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     pytestCheckHook
     responses

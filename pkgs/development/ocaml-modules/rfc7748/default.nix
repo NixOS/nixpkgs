@@ -1,6 +1,7 @@
 { lib
 , buildDunePackage
 , fetchFromGitHub
+, fetchpatch
 , ocaml
 
 , ounit
@@ -18,14 +19,17 @@ buildDunePackage rec {
     sha256 = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 
-  useDune2 = true;
+  # Compatibility with OCaml 5.0
+  patches = fetchpatch {
+    url = "https://github.com/burgerdev/ocaml-rfc7748/commit/f66257bae0317c7b24c4b208ee27ab6eb68460e4.patch";
+    hash = "sha256-780yy8gLOwwf7xIKIIIaoGpDPcY7+dZ0jPS4nrkH2s8=";
+  };
 
-  minimumOCamlVersion = "4.05";
+  minimalOCamlVersion = "4.05";
 
   propagatedBuildInputs = [ zarith ];
 
-  # the tests fail for 4.05
-  doCheck = lib.versionAtLeast ocaml.version "4.06";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ ounit ];
 
   meta = {

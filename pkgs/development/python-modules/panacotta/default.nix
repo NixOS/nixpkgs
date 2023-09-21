@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "panacotta";
-  version = "0.1";
+  version = "0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "u1f35c";
     repo = "python-panacotta";
     rev = "panacotta-${version}";
-    sha256 = "0v2fa18n50iy18n22klkgjral728iplj6yk3b6hjkzas5dk9wd9c";
+    hash = "sha256-0Ygmj9iRWKvjAuy6j6HjGhl9qJJylfvT5+Uwj44jLgE=";
   };
 
   # Project has no tests

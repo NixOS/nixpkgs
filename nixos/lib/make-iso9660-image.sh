@@ -1,12 +1,3 @@
-source $stdenv/setup
-
-sources_=($sources)
-targets_=($targets)
-
-objects=($objects)
-symlinks=($symlinks)
-
-
 # Remove the initial slash from a path, since genisofs likes it that way.
 stripSlash() {
     res="$1"
@@ -35,13 +26,13 @@ if test -n "$bootable"; then
     # The -boot-info-table option modifies the $bootImage file, so
     # find it in `contents' and make a copy of it (since the original
     # is read-only in the Nix store...).
-    for ((i = 0; i < ${#targets_[@]}; i++)); do
-        stripSlash "${targets_[$i]}"
+    for ((i = 0; i < ${#targets[@]}; i++)); do
+        stripSlash "${targets[$i]}"
         if test "$res" = "$bootImage"; then
-            echo "copying the boot image ${sources_[$i]}"
-            cp "${sources_[$i]}" boot.img
+            echo "copying the boot image ${sources[$i]}"
+            cp "${sources[$i]}" boot.img
             chmod u+w boot.img
-            sources_[$i]=boot.img
+            sources[$i]=boot.img
         fi
     done
 
@@ -66,9 +57,9 @@ touch pathlist
 
 
 # Add the individual files.
-for ((i = 0; i < ${#targets_[@]}; i++)); do
-    stripSlash "${targets_[$i]}"
-    addPath "$res" "${sources_[$i]}"
+for ((i = 0; i < ${#targets[@]}; i++)); do
+    stripSlash "${targets[$i]}"
+    addPath "$res" "${sources[$i]}"
 done
 
 

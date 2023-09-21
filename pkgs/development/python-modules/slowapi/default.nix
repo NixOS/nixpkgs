@@ -9,26 +9,37 @@
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder
+, pythonRelaxDepsHook
 , redis
 , starlette
 }:
 
 buildPythonPackage rec {
   pname = "slowapi";
-  version = "0.1.6";
+  version = "0.1.8";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-3ZkQnroHMCHuTPH/cvi/iWndvdyQ/ZJQ2Qtu1CZyeGg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xgHz8b95SXf/GwzKPfQ/RHbUNJfCx6+7a2HB8+6hjsw=";
   };
+
+  pythonRelaxDeps = [
+    "limits"
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '["redis^3.4.1"]' '["redis"]'
+  '';
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -36,19 +47,13 @@ buildPythonPackage rec {
     redis
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fastapi
     hiro
     mock
     pytestCheckHook
     starlette
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'limits = "^1.5"' 'limits = "*"' \
-      --replace 'redis = "^3.4.1"' 'redis = "*"'
-  '';
 
   disabledTests = [
     # AssertionError: Regex pattern 'parameter `request` must be an instance of starlette.requests.Request' does not match 'This portal is not running'.
@@ -65,6 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for API rate limiting";
     homepage = "https://github.com/laurentS/slowapi";
+    changelog = "https://github.com/laurentS/slowapi/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-asyncio";
-  version = "0.19.0";
+  version = "0.21.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-A8ngASbSRwY4RjanalnWBGgskZMDO50ffOf6wMNqOvA=";
+    hash = "sha256-Wpo8MpCPGiXrckT2x5/yBYtGlzso/L2urG7yGc7SPkA=";
   };
 
   outputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for testing asyncio code with pytest";
     homepage = "https://github.com/pytest-dev/pytest-asyncio";
-    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/pytest-dev/pytest-asyncio/blob/v${version}/docs/source/reference/changelog.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];
   };

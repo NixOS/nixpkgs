@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.2.21";
+  version = "9.2.68";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -16,15 +16,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-29KWlXZ4KrDq4CmTeF6z1CDVDgnO2JyxOdOi5bhl1nI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rbhzqp8PaotOt5d4E8hqWTwDRsG+hm7sVjBDkkblaIU=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -41,6 +41,25 @@
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
   inherit (lib) enableFeature optional optionals;
+
+  # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
+  # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
+  # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
+  darwinVersion =
+    /**/ if stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
+    else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
+    else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
+    else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
+    else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
+    else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
+    else "8";
+
+  kernel =
+    # Build system doesn't understand BSD, so pretend to be Linux.
+    /**/ if stdenv.isBSD then "linux"
+    else if stdenv.isDarwin then "darwin${darwinVersion}"
+    else stdenv.hostPlatform.parsed.kernel.name;
+
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -56,13 +75,13 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9SFFE2GfYYMgxp1dpmL3STTU2ea1R5vFKA1L0pZwIvQ=";
+    sha256 = "sha256-IH+ZWbBUlU5fbciYe+dNGnTFFCte2BXxAlLcvmzdAeY=";
   };
 
   postPatch = ''
@@ -144,21 +163,9 @@ stdenv.mkDerivation rec {
     (enableFeature (experimentalSpatialSvcSupport ||
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
-    # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
-    # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
-    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${stdenv.hostPlatform.parsed.kernel.name}${
-            if stdenv.hostPlatform.isDarwin then
-              if      stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
-              else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
-              else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
-              else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
-              else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
-              else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
-              else "8"
-            else ""}-gcc"
-    (if stdenv.hostPlatform.isCygwin then "--enable-static-msvcrt" else "")
+  ] ++ optionals (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${kernel}-gcc"
+    (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
   ] # Experimental features
     ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
     ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"

@@ -1,24 +1,25 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
+, cmake
 , pkg-config
+, python3
 , curl
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "2.3";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
     rev = version;
-    sha256 = "sha256-KJyGDrT3dr8DfjfRrWIENoBFuiWrgQx4qz1V+mT8/yI=";
+    sha256 = "sha256-Lt99RO/pTEtksIuulkKTm48+1xUKZOHrnlbDZGi3VWk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
 
   buildInputs = [ curl openssl ];
 

@@ -1,21 +1,27 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "montserrat";
   version = "7.222";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
-  owner = "JulietaUla";
-  repo = pname;
-  rev = "v${version}";
-  sha256 = "sha256-MeNnc1e5X5f0JyaLY6fX22rytHkvL++eM2ygsdlGMv0=";
 
-  postFetch = ''
-    tar xf $downloadedFile --strip 1
-    install -Dm 444 fonts/otf/*.otf -t $out/share/fonts/otf
-    install -Dm 444 fonts/ttf/*.ttf -t $out/share/fonts/ttf
-    install -Dm 444 fonts/webfonts/*.woff -t $out/share/fonts/woff
-    install -Dm 444 fonts/webfonts/*.woff2 -t $out/share/fonts/woff2
+  src = fetchFromGitHub {
+    owner = "JulietaUla";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-eVCRn2OtNI5NuYZBQy06HKnMMXhPPnFxI8m8kguZjg0=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/fonts/{otf,ttf,woff,woff2}
+
+    mv fonts/otf/*.otf $out/share/fonts/otf
+    mv fonts/ttf/*.ttf $out/share/fonts/ttf
+    mv fonts/webfonts/*.woff $out/share/fonts/woff
+    mv fonts/webfonts/*.woff2 $out/share/fonts/woff2
+
+    runHook postInstall
   '';
 
   meta = with lib; {

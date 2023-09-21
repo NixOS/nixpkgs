@@ -1,91 +1,72 @@
 { stdenv
 , lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, argon2-cffi
-, nose
-, nose_warnings_filters
-, glibcLocales
-, isPy3k
-, mock
-, jinja2
+, hatch-jupyter-builder
+, hatchling
+, jupyter-server
+, jupyterlab
+, jupyterlab_server
+, notebook-shim
 , tornado
-, ipython_genutils
-, traitlets
-, jupyter_core
-, jupyter-client
-, nbformat
-, nbconvert
-, ipykernel
-, terminado
-, requests
-, send2trash
-, pexpect
-, prometheus-client
+, pytest-jupyter
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.4.12";
-  disabled = !isPy3k;
+  version = "7.0.2";
+  disabled = pythonOlder "3.8";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YmjJ7JBIz/ekVAXJkMKaycpAsLw+wpJj0hjF4B8rToY=";
+    hash = "sha256-1w1qB0GMgpvV9UM3zpk7cQUmHZAm+dP+aOm4qhog2po=";
   };
 
-  LC_ALL = "en_US.utf8";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "timeout = 300" ""
+  '';
 
-  checkInputs = [ nose pytestCheckHook glibcLocales ]
-    ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
+  nativeBuildInputs = [
+    hatch-jupyter-builder
+    hatchling
+    jupyterlab
+  ];
 
   propagatedBuildInputs = [
-    jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus-client argon2-cffi
+    jupyter-server
+    jupyterlab
+    jupyterlab_server
+    notebook-shim
+    tornado
   ];
 
-  # disable warning_filters
-  preCheck = lib.optionalString (!isPy3k) ''
-    echo "" > setup.cfg
-  '';
-
-  postPatch = ''
-    # Remove selenium tests
-    rm -rf notebook/tests/selenium
-    export HOME=$TMPDIR
-  '';
-
-  disabledTests = [
-    # a "system_config" is generated, and fails many tests
-    "config"
-    "load_ordered"
-    # requires jupyter, but will cause circular imports
-    "test_run"
-    "TestInstallServerExtension"
-    "launch_socket"
-    "sock_server"
-    "test_list_formats" # tries to find python MIME type
-    "KernelCullingTest" # has a race condition failing on slower hardware
-  ] ++ lib.optional stdenv.isDarwin [
-    "test_delete"
-    "test_checkpoints_follow_file"
+  nativeCheckInputs = [
+    pytest-jupyter
+    pytestCheckHook
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
-    # requires local networking
-    "notebook/auth/tests/test_login.py"
-    "notebook/bundler/tests/test_bundler_api.py"
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
   ];
+
+  env = {
+    JUPYTER_PLATFORM_DIRS = 1;
+  };
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
-    description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-    homepage = "https://jupyter.org/";
+    changelog = "https://github.com/jupyter/notebook/blob/v${version}/CHANGELOG.md";
+    description = "Web-based notebook environment for interactive computing";
+    homepage = "https://github.com/jupyter/notebook";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupyter-notebook";
   };
 }

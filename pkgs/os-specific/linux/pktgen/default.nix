@@ -1,18 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config
-, dpdk, libbsd, libpcap, lua5_3, numactl, util-linux
-, gtk2, which, withGtk ? false
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, dpdk
+, libbsd
+, libpcap
+, lua5_3
+, numactl
+, util-linux
+, gtk2
+, which
+, withGtk ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "22.04.1";
+  version = "22.07.1";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "0gbag98i2jq0p2hpvfgc3fiqy2sark1dm72hla4sxmn3gljy3p70";
+    sha256 = "sha256-wBLGwVdn3ymUTVv7J/kbQYz4WNIgV246PHg51+FStUo=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Ealier DPDK deprecated some macros, which were finally removed in >= 22.11
+      url = "https://github.com/pktgen/Pktgen-DPDK/commit/089ef94ac04629f7380f5e618443bcacb2cef5ab.patch";
+      sha256 = "sha256-ITU/dIfu7QPpdIVYuCuDhDG9rVF+n8i1YYn9bFmQUME=";
+    })
+  ];
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
@@ -24,6 +45,12 @@ stdenv.mkDerivation rec {
 
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=address"
+    "-Wno-error=use-after-free"
+  ];
 
   # requires symbols from this file
   NIX_LDFLAGS = "-lrte_net_bond";

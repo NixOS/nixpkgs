@@ -3,11 +3,9 @@
 , fetchzip
 , fetchFromGitHub
 , cmake
-, spirv-headers
 , vulkan-headers
 , vulkan-loader
 , glslang
-, libgcc
 , libwebp
 , ncnn
 }:
@@ -22,7 +20,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-eLAIlOl1sUxijeVPFG+NscZGxDdtrQqVkMuxhegESHk=";
   };
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   models = fetchzip {
     # Choose the newst release from https://github.com/xinntao/Real-ESRGAN/releases to update
@@ -44,8 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ vulkan-headers vulkan-loader glslang libwebp ncnn ]
-    ++ lib.optional (!stdenv.isDarwin) libgcc;
+  buildInputs = [ vulkan-headers vulkan-loader glslang libwebp ncnn ];
 
   postPatch = ''
     substituteInPlace main.cpp --replace REPLACE_MODELS $out/share/models
@@ -62,5 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/xinntao/Real-ESRGAN-ncnn-vulkan";
     license = licenses.mit;
     maintainers = with maintainers; [ tilcreator ];
+    platforms = platforms.all;
   };
 }

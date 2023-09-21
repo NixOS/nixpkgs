@@ -8,7 +8,7 @@
 , future
 , atomicwrites
 , attrs
-, Logbook
+, logbook
 , pygments
 , matrix-nio
 , aiohttp
@@ -45,17 +45,19 @@ in buildPythonPackage {
     future
     atomicwrites
     attrs
-    Logbook
+    logbook
     pygments
     matrix-nio
     aiohttp
     requests
-  ];
+  ] ++ matrix-nio.optional-dependencies.e2e;
 
   passthru.scripts = [ "matrix.py" ];
 
   dontBuild = true;
   doCheck = false;
+
+  format = "other";
 
   installPhase = ''
     mkdir -p $out/share $out/bin

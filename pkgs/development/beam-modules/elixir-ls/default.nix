@@ -1,29 +1,30 @@
-{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
+{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
 # Based on the work of Hauleth
 # None of this would have happened without him
 
 let
   pname = "elixir-ls";
-  pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = "0.16.0";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    sha256 = pinData.sha256;
+    hash = "sha256-tEKwM5o3uXJ0cLY5USnQJ+HOGTSv6NDJvq+F/iqFEWs=";
     fetchSubmodules = true;
   };
 in
 mixRelease  {
   inherit pname version src elixir;
 
+  stripDebug = true;
+
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    sha256 = pinData.depsSha256;
+    hash = "sha256-jpjqMIQ9fS4nkkKWZ80Mx5vULm5bvnNHy52ZQcR0y8c=";
   };
 
-  # elixir_ls is an umbrella app
+  # elixir-ls is an umbrella app
   # override configurePhase to not skip umbrella children
   configurePhase = ''
     runHook preConfigure
@@ -31,7 +32,7 @@ mixRelease  {
     runHook postConfigure
   '';
 
-  # elixir_ls require a special step for release
+  # elixir-ls require a special step for release
   # compile and release need to be performed together because
   # of the no-deps-check requirement
   buildPhase = ''
@@ -69,7 +70,8 @@ mixRelease  {
     '';
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "elixir-ls";
     maintainers = teams.beam.members;
   };
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 }

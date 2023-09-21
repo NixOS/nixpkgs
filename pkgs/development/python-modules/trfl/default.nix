@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = pname;
     rev = "ed6eff5b79ed56923bcb102e152c01ea52451d4c";
-    sha256 = "sha256-UsDUKJCHSJ4gP+P95Pm7RsPpqTJqJhrsW47C7fTZ77I=";
+    hash = "sha256-UsDUKJCHSJ4gP+P95Pm7RsPpqTJqJhrsW47C7fTZ77I=";
   };
 
   buildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     tensorflow-probability
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
   ];

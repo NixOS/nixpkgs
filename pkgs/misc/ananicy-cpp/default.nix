@@ -1,40 +1,63 @@
 { lib
-, gcc11Stdenv
+, clangStdenv
 , fetchFromGitLab
-, makeWrapper
 , cmake
+, pkg-config
 , spdlog
 , nlohmann_json
 , systemd
+, libbpf
+, elfutils
+, bpftools
+, zlib
 }:
 
-gcc11Stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "ananicy-cpp";
-  version = "unstable-2021-10-13";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
-    rev = "6a14fe7353221c89347eddbbcafb35cf5fee4758";
-    sha256 = "sha256-V0QPXC17ZD2c4MK3DAkzoPgKOU5V5BjfQKUk7I6f8WM=";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    makeWrapper
     cmake
+    pkg-config
+    bpftools
   ];
 
   buildInputs = [
     spdlog
     nlohmann_json
     systemd
+    libbpf
+    elfutils
+    zlib
   ];
 
+  # BPF A call to built-in function '__stack_chk_fail' is not supported.
+  hardeningDisable = [ "stackprotector" ];
+
   cmakeFlags = [
-    "-DUSE_EXTERNAL_JSON=yON"
+    "-DUSE_EXTERNAL_JSON=ON"
     "-DUSE_EXTERNAL_SPDLOG=ON"
     "-DUSE_EXTERNAL_FMTLIB=ON"
+    "-DUSE_BPF_PROC_IMPL=ON"
+    "-DBPF_BUILD_LIBBPF=OFF"
+    "-DENABLE_SYSTEMD=ON"
+    "-DVERSION=${version}"
   ];
+
+  postInstall = ''
+    rm -rf "$out"/include
+    rm -rf "$out"/lib/cmake
+  '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/ananicy-cpp/ananicy-cpp";

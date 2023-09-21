@@ -1,7 +1,9 @@
 { lib
 , stdenv
-, buildGo119Module
+, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
+, fetchFromGitLab
 , callPackage
 , config
 , writeShellScript
@@ -16,16 +18,21 @@ let
     ({ owner
      , repo
      , rev
-     , version
-     , hash ? throw "use hash instead of sha256" # added 2202/09
-     , vendorHash ? throw "use vendorHash instead of vendorSha256" # added 2202/09
+     , spdx ? "UNSET"
+     , version ? lib.removePrefix "v" rev
+     , hash
+     , vendorHash
      , deleteVendor ? false
      , proxyVendor ? false
-     , mkProviderGoModule ? buildGo119Module
-       # Looks like "registry.terraform.io/vancluever/acme"
-     , provider-source-address
+     , mkProviderFetcher ? fetchFromGitHub
+     , mkProviderGoModule ? buildGoModule
+       # "https://registry.terraform.io/providers/vancluever/acme"
+     , homepage ? ""
+       # "registry.terraform.io/vancluever/acme"
+     , provider-source-address ? lib.replaceStrings [ "https://registry" ".io/providers" ] [ "registry" ".io" ] homepage
      , ...
      }@attrs:
+      assert lib.stringLength provider-source-address > 0;
       mkProviderGoModule {
         pname = repo;
         inherit vendorHash version deleteVendor proxyVendor;
@@ -35,9 +42,14 @@ let
         # goreleaser (used for builds distributed via terraform registry) requires that CGO is disabled
         CGO_ENABLED = 0;
         ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${rev}" ];
-        src = fetchFromGitHub {
+        src = mkProviderFetcher {
           name = "source-${rev}";
           inherit owner repo rev hash;
+        };
+
+        meta = {
+          inherit homepage;
+          license = lib.getLicenseFromSpdxId spdx;
         };
 
         # Move the provider to libexec
@@ -50,6 +62,7 @@ let
 
         # Keep the attributes around for later consumption
         passthru = attrs // {
+          inherit provider-source-address;
           updateScript = writeShellScript "update" ''
             provider="$(basename ${provider-source-address})"
             ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
@@ -65,8 +78,14 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
+      # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
+      checkly = automated-providers.checkly.override { spdx = "MIT"; };
+      gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
+      # actions update always fails but can't reproduce the failure.
+      heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
       # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
+      tailscale = automated-providers.tailscale.override { mkProviderGoModule = buildGo121Module; };
     };
 
   # Put all the providers we not longer support in this list.
@@ -76,12 +95,7 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      b2 = removed "b2" "2022/06";
-      dome9 = removed "dome9" "2022/08";
-      ncloud = removed "ncloud" "2022/08";
-      opc = archived "opc" "2022/05";
-      oraclepaas = archived "oraclepaas" "2022/05";
-      template = archived "template" "2022/05";
+      ksyun = removed "ksyun" "2023/04";
     };
 
   # excluding aliases, used by terraform-full

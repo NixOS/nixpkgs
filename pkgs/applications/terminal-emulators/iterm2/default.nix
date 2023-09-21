@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
-  version = "3.4.15";
+  version = "3.4.20";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${lib.replaceStrings ["."] ["_"] version}.zip";
-    sha256 = "sha256-ZE/uYBKB2popdIdZWA8AvyJiwMzt32u6u/H/AyNcoVo=";
+    hash = "sha256-RXBv3RXd2Kq8k7rbOE3HPEf6vI64VZCo1IX03gDy7l0=";
   };
 
   dontFixup = true;

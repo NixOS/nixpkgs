@@ -9,32 +9,41 @@
 , python3
 , shadow
 , systemd
+, coreutils
+, gitUpdater
+, busybox
+, procps
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
-  version = "21.4";
+  version = "23.3.1";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
-    rev = version;
-    sha256 = "09413qz9y2csvhjb4krjnkfj97vlykx79j912p27jjcrg82f1nib";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3UxTqlhLZi/3/buWqDGto4cZN03uONbA8HEWQtaIRxU=";
   };
 
-  patches = [ ./0001-add-nixos-support.patch ];
+  patches = [
+    ./0001-add-nixos-support.patch
+  ];
 
   prePatch = ''
     substituteInPlace setup.py \
       --replace /lib/systemd $out/lib/systemd
 
     substituteInPlace cloudinit/net/networkd.py \
-      --replace "['/usr/sbin', '/bin']" "['/usr/sbin', '/bin', '${iproute2}/bin', '${systemd}/bin']"
+      --replace '["/usr/sbin", "/bin"]' '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
 
     substituteInPlace tests/unittests/test_net_activators.py \
-      --replace "['/usr/sbin', '/bin']" \
-        "['/usr/sbin', '/bin', '${iproute2}/bin', '${systemd}/bin']"
+      --replace '["/usr/sbin", "/bin"]' \
+        '["/usr/sbin", "/bin", "${iproute2}/bin", "${systemd}/bin"]'
+
+    substituteInPlace tests/unittests/cmd/test_clean.py \
+      --replace "/bin/bash" "/bin/sh"
   '';
 
   postInstall = ''
@@ -56,25 +65,34 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     httpretty
     dmidecode
     # needed for tests; at runtime we rather want the setuid wrapper
+    passlib
     shadow
+    responses
+    pytest-mock
+    coreutils
+    procps
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest ]}/bin"
+    "--prefix PATH : ${lib.makeBinPath [ dmidecode cloud-utils.guest busybox ]}/bin"
   ];
 
   disabledTests = [
     # tries to create /var
     "test_dhclient_run_with_tmpdir"
+    "test_dhcp_client_failover"
     # clears path and fails because mkdir is not found
     "test_path_env_gets_set_from_main"
+    # fails to find cat
+    "test_subp_combined_stderr_stdout"
     # tries to read from /etc/ca-certificates.conf while inside the sandbox
     "test_handler_ca_certs"
+    "TestRemoveDefaultCaCerts"
     # Doesn't work in the sandbox
     "TestEphemeralDhcpNoNetworkSetup"
     "TestHasURLConnectivity"
@@ -96,20 +114,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_install_with_version"
   ];
 
-  disabledTestPaths = [
-    # Oracle tests are not passing
-    "cloudinit/sources/tests/test_oracle.py"
-    # Disable the integration tests. pycloudlib would be required
-    "tests/unittests/test_datasource/test_aliyun.py"
-    "tests/unittests/test_datasource/test_azure.py"
-    "tests/unittests/test_datasource/test_ec2.py"
-    "tests/unittests/test_datasource/test_exoscale.py"
-    "tests/unittests/test_datasource/test_gce.py"
-    "tests/unittests/test_datasource/test_openstack.py"
-    "tests/unittests/test_datasource/test_scaleway.py"
-    "tests/unittests/test_ec2_util.py"
-  ];
-
   preCheck = ''
     # TestTempUtils.test_mkdtemp_default_non_root does not like TMPDIR=/build
     export TMPDIR=/tmp
@@ -119,13 +123,17 @@ python3.pkgs.buildPythonApplication rec {
     "cloudinit"
   ];
 
-  passthru.tests.cloud-init = nixosTests.cloud-init;
+  passthru = {
+    tests = { inherit (nixosTests) cloud-init cloud-init-hostname; };
+    updateScript = gitUpdater { ignoredVersions = ".ubuntu.*"; };
+  };
 
   meta = with lib; {
-    homepage = "https://cloudinit.readthedocs.org";
+    homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
+    changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
     license = with licenses; [ asl20 gpl3Plus ];
-    maintainers = with maintainers; [ madjar phile314 ];
+    maintainers = with maintainers; [ illustris jfroche ];
     platforms = platforms.all;
   };
 }

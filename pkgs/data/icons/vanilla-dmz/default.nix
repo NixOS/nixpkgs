@@ -25,18 +25,30 @@ stdenvNoCC.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   buildPhase = ''
-    cd DMZ-White/pngs; ./make.sh; cd -
-    cd DMZ-Black/pngs; ./make.sh; cd -
+    runHook preBuild
+
+    for theme in DMZ-{White,Black}; do
+      pushd $theme/pngs
+      ./make.sh
+      popd
+    done
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -d $out/share/icons/Vanilla-DMZ/cursors
-    cp -a DMZ-White/xcursors/* $out/share/icons/Vanilla-DMZ/cursors
-    install -Dm644 DMZ-White/index.theme $out/share/icons/Vanilla-DMZ/index.theme
+    runHook preInstall
 
-    install -d $out/share/icons/Vanilla-DMZ-AA/cursors
-    cp -a DMZ-Black/xcursors/* $out/share/icons/Vanilla-DMZ-AA/cursors
-    install -Dm644 DMZ-Black/index.theme $out/share/icons/Vanilla-DMZ-AA/index.theme
+    for theme in DMZ-{White,Black}; do
+      mkdir -p $out/share/icons/$theme/cursors
+      cp -a $theme/xcursors/* $out/share/icons/$theme/cursors/
+      install -m644 $theme/index.theme $out/share/icons/$theme/index.theme
+    done
+
+    ln -s $out/share/icons/{DMZ-White,Vanilla-DMZ}
+    ln -s $out/share/icons/{DMZ-Black,Vanilla-DMZ-AA}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

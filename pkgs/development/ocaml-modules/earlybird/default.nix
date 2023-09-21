@@ -1,25 +1,40 @@
-{ lib, fetchurl, ocaml, buildDunePackage
+{ lib, fetchFromGitHub, ocaml, buildDunePackage
 , cmdliner, dap, fmt, iter, logs, lru, lwt_ppx, lwt_react, menhir, menhirLib, path_glob, ppx_deriving_yojson
+, ppx_optcomp
+, gitUpdater
 }:
-
-if lib.versionAtLeast ocaml.version "4.13"
-then throw "earlybird is not available for OCaml ${ocaml.version}"
-else
 
 buildDunePackage rec {
   pname = "earlybird";
-  version = "1.1.0";
+  version = "1.2.1";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.12";
 
-  minimumOCamlVersion = "4.11";
-
-  src = fetchurl {
-    url = "https://github.com/hackwaly/ocamlearlybird/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1pwzhcr3pw24ra4j4d23vz71h0psz4xkyp7b12l2wl1slxzjbrxa";
+  src = fetchFromGitHub {
+    owner = "hackwaly";
+    repo = "ocamlearlybird";
+    rev = version;
+    hash = "sha256-p29uTdx8+mZKXUL+ng/FzpKuhnykEe8Sy968Wa/KUn4=";
   };
 
-  buildInputs = [ cmdliner dap fmt iter logs lru lwt_ppx lwt_react menhir menhirLib path_glob ppx_deriving_yojson ];
+  nativeBuildInputs = [ menhir ];
+
+  buildInputs = [
+    cmdliner
+    dap
+    fmt
+    iter
+    logs
+    lru
+    lwt_ppx
+    lwt_react
+    menhirLib
+    path_glob
+    ppx_deriving_yojson
+    ppx_optcomp
+  ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     homepage = "https://github.com/hackwaly/ocamlearlybird";

@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 
 # extras: babel
 , babel
@@ -25,8 +26,8 @@
 , blinker
 , email-validator
 , flask
-, flask_login
-, flask_principal
+, flask-login
+, flask-principal
 , flask-wtf
 , itsdangerous
 , passlib
@@ -45,20 +46,28 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.0.2";
+  version = "5.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    sha256 = "sha256-Nv7g2l0bPSEcrydFU7d1NHjCCJl8Ykq7hOu6QmHeZcI=";
+    hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
   };
+
+  postPatch = ''
+    # This should be removed after updating to version 5.3.0.
+    sed -i '/filterwarnings =/a ignore:pkg_resources is deprecated:DeprecationWarning' pytest.ini
+  '';
 
   propagatedBuildInputs = [
     blinker
     email-validator
     flask
-    flask_login
-    flask_principal
+    flask-login
+    flask-principal
     flask-wtf
     itsdangerous
     passlib
@@ -86,7 +95,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     argon2-cffi
     flask-mongoengine
     mongoengine
@@ -103,10 +112,13 @@ buildPythonPackage rec {
   ++ passthru.optional-dependencies.mfa;
 
 
-  pythonImportsCheck = [ "flask_security" ];
+  pythonImportsCheck = [
+    "flask_security"
+  ];
 
   meta = with lib; {
-    homepage = "https://pypi.org/project/Flask-Security-Too/";
+    changelog = "https://github.com/Flask-Middleware/flask-security/blob/${version}/CHANGES.rst";
+    homepage = "https://github.com/Flask-Middleware/flask-security";
     description = "Simple security for Flask apps (fork)";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];

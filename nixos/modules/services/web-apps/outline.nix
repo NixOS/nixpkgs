@@ -3,13 +3,17 @@
 let
   defaultUser = "outline";
   cfg = config.services.outline;
+  inherit (lib) mkRemovedOptionModule;
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "outline" "sequelizeArguments" ] "Database migration are run agains configurated database by outline directly")
+  ];
   # See here for a reference of all the options:
-  #   https://github.com/outline/outline/blob/v0.65.2/.env.sample
-  #   https://github.com/outline/outline/blob/v0.65.2/app.json
-  #   https://github.com/outline/outline/blob/v0.65.2/server/env.ts
-  #   https://github.com/outline/outline/blob/v0.65.2/shared/types.ts
+  #   https://github.com/outline/outline/blob/v0.67.0/.env.sample
+  #   https://github.com/outline/outline/blob/v0.67.0/app.json
+  #   https://github.com/outline/outline/blob/v0.67.0/server/env.ts
+  #   https://github.com/outline/outline/blob/v0.67.0/shared/types.ts
   # The order is kept the same here to make updating easier.
   options.services.outline = {
     enable = lib.mkEnableOption (lib.mdDoc "outline");
@@ -25,7 +29,7 @@ in
           # to still land in the same team. Note that this effectively makes
           # Outline a single-team instance.
           patchPhase = ${"''"}
-            sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' server/routes/auth/providers/oidc.ts
+            sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' plugins/oidc/server/auth/oidc.ts
           ${"''"};
         })
       '';
@@ -48,15 +52,6 @@ in
       description = lib.mdDoc ''
         Group under which the service should run. If this is the default value,
         the group will be created.
-      '';
-    };
-
-    sequelizeArguments = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "--env=production-ssl-disabled";
-      description = lib.mdDoc ''
-        Optional arguments to pass to `sequelize` calls.
       '';
     };
 
@@ -123,7 +118,7 @@ in
       description = lib.mdDoc ''
         To support uploading of images for avatars and document attachments an
         s3-compatible storage must be provided. AWS S3 is recommended for
-        redundency however if you want to keep all file storage local an
+        redundancy however if you want to keep all file storage local an
         alternative such as [minio](https://github.com/minio/minio)
         can be used.
 
@@ -435,6 +430,16 @@ in
       '';
     };
 
+    sentryTunnel = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = lib.mdDoc ''
+        Optionally add a
+        [Sentry proxy tunnel](https://docs.sentry.io/platforms/javascript/troubleshooting/#using-the-tunnel-option)
+        for bypassing ad blockers in the UI.
+      '';
+    };
+
     logo = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       default = null;
@@ -455,7 +460,7 @@ in
         options = {
           host = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc "Host name or IP adress of the SMTP server.";
+            description = lib.mdDoc "Host name or IP address of the SMTP server.";
           };
           port = lib.mkOption {
             type = lib.types.port;
@@ -573,16 +578,6 @@ in
     systemd.services.outline = let
       localRedisUrl = "redis+unix:///run/redis-outline/redis.sock";
       localPostgresqlUrl = "postgres://localhost/outline?host=/run/postgresql";
-
-      # Create an outline-sequalize wrapper (a wrapper around the wrapper) that
-      # has the config file's path baked in. This is necessary because there is
-      # at least one occurrence of outline calling this from its own code.
-      sequelize = pkgs.writeShellScriptBin "outline-sequelize" ''
-        exec ${cfg.package}/bin/outline-sequelize \
-          --config $RUNTIME_DIRECTORY/database.json \
-          ${cfg.sequelizeArguments} \
-          "$@"
-      '';
     in {
       description = "Outline wiki and knowledge base";
       wantedBy = [ "multi-user.target" ];
@@ -593,7 +588,6 @@ in
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
       path = [
         pkgs.openssl # Required by the preStart script
-        sequelize
       ];
 
 
@@ -621,6 +615,7 @@ in
           DEBUG = cfg.debugOutput;
           GOOGLE_ANALYTICS_ID = lib.optionalString (cfg.googleAnalyticsId != null) cfg.googleAnalyticsId;
           SENTRY_DSN = lib.optionalString (cfg.sentryDsn != null) cfg.sentryDsn;
+          SENTRY_TUNNEL = lib.optionalString (cfg.sentryTunnel != null) cfg.sentryTunnel;
           TEAM_LOGO = lib.optionalString (cfg.logo != null) cfg.logo;
           DEFAULT_LANGUAGE = cfg.defaultLanguage;
 
@@ -676,44 +671,6 @@ in
           openssl rand -hex 32 > ${lib.escapeShellArg cfg.utilsSecretFile}
         fi
 
-        # The config file is required for the CLI, the DATABASE_URL environment
-        # variable is read by the app.
-        ${if (cfg.databaseUrl == "local") then ''
-          cat <<EOF > $RUNTIME_DIRECTORY/database.json
-          {
-            "production": {
-              "dialect": "postgres",
-              "host": "/run/postgresql",
-              "username": null,
-              "password": null
-            }
-          }
-          EOF
-          export DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
-          export PGSSLMODE=disable
-        '' else ''
-          cat <<EOF > $RUNTIME_DIRECTORY/database.json
-          {
-            "production": {
-              "use_env_variable": "DATABASE_URL",
-              "dialect": "postgres",
-              "dialectOptions": {
-                "ssl": {
-                  "rejectUnauthorized": false
-                }
-              }
-            },
-            "production-ssl-disabled": {
-              "use_env_variable": "DATABASE_URL",
-              "dialect": "postgres"
-            }
-          }
-          EOF
-          export DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
-        ''}
-
-        cd $RUNTIME_DIRECTORY
-        ${sequelize}/bin/outline-sequelize db:migrate
       '';
 
       script = ''
@@ -770,7 +727,7 @@ in
         RuntimeDirectoryMode = "0750";
         # This working directory is required to find stuff like the set of
         # onboarding files:
-        WorkingDirectory = "${cfg.package}/share/outline/build";
+        WorkingDirectory = "${cfg.package}/share/outline";
       };
     };
   };

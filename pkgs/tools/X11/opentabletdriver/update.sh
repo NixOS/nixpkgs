@@ -3,8 +3,6 @@
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-deps_file="$(realpath "./deps.nix")"
-
 new_version="$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/OpenTabletDriver/OpenTabletDriver/releases" | jq -r  'map(select(.prerelease == false)) | .[0].tag_name' | cut -c2-)"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
@@ -23,4 +21,4 @@ sed -i ./default.nix -re "s|\"$oldDebSha256\"|\"$newDebSha256\"|"
 
 pushd ../../../..
 update-source-version opentabletdriver "$new_version"
-$(nix-build -A opentabletdriver.fetch-deps --no-out-link) "$deps_file"
+$(nix-build -A opentabletdriver.fetch-deps --no-out-link)

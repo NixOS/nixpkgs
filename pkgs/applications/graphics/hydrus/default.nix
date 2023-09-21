@@ -1,28 +1,35 @@
 { lib
 , fetchFromGitHub
 , wrapQtAppsHook
-, miniupnpc_2
+, miniupnpc
 , ffmpeg
 , enableSwftools ? false
 , swftools
 , python3Packages
+, qtbase
+, qtcharts
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "501";
+  version = "520";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-dmQD3CAAAhE6IOfT38PHUIlHdDFdk6HZ6ZEZmKw7+WM=";
+    hash = "sha256-y8KfPe3cBBq/iPCG7hNXrZDkOSNi+qSir6rO/65SHkI=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
     python3Packages.mkdocs-material
+  ];
+
+  buildInputs = [
+    qtbase
+    qtcharts
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -37,10 +44,12 @@ python3Packages.buildPythonPackage rec {
     opencv4
     pillow
     psutil
-    pylzma
+    pympler
     pyopenssl
-    pyside2
+    pyqt6
+    pyqt6-charts
     pysocks
+    python-dateutil
     python3Packages.mpv
     pyyaml
     qtpy
@@ -51,7 +60,11 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  checkInputs = with python3Packages; [ nose mock httmock ];
+  nativeCheckInputs = with python3Packages; [
+    nose
+    mock
+    httmock
+  ];
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''
@@ -78,6 +91,7 @@ python3Packages.buildPythonPackage rec {
     -e TestHydrusServer \
     -e TestHydrusSessions \
     -e TestServer \
+    -e TestClientMetadataMigration \
   '';
 
   outputs = [ "out" "doc" ];
@@ -104,7 +118,7 @@ python3Packages.buildPythonPackage rec {
   dontWrapQtApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc_2 ]})
+    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg miniupnpc ]})
   '';
 
   meta = with lib; {

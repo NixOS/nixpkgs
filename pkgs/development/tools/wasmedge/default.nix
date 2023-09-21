@@ -1,42 +1,67 @@
 { lib
 , fetchFromGitHub
-, llvmPackages
+, llvmPackages_12
 , boost
 , cmake
-, gtest
 , spdlog
+, libxml2
+, libffi
+, Foundation
+, testers
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+let
+  llvmPackages = llvmPackages_12;
+  stdenv = llvmPackages.stdenv;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "wasmedge";
-  version = "0.11.1";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "WasmEdge";
     repo = "WasmEdge";
-    rev = version;
-    sha256 = "sha256-+rCzbw44/8mHo6v4rUuXOq4FVs/LJtSF5zhva9/LIL0=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-2EKUnRvd1w1TxO7OFKYpTzSXC3fdIU7Jk0MIPPTY96U=";
   };
+
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.lld
+  ];
 
   buildInputs = [
     boost
     spdlog
     llvmPackages.llvm
+    libxml2
+    libffi
+  ] ++ lib.optionals stdenv.isDarwin [
+    Foundation
   ];
-
-  nativeBuildInputs = [ cmake llvmPackages.lld ];
-
-  checkInputs = [ gtest ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
     "-DWASMEDGE_BUILD_TESTS=OFF" # Tests are downloaded using git
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
   ];
+
+  postPatch = ''
+    echo -n $version > VERSION
+  '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://wasmedge.org/";
     license = with licenses; [ asl20 ];
     description = "A lightweight, high-performance, and extensible WebAssembly runtime for cloud native, edge, and decentralized applications";
     maintainers = with maintainers; [ dit7ya ];
+    platforms = platforms.all;
   };
-}
+})

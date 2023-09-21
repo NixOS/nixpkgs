@@ -6,7 +6,7 @@
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
-    removeSuffix replaceChars singleton splitString;
+    removeSuffix replaceStrings singleton splitString makeBinPath;
 
   /*
     * The attrset `exporterTests` contains one attribute
@@ -182,7 +182,7 @@ let
         enable = true;
         extraFlags = [ "--web.collectd-push-path /collectd" ];
       };
-      exporterTest = let postData = replaceChars [ "\n" ] [ "" ] ''
+      exporterTest = let postData = replaceStrings [ "\n" ] [ "" ] ''
         [{
           "values":[23],
           "dstypes":["gauge"],
@@ -234,9 +234,7 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-domain-exporter.service")
         wait_for_open_port(9222)
-        succeed(
-            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep 'domain_probe_success 0'"
-        )
+        succeed("curl -sSf 'http://localhost:9222/probe?target=nixos.org'")
       '';
     };
 
@@ -286,6 +284,46 @@ let
       '';
     };
 
+    graphite = {
+      exporterConfig = {
+        enable = true;
+        port = 9108;
+        graphitePort = 9109;
+        mappingSettings.mappings = [{
+          match = "test.*.*";
+          name = "testing";
+          labels = {
+            protocol = "$1";
+            author = "$2";
+          };
+        }];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-graphite-exporter.service")
+        wait_for_open_port(9108)
+        wait_for_open_port(9109)
+        succeed("echo test.tcp.foo-bar 1234 $(date +%s) | nc -w1 localhost 9109")
+        succeed("curl -sSf http://localhost:9108/metrics | grep 'testing{author=\"foo-bar\",protocol=\"tcp\"} 1234'")
+      '';
+    };
+
+    idrac = {
+      exporterConfig = {
+        enable = true;
+        port = 9348;
+        configuration = {
+          hosts = {
+            default = { username = "username"; password = "password"; };
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-idrac-exporter.service")
+        wait_for_open_port(9348)
+        wait_until_succeeds("curl localhost:9348")
+      '';
+    };
+
     influxdb = {
       exporterConfig = {
         enable = true;
@@ -328,7 +366,7 @@ let
         systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
         services.jitsi-videobridge = {
           enable = true;
-          apis = [ "colibri" "rest" ];
+          colibriRestApi = true;
         };
       };
       exporterTest = ''
@@ -348,9 +386,13 @@ let
         enable = true;
         url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
-          metrics = [
-            { name = "json_test_metric"; path = "{ .test }"; }
-          ];
+          modules = {
+            default = {
+              metrics = [
+                { name = "json_test_metric"; path = "{ .test }"; }
+              ];
+            };
+          };
         });
       };
       metricProvider = {
@@ -374,25 +416,34 @@ let
     };
 
     kea = let
-      controlSocketPath = "/run/kea/dhcp6.sock";
+      controlSocketPathV4 = "/run/kea/dhcp4.sock";
+      controlSocketPathV6 = "/run/kea/dhcp6.sock";
     in
     {
       exporterConfig = {
         enable = true;
         controlSocketPaths = [
-          controlSocketPath
+          controlSocketPathV4
+          controlSocketPathV6
         ];
       };
       metricProvider = {
-        systemd.services.prometheus-kea-exporter.after = [ "kea-dhcp6-server.service" ];
-
         services.kea = {
+          dhcp4 = {
+            enable = true;
+            settings = {
+              control-socket = {
+                socket-type = "unix";
+                socket-name = controlSocketPathV4;
+              };
+            };
+          };
           dhcp6 = {
             enable = true;
             settings = {
               control-socket = {
                 socket-type = "unix";
-                socket-name = controlSocketPath;
+                socket-name = controlSocketPathV6;
               };
             };
           };
@@ -400,8 +451,10 @@ let
       };
 
       exporterTest = ''
+        wait_for_unit("kea-dhcp4-server.service")
         wait_for_unit("kea-dhcp6-server.service")
-        wait_for_file("${controlSocketPath}")
+        wait_for_file("${controlSocketPathV4}")
+        wait_for_file("${controlSocketPathV6}")
         wait_for_unit("prometheus-kea-exporter.service")
         wait_for_open_port(9547)
         succeed(
@@ -663,6 +716,41 @@ let
       '';
     };
 
+    mysqld = {
+      exporterConfig = {
+        enable = true;
+        runAsLocalSuperUser = true;
+        configFile = pkgs.writeText "test-prometheus-exporter-mysqld-config.my-cnf" ''
+          [client]
+          user = exporter
+          password = snakeoilpassword
+        '';
+      };
+      metricProvider = {
+        services.mysql = {
+          enable = true;
+          package = pkgs.mariadb;
+          initialScript = pkgs.writeText "mysql-init-script.sql" ''
+            CREATE USER 'exporter'@'localhost'
+            IDENTIFIED BY 'snakeoilpassword'
+            WITH MAX_USER_CONNECTIONS 3;
+            GRANT PROCESS, REPLICATION CLIENT, SLAVE MONITOR, SELECT ON *.* TO 'exporter'@'localhost';
+          '';
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-mysqld-exporter.service")
+        wait_for_open_port(9104)
+        wait_for_unit("mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 1'")
+        systemctl("stop mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 0'")
+        systemctl("start mysql.service")
+        wait_for_unit("mysql.service")
+        succeed("curl -sSf http://localhost:9104/metrics | grep 'mysql_up 1'")
+      '';
+    };
+
     nextcloud = {
       exporterConfig = {
         enable = true;
@@ -878,6 +966,47 @@ let
       '';
     };
 
+    php-fpm = {
+      nodeName = "php_fpm";
+      exporterConfig = {
+        enable = true;
+        environmentFile = pkgs.writeTextFile {
+          name = "/tmp/prometheus-php-fpm-exporter.env";
+          text = ''
+            PHP_FPM_SCRAPE_URI="tcp://127.0.0.1:9000/status"
+          '';
+        };
+      };
+      metricProvider = {
+        users.users."php-fpm-exporter" = {
+          isSystemUser = true;
+          group  = "php-fpm-exporter";
+        };
+        users.groups."php-fpm-exporter" = {};
+        services.phpfpm.pools."php-fpm-exporter" = {
+          user = "php-fpm-exporter";
+          group = "php-fpm-exporter";
+          settings = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.max_requests" = 500;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 5;
+            "pm.status_path" = "/status";
+            "listen" = "127.0.0.1:9000";
+            "listen.allowed_clients" = "127.0.0.1";
+          };
+          phpEnv."PATH" = makeBinPath [ pkgs.php ];
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("phpfpm-php-fpm-exporter.service")
+        wait_for_unit("prometheus-php-fpm-exporter.service")
+        succeed("curl -sSf http://localhost:9253/metrics | grep 'phpfpm_up{.*} 1'")
+      '';
+    };
+
     postfix = {
       exporterConfig = {
         enable = true;
@@ -1049,6 +1178,36 @@ let
       '';
     };
 
+    scaphandre = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.kernelModules = [ "intel_rapl_common" ];
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-scaphandre-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:8080/metrics'"
+        )
+      '';
+    };
+
+    shelly = {
+      exporterConfig = {
+        enable = true;
+        metrics-file = "${pkgs.writeText "test.json" ''{}''}";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-shelly-exporter.service")
+        wait_for_open_port(9784)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9784/metrics'"
+        )
+      '';
+    };
+
     script = {
       exporterConfig = {
         enable = true;
@@ -1075,13 +1234,8 @@ let
         ];
       };
       exporterTest = ''
-        wait_for_unit("prometheus-smartctl-exporter.service")
-        wait_for_open_port(9633)
         wait_until_succeeds(
-          "curl -sSf 'localhost:9633/metrics'"
-        )
-        wait_until_succeeds(
-            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "/dev/vda: Unable to detect device type"'
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
         )
       '';
     };
@@ -1166,6 +1320,27 @@ let
       '';
     };
 
+    statsd = {
+      exporterConfig = {
+        enable = true;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-statsd-exporter.service")
+        wait_for_open_port(9102)
+        succeed("curl http://localhost:9102/metrics | grep 'statsd_exporter_build_info{'")
+        wait_until_succeeds(
+          "echo 'test.udp:1|c' > /dev/udp/localhost/9125 && \
+          curl http://localhost:9102/metrics | grep 'test_udp 1'",
+          timeout=10
+        )
+        wait_until_succeeds(
+          "echo 'test.tcp:1|c' > /dev/tcp/localhost/9125 && \
+          curl http://localhost:9102/metrics | grep 'test_tcp 1'",
+          timeout=10
+        )
+      '';
+    };
+
     surfboard = {
       exporterConfig = {
         enable = true;
@@ -1233,15 +1408,13 @@ let
       '';
     };
 
-    unifi-poller = {
-      nodeName = "unifi_poller";
+    unpoller = {
+      nodeName = "unpoller";
       exporterConfig.enable = true;
       exporterConfig.controllers = [{ }];
       exporterTest = ''
-        wait_for_unit("prometheus-unifi-poller-exporter.service")
-        wait_for_open_port(9130)
-        succeed(
-            "curl -sSf localhost:9130/metrics | grep 'unifipoller_build_info{.\\+} 1'"
+        wait_until_succeeds(
+            'journalctl -eu prometheus-unpoller-exporter.service -o cat | grep "Connection Error"'
         )
       '';
     };
@@ -1249,8 +1422,7 @@ let
     unbound = {
       exporterConfig = {
         enable = true;
-        fetchType = "uds";
-        controlInterface = "/run/unbound/unbound.ctl";
+        unbound.host = "unix:///run/unbound/unbound.ctl";
       };
       metricProvider = {
         services.unbound = {
@@ -1265,7 +1437,7 @@ let
         wait_for_unit("unbound.service")
         wait_for_unit("prometheus-unbound-exporter.service")
         wait_for_open_port(9167)
-        succeed("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
+        wait_until_succeeds("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
       '';
     };
 
@@ -1359,7 +1531,10 @@ let
       '';
     };
 
-    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in
+    wireguard = let
+      snakeoil = import ./wireguard/snakeoil-keys.nix;
+      publicKeyWithoutNewlines = replaceStrings [ "\n" ] [ "" ] snakeoil.peer1.publicKey;
+    in
       {
         exporterConfig.enable = true;
         metricProvider = {
@@ -1381,10 +1556,26 @@ let
           wait_for_unit("prometheus-wireguard-exporter.service")
           wait_for_open_port(9586)
           wait_until_succeeds(
-              "curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'"
+              "curl -sSf http://localhost:9586/metrics | grep '${publicKeyWithoutNewlines}'"
           )
         '';
       };
+
+    zfs = {
+      exporterConfig = {
+        enable = true;
+      };
+      metricProvider = {
+        boot.supportedFilesystems = [ "zfs" ];
+        networking.hostId = "7327ded7";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-zfs-exporter.service")
+        wait_for_unit("zfs.target")
+        wait_for_open_port(9134)
+        wait_until_succeeds("curl -f localhost:9134/metrics | grep 'zfs_scrape_collector_success{.*} 1'")
+      '';
+    };
   };
 in
 mapAttrs

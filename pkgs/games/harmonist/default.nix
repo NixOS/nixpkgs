@@ -1,20 +1,17 @@
-{lib, fetchurl, buildGoPackage}:
+{lib, fetchurl, buildGoModule}:
 
-buildGoPackage rec {
-
+buildGoModule rec {
   pname = "harmonist";
-  version = "0.4.1";
-
-  goPackagePath = "git.tuxfamily.org/harmonist/harmonist.git";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/harmonist/releases/${pname}-${version}.tar.gz";
-    sha256 = "19abqmzz9nnlnizkskvlkcpahk8lzrl57mgg6dfxn25l55vfznws";
+    hash = "sha256-NkUrBvOOs6yctW4CVRpJNcdfdPvUJZp9HaWLS7eO4yE=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-0DV32a2LYnfYzg/tqwear9uaaahNUIi0M8uWlXOQ5Ic=";
 
-  postInstall = "mv $out/bin/harmonist.git $out/bin/harmonist";
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "A stealth coffee-break roguelike game";
@@ -28,7 +25,6 @@ buildGoPackage rec {
     '';
     homepage = "https://harmonist.tuxfamily.org/";
     license = licenses.isc;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ aaronjheng ];
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tmux-mem-cpu-load";
-  version = "3.6.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "thewtex";
     repo = "tmux-mem-cpu-load";
     rev = "v${version}";
-    sha256 = "sha256-1smhlp30y0qihm+d9RcCKY1CFbPm5gzago+OIQQT5jE=";
+    sha256 = "sha256-dRHV2XF3NFzd4HT9SbRnEn8U40QTnAUJDsM51NA9fEk=";
   };
 
   nativeBuildInputs = [ cmake ];

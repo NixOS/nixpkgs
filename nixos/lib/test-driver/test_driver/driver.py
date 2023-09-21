@@ -2,6 +2,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Union, Optional, Callable, ContextManager
 import os
+import re
 import tempfile
 
 from test_driver.logger import rootlog
@@ -19,17 +20,17 @@ def get_tmp_dir() -> Path:
     tmp_dir.mkdir(mode=0o700, exist_ok=True)
     if not tmp_dir.is_dir():
         raise NotADirectoryError(
-            "The directory defined by TMPDIR, TEMP, TMP or CWD: {0} is not a directory".format(
-                tmp_dir
-            )
+            f"The directory defined by TMPDIR, TEMP, TMP or CWD: {tmp_dir} is not a directory"
         )
     if not os.access(tmp_dir, os.W_OK):
         raise PermissionError(
-            "The directory defined by TMPDIR, TEMP, TMP, or CWD: {0} is not writeable".format(
-                tmp_dir
-            )
+            f"The directory defined by TMPDIR, TEMP, TMP, or CWD: {tmp_dir} is not writeable"
         )
     return tmp_dir
+
+
+def pythonize_name(name: str) -> str:
+    return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
 
 
 class Driver:
@@ -117,7 +118,7 @@ class Driver:
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
         )
-        machine_symbols = {m.name: m for m in self.machines}
+        machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
         # "machine", even if it's not called that.
         if len(self.machines) == 1:
@@ -162,11 +163,6 @@ class Driver:
                 machine.wait_for_shutdown()
 
     def create_machine(self, args: Dict[str, Any]) -> Machine:
-        rootlog.warning(
-            "Using legacy create_machine(), please instantiate the"
-            "Machine class directly, instead"
-        )
-
         tmp_dir = get_tmp_dir()
 
         if args.get("startCommand"):
@@ -183,7 +179,6 @@ class Driver:
             start_command=cmd,
             name=name,
             keep_vm_state=args.get("keep_vm_state", False),
-            allow_reboot=args.get("allow_reboot", False),
         )
 
     def serial_stdout_on(self) -> None:
@@ -219,6 +214,20 @@ class Driver:
             def __exit__(self, a, b, c) -> None:  # type: ignore
                 res = driver.polling_conditions.pop()
                 assert res is self.condition
+
+            def wait(self, timeout: int = 900) -> None:
+                def condition(last: bool) -> bool:
+                    if last:
+                        rootlog.info(f"Last chance for {self.condition.description}")
+                    ret = self.condition.check(force=True)
+                    if not ret and not last:
+                        rootlog.info(
+                            f"({self.condition.description} failure not fatal yet)"
+                        )
+                    return ret
+
+                with rootlog.nested(f"waiting for {self.condition.description}"):
+                    retry(condition, timeout=timeout)
 
         if fun_ is None:
             return Poll

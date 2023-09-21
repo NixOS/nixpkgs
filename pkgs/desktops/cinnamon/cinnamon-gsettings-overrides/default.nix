@@ -2,6 +2,7 @@
 , runCommand
 , nixos-artwork
 , glib
+, gnome
 , gtk3
 , gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
@@ -35,9 +36,20 @@ let
     cinnamon-session
     cinnamon-settings-daemon
     cinnamon-common
+    gnome.gnome-terminal
     gtk3
   ] ++ extraGSettingsOverridePackages;
 
+  gsettingsOverrides = ''
+    # Use Fedora's default to make text readable and
+    # restore ununified menu.
+    # https://github.com/NixOS/nixpkgs/issues/200017
+    [org.gnome.Terminal.Legacy.Settings]
+    theme-variant='dark'
+    unified-menu=false
+
+    ${extraGSettingsOverrides}
+  '';
 in
 
 # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
@@ -53,7 +65,7 @@ runCommand "cinnamon-gsettings-overrides" { preferLocalBuild = true; }
     chmod -R a+w "$data_dir"
 
     cat - > "$schema_dir/nixos-defaults.gschema.override" <<- EOF
-    ${extraGSettingsOverrides}
+    ${gsettingsOverrides}
     EOF
 
     ${glib.dev}/bin/glib-compile-schemas --strict "$schema_dir"

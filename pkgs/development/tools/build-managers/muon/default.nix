@@ -17,15 +17,17 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "muon"
           + lib.optionalString embedSamurai "-embedded-samurai";
-  version = "unstable-2022-09-24";
+  version = "0.2.0";
 
   src = fetchFromSourcehut {
     name = "muon-src";
     owner = "~lattis";
     repo = "muon";
-    rev = "f385c82a6104ea3341ca34756e2812d700bc43d8";
-    hash = "sha256-Cr1r/sp6iVotU+n4bTzQiQl8Y+ShaqnnaWjL6gRW8p0=";
+    rev = finalAttrs.version;
+    hash = "sha256-ZHWyUV/BqM3ihauXDqDVkZURDDbBiRcEzptyGQmw94I=";
   };
+
+  outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" ];
 
   nativeBuildInputs = [
     pkgconf
@@ -50,14 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
     # URLs manually extracted from subprojects directory
     meson-docs-wrap = fetchurl {
       name = "meson-docs-wrap";
-      url = "https://mochiro.moe/wrap/meson-docs-0.63.0-116-g8a45c81cf.tar.gz";
-      hash = "sha256-fsXdhfBEXvw1mvqnPp2TgZnO5FaeHTNW3Nfd5qfTfxg=";
+      url = "https://mochiro.moe/wrap/meson-docs-1.0.1-19-gdd8d4ee22.tar.gz";
+      hash = "sha256-jHSPdLFR5jUeds4e+hLZ6JOblor5iuCV5cIwoc4K9gI=";
     };
 
     samurai-wrap = fetchurl {
       name = "samurai-wrap";
-      url = "https://mochiro.moe/wrap/samurai-1.2-28-g4e3a595.tar.gz";
-      hash = "sha256-TZAEwndVgoWr/zhykfr0wcz9wM96yG44GfzM5p9TpBo=";
+      url = "https://mochiro.moe/wrap/samurai-1.2-32-g81cef5d.tar.gz";
+      hash = "sha256-aPMAtScqweGljvOLaTuR6B0A0GQQQrVbRviXY4dpCoc=";
   };
   in ''
     pushd $sourceRoot/subprojects
@@ -79,14 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildPhase = let
-    featureFlag = feature: flag:
-      "-D${feature}=${if flag then "enabled" else "disabled"}";
-    conditionFlag = condition: flag:
-      "-D${condition}=${lib.boolToString flag}";
+    muonBool = lib.mesonBool;
+    muonEnable = lib.mesonEnable;
+
     cmdlineForMuon = lib.concatStringsSep " " [
-      (conditionFlag "static" stdenv.targetPlatform.isStatic)
-      (featureFlag "docs" buildDocs)
-      (featureFlag "samurai" embedSamurai)
+      (muonBool "static" stdenv.targetPlatform.isStatic)
+      (muonEnable "docs" buildDocs)
+      (muonEnable "samurai" embedSamurai)
     ];
     cmdlineForSamu = "-j$NIX_BUILD_CORES";
   in ''
@@ -132,7 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 # TODO LIST:
-# 1. setup hook
-# 2. multiple outputs
-# 3. automate sources acquisition (especially wraps)
-# 4. tests
+# 1. automate sources acquisition (especially wraps)
+# 2. setup hook
+# 3. tests

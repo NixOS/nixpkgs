@@ -1,7 +1,7 @@
 { lib
+, stdenv
 , dbus
 , fetchFromGitHub
-, libssh
 , openssl
 , pkg-config
 , rustPlatform
@@ -9,21 +9,20 @@
 , Cocoa
 , Foundation
 , Security
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.9.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-iazp3Qx2AivuL+S1Ma/64BLJtE46tc33dq5qsgw+a6Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bQvoTy48eYK369Ei6B8l6F5/pfQGYiHdz3KsQV7Bi9Y=";
   };
 
-  cargoSha256 = "sha256-FBW3Hl67Efnc/sNGM1LQw6msWHCYRj3KwfmSD2lpbUc=";
+  cargoHash = "sha256-/nadstDHzLOrimL+xK7/ldOozz7ZS1nRQmkIhGHK8p8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,18 +30,20 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     dbus
-    libssh
     openssl
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
     Foundation
     Security
   ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
     "-framework" "AppKit"
-  ];
+  ]);
 
   # Requires network access
   doCheck = false;
@@ -50,6 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Terminal tool for file transfer and explorer";
     homepage = "https://github.com/veeso/termscp";
+    changelog = "https://github.com/veeso/termscp/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

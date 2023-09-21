@@ -12,11 +12,10 @@ buildPythonPackage rec {
 
   src = unicorn-emu.src;
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   prePatch = ''
-    ln -s ${unicorn-emu}/lib/libunicorn${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
-    ln -s ${unicorn-emu}/lib/libunicorn.a prebuilt/
+    ln -s ${unicorn-emu}/lib/libunicorn.* prebuilt/
   '';
 
   # needed on non-x86 linux

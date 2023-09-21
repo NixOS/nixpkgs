@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image SDL_ttf SDL_gfx ];
 
-  NIX_CFLAGS_COMPILE = toString (makeSDLFlags [ SDL SDL_image SDL_ttf SDL_gfx ]);
+  env.NIX_CFLAGS_COMPILE = toString (makeSDLFlags [ SDL SDL_image SDL_ttf SDL_gfx ]);
 
   patches = [
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.

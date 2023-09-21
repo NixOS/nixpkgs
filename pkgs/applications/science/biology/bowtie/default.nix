@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An ultrafast memory-efficient short read aligner";
     license = licenses.artistic2;
-    homepage = "http://bowtie-bio.sourceforge.net";
+    homepage = "https://bowtie-bio.sourceforge.net";
     maintainers = with maintainers; [ prusnak ];
     platforms = platforms.all;
   };

@@ -6,14 +6,14 @@ buildDunePackage rec {
   pname = "otr";
   version = "0.3.10";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/hannesm/ocaml-otr/releases/download/v${version}/otr-v${version}.tbz";
-    sha256 = "0dssc7p6s7z53n0mddyipjghzr8ld8bb7alaxqrx9gdpspwab1gq";
+    hash = "sha256:0dssc7p6s7z53n0mddyipjghzr8ld8bb7alaxqrx9gdpspwab1gq";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
 
   propagatedBuildInputs = [ cstruct sexplib0 mirage-crypto mirage-crypto-pk
                             astring base64 ];

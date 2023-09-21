@@ -8,7 +8,7 @@ let
   # Escaping is done according to https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-CONSTANTS
   setDatabaseOption = key: value:
     "UPDATE settings SET value = '${
-      lib.replaceChars [ "'" ] [ "''" ] (builtins.toJSON value)
+      lib.replaceStrings [ "'" ] [ "''" ] (builtins.toJSON value)
     }' WHERE key = '${key}';";
   updateDatabaseConfigSQL = pkgs.writeText "update-database-config.sql"
     (concatStringsSep "\n" (mapAttrsToList setDatabaseOption
@@ -54,7 +54,7 @@ let
 
       smtp = mkOption {
         type = listOf (submodule {
-          freeformType = with types; attrsOf (oneOf [ str int bool ]);
+          freeformType = with types; attrsOf anything;
 
           options = {
             enabled = mkEnableOption (lib.mdDoc "this SMTP server for listmonk");
@@ -86,7 +86,7 @@ let
       # TODO: refine this type based on the smtp one.
       "bounce.mailboxes" = mkOption {
         type = listOf
-          (submodule { freeformType = with types; oneOf [ str int bool ]; });
+          (submodule { freeformType = with types; listOf (attrsOf anything); });
         default = [ ];
         description = lib.mdDoc "List of bounce mailboxes";
       };
@@ -128,7 +128,7 @@ in {
           '';
         };
       };
-      package = mkPackageOption pkgs "listmonk" {};
+      package = mkPackageOptionMD pkgs "listmonk" {};
       settings = mkOption {
         type = types.submodule { freeformType = tomlFormat.type; };
         description = lib.mdDoc ''
@@ -202,7 +202,7 @@ in {
         NoNewPrivileges = true;
         CapabilityBoundingSet = "";
         SystemCallArchitecture = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "@resources" ];
+        SystemCallFilter = [ "@system-service" "~@privileged" ];
         ProtectDevices = true;
         ProtectControlGroups = true;
         ProtectKernelTunables = true;

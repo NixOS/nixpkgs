@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , makeWrapper
+, wrapGAppsHook
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -32,11 +33,13 @@
 , systemd
 , xdg-utils
 , xorg
+, wayland
+, pipewire
 }:
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.0.8";
+  version = "3.2.4";
 
   src =
     let
@@ -45,15 +48,17 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          sha256 = "sha256-Lzkh1RDRoZSg5GNYlntROHdKLj12ogCqH+h8l5en9U0=";
+          hash = "sha256-IUHcDHIJeGx7QKjxl3fUFHqUfs1JdIFxesvDXt3mVw0=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          sha256 = "sha256-PuQ/zhuv+MA59Cx6QypAmg5Q6zVwfKg+1xKbazb3XM0=";
+          hash = "sha256-TWVlEjakdRyZmOuBq9HLO+R7y5jmgstFtyEHjf8nxxM=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+
+  dontWrapGApps = true;
 
   buildInputs = [
     alsa-lib
@@ -94,6 +99,8 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libxshmfence
     xorg.libXtst
+    wayland
+    pipewire
   ];
 
   sourceRoot = ".";
@@ -109,9 +116,11 @@ stdenv.mkDerivation rec {
 
     # Wrap the startup command
     makeWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      "''${gappsWrapperArgs[@]}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     # Fix desktop link
     substituteInPlace $out/share/applications/armcord.desktop \
@@ -122,10 +131,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";
-    homepage = "https://github.com/ArmCord/ArmCord";
+    homepage = "https://armcord.app";
+    downloadPage = "https://github.com/ArmCord/ArmCord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling ];
+    maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "armcord";
   };
 }

@@ -1,13 +1,16 @@
 { lib
-, awkward
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
+, pythonOlder
+, awkward
+, hatchling
 , importlib-metadata
-, lz4
 , numpy
 , packaging
 , pytestCheckHook
-, pythonOlder
+, lz4
+, pytest-timeout
 , scikit-hep-testdata
 , xxhash
 , zstandard
@@ -15,32 +18,37 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "4.3.6";
-  format = "setuptools";
+  version = "5.0.11";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
-    repo = "uproot4";
+    repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Te4D2tHVD5fD8DH2njjQMGnTUvLQdcGBzApklnGn6g8=";
+    hash = "sha256-qp1iffElJSAwqaycelnILBzeW8kG7Yy0R1bjMumW8UU=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     awkward
     numpy
-    lz4
     packaging
-    xxhash
-    zstandard
   ]  ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    lz4
+    pytest-timeout
     scikit-hep-testdata
+    xxhash
+    zstandard
   ];
 
   preCheck = ''
@@ -60,6 +68,8 @@ buildPythonPackage rec {
     "tests/test_0066-fix-http-fallback-freeze.py"
     "tests/test_0088-read-with-http.py"
     "tests/test_0220-contiguous-byte-ranges-in-http.py"
+    "tests/test_0916-read-from-s3.py"
+    "tests/test_0930-expressions-in-pandas.py"
   ];
 
   pythonImportsCheck = [

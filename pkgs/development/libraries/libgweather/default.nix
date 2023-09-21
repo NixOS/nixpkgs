@@ -5,27 +5,29 @@
 , ninja
 , pkg-config
 , libxml2
+, json-glib
 , glib
 , gettext
-, libsoup
+, libsoup_3
 , gi-docgen
 , gobject-introspection
 , python3
 , tzdata
-, geocode-glib
+, geocode-glib_2
 , vala
 , gnome
+, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.0.0";
+  version = "4.2.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "RA1EgBtvcrSMZ25eN/kQnP7hOU/XTMknJeGxuk+ug0w=";
+    sha256 = "r4qBLaDYl2oADh1iVywlYIaoFzI/vzWwZtv92NLKYgM=";
   };
 
   patches = [
@@ -44,27 +46,28 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gettext
-    vala
+    glib
+    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+  ] ++ lib.optionals withIntrospection [
     gi-docgen
     gobject-introspection
-    (python3.pythonForBuild.withPackages (ps: [ ps.pygobject3 ]))
+    vala
   ];
 
   buildInputs = [
     glib
-    libsoup
+    libsoup_3
     libxml2
-    geocode-glib
+    json-glib
+    geocode-glib_2
   ];
 
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
-    "-Denable_vala=true"
-    "-Dgtk_doc=true"
+    (lib.mesonBool "introspection" withIntrospection)
   ];
 
   postPatch = ''
-    patchShebangs build-aux/meson/meson_post_install.py
     patchShebangs build-aux/meson/gen_locations_variant.py
 
     # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)

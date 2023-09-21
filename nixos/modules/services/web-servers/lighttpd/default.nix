@@ -64,7 +64,7 @@ let
   ];
 
   maybeModuleString = moduleName:
-    if elem moduleName cfg.enableModules then ''"${moduleName}"'' else "";
+    optionalString (elem moduleName cfg.enableModules) ''"${moduleName}"'';
 
   modulesIncludeString = concatStringsSep ",\n"
     (filter (x: x != "") (map maybeModuleString allKnownModules));
@@ -106,15 +106,15 @@ let
       static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
       index-file.names = ( "index.html" )
 
-      ${if cfg.mod_userdir then ''
+      ${optionalString cfg.mod_userdir ''
         userdir.path = "public_html"
-      '' else ""}
+      ''}
 
-      ${if cfg.mod_status then ''
+      ${optionalString cfg.mod_status ''
         status.status-url = "/server-status"
         status.statistics-url = "/server-statistics"
         status.config-url = "/server-config"
-      '' else ""}
+      ''}
 
       ${cfg.extraConfig}
     '';
@@ -137,7 +137,7 @@ in
 
       package = mkOption {
         default = pkgs.lighttpd;
-        defaultText = "pkgs.lighttpd";
+        defaultText = lib.literalExpression "pkgs.lighttpd";
         type = types.package;
         description = lib.mdDoc ''
           lighttpd package to use.

@@ -8,7 +8,7 @@
 , libXpm ? null
 , libXaw ? null
 , aquaterm ? false
-, withWxGTK ? false, wxGTK ? null
+, withWxGTK ? false, wxGTK32, Cocoa
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
@@ -21,11 +21,11 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.4";
+  version = "5.4.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-NyMAt4Z/WzU4sl/F0Kx3NK9uP+DSArbbkm5DaZE/CQI=";
+    sha256 = "sha256-kxJ5x8qtGv99RstHZvH/QcJtm+na8Lzwx53u7j2R9c8=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
@@ -37,7 +37,8 @@ in
     ++ lib.optional withCaca libcaca
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
-    ++ lib.optional withWxGTK wxGTK;
+    ++ lib.optional withWxGTK wxGTK32
+    ++ lib.optional (withWxGTK && stdenv.isDarwin) Cocoa;
 
   postPatch = ''
     # lrelease is in qttools, not in qtbase.
@@ -52,13 +53,24 @@ in
 
   CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
+  # we'll wrap things ourselves
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
+  # binary wrappers don't support --run
   postInstall = lib.optionalString withX ''
-    wrapProgram $out/bin/gnuplot \
-       --prefix PATH : '${gnused}/bin' \
-       --prefix PATH : '${coreutils}/bin' \
-       --prefix PATH : '${fontconfig.bin}/bin' \
+    wrapProgramShell $out/bin/gnuplot \
+       --prefix PATH : '${lib.makeBinPath [ gnused coreutils fontconfig.bin ]}' \
+       "''${gappsWrapperArgs[@]}" \
+       "''${qtWrapperArgs[@]}" \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
+
+  # When cross-compiling, don't build docs and demos.
+  # Inspiration taken from https://sourceforge.net/p/gnuplot/gnuplot-main/merge-requests/10/
+  makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-C src"
+  ];
 
   enableParallelBuilding = true;
 

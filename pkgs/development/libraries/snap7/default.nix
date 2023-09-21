@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://snap7.sourceforge.net/";
+    homepage = "https://snap7.sourceforge.net/";
     description = "Step7 Open Source Ethernet Communication Suite";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ freezeboy ];

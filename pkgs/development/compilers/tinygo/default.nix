@@ -18,27 +18,38 @@
 , avrdude
 , gdb
 , openocd
+, runCommand
 , tinygoTests ? [ "smoketest" ]
 }:
 
 let
   llvmMajor = lib.versions.major llvm.version;
   inherit (llvmPackages) llvm clang compiler-rt lld;
+
+  # only doing this because only on darwin placing clang.cc in nativeBuildInputs
+  # doesn't build
+  bootstrapTools = runCommand "tinygo-bootstap-tools" { } ''
+    mkdir -p $out
+    ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/ld.lld $out/ld.lld-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/wasm-ld $out/wasm-ld-${llvmMajor}
+    ln -s ${gdb}/bin/gdb $out/gdb-multiarch
+  '';
 in
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "sha256-Rxdxum1UIaz8tpEAGqpLvKd25nHdj4Se+IoN29EJEHg=";
+    sha256 = "rI8CADPWKdNvfknEsrpp2pCeZobf9fAp0GDIWjupzZA=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-QxLY4KT05PtA/W7d1vKxsq5w35YZ6MJL3Lh726b+E9w=";
+  vendorHash = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
 
   patches = [
     ./0001-Makefile.patch
@@ -52,7 +63,7 @@ buildGoModule rec {
     ./0003-Use-out-path-as-build-id-on-darwin.patch
   ];
 
-  checkInputs = [ avrgcc binaryen ];
+  nativeCheckInputs = [ avrgcc binaryen ];
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ llvm clang.cc ]
     ++ lib.optionals stdenv.isDarwin [ zlib ncurses libffi libxml2 xar ];
@@ -100,20 +111,13 @@ buildGoModule rec {
     # Disable windows and darwin cross-compile tests
     sed -i "/GOOS=windows/d" Makefile
     sed -i "/GOOS=darwin/d" Makefile
-
-    # tinygo needs versioned binaries
-    mkdir -p $out/libexec/tinygo
-    ln -s ${lib.getBin clang.cc}/bin/clang $out/libexec/tinygo/clang-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/ld.lld $out/libexec/tinygo/ld.lld-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/wasm-ld $out/libexec/tinygo/wasm-ld-${llvmMajor}
-    ln -s ${gdb}/bin/gdb $out/libexec/tinygo/gdb-multiarch
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace Makefile \
       --replace "./build/tinygo" "${buildPackages.tinygo}/bin/tinygo"
   '';
 
   preBuild = ''
-    export PATH=$out/libexec/tinygo:$PATH
+    export PATH=${bootstrapTools}:$PATH
     export HOME=$TMPDIR
   '';
 
@@ -149,7 +153,7 @@ buildGoModule rec {
     make build/release
 
     wrapProgram $out/bin/tinygo \
-      --prefix PATH : ${lib.makeBinPath [ go avrdude openocd avrgcc binaryen ]}:$out/libexec/tinygo
+      --prefix PATH : ${lib.makeBinPath [ go avrdude openocd avrgcc binaryen ]}:${bootstrapTools}
 
     runHook postInstall
   '';

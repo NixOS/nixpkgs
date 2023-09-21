@@ -1,12 +1,19 @@
-{ lib, stdenv, fetchurl, gettext, bzip2 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, bzip2
+}:
 
 stdenv.mkDerivation rec {
   pname = "sysstat";
-  version = "12.6.0";
+  version = "12.7.4";
 
-  src = fetchurl {
-    url = "http://pagesperso-orange.fr/sebastien.godard/sysstat-${version}.tar.xz";
-    sha256 = "sha256-aZ/ZSINtd/mtBUH9Xc91zSUF+dpOwU32aShq0EfCPZc=";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ELmSzWnJ8vGwGPwY/5MFp/2gQhMXMjNG4bHtCplfQSc=";
   };
 
   buildInputs = [ gettext ];

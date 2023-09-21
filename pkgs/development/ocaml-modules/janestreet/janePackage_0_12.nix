@@ -5,7 +5,7 @@
 buildDunePackage (args // {
   inherit version;
 
-  useDune2 = false;
+  duneVersion = "1";
 
   minimalOCamlVersion = "4.07";
 
@@ -15,8 +15,6 @@ buildDunePackage (args // {
     rev = "v${version}";
     sha256 = hash;
   };
-
-  strictDeps = true;
 
   meta = {
     license = lib.licenses.mit;

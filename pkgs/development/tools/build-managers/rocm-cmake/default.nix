@@ -1,30 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rocmUpdateScript
+, cmake
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
-  version = "5.2.0";
+  version = "5.4.4";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm-cmake";
-    rev = "rocm-${version}";
-    hash = "sha256-2YALk3G5BhrsXZZHjGSSuk8tCi5sNGuB2VB4uvozyZo=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-JarQqiiZ36WV1d6vyQD546GN1EtoKLcdvcZsG3QWD2Y=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/RadeonOpenCompute/rocm-cmake/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocm-cmake "$version"
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "CMake modules for common build tasks for the ROCm stack";
     homepage = "https://github.com/RadeonOpenCompute/rocm-cmake";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = teams.rocm.members;
     platforms = platforms.unix;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
-}
+})

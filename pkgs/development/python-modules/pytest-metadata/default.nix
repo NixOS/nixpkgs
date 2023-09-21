@@ -1,24 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, hatch-vcs
+, hatchling
 , pytest
+, pytestCheckHook
 , pythonOlder
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-metadata";
-  version = "2.0.2";
+  version = "3.0.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-/NL0FvFb4pWUNSezyLoWpErlpxQZOckMPcXOnRZ88qU=";
+    pname = "pytest_metadata";
+    inherit version;
+    hash = "sha256-dpqcZdKIS9WDvGJrCs53rRXb4C3ZGpEG1H/UbZwlaco=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
-  buildInputs = [ pytest ];
+  nativeBuildInputs = [
+    hatchling
+    hatch-vcs
+  ];
+
+  buildInputs = [
+    pytest
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "Plugin for accessing test session metadata";

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "sdds";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,15 +16,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylhc";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-l9j+YJ5VNMzL6JW59kq0hQS7XIj53UxW5bNnfdURz/o=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8tnJAptTUsC0atxM9Dpn90drcprdWrs8fYoX8RDkLyQ=";
   };
 
   propagatedBuildInputs = [
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

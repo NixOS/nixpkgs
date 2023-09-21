@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , gnome
 , pkg-config
@@ -18,6 +19,7 @@
 , libchamplain
 , librsvg
 , libwebp
+, libX11
 , json-glib
 , webkitgtk
 , lcms2
@@ -33,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.12.2";
+  version = "3.12.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-l/iv5SJTUhZUHrvx47VG0Spr6zio8OuF8m5naTSq1CU=";
+    sha256 = "sha256-k9s11xQCxIoILVDPQIW7a4DkvVyLmxYaH3tRhBsQBxE=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +77,7 @@ stdenv.mkDerivation rec {
     libsoup
     libtiff
     libwebp
+    libX11
     webkitgtk
   ];
 

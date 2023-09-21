@@ -1,19 +1,20 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, writeScript
+, rocmUpdateScript
 , rocm-comgr
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocclr";
-  version = "5.2.3";
+  version = "5.4.4";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "ROCclr";
-    rev = "rocm-${version}";
-    hash = "sha256-DER6PBYXmZRgwFNVU5rpn87HrXMR+HnQf8cwHioUals=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-DbN7kL8oyaPeYQB19Q96L3wX66v62TMSWl0Yor7Q4kE=";
   };
 
   patches = [
@@ -26,37 +27,38 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace device/comgrctx.cpp \
       --replace "libamd_comgr.so" "${rocm-comgr}/lib/libamd_comgr.so"
   '';
 
-  buildPhase = "";
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out
-    cp -r * $out/
+    cp -a * $out/
 
     runHook postInstall
   '';
 
-  passthru.updateScript = writeScript "update.sh" ''
-    #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl jq common-updater-scripts
-    version="$(curl -sL "https://api.github.com/repos/ROCm-Developer-Tools/ROCclr/tags" | jq '.[].name | split("-") | .[1] | select( . != null )' --raw-output | sort -n | tail -1)"
-    update-source-version rocclr "$version"
-  '';
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   meta = with lib; {
     description = "Source package of the Radeon Open Compute common language runtime";
     homepage = "https://github.com/ROCm-Developer-Tools/ROCclr";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     # rocclr seems to have some AArch64 ifdefs, but does not seem
     # to be supported yet by the build infrastructure. Recheck in
     # the future.
     platforms = [ "x86_64-linux" ];
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
-}
+})

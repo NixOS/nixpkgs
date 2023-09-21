@@ -5,6 +5,7 @@
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
+, pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
 , python-didl-lite
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.31.2";
+  version = "0.35.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
-    rev = version;
-    sha256 = "sha256-/8gSx1oe2ljBGIPddzBLXuH3LiuHpUXi4/vO7stm5FY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-owg9oZv/smovJPoCjr9Y0TK4Ap5IMD7cNagtkYkJk1c=";
   };
 
   propagatedBuildInputs = [
@@ -34,8 +35,9 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+    pytest-aiohttp
     pytest-asyncio
   ];
 
@@ -73,6 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Asyncio UPnP Client library for Python";
     homepage = "https://github.com/StevenLooman/async_upnp_client";
+    changelog = "https://github.com/StevenLooman/async_upnp_client/blob/${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };

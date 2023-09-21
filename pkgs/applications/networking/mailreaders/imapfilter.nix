@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, openssl, lua, pcre2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "imapfilter";
-  version = "2.7.6";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "lefcha";
     repo = "imapfilter";
-    rev = "v${version}";
-    sha256 = "sha256-7B3ebY2QAk+64NycptoMmAo7GxUFOo3a7CH7txV/KTY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-nHKZ3skRbDhKWocaw5mbaRnZC37FxFIVd08iFgrEA0s=";
   };
   makeFlags = [
     "SSLCAFILE=/etc/ssl/certs/ca-bundle.crt"
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

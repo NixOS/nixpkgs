@@ -1,35 +1,40 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, unstableGitUpdater
+}:
 
-buildGoPackage rec {
-  pname = "tewisay-unstable";
-  version = "2017-04-14";
+buildGoModule rec {
+  pname = "tewisay";
+  version = "unstable-2022-11-04";
 
-  goPackagePath = "github.com/lucy/tewisay";
-
+  # lucy deleted the old repo, this is a fork/mirror
   src = fetchFromGitHub {
-    owner = "lucy";
+    owner = "raymond-w-ko";
     repo = "tewisay";
-    rev = "e3fc38737cedb79d93b8cee07207c6c86db4e488";
-    sha256 = "1na3xi4z90v8qydcvd3454ia9jg7qhinciy6kvgyz61q837cw5dk";
+    rev = "caa5b0131dda868f656716d2107f02d04d1048d4";
+    hash = "sha256-E492d8P/Bek9xZlJP+k9xvIJEFtA1YrIB/pogvz3wM4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  vendorHash = "sha256-WcpRJ31kqWA255zfjuWDj0honJgSGdm4ONx2yOKk7/g=";
 
-  goDeps = ./deps.nix;
+  # Currently hard-coded, will be fixed by developer
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace "/usr" "$out"
+  '';
 
   postInstall = ''
-    install -D -t $out/share/tewisay/cows go/src/${goPackagePath}/cows/*.cow
+    mkdir -p $out/share
+    mv {cows,zsh} $out/share
   '';
 
-  preFixup = ''
-    wrapProgram $out/bin/tewisay \
-      --prefix COWPATH : $out/share/tewisay/cows
-  '';
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    homepage = "https://github.com/lucy/tewisay";
+    homepage = "https://github.com/raymond-w-ko/tewisay";
     description = "Cowsay replacement with unicode and partial ansi escape support";
-    license = licenses.cc0;
+    license = with licenses; [ cc0 ];
     maintainers = with maintainers; [ Madouura ];
   };
 }

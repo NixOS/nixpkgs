@@ -32,7 +32,8 @@ Again, it's possible to launch the interpreter from the shell. The Ruby interpre
 
 #### Load Ruby environment from `.nix` expression {#load-ruby-environment-from-.nix-expression}
 
-As explained in the Nix manual, `nix-shell` can also load an expression from a `.nix` file. Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
+As explained [in the `nix-shell` section](https://nixos.org/manual/nix/stable/command-ref/nix-shell) of the Nix manual, `nix-shell` can also load an expression from a `.nix` file.
+Say we want to have Ruby 2.6, `nokogori`, and `pry`. Consider a `shell.nix` file with:
 
 ```nix
 with import <nixpkgs> {};
@@ -120,6 +121,16 @@ One common issue that you might have is that you have Ruby 2.6, but also `bundle
 mkShell { buildInputs = [ gems (lowPrio gems.wrappedRuby) ]; }
 ```
 
+Sometimes a Gemfile references other files. Such as `.ruby-version` or vendored gems. When copying the Gemfile to the nix store we need to copy those files alongside. This can be done using `extraConfigPaths`. For example:
+
+```nix
+  gems = bundlerEnv {
+    name = "gems-for-some-project";
+    gemdir = ./.;
+    extraConfigPaths = [ "${./.}/.ruby-version" ];
+  };
+```
+
 ### Gem-specific configurations and workarounds {#gem-specific-configurations-and-workarounds}
 
 In some cases, especially if the gem has native extensions, you might need to modify the way the gem is built.
@@ -201,7 +212,7 @@ $ nix-shell --run 'ruby -rpg -e "puts PG.library_version"'
 
 Of course for this use-case one could also use overlays since the configuration for `pg` depends on the `postgresql` alias, but for demonstration purposes this has to suffice.
 
-### Platform-specific gems
+### Platform-specific gems {#ruby-platform-specif-gems}
 
 Right now, bundix has some issues with pre-built, platform-specific gems: [bundix PR #68](https://github.com/nix-community/bundix/pull/68).
 Until this is solved, you can tell bundler to not use platform-specific gems and instead build them from source each time:

@@ -27,11 +27,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share/applications}
     ln -s $out/opt/stremio/stremio $out/bin/stremio
     mv $out/opt/stremio/smartcode-stremio.desktop $out/share/applications
+    install -Dm 644 images/stremio_window.png $out/share/pixmaps/smartcode-stremio.png
     ln -s ${nodejs}/bin/node $out/opt/stremio/node
     ln -s $server $out/opt/stremio/server.js
   '';
 
   meta = with lib; {
+    mainProgram = "stremio";
     description = "A modern media center that gives you the freedom to watch everything you want.";
     homepage = "https://www.stremio.com/";
     # (Server-side) web UI is closed source now, apparently they work on open-sourcing it.

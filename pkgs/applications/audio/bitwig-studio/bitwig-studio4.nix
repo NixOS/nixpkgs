@@ -1,16 +1,34 @@
-{ stdenv, fetchurl, alsa-lib, cairo, dpkg, freetype
-, gdk-pixbuf, glib, gtk3, lib, xorg
-, libglvnd, libjack2, ffmpeg
-, libxkbcommon, xdg-utils, zlib, pipewire, pulseaudio
-, wrapGAppsHook, makeWrapper }:
+{ stdenv
+, fetchurl
+, alsa-lib
+, cairo
+, dpkg
+, ffmpeg
+, freetype
+, gdk-pixbuf
+, glib
+, gtk3
+, lib
+, libglvnd
+, libjack2
+, libjpeg
+, libxkbcommon
+, makeWrapper
+, pipewire
+, pulseaudio
+, wrapGAppsHook
+, xdg-utils
+, xorg
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio";
-  version = "4.3.8";
+  version = "4.4.10";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-mJIzlY1m/r56e7iw5Hm+u2EbpHn5JqOMaRjpbCe8HHw=";
+    sha256 = "sha256-gtQ1mhXk0AqGidZk5TCzSR58pD1JJoELMBmELtqyb4U=";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook ];
@@ -24,7 +42,27 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsa-lib cairo freetype gdk-pixbuf glib gtk3 libxcb xcbutil xcbutilwm zlib libXtst libxkbcommon pipewire pulseaudio libjack2 libX11 libglvnd libXcursor stdenv.cc.cc.lib
+    alsa-lib
+    cairo
+    freetype
+    gdk-pixbuf
+    glib
+    gtk3
+    libglvnd
+    libjack2
+    # libjpeg8 is required for converting jpeg's to colour palettes
+    libjpeg
+    libxcb
+    libXcursor
+    libX11
+    libXtst
+    libxkbcommon
+    pipewire
+    pulseaudio
+    stdenv.cc.cc.lib
+    xcbutil
+    xcbutilwm
+    zlib
   ];
 
   installPhase = ''

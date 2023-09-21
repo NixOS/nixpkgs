@@ -10,6 +10,7 @@
 , libxml2
 , gnome-desktop
 , libadwaita
+, fribidi
 , wrapGAppsHook4
 , gnome
 , harfbuzz
@@ -17,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-font-viewer";
-  version = "42.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-font-viewer/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "z6K43/8hoQWhoCHa36IT8TYn5qF5p3x7Wf3O2sqEjcw=";
+    sha256 = "oVEd8wsijMLvEXXdnSuTQ46pEuJZE0BLJjzz1Fe7n5c=";
   };
 
   doCheck = true;
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     gnome-desktop
     harfbuzz
     libadwaita
+    fribidi
   ];
 
   # Do not run meson-postinstall.sh
@@ -59,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-font-viewer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

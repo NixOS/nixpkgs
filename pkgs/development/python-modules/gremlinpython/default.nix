@@ -6,8 +6,8 @@
 , importlib-metadata
 , isodate
 , nest-asyncio
-, six
 , pytestCheckHook
+, pythonOlder
 , mock
 , pyhamcrest
 , radish-bdd
@@ -15,34 +15,41 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
-  version = "3.6.0";
+  version = "3.6.4";
+  format = "setuptools";
 
-  # pypi tarball doesn't include tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "apache";
     repo = "tinkerpop";
-    rev = version;
-    sha256 = "0gyf3a0zbh1grc1vr9zzpqm5yfcjvn0f1akw9l1arq36isqwvydn";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SQ+LcHeHDB1Hd5wXGDJBZmBG4KEZ3NsV4+4X9WgPb9E=";
   };
-  sourceRoot = "source/gremlin-python/src/main/python";
+
+  sourceRoot = "${src.name}/gremlin-python/src/main/python";
+
   postPatch = ''
+    sed -i '/pytest-runner/d' setup.py
+
     substituteInPlace setup.py \
-      --replace 'pytest-runner==5.2' ' '
+      --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
+      --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
   '';
 
   # setup-requires requirements
   nativeBuildInputs = [
     importlib-metadata
   ];
+
   propagatedBuildInputs = [
     aenum
     aiohttp
     isodate
     nest-asyncio
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     pyhamcrest
@@ -72,6 +79,6 @@ buildPythonPackage rec {
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ turion ris ];
+    maintainers = with maintainers; [ ris ];
   };
 }

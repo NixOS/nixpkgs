@@ -12,7 +12,7 @@ buildPythonPackage rec {
   LC_ALL="en_US.utf-8";
   buildInputs = [ glibcLocales ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     py.test

@@ -1,59 +1,37 @@
-{ stdenv, lib, rustPlatform, fetchgit
-, minijail-tools, pkg-config, protobuf, wayland-scanner
+{ lib, rustPlatform, fetchgit, pkg-config, protobuf, python3, wayland-scanner
 , libcap, libdrm, libepoxy, minijail, virglrenderer, wayland, wayland-protocols
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "104.0";
+  version = "116.1";
 
   src = fetchgit {
-    url = "https://chromium.googlesource.com/crosvm/crosvm";
-    rev = "265aab613b1eb31598ea0826f04810d9f010a2c6";
-    sha256 = "OzbtPHs6BWK83RZ/6eCQHA61X6SY8FoBkaN70a37pvc=";
+    url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
+    rev = "97ac6ce38d8e5789c91fcc5bae6078d21a2afdb3";
+    sha256 = "NssjHXorPGZBYqERPeLW3cqEzbXqyL9N4OnLLQMLALk=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  patches = [
-    ./default-seccomp-policy-dir.diff
+  cargoHash = "sha256-mlXAlq62nAW6ZVxRav+k/iU1YDecfPDTCPp7FdJBO54=";
+
+  nativeBuildInputs = [
+    pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner
   ];
-
-  cargoLock.lockFile = ./Cargo.lock;
-
-  nativeBuildInputs = [ minijail-tools pkg-config protobuf wayland-scanner ];
 
   buildInputs = [
     libcap libdrm libepoxy minijail virglrenderer wayland wayland-protocols
   ];
 
-  arch = stdenv.hostPlatform.parsed.cpu.name;
-
-  postPatch = ''
-    cp ${cargoLock.lockFile} Cargo.lock
-    sed -i "s|/usr/share/policy/crosvm/|$PWD/seccomp/$arch/|g" \
-        seccomp/$arch/*.policy
+  preConfigure = ''
+    patchShebangs third_party/minijail/tools/*.py
   '';
 
-  preBuild = ''
-    export DEFAULT_SECCOMP_POLICY_DIR=$out/share/policy
-
-    for policy in seccomp/$arch/*.policy; do
-        compile_seccomp_policy \
-            --default-action trap $policy ''${policy%.policy}.bpf
-    done
-
-    substituteInPlace seccomp/$arch/*.policy \
-      --replace "@include $(pwd)/seccomp/$arch/" "@include $out/share/policy/"
-  '';
+  CROSVM_USE_SYSTEM_VIRGLRENDERER = true;
 
   buildFeatures = [ "default" "virgl_renderer" "virgl_renderer_next" ];
-
-  postInstall = ''
-    mkdir -p $out/share/policy/
-    cp -v seccomp/$arch/*.{policy,bpf} $out/share/policy/
-  '';
 
   passthru.updateScript = ./update.py;
 

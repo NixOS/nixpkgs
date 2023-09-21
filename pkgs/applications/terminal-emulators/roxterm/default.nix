@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       Tabbed, VTE-based terminal emulator. Similar to gnome-terminal without
       the dependencies on Gnome.
     '';
-    maintainers = with maintainers; [ cdepillabout ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

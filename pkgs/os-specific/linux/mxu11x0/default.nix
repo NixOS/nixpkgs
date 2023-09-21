@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   version = mxu_version + "-${kernel.version}";
 
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+
   preBuild = ''
-    sed -i -e "s/\$(uname -r).*/${kernel.modDirVersion}/g" driver/mxconf
-    sed -i -e "s/\$(shell uname -r).*/${kernel.modDirVersion}/g" driver/Makefile
     sed -i -e 's|/lib/modules|${kernel.dev}/lib/modules|' driver/mxconf
     sed -i -e 's|/lib/modules|${kernel.dev}/lib/modules|' driver/Makefile
   '';

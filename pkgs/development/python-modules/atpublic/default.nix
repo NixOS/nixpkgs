@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MJjuEtAQfMUAnWH06A5e3PrEzaK9qgRkSvdYJ8sSGxg=";
+    hash = "sha256-MJjuEtAQfMUAnWH06A5e3PrEzaK9qgRkSvdYJ8sSGxg=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     sybil
   ];

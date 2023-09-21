@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   # make check fails, see https://github.com/rocky/remake/issues/117
 
   meta = {
-    homepage = "http://bashdb.sourceforge.net/remake/";
+    homepage = "https://bashdb.sourceforge.net/remake/";
     license = lib.licenses.gpl3Plus;
     description = "GNU Make with comprehensible tracing and a debugger";
     platforms = with lib.platforms; linux ++ darwin;

@@ -20,7 +20,15 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk3 libxml2 llvm perl sqlite ];
   doCheck = true;
-  buildFlags = "GCC_BASE:=${GCC_BASE}";
+  buildFlags = [ "GCC_BASE:=${GCC_BASE}" ];
+
+  # Test failures with "fortify3" on, such as:
+  # +*** buffer overflow detected ***: terminated
+  # +Aborted (core dumped)
+  # error: Actual exit value does not match the expected one.
+  # error: expected 0, got 134.
+  # error: FAIL: test 'bool-float.c' failed
+  hardeningDisable = [ "fortify3" ];
 
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };

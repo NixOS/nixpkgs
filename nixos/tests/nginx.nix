@@ -67,10 +67,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   };
 
   testScript = { nodes, ... }: let
-    etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etagSystem";
-    justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/justReloadSystem";
-    reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadRestartSystem";
-    reloadWithErrorsSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
+    etagSystem = "${nodes.webserver.system.build.toplevel}/specialisation/etagSystem";
+    justReloadSystem = "${nodes.webserver.system.build.toplevel}/specialisation/justReloadSystem";
+    reloadRestartSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadRestartSystem";
+    reloadWithErrorsSystem = "${nodes.webserver.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
   in ''
     url = "http://localhost/index.html"
 
@@ -87,15 +87,23 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         return etag
 
 
-    webserver.wait_for_unit("nginx")
-    webserver.wait_for_open_port(80)
+    def wait_for_nginx_on_port(port):
+        webserver.wait_for_unit("nginx")
+        webserver.wait_for_open_port(port)
+
+
+    # nginx can be ready before multi-user.target, in which case switching to
+    # a different configuration might not realize it needs to restart nginx.
+    webserver.wait_for_unit("multi-user.target")
+
+    wait_for_nginx_on_port(80)
 
     with subtest("check ETag if serving Nix store paths"):
         old_etag = check_etag()
         webserver.succeed(
             "${etagSystem}/bin/switch-to-configuration test >&2"
         )
-        webserver.sleep(1)
+        wait_for_nginx_on_port(80)
         new_etag = check_etag()
         assert old_etag != new_etag
 
@@ -103,7 +111,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         webserver.succeed(
             "${justReloadSystem}/bin/switch-to-configuration test >&2"
         )
-        webserver.wait_for_open_port(8080)
+        wait_for_nginx_on_port(8080)
         webserver.fail("journalctl -u nginx | grep -q -i stopped")
         webserver.succeed("journalctl -u nginx | grep -q -i reloaded")
 
@@ -111,7 +119,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         webserver.succeed(
             "${reloadRestartSystem}/bin/switch-to-configuration test >&2"
         )
-        webserver.wait_for_unit("nginx")
+        wait_for_nginx_on_port(80)
         webserver.succeed("journalctl -u nginx | grep -q -i stopped")
 
     with subtest("nixos-rebuild --switch should fail when there are configuration errors"):

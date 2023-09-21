@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
-  version = "0.47.1";
+  version = "1.0.0";
 
   src = fetchurl {
     url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
-    sha256 = "sha256-ozOtAXI2mlzZc66oPgLotpjAai2qxvMpJdoDBJqj3Oc=";
+    sha256 = "1pc1ck87l849xfy1lcdr1v3p84qyxn9725pvh09czvlqs58yy6ax";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;
+    changelog = "https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md";
     maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, callPackage, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -15,6 +15,7 @@ let
     cryptography
     openssl
     crcmod
+    numpy
   ] ++ lib.optional (with-gce) google-compute-engine);
 
   data = import ./data.nix { };
@@ -111,6 +112,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     inherit components withExtraComponents;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {

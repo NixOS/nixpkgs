@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "promql-cli";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nalbury";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uuoUvEBnLxopdt6u4vX6pYnuyOATwJFJo9ozQ9jhSyo=";
+    hash = "sha256-EV63fdG+GF+kVLH2TxHPhRcUU5xBvkW5bhHC1lEoj84=";
   };
 
-  vendorHash = "sha256-OLkOyeLyBnNmijNYFrXIZ4nbOvV/65KIKjOFOVS9Yiw=";
+  vendorHash = "sha256-jhNll04xGaxS6NJTh4spSW9zPrff8jk5OEQiRevPQwU=";
 
   ldflags = [ "-s" "-w" ];
 

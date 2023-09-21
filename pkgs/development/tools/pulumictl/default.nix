@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pulumictl";
-  version = "0.0.32";
+  version = "0.0.44";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumictl";
     rev = "v${version}";
-    sha256 = "sha256-CZ0DnQUnyj8aoesFymc+Uhv+3vdQhdxb2YHElAyqGWE=";
+    sha256 = "sha256-7Q+1shNZ18BZ6W6CslwUZhX0LtxPdTXOSNH5VhBHFxE=";
   };
 
-  vendorSha256 = "sha256-xalfnLc6bPBvm2B42+FzpgrOH541HMWmNHChveI792s=";
+  vendorHash = "sha256-XOgHvOaHExazQfsu1brYDq1o2fUh6dZeJlpVhCQX9ns=";
 
   ldflags = [
     "-s" "-w" "-X=github.com/pulumi/pulumictl/pkg/version.Version=${src.rev}"

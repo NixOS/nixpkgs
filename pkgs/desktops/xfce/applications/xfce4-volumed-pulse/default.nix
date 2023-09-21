@@ -3,9 +3,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-volumed-pulse";
-  version = "0.2.3";
+  version = "0.2.4";
 
-  sha256 = "sha256-EgmTk19p9OBmz3rWQB0LoPhhoDm4u1V6/vvgitOzUuc=";
+  sha256 = "sha256-NDIJRjKV5aoM2sLhZ6WmoynOc4yz55KpuiTJDMLMA5Y=";
 
   buildInputs = [ gtk3 libnotify libpulseaudio keybinder3 xfconf ];
 

@@ -8,6 +8,13 @@
    arguments. Normal users should not import this directly but instead
    import `pkgs/default.nix` or `default.nix`. */
 
+let
+  # An overlay to auto-call packages in ../by-name.
+  # By defining it at the top of the file,
+  # this value gets reused even if this file is imported multiple times,
+  # thanks to Nix's import-value cache.
+  autoCalledPackages = import ./by-name-overlay.nix ../by-name;
+in
 
 { ## Misc parameters kept the same for all stages
   ##
@@ -101,9 +108,9 @@ let
     };
 
   trivialBuilders = self: super:
-    import ../build-support/trivial-builders.nix {
+    import ../build-support/trivial-builders {
       inherit lib;
-      inherit (self) runtimeShell stdenv stdenvNoCC;
+      inherit (self) runtimeShell stdenv stdenvNoCC haskell;
       inherit (self.pkgsBuildHost) shellcheck;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
@@ -136,14 +143,6 @@ let
     targetPackages = self.pkgsTargetTarget;
 
     inherit stdenv;
-  };
-
-  # The old identifiers for cross-compiling. These should eventually be removed,
-  # and the packages that rely on them refactored accordingly.
-  platformCompat = self: super: let
-    inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
-  in {
-    inherit buildPlatform hostPlatform targetPlatform;
   };
 
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
@@ -207,8 +206,8 @@ let
 
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
-    # supported.
-    pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
+    # supported. 32-bit is also not supported.
+    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFun {
       overlays = [ (self': super': {
         pkgsMusl = super';
       })] ++ overlays;
@@ -216,7 +215,7 @@ let
         then "localSystem" else "crossSystem"} = {
         parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
       };
-    } else throw "Musl libc only supports Linux systems.";
+    } else throw "Musl libc only supports 64-bit Linux systems.";
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
@@ -231,6 +230,18 @@ let
         };
       };
     } else throw "i686 Linux package set can only be used with the x86 family.";
+
+    # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
+    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
+      overlays = [ (self': super': {
+        pkgsx86_64Darwin = super';
+      })] ++ overlays;
+      localSystem = {
+        parsed = stdenv.hostPlatform.parsed // {
+          cpu = lib.systems.parse.cpuTypes.x86_64;
+        };
+      };
+    } else throw "x86_64 Darwin package set can only be used on Darwin systems.";
 
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays
@@ -255,10 +266,12 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
-    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       crossSystem = {
         isStatic = true;
-        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+        parsed =
+          if stdenv.isLinux
+          then makeMuslParsedPlatform stdenv.hostPlatform.parsed
+          else stdenv.hostPlatform.parsed;
       } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
         gcc.abi = "elfv2";
       };
@@ -270,10 +283,10 @@ let
   # previous bootstrapping phases which have already been overlayed.
   toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
     stdenvBootstappingAndPlatforms
-    platformCompat
     stdenvAdapters
     trivialBuilders
     splice
+    autoCalledPackages
     allPackages
     otherPackageSets
     aliases

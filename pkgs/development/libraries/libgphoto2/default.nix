@@ -58,10 +58,13 @@ stdenv.mkDerivation rec {
           buildPackages.libgphoto2;
     in
     ''
-      mkdir -p $out/lib/udev/rules.d
+      mkdir -p $out/lib/udev/{rules.d,hwdb.d}
       ${executablePrefix}/lib/libgphoto2/print-camera-list \
-          udev-rules version 175 group camera \
-          >$out/lib/udev/rules.d/40-gphoto2.rules
+          udev-rules version 201 group camera \
+          >$out/lib/udev/rules.d/40-libgphoto2.rules
+      ${executablePrefix}/lib/libgphoto2/print-camera-list \
+          hwdb version 201 group camera \
+          >$out/lib/udev/hwdb.d/20-gphoto.hwdb
     '';
 
   meta = {

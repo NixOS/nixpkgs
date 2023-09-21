@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "hdhomerun-config-gui";
-  version = "20210224";
+  version = "20221205";
 
   src = fetchurl {
     url = "https://download.silicondust.com/hdhomerun/hdhomerun_config_gui_${version}.tgz";

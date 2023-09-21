@@ -1,53 +1,43 @@
 { lib
 , stdenv
-, aiocontextvars
 , buildPythonPackage
 , colorama
-, fetchpatch
-, fetchPypi
+, fetchFromGitHub
+, freezegun
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "loguru";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-BmvQZ1jQpRPpg2/ZxrWnW/s/02hB9LmWvGC1R6MJ1Bw=";
+  src = fetchFromGitHub {
+    owner = "Delgan";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-JwhJPX58KrPdX237L43o77spycLAVFv3K9njJiRK30Y=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-test-repr-infinite-recursion.patch";
-      url = "https://github.com/Delgan/loguru/commit/4fe21f66991abeb1905e24c3bc3c634543d959a2.patch";
-      hash = "sha256-NUOkgUS28TOazO0txMinFtaKwsi/J1Y7kqjjvMRCnR8=";
-    })
-  ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.7") [
-    aiocontextvars
-  ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     colorama
+    freezegun
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = [
+    "tests/test_type_hinting.py" # avoid dependency on mypy
+  ] ++ lib.optionals stdenv.isDarwin [
     "tests/test_multiprocessing.py"
   ];
 
   disabledTests = [
-    "test_time_rotation_reopening"
+    # fails on some machine configurations
+    # AssertionError: assert '' != ''
     "test_file_buffering"
-    # Tests are failing with Python 3.10
-    "test_exception_others"
-    ""
   ] ++ lib.optionals stdenv.isDarwin [
     "test_rotation_and_retention"
     "test_rotation_and_retention_timed_file"
@@ -60,8 +50,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/Delgan/loguru";
     description = "Python logging made (stupidly) simple";
+    homepage = "https://github.com/Delgan/loguru";
+    changelog = "https://github.com/delgan/loguru/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum rmcgibbo ];
   };

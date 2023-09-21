@@ -35,7 +35,7 @@ buildPythonPackage rec {
     "pytmx.util_pysdl2"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

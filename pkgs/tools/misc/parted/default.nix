@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , lvm2
 , libuuid
 , gettext
@@ -16,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "parted";
-  version = "3.5";
+  version = "3.6";
 
   src = fetchurl {
     url = "mirror://gnu/parted/parted-${version}.tar.xz";
-    sha256 = "sha256-STjdXBwSX2x4sfSz4pdSbxjudKpD1FwkhXix0kcMBaI=";
+    sha256 = "sha256-O0Pb4zzKD5oYYB66tWt4UrEo7Bo986mzDM3l5zNZ5hI=";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
   # Tests were previously failing due to Hydra running builds as uid 0.
   # That should hopefully be fixed now.
   doCheck = !stdenv.hostPlatform.isMusl; /* translation test */
-  checkInputs = [ check dosfstools e2fsprogs perl python3 util-linux ];
+  nativeCheckInputs = [ check dosfstools e2fsprogs perl python3 util-linux ];
 
   meta = {
     description = "Create, destroy, resize, check, and copy partitions";

@@ -16,11 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-exljmDNtVhjJkvh0EomcbBXSsmQx4I59MHDfMWSQyKk=";
   };
 
-  vendorSha256 = "sha256-q/0lxZWk3a7brMsbLvZUSZ8XUHfWfx79qxjir1Vygx4=";
+  vendorHash = "sha256-q/0lxZWk3a7brMsbLvZUSZ8XUHfWfx79qxjir1Vygx4=";
 
   allowGoReference = true;
 
-  checkInputs = [ go ];
+  nativeCheckInputs = [ go ];
 
   meta = with lib; {
     description = "Tool to detect Go structs that would take less memory if their fields were sorted";
