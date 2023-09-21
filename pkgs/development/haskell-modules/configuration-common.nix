@@ -531,13 +531,8 @@ self: super: {
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 
-  jacinda = appendPatches [
-    (pkgs.fetchpatch {
-      name = "jacinda-alex-3.3.patch";
-      url = "https://github.com/vmchale/jacinda/commit/b8e18871900402e6ab0addae2e41a0f360682ae3.patch";
-      sha256 = "0c1b9hp9j44zafzjidp301dz0m54vplgfisqvb1zrh1plk6vsxsa";
-    })
-  ] (overrideCabal { revision = null; editedCabalFile = null; } super.jacinda);
+  # Requires alex >= 3.4
+  jacinda = super.jacinda.override { alex = self.alex_3_4_0_0; };
 
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year;                # http://hydra.cryp.to/build/497858/log/raw
