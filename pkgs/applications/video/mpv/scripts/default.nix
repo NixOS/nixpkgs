@@ -13,6 +13,7 @@ lib.recurseIntoAttrs
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
+    mpv-slicing = callPackage ./mpv-slicing.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
