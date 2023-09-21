@@ -1,6 +1,35 @@
 # Overlays {#chap-overlays}
 
-This chapter describes how to extend and change Nixpkgs using overlays.  Overlays are used to add layers in the fixed-point used by Nixpkgs to compose the set of all packages.
+This chapter describes how to extend and change Nixpkgs using overlays.
+
+TODO: Maybe add link to `lib.extends`/`lib.fix`
+
+## What are overlays {#sec-overlays-definition}
+
+Overlays are Nix functions which accept two arguments, conventionally called `self` and `super`, and return a set of attributes. For example, the following is a valid overlay.
+
+```nix
+self: super:
+
+{
+  boost = super.boost.override {
+    python = self.python3;
+  };
+  rr = super.callPackage ./pkgs/rr {
+    stdenv = self.stdenv_32bit;
+  };
+}
+```
+
+The first argument (`self`) corresponds to the final package set. You should use this set for the dependencies of all packages specified in your overlay. For example, all the dependencies of `rr` in the example above come from `self`, as well as the overridden dependencies used in the `boost` override.
+
+The second argument (`super`) corresponds to the result of the evaluation of the previous stages of Nixpkgs. It does not contain any of the packages added by the current overlay, nor any of the following overlays. This set should be used either to refer to packages you wish to override, or to access functions defined in Nixpkgs. For example, the original recipe of `boost` in the above example, comes from `super`, as well as the `callPackage` function.
+
+The value returned by this function should be a set similar to `pkgs/top-level/all-packages.nix`, containing overridden and/or new packages.
+
+Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [](#sec-modify-via-packageOverrides). Indeed, `packageOverrides` acts as an overlay with only the `super` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
+
+Note that the order of the overlays can matter if multiple overlays set the same attributes.
 
 ## Applying overlays {#sec-overlays-applying}
 
@@ -9,7 +38,9 @@ See [here](#sec-overlays-definition) for how to define overlays.
 
 There are various ways of applying overlays, but by default none are applied.
 
-### Applying overlays when importing Nixpkgs {#sec-overlays-applying-nixpkgs}
+### Using nix expression {#d}
+
+#### Applying overlays when importing Nixpkgs {#sec-overlays-applying-nixpkgs}
 
 When importing Nixpkgs, a list of overlays can be specified using the `overlays` attribute in the argument:
 ```nix
@@ -27,13 +58,13 @@ If the `overlays` argument is not passed, these defaults are used:
 
   Where such path expressions point is defined with the [`NIX_PATH`](https://nixos.org/manual/nix/stable/command-ref/env-common.html#env-NIX_PATH) environment variable.
 
-  On a NixOS system, this variable can be set using the [`nix.nixPath` option](https://search.nixos.org/options?query=nix.nixPath).
+  On a NixOS system, this variable can be set using the [`nix.nixPath` option](https://search.nixos.org/options?show=nix.nixPath&query=nix.nixPath).
   On non-NixOS systems, see [here](https://wiki.archlinux.org/title/Environment_variables) for how to set environment variables.
 
 - If either `~/.config/nixpkgs/overlays.nix` or `~/.config/nixpkgs/overlays/` exist, then we look for overlays at that path, as described in [the below section](#sec-overlays-applying-nixpkgs-paths).
   It is an error if both exist.
 
-#### How paths get turned into overlays {#sec-overlays-applying-nixpkgs-paths}
+##### How paths get turned into overlays {#sec-overlays-applying-nixpkgs-paths}
 
 - If the path is a file, then the file is imported as a Nix expression and used as the list of overlays.
   Here is an example:
@@ -62,7 +93,7 @@ If the `overlays` argument is not passed, these defaults are used:
      └── default.nix
   ```
 
-### Applying further overlays on top of an imported Nixpkgs
+#### Applying further overlays on top of an imported Nixpkgs {#c}
 
 If you already have an imported Nixpkgs (often in a variable called `pkgs`),
 you can apply a list of overlays on top using `pkgs.appendOverlays`:
@@ -88,15 +119,38 @@ so these functions may be expensive.
 This should not be used in Nixpkgs.
 :::
 
-### Setting overlays for a NixOS configuration
+### Commands implicitly importing Nixpkgs {#b}
 
-NixOS evaluations do not use
+These CLI commands can implicitly import Nixpkgs without it being specified in a Nix expression.
 
-(link to nixpkgs.overlays option in the NixOS manual)
+#### `nixos-rebuild` {#e}
 
-Note that this does not affect the overlays for non-NixOS operations (e.g.  `nix-env`), which are [looked up](#sec-overlays-lookup) independently.
+NixOS implicitly imports Nixpkgs for you [with the `overlays` argument](#sec-overlays-applying-nixpkgs) set to the value of the [`nixpkgs.overlays`](https://search.nixos.org/options?show=nixpkgs.overlays&query=nixpkgs.overlays) option.
 
-## Sharing overlays between a NixOS configuration and nix commands
+This option is empty by default.
+
+This is the only thing that the `nixpkgs.overlays` option affects.
+It does not propagate the overlays to the non-NixOS commands.
+
+Note that this does not affect the overlays for non-NixOS operations (e.g.  `nix-env`), which are looked up independently, see the following sections.
+
+#### `nix-shell -p` {#f}
+
+`nix-shell -p` implicitly imports Nixpkgs without any arguments, such that the defaults from <link section> apply.
+
+#### `nix-build '<nixpkgs>'` / `nix-env -f '<nixpkgs>'` {#g}
+
+`nix-build` and `nix-env -f` with any Nixpkgs path, such as `<nixpkgs>` or `~/src/nixpkgs`, ...
+
+Will by default pass no arguments to the Nixpkgs imports, therefore the defaults from <link section> apply.
+
+The `overlays` argument can be overridden using the [`--arg`](<link to Nix manual>) option, for example to not use the default overlays:
+```
+nix-build '<nixpkgs>' --arg overlays '[ ]'
+nix-env -f '<nixpkgs>' --arg overlays '[ ]'
+```
+
+## Sharing overlays between a NixOS configuration and nix commands {#a}
 
 TODO: Rewrite
 Because overlays that are set in NixOS configuration do not affect non-NixOS operations such as `nix-env`, the `overlays.nix` option provides a convenient way to use the same overlays for a NixOS system configuration and user configuration: the same file can be used as `overlays.nix` and imported as the value of `nixpkgs.overlays`.
@@ -107,32 +161,6 @@ Because overlays that are set in NixOS configuration do not affect non-NixOS ope
 nixpkgs.overlays = import ~/.config/nixpkgs/overlays.nix;
 ```
 
-## Defining overlays {#sec-overlays-definition}
-
-Overlays are Nix functions which accept two arguments, conventionally called `self` and `super`, and return a set of attributes. For example, the following is a valid overlay.
-
-```nix
-self: super:
-
-{
-  boost = super.boost.override {
-    python = self.python3;
-  };
-  rr = super.callPackage ./pkgs/rr {
-    stdenv = self.stdenv_32bit;
-  };
-}
-```
-
-The first argument (`self`) corresponds to the final package set. You should use this set for the dependencies of all packages specified in your overlay. For example, all the dependencies of `rr` in the example above come from `self`, as well as the overridden dependencies used in the `boost` override.
-
-The second argument (`super`) corresponds to the result of the evaluation of the previous stages of Nixpkgs. It does not contain any of the packages added by the current overlay, nor any of the following overlays. This set should be used either to refer to packages you wish to override, or to access functions defined in Nixpkgs. For example, the original recipe of `boost` in the above example, comes from `super`, as well as the `callPackage` function.
-
-The value returned by this function should be a set similar to `pkgs/top-level/all-packages.nix`, containing overridden and/or new packages.
-
-Overlays are similar to other methods for customizing Nixpkgs, in particular the `packageOverrides` attribute described in [](#sec-modify-via-packageOverrides). Indeed, `packageOverrides` acts as an overlay with only the `super` argument. It is therefore appropriate for basic use, but overlays are more powerful and easier to distribute.
-
-Note that the order of the overlays can matter if multiple overlays set the same attributes.
 
 ## Using overlays to configure alternatives {#sec-overlays-alternatives}
 
