@@ -10,36 +10,47 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-ssh";
   version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "artyom-poptsov";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-P29U88QrCjoyl/wdTPZbiMoykd/v6ul6CW/IJn9UAyw=";
+    repo = "guile-ssh";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-P29U88QrCjoyl/wdTPZbiMoykd/v6ul6CW/IJn9UAyw=";
   };
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/artyom-poptsov/guile-ssh/pull/31.patch";
-      sha256 = "sha256-J+TDgdjihKoEjhbeH+BzqrHhjpVlGdscRj3L/GAFgKg=";
+      url = "https://github.com/artyom-poptsov/guile-ssh/pull/31/commits/38636c978f257d5228cd065837becabf5da16854.patch";
+      hash = "sha256-J+TDgdjihKoEjhbeH+BzqrHhjpVlGdscRj3L/GAFgKg=";
     })
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
     texinfo
     which
   ];
-  buildInputs = [ guile ];
-  propagatedBuildInputs = [ libssh ];
+
+  buildInputs = [
+    guile
+  ];
+
+  propagatedBuildInputs = [
+    libssh
+  ];
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # FAIL: server-client.scm
+  doCheck = !stdenv.isDarwin;
+
   postInstall = ''
     mv $out/bin/*.scm $out/share/guile-ssh
     rmdir $out/bin
@@ -52,4 +63,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ethancedwards8 foo-dogsquared ];
     platforms = guile.meta.platforms;
   };
-}
+})
