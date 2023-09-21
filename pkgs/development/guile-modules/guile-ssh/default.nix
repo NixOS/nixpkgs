@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Bindings to Libssh for GNU Guile";
     homepage = "https://github.com/artyom-poptsov/guile-ssh";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    maintainers = with maintainers; [ ethancedwards8 foo-dogsquared ];
     platforms = guile.meta.platforms;
   };
 }
