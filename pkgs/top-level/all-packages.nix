@@ -17985,14 +17985,10 @@ with pkgs;
 
   obb = callPackage ../development/interpreters/clojure/obb.nix { };
 
-  octave = callPackage ../development/interpreters/octave {
-    python = python3;
-    mkDerivation = stdenv.mkDerivation;
-  };
-  octaveFull = libsForQt5.callPackage ../development/interpreters/octave {
-    python = python3;
+  octave = callPackage ../development/interpreters/octave { };
+
+  octaveFull = octave.override {
     enableQt = true;
-    overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   };
 
   octave-kernel = callPackage ../applications/editors/jupyter-kernels/octave { };

@@ -41,7 +41,7 @@ let
   );
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uhd";
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
@@ -52,14 +52,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-khVOHlvacZc4EMg4m55rxEqPvLY1xURpAfOW905/3jg=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
-    url = "https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz";
+    url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
     sha256 = "V8ldW8bvYWbrDAvpWpHcMeLf9YvF8PIruDAyNK/bru4=";
   };
+  # TODO: Add passthru.updateScript that will update both of the above hashes...
 
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
@@ -105,7 +106,7 @@ stdenv.mkDerivation rec {
     # pythonEnv for runtime as well. The utilities' runtime dependencies are
     # handled at the environment
     ++ optionals (enableExamples) [ ncurses ncurses.dev ]
-    ++ optionals (enablePythonApi || enableUtils) [ pythonEnv ]
+    ++ optionals (enablePythonApi || enableUtils) [ finalAttrs.pythonEnv ]
     ++ optionals (enableDpdk) [ dpdk ]
   ;
 
@@ -128,7 +129,7 @@ stdenv.mkDerivation rec {
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
   installFirmware = ''
     mkdir -p "$out/share/uhd/images"
-    tar --strip-components=1 -xvf "${uhdImagesSrc}" -C "$out/share/uhd/images"
+    tar --strip-components=1 -xvf "${finalAttrs.uhdImagesSrc}" -C "$out/share/uhd/images"
   '';
 
   # -DENABLE_TESTS=ON installs the tests, we don't need them in the output
@@ -157,4 +158,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz tomberek doronbehar ];
   };
-}
+})
