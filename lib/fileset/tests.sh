@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2016
 
 # Tests lib.fileset
 # Run:
@@ -50,27 +51,37 @@ with lib;
 with internal;
 with lib.fileset;'
 
-# Check that a nix expression evaluates successfully (strictly, coercing to json, read-write-mode).
-# The expression has `lib.fileset` in scope.
-# If a second argument is provided, the result is checked against it as a regex.
-# Otherwise, the result is output.
-# Usage: expectSuccess NIX [REGEX]
-expectSuccess() {
-    local expr=$1
-    if [[ "$#" -gt 1 ]]; then
-        local expectedResultRegex=$2
+# Check that two nix expression successfully evaluate to the same value.
+# The expressions have `lib.fileset` in scope.
+# Usage: expectEqual NIX NIX
+expectEqual() {
+    local actualExpr=$1
+    local expectedExpr=$2
+    if ! actualResult=$(nix-instantiate --eval --strict --show-trace \
+        --expr "$prefixExpression ($actualExpr)"); then
+        die "$actualExpr failed to evaluate, but it was expected to succeed"
     fi
+    if ! expectedResult=$(nix-instantiate --eval --strict --show-trace \
+        --expr "$prefixExpression ($expectedExpr)"); then
+        die "$expectedExpr failed to evaluate, but it was expected to succeed"
+    fi
+
+    if [[ "$actualResult" != "$expectedResult" ]]; then
+        die "$actualExpr should have evaluated to $expectedExpr:\n$expectedResult\n\nbut it evaluated to\n$actualResult"
+    fi
+}
+
+# Check that a nix expression evaluates successfully to a store path and returns it (without quotes).
+# The expression has `lib.fileset` in scope.
+# Usage: expectStorePath NIX
+expectStorePath() {
+    local expr=$1
     if ! result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace \
-        --expr "$prefixExpression $expr"); then
+        --expr "$prefixExpression ($expr)"); then
         die "$expr failed to evaluate, but it was expected to succeed"
     fi
-    if [[ -v expectedResultRegex ]]; then
-        if [[ ! "$result" =~ $expectedResultRegex ]]; then
-            die "$expr should have evaluated to this regex pattern:\n\n$expectedResultRegex\n\nbut this was the actual result:\n\n$result"
-        fi
-    else
-        echo "$result"
-    fi
+    # This is safe because we assume to get back a store path in a string
+    crudeUnquoteJSON <<< "$result"
 }
 
 # Check that a nix expression fails to evaluate (strictly, coercing to json, read-write-mode).
@@ -114,18 +125,19 @@ checkFileset() (
     local fileset=$1
 
     # Process the tree into separate arrays for included paths, excluded paths and excluded files.
-    # Also create all the paths in the local directory
     local -a included=()
     local -a excluded=()
     local -a excludedFiles=()
+    # Track which paths need to be created
+    local -a dirsToCreate=()
+    local -a filesToCreate=()
     for p in "${!tree[@]}"; do
         # If keys end with a `/` we treat them as directories, otherwise files
         if [[ "$p" =~ /$ ]]; then
-            mkdir -p "$p"
+            dirsToCreate+=("$p")
             isFile=
         else
-            mkdir -p "$(dirname "$p")"
-            touch "$p"
+            filesToCreate+=("$p")
             isFile=1
         fi
         case "${tree[$p]}" in
@@ -143,6 +155,19 @@ checkFileset() (
         esac
     done
 
+    # Create all the necessary paths.
+    # This is done with only a fixed number of processes,
+    # in order to not be too slow
+    # Though this does mean we're a bit limited with how many files can be created
+    if (( ${#dirsToCreate[@]} != 0 )); then
+        mkdir -p "${dirsToCreate[@]}"
+    fi
+    if (( ${#filesToCreate[@]} != 0 )); then
+        readarray -d '' -t parentsToCreate < <(dirname -z "${filesToCreate[@]}")
+        mkdir -p "${parentsToCreate[@]}"
+        touch "${filesToCreate[@]}"
+    fi
+
     # Start inotifywait in the background to monitor all excluded files (if any)
     if [[ -n "$canMonitorFiles" ]] && (( "${#excludedFiles[@]}" != 0 )); then
         coproc watcher {
@@ -154,6 +179,7 @@ checkFileset() (
         }
         # This will trigger when this subshell exits, no matter if successful or not
         # After exiting the subshell, the parent shell will continue executing
+        # shellcheck disable=SC2154
         trap 'kill "${watcher_PID}"' exit
 
         # Synchronously wait until inotifywait is ready
@@ -164,8 +190,7 @@ checkFileset() (
 
     # Call toSource with the fileset, triggering open events for all files that are added to the store
     expression="toSource { root = ./.; fileset = $fileset; }"
-    # crudeUnquoteJSON is safe because we get back a store path in a string
-    storePath=$(expectSuccess "$expression" | crudeUnquoteJSON)
+    storePath=$(expectStorePath "$expression")
 
     # Remove all files immediately after, triggering delete_self events for all of them
     rm -rf -- *
@@ -211,7 +236,7 @@ checkFileset() (
 #### Error messages #####
 
 # Absolute paths in strings cannot be passed as `root`
-expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` "/nix/store/foobar" is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = "/nix/store/foobar"; fileset = ./.; }' 'lib.fileset.toSource: `root` \("/nix/store/foobar"\) is a string-like value, but it should be a path instead.
 \s*Paths in strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Only paths are accepted as `root`
@@ -221,56 +246,65 @@ expectFailure 'toSource { root = 10; fileset = ./.; }' 'lib.fileset.toSource: `r
 mkdir -p {foo,bar}/mock-root
 expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
   toSource { root = ./foo/mock-root; fileset = ./bar/mock-root; }
-' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` "'"$work"'/foo/mock-root":
+' 'lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` \("'"$work"'/foo/mock-root"\):
 \s*`root`: root "'"$work"'/foo/mock-root"
 \s*`fileset`: root "'"$work"'/bar/mock-root"
 \s*Different roots are not supported.'
 rm -rf *
 
 # `root` needs to exist
-expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` '"$work"'/a does not exist.'
+expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) does not exist.'
 
 # `root` needs to be a file
 touch a
-expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `root` '"$work"'/a is a file, but it should be a directory instead. Potential solutions:
+expectFailure 'toSource { root = ./a; fileset = ./a; }' 'lib.fileset.toSource: `root` \('"$work"'/a\) is a file, but it should be a directory instead. Potential solutions:
 \s*- If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
 \s*- If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as '"$work"', and set `fileset` to the file path.'
 rm -rf *
 
+# The fileset argument should be evaluated, even if the directory is empty
+expectFailure 'toSource { root = ./.; fileset = abort "This should be evaluated"; }' 'evaluation aborted with the following error message: '\''This should be evaluated'\'
+
 # Only paths under `root` should be able to influence the result
 mkdir a
-expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` '"$work"'/a. Potential solutions:
+expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `fileset` could contain files in '"$work"', which is not under the `root` \('"$work"'/a\). Potential solutions:
 \s*- Set `root` to '"$work"' or any directory higher up. This changes the layout of the resulting store path.
-\s*- Set `fileset` to a file set that cannot contain files outside the `root` '"$work"'/a. This could change the files included in the result.'
+\s*- Set `fileset` to a file set that cannot contain files outside the `root` \('"$work"'/a\). This could change the files included in the result.'
 rm -rf *
 
 # Path coercion only works for paths
 expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a path instead.'
-expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` "/some/path" is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a path instead.
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Path coercion errors for non-existent paths
-expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` '"$work"'/a does not exist.'
+expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
 
 # File sets cannot be evaluated directly
-expectFailure '_create ./. null' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
+expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
+
+# Past versions of the internal representation are supported
+expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
+    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalVersion = 2; _type = "fileset"; }'
+expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' \
+    '{ _type = "fileset"; _internalVersion = 2; }'
 
 # Future versions of the internal representation are unsupported
-expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-\s*- Internal version of the file set: 1
-\s*- Internal version of the library: 0
+expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 3; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
+\s*- Internal version of the file set: 3
+\s*- Internal version of the library: 2
 \s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
-expectSuccess '{
-  inherit (_coerce "<test>" (_create "base" "tree"))
+expectEqual '{
+  inherit (_coerce "<test>" (_create ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '\{"_internalBase":"base","_internalTree":"tree","_internalVersion":0\}'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 2; }'
 
 #### Resulting store path ####
 
 # The store path name should be "source"
-expectSuccess 'toSource { root = ./.; fileset = ./.; }' '"'"${NIX_STORE_DIR:-/nix/store}"'/.*-source"'
+expectEqual 'toSource { root = ./.; fileset = ./.; }' 'sources.cleanSourceWith { name = "source"; src = ./.; }'
 
 # We should be able to import an empty directory and end up with an empty result
 tree=(
@@ -341,9 +375,104 @@ checkFileset './c'
 
 # Test the source filter for the somewhat special case of files in the filesystem root
 # We can't easily test this with the above functions because we can't write to the filesystem root and we don't want to make any assumptions which files are there in the sandbox
-expectSuccess '_toSourceFilter (_create /. null) "/foo" ""' 'false'
-expectSuccess '_toSourceFilter (_create /. { foo = "regular"; }) "/foo" ""' 'true'
-expectSuccess '_toSourceFilter (_create /. { foo = null; }) "/foo" ""' 'false'
+expectEqual '_toSourceFilter (_create /. null) "/foo" ""' 'false'
+expectEqual '_toSourceFilter (_create /. { foo = "regular"; }) "/foo" ""' 'true'
+expectEqual '_toSourceFilter (_create /. { foo = null; }) "/foo" ""' 'false'
+
+
+## lib.fileset.union, lib.fileset.unions
+
+
+# Different filesystem roots in root and fileset are not supported
+mkdir -p {foo,bar}/mock-root
+expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
+  toSource { root = ./.; fileset = union ./foo/mock-root ./bar/mock-root; }
+' 'lib.fileset.union: Filesystem roots are not the same:
+\s*first argument: root "'"$work"'/foo/mock-root"
+\s*second argument: root "'"$work"'/bar/mock-root"
+\s*Different roots are not supported.'
+
+expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
+  toSource { root = ./.; fileset = unions [ ./foo/mock-root ./bar/mock-root ]; }
+' 'lib.fileset.unions: Filesystem roots are not the same:
+\s*element 0: root "'"$work"'/foo/mock-root"
+\s*element 1: root "'"$work"'/bar/mock-root"
+\s*Different roots are not supported.'
+rm -rf *
+
+# Coercion errors show the correct context
+expectFailure 'toSource { root = ./.; fileset = union ./a ./.; }' 'lib.fileset.union: first argument \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.union: second argument \('"$work"'/b\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 \('"$work"'/b\) does not exist.'
+
+# unions needs a list with at least 1 element
+expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
+expectFailure 'toSource { root = ./.; fileset = unions [ ]; }' 'lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements.'
+
+# The tree of later arguments should not be evaluated if a former argument already includes all files
+tree=()
+checkFileset 'union ./. (_create ./. (abort "This should not be used!"))'
+checkFileset 'unions [ ./. (_create ./. (abort "This should not be used!")) ]'
+
+# union doesn't include files that weren't specified
+tree=(
+    [x]=1
+    [y]=1
+    [z]=0
+)
+checkFileset 'union ./x ./y'
+checkFileset 'unions [ ./x ./y ]'
+
+# Also for directories
+tree=(
+    [x/a]=1
+    [x/b]=1
+    [y/a]=1
+    [y/b]=1
+    [z/a]=0
+    [z/b]=0
+)
+checkFileset 'union ./x ./y'
+checkFileset 'unions [ ./x ./y ]'
+
+# And for very specific paths
+tree=(
+    [x/a]=1
+    [x/b]=0
+    [y/a]=0
+    [y/b]=1
+    [z/a]=0
+    [z/b]=0
+)
+checkFileset 'union ./x/a ./y/b'
+checkFileset 'unions [ ./x/a ./y/b ]'
+
+# unions or chained union's can include more paths
+tree=(
+    [x/a]=1
+    [x/b]=1
+    [y/a]=1
+    [y/b]=0
+    [z/a]=0
+    [z/b]=1
+)
+checkFileset 'unions [ ./x/a ./x/b ./y/a ./z/b ]'
+checkFileset 'union (union ./x/a ./x/b) (union ./y/a ./z/b)'
+checkFileset 'union (union (union ./x/a ./x/b) ./y/a) ./z/b'
+
+# unions should not stack overflow, even if many elements are passed
+tree=()
+for i in $(seq 1000); do
+    tree[$i/a]=1
+    tree[$i/b]=0
+done
+(
+    # Locally limit the maximum stack size to 100 * 1024 bytes
+    # If unions was implemented recursively, this would stack overflow
+    ulimit -s 100
+    checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
+)
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 
