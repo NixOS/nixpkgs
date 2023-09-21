@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, dagger }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, dagger }:
 
 buildGoModule rec {
   pname = "dagger";
@@ -19,6 +19,15 @@ buildGoModule rec {
   ];
 
   ldflags = [ "-s" "-w" "-X github.com/dagger/dagger/engine.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd dagger \
+      --bash <($out/bin/dagger completion bash) \
+      --fish <($out/bin/dagger completion fish) \
+      --zsh <($out/bin/dagger completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = dagger;
