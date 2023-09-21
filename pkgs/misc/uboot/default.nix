@@ -2,6 +2,8 @@
 , lib
 , bc
 , bison
+, coreutils-full
+, netcat
 , dtc
 , fetchFromGitHub
 , fetchpatch
@@ -10,6 +12,7 @@
 , gnutls
 , installShellFiles
 , libuuid
+, makeWrapper
 , meson-tools
 , ncurses
 , openssl
@@ -64,6 +67,7 @@ let
       flex
       installShellFiles
       openssl
+      makeWrapper # to wrap tools scripts
       (buildPackages.python3.withPackages (p: [
         p.libfdt
         p.setuptools # for pkg_resources
@@ -139,6 +143,9 @@ in {
 
     postInstall = ''
       installManPage doc/*.1
+
+      wrapProgram $out/bin/netconsole --prefix PATH : ${lib.makeBinPath [ coreutils-full netcat ]}
+      wrapProgram $out/bin/jtagconsole --prefix PATH : ${lib.makeBinPath [ coreutils-full netcat ]}
     '';
     filesToInstall = [
       "tools/dumpimage"
@@ -146,6 +153,11 @@ in {
       "tools/kwboot"
       "tools/mkenvimage"
       "tools/mkimage"
+      "tools/mkeficapsule"
+      "tools/fit_check_sign"
+      "tools/fdt_add_pubkey"
+      "tools/netconsole"
+      "tools/jtagconsole"
     ];
   };
 
