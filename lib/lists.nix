@@ -94,7 +94,7 @@ rec {
 
      Type: foldl' :: (b -> a -> b) -> b -> [a] -> b
   */
-  foldl' = builtins.foldl' or foldl;
+  foldl' = builtins.foldl';
 
   /* Map with index starting from 0
 
