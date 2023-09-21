@@ -17869,9 +17869,7 @@ with pkgs;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
-  inherit (callPackages ../applications/networking/cluster/hadoop {
-    openssl = openssl_1_1;
-  })
+  inherit (callPackages ../applications/networking/cluster/hadoop {})
     hadoop_3_3
     hadoop_3_2
     hadoop2;

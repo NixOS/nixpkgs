@@ -19,6 +19,8 @@
 , nixosTests
 , sparkSupport ? true
 , spark
+, libtirpc
+, callPackage
 }:
 
 with lib;
@@ -26,40 +28,49 @@ with lib;
 assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
 let
-  common = { pname, platformAttrs, untarDir ? "${pname}-${version}", jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
-    stdenv.mkDerivation rec {
-      inherit pname jdk libPatches untarDir openssl;
+  common = { pname, platformAttrs, untarDir ? "${pname}-${version}", jdk, openssl ? null, nativeLibs ? [ ], libPatchesGenerator ? (_: ""), tests }:
+    stdenv.mkDerivation (finalAttrs: {
+      inherit pname jdk untarDir openssl;
+      libPatches = libPatchesGenerator finalAttrs;
       version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
-        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
+        url = "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
         inherit (platformAttrs.${stdenv.system}) hash;
       };
       doCheck = true;
 
+      # Build the container executor binary from source
+      containerExecutor = callPackage ./containerExecutor.nix {
+        inherit (finalAttrs) version;
+        inherit platformAttrs;
+        hash = platformAttrs.${stdenv.system}.srcHash;
+      };
+
       nativeBuildInputs = [ makeWrapper ]
-        ++ optionals (stdenv.isLinux && (nativeLibs != [ ] || libPatches != "")) [ autoPatchelfHook ];
+                          ++ optionals (stdenv.isLinux && (nativeLibs != [ ] || (libPatches finalAttrs) != "")) [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''
-        mkdir -p $out/{lib/${untarDir}/conf,bin,lib}
-        mv * $out/lib/${untarDir}
+        mkdir -p $out/{lib/${finalAttrs.untarDir}/conf,bin,lib}
+        mv * $out/lib/${finalAttrs.untarDir}
       '' + optionalString stdenv.isLinux ''
-        # All versions need container-executor, but some versions can't use autoPatchelf because of broken SSL versions
-        patchelf --set-interpreter ${glibc.out}/lib64/ld-linux-x86-64.so.2 $out/lib/${untarDir}/bin/container-executor
+        for n in $(find ${finalAttrs.containerExecutor}/bin -type f); do
+          ln -sf "$n" $out/lib/${finalAttrs.untarDir}/bin
+        done
       '' + ''
-        for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
+        for n in $(find $out/lib/${finalAttrs.untarDir}/bin -type f ! -name "*.*"); do
           makeWrapper "$n" "$out/bin/$(basename $n)"\
-            --set-default JAVA_HOME ${jdk.home}\
-            --set-default HADOOP_HOME $out/lib/${untarDir}\
+            --set-default JAVA_HOME ${finalAttrs.jdk.home}\
+            --set-default HADOOP_HOME $out/lib/${finalAttrs.untarDir}\
             --run "test -d /etc/hadoop-conf && export HADOOP_CONF_DIR=\''${HADOOP_CONF_DIR-'/etc/hadoop-conf/'}"\
-            --set-default HADOOP_CONF_DIR $out/lib/${untarDir}/etc/hadoop/\
+            --set-default HADOOP_CONF_DIR $out/lib/${finalAttrs.untarDir}/etc/hadoop/\
             --prefix PATH : "${makeBinPath [ bash coreutils which]}"\
-            --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath buildInputs}"
+            --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath finalAttrs.buildInputs}"
         done
       '' + optionalString sparkSupport ''
         # Add the spark shuffle service jar to YARN
-        cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/lib/${untarDir}/share/hadoop/yarn/
-      '' + libPatches;
+        cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/lib/${finalAttrs.untarDir}/share/hadoop/yarn/
+      '' + (finalAttrs.libPatches);
 
       passthru = { inherit tests; };
 
@@ -83,7 +94,7 @@ let
         maintainers = with maintainers; [ illustris ];
         platforms = attrNames platformAttrs;
       } (attrByPath [ stdenv.system "meta" ] {} platformAttrs);
-    };
+    });
 in
 {
   # Different version of hadoop support different java runtime versions
@@ -91,37 +102,39 @@ in
   hadoop_3_3 = common rec {
     pname = "hadoop";
     platformAttrs = rec {
-        x86_64-linux = {
-          version = "3.3.5";
-          hash = "sha256-RG4FypL6I6YGF6ixeUbe3kcoGvFQQEFhfLfV9i50JSo=";
-        };
-        x86_64-darwin = x86_64-linux;
-        aarch64-linux = {
-          version = "3.3.5";
-          hash = "sha256-qcKjbE881isauWBxIv+NY0UFbYit704/Re8Kdl6x1LA=";
-        };
-        aarch64-darwin = aarch64-linux;
+      x86_64-linux = {
+        version = "3.3.6";
+        hash = "sha256-9RlQWcDUECrap//xf3sqhd+Qa8tuGZSHFjGfmXhkGgQ=";
+        srcHash = "sha256-4OEsVhBNV9CJ+PN4FgCduUCVA9/el5yezSCZ6ko3+bU=";
+      };
+      x86_64-darwin = x86_64-linux;
+      aarch64-linux = x86_64-linux // {
+        hash = "sha256-5Lv2uA72BJEva5v2yncyPe5gKNCNOPNsoHffVt6KXQ0=";
+      };
+      aarch64-darwin = aarch64-linux;
     };
     untarDir = "${pname}-${platformAttrs.${stdenv.system}.version}";
     jdk = jdk11_headless;
     inherit openssl;
     # TODO: Package and add Intel Storage Acceleration Library
-    nativeLibs = [ stdenv.cc.cc.lib protobuf zlib snappy ];
-    libPatches = ''
-      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${untarDir}/lib/native/libsasl2.so.2
-      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${untarDir}/lib/native/
-      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
-      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
-      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
+    nativeLibs = [ stdenv.cc.cc.lib protobuf zlib snappy libtirpc ];
+    libPatchesGenerator = finalAttrs: (''
+      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${finalAttrs.untarDir}/lib/native/libsasl2.so.2
+      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${finalAttrs.untarDir}/lib/native/
+      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
+      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
+      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
     '' + optionalString stdenv.isLinux ''
       # libjvm.so for Java >=11
-      patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
+      patchelf --add-rpath ${finalAttrs.jdk.home}/lib/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
       # Java 8 has libjvm.so at a different path
-      patchelf --add-rpath ${jdk.home}/jre/lib/amd64/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
+      patchelf --add-rpath ${finalAttrs.jdk.home}/jre/lib/amd64/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
       # NixOS/nixpkgs#193370
       # This workaround is needed to use protobuf 3.19
-      patchelf --replace-needed libprotobuf.so.18 libprotobuf.so $out/lib/${untarDir}/lib/native/libhdfspp.so
-    '';
+      patchelf --replace-needed libprotobuf.so.18 libprotobuf.so $out/lib/${finalAttrs.untarDir}/lib/native/libhdfspp.so
+      patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
+        $out/lib/${finalAttrs.untarDir}/lib/native/{libhdfspp.so.0.1.0,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
+    '');
     tests = nixosTests.hadoop;
   };
   hadoop_3_2 = common rec {
@@ -129,6 +142,7 @@ in
     platformAttrs.x86_64-linux = {
       version = "3.2.4";
       hash = "sha256-qt2gpMr+NHuiVR+/zFRzRyRKG725/ZNBIM69z9J9wNw=";
+      srcHash = "sha256-F9nGD3mZZ1eJf3Ec3AJGE9YBcL/HiagskcdKQhCn/sw=";
     };
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
@@ -140,6 +154,7 @@ in
     platformAttrs.x86_64-linux = {
       version = "2.10.2";
       hash = "sha256-xhA4zxqIRGNhIeBnJO9dLKf/gx/Bq+uIyyZwsIafEyo=";
+      srcHash = "sha256-ucxCyXiJo8aL6aNMhZgKEbn8sGKOoMPVREbMGSfSdAI=";
     };
     jdk = jdk8_headless;
     tests = nixosTests.hadoop2;
