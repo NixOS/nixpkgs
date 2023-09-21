@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -r usr/* $out
 
+    rm -r $out/share/bluej/jdk
+    rm -r $out/share/bluej/javafx
+    rm -r $out/share/bluej/javafx-*.jar
+
     makeWrapper ${openjdk}/bin/java $out/bin/bluej \
       "''${gappsWrapperArgs[@]}" \
       --add-flags "-Dawt.useSystemAAFontSettings=on -Xmx512M \
@@ -49,6 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bluej.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2ClasspathPlus;
+    mainProgram = pname;
     maintainers = with maintainers; [ chvp ];
     platforms = platforms.linux;
   };
