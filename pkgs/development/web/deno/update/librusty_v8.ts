@@ -18,23 +18,15 @@ interface PrefetchResult {
   sha256: string;
 }
 
-const getDenoCoreVersion = async (
-  owner: string,
-  repo: string,
-  version: string
-) =>
-  fetch(`https://github.com/${owner}/${repo}/raw/${version}/Cargo.toml`)
-    .then((res) => res.text())
-    .then((txt) => toml.parse(txt).workspace.dependencies.deno_core.version
-
-const getLibrustyV8Version = async (
+const getDependencyVersion = async (
   owner: string,
   repo: string,
   version: string,
+  dependency: string,
 ) =>
   fetch(`https://github.com/${owner}/${repo}/raw/${version}/Cargo.toml`)
     .then((res) => res.text())
-    .then((txt) => toml.parse(txt).workspace.dependencies.v8.version);
+    .then((txt) => toml.parse(txt).workspace.dependencies[dependency].version;
 
 const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
   arches.map(
@@ -83,8 +75,8 @@ export async function updateLibrustyV8(
 ) {
   log("Starting librusty_v8 update");
   // 0.0.0
-  const denoCoreVersion = await getDenoCoreVersion(owner, repo, denoVersion);
-  const version = await getLibrustyV8Version(owner, "deno_core", denoCoreVersion);
+  const denoCoreVersion = await getDependencyVersion(owner, repo, denoVersion, "deno_core");
+  const version = await getDependencyVersion(owner, "deno_core", denoCoreVersion, "v8");
   if (typeof version !== "string") {
     throw "no librusty_v8 version";
   }
