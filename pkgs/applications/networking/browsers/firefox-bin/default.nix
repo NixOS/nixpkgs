@@ -25,6 +25,8 @@ let
 
   inherit (generated) version sources;
 
+  binaryName = if channel == "release" then "firefox" else "firefox-${channel}";
+
   mozillaPlatforms = {
     i686-linux = "linux-i686";
     x86_64-linux = "linux-x86_64";
@@ -85,7 +87,7 @@ stdenv.mkDerivation {
       cp -r * "$prefix/lib/firefox-bin-${version}"
 
       mkdir -p "$out/bin"
-      ln -s "$prefix/lib/firefox-bin-${version}/firefox" "$out/bin/"
+      ln -s "$prefix/lib/firefox-bin-${version}/firefox" "$out/bin/${binaryName}"
 
       # See: https://github.com/mozilla/policy-templates/blob/master/README.md
       mkdir -p "$out/lib/firefox-bin-${version}/distribution";
@@ -93,7 +95,7 @@ stdenv.mkDerivation {
     '';
 
   passthru = {
-    binaryName = "firefox";
+    inherit binaryName;
     libName = "firefox-bin-${version}";
     ffmpegSupport = true;
     gssSupport = true;
@@ -119,6 +121,6 @@ stdenv.mkDerivation {
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];
-    mainProgram = "firefox";
+    mainProgram = binaryName;
   };
 }
