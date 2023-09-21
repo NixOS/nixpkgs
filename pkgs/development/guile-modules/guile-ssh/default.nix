@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , guile
 , libssh
 , autoreconfHook
@@ -20,14 +21,18 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-P29U88QrCjoyl/wdTPZbiMoykd/v6ul6CW/IJn9UAyw=";
   };
 
-  configureFlags = [ "--with-guilesitedir=\${out}/${guile.siteDir}" ];
-
   postFixup = ''
     for f in $out/${guile.siteDir}/ssh/**.scm; do \
       substituteInPlace $f \
         --replace "libguile-ssh" "$out/lib/libguile-ssh"; \
     done
   '';
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/artyom-poptsov/guile-ssh/pull/31.patch";
+      sha256 = "sha256-J+TDgdjihKoEjhbeH+BzqrHhjpVlGdscRj3L/GAFgKg=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -39,6 +44,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libssh ];
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mv $out/bin/*.scm $out/share/guile-ssh
+    rmdir $out/bin
+  '';
 
   meta = with lib; {
     description = "Bindings to Libssh for GNU Guile";
