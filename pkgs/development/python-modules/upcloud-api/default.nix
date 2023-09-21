@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "upcloud-api";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "UpCloudLtd";
     repo = "upcloud-python-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-35vPODc/oL+JPMnStFutIRYVTUkYAXKRt/KXBW0Yc+U=";
+    hash = "sha256-fMsI0aZ8jA08rrNPm8HmfYz/a3HLUExvvXIeDGPh2e8=";
   };
 
   propagatedBuildInputs = [
