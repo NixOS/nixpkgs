@@ -39829,7 +39829,7 @@ with pkgs;
   caffe = callPackage ../applications/science/math/caffe ({
     inherit (config) cudaSupport;
     cudaPackages = cudaPackages_10_1;
-    opencv3 = opencv3WithoutCuda; # Used only for image loading.
+    opencv4 = opencv4WithoutCuda; # Used only for image loading.
     blas = openblas;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
   } // (config.caffe or {}));
