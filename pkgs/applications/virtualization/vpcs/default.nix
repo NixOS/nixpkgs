@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "vpcs";
     maintainers = with maintainers; [ anthonyroussel ];
   };
 }
