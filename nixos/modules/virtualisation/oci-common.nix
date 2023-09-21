@@ -38,7 +38,6 @@ in
 
   boot.loader.efi.canTouchEfiVariables = false;
   boot.loader.grub = {
-    version = 2;
     device = if cfg.efi then "nodev" else "/dev/sda";
     splashImage = null;
     extraConfig = ''
