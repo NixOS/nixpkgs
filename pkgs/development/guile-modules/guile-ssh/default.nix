@@ -21,12 +21,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-P29U88QrCjoyl/wdTPZbiMoykd/v6ul6CW/IJn9UAyw=";
   };
 
-  postFixup = ''
-    for f in $out/${guile.siteDir}/ssh/**.scm; do \
-      substituteInPlace $f \
-        --replace "libguile-ssh" "$out/lib/libguile-ssh"; \
-    done
-  '';
   patches = [
     (fetchpatch {
       url = "https://github.com/artyom-poptsov/guile-ssh/pull/31.patch";
