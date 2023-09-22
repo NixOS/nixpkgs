@@ -10,7 +10,7 @@ in buildPecl {
     owner = "php-amqp";
     repo = "php-amqp";
     rev = "v${version}";
-    sha256 = "sha256-CDhNDk78D15MtljbtyYj8euPnCruLZnc2NEHqXDX8HY=";
+    hash = "sha256-CDhNDk78D15MtljbtyYj8euPnCruLZnc2NEHqXDX8HY=";
   };
 
   buildInputs = [ rabbitmq-c ];
