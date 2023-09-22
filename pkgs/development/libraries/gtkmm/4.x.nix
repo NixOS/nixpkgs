@@ -6,7 +6,7 @@
 , ninja
 , python3
 , gtk4
-, glibmm_2_68
+, glibmm_2_78
 , cairomm_1_16
 , pangomm_2_48
 , libepoxy
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    glibmm_2_68
+    glibmm_2_78
     gtk4
     cairomm_1_16
     pangomm_2_48

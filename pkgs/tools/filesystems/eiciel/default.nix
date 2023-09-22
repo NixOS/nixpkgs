@@ -3,7 +3,7 @@
 , stdenv
 , acl
 , gnome
-, glibmm_2_68
+, glibmm_2_78
 , gtkmm4
 , meson
 , ninja
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     acl
-    glibmm_2_68
+    glibmm_2_78
     gtkmm4
     gnome.nautilus
   ];

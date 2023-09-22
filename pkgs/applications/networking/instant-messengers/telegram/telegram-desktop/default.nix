@@ -30,7 +30,7 @@
 , range-v3
 , tl-expected
 , hunspell
-, glibmm_2_68
+, glibmm_2_78
 , webkitgtk_6_0
 , jemalloc
 , rnnoise
@@ -143,7 +143,7 @@ stdenv.mkDerivation rec {
     range-v3
     tl-expected
     hunspell
-    glibmm_2_68
+    glibmm_2_78
     webkitgtk_6_0
     jemalloc
     rnnoise

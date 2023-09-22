@@ -21950,7 +21950,7 @@ with pkgs;
 
   glibmm = callPackage ../development/libraries/glibmm { };
 
-  glibmm_2_68 = callPackage ../development/libraries/glibmm/2.68.nix {
+  glibmm_2_78 = callPackage ../development/libraries/glibmm/2.78.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
