@@ -9,6 +9,7 @@ import re
 import subprocess
 import urllib.request
 import sys
+import os
 
 
 HERE = pathlib.Path(__file__).parent
@@ -24,6 +25,7 @@ class KernelNature(Enum):
 class KernelRelease:
     nature: KernelNature
     version: str
+    branch: str
     date: str
     link: str
     eol: bool = False
@@ -43,7 +45,14 @@ def parse_release(release: Tag) -> KernelRelease | None:
     assert link is not None, f'link for kernel {version} is non-existent'
     eol = bool(release.find(class_='eolkernel'))
 
-    return KernelRelease(nature=nature, version=version, date=date, link=link, eol=eol)
+    return KernelRelease(
+        nature=nature,
+        branch=get_branch(version),
+        version=version,
+        date=date,
+        link=link,
+        eol=eol,
+    )
 
 def get_branch(version: str):
     # This is a testing kernel.
@@ -53,9 +62,18 @@ def get_branch(version: str):
         major, minor, *_ = version.split(".")
         return f"{major}.{minor}"
 
+def get_hash(kernel: KernelRelease):
+    if kernel.branch == "testing":
+        args = ["--unpack"]
+    else:
+        args = []
 
-def get_hash(url: str):
-    return subprocess.check_output(["nix-prefetch-url", url]).decode().strip()
+    hash = (
+        subprocess.check_output(["nix-prefetch-url", kernel.link] + args)
+        .decode()
+        .strip()
+    )
+    return f"sha256:{hash}"
 
 
 def commit(message):
@@ -91,13 +109,17 @@ def main():
 
         print(message)
 
-        all_kernels[branch] = {"version": kernel.version, "hash": get_hash(kernel.link)}
+        all_kernels[branch] = {
+            "version": kernel.version,
+            "hash": get_hash(kernel),
+        }
 
         with VERSIONS_FILE.open("w") as fd:
             json.dump(all_kernels, fd, indent=4)
             fd.write("\n")  # makes editorconfig happy
 
-        commit(message)
+        if os.environ.get("COMMIT") == "1":
+            commit(message)
 
 
 if __name__ == "__main__":
