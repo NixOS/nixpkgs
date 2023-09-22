@@ -7519,6 +7519,8 @@ self: super: with self; {
     protobuf = protobuf3;
   };
 
+  onnx-graphsurgeon = callPackage ../development/python-modules/onnx-graphsurgeon { };
+
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
     protobuf = protobuf3;
   };
