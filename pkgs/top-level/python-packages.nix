@@ -8474,6 +8474,8 @@ self: super: with self; {
 
   podcats = callPackage ../development/python-modules/podcats { };
 
+  podman = callPackage ../development/python-modules/podman { };
+
   poetry-core = callPackage ../development/python-modules/poetry-core { };
 
   poetry-dynamic-versioning = callPackage ../development/python-modules/poetry-dynamic-versioning { };
