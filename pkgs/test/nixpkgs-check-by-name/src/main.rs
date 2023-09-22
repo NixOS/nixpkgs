@@ -140,6 +140,42 @@ mod tests {
         Ok(())
     }
 
+    /// Tests symlinked temporary directories.
+    /// This is needed because on darwin, `/tmp` is a symlink to `/private/tmp`, and Nix's
+    /// restrict-eval doesn't also allow access to the canonical path when you allow the
+    /// non-canonical one.
+    ///
+    /// The error if we didn't do this would look like this:
+    /// error: access to canonical path '/private/var/folders/[...]/.tmpFbcNO0' is forbidden in restricted mode
+    #[test]
+    fn test_symlinked_tmpdir() -> anyhow::Result<()> {
+        // Create a directory with two entries:
+        // - actual (dir)
+        // - symlinked -> actual (symlink)
+        let temp_root = tempdir()?;
+        fs::create_dir(temp_root.path().join("actual"))?;
+        std::os::unix::fs::symlink("actual", temp_root.path().join("symlinked"))?;
+        let tmpdir = temp_root.path().join("symlinked");
+
+        // Then set TMPDIR to the symlinked directory
+        // Make sure to persist the old value so we can undo this later
+        let old_tmpdir = env::var("TMPDIR").ok();
+        env::set_var("TMPDIR", &tmpdir);
+
+        // Then run a simple test with this symlinked temporary directory
+        // This should be successful
+        test_nixpkgs("symlinked_tmpdir", Path::new("tests/success"), "")?;
+
+        // Undo the env variable change
+        if let Some(old) = old_tmpdir {
+            env::set_var("TMPDIR", old);
+        } else {
+            env::remove_var("TMPDIR");
+        }
+
+        Ok(())
+    }
+
     fn test_nixpkgs(name: &str, path: &Path, expected_errors: &str) -> anyhow::Result<()> {
         let extra_nix_path = Path::new("tests/mock-nixpkgs.nix");
 
