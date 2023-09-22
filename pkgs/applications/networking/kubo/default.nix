@@ -27,7 +27,7 @@ buildGoModule rec {
 
   passthru.tests.kubo = nixosTests.kubo;
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   outputs = [ "out" "systemd_unit" "systemd_unit_hardened" ];
 

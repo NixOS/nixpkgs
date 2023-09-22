@@ -61,6 +61,7 @@
   ./hardware/flipperzero.nix
   ./hardware/flirc.nix
   ./hardware/gkraken.nix
+  ./hardware/glasgow.nix
   ./hardware/gpgsmartcards.nix
   ./hardware/hackrf.nix
   ./hardware/i2c.nix

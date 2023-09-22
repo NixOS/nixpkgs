@@ -30,13 +30,11 @@ let
   configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
     (mkSection "main" {
       plugins = "keyfile";
-      dhcp = cfg.dhcp;
-      dns = cfg.dns;
+      inherit (cfg) dhcp dns;
       # If resolvconf is disabled that means that resolv.conf is managed by some other module.
       rc-manager =
         if config.networking.resolvconf.enable then "resolvconf"
         else "unmanaged";
-      firewall-backend = cfg.firewallBackend;
     })
     (mkSection "keyfile" {
       unmanaged-devices =
@@ -233,15 +231,6 @@ in
         '';
       };
 
-      firewallBackend = mkOption {
-        type = types.enum [ "iptables" "nftables" "none" ];
-        default = "iptables";
-        description = lib.mdDoc ''
-          Which firewall backend should be used for configuring masquerading with shared mode.
-          If set to none, NetworkManager doesn't manage the configuration at all.
-        '';
-      };
-
       logLevel = mkOption {
         type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
         default = "WARN";
@@ -340,20 +329,20 @@ in
         default = [ ];
         example = literalExpression ''
           [ {
-                source = pkgs.writeText "upHook" '''
+            source = pkgs.writeText "upHook" '''
+              if [ "$2" != "up" ]; then
+                logger "exit: event $2 != up"
+                exit
+              fi
 
-                  if [ "$2" != "up" ]; then
-                      logger "exit: event $2 != up"
-                      exit
-                  fi
-
-                  # coreutils and iproute are in PATH too
-                  logger "Device $DEVICE_IFACE coming up"
-              ''';
-              type = "basic";
-          } ]'';
+              # coreutils and iproute are in PATH too
+              logger "Device $DEVICE_IFACE coming up"
+            ''';
+            type = "basic";
+          } ]
+        '';
         description = lib.mdDoc ''
-          A list of scripts which will be executed in response to  network  events.
+          A list of scripts which will be executed in response to network events.
         '';
       };
 
@@ -412,6 +401,9 @@ in
       Consider setting system-wide host entries using networking.hosts, provide
       them via the DNS server in your network, or use environment.etc
       to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
+    '')
+    (mkRemovedOptionModule [ "networking" "networkmanager" "firewallBackend" ] ''
+      This option was removed as NixOS is now using iptables-nftables-compat even when using iptables, therefore Networkmanager now uses the nftables backend unconditionally.
     '')
   ];
 

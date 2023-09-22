@@ -41,12 +41,20 @@ An attribute set with these values:
 - `_type` (constant string `"fileset"`):
   Tag to indicate this value is a file set.
 
-- `_internalVersion` (constant string equal to the current version):
-  Version of the representation
+- `_internalVersion` (constant `2`, the current version):
+  Version of the representation.
 
 - `_internalBase` (path):
   Any files outside of this path cannot influence the set of files.
   This is always a directory.
+
+- `_internalBaseRoot` (path):
+  The filesystem root of `_internalBase`, same as `(lib.path.splitRoot _internalBase).root`.
+  This is here because this needs to be computed anyway, and this computation shouldn't be duplicated.
+
+- `_internalBaseComponents` (list of strings):
+  The path components of `_internalBase`, same as `lib.path.subpath.components (lib.path.splitRoot _internalBase).subpath`.
+  This is here because this needs to be computed anyway, and this computation shouldn't be duplicated.
 
 - `_internalTree` ([filesetTree](#filesettree)):
   A tree representation of all included files under `_internalBase`.
@@ -59,8 +67,8 @@ An attribute set with these values:
 One of the following:
 
 - `{ <name> = filesetTree; }`:
-  A directory with a nested `filesetTree` value for every directory entry.
-  Even entries that aren't included are present as `null` because it improves laziness and allows using this as a sort of `builtins.readDir` cache.
+  A directory with a nested `filesetTree` value for directory entries.
+  Entries not included may either be omitted or set to `null`, as necessary to improve efficiency or laziness.
 
 - `"directory"`:
   A directory with all its files included recursively, allowing early cutoff for some operations.
@@ -169,15 +177,9 @@ Arguments:
 ## To update in the future
 
 Here's a list of places in the library that need to be updated in the future:
-- > The file set library is currently very limited but is being expanded to include more functions over time.
+- > The file set library is currently somewhat limited but is being expanded to include more functions over time.
 
   in [the manual](../../doc/functions/fileset.section.md)
-- > Currently the only way to construct file sets is using implicit coercion from paths.
-
-  in [the `toSource` reference](./default.nix)
-- > For now filesets are always paths
-
-  in [the `toSource` implementation](./default.nix), also update the variable name there
 - Once a tracing function exists, `__noEval` in [internal.nix](./internal.nix) should mention it
 - If/Once a function to convert `lib.sources` values into file sets exists, the `_coerce` and `toSource` functions should be updated to mention that function in the error when such a value is passed
 - If/Once a function exists that can optionally include a path depending on whether it exists, the error message for the path not existing in `_coerce` should mention the new function

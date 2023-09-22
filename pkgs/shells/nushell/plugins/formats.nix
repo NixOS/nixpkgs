@@ -12,9 +12,9 @@ let
 in
 rustPlatform.buildRustPackage {
   inherit pname;
-  version = "0.84.0";
+  version = "0.85.0";
   src = nushell.src;
-  cargoHash = "sha256-pwOdSJHd9njR0lr4n2EzCcqRonh0cbBHGZgAJ1l8FEk=";
+  cargoHash = "sha256-OKtktjBOujvljAX260TbC2sQWZOiGgU+sXsbYRhGPRM=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ IOKit Foundation ];
   cargoBuildFlags = [ "--package nu_plugin_formats" ];

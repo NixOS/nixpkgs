@@ -951,6 +951,8 @@ self: super: with self; {
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
+  aws-encryption-sdk = callPackage ../development/python-modules/aws-encryption-sdk { };
+
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
@@ -1290,6 +1292,8 @@ self: super: with self; {
   base58 = callPackage ../development/python-modules/base58 { };
 
   base58check = callPackage ../development/python-modules/base58check { };
+
+  base64io = callPackage ../development/python-modules/base64io { };
 
   baseline = callPackage ../development/python-modules/baseline { };
 
@@ -3075,6 +3079,8 @@ self: super: with self; {
   django-treebeard = callPackage ../development/python-modules/django-treebeard { };
 
   django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
+
+  django-types = callPackage ../development/python-modules/django-types { };
 
   django-versatileimagefield = callPackage ../development/python-modules/django-versatileimagefield { };
 
@@ -6429,6 +6435,8 @@ self: super: with self; {
 
   manuel = callPackage ../development/python-modules/manuel { };
 
+  manuf = callPackage ../development/python-modules/manuf { };
+
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
@@ -7535,7 +7543,7 @@ self: super: with self; {
     abseil-cpp = if stdenv.isLinux then
         pkgs.abseil-cpp_202301
       else
-        pkgs.abseil-cpp_202301.override { cxxStandard = "17"; };
+        pkgs.abseil-cpp_202301.override { cxxStandard = "14"; };
   };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
@@ -9052,6 +9060,8 @@ self: super: with self; {
   pydata-google-auth = callPackage ../development/python-modules/pydata-google-auth { };
 
   pydata-sphinx-theme = callPackage ../development/python-modules/pydata-sphinx-theme { };
+
+  pydateinfer = callPackage ../development/python-modules/pydateinfer { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
@@ -11644,6 +11654,8 @@ self: super: with self; {
   scikit-misc = callPackage ../development/python-modules/scikit-misc { };
 
   scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
+
+  scikit-posthocs = callPackage ../development/python-modules/scikit-posthocs { };
 
   scikit-rf = callPackage ../development/python-modules/scikit-rf { };
 
