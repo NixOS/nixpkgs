@@ -9,19 +9,20 @@
 , tqdm
 , funsor
 , pytestCheckHook
-, tensorflow-probability
+# TODO: uncomment when tensorflow-probability gets fixed.
+# , tensorflow-probability
 }:
 
 buildPythonPackage rec {
   pname = "numpyro";
-  version = "0.13.0";
+  version = "0.13.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit version pname;
-    hash = "sha256-n+5K6fZlatKkXGVxzKcVhmP5XNuJeeM+GcCJ1Kh/WMk=";
+    hash = "sha256-Um8LFVGAlMeOaN9uMwycHJzqEnTaxp8FYXIk+m2VTug=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +36,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     funsor
     pytestCheckHook
-    tensorflow-probability
+    # TODO: uncomment when tensorflow-probability gets fixed.
+    # tensorflow-probability
   ];
 
   pythonImportsCheck = [
@@ -60,6 +62,11 @@ buildPythonPackage rec {
     "test_zero_inflated_logits_probs_agree"
     # NameError: unbound axis name: _provenance
     "test_model_transformation"
+  ];
+
+  # TODO: remove when tensorflow-probability gets fixed.
+  disabledTestPaths = [
+    "test/test_distributions.py"
   ];
 
   meta = with lib; {
