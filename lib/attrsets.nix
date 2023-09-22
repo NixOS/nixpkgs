@@ -392,7 +392,7 @@ rec {
       foldlAttrs :: ( a -> String -> b -> a ) -> a -> { ... :: b } -> a
   */
   foldlAttrs = f: init: set:
-    foldl'
+    builtins.foldl'
       (acc: name: f acc name set.${name})
       init
       (attrNames set);

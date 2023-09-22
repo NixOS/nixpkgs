@@ -524,10 +524,10 @@ runTests {
     expected = [ 3 2 1 ];
   };
 
-  # The same as builtins.foldl', lib.foldl' doesn't evaluate the first accumulator strictly
+  # Compared to builtins.foldl', lib.foldl' evaluates the first accumulator strictly too
   testFoldl'StrictInitial = {
     expr = (builtins.tryEval (foldl' (acc: el: el) (throw "hello") [])).success;
-    expected = true;
+    expected = false;
   };
 
   # Make sure we don't get a stack overflow for large lists

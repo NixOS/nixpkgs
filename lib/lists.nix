@@ -90,8 +90,11 @@ rec {
     Reduce a list by applying a binary operator from left to right,
     starting with an initial accumulator.
 
-    After each application of the operator, the resulting value is evaluated.
+    Before each application of the operator, the accumulator value is evaluated.
     This behavior makes this function stricter than [`foldl`](#function-library-lib.lists.foldl).
+
+    Unlike [`builtins.foldl'`](https://nixos.org/manual/nix/unstable/language/builtins.html#builtins-foldl'),
+    the initial accumulator argument is evaluated before the first iteration.
 
     A call like
 
@@ -104,7 +107,7 @@ rec {
 
     ```nix
     let
-      acc₁   =                      op acc₀   x₀   ;
+      acc₁   = builtins.seq acc₀   (op acc₀   x₀  );
       acc₂   = builtins.seq acc₁   (op acc₁   x₁  );
       acc₃   = builtins.seq acc₂   (op acc₂   x₂  );
       ...
@@ -135,7 +138,11 @@ rec {
     # The list to fold
     list:
 
-    builtins.foldl' op acc list;
+    # The builtin `foldl'` is a bit lazier than one might expect.
+    # See https://github.com/NixOS/nix/pull/7158.
+    # In particular, the initial accumulator value is not forced before the first iteration starts.
+    builtins.seq acc
+      (builtins.foldl' op acc list);
 
   /* Map with index starting from 0
 
