@@ -5501,8 +5501,6 @@ with pkgs;
 
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
-  go-thumbnailer = callPackage ../applications/misc/go-thumbnailer { };
-
   google-cursor = callPackage ../data/icons/google-cursor { };
 
   geckodriver = callPackage ../development/tools/geckodriver {
