@@ -670,7 +670,7 @@
     },
     "netsnmp": {
       "attrPath": [
-        "net_snmp"
+        "net-snmp"
       ]
     },
     "nix-cmd": {
