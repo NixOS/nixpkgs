@@ -249,7 +249,7 @@ import ../make-test-python.nix ({ package, ... }: {
     assert "standby" in client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState")
     client.succeed("sudo -u yarn yarn rmadmin -getAllServiceState | systemd-cat")
 
-    assert "Estimated value of Pi is" in client.succeed("HADOOP_USER_NAME=hdfs yarn jar $(readlink $(which yarn) | sed -r 's~bin/yarn~lib/hadoop-*/share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar~g') pi 2 10")
+    assert "Estimated value of Pi is" in client.succeed("HADOOP_USER_NAME=hdfs yarn jar $(readlink $(which yarn) | sed -r 's~bin/yarn~share/hadoop/mapreduce/hadoop-mapreduce-examples-*.jar~g') pi 2 10")
     assert "SUCCEEDED" in client.succeed("yarn application -list -appStates FINISHED")
   '';
 })

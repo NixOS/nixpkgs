@@ -29,11 +29,11 @@ assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarc
 
 let
   common = {
-    pname, platformAttrs, untarDir ? "${pname}-${version}", jdk
-    , nativeLibs ? [ ], libPatchesGenerator ? (_: ""), tests
+    pname, platformAttrs, jdk, nativeLibs ? [ ]
+    , libPatchesGenerator ? (_: ""), tests
   }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname jdk untarDir;
+      inherit pname jdk;
       libPatches = libPatchesGenerator finalAttrs;
       version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
@@ -51,29 +51,29 @@ let
       };
 
       nativeBuildInputs = [ makeWrapper ]
-                          ++ optionals (stdenv.isLinux && (nativeLibs != [ ] || (libPatches finalAttrs) != "")) [ autoPatchelfHook ];
+                          ++ optionals (stdenv.isLinux && (nativeLibs != [ ] || (libPatchesGenerator finalAttrs) != "")) [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''
-        mkdir -p $out/{lib/${finalAttrs.untarDir}/conf,bin,lib}
-        mv * $out/lib/${finalAttrs.untarDir}
+        mkdir $out
+        mv * $out/
       '' + optionalString stdenv.isLinux ''
         for n in $(find ${finalAttrs.containerExecutor}/bin -type f); do
-          ln -sf "$n" $out/lib/${finalAttrs.untarDir}/bin
+          ln -sf "$n" $out/bin
         done
       '' + ''
-        for n in $(find $out/lib/${finalAttrs.untarDir}/bin -type f ! -name "*.*"); do
-          makeWrapper "$n" "$out/bin/$(basename $n)"\
+        for n in $(find $out/bin -type f ! -name "*.*"); do
+          wrapProgram "$n"\
             --set-default JAVA_HOME ${finalAttrs.jdk.home}\
-            --set-default HADOOP_HOME $out/lib/${finalAttrs.untarDir}\
+            --set-default HADOOP_HOME $out/\
             --run "test -d /etc/hadoop-conf && export HADOOP_CONF_DIR=\''${HADOOP_CONF_DIR-'/etc/hadoop-conf/'}"\
-            --set-default HADOOP_CONF_DIR $out/lib/${finalAttrs.untarDir}/etc/hadoop/\
+            --set-default HADOOP_CONF_DIR $out/etc/hadoop/\
             --prefix PATH : "${makeBinPath [ bash coreutils which]}"\
             --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath finalAttrs.buildInputs}"
         done
       '' + optionalString sparkSupport ''
         # Add the spark shuffle service jar to YARN
-        cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/lib/${finalAttrs.untarDir}/share/hadoop/yarn/
+        cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/share/hadoop/yarn/
       '' + (finalAttrs.libPatches);
 
       passthru = { inherit tests; };
@@ -101,24 +101,24 @@ let
     });
   nativeLibs = [ stdenv.cc.cc.lib protobuf zlib snappy libtirpc ];
   libPatchesGenerator = finalAttrs: (''
-      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${finalAttrs.untarDir}/lib/native/libsasl2.so.2
-      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${finalAttrs.untarDir}/lib/native/
-      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
-      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
-      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
+      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/native/libsasl2.so.2
+      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/native/
+      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/native/
+      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/native/
+      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/native/
     '' + optionalString stdenv.isLinux ''
       # libjvm.so for Java >=11
-      patchelf --add-rpath ${finalAttrs.jdk.home}/lib/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
+      patchelf --add-rpath ${finalAttrs.jdk.home}/lib/server $out/lib/native/libnativetask.so.1.0.0
       # Java 8 has libjvm.so at a different path
-      patchelf --add-rpath ${finalAttrs.jdk.home}/jre/lib/amd64/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
+      patchelf --add-rpath ${finalAttrs.jdk.home}/jre/lib/amd64/server $out/lib/native/libnativetask.so.1.0.0
       # NixOS/nixpkgs#193370
       # This workaround is needed to use protobuf 3.19
       # for hadoop 3.3
-      patchelf --replace-needed libprotobuf.so.18 libprotobuf.so $out/lib/${finalAttrs.untarDir}/lib/native/libhdfspp.so
+      patchelf --replace-needed libprotobuf.so.18 libprotobuf.so $out/lib/native/libhdfspp.so
       # for hadoop 3.2
-      patchelf --replace-needed libprotobuf.so.8 libprotobuf.so $out/lib/${finalAttrs.untarDir}/lib/native/libhdfspp.so
+      patchelf --replace-needed libprotobuf.so.8 libprotobuf.so $out/lib/native/libhdfspp.so
       patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
-        $out/lib/${finalAttrs.untarDir}/lib/native/{libhdfspp.so.0.1.0,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
+        $out/lib/native/{libhdfspp.so.0.1.0,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
     '');
 in
 {
@@ -138,7 +138,6 @@ in
       };
       aarch64-darwin = aarch64-linux;
     };
-    untarDir = "${pname}-${platformAttrs.${stdenv.system}.version}";
     jdk = jdk11_headless;
     inherit nativeLibs libPatchesGenerator;
     # TODO: Package and add Intel Storage Acceleration Library
