@@ -160,8 +160,9 @@ rec {
           linux-kernel = args.linux-kernel or {};
           gcc = args.gcc or {};
           rustc = args.rustc or {};
+          go = args.go or {};
         } // platforms.select final)
-        linux-kernel gcc rustc;
+        linux-kernel gcc rustc go;
 
       linuxArch =
         if final.isAarch32 then "arm"
