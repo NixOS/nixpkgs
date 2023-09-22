@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchCrate
 , rustPlatform
+, installShellFiles
 , pkg-config
 , libsodium
 , openssl
@@ -22,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-mRi0NUETTdYE/oM+Jo7gW/zNby8dPAKl6XhzP0Qzsf0=";
 
   doCheck = false;
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl libsodium xxHash ]
     ++ (lib.optionals gitImportSupport [ libgit2 ])
     ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -30,6 +31,13 @@ rustPlatform.buildRustPackage rec {
     ]));
 
   buildFeatures = lib.optional gitImportSupport "git";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd pijul \
+      --bash <($out/bin/pijul completion bash) \
+      --fish <($out/bin/pijul completion fish) \
+      --zsh <($out/bin/pijul completion zsh)
+  '';
 
   meta = with lib; {
     description = "A distributed version control system";

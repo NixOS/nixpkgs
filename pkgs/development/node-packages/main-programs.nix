@@ -13,7 +13,6 @@
   "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
-  "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
   "@mermaid-js/mermaid-cli" = "mmdc";
   "@nerdwallet/shepherd" = "shepherd";

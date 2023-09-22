@@ -5,7 +5,6 @@
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
-, "@forge/cli"
 , "@mermaid-js/mermaid-cli"
 , "@microsoft/rush"
 , "@nerdwallet/shepherd"
