@@ -4,7 +4,7 @@
 , rustPlatform
 , nix-update-script
 
-, appstream-glib
+, appstream
 , blueprint-compiler
 , cargo
 , desktop-file-utils
@@ -14,31 +14,34 @@
 , rustc
 , wrapGAppsHook4
 
+, dav1d
 , gst_all_1
 , gtk4
 , libadwaita
+, libwebp
 }:
 
 stdenv.mkDerivation rec {
   pname = "identity";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
     rev = "v${version}";
-    hash = "sha256-ZBK2Vc2wnohABnWXRtmRdAAOnkTIHt4RriZitu8BW1A=";
+    hash = "sha256-AiOaTjYOc7Eo+9kl1H91TKAkCKNUJNWobmBENZlHBhQ=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-5NUnrBHj3INhh9zbdwPink47cP6uJiRyzzdj+yiSVD8=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "gst-plugin-gtk4-0.12.0-alpha.1" = "sha256-JSw9yZ4oy7m6c9pqOT+fnYEbTlneLTtWQf3/Jbek/ps=";
+    };
   };
 
   nativeBuildInputs = [
-    appstream-glib
+    appstream
     blueprint-compiler
     cargo
     desktop-file-utils
@@ -51,6 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    dav1d
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
@@ -58,6 +62,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gtk4
     libadwaita
+    libwebp
   ];
 
   passthru.updateScript = nix-update-script { };
