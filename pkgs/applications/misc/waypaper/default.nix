@@ -2,8 +2,8 @@
 , python3
 , fetchFromGitHub
 , gobject-introspection
-, gtk3
 , wrapGAppsHook
+, killall
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,8 +22,9 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
+  propagatedBuildInputs = [
+    python3.pkgs.pygobject3
+    killall
   ];
 
   # has no tests

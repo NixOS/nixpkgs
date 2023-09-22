@@ -97,6 +97,7 @@ python3Packages.buildPythonApplication rec {
     description = "Linux compatible UI for the Elgato Stream Deck";
     homepage = "https://streamdeck-linux-gui.github.io/streamdeck-linux-gui/";
     license = licenses.mit;
+    mainProgram = "streamdeck";
     maintainers = with maintainers; [ majiir ];
   };
 }
