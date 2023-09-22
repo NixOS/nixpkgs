@@ -28,8 +28,6 @@
 , udev
 }:
 
-# TODO respect $NIX_BUILD_CORES
-
 assert debugBuild -> withJcef;
 
 let
