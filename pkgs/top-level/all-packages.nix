@@ -33668,7 +33668,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
   };
 
-  minicom = callPackage ../tools/misc/minicom { };
+  minicom = callPackage ../tools/misc/minicom {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   minigalaxy = callPackage ../applications/misc/minigalaxy { };
 
