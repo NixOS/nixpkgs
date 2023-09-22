@@ -4,7 +4,6 @@
 , fetchurl
 , bash
 , tinycc
-, musl
 , gnumake
 , gnugrep
 , gnused
@@ -60,7 +59,7 @@ bash.runCommand "${pname}-${version}" {
   sed -i 's/chdir_long/chdir/' gl/lib/save-cwd.c
 
   # Configure
-  export CC="tcc -B ${musl}/lib"
+  export CC="tcc -B ${tinycc.libs}/lib"
   export AR="tcc -ar"
   export LD=tcc
   bash ./configure \

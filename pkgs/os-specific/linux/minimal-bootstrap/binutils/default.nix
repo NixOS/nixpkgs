@@ -13,7 +13,6 @@
 , gnutar
 , xz
 , tinycc
-, musl
 }:
 
 let
@@ -99,7 +98,7 @@ bash.runCommand "${pname}-${version}" {
   export PATH="$(pwd)/aliases/:$PATH"
 
   # Configure
-  export CC="tcc -B ${musl}/lib"
+  export CC="tcc -B ${tinycc.libs}/lib"
   export AR="tcc -ar"
   export lt_cv_sys_max_cmd_len=32768
   export CFLAGS="-D__LITTLE_ENDIAN__=1"

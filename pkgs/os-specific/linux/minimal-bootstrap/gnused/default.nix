@@ -5,7 +5,6 @@
 , bash
 , gnumake
 , tinycc
-, musl
 , gnused
 , gnugrep
 , gnutar
@@ -46,7 +45,7 @@ bash.runCommand "${pname}-${version}" {
   cd sed-${version}
 
   # Configure
-  export CC="tcc -B ${musl}/lib"
+  export CC="tcc -B ${tinycc.libs}/lib"
   export LD=tcc
   ./configure \
     --build=${buildPlatform.config} \

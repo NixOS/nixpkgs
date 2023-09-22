@@ -24,7 +24,6 @@ lib.makeScope
     binutils = callPackage ./binutils {
       bash = bash_2_05;
       tinycc = tinycc-musl;
-      musl = musl11;
     };
 
     bzip2 = callPackage ./bzip2 {
@@ -37,13 +36,11 @@ lib.makeScope
     diffutils = callPackage ./diffutils {
       bash = bash_2_05;
       tinycc = tinycc-musl;
-      musl = musl11;
     };
 
     findutils = callPackage ./findutils {
       bash = bash_2_05;
       tinycc = tinycc-musl;
-      musl = musl11;
     };
 
     gawk-mes = callPackage ./gawk/mes.nix {
@@ -98,7 +95,6 @@ lib.makeScope
     gnused = callPackage ./gnused {
       bash = bash_2_05;
       tinycc = tinycc-musl;
-      musl = musl11;
       gnused = gnused-mes;
     };
     gnused-mes = callPackage ./gnused/mes.nix {
@@ -157,7 +153,6 @@ lib.makeScope
     xz = callPackage ./xz {
       bash = bash_2_05;
       tinycc = tinycc-musl;
-      musl = musl11;
     };
 
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;

@@ -4,7 +4,6 @@
 , fetchurl
 , bash
 , tinycc
-, musl
 , gnumake
 , gnugrep
 , gnused
@@ -57,7 +56,7 @@ bash.runCommand "${pname}-${version}" {
   cd diffutils-${version}
 
   # Configure
-  export CC="tcc -B ${musl}/lib"
+  export CC="tcc -B ${tinycc.libs}/lib"
   export LD=tcc
   bash ./configure \
     --prefix=$out \

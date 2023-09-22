@@ -4,7 +4,6 @@
 , fetchurl
 , bash
 , tinycc
-, musl
 , gnumake
 , gnused
 , gnugrep
@@ -53,7 +52,7 @@ bash.runCommand "${pname}-${version}" {
   cd xz-${version}
 
   # Configure
-  export CC="tcc -B ${musl}/lib"
+  export CC="tcc -B ${tinycc.libs}/lib"
   export AR="tcc -ar"
   export LD=tcc
   bash ./configure \
