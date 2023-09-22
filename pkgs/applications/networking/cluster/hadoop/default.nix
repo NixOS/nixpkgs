@@ -28,13 +28,17 @@ with lib;
 assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
 
 let
-  common = { pname, platformAttrs, untarDir ? "${pname}-${version}", jdk, openssl ? null, nativeLibs ? [ ], libPatchesGenerator ? (_: ""), tests }:
+  common = {
+    pname, platformAttrs, untarDir ? "${pname}-${version}", jdk
+    , nativeLibs ? [ ], libPatchesGenerator ? (_: ""), tests
+  }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname jdk untarDir openssl;
+      inherit pname jdk untarDir;
       libPatches = libPatchesGenerator finalAttrs;
       version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
-        url = "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
+        url = "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
+              + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
         inherit (platformAttrs.${stdenv.system}) hash;
       };
       doCheck = true;
@@ -95,6 +99,27 @@ let
         platforms = attrNames platformAttrs;
       } (attrByPath [ stdenv.system "meta" ] {} platformAttrs);
     });
+  nativeLibs = [ stdenv.cc.cc.lib protobuf zlib snappy libtirpc ];
+  libPatchesGenerator = finalAttrs: (''
+      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${finalAttrs.untarDir}/lib/native/libsasl2.so.2
+      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${finalAttrs.untarDir}/lib/native/
+      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
+      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
+      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
+    '' + optionalString stdenv.isLinux ''
+      # libjvm.so for Java >=11
+      patchelf --add-rpath ${finalAttrs.jdk.home}/lib/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
+      # Java 8 has libjvm.so at a different path
+      patchelf --add-rpath ${finalAttrs.jdk.home}/jre/lib/amd64/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
+      # NixOS/nixpkgs#193370
+      # This workaround is needed to use protobuf 3.19
+      # for hadoop 3.3
+      patchelf --replace-needed libprotobuf.so.18 libprotobuf.so $out/lib/${finalAttrs.untarDir}/lib/native/libhdfspp.so
+      # for hadoop 3.2
+      patchelf --replace-needed libprotobuf.so.8 libprotobuf.so $out/lib/${finalAttrs.untarDir}/lib/native/libhdfspp.so
+      patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
+        $out/lib/${finalAttrs.untarDir}/lib/native/{libhdfspp.so.0.1.0,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
+    '');
 in
 {
   # Different version of hadoop support different java runtime versions
@@ -115,29 +140,11 @@ in
     };
     untarDir = "${pname}-${platformAttrs.${stdenv.system}.version}";
     jdk = jdk11_headless;
-    inherit openssl;
+    inherit nativeLibs libPatchesGenerator;
     # TODO: Package and add Intel Storage Acceleration Library
-    nativeLibs = [ stdenv.cc.cc.lib protobuf zlib snappy libtirpc ];
-    libPatchesGenerator = finalAttrs: (''
-      ln -s ${getLib cyrus_sasl}/lib/libsasl2.so $out/lib/${finalAttrs.untarDir}/lib/native/libsasl2.so.2
-      ln -s ${getLib openssl}/lib/libcrypto.so $out/lib/${finalAttrs.untarDir}/lib/native/
-      ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
-      ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
-      ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${finalAttrs.untarDir}/lib/native/
-    '' + optionalString stdenv.isLinux ''
-      # libjvm.so for Java >=11
-      patchelf --add-rpath ${finalAttrs.jdk.home}/lib/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
-      # Java 8 has libjvm.so at a different path
-      patchelf --add-rpath ${finalAttrs.jdk.home}/jre/lib/amd64/server $out/lib/${finalAttrs.untarDir}/lib/native/libnativetask.so.1.0.0
-      # NixOS/nixpkgs#193370
-      # This workaround is needed to use protobuf 3.19
-      patchelf --replace-needed libprotobuf.so.18 libprotobuf.so $out/lib/${finalAttrs.untarDir}/lib/native/libhdfspp.so
-      patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
-        $out/lib/${finalAttrs.untarDir}/lib/native/{libhdfspp.so.0.1.0,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
-    '');
     tests = nixosTests.hadoop;
   };
-  hadoop_3_2 = common rec {
+  hadoop_3_2 = common {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
       version = "3.2.4";
@@ -145,8 +152,7 @@ in
       srcHash = "sha256-F9nGD3mZZ1eJf3Ec3AJGE9YBcL/HiagskcdKQhCn/sw=";
     };
     jdk = jdk8_headless;
-    # not using native libs because of broken openssl_1_0_2 dependency
-    # can be manually overridden
+    inherit nativeLibs libPatchesGenerator;
     tests = nixosTests.hadoop_3_2;
   };
   hadoop2 = common rec {
