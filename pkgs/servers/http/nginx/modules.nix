@@ -786,8 +786,8 @@ let self = {
       name = "spnego-http-auth";
       owner = "stnoonan";
       repo = "spnego-http-auth-nginx-module";
-      rev = "72c8ee04c81f929ec84d5a6d126f789b77781a8c";
-      sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
+      rev = "3575542b3147bd03a6c68a750c3662b0d72ed94e";
+      hash = "sha256-s0m5h7m7dsPD5o2SvBb9L2kB57jwXZK5SkdkGuOmlgs=";
     };
 
     inputs = [ libkrb5 ];
@@ -796,7 +796,7 @@ let self = {
       description = "SPNEGO HTTP Authentication Module";
       homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = teams.deshaw.members;
     };
   };
 
