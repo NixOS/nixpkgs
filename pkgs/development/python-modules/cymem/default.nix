@@ -3,11 +3,15 @@
 , fetchFromGitHub
 , cython
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "cymem";
   version = "2.0.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "explosion";
