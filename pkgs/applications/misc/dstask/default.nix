@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-xZFQQDK+yGAv4IbuNe2dvNa3GDASeJY2mOYw94goAIM=";
   };
 
-  # Set vendorSha256 to null because dstask vendors its dependencies (meaning
+  # Set vendorHash to null because dstask vendors its dependencies (meaning
   # that third party dependencies are stored in the repository).
   #
   # Ref <https://github.com/NixOS/nixpkgs/pull/87383#issuecomment-633204382>
