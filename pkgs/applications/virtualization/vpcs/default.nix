@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, gcc, testers, vpcs }:
+{ lib, stdenv, fetchFromGitHub, testers, vpcs }:
 
 stdenv.mkDerivation rec {
   pname = "vpcs";
@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-OKi4sC4fmKtkJkkpHZ6OfeIDaBafVrJXGXh1R6gLPFY=";
   };
 
-  buildInputs = [ gcc ];
+  postPatch = ''
+    substituteInPlace src/Makefile.osx \
+      --replace "gcc" "${stdenv.cc.targetPrefix}cc"
+  '';
 
   buildPhase = ''(
     cd src
