@@ -862,6 +862,10 @@ self: super: {
     dontBuild = true;
   };
 
+  nvim-navbuddy = super.nvim-navbuddy.overrideAttrs {
+    dependencies = with self; [ nui-nvim nvim-lspconfig nvim-navic ];
+  };
+
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
   };
