@@ -38,6 +38,9 @@ buildPythonPackage rec {
     popd
   '';
 
+  pythonImportsCheck = [
+    "cymem"
+  ];
 
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";
