@@ -33651,6 +33651,8 @@ with pkgs;
 
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
+  listen1 = callPackage ../applications/audio/listen1 { };
+
   llpp = callPackage ../applications/misc/llpp {
     inherit (ocaml-ng.ocamlPackages_4_14) ocaml;
   };
