@@ -27,7 +27,7 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  "@forge/cli" = prev."@forge/cli".override {
+  "@forge/cli" = prev."@forge/cli".override (old: {
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
       libsecret
@@ -37,7 +37,10 @@ final: prev: {
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Security
     ];
-  };
+    meta = old.meta // {
+      license = lib.licenses.unfree; # unlicensed
+    };
+  });
 
   "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override (oldAttrs: {
     nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
