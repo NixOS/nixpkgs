@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 let
-  version = "0.1.3";
+  version = "0.1.4";
 in
 python3.pkgs.buildPythonApplication {
   pname = "open-interpreter";
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication {
     owner = "KillianLucas";
     repo = "open-interpreter";
     rev = "v${version}";
-    hash = "sha256-xmmyDIshEYql41k/7gF+ay7s3mI+iGCjr5gDfLkqLU0=";
+    hash = "sha256-3a4pRV8o+NBZGgOuXng97KjRVU8xVqBp+B9sXsCqHtk=";
   };
 
   nativeBuildInputs = [
