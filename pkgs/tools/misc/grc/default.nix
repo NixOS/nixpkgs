@@ -21,6 +21,10 @@ buildPythonApplication rec {
       substituteInPlace $f \
         --replace /usr/local/ $out/
     done
+
+    # Support for absolute store paths.
+    substituteInPlace grc.conf \
+      --replace "^([/\w\.]+\/)" "^([/\w\.\-]+\/)"
   '';
 
   nativeBuildInputs = [ installShellFiles ];
