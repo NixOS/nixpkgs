@@ -505,6 +505,38 @@ runTests {
       };
     };
 
+  testFoldl'Empty = {
+    expr = foldl' (acc: el: abort "operation not called") 0 [ ];
+    expected = 0;
+  };
+
+  testFoldl'IntegerAdding = {
+    expr = foldl' (acc: el: acc + el) 0 [ 1 2 3 ];
+    expected = 6;
+  };
+
+  # The accumulator isn't forced deeply
+  testFoldl'NonDeep = {
+    expr = take 3 (foldl'
+      (acc: el: [ el ] ++ acc)
+      [ (abort "unevaluated list entry") ]
+      [ 1 2 3 ]);
+    expected = [ 3 2 1 ];
+  };
+
+  # The same as builtins.foldl', lib.foldl' doesn't evaluate the first accumulator strictly
+  testFoldl'StrictInitial = {
+    expr = (builtins.tryEval (foldl' (acc: el: el) (throw "hello") [])).success;
+    expected = true;
+  };
+
+  # Make sure we don't get a stack overflow for large lists
+  # This number of elements would notably cause a stack overflow if it was implemented without the `foldl'` builtin
+  testFoldl'Large = {
+    expr = foldl' (acc: el: acc + el) 0 (range 0 100000);
+    expected = 5000050000;
+  };
+
   testTake = testAllTrue [
     ([] == (take 0 [  1 2 3 ]))
     ([1] == (take 1 [  1 2 3 ]))
