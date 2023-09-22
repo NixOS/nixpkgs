@@ -779,9 +779,6 @@ in
 
       admins = ${toLua cfg.admins}
 
-      -- we already build with libevent, so we can just enable it for a more performant server
-      use_libevent = true
-
       modules_enabled = {
 
         ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
