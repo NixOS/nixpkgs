@@ -58,6 +58,8 @@ let
     #   url = "${liveBootstrap}/patches/stdio_flush_on_exit.patch";
     #   hash = "sha256-/z5ze3h3QTysay8nRvyvwPv3pmTcKptdkBIaMCoeLDg=";
     # })
+    # HACK: always flush stdio immediately
+    ./always-flush.patch
     (fetchurl {
       url = "${liveBootstrap}/patches/va_list.patch";
       hash = "sha256-UmcMIl+YCi3wIeVvjbsCyqFlkyYsM4ECNwTfXP+s7vg=";
