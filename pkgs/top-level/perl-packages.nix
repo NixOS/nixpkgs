@@ -14670,6 +14670,7 @@ with self; {
     meta = {
       description = "Parse and evaluate mathematical expressions";
       homepage = "https://github.com/Grinnz/Math-Calc-Parser";
+      broken = true;
       license = with lib.licenses; [ artistic2 ];
       maintainers = with maintainers; [ sgo ];
     };
