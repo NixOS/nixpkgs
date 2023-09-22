@@ -1,12 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , nixosTests
 , dtkwidget
 , qt5integration
 , qt5platform-plugins
-, dde-qt-dbus-factory
 , cmake
 , qtbase
 , qtsvg
@@ -14,7 +12,6 @@
 , qtx11extras
 , pkg-config
 , wrapQtAppsHook
-, at-spi2-core
 , libsecret
 , chrpath
 , lxqt
@@ -22,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-terminal";
-  version = "6.0.6";
+  version = "6.0.7";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-LzCbh+BErgh7Ojbw314oHB8QvyS6UeJkDUkNngzVm+A=";
+    hash = "sha256-vXykC/x9F+cPTSqKTWimUhnr+IsfoeQncdj75sXG4/g=";
   };
 
   cmakeFlags = [ "-DVERSION=${version}" ];
@@ -47,9 +44,7 @@ stdenv.mkDerivation rec {
     qtbase
     qtsvg
     dtkwidget
-    dde-qt-dbus-factory
     qtx11extras
-    at-spi2-core
     libsecret
     chrpath
   ];

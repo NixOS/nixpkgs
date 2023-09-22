@@ -27,6 +27,7 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , buildPackages
+, pkgsBuildTarget
 , libxcrypt
 , disableGdbPlugin ? !enablePlugin
 , nukeReferences
@@ -176,6 +177,7 @@ let inherit version;
         nukeReferences
         patchelf
         perl
+        pkgsBuildTarget
         profiledCompiler
         reproducibleBuild
         staticCompiler
