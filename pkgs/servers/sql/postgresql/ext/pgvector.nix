@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   installPhase = ''
-    install -D -t $out/lib vector.so
+    install -D -t $out/lib vector${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension sql/vector-*.sql
     install -D -t $out/share/postgresql/extension vector.control
   '';
