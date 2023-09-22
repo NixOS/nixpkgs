@@ -80,7 +80,7 @@ buildFHSEnv rec {
       mkdir -p $out/$(dirname $executable)
 
       echo "#!${stdenv.shell}" >> $out/$executable
-      echo "$WRAPPER ${unwrapped}/$executable \$@" >> $out/$executable
+      echo "$WRAPPER ${unwrapped}/$executable \"\$@\"" >> $out/$executable
     done
 
     cd $out
@@ -93,6 +93,6 @@ buildFHSEnv rec {
   ];
 
   runScript = writeScript "${name}-wrapper" ''
-    exec $@
+    exec "$@"
   '';
 }
