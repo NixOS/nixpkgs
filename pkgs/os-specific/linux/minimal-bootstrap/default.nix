@@ -55,7 +55,6 @@ lib.makeScope
     gawk = callPackage ./gawk {
       bash = bash_2_05;
       tinycc = tinycc-musl;
-      musl = musl11;
       bootGawk = gawk-mes;
     };
 
