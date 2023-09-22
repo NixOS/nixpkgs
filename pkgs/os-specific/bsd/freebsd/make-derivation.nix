@@ -37,11 +37,11 @@ in stdenv'.mkDerivation (rec {
   HOST_SH = stdenv'.shell;
 
   # Since STRIP below is the flag
-  STRIPBIN = "${stdenv.cc.bintools.targetPrefix}strip";
+  STRIPBIN = "${stdenv'.cc.bintools.targetPrefix}strip";
 
   makeFlags = [
     "STRIP=-s" # flag to install, not command
-  ] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "MK_WERROR=no";
+  ] ++ lib.optional (!stdenv'.hostPlatform.isFreeBSD) "MK_WERROR=no";
 
   # amd64 not x86_64 for this on unlike NetBSD
   MACHINE_ARCH = hostArchBsd;

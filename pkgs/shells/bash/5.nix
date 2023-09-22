@@ -87,6 +87,8 @@ stdenv.mkDerivation rec {
     "bash_cv_termcap_lib=libncurses"
   ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
     "--disable-nls"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "bash_cv_getenv_redef=no"
   ];
 
   strictDeps = true;

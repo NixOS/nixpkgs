@@ -108,6 +108,7 @@ mkDerivation rec {
     sed -i -e 's| [^ ]*/libc_nonshared.a||' $out/lib/libc.so
 
     $CC -nodefaultlibs -lgcc -shared -o $out/lib/libgcc_s.so
+    $AR r $out/lib/libgcc_eh.a  # experimental
 
     NIX_CFLAGS_COMPILE+=" -B$out/lib"
     NIX_CFLAGS_COMPILE+=" -I$out/include"
