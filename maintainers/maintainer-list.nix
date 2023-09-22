@@ -13597,6 +13597,12 @@
     githubId = 34967;
     name = "Julius de Bruijn";
   };
+  pineapplehunter = {
+    email = "peshogo+nixpkgs@gmail.com";
+    github = "pineapplehunter";
+    githubId = 8869894;
+    name = "Shogo Takata";
+  };
   pingiun = {
     email = "nixos@pingiun.com";
     github = "pingiun";
