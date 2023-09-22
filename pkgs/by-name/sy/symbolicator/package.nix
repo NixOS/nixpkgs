@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "symbolicator";
-  version = "23.9.0";
+  version = "23.9.1";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
     rev = version;
-    hash = "sha256-odlxslhSsalWbgouzq/1Gyn/5hekoW0dtgshz1vxsg8=";
+    hash = "sha256-QsU9hxBF7Te3vO6in/nWn6hYbovI1jOWYXB6PcqWGTA=";
     fetchSubmodules = true;
   };
 

@@ -7543,7 +7543,7 @@ self: super: with self; {
     abseil-cpp = if stdenv.isLinux then
         pkgs.abseil-cpp_202301
       else
-        pkgs.abseil-cpp_202301.override { cxxStandard = "17"; };
+        pkgs.abseil-cpp_202301.override { cxxStandard = "14"; };
   };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {

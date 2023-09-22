@@ -64,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/eza-community/eza/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "eza";
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [ cafkafk _9glenda ];
     platforms = platforms.unix ++ platforms.windows;
   };
 }

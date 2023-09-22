@@ -2,9 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
-, pdm
-, python3
+, pdm-backend
 , pyvcd
 , jinja2
 , importlib-resources
@@ -34,13 +32,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     git
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
     jinja2
-    pdm
     pyvcd
-    python3.pkgs.pdm-backend
   ] ++
     lib.optional (pythonOlder "3.9") importlib-resources ++
     lib.optional (pythonOlder "3.8") importlib-metadata;
