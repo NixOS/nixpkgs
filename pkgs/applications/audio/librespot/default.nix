@@ -5,7 +5,7 @@
 , pkg-config
 , stdenv
 , openssl
-, withALSA ? true
+, withALSA ? stdenv.isLinux
 , alsa-lib
 , alsa-plugins
 , withPortAudio ? false
