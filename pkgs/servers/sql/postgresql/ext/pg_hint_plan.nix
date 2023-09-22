@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   buildInputs = [ postgresql ];
 
   installPhase = ''
-    install -D -t $out/lib pg_hint_plan.so
+    install -D -t $out/lib pg_hint_plan${postgresql.dlSuffix}
     install -D -t $out/share/postgresql/extension *.sql
     install -D -t $out/share/postgresql/extension *.control
   '';
