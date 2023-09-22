@@ -8,10 +8,8 @@
 , pkg-config
 , cppunit
 , fmt
-, glib
 , json_c
 , libmodulemd
-, libpeas
 , librepo
 , libsmartcols
 , libsolv
@@ -39,10 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cppunit
     fmt
-    glib
     json_c
     libmodulemd
-    libpeas
     librepo
     libsmartcols
     libsolv
