@@ -1,25 +1,26 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.beautifulsoup4 ps.lxml ])"
-from enum import Enum
-from bs4 import BeautifulSoup, NavigableString, Tag
-from dataclasses import dataclass
 import json
-import pathlib
-import re
-import subprocess
-import urllib.request
-import sys
 import os
+import pathlib
+import subprocess
+import sys
+import urllib.request
+from dataclasses import dataclass
+from enum import Enum
 
+from bs4 import BeautifulSoup, NavigableString, Tag
 
 HERE = pathlib.Path(__file__).parent
 ROOT = HERE.parent.parent.parent.parent
 VERSIONS_FILE = HERE / "kernels-org.json"
 
+
 class KernelNature(Enum):
     MAINLINE = 1
     STABLE = 2
     LONGTERM = 3
+
 
 @dataclass
 class KernelRelease:
@@ -30,20 +31,21 @@ class KernelRelease:
     link: str
     eol: bool = False
 
+
 def parse_release(release: Tag) -> KernelRelease | None:
-    columns: list[Tag] = list(release.find_all('td'))
+    columns: list[Tag] = list(release.find_all("td"))
     try:
-        nature = KernelNature[columns[0].get_text().rstrip(':').upper()]
+        nature = KernelNature[columns[0].get_text().rstrip(":").upper()]
     except KeyError:
         return None
 
-    version = columns[1].get_text().rstrip(' [EOL]')
+    version = columns[1].get_text().rstrip(" [EOL]")
     date = columns[2].get_text()
-    link = columns[3].find('a')
+    link = columns[3].find("a")
     if link is not None and isinstance(link, Tag):
-        link = link.attrs.get('href')
-    assert link is not None, f'link for kernel {version} is non-existent'
-    eol = bool(release.find(class_='eolkernel'))
+        link = link.attrs.get("href")
+    assert link is not None, f"link for kernel {version} is non-existent"
+    eol = bool(release.find(class_="eolkernel"))
 
     return KernelRelease(
         nature=nature,
@@ -54,13 +56,15 @@ def parse_release(release: Tag) -> KernelRelease | None:
         eol=eol,
     )
 
+
 def get_branch(version: str):
     # This is a testing kernel.
-    if 'rc' in version:
-        return 'testing'
+    if "rc" in version:
+        return "testing"
     else:
         major, minor, *_ = version.split(".")
         return f"{major}.{minor}"
+
 
 def get_hash(kernel: KernelRelease):
     if kernel.branch == "testing":
@@ -83,19 +87,19 @@ def commit(message):
 def main():
     kernel_org = urllib.request.urlopen("https://kernel.org/")
     soup = BeautifulSoup(kernel_org.read().decode(), "lxml")
-    release_table = soup.find(id='releases')
+    release_table = soup.find(id="releases")
     if not release_table or isinstance(release_table, NavigableString):
         print(release_table)
-        print('Failed to find the release table on https://kernel.org')
+        print("Failed to find the release table on https://kernel.org")
         sys.exit(1)
 
-    releases = release_table.find_all('tr')
+    releases = release_table.find_all("tr")
     parsed_releases = filter(None, [parse_release(release) for release in releases])
     all_kernels = json.load(VERSIONS_FILE.open())
 
     for kernel in parsed_releases:
         branch = get_branch(kernel.version)
-        nixpkgs_branch = branch.replace('.', '_')
+        nixpkgs_branch = branch.replace(".", "_")
 
         old_version = all_kernels.get(branch, {}).get("version")
         if old_version == kernel.version:
