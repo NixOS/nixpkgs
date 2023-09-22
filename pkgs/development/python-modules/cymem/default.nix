@@ -38,6 +38,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Cython memory pool for RAII-style memory management";
     homepage = "https://github.com/explosion/cymem";
+    changelog = "https://github.com/explosion/cymem/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
