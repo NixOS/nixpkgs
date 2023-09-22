@@ -23,6 +23,20 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config
   '';
 
+  postInstall = ''
+    mkdir -p $out/share
+    cp assets/desktop/xplr.desktop $out/share
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp assets/icon/xplr.svg $out/share/icons/hicolor/scalable/apps
+
+    for size in 16 32 64 128; do
+      icon_dir=$out/share/icons/hicolor/''${size}x$size/apps
+      mkdir -p $icon_dir
+      cp assets/icon/xplr$size.png $icon_dir/xplr.png
+    done
+  '';
+
   meta = with lib; {
     description = "A hackable, minimal, fast TUI file explorer";
     homepage = "https://xplr.dev";
