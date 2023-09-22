@@ -19,14 +19,14 @@ interface PrefetchResult {
 }
 
 const getDependencyVersion = async ( 
-   owner: string, 
-   repo: string, 
-   version: string, 
-   dependency: string
- ) => 
-   fetch(`https://github.com/${owner}/${repo}/raw/${version}/Cargo.toml`) 
-     .then((res) => res.text()) 
-     .then((txt) => toml.parse(txt).workspace.dependencies[dependency].version);
+  owner: string, 
+  repo: string, 
+  version: string, 
+  dependency: string
+) => 
+  fetch(`https://github.com/${owner}/${repo}/raw/${version}/Cargo.toml`) 
+    .then((res) => res.text()) 
+    .then((txt) => toml.parse(txt).workspace.dependencies[dependency].version);
 
 const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
   arches.map(
