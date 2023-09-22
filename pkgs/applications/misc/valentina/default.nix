@@ -2,6 +2,7 @@
 , qmake, qttools
 , qtsvg, qtxmlpatterns
 , wrapQtAppsHook
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${lib.getDev qttools}/bin/lrelease'
   '';
 
-  nativeBuildInputs = [ qmake qttools wrapQtAppsHook installShellFiles ];
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook installShellFiles autoPatchelfHook ];
 
   buildInputs = [ qtsvg qtxmlpatterns ];
 
