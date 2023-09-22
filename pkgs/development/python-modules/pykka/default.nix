@@ -5,6 +5,7 @@
 , poetry-core
 , pytestCheckHook
 , pytest-mock
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -25,9 +26,17 @@ buildPythonPackage rec {
     poetry-core
   ];
 
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+  ];
+
+  pythonImportsCheck = [
+    "pykka"
   ];
 
   meta = with lib; {
