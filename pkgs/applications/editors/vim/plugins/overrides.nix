@@ -851,7 +851,7 @@ self: super: {
   };
 
   nvim-navbuddy = super.nvim-navbuddy.overrideAttrs {
-    dependencies = with self; [ nvim-lspconfig nvim-navic  ];
+    dependencies = with self; [ nui-nvim nvim-lspconfig nvim-navic ];
   };
 
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
