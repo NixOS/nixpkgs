@@ -12486,6 +12486,8 @@ with pkgs;
 
   qscintilla-qt6 = qt6Packages.callPackage ../development/libraries/qscintilla { };
 
+  qsv = callPackage ../tools/text/qsv { };
+
   qrcp = callPackage ../tools/networking/qrcp { };
 
   qrscan = callPackage ../tools/misc/qrscan { };
