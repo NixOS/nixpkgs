@@ -140,6 +140,7 @@ lib.makeScope
 
     musl = callPackage ./musl {
       gcc = gcc46;
+      gnumake = gnumake-musl;
     };
 
     stage0-posix = callPackage ./stage0-posix { };
