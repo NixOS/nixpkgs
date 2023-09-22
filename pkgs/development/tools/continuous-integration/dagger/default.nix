@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, dagger }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, testers, dagger }:
 
 buildGoModule rec {
   pname = "dagger";
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dagger \
       --bash <($out/bin/dagger completion bash) \
       --fish <($out/bin/dagger completion fish) \
