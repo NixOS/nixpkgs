@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;
+    broken      = versionOlder postgresql.version "12";
   };
 }
