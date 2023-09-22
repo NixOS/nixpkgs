@@ -42,12 +42,12 @@ let
   ];
 
   meta = with lib; {
-      description = "Small, fast, and embeddable C compiler and interpreter";
-      homepage = "http://savannah.nongnu.org/projects/tinycc";
-      license = licenses.lgpl21Only;
-      maintainers = teams.minimal-bootstrap.members;
-      platforms = [ "i686-linux" ];
-    };
+    description = "Small, fast, and embeddable C compiler and interpreter";
+    homepage = "http://savannah.nongnu.org/projects/tinycc";
+    license = licenses.lgpl21Only;
+    maintainers = teams.minimal-bootstrap.members;
+    platforms = [ "i686-linux" ];
+  };
 
   tinycc-musl = bash.runCommand "${pname}-${version}" {
     inherit pname version meta;
@@ -123,7 +123,8 @@ let
     # libtcc1.a
     rm -f libtcc1.a
     ./tcc-musl -c -D HAVE_CONFIG_H=1 lib/libtcc1.c
-    ./tcc-musl -ar cr libtcc1.a libtcc1.o
+    ./tcc-musl -c -D HAVE_CONFIG_H=1 lib/alloca86.S
+    ./tcc-musl -ar cr libtcc1.a libtcc1.o alloca86.o
 
     # Install
     install -D tcc-musl $out/bin/tcc
@@ -151,5 +152,10 @@ in
 
   libs = bash.runCommand "${pname}-${version}-libs" {
     inherit pname version meta;
-  } "install -D ${tinycc-musl}/lib/libtcc1.a $out/lib/libtcc1.a";
+  } ''
+    mkdir $out
+    cp -r ${musl}/* $out
+    chmod +w $out/lib/libtcc1.a
+    cp ${tinycc-musl}/lib/libtcc1.a $out/lib/libtcc1.a
+  '';
 }
