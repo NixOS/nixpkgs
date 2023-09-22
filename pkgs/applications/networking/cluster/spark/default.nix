@@ -71,16 +71,20 @@ let
     };
 in
 {
+  spark_3_5 = spark rec {
+    pname = "spark";
+    version = "3.5.0";
+    hash = "sha256-f+a4a23aOM0GCDoZlZ7WNXs0Olzyh3yMtO8ZmEoYvZ4=";
+  };
   spark_3_4 = spark rec {
     pname = "spark";
-    version = "3.4.0";
-    hash = "sha256-0y80dRYzb6Ceu6MlGQHtpMdzOob/TBg6kf8dtF6KyCk=";
+    version = "3.4.1";
+    hash = "sha256-4vC9oBCycVNy3hIxFII65j7FHlrxhDURU3NmsJZPDDU=";
   };
   spark_3_3 = spark rec {
     pname = "spark";
-    version = "3.3.2";
-    hash = "sha256-AeKe2QN+mhUJgZRSIgbi/DttAWlDgwC1kl9p7syEvbo=";
-    extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
+    version = "3.3.3";
+    hash = "sha256-YtHxRYTwrwSle3UpFjRSwKcnLFj2m9/zLBENH/HVzuM=";
   };
   spark_3_2 = spark rec {
     pname = "spark";
