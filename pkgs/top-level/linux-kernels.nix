@@ -165,6 +165,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.dell_xps_regression
+        kernelPatches.selinux_empty_opts # backport NFS fix from 6.6
       ];
     };
 
@@ -190,6 +191,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.dell_xps_regression
+        kernelPatches.selinux_empty_opts # backport NFS fix from 6.6
       ];
     };
 

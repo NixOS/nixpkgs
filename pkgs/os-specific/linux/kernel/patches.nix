@@ -44,6 +44,15 @@
       patch = ./modinst-arg-list-too-long.patch;
     };
 
+  selinux_empty_opts =
+    { name = "selinux-empty-opts";
+      patch = fetchurl {
+        name = "selinux-empty-opts.patch";
+        url = "https://lore.kernel.org/selinux/20230911142358.883728-1-omosnace@redhat.com/raw";
+        hash = "sha256-FP28/xMfmnDPFO2G9Jpik+t4rVfWEFpdB0Lh1QGLx6E=";
+      };
+    };
+
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   hardened = let
