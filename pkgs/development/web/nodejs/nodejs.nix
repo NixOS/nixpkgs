@@ -34,6 +34,7 @@ let
      */
   ]) (builtins.attrNames sharedLibDeps) ++ [
     "--with-intl=system-icu"
+    "--openssl-use-def-ca-store"
   ];
 
   copyLibHeaders =
