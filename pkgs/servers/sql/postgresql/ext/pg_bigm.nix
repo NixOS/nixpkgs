@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_bigm";
   version = "1.2-20200228";
 
-  src = fetchurl {
-    url = "mirror://osdn/pgbigm/72448/${pname}-${version}.tar.gz";
-    sha256 = "1hxn90prldwriqmqlf33ypgbxw5v54gkzx1305yzghryzfg7rhbl";
+  src = fetchFromGitHub {
+    owner = "pgbigm";
+    repo = "pg_bigm";
+    rev = "v${version}";
+    hash = "sha256-3lspEglVWzEUTiRIWqW0DpQe8gDn9R/RxsWuI9znYc8=";
   };
 
   buildInputs = [ postgresql ];
