@@ -338,7 +338,7 @@ rec {
     );
 
    /*
-    Like builtins.foldl' but for attribute sets.
+    Like [`lib.lists.foldl'`](#function-library-lib.lists.foldl-prime) but for attribute sets.
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
 
@@ -372,9 +372,9 @@ rec {
         123
 
       foldlAttrs
-        (_: _: v: v)
-        (throw "initial accumulator not needed")
-        { z = 3; a = 2; };
+        (acc: _: _: acc)
+        3
+        { z = throw "value not needed"; a = throw "value not needed"; };
       ->
         3
 
@@ -392,7 +392,7 @@ rec {
       foldlAttrs :: ( a -> String -> b -> a ) -> a -> { ... :: b } -> a
   */
   foldlAttrs = f: init: set:
-    builtins.foldl'
+    foldl'
       (acc: name: f acc name set.${name})
       init
       (attrNames set);

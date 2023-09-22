@@ -740,7 +740,7 @@ runTests {
       # should just return the initial value
       emptySet = foldlAttrs (throw "function not needed") 123 { };
       # should just evaluate to the last value
-      accNotNeeded = foldlAttrs (_acc: _name: v: v) (throw "accumulator not needed") { z = 3; a = 2; };
+      valuesNotNeeded = foldlAttrs (acc: _name: _v: acc) 3 { z = throw "value z not needed"; a = throw "value a not needed"; };
       # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
       trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
     };
@@ -750,7 +750,7 @@ runTests {
         names = [ "bar" "foo" ];
       };
       emptySet = 123;
-      accNotNeeded = 3;
+      valuesNotNeeded = 3;
       trivialAcc = 121;
     };
   };
