@@ -1,20 +1,22 @@
-{ appstream-glib
-, blueprint-compiler
-, desktop-file-utils
+{ lib
+, stdenv
 , fetchFromGitLab
-, gst_all_1
-, gtk4
-, lib
-, libadwaita
+, rustPlatform
+, nix-update-script
+
+, appstream-glib
+, blueprint-compiler
 , cargo
+, desktop-file-utils
 , meson
 , ninja
-, nix-update-script
 , pkg-config
-, rustPlatform
 , rustc
-, stdenv
 , wrapGAppsHook4
+
+, gst_all_1
+, gtk4
+, libadwaita
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "YaLTeR";
     repo = "identity";
     rev = "v${version}";
-    sha256 = "sha256-ZBK2Vc2wnohABnWXRtmRdAAOnkTIHt4RriZitu8BW1A=";
+    hash = "sha256-ZBK2Vc2wnohABnWXRtmRdAAOnkTIHt4RriZitu8BW1A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -38,14 +40,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     blueprint-compiler
+    cargo
     desktop-file-utils
     meson
     ninja
     pkg-config
-    wrapGAppsHook4
-    rustPlatform.cargoSetupHook
-    cargo
     rustc
+    rustPlatform.cargoSetupHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -60,11 +62,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = {
+  meta = with lib; {
     description = "A program for comparing multiple versions of an image or video";
     homepage = "https://gitlab.gnome.org/YaLTeR/identity";
-    maintainers = [ lib.maintainers.paveloom ];
-    license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ paveloom ];
   };
 }
