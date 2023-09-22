@@ -26059,54 +26059,49 @@ with pkgs;
 
   ### DEVELOPMENT / GO
 
+  makeGoPlatform = callPackage ../build-support/go/platform.nix {
+    # requires a newer Apple SDK
+    inherit (darwin.apple_sdk_11_0) callPackage;
+  };
+
   # the unversioned attributes should always point to the same go version
   go = go_1_20;
-  buildGoModule = buildGo120Module;
-  buildGoPackage = buildGo120Package;
+  goPlatform = goPlatform_1_20;
+  inherit (goPlatform)
+    buildGoModule
+    buildGoPackage;
 
   # requires a newer Apple SDK
   go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo118Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_18;
-  };
-  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix{
-    go = buildPackages.go_1_18;
-  };
+  goPlatform_1_18 = makeGoPlatform { go = buildPackages.go_1_18; };
+  buildGo118Module = goPlatform_1_18.buildGoModule;
+  buildGo118Package = goPlatform_1_18.buildGoPackage;
 
   # requires a newer Apple SDK
   go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo119Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_19;
-  };
-  buildGo119Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
-    go = buildPackages.go_1_19;
-  };
+  goPlatform_1_19 = makeGoPlatform { go = buildPackages.go_1_19; };
+  buildGo119Module = goPlatform_1_19.buildGoModule;
+  buildGo119Package = goPlatform_1_19.buildGoPackage;
 
   # requires a newer Apple SDK
   go_1_20 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.20.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo120Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_20;
-  };
-  buildGo120Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
-    go = buildPackages.go_1_20;
-  };
+  goPlatform_1_20 = makeGoPlatform { go = buildPackages.go_1_20; };
+  buildGo120Module = goPlatform_1_20.buildGoModule;
+  buildGo120Package = goPlatform_1_20.buildGoPackage;
 
   # requires a newer Apple SDK
   go_1_21 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.21.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
-  buildGo121Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_21;
-  };
-  buildGo121Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
-    go = buildPackages.go_1_21;
-  };
+  goPlatform_1_21 = makeGoPlatform { go = buildPackages.go_1_21; };
+  buildGo121Module = goPlatform_1_21.buildGoModule;
+  buildGo121Package = goPlatform_1_21.buildGoPackage;
 
   go2nix = callPackage ../development/tools/go2nix { };
 

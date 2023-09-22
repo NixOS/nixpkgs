@@ -1,4 +1,4 @@
-{ go, govers, lib, fetchgit, fetchhg, fetchbzr, rsync
+{ go, goPlatform, govers, lib, fetchgit, fetchhg, fetchbzr, rsync
 , fetchFromGitHub, stdenv }:
 
 { buildInputs ? []
@@ -35,7 +35,7 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, CGO_ENABLED ? go.CGO_ENABLED
+, CGO_ENABLED ? goPlatform.host.env.CGO_ENABLED or true
 
 # needed for buildFlags{,Array} warning
 , buildFlags ? ""
@@ -69,27 +69,37 @@ let
   importGodeps = { depsFile }:
     map dep2src (import depsFile);
 
+  inherit (goPlatform.host.env) GOOS GOARCH;
+  GOHOSTOS = goPlatform.build.env.GOOS;
+  GOHOSTARCH = goPlatform.build.env.GOARCH;
+
+  # Before `goPlatform` was introduced, we exposed these attributes from `go`
+  # package. Set default values that used to be there for compatibility.
+  GO386 = goPlatform.host.env.GO386 or "softfloat";
+  GOARM = goPlatform.host.env.GOARM or "";
+
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
   package = stdenv.mkDerivation (
-    (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs"]) // {
+    (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs" "CGO_ENABLED" ]) // {
 
     nativeBuildInputs = [ go ]
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go) GOOS GOARCH GO386;
+    env = goPlatform.host.env // {
+      inherit CGO_ENABLED GOHOSTOS GOHOSTARCH GO386 GOARM;
 
-    GOHOSTARCH = go.GOHOSTARCH or null;
-    GOHOSTOS = go.GOHOSTOS or null;
+      GO111MODULE = "off";
+      GOTOOLCHAIN = "local";
 
-    inherit CGO_ENABLED enableParallelBuilding;
+      GOFLAGS = lib.concatStringsSep " " (
+        lib.optionals (goPlatform.host.env ? GOFLAGS) [ goPlatform.host.env.GOFLAGS ]
+        ++ lib.optionals (!allowGoReference) [ "-trimpath" ]
+      );
+    } // (args.env or { });
 
-    GO111MODULE = "off";
-    GOTOOLCHAIN = "local";
-    GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
-
-    GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+    inherit enableParallelBuilding;
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -214,10 +224,10 @@ let
         echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done
-    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    '' + lib.optionalString (goPlatform.isCross) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
-        dir=$NIX_BUILD_TOP/go/bin/${go.GOOS}_${go.GOARCH}
+        dir=$NIX_BUILD_TOP/go/bin/${GOOS}_${GOARCH}
         if [[ -n "$(shopt -s nullglob; echo $dir/*)" ]]; then
           mv $dir/* $dir/..
         fi
