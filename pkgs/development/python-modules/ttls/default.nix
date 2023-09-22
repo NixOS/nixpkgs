@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "ttls";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jschlyter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gsr1ww/00/N1YyK9U0iryBfdio2niUP8TboyB13B6H8=";
+    hash = "sha256-WhngJfDu1Dcc4M5083o8ZBC1aSp4nOKOGPni2I/Llwg=";
   };
 
   nativeBuildInputs = [
