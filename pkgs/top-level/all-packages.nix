@@ -23186,7 +23186,7 @@ with pkgs;
   # We also provide `libiconvReal`, which will always be a standalone libiconv,
   # just in case you want it regardless of platform.
   libiconv =
-    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" "fblibc" ]
+    if lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" "nblibc" "wasilibc" ]
       then libcIconv (if stdenv.hostPlatform != stdenv.buildPlatform
           then libcCross
         else if stdenv.cc.nativeLibc

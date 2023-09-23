@@ -19,6 +19,7 @@
 , icu
 , enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
+, splitStaticOutput ? enableShared && enableStatic
 , gnome
 }:
 
@@ -38,7 +39,7 @@ libxml = stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
-    ++ lib.optional (enableStatic && enableShared) "static";
+    ++ lib.optional (enableStatic && enableShared && splitStaticOutput) "static";
   outputMan = "bin";
 
   src = fetchurl {
@@ -111,7 +112,7 @@ libxml = stdenv.mkDerivation rec {
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"
     moveToOutput lib/xml2Conf.sh "$dev"
-  '' + lib.optionalString (enableStatic && enableShared) ''
+  '' + lib.optionalString (enableStatic && enableShared && splitStaticOutput) ''
     moveToOutput lib/libxml2.a "$static"
   '';
 

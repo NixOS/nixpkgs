@@ -5,369 +5,85 @@
 assert crossSystem == localSystem;
 let inherit (localSystem) system;
   trivialBuilder = (import ./trivial-builder.nix);
+  all-bootstrap-urls-table = {
+    x86_64-freebsd14 = {
+      bash = {
+        url = "http://192.168.1.9:8000/v04k0p2b5ps86w56h70myaw4wcpf1a5b-x86_64-freebsd14-bash";
+        hash = "sha256-F0c3LT1XBl5g2eKsaj3Y8tXT0NnaKUb+qOV5y9U4Fis=";
+      };
+      mkdir = {
+        url = "http://192.168.1.9:8000/2r8n72xjqcx91jvzilw9yimbkvbcalbp-x86_64-freebsd14-mkdir";
+        hash = "sha256-Wje9u9mz5kiTNSoPvmvgGwxQRgLnBM+26jPadbUTkpg=";
+      };
+      tar = {
+        url = "http://192.168.1.9:8000/wb5q48dipl4p8f83rbgggcxab4n02r90-x86_64-freebsd14-tar";
+        hash = "sha256-NClJCZiW7p4rDllguiWthftS9TjwTWh5ZSe+7CMCSzs=";
+      };
+      unxz = {
+        url = "http://192.168.1.9:8000/gmqhzn12jd575xxxd59ic8g46m749g7j-x86_64-freebsd14-unxz";
+        hash = "sha256-yVPhB2tOwGP5aieKTJw+bXdNaM2ye8foo9SJkU3bgEY=";
+      };
+      bootstrapFiles = {
+        url = "http://192.168.1.9:8000/gkzdw7a5pb3xj1py6w0r7xfna597ksqy-x86_64-freebsd14-bootstrap-files.tar.gz";
+        hash = "sha256-SMFdhT6dKFmEcVw/p44u5T8FxVvvM43v7J7nZ7DAhMM=";
+      };
+    };
+  };
+  fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
+    inherit system;
+  };
+  all-bootstrap-urls = all-bootstrap-urls-table.${localSystem.system};
+  all-bootstrap-files = lib.mapAttrs (_: v: fetchurlBoot v) all-bootstrap-urls;
 in
 [
-  ({}: rec {
-    __raw = true;
-    hostTools = derivation ({
-      inherit system;
-      name = "host-tools";
-      version = "9.9.9";
-      builder = ./host-bootstrap.sh;
-      args = ["curl" "bash" "objdump" "objcopy" "size" "strings" "as" "ar" "nm" "gprof" "dwp" "c++filt" "addr2line" "ranlib" "readelf" "elfedit"];
-      shellPath = "bash";
-      prefix = "";
-    });
+  ({}: let
+    bootstrap-tools = derivation {
+      name = "bootstrap-tools";
+      builder = all-bootstrap-files.bash;
+      args = [ ./unpack-bootstrap-files.sh ];
+      inherit (all-bootstrap-files) tar unxz mkdir bootstrapFiles;
+    };
 
+    fetchurl = import ../../build-support/fetchurl {
+      inherit lib;
+      stdenvNoCC = stdenv;
+      curl = bootstrap-tools;
+    };
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-0";
       buildPlatform = localSystem;
       hostPlatform = localSystem;
       targetPlatform = localSystem;
       inherit config;
-      initialPath = [ "/" "/usr" ];
-      shell = "${hostTools}/bin/bash";
+      shell = "${bootstrap-tools}/bin/bash";
       fetchurlBoot = fetchurl;
-      cc = null;
-      overrides = self: super: {
-        inherit fbworld hostTools;
-      };
-    };
-
-    fetchurl = import ../../build-support/fetchurl {
-      inherit lib;
-      stdenvNoCC = stdenv;
-      curl = hostTools;
-    };
-
-    fbworld-base = derivation (rec {
-      inherit system;
-      name = "fbworld-base";
-      pname = "fbworld-base";
-      version = "14.0-CURRENT";
-      rev = "d1d7a273707a50d4ad1691b2c4dbf645dfa253ea";
-      src = fetchurl {
-        url = "https://github.com/freebsd/freebsd-src/archive/${rev}.tar.gz";
-        sha256 = "sha256-D7pTkW4DLKqS/HxyERI/oUh+/Qh/5ri5Z3O5RcooUVI=";
-      };
-      dname = "freebsd-src-${rev}";
-      builder = ./world-builder.sh;
-    });
-    fbworld = derivation (rec {
-      inherit system;
-      name = "fbworld";
-      pname = "fbworld";
-      version = "14.0-CURRENT";
-      world = fbworld-base;
-      outputs = ["lib" "out" "dev" "outbin" "corebin" "cc" "sh" "zip"];  # misbehaves when bin is named bin?
-      builder = ./world-patcher.sh;
-      patchelf = "${patchelf_}/bin/patchelf";
-      readelf = "${hostTools}/bin/readelf";
-    });
-
-    gmake = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "make";
-      ver = "4.3";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
-      sha256 = "06cfqzpqsvdnsxbysl5p2fgdgxgl9y4p7scpnrfa8z2zgkjdspz0";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
-    };
-    bash = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "bash";
-      ver = "4.4.18";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
-      sha256 = "08vz660768mnnax7n8d4d85jxafwdmsxsi7fh0hzvmafbvn9wkb0";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
-    };
-    coreutils = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "coreutils";
-      ver = "9.3";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "rbz8/omSNbceh2jc8HzVMlILf1T5qAZIQ/jRmakEu6o=";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-gmp"
-                        "--without-libpth-prefix"
-                      ];
-    };
-    findutils = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "findutils";
-      ver = "4.7.0";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "16kqz9yz98dasmj70jwf5py7jk558w96w0vgp3zf9xsqk3gzpzn5";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-gmp"
-                        "--without-libpth-prefix"
-                      ];
-    };
-    diffutils = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "diffutils";
-      ver = "3.7";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "09isrg0isjinv8c535nxsi1s86wfdfzml80dbw41dj9x3hiad9xk";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-libsigsegv-prefix"
-                      ];
-    };
-    grep = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "grep";
-      ver = "3.11";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "HbKu3eidDepCsW2VKPiUyNFdrk4ZC1muzHj1qVEnbqs=";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--disable-perl-regexp"
-                        "--without-libsegsegv-prefix"
-                      ];
-    };
-    patch = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "patch";
-      ver = "2.7.6";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "1zfqy4rdcy279vwn2z1kbv19dcfw25d2aqy9nzvdkq5bjzd0nqdc";
-    };
-    gawk = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "gawk";
-      ver = "5.0.1";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "15570p7g2x54asvr2fsc56sxzmm08fbk4mzpcs5n92fp9vq8cklf";
-      configureArgs = [ "--disable-nls"
-                        "--disable-mpfr"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                        "--without-libsegsegv-prefix"
-                      ];
-    };
-    cpio = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "cpio";
-      ver = "2.13";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
-      sha256 = "126vyg4a8wcdwh6npgvxy6gq433bzgz3ph37hmjpycc4r7cp0x78";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
-      patches = [{
-        url = "https://git.savannah.gnu.org/cgit/cpio.git/patch/src/global.c?id=641d3f489cf6238bb916368d4ba0d9325a235afb";
-        sha256 = "ftJs4vYkybaIxqtfLy0NfpBnHZ2HGCRbAUHQLHm6cVs=";
-      }];
-    };
-    tar = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "tar";
-      ver = "1.34";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.gz";
-      sha256 = "A9kIz1doz+a3rViMkhxu0hrKv7K3m3iNEzBFNQdkeu0=";
-    };
-    sed = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "sed";
-      ver = "4.9";
-      url = "https://ftp.gnu.org/gnu/${name}/${name}-${ver}.tar.xz";
-      sha256 = "biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
-      configureArgs = [ "--disable-nls"
-                        "--without-libintl-prefix"
-                        "--without-libiconv-prefix"
-                      ];
-    };
-    cacert = fetchurl {
-      url = "https://curl.haxx.se/ca/cacert-2020-01-01.pem";
-      sha256 = "07q808n307gzaga93abpf6an7c3rd35p18psdc1dd83lspgp1xxd";
-      executable = false;
-    };
-    curl = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "curl";
-      ver = "7.68.0";
-      url = "https://curl.haxx.se/download/${name}-${ver}.tar.xz";
-      sha256 = "0nh3j90w6b97wqcgxjfq55qhkz9s38955fbhwzv2fsi7483j895p";
-      configureArgs = [ "--disable-nls"
-                        "--disable-ares"
-                        "--disable-debug"
-                        "--disable-ldap"
-                        "--disable-ldaps"
-                        "--disable-rtsp"
-                        "--disable-dict"
-                        "--disable-telnet"
-                        "--disable-tftp"
-                        "--disable-pop3"
-                        "--disable-imap"
-                        "--disable-smb"
-                        "--disable-smtp"
-                        "--disable-gopher"
-                        "--disable-manual"
-                        "--disable-verbose"
-                        "--disable-sspi"
-                        "--disable-tls-srp"
-                        "--disable-unix-sockets"
-                        "--without-brotli"
-                        "--without-gnutls"
-                        "--without-mbedtls"
-                        "--without-wolfssl"
-                        "--without-bearssl"
-                        "--without-libidn2"
-                        "--without-librtmp"
-                        "--without-nghttp2"
-                        "--with-ssl=/usr"
-                        "--with-ca-bundle=${cacert}"
-                      ];
-    };
-    zlib = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "zlib";
-      ver = "1.2.13";
-      url = "https://github.com/madler/zlib/releases/download/v${ver}/zlib-${ver}.tar.gz";
-      sha256 = "s6JN6XqP28g1uYMxaVAQMLiXcDG8tUs7OsE3QPhGqzA=";
-    };
-
-    binutils = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "binutils";
-      ver = "2.41";
-      url = "https://ftp.gnu.org/gnu/binutils/binutils-${ver}.tar.gz";
-      sha256 = "SNAKjcc6p9I5Sn3Aablhkdlejejw2m3JHaXM5lXCDkU=";
-      make = "${gmake}/bin/make";
-    };
-
-    patchelf_ = trivialBuilder rec {
-      inherit (localSystem) system;
-      name = "patchelf";
-      ver = "0.15.0";
-      url = "https://github.com/NixOS/${name}/releases/download/${ver}/${name}-${ver}.tar.bz2";
-      sha256 = "9ANtPuTY4ijewb7/8PbkbYpA6eVw4AaOOdd+YuLIvcI=";
-    };
-  })
-
-  (prevStage: rec {
-    inherit config overlays;
-
-    stdenv = import ../generic rec {
-        name = "stdenv-freebsd-boot-1";
-        inherit config;
-        initialPath = [ prevStage.coreutils prevStage.tar prevStage.findutils prevStage.gmake prevStage.sed prevStage.patchelf_ prevStage.grep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.fbworld.sh prevStage.fbworld.zip ];
-        extraNativeBuildInputs = [];
-        inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
-        shell = "${prevStage.bash}/bin/bash";
-        cc = import ../../build-support/cc-wrapper ({
-          inherit lib;
-          name = "stdenv-freebsd-boot-1-cc-wrapper";
-          stdenvNoCC = prevStage.stdenv;
-          cc = prevStage.fbworld.cc;
-          libc = prevStage.fbworld.lib;
-          gnugrep = prevStage.grep;
-          coreutils = prevStage.coreutils;
-          nativeTools = false;
-          nativeLibc = false;
-          isClang = true;
-          bintools = import ../../build-support/bintools-wrapper {
-            inherit lib;
-            stdenvNoCC = prevStage.stdenv;
-            name = "stdenv-freebsd-boot-1-bintools-wrapper";
-            libc = prevStage.fbworld.lib;
-            propagateDoc = false;
-            nativeTools = false;
-            nativeLibc = false;
-            bintools = prevStage.binutils;
-            gnugrep = prevStage.grep;
-            coreutils = prevStage.coreutils;
-          };
-        });
-        fetchurlBoot = import ../../build-support/fetchurl {
+      cc = import ../../build-support/cc-wrapper ({
+        inherit lib;
+        name = "bootstrap-tools-cc-wrapper";
+        stdenvNoCC = stdenv;
+        libc = bootstrap-tools;
+        propagateDoc = false;
+        nativeTools = false;
+        nativeLibc = false;
+        gnugrep = bootstrap-tools;
+        coreutils = bootstrap-tools;
+        isClang = true;
+        bintools = import ../../build-support/bintools-wrapper {
           inherit lib;
           stdenvNoCC = stdenv;
-          curl = prevStage.hostTools;
+          name = "bootstrap-tools-bintools-wrapper";
+          libc = bootstrap-tools;
+          propagateDoc = false;
+          nativeTools = false;
+          nativeLibc = false;
+          bintools = bootstrap-tools;
+          gnugrep = bootstrap-tools;
+          coreutils = bootstrap-tools;
         };
-
-        overrides = self: super: ({
-          fbworld = prevStage.fbworld;
-          fetchurl = prevStage.fetchurl;
-        });
+      });
+      overrides = self: super: {
+        inherit bootstrap-tools fetchurl;
       };
-  })
-
-  (prevStage: rec {
-    inherit config overlays;
-
-    stdenv = import ../generic rec {
-      name = "stdenv-freebsd";
-      inherit config;
-      extraNativeBuildInputs = [./unpack-source.sh];
-      initialPath = [ prevStage.coreutils prevStage.gnutar prevStage.findutils prevStage.gnumake prevStage.gnused prevStage.patchelf prevStage.gnugrep prevStage.gawk prevStage.diffutils prevStage.patch prevStage.bash prevStage.gzip prevStage.bzip2 prevStage.xz (
-              prevStage.stdenv.mkDerivation {
-                name = "freebsd-cp";
-                fbworld = prevStage.fbworld.corebin;
-                phases = [ "installPhase" ];
-                installPhase = ''
-                  mkdir -p $out/bin
-                  cp $fbworld/bin/cp $out/bin/freebsd-cp
-                '';
-              }
-          ) ];
-      inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
-      shell = "${prevStage.bash}/bin/bash";
-      cc = (prevStage.gcc.overrideAttrs (self: super: {
-        setupHooks = super.setupHooks ++ [ ./cc-wrapper-setup-hook-hook.sh ];
-        gnused = prevStage.gnused;
-      })).override {
-        nixSupport = {
-          cc-ldflags = "--allow-shlib-undefined";
-          libcxx-cxxflags = "-isystem ${prevStage.fbworld}/usr/include/c++/v1";
-        };
-      };
-      fetchurlBoot = import ../../build-support/fetchurl {
-        inherit lib;
-        stdenvNoCC = stdenv;
-        curl = prevStage.curl;
-      };
-      overrides = self: super: let
-          stdenvNoAllow = stdenv.override {
-            cc = (prevStage.gcc.overrideAttrs (self: super: {
-              #name = "based-cc";
-              setupHooks = super.setupHooks ++ [ ./cc-wrapper-setup-hook-hook.sh ];
-              gnused = prevStage.gnused;
-            }));
-          };
-      in {
-        inherit (prevStage) fbworld coreutils gnutar findutils gnumake gnused patchelf gnugrep gawk diffutils patch bash gzip bzip2 xz;
-        libkrb5 = prevStage.fbworld // { override = _: prevStage.fbworld; };
-        shadow = prevStage.fbworld.corebin;
-        # FreeBSD requires using --allow-shlib-undefined most of the time in order to link with libc,
-        # due to some exports (notably environ) not actually being provided by libc but instead being
-        # transitive dependencies to ld-elf.so (?)
-        # rust packages seem to sometimes use symbol linkage visibility that gcc rejects under
-        # --allow-shlib-undefined, so we must turn it off
-        # We must FURTHER not just use --no-allow-shlib-undefined, because rustc (?) will sometimes
-        # add it explicity
-        makeRustPlatform = super.makeRustPlatform.override {
-          callPackage = super.newScope { stdenv = stdenvNoAllow; buildPackages = super.buildPackages // { stdenv = stdenvNoAllow; }; };
-        };
-      };
-      preHook =
-        ''
-          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
-          #export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
-        '';
     };
-  })
+  in { inherit config overlays stdenv; })
 ]

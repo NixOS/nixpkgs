@@ -134,4 +134,7 @@ mkDerivation rec {
   '';
 
   meta.platforms = lib.platforms.freebsd;
+
+  # definitely a bad idea to enable stack protection on the stack protection initializers
+  hardeningDisable = [ "stackprotector" ];
 }

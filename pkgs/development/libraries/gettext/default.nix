@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, fetchpatch, libiconv, xz, bash
 , gnulib
+, enableStatic ? false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -40,6 +41,8 @@ stdenv.mkDerivation rec {
     # own wchar.h file, which does not cope well with the system's
     # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
     "gl_cv_func_wcwidth_works=yes"
+  ] ++ lib.optionals (enableStatic) [
+    "--enable-static"
   ];
 
   postPatch = ''

@@ -30,6 +30,7 @@
   # broken for the armv7l builder
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
+, enableTerminfo ? true
 }:
 
 let
@@ -318,9 +319,12 @@ in
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
+  ] ++ optionals (!doCheck) [
+    "-DLLVM_INCLUDE_TESTS=OFF"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
     "-DLLVM_ENABLE_PIC=OFF"
+    "-DCMAKE_SKIP_INSTALL_RPATH=ON"
     "-DLLVM_BUILD_STATIC=ON"
     "-DLLVM_LINK_LLVM_DYLIB=off"
     # libxml2 needs to be disabled because the LLVM build system ignores its .la
@@ -369,6 +373,8 @@ in
         nativeInstallFlags
       ])
     )
+  ] ++ optionals (!enableTerminfo) [
+    "-DLLVM_ENABLE_TERMINFO=OFF"
   ];
 
   postInstall = ''
