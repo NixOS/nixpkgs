@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-nomad";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "rraval";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1PXAdXafkPOIVzaWjW/RlWHwYhMqPoj0Hj5JmOMUj8A=";
+    hash = "sha256-KrxP2P62Dfx1ZBeYAuhUYdSxNG18I7PJTvbXBS93k2k=";
   };
 
-  cargoHash = "sha256-ULcdJRla1JwI0y6ngW9xQXjNw2wO48HuAczsNIsJJK0=";
+  cargoHash = "sha256-eu/TAAJ8nsZkLgDKO4bVeNNjhTsz4lugHqhaSKrwyMc=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
