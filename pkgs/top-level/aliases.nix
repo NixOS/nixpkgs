@@ -1520,6 +1520,8 @@ mapAliases ({
   qlandkartegt = throw "'qlandkartegt' has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-04-17
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # Added 2020-12-02
   qshowdiff = throw "'qshowdiff' (Qt4) is unmaintained and not been updated since its addition in 2010"; # Added 2022-06-14
+  qscintilla = libsForQt5.qscintilla; # Added 2023-09-20
+  qscintilla-qt6 = qt6Packages.qscintilla; # Added 2023-09-20
   qtscrobbler = throw "qtscrobbler has been removed, because it was unmaintained"; # Added 2022-05-26
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # Added 2021-02-15
   qt512 = throw "Qt 5 versions prior to 5.15 are no longer supported upstream and have been removed";  # Added 2022-11-24
