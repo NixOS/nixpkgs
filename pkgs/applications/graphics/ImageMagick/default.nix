@@ -133,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org/";
+    changelog = "https://github.com/ImageMagick/Website/blob/main/ChangeLog.md";
     description = "A software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
