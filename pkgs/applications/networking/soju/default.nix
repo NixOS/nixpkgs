@@ -26,11 +26,11 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   postBuild = ''
-    make doc/soju.1
+    make doc/soju.1 doc/sojuctl.1
   '';
 
   postInstall = ''
-    installManPage doc/soju.1
+    installManPage doc/soju.1 doc/sojuctl.1
   '';
 
   preCheck = ''
