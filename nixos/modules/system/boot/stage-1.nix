@@ -610,6 +610,13 @@ in
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
             path inside and out).
+
+            The loader `generic-extlinux-compatible` supports this. Because
+            it is not well know how different implementations react to
+            concatenated cpio archives, this is disabled by default. It can be
+            enabled by setting {option}`boot.loader.supportsInitrdSecrets`
+            to true. If this works for you, please report your findings at
+            https://github.com/NixOS/nixpkgs/issues/247145 .
           '';
         example = literalExpression
           ''
