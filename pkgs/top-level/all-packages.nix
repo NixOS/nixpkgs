@@ -20160,8 +20160,6 @@ with pkgs;
 
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
-  rome = callPackage ../development/tools/rome { };
-
   rr = callPackage ../development/tools/analysis/rr { };
 
   rsass = callPackage ../development/tools/misc/rsass { };
