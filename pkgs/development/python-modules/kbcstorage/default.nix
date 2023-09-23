@@ -4,6 +4,8 @@
 , pythonOlder
 
 # build
+, setuptools
+, setuptools-git-versioning
 , setuptools-scm
 
 # propagates
@@ -18,7 +20,7 @@
 buildPythonPackage rec {
   pname = "sapi-python-client";
   version = "0.7.1";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -32,6 +34,8 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
+    setuptools
+    setuptools-git-versioning
     setuptools-scm
   ];
 
