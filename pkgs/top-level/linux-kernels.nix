@@ -218,8 +218,8 @@ in {
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
       # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = linux_6_4;
-      kernelPatches = linux_6_4.kernelPatches;
+      kernel = linux_6_5;
+      kernelPatches = linux_6_5.kernelPatches;
    };
 
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
