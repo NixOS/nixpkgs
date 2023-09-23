@@ -64,6 +64,9 @@ let
     "text/vtt"
     "text/x-component"
     "text/xml"
+    # nginx uses application/javascript for JavaScript
+    # https://hg.nginx.org/nginx/file/tip/conf/mime.types
+    "application/javascript"
   ];
 
   defaultFastcgiParams = {
