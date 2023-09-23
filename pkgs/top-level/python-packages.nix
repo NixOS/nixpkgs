@@ -1285,6 +1285,8 @@ self: super: with self; {
     inherit (pkgs.ocaml-ng.ocamlPackages) bap;
   };
 
+  barcodenumber = callPackage ../development/python-modules/barcodenumber { };
+
   baron = callPackage ../development/python-modules/baron { };
 
   base36 = callPackage ../development/python-modules/base36 { };
