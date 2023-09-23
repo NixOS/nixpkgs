@@ -50,8 +50,7 @@
 , makeWrapper
 # - Build Octave Qt GUI:
 , enableQt ? false
-, qt5
-, qscintilla
+, libsForQt5
 , libiconv
 , darwin
 }:
@@ -132,9 +131,9 @@ in stdenv.mkDerivation (finalAttrs: {
       gnuplot
       python3
     ] ++ lib.optionals enableQt [
-      qt5.qtbase
-      qt5.qtsvg
-      qscintilla
+      libsForQt5.qtbase
+      libsForQt5.qtsvg
+      libsForQt5.qscintilla
     ] ++ lib.optionals (enableJava) [
       jdk
     ] ++ lib.optionals (!stdenv.isDarwin) [
@@ -149,9 +148,9 @@ in stdenv.mkDerivation (finalAttrs: {
       gfortran
       texinfo
     ] ++ lib.optionals enableQt [
-      qt5.wrapQtAppsHook
-      qt5.qtscript
-      qt5.qttools
+      libsForQt5.wrapQtAppsHook
+      libsForQt5.qtscript
+      libsForQt5.qttools
     ];
 
     doCheck = !stdenv.isDarwin;

@@ -12478,12 +12478,6 @@ with pkgs;
 
   qprint = callPackage ../tools/text/qprint { };
 
-  qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla {
-    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
-
-  qscintilla-qt6 = qt6Packages.callPackage ../development/libraries/qscintilla { };
-
   qrcp = callPackage ../tools/networking/qrcp { };
 
   qrscan = callPackage ../tools/misc/qrscan { };
@@ -24753,7 +24747,9 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf3_24;
+  # 3.24 and 3.23 tests crash on Hydra for *-darwin:
+  # https://hydra.nixos.org/build/235677717/nixlog/4/tail
+  protobuf = if stdenv.isDarwin then protobuf3_21 else protobuf3_24;
 
   protobuf3_24 = callPackage ../development/libraries/protobuf/3.24.nix { };
   protobuf3_23 = callPackage ../development/libraries/protobuf/3.23.nix { };
@@ -26451,11 +26447,7 @@ with pkgs;
 
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
-  dig = bind.dnsutils // {
-    meta = bind.dnsutils.meta // {
-      mainProgram = "dig";
-    };
-  };
+  dig = lib.addMetaAttrs { mainProgram = "dig"; } bind.dnsutils;
 
   bird = callPackage ../servers/bird { };
 
@@ -30401,6 +30393,8 @@ with pkgs;
   whatsapp-emoji-font = callPackage ../data/fonts/whatsapp-emoji { };
 
   weather-icons = callPackage ../data/fonts/weather-icons { };
+
+  whitesur-cursors = callPackage ../data/icons/whitesur-cursors { };
 
   whitesur-gtk-theme = callPackage ../data/themes/whitesur {
     inherit (gnome) gnome-shell;
