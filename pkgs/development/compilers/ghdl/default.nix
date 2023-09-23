@@ -61,11 +61,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ghdl/ghdl";
     description = "VHDL 2008/93/87 simulator";
-    maintainers = with maintainers; [ lucus16 thoughtpolice ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "ghdl";
+    maintainers = with lib.maintainers; [ eclairevoyant lucus16 thoughtpolice ];
+    platforms = lib.platforms.linux;
   };
 }
