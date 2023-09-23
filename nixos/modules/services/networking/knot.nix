@@ -188,6 +188,12 @@ in {
       };
     };
   };
+  imports = [
+    # Compatibility with NixOS 23.05.  At least partial, as it fails assert if used with keyFiles.
+    (mkChangedOptionModule [ "services" "knot" "extraConfig" ] [ "services" "knot" "settingsFile" ]
+      (config: pkgs.writeText "knot.conf" config.services.knot.extraConfig)
+    )
+  ];
 
   config = mkIf config.services.knot.enable {
     users.groups.knot = {};
