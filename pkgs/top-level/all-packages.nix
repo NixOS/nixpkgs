@@ -33512,7 +33512,7 @@ with pkgs;
 
   lame = callPackage ../development/libraries/lame { };
 
-  labwc = callPackage ../applications/window-managers/labwc {
+  labwc = callPackage ../by-name/la/labwc/package.nix {
     wlroots = wlroots_0_16;
   };
 
