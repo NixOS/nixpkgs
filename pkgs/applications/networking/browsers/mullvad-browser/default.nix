@@ -232,7 +232,7 @@ stdenv.mkDerivation rec {
     updateScript = callPackage ../tor-browser/update.nix {
       inherit pname version meta;
       baseUrl = "https://cdn.mullvad.net/browser/";
-      prefix = "mullvad-browser-";
+      name = "mullvad-browser";
     };
   };
 
