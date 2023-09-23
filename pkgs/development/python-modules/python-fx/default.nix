@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "python-fx";
-  version = "0.2.0";
+  version = "0.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "cielong";
     repo = "pyfx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nRMeYL0JGvCtUQBUMXUsZ4+F2KX+x/CbZ61sAidT9so=";
+    hash = "sha256-Bgg6UbAyog1I4F2NfULY+UlPf2HeyBJdxm4+5bmCLN0=";
   };
 
   postPatch = ''
