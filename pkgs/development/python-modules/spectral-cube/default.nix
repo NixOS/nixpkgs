@@ -63,5 +63,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/radio-astro-tools/spectral-cube/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ smaret ];
+    # Tests fail to start, according to Hydra
+    broken = true;
   };
 }
