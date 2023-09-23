@@ -72,5 +72,6 @@ in
       license = licenses.gpl3Plus;
       platforms = platforms.linux;
       maintainers = with maintainers; [Scrumplex];
+      mainProgram = "livecaptions";
     };
   })
