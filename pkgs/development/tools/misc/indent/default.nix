@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  doCheck = true;
+
   passthru.tests.static = pkgsStatic.indent;
   meta = {
     homepage = "https://www.gnu.org/software/indent/";
