@@ -67,10 +67,10 @@
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "bcb506fa27078f78da44a38f4fbab0a2000cea26385f51800c931d0cbd1b47c4",
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.1.tar.gz",
-      "build_number": "232.9559.64",
+      "version": "2023.2.2",
+      "sha256": "5e3dd021b82dcad0f51bded677aa87680dcc3f5d843951c48848a9191141bf1d",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.2.tar.gz",
+      "build_number": "232.9921.55",
       "version-major-minor": "2022.3"
     },
     "pycharm-community": {
@@ -108,10 +108,10 @@
     "rust-rover": {
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
-      "version": "2023.2",
-      "sha256": "5a51bcae179467e9c6440bc0c31bffd27c6fc58d593a0cbecd5aeb51508d27b6",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.46.tar.gz",
-      "build_number": "232.9921.46"
+      "version": "2023.2 EAP",
+      "sha256": "1f67e1a82f5cbb7c84382c7f251ae06b1e2699fa7d2fa4129e23ec2e43251687",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62.tar.gz",
+      "build_number": "232.9921.62"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -190,10 +190,10 @@
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "5d238f0d3ddd59762256dc406ae2430e5abf79f9a04488722a87e54b70db68ef",
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.1.dmg",
-      "build_number": "232.9559.64",
+      "version": "2023.2.2",
+      "sha256": "99a9bb313a5c141ecd1810306deaca3cf52d338edf206362b3f9d9337a27890e",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.2.dmg",
+      "build_number": "232.9921.55",
       "version-major-minor": "2022.3"
     },
     "pycharm-community": {
@@ -231,10 +231,10 @@
     "rust-rover": {
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
-      "version": "2023.2",
-      "sha256": "4c7193acf07f44b91512d8b4c04c88068b8599e76150a81dfd728046910a0929",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.46.dmg",
-      "build_number": "232.9921.46"
+      "version": "2023.2 EAP",
+      "sha256": "dfde444bff011783cb4a5aa2aafae8ea989874c19535b01da8214df5eb3174fb",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62.dmg",
+      "build_number": "232.9921.62"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -313,10 +313,10 @@
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "886e79089e5e783739e71f57f8f20b9ecbc2e9e7cc9b941bb99d1444181939df",
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.64",
+      "version": "2023.2.2",
+      "sha256": "a31daeddae532324436b2d11acbd5fb657721883f17c7ef4457ac76a51bd4189",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.55",
       "version-major-minor": "2022.3"
     },
     "pycharm-community": {
@@ -354,10 +354,10 @@
     "rust-rover": {
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
-      "version": "2023.2",
-      "sha256": "7f01fef11d89c6c6c870a79007607babde40f7a958b7103d1028aa760ed713b7",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.46-aarch64.dmg",
-      "build_number": "232.9921.46"
+      "version": "2023.2 EAP",
+      "sha256": "35d44a4f72c027283843aaa6409de701d14274cdc5a614c3fdc53121383f9389",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62-aarch64.dmg",
+      "build_number": "232.9921.62"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
