@@ -10,27 +10,22 @@
 , miniaudio
 , netifaces
 , protobuf
-, pydantic
-, pydantic-settings
-, pyfakefs
 , pytest-aiohttp
 , pytest-asyncio
 , pytest-httpserver
 , pytest-timeout
-, pytest-xdist
 , pytestCheckHook
 , pythonRelaxDepsHook
 , pythonOlder
 , requests
 , srptools
 , stdenv
-, tabulate
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.14.0";
+  version = "0.13.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +34,7 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MVDjoo0v+zUXrluoUBc/hwVX+FeIYGzJgHsqNoI6HVo=";
+    hash = "sha256-rZnL18vO8eYn70GzeKSY528iTc0r/seGv0dYDYGHNzw=";
   };
 
   postPatch = ''
@@ -75,23 +70,22 @@ buildPythonPackage rec {
     miniaudio
     netifaces
     protobuf
-    pydantic
-    pydantic-settings
     requests
     srptools
-    tabulate
     zeroconf
   ];
 
   nativeCheckInputs = [
     deepdiff
-    pyfakefs
     pytest-aiohttp
     pytest-asyncio
     pytest-httpserver
     pytest-timeout
-    pytest-xdist
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--asyncio-mode=legacy"
   ];
 
   disabledTests = lib.optionals (stdenv.isDarwin) [
