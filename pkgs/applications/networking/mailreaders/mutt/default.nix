@@ -23,12 +23,12 @@ assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "2.2.10";
+  version = "2.2.12";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TXc/IkIveQlve5S1e+5FZUrZolFl27NkY8WClbTNPYg=";
+    hash = "sha256-BDrzEvZLjlb3/Qv3f4SiBdTEmAML2VhkV2ZcR7sYzjg=";
   };
 
   patches = lib.optional smimeSupport (fetchpatch {
@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
+    mainProgram = "mutt";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];
