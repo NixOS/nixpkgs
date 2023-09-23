@@ -36,7 +36,7 @@
 
 let
   # Derived from subprojects/cmocka.wrap
-  cmocka = rec {
+  cmocka = {
     version = "1.81";
     src = fetchFromGitLab {
       owner = "cmocka";
