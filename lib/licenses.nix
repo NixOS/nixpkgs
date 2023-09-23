@@ -390,6 +390,12 @@ in mkLicense lset) ({
     fullName = "Detection Rule License 1.0";
   };
 
+  dyalog = {
+    fullName = "DYALOG LIMITED SOFTWARE LICENSE AGREEMENT";
+    url = "https://www.dyalog.com/uploads/documents/Developer_Software_Licence.pdf";
+    free = false;
+  };
+
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
     url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
