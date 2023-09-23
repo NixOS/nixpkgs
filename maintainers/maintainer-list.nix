@@ -1371,6 +1371,12 @@
     githubId = 58516559;
     name = "Alexander Rezvov";
   };
+  argrat = {
+    email = "n.bertazzo@protonmail.com";
+    github = "argrat";
+    githubId = 98821629;
+    name = "Nicolò Bertazzo";
+  };
   arian-d = {
     email = "arianxdehghani@gmail.com";
     github = "arian-d";
