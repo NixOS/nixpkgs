@@ -5,7 +5,7 @@ lib:
   # commit hash
   k3sCommit,
   k3sRepoSha256 ? lib.fakeHash,
-  k3sVendorSha256 ? lib.fakeHash,
+  k3sVendorHash ? lib.fakeHash,
   # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
   k3sRootVersion,
   k3sRootSha256 ? lib.fakeHash,
@@ -182,7 +182,7 @@ let
     version = k3sVersion;
 
     src = k3sRepo;
-    vendorSha256 = k3sVendorSha256;
+    vendorHash = k3sVendorHash;
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp sqlite.dev ];
@@ -238,7 +238,7 @@ buildGoModule rec {
 
   tags = [ "libsqlite3" "linux" "ctrd" ];
   src = k3sRepo;
-  vendorSha256 = k3sVendorSha256;
+  vendorHash = k3sVendorHash;
 
   postPatch = ''
     # Nix prefers dynamically linked binaries over static binary.
@@ -296,7 +296,7 @@ buildGoModule rec {
   # Specifically, it has a 'go generate' which runs part of the package. See
   # this comment:
   # https://github.com/NixOS/nixpkgs/pull/158089#discussion_r799965694
-  # So, why do we use buildGoModule at all? For the `vendorSha256` / `go mod download` stuff primarily.
+  # So, why do we use buildGoModule at all? For the `vendorHash` / `go mod download` stuff primarily.
   buildPhase = ''
     patchShebangs ./scripts/package-cli ./scripts/download ./scripts/build-upload
 

@@ -12,7 +12,6 @@
 , python3, perl
 , which
 , llvmPackages_attrName
-, rustc
 , libuuid
 , overrideCC
 # postPatch:
@@ -388,7 +387,7 @@ let
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
       # We do intentionally not set rustc_version as nixpkgs will never do incremental
       # rebuilds, thus leaving this empty is fine.
-      rust_sysroot_absolute = "${rustc}";
+      rust_sysroot_absolute = "${buildPackages.rustc}";
       # Building with rust is disabled for now - this matches the flags in other major distributions.
       enable_rust = false;
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
