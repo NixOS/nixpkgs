@@ -47,7 +47,7 @@ let
 
       nativeBuildInputs = [ makeWrapper ]
                           ++ optionals stdenv.isLinux [ autoPatchelfHook ];
-      buildInputs = [ stdenv.cc.cc.lib openssl protobuf zlib snappy libtirpc ];
+      buildInputs = optionals stdenv.isLinux [ stdenv.cc.cc.lib openssl protobuf zlib snappy libtirpc ];
 
       installPhase = ''
         mkdir $out
