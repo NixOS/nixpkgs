@@ -8573,6 +8573,8 @@ self: super: with self; {
 
   polarizationsolver = callPackage ../development/python-modules/polarizationsolver { };
 
+  polling = callPackage ../development/python-modules/polling { };
+
   polib = callPackage ../development/python-modules/polib { };
 
   policy-sentry = callPackage ../development/python-modules/policy-sentry { };
