@@ -21,15 +21,15 @@
 , hyprland
 , slurp
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation (self: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "unstable-2023-09-10";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "aca51609d4c415b30e88b96c6f49f0142cbcdae7";
-    hash = "sha256-RF6LXm4J6mBF3B8VcQuABuU4g4tCPHgMYJQSoJ3DW+8=";
+    rev = "v${self.version}";
+    hash = "sha256-K1cqx+NP4lxPwRVPLEeSUfagaMI3m5hdYvQe7sZr7BU=";
   };
 
   nativeBuildInputs = [
@@ -73,4 +73,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ fufexan ];
     platforms = platforms.linux;
   };
-}
+})
