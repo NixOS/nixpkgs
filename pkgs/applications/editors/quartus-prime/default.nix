@@ -49,36 +49,34 @@ in buildFHSEnvChroot rec {
 
   passthru = { inherit unwrapped; };
 
-  extraInstallCommands = let
-    quartusExecutables = (map (c: "quartus/bin/quartus_${c}") [
-      "asm" "cdb" "cpf" "drc" "eda" "fit" "jbcc" "jli" "map" "pgm" "pow"
-      "sh" "si" "sim" "sta" "stp" "tan"
-    ]) ++ [ "quartus/bin/quartus" ];
-
-    qsysExecutables = map (c: "quartus/sopc_builder/bin/qsys-${c}") [
-      "generate" "edit" "script"
-    ];
-    # Should we install all executables ?
-    modelsimExecutables = map (c: "modelsim_ase/bin/${c}") [
-      "vsim" "vlog" "vlib"
-    ];
-  in ''
+  extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/128x128
     ln -s ${desktopItem}/share/applications/* $out/share/applications
     ln -s ${unwrapped}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
 
+    progs_to_wrap=(
+      "${unwrapped}"/quartus/bin/quartus
+      "${unwrapped}"/quartus/bin/quartus_{asm,cdb,cpf,drc,eda,fit,jbcc,jli,map,pgm,pow,sh,si,sim,sta,stp,tan}
+      "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
+      # Should we install all executables?
+      "${unwrapped}"/modelsim_ase/bin/{vsim,vlog,vlib}
+    )
+
     wrapper=$out/bin/${name}
-    executables="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
-    for executable in $executables; do
-        mkdir -p "$(dirname "$out/$executable")"
-        echo "#!${stdenv.shell}" >> $out/$executable
-        echo "$wrapper ${unwrapped}/$executable \"\$@\"" >> $out/$executable
+    progs_wrapped=()
+    for prog in ''${progs_to_wrap[@]}; do
+        relname="''${prog#"${unwrapped}/"}"
+        wrapped="$out/$relname"
+        progs_wrapped+=("$wrapped")
+        mkdir -p "$(dirname "$wrapped")"
+        echo "#!${stdenv.shell}" >> "$wrapped"
+        echo "$wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
     cd $out
-    chmod +x $executables
+    chmod +x ''${progs_wrapped[@]}
     # link into $out/bin so executables become available on $PATH
-    ln --symbolic --relative --target-directory ./bin $executables
+    ln --symbolic --relative --target-directory ./bin ''${progs_wrapped[@]}
   '';
 
   # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
