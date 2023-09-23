@@ -11,14 +11,14 @@
 
 assert backend == "mcode" || backend == "llvm";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ghdl-${backend}";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner  = "ghdl";
     repo   = "ghdl";
-    rev    = "v${version}";
+    rev    = "v${finalAttrs.version}";
     hash   = "sha256-94RNtHbOpbC2q/Z+PsQplrLxXmpS3LXOCXyTBB+n9c4=";
   };
 
@@ -69,4 +69,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ eclairevoyant lucus16 thoughtpolice ];
     platforms = lib.platforms.linux;
   };
-}
+})
