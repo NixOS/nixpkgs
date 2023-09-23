@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils git nix curl
+#!nix-shell -i bash -p coreutils git nix curl jq
 # shellcheck shell=bash enable=all
 
 set -e
@@ -27,6 +27,15 @@ export TMPDIR=/tmp
 # remove items left in /nix/store?
 # reuse hashes of already checked revs (to avoid redownloading testing's packages3d)
 
+# nixpkgs' update.nix passes in UPDATE_NIX_PNAME to indicate which package is being updated
+# assigning a default value to that as shellcheck doesn't like the use of unassigned variables
+: "${UPDATE_NIX_PNAME:=""}"
+# update.nix can also parse JSON output of this script to formulate a commit
+# this requires we collect the version string in the old versions.nix for the updated package
+old_version=""
+new_version=""
+
+
 # get the latest tag that isn't an RC or *.99
 latest_tags="$(git ls-remote --tags --sort -version:refname https://gitlab.com/kicad/code/kicad.git)"
 # using a scratch variable to ensure command failures get caught (SC2312)
@@ -49,16 +58,16 @@ prefetch="nix-prefetch-url --unpack --quiet"
 
 clean=""
 check_stable=""
-check_unstable=1
 check_testing=1
+check_unstable=1
 commit=""
 
-for arg in "$@"; do
+for arg in "$@" "${UPDATE_NIX_PNAME}"; do
   case "${arg}" in
     help|-h|--help) echo "Read me!" >&2; exit 1; ;;
-    kicad|release|tag|stable|*small|5*|6*|7*|8*) check_stable=1; check_testing=""; check_unstable="" ;;
-    testing) check_testing=1; check_unstable="" ;;
-    master|*unstable) check_unstable=1; check_testing="" ;;
+    kicad|kicad-small|release|tag|stable|5*|6*|7*|8*) check_stable=1; check_testing=""; check_unstable="" ;;
+    *testing|kicad-testing-small) check_testing=1; check_unstable="" ;;
+    *unstable|*unstable-small|master|main) check_unstable=1; check_testing="" ;;
     latest|now|today) check_unstable=1; check_testing=1 ;;
     all|both|full) check_stable=1; check_testing=1; check_unstable=1 ;;
     clean|fix|*fuck) check_stable=1; check_testing=1; check_unstable=1; clean=1 ;;
@@ -86,9 +95,10 @@ src_pre="https://gitlab.com/api/v4/projects/kicad%2Fcode%2Fkicad/repository/arch
 lib_pre="https://gitlab.com/api/v4/projects/kicad%2Flibraries%2Fkicad-"
 lib_mid="/repository/archive.tar.gz?sha="
 
+# number of items updated
 count=0
 
-printf "Latest tag is\t%s\n" "${latest_tag}" >&2
+printf "Latest tag is %s\n" "${latest_tag}" >&2
 
 if [[ ! -f ${file} ]]; then
   echo "No existing file, generating from scratch" >&2
@@ -105,17 +115,6 @@ printf "{\n"
 
 for version in "${all_versions[@]}"; do
 
-  if [[ ${version} == "master" ]]; then
-    pname="kicad-unstable"
-    today="${now}"
-  elif [[ ${version} == "testing" ]]; then
-    pname="kicad-testing"
-    today="${testing_branch}-${now}"
-  else
-    pname="kicad"
-    today="${version}"
-  fi
-
   src_version=${version};
   lib_version=${version};
   # testing is the stable branch on the main repo
@@ -126,16 +125,35 @@ for version in "${all_versions[@]}"; do
       lib_version=${latest_tag};
   fi
 
+  if [[ ${version} == "master" ]]; then
+    pname="kicad-unstable"
+  elif [[ ${version} == "testing" ]]; then
+    pname="kicad-testing"
+  else
+    pname="kicad"
+  fi
+
   # skip a version if we don't want to check it
-  if [[ (${version} != "master" && ${version} != "testing" && -n ${check_stable}) \
-     || (${version} == "testing" && -n ${check_testing}) \
-     || (${version} == "master" && -n ${check_unstable}) ]]; then
+  if [[ (-n ${check_stable} && ${version} != "master" && ${version} != "testing") \
+     || (-n ${check_testing} && ${version} == "testing") \
+     || (-n ${check_unstable} && ${version} == "master" ) ]]; then
+
+    if [[ ${version} == "master" ]]; then
+      pname="kicad-unstable"
+      new_version="${now}"
+    elif [[ ${version} == "testing" ]]; then
+      pname="kicad-testing"
+      new_version="${testing_branch}-${now}"
+    else
+      pname="kicad"
+      new_version="${version}"
+    fi
 
     printf "\nChecking %s\n" "${pname}" >&2
 
     printf "%2s\"%s\" = {\n" "" "${pname}"
       printf "%4skicadVersion = {\n" ""
-        printf "%6sversion =\t\t\t\"%s\";\n" "" "${today}"
+        printf "%6sversion =\t\t\t\"%s\";\n" "" "${new_version}"
         printf "%6ssrc = {\n" ""
 
     echo "Checking src" >&2
@@ -143,9 +161,10 @@ for version in "${all_versions[@]}"; do
     src_rev="$(cut -f1 <<< "${scratch}")"
     has_rev="$(grep -sm 1 "\"${pname}\"" -A 4 "${file}" | grep -sm 1 "${src_rev}" || true)"
     has_hash="$(grep -sm 1 "\"${pname}\"" -A 5 "${file}" | grep -sm 1 "sha256" || true)"
+    old_version="$(grep -sm 1 "\"${pname}\"" -A 3 "${file}" | grep -sm 1 "version" | awk -F "\"" '{print $2}' || true)"
 
     if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
-      echo "Reusing old ${pname}.src.sha256, already latest .rev" >&2
+      echo "Reusing old ${pname}.src.sha256, already latest .rev at ${old_version}" >&2
       scratch=$(grep -sm 1 "\"${pname}\"" -A 5 "${file}")
       grep -sm 1 "rev" -A 1 <<< "${scratch}"
     else
@@ -158,7 +177,7 @@ for version in "${all_versions[@]}"; do
       printf "%4s};\n" ""
 
       printf "%4slibVersion = {\n" ""
-        printf "%6sversion =\t\t\t\"%s\";\n" "" "${today}"
+        printf "%6sversion =\t\t\t\"%s\";\n" "" "${new_version}"
         printf "%6slibSources = {\n" ""
 
           for lib in "${libs[@]}"; do
@@ -170,7 +189,7 @@ for version in "${all_versions[@]}"; do
             has_rev="$(grep -sm 1 "\"${pname}\"" -A 19 "${file}" | grep -sm 1 "${lib_rev}" || true)"
             has_hash="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}" | grep -sm 1 "${lib}.sha256" || true)"
             if [[ -n ${has_rev} && -n ${has_hash} && -z ${clean} ]]; then
-              echo "Reusing old kicad-${lib}-${today}.src.sha256, already latest .rev" >&2
+              echo "Reusing old kicad-${lib}-${new_version}.src.sha256, already latest .rev" >&2
               scratch="$(grep -sm 1 "\"${pname}\"" -A 20 "${file}")"
               grep -sm 1 "${lib}" -A 1 <<< "${scratch}"
             else
@@ -213,4 +232,23 @@ if [[ ${count} -gt 0 ]]; then
   echo "Please confirm the new versions.nix works before making a PR." >&2
 else
   echo "No changes, those checked are up to date" >&2
+fi
+
+# using UPDATE_NIX_ATTR_PATH to detect if this is being called from update.nix
+# and output JSON to describe the changes
+if [[ -n ${UPDATE_NIX_ATTR_PATH} ]]; then
+
+  if [[ ${count} -eq 0 ]]; then echo "[{}]"; exit 0; fi
+
+  jq -n \
+    --arg attrpath "${UPDATE_NIX_PNAME}" \
+    --arg oldversion "${old_version}" \
+    --arg newversion "${new_version}" \
+    --arg file "${file}" \
+'[{
+  "attrPath": $attrpath,
+  "oldVersion": $oldversion,
+  "newVersion": $newversion,
+  "files": [ $file ]
+}]'
 fi

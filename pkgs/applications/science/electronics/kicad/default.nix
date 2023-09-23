@@ -267,12 +267,10 @@ stdenv.mkDerivation rec {
     ln -s ${base}/share/metainfo $out/share/metainfo
   '';
 
-  # can't run this for each pname
-  # stable and unstable are in the same versions.nix
-  # and kicad-small reuses stable
-  # with "all" it updates both, run it manually if you don't want that
-  # and can't git commit if this could be running in parallel with other scripts
-  passthru.updateScript = [ ./update.sh "all" ];
+  passthru.updateScript = {
+    command = [ ./update.sh "${pname}" ];
+    supportedFeatures = [ "commit" ];
+  };
 
   meta = rec {
     description = (if (stable)
