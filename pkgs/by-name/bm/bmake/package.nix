@@ -4,28 +4,29 @@
 , fetchpatch
 , getopt
 , ksh
+, bc
 , tzdata
 , pkgsMusl # for passthru.tests
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20230723";
+  version = "20230909";
 
   src = fetchurl {
     url = "http://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-xCoNlRuiP3ZlMxMJ+74h7cARNqI8uUFoULQxW+X7WQQ=";
+    hash = "sha256-Hl5sdlQN/oEEQmzX/T9xXMZAT5A5ySA0RwErjy9re4Y=";
   };
 
   patches = [
     # make bootstrap script aware of the prefix in /nix/store
-    ./bootstrap-fix.patch
-    # preserve PATH from build env in unit tests
-    ./fix-unexport-env-test.patch
-    # Always enable ksh test since it checks in a impure location /bin/ksh
-    ./unconditional-ksh-test.patch
+    ./001-bootstrap-fix.diff
     # decouple tests from build phase
-    ./dont-test-while-installing.diff
+    ./002-dont-test-while-installing.diff
+    # preserve PATH from build env in unit tests
+    ./003-fix-unexport-env-test.diff
+    # Always enable ksh test since it checks in a impure location /bin/ksh
+    ./004-unconditional-ksh-test.diff
   ];
 
   # Make tests work with musl
@@ -68,18 +69,22 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   nativeCheckInputs = [
+    bc
     tzdata
   ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
     ksh
   ];
 
   # Disabled tests:
+  # directive-export{,-gmake}: another failure related to TZ variables
   # opt-chdir: ofborg complains about it somehow
   # opt-keep-going-indirect: not yet known
   # varmod-localtime: musl doesn't support TZDIR and this test relies on impure,
   # implicit paths
   env.BROKEN_TESTS = builtins.concatStringsSep " " [
-    "opt-chdir"
+    "directive-export"
+    "directive-export-gmake"
+    "opt-chdir" # works on my machine -- AndersonTorres
     "opt-keep-going-indirect"
     "varmod-localtime"
   ];
@@ -92,6 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
+  strictDeps = true;
+
   setupHook = ./setup-hook.sh;
 
   passthru.tests.bmakeMusl = pkgsMusl.bmake;
@@ -100,9 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.crufty.net/help/sjg/bmake.html";
     description = "Portable version of NetBSD 'make'";
     license = lib.licenses.bsd3;
+    mainProgram = "bmake";
     maintainers = with lib.maintainers; [ thoughtpolice AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isAarch64; # failure on gnulib-tests
+    # ofborg: x86_64-linux builds the musl package, aarch64-linux doesn't
+    broken = stdenv.targetPlatform.isMusl && stdenv.buildPlatform.isAarch64;
   };
 })
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)
+# TODO: investigate Musl support

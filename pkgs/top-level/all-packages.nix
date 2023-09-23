@@ -4408,8 +4408,6 @@ with pkgs;
 
   bmon = callPackage ../tools/misc/bmon { };
 
-  bmake = callPackage ../development/tools/build-managers/bmake { };
-
   boca = callPackage ../development/libraries/boca { };
 
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
@@ -5502,8 +5500,6 @@ with pkgs;
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
-
-  go-thumbnailer = callPackage ../applications/misc/go-thumbnailer { };
 
   google-cursor = callPackage ../data/icons/google-cursor { };
 
@@ -9097,9 +9093,7 @@ with pkgs;
 
   hardinfo = callPackage ../tools/system/hardinfo { };
 
-  harmonia = callPackage ../tools/package-management/harmonia {
-    nix = nixVersions.unstable;
-  };
+  harmonia = callPackage ../tools/package-management/harmonia { };
 
   hayagriva = callPackage ../tools/typesetting/hayagriva { };
 
@@ -9422,8 +9416,6 @@ with pkgs;
   ioping = callPackage ../tools/system/ioping { };
 
   ior = callPackage ../tools/system/ior { };
-
-  iouyap = callPackage ../tools/networking/iouyap { };
 
   ioztat = callPackage ../tools/filesystems/ioztat { };
 
@@ -11098,8 +11090,6 @@ with pkgs;
   netlistsvg = callPackage ../applications/science/logic/netlistsvg { };
 
   netpbm = callPackage ../tools/graphics/netpbm { };
-
-  netproc = callPackage ../tools/networking/netproc { };
 
   netrw = callPackage ../tools/networking/netrw { };
 
@@ -39347,6 +39337,14 @@ with pkgs;
   trf = callPackage ../applications/science/biology/trf { };
 
   trimal = callPackage ../applications/science/biology/trimal { };
+
+  trimmomatic = callPackage ../applications/science/biology/trimmomatic {
+    # Reduce closure size
+    jre = pkgs.jre_minimal.override {
+      modules = [ "java.base" "java.logging" ];
+      jdk = pkgs.jdk11_headless;
+    };
+  };
 
   truvari = callPackage ../applications/science/biology/truvari { };
 

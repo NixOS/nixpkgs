@@ -17,28 +17,22 @@
 
 let
   isQt5 = lib.versions.major qtbase.version == "5";
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.6.1.20230907"; # unstable-date format not suitable for cmake
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "20249153077964d01c7c36b9f4042a40e8c8fbf1";
-    hash = "sha256-AyfpMq0R0ummTGvyUHOh/XBUeVfkFwo1VyyLSGoTN8w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-s1FaazHVtWE697BO0hIOgZVowdkq68R9x327ZnJRnlo=";
   };
 
-  # we only need this if we are using a version that hasn't been released. We
-  # could also match on the "VERSION x.y.z" bit but then it would have to be
-  # updated based on whatever is the latest release, so instead just rewrite the
-  # line.
   postPatch = ''
-    sed -i CMakeLists.txt \
-      -e 's@^project.*@project(Zeal VERSION ${finalAttrs.version})@'
-  '' + lib.optionalString (!isQt5) ''
-    substituteInPlace src/app/CMakeLists.txt \
-      --replace "COMPONENTS Widgets" "COMPONENTS Widgets QmlIntegration"
+    substituteInPlace CMakeLists.txt \
+      --replace 'ZEAL_VERSION_SUFFIX "-dev"' 'ZEAL_VERSION_SUFFIX ""'
   '';
 
   nativeBuildInputs = [

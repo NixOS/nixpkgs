@@ -2,17 +2,17 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonOlder
 , pyzipper
 , setuptools
+, striprtf
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "xknxproject";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,16 +21,8 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknxproject";
     rev = "refs/tags/${version}";
-    hash = "sha256-ZLBvhuLXEOgqS7tRwP/e1Dv1/EMqxqXgpAZtLQGIt/o=";
+    hash = "sha256-RH5RQHLpfrI9fRg6OfPZ7/BPHQuHCrkJlwW/EJitdPo=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "unpin-setuptools.patch";
-      url = "https://github.com/XKNX/xknxproject/commit/53fecaf757d682fda00b04c3a2a1f3da86d9705f.patch";
-      hash = "sha256-EpfgEq4pIx7ahqJZalzo30ruj8NlZYHcKHxFXCGL98w=";
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools
@@ -40,6 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cryptography
     pyzipper
+    striprtf
   ];
 
   nativeCheckInputs = [

@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , autoreconfHook
+, perl
 , po4a
 }:
 
@@ -19,6 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    perl
     po4a
   ];
 

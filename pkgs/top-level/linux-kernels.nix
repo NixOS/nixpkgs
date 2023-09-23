@@ -96,7 +96,8 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_14 = callPackage ../os-specific/linux/kernel/linux-4.14.nix {
+    linux_4_14 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "4.14";
       kernelPatches =
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
@@ -107,7 +108,8 @@ in {
         ];
     };
 
-    linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
+    linux_4_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "4.19";
       kernelPatches =
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
@@ -115,7 +117,8 @@ in {
         ];
     };
 
-    linux_5_4 = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
+    linux_5_4 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "5.4";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -130,7 +133,8 @@ in {
       ];
     };
 
-    linux_5_10 = callPackage ../os-specific/linux/kernel/linux-5.10.nix {
+    linux_5_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "5.10";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -145,7 +149,8 @@ in {
       ];
     };
 
-    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
+    linux_5_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "5.15";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -160,10 +165,12 @@ in {
       ];
     };
 
-    linux_6_1 = callPackage ../os-specific/linux/kernel/linux-6.1.nix {
+    linux_6_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.1";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.dell_xps_regression
       ];
     };
 
@@ -172,25 +179,33 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
+        kernelPatches.dell_xps_regression
       ];
     };
 
-    linux_6_4 = callPackage ../os-specific/linux/kernel/linux-6.4.nix {
+    linux_6_4 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.4";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.dell_xps_regression
       ];
     };
 
-    linux_6_5 = callPackage ../os-specific/linux/kernel/linux-6.5.nix {
+    linux_6_5 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.5";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.dell_xps_regression
       ];
     };
 
     linux_testing = let
-      testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
+      testing = callPackage ../os-specific/linux/kernel/mainline.nix {
+        # A special branch that tracks the kernel under the release process
+        # i.e. which has at least a public rc1 and is not released yet.
+        branch = "testing";
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
