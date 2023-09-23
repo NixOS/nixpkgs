@@ -1,19 +1,27 @@
-{ lib, stdenv, fetchurl, texinfo, buildPackages, pkgsStatic }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, libintl
+, texinfo
+, buildPackages
+, pkgsStatic
+}:
 
 stdenv.mkDerivation rec {
   pname = "indent";
-  version = "2.2.12";
+  version = "2.2.13";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "12xvcd16cwilzglv9h7sgh4h1qqjd1h8s48ji2dla58m4706hzg7";
+    hash = "sha256-nmRjT8TOZ5eyBLy4iXzhT90KtIyldpb3h2fFnK5XgJU=";
   };
 
-  patches = [ ./darwin.patch ];
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   strictDeps = true;
   nativeBuildInputs = [ texinfo ];
+  buildInputs = [ libintl ];
   pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
   env.NIX_CFLAGS_COMPILE = toString (
