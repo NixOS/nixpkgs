@@ -1,4 +1,4 @@
-{ version, hash, stdenv, fetchurl, lib, cmake, openssl, platformAttrs, ... }:
+{ version, stdenv, fetchurl, lib, cmake, openssl, platformAttrs, ... }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hadoop-yarn-containerexecutor";
@@ -6,7 +6,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}-src.tar.gz";
-    inherit hash;
+    hash = platformAttrs.${stdenv.system}.srcHash;
   };
   sourceRoot = "hadoop-${finalAttrs.version}-src/hadoop-yarn-project/hadoop-yarn/"
                +"hadoop-yarn-server/hadoop-yarn-server-nodemanager/src";
