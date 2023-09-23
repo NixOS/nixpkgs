@@ -311,6 +311,7 @@
   ./security/rngd.nix
   ./security/rtkit.nix
   ./security/sudo.nix
+  ./security/sudo-rs.nix
   ./security/systemd-confinement.nix
   ./security/tpm2.nix
   ./security/wrappers/default.nix

@@ -5,7 +5,7 @@ let
   password = "helloworld";
 in
   import ./make-test-python.nix ({ lib, pkgs, ...} : {
-    name = "sudo";
+    name = "sudo-rs";
     meta.maintainers = pkgs.sudo-rs.meta.maintainers;
 
     nodes.machine =
@@ -22,7 +22,9 @@ in
           test5 = { isNormalUser = true; };
         };
 
-        security.sudo = {
+        security.sudo.enable = false;
+
+        security.sudo-rs = {
           enable = true;
           package = pkgs.sudo-rs;
           wheelNeedsPassword = false;
@@ -54,7 +56,9 @@ in
         noadmin = { isNormalUser = true; };
       };
 
-      security.sudo = {
+      security.sudo.enable = false;
+
+      security.sudo-rs = {
         package = pkgs.sudo-rs;
         enable = true;
         wheelNeedsPassword = false;
@@ -86,7 +90,7 @@ in
             machine.succeed("sudo -u test5 sudo -n -u test1 true")
 
         with subtest("test5 user should not be able to run commands under root"):
-            machine.fail("sudo -u test5 sudo -n -u root true")
+            machine.fail("sudo -u test5 sudo -n -u root true 2>/dev/null")
 
         with subtest("users in wheel should be able to run sudo despite execWheelOnly"):
             strict.succeed('faketty -- su - admin -c "sudo -u root true"')
