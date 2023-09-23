@@ -36,6 +36,7 @@
 , postgresql
 , readline
 , sqlite
+, symlinkJoin
 , unbound
 , vimPlugins
 , vimUtils
@@ -427,6 +428,34 @@ with prev;
     };
   });
 
+
+  liblpeg = prev.lpeg.overrideAttrs (oa: {
+    pname = "liblpeg";
+
+    # https://github.com/neovim/neovim/pull/25315
+    # Original author uses gcc for darwin to compile lpeg onto `.so`.
+    # This causes some issue with the common darwin setup to use clang, which
+    # expects `.dylib` for `CMAKE_SHARED_LIBRARY_SUFFIX`
+    buildPhase = ''
+      sed -i makefile -e "s/CC = gcc/CC = clang/"
+      sed -i makefile -e "s/-bundle/-dynamiclib/"
+      make macosx
+    '';
+
+    installPhase = ''
+      mkdir -p $out/lib
+      mv lpeg.so $out/lib/lpeg.dylib
+    '';
+
+    nativeBuildInputs = [ fixDarwinDylibNames ] ++ oa.nativeBuildInputs;
+  });
+
+  lpeg = prev.lpeg.overrideAttrs (oa: {
+    postInstall = ''
+      mkdir -p $out/lib
+      cp -r ${final.liblpeg}/lib/* $out/lib/
+    '';
+  });
 
   # as advised in https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
   # we shouldn't use luarocks machinery to build complex cmake components
