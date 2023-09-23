@@ -2,21 +2,23 @@
 , stdenv
 , fetchFromGitHub
 , cairo
+, gettext
 , glib
 , libdrm
 , libinput
+, libpng
+, librsvg
 , libxcb
 , libxkbcommon
 , libxml2
-, gettext
 , meson
 , ninja
 , pango
 , pkg-config
 , scdoc
-, wayland-scanner
 , wayland
 , wayland-protocols
+, wayland-scanner
 , wlroots
 , xcbutilwm
 , xwayland
@@ -24,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     rev = finalAttrs.version;
-    hash = "sha256-8FMC0tq5Gp5qDPUmoJTCrHEergDMUbiTco17jPTJUgE=";
+    hash = "sha256-nQLxE2Q4GiLUjkag/yqctzmkKKWFw1XNFjotE8MMgBA=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libdrm
     libinput
+    libpng
+    librsvg
     libxcb
     libxkbcommon
     libxml2
@@ -58,16 +62,20 @@ stdenv.mkDerivation (finalAttrs: {
     xwayland
   ];
 
+  outputs = [ "out" "man" ];
+
+  strictDeps = true;
+
   mesonFlags = [
     (lib.mesonEnable "xwayland" true)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/labwc/labwc";
-    description = "A Wayland stacking compositor, similar to Openbox";
+    description = "A Wayland stacking compositor, inspired by Openbox";
     changelog = "https://raw.githubusercontent.com/labwc/labwc/${finalAttrs.version}/NEWS.md";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
   };
 })
