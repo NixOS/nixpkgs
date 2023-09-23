@@ -10,19 +10,20 @@ let
     packageOverrides = self: super: {
       torch = super.torch-bin;
       torchvision = super.torchvision-bin;
+      tensorflow = super.tensorflow-bin;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.16.0";
+  version = "0.17.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2JZyINyzy4X1DTp4ZsMLY/rCsH4JdQ8bF/3hoqtvNTU=";
+    hash = "sha256-yZHdPqvYmlq/ZKeinez4MmO9+jCIl9JAD0t/tc/Uz8c=";
   };
 
   postPatch = let
