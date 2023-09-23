@@ -17,6 +17,11 @@ in buildFHSEnvChroot rec {
   name = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
+    (runCommand "ld-lsb-compat" {} ''
+      mkdir -p "$out/lib"
+      ln -sr "${glibc}/lib/ld-linux-x86-64.so.2" "$out/lib/ld-lsb-x86-64.so.3"
+      ln -sr "${pkgsi686Linux.glibc}/lib/ld-linux.so.2" "$out/lib/ld-lsb.so.3"
+    '')
     # quartus requirements
     glib
     xorg.libICE
