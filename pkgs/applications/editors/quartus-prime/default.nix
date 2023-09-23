@@ -67,10 +67,10 @@ in buildFHSEnvChroot rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
     ln -s ${unwrapped}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
 
-    mkdir -p $out/quartus/bin $out/quartus/sopc_builder/bin $out/modelsim_ase/bin
     WRAPPER=$out/bin/${name}
     EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
     for executable in $EXECUTABLES; do
+        mkdir -p "$(dirname "$out/$executable")"
         echo "#!${stdenv.shell}" >> $out/$executable
         echo "$WRAPPER ${unwrapped}/$executable \"\$@\"" >> $out/$executable
     done
