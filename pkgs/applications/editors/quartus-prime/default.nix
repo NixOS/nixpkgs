@@ -67,18 +67,18 @@ in buildFHSEnvChroot rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
     ln -s ${unwrapped}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
 
-    WRAPPER=$out/bin/${name}
-    EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
-    for executable in $EXECUTABLES; do
+    wrapper=$out/bin/${name}
+    executables="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
+    for executable in $executables; do
         mkdir -p "$(dirname "$out/$executable")"
         echo "#!${stdenv.shell}" >> $out/$executable
-        echo "$WRAPPER ${unwrapped}/$executable \"\$@\"" >> $out/$executable
+        echo "$wrapper ${unwrapped}/$executable \"\$@\"" >> $out/$executable
     done
 
     cd $out
-    chmod +x $EXECUTABLES
+    chmod +x $executables
     # link into $out/bin so executables become available on $PATH
-    ln --symbolic --relative --target-directory ./bin $EXECUTABLES
+    ln --symbolic --relative --target-directory ./bin $executables
   '';
 
   # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
