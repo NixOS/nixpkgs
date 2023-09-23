@@ -207,11 +207,15 @@ in
     substituteInPlace "$out/bin/run-singularity" \
       --replace "/usr/bin/env ${projectName}" "$out/bin/${projectName}"
     wrapProgram "$out/bin/${projectName}" \
-      --prefix PATH : "''${defaultPathInputs// /\/bin:}"
+      --prefix PATH : "''${defaultPathInputs// /\/bin:}''${defaultPathInputs:+/bin:}"
     # Make changes in the config file
     ${lib.optionalString enableNvidiaContainerCli ''
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
         --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
+    ''}
+    ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
+      substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
+        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
     ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"

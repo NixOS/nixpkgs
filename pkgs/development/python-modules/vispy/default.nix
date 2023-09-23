@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "vispy";
-  version = "0.13.0";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tZ97z2UoyRS8ps60rZWZhMZgS+o0ZjASpyq4itiInq8=";
+    hash = "sha256-3vcn528rZd7YhmSoPaUN2peWOWHBbxOk2FCr3UWTD5Q=";
   };
 
   patches = [

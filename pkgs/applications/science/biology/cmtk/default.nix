@@ -1,31 +1,47 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib
+, stdenv
+, bzip2
+, cmake
+, fetchurl
+, fftw
+, llvmPackages
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmtk";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchurl {
     name = "cmtk-source.tar.gz";
-    url = "https://www.nitrc.org/frs/download.php/8198/CMTK-${version}-Source.tar.gz//?i_agree=1&download_now=1";
-    sha256 = "1nmsga9m7vcc4y4a6zl53ra3mwlgjwdgsq1j291awkn7zr1az6qs";
+    url = "https://www.nitrc.org/frs/download.php/13188/CMTK-${finalAttrs.version}-Source.tar.gz//?i_agree=1&download_now=1";
+    hash = "sha256-iE164NCOSOypZLLZfZy9RTyrS+YnY9ECqfb4QhlsMS4=";
   };
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = [
+    bzip2
+    fftw
+    zlib
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
+
   env.NIX_CFLAGS_COMPILE = toString [
-    "-std=c++11"
-    (lib.optional stdenv.cc.isClang "-Wno-error=c++11-narrowing")
+    (lib.optionalString stdenv.cc.isGNU "-std=c++11")
+    (lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing")
+    (lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-Dfinite=isfinite")
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "Computational Morphometry Toolkit ";
+    description = "Computational Morphometry Toolkit";
     longDescription = ''A software toolkit for computational morphometry of
       biomedical images, CMTK comprises a set of command line tools and a
       back-end general-purpose library for processing and I/O'';
     maintainers = with maintainers; [ tbenst ];
     platforms = platforms.all;
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     homepage = "https://www.nitrc.org/projects/cmtk/";
   };
-}
+})

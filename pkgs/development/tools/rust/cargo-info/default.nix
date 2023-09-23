@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/imp/cargo-info";
     changelog = "https://gitlab.com/imp/cargo-info/-/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

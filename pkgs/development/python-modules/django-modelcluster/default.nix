@@ -1,11 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, django
-, django-taggit
-, pytz
 , pythonOlder
-, python
+
+# dependencies
+, django
+, pytz
+
+# optionals
+, django-taggit
+
+# tests
+, pytest-django
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,8 +24,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wagtail";
-    repo = pname;
-    rev = "v${version}";
+    repo = "modelcluster";
+    rev = "refs/tags/v${version}";
     hash = "sha256-p6hvOkPWRVJYLHvwyn9nS05wblikRFmlSYZuLiCcuqc=";
   };
 
@@ -31,13 +38,17 @@ buildPythonPackage rec {
     django-taggit
   ];
 
-  nativeCheckInputs = passthru.optional-dependencies.taggit;
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} ./runtests.py --noinput
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.taggit;
+
+  # https://github.com/wagtail/django-modelcluster/issues/173
+  disabledTests = lib.optionals (lib.versionAtLeast django.version "4.2") [
+    "test_formfield_callback"
+  ];
 
   meta = with lib; {
     description = "Django extension to allow working with 'clusters' of models as a single unit, independently of the database";

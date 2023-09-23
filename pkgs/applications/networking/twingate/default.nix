@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "twingate";
-  version = "1.0.83+88994";
+  version = "2023.250.97595";
 
   src = fetchurl {
     url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-    hash = "sha256-rPYjGSrjSNSdjMZRP0Gd7a9lRC+I06oOvZZEUEJ6s5k=";
+    hash = "sha256-JTkyJLbcAEcmftPKejMnxwIY+ICkaFar2fahKeXk3fs=";
   };
 
   buildInputs = [

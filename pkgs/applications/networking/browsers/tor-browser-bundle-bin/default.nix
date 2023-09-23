@@ -47,7 +47,7 @@
 # Hardening
 , graphene-hardened-malloc
 # Whether to use graphene-hardened-malloc
-, useHardenedMalloc ? true
+, useHardenedMalloc ? null
 
 # Whether to disable multiprocess support
 , disableContentSandbox ? false
@@ -56,7 +56,10 @@
 , extraPrefs ? ""
 }:
 
-let
+lib.warnIf (useHardenedMalloc != null)
+  "tor-browser-bundle-bin: useHardenedMalloc is deprecated and enabling it can cause issues"
+
+(let
   libPath = lib.makeLibraryPath libPkgs;
 
   libPkgs = [
@@ -89,7 +92,7 @@ let
   fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "12.5.2";
+  version = "12.5.4";
 
   lang = "ALL";
 
@@ -101,7 +104,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-Mm2/ianon+RtOJqmuZCl+2cPliKiJvIOZ+TyzJ8l5es=";
+      hash = "sha256-AIwqIz8QG7Fq3Vvd22QTNFH1fnZgtH25qUaECX50QCQ=";
     };
 
     i686-linux = fetchurl {
@@ -111,7 +114,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-mouxVi/Y5duIQXHYd8WcIzLZEXs5FZAt20dFq4vHzso=";
+      hash = "sha256-s8UReyurIKlxG0bT0ecGUcXMTTHyYKy/AcygTE6ujqo=";
     };
   };
 
@@ -268,7 +271,7 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
-    WRAPPER_LD_PRELOAD=${lib.optionalString useHardenedMalloc
+    WRAPPER_LD_PRELOAD=${lib.optionalString (useHardenedMalloc == true)
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
     WRAPPER_XDG_DATA_DIRS=${lib.concatMapStringsSep ":" (x: "${x}/share") [
@@ -477,4 +480,4 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

@@ -22,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kamiyaa/joshuto";
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ figsoda totoroot ];
+    maintainers = with maintainers; [ figsoda totoroot xrelkd ];
+    mainProgram = "joshuto";
   };
 }

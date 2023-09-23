@@ -458,7 +458,7 @@ def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
                 token.attrs['id'] = f'{token.meta["label"]}.__back.{token.meta["subId"]}'
                 token.meta['target'] = token.meta["label"]
             elif token.type == 'inline':
-                assert token.children
+                assert token.children is not None
                 generate_ids(token.children)
 
     def footnote_ids(state: markdown_it.rules_core.StateCore) -> None:

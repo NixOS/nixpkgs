@@ -59,6 +59,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  # https://github.com/NixOS/nixpkgs/issues/245534
+  hardeningDisable = [ "fortify" ];
+
   meta = with lib; {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";

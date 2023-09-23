@@ -842,6 +842,16 @@ in
     };
   };
 
+  same_cdi = mkLibretroCore {
+    core = "same_cdi";
+    extraNativeBuildInputs = [ python3 ];
+    extraBuildInputs = [ alsa-lib libGLU libGL portaudio xorg.libX11 ];
+    meta = {
+      description = "SAME_CDI is a libretro core to play CD-i games";
+      license = with lib.licenses; [ bsd3 gpl2Plus ];
+    };
+  };
+
   scummvm = mkLibretroCore rec {
     core = "scummvm";
     version = "unstable-2022-04-06";

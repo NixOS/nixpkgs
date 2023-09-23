@@ -1,12 +1,10 @@
 { stdenv
 , buildPythonPackage
-, asgiref
+, a2wsgi
 , uvicorn
 , httpx
-, pytest-asyncio
 , pytestCheckHook
 , pytest-mock
-, requests
 , trustme
 , watchgod
 , wsproto
@@ -23,16 +21,14 @@ buildPythonPackage {
   dontInstall = true;
 
   nativeCheckInputs = [
-    asgiref
     uvicorn
     httpx
     pytestCheckHook
-    pytest-asyncio
     pytest-mock
-    requests
     trustme
 
     # strictly optional dependencies
+    a2wsgi
     watchgod
     wsproto
   ]

@@ -17,13 +17,13 @@ let
   '';
 in mkDerivation rec {
   pname = "deadd-notification-center";
-  version = "2.0.4";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
     rev = version;
-    hash = "sha256-ascg31HsHeXKhvMNntiRLuZ4+T2+fokfDhZ3c8N/Gzg=";
+    hash = "sha256-VU9NaQVS0n8hFRjWMvCMkaF5mZ4hpnluV31+/SAK7tU=";
   };
 
   isLibrary = false;

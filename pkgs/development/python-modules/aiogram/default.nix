@@ -53,6 +53,12 @@ buildPythonPackage rec {
     redis
   ];
 
+  # requires network
+  disabledTests = [
+    "test_download_file_404"
+    "test_download_404"
+  ];
+
   pythonImportsCheck = [ "aiogram" ];
 
   meta = with lib; {

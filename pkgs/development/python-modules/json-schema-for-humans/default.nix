@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "0.44.6";
+  version = "0.45.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,13 +27,8 @@ buildPythonPackage rec {
     owner = "coveooss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sxk6n+ufTR0ZoGzLQWbriHYyXTCBz39Ls3UkfGr4kOw=";
+    hash = "sha256-DmUQ06UabLcB67PyfRC/gmSkEY/V8kuZ/T/ZW1D11vA=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pytz = "^2021.1"' 'pytz = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core

@@ -11,7 +11,7 @@
 
 let
   pname = "edge-runtime";
-  version = "1.8.1";
+  version = "1.14.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,16 +20,16 @@ rustPlatform.buildRustPackage {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-B8XsH2aOvd87nxUGpSpaNnpTIY0tKDWh7RkXoJcBjrs=";
+    hash = "sha256-63XStzO4Jt6ObWuzcBf2QwCIWsStXvhQ0XaJabELhWg=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-I8BC13WUlBdT6OxTD2t0Aw5qYXpUyOa0MYUB8H2XNx8=";
+  cargoHash = "sha256-JwwdvvpqgSbl0Xyb5pQ5hzZRrrCnDSjwV+ikdO2pXCk=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security CoreFoundation ]);
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security CoreFoundation SystemConfiguration ]);
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE

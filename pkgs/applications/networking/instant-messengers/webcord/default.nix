@@ -13,16 +13,16 @@
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "v${version}";
-    hash = "sha256-E/WXAVSCNTDEDaz71LXOHUf/APFO2uSpkTRhlZfQp0E=";
+    hash = "sha256-g9UJANYs5IlKAeRc27oNOfdD3uD3nrG5Ecp+AbbsXLE=";
   };
 
-  npmDepsHash = "sha256-vGaYjM13seVmRbVPyDIM+qhGTCj6rw/el6Dq3KMzDks=";
+  npmDepsHash = "sha256-SSlSLZs97LDtL7OyfCtEGZjDVfsn5KKUgRNyL8J5M5g=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -84,7 +84,8 @@ buildNpmPackage rec {
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "webcord";
     maintainers = with maintainers; [ huantian ];
-    platforms = electron_25.meta.platforms;
+    platforms = platforms.linux;
   };
 }

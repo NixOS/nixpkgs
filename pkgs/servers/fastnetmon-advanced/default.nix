@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     description = "A high performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ yuka ];
+    maintainers = teams.wdz.members;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

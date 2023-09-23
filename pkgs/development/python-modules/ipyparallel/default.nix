@@ -28,6 +28,14 @@ buildPythonPackage rec {
     hash = "sha256-o5ql75VgFwvw6a/typ/wReG5wYMsSTAzd+3Mkc6p+3c=";
   };
 
+  # We do not need the jupyterlab build dependency, because we do not need to
+  # build any JS components; these are present already in the PyPI artifact.
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"jupyterlab>=3.0.0,==3.*",' ""
+  '';
+
   nativeBuildInputs = [
     hatchling
   ];

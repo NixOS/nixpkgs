@@ -11,7 +11,7 @@ in
     settings = mkOption {
       description = lib.mdDoc ''
         Attrset that is converted and passed as TOML config file.
-        For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy2.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
+        For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
       '';
       example = literalExpression ''
         {
@@ -49,7 +49,7 @@ in
         passAsFile = [ "json" ];
       } ''
         ${if cfg.upstreamDefaults then ''
-          ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy2.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+          ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
           ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
         '' else ''
           cp $jsonPath config.json
@@ -80,7 +80,7 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";
         DynamicUser = true;
-        ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+        ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy -config ${cfg.configFile}";
         LockPersonality = true;
         LogsDirectory = "dnscrypt-proxy";
         MemoryDenyWriteExecute = true;

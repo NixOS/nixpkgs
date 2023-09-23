@@ -1,5 +1,5 @@
-{ lib, runCommandNoCC, apache-jena-fuseki, curl }:
-runCommandNoCC "fuseki-test-${apache-jena-fuseki.name}"
+{ lib, runCommand, apache-jena-fuseki, curl }:
+runCommand "fuseki-test-${apache-jena-fuseki.name}"
 { nativeBuildInputs = [ curl apache-jena-fuseki ]; } ''
   export FUSEKI_BASE="$PWD/fuseki-base"
   mkdir -p "$FUSEKI_BASE/db"

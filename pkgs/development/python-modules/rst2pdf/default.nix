@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
+, wheel
 , docutils
 , importlib-metadata
 , jinja2
@@ -19,18 +21,19 @@
 buildPythonPackage rec {
   pname = "rst2pdf";
   version = "0.101";
-
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AF8FssEIFHmeY2oVrAPNe85pbmgKWO52yD6ycNNzTSg=";
+    hash = "sha256-AF8FssEIFHmeY2oVrAPNe85pbmgKWO52yD6ycNNzTSg=";
   };
 
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

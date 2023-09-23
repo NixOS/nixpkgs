@@ -69,8 +69,8 @@ _multioutConfig() {
     # try to detect share/doc/${shareDocName}
     # Note: sadly, $configureScript detection comes later in configurePhase,
     #   and reordering would cause more trouble than worth.
-    if [ -z "$shareDocName" ]; then
-        local confScript="$configureScript"
+    if [ -z "${shareDocName:-}" ]; then
+        local confScript="${configureScript:-}"
         if [ -z "$confScript" ] && [ -x ./configure ]; then
             confScript=./configure
         fi

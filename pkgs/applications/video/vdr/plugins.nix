@@ -1,6 +1,6 @@
 { lib, stdenv, vdr, fetchFromGitHub
-, graphicsmagick, pcre, xorgserver, ffmpeg
-, libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
+, graphicsmagick, pcre
+, boost, libgcrypt, perl, util-linux, groff, ncurses
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
@@ -11,6 +11,10 @@
     installFlags = [ "DESTDIR=$(out)" ];
   };
 in {
+
+  markad = callPackage ./markad {};
+
+  nopacity = callPackage ./nopacity {};
 
   softhddevice = callPackage ./softhddevice {};
 
@@ -46,52 +50,6 @@ in {
     meta = with lib; {
       inherit (src.meta) homepage;
       description = "DVB Frontend Status Monitor plugin for VDR";
-      maintainers = [ maintainers.ck3d ];
-      license = licenses.gpl2;
-      inherit (vdr.meta) platforms;
-    };
-
-  };
-
-  markad = stdenv.mkDerivation rec {
-    pname = "vdr-markad";
-    version = "3.1.1";
-
-    src = fetchFromGitHub {
-      repo = "vdr-plugin-markad";
-      owner = "kfb77";
-      sha256 = "sha256-h2a400T6mHzZRWAVFXF5Wzhu4Zp1D3btEKlxnCtB13M=";
-      rev = "V${version}";
-    };
-
-    buildInputs = [ vdr ffmpeg ];
-
-    postPatch = ''
-      substituteInPlace command/Makefile --replace '/usr' ""
-
-      substituteInPlace plugin/markad.cpp \
-        --replace "/usr/bin" "$out/bin" \
-        --replace "/var/lib/markad" "$out/var/lib/markad"
-
-      substituteInPlace command/markad-standalone.cpp \
-        --replace "/var/lib/markad" "$out/var/lib/markad"
-    '';
-
-    buildFlags = [
-      "DESTDIR=$(out)"
-      "LIBDIR=/lib/vdr"
-      "BINDIR=/bin"
-      "MANDIR=/share/man"
-      "APIVERSION=${vdr.version}"
-      "VDRDIR=${vdr.dev}/include/vdr"
-      "LOCDIR=/share/locale"
-    ];
-
-    installFlags = buildFlags;
-
-    meta = with lib; {
-      inherit (src.meta) homepage;
-      description = "MarkAd marks advertisements in VDR recordings.";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;

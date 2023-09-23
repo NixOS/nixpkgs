@@ -40,6 +40,8 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     cheroot
     pytestCheckHook

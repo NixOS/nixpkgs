@@ -1,33 +1,68 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qttools, wrapQtAppsHook
-, alsa-lib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
-, libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord, serd
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qttools
+, wrapQtAppsHook
+, alsa-lib
+, dssi
+, fluidsynth
+, ladspaH
+, lash
+, libinstpatch
+, libjack2
+, liblo
+, libsamplerate
+, libsndfile
+, lilv
+, lrdf
+, lv2
+, qtsvg
+, rtaudio
+, rubberband
+, sord
+, serd
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "muse-sequencer";
-  version = "3.1.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "muse-sequencer";
     repo = "muse";
-    rev = "muse_${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "1rasp2v1ds2aw296lbf27rzw0l9fjl0cvbvw85d5ycvh6wkm301p";
+    rev = finalAttrs.version;
+    hash = "sha256-JPvoximDL4oKO8reXW7alMegwUyUTSAcdq3ueXeUMMY=";
   };
 
-  sourceRoot = "${src.name}/muse3";
-
-  patches = [ ./fix-parallel-building.patch ];
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
-    alsa-lib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
-    libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
+    alsa-lib
+    dssi
+    fluidsynth
+    ladspaH
+    lash
+    libinstpatch
+    libjack2
+    liblo
+    libsamplerate
+    libsndfile
+    lilv
+    lrdf
+    lv2
+    qtsvg
+    rtaudio
+    rubberband
+    sord
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev serd}/include/serd-0" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://muse-sequencer.github.io/";
     description = "MIDI/Audio sequencer with recording and editing capabilities";
     longDescription = ''
@@ -38,7 +73,9 @@ stdenv.mkDerivation rec {
       MusE aims to be a complete multitrack virtual studio for Linux,
       it is published under the GNU General Public License.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ eclairevoyant orivej ];
+    platforms = lib.platforms.linux;
+    mainProgram = "muse4";
   };
-}
+})

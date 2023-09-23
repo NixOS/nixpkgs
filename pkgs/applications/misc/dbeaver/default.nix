@@ -135,5 +135,6 @@ mavenJdk17.buildMavenPackage rec {
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
+    mainProgram = "dbeaver";
   };
 }

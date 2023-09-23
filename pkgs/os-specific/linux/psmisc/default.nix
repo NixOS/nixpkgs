@@ -1,25 +1,22 @@
-{lib, stdenv, fetchFromGitLab, fetchpatch, autoconf, automake, gettext, ncurses}:
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoconf
+, automake
+, gettext
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "psmisc";
-  version = "23.5";
+  version = "23.6";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-02jvRPqN8DS30ID42hQFu400NoFC5QiH5YA3NB+EoFI=";
+    hash = "sha256-TjnOn8a7HAgt11zcM0i5DM5ERmsvLJHvo1e5FOsl6IA=";
   };
-
-  patches = [
-    # Upstream patch to be released in the next version
-    (fetchpatch {
-      name = "fallback-to-kill.diff";
-      url = "https://gitlab.com/psmisc/psmisc/-/commit/6892e321e7042e3df60a5501a1c59d076e8a856f.patch";
-      sha256 = "sha256-3uk1KXEOqAxpHWBORUw5+dR5s/Z55JJs5tuBZlTdjlo=";
-      excludes = [ "ChangeLog" ];
-    })
-  ];
 
   nativeBuildInputs = [ autoconf automake gettext ];
   buildInputs = [ ncurses ];

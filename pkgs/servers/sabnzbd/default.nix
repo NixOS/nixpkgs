@@ -1,37 +1,60 @@
 { lib, stdenv
+, coreutils
 , fetchFromGitHub
 , python3
 , par2cmdline
 , unzip
 , unrar
 , p7zip
+, util-linux
 , makeWrapper
 , nixosTests
 }:
 
 let
   pythonEnv = python3.withPackages(ps: with ps; [
+    babelfish
+    cffi
     chardet
     cheetah3
+    cheroot
     cherrypy
-    cryptography
     configobj
+    cryptography
     feedparser
-    sabyenc3
-    puremagic
     guessit
+    jaraco-classes
+    jaraco-collections
+    jaraco-context
+    jaraco-functools
+    jaraco-text
+    more-itertools
+    notify2
+    orjson
+    portend
+    puremagic
+    pycparser
     pysocks
+    python-dateutil
+    pytz
+    rebulk
+    sabctools
+    sabyenc3
+    sgmllib3k
+    six
+    tempora
+    zc_lockfile
   ]);
-  path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
+  path = lib.makeBinPath [ coreutils par2cmdline unrar unzip p7zip util-linux ];
 in stdenv.mkDerivation rec {
-  version = "3.7.2";
+  version = "4.0.3";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-1gGvdc6TJrkFIrN+TUL/7EejApgpgAQxnQbp8RMknHQ=";
+    sha256 = "sha256-6d/UGFuySgKvpqhGjzl007GS9yMgfgI3YwTxkxsCzew=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -59,6 +82,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ fridh jojosch ];
+    maintainers = with lib.maintainers; [ fridh jojosch adamcstephens ];
   };
 }

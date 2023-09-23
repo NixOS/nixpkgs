@@ -65,6 +65,7 @@
 , polkit-qt
 , pipewire
 , libdrm
+, fetchpatch
 }:
 
 let inherit (lib) getBin getLib; in

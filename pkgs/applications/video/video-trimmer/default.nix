@@ -16,21 +16,21 @@
 , ffmpeg-full
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "video-trimmer";
   version = "0.8.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
-    repo = pname;
-    rev = "v${version}";
+    repo = "video-trimmer";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nr0PAvp4wlswQBNN2LLyYQMpk3IIleHf3+978XhUGGQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-${finalAttrs.version}";
     hash = "sha256-YFbLMpQbHUtxRrBVarcoIeDsvc26NWc1YhMeCaLgJAc=";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

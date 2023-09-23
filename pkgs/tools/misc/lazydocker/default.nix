@@ -1,14 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, lazydocker, testers }:
 
 buildGoModule rec {
   pname = "lazydocker";
-  version = "0.21.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
     rev = "v${version}";
-    sha256 = "sha256-CALMpedDCBlsYt31JOlwH1SOEhy/DFP6SdjoVkQ2KOs=";
+    sha256 = "sha256-fzHsLKtlyTKcuOqTYtoE5Wv0Y45tAMgRpYmXA4oYrVY=";
   };
 
   vendorHash = null;
@@ -20,6 +20,10 @@ buildGoModule rec {
   excludedPackages = [ "scripts" "test/printrandom" ];
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = lazydocker;
+  };
 
   meta = with lib; {
     description = "A simple terminal UI for both docker and docker-compose";

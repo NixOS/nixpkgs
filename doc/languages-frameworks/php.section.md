@@ -130,6 +130,7 @@ package: a project may depend on certain extensions and `composer`
 won't work with that project unless those extensions are loaded.
 
 Example of building `composer` with additional extensions:
+
 ```nix
 (php.withExtensions ({ all, enabled }:
   enabled ++ (with all; [ imagick redis ]))
@@ -138,7 +139,9 @@ Example of building `composer` with additional extensions:
 
 ### Overriding PHP packages {#ssec-php-user-guide-overriding-packages}
 
-`php-packages.nix` form a scope, allowing us to override the packages defined within. For example, to apply a patch to a `mysqlnd` extension, you can simply pass an overlay-style function to `php`’s `packageOverrides` argument:
+`php-packages.nix` form a scope, allowing us to override the packages defined
+within. For example, to apply a patch to a `mysqlnd` extension, you can simply
+pass an overlay-style function to `php`’s `packageOverrides` argument:
 
 ```nix
 php.override {
@@ -152,4 +155,139 @@ php.override {
     };
   };
 }
+```
+
+### Building PHP projects {#ssec-building-php-projects}
+
+With [Composer](https://getcomposer.org/), you can effectively build PHP
+projects by streamlining dependency management. As the de-facto standard
+dependency manager for PHP, Composer enables you to declare and manage the
+libraries your project relies on, ensuring a more organized and efficient
+development process.
+
+Composer is not a package manager in the same sense as `Yum` or `Apt` are. Yes,
+it deals with "packages" or libraries, but it manages them on a per-project
+basis, installing them in a directory (e.g. `vendor`) inside your project. By
+default, it does not install anything globally. This idea is not new and
+Composer is strongly inspired by node's `npm` and ruby's `bundler`.
+
+Currently, there is no other PHP tool that offers the same functionality as
+Composer. Consequently, incorporating a helper in Nix to facilitate building
+such applications is a logical choice.
+
+In a Composer project, dependencies are defined in a `composer.json` file,
+while their specific versions are locked in a `composer.lock` file. Some
+Composer-based projects opt to include this `composer.lock` file in their source
+code, while others choose not to.
+
+In Nix, there are multiple approaches to building a Composer-based project.
+
+One such method is the `php.buildComposerProject` helper function, which serves
+as a wrapper around `mkDerivation`.
+
+Using this function, you can build a PHP project that includes both a
+`composer.json` and `composer.lock` file. If the project specifies binaries
+using the `bin` attribute in `composer.json`, these binaries will be
+automatically linked and made accessible in the derivation. In this context,
+"binaries" refer to PHP scripts that are intended to be executable.
+
+To use the helper effectively, simply add the `vendorHash` attribute, which
+enables the wrapper to handle the heavy lifting.
+
+Internally, the helper operates in three stages:
+
+1. It constructs a `composerRepository` attribute derivation by creating a
+   composer repository on the filesystem containing dependencies specified in
+   `composer.json`. This process uses the function
+   `php.mkComposerRepository` which in turn uses the
+   `php.composerHooks.composerRepositoryHook` hook. Internaly this function uses
+   a custom
+   [Composer plugin](https://github.com/nix-community/composer-local-repo-plugin) to
+   generate the repository.
+2. The resulting `composerRepository` derivation is then used by the
+   `php.composerHooks.composerInstallHook` hook, which is responsible for
+   creating the final `vendor` directory.
+3. Any "binary" specified in the `composer.json` are linked and made accessible
+   in the derivation.
+
+As the autoloader optimization can be activated directly within the
+`composer.json` file, we do not enable any autoloader optimization flags.
+
+To customize the PHP version, you can specify the `php` attribute. Similarly, if
+you wish to modify the Composer version, use the `composer` attribute. It is
+important to note that both attributes should be of the `derivation` type.
+
+Here's an example of working code example using `php.buildComposerProject`:
+
+```nix
+{ php, fetchFromGitHub }:
+
+php.buildComposerProject (finalAttrs: {
+  pname = "php-app";
+  version = "1.0.0";
+
+  src = fetchFromGitHub {
+    owner = "git-owner";
+    repo = "git-repo";
+    rev = finalAttrs.version;
+    hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
+  };
+
+  # PHP version containing the `ast` extension enabled
+  php = php.buildEnv {
+    extensions = ({ enabled, all }: enabled ++ (with all; [
+      ast
+    ]));
+  };
+
+  # The composer vendor hash
+  vendorHash = "sha256-86s/F+/5cBAwBqZ2yaGRM5rTGLmou5//aLRK5SA0WiQ=";
+
+  # If the composer.lock file is missing from the repository, add it:
+  # composerLock = ./path/to/composer.lock;
+})
+```
+
+In case the file `composer.lock` is missing from the repository, it is possible
+to specify it using the `composerLock` attribute.
+
+The other method is to use all these methods and hooks individually. This has
+the advantage of building a PHP library within another derivation very easily
+when necessary.
+
+Here's a working code example to build a PHP library using `mkDerivation` and
+separate functions and hooks:
+
+```nix
+{ stdenvNoCC, fetchFromGitHub, php }:
+
+stdenvNoCC.mkDerivation (finalAttrs:
+let
+  src = fetchFromGitHub {
+    owner = "git-owner";
+    repo = "git-repo";
+    rev = finalAttrs.version;
+    hash = "sha256-VcQRSss2dssfkJ+iUb5qT+FJ10GHiFDzySigcmuVI+8=";
+  };
+in {
+  inherit src;
+  pname = "php-app";
+  version = "1.0.0";
+
+  buildInputs = [ php ];
+
+  nativeBuildInputs = [
+    php.packages.composer
+    # This hook will use the attribute `composerRepository`
+    php.composerHooks.composerInstallHook
+  ];
+
+  composerRepository = php.mkComposerRepository {
+    inherit (finalAttrs) src;
+    # Specifying a custom composer.lock since it is not present in the sources.
+    composerLock = ./composer.lock;
+    # The composer vendor hash
+    vendorHash = "sha256-86s/F+/5cBAwBqZ2yaGRM5rTGLmou5//aLRK5SA0WiQ=";
+  };
+})
 ```

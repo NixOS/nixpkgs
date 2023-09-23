@@ -105,7 +105,7 @@ in
     };
 
     otherNodesIps = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       example = [ "192.168.1.2" "192.168.1.3" ];
       description = mdDoc ''
         IP addresses of the other nodes.

@@ -24,8 +24,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.26.3";
-    rev = "ea9d25e93cef74b023c95ca1a3f79449cdf7fa9a";
+    version = "1.26.4";
+    rev = "cfa32deca25ac57c2bbecdad72807a9b13493fc1";
   };
 in
 buildBazelPackage rec {
@@ -36,7 +36,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    sha256 = "sha256-ZZAVuelcPzFQRqh9SwRxt+odEjF0jTNh/KkLWHKiZ3o=";
+    hash = "sha256-j5QyqT+9tpChg5JxdSw21rtb9AI036vIiAmzCNzGWGc=";
 
     postFetch = ''
       chmod -R +w $out
@@ -80,8 +80,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-7CB6mRe+q1LMryh50dEjgR+RWU//tbaedgipuB4B+S4=";
-      aarch64-linux = "sha256-kdc1vMPueONOaT8w0Gbkz7OUOcPMMHHdwQ+ABTIL8xs=";
+      x86_64-linux = "sha256-MvY4cLdLOeb7+Zt7Oz7Kzz1+dsUceemP/V02egvHg+M=";
+      aarch64-linux = "sha256-U5mnAq8RHDygxiYeNc0HDeOgoaGyrd0MPjHKdyUkM0A=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -97,11 +97,14 @@ buildBazelPackage rec {
         -e 's,${stdenv.shellPackage},__NIXSHELL__,' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
 
       rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
+
+      # Remove compiled python
+      find $bazelOut -name '*.pyc' -delete
 
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
@@ -130,7 +133,7 @@ buildBazelPackage rec {
         -e 's,__NIXSHELL__,${stdenv.shellPackage},' \
         $bazelOut/external/com_github_luajit_luajit/build.py \
         $bazelOut/external/local_config_sh/BUILD \
-        $bazelOut/external/base_pip3/BUILD.bazel
+        $bazelOut/external/*_pip3/BUILD.bazel
     '';
     installPhase = ''
       install -Dm0755 bazel-bin/source/exe/envoy-static $out/bin/envoy

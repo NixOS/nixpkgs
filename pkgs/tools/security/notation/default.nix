@@ -1,22 +1,32 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, notation }:
 
 buildGoModule rec {
   pname = "notation";
-  version = "1.0.0-rc.7";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "notaryproject";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EM2QunSL88Am3zgKwgI94jET3xaVfvsa4MCtMZ3ejjU=";
+    hash = "sha256-mj+LCO6Q4kKfYewPl0R9axZB9O4Yy+GkLlUIDe6yhlI=";
   };
 
-  vendorHash = "sha256-88PCnIm7nQB8jLzrfVOyDLXWX7RZeT31n1cwvb4Qza0=";
+  vendorHash = "sha256-wQTRgOSOq0LeiSwF5eowaW4R2xCx+kEb0WQ+upsxdAA=";
 
   # This is a Go sub-module and cannot be built directly (e2e tests).
   excludedPackages = [ "./test" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/notaryproject/notation/internal/version.Version=${version}"
+    "-X github.com/notaryproject/notation/internal/version.BuildMetadata="
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = notation;
+    command = "notation version";
+  };
 
   meta = with lib; {
     description = "CLI tool to sign and verify OCI artifacts and container images";

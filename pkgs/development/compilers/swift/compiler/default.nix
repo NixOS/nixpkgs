@@ -2,6 +2,7 @@
 , stdenv
 , callPackage
 , cmake
+, bash
 , coreutils
 , gnugrep
 , perl
@@ -133,7 +134,8 @@ let
     sed < '${clang}/bin/clang' > "$targetFile" \
       -e 's|^\s*exec|exec -a "$0"|g' \
       -e 's|^\[\[ "${clang.cc}/bin/clang" = \*++ ]]|[[ "$0" = *++ ]]|' \
-      -e "s|${clang.cc}/bin/clang|$unwrappedClang|g"
+      -e "s|${clang.cc}/bin/clang|$unwrappedClang|g" \
+      -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|"
     chmod a+x "$targetFile"
   '';
 

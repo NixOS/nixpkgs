@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , Carbon
 , Cocoa
+, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,11 +32,17 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.skhd.plist --subst-var out
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "skhd-v${finalAttrs.version}";
+  };
+
   meta = {
     description = "Simple hotkey daemon for macOS";
     homepage = "https://github.com/koekeishiya/skhd";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cmacrae lnl7 periklis khaneliman];
+    mainProgram = "skhd";
+    maintainers = with lib.maintainers; [ cmacrae lnl7 periklis khaneliman ];
     platforms = lib.platforms.darwin;
   };
 })

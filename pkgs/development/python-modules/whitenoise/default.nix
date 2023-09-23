@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.4.0";
+  version = "6.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "evansd";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ouEoqMcNh3Vwahwaq6bGQuVUFViVN14CDJosDXC5ozI=";
+    hash = "sha256-g1D0tjGsAP3y1fWvODWwNvxnTSZJuTpyZ0Otk83Oq9E=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to serve static file for WSGI applications";
-    homepage = "https://whitenoise.evans.io/";
+    homepage = "https://whitenoise.readthedocs.io/";
     changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

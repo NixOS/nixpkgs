@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     popt
   ];
 
-  sourceRoot = "${src.name}/xmlroff/";
+  sourceRoot = "${src.name}/xmlroff";
 
   enableParallelBuilding = true;
 

@@ -194,6 +194,7 @@ let
           inherit lib;
           inherit (prevStage) coreutils gnugrep;
           stdenvNoCC = prevStage.ccWrapperStdenv;
+          fortify-headers = prevStage.fortify-headers;
         }).overrideAttrs(a: lib.optionalAttrs (prevStage.gcc-unwrapped.passthru.isXgcc or false) {
           # This affects only `xgcc` (the compiler which compiles the final compiler).
           postFixup = (a.postFixup or "") + ''
@@ -568,6 +569,7 @@ in
         inherit lib;
         inherit (self) stdenvNoCC coreutils gnugrep;
         shell = self.bash + "/bin/bash";
+        fortify-headers = self.fortify-headers;
       };
     };
     extraNativeBuildInputs = [
@@ -645,6 +647,7 @@ in
         ++  [ linuxHeaders # propagated from .dev
             binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params gcc.cc.libgcc glibc.passthru.libgcc
           ]
+        ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
         ++ [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ]
         ++ (with gcc-unwrapped.passthru; [
           gmp libmpc mpfr isl

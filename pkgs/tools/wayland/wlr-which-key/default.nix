@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wlr-which-key";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "MaxVerevkin";
     repo = "wlr-which-key";
     rev = "v${version}";
-    hash = "sha256-GLTbUa5EfpJV7OACTlewAgGjd5Ub0fYHoW8f+EVrT14=";
+    hash = "sha256-FVpPS5EQ6+xZIBtdS18SdVx0TK9/ikryU9mtm5JvDgk=";
   };
 
-  cargoHash = "sha256-TtA4Ley5bwymF8Yiqso5fGAwGsT0GRlfAlGS5j4s0Qw=";
+  cargoHash = "sha256-JELvmG2CiknBP3QbaXSl1uj6wEgLaDFVFBuS1l5SUk4=";
 
   nativeBuildInputs = [
     pkg-config

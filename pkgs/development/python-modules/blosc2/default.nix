@@ -3,11 +3,13 @@
 , fetchFromGitHub
 
 # build-system
-, setuptools
-, scikit-build
-, cython
 , cmake
+, cython
 , ninja
+, oldest-supported-numpy
+, scikit-build
+, setuptools
+, wheel
 
 # propagates
 , msgpack
@@ -44,9 +46,10 @@ buildPythonPackage rec {
     cmake
     cython
     ninja
-    numpy
+    oldest-supported-numpy
     scikit-build
     setuptools
+    wheel
   ];
 
   dontUseCmakeConfigure = true;

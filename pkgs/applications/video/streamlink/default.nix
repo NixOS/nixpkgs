@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.0.0";
+  version = "6.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BeP+YOBtTz1D//LDBMha+07yVXdgBHfM4v4aVNHzwAw=";
+    hash = "sha256-rq4beEhEb5CZjGIyTnEHyPQfjAgmbbxBm4HhzBs1VZo=";
   };
 
   nativeCheckInputs = with python3Packages; [
@@ -45,8 +45,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = "https://streamlink.github.io/";
+    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     description = "CLI for extracting streams from various websites to video player of your choosing";
+    homepage = "https://streamlink.github.io/";
     longDescription = ''
       Streamlink is a CLI utility that pipes videos from online
       streaming services to a variety of video players such as VLC, or
@@ -54,8 +55,8 @@ python3Packages.buildPythonApplication rec {
 
       Streamlink is a fork of the livestreamer project.
     '';
-    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     license = licenses.bsd2;
+    mainProgram = "streamlink";
     maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

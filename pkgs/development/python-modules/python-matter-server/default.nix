@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 
 # build
 , setuptools
+, wheel
 
 # propagates
 , aiohttp
@@ -39,8 +41,18 @@ buildPythonPackage rec {
     hash = "sha256-t++7jQreibGpJRjJawicxjFIye5X6R1dpFqiM6yvRf0=";
   };
 
+  patches = [
+    # https://github.com/home-assistant-libs/python-matter-server/pull/379
+    (fetchpatch {
+      name = "relax-setuptools-dependency.patch";
+      url = "https://github.com/home-assistant-libs/python-matter-server/commit/1bbc945634db92ea081051645b03c3d9c358fb15.patch";
+      hash = "sha256-kTu1+IwDrcdqelyK/vfhxw8MQBis5I1jag7YTytKQhs=";
+    })
+  ];
+
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [

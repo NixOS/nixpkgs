@@ -49,8 +49,8 @@ in {
       #!${pkgs.runtimeShell}
       echo 'bye' | ${withRcloneEnv3} ${pkgs.rclone}/bin/rclone rcat nextcloud:test-shared-file2
     '';
-    openssl1-node = nodes.nextcloudwithopenssl1.config.system.build.toplevel;
-    openssl3-node = nodes.nextcloudwithopenssl3.config.system.build.toplevel;
+    openssl1-node = nodes.nextcloudwithopenssl1.system.build.toplevel;
+    openssl3-node = nodes.nextcloudwithopenssl3.system.build.toplevel;
   in ''
     nextcloudwithopenssl1.start()
     nextcloudwithopenssl1.wait_for_unit("multi-user.target")

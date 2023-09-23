@@ -7,6 +7,7 @@
 , pulumi
 , isPy27
 , semver
+, pip
 , pytestCheckHook
 , pyyaml
 , six
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pip
     pulumi.pkgs.pulumi-language-python
     pytestCheckHook
   ];

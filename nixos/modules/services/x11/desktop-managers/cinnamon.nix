@@ -212,10 +212,12 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Harmonize Qt applications under Cinnamon
-      qt.enable = true;
-      qt.platformTheme = "gnome";
-      qt.style = "adwaita";
+      # Qt application style
+      qt = {
+        enable = mkDefault true;
+        style = mkDefault "gtk2";
+        platformTheme = mkDefault "gtk2";
+      };
 
       # Default Fonts
       fonts.packages = with pkgs; [

@@ -4,8 +4,10 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscript_headless, harfbuzz
-, makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
-, libfaketime, makeFontsConf
+, makeWrapper, installShellFiles
+, python3, ruby, perl, tk, jdk, bash, snobol4
+, coreutils, findutils, gawk, getopt, gnugrep, gnumake, gnupg, gnused, gzip, ncurses, zip
+, libfaketime, asymptote, biber-ms, makeFontsConf
 , useFixedHashes ? true
 , recurseIntoAttrs
 }:
@@ -17,12 +19,13 @@ let
       withIcu = true; withGraphite2 = true;
     };
     inherit useFixedHashes;
+    tlpdb = overriddenTlpdb;
   };
 
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
-    inherit bin combinePkgs buildEnv lib makeWrapper writeText runCommand
-      stdenv python3 ruby perl gnused gnugrep coreutils libfaketime makeFontsConf;
+    inherit bin buildEnv lib makeWrapper writeText runCommand
+      perl libfaketime makeFontsConf bash tl coreutils gawk gnugrep gnused;
     ghostscript = ghostscript_headless;
   };
 
@@ -31,88 +34,15 @@ let
   tlpdbVersion = tlpdb."00texlive.config";
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
-  tl = let
-    orig = removeAttrs tlpdb [ "00texlive.config" ];
-
-    overridden = lib.recursiveUpdate orig {
-      # overrides of texlive.tlpdb
-
-      # only *.po for tlmgr
-      texlive-msg-translations.hasTlpkg = false;
-
-      # it seems to need it to transform fonts
-      xdvi.deps = (orig.xdvi.deps or []) ++  [ "metafont" ];
-
-      # TODO: remove when updating to texlive-2023, metadata has been corrected in the TeX catalogue
-      # tlpdb lists license as "unknown", but the README says lppl13: http://mirrors.ctan.org/language/arabic/arabi-add/README
-      arabi-add.license = [  "lppl13c" ];
-
-      # TODO: remove this when updating to texlive-2023, npp-for-context is no longer in texlive
-      # tlpdb lists license as "noinfo", but it's gpl3: https://github.com/luigiScarso/context-npp
-      npp-for-context.license = [  "gpl3Only" ];
-
-      # remove dependency-heavy packages from the basic collections
-      collection-basic.deps = lib.subtractLists [ "metafont" "xdvi" ] orig.collection-basic.deps;
-
-      # add them elsewhere so that collections cover all packages
-      collection-metapost.deps = orig.collection-metapost.deps ++ [ "metafont" ];
-      collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
-
-      texdoc = {
-        extraRevision = ".tlpdb${toString tlpdbVersion.revision}";
-        extraVersion = "-tlpdb-${toString tlpdbVersion.revision}";
-
-        # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
-        postUnpack = ''
-          if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
-            unxz --stdout "${tlpdbxz}" > texlive.tlpdb
-
-            # create dummy doc file to ensure that texdoc does not return an error
-            mkdir -p support/texdoc
-            touch support/texdoc/NEWS
-
-            TEXMFCNF="${bin.core}"/share/texmf-dist/web2c TEXMF="$out" TEXDOCS=. TEXMFVAR=. \
-              "${bin.luatex}"/bin/texlua "$out"/scripts/texdoc/texdoc.tlu \
-              -c texlive_tlpdb=texlive.tlpdb -lM texdoc
-
-            cp texdoc/cache-tlpdb.lua "$out"/scripts/texdoc/Data.tlpdb.lua
-          fi
-        '';
-      };
-    }; # overrides
-
-    in lib.mapAttrs mkTLPkg overridden;
-
-  # create a TeX package: an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
-  mkTLPkg = pname: attrs:
-    let
-      version = attrs.version or (toString attrs.revision);
-      mkPkgV = tlType: let
-        pkg = attrs // {
-          sha512 = attrs.sha512.${if tlType == "tlpkg" then "run" else tlType};
-          inherit pname tlType version;
-        };
-        in mkPkg pkg;
-    in {
-      # TL pkg contains lists of packages: runtime files, docs, sources, tlpkg, binaries
-      pkgs =
-        # tarball of a collection/scheme itself only contains a tlobj file
-        [( if (attrs.hasRunfiles or false) then mkPkgV "run"
-            # the fake derivations are used for filtering of hyphenation patterns and formats
-          else {
-            inherit pname version;
-            tlType = "run";
-            hasFormats = attrs.hasFormats or false;
-            hasHyphens = attrs.hasHyphens or false;
-            tlDeps = map (n: tl.${n}) (attrs.deps or []);
-          }
-        )]
-        ++ lib.optional (attrs.sha512 ? doc) (mkPkgV "doc")
-        ++ lib.optional (attrs.sha512 ? source) (mkPkgV "source")
-        ++ lib.optional (attrs.hasTlpkg or false) (mkPkgV "tlpkg")
-        ++ lib.optional (bin ? ${pname})
-            ( bin.${pname} // { tlType = "bin"; } );
+  overriddenTlpdb = let
+    overrides = import ./tlpdb-overrides.nix {
+      inherit
+        stdenv lib bin tlpdb tlpdbxz tl
+        installShellFiles
+        coreutils findutils gawk getopt ghostscript_headless gnugrep
+        gnumake gnupg gnused gzip ncurses perl python3 ruby zip;
     };
+  in overrides tlpdb;
 
   version = {
     # day of the snapshot being taken
@@ -130,7 +60,7 @@ let
   # need to be used instead. Ideally, for the release branches of NixOS we
   # should be switching to the tlnet-final versions
   # (https://tug.org/historic/).
-  urlPrefixes = with version; lib.optionals final  [
+  mirrors = with version; lib.optionals final  [
     # tlnet-final snapshot; used when texlive.tlpdb is frozen
     # the TeX Live yearly freeze typically happens in mid-March
     "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString texliveYear}/tlnet-final"
@@ -144,7 +74,7 @@ let
   ];
 
   tlpdbxz = fetchurl {
-    urls = map (up: "${up}/tlpkg/texlive.tlpdb.xz") urlPrefixes;
+    urls = map (up: "${up}/tlpkg/texlive.tlpdb.xz") mirrors;
     hash = "sha256-vm7DmkH/h183pN+qt1p1wZ6peT2TcMk/ae0nCXsCoMw=";
   };
 
@@ -159,87 +89,21 @@ let
   # map: name -> fixed-output hash
   fixedHashes = lib.optionalAttrs useFixedHashes (import ./fixed-hashes.nix);
 
-  # NOTE: the fixed naming scheme must match generated-fixed-hashes.nix
-  # name for the URL
-  mkURLName = { pname, tlType, ... }: pname + lib.optionalString (tlType != "run" && tlType != "tlpkg") ".${tlType}";
-  # name + revision for the fixed output hashes
-  mkFixedName = { tlType, revision, extraRevision ? "", ... }@attrs: mkURLName attrs + (lib.optionalString (tlType == "tlpkg") ".tlpkg") + ".r${toString revision}${extraRevision}";
-  # name + version for the derivation
-  mkTLName = { tlType, version, extraVersion ? "", ... }@attrs: mkURLName attrs + (lib.optionalString (tlType == "tlpkg") ".tlpkg") + "-${version}${extraVersion}";
+  buildTeXLivePackage = import ./build-texlive-package.nix {
+    inherit lib fetchurl runCommand bash jdk perl python3 ruby snobol4 tk;
+    texliveBinaries = bin;
+  };
 
-  # create a derivation that contains an unpacked upstream TL package
-  mkPkg = { pname, tlType, revision, version, sha512, extraRevision ? "", postUnpack ? "", stripPrefix ? 1, ... }@args:
-    let
-      # the basename used by upstream (without ".tar.xz" suffix)
-      urlName = mkURLName args;
-      tlName = mkTLName args;
-      fixedHash = fixedHashes.${mkFixedName args} or null; # be graceful about missing hashes
-
-      urls = args.urls or (if args ? url then [ args.url ] else
-        map (up: "${up}/archive/${urlName}.r${toString revision}.tar.xz") (args.urlPrefixes or urlPrefixes));
-
-    in runCommand "texlive-${tlName}"
-      ( {
-          src = fetchurl { inherit urls sha512; };
-          meta = {
-            license = map (x: lib.licenses.${x}) (args.license or []);
-          };
-          inherit stripPrefix tlType;
-          # metadata for texlive.combine
-          passthru = {
-            inherit pname tlType revision version extraRevision;
-          } // lib.optionalAttrs (tlType == "run" && args ? deps) {
-            tlDeps = map (n: tl.${n}) args.deps;
-          } // lib.optionalAttrs (tlType == "run") {
-            hasFormats = args.hasFormats or false;
-            hasHyphens = args.hasHyphens or false;
-          } // lib.optionalAttrs (tlType == "tlpkg" && args ? postactionScript) {
-            postactionScript = args.postactionScript;
-          };
-        } // lib.optionalAttrs (fixedHash != null) {
-          outputHash = fixedHash;
-          outputHashAlgo = "sha256";
-          outputHashMode = "recursive";
-        }
-      )
-      ( ''
-          mkdir "$out"
-          if [[ "$tlType"  == "tlpkg" ]]; then
-            tar -xf "$src" \
-              --strip-components=1 \
-              -C "$out" --anchored --exclude=tlpkg/tlpobj --exclude=tlpkg/installer --exclude=tlpkg/gpg --keep-old-files \
-              tlpkg
-          else
-            tar -xf "$src" \
-              --strip-components="$stripPrefix" \
-              -C "$out" --anchored --exclude=tlpkg --keep-old-files
-          fi
-        '' + postUnpack
-      );
-
-  # combine a set of TL packages into a single TL meta-package
-  combinePkgs = pkgList: lib.catAttrs "pkg" (
-    let
-      # a TeX package is an attribute set { pkgs = [ ... ]; ... } where pkgs is a list of derivations
-      # the derivations make up the TeX package and optionally (for backward compatibility) its dependencies
-      tlPkgToSets = { pkgs, ... }: map ({ tlType, version ? "", outputName ? "", ... }@pkg: {
-          # outputName required to distinguish among bin.core-big outputs
-          key = "${pkg.pname or pkg.name}.${tlType}-${version}-${outputName}";
-          inherit pkg;
-        }) pkgs;
-      pkgListToSets = lib.concatMap tlPkgToSets; in
-    builtins.genericClosure {
-      startSet = pkgListToSets pkgList;
-      operator = { pkg, ... }: pkgListToSets (pkg.tlDeps or []);
-    });
+  tl = lib.mapAttrs (pname: { revision, extraRevision ? "", ... }@args:
+    buildTeXLivePackage (args
+      # NOTE: the fixed naming scheme must match generate-fixed-hashes.nix
+      // { inherit mirrors pname; fixedHashes = fixedHashes."${pname}-${toString revision}${extraRevision}" or { }; }
+      // lib.optionalAttrs (args ? deps) { deps = map (n: tl.${n}) (args.deps or [ ]); })
+  ) overriddenTlpdb;
 
   assertions = with lib;
     assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    (!useFixedHashes ||
-      (let all = concatLists (catAttrs "pkgs" (attrValues tl));
-         fods = filter (p: isDerivation p && p.tlType != "bin") all;
-      in builtins.all (p: assertMsg (p ? outputHash) "The TeX Live package '${p.pname + lib.optionalString (p.tlType != "run") ("." + p.tlType)}' does not have a fixed output hash. Please read UPGRADING.md on how to build a new 'fixed-hashes.nix'.") fods));
+    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
 in
   tl // {
@@ -250,7 +114,11 @@ in
       xz = tlpdbxz;
     };
 
-    bin = assert assertions; bin;
+    bin = assert assertions; bin // {
+      # for backward compatibility
+      latexindent = lib.findFirst (p: p.tlType == "bin") tl.latexindent.pkgs;
+    };
+
     combine = assert assertions; combine;
 
     # Pre-defined combined packages for TeX Live schemes,
@@ -263,12 +131,12 @@ in
           scheme-basic = [ free gfl gpl1Only gpl2 gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
           scheme-context = [ bsd2 bsd3 cc-by-sa-40 free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21
             lppl1 lppl13c mit ofl publicDomain x11 ];
-          scheme-full = [ artistic1 artistic1-cl8 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-40 cc-by-sa-10 cc-by-sa-20
-            cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl1Plus gpl2 gpl2Plus gpl3 gpl3Plus isc knuth
+          scheme-full = [ artistic1-cl8 artistic2 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-40 cc-by-sa-10 cc-by-sa-20
+            cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth
             lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
           scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 fdl13Only free gfl gfsl gpl1Only gpl2
             gpl2Plus gpl3 gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-          scheme-infraonly = [ gpl2 lgpl21 ];
+          scheme-infraonly = [ gpl2 gpl2Plus lgpl21 ];
           scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 fdl13Only
             free gfl gpl1Only gpl2 gpl2Plus gpl3 gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl
             publicDomain x11 ];

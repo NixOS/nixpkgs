@@ -9,15 +9,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.19.2";
-  format = "setuptools";
+  version = "0.19.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    hash = "sha256-FyQcsKCHsAB8BmPxeIZdiidaxyNi/5bFA/ilGydDVM0=";
+    hash = "sha256-+WD+SV/L3TvksWBIg6jk+T0dUTNdp4VKONzdzVT+pac=";
   };
+
+  nativeBuildInputs = [
+    python3.pkgs.setuptools
+  ];
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [ nix nix-prefetch-git nixpkgs-fmt nixpkgs-review ])

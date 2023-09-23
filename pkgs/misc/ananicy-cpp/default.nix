@@ -14,14 +14,14 @@
 
 clangStdenv.mkDerivation rec {
   pname = "ananicy-cpp";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "ananicy-cpp";
     repo = "ananicy-cpp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-BomtP9KcipBJuZjra/ojRyJi+pgktxGGEdt86N1H9Hc=";
+    sha256 = "sha256-oPinSc00+Z6SxjfTh7DttcXSjsLv1X0NI+O37C8M8GY=";
   };
 
   strictDeps = true;

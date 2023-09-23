@@ -1,8 +1,10 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
-  version = "5.15.9";
-  overrides = {};
+  version = "5.15.10";
+  overrides = {
+    qtscript.version = "5.15.9";
+  };
 
   mk = name: args:
     let
@@ -74,37 +76,15 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     hash = "sha256-LPfBCEB5tJOljXpptsNk0sHGtJf/wIRL7fccN79Nh6o=";
   };
 
-  qtwebengine =
-    let
-      branchName = "5.15.13";
-      rev = "v${branchName}-lts";
-    in
-    {
-      version = branchName;
+  qtwebengine = rec {
+      version = "5.15.14";
 
-      src = fetchgit {
-        url = "https://github.com/qt/qtwebengine.git";
-        sha256 = "sha256-gZmhJTA5A3+GeySJoppYGffNC6Ych2pOYlsu3w+fnmw=";
-        inherit rev branchName;
+      src = fetchFromGitHub {
+        owner = "qt";
+        repo = "qtwebengine";
+        rev = "v${version}-lts";
+        hash = "sha256-jIoNwRdr0bZ2p0UMp/KDQuwgNjhzzGlb91UGjQgT60Y=";
         fetchSubmodules = true;
-        leaveDotGit = true;
-        name = "qtwebengine-${lib.substring 0 8 rev}.tar.gz";
-        postFetch = ''
-          # remove submodule .git directory
-          rm -rf "$out/src/3rdparty/.git"
-
-          # compress to not exceed the 2GB output limit
-          # try to make a deterministic tarball
-          tar -I 'gzip -n' \
-            --sort=name \
-            --mtime=1970-01-01 \
-            --owner=root --group=root \
-            --numeric-owner --mode=go=rX,u+rw,a-s \
-            --transform='s@^@source/@' \
-            -cf temp  -C "$out" .
-          rm -r "$out"
-          mv temp "$out"
-        '';
       };
     };
 }

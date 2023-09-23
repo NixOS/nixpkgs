@@ -9,6 +9,7 @@
 , cjs
 , evolution-data-server
 , fetchFromGitHub
+, fetchpatch
 , gdk-pixbuf
 , gettext
 , libgnomekbd
@@ -84,6 +85,13 @@ stdenv.mkDerivation rec {
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+
+    # Backport pillow 10.0.0 support.
+    # https://github.com/linuxmint/cinnamon/issues/11746
+    (fetchpatch {
+      url = "https://github.com/linuxmint/cinnamon/commit/fce9aad1ebb290802dc550e8dae6344dddf9dec1.patch";
+      hash = "sha256-flt7CblfXlLieAVNeC8TBnv1TX0Zca1obPWusBMnIxE=";
+    })
   ];
 
   buildInputs = [

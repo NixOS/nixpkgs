@@ -123,7 +123,7 @@ let
         # ZFS properties such as `setuid=off` and `exec=off` (unless manually
         # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
         copy_bin_and_libs ${lib.getOutput "mount" pkgs.util-linux}/bin/mount
-        copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
+        copy_bin_and_libs ${config.boot.zfs.package}/bin/mount.zfs
       ''}
 
       # Copy some util-linux stuff.

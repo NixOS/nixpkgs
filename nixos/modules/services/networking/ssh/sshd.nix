@@ -33,8 +33,7 @@ let
     ${cfg.extraConfig}
     EOL
 
-    ssh-keygen -q -f mock-hostkey -N ""
-    sshd -t -f $out -h mock-hostkey
+    sshd -G -f $out
   '';
 
   cfg  = config.services.openssh;

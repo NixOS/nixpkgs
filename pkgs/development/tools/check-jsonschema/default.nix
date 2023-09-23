@@ -4,7 +4,7 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "check-jsonschema";
-  version = "0.21.0";
+  version = "0.23.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -13,7 +13,7 @@ buildPythonApplication rec {
     owner = "python-jsonschema";
     repo = "check-jsonschema";
     rev = version;
-    hash = "sha256-7cXnV27LCG1MXDH28UBmUC4sLooH2gKvGYF3YijLB38=";
+    hash = "sha256-gPFG1AgInakF8leMM0c1zZt2OdZdIKcUmItwICV8p1I=";
   };
 
   propagatedBuildInputs = [
@@ -28,16 +28,6 @@ buildPythonApplication rec {
     pytest-xdist
     responses
   ];
-
-  pytestFlagsArray = [
-    # DeprecationWarning: Accessing jsonschema.draft3_format_checker is deprecated and will be removed in a future release. Instead, use the FORMAT_CHECKER attribute on the corresponding Validator.
-    "-W" "ignore::DeprecationWarning"
-  ];
-
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
-    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
-    export no_proxy='*';
-  '';
 
   pythonImportsCheck = [
     "check_jsonschema"

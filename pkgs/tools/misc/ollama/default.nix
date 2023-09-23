@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ollama";
-  version = "0.0.12";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "jmorganca";
     repo = "ollama";
     rev = "v${version}";
-    hash = "sha256-TEifqWVgZjrQcq9eDjfRgUff9vdsO3Fx2hZZJVJZLsU=";
+    hash = "sha256-idsFcjsRD1zPmG742gnYQJcgSWDA2DLMHksCFNe2GiY=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
@@ -22,7 +22,7 @@ buildGoModule rec {
     MetalKit
   ]);
 
-  vendorHash = "sha256-KtpEqGXLpwH0NXFjb0F/SUBxP7BLEiEg3NouC0ZQOPs=";
+  vendorHash = "sha256-IgEf/WOc1eNGCif1fViIFxbgZAd6mHBqfxcaqH/WvGg=";
 
   ldflags = [ "-s" "-w" ];
 

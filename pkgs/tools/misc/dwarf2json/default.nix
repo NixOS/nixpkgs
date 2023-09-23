@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-hnS00glAcj78mZp5as63CsEn+dcr+GNEkz8iC3KM0h0=";
   };
 
-  vendorSha256 = "sha256-tgs0l+sYdAxMHwVTew++keNpDyrHmevpmOBVIiuL+34=";
+  vendorHash = "sha256-tgs0l+sYdAxMHwVTew++keNpDyrHmevpmOBVIiuL+34=";
 
   meta = with lib; {
     homepage = "https://github.com/volatilityfoundation/dwarf2json";

@@ -35,7 +35,7 @@ buildGoModule {
 
   src = x509;
 
-  vendorSha256 = "sha256-ENtTnDsz5WhRz1kiqnWQ5vyEpZtgi7ZeYvksffgW78k=";
+  vendorHash = "sha256-ENtTnDsz5WhRz1kiqnWQ5vyEpZtgi7ZeYvksffgW78k=";
 
   # Override the goModules fetcher derivation to apply
   # upstream's patch of the crypto/x509 library.

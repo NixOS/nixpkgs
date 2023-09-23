@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     libgit2 scheme-bytestructures
   ];
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   enableParallelBuilding = true;

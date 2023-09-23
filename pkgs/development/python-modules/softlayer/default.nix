@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
-  version = "6.1.7";
+  version = "6.1.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "softlayer-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WL/hv1/eB8/ynSo0XOTOYE2rGWV/4VsgSQsRioR2ACE=";
+    hash = "sha256-6LZ2vy6nkyWA7xbUl4aNi2ygRWDJTj7J9Af0GTvNLd4=";
   };
 
   postPatch = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, bash, nodePackages, unzip }:
+{ lib, stdenv, fetchFromGitHub, nodejs, bash, asar, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "openasar";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     bash scripts/injectPolyfills.sh
     substituteInPlace src/index.js --replace 'nightly' '${version}'
     ${nodejs}/bin/node scripts/strip.js
-    ${nodePackages.asar}/bin/asar pack src app.asar
+    ${asar}/bin/asar pack src app.asar
 
     runHook postBuild
   '';

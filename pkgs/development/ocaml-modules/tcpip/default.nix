@@ -1,8 +1,8 @@
 { lib, buildDunePackage, fetchurl
-, ppx_cstruct, pkg-config
+, pkg-config
 , cstruct, cstruct-lwt, mirage-net, mirage-clock
 , mirage-random, mirage-time
-, ipaddr, macaddr, macaddr-cstruct, mirage-profile, fmt
+, macaddr, macaddr-cstruct, fmt
 , lwt, lwt-dllist, logs, duration, randomconv, ethernet
 , alcotest, mirage-flow, mirage-vnetif, pcap-format
 , mirage-clock-unix, arp, ipaddr-cstruct, mirage-random-test
@@ -13,13 +13,11 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "7.1.2";
-
-  duneVersion = "3";
+  version = "8.0.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-lraur6NfFD9yddG+y21jlHKt82gLgYBBbedltlgcRm0=";
+    hash = "sha256-NrTBVr4WcCukxteBotqLoUYrIjcNFVcOERYFbL8CUjM=";
   };
 
   nativeBuildInputs = [
@@ -27,17 +25,15 @@ buildDunePackage rec {
   ];
 
   propagatedBuildInputs = [
-    ppx_cstruct
     cstruct
     cstruct-lwt
     mirage-net
     mirage-clock
     mirage-random
     mirage-time
-    ipaddr
+    ipaddr-cstruct
     macaddr
     macaddr-cstruct
-    mirage-profile
     fmt
     lwt
     lwt-dllist
@@ -61,7 +57,6 @@ buildDunePackage rec {
     mirage-vnetif
     pcap-format
     mirage-clock-unix
-    ipaddr-cstruct
   ];
   __darwinAllowLocalNetworking = true;
 

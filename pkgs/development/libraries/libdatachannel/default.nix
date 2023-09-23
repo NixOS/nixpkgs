@@ -12,28 +12,15 @@
 , usrsctp
 }:
 
-let
-  # Use usrsctp version specified at https://github.com/paullouisageneau/libdatachannel/tree/master/deps
-  # Older or newer usrsctp might break libdatachannel, please keep it synced with upstream.
-  customUsrsctp = usrsctp.overrideAttrs (finalAttrs: previousAttrs: {
-    version = "unstable-2021-10-08";
-    src = fetchFromGitHub {
-      owner = "sctplab";
-      repo = "usrsctp";
-      rev = "7c31bd35c79ba67084ce029511193a19ceb97447";
-      hash = "sha256-KeOR/0WDtG1rjUndwTUOhE21PoS+ETs1Vk7jQYy/vNs=";
-    };
-  });
-in
 stdenv.mkDerivation rec {
   pname = "libdatachannel";
-  version = "0.18.5";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ognjEDw68DpdQ/4JqcTejP5f9K0zLZGnpr99P/dvHK4=";
+    hash = "sha256-jsJTECSR3ptiByfYQ00laeKMKJCv5IDkZmilY3jpRrU=";
   };
 
   outputs = [ "out" "dev" ];
@@ -48,21 +35,15 @@ stdenv.mkDerivation rec {
     libnice
     openssl
     srtp
+    usrsctp
+    plog
   ];
 
   cmakeFlags = [
     "-DUSE_NICE=ON"
-    "-DUSE_SYSTEM_SRTP=ON"
+    "-DPREFER_SYSTEM_LIB=ON"
     "-DNO_EXAMPLES=ON"
   ];
-
-  postPatch = ''
-    # TODO: Remove when updating to 0.19.x, and add
-    # -DUSE_SYSTEM_USRSCTP=ON and -DUSE_SYSTEM_PLOG=ON to cmakeFlags instead
-    mkdir -p deps/{usrsctp,plog}
-    cp -r --no-preserve=mode ${srcOnly customUsrsctp}/. deps/usrsctp
-    cp -r --no-preserve=mode ${srcOnly plog}/. deps/plog
-  '';
 
   postFixup = ''
     # Fix shared library path that will be incorrect on move to "dev" output

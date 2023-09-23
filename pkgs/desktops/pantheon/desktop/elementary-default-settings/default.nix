@@ -10,18 +10,17 @@
 , dbus
 , polkit
 , accountsservice
-, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "7.0.2";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
     rev = version;
-    sha256 = "sha256-YFI1UM7CxjYkoIhSg9Fn81Ze6DX7D7p89xibk7ik8bI=";
+    sha256 = "sha256-j4K8qYwfu6/s4qnTSzwv6KRsk9f+Qr/l1bhLywKMHMU=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     polkit
-    python3
   ];
 
   mesonFlags = [
@@ -40,11 +38,6 @@ stdenv.mkDerivation rec {
     "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
     "-Dplank-dockitems=false"
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   preInstall = ''
     # Install our override for plank dockitems as the desktop file path is different.

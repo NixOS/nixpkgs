@@ -13,16 +13,16 @@
 , pulseaudio
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wf-shell";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
-    repo = pname;
-    rev = "v${version}";
+    repo = "wf-shell";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-iQUBuNjbZuf51A69RC6NsMHFZCFRv+d9XZ0HtP6OpOA=";
+    hash = "sha256-iQUBuNjbZuf51A69RC6NsMHFZCFRv+d9XZ0HtP6OpOA=";
   };
 
   nativeBuildInputs = [
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "--sysconfdir /etc" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/WayfireWM/wf-shell";
     description = "GTK3-based panel for Wayfire";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss wucke13 rewine ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss wucke13 rewine ];
+    platforms = lib.platforms.unix;
   };
-}
+})

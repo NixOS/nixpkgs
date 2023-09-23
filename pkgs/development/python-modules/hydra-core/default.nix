@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , antlr4
 , antlr4-python3-runtime
 , buildPythonPackage
@@ -83,7 +82,6 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;

@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
     platforms = platforms.linux;
+    mainProgram = "strawberry";
   };
 }

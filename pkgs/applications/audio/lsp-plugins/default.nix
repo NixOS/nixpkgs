@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.2.7";
+  version = "1.2.10";
 
   src = fetchurl {
     url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-UCyPOGfa8tVTZzE5ynv/Ov0L+Q6SjAAIwb3jX8X/x0M=";
+    sha256 = "sha256-2Yf+4TYGWF/AMI1kNvVOx9g6CSIoeZKY63qC/zJNilc=";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
         Contains the following plugins (https://lsp-plug.in/?page=plugins)
 
         Equalizers:
+        - Fliter
         - Graphic Equalizer
         - Parametric Equalizer
         Dynamic Processing:
@@ -56,10 +57,12 @@ stdenv.mkDerivation rec {
         - Gate
         - Limiter
         Multiband Dynamic Processing:
+        - GOTT Compressor
         - Multiband Compressor
-        - Multiband Dynamic Processor
+        - Multiband Dynamics Processor
         - Multiband Expander
         - Multiband Gate
+        - Multiband Limiter
         Convolution / Reverb processing:
         - Impulse Responses
         - Impulse Reverb
@@ -82,6 +85,7 @@ stdenv.mkDerivation rec {
         - Oscillator
         Utilitary Plugins:
         - A/B Test Plugin
+        - Flanger
         - Latency Meter
         - Loudness Compensator
         - Mixer
@@ -90,7 +94,7 @@ stdenv.mkDerivation rec {
         - Trigger
       '';
       homepage = "https://lsp-plug.in";
-      maintainers = with maintainers; [ magnetophon ];
+      maintainers = with maintainers; [ magnetophon PowerUser64 ];
       license = licenses.gpl2;
       platforms = platforms.linux;
     };

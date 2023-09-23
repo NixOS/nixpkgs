@@ -73,5 +73,6 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ rnhmjoj ];
+    mainProgram = "monero-wallet-cli";
   };
 }

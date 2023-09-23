@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib mpv-unwrapped ];
 
+  postPatch = ''
+    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+  '';
+
   installFlags = [ "SCRIPTS_DIR=$(out)/share/mpv/scripts" ];
 
   # Otherwise, the shared object isn't `strip`ped. See:

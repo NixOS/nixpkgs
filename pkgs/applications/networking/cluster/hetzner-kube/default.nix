@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "xetys";
     repo = "hetzner-kube";
     rev = version;
-    sha256 = "1iqgpmljqx6rhmvsir2675waj78amcfiw08knwvlmavjgpxx2ysw";
+    hash = "sha256-XHvR+31yq0o3txMBHh2rCh2peDlG5Kh3hdl0LGm9D8c=";
   };
 
   patches = [
@@ -18,7 +18,7 @@ buildGoModule rec {
     ./fix-home.patch
   ];
 
-  vendorSha256 = "1jh2f66ys6rmrrwrf5zqfprgcvziyq6l4z8bfqwxgf1ysnxx525h";
+  vendorHash = "sha256-sIjSu9U+uNc5dgt9Qg328W/28nX4F5d5zjUb7Y1xAso=";
 
   doCheck = false;
 

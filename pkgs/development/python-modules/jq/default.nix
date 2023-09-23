@@ -1,14 +1,24 @@
-{ lib, buildPythonPackage, fetchFromGitHub, cython, jq, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, cython
+, fetchFromGitHub
+, jq
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "jq";
-  version = "1.3.0";
+  version = "1.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "jq.py";
-    rev = version;
-    hash = "sha256-1EQm5ShjFHbO1IO5QD42fsGHFGDBrJulLrcl+WeU7wo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-prH3yUFh3swXGsxnoax09aYAXaiu8o2M21ZbOp9HDJY=";
   };
 
   patches = [
@@ -16,9 +26,13 @@ buildPythonPackage rec {
     ./jq-py-setup.patch
   ];
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  buildInputs = [ jq ];
+  buildInputs = [
+    jq
+  ];
 
   preBuild = ''
     cython jq.pyx
@@ -28,12 +42,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "jq" ];
+  pythonImportsCheck = [
+    "jq"
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for jq, the flexible JSON processor";
     homepage = "https://github.com/mwilliamson/jq.py";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ benley ];
+    changelog = "https://github.com/mwilliamson/jq.py/blob/${version}/CHANGELOG.rst";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ benley ];
   };
 }

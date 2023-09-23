@@ -11,7 +11,7 @@
 , hdf5
 , boost
 , gflags
-, protobuf
+, protobuf3_21
 , config
 , ocl-icd
 , buildPackages
@@ -317,7 +317,7 @@ stdenv.mkDerivation {
     echo '"(build info elided)"' > modules/core/version_string.inc
   '';
 
-  buildInputs = [ zlib pcre boost gflags protobuf ]
+  buildInputs = [ zlib pcre boost gflags protobuf3_21 ]
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) hdf5
     ++ lib.optional enableGtk2 gtk2
@@ -369,7 +369,7 @@ stdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
-    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
+    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf3_21}"
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=${printEnabled runAccuracyTests}"

@@ -52,10 +52,16 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.wait_for_window("budgie-daemon")
           machine.wait_until_succeeds("pgrep budgie-panel")
           machine.wait_for_window("budgie-panel")
+          # We don't check xwininfo for this one.
+          # See https://github.com/NixOS/nixpkgs/pull/216737#discussion_r1155312754
+          machine.wait_until_succeeds("pgrep budgie-wm")
 
       with subtest("Open MATE terminal"):
           machine.succeed("su - ${user.name} -c 'DISPLAY=:0 mate-terminal >&2 &'")
           machine.wait_for_window("Terminal")
+
+      with subtest("Check if budgie-wm has ever coredumped"):
+          machine.fail("coredumpctl --json=short | grep budgie-wm")
           machine.sleep(20)
           machine.screenshot("screen")
     '';

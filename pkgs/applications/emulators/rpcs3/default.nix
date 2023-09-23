@@ -101,5 +101,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ abbradar neonfuz ilian zane ];
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "rpcs3";
   };
 }

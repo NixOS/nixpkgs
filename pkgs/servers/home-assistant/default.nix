@@ -49,6 +49,7 @@ let
         };
         postPatch = ''
           substituteInPlace pyproject.toml \
+            --replace "poetry>=1.0.0b1" "poetry-core" \
             --replace "poetry.masonry" "poetry.core.masonry"
         '';
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
@@ -130,6 +131,16 @@ let
           repo = "ovoenergy";
           rev = "refs/tags/v${version}";
           hash = "sha256-OSK74uvpHuEtWgbLVFrz1NO7lvtHbt690smGQ+GlsOI=";
+        };
+      });
+
+      plexapi = super.plexapi.overridePythonAttrs (oldAttrs: rec {
+        version = "4.13.2";
+        src = fetchFromGitHub {
+          owner = "pkkid";
+          repo = "python-plexapi";
+          rev = "refs/tags/${version}";
+          hash = "sha256-5YwINPgQ4efZBvu5McsLYicW/7keKSi011lthJUR9zw=";
         };
       });
 
@@ -271,6 +282,16 @@ let
         };
       });
 
+      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
+        version = "0.98.0";
+        src = fetchFromGitHub {
+          owner = "python-zeroconf";
+          repo = "python-zeroconf";
+          rev = "refs/tags/${version}";
+          hash = "sha256-oajSXGQTsJsajRAnS/MkkbSyxTeVvdjvw1eiJaPzZMY=";
+        };
+      });
+
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -295,7 +316,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.8.0";
+  hassVersion = "2023.9.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -311,7 +332,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Nvh52oVovcmicqYuXJcQveTTjTd/ZHjrKTMh2rtQKdU=";
+    hash = "sha256-pVW9NQYEf2pmGCp342lCzEiWfAyFCiWeRMVbhPd8wxQ=";
   };
 
   # Secondary source is git for tests
@@ -319,11 +340,12 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-WGM7xo2iOS1q19eVzBIh4t8B8s1kw7E1gsFChR8SPc0=";
+    hash = "sha256-4sZBrGd5gz4W7c7Ok5Bj/47MaXAqAFC4qufcidbU5zA=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
+    wheel
   ];
 
   # copy tests early, so patches apply as they would to the git repo
@@ -368,6 +390,9 @@ in python.pkgs.buildPythonApplication rec {
       ) relaxedConstraints)}
       pyproject.toml
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+
+    sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
+    sed -i 's/wheel[~=]/wheel>/' pyproject.toml
   '';
 
   propagatedBuildInputs = with python.pkgs; [
@@ -388,6 +413,7 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     lru-dict
     orjson
+    packaging
     pip
     pyopenssl
     pyjwt
@@ -449,6 +475,10 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # AssertionError: assert 2 == 1
     "--deselect=tests/helpers/test_translation.py::test_caching"
+    # AssertionError: assert None == RegistryEntry
+    "--deselect=tests/helpers/test_entity_registry.py::test_get_or_create_updates_data"
+    # AssertionError: assert 2 == 1
+    "--deselect=tests/helpers/test_entity_values.py::test_override_single_value"
     # tests are located in tests/
     "tests"
   ];

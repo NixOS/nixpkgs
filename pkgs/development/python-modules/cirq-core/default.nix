@@ -104,6 +104,8 @@ buildPythonPackage rec {
     "test_benchmark_2q_xeb_fidelities"
     # https://github.com/quantumlib/Cirq/pull/5991
     "test_json_and_repr_data"
+    # Tests for some changed error handling behavior in SymPy 1.12
+    "test_custom_value_not_implemented"
   ];
 
   meta = with lib; {

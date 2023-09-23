@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qtcreator";
-  version = "11.0.1";
+  version = "11.0.2";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    hash = "sha256-T55ZOFPPO/gGxlc6u2/EF2dhQWAj2X3e0H4ZxFbW23M=";
+    hash = "sha256-nemSXfzgrR5vzDevdEHhBS3d0V+XIGSTdY2DA0eaLQM=";
   };
 
   nativeBuildInputs = [
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
       advanced code editor, a visual debugger and a GUI designer.
     '';
     homepage = "https://wiki.qt.io/Qt_Creator";
-    license = licenses.lgpl3Plus;
+    license = licenses.gpl3Only; # annotated with The Qt Company GPL Exception 1.0
     maintainers = [ maintainers.rewine ];
     platforms = platforms.linux;
   };

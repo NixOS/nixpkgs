@@ -25,7 +25,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X oss.terrastruct.com/d2/lib/version.Version=${version}"
+    "-X oss.terrastruct.com/d2/lib/version.Version=v${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -41,7 +41,10 @@ buildGoModule rec {
     export TESTDATA_ACCEPT=1
   '';
 
-  passthru.tests.version = testers.testVersion { package = d2; };
+  passthru.tests.version = testers.testVersion {
+    package = d2;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "A modern diagram scripting language that turns text to diagrams";

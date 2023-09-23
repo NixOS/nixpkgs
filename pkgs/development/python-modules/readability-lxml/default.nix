@@ -31,8 +31,12 @@ buildPythonPackage rec {
     timeout-decorator
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Test is broken on darwin. Fix in master from https://github.com/buriy/python-readability/pull/178
+    "test_many_repeated_spaces"
+  ];
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
     license = licenses.asl20;

@@ -89,7 +89,7 @@ in {
         options = {
           enable = mkEnableOption (mdDoc "GameScope Session");
           args = mkOption {
-            type = types.listOf types.string;
+            type = types.listOf types.str;
             default = [ ];
             description = mdDoc ''
               Arguments to be passed to GameScope for the session.
@@ -97,7 +97,7 @@ in {
           };
 
           env = mkOption {
-            type = types.attrsOf types.string;
+            type = types.attrsOf types.str;
             default = { };
             description = mdDoc ''
               Environmental variables to be passed to GameScope for the session.

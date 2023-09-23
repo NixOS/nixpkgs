@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/jeffvli/feishin/releases/download/v${version}/${appname}-${version}-mac-x64.zip";
-    hash = "sha256-WzU/Yd3cNMIpmkKWC29mQlviYXiYV5k8+80iyzilPGc=";
+    hash = "sha256-J5LB4uR/NJ6ykiTqBY1VepcLujprgqwpxy7sGD0NtZw=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];

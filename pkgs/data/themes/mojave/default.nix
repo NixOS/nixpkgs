@@ -103,7 +103,7 @@ stdenvNoCC.mkDerivation rec {
     done
 
     ${lib.optionalString wallpapers ''
-      for f in ../wallpapers/Mojave{,-timed}.xml; do
+      for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
         substituteInPlace $f --replace /usr $out
       done
     ''}
@@ -123,9 +123,9 @@ stdenvNoCC.mkDerivation rec {
     ${lib.optionalString wallpapers ''
       mkdir -p $out/share/backgrounds/Mojave
       mkdir -p $out/share/gnome-background-properties
-      cp -a ../wallpapers/Mojave*.jpeg $out/share/backgrounds/Mojave/
-      cp -a ../wallpapers/Mojave-timed.xml $out/share/backgrounds/Mojave/
-      cp -a ../wallpapers/Mojave.xml $out/share/gnome-background-properties/
+      cp -a ../${wallpapers_src.name}/Mojave*.jpeg $out/share/backgrounds/Mojave/
+      cp -a ../${wallpapers_src.name}/Mojave-timed.xml $out/share/backgrounds/Mojave/
+      cp -a ../${wallpapers_src.name}/Mojave.xml $out/share/gnome-background-properties/
     ''}
 
     # Replace duplicate files with soft links to the first file in each

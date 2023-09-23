@@ -1,30 +1,87 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, pytest, mock, brotli }:
+{ lib
+, brotli
+, buildPythonPackage
+, cython
+, execnet
+, fetchFromGitHub
+, jinja2
+, pytestCheckHook
+, pythonOlder
+, pyzmq
+, redis
+, setuptools
+, sqlalchemy
+}:
 
 buildPythonPackage rec {
   pname = "logbook";
-  version = "1.5.3";
+  version = "1.6.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    pname = "Logbook";
-    inherit version;
-    sha256 = "1s1gyfw621vid7qqvhddq6c3z2895ci4lq3g0r1swvpml2nm9x36";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "getlogbook";
+    repo = "logbook";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2K6fM6MFrh3l0smhSz8RFd79AIOXQZJQbNLTJM4WZUo=";
   };
 
-  nativeCheckInputs = [ pytest ] ++ lib.optionals (!isPy3k) [ mock ];
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ brotli ];
+  passthru.optional-dependencies = {
+    execnet = [
+      execnet
+    ];
+    sqlalchemy = [
+      sqlalchemy
+    ];
+    redis = [
+      redis
+    ];
+    zmq = [
+      pyzmq
+    ];
+    compression = [
+      brotli
+    ];
+    jinja = [
+      jinja2
+    ];
+    all = [
+      brotli
+      execnet
+      jinja2
+      pyzmq
+      redis
+      sqlalchemy
+    ];
+  };
 
-  checkPhase = ''
-    find tests -name \*.pyc -delete
-    py.test tests
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
-  meta = {
-    homepage = "https://pythonhosted.org/Logbook/";
+  pythonImportsCheck = [
+    "logbook"
+  ];
+
+  disabledTests = [
+    # Test require Redis instance
+    "test_redis_handler"
+  ];
+
+  meta = with lib; {
     description = "A logging replacement for Python";
-    license = lib.licenses.bsd3;
+    homepage = "https://logbook.readthedocs.io/";
+    changelog = "https://github.com/getlogbook/logbook/blob/${version}/CHANGES";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

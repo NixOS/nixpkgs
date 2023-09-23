@@ -81,6 +81,7 @@ CORES = {
     "puae": {"repo": "libretro-uae"},
     "quicknes": {"repo": "QuickNES_Core"},
     "sameboy": {"repo": "sameboy"},
+    "same_cdi": {"repo": "same_cdi"},
     "scummvm": {"repo": "scummvm"},
     "smsplus-gx": {"repo": "smsplus-gx"},
     "snes9x": {"repo": "snes9x", "owner": "snes9xgit"},

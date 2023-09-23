@@ -13,6 +13,7 @@ lib.recurseIntoAttrs
     inhibit-gnome = callPackage ./inhibit-gnome.nix { };
     mpris = callPackage ./mpris.nix { };
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
+    mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
     quality-menu = callPackage ./quality-menu.nix { };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
@@ -20,6 +21,7 @@ lib.recurseIntoAttrs
     thumbfast = callPackage ./thumbfast.nix { };
     thumbnail = callPackage ./thumbnail.nix { };
     uosc = callPackage ./uosc.nix { };
+    visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
     cutter = callPackage ./cutter.nix { };

@@ -97,7 +97,7 @@ let
     else stdenv;
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
-  version = "0.35.1";
+  version = "0.36.0";
 
   outputs = [ "out" "dev" "man" ];
 
@@ -105,15 +105,16 @@ in stdenv'.mkDerivation (finalAttrs: {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-CoYTX9hgxLo72YdMoa0sEywg4kybHbFsypHk1rCM6tM=";
+    hash = "sha256-82moFbWvfc1awXih0d0D+dHqYbIoGNZ77RmafQ80IOY=";
   };
 
   patches = [
+    # Revert "meson: use the new build_options method" to avoid a
+    # cycle between the out and dev outputs.
     (fetchpatch {
-      # fixes EDL error on youtube DASH streams https://github.com/mpv-player/mpv/issues/11392
-      # to be removed on next release
-      url = "https://github.com/mpv-player/mpv/commit/94c189dae76ba280d9883b16346c3dfb9720687e.patch";
-      sha256 = "sha256-GeAltLAwkOKk82YfXYSrkNEX08uPauh7+kVbBGPWeT8=";
+      url = "https://github.com/mpv-player/mpv/commit/3c1686488b48bd2760e9b19f42e7d3be1363d00a.patch";
+      hash = "sha256-eYXfX8Y08q4Bl41VHBpwbxYRMZgm/iziXeK6AOp8O6I=";
+      revert = true;
     })
   ];
 

@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix shell -i python3 -p python3 python3.pkgs.semver nix-prefetch-github
+#! nix-shell -i python3 -p python3 python3.pkgs.semver nix-prefetch-github
 from urllib.request import Request, urlopen
 import dataclasses
 import subprocess

@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guacamole-server";
-  version = "1.5.2";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "guacamole-server";
     rev = finalAttrs.version;
-    hash = "sha256-L1hFZ24kwTSHwqCUslnt5cBKkNh1cpVxu1ntTN1gFr0=";
+    hash = "sha256-8VPhaZ+XnbDElF5MOpbA8MDDTUkou9O2z4NUdWwW4FM=";
   };
 
   NIX_CFLAGS_COMPILE = [
@@ -89,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Clientless remote desktop gateway";
     homepage = "https://guacamole.apache.org/";
     license = lib.licenses.asl20;
+    mainProgram = "guacd";
     maintainers = [ lib.maintainers.drupol ];
     platforms = [ "x86_64-linux" "i686-linux" ];
-    mainProgram = "guacd";
   };
 })

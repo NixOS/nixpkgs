@@ -91,7 +91,7 @@ buildDhallPackage {
 let
   nixpkgs = builtins.fetchTarball {
     url    = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
-    sha256 = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
+    hash = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
   dhallOverlay = self: super: {

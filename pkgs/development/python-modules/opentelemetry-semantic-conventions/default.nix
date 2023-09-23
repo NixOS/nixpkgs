@@ -11,7 +11,7 @@ buildPythonPackage {
   pname = "opentelemetry-semantic-conventions";
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/opentelemetry-semantic-conventions";
+  sourceRoot = "${opentelemetry-api.src.name}/opentelemetry-semantic-conventions";
 
   format = "pyproject";
 

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "meshtastic";
-  version = "2.1.11";
+  version = "2.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "meshtastic";
     repo = "Meshtastic-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-nYbnOlD3yC3aoSSY4jwSgTv/m56I+ral2GwmoyQij1M=";
+    hash = "sha256-JnheGeiLJMI0zsb+jiuMxjXg/3rDbMyA2XVtl1ujiso=";
   };
 
   propagatedBuildInputs = [
@@ -110,6 +110,7 @@ buildPythonPackage rec {
     "test_MeshInterface"
     "test_getNode_not_local"
     "test_getNode_not_local_timeout"
+    "test_main_onConnected_exception"
   ];
 
   meta = with lib; {

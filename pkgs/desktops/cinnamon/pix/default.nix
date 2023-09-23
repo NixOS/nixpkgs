@@ -1,7 +1,7 @@
 { stdenv
 , lib
-, fetchurl
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -42,6 +42,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-iNUhcHG4nCZ4WNELodyLdztzfNg9g+F0eQrZHXS6Zj0=";
   };
+
+  patches = [
+    # Fix build with exiv2 0.28, can be removed on next update
+    # https://github.com/linuxmint/pix/pull/178
+    (fetchpatch {
+      url = "https://github.com/linuxmint/pix/commit/46e19703a973d51fa97e6a22121560f5ba200eea.patch";
+      sha256 = "sha256-Z+pUxoy0m/agXW++YxEUhRuax0qvuGVXNhU8d9mvGh4=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison

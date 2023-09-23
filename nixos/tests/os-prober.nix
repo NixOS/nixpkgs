@@ -76,6 +76,7 @@ in {
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
         [
+          bintools
           brotli
           brotli.dev
           brotli.lib

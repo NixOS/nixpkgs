@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       runHook preInstallCheck
 
       echo -e "#include<stdio.h>\nint main() {printf(\"Hello, world\");return 0;}" > hello.c
-      ${riscvPkgs.stdenv.cc}/bin/riscv64-none-elf-gcc -o hello hello.c
+      ${riscvPkgs.stdenv.cc}/bin/${riscvPkgs.stdenv.cc.targetPrefix}cc -o hello hello.c
       $out/bin/spike -m64 ${riscvPkgs.riscv-pk}/bin/pk hello | grep -Fq "Hello, world"
 
       runHook postInstallCheck

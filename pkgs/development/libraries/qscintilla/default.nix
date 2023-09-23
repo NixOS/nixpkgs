@@ -3,12 +3,19 @@
 , fetchurl
 , unzip
 , qtbase
-, qtmacextras
+, qtmacextras ? null
 , qmake
 , fixDarwinDylibNames
+, darwin
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if stdenv.isDarwin then
+    darwin.apple_sdk_11_0.stdenv
+  else
+    stdenv
+  ;
+in stdenv'.mkDerivation rec {
   pname = "qscintilla-qt5";
   version = "2.13.2";
 
@@ -63,5 +70,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+    # ld: library not found for -lcups
+    broken = stdenv.isDarwin && lib.versionAtLeast qtbase.version "6";
   };
 }

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  enableParallelBuilding = true;
+
   configureFlags = lib.optional exampleSupport "--enable-example";
 
   meta = with lib; {

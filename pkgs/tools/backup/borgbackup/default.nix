@@ -6,7 +6,7 @@
 , lz4
 , openssh
 , openssl
-, python3
+, python3Packages
 , xxHash
 , zstd
 , installShellFiles
@@ -14,14 +14,14 @@
 , fetchPypi
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.2.4";
+  version = "1.2.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pL1U6UaegbejCmcRQjEVq8gY2c2ETsscoOYQS8U3Tag=";
+    hash = "sha256-t6b48IYDnu7HkHC5FPPGUe1/NhLJZTdK+RDSd8eiE50=";
   };
 
   postPatch = ''
@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "0o4755" "0o0755"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3Packages; [
     cython
     setuptools-scm
     pkgconfig
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
     acl
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -72,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     e2fsprogs
     py
     python-dateutil

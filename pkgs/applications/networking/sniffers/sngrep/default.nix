@@ -3,6 +3,7 @@
 , autoconf
 , automake
 , fetchFromGitHub
+, fetchpatch
 , libpcap
 , ncurses
 , openssl
@@ -19,6 +20,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-gFba2wOU4GwpOZTo5A2QpBgnC6OgDJEeyaPGHbA+7tA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-36192.patch";
+      url = "https://github.com/irontec/sngrep/commit/ad1daf15c8387bfbb48097c25197bf330d2d98fc.patch";
+      hash = "sha256-g8fxvxi3d7jmZEKTbxqw29hJbm/ShsKKxstsOUGxTug=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -43,6 +52,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./bootstrap.sh
   '';
+
+  doCheck = true;
 
   meta = with lib; {
     description = "A tool for displaying SIP calls message flows from terminal";

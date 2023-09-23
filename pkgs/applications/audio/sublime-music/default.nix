@@ -27,6 +27,17 @@ let
           hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
         };
       });
+
+      dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.7";
+        src = fetchFromGitHub {
+          owner = "lidatong";
+          repo = "dataclasses-json";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-0tw5Lz+c4ymO+AGpG6THbiALWGBrehC84+yWWk1eafc=";
+        };
+        nativeBuildInputs = [ python3.pkgs.setuptools ];
+      });
     };
   };
 in
@@ -50,6 +61,9 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
     sed -i "/--no-cov-on-fail/d" setup.cfg
+
+    # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
+    sed -i "s/python-mpv/mpv/g" pyproject.toml
   '';
 
   buildInputs = [

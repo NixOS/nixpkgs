@@ -1,10 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, rednose
-, six
+, nose
 , mock
+, six
 , isPyPy
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -19,13 +20,18 @@ buildPythonPackage rec {
     sha256 = "sha256-yPxvq8Dn9phO6ruUJUDkVkblvvC7mf5Z4C2mNOTUuco=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "rednose = 1" ""
+  '';
+
   propagatedBuildInputs = [
-    six
     mock
+    six
   ];
 
   nativeCheckInputs = [
-    rednose
+    nose
   ];
 
   pythonImportsCheck = [

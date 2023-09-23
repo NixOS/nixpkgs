@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildSamples ''
     mkdir -p $sample/bin
     mv clients/staging/hipfft_* $sample/bin
-    patchelf $sample/bin/hipfft_* --shrink-rpath --allowed-rpath-prefixes /nix/store
+    patchelf $sample/bin/hipfft_* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
     rmdir $out/bin
   '';

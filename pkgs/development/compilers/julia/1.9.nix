@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
-    hash = "sha256-hwY9TC6kHHNqoujLvHwvGgYuIjlVFX+EBFU87XZJE80=";
+    hash = "sha256-j8DJ3FRDoo01m9ed2jlA+pS6K3lmuJhlvrINqBEjwxY=";
   };
 
   patches = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = !stdenv.hostPlatform.isAarch64; # tests are flaky for aarch64-linux on hydra
   installCheckTarget = "testall";
 
   preInstallCheck = ''

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "5.2";
+  version = "5.4";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
-    hash = "sha256-I34wnUawdSEMDky3ib/Qycd37d9sswNBw/49vMZYw4A=";
+    hash = "sha256-SR3e0sw/Hc2NJvSWpMezqZa5HHqyCIPKN1A3o5giH54=";
   };
 
   postPatch = ''
@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
+
+  TARGET_OS = stdenv.hostPlatform.uname.system;
 
   meta = with lib; {
     homepage = "https://eradman.com/entrproject/";

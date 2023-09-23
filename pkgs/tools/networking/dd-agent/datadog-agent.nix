@@ -14,12 +14,12 @@
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
-  payloadVersion = "4.78.0";
+  payloadVersion = "5.0.89";
   python = pythonPackages.python;
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
-  version = "7.38.1";
+  version = "7.45.1";
 
   src = fetchFromGitHub {
     inherit owner repo;
@@ -41,7 +41,7 @@ in buildGoModule rec {
 
   doCheck = false;
 
-  vendorSha256 = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
+  vendorHash = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
 
   subPackages = [
     "cmd/agent"

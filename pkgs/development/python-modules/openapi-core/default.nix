@@ -1,4 +1,6 @@
 { lib
+, aiohttp
+, asgiref
 , buildPythonPackage
 , django
 , djangorestframework
@@ -7,36 +9,35 @@
 , flask
 , httpx
 , isodate
+, jsonschema
 , jsonschema-spec
-, mock
 , more-itertools
 , openapi-schema-validator
 , openapi-spec-validator
 , parse
-, pathable
 , poetry-core
+, pytest-aiohttp
 , pytestCheckHook
 , pythonOlder
 , responses
 , requests
 , starlette
-, typing-extensions
 , webob
 , werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     rev = "refs/tags/${version}";
-    hash = "sha256-xlrG2FF55qDsrkdSqCBLu3/QLtZs48ZUB90B2CemY64=";
+    hash = "sha256-2OcGaZQwzgxcwrXinmJjFc91620Ri0O79c8WZWfDdlQ=";
   };
 
   postPatch = ''
@@ -50,17 +51,19 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     isodate
     more-itertools
-    pathable
-    more-itertools
-    openapi-schema-validator
-    jsonschema-spec
-    openapi-spec-validator
-    typing-extensions
     parse
+    openapi-schema-validator
+    openapi-spec-validator
     werkzeug
+    jsonschema-spec
+    asgiref
+    jsonschema
   ];
 
   passthru.optional-dependencies = {
+    aiohttp = [
+      aiohttp
+    ];
     django = [
       django
     ];
@@ -79,8 +82,10 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
-    mock
+    pytest-aiohttp
     pytestCheckHook
     responses
     webob

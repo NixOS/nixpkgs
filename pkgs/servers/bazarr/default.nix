@@ -20,7 +20,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip makeWrapper ];
 
   buildInputs = [
-    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ps.pillow ]))
+    (python3.withPackages (ps: [
+      ps.lxml
+      ps.numpy
+      ps.gevent
+      ps.gevent-websocket
+      ps.pillow
+      ps.setuptools
+    ]))
   ] ++ runtimeProgDeps;
 
   installPhase = ''
