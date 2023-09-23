@@ -65,6 +65,7 @@ in buildFHSEnvChroot rec {
       "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
       # Should we install all executables?
       "${unwrapped}"/modelsim_ase/bin/{vsim,vlog,vlib}
+      "${unwrapped}"/modelsim_ase/linuxaloem/lmutil
     )
 
     wrapper=$out/bin/${name}
