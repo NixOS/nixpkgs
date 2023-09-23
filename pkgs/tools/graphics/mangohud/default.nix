@@ -3,7 +3,6 @@
 , fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
-, fetchpatch
 , substituteAll
 , coreutils
 , curl
