@@ -18,13 +18,6 @@ buildGoModule rec {
 
   vendorHash = "sha256-iT/QMm6RM6kvw69Az+aLTtBuaCX7ELAiYlj5wXAtBd4=";
 
-  subPackages = [
-    "cmd/soju"
-    "cmd/sojuctl"
-    "contrib/migrate-db"
-    "contrib/znc-import"
-  ];
-
   nativeBuildInputs = [
     installShellFiles
     scdoc
@@ -41,9 +34,6 @@ buildGoModule rec {
   '';
 
   preCheck = ''
-    # Test all targets.
-    unset subPackages
-
     # Disable a test that requires an additional service.
     rm database/postgres_test.go
   '';
