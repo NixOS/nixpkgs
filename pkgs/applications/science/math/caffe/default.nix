@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://caffe.berkeleyvision.org/";
     maintainers = with maintainers; [ ];
-    broken = pythonSupport && (python.isPy310);
+    broken = (pythonSupport && (python.isPy310)) || cudaSupport;
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };
