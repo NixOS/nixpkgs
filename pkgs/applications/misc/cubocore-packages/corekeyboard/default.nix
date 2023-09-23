@@ -8,7 +8,7 @@ mkDerivation rec {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Hylz1x9Wsk0iVhpNBFZJChsl3gIvJDICgpITjIXDZAg=";
+    hash = "sha256-Hylz1x9Wsk0iVhpNBFZJChsl3gIvJDICgpITjIXDZAg=";
   };
 
   nativeBuildInputs = [
