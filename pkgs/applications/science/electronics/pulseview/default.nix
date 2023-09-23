@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, cmake, glib, boost180, libsigrok
 , libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
 , pcre, python3, qtsvg, qttools, wrapQtAppsHook, desktopToDarwinBundle
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
-    glib boost libsigrok libsigrokdecode libserialport libzip libusb1 libftdi1 glibmm
+    glib boost180 libsigrok libsigrokdecode libserialport libzip libusb1 libftdi1 glibmm
     pcre python3
     qtsvg
   ] ++ lib.optional stdenv.isLinux udev;
