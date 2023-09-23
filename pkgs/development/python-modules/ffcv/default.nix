@@ -18,7 +18,6 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "libffcv";
     repo = pname;
-    # See https://github.com/libffcv/ffcv/issues/158.
     rev = "refs/tags/v${version}";
     sha256 = "sha256-L2mwGFivq/gtAw+1D6U2jbW6VxYgetHX7OUrjwyybqE=";
   };
