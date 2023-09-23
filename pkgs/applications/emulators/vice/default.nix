@@ -35,15 +35,6 @@ let
     })
 
     (makeDesktopItem {
-      name = "x64";
-      exec = "x64";
-      comment = "VICE: C64 Emulator";
-      desktopName = "VICE: C64 Emulator";
-      genericName = "Commodore 64 emulator";
-      categories = [ "System" ];
-    })
-
-    (makeDesktopItem {
       name = "x64dtv";
       exec = "x64dtv";
       comment = "VICE: C64 DTV Emulator";
@@ -55,8 +46,8 @@ let
     (makeDesktopItem {
       name = "x64sc";
       exec = "x64sc";
-      comment = "VICE: C64 SC Emulator";
-      desktopName = "VICE: C64 SC Emulator";
+      comment = "VICE: C64 Emulator";
+      desktopName = "VICE: C64 Emulator";
       genericName = "Commodore 64 SC emulator";
       categories = [ "System" ];
     })
@@ -127,11 +118,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vice";
-  version = "3.6.1";
+  version = "3.7.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/vice-emu/vice-${version}.tar.gz";
-    sha256 = "sha256-IN+EyFGq8vUABRCSf20xsy8mmRbTUUZcNm3Ar8ncFQw=";
+    sha256 = "sha256-fjgR5gJNsGmL+8MhuzJFckRriFPQG0Bz8JhllXsMq5g=";
   };
 
   nativeBuildInputs = [
