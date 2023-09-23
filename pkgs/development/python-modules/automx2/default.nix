@@ -1,12 +1,13 @@
 { lib
 , buildPythonPackage
-, pythonOlder
 , fetchFromGitHub
 , flask
 , flask-migrate
 , ldap3
 , pytestCheckHook
+, pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "automx2";
   version = "unstable-2023-08-23";
@@ -27,8 +28,13 @@ buildPythonPackage rec {
     ldap3
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "automx2" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "automx2"
+  ];
 
   meta = with lib; {
     description = "Email client configuration made easy";
