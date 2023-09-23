@@ -15,6 +15,7 @@
 , mangohud32
 , addOpenGLRunpath
 , appstream
+, git
 , glslang
 , mako
 , meson
@@ -78,14 +79,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mangohud";
-  version = "0.6.9-1";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-AX4m1XZ+yXp74E3slFGyI3CGu2eYU+eXNN2EY+ivdfk=";
+    hash = "sha256-KkMN7A3AcS/v+b9GCs0pI6MBBk3WwOMciaoiBzL5xOQ=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -123,13 +124,6 @@ stdenv.mkDerivation (finalAttrs: {
       libdbus = dbus.lib;
       inherit hwdata;
     })
-
-    # Pull gcc-13 build fix for nissing <cstdint>
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/flightlessmango/MangoHud/commit/3f8f036ee8773ae1af23dd0848b6ab487b5ac7de.patch";
-      hash = "sha256-qbNywAXAStGiVZ1LA5qZyNp4n28iNUuE4N69zXv2gmM=";
-    })
   ];
 
   postPatch = ''
@@ -139,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       ] ++ lib.optionals lowerBitnessSupport [
         mangohud32
       ])} \
+      --subst-var-by version "${finalAttrs.version}" \
       --subst-var-by dataDir ${placeholder "out"}/share
 
     (
@@ -160,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     addOpenGLRunpath
+    git
     glslang
     mako
     meson
