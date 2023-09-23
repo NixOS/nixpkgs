@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , curl
+, requireFile
 , jq
 , htmlq
 , xorg
@@ -176,48 +177,6 @@ let
       '';
     };
 
-  fetchPianoteqWithLogin = { name, hash }:
-    fetchWithCurlScript {
-      inherit name hash;
-
-      impureEnvVars = [ "NIX_MODARTT_USERNAME" "NIX_MODARTT_PASSWORD" ];
-
-      script = ''
-        if [ -z "''${NIX_MODARTT_USERNAME}" -o -z "''${NIX_MODARTT_PASSWORD}" ]; then
-          echo "Error: Downloading a personal Pianoteq instance requires the nix building process (nix-daemon in multi user mode) to have the NIX_MODARTT_USERNAME and NIX_MODARTT_PASSWORD env vars set." >&2
-          exit 1
-        fi
-
-        "''${curl[@]}" -s -o /dev/null "https://www.modartt.com/user_area"
-
-        ${jq}/bin/jq -n "{connect: 1, login: \"''${NIX_MODARTT_USERNAME}\", password: \"''${NIX_MODARTT_PASSWORD}\"}" > login.json
-
-        "''${curl[@]}" --silent --request POST \
-          --cookie cookies \
-          --referer "https://www.modartt.com/user_area" \
-          --header "modartt-json: request" \
-          --header "origin: https://www.modartt.com" \
-          --header "content-type: application/json; charset=UTF-8" \
-          --header "accept: application/json, text/javascript, */*" \
-          --data @login.json \
-          https://www.modartt.com/api/0/session
-
-        json=$(
-          "''${curl[@]}" --silent --request POST \
-          --cookie cookies \
-          --header "modartt-json: request" \
-          --header "origin: https://www.modartt.com" \
-          --header "content-type: application/json; charset=UTF-8" \
-          --header "accept: application/json, text/javascript, */*" \
-          --data-raw '{"file": "${name}", "get": "url"}' \
-          https://www.modartt.com/api/0/download
-        )
-
-        url=$(echo $json | ${jq}/bin/jq -r .url)
-        "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
-      '';
-    };
-
 in
 {
   # TODO currently can't install more than one because `lame` clashes
@@ -247,8 +206,9 @@ in
     startupWMClass = "Pianoteq STAGE";
     version = "6.7.3";
     archdir = if (stdenv.hostPlatform.system == "aarch64-linux") then throw "Pianoteq stage-6 is not supported on aarch64-linux" else "amd64";
-    src = fetchPianoteqWithLogin {
+    src = requireFile {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
+      url = "https://www.modartt.com/download";
       hash = "0jy0hkdynhwv0zhrqkby0hdphgmcc09wxmy74rhg9afm1pzl91jy";
     };
   };
@@ -257,8 +217,9 @@ in
     mainProgram = "Pianoteq 7 STAGE";
     startupWMClass = "Pianoteq STAGE";
     version = "7.3.0";
-    src = fetchPianoteqWithLogin {
+    src = requireFile {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
+      url = "https://www.modartt.com/download";
       hash = "05w7sv9v38r6ljz9xai816w5z2qqwx88hcfjm241fvgbs54125hx";
     };
   };
@@ -267,9 +228,21 @@ in
     mainProgram = "Pianoteq 8";
     startupWMClass = "Pianoteq";
     version = "8.1.1";
-    src = fetchPianoteqWithLogin {
+    src = requireFile {
       name = "pianoteq_linux_v${versionForFile version}.7z";
+      url = "https://www.modartt.com/download";
       hash = "sha256-vWvo+ctJ0yN6XeJZZVhA3Ul9eWJWAh7Qo54w0TpOiVw=";
+    };
+  };
+  stage-8 = mkPianoteq rec {
+    name = "stage-8";
+    mainProgram = "Pianoteq 8 STAGE";
+    startupWMClass = "Pianoteq STAGE";
+    version = "8.1.3";
+    src = requireFile {
+      name = "pianoteq_stage_linux_v${versionForFile version}.7z";
+      url = "https://www.modartt.com/download";
+      sha256 = "1x70hl15ql8i7g78mmhsfn5z1w5y41lxi9w8fnw779wl7dywj1a6";
     };
   };
   # TODO other paid binaries, I don't own that so I don't know their hash.
