@@ -89,7 +89,10 @@ in buildFHSEnvChroot rec {
   # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
   # we use the name so that quartus can load the 64 bit verson and modelsim can load the 32 bit version
   # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
-  runScript = writeScript "${name}-wrapper" ''
-    exec env LD_PRELOAD=libudev.so.0 "$@"
+  profile = ''
+    export LD_PRELOAD=libudev.so.0
   '';
+
+  # Run the wrappers directly, instead of going via bash.
+  runScript = "";
 }
