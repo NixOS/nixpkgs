@@ -4,11 +4,15 @@
 , iso8601
 , bottle
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "m3u8";
   version = "3.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "globocom";
