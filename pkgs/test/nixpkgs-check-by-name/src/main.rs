@@ -87,10 +87,9 @@ mod tests {
     use crate::check_nixpkgs;
     use crate::structure;
     use anyhow::Context;
-    use std::env;
     use std::fs;
     use std::path::Path;
-    use tempfile::{tempdir, tempdir_in};
+    use tempfile::{tempdir_in, TempDir};
 
     #[test]
     fn tests_dir() -> anyhow::Result<()> {
@@ -109,6 +108,13 @@ mod tests {
             test_nixpkgs(&name, &path, &expected_errors)?;
         }
         Ok(())
+    }
+
+    // tempfile::tempdir needs to be wrapped in temp_env lock
+    // because it accesses TMPDIR environment variable.
+    fn tempdir() -> anyhow::Result<TempDir> {
+        let empty_list: [(&str, Option<&str>); 0] = [];
+        Ok(temp_env::with_vars(empty_list, tempfile::tempdir)?)
     }
 
     // We cannot check case-conflicting files into Nixpkgs (the channel would fail to
@@ -157,34 +163,21 @@ mod tests {
         std::os::unix::fs::symlink("actual", temp_root.path().join("symlinked"))?;
         let tmpdir = temp_root.path().join("symlinked");
 
-        // Then set TMPDIR to the symlinked directory
-        // Make sure to persist the old value so we can undo this later
-        let old_tmpdir = env::var("TMPDIR").ok();
-        env::set_var("TMPDIR", &tmpdir);
-
-        // Then run a simple test with this symlinked temporary directory
-        // This should be successful
-        test_nixpkgs("symlinked_tmpdir", Path::new("tests/success"), "")?;
-
-        // Undo the env variable change
-        if let Some(old) = old_tmpdir {
-            env::set_var("TMPDIR", old);
-        } else {
-            env::remove_var("TMPDIR");
-        }
-
-        Ok(())
+        temp_env::with_var("TMPDIR", Some(&tmpdir), || {
+            test_nixpkgs("symlinked_tmpdir", Path::new("tests/success"), "")
+        })
     }
 
     fn test_nixpkgs(name: &str, path: &Path, expected_errors: &str) -> anyhow::Result<()> {
         let extra_nix_path = Path::new("tests/mock-nixpkgs.nix");
 
         // We don't want coloring to mess up the tests
-        env::set_var("NO_COLOR", "1");
-
-        let mut writer = vec![];
-        check_nixpkgs(&path, vec![&extra_nix_path], &mut writer)
-            .context(format!("Failed test case {name}"))?;
+        let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
+            let mut writer = vec![];
+            check_nixpkgs(&path, vec![&extra_nix_path], &mut writer)
+                .context(format!("Failed test case {name}"))?;
+            Ok(writer)
+        })?;
 
         let actual_errors = String::from_utf8_lossy(&writer);
 

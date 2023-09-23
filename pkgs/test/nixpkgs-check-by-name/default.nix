@@ -30,9 +30,6 @@ let
         # We'd run into https://github.com/NixOS/nix/issues/2706 unless the store is initialised first
         nix-store --init
       '';
-      # The tests use the shared environment variables,
-      # so we cannot run them in parallel
-      dontUseCargoParallelTests = true;
       postCheck = ''
         cargo fmt --check
         cargo clippy -- -D warnings
