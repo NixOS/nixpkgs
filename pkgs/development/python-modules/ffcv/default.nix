@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "libffcv";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-L2mwGFivq/gtAw+1D6U2jbW6VxYgetHX7OUrjwyybqE=";
+    hash = "sha256-L2mwGFivq/gtAw+1D6U2jbW6VxYgetHX7OUrjwyybqE=";
   };
 
   # See https://github.com/libffcv/ffcv/issues/159.
