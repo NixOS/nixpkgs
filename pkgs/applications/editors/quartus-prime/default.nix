@@ -60,8 +60,7 @@ in buildFHSEnvChroot rec {
     ln -s ${unwrapped}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
 
     progs_to_wrap=(
-      "${unwrapped}"/quartus/bin/quartus
-      "${unwrapped}"/quartus/bin/quartus_{asm,cdb,cpf,drc,eda,fit,jbcc,jli,map,pgm,pow,sh,si,sim,sta,stp,tan}
+      "${unwrapped}"/quartus/bin/*
       "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
       # Should we install all executables?
       "${unwrapped}"/modelsim_ase/bin/{vsim,vlog,vlib,vcom,vdel,vmap}
