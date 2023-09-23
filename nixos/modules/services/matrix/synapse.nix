@@ -1022,7 +1022,7 @@ in {
 
     systemd.targets.matrix-synapse = lib.mkIf hasWorkers {
       description = "Synapse Matrix parent target";
-      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+      after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
     };
 
@@ -1036,7 +1036,7 @@ in {
             unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
           }
           else {
-            after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+            after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
             wantedBy = [ "multi-user.target" ];
           };
         baseServiceConfig = {
