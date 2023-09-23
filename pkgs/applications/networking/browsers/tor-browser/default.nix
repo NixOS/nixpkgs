@@ -467,7 +467,7 @@ stdenv.mkDerivation rec {
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = licenses.free;
+    license = with licenses; [ mpl20 lgpl21Plus lgpl3Plus free ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })
