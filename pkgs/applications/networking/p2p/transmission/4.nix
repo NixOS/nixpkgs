@@ -141,6 +141,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
+    smoke-test = nixosTests.bittorrent;
+  };
+
   meta = {
     description = "A fast, easy and free BitTorrent client";
     mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
