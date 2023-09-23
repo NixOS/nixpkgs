@@ -11,7 +11,7 @@ rec {
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "4ae3f216833aec55421f827d55bc1b5fc2f0ad4fefecb27724a5be3318c351df24d30a4897b924e733ed2e3995be284b6d135049d46001143fb1c961fefc1830";
+      hash = "sha512-SuPyFoM67FVCH4J9VbwbX8LwrU/v7LJ3JKW+MxjDUd8k0wpIl7kk5zPtLjmVvihLbRNQSdRgARQ/sclh/vwYMA==";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -49,7 +49,7 @@ rec {
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "45843709c21eb19d69d43205da6b2f943b584811a29942ffef1933c1ce7882b48046b201c2ff198658fec2c53d479311d8a353731afe6ea53f97b31674d6074a";
+      hash = "sha512-RYQ3CcIesZ1p1DIF2msvlDtYSBGimUL/7xkzwc54grSARrIBwv8Zhlj+wsU9R5MR2KNTcxr+bqU/l7MWdNYHSg==";
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
