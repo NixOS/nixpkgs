@@ -267,7 +267,6 @@ dependencies = [
  "lazy_static",
  "regex",
  "rnix",
- "rowan",
  "serde",
  "serde_json",
  "tempfile",
