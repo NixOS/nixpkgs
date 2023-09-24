@@ -66,7 +66,7 @@ let
   package = buildPythonApplication rec {
     pname = "buildbot";
     version = "3.9.2";
-    format = "setuptools";
+    format = "pyproject";
 
     disabled = pythonOlder "3.7";
 
