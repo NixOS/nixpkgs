@@ -1,12 +1,30 @@
-{ config, lib, stdenv, fetchurl, fetchpatch, pkg-config, libiconv
-, libintl, expat, zlib, libpng, pixman, fontconfig, freetype
-, x11Support? !stdenv.isDarwin, libXext, libXrender
-, gobjectSupport ? true, glib
-, xcbSupport ? x11Support, libxcb, xcbutil # no longer experimental since 1.12
-, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
-, glSupport ? x11Support && config.cairo.gl or (libGLSupported && stdenv.isLinux)
-, libGL # libGLU libGL is no longer a big dependency
-, pdfSupport ? true
+{ config
+, lib
+, stdenv
+, fetchurl
+, docbook-xsl-nons
+, expat
+, fontconfig
+, freetype
+, gtk-doc
+, libiconv
+, libintl
+, libpng
+, meson
+, ninja
+, pixman
+, pkg-config
+, writeShellScript
+, writeText
+, zlib
+, x11Support? !stdenv.isDarwin
+, libXext
+, libXrender
+, gobjectSupport ? true
+, glib
+, xcbSupport ? x11Support
+, libxcb
+, xcbutil
 , darwin
 , testers
 }:
@@ -17,76 +35,34 @@ in stdenv.mkDerivation (finalAttrs: let
   inherit (finalAttrs) pname version;
 in {
   pname = "cairo";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://cairographics.org/${if lib.mod (builtins.fromJSON (lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
-    sha256 = "0c930mk5xr2bshbdljv005j3j8zr47gqmkry3q6qgvqky6rjjysy";
+    hash = "sha256-JDoHNrl4oz3uKfnMp1IXM7eKZbVBggb+970cPUzxC2Q=";
   };
 
-  patches = [
-    # Fixes CVE-2018-19876; see Nixpkgs issue #55384
-    # CVE information: https://nvd.nist.gov/vuln/detail/CVE-2018-19876
-    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/merge_requests/5
-    #
-    # This patch is the merged commit from the above PR.
-    (fetchpatch {
-      name   = "CVE-2018-19876.patch";
-      url    = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
-      hash = "sha256-wZ51BZWlXByFY3/CTn7el2A9aYkwL1FygJ2zqnN+UIQ=";
-    })
-
-    # Fix PDF output.
-    # https://gitlab.freedesktop.org/cairo/cairo/issues/342
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/5e34c5a9640e49dcc29e6b954c4187cfc838dbd1.patch";
-      hash = "sha256-yCwsDUY7efVvOZkA6a0bPS+RrVc8Yk9bfPwWHeOjq5o=";
-    })
-
-    # Fixes CVE-2020-35492; see https://github.com/NixOS/nixpkgs/issues/120364.
-    # CVE information: https://nvd.nist.gov/vuln/detail/CVE-2020-35492
-    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/merge_requests/85
-    (fetchpatch {
-      name = "CVE-2020-35492.patch";
-      includes = [ "src/cairo-image-compositor.c" ];
-      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
-      hash = "sha256-cXKzLMENx4/BHXLZg3Kfkx3esCnaNaB7WvjNfL77FhE=";
-    })
-
-    # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
-    ./skip-configure-stderr-check.patch
-
-    # Fixes cairo crash on macOS Big Sur
-    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/-/issues/420
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/e22d7212acb454daccc088619ee147af03883974.diff";
-      hash = "sha256-8G98nsPz3MLEWPDX9F0jKgXC4hC4NNdFQLSpmW3ay2s=";
-    })
-
-    # Fix clang build failures on newer LLVM versions
-    # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/119
-    (fetchpatch {
-      name = "fix-types.patch";
-      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/38e486b34d435130f2fb38c429e6016c3c82cd53.patch";
-      hash = "sha256-vmluOJSuTRiQHmbBBVCxOIkZ0O0ZEo0J4mgrUPn0SIo=";
-    })
-
-    # Fix unexpected color addition on grayscale images (usually text).
-    # Upstream fix: https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/114
-    # Can be removed after 1.18 release
-    (fetchpatch {
-      name = "fix-grayscale-anialias.patch";
-      url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/4f4d89506f58a64b4829b1bb239bab9e46d63727.diff";
-      hash = "sha256-mbTg67e7APfdELsuMAgXdY3xokWbGtHF7VDD5UyYqKM=";
-    })
-
-  ];
+  postPatch = let
+    # despite the suffix this is not a python script - this allows
+    # us to take control of the apparent version and avoid the
+    # direct python dependency at the same time
+    dummyVersionScript = writeShellScript "version.py" ''
+      echo '${finalAttrs.version}'
+    '';
+  in ''
+    rm version.py
+    ln -s ${dummyVersionScript} version.py
+  '';
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev"; # very small
   separateDebugInfo = true;
 
   nativeBuildInputs = [
+    docbook-xsl-nons
+    gtk-doc
+    meson
+    ninja
     pkg-config
   ];
 
@@ -104,39 +80,29 @@ in {
     ++ optionals x11Support [ libXext libXrender ]
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
-    ++ optional glSupport libGL
     ; # TODO: maybe liblzo but what would it be for here?
 
-  configureFlags = [
-    "--enable-tee"
-  ] ++ (if stdenv.isDarwin then [
-    "--disable-dependency-tracking"
-    "--enable-quartz"
-    "--enable-quartz-font"
-    "--enable-quartz-image"
-    "--enable-ft"
-  ] else (optional xcbSupport "--enable-xcb"
-    ++ optional glSupport "--enable-gl"
-    ++ optional pdfSupport "--enable-pdf"
-  )) ++ optional (!x11Support) "--disable-xlib";
-
-  preConfigure =
-  # On FreeBSD, `-ldl' doesn't exist.
-    lib.optionalString stdenv.isFreeBSD
-       '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
-          do
-            cat "$i" | sed -es/-ldl//g > t
-            mv t "$i"
-          done
-       ''
-    +
-    ''
-    # Work around broken `Requires.private' that prevents Freetype
-    # `-I' flags to be propagated.
-    sed -i "src/cairo.pc.in" \
-        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
-    substituteInPlace configure --replace strings $STRINGS
-    '';
+  mesonFlags = [
+    "-Dtee=enabled"
+    "-Dfreetype=enabled"
+    "-Dgtk_doc=true"
+    "-Dglib=${if gobjectSupport then "enabled" else "disabled"}"
+    "-Dxcb=${if xcbSupport then "enabled" else "disabled"}"
+    "-Dxlib=${if x11Support then "enabled" else "disabled"}"
+    "-Dquartz=${if stdenv.isDarwin then "enabled" else "disabled"}"
+    "-Dsymbol-lookup=disabled"  # avoid libbfd dependency
+    "-Dspectre=disabled"
+    "-Dtests=${if finalAttrs.finalPackage.doCheck then "enabled" else "disabled"}"
+  ] ++ optional (stdenv.buildPlatform != stdenv.hostPlatform) (let
+      # see https://marc.info/?l=cairo&m=135064523003805&w=2 and
+      # https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/134
+      crossFile = writeText "cross-file.conf" ''
+        [properties]
+        ipc_rmid_deferred_release = ${if stdenv.hostPlatform.isLinux then "true" else "false"}
+      '';
+    in
+      "--cross-file=${crossFile}"
+  );
 
   enableParallelBuilding = true;
 
@@ -164,8 +130,8 @@ in {
     pkgConfigModules = [
       "cairo-ps"
       "cairo-svg"
-    ] ++ lib.optional gobjectSupport "cairo-gobject"
-      ++ lib.optional pdfSupport "cairo-pdf";
+      "cairo-pdf"
+    ] ++ lib.optional gobjectSupport "cairo-gobject";
     platforms = platforms.all;
   };
 })
