@@ -19647,6 +19647,13 @@ with pkgs;
 
   mold = callPackage ../development/tools/mold { };
 
+  mold-wrapped = wrapBintoolsWith {
+    bintools = mold;
+    extraBuildCommands = ''
+      wrap mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold}/bin/ld.mold
+    '';
+  };
+
   mommy = callPackage ../tools/misc/mommy { };
 
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
