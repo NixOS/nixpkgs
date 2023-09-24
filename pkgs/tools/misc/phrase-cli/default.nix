@@ -22,6 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
+    changelog = "https://github.com/phrase/phrase-cli/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ juboba ];
   };
