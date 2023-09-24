@@ -35275,8 +35275,6 @@ with pkgs;
 
   ratox = callPackage ../applications/networking/instant-messengers/ratox { };
 
-  ratpoison = callPackage ../applications/window-managers/ratpoison { };
-
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
   };
