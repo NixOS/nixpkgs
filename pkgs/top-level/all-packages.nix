@@ -34271,8 +34271,6 @@ with pkgs;
 
   nncp = darwin.apple_sdk_11_0.callPackage ../tools/misc/nncp { };
 
-  notion = callPackage ../applications/window-managers/notion { };
-
   nootka = qt5.callPackage ../applications/audio/nootka { };
 
   novnc = callPackage ../applications/networking/novnc { };
