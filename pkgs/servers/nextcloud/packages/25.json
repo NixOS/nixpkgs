@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "0liws0xkndrx5qd06hn3n5jg7yl02w38j0nj37wyrv4qjk9w6n7v",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.4.4/calendar-v4.4.4.tar.gz",
-    "version": "4.4.4",
+    "sha256": "14jf0vrjkscz6j2xsf2xn18v3vwqkd8qi47iyyz2wlzdgi25zl6v",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.5.1/calendar-v4.5.1.tar.gz",
+    "version": "4.5.1",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -20,9 +20,9 @@
     ]
   },
   "contacts": {
-    "sha256": "0f9k3glw6kfj4ms9bxw5zcv0ygfg0jdhdn9cdzq8a3d8i07v0vb8",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.3.2/contacts-v5.3.2.tar.gz",
-    "version": "5.3.2",
+    "sha256": "1pz2px5amk3byn4pq86cyyjv4hrqhsjz61xfm7cl7z8qfckqfhi2",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v5.4.2/contacts-v5.4.2.tar.gz",
+    "version": "5.4.2",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "deck": {
-    "sha256": "1rsfyl6p6myy36mv4x9ci3g53k4ndbwqmss4pfk3sh1y6vik8hcn",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.8.5/deck-v1.8.5.tar.gz",
-    "version": "1.8.5",
+    "sha256": "01bpcq96y1yp4cmkssjcpqamk3wsg99jbsyhich2kjj9a33d0a5v",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.8.6/deck-v1.8.6.tar.gz",
+    "version": "1.8.6",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "1yfhy14cfz16ax5i8d6zhl4m161qzy98xzm36y1656rh96i2ksbx",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.5/groupfolders-v13.1.5.tar.gz",
-    "version": "13.1.5",
+    "sha256": "0mkw8w3miq14ky3c04d3pli1n1jcrsf47005pv8ny170zyhai943",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.6/groupfolders-v13.1.6.tar.gz",
+    "version": "13.1.6",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -113,15 +113,15 @@
     "sha256": "1i05dbdhbsg6pmzs7w9dh0wmfd4irv4d44v1gwsfmr00w4mwn9v1",
     "url": "https://github.com/nextcloud-releases/mail/releases/download/v2.2.7/mail-v2.2.7.tar.gz",
     "version": "2.2.7",
-    "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n### Rating: 🟢\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
+    "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
       "agpl"
     ]
   },
   "maps": {
-    "sha256": "12dg1bklv2jhmj5dnz4ram6zvgf8kipfz77g1lcn77fyhzqw6y1z",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.1.0/maps-1.1.0.tar.gz",
+    "sha256": "0517kakkk7lr7ays6rrnl276709kcm5yvkp8g6cwjnfih7pmnkn9",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.1.0-2a-nightly/maps-1.1.0-2a-nightly.tar.gz",
     "version": "1.1.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -130,9 +130,9 @@
     ]
   },
   "memories": {
-    "sha256": "0v72hfn57zrvbfgd970qkm7c4lkm436k32vhxz4d1hkg83wjqsrl",
-    "url": "https://github.com/pulsejet/memories/releases/download/v5.2.1/memories.tar.gz",
-    "version": "5.2.1",
+    "sha256": "1w17cy5ciybq2yf42rmiim77mkfdrjg49l2l3b2v2dxpfv36is1s",
+    "url": "https://github.com/pulsejet/memories/releases/download/v5.4.1/memories.tar.gz",
+    "version": "5.4.1",
     "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
     "homepage": "https://memories.gallery",
     "licenses": [
@@ -180,9 +180,9 @@
     ]
   },
   "polls": {
-    "sha256": "0w41zxbf8kqnr5hwlf6z5bymwz1d0vbgg5ippc72a8rwma7hlyay",
-    "url": "https://github.com/nextcloud/polls/releases/download/v5.2.0/polls.tar.gz",
-    "version": "5.2.0",
+    "sha256": "1v5zb164f60qskfiv02l9x2v0d4rayacg5qivd70dawmyqnz4vmd",
+    "url": "https://github.com/nextcloud/polls/releases/download/v5.3.2/polls.tar.gz",
+    "version": "5.3.2",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -220,9 +220,9 @@
     ]
   },
   "spreed": {
-    "sha256": "0az92qmc24n91zh2vq4qs99zppph6bchknv5akw6c7iqpg8d12gk",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v15.0.7/spreed-v15.0.7.tar.gz",
-    "version": "15.0.7",
+    "sha256": "0n6dbvfmasyrrpzqp5i5k6bcp6ipwawkvn7hl557nhy2d60k0ffs",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v15.0.8/spreed-v15.0.8.tar.gz",
+    "version": "15.0.8",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
