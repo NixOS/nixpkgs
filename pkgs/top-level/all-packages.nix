@@ -34863,7 +34863,7 @@ with pkgs;
 
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
 
-  pekwm = callPackage ../applications/window-managers/pekwm {
+  pekwm = callPackage ../by-name/pe/pekwm/package.nix {
     awk = gawk;
     grep = gnugrep;
     sed = gnused;
