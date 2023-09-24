@@ -68,9 +68,17 @@ let
     else showWarnings config.warnings baseSystem;
 
   # Replace runtime dependencies
-  system = foldr ({ oldDependency, newDependency }: drv:
-      pkgs.replaceDependency { inherit oldDependency newDependency drv; }
-    ) baseSystemAssertWarn config.system.replaceRuntimeDependencies;
+  system = let replacements = config.system.replaceRuntimeDependencies; in
+    if replacements == [] then
+      # Avoid IFD if possible, by sidestepping replaceDependencies if no replacements are specified.
+      baseSystemAssertWarn
+    else
+      (pkgs.replaceDependencies.override {
+        nix = config.nix.package;
+      }) {
+        drv = baseSystemAssertWarn;
+        inherit replacements;
+      };
 
   systemWithBuildDeps = system.overrideAttrs (o: {
     systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
