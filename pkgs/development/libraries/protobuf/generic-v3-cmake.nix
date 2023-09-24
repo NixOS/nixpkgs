@@ -83,7 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dprotobuf_BUILD_TESTS=OFF"
   ];
 
-  doCheck = true;
+  # FIXME: investigate.  3.24 and 3.23 have different errors.
+  # At least some of it is not reproduced on some other machine; example:
+  # https://hydra.nixos.org/build/235677717/nixlog/4/tail
+  doCheck = !(stdenv.isDarwin && lib.versionAtLeast version "3.23");
 
   passthru = {
     tests = {

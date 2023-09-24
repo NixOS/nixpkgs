@@ -24740,9 +24740,7 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  # 3.24 and 3.23 tests crash on Hydra for *-darwin:
-  # https://hydra.nixos.org/build/235677717/nixlog/4/tail
-  protobuf = if stdenv.isDarwin then protobuf3_21 else protobuf3_24;
+  protobuf = protobuf3_24;
 
   protobuf3_24 = callPackage ../development/libraries/protobuf/3.24.nix { };
   protobuf3_23 = callPackage ../development/libraries/protobuf/3.23.nix { };
