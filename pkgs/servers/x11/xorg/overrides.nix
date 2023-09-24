@@ -134,7 +134,14 @@ self: super:
     };
   });
 
-  libxcvt = addMainProgram super.libxcvt { mainProgram = "cvt"; };
+  libxcvt = super.libxcvt.overrideAttrs ({ meta ? {}, ... }: {
+    meta = meta // {
+      mainProgram = "cvt";
+      badPlatforms = meta.badPlatforms or [] ++ [
+        lib.systems.inspect.platformPatterns.isStatic
+      ];
+    };
+  });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
