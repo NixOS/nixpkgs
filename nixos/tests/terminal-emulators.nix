@@ -117,6 +117,8 @@ let tests = {
       xfce4-terminal.pkg = p: p.xfce.xfce4-terminal;
 
       xterm.pkg = p: p.xterm;
+
+      zutty.pkg = p: p.zutty;
     };
 in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}", colourTest ? true, pinkValue ? "#FF0087", kill ? false }: makeTest
 {
