@@ -39,12 +39,6 @@ stdenv.mkDerivation {
     ./patches/nix-resource-root.patch
     ./patches/disable-catalyst.patch
     ./patches/linux-fix-linking.patch
-    # TODO: Replace with branch patch once merged:
-    # https://github.com/apple/swift-driver/pull/1197
-    (fetchpatch {
-      url = "https://github.com/apple/swift-driver/commit/d3ef9cdf4871a58eddec7ff0e28fe611130da3f9.patch";
-      hash = "sha256-eVBaKN6uzj48ZnHtwGV0k5ChKjak1tDCyE+wTdyGq2c=";
-    })
     # Prevent a warning about SDK directories we don't have.
     (substituteAll {
       src = ./patches/prevent-sdk-dirs-warnings.patch;

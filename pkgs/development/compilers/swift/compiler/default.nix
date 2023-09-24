@@ -142,9 +142,9 @@ let
   # Create a tool used during the build to create a custom swift wrapper for
   # each of the swift executables produced by the build.
   #
-  # The build produces several `swift-frontend` executables during
-  # bootstrapping. Each of these has numerous aliases via symlinks, and the
-  # executable uses $0 to detect what tool is called.
+  # The build produces a `swift-frontend` executable per bootstrap stage. Each
+  # of these has one or more aliases via symlinks, and the executable uses $0
+  # to detect what tool is called.
   wrapperParams = {
     inherit bintools;
     default_cc_wrapper = clang; # Instead of `@out@` in the original.
@@ -153,7 +153,7 @@ let
     suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
     use_response_file_by_default = 1;
     swiftDriver = "";
-    # NOTE: @prog@ needs to be filled elsewhere.
+    # NOTE: @prog@ and @progName@ need to be filled elsewhere.
   };
   swiftWrapper = runCommand "swift-wrapper.sh" wrapperParams ''
     substituteAll '${../wrapper/wrapper.sh}' "$out"
@@ -167,7 +167,7 @@ let
     mv "$targetFile" "$unwrappedSwift"
     sed < '${swiftWrapper}' > "$targetFile" \
       -e "s|@prog@|'$unwrappedSwift'|g" \
-      -e 's|exec "$prog"|exec -a "$0" "$prog"|g'
+      -e 's|@progName@|"$0"|g'
     chmod a+x "$targetFile"
   '';
 

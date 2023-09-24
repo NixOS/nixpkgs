@@ -19,7 +19,7 @@ expandResponseParams "$@"
 # and doesn't understand linker flags. This follows logic in
 # `lib/DriverTool/driver.cpp`.
 prog=@prog@
-progName="$(basename "$prog")"
+progName=@progName@
 firstArg="${params[0]:-}"
 isFrontend=0
 isRepl=0
@@ -48,7 +48,7 @@ case "$firstArg" in
         ;;
     -modulewrap)
         # Don't wrap this integrated tool.
-        exec "$prog" "${params[@]}"
+        exec -a "$progName" "$prog" "${params[@]}"
         ;;
     repl)
         isRepl=1
@@ -208,8 +208,8 @@ done
 for i in ${NIX_SWIFTFLAGS_COMPILE_BEFORE:-}; do
     extraBefore+=("$i")
 done
-addCFlagsToList extraAfter $NIX_CFLAGS_COMPILE_@suffixSalt@
-addCFlagsToList extraBefore ${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@
+addCFlagsToList extraAfter ${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@
+addCFlagsToList extraBefore ${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@
 
 if [ "$dontLink" != 1 ]; then
 
@@ -279,12 +279,15 @@ PATH="$path_backup"
 # Old bash workaround, see above.
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
-    exec "$prog" @<(printf "%q\n" \
+    responseFile=$(mktemp --tmpdir swift-params.XXXXXX)
+    trap 'rm -f -- "$responseFile"' EXIT
+    printf "%q\n" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
-       ${extraAfter+"${extraAfter[@]}"})
+       ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
+    (exec -a "$progName" "$prog" "@$responseFile")
 else
-    exec "$prog" \
+    exec -a "$progName" "$prog" \
        ${extraBefore+"${extraBefore[@]}"} \
        ${params+"${params[@]}"} \
        ${extraAfter+"${extraAfter[@]}"}
