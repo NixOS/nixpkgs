@@ -1,30 +1,61 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, autoconf, automake
-, libX11, xorgproto, libXt, libXpm, libXft, libXtst, libXi
-, libXrandr, fontconfig, freetype, readline
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, fontconfig
+, freetype
+, libX11
+, libXft
+, libXi
+, libXpm
+, libXrandr
+, libXt
+, libXtst
+, perl
+, pkg-config
+, readline
+, texinfo
+, xorgproto
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ratpoison";
   version = "1.4.9";
 
   src = fetchurl {
-    url = "mirror://savannah/ratpoison/${pname}-${version}.tar.xz";
-    sha256 = "1wfir1gvh5h7izgvx2kd1pr2k7wlncd33zq7qi9s9k2y0aza93yr";
+    url = "mirror://savannah/ratpoison/ratpoison-${finalAttrs.version}.tar.xz";
+    hash = "sha256-2Y+kvgJezKRTxAf/MRqzlJ8p8g1tir7fjwcWuF/I0fE=";
   };
 
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    texinfo
+  ];
+
+  buildInputs = [
+    fontconfig
+    freetype
+    libX11
+    libXft
+    libXi
+    libXpm
+    libXrandr
+    libXt
+    libXtst
+    perl
+    readline
+    xorgproto
+  ];
+
   outputs = [ "out" "contrib" "man" "doc" "info" ];
+
+  strictDeps = true;
 
   configureFlags = [
     # >=1.4.9 requires this even with readline in inputs
     "--enable-history"
   ];
-
-  nativeBuildInputs = [ pkg-config autoconf automake ];
-
-  buildInputs =
-    [ perl
-      libX11 xorgproto libXt libXpm libXft libXtst libXi libXrandr
-      fontconfig freetype readline ];
 
   postInstall = ''
     mkdir -p $contrib/{bin,share}
@@ -32,11 +63,9 @@ stdenv.mkDerivation rec {
     mv $out/share/ratpoison $contrib/share
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nongnu.org/ratpoison/";
     description = "Simple mouse-free tiling window manager";
-    license = licenses.gpl2Plus;
-
     longDescription = ''
        Ratpoison is a simple window manager with no fat library
        dependencies, no fancy graphics, no window decorations, and no
@@ -51,8 +80,9 @@ stdenv.mkDerivation rec {
        Ratpoison has a prefix map to minimize the key clobbering that
        cripples Emacs and other quality pieces of software.
     '';
-
-    platforms = platforms.unix;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "ratpoison";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (libX11.meta) platforms;
   };
-}
+})
