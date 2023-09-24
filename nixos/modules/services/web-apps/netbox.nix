@@ -74,9 +74,9 @@ in {
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = if lib.versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+      default = if lib.versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox_3_5 else pkgs.netbox_3_3;
       defaultText = lib.literalExpression ''
-        if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+        if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox_3_5 else pkgs.netbox_3_3;
       '';
       description = lib.mdDoc ''
         NetBox package to use.

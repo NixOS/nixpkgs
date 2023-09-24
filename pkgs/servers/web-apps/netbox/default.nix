@@ -2,7 +2,9 @@
 let
   generic = import ./generic.nix;
 in
-{
+lib.fix (self: {
+  netbox = self.netbox_3_5;
+
   netbox_3_3 = callPackage generic {
     version = "3.3.10";
     hash = "sha256-MeOfTU5IxNDoUh7FyvwAQNRC/CE0R6p40WnlF+3RuxA=";
@@ -25,7 +27,7 @@ in
     eol = true;
   };
 
-  netbox = callPackage generic {
+  netbox_3_5 = callPackage generic {
     version = "3.5.9";
     hash = "sha256-CJbcuCyTuihDXrObSGyJi2XF+zgWAwcJzjxtkX8pmKs=";
     extraPatches = [
@@ -33,9 +35,10 @@ in
       ./config.patch
     ];
     tests = {
-      inherit (nixosTests) netbox netbox-upgrade;
+      netbox = nixosTests.netbox_3_5;
+      inherit (nixosTests) netbox-upgrade;
     };
 
     maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];
   };
-}
+})
