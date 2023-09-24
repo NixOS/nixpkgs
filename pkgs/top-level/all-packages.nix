@@ -30553,8 +30553,6 @@ with pkgs;
 
   aewan = callPackage ../applications/editors/aewan { };
 
-  afterstep = callPackage ../applications/window-managers/afterstep { };
-
   agedu = callPackage ../tools/misc/agedu { };
 
   agenda = callPackage ../applications/office/agenda { };
