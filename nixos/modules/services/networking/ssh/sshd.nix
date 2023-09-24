@@ -27,13 +27,11 @@ let
       mkValueString = mkValueStringSshd;
     } " ";});
 
-  configFile = settingsFormat.generate "config" cfg.settings;
-  sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
+  configFile = settingsFormat.generate "sshd.conf-settings" cfg.settings;
+  sshconf = pkgs.runCommand "sshd.conf-final" { } ''
     cat ${configFile} - >$out <<EOL
     ${cfg.extraConfig}
     EOL
-
-    sshd -G -f $out
   '';
 
   cfg  = config.services.openssh;
@@ -575,6 +573,21 @@ in
           HostKey ${k.path}
         '')}
       '';
+
+    system.checks = [
+      (pkgs.runCommand "check-sshd-config"
+        {
+          nativeBuildInputs = [ validationPackage ];
+        } ''
+        ${concatMapStringsSep "\n"
+          (lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null")
+          cfg.ports}
+        ${concatMapStringsSep "\n"
+          (la: "sshd -G -T -C laddr=${la.addr},lport=${toString la.port} -f ${sshconf} > /dev/null")
+          cfg.listenAddresses}
+        touch $out
+      '')
+    ];
 
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}
