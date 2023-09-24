@@ -635,6 +635,13 @@ in
     src = getCoreSrc "mupen64plus";
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
+    makeFlags = [
+      "HAVE_PARALLEL_RDP=1"
+      "HAVE_PARALLEL_RSP=1"
+      "HAVE_THR_AL=1"
+      "LLE=1"
+      "WITH_DYNAREC=${stdenv.hostPlatform.parsed.cpu.name}"
+    ];
     meta = {
       description = "Libretro port of Mupen64 Plus, GL only";
       license = lib.licenses.gpl3Only;
