@@ -32,7 +32,7 @@ Each interpreter has the following attributes:
 
 - `libPrefix`. Name of the folder in `${python}/lib/` for corresponding interpreter.
 - `interpreter`. Alias for `${python}/bin/${executable}`.
-- `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See on [](#python.buildenv-function) for usage and documentation.
+- `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See [](#python.buildenv-function) for usage and documentation.
 - `withPackages`. Simpler interface to `buildEnv`. See [](#python.withpackages-function) for usage and documentation.
 - `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
 - `executable`. Name of the interpreter executable, e.g. `python3.10`.
