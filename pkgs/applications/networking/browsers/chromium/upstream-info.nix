@@ -54,12 +54,12 @@
         version = "2023-08-01";
       };
       ungoogled-patches = {
-        rev = "117.0.5938.88-1";
-        sha256 = "1wz15ib56j8c84bgrbf0djk5wli49b1lvaqbg18pdclkp1mqy5w9";
+        rev = "117.0.5938.92-1";
+        sha256 = "0ix0vaki9r305js61qraiah3vqjaj3dyycabi6grfavdgjpjkasb";
       };
     };
-    sha256 = "01n9aqnilsjrbpv5kkx3c6nxs9p5l5lfwxj67hd5s5g4740di4a6";
-    sha256bin64 = "1dhgagphdzbd19gkc7vpl1hxc9vn0l7sxny346qjlmrwafqlhbgi";
-    version = "117.0.5938.88";
+    sha256 = "0b1l8gjhqbsyqi30rsn8dyq2hdvwasdqfk1qzk55f9ch4wclkjk5";
+    sha256bin64 = "047w7y4c8k076yzrjc50lvwncbk8b3lyqnd1si9nrsl7c66j2h0q";
+    version = "117.0.5938.92";
   };
 }
