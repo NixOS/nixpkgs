@@ -495,6 +495,8 @@ let
           '' +
           optionalString cfg.googleOsLoginAccountVerification ''
             account [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
+          '' +
+          optionalString cfg.googleOsLoginAccountVerification ''
             account [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
           '' +
           optionalString config.services.homed.enable ''
@@ -627,7 +629,11 @@ let
           '' +
           optionalString config.security.pam.krb5.enable ''
             auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
+          '' +
+          optionalString config.security.pam.krb5.enable ''
             auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
+          '' +
+          optionalString config.security.pam.krb5.enable ''
             auth sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_pass
           '' +
           ''
@@ -705,10 +711,14 @@ let
             # anyways.
             # See also https://github.com/google/fscrypt/issues/95
             session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
+          '' +
+          optionalString config.security.pam.enableFscrypt ''
             session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
           '' +
           optionalString cfg.zfs ''
             session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
+          '' +
+          optionalString cfg.zfs ''
             session optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes} ${optionalString config.security.pam.zfs.noUnmount "nounmount"}
           '' +
           optionalString cfg.pamMount ''
