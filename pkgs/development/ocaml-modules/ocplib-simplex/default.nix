@@ -2,7 +2,7 @@
 
 let
   pname = "ocplib-simplex";
-  version = "0.4";
+  version = "0.4.1";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "OCamlPro-Iguernlala";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09niyidrjzrj8g1qwx4wgsdf5m6cwrnzg7zsgala36jliic4di60";
+    sha256 = "sha256-bhlTBpJg031x2lUjwuVrhQgOGmDLW/+0naN8wRjv6i4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ocaml findlib ];
