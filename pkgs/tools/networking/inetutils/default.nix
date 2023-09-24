@@ -51,9 +51,7 @@ stdenv.mkDerivation rec {
     "--disable-rexec"
   ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
 
-  # Test fails with "UNIX socket name too long", probably because our
-  # $TMPDIR is too long.
-  doCheck = false;
+  doCheck = true;
 
   installFlags = [ "SUIDMODE=" ];
 
