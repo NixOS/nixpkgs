@@ -72,6 +72,7 @@ mapAliases {
   inherit (pkgs) firebase-tools; # added 2023-08-18
   flood = pkgs.flood; # Added 2023-07-25
   git-ssb = throw "git-ssb was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) gitmoji-cli; # added 2023-09-23
   glob = pkgs.node-glob; # added 2023-08-18
   inherit (pkgs) gqlint; # added 2023-08-19
   inherit (pkgs) graphqurl; # added 2023-08-19
