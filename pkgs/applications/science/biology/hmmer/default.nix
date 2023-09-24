@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
       HMMER can be downloaded and installed as a command line tool on your own hardware, and now it is also more widely accessible to the scientific community via new search servers at the European Bioinformatics Institute.
     '';
     homepage = "http://hmmer.org/";
+    changelog = "https://github.com/EddyRivasLab/hmmer/blob/hmmer-${version}/release-notes/RELEASE-${version}.md";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
     # at least SSE is *required*
