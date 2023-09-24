@@ -55,15 +55,15 @@ stdenvNoCC.mkDerivation rec {
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-xpV818IKE55ZdiLqgXupbFFNnnsRtBaIXUWJVfSeEnA=";
+        hash = "sha256-0Nto5EikWEvW6PCX6801qxDdlB1PtWJ1iym0mwh/YJI=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-60rJzbuHxDqnfCjmO3givs4/xpOWOG8B7bTWR52xML4=";
+        hash = "sha256-3GUQk7Nv5Nx25SPk+Z+6EDNEsDbLW68IOXmLt8NkSYQ=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-c+/yHKIZAPmpwCRn7HLC39tj0nGeAK1qlby4UuILZRw=";
+        hash = "sha256-8xMBU3jloMsdekejKrnswWfzXhxwvsHFNgcUf4hn0W4=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
