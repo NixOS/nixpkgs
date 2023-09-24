@@ -30551,10 +30551,7 @@ with pkgs;
 
   aewan = callPackage ../applications/editors/aewan { };
 
-  afterstep = callPackage ../applications/window-managers/afterstep {
-    fltk = fltk13;
-    gtk = gtk2;
-  };
+  afterstep = callPackage ../applications/window-managers/afterstep { };
 
   agedu = callPackage ../tools/misc/agedu { };
 
