@@ -8,7 +8,7 @@ let
   src = fetchurl {
     url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${version}/Beekeeper-Studio-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha512 = "sha512-an4Gqx2mx/rnkLe/LUAz3qRdrqWBcrWcdCiNi8Hz1OKBp1SWN3acU8RppIM0uwlrcBkjnigbbM5DZ2o+svA23A==";
+    hash = "sha512-an4Gqx2mx/rnkLe/LUAz3qRdrqWBcrWcdCiNi8Hz1OKBp1SWN3acU8RppIM0uwlrcBkjnigbbM5DZ2o+svA23A==";
   };
 
   appimageContents = appimageTools.extractType2 {
