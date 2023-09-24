@@ -10,8 +10,13 @@ import ./make-test-python.nix ({ lib, ... }: {
     users.users.bob = {
       initialPassword = "pass2";
       isNormalUser = true;
+      recursiveCreateHome = true;
       homeMode = "750";
     };
+    boot.initrd.postMountCommands = ''
+      mkdir -p $targetRoot/home/bob/.config
+      touch $targetRoot/home/bob/.config/user-dirs.dirs
+    '';
   };
 
   testScript = ''
@@ -23,5 +28,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.send_chars("pass1\n")
     machine.succeed('[ "$(stat -c %a /home/alice)" == "700" ]')
     machine.succeed('[ "$(stat -c %a /home/bob)" == "750" ]')
+    machine.succeed('[ "$(stat -c %U:%G /home/bob/.config)" == "bob:users" ]')
+    machine.succeed('[ "$(stat -c %U:%G /home/bob/.config/user-dirs.dirs)" = "bob:users" ]')
   '';
 })

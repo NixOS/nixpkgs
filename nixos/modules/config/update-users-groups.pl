@@ -235,7 +235,10 @@ foreach my $u (@{$spec->{users}}) {
     # Ensure home directory incl. ownership and permissions.
     if ($u->{createHome} and !$is_dry) {
         make_path($u->{home}, { mode => oct($u->{homeMode}) }) if ! -e $u->{home};
-        chown $u->{uid}, $u->{gid}, $u->{home};
+        system("chown",
+                ($u->{recursiveCreateHome} ? "-R" : ()),
+                "$u->{uid}:$u->{gid}",
+                 $u->{home}) == 0 || warn "warning: unable to chown $u->{home}, $!";
         chmod oct($u->{homeMode}), $u->{home};
     }
 

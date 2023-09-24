@@ -219,6 +219,14 @@ let
         '';
       };
 
+      recursiveCreateHome = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to recursivley ensure ownership of the users home direcotry
+        '';
+      };
+
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
@@ -454,7 +462,7 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home homeMode createHome isSystemUser
+          name uid group description home homeMode createHome recursiveCreateHome isSystemUser
           password hashedPasswordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword expires;
