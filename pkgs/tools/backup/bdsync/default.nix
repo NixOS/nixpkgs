@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bdsync";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "rolffokkens";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kx422cp1bxr62i1mi7dzrpwmys1kdp865rcymdp4knb5rr5864k";
+    sha256 = "sha256-58yoF6s0WjH+1mTY7X5OX53YgcnDmGxoCR8Kvl6lP+A=";
   };
 
   nativeBuildInputs = [ pandoc which ];
