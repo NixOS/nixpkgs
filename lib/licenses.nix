@@ -840,6 +840,14 @@ in mkLicense lset) ({
     fullName = "University of Illinois/NCSA Open Source License";
   };
 
+  ncul1 = {
+    spdxId = "NCUL1";
+    fullName = "Netdata Cloud UI License v1.0";
+    free = false;
+    redistributable = true; # Only if used in Netdata products.
+    url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
+  };
+
   nlpl = {
     spdxId = "NLPL";
     fullName = "No Limit Public License";
