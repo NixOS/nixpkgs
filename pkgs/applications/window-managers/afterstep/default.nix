@@ -1,26 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config
-, libtiff
-, fltk, gtk
-, libICE, libSM
-, dbus
+{ lib
+, stdenv
+, fetchFromGitHub
 , fetchpatch
+, dbus
+, fltk13
+, gtk2
+, libICE
+, libSM
+, libtiff
+, pkg-config
 }:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "afterstep";
   version = "2.2.12";
-  sourceName = "AfterStep-${version}";
 
-  src = fetchurl {
-    urls = [ "ftp://ftp.afterstep.org/stable/${sourceName}.tar.bz2" ];
-    sha256 = "1j7vkx1ig4kzwffdxnkqv3kld9qi3sam4w2nhq18waqjsi8xl5gz";
+  src = fetchFromGitHub {
+    owner = "afterstep";
+    repo = "afterstep";
+    rev = finalAttrs.version;
+    hash = "sha256-j1ADTRZ3Mxv9VNZWhWCFMnM/CJfkphdrgbw9Ca3bBw0=";
   };
 
   patches = [
     (fetchpatch {
       url = "https://salsa.debian.org/debian/afterstep/raw/master/debian/patches/44-Fix-build-with-gcc-5.patch";
-      sha256 = "1vipy2lzzd2gqrsqk85pwgcdhargy815fxlbn57hsm45zglc3lj4";
+      hash = "sha256-RNLB6PuFVA1PsYt2VwLyLyvY2OO3oIl1xk+0/6nwN+4=";
     })
 
     # Fix pending upstream inclusion for binutils-2.36 support:
@@ -28,7 +33,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "binutils-2.36.patch";
       url = "https://github.com/afterstep/afterstep/commit/5e9e897cf8c455390dd6f5b27fec49707f6b9088.patch";
-      sha256 = "1kk97max05r2p1a71pvpaza79ff0klz32rggik342p7ki3516qv8";
+      hash = "sha256-aGMTyojzXEHGjO9lMT6dwLl01Fd333BUuCIX0FU9ac4=";
     })
   ];
 
@@ -40,8 +45,22 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libtiff fltk gtk libICE libSM dbus ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    dbus
+    fltk13
+    gtk2
+    libICE
+    libSM
+    libtiff
+  ];
+
+  outputs = [ "out" "man" ];
+
+  strictDeps = true;
 
   # A strange type of bug: dbus is not immediately found by pkg-config
   preConfigure = ''
@@ -66,20 +85,19 @@ stdenv.mkDerivation rec {
   #   https://github.com/afterstep/afterstep/issues/8
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
+    homepage = "http://www.afterstep.org/";
     description = "A NEXTStep-inspired window manager";
     longDescription = ''
-      AfterStep is a window manager for the Unix X Window
-      System. Originally based on the look and feel of the NeXTStep
-      interface, it provides end users with a consistent, clean, and
-      elegant desktop. The goal of AfterStep development is to provide
-      for flexibility of desktop configuration, improving aestetics,
-      and efficient use of system resources.
+      AfterStep is a window manager for the Unix X Window System. Originally
+      based on the look and feel of the NeXTStep interface, it provides end
+      users with a consistent, clean, and elegant desktop. The goal of AfterStep
+      development is to provide for flexibility of desktop configuration,
+      improving aestetics, and efficient use of system resources.
     '';
-    homepage = "http://www.afterstep.org/";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    mainProgram = "afterstep";
+    platforms = lib.platforms.linux;
   };
-
-}
+})
