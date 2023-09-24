@@ -6,7 +6,7 @@ let
   '');
   static = import ./static.nix { inherit stdenvAdapters pkgs; };
 in
-  tar-all "${system}-bootstrap-files.tar.gz" ([
+  tar-all "${system}-bootstrap-files.tar.xz" ([
     static.patchelf
   ] ++ (with pkgs; [
     bash
