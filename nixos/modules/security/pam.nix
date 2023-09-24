@@ -484,14 +484,11 @@ let
           optionalString cfg.mysqlAuth ''
             account sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
-          optionalString (config.services.kanidm.enablePam) ''
+          optionalString config.services.kanidm.enablePam ''
             account sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user
           '' +
-          optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false) ''
-            account sufficient ${pkgs.sssd}/lib/security/pam_sss.so
-          '' +
-          optionalString (config.services.sssd.enable && cfg.sssdStrictAccess) ''
-            account [default=bad success=ok user_unknown=ignore] ${pkgs.sssd}/lib/security/pam_sss.so
+          optionalString config.services.sssd.enable ''
+            account ${if cfg.sssdStrictAccess then "[default=bad success=ok user_unknown=ignore]" else "sufficient"} ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
           optionalString config.security.pam.krb5.enable ''
             account sufficient ${pam_krb5}/lib/security/pam_krb5.so
@@ -532,10 +529,9 @@ let
           (let p11 = config.security.pam.p11; in optionalString cfg.p11Auth ''
             auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so
           '') +
-          (let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth (''
-              auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ''
-                + ''${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"} ${optionalString (u2f.origin != null) "origin=${u2f.origin}"}
-          '')) +
+          (let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth ''
+            auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"} ${optionalString (u2f.origin != null) "origin=${u2f.origin}"}
+          '') +
           optionalString cfg.usbAuth ''
             auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so
           '' +
@@ -593,13 +589,13 @@ let
                 auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
               '' +
               optionalString cfg.enableKwallet ''
-               auth optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5
+                auth optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5
               '' +
               optionalString cfg.enableGnomeKeyring ''
                 auth optional ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so
               '' +
               optionalString cfg.gnupg.enable ''
-                auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly " store-only"}
+                auth optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.storeOnly "store-only"}
               '' +
               optionalString cfg.failDelay.enable ''
                 auth optional ${pkgs.pam}/lib/security/pam_faildelay.so delay=${toString cfg.failDelay.delay}
@@ -641,7 +637,8 @@ let
           '' +
           optionalString config.services.homed.enable ''
             password sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
-          '' + ''
+          '' +
+          ''
             password sufficient pam_unix.so nullok yescrypt
           '' +
           optionalString config.security.pam.enableEcryptfs ''
@@ -687,12 +684,9 @@ let
           optionalString cfg.setLoginUid ''
             session ${if config.boot.isContainer then "optional" else "required"} pam_loginuid.so
           '' +
-          optionalString cfg.ttyAudit.enable (concatStringsSep " \\\n  " ([
-            "session required ${pkgs.pam}/lib/security/pam_tty_audit.so"
-          ] ++ optional cfg.ttyAudit.openOnly "open_only"
-          ++ optional (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"
-          ++ optional (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"
-          )) +
+          optionalString cfg.ttyAudit.enable ''
+            session required ${pkgs.pam}/lib/security/pam_tty_audit.so ${optionalString cfg.ttyAudit.openOnly "open_only"} ${optionalString (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"} ${optionalString (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"}
+          '' +
           optionalString config.services.homed.enable ''
             session required ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' +
@@ -753,16 +747,16 @@ let
           optionalString (cfg.enableAppArmor && config.security.apparmor.enable) ''
             session optional ${pkgs.apparmor-pam}/lib/security/pam_apparmor.so order=user,group,default debug
           '' +
-          optionalString (cfg.enableKwallet) ''
+          optionalString cfg.enableKwallet ''
             session optional ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so kwalletd=${pkgs.plasma5Packages.kwallet.bin}/bin/kwalletd5
           '' +
-          optionalString (cfg.enableGnomeKeyring) ''
+          optionalString cfg.enableGnomeKeyring ''
             session optional ${pkgs.gnome.gnome-keyring}/lib/security/pam_gnome_keyring.so auto_start
           '' +
           optionalString cfg.gnupg.enable ''
             session optional ${pkgs.pam_gnupg}/lib/security/pam_gnupg.so ${optionalString cfg.gnupg.noAutostart " no-autostart"}
           '' +
-          optionalString (config.virtualisation.lxc.lxcfs.enable) ''
+          optionalString config.virtualisation.lxc.lxcfs.enable ''
             session optional ${pkgs.lxc}/lib/security/pam_cgfs.so -c all
           ''
         );
