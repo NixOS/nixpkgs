@@ -34,7 +34,7 @@ appimageTools.wrapType2 {
     description = "One for all free music in China";
     homepage = "http://listen1.github.io/listen1/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ running-grass ];
     platforms = [ "x86_64-linux" ];
   };
 }

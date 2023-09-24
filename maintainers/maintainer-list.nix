@@ -14976,6 +14976,12 @@
     github = "rumpelsepp";
     githubId = 1961699;
   };
+  running-grass = {
+    name = "Leo Liu";
+    email = "467195537@qq.com";
+    github = "running-grass";
+    githubId = 17241154;
+  };
   rushmorem = {
     email = "rushmore@webenchanter.com";
     github = "rushmorem";
