@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , acl
 , attr
 , autoreconfHook
@@ -35,6 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-p2JgJ/rvqaQ6yyXSh+ehScUH565ud5bQncl+lOnsWfc=";
   };
+
+  patches = [
+    # Pull fix for test failure on 32-bit systems:
+    (fetchpatch {
+      name = "32-bit-tests-fix.patch";
+      url = "https://github.com/libarchive/libarchive/commit/3bd918d92f8c34ba12de9c6604d96f9e262a59fc.patch";
+      hash = "sha256-RM3xFM6S2DkM5DJ0kAba8eLzEXuY5/7AaU06maHJ6rM=";
+    })
+  ];
 
   outputs = [ "out" "lib" "dev" ];
 
