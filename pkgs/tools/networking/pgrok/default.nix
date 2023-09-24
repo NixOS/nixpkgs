@@ -3,23 +3,22 @@
 , callPackage
 , fetchFromGitHub
 }:
-let
+buildGoModule rec {
+  pname = "pgrok";
   version = "1.4.0";
+
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     rev = "v${version}";
     hash = "sha256-2k3XLXmf1Xnx4HvS7sD/aq+78Z4I7uY4djV958n5TX4=";
   };
-  web = callPackage ./web.nix { inherit src version; };
-in
-buildGoModule {
-  pname = "pgrok";
-  inherit version src;
 
   vendorHash = "sha256-M0xVHRh9NKPxmUEmx1dDQUZc8aXcdAfHisQAnt72RdY=";
 
-  outputs = [ "out" "server" "web" ];
+  outputs = [ "out" "server" ];
+
+  web = callPackage ./web.nix { inherit src version; };
 
   ldflags = [
     "-s"
@@ -43,7 +42,6 @@ buildGoModule {
 
   postInstall = ''
     moveToOutput bin/pgrokd $server
-    cp -r ${web} $web
   '';
 
   passthru.updateScript = ./update.sh;

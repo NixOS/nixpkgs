@@ -1,29 +1,30 @@
-{ buildNpmPackage
-, src
+{ src
 , version
+, nodejs
+, nodePackages
+, stdenvNoCC
 }:
-buildNpmPackage {
-    name = "pgrok-web";
-    inherit src version;
-    sourceRoot = "${src.name}/pgrokd/web";
+let
+  build-deps = nodePackages."pgrok-build-deps-../../tools/networking/pgrok/build-deps";
+in
+stdenvNoCC.mkDerivation {
+  pname = "pgrok-web";
+  inherit version;
+  src = "${src}/pgrokd/web";
 
-    npmDepsHash = "sha256-f4pDBoG6sTJE3aUknqUvHHpBR9KWo/B4YMrWHkGbvA8=";
+  nativeBuildInputs = [ nodejs ];
 
-    # Upstream doesn't have a lockfile
-    postPatch = ''
-      cp ${./package-lock.json} ./package-lock.json
-      substituteInPlace ./package.json \
-        --replace "../cli/dist" "$out"
-    '';
+  buildPhase = ''
+    runHook preBuild
+    cp ${./build-deps/package.json} package.json
+    ln -s ${build-deps}/lib/node_modules/pgrokd/node_modules node_modules
+    npm run build
+    runHook postBuild
+  '';
 
-    patches = [
-      ./add_version_to_package.json.patch
-    ];
-
-    dontInstall = true;
-    dontFixup = true;
-
-    NODE_OPTIONS = "--openssl-legacy-provider";
-
-    npmPackFlags = [ "--ignore-scripts" ];
-  }
+  installPhase = ''
+    runHook preInstall
+    cp -r dist $out
+    runHook postInstall
+  '';
+}
