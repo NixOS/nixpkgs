@@ -1,18 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
+
 , cmake
 , mimalloc
 , ninja
 , openssl
 , zlib
-, testers
-, mold
-, nix-update-script
-, runCommandCC
-, mold-wrapped
-, hello
+
 , buildPackages
+, hello
+, mold
+, mold-wrapped
+, runCommandCC
+, testers
 , useMoldLinker
 }:
 
@@ -22,8 +24,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "rui314";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "mold";
+    rev = "v${version}";
     hash = "sha256-4W6quVSkxS2I6KEy3fVyBTypD0fg4EecgeEVM0Yw58s=";
   };
 
@@ -103,8 +105,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi nitsky paveloom ];
-    mainProgram = "mold";
     platforms = platforms.unix;
+    mainProgram = "mold";
+    maintainers = with maintainers; [ azahi nitsky paveloom ];
   };
 }
