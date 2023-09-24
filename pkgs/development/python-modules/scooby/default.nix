@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.7.2";
+  version = "0.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "banesullivan";
-    repo = pname;
+    repo = "scooby";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eY8Ysc20Q1OHKb/LU+4gqnSgNfHCytjOnnvB24EfQto=";
+    hash = "sha256-lu+iuO0871DpFRDPzDGClKXYnB8w/lVsUCc39JXDmNo=";
   };
 
   nativeBuildInputs = [
