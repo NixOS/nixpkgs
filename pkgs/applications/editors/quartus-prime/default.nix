@@ -1,4 +1,4 @@
-{ stdenv, lib, buildFHSEnvChroot, callPackage, makeDesktopItem, writeScript
+{ stdenv, lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
 }:
@@ -13,7 +13,7 @@ let
     categories = [ "Development" ];
   };
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-in buildFHSEnvChroot rec {
+in buildFHSEnv rec {
   name = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
@@ -31,6 +31,10 @@ in buildFHSEnvChroot rec {
     xorg.libXtst
     xorg.libXi
   ];
+
+  # Also support 32-bit executables.
+  multiArch = true;
+
   multiPkgs = pkgs: with pkgs; let
     # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
     freetype = pkgs.freetype.override { libpng = libpng12; };
