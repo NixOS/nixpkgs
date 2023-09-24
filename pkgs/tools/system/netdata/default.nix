@@ -118,7 +118,8 @@ stdenv.mkDerivation rec {
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
+    # ncul1 for the cloud dashboard
+    license = with licenses; [ gpl3Plus ncul1 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ raitobezarius ];
   };
