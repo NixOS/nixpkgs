@@ -551,9 +551,6 @@ let
           (let dp9ik = config.security.pam.dp9ik; in optionalString dp9ik.enable ''
             auth ${dp9ik.control} ${pkgs.pam_dp9ik}/lib/security/pam_p9.so ${dp9ik.authserver}
           '') +
-          optionalString cfg.fprintAuth ''
-            auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
-          '' +
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
           # after it succeeds. Certain modules need to run after pam_unix
@@ -616,6 +613,9 @@ let
           '' +
           optionalString cfg.unixAuth ''
             auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth try_first_pass
+          '' +
+          optionalString cfg.fprintAuth ''
+            auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
           '' +
           optionalString cfg.otpwAuth ''
             auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so
