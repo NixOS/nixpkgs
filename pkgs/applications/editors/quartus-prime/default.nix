@@ -56,8 +56,6 @@ in buildFHSEnv rec {
     libxcrypt-legacy
   ];
 
-  passthru = { inherit unwrapped; };
-
   extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/128x128
     ln -s ${desktopItem}/share/applications/* $out/share/applications
@@ -99,4 +97,6 @@ in buildFHSEnv rec {
 
   # Run the wrappers directly, instead of going via bash.
   runScript = "";
+
+  passthru = { inherit unwrapped; };
 }
