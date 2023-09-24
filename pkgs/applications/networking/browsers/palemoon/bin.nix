@@ -17,19 +17,19 @@
 , palemoon-bin
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.3.1";
+  version = "32.4.0.1";
 
   src = fetchzip {
     urls = [
-      "https://rm-eu.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-      "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+      "https://rm-eu.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+      "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
-      "sha256-1JYaxxkqgg/gLdZ+uGDB5BI0NKjHO4huk0b/M9QFuII="
+      "sha256-kGt3pIgCjVeSD6UXRvj5w9opWrMx3q3B/Y0S55kKS08="
     else
-      "sha256-p/Lid6Uv3XTEg+43Gke5VLILhzENHoBP6XjGVHy7wCY=";
+      "sha256-kNvUC/ir7TKjvKXYFoEDOPAY75CEgeixmEV1tuB/WIM=";
   };
 
   preferLocalBuild = true;
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   desktopItems = [(makeDesktopItem rec {
-    name = pname;
+    name = "palemoon-bin";
     desktopName = "Pale Moon Web Browser";
     comment = "Browse the World Wide Web";
     keywords = [
@@ -164,6 +164,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
+
       Pale Moon offers you a browsing experience in a browser completely built
       from its own, independently developed source that has been forked off from
       Firefox/Mozilla code a number of years ago, with carefully selected
@@ -186,4 +187,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
   };
-}
+})
