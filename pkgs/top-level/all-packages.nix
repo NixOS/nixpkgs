@@ -32956,7 +32956,7 @@ with pkgs;
 
   kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
 
-  waybox = callPackage ../applications/window-managers/waybox {
+  waybox = callPackage ../by-name/wa/waybox/package.nix {
     wlroots = wlroots_0_15;
   };
 
