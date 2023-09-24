@@ -30826,8 +30826,6 @@ with pkgs;
 
   bchoppr = callPackage ../applications/audio/bchoppr { };
 
-  berry = callPackage ../applications/window-managers/berry { };
-
   bespokesynth = darwin.apple_sdk_11_0.callPackage ../applications/audio/bespokesynth {
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices CoreAudioKit IOBluetooth MetalKit;
   };
