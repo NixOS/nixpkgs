@@ -23,6 +23,12 @@ in
       example = { RUST_BACKTRACE="yes"; };
     };
 
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      description = lib.mdDoc "File containing environment variables to be passed to the Garage server.";
+      default = null;
+    };
+
     logLevel = mkOption {
       type = types.enum (["info" "debug" "trace"]);
       default = "info";
@@ -80,7 +86,7 @@ in
       after = [ "network.target" "network-online.target" ];
       wants = [ "network.target" "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ configFile ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/garage server";
 
@@ -88,6 +94,7 @@ in
         DynamicUser = lib.mkDefault true;
         ProtectHome = true;
         NoNewPrivileges = true;
+        EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
       };
       environment = {
         RUST_LOG = lib.mkDefault "garage=${cfg.logLevel}";

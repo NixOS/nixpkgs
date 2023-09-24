@@ -6,16 +6,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "postgres-lsp";
-  version = "unstable-2023-08-23";
+  version = "unstable-2023-09-21";
 
-  src = fetchFromGitHub {
+  src = (fetchFromGitHub {
     owner = "supabase";
     repo = "postgres_lsp";
-    rev = "47dd0132b12661ab6c97f5fba892e567a5109c84";
-    hash = "sha256-aV3QAp6DkNrHiDe1Ytiu6UyTWrelV6vO83Baiv4ONLg=";
+    rev = "f25f23a683c4e14dea52e3e423584588ab349081";
+    hash = "sha256-z8WIUfgnPYdzhBit1V6A5UktjoYCblTKXxwpbHOmFJA=";
+    fetchSubmodules = true;
+  }).overrideAttrs {
+    # workaround to be able to fetch git@github.com submodules
+    # https://github.com/NixOS/nixpkgs/issues/195117
+    env = {
+      GIT_CONFIG_COUNT = 1;
+      GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
+      GIT_CONFIG_VALUE_0 = "git@github.com:";
+    };
   };
 
-  cargoHash = "sha256-9d/KiQ7IXhmYvTb97FKJh/cGTdnxAgCXSx4+V74b+RE=";
+  cargoHash = "sha256-Nyxiere6/e5Y7YcgHitVkaiS1w3JXkbohIcBNc00YXY=";
 
   nativeBuildInputs = [
     protobuf
