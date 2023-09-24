@@ -24,13 +24,13 @@
 , networkmanager
 }: stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-XAyko2MxFyo5RyioaexhoFAR3E+I3t/8vD2K3WYNmsI=";
+    hash = "sha256-CxO1KU7F6sT5D8vjKOmntjDxcieoRSHTvuSqXfplcHk=";
   };
 
   # XXX: See patch files for relevant explanations.
