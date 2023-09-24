@@ -4066,6 +4066,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
   };
 
+  oelint-parser = callPackage ../development/python-modules/oelint-parser { };
+
   openllm = callPackage ../development/python-modules/openllm { };
 
   openllm-client = callPackage ../development/python-modules/openllm-client { };
