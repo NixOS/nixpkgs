@@ -73,5 +73,6 @@ buildGoModule rec {
       users. We go by the UNIX philosophy and try to do one thing and do it
       well, providing a stellar user experience and a sane, simple interface.
     '';
+    mainProgram = "gopass";
   };
 }
