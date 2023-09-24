@@ -28,6 +28,7 @@ let
      schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
      builders      = [ ${concatStringsSep "," cfg.builders} ],
      services      = [ ${concatStringsSep "," cfg.reporters} ],
+     configurators = [ ${concatStringsSep "," cfg.configurators} ],
     )
     for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
@@ -76,6 +77,15 @@ in {
         default = [];
         example = [
           "changes.GitPoller('https://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+        ];
+      };
+
+      configurators = mkOption {
+        type = types.listOf types.str;
+        description = lib.mdDoc "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
+        default = [];
+        example = [
+          "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
         ];
       };
 
