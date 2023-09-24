@@ -18,7 +18,9 @@ let
         description = lib.mdDoc ''
           wg-quick .conf file, describing the interface.
           This overrides any other configuration interface configuration options.
-          See wg-quick manpage for more details.
+          See wg-quick manpage for more details. Using this option can be a useful
+          means of configuring WireGuard if you have an existing .conf file, which one may
+          wish to store in /secret.
         '';
       };
 
