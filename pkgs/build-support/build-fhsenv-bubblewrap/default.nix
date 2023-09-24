@@ -31,7 +31,7 @@ assert (pname != null || version != null) -> (name == null && pname != null); # 
 
 with builtins;
 let
-  pname = if args.name != null then args.name else args.pname;
+  pname = if args ? name && args.name != null then args.name else args.pname;
   versionStr = lib.optionalString (version != null) ("-" + version);
   name = pname + versionStr;
 
