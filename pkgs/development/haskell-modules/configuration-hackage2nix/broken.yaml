@@ -3766,7 +3766,6 @@ broken-packages:
   - numtype # failure in job https://hydra.nixos.org/build/233219211 at 2023-09-02
   - numtype-tf # failure in job https://hydra.nixos.org/build/233243483 at 2023-09-02
   - Nutri # failure in job https://hydra.nixos.org/build/233244244 at 2023-09-02
-  - nvfetcher # failure in job https://hydra.nixos.org/build/233598212 at 2023-09-02
   - NXTDSL # failure in job https://hydra.nixos.org/build/233193483 at 2023-09-02
   - nylas # failure in job https://hydra.nixos.org/build/233193540 at 2023-09-02
   - oanda-rest-api # failure in job https://hydra.nixos.org/build/233250190 at 2023-09-02
