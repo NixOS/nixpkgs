@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "45.rc";
+  version = "45.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "ZAB0x80KGy80pzjLFZdbXyxUowiAWPv9sU5zTOB2clQ=";
+    sha256 = "dricPVx6kg9OAHPbbET95Y2z8Ypr8sonR2hlKxyAdxM=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
       do not need to be recompiled.  In fact they don't even have to
       be restarted.
     '';
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
