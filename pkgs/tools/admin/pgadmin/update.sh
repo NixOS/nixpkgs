@@ -104,7 +104,7 @@ cp yarn.lock "$nixpkgs/pkgs/tools/admin/pgadmin/"
 printf "Done\n"
 popd
 
-sed -i -E -e "s#yarnSha256 = \".*\"#yarnSha256 = \"$YARN_HASH\"#" ${scriptDir}/default.nix
+sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$YARN_HASH\"#" ${scriptDir}/default.nix
 
 update-source-version pgadmin4 "$newest_version" --print-changes
 touch $TMPDIR/.done
