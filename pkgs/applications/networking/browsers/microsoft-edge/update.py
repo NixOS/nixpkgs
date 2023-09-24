@@ -8,6 +8,9 @@ from urllib import request
 from collections import OrderedDict
 from debian.deb822 import Packages
 from debian.debian_support import Version
+from os.path import abspath, dirname
+
+PIN_PATH = dirname(abspath(__file__)) + '/default.nix'
 
 def packages():
     packages_url = 'https://packages.microsoft.com/repos/edge/dists/stable/main/binary-amd64/Packages'
@@ -60,7 +63,7 @@ def write_expression():
     latest = latest_packages(packages())
     channel_strs = nix_expressions(latest)
     nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}\n'
-    with open('default.nix', 'w') as f:
+    with open(PIN_PATH, 'w') as f:
         f.write(nix_expr)
 
 
