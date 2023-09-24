@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-console";
-  version = "45.beta";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-console/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "JMvVaA5SXCwMV62NjBrRme9bRbH/HIC+IqN4SORuk6w=";
+    sha256 = "50YhKNLfIySh10gGLEBCnNBQSvCeQHBnsz86nQxZyOE=";
   };
 
   nativeBuildInputs = [
