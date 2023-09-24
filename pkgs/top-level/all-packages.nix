@@ -19647,7 +19647,9 @@ with pkgs;
 
   modd = callPackage ../development/tools/modd { };
 
-  mold = callPackage ../development/tools/mold { };
+  mold = callPackage ../development/tools/mold {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.llvmPackages_13.stdenv else stdenv;
+  };
 
   mold-wrapped = wrapBintoolsWith {
     bintools = mold;
