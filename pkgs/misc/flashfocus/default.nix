@@ -2,11 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flashfocus";
-  version = "2.3.1";
+  version = "2.4.0";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XT3CKJWn1uKnPPsJC+MWlEAd8sWdVTEXz5b3n0UUedY=";
+    sha256 = "sha256-TKqPUJq3t2EjX6sY3NSuW0sCq4IS4PNMaaFNe+5hvoY=";
   };
 
   postPatch = ''
@@ -16,6 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
