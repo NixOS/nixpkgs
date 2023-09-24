@@ -36,7 +36,6 @@
 , postgresql
 , readline
 , sqlite
-, symlinkJoin
 , unbound
 , vimPlugins
 , vimUtils
