@@ -3268,6 +3268,8 @@ self: super: with self; {
 
   dtschema = callPackage ../development/python-modules/dtschema { };
 
+  dtw-python = callPackage ../development/python-modules/dtw-python { };
+
   ducc0 = callPackage ../development/python-modules/ducc0 { };
 
   duckdb = callPackage ../development/python-modules/duckdb {
