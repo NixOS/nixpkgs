@@ -136,6 +136,7 @@ self: super:
 
   libxcvt = super.libxcvt.overrideAttrs ({ meta ? {}, ... }: {
     meta = meta // {
+      homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcvt";
       mainProgram = "cvt";
       badPlatforms = meta.badPlatforms or [] ++ [
         lib.systems.inspect.platformPatterns.isStatic
