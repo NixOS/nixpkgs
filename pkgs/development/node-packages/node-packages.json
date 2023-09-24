@@ -120,7 +120,6 @@
 , "fx"
 , "ganache"
 , "gatsby-cli"
-, "generator-code"
 , "get-graphql-schema"
 , "git-run"
 , "git-standup"
