@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-emojicodes";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "blyxyas";
     repo = "mdbook-emojicodes";
     rev = "${version}";
-    hash = "sha256-wj3WVDDJmRh1g4E1iqxqmu6QNNVi9pOqZDnnDX3AnFo=";
+    hash = "sha256-dlvfY2AMBvTl0j9YaT+u4CeWQGGihFD8AZaAK4/hUWU=";
   };
 
-  cargoHash = "sha256-Ia7GdMadx1Jb1BB040eRmyIpK98CsN3yjruUxUNh3co=";
+  cargoHash = "sha256-SkvAtV613+ARk79dB2zRKoLjPgdzoEKQa3JrRw9qBkA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
