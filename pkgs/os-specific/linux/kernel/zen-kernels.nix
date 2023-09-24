@@ -74,10 +74,10 @@ let
       HZ = freeform "1000";
       HZ_1000 = yes;
     } // lib.optionalAttrs (isLqx) {
-      # Google's BBRv2 TCP congestion Control
-      TCP_CONG_BBR2 = yes;
-      DEFAULT_BBR2 = yes;
-      DEFAULT_TCP_CONG = freeform "bbr2";
+      # Google's BBRv3 TCP congestion Control
+      TCP_CONG_BBR = yes;
+      DEFAULT_BBR = yes;
+      DEFAULT_TCP_CONG = freeform "bbr";
 
       # PDS Process Scheduler
       SCHED_ALT = yes;
