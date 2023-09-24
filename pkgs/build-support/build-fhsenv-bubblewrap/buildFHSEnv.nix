@@ -52,7 +52,7 @@ let
   # these match the host's architecture, glibc_multi is used for multilib
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
-  basePkgs = with pkgs; [
+  baseTargetPaths = with pkgs; [
     glibcLocales
     (if isMultiBuild then glibc_multi else glibc)
     (toString gcc.cc.lib)
@@ -71,7 +71,7 @@ let
     bzip2
     xz
   ];
-  baseMultiPkgs = with pkgsi686Linux; [
+  baseMultiPaths = with pkgsi686Linux; [
     (toString gcc.cc.lib)
   ];
 
@@ -132,7 +132,7 @@ let
   staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
     # ldconfig wrapper must come first so it overrides the original ldconfig
-    paths = [ etcPkg ldconfig ] ++ basePkgs ++ targetPaths;
+    paths = [ etcPkg ldconfig ] ++ baseTargetPaths ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
     postBuild = ''
@@ -168,7 +168,7 @@ let
 
   staticUsrProfileMulti = buildEnv {
     name = "${name}-usr-multi";
-    paths = baseMultiPkgs ++ multiPaths;
+    paths = baseMultiPaths ++ multiPaths;
     extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
@@ -251,7 +251,7 @@ let
 
 in runCommandLocal "${name}-fhs" {
   passthru = {
-    inherit args multiPaths targetPaths ldconfig;
+    inherit args baseTargetPaths targetPaths baseMultiPaths multiPaths ldconfig;
   };
 } ''
   mkdir -p $out
