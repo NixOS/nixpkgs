@@ -15,6 +15,7 @@ let
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
+    ${cfg.extraImports}
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
@@ -99,6 +100,13 @@ in {
         type = types.str;
         description = lib.mdDoc "Extra configuration to append to master.cfg";
         default = "c['buildbotNetUsageData'] = None";
+      };
+
+      extraImports = mkOption {
+        type = types.str;
+        description = lib.mdDoc "Extra python imports to prepend to master.cfg";
+        default = "";
+        example = "from buildbot.process.project import Project";
       };
 
       masterCfg = mkOption {
