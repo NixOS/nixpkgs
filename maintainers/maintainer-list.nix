@@ -15024,6 +15024,12 @@
     github = "rubyowo";
     githubId = 105302757;
   };
+  rudolfvesely = {
+    name = "Rudolf Vesely";
+    email = "i@rudolfvesely.com";
+    github = "rudolfvesely";
+    githubId = 13966949;
+  };
   Ruixi-rebirth = {
     name = "Ruixi-rebirth";
     email = "ruixirebirth@gmail.com";
