@@ -26,8 +26,8 @@ let
         export NIX_STATE_DIR=$TEST_ROOT/var/nix
         export NIX_STORE_DIR=$TEST_ROOT/store
 
-        # cargo tests run in parallel by default, which would then run into
-        # https://github.com/NixOS/nix/issues/2706 unless the store is initialised first
+        # Ensure that even if tests run in parallel, we don't get an error
+        # We'd run into https://github.com/NixOS/nix/issues/2706 unless the store is initialised first
         nix-store --init
       '';
       postCheck = ''

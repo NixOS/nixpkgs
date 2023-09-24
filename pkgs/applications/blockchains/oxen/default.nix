@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # Required for static linking, the only supported install path
   lbzmqsrc = fetchurl {
     url = "https://github.com/zeromq/libzmq/releases/download/v4.3.3/zeromq-4.3.3.tar.gz";
-    sha512 = "4c18d784085179c5b1fcb753a93813095a12c8d34970f2e1bfca6499be6c9d67769c71c68b7ca54ff181b20390043170e89733c22f76ff1ea46494814f7095b1";
+    hash = "sha512-TBjXhAhRecWx/LdTqTgTCVoSyNNJcPLhv8pkmb5snWd2nHHGi3ylT/GBsgOQBDFw6Jczwi92/x6kZJSBT3CVsQ==";
   };
 
   postPatch = ''

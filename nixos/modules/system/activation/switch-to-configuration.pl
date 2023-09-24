@@ -74,7 +74,7 @@ if ("@localeArchive@" ne "") {
 
 if (!defined($action) || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<"EOF";
-Usage: $0 [switch|boot|test]
+Usage: $0 [switch|boot|test|dry-activate]
 
 switch:       make the configuration the boot default and activate now
 boot:         make the configuration the boot default
@@ -661,10 +661,20 @@ foreach my $mount_point (keys(%{$cur_fss})) {
         # Filesystem entry disappeared, so unmount it.
         $units_to_stop{$unit} = 1;
     } elsif ($cur->{fsType} ne $new->{fsType} || $cur->{device} ne $new->{device}) {
-        # Filesystem type or device changed, so unmount and mount it.
-        $units_to_stop{$unit} = 1;
-        $units_to_start{$unit} = 1;
-        record_unit($start_list_file, $unit);
+        if ($mount_point eq '/' or $mount_point eq '/nix') {
+            if ($cur->{options} ne $new->{options}) {
+                # Mount options changed, so remount it.
+                $units_to_reload{$unit} = 1;
+                record_unit($reload_list_file, $unit);
+            } else {
+                # Don't unmount / or /nix if the device changed
+                $units_to_skip{$unit} = 1;
+            }
+        } else {
+            # Filesystem type or device changed, so unmount and mount it.
+            $units_to_restart{$unit} = 1;
+            record_unit($restart_list_file, $unit);
+        }
     } elsif ($cur->{options} ne $new->{options}) {
         # Mount options changes, so remount it.
         $units_to_reload{$unit} = 1;

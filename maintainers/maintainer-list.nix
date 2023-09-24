@@ -10770,6 +10770,12 @@
     githubId = 7878181;
     name = "Mateo Diaz";
   };
+  materus = {
+    email = "materus@podkos.pl";
+    github = "materusPL";
+    githubId = 28183516;
+    name = "Mateusz Słodkowicz";
+  };
   math-42 = {
     email = "matheus.4200@gmail.com";
     github = "Math-42";
@@ -13607,6 +13613,12 @@
     github = "pimeys";
     githubId = 34967;
     name = "Julius de Bruijn";
+  };
+  pineapplehunter = {
+    email = "peshogo+nixpkgs@gmail.com";
+    github = "pineapplehunter";
+    githubId = 8869894;
+    name = "Shogo Takata";
   };
   pingiun = {
     email = "nixos@pingiun.com";

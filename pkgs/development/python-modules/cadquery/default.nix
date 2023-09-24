@@ -5,12 +5,11 @@
 , pythonAtLeast
 , fetchFromGitHub
 , pyparsing
-, opencascade
+, opencascade-occt
 , stdenv
 , python
 , cmake
 , swig
-, smesh
 , freetype
 , libGL
 , libGLU
@@ -42,8 +41,7 @@ let
 
     buildInputs = [
       python
-      opencascade
-      smesh
+      opencascade-occt
       freetype
       libGL
       libGLU
@@ -57,9 +55,6 @@ let
     cmakeFlags = [
       "-Wno-dev"
       "-DPYTHONOCC_INSTALL_DIRECTORY=${placeholder "out"}/${python.sitePackages}/OCC"
-      "-DSMESH_INCLUDE_PATH=${smesh}/include/smesh"
-      "-DSMESH_LIB_PATH=${smesh}/lib"
-      "-DPYTHONOCC_WRAP_SMESH=TRUE"
     ];
   });
 
@@ -76,7 +71,7 @@ in
     };
 
     buildInputs = [
-      opencascade
+      opencascade-occt
     ];
 
     propagatedBuildInputs = [
@@ -99,5 +94,6 @@ in
       homepage = "https://github.com/CadQuery/cadquery";
       license = licenses.asl20;
       maintainers = with maintainers; [ marcus7070 ];
+      broken = true;
     };
   }

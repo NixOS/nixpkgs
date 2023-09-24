@@ -28,7 +28,7 @@
 }:
 
 let
-  version = "2.7.0.1";
+  version = "2.7.0";
 in
 buildPythonPackage {
   pname = "paddleocr";
@@ -38,8 +38,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleOCR";
-    rev = "254786752a2659e184822b4b2de5637a05236590";
-    hash = "sha256-M/Fpk9swX9Gds7o5poM9Iv6LOhKoZNbe0Wv9JNMPOU0=";
+    rev = "v${version}";
+    hash = "sha256-r7Y666KpY855NCSinCBBUz9PXHfZ56+oZW1/0ISpWe4=";
   };
 
   patches = [

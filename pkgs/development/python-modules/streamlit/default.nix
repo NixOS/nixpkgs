@@ -12,7 +12,7 @@
 , packaging
 , pandas
 , pillow
-, protobuf3
+, protobuf
 , pyarrow
 , pydeck
 , pympler
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pillow
-    protobuf3
+    protobuf
     pyarrow
     pydeck
     pympler

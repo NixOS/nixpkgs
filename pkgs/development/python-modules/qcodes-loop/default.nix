@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchpatch
 , fetchPypi
 , pythonOlder
@@ -97,5 +98,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/QCoDeS/Qcodes_loop";
     license = licenses.mit;
     maintainers = with maintainers; [ evilmav ];
+    # Some tests fail on this platform
+    broken = stdenv.isDarwin;
   };
 }
