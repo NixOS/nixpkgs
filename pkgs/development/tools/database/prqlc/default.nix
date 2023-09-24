@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "prqlc";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "prql";
     repo = "prql";
     rev = version;
-    hash = "sha256-9BDBuAaer92BAwQexkZOyt99VXEbJT6/87DoCqVzjcQ=";
+    hash = "sha256-t/l1fMZpGCLtxjCtOMv4eaj6oNyFX9BFgfc3OwYrxs0=";
   };
 
-  cargoHash = "sha256-LeMl9t2ZYsBFuGnxJVvfmnjKFVIVO8ChmXQhXcSYV6s=";
+  cargoHash = "sha256-bdPjLOHh5qC1/LNfsUC26h4v3EuwiM9HqoQxeeNCOIw=";
 
   nativeBuildInputs = [
     pkg-config

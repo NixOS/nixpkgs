@@ -28,13 +28,13 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    sha256 = "sha256-b03V/c2do5FSm4Q0yN7V0RuoQX1fYsBd//Hj3R5MESI=";
+    hash = "sha256-BjdPe3wQBSVMYpeCifq93Cqt/G4bzsZYgOPBTilHqD8=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -53,8 +53,11 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   postPatch = ''
-    patchShebangs --build colloid/clean-old-theme.sh colloid/install.sh
+    patchShebangs --build colloid/install.sh
   '';
+
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
