@@ -18,7 +18,6 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
   GO111MODULE = "on";
-  GOFLAGS = "-trimpath";
 
   subPackages = [ "cli/slsa-verifier" ];
 

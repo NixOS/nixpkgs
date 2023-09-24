@@ -19,7 +19,6 @@ buildGoModule rec {
   vendorHash = "sha256-J/sJd2LLMBr53Z3sGrWgnWA8Ry+XqqfCEObqFyUD96g=";
 
   CGO_ENABLED = 0;
-  GOFLAGS = [ "-trimpath" ];
   ldFlags = [ "-buildid=" "-w" ];
 
   doCheck = false;
