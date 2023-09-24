@@ -13,14 +13,14 @@
 , which
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "berry";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "JLErvin";
-    repo = pname;
-    rev = version;
+    repo = "berry";
+    rev = finalAttrs.version;
     hash = "sha256-xMJRiLNtwVRQf9HiCF3ClLKEmdDNxcY35IYxe+L7+Hk=";
   };
 
@@ -39,8 +39,12 @@ stdenv.mkDerivation rec {
     freetype
   ];
 
+  outputs = [ "out" "man" ];
+
+  strictDeps = true;
+
   postPatch = ''
-    sed -i --regexp-extended 's/(pkg_verstr=").*(")/\1${version}\2/' configure
+    sed -i --regexp-extended 's/(pkg_verstr=").*(")/\1${finalAttrs.version}\2/' configure
   '';
 
   preConfigure = ''
@@ -49,16 +53,16 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "berry";
       exec = "berry";
-      comment = meta.description;
+      comment = "A healthy, bite-sized window manager";
       desktopName = "Berry Window Manager";
       genericName = "Berry Window Manager";
       categories = [ "Utility" ];
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://berrywm.org/";
     description = "A healthy, bite-sized window manager";
     longDescription = ''
@@ -74,8 +78,9 @@ stdenv.mkDerivation rec {
       - Intuitively place new windows in unoccupied spaces.
       - Virtual desktops.
     '';
-    license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    mainProgram = "berry";
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    inherit (libX11.meta) platforms;
   };
-}
+})
