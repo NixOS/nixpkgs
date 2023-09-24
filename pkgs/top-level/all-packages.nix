@@ -11073,7 +11073,7 @@ with pkgs;
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
   inherit (callPackage ../servers/web-apps/netbox { })
-    netbox netbox_3_3 netbox_3_5;
+    netbox netbox_3_3 netbox_3_5 netbox_3_6;
 
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
 

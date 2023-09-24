@@ -1,6 +1,6 @@
 import ../make-test-python.nix ({ lib, pkgs, ... }: let
-  oldNetbox = pkgs.netbox_3_3;
-  newNetbox = pkgs.netbox_3_5;
+  oldNetbox = pkgs.netbox_3_5;
+  newNetbox = pkgs.netbox_3_6;
 in {
   name = "netbox-upgrade";
 
@@ -9,6 +9,7 @@ in {
   };
 
   nodes.machine = { config, ... }: {
+    virtualisation.memorySize = 2048;
     services.netbox = {
       enable = true;
       package = oldNetbox;
