@@ -2,10 +2,8 @@
 , stdenv
 , fetchFromGitHub
 , awk
-, grep
-, sed
-, runtimeShell
 , cmake
+, grep
 , libXext
 , libXft
 , libXinerama
@@ -14,6 +12,8 @@
 , libjpeg
 , libpng
 , pkg-config
+, runtimeShell
+, sed
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,13 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  cmakeFlags = [
-    "-DAWK=${awk}/bin/awk"
-    "-DGREP=${grep}/bin/grep"
-    "-DSED=${sed}/bin/sed"
-    "-DSH=${runtimeShell}"
-  ];
-
   buildInputs = [
     libXext
     libXft
@@ -47,6 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libjpeg
     libpng
+  ];
+
+  outputs = [ "out" "man" ];
+
+  strictDeps = true;
+
+  cmakeFlags = [
+    "-DAWK=${lib.getBin awk}/bin/awk"
+    "-DGREP=${lib.getBin grep}/bin/grep"
+    "-DSED=${lib.getBin sed}/bin/sed"
+    "-DSH=${runtimeShell}"
   ];
 
   meta = {
@@ -67,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://raw.githubusercontent.com/pekwm/pekwm/release-${finalAttrs.version}/NEWS.md";
     license = lib.licenses.gpl2Plus;
+    mainProgram = "pekwm";
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;
   };
