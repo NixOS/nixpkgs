@@ -4,6 +4,8 @@
 , installShellFiles
 , stdenv
 , darwin
+, bottom
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,6 +37,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   BTM_GENERATE = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = bottom;
+  };
 
   meta = with lib; {
     description = "A cross-platform graphical process/system monitor with a customizable interface";

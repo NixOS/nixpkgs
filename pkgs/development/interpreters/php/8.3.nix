@@ -2,12 +2,12 @@
 
 let
   base = (callPackage ./generic.nix (_args // {
-    version = "8.3.0beta3";
+    version = "8.3.0RC2";
     hash = null;
   })).overrideAttrs (oldAttrs: {
     src = fetchurl {
-      url = "https://downloads.php.net/~eric/php-8.3.0beta3.tar.xz";
-      hash = "sha256-XW3t9BOsBFvThYXF66faVl8VyMLFB+Oi7h45vWUmE6Y=";
+      url = "https://downloads.php.net/~eric/php-8.3.0RC2.tar.xz";
+      hash = "sha256-0Lo9msTyjfU9kuq0QkvUv4yeshM2tUizMJb9oCggMtw=";
     };
   });
 in

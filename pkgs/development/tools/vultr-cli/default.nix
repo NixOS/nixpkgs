@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "vultr-cli";
@@ -13,7 +13,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-61hdhkFyp4an9KtqDzB4Sd2+t40QEoLgq7MvUBxEQKs=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [ "-s" "-w" ];
+
+  postInstall = ''
+    installShellCompletion --cmd vultr-cli \
+      --bash <($out/bin/vultr-cli completion bash) \
+      --fish <($out/bin/vultr-cli completion fish) \
+      --zsh <($out/bin/vultr-cli completion zsh)
+  '';
 
   meta = with lib; {
     description = "Official command line tool for Vultr services";
@@ -21,5 +30,6 @@ buildGoModule rec {
     changelog = "https://github.com/vultr/vultr-cli/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "vultr-cli";
   };
 }

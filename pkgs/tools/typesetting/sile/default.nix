@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , darwin
 , fetchurl
 , makeWrapper
@@ -43,13 +44,13 @@ let
   ]);
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sile";
-  version = "0.14.10";
+  version = "0.14.11";
 
   src = fetchurl {
-    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "05jqr9lqy33zgi1wb0gn3j9w78sswznwbpaaz8i3jvrs1l1wd2i0";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${finalAttrs.version}/sile-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-JXlgiK1XyZZSe5QXz06zwEAnVYhiIZhhIaBmfxAgRS4=";
   };
 
   configureFlags = [
@@ -76,14 +77,14 @@ stdenv.mkDerivation rec {
     inherit luaEnv;
     # Copied from Makefile.am
     tests.test = lib.optionalAttrs (!(stdenv.isDarwin && stdenv.isAarch64)) (
-      runCommand "${pname}-test"
+      runCommand "sile-test"
         {
           nativeBuildInputs = [ poppler_utils sile ];
-          inherit FONTCONFIG_FILE;
+          inherit (finalAttrs) FONTCONFIG_FILE;
         } ''
         output=$(mktemp -t selfcheck-XXXXXX.pdf)
         echo "<sile>foo</sile>" | sile -o $output -
-        pdfinfo $output | grep "SILE v${version}" > $out
+        pdfinfo $output | grep "SILE v${finalAttrs.version}" > $out
       '');
   };
 
@@ -132,9 +133,9 @@ stdenv.mkDerivation rec {
       such as InDesign.
     '';
     homepage = "https://sile-typesetter.org";
-    changelog = "https://github.com/sile-typesetter/sile/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sile-typesetter/sile/raw/v${finalAttrs.version}/CHANGELOG.md";
     platforms = platforms.unix;
     maintainers = with maintainers; [ doronbehar alerque ];
     license = licenses.mit;
   };
-}
+})

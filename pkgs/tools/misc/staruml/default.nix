@@ -23,14 +23,13 @@ let
     cups
   ];
 in
-stdenv.mkDerivation rec {
-  version = "5.1.0";
+stdenv.mkDerivation (finalAttrs: {
+  version = "6.0.1";
   pname = "staruml";
 
-  src =
-    fetchurl {
-      url = "https://staruml-7a0.kxcdn.com/releases-v5/StarUML_${version}_amd64.deb";
-      sha256 = "sha256-da1mY3OW24g6Ix0L57CBPbaMeSLzhOOjoBsyZszmNOc=";
+  src = fetchurl {
+      url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
+      sha256 = "sha256-LxulOfYjdJrDjRL661S0W9slIXvhLc+kXZN6e3TfXVs=";
     };
 
   nativeBuildInputs = [ wrapGAppsHook dpkg ];
@@ -74,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage = "https://staruml.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kashw2 ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

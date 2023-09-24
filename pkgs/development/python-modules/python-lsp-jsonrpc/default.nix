@@ -2,19 +2,37 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
+, setuptools
+, setuptools-scm
 , ujson
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-jsonrpc";
-  version = "1.0.0";
+  version = "1.1.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0h4bs8s4axcm0p02v59amz9sq3nr4zhzdgwq7iaw6awl27v1hd0i";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XTvnDTaP5oweGSq1VItq+SEv7S/LrQq4YP1XQc3bxbk=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "--cov-report html --cov-report term --junitxml=pytest.xml --cov pylsp_jsonrpc --cov test" ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     ujson
@@ -24,17 +42,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp_jsonrpc --cov test" ""
-  '';
-
-  pythonImportsCheck = [ "pylsp_jsonrpc" ];
+  pythonImportsCheck = [
+    "pylsp_jsonrpc"
+  ];
 
   meta = with lib; {
-    description = "Python server implementation of the JSON RPC 2.0 protocol.";
+    description = "Python server implementation of the JSON RPC 2.0 protocol";
     homepage = "https://github.com/python-lsp/python-lsp-jsonrpc";
+    changelog = "https://github.com/python-lsp/python-lsp-jsonrpc/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -7,8 +7,10 @@
 , pkg-config
 , gst_all_1
 , protobuf
+, libspelling
 , libsecret
 , libadwaita
+, gtksourceview5
 , rustPlatform
 , rustc
 , appstream-glib
@@ -19,23 +21,24 @@
 
 stdenv.mkDerivation rec {
   pname = "flare";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.com";
     owner = "schmiddi-on-mobile";
     repo = pname;
     rev = version;
-    hash = "sha256-RceCVn2OmrHyY2DWT+5XeOc+HlQGVdtOmfo3+2r9hKs=";
+    hash = "sha256-+9zpYW9xjLe78c2GRL6raFDR5g+R/JWxQzU/ZS+5JtY=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "blurhash-0.1.1" = "sha256-SLpszTL2CupMAfUQK5KlnsHTIBDB8hbJs1d6DQXaUiA=";
       "curve25519-dalek-3.2.1" = "sha256-0hFRhn920tLBpo6ZNCl6DYtTMHMXY/EiDvuhOPVjvC0=";
       "libsignal-protocol-0.1.0" = "sha256-VQwrGTNZnlDK5p8ZleAZYtbzDiVTHxc93/CRlCUjWtE=";
-      "libsignal-service-0.1.0" = "sha256-azXQGC008rcqF2C8yHy5CM2NU1Hvwv2I3Kr8aI6URS8=";
-      "presage-0.6.0-dev" = "sha256-MNd4CvBv6htZQj2g2a3JcQ1r/kk4UPSBLFezEnRK+60=";
+      "libsignal-service-0.1.0" = "sha256-1ub0IPSvGhZ2tsC6IolusJ1NSWy+5SXSx8qlIdPngTE=";
+      "presage-0.6.0-dev" = "sha256-4isKBn/4yHoAYsYbBTULK/veZmaecU7t+PvE4Y0oNgk=";
     };
   };
 
@@ -53,8 +56,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gtksourceview5
     libadwaita
     libsecret
+    libspelling
     protobuf
 
     # To reproduce audio messages

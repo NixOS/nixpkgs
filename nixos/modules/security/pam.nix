@@ -1303,7 +1303,7 @@ in
 
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
     security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
-      Enables fscrypt to automatically unlock directories with the user's login password.
+      fscrypt to automatically unlock directories with the user's login password.
 
       This also enables a service at security.pam.services.fscrypt which is used by
       fscrypt to verify the user's password when setting up a new protector. If you

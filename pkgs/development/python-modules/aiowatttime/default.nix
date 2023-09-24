@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiowatttime";
-  version = "2022.10.0";
+  version = "2023.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-rqmsUvVwXC/XkR/v2d9d3t7u6Poms4ORiOci41ajXIo=";
+    hash = "sha256-/ulDImbLOTcoA4iH8e65A01aqqnCLn+01DWuM/4H4p4=";
   };
 
   patches = [

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "grpc-interceptor";
-  version = "0.15.2";
+  version = "0.15.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "d5h-foss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zulK0SVehzHcrmgIyH0D5sUOiAN53eIg88IoVyF6/DA=";
+    hash = "sha256-tTi1X1r7584ZXa12eLp2G/Am8G6Dnd18eE5wF/Lp/EY=";
   };
 
   patches = [

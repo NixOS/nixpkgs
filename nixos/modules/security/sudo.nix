@@ -192,6 +192,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.package.pname != "sudo-rs";
+        message = "The NixOS `sudo` module does not work with `sudo-rs` yet."; }
+    ];
 
     # We `mkOrder 600` so that the default rule shows up first, but there is
     # still enough room for a user to `mkBefore` it.

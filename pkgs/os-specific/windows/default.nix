@@ -6,7 +6,7 @@ lib.makeScope newScope (self: with self; {
 
   cygwinSetup = callPackage ./cygwin-setup { };
 
-  jom = callPackage ./jom { };
+  dlfcn = callPackage ./dlfcn { };
 
   w32api = callPackage ./w32api { };
 

@@ -16,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.28";
+  version = "0.29";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hplpsig+phIX6WCbUV0ILcA62f5DE/yTyKfoaeumgyY=";
+    hash = "sha256-XxfeBikJcRcUCIVDAmPTtcrrgvZYrRKpjs5bmMokeeI=";
   };
 
   propagatedBuildInputs = [

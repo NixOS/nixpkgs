@@ -8,6 +8,7 @@
 , targetPlatform
 , hostPlatform
 , withoutTargetLibc
+, libcCross
 }:
 
 assert !stdenv.targetPlatform.hasSharedLibraries -> !enableShared;
@@ -19,7 +20,7 @@ drv: lib.pipe drv
   (pkg: pkg.overrideAttrs (previousAttrs:
     lib.optionalAttrs (
       targetPlatform != hostPlatform &&
-      (enableShared || targetPlatform.libc == "msvcrt") &&
+      (enableShared || targetPlatform.isMinGW) &&
       withoutTargetLibc
     ) {
       makeFlags = [ "all-gcc" "all-target-libgcc" ];
@@ -31,7 +32,7 @@ drv: lib.pipe drv
 # nixpkgs did not add the "libgcc" output until gcc11.  In theory
 # the following condition can be changed to `true`, but that has not
 # been tested.
-lib.optional (lib.versionAtLeast version "11.0")
+lib.optionals (lib.versionAtLeast version "11.0")
 
 (let
   targetPlatformSlash =
@@ -39,11 +40,20 @@ lib.optional (lib.versionAtLeast version "11.0")
     then ""
     else "${targetPlatform.config}/";
 
+  # If we are building a cross-compiler and the target libc provided
+  # to us at build time has a libgcc, use that instead of building a
+  # new one.  This avoids having two separate (but identical) libgcc
+  # outpaths in the closure of most packages, which can be confusing.
+  useLibgccFromTargetLibc =
+    libcCross != null &&
+    libcCross?passthru.libgcc;
+
   enableLibGccOutput =
     (!stdenv.targetPlatform.isWindows || (with stdenv; targetPlatform == hostPlatform)) &&
     !langJit &&
     !stdenv.hostPlatform.isDarwin &&
-    enableShared
+    enableShared &&
+    !useLibgccFromTargetLibc
   ;
 
   # For some reason libgcc_s.so has major-version "2" on m68k but
@@ -54,6 +64,14 @@ lib.optional (lib.versionAtLeast version "11.0")
     else "1";
 
 in
+[
+
+(pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs useLibgccFromTargetLibc {
+  passthru = (previousAttrs.passthru or {}) // {
+    inherit (libcCross) libgcc;
+  };
+}))
+
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
   # This is a separate phase because gcc assembles its phase scripts
@@ -143,5 +161,4 @@ in
     + ''
       patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.${libgcc_s-version-major}
     '');
-}))))
-
+}))]))

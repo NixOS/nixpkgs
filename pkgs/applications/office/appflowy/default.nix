@@ -6,18 +6,17 @@
 , copyDesktopItems
 , makeDesktopItem
 , gtk3
-, openssl_1_1
 , xdg-user-dirs
 , keybinder3
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04.tar.gz";
-    sha256 = "sha256-05RQtvf6I4/sjGtMDfc5U4esxfFFeTwIuxFAkbr6p4A";
+    hash = "sha256-jIekGA+MG9tvjEyHAI3dcD7lI1JL/qPqRpVO9gRhcTw=";
     stripRoot = false;
   };
 
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    openssl_1_1
     keybinder3
   ];
 

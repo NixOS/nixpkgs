@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.25.1";
+  version = "1.26.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-RJbPqj6hXqf8D5G8zrg0BAYfxSRDfUgRNGwX+LZlPPY=";
+    hash = "sha256-pj4kaQDXahjhN7bu7xxT/ZuoCfPdGyo898482S5gnlE=";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];

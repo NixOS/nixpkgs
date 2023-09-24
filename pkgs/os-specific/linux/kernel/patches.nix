@@ -19,6 +19,16 @@
       patch = ./bridge-stp-helper.patch;
     };
 
+  # Reverts the buggy commit causing https://bugzilla.kernel.org/show_bug.cgi?id=217802
+  dell_xps_regression = {
+    name = "dell_xps_regression";
+    patch = fetchpatch {
+      name = "Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
+      url = "https://raw.githubusercontent.com/openSUSE/kernel-source/1b02b1528a26f4e9b577e215c114d8c5e773ee10/patches.suse/Revert-101bd907b424-misc-rtsx-judge-ASPM-Mode-to-set.patch";
+      sha256 = "sha256-RHJdQ4p0msTOVPR+/dYiKuwwEoG9IpIBqT4dc5cJjf8=";
+    };
+  };
+
   request_key_helper =
     { name = "request-key-helper";
       patch = ./request-key-helper.patch;

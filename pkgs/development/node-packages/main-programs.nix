@@ -4,9 +4,7 @@
   "@antfu/ni" = "ni";
   "@electron-forge/cli" = "electron-forge";
   "@microsoft/rush" = "rush";
-  "@squoosh/cli" = "squoosh-cli";
   "@webassemblyjs/cli-1.11.1" = "wasm2wast";
-  coffee-script = "coffee";
   "@withgraphite/graphite-cli" = "gt";
 
   # Packages that provide a single executable.
@@ -15,7 +13,6 @@
   "@astrojs/language-server" = "astro-ls";
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
-  "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
   "@mermaid-js/mermaid-cli" = "mmdc";
   "@nerdwallet/shepherd" = "shepherd";
@@ -28,14 +25,13 @@
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";
   "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
+  bash-language-server = "bash-language-server";
   cdk8s-cli = "cdk8s";
   cdktf-cli = "cdktf";
   clipboard-cli = "clipboard";
-  clubhouse-cli = "club";
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";
   diff2html-cli = "diff2html";
-  dockerfile-language-server-nodejs = "docker-langserver";
   fast-cli = "fast";
   fauna-shell = "fauna";
   fkill-cli = "fkill";
@@ -47,13 +43,10 @@
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   kaput-cli = "kaput";
-  leetcode-cli = "leetcode";
   less = "lessc";
   localtunnel = "lt";
   lua-fmt = "luafmt";
-  near-cli = "near";
   neovim = "neovim-node-host";
-  parcel-bundler = "parcel";
   parsoid = "parse.js";
   poor-mans-t-sql-formatter-cli = "sqlformat";
   postcss-cli = "postcss";
@@ -68,7 +61,6 @@
   typescript-language-server = "typescript-language-server";
   uglify-js = "uglifyjs";
   undollar = "$";
-  vsc-leetcode-cli = "leetcode";
   vscode-css-languageserver-bin = "css-languageserver";
   vscode-html-languageserver-bin = "html-languageserver";
   vscode-json-languageserver-bin = "json-languageserver";

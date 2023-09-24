@@ -3,18 +3,19 @@
 , fetchFromGitHub
 , Security
 , autoreconfHook
+, util-linux
 , openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "wolfssl";
-  version = "5.5.4";
+  version = "5.6.3";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
-    rev = "v${version}-stable";
-    hash = "sha256-sR/Gjk50kLej5oJzDH1I6/V+7OIRiwtyeg5tEE3fmHk=";
+    rev = "refs/tags/v${version}-stable";
+    hash = "sha256-UN4zs+Rxh/bsLD1BQA+f1YN/UOJ6OB2HduhoetEp10Y=";
   };
 
   postPatch = ''
@@ -43,13 +44,20 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  propagatedBuildInputs = [ ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+    Security
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
+    util-linux
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ openssl ];
+
+  nativeCheckInputs = [
+    openssl
+  ];
 
   postInstall = ''
      # fix recursive cycle:
@@ -62,6 +70,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
     homepage = "https://www.wolfssl.com/";
+    changelog = "https://github.com/wolfSSL/wolfssl/releases/tag/v${version}-stable";
     platforms = platforms.all;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fab ];

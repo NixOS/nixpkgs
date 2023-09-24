@@ -5,9 +5,9 @@
 , aubio
 , boost
 , cmake
-, ffmpeg_4
+, ffmpeg
+, fmt
 , gettext
-, git
 , glew
 , glibmm
 , glm
@@ -15,6 +15,7 @@
 , libepoxy
 , librsvg
 , libxmlxx
+, nlohmann_json
 , pango
 , pkg-config
 , portaudio
@@ -22,17 +23,17 @@
 
 stdenv.mkDerivation rec {
   pname = "performous";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "performous";
+    repo = "performous";
     rev = "refs/tags/${version}";
-    hash = "sha256-ueTSirov/lj4/IzaMqHitbOqx8qqUpsTghcb9DUnNEg=";
+    hash = "sha256-y7kxLht15vULN9NxM0wzj9+7Uq4/3D5j9oBEnrTIwQ8=";
   };
 
   cedSrc = fetchFromGitHub {
-    owner = pname;
+    owner = "performous";
     repo = "compact_enc_det";
     rev = "9ca1351fe0b1e85992a407b0fc54a63e9b3adc6e";
     hash = "sha256-ztfeblR4YnB5+lb+rwOQJjogl+C9vtPH9IVnYO7oxec=";
@@ -46,6 +47,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     mkdir ced-src
     cp -R ${cedSrc}/* ced-src
+
+    substituteInPlace data/CMakeLists.txt \
+      --replace "/usr" "$out"
   '';
 
   nativeBuildInputs = [
@@ -58,7 +62,8 @@ stdenv.mkDerivation rec {
     SDL2
     aubio
     boost
-    ffmpeg_4
+    ffmpeg
+    fmt
     glew
     glibmm
     glm
@@ -66,6 +71,7 @@ stdenv.mkDerivation rec {
     libepoxy
     librsvg
     libxmlxx
+    nlohmann_json
     pango
     portaudio
   ];

@@ -55,7 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
   CC_BUILD = "${buildPackages.stdenv.cc}/bin/cc";
 
   # The asm for armel is written with the 'asm' keyword.
-  CFLAGS = lib.optionalString stdenv.isAarch32 "-std=gnu99";
+  CFLAGS = lib.optionalString stdenv.isAarch32 "-std=gnu99"
+    + lib.optionalString stdenv.hostPlatform.is32bit " -D_FILE_OFFSET_BITS=64";
 
   enableParallelBuilding = true;
 

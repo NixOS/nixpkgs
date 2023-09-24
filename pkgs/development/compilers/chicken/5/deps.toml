@@ -107,9 +107,9 @@ version = "0.6"
 [apropos]
 dependencies = ["srfi-1", "utf8", "string-utils", "symbol-utils", "check-errors"]
 license = "bsd"
-sha256 = "1xnqfnbnac4pzm4j3mphq09p18q962dxg11cfyxqk8k6v8qrv5nh"
+sha256 = "0njkdxwd9122l9vql64nqm7dy3lggikr2bzwidwk7i8yz3nm3g6w"
 synopsis = "CHICKEN apropos"
-version = "3.7.2"
+version = "3.8.1"
 
 [arcadedb]
 dependencies = ["uri-common", "medea"]
@@ -282,9 +282,9 @@ version = "1.37"
 [bitwise-utils]
 dependencies = []
 license = "public-domain"
-sha256 = "09fdcv81069br4pz0ccr2jj6xgakvwbshdiy21r85865r7r6g05m"
+sha256 = "065q6ha8wsj6qhg7zxkaj2qrj5sm3iz2v7shcp5wh7j3fqwbs5q5"
 synopsis = "Bitwise utilities"
-version = "1.2.5"
+version = "1.3.0"
 
 [blas]
 dependencies = ["bind", "compile-file", "srfi-13"]
@@ -364,11 +364,11 @@ synopsis = "Byte array utility procedures for blobs."
 version = "2.3"
 
 [cairo]
-dependencies = []
+dependencies = ["srfi-1"]
 license = "lgpl-2.1"
-sha256 = "1krsjlydqa9zj0bpad0w4x636kg30ng1azlyyn8j8vx3b8lcd362"
+sha256 = "1x69i4aysn8mf93ic36947p6gvgglk8c0vg2m6vdhimf6y65szi1"
 synopsis = "Chicken bindings for Cairo, a vector graphics library"
-version = "0.1.17"
+version = "0.1.18"
 
 [call-table-generics]
 dependencies = ["brev-separate"]
@@ -1157,9 +1157,9 @@ version = "0.4.2"
 [gochan]
 dependencies = ["matchable", "srfi-18", "queues"]
 license = "bsd"
-sha256 = "1yp3yzfx97qfx8kkxvjvs1vnr2h8iffnx1zaqq05dbh5ivnx74j8"
+sha256 = "1pyzr387zbbw7x9zk524qcs368hzxv4c46p24cz3x2nl30y84d5h"
 synopsis = "golang channels in CHICKEN"
-version = "5.2.9"
+version = "5.2.10"
 
 [graph-bfs]
 dependencies = ["srfi-1", "iset", "matchable", "yasos", "digraph"]
@@ -1213,9 +1213,9 @@ version = "0.10.1"
 [hash-trie]
 dependencies = []
 license = "mit"
-sha256 = "0kcr99fdc0b09inq8ansb79ynblcxryvsg67zfms5y7z91v11p0c"
+sha256 = "1860bp5h3kh0ra6b2qvb5pccylajq1x2hng0skqnv8ik068lnfr0"
 synopsis = "hash-trie"
-version = "1.1.7"
+version = "1.1.8"
 
 [heap-o-rama]
 dependencies = ["srfi-18"]
@@ -1395,9 +1395,9 @@ version = "0.3"
 [ipfs]
 dependencies = ["http-client", "intarweb", "medea", "srfi-1", "srfi-13", "srfi-189", "srfi-197", "uri-common"]
 license = "unlicense"
-sha256 = "1cxjbl5kl4xk42a4p8j3av6ip0gqvp5yxahsccvm0snc98n3ngqg"
+sha256 = "1mw6z3piddy9xz494kv0243jhhirlb1dp15dph2p1ks4bhipbr4m"
 synopsis = "IPFS HTTP API for Scheme"
-version = "0.0.12"
+version = "0.0.13"
 
 [irc]
 dependencies = ["matchable", "regex", "srfi-1"]
@@ -1556,9 +1556,9 @@ version = "1.2.1"
 [list-utils]
 dependencies = ["utf8", "srfi-1", "check-errors"]
 license = "bsd"
-sha256 = "0wqmsvh3sfgp8ssh98n8y615lxnjlcda1k375jfss7vf8k5xn032"
+sha256 = "0sbd04kmiahk7mbw1cy64n1qjz2rpldjx66aj41r964kjscm6izv"
 synopsis = "list-utils"
-version = "2.4.3"
+version = "2.5.1"
 
 [live-define]
 dependencies = ["matchable"]
@@ -1794,9 +1794,9 @@ version = "0.7"
 [micro-benchmark]
 dependencies = ["micro-stats", "srfi-1"]
 license = "gplv3"
-sha256 = "0ahvxdm350bc9v80gnb8ccmjqqp60jznfjkx7w5ypf0q61mnj8sj"
+sha256 = "022fkwr1wm1im40rgk3g5dz8n4rvlw1zdmskqsh9idv31gbfi456"
 synopsis = "Easily create micro-benchmarks"
-version = "0.0.19"
+version = "0.0.20"
 
 [micro-stats]
 dependencies = ["srfi-1", "sequences", "sequences-utils"]
@@ -2333,9 +2333,9 @@ version = "2.1.2"
 [rlimit]
 dependencies = ["srfi-13"]
 license = "bsd"
-sha256 = "0jmz98253k3q9a6kyyby6jm722w3s74c5y3km7ih9ybjjmcdkyzv"
+sha256 = "1yxdn9y11i8s9mj5dknlpz588d48bklylxcq73v0s48a5m7vfpwp"
 synopsis = "Setting resource limits"
-version = "1.0.1"
+version = "1.0.2"
 
 [rocksdb]
 dependencies = []
@@ -2368,9 +2368,9 @@ version = "0.9.12"
 [s9fes-char-graphics]
 dependencies = ["srfi-1", "utf8", "format"]
 license = "public-domain"
-sha256 = "1h12l59860cyv8xwvvpf96dnlqwd25mrq2qapj9nyxv0vbkcs4p6"
+sha256 = "1ysz8vrx7zwfv4drx955ca28avmdfilafd9a20sl67y5vwb47i8m"
 synopsis = "Scheme 9 from Empty Space Char Graphics"
-version = "1.3.3"
+version = "1.4.2"
 
 [salmonella-diff]
 dependencies = ["salmonella", "salmonella-html-report", "srfi-1", "srfi-13", "sxml-transforms"]
@@ -2508,9 +2508,9 @@ version = "1.9.1"
 [sequences-utils]
 dependencies = ["srfi-1", "srfi-69", "sequences"]
 license = "bsd"
-sha256 = "0s5yadn034a3g89xjcy0yxga7k60dadcnynv16yvbcfg4wjrs81k"
+sha256 = "1c0yq4bzq6lkax4pwky5vyb2gl0yw88r7fzsbx37xsw14lb4fl64"
 synopsis = "(More) Generic sequence operators"
-version = "0.4.0"
+version = "0.5.0"
 
 [sequences]
 dependencies = ["fast-generic", "srfi-42"]
@@ -3047,9 +3047,9 @@ version = "0.2.3"
 [srfi-18]
 dependencies = []
 license = "bsd"
-sha256 = "0v2pkdck0ji1wiqgg8sg4z6rbkj2qw4vy4b9lx0w0pmhlxqpg1xd"
+sha256 = "0mkg3g045md9v74p4ac24q0c4xvvinz1nggakyg7wlg7c176i2l9"
 synopsis = "SRFI-18 thread library"
-version = "0.1.6"
+version = "0.1.7"
 
 [srfi-180]
 dependencies = ["r7rs", "srfi-60", "srfi-145", "srfi-121"]
@@ -3068,9 +3068,9 @@ version = "1.0.3"
 [srfi-19]
 dependencies = ["srfi-1", "utf8", "srfi-18", "srfi-29", "srfi-69", "miscmacros", "locale", "record-variants", "check-errors"]
 license = "bsd"
-sha256 = "14nyv6m67k2angmhg028rd50mq77qi1zfr5f0praiyy07k2pmcpz"
+sha256 = "0mq9nd1ck1qq9bs415xw4sqlbw1jcrg9n1vrh8kiqy197xbymh0h"
 synopsis = "Time Data Types and Procedures"
-version = "4.7.3"
+version = "4.7.5"
 
 [srfi-193]
 dependencies = []
@@ -3159,9 +3159,9 @@ version = "4.2.2"
 [srfi-29]
 dependencies = ["srfi-1", "srfi-69", "utf8", "locale", "posix-utils", "condition-utils", "check-errors"]
 license = "bsd"
-sha256 = "1wxz4kj6dqylfiqi035vzsphgbj68y6wwivmx25z5j11c8v3s81c"
+sha256 = "15g2knq5b76f3nhxnmxidhkvbw9dyyc00hrzvsnpkmnfqzcmxbxw"
 synopsis = "Localization"
-version = "3.0.6"
+version = "3.0.7"
 
 [srfi-34]
 dependencies = []
@@ -3647,11 +3647,11 @@ synopsis = "tracing and breakpoints"
 version = "2.0"
 
 [transducers]
-dependencies = ["srfi-1", "srfi-128", "srfi-133", "srfi-143", "srfi-146", "srfi-160", "check-errors"]
+dependencies = ["srfi-1", "srfi-128", "srfi-133", "srfi-143", "srfi-146", "srfi-160", "check-errors", "r7rs"]
 license = "mit"
-sha256 = "0mkrrfvskwgy5w8c9gz21np3p9857sm8fylq0hjz608jaxzybpcz"
+sha256 = "162f0xvk69jha55sszdkgm47q18k3x5bc2g6psn2107im4ma45fi"
 synopsis = "Transducers for working with foldable data types."
-version = "0.4.0"
+version = "0.4.2"
 
 [transmission]
 dependencies = ["http-client", "intarweb", "medea", "r7rs", "srfi-1", "srfi-189", "uri-common"]
@@ -3789,9 +3789,9 @@ version = "3.6.3"
 [uuid-lib]
 dependencies = ["record-variants"]
 license = "bsd"
-sha256 = "0da71k0f3j1l9wjnfk9gqs9gw3v1192xhxbxv2gfmah3fvxf203p"
+sha256 = "1hk5p2yvwq4dx93a1wnxggrbwkh050b6m9jlw44s7xvhxhvdqyns"
 synopsis = "OSF DCE 1.1 UUID"
-version = "0.0.10"
+version = "0.0.14"
 
 [uuid]
 dependencies = []
@@ -3915,9 +3915,9 @@ version = "0.2"
 [zshbrev]
 dependencies = ["brev"]
 license = "lgplv3"
-sha256 = "16sn87z72x8d4ddbkwgz1jxas471r5nvazwi0klsn204v1qc30dy"
+sha256 = "1id8a728ibi3fzcpfdd7ary41g7nrlb7pc3vjpmz70jp1q53qppx"
 synopsis = "Access Chicken functions from any shell and access zsh functions from Chicken"
-version = "1.19"
+version = "1.20"
 
 [zstd]
 dependencies = []

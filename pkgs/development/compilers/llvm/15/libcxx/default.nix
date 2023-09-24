@@ -1,5 +1,5 @@
 { lib, stdenv, llvm_meta
-, monorepoSrc, runCommand
+, monorepoSrc, runCommand, fetchpatch
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
 , libcxxabi, libcxxrt, libunwind
@@ -47,6 +47,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
+    # See:
+    #   - https://reviews.llvm.org/D133566
+    #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+    # !!! Drop in LLVM 16+
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+      hash = "sha256-AaM9A6tQ4YAw7uDqCIV4VaiUyLZv+unwcOqbakwW9/k=";
+      relative = "libcxx";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];

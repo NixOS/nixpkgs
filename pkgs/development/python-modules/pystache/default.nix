@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pystache";
-  version = "0.6.4";
+  version = "0.6.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4CkCIzBJsW4L4alPDHOJ6AViX2c1eD9FM7AgtaOKJ8c=";
+    hash = "sha256-nyONWgbxiEPg1JHY5OKS3AP+1qVMsKXDS+N6P6qXMXQ=";
   };
 
   LC_ALL = "en_US.UTF-8";

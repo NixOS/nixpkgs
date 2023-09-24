@@ -24,7 +24,7 @@ The list of overlays is determined as follows.
 
 2.  Otherwise, if the Nix path entry `<nixpkgs-overlays>` exists, we look for overlays at that path, as described below.
 
-    See the section on `NIX_PATH` in the Nix manual for more details on how to set a value for `<nixpkgs-overlays>.`
+    See the [section on `NIX_PATH`](https://nixos.org/manual/nix/stable/command-ref/env-common.html#env-NIX_PATH) in the Nix manual for more details on how to set a value for `<nixpkgs-overlays>.`
 
 3.  If one of `~/.config/nixpkgs/overlays.nix` and `~/.config/nixpkgs/overlays/` exists, then we look for overlays at that path, as described below. It is an error if both exist.
 

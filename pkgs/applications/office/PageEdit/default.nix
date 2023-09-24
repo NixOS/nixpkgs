@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pageedit";
-  version = "1.9.20";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = pname;
     rev = version;
-    hash = "sha256-naoflFANeMwabbdrNL3+ndvEXYT4Yqf+Mo77HcCexHE=";
+    hash = "sha256-zwOSt1eyvuuqfQ1G2bCB4yj6GgixFRc2FLOgcCrdg3Q=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];

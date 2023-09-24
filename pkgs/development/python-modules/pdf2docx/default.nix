@@ -5,6 +5,7 @@
 , buildPythonPackage
 , pythonRelaxDepsHook
 , imagemagick
+, pip
 , pytestCheckHook
 , pymupdf
 , fire
@@ -29,7 +30,12 @@ buildPythonPackage {
     hash = "sha256-NrT4GURQIJbqnHstfJrPzwLXT9c2oGBi4QJ6eGIFwu4=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook imagemagick ];
+  nativeBuildInputs = [
+    pip
+    pythonRelaxDepsHook
+    imagemagick
+  ];
+
   pythonRemoveDeps = [ "opencv-python" ];
 
   preBuild = "echo '${version}' > version.txt";

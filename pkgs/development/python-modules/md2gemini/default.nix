@@ -19,5 +19,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/makeworld-the-better-one/md2gemini";
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.kaction ];
+    broken = versionAtLeast mistune.version "3";
   };
 }

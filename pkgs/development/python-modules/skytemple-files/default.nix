@@ -28,19 +28,19 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.5.4";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-RB+Cp4mL0y59/l7yu0z3jefADHR9/h0rbTZLm7BvJ7k=";
+    hash = "sha256-PVHI3SuXXH+XpSaBhtSUT5I6wYK3WmwW67nJmPLKdg4=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    substituteInPlace skytemple_files/patch/arm_patcher.py \
-      --replace "exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')" "exec_name = \"${armips}/bin/armips\""
+    substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
+      --replace "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" "exec_name = \"${armips}/bin/armips\""
   '';
 
   buildInputs = [ armips ];

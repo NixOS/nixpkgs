@@ -41,6 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    bin/unit-hyperscan
+
+    runHook postCheck
+  '';
+
   meta = with lib; {
     description = "High-performance multiple regex matching library";
     longDescription = ''

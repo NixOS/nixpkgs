@@ -68,6 +68,10 @@ self: super: {
   tuple = addBuildDepend self.base-orphans super.tuple;
   vector-th-unbox = doJailbreak super.vector-th-unbox;
 
+  hls-cabal-plugin = super.hls-cabal-plugin.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
+
   ormolu = self.ormolu_0_5_2_0.override {
     Cabal-syntax = self.Cabal-syntax_3_8_1_0;
   };

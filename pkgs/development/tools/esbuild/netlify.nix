@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "pYiwGjgFMclPYTW0Qml7Pr/knT1gywUAGANra5aojYM=";
   };
 
-  vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+  vendorHash = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
 
   passthru = {
     tests = {

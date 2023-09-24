@@ -30,9 +30,13 @@ in
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 
-  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
+  qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum {
+    qt5Kvantum = pkgs.libsForQt5.qtstyleplugin-kvantum;
+  };
 
   quazip = callPackage ../development/libraries/quazip { };
+
+  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qxlsx = callPackage ../development/libraries/qxlsx { };
 

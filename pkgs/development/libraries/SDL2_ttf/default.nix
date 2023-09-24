@@ -1,4 +1,4 @@
-{ lib, stdenv, pkg-config, darwin, fetchurl, SDL2, freetype, libGL }:
+{ lib, stdenv, pkg-config, darwin, fetchurl, SDL2, freetype, harfbuzz, libGL }:
 
 stdenv.mkDerivation rec {
   pname = "SDL2_ttf";
@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ncce2TSHUhsQeixKnKa/Q/ti9r3dXCawVea5FBiiIFM=";
   };
 
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = [ "--disable-harfbuzz-builtin" ]
+    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ SDL2 freetype ]
+  buildInputs = [ SDL2 freetype harfbuzz ]
     ++ lib.optional (!stdenv.isDarwin) libGL
     ++ lib.optional stdenv.isDarwin darwin.libobjc;
 

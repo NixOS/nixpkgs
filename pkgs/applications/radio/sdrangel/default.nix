@@ -41,22 +41,24 @@
 , qtwebengine
 , rtl-sdr
 , serialdv
+, sdrplay
 , sgp4
 , soapysdr-with-plugins
 , uhd
 , wrapQtAppsHook
 , zlib
+, withSDRplay ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.15.2";
+  version = "7.15.4";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Yvf0LJu7YbXhW3i0fd5R2KVn2dkx484AZ0XaWhjozFE=";
+    hash = "sha256-oSFnoNmoXvdb5lpx/j3DVVhOfbsDZlGNZNcvud1w8Ks=";
   };
 
   nativeBuildInputs = [
@@ -108,7 +110,8 @@ stdenv.mkDerivation (finalAttrs: {
     soapysdr-with-plugins
     uhd
     zlib
-  ];
+  ]
+  ++ lib.optionals withSDRplay [ sdrplay ];
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"

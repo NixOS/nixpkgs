@@ -1,24 +1,27 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , testers
 , risor
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "risor";
-  version = "0.15.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "risor-io";
     repo = "risor";
     rev = "v${version}";
-    hash = "sha256-aBUM/+mAuQ+JUOqeMtRYpOwdKbD6An9/Nc2Q6YDnUmE=";
+    hash = "sha256-7bWtlLo1fJQ7ddcg0MFUfeCn8VNkSEENxmp0O8cNTBE=";
   };
 
-  sourceRoot = "${src.name}/cmd/risor";
+  proxyVendor = true;
+  vendorHash = "sha256-cV6TOvcquAOr4WQ3IzWOVtLuwjQf1BA+QXzzDYnPsYQ=";
 
-  vendorHash = "sha256-vlrYmY70nEAI8FSsMzZtuLMt8+aVi0jDX7PGKRMw4r8=";
+  subPackages = [
+    "cmd/risor"
+  ];
 
   ldflags = [
     "-s"
@@ -41,3 +44,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ figsoda ];
   };
 }
+

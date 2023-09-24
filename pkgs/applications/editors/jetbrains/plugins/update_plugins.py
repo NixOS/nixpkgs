@@ -36,6 +36,7 @@ FRIENDLY_TO_PLUGIN = {
     "pycharm-professional": "PYCHARM",
     "rider": "RIDER",
     "ruby-mine": "RUBYMINE",
+    "rust-rover": "RUST",
     "webstorm": "WEBSTORM"
 }
 PLUGIN_TO_FRIENDLY = {j: i for i, j in FRIENDLY_TO_PLUGIN.items()}

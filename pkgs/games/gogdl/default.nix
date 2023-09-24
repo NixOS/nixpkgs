@@ -17,8 +17,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "heroic-gogdl";
-    rev = "d2fa34bfba7beb2ecc0e3fc70a657f2c612c8a10";
-    hash = "sha256-YCqtfY49lDg6sLrF/INOZVD9cMCwvejhySzUWrxHKAw=";
+    rev = "89d15f1593cc26f15a5f8f409bb623764c095d37";
+    hash = "sha256-EECpXGVhcwihKB8fLObVvYzFD8uh7CxYKtFiGc0Jqbk=";
   };
 
   disabled = pythonOlder "3.8";
@@ -26,13 +26,6 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     setuptools
     requests
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/Heroic-Games-Launcher/heroic-gogdl/pull/37.patch";
-      hash = "sha256-oZLetPoWzsEDrL0Bh89HB4hTn70FTh8aXj9mKGr4Dqw=";
-    })
   ];
 
   pythonImportsCheck = [ "gogdl" ];

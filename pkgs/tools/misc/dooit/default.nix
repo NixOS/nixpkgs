@@ -1,48 +1,54 @@
 { lib
 , fetchFromGitHub
+, dooit
 , python3
+, testers
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dooit";
-  version = "1.0.1";
+  version = "2.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "kraanzu";
-    repo = pname;
+    repo = "dooit";
     rev = "v${version}";
-    hash = "sha256-7a6xoqbAmnGVUVppQTSo4hH44XFCqBnF7xO7sOVySY0=";
+    hash = "sha256-iQAGD6zrBBd4fJONaB7to1OJpAJUO0zeA1xhVQZBkMc=";
   };
-
-  # Required versions not available
-  pythonRelaxDeps = [
-    "textual"
-    "tzlocal"
-  ];
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    textual
-    pyperclip
-    pyyaml
-    dateparser
-    tzlocal
     appdirs
+    pyperclip
+    python-dateutil
+    pyyaml
+    textual
+    tzlocal
   ];
+
+  # NOTE pyproject version was bumped after release tag 2.0.1 - remove after next release.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "version = \"2.0.0\"" "version = \"2.0.1\""
+  '';
 
   # No tests available
   doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    package = dooit;
+    command = "HOME=$(mktemp -d) dooit --version";
+  };
 
   meta = with lib; {
     description = "A TUI todo manager";
     homepage = "https://github.com/kraanzu/dooit";
     changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ wesleyjrz ];
+    maintainers = with maintainers; [ khaneliman wesleyjrz ];
   };
 }

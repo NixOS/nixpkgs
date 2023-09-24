@@ -12,15 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchCrate {
     inherit version;
     pname = "https";
-    hash = "sha256-KjkUIAo2CAfVNjC0Vq3Pd8qDN9g1+K/ZRs+sGcc8bCg=";
+    hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
   };
 
-  cargoHash = "sha256-liRCdFg1wUPIURffSJVYG9nf1UEsvSH/krglBeluvlQ=";
+  cargoHash = "sha256-8cH8QrnkfPF0Di7+Ns/P/8cFe0jej/v7m4fkkfTFdvs=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -12,11 +12,11 @@
 
 let
   pname = "clr-loader";
-  version = "0.2.5";
+  version = "0.2.6";
   src = fetchPypi {
     pname = "clr_loader";
     inherit version;
-    hash = "sha256-gu1ftlRynRT9iCludLtrhOss+5dv9LfUnU5En9eKIms=";
+    hash = "sha256-AZNIrmtqg8ekBtFFN8J3zs96OlOyY+w0LIHe1YRaZ+4=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual

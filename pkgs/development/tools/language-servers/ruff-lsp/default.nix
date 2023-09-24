@@ -3,6 +3,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , ruff
 , pygls
 , lsprotocol
@@ -15,16 +16,30 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.37";
-  format = "pyproject";
+  version = "0.0.39";
+  pyproject = true;
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "v${version}";
-    hash = "sha256-B77q2qB0X8K8YkUjL5Hm7/aa/p3YCyhys5JnPjPQ+ZU=";
+    hash = "sha256-hbnSx59uSzXHeAhZPZnCzxl+mCZIdr29uUPfQCsm/Ww=";
   };
+
+  patches = [
+    # update tests to fix compatibility with ruff 0.0.291
+    # https://github.com/astral-sh/ruff-lsp/pull/250
+    (fetchpatch {
+      name = "bump-ruff-version.patch";
+      url = "https://github.com/astral-sh/ruff-lsp/commit/35691407c4f489416a46fd2e88ef037b1204feb7.patch";
+      hash = "sha256-D6k2BWDUqN4GBhjspRwg84Idr7fvKMbmAAkG3I1YOH4=";
+      excludes = [
+        "requirements.txt"
+        "requirements-dev.txt"
+      ];
+    })
+  ];
 
   postPatch = ''
     # ruff binary added to PATH in wrapper so it's not needed

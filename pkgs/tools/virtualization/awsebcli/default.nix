@@ -23,14 +23,14 @@ let
 in
 with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.20.7";
+  version = "3.20.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-DxjoEkFnY4aSfxVKPpnJLmnjLtZnlM74XXd0K8mcdoY=";
+    hash = "sha256-tnBDEeR+SCHb9UT3pTO7ISm4TVICvVfrV5cfz/60YQY=";
   };
 
   postPatch = ''

@@ -98,7 +98,8 @@ let
       ++ lib.optionals jitSupport [ "--with-llvm" ];
 
     patches = [
-      ./patches/disable-resolve_symlinks.patch
+      (if atLeast "16" then ./patches/disable-normalize_exec_path.patch
+       else ./patches/disable-resolve_symlinks.patch)
       ./patches/less-is-more.patch
       ./patches/hardcode-pgxs-path.patch
       ./patches/specify_pkglibdir_at_runtime.patch
@@ -355,6 +356,15 @@ let
       hash = "sha256-uuxaS9xENzNmU7bLXZ7Ym+W9XAxYuU4L7O4KmZ5jyPk=";
       this = self.postgresql_15;
       thisAttr = "postgresql_15";
+      inherit self;
+    };
+
+    postgresql_16 = self.callPackage generic {
+      version = "16.0";
+      psqlSchema = "16";
+      hash = "sha256-356CPrIjMEROHUjlLMZRNaZSpv2zzjJePwhUkzn1G5k=";
+      this = self.postgresql_16;
+      thisAttr = "postgresql_16";
       inherit self;
     };
   };

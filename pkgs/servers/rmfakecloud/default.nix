@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-7lVNbqQv6MNIhHMFbH8VFVIjKiuTCbeVkAKeGprzrkw=";
   };
 
-  vendorSha256 = "sha256-Pz/TtGjwGHaDSueBEHMtHjyAxYO5V+8jzXCowHcUW/4=";
+  vendorHash = "sha256-Pz/TtGjwGHaDSueBEHMtHjyAxYO5V+8jzXCowHcUW/4=";
 
   ui = callPackage ./webui.nix { inherit version src; };
 

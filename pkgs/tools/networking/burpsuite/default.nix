@@ -74,6 +74,6 @@ buildFHSEnv {
     license = licenses.unfree;
     platforms = jdk.meta.platforms;
     hydraPlatforms = [ ];
-    maintainers = with maintainers; [ bennofs stepech ];
+    maintainers = with maintainers; [ bennofs ];
   };
 }

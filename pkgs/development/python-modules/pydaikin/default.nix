@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.11.0";
+  version = "2.11.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mustang51";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YQmMuUSmI6npdhRRhoSNwEFXUF1ZHdKsjZnfxFbL60E=";
+    hash = "sha256-IBrd4PH8EzVVVFQtJdJ8bTMLEzfh7MYMe79yuCrhmww=";
   };
 
   propagatedBuildInputs = [

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip, python310, nodePackages, wkhtmltopdf
+{ stdenv, lib, fetchFromGitHub, fetchzip, python310, rtlcss, wkhtmltopdf
 , nixosTests }:
 
 let
@@ -59,7 +59,7 @@ in python.pkgs.buildPythonApplication rec {
     "--prefix"
     "PATH"
     ":"
-    "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}"
+    "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

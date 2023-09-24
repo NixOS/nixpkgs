@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "canals";
-  version = "0.6.0";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "deepset-ai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-s4nKPywfRn2hNhn/coWGqShv7D+MCEHblVzfweQJlnM=";
+    hash = "sha256-co2Zv4U4Vnn8IdPqZnyLD+siFu7tectj7ckh4oaKWYU=";
   };
 
   nativeBuildInputs = [

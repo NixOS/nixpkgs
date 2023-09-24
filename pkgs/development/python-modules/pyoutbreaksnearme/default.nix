@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyoutbreaksnearme";
-  version = "2022.10.0";
+  version = "2023.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-D7oXkKDSg+yF+j1WyG/VVY12hLU6oyhEtxLrF6IkMSA=";
+    hash = "sha256-Qrq8/dPJsJMJNXobc+Ps6Nbg819+GFuYplovGuWK0nQ=";
   };
 
   patches = [

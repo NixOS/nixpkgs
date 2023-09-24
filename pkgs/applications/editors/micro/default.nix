@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "micro";
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3Rppi8UcAc4zdXOd81Y+sb5Psezx2TQsNw73WdPVMgE=";
+    hash = "sha256-L8yJE3rjNcx+1gawQ8urZcFfoQdO20E67mJQjWaVwVo=";
   };
+
+  vendorHash = "sha256-h00s+xqepj+odKAgf54s35xMnnj3gtx5LWDOYFx5GY0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "cmd/micro" ];
-
-  vendorSha256 = "sha256-/bWIn5joZOTOtuAbljOc0NgBfjrFkbFZih+cPNHnS9w=";
 
   ldflags = let t = "github.com/zyedidia/micro/v2/internal"; in [
     "-s"
@@ -34,7 +34,7 @@ buildGoModule rec {
     install -Dm644 assets/micro-logo-mark.svg $out/share/icons/hicolor/scalable/apps/micro.svg
   '';
 
-  passthru.tests.expect = callPackage ./test-with-expect.nix {};
+  passthru.tests.expect = callPackage ./test-with-expect.nix { };
 
   meta = with lib; {
     homepage = "https://micro-editor.github.io";

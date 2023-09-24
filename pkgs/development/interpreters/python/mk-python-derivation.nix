@@ -82,6 +82,11 @@
 # However, some packages do provide executables with extensions, and thus bytecode is generated.
 , removeBinBytecode ? true
 
+# pyproject = true <-> format = "pyproject"
+# pyproject = false <-> format = "other"
+# https://github.com/NixOS/nixpkgs/issues/253154
+, pyproject ? null
+
 # Several package formats are supported.
 # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
 # "wheel" : Install from a pre-compiled wheel.
@@ -89,7 +94,7 @@
 # "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
 # "egg": Install a package from an egg.
 # "other" : Provide your own buildPhase and installPhase.
-, format ? "setuptools"
+, format ? null
 
 , meta ? {}
 
@@ -101,10 +106,23 @@
 
 , ... } @ attrs:
 
+assert (pyproject != null) -> (format == null);
+
 let
   inherit (python) stdenv;
 
-  withDistOutput = lib.elem format ["pyproject" "setuptools" "flit" "wheel"];
+  format' =
+    if pyproject != null then
+      if pyproject then
+        "pyproject"
+      else
+        "other"
+    else if format != null then
+      format
+    else
+      "setuptools";
+
+  withDistOutput = lib.elem format' ["pyproject" "setuptools" "flit" "wheel"];
 
   name_ = name;
 
@@ -177,7 +195,7 @@ let
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
     "disabledTestPaths" "outputs"
   ]) // {
 
@@ -202,11 +220,11 @@ let
       pythonRemoveBinBytecodeHook
     ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
       unzip
-    ] ++ lib.optionals (format == "setuptools") [
+    ] ++ lib.optionals (format' == "setuptools") [
       setuptoolsBuildHook
-    ] ++ lib.optionals (format == "flit") [
+    ] ++ lib.optionals (format' == "flit") [
       flitBuildHook
-    ] ++ lib.optionals (format == "pyproject") [(
+    ] ++ lib.optionals (format' == "pyproject") [(
       if isBootstrapPackage then
         pypaBuildHook.override {
           inherit (python.pythonForBuild.pkgs.bootstrap) build;
@@ -214,11 +232,11 @@ let
         }
       else
         pypaBuildHook
-    )] ++ lib.optionals (format == "wheel") [
+    )] ++ lib.optionals (format' == "wheel") [
       wheelUnpackHook
-    ] ++ lib.optionals (format == "egg") [
+    ] ++ lib.optionals (format' == "egg") [
       eggUnpackHook eggBuildHook eggInstallHook
-    ] ++ lib.optionals (format != "other") [(
+    ] ++ lib.optionals (format' != "other") [(
       if isBootstrapInstallPackage then
         pypaInstallHook.override {
           inherit (python.pythonForBuild.pkgs.bootstrap) installer;
@@ -252,7 +270,7 @@ let
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
     nativeInstallCheckInputs = [
-    ] ++ lib.optionals (format == "setuptools") [
+    ] ++ lib.optionals (format' == "setuptools") [
       # Longer-term we should get rid of this and require
       # users of this function to set the `installCheckPhase` or
       # pass in a hook that sets it.

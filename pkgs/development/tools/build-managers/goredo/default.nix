@@ -24,7 +24,7 @@ buildGoModule rec {
 
   inherit (sharness) SHARNESS_TEST_SRCDIR;
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   modRoot = "./src";
   subPackages = [ "." ];

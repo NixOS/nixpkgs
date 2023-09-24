@@ -93,6 +93,8 @@ in buildPythonPackage rec {
     "test_cross_module_exception_translator"
   ];
 
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
+
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";
     changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";

@@ -3,12 +3,14 @@
 , stdenv
 , fetchurl
 , fetchpatch
+, fetchpatch2
 , makeSetupHook
 , makeWrapper
 , gst_all_1
 , libglvnd
 , darwin
 , buildPackages
+, python3
 
   # options
 , developerBuild ? false
@@ -24,7 +26,7 @@ let
   addPackages = self: with self;
     let
       callPackage = self.newScope ({
-        inherit qtModule srcs;
+        inherit qtModule srcs python3;
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in
@@ -103,7 +105,15 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
-      qtgrpc = callPackage ./modules/qtgrpc.nix { };
+      qtgrpc = callPackage ./modules/qtgrpc.nix {
+        patches = [
+          (fetchpatch2 {
+            # fix compatibility with protobuf 23
+            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-grpc/-/raw/d6b33bd915dc6e63b30db2cd29150d55b289d7ed/protobuf-23.patch";
+            hash = "sha256-KQAcrjQ3rK9pDQUOUK6AS4ej8YvtRv9WZOxby31Y5r4=";
+          })
+        ];
+      };
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };

@@ -63,6 +63,14 @@ buildPythonPackage rec {
     sed -i "s#@TPM2_TSS@#${tpm2-tss.out}#" src/tpm2_pytss/FAPI.py
   '';
 
+  # Hardening has to be disabled
+  # due to pycparsing handling it poorly.
+  # See https://github.com/NixOS/nixpkgs/issues/252023
+  # for more details.
+  hardeningDisable = [
+    "fortify"
+  ];
+
   nativeBuildInputs = [
     cffi
     pkgconfig # this is the Python module

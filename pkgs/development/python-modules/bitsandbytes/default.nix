@@ -3,12 +3,9 @@
 , fetchFromGitHub
 , python
 , pythonOlder
-, pytestCheckHook
 , setuptools
 , wheel
 , torch
-, einops
-, lion-pytorch
 , scipy
 , symlinkJoin
 }:
@@ -85,7 +82,6 @@ buildPythonPackage {
   ];
 
   doCheck = false;  # tests require CUDA and also GPU access
-  nativeCheckInputs = [ pytestCheckHook einops lion-pytorch ];
 
   pythonImportsCheck = [
     "bitsandbytes"

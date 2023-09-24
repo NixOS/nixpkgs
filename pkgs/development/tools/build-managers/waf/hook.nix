@@ -13,7 +13,7 @@ makeSetupHook {
     # waf is not inserted into propagatedBuildInputs, rather it is inserted
     # directly
     inherit waf;
-    crossFlags = lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system)
+    wafCrossFlags = lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system)
       ''--cross-compile "--cross-execute=${stdenv.targetPlatform.emulator pkgs}"'';
   };
 

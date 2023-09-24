@@ -218,18 +218,6 @@ let
     };
   };
 
-  cl-webkit2_3_5_9 = build-asdf-system {
-    inherit (super.cl-webkit2) pname systems nativeLibs lispLibs;
-    version = "3.5.9";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "joachifm";
-      repo = "cl-webkit";
-      rev = "3.5.9";
-      sha256 = "sha256-YJo5ahL6+HLeJrxFBuZZjuK3OfA6DnAu82vvXMsNBgI=";
-    };
-  };
-
   prompter = build-asdf-system {
     pname = "prompter";
     version = "0.1.0";
@@ -258,12 +246,12 @@ let
 
   nasdf = build-asdf-system {
     pname = "nasdf";
-    version = "20230524-git";
+    version = "20230911-git";
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "ntemplate";
-      rev = "51a884f388ec526c32914093fcad6bb2434e3c14";
-      sha256 = "sha256-bjQPkiHAxhjsHCnWpCGMsmQlGDJFGtQEdevnhK2k+kY=";
+      rev = "ab7a018f3a67a999c72710644b10b4545130c139";
+      sha256 = "sha256-fXGh0h6CXLoBgK1jRxkSNyQVAY1gvi4iyHQBuzueR5Y=";
     };
   };
 
@@ -370,7 +358,7 @@ let
 
   nyxt-gtk = build-asdf-system {
     pname = "nyxt";
-    version = "3.6.0";
+    version = "3.7.0";
 
     lispLibs = (with super; [
       alexandria
@@ -410,7 +398,6 @@ let
       spinneret
       slynk
       trivia
-      trivial-clipboard
       trivial-features
       trivial-garbage
       trivial-package-local-nicknames
@@ -418,9 +405,31 @@ let
       unix-opts
       cluffer
       cl-cffi-gtk
-      cl-gobject-introspection
       quri
       sqlite
+      # TODO: Remove these overrides after quicklisp updates past the June 2023 release
+      (trivial-clipboard.overrideAttrs (final: prev: {
+        src = pkgs.fetchFromGitHub {
+          owner = "snmsts";
+          repo = "trivial-clipboard";
+          rev = "6ddf8d5dff8f5c2102af7cd1a1751cbe6408377b";
+          sha256 = "sha256-n15IuTkqAAh2c1OfNbZfCAQJbH//QXeH0Bl1/5OpFRM=";
+        };}))
+      (cl-gobject-introspection.overrideAttrs (final: prev: {
+        src = pkgs.fetchFromGitHub {
+          owner = "andy128k";
+          repo = "cl-gobject-introspection";
+          rev = "83beec4492948b52aae4d4152200de5d5c7ac3e9";
+          sha256 = "sha256-g/FwWE+Rzmzm5Y+irvd1AJodbp6kPHJIFOFDPhaRlXc=";
+        };}))
+      (cl-webkit2.overrideAttrs (final: prev: {
+        src = pkgs.fetchFromGitHub {
+          owner = "joachifm";
+          repo = "cl-webkit";
+          rev = "66fd0700111586425c9942da1694b856fb15cf41";
+          sha256 = "sha256-t/B9CvQTekEEsM/ZEp47Mn6NeZaTYFsTdRqclfX9BNg=";
+        };
+      }))
     ]) ++ (with self; [
       history-tree
       nhooks
@@ -432,7 +441,6 @@ let
       nsymbols
       nclasses
       nfiles
-      cl-webkit2_3_5_9
       swank
       cl-containers
     ]);
@@ -440,8 +448,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
-      rev = "3.6.0";
-      sha256 = "sha256-DaPEKdYf5R+RS7VQzbdLSqZvEQfxjeGEdX8rwmHRLrY=";
+      rev = "3.7.0";
+      sha256 = "sha256-viiyO4fX3uyGuvojQ1rYYKBldRdVNzeJX1KYlYwfWVU=";
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -534,88 +542,6 @@ let
     version = "f19162e76";
   });
 
-
-  qt = let
-    rev = "dffff3ee3dbd0686c85c323f579b8bbf4881e60e";
-  in build-with-compile-into-pwd rec {
-    pname = "commonqt";
-    version = builtins.substring 0 7 rev;
-    src = pkgs.fetchFromGitHub {
-      inherit rev;
-      owner = pname;
-      repo = pname;
-      hash = "sha256-GAgwT0D9mIkYPTHfCH/KxxIv7b6QGwcxwZE7ehH5xug=";
-    };
-
-    buildInputs = [ pkgs.qt4 ];
-    nativeBuildInputs = [ pkgs.smokegen pkgs.smokeqt ];
-    nativeLibs = [ pkgs.qt4 pkgs.smokegen pkgs.smokeqt ];
-
-    systems = [ "qt" ];
-
-    lispLibs = with super; [
-      cffi named-readtables cl-ppcre alexandria
-      closer-mop iterate trivial-garbage bordeaux-threads
-    ];
-  };
-
-  qt-libs = build-with-compile-into-pwd {
-    inherit (super.qt-libs) pname version src;
-    patches = [ ./patches/qt-libs-dont-download.patch ];
-    prePatch = ''
-      substituteInPlace systems/*.asd --replace ":qt+libs" ":qt"
-    '';
-    lispLibs = super.qt-libs.lispLibs ++ [ self.qt ];
-    systems = [
-      "qt-libs"
-      "commonqt"
-      # "phonon"
-      # "qimageblitz"
-      # "qsci"
-      "qt3support"
-      "qtcore"
-      "qtdbus"
-      "qtdeclarative"
-      "qtgui"
-      "qthelp"
-      "qtnetwork"
-      "qtopengl"
-      "qtscript"
-      "qtsql"
-      "qtsvg"
-      "qttest"
-      "qtuitools"
-      # "qtwebkit"
-      "qtxml"
-      "qtxmlpatterns"
-      # "qwt"
-      "smokebase"
-    ];
-  };
-
-  commonqt = self.qt-libs;
-  qt3support = self.qt-libs;
-  qtcore = self.qt-libs;
-  qtdbus = self.qt-libs;
-  qtdeclarative = self.qt-libs;
-  qtgui = self.qt-libs;
-  qthelp = self.qt-libs;
-  qtnetwork = self.qt-libs;
-  qtopengl = self.qt-libs;
-  qtscript = self.qt-libs;
-  qtsql = self.qt-libs;
-  qtsvg = self.qt-libs;
-  qttest = self.qt-libs;
-  qtuitools = self.qt-libs;
-  qtxml = self.qt-libs;
-  qtxmlpatterns = self.qt-libs;
-  smokebase = self.qt-libs;
-
-  qtools = build-with-compile-into-pwd {
-    inherit (super.qtools) pname version src nativeLibs;
-    lispLibs = [ self.qt ] ++ remove super.qt_plus_libs super.qtools.lispLibs ++ [ self.qt-libs ];
-    patches = [ ./patches/qtools-use-nix-libs.patch ];
-  };
 
   magicl = build-with-compile-into-pwd {
     inherit (super.magicl) pname version src lispLibs;

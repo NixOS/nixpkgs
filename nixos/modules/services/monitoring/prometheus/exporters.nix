@@ -304,6 +304,14 @@ in
           'services.mysql.enable' is set to false.
       '';
     } {
+      assertion = cfg.nextcloud.enable -> (
+        (cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
+          'services.prometheus.exporters.nextcloud.tokenFile'
+      '';
+    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );

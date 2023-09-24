@@ -139,9 +139,9 @@ impl Package {
             None => Specifics::Registry {
                 integrity: pkg
                     .integrity
-                    .expect("non-git dependencies should have assosciated integrity")
+                    .expect("non-git dependencies should have associated integrity")
                     .into_best()
-                    .expect("non-git dependencies should have non-empty assosciated integrity"),
+                    .expect("non-git dependencies should have non-empty associated integrity"),
             },
         };
 

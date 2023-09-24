@@ -68,12 +68,19 @@ self: super: {
   doctest = doDistribute super.doctest_0_22_0;
   http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
   some = doDistribute self.some_1_0_5;
-  th-abstraction = doDistribute self.th-abstraction_0_5_0_0;
+  th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
   th-desugar = doDistribute self.th-desugar_1_15;
   semigroupoids = doDistribute self.semigroupoids_6_0_0_1;
   bifunctors = doDistribute self.bifunctors_5_6_1;
   base-compat = doDistribute self.base-compat_0_13_0;
   base-compat-batteries = doDistribute self.base-compat-batteries_0_13_0;
+
+  # Because we bumped the version of th-abstraction above.^
+  aeson = doJailbreak super.aeson;
+  free = doJailbreak super.free;
+
+  # Requires filepath >= 1.4.100.0 <=> GHC >= 9.6
+  file-io = unmarkBroken super.file-io;
 
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/pull/21
@@ -81,7 +88,7 @@ self: super: {
 
   ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_0;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_1;
 
   # v0.1.6 forbids base >= 4.18
   singleton-bool = doDistribute super.singleton-bool_0_1_7;
@@ -164,22 +171,13 @@ self: super: {
 
   # 2023-04-03: plugins disabled for hls 1.10.0.0 based on
   #
-  haskell-language-server =
-    let
-      # TODO: HLS-2.0.0.0 added support for the foumolu plugin for ghc-9.6.
-      # However, putting together all the overrides to get the latest
-      # version of fourmolu compiling together with ghc-9.6 and HLS is a
-      # little annoying, so currently fourmolu has been disabled.  We should
-      # try to enable this at some point in the future.
-      hlsWithFlags = disableCabalFlag "fourmolu" super.haskell-language-server;
-    in
-    hlsWithFlags.override {
-      hls-ormolu-plugin = null;
+  haskell-language-server = super.haskell-language-server.override {
       hls-floskell-plugin = null;
-      hls-fourmolu-plugin = null;
-      hls-hlint-plugin = null;
-      hls-stylish-haskell-plugin = null;
     };
+
+  fourmolu = super.fourmolu_0_13_1_0;
+  ormolu = super.ormolu_0_7_1_0;
+  stylish-haskell = super.stylish-haskell_0_14_5_0;
 
   # Newer version of servant required for GHC 9.6
   servant = self.servant_0_20;
@@ -215,6 +213,8 @@ self: super: {
   ghc-exactprint = unmarkBroken (addBuildDepends (with self.ghc-exactprint.scope; [
    HUnit Diff data-default extra fail free ghc-paths ordered-containers silently syb
   ]) super.ghc-exactprint_1_7_0_1);
+
+  hlint = super.hlint_3_6_1;
 
   inherit (pkgs.lib.mapAttrs (_: doJailbreak ) super)
     hls-cabal-plugin

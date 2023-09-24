@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "apycula";
-  version = "0.8.3";
+  version = "0.9.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Apycula";
-    hash = "sha256-QGBWNWAEe6KbfYIoW3FScEL7b4TTcK1YZQoNkfxDNMo=";
+    hash = "sha256-M62RgNUxn14o8w+vIJjDrMpYnfvwcU4jw05PPvPvR8A=";
   };
 
   nativeBuildInputs = [

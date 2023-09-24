@@ -11,53 +11,47 @@
   settingsFileUnsubstituted = settingsFormat.generate "mautrix-whatsapp-config-unsubstituted.json" cfg.settings;
   settingsFormat = pkgs.formats.json {};
   appservicePort = 29318;
+
+  mkDefaults = lib.mapAttrsRecursive (n: v: lib.mkDefault v);
+  defaultConfig = {
+    homeserver.address = "http://localhost:8448";
+    appservice = {
+      hostname = "[::]";
+      port = appservicePort;
+      database.type = "sqlite3";
+      database.uri = "${dataDir}/mautrix-whatsapp.db";
+      id = "whatsapp";
+      bot.username = "whatsappbot";
+      bot.displayname = "WhatsApp Bridge Bot";
+      as_token = "";
+      hs_token = "";
+    };
+    bridge = {
+      username_template = "whatsapp_{{.}}";
+      displayname_template = "{{if .BusinessName}}{{.BusinessName}}{{else if .PushName}}{{.PushName}}{{else}}{{.JID}}{{end}} (WA)";
+      double_puppet_server_map = {};
+      login_shared_secret_map = {};
+      command_prefix = "!wa";
+      permissions."*" = "relay";
+      relay.enabled = true;
+    };
+    logging = {
+      min_level = "info";
+      writers = lib.singleton {
+        type = "stdout";
+        format = "pretty-colored";
+        time_format = " ";
+      };
+    };
+  };
+
 in {
-  imports = [];
   options.services.mautrix-whatsapp = {
-    enable = lib.mkEnableOption "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp.";
+    enable = lib.mkEnableOption (lib.mdDoc "mautrix-whatsapp, a puppeting/relaybot bridge between Matrix and WhatsApp.");
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = {
-        appservice = {
-          address = "http://localhost:${toString appservicePort}";
-          hostname = "[::]";
-          port = appservicePort;
-          database = {
-            type = "sqlite3";
-            uri = "${dataDir}/mautrix-whatsapp.db";
-          };
-          id = "whatsapp";
-          bot = {
-            username = "whatsappbot";
-            displayname = "WhatsApp Bridge Bot";
-          };
-          as_token = "";
-          hs_token = "";
-        };
-        bridge = {
-          username_template = "whatsapp_{{.}}";
-          displayname_template = "{{if .BusinessName}}{{.BusinessName}}{{else if .PushName}}{{.PushName}}{{else}}{{.JID}}{{end}} (WA)";
-          double_puppet_server_map = {};
-          login_shared_secret_map = {};
-          command_prefix = "!wa";
-          permissions."*" = "relay";
-          relay.enabled = true;
-        };
-        logging = {
-          min_level = "info";
-          writers = [
-            {
-              type = "stdout";
-              format = "pretty-colored";
-            }
-            {
-              type = "file";
-              format = "json";
-            }
-          ];
-        };
-      };
+      default = defaultConfig;
       description = lib.mdDoc ''
         {file}`config.yaml` configuration as a Nix attribute set.
         Configuration options should match those described in
@@ -117,9 +111,21 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.mautrix-whatsapp.settings = {
-      homeserver.domain = lib.mkDefault config.services.matrix-synapse.settings.server_name;
+
+    users.users.mautrix-whatsapp = {
+      isSystemUser = true;
+      group = "mautrix-whatsapp";
+      home = dataDir;
+      description = "Mautrix-WhatsApp bridge user";
     };
+
+    users.groups.mautrix-whatsapp = {};
+
+    services.mautrix-whatsapp.settings = lib.mkMerge (map mkDefaults [
+      defaultConfig
+      # Note: this is defined here to avoid the docs depending on `config`
+      { homeserver.domain = config.services.matrix-synapse.settings.server_name; }
+    ]);
 
     systemd.services.mautrix-whatsapp = {
       description = "Mautrix-WhatsApp Service - A WhatsApp bridge for Matrix";
@@ -158,10 +164,11 @@ in {
       '';
 
       serviceConfig = {
-        DynamicUser = true;
+        User = "mautrix-whatsapp";
+        Group = "mautrix-whatsapp";
         EnvironmentFile = cfg.environmentFile;
         StateDirectory = baseNameOf dataDir;
-        WorkingDirectory = "${dataDir}";
+        WorkingDirectory = dataDir;
         ExecStart = ''
           ${pkgs.mautrix-whatsapp}/bin/mautrix-whatsapp \
           --config='${settingsFile}' \

@@ -41,11 +41,6 @@ default-package-overrides:
   - dhall-nixpkgs == 1.0.9
   - dhall-nix == 1.1.25
 
-  # 2023-06-24: HLS at large can't deal with lsp-2.0.0.0 yet
-  - lsp == 1.6.*
-  - lsp-types == 1.6.*
-  - lsp-test == 0.14.*
-
   # 2023-07-06: ghcide-2.0.0.1 explicitly needs implicit-hie < 0.1.3, because some sort of
   # breaking change was introduced in implicit-hie-0.1.3.0.
   # https://github.com/haskell/haskell-language-server/blob/feb596592de95f09cf4ee885f3e74178161919f1/ghcide/ghcide.cabal#L107-L111
@@ -112,6 +107,7 @@ extra-packages:
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-meta < 2.8                    # 2022-12-07: Needed for elmPackages.elm / hspec-discover
   - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
+  - http2 < 3.3                         # 2023-08-24: Needed for twain <https://github.com/alexmingoia/twain/issues/5>
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
   - language-docker == 11.0.0           # required by hadolint 2.12.0, 2022-11-16
   - language-javascript == 0.7.0.0      # required by purescript
@@ -132,6 +128,7 @@ extra-packages:
   - sbv == 7.13                         # required for pkgs.petrinizer
   - stylish-haskell == 0.14.3.0         # 2022-09-19: needed for hls on ghc 8.8
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
+  - th-abstraction < 0.6                # 2023-09-11: needed for aeson-2.2.0.0
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
@@ -173,6 +170,7 @@ package-maintainers:
     - patat
     - svgcairo
   danielrolls:
+    - byte-count-reader
     - shellify
   domenkozar:
     - cachix
@@ -580,6 +578,8 @@ unsupported-platforms:
   bustle:                                       [ platforms.darwin ] # uses glibc-specific ptsname_r
   bytelog:                                      [ platforms.darwin ] # due to posix-api
   camfort:                                      [ aarch64-linux ]
+  chalkboard:                                   [ platforms.darwin ] # depends on Codec-Image-DevIL
+  chalkboard-viewer:                            [ platforms.darwin ] # depends on chalkboard
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   Codec-Image-DevIL:                            [ platforms.darwin ] # depends on mesa
   coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
@@ -596,6 +596,7 @@ unsupported-platforms:
   gi-dbusmenugtk3:                              [ platforms.darwin ]
   gi-dbusmenu:                                  [ platforms.darwin ]
   gi-ggit:                                      [ platforms.darwin ]
+  gi-gtk-layer-shell:                           [ platforms.darwin ] # depends on gtk-layer-shell which is not supported on darwin
   gi-ibus:                                      [ platforms.darwin ]
   gi-javascriptcore:                            [ platforms.darwin ] # webkitgtk marked broken on darwin
   gi-ostree:                                    [ platforms.darwin ]
@@ -610,7 +611,6 @@ unsupported-platforms:
   gtk-sni-tray:                                 [ platforms.darwin ]
   h-raylib:                                     [ platforms.darwin ] # depends on mesa
   haskell-snake:                                [ platforms.darwin ]
-  hb3sum:                                       [ aarch64-linux ] # depends on blake3, which is not supported on aarch64-linux
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
   hidapi:                                       [ platforms.darwin ]
@@ -664,6 +664,7 @@ unsupported-platforms:
   SDL-mpeg:                                     [ platforms.darwin ] # depends on mesa
   sdl2-mixer:                                   [ platforms.darwin ]
   sdl2-ttf:                                     [ platforms.darwin ]
+  sdr:                                          [ platforms.darwin ] # depends on rtlsdr
   sensei:                                       [ platforms.darwin ]
   spade:                                        [ platforms.darwin ] # depends on sdl2-mixer, which doesn't work on darwin
   synthesizer-alsa:                             [ platforms.darwin ]
@@ -711,12 +712,14 @@ supported-platforms:
   gtk3-mac-integration:                         [ platforms.darwin ]
   halide-haskell:                               [ platforms.linux ]
   halide-JuicyPixels:                           [ platforms.linux ]
+  hb3sum:                                       [ platforms.x86 ] # due to blake3
   hommage-ds:                                   [ platforms.windows ]
   hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
   hsignal:                                      [ platforms.x86 ] # -msse2
   HFuse:                                        [ platforms.linux ]
   HQu:                                          [ platforms.x86 ] # vendored C++ library needs i686/x86_64
   hs-swisstable-hashtables-class:               [ platforms.x86_64 ] # depends on swisstable, which Needs AVX2
+  htune:                                        [ platforms.linux ] # depends on alsa-pcm
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
   inline-asm:                                   [ platforms.x86 ] # x86 assembler
   keid-core:                                    [ x86_64-linux ] # geomancy (only x86), vulkan (no i686, no darwin, …)
@@ -844,7 +847,9 @@ dont-distribute-packages:
 
   # Packages that (transitively) depend on insecure packages
   - distributed-process-zookeeper # depends on hzk
+  - HDRUtils # depends on pfstools, which depends on imagemagick
   - hzk # depends on zookeeper_mt, which depends on openssl-1.1
-  - persistent-zookeper # depends on hzk
+  - jobqueue # depends on hzk
+  - persistent-zookeeper # depends on hzk
   - pocket-dns # depends on persistent-zookeeper
   - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1

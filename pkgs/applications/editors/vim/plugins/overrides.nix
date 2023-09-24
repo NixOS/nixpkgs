@@ -11,6 +11,8 @@
 , substituteAll
 
   # Language dependencies
+, fetchYarnDeps
+, mkYarnModules
 , python3
 , rustPlatform
 
@@ -730,8 +732,14 @@ self: super: {
 
   markdown-preview-nvim =  let
     # We only need its dependencies `node-modules`.
-    nodeDep = nodePackages."markdown-preview-nvim-../../applications/editors/vim/plugins/markdown-preview-nvim".overrideAttrs {
-      dontNpmInstall = true;
+    nodeDep = mkYarnModules rec {
+      inherit (super.markdown-preview-nvim) pname version;
+      packageJSON = ./markdown-preview-nvim/package.json;
+      yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
+      offlineCache = fetchYarnDeps {
+        inherit yarnLock;
+        hash = "sha256-kzc9jm6d9PJ07yiWfIOwqxOTAAydTpaLXVK6sEWM8gg=";
+      };
     };
   in super.markdown-preview-nvim.overrideAttrs {
     patches = [
@@ -741,7 +749,7 @@ self: super: {
       })
     ];
     postInstall = ''
-      ln -s ${nodeDep}/lib/node_modules/markdown-preview/node_modules $out/app
+      ln -s ${nodeDep}/node_modules $out/app
     '';
 
     nativeBuildInputs = [ nodejs ];
@@ -787,6 +795,10 @@ self: super: {
       sha256 = "1db5az5civ2bnqg7v3g937mn150ys52258c3glpvdvyyasxb4iih";
     };
     meta.homepage = "https://github.com/jose-elias-alvarez/minsnip.nvim/";
+  };
+
+  multicursors-nvim = super.multicursors-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-treesitter hydra-nvim ];
   };
 
   ncm2 = super.ncm2.overrideAttrs {
@@ -850,8 +862,16 @@ self: super: {
     dontBuild = true;
   };
 
+  nvim-navbuddy = super.nvim-navbuddy.overrideAttrs {
+    dependencies = with self; [ nui-nvim nvim-lspconfig nvim-navic ];
+  };
+
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
+  };
+
+  nvim-navic = super.nvim-navic.overrideAttrs {
+    dependencies = with self; [ nvim-lspconfig ];
   };
 
   nvim-spectre = super.nvim-spectre.overrideAttrs {
@@ -966,7 +986,7 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-qwllMt4va9j8Sfh2+xYcfRtQgypNKZLDT3gRD7dUQ+w=";
+        cargoHash = "sha256-JwEOfxGH2wiFkdepxBsUYrpQ2kMV6koqpkD7s+gbWw8=";
 
         nativeBuildInputs = [ pkg-config ];
 
@@ -1416,7 +1436,7 @@ self: super: {
         hexokinase = buildGoModule {
           name = "hexokinase";
           src = old.src + "/hexokinase";
-          vendorSha256 = null;
+          vendorHash = null;
         };
       in
       ''
@@ -1461,6 +1481,10 @@ self: super: {
 
   vim-pluto = super.vim-pluto.overrideAttrs {
     dependencies = with self; [ denops-vim ];
+  };
+
+  vim-sensible = super.vim-sensible.overrideAttrs {
+    patches = [ ./patches/vim-sensible/fix-nix-store-path-regex.patch ];
   };
 
   vim-snipmate = super.vim-snipmate.overrideAttrs {
@@ -1616,6 +1640,17 @@ self: super: {
       substituteInPlace autoload/zoxide.vim \
         --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
+  };
+  LeaderF = super.LeaderF.overrideAttrs {
+    buildInputs = [ python3 ];
+    # rm */build/ to prevent dependencies on gcc
+    # strip the *.so to keep files small
+    buildPhase = ''
+      patchShebangs .
+      ./install.sh
+      rm autoload/leaderf/fuzzyMatch_C/build/ -r
+    '';
+    stripDebugList = [ "autoload/leaderf/python" ];
   };
 
 } // (

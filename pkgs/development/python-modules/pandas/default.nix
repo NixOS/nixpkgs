@@ -206,6 +206,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
     "test_binops"
+    # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
+    "test_rolling"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "confection";
-  version = "0.1.1";
+  version = "0.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-OpUMx8hcTnBdaATzRXBICwF6eAGsdyA0jFvX4nVBiM4=";
+    hash = "sha256-PJbFv+5bT4+oF7PRAO6AGnjRhjNudiJEkPFgGSmuI8c=";
   };
 
   propagatedBuildInputs = [

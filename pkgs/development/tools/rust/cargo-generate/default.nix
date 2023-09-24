@@ -2,7 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, libgit2
+, libgit2_1_6
 , openssl
 , stdenv
 , darwin
@@ -11,20 +11,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
-  version = "0.18.3";
+  version = "0.18.4";
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
-    sha256 = "sha256-Prue55oe3+NeiOiOYdr41sRqc6WvAVKC9nHD0a6mvrc=";
+    sha256 = "sha256-u4LEE3fDYneKhNU38VeVNvqcbDO0pws6yldgcvwSv6M=";
   };
 
-  cargoSha256 = "sha256-TcJ8DeplbBOx3utdc67xkUg5Z4PYe/lnG+k/X5Zg0FQ=";
+  cargoSha256 = "sha256-pgffaqHWnm3RBE9TGbpRJX35BFpXW/na9wmad9eyCXw=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libgit2_1_6 openssl ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

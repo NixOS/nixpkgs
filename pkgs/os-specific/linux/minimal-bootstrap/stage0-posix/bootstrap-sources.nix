@@ -9,14 +9,6 @@ rec {
   outputHashAlgo = "sha256";
   outputHash = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
 
-  # This 256 byte seed is the only pre-compiled binary in the bootstrap chain.
-  hex0-seed = import <nix/fetchurl.nix> {
-    name = "hex0-seed-${version}";
-    url = "https://github.com/oriansj/bootstrap-seeds/raw/b1263ff14a17835f4d12539226208c426ced4fba/POSIX/x86/hex0-seed";
-    hash = "sha256-QU3RPGy51W7M2xnfFY1IqruKzusrSLU+L190ztN6JW8=";
-    executable = true;
-  };
-
   /*
   Since `make-minimal-bootstrap-sources` requires nixpkgs and nix it
   will create a circular dependency if it is used in place of the

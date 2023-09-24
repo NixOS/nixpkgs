@@ -8,22 +8,24 @@
 , nodejs
 , fetchYarnDeps
 , fixup_yarn_lock
-, electron
+, electron_24
 , libpulseaudio
 , pipewire
 , alsa-utils
 , which
+, testers
+, teams-for-linux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.3.2";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2WoTbkRGH9l6cQrveyxGvO/Dy+0NV4UTDaooYn8k06s=";
+    hash = "sha256-G0UBzSXoZPLHBsM0nslPLNBZs0sUAQYJ403nPV+3Qu4=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -50,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/lib/electron \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=${electron_24}/libexec/electron \
+      -c.electronVersion=${electron_24.version}
 
     runHook postBuild
   '';
@@ -70,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
-    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
+    makeWrapper '${electron_24}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
@@ -91,12 +93,16 @@ stdenv.mkDerivation (finalAttrs: {
   })];
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion rec {
+    package = teams-for-linux;
+    command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
+  };
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

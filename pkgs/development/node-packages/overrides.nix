@@ -29,18 +29,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  "@forge/cli" = prev."@forge/cli".override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      libsecret
-      final.node-gyp-build
-      final.node-pre-gyp
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
-  };
-
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -97,7 +85,7 @@ final: prev: {
   };
 
 
-  graphite-cli = prev."@withgraphite/graphite-cli".override {
+  graphite-cli = prev."@withgraphite/graphite-cli".override (old: {
     name = "graphite-cli";
     nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
     buildInputs = with pkgs; [ cairo pango pixman ];
@@ -108,7 +96,10 @@ final: prev: {
         --bash <($out/bin/gt completion) \
         --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
     '';
-  };
+    meta = old.meta // {
+      license = lib.licenses.unfree; # no license specified
+    };
+  });
 
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -118,9 +109,6 @@ final: prev: {
     '';
   };
 
-  hsd = prev.hsd.override {
-    buildInputs = [ final.node-gyp-build pkgs.unbound ];
-  };
 
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
@@ -207,14 +195,6 @@ final: prev: {
     '';
   });
 
-  near-cli = prev.near-cli.override {
-    nativeBuildInputs = with pkgs; [
-      libusb1
-      final.prebuild-install
-      final.node-gyp-build
-      pkg-config
-    ];
-  };
 
   node-gyp = prev.node-gyp.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -256,13 +236,6 @@ final: prev: {
     in ''
       ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
-    '';
-  };
-
-  parcel = prev.parcel.override {
-    buildInputs = [ final.node-gyp-build ];
-    preRebuild = ''
-      sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
     '';
   };
 
@@ -311,12 +284,11 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      hash = "sha256-0NxYp+W2KbR3xEV2OCXCIL3RqkvLfJHNKgl/PxapVbI=";
+      hash = "sha256-HiZtNHXkoSl3Q4cAerUs8c138AiDJJxzYNQT3I4+ea8=";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
         --set PRISMA_SCHEMA_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
-        --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/schema-engine \
         --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
         --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
         --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
@@ -369,14 +341,6 @@ final: prev: {
   teck-programmer = prev.teck-programmer.override {
     nativeBuildInputs = [ final.node-gyp-build ];
     buildInputs = [ pkgs.libusb1 ];
-  };
-
-  tedicross = prev."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
-    nativeBuildInputs = with pkgs; [ makeWrapper libtool autoconf ];
-    postInstall = ''
-      makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
-        --add-flags "$out/lib/node_modules/tedicross/main.js"
-    '';
   };
 
   thelounge-plugin-closepms = prev.thelounge-plugin-closepms.override {
@@ -489,12 +453,4 @@ final: prev: {
       rm -r $out/lib/node_modules/wrangler/node_modules/@esbuild/sunos-x64
     '';
   });
-
-  yaml-language-server = prev.yaml-language-server.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/yaml-language-server" \
-      --prefix NODE_PATH : ${final.prettier}/lib/node_modules
-    '';
-  };
 }

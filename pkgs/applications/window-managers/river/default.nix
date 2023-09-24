@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       fortuneteller2k
       rodrgz
     ];
+    mainProgram = "river";
     platforms = lib.platforms.linux;
   };
 })

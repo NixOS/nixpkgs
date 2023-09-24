@@ -1,93 +1,140 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
-, mock
-, bokeh
-, plotly
-, chainer
-, xgboost
-, mpi4py
-, lightgbm
-, keras
-, mxnet
-, scikit-optimize
-, tensorflow
-, cma
-, sqlalchemy
-, numpy
-, scipy
-, six
-, cliff
-, colorlog
-, pandas
-, alembic
-, tqdm
-, typing
+, pytestCheckHook
 , pythonOlder
-, isPy27
+, alembic
+, boto3
+, botorch
+, catboost
+, cma
+, cmaes
+, colorlog
+, distributed
+, fakeredis
+, fastai
+, lightgbm
+, matplotlib
+, mlflow
+, moto
+, numpy
+, packaging
+, pandas
+, plotly
+, pytest-xdist
+, pytorch-lightning
+, pyyaml
+, redis
+, scikit-learn
+, scikit-optimize
+, scipy
+, setuptools
+, shap
+, sqlalchemy
+, tensorflow
+, torch
+, torchaudio
+, torchvision
+, tqdm
+, wandb
+, wheel
+, xgboost
 }:
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "3.1.0";
-  disabled = isPy27;
+  version = "3.3.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "optuna";
-    repo = pname;
+    repo = "optuna";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dNS3LEWP/Ul1z60iZirFEX30Frc5ZFQLNTgUkT9vLNQ=";
+    hash = "sha256-uHv8uEJOQO1+AeNSxBtnCt6gDQHLT1RToF4hfolVVX0=";
   };
 
-  nativeCheckInputs = [
-    pytest
-    mock
-    bokeh
-    plotly
-    chainer
-    xgboost
-    mpi4py
-    lightgbm
-    keras
-    mxnet
-    scikit-optimize
-    tensorflow
-    cma
+  nativeBuildInputs = [
+    setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
-    sqlalchemy
-    numpy
-    scipy
-    six
-    cliff
-    colorlog
-    pandas
     alembic
+    cmaes
+    colorlog
+    numpy
+    packaging
+    sqlalchemy
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.5") [
-    typing
+    pyyaml
   ];
 
-  configurePhase = lib.optionalString (! pythonOlder "3.5") ''
-    substituteInPlace setup.py \
-      --replace "'typing'," ""
+  passthru.optional-dependencies = {
+    integration = [
+      botorch
+      catboost
+      cma
+      distributed
+      fastai
+      lightgbm
+      mlflow
+      pandas
+      # pytorch-ignite
+      pytorch-lightning
+      scikit-learn
+      scikit-optimize
+      shap
+      tensorflow
+      torch
+      torchaudio
+      torchvision
+      wandb
+      xgboost
+    ];
+    optional = [
+      boto3
+      botorch
+      matplotlib
+      pandas
+      plotly
+      redis
+      scikit-learn
+    ];
+  };
+
+  preCheck = ''
+    export PATH=$out/bin:$PATH
   '';
 
-  checkPhase = ''
-    pytest --ignore tests/test_cli.py \
-           --ignore tests/integration_tests/test_chainermn.py \
-           --ignore tests/integration_tests/test_pytorch_lightning.py \
-           --ignore tests/integration_tests/test_pytorch_ignite.py \
-           --ignore tests/integration_tests/test_fastai.py
-  '';
+  nativeCheckInputs = [
+    fakeredis
+    moto
+    pytest-xdist
+    pytestCheckHook
+    scipy
+  ] ++ fakeredis.optional-dependencies.lua
+    ++ passthru.optional-dependencies.optional;
+
+  pytestFlagsArray = [
+    "-m 'not integration'"
+  ];
+
+  disabledTestPaths = [
+    # require unpackaged kaleido and building it is a bit difficult
+    "tests/visualization_tests"
+  ];
+
+  pythonImportsCheck = [
+    "optuna"
+  ];
 
   meta = with lib; {
-    broken = true;  # Dashboard broken, other build failures.
     description = "A hyperparameter optimization framework";
     homepage = "https://optuna.org/";
+    changelog = "https://github.com/optuna/optuna/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ natsukium ];
   };
 }

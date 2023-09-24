@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
   version = "1.8.9-2";
 
   src = requireFile rec {
-    name = "PI-linux-x64-${version}-20230814-c.tar.xz";
+    name = "PI-linux-x64-${version}-20230828-c.tar.xz";
     url = "https://pixinsight.com/";
-    sha256 = "sha256-4Jspkl5riMlbeJX/h1zhVfVymORPK1X4l0LyOgXm05Y=";
+    sha256 = "sha256-f4E6F3LeEolDGcN9Uo/n8GlIuwMIVI26fW9NYtEesd4=";
     message = ''
       PixInsight is available from ${url} and requires a commercial (or trial) license.
       After a license has been obtained, PixInsight can be downloaded from the software distribution

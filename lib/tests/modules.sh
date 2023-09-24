@@ -39,7 +39,7 @@ reportFailure() {
 checkConfigOutput() {
     local outputContains=$1
     shift
-    if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
+    if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
@@ -443,6 +443,24 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
+
+# Declaration positions
+# Line should be present for direct options
+checkConfigOutput '^10$' options.imported.line10.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.imported.line10.declarationPositions.0.file ./declaration-positions.nix
+# Generated options may not have line numbers but they will at least get the
+# right file
+checkConfigOutput '/declaration-positions.nix"$' options.generated.line18.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^null$' options.generated.line18.declarationPositions.0.line ./declaration-positions.nix
+# Submodules don't break it
+checkConfigOutput '^39$' config.submoduleLine34.submodDeclLine39.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine34.submodDeclLine39.0.file ./declaration-positions.nix
+# New options under freeform submodules get collected into the parent submodule
+# (consistent with .declarations behaviour, but weird; notably appears in system.build)
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.1.line ./declaration-positions.nix
+# nested options work
+checkConfigOutput '^30$' options.nested.nestedLine30.declarationPositions.0.line ./declaration-positions.nix
 
 cat <<EOF
 ====== module tests ======

@@ -11,7 +11,7 @@ buildGoModule rec {
     hash = "sha256-J6t8QoyCvbGrUX2AkdqugztchP7Cc0jZsrn1+OB2hVY=";
   };
 
-  vendorSha256 = "sha256-oxhi27Zt91S2RwidM+BPati/HWuP8FrZs1X2R2Px5hI=";
+  vendorHash = "sha256-oxhi27Zt91S2RwidM+BPati/HWuP8FrZs1X2R2Px5hI=";
 
   # don't run tests as they require secret access keys that only travis has
   doCheck = false;

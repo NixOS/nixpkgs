@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , config
-, fetchurl
+, fetchFromGitHub
+, nix-update-script
 , pkg-config
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported
@@ -55,11 +56,13 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.28.2";
+  version = "2.28.3";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    hash = "sha256-ZLEQL6Igk1FbAu8z3Yc53uG6V+nbumoJKUK4u+0aHF4=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL";
+    rev = "release-${version}";
+    hash = "sha256-/kQ2IyvAfmZ+zIUt1WuEIeX0nYPGXDlAQk2qDsQnFFs=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -165,7 +168,10 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { inherit openglSupport; };
+  passthru = {
+    inherit openglSupport;
+    updateScript = nix-update-script { extraArgs = ["--version-regex" "release-(.*)"]; };
+  };
 
   meta = with lib; {
     description = "A cross-platform multimedia library";

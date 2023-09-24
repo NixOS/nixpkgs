@@ -19,7 +19,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorSha256 = "sha256-0sgC1+ueZTUCP+7JwI/OKLktfMHQq959GEk1mC0TQgE=";
+  vendorHash = "sha256-0sgC1+ueZTUCP+7JwI/OKLktfMHQq959GEk1mC0TQgE=";
 
   nativeBuildInputs = [
     stuffbin

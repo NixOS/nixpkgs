@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-yI1mmEb5SP2lbP37CpPxYITJL/nvd/mIwxB0RIQRe4I=";
   };
 
-  vendorSha256 = "sha256-0QSsGgokErRNIHQIjZQn5t1dvc306uZck8uLSgjcrck=";
+  vendorHash = "sha256-0QSsGgokErRNIHQIjZQn5t1dvc306uZck8uLSgjcrck=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) keylight; };
 

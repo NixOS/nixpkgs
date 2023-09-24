@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-5ns6n1UO9kRSw8iio4dmJDncsyvFeN01bjxHxQ9Fae4=";
   };
 
-  vendorSha256 = "sha256-jYYtSXdJd2eUc80UfwRRMPcX6tFiXE3LbxV3NAdKVKE=";
+  vendorHash = "sha256-jYYtSXdJd2eUc80UfwRRMPcX6tFiXE3LbxV3NAdKVKE=";
 
   meta = with lib; {
     description = "Utility to extract JSON representation of declarations from a Go source file";

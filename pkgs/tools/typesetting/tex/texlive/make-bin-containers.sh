@@ -20,14 +20,12 @@ for binname in $binfiles ; do
 
   output="$out/bin/$binname"
 
-  # look for existing binary from bin.core or bin.${pname}
-  for folder in $binfolders ; do
-    target="$folder"/bin/"$binname"
-    if [[ -f "$target" && -x "$target" ]] ; then
-      ln -s "$(realpath "$target")" "$output"
-      continue 2
-    fi
-  done
+  # look for existing binary from bin.*
+  target="$(PATH="$HOST_PATH" command -v "$binname" || :)"
+  if [[ -n "$target" && -x "$target" ]] ; then
+    ln -s "$(realpath "$target")" "$output"
+    continue
+  fi
 
   # look for scripts
   # the explicit list of extensions avoid non-scripts such as $binname.cmd, $binname.jar, $binname.pm

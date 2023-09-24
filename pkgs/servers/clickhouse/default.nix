@@ -28,7 +28,7 @@ let
     else llvmPackages.stdenv).mkDerivation;
 in mkDerivation rec {
   pname = "clickhouse";
-  version = "23.3.10.5";
+  version = "23.3.13.6";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
@@ -36,7 +36,7 @@ in mkDerivation rec {
     rev = "v${version}-lts";
     fetchSubmodules = true;
     name = "clickhouse-${rev}.tar.gz";
-    hash = "sha256-xvmZOJqXrGToQRoEl+4AL9ewUhNdKGZFnCdBnSlB+tk=";
+    hash = "sha256-ryUjXN8UNGmkZTkqNHotB4C2E1MHZhx2teqXrlp5ySQ=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test

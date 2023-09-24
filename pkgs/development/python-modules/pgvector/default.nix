@@ -4,6 +4,7 @@
 , django
 , fetchFromGitHub
 , numpy
+, peewee
 , postgresql
 , postgresqlTestHook
 , psycopg
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pgvector";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "pgvector";
     repo = "pgvector-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Phe8iAdOCVp4wpLuLfO+fQMD1MOD47OEIQJ45rYQzug=";
+    hash = "sha256-qvLDFnrTYibdhjSeeIFI4YdpPRsvNBnQ23uqsLCblEo=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     asyncpg
     django
+    peewee
     (postgresql.withPackages (p: with p; [ pgvector ]))
     postgresqlTestHook
     psycopg

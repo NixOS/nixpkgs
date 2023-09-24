@@ -6,6 +6,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, qt5
 , wrapQtAppsHook
 }:
 
@@ -21,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 
@@ -33,19 +33,27 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     sip_4 (pyqt5.override { withWebSockets = true; })
     truststore
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
-
-  pythonRelaxDeps = [
-    "jsonschema"
-    "sentry-sdk"
-  ];
-
-  doCheck = false; # Failing
 
   dontWrapQtApps = true;
 
   preFixup = ''
     wrapQtApp "$out/bin/gns3"
+  '';
+
+  doCheck = true;
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
+    export QT_QPA_PLATFORM=offscreen
   '';
 
   meta = with lib; {

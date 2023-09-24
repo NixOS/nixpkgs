@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.8.4";
+  version = "2023.9.2";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -157,7 +157,8 @@
       androidtvremote2
     ];
     "anel_pwrctrl" = ps: with ps; [
-    ]; # missing inputs: anel-pwrctrl-homeassistant
+      anel-pwrctrl-homeassistant
+    ];
     "anova" = ps: with ps; [
     ]; # missing inputs: anova-wifi
     "anthemav" = ps: with ps; [
@@ -638,6 +639,9 @@
     ];
     "comed_hourly_pricing" = ps: with ps; [
     ];
+    "comelit" = ps: with ps; [
+      aiocomelit
+    ];
     "comfoconnect" = ps: with ps; [
       pycomfoconnect
     ];
@@ -648,6 +652,8 @@
     ];
     "concord232" = ps: with ps; [
     ]; # missing inputs: concord232
+    "coned" = ps: with ps; [
+    ];
     "config" = ps: with ps; [
       aiohttp-cors
     ];
@@ -821,7 +827,8 @@
       nextcord
     ];
     "discovergy" = ps: with ps; [
-    ]; # missing inputs: pydiscovergy
+      pydiscovergy
+    ];
     "dlib_face_detect" = ps: with ps; [
       face-recognition
     ];
@@ -1049,7 +1056,7 @@
       enocean
     ];
     "enphase_envoy" = ps: with ps; [
-      envoy-reader
+      pyenphase
     ];
     "entur_public_transport" = ps: with ps; [
       enturclient
@@ -1678,6 +1685,25 @@
     ];
     "homeassistant_alerts" = ps: with ps; [
     ];
+    "homeassistant_green" = ps: with ps; [
+      aiohttp-cors
+      bellows
+      fnv-hash-fast
+      janus
+      pillow
+      psutil-home-assistant
+      pyserial
+      pyserial-asyncio
+      pyudev
+      sqlalchemy
+      universal-silabs-flasher
+      zha-quirks
+      zigpy
+      zigpy-deconz
+      zigpy-xbee
+      zigpy-zigate
+      zigpy-znp
+    ];
     "homeassistant_hardware" = ps: with ps; [
       aiohttp-cors
       bellows
@@ -1689,6 +1715,7 @@
       pyserial-asyncio
       pyudev
       sqlalchemy
+      universal-silabs-flasher
       zha-quirks
       zigpy
       zigpy-deconz
@@ -1707,6 +1734,7 @@
       pyserial-asyncio
       pyudev
       sqlalchemy
+      universal-silabs-flasher
       zha-quirks
       zigpy
       zigpy-deconz
@@ -1725,6 +1753,7 @@
       pyserial-asyncio
       pyudev
       sqlalchemy
+      universal-silabs-flasher
       zha-quirks
       zigpy
       zigpy-deconz
@@ -1822,7 +1851,8 @@
       pygti
     ];
     "hydrawise" = ps: with ps; [
-    ]; # missing inputs: pydrawise
+      pydrawise
+    ];
     "hyperion" = ps: with ps; [
       hyperion-py
     ];
@@ -2181,6 +2211,8 @@
     ];
     "laundrify" = ps: with ps; [
       laundrify-aio
+    ];
+    "lawn_mower" = ps: with ps; [
     ];
     "lcn" = ps: with ps; [
       pypck
@@ -2987,6 +3019,8 @@
     ];
     "oru" = ps: with ps; [
     ]; # missing inputs: oru
+    "oru_opower" = ps: with ps; [
+    ];
     "orvibo" = ps: with ps; [
       orvibo
     ];
@@ -3006,6 +3040,7 @@
       python-otbr-api
       pyudev
       sqlalchemy
+      universal-silabs-flasher
       zeroconf
       zha-quirks
       zigpy
@@ -3073,7 +3108,8 @@
     "peco_opower" = ps: with ps; [
     ];
     "pegel_online" = ps: with ps; [
-    ]; # missing inputs: aiopegelonline
+      aiopegelonline
+    ];
     "pencom" = ps: with ps; [
       pencompy
     ];
@@ -3444,7 +3480,8 @@
       rtsp-to-webrtc
     ];
     "ruckus_unleashed" = ps: with ps; [
-      pyruckus
+      aioruckus
+      xmltodict
     ];
     "russound_rio" = ps: with ps; [
     ]; # missing inputs: russound-rio
@@ -3535,6 +3572,9 @@
     "scene" = ps: with ps; [
     ];
     "schedule" = ps: with ps; [
+    ];
+    "schlage" = ps: with ps; [
+      pyschlage
     ];
     "schluter" = ps: with ps; [
     ]; # missing inputs: py-schluter
@@ -3727,7 +3767,8 @@
       pysignalclirestapi
     ];
     "simplepush" = ps: with ps; [
-    ]; # missing inputs: simplepush
+      simplepush
+    ];
     "simplisafe" = ps: with ps; [
       simplisafe-python
     ];
@@ -4319,6 +4360,9 @@
       pytradfri
     ]
     ++ pytradfri.optional-dependencies.async;
+    "trafikverket_camera" = ps: with ps; [
+      pytrafikverket
+    ];
     "trafikverket_ferry" = ps: with ps; [
       pytrafikverket
     ];
@@ -4503,6 +4547,9 @@
     "vlc_telnet" = ps: with ps; [
       aiovlc
     ];
+    "vodafone_station" = ps: with ps; [
+      aiovodafone
+    ];
     "voicerss" = ps: with ps; [
     ];
     "voip" = ps: with ps; [
@@ -4532,11 +4579,13 @@
     "wake_on_lan" = ps: with ps; [
       wakeonlan
     ];
+    "wake_word" = ps: with ps; [
+    ];
     "wallbox" = ps: with ps; [
       wallbox
     ];
     "waqi" = ps: with ps; [
-      waqiasync
+      aiowaqi
     ];
     "water_heater" = ps: with ps; [
     ];
@@ -4549,7 +4598,7 @@
       aiowatttime
     ];
     "waze_travel_time" = ps: with ps; [
-      wazeroutecalculator
+      pywaze
     ];
     "weather" = ps: with ps; [
     ];
@@ -4727,6 +4776,8 @@
     ];
     "yandextts" = ps: with ps; [
     ];
+    "yardian" = ps: with ps; [
+    ]; # missing inputs: pyyardian
     "yeelight" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
@@ -4795,6 +4846,7 @@
       pyserial-asyncio
       pyudev
       sqlalchemy
+      universal-silabs-flasher
       zha-quirks
       zigpy
       zigpy-deconz
@@ -4927,6 +4979,7 @@
     "cloudflare"
     "co2signal"
     "color_extractor"
+    "comelit"
     "comfoconnect"
     "command_line"
     "compensation"
@@ -4961,6 +5014,7 @@
     "dialogflow"
     "directv"
     "discord"
+    "discovergy"
     "dlna_dmr"
     "dlna_dms"
     "dnsip"
@@ -5096,6 +5150,7 @@
     "home_plus_control"
     "homeassistant"
     "homeassistant_alerts"
+    "homeassistant_green"
     "homeassistant_hardware"
     "homeassistant_sky_connect"
     "homeassistant_yellow"
@@ -5167,6 +5222,7 @@
     "lastfm"
     "launch_library"
     "laundrify"
+    "lawn_mower"
     "lcn"
     "ld2410_ble"
     "led_ble"
@@ -5302,6 +5358,7 @@
     "panel_custom"
     "panel_iframe"
     "peco"
+    "pegel_online"
     "persistent_notification"
     "person"
     "philips_js"
@@ -5376,6 +5433,7 @@
     "samsungtv"
     "scene"
     "schedule"
+    "schlage"
     "scrape"
     "screenlogic"
     "script"
@@ -5400,6 +5458,7 @@
     "sigfox"
     "sighthound"
     "signal_messenger"
+    "simplepush"
     "simplisafe"
     "simulated"
     "siren"
@@ -5494,6 +5553,7 @@
     "trace"
     "tractive"
     "tradfri"
+    "trafikverket_camera"
     "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
@@ -5534,12 +5594,14 @@
     "vilfo"
     "vizio"
     "vlc_telnet"
+    "vodafone_station"
     "voicerss"
     "volumio"
     "volvooncall"
     "vulcan"
     "vultr"
     "wake_on_lan"
+    "wake_word"
     "wallbox"
     "water_heater"
     "watttime"

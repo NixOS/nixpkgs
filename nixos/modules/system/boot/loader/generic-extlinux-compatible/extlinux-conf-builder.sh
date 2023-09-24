@@ -70,13 +70,33 @@ copyToKernelsDir() {
 addEntry() {
     local path=$(readlink -f "$1")
     local tag="$2" # Generation number or 'default'
+    local current="$3" # whether this is the current/latest generation
 
     if ! test -e $path/kernel -a -e $path/initrd; then
         return
     fi
 
+    if test -e "$path/append-initrd-secrets"; then
+        local initrd="$target/nixos/$(basename "$path")-initramfs-with-secrets"
+        cp $(readlink -f "$path/initrd") "$initrd"
+        chmod 600 "${initrd}"
+        chown 0:0 "${initrd}"
+        filesCopied[$initrd]=1
+
+        "$path/append-initrd-secrets" "$initrd" || if test "${current}" = "1"; then
+            echo "failed to create initrd secrets for the current generation." >&2
+            echo "are your \`boot.initrd.secrets\` still in place?" >&2
+            exit 1
+        else
+            echo "warning: failed to create initrd secrets for \"$path\", an older generation" >&2
+            echo "note: this is normal after having removed or renamed a file in \`boot.initrd.secrets\`" >&2
+        fi
+    else
+        copyToKernelsDir "$path/initrd"; initrd=$result
+    fi
+
     copyToKernelsDir "$path/kernel"; kernel=$result
-    copyToKernelsDir "$path/initrd"; initrd=$result
+
     dtbDir=$(readlink -m "$path/dtbs")
     if [ -e "$dtbDir" ]; then
         copyToKernelsDir "$dtbDir"; dtbs=$result
@@ -130,18 +150,20 @@ MENU TITLE ------------------------------------------------------------
 TIMEOUT $timeout
 EOF
 
-addEntry $default default >> $tmpFile
+addEntry $default default 1 >> $tmpFile
 
 if [ "$numGenerations" -gt 0 ]; then
     # Add up to $numGenerations generations of the system profile to the menu,
     # in reverse (most recent to least recent) order.
+    current=1
     for generation in $(
             (cd /nix/var/nix/profiles && ls -d system-*-link) \
             | sed 's/system-\([0-9]\+\)-link/\1/' \
             | sort -n -r \
             | head -n $numGenerations); do
         link=/nix/var/nix/profiles/system-$generation-link
-        addEntry $link $generation
+        addEntry $link $generation $current
+        current=0
     done >> $tmpFile
 fi
 

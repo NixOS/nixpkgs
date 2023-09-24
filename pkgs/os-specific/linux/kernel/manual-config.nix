@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, kmod
 , fetchpatch
 }:
 
@@ -271,7 +271,7 @@ let
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
         unlink $out/lib/modules/${modDirVersion}/build
-        unlink $out/lib/modules/${modDirVersion}/source
+        rm -f $out/lib/modules/${modDirVersion}/source
 
         mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
@@ -352,6 +352,9 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
+        badPlatforms =
+          lib.optionals (lib.versionOlder version "4.15") [ "riscv32-linux" "riscv64-linux" ] ++
+          lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
         timeout = 14400; # 4 hours
       } // extraMeta;
     };
@@ -373,6 +376,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
       ++ optionals (lib.versionAtLeast version "5.2")  [ cpio pahole zlib ]
       ++ optional  (lib.versionAtLeast version "5.8")  elfutils
+      ++ optional  (lib.versionAtLeast version "6.6")  kmod
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];

@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "protox";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-n72Fvdo6LLk8pzYS2/5zk+dbsLRPAm6NZ5DsMRyHCTY=";
+    hash = "sha256-U9+7k7dQ6YFfsKMfFMg34g42qLvn+mcSRlAAys3eXNo=";
   };
 
-  cargoHash = "sha256-wW4UcC3QAtriLEiXPndP+tZATftWP7ySavpIV6cGVCA=";
+  cargoHash = "sha256-sNOw19gxj+cEctxhXNWI8u15VJYlN8nSNl6Ha9sB/eE=";
 
   buildFeatures = [ "bin" ];
 

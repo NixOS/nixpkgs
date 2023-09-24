@@ -2,14 +2,16 @@
 , buildPythonPackage
 , cloudscraper
 , fetchFromGitHub
+, garth
+, pdm-backend
 , pythonOlder
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "garminconnect";
-  version = "0.1.55";
-  format = "setuptools";
+  version = "0.2.7";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -17,15 +19,20 @@ buildPythonPackage rec {
     owner = "cyberjunky";
     repo = "python-garminconnect";
     rev = "refs/tags/${version}";
-    hash = "sha256-YPLlrlV8UyoaNtE+LgX7jpZkR7jbSe/2WRR0v0cfACY=";
+    hash = "sha256-hyrj3icj5QxXf9NDk/x7bocFg6iD+KEDZNcpZVBEx4k=";
   };
+
+  nativeBuildInputs = [
+    pdm-backend
+  ];
 
   propagatedBuildInputs = [
     cloudscraper
+    garth
     requests
   ];
 
-  # Module has no tests
+  # Tests require a token
   doCheck = false;
 
   pythonImportsCheck = [

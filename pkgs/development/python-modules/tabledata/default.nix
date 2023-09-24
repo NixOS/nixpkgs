@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "tabledata";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-oDo+wj5MO5Zopya2lp+sU/LAnFGZy6OIdW4YgcAmw1Q=";
+    hash = "sha256-84KrXnks76mvIjcEeQPpwd8rPO5SMbH/jfqERaFTrWo=";
   };
 
   propagatedBuildInputs = [ dataproperty typepy ];

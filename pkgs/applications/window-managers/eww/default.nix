@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
-  version = "unstable-2023-06-10";
+  version = "unstable-2023-08-18";
 
   src = fetchFromGitHub {
     owner = "elkowar";
     repo = "eww";
-    rev = "25e50eda46379bccd8a7887c18ee35833e0460e8";
-    hash = "sha256-8e6gHSg6FDp6nU5v89D44Tqb1lR5aQpS0lXOVqzoUS4=";
+    rev = "a9a35c1804d72ef92e04ee71555bd9e5a08fa17e";
+    hash = "sha256-GEysmNDm+olt1WXHzRwb4ZLifkXmeP5+APAN3b81/Og=";
   };
 
-  cargoHash = "sha256-dC7yVJdR7mO0n+sxWwigM1Q4tbDv5ZuOINHHlUIPdA0=";
+  cargoHash = "sha256-4yeu5AgleZMOLKNynGMd0XuyZxyyZ+RmzNtuJiNPN8g=";
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 

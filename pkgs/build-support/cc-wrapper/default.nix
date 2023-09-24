@@ -107,6 +107,8 @@ let
     && !(stdenv.targetPlatform.useAndroidPrebuilt or false)
     && !(stdenv.targetPlatform.isiOS or false)
     && gccForLibs != null;
+  gccForLibs_solib = getLib gccForLibs
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
   isGccArchSupported = arch:
@@ -332,7 +334,16 @@ stdenv.mkDerivation {
   setupHooks = [
     ../setup-hooks/role.bash
   ] ++ lib.optional (cc.langC or true) ./setup-hook.sh
-    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh;
+    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh
+    ++ lib.optional (targetPlatform.isWindows) (stdenv.mkDerivation {
+      name = "win-dll-hook.sh";
+      dontUnpack = true;
+      installPhase = ''
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
+        echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
+      '';
+    });
 
   postFixup =
     # Ensure flags files exists, as some other programs cat them. (That these
@@ -365,7 +376,7 @@ stdenv.mkDerivation {
     ''
     + optionalString useGccForLibs ''
       echo "-L${gccForLibs}/lib/gcc/${targetPlatform.config}/${gccForLibs.version}" >> $out/nix-support/cc-ldflags
-      echo "-L${gccForLibs.lib}/${targetPlatform.config}/lib" >> $out/nix-support/cc-ldflags
+      echo "-L${gccForLibs_solib}/lib" >> $out/nix-support/cc-ldflags
     ''
 
     # TODO We would like to connect this to `useGccForLibs`, but we cannot yet

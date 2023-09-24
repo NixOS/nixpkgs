@@ -9,6 +9,7 @@
 , IOKit
 , MediaRemote
 , SkyLight
+, testers
 }:
 
 let
@@ -20,13 +21,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sketchybar";
-  version = "2.16.1";
+  version = "2.16.3";
 
   src = fetchFromGitHub {
     owner = "FelixKratz";
     repo = "SketchyBar";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-H+bR5ZhUTrN2KAEdY/hnq6c3TEb1NQvPQ9uPo09gSM8=";
+    hash = "sha256-PCAGIcO7lvIAEFXlJn/e9zG5kxvDABshxFbu/bXWX7o=";
   };
 
   buildInputs = [
@@ -52,6 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "sketchybar-v${finalAttrs.version}";
+  };
 
   meta = {
     description = "A highly customizable macOS status bar replacement";

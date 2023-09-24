@@ -103,7 +103,6 @@ self: super: {
     # These aren't included in hackage-packages.nix because hackage2nix is configured for GHC 9.2, under which these plugins aren't supported.
     # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`
     additionalDeps = with self.haskell-language-server.scope; [
-      hls-brittany-plugin
       hls-haddock-comments-plugin
       (unmarkBroken hls-splice-plugin)
       hls-tactics-plugin
@@ -112,16 +111,20 @@ self: super: {
     Cabal = lself.Cabal_3_6_3_0;
     aeson = lself.aeson_1_5_6_0;
     lens-aeson = doJailbreak lself.lens-aeson_1_1_3;
-    lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
+    lsp-types = dontCheck (doJailbreak lsuper.lsp-types); # Checks require aeson >= 2.0
     hls-overloaded-record-dot-plugin = null;
   }));
 
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_7_20230228;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
-  ghc-lib = doDistribute self.ghc-lib_9_2_7_20230228;
+  ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
 
   mod = super.mod_0_1_2_2;
   path-io = doJailbreak super.path-io;
+
+  hls-cabal-plugin = super.hls-cabal-plugin.override {
+    Cabal-syntax = self.Cabal-syntax_3_8_1_0;
+  };
 
   ormolu = self.ormolu_0_5_0_1;
   fourmolu = dontCheck self.fourmolu_0_9_0_0;
@@ -133,15 +136,6 @@ self: super: {
     hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
     parser-combinators prettyprinter refinery retrie syb unagi-chan unordered-containers
   ]) super.hls-tactics-plugin);
-
-  hls-brittany-plugin =  unmarkBroken (addBuildDepends (with self.hls-brittany-plugin.scope; [
-    brittany czipwith extra ghc-exactprint ghcide hls-plugin-api hls-test-utils lens lsp-types
-    ]) (super.hls-brittany-plugin.overrideScope (lself: lsuper: {
-    brittany = doJailbreak (unmarkBroken lself.brittany_0_13_1_2);
-    aeson = lself.aeson_1_5_6_0;
-    multistate = unmarkBroken (dontCheck lsuper.multistate);
-    lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
-  })));
 
   # This package is marked as unbuildable on GHC 9.2, so hackage2nix doesn't include any dependencies.
   # See https://github.com/NixOS/nixpkgs/pull/205902 for why we use `self.<package>.scope`

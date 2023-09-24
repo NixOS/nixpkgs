@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, udev, intltool, pkg-config, glib, xmlto, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, udev, pkg-config, glib, xmlto, wrapGAppsHook
 , docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret, packagekit
-, cups-filters
-, python3Packages, autoreconfHook, bash
+, cups-filters, gettext, libtool, autoconf-archive
+, python3Packages, autoreconfHook, bash, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "system-config-printer";
-  version = "1.5.15";
+  version = "1.5.18";
 
   src = fetchFromGitHub {
     owner = "openPrinting";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0a3v8fp1dfb5cwwpadc3f6mv608b5yrrqd8ddkmnrngizqwlswsc";
+    sha256 = "sha256-l3HEnYycP56vZWREWkAyHmcFgtu09dy4Ds65u7eqNZk=";
   };
 
   prePatch = ''
@@ -26,6 +26,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./detect_serverbindir.patch
+    # fix typeerror, remove on next release
+    (fetchpatch {
+      url = "https://github.com/OpenPrinting/system-config-printer/commit/399b3334d6519639cfe7f1c0457e2475b8ee5230.patch";
+      sha256 = "sha256-JCdGmZk2vRn3X1BDxOJaY3Aw8dr0ODVzi0oY20ZWfRs=";
+      excludes = [ "NEWS" ];
+    })
   ];
 
   buildInputs = [
@@ -36,17 +42,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    intltool pkg-config
+    pkg-config gettext libtool autoconf-archive
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
     python3Packages.wrapPython
     wrapGAppsHook autoreconfHook gobject-introspection
   ];
 
-  pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
-
-  preConfigure = ''
-    intltoolize --copy --force --automake
-  '';
+  pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 pycairo pysmbc ];
 
   configureFlags = [
     "--with-udev-rules"

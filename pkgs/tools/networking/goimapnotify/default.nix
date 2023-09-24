@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-Wot+E+rDgXQ4FVgdfqe6a3O9oYUK3X1xImC33eDuUBo=";
   };
 
-  vendorSha256 = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
+  vendorHash = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
 
   postPatch = ''
     for f in command.go command_test.go; do

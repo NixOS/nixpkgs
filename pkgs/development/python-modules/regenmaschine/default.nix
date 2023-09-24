@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2023.06.0";
+  version = "2023.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-W5W/2gBraraZs8ai8tyg3aRWvHt6WOQCVICuiAigae0=";
+    hash = "sha256-2czpPLTJOUxjzG0+aOyY01jfwlcRgoHiQdB6ybQ6gWg=";
   };
 
   patches = [

@@ -28,22 +28,22 @@
 , rnnoise
 , rubberband
 , speexdsp
+, soundtouch
 , tbb
 , wrapGAppsHook4
 , zam-plugins
 , zita-convolver
-, soundtouch
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.0.5";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    hash = "sha256-Z/0O8dVZ3J901OdOc1wF1XibNE/33b8oSqY6RKPDfzg=";
+    hash = "sha256-TuVW2KBJciuFVdduzfFepGOa+UY9+sXRN1gWhfDvXgw=";
   };
 
   nativeBuildInputs = [

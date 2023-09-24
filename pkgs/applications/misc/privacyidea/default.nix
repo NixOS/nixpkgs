@@ -7,6 +7,8 @@ let
     outputs = lib.filter (x: x != "doc") outputs;
   };
 
+  # Follow issue below for Python 3.11 support
+  # https://github.com/privacyidea/privacyidea/issues/3593
   python3' = python310.override {
     packageOverrides = self: super: {
       django = super.django_3;
@@ -19,6 +21,15 @@ let
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
         doCheck = false;
+      });
+      # version 3.3.0+ does not support SQLAlchemy 1.3
+      factory_boy = super.factory_boy.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-qY0newwEfHXrbkq4UIp/gfsD0sshmG9ieRNUbveipV4=";
+        };
+        postPatch = "";
       });
       # fails with `no tests ran in 1.75s`
       alembic = super.alembic.overridePythonAttrs (lib.const {
@@ -180,6 +191,7 @@ in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
   version = "3.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;

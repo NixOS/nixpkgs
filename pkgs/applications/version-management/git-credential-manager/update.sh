@@ -16,8 +16,8 @@ fi
 echo "updating $currentVersion -> $latestVersion"
 
 sed -i -e "s/version = \"${currentVersion}\"/version = \"${latestVersion}\"/" default.nix
-hash="$(nix-prefetch ./.)"
-sed -i -Ee "s/hash = \"sha256-[A-Za-z0-9=]{44}\"/hash = \"${hash}\"/" default.nix
+hash="$(nix-prefetch -f "$(pwd)/../../../.." git-credential-manager)"
+sed -i -Ee "s/hash = \"sha256-[A-Za-z0-9/+=]{44}\"/hash = \"${hash}\"/" default.nix
 
 
 $(nix-build ../../../.. -A git-credential-manager.fetch-deps --no-out-link)

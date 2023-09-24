@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , fetchzip
 , python310
-, nodePackages
+, rtlcss
 , wkhtmltopdf
 , nixosTests
 }:
@@ -63,7 +63,7 @@ in python.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}"
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

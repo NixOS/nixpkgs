@@ -279,7 +279,7 @@ in {
           support your new systems.
           Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
         '';
-        type = types.listOf types.str;
+        type = types.listOf (types.enum (builtins.attrNames magics));
       };
     };
   };

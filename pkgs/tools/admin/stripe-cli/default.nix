@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.17.1";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5j2DHbBLHQWtkQP8qTTxD949alo5mh88Vgv5cus8C/w=";
+    hash = "sha256-MzzjrGtqbtZMvfL7dPAsKHF2ZTneSdtDuwHQQcyrQDw=";
   };
   vendorHash = "sha256-DYA6cu2KzEBZ4wsT7wjcdY1endQQOZlj2aOwu6iGLew=";
 
@@ -72,7 +72,7 @@ buildGoModule rec {
       Create, retrieve, update, or delete API objects.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ RaghavSood jk ];
+    maintainers = with maintainers; [ RaghavSood jk kashw2 ];
     mainProgram = "stripe";
   };
 }

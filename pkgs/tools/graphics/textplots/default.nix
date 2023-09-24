@@ -2,14 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "textplots";
-  version = "0.8.1";
+  version = "0.8.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-fzuvJwxU6Vi9hWW0IcRAHUeSoOBpGyebzvgjKiYxAbs=";
+    hash = "sha256-DtDxD3b8idYOBcHKkLbOy6NUU0bjWzDySGoW8uOT4xc=";
   };
 
-  cargoHash = "sha256-QH27BjS75jZOQBBflGapAjg49LpG12DxWZo8TjLoXmI=";
+  cargoHash = "sha256-tXqonC4qawS6eu9dPt/6/TVYCjTroG+9XikmYQHCLdA=";
+
+  buildFeatures = [ "tool" ];
 
   meta = with lib; {
     description = "Terminal plotting written in Rust";

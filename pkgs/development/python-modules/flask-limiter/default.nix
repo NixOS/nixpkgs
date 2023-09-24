@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = "refs/tags/${version}";
-    hash = "sha256-YDVZ/dD+TRJEnJRTRmGEB6EIkK5eQ5MdXh8FideoVDQ=";
+    hash = "sha256-UtmMd180bwFm426YevARq6r7DL182dI7dGAUPFKLWuM=";
   };
 
   postPatch = ''

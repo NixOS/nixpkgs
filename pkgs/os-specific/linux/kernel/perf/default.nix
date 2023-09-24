@@ -25,6 +25,7 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+, libpfm
 , libtraceevent
 , openssl
 , systemtap
@@ -125,6 +126,7 @@ stdenv.mkDerivation {
   ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
+  ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
   ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
 
   env.NIX_CFLAGS_COMPILE = toString [

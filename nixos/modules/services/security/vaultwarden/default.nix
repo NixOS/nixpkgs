@@ -60,10 +60,8 @@ in {
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
       default = {
-        config = {
-          ROCKET_ADDRESS = "::1"; # default to localhost
-          ROCKET_PORT = 8222;
-        };
+        ROCKET_ADDRESS = "::1"; # default to localhost
+        ROCKET_PORT = 8222;
       };
       example = literalExpression ''
         {

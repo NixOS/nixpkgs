@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "jackett";
-  version = "0.21.705";
+  version = "0.21.887";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha512-FgZdWEr+F9GuQQABlEQR6egcxRpvYOaL6T732K2d2326B57HXQpm+xPw0axphBwvZo+u3dw7Tz91HcnGhcDR1w==";
+    hash = "sha512-mRxNizkYbCQZ7DXkexj8AwWb8vv2+aEP6RkWAX+7WjIkPGtEnpXV11tGK/RwOJp4dstn9sBYIxPxxWPK+AL+pg==";
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";

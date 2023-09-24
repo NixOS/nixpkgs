@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.18";
+  version = "9.18.19";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-1zXNwSemxXCb3kdbW/FvohM/Nv26IC98PDfRNOUZIWA=";
+    hash = "sha256-EV4JwFQ5vrreHScu2gj6iOs7YBKe3vaQWIyHpNJ2Esw=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -79,7 +79,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   # TODO: investigate the aarch64-linux failures; see this and linked discussions:
   # https://github.com/NixOS/nixpkgs/pull/192962
-  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux) && !isi686;
+  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
+    # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
+    && !is32bit;
   checkTarget = "unit";
   checkInputs = [
     cmocka

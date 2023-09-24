@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "2023.04.0";
+  version = "2023.08.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    hash = "sha256-SFHWhXKC7PIqanJIQyGcpM8klwxOAJPVtzk9w0i2YYA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-wPtGofli3ZKBcAwjwjCbeYnLaSZ5lLshlBSz1/WlAcg=";
   };
 
   patches = [

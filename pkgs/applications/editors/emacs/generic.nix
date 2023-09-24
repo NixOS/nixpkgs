@@ -32,6 +32,7 @@
 , libXaw
 , libXcursor
 , libXft
+, libXi
 , libXpm
 , libgccjit
 , libjpeg
@@ -42,7 +43,7 @@
 , libtiff
 , libwebp
 , libxml2
-, llvmPackages_6
+, llvmPackages_14
 , m17n_lib
 , makeWrapper
 , motif
@@ -64,7 +65,7 @@
 , withNativeCompilation ?
   if nativeComp != null
   then lib.warn "nativeComp option is deprecated and will be removed; use withNativeCompilation instead" nativeComp
-  else true
+  else stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , noGui ? false
 , srcRepo ? true
 , withAcl ? false
@@ -99,6 +100,7 @@
   else "lucid")
 
 # macOS dependencies for NS and macPort
+, Accelerate
 , AppKit
 , Carbon
 , Cocoa
@@ -109,6 +111,7 @@
 , OSAKit
 , Quartz
 , QuartzCore
+, UniformTypeIdentifiers
 , WebKit
 }:
 
@@ -135,15 +138,10 @@ let
   ];
 
   inherit (if variant == "macport"
-           then llvmPackages_6.stdenv
+           then llvmPackages_14.stdenv
            else stdenv) mkDerivation;
 in
-mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
-  env = {
-    NATIVE_FULL_AOT = "1";
-    LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
-  };
-} // {
+mkDerivation (finalAttrs: {
   pname = pname
           + (if noGui then "-nox"
              else if variant == "macport" then "-macport"
@@ -277,6 +275,8 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
     libpng
     librsvg
     libtiff
+  ] ++ lib.optionals withXinput2 [
+    libXi
   ] ++ lib.optionals withXwidgets [
     webkitgtk
   ] ++ lib.optionals stdenv.isDarwin [
@@ -287,6 +287,7 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
     GSS
     ImageIO
   ] ++ lib.optionals (variant == "macport") [
+    Accelerate
     AppKit
     Carbon
     Cocoa
@@ -294,6 +295,7 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
     OSAKit
     Quartz
     QuartzCore
+    UniformTypeIdentifiers
     WebKit
     # TODO are these optional?
     GSS
@@ -336,6 +338,15 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
   ++ lib.optional withXinput2 "--with-xinput2"
   ++ lib.optional withXwidgets "--with-xwidgets"
   ;
+
+  env = lib.optionalAttrs withNativeCompilation {
+    NATIVE_FULL_AOT = "1";
+    LIBRARY_PATH = lib.concatStringsSep ":" libGccJitLibraryPaths;
+  } // lib.optionalAttrs (variant == "macport") {
+    # Fixes intermittent segfaults when compiled with LLVM >= 7.0.
+    # See https://github.com/NixOS/nixpkgs/issues/127902
+    NIX_CFLAGS_COMPILE = "-include ${./macport_noescape_noop.h}";
+  };
 
   enableParallelBuilding = true;
 
@@ -394,6 +405,6 @@ mkDerivation (finalAttrs: (lib.optionalAttrs withNativeCompilation {
   };
 
   meta = meta // {
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+    broken = withNativeCompilation && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
-}))
+})

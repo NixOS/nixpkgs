@@ -20,32 +20,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-kbJWkCnb77VRKemA8WejaChaQYCxNiVMbqW5PCrDoE8=";
+    sha256 = "sha256-5RN2xaH591/83iNXRcW9i/TyU5ndPZq3P/BesHM9I6w=";
   };
 
-  cargoHash = "sha256-qbCOVcKpNGWGonRAwPsr3o3yd+7qUTy3IVmC3Ifn4xE=";
+  cargoHash = "sha256-G4W3GeTWTuIZO1PupuZ0hACwhNoNBQhULyT9f6qVckg=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
     # enable 'packaging' feature, which enables extra features such as support
     # for watchman
     "packaging"
-  ];
-
-  patches = [
-    # this patch (hopefully!) fixes a very, very rare test failure that can
-    # occasionally be cajoled out of Nix and GitHub CI builds. go ahead and
-    # apply it to be safe.
-    (fetchpatch {
-      url = "https://github.com/martinvonz/jj/commit/8e7e32710d29010423f3992bb920aaf2a0fa04ec.patch";
-      hash = "sha256-ySieobB1P/DpWOurcCb4BXoHk9IqrjzMfzdc3O5cTXk=";
-    })
   ];
 
   cargoBuildFlags = [ "--bin" "jj" ]; # don't install the fake editors

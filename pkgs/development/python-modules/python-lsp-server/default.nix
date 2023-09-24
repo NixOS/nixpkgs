@@ -4,9 +4,9 @@
 , buildPythonPackage
 , docstring-to-markdown
 , fetchFromGitHub
-, fetchpatch
 , flake8
 , flaky
+, importlib-metadata
 , jedi
 , matplotlib
 , mccabe
@@ -19,9 +19,9 @@
 , pylint
 , pyqt5
 , pytestCheckHook
-, pythonRelaxDepsHook
 , python-lsp-jsonrpc
 , pythonOlder
+, pythonRelaxDepsHook
 , rope
 , setuptools
 , setuptools-scm
@@ -35,26 +35,17 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.7.4";
+  version = "1.8.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-plciPUROFileVULGBZpwUTkW2NZVHy4Nuf4+fSjd8nM=";
+    hash = "sha256-hLgMGZumuNY70/qyD9t5pMpYI/g70sqFIt1LEfIEALY=";
   };
-
-  patches = [
-    # https://github.com/python-lsp/python-lsp-server/pull/416
-    (fetchpatch {
-      name = "bump-jedi-upper-pin-to-0.20.patch";
-      url = "https://github.com/python-lsp/python-lsp-server/commit/f33a93afc8c3a0f16751f9e1f6601a37967fd7df.patch";
-      hash = "sha256-lBpzXxjlQp2ig0z2DRJw+jQZ5eRLIOJYjGrzfgvknDA=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -86,6 +77,8 @@ buildPythonPackage rec {
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   passthru.optional-dependencies = {

@@ -33,7 +33,7 @@
 }:
 let
   pname = "gamescope";
-  version = "3.12.3";
+  version = "3.12.5";
 
   vkroots = fetchFromGitHub {
     owner = "Joshua-Ashton";
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${version}";
-    hash = "sha256-eo3c+s+sB20wrzbe2H/pMAYdvKeYOpWwEqmuuLY6ZJA=";
+    hash = "sha256-u4pnKd5ZEC3CS3E2i8E8Wposd8Tu4ZUoQXFmr0runwE=";
   };
 
   patches = [
@@ -106,6 +106,8 @@ stdenv.mkDerivation {
     libdisplay-info
   ];
 
+  outputs = [ "out" "lib" ];
+
   postUnpack = ''
     rm -rf source/subprojects/vkroots
     ln -s ${vkroots} source/subprojects/vkroots
@@ -114,7 +116,12 @@ stdenv.mkDerivation {
   # --debug-layers flag expects these in the path
   postInstall = ''
     wrapProgram "$out/bin/gamescope" \
-     --prefix PATH : ${with xorg; lib.makeBinPath [xprop xwininfo]}
+      --prefix PATH : ${with xorg; lib.makeBinPath [xprop xwininfo]}
+
+    # Install Vulkan layer in lib output
+    install -d $lib/share/vulkan
+    mv $out/share/vulkan/implicit_layer.d $lib/share/vulkan
+    rm -r $out/share/vulkan
   '';
 
   meta = with lib; {

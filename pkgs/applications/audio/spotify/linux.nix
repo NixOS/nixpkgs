@@ -84,7 +84,7 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    sha512 = "3d5a9fda88a076a22bb6d0b6b586334865f03a4e852ca8e022468e3dd3520a81dea314721e26e54ba9309603e08f66588f005ee8970e73eccbf805ff70e89dca";
+    hash = "sha512-PVqf2oigdqIrttC2tYYzSGXwOk6FLKjgIkaOPdNSCoHeoxRyHiblS6kwlgPgj2ZYjwBe6JcOc+zL+AX/cOidyg==";
   };
 
   nativeBuildInputs = [ wrapGAppsHook makeShellWrapper squashfsTools ];

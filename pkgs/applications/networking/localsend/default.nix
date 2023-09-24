@@ -2,17 +2,23 @@
 
 let
   pname = "localsend";
-  version = "1.10.0";
+  version = "1.11.1";
 
-  srcs = {
+  hashes = {
+    x86_64-linux = "sha256-K4M9cks0FNsCLIqQhSgUAz3tRMKng6JkZ/ZfwG2hZJA=";
+    x86_64-darwin = "sha256-Cixo00I4BBAmUnszsz+CxPX3EY175UTufCmwQmIsEgg=";
+  };
+
+  srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}-linux-x86-64.AppImage";
-      hash = "sha256-5MxLQG704bVfaW2tCI6BeFmd8X9Xnn1xWPeIGKZv3P8=";
+      hash = hashes.x86_64-linux;
     };
     x86_64-darwin = fetchurl {
       url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
-      hash = "sha256-IASoA56Vzec+O62CjSM+2Q8XJJzpEK7hsI3L7R1+Izc=";
+      hash = hashes.x86_64-darwin;
     };
+    aarch64-darwin = x86_64-darwin;
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system for package localsend: ${stdenv.hostPlatform.system}");
 

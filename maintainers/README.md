@@ -1,10 +1,63 @@
 # Nixpkgs Maintainers
 
-The *Nixpkgs maintainers* are people who have assigned themselves to
-maintain specific individual packages. We encourage people who care
-about a package to assign themselves as a maintainer. When a pull
-request is made against a package, OfBorg will notify the appropriate
-maintainer(s).
+Unlike other packaging ecosystems, the maintainer doesn't have exclusive
+control over the packages and modules they maintain. This more fluid approach
+is one reason why we scale to so many packages.
+
+## Definition and role of the maintainer
+
+The main responsibility of a maintainer is to keep the packages they maintain
+in a functioning state, and keep up with updates. In order to do that, they
+are empowered to make decisions over the packages they maintain.
+
+That being said, the maintainer is not alone proposing changes to the
+packages. Anybody (both bots and humans) can send PRs to bump or tweak the
+package.
+
+We also allow other non-maintainer committers to merge changes to the package,
+provided enough time and priority has been given to the maintainer.
+
+For most packages, we expect committers to wait at least a week before merging
+changes not endorsed by a package maintainer (which may be themselves). This should leave enough time
+for the maintainers to provide feedback.
+
+For critical packages, this convention needs to be negotiated with the
+maintainer. A critical package is one that causes mass-rebuild, or where an
+author is listed in the [`CODEOWNERS`](../.github/CODEOWNERS) file.
+
+In case of critical security updates, the [security team](https://nixos.org/community/teams/security) might override these
+heuristics in order to get the fixes in as fast as possible.
+
+In case of conflict, the maintainer takes priority and is allowed to revert
+the changes. This can happen for example if the maintainer was on holiday.
+
+### How to become a maintainer
+
+We encourage people who care about a package to assign themselves as a
+maintainer. Commit access to the Nixpkgs repository is not required for that.
+
+In order to do so, add yourself to the
+[`maintainer-list.nix`](./maintainer-list.nix), and then to the desired
+package's `meta.maintainers` list, and send a PR with the changes.
+
+### How to lose maintainer status
+
+Maintainers who have become inactive on a given package can be removed. This
+helps us keep an accurate view of the state of maintenance in Nixpkgs.
+
+The inactivity measure is currently not strictly enforced. We would typically
+look at it if we notice that the author hasn't reacted to package-related
+notifications for more than 3 months.
+
+Removing the maintainer happens by making a PR on the package, adding that
+person as a reviewer, and then waiting a week for a reaction.
+
+The maintainer is welcome to come back at any time.
+
+### Tools for maintainers
+
+When a pull request is made against a package, OfBorg will notify the
+appropriate maintainer(s).
 
 ## Reviewing contributions
 

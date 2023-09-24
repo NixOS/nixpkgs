@@ -69,7 +69,7 @@ self: super: builtins.intersectAttrs super {
         -e "s/@@GHC_VERSION@@/${self.ghc.version}/" \
         -e "s/@@BOOT_PKGS@@/$BOOT_PKGS/" \
         -e "s/@@ABI_HASHES@@/$(for dep in $BOOT_PKGS; do printf "%s:" "$dep" && ghc-pkg-${self.ghc.version} field $dep abi --simple-output ; done | tr '\n' ' ' | xargs)/" \
-        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://haskell4nix.readthedocs.io/nixpkgs-users-guide.html#how-to-install-haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
+        -e "s!Consider installing ghc.* via ghcup or build HLS from source.!Visit https://nixos.org/manual/nixpkgs/unstable/#haskell-language-server to learn how to correctly install a matching hls for your ghc with nix.!" \
         bindist/wrapper.in > "$out/bin/haskell-language-server"
       ln -s "$out/bin/haskell-language-server" "$out/bin/haskell-language-server-${self.ghc.version}"
       chmod +x "$out/bin/haskell-language-server"
@@ -123,7 +123,6 @@ self: super: builtins.intersectAttrs super {
     hls-brittany-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
-    hls-cabal-plugin
     hls-overloaded-record-dot-plugin
   ;
 
@@ -134,6 +133,7 @@ self: super: builtins.intersectAttrs super {
     hls-gadt-plugin
 
     # https://github.com/haskell/haskell-language-server/pull/3431
+    hls-cabal-plugin
     hls-cabal-fmt-plugin
     hls-code-range-plugin
     hls-explicit-record-fields-plugin
@@ -452,6 +452,8 @@ self: super: builtins.intersectAttrs super {
   wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK32; };
 
+  shellify = enableSeparateBinOutput super.shellify;
+
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
@@ -599,7 +601,17 @@ self: super: builtins.intersectAttrs super {
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only
-  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = addPkgconfigDepend pkgs.freeglut (appendPatch ./patches/GLUT.patch super.GLUT);
+  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = overrideCabal (drv: {
+    pkg-configDepends = drv.pkg-configDepends or [] ++ [
+      pkgs.freeglut
+    ];
+    patches = drv.patches or [] ++ [
+      ./patches/GLUT.patch
+    ];
+    prePatch = drv.prePatch or "" + ''
+      ${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+    '';
+  }) super.GLUT;
 
   libsystemd-journal = doJailbreak (addExtraLibrary pkgs.systemd super.libsystemd-journal);
 

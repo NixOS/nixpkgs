@@ -19,14 +19,14 @@ wafConfigurePhase() {
     local flagsArray=(
         $prefixFlag
         $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
-        ${configureTargets:-configure}
+        ${wafConfigureTargets:-configure}
     )
 
     if [ -z "${dontAddWafCrossFlags:-}" ]; then
-        flagsArray+=(@crossFlags@)
+        flagsArray+=(@wafCrossFlags@)
     fi
 
-    echoCmd 'configure flags' "${flagsArray[@]}"
+    echoCmd 'waf configure flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
@@ -51,11 +51,11 @@ wafBuildPhase () {
     local flagsArray=(
       ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}}
       $wafFlags ${wafFlagsArray[@]}
-      $buildFlags ${buildFlagsArray[@]}
-      ${buildTargets:-build}
+      $wafBuildFlags ${wafBuildFlagsArray[@]}
+      ${wafBuildTargets:-build}
     )
 
-    echoCmd 'build flags' "${flagsArray[@]}"
+    echoCmd 'waf build flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
     runHook postBuild
@@ -71,11 +71,11 @@ wafInstallPhase() {
     local flagsArray=(
         ${enableParallelInstalling:+-j ${NIX_BUILD_CORES}}
         $wafFlags ${wafFlagsArray[@]}
-        $installFlags ${installFlagsArray[@]}
-        ${installTargets:-install}
+        $wafInstallFlags ${wafInstallFlagsArray[@]}
+        ${wafInstallTargets:-install}
     )
 
-    echoCmd 'install flags' "${flagsArray[@]}"
+    echoCmd 'waf install flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
     runHook postInstall

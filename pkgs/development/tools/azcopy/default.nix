@@ -22,7 +22,6 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ colemickens kashw2 ];
     license = licenses.mit;
     description = "The new Azure Storage data transfer utility - AzCopy v10";

@@ -21,14 +21,13 @@ python3.pkgs.buildPythonApplication rec {
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
-  ];
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     wrapGAppsHook
     libvirt-glib vte dconf gtk-vnc gnome.adwaita-icon-theme avahi
     gsettings-desktop-schemas libosinfo gtksourceview4
-  ] ++ lib.optional spiceSupport spice-gtk
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional spiceSupport spice-gtk;
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3 libvirt libxml2 requests cdrtools

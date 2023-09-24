@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/Solo5/solo5/releases/download/v${version}/solo5-v${version}.tar.gz";
-    sha256 = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
+    hash = "sha256-viwrS9lnaU8sTGuzK/+L/PlMM/xRRtgVuK5pixVeDEw=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config ];
@@ -937,6 +937,28 @@ Like `stripDebugList`, but only applies to packages’ target platform. By defau
 
 Flags passed to the `strip` command applied to the files in the directories listed in `stripDebugList`. Defaults to `-S` (i.e. `--strip-debug`).
 
+##### `stripExclude` {#var-stdenv-stripExclude}
+
+A list of filenames or path patterns to avoid stripping. A file is excluded if its name _or_ path (from the derivation root) matches.
+
+This example prevents all `*.rlib` files from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "*.rlib" ]
+}
+```
+
+This example prevents files within certain paths from being stripped:
+
+```nix
+stdenv.mkDerivation {
+  # ...
+  stripExclude = [ "lib/modules/*/build/* ]
+}
+```
+
 ##### `dontPatchELF` {#var-stdenv-dontPatchELF}
 
 If set, the `patchelf` command is not used to remove unnecessary `RPATH` entries. Only applies to Linux.
@@ -1179,7 +1201,7 @@ someVar=$(stripHash $name)
 
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
-Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
+Convenience function for `makeWrapper` that replaces `<executable>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 

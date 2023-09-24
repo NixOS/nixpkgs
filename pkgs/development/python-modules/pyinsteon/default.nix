@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.4.3";
+  version = "1.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-KKF+XYQgdmLbbicyMFyZBG4ol69xAWCF2W/r15gH2Mo=";
+    hash = "sha256-REm0E7+otqDypVslB5heHEaWA+q3Nh1O96gxFeCC3As=";
   };
 
   patches = [
@@ -69,6 +69,7 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
