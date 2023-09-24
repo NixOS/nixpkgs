@@ -36,5 +36,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ moody ];
     broken = stdenv.isDarwin;
     platforms = lib.platforms.unix;
+    mainProgram = "flisp";
   };
 }

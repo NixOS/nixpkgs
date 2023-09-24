@@ -6,34 +6,32 @@
 , makeWrapper
 }:
 
+
+let
+  sounds = fetchFromGitHub {
+    owner = "nivs1978";
+    repo = "Johnny-Castaway-Open-Source";
+    rev = "be6afefd43a3334acc66fc9d777c162c8bfb9558";
+    hash = "sha256-rtZVCn4KbEBVwaSQ4HZhMoDEI5Q9IPj9SZywgAx0MPY=";
+  };
+
+  resources = fetchzip {
+    name = "scrantic-source";
+    url = "https://archive.org/download/johnny-castaway-screensaver/scrantic-run.zip";
+    hash = "sha256-Q9chCYReOQEmkTyIkYo+D+OXYUqxPNOOEEmiFh8yaw4=";
+    stripRoot = false;
+  };
+in
+
 stdenvNoCC.mkDerivation {
   pname = "johnny-reborn";
   inherit (johnny-reborn-engine) version;
 
-  srcs =
-    let
-      sounds = fetchFromGitHub {
-        owner = "nivs1978";
-        repo = "Johnny-Castaway-Open-Source";
-        rev = "be6afefd43a3334acc66fc9d777c162c8bfb9558";
-        hash = "sha256-rtZVCn4KbEBVwaSQ4HZhMoDEI5Q9IPj9SZywgAx0MPY=";
-      };
-
-      resources = fetchzip {
-        name = "scrantic-source";
-        url = "https://archive.org/download/johnny-castaway-screensaver/scrantic-run.zip";
-        hash = "sha256-Q9chCYReOQEmkTyIkYo+D+OXYUqxPNOOEEmiFh8yaw4=";
-        stripRoot = false;
-      };
-    in
-    [
-      sounds
-      resources
-    ];
+  srcs = [ sounds resources ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  sourceRoot = "source";
+  sourceRoot = sounds.name;
 
   dontConfigure = true;
   dontBuild = true;

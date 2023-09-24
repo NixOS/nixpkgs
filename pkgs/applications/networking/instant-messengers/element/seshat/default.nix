@@ -14,7 +14,7 @@ in rustPlatform.buildRustPackage rec {
     hash = pinData.srcHash;
   };
 
-  sourceRoot = "source/seshat-node/native";
+  sourceRoot = "${src.name}/seshat-node/native";
 
   nativeBuildInputs = [ nodejs python3 yarn ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;

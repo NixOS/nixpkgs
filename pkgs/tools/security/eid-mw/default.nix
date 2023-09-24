@@ -1,21 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
 , autoconf-archive
-, pkg-config
+, autoreconfHook
 , makeWrapper
+, pkg-config
+, substituteAll
 , curl
 , gtk3
 , libassuan
 , libbsd
 , libproxy
 , libxml2
+, nssTools
 , openssl
 , p11-kit
 , pcsclite
-, nssTools
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
@@ -30,8 +30,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-70UjfkH+rx1Q+2XEuAByoDsP5ZelyuGXaHdkjTe/sCY=";
   };
 
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+    substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
+  '';
+
+
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
   buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+
   preConfigure = ''
     mkdir openssl
     ln -s ${lib.getLib openssl}/lib openssl
@@ -43,10 +50,6 @@ stdenv.mkDerivation rec {
   '';
   # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
-
-  postPatch = ''
-    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
-  '';
 
   postInstall =
     let

@@ -88,6 +88,13 @@ in
       '';
     };
 
+    package = lib.mkPackageOption pkgs "systemd-repart" {
+      default = "systemd";
+      example = lib.literalExpression ''
+        pkgs.systemdMinimal.override { withCryptsetup = true; }
+      '';
+    };
+
     partitions = lib.mkOption {
       type = with lib.types; attrsOf (submodule partitionOptions);
       default = { };
@@ -178,9 +185,9 @@ in
       in
       pkgs.runCommand cfg.name
         {
-          nativeBuildInputs = with pkgs; [
-            fakeroot
-            systemd
+          nativeBuildInputs = [
+            cfg.package
+            pkgs.fakeroot
           ] ++ fileSystemTools;
         } ''
         amendedRepartDefinitions=$(${amendRepartDefinitions} ${partitions} ${definitionsDirectory})
@@ -195,7 +202,9 @@ in
           --seed="${cfg.seed}" \
           --definitions="$amendedRepartDefinitions" \
           --split="${lib.boolToString cfg.split}" \
-          image.raw
+          --json=pretty \
+          image.raw \
+          | tee repart-output.json
       '';
 
     meta = {

@@ -41,6 +41,7 @@
 , version
 , meta
 , copyDesktopItems
+, makeWrapper
 }:
 
 let
@@ -128,6 +129,10 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     ln -s $out/share/postman/postman $out/bin/postman
+
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/${pname} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     mkdir -p $out/share/icons/hicolor/128x128/apps
     ln -s $out/share/postman/resources/app/assets/icon.png $out/share/icons/postman.png

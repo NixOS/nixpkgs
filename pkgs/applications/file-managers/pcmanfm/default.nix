@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     description = "File manager with GTK interface";
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux;
+    mainProgram = "pcmanfm";
   };
 }

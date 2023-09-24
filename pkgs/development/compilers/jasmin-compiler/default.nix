@@ -2,20 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2023.06.0";
+  version = "2023.06.1";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-yQBQGDNZQhNATs62nqWsgl/HzQCH24EHPp87B3I0Dxo=";
+    hash = "sha256-3+eIR8wkBlcUQVDsugHo/rHNHbE2vpE9gutp55kRY4Y=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
-
-  # Released tarball contains extraneous `dune` files
-  # See https://github.com/jasmin-lang/jasmin/pull/495
-  preBuild = ''
-    rm -rf tests
-  '';
 
   nativeBuildInputs = with ocamlPackages; [ ocaml findlib dune_3 menhir camlidl cmdliner ];
 

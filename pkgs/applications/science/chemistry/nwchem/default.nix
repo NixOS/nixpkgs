@@ -3,6 +3,7 @@
 , pkgs
 , fetchFromGitHub
 , fetchurl
+, mpiCheckPhaseHook
 , which
 , openssh
 , gcc
@@ -190,16 +191,15 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
+  nativeCheckInputs = [ mpiCheckPhaseHook ];
   installCheckPhase = ''
-    export OMP_NUM_THREADS=1
-
-    # Fix to make mpich run in a sandbox
-    export HYDRA_IFACE=lo
-    export OMPI_MCA_rmaps_base_oversubscribe=1
+    runHook preInstallCheck
 
     # run a simple water test
     mpirun -np 2 $out/bin/nwchem $out/share/nwchem/QA/tests/h2o/h2o.nw > h2o.out
     grep "Total SCF energy" h2o.out  | grep 76.010538
+
+    runHook postInstallCheck
   '';
 
   passthru = { inherit mpi; };

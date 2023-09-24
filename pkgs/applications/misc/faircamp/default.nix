@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchgit
 , makeWrapper
@@ -9,6 +10,7 @@
 , ffmpeg
 , callPackage
 , unstableGitUpdater
+, darwin
 }:
 
 rustPlatform.buildRustPackage {
@@ -39,6 +41,8 @@ rustPlatform.buildRustPackage {
     glib
     libopus
     vips
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   postInstall = ''

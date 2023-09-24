@@ -16,13 +16,9 @@ in rec {
     outputs = [ "out" "dev" "lib" "man" ];
 
     src = fetchurl {
-      url = "https://getdnsapi.net/releases/${pname}-${
-          with builtins;
-          concatStringsSep "-" (splitVersion version)
-        }/${pname}-${version}.tar.gz";
-      sha256 =
-        # upstream publishes hashes in hex format
-        "f1404ca250f02e37a118aa00cf0ec2cbe11896e060c6d369c6761baea7d55a2c";
+      url = with lib; "https://getdnsapi.net/releases/${pname}-${concatStringsSep "-" (splitVersion version)}/${pname}-${version}.tar.gz";
+      # upstream publishes hashes in hex format
+      sha256 = "f1404ca250f02e37a118aa00cf0ec2cbe11896e060c6d369c6761baea7d55a2c";
     };
 
     nativeBuildInputs = [ cmake doxygen ];

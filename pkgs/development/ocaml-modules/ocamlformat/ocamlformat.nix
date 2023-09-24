@@ -1,14 +1,24 @@
-{ lib, callPackage, buildDunePackage, re, ocamlformat-lib, menhir
-, version ? "0.26.0" }:
+{ lib
+, callPackage
+, buildDunePackage
+, ocaml
+, re
+, ocamlformat-lib
+, menhir
+, version ? "0.26.0"
+}:
 
 let inherit (callPackage ./generic.nix { inherit version; }) src library_deps;
+in
 
-in buildDunePackage {
+lib.throwIf (lib.versionAtLeast ocaml.version "5.0" && !lib.versionAtLeast version "0.23")
+  "ocamlformat ${version} is not available for OCaml ${ocaml.version}"
+
+buildDunePackage {
   pname = "ocamlformat";
   inherit src version;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   nativeBuildInputs =
     if lib.versionAtLeast version "0.25.1" then [ ] else [ menhir ];
@@ -22,5 +32,6 @@ in buildDunePackage {
     description = "Auto-formatter for OCaml code";
     maintainers = with lib.maintainers; [ Zimmi48 marsam Julow ];
     license = lib.licenses.mit;
+    mainProgram = "ocamlformat";
   };
 }

@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 , installShellFiles
 , nodejs
@@ -9,18 +9,18 @@
 , runme
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "runme";
-  version = "1.6.0";
+  version = "1.7.5";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-WxsMANyxV+ibAf0/TnkVExyC8XgBjtO92GHNztM0GiU=";
+    hash = "sha256-cy4IUsCMh0sFpHLFce3DW4KAMYT2/BtvKBHKPpkCggQ=";
   };
 
-  vendorHash = "sha256-gFe4lfe6M8NF1zzqK+jLmQix/311yWhFccLsOn+LOZc=";
+  vendorHash = "sha256-vfLLL/sV8Jg/QE4oT45XLXAwvlLep3ehtPwXbpwo5PQ=";
 
   nativeBuildInputs = [
     installShellFiles

@@ -351,7 +351,7 @@ in {
           CacheDirectory = dirs cacheDirs;
           RuntimeDirectory = dirName;
           ReadWriteDirectories = lib.mkIf useCustomDir [ cfg.storageDir ];
-          StateDirectory = dirs (lib.optional (!useCustomDir) libDirs);
+          StateDirectory = dirs (lib.optionals (!useCustomDir) libDirs);
           LogsDirectory = dirName;
           PrivateTmp = true;
           ProtectSystem = "strict";

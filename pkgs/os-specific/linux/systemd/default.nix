@@ -82,6 +82,9 @@
 , bpftools
 , libbpf
 
+  # Needed to produce a ukify that works for cross compiling UKIs.
+, targetPackages
+
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
@@ -92,6 +95,7 @@
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
+, withFirstboot ? false # conflicts with the NixOS /etc management
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
@@ -118,6 +122,7 @@
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
+, withSysusers ? false # conflicts with the NixOS user management
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
@@ -209,7 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
       (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
-      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
       (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
@@ -235,6 +239,16 @@ stdenv.mkDerivation (finalAttrs: {
     # BPF does not work with stack protector
     substituteInPlace src/core/bpf/meson.build \
       --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
+  '' + lib.optionalString withUkify ''
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'readelf'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
+    # The objcopy dependency is removed in v254
+    substituteInPlace src/ukify/ukify.py \
+      --replace \
+      "'objcopy'" \
+      "'${targetPackages.stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -482,6 +496,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=${lib.boolToString withLibidn2}"
+    "-Dfirstboot=${lib.boolToString withFirstboot}"
+    "-Dsysusers=${lib.boolToString withSysusers}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
@@ -724,6 +740,11 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
+  '' + lib.optionalString withUkify ''
+    # To cross compile a derivation that builds a UKI with ukify, we need to wrap
+    # ukify with the correct binutils. When wrapping, no splicing happens so we
+    # have to explicitly pull binutils from targetPackages.
+    wrapProgram $out/lib/systemd/ukify --set PATH ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)

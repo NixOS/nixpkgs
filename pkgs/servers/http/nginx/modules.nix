@@ -690,8 +690,8 @@ let self = {
       name = "set-misc";
       owner = "openresty";
       repo = "set-misc-nginx-module";
-      rev = "v0.32";
-      sha256 = "048a6jwinbjgxiprjj9ml3fdp0mhkx89g6ggams57fsx9m5vaxax";
+      rev = "v0.33";
+      hash = "sha256-jMMj3Ki1uSfQzagoB/O4NarxPjiaF9YRwjSKo+cgMxo=";
     };
 
     meta = with lib; {

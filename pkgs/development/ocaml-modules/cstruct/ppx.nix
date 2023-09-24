@@ -1,4 +1,5 @@
-{ lib, buildDunePackage, cstruct, sexplib, ppxlib, stdlib-shims
+{ lib, buildDunePackage, cstruct, sexplib, ppxlib
+, ocaml-migrate-parsetree-2
 , ounit, cppo, ppx_sexp_conv, cstruct-unix, cstruct-sexp
 }:
 
@@ -11,11 +12,10 @@ else
     inherit (cstruct) version src meta;
 
     minimalOCamlVersion = "4.08";
-    duneVersion = "3";
 
-    propagatedBuildInputs = [ cstruct ppxlib sexplib stdlib-shims ];
+    propagatedBuildInputs = [ cstruct ppxlib sexplib ];
 
     doCheck = true;
     nativeCheckInputs = [ cppo ];
-    checkInputs = [ ounit ppx_sexp_conv cstruct-sexp cstruct-unix ];
+    checkInputs = [ ounit ppx_sexp_conv cstruct-sexp cstruct-unix ocaml-migrate-parsetree-2 ];
   }

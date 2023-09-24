@@ -355,5 +355,37 @@ in
       '';
       destination = "/share/dbus-1/system.d/murmur.conf";
     })];
+
+    security.apparmor.policies."bin.mumble-server".profile = ''
+      include <tunables/global>
+
+      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+        pix ${cfg.package}/bin/.mumble-server-wrapped,
+
+        r ${config.environment.etc."os-release".source},
+        r ${config.environment.etc."lsb-release".source},
+        owner rwk /var/lib/murmur/murmur.sqlite,
+        owner rw /var/lib/murmur/murmur.sqlite-journal,
+        owner r /var/lib/murmur/,
+        r /run/murmur/murmurd.pid,
+        r /run/murmur/murmurd.ini,
+        r ${configFile},
+      '' + optionalString (cfg.logFile != null) ''
+        rw ${cfg.logFile},
+      '' + optionalString (cfg.sslCert != "") ''
+        r ${cfg.sslCert},
+      '' + optionalString (cfg.sslKey != "") ''
+        r ${cfg.sslKey},
+      '' + optionalString (cfg.sslCa != "") ''
+        r ${cfg.sslCa},
+      '' + optionalString (cfg.dbus != null) ''
+        dbus bus=${cfg.dbus}
+      '' + ''
+      }
+    '';
   };
 }

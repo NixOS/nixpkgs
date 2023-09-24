@@ -102,9 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     command = "pjsua --version";
   };
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModule {
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
-    moduleName = "libpjproject";
   };
 
   passthru.tests.python-pjsua2 = runCommand "python-pjsua2" { } ''
@@ -118,5 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ olynch ];
     mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
+    pkgConfigModules = [
+      "libpjproject"
+    ];
   };
 })

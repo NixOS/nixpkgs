@@ -1,8 +1,32 @@
 { config, options, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib)
+    all
+    concatMap
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    escapeShellArg
+    flip
+    foldr
+    forEach
+    hasPrefix
+    mapAttrsToList
+    literalExpression
+    makeBinPath
+    mkDefault
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionals
+    optionalString
+    replaceStrings
+    types
+  ;
 
   cfg = config.boot.loader.grub;
 
@@ -63,7 +87,9 @@ let
         extraGrubInstallArgs
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
         default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios
-        users;
+        users
+        timeoutStyle
+      ;
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
         ++ optional cfg.efiSupport efibootmgr
@@ -148,7 +174,7 @@ in
           (as opposed to external files) will be copied into the Nix store, and
           will be visible to all local users.
         '';
-        type = with types; attrsOf (submodule {
+        type = types.attrsOf (types.submodule {
           options = {
             hashedPasswordFile = mkOption {
               example = "/path/to/file";
@@ -422,6 +448,28 @@ in
         default = null;
         description = lib.mdDoc ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
+        '';
+      };
+
+      timeoutStyle = mkOption {
+        default = "menu";
+        type = types.enum [ "menu" "countdown" "hidden" ];
+        description = lib.mdDoc ''
+           - `menu` shows the menu.
+           - `countdown` uses a text-mode countdown.
+           - `hidden` hides GRUB entirely.
+
+          When using a theme, the default value (`menu`) is appropriate for the graphical countdown.
+
+          When attempting to do flicker-free boot, `hidden` should be used.
+
+          See the [GRUB documentation section about `timeout_style`](https://www.gnu.org/software/grub/manual/grub/html_node/timeout.html).
+
+          ::: {.note}
+          If this option is set to ‘countdown’ or ‘hidden’ [...] and ESC or F4 are pressed, or SHIFT is held down during that time, it will display the menu and wait for input.
+          :::
+
+          From: [Simple configuration handling page, under GRUB_TIMEOUT_STYLE](https://www.gnu.org/software/grub/manual/grub/html_node/Simple-configuration.html).
         '';
       };
 
@@ -699,7 +747,7 @@ in
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/cp -pf "${v}" "@bootPath@/${n}"
+          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
         '') config.boot.loader.grub.extraFiles);
 
       assertions = [

@@ -8,20 +8,21 @@
 , numba
 , numpy
 , packaging
+, setuptools
 , typing-extensions
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.2.4";
+  version = "2.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v06mYdoP/WfIfz6x6+MJvS4YOsTsyWqhCyAykZ1d5v4=";
+    hash = "sha256-NLROXEbh4MKvBFuj+4+Wa2u37P9vuQ0Ww8kK+CYWt5E=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     numba
+    setuptools
   ];
 
   disabledTestPaths = [

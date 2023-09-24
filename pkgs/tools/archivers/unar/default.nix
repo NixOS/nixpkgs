@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  sourceRoot = "./source/XADMaster";
+  sourceRoot = "${src.name}/XADMaster";
 
   installPhase = ''
     runHook preInstall

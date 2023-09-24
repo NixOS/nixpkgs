@@ -7,7 +7,7 @@
 , darwin
 , gitMinimal
 , mercurial
-, nixVersions
+, nix
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/nurl \
-      --prefix PATH : ${lib.makeBinPath [ gitMinimal mercurial nixVersions.unstable ]}
+      --prefix PATH : ${lib.makeBinPath [ gitMinimal mercurial nix ]}
     installManPage artifacts/nurl.1
     installShellCompletion artifacts/nurl.{bash,fish} --zsh artifacts/_nurl
   '';
@@ -57,5 +57,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/nix-community/nurl/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ figsoda ];
+    mainProgram = "nurl";
   };
 }

@@ -80,11 +80,35 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-k8Oam+EiRcfXC7qCdLacCx+7vpUAw2K1wsjKcQbeGb4=";
     })
 
+    # https://github.com/sagemath/sage/pull/35826, landed in 10.1.beta5
+    (fetchpatch {
+      name = "numpy-1.25.0-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/ecfe06b8f1fe729b07e885f0de55244467e5c137.diff";
+      sha256 = "sha256-G0xhl+LyNdDYPzRqSHK3fHaepcIzpuwmqRiussraDf0=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35826#issuecomment-1658569891
+    ./patches/numpy-1.25-deprecation.patch
+
+    # https://github.com/sagemath/sage/pull/35842, landed in 10.1.beta5
+    (fetchpatch {
+      name = "scipy-1.11-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/90ece168c3c61508baa36659b0027b7dd8b43add.diff";
+      sha256 = "sha256-Y5TmuJcUJR+veb2AuSVODGs+xkVV+pTM8fWTm4q+NDs=";
+    })
+
     # https://github.com/sagemath/sage/pull/35825, landed in 10.1.beta6
     (fetchpatch {
       name = "singular-4.3.2p2-upgrade.patch";
       url = "https://github.com/sagemath/sage/commit/1a1b49f814cdf4c4c8d0ac8930610f3fef6af5b0.diff";
       sha256 = "sha256-GqMgoi0tsP7zcCcPumhdsbvhPB6fgw1ufx6gHlc6iSc=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36006, positively reviewed
+    (fetchpatch {
+      name = "gmp-6.3-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/d88bc3815c0901bfdeaa3e4a31107c084199f614.diff";
+      sha256 = "sha256-dXaEwk2wXxmx02sCw4Vu9mF0ZrydhFD4LRwNAiQsPgM=";
     })
   ];
 

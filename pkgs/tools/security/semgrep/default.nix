@@ -102,6 +102,10 @@ buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ semgrep-core ]})
   '';
 
+  postInstall = ''
+    chmod +x $out/bin/{,py}semgrep
+  '';
+
   passthru = {
     inherit common;
     submodulesSubset = lib.mapAttrs (k: args: fetchFromGitHub args) common.submodules;

@@ -32,7 +32,7 @@ buildGoModule rec {
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    sourceRoot = "source/ui";
+    sourceRoot = "${src.name}/ui";
     hash = "sha256-qxwTiXLmZnTnmTSBmWPjeFCP7qzvTFN0xXp5lFkWFog=";
   };
 

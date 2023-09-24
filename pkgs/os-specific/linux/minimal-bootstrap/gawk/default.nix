@@ -3,36 +3,41 @@
 , hostPlatform
 , fetchurl
 , bash
-, tinycc
+, gcc
+, glibc
+, binutils
+, linux-headers
 , gnumake
-, gnupatch
-, gnused
 , gnugrep
+, gnused
+, gnutar
+, gzip
+, bootGawk
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gawk";
-  # >=3.1.x is incompatible with mes-libc
-  version = "3.0.6";
+  # >= 4.2.0 fails to cleanly build. may be worth investigating in the future.
+  # for now this version is sufficient to build glibc 2.16
+  version = "4.1.4";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.gz";
-    sha256 = "1z4bibjm7ldvjwq3hmyifyb429rs2d9bdwkvs0r171vv1khpdwmb";
+    sha256 = "0dadjkpyyizmyd0l098qps8lb39r0vrz3xl3hwz2cmjs5c70h0wc";
   };
-
-  patches = [
-    # for reproducibility don't generate date stamp
-    ./no-stamp.patch
-  ];
 in
 bash.runCommand "${pname}-${version}" {
-  inherit pname version;
+  inherit pname version meta;
 
   nativeBuildInputs = [
-    tinycc.compiler
+    gcc
+    binutils
     gnumake
-    gnupatch
     gnused
     gnugrep
+    gnutar
+    gzip
+    bootGawk
   ];
 
   passthru.tests.get-version = result:
@@ -40,33 +45,19 @@ bash.runCommand "${pname}-${version}" {
       ${result}/bin/awk --version
       mkdir $out
     '';
-
-  meta = with lib; {
-    description = "GNU implementation of the Awk programming language";
-    homepage = "https://www.gnu.org/software/gawk";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
 } ''
   # Unpack
-  ungz --file ${src} --output gawk.tar
-  untar --file gawk.tar
-  rm gawk.tar
+  tar xzf ${src}
   cd gawk-${version}
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
-
   # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export ac_cv_func_getpgrp_void=yes
-  export ac_cv_func_tzset=yes
+  export C_INCLUDE_PATH="${glibc}/include:${linux-headers}/include"
+  export LIBRARY_PATH="${glibc}/lib"
+  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
   bash ./configure \
+    --prefix=$out \
     --build=${buildPlatform.config} \
-    --host=${hostPlatform.config} \
-    --disable-nls \
-    --prefix=$out
+    --host=${hostPlatform.config}
 
   # Build
   make gawk

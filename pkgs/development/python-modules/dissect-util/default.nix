@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-util";
-  version = "3.9";
+  version = "3.10";
   format = "pyproject";
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.util";
     rev = "refs/tags/${version}";
-    hash = "sha256-u8FPGSG9bZi+bxqI5zABwHcqwmM24hURvHcHTKz8dYw=";
+    hash = "sha256-H89lPX//AlTEJLuZFzzn9wUc4lZC1TGd98t4+TYlbWs=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

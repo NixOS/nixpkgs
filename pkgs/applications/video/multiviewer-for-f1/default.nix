@@ -22,17 +22,16 @@
 , pango
 , xorg
 }:
-
 let
-  id = "118976581";
+  id = "123219506";
 in
 stdenvNoCC.mkDerivation rec {
   pname = "multiviewer-for-f1";
-  version = "1.24.2";
+  version = "1.26.2";
 
   src = fetchurl {
     url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
-    sha256 = "sha256-zll639fQFdrNvIj/4ECqEGxQw4VgfERGlti7opSmSi0=";
+    sha256 = "sha256-nibPVqc4B3PHF/3wR5FsYZGVkkReQjy+4glfdnBysSU=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +97,7 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [ babeuh ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "multiviewer-for-f1";
   };
 }
 

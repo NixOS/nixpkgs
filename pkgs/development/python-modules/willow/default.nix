@@ -2,22 +2,29 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, six
-, pillow
+
+# dependencies
+, filetype
+, defusedxml,
 }:
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.4.1";
+  version = "1.5.1";
+  format = "setuptools";
+
   disabled = pythonOlder "2.7";
 
   src = fetchPypi {
     pname = "Willow";
     inherit version;
-    hash = "sha256-Dfj/UoUx4AtI1Av3Ltgb6sHcgvLULlu+1K/wIYvvjA0=";
+    hash = "sha256-t6SQkRATP9seIodZLgZzzCVeAobhzVNCfuaN8ckiDEw=";
   };
 
-  propagatedBuildInputs = [ six pillow ];
+  propagatedBuildInputs = [
+    filetype
+    defusedxml
+  ];
 
   # Test data is not included
   # https://github.com/torchbox/Willow/issues/34

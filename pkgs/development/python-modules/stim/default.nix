@@ -11,6 +11,8 @@
 , matplotlib
 , networkx
 , scipy
+, setuptools
+, wheel
 , pandas
 }:
 
@@ -28,9 +30,20 @@ buildPythonPackage rec {
     hash = "sha256-zXWdJjFkf74FCWxyVMF8dx0P8GmUkuHFxUo5wYNU2o0=";
   };
 
+  postPatch = ''
+    # asked to relax this in https://github.com/quantumlib/Stim/issues/623
+    substituteInPlace pyproject.toml \
+      --replace "pybind11==" "pybind11>="
+  '';
+
+  nativeBuildInputs = [
+    pybind11
+    setuptools
+    wheel
+  ];
+
   propagatedBuildInputs = [
     numpy
-    pybind11
   ];
 
   nativeCheckInputs = [

@@ -40,10 +40,11 @@ python.pkgs.buildPythonApplication rec {
     chardet
     flask-babel
     flask-login
-    flask_principal
+    flask-principal
     flask-wtf
     flask-limiter
     iso-639
+    jsonschema
     lxml
     pypdf
     requests
@@ -63,6 +64,8 @@ python.pkgs.buildPythonApplication rec {
     # and exit. This is gonna be used to configure calibre-web declaratively, as most of its configuration parameters
     # are stored in the DB.
     ./db-migrations.patch
+    # environ in tornado.wsgi.WSGIContainer no longer a static method from 6.3 version
+    ./static_environ.patch
   ];
 
   # calibre-web doesn't follow setuptools directory structure. The following is taken from the script

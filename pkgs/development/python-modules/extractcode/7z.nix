@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "02qinla281fc6pmg5xzsrmqnf9js76f2qcbf98zq7m2dkn70as4w";
   };
 
-  sourceRoot = "source/builtins/extractcode_7z-linux";
+  sourceRoot = "${src.name}/builtins/extractcode_7z-linux";
 
   propagatedBuildInputs = [
     plugincode

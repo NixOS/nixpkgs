@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
   };
   patches = [
     ./absolute-paths.diff
+    # fix reproducibile output, in particular in the grub2 build
+    # https://savannah.gnu.org/bugs/index.php?59658
+    ./0001-msginit-Do-not-use-POT-Creation-Date.patch
   ] ++ lib.optional stdenv.hostPlatform.isWindows (fetchpatch {
     url = "https://aur.archlinux.org/cgit/aur.git/plain/gettext_formatstring-ruby.patch?h=mingw-w64-gettext&id=e8b577ee3d399518d005e33613f23363a7df07ee";
     name = "gettext_formatstring-ruby.patch";
@@ -54,9 +57,13 @@ stdenv.mkDerivation rec {
     xz
     xz.bin
   ];
-  buildInputs = [ bash ]
-  # HACK, see #10874 (and 14664)
-    ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [ libiconv ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    bash
+  ]
+  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
+    # HACK, see #10874 (and 14664)
+    libiconv
+  ];
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash

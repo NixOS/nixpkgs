@@ -61,7 +61,7 @@ in stdenv.mkDerivation (rec {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 

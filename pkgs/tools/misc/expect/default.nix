@@ -41,6 +41,7 @@ tcl.mkTclDerivation rec {
     homepage = "https://expect.sourceforge.net/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
+    mainProgram = "expect";
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

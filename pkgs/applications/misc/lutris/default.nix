@@ -147,5 +147,6 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
+    mainProgram = "lutris";
   };
 }

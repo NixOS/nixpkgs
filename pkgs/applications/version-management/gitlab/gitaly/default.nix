@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "16.1.2";
+  version = "16.3.4";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -24,10 +24,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      sha256 = "sha256-/yCmFbmKTp8V8CjdhoAPpAdwNEcaP/wB0oAeTLdMESo=";
+      hash = "sha256-5fNRoxWNBky7dJLFg+OyshfIcAqCAj41hvfrQRPIuzg=";
     };
 
-    vendorSha256 = "sha256-6oOFQGPwiMRQrESXsQsGzvWz9bCb0VTYIyyG/C2b3nA=";
+    vendorHash = "sha256-abyouKgn31yO3+oeowtxZcuvS6mazVM8zOMEFsyw4C0=";
 
     ldflags = [ "-X ${gitaly_package}/internal/version.version=${version}" "-X ${gitaly_package}/internal/version.moduleVersion=${version}" ];
 
@@ -42,7 +42,7 @@ let
   auxBins = buildGoModule ({
     pname = "gitaly-aux";
 
-    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-git2go" "cmd/gitaly-lfs-smudge" ];
+    subPackages = [ "cmd/gitaly-hooks" "cmd/gitaly-ssh" "cmd/gitaly-git2go" "cmd/gitaly-lfs-smudge" "cmd/gitaly-gpg" ];
   } // commonOpts);
 in
 buildGoModule ({

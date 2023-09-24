@@ -4,6 +4,8 @@
 , pythonOlder
 , installShellFiles
 , setuptools
+, setuptools-scm
+, wheel
 , docopt
 , hidapi
 , pyusb
@@ -17,21 +19,25 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.12.1";
+  version = "1.13.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-0QjgnTxqB50JNjSUAgBrGyhN2XC/TDYiC1tvhw1Bl1M=";
+    hash = "sha256-LU8rQmXrEIoOBTTFotGvMeHqksYGrtNo2YSl2l2e/UI=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

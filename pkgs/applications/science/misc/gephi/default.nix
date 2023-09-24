@@ -18,7 +18,7 @@ mavenJdk11.buildMavenPackage rec {
 
   mvnHash = "sha256-/2/Yb26Ry0NHQQ3j0LXnjwC0wQqJiztvTgWixyMJqvg=";
 
-  nativeBuildInputs = [ jdk11 mavenJdk11 ];
+  nativeBuildInputs = [ jdk11 ];
 
   installPhase = ''
     cp -r modules/application/target/gephi $out
@@ -44,6 +44,5 @@ mavenJdk11.buildMavenPackage rec {
     ];
     license = licenses.gpl3;
     maintainers = [ maintainers.taeer ];
-    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
 , nodejs
 , yarn
@@ -10,19 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.70.2";
+  version = "0.71.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-y2VGWuwJX91Aa8Bs7YcT4MKOURrFKXUz9CcQkUI/U2s=";
+    hash = "sha256-vwYq5b+cMYf/gnpCwLEpErYKqYw/RwcvyBjhp+5+bTY=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
   buildInputs = [ yarn nodejs ];
 
-  yarnOfflineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-j9iaxXfMlG9dT6fvYgPQg6Y0QvCRiBU1peO0YgsGHOY=";
+  };
 
   configurePhase = ''
     export HOME=$(mktemp -d)/yarn_home

@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
     cd ../runtimes
   '';
 
+  postInstall = lib.optionalString (enableShared && !stdenv.hostPlatform.isDarwin) ''
+    # libcxxabi wants to link to libunwind_shared.so (?).
+    ln -s $out/lib/libunwind.so $out/lib/libunwind_shared.so
+  '';
+
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ninja python3 ];

@@ -19,7 +19,7 @@ buildGoModule rec {
     hash = "sha256-y0IYSKKZlFbPrTUC6XqYKhS3a79rieNGBL58teWMlC4=";
   };
 
-  sourceRoot = "source/fs-repo-migrations";
+  sourceRoot = "${src.name}/fs-repo-migrations";
 
   vendorHash = "sha256-/DqkBBtR/nU8gk3TFqNKY5zQU6BFMc3N8Ti+38mi/jk=";
 

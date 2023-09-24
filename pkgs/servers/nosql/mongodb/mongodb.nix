@@ -149,6 +149,9 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
     ++ map (lib: "--use-system-${lib}") system-libraries;
 
+  # This seems to fix mongodb not able to find OpenSSL's crypto.h during build
+  hardeningDisable = [ "fortify3" ];
+
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"

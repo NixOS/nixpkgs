@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "lc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01cip5rf35dnh3l325p03y6axyqdpf48ry4zcwiyd7hlfsglbk3j";
+    hash = "sha256-csxFn3YUnuYjZ5/4jIi7DfuujB/gFjHogLaV4XK5kQU=";
   };
 
-  vendorSha256 = "1y01k8pvv7y9zb15wbk068cvkx0g83484jak2dvcvghqcf5j1fr1";
+  vendorHash = "sha256-Ibsgi2MYvs12E1NJgshAD/S5GTJgLl7C+smfvS+aAfg=";
 
   ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
 

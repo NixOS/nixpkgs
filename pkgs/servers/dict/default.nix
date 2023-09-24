@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Dict protocol server and client";
     homepage = "http://www.dict.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sikmir ];
+    platforms = platforms.unix;
   };
 }

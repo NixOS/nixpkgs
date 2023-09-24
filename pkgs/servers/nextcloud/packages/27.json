@@ -1,18 +1,18 @@
 {
   "bookmarks": {
-    "sha256": "0xx331bgly91y8ncxk36ha3ncrr2xlivblfi7rix6ffkrdx73yb9",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.0.1/bookmarks-13.0.1.tar.gz",
-    "version": "13.0.1",
-    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP v7.4+\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
+    "sha256": "16j10gj5nghgji36jhng60291wl4h9c3vndjx9j8jij9qn6hz23f",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v13.1.0/bookmarks-13.1.0.tar.gz",
+    "version": "13.1.0",
+    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
       "agpl"
     ]
   },
   "calendar": {
-    "sha256": "00m00jm6x6kkwbn8v7v0yjmr7m5isizsyll4nqy409c1jvmhq2rq",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.4.3/calendar-v4.4.3.tar.gz",
-    "version": "4.4.3",
+    "sha256": "0liws0xkndrx5qd06hn3n5jg7yl02w38j0nj37wyrv4qjk9w6n7v",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.4.4/calendar-v4.4.4.tar.gz",
+    "version": "4.4.4",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "13d4zqlfg2sq8j1jrq6lvsn8vx17825h3i3r88wi66ndsijz11dq",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v15.0.1/groupfolders-v15.0.1.tar.gz",
-    "version": "15.0.1",
+    "sha256": "1ghq09ym82i6w4w11zarx5m64axa3m1abwyzmmhz9zv1rlz5xjm4",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v15.0.2/groupfolders-v15.0.2.tar.gz",
+    "version": "15.0.2",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "mail": {
-    "sha256": "1scx48g1h209pp4flq837njdgcdh4dxwh2n9jzv48zax8i9yz961",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.2.4/mail-v3.2.4.tar.gz",
-    "version": "3.2.4",
+    "sha256": "044adgcsix1lkisk6lr6y1z7hiqb0p3sipwn16xilxy1cdnxwf5h",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.2.6/mail-v3.2.6.tar.gz",
+    "version": "3.2.6",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n### Rating: 🟢\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -139,6 +139,16 @@
       "agpl"
     ]
   },
+  "news": {
+    "sha256": "1j9dhqz5anwsmw3f8hbhvqc2h1fp15zmxzdbpnz1p3vwqf8f5cjs",
+    "url": "https://github.com/nextcloud/news/releases/download/23.0.0/news.tar.gz",
+    "version": "23.0.0",
+    "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
+    "homepage": "https://github.com/nextcloud/news",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "notes": {
     "sha256": "1g4ibrymsfd2bcvmyfyrl23z2kh4bgkwrgyacvdx1glk44di6sgc",
     "url": "https://github.com/nextcloud-releases/notes/releases/download/v4.8.1/notes.tar.gz",
@@ -160,9 +170,9 @@
     ]
   },
   "onlyoffice": {
-    "sha256": "16vdbpylicdb8gz76j9sr8p15frwhdk0sd7sp0s3g6f49lb7fdrz",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v8.1.0/onlyoffice.tar.gz",
-    "version": "8.1.0",
+    "sha256": "1872y2fpz3hrmafhcc6n84d63j5wgzx2plpirr91z3a8650frf3m",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v8.2.0/onlyoffice.tar.gz",
+    "version": "8.2.0",
     "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
@@ -210,9 +220,9 @@
     ]
   },
   "spreed": {
-    "sha256": "07bf6vmz957m2myazkvw63q40lisi14kyb42w4gpg3860ihr16sc",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v17.0.2/spreed-v17.0.2.tar.gz",
-    "version": "17.0.2",
+    "sha256": "02npdw77xbpmxr8nff4wpiz08155zcxbkd3awhzhl6gq00pigwrw",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v17.0.3/spreed-v17.0.3.tar.gz",
+    "version": "17.0.3",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat integration!** Nextcloud Talk comes with a simple text chat. Allowing you to share files from your Nextcloud and mentioning other participants.\n* 👥 **Private, group, public and password protected calls!** Just invite somebody, a whole group or send a public link to invite to a call.\n* 💻 **Screen sharing!** Share your screen with participants of your call. You just need to use Firefox version 66 (or newer), latest Edge or Chrome 72 (or newer, also possible using Chrome 49 with this [Chrome extension](https://chrome.google.com/webstore/detail/screensharing-for-nextclo/kepnpjhambipllfmgmbapncekcmabkol)).\n* 🚀 **Integration with other Nextcloud apps** like Files, Contacts and Deck. More to come.\n\nAnd in the works for the [coming versions](https://github.com/nextcloud/spreed/milestones/):\n* ✋ [Federated calls](https://github.com/nextcloud/spreed/issues/21), to call people on other Nextclouds",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -260,9 +270,9 @@
     ]
   },
   "user_saml": {
-    "sha256": "0kf8h6z32x2gr87lm0l2cc7lghs8s222553lczxlfgj1xbi7486n",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.1/user_saml-v5.2.1.tar.gz",
-    "version": "5.2.1",
+    "sha256": "1gsq5mcn5nnxd56jlp4j2610gqq2gk3ma9yvhgy74wl0sqil98jd",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.2/user_saml-v5.2.2.tar.gz",
+    "version": "5.2.2",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [

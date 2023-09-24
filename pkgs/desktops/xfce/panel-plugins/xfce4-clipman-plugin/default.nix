@@ -3,8 +3,8 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-clipman-plugin";
-  version = "1.6.3";
-  sha256 = "sha256-tnpQRYLV48NxKsWDjVSmypx6X1bVbx2U5Q8kQaP0AW8=";
+  version = "1.6.4";
+  sha256 = "sha256-N/e97C6xWyF1GUg7gMN0Wcw35awypflMmA+Pdg6alEw=";
 
   buildInputs = [ libXtst libxfce4ui xfce4-panel xfconf ];
 

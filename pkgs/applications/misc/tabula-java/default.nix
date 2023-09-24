@@ -1,24 +1,37 @@
-{ stdenv, lib, fetchurl, jre, makeWrapper }:
+{ lib
+, maven
+, fetchFromGitHub
+, makeWrapper
+, jre
+}:
 
-stdenv.mkDerivation rec {
+maven.buildMavenPackage rec {
   pname = "tabula-java";
   version = "1.0.5";
 
-  src = fetchurl {
-    url = "https://github.com/tabulapdf/tabula-java/releases/download/v${version}/tabula-${version}-jar-with-dependencies.jar";
-    sha256 = "sha256-IWHj//ZZOdfOCBJHnPnKNoYNtWl/f8H6ARYe1AkqB0U=";
+  src = fetchFromGitHub {
+    owner = "tabulapdf";
+    repo = "tabula-java";
+    rev = "v${version}";
+    hash = "sha256-lg8/diyGhfkUU0w7PEOlxb1WNpJZVDDllxMMsTIU/Cw=";
   };
+
+  mvnHash = "sha256-yULCBHgctZZU3Deod+nQujssmUy+kgdFdgE3NUuFhOw=";
+  mvnParameters = "compile assembly:single -Dmaven.test.skip=true";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  dontUnpack = true;
-  dontBuild = true;
-
   installPhase = ''
-    mkdir -pv $out/share/tabula-java
-    cp -v $src $out/share/tabula-java/tabula-java.jar
+    runHook preInstall
 
-    makeWrapper ${jre}/bin/java $out/bin/tabula-java --add-flags "-jar $out/share/tabula-java/tabula-java.jar"
+    mkdir -p $out/{bin,lib}
+    cp target/tabula-${version}-jar-with-dependencies.jar $out/lib/tabula.jar
+
+    makeWrapper ${jre}/bin/java $out/bin/tabula-java \
+      --add-flags "-cp $out/lib/tabula.jar" \
+      --add-flags "technology.tabula.CommandLineApp"
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -29,7 +42,6 @@ stdenv.mkDerivation rec {
       programmatically extract tables from PDFs.
     '';
     homepage = "https://tabula.technology/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = [ maintainers.jakewaksbaum ];
     platforms = platforms.all;

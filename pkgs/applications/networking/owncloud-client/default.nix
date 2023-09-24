@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "4.1.0";
+  version = "4.2.0";
 
   libregraph = callPackage ./libre-graph-api-cpp-qt-client.nix { };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     owner = "owncloud";
     repo = "client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L0xeLYzlonzNClOcijyucGdwgQHTS7TlczIyJGbVQ5E=";
+    hash = "sha256-dPNVp5DxCI4ye8eFjHoLGDlf8Ap682o1UB0k2VNr2rs=";
   };
 
   nativeBuildInputs = [ pkg-config cmake extra-cmake-modules wrapQtAppsHook qttools ];

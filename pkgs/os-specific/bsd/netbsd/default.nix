@@ -1,5 +1,5 @@
 { stdenv, lib, stdenvNoCC
-, makeScopeWithSplicing, generateSplicesForMkScope
+, makeScopeWithSplicing', generateSplicesForMkScope
 , buildPackages
 , bsdSetupHook, makeSetupHook, fetchcvs, groff, mandoc, byacc, flex
 , zlib
@@ -26,17 +26,15 @@ let
       else "no"}"
   ];
 
-in makeScopeWithSplicing
-  (generateSplicesForMkScope "netbsd")
-  (_: {})
-  (_: {})
-  (self: let
+in makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "netbsd";
+  f = (self: let
     inherit (self) mkDerivation;
   in {
 
   # Why do we have splicing and yet do `nativeBuildInputs = with self; ...`?
   #
-  # We use `makeScopeWithSplicing` because this should be used for all
+  # We use `makeScopeWithSplicing'` because this should be used for all
   # nested package sets which support cross, so the inner `callPackage` works
   # correctly. But for the inline packages we don't bother to use
   # `callPackage`.
@@ -212,7 +210,7 @@ in makeScopeWithSplicing
     ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # GNU objcopy produces broken .a libs which won't link into dependers.
       # Makefiles only invoke `$OBJCOPY -x/-X`, so cctools strip works here.
-      "OBJCOPY=${buildPackages.darwin.cctools}/bin/strip"
+      "OBJCOPY=${buildPackages.darwin.cctools-port}/bin/strip"
     ];
     RENAME = "-D";
 
@@ -1011,4 +1009,5 @@ in makeScopeWithSplicing
   # END MISCELLANEOUS
   #
 
-})
+});
+}

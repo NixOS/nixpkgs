@@ -7,6 +7,7 @@
 , emacs
 , ruby
 , testers
+, gitUpdater
 , which, dtach, openssl, bash, gdb, man, git
 , withEmacs ? true
 , withRuby ? true
@@ -15,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "notmuch";
-  version = "0.37";
+  version = "0.38";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
-    sha256 = "sha256-DnZt8ot4v064I1Ymqx9S8E8eNmZJMlqM6NPJCGAnhvY=";
+    sha256 = "sha256-oXkBrb5D9IGmv1PBWiogJovI3HrVzPaFoNF8FFbbr24=";
   };
 
   nativeBuildInputs = [
@@ -102,10 +103,11 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   nativeCheckInputs = [
     which dtach openssl bash
-    gdb man emacs
+    gdb man
   ]
   # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
   # built without sexp-support
+  ++ lib.optional withEmacs emacs
   ++ lib.optional withSfsexp git;
 
   installTargets = [ "install" "install-man" "install-info" ];
@@ -130,11 +132,17 @@ stdenv.mkDerivation rec {
     pythonSourceRoot = "notmuch-${version}/bindings/python";
     tests.version = testers.testVersion { package = notmuch; };
     inherit version;
+
+    updateScript = gitUpdater {
+      url = "https://git.notmuchmail.org/git/notmuch";
+      ignoredVersions = "_rc.*";
+    };
   };
 
   meta = with lib; {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
+    changelog   = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;

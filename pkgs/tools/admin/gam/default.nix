@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-/VmBFMjCkd1xhudlcjYGGv+6tgEsyY/xqQoGdupJvOg=";
   };
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   patches = [
     # Also disables update check

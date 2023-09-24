@@ -5,18 +5,19 @@
 , cmake
 , libserialport
 , pkg-config
+, testers
 , IOKit
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blisp";
-  version = "unstable-2023-06-03";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "pine64";
     repo = "blisp";
-    rev = "048a72408218788d519a87bcdfb23bcf9ed91a84";
-    hash = "sha256-hipJrr0D4uEN2hk8ooXeg0gv0X3w4U9ReXbC4oPEPwI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cN35VLbdQFA3KTZ8PxgpbsLGXqfFhw5eh3nEBRZqAm4=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -31,12 +32,16 @@ stdenv.mkDerivation {
     "-DBLISP_USE_SYSTEM_LIBRARIES=ON"
   ];
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
+  };
+
   meta = with lib; {
-    description = "ISP tool & library for Bouffalo Labs RISC-V Microcontrollers and SoCs";
+    description = "An In-System-Programming (ISP) tool & library for Bouffalo Labs RISC-V Microcontrollers and SoCs";
     license = licenses.mit;
+    mainProgram = "blisp";
     homepage = "https://github.com/pine64/blisp";
     maintainers = [ maintainers.fortuneteller2k ];
   };
-}
-# TODO: update when next stable release supports building without vendored
-# libraries
+})

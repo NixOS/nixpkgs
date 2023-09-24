@@ -30,14 +30,14 @@
 , withDebug ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "picom";
   version = "10.2";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-C+icJXTkE+XMaU7N6JupsP8xhmRVggX9hY1P7za0pO0=";
     fetchSubmodules = true;
   };
@@ -113,5 +113,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/yshui/picom";
     maintainers = with maintainers; [ ertes twey thiagokokada ];
     platforms = platforms.linux;
+    mainProgram = "picom";
   };
-}
+})

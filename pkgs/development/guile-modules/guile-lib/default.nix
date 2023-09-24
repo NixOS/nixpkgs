@@ -6,8 +6,6 @@
 , texinfo
 }:
 
-assert stdenv ? cc && stdenv.cc.isGNU;
-
 stdenv.mkDerivation rec {
   pname = "guile-lib";
   version = "0.2.7";
@@ -25,7 +23,9 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  doCheck = true;
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+
+  doCheck = !stdenv.isDarwin;
 
   preCheck = ''
     # Make `libgcc_s.so' visible for `pthread_cancel'.
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = guile.meta.platforms;
   };
 }

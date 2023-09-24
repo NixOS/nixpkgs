@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-ZkAfAQsaFX7npyDcBDFS4Xa8kOMVH6yGfxGD7c0iQ+o=";
   };
 
-  vendorSha256 = "sha256-K/QAG9mCIHe7PQhex3TntlGYAK9l0bESWk616N97dBs=";
+  vendorHash = "sha256-K/QAG9mCIHe7PQhex3TntlGYAK9l0bESWk616N97dBs=";
 
   ldflags = [ "-s" "-w" "-X main.gronVersion=${version}" ];
 

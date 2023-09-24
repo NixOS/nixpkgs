@@ -37,7 +37,7 @@ let
   babelfishTranslate = path: name:
     pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
-    } "${pkgs.babelfish}/bin/babelfish < ${path} > $out;";
+    } "babelfish < ${path} > $out;";
 
 in
 
@@ -258,20 +258,17 @@ in
             preferLocalBuild = true;
             allowSubstitutes = false;
           };
-          generateCompletions = package: pkgs.runCommand
-            "${package.name}_fish-completions"
-            (
-              {
-                inherit package;
-                preferLocalBuild = true;
-                allowSubstitutes = false;
-              }
-              // optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
-            )
+          generateCompletions = package: pkgs.runCommandLocal
+            ( with lib.strings; let
+                storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
+                pathName = substring storeLength (stringLength package - storeLength) package;
+              in (package.name or pathName) + "_fish-completions")
+            ( { inherit package; } //
+              optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; })
             ''
               mkdir -p $out
               if [ -d $package/share/man ]; then
-                find $package/share/man -type f | xargs ${pkgs.python3.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
+                find $package/share/man -type f | xargs ${pkgs.python3.pythonForBuild.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
               fi
             '';
         in

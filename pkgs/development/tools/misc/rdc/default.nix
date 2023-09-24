@@ -102,7 +102,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     find $out/bin -executable -type f -exec \
-      patchelf {} --shrink-rpath --allowed-rpath-prefixes /nix/store \;
+      patchelf {} --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" \;
   '' + lib.optionalString buildTests ''
     mkdir -p $test
     mv $out/bin/rdctst_tests $test/bin

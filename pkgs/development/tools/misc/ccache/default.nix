@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.8.2";
+  version = "4.8.3";
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-wft9T0XzTJhN/85kV+pIAUqTvcIBClbj+nHPQK0ncVE=";
+    sha256 = "sha256-fcstTjwwOh5SAe6+VT5MpBaD+AEFoQtHop99dOMr7/A=";
   };
 
   outputs = [ "out" "man" ];
@@ -31,9 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Linux it uses objdump. We don't have dwarfdump packaged for
     # Darwin, so this patch updates the test to also use objdump on
     # Darwin.
+    # Additionally, when cross compiling, the correct target prefix
+    # needs to be set.
     (substituteAll {
-      src = ./force-objdump-on-darwin.patch;
-      objdump = "${binutils.bintools}/bin/objdump";
+      src = ./fix-objdump-path.patch;
+      objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
 

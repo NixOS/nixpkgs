@@ -25,7 +25,7 @@ let
     DOMAIN = ${cfg.domain}
     HTTP_ADDR = ${cfg.httpAddress}
     HTTP_PORT = ${toString cfg.httpPort}
-    ROOT_URL = ${cfg.rootUrl}
+    EXTERNAL_URL = ${cfg.rootUrl}
 
     [session]
     COOKIE_NAME = session

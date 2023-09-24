@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+    mainProgram = "dosbox";
   };
 }

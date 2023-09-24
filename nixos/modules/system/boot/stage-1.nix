@@ -123,7 +123,7 @@ let
         # ZFS properties such as `setuid=off` and `exec=off` (unless manually
         # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
         copy_bin_and_libs ${lib.getOutput "mount" pkgs.util-linux}/bin/mount
-        copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
+        copy_bin_and_libs ${config.boot.zfs.package}/bin/mount.zfs
       ''}
 
       # Copy some util-linux stuff.
@@ -610,6 +610,13 @@ in
             path the secret should have inside the initrd, the value
             is the path it should be copied from (or null for the same
             path inside and out).
+
+            The loader `generic-extlinux-compatible` supports this. Because
+            it is not well know how different implementations react to
+            concatenated cpio archives, this is disabled by default. It can be
+            enabled by setting {option}`boot.loader.supportsInitrdSecrets`
+            to true. If this works for you, please report your findings at
+            https://github.com/NixOS/nixpkgs/issues/247145 .
           '';
         example = literalExpression
           ''

@@ -1,34 +1,33 @@
 { lib
 , stdenv
 , fetchFromGitHub
+
+# build time
 , cmake
 , pkg-config
-, espeak-ng
+
+# runtime
 , onnxruntime
 , pcaudiolib
+, piper-phonemize
+, spdlog
+
+# tests
 , piper-train
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "piper";
-  version = "0.0.2";
-in
-stdenv.mkDerivation {
-  inherit pname version;
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "piper";
-    rev = "70afec58bc131010c8993c154ff02a78d1e7b8b0";
-    hash = "sha256-zTW7RGcV8Hh7G6Braf27F/8s7nNjAqagp7tmrKO10BY=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-6WNWqJt0PO86vnf+3iHaRRg2KwBOEj4aicmB+P2phlk=";
   };
 
-  sourceRoot = "source/src/cpp";
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/local/include/onnxruntime" "${onnxruntime}"
-  '';
+  sourceRoot = "${finalAttrs.src.name}/src/cpp";
 
   nativeBuildInputs = [
     cmake
@@ -36,9 +35,15 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    espeak-ng
     onnxruntime
     pcaudiolib
+    piper-phonemize
+    piper-phonemize.espeak-ng
+    spdlog
+  ];
+
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
+    "-isystem ${lib.getDev piper-phonemize}/include/piper-phonemize"
   ];
 
   installPhase = ''
@@ -55,10 +60,10 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/rhasspy/piper/releases/tag/v${version}";
+    changelog = "https://github.com/rhasspy/piper/releases/tag/v${finalAttrs.version}";
     description = "A fast, local neural text to speech system";
     homepage = "https://github.com/rhasspy/piper";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };
-}
+})

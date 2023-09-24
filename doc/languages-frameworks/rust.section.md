@@ -102,7 +102,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
+    hash = "sha256-aDQA4A5mScX9or3Lyiv/5GyAehidnpKKE0grhbP1Ctc=";
   };
 
   cargoHash = "sha256-tbrTbutUs5aPSV+yE0IBUZAAytgmZV7Eqxia7g+9zRs=";
@@ -558,7 +558,7 @@ buildPythonPackage rec {
     hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
   };
 
-  sourceRoot = "source/bindings/python";
+  sourceRoot = "${src.name}/bindings/python";
 
   nativeBuildInputs = [
     cargo

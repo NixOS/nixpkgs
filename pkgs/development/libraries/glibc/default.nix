@@ -4,6 +4,7 @@
 , withGd ? false
 , withLibcrypt? false
 , buildPackages
+, libgcc
 }:
 
 let
@@ -16,7 +17,7 @@ in
 
 (callPackage ./common.nix { inherit stdenv; } {
   inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
-  pname = "glibc" + lib.optionalString withGd "-gd";
+  pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 
     # Note:
@@ -90,8 +91,8 @@ in
     #
     makeFlags =
       (previousAttrs.makeFlags or [])
-      ++ lib.optionals (stdenv.cc.cc?libgcc) [
-        "user-defined-trusted-dirs=${stdenv.cc.cc.libgcc}/lib"
+      ++ lib.optionals (libgcc != null) [
+        "user-defined-trusted-dirs=${libgcc}/lib"
       ];
 
     postInstall = previousAttrs.postInstall + (if stdenv.hostPlatform == stdenv.buildPlatform then ''
@@ -166,8 +167,8 @@ in
 
     passthru =
       (previousAttrs.passthru or {})
-      // lib.optionalAttrs (stdenv.cc.cc?libgcc) {
-        inherit (stdenv.cc.cc) libgcc;
+      // lib.optionalAttrs (libgcc != null) {
+        inherit libgcc;
       };
 
   meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };

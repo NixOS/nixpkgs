@@ -1,26 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dufs";
-  version = "0.34.2";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
-    repo = pname;
+    repo = "dufs";
     rev = "v${version}";
-    sha256 = "sha256-NkH7w5HEQFhnovUmjN/qW5QZwO8mVQZMbhpNFkKtLTI=";
+    hash = "sha256-WZ+tyrx4ayFyPmDJq6dGaTRiR6bSQq5k5iOfb+ETe/I=";
   };
 
-  cargoHash = "sha256-bUznaVyhZswLaXUgC+GUh5ZpJQW7Vkcoui6CO9ds22g=";
+  cargoHash = "sha256-HZiWmqIh21b12DP+hnx1pWBWgSa5j71kp6GCRKGMHv0=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
-    pkg-config
-  ];
-
-  buildInputs = lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
   ];
 
   # FIXME: checkPhase on darwin will leave some zombie spawn processes
@@ -34,7 +33,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A file server that supports static serving, uploading, searching, accessing control, webdav";
     homepage = "https://github.com/sigoden/dufs";
+    changelog = "https://github.com/sigoden/dufs/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = [ maintainers.holymonson ];
+    maintainers = with maintainers; [ figsoda holymonson ];
   };
 }

@@ -412,6 +412,12 @@
         "rev": "75d501a87ec2074e8d2f7256fb0359513c263c29",
         "hash": "sha256-yAHVTgOt8SGyPXihp4YNKKAvxl9VBBAvHyzLW86zSCw="
     },
+    "same_cdi": {
+        "owner": "libretro",
+        "repo": "same_cdi",
+        "rev": "54cf493c2dee4c46666059c452f8aaaa0bd7c8e0",
+        "hash": "sha256-/+4coMzj/o82Q04Z65DQiPaykK6N56W6PRQLtyJOd8E="
+    },
     "sameboy": {
         "owner": "libretro",
         "repo": "sameboy",

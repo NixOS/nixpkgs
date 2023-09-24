@@ -1,4 +1,4 @@
-{ version, sha256, extraPatches ? [], knownVulnerabilities ? [] }:
+{ version, sha256, extraPatches ? [] }:
 
 { lib, stdenv, buildPackages, removeReferencesTo, addOpenGLRunpath, pkg-config, perl, texinfo, yasm
 
@@ -33,8 +33,7 @@
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
 , withCelt ? withFullDeps # CELT decoder
-, withCrystalhd ? withFullDeps
-, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch))
+, withCuda ? withFullDeps && (with stdenv; (!isDarwin && !hostPlatform.isAarch && !hostPlatform.isRiscV))
 , withCudaLLVM ? withFullDeps
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.isDarwin # IIDC-1394 grabbing (ieee 1394)
@@ -49,7 +48,6 @@
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
 , withIconv ? withHeadlessDeps
-, withIlbc ? withFullDeps
 , withJack ? withFullDeps && !stdenv.isDarwin # Jack audio
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLibplacebo ? withFullDeps && !stdenv.isDarwin # libplacebo video processing library
@@ -58,8 +56,8 @@
 , withModplug ? withFullDeps && !stdenv.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
-, withNvdec ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
-, withNvenc ? withHeadlessDeps && !stdenv.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isAarch32
+, withNvdec ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
+, withNvenc ? withHeadlessDeps && (with stdenv; !isDarwin && hostPlatform == buildPlatform && !isAarch32 && !hostPlatform.isRiscV)
 , withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
@@ -79,7 +77,7 @@
 , withSrt ? withHeadlessDeps # Secure Reliable Transport (SRT) protocol
 , withSsh ? withHeadlessDeps # SFTP protocol
 , withSvg ? withFullDeps # SVG protocol
-, withSvtav1 ? withFullDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
+, withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
 , withV4l2 ? withFullDeps && !stdenv.isDarwin # Video 4 Linux support

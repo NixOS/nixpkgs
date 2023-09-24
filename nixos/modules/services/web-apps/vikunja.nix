@@ -147,5 +147,9 @@ in {
     };
 
     environment.etc."vikunja/config.yaml".source = configFile;
+
+    environment.systemPackages = [
+      cfg.package-api # for admin `vikunja` CLI
+    ];
   };
 }

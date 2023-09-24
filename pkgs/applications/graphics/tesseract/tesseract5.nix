@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anselmschueler ];
     platforms = lib.platforms.unix;
+    mainProgram = "tesseract";
   };
 }

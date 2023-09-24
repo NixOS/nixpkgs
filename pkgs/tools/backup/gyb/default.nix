@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gyb";
-  version = "1.72";
+  version = "1.74";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "got-your-back";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-75ZU1qNFdiX9Uhb+tKN0438iHKvY4fuFVGvcgyFFgJo=";
+    sha256 = "sha256-JUI9BIDg7Z6z5ZtwBMsgTbYXp9w0jd1DKFAa1XjeEtQ=";
   };
 
   propagatedBuildInputs = with python3Packages; [

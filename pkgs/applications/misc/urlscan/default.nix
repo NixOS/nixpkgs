@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-IvCdc4f784hBM+TEa0zIACz/1/FUnEpGxHUGiS85tt8=";
+    hash = "sha256-OzcoOIgEiadWrsUPIxBJTuZQYjScJBYKyqCu1or6fz8=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

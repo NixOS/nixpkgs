@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -16,13 +17,16 @@
 #include <syscall.h>
 #include <byteswap.h>
 
+#ifndef SOURCE_PROG
+#error SOURCE_PROG should be defined via preprocessor commandline
+#endif
+
+// aborts when false, printing the failed expression
 #define ASSERT(expr) ((expr) ? (void) 0 : assert_failure(#expr))
+// aborts when returns non-zero, printing the failed expression and errno
+#define MUSTSUCCEED(expr) ((expr) ? print_errno_and_die(#expr) : (void) 0)
 
 extern char **environ;
-
-// The WRAPPER_DIR macro is supplied at compile time so that it cannot
-// be changed at runtime
-static char *wrapper_dir = WRAPPER_DIR;
 
 // Wrapper debug variable name
 static char *wrapper_debug = "WRAPPER_DEBUG";
@@ -37,6 +41,12 @@ static char *wrapper_debug = "WRAPPER_DEBUG";
 
 static noreturn void assert_failure(const char *assertion) {
     fprintf(stderr, "Assertion `%s` in NixOS's wrapper.c failed.\n", assertion);
+    fflush(stderr);
+    abort();
+}
+
+static noreturn void print_errno_and_die(const char *assertion) {
+    fprintf(stderr, "Call `%s` in NixOS's wrapper.c failed: %s\n", assertion, strerror(errno));
     fflush(stderr);
     abort();
 }
@@ -141,97 +151,20 @@ static int make_caps_ambient(const char *self_path) {
     return 0;
 }
 
-int readlink_malloc(const char *p, char **ret) {
-    size_t l = FILENAME_MAX+1;
-    int r;
-
-    for (;;) {
-        char *c = calloc(l, sizeof(char));
-        if (!c) {
-            return -ENOMEM;
-        }
-
-        ssize_t n = readlink(p, c, l-1);
-        if (n < 0) {
-            r = -errno;
-            free(c);
-            return r;
-        }
-
-        if ((size_t) n < l-1) {
-            c[n] = 0;
-            *ret = c;
-            return 0;
-        }
-
-        free(c);
-        l *= 2;
-    }
-}
-
 int main(int argc, char **argv) {
     ASSERT(argc >= 1);
-    char *self_path = NULL;
-    int self_path_size = readlink_malloc("/proc/self/exe", &self_path);
-    if (self_path_size < 0) {
-        fprintf(stderr, "cannot readlink /proc/self/exe: %s", strerror(-self_path_size));
-    }
-
-    // Make sure that we are being executed from the right location,
-    // i.e., `safe_wrapper_dir'.  This is to prevent someone from creating
-    // hard link `X' from some other location, along with a false
-    // `X.real' file, to allow arbitrary programs from being executed
-    // with elevated capabilities.
-    int len = strlen(wrapper_dir);
-    if (len > 0 && '/' == wrapper_dir[len - 1])
-      --len;
-    ASSERT(!strncmp(self_path, wrapper_dir, len));
-    ASSERT('/' == wrapper_dir[0]);
-    ASSERT('/' == self_path[len]);
-
-    // Make *really* *really* sure that we were executed as
-    // `self_path', and not, say, as some other setuid program. That
-    // is, our effective uid/gid should match the uid/gid of
-    // `self_path'.
-    struct stat st;
-    ASSERT(lstat(self_path, &st) != -1);
-
-    ASSERT(!(st.st_mode & S_ISUID) || (st.st_uid == geteuid()));
-    ASSERT(!(st.st_mode & S_ISGID) || (st.st_gid == getegid()));
-
-    // And, of course, we shouldn't be writable.
-    ASSERT(!(st.st_mode & (S_IWGRP | S_IWOTH)));
-
-    // Read the path of the real (wrapped) program from <self>.real.
-    char real_fn[PATH_MAX + 10];
-    int real_fn_size = snprintf(real_fn, sizeof(real_fn), "%s.real", self_path);
-    ASSERT(real_fn_size < sizeof(real_fn));
-
-    int fd_self = open(real_fn, O_RDONLY);
-    ASSERT(fd_self != -1);
-
-    char source_prog[PATH_MAX];
-    len = read(fd_self, source_prog, PATH_MAX);
-    ASSERT(len != -1);
-    ASSERT(len < sizeof(source_prog));
-    ASSERT(len > 0);
-    source_prog[len] = 0;
-
-    close(fd_self);
 
     // Read the capabilities set on the wrapper and raise them in to
     // the ambient set so the program we're wrapping receives the
     // capabilities too!
-    if (make_caps_ambient(self_path) != 0) {
-        free(self_path);
+    if (make_caps_ambient("/proc/self/exe") != 0) {
         return 1;
     }
-    free(self_path);
 
-    execve(source_prog, argv, environ);
+    execve(SOURCE_PROG, argv, environ);
     
     fprintf(stderr, "%s: cannot run `%s': %s\n",
-        argv[0], source_prog, strerror(errno));
+        argv[0], SOURCE_PROG, strerror(errno));
 
     return 1;
 }

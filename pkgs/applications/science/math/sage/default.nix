@@ -11,8 +11,8 @@
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
-  python3 = pkgs.python3.override {
-    packageOverrides = self: super: {
+  python3 = pkgs.python3 // {
+    pkgs = pkgs.python3.pkgs.overrideScope (self: super: {
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
         inherit flint arb;
@@ -29,7 +29,7 @@ let
       sage-setup = self.callPackage ./python-modules/sage-setup.nix {
         inherit sage-src;
       };
-    };
+    });
   };
 
   jupyter-kernel-definition = {

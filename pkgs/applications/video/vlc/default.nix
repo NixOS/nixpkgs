@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, pkgsBuildBuild
 , fetchurl
 , fetchpatch
 , SDL
@@ -110,12 +111,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     autoreconfHook
+    lua5
     perl
     pkg-config
     removeReferencesTo
     unzip
     wrapGAppsHook
   ]
+  ++ optional chromecastSupport protobuf
   ++ optionals withQt5 [ wrapQtAppsHook ]
   ++ optionals waylandSupport [
     wayland
@@ -204,7 +207,8 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     # vlc depends on a c11-gcc wrapper script which we don't have so we need to
     # set the path to the compiler
-    BUILDCC = "${stdenv.cc}/bin/gcc";
+    BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
+    PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = "wayland-scanner";
   } // lib.optionalAttrs (!stdenv.hostPlatform.isAarch) {
     LIVE555_PREFIX = live555;
   };
@@ -227,6 +231,11 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace modules/text_renderer/freetype/platform_fonts.h --replace \
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
+  '' + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
+    # Upstream luac can't cross compile, so we have to install the lua
+    # sources, not bytecode:
+    # https://www.lua.org/wshop13/Jericke.pdf#page=39
+    substituteInPlace share/Makefile.am --replace $'.luac \\\n' $'.lua \\\n'
   '';
 
   enableParallelBuilding = true;
@@ -240,9 +249,13 @@ stdenv.mkDerivation (finalAttrs: {
   # - Touch plugins (plugins cache keyed off mtime and file size:
   #     https://github.com/NixOS/nixpkgs/pull/35124#issuecomment-370552830
   # - Remove references to the Qt development headers (used in error messages)
+  #
+  # pkgsBuildBuild is used here because buildPackages.libvlc somehow
+  # depends on a qt5.qttranslations that doesn't build, even though it
+  # should be the same as pkgsBuildBuild.qt5.qttranslations.
   postFixup = ''
     find $out/lib/vlc/plugins -exec touch -d @1 '{}' ';'
-    $out/lib/vlc/vlc-cache-gen $out/vlc/plugins
+    ${if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else pkgsBuildBuild.libvlc}/lib/vlc/vlc-cache-gen $out/vlc/plugins
   '' + optionalString withQt5 ''
     remove-references-to -t "${qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';

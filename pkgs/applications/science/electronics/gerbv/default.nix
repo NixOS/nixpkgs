@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gerbv";
-  version = "2.9.8";
+  version = "2.10.0";
 
   src = fetchFromGitHub {
     owner = "gerbv";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-6r9C5qDOXsQoLsYMSCuIS01gI0ijH7WDoepcowo1yQw=";
+    hash = "sha256-sr48RGLYcMKuyH9p+5BhnR6QpKBvNOqqtRryw3+pbBk=";
   };
 
   postPatch = ''

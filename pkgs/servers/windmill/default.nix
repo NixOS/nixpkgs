@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildNpmPackage
 , bash
+, cmake
 , cairo
 , deno
 , fetchurl
@@ -23,13 +24,13 @@
 
 let
   pname = "windmill";
-  version = "1.100.1";
+  version = "1.160.0";
 
   fullSrc = fetchFromGitHub {
     owner = "windmill-labs";
-    repo = pname;
+    repo = "windmill";
     rev = "v${version}";
-    sha256 = "sha256-o9obIvtFRNGfyOWmAQVLfAmLhwtJVHZWNxGaG7lbbC8=";
+    hash = "sha256-WsIYGqBBcLq5CE/zcgqPVCYtxM3GfSxSqF2JeW6C0ss=";
   };
 
   pythonEnv = python3.withPackages (ps: [ ps.pip-tools ]);
@@ -40,9 +41,9 @@ let
     pname = "windmill-ui";
     src = fullSrc;
 
-    sourceRoot = "source/frontend";
+    sourceRoot = "${fullSrc.name}/frontend";
 
-    npmDepsHash = "sha256-nRx/UQ7GU1iwhddTotCTG08RoOmdbP66zGKYsEp9XOE=";
+    npmDepsHash = "sha256-GUrOfN3SyxkvQllgHXDao8JFl5zY4DBxftelsX0Rkqo=";
 
     preBuild = ''
       npm run generate-backend-client
@@ -61,33 +62,34 @@ rustPlatform.buildRustPackage {
   inherit pname version;
   src = "${fullSrc}/backend";
 
-  SQLX_OFFLINE = "true";
-  RUSTY_V8_ARCHIVE =
-    let
-      arch = rust.toRustTarget stdenv.hostPlatform;
-      fetch_librusty_v8 = args:
-        fetchurl {
-          name = "librusty_v8-${args.version}";
-          url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${arch}.a";
-          sha256 = args.shas.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
-          meta = { inherit (args) version; };
+  env = {
+    SQLX_OFFLINE = "true";
+    RUSTY_V8_ARCHIVE =
+      let
+        arch = rust.toRustTarget stdenv.hostPlatform;
+        fetch_librusty_v8 = args:
+          fetchurl {
+            name = "librusty_v8-${args.version}";
+            url = "https://github.com/denoland/rusty_v8/releases/download/v${args.version}/librusty_v8_release_${arch}.a";
+            sha256 = args.shas.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+            meta = { inherit (args) version; };
+          };
+      in
+      fetch_librusty_v8 {
+        version = "0.74.3";
+        shas = {
+          x86_64-linux = "sha256-8pa8nqA6rbOSBVnp2Q8/IQqh/rfYQU57hMgwU9+iz4A=";
+          aarch64-linux = "sha256-3kXOV8rlCNbNBdXgOtd3S94qO+JIKyOByA4WGX+XVP0=";
+          x86_64-darwin = "sha256-iBBVKZiSoo08YEQ8J/Rt1/5b7a+2xjtuS6QL/Wod5nQ=";
+          aarch64-darwin = "sha256-Djnuc3l/jQKvBf1aej8LG5Ot2wPT0m5Zo1B24l1UHsM=";
         };
-    in
-    fetch_librusty_v8 {
-      version = "0.71.0";
-      shas = {
-        x86_64-linux = "sha256-52usT7MsLme3o3tjxcRJ0U3iX0fKtnvEvyKJeuL1Bvc=";
-        aarch64-linux = "sha256-E7CjpBO1cV5wFtLTIPPltGAyX1OEPjfhnVUQ4u3Mzxs=";
-        x86_64-darwin = "sha256-+Vj0SgvenrCuHPSYKFoxXTyfWDFbnUgHtWibNnXwbVk=";
-        aarch64-darwin = "sha256-p7BaC2nkZ+BGRPSXogpHshBblDe3ZDMGV93gA4sqpUc=";
       };
-    };
+  };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "progenitor-0.3.0" = "sha256-EPiAeAKCYBHiISGdXyuqlX/+Xp1feQmniLzt/FIDiLw=";
-      "typify-0.0.12" = "sha256-LfFUhr40jKQNO6be2RWend3mbZ/b6i2eljGLx0UTunY=";
+      "progenitor-0.3.0" = "sha256-F6XRZFVIN6/HfcM8yI/PyNke45FL7jbcznIiqj22eIQ=";
     };
   };
 
@@ -101,11 +103,26 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace windmill-worker/src/worker.rs \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
+
+    substituteInPlace windmill-api/src/lib.rs \
+      --replace 'unknown-version' 'v${version}'
+
+    substituteInPlace src/main.rs \
+      --replace 'unknown-version' 'v${version}'
   '';
 
-  buildInputs = [ openssl rustfmt lld ];
+  buildInputs = [
+    openssl
+    rustfmt
+    lld
+  ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper swagger-cli ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+    swagger-cli
+    cmake # for libz-ng-sys crate
+  ];
 
   preBuild = ''
     pushd ..
@@ -132,11 +149,13 @@ rustPlatform.buildRustPackage {
       --set NSJAIL_PATH "${nsjail}/bin/nsjail"
   '';
 
-  meta = with lib; {
-    description = "Open-source web IDE, scalable runtime and platform for serverless, workflows and UIs";
+  meta = {
+    changelog = "https://github.com/windmill-labs/windmill/blob/${fullSrc.rev}/CHANGELOG.md";
+    description = "Open-source developer platform to turn scripts into workflows and UIs";
     homepage = "https://windmill.dev";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
+    mainProgram = "windmill";
     # limited by librusty_v8
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

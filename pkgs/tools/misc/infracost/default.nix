@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "infracost";
-  version = "0.10.26";
+  version = "0.10.29";
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
-    sha256 = "sha256-Tw+peSlcnSge4xOXslsFT6UTz7NQsy1Sy89vP2YjI90=";
+    sha256 = "sha256-xtxTIC7DNTvcDMXtFJOJkJGn78HdzCWVrBMS5Ksmtcc=";
   };
-  vendorHash = "sha256-nObY/79e6I5PYso917rZxwVt6pwwI5BY0nguP/1yirc=";
+  vendorHash = "sha256-ZKRtUlrEk/W2qZSbsh0ddwmspH6quzzY0cFSQmO0i10=";
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -62,6 +62,6 @@ buildGoModule rec {
       compare different deployment options upfront.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ davegallant jk ];
+    maintainers = with maintainers; [ davegallant jk kashw2 ];
   };
 }

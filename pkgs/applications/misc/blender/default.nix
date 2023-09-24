@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "3.6.0";
+  version = "3.6.2";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-SzdWyzdGhsaesv1VX5ZUfUnLHvRvW8buJTlOVxz6yOk=";
+    hash = "sha256-olEmcOM3VKo/IWOhQp/qOkdJvwzM7bCkf8i8Bzh07Eg=";
   };
 
   patches = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional cudaSupport cudaPackages.cudatoolkit
     ++ lib.optional colladaSupport opencollada
     ++ lib.optional spaceNavSupport libspnav;
-  pythonPath = with python310Packages; [ numpy requests ];
+  pythonPath = with python310Packages; [ numpy requests zstandard ];
 
   postPatch = ''
   '' +
@@ -196,5 +196,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ goibhniu veprbl ];
+    mainProgram = "blender";
   };
 }

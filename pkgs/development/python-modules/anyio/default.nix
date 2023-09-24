@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "3.7.0";
+  version = "3.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = pname;
     rev = version;
-    hash = "sha256-uXPp2ycYl3T/ybZihDchImC/Yi4qgHI37ZeA+I6dg4c=";
+    hash = "sha256-9/pAcVTzw9v57E5l4d8zNyBJM+QNGEuLKrQ0WUBW5xw=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

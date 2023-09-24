@@ -22,6 +22,7 @@ let
           inherit version;
           hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
+        disabledTests = [ "test_bytes_args" ];
       });
     };
   };

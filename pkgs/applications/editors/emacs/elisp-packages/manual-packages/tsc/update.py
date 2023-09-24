@@ -96,12 +96,12 @@ if __name__ == "__main__":
         drv_path = eval_drv(
             nixpkgs,
             """
-        rustPlatform.buildRustPackage {
+        rustPlatform.buildRustPackage rec {
           pname = "tsc-dyn";
           version = "%s";
           nativeBuildInputs = [ clang ];
           src = fetchFromGitHub (lib.importJSON %s);
-          sourceRoot = "source/core";
+          sourceRoot = "${src.name}/core";
           cargoHash = lib.fakeHash;
         }
         """

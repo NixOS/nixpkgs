@@ -23,7 +23,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
   nativeBuildInputs = [
     pybind11

@@ -3,16 +3,16 @@
     "sha256": "1kdpma5f3rb9g29j364lqv6bkar5qgwlvcxmhpmzllwlkmjpc9w8",
     "url": "https://github.com/nextcloud/bookmarks/releases/download/v12.1.0/bookmarks-12.1.0.tar.gz",
     "version": "12.1.0",
-    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP v7.4+\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
+    "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- 🔍 Full-text search\n- 📲 Synchronize with all your browsers and devices\n- 👪 Share bookmarks with other users and publicly\n- ☠ Find broken links\n- ⚛ Generate RSS feeds of your collections\n- 📔 Read archived versions of your links in case they are depublished\n- 💬 Create new bookmarks directly from within Nextcloud Talk\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
       "agpl"
     ]
   },
   "calendar": {
-    "sha256": "00m00jm6x6kkwbn8v7v0yjmr7m5isizsyll4nqy409c1jvmhq2rq",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.4.3/calendar-v4.4.3.tar.gz",
-    "version": "4.4.3",
+    "sha256": "0liws0xkndrx5qd06hn3n5jg7yl02w38j0nj37wyrv4qjk9w6n7v",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.4.4/calendar-v4.4.4.tar.gz",
+    "version": "4.4.4",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -80,9 +80,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "1mcb3dw1kx7fd35hm30af88wkfwc5q6jfqph2vmf1a0k5nkjg7vc",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.4/groupfolders-v13.1.4.tar.gz",
-    "version": "13.1.4",
+    "sha256": "1yfhy14cfz16ax5i8d6zhl4m161qzy98xzm36y1656rh96i2ksbx",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.5/groupfolders-v13.1.5.tar.gz",
+    "version": "13.1.5",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -120,8 +120,8 @@
     ]
   },
   "maps": {
-    "sha256": "0517kakkk7lr7ays6rrnl276709kcm5yvkp8g6cwjnfih7pmnkn9",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.1.0-2a-nightly/maps-1.1.0-2a-nightly.tar.gz",
+    "sha256": "12dg1bklv2jhmj5dnz4ram6zvgf8kipfz77g1lcn77fyhzqw6y1z",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.1.0/maps-1.1.0.tar.gz",
     "version": "1.1.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -140,9 +140,9 @@
     ]
   },
   "news": {
-    "sha256": "0fr72j4al8mi6fr7cdsyvvnp5cc39mphaaf3bcpkxy4a2v2hn2k0",
-    "url": "https://github.com/nextcloud/news/releases/download/21.2.0/news.tar.gz",
-    "version": "21.2.0",
+    "sha256": "1j9dhqz5anwsmw3f8hbhvqc2h1fp15zmxzdbpnz1p3vwqf8f5cjs",
+    "url": "https://github.com/nextcloud/news/releases/download/23.0.0/news.tar.gz",
+    "version": "23.0.0",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -170,9 +170,9 @@
     ]
   },
   "onlyoffice": {
-    "sha256": "10axh9a4w8y3iw95xdjn4q8wjg5459dki42xb6cax5ikimyfv07j",
-    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v7.8.0/onlyoffice.tar.gz",
-    "version": "7.8.0",
+    "sha256": "12hzmngps86ha4lcfwaf62svfz41aywykq0z419r644g5i4v7raq",
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-nextcloud/releases/download/v7.9.0/onlyoffice.tar.gz",
+    "version": "7.9.0",
     "description": "ONLYOFFICE connector allows you to view, edit and collaborate on text documents, spreadsheets and presentations within Nextcloud using ONLYOFFICE Docs. This will create a new Edit in ONLYOFFICE action within the document library for Office documents. This allows multiple users to co-author documents in real time from the familiar web interface and save the changes back to your file storage.",
     "homepage": "https://www.onlyoffice.com",
     "licenses": [
@@ -280,9 +280,9 @@
     ]
   },
   "user_saml": {
-    "sha256": "0kf8h6z32x2gr87lm0l2cc7lghs8s222553lczxlfgj1xbi7486n",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.1/user_saml-v5.2.1.tar.gz",
-    "version": "5.2.1",
+    "sha256": "1gsq5mcn5nnxd56jlp4j2610gqq2gk3ma9yvhgy74wl0sqil98jd",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v5.2.2/user_saml-v5.2.2.tar.gz",
+    "version": "5.2.2",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [

@@ -20,8 +20,7 @@ let
   };
 
   linux = stdenv.mkDerivation rec {
-    pname = "trilium-desktop";
-    inherit version;
+    inherit pname version meta;
 
     src = fetchurl linuxSource;
 

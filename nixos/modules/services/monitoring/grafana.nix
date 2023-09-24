@@ -88,26 +88,6 @@ let
   # Get a submodule without any embedded metadata:
   _filter = x: filterAttrs (k: v: k != "_module") x;
 
-  # FIXME(@Ma27) remove before 23.05. This is just a helper-type
-  # because `mkRenamedOptionModule` doesn't work if `foo.bar` is renamed
-  # to `foo.bar.baz`.
-  submodule' = module: types.coercedTo
-    (mkOptionType {
-      name = "grafana-provision-submodule";
-      description = "Wrapper-type for backwards compat of Grafana's declarative provisioning";
-      check = x:
-        if builtins.isList x then
-          throw ''
-            Provisioning dashboards and datasources declaratively by
-            setting `dashboards` or `datasources` to a list is not supported
-            anymore. Use `services.grafana.provision.datasources.settings.datasources`
-            (or `services.grafana.provision.dashboards.settings.providers`) instead.
-          ''
-        else isAttrs x || isFunction x;
-    })
-    id
-    (types.submodule module);
-
   # http://docs.grafana.org/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
@@ -1160,7 +1140,7 @@ in
           Declaratively provision Grafana's datasources.
         '';
         default = { };
-        type = submodule' {
+        type = types.submodule {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana datasource configuration in Nix. Can't be used with
@@ -1235,7 +1215,7 @@ in
           Declaratively provision Grafana's dashboards.
         '';
         default = { };
-        type = submodule' {
+        type = types.submodule {
           options.settings = mkOption {
             description = lib.mdDoc ''
               Grafana dashboard configuration in Nix. Can't be used with

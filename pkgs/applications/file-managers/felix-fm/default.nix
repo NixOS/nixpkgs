@@ -9,21 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "felix";
-  version = "2.6.0";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "kyoheiu";
-    repo = pname;
+    repo = "felix";
     rev = "v${version}";
-    sha256 = "sha256-e/NJmlXo6x/NUWU/JlVDItQK4c2XDC4unNNE+BUI5OE=";
+    hash = "sha256-RDCX5+Viq/VRb0SXUYxCtWF+aVahI5WGhp9/Vn+uHqI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "syntect-5.0.0" = "sha256-RMdO5+oHLpNlAynvNIbCI0ia4KzaOO9IYwpiX6ZTwno=";
-    };
-  };
+  cargoHash = "sha256-kgI+afly+/Ag0witToM95L9b3yQXP5Gskwl4Lf4SusY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,6 +36,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=functions::tests::test_list_up_contents"
     "--skip=state::tests::test_has_write_permission"
   ];
+
+  # Cargo.lock is outdated
+  postConfigure = ''
+    cargo metadata --offline
+  '';
 
   meta = with lib; {
     description = "A tui file manager with vim-like key mapping";

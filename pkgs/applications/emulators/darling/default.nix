@@ -227,5 +227,6 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "darling";
   };
 }

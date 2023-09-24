@@ -1,4 +1,4 @@
-{ fetchzip, lib, rustPlatform, git, installShellFiles, makeWrapper }:
+{ fetchpatch, fetchzip, lib, rustPlatform, git, installShellFiles, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
@@ -13,6 +13,13 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-/LCtfyDAA2JuioBD/CDMv6OOxM0B9A3PpuVP/YY5oF0=";
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/helix-editor/helix/pull/7227.patch";
+      hash = "sha256-dObMKHNJfc5TODUjZ28TVxuTen02rl8HzcXpFWnhB1k=";
+    })
+  ];
 
   nativeBuildInputs = [ git installShellFiles makeWrapper ];
 

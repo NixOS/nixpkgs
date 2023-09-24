@@ -108,7 +108,7 @@ fn fixup_lockfile(
 
 // Recursive helper to fixup v1 lockfile deps
 fn fixup_v1_deps(
-    dependencies: &mut serde_json::Map<String, Value>,
+    dependencies: &mut Map<String, Value>,
     cache: &Option<HashMap<String, String>>,
     fixed: &mut bool,
 ) {

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pynina";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyNINA";
     inherit version;
-    hash = "sha256-HyOk3W95dEl+p8YGh3xP29HcvbncqxsUaWSQUiKgTWM=";
+    hash = "sha256-uiNUkNL/3FGGhqctE9AZNdSD4o7jTk829GAT5Gy2Xeo=";
   };
 
   propagatedBuildInputs = [

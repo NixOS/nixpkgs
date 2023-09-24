@@ -30,17 +30,17 @@
 
 buildPythonPackage rec {
   pname = "dbt-core";
-  version = "1.5.3";
+  version = "1.5.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZgP11fVMtXpzo9QaTkejvKl0LzCAkIyGBMcOquBirxQ=";
+    hash = "sha256-aAe3sNa4CxqynsFHoTLEYWo12jEF/LAyYMqnpy5cTbg=";
   };
 
-  sourceRoot = "source/core";
+  sourceRoot = "${src.name}/core";
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -51,6 +51,7 @@ buildPythonPackage rec {
     "click"
     "mashumaro"
     "networkx"
+    "logbook"
   ];
 
   propagatedBuildInputs = [

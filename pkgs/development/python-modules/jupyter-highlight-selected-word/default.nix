@@ -14,6 +14,9 @@ buildPythonPackage rec {
     hash = "sha256-KgM//SIfES46uZySwNR4ZOcolnJORltvThsmEvxXoIs=";
   };
 
+  # This package does not have tests
+  doChecks = false;
+
   pythonImportsCheck = [ "jupyter_highlight_selected_word" ];
 
   meta = with lib; {

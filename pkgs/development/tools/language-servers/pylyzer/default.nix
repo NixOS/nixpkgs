@@ -5,27 +5,30 @@
 , git
 , python3
 , makeWrapper
+, writeScriptBin
 , darwin
 , which
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.37";
+  version = "0.0.47";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "v${version}";
-    hash = "sha256-MzcGWOJud8SA6cpTdhms+Hfi0sAqelOr7dgy/k1H+qw=";
+    hash = "sha256-edLzBQvyanF7ozkDH+aqUF8j8r2cNKBKxLvEyPoCRIc=";
   };
 
-  cargoHash = "sha256-Xl0YxBmhhFKBzxbO1GXIds3XdSS78/7Z1rOAmLgTYSw=";
+  cargoHash = "sha256-moTOErMKe7+3lAAOfz3F3cGzYB+xXqtNLPO3134JFl0=";
 
   nativeBuildInputs = [
     git
     python3
     makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    (writeScriptBin "diskutil" "")
   ];
 
   buildInputs = [

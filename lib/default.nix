@@ -41,6 +41,7 @@ let
 
     # serialization
     cli = callLibs ./cli.nix;
+    gvariant = callLibs ./gvariant.nix;
     generators = callLibs ./generators.nix;
 
     # misc
@@ -54,6 +55,7 @@ let
     # Eval-time filesystem handling
     path = callLibs ./path;
     filesystem = callLibs ./filesystem.nix;
+    fileset = callLibs ./fileset;
     sources = callLibs ./sources.nix;
 
     # back-compat aliases
@@ -112,11 +114,11 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
-      makeScope makeScopeWithSplicing;
+      makeScope makeScopeWithSplicing makeScopeWithSplicing';
     inherit (self.derivations) lazyDerivation;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
-      hiPrioSet getLicenseFromSpdxId getExe;
+      hiPrioSet getLicenseFromSpdxId getExe getExe';
     inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile;
     inherit (self.sources) cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices

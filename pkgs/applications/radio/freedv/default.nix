@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
-  version = "1.8.12";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
-    hash = "sha256-5qq7EDCLAiCReFS1V8R2SkFI8CesmQclimcE3USGV/U=";
+    hash = "sha256-SBWwAmIsa9HfaZpH8TioMm9IaoZ+x4HNHaOBps0vA0A=";
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
     "-DUNITTEST=ON"
-  ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
+    "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     "-DAPPLE_OLD_XCODE"

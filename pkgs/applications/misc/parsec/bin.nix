@@ -1,13 +1,25 @@
-{ stdenvNoCC, stdenv
+{ stdenvNoCC
+, stdenv
 , lib
-, dpkg, autoPatchelfHook, makeWrapper
+, dpkg
+, autoPatchelfHook
+, makeWrapper
 , fetchurl
-, alsa-lib, openssl, udev
+, alsa-lib
+, openssl
+, udev
 , libglvnd
-, libX11, libXcursor, libXi, libXrandr
+, libX11
+, libXcursor
+, libXi
+, libXrandr
+, libXfixes
 , libpulseaudio
 , libva
 , ffmpeg
+, libpng
+, libjpeg8
+, curl
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,7 +27,7 @@ stdenvNoCC.mkDerivation {
   version = "150_86e";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20230124210253/https://builds.parsecgaming.com/package/parsec-linux.deb";
+    url = "https://web.archive.org/web/20230531105208/https://builds.parsec.app/package/parsec-linux.deb";
     sha256 = "sha256-wwBy86TdrHaH9ia40yh24yd5G84WTXREihR+9I6o6uU=";
   };
 
@@ -44,10 +56,14 @@ stdenvNoCC.mkDerivation {
     libpulseaudio
     libva
     ffmpeg
+    libpng
+    libjpeg8
+    curl
     libX11
     libXcursor
     libXi
     libXrandr
+    libXfixes
   ];
 
   prepareParsec = ''
@@ -72,6 +88,19 @@ stdenvNoCC.mkDerivation {
       --replace "/usr/share/icons" "${placeholder "out"}/share/icons"
 
     runHook postInstall
+  '';
+
+  # Only the main binary needs to be patched, the wrapper script handles
+  # everything else. The libraries in `share/parsec/skel` would otherwise
+  # contain dangling references when copied out of the nix store.
+  dontAutoPatchelf = true;
+
+  fixupPhase = ''
+    runHook preFixup
+
+    autoPatchelf $out/bin
+
+    runHook postFixup
   '';
 
   meta = with lib; {

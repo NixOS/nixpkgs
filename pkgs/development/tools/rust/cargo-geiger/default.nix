@@ -54,6 +54,6 @@ rustPlatform.buildRustPackage rec {
       code is appropriate.
     '';
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ evanjs jk ];
+    maintainers = with maintainers; [ evanjs jk matthiasbeyer ];
   };
 }

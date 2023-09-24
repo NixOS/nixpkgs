@@ -18,6 +18,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/the-lean-crate/cargo-diet";
     changelog = "https://github.com/the-lean-crate/cargo-diet/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

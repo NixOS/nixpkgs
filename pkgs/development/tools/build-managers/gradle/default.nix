@@ -119,6 +119,7 @@ rec {
         ];
         license = licenses.asl20;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
+        mainProgram = "gradle";
       };
     };
 
@@ -127,9 +128,9 @@ rec {
   # https://docs.gradle.org/current/userguide/compatibility.html
 
   gradle_8 = gen {
-    version = "8.2.1";
+    version = "8.3";
     nativeVersion = "0.22-milestone-24";
-    sha256 = "1lasx96qgh1pjmjjk8a5a772ppgqmp33mp6axyfsjalg71nigv03";
+    sha256 = "09cjyss4bcnig1wzhxpwyn4kznkawzaha7fy0jg5nqzw2ysma62r";
     defaultJava = jdk17;
   };
 

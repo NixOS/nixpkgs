@@ -43,16 +43,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.9";
+  version = "0.0.19";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-faK0KShbMUuvFbR2m9oCeWSwwrSxyXNWreODtHFyp5U=";
+    hash = "sha256-N7eHIyp2imkMUVwiOCameOROoaDJ7g+zNKdIB2aGZy0=";
   };
 
-  cargoHash = "sha256-54uyqk6fW3pHCK7JC5T7c8C/0Hcq0K/PBn71tNwnA0g=";
+  cargoHash = "sha256-XD+/DaaJEJ9jHZITTUma/wfsbduPUTc/SralPOx46Yo=";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -78,6 +78,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    install -D -m 644 misc/rio.desktop -t $out/share/applications
+    install -D -m 644 rio/src/screen/window/resources/images/logo.png \
+                      $out/share/icons/hicolor/scalable/apps/rio.png
+
     install -dm 755 "$terminfo/share/terminfo/r/"
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support

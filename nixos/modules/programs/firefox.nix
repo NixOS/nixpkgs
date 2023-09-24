@@ -53,7 +53,7 @@ in
     };
 
     preferences = mkOption {
-      type = with types; attrsOf (oneOf [ bool int string ]);
+      type = with types; attrsOf (oneOf [ bool int str ]);
       default = { };
       description = mdDoc ''
         Preferences to set from `about:config`.

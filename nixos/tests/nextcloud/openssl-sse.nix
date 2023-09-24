@@ -33,7 +33,7 @@ in {
     withRcloneEnv = host: pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://${host}/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://${host}/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -49,8 +49,8 @@ in {
       #!${pkgs.runtimeShell}
       echo 'bye' | ${withRcloneEnv3} ${pkgs.rclone}/bin/rclone rcat nextcloud:test-shared-file2
     '';
-    openssl1-node = nodes.nextcloudwithopenssl1.config.system.build.toplevel;
-    openssl3-node = nodes.nextcloudwithopenssl3.config.system.build.toplevel;
+    openssl1-node = nodes.nextcloudwithopenssl1.system.build.toplevel;
+    openssl3-node = nodes.nextcloudwithopenssl3.system.build.toplevel;
   in ''
     nextcloudwithopenssl1.start()
     nextcloudwithopenssl1.wait_for_unit("multi-user.target")

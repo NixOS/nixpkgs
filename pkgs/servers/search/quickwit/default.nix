@@ -11,7 +11,7 @@ let
   pname = "quickwit";
   version = "0.6.2";
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
       --replace '&[]' '&["."]'
   '';
 
-  sourceRoot = "source/quickwit";
+  sourceRoot = "${src.name}/quickwit";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

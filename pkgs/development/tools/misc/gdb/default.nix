@@ -10,6 +10,7 @@
 , enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
 , hostCpuOnly ? false
+, enableSim ? false
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
@@ -113,7 +114,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
-    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
+    ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
+    ++ lib.optional (!enableSim) "--disable-sim";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

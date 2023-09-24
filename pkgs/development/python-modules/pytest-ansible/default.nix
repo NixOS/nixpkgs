@@ -8,11 +8,14 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "3.1.5";
+  version = "3.2.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,13 +24,21 @@ buildPythonPackage rec {
     owner = "ansible";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-stsgVJseZ02C7nG0Hm0wfAnhoLpM3qRZ2Lkr1N5hODw=";
+    hash = "sha256-fSerRbd7QeEdTfyy2lVLq7FKHWWT0MlutonunHhM5M4=";
   };
 
   postPatch = ''
     substituteInPlace tests/conftest.py inventory \
       --replace '/usr/bin/env' '${coreutils}/bin/env'
   '';
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   buildInputs = [
     pytest
@@ -78,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jlaska/pytest-ansible";
     changelog = "https://github.com/ansible-community/pytest-ansible/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ tjni ];
   };
 }

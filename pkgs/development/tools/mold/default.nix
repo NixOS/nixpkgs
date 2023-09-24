@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dEmwVgo9XiU3WtObVL5VbFW7rEzdFfnRepcbyGxX1JM=";
+    hash = "sha256-4W6quVSkxS2I6KEy3fVyBTypD0fg4EecgeEVM0Yw58s=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +33,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.isDarwin) [
     mimalloc
   ];
-
-  patches = [
-    ./fix-debug-strip.patch # fix --debug-strip; https://github.com/rui314/mold/pull/1038
-  ];
-
-  postPatch = ''
-    sed -i CMakeLists.txt -e '/.*set(DEST\ .*/d'
-  '';
 
   cmakeFlags = [
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
@@ -66,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi nitsky ];
+    maintainers = with maintainers; [ azahi nitsky paveloom ];
     platforms = platforms.unix;
   };
 }

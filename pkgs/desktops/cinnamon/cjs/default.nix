@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
     pkg-config
     which # for locale detection
     libxml2 # for xml-stripblanks
+    gobject-introspection
   ];
 
   buildInputs = [
-    gobject-introspection
     cairo
     readline
     spidermonkey_102

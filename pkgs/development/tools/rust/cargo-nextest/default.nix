@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.54";
+  version = "0.9.58";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    hash = "sha256-HkDGW91XDoYMfknPg6td51KTYniCfGtGQd3dkzumRpo=";
+    hash = "sha256-D3mSDh6IliKbtxitMRXy1L4YH/qZfdXtXiPvf45mTno=";
   };
 
-  cargoHash = "sha256-McL5G/PtdOou17hWLiNTSJEjTh4YpT1GUPjTMAVNxQA=";
+  cargoHash = "sha256-TjQHSaBVM4pJoTp6Vdz6WGWIyw5uC6UG7Wle6LsXP+4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nextest-rs/nextest";
     changelog = "https://nexte.st/CHANGELOG.html";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ ekleog figsoda ];
+    maintainers = with maintainers; [ ekleog figsoda matthiasbeyer ];
   };
 }

@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
       you need to set "security.pam.services.swaylock = {};" manually.
     '';
     inherit (src.meta) homepage;
+    mainProgram = "swaylock";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

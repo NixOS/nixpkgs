@@ -2,24 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "nuspell";
-  version = "5.1.2";
+  version = "5.1.3";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "sha256-nGC8Um9GutJZXlUcUCK0IiHxMaZmeoe4febw/jC2dRU=";
+    hash = "sha256-ww7Kqzlnf7065i9RZLeFDUOPBMCVgV/6sBnN0+WvBTk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ catch2 ];
   propagatedBuildInputs = [ icu ];
 
-  outputs = [ "out" "lib" "dev" ];
+  cmakeFlags = [ "-DBUILD_TESTING=YES" ];
+  doCheck = true;
 
-  postPatch = ''
-    rm -rf external/Catch2
-    ln -sf ${catch2.src} external/Catch2
-  '';
+  outputs = [ "out" "lib" "dev" ];
 
   meta = with lib; {
     description = "Free and open source C++ spell checking library";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, libcaca }:
+{ lib, stdenv, fetchurl, pkg-config, libcaca, toilet, testers }:
 
 stdenv.mkDerivation rec {
   pname = "toilet";
@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libcaca ];
+
+  passthru.tests.version = testers.testVersion {
+    package = toilet;
+  };
 
   meta = with lib; {
     description = "Display large colourful characters in text mode";

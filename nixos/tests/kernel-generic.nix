@@ -32,6 +32,7 @@ let
       linux_5_15_hardened
       linux_6_1_hardened
       linux_6_4_hardened
+      linux_6_5_hardened
       linux_rt_5_4
       linux_rt_5_10
       linux_rt_5_15
@@ -42,7 +43,9 @@ let
   };
 
 in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
-  inherit testsForLinuxPackages;
+  passthru = {
+    inherit testsForLinuxPackages;
 
-  testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
+    testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
+  };
 }

@@ -80,6 +80,15 @@ in
         using the EDITOR environment variable.
       '';
     };
+
+    startWithGraphical = mkOption {
+      type = types.bool;
+      default = config.services.xserver.enable;
+      defaultText = literalExpression "config.services.xserver.enable";
+      description = lib.mdDoc ''
+        Start emacs with the graphical session instead of any session. Without this, emacs clients will not be able to create frames in the graphical session.
+      '';
+    };
   };
 
   config = mkIf (cfg.enable || cfg.install) {
@@ -92,7 +101,13 @@ in
         ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
         Restart = "always";
       };
-    } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
+
+      unitConfig = optionalAttrs cfg.startWithGraphical {
+        After = "graphical-session.target";
+      };
+    } // optionalAttrs cfg.enable {
+      wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
+    };
 
     environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
 

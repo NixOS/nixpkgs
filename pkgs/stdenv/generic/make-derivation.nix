@@ -48,7 +48,7 @@ let
 
     in finalPackage;
 
-  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
+  #makeDerivationExtensibleConst = attrs: makeDerivationExtensible (_: attrs);
   # but pre-evaluated for a slight improvement in performance.
   makeDerivationExtensibleConst = attrs:
     mkDerivationSimple
@@ -377,6 +377,8 @@ else let
           "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
         ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
           "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+        ] ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+          "-DCMAKE_CROSSCOMPILING_EMULATOR=env"
         ]);
 
       mesonFlags =

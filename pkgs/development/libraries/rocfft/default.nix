@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-test";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "source/clients/tests";
+      sourceRoot = "${finalAttrs.src.name}/clients/tests";
 
       nativeBuildInputs = [
         cmake
@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-benchmark";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "source/clients/rider";
+      sourceRoot = "${finalAttrs.src.name}/clients/rider";
 
       nativeBuildInputs = [
         cmake
@@ -197,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-samples";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "source/clients/samples";
+      sourceRoot = "${finalAttrs.src.name}/clients/samples";
 
       nativeBuildInputs = [
         cmake

@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.7.11";
+  version = "3.9.10";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rrxY5liF4IzuaZ3kjJ2zEUzK1p7jGbS/T/bM1HQGzbA=";
+    hash = "sha256-cUcfXoqNKe5Ok0vDqe0uCpV84XokKe4iXbWeTm1Qv14=";
   };
 
   postPatch = ''
@@ -22,8 +22,10 @@ python3.pkgs.buildPythonApplication rec {
     sed 's/[~<>=][^;]*//' -i requirements.txt
   '';
 
-  # ~400 failures
-  doCheck = false;
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
@@ -42,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     psutil
     pynzb
+    pyrsistent
     pyrss2gen
     python-dateutil
     pyyaml
@@ -72,6 +75,9 @@ python3.pkgs.buildPythonApplication rec {
     "flexget"
     "flexget.plugins.clients.transmission"
   ];
+
+  # ~400 failures
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://flexget.com/";

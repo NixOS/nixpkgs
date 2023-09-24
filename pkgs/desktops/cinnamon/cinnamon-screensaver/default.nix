@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     libtool
     meson
     ninja
+    gobject-introspection
   ];
 
   buildInputs = [
     # from meson.build
-    gobject-introspection
     gtk3
     glib
 

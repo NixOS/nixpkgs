@@ -638,6 +638,40 @@ rec {
     # Input list
     list: sublist count (length list) list;
 
+  /* Whether the first list is a prefix of the second list.
+
+  Type: hasPrefix :: [a] -> [a] -> bool
+
+  Example:
+    hasPrefix [ 1 2 ] [ 1 2 3 4 ]
+    => true
+    hasPrefix [ 0 1 ] [ 1 2 3 4 ]
+    => false
+  */
+  hasPrefix =
+    list1:
+    list2:
+    take (length list1) list2 == list1;
+
+  /* Remove the first list as a prefix from the second list.
+  Error if the first list isn't a prefix of the second list.
+
+  Type: removePrefix :: [a] -> [a] -> [a]
+
+  Example:
+    removePrefix [ 1 2 ] [ 1 2 3 4 ]
+    => [ 3 4 ]
+    removePrefix [ 0 1 ] [ 1 2 3 4 ]
+    => <error>
+  */
+  removePrefix =
+    list1:
+    list2:
+    if hasPrefix list1 list2 then
+      drop (length list1) list2
+    else
+      throw "lib.lists.removePrefix: First argument is not a list prefix of the second argument";
+
   /* Return a list consisting of at most `count` elements of `list`,
      starting at index `start`.
 

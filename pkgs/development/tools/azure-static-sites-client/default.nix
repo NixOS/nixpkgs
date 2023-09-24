@@ -6,7 +6,7 @@
 , icu70
 , libkrb5
 , lttng-ust
-, openssl_1_1
+, openssl
 , zlib
 , azure-static-sites-client
   # "latest", "stable" or "backup"
@@ -37,9 +37,9 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     icu70
-    openssl_1_1
     libkrb5
     lttng-ust
+    openssl
     stdenv.cc.cc.lib
     zlib
   ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
 
     patchelf --add-needed 'libgssapi_krb5.so' \
              --add-needed 'liblttng-ust.so'   \
-             --add-needed 'libssl.so.1.1'     \
+             --add-needed 'libssl.so.3'     \
              "$out/bin/StaticSitesClient"
 
     runHook postInstall

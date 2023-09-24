@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.10.2";
+  version = "2.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
-    hash = "sha256-W7aCSekm6vZSlEAgwgrwmUBV2/jCiBol7JyNMYUVpPY=";
+    hash = "sha256-mblj6SQK/az2al81wMiWXHuyn1+30jfAxrWGv9Nw/gw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  propagatedBuildInput = [
+  propagatedBuildInputs = [
     pip
   ];
 

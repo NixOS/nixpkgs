@@ -99,7 +99,7 @@ in py.pkgs.buildPythonApplication rec {
     homepage = "https://peering-manager.net/";
     license = licenses.asl20;
     description = "BGP sessions management tool";
-    maintainers = with maintainers; [ yuka ];
+    maintainers = teams.wdz.members;
     platforms = platforms.linux;
   };
 }

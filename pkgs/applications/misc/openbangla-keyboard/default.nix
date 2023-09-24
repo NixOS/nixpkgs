@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     postPatch = ''
       cp ${./Cargo.lock} Cargo.lock
     '';
-    sourceRoot = "source/${cargoRoot}";
+    sourceRoot = "${src.name}/${cargoRoot}";
     sha256 = "sha256-01MWuUUirsgpoprMArRp3qxKNayPHTkYWk31nXcIC34=";
   };
 

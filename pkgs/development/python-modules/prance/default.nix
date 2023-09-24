@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.22.02.22.0";
+  version = "23.06.21.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-NtIbZp34IcMYJzaNQVL9GLdNS3NYOCRoWS1wGg/gLVA=";
+    hash = "sha256-p+LZbQal4DPeMp+eJ2O83rCaL+QIUDcU34pZhYdN4bE=";
   };
 
   postPatch = ''
@@ -70,6 +70,7 @@ buildPythonPackage rec {
     "test_convert_defaults"
     "test_convert_output"
     "test_fetch_url_http"
+    "test_openapi_spec_validator_validate_failure"
   ];
   pythonImportsCheck = [ "prance" ];
 

@@ -1,19 +1,33 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtscript, qtsvg,
-  wrapQtAppsHook, poppler, zlib, pkg-config }:
+{ stdenv, lib, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qt5compat, quazip
+, hunspell
+, wrapQtAppsHook, poppler, zlib, pkg-config }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.5.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
-    owner = "${pname}-org";
-    repo = pname;
-    rev = version;
-    hash = "sha256-L+q4+k4XWywnxIvhfXPCBeCqnGj4E9BhAmgcAZhm7S8=";
+    owner = "texstudio-org";
+    repo = "texstudio";
+    rev = finalAttrs.version;
+    hash = "sha256-L8N7T7FFfjT801HxbQiiC0ewW7vde4S0RVmNT2CWiWY=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
-  buildInputs = [ qtbase qtscript qtsvg poppler zlib ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+    pkg-config
+  ];
+  buildInputs = [
+    hunspell
+    poppler
+    qt5compat
+    qtbase
+    qtsvg
+    qttools
+    quazip
+    zlib
+  ];
 
   meta = with lib; {
     description = "TeX and LaTeX editor";
@@ -28,4 +42,4 @@ mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ ajs124 cfouche ];
   };
-}
+})

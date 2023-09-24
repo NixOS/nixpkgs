@@ -16,6 +16,7 @@
 , rich
 , pysocks
 # CheckInputs
+, pip
 , pytest-httpbin
 , pytest-lazy-fixture
 , pytest-mock
@@ -52,8 +53,10 @@ buildPythonPackage rec {
     rich
   ] ++ requests.optional-dependencies.socks;
 
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
+    pip
     pytest-httpbin
     pytest-lazy-fixture
     pytest-mock

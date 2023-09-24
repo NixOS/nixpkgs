@@ -2,6 +2,7 @@
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
+, desktopToDarwinBundle, stdenv
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -20,7 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
-  ];
+  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     wrapGAppsHook
@@ -91,6 +92,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.unix;
+    mainProgram = "virt-manager";
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

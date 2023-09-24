@@ -88,6 +88,12 @@ stdenv.mkDerivation rec {
      ''}
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     export LC_ALL=C
+  '' + lib.optionalString stdenv.isAarch32 ''
+    # these tests are fixed in 0.28, remove when updating to 0.28
+    rm -f ../tests/bugfixes/github/test_issue_1503.py
+    rm -f ../tests/bugfixes/github/test_pr1475_AVIF.py
+    rm -f ../tests/bugfixes/github/test_pr1475_HEIC.py
+    rm -f ../tests/bugfixes/github/test_pr1475_HIF.py
   '';
 
   # With CMake we have to enable samples or there won't be

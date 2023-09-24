@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \

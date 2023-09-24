@@ -1,4 +1,5 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
+, fetchpatch
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
@@ -110,7 +111,15 @@ in stdenv.mkDerivation {
     version = kodiVersion;
 
     src = kodi_src;
-
+    patches = [
+      # Fix compatiblity with fmt 10.0 (from spdlog).
+      # Remove with the next release: https://github.com/xbmc/xbmc/pull/23453
+      (fetchpatch {
+        name = "Fix fmt10 compat";
+        url = "https://github.com/xbmc/xbmc/pull/23453.patch";
+        hash = "sha256-zMUparbQ8gfgeXj8W3MDmPi5OgLNz/zGCJINU7H6Rx0=";
+      })
+    ];
     buildInputs = [
       gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python

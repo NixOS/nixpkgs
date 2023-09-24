@@ -1,7 +1,20 @@
 { lib
-, python3
 , buildPythonPackage
 , fetchPypi
+
+# build-system
+, poetry-core
+
+# propagates
+, flet-core
+, httpx
+, oauthlib
+, packaging
+, typing-extensions
+, watchdog
+, websocket-client
+, websockets
+
 }:
 
 buildPythonPackage rec {
@@ -20,11 +33,11 @@ buildPythonPackage rec {
       --replace 'watchdog = "^2' 'watchdog = ">=2'
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     flet-core
     typing-extensions
     websocket-client

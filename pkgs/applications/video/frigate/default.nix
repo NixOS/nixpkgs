@@ -92,11 +92,11 @@ python.pkgs.buildPythonApplication rec {
 
     substituteInPlace frigate/const.py \
       --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate"
+      --replace "/tmp/cache" "/var/cache/frigate/"
 
     substituteInPlace frigate/http.py \
       --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}" \
-      --replace "/tmp/cache/" "/var/cache/frigate"
+      --replace "/tmp/cache/" "/var/cache/frigate/"
 
     substituteInPlace frigate/output.py \
       --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"

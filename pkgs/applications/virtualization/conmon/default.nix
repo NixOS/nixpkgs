@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
-  version = "2.1.7";
+  version = "2.1.8";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W6nqhSEoP2mDp7fCoXqwYAafjfESxymYXAdC3BnJJno=";
+    hash = "sha256-gdMNAU+w4u+9DZL9x96OAZihShkQdvSiqPCA+eNf600=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libseccomp systemd ]
-  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
   # manpage requires building the vendored go-md2man
   makeFlags = [ "bin/conmon" ];

@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-TWvbtuLmAdYS8otD2TpVlZx2FJS6DF03U2zM28FNsfc=";
   };
 
-  sourceRoot = "datafusion-cli-source/datafusion-cli";
+  sourceRoot = "${src.name}/datafusion-cli";
 
   cargoSha256 = "sha256-muWWVJDKm4rbpCK0SS7Zj6umFoMKGMScEAd2ZyZ5An8=";
 

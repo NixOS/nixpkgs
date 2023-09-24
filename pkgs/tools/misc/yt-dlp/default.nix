@@ -77,5 +77,6 @@ buildPythonPackage rec {
     '';
     license = licenses.unlicense;
     maintainers = with maintainers; [ mkg20001 SuperSandro2000 marsam ];
+    mainProgram = "yt-dlp";
   };
 }

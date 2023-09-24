@@ -15,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-PZ0M79duSctPepD5O+NdJZKhkyR21g/4P6loJtoWZiU=";
   };
 
-  vendorSha256 = "sha256-JC7OR4ySDsVWmrBBTjpwZrkJlM8RJehbsvXW/VtA4VA=";
+  vendorHash = "sha256-JC7OR4ySDsVWmrBBTjpwZrkJlM8RJehbsvXW/VtA4VA=";
 
   # patch taken from https://patch-diff.githubusercontent.com/raw/harness/drone-cli/pull/179.patch
   # but with go.mod changes removed due to conflict

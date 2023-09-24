@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     gsettings-desktop-schemas
     gettext
+    gobject-introspection
   ];
 
   buildInputs = [
     (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
-    gobject-introspection
     gsettings-desktop-schemas
     gtk3
     glib

@@ -395,7 +395,9 @@ in
       description = lib.mdDoc ''
         The amount of time which can elapse after a reboot has been triggered
         before a watchdog hardware device will automatically reboot the system.
-        Valid time units include "ms", "s", "min", "h", "d", and "w".
+        Valid time units include "ms", "s", "min", "h", "d", and "w". If left
+        `null`, systemd will use its default of `10min`; see also {command}`man
+        5 systemd-system.conf`.
       '';
     };
 
@@ -595,6 +597,11 @@ in
       # file, the units generated in /run/systemd/generator would
       # override anything we put here. But by forcing the use of a
       # drop-in in /etc, it does apply.
+      overrideStrategy = "asDropin";
+    };
+    systemd.services."systemd-mkswap@" = {
+      restartIfChanged = false;
+      path = [ pkgs.util-linux ];
       overrideStrategy = "asDropin";
     };
     systemd.services.systemd-random-seed.restartIfChanged = false;

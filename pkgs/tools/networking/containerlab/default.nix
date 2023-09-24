@@ -1,20 +1,23 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "containerlab";
-  version = "0.42.0";
+  version = "0.44.3";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     rev = "v${version}";
-    hash = "sha256-Vs3+5lnHy1QOisyq8heHlkE+Ezd6jDTFiTZUPxNQDnA=";
+    hash = "sha256-USQULAT1T40eyQHpU3YIdwl2PDG1IHm9ferXKsNVyLg=";
   };
 
-  vendorHash = "sha256-QaL4dlGw0az/hnYK20UOgh+AZ4wjhaopesJeN4zmeFE=";
+  nativeBuildInputs = [ installShellFiles ];
+
+  vendorHash = "sha256-yzxhK7Gpgcdh+j8EJvHIduZgsF1rK652QWvswFkgO7s=";
 
   ldflags = [
     "-s"
@@ -23,6 +26,14 @@ buildGoModule rec {
     "-X" "github.com/srl-labs/containerlab/cmd.commit=${src.rev}"
     "-X" "github.com/srl-labs/containerlab/cmd.date=1970-01-01T00:00:00Z"
   ];
+
+  postInstall = ''
+    local INSTALL="$out/bin/containerlab"
+    installShellCompletion --cmd containerlab \
+      --bash <($out/bin/containerlab completion bash) \
+      --fish <($out/bin/containerlab completion fish) \
+      --zsh <($out/bin/containerlab completion zsh)
+  '';
 
   meta = with lib; {
     description = "Container-based networking lab";

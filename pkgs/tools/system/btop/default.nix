@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , darwin
 , removeReferencesTo
+, btop
+, testers
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +31,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/bin/btop)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = btop;
+  };
 
   meta = with lib; {
     description = "A monitor of resources";

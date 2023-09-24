@@ -17,7 +17,8 @@
 , libxml2
 , libyaml
 , libffi
-, llvmPackages
+, llvmPackages_13
+, llvmPackages_15
 , makeWrapper
 , openssl
 , pcre2
@@ -53,28 +54,29 @@ let
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary = { version, sha256s, rel ? 1 }:
-    stdenv.mkDerivation rec {
-      pname = "crystal-binary";
-      inherit version;
+  stdenv.mkDerivation rec {
+    pname = "crystal-binary";
+    inherit version;
 
-      src = fetchurl {
-        url = binaryUrl version rel;
-        sha256 = sha256s.${stdenv.system};
-      };
-
-      buildCommand = ''
-        mkdir -p $out
-        tar --strip-components=1 -C $out -xf ${src}
-        patchShebangs $out/bin/crystal
-      '';
-
-      meta.platforms = lib.attrNames sha256s;
+    src = fetchurl {
+      url = binaryUrl version rel;
+      sha256 = sha256s.${stdenv.system};
     };
 
-  generic = (
+    buildCommand = ''
+      mkdir -p $out
+      tar --strip-components=1 -C $out -xf ${src}
+      patchShebangs $out/bin/crystal
+    '';
+
+    meta.platforms = lib.attrNames sha256s;
+  };
+
+  generic =
     { version
     , sha256
     , binary
+    , llvmPackages
     , doCheck ? true
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
@@ -197,6 +199,9 @@ let
         wrapProgram $bin/bin/crystal \
           --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
           --suffix CRYSTAL_PATH : lib:$lib/crystal \
+          --suffix PKG_CONFIG_PATH : ${
+            lib.makeSearchPathOutput "dev" "lib/pkgconfig" finalAttrs.buildInputs
+          } \
           --suffix CRYSTAL_LIBRARY_PATH : ${
             lib.makeLibraryPath finalAttrs.buildInputs
           }
@@ -244,9 +249,7 @@ let
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg donovanglover ];
       };
-    })
-  );
-
+    });
 in
 rec {
   binaryCrystal_1_2 = genericBinary {
@@ -263,6 +266,7 @@ rec {
     version = "1.2.2";
     sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_13;
     extraBuildInputs = [ libatomic_ops ];
   };
 
@@ -270,18 +274,21 @@ rec {
     version = "1.7.3";
     sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_13;
   };
 
   crystal_1_8 = generic {
     version = "1.8.2";
     sha256 = "sha256-YAORdipzpC9CrFgZUFlFfjzlJQ6ZeA2ekVu8IfPOxR8=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_15;
   };
 
   crystal_1_9 = generic {
-    version = "1.9.0";
-    sha256 = "sha256-FFpAL1U8WtfwDCLaUP+axSnJlGaKp/jzBs54rit9T2A=";
+    version = "1.9.2";
+    sha256 = "sha256-M1oUFs7/8ljszga3StzLOLM1aA4fSfVPQlsbuDHGd84=";
     binary = binaryCrystal_1_2;
+    llvmPackages = llvmPackages_15;
   };
 
   crystal = crystal_1_9;

@@ -87,5 +87,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
+    mainProgram = "sitespeed-io";
   };
 }

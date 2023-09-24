@@ -7,15 +7,19 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
-  version = "2.5.2";
+  version = "2.5.5";
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
-    sha256 = "sha256-5qxop/hJj1hIsEcK6vJnI2RnAcLf3tO43B0e0FcNZcA=";
+    sha256 = "sha256-9gD39eHIQEd59UNlz/Sw7V7ekBvk/pHETfo8HzfdQDQ=";
   };
+
+  patches = [
+    ./Revert-Config-Restrict-permissions-of-OTP-config.patch
+  ];
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
@@ -171,7 +175,7 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ ninjatrappeur yuka kloenk ];
+    maintainers = with maintainers; [ ninjatrappeur yuka kloenk yayayayaka ];
     platforms = platforms.unix;
   };
 }

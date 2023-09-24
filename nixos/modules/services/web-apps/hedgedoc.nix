@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) literalExpression mdDoc mkEnableOption mkIf mkOption mkPackageOptionMD mkRenamedOptionModule types versionAtLeast;
+
   cfg = config.services.hedgedoc;
 
   # 21.03 will not be an official release - it was instead 21.05.  This
@@ -32,6 +32,7 @@ in
   ];
 
   options.services.hedgedoc = {
+    package = mkPackageOptionMD pkgs "hedgedoc" { };
     enable = mkEnableOption (lib.mdDoc "the HedgeDoc Markdown Editor");
 
     groups = mkOption {
@@ -105,6 +106,13 @@ in
         description = lib.mdDoc ''
           Enable to use SSL server. This will also enable
           {option}`protocolUseSSL`.
+        '';
+      };
+      enableStatsApi = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enables or disables the /status and /metrics endpoint.
         '';
       };
       hsts = {
@@ -1018,16 +1026,6 @@ in
         `HedgeDoc` is running.
       '';
     };
-
-    package = mkOption {
-      type = types.package;
-      default = pkgs.hedgedoc;
-      defaultText = literalExpression "pkgs.hedgedoc";
-      description = lib.mdDoc ''
-        Package that provides HedgeDoc.
-      '';
-    };
-
   };
 
   config = mkIf cfg.enable {
@@ -1060,7 +1058,7 @@ in
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
         StateDirectory = [ cfg.workDir cfg.settings.uploadsPath ];
-        ExecStart = "${cfg.package}/bin/hedgedoc";
+        ExecStart = "${lib.getExe cfg.package}";
         EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
           "CMD_CONFIG_FILE=${cfg.workDir}/config.json"

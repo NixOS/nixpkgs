@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
-    inherit curl grpc;
+    inherit grpc;
+    curl = (curl.override { c-aresSupport = true; }).tests.withCheck;
   };
 
   meta = with lib; {

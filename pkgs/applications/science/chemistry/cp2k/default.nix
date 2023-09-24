@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
+{ lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook, python3, gfortran, blas, lapack
 , fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
 , libxsmm, spglib, which, pkg-config, plumed, zlib
 , enableElpa ? false
@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "cp2k";
-  version = "2023.1";
+  version = "2023.2";
 
   src = fetchFromGitHub {
     owner = "cp2k";
     repo = "cp2k";
     rev = "v${version}";
-    hash = "sha256-SG5Gz0cDiSfbSZ8m4K+eARMLU4iMk/xK3esN5yt05RE=";
+    hash = "sha256-1TJorIjajWFO7i9vqSBDTAIukBdyvxbr5dargt4QB8M=";
     fetchSubmodules = true;
   };
 
@@ -88,14 +88,18 @@ in stdenv.mkDerivation rec {
     EOF
   '';
 
+  nativeCheckInputs = [
+    mpiCheckPhaseHook
+    openssh
+  ];
+
   checkPhase = ''
-    export OMP_NUM_THREADS=1
+    runHook preCheck
 
-    export HYDRA_IFACE=lo  # Fix to make mpich run in a sandbox
-    export OMPI_MCA_rmaps_base_oversubscribe=1
     export CP2K_DATA_DIR=data
-
     mpirun -np 2 exe/${arch}/libcp2k_unittest.${cp2kVersion}
+
+    runHook postCheck
   '';
 
   installPhase = ''

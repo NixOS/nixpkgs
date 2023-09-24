@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
     xorgserver # for cvt command
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -69,7 +70,6 @@ stdenv.mkDerivation rec {
     cinnamon-desktop
     dbus
     glib
-    gobject-introspection
     gtk3
     libcanberra
     libdrm

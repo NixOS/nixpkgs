@@ -4,6 +4,7 @@
 , fetchpatch
 , gettext
 , meson
+, mesonEmulatorHook
 , ninja
 , pkg-config
 , asciidoc
@@ -71,6 +72,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [

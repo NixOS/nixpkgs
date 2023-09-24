@@ -4,6 +4,7 @@
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
 , yasm, glslang
+, linuxPackages
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -212,6 +213,10 @@ in stdenv.mkDerivation {
     ''}
 
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+
+    mkdir -p "$out/share/virtualbox"
+    cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
+    ln -s "${linuxPackages.virtualboxGuestAdditions.src}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''

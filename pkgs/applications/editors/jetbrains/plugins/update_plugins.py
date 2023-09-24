@@ -36,6 +36,7 @@ FRIENDLY_TO_PLUGIN = {
     "pycharm-professional": "PYCHARM",
     "rider": "RIDER",
     "ruby-mine": "RUBYMINE",
+    "rust-rover": "RUST",
     "webstorm": "WEBSTORM"
 }
 PLUGIN_TO_FRIENDLY = {j: i for i, j in FRIENDLY_TO_PLUGIN.items()}
@@ -379,6 +380,11 @@ def main():
     result["files"] = get_file_hashes(file_list, refetch_all)
 
     write_result(result)
+
+    # Commit the result
+    commitMessage = "jetbrains.plugins: update"
+    print("#### Committing changes... ####")
+    run(['git', 'commit', f'-m{commitMessage}', '--', f'{PLUGINS_FILE}'], check=True)
 
 
 if __name__ == '__main__':

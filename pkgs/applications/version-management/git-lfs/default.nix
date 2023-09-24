@@ -39,6 +39,10 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage man/man*/*
+    installShellCompletion --cmd git-lfs \
+      --bash <($out/bin/git-lfs completion bash) \
+      --fish <($out/bin/git-lfs completion fish) \
+      --zsh <($out/bin/git-lfs completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion {

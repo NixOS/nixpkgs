@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , perl
 , wrapGAppsHook
@@ -10,13 +11,13 @@
 , qtpositioning
 , qtmultimedia
 , qtserialport
-, qttranslations
 , qtwayland
 , qtwebengine
 , calcmysky
 , qxlsx
 , indilib
 , libnova
+, qttools
 }:
 
 stdenv.mkDerivation rec {
@@ -29,6 +30,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-8Iheb/9wjf0u10ZQRkLMLNN2s7P++Fqcr26iatiKcTo=";
   };
+
+  patches = [
+    # Compatibility with INDI 2.0 series from https://github.com/Stellarium/stellarium/pull/3269
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/31fd7bebf33fa710ce53ac8375238a24758312bc.patch";
+      hash = "sha256-eJEqqitZgtV6noeCi8pDBYMVTFIVWXZU1fiEvoilX8o=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
@@ -43,6 +52,7 @@ stdenv.mkDerivation rec {
     perl
     wrapGAppsHook
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
@@ -51,7 +61,6 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtmultimedia
     qtserialport
-    qttranslations
     qtwebengine
     calcmysky
     qxlsx

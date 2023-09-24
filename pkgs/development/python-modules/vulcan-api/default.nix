@@ -7,6 +7,7 @@
 , fetchFromGitHub
 , pyopenssl
 , pythonOlder
+, pythonRelaxDepsHook
 , pytz
 , related
 , requests
@@ -27,6 +28,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-5Tj611p4wYn7GjoCtCTRhUZkKyAJglHcci76ciVFWik=";
   };
+
+  pythonRemoveDeps = [
+    "faust-cchardet"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     aenum

@@ -9,13 +9,13 @@
 , examples ? false
 }: stdenv.mkDerivation rec {
     pname = "cassandra-cpp-driver";
-    version = "2.16.2";
+    version = "2.17.0";
 
     src = fetchFromGitHub {
       owner = "datastax";
       repo = "cpp-driver";
       rev = "refs/tags/${version}";
-      sha256 = "sha256-NAvaRLhEvFjSmXcyM039wLC6IfLws2rkeRpbE5eL/rQ=";
+      sha256 = "sha256-sLKLaBFnGq3NIQV7Tz5aAfsL+LeLw8XDbcJt//H468k=";
     };
 
     nativeBuildInputs = [ cmake pkg-config ];

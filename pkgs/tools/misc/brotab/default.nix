@@ -1,8 +1,9 @@
-{ lib, fetchFromGitHub, python }:
+{ lib, fetchFromGitHub, fetchpatch, python }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "1.4.2";
   pname = "brotab";
+  version = "1.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "balta2ar";
@@ -11,10 +12,19 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
   };
 
+  patches = [
+    # https://github.com/balta2ar/brotab/pull/102
+    (fetchpatch {
+      name = "remove-unnecessary-pip-import.patch";
+      url = "https://github.com/balta2ar/brotab/commit/825cd48f255c911aabbfb495f6b8fc73f27d3fe5.patch";
+      hash = "sha256-IN28AOLPKPUc3KkxIGFMpZNNXA1+O12NxS+Hl4KMXbg=";
+    })
+  ];
+
   propagatedBuildInputs = with python.pkgs; [
-    requests
     flask
     psutil
+    requests
     setuptools
   ];
 
@@ -24,6 +34,8 @@ python.pkgs.buildPythonApplication rec {
       --replace "psutil==5.8.0" "psutil>=5.8.0" \
       --replace "requests==2.24.0" "requests>=2.24.0"
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook

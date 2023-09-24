@@ -35,6 +35,7 @@
 , xorg
 , fetchpatch
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, wxGTK-override ? null
 }:
 let
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
@@ -64,10 +65,11 @@ let
   openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
     buildInputs = [ openexr boost tbb_2021_8 jemalloc c-blosc ilmbase ];
   });
+  wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
-  version = "2.6.0";
+  version = "2.6.1";
 
   nativeBuildInputs = [
     cmake
@@ -99,7 +101,7 @@ stdenv.mkDerivation rec {
     pcre
     qhull
     tbb_2021_8
-    wxGTK-prusa
+    wxGTK-override'
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
@@ -164,7 +166,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-6AZdwNcgddHePyB0bNS7xGmpz38uzhAwUxgo48OQLuU=";
+    hash = "sha256-t5lnBL7SZVfyR680ZK29YXgE3pag+uVv4+BGJZq40/A=";
     rev = "version_${version}";
   };
 

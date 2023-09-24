@@ -6,7 +6,6 @@
 # build time
 , hatchling
 , hatch-vcs
-, setuptools-scm
 
 # runtime
 , packaging
@@ -21,13 +20,14 @@
 # tests
 , pytest-mock
 , pytestCheckHook
+, setuptools
 , virtualenv
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-api";
-  version = "1.5.0";
+  version = "1.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pyproject-api";
     rev = "refs/tags/${version}";
-    hash = "sha256-VO+huA9i7uMpCVaWHC29XlfestSu+N9vWWHteY21uqs=";
+    hash = "sha256-HX+5BypfEOfQ3vg3vha0QCVrEarjMu/Q8id+xgmWGfA=";
   };
 
   outputs = [
@@ -44,12 +44,11 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     hatchling
     hatch-vcs
-    setuptools-scm
 
     # docs
     sphinxHook
@@ -66,6 +65,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    setuptools
     virtualenv
     wheel
   ];

@@ -1,16 +1,17 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sacd";
   version = "19.7.16.37";
 
   src = fetchFromGitHub {
     owner = "Sound-Linux-More";
     repo = "sacd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "03s7jr75pzqj1xd41rkgbszlgf9zx6vzhd0nizc05wyf0fxq5xif";
   };
 
@@ -38,4 +39,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.doronbehar ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

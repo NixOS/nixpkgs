@@ -16,7 +16,7 @@ buildGoModule rec {
     sha256 = "sha256-HTIzA1QOVn3V/hGUu7wLIYUNYmcJ/FXi2yr6BGRizZA=";
   };
 
-  vendorSha256 = "sha256-TWRMNt6x8zuvhP1nz4R6IVCX+9HityvVpzxRhDiMyO4=";
+  vendorHash = "sha256-TWRMNt6x8zuvhP1nz4R6IVCX+9HityvVpzxRhDiMyO4=";
 
   patches = [
     # Fix darwin builds: https://github.com/v-byte-cpu/sx/pull/120
