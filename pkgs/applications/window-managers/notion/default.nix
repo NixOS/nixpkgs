@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, lua, gettext, which, groff, xmessage, xterm
-, readline, fontconfig, libX11, libXext, libSM
-, libXinerama, libXrandr, libXft
+{ lib
+, stdenv
+, fetchFromGitHub
+, fontconfig
+, gettext
+, groff
+, libSM
+, libX11
+, libXext
+, libXft
+, libXinerama
+, libXrandr
+, lua
 , makeWrapper
+, pkg-config
+, readline
+, which
+, xmessage
+, xterm
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notion";
   version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "raboof";
-    repo = pname;
-    rev = version;
-    sha256 = "14swd0yqci8lxn259fkd9w92bgyf4rmjwgvgyqp78wlfix6ai4mv";
+    repo = "notion";
+    rev = finalAttrs.version;
+    hash = "sha256-u5KoTI+OcnQu9m8/Lmsmzr8lEk9tulSE7RRFhj1oXJM=";
   };
 
   # error: 'PATH_MAX' undeclared
@@ -21,24 +35,52 @@ stdenv.mkDerivation rec {
     sed 1i'#include <linux/limits.h>' -i mod_notionflux/notionflux/notionflux.c
   '';
 
-  nativeBuildInputs = [ pkg-config makeWrapper groff ];
-  buildInputs = [ lua gettext which readline fontconfig libX11 libXext libSM
-                  libXinerama libXrandr libXft ];
+  nativeBuildInputs = [
+    gettext
+    groff
+    lua
+    makeWrapper
+    pkg-config
+    which
+  ];
 
-  buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" ];
+  buildInputs = [
+    fontconfig
+    libSM
+    libX11
+    libXext
+    libXft
+    libXinerama
+    libXrandr
+    lua
+    readline
+  ];
 
-  makeFlags = [ "NOTION_RELEASE=${version}" "PREFIX=\${out}" ];
+  outputs = [ "out" "man" ];
+
+  strictDeps = true;
+
+  buildFlags = [
+    "LUA_DIR=${lua}"
+    "X11_PREFIX=/no-such-path"
+  ];
+
+  makeFlags = [
+    "NOTION_RELEASE=${finalAttrs.version}"
+    "PREFIX=${placeholder "out"}"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/notion \
-      --prefix PATH ":" "${xmessage}/bin:${xterm}/bin" \
+      --prefix PATH ":" "${lib.makeBinPath [ xmessage xterm ]}" \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiling tabbed window manager";
     homepage = "https://notionwm.net";
-    license   = licenses.lgpl21;
-    maintainers = with maintainers; [ jfb AndersonTorres raboof ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21;
+    mainProgram = "notion";
+    maintainers = with lib.maintainers; [ jfb AndersonTorres raboof ];
+    platforms = lib.platforms.linux;
   };
-}
+})
