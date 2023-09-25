@@ -63,6 +63,7 @@ mapAliases {
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   inherit (pkgs) cordova; # added 2023-08-18
+  inherit (pkgs) create-react-app; # added 2023-09-25
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) dockerfile-language-server-nodejs; # added 2023-08-18
