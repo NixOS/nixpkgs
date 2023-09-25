@@ -11,7 +11,6 @@
 , namePrefix
 , update-python-libraries
 , setuptools
-, flitBuildHook
 , pypaBuildHook
 , pypaInstallHook
 , pythonCatchConflictsHook
@@ -90,7 +89,6 @@
 # Several package formats are supported.
 # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
 # "wheel" : Install from a pre-compiled wheel.
-# "flit" : Install a flit package. This builds a wheel.
 # "pyproject": Install a package using a ``pyproject.toml`` file (PEP517). This builds a wheel.
 # "egg": Install a package from an egg.
 # "other" : Provide your own buildPhase and installPhase.
@@ -122,7 +120,7 @@ let
     else
       "setuptools";
 
-  withDistOutput = lib.elem format' ["pyproject" "setuptools" "flit" "wheel"];
+  withDistOutput = lib.elem format' ["pyproject" "setuptools" "wheel"];
 
   name_ = name;
 
@@ -222,8 +220,6 @@ let
       unzip
     ] ++ lib.optionals (format' == "setuptools") [
       setuptoolsBuildHook
-    ] ++ lib.optionals (format' == "flit") [
-      flitBuildHook
     ] ++ lib.optionals (format' == "pyproject") [(
       if isBootstrapPackage then
         pypaBuildHook.override {
