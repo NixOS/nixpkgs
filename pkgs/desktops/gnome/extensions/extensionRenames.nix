@@ -120,7 +120,6 @@
   "EasyScreenCast@iacopodeenosee.gmail.com" = "easyScreenCast"; # extensionPortalSlug is "easyscreencast"
   "gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com" = "fuzzy-app-search"; # extensionPortalSlug is "gnome-fuzzy-app-search"
   "TopIcons@phocean.net" = "topicons-plus"; # extensionPortalSlug is "topicons"
-  "paperwm@hedning:matrix.org" = "paperwm"; # is not on extensions.gnome.org
   "no-title-bar@jonaspoehler.de" = "no-title-bar"; # extensionPortalSlug is "no-title-bar-forked"
   # These extensions are automatically packaged at the moment. We preserve the old attribute name
   # for backwards compatibility.
