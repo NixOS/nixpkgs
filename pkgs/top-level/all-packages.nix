@@ -22288,6 +22288,8 @@ with pkgs;
 
   libjson = callPackage ../development/libraries/libjson { };
 
+  libjodycode = callPackage ../development/libraries/libjodycode { };
+
   libb64 = callPackage ../development/libraries/libb64 { };
 
   judy = callPackage ../development/libraries/judy { };
