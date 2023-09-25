@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
+, flit-core
 , py-cid
 , pytestCheckHook
 , pytest-cov
@@ -10,7 +11,7 @@
 buildPythonPackage rec {
   pname = "pytest-cid";
   version = "1.1.2";
-  format = "flit";
+  format = "pyproject";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
@@ -24,6 +25,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace "pytest >= 5.0, < 7.0" "pytest >= 5.0"
   '';
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     py-cid

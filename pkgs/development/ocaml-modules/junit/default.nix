@@ -14,12 +14,11 @@ buildDunePackage (rec {
     tyxml
   ];
 
-  duneVersion = "3";
   doCheck = true;
 
   meta = with lib; {
     description = "ocaml-junit is an OCaml package for the creation of JUnit XML reports, proving a typed API to produce valid reports acceptable to Jenkins, comes with packages supporting OUnit and Alcotest.";
-    license = licenses.gpl3;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ ];
     homepage = "https://github.com/Khady/ocaml-junit";
   };

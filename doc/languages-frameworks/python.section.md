@@ -459,7 +459,6 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   with the `eggInstallHook`
 - `eggBuildHook` to skip building for eggs.
 - `eggInstallHook` to install eggs.
-- `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
   (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pypaBuildHook` to build a wheel using

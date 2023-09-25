@@ -173,6 +173,33 @@ let
     }];
   }));
 
+  bridgeNetworks = mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
+    netdevs."40-${name}" = {
+      netdevConfig = {
+        Name = name;
+        Kind = "bridge";
+      };
+    };
+    networks = listToAttrs (forEach bridge.interfaces (bi:
+      nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
+        DHCP = mkOverride 0 (dhcpStr false);
+        networkConfig.Bridge = name;
+      } ])));
+  }));
+
+  vlanNetworks = mkMerge (flip mapAttrsToList cfg.vlans (name: vlan: {
+    netdevs."40-${name}" = {
+      netdevConfig = {
+        Name = name;
+        Kind = "vlan";
+      };
+      vlanConfig.Id = vlan.id;
+    };
+    networks."40-${vlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
+      vlan = [ name ];
+    } ]);
+  }));
+
 in
 
 {
@@ -182,7 +209,15 @@ in
     # Note this is if initrd.network.enable, not if
     # initrd.systemd.network.enable. By setting the latter and not the
     # former, the user retains full control over the configuration.
-    boot.initrd.systemd.network = mkMerge [(genericDhcpNetworks true) interfaceNetworks];
+    boot.initrd.systemd.network = mkMerge [
+      (genericDhcpNetworks true)
+      interfaceNetworks
+      bridgeNetworks
+      vlanNetworks
+    ];
+    boot.initrd.availableKernelModules =
+      optional (cfg.bridges != {}) "bridge" ++
+      optional (cfg.vlans != {}) "8021q";
   })
 
   (mkIf cfg.useNetworkd {
@@ -212,19 +247,7 @@ in
       }
       (genericDhcpNetworks false)
       interfaceNetworks
-      (mkMerge (flip mapAttrsToList cfg.bridges (name: bridge: {
-        netdevs."40-${name}" = {
-          netdevConfig = {
-            Name = name;
-            Kind = "bridge";
-          };
-        };
-        networks = listToAttrs (forEach bridge.interfaces (bi:
-          nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
-            DHCP = mkOverride 0 (dhcpStr false);
-            networkConfig.Bridge = name;
-          } ])));
-      })))
+      bridgeNetworks
       (mkMerge (flip mapAttrsToList cfg.bonds (name: bond: {
         netdevs."40-${name}" = {
           netdevConfig = {
@@ -377,18 +400,7 @@ in
           } ]);
         };
       })))
-      (mkMerge (flip mapAttrsToList cfg.vlans (name: vlan: {
-        netdevs."40-${name}" = {
-          netdevConfig = {
-            Name = name;
-            Kind = "vlan";
-          };
-          vlanConfig.Id = vlan.id;
-        };
-        networks."40-${vlan.interface}" = (mkMerge [ (genericNetwork (mkOverride 999)) {
-          vlan = [ name ];
-        } ]);
-      })))
+      vlanNetworks
     ];
 
     # We need to prefill the slaved devices with networking options
