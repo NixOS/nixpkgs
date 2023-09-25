@@ -5,6 +5,10 @@ let
   stateDir = "/var/lib/unifi";
   cmd = ''
     @${cfg.jrePackage}/bin/java java \
+        ${optionalString (lib.versionAtLeast (lib.getVersion cfg.jrePackage) "16")
+        "--add-opens java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.time=ALL-UNNAMED "
+        + "--add-opens java.base/sun.security.util=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED "
+        + "--add-opens java.rmi/sun.rmi.transport=ALL-UNNAMED"} \
         ${optionalString (cfg.initialJavaHeapSize != null) "-Xms${(toString cfg.initialJavaHeapSize)}m"} \
         ${optionalString (cfg.maximumJavaHeapSize != null) "-Xmx${(toString cfg.maximumJavaHeapSize)}m"} \
         -jar ${stateDir}/lib/ace.jar
@@ -24,8 +28,8 @@ in
 
     services.unifi.jrePackage = mkOption {
       type = types.package;
-      default = if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then pkgs.jdk11 else pkgs.jre8;
-      defaultText = literalExpression ''if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3" then pkgs.jdk11 else pkgs.jre8'';
+      default = if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.5") then pkgs.jdk17_headless else if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3") then pkgs.jdk11 else pkgs.jre8;
+      defaultText = literalExpression ''if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.5") then pkgs.jdk17_headless else if (lib.versionAtLeast (lib.getVersion cfg.unifiPackage) "7.3" then pkgs.jdk11 else pkgs.jre8'';
       description = lib.mdDoc ''
         The JRE package to use. Check the release notes to ensure it is supported.
       '';
