@@ -28,7 +28,7 @@ let
 
   # only doing this because only on darwin placing clang.cc in nativeBuildInputs
   # doesn't build
-  bootstrapTools = runCommand "tinygo-bootstap-tools" { } ''
+  bootstrapTools = runCommand "tinygo-bootstrap-tools" { } ''
     mkdir -p $out
     ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
     ln -s ${lib.getBin lld}/bin/ld.lld $out/ld.lld-${llvmMajor}
