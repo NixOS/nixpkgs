@@ -3,7 +3,6 @@
 , hostPlatform
 , fetchurl
 , bash
-, coreutils
 , tinycc
 , binutils
 , gnumake
@@ -57,7 +56,6 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    coreutils
     tinycc.compiler
     binutils
     gnumake

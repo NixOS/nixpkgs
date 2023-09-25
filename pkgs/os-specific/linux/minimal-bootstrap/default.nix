@@ -17,8 +17,10 @@ lib.makeScope
 
     bash = callPackage ./bash {
       bootBash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
+      tinycc = tinycc-musl;
+      coreutils = coreutils-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     binutils = callPackage ./binutils {
@@ -73,7 +75,6 @@ lib.makeScope
     };
 
     gcc46 = callPackage ./gcc/4.6.nix {
-      coreutils = coreutils-musl;
       tinycc = tinycc-musl;
       gnumake = gnumake-musl;
       gnutar = gnutar-musl;
