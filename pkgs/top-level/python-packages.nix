@@ -4799,6 +4799,8 @@ self: super: with self; {
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
 
+  ha-mqtt-discoverable = callPackage ../development/python-modules/ha-mqtt-discoverable { };
+
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
 
   hahomematic = callPackage ../development/python-modules/hahomematic { };
