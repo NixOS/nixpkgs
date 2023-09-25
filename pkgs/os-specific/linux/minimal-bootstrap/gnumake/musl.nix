@@ -13,7 +13,7 @@
 , gzip
 }:
 let
-  pname = "gnumake";
+  pname = "gnumake-musl";
   version = "4.4.1";
 
   src = fetchurl {
