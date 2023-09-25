@@ -14,11 +14,11 @@
 let
   inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gawk";
-  version = "5.2.0";
+  version = "5.2.2";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/gawk-${version}.tar.gz";
-    hash = "sha256-71r0RJywJp+vOvJL9MAic9RV8HQb88UPht3AkzLWz1Y=";
+    hash = "sha256-lFrvfM/xAfILIqEIArwAXplKsrjqPnJMwaGXxi9B9lA=";
   };
 in
 bash.runCommand "${pname}-${version}" {
@@ -54,8 +54,8 @@ bash.runCommand "${pname}-${version}" {
     --host=${hostPlatform.config}
 
   # Build
-  make
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''

@@ -60,6 +60,8 @@ lib.makeScope
     gawk = callPackage ./gawk {
       bash = bash_2_05;
       tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
       bootGawk = gawk-mes;
     };
 
