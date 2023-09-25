@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 buildGoModule rec {
   pname = "glow";
@@ -18,6 +19,14 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd glow \
+      --bash <($out/bin/glow completion bash) \
+      --fish <($out/bin/glow completion fish) \
+      --zsh <($out/bin/glow completion zsh)
+  '';
 
   meta = with lib; {
     description = "Render markdown on the CLI, with pizzazz!";
