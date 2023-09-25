@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd glow \
       --bash <($out/bin/glow completion bash) \
       --fish <($out/bin/glow completion fish) \
