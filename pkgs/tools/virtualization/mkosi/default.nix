@@ -50,21 +50,27 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "15.2-pre"; # 15.1 is the latest release, but we require a newer commit
+  version = "17.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
-    # Fix from the commit is needed to run on NixOS,
-    # see https://github.com/systemd/mkosi/issues/1792
-    rev = "ca9673cbcbd9f293e5566cec4a1ba14bbcd075b8";
-    hash = "sha256-y5gG/g33HBpH1pTXfjHae25bc5p/BvlCm9QxOIYtcA8=";
+    rev = "v${version}";
+    hash = "sha256-v6so6MFOkxPOnPDgAgni517NX4vUnkPd7o4UMSUHL24=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Fix tests. Remove in next release.
+      url = "https://github.com/systemd/mkosi/commit/3e2642c743b2ccb78fd0a99e75993824034f7124.patch";
+      hash = "sha256-x9xb8Pz7l2FA8pfhQd7KqITxbnjjwBUh0676uggcukI=";
+    })
+  ];
 
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
-  patchPhase = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace mkosi/run.py \
       --replace 'ctypes.util.find_library("c")' "'${stdenv.cc.libc}/lib/libc.so.6'"
     substituteInPlace mkosi/__init__.py \
@@ -104,6 +110,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Build legacy-free OS images";
     homepage = "https://github.com/systemd/mkosi";
+    changelog = "https://github.com/systemd/mkosi/releases/tag/v${version}";
     license = licenses.lgpl21Only;
     mainProgram = "mkosi";
     maintainers = with maintainers; [ malt3 katexochen ];
