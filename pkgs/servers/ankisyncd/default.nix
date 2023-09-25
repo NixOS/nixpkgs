@@ -1,8 +1,11 @@
-{ lib, runCommand, fetchFromGitHub, rustPlatform, protobuf }:
+{ lib, runCommand, fetchFromGitHub, fetchpatch
+, rustPlatform, protobuf }:
 
 let
   pname = "ankisyncd";
   version = "1.1.4";
+
+  ankirev = "23.10.1";
 
   # anki-sync-server-rs expects anki sources in the 'anki' folder
   # of its own source tree, with a patch applied (mostly to make
@@ -14,12 +17,25 @@ let
       rev = version;
       hash = "sha256-iL4lJJAV4SrNeRX3s0ZpJ//lrwoKjLsltlX4d2wP6O0=";
     };
+    patches = [
+      (fetchpatch {
+        name = "update for anki 23.10";
+        #https://github.com/ankicommunity/anki-sync-server-rs/pull/76
+        url = "https://github.com/ankicommunity/anki-sync-server-rs/commit/49e1488fec38c7a9549b8795b48a41e476a70479.patch";
+        hash = "sha256-rn+ieUeOXd8WaoK5L0rCq9kYEY0BVID0ebSzxO3oRdQ=";
+      })
+    ];
   } ''
     cp -r "$src/." "$out"
-    chmod +w "$out"
+    chmod -R +w "$out"
     cp -r "${ankiSrc}" "$out/anki"
     chmod -R +w "$out/anki"
-    patch -d "$out/anki" -Np1 < "$src/anki_patch/d9d36078f17a2b4b8b44fcb802eb274911ebabe7_anki_rslib.patch"
+    # temp: apply patch manually
+    cd "$out"
+    chmod +w anki_patch scripts
+    patchPhase
+    # temp: nixos' patchPhase does not rename files, replace * with ${ankirev}
+    patch -d "$out/anki" -Np1 < "$out/anki_patch/"*"_anki_rslib.patch"
   '';
 
   # Note we do not use anki.src because the patch in ankisyncd's
@@ -27,8 +43,8 @@ let
   ankiSrc = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
-    rev = "2.1.60";
-    hash = "sha256-hNrf6asxF7r7QK2XO150yiRjyHAYKN8OFCFYX0SAiwA=";
+    rev = ankirev;
+    hash = "sha256-leGdamjCehffv2ByL7JWdaUhxRA4ZEPRKxBphUVzfRw=";
     fetchSubmodules = true;
   };
 in rustPlatform.buildRustPackage {
@@ -37,7 +53,8 @@ in rustPlatform.buildRustPackage {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "csv-1.1.6" = "sha256-w728ffOVkI+IfK6FbmkGhr0CjuyqgJnPB1kutMJIUYg=";
+      "fsrs-0.1.0" = "sha256-bnLmJk2aaWBdgdsiasRrDG4NiTDMCDCXotCSoc0ldlk=";
+      "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
   };
 
