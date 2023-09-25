@@ -10479,7 +10479,7 @@ with pkgs;
 
   libmbim = callPackage ../development/libraries/libmbim { };
 
-  libmongocrypt = callPackage ../development/libraries/libmongocrypt { };
+  libmongocrypt = darwin.apple_sdk_11_0.callPackage ../development/libraries/libmongocrypt { };
 
   libmesode = callPackage ../development/libraries/libmesode { };
 
