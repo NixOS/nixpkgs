@@ -36,6 +36,11 @@
 , libxkbcommon
 , libdrm
 , mesa
+# It's unknown which version of openssl that postman expects but it seems that
+# OpenSSL 3+ seems to work fine (cf.
+# https://github.com/NixOS/nixpkgs/issues/254325). If postman breaks apparently
+# around OpenSSL stuff then try changing this dependency version.
+, openssl
 , xorg
 , pname
 , version
@@ -149,5 +154,6 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
     done
     popd
+    wrapProgram $out/bin/postman --set PATH ${lib.makeBinPath [ openssl ]}
   '';
 }

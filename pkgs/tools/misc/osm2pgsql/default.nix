@@ -9,6 +9,7 @@
 , boost
 , cimg
 , postgresql
+, python3
 , withLuaJIT ? false
 , lua
 , luajit
@@ -21,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    owner = "openstreetmap";
+    owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-ZIjT4uKJas5RgxcMSoR8hWCM9pdu3hSzWwfIn1ZvU8Y=";
+    hash = "sha256-RzJpaOEpgKm2IN6CK2Z67CUG0WU2ELvCpGhdQehjGKU=";
   };
 
   postPatch = ''
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     potrace
     proj
     protozero
+    (python3.withPackages (p: with p; [ psycopg2 pyosmium ]))
     zlib
   ] ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;

@@ -1,20 +1,19 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, stdenv
 , pkg-config
 , ffmpeg
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gifski";
-  version = "1.11.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    hash = "sha256-sPsq/hntNqOdPJcoob1jrDUrLLiBEnfRoDANyFUjOuM=";
+    hash = "sha256-KiedPhlPcFkTiZZfOBlTKqtzU2ND1HXdsfhq+F1MtdU=";
   };
 
   cargoLock = {
@@ -44,11 +43,6 @@ rustPlatform.buildRustPackage rec {
   # outline a solution.
   #
   checkType = "debug";
-
-  # error: linker `/usr/bin/x86_64-linux-gnu-gcc` not found
-  postPatch = ''
-    rm .cargo/config.toml;
-  '';
 
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";
