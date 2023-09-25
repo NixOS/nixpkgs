@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, stdenv
 }:
 buildGoModule rec {
   pname = "glow";
