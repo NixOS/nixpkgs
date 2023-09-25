@@ -15389,6 +15389,12 @@
     githubId = 3958212;
     name = "Tom Sorlie";
   };
+  schinmai-akamai = {
+    email = "schinmai@akamai.com";
+    github = "schinmai-akamai";
+    gitubId = 70169773;
+    name = "Tarun Chinmai Sekar";
+  };
   schmitthenner = {
     email = "development@schmitthenner.eu";
     github = "fkz";
