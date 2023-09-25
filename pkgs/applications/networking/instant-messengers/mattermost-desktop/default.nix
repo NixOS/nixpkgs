@@ -2,29 +2,30 @@
 , stdenv
 , fetchurl
 , atomEnv
+, electron_26
 , systemd
 , pulseaudio
 , libxshmfence
 , libnotify
 , libappindicator-gtk3
-, wrapGAppsHook
+, makeWrapper
 , autoPatchelfHook
 }:
 
 let
 
   pname = "mattermost-desktop";
-  version = "5.3.1";
+  version = "5.5.0";
 
   srcs = {
     "x86_64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
-      hash = "sha256-rw+SYCFmN2W4t5iIWEpV9VHxcvwTLOckMV58WRa5dZE=";
+      hash = "sha256-htjKGO16Qs1RVE4U47DdN8bNpUH4JD/LkMOeoIRmLPI=";
     };
 
     "aarch64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-arm64.tar.gz";
-      hash = "sha256-FEIldkb3FbUfVAYRkjs7oPRJDHdsIGDW5iaC2Qz1dpc=";
+      hash = "sha256-LQhMSIrWDZTXBnJfLKph5e6txHGvQSqEu+P1j1zOiTg=";
     };
   };
 
@@ -37,11 +38,7 @@ stdenv.mkDerivation {
 
   src = fetchurl (srcs."${system}" or (throw "Unsupported system ${system}"));
 
-  dontBuild = true;
-  dontConfigure = true;
-  dontStrip = true;
-
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
 
   buildInputs = atomEnv.packages ++ [
     libxshmfence
@@ -63,20 +60,18 @@ stdenv.mkDerivation {
     find . -type f \( -name '*.so.*' -o -name '*.s[oh]' \) -print0 | xargs -0 chmod +x
     chmod +x mattermost-desktop chrome-sandbox
 
-    mkdir -p $out/share/mattermost-desktop
-    cp -R . $out/share/mattermost-desktop
+    mkdir -p $out/bin $out/share/applications $out/share/${pname}/
+    cp -r app_icon.png create_desktop_file.sh locales/ resources/* $out/share/${pname}/
 
-    mkdir -p "$out/bin"
-    ln -s $out/share/mattermost-desktop/mattermost-desktop $out/bin/mattermost-desktop
-
-    patchShebangs $out/share/mattermost-desktop/create_desktop_file.sh
-    $out/share/mattermost-desktop/create_desktop_file.sh
-    rm $out/share/mattermost-desktop/create_desktop_file.sh
-    mkdir -p $out/share/applications
-    chmod -x Mattermost.desktop
+    patchShebangs $out/share/${pname}/create_desktop_file.sh
+    $out/share/${pname}/create_desktop_file.sh
+    rm $out/share/${pname}/create_desktop_file.sh
     mv Mattermost.desktop $out/share/applications/Mattermost.desktop
     substituteInPlace $out/share/applications/Mattermost.desktop \
       --replace /share/mattermost-desktop/mattermost-desktop /bin/mattermost-desktop
+
+    makeWrapper ${electron_26}/bin/electron $out/bin/${pname} \
+      --add-flags $out/share/${pname}/app.asar
 
     runHook postInstall
   '';
