@@ -63,8 +63,8 @@ bash.runCommand "${pname}-${version}" {
     --disable-assembler
 
   # Build
-  make
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''
