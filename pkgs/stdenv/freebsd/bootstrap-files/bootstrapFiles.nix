@@ -2,7 +2,7 @@
 let
   pkgs = pkgsCross.${system};
   tar-all = name: pkgs: (runCommand name {} ''
-    tar -czf $out ${lib.concatStringsSep " " (lib.flatten (map (pkg: ["-C" pkg "."]) pkgs))}
+    tar -cJf $out ${lib.concatStringsSep " " (lib.flatten (map (pkg: ["-C" pkg "."]) pkgs))}
   '');
   static = import ./static.nix { inherit stdenvAdapters pkgs; };
 in
@@ -16,6 +16,7 @@ in
     findutils
     gnutar
     gawk
+    gnumake
     gnugrep
     gnused
     gzip
@@ -33,4 +34,10 @@ in
     ncurses
     readline
     llvmPackages_16.libllvm
+    llvmPackages_16.libcxx
+    llvmPackages_16.libcxxabi
+    llvmPackages_12.libunwind
+    (lib.getLib bzip2)
+    (lib.getLib llvmPackages_16.clang-unwrapped)
+    (lib.getLib llvmPackages_16.libllvm)
 ]))) {})

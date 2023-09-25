@@ -1,8 +1,8 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
 , cmake, ninja, python3, fixDarwinDylibNames, version
-, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt, libunwind
+, cxxabi ? libcxxabi
+, libcxxabi, libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.

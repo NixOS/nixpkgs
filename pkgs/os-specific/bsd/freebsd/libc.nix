@@ -29,6 +29,8 @@ mkDerivation rec {
     "lib/libthr"
     "lib/libthread_db"
     "libexec/rtld-elf"
+    "lib/csu/common/crtbrand.S"
+    "lib/csu/common/notes.h"
 
     # librpcsvc
     "lib/librpcsvc"
@@ -40,6 +42,14 @@ mkDerivation rec {
     "lib/libcrypt"
     "lib/libmd"
     "sys/crypto/sha2"
+
+    # libgcc and friends
+    "lib/libgcc_eh"
+    "lib/libgcc_s"
+    "contrib/llvm-project/compiler-rt"
+    "contrib/llvm-project/libunwind"
+    "contrib/llvm-project/libcxx"
+    "lib/libcompiler_rt"
   ];
 
   patches = [
@@ -48,6 +58,7 @@ mkDerivation rec {
 
     # Don't force -lcompiler-rt, we don't actually call it that
     ./libc-no-force--lcompiler-rt.patch
+    ./rtld-no-force--lcompiler-rt.patch
 
     # Fix extra include dir to get rpcsvc headers.
     ./librpcsvc-include-subdir.patch
@@ -107,8 +118,16 @@ mkDerivation rec {
 
     sed -i -e 's| [^ ]*/libc_nonshared.a||' $out/lib/libc.so
 
-    $CC -nodefaultlibs -lgcc -shared -o $out/lib/libgcc_s.so
-    $AR r $out/lib/libgcc_eh.a  # experimental
+    mkdir $BSDSRCDIR/lib/libcompiler_rt/i386
+    make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags
+    make -C $BSDSRCDIR/lib/libcompiler_rt $makeFlags install
+
+    make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags
+    make -C $BSDSRCDIR/lib/libgcc_eh $makeFlags install
+
+    mkdir $BSDSRCDIR/lib/libgcc_s/i386
+    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags
+    make -C $BSDSRCDIR/lib/libgcc_s $makeFlags install
 
     NIX_CFLAGS_COMPILE+=" -B$out/lib"
     NIX_CFLAGS_COMPILE+=" -I$out/include"
@@ -131,6 +150,11 @@ mkDerivation rec {
 
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags
     make -C $BSDSRCDIR/lib/libcrypt $makeFlags install
+
+    make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags
+    make -C $BSDSRCDIR/libexec/rtld-elf $makeFlags install
+    rm -f $out/libexec/ld-elf.so.1
+    mv $out/bin/ld-elf.so.1 $out/libexec
   '';
 
   meta.platforms = lib.platforms.freebsd;

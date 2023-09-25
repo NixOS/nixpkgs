@@ -89,6 +89,8 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "bash_cv_getenv_redef=no"
+  ] ++ lib.optionals (stdenv.hostPlatform.isFreeBSD && stdenv.buildPlatform != stdenv.hostPlatform) [
+    "bash_cv_dev_fd=absent"
   ];
 
   strictDeps = true;
