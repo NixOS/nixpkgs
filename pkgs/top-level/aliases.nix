@@ -1112,7 +1112,6 @@ mapAliases ({
   metal = throw "metal has been removed due to lack of maintainers";
   metricbeat6 = throw "metricbeat6 has been removed because it reached end of life"; # Added 2022-10-04
   microsoft_gsl = microsoft-gsl; # Added 2023-05-26
-  mididings = throw "mididings has been removed from nixpkgs as it doesn't support recent python3 versions and its upstream stopped maintaining it"; # Added 2022-01-12
   midoriWrapper = throw "'midoriWrapper' has been renamed to/replaced by 'midori'"; # Converted to throw 2022-02-22
   mime-types = mailcap; # Added 2022-01-21
   mimms = throw "mimms has been removed from nixpkgs as the upstream project is stuck on python2"; # Added 2022-01-01

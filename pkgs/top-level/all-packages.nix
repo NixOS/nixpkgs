@@ -1904,6 +1904,10 @@ with pkgs;
 
   memos = callPackage ../servers/memos { };
 
+  mididings = with python3.pkgs; toPythonApplication (mididings.override {
+    withOptionalDependencies = true;
+  });
+
   midimonster = callPackage ../tools/audio/midimonster { };
 
   midi-trigger = callPackage ../applications/audio/midi-trigger { };
