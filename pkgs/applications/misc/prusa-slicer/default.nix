@@ -67,7 +67,7 @@ let
   });
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
   version = "2.6.1";
 
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ nativeCheckInputs;
+  ] ++ finalAttrs.nativeCheckInputs;
 
   doCheck = true;
   nativeCheckInputs = [ gtest ];
@@ -167,7 +167,7 @@ stdenv.mkDerivation rec {
     owner = "prusa3d";
     repo = "PrusaSlicer";
     hash = "sha256-t5lnBL7SZVfyR680ZK29YXgE3pag+uVv4+BGJZq40/A=";
-    rev = "version_${version}";
+    rev = "version_${finalAttrs.version}";
   };
 
   cmakeFlags = [
@@ -201,4 +201,4 @@ stdenv.mkDerivation rec {
   } // lib.optionalAttrs (stdenv.isDarwin) {
     mainProgram = "PrusaSlicer";
   };
-}
+})

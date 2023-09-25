@@ -37,5 +37,6 @@ buildGoModule rec {
     changelog = "https://github.com/gopasspw/git-credential-gopass/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ benneti ];
+    mainProgram = "git-credential-gopass";
   };
 }

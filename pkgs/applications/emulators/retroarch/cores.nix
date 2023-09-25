@@ -50,7 +50,7 @@ let
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2023-03-13"
+    , version ? "unstable-2023-09-24"
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
@@ -410,7 +410,9 @@ in
 
   flycast = mkLibretroCore {
     core = "flycast";
+    extraNativeBuildInputs = [ cmake ];
     extraBuildInputs = [ libGL libGLU ];
+    cmakeFlags = [ "-DLIBRETRO=ON" ];
     makefile = "Makefile";
     meta = {
       description = "Flycast libretro port";
@@ -502,10 +504,17 @@ in
 
   mame = mkLibretroCore {
     core = "mame";
-    extraBuildInputs = [ alsa-lib libGLU libGL portaudio python3 xorg.libX11 ];
+    extraNativeBuildInputs = [ python3 ];
+    extraBuildInputs = [ alsa-lib libGLU libGL ];
     meta = {
       description = "Port of MAME to libretro";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
+      # Build fail with errors:
+      # gcc: warning: <arch>: linker input file unused because linking not done
+      # gcc: error: <arch>: linker input file not found: No such file or directory
+      # Removing it from platforms instead of marking as broken to allow
+      # retroarchFull to be built
+      platforms = [ ];
     };
   };
 
@@ -626,6 +635,13 @@ in
     src = getCoreSrc "mupen64plus";
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
+    makeFlags = [
+      "HAVE_PARALLEL_RDP=1"
+      "HAVE_PARALLEL_RSP=1"
+      "HAVE_THR_AL=1"
+      "LLE=1"
+      "WITH_DYNAREC=${stdenv.hostPlatform.parsed.cpu.name}"
+    ];
     meta = {
       description = "Libretro port of Mupen64 Plus, GL only";
       license = lib.licenses.gpl3Only;
@@ -698,6 +714,11 @@ in
     core = "parallel-n64";
     extraBuildInputs = [ libGLU libGL libpng ];
     makefile = "Makefile";
+    makeFlags = [
+      "HAVE_PARALLEL=1"
+      "HAVE_PARALLEL_RSP=1"
+      "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+    ];
     postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
       sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
       && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
@@ -852,19 +873,8 @@ in
     };
   };
 
-  scummvm = mkLibretroCore rec {
+  scummvm = mkLibretroCore {
     core = "scummvm";
-    version = "unstable-2022-04-06";
-    # Commit below introduces libretro platform, that uses libretro-{deps,common} as
-    # submodules. We will probably need to introduce this as separate derivations,
-    # but for now let's just use the last known version that does not use it.
-    # https://github.com/libretro/scummvm/commit/36446fa6eb33e67cc798f56ce1a31070260e2ada
-    src = fetchFromGitHub {
-      owner = "libretro";
-      repo = core;
-      rev = "2fb2e4c551c9c1510c56f6e890ee0300b7b3fca3";
-      hash = "sha256-wrlFqu+ONbYH4xMFDByOgySobGrkhVc7kYWI4JzA4ew=";
-    };
     extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";

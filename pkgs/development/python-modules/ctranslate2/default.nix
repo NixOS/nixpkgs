@@ -12,7 +12,7 @@
 
 # tests
 , pytestCheckHook
-, tensorflow
+, tensorflow-bin
 , torch
 , transformers
 , wurlitzer
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    tensorflow
+    tensorflow-bin
     torch
     transformers
     wurlitzer
