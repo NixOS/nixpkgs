@@ -100,12 +100,22 @@ in
     };
   };
 
+  beetle-pce = mkLibretroCore {
+    core = "mednafen-pce";
+    src = getCoreSrc "beetle-pce";
+    makefile = "Makefile";
+    meta = {
+      description = "Port of Mednafen's PC Engine core to libretro";
+      license = lib.licenses.gpl2Only;
+    };
+  };
+
   beetle-pce-fast = mkLibretroCore {
     core = "mednafen-pce-fast";
     src = getCoreSrc "beetle-pce-fast";
     makefile = "Makefile";
     meta = {
-      description = "Port of Mednafen's PC Engine core to libretro";
+      description = "Port of Mednafen's PC Engine fast core to libretro";
       license = lib.licenses.gpl2Only;
     };
   };
