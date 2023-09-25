@@ -9,6 +9,7 @@
 , lame
 , mpv-unwrapped
 , ninja
+, nixosTests
 , nodejs
 , nodejs-slim
 , prefetch-yarn-deps
@@ -270,6 +271,7 @@ python3.pkgs.buildPythonApplication {
   passthru = {
     # cargoLock is reused in anki-sync-server
     inherit cargoLock;
+    tests.anki-sync-server = nixosTests.anki-sync-server;
   };
 
   meta = with lib; {
