@@ -1,7 +1,7 @@
 #! @runtimeShell@
 # shellcheck shell=bash
 
-set -e
+set -euo pipefail
 shopt -s nullglob
 
 export PATH=@path@:$PATH
