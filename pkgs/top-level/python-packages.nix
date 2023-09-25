@@ -4376,6 +4376,8 @@ self: super: with self; {
 
   gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
 
+  gitlike-commands = callPackage ../development/python-modules/gitlike-commands { };
+
   gitpython = callPackage ../development/python-modules/gitpython { };
 
   glad =  callPackage ../development/python-modules/glad { };
