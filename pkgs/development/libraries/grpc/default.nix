@@ -70,14 +70,10 @@ stdenv.mkDerivation rec {
   # problematic, because the compatibility types in abseil will have different
   # interface definitions than the ones used for building abseil itself.
   # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
-  ++ (let
-    defaultCxxIsOlderThan17 =
-      (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
-       || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
-    in lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17)
-  [
+  # TODO: Patching that line out would be a better solution.
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.cc.cc.defaultCxxStandard >= 17) [
     "-DCMAKE_CXX_STANDARD=17"
-  ]);
+  ];
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.

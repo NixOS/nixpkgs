@@ -89,6 +89,8 @@ let
     passthru = {
       inherit libllvm;
       isClang = true;
+      defaultCStandard = 17;
+      defaultCxxStandard = 14;
       hardeningUnsupportedFlags = [ "fortify3" ];
     };
 

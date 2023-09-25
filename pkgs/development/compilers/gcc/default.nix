@@ -415,6 +415,8 @@ ${""}          done
   passthru = {
     inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
+    defaultCStandard = if atLeast11 then 17 else if atleast5 then 11 else 89;
+    defaultCxxStandard = if atLeast11 then 17 else if atleast6 then 14 else 98;
   } // lib.optionalAttrs (!atLeast12) {
     hardeningUnsupportedFlags = lib.optionals is48 [ "stackprotector" ] ++ [ "fortify3" ];
   };
