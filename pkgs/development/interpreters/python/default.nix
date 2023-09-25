@@ -181,14 +181,14 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "11";
+      patch = "12";
     };
 
     hash = {
-      aarch64-linux = "sha256-6pJNod7+kyXvdg4oiwT5hGFOQFWA9TIetqXI9Tm9QVo=";
-      x86_64-linux = "sha256-uo7ZWKkFwHNaTP/yh1wlCJlU3AIOCH2YKw/6W52jFs0=";
-      aarch64-darwin = "sha256-zFaWq0+TzTSBweSZC13t17pgrAYC+hiQ02iImmxb93E=";
-      x86_64-darwin = "sha256-Vt7unCJkD1aGw1udZP2xzjq9BEWD5AePCxccov0qGY4=";
+      aarch64-linux = "sha256-4E3LYoantHJOw/DlDTzBuoWDMB3RZYwG1/N1meQgHFk=";
+      x86_64-linux = "sha256-GmGiV0t5Rm9gYBDymZormVvZbNCF+Rp46909XCxA6B0=";
+      aarch64-darwin = "sha256-a3R6oHauhZfklgPF3sTKWTWhoKEy10BKVZvpaiYNm/c=";
+      x86_64-darwin = "sha256-bon/3RVTfOT/zjFFtl7lfC6clSiSvZW5NAEtLwCfUDs=";
     }.${stdenv.system};
     pythonVersion = "2.7";
     inherit passthruFun;
