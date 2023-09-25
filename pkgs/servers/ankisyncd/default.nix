@@ -60,6 +60,9 @@ in rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ protobuf ];
 
+  # no rust-level test, skip useless build
+  doCheck = false;
+
   meta = with lib; {
     description = "Standalone unofficial anki sync server";
     homepage = "https://github.com/ankicommunity/anki-sync-server-rs";
