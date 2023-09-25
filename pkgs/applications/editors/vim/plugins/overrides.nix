@@ -165,6 +165,19 @@ self: super: {
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
+  # The GitHub repository returns 404, which breaks the update script
+  vim-pony = buildVimPluginFrom2Nix {
+    pname = "vim-pony";
+    version = "2018-07-27";
+    src = fetchFromGitHub {
+      owner = "jakwings";
+      repo = "vim-pony";
+      rev = "b26f01a869000b73b80dceabd725d91bfe175b75";
+      sha256 = "0if8g94m3xmpda80byfxs649w2is9ah1k8v3028nblan73zlc8x8";
+    };
+    meta.homepage = "https://github.com/jakwings/vim-pony/";
+  };
+
   chadtree = super.chadtree.overrideAttrs {
     passthru.python3Dependencies = ps: with ps; [
       pynvim-pp
