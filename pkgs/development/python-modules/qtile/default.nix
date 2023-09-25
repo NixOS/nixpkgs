@@ -5,13 +5,15 @@
 , dbus-next
 , dbus-python
 , glib
+, libdrm
 , libinput
 , libxkbcommon
 , mpd2
 , pango
+, pixman
 , pkg-config
 , psutil
-, pulseaudio
+, pulsectl-asyncio
 , pygobject3
 , python-dateutil
 , pywayland
@@ -22,19 +24,20 @@
 , wayland
 , wlroots
 , xcbutilcursor
+, xcbutilwm
 , xcffib
 , xkbcommon
 }:
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.22.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "v${version}";
-    hash = "sha256-HOyExVKOqZ4OeNM1/AiXQeiUV+EbSJLEjWEibm07ff8=";
+    hash = "sha256-WxnpkKqYGGEsFTt/1iCSiCzdESJP6HFJ6BztaMsMbYo=";
   };
 
   patches = [
@@ -48,6 +51,9 @@ buildPythonPackage rec {
       --replace libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
     substituteInPlace libqtile/backend/x11/xcursors.py \
       --replace libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
+    substituteInPlace libqtile/backend/wayland/cffi/build.py \
+        --replace /usr/include/pixman-1 ${lib.getDev pixman}/include \
+        --replace /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -66,12 +72,12 @@ buildPythonPackage rec {
     dbus-next
     mpd2
     psutil
+    pulsectl-asyncio
     pyxdg
     pygobject3
     pywayland
     pywlroots
     xkbcommon
-    pulseaudio
   ];
 
   buildInputs = [
@@ -79,6 +85,7 @@ buildPythonPackage rec {
     wayland
     wlroots
     libxkbcommon
+    xcbutilwm
   ];
 
   doCheck = false; # Requires X server #TODO this can be worked out with the existing NixOS testing infrastructure.
