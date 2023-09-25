@@ -40,13 +40,13 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.7.5";
+  version = "2.7.6";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "sha256-OBEjczUIkY3pQXJfsuNj9Bm2TIbVWEHqMSolQnSfvLE=";
+    hash = "sha256-xgrkMz7BCBxjfxHsAz/CFLv1d175LnrAJIOZMM3GmU0=";
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jonafato srapenne ];
+    maintainers = with maintainers; [ jonafato srapenne blankparticle ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
