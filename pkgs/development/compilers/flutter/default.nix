@@ -94,7 +94,7 @@ in
     patches = flutter3Patches;
   };
 
-  v37 = mkFlutter {
+  v37 = let flutter = mkFlutter {
     version = "3.7.12";
     engineVersion = "1a65d409c7a1438a34d21b60bf30a6fd5db59314";
     dartVersion = "2.19.6";
@@ -111,7 +111,7 @@ in
       aarch64-darwin = "sha256-yetEE65UP2Wh9ocx7nClQjYLHO6lIbZPay1+I2tDSM4=";
     };
     patches = flutter37Patches;
-  };
+  }; in flutter // { meta = flutter.meta // { knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
 
   v2 = let flutter = mkFlutter {
     version = "2.10.5";
@@ -132,5 +132,5 @@ in
       aarch64-darwin = lib.fakeHash;
     };
     patches = flutter2Patches;
-  }; in flutter // { meta = flutter.meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; }; };
+  }; in flutter // { meta = flutter.meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
 }
