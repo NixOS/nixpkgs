@@ -516,15 +516,11 @@ in
     core = "mame";
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib libGLU libGL ];
+    # Setting this is breaking compilation of src/3rdparty/genie for some reason
+    makeFlags = [ "ARCH=" ];
     meta = {
       description = "Port of MAME to libretro";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
-      # Build fail with errors:
-      # gcc: warning: <arch>: linker input file unused because linking not done
-      # gcc: error: <arch>: linker input file not found: No such file or directory
-      # Removing it from platforms instead of marking as broken to allow
-      # retroarchFull to be built
-      platforms = [ ];
     };
   };
 
