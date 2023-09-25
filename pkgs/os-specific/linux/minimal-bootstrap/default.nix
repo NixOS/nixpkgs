@@ -102,9 +102,15 @@ lib.makeScope
       tinycc = tinycc-mes;
     };
 
-    gnutar = callPackage ./gnutar {
+    gnutar = callPackage ./gnutar/mes.nix {
       bash = bash_2_05;
       tinycc = tinycc-mes;
+      gnused = gnused-mes;
+    };
+
+    gnutar-musl = callPackage ./gnutar/musl.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-musl;
       gnused = gnused-mes;
     };
 
@@ -173,6 +179,7 @@ lib.makeScope
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
       echo ${gnutar.tests.get-version}
+      echo ${gnutar-musl.tests.get-version}
       echo ${gzip.tests.get-version}
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
