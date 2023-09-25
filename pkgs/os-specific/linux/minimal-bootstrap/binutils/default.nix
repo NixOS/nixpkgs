@@ -105,10 +105,10 @@ bash.runCommand "${pname}-${version}" {
   bash ./configure ${lib.concatStringsSep " " configureFlags}
 
   # Build
-  make all-libiberty all-gas all-bfd all-libctf all-zlib all-gprof
+  make -j $NIX_BUILD_CORES all-libiberty all-gas all-bfd all-libctf all-zlib all-gprof
   make all-ld # race condition on ld/.deps/ldwrite.Po, serialize
-  make
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''
