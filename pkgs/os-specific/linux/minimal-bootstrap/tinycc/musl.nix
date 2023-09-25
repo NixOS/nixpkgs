@@ -10,12 +10,13 @@
 }:
 let
   pname = "tinycc-musl";
-  version = "unstable-2023-04-20";
-  rev = "86f3d8e33105435946383aee52487b5ddf918140";
+  # next commit introduces use of realpath (unsupported in mes-libc)
+  version = "unstable-2023-07-10";
+  rev = "fd6d2180c5c801bb0b4c5dde27d61503059fc97d";
 
   src = fetchurl {
     url = "https://repo.or.cz/tinycc.git/snapshot/${rev}.tar.gz";
-    hash = "sha256-V3XBXYyzHi9f4JSYGeQwz6+1biUp7cwGaEE+x9fOLYY=";
+    hash = "sha256-R81SNbEmh4s9FNQxCWZwUiMCYRkkwOHAdRf0aMnnRiA=";
   };
 
   patches = [
