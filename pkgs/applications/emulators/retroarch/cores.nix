@@ -301,7 +301,11 @@ in
     core = "citra";
     extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
-    makeFlags = [ "HAVE_FFMPEG_STATIC=0" ];
+    makeFlags = [
+      "HAVE_FFMPEG_STATIC=0"
+      # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L90
+      "BUILD_DATE=01/01/1970_00:00"
+    ];
     meta = {
       description = "Port of Citra to libretro";
       license = lib.licenses.gpl2Plus;
