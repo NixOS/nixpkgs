@@ -231,6 +231,8 @@
   };
 
   "57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab" = {
+    skyNotice = "sha256-RRHgPRGCnD6OFlqCrtIsFTKYo1F9FvGvVDvSsAbIcPo=";
+    flutterNotice = "sha256-pZjblLYpD/vhC17PkRBXtqlDNRxyf92p5fKJHWhwCiA=";
     android-arm = {
       "artifacts.zip" = "sha256-3igOO+rgFh0fNTIIiiucqSmqC+NKFPG5H1CnIa9bDcM=";
     };

@@ -71,6 +71,7 @@ let
 
   flutter2Patches = getPatches ./patches/flutter2;
   flutter3Patches = getPatches ./patches/flutter3;
+  flutter37Patches = getPatches ./patches/flutter37;
 in
 {
   inherit wrapFlutter;
@@ -109,18 +110,27 @@ in
       x86_64-darwin = "sha256-cJF8KB9fNb3hTZShDAPsMmr1neRdIMLvIl/m2tpzwQs=";
       aarch64-darwin = "sha256-yetEE65UP2Wh9ocx7nClQjYLHO6lIbZPay1+I2tDSM4=";
     };
-    patches = flutter3Patches;
+    patches = flutter37Patches;
   };
 
-  v2 = mkFlutter {
+  v2 = let flutter = mkFlutter {
     version = "2.10.5";
     engineVersion = "57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab";
     dartVersion = "2.16.2";
-    hash = "sha256-MxaWvlcCfXN8gsC116UMzqb4LgixHL3YjrGWy7WYgW4=";
     dartHash = {
       x86_64-linux = "sha256-vxKxysg6e3Qxtlp4dLxOZaBtgHGtl7XYd73zFZd9yJc=";
       aarch64-linux = "sha256-ZfpR6fj/a9Bsgrg31Z/uIJaCHIWtcQH3VTTVkDJKkwA=";
+      # these weren't supported previously
+      x86_64-darwin = lib.fakeHash;
+      aarch64-darwin = lib.fakeHash;
+    };
+    flutterHash = rec {
+      x86_64-linux = "sha256-MxaWvlcCfXN8gsC116UMzqb4LgixHL3YjrGWy7WYgW4=";
+      aarch64-linux = x86_64-linux;
+      # these weren't supported previously
+      x86_64-darwin = lib.fakeHash;
+      aarch64-darwin = lib.fakeHash;
     };
     patches = flutter2Patches;
-  };
+  }; in flutter // { meta = flutter.meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; }; };
 }

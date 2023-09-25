@@ -183,12 +183,14 @@ let
         if overrideUnpackCmd then
           (fetchurl {
             url = "https://storage.googleapis.com/flutter_infra_release/flutter/${engineVersion}${lib.optionalString (platform != null) "/${artifactDirectory}"}/${archive}";
-            hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
+            hash = if artifactDirectory != null && !(hashes ? ${artifactDirectory}) then lib.fakeHash else (let ar = if artifactDirectory == null then hashes else 
+hashes.${artifactDirectory}; in if !(ar ? ${archive}) then lib.fakeHash else ar.${archive});
           }) else
           (fetchzip {
             url = "https://storage.googleapis.com/flutter_infra_release/flutter/${engineVersion}${lib.optionalString (platform != null) "/${artifactDirectory}"}/${archive}";
             stripRoot = false;
-            hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
+            hash = if artifactDirectory != null && !(hashes ? ${artifactDirectory}) then lib.fakeHash else (let ar = if artifactDirectory == null then hashes else 
+hashes.${artifactDirectory}; in if !(ar ? ${archive}) then lib.fakeHash else ar.${archive});
           });
 
       setSourceRoot = if overrideUnpackCmd then "sourceRoot=`pwd`" else null;
