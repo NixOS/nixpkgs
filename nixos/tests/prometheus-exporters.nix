@@ -1178,6 +1178,44 @@ let
       '';
     };
 
+    sabnzbd = {
+      exporterConfig = {
+        enable = true;
+        servers = [{
+          baseUrl = "http://localhost:8080";
+          apiKeyFile = "/var/sabnzbd-apikey";
+        }];
+      };
+
+      metricProvider = {
+        services.sabnzbd.enable = true;
+
+        # unrar is required for sabnzbd
+        nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [ "unrar" ];
+
+        # extract the generated api key before starting
+        systemd.services.sabnzbd-apikey = {
+          requires = [ "sabnzbd.service" ];
+          after = [ "sabnzbd.service" ];
+          requiredBy = [ "prometheus-sabnzbd-exporter.service" ];
+          before = [ "prometheus-sabnzbd-exporter.service" ];
+          script = ''
+            grep -Po '^api_key = \K.+' /var/lib/sabnzbd/sabnzbd.ini > /var/sabnzbd-apikey
+          '';
+        };
+      };
+
+      exporterTest = ''
+        wait_for_unit("sabnzbd.service")
+        wait_for_unit("prometheus-sabnzbd-exporter.service")
+        wait_for_open_port(8080)
+        wait_for_open_port(9387)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9387/metrics' | grep 'sabnzbd_queue_size{sabnzbd_instance=\"http://localhost:8080\"} 0.0'"
+        )
+      '';
+    };
+
     scaphandre = {
       exporterConfig = {
         enable = true;
