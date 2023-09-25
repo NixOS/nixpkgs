@@ -6,7 +6,9 @@
 , cmake
 , mimalloc
 , ninja
+, tbb
 , zlib
+, zstd
 
 , buildPackages
 , hello
@@ -34,13 +36,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    tbb
     zlib
+    zstd
   ] ++ lib.optionals (!stdenv.isDarwin) [
     mimalloc
   ];
 
   cmakeFlags = [
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
+    "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
