@@ -167,13 +167,11 @@ in {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pypy38 = __splicedPackages.pypy39.override {
-    self = __splicedPackages.pythonInterpreters.pypy38;
-    pythonVersion = "3.8";
-    hash = "sha256-TWdpv8pzc06GZv1wUDt86wam4lkRDmFzMbs4mcpOYFg=";
+  pypy310 = __splicedPackages.pypy39.override {
+    self = __splicedPackages.pythonInterpreters.pypy310;
+    pythonVersion = "3.10";
+    hash = "sha256-huTk6sw2BGxhgvQwGHllN/4zpg4dKizGuOf5Gl3LPkI=";
   };
-
-  pypy37 = throw "pypy37 has been removed from nixpkgs since it is no longer supported upstream"; # Added 2023-01-04
 
   pypy27_prebuilt = callPackage ./pypy/prebuilt_2_7.nix {
     # Not included at top-level
