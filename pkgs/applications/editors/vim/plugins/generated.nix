@@ -5999,12 +5999,12 @@ final: prev:
 
   neogit = buildVimPlugin {
     pname = "neogit";
-    version = "2023-09-23";
+    version = "2023-09-25";
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "dfacf16679b120c50c8a2dcefe00f77932523708";
-      sha256 = "1fkf3qjicn6y6n54ziwfh9hpxgvkg31wvjdl1nxhxfdx2rif3vnm";
+      rev = "7bd45be6f327cd4f7c5ef08000734916de8af94e";
+      sha256 = "1mav0580b6mjb67454sq9i7kcgvxigkc6w5nmip68n1ghksss1df";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
   };
