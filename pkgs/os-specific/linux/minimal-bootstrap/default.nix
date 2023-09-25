@@ -32,6 +32,12 @@ lib.makeScope
     };
 
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
+    coreutils-musl = callPackage ./coreutils/musl.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
+    };
 
     diffutils = callPackage ./diffutils {
       bash = bash_2_05;
@@ -168,6 +174,7 @@ lib.makeScope
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}
       echo ${bzip2.tests.get-version}
+      echo ${coreutils-musl.tests.get-version}
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
       echo ${gawk-mes.tests.get-version}
