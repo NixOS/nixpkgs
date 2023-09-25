@@ -64,8 +64,8 @@ bash.runCommand "${pname}-${version}" {
     --host=${hostPlatform.config}
 
   # Build
-  make AR="tcc -ar"
+  make -j $NIX_BUILD_CORES AR="tcc -ar"
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''

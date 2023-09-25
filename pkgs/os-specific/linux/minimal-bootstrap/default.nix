@@ -44,6 +44,8 @@ lib.makeScope
     diffutils = callPackage ./diffutils {
       bash = bash_2_05;
       tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     findutils = callPackage ./findutils {
