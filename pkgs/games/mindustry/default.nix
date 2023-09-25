@@ -37,7 +37,7 @@
 
 let
   pname = "mindustry";
-  version = "143.1";
+  version = "146";
   buildVersion = makeBuildVersion version;
 
   selectedGlew = if enableWayland then glew-egl else glew;
@@ -46,13 +46,13 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-p6HxccLg+sjFW+ZGGTfo5ZvOIs6lKjub88kX/iaBres=";
+    hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-fbFjelwqBRadcUmbW3/oDnhmNAjTj660qB5WwXugIIU=";
+    hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -131,7 +131,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-uxnW5AqX6PazqHJYLuF/By5qpev8Se+992jCyacogSY=";
+    outputHash = "sha256-hbWLsWorEo+1BBURvrFMXpxvZjJBZ1p7HVlJN5e5JZc=";
   };
 
 in
@@ -243,7 +243,7 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno fgaz thekostins ];
-    platforms = platforms.x86_64;
+    platforms = if enableClient then platforms.x86_64 else platforms.linux;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
     broken = stdenv.isDarwin;
