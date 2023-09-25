@@ -3,7 +3,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "brutalmaze";
   version = "1.1.1";
-  format = "flit";
+  format = "pyproject";
   disabled = python3Packages.pythonOlder "3.7";
 
   src = fetchFromSourcehut {
@@ -12,6 +12,10 @@ python3Packages.buildPythonApplication rec {
     rev = version;
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
+
+  nativeBuildInputs = with python3Packages; [
+    flit-core
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     loca

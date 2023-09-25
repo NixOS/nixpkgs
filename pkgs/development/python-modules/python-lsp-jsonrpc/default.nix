@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-jsonrpc";
-  version = "1.1.1";
+  version = "1.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XTvnDTaP5oweGSq1VItq+SEv7S/LrQq4YP1XQc3bxbk=";
+    hash = "sha256-5WN/31e6WCgXVzevMuQbNjyo/2jjWDF+m48nrLKS+64=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
