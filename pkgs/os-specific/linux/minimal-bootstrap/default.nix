@@ -73,8 +73,12 @@ lib.makeScope
     };
 
     gcc46 = callPackage ./gcc/4.6.nix {
-      gcc = gcc2;
-      glibc = glibc22;
+      coreutils = coreutils-musl;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
     };
 
     inherit (callPackage ./glibc {
