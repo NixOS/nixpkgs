@@ -1508,17 +1508,7 @@ distPhase() {
 
 showPhaseHeader() {
     local phase="$1"
-    case "$phase" in
-        unpackPhase) echo "unpacking sources";;
-        patchPhase) echo "patching sources";;
-        configurePhase) echo "configuring";;
-        buildPhase) echo "building";;
-        checkPhase) echo "running tests";;
-        installPhase) echo "installing";;
-        fixupPhase) echo "post-installation fixup";;
-        installCheckPhase) echo "running install tests";;
-        *) echo "$phase";;
-    esac
+        echo "started phase: $phase"
 }
 
 
@@ -1526,13 +1516,12 @@ showPhaseFooter() {
     local phase="$1"
     local startTime="$2"
     local endTime="$3"
-    local delta=$(( endTime - startTime ))
-    (( delta < 30 )) && return
 
+    local delta=$(( endTime - startTime ))
     local H=$((delta/3600))
     local M=$((delta%3600/60))
     local S=$((delta%60))
-    echo -n "$phase completed in "
+    echo -n "finished phase: $phase in "
     (( H > 0 )) && echo -n "$H hours "
     (( M > 0 )) && echo -n "$M minutes "
     echo "$S seconds"
@@ -1558,6 +1547,7 @@ genericBuild() {
             configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
             ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
             ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
+        echo "phases: $phases" | tr -s ' '
     fi
 
     # The use of ${phases[*]} gives the correct behavior both with and
