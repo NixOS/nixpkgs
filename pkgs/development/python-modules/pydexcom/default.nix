@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pydexcom";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "gagebenne";
     repo = "pydexcom";
     rev = "refs/tags/${version}";
-    hash = "sha256-VZ8Y8W3oEQ3W8eubMbHLfQAXK8cL6+OTyBFwtEe0cBE=";
+    hash = "sha256-46+Ml73F6EUbMwRJB93FD+No/g65RJwnCnFzH4Pb5ek=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
