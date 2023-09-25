@@ -947,6 +947,8 @@ in
 
 {
 
+  meta.maintainers = [ maintainers.majiir ];
+
   imports = [
     (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
   ];
