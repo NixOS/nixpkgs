@@ -1,8 +1,9 @@
 { lib
 , fetchFromGitHub
-, makeRustPlatform
 , hostPlatform
 , targetPlatform
+, cargo
+, rustc
 , lld
 }:
 
@@ -24,7 +25,9 @@ let
     };
   };
 
-  inherit (cross) rustPlatform;
+  rustPlatform = cross.makeRustPlatform {
+    inherit rustc cargo;
+  };
 
 in
 
