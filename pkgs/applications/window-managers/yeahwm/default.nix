@@ -1,40 +1,63 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
+, installShellFiles
 , lesstif
-, libX11, libXext, libXmu, libXinerama }:
+, libX11
+, libXext
+, libXinerama
+, libXmu
+}:
 
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "yeahwm";
   version = "0.3.5";
 
   src = fetchurl {
-    url = "http://phrat.de/${pname}_${version}.tar.gz";
-    sha256 = "01gfzjvb40n16m2ja4238nk08k4l203y6a61cydqvf68924fjb69";
+    url = "http://phrat.de/yeahwm_${finalAttrs.version}.tar.gz";
+    hash = "sha256-ySzpiEjIuI2bZ8Eo4wcQlEwEpkVDECVFNcECsrb87gU=";
   };
 
-  buildInputs = [ lesstif libX11 libXext libXinerama libXmu ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  dontConfigure = true;
+  buildInputs = [
+    lesstif
+    libX11
+    libXext
+    libXinerama
+    libXmu
+  ];
 
-  preBuild = ''
+  strictDeps = true;
+
+  preBuild = let
+    includes = builtins.concatStringsSep " "
+      (builtins.map (l: "-I${lib.getDev l}/include")
+        finalAttrs.buildInputs);
+    ldpath = builtins.concatStringsSep " "
+      (builtins.map (l: "-L${lib.getLib l}/lib")
+        finalAttrs.buildInputs);
+  in ''
     makeFlagsArray+=( CC="${stdenv.cc}/bin/cc" \
                       XROOT="${libX11}" \
-                      INCLUDES="-I${libX11.dev}/include -I${libXext.dev}/include -I${libXinerama.dev}/include -I${libXmu.dev}/include" \
-                      LDPATH="-L${libX11}/lib -L${libXext}/lib -L${libXinerama}/lib -L${libXmu}/lib" \
+                      INCLUDES="${includes}" \
+                      LDPATH="${ldpath}" \
                       prefix="${placeholder "out"}" )
   '';
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10.
+  # Otherwise build fails as:
   #   ld: screen.o:(.bss+0x40): multiple definition of `fg'; client.o:(.bss+0x40): first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   postInstall = ''
-    gzip -9 --stdout yeahwm.1 > yeahwm.1.gz
-    install -m644 yeahwm.1.gz ${placeholder "out"}/share/man/man1/
+    installManPage yeahwm.1
   '';
 
-  meta = with lib;{
+  meta = {
+    homepage = "http://phrat.de/index.html";
     description = "An X window manager based on evilwm and aewm";
     longDescription = ''
       YeahWM is a h* window manager for X based on evilwm and aewm.
@@ -55,9 +78,10 @@ stdenv.mkDerivation rec {
       - Little resource usage.
       - It's slick.
     '';
-    homepage = "http://phrat.de/index.html";
-    license = licenses.isc;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = libX11.meta.platforms;
+    changelog = "http://phrat.de/README";
+    license = lib.licenses.isc;
+    mainProgram = "yeahwm";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    inherit (libX11.meta) platforms;
   };
-}
+})
