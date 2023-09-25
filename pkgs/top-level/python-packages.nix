@@ -12892,6 +12892,8 @@ self: super: with self; {
 
   thefuzz = callPackage ../development/python-modules/thefuzz { };
 
+  thelogrus = callPackage ../development/python-modules/thelogrus { };
+
   thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
 
   thermopro-ble = callPackage ../development/python-modules/thermopro-ble { };
