@@ -24879,6 +24879,8 @@ with pkgs;
 
   readline82 = callPackage ../development/libraries/readline/8.2.nix { };
 
+  readmdict = with python3Packages; toPythonApplication readmdict;
+
   readosm = callPackage ../development/libraries/readosm { };
 
   recastnavigation = callPackage ../development/libraries/recastnavigation { };

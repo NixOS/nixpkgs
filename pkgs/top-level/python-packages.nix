@@ -11169,6 +11169,8 @@ self: super: with self; {
 
   readlike = callPackage ../development/python-modules/readlike { };
 
+  readmdict = callPackage ../development/python-modules/readmdict { };
+
   readme = callPackage ../development/python-modules/readme { };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
