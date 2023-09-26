@@ -8319,6 +8319,8 @@ self: super: with self; {
 
   pyisy = callPackage ../development/python-modules/pyisy { };
 
+  pyixapi = callPackage ../development/python-modules/pyixapi { };
+
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
 
   pylddwrap = callPackage ../development/python-modules/pylddwrap { };

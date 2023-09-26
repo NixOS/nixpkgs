@@ -9,21 +9,30 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.7.4";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mXva4c5Rtjq/jFJl3yGGlVrggzGJ3awN0+xoDnDWBSA=";
+    sha256 = "sha256-N34piaSP+QKZzjT42nAR47DTtqGtZ/GMeTeTyRQw3/4=";
   };
+
+  patches = [
+    # restore support unix sockets for redis connections
+    # https://github.com/peering-manager/peering-manager/pull/773
+    (fetchpatch {
+      url = "https://github.com/peering-manager/peering-manager/commit/ff66823c04d8c545a46dcec91d61eda7c21f99aa.patch";
+      hash = "sha256-x5E0LFhGrc5LPY4pwAMNUtigltLGqqbRCe1PIm0yLA8=";
+    })
+  ];
 
   format = "other";
 
   propagatedBuildInputs = with python3.pkgs; [
     django
     djangorestframework
-    django-cacheops
+    django-redis
     django-debug-toolbar
     django-filter
     django-postgresql-netfields
@@ -32,11 +41,13 @@ python3.pkgs.buildPythonApplication rec {
     django-tables2
     django-taggit
     drf-spectacular
+    drf-spectacular-sidecar
     jinja2
     markdown
     napalm
     packaging
     psycopg2
+    pyixapi
     pynetbox
     pyyaml
     requests
