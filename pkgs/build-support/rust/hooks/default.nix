@@ -12,20 +12,11 @@
 
 # This confusingly-named parameter indicates the *subdirectory of
 # `target/` from which to copy the build artifacts.  It is derived
-# from a stdenv platform (or a JSON file; see below).
-, target ? rust.toRustTargetSpec stdenv.hostPlatform
+# from a stdenv platform (or a JSON file).
+, target ? rust.lib.toRustTargetSpecShort stdenv.hostPlatform
 }:
 
-let
-  targetIsJSON = lib.hasSuffix ".json" target;
-
-  # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
-  # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
-  targetSubdirectory = if targetIsJSON then
-      (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
-    else target;
-
-in {
+{
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-build-hook.sh";
@@ -49,7 +40,7 @@ in {
       name = "cargo-install-hook.sh";
       propagatedBuildInputs = [ ];
       substitutions = {
-        inherit targetSubdirectory;
+        targetSubdirectory = target;
       };
     } ./cargo-install-hook.sh) {};
 
