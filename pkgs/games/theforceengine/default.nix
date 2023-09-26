@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , SDL2
-, libdevil
+, SDL2_image
 , rtaudio
 , rtmidi
 , glew
@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "theforceengine";
-  version = "1.09.300";
+  version = "1.09.540";
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
-    sha256 = "sha256-nf5fhP68AgBESiJleeZOLXkAajS+JmHUqyj4vAt2wl4=";
+    sha256 = "sha256-s54X6LZdk7daIlQPHyRBxc8MLS6bzkkypi4m1m+xK80=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    libdevil
+    SDL2_image
     rtaudio
     rtmidi
     glew
