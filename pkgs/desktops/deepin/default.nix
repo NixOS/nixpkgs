@@ -25,6 +25,7 @@ let
 
     #### CORE
     deepin-kwin = callPackage ./core/deepin-kwin { };
+    dde-appearance = callPackage ./core/dde-appearance { };
     dde-app-services = callPackage ./core/dde-app-services { };
     dde-control-center = callPackage ./core/dde-control-center { };
     dde-calendar = callPackage ./core/dde-calendar { };
