@@ -71,6 +71,7 @@ let
     ghc945
     ghc946
     ghc962
+    ghc963
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -493,9 +494,11 @@ let
       ] released;
       hoogle = lib.subtractLists [
         compilerNames.ghc962
+        compilerNames.ghc963
       ] released;
       hlint = lib.subtractLists [
         compilerNames.ghc962
+        compilerNames.ghc963
       ] released;
       hpack = released;
       hsdns = released;
@@ -537,6 +540,7 @@ let
         compilerNames.ghc945
         compilerNames.ghc946
         compilerNames.ghc962
+        compilerNames.ghc963
       ];
       hashable = released;
       primitive = released;
@@ -551,6 +555,7 @@ let
         compilerNames.ghc945
         compilerNames.ghc946
         compilerNames.ghc962
+        compilerNames.ghc963
       ];
     })
     {
