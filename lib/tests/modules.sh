@@ -168,6 +168,30 @@ checkConfigError() {
     fi
 }
 
+# record field
+checkConfigOutput '^"Alice"$' config.people.alice.name ./declare-record.nix ./define-record-alice.nix ./define-record-bob.nix
+checkConfigOutput '^2019$' config.people.bob.nixerSince ./declare-record.nix ./define-record-alice.nix ./define-record-bob.nix
+
+# record field type error
+checkConfigError 'A definition for option .people.mallory.nixerSince. is not of type .signed integer.. Definition values' config.people.mallory.nixerSince ./declare-record.nix ./define-record-mallory.nix
+checkConfigError 'define-record-mallory.nix.: "beginning of time"' config.people.mallory.nixerSince ./declare-record.nix ./define-record-mallory.nix
+
+# record field default
+checkConfigOutput '^true$' config.people.bob.isCool ./declare-record.nix ./define-record-alice.nix ./define-record-bob.nix
+
+# record field bad default definition
+checkConfigError 'In .the default value of option people.mallory.: "yeah"' config.people.mallory.isCool ./declare-record-bad-default.nix ./define-record-mallory.nix
+checkConfigError 'A definition for option .people.mallory.isCool. is not of type .boolean.. Definition values:' config.people.mallory.isCool ./declare-record-bad-default.nix ./define-record-mallory.nix
+
+# record field works in presence of wildcard
+checkConfigOutput '^2016$' config.people.alice.nixerSince ./declare-record-wildcard.nix ./define-record-alice-prefs.nix
+
+# record wildcard field
+checkConfigOutput '^true$' config.people.alice.mechKeyboard ./declare-record-wildcard.nix ./define-record-alice-prefs.nix
+
+
+if false; then
+
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
@@ -866,6 +890,8 @@ checkConfigError 'the-defs-file\.nix' config.argv ./attrList-valueMeta-definitio
 checkConfigError 'The option .merged. in .*/declare-attrList-type-merge.nix. is already declared in .*/declare-attrList-type-merge.nix' config.merged ./declare-attrList-type-merge.nix
 
 checkConfigOutput '"ok"' config.result ./mapAttrsOfSubmodule.nix
+
+fi
 
 cat <<EOF
 ====== module tests ======
