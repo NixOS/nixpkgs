@@ -1,53 +1,53 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, buildGoPackage
-, wrapQtAppsHook
-, wrapGAppsHook
-, gtk3
+, fetchpatch
+, buildGoModule
 , pkg-config
 , deepin-gettext-tools
+, wrapQtAppsHook
+, wrapGAppsHook
 , alsa-lib
-, go-dbus-factory
-, go-gir-generator
-, go-lib
+, gtk3
 , libcanberra
 , libgudev
 , librsvg
 , poppler
 , pulseaudio
 , gdk-pixbuf-xlib
-, dbus
 , coreutils
-, deepin-desktop-base
+, dbus
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dde-api";
-  version = "5.5.32";
-
-  goPackagePath = "github.com/linuxdeepin/dde-api";
+  version = "6.0.7";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-F+vEOSpysqVtjs8de5mCmeANuCbYUQ860ZHl5rwNYac=";
+    hash = "sha256-kdf1CoZUyda6bOTW0WJTgaXYhocrjRU9ptj7i+k8aaQ=";
   };
 
-  patches = [ ./0001-dont-set-PATH.patch ];
+  patches = [
+    (fetchpatch {
+      name = "modify_PKGBUILD_to_support_OBS.patch";
+      url = "https://github.com/linuxdeepin/dde-api/commit/1399522d032c6c649db79a33348cdb1a233bc23a.patch";
+      hash = "sha256-kSHnYaOxIvv7lAJnvxpSwyRDPyDxpAq9x+gJcBdU3T8=";
+    })
+  ];
+
+  vendorHash = "sha256-4Yscw3QjWG1rlju6sMRHGn3dSe65b1nx10B3KeyAzBM=";
 
   postPatch = ''
-    substituteInPlace lang_info/lang_info.go \
-      --replace "/usr/share/i18n/language_info.json" "${deepin-desktop-base}/share/i18n/language_info.json"
-
     substituteInPlace misc/systemd/system/deepin-shutdown-sound.service \
       --replace "/usr/bin/true" "${coreutils}/bin/true"
 
     substituteInPlace sound-theme-player/main.go \
       --replace "/usr/sbin/alsactl" "alsactl"
 
-    substituteInPlace misc/scripts/deepin-boot-sound.sh \
+    substituteInPlace misc/{scripts/deepin-boot-sound.sh,systemd/system/deepin-login-sound.service} \
      --replace "/usr/bin/dbus-send" "${dbus}/bin/dbus-send"
 
     substituteInPlace lunar-calendar/huangli.go adjust-grub-theme/main.go \
@@ -62,8 +62,6 @@ buildGoPackage rec {
     done
   '';
 
-  goDeps = ./deps.nix;
-
   nativeBuildInputs = [
     pkg-config
     deepin-gettext-tools
@@ -73,11 +71,8 @@ buildGoPackage rec {
   dontWrapGApps = true;
 
   buildInputs = [
-    go-dbus-factory
-    go-gir-generator
-    go-lib
-    gtk3
     alsa-lib
+    gtk3
     libcanberra
     libgudev
     librsvg
@@ -88,16 +83,15 @@ buildGoPackage rec {
 
   buildPhase = ''
     runHook preBuild
-    addToSearchPath GOPATH "${go-dbus-factory}/share/gocode"
-    addToSearchPath GOPATH "${go-gir-generator}/share/gocode"
-    addToSearchPath GOPATH "${go-lib}/share/gocode"
-    make -C go/src/${goPackagePath}
+    make GOBUILD_OPTIONS="$GOFLAGS"
     runHook postBuild
   '';
 
+  doCheck = false;
+
   installPhase = ''
     runHook preInstall
-    make install DESTDIR="$out" PREFIX="/" -C go/src/${goPackagePath}
+    make install DESTDIR="$out" PREFIX="/"
     runHook postInstall
   '';
 
