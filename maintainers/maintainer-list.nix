@@ -13072,6 +13072,11 @@
     githubId = 75299;
     name = "Malcolm Matalka";
   };
+  organomagnesiumhalide = {
+    github = "OrganomagnesiumHalide";
+    githubId = 99297401;
+    name = "Organomagnesium Halide";
+  };
   orichter = {
     email = "richter-oliver@gmx.net";
     github = "ORichterSec";
