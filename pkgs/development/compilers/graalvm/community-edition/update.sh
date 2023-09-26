@@ -35,6 +35,7 @@ readonly nixpkgs=../../../../..
 declare -r -A update_urls=(
   [graalvm-ce]="https://api.github.com/repos/graalvm/graalvm-ce-builds/releases/latest"
   [graalpy]="https://api.github.com/repos/oracle/graalpython/releases/latest"
+  [truffleruby]="https://api.github.com/repos/oracle/truffleruby/releases/latest"
 )
 
 current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A "graalvmCEPackages.${product}.version" --json | jq -r)"
@@ -65,6 +66,7 @@ fi
 declare -r -A products_urls=(
   [graalvm-ce]="https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-${new_version}/graalvm-community-jdk-${new_version}_@platform@_bin.tar.gz"
   [graalpy]="https://github.com/oracle/graalpython/releases/download/graal-${new_version}/graalpy-community-${new_version}-@platform@.tar.gz"
+  [truffleruby]="https://github.com/oracle/truffleruby/releases/download/graal-${new_version}/truffleruby-community-${new_version}-@platform@.tar.gz"
 )
 
 if [[ "$product" == "graalvm-ce" ]]; then

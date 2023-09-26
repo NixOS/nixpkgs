@@ -38,4 +38,9 @@ rec {
     version = version "graalpy";
     src = fetchurl (source "graalpy");
   };
+
+  truffleruby = callPackage ./truffleruby.nix {
+    version = version "truffleruby";
+    src = fetchurl (source "truffleruby");
+  };
 }
