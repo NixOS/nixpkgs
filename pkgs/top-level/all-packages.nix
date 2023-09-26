@@ -9175,6 +9175,8 @@ with pkgs;
 
   hey = callPackage ../tools/networking/hey { };
 
+  heygpt = callPackage ../tools/llm/heygpt { };
+
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
