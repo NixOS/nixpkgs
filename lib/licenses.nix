@@ -455,6 +455,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  fraunhofer-fdk = {
+    fullName = "Fraunhofer FDK AAC Codec Library";
+    spdxId = "FDK-AAC";
+  };
+
   free = {
     fullName = "Unspecified free software license";
   };
