@@ -4,6 +4,7 @@
   "date": "2023-04-23T12:18:55-05:00",
   "path": "/nix/store/m39bl3vasy0b1r0qzdn8flb480ys8laq-tree-sitter-devicetree",
   "sha256": "11r46v3zw03p1fldhawn9zwyzpi7h57pjw9sydwq7b1fgdmdxvn7",
+  "hash": "sha256-x+7eansurIN58zpxeU+BJ97v+U+WK9ioC3cA/sc2JIc=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
