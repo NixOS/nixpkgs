@@ -10,6 +10,9 @@
 , filetype
 , defusedxml
 
+# optional-dependencies
+, pillow-heif
+
 # tests
 , numpy
 , opencv4
@@ -43,7 +46,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     heif = [
-      # TODO: pillow-heif
+      pillow-heif
     ];
   };
 
@@ -53,18 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pillow
     wand
-  ];
-
-  disabledTests = [
-    # pillow-heif missing
-    "test_avif"
-    "test_heic"
-    "test_heif"
-    "test_save_as_avif"
-    "test_save_as_heif"
-    "test_save_as_heic"
-    "test_detect_faces"
-  ];
+  ] ++ passthru.optional-dependencies.heif;
 
   meta = with lib; {
     description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
