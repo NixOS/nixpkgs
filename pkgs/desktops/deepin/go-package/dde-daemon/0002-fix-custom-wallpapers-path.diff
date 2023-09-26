@@ -1,5 +1,5 @@
 diff --git a/bin/dde-system-daemon/wallpaper.go b/bin/dde-system-daemon/wallpaper.go
-index d4af13da..1ff36f84 100644
+index 6ee26e27..67dc77dc 100644
 --- a/bin/dde-system-daemon/wallpaper.go
 +++ b/bin/dde-system-daemon/wallpaper.go
 @@ -24,7 +24,7 @@ import (
@@ -20,3 +20,6 @@ index d4af13da..1ff36f84 100644
  		"-c",
  		"0",
  		file,
+-- 
+2.40.1
+
