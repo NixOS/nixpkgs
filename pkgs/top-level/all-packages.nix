@@ -8636,7 +8636,7 @@ with pkgs;
   };
   dapl-native = callPackage ../development/interpreters/dzaima-apl {
     buildNativeImage = true;
-    jdk = graalvm11-ce;
+    jdk = graalvm-ce;
   };
 
   gnucap = callPackage ../applications/science/electronics/gnucap { };
@@ -16471,10 +16471,7 @@ with pkgs;
 
   graalvmCEPackages =
     recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
-  graalvm-ce = graalvm11-ce;
-  graalvm11-ce = graalvmCEPackages.graalvm11-ce;
-  graalvm17-ce = graalvmCEPackages.graalvm17-ce;
-  graalvm19-ce = graalvmCEPackages.graalvm19-ce;
+  graalvm-ce = graalvmCEPackages.graalvm-ce;
   buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
     graalvmDrv = graalvm-ce;
   }).override;
@@ -17760,7 +17757,7 @@ with pkgs;
   };
   dbqn-native = callPackage ../development/interpreters/bqn/dzaima-bqn {
     buildNativeImage = true;
-    jdk = graalvm11-ce;
+    jdk = graalvm-ce;
   };
 
   chibi = callPackage ../development/interpreters/chibi { };

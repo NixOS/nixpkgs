@@ -26,7 +26,7 @@ if [[ -z "${1:-}" ]]; then
       ${GITHUB_TOKEN:+"-u \":$GITHUB_TOKEN\""} \
       -s https://api.github.com/repos/graalvm/graalvm-ce-builds/releases/latest | \
       jq --raw-output .tag_name)"
-  readonly new_version="${gh_version//vm-/}"
+  readonly new_version="${gh_version//jdk-/}"
 else
   readonly new_version="$1"
 fi
@@ -41,29 +41,15 @@ else
 fi
 
 declare -r -A products_urls=(
-  [graalvm-ce]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/graalvm-ce-java@platform@-${new_version}.tar.gz"
-  [js-installable-svm]="https://github.com/graalvm/graaljs/releases/download/vm-${new_version}/js-installable-svm-java@platform@-${new_version}.jar"
-  [llvm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/llvm-installable-svm-java@platform@-${new_version}.jar"
-  [native-image-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/native-image-installable-svm-java@platform@-${new_version}.jar"
-  [nodejs-installable-svm]="https://github.com/graalvm/graaljs/releases/download/vm-${new_version}/nodejs-installable-svm-java@platform@-${new_version}.jar"
-  [python-installable-svm]="https://github.com/graalvm/graalpython/releases/download/vm-${new_version}/python-installable-svm-java@platform@-${new_version}.jar"
-  [ruby-installable-svm]="https://github.com/oracle/truffleruby/releases/download/vm-${new_version}/ruby-installable-svm-java@platform@-${new_version}.jar"
-  [wasm-installable-svm]="https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${new_version}/wasm-installable-svm-java@platform@-${new_version}.jar"
+  [graalvm-ce]="https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-${new_version}/graalvm-community-jdk-${new_version}_@platform@_bin.tar.gz"
+
 )
 
 readonly platforms=(
-  "11-linux-aarch64"
-  "17-linux-aarch64"
-  "19-linux-aarch64"
-  "11-linux-amd64"
-  "17-linux-amd64"
-  "19-linux-amd64"
-  "11-darwin-aarch64"
-  "17-darwin-aarch64"
-  "19-darwin-aarch64"
-  "11-darwin-amd64"
-  "17-darwin-amd64"
-  "19-darwin-amd64"
+  "linux-aarch64"
+  "linux-x64"
+  "macos-aarch64"
+  "macos-x64"
 )
 
 info "Generating '$hashes_nix' file for 'graalvm-ce' $new_version. This will take a while..."
