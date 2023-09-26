@@ -10445,8 +10445,8 @@
   mikaelfangel = {
     email = "nixpkgs.bottle597@passfwd.com";
     github = "MikaelFangel";
-    githubID = "34864484";
-    name = "Mikael Fangel"
+    githubId = 34864484;
+    name = "Mikael Fangel";
   };
   mikefaille = {
     email = "michael@faille.io";
