@@ -51,6 +51,10 @@ stdenv.mkDerivation rec {
     "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
     "--with-pgsql=${postgresql}/bin/pg_config"
   ];
+  postConfigure = ''
+    # Mangle embedded paths to dev-only inputs.
+    sed -e "s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i config.report
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
