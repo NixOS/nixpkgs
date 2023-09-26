@@ -140,19 +140,10 @@ const performParallel = tasks => {
 
 const prefetchYarnDeps = async (lockContents, verbose) => {
 	const lockData = lockfile.parse(lockContents)
-	const tasks = Object.values(
+	await performParallel(
 		Object.entries(lockData.object)
-		.map(([key, value]) => {
-			return { key, ...value }
-		})
-		.reduce((out, pkg) => {
-			out[pkg.resolved] = pkg
-			return out
-		}, {})
+		.map(([key, value]) => () => downloadPkg({ key, ...value }, verbose))
 	)
-		.map(pkg => () => downloadPkg(pkg, verbose))
-
-	await performParallel(tasks)
 	await fs.promises.writeFile('yarn.lock', lockContents)
 	if (verbose) console.log('Done')
 }
