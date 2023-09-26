@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-java",
-  "rev": "09d650def6cdf7f479f4b78f595e9ef5b58ce31e",
-  "date": "2022-09-19T09:37:51+02:00",
-  "path": "/nix/store/478mfssm2335hdflgba22n4f0dir7xmr-tree-sitter-java",
-  "sha256": "0440xh8x8rkbdlc1f1ail9wzl4583l29ic43x9lzl8290bm64q5l",
+  "rev": "c194ee5e6ede5f26cf4799feead4a8f165dcf14d",
+  "date": "2023-04-19T11:09:24+02:00",
+  "path": "/nix/store/8cvdxy97gqx6w22a7s6a20nrw15z57wf-tree-sitter-java",
+  "sha256": "0qcka2lxnidm3vzd0vvi95wz7i7g7dpixhlbq4pb846zm1fpbm1w",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
