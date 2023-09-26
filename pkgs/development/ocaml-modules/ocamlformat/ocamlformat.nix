@@ -5,7 +5,7 @@
 , re
 , ocamlformat-lib
 , menhir
-, version ? "0.26.0"
+, version ? "0.26.1"
 }:
 
 let inherit (callPackage ./generic.nix { inherit version; }) src library_deps;
