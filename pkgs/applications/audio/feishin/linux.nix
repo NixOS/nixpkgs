@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/jeffvli/feishin/releases/download/v${version}/${appname}-${version}-linux-x64.tar.xz";
-    hash = "sha256-sl2zM24bb0yBTfCxtNGizp6Yu+L4nj/Uf669zylnPmE=";
+    hash = "sha256-Y8r329rO7z8V2xP/uRsjTFJfvTn+zyeAYzq6fKDxXs4=";
   };
 
 
