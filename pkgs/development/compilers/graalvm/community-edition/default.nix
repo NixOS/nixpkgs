@@ -39,6 +39,11 @@ rec {
     src = fetchurl (source "graaljs");
   };
 
+  graalnodejs = callPackage ./graalnodejs.nix {
+    version = "21";
+    src = fetchurl (source "graalnodejs");
+  };
+
   graalpy = callPackage ./graalpy.nix {
     version = version "graalpy";
     src = fetchurl (source "graalpy");
