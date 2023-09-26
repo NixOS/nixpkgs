@@ -2,7 +2,6 @@
 , stdenv
 , buildPackages
 , fetchurl
-, binutils
 , bison
 , util-linux
 
@@ -90,7 +89,7 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
     ++ lib.optional withDocs texinfo
-    ++ lib.optional stdenv.hostPlatform.isDarwin binutils;
+    ++ lib.optional stdenv.hostPlatform.isDarwin stdenv.cc.bintools;
 
   buildInputs = lib.optional interactive readline;
 
