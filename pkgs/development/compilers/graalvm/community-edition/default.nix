@@ -34,6 +34,11 @@ rec {
     meta.platforms = builtins.attrNames javaPlatform;
   };
 
+  graaljs = callPackage ./graaljs.nix {
+    version = version "graaljs";
+    src = fetchurl (source "graaljs");
+  };
+
   graalpy = callPackage ./graalpy.nix {
     version = version "graalpy";
     src = fetchurl (source "graalpy");
