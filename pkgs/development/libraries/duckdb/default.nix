@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LEv9yURkYvONObTbIA4CS+umwCRMH8gRQaDtzbCzID4=";
+    hash = "sha256-EKvDH7RwOC4Gu/lturrfnGpzXnJ9azIwAFeuVoa6L/Y=";
   };
 
   patches = [ ./version.patch ];

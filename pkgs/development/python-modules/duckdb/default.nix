@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , duckdb
+, fsspec
 , google-cloud-storage
 , numpy
 , pandas
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     google-cloud-storage
     psutil
     pytestCheckHook
+    fsspec
   ];
 
   disabledTests = [
@@ -54,6 +56,10 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME="$(mktemp -d)"
   '';
+
+  setupPyBuildFlags = [
+    "--inplace"
+  ];
 
   pythonImportsCheck = [
     "duckdb"
