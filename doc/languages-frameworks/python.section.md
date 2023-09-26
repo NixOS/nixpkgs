@@ -1300,15 +1300,27 @@ roughly translates to:
 
 ```
   postCheck = ''
-    PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
-    python -c "import requests; import urllib"
+    (
+      buildPythonPath "$out"
+      env --ignore-environment PATH="$program_PATH" PYTHONPATH="$program_PYTHONPATH" \
+        python -c "import requests; import urllib"
+    )
   '';
 ```
 
-However, this is done in its own phase, and not dependent on whether [`doCheck = true;`](#var-stdenv-doCheck).
+where `buildPythonPath` determines `program_PATH` and `program_PYTHONPATH`. The
+`buildInputs` and `nativeBuildInputs` are _not_ made available in `PATH` or
+`PYTHONPATH` during this check.
 
-This can also be useful in verifying that the package doesn't assume commonly
-present packages (e.g. `setuptools`).
+This also helps checking whether the package assumes dependencies such as
+`setuptools` at runtime, which is commonly not listed.
+
+If your package does not propagate all needed dependencies _(e.g. it has
+`passthru.optional-dependencies`)_ consider using the relaxed check
+`pythonImportsExtrasCheck`, which _does_ have knowledge of all build inputs.
+
+This check is done in its own phase (`preDistPhases`), and is not dependent on
+whether [`doCheck = true;`](#var-stdenv-doCheck). or not.
 
 #### Using pythonRelaxDepsHook {#using-pythonrelaxdepshook}
 
