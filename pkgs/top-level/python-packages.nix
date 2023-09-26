@@ -11221,6 +11221,8 @@ self: super: with self; {
 
   redis = callPackage ../development/python-modules/redis { };
 
+  redis-om = callPackage ../development/python-modules/redis-om { };
+
   redshift-connector = callPackage ../development/python-modules/redshift-connector { };
 
   reedsolo = callPackage ../development/python-modules/reedsolo { };
