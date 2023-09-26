@@ -11,15 +11,15 @@
 let
   inherit (lib) getDev;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qt6ct";
-  version = "0.8";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "trialuser02";
     repo = "qt6ct";
-    rev = version;
-    sha256 = "BFE5aUgn3uFJWTgd4sUwP2L9RZwwwr5jVtAapA9vYbA=";
+    rev = finalAttrs.version;
+    hash = "sha256-MmN/qPBlsF2mBST+3eYeXaq+7B3b+nTN2hi6CmxrILc=";
   };
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ Flakebi Scrumplex ];
   };
-}
+})
