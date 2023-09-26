@@ -9,5 +9,9 @@ finalAttrs: {
     hash = "sha256-4HMyV4MTW3LmZhRceBu0j62lg9UiT7JJD7bBQDumnFk=";
   };
 
+  configureFlags = [
+    "--with-charset=utf8"
+  ];
+
   doCheck = true;
 }

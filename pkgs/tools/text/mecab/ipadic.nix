@@ -12,7 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ mecab-nodic ];
 
-  configurePhase = ''
-    ./configure --with-dicdir="$out"
-  '';
+  configureFlags = [
+    "--with-charset=utf8"
+    "--with-dicdir=${placeholder "out"}"
+  ];
 })
