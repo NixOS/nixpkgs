@@ -1547,13 +1547,15 @@ genericBuild() {
             configurePhase ${preBuildPhases[*]:-} buildPhase checkPhase \
             ${preInstallPhases[*]:-} installPhase ${preFixupPhases[*]:-} fixupPhase installCheckPhase \
             ${preDistPhases[*]:-} distPhase ${postPhases[*]:-}";
-        echo "phases: $phases" | tr -s ' '
     fi
 
     # The use of ${phases[*]} gives the correct behavior both with and
     # without structured attrs.  This relies on the fact that each
     # phase name is space-free, which it must be because it's the name
     # of either a shell variable or a shell function.
+
+    # Detect active phases
+    local activePhases=()
     for curPhase in ${phases[*]}; do
         if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
         if [[ "$curPhase" = patchPhase && -n "${dontPatch:-}" ]]; then continue; fi
@@ -1569,6 +1571,13 @@ genericBuild() {
             echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&"$NIX_LOG_FD"
         fi
 
+        activePhases+=("$curPhase")
+    done
+
+    # Execute active phases
+    echo "phases: ${activePhases[*]}"
+
+    for curPhase in ${activePhases[*]}; do
         showPhaseHeader "$curPhase"
         dumpVars
 
