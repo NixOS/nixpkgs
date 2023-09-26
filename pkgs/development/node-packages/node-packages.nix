@@ -93872,60 +93872,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  react-tools = nodeEnv.buildNodePackage {
-    name = "react-tools";
-    packageName = "react-tools";
-    version = "0.13.3";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/react-tools/-/react-tools-0.13.3.tgz";
-      sha512 = "lmdjIRNk2cVUdlF/dyy6oP0nG2qrlX5qKFYRtiC5zK5Sg5QqgUEOrcS7Jz+kPNeOj9OWT7NfrR/cDvbGGSjCyg==";
-    };
-    dependencies = [
-      sources."acorn-5.7.4"
-      sources."amdefine-1.0.1"
-      sources."ast-types-0.9.6"
-      sources."balanced-match-1.0.2"
-      sources."base62-0.1.1"
-      sources."brace-expansion-1.1.11"
-      sources."commander-2.20.3"
-      sources."commoner-0.10.8"
-      sources."concat-map-0.0.1"
-      sources."defined-1.0.1"
-      sources."detective-4.7.1"
-      sources."esprima-3.1.3"
-      sources."esprima-fb-13001.1001.0-dev-harmony-fb"
-      sources."glob-5.0.15"
-      sources."graceful-fs-4.2.11"
-      sources."iconv-lite-0.4.24"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      (sources."jstransform-10.1.0" // {
-        dependencies = [
-          sources."source-map-0.1.31"
-        ];
-      })
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."once-1.4.0"
-      sources."path-is-absolute-1.0.1"
-      sources."private-0.1.8"
-      sources."q-1.5.1"
-      sources."recast-0.11.23"
-      sources."safer-buffer-2.1.2"
-      sources."source-map-0.5.7"
-      sources."wrappy-1.0.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "A set of complementary tools to React, including the JSX transformer.";
-      homepage = "https://facebook.github.io/react";
-      license = "BSD-3-Clause";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   remod-cli = nodeEnv.buildNodePackage {
     name = "remod-cli";
     packageName = "remod-cli";

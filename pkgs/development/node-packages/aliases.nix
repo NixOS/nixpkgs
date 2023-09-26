@@ -105,6 +105,7 @@ mapAliases {
   inherit (pkgs) quicktype; # added 2023-09-09
   react-native-cli = throw "react-native-cli was removed because it was deprecated"; # added 2023-09-25
   inherit (pkgs) react-static; # added 2023-08-21
+  react-tools = throw "react-tools was removed because it was deprecated"; # added 2023-09-25
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31
