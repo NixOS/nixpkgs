@@ -25,6 +25,9 @@ let
     };
   };
 
+  # inherit (cross) rustPlatform;
+  # ^ breaks because we are doing a no_std embedded build with a custom sysroot,
+  # but the fast_cross rustc wrapper already passes a sysroot argument
   rustPlatform = cross.makeRustPlatform {
     inherit rustc cargo;
   };
