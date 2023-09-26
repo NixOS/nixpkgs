@@ -106,7 +106,9 @@ rec {
   ];
 
   _noEvalMessage = ''
-    lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
+    lib.fileset: Directly evaluating a file set is not supported.
+      To turn it into a usable source, use `lib.fileset.toSource`.
+      To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'';
 
   # The empty file set without a base path
   _emptyWithoutBase = {

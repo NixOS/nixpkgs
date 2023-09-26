@@ -327,8 +327,12 @@ expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.to
 expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
 
 # File sets cannot be evaluated directly
-expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
-expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
+expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
+\s*To turn it into a usable source, use `lib.fileset.toSource`.
+\s*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
+expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set is not supported.
+\s*To turn it into a usable source, use `lib.fileset.toSource`.
+\s*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
