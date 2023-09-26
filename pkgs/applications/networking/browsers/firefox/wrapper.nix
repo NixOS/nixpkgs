@@ -362,7 +362,7 @@ let
 
         extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
         for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
-          jq -s '.[0] + .[1]' "$POL_PATH" $extraPoliciesFile > .tmp.json
+          jq -s '.[0] * .[1]' "$POL_PATH" $extraPoliciesFile > .tmp.json
           mv .tmp.json "$POL_PATH"
         done
 

@@ -303,11 +303,8 @@ You can use the `dhall-to-nixpkgs` command-line utility to automate
 packaging Dhall code.  For example:
 
 ```ShellSession
-$ nix-env --install --attr haskellPackages.dhall-nixpkgs
-
-$ nix-env --install --attr nix-prefetch-git  # Used by dhall-to-nixpkgs
-
-$ dhall-to-nixpkgs github https://github.com/Gabriella439/dhall-semver.git
+$ nix-shell -p haskellPackages.dhall-nixpkgs nix-prefetch-git
+[nix-shell]$ dhall-to-nixpkgs github https://github.com/Gabriella439/dhall-semver.git
 { buildDhallGitHubPackage, Prelude }:
   buildDhallGitHubPackage {
     name = "dhall-semver";
@@ -324,6 +321,10 @@ $ dhall-to-nixpkgs github https://github.com/Gabriella439/dhall-semver.git
     dependencies = [ (Prelude.overridePackage { file = "package.dhall"; }) ];
     }
 ```
+
+:::{.note}
+`nix-prefetch-git` has to be in `$PATH` for `dhall-to-nixpkgs` to work.
+:::
 
 The utility takes care of automatically detecting remote imports and converting
 them to package dependencies.  You can also use the utility on local
