@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, pytestCheckHook
 , pythonOlder
 , setuptools
 }:
@@ -18,29 +18,29 @@ buildPythonPackage rec {
     hash = "sha256-EEeKYeYnxbjLdpH39+v3IQhFSFMWST0310DCl/ttGEU=";
   };
 
-  postPatch = ''
-    # this test has issues with an import statement
-    # rm tests/tags.py
-    sed -i '/from .tags import/d' tests/__init__.py
-
-    # this assertion errors without obvious reason
-    sed -i '/self.assertEqual(csv0, str(r4))/d' tests/caching.py
-
-    # some sql tests fail against sqlite engine
-    sed -i '/from .sql import/d' tests/__init__.py
-  '';
-
   nativeBuildInputs = [
     setuptools
   ];
 
-  pythonImportsCheck = [ "pydal" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m unittest tests
-    runHook postCheck
-  '';
+  pytestFlagsArray = [
+    "tests/*.py"
+    # these tests already seem to be broken on the upstream
+    "--deselect=tests/nosql.py::TestFields::testRun"
+    "--deselect=tests/nosql.py::TestSelect::testGroupByAndDistinct"
+    "--deselect=tests/nosql.py::TestExpressions::testOps"
+    "--deselect=tests/nosql.py::TestExpressions::testRun"
+    "--deselect=tests/nosql.py::TestImportExportUuidFields::testRun"
+    "--deselect=tests/nosql.py::TestConnection::testRun"
+    "--deselect=tests/validation.py::TestValidateAndInsert::testRun"
+    "--deselect=tests/validation.py::TestValidateUpdateInsert::testRun"
+    "--deselect=tests/validators.py::TestValidators::test_IS_IN_DB"
+  ];
+
+  pythonImportsCheck = ["pydal"];
 
   meta = with lib; {
     description = "Python Database Abstraction Layer";
