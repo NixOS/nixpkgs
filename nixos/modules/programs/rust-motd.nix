@@ -8,12 +8,13 @@ let
 
   orderedSections = listToAttrs
     (imap0
-      (i: items@{ sectionHeader, ... }: nameValuePair "env${toString i}" {
-        ${sectionHeader} = removeAttrs items [ "priority" "sectionHeader" ];
+      (i: attr: nameValuePair "env${toString i}" {
+        ${attr} = cfg.settings.${attr};
       })
-      (sortProperties (mapAttrsToList (k: v: v // { sectionHeader = k; }) cfg.settings)));
+      cfg.order);
 
-  # Order the sections in the TOML according to the `priority` field.
+  # Order the sections in the TOML according to the order of sections
+  # in `cfg.order`.
   # This is done by
   # * creating an attribute set with keys `env0`/`env1`/.../`envN`
   #   where `env0` contains the first section and `envN` the last
@@ -54,35 +55,42 @@ in {
         For possible formats, please refer to {manpage}`systemd.time(7)`.
       '';
     };
+    order = mkOption {
+      type = types.listOf types.str;
+      default = attrNames cfg.settings;
+      defaultText = literalExpression "attrNames cfg.settings";
+      description = mdDoc ''
+        The order of the sections in [](#opt-programs.rust-motd.settings) implies
+        the order of sections in the motd. Since attribute sets in Nix are always
+        ordered alphabetically internally this means that
+
+        ```nix
+        {
+          uptime = { /* ... */ };
+          banner = { /* ... */ };
+        }
+        ```
+
+        will still have `banner` displayed before `uptime`.
+
+        To work around that, this option can be used to define the order of all keys,
+        i.e.
+
+        ```nix
+        {
+          order = [
+            "uptime"
+            "banner"
+          ];
+        }
+        ```
+
+        makes sure that `uptime` is placed before `banner` in the motd.
+      '';
+    };
     settings = mkOption {
       type = types.attrsOf (types.submodule {
         freeformType = format.type;
-        options.priority = mkOption {
-          type = types.int;
-          default = modules.defaultOrderPriority;
-          description = mdDoc ''
-            In `rust-motd`, the order of the sections in TOML correlates to the order
-            of the items displayed in the resulting `motd`. Attributes in Nix are
-            ordered alphabetically, e.g. `banner` would always be before `uptime`.
-
-            To change that, this option can be used. The lower this number is, the higher
-            is the priority and the more a section is at the top of the message.
-
-            For instance
-
-            ```nix
-            {
-              banner.command = "hostname | figlet -f slant";
-              uptime = {
-                prefix = "Up";
-                priority = 0;
-              };
-            }
-            ```
-
-            would make the `uptime` appear before the banner.
-          '';
-        };
       });
       description = mdDoc ''
         Settings on what to generate. Please read the
@@ -96,6 +104,13 @@ in {
       { assertion = config.users.motd == null;
         message = ''
           `programs.rust-motd` is incompatible with `users.motd`!
+        '';
+      }
+      { assertion = length cfg.order == length (attrNames cfg.settings)
+          && all (section: cfg.settings?${section}) cfg.order;
+        message = ''
+          Please ensure that every section from `programs.rust-motd.settings` is present in
+          `programs.rust-motd.order`.
         '';
       }
     ];
