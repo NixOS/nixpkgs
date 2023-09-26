@@ -34,10 +34,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    async-timeout
     bleak
     bleak-retry-connector
     flux-led
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [
