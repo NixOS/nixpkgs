@@ -35862,6 +35862,8 @@ with pkgs;
 
   tailor = callPackage ../applications/version-management/tailor { };
 
+  tailor-gui = callPackage ../os-specific/linux/tailor-gui { };
+
   taizen = callPackage ../applications/misc/taizen { };
 
   talosctl = callPackage ../applications/networking/cluster/talosctl { };
@@ -36191,6 +36193,8 @@ with pkgs;
   };
 
   tut = callPackage ../applications/misc/tut { };
+
+  tuxedo-rs = callPackage ../os-specific/linux/tuxedo-rs { };
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar {
     jre = jre8;
