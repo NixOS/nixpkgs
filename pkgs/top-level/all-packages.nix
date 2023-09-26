@@ -21414,9 +21414,9 @@ with pkgs;
   # update to ffmpeg
   # Packages which use ffmpeg as a library, should pin to the relevant major
   # version number which the upstream support.
-  ffmpeg = ffmpeg_5;
-  ffmpeg-headless = ffmpeg_5-headless;
-  ffmpeg-full = ffmpeg_5-full;
+  ffmpeg = ffmpeg_6;
+  ffmpeg-headless = ffmpeg_6-headless;
+  ffmpeg-full = ffmpeg_6-full;
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
