@@ -20,6 +20,7 @@ let
     "aarch64-darwin" = "macos-aarch64";
     "x86_64-darwin" = "macos-x64";
   };
+  version = product: (import (./. + "/hashes-${product}.nix")).version;
   source = product: (import (./. + "/hashes-${product}.nix")).${product}.${javaPlatform.${stdenv.system}}
     or (import (./. + "/hashes-${product}.nix")).${product}.${javaPlatformForProducts.${stdenv.system}}
     or (throw "Unsupported product combination: product=${product} system=${stdenv.system}");
@@ -28,13 +29,13 @@ rec {
   inherit buildGraalvm buildGraalvmProduct;
 
   graalvm-ce = buildGraalvm {
-    version = "21.0.0";
+    version = version "graalvm-ce";
     src = fetchurl (source "graalvm-ce");
     meta.platforms = builtins.attrNames javaPlatform;
   };
 
   graalpy = callPackage ./graalpy.nix {
-    version = "23.1.0";
+    version = version "graalpy";
     src = fetchurl (source "graalpy");
   };
 }
