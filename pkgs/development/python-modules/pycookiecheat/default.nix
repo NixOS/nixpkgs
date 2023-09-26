@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pycookiecheat";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "n8henrie";
     repo = "pycookiecheat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3I7iw/dwF4lRqmVM3OR402InZCFoV9gzKpRQrx4F9KA=";
+    hash = "sha256-mSc5FqMM8BICVEdSdsIny9Bnk6qCRekPk4RkBusDoVA=";
   };
 
   pythonRelaxDeps = [
@@ -51,10 +51,18 @@ buildPythonPackage rec {
     "pycookiecheat"
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   disabledTests = [
     # Tests want to use playwright executable
     "test_no_cookies"
     "test_fake_cookie"
+    "test_firefox_cookies"
+    "test_load_firefox_cookie_db"
+    "test_firefox_no_cookies"
+    "test_firefox_get_default_profile"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_slack_config"
   ];

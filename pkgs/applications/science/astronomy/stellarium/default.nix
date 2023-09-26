@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "23.2";
+  version = "23.3";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    hash = "sha256-8Iheb/9wjf0u10ZQRkLMLNN2s7P++Fqcr26iatiKcTo=";
+    hash = "sha256-bYvGmYu9jMHk2IUICz2kCVh56Ymz8JHqurdWV+xEdJY=";
   };
 
   patches = [
@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://stellarium.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kilianar ];
   };
 }
