@@ -6425,6 +6425,8 @@ self: super: with self; {
 
   managesieve = callPackage ../development/python-modules/managesieve { };
 
+  manga-ocr = callPackage ../development/python-modules/manga-ocr { };
+
   manhole = callPackage ../development/python-modules/manhole { };
 
   manimpango = callPackage ../development/python-modules/manimpango {
