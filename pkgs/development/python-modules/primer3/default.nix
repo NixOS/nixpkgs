@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "primer3";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "libnano";
     repo = "primer3-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ku2PVrWYWPKnNXeUQmstQedJg1O0hsQl4/iEnAMMEaY=";
+    hash = "sha256-WYn88Xv7WSc67TfYCq+i05tG8aKtWLUgc6axntvLF+8=";
   };
 
   nativeBuildInputs = [
