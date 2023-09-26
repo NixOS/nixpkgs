@@ -11931,6 +11931,8 @@ self: super: with self; {
 
   simplekv = callPackage ../development/python-modules/simplekv { };
 
+  simplemma = callPackage ../development/python-modules/simplemma { };
+
   simplenote = callPackage ../development/python-modules/simplenote { };
 
   simplepush = callPackage ../development/python-modules/simplepush { };
