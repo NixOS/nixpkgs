@@ -16,6 +16,14 @@ in
         Size of disk image. Unit is MB.
       '';
     };
+    virtualisation.azureImage.efiSupport = mkOption {
+      type = types.bool;
+      default = !pkgs.stdenv.hostPlatform.isx86;
+      example = true;
+      description = lib.mdDoc ''
+        Whether to enable EFI support for Generation 2 VMs. Defaults to true for non-x86 platforms.
+      '';
+    };
   };
   config = {
     system.build.azureImage = import ../../lib/make-disk-image.nix {
@@ -26,6 +34,7 @@ in
       '';
       configFile = ./azure-config-user.nix;
       format = "raw";
+      partitionTableType = if cfg.efiSupport then "efi" else "legacy";
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };

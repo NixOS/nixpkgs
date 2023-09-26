@@ -1,6 +1,9 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
+let
+  cfg = config.virtualisation.azureImage;
+in
 {
   imports = [ ../profiles/headless.nix ];
 
@@ -10,9 +13,13 @@ with lib;
   boot.kernelParams = [ "console=ttyS0" "earlyprintk=ttyS0" "rootdelay=300" "panic=1" "boot.panic_on_fail" ];
   boot.initrd.kernelModules = [ "hv_vmbus" "hv_netvsc" "hv_utils" "hv_storvsc" ];
 
-  # Generate a GRUB menu.
-  boot.loader.grub.device = "/dev/sda";
+  # Generate a GRUB menu when booting in BIOS.
+  boot.loader.grub.device = if cfg.efiSupport then "nodev" else "/dev/sda";
   boot.loader.timeout = 0;
+
+  # Enable GRUB EFI support if requested.
+  boot.loader.grub.efiSupport = mkIf cfg.efiSupport true;
+  boot.loader.grub.efiInstallAsRemovable = mkIf cfg.efiSupport true;
 
   boot.growPartition = true;
 
@@ -24,6 +31,12 @@ with lib;
     device = "/dev/disk/by-label/nixos";
     fsType = "ext4";
     autoResize = true;
+  };
+
+  # Mount ESP for EFI support.
+  fileSystems."/boot" = mkIf cfg.efiSupport {
+    device = "/dev/disk/by-label/ESP";
+    fsType = "vfat";
   };
 
   # Allow root logins only using the SSH key that the user specified

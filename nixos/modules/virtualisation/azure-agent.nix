@@ -33,15 +33,11 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = pkgs.stdenv.hostPlatform.isx86;
-      message = "Azure not currently supported on ${pkgs.stdenv.hostPlatform.system}";
-    }
-      {
-        assertion = config.networking.networkmanager.enable == false;
-        message = "Windows Azure Linux Agent is not compatible with NetworkManager";
-      }];
+  config = mkIf cfg.enable {
+    assertions = singleton {
+      assertion = config.networking.networkmanager.enable == false;
+      message = "Windows Azure Linux Agent is not compatible with NetworkManager";
+    };
 
     boot.initrd.kernelModules = [ "ata_piix" ];
     networking.firewall.allowedUDPPorts = [ 68 ];
