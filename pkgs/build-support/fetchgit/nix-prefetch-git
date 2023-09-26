@@ -293,9 +293,6 @@ clone_user_rev() {
     local rev="${3:-HEAD}"
 
     if [ -n "$fetchLFS" ]; then
-        tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
-        exit_handlers+=(remove_tmpHomePath)
-        HOME="$tmpHomePath"
         clean_git lfs install
     fi
 
@@ -416,6 +413,12 @@ fi
 if test -z "$branchName"; then
     branchName=fetchgit
 fi
+
+tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
+exit_handlers+=(remove_tmpHomePath)
+HOME="$tmpHomePath"
+unset XDG_CONFIG_HOME
+export GIT_CONFIG_NOSYSTEM=1
 
 if test -n "$builder"; then
     test -n "$out" -a -n "$url" -a -n "$rev" || usage

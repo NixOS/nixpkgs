@@ -22,7 +22,7 @@ buildPythonPackage rec {
   pname = "myst-nb";
   version = "0.17.2";
 
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
