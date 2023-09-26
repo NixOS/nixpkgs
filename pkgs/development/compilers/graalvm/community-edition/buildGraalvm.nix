@@ -188,7 +188,7 @@ let
 
     passthru = {
       home = graalvm-ce;
-      updateScript = ./update.sh;
+      updateScript = [ ./update.sh "graalvm-ce" ];
     } // (args.passhtru or { });
 
     meta = with lib; ({

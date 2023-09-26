@@ -72,6 +72,10 @@ stdenv.mkDerivation ({
 
   dontStrip = true;
 
+  passthru = {
+    updateScript = [ ./update.sh product ];
+  } // (args.passhtru or { });
+
   meta = ({
     inherit (graalvm-ce.meta) homepage license sourceProvenance maintainers platforms;
     description = "High-Performance Polyglot VM (Product: ${product})";

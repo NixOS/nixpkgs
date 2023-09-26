@@ -2,21 +2,21 @@
 {
   "version" = "23.1.0";
   "truffleruby" = {
-    "linux-aarch64" = {
+    "aarch64-linux" = {
       sha256 = "05q0xqm7qa9mw7v4kwyhbqsx27x19msf9rbbzq60dinp5724r721";
       url = "https://github.com/oracle/truffleruby/releases/download/graal-23.1.0/truffleruby-community-23.1.0-linux-aarch64.tar.gz";
     };
-    "linux-amd64" = {
+    "x86_64-linux" = {
       sha256 = "0bfcqcax9424vsdqzr18mxkhi2wpzc4xaji98anm8mcjkyl1r89q";
       url = "https://github.com/oracle/truffleruby/releases/download/graal-23.1.0/truffleruby-community-23.1.0-linux-amd64.tar.gz";
     };
-    "macos-aarch64" = {
-      sha256 = "1nmqyn4vzwjsvq7dly8qn1xx973jg027xfbs988vf3nljnhkpq5l";
-      url = "https://github.com/oracle/truffleruby/releases/download/graal-23.1.0/truffleruby-community-23.1.0-macos-aarch64.tar.gz";
-    };
-    "macos-amd64" = {
+    "x86_64-darwin" = {
       sha256 = "1yj9nk670hgh9104s1j207mqldagfvvvscj4bfgf3jlbcq5hvlhn";
       url = "https://github.com/oracle/truffleruby/releases/download/graal-23.1.0/truffleruby-community-23.1.0-macos-amd64.tar.gz";
+    };
+    "aarch64-darwin" = {
+      sha256 = "1nmqyn4vzwjsvq7dly8qn1xx973jg027xfbs988vf3nljnhkpq5l";
+      url = "https://github.com/oracle/truffleruby/releases/download/graal-23.1.0/truffleruby-community-23.1.0-macos-aarch64.tar.gz";
     };
   };
 }

@@ -75,19 +75,20 @@ declare -r -A products_urls=(
   [truffleruby]="https://github.com/oracle/truffleruby/releases/download/graal-${new_version}/truffleruby-community-${new_version}-@platform@.tar.gz"
 )
 
+# Argh, this is really inconsistent...
 if [[ "$product" == "graalvm-ce" ]]; then
-  readonly platforms=(
-    "linux-aarch64"
-    "linux-x64"
-    "macos-aarch64"
-    "macos-x64"
+  declare -r -A platforms=(
+    [aarch64-linux]="linux-aarch64"
+    [x86_64-linux]="linux-x64"
+    [aarch64-darwin]="macos-aarch64"
+    [x86_64-darwin]="macos-x64"
   )
 else
-  readonly platforms=(
-    "linux-aarch64"
-    "linux-amd64"
-    "macos-aarch64"
-    "macos-amd64"
+  declare -r -A platforms=(
+    [aarch64-linux]="linux-aarch64"
+    [x86_64-linux]="linux-amd64"
+    [aarch64-darwin]="macos-aarch64"
+    [x86_64-darwin]="macos-amd64"
   )
 fi
 
@@ -99,23 +100,24 @@ echo_file "{"
 echo_file "  \"version\" = \"$new_version\";"
 url="${products_urls["${product}"]}"
 echo_file "  \"$product\" = {"
-for platform in "${platforms[@]}"; do
-  args=("${url//@platform@/$platform}")
+for nix_platform in "${!platforms[@]}"; do
+  product_platform="${platforms[$nix_platform]}"
+  args=("${url//@platform@/$product_platform}")
   # Get current hashes to skip derivations already in /nix/store to reuse cache when the version is the same
   # e.g.: when adding a new product and running this script with FORCE=1
   if [[ "$current_version" == "$new_version" ]] && \
-      previous_hash="$(nix-instantiate --eval "$hashes_nix" -A "$product.$platform.sha256" --json | jq -r)"; then
+      previous_hash="$(nix-instantiate --eval "$hashes_nix" -A "$product.$nix_platform.sha256" --json | jq -r)"; then
       args+=("$previous_hash" "--type" "sha256")
   else
-      info "Hash in '$product' for '$platform' not found. Re-downloading it..."
+      info "Hash in '$product' for '$nix_platform' not found. Re-downloading it..."
   fi
   if hash="$(nix-prefetch-url "${args[@]}")"; then
-echo_file "    \"$platform\" = {"
+echo_file "    \"$nix_platform\" = {"
 echo_file "      sha256 = \"$hash\";"
-echo_file "      url = \"${url//@platform@/${platform}}\";"
+echo_file "      url = \"${url//@platform@/${product_platform}}\";"
 echo_file "    };"
   else
-      info "Error while downloading '$product' for '$platform'. Skipping it..."
+      info "Error while downloading '$product' for '$nix_platform'. Skipping it..."
   fi
 done
 echo_file "  };"
