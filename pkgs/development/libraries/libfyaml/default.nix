@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfyaml";
   version = "0.8";
 
   src = fetchFromGitHub {
     owner = "pantoniou";
-    repo = pname;
-    rev = "v${version}";
+    repo = "libfyaml";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-b/jRKe23NIVSydoczI+Ax2VjBJLfAEwF8SW61vIDTwA=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.marsam ];
     platforms = platforms.all;
   };
-}
+})
