@@ -16,15 +16,15 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.37.0";
+  version = "1.38.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
-    rev = "v${version}";
-    hash = "sha256-7egK76A3+C+JPbCNFXDd4qTjepBRSZgtQmFrE/jWJN4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-K3ZLDnDtV9PWX0etVv6RIDHp0vZZ7b7DGJ1GjP2kfXU=";
   };
 
   patches = [
