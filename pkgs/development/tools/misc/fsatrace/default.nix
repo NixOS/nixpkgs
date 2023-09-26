@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fsatrace";
-  version = "0.0.1-324";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "jacereda";
     repo = "fsatrace";
-    rev = "41fbba17da580f81ababb32ec7e6e5fd49f11473";
-    sha256 = "1ihm2v723idd6m0kc1z9v73hmfvh2v0vjs8wvx5w54jaxh3lmj1y";
+    rev = "5af79511828ca6cea4e5dd9f28e1676fb0b705e9";
+    "hash" = "sha256-pn07qlrRaM153znEviziuKWrkX9cLsNFCujovmE4UUA=";
   };
 
   installDir = "libexec/${pname}-${version}";
