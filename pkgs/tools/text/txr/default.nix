@@ -69,6 +69,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ AndersonTorres dtzWill ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin && stdenv.isx86_64; # ofborg fails while testing
   };
 })

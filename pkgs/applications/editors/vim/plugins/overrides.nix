@@ -862,8 +862,16 @@ self: super: {
     dontBuild = true;
   };
 
+  nvim-navbuddy = super.nvim-navbuddy.overrideAttrs {
+    dependencies = with self; [ nui-nvim nvim-lspconfig nvim-navic ];
+  };
+
   vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs {
     passthru.python3Dependencies = [ python3.pkgs.mwclient ];
+  };
+
+  nvim-navic = super.nvim-navic.overrideAttrs {
+    dependencies = with self; [ nvim-lspconfig ];
   };
 
   nvim-spectre = super.nvim-spectre.overrideAttrs {
@@ -1428,7 +1436,7 @@ self: super: {
         hexokinase = buildGoModule {
           name = "hexokinase";
           src = old.src + "/hexokinase";
-          vendorSha256 = null;
+          vendorHash = null;
         };
       in
       ''
@@ -1632,6 +1640,17 @@ self: super: {
       substituteInPlace autoload/zoxide.vim \
         --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
+  };
+  LeaderF = super.LeaderF.overrideAttrs {
+    buildInputs = [ python3 ];
+    # rm */build/ to prevent dependencies on gcc
+    # strip the *.so to keep files small
+    buildPhase = ''
+      patchShebangs .
+      ./install.sh
+      rm autoload/leaderf/fuzzyMatch_C/build/ -r
+    '';
+    stripDebugList = [ "autoload/leaderf/python" ];
   };
 
 } // (

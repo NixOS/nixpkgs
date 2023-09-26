@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "runitor";
   version = "1.2.0";
-  vendorSha256 = null;
+  vendorHash = null;
 
   src = fetchFromGitHub {
     owner = "bdd";

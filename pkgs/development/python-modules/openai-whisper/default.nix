@@ -5,7 +5,7 @@
 , cudaSupport ? false
 
 # runtime
-, ffmpeg
+, ffmpeg-headless
 
 # propagates
 , numpy
@@ -14,7 +14,6 @@
 , tqdm
 , more-itertools
 , transformers
-, ffmpeg-python
 , numba
 , openai-triton
 , scipy
@@ -26,20 +25,20 @@
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "20230314";
+  version = "20230918";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qQCELjRFeRCT1k1CBc3netRtFvt+an/EbkrgnmiX/mc=";
+    hash = "sha256-wBAanFVEIIzTcoX40P9eI26UdEu0SC/xuife/zi2Xho=";
   };
 
   patches = [
     (substituteAll {
       src = ./ffmpeg-path.patch;
-      inherit ffmpeg;
+      ffmpeg = ffmpeg-headless;
     })
   ];
 
@@ -48,7 +47,6 @@ buildPythonPackage rec {
     tqdm
     more-itertools
     transformers
-    ffmpeg-python
     numba
     scipy
     tiktoken
@@ -61,7 +59,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "tiktoken==0.3.1" "tiktoken>=0.3.1"
+      --replace "tiktoken==0.3.3" "tiktoken>=0.3.3"
   ''
   # openai-triton is only needed for CUDA support.
   # triton needs CUDA to be build.
@@ -80,7 +78,6 @@ buildPythonPackage rec {
 
   disabledTests = [
     # requires network access to download models
-    "test_tokenizer"
     "test_transcribe"
     # requires NVIDIA drivers
     "test_dtw_cuda_equivalence"

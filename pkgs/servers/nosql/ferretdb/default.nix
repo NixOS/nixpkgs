@@ -1,17 +1,17 @@
 { lib
-, buildGoModule
+, buildGo121Module
 , fetchFromGitHub
 }:
 
-buildGoModule rec {
+buildGo121Module rec {
   pname = "ferretdb";
-  version = "1.9.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
-    hash = "sha256-cDXdTFgSf126BuPG2h0xZFUTCgyg8IVmNySCQyJV4T4=";
+    hash = "sha256-Pw3rusnFYlVPL55dj7VM8kGxE2c+72jgEXCoS4+hufY=";
   };
 
   postPatch = ''
@@ -19,13 +19,11 @@ buildGoModule rec {
     echo nixpkgs     > build/version/package.txt
   '';
 
-  vendorHash = "sha256-mzgj5VBggAqCFlLUcNE03B9jFHLKgfTzH6LI9wTe6Io=";
+  vendorHash = "sha256-1hkJMkMgDrjOgKgGX96hv5PALqx0KyjUZXXiIvUh5VA=";
 
   CGO_ENABLED = 0;
 
   subPackages = [ "cmd/ferretdb" ];
-
-  tags = [ "ferretdb_tigris" ];
 
   # tests in cmd/ferretdb are not production relevant
   doCheck = false;

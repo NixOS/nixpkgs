@@ -16,8 +16,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-IWviLboZz421/Amz/QG4o8jYaG8Y/l5PvmvXfK5nzJE=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/src";
-
   nativeBuildInputs = [
     pkg-config
   ];
@@ -32,7 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  makeFlags = [ "-C" "src" ];
+
   installFlags = [ "prefix=$(out)" ];
+
+  postPatch = ''
+    substituteInPlace src/config.mk \
+      --replace pkg-config "$PKG_CONFIG"
+  '';
 
   meta = {
     homepage = "https://www.uninformativ.de/git/katriawm/file/README.html";

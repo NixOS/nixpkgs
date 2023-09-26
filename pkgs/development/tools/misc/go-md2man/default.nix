@@ -4,7 +4,7 @@ buildGoModule rec {
   pname = "go-md2man";
   version = "2.0.2";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   src = fetchFromGitHub {
     rev = "v${version}";

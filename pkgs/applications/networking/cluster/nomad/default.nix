@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , buildGo120Module
+, buildGo121Module
 , fetchFromGitHub
 , nixosTests
 , installShellFiles
@@ -73,10 +74,10 @@ rec {
   };
 
   nomad_1_6 = generic {
-    buildGoModule = buildGo120Module;
-    version = "1.6.1";
-    sha256 = "sha256-RsyGUaLteGiNf0PTkKLcjHTevhKb/mNx2JORpXhHJMw=";
-    vendorHash = "sha256-Y3O7ADzZPlLWFbXSYBcI6b5MAhMD0UnkhQxO9VJMpOY=";
+    buildGoModule = buildGo121Module;
+    version = "1.6.2";
+    sha256 = "sha256-Q0RyO9FZWGxWgVmTU07/pw5P4Ebcwcednq8TDmshuAk=";
+    vendorHash = "sha256-XCuWhKuBtSPTK8fXwgjMKMjwLnl1KWZKSJ4Ih9XDIDc=";
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''
       export PATH="$PATH:$NIX_BUILD_TOP/go/bin"

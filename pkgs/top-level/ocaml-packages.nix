@@ -337,6 +337,10 @@ let
 
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
+    dolmen_loop =  callPackage ../development/ocaml-modules/dolmen/loop.nix { };
+
+    dolmen_type =  callPackage ../development/ocaml-modules/dolmen/type.nix { };
+
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
     domain-local-await = callPackage ../development/ocaml-modules/domain-local-await { };
@@ -1290,6 +1294,8 @@ let
 
     ocf_ppx = callPackage ../development/ocaml-modules/ocf/ppx.nix { };
 
+    ocolor = callPackage ../development/ocaml-modules/ocolor { };
+
     ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
     ocp-indent = callPackage ../development/tools/ocaml/ocp-indent { };
@@ -1515,10 +1521,7 @@ let
 
     psq = callPackage ../development/ocaml-modules/psq { };
 
-    ptime =
-      if lib.versionAtLeast ocaml.version "4.08"
-      then callPackage ../development/ocaml-modules/ptime { }
-      else null;
+    ptime = callPackage ../development/ocaml-modules/ptime { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 

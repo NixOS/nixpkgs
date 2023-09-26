@@ -68,6 +68,7 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+    "sabnzbd"
     "scaphandre"
     "script"
     "shelly"
@@ -302,6 +303,14 @@ in
       message = ''
         The exporter is configured to run as 'services.mysql.user', but
           'services.mysql.enable' is set to false.
+      '';
+    } {
+      assertion = cfg.nextcloud.enable -> (
+        (cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
+          'services.prometheus.exporters.nextcloud.tokenFile'
       '';
     } {
       assertion = cfg.sql.enable -> (

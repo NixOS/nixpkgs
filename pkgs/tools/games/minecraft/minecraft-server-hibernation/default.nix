@@ -2,24 +2,35 @@
 
 buildGoModule rec {
   pname = "minecraft-server-hibernation";
-  version = "2.4.10";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "gekware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hflPVO+gqHr0jDrhWzd7t/E6WsswiMKMHCkTUK4E05k=";
+    hash = "sha256-b6LeqjIraIasHBpaVgy8esl4NV8rdBrfO7ewgeIocS8=";
   };
 
-  vendorHash = "sha256-W6P7wz1FGL6Os1zmmqWJ7/sO8zizfnwg+TMiFWGHIOM=";
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # Disable tests requiring network access
+        "Test_getPing"
+        "Test_getReqType"
+        "Test_QueryBasic"
+        "Test_QueryFull"
+      ];
+    in
+    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
   meta = with lib; {
     description = "Autostart and stop minecraft-server when players join/leave";
     homepage = "https://github.com/gekware/minecraft-server-hibernation";
     license = licenses.gpl3Only;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ squarepear ];
   };
 }

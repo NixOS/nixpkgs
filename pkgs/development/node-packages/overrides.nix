@@ -29,18 +29,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  "@forge/cli" = prev."@forge/cli".override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = with pkgs; [
-      libsecret
-      final.node-gyp-build
-      final.node-pre-gyp
-    ] ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.AppKit
-      darwin.apple_sdk.frameworks.Security
-    ];
-  };
-
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -97,7 +85,7 @@ final: prev: {
   };
 
 
-  graphite-cli = prev."@withgraphite/graphite-cli".override {
+  graphite-cli = prev."@withgraphite/graphite-cli".override (old: {
     name = "graphite-cli";
     nativeBuildInputs = with pkgs; [ installShellFiles pkg-config ];
     buildInputs = with pkgs; [ cairo pango pixman ];
@@ -108,7 +96,10 @@ final: prev: {
         --bash <($out/bin/gt completion) \
         --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
     '';
-  };
+    meta = old.meta // {
+      license = lib.licenses.unfree; # no license specified
+    };
+  });
 
   graphql-language-service-cli = prev.graphql-language-service-cli.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];

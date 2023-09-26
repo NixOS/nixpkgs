@@ -36,6 +36,8 @@ in
 
   quazip = callPackage ../development/libraries/quazip { };
 
+  qscintilla = callPackage ../development/libraries/qscintilla { };
+
   qxlsx = callPackage ../development/libraries/qxlsx { };
 
   poppler = callPackage ../development/libraries/poppler {

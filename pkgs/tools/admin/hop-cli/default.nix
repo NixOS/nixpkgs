@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hop-cli";
-  version = "0.2.53";
+  version = "0.2.54";
 
   src = fetchFromGitHub {
     owner = "hopinc";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-DyM8OEgO2OtD/PD/I6Ys2Yg0gQMB21OnjFdDkWKw+Io=";
+    hash = "sha256-0BIPN4+XYZgUdxygpKpWZq6VkWWNCFD8v5egXOYfC64=";
   };
 
-  cargoHash = "sha256-R6Dbje6OEndJxyWJ8cR/QcfdIBw88Vfbve+EYGozWNc=";
+  cargoHash = "sha256-KE7AAyArRang/EZrpgv+vlNZaAP/Y2pCltiPMgZ5vFA=";
 
   nativeBuildInputs = [
     pkg-config

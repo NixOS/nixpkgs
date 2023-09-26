@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyschlage";
-  version = "2023.9.0";
+  version = "2023.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "dknowles2";
     repo = "pyschlage";
     rev = "refs/tags/${version}";
-    hash = "sha256-4uYUEx6OcUMG8nS/PqZK5hHFQd/7pTGIix2it8pleuY=";
+    hash = "sha256-HFgQXMUmjWW5syBwtCunQ/TeulPwtF48Nesy9iZ3hlU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

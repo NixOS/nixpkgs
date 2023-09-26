@@ -6,7 +6,7 @@
 
 let
   generic = {
-    version, sha256
+    version, hash
   , eol ? false, extraVulnerabilities ? []
   , packages
   }: let
@@ -17,7 +17,7 @@ let
 
     src = fetchurl {
       url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      inherit hash;
     };
 
     # This patch is only necessary for NC version <26.
@@ -60,20 +60,20 @@ in {
   '';
 
   nextcloud25 = generic {
-    version = "25.0.10";
-    sha256 = "sha256-alvh0fWESSS5KbfiKI1gaoahisDWnfT/bUhsSEEXfQI=";
+    version = "25.0.12";
+    hash = "sha256-UgMYQkEdh7hjL47EEq14y0K9VIi+LT77/OSmhRykTYw=";
     packages = nextcloud25Packages;
   };
 
   nextcloud26 = generic {
-    version = "26.0.5";
-    sha256 = "sha256-nhq0aAY4T1hUZdKJY66ZSlirCSgPQet8YJpciwJw1b4=";
+    version = "26.0.7";
+    hash = "sha256-vtJEqLlNE7YWqSdAUhZwwdZ9Q8SAR3I/sTGAv/bUjpI=";
     packages = nextcloud26Packages;
   };
 
   nextcloud27 = generic {
-    version = "27.0.2";
-    sha256 = "sha256-ei3OpDqjuPswM0fv2kxvN3M8yhE8juFt2fDl+2jHIS8=";
+    version = "27.1.1";
+    hash = "sha256-OpFQBWaHRnVnb6O1v64lh6g5zeQd+sUxgEOxYsExH6s=";
     packages = nextcloud27Packages;
   };
 

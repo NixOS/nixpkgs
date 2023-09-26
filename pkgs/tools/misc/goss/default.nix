@@ -10,13 +10,13 @@ buildGoModule rec {
   pname = "goss";
 
   # Don't forget to update dgoss to the same version.
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dpMTUBMEG5tDi7E6ZRg1KHqIj5qDlvwfwJEgq/5z7RE=";
+    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
   };
 
   vendorHash = "sha256-n+k7f9e2iqf4KrcDkzX0CWk+Bq2WE3dyUEid4PTP1FA=";
@@ -51,7 +51,7 @@ buildGoModule rec {
       Once the test suite is written they can be executed, waited-on, or served as a health endpoint.
     '';
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ hyzual jk anthonyroussel ];
   };
 }

@@ -4,6 +4,7 @@
 , bazel_self
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
+, diffutils, gnupatch
 # updater
 , python3, writeScript
 # Apple dependencies
@@ -110,10 +111,12 @@ let
     [
       bash
       coreutils
+      diffutils
       file
       findutils
       gawk
       gnugrep
+      gnupatch
       gnused
       gnutar
       gzip

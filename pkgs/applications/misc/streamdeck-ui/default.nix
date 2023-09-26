@@ -4,6 +4,7 @@
 , copyDesktopItems
 , writeText
 , makeDesktopItem
+, wrapGAppsHook
 , xvfb-run
 , qt6
 }:
@@ -61,7 +62,8 @@ python3Packages.buildPythonApplication rec {
       '';
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" ];
+  dontWrapGApps = true;
+  makeWrapperArgs = [ "\${qtWrapperArgs[@]}" "\${gappsWrapperArgs[@]}"];
 
   format = "pyproject";
 
@@ -69,6 +71,7 @@ python3Packages.buildPythonApplication rec {
     python3Packages.poetry-core
     copyDesktopItems
     qt6.wrapQtAppsHook
+    wrapGAppsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -97,6 +100,7 @@ python3Packages.buildPythonApplication rec {
     description = "Linux compatible UI for the Elgato Stream Deck";
     homepage = "https://streamdeck-linux-gui.github.io/streamdeck-linux-gui/";
     license = licenses.mit;
+    mainProgram = "streamdeck";
     maintainers = with maintainers; [ majiir ];
   };
 }

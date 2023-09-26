@@ -2,25 +2,32 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, OpenGL
+, Foundation
+, CoreGraphics
+, Metal
 , AppKit
 }:
 
 buildGoModule rec {
   pname = "gdlv";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "aarzilli";
     repo = "gdlv";
     rev = "v${version}";
-    sha256 = "sha256-G1/Wbz836yfGZ/1ArICrNbWU6eh4SHXDmo4FKkjUszY=";
+    hash = "sha256-OPsQOFwV6jIX4ZOVwJmpTeQUr/zkfkqCr86HmPhYarI=";
   };
 
-  vendorSha256 = null;
+  preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
+    export MACOSX_DEPLOYMENT_TARGET=10.15
+  '';
+
+  vendorHash = null;
+
   subPackages = ".";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ OpenGL AppKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Foundation CoreGraphics Metal AppKit ];
 
   meta = with lib; {
     description = "GUI frontend for Delve";

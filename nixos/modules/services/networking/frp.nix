@@ -31,8 +31,8 @@ in
         default = { };
         description = mdDoc ''
           Frp configuration, for configuration options
-          see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_full.ini)
-          or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_full.ini) on github.
+          see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_legacy_full.ini)
+          or [server](https://github.com/fatedier/frp/blob/dev/conf/frps_legacy_full.ini) on github.
         '';
         example = literalExpression ''
           {

@@ -42,6 +42,7 @@ ocamlPackages.buildDunePackage rec {
     homepage = "https://github.com/talex5/wayland-virtwl-proxy";
     description = "Proxy Wayland connections across a VM boundary";
     license = licenses.asl20;
+    mainProgram = "wayland-proxy-virtwl";
     maintainers = [ maintainers.qyliss maintainers.sternenseemann ];
     platforms = platforms.linux;
   };

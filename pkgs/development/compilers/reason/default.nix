@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
-  version = "3.9.0";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
-    hash = "sha256-vPAIHs89Bc5o6Ch2obwqSEl8eCJbizEPLPJLM/NWhBY=";
+    hash = "sha256-F+rUwoZK9yc/VtCtYsRWS+Lq3nbT2oex04HtW0T0Zss=";
   };
 
   strictDeps = true;

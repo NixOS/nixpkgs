@@ -1,5 +1,4 @@
-{
-  stdenv
+{ stdenv
 , fetchFromGitHub
 , fetchurl
 , cmake
@@ -28,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "23.07";
+  version = "23.09";
 
   src = fetchurl {
     url = "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
-    hash = "sha256-Ng2E6ML9lffmdGgn9piIF3ko4uvV/uLDb3d7ytrfcLU=";
+    hash = "sha256-q42ry47y4tTkUbejv6iN5jXcadXSSTPQ3omhMUevfqU=";
   };
 
   prePatch = ''
@@ -87,7 +86,7 @@ stdenv.mkDerivation rec {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon PowerUser64 ];
     mainProgram = "Cardinal";
     platforms = lib.platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs

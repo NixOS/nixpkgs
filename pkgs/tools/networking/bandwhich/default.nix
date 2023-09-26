@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "unstable-2023-09-11";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
-    rev = "eba356220cc06254b96cd3241bc80ab7a0ab017b";
-    hash = "sha256-qrVGUbVbURXSKJy28mhpwVkzSGgct8PPOnwb0FdVWtE=";
+    rev = "v${version}";
+    hash = "sha256-FquV+V5BTIX0HB6lLqPMUTvnPn7Y8/jhl93qvrSkYLY=";
   };
 
   cargoLock = {
@@ -17,6 +17,11 @@ rustPlatform.buildRustPackage rec {
       "packet-builder-0.7.0" = "sha256-KxNrnLZ/z3JJ3E1pCTJF9tNXI7XYNRc6ooTUz3avpjw=";
     };
   };
+
+  checkFlags = [
+    # failing in upstream CI
+    "--skip=tests::cases::ui::layout_under_50_width_under_50_height"
+  ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

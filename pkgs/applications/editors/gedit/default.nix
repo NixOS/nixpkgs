@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , meson
+, mesonEmulatorHook
 , fetchurl
 , python3
 , pkg-config
@@ -58,6 +59,8 @@ stdenv.mkDerivation rec {
     gtk-doc
     gobject-introspection
     docbook-xsl-nons
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [

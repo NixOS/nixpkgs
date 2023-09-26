@@ -11,8 +11,8 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nushell";
     repo = pname;
-    rev = "45c051dad0e243a63608c8274b7fddd5f0b74941";
-    hash = "sha256-kpE+vgobYsQuh8sS3gK/yg68nQykquwteeuecjLtIrE=";
+    rev = "36a45f28a39ee1526a748b53f438a41ae939fc7c";
+    hash = "sha256-QhERyWomyOOk9aYRjm69ykzOR3G/uGM/A4Pr9PlB71w=";
   };
 
   installPhase = ''

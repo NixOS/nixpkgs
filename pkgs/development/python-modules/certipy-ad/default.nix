@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "certipy-ad";
-  version = "4.8.0";
+  version = "4.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "ly4k";
     repo = "Certipy";
     rev = "refs/tags/${version}";
-    hash = "sha256-CyTwaCYhxUqvycZBKSzTWLKmKvebCNyE4vqTUnaX1V0=";
+    hash = "sha256-HgRUpltkai68tDkanXIOEdrJ4DJYDcbNk0op0enUAXU=";
   };
 
   postPatch = ''

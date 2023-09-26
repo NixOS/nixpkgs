@@ -31,15 +31,15 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.10.1";
+  version = "2.11.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-kdZ4dfu1N2B7B+MTY0RXGKNTK1RObitLr4oEKyGh0Q8=";
+    hash = "sha256-PL3tzgw/DgSC1hvi10WGg758188UsO5q37rduA9bNqU=";
   };
 
   nativeBuildInputs = [
@@ -109,6 +109,8 @@ buildPythonPackage rec {
     "test_peek_one_element"
     "test_peek_lifo"
     "test_callback_kwargs"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"

@@ -19,26 +19,26 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "0faf17adf9a071ef8813c1b43e8321728990ba8e4a2c284915cb3ce9451fca80",
-      "url": "https://download.jetbrains.com/python/dataspell-2023.2.1.tar.gz",
-      "build_number": "232.9559.63"
+      "version": "2023.2.2",
+      "sha256": "30a7b848d004c12e8a5ce668dea6939f49b2aaf0bcce443f02987b4ea38179ab",
+      "url": "https://download.jetbrains.com/python/dataspell-2023.2.2.tar.gz",
+      "build_number": "232.9921.48"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "05cfcaaebfa171297eff94ca44fa58500bd7d33db3dc6fa55f5f8501c449c9df",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.2.1.tar.gz",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "685b3eb786134137be41beaca80a0edb9aaed9e24b98cef8006fe840972b990f",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.2.2.tar.gz",
+      "build_number": "232.9921.47"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "7d5c83cb43286d57b045d1d837185633be13673a5e0e443773778e0d4936647a",
-      "url": "https://download.jetbrains.com/go/goland-2023.2.1.tar.gz",
-      "build_number": "232.9559.64"
+      "version": "2023.2.2",
+      "sha256": "e2951dfcd80556f29378d55c8d4ebfbc6e599e14ada17a06386729221d71353b",
+      "url": "https://download.jetbrains.com/go/goland-2023.2.2.tar.gz",
+      "build_number": "232.9921.53"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -67,10 +67,10 @@
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "bcb506fa27078f78da44a38f4fbab0a2000cea26385f51800c931d0cbd1b47c4",
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.1.tar.gz",
-      "build_number": "232.9559.64",
+      "version": "2023.2.2",
+      "sha256": "5e3dd021b82dcad0f51bded677aa87680dcc3f5d843951c48848a9191141bf1d",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.2.tar.gz",
+      "build_number": "232.9921.55",
       "version-major-minor": "2022.3"
     },
     "pycharm-community": {
@@ -100,18 +100,26 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "13e56acc36e52e52e91eb23d5166144be47511ee466601efea82dc891bad3bfe",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.1.tar.gz",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "9f14f95ef1952d6b85e13a596d00e8b57ab35a4d07a96ee33d4ceebbd113a827",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.2.tar.gz",
+      "build_number": "232.9921.48"
+    },
+    "rust-rover": {
+      "update-channel": "RustRover EAP",
+      "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
+      "version": "2023.2 EAP",
+      "sha256": "1f67e1a82f5cbb7c84382c7f251ae06b1e2699fa7d2fa4129e23ec2e43251687",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62.tar.gz",
+      "build_number": "232.9921.62"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}.tar.gz",
-      "version": "2023.2.1",
-      "sha256": "0487d1e80b3d538c968ab6437d950a504166b0c266346d52969bfb828820a642",
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.1.tar.gz",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "10c1203620258bf4b0c952d809f50ea954f80d1ed60098917a4c64fb2718b931",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.2.tar.gz",
+      "build_number": "232.9921.42"
     }
   },
   "x86_64-darwin": {
@@ -134,26 +142,26 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "447ed7d593ea225af53ef54023cb29cfb906109961011d485eefbf0f0879451b",
-      "url": "https://download.jetbrains.com/python/dataspell-2023.2.1.dmg",
-      "build_number": "232.9559.63"
+      "version": "2023.2.2",
+      "sha256": "24fb47966c891bf3a2a827df38885d48509c6e2e68a7cc03145ad28493adb76b",
+      "url": "https://download.jetbrains.com/python/dataspell-2023.2.2.dmg",
+      "build_number": "232.9921.48"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "a0d4a889bc0688bfb03add22f45d878b99e5d85faf24f628345121b8689704e0",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.2.1.dmg",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "cfa68c2b1290f1d51aa37a918a79342e42b6a50b2563524757ec8bd700008fba",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.2.2.dmg",
+      "build_number": "232.9921.47"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "63f26b3a2a8aa7fb93b5a0a61ca9f4e4f75688ee9451631b875829dee013e561",
-      "url": "https://download.jetbrains.com/go/goland-2023.2.1.dmg",
-      "build_number": "232.9559.64"
+      "version": "2023.2.2",
+      "sha256": "d60e55ecd6208d2af871c154320f988622cd52ca4b202cd9a90c2de7750e8e23",
+      "url": "https://download.jetbrains.com/go/goland-2023.2.2.dmg",
+      "build_number": "232.9921.53"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -182,10 +190,10 @@
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "5d238f0d3ddd59762256dc406ae2430e5abf79f9a04488722a87e54b70db68ef",
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.1.dmg",
-      "build_number": "232.9559.64",
+      "version": "2023.2.2",
+      "sha256": "99a9bb313a5c141ecd1810306deaca3cf52d338edf206362b3f9d9337a27890e",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.2.dmg",
+      "build_number": "232.9921.55",
       "version-major-minor": "2022.3"
     },
     "pycharm-community": {
@@ -215,18 +223,26 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "1ae42d9f0af0e293406a7ab6042299cc29a3ae4f6d023656bebc0b1d78ad0a4b",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.1.dmg",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "2b77f24770813c0cf55892effde8c0a6a5af1c9f4b08c1c8ae9163e503afc5d3",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.2.dmg",
+      "build_number": "232.9921.48"
+    },
+    "rust-rover": {
+      "update-channel": "RustRover EAP",
+      "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
+      "version": "2023.2 EAP",
+      "sha256": "dfde444bff011783cb4a5aa2aafae8ea989874c19535b01da8214df5eb3174fb",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62.dmg",
+      "build_number": "232.9921.62"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}.dmg",
-      "version": "2023.2.1",
-      "sha256": "c42ba4e262a91bed368168ef8498058ccaef560bce3f72d86fc80e5492cad6f1",
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.1.dmg",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "3733f1968925681a693a09053e62ba4a800b51a062f5e9772658a5fba82d2fa8",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.2.dmg",
+      "build_number": "232.9921.42"
     }
   },
   "aarch64-darwin": {
@@ -249,26 +265,26 @@
     "dataspell": {
       "update-channel": "DataSpell RELEASE",
       "url-template": "https://download.jetbrains.com/python/dataspell-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "a17d036b2d425619941d90ab7ae6597c8d5aad4a2e1446d6ccbc3ad1f844852d",
-      "url": "https://download.jetbrains.com/python/dataspell-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.63"
+      "version": "2023.2.2",
+      "sha256": "0baeeba5f8a2dd02304b42a54d633719df3242bfaedc5b62bec4dacd403eabf2",
+      "url": "https://download.jetbrains.com/python/dataspell-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.48"
     },
     "gateway": {
       "update-channel": "Gateway RELEASE",
       "url-template": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "4e227b78bcb33f2bdbc3f3749a373413e785180b34fce03de863479c1f892bd2",
-      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.62"
+      "version": "2023.2.2",
+      "sha256": "b6ae26eaa6f7f4b77d1bf3d75658eb8ae70bccce4b7e8e62d18dada0810b382c",
+      "url": "https://download.jetbrains.com/idea/gateway/JetBrainsGateway-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.47"
     },
     "goland": {
       "update-channel": "GoLand RELEASE",
       "url-template": "https://download.jetbrains.com/go/goland-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "08310be67b03a0f36cebf28fddfe0886d96f7446f04d25fec69beaaf222daf9e",
-      "url": "https://download.jetbrains.com/go/goland-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.64"
+      "version": "2023.2.2",
+      "sha256": "b8343e424f1c954ef2c8db7dabc4aaad63d055aa7a4b572773dbeeab43463007",
+      "url": "https://download.jetbrains.com/go/goland-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.53"
     },
     "idea-community": {
       "update-channel": "IntelliJ IDEA RELEASE",
@@ -297,10 +313,10 @@
     "phpstorm": {
       "update-channel": "PhpStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webide/PhpStorm-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "886e79089e5e783739e71f57f8f20b9ecbc2e9e7cc9b941bb99d1444181939df",
-      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.64",
+      "version": "2023.2.2",
+      "sha256": "a31daeddae532324436b2d11acbd5fb657721883f17c7ef4457ac76a51bd4189",
+      "url": "https://download.jetbrains.com/webide/PhpStorm-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.55",
       "version-major-minor": "2022.3"
     },
     "pycharm-community": {
@@ -330,18 +346,26 @@
     "ruby-mine": {
       "update-channel": "RubyMine RELEASE",
       "url-template": "https://download.jetbrains.com/ruby/RubyMine-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "422462636fc4036a2a28037519decef70f38505826b34f167020b1ffeea3a8aa",
-      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "53e551897d42d0986b2e01f171bd7b96fe790516fdf1578feabec0a44cf441e5",
+      "url": "https://download.jetbrains.com/ruby/RubyMine-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.48"
+    },
+    "rust-rover": {
+      "update-channel": "RustRover EAP",
+      "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
+      "version": "2023.2 EAP",
+      "sha256": "35d44a4f72c027283843aaa6409de701d14274cdc5a614c3fdc53121383f9389",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62-aarch64.dmg",
+      "build_number": "232.9921.62"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
       "url-template": "https://download.jetbrains.com/webstorm/WebStorm-{version}-aarch64.dmg",
-      "version": "2023.2.1",
-      "sha256": "fb75c5d9164776353262cde6d8589826975868804a32f27007cb8a71c0e2d87b",
-      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.1-aarch64.dmg",
-      "build_number": "232.9559.58"
+      "version": "2023.2.2",
+      "sha256": "27ae504b6ee24df28d29f59602c893c2b9af9357e4cc1e20dab22753177508db",
+      "url": "https://download.jetbrains.com/webstorm/WebStorm-2023.2.2-aarch64.dmg",
+      "build_number": "232.9921.42"
     }
   }
 }
