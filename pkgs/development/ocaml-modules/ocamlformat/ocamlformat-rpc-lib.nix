@@ -4,8 +4,8 @@
 let source =
   if lib.versionAtLeast ocaml.version "4.13"
   then {
-    version = "0.26.0";
-    sha256 = "sha256-AxSUq3cM7xCo9qocvrVmDkbDqmwM1FexEP7IWadeh30=";
+    version = "0.26.1";
+    sha256 = "sha256-2gBuQn8VuexhL7gI1EZZm9m3w+4lq+s9VVdHpw10xtc=";
   } else {
     version = "0.20.0";
     sha256 = "sha256-JtmNCgwjbCyUE4bWqdH5Nc2YSit+rekwS43DcviIfgk=";
