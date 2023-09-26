@@ -79,7 +79,13 @@ let
 
       installPhase = ''
         _pub_get() {
-          ${pubGetScript}
+          (
+            # Dart does not respect SSL_CERT_FILE.
+            # https://github.com/dart-lang/sdk/issues/48506
+            export DART_VM_OPTIONS="--root-certs-file=$SSL_CERT_FILE"
+
+            ${pubGetScript}
+          )
         }
 
         # so we can use lock, diff yaml

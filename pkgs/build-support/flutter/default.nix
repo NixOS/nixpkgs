@@ -1,9 +1,12 @@
 { lib
 , callPackage
 , stdenvNoCC
+, runCommand
 , makeWrapper
+, wrapGAppsHook
 , llvmPackages_13
 , cacert
+, glib
 , flutter
 , jq
 }:
@@ -26,6 +29,26 @@
 }@args:
 let
   flutterSetupScript = ''
+    # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
+    # https://github.com/dart-lang/sdk/blob/3.1.0/runtime/bin/security_context_linux.cc#L48
+    #
+    # Dart does not respect SSL_CERT_FILE...
+    # https://github.com/dart-lang/sdk/issues/48506
+    # ...and Flutter does not support --root-certs-file, so the path cannot be manually set.
+    # https://github.com/flutter/flutter/issues/56607
+    # https://github.com/flutter/flutter/issues/113594
+    #
+    # libredirect is of no use either, as Flutter does not pass any
+    # environment variables (including LD_PRELOAD) to the Pub process.
+    #
+    # Instead, Flutter is patched to allow the path to the Dart binary used for
+    # Pub commands to be overriden.
+    export NIX_FLUTTER_PUB_DART="${runCommand "dart-with-certs" { nativeBuildInputs = [ makeWrapper ]; } ''
+      mkdir -p "$out/bin"
+      makeWrapper ${flutter.dart}/bin/dart "$out/bin/dart" \
+        --add-flags "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
+    ''}/bin/dart"
+
     export HOME="$NIX_BUILD_TOP"
     flutter config --no-analytics &>/dev/null # mute first-run
     flutter config --enable-linux-desktop >/dev/null
@@ -47,7 +70,11 @@ let
       deps
       flutter
       jq
+      glib
+      wrapGAppsHook
     ] ++ nativeBuildInputs;
+
+    dontWrapGApps = true;
 
     preUnpack = ''
       ${lib.optionalString (!autoDepsList) ''
@@ -123,6 +150,7 @@ let
       for f in "$out"/bin/*; do
         wrapProgram "$f" \
           --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}' \
+          ''${gappsWrapperArgs[@]} \
           ${extraWrapProgramArgs}
       done
 
