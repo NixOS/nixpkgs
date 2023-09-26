@@ -38,12 +38,12 @@
     },
     "headless": {
       "experimental": {
-        "name": "factorio_headless_x64-1.1.91.tar.xz",
+        "name": "factorio_headless_x64-1.1.92.tar.xz",
         "needsAuth": false,
-        "sha256": "0v8zg3q79n15242fr79f9amg0icw3giy4aiaf43am5hxzcdb5212",
+        "sha256": "04j3p2r1r0h3fak3vxxq3d7qqpyjlg57n3c8sm6gadg4q4h15aw8",
         "tarDirectory": "x64",
-        "url": "https://factorio.com/get-download/1.1.91/headless/linux64",
-        "version": "1.1.91"
+        "url": "https://factorio.com/get-download/1.1.92/headless/linux64",
+        "version": "1.1.92"
       },
       "stable": {
         "name": "factorio_headless_x64-1.1.91.tar.xz",
