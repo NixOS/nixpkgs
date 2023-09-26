@@ -26169,18 +26169,7 @@ with pkgs;
 
   # CLISP
   clisp = wrapLisp {
-    pkg = callPackage ../development/interpreters/clisp {
-    # On newer readline8 fails as:
-    #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
-    #   does not have the required size or alignment
-    readline = readline63;
-    };
-    faslExt = "fas";
-    flags = ["-E" "UTF-8"];
-  };
-
-  clisp-tip = wrapLisp {
-    pkg = callPackage ../development/interpreters/clisp/hg.nix { };
+    pkg = callPackage ../development/interpreters/clisp { };
     faslExt = "fas";
     flags = ["-E" "UTF-8"];
   };
