@@ -477,6 +477,27 @@ rec {
     in
     recurse (length targetBaseComponents);
 
+  # Transforms the filesetTree of a file set to a longer base path, e.g.
+  # _lengthenTreeBase [ "foo" "bar" ] (_create /foo { bar.baz = "regular"; })
+  # => { baz = "regular"; }
+  _lengthenTreeBase = targetBaseComponents: fileset:
+    let
+      recurse = index: tree:
+        # If the filesetTree is an attribute set and we haven't reached the required depth yet
+        if isAttrs tree && index < length targetBaseComponents then
+          # Recurse with the tree under the right component (which might not exist)
+          recurse (index + 1) (tree.${elemAt targetBaseComponents index} or null)
+        else
+          # For all values here we can just return the tree itself:
+          # tree == null -> the result is also null, everything is excluded
+          # tree == "directory" -> the result is also "directory",
+          #   because the base path is always a directory and everything is included
+          # isAttrs tree -> the result is `tree`
+          #   because we don't need to recurse any more since `index == length longestBaseComponents`
+          tree;
+    in
+    recurse (length fileset._internalBaseComponents) fileset._internalTree;
+
   # Computes the union of a list of filesets.
   # The filesets must already be coerced and validated to be in the same filesystem root
   # Type: [ Fileset ] -> Fileset
@@ -545,4 +566,76 @@ rec {
       # The non-null elements have to be attribute sets representing partial trees
       # We need to recurse into those
       zipAttrsWith (name: _unionTrees) withoutNull;
+
+  # Computes the intersection of a list of filesets.
+  # The filesets must already be coerced and validated to be in the same filesystem root
+  # Type: Fileset -> Fileset -> Fileset
+  _intersection = fileset1: fileset2:
+    let
+      # The common base components prefix, e.g.
+      # (/foo/bar, /foo/bar/baz) -> /foo/bar
+      # (/foo/bar, /foo/baz) -> /foo
+      commonBaseComponentsLength =
+        # TODO: Have a `lib.lists.commonPrefixLength` function such that we don't need the list allocation from commonPrefix here
+        length (
+          commonPrefix
+            fileset1._internalBaseComponents
+            fileset2._internalBaseComponents
+        );
+
+      # To be able to intersect filesetTree's together, they need to have the same base path.
+      # Base paths can be intersected by taking the longest one (if any)
+
+      # The fileset with the longest base, if any, e.g.
+      # (/foo/bar, /foo/bar/baz) -> /foo/bar/baz
+      # (/foo/bar, /foo/baz) -> null
+      longestBaseFileset =
+        if commonBaseComponentsLength == length fileset1._internalBaseComponents then
+          # The common prefix is the same as the first path, so the second path is equal or longer
+          fileset2
+        else if commonBaseComponentsLength == length fileset2._internalBaseComponents then
+          # The common prefix is the same as the second path, so the first path is longer
+          fileset1
+        else
+          # The common prefix is neither the first nor the second path
+          # This means there's no overlap between the two sets
+          null;
+
+      # Whether the result should be the empty value without a base
+      resultIsEmptyWithoutBase =
+        # If either fileset is the empty fileset without a base, the intersection is too
+        fileset1._internalIsEmptyWithoutBase
+        || fileset2._internalIsEmptyWithoutBase
+        # If there is no overlap between the base paths
+        || longestBaseFileset == null;
+
+      # Lengthen each fileset's tree to the longest base prefix
+      tree1 = _lengthenTreeBase longestBaseFileset._internalBaseComponents fileset1;
+      tree2 = _lengthenTreeBase longestBaseFileset._internalBaseComponents fileset2;
+
+      # With two filesetTree's with the same base, we can compute their intersection
+      resultTree = _intersectTree tree1 tree2;
+    in
+    if resultIsEmptyWithoutBase then
+      _emptyWithoutBase
+    else
+      _create longestBaseFileset._internalBase resultTree;
+
+  # The intersection of two filesetTree's with the same base path
+  # The second element is only evaluated as much as necessary.
+  # Type: filesetTree -> filesetTree -> filesetTree
+  _intersectTree = lhs: rhs:
+    if isAttrs lhs && isAttrs rhs then
+      # Both sides are attribute sets, we can recurse for the attributes existing on both sides
+      mapAttrs
+        (name: _intersectTree lhs.${name})
+        (builtins.intersectAttrs lhs rhs)
+    else if lhs == null || isString rhs then
+      # If the lhs is null, the result should also be null
+      # And if the rhs is the identity element
+      # (a string, aka it includes everything), then it's also the lhs
+      lhs
+    else
+      # In all other cases it's the rhs
+      rhs;
 }
