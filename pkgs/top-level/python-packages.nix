@@ -12043,6 +12043,8 @@ self: super: with self; {
 
   slowapi = callPackage ../development/python-modules/slowapi { };
 
+  slpp = callPackage ../development/python-modules/slpp { };
+
   slugid = callPackage ../development/python-modules/slugid { };
 
   sly = callPackage ../development/python-modules/sly { };
