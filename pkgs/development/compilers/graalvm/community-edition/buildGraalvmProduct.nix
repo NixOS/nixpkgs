@@ -45,18 +45,7 @@ stdenv.mkDerivation ({
 
     mkdir -p "$out"
 
-    # The tarball on Linux has the following directory structure:
-    #
-    #   graalvm-ce-java11-20.3.0/*
-    #
-    # while on Darwin it looks like this:
-    #
-    #   graalvm-ce-java11-20.3.0/Contents/Home/*
-    #
-    # We therefor use --strip-components=1 vs 3 depending on the platform.
-    tar xf "$src" -C "$out" --strip-components=${
-      if stdenv.isLinux then "1" else "3"
-    }
+    tar xf "$src" -C "$out" --strip-components=1
 
     # Sanity check
     if [ ! -d "$out/bin" ]; then
