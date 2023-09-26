@@ -10738,6 +10738,8 @@ self: super: with self; {
 
   python-uinput = callPackage ../development/python-modules/python-uinput { };
 
+  python-ulid = callPackage ../development/python-modules/python-ulid { };
+
   python-unshare = callPackage ../development/python-modules/python-unshare { };
 
   python-utils = callPackage ../development/python-modules/python-utils { };
