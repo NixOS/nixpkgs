@@ -14869,11 +14869,15 @@ with pkgs;
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter-unwrapped = flutterPackages.stable;
-  flutter37-unwrapped = flutterPackages.v37;
-  flutter2-unwrapped = flutterPackages.v2;
+  flutter37-unwrapped = let flutter =flutterPackages.v37;
+  in flutter // { meta = flutter.meta // { insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
+  flutter2-unwrapped = let flutter = flutterPackages.v2;
+  in flutter // { meta = flutter.meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
   flutter = flutterPackages.wrapFlutter flutter-unwrapped;
-  flutter37 = flutterPackages.wrapFlutter flutter37-unwrapped;
-  flutter2 = flutterPackages.wrapFlutter flutter2-unwrapped;
+  flutter37 = let flutter = flutterPackages.wrapFlutter flutter37-unwrapped;
+  in flutter // { meta = flutter.meta // { insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
+  flutter2 = let flutter = flutterPackages.wrapFlutter flutter2-unwrapped;
+  in flutter // { meta = flutter.meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; insecure = true; knownVulnerabilities = [ "CVE-2023-4863 WebP Vulnerability" ]; }; };
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;

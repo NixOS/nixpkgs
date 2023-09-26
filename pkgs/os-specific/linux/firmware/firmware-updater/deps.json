@@ -23,6 +23,7 @@
       "ubuntu_logger",
       "ubuntu_service",
       "ubuntu_session",
+      "ubuntu_test",
       "upower",
       "yaru",
       "yaru_colors",
@@ -34,30 +35,13 @@
       "freezed",
       "integration_test",
       "melos",
-      "mockito"
-    ]
-  },
-  {
-    "name": "mockito",
-    "version": "5.4.0",
-    "kind": "dev",
-    "source": "hosted",
-    "dependencies": [
-      "analyzer",
-      "build",
-      "code_builder",
-      "collection",
-      "dart_style",
-      "matcher",
-      "meta",
-      "path",
-      "source_gen",
+      "mockito",
       "test_api"
     ]
   },
   {
     "name": "test_api",
-    "version": "0.4.16",
+    "version": "0.6.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -69,42 +53,8 @@
       "stack_trace",
       "stream_channel",
       "string_scanner",
-      "term_glyph",
-      "matcher"
+      "term_glyph"
     ]
-  },
-  {
-    "name": "matcher",
-    "version": "0.12.13",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "meta",
-      "stack_trace"
-    ]
-  },
-  {
-    "name": "stack_trace",
-    "version": "1.11.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "path"
-    ]
-  },
-  {
-    "name": "path",
-    "version": "1.8.2",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
-    "name": "meta",
-    "version": "1.8.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": []
   },
   {
     "name": "term_glyph",
@@ -124,7 +74,7 @@
   },
   {
     "name": "source_span",
-    "version": "1.9.1",
+    "version": "1.10.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -134,8 +84,15 @@
     ]
   },
   {
+    "name": "path",
+    "version": "1.8.3",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
     "name": "collection",
-    "version": "1.17.0",
+    "version": "1.17.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
@@ -151,12 +108,28 @@
   },
   {
     "name": "async",
-    "version": "2.10.0",
+    "version": "2.11.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "collection",
       "meta"
+    ]
+  },
+  {
+    "name": "meta",
+    "version": "1.9.1",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.11.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path"
     ]
   },
   {
@@ -170,8 +143,26 @@
     ]
   },
   {
+    "name": "mockito",
+    "version": "5.4.2",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "analyzer",
+      "build",
+      "code_builder",
+      "collection",
+      "dart_style",
+      "matcher",
+      "meta",
+      "path",
+      "source_gen",
+      "test_api"
+    ]
+  },
+  {
     "name": "source_gen",
-    "version": "1.2.7",
+    "version": "1.4.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -187,7 +178,7 @@
   },
   {
     "name": "yaml",
-    "version": "3.1.1",
+    "version": "3.1.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -198,7 +189,7 @@
   },
   {
     "name": "glob",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -221,7 +212,7 @@
   },
   {
     "name": "dart_style",
-    "version": "2.3.0",
+    "version": "2.3.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -234,7 +225,7 @@
   },
   {
     "name": "pub_semver",
-    "version": "2.1.3",
+    "version": "2.1.4",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -244,14 +235,14 @@
   },
   {
     "name": "args",
-    "version": "2.4.0",
+    "version": "2.4.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
   },
   {
     "name": "analyzer",
-    "version": "5.11.1",
+    "version": "5.13.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -271,7 +262,7 @@
   },
   {
     "name": "watcher",
-    "version": "1.0.2",
+    "version": "1.1.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -290,7 +281,7 @@
   },
   {
     "name": "crypto",
-    "version": "3.0.2",
+    "version": "3.0.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -299,7 +290,7 @@
   },
   {
     "name": "typed_data",
-    "version": "1.3.1",
+    "version": "1.3.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -317,7 +308,7 @@
   },
   {
     "name": "_fe_analyzer_shared",
-    "version": "59.0.0",
+    "version": "61.0.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -326,7 +317,7 @@
   },
   {
     "name": "build",
-    "version": "2.3.1",
+    "version": "2.4.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -337,6 +328,7 @@
       "glob",
       "logging",
       "meta",
+      "package_config",
       "path"
     ]
   },
@@ -348,8 +340,21 @@
     "dependencies": []
   },
   {
+    "name": "matcher",
+    "version": "0.12.16",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "meta",
+      "stack_trace",
+      "term_glyph",
+      "test_api"
+    ]
+  },
+  {
     "name": "code_builder",
-    "version": "4.4.0",
+    "version": "4.5.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -362,7 +367,7 @@
   },
   {
     "name": "built_value",
-    "version": "8.4.4",
+    "version": "8.6.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -388,7 +393,7 @@
   },
   {
     "name": "melos",
-    "version": "3.0.1",
+    "version": "3.1.1",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -418,7 +423,7 @@
   },
   {
     "name": "yaml_edit",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -461,13 +466,14 @@
   },
   {
     "name": "pub_updater",
-    "version": "0.2.4",
+    "version": "0.3.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "http",
       "json_annotation",
-      "process"
+      "process",
+      "pub_semver"
     ]
   },
   {
@@ -490,7 +496,7 @@
   },
   {
     "name": "json_annotation",
-    "version": "4.8.0",
+    "version": "4.8.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -499,14 +505,13 @@
   },
   {
     "name": "http",
-    "version": "0.13.5",
+    "version": "1.1.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "async",
       "http_parser",
-      "meta",
-      "path"
+      "meta"
     ]
   },
   {
@@ -568,7 +573,7 @@
   },
   {
     "name": "graphs",
-    "version": "2.2.0",
+    "version": "2.3.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -584,7 +589,7 @@
   },
   {
     "name": "cli_util",
-    "version": "0.3.5",
+    "version": "0.4.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -620,16 +625,13 @@
       "flutter_test",
       "path",
       "vm_service",
-      "archive",
       "async",
       "boolean_selector",
       "characters",
       "clock",
       "collection",
-      "crypto",
       "fake_async",
       "file",
-      "js",
       "matcher",
       "material_color_utilities",
       "meta",
@@ -640,18 +642,17 @@
       "sync_http",
       "term_glyph",
       "test_api",
-      "typed_data",
       "vector_math",
+      "web",
       "webdriver"
     ]
   },
   {
     "name": "webdriver",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
-      "archive",
       "matcher",
       "path",
       "stack_trace",
@@ -666,14 +667,11 @@
     "dependencies": []
   },
   {
-    "name": "archive",
-    "version": "3.3.2",
+    "name": "web",
+    "version": "0.1.4-beta",
     "kind": "transitive",
     "source": "hosted",
-    "dependencies": [
-      "crypto",
-      "path"
-    ]
+    "dependencies": []
   },
   {
     "name": "vector_math",
@@ -684,18 +682,11 @@
   },
   {
     "name": "material_color_utilities",
-    "version": "0.2.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
-    "name": "js",
-    "version": "0.6.5",
+    "version": "0.5.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
-      "meta"
+      "collection"
     ]
   },
   {
@@ -717,14 +708,14 @@
   },
   {
     "name": "characters",
-    "version": "1.2.1",
+    "version": "1.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
   },
   {
     "name": "vm_service",
-    "version": "9.4.0",
+    "version": "11.7.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
@@ -737,6 +728,7 @@
     "dependencies": [
       "flutter",
       "test_api",
+      "matcher",
       "path",
       "fake_async",
       "clock",
@@ -746,14 +738,13 @@
       "boolean_selector",
       "characters",
       "collection",
-      "js",
-      "matcher",
       "material_color_utilities",
       "meta",
       "source_span",
       "stream_channel",
       "string_scanner",
-      "term_glyph"
+      "term_glyph",
+      "web"
     ]
   },
   {
@@ -764,10 +755,10 @@
     "dependencies": [
       "characters",
       "collection",
-      "js",
       "material_color_utilities",
       "meta",
       "vector_math",
+      "web",
       "sky_engine"
     ]
   },
@@ -792,14 +783,11 @@
       "meta",
       "vm_service",
       "webdriver",
-      "archive",
       "async",
       "boolean_selector",
       "characters",
       "clock",
       "collection",
-      "crypto",
-      "js",
       "matcher",
       "material_color_utilities",
       "platform",
@@ -811,8 +799,8 @@
       "sync_http",
       "term_glyph",
       "test_api",
-      "typed_data",
-      "vector_math"
+      "vector_math",
+      "web"
     ]
   },
   {
@@ -831,7 +819,7 @@
   },
   {
     "name": "freezed",
-    "version": "2.3.2",
+    "version": "2.4.1",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -847,7 +835,7 @@
   },
   {
     "name": "freezed_annotation",
-    "version": "2.2.0",
+    "version": "2.4.1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -871,7 +859,7 @@
   },
   {
     "name": "pubspec_parse",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -884,7 +872,7 @@
   },
   {
     "name": "checked_yaml",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -895,7 +883,7 @@
   },
   {
     "name": "flutter_lints",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -904,20 +892,20 @@
   },
   {
     "name": "lints",
-    "version": "2.0.1",
+    "version": "2.1.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
   },
   {
     "name": "build_runner",
-    "version": "2.3.3",
+    "version": "2.4.6",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
+      "analyzer",
       "args",
       "async",
-      "analyzer",
       "build",
       "build_config",
       "build_daemon",
@@ -980,7 +968,7 @@
   },
   {
     "name": "shelf_web_socket",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -991,7 +979,7 @@
   },
   {
     "name": "shelf",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1009,6 +997,15 @@
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
+  },
+  {
+    "name": "js",
+    "version": "0.6.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
   },
   {
     "name": "http_multi_server",
@@ -1031,7 +1028,7 @@
   },
   {
     "name": "build_runner_core",
-    "version": "7.2.7",
+    "version": "7.2.8",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1057,7 +1054,7 @@
   },
   {
     "name": "build_resolvers",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1068,8 +1065,8 @@
       "crypto",
       "graphs",
       "logging",
-      "path",
       "package_config",
+      "path",
       "pool",
       "pub_semver",
       "stream_transform",
@@ -1078,7 +1075,7 @@
   },
   {
     "name": "build_daemon",
-    "version": "3.1.1",
+    "version": "4.0.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1097,20 +1094,19 @@
   },
   {
     "name": "yaru_widgets",
-    "version": "2.3.1",
+    "version": "3.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "flutter",
       "yaru",
-      "yaru_colors",
       "yaru_icons",
       "yaru_window"
     ]
   },
   {
     "name": "yaru_window",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1123,7 +1119,7 @@
   },
   {
     "name": "yaru_window_web",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1134,7 +1130,7 @@
   },
   {
     "name": "yaru_window_platform_interface",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1145,7 +1141,7 @@
   },
   {
     "name": "plugin_platform_interface",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1159,17 +1155,17 @@
     "source": "sdk",
     "dependencies": [
       "flutter",
-      "js",
       "characters",
       "collection",
       "material_color_utilities",
       "meta",
-      "vector_math"
+      "vector_math",
+      "web"
     ]
   },
   {
     "name": "yaru_window_manager",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1181,7 +1177,7 @@
   },
   {
     "name": "window_manager",
-    "version": "0.3.2",
+    "version": "0.3.6",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1192,7 +1188,7 @@
   },
   {
     "name": "screen_retriever",
-    "version": "0.1.6",
+    "version": "0.1.9",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1201,7 +1197,7 @@
   },
   {
     "name": "yaru_window_linux",
-    "version": "0.1.1",
+    "version": "0.1.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1211,12 +1207,42 @@
   },
   {
     "name": "yaru_icons",
-    "version": "1.0.4",
+    "version": "2.2.1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "flutter"
     ]
+  },
+  {
+    "name": "yaru",
+    "version": "1.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "flutter",
+      "gtk",
+      "platform"
+    ]
+  },
+  {
+    "name": "gtk",
+    "version": "2.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "ffi",
+      "flutter",
+      "meta"
+    ]
+  },
+  {
+    "name": "ffi",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
   },
   {
     "name": "yaru_colors",
@@ -1241,37 +1267,6 @@
     ]
   },
   {
-    "name": "yaru",
-    "version": "0.6.2",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "collection",
-      "flutter",
-      "gtk",
-      "platform",
-      "yaru_colors"
-    ]
-  },
-  {
-    "name": "gtk",
-    "version": "2.0.0",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "ffi",
-      "flutter",
-      "meta"
-    ]
-  },
-  {
-    "name": "ffi",
-    "version": "2.0.1",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
     "name": "upower",
     "version": "0.7.0",
     "kind": "direct",
@@ -1294,7 +1289,7 @@
   },
   {
     "name": "xml",
-    "version": "6.2.2",
+    "version": "6.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1305,11 +1300,203 @@
   },
   {
     "name": "petitparser",
-    "version": "5.1.0",
+    "version": "5.4.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "meta"
+    ]
+  },
+  {
+    "name": "ubuntu_test",
+    "version": "0.1.0-beta.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_html",
+      "flutter_markdown",
+      "flutter_svg",
+      "flutter_test",
+      "mockito",
+      "test_api",
+      "ubuntu_localizations",
+      "yaru_test"
+    ]
+  },
+  {
+    "name": "yaru_test",
+    "version": "0.1.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_test",
+      "yaru",
+      "yaru_widgets",
+      "yaru_window_platform_interface"
+    ]
+  },
+  {
+    "name": "ubuntu_localizations",
+    "version": "0.3.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection",
+      "diacritic",
+      "flutter",
+      "flutter_localizations",
+      "intl"
+    ]
+  },
+  {
+    "name": "intl",
+    "version": "0.18.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "flutter_localizations",
+    "version": "0.0.0",
+    "kind": "direct",
+    "source": "sdk",
+    "dependencies": [
+      "flutter",
+      "intl",
+      "characters",
+      "clock",
+      "collection",
+      "material_color_utilities",
+      "meta",
+      "path",
+      "vector_math",
+      "web"
+    ]
+  },
+  {
+    "name": "diacritic",
+    "version": "0.1.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_svg",
+    "version": "2.0.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "vector_graphics",
+      "vector_graphics_codec",
+      "vector_graphics_compiler"
+    ]
+  },
+  {
+    "name": "vector_graphics_compiler",
+    "version": "1.1.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "meta",
+      "path_parsing",
+      "xml",
+      "vector_graphics_codec"
+    ]
+  },
+  {
+    "name": "vector_graphics_codec",
+    "version": "1.1.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "path_parsing",
+    "version": "1.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "vector_math",
+      "meta"
+    ]
+  },
+  {
+    "name": "vector_graphics",
+    "version": "1.1.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "vector_graphics_codec"
+    ]
+  },
+  {
+    "name": "flutter_markdown",
+    "version": "0.6.17+1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "markdown",
+      "meta",
+      "path"
+    ]
+  },
+  {
+    "name": "markdown",
+    "version": "7.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "args",
+      "meta"
+    ]
+  },
+  {
+    "name": "flutter_html",
+    "version": "3.0.0-beta.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "html",
+      "csslib",
+      "collection",
+      "list_counter",
+      "flutter"
+    ]
+  },
+  {
+    "name": "list_counter",
+    "version": "1.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "csslib",
+    "version": "0.17.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+  },
+  {
+    "name": "html",
+    "version": "0.15.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "csslib",
+      "source_span"
     ]
   },
   {
@@ -1324,7 +1511,7 @@
   },
   {
     "name": "ubuntu_service",
-    "version": "0.2.2",
+    "version": "0.2.4",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1334,7 +1521,7 @@
   },
   {
     "name": "get_it",
-    "version": "7.3.0",
+    "version": "7.6.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1344,9 +1531,9 @@
   },
   {
     "name": "ubuntu_logger",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "kind": "direct",
-    "source": "git",
+    "source": "hosted",
     "dependencies": [
       "collection",
       "logging",
@@ -1365,16 +1552,6 @@
       "dio",
       "intl",
       "clock"
-    ]
-  },
-  {
-    "name": "intl",
-    "version": "0.17.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "clock",
-      "path"
     ]
   },
   {
@@ -1434,65 +1611,6 @@
       "collection",
       "dbus",
       "meta"
-    ]
-  },
-  {
-    "name": "flutter_localizations",
-    "version": "0.0.0",
-    "kind": "direct",
-    "source": "sdk",
-    "dependencies": [
-      "flutter",
-      "intl",
-      "characters",
-      "clock",
-      "collection",
-      "js",
-      "material_color_utilities",
-      "meta",
-      "path",
-      "vector_math"
-    ]
-  },
-  {
-    "name": "flutter_html",
-    "version": "3.0.0-alpha.6",
-    "kind": "direct",
-    "source": "hosted",
-    "dependencies": [
-      "html",
-      "csslib",
-      "collection",
-      "numerus",
-      "flutter"
-    ]
-  },
-  {
-    "name": "numerus",
-    "version": "2.0.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "characters"
-    ]
-  },
-  {
-    "name": "csslib",
-    "version": "0.17.2",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "source_span"
-    ]
-  },
-  {
-    "name": "html",
-    "version": "0.15.2",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "csslib",
-      "source_span"
     ]
   }
 ]

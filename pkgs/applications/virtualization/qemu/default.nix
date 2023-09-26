@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "8.0.4";
+  version = "8.0.5";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${version}.tar.xz";
-    hash = "sha256-gcgX3aOK+Vi+W+8abPVbZYuy0/uHwealcd5reyxEUWw=";
+    hash = "sha256-kdMCTVHkQcI13LGwyHyzqrMCKDFm6NPV+CgqoGw0a+E=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
