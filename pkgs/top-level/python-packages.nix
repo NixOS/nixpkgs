@@ -11781,6 +11781,8 @@ self: super: with self; {
     inherit (pkgs) sentencepiece;
   };
 
+  sentence-splitter = callPackage ../development/python-modules/sentence-splitter { };
+
   sentence-transformers = callPackage ../development/python-modules/sentence-transformers { };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
