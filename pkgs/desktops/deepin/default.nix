@@ -34,6 +34,7 @@ let
     dde-launcher = callPackage ./core/dde-launcher { };
     dde-launchpad = callPackage ./core/dde-launchpad { };
     dde-network-core = callPackage ./core/dde-network-core { };
+    dde-session = callPackage ./core/dde-session { };
     dde-session-shell = callPackage ./core/dde-session-shell { };
     dde-session-ui = callPackage ./core/dde-session-ui { };
     deepin-service-manager = callPackage ./core/deepin-service-manager { };
