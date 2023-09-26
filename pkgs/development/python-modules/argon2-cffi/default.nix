@@ -1,46 +1,32 @@
-{ cffi
-, six
-, enum34
-, hypothesis
-, pytest
-, wheel
+{ hypothesis
+, pytestCheckHook
 , buildPythonPackage
 , fetchPypi
-, flit-core
-, isPy3k
 , lib
-, stdenv
+, hatchling
+, hatch-vcs
+, hatch-fancy-pypi-readme
 , argon2-cffi-bindings
 }:
 
 buildPythonPackage rec {
   pname = "argon2-cffi";
-  version = "21.3.0";
+  version = "23.1.0";
   format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "d384164d944190a7dd7ef22c6aa3ff197da12962bd04b17f64d4e93d934dba5b";
+    pname = "argon2_cffi";
+    inherit version;
+    hash = "sha256-h5w+eaJynOdo67fTbUYJ46eKTKLsOp8SKGygV+PQ2wg=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ hatchling hatch-vcs hatch-fancy-pypi-readme ];
 
-  propagatedBuildInputs = [ cffi six argon2-cffi-bindings ]
-    ++ lib.optional (!isPy3k) enum34;
+  propagatedBuildInputs = [ argon2-cffi-bindings ];
 
-  propagatedNativeBuildInputs = [
-    argon2-cffi-bindings
-    cffi
-  ];
+  nativeCheckInputs = [ hypothesis pytestCheckHook ];
 
-  ARGON2_CFFI_USE_SSE2 = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) "0";
-
-  nativeCheckInputs = [ hypothesis pytest wheel ];
-  checkPhase = ''
-    pytest tests
-  '';
+  pythonImportsCheck = [ "argon2" ];
 
   meta = with lib; {
     description = "Secure Password Hashes for Python";
