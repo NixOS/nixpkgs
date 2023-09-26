@@ -29,8 +29,10 @@ verlte() {
 }
 
 readonly product="${1:-graalvm-ce}"
-readonly hashes_nix="hashes-$product.nix"
+readonly hashes_nix="$product/hashes.nix"
 readonly nixpkgs=../../../../..
+
+mkdir -p "$product"
 
 declare -r -A update_urls=(
   [graalvm-ce]="https://api.github.com/repos/graalvm/graalvm-ce-builds/releases/latest"

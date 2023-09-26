@@ -20,9 +20,10 @@ let
     "aarch64-darwin" = "macos-aarch64";
     "x86_64-darwin" = "macos-x64";
   };
-  version = product: (import (./. + "/hashes-${product}.nix")).version;
-  source = product: (import (./. + "/hashes-${product}.nix")).${product}.${javaPlatform.${stdenv.system}}
-    or (import (./. + "/hashes-${product}.nix")).${product}.${javaPlatformForProducts.${stdenv.system}}
+  hashes = product: (import (./. + "/${product}/hashes.nix"));
+  version = product: (hashes product).version;
+  source = product: (hashes product).${product}.${javaPlatform.${stdenv.system}}
+    or (hashes product).${product}.${javaPlatformForProducts.${stdenv.system}}
     or (throw "Unsupported product combination: product=${product} system=${stdenv.system}");
 in
 rec {
@@ -34,22 +35,22 @@ rec {
     meta.platforms = builtins.attrNames javaPlatform;
   };
 
-  graaljs = callPackage ./graaljs.nix {
+  graaljs = callPackage ./graaljs {
     version = version "graaljs";
     src = fetchurl (source "graaljs");
   };
 
-  graalnodejs = callPackage ./graalnodejs.nix {
+  graalnodejs = callPackage ./graalnodejs {
     version = "21";
     src = fetchurl (source "graalnodejs");
   };
 
-  graalpy = callPackage ./graalpy.nix {
+  graalpy = callPackage ./graalpy {
     version = version "graalpy";
     src = fetchurl (source "graalpy");
   };
 
-  truffleruby = callPackage ./truffleruby.nix {
+  truffleruby = callPackage ./truffleruby {
     version = version "truffleruby";
     src = fetchurl (source "truffleruby");
   };
