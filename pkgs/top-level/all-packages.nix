@@ -37470,6 +37470,8 @@ with pkgs;
 
   wyoming-faster-whisper = callPackage ../tools/audio/wyoming/faster-whisper.nix { };
 
+  wyoming-openwakeword = callPackage ../tools/audio/wyoming/openwakeword.nix { };
+
   wyoming-piper = callPackage ../tools/audio/wyoming/piper.nix { };
 
   ### GAMES
