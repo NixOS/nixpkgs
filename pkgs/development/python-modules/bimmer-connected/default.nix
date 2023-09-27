@@ -1,10 +1,10 @@
 { lib
-, aiofile
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , pbr
 , httpx
+, pillow
 , pycryptodome
 , pyjwt
 , pytest-asyncio
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.14.0";
+  version = "0.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-cx22otbBCSFRTfr+wY1+k5kyX6h9mTQfRBfPw3rplzY=";
+    hash = "sha256-Fo30qDBqVxVuD/Ow0jsvN20Hx7Zhvie47CE+1ys1ewU=";
   };
 
   nativeBuildInputs = [
@@ -36,8 +36,8 @@ buildPythonPackage rec {
   PBR_VERSION = version;
 
   propagatedBuildInputs = [
-    aiofile
     httpx
+    pillow
     pycryptodome
     pyjwt
   ];
