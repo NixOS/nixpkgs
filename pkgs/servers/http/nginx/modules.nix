@@ -304,14 +304,6 @@ let self = {
     };
   };
 
-  http_proxy_connect_module_v18 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "18";
-  };
-
-  http_proxy_connect_module_v19 = http_proxy_connect_module_generic "proxy_connect_rewrite_1018" // {
-    supports = with lib.versions; version: major version == "1" && minor version == "19";
-  };
-
   http_proxy_connect_module_v24 = http_proxy_connect_module_generic "proxy_connect_rewrite_102101" // {
     supports = with lib.versions; version: major version == "1" && minor version == "24";
   };
