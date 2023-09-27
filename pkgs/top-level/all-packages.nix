@@ -30599,6 +30599,8 @@ with pkgs;
   apngasm = callPackage ../applications/graphics/apngasm { };
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
 
+  appcleaner = callPackage ../applications/misc/appcleaner { };
+
   appeditor = callPackage ../applications/misc/appeditor { };
 
   appgate-sdp = callPackage ../applications/networking/appgate-sdp { };
@@ -35857,6 +35859,8 @@ with pkgs;
 
   tailor = callPackage ../applications/version-management/tailor { };
 
+  tailor-gui = callPackage ../os-specific/linux/tailor-gui { };
+
   taizen = callPackage ../applications/misc/taizen { };
 
   talosctl = callPackage ../applications/networking/cluster/talosctl { };
@@ -36186,6 +36190,8 @@ with pkgs;
   };
 
   tut = callPackage ../applications/misc/tut { };
+
+  tuxedo-rs = callPackage ../os-specific/linux/tuxedo-rs { };
 
   tuxguitar = callPackage ../applications/editors/music/tuxguitar {
     jre = jre8;
