@@ -2109,6 +2109,8 @@ self: super: with self; {
 
   clvm-tools-rs = callPackage ../development/python-modules/clvm-tools-rs { };
 
+  cmapy = callPackage ../development/python-modules/cmapy { };
+
   cma = callPackage ../development/python-modules/cma { };
 
   cmaes = callPackage ../development/python-modules/cmaes { };
