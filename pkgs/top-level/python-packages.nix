@@ -6732,6 +6732,8 @@ self: super: with self; {
 
   mir_eval = callPackage ../development/python-modules/mir_eval { };
 
+  mirakuru = callPackage ../development/python-modules/mirakuru { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
