@@ -3,13 +3,9 @@
 , runCommand
 , glib
 , gtk3
-, dtkcommon
 , dde-dock
 , startdde
-, dde-launcher
 , dde-session-shell
-, dde-session-ui
-, dde-control-center
 , dde-file-manager
 , deepin-desktop-schemas
 , deepin-movie-reborn
@@ -21,13 +17,9 @@
 
 let
   gsettingsOverridePackages = [
-    dtkcommon
     dde-dock
     startdde
-    dde-launcher
     dde-session-shell
-    dde-session-ui
-    dde-control-center
     dde-file-manager
     deepin-desktop-schemas
     deepin-movie-reborn
