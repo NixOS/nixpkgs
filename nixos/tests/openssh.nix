@@ -57,7 +57,7 @@ in {
 
       {
         services.openssh = {
-          enable = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } ];
+          enable = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } { addr = "[::]"; port = 22; } ];
           extraConfig = ''
             # Combined test for two (predictable) Match criterias
             Match LocalAddress 127.0.0.1 LocalPort 22
