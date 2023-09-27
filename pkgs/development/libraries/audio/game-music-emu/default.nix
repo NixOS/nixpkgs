@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, removeReferencesTo }:
+{ lib, stdenv, fetchurl, cmake, removeReferencesTo, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.6.3";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
   cmakeFlags = [ "-DENABLE_UBSAN=OFF" ];
   nativeBuildInputs = [ cmake removeReferencesTo ];
+  buildInputs = [ zlib ];
 
   # It used to reference it, in the past, but thanks to the postFixup hook, now
   # it doesn't.
