@@ -44,15 +44,16 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "2Aug2023";
+  # LAMMPS has weird versioning convention. Updates should go smoothly with:
+  # nix-update --commit lammps --version-regex 'stable_(.*)'
+  version = "2Aug2023_update1";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = "stable_${finalAttrs.version}";
-    hash = "sha256-6T4YAa4iN3pJpODGPW+faR16xxyYYdkHLavtiPUbZ4o=";
+    hash = "sha256-Zmn87a726qdidBfyvJlYleYv9jqyFAakxjGrg3lipc0=";
   };
   preConfigure = ''
     cd cmake
