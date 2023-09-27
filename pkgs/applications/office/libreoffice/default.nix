@@ -467,6 +467,7 @@ in
     "--without-system-libqxp"
     "--without-system-dragonbox"
     "--without-system-libfixmath"
+    "--without-system-frozen"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     # https://github.com/NixOS/nixpkgs/issues/212556, but we need mdds 2.1 for libreoffice 7.6+
     "--without-system-mdds"
