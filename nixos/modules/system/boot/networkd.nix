@@ -954,10 +954,12 @@ let
           "Prefix"
           "PreferredLifetimeSec"
           "ValidLifetimeSec"
+          "Assign"
           "Token"
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
+        (assertValueOneOf "Assign" boolValues)
       ];
 
       sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [
