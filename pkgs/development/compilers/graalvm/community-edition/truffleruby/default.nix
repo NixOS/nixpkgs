@@ -1,14 +1,15 @@
 { lib
 , stdenv
+, fetchurl
 , graalvmCEPackages
 , libyaml
 , openssl
-, src
-, version
 }:
 
 graalvmCEPackages.buildGraalvmProduct {
-  inherit src version;
+  src = fetchurl (import ./hashes.nix).hashes.${stdenv.system};
+  version = (import ./hashes.nix).version;
+
   product = "truffleruby";
 
   extraBuildInputs = [

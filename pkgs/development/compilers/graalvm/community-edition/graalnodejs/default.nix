@@ -1,10 +1,12 @@
-{ graalvmCEPackages
-, src
-, version
+{ stdenv
+, fetchurl
+, graalvmCEPackages
 }:
 
 graalvmCEPackages.buildGraalvmProduct {
-  inherit src version;
+  src = fetchurl (import ./hashes.nix).hashes.${stdenv.system};
+  version = (import ./hashes.nix).version;
+
   product = "nodejs-installable-svm";
 
   doInstallCheck = true;
