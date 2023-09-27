@@ -43,6 +43,16 @@ buildPythonPackage rec {
     "dissect.volume"
   ];
 
+  disabledTests = [
+    # gzip.BadGzipFile: Not a gzipped file
+    "test_ddf_read"
+    "test_dm_thin"
+    "test_lvm_mirro"
+    "test_lvm_thin"
+    "test_md_raid0_zones"
+    "test_md_read"
+  ];
+
   meta = with lib; {
     description = "Dissect module implementing various utility functions for the other Dissect modules";
     homepage = "https://github.com/fox-it/dissect.volume";
