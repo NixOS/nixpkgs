@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0xmz64m02knbrpasfij4rrq53ksxna5idxwgabcw4n2b1ig7pyx5";
   };
 
+  patches = [ ./fix-strlcpy-usage.patch ];
+
   nativeBuildInputs = [ cmake ];
 
   strictDeps = true;
