@@ -10989,6 +10989,8 @@ self: super: with self; {
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
+  qemu-qmp = callPackage ../development/python-modules/qemu-qmp { };
+
   qgrid = callPackage ../development/python-modules/qgrid { };
 
   qiling = callPackage ../development/python-modules/qiling { };
