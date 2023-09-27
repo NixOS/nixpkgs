@@ -10349,6 +10349,8 @@ self: super: with self; {
 
   pytest-plt = callPackage ../development/python-modules/pytest-plt { };
 
+  pytest-postgresql = callPackage ../development/python-modules/pytest-postgresql { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-pytestrail = callPackage ../development/python-modules/pytest-pytestrail { };
