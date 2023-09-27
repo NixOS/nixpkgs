@@ -25708,6 +25708,8 @@ with pkgs;
 
   xsimd = callPackage ../development/libraries/xsimd { };
 
+  xsimd10 = callPackage ../development/libraries/xsimd/10.nix { };
+
   xtensor = callPackage ../development/libraries/xtensor { };
 
   xtl = callPackage ../development/libraries/xtl { };
