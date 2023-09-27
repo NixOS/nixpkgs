@@ -1,6 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+
+# tests
+, wyoming-faster-whisper
+, wyoming-openwakeword
+, wyoming-piper
 }:
 
 buildPythonPackage rec {
@@ -19,6 +24,14 @@ buildPythonPackage rec {
 
   # no tests
   doCheck = false;
+
+  passthru.tests = {
+    inherit
+      wyoming-faster-whisper
+      wyoming-openwakeword
+      wyoming-piper
+    ;
+  };
 
   meta = with lib; {
     description = "Protocol for Rhasspy Voice Assistant";
