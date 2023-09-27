@@ -6,7 +6,6 @@
 , cups
 , darwin
 , fontconfig
-, gcc
 , glib
 , glibc
 , gtk3
@@ -27,20 +26,20 @@
 assert useMusl -> stdenv.isLinux;
 let
   extraArgs = builtins.removeAttrs args [
+    "lib"
+    "stdenv"
     "alsa-lib"
     "autoPatchelfHook"
     "cairo"
     "cups"
     "darwin"
     "fontconfig"
-    "gcc"
     "glib"
+    "glibc"
     "gtk3"
-    "lib"
     "makeWrapper"
     "musl"
     "setJavaClassPath"
-    "stdenv"
     "unzip"
     "writeShellScriptBin"
     "xorg"
@@ -59,7 +58,7 @@ let
 
   # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
   musl-gcc = (writeShellScriptBin "${stdenv.hostPlatform.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'');
-  binPath = lib.makeBinPath ([ gcc ] ++ lib.optionals useMusl [ musl-gcc ]);
+  binPath = lib.makeBinPath ([ stdenv.cc ] ++ lib.optionals useMusl [ musl-gcc ]);
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -127,9 +126,11 @@ let
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
 
-      wrapProgram $out/bin/native-image \
-        --prefix PATH : ${binPath} \
-        ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
+      ${lib.optionalString stdenv.isLinux ''
+        wrapProgram $out/bin/native-image \
+          --prefix PATH : ${binPath} \
+          ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
+      ''}
     '';
 
     preFixup = lib.optionalString (stdenv.isLinux) ''
@@ -162,7 +163,7 @@ let
       $out/bin/java -XX:+UnlockExperimentalVMOptions -XX:+EnableJVMCI -XX:+UseJVMCICompiler HelloWorld | fgrep 'Hello World'
 
       echo "Ahead-Of-Time compilation"
-      $out/bin/native-image -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
+      $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:-CheckToolchain -H:+ReportExceptionStackTraces HelloWorld
       ./helloworld | fgrep 'Hello World'
 
       ${# --static is only available in Linux
@@ -198,6 +199,8 @@ let
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       mainProgram = "java";
       maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
+      # fatal error: 'Foundation/Foundation.h' file not found
+      broken = stdenv.isDarwin;
     } // (args.meta or { }));
   } // extraArgs);
 in
