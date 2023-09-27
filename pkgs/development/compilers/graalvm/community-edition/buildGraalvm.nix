@@ -14,7 +14,6 @@
 , runCommandCC
 , setJavaClassPath
 , unzip
-, writeShellScriptBin
 , xorg
 , zlib
   # extra params
@@ -43,7 +42,6 @@ let
     "runCommandCC"
     "setJavaClassPath"
     "unzip"
-    "writeShellScriptBin"
     "xorg"
     "zlib"
     "extraCLibs"
@@ -61,21 +59,25 @@ let
   );
 
   # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
-  musl-gcc = (writeShellScriptBin "${stdenv.hostPlatform.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'');
+  musl-gcc = (runCommandCC "musl-gcc" { } ''
+    mkdir -p $out/bin
+    ln -s ${lib.getDev musl}/bin/musl-gcc $out/bin/${stdenv.hostPlatform.system}-musl-gcc
+  '');
   # GraalVM 23.0.0+ (i.e.: JDK 21.0.0+) clean-up the environment inside darwin
   # So we need to re-added some env vars to make everything work correctly again
-  darwin-cc = (runCommandCC "darwin-cc" {
-    nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ darwin.apple_sdk.frameworks.Foundation zlib ];
-  } ''
+  darwin-cc = (runCommandCC "darwin-cc"
+    {
+      nativeBuildInputs = [ makeWrapper ];
+      buildInputs = [ darwin.apple_sdk.frameworks.Foundation zlib ];
+    } ''
     makeWrapper ${stdenv.cc}/bin/cc $out/bin/cc \
       --prefix NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} : "$NIX_CFLAGS_COMPILE" \
       --prefix NIX_LDFLAGS_${stdenv.cc.suffixSalt} : "$NIX_LDFLAGS"
   '');
   binPath = lib.makeBinPath (
     lib.optionals stdenv.isDarwin [ darwin-cc ]
-    ++ [ stdenv.cc ]
     ++ lib.optionals useMusl [ musl-gcc ]
+    ++ [ stdenv.cc ]
   );
 
   runtimeLibraryPath = lib.makeLibraryPath

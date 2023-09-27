@@ -11,6 +11,8 @@
 
   graalvm-ce = callPackage ./graalvm-ce { };
 
+  graalvm-ce-musl = callPackage ./graalvm-ce { useMusl = true; };
+
   graaljs = callPackage ./graaljs { };
 
   graalnodejs = callPackage ./graalnodejs { };
