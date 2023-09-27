@@ -1,4 +1,4 @@
-{ lib, pkgs, libsForQt5 }:
+{ lib, pkgs, config, libsForQt5 }:
 let
   packages = self:
   let
@@ -91,6 +91,8 @@ let
     #### MISC
     deepin-desktop-base = callPackage ./misc/deepin-desktop-base { };
     deepin-turbo = callPackage ./misc/deepin-turbo { };
+  } // lib.optionalAttrs config.allowAliases {
+    dde-kwin = throw "The 'deepin.dde-kwin' package was removed as it is outdated and no longer relevant."; # added 2023-09-27
   };
 in
 lib.makeScope libsForQt5.newScope packages
