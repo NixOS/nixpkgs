@@ -211,7 +211,8 @@ in package-set { inherit pkgs lib callPackage; } self // {
       let
         filter = path: type:
                    pkgs.lib.hasSuffix ".cabal" path ||
-                   baseNameOf path == "package.yaml";
+                   baseNameOf path == "package.yaml" ||
+                   args.extraSrcFilter;
         expr = self.haskellSrc2nix {
           inherit name extraCabal2nixOptions;
           src = if pkgs.lib.canCleanSource src
