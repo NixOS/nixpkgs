@@ -6588,6 +6588,8 @@ self: super: with self; {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  mediapipe-bin = callPackage ../development/python-modules/mediapipe-bin { };
+
   mediapy = callPackage ../development/python-modules/mediapy { };
 
   meeko = callPackage ../development/python-modules/meeko { };
