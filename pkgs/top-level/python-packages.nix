@@ -8933,6 +8933,8 @@ self: super: with self; {
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
+  pybloom-live = callPackage ../development/python-modules/pybloom-live { };
+
   pybluez = callPackage ../development/python-modules/pybluez {
     inherit (pkgs) bluez;
   };
