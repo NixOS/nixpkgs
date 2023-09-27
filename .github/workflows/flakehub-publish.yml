@@ -1,0 +1,53 @@
+name: "Publish every Git push to NixOS release branches to FlakeHub. nixos-unstable is 0.1.x, and nixos-yy.mm is 0.yymm.x."
+on:
+  push:
+    branches:
+        - nixos-**
+
+jobs:
+  flakehub-publish:
+    runs-on: "ubuntu-latest"
+    permissions:
+      id-token: "write"
+      contents: "read"
+    steps:
+      - uses: actions/github-script@v6
+        id: split
+        with:
+          script: |
+            "use strict";
+            const ref = context.ref;
+            if (!ref) {
+                console.log("ref is undefined in context:", context);
+                process.exit(1);
+            }
+            console.log(`Calculating the minor version for ${ref}`);
+            let regex = new RegExp(/^refs\/heads\/nixos-(?<version>([0-9]+\.[0-9]+)|unstable)$/);
+            let match = regex.exec(ref);
+            if (match && match.groups) {
+                const versionPart = match.groups.version;
+                if (versionPart) {
+                    const minorVersion = versionPart == "unstable" ? "1" : versionPart.replace('.', '');
+                    console.log(`Minor version part: ${minorVersion}`);
+                    core.setOutput("minorVersion", minorVersion);
+                }
+                else {
+                    console.log(`version part is undefined in matches:`, match.groups);
+                    process.exit(1);
+                }
+            }
+            else {
+                console.log(`Branch didn't match our publishable regex.`);
+                process.exit();
+            }
+      - uses: "actions/checkout@v3"
+        if: steps.split.outputs.minorVersion
+      - uses: "DeterminateSystems/nix-installer-action@main"
+        if: steps.split.outputs.minorVersion
+      - uses: "DeterminateSystems/flakehub-push@main"
+        if: steps.split.outputs.minorVersion
+        with:
+          name: "NixOS/nixpkgs"
+          rolling: true
+          visibility: "public"
+          rolling-minor: "${{ steps.split.outputs.minorVersion }}"
