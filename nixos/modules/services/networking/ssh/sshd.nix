@@ -583,7 +583,7 @@ in
           (lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null")
           cfg.ports}
         ${concatMapStringsSep "\n"
-          (la: "sshd -G -T -C laddr=${la.addr},lport=${toString la.port} -f ${sshconf} > /dev/null")
+          (la: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString la.port}"} -f ${sshconf} > /dev/null")
           cfg.listenAddresses}
         touch $out
       '')
