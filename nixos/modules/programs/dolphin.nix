@@ -5,10 +5,10 @@ with lib;
 let
   cfg = config.programs.dolphin;
 
-  # This is needed to select the Breeze theme
+  # This is needed to select the custom theme
   dolphin-stylized = pkgs.writeShellScriptBin "dolphin" ''
     export QT_STYLE_OVERRIDE="${cfg.style}"
-    exec ${pkgs.libsForQt5.dolphin}/bin/dolphin
+    exec -a ${lib.getExe pkgs.libsForQt5.dolphin}
   '';
 in
 {
@@ -26,7 +26,6 @@ in
     style = mkOption {
       type = types.str;
       default = "breeze";
-      example = "breeze";
       description = mdDoc ''
         Set the style for Dolphin.
 
@@ -51,12 +50,6 @@ in
 
         This option should be used with `style` together.
       '';
-      example = literalExpression ''
-        with pkgs.libsForQt5; [
-          breeze-qt5
-          breeze-icons
-        ];
-      '';
     };
 
     extraPackages = mkOption {
@@ -80,36 +73,24 @@ in
         but add useful features such as thumbnails, network/device filesystem
         access, and similar.
       '';
-      example = literalExpression ''
-        with pkgs.libsForQt5; [
-          dolphin-plugins
-          kio-extras
-          kdegraphics-thumbnailers
-        ];
-      '';
     };
   };
 
-  # implementation
   config = mkIf cfg.enable {
-
     environment = {
-
       # This is needed to have Konsole colorscheme files available in Dolphin
       pathsToLink = [
         "/share/konsole"
       ];
 
-      systemPackages = with pkgs; with libsForQt5; [
-        dolphin-stylized
-        konsole # for terminal panel
+      systemPackages = [
+        pkgs.dolphin-stylized
+        libsForQt5.konsole # for terminal panel
       ] ++ cfg.extraPackages
       ++ cfg.stylePackages;
     };
 
-    services = {
-      udisks2.enable = true; # for mounting hard drives
-    };
-
+    # for mounting hard drives
+    services.udisks2.enable = true;
   };
 }
