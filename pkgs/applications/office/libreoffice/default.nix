@@ -66,7 +66,6 @@
 , libcdr
 , lcms
 , unixODBC
-, mdds
 , sane-backends
 , mythes
 , libexttextcat
@@ -468,8 +467,9 @@ in
     "--without-system-libqxp"
     "--without-system-dragonbox"
     "--without-system-libfixmath"
-    "--with-system-mdds"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
+    # https://github.com/NixOS/nixpkgs/issues/212556, but we need mdds 2.1 for libreoffice 7.6+
+    "--without-system-mdds"
     "--without-system-orcus"
     "--without-system-xmlsec"
     "--without-system-cuckoo"
@@ -565,7 +565,6 @@ in
     libxshmfence
     libxslt
     libzmf
-    mdds
     mythes
     ncurses
     neon
