@@ -288,7 +288,10 @@ in rec {
         default = {};
         type = with types; attrsOf (nullOr (oneOf [ str path package ]));
         example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
-        description = lib.mdDoc "Environment variables passed to the service's processes.";
+        description = lib.mdDoc ''
+          Environment variables passed to the service's processes.
+          Can contain specifiers (`%` placeholders expanded by systemd, see {manpage}`systemd.unit(5)`).
+        '';
       };
 
       path = mkOption {
