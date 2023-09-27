@@ -71,5 +71,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/esp-rs/espup/";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ knightpp ];
+    mainProgram = "espup";
   };
 }
