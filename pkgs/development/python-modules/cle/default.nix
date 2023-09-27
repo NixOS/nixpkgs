@@ -23,7 +23,7 @@ let
     owner = "angr";
     repo = "binaries";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AURNfPdmvMwVxYwLa10T7pJxKbGbTy3xeH/jm1Qdad0=";
+    hash = "sha256-BQwP3qq+2o/Z05RcnhJyrBAo/kqosHMJ8Bn8T7ZBlaA=";
   };
 
 in
