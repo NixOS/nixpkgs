@@ -18260,8 +18260,6 @@ with pkgs;
 
   scheme-bytestructures = callPackage ../development/scheme-modules/scheme-bytestructures { };
 
-  self = pkgsi686Linux.callPackage ../development/interpreters/self { };
-
   smiley-sans = callPackage ../data/fonts/smiley-sans { };
 
   inherit (callPackages ../applications/networking/cluster/spark { })
