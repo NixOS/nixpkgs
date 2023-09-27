@@ -4954,6 +4954,8 @@ with pkgs;
 
   dagger = callPackage ../development/tools/continuous-integration/dagger { };
 
+  daikhan = callPackage ../applications/video/daikhan { };
+
   dale = callPackage ../development/compilers/dale { };
 
   damon = callPackage ../tools/admin/damon { };
