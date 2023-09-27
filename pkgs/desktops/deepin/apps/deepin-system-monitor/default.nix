@@ -21,17 +21,19 @@
 , util-linux
 , systemd
 , polkit
+, wayland
+, dwayland
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-system-monitor";
-  version = "5.9.33";
+  version = "6.0.8";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-X7/YwnJyA/HOLsOGARjsHWgL2qxW1eU1TvoWulvz0j4=";
+    hash = "sha256-7XvS5HviK9XRsxTGnreYX9IQxxGWk7x7MHtcsHCz1rc=";
   };
 
   postPatch = ''
@@ -74,11 +76,12 @@ stdenv.mkDerivation rec {
     procps
     libpcap
     libnl
+    wayland
+    dwayland
   ];
 
   cmakeFlags = [
     "-DVERSION=${version}"
-    "-DUSE_DEEPIN_WAYLAND=OFF"
   ];
 
   strictDeps = true;
