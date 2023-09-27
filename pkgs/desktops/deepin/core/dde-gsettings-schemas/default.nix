@@ -11,6 +11,7 @@
 , deepin-movie-reborn
 , deepin-screen-recorder
 , deepin-system-monitor
+, gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
 , extraGSettingsOverridePackages ? [ ]
 }:
@@ -25,6 +26,7 @@ let
     deepin-movie-reborn
     deepin-screen-recorder
     deepin-system-monitor
+    gsettings-desktop-schemas # dde-appearance need org.gnome.desktop.background
   ] ++ extraGSettingsOverridePackages;
 
 in
