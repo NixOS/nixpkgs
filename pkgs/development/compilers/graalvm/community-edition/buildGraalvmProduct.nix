@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , autoPatchelfHook
+, darwin
 , graalvm-ce
 , makeWrapper
 , zlib
@@ -17,10 +18,11 @@ let
     "lib"
     "stdenv"
     "autoPatchelfHook"
+    "darwin"
     "graalvm-ce"
+    "libxcrypt-legacy"
     "makeWrapper"
     "zlib"
-    "libxcrypt-legacy"
     "product"
     "extraBuildInputs"
     "extraNativeBuildInputs"
@@ -38,7 +40,9 @@ stdenv.mkDerivation ({
     stdenv.cc.cc.lib # libstdc++.so.6
     zlib
     libxcrypt-legacy # libcrypt.so.1 (default is .2 now)
-  ] ++ extraBuildInputs;
+  ]
+  ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Foundation
+  ++ extraBuildInputs;
 
   unpackPhase = ''
     runHook preUnpack
