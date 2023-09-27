@@ -11,6 +11,7 @@
 , gtk3
 , makeWrapper
 , musl
+, runCommandCC
 , setJavaClassPath
 , unzip
 , writeShellScriptBin
@@ -39,6 +40,7 @@ let
     "gtk3"
     "makeWrapper"
     "musl"
+    "runCommandCC"
     "setJavaClassPath"
     "unzip"
     "writeShellScriptBin"
@@ -51,14 +53,30 @@ let
     "meta"
   ];
 
-  cLibs = [ glibc zlib.static ]
+  cLibs = lib.optionals stdenv.isLinux (
+    [ glibc zlib.static ]
     ++ lib.optionals (!useMusl) [ glibc.static ]
     ++ lib.optionals useMusl [ musl ]
-    ++ extraCLibs;
+    ++ extraCLibs
+  );
 
   # GraalVM 21.3.0+ expects musl-gcc as <system>-musl-gcc
   musl-gcc = (writeShellScriptBin "${stdenv.hostPlatform.system}-musl-gcc" ''${lib.getDev musl}/bin/musl-gcc "$@"'');
-  binPath = lib.makeBinPath ([ stdenv.cc ] ++ lib.optionals useMusl [ musl-gcc ]);
+  # GraalVM 23.0.0+ (i.e.: JDK 21.0.0+) clean-up the environment inside darwin
+  # So we need to re-added some env vars to make everything work correctly again
+  darwin-cc = (runCommandCC "darwin-cc" {
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ darwin.apple_sdk.frameworks.Foundation zlib ];
+  } ''
+    makeWrapper ${stdenv.cc}/bin/cc $out/bin/cc \
+      --prefix NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} : "$NIX_CFLAGS_COMPILE" \
+      --prefix NIX_LDFLAGS_${stdenv.cc.suffixSalt} : "$NIX_LDFLAGS"
+  '');
+  binPath = lib.makeBinPath (
+    lib.optionals stdenv.isDarwin [ darwin-cc ]
+    ++ [ stdenv.cc ]
+    ++ lib.optionals useMusl [ musl-gcc ]
+  );
 
   runtimeLibraryPath = lib.makeLibraryPath
     ([ cups ] ++ lib.optionals gtkSupport [ cairo glib gtk3 ]);
@@ -126,11 +144,9 @@ let
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
 
-      ${lib.optionalString stdenv.isLinux ''
-        wrapProgram $out/bin/native-image \
-          --prefix PATH : ${binPath} \
-          ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
-      ''}
+      wrapProgram $out/bin/native-image \
+        --prefix PATH : ${binPath} \
+        ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
     '';
 
     preFixup = lib.optionalString (stdenv.isLinux) ''
@@ -199,8 +215,6 @@ let
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       mainProgram = "java";
       maintainers = with maintainers; teams.graalvm-ce.members ++ [ ];
-      # fatal error: 'Foundation/Foundation.h' file not found
-      broken = stdenv.isDarwin;
     } // (args.meta or { }));
   } // extraArgs);
 in
