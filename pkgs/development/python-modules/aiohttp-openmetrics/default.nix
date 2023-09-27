@@ -3,11 +3,15 @@
 , fetchPypi
 , aiohttp
 , prometheus-client
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiohttp-openmetrics";
   version = "0.0.12";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +26,9 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "aiohttp_openmetrics" ];
+  pythonImportsCheck = [
+    "aiohttp_openmetrics"
+  ];
 
   meta = with lib; {
     description = "OpenMetrics provider for aiohttp";
