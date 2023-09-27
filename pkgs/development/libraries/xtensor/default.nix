@@ -7,8 +7,10 @@
 , enableBoundChecks ? false # Broadcasts don't pass bound checks
 , nlohmann_json
 , xtl
-# We don't support xsimd yet due to:
+# Although this dependency is of the same GitHub organization, xtensor don't
+# support xsimd 11 yet, see:
 # https://github.com/xtensor-stack/xtensor/issues/2721
+, xsimd10
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     nlohmann_json
     xtl
+  ] ++ lib.optionals (!(stdenv.isAarch64 && stdenv.isLinux)) [
+    # xsimd support is broken on aarch64-linux, see:
+    # https://github.com/xtensor-stack/xsimd/issues/945
+    xsimd10
   ];
 
   cmakeFlags = let
