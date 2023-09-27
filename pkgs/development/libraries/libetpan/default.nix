@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g7an003simfdn7ihg9yjv7hl2czsmjsndjrp39i7cad8icixscn";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [
     # The following two patches are fixing CVE-2020-15953, as reported in the
     # issue tracker: https://github.com/dinhvh/libetpan/issues/386
