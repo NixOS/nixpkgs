@@ -62,8 +62,11 @@ buildPythonPackage rec {
     testtools
   ];
 
+  # test_keystoneauth_betamax_fixture is incompatible with urllib3 2.0.0
+  # https://bugs.launchpad.net/keystoneauth/+bug/2020112
   checkPhase = ''
-    stestr run
+    stestr run \
+      -E "keystoneauth1.tests.unit.test_betamax_fixture.TestBetamaxFixture.test_keystoneauth_betamax_fixture"
   '';
 
   pythonImportsCheck = [ "keystoneauth1" ];
