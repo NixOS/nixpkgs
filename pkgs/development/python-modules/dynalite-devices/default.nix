@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "dynalite-devices";
-  version = "0.1.48";
+  version = "0.47";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ziv1234";
     repo = "python-dynalite-devices";
     rev = "refs/tags/v${version}";
-    hash = "sha256-i88aIsRNsToSceQdwfspJg+Y5MO5zC4O6EkyhrYR27g=";
+    hash = "sha256-kJo4e5vhgWzijLUhQd9VBVk1URpg9SXhOA60dJYashM=";
   };
 
   postPatch = ''

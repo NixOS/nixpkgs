@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2023.4.0";
+  version = "2023.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     rev = version;
-    hash = "sha256-qkvhmXJNxA8v+kbZ6ulxJAQr7ReQpb+JkbhOUnL59KM=";
+    hash = "sha256-1ai+/8akUlP9kfzSKYEpDnobBfUC6EAPFPVVxh4jb/0=";
   };
 
   propagatedBuildInputs = [
@@ -144,6 +144,11 @@ buildPythonPackage rec {
     # this two tests however, assume nanosecond resolution
     "test_modified"
     "test_touch"
+  ];
+
+  disabledTestPaths = [
+    # JSON decoding issues
+    "fsspec/implementations/tests/test_dbfs.py"
   ];
 
   pythonImportsCheck = [

@@ -14,8 +14,11 @@
 , importlib-metadata
 , jinja2
 , markdown
+, markupsafe
 , mergedeep
 , packaging
+, pathspec
+, platformdirs
 , pyyaml
 , pyyaml-env-tag
 , watchdog
@@ -28,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs";
-  version = "1.4.2";
+  version = "1.5.2";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -36,13 +39,8 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-/NxiKbCd2acYcNe5ww3voM9SGVE2IDqknngqApkDbNs=";
+    hash = "sha256-9sV1bewsHVJEc2kTyGxDM6SjDTEKEc/HSY6gWBC5tvE=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "Markdown >=3.2.1, <3.4" "Markdown"
-  '';
 
   nativeBuildInputs = [
     hatchling
@@ -50,15 +48,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     click
+    ghp-import
     jinja2
     markdown
+    markupsafe
     mergedeep
+    packaging
+    pathspec
+    platformdirs
     pyyaml
     pyyaml-env-tag
-    ghp-import
-    importlib-metadata
     watchdog
-    packaging
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   nativeCheckInputs = [

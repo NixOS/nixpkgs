@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , hatchling
+, backoff
 , opentelemetry-api
 , opentelemetry-proto
 , opentelemetry-sdk
@@ -23,6 +24,7 @@ buildPythonPackage {
   ];
 
   propagatedBuildInputs = [
+    backoff
     opentelemetry-sdk
     opentelemetry-proto
   ];

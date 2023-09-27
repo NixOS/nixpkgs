@@ -18,12 +18,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.15.6";
+  version = "0.16.3";
   pname = "pybids";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OjWW08tyVDHkF0X3Pa+10HYD/7Gysp5DkEt9LaVxsdM=";
+    hash = "sha256-EOJ5NQyNFMpgLA1EaaXkv3/zk+hkPIMaVGrnNba4LMM=";
   };
 
   patches = [

@@ -57,6 +57,12 @@ qtModule {
 
       # TODO: be more precise
       patchShebangs .
+
+      # Fix compatibility with python3.11
+      substituteInPlace tools/metrics/ukm/ukm_model.py \
+        --replace "r'^(?i)(|true|false)$'" "r'(?i)^(|true|false)$'"
+      substituteInPlace tools/grit/grit/util.py \
+        --replace "mode = 'rU'" "mode = 'r'"
     )
   ''
   # Prevent Chromium build script from making the path to `clang` relative to

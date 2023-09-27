@@ -2,20 +2,22 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
  }:
 
 buildPythonPackage rec {
   pname = "ledgercomm";
-  version = "1.1.2";
+  version = "1.2.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-izOPbwv+34Xq8mpq9+QRIGhd+z4pVnGJSMnYOktRVbs=";
+    hash = "sha256-HunJjIRa3IpSL/3pZPf6CroLxEK/l7ihh737VOAILgU=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   pythonImportsCheck = [

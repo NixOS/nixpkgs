@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "duo-client";
-  version = "4.7.1";
+  version = "5.0.1";
 
   src = fetchFromGitHub {
     owner = "duosecurity";
     repo = "duo_client_python";
     rev = "refs/tags/${version}";
-    hash = "sha256-nnKujvhOtuNnlFrbmYtD7L++S7DK0Qqrc0LyAVYe7Xg=";
+    hash = "sha256-G0XLZZaQTPD64WXN34wq2z+YtzECgtC2nJXzDxAlgyg=";
   };
 
   postPatch = ''

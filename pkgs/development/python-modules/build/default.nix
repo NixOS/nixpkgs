@@ -13,22 +13,22 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
-, toml
 , tomli
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "build";
-  version = "0.10.0";
+  version = "1.0.3";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pypa";
-    repo = pname;
-    rev = version;
-    hash = "sha256-kXFrfTb7+68EV+gSENL81IFSR+ue7Fl6R2gsuFFBJhI=";
+    repo = "build";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SGWpm+AGIfqKMpDfmz2aMYmcs+XVREbHIXSuU4R7U/k=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   passthru.tests = {
     pytest = buildPythonPackage {
       pname = "${pname}-pytest";
-      inherit version;
+      inherit src version;
       format = "other";
 
       dontBuild = true;
@@ -63,7 +63,7 @@ buildPythonPackage rec {
         pytest-xdist
         pytestCheckHook
         setuptools
-        toml
+        wheel
       ];
 
       pytestFlagsArray = [

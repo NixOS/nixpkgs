@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-events";
-  version = "0.6.3";
+  version = "0.7.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k+OyCKUN9hC6J1Ff2DDb2ECLvmWkkK1HtNxfKVXyl8g=";
+    hash = "sha256-hOx2/WiFpDjtmP+qC6Ew2VY4/gdvXuv2k76qtmS+61M=";
   };
 
   nativeBuildInputs = [

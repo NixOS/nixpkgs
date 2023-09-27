@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "rnginline";
-  version = "0.0.2";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j4W4zwHA4yA6iAFVa/LDKp00eeCX3PbmWkjd2LSUGfk=";
+    hash = "sha256-JWqzs+OqOynIAWYVgGrZiuiCqObAgGe6rBt0DcP3U6E=";
   };
 
   patches = [

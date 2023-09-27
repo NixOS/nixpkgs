@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "xdot";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3df91e6c671869bd2a6b2a8883fa3476dbe2ba763bd2a7646cf848a9eba71b70";
+    sha256 = "sha256-FtyvfAY8x/smpSkKDRZgawPeF4plNePUndFnCbZCBoE=";
   };
 
   disabled = !isPy3k;

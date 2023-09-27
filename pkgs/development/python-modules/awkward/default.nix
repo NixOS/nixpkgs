@@ -3,8 +3,10 @@
 , fetchPypi
 , pythonOlder
 , awkward-cpp
+, cupy
 , hatch-fancy-pypi-readme
 , hatchling
+, importlib-metadata
 , numba
 , numpy
 , packaging
@@ -15,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.3.1";
+  version = "2.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NLROXEbh4MKvBFuj+4+Wa2u37P9vuQ0Ww8kK+CYWt5E=";
+    hash = "sha256-soMmJ2JXhoR7rmCjtb+5388WfwnDrEbILyMvJqdymro=";
   };
 
   nativeBuildInputs = [
@@ -34,13 +36,16 @@ buildPythonPackage rec {
     awkward-cpp
     numpy
     packaging
-  ]  ++ lib.optionals (pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonOlder "3.11") [
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    importlib-metadata
   ];
 
   dontUseCmakeConfigure = true;
 
   nativeCheckInputs = [
+    cupy
     pytestCheckHook
     numba
     setuptools

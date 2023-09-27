@@ -30,6 +30,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
+      aioairq = super.aioairq.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.4";
+        src = fetchFromGitHub {
+          owner = "CorantGmbH";
+          repo = "aioairq";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-+5FyBfsB3kjyX/V9CdZ072mZ3THyvALyym+uk7/kZLo=";
+        };
+      });
+
       aiowatttime = super.aiowatttime.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.1";
         src = fetchFromGitHub {
@@ -57,6 +67,16 @@ let
         ];
       });
 
+      blinkpy = super.blinkpy.overridePythonAttrs (oldAttrs: rec {
+        version = "0.21.0";
+        src = fetchFromGitHub {
+          owner = "fronzbot";
+          repo = "blinkpy";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-0sEZlnS6CJj8nMyjtSFZRALRKdmY0Uu5N6sozPiDG6w=";
+        };
+      });
+
       dsmr-parser = super.dsmr-parser.overridePythonAttrs (oldAttrs: rec {
         version = "0.33";
         src = fetchFromGitHub {
@@ -64,6 +84,16 @@ let
           repo = "dsmr_parser";
           rev = "refs/tags/v${version}";
           hash = "sha256-Phx8Yqx6beTzkQv0fU8Pfs2btPgKVARdO+nMcne1S+w=";
+        };
+      });
+
+      faadelays = super.faadelays.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.7";
+        src = fetchFromGitHub {
+          owner = "ntilley905";
+          repo = "faadelays";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-NmBijDr/6pGATvzZhCrOjdDU7DKwLFAfwSgozvBYHMo=";
         };
       });
 
@@ -87,12 +117,42 @@ let
         };
       });
 
+      google-nest-sdm = super.google-nest-sdm.overridePythonAttrs (oldAtrs: rec {
+        version = "2.2.5";
+        src = fetchFromGitHub {
+          owner = "allenporter";
+          repo = "python-google-nest-sdm";
+          rev = "refs/tags/${version}";
+          hash = "sha256-UMP4FMyS8nAZmN7oKBZhMbqTgi4bSR/JmIeyWaZRZis=";
+        };
+      });
+
+      holidays = super.holidays.overridePythonAttrs (oldAttrs: rec {
+        version = "0.28";
+        src = fetchFromGitHub {
+          owner = "dr-prodigy";
+          repo = "python-holidays";
+          rev = "refs/tags/v.${version}";
+          hash = "sha256-JHj7fSE8p3TLViDSegl6gm35u53D9NvN7Oa2TBjN9t4=";
+        };
+      });
+
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.0";
         src = fetchFromGitHub {
           inherit (oldAttrs.src) owner repo;
           rev = "refs/tags/v${version}";
           hash = "sha256-LnbWzIST+GMtdsHDKg67WWt9GmHUcSuGZ5Spei3nEio=";
+        };
+      });
+
+      justnimbus = super.justnimbus.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6.0";
+        src = fetchFromGitHub {
+          owner = "kvanzuijlen";
+          repo = "justnimbus";
+          rev = "refs/tags/${version}";
+          hash = "sha256-uQ5Nc5sxqHeAuavyfX4Q6Umsd54aileJjFwOOU6X7Yg=";
         };
       });
 
@@ -193,6 +253,16 @@ let
         };
       });
 
+      pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
+        version = "0.2.3";
+        src = fetchFromGitHub {
+          owner = "gagebenne";
+          repo = "pydexcom";
+          rev = "refs/tags/${version}";
+          hash = "sha256-ItDGnUUUTwCz4ZJtFVlMYjjoBPn2h8QZgLzgnV2T/Qk=";
+        };
+      });
+
       pykaleidescape = super.pykaleidescape.overridePythonAttrs (oldAttrs: rec {
         version = "1.0.1";
         src = fetchFromGitHub {
@@ -202,12 +272,41 @@ let
         };
       });
 
+      pysensibo = super.pysensibo.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.33";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-A7IzAIV8dQVSmYTEp9yeySQ8eXnLFVkiuWFS3pe2YTA=";
+        };
+      });
+
+      pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.6";
+        src = fetchFromGitHub {
+          owner = "AustinBrunkhorst";
+          repo = "pysnooz";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
+        };
+      });
+
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
         src = fetchPypi {
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
+        };
+      });
+
+      python-tado = super.python-tado.overridePythonAttrs (oldAttrs: rec {
+        version = "0.15.0";
+        src = fetchFromGitHub {
+          owner = "wmalgadey";
+          repo = "PyTado";
+          rev = "refs/tags/${version}";
+          hash = "sha256-gduqQVw/a64aDzTHFmgZu7OVB53jZb7L5vofzL3Ho6s=";
         };
       });
 
@@ -250,6 +349,27 @@ let
         doCheck = false;
       });
 
+      screenlogicpy = super.screenlogicpy.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.2";
+        src = fetchFromGitHub {
+          owner = "dieselrabbit";
+          repo = "screenlogicpy";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-7w2cg+LfL3w2Xxf8s7lFxE/HkqZ6RBYp8LkZTOwgK+I=";
+        };
+      });
+
+      syrupy = super.syrupy.overridePythonAttrs (oldAttrs: rec {
+        version = "4.2.1";
+        src = fetchFromGitHub {
+          owner = "tophat";
+          repo = "syrupy";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-MXUuLw4+J/9JtXY1DYwBjj2sgAbO2cXQi1HnVRx3BhM=";
+        };
+        doCheck = false;
+      });
+
       # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
@@ -258,6 +378,17 @@ let
           repo = "python-tailscale";
           rev = "refs/tags/v${version}";
           hash = "sha256-/tS9ZMUWsj42n3MYPZJYJELzX3h02AIHeRZmD2SuwWE=";
+        };
+      });
+
+      velbus-aio = super.velbus-aio.overridePythonAttrs (oldAttrs: rec {
+        version = "2023.2.0";
+        src = fetchFromGitHub {
+          owner = "Cereal2nd";
+          repo = "velbus-aio";
+          rev = "refs/tags/${version}";
+          hash = "sha256-y8M9Zf/CMM7NH0Sr7E9sx7JnOFGlExEk7cFEGrHBi7g=";
+          fetchSubmodules = true;
         };
       });
 

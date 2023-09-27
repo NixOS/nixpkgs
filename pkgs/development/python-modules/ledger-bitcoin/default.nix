@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ledger-bitcoin";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "ledger_bitcoin";
-    hash = "sha256-AWl/q2MzzspNIo6yf30S92PgM/Ygsb+1lJsg7Asztso=";
+    hash = "sha256-MEZuwIthIOwBkRdR7dEsEznO+GVBeOf7/5xmwNW1SvI=";
   };
 
   nativeBuildInputs = [

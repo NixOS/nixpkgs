@@ -1,23 +1,26 @@
-{ lib, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "cc2538-bsl";
-  version = "unstable-2022-08-03";
-  format = "setuptools";
+  version = "unstable-2023-08-14";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "JelmerT";
-    repo = pname;
-    rev = "538ea0deb99530e28fdf1b454e9c9d79d85a3970";
+    repo = "cc2538-bsl";
+    rev = "641305fb5cae98415a28cbfab6e63436c1753abf";
     hash = "sha256-fPY12kValxbJORi9xNyxzwkGpD9F9u3M1+aa9IlSiaE=";
   };
 
   patches = [
-    # https://github.com/JelmerT/cc2538-bsl/pull/138
     (fetchpatch {
-      name = "clean-up-install-dependencies.patch";
-      url = "https://github.com/JelmerT/cc2538-bsl/commit/bf842adf8e99a9eb8528579e5b85e59ee23be08d.patch";
-      hash = "sha256-XKQ0kfl8yFrSF5RosHY9OvJR18Fh0dmAN1FlfZ024ME=";
+      # fix extras specification in setup.py; https://github.com/JelmerT/cc2538-bsl/pull/143
+      url = "https://github.com/JelmerT/cc2538-bsl/commit/c70f58ec0222357db8020176711d6d45cf24da35.patch";
+      hash = "sha256-Rxm/TRcm87WgRfq60cu0loyrbJmZou09XYR7uhrhhj8=";
     })
   ];
 

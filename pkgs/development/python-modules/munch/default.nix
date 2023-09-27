@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "munch";
-  version = "2.5.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2d735f6f24d4dba3417fa448cae40c6e896ec1fdab6cdb5e6510999758a4dbd2";
+    sha256 = "sha256-VCyxUUYSYyFqTjfD/Zr8Ql/urziqowJc0qmB+ttCIjU=";
   };
 
   propagatedBuildInputs = [ six pbr ];

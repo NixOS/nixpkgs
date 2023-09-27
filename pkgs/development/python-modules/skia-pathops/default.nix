@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "skia-pathops";
-  version = "0.7.4";
+  version = "0.8.0.post1";
 
   src = fetchPypi {
     pname = "skia-pathops";
     inherit version;
     extension = "zip";
-    hash = "sha256-Ci/e6Ht62wGMv6bpXvnkKZ7WOwCAvidnejD/77ypE1A=";
+    hash = "sha256-oFYkneL2H6VRFrnuVVE8aja4eK7gDJFFDkBNFgZIXLs=";
   };
 
   postPatch = ''

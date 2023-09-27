@@ -3,22 +3,24 @@
 , fetchPypi
 , requests
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "5.5.0";
+  version = "6.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BKlzKzekYijs8OSWFjo+3ZNZaw5iAAKfvEiRFjhifhk=";
+    hash = "sha256-9fTHare5AfJjHvd3QdBpMg8zKMHjGRjax+20qgSssP0=";
   };
 
   propagatedBuildInputs = [
     requests
+    typing-extensions
   ];
 
   # Tests require network connectivity and there's no easy way to disable them

@@ -6,13 +6,11 @@
 , fetchFromGitHub
 , rustPlatform
 , rustc
-, setuptools-rust
 , pythonOlder
 , dirty-equals
 , pytest-mock
 , pytest-timeout
 , pytestCheckHook
-, python
 , CoreServices
 , libiconv
 }:
@@ -72,6 +70,11 @@ buildPythonPackage rec {
   preCheck = ''
     rm -rf watchfiles
   '';
+
+  disabledTests = [
+    #  BaseExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+    "test_awatch_interrupt_raise"
+  ];
 
   pythonImportsCheck = [
     "watchfiles"

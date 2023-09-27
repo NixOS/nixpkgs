@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "2.0.19";
+  version = "2.0.21";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-97q04wQVtlV2b6VJHxvnQ9ep76T5umn1KI3hXh6a8kU=";
+    hash = "sha256-ldBn+pdZfqnBKdYkOcG47ScH/hBgeJBeIvn1hCIBw/A=";
   };
 
   nativeBuildInputs =[

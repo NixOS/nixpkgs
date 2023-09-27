@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.8.0";
+  version = "4.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
     rev = "refs/tags/selenium-${version}";
-    hash = "sha256-YTi6SNtTWuEPlQ3PTeis9osvtnWmZ7SRQbne9fefdco=";
+    hash = "sha256-A2lI40bPSIri/0yp6C3aJZBX5p6ON1fWGfJTcul9/2o=";
   };
 
   postPatch = ''

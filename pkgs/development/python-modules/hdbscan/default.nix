@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.28";
+  version = "0.8.33";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7tr3Hy87vt/Ew42hrUiXRUzl69R5LhponJecKFPtwFo=";
+    hash = "sha256-V/q8Xw5F9I0kB7NccxGSq8iWN2QR/n5LuDb/oD04+Q0=";
   };
   patches = [
     # should be included in next release

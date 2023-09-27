@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "qcodes-loop";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "qcodes_loop";
-    hash = "sha256-pDR0Ws8cYQifftdE9dKcSzMxmouFo4tJmQvNanm6zyM=";
+    hash = "sha256-TizNSC49n4Xc2BmJNziARlVXYQxp/LtwmKpgqQkQ3a8=";
   };
 
   patches = [

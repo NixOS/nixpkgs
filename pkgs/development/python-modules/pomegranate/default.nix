@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , numpy
 , scipy
 , cython
@@ -16,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.14.8";
+  version = "1.0.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
     # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
-    rev = "0652e955c400bc56df5661db3298a06854c7cce8";
-    sha256 = "16g49nl2bgnh6nh7bd21s393zbksdvgp9l13ww2diwhplj6hlly3";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-EnxKlRRfsOIDLAhYOq7bUSbI/NvPoSyYCZ9D5VCXFGQ=";
   };
 
   propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
