@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-j1UO8lkVoS56hwPQXH8aIr1UegM6PdtaBXKZn50GP60=";
+    sha256 = "sha256-sJBY/pXUX5InLynsvAmapW54UF/WGn9eDlluWXjhubQ=";
   };
 
   patches = [
