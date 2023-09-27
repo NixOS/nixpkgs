@@ -19,6 +19,7 @@ let
     ./pkgs.nix
     ./run.nix
     ./testScript.nix
+    ./video.nix
   ];
 
 in

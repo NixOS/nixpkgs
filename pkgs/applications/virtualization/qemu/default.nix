@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
-, pixman, vde2, alsa-lib, texinfo, flex
+, pixman, vde2, alsa-lib, texinfo, flex, runCommandCC
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, removeReferencesTo
+, makeWrapper, removeReferencesTo, ffmpeg_4
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
@@ -41,6 +41,7 @@
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
+
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -128,12 +129,17 @@ stdenv.mkDerivation (finalAttrs: {
       revert = true;
     })
   ]
-  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ++ lib.optionals nixosTestRunner [
+    ./force-uid0-on-9p.patch
+    ./nixos-test-ui.patch
+  ];
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
     sed -i "/install_emptydir(get_option('localstatedir') \/ 'run')/d" \
         qga/meson.build
+  '' + lib.optionalString nixosTestRunner ''
+    cat ${./nixos-test-ui.c} > ui/nixos-test.c
   '';
 
   preConfigure = ''
@@ -254,6 +260,18 @@ stdenv.mkDerivation (finalAttrs: {
       rev-prefix = "v";
       ignoredVersions = "(alpha|beta|rc).*";
     };
+  } // lib.optionalAttrs nixosTestRunner {
+    tools = runCommandCC "nixos-test-tools" {
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [ ffmpeg_4 zlib ];
+      pkgconfigLibs = [
+        "libavformat" "libavcodec" "libavutil" "libswscale" "zlib"
+      ];
+    } ''
+      mkdir -p "$out/bin"
+      $CC -Wall $(pkg-config $pkgconfigLibs --libs --cflags) \
+        ${./encode-video.c} -o "$out/bin/nixos-test-encode-video"
+    '';
   };
 
   # Builds in ~3h with 2 cores, and ~20m with a big-parallel builder.
