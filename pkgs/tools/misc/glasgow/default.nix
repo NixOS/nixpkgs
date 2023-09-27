@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     crc
     fx2
     libusb1
+    packaging
     pyvcd
     setuptools
   ];
@@ -58,7 +59,10 @@ python3.pkgs.buildPythonApplication rec {
 
   checkPhase = ''
     # tests attempt to cache bitstreams
+    # for linux:
     export XDG_CACHE_HOME=$TMPDIR
+    # for darwin:
+    export HOME=$TMPDIR
     ${python3.interpreter} -W ignore::DeprecationWarning test.py
   '';
 

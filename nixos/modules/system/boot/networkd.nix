@@ -799,6 +799,8 @@ let
           "UseAddress"
           "UseDNS"
           "UseNTP"
+          "UseHostname"
+          "UseDomains"
           "RouteMetric"
           "RapidCommit"
           "MUDURL"
@@ -813,16 +815,20 @@ let
           "DUIDRawData"
           "IAID"
           "UseDelegatedPrefix"
+          "SendRelease"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "UseHostname" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertInt "RouteMetric")
         (assertValueOneOf "RapidCommit" boolValues)
         (assertValueOneOf "WithoutRA" ["no" "solicit" "information-request"])
         (assertRange "SendOption" 1 65536)
         (assertInt "IAID")
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
+        (assertValueOneOf "SendRelease" boolValues)
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -948,10 +954,12 @@ let
           "Prefix"
           "PreferredLifetimeSec"
           "ValidLifetimeSec"
+          "Assign"
           "Token"
         ])
         (assertValueOneOf "AddressAutoconfiguration" boolValues)
         (assertValueOneOf "OnLink" boolValues)
+        (assertValueOneOf "Assign" boolValues)
       ];
 
       sectionIPv6RoutePrefix = checkUnitConfig "IPv6RoutePrefix" [

@@ -9177,6 +9177,8 @@ with pkgs;
 
   hey = callPackage ../tools/networking/hey { };
 
+  heygpt = callPackage ../tools/llm/heygpt { };
+
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
@@ -11079,7 +11081,7 @@ with pkgs;
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
 
   inherit (callPackage ../servers/web-apps/netbox { })
-    netbox_3_3 netbox;
+    netbox netbox_3_5 netbox_3_6;
 
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
 
@@ -18259,8 +18261,6 @@ with pkgs;
   scheme48 = callPackage ../development/interpreters/scheme48 { };
 
   scheme-bytestructures = callPackage ../development/scheme-modules/scheme-bytestructures { };
-
-  self = pkgsi686Linux.callPackage ../development/interpreters/self { };
 
   smiley-sans = callPackage ../data/fonts/smiley-sans { };
 
