@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, removeReferencesTo
 , autoreconfHook
 , bison
 , onigurumaSupport ? true
@@ -9,17 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jq";
-  version = "1.6";
+  version = "1.7";
 
   # Note: do not use fetchpatch or fetchFromGitHub to keep this package available in __bootPackages
   src = fetchurl {
-    url = "https://github.com/stedolan/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
-    sha256 = "sha256-XejI4pqqP7nMa0e7JymfJxNU67clFOOsytx9OLW7qnI=";
+    url = "https://github.com/jqlang/jq/releases/download/jq-${version}/jq-${version}.tar.gz";
+    hash = "sha256-QCoNaXXZRub05ITRqEMgQUoP+Ots9J0sEdFE1NNE22I=";
   };
-
-  patches = [
-    ./fix-tests-when-building-without-regex-supports.patch
-  ];
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
 
@@ -39,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals onigurumaSupport [ oniguruma ];
-  nativeBuildInputs = [ autoreconfHook bison ];
+  nativeBuildInputs = [ removeReferencesTo autoreconfHook bison ];
 
   # Darwin requires _REENTRANT be defined to use functions like `lgamma_r`.
   # Otherwise, configure will detect that they’re in libm, but the build will fail
@@ -59,6 +56,12 @@ stdenv.mkDerivation rec {
   # jq is linked to libjq:
   ++ lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
+  # Break the dependency cycle: $dev refers to $bin via propagated-build-outputs, and
+  # $bin refers to $dev because of https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
+  postFixup = ''
+    remove-references-to -t "$dev" "$bin/bin/jq"
+  '';
+
   doInstallCheck = true;
   installCheckTarget = "check";
 
@@ -71,11 +74,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A lightweight and flexible command-line JSON processor";
-    homepage = "https://stedolan.github.io/jq/";
+    homepage = "https://jqlang.github.io/jq/";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin globin artturin ];
+    maintainers = with maintainers; [ raskin artturin ncfavier ];
     platforms = platforms.unix;
-    downloadPage = "https://stedolan.github.io/jq/download/";
+    downloadPage = "https://jqlang.github.io/jq/download/";
     mainProgram = "jq";
   };
 }

@@ -119,6 +119,9 @@ buildPythonPackage rec {
     "mypyc/test/test_commandline.py"
     # fails to find hatchling
     "mypy/test/testpep561.py"
+  ] ++ lib.optionals stdenv.hostPlatform.isi686 [
+    # https://github.com/python/mypy/issues/15221
+    "mypyc/test/test_run.py"
   ];
 
   meta = with lib; {

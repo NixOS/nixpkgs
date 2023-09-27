@@ -80,7 +80,7 @@
 , withSvtav1 ? withHeadlessDeps && !stdenv.isAarch64 # AV1 encoder/decoder (focused on speed and correctness)
 , withTensorflow ? false # Tensorflow dnn backend support
 , withTheora ? withHeadlessDeps # Theora encoder
-, withV4l2 ? withFullDeps && !stdenv.isDarwin # Video 4 Linux support
+, withV4l2 ? withHeadlessDeps && !stdenv.isDarwin # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps # Vdpau hardware acceleration
@@ -545,7 +545,10 @@ stdenv.mkDerivation (finalAttrs: {
   in
     "remove-references-to ${lib.concatStringsSep " " (map (o: "-t ${o}") toStrip)} config.h";
 
-  nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ removeReferencesTo addOpenGLRunpath perl pkg-config texinfo yasm ]
+  ++ optionals withCudaLLVM [ clang ];
 
   # TODO This was always in buildInputs before, why?
   buildInputs = optionals withFullDeps [ libdc1394 ]
@@ -559,7 +562,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
   ++ optionals withCelt [ celt ]
-  ++ optionals withCudaLLVM [ clang ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDrm [ libdrm ]
   ++ optionals withFdkAac [ fdk_aac ]

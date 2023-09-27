@@ -71,7 +71,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RELEASE"
     "-DINTERNAL_LXQT_WALLET=false"
     "-DNOKDESUPPORT=${if withKWallet then "false" else "true"}"
     "-DNOSECRETSUPPORT=${if withLibsecret then "false" else "true"}"

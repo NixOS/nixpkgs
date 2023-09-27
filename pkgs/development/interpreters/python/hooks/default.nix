@@ -57,7 +57,19 @@ in {
   pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
     makePythonHook {
       name = "pypa-build-hook.sh";
-      propagatedBuildInputs = [ build wheel ];
+      propagatedBuildInputs = [ wheel ];
+      substitutions = {
+        inherit build;
+      };
+      # A test to ensure that this hook never propagates any of its dependencies
+      #   into the build environment.
+      # This prevents false positive alerts raised by catchConflictsHook.
+      # Such conflicts don't happen within the standard nixpkgs python package
+      #   set, but in downstream projects that build packages depending on other
+      #   versions of this hook's dependencies.
+      passthru.tests = import ./pypa-build-hook-tests.nix {
+        inherit pythonForBuild runCommand;
+      };
     } ./pypa-build-hook.sh) {
       inherit (pythonForBuild.pkgs) build;
     };

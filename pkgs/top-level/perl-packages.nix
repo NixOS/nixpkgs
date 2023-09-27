@@ -9189,19 +9189,15 @@ with self; {
     };
   };
 
-  FileBaseDir = buildPerlModule {
-    version = "0.08";
+  FileBaseDir = buildPerlPackage {
+    version = "0.09";
     pname = "File-BaseDir";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KI/KIMRYAN/File-BaseDir-0.08.tar.gz";
-      hash = "sha256-wGX80+LyKudpk3vMlxuR+AKU1QCfrBQL+6g799NTBeM=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-BaseDir-0.09.tar.gz";
+      hash = "sha256-bab3KBVirI8R7xo69q7bUcQRgrYPHxIs7QB579kpZ9k=";
     };
-    configurePhase = ''
-      runHook preConfigure
-      perl Build.PL PREFIX="$out" prefix="$out"
-    '';
     propagatedBuildInputs = [ IPCSystemSimple ];
-    buildInputs = [ FileWhich ];
+    nativeCheckInputs = [ FileWhich ];
     meta = {
       description = "Use the Freedesktop.org base directory specification";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -24147,12 +24143,11 @@ with self; {
 
   TestFile = buildPerlPackage {
     pname = "Test-File";
-    version = "1.443";
+    version = "1.993";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-File-1.443.tar.gz";
-      hash = "sha256-YbSmq49hfIx7WXUWTPYZRo3DBLa6quo1J4KShvpYvNU=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Test-File-1.993.tar.gz";
+      hash = "sha256-7y/+Gq7HtC2HStQR7GR1R7m5vC9fuT5J4zmUiEVq/Ho=";
     };
-    buildInputs = [ Testutf8 ];
     meta = {
       description = "Test file attributes";
       homepage = "https://github.com/briandfoy/test-file";
