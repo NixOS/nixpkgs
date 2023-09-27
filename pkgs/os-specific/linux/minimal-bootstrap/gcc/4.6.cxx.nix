@@ -3,7 +3,9 @@
 , hostPlatform
 , fetchurl
 , bash
-, tinycc
+, coreutils
+, gcc
+, musl
 , binutils
 , gnumake
 , gnupatch
@@ -16,7 +18,7 @@
 , gzip
 }:
 let
-  pname = "gcc";
+  pname = "gcc-cxx";
   version = "4.6.4";
 
   src = fetchurl {
@@ -56,7 +58,7 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    tinycc.compiler
+    gcc
     binutils
     gnumake
     gnupatch
@@ -69,11 +71,21 @@ bash.runCommand "${pname}-${version}" {
     gzip
   ];
 
-  passthru.tests.get-version = result:
-    bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/gcc --version
-      mkdir $out
-    '';
+  passthru.tests.hello-world = result:
+    bash.runCommand "${pname}-simple-program-${version}" {
+        nativeBuildInputs = [ binutils musl result ];
+      } ''
+        cat <<EOF >> test.c
+        #include <stdio.h>
+        int main() {
+          printf("Hello World!\n");
+          return 0;
+        }
+        EOF
+        musl-gcc -o test test.c
+        ./test
+        mkdir $out
+      '';
 
   meta = with lib; {
     description = "GNU Compiler Collection, version ${version}";
@@ -97,45 +109,28 @@ bash.runCommand "${pname}-${version}" {
 
   # Patch
   ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
+  # doesn't recognise musl
+  sed -i 's|"os/gnu-linux"|"os/generic"|' libstdc++-v3/configure.host
 
   # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export C_INCLUDE_PATH="${tinycc.libs}/include:$(pwd)/mpfr/src"
+  export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+  export CFLAGS_FOR_TARGET="-Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
+  export C_INCLUDE_PATH="${musl}/include"
   export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-
-  # Avoid "Link tests are not allowed after GCC_NO_EXECUTABLES"
-  export lt_cv_shlibpath_overrides_runpath=yes
-  export ac_cv_func_memcpy=yes
-  export ac_cv_func_strerror=yes
+  export LIBRARY_PATH="${musl}/lib"
 
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
-    --with-native-system-header-dir=${tinycc.libs}/include \
-    --with-build-sysroot=${tinycc.libs}/include \
+    --with-native-system-header-dir=${musl}/include \
+    --with-build-sysroot=${musl} \
+    --enable-languages=c,c++ \
     --disable-bootstrap \
-    --disable-decimal-float \
-    --disable-libatomic \
-    --disable-libcilkrts \
-    --disable-libgomp \
-    --disable-libitm \
     --disable-libmudflap \
-    --disable-libquadmath \
-    --disable-libsanitizer \
-    --disable-libssp \
-    --disable-libvtv \
-    --disable-lto \
-    --disable-lto-plugin \
-    --disable-multilib \
-    --disable-plugin \
-    --disable-threads \
-    --enable-languages=c \
-    --enable-static \
-    --disable-shared \
-    --enable-threads=single \
     --disable-libstdcxx-pch \
-    --disable-build-with-cxx
+    --disable-lto \
+    --disable-multilib
 
   # Build
   make -j $NIX_BUILD_CORES
