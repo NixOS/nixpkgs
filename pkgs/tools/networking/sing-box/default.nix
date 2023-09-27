@@ -4,21 +4,22 @@
 , fetchFromGitHub
 , installShellFiles
 , buildPackages
+, coreutils
 , nix-update-script
 }:
 
 buildGoModule rec {
   pname = "sing-box";
-  version = "1.2.7";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+pRG5nq0Be58at61qqu5QciHC2DMvw+wj7u8tZx8+eY=";
+    hash = "sha256-Tb+4k0fwb22gif4SSNDmIBDq346CinhyqxwE0fhkXq4=";
   };
 
-  vendorHash = "sha256-gHPMJ4/W2ZisG/jAtHSLH/NlHgBitg7Bwe95wGJAsOY=";
+  vendorHash = "sha256-EZ+ehh/FuQWNHqfXWMoSI+z9+OKDTVzRn51CYR/ezZw=";
 
   tags = [
     "with_quic"
@@ -50,6 +51,11 @@ buildGoModule rec {
       --bash <(${emulator} $out/bin/sing-box completion bash) \
       --fish <(${emulator} $out/bin/sing-box completion fish) \
       --zsh  <(${emulator} $out/bin/sing-box completion zsh )
+
+    substituteInPlace release/config/sing-box{,@}.service \
+      --replace "/usr/bin/sing-box" "$out/bin/sing-box" \
+      --replace "/bin/kill" "${coreutils}/bin/kill"
+    install -Dm444 -t "$out/lib/systemd/system/" release/config/sing-box{,@}.service
   '';
 
   passthru.updateScript = nix-update-script { };
