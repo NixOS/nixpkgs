@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.1.4";
+  version = "1.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-McHzHK404kDB992T2f84dZHDxujpPIz4qglYMmv3kTw=";
+    hash = "sha256-ofGAeTPEvzFTswDSR2xdlF5qxE41xsNeOB0G4xbHJYo=";
   };
 
   pythonRelaxDeps = [
@@ -34,7 +34,9 @@ python3.pkgs.buildPythonApplication rec {
     argcomplete
     can
     construct
+    exitcode
     msgspec
+    platformdirs
     pydantic
     pygit2
     tabulate
