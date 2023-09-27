@@ -10,6 +10,7 @@
 , pandas
 , pythonOlder
 , scipy
+, statsmodels
 }:
 
 buildPythonPackage rec {
@@ -34,8 +35,14 @@ buildPythonPackage rec {
     matplotlib
     numpy
     pandas
-    scipy
   ];
+
+  passthru.optional-dependencies = {
+    stats = [
+      scipy
+      statsmodels
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-xdist
@@ -61,6 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Statistical data visualization";
     homepage = "https://seaborn.pydata.org/";
+    changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fridh ];
   };
