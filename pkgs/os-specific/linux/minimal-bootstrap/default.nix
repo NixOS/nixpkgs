@@ -32,7 +32,9 @@ lib.makeScope
 
     bzip2 = callPackage ./bzip2 {
       bash = bash_2_05;
-      tinycc = tinycc-mes;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
