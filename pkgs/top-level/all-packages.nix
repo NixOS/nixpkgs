@@ -13025,6 +13025,10 @@ with pkgs;
 
   senpai = callPackage ../applications/networking/irc/senpai { };
 
+  skiboot-qemu = callPackage ../misc/skiboot { hardware = "qemu"; };
+  skiboot-blackbird = callPackage ../misc/skiboot { hardware = "blackbird"; };
+  skiboot-talos = callPackage ../misc/skiboot { hardware = "talos"; };
+
   skim = callPackage ../tools/misc/skim { };
 
   seashells = callPackage ../applications/misc/seashells { };
