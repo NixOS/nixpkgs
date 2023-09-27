@@ -28,8 +28,13 @@ let
     "4.10-500" = "sha256-m9+Qz8DT94yNSwpamTVLQKISHtRVBWnZD3t/yyujSZ0=";
   };
 
-  ocamlVersionShorthand = lib.substring 0 3
-    (lib.concatStrings (lib.splitVersion ocaml.version));
+  ocamlVersionShorthand =
+    let
+      v = lib.splitVersion ocaml.version;
+      major = builtins.elemAt v 0;
+      minor = builtins.elemAt v 1;
+      minor_prefix = if builtins.stringLength minor < 2 then "0" else "";
+    in "${toString major}${minor_prefix}${toString minor}";
 
   version = "${merlinVersion}-${ocamlVersionShorthand}";
 in
