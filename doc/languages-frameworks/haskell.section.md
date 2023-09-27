@@ -230,7 +230,7 @@ completely incompatible with packages from `haskellPackages`.
 
 Every haskell package set has its own haskell-aware `mkDerivation` which is used
 to build its packages. Generally you won't have to interact with this builder
-since [cabal2nix][cabal2nix] can generate packages
+since [cabal2nix](#haskell-cabal2nix) can generate packages
 using it for an arbitrary cabal package definition. Still it is useful to know
 the parameters it takes when you need to
 [override](#haskell-overriding-haskell-packages) a generated Nix expression.
@@ -1123,17 +1123,74 @@ for [this to work][optparse-applicative-completions].
 Note that this feature is automatically disabled when cross-compiling, since it
 requires executing the binaries in question.
 
+## Import-from-Derivation helpers {#haskell-import-from-derivation}
+
+### cabal2nix {#haskell-cabal2nix}
+
+[`cabal2nix`][cabal2nix] can generate Nix package definitions for arbitrary
+Haskell packages using [import from derivation][import-from-derivation].
+`cabal2nix` will generate Nix expressions that look like this:
+
+```nix
+# cabal get mtl-2.2.1 && cd mtl-2.2.1 && cabal2nix .
+{ mkDerivation, base, lib, transformers }:
+mkDerivation {
+  pname = "mtl";
+  version = "2.2.1";
+  src = ./.;
+  libraryHaskellDepends = [ base transformers ];
+  homepage = "http://github.com/ekmett/mtl";
+  description = "Monad classes, using functional dependencies";
+  license = lib.licenses.bsd3;
+}
+```
+
+This expression should be called with `haskellPackages.callPackage`, which will
+supply [`haskellPackages.mkDerivation`](#haskell-mkderivation) and the Haskell
+dependencies as arguments.
+
+`callCabal2nix name src args`
+: Create a package named `name` from the source derivation `src` using
+  `cabal2nix`.
+
+  `args` are extra arguments provided to `haskellPackages.callPackage`.
+
+`callCabal2nixWithOptions name src opts args`
+: Create a package named `name` from the source derivation `src` using
+  `cabal2nix`.
+
+  `opts` are extra options for calling `cabal2nix`. If `opts` is a string, it
+  will be used as extra command line arguments for `cabal2nix`, e.g. `--subpath
+  path/to/dir/containing/cabal-file`. Otherwise, `opts` should be an AttrSet
+  which can contain the following attributes:
+
+  `extraCabal2nixOptions`
+  : Extra command line arguments for `cabal2nix`.
+
+  `srcModifier`
+  : A function which is used to modify the given `src` instead of the default
+    filter.
+
+    The default source filter will remove all files from `src` except for
+    `.cabal` files and `package.yaml` files.
+
+<!--
+
+`callHackage`
+: TODO
+
+`callHackageDirect`
+: TODO
+
+`developPackage`
+: TODO
+
+-->
+
 <!--
 
 TODO(@NixOS/haskell): finish these planned sections
 ### Overriding the entire package set
-
-
-## Import-from-Derivation helpers
-
-* `callCabal2nix`
-* `callHackage`, `callHackageDirect`
-* `developPackage`
 
 ## Contributing {#haskell-contributing}
 
@@ -1309,3 +1366,4 @@ relevant.
 [profiling]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
 [search.nixos.org]: https://search.nixos.org
 [turtle]: https://hackage.haskell.org/package/turtle
+[import-from-derivation]: https://nixos.org/manual/nix/stable/language/import-from-derivation
