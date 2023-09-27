@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     crc
     fx2
     libusb1
+    packaging
     pyvcd
     setuptools
   ];
