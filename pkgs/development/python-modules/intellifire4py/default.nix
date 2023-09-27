@@ -1,10 +1,11 @@
 { lib
 , aenum
-, aiohttp
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
+, httpx
+, poetry-core
 , pydantic
+, pytest-httpx
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -13,27 +14,31 @@
 
 buildPythonPackage rec {
   pname = "intellifire4py";
-  version = "2.2.2";
-  format = "setuptools";
+  version = "3.1.10";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-iqlKfpnETLqQwy5sNcK2x/TgmuN2hCfYoHEFK2WWVXI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-++xmUvPDC6aq1ZzsFrUXevhwVekJZ8bcJVZg/J5S3Mk=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aenum
-    aiohttp
+    httpx
     pydantic
     requests
   ];
 
   nativeCheckInputs = [
-    asynctest
+    pytest-httpx
     pytest-mock
     pytestCheckHook
   ];
@@ -50,7 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to read Intellifire fireplace status data";
     homepage = "https://github.com/jeeftor/intellifire4py";
-    changelog = "https://github.com/jeeftor/intellifire4py/blob/${version}/CHANGELOG";
+    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
