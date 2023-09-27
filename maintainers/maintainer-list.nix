@@ -759,6 +759,12 @@
     github = "Alexnortung";
     githubId = 1552267;
   };
+  alexoundos = {
+    email = "alexoundos@gmail.com";
+    github = "AleXoundOS";
+    githubId = 464913;
+    name = "Alexander Tomokhov";
+  };
   alexshpilkin = {
     email = "ashpilkin@gmail.com";
     github = "alexshpilkin";
@@ -11408,6 +11414,12 @@
     github = "mihnea-s";
     githubId = 43088426;
     name = "Mihnea Stoian";
+  };
+  mikaelfangel = {
+    email = "nixpkgs.bottle597@passfwd.com";
+    github = "MikaelFangel";
+    githubId = 34864484;
+    name = "Mikael Fangel";
   };
   mikefaille = {
     email = "michael@faille.io";

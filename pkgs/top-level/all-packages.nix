@@ -3583,6 +3583,8 @@ with pkgs;
 
   callaudiod = callPackage ../applications/audio/callaudiod { };
 
+  castopod = callPackage ../applications/audio/castopod { };
+
   calls = callPackage ../applications/networking/calls { };
 
   castnow = callPackage ../tools/networking/castnow { };
@@ -25196,7 +25198,7 @@ with pkgs;
 
   snappy = callPackage ../development/libraries/snappy { };
 
-  snac2 = callPackage ../servers/snac2 { };
+  snac2 = darwin.apple_sdk_11_0.callPackage ../servers/snac2 { };
 
   snappymail = callPackage ../servers/snappymail { };
 
@@ -26167,18 +26169,7 @@ with pkgs;
 
   # CLISP
   clisp = wrapLisp {
-    pkg = callPackage ../development/interpreters/clisp {
-    # On newer readline8 fails as:
-    #  #<FOREIGN-VARIABLE "rl_readline_state" #x...>
-    #   does not have the required size or alignment
-    readline = readline63;
-    };
-    faslExt = "fas";
-    flags = ["-E" "UTF-8"];
-  };
-
-  clisp-tip = wrapLisp {
-    pkg = callPackage ../development/interpreters/clisp/hg.nix { };
+    pkg = callPackage ../development/interpreters/clisp { };
     faslExt = "fas";
     flags = ["-E" "UTF-8"];
   };
@@ -30551,11 +30542,6 @@ with pkgs;
 
   aewan = callPackage ../applications/editors/aewan { };
 
-  afterstep = callPackage ../applications/window-managers/afterstep {
-    fltk = fltk13;
-    gtk = gtk2;
-  };
-
   agedu = callPackage ../tools/misc/agedu { };
 
   agenda = callPackage ../applications/office/agenda { };
@@ -30828,8 +30814,6 @@ with pkgs;
   bb =  callPackage ../applications/misc/bb { };
 
   bchoppr = callPackage ../applications/audio/bchoppr { };
-
-  berry = callPackage ../applications/window-managers/berry { };
 
   bespokesynth = darwin.apple_sdk_11_0.callPackage ../applications/audio/bespokesynth {
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices CoreAudioKit IOBluetooth MetalKit;
@@ -32819,8 +32803,6 @@ with pkgs;
 
   spectmorph = callPackage ../applications/audio/spectmorph { };
 
-  smallwm = callPackage ../applications/window-managers/smallwm { };
-
   smooth = callPackage ../development/libraries/smooth { };
 
   spectrwm = callPackage ../applications/window-managers/spectrwm { };
@@ -32963,7 +32945,7 @@ with pkgs;
 
   kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
 
-  waybox = callPackage ../applications/window-managers/waybox {
+  waybox = callPackage ../by-name/wa/waybox/package.nix {
     wlroots = wlroots_0_15;
   };
 
@@ -34276,8 +34258,6 @@ with pkgs;
 
   nncp = darwin.apple_sdk_11_0.callPackage ../tools/misc/nncp { };
 
-  notion = callPackage ../applications/window-managers/notion { };
-
   nootka = qt5.callPackage ../applications/audio/nootka { };
 
   novnc = callPackage ../applications/networking/novnc { };
@@ -34872,7 +34852,7 @@ with pkgs;
 
   pdfslicer = callPackage ../applications/misc/pdfslicer { };
 
-  pekwm = callPackage ../applications/window-managers/pekwm {
+  pekwm = callPackage ../by-name/pe/pekwm/package.nix {
     awk = gawk;
     grep = gnugrep;
     sed = gnused;
@@ -35283,8 +35263,6 @@ with pkgs;
   ratmen = callPackage ../tools/X11/ratmen { };
 
   ratox = callPackage ../applications/networking/instant-messengers/ratox { };
-
-  ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
@@ -36175,8 +36153,6 @@ with pkgs;
 
   tinywl = callPackage ../applications/window-managers/tinywl { };
 
-  tinywm = callPackage ../applications/window-managers/tinywm { };
-
   tree-from-tags = callPackage ../applications/audio/tree-from-tags { };
 
   tdrop = callPackage ../applications/misc/tdrop { };
@@ -36555,8 +36531,6 @@ with pkgs;
   };
 
   vwm = callPackage ../applications/window-managers/vwm { };
-
-  yeahwm = callPackage ../applications/window-managers/yeahwm { };
 
   vym = callPackage ../applications/misc/vym {
     inherit (libsForQt5) qmake qtscript qtsvg qtbase wrapQtAppsHook;

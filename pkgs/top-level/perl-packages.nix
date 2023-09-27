@@ -19869,10 +19869,10 @@ with self; {
   PerlMagick = ImageMagick; # added 2021-08-02
   ImageMagick = buildPerlPackage rec {
     pname = "Image-Magick";
-    version = "7.1.0-0";
+    version = "7.1.1-18";
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JC/JCRISTY/Image-Magick-${version}.tar.gz";
-      hash = "sha256-+QyXXL4hRFd3xA0ZwXt/eQI9MGTvj6vPNIz4JlS8Fus=";
+      hash = "sha256-42mvGP4FkY/YfPOh/jRiUFWdDk+S2oB0Jfqv30AAlxw=";
     };
     buildInputs = [ pkgs.imagemagick ];
     preConfigure =
