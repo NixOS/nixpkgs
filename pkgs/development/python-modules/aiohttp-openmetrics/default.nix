@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-openmetrics";
-  version = "0.0.11";
+  version = "0.0.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GIVUkjyn+iQSMZZ6dNmmimvbt+t+uxOYv2QEDk/dA+g=";
+    hash = "sha256-/ZRngcMlroCVTvIl+30DR4SI8LsSnTovuzg3YduWgWA=";
   };
 
   propagatedBuildInputs = [
