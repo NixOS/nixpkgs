@@ -13499,8 +13499,6 @@ with pkgs;
 
   sumorobot-manager = python3Packages.callPackage ../applications/science/robotics/sumorobot-manager { };
 
-  super = callPackage ../tools/security/super { };
-
   supertag = callPackage ../tools/filesystems/supertag { };
 
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
