@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyduotecno";
-  version = "2023.8.4";
+  version = "2023.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Cereal2nd";
     repo = "pyDuotecno";
     rev = "refs/tags/${version}";
-    hash = "sha256-VDDDG/D21yumWmcTC0mwXoGItB7OTdVCcjo01W1YZXY=";
+    hash = "sha256-UPyx/e06N2cAct6/r1y5LXAzKwANQ/ZpADQsjxBv6/Q=";
   };
 
   nativeBuildInputs = [
