@@ -51,8 +51,8 @@ in
 
       ruleFile = mkOption {
         type = types.nullOr types.path;
-        default = /var/lib/usbguard/rules.conf;
-        example = /run/secrets/usbguard-rules;
+        default = "/var/lib/usbguard/rules.conf";
+        example = "/run/secrets/usbguard-rules";
         description = lib.mdDoc ''
           This tells the USBGuard daemon which file to load as policy rule set.
 
