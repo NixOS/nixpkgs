@@ -1183,6 +1183,7 @@ mapAliases ({
   nccl_cudatoolkit_11 = throw "nccl_cudatoolkit_11 has been renamed to cudaPackages_11.nccl"; # Added 2022-04-04
 
   net_snmp = throw "'net_snmp' has been renamed to/replaced by 'net-snmp'"; # Converted to throw 2023-09-10
+  netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   nagiosPluginsOfficial = monitoring-plugins;
   navit = throw "navit has been removed from nixpkgs, due to being unmaintained"; # Added 2021-06-07
   ncat = throw "'ncat' has been renamed to/replaced by 'nmap'"; # Converted to throw 2022-02-22
