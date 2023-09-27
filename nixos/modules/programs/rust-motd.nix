@@ -6,31 +6,20 @@ let
   cfg = config.programs.rust-motd;
   format = pkgs.formats.toml { };
 
-  orderedSections = listToAttrs
-    (imap0
-      (i: attr: nameValuePair "env${toString i}" {
-        ${attr} = cfg.settings.${attr};
-      })
-      cfg.order);
-
   # Order the sections in the TOML according to the order of sections
   # in `cfg.order`.
-  # This is done by
-  # * creating an attribute set with keys `env0`/`env1`/.../`envN`
-  #   where `env0` contains the first section and `envN` the last
-  #   (in the form of `{ sectionName = { /* ... */ }}`)
-  # * the declarations of `env0` to `envN` in ascending order are
-  #   concatenated with `jq`. Now we have a JSON representation of
-  #   the config in the correct order.
-  # * this is piped to `json2toml` to get the correct format for rust-motd.
   motdConf = pkgs.runCommand "motd.conf"
-    (orderedSections // {
+    {
       __structuredAttrs = true;
+      inherit (cfg) order settings;
       nativeBuildInputs = [ pkgs.remarshal pkgs.jq ];
-    })
+    }
     ''
       cat "$NIX_ATTRS_JSON_FILE" \
-        | jq '${concatMapStringsSep " + " (key: ''."${key}"'') (attrNames orderedSections)}' \
+        | jq '.settings as $settings
+              | .order
+              | map({ key: ., value: $settings."\(.)" })
+              | from_entries' -r \
         | json2toml /dev/stdin "$out"
     '';
 in {
@@ -60,8 +49,10 @@ in {
       default = attrNames cfg.settings;
       defaultText = literalExpression "attrNames cfg.settings";
       description = mdDoc ''
-        The order of the sections in [](#opt-programs.rust-motd.settings) implies
-        the order of sections in the motd. Since attribute sets in Nix are always
+        The order of the sections in [](#opt-programs.rust-motd.settings).
+        By default they are ordered alphabetically.
+
+        Context: since attribute sets in Nix are always
         ordered alphabetically internally this means that
 
         ```nix
@@ -89,9 +80,7 @@ in {
       '';
     };
     settings = mkOption {
-      type = types.attrsOf (types.submodule {
-        freeformType = format.type;
-      });
+      type = types.attrsOf format.type;
       description = mdDoc ''
         Settings on what to generate. Please read the
         [upstream documentation](https://github.com/rust-motd/rust-motd/blob/main/README.md#configuration)
@@ -106,8 +95,7 @@ in {
           `programs.rust-motd` is incompatible with `users.motd`!
         '';
       }
-      { assertion = length cfg.order == length (attrNames cfg.settings)
-          && all (section: cfg.settings?${section}) cfg.order;
+      { assertion = sort (a: b: a < b) cfg.order == attrNames cfg.settings;
         message = ''
           Please ensure that every section from `programs.rust-motd.settings` is present in
           `programs.rust-motd.order`.
