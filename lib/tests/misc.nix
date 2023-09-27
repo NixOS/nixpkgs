@@ -505,6 +505,38 @@ runTests {
       };
     };
 
+  testFoldl'Empty = {
+    expr = foldl' (acc: el: abort "operation not called") 0 [ ];
+    expected = 0;
+  };
+
+  testFoldl'IntegerAdding = {
+    expr = foldl' (acc: el: acc + el) 0 [ 1 2 3 ];
+    expected = 6;
+  };
+
+  # The accumulator isn't forced deeply
+  testFoldl'NonDeep = {
+    expr = take 3 (foldl'
+      (acc: el: [ el ] ++ acc)
+      [ (abort "unevaluated list entry") ]
+      [ 1 2 3 ]);
+    expected = [ 3 2 1 ];
+  };
+
+  # Compared to builtins.foldl', lib.foldl' evaluates the first accumulator strictly too
+  testFoldl'StrictInitial = {
+    expr = (builtins.tryEval (foldl' (acc: el: el) (throw "hello") [])).success;
+    expected = false;
+  };
+
+  # Make sure we don't get a stack overflow for large lists
+  # This number of elements would notably cause a stack overflow if it was implemented without the `foldl'` builtin
+  testFoldl'Large = {
+    expr = foldl' (acc: el: acc + el) 0 (range 0 100000);
+    expected = 5000050000;
+  };
+
   testTake = testAllTrue [
     ([] == (take 0 [  1 2 3 ]))
     ([1] == (take 1 [  1 2 3 ]))
@@ -708,7 +740,7 @@ runTests {
       # should just return the initial value
       emptySet = foldlAttrs (throw "function not needed") 123 { };
       # should just evaluate to the last value
-      accNotNeeded = foldlAttrs (_acc: _name: v: v) (throw "accumulator not needed") { z = 3; a = 2; };
+      valuesNotNeeded = foldlAttrs (acc: _name: _v: acc) 3 { z = throw "value z not needed"; a = throw "value a not needed"; };
       # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
       trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
     };
@@ -718,7 +750,7 @@ runTests {
         names = [ "bar" "foo" ];
       };
       emptySet = 123;
-      accNotNeeded = 3;
+      valuesNotNeeded = 3;
       trivialAcc = 121;
     };
   };
