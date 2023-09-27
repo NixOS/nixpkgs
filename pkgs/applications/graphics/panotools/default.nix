@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libpano13";
-  version = "2.9.21";
+  version = "2.9.22";
 
   src = fetchurl {
     url = "mirror://sourceforge/panotools/${pname}-${version}.tar.gz";
-    sha256 = "sha256-eeWhRSGZMF4pYUYnIO9ZQRUnecEnxblvw0DSSS5jNZA=";
+    sha256 = "sha256-r/xoMM2+ccKNJzHcv43qKs2m2f/UYJxtvzugxoRAqOM=";
   };
 
   buildInputs = [ perl libjpeg libpng libtiff ];
