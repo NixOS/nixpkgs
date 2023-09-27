@@ -9,7 +9,12 @@ rec {
   version-path = "version";
 
   gerbilInputs = with gerbilPackages; [
-    gerbil-utils gerbil-crypto gerbil-poo gerbil-persist gerbil-leveldb ];
+    gerbil-utils
+    gerbil-crypto
+    gerbil-poo
+    gerbil-persist
+    gerbil-leveldb
+  ];
 
   pre-src = {
     fun = fetchFromGitHub;
@@ -38,13 +43,13 @@ rec {
     (apply call-entry-point (cdr (command-line)))
     EOF
     chmod a+x $out/bin/run-ethereum-test-net
-    '';
+  '';
 
   meta = with lib; {
     description = "Gerbil Ethereum: a Scheme alternative to web3.js";
-    homepage    = "https://github.com/fare/gerbil-ethereum";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-ethereum";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

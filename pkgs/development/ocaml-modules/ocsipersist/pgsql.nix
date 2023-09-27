@@ -1,4 +1,5 @@
-{ buildDunePackage, ocsipersist-lib
+{ buildDunePackage
+, ocsipersist-lib
 , lwt_log
 , ocsigen_server
 , pgocaml

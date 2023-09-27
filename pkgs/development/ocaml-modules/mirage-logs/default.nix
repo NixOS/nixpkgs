@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage
-, logs, lwt, mirage-clock, ptime
+{ lib
+, fetchurl
+, buildDunePackage
+, logs
+, lwt
+, mirage-clock
+, ptime
 , alcotest
 }:
 

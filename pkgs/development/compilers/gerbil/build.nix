@@ -1,11 +1,19 @@
-{ pkgs, gccStdenv, lib, coreutils,
-  openssl, zlib, sqlite,
-  version, git-version, src,
-  gambit-support,
-  gambit-git-version,
-  gambit-stampYmd,
-  gambit-stampHms,
-  gambit-params }:
+{ pkgs
+, gccStdenv
+, lib
+, coreutils
+, openssl
+, zlib
+, sqlite
+, version
+, git-version
+, src
+, gambit-support
+, gambit-git-version
+, gambit-stampYmd
+, gambit-stampHms
+, gambit-params
+}:
 
 # We use Gambit, that works 10x better with GCC than Clang. See ../gambit/build.nix
 let stdenv = gccStdenv; in
@@ -41,16 +49,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-## TODO: make static compilation work.
-## For that, get all the packages below to somehow expose static libraries,
-## so we can offer users the option to statically link them into Gambit and/or Gerbil.
-## Then add the following to the postPatch script above:
-#     cat > etc/gerbil_static_libraries.sh <<EOF
-# OPENSSL_LIBCRYPTO=${makeStaticLibraries openssl}/lib/libcrypto.a # MISSING!
-# OPENSSL_LIBSSL=${makeStaticLibraries openssl}/lib/libssl.a # MISSING!
-# ZLIB=${makeStaticLibraries zlib}/lib/libz.a
-# SQLITE=${makeStaticLibraries sqlite}/lib/sqlite.a # MISSING!
-# EOF
+  ## TODO: make static compilation work.
+  ## For that, get all the packages below to somehow expose static libraries,
+  ## so we can offer users the option to statically link them into Gambit and/or Gerbil.
+  ## Then add the following to the postPatch script above:
+  #     cat > etc/gerbil_static_libraries.sh <<EOF
+  # OPENSSL_LIBCRYPTO=${makeStaticLibraries openssl}/lib/libcrypto.a # MISSING!
+  # OPENSSL_LIBSSL=${makeStaticLibraries openssl}/lib/libssl.a # MISSING!
+  # ZLIB=${makeStaticLibraries zlib}/lib/libz.a
+  # SQLITE=${makeStaticLibraries sqlite}/lib/sqlite.a # MISSING!
+  # EOF
 
   configureFlags = [
     "--prefix=$out/gerbil"
@@ -72,10 +80,10 @@ stdenv.mkDerivation rec {
   '';
 
   extraLdOptions = [
-      "-L${zlib}/lib"
-      "-L${openssl.out}/lib"
-      "-L${sqlite.out}/lib"
-    ];
+    "-L${zlib}/lib"
+    "-L${openssl.out}/lib"
+    "-L${sqlite.out}/lib"
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -115,11 +123,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Gerbil Scheme";
-    homepage    = "https://github.com/vyzo/gerbil";
-    license     = lib.licenses.lgpl21Only; # dual, also asl20, like Gambit
+    homepage = "https://github.com/vyzo/gerbil";
+    license = lib.licenses.lgpl21Only; # dual, also asl20, like Gambit
     # NB regarding platforms: regularly tested on Linux and on macOS.
     # Please report success and/or failure to fare.
-    platforms   = lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fare ];
   };
 

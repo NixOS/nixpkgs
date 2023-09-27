@@ -2,15 +2,15 @@
    broken nix expressions.
 
    * `trace`-like functions take two values, print
-     the first to stderr and return the second.
+   the first to stderr and return the second.
    * `traceVal`-like functions take one argument
-     which both printed and returned.
+   which both printed and returned.
    * `traceSeq`-like functions fully evaluate their
-     traced value before printing (not just to “weak
-     head normal form” like trace does by default).
+   traced value before printing (not just to “weak
+   head normal form” like trace does by default).
    * Functions that end in `-Fn` take an additional
-     function as their first argument, which is applied
-     to the traced value before it is printed.
+   function as their first argument, which is applied
+   to the traced value before it is printed.
 */
 { lib }:
 let
@@ -106,17 +106,25 @@ rec {
      Type: traceSeqN :: Int -> a -> b -> b
    */
   traceSeqN = depth: x: y:
-    let snip = v: if      isList  v then noQuotes "[…]" v
-                  else if isAttrs v then noQuotes "{…}" v
-                  else v;
-        noQuotes = str: v: { __pretty = const str; val = v; };
-        modify = n: fn: v: if (n == 0) then fn v
-                      else if isList  v then map (modify (n - 1) fn) v
-                      else if isAttrs v then mapAttrs
-                        (const (modify (n - 1) fn)) v
-                      else v;
-    in trace (generators.toPretty { allowPrettyValues = true; }
-               (modify depth snip x)) y;
+    let
+      snip = v:
+        if isList v then noQuotes "[…]" v
+        else if isAttrs v then noQuotes "{…}" v
+        else v;
+      noQuotes = str: v: { __pretty = const str; val = v; };
+      modify = n: fn: v:
+        if (n == 0) then fn v
+        else if isList v then map (modify (n - 1) fn) v
+        else if isAttrs v then
+          mapAttrs
+            (const (modify (n - 1) fn))
+            v
+        else v;
+    in
+    trace
+      (generators.toPretty { allowPrettyValues = true; }
+        (modify depth snip x))
+      y;
 
   /* A combination of `traceVal` and `traceSeq` that applies a
      provided function to the value to be traced after `deepSeq`ing
@@ -144,10 +152,10 @@ rec {
   traceValSeqN = traceValSeqNFn id;
 
   /* Trace the input and output of a function `f` named `name`,
-  both down to `depth`.
+    both down to `depth`.
 
-  This is useful for adding around a function call,
-  to see the before/after of values as they are transformed.
+    This is useful for adding around a function call,
+    to see the before/after of values as they are transformed.
 
      Example:
        traceFnSeqN 2 "id" (x: x) { a.b.c = 3; }
@@ -157,13 +165,13 @@ rec {
   traceFnSeqN = depth: name: f: v:
     let res = f v;
     in lib.traceSeqN
-        (depth + 1)
-        {
-          fn = name;
-          from = v;
-          to = res;
-        }
-        res;
+      (depth + 1)
+      {
+        fn = name;
+        from = v;
+        to = res;
+      }
+      res;
 
 
   # -- TESTING --
@@ -228,14 +236,16 @@ rec {
   */
   runTests =
     # Tests to run
-    tests: concatLists (attrValues (mapAttrs (name: test:
-    let testsToRun = if tests ? tests then tests.tests else [];
-    in if (substring 0 4 name == "test" ||  elem name testsToRun)
-       && ((testsToRun == []) || elem name tests.tests)
-       && (test.expr != test.expected)
+    tests: concatLists (attrValues (mapAttrs
+      (name: test:
+      let testsToRun = if tests ? tests then tests.tests else [ ];
+      in if (substring 0 4 name == "test" || elem name testsToRun)
+        && ((testsToRun == [ ]) || elem name tests.tests)
+        && (test.expr != test.expected)
 
-      then [ { inherit name; expected = test.expected; result = test.expr; } ]
-      else [] ) tests));
+      then [{ inherit name; expected = test.expected; result = test.expr; }]
+      else [ ])
+      tests));
 
   /* Create a test assuming that list elements are `true`.
 

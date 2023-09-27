@@ -22,20 +22,21 @@
 , ordering
 , ocamlformat-rpc-lib
 , ocaml
-, version ?
-    if lib.versionAtLeast ocaml.version "4.14" then
-      "1.16.2"
-    else if lib.versionAtLeast ocaml.version "4.13" then
-      "1.10.5"
-    else if lib.versionAtLeast ocaml.version "4.12" then
-      "1.9.0"
-    else
-      "1.4.1"
+, version ? if lib.versionAtLeast ocaml.version "4.14" then
+    "1.16.2"
+  else if lib.versionAtLeast ocaml.version "4.13" then
+    "1.10.5"
+  else if lib.versionAtLeast ocaml.version "4.12" then
+    "1.9.0"
+  else
+    "1.4.1"
 }:
 
-let jsonrpc_v = jsonrpc.override {
-  inherit version;
-}; in
+let
+  jsonrpc_v = jsonrpc.override {
+    inherit version;
+  };
+in
 buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc_v) version src;

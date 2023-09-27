@@ -1,5 +1,9 @@
-{ lib, stdenv, llvm_meta, version
-, monorepoSrc, runCommand
+{ lib
+, stdenv
+, llvm_meta
+, version
+, monorepoSrc
+, runCommand
 , cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
@@ -10,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # I am not so comfortable giving libc++ and friends the whole monorepo as
   # requested, so I filter it to what is needed.
-  src = runCommand "${pname}-src-${version}" {} ''
+  src = runCommand "${pname}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${pname} "$out"

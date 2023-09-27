@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = pname;
-    rev =  version;
+    rev = version;
     hash = "sha256-uA+4dnhOnv7qRE7nqew8a14DGaQblsMY2uBZ+iyLtFU=";
   };
 
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       It is designed and programmed by Sylvain Huet.
     '';
     maintainers = with lib.maintainers; [ jboy ];
-    homepage    = "https://minimacy.net";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
+    homepage = "https://minimacy.net";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

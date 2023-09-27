@@ -1,9 +1,24 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
 
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
-, makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
-, nim-unwrapped-2, nim-unwrapped-1, nim }:
+{ lib
+, callPackage
+, buildPackages
+, stdenv
+, fetchurl
+, fetchgit
+, fetchFromGitHub
+, makeWrapper
+, openssl
+, pcre
+, readline
+, boehmgc
+, sqlite
+, Security
+, nim-unwrapped-2
+, nim-unwrapped-1
+, nim
+}:
 
 let
   parseCpu = platform:
@@ -72,7 +87,8 @@ let
   nimHost = parsePlatform stdenv.hostPlatform;
   nimTarget = parsePlatform stdenv.targetPlatform;
 
-in {
+in
+{
 
   nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
@@ -85,7 +101,7 @@ in {
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
-      ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.isDarwin Security;
 
     patches = [
       ./NIM_CONFIG_DIR.patch
@@ -101,23 +117,25 @@ in {
       # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
     ];
 
-    configurePhase = let
-      bootstrapCompiler = stdenv.mkDerivation {
-        pname = "nim-bootstrap";
-        inherit (finalAttrs) version src preBuild;
-        enableParallelBuilding = true;
-        installPhase = ''
-          runHook preInstall
-          install -Dt $out/bin bin/nim
-          runHook postInstall
-        '';
-      };
-    in ''
-      runHook preConfigure
-      cp ${bootstrapCompiler}/bin/nim bin/
-      echo 'define:nixbuild' >> config/nim.cfg
-      runHook postConfigure
-    '';
+    configurePhase =
+      let
+        bootstrapCompiler = stdenv.mkDerivation {
+          pname = "nim-bootstrap";
+          inherit (finalAttrs) version src preBuild;
+          enableParallelBuilding = true;
+          installPhase = ''
+            runHook preInstall
+            install -Dt $out/bin bin/nim
+            runHook postInstall
+          '';
+        };
+      in
+      ''
+        runHook preConfigure
+        cp ${bootstrapCompiler}/bin/nim bin/
+        echo 'define:nixbuild' >> config/nim.cfg
+        runHook postConfigure
+      '';
 
     kochArgs = [
       "--cpu:${nimHost.cpu}"
@@ -179,10 +197,11 @@ in {
     ] ++ lib.optional (!stdenv.hostPlatform.isWindows) ./toLocation.patch;
   });
 
-} // (let
-  wrapNim = { nim', patches }:
-    let targetPlatformConfig = stdenv.targetPlatform.config;
-    in stdenv.mkDerivation (finalAttrs: {
+} // (
+  let
+    wrapNim = { nim', patches }:
+      let targetPlatformConfig = stdenv.targetPlatform.config;
+      in stdenv.mkDerivation (finalAttrs: {
         name = "${targetPlatformConfig}-nim-wrapper-${nim'.version}";
         inherit (nim') version;
         preferLocalBuild = true;
@@ -302,20 +321,22 @@ in {
 
         meta = nim'.meta // {
           description = nim'.meta.description
-            + " (${targetPlatformConfig} wrapper)";
+          + " (${targetPlatformConfig} wrapper)";
           platforms = with lib.platforms; unix ++ genode;
         };
       });
-in {
+  in
+  {
 
-  nim2 = wrapNim {
-    nim' = buildPackages.nim-unwrapped-2;
-    patches = [ ./nim2.cfg.patch ];
-  };
+    nim2 = wrapNim {
+      nim' = buildPackages.nim-unwrapped-2;
+      patches = [ ./nim2.cfg.patch ];
+    };
 
-  nim1 = wrapNim {
-    nim' = buildPackages.nim-unwrapped-1;
-    patches = [ ./nim.cfg.patch ];
-  };
+    nim1 = wrapNim {
+      nim' = buildPackages.nim-unwrapped-1;
+      patches = [ ./nim.cfg.patch ];
+    };
 
-})
+  }
+)

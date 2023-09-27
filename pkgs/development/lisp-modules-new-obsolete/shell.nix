@@ -1,4 +1,4 @@
-with import ../../../default.nix {};
+with import ../../../default.nix { };
 mkShell {
   nativeBuildInputs = [
     (lispPackages_new.sbclWithPackages

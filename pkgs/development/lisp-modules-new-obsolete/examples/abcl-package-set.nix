@@ -15,10 +15,11 @@
 
 let
 
-  pkgs = import ../../../../default.nix {};
+  pkgs = import ../../../../default.nix { };
 
   abcl = "${pkgs.abcl}/bin/abcl --batch --load";
 
   abcl-packages = pkgs.lispPackages_new.lispPackagesFor abcl;
 
-in abcl-packages
+in
+abcl-packages

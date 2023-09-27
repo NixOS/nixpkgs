@@ -1,4 +1,4 @@
-{ pkgs ? (import ./.. { }), nixpkgs ? { }}:
+{ pkgs ? (import ./.. { }), nixpkgs ? { } }:
 let
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
@@ -28,35 +28,36 @@ let
     ];
   };
 
-  epub = pkgs.runCommand "manual.epub" {
-    nativeBuildInputs = with pkgs; [ libxslt zip ];
+  epub = pkgs.runCommand "manual.epub"
+    {
+      nativeBuildInputs = with pkgs; [ libxslt zip ];
 
-    epub = ''
-      <book xmlns="http://docbook.org/ns/docbook"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            version="5.0"
-            xml:id="nixpkgs-manual">
-        <info>
-          <title>Nixpkgs Manual</title>
-          <subtitle>Version ${pkgs.lib.version}</subtitle>
-        </info>
-        <chapter>
-          <title>Temporarily unavailable</title>
-          <para>
-            The Nixpkgs manual is currently not available in EPUB format,
-            please use the <link xlink:href="https://nixos.org/nixpkgs/manual">HTML manual</link>
-            instead.
-          </para>
-          <para>
-            If you've used the EPUB manual in the past and it has been useful to you, please
-            <link xlink:href="https://github.com/NixOS/nixpkgs/issues/237234">let us know</link>.
-          </para>
-        </chapter>
-      </book>
-    '';
+      epub = ''
+        <book xmlns="http://docbook.org/ns/docbook"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              version="5.0"
+              xml:id="nixpkgs-manual">
+          <info>
+            <title>Nixpkgs Manual</title>
+            <subtitle>Version ${pkgs.lib.version}</subtitle>
+          </info>
+          <chapter>
+            <title>Temporarily unavailable</title>
+            <para>
+              The Nixpkgs manual is currently not available in EPUB format,
+              please use the <link xlink:href="https://nixos.org/nixpkgs/manual">HTML manual</link>
+              instead.
+            </para>
+            <para>
+              If you've used the EPUB manual in the past and it has been useful to you, please
+              <link xlink:href="https://github.com/NixOS/nixpkgs/issues/237234">let us know</link>.
+            </para>
+          </chapter>
+        </book>
+      '';
 
-    passAsFile = [ "epub" ];
-  } ''
+      passAsFile = [ "epub" ];
+    } ''
     mkdir scratch
     xsltproc \
       --param chapter.autolabel 0 \
@@ -89,9 +90,10 @@ let
                 in { url = "https://github.com/NixOS/nixpkgs/blob/master/${subpath}"; name = subpath; }
               else decl)
             opt.declarations;
-        };
+      };
   };
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
   nativeBuildInputs = with pkgs; [
@@ -154,20 +156,22 @@ in pkgs.stdenv.mkDerivation {
     ({ name ? "manual_check-manpage-urls"
      , script
      , urlsFile
-     }: runCommand name {
-      nativeBuildInputs = [
-        cacert
-        (python3.withPackages (p: with p; [
-          aiohttp
-          rich
-          structlog
-        ]))
-      ];
-      outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=";  # Empty output
-    } ''
+     }: runCommand name
+      {
+        nativeBuildInputs = [
+          cacert
+          (python3.withPackages (p: with p; [
+            aiohttp
+            rich
+            structlog
+          ]))
+        ];
+        outputHash = "sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU="; # Empty output
+      } ''
       python3 ${script} ${urlsFile}
       touch $out
-    '') {
+    '')
+    {
       script = ./tests/manpage-urls.py;
       urlsFile = ./manpage-urls.json;
     };

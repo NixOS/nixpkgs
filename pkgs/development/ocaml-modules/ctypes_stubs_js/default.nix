@@ -1,6 +1,9 @@
-{
-  lib, fetchFromGitLab, buildDunePackage
-, integers_stubs_js, ctypes, ppx_expect
+{ lib
+, fetchFromGitLab
+, buildDunePackage
+, integers_stubs_js
+, ctypes
+, ppx_expect
 , js_of_ocaml-compiler
 , nodejs
 }:

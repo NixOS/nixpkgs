@@ -1,10 +1,14 @@
-{ lib, stdenv, haskellPackages, symlinkJoin, makeWrapper
-# GHC will have LLVM available if necessary for the respective target,
-# so useLLVM only needs to be changed if -fllvm is to be used for a
-# platform that has NCG support
+{ lib
+, stdenv
+, haskellPackages
+, symlinkJoin
+, makeWrapper
+  # GHC will have LLVM available if necessary for the respective target,
+  # so useLLVM only needs to be changed if -fllvm is to be used for a
+  # platform that has NCG support
 , useLLVM ? false
 , withHoogle ? false
-# Whether to install `doc` outputs for GHC and all included libraries.
+  # Whether to install `doc` outputs for GHC and all included libraries.
 , installDocumentation ? true
 , hoogleWithPackages
 , postBuild ? ""
@@ -42,51 +46,56 @@ selectPackages:
 let
   inherit (haskellPackages) llvmPackages ghc;
 
-  packages      = selectPackages haskellPackages
-                  ++ lib.optional withHoogle (hoogleWithPackages selectPackages);
+  packages = selectPackages haskellPackages
+    ++ lib.optional withHoogle (hoogleWithPackages selectPackages);
 
-  isGhcjs       = ghc.isGhcjs or false;
-  isHaLVM       = ghc.isHaLVM or false;
+  isGhcjs = ghc.isGhcjs or false;
+  isHaLVM = ghc.isHaLVM or false;
   ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
-  ghcCommand    = "${ghc.targetPrefix}${ghcCommand'}";
-  ghcCommandCaps= lib.toUpper ghcCommand';
-  libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
-                  else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
-                    + lib.optionalString (ghc ? hadrian) "/lib";
+  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
+  ghcCommandCaps = lib.toUpper ghcCommand';
+  libDir =
+    if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
+    else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
+      + lib.optionalString (ghc ? hadrian) "/lib";
   # Boot libraries for GHC are present in a separate directory.
-  bootLibDir    = let arch = if stdenv.targetPlatform.isAarch64
-                             then "aarch64"
-                             else "x86_64";
-                      platform = if stdenv.targetPlatform.isDarwin then "osx" else "linux";
-                  in "${ghc}/lib/${ghc.haskellCompilerName}/lib/${arch}-${platform}-${ghc.haskellCompilerName}";
-  docDir        = "$out/share/doc/ghc/html";
+  bootLibDir =
+    let
+      arch =
+        if stdenv.targetPlatform.isAarch64
+        then "aarch64"
+        else "x86_64";
+      platform = if stdenv.targetPlatform.isDarwin then "osx" else "linux";
+    in
+    "${ghc}/lib/${ghc.haskellCompilerName}/lib/${arch}-${platform}-${ghc.haskellCompilerName}";
+  docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
-  paths         = lib.concatLists (
-                    builtins.map
-                      (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ])
-                      (lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages))
-                  );
-  hasLibraries  = lib.any (x: x.isHaskellLibrary) paths;
+  paths = lib.concatLists (
+    builtins.map
+      (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ])
+      (lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages))
+  );
+  hasLibraries = lib.any (x: x.isHaskellLibrary) paths;
   # CLang is needed on Darwin for -fllvm to work:
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
-  llvm          = lib.makeBinPath
-                  ([ llvmPackages.llvm ]
-                   ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
+  llvm = lib.makeBinPath
+    ([ llvmPackages.llvm ]
+      ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
 
 assert ghcLibdir != null -> (ghc.isGhcjs or false);
 
-if paths == [] && !useLLVM then ghc else
+if paths == [ ] && !useLLVM then ghc else
 symlinkJoin {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths
-          ++ [ ghc ]
-          ++ lib.optionals installDocumentation [ (lib.getOutput "doc" ghc) ];
+    ++ [ ghc ]
+    ++ lib.optionals installDocumentation [ (lib.getOutput "doc" ghc) ];
   nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
     # wrap compiler executables with correct env variables

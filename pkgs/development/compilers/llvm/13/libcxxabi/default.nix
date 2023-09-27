@@ -1,4 +1,12 @@
-{ lib, stdenv, llvm_meta, cmake, python3, src, cxx-headers, libunwind, version
+{ lib
+, stdenv
+, llvm_meta
+, cmake
+, python3
+, src
+, cxx-headers
+, libunwind
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 , standalone ? stdenv.hostPlatform.useLLVM or false
 , withLibunwind ? !stdenv.isDarwin && !stdenv.hostPlatform.isWasm

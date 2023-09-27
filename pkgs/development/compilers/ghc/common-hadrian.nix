@@ -1,10 +1,9 @@
 { version
 , rev ? null
 , sha256
-, url ?
-    if rev != null
-    then "https://gitlab.haskell.org/ghc/ghc.git"
-    else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
+, url ? if rev != null
+  then "https://gitlab.haskell.org/ghc/ghc.git"
+  else "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz"
 
 }:
 
@@ -14,7 +13,7 @@
 , pkgsHostTarget
 , targetPackages
 
-# build-tools
+  # build-tools
 , bootPkgs
 , autoconf
 , automake
@@ -30,17 +29,18 @@
 , autoSignDarwinBinariesHook
 , bash
 
-, libiconv ? null, ncurses
+, libiconv ? null
+, ncurses
 , glibcLocales ? null
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPower
-              || stdenv.targetPlatform.isSparc
-              || stdenv.targetPlatform.isAarch64
-              || stdenv.targetPlatform.isGhcjs)
+    || stdenv.targetPlatform.isPower
+    || stdenv.targetPlatform.isSparc
+    || stdenv.targetPlatform.isAarch64
+    || stdenv.targetPlatform.isGhcjs)
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -50,8 +50,8 @@
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
   enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp
-                         && lib.meta.availableOn stdenv.targetPlatform gmp)
-                       || stdenv.targetPlatform.isGhcjs
+    && lib.meta.availableOn stdenv.targetPlatform gmp)
+  || stdenv.targetPlatform.isGhcjs
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
@@ -65,42 +65,41 @@
 
 , # Whether to build terminfo.
   enableTerminfo ? !(stdenv.targetPlatform.isWindows
-                     || stdenv.targetPlatform.isGhcjs)
+    || stdenv.targetPlatform.isGhcjs)
 
 , # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
   enableDwarf ? (stdenv.targetPlatform.isx86 ||
-                 (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit)) &&
-                lib.meta.availableOn stdenv.hostPlatform elfutils &&
-                lib.meta.availableOn stdenv.targetPlatform elfutils &&
-                # HACK: elfutils is marked as broken on static platforms
-                # which availableOn can't tell.
-                !stdenv.targetPlatform.isStatic &&
-                !stdenv.hostPlatform.isStatic
+    (stdenv.targetPlatform.isS390 && stdenv.targetPlatform.is64bit)) &&
+  lib.meta.availableOn stdenv.hostPlatform elfutils &&
+  lib.meta.availableOn stdenv.targetPlatform elfutils &&
+  # HACK: elfutils is marked as broken on static platforms
+  # which availableOn can't tell.
+  !stdenv.targetPlatform.isStatic &&
+  !stdenv.hostPlatform.isStatic
 , elfutils
 
 , # What flavour to build. Flavour string may contain a flavour and flavour
   # transformers as accepted by hadrian.
-  ghcFlavour ?
-    let
-      # TODO(@sternenseemann): does using the static flavour make sense?
-      baseFlavour = "release";
-      # Note: in case hadrian's flavour transformers cease being expressive
-      # enough for us, we'll need to resort to defining a "nixpkgs" flavour
-      # in hadrianUserSettings and using that instead.
-      transformers =
-        lib.optionals useLLVM [ "llvm" ]
-        ++ lib.optionals (!enableShared) [
-          "no_dynamic_libs"
-          "no_dynamic_ghc"
-        ]
-        ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
-        # While split sections are now enabled by default in ghc 8.8 for windows,
-        # they seem to lead to `too many sections` errors when building base for
-        # profiling.
-        ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ]
-      ;
-    in
-      baseFlavour + lib.concatMapStrings (t: "+${t}") transformers
+  ghcFlavour ? let
+    # TODO(@sternenseemann): does using the static flavour make sense?
+    baseFlavour = "release";
+    # Note: in case hadrian's flavour transformers cease being expressive
+    # enough for us, we'll need to resort to defining a "nixpkgs" flavour
+    # in hadrianUserSettings and using that instead.
+    transformers =
+      lib.optionals useLLVM [ "llvm" ]
+      ++ lib.optionals (!enableShared) [
+        "no_dynamic_libs"
+        "no_dynamic_ghc"
+      ]
+      ++ lib.optionals (!enableProfiledLibs) [ "no_profiled_libs" ]
+      # While split sections are now enabled by default in ghc 8.8 for windows,
+      # they seem to lead to `too many sections` errors when building base for
+      # profiling.
+      ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ]
+    ;
+  in
+  baseFlavour + lib.concatMapStrings (t: "+${t}") transformers
 
 , # Contents of the UserSettings.hs file to use when compiling hadrian.
   hadrianUserSettings ? ''
@@ -200,7 +199,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ lib.optionals (!targetPlatform.isGhcjs) [libffi]
+    ++ lib.optionals (!targetPlatform.isGhcjs) [ libffi ]
     # Bindist configure script fails w/o elfutils in linker search path
     # https://gitlab.haskell.org/ghc/ghc/-/issues/22081
     ++ lib.optional enableDwarf elfutils
@@ -211,8 +210,8 @@ let
   # GHC doesn't seem to have {LLC,OPT}_HOST
   toolsForTarget = [
     (if targetPlatform.isGhcjs
-     then pkgsBuildTarget.emscripten
-     else pkgsBuildTarget.targetPackages.stdenv.cc)
+    then pkgsBuildTarget.emscripten
+    else pkgsBuildTarget.targetPackages.stdenv.cc)
   ] ++ lib.optional useLLVM buildTargetLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
@@ -250,8 +249,8 @@ let
 in
 
 # C compiler, bintools and LLVM are used at build time, but will also leak into
-# the resulting GHC's settings file and used at runtime. This means that we are
-# currently only able to build GHC if hostPlatform == buildPlatform.
+  # the resulting GHC's settings file and used at runtime. This means that we are
+  # currently only able to build GHC if hostPlatform == buildPlatform.
 assert !targetPlatform.isGhcjs -> targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
 assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
@@ -267,8 +266,8 @@ stdenv.mkDerivation ({
   patches = [
     # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
     (if lib.versionAtLeast version "9.8"
-      then ./docs-sphinx-7-ghc98.patch
-      else ./docs-sphinx-7.patch )
+    then ./docs-sphinx-7-ghc98.patch
+    else ./docs-sphinx-7.patch)
   ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
@@ -334,21 +333,21 @@ stdenv.mkDerivation ({
   + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
-      echo "patching llvm-targets for musl targets..."
-      echo "Cloning these existing '*-linux-gnu*' targets:"
-      grep linux-gnu llvm-targets | sed 's/^/  /'
-      echo "(go go gadget sed)"
-      sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
-      echo "llvm-targets now contains these '*-linux-musl*' targets:"
-      grep linux-musl llvm-targets | sed 's/^/  /'
+    echo "patching llvm-targets for musl targets..."
+    echo "Cloning these existing '*-linux-gnu*' targets:"
+    grep linux-gnu llvm-targets | sed 's/^/  /'
+    echo "(go go gadget sed)"
+    sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
+    echo "llvm-targets now contains these '*-linux-musl*' targets:"
+    grep linux-musl llvm-targets | sed 's/^/  /'
 
-      echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
-      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
-      for x in configure aclocal.m4; do
-        substituteInPlace $x \
-          --replace '*-android*|*-gnueabi*)' \
-                    '*-android*|*-gnueabi*|*-musleabi*)'
-      done
+    echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
+    # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
+    for x in configure aclocal.m4; do
+      substituteInPlace $x \
+        --replace '*-android*|*-gnueabi*)' \
+                  '*-android*|*-gnueabi*|*-musleabi*)'
+    done
   ''
   # Need to make writable EM_CACHE for emscripten
   # https://gitlab.haskell.org/ghc/ghc/-/wikis/javascript-backend#configure-fails-with-sub-word-sized-atomic-operations-not-available
@@ -379,7 +378,8 @@ stdenv.mkDerivation ({
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--with-curses-includes=${ncurses.dev}/include"
+    "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
@@ -417,9 +417,16 @@ stdenv.mkDerivation ({
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl ghc hadrian bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    perl
+    ghc
+    hadrian
+    bootPkgs.alex
+    bootPkgs.happy
+    bootPkgs.hscolour
     # autoconf and friends are necessary for hadrian to create the bindist
-    autoconf automake m4
+    autoconf
+    automake
+    m4
     # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
     python3
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
@@ -462,14 +469,14 @@ stdenv.mkDerivation ({
 
   hardeningDisable =
     [ "format" ]
-    # In nixpkgs, musl based builds currently enable `pie` hardening by default
-    # (see `defaultHardeningFlags` in `make-derivation.nix`).
-    # But GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-    ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+      # In nixpkgs, musl based builds currently enable `pie` hardening by default
+      # (see `defaultHardeningFlags` in `make-derivation.nix`).
+      # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+      # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+      # See:
+      # * https://github.com/NixOS/nixpkgs/issues/129247
+      # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+      ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
   # big-parallel allows us to build with more than 2 cores on
   # Hydra which already warrants a significant speedup

@@ -98,9 +98,9 @@ rec {
     let
       x' = f x;
     in
-      if x' == x
-      then x
-      else converge f x';
+    if x' == x
+    then x
+    else converge f x';
 
   /*
     Extend a function using an overlay.
@@ -260,9 +260,11 @@ rec {
   */
   composeExtensions =
     f: g: final: prev:
-      let fApplied = f final prev;
-          prev' = prev // fApplied;
-      in fApplied // g final prev';
+    let
+      fApplied = f final prev;
+      prev' = prev // fApplied;
+    in
+    fApplied // g final prev';
 
   /*
     Compose several extending functions of the type expected by 'extends' into
@@ -275,7 +277,7 @@ rec {
     ```
   */
   composeManyExtensions =
-    lib.foldr (x: y: composeExtensions x y) (final: prev: {});
+    lib.foldr (x: y: composeExtensions x y) (final: prev: { });
 
   /*
     Create an overridable, recursive attribute set. For example:

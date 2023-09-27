@@ -1,11 +1,18 @@
-{ lib, stdenv, fetchurl
-, ocaml, findlib, ocamlbuild, topkg, cmdliner
+{ lib
+, stdenv
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, cmdliner
 }:
 
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.14")
   "zipc is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   pname = "ocaml${ocaml.version}-zipc";
   version = "0.1.0";
 
@@ -17,7 +24,9 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    ocaml findlib ocamlbuild
+    ocaml
+    findlib
+    ocamlbuild
   ];
 
   buildInputs = [ cmdliner topkg ];

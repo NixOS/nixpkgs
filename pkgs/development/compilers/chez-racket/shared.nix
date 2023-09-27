@@ -1,15 +1,23 @@
 args:
-{ stdenv, lib, fetchFromGitHub, coreutils, darwin
-, ncurses, libiconv, libX11, zlib, lz4
+{ stdenv
+, lib
+, fetchFromGitHub
+, coreutils
+, darwin
+, ncurses
+, libiconv
+, libX11
+, zlib
+, lz4
 }:
 
 stdenv.mkDerivation (args // {
   version = "unstable-2021-12-11";
 
   src = fetchFromGitHub {
-    owner  = "racket";
-    repo   = "ChezScheme";
-    rev    = "8846c96b08561f05a937d5ecfe4edc96cc99be39";
+    owner = "racket";
+    repo = "ChezScheme";
+    rev = "8846c96b08561f05a937d5ecfe4edc96cc99be39";
     sha256 = "IYJQzT88T8kFahx2BusDOyzz6lQDCbZIfSz9rZoNF7A=";
     fetchSubmodules = true;
   };
@@ -31,10 +39,10 @@ stdenv.mkDerivation (args // {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   meta = {
-    description  = "Fork of Chez Scheme for Racket";
-    homepage     = "https://github.com/racket/ChezScheme";
-    license      = lib.licenses.asl20;
-    maintainers  = with lib.maintainers; [ l-as ];
-    platforms    = lib.platforms.unix;
+    description = "Fork of Chez Scheme for Racket";
+    homepage = "https://github.com/racket/ChezScheme";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ l-as ];
+    platforms = lib.platforms.unix;
   };
 })

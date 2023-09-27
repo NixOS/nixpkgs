@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, uri, cohttp, lwt, cohttp-lwt, github-data, yojson, stringext
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, uri
+, cohttp
+, lwt
+, cohttp-lwt
+, github-data
+, yojson
+, stringext
 }:
 
 buildDunePackage rec {

@@ -9,8 +9,14 @@ rec {
   version-path = "version";
 
   gerbilInputs = with gerbilPackages;
-    [ gerbil-utils gerbil-crypto gerbil-poo gerbil-persist gerbil-ethereum
-      smug-gerbil gerbil-leveldb # gerbil-libp2p ftw
+    [
+      gerbil-utils
+      gerbil-crypto
+      gerbil-poo
+      gerbil-persist
+      gerbil-ethereum
+      smug-gerbil
+      gerbil-leveldb # gerbil-libp2p ftw
     ];
 
   pre-src = {
@@ -19,7 +25,7 @@ rec {
     repo = "glow";
     rev = "08d849adef94ae9deead34e6981e77d47806c6e3";
     sha256 = "0dq0s8y3rgx0wa5wsgcdjs0zijnbgff3y4w2mkh5a04gz4lrhl50";
-    };
+  };
 
   postPatch = ''
     substituteInPlace "runtime/glow-path.ss" --replace \
@@ -44,13 +50,13 @@ rec {
     exec ${gerbil}/bin/gxi $out/gerbil/lib/mukn/glow/main.ss "\$@"
     EOF
     chmod a+x $out/bin/glow
-    '';
+  '';
 
   meta = with lib; {
     description = "Glow: language for safe Decentralized Applications (DApps)";
-    homepage    = "https://glow-lang.org";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://glow-lang.org";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

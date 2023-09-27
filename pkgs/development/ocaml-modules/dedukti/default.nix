@@ -21,7 +21,7 @@ buildDunePackage rec {
   nativeBuildInputs = [ menhir ];
   buildInputs = [ cmdliner ];
 
-  doCheck = false;  # requires `tezt`
+  doCheck = false; # requires `tezt`
 
   meta = with lib; {
     homepage = "https://deducteam.github.io";

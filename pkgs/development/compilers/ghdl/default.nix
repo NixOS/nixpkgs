@@ -16,10 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.0.0";
 
   src = fetchFromGitHub {
-    owner  = "ghdl";
-    repo   = "ghdl";
-    rev    = "v${finalAttrs.version}";
-    hash   = "sha256-94RNtHbOpbC2q/Z+PsQplrLxXmpS3LXOCXyTBB+n9c4=";
+    owner = "ghdl";
+    repo = "ghdl";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-94RNtHbOpbC2q/Z+PsQplrLxXmpS3LXOCXyTBB+n9c4=";
   };
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";

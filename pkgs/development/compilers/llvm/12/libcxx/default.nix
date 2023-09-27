@@ -1,6 +1,15 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, python3, llvm, fixDarwinDylibNames, version
+{ lib
+, stdenv
+, llvm_meta
+, fetch
+, cmake
+, python3
+, llvm
+, fixDarwinDylibNames
+, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt
+, libcxxabi
+, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -39,12 +48,12 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DLIBCXX_CXX_ABI=${cxxabi.pname}"
   ] ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optionals stdenv.hostPlatform.isWasm [
-      "-DLIBCXX_ENABLE_THREADS=OFF"
-      "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
-      "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
+  ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+  ++ lib.optionals stdenv.hostPlatform.isWasm [
+    "-DLIBCXX_ENABLE_THREADS=OFF"
+    "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+    "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   preInstall = lib.optionalString (stdenv.isDarwin) ''
     for file in lib/*.dylib; do

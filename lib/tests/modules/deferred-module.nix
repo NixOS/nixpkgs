@@ -13,7 +13,7 @@ in
       _file = "generic.nix";
       options.nodes = mkOption {
         type = lazyAttrsOf (submodule { imports = [ config.default ]; });
-        default = {};
+        default = { };
       };
       options.default = mkOption {
         type = deferredModule;
@@ -27,8 +27,8 @@ in
     {
       _file = "default-1.nix";
       default = { config, ... }: {
-        options.settingsDict = lib.mkOption { type = lazyAttrsOf str; default = {}; };
-        options.bottom = lib.mkOption { type = enum []; };
+        options.settingsDict = lib.mkOption { type = lazyAttrsOf str; default = { }; };
+        options.bottom = lib.mkOption { type = enum [ ]; };
       };
     }
 

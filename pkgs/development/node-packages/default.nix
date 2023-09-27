@@ -9,11 +9,13 @@ let
   };
 
   mainProgramOverrides = final: prev:
-    mapAttrs (pkgName: mainProgram:
-      prev.${pkgName}.override (oldAttrs: {
-        meta = oldAttrs.meta // { inherit mainProgram; };
-      })
-    ) (import ./main-programs.nix);
+    mapAttrs
+      (pkgName: mainProgram:
+        prev.${pkgName}.override (oldAttrs: {
+          meta = oldAttrs.meta // { inherit mainProgram; };
+        })
+      )
+      (import ./main-programs.nix);
 
   aliases = final: prev:
     lib.optionalAttrs config.allowAliases
@@ -25,4 +27,4 @@ let
     (import ./overrides.nix { inherit pkgs nodejs; })
   ];
 in
-  makeExtensible (extends extensions nodePackages)
+makeExtensible (extends extensions nodePackages)

@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, fmt, lwt, mirage-kv
+{ lib
+, fetchurl
+, buildDunePackage
+, cstruct
+, fmt
+, lwt
+, mirage-kv
 }:
 
 buildDunePackage rec {

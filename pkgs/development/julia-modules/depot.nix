@@ -16,10 +16,11 @@
 , registry
 }:
 
-runCommand "julia-depot" {
-    nativeBuildInputs = [curl git julia (python3.withPackages (ps: with ps; [pyyaml]))] ++ extraLibs;
-    inherit precompile registry;
-  } ''
+runCommand "julia-depot"
+{
+  nativeBuildInputs = [ curl git julia (python3.withPackages (ps: with ps; [ pyyaml ])) ] ++ extraLibs;
+  inherit precompile registry;
+} ''
   export HOME=$(pwd)
 
   echo "Building Julia depot and project with the following inputs"

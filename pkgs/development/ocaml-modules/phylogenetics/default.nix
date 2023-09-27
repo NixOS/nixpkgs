@@ -18,7 +18,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "phylogenetics is not compatible with OCaml ${ocaml.version}"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "phylogenetics";
   version = "unstable-2022-05-06";
 

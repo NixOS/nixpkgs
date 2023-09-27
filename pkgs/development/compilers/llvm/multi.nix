@@ -1,24 +1,25 @@
-{ runCommand,
-clang,
-gcc64,
-gcc32,
-glibc_multi
+{ runCommand
+, clang
+, gcc64
+, gcc32
+, glibc_multi
 }:
 
 let
-  combine = basegcc: runCommand "combine-gcc-libc" {} ''
+  combine = basegcc: runCommand "combine-gcc-libc" { } ''
     mkdir -p $out
     cp -r ${basegcc.cc}/lib $out/lib
 
     chmod u+rw -R $out/lib
     cp -r ${basegcc.libc}/lib/* $(ls -d $out/lib/gcc/*/*)
   '';
-  gcc_multi_sysroot = runCommand "gcc-multi-sysroot" {
-    passthru = {
-      inherit (gcc64) version;
-      lib = gcc_multi_sysroot;
-    };
-  } ''
+  gcc_multi_sysroot = runCommand "gcc-multi-sysroot"
+    {
+      passthru = {
+        inherit (gcc64) version;
+        lib = gcc_multi_sysroot;
+      };
+    } ''
     mkdir -p $out/lib{,64}/gcc
 
     ln -s ${combine gcc64}/lib/gcc/* $out/lib64/gcc/
@@ -52,9 +53,10 @@ let
       inherit (glibc_multi) libgcc;
       langCC =
         assert (gcc64.cc.langCC != gcc32.cc.langCC)
-               -> throw "(gcc64.cc.langCC=${gcc64.cc.langCC}) != (gcc32.cc.langCC=${gcc32.cc.langCC})";
+          -> throw "(gcc64.cc.langCC=${gcc64.cc.langCC}) != (gcc32.cc.langCC=${gcc32.cc.langCC})";
         gcc64.cc.langCC;
     };
   };
 
-in clangMulti
+in
+clangMulti

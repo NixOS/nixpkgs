@@ -1,4 +1,11 @@
-{ lib, fetchurl, buildDunePackage, ounit2, cstruct, dune-configurator, eqaf, pkg-config
+{ lib
+, fetchurl
+, buildDunePackage
+, ounit2
+, cstruct
+, dune-configurator
+, eqaf
+, pkg-config
 , withFreestanding ? false
 , ocaml-freestanding
 }:
@@ -19,9 +26,10 @@ buildDunePackage rec {
   checkInputs = [ ounit2 ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator  ];
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
-    cstruct eqaf
+    cstruct
+    eqaf
   ] ++ lib.optionals withFreestanding [
     ocaml-freestanding
   ];
@@ -30,9 +38,9 @@ buildDunePackage rec {
     homepage = "https://github.com/mirage/mirage-crypto";
     description = "Simple symmetric cryptography for the modern age";
     license = [
-      licenses.isc  # default license
+      licenses.isc # default license
       licenses.bsd2 # mirage-crypto-rng-mirage
-      licenses.mit  # mirage-crypto-ec
+      licenses.mit # mirage-crypto-ec
     ];
     maintainers = with maintainers; [ sternenseemann ];
   };

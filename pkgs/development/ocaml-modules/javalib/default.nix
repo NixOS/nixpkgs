@@ -11,7 +11,8 @@
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "javalib is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   pname = "ocaml${ocaml.version}-javalib";
   version = "3.2.2";
 

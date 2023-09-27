@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , langC
 , langAda
 , langObjC
@@ -29,46 +30,48 @@ let
   atLeast12 = lib.versionAtLeast version "12";
   atLeast11 = lib.versionAtLeast version "11";
   atLeast10 = lib.versionAtLeast version "10";
-  atLeast9  = lib.versionAtLeast version  "9";
-  atLeast8  = lib.versionAtLeast version  "8";
-  atLeast7  = lib.versionAtLeast version  "7";
-  atLeast6  = lib.versionAtLeast version  "6";
-  atLeast49 = lib.versionAtLeast version  "4.9";
+  atLeast9 = lib.versionAtLeast version "9";
+  atLeast8 = lib.versionAtLeast version "8";
+  atLeast7 = lib.versionAtLeast version "7";
+  atLeast6 = lib.versionAtLeast version "6";
+  atLeast49 = lib.versionAtLeast version "4.9";
   is13 = majorVersion == "13";
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
   is10 = majorVersion == "10";
-  is9  = majorVersion == "9";
-  is8  = majorVersion == "8";
-  is7  = majorVersion == "7";
-  is6  = majorVersion == "6";
+  is9 = majorVersion == "9";
+  is8 = majorVersion == "8";
+  is7 = majorVersion == "7";
+  is6 = majorVersion == "6";
   is49 = majorVersion == "4" && lib.versions.minor version == "9";
   is48 = majorVersion == "4" && lib.versions.minor version == "8";
   inherit (lib) optionals optional;
 in
 
 #
-#  Patches below are organized into three general categories:
-#  1. Patches relevant to gcc>=12 on every platform
-#  2. Patches relevant to gcc>=12 on specific platforms
-#  3. Patches relevant only to gcc<12
-#
+  #  Patches below are organized into three general categories:
+  #  1. Patches relevant to gcc>=12 on every platform
+  #  2. Patches relevant to gcc>=12 on specific platforms
+  #  3. Patches relevant only to gcc<12
+  #
 
 
-## 1. Patches relevant to gcc>=12 on every platform ####################################
+  ## 1. Patches relevant to gcc>=12 on every platform ####################################
 
-[]
+[ ]
 ++ optional (atLeast6 && !atLeast12) ./fix-bug-80431.patch
 ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
-  [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
-  ({
-    "13" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
-    "12" = [ ./no-sys-dirs-riscv.patch ./12/mangle-NIX_STORE-in-__FILE__.patch ];
-    "11" = [ ./no-sys-dirs-riscv.patch ];
-    "10" = [ ./no-sys-dirs-riscv.patch ];
-    "9"  = [ ./no-sys-dirs-riscv-gcc9.patch ];
-  }."${majorVersion}" or [])
+  [ (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch) ] ++
+  (
+    {
+      "13" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
+      "12" = [ ./no-sys-dirs-riscv.patch ./12/mangle-NIX_STORE-in-__FILE__.patch ];
+      "11" = [ ./no-sys-dirs-riscv.patch ];
+      "10" = [ ./no-sys-dirs-riscv.patch ];
+      "9" = [ ./no-sys-dirs-riscv-gcc9.patch ];
+    }."${majorVersion}" or [ ]
+  )
 )
 ++ optional (atLeast12 && langAda) ./gnat-cflags-11.patch
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
@@ -131,24 +134,32 @@ in
 
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
-++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
-  "13" = [ (fetchpatch {
-    name = "gcc-13-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
-    sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
-  }) ];
-  "12" = [ (fetchurl {
-    name = "gcc-12-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
-    sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
-  }) ];
-  "11" = [ (fetchpatch {
-    # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
-    # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
-    url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
-    hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
-  }) ];
-}.${majorVersion} or [])
+++ optionals (stdenv.isDarwin && stdenv.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) (
+  {
+    "13" = [
+      (fetchpatch {
+        name = "gcc-13-darwin-aarch64-support.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3c5cbc8e9cf444a1967786af48e430588e1eb481/gcc/gcc-13.2.0.diff";
+        sha256 = "sha256-Y5r3U3dwAFG6+b0TNCFd18PNxYu2+W/5zDbZ5cHvv+U=";
+      })
+    ];
+    "12" = [
+      (fetchurl {
+        name = "gcc-12-darwin-aarch64-support.patch";
+        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/f1188b90d610e2ed170b22512ff7435ba5c891e2/gcc/gcc-12.3.0.diff";
+        sha256 = "sha256-naL5ZNiurqfDBiPSU8PTbTmLqj25B+vjjiqc4fAFgYs=";
+      })
+    ];
+    "11" = [
+      (fetchpatch {
+        # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
+        # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
+        url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
+        hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
+      })
+    ];
+  }.${majorVersion} or [ ]
+)
 
 
 ## Windows
@@ -223,7 +234,8 @@ in
 
 ## gcc 7.0 and older ##############################################################################
 
-++ optional (is7 && hostPlatform != buildPlatform) (fetchpatch { # XXX: Refine when this should be applied
+++ optional (is7 && hostPlatform != buildPlatform) (fetchpatch {
+  # XXX: Refine when this should be applied
   url = "https://git.busybox.net/buildroot/plain/package/gcc/7.1.0/0900-remove-selftests.patch?id=11271540bfe6adafbc133caf6b5b902a816f5f02";
   sha256 = "0mrvxsdwip2p3l17dscpc1x8vhdsciqw1z5q9i6p5g9yg1cqnmgs";
 })
@@ -284,20 +296,20 @@ in
 ]
 # Retpoline patches pulled from the branch hjl/indirect/gcc-4_9-branch (by H.J. Lu, the author of GCC upstream retpoline commits)
 ++ optionals is49
-  (builtins.map ({commit, sha256}: fetchpatch {url = "https://github.com/hjl-tools/gcc/commit/${commit}.patch"; inherit sha256;})
-  [{ commit = "e623d21608e96ecd6b65f0d06312117d20488a38"; sha256 = "1ix8i4d2r3ygbv7npmsdj790rhxqrnfwcqzv48b090r9c3ij8ay3"; }
-   { commit = "2015a09e332309f12de1dadfe179afa6a29368b8"; sha256 = "0xcfs0cbb63llj2gbcdrvxim79ax4k4aswn0a3yjavxsj71s1n91"; }
-   { commit = "6b11591f4494f705e8746e7d58b7f423191f4e92"; sha256 = "0aydyhsm2ig0khgbp27am7vq7liyqrq6kfhfi2ki0ij0ab1hfbga"; }
-   { commit = "203c7d9c3e9cb0f88816b481ef8e7e87b3ecc373"; sha256 = "0wqn16y7wy5kg8ngfcni5qdwfphl01axczibbk49bxclwnzvldqa"; }
-   { commit = "f039c6f284b2c9ce97c8353d6034978795c4872e"; sha256 = "13fkgdb17lpyxfksz1zanxhgpsm0jrss9w61nbl7an4im22hz7ci"; }
-   { commit = "ed42606bdab1c5d9e5ad828cd6fe1a0557f193b7"; sha256 = "0gdnn8v3p03imj3qga2mzdhpgbmjcklkxdl97jvz5xia2ikzknxm"; }
-   { commit = "5278e062ef292fd2fbf987d25389785f4c5c0f99"; sha256 = "0j81x758wf8v7j4rx5wc1cy7yhkvhlhv3wmnarwakxiwsspq0vrs"; }
-   { commit = "76f1ffbbb6cd9f6ecde6c82cd16e20a27242e890"; sha256 = "1py56y6gp7fjf4f8bbsfwh5bs1gnmlqda1ycsmnwlzfm0cshdp0c"; }
-   { commit = "4ca48b2b688b135c0390f54ea9077ef10aedd52c"; sha256 = "15r019pzr3k0lpgyvdc92c8fayw8b5lrzncna4bqmamcsdz7vsaw"; }
-   { commit = "98c7bf9ddc80db965d69d61521b1c7a1cec32d9a"; sha256 = "1d7pfdv1q23nf0wadw7jbp6d6r7pnzjpbyxgbdfv7j1vr9l1bp60"; }
-   { commit = "3dc76b53ad896494ca62550a7a752fecbca3f7a2"; sha256 = "0jvdzfpvfdmklfcjwqblwq1i22iqis7ljpvm7adra5d7zf2xk7xz"; }
-   { commit = "1e961ed49b18e176c7457f53df2433421387c23b"; sha256 = "04dnqqs4qsvz4g8cq6db5id41kzys7hzhcaycwmc9rpqygs2ajwz"; }
-   { commit = "e137c72d099f9b3b47f4cc718aa11eab14df1a9c"; sha256 = "1ms0dmz74yf6kwgjfs4d2fhj8y6mcp2n184r3jk44wx2xc24vgb2"; }])
+  (builtins.map ({ commit, sha256 }: fetchpatch { url = "https://github.com/hjl-tools/gcc/commit/${commit}.patch"; inherit sha256; })
+    [{ commit = "e623d21608e96ecd6b65f0d06312117d20488a38"; sha256 = "1ix8i4d2r3ygbv7npmsdj790rhxqrnfwcqzv48b090r9c3ij8ay3"; }
+      { commit = "2015a09e332309f12de1dadfe179afa6a29368b8"; sha256 = "0xcfs0cbb63llj2gbcdrvxim79ax4k4aswn0a3yjavxsj71s1n91"; }
+      { commit = "6b11591f4494f705e8746e7d58b7f423191f4e92"; sha256 = "0aydyhsm2ig0khgbp27am7vq7liyqrq6kfhfi2ki0ij0ab1hfbga"; }
+      { commit = "203c7d9c3e9cb0f88816b481ef8e7e87b3ecc373"; sha256 = "0wqn16y7wy5kg8ngfcni5qdwfphl01axczibbk49bxclwnzvldqa"; }
+      { commit = "f039c6f284b2c9ce97c8353d6034978795c4872e"; sha256 = "13fkgdb17lpyxfksz1zanxhgpsm0jrss9w61nbl7an4im22hz7ci"; }
+      { commit = "ed42606bdab1c5d9e5ad828cd6fe1a0557f193b7"; sha256 = "0gdnn8v3p03imj3qga2mzdhpgbmjcklkxdl97jvz5xia2ikzknxm"; }
+      { commit = "5278e062ef292fd2fbf987d25389785f4c5c0f99"; sha256 = "0j81x758wf8v7j4rx5wc1cy7yhkvhlhv3wmnarwakxiwsspq0vrs"; }
+      { commit = "76f1ffbbb6cd9f6ecde6c82cd16e20a27242e890"; sha256 = "1py56y6gp7fjf4f8bbsfwh5bs1gnmlqda1ycsmnwlzfm0cshdp0c"; }
+      { commit = "4ca48b2b688b135c0390f54ea9077ef10aedd52c"; sha256 = "15r019pzr3k0lpgyvdc92c8fayw8b5lrzncna4bqmamcsdz7vsaw"; }
+      { commit = "98c7bf9ddc80db965d69d61521b1c7a1cec32d9a"; sha256 = "1d7pfdv1q23nf0wadw7jbp6d6r7pnzjpbyxgbdfv7j1vr9l1bp60"; }
+      { commit = "3dc76b53ad896494ca62550a7a752fecbca3f7a2"; sha256 = "0jvdzfpvfdmklfcjwqblwq1i22iqis7ljpvm7adra5d7zf2xk7xz"; }
+      { commit = "1e961ed49b18e176c7457f53df2433421387c23b"; sha256 = "04dnqqs4qsvz4g8cq6db5id41kzys7hzhcaycwmc9rpqygs2ajwz"; }
+      { commit = "e137c72d099f9b3b47f4cc718aa11eab14df1a9c"; sha256 = "1ms0dmz74yf6kwgjfs4d2fhj8y6mcp2n184r3jk44wx2xc24vgb2"; }])
 
 ++ optional (is49 && !atLeast6) [
   # gcc-11 compatibility

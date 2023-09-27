@@ -1,4 +1,13 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi, libxcrypt
+{ lib
+, stdenv
+, llvm_meta
+, version
+, fetch
+, cmake
+, python3
+, libllvm
+, libcxxabi
+, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 

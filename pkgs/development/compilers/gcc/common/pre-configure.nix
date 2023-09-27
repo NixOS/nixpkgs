@@ -1,6 +1,9 @@
 { lib
 , stdenv
-, version, buildPlatform, hostPlatform, targetPlatform
+, version
+, buildPlatform
+, hostPlatform
+, targetPlatform
 , gnat-bootstrap ? null
 , langAda ? false
 , langFortran
@@ -15,10 +18,10 @@
 
 assert langJava -> lib.versionOlder version "7";
 assert langAda -> gnat-bootstrap != null; let
-  needsLib
-    =  (lib.versionOlder version "7" && (langJava || langGo))
+  needsLib = (lib.versionOlder version "7" && (langJava || langGo))
     || (lib.versions.major version == "4" && lib.versions.minor version == "9" && targetPlatform.isDarwin);
-in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
+in
+lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
   export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
   export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
@@ -52,7 +55,8 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # gnat-bootstrap, the former is provided as `as`, while the latter is provided as
 # `gas`.
 #
-+ lib.optionalString (
++ lib.optionalString
+  (
     langAda
     && buildPlatform == hostPlatform
     && hostPlatform == targetPlatform
@@ -92,11 +96,11 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 #    compilation even if the configure scripts did not check header presence.
 #
 + lib.optionalString (buildPlatform.isDarwin) ''
-    export build_configargs=ac_cv_func_aligned_alloc=no
+  export build_configargs=ac_cv_func_aligned_alloc=no
 '' + lib.optionalString (hostPlatform.isDarwin) ''
-    export host_configargs=ac_cv_func_aligned_alloc=no
+  export host_configargs=ac_cv_func_aligned_alloc=no
 '' + lib.optionalString (targetPlatform.isDarwin) ''
-    export target_configargs=ac_cv_func_aligned_alloc=no
+  export target_configargs=ac_cv_func_aligned_alloc=no
 ''
 
 # In order to properly install libgccjit on macOS Catalina, strip(1)
@@ -119,11 +123,12 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # gcc->clang or dynamic->static "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
-+ lib.optionalString (targetPlatform != hostPlatform &&
-                      withoutTargetLibc &&
-                      targetPlatform.config == hostPlatform.config) ''
++ lib.optionalString
+  (targetPlatform != hostPlatform &&
+  withoutTargetLibc &&
+  targetPlatform.config == hostPlatform.config) ''
   export inhibit_libc=true
 ''
 
-+ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared)
+  + lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared)
   (import ./libgcc-buildstuff.nix { inherit lib stdenv; })

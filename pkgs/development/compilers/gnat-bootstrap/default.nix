@@ -1,48 +1,66 @@
-{ stdenv, lib, autoPatchelfHook, fetchzip, xz, ncurses5, readline, gmp, mpfr
-, expat, libipt, zlib, dejagnu, sourceHighlight, python3, elfutils, guile, glibc
+{ stdenv
+, lib
+, autoPatchelfHook
+, fetchzip
+, xz
+, ncurses5
+, readline
+, gmp
+, mpfr
+, expat
+, libipt
+, zlib
+, dejagnu
+, sourceHighlight
+, python3
+, elfutils
+, guile
+, glibc
 , majorVersion
 }:
 
 let
   throwUnsupportedSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 in
-stdenv.mkDerivation(finalAttrs:
-  let versionMap =
+stdenv.mkDerivation (finalAttrs:
+let
+  versionMap =
     let url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${finalAttrs.version}/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
     in {
-    "11" = {
-      gccVersion = "11.2.0";
-      alireRevision = "4";
-    } // {
-      x86_64-darwin = {
-        inherit url;
-        hash = "sha256-FmBgD20PPQlX/ddhJliCTb/PRmKxe9z7TFPa2/SK4GY=";
-        upstreamTriplet = "x86_64-apple-darwin19.6.0";
-      };
-      x86_64-linux = {
-        inherit url;
-        hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
-        upstreamTriplet = "x86_64-pc-linux-gnu";
-      };
-    }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
-    "12" = {
-      gccVersion = "12.1.0";
-      alireRevision = "2";
-    } // {
-      x86_64-darwin = {
-        inherit url;
-        hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
-        upstreamTriplet = "x86_64-apple-darwin19.6.0";
-      };
-      x86_64-linux = {
-        inherit url;
-        hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
-        upstreamTriplet = "x86_64-pc-linux-gnu";
-      };
-    }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
-  };
+      "11" = {
+        gccVersion = "11.2.0";
+        alireRevision = "4";
+      } // {
+        x86_64-darwin = {
+          inherit url;
+          hash = "sha256-FmBgD20PPQlX/ddhJliCTb/PRmKxe9z7TFPa2/SK4GY=";
+          upstreamTriplet = "x86_64-apple-darwin19.6.0";
+        };
+        x86_64-linux = {
+          inherit url;
+          hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
+          upstreamTriplet = "x86_64-pc-linux-gnu";
+        };
+      }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+      "12" = {
+        gccVersion = "12.1.0";
+        alireRevision = "2";
+      } // {
+        x86_64-darwin = {
+          inherit url;
+          hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
+          upstreamTriplet = "x86_64-apple-darwin19.6.0";
+        };
+        x86_64-linux = {
+          inherit url;
+          hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
+          upstreamTriplet = "x86_64-pc-linux-gnu";
+        };
+      }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
+    };
   inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
-in {
+in
+{
   pname = "gnat-bootstrap";
   inherit (versionMap.${majorVersion}) gccVersion alireRevision;
 
@@ -82,7 +100,7 @@ in {
   # contain a slash, so we can just change the string to "sed" and zero the
   # other bytes.
   + ''
-     sed -i "s,/usr/bin/sed,sed\x00\x00\x00\x00\x00\x00\x00\x00\x00," libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/fixincl
+    sed -i "s,/usr/bin/sed,sed\x00\x00\x00\x00\x00\x00\x00\x00\x00," libexec/gcc/${upstreamTriplet}/${gccVersion}/install-tools/fixincl
   '';
 
   installPhase = ''

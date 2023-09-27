@@ -1,6 +1,6 @@
 { a ? false, lib, ... }: {
   options = {
-    result = lib.mkOption {};
+    result = lib.mkOption { };
   };
   config = {
     _module.args.a = true;

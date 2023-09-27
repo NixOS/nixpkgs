@@ -1,13 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , callPackage
 
-# Linux deps
+  # Linux deps
 , libGL
 , xorg
 
-# Darwin deps
+  # Darwin deps
 , CoreFoundation
 , Cocoa
 , AudioToolbox
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = if stdenv.isDarwin
+  buildInputs =
+    if stdenv.isDarwin
     then [
       CoreFoundation
       Cocoa
@@ -47,7 +49,7 @@ stdenv.mkDerivation rec {
     cd dev
   '';
 
-  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
+  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix { };
 
   meta = with lib; {
     broken = stdenv.isDarwin;

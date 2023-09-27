@@ -108,11 +108,14 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers; # ChasingBottoms doesn't support base 4.20
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers == 0.6.*
   # https://github.com/wz1000/HieDb/issues/64
-  hiedb = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      "--match" "!/hiedb/Command line/point-info/correctly prints type signatures/"
-    ];
-  }) super.hiedb;
+  hiedb = overrideCabal
+    (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "--match"
+        "!/hiedb/Command line/point-info/correctly prints type signatures/"
+      ];
+    })
+    super.hiedb;
 
   # Unbroken due to hspec* upgrades
   hspec-api = doDistribute (unmarkBroken super.hspec-api);

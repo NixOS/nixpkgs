@@ -9,22 +9,23 @@ stdenv.mkDerivation rec {
   pname = "kotlin-native";
   version = "1.9.22";
 
-  src = let
-    getArch = {
-      "aarch64-darwin" = "macos-aarch64";
-      "x86_64-darwin" = "macos-x86_64";
-      "x86_64-linux" = "linux-x86_64";
-    }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+  src =
+    let
+      getArch = {
+        "aarch64-darwin" = "macos-aarch64";
+        "x86_64-darwin" = "macos-x86_64";
+        "x86_64-linux" = "linux-x86_64";
+      }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
-    getUrl = version: arch:
-      "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${arch}-${version}.tar.gz";
+      getUrl = version: arch:
+        "https://github.com/JetBrains/kotlin/releases/download/v${version}/kotlin-native-${arch}-${version}.tar.gz";
 
-    getHash = arch: {
-      "macos-aarch64" = "1pf81rplikbp194pjrm2la101iz8vz3jv55109nipd26xghc15ca";
-      "macos-x86_64" = "1r7dmk8cc7f3iwaxamlnlcjl4mbvx443nwvsp8141a21ibrvrmx9";
-      "linux-x86_64" = "1m77qld44gbarjxm99gsdscncx4v0cf6ca3h9bdh2m7d3i4adc62";
-    }.${arch};
-  in
+      getHash = arch: {
+        "macos-aarch64" = "1pf81rplikbp194pjrm2la101iz8vz3jv55109nipd26xghc15ca";
+        "macos-x86_64" = "1r7dmk8cc7f3iwaxamlnlcjl4mbvx443nwvsp8141a21ibrvrmx9";
+        "linux-x86_64" = "1m77qld44gbarjxm99gsdscncx4v0cf6ca3h9bdh2m7d3i4adc62";
+      }.${arch};
+    in
     fetchurl {
       url = getUrl version getArch;
       sha256 = getHash getArch;

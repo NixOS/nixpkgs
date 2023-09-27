@@ -1,5 +1,11 @@
-{ lib, buildDunePackage, fetchurl
-, domain-name, duration, fmt, ipaddr, logs
+{ lib
+, buildDunePackage
+, fetchurl
+, domain-name
+, duration
+, fmt
+, ipaddr
+, logs
 }:
 
 buildDunePackage rec {

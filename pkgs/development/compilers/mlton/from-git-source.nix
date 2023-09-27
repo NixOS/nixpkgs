@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ which ];
 
-  buildInputs = [mltonBootstrap gmp];
+  buildInputs = [ mltonBootstrap gmp ];
 
   # build fails otherwise
   enableParallelBuilding = false;

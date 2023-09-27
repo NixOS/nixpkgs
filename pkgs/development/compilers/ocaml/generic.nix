@@ -1,13 +1,25 @@
-{ minor_version, major_version, patch_version, patches ? []
-, ...}@args:
+{ minor_version
+, major_version
+, patch_version
+, patches ? [ ]
+, ...
+}@args:
 let
   versionNoPatch = "${toString major_version}.${toString minor_version}";
   version = "${versionNoPatch}.${toString patch_version}";
   safeX11 = stdenv: !(stdenv.isAarch32 || stdenv.isMips || stdenv.hostPlatform.isStatic);
 in
 
-{ lib, stdenv, fetchurl, ncurses, buildEnv, libunwind, fetchpatch
-, libX11, xorgproto, useX11 ? safeX11 stdenv && lib.versionOlder version "4.09"
+{ lib
+, stdenv
+, fetchurl
+, ncurses
+, buildEnv
+, libunwind
+, fetchpatch
+, libX11
+, xorgproto
+, useX11 ? safeX11 stdenv && lib.versionOlder version "4.09"
 , aflSupport ? false
 , flambdaSupport ? false
 , spaceTimeSupport ? false
@@ -32,7 +44,8 @@ in
 let
   useNativeCompilers = !stdenv.isMips;
   inherit (lib) optional optionals optionalString strings concatStrings;
-  pname = concatStrings [ "ocaml"
+  pname = concatStrings [
+    "ocaml"
     (optionalString aflSupport "+afl")
     (optionalString spaceTimeSupport "+spacetime")
     (optionalString flambdaSupport "+flambda")
@@ -41,7 +54,7 @@ let
 in
 
 let
-  x11env = buildEnv { name = "x11env"; paths = [libX11 xorgproto]; };
+  x11env = buildEnv { name = "x11env"; paths = [ libX11 xorgproto ]; };
   x11lib = x11env + "/lib";
   x11inc = x11env + "/include";
 
@@ -58,26 +71,29 @@ stdenv.mkDerivation (args // {
 
   prefixKey = "-prefix ";
   configureFlags =
-    let flags = new: old:
-      if lib.versionAtLeast version "4.08"
-      then new else old
-    ; in
-    optionals useX11 (flags
-      [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}"]
-      [ "-x11lib" x11lib "-x11include" x11inc ])
-  ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
-  ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
-  ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
-  ++ optional framePointerSupport (flags "--enable-frame-pointers" "-with-frame-pointers")
-  ++ optionals unsafeStringSupport [
-    "--disable-force-safe-string"
-    "DEFAULT_STRING=unsafe"
-  ]
-  ++ optional (stdenv.hostPlatform.isStatic && (lib.versionOlder version "4.08")) "-no-shared-libs"
-  ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
-    "-host ${stdenv.hostPlatform.config}"
-    "-target ${stdenv.targetPlatform.config}"
-  ];
+    let
+      flags = new: old:
+        if lib.versionAtLeast version "4.08"
+        then new else old
+      ;
+    in
+    optionals useX11
+      (flags
+        [ "--x-libraries=${x11lib}" "--x-includes=${x11inc}" ]
+        [ "-x11lib" x11lib "-x11include" x11inc ])
+    ++ optional aflSupport (flags "--with-afl" "-afl-instrument")
+    ++ optional flambdaSupport (flags "--enable-flambda" "-flambda")
+    ++ optional spaceTimeSupport (flags "--enable-spacetime" "-spacetime")
+    ++ optional framePointerSupport (flags "--enable-frame-pointers" "-with-frame-pointers")
+    ++ optionals unsafeStringSupport [
+      "--disable-force-safe-string"
+      "DEFAULT_STRING=unsafe"
+    ]
+    ++ optional (stdenv.hostPlatform.isStatic && (lib.versionOlder version "4.08")) "-no-shared-libs"
+    ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && lib.versionOlder version "4.08") [
+      "-host ${stdenv.hostPlatform.config}"
+      "-target ${stdenv.targetPlatform.config}"
+    ];
   dontAddStaticConfigureFlags = lib.versionOlder version "4.08";
 
   # on aarch64-darwin using --host and --target causes the build to invoke
@@ -104,9 +120,10 @@ stdenv.mkDerivation (args // {
   # we place nixpkgs-specific targets to a separate file and set
   # sequential order among them as a single rule.
   makefile = ./Makefile.nixpkgs;
-  buildFlags = if useNativeCompilers
-    then ["nixpkgs_world_bootstrap_world_opt"]
-    else ["nixpkgs_world"];
+  buildFlags =
+    if useNativeCompilers
+    then [ "nixpkgs_world_bootstrap_world_opt" ]
+    else [ "nixpkgs_world" ];
   buildInputs = optional (lib.versionOlder version "4.07") ncurses
     ++ optionals useX11 [ libX11 xorgproto ];
   propagatedBuildInputs = optional spaceTimeSupport libunwind;

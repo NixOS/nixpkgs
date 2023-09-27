@@ -1,6 +1,15 @@
-{ lib, stdenv, llvm_meta
-, monorepoSrc, runCommand
-, substituteAll, cmake, ninja, libxml2, libllvm, version, python3
+{ lib
+, stdenv
+, llvm_meta
+, monorepoSrc
+, runCommand
+, substituteAll
+, cmake
+, ninja
+, libxml2
+, libllvm
+, version
+, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -11,7 +20,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = runCommand "${pname}-src-${version}" {} ''
+    src = runCommand "${pname}-src-${version}" { } ''
       mkdir -p "$out"
       cp -r ${monorepoSrc}/cmake "$out"
       cp -r ${monorepoSrc}/${pname} "$out"
@@ -54,7 +63,7 @@ let
       ../../common/clang/add-nostdlibinc-flag.patch
       (substituteAll {
         src = ../../clang-at-least-16-LLVMgold-path.patch;
-       libllvmLibdir = "${libllvm.lib}/lib";
+        libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
 
@@ -133,4 +142,5 @@ let
       description = "man page for Clang ${version}";
     };
   });
-in self
+in
+self

@@ -8,15 +8,16 @@
 , zlib
 , yosys-symbiflow
 , pkg-config
-}: let
+}:
+let
 
   version = "1.20230906";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo  = "yosys-f4pga-plugins";
-    rev   = "v${version}";
-    hash  = "sha256-XIn5wFw8i2njDN0Arua5BdZ0u1q6a/aJAs48YICehsc=";
+    repo = "yosys-f4pga-plugins";
+    rev = "v${version}";
+    hash = "sha256-XIn5wFw8i2njDN0Arua5BdZ0u1q6a/aJAs48YICehsc=";
   };
 
   # Supported symbiflow plugins.
@@ -38,10 +39,11 @@
   static_gtest = gtest.overrideAttrs (old: {
     dontDisableStatic = true;
     disableHardening = [ "pie" ];
-    cmakeFlags = old.cmakeFlags ++ ["-DBUILD_SHARED_LIBS=OFF"];
+    cmakeFlags = old.cmakeFlags ++ [ "-DBUILD_SHARED_LIBS=OFF" ];
   });
 
-in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
+in
+lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
   pname = "yosys-symbiflow-${plugin}-plugin";
   inherit src version plugin;
   enableParallelBuilding = true;
@@ -81,10 +83,10 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
 
   checkTarget = "test";
   checkFlags = [
-    ( "NIX_YOSYS_PLUGIN_DIRS=\${NIX_BUILD_TOP}/source/${plugin}-plugin/build"
+    ("NIX_YOSYS_PLUGIN_DIRS=\${NIX_BUILD_TOP}/source/${plugin}-plugin/build"
       # sdc and xdc plugins use design introspection for their tests
-      + (lib.optionalString ( plugin == "sdc" || plugin == "xdc" )
-        ":${yosys-symbiflow.design_introspection}/share/yosys/plugins/")
+      + (lib.optionalString (plugin == "sdc" || plugin == "xdc")
+      ":${yosys-symbiflow.design_introspection}/share/yosys/plugins/")
     )
   ];
 
@@ -92,8 +94,8 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
 
   meta = with lib; {
     description = "Symbiflow ${plugin} plugin for Yosys";
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    license = licenses.isc;
+    platforms = platforms.all;
     maintainers = with maintainers; [ ollieB thoughtpolice ];
   };
 }))

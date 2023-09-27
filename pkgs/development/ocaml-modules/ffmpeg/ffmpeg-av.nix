@@ -1,7 +1,14 @@
-{ lib, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
+{ lib
+, buildDunePackage
+, dune-configurator
+, pkg-config
+, fetchFromGitHub
+, callPackage
 , AudioToolbox
 , ffmpeg-base ? callPackage ./base.nix { }
-, ffmpeg-avutil, ffmpeg-avcodec, ffmpeg
+, ffmpeg-avutil
+, ffmpeg-avcodec
+, ffmpeg
 , stdenv
 , VideoToolbox
 }:

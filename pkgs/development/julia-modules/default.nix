@@ -10,7 +10,7 @@
 , writeTextFile
 , python3
 
-# Artifacts dependencies
+  # Artifacts dependencies
 , fetchurl
 , glibc
 , pkgs
@@ -18,37 +18,39 @@
 
 , julia
 
-# Special registry which is equal to JuliaRegistries/General, but every Versions.toml
-# entry is augmented with a Nix sha256 hash
-, augmentedRegistry ? callPackage ./registry.nix {}
+  # Special registry which is equal to JuliaRegistries/General, but every Versions.toml
+  # entry is augmented with a Nix sha256 hash
+, augmentedRegistry ? callPackage ./registry.nix { }
 
-# Other overridable arguments
-, extraLibs ? []
+  # Other overridable arguments
+, extraLibs ? [ ]
 , precompile ? true
 , setDefaultDepot ? true
 , makeWrapperArgs ? ""
-, packageOverrides ? {}
+, packageOverrides ? { }
 , makeTransitiveDependenciesImportable ? false # Used to support symbol indexing
 }:
 
 packageNames:
 
 let
-  util = callPackage ./util.nix {};
+  util = callPackage ./util.nix { };
 
 in
 
 let
   # Some Julia packages require access to Python. Provide a Nixpkgs version so it
   # doesn't try to install its own.
-  pythonToUse = let
-    extraPythonPackages = ((callPackage ./extra-python-packages.nix { inherit python3; }).getExtraPythonPackages packageNames);
-  in (if extraPythonPackages == [] then python3
-      else util.addPackagesToPython python3 (map (pkg: lib.getAttr pkg python3.pkgs) extraPythonPackages));
+  pythonToUse =
+    let
+      extraPythonPackages = ((callPackage ./extra-python-packages.nix { inherit python3; }).getExtraPythonPackages packageNames);
+    in
+    (if extraPythonPackages == [ ] then python3
+    else util.addPackagesToPython python3 (map (pkg: lib.getAttr pkg python3.pkgs) extraPythonPackages));
 
   # Start by wrapping Julia so it has access to Python and any other extra libs.
   # Also, prevent various packages (CondaPkg.jl, PythonCall.jl) from trying to do network calls.
-  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { buildInputs = [makeWrapper]; inherit makeWrapperArgs; } ''
+  juliaWrapped = runCommand "julia-${julia.version}-wrapped" { buildInputs = [ makeWrapper ]; inherit makeWrapperArgs; } ''
     mkdir -p $out/bin
     makeWrapper ${julia}/bin/julia $out/bin/julia \
       --suffix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLibs}" \
@@ -65,7 +67,7 @@ let
   packageImplications = {
     # Because we want to put PythonCall in PyCall mode so it doesn't try to download
     # Python packages
-    PythonCall = ["PyCall"];
+    PythonCall = [ "PyCall" ];
   };
 
   # Invoke Julia resolution logic to determine the full dependency closure
@@ -85,7 +87,7 @@ let
   #   };
   #   ...
   # }
-  dependencies = runCommand "julia-sources.nix" { buildInputs = [(python3.withPackages (ps: with ps; [toml pyyaml])) git]; } ''
+  dependencies = runCommand "julia-sources.nix" { buildInputs = [ (python3.withPackages (ps: with ps; [ toml pyyaml ])) git ]; } ''
     python ${./python}/sources_nix.py \
       "${augmentedRegistry}" \
       '${lib.generators.toJSON {} packageOverridesRepoified}' \
@@ -107,19 +109,19 @@ let
   dependencyUuidToRepo = lib.mapAttrs util.repoifyInfo (lib.mapAttrs fillInOverrideSrc dependencyUuidToInfo);
   dependencyUuidToRepoYaml = writeTextFile {
     name = "dependency-uuid-to-repo.yml";
-    text = lib.generators.toYAML {} dependencyUuidToRepo;
+    text = lib.generators.toYAML { } dependencyUuidToRepo;
   };
 
   # Given the augmented registry, closure info yaml, and dependency path yaml, construct a complete
   # Julia registry containing all the necessary packages
   dependencyUuidToInfoYaml = writeTextFile {
     name = "dependency-uuid-to-info.yml";
-    text = lib.generators.toYAML {} dependencyUuidToInfo;
+    text = lib.generators.toYAML { } dependencyUuidToInfo;
   };
   fillInOverrideSrc' = uuid: info:
     if lib.hasAttr info.name packageOverridesRepoified then (info // { src = lib.getAttr info.name packageOverridesRepoified; }) else info;
   overridesOnly = lib.mapAttrs fillInOverrideSrc' (lib.filterAttrs (uuid: info: info.src == null) dependencyUuidToInfo);
-  minimalRegistry = runCommand "minimal-julia-registry" { buildInputs = [(python3.withPackages (ps: with ps; [toml pyyaml])) git]; } ''
+  minimalRegistry = runCommand "minimal-julia-registry" { buildInputs = [ (python3.withPackages (ps: with ps; [ toml pyyaml ])) git ]; } ''
     python ${./python}/minimal_registry.py \
       "${augmentedRegistry}" \
       "${closureYaml}" \
@@ -130,7 +132,7 @@ let
 
   # Next, deal with artifacts. Scan each artifacts file individually and generate a Nix file that
   # produces the desired Overrides.toml.
-  artifactsNix = runCommand "julia-artifacts.nix" { buildInputs = [(python3.withPackages (ps: with ps; [toml pyyaml]))]; } ''
+  artifactsNix = runCommand "julia-artifacts.nix" { buildInputs = [ (python3.withPackages (ps: with ps; [ toml pyyaml ])) ]; } ''
     python ${./python}/extract_artifacts.py \
       "${dependencyUuidToRepoYaml}" \
       "${closureYaml}" \
@@ -144,9 +146,9 @@ let
   artifacts = import artifactsNix { inherit lib fetchurl pkgs glibc stdenv; };
   overridesJson = writeTextFile {
     name = "Overrides.json";
-    text = lib.generators.toJSON {} artifacts;
+    text = lib.generators.toJSON { } artifacts;
   };
-  overridesToml = runCommand "Overrides.toml" { buildInputs = [(python3.withPackages (ps: with ps; [toml]))]; } ''
+  overridesToml = runCommand "Overrides.toml" { buildInputs = [ (python3.withPackages (ps: with ps; [ toml ])) ]; } ''
     python ${./python}/format_overrides.py \
       "${overridesJson}" \
       "$out"
@@ -158,15 +160,17 @@ let
     inherit closureYaml extraLibs overridesToml packageImplications precompile;
     julia = juliaWrapped;
     registry = minimalRegistry;
-    packageNames = if makeTransitiveDependenciesImportable
+    packageNames =
+      if makeTransitiveDependenciesImportable
       then lib.mapAttrsToList (uuid: info: info.name) dependencyUuidToInfo
       else packageNames;
   };
 
 in
 
-runCommand "julia-${julia.version}-env" {
-  buildInputs = [makeWrapper];
+runCommand "julia-${julia.version}-env"
+{
+  buildInputs = [ makeWrapper ];
 
   inherit julia;
   inherit juliaWrapped;
@@ -183,12 +187,13 @@ runCommand "julia-${julia.version}-env" {
   inherit overridesJson;
   inherit overridesToml;
   inherit projectAndDepot;
-} (''
-  mkdir -p $out/bin
-  makeWrapper ${juliaWrapped}/bin/julia $out/bin/julia \
-    --suffix JULIA_DEPOT_PATH : "${projectAndDepot}/depot" \
-    --set-default JULIA_PROJECT "${projectAndDepot}/project" \
-    --set-default JULIA_LOAD_PATH '@:${projectAndDepot}/project/Project.toml:@v#.#:@stdlib'
-'' + lib.optionalString setDefaultDepot ''
-  sed -i '2 i\JULIA_DEPOT_PATH=''${JULIA_DEPOT_PATH-"$HOME/.julia"}' $out/bin/julia
-'')
+}
+  (''
+    mkdir -p $out/bin
+    makeWrapper ${juliaWrapped}/bin/julia $out/bin/julia \
+      --suffix JULIA_DEPOT_PATH : "${projectAndDepot}/depot" \
+      --set-default JULIA_PROJECT "${projectAndDepot}/project" \
+      --set-default JULIA_LOAD_PATH '@:${projectAndDepot}/project/Project.toml:@v#.#:@stdlib'
+  '' + lib.optionalString setDefaultDepot ''
+    sed -i '2 i\JULIA_DEPOT_PATH=''${JULIA_DEPOT_PATH-"$HOME/.julia"}' $out/bin/julia
+  '')

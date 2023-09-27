@@ -4,11 +4,12 @@
 let
   # for compat with ocaml-lsp
   version_arg =
-    if lib.versionAtLeast ocaml.version "4.13" then {} else { version = "0.20.0"; };
+    if lib.versionAtLeast ocaml.version "4.13" then { } else { version = "0.20.0"; };
 
   inherit (callPackage ./generic.nix (args // version_arg)) src version;
 
-in buildDunePackage rec {
+in
+buildDunePackage rec {
   pname = "ocamlformat-rpc-lib";
   inherit src version;
 

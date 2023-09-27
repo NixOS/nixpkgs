@@ -18,7 +18,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "piaf is not available for OCaml ${ocaml.version}"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "piaf";
   version = "0.1.0";
 

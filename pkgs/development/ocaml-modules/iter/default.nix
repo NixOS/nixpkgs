@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage
-, mdx, ounit2, qcheck-core
+{ lib
+, fetchurl
+, buildDunePackage
+, mdx
+, ounit2
+, qcheck-core
 }:
 
 buildDunePackage rec {

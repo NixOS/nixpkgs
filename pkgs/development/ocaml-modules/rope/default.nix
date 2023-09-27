@@ -3,7 +3,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "rope is not available for OCaml ${ocaml.version}"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "rope";
   version = "0.6.2";
   minimalOCamlVersion = "4.03";
@@ -13,7 +14,7 @@ buildDunePackage rec {
     sha256 = "15cvfa0s1vjx7gjd07d3fkznilishqf4z4h2q5f20wm9ysjh2h2i";
   };
 
-  buildInputs = [ benchmark ] ;
+  buildInputs = [ benchmark ];
 
   meta = {
     homepage = "https://github.com/Chris00/ocaml-rope";

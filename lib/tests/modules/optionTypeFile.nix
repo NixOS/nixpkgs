@@ -8,7 +8,7 @@
 
   options.theOption = lib.mkOption {
     type = config.theType;
-    default = {};
+    default = { };
   };
 
   config.theType = lib.mkMerge [

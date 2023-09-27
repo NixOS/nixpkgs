@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, pkg-config, gtk2, pygobject2, pycairo, pango
-, buildPythonPackage, isPy3k }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python
+, pkg-config
+, gtk2
+, pygobject2
+, pycairo
+, pango
+, buildPythonPackage
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "pygtk";

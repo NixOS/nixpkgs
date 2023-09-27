@@ -2,8 +2,8 @@
 , fetchFromGitHub
 , lib
 
-# since this is a dependency of pytest, we need to avoid
-# circular dependencies
+  # since this is a dependency of pytest, we need to avoid
+  # circular dependencies
 , jinja2
 , railroad-diagrams
 }:
@@ -42,4 +42,4 @@ let
     };
   };
 in
-  pyparsing
+pyparsing

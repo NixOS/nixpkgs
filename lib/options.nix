@@ -40,7 +40,7 @@ let
     last
     ;
   prioritySuggestion = ''
-   Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
+    Use `lib.mkForce value` or `lib.mkDefault value` to change the priority on any of these definitions.
   '';
 in
 rec {
@@ -65,26 +65,27 @@ rec {
   */
   mkOption =
     {
-    # Default value used when no definition is given in the configuration.
-    default ? null,
-    # Textual representation of the default, for the manual.
-    defaultText ? null,
-    # Example value used in the manual.
-    example ? null,
-    # String describing the option.
-    description ? null,
-    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
-    relatedPackages ? null,
-    # Option type, providing type-checking and value merging.
-    type ? null,
-    # Function that converts the option value to something else.
-    apply ? null,
-    # Whether the option is for NixOS developers only.
-    internal ? null,
-    # Whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
-    visible ? null,
-    # Whether the option can be set only once
-    readOnly ? null,
+      # Default value used when no definition is given in the configuration.
+      default ? null
+    , # Textual representation of the default, for the manual.
+      defaultText ? null
+    , # Example value used in the manual.
+      example ? null
+    , # String describing the option.
+      description ? null
+    , # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
+      relatedPackages ? null
+    , # Option type, providing type-checking and value merging.
+      type ? null
+    , # Function that converts the option value to something else.
+      apply ? null
+    , # Whether the option is for NixOS developers only.
+      internal ? null
+    , # Whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
+      visible ? null
+    , # Whether the option can be set only once
+      readOnly ? null
+    ,
     } @ attrs:
     attrs // { _type = "option"; };
 
@@ -98,11 +99,11 @@ rec {
   mkEnableOption =
     # Name for the created option
     name: mkOption {
-    default = false;
-    example = true;
-    description = "Whether to enable ${name}.";
-    type = lib.types.bool;
-  };
+      default = false;
+      example = true;
+      description = "Whether to enable ${name}.";
+      type = lib.types.bool;
+    };
 
   /* Creates an Option attribute set for an option that specifies the
      package a module should use for some purpose.
@@ -185,40 +186,44 @@ rec {
   mkPackageOption =
     # Package set (an instantiation of nixpkgs such as pkgs in modules or another package set)
     pkgs:
-      # Name for the package, shown in option description
-      name:
-      {
-        # Whether the package can be null, for example to disable installing a package altogether (defaults to false)
-        nullable ? false,
-        # The attribute path where the default package is located (may be omitted, in which case it is copied from `name`)
-        default ? name,
-        # A string or an attribute path to use as an example (may be omitted)
-        example ? null,
-        # Additional text to include in the option description (may be omitted)
-        extraDescription ? "",
-        # Representation of the package set passed as pkgs (defaults to `"pkgs"`)
-        pkgsText ? "pkgs"
-      }:
-      let
-        name' = if isList name then last name else name;
-        default' = if isList default then default else [ default ];
-        defaultText = concatStringsSep "." default';
-        defaultValue = attrByPath default'
-          (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
-        defaults = if default != null then {
+    # Name for the package, shown in option description
+    name:
+    {
+      # Whether the package can be null, for example to disable installing a package altogether (defaults to false)
+      nullable ? false
+    , # The attribute path where the default package is located (may be omitted, in which case it is copied from `name`)
+      default ? name
+    , # A string or an attribute path to use as an example (may be omitted)
+      example ? null
+    , # Additional text to include in the option description (may be omitted)
+      extraDescription ? ""
+    , # Representation of the package set passed as pkgs (defaults to `"pkgs"`)
+      pkgsText ? "pkgs"
+    }:
+    let
+      name' = if isList name then last name else name;
+      default' = if isList default then default else [ default ];
+      defaultText = concatStringsSep "." default';
+      defaultValue = attrByPath default'
+        (throw "${defaultText} cannot be found in ${pkgsText}")
+        pkgs;
+      defaults =
+        if default != null then {
           default = defaultValue;
           defaultText = literalExpression ("${pkgsText}." + defaultText);
-        } else optionalAttrs nullable {
-          default = null;
-        };
-      in mkOption (defaults // {
-        description = "The ${name'} package to use."
-          + (if extraDescription == "" then "" else " ") + extraDescription;
-        type = with lib.types; (if nullable then nullOr else lib.id) package;
-      } // optionalAttrs (example != null) {
-        example = literalExpression
-          (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
-      });
+        } else
+          optionalAttrs nullable {
+            default = null;
+          };
+    in
+    mkOption (defaults // {
+      description = "The ${name'} package to use."
+        + (if extraDescription == "" then "" else " ") + extraDescription;
+      type = with lib.types; (if nullable then nullOr else lib.id) package;
+    } // optionalAttrs (example != null) {
+      example = literalExpression
+        (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
+    });
 
   /* Alias of mkPackageOption. Previously used to create options with markdown
      documentation, which is no longer required.
@@ -248,7 +253,7 @@ rec {
     if length list == 1 then head list
     else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
     else if all isList list then concatLists list
-    else if all isAttrs list then foldl' lib.mergeAttrs {} list
+    else if all isAttrs list then foldl' lib.mergeAttrs { } list
     else if all isBool list then foldl' lib.or false list
     else if all isString list then lib.concatStrings list
     else if all isInt list && all (x: x == head list) list then head list
@@ -260,20 +265,23 @@ rec {
     if length defs == 1
     then (head defs).value
     else assert length defs > 1;
-      throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
+    throw "The option `${showOption loc}' is defined multiple times while it's expected to be unique.\n${message}\nDefinition values:${showDefs defs}\n${prioritySuggestion}";
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
-    if defs == [] then abort "This case should never happen."
+    if defs == [ ] then abort "This case should never happen."
     # Return early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then (head defs).value
-    else (foldl' (first: def:
-      if def.value != first.value then
-        throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}\n${prioritySuggestion}"
-      else
-        first) (head defs) (tail defs)).value;
+    else (foldl'
+      (first: def:
+        if def.value != first.value then
+          throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}\n${prioritySuggestion}"
+        else
+          first)
+      (head defs)
+      (tail defs)).value;
 
   /* Extracts values of all "value" keys of the given list.
 
@@ -297,47 +305,49 @@ rec {
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
-  optionAttrSetToDocList = optionAttrSetToDocList' [];
+  optionAttrSetToDocList = optionAttrSetToDocList' [ ];
 
   optionAttrSetToDocList' = _: options:
-    concatMap (opt:
-      let
-        name = showOption opt.loc;
-        docOption = {
-          loc = opt.loc;
-          inherit name;
-          description = opt.description or null;
-          declarations = filter (x: x != unknownModule) opt.declarations;
-          internal = opt.internal or false;
-          visible =
-            if (opt?visible && opt.visible == "shallow")
-            then true
-            else opt.visible or true;
-          readOnly = opt.readOnly or false;
-          type = opt.type.description or "unspecified";
-        }
-        // optionalAttrs (opt ? example) {
-          example =
-            builtins.addErrorContext "while evaluating the example of option `${name}`" (
-              renderOptionValue opt.example
-            );
-        }
-        // optionalAttrs (opt ? defaultText || opt ? default) {
-          default =
-            builtins.addErrorContext "while evaluating the ${if opt?defaultText then "defaultText" else "default value"} of option `${name}`" (
-              renderOptionValue (opt.defaultText or opt.default)
-            );
-        }
-        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
+    concatMap
+      (opt:
+        let
+          name = showOption opt.loc;
+          docOption = {
+            loc = opt.loc;
+            inherit name;
+            description = opt.description or null;
+            declarations = filter (x: x != unknownModule) opt.declarations;
+            internal = opt.internal or false;
+            visible =
+              if (opt?visible && opt.visible == "shallow")
+              then true
+              else opt.visible or true;
+            readOnly = opt.readOnly or false;
+            type = opt.type.description or "unspecified";
+          }
+          // optionalAttrs (opt ? example) {
+            example =
+              builtins.addErrorContext "while evaluating the example of option `${name}`" (
+                renderOptionValue opt.example
+              );
+          }
+          // optionalAttrs (opt ? defaultText || opt ? default) {
+            default =
+              builtins.addErrorContext "while evaluating the ${if opt?defaultText then "defaultText" else "default value"} of option `${name}`" (
+                renderOptionValue (opt.defaultText or opt.default)
+              );
+          }
+          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
-        subOptions =
-          let ss = opt.type.getSubOptions opt.loc;
-          in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
-        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
-      in
+          subOptions =
+            let ss = opt.type.getSubOptions opt.loc;
+            in if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
+          subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
+        in
         # To find infinite recursion in NixOS option docs:
-        # builtins.trace opt.loc
-        [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
+          # builtins.trace opt.loc
+        [ docOption ] ++ optionals subOptionsVisible subOptions)
+      (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
@@ -355,7 +365,7 @@ rec {
     if isDerivation x then
       { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
     else if isList x then map scrubOptionValue x
-    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
+    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x [ "_args" ])
     else x;
 
 
@@ -364,10 +374,13 @@ rec {
   */
   renderOptionValue = v:
     if v ? _type && v ? text then v
-    else literalExpression (lib.generators.toPretty {
-      multiline = true;
-      allowPrettyValues = true;
-    } v);
+    else
+      literalExpression (lib.generators.toPretty
+        {
+          multiline = true;
+          allowPrettyValues = true;
+        }
+        v);
 
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
@@ -408,45 +421,51 @@ rec {
        (showOption ["foo" "*" "bar"]) == "foo.*.bar"
        (showOption ["foo" "<name>" "bar"]) == "foo.<name>.bar"
   */
-  showOption = parts: let
-    escapeOptionPart = part:
-      let
-        # We assume that these are "special values" and not real configuration data.
-        # If it is real configuration data, it is rendered incorrectly.
-        specialIdentifiers = [
-          "<name>"          # attrsOf (submodule {})
-          "*"               # listOf (submodule {})
-          "<function body>" # functionTo
-        ];
-      in if builtins.elem part specialIdentifiers
-         then part
-         else lib.strings.escapeNixIdentifier part;
-    in (concatStringsSep ".") (map escapeOptionPart parts);
+  showOption = parts:
+    let
+      escapeOptionPart = part:
+        let
+          # We assume that these are "special values" and not real configuration data.
+          # If it is real configuration data, it is rendered incorrectly.
+          specialIdentifiers = [
+            "<name>" # attrsOf (submodule {})
+            "*" # listOf (submodule {})
+            "<function body>" # functionTo
+          ];
+        in
+        if builtins.elem part specialIdentifiers
+        then part
+        else lib.strings.escapeNixIdentifier part;
+    in
+    (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
-  showDefs = defs: concatMapStrings (def:
-    let
-      # Pretty print the value for display, if successful
-      prettyEval = builtins.tryEval
-        (lib.generators.toPretty { }
-          (lib.generators.withRecursion { depthLimit = 10; throwOnDepthLimit = false; } def.value));
-      # Split it into its lines
-      lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
-      # Only display the first 5 lines, and indent them for better visibility
-      value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
-      result =
-        # Don't print any value if evaluating the value strictly fails
-        if ! prettyEval.success then ""
-        # Put it on a new line if it consists of multiple
-        else if length lines > 1 then ":\n    " + value
-        else ": " + value;
-    in "\n- In `${def.file}'${result}"
-  ) defs;
+  showDefs = defs: concatMapStrings
+    (def:
+      let
+        # Pretty print the value for display, if successful
+        prettyEval = builtins.tryEval
+          (lib.generators.toPretty { }
+            (lib.generators.withRecursion { depthLimit = 10; throwOnDepthLimit = false; } def.value));
+        # Split it into its lines
+        lines = filter (v: ! isList v) (builtins.split "\n" prettyEval.value);
+        # Only display the first 5 lines, and indent them for better visibility
+        value = concatStringsSep "\n    " (take 5 lines ++ optional (length lines > 5) "...");
+        result =
+          # Don't print any value if evaluating the value strictly fails
+          if ! prettyEval.success then ""
+          # Put it on a new line if it consists of multiple
+          else if length lines > 1 then ":\n    " + value
+          else ": " + value;
+      in
+      "\n- In `${def.file}'${result}"
+    )
+    defs;
 
   showOptionWithDefLocs = opt: ''
-      ${showOption opt.loc}, with values defined in:
-      ${concatMapStringsSep "\n" (defFile: "  - ${defFile}") opt.files}
-    '';
+    ${showOption opt.loc}, with values defined in:
+    ${concatMapStringsSep "\n" (defFile: "  - ${defFile}") opt.files}
+  '';
 
   unknownModule = "<unknown-file>";
 

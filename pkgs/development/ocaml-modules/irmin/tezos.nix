@@ -1,6 +1,17 @@
-{ lib, buildDunePackage
-, irmin, irmin-pack, ppx_irmin, digestif, cmdliner, fmt, yojson, tezos-base58
-, alcotest, hex, irmin-test, fpath
+{ lib
+, buildDunePackage
+, irmin
+, irmin-pack
+, ppx_irmin
+, digestif
+, cmdliner
+, fmt
+, yojson
+, tezos-base58
+, alcotest
+, hex
+, irmin-test
+, fpath
 }:
 
 buildDunePackage rec {

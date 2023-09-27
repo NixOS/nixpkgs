@@ -1,18 +1,19 @@
-{
-  nixpkgs ? ../../..,
-  system ? builtins.currentSystem,
-  pkgs ? import nixpkgs {
-    config = {};
-    overlays = [];
+{ nixpkgs ? ../../..
+, system ? builtins.currentSystem
+, pkgs ? import nixpkgs {
+    config = { };
+    overlays = [ ];
     inherit system;
-  },
-  nixVersions ? import ../../tests/nix-for-tests.nix { inherit pkgs; },
-  libpath ? ../..,
-  # Random seed
-  seed ? null,
+  }
+, nixVersions ? import ../../tests/nix-for-tests.nix { inherit pkgs; }
+, libpath ? ../..
+, # Random seed
+  seed ? null
+,
 }:
 
-pkgs.runCommand "lib-path-tests" {
+pkgs.runCommand "lib-path-tests"
+{
   nativeBuildInputs = [
     nixVersions.stable
   ] ++ (with pkgs; [

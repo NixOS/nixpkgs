@@ -3,12 +3,14 @@
 , callPackage
 , cmake
 , ninja
-, useSwift ? true, swift
+, useSwift ? true
+, swift
 }:
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-libdispatch";
 
   inherit (sources) version;

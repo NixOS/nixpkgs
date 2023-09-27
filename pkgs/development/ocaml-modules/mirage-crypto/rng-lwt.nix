@@ -1,5 +1,12 @@
-{ buildDunePackage, mirage-crypto, mirage-crypto-rng, dune-configurator
-, duration, logs, mtime, lwt }:
+{ buildDunePackage
+, mirage-crypto
+, mirage-crypto-rng
+, dune-configurator
+, duration
+, logs
+, mtime
+, lwt
+}:
 
 buildDunePackage rec {
   pname = "mirage-crypto-rng-lwt";

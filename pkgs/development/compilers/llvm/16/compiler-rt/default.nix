@@ -1,6 +1,17 @@
-{ lib, stdenv, llvm_meta, version
-, monorepoSrc, runCommand
-, cmake, ninja, python3, xcbuild, libllvm, linuxHeaders, libcxxabi, libxcrypt
+{ lib
+, stdenv
+, llvm_meta
+, version
+, monorepoSrc
+, runCommand
+, cmake
+, ninja
+, python3
+, xcbuild
+, libllvm
+, linuxHeaders
+, libcxxabi
+, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -14,7 +25,7 @@ let
 
   baseName = "compiler-rt";
 
-  src = runCommand "${baseName}-src-${version}" {} ''
+  src = runCommand "${baseName}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${baseName} "$out"
@@ -58,8 +69,8 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_MEMPROF=OFF"
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
   ] ++ lib.optionals (useLLVM || bareMetal) [
-     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal || isDarwinStatic ) [
+    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal || isDarwinStatic) [
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
@@ -135,7 +146,7 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '' + lib.optionalString doFakeLibgcc ''
-     ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
   '';
 
   meta = llvm_meta // {

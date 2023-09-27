@@ -18,10 +18,10 @@ buildDunePackage rec {
   duneVersion = "3";
 
   buildInputs = lsp.buildInputs ++ [ lsp re ]
-  ++ lib.optional (lib.versionAtLeast version "1.9") spawn
-  ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ]
-  ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
-  ++ lib.optional (lib.versionAtLeast version "1.16.2") [ odoc-parser merlin-lib ];
+    ++ lib.optional (lib.versionAtLeast version "1.9") spawn
+    ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ]
+    ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
+    ++ lib.optional (lib.versionAtLeast version "1.16.2") [ odoc-parser merlin-lib ];
 
   nativeBuildInputs = [ makeWrapper ];
 

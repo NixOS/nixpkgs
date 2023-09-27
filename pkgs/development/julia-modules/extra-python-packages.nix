@@ -8,15 +8,18 @@ with lib;
 
 rec {
   packageMapping = {
-    ExcelFiles = ["xlrd"];
-    PyPlot = ["matplotlib"];
-    PythonPlot = ["matplotlib"];
-    SymPy = ["sympy"];
+    ExcelFiles = [ "xlrd" ];
+    PyPlot = [ "matplotlib" ];
+    PythonPlot = [ "matplotlib" ];
+    SymPy = [ "sympy" ];
   };
 
-  getExtraPythonPackages = names: concatMap (name: let
-    allCandidates = if hasAttr name packageMapping then getAttr name packageMapping else [];
-  in
-    filter (x: hasAttr x python3.pkgs) allCandidates
-  ) names;
+  getExtraPythonPackages = names: concatMap
+    (name:
+      let
+        allCandidates = if hasAttr name packageMapping then getAttr name packageMapping else [ ];
+      in
+      filter (x: hasAttr x python3.pkgs) allCandidates
+    )
+    names;
 }

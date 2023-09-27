@@ -18,18 +18,18 @@ rec {
        addMetaAttrs {description = "Bla blah";} somePkg
   */
   addMetaAttrs = newAttrs: drv:
-    drv // { meta = (drv.meta or {}) // newAttrs; };
+    drv // { meta = (drv.meta or { }) // newAttrs; };
 
 
   /* Disable Hydra builds of given derivation.
   */
-  dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
+  dontDistribute = drv: addMetaAttrs { hydraPlatforms = [ ]; } drv;
 
 
   /* Change the symbolic name of a package for presentation purposes
      (i.e., so that nix-env users can tell them apart).
   */
-  setName = name: drv: drv // {inherit name;};
+  setName = name: drv: drv // { inherit name; };
 
 
   /* Like `setName`, but takes the previous name as an argument.
@@ -37,7 +37,7 @@ rec {
      Example:
        updateName (oldName: oldName + "-experimental") somePkg
   */
-  updateName = updater: drv: drv // {name = updater (drv.name);};
+  updateName = updater: drv: drv // { name = updater (drv.name); };
 
 
   /* Append a suffix to the name of a package (before the version
@@ -97,11 +97,14 @@ rec {
     # Avoiding an attrset allocation results in significant  performance gains (~2-30) across the board in OfBorg
     # because this is a hot path for nixpkgs.
     if isString elem then platform ? system && elem == platform.system
-    else matchAttrs (
-      # Normalize platform attrset.
-      if elem ? parsed then elem
-      else { parsed = elem; }
-    ) platform
+    else
+      matchAttrs
+        (
+          # Normalize platform attrset.
+          if elem ? parsed then elem
+          else { parsed = elem; }
+        )
+        platform
   );
 
   /* Check if a package is available on a given platform.
@@ -115,7 +118,7 @@ rec {
   */
   availableOn = platform: pkg:
     ((!pkg?meta.platforms) || any (platformMatch platform) pkg.meta.platforms) &&
-    all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or []);
+    all (elem: !platformMatch platform elem) (pkg.meta.badPlatforms or [ ]);
 
   /* Get the corresponding attribute in lib.licenses
      from the SPDX ID.
@@ -138,10 +141,11 @@ rec {
     let
       spdxLicenses = lib.mapAttrs (id: ls: assert lib.length ls == 1; builtins.head ls)
         (lib.groupBy (l: lib.toLower l.spdxId) (lib.filter (l: l ? spdxId) (lib.attrValues lib.licenses)));
-    in licstr:
+    in
+    licstr:
       spdxLicenses.${ lib.toLower licstr } or (
         lib.warn "getLicenseFromSpdxId: No license matches the given SPDX ID: ${licstr}"
-        { shortName = licstr; }
+          { shortName = licstr; }
       );
 
   /* Get the path to the main program of a package based on meta.mainProgram
@@ -154,12 +158,14 @@ rec {
        getExe pkgs.mustache-go
        => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
   */
-  getExe = x: getExe' x (x.meta.mainProgram or (
-    # This could be turned into an error when 23.05 is at end of life
-    lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
-    lib.getName
-    x
-  ));
+  getExe = x: getExe' x (
+    x.meta.mainProgram or (
+      # This could be turned into an error when 23.05 is at end of life
+      lib.warn "getExe: Package ${lib.strings.escapeNixIdentifier x.meta.name or x.pname or x.name} does not have the meta.mainProgram attribute. We'll assume that the main program has the same name for now, but this behavior is deprecated, because it leads to surprising errors when the assumption does not hold. If the package has a main program, please set `meta.mainProgram` in its definition to make this warning go away. Otherwise, if the package does not have a main program, or if you don't control its definition, use getExe' to specify the name to the program, such as lib.getExe' foo \"bar\"."
+        lib.getName
+        x
+    )
+  );
 
   /* Get the path of a program of a derivation.
 

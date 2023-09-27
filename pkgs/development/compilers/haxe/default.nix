@@ -115,7 +115,8 @@ let
         platforms = platforms.linux ++ platforms.darwin;
       };
     };
-in {
+in
+{
   haxe_4_0 = generic {
     version = "4.0.5";
     sha256 = "0f534pchdx0m057ixnk07ab4s518ica958pvpd0vfjsrxg5yjkqa";

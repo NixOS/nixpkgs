@@ -12,7 +12,8 @@
 , stdenv
 , texinfo
 , unzip
-, which }:
+, which
+}:
 
 let
   s = import ./sources.nix { inherit fetchurl fetchFromGitHub; };

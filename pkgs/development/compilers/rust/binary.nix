@@ -1,5 +1,13 @@
-{ lib, stdenv, makeWrapper, wrapRustc, bash, curl, darwin, zlib
-, autoPatchelfHook, gcc
+{ lib
+, stdenv
+, makeWrapper
+, wrapRustc
+, bash
+, curl
+, darwin
+, zlib
+, autoPatchelfHook
+, gcc
 , version
 , src
 , platform
@@ -12,10 +20,9 @@ let
 
   bootstrapping = versionType == "bootstrap";
 
-  installComponents
-    = "rustc,rust-std-${platform}"
+  installComponents = "rustc,rust-std-${platform}"
     + (optionalString bootstrapping ",cargo")
-    ;
+  ;
 in
 
 rec {

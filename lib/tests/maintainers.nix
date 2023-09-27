@@ -1,14 +1,15 @@
 # to run these tests (and the others)
 # nix-build nixpkgs/lib/tests/release.nix
 # These tests should stay in sync with the comment in maintainers/maintainers-list.nix
-{ # The pkgs used for dependencies for the testing itself
-  pkgs ? import ../.. {}
+{
+  # The pkgs used for dependencies for the testing itself
+  pkgs ? import ../.. { }
 , lib ? pkgs.lib
 }:
 
 let
   checkMaintainer = handle: uncheckedAttrs:
-  let
+    let
       prefix = [ "lib" "maintainers" handle ];
       checkedAttrs = (lib.modules.evalModules {
         inherit prefix;
@@ -34,20 +35,23 @@ let
       '' ++ lib.optional (checkedAttrs.email != null && lib.hasSuffix "noreply.github.com" checkedAttrs.email) ''
         echo ${lib.escapeShellArg (lib.showOption prefix)}': If an email address is given, it should allow people to reach you. If you do not want that, you can just provide `github` or `matrix` instead.'
       '';
-    in lib.deepSeq checkedAttrs checks;
+    in
+    lib.deepSeq checkedAttrs checks;
 
   missingGithubIds = lib.concatLists (lib.mapAttrsToList checkMaintainer lib.maintainers);
 
-  success = pkgs.runCommand "checked-maintainers-success" {} ">$out";
+  success = pkgs.runCommand "checked-maintainers-success" { } ">$out";
 
-  failure = pkgs.runCommand "checked-maintainers-failure" {
-    nativeBuildInputs = [ pkgs.curl pkgs.jq ];
-    outputHash = "sha256:${lib.fakeSha256}";
-    outputHAlgo = "sha256";
-    outputHashMode = "flat";
-    SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
-  } ''
+  failure = pkgs.runCommand "checked-maintainers-failure"
+    {
+      nativeBuildInputs = [ pkgs.curl pkgs.jq ];
+      outputHash = "sha256:${lib.fakeSha256}";
+      outputHAlgo = "sha256";
+      outputHashMode = "flat";
+      SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+    } ''
     ${lib.concatStringsSep "\n" missingGithubIds}
     exit 1
   '';
-in if missingGithubIds == [] then success else failure
+in
+if missingGithubIds == [ ] then success else failure

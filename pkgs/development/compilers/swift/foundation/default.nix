@@ -18,7 +18,8 @@
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-foundation";
 
   inherit (sources) version;

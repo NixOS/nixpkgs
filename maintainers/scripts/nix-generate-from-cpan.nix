@@ -6,7 +6,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with perlPackages; [
-    perl GetoptLongDescriptive CPANPLUS Readonly LogLog4perl
+    perl
+    GetoptLongDescriptive
+    CPANPLUS
+    Readonly
+    LogLog4perl
   ];
 
   dontUnpack = true;

@@ -1,7 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
 , pkg-config
-, bison, flex
-, makeWrapper }:
+, bison
+, flex
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
 

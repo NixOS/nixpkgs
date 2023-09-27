@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, github
-, yojson, atdgen
+{ lib
+, buildDunePackage
+, github
+, yojson
+, atdgen
 }:
 
 buildDunePackage {

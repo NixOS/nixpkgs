@@ -1,6 +1,20 @@
-{ lib, buildDunePackage, astring, cohttp-lwt, cohttp-lwt-unix, irmin, webmachine
-, fmt, jsonm, logs, lwt, uri
-, git-unix, irmin-git, irmin-test, irmin-fs, digestif
+{ lib
+, buildDunePackage
+, astring
+, cohttp-lwt
+, cohttp-lwt-unix
+, irmin
+, webmachine
+, fmt
+, jsonm
+, logs
+, lwt
+, uri
+, git-unix
+, irmin-git
+, irmin-test
+, irmin-fs
+, digestif
 , cacert
 }:
 
@@ -15,7 +29,12 @@ buildDunePackage rec {
   propagatedBuildInputs = [ astring cohttp-lwt cohttp-lwt-unix fmt jsonm logs lwt uri irmin webmachine ];
 
   checkInputs = [
-    digestif git-unix irmin-git irmin-test irmin-fs cacert
+    digestif
+    git-unix
+    irmin-git
+    irmin-test
+    irmin-fs
+    cacert
   ];
 
   doCheck = true;

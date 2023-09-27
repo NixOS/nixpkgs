@@ -1,6 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, writeText, openjdk17_headless
-, openjdk19_headless, gradle_7, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst
-, libXxf86vm, glib, alsa-lib, ffmpeg_4, python3, ruby, icu68
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, writeText
+, openjdk17_headless
+, openjdk19_headless
+, gradle_7
+, pkg-config
+, perl
+, cmake
+, gperf
+, gtk2
+, gtk3
+, libXtst
+, libXxf86vm
+, glib
+, alsa-lib
+, ffmpeg_4
+, python3
+, ruby
+, icu68
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -70,7 +89,8 @@ let
     outputHash = "sha256-dV7/U5GpFxhI13smZ587C6cVE4FRNPY0zexZkYK4Yqo=";
   };
 
-in makePackage {
+in
+makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''

@@ -1,5 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl
-, flint, pplite
+{ stdenv
+, lib
+, fetchFromGitHub
+, perl
+, gmp
+, mpfr
+, ppl
+, ocaml
+, findlib
+, camlidl
+, mlgmpidl
+, flint
+, pplite
 }:
 
 stdenv.mkDerivation rec {

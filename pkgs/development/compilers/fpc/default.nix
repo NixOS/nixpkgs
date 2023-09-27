@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ startFPC gawk ]
     ++ lib.optionals stdenv.isDarwin [
-      libiconv
-      darwin.apple_sdk.frameworks.CoreFoundation
-    ];
+    libiconv
+    darwin.apple_sdk.frameworks.CoreFoundation
+  ];
 
   glibc = stdenv.cc.libc.out;
 
@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = lib.optionalString
-    stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
+    stdenv.isDarwin
+    (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
   makeFlags = [ "NOGDB=1" "FPC=${startFPC}/bin/fpc" ];
 

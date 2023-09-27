@@ -3,7 +3,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "piqi is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   version = "0.6.16";
   pname = "piqi";
   name = "ocaml${ocaml.version}-${pname}-${version}";

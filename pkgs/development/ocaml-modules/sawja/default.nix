@@ -8,7 +8,8 @@ in
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "${pname} is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation
+{
 
   pname = "ocaml${ocaml.version}-${pname}";
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   propagatedBuildInputs = [ javalib ];
 

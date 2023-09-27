@@ -66,7 +66,8 @@ self: super: {
   hashable = addBuildDepends [
     self.data-array-byte
     self.base-orphans
-  ] super.hashable;
+  ]
+    super.hashable;
 
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
@@ -91,12 +92,14 @@ self: super: {
 
   # hnix 0.9.0 does not provide an executable for ghc < 8.10, so define completions here for now.
   hnix = self.generateOptparseApplicativeCompletions [ "hnix" ]
-    (overrideCabal (drv: {
-      # executable is allowed for ghc >= 8.10 and needs repline
-      executableHaskellDepends = drv.executableToolDepends or [] ++ [ self.repline ];
-    }) super.hnix);
+    (overrideCabal
+      (drv: {
+        # executable is allowed for ghc >= 8.10 and needs repline
+        executableHaskellDepends = drv.executableToolDepends or [ ] ++ [ self.repline ];
+      })
+      super.hnix);
 
-  haskell-language-server =  throw "haskell-language-server dropped support for ghc 8.10 in version 2.3.0.0 please use a newer ghc version or an older nixpkgs version";
+  haskell-language-server = throw "haskell-language-server dropped support for ghc 8.10 in version 2.3.0.0 please use a newer ghc version or an older nixpkgs version";
 
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_2_8_20230729;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_2_1_1;
@@ -123,9 +126,10 @@ self: super: {
   # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
   OneTuple = addBuildDepends [
     self.foldable1-classes-compat
-  ] (super.OneTuple.override {
-    ghc-prim = self.hashable;
-  });
+  ]
+    (super.OneTuple.override {
+      ghc-prim = self.hashable;
+    });
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
@@ -134,7 +138,8 @@ self: super: {
   # https://github.com/paul-rouse/mysql-simple/blob/872604f87044ff6d1a240d9819a16c2bdf4ed8f5/Database/MySQL/Internal/Blaze.hs#L4-L10
   mysql-simple = addBuildDepends [
     self.blaze-textual
-  ] super.mysql-simple;
+  ]
+    super.mysql-simple;
 
   taffybar = markUnbroken (doDistribute super.taffybar);
 

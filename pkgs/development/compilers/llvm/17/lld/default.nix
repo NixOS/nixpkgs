@@ -1,6 +1,9 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , buildLlvmTools
-, monorepoSrc, runCommand
+, monorepoSrc
+, runCommand
 , cmake
 , ninja
 , libxml2
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${pname}-src-${version}" {} ''
+  src = runCommand "${pname}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${pname} "$out"

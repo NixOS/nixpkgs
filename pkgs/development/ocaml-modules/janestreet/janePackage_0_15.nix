@@ -5,8 +5,9 @@
 , hash
 , minimalOCamlVersion ? "4.11"
 , doCheck ? true
-, buildInputs ? []
-, ...}@args:
+, buildInputs ? [ ]
+, ...
+}@args:
 
 buildDunePackage (args // {
   duneVersion = "3";

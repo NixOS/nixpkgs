@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , pkgsBuildBuild
 , fetch
 , fetchpatch
@@ -16,11 +18,11 @@
 , buildLlvmTools
 , debugVersion ? false
 , doCheck ? stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isMusl) && (!stdenv.hostPlatform.isRiscV)
-  && (stdenv.hostPlatform == stdenv.buildPlatform)
+    && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-# broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-# broken for the armv7l builder
+  # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+  # broken for the armv7l builder
 , enablePFM ? stdenv.isLinux && !stdenv.hostPlatform.isAarch
 , enablePolly ? false # TODO should be on by default
 }:
@@ -49,13 +51,16 @@ let
   #
   # So, we "manually" assemble one python derivation for the package to depend
   # on, taking into account whether checks are enabled or not:
-  python = if doCheck then
-    let
-      checkDeps = ps: with ps; [ psutil ];
-    in python3.withPackages checkDeps
-  else python3;
+  python =
+    if doCheck then
+      let
+        checkDeps = ps: with ps; [ psutil ];
+      in
+      python3.withPackages checkDeps
+    else python3;
 
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
@@ -228,8 +233,9 @@ in stdenv.mkDerivation (rec {
     ] ++ optionals enableSharedLibraries [
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
-  in flagsForLlvmConfig ++ [
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+  in
+  flagsForLlvmConfig ++ [
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
@@ -279,8 +285,9 @@ in stdenv.mkDerivation (rec {
           "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
           "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "lib"}/libexec"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
-      + lib.concatStringsSep ";" (lib.concatLists [
+      in
+      "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
+        + lib.concatStringsSep ";" (lib.concatLists [
         flagsForLlvmConfig
         nativeToolchainFlags
         nativeInstallFlags
@@ -344,7 +351,7 @@ in stdenv.mkDerivation (rec {
     make docs-llvm-man
   '';
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   installPhase = ''
     make -C docs install

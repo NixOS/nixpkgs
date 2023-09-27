@@ -1,7 +1,23 @@
-{ mkDerivation, aeson, ansi-wl-pprint, avh4-lib, base, bytestring
-, elm-format-lib, elm-format-test-lib, fetchgit, hspec, lib
-, optparse-applicative, QuickCheck, quickcheck-io, relude, tasty
-, tasty-hspec, tasty-hunit, tasty-quickcheck, text
+{ mkDerivation
+, aeson
+, ansi-wl-pprint
+, avh4-lib
+, base
+, bytestring
+, elm-format-lib
+, elm-format-test-lib
+, fetchgit
+, hspec
+, lib
+, optparse-applicative
+, QuickCheck
+, quickcheck-io
+, relude
+, tasty
+, tasty-hspec
+, tasty-hunit
+, tasty-quickcheck
+, text
 }:
 mkDerivation rec {
   pname = "elm-format";
@@ -15,13 +31,33 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson ansi-wl-pprint avh4-lib base bytestring elm-format-lib
-    optparse-applicative relude text
+    aeson
+    ansi-wl-pprint
+    avh4-lib
+    base
+    bytestring
+    elm-format-lib
+    optparse-applicative
+    relude
+    text
   ];
   testHaskellDepends = [
-    aeson ansi-wl-pprint avh4-lib base bytestring elm-format-lib
-    elm-format-test-lib hspec optparse-applicative QuickCheck
-    quickcheck-io relude tasty tasty-hspec tasty-hunit tasty-quickcheck
+    aeson
+    ansi-wl-pprint
+    avh4-lib
+    base
+    bytestring
+    elm-format-lib
+    elm-format-test-lib
+    hspec
+    optparse-applicative
+    QuickCheck
+    quickcheck-io
+    relude
+    tasty
+    tasty-hspec
+    tasty-hunit
+    tasty-quickcheck
     text
   ];
   doHaddock = false;

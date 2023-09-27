@@ -41,7 +41,8 @@ let
       "3.10" = "sha256-d0hbiJ44lEu8V4XX7JpZVSTQwwykwKPUfiqetRBI6uI=";
     }.${gnuradio.versionAttr.major};
   };
-in mkDerivation {
+in
+mkDerivation {
   pname = "gr-osmosdr";
   inherit version src;
   disabledForGRafter = "3.11";
@@ -68,8 +69,8 @@ in mkDerivation {
     thrift
     python.pkgs.thrift
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      python.pkgs.numpy
-      python.pkgs.pybind11
+    python.pkgs.numpy
+    python.pkgs.pybind11
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
     darwin.apple_sdk.frameworks.Security
@@ -86,13 +87,13 @@ in mkDerivation {
     pkg-config
     swig
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
-      (if (gnuradio.versionAttr.major == "3.7") then
-        python.pkgs.cheetah
-      else
-        python.pkgs.mako
-      )
-      python
-    ]
+    (if (gnuradio.versionAttr.major == "3.7") then
+      python.pkgs.cheetah
+    else
+      python.pkgs.mako
+    )
+    python
+  ]
   ;
 
   meta = with lib; {

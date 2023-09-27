@@ -2,8 +2,8 @@
 
 let
   ARCH = {
-    i686-linux    = "linux32";
-    x86_64-linux  = "linux64";
+    i686-linux = "linux32";
+    x86_64-linux = "linux64";
     aarch64-linux = "linux64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
@@ -28,9 +28,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Logic-based programming langage";
-    homepage    = "http://picat-lang.org/";
-    license     = licenses.mpl20;
-    platforms   = platforms.linux;
+    homepage = "http://picat-lang.org/";
+    license = licenses.mpl20;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ earldouglas thoughtpolice ];
   };
 }

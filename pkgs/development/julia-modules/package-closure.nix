@@ -38,7 +38,7 @@ let
     foreach(pkg -> ctx.env.project.deps[pkg.name] = pkg.uuid, pkgs)
 
     pkgs, deps_map = _resolve(ctx, pkgs, PRESERVE_NONE)
-'';
+  '';
 
   resolveCode1_8 = ''
     import Pkg.API: handle_package_input!
@@ -160,7 +160,7 @@ let
   '';
 in
 
-runCommand "julia-package-closure.yml" { buildInputs = [julia (python3.withPackages (ps: with ps; [pyyaml]))]; } ''
+runCommand "julia-package-closure.yml" { buildInputs = [ julia (python3.withPackages (ps: with ps; [ pyyaml ])) ]; } ''
   mkdir home
   export HOME=$(pwd)/home
 

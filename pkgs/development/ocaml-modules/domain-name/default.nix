@@ -1,4 +1,7 @@
-{ lib, buildDunePackage, ocaml, fetchurl
+{ lib
+, buildDunePackage
+, ocaml
+, fetchurl
 , alcotest
 }:
 

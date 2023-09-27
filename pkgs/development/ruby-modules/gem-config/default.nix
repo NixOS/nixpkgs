@@ -17,18 +17,107 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
-, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick, lasem
-, pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
-, cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre, pcre2, gecode_3, curl
-, msgpack, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, gtk3, buildRubyGem
-, cairo, expat, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
-, file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
-, bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libepoxy, libxkbcommon, libmaxminddb, libyaml
-, cargo, rustc, rustPlatform
-, autoSignDarwinBinariesHook, fetchpatch
+{ lib
+, fetchurl
+, writeScript
+, ruby
+, libkrb5
+, libxml2
+, libxslt
+, python2
+, stdenv
+, which
+, libiconv
+, postgresql
+, v8
+, clang
+, sqlite
+, zlib
+, imagemagick
+, lasem
+, pkg-config
+, ncurses
+, xapian
+, gpgme
+, util-linux
+, tzdata
+, icu
+, libffi
+, cmake
+, libssh2
+, openssl
+, openssl_1_1
+, libmysqlclient
+, git
+, perl
+, pcre
+, pcre2
+, gecode_3
+, curl
+, msgpack
+, libsodium
+, snappy
+, libossp_uuid
+, lxc
+, libpcap
+, xorg
+, gtk2
+, gtk3
+, buildRubyGem
+, cairo
+, expat
+, re2
+, rake
+, gobject-introspection
+, gdk-pixbuf
+, zeromq
+, czmq
+, graphicsmagick
+, libcxx
+, file
+, libvirt
+, glib
+, vips
+, taglib
+, libopus
+, linux-pam
+, libidn
+, protobuf
+, fribidi
+, harfbuzz
+, bison
+, flex
+, pango
+, python3
+, patchelf
+, binutils
+, freetds
+, wrapGAppsHook
+, atk
+, bundler
+, libsass
+, dart-sass
+, libexif
+, libselinux
+, libsepol
+, shared-mime-info
+, libthai
+, libdatrie
+, CoreServices
+, DarwinTools
+, cctools
+, libtool
+, discount
+, exiv2
+, libepoxy
+, libxkbcommon
+, libmaxminddb
+, libyaml
+, cargo
+, rustc
+, rustPlatform
+, autoSignDarwinBinariesHook
+, fetchpatch
 }@args:
 
 let
@@ -56,10 +145,11 @@ in
   bundler = attrs:
     let
       templates = "${attrs.ruby.gemPath}/gems/${attrs.gemName}-${attrs.version}/lib/bundler/templates/";
-    in {
+    in
+    {
       # patching shebangs would fail on the templates/Executable file, so we
       # temporarily remove the executable flag.
-      preFixup  = "chmod -x $out/${templates}/Executable";
+      preFixup = "chmod -x $out/${templates}/Executable";
       postFixup = ''
         chmod +x $out/${templates}/Executable
 
@@ -71,7 +161,7 @@ in
   cairo = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre2 xorg.libpthreadstubs xorg.libXdmcp];
+    buildInputs = [ gtk2 pcre2 xorg.libpthreadstubs xorg.libXdmcp ];
   };
 
   cairo-gobject = attrs: {
@@ -267,15 +357,16 @@ in
     meta.mainProgram = "ruby-parse";
   };
 
-  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2") {
-    dontBuild = false;
-    postPatch = ''
-      sed -i "s;'https://codeload.github.com.*';'${fetchurl {
-        url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
-        sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
-      }}';" ext/pg_query/extconf.rb
-    '';
-  } // lib.optionalAttrs (attrs.version == "1.3.0") {
+  pg_query = attrs: lib.optionalAttrs (attrs.version == "2.0.2")
+    {
+      dontBuild = false;
+      postPatch = ''
+        sed -i "s;'https://codeload.github.com.*';'${fetchurl {
+          url = "https://codeload.github.com/lfittl/libpg_query/tar.gz/13-2.0.2";
+          sha256 = "0ms2s6hmy8qyzv4g1hj4i2p5fws1v8lrj73b2knwbp2ipd45yj7y";
+        }}';" ext/pg_query/extconf.rb
+      '';
+    } // lib.optionalAttrs (attrs.version == "1.3.0") {
     # Needed for gitlab
     dontBuild = false;
     postPatch = ''
@@ -292,11 +383,13 @@ in
 
   prometheus-client-mmap = attrs: {
     dontBuild = false;
-    postPatch = let
-      getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
-    in ''
-      substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
-    '';
+    postPatch =
+      let
+        getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
+      in
+      ''
+        substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+      '';
   } // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
     cargoRoot = "ext/fast_mmaped_file_rs";
     cargoDeps = rustPlatform.fetchCargoTarball {
@@ -306,7 +399,7 @@ in
           src
           unpackPhase
           nativeBuildInputs
-        ;
+          ;
         dontBuilt = true;
         installPhase = ''
           cp -R ext/fast_mmaped_file_rs $out
@@ -334,9 +427,12 @@ in
 
   gtk2 = attrs: {
     nativeBuildInputs = [
-      binutils pkg-config
+      binutils
+      pkg-config
     ] ++ lib.optionals stdenv.isLinux [
-      util-linux libselinux libsepol
+      util-linux
+      libselinux
+      libsepol
     ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       atk
@@ -347,7 +443,8 @@ in
       harfbuzz
       libdatrie
       libthai
-      pcre pcre2
+      pcre
+      pcre2
       xorg.libpthreadstubs
       xorg.libXdmcp
     ];
@@ -400,10 +497,10 @@ in
 
   google-protobuf = attrs:
     lib.optionalAttrs (lib.versionAtLeast attrs.version "3.25.0") {
-    # Fails on 3.25.0 with:
-    #   convert.c:312:32: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
-    hardeningDisable = [ "format" ];
-  };
+      # Fails on 3.25.0 with:
+      #   convert.c:312:32: error: format string is not a string literal (potentially insecure) [-Werror,-Wformat-security]
+      hardeningDisable = [ "format" ];
+    };
 
   grpc = attrs: {
     nativeBuildInputs = [ pkg-config ]
@@ -483,8 +580,8 @@ in
                   "location = Libv8::Location::System.new"
     '';
     meta.broken = true; # At 2023-01-20, errors as:
-                        #   "Failed to build gem native extension."
-                        # Requires Python 2. Project is abandoned.
+    #   "Failed to build gem native extension."
+    # Requires Python 2. Project is abandoned.
   };
 
   execjs = attrs: {
@@ -631,7 +728,8 @@ in
       pkg-config
       fribidi
       harfbuzz
-      pcre pcre2
+      pcre
+      pcre2
       xorg.libpthreadstubs
       xorg.libXdmcp
     ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
@@ -819,20 +917,21 @@ in
     buildInputs = [ args.snappy ];
   };
 
-  sqlite3 = attrs: if lib.versionAtLeast attrs.version "1.5.0"
-  then {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ sqlite ];
-    buildFlags = [
-      "--enable-system-libraries"
-    ];
-  }
-  else {
-    buildFlags = [
-      "--with-sqlite3-include=${sqlite.dev}/include"
-      "--with-sqlite3-lib=${sqlite.out}/lib"
-    ];
-  };
+  sqlite3 = attrs:
+    if lib.versionAtLeast attrs.version "1.5.0"
+    then {
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [ sqlite ];
+      buildFlags = [
+        "--enable-system-libraries"
+      ];
+    }
+    else {
+      buildFlags = [
+        "--with-sqlite3-include=${sqlite.dev}/include"
+        "--with-sqlite3-lib=${sqlite.out}/lib"
+      ];
+    };
 
   rb-readline = attrs: {
     dontBuild = false;
@@ -867,14 +966,15 @@ in
     dontBuild = false;
     postPatch =
       let
-        path = if lib.versionAtLeast attrs.version "2.0"
-               then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
-               else "lib/tzinfo/zoneinfo_data_source.rb";
+        path =
+          if lib.versionAtLeast attrs.version "2.0"
+          then "lib/tzinfo/data_sources/zoneinfo_data_source.rb"
+          else "lib/tzinfo/zoneinfo_data_source.rb";
       in
-        ''
-          substituteInPlace ${path} \
-            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-        '';
+      ''
+        substituteInPlace ${path} \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      '';
   };
 
   uuid4r = attrs: {

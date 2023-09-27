@@ -1,4 +1,6 @@
-{ lib, buildDunePackage, fetchFromGitLab
+{ lib
+, buildDunePackage
+, fetchFromGitLab
 , readline
 }:
 

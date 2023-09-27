@@ -1,11 +1,22 @@
-{ stdenv, lib, fetchurl, pkg-config, which, ncurses, ocaml, findlib, ocaml_pcre, camlzip
-, gnutls, nettle
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, which
+, ncurses
+, ocaml
+, findlib
+, ocaml_pcre
+, camlzip
+, gnutls
+, nettle
 }:
 
 lib.throwIf (lib.versionOlder ocaml.version "4.02" || lib.versionAtLeast ocaml.version "5.0")
   "ocamlnet is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   pname = "ocaml${ocaml.version}-ocamlnet";
   version = "4.1.9";
 
@@ -23,7 +34,7 @@ stdenv.mkDerivation rec {
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   preConfigure = ''
     configureFlagsArray=(

@@ -1,11 +1,17 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , targetPackages
 
-, withoutTargetLibc, libcCross
+, withoutTargetLibc
+, libcCross
 , threadsCross
 , version
 
-, binutils, gmp, mpfr, libmpc, isl
+, binutils
+, gmp
+, mpfr
+, libmpc
+, isl
 , cloog ? null
 
 , enableLTO
@@ -18,7 +24,10 @@
 , langCC
 , langD ? false
 , langFortran
-, langJava ? false, javaAwtGtk ? false, javaAntlr ? null, javaEcj ? null
+, langJava ? false
+, javaAwtGtk ? false
+, javaAntlr ? null
+, javaEcj ? null
 , langAda ? false
 , langGo
 , langObjC
@@ -51,7 +60,7 @@ let
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                  "${stdenv.targetPlatform.config}-";
+    "${stdenv.targetPlatform.config}-";
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
@@ -88,7 +97,7 @@ let
       "--with-dwarf2"
     ] else [
       (if crossDarwin then "--with-sysroot=${lib.getLib libcCross}/share/sysroot"
-       else                "--with-headers=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
+      else "--with-headers=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
       "--enable-__cxa_atexit"
       "--enable-long-long"
       "--enable-threads=${if targetPlatform.isUnix then "posix"
@@ -100,7 +109,7 @@ let
       # available in uclibc.
       "--disable-libsanitizer"
     ] ++ lib.optional (targetPlatform.libc == "newlib" || targetPlatform.libc == "newlib-nano") "--with-newlib"
-      ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
+    ++ lib.optional (targetPlatform.libc == "avrlibc") "--with-avrlibc"
     );
 
   configureFlags =
@@ -114,8 +123,8 @@ let
     ]
     ++ lib.optionals (!withoutTargetLibc) [
       (if libcCross == null
-       then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
-       else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
+      then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
+      else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
       # gcc builds for cross-compilers (build != host) or cross-built
       # gcc (host != target) always apply the offset prefix to disentangle
       # target headers from build or host headers:
@@ -174,8 +183,8 @@ let
     ]
 
     ++ (if (enableMultilib || targetPlatform.isAvr)
-      then ["--enable-multilib" "--disable-libquadmath"]
-      else ["--disable-multilib"])
+    then [ "--enable-multilib" "--disable-libquadmath" ]
+    else [ "--disable-multilib" ])
     ++ lib.optional (!enableShared) "--disable-shared"
     ++ lib.singleton (lib.enableFeature enablePlugin "plugin")
     # Libcc1 is the GCC cc1 plugin for the GDB debugger which is only used by gdb
@@ -202,8 +211,8 @@ let
     # Ada options, gcc can't build the runtime library for a cross compiler
     ++ lib.optional langAda
       (if hostPlatform == targetPlatform
-       then "--enable-libada"
-       else "--disable-libada")
+      then "--enable-libada"
+      else "--disable-libada")
 
     # Java options
     ++ lib.optionals langJava [
@@ -217,7 +226,7 @@ let
     ++ lib.optional javaAwtGtk "--enable-java-awt=gtk"
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
-    ++ import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; }
+    ++ import ../common/platform-flags.nix { inherit (stdenv) targetPlatform; inherit lib; }
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
 
@@ -225,9 +234,14 @@ let
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.
     ++ lib.optionals hostPlatform.isSunOS [
-      "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
+      "--enable-long-long"
+      "--enable-libssp"
+      "--enable-threads=posix"
+      "--disable-nls"
+      "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
-      "--with-gnu-as" "--without-gnu-ld"
+      "--with-gnu-as"
+      "--without-gnu-ld"
     ]
     ++ lib.optional (targetPlatform.libc == "musl")
       # musl at least, disable: https://git.buildroot.net/buildroot/commit/?id=873d4019f7fb00f6a80592224236b3ba7d657865
@@ -251,4 +265,5 @@ let
     ]
   ;
 
-in configureFlags
+in
+configureFlags

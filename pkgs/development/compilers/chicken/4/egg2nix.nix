@@ -15,7 +15,8 @@ eggDerivation rec {
   };
 
   buildInputs = with chickenEggs; [
-    matchable http-client
+    matchable
+    http-client
   ];
 
   meta = {

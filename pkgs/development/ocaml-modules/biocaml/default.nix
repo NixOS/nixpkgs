@@ -1,6 +1,18 @@
-{ lib, buildDunePackage, fetchFromGitHub, fetchpatch
-, ounit, async, base64, camlzip, cfstream
-, core, ppx_jane, ppx_sexp_conv, rresult, uri, xmlm
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, fetchpatch
+, ounit
+, async
+, base64
+, camlzip
+, cfstream
+, core
+, ppx_jane
+, ppx_sexp_conv
+, rresult
+, uri
+, xmlm
 }:
 
 buildDunePackage rec {

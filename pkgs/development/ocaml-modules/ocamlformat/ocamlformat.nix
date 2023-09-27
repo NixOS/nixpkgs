@@ -15,7 +15,8 @@ in
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0" && !lib.versionAtLeast version "0.23")
   "ocamlformat ${version} is not available for OCaml ${ocaml.version}"
 
-buildDunePackage {
+  buildDunePackage
+{
   pname = "ocamlformat";
   inherit src version;
 

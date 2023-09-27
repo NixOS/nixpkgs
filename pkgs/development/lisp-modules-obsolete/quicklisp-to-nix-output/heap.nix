@@ -15,11 +15,11 @@ rec {
 
   packageName = "heap";
 
-  asdFilesToKeep = ["heap.asd"];
+  asdFilesToKeep = [ "heap.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM heap DESCRIPTION Binary Heap for Common Lisp. SHA256
-    1376i9vq5kcskzhqfxvsfvxz7kwkp6d3bd7rxn94dgnha988fd77 URL
-    http://beta.quicklisp.org/archive/heap/2018-10-18/heap-20181018-git.tgz MD5
-    a2355ef9c113a3335919a45195083951 NAME heap FILENAME heap DEPS NIL
+  1376i9vq5kcskzhqfxvsfvxz7kwkp6d3bd7rxn94dgnha988fd77 URL
+  http://beta.quicklisp.org/archive/heap/2018-10-18/heap-20181018-git.tgz MD5
+  a2355ef9c113a3335919a45195083951 NAME heap FILENAME heap DEPS NIL
     DEPENDENCIES NIL VERSION 20181018-git SIBLINGS NIL PARASITES NIL) */

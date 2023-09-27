@@ -12,7 +12,8 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    camlp-streams num
+    camlp-streams
+    num
   ];
 
   meta = with lib; {

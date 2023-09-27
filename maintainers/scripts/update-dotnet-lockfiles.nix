@@ -10,7 +10,7 @@
   update scripts.
  */
 let
-  pkgs = import ../.. {};
+  pkgs = import ../.. { };
 
   inherit (pkgs) lib;
 
@@ -19,23 +19,25 @@ let
       packagesWithInner = attrs:
         lib.unique (
           lib.concatLists (
-            lib.mapAttrsToList (name: elem:
-              let
-                result = builtins.tryEval elem;
-              in
+            lib.mapAttrsToList
+              (name: elem:
+                let
+                  result = builtins.tryEval elem;
+                in
                 if result.success then
                   let
                     value = result.value;
                   in
-                    if lib.isDerivation value then
-                      lib.optional (cond value) value
-                    else
-                      if lib.isAttrs value && (value.recurseForDerivations or false || value.recurseForRelease or false) then
-                        packagesWithInner value
-                      else []
-                else []) attrs));
+                  if lib.isDerivation value then
+                    lib.optional (cond value) value
+                  else
+                    if lib.isAttrs value && (value.recurseForDerivations or false || value.recurseForRelease or false) then
+                      packagesWithInner value
+                    else [ ]
+                else [ ])
+              attrs));
     in
-      packagesWithInner pkgs;
+    packagesWithInner pkgs;
 
   packages =
     packagesWith (pkgs: pkgs ? fetch-deps) pkgs;
@@ -48,7 +50,8 @@ let
 
   fetchScripts = map (p: p.fetch-deps) packages;
 
-in pkgs.stdenv.mkDerivation {
+in
+pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-dotnet-lockfiles";
   buildCommand = ''
     echo ""

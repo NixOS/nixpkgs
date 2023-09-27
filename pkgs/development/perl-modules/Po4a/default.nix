@@ -1,6 +1,27 @@
-{ stdenv, lib, fetchurl, docbook_xsl, docbook_xsl_ns, gettext, libxslt, glibcLocales, docbook_xml_dtd_412, docbook_sgml_dtd_41, opensp, bash
-, perl, buildPerlPackage, ModuleBuild, TextWrapI18N, LocaleGettext, TermReadKey, SGMLSpm, UnicodeLineBreak, PodParser, YAMLTiny
-, fetchpatch, writeShellScriptBin
+{ stdenv
+, lib
+, fetchurl
+, docbook_xsl
+, docbook_xsl_ns
+, gettext
+, libxslt
+, glibcLocales
+, docbook_xml_dtd_412
+, docbook_sgml_dtd_41
+, opensp
+, bash
+, perl
+, buildPerlPackage
+, ModuleBuild
+, TextWrapI18N
+, LocaleGettext
+, TermReadKey
+, SGMLSpm
+, UnicodeLineBreak
+, PodParser
+, YAMLTiny
+, fetchpatch
+, writeShellScriptBin
 }:
 
 buildPerlPackage rec {
@@ -25,8 +46,9 @@ buildPerlPackage rec {
     # We don't want to depend on texlive here, so we replace it with a minimal
     # shellscript that suffices for the tests in t/fmt/tex/, i.e. it looks up
     # article.cls to an existing file, but doesn't find article-wrong.cls.
-    let kpsewhich-stub = writeShellScriptBin "kpsewhich"
-      ''[[ $1 = "article.cls" ]] && echo /dev/null'';
+    let
+      kpsewhich-stub = writeShellScriptBin "kpsewhich"
+        ''[[ $1 = "article.cls" ]] && echo /dev/null'';
     in
     [ gettext libxslt docbook_xsl docbook_xsl_ns ModuleBuild docbook_xml_dtd_412 docbook_sgml_dtd_41 opensp kpsewhich-stub glibcLocales ];
   propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isMusl) TextWrapI18N ++ [ LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];

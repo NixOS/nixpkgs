@@ -1,6 +1,16 @@
-{ lib, stdenv, llvm_meta, version
-, monorepoSrc, runCommand
-, cmake, python3, xcbuild, libllvm, linuxHeaders, libcxxabi, libxcrypt
+{ lib
+, stdenv
+, llvm_meta
+, version
+, monorepoSrc
+, runCommand
+, cmake
+, python3
+, xcbuild
+, libllvm
+, linuxHeaders
+, libcxxabi
+, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -13,7 +23,7 @@ let
 
   baseName = "compiler-rt";
 
-  src = runCommand "${baseName}-src-${version}" {} ''
+  src = runCommand "${baseName}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${baseName} "$out"

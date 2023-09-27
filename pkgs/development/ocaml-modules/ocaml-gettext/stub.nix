@@ -3,7 +3,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "gettext-stub is not available for OCaml ${ocaml.version}"
 
-buildDunePackage {
+  buildDunePackage
+{
 
   pname = "gettext-stub";
 
@@ -19,5 +20,5 @@ buildDunePackage {
 
   checkInputs = [ ounit ];
 
-  meta = builtins.removeAttrs ocaml_gettext.meta  [ "mainProgram" ];
+  meta = builtins.removeAttrs ocaml_gettext.meta [ "mainProgram" ];
 }

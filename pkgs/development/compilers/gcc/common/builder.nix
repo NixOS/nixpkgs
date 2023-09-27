@@ -9,7 +9,7 @@ let
 in
 
 originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
-  passthru = (originalAttrs.passthru or {}) // { inherit forceLibgccToBuildCrtStuff; };
+  passthru = (originalAttrs.passthru or { }) // { inherit forceLibgccToBuildCrtStuff; };
   preUnpack = ''
     oldOpts="$(shopt -po nounset)" || true
     set -euo pipefail

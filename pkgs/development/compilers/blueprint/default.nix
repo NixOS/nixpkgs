@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # requires xvfb-run
   doCheck = !stdenv.isDarwin
-  && false;  # tests time out
+    && false; # tests time out
 
   checkPhase = ''
     runHook preCheck

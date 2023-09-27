@@ -1,11 +1,42 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, lndir, bash, cpio, file, which, unzip, zip
-, cups, freetype, alsa-lib, cacert, perl, liberation_ttf, fontconfig, zlib
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor, libXrandr
-, libjpeg, giflib
+{ stdenv
+, lib
+, fetchFromGitHub
+, pkg-config
+, lndir
+, bash
+, cpio
+, file
+, which
+, unzip
+, zip
+, cups
+, freetype
+, alsa-lib
+, cacert
+, perl
+, liberation_ttf
+, fontconfig
+, zlib
+, libX11
+, libICE
+, libXrender
+, libXext
+, libXt
+, libXtst
+, libXi
+, libXinerama
+, libXcursor
+, libXrandr
+, libjpeg
+, giflib
 , openjdk8-bootstrap
 , setJavaClassPath
 , headless ? false
-, enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
+, enableGnome2 ? true
+, gtk2
+, gnome_vfs
+, glib
+, GConf
 }:
 
 let
@@ -40,11 +71,35 @@ let
 
     nativeBuildInputs = [ pkg-config lndir unzip ];
     buildInputs = [
-      cpio file which zip perl zlib cups freetype alsa-lib
-      libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
+      cpio
+      file
+      which
+      zip
+      perl
+      zlib
+      cups
+      freetype
+      alsa-lib
+      libjpeg
+      giflib
+      libX11
+      libICE
+      libXext
+      libXrender
+      libXtst
+      libXt
+      libXtst
+      libXi
+      libXinerama
+      libXcursor
+      libXrandr
+      fontconfig
+      openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk2 gnome_vfs GConf glib
+      gtk2
+      gnome_vfs
+      GConf
+      glib
     ];
 
     patches = [
@@ -94,10 +149,17 @@ let
       "-Wno-error"
     ]);
 
-    NIX_LDFLAGS= toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
+    NIX_LDFLAGS = toString (lib.optionals (!headless) [
+      "-lfontconfig"
+      "-lcups"
+      "-lXinerama"
+      "-lXrandr"
+      "-lmagic"
     ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-x11-2.0" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+      "-lgtk-x11-2.0"
+      "-lgio-2.0"
+      "-lgnomevfs-2"
+      "-lgconf-2"
     ]);
 
     # -j flag is explicitly rejected by the build system:
@@ -223,4 +285,5 @@ let
       inherit gtk2;
     };
   };
-in openjdk8
+in
+openjdk8

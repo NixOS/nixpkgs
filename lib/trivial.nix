@@ -12,7 +12,8 @@ let
     version
     versionSuffix
     warn;
-in {
+in
+{
 
   ## Simple (higher order) functions
 
@@ -98,17 +99,17 @@ in {
   /* bitwise “and” */
   bitAnd = builtins.bitAnd
     or (import ./zip-int-bits.nix
-        (a: b: if a==1 && b==1 then 1 else 0));
+    (a: b: if a == 1 && b == 1 then 1 else 0));
 
   /* bitwise “or” */
   bitOr = builtins.bitOr
     or (import ./zip-int-bits.nix
-        (a: b: if a==1 || b==1 then 1 else 0));
+    (a: b: if a == 1 || b == 1 then 1 else 0));
 
   /* bitwise “xor” */
   bitXor = builtins.bitXor
     or (import ./zip-int-bits.nix
-        (a: b: if a!=b then 1 else 0));
+    (a: b: if a != b then 1 else 0));
 
   /* bitwise “not” */
   bitNot = builtins.sub (-1);
@@ -198,7 +199,7 @@ in {
        Set it to the upcoming release, matching the nixpkgs/.version file.
     */
     release:
-      release <= lib.trivial.oldestSupportedRelease;
+    release <= lib.trivial.oldestSupportedRelease;
 
   /* Returns the current nixpkgs release code name.
 
@@ -224,11 +225,12 @@ in {
     default:
     let
       revisionFile = "${toString ./..}/.git-revision";
-      gitRepo      = "${toString ./..}/.git";
-    in if lib.pathIsGitRepo gitRepo
-       then lib.commitIdFromGitRepo gitRepo
-       else if lib.pathExists revisionFile then lib.fileContents revisionFile
-       else default;
+      gitRepo = "${toString ./..}/.git";
+    in
+    if lib.pathIsGitRepo gitRepo
+    then lib.commitIdFromGitRepo gitRepo
+    else if lib.pathExists revisionFile then lib.fileContents revisionFile
+    else default;
 
   nixpkgsVersion = builtins.trace "`lib.nixpkgsVersion` is deprecated, use `lib.version` instead!" version;
 
@@ -278,8 +280,8 @@ in {
     if a < b
     then -1
     else if a > b
-         then 1
-         else 0;
+    then 1
+    else 0;
 
   /* Split type into two subtypes by predicate `p`, take all elements
      of the first subtype to be less than all the elements of the
@@ -355,7 +357,7 @@ in {
     Type: string -> a -> a
   */
   warn =
-    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") ["1" "true" "yes"]
+    if lib.elem (builtins.getEnv "NIX_ABORT_ON_WARN") [ "1" "true" "yes" ]
     then msg: builtins.trace "[1;31mwarning: ${msg}[0m" (abort "NIX_ABORT_ON_WARN=true; warnings are treated as unrecoverable errors.")
     else msg: builtins.trace "[1;31mwarning: ${msg}[0m";
 
@@ -416,8 +418,8 @@ in {
     let
       unexpected = lib.subtractLists valid given;
     in
-      lib.throwIfNot (unexpected == [])
-        "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
+    lib.throwIfNot (unexpected == [ ])
+      "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
 
   info = msg: builtins.trace "INFO: ${msg}";
 
@@ -436,7 +438,8 @@ in {
      like callPackage expect to be able to query expected arguments.
   */
   setFunctionArgs = f: args:
-    { # TODO: Should we add call-time "type" checking like built in?
+    {
+      # TODO: Should we add call-time "type" checking like built in?
       __functor = self: f;
       __functionArgs = args;
     };
@@ -520,20 +523,22 @@ in {
 
      toHexString 250 => "FA"
   */
-  toHexString = let
-    hexDigits = {
-      "10" = "A";
-      "11" = "B";
-      "12" = "C";
-      "13" = "D";
-      "14" = "E";
-      "15" = "F";
-    };
-    toHexDigit = d:
-      if d < 10
-      then toString d
-      else hexDigits.${toString d};
-  in i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+  toHexString =
+    let
+      hexDigits = {
+        "10" = "A";
+        "11" = "B";
+        "12" = "C";
+        "13" = "D";
+        "14" = "E";
+        "15" = "F";
+      };
+      toHexDigit = d:
+        if d < 10
+        then toString d
+        else hexDigits.${toString d};
+    in
+    i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:
@@ -548,17 +553,17 @@ in {
     let
       go = i:
         if i < base
-        then [i]
+        then [ i ]
         else
           let
             r = i - ((i / base) * base);
             q = (i - r) / base;
           in
-            [r] ++ go q;
+          [ r ] ++ go q;
     in
-      assert (isInt base);
-      assert (isInt i);
-      assert (base >= 2);
-      assert (i >= 0);
-      lib.reverseList (go i);
+    assert (isInt base);
+    assert (isInt i);
+    assert (base >= 2);
+    assert (i >= 0);
+    lib.reverseList (go i);
 }

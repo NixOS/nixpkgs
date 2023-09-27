@@ -1,6 +1,13 @@
-{ lib, stdenv
-, fetchurl, perl, gcc
-, ncurses5, ncurses6, gmp, glibc, libiconv
+{ lib
+, stdenv
+, fetchurl
+, perl
+, gcc
+, ncurses5
+, ncurses6
+, gmp
+, glibc
+, libiconv
 , llvmPackages
 , coreutils
 , targetPackages
@@ -11,16 +18,17 @@ assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
   useLLVM = !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPower
-              || stdenv.targetPlatform.isSparc);
+    || stdenv.targetPlatform.isPower
+    || stdenv.targetPlatform.isSparc);
 
   useNcurses6 = stdenv.hostPlatform.system == "x86_64-linux"
-                || (with stdenv.hostPlatform; isPower64 && isLittleEndian);
+    || (with stdenv.hostPlatform; isPower64 && isLittleEndian);
 
   ourNcurses = if useNcurses6 then ncurses6 else ncurses5;
 
   libPath = lib.makeLibraryPath ([
-    ourNcurses gmp
+    ourNcurses
+    gmp
   ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
 
   libEnvVar = lib.optionalString stdenv.hostPlatform.isDarwin "DY"
@@ -28,8 +36,8 @@ let
 
   glibcDynLinker = assert stdenv.isLinux;
     if stdenv.hostPlatform.libc == "glibc" then
-       # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
-       ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
+    # Could be stdenv.cc.bintools.dynamicLinker, keeping as-is to avoid rebuild.
+      ''"$(cat $NIX_CC/nix-support/dynamic-linker)"''
     else
       "${lib.getLib glibc}/lib/ld-linux*";
 
@@ -55,29 +63,31 @@ stdenv.mkDerivation rec {
   pname = "ghc-binary";
 
   # https://downloads.haskell.org/~ghc/8.6.5/
-  src = fetchurl ({
-    i686-linux = {
-      # Don't use the Fedora27 build (as below) because there isn't one!
-      url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
-      sha256 = "1p2h29qghql19ajk755xa0yxkn85slbds8m9n5196ris743vkp8w";
-    };
-    x86_64-linux = {
-      # This is the Fedora build because it links against ncurses6 where the
-      # deb9 one links against ncurses5, see here
-      # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
-      sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
-    };
-    x86_64-darwin = {
-      url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
-      sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
-    };
-    powerpc64le-linux = {
-      url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-powerpc64le-fedora29-linux.tar.xz";
-      sha256 = "sha256-tWSsJdPVrCiqDyIKzpBt5DaXb3b6j951tCya584kWs4=";
-    };
-  }.${stdenv.hostPlatform.system}
-    or (throw "cannot bootstrap GHC on this platform"));
+  src = fetchurl (
+    {
+      i686-linux = {
+        # Don't use the Fedora27 build (as below) because there isn't one!
+        url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
+        sha256 = "1p2h29qghql19ajk755xa0yxkn85slbds8m9n5196ris743vkp8w";
+      };
+      x86_64-linux = {
+        # This is the Fedora build because it links against ncurses6 where the
+        # deb9 one links against ncurses5, see here
+        # https://github.com/NixOS/nixpkgs/issues/85924 for a discussion
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-fedora27-linux.tar.xz";
+        sha256 = "18dlqm5d028fqh6ghzn7pgjspr5smw030jjzl3kq6q1kmwzbay6g";
+      };
+      x86_64-darwin = {
+        url = "${downloadsUrl}/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
+        sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
+      };
+      powerpc64le-linux = {
+        url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-powerpc64le-fedora29-linux.tar.xz";
+        sha256 = "sha256-tWSsJdPVrCiqDyIKzpBt5DaXb3b6j951tCya584kWs4=";
+      };
+    }.${stdenv.hostPlatform.system}
+      or (throw "cannot bootstrap GHC on this platform")
+  );
 
   nativeBuildInputs = [ perl ];
 
@@ -143,7 +153,7 @@ stdenv.mkDerivation rec {
     # Note `--with-gmp-libraries` does nothing for GHC bindists:
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6124
   ] ++ lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"
-    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
+  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-ld-override";
 
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...

@@ -1,4 +1,14 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, xcbuild, libllvm, libcxxabi, libxcrypt
+{ lib
+, stdenv
+, llvm_meta
+, version
+, fetch
+, cmake
+, python3
+, xcbuild
+, libllvm
+, libcxxabi
+, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -18,7 +28,7 @@ stdenv.mkDerivation {
   src = fetch "compiler-rt" "0x1j8ngf1zj63wlnns9vlibafq48qcm72p4jpaxkmkb4qw0grwfy";
 
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
-     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
+    ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"

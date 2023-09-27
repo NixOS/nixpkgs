@@ -1,24 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, which
+, m4
+, python3
+, bison
+, flex
+, llvmPackages
+, ncurses
+, xcode
+, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
 , testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "ispc";
+  pname = "ispc";
   version = "1.22.0";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
     sha256 = "sha256-NiBwQ7BzNgRdWLvjOi1fQni+vnYwn0nLHxqAVucmb2k=";
   };
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
 
   buildInputs = with llvmPackages; [
-    libllvm libclang openmp ncurses
+    libllvm
+    libclang
+    openmp
+    ncurses
   ];
 
   postPatch = ''
@@ -67,10 +82,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage    = "https://ispc.github.io/";
+    homepage = "https://ispc.github.io/";
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
-    license     = licenses.bsd3;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
+    license = licenses.bsd3;
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]; # TODO: buildable on more platforms?
     maintainers = with maintainers; [ aristid thoughtpolice athas alexfmpe ];
   };
 }

@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg
-, astring, bos, cmdliner, rresult
+{ stdenv
+, lib
+, fetchurl
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, astring
+, bos
+, cmdliner
+, rresult
 }:
 
 stdenv.mkDerivation rec {

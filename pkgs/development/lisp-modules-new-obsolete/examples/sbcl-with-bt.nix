@@ -16,7 +16,7 @@
 
 let
 
-  pkgs = import ../../../../default.nix {};
+  pkgs = import ../../../../default.nix { };
 
   sbcl = "${pkgs.sbcl}/bin/sbcl --script";
 
@@ -28,4 +28,5 @@ let
 
   sbcl-bt = sbclWithPackages (p: [ p.bordeaux-threads ]);
 
-in sbcl-bt
+in
+sbcl-bt

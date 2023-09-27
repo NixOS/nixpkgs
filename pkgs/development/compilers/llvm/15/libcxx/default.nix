@@ -1,15 +1,25 @@
-{ lib, stdenv, llvm_meta
-, monorepoSrc, runCommand, fetchpatch
-, cmake, ninja, python3, fixDarwinDylibNames, version
+{ lib
+, stdenv
+, llvm_meta
+, monorepoSrc
+, runCommand
+, fetchpatch
+, cmake
+, ninja
+, python3
+, fixDarwinDylibNames
+, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt, libunwind
+, libcxxabi
+, libcxxrt
+, libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 
-# If headersOnly is true, the resulting package would only include the headers.
-# Use this to break the circular dependency between libcxx and libcxxabi.
-#
-# Some context:
-# https://reviews.llvm.org/rG1687f2bbe2e2aaa092f942d4a97d41fad43eedfb
+  # If headersOnly is true, the resulting package would only include the headers.
+  # Use this to break the circular dependency between libcxx and libcxxabi.
+  #
+  # Some context:
+  # https://reviews.llvm.org/rG1687f2bbe2e2aaa092f942d4a97d41fad43eedfb
 , headersOnly ? false
 }:
 
@@ -23,7 +33,7 @@ stdenv.mkDerivation rec {
   pname = basename + lib.optionalString headersOnly "-headers";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" {} ''
+  src = runCommand "${pname}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${basename} "$out"
@@ -75,16 +85,18 @@ stdenv.mkDerivation rec {
     lib.optionals (!headersOnly) [ cxxabi ]
     ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [ libunwind ];
 
-  cmakeFlags = let
-    # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
-    libcxx_cxx_abi_opt = {
-      "c++abi" = "system-libcxxabi";
-      "cxxrt" = "libcxxrt";
-    }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
-  in [
-    "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
-  ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
+  cmakeFlags =
+    let
+      # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
+      libcxx_cxx_abi_opt = {
+        "c++abi" = "system-libcxxabi";
+        "cxxrt" = "libcxxrt";
+      }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
+    in
+    [
+      "-DLLVM_ENABLE_RUNTIMES=libcxx"
+      "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
+    ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
       "-DLIBCXX_USE_COMPILER_RT=ON"

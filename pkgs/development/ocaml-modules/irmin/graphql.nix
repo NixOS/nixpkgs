@@ -1,5 +1,16 @@
-{ lib, buildDunePackage, cohttp-lwt, cohttp-lwt-unix, graphql-cohttp, graphql-lwt, irmin, git-unix
-, alcotest, alcotest-lwt, logs, yojson, cacert
+{ lib
+, buildDunePackage
+, cohttp-lwt
+, cohttp-lwt-unix
+, graphql-cohttp
+, graphql-lwt
+, irmin
+, git-unix
+, alcotest
+, alcotest-lwt
+, logs
+, yojson
+, cacert
 }:
 
 buildDunePackage rec {

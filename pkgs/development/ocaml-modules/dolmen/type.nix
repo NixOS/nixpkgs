@@ -1,4 +1,5 @@
-{ buildDunePackage, dolmen
+{ buildDunePackage
+, dolmen
 , spelll
 , uutf
 }:

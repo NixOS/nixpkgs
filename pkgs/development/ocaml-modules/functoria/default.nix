@@ -1,11 +1,20 @@
-{ lib, buildDunePackage, cmdliner
+{ lib
+, buildDunePackage
+, cmdliner
 , functoria-runtime
-, rresult, astring, fmt, logs, bos, fpath, emile, uri
+, rresult
+, astring
+, fmt
+, logs
+, bos
+, fpath
+, emile
+, uri
 , alcotest
 }:
 
 buildDunePackage {
-  pname   = "functoria";
+  pname = "functoria";
   inherit (functoria-runtime) version src;
 
   minimalOCamlVersion = "4.08";
@@ -17,8 +26,8 @@ buildDunePackage {
 
   meta = with lib; {
     description = "A DSL to organize functor applications";
-    homepage    = "https://github.com/mirage/functoria";
-    license     = licenses.isc;
+    homepage = "https://github.com/mirage/functoria";
+    license = licenses.isc;
     maintainers = [ maintainers.vbgl ];
   };
 }

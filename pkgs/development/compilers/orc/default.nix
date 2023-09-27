@@ -8,15 +8,17 @@
 , gtk-doc ? null
 , buildDevDoc ? gtk-doc != null
 
-# for passthru.tests
+  # for passthru.tests
 , gnuradio
 , gst_all_1
 , qt6
 , vips
 
-}: let
+}:
+let
   inherit (lib) optional optionals;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "orc";
   version = "0.4.34";
 
@@ -34,7 +36,7 @@ in stdenv.mkDerivation rec {
   '';
 
   outputs = [ "out" "dev" ]
-     ++ optional buildDevDoc "devdoc"
+    ++ optional buildDevDoc "devdoc"
   ;
   outputBin = "dev"; # compilation tools
 

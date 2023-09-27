@@ -9,11 +9,18 @@ with pkgs.gerbil-support; {
 
   prePackages-unstable =
     ppplToPpa
-      [ ./gerbil-leveldb.nix ./gerbil-lmdb.nix ./gerbil-mysql.nix
-        ./gerbil-libxml.nix ./gerbil-libyaml.nix
+      [
+        ./gerbil-leveldb.nix
+        ./gerbil-lmdb.nix
+        ./gerbil-mysql.nix
+        ./gerbil-libxml.nix
+        ./gerbil-libyaml.nix
         ./smug-gerbil.nix # ./ftw.nix
-        ./gerbil-utils.nix ./gerbil-crypto.nix ./gerbil-poo.nix
-        ./gerbil-persist.nix ./gerbil-ethereum.nix
+        ./gerbil-utils.nix
+        ./gerbil-crypto.nix
+        ./gerbil-poo.nix
+        ./gerbil-persist.nix
+        ./gerbil-ethereum.nix
         # ./gerbil-libp2p.nix
         ./glow-lang.nix
       ];
@@ -24,9 +31,9 @@ with pkgs.gerbil-support; {
     gerbilPackages = gerbilPackages-unstable;
     git-version = "";
     version-path = "";
-    gerbilInputs = [];
-    nativeBuildInputs = [];
-    buildInputs = [];
+    gerbilInputs = [ ];
+    nativeBuildInputs = [ ];
+    buildInputs = [ ];
     buildScript = "./build.ss";
     postInstall = "";
     softwareName = "";
@@ -35,20 +42,24 @@ with pkgs.gerbil-support; {
   ppaToPl = builtins.mapAttrs (_: gerbilPackage);
   gerbilPackages-unstable = ppaToPl prePackages-unstable;
 
-  resolve-pre-src = pre-src: pre-src.fun (removeAttrs pre-src ["fun"]);
+  resolve-pre-src = pre-src: pre-src.fun (removeAttrs pre-src [ "fun" ]);
 
   gerbilVersionFromGit = srcDir: version-path:
     let version-file = "${srcDir}/${version-path}.ss"; in
     if builtins.pathExists version-file then
-      let m =
-        builtins.match "\\(import :clan/versioning.*\\)\n\\(register-software \"([-_.A-Za-z0-9]+)\" \"([-_.A-Za-z0-9]+)\"\\) ;; ([-0-9]+)\n"
-          (builtins.readFile version-file); in
-          { version = "${builtins.elemAt m 2}-git"; git-version = builtins.elemAt m 1; }
-     else { version = "0.0-git";
-            git-version = let gitpath = "${srcDir}/.git"; in
-              if builtins.pathExists gitpath then lib.commitIdFromGitRepo gitpath else "0"; };
+      let
+        m =
+          builtins.match "\\(import :clan/versioning.*\\)\n\\(register-software \"([-_.A-Za-z0-9]+)\" \"([-_.A-Za-z0-9]+)\"\\) ;; ([-0-9]+)\n"
+            (builtins.readFile version-file);
+      in
+      { version = "${builtins.elemAt m 2}-git"; git-version = builtins.elemAt m 1; }
+    else {
+      version = "0.0-git";
+      git-version = let gitpath = "${srcDir}/.git"; in
+        if builtins.pathExists gitpath then lib.commitIdFromGitRepo gitpath else "0";
+    };
 
-  gerbilSkippableFiles = [".git" ".build" ".build_outputs" "run" "result" "dep" "BLAH" "tmp.nix"];
+  gerbilSkippableFiles = [ ".git" ".build" ".build_outputs" "run" "result" "dep" "BLAH" "tmp.nix" ];
 
   gerbilSourceFilter = path: type:
     let baseName = baseNameOf path; in
@@ -67,32 +78,43 @@ with pkgs.gerbil-support; {
   sha256-of-pre-src = pre-src: if pre-src ? sha256 then pre-src.sha256 else "none";
 
   overrideSrcIfShaDiff = name: new-pre-src: super:
-    let old-sha256 = sha256-of-pre-src super.${name}.pre-src;
-        new-sha256 = sha256-of-pre-src new-pre-src; in
-    if old-sha256 == new-sha256 then {} else
+    let
+      old-sha256 = sha256-of-pre-src super.${name}.pre-src;
+      new-sha256 = sha256-of-pre-src new-pre-src;
+    in
+    if old-sha256 == new-sha256 then { } else
     view "Overriding ${name} old-sha256: ${old-sha256} new-sha256: ${new-sha256}"
-    { ${name} = super.${name} // {
-                       pre-src = new-pre-src;
-                       version = "override";
-                       git-version = if new-pre-src ? rev
-                                     then lib.substring 0 7 new-pre-src.rev
-                                     else "unknown";};
-                     };
+      {
+        ${name} = super.${name} // {
+          pre-src = new-pre-src;
+          version = "override";
+          git-version =
+            if new-pre-src ? rev
+            then lib.substring 0 7 new-pre-src.rev
+            else "unknown";
+        };
+      };
 
   pkgsOverrideGerbilPackageSrc = name: pre-src: pkgs: super: {
     gerbil-support = (super-support:
-      { prePackages-unstable =
+      {
+        prePackages-unstable =
           (super-ppu: super-ppu // (overrideSrcIfShaDiff name pre-src super-ppu))
-          super-support.prePackages-unstable;}) super.gerbil-support;};
+            super-support.prePackages-unstable;
+      }) super.gerbil-support;
+  };
 
   # Use this function to create a Gerbil library. See gerbil-utils as an example.
   gerbilPackage = prePackage:
-    let pre-pkg = prePackage-defaults // prePackage;
-        inherit (pre-pkg) pname version pre-src git-version meta
-          softwareName gerbil-package version-path gerbil gambit-params
-          gerbilInputs nativeBuildInputs buildInputs buildScript postInstall;
-        buildInputs_ = buildInputs; in
-    pkgs.gccStdenv.mkDerivation rec { # See ../gambit/build.nix regarding why we use gccStdenv
+    let
+      pre-pkg = prePackage-defaults // prePackage;
+      inherit (pre-pkg) pname version pre-src git-version meta
+        softwareName gerbil-package version-path gerbil gambit-params
+        gerbilInputs nativeBuildInputs buildInputs buildScript postInstall;
+      buildInputs_ = buildInputs;
+    in
+    pkgs.gccStdenv.mkDerivation rec {
+      # See ../gambit/build.nix regarding why we use gccStdenv
       inherit meta pname version nativeBuildInputs postInstall;
       passthru = {
         inherit pre-pkg;

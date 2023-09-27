@@ -17,12 +17,12 @@ rec {
 
   packageName = "binpack";
 
-  asdFilesToKeep = ["binpack.asd"];
+  asdFilesToKeep = [ "binpack.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM binpack DESCRIPTION Rectangle packer for sprite/texture atlases
-    SHA256 1kyl19kjsii2nrbf229c5fb3bjw7r25736f991g2j8vig991imwm URL
-    http://beta.quicklisp.org/archive/binpack/2020-12-20/binpack-20201220-git.tgz
-    MD5 1ac4eaa76586091edb77111ea033f316 NAME binpack FILENAME binpack DEPS
-    ((NAME alexandria FILENAME alexandria)) DEPENDENCIES (alexandria) VERSION
+  SHA256 1kyl19kjsii2nrbf229c5fb3bjw7r25736f991g2j8vig991imwm URL
+  http://beta.quicklisp.org/archive/binpack/2020-12-20/binpack-20201220-git.tgz
+  MD5 1ac4eaa76586091edb77111ea033f316 NAME binpack FILENAME binpack DEPS
+  ((NAME alexandria FILENAME alexandria)) DEPENDENCIES (alexandria) VERSION
     20201220-git SIBLINGS (binpack-test) PARASITES (binpack/2)) */

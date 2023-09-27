@@ -1,7 +1,12 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
 , saturn_lockfree
 , dscheck
-, qcheck, qcheck-alcotest, qcheck-stm
+, qcheck
+, qcheck-alcotest
+, qcheck-stm
 }:
 
 buildDunePackage rec {

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , mrustc
 , mrustc-minicargo
@@ -62,7 +63,10 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     # for rustc
-    llvm_12 libffi zlib libxml2
+    llvm_12
+    libffi
+    zlib
+    libxml2
     # for cargo
     openssl
     (curl.override { inherit openssl; })

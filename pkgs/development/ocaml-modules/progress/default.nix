@@ -1,6 +1,13 @@
-{ lib, buildDunePackage
-, fmt, logs, mtime, optint, terminal, vector
-, alcotest, astring
+{ lib
+, buildDunePackage
+, fmt
+, logs
+, mtime
+, optint
+, terminal
+, vector
+, alcotest
+, astring
 }:
 
 buildDunePackage rec {

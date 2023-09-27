@@ -1,30 +1,45 @@
-{ lib, stdenv, pkgsBuildTarget, pkgsHostTarget, targetPackages
+{ lib
+, stdenv
+, pkgsBuildTarget
+, pkgsHostTarget
+, targetPackages
 
-# build-tools
+  # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchpatch, fetchurl, perl, python3, m4, sphinx
-, xattr, autoSignDarwinBinariesHook
+, autoconf
+, automake
+, coreutils
+, fetchpatch
+, fetchurl
+, perl
+, python3
+, m4
+, sphinx
+, xattr
+, autoSignDarwinBinariesHook
 , bash
 
-, libiconv ? null, ncurses
+, libiconv ? null
+, ncurses
 , glibcLocales ? null
 
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPower
-              || stdenv.targetPlatform.isSparc
-              || stdenv.targetPlatform.isAarch64)
+    || stdenv.targetPlatform.isPower
+    || stdenv.targetPlatform.isSparc
+    || stdenv.targetPlatform.isAarch64)
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildTargetLlvmPackages, llvmPackages
+  buildTargetLlvmPackages
+, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
   enableNativeBignum ? !(lib.meta.availableOn stdenv.hostPlatform gmp
-                         && lib.meta.availableOn stdenv.targetPlatform gmp)
+    && lib.meta.availableOn stdenv.targetPlatform gmp)
 , gmp
 
 , # If enabled, use -fPIC when compiling static libs.
@@ -51,9 +66,8 @@
     !stdenv.buildPlatform.isMusl
   )
 
-, enableHaddockProgram ?
-    # Disabled for cross; see note [HADDOCK_DOCS].
-    (stdenv.targetPlatform == stdenv.hostPlatform)
+, enableHaddockProgram ? # Disabled for cross; see note [HADDOCK_DOCS].
+  (stdenv.targetPlatform == stdenv.hostPlatform)
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
@@ -119,7 +133,7 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: lib.optional enableTerminfo ncurses
-    ++ [libffi]
+    ++ [ libffi ]
     ++ lib.optional (!enableNativeBignum) gmp
     ++ lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -164,8 +178,8 @@ let
 in
 
 # C compiler, bintools and LLVM are used at build time, but will also leak into
-# the resulting GHC's settings file and used at runtime. This means that we are
-# currently only able to build GHC if hostPlatform == buildPlatform.
+  # the resulting GHC's settings file and used at runtime. This means that we are
+  # currently only able to build GHC if hostPlatform == buildPlatform.
 assert targetCC == pkgsHostTarget.targetPackages.stdenv.cc;
 assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
@@ -264,21 +278,21 @@ stdenv.mkDerivation (rec {
   '' + lib.optionalString targetPlatform.useAndroidPrebuilt ''
     sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
   '' + lib.optionalString targetPlatform.isMusl ''
-      echo "patching llvm-targets for musl targets..."
-      echo "Cloning these existing '*-linux-gnu*' targets:"
-      grep linux-gnu llvm-targets | sed 's/^/  /'
-      echo "(go go gadget sed)"
-      sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
-      echo "llvm-targets now contains these '*-linux-musl*' targets:"
-      grep linux-musl llvm-targets | sed 's/^/  /'
+    echo "patching llvm-targets for musl targets..."
+    echo "Cloning these existing '*-linux-gnu*' targets:"
+    grep linux-gnu llvm-targets | sed 's/^/  /'
+    echo "(go go gadget sed)"
+    sed -i 's,\(^.*linux-\)gnu\(.*\)$,\0\n\1musl\2,' llvm-targets
+    echo "llvm-targets now contains these '*-linux-musl*' targets:"
+    grep linux-musl llvm-targets | sed 's/^/  /'
 
-      echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
-      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
-      for x in configure aclocal.m4; do
-        substituteInPlace $x \
-          --replace '*-android*|*-gnueabi*)' \
-                    '*-android*|*-gnueabi*|*-musleabi*)'
-      done
+    echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
+    # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
+    for x in configure aclocal.m4; do
+      substituteInPlace $x \
+        --replace '*-android*|*-gnueabi*)' \
+                  '*-android*|*-gnueabi*|*-musleabi*)'
+    done
   '';
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
@@ -288,7 +302,8 @@ stdenv.mkDerivation (rec {
   # `--with` flags for libraries needed for RTS linker
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--with-curses-includes=${ncurses.dev}/include"
+    "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ lib.optionals (libffi != null) [
     "--with-system-libffi"
     "--with-ffi-includes=${targetPackages.libffi.dev}/include"
@@ -316,8 +331,15 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3
-    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    perl
+    autoconf
+    automake
+    m4
+    python3
+    ghc
+    bootPkgs.alex
+    bootPkgs.happy
+    bootPkgs.hscolour
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
@@ -340,14 +362,14 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable =
     [ "format" ]
-    # In nixpkgs, musl based builds currently enable `pie` hardening by default
-    # (see `defaultHardeningFlags` in `make-derivation.nix`).
-    # But GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
-    ++ lib.optional stdenv.targetPlatform.isMusl "pie";
+      # In nixpkgs, musl based builds currently enable `pie` hardening by default
+      # (see `defaultHardeningFlags` in `make-derivation.nix`).
+      # But GHC cannot currently produce outputs that are ready for `-pie` linking.
+      # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
+      # See:
+      # * https://github.com/NixOS/nixpkgs/issues/129247
+      # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
+      ++ lib.optional stdenv.targetPlatform.isMusl "pie";
 
   # big-parallel allows us to build with more than 2 cores on
   # Hydra which already warrants a significant speedup

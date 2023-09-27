@@ -1,6 +1,14 @@
-{ lib, stdenv, llvm_meta
-, monorepoSrc, runCommand
-, substituteAll, cmake, libxml2, libllvm, version, python3
+{ lib
+, stdenv
+, llvm_meta
+, monorepoSrc
+, runCommand
+, substituteAll
+, cmake
+, libxml2
+, libllvm
+, version
+, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -11,7 +19,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = runCommand "${pname}-src-${version}" {} ''
+    src = runCommand "${pname}-src-${version}" { } ''
       mkdir -p "$out"
       cp -r ${monorepoSrc}/cmake "$out"
       cp -r ${monorepoSrc}/${pname} "$out"
@@ -126,4 +134,5 @@ let
       description = "man page for Clang ${version}";
     };
   });
-in self
+in
+self

@@ -3,7 +3,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "gd4o is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   pname = "ocaml${ocaml.version}-gd4o";
   version = "1.0a5";
 

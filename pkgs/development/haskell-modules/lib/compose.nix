@@ -46,12 +46,17 @@ rec {
   # a package override set (i.e. (self: super: { etc. })) that sets
   # the packages named in the input set to the corresponding versions
   packageSourceOverrides =
-    overrides: self: super: pkgs.lib.mapAttrs (name: src:
-      let isPath = x: builtins.substring 0 1 (toString x) == "/";
-          generateExprs = if isPath src
-                             then self.callCabal2nix
-                             else self.callHackage;
-      in generateExprs name src {}) overrides;
+    overrides: self: super: pkgs.lib.mapAttrs
+      (name: src:
+      let
+        isPath = x: builtins.substring 0 1 (toString x) == "/";
+        generateExprs =
+          if isPath src
+          then self.callCabal2nix
+          else self.callHackage;
+      in
+      generateExprs name src { })
+      overrides;
 
   /* doCoverage modifies a haskell package to enable the generation
      and installation of a coverage report.
@@ -124,13 +129,13 @@ rec {
    */
   doDistribute = overrideCabal (drv: {
     # lib.platforms.all is the default value for platforms (since GHC can cross-compile)
-    hydraPlatforms = lib.subtractLists (drv.badPlatforms or [])
+    hydraPlatforms = lib.subtractLists (drv.badPlatforms or [ ])
       (drv.platforms or lib.platforms.all);
   });
   /* dontDistribute disables the distribution of binaries for the package
      via hydra.
    */
-  dontDistribute = overrideCabal (drv: { hydraPlatforms = []; });
+  dontDistribute = overrideCabal (drv: { hydraPlatforms = [ ]; });
 
   /* appendConfigureFlag adds a single argument that will be passed to the
      cabal configure command, after the arguments that have been defined
@@ -140,41 +145,41 @@ rec {
 
          > haskell.lib.compose.appendConfigureFlag "--profiling-detail=all-functions" haskellPackages.servant
    */
-  appendConfigureFlag = x: appendConfigureFlags [x];
-  appendConfigureFlags = xs: overrideCabal (drv: { configureFlags = (drv.configureFlags or []) ++ xs; });
+  appendConfigureFlag = x: appendConfigureFlags [ x ];
+  appendConfigureFlags = xs: overrideCabal (drv: { configureFlags = (drv.configureFlags or [ ]) ++ xs; });
 
-  appendBuildFlag = x: overrideCabal (drv: { buildFlags = (drv.buildFlags or []) ++ [x]; });
-  appendBuildFlags = xs: overrideCabal (drv: { buildFlags = (drv.buildFlags or []) ++ xs; });
+  appendBuildFlag = x: overrideCabal (drv: { buildFlags = (drv.buildFlags or [ ]) ++ [ x ]; });
+  appendBuildFlags = xs: overrideCabal (drv: { buildFlags = (drv.buildFlags or [ ]) ++ xs; });
 
   /* removeConfigureFlag drv x is a Haskell package like drv, but with
      all cabal configure arguments that are equal to x removed.
 
          > haskell.lib.compose.removeConfigureFlag "--verbose" haskellPackages.servant
    */
-  removeConfigureFlag = x: overrideCabal (drv: { configureFlags = lib.remove x (drv.configureFlags or []); });
+  removeConfigureFlag = x: overrideCabal (drv: { configureFlags = lib.remove x (drv.configureFlags or [ ]); });
 
-  addBuildTool = x: addBuildTools [x];
-  addBuildTools = xs: overrideCabal (drv: { buildTools = (drv.buildTools or []) ++ xs; });
+  addBuildTool = x: addBuildTools [ x ];
+  addBuildTools = xs: overrideCabal (drv: { buildTools = (drv.buildTools or [ ]) ++ xs; });
 
-  addExtraLibrary = x: addExtraLibraries [x];
-  addExtraLibraries = xs: overrideCabal (drv: { extraLibraries = (drv.extraLibraries or []) ++ xs; });
+  addExtraLibrary = x: addExtraLibraries [ x ];
+  addExtraLibraries = xs: overrideCabal (drv: { extraLibraries = (drv.extraLibraries or [ ]) ++ xs; });
 
-  addBuildDepend = x: addBuildDepends [x];
-  addBuildDepends = xs: overrideCabal (drv: { buildDepends = (drv.buildDepends or []) ++ xs; });
+  addBuildDepend = x: addBuildDepends [ x ];
+  addBuildDepends = xs: overrideCabal (drv: { buildDepends = (drv.buildDepends or [ ]) ++ xs; });
 
-  addTestToolDepend = x: addTestToolDepends [x];
-  addTestToolDepends = xs: overrideCabal (drv: { testToolDepends = (drv.testToolDepends or []) ++ xs; });
+  addTestToolDepend = x: addTestToolDepends [ x ];
+  addTestToolDepends = xs: overrideCabal (drv: { testToolDepends = (drv.testToolDepends or [ ]) ++ xs; });
 
-  addPkgconfigDepend = x: addPkgconfigDepends [x];
-  addPkgconfigDepends = xs: overrideCabal (drv: { pkg-configDepends = (drv.pkg-configDepends or []) ++ xs; });
+  addPkgconfigDepend = x: addPkgconfigDepends [ x ];
+  addPkgconfigDepends = xs: overrideCabal (drv: { pkg-configDepends = (drv.pkg-configDepends or [ ]) ++ xs; });
 
-  addSetupDepend = x: addSetupDepends [x];
-  addSetupDepends = xs: overrideCabal (drv: { setupHaskellDepends = (drv.setupHaskellDepends or []) ++ xs; });
+  addSetupDepend = x: addSetupDepends [ x ];
+  addSetupDepends = xs: overrideCabal (drv: { setupHaskellDepends = (drv.setupHaskellDepends or [ ]) ++ xs; });
 
   enableCabalFlag = x: drv: appendConfigureFlag "-f${x}" (removeConfigureFlag "-f-${x}" drv);
   disableCabalFlag = x: drv: appendConfigureFlag "-f-${x}" (removeConfigureFlag "-f${x}" drv);
 
-  markBroken = overrideCabal (drv: { broken = true; hydraPlatforms = []; });
+  markBroken = overrideCabal (drv: { broken = true; hydraPlatforms = [ ]; });
   unmarkBroken = overrideCabal (drv: { broken = false; });
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
   markUnbroken = overrideCabal (drv: { broken = false; });
@@ -199,8 +204,8 @@ rec {
 
   enableSeparateBinOutput = overrideCabal (drv: { enableSeparateBinOutput = true; });
 
-  appendPatch = x: appendPatches [x];
-  appendPatches = xs: overrideCabal (drv: { patches = (drv.patches or []) ++ xs; });
+  appendPatch = x: appendPatches [ x ];
+  appendPatches = xs: overrideCabal (drv: { patches = (drv.patches or [ ]) ++ xs; });
 
   /* Set a specific build target instead of compiling all targets in the package.
    * For example, imagine we have a .cabal file with a library, and 2 executables "dev" and "server".
@@ -210,7 +215,7 @@ rec {
    *
    */
   setBuildTargets = xs: overrideCabal (drv: { buildTarget = lib.concatStringsSep " " xs; });
-  setBuildTarget = x: setBuildTargets [x];
+  setBuildTarget = x: setBuildTargets [ x ];
 
   doHyperlinkSource = overrideCabal (drv: { hyperlinkSource = true; });
   dontHyperlinkSource = overrideCabal (drv: { hyperlinkSource = false; });
@@ -231,10 +236,10 @@ rec {
    * This includes dontStrip.
    */
   enableDWARFDebugging = drv:
-   # -g: enables debugging symbols
-   # --disable-*-stripping: tell GHC not to strip resulting binaries
-   # dontStrip: see above
-   appendConfigureFlag "--ghc-options=-g --disable-executable-stripping --disable-library-stripping" (dontStrip drv);
+    # -g: enables debugging symbols
+    # --disable-*-stripping: tell GHC not to strip resulting binaries
+    # dontStrip: see above
+    appendConfigureFlag "--ghc-options=-g --disable-executable-stripping --disable-library-stripping" (dontStrip drv);
 
   /* Create a source distribution tarball like those found on hackage,
      instead of building the package.
@@ -243,7 +248,7 @@ rec {
     name = "${drv.pname}-source-${drv.version}";
     # Since we disable the haddock phase, we also need to override the
     # outputs since the separate doc output will not be produced.
-    outputs = ["out"];
+    outputs = [ "out" ];
     buildPhase = "./Setup sdist";
     haddockPhase = ":";
     checkPhase = ":";
@@ -305,14 +310,16 @@ rec {
      A faster implementation using `cabal-install` is available as
      `buildFromCabalSdist` in your Haskell package set.
    */
-  buildFromSdist = pkg: overrideCabal (drv: {
-    src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";
+  buildFromSdist = pkg: overrideCabal
+    (drv: {
+      src = "${sdistTarball pkg}/${pkg.pname}-${pkg.version}.tar.gz";
 
-    # Revising and jailbreaking the cabal file has been handled in sdistTarball
-    revision = null;
-    editedCabalFile = null;
-    jailbreak = false;
-  }) pkg;
+      # Revising and jailbreaking the cabal file has been handled in sdistTarball
+      revision = null;
+      editedCabalFile = null;
+      jailbreak = false;
+    })
+    pkg;
 
   /* Build the package in a strict way to uncover potential problems.
      This includes buildFromSdist and failOnAllWarnings.
@@ -335,19 +342,23 @@ rec {
    */
   checkUnusedPackages =
     { ignoreEmptyImports ? false
-    , ignoreMainModule   ? false
-    , ignorePackages     ? []
-    } : drv :
-      overrideCabal (_drv: {
+    , ignoreMainModule ? false
+    , ignorePackages ? [ ]
+    }: drv:
+    overrideCabal
+      (_drv: {
         postBuild = with lib;
-          let args = concatStringsSep " " (
-                       optional ignoreEmptyImports "--ignore-empty-imports" ++
-                       optional ignoreMainModule   "--ignore-main-module" ++
-                       map (pkg: "--ignore-package ${pkg}") ignorePackages
-                     );
-          in "${pkgs.haskellPackages.packunused}/bin/packunused" +
-             optionalString (args != "") " ${args}";
-      }) (appendConfigureFlag "--ghc-option=-ddump-minimal-imports" drv);
+          let
+            args = concatStringsSep " " (
+              optional ignoreEmptyImports "--ignore-empty-imports" ++
+              optional ignoreMainModule "--ignore-main-module" ++
+              map (pkg: "--ignore-package ${pkg}") ignorePackages
+            );
+          in
+          "${pkgs.haskellPackages.packunused}/bin/packunused" +
+          optionalString (args != "") " ${args}";
+      })
+      (appendConfigureFlag "--ghc-option=-ddump-minimal-imports" drv);
 
   buildStackProject = pkgs.callPackage ../generic-stack-builder.nix { };
 
@@ -380,12 +391,14 @@ rec {
   shellAware = p: if lib.inNixShell then p.env else p;
 
   ghcInfo = ghc:
-    rec { isCross = (ghc.cross or null) != null;
-          isGhcjs = ghc.isGhcjs or false;
-          nativeGhc = if isCross || isGhcjs
-                        then ghc.bootPkgs.ghc
-                        else ghc;
-        };
+    rec {
+      isCross = (ghc.cross or null) != null;
+      isGhcjs = ghc.isGhcjs or false;
+      nativeGhc =
+        if isCross || isGhcjs
+        then ghc.bootPkgs.ghc
+        else ghc;
+    };
 
   ### mkDerivation helpers
   # These allow external users of a haskell package to extract
@@ -397,11 +410,12 @@ rec {
   # an example of this.
 
   # Some information about which phases should be run.
-  controlPhases = ghc: let inherit (ghcInfo ghc) isCross; in
-                  { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
-                  , doBenchmark ? false
-                  , ...
-                  }: { inherit doCheck doBenchmark; };
+  controlPhases = ghc:
+    let inherit (ghcInfo ghc) isCross; in
+    { doCheck ? !isCross && (lib.versionOlder "7.4" ghc.version)
+    , doBenchmark ? false
+    , ...
+    }: { inherit doCheck doBenchmark; };
 
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
@@ -411,19 +425,19 @@ rec {
     { directory, ... }:
 
     self: super:
-      let
-        haskellPaths =
-          lib.filter (lib.hasSuffix ".nix")
-            (builtins.attrNames (builtins.readDir directory));
+    let
+      haskellPaths =
+        lib.filter (lib.hasSuffix ".nix")
+          (builtins.attrNames (builtins.readDir directory));
 
-        toKeyVal = file: {
-          name  = builtins.replaceStrings [ ".nix" ] [ "" ] file;
+      toKeyVal = file: {
+        name = builtins.replaceStrings [ ".nix" ] [ "" ] file;
 
-          value = self.callPackage (directory + "/${file}") { };
-        };
+        value = self.callPackage (directory + "/${file}") { };
+      };
 
-      in
-        builtins.listToAttrs (map toKeyVal haskellPaths);
+    in
+    builtins.listToAttrs (map toKeyVal haskellPaths);
 
   /*
     INTERNAL function retained for backwards compatibility, use
@@ -490,18 +504,22 @@ rec {
       propagatedPlainBuildInputs = drvs:
         builtins.map (i: i.val) (
           builtins.genericClosure {
-            startSet = builtins.map (drv:
-              { key = drv.outPath; val = drv; }
-            ) drvs;
+            startSet = builtins.map
+              (drv:
+                { key = drv.outPath; val = drv; }
+              )
+              drvs;
             operator = { val, ... }:
               if !lib.isDerivation val
               then [ ]
               else
-                builtins.concatMap (drv:
-                  if !lib.isDerivation drv
-                  then [ ]
-                  else [ { key = drv.outPath; val = drv; } ]
-                ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
+                builtins.concatMap
+                  (drv:
+                    if !lib.isDerivation drv
+                    then [ ]
+                    else [{ key = drv.outPath; val = drv; }]
+                  )
+                  (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
           }
         );
     in

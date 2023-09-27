@@ -7,7 +7,7 @@ in
 {
   options.value = lib.mkOption {
     type = lib.types.attrsOf lib.types.str;
-    default = {};
+    default = { };
   };
   options.testing-laziness-so-don't-read-me = lib.mkOption deathtrapArgs;
 }

@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.chisel-lang.org/firrtl/";
     license = licenses.asl20;
-    maintainers =  with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill ];
   };
 }

@@ -10,7 +10,8 @@
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-xctest";
 
   inherit (sources) version;

@@ -1,8 +1,18 @@
-{ stdenv, fetchFromGitHub, lib
-, cmake, pkg-config, openjdk
-, libuuid, python3
-, silice, yosys, nextpnr, verilator
-, dfu-util, icestorm, trellis
+{ stdenv
+, fetchFromGitHub
+, lib
+, cmake
+, pkg-config
+, openjdk
+, libuuid
+, python3
+, silice
+, yosys
+, nextpnr
+, verilator
+, dfu-util
+, icestorm
+, trellis
 }:
 
 stdenv.mkDerivation rec {
@@ -69,7 +79,8 @@ stdenv.mkDerivation rec {
           done
         '';
       };
-    in {
+    in
+    {
       # a selection of test projects that build with the FPGA tools in
       # nixpkgs
       audio_sdcard_streamer = testProject "audio_sdcard_streamer";

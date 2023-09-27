@@ -13,7 +13,7 @@ let
   # set to appear while listing all the packages available.
   removeRecurseForDerivations = alias: with lib;
     if alias.recurseForDerivations or false
-    then removeAttrs alias ["recurseForDerivations"]
+    then removeAttrs alias [ "recurseForDerivations" ]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
@@ -30,10 +30,11 @@ let
     else alias;
 
   mapAliases = aliases:
-    lib.mapAttrs (n: alias:
-      removeDistribute
-        (removeRecurseForDerivations
-          (checkInPkgs n alias)))
+    lib.mapAttrs
+      (n: alias:
+        removeDistribute
+          (removeRecurseForDerivations
+            (checkInPkgs n alias)))
       aliases;
 in
 

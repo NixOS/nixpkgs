@@ -41,10 +41,13 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  packageDeps = if type == "sdk" then mkNugetDeps {
-    name = "${pname}-${version}-deps";
-    nugetDeps = packages;
-  } else null;
+  packageDeps =
+    if type == "sdk" then
+      mkNugetDeps
+        {
+          name = "${pname}-${version}-deps";
+          nugetDeps = packages;
+        } else null;
 
 in
 stdenv.mkDerivation (finalAttrs: rec {
@@ -129,24 +132,25 @@ stdenv.mkDerivation (finalAttrs: rec {
 
     updateScript =
       if type == "sdk" then
-      let
-        majorVersion =
-          with lib;
-          concatStringsSep "." (take 2 (splitVersion version));
-      in
-      writeShellScript "update-dotnet-${majorVersion}" ''
-        pushd pkgs/development/compilers/dotnet
-        exec ${./update.sh} "${majorVersion}"
-      '' else null;
+        let
+          majorVersion =
+            with lib;
+            concatStringsSep "." (take 2 (splitVersion version));
+        in
+        writeShellScript "update-dotnet-${majorVersion}" ''
+          pushd pkgs/development/compilers/dotnet
+          exec ${./update.sh} "${majorVersion}"
+        '' else null;
 
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
       };
 
-      smoke-test = runCommand "dotnet-sdk-smoke-test" {
-        nativeBuildInputs = [ finalAttrs.finalPackage ];
-      } ''
+      smoke-test = runCommand "dotnet-sdk-smoke-test"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        } ''
         HOME=$(pwd)/fake-home
         dotnet new console --no-restore
         dotnet restore --source "$(mktemp -d)"

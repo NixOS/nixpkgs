@@ -9,17 +9,19 @@
 , ppx_expect
 }:
 
-let param =
-  if lib.versionAtLeast ppxlib.version "0.26.0" then
-    {
-      version = "3.2";
-      sha256 = "sha256-5Vf1LRhSotNpTPzHmRgCMRYtrpgaspLlyzv1XdGt+u8=";
+let
+  param =
+    if lib.versionAtLeast ppxlib.version "0.26.0" then
+      {
+        version = "3.2";
+        sha256 = "sha256-5Vf1LRhSotNpTPzHmRgCMRYtrpgaspLlyzv1XdGt+u8=";
+      }
+    else {
+      version = "2.5";
+      sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
     }
-  else {
-    version = "2.5";
-    sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
-  }
-; in
+  ;
+in
 
 let
   unicodeVersion = "15.0.0";

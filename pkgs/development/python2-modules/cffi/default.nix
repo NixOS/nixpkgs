@@ -1,6 +1,7 @@
 { lib, stdenv, cffi }:
 
-if cffi == null then null else cffi.overridePythonAttrs {
+if cffi == null then null else
+cffi.overridePythonAttrs {
   disabledTests = lib.optionals stdenv.isDarwin [
     # cannot load library 'c'
     "test_FILE"

@@ -6,14 +6,15 @@
 let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
-  patchelf = libPath :
+  patchelf = libPath:
     lib.optionalString (!stdenv.isDarwin) ''
-          chmod u+w $PURS
-          patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
-          chmod u-w $PURS
-        '';
+      chmod u+w $PURS
+      patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
+      chmod u-w $PURS
+    '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "purescript";
   version = "0.15.14";
 
@@ -23,20 +24,21 @@ in stdenv.mkDerivation rec {
     then
       (if stdenv.isAarch64
       then
-      fetchurl {
-        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos-arm64.tar.gz";
-        sha256 = "1sc8ygiha980wbg60bkinvvpdn4bdasq9zffanbxck8msdwxc4zx";
-      }
+        fetchurl
+          {
+            url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos-arm64.tar.gz";
+            sha256 = "1sc8ygiha980wbg60bkinvvpdn4bdasq9zffanbxck8msdwxc4zx";
+          }
       else
-      fetchurl {
-        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-        sha256 = "01973wiybblfbgjbqrhr8435y6jk6c94i667nr3zxkxy4np3lv3q";
-      })
+        fetchurl {
+          url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+          sha256 = "01973wiybblfbgjbqrhr8435y6jk6c94i667nr3zxkxy4np3lv3q";
+        })
     else
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "0i717gb4d21m0pi1k90g5diq3yja1pwlw6ripv0d70jdnd9gsdl9";
-    };
+      fetchurl {
+        url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
+        sha256 = "0i717gb4d21m0pi1k90g5diq3yja1pwlw6ripv0d70jdnd9gsdl9";
+      };
 
 
   buildInputs = [ zlib gmp ];
@@ -57,7 +59,7 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = ./update.sh;
     tests = {
-      minimal-module = pkgs.callPackage ./test-minimal-module {};
+      minimal-module = pkgs.callPackage ./test-minimal-module { };
     };
   };
 

@@ -1,7 +1,15 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
 , dune-configurator
-, either, seq
-, gen, iter, qcheck-core, uutf, yojson
+, either
+, seq
+, gen
+, iter
+, qcheck-core
+, uutf
+, yojson
 }:
 
 buildDunePackage rec {

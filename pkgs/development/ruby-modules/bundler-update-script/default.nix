@@ -21,4 +21,5 @@ let
     bundler lock --update
     bundix
   '';
-in [ updateScript attrPath ]
+in
+[ updateScript attrPath ]

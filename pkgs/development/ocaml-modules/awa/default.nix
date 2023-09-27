@@ -1,8 +1,23 @@
-{ lib, buildDunePackage, fetchurl
+{ lib
+, buildDunePackage
+, fetchurl
 , ppx_sexp_conv
-, mirage-crypto, mirage-crypto-ec, mirage-crypto-rng, mirage-crypto-pk
-, x509, cstruct, cstruct-unix, cstruct-sexp, sexplib, eqaf
-, rresult, mtime, logs, fmt, cmdliner, base64
+, mirage-crypto
+, mirage-crypto-ec
+, mirage-crypto-rng
+, mirage-crypto-pk
+, x509
+, cstruct
+, cstruct-unix
+, cstruct-sexp
+, sexplib
+, eqaf
+, rresult
+, mtime
+, logs
+, fmt
+, cmdliner
+, base64
 , zarith
 }:
 
@@ -18,10 +33,20 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    mirage-crypto mirage-crypto-ec mirage-crypto-rng mirage-crypto-pk x509
-    cstruct cstruct-sexp sexplib mtime
-    logs base64 zarith
-    ppx_sexp_conv eqaf
+    mirage-crypto
+    mirage-crypto-ec
+    mirage-crypto-rng
+    mirage-crypto-pk
+    x509
+    cstruct
+    cstruct-sexp
+    sexplib
+    mtime
+    logs
+    base64
+    zarith
+    ppx_sexp_conv
+    eqaf
   ];
 
   doCheck = true;

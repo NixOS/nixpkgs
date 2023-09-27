@@ -1,4 +1,7 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
 , astring
 , ounit
 }:

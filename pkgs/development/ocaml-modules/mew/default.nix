@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchFromGitHub
-, result, trie
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, result
+, trie
 }:
 
 buildDunePackage rec {

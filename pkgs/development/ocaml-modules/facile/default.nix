@@ -3,7 +3,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "facile is not available for OCaml ≥ 5.0"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "facile";
   version = "1.1.4";
 

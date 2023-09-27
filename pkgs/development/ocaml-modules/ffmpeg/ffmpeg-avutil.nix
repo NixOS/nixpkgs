@@ -1,5 +1,12 @@
-{ lib, stdenv, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
-, AudioToolbox, VideoToolbox
+{ lib
+, stdenv
+, buildDunePackage
+, dune-configurator
+, pkg-config
+, fetchFromGitHub
+, callPackage
+, AudioToolbox
+, VideoToolbox
 , ffmpeg-base ? callPackage ./base.nix { }
 , ffmpeg
 }:

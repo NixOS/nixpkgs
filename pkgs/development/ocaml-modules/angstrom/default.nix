@@ -7,9 +7,9 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
-    owner  = "inhabitedtype";
-    repo   = pname;
-    rev    = version;
+    owner = "inhabitedtype";
+    repo = pname;
+    rev = version;
     hash = "sha256-vilGto5ciyKzVJd72z4B+AvM1nf3x3O7DHXrK5SIajQ=";
   };
 

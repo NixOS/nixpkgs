@@ -3,9 +3,10 @@
 let
 
 in lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
-"b0 is not available for OCaml ${ocaml.version}"
+  "b0 is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
 
   pname = "ocaml${ocaml.version}-b0";
   version = "0.0.5";

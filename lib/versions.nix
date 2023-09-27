@@ -44,7 +44,7 @@ rec {
   */
   majorMinor = v:
     builtins.concatStringsSep "."
-    (lib.take 2 (splitVersion v));
+      (lib.take 2 (splitVersion v));
 
   /* Pad a version string with zeros to match the given number of components.
 
@@ -56,9 +56,11 @@ rec {
        pad 3 "1.2.3.4"
        => "1.2.3"
   */
-  pad = n: version: let
-    numericVersion = lib.head (lib.splitString "-" version);
-    versionSuffix = lib.removePrefix numericVersion version;
-  in lib.concatStringsSep "." (lib.take n (lib.splitVersion numericVersion ++ lib.genList (_: "0") n)) + versionSuffix;
+  pad = n: version:
+    let
+      numericVersion = lib.head (lib.splitString "-" version);
+      versionSuffix = lib.removePrefix numericVersion version;
+    in
+    lib.concatStringsSep "." (lib.take n (lib.splitVersion numericVersion ++ lib.genList (_: "0") n)) + versionSuffix;
 
 }

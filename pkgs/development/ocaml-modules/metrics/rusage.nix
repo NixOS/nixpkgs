@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, metrics
-, fmt, logs
+{ lib
+, buildDunePackage
+, metrics
+, fmt
+, logs
 }:
 
 buildDunePackage {

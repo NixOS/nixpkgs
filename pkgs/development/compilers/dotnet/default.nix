@@ -1,13 +1,13 @@
 /*
-How to combine packages for use in development:
-dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
+  How to combine packages for use in development:
+  dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
 
-Hashes and urls are retrieved from:
-https://dotnet.microsoft.com/download/dotnet
+  Hashes and urls are retrieved from:
+  https://dotnet.microsoft.com/download/dotnet
 */
 { lib, config, callPackage }:
 let
-  buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) {};
+  buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) { };
   buildAttrs = {
     buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
     buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
@@ -34,7 +34,7 @@ in
 {
   inherit systemToDotnetRid;
 
-  combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
+  combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) { };
 } // lib.optionalAttrs config.allowAliases {
   # EOL
   sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 6.0 (LTS) or 7.0 (Current)";

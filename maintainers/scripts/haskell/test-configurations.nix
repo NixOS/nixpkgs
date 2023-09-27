@@ -8,41 +8,41 @@
    By default, it checks `configuration-{common,nix,ghc-8.10.x}.nix`. You can
    invoke it like this:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix --keep-going
+   nix-build maintainers/scripts/haskell/test-configurations.nix --keep-going
 
    It is possible to specify other configurations:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
+   nix-build maintainers/scripts/haskell/test-configurations.nix \
        --arg files '[ "configuration-ghc-9.0.x.nix" "configuration-ghc-9.2.x.nix" ]' \
        --keep-going
 
    You can also just supply a single string:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
+   nix-build maintainers/scripts/haskell/test-configurations.nix \
        --argstr files "configuration-arm.nix" --keep-going
 
    You can even supply full paths which is handy, as it allows for tab-completing
    the configurations:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
+   nix-build maintainers/scripts/haskell/test-configurations.nix \
        --argstr files pkgs/development/haskell-modules/configuration-arm.nix \
        --keep-going
 
    By default, derivation that fail to evaluate are skipped, unless they are
    “just” marked as broken. You can check for other eval errors like this:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
+   nix-build maintainers/scripts/haskell/test-configurations.nix \
        --arg skipEvalErrors false --keep-going
 
    You can also disable checking broken packages by passing a nixpkgs config:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
+   nix-build maintainers/scripts/haskell/test-configurations.nix \
        --arg config '{ allowBroken = false; }' --keep-going
 
    By default the haskell.packages.ghc*Binary sets used for bootstrapping GHC
    are _not_ tested. You can change this using:
 
-     nix-build maintainers/scripts/haskell/test-configurations.nix \
+   nix-build maintainers/scripts/haskell/test-configurations.nix \
        --arg skipBinaryGHCs false --keep-going
 
 */
@@ -99,24 +99,27 @@ let
         builtins.match "ghc-([0-9]+).([0-9]+).x" configName
       );
       # return all package sets under haskell.packages matching the version components
-      setsForVersion =  builtins.map (name: packageSetsWithVersionedHead.${name}) (
-        builtins.filter (setName:
-          lib.hasPrefix "ghc${configVersion}" setName
-          && (skipBinaryGHCs -> !(lib.hasInfix "Binary" setName))
-        ) (
-          builtins.attrNames packageSetsWithVersionedHead
-        )
+      setsForVersion = builtins.map (name: packageSetsWithVersionedHead.${name}) (
+        builtins.filter
+          (setName:
+            lib.hasPrefix "ghc${configVersion}" setName
+            && (skipBinaryGHCs -> !(lib.hasInfix "Binary" setName))
+          )
+          (
+            builtins.attrNames packageSetsWithVersionedHead
+          )
       );
 
       defaultSets = [ pkgs.haskellPackages ];
-    in {
-      # use plain haskellPackages for the version-agnostic files
-      # TODO(@sternenseemann): also consider currently selected versioned sets
-      "common" = defaultSets;
-      "nix" = defaultSets;
-      "arm" = defaultSets;
-      "darwin" = defaultSets;
-    }.${configName} or setsForVersion;
+    in
+      {
+        # use plain haskellPackages for the version-agnostic files
+        # TODO(@sternenseemann): also consider currently selected versioned sets
+        "common" = defaultSets;
+        "nix" = defaultSets;
+        "arm" = defaultSets;
+        "darwin" = defaultSets;
+      }.${configName} or setsForVersion;
 
   # attribute set that has all the attributes of haskellPackages set to null
   availableHaskellPackages = builtins.listToAttrs (
@@ -129,30 +132,37 @@ let
   # pass availableHaskellPackages as super in case intersectAttrs is used
   overriddenAttrs = fileName: builtins.attrNames (
     lib.fix (self:
-      import (nixpkgsPath + "/pkgs/development/haskell-modules/${fileName}") {
-        haskellLib = pkgs.haskell.lib.compose;
-        inherit pkgs;
-      } self availableHaskellPackages
+      import (nixpkgsPath + "/pkgs/development/haskell-modules/${fileName}")
+        {
+          haskellLib = pkgs.haskell.lib.compose;
+          inherit pkgs;
+        }
+        self
+        availableHaskellPackages
     )
   );
 
   # list of derivations that are affected by overrides in the given configuration
   # overlays. For common, nix, darwin etc. only the derivation from the default
   # package set will be emitted.
-  packages = builtins.filter (v:
-    lib.warnIf (v.meta.broken or false) "${v.pname} is marked as broken" (
-      v != null
-      && (skipEvalErrors -> (builtins.tryEval (v.outPath or v)).success)
+  packages = builtins.filter
+    (v:
+      lib.warnIf (v.meta.broken or false) "${v.pname} is marked as broken" (
+        v != null
+        && (skipEvalErrors -> (builtins.tryEval (v.outPath or v)).success)
+      )
     )
-  ) (
-    lib.concatMap (fileName:
-      let
-        sets = setsForFile fileName;
-        attrs = overriddenAttrs fileName;
-      in
-        lib.concatMap (set: builtins.map (attr: set.${attr}) attrs) sets
-    ) files'
-  );
+    (
+      lib.concatMap
+        (fileName:
+          let
+            sets = setsForFile fileName;
+            attrs = overriddenAttrs fileName;
+          in
+          lib.concatMap (set: builtins.map (attr: set.${attr}) attrs) sets
+        )
+        files'
+    );
 in
 
 packages

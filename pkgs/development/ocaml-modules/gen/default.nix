@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, ocaml
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ocaml
 , seq
-, qcheck, ounit2
+, qcheck
+, ounit2
 }:
 
 buildDunePackage rec {

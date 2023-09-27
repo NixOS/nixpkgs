@@ -3,9 +3,11 @@
 , fetchFromGitHub
 , cmake
 , sqlite
-, httpSupport ? true, curl
+, httpSupport ? true
+, curl
 , cliSupport ? true
-, linenoiseSupport ? cliSupport, linenoise
+, linenoiseSupport ? cliSupport
+, linenoise
 , enableLTO ? stdenv.cc.isGNU
 }:
 
@@ -42,7 +44,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_CLI=${if cliSupport then "ON" else "OFF"}"
     "-DDISABLE_HTTP=${if httpSupport then "OFF" else "ON"}"
     "-DDISABLE_LINENOISE=${if linenoiseSupport then "OFF" else "ON"}"
-  ] ++ lib.optionals enableLTO [ # TODO: LTO with LLVM
+  ] ++ lib.optionals enableLTO [
+    # TODO: LTO with LLVM
     "-DCMAKE_AR=${stdenv.cc.cc}/bin/gcc-ar"
     "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
   ];

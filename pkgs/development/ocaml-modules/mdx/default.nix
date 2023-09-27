@@ -1,6 +1,18 @@
-{ lib, fetchurl, buildDunePackage, ocaml, findlib
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, findlib
 , alcotest
-, astring, cppo, fmt, logs, ocaml-version, camlp-streams, lwt, re, csexp
+, astring
+, cppo
+, fmt
+, logs
+, ocaml-version
+, camlp-streams
+, lwt
+, re
+, csexp
 , gitUpdater
 }:
 
@@ -24,7 +36,14 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
   propagatedBuildInputs = [
-    astring fmt logs' csexp ocaml-version camlp-streams re findlib
+    astring
+    fmt
+    logs'
+    csexp
+    ocaml-version
+    camlp-streams
+    re
+    findlib
   ];
   checkInputs = [ alcotest lwt ];
 

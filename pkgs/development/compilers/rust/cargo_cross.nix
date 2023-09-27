@@ -1,6 +1,7 @@
 { runCommand, stdenv, lib, pkgsBuildBuild, makeShellWrapper, rustc, ... }:
 
-runCommand "${stdenv.targetPlatform.config}-cargo-${lib.getVersion pkgsBuildBuild.cargo}" {
+runCommand "${stdenv.targetPlatform.config}-cargo-${lib.getVersion pkgsBuildBuild.cargo}"
+{
   # Use depsBuildBuild or it tries to use target-runtimeShell
   depsBuildBuild = [ makeShellWrapper ];
 
@@ -11,4 +12,4 @@ runCommand "${stdenv.targetPlatform.config}-cargo-${lib.getVersion pkgsBuildBuil
 
   makeWrapper "${pkgsBuildBuild.cargo}/bin/cargo" "$out/bin/cargo" \
     --prefix PATH : "${rustc}/bin"
- ''
+''

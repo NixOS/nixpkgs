@@ -19,7 +19,8 @@ self: super: {
           (self.reverseList components);
         root = self.path.append parts.root (self.path.subpath.join (self.take rootIndex components));
         subpath = self.path.subpath.join (self.drop rootIndex components);
-      in {
+      in
+      {
         inherit root subpath;
       };
   };

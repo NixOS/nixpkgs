@@ -1,5 +1,10 @@
-{ lib, fetchFromGitHub, pkg-config, buildDunePackage, dune-configurator
-, gtk3, cairo2
+{ lib
+, fetchFromGitHub
+, pkg-config
+, buildDunePackage
+, dune-configurator
+, gtk3
+, cairo2
 , camlp-streams
 }:
 

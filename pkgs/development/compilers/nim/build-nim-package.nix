@@ -113,15 +113,15 @@ let
                 f = self: super:
                   let x = f0 super;
                   in
-                    if builtins.isFunction x
-                    then f0 self super
-                    else x;
+                  if builtins.isFunction x
+                  then f0 self super
+                  else x;
               in
               buildNimPackage
                 (self:
                   let super = (asFunc ((asFunc buildNimPackageArgs) self)) baseAttrs;
                   in
-                    super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
+                  super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
           };
         };
 

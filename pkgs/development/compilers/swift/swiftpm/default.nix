@@ -81,18 +81,18 @@ let
   # Tools invoked by swiftpm at run-time.
   runtimeDeps = [ git ]
     ++ lib.optionals stdenv.isDarwin [
-      xcbuild.xcrun
-      # These tools are part of cctools, but adding that as a build input puts
-      # an unwrapped linker in PATH, and breaks builds. This small derivation
-      # exposes just the tools we need:
-      # - vtool is used to determine a minimum deployment target.
-      # - libtool is used to build static libraries.
-      (runCommandLocal "swiftpm-cctools" { } ''
-        mkdir -p $out/bin
-        ln -s ${cctools}/bin/vtool $out/bin/vtool
-        ln -s ${cctools}/bin/libtool $out/bin/libtool
-      '')
-    ];
+    xcbuild.xcrun
+    # These tools are part of cctools, but adding that as a build input puts
+    # an unwrapped linker in PATH, and breaks builds. This small derivation
+    # exposes just the tools we need:
+    # - vtool is used to determine a minimum deployment target.
+    # - libtool is used to build static libraries.
+    (runCommandLocal "swiftpm-cctools" { } ''
+      mkdir -p $out/bin
+      ln -s ${cctools}/bin/vtool $out/bin/vtool
+      ln -s ${cctools}/bin/libtool $out/bin/libtool
+    '')
+  ];
 
   # Common attributes for the bootstrap derivations.
   mkBootstrapDerivation = attrs: stdenv.mkDerivation (attrs // {
@@ -105,43 +105,43 @@ let
 
     postPatch = (attrs.postPatch or "")
       + lib.optionalString stdenv.isDarwin ''
-        # On Darwin only, Swift uses arm64 as cpu arch.
-        if [ -e cmake/modules/SwiftSupport.cmake ]; then
-          substituteInPlace cmake/modules/SwiftSupport.cmake \
-            --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
-        fi
-      '';
+      # On Darwin only, Swift uses arm64 as cpu arch.
+      if [ -e cmake/modules/SwiftSupport.cmake ]; then
+        substituteInPlace cmake/modules/SwiftSupport.cmake \
+          --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
+      fi
+    '';
 
     preConfigure = (attrs.preConfigure or "")
       + ''
-        # Builds often don't set a target, and our default minimum macOS deployment
-        # target on x86_64-darwin is too low. Harmless on non-Darwin.
-        export MACOSX_DEPLOYMENT_TARGET=10.15.4
-      '';
+      # Builds often don't set a target, and our default minimum macOS deployment
+      # target on x86_64-darwin is too low. Harmless on non-Darwin.
+      export MACOSX_DEPLOYMENT_TARGET=10.15.4
+    '';
 
     postInstall = (attrs.postInstall or "")
       + lib.optionalString stdenv.isDarwin ''
-        # The install name of libraries is incorrectly set to lib/ (via our
-        # CMake setup hook) instead of lib/swift/. This'd be easily fixed by
-        # fixDarwinDylibNames, but some builds create libraries that reference
-        # eachother, and we also have to fix those references.
-        dylibs="$(find $out/lib/swift* -name '*.dylib')"
-        changes=""
-        for dylib in $dylibs; do
-          changes+=" -change $(otool -D $dylib | tail -n 1) $dylib"
-        done
-        for dylib in $dylibs; do
-          install_name_tool -id $dylib $changes $dylib
-        done
-      '';
+      # The install name of libraries is incorrectly set to lib/ (via our
+      # CMake setup hook) instead of lib/swift/. This'd be easily fixed by
+      # fixDarwinDylibNames, but some builds create libraries that reference
+      # eachother, and we also have to fix those references.
+      dylibs="$(find $out/lib/swift* -name '*.dylib')"
+      changes=""
+      for dylib in $dylibs; do
+        changes+=" -change $(otool -D $dylib | tail -n 1) $dylib"
+      done
+      for dylib in $dylibs; do
+        install_name_tool -id $dylib $changes $dylib
+      done
+    '';
 
     cmakeFlags = (attrs.cmakeFlags or [ ])
       ++ [
-        # Some builds link to libraries within the same build. Make sure these
-        # create references to $out. None of our builds run their own products,
-        # so we don't have to account for that scenario.
-        "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-      ];
+      # Some builds link to libraries within the same build. Make sure these
+      # create references to $out. None of our builds run their own products,
+      # so we don't have to account for that scenario.
+      "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+    ];
   });
 
   # On Darwin, we only want ncurses in the linker search path, because headers
@@ -168,11 +168,11 @@ let
 
     postInstall = cmakeGlue.SwiftSystem
       + lib.optionalString (!stdenv.isDarwin) ''
-        # The cmake rules apparently only use the Darwin install convention.
-        # Fix up the installation so the module can be found on non-Darwin.
-        mkdir -p $out/${swiftStaticModuleSubdir}
-        mv $out/lib/swift_static/${swiftOs}/*.swiftmodule $out/${swiftStaticModuleSubdir}/
-      '';
+      # The cmake rules apparently only use the Darwin install convention.
+      # Fix up the installation so the module can be found on non-Darwin.
+      mkdir -p $out/${swiftStaticModuleSubdir}
+      mv $out/lib/swift_static/${swiftOs}/*.swiftmodule $out/${swiftStaticModuleSubdir}/
+    '';
   };
 
   swift-collections = mkBootstrapDerivation {
@@ -188,11 +188,11 @@ let
 
     postInstall = cmakeGlue.SwiftCollections
       + lib.optionalString (!stdenv.isDarwin) ''
-        # The cmake rules apparently only use the Darwin install convention.
-        # Fix up the installation so the module can be found on non-Darwin.
-        mkdir -p $out/${swiftStaticModuleSubdir}
-        mv $out/lib/swift_static/${swiftOs}/*.swiftmodule $out/${swiftStaticModuleSubdir}/
-      '';
+      # The cmake rules apparently only use the Darwin install convention.
+      # Fix up the installation so the module can be found on non-Darwin.
+      mkdir -p $out/${swiftStaticModuleSubdir}
+      mv $out/lib/swift_static/${swiftOs}/*.swiftmodule $out/${swiftStaticModuleSubdir}/
+    '';
   };
 
   swift-tools-support-core = mkBootstrapDerivation {
@@ -231,10 +231,10 @@ let
 
     postInstall = cmakeGlue.ArgumentParser
       + lib.optionalString stdenv.isLinux ''
-        # Fix rpath so ArgumentParserToolInfo can be found.
-        patchelf --add-rpath "$out/lib/swift/${swiftOs}" \
-          $out/lib/swift/${swiftOs}/libArgumentParser.so
-      '';
+      # Fix rpath so ArgumentParserToolInfo can be found.
+      patchelf --add-rpath "$out/lib/swift/${swiftOs}" \
+        $out/lib/swift/${swiftOs}/libArgumentParser.so
+    '';
   };
 
   Yams = mkBootstrapDerivation {
@@ -360,8 +360,9 @@ let
     '';
   });
 
-# Build the final swiftpm with the bootstrapping swiftpm.
-in stdenv.mkDerivation (commonAttrs // {
+  # Build the final swiftpm with the bootstrapping swiftpm.
+in
+stdenv.mkDerivation (commonAttrs // {
   pname = "swiftpm";
 
   nativeBuildInputs = commonAttrs.nativeBuildInputs ++ [
@@ -374,10 +375,10 @@ in stdenv.mkDerivation (commonAttrs // {
     sqlite
     XCTest
   ]
-    ++ lib.optionals stdenv.isDarwin [
-      CryptoKit
-      LocalAuthentication
-    ];
+  ++ lib.optionals stdenv.isDarwin [
+    CryptoKit
+    LocalAuthentication
+  ];
 
   configurePhase = generated.configure + ''
     # Functionality provided by Xcode XCTest, but not available in

@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, buildDunePackage, async, cohttp_static_handler ? null
-, core_unix ? null, owee, ppx_jane, shell ? null }:
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, async
+, cohttp_static_handler ? null
+, core_unix ? null
+, owee
+, ppx_jane
+, shell ? null
+}:
 
 buildDunePackage rec {
   pname = "magic-trace";

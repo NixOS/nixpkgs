@@ -4,17 +4,17 @@
 , autoconf269
 , automake
 , libtool
-# libs
+  # libs
 , cjson
 , db
 , gmp
 , libxml2
 , ncurses
-# docs
+  # docs
 , help2man
 , texinfo
 , texliveBasic
-# test
+  # test
 , writeText
 }:
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "lib" "out" ];
   # XXX: Without this, we get a cycle between bin and dev
-  propagatedBuildOutputs = [];
+  propagatedBuildOutputs = [ ];
 
   # Skips a broken test
   postPatch = ''

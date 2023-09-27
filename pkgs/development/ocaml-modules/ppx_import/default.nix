@@ -9,19 +9,22 @@
 , version ? if lib.versionAtLeast ocaml.version "4.11" then "1.10.0" else "1.9.1"
 }:
 
-let param = {
-  "1.9.1" = {
-    sha256 = "sha256-0bSY4u44Ds84XPIbcT5Vt4AG/4PkzFKMl9CDGFZyIdI=";
-  };
-  "1.10.0" = {
-    sha256 = "sha256-MA8sf0F7Ch1wJDL8E8470ukKx7KieWyjWJnJQsqBVW8=";
-  };
-}."${version}"; in
+let
+  param = {
+    "1.9.1" = {
+      sha256 = "sha256-0bSY4u44Ds84XPIbcT5Vt4AG/4PkzFKMl9CDGFZyIdI=";
+    };
+    "1.10.0" = {
+      sha256 = "sha256-MA8sf0F7Ch1wJDL8E8470ukKx7KieWyjWJnJQsqBVW8=";
+    };
+  }."${version}";
+in
 
 lib.throwIfNot (lib.versionAtLeast ppxlib.version "0.24.0")
   "ppx_import is not available with ppxlib-${ppxlib.version}"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "ppx_import";
   inherit version;
 

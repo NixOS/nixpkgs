@@ -1,7 +1,7 @@
 # to run these tests:
 # nix-build nixpkgs/lib/tests/teams.nix
 # If it builds, all tests passed
-{ pkgs ? import ../.. {}, lib ? pkgs.lib }:
+{ pkgs ? import ../.. { }, lib ? pkgs.lib }:
 
 let
   inherit (lib) types;
@@ -22,17 +22,17 @@ let
         type = types.listOf (types.submodule
           (import ./maintainer-module.nix { inherit lib; })
         );
-        default = [];
+        default = [ ];
       };
       githubTeams = lib.mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
       };
     };
   };
 
   checkTeam = team: uncheckedAttrs:
-  let
+    let
       prefix = [ "lib" "maintainer-team" team ];
       checkedAttrs = (lib.modules.evalModules {
         inherit prefix;
@@ -44,7 +44,9 @@ let
           }
         ];
       }).config;
-  in checkedAttrs;
+    in
+    checkedAttrs;
 
   checkedTeams = lib.mapAttrs checkTeam lib.teams;
-in pkgs.writeTextDir "maintainer-teams.json" (builtins.toJSON checkedTeams)
+in
+pkgs.writeTextDir "maintainer-teams.json" (builtins.toJSON checkedTeams)

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_DOCS=${toCMakeBoolean enableDocumentation}"
     "-DENABLE_GC=ON"
     "-DENABLE_GTESTS=${toCMakeBoolean enableGTests}"
-    "-DENABLE_PROTOBUF_STATIC=OFF"  # static protobuf has been removed since 3.21.6
+    "-DENABLE_PROTOBUF_STATIC=OFF" # static protobuf has been removed since 3.21.6
     "-DENABLE_MULTITHREAD=${toCMakeBoolean enableMultithreading}"
     "-DENABLE_GMP=ON"
   ];

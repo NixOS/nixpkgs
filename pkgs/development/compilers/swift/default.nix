@@ -25,25 +25,27 @@ let
     #
     # The following selects the correct Clang version, matching the version
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
-    clang = if pkgs.stdenv.isDarwin
+    clang =
+      if pkgs.stdenv.isDarwin
       then
-        swiftLlvmPackages.clang.override rec {
-          libc = apple_sdk.Libsystem;
-          bintools = pkgs.bintools.override { inherit libc; };
-          # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
-          # default Darwin stdenv. Using the default libc++ avoids issues (such as crashes)
-          # that can happen when a Swift application dynamically links different versions
-          # of libc++ and libc++abi than libraries it links are using.
-          inherit (llvmPackages) libcxx;
-          extraPackages = [
-            llvmPackages.libcxxabi
-            # Use the compiler-rt associated with clang, but use the libc++abi from the stdenv
-            # to avoid linking against two different versions (for the same reasons as above).
-            (swiftLlvmPackages.compiler-rt.override {
-              inherit (llvmPackages) libcxxabi;
-            })
-          ];
-        }
+        swiftLlvmPackages.clang.override
+          rec {
+            libc = apple_sdk.Libsystem;
+            bintools = pkgs.bintools.override { inherit libc; };
+            # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
+            # default Darwin stdenv. Using the default libc++ avoids issues (such as crashes)
+            # that can happen when a Swift application dynamically links different versions
+            # of libc++ and libc++abi than libraries it links are using.
+            inherit (llvmPackages) libcxx;
+            extraPackages = [
+              llvmPackages.libcxxabi
+              # Use the compiler-rt associated with clang, but use the libc++abi from the stdenv
+              # to avoid linking against two different versions (for the same reasons as above).
+              (swiftLlvmPackages.compiler-rt.override {
+                inherit (llvmPackages) libcxxabi;
+              })
+            ];
+          }
       else
         swiftLlvmPackages.clang;
 
@@ -76,11 +78,13 @@ let
       useSwiftDriver = false;
     };
 
-    Dispatch = if stdenv.isDarwin
+    Dispatch =
+      if stdenv.isDarwin
       then null # part of libsystem
       else callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
 
-    Foundation = if stdenv.isDarwin
+    Foundation =
+      if stdenv.isDarwin
       then apple_sdk.frameworks.Foundation
       else callPackage ./foundation { swift = swiftNoSwiftDriver; };
 
@@ -118,4 +122,5 @@ let
 
   };
 
-in self
+in
+self

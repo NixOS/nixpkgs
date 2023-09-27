@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "0.2.2";
 
   src = fetchFromGitLab {
-    owner  = "owl-lisp";
-    repo   = "owl";
-    rev    = "v${version}";
+    owner = "owl-lisp";
+    repo = "owl";
+    rev = "v${version}";
     sha256 = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
   };
 
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A functional Scheme for world domination";
-    homepage    = "https://gitlab.com/owl-lisp/owl";
-    license     = licenses.mit;
+    homepage = "https://gitlab.com/owl-lisp/owl";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

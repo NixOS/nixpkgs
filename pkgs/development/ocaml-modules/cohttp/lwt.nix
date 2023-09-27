@@ -12,7 +12,11 @@ buildDunePackage {
   buildInputs = [ ppx_sexp_conv ];
 
   propagatedBuildInputs = [
-    cohttp lwt logs sexplib0 uri
+    cohttp
+    lwt
+    logs
+    sexplib0
+    uri
   ];
 
   meta = cohttp.meta // {

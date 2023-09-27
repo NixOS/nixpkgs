@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, dune-configurator, stdio, R
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, buildDunePackage
+, pkg-config
+, dune-configurator
+, stdio
+, R
 , alcotest
 }:
 

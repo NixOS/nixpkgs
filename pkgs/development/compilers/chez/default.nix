@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchurl
-, coreutils, cctools
-, ncurses, libiconv, libX11, libuuid
+{ lib
+, stdenv
+, fetchurl
+, coreutils
+, cctools
+, ncurses
+, libiconv
+, libX11
+, libuuid
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,11 +71,11 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description  = "A powerful and incredibly fast R6RS Scheme compiler";
-    homepage     = "https://cisco.github.io/ChezScheme/";
-    license      = lib.licenses.asl20;
-    maintainers  = with lib.maintainers; [ thoughtpolice ];
-    platforms    = lib.platforms.unix;
+    description = "A powerful and incredibly fast R6RS Scheme compiler";
+    homepage = "https://cisco.github.io/ChezScheme/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.unix;
     badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
   };
 })

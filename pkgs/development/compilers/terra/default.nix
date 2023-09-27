@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, llvmPackages, ncurses, cmake, libxml2
-, symlinkJoin, breakpointHook, cudaPackages, enableCUDA ? false
-, libobjc, Cocoa, Foundation
+{ lib
+, stdenv
+, fetchFromGitHub
+, llvmPackages
+, ncurses
+, cmake
+, libxml2
+, symlinkJoin
+, breakpointHook
+, cudaPackages
+, enableCUDA ? false
+, libobjc
+, Cocoa
+, Foundation
 }:
 
 let
@@ -30,7 +41,8 @@ let
 
   clangVersion = llvmPackages.clang-unwrapped.version;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "terra";
   version = "1.1.0";
 

@@ -1,6 +1,15 @@
-{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, dune-configurator
 , optint
-, fmt, rresult, bos, fpath, astring, alcotest
+, fmt
+, rresult
+, bos
+, fpath
+, astring
+, alcotest
 }:
 
 buildDunePackage rec {

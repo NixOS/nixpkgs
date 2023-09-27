@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, re, uunf, uuseg
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, re
+, uunf
+, uuseg
 , alcotest
 }:
 

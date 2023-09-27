@@ -1,4 +1,6 @@
-{ buildDunePackage, dolmen, dolmen_type
+{ buildDunePackage
+, dolmen
+, dolmen_type
 , gen
 , pp_loc
 }:

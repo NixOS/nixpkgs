@@ -281,5 +281,5 @@ let
     };
   };
 in
-  if cases == [] then "Unit tests successful"
-  else throw "Path unit tests failed: ${lib.generators.toPretty {} cases}"
+if cases == [ ] then "Unit tests successful"
+else throw "Path unit tests failed: ${lib.generators.toPretty {} cases}"

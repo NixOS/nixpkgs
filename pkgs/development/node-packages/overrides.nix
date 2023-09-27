@@ -106,7 +106,7 @@ final: prev: {
   });
 
   insect = prev.insect.override (oldAttrs: {
-    nativeBuildInputs = oldAttrs.nativeBuildInputs or [] ++ [ pkgs.psc-package final.pulp ];
+    nativeBuildInputs = oldAttrs.nativeBuildInputs or [ ] ++ [ pkgs.psc-package final.pulp ];
   });
 
   intelephense = prev.intelephense.override (oldAttrs: {
@@ -161,7 +161,7 @@ final: prev: {
     ];
   };
 
-  makam =  prev.makam.override {
+  makam = prev.makam.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
@@ -192,24 +192,26 @@ final: prev: {
       sha256 = "sha256-8OxTOkwBPcnjyhXhxQEDd8tiaQoHt91zUJX5Ka+IXco=";
     };
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = let
-      patches = [
-        # Needed to fix packages with DOS line-endings after above patch - PR svanderburg/node2nix#314
-        (fetchpatch {
-          name = "convert-crlf-for-script-bin-files.patch";
-          url = "https://github.com/svanderburg/node2nix/commit/91aa511fe7107938b0409a02ab8c457a6de2d8ca.patch";
-          hash = "sha256-ISiKYkur/o8enKDzJ8mQndkkSC4yrTNlheqyH+LiXlU=";
-        })
-        # fix nodejs attr names
-        (fetchpatch {
-          url = "https://github.com/svanderburg/node2nix/commit/3b63e735458947ef39aca247923f8775633363e5.patch";
-          hash = "sha256-pe8Xm4mjPh9oKXugoMY6pRl8YYgtdw0sRXN+TienalU=";
-        })
-      ];
-    in ''
-      ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
-      wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
-    '';
+    postInstall =
+      let
+        patches = [
+          # Needed to fix packages with DOS line-endings after above patch - PR svanderburg/node2nix#314
+          (fetchpatch {
+            name = "convert-crlf-for-script-bin-files.patch";
+            url = "https://github.com/svanderburg/node2nix/commit/91aa511fe7107938b0409a02ab8c457a6de2d8ca.patch";
+            hash = "sha256-ISiKYkur/o8enKDzJ8mQndkkSC4yrTNlheqyH+LiXlU=";
+          })
+          # fix nodejs attr names
+          (fetchpatch {
+            url = "https://github.com/svanderburg/node2nix/commit/3b63e735458947ef39aca247923f8775633363e5.patch";
+            hash = "sha256-pe8Xm4mjPh9oKXugoMY6pRl8YYgtdw0sRXN+TienalU=";
+          })
+        ];
+      in
+      ''
+        ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
+        wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
+      '';
   };
 
   pnpm = prev.pnpm.override {
@@ -219,16 +221,18 @@ final: prev: {
       sed 's/"link:/"file:/g' --in-place package.json
     '';
 
-    postInstall = let
-      pnpmLibPath = lib.makeBinPath [
-        nodejs.passthru.python
-        nodejs
-      ];
-    in ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
-      done
-    '';
+    postInstall =
+      let
+        pnpmLibPath = lib.makeBinPath [
+          nodejs.passthru.python
+          nodejs
+        ];
+      in
+      ''
+        for prog in $out/bin/*; do
+          wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
+        done
+      '';
   };
 
   postcss-cli = prev.postcss-cli.override (oldAttrs: {
@@ -282,7 +286,7 @@ final: prev: {
     npmFlags = builtins.toString [ "--ignore-scripts" ];
 
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall =  ''
+    postInstall = ''
       wrapProgram "$out/bin/pulp" --suffix PATH : ${lib.makeBinPath [
         pkgs.purescript
       ]}
@@ -385,19 +389,19 @@ final: prev: {
   };
 
   vega-lite = prev.vega-lite.override {
-      postInstall = ''
-        cd node_modules
-        for dep in ${final.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
-          if [[ ! -d ''${dep##*/} ]]; then
-            ln -s "${final.vega-cli}/lib/node_modules/vega-cli/node_modules/''${dep##*/}"
-          fi
-        done
-      '';
-      passthru.tests = {
-        simple-execution = callPackage ./package-tests/vega-lite.nix {
-          inherit (final) vega-lite;
-        };
+    postInstall = ''
+      cd node_modules
+      for dep in ${final.vega-cli}/lib/node_modules/vega-cli/node_modules/*; do
+        if [[ ! -d ''${dep##*/} ]]; then
+          ln -s "${final.vega-cli}/lib/node_modules/vega-cli/node_modules/''${dep##*/}"
+        fi
+      done
+    '';
+    passthru.tests = {
+      simple-execution = callPackage ./package-tests/vega-lite.nix {
+        inherit (final) vega-lite;
       };
+    };
   };
 
   volar = final."@volar/vue-language-server".override {

@@ -29,7 +29,15 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ menhir ];
   propagatedBuildInputs = [
-    bindlib camlp-streams cmdliner pratter sedlex stdlib-shims timed why3 yojson
+    bindlib
+    camlp-streams
+    cmdliner
+    pratter
+    sedlex
+    stdlib-shims
+    timed
+    why3
+    yojson
   ];
 
   checkInputs = [ alcotest dedukti ];

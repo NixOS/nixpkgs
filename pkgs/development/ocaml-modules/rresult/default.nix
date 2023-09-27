@@ -3,7 +3,8 @@
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
   "rresult is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   pname = "ocaml${ocaml.version}-rresult";
   version = "0.7.0";
   src = fetchurl {

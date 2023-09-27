@@ -1,5 +1,8 @@
-{ buildDunePackage, metrics
-, duration, fmt, lwt
+{ buildDunePackage
+, metrics
+, duration
+, fmt
+, lwt
 }:
 
 buildDunePackage rec {

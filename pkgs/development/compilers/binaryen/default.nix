@@ -1,5 +1,14 @@
-{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten,
-  gtest, lit, nodejs, filecheck
+{ lib
+, stdenv
+, cmake
+, python3
+, fetchFromGitHub
+, fetchpatch
+, emscripten
+, gtest
+, lit
+, nodejs
+, filecheck
 }:
 
 stdenv.mkDerivation rec {
@@ -45,13 +54,23 @@ stdenv.mkDerivation rec {
   '';
 
   tests = [
-    "version" "wasm-opt" "wasm-dis"
-    "crash" "dylink" "ctor-eval"
-    "wasm-metadce" "wasm-reduce" "spec"
-    "lld" "wasm2js" "validator"
-    "example" "unit"
+    "version"
+    "wasm-opt"
+    "wasm-dis"
+    "crash"
+    "dylink"
+    "ctor-eval"
+    "wasm-metadce"
+    "wasm-reduce"
+    "spec"
+    "lld"
+    "wasm2js"
+    "validator"
+    "example"
+    "unit"
     # "binaryenjs" "binaryenjs_wasm" # not building this
-    "lit" "gtest"
+    "lit"
+    "gtest"
   ];
   doCheck = stdenv.isLinux;
 

@@ -1,16 +1,15 @@
-{
- BioPerl,
- IOString,
- buildPerlModule,
- fetchFromGitHub,
- fetchpatch,
- fetchurl,
- kent,
- lib,
- libmysqlclient,
- libpng,
- openssl,
- perl
+{ BioPerl
+, IOString
+, buildPerlModule
+, fetchFromGitHub
+, fetchpatch
+, fetchurl
+, kent
+, lib
+, libmysqlclient
+, libpng
+, openssl
+, perl
 }:
 
 buildPerlModule rec {

@@ -1,11 +1,16 @@
-{ lib, fetchFromGitHub, stdenv
-, findlib, ocaml, ocamlbuild
+{ lib
+, fetchFromGitHub
+, stdenv
+, findlib
+, ocaml
+, ocamlbuild
 }:
 
 lib.throwIf (lib.versionOlder ocaml.version "4.02")
   "sosa is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation rec {
+  stdenv.mkDerivation
+rec {
   pname = "ocaml${ocaml.version}-sosa";
   version = "0.3.0";
 

@@ -19,9 +19,9 @@
 
   meta = with lib; {
     description = "Simple web handlers for Gerbil Scheme";
-    homepage    = "https://github.com/drewc/ftw";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/drewc/ftw";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

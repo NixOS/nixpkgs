@@ -55,16 +55,19 @@ rec {
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in flip (extendDerivation (seq drv.drvPath true)) newDrv (
-      { meta = drv.meta or {};
-        passthru = if drv ? passthru then drv.passthru else {};
+    in
+    flip (extendDerivation (seq drv.drvPath true)) newDrv (
+      {
+        meta = drv.meta or { };
+        passthru = if drv ? passthru then drv.passthru else { };
       }
       //
-      (drv.passthru or {})
+      (drv.passthru or { })
       //
       optionalAttrs (drv ? __spliced) {
-        __spliced = {} // (mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
-      });
+        __spliced = { } // (mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
+      }
+    );
 
 
   /* `makeOverridable` takes a function from attribute set to attribute set and
@@ -94,17 +97,17 @@ rec {
       mirrorArgs = mirrorFunctionArgs f;
     in
     mirrorArgs (origArgs:
-    let
-      result = f origArgs;
+      let
+        result = f origArgs;
 
-      # Changes the original arguments with (potentially a function that returns) a set of new attributes
-      overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
+        # Changes the original arguments with (potentially a function that returns) a set of new attributes
+        overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
 
-      # Re-call the function but with different arguments
-      overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
-      # Change the result of the function call by applying g to it
-      overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
-    in
+        # Re-call the function but with different arguments
+        overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
+        # Change the result of the function call by applying g to it
+        overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
+      in
       if isAttrs result then
         result // {
           override = overrideArgs;
@@ -113,7 +116,7 @@ rec {
             overrideResult (x: x.overrideAttrs fdrv);
         }
       else if isFunction result then
-        # Transform the result into a functor while propagating its arguments
+      # Transform the result into a functor while propagating its arguments
         setFunctionArgs result (functionArgs result) // {
           override = overrideArgs;
         }
@@ -164,8 +167,8 @@ rec {
       missingArgs =
         # Filter out arguments that have a default value
         (filterAttrs (name: value: ! value)
-        # Filter out arguments that would be passed
-        (removeAttrs fargs (attrNames allArgs)));
+          # Filter out arguments that would be passed
+          (removeAttrs fargs (attrNames allArgs)));
 
       # Get a list of suggested argument names for a given missing one
       getSuggestions = arg: pipe (autoArgs // args) [
@@ -182,7 +185,7 @@ rec {
       ];
 
       prettySuggestions = suggestions:
-        if suggestions == [] then ""
+        if suggestions == [ ] then ""
         else if length suggestions == 1 then ", did you mean ${elemAt suggestions 0}?"
         else ", did you mean ${concatStringsSep ", " (lib.init suggestions)} or ${lib.last suggestions}?";
 
@@ -191,23 +194,26 @@ rec {
           loc = builtins.unsafeGetAttrPos arg fargs;
           # loc' can be removed once lib/minver.nix is >2.3.4, since that includes
           # https://github.com/NixOS/nix/pull/3468 which makes loc be non-null
-          loc' = if loc != null then loc.file + ":" + toString loc.line
+          loc' =
+            if loc != null then loc.file + ":" + toString loc.line
             else if ! isFunction fn then
               toString fn + optionalString (pathIsDirectory fn) "/default.nix"
             else "<unknown location>";
-        in "Function called without required argument \"${arg}\" at "
+        in
+        "Function called without required argument \"${arg}\" at "
         + "${loc'}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
       error = errorForArg (head (attrNames missingArgs));
 
-    in if missingArgs == {}
-       then makeOverridable f allArgs
-       # This needs to be an abort so it can't be caught with `builtins.tryEval`,
-       # which is used by nix-env and ofborg to filter out packages that don't evaluate.
-       # This way we're forced to fix such errors in Nixpkgs,
-       # which is especially relevant with allowAliases = false
-       else abort "lib.customisation.callPackageWith: ${error}";
+    in
+    if missingArgs == { }
+    then makeOverridable f allArgs
+    # This needs to be an abort so it can't be caught with `builtins.tryEval`,
+    # which is used by nix-env and ofborg to filter out packages that don't evaluate.
+    # This way we're forced to fix such errors in Nixpkgs,
+    # which is especially relevant with allowAliases = false
+    else abort "lib.customisation.callPackageWith: ${error}";
 
 
   /* Like callPackage, but for a function that returns an attribute
@@ -225,11 +231,12 @@ rec {
       pkgs = f origArgs;
       mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
     in
-      if isDerivation pkgs then throw
+    if isDerivation pkgs then
+      throw
         ("function `callPackages` was called on a *single* derivation "
           + ''"${pkgs.name or "<unknown-name>"}";''
           + " did you mean to use `callPackage` instead?")
-      else mapAttrs mkAttrOverridable pkgs;
+    else mapAttrs mkAttrOverridable pkgs;
 
 
   /* Add attributes to each output of a derivation without changing
@@ -246,7 +253,8 @@ rec {
         ({ all = map (x: x.value) outputsList; }) // passthru;
 
       outputToAttrListElement = outputName:
-        { name = outputName;
+        {
+          name = outputName;
           value = commonAttrs // {
             inherit (drv.${outputName}) type outputName;
             outputSpecified = true;
@@ -263,7 +271,8 @@ rec {
         };
 
       outputsList = map outputToAttrListElement outputs;
-    in commonAttrs // {
+    in
+    commonAttrs // {
       drvPath = assert condition; drv.drvPath;
       outPath = assert condition; drv.outPath;
     };
@@ -278,7 +287,7 @@ rec {
   */
   hydraJob = drv:
     let
-      outputs = drv.outputs or ["out"];
+      outputs = drv.outputs or [ "out" ];
 
       commonAttrs =
         { inherit (drv) name system meta; inherit outputs; }
@@ -290,7 +299,8 @@ rec {
 
       makeOutput = outputName:
         let output = drv.${outputName}; in
-        { name = outputName;
+        {
+          name = outputName;
           value = commonAttrs // {
             outPath = output.outPath;
             drvPath = output.drvPath;
@@ -302,8 +312,9 @@ rec {
       outputsList = map makeOutput outputs;
 
       drv' = (head outputsList).value;
-    in if drv == null then null else
-      deepSeq drv' drv';
+    in
+    if drv == null then null else
+    deepSeq drv' drv';
 
   /* Make a set of packages with a common scope. All packages called
      with the provided `callPackage` will be evaluated with the same
@@ -319,24 +330,26 @@ rec {
        makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> AttrSet
   */
   makeScope = newScope: f:
-    let self = f self // {
-          newScope = scope: newScope (self // scope);
-          callPackage = self.newScope {};
-          overrideScope = g: makeScope newScope (extends g f);
-          # Remove after 24.11 is released.
-          overrideScope' = g: warnIf (isInOldestRelease 2311)
-            "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
-            (makeScope newScope (extends g f));
-          packages = f;
-        };
-    in self;
+    let
+      self = f self // {
+        newScope = scope: newScope (self // scope);
+        callPackage = self.newScope { };
+        overrideScope = g: makeScope newScope (extends g f);
+        # Remove after 24.11 is released.
+        overrideScope' = g: warnIf (isInOldestRelease 2311)
+          "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
+          (makeScope newScope (extends g f));
+        packages = f;
+      };
+    in
+    self;
 
   /* backward compatibility with old uncurried form; deprecated */
   makeScopeWithSplicing =
     splicePackages: newScope: otherSplices: keep: extra: f:
     makeScopeWithSplicing'
-    { inherit splicePackages newScope; }
-    { inherit otherSplices keep extra f; };
+      { inherit splicePackages newScope; }
+      { inherit otherSplices keep extra f; };
 
   /* Like makeScope, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit.
@@ -363,25 +376,25 @@ rec {
     , newScope
     }:
     { otherSplices
-    # Attrs from `self` which won't be spliced.
-    # Avoid using keep, it's only used for a python hook workaround, added in PR #104201.
-    # ex: `keep = (self: { inherit (self) aAttr; })`
-    , keep ? (_self: {})
-    # Additional attrs to add to the sets `callPackage`.
-    # When the package is from a subset (but not a subset within a package IS #211340)
-    # within `spliced0` it will be spliced.
-    # When using an package outside the set but it's available from `pkgs`, use the package from `pkgs.__splicedPackages`.
-    # If the package is not available within the set or in `pkgs`, such as a package in a let binding, it will not be spliced
-    # ex:
-    # ```
-    # nix-repl> darwin.apple_sdk.frameworks.CoreFoundation
-    #   «derivation ...CoreFoundation-11.0.0.drv»
-    # nix-repl> darwin.CoreFoundation
-    #   error: attribute 'CoreFoundation' missing
-    # nix-repl> darwin.callPackage ({ CoreFoundation }: CoreFoundation) { }
-    #   «derivation ...CoreFoundation-11.0.0.drv»
-    # ```
-    , extra ? (_spliced0: {})
+      # Attrs from `self` which won't be spliced.
+      # Avoid using keep, it's only used for a python hook workaround, added in PR #104201.
+      # ex: `keep = (self: { inherit (self) aAttr; })`
+    , keep ? (_self: { })
+      # Additional attrs to add to the sets `callPackage`.
+      # When the package is from a subset (but not a subset within a package IS #211340)
+      # within `spliced0` it will be spliced.
+      # When using an package outside the set but it's available from `pkgs`, use the package from `pkgs.__splicedPackages`.
+      # If the package is not available within the set or in `pkgs`, such as a package in a let binding, it will not be spliced
+      # ex:
+      # ```
+      # nix-repl> darwin.apple_sdk.frameworks.CoreFoundation
+      #   «derivation ...CoreFoundation-11.0.0.drv»
+      # nix-repl> darwin.CoreFoundation
+      #   error: attribute 'CoreFoundation' missing
+      # nix-repl> darwin.callPackage ({ CoreFoundation }: CoreFoundation) { }
+      #   «derivation ...CoreFoundation-11.0.0.drv»
+      # ```
+    , extra ? (_spliced0: { })
     , f
     }:
     let
@@ -401,11 +414,13 @@ rec {
         # overridden.
         overrideScope = g: (makeScopeWithSplicing'
           { inherit splicePackages newScope; }
-          { inherit otherSplices keep extra;
+          {
+            inherit otherSplices keep extra;
             f = extends g f;
           });
         packages = f;
       };
-    in self;
+    in
+    self;
 
 }

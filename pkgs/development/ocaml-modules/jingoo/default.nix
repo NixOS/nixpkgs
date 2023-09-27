@@ -1,5 +1,14 @@
-{ lib, buildDunePackage, fetchFromGitHub, ocaml
-, menhir, ppxlib, ppx_deriving, re, uutf, uucp, ounit2
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ocaml
+, menhir
+, ppxlib
+, ppx_deriving
+, re
+, uutf
+, uucp
+, ounit2
 }:
 
 buildDunePackage rec {

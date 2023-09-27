@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
@@ -93,10 +94,10 @@ disable-warnings-if-gcc13 (stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage    = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
+    homepage = "https://github.com/KhronosGroup/SPIRV-LLVM-Translator";
     description = "A tool and a library for bi-directional translation between SPIR-V and LLVM IR";
-    license     = licenses.ncsa;
-    platforms   = platforms.unix;
+    license = licenses.ncsa;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ gloaming ];
   };
 })

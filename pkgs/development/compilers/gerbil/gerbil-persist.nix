@@ -19,9 +19,9 @@
 
   meta = with lib; {
     description = "Gerbil Persist: Persistent data and activities";
-    homepage    = "https://github.com/fare/gerbil-persist";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-persist";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, callPackage
-, autoreconfHook, texinfo, libffi
+{ lib
+, stdenv
+, fetchFromGitHub
+, callPackage
+, autoreconfHook
+, texinfo
+, libffi
 }:
 
 let
   swig = callPackage ./swig.nix { };
   bootForth = callPackage ./boot-forth.nix { };
   lispDir = "${placeholder "out"}/share/emacs/site-lisp";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   pname = "gforth";
   version = "0.7.9_20230518";
@@ -19,7 +25,10 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook texinfo bootForth swig
+    autoreconfHook
+    texinfo
+    bootForth
+    swig
   ];
   buildInputs = [
     libffi

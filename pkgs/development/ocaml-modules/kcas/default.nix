@@ -1,5 +1,8 @@
-{ lib, buildDunePackage, fetchurl
-, domain-local-await, domain-local-timeout
+{ lib
+, buildDunePackage
+, fetchurl
+, domain-local-await
+, domain-local-timeout
 , alcotest
 }:
 

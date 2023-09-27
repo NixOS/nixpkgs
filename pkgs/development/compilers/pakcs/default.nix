@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, haskellPackages, haskell
-, which, swiProlog, rlwrap, tk
-, curl, git, unzip, gnutar, coreutils, sqlite }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, haskellPackages
+, haskell
+, which
+, swiProlog
+, rlwrap
+, tk
+, curl
+, git
+, unzip
+, gnutar
+, coreutils
+, sqlite
+}:
 
 let
   pname = "pakcs";
@@ -16,14 +29,17 @@ let
 
   curry-frontend = (haskellPackages.override {
     overrides = self: super: {
-      curry-frontend = haskell.lib.compose.overrideCabal (drv: {
-        inherit src;
-        postUnpack = "sourceRoot+=/frontend";
-      }) (super.callPackage ./curry-frontend.nix { });
+      curry-frontend = haskell.lib.compose.overrideCabal
+        (drv: {
+          inherit src;
+          postUnpack = "sourceRoot+=/frontend";
+        })
+        (super.callPackage ./curry-frontend.nix { });
     };
   }).curry-frontend;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   buildInputs = [ swiProlog ];
@@ -45,7 +61,7 @@ in stdenv.mkDerivation {
                 scripts/compile-all-libs.sh; do
         substituteInPlace $file --replace "/bin/rm" "rm"
     done
-  '' ;
+  '';
 
   preBuild = ''
     mkdir -p $out/pakcs

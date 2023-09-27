@@ -3,7 +3,8 @@
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "nonstd is not available for OCaml ≥ 5.0"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "nonstd";
   version = "0.0.3";
 

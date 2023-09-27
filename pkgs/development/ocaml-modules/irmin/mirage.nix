@@ -7,7 +7,10 @@ buildDunePackage {
   duneVersion = "3";
 
   propagatedBuildInputs = [
-    irmin fmt ptime mirage-clock
+    irmin
+    fmt
+    ptime
+    mirage-clock
   ];
 
   meta = irmin.meta // {

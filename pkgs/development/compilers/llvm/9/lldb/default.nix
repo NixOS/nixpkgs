@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , fetch
 , fetchpatch
 , cmake
@@ -44,14 +46,23 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [
-    cmake python3 which swig lit makeWrapper
+    cmake
+    python3
+    which
+    swig
+    lit
+    makeWrapper
   ] ++ lib.optionals stdenv.isDarwin [
     # for scripts/generate-vers.pl
     perl
   ];
 
   buildInputs = [
-    ncurses zlib libedit libxml2 libllvm
+    ncurses
+    zlib
+    libedit
+    libxml2
+    libllvm
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc

@@ -1,5 +1,13 @@
-{ lib, buildDunePackage, fetchurl
-, astring, cmdliner, fmt, re, stdlib-shims, uutf, ocaml-syntax-shims
+{ lib
+, buildDunePackage
+, fetchurl
+, astring
+, cmdliner
+, fmt
+, re
+, stdlib-shims
+, uutf
+, ocaml-syntax-shims
 }:
 
 buildDunePackage rec {

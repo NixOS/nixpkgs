@@ -29,7 +29,7 @@ self: super:
   stm = doJailbreak self.stm_2_5_3_0;
   exceptions = dontCheck self.exceptions_0_10_7;
 
-## OTHER PACKAGES
+  ## OTHER PACKAGES
 
   # Runtime exception in tests, missing C API h$realloc
   base-compat-batteries = dontCheck super.base-compat-batteries;
@@ -43,17 +43,24 @@ self: super:
   # doctest doesn't work on ghcjs, but sometimes dontCheck doesn't seem to get rid of the dependency
   doctest = pkgs.lib.warn "ignoring dependency on doctest" null;
 
-  ghcjs-dom = overrideCabal (drv: {
-    libraryHaskellDepends = with self; [
-      ghcjs-base ghcjs-dom-jsffi text transformers
-    ];
-    configureFlags = [ "-fjsffi" "-f-webkit" ];
-  }) super.ghcjs-dom;
+  ghcjs-dom = overrideCabal
+    (drv: {
+      libraryHaskellDepends = with self; [
+        ghcjs-base
+        ghcjs-dom-jsffi
+        text
+        transformers
+      ];
+      configureFlags = [ "-fjsffi" "-f-webkit" ];
+    })
+    super.ghcjs-dom;
 
-  ghcjs-dom-jsffi = overrideCabal (drv: {
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ [ self.ghcjs-base self.text ];
-    broken = false;
-  }) super.ghcjs-dom-jsffi;
+  ghcjs-dom-jsffi = overrideCabal
+    (drv: {
+      libraryHaskellDepends = (drv.libraryHaskellDepends or [ ]) ++ [ self.ghcjs-base self.text ];
+      broken = false;
+    })
+    super.ghcjs-dom-jsffi;
 
   # https://github.com/Deewiant/glob/issues/39
   Glob = dontCheck super.Glob;
@@ -64,9 +71,11 @@ self: super:
   # uses doctest
   http-types = dontCheck super.http-types;
 
-  jsaddle = overrideCabal (drv: {
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ [ self.ghcjs-base ];
-  }) super.jsaddle;
+  jsaddle = overrideCabal
+    (drv: {
+      libraryHaskellDepends = (drv.libraryHaskellDepends or [ ]) ++ [ self.ghcjs-base ];
+    })
+    super.jsaddle;
 
   # Tests hang, possibly some issue with tasty and race(async) usage in the nonTerminating tests
   logict = dontCheck super.logict;
@@ -79,13 +88,17 @@ self: super:
   # Terminal test not supported on ghcjs
   QuickCheck = dontCheck super.QuickCheck;
 
-  reflex = overrideCabal (drv: {
-    libraryHaskellDepends = (drv.libraryHaskellDepends or []) ++ [ self.ghcjs-base ];
-  }) super.reflex;
+  reflex = overrideCabal
+    (drv: {
+      libraryHaskellDepends = (drv.libraryHaskellDepends or [ ]) ++ [ self.ghcjs-base ];
+    })
+    super.reflex;
 
-  reflex-dom = overrideCabal (drv: {
-    libraryHaskellDepends = removeLibraryHaskellDepends ["jsaddle-webkit2gtk"] (drv.libraryHaskellDepends or []);
-  }) super.reflex-dom;
+  reflex-dom = overrideCabal
+    (drv: {
+      libraryHaskellDepends = removeLibraryHaskellDepends [ "jsaddle-webkit2gtk" ] (drv.libraryHaskellDepends or [ ]);
+    })
+    super.reflex-dom;
 
   # https://github.com/dreixel/syb/issues/21
   syb = dontCheck super.syb;
@@ -120,13 +133,15 @@ self: super:
   # Without this revert, test suites using tasty fail with:
   # ReferenceError: h$getMonotonicNSec is not defined
   # https://github.com/UnkindPartition/tasty/pull/345#issuecomment-1538216407
-  tasty = appendPatch (pkgs.fetchpatch {
-    name = "tasty-ghcjs.patch";
-    url = "https://github.com/UnkindPartition/tasty/commit/e692065642fd09b82acccea610ad8f49edd207df.patch";
-    revert = true;
-    relative = "core";
-    hash = "sha256-ryABU2ywkVOEPC/jWv8humT3HaRpCwMYEk+Ux3hhi/M=";
-  }) super.tasty;
+  tasty = appendPatch
+    (pkgs.fetchpatch {
+      name = "tasty-ghcjs.patch";
+      url = "https://github.com/UnkindPartition/tasty/commit/e692065642fd09b82acccea610ad8f49edd207df.patch";
+      revert = true;
+      relative = "core";
+      hash = "sha256-ryABU2ywkVOEPC/jWv8humT3HaRpCwMYEk+Ux3hhi/M=";
+    })
+    super.tasty;
 
   # Tests take unacceptably long.
   vector = dontCheck super.vector;

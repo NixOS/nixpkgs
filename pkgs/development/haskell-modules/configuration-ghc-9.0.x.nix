@@ -62,7 +62,8 @@ self: super: {
   hashable = addBuildDepends [
     self.data-array-byte
     self.base-orphans
-  ] super.hashable;
+  ]
+    super.hashable;
 
   hashable-time = doJailbreak super.hashable-time;
   tuple = addBuildDepend self.base-orphans super.tuple;
@@ -76,7 +77,7 @@ self: super: {
 
   doctest = dontCheck super.doctest;
 
-  haskell-language-server =  throw "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version";
+  haskell-language-server = throw "haskell-language-server has dropped support for ghc 9.0 in version 2.4.0.0, please use a newer ghc version or an older nixpkgs version";
 
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_6);
@@ -93,9 +94,11 @@ self: super: {
   ghc-api-compat = unmarkBroken super.ghc-api-compat;
 
   # 2021-09-18: cabal2nix does not detect the need for ghc-api-compat.
-  hiedb = overrideCabal (old: {
-    libraryHaskellDepends = old.libraryHaskellDepends ++ [self.ghc-api-compat];
-  }) super.hiedb;
+  hiedb = overrideCabal
+    (old: {
+      libraryHaskellDepends = old.libraryHaskellDepends ++ [ self.ghc-api-compat ];
+    })
+    super.hiedb;
 
   # https://github.com/lspitzner/butcher/issues/7
   butcher = doJailbreak super.butcher;
@@ -103,8 +106,8 @@ self: super: {
   # We use a GHC patch to support the fix for https://github.com/fpco/inline-c/issues/127
   # which means that the upstream cabal file isn't allowed to add the flag.
   inline-c-cpp =
-    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
-    super.inline-c-cpp;
+    (if isDarwin then appendConfigureFlags [ "--ghc-option=-fcompact-unwind" ] else x: x)
+      super.inline-c-cpp;
 
   # 2022-05-31: weeder 2.4.* requires GHC 9.2
   weeder = doDistribute self.weeder_2_3_1;

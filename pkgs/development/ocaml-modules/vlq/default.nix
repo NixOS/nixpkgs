@@ -1,11 +1,15 @@
-{ lib, buildDunePackage, fetchurl, ocaml
+{ lib
+, buildDunePackage
+, fetchurl
+, ocaml
 , dune-configurator
 }:
 
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "vlq is not available for OCaml ${ocaml.version}"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "vlq";
   version = "0.2.1";
 

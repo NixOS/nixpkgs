@@ -1,6 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
-, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4-headless, python3, ruby, icu71, fetchurl, runCommand
+{ stdenv
+, lib
+, fetchFromGitHub
+, writeText
+, openjdk17_headless
+, gradle_7
+, pkg-config
+, perl
+, cmake
+, gperf
+, gtk2
+, gtk3
+, libXtst
+, libXxf86vm
+, glib
+, alsa-lib
+, ffmpeg_4-headless
+, python3
+, ruby
+, icu71
+, fetchurl
+, runCommand
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -21,7 +40,7 @@ let
     hash = "sha256-pVWIy0BkICsthA5mxhR9SJQHleMNnaEcGl/AaLi5qZM=";
   };
 
-  fakeRepository = runCommand "icu-data-repository" {} ''
+  fakeRepository = runCommand "icu-data-repository" { } ''
     mkdir -p $out/download/release-${dashed-icu-version}
     cp ${icu-data} $out/download/release-${dashed-icu-version}/icu4c-${underscored-icu-version}-data-bin-l.zip
   '';
@@ -78,7 +97,8 @@ let
     outputHash = "sha256-dV7/U5GpFxhI13smZ587C6cVE4FRNPY0zexZkYK4Yqo=";
   };
 
-in makePackage {
+in
+makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''

@@ -1,6 +1,17 @@
-{ lib, stdenv, llvm_meta, version
-, monorepoSrc, runCommand
-, cmake, ninja, python3, xcbuild, libllvm, linuxHeaders, libcxxabi, libxcrypt
+{ lib
+, stdenv
+, llvm_meta
+, version
+, monorepoSrc
+, runCommand
+, cmake
+, ninja
+, python3
+, xcbuild
+, libllvm
+, linuxHeaders
+, libcxxabi
+, libxcrypt
 , doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
 }:
 
@@ -13,7 +24,7 @@ let
 
   baseName = "compiler-rt";
 
-  src = runCommand "${baseName}-src-${version}" {} ''
+  src = runCommand "${baseName}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${baseName} "$out"
@@ -121,7 +132,7 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '' + lib.optionalString doFakeLibgcc ''
-     ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
   '';
 
   meta = llvm_meta // {

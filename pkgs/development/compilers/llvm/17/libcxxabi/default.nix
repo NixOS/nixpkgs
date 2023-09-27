@@ -1,6 +1,15 @@
-{ lib, stdenv, llvm_meta, cmake, ninja, python3
-, monorepoSrc, runCommand, fetchpatch
-, cxx-headers, libunwind, version
+{ lib
+, stdenv
+, llvm_meta
+, cmake
+, ninja
+, python3
+, monorepoSrc
+, runCommand
+, fetchpatch
+, cxx-headers
+, libunwind
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -8,7 +17,7 @@ stdenv.mkDerivation rec {
   pname = "libcxxabi";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" {} ''
+  src = runCommand "${pname}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${pname} "$out"

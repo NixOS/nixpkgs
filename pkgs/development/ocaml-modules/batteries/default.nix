@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, buildDunePackage, ocaml, qtest, qcheck, num, camlp-streams
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, qtest
+, qcheck
+, num
+, camlp-streams
 , doCheck ? lib.versionAtLeast ocaml.version "4.08"
 }:
 

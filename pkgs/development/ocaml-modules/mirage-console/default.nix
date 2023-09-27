@@ -1,5 +1,8 @@
-{ lib, fetchurl, buildDunePackage
-, lwt, mirage-flow
+{ lib
+, fetchurl
+, buildDunePackage
+, lwt
+, mirage-flow
 }:
 
 buildDunePackage rec {

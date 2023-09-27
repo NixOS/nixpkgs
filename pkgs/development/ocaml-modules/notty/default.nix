@@ -1,4 +1,7 @@
-{ lib, buildDunePackage, fetchurl, cppo
+{ lib
+, buildDunePackage
+, fetchurl
+, cppo
 , uutf
 , lwt
 }:

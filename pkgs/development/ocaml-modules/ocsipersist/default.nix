@@ -1,4 +1,5 @@
-{ buildDunePackage, ocsipersist-lib
+{ buildDunePackage
+, ocsipersist-lib
 , ocsipersist-pgsql
 , ocsipersist-sqlite
 }:

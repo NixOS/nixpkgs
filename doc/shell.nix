@@ -1,7 +1,7 @@
 let
   pkgs = import ../. {
-    config = {};
-    overlays = [];
+    config = { };
+    overlays = [ ];
   };
 
   common = import ./common.nix;
@@ -13,8 +13,8 @@ let
     open = "/${outputPath}/${indexPath}";
   };
 in
-  pkgs.mkShell {
-    packages = [
-      web-devmode
-    ];
-  }
+pkgs.mkShell {
+  packages = [
+    web-devmode
+  ];
+}

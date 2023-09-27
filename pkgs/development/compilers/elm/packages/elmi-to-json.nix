@@ -1,6 +1,18 @@
-{ mkDerivation, aeson, base, binary, bytestring, containers
-, directory, fetchgit, filepath, ghc-prim, hpack
-, optparse-applicative, lib, text, unliftio
+{ mkDerivation
+, aeson
+, base
+, binary
+, bytestring
+, containers
+, directory
+, fetchgit
+, filepath
+, ghc-prim
+, hpack
+, optparse-applicative
+, lib
+, text
+, unliftio
 , unordered-containers
 }:
 mkDerivation {
@@ -14,8 +26,18 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson base binary bytestring containers directory filepath ghc-prim
-    optparse-applicative text unliftio unordered-containers
+    aeson
+    base
+    binary
+    bytestring
+    containers
+    directory
+    filepath
+    ghc-prim
+    optparse-applicative
+    text
+    unliftio
+    unordered-containers
   ];
   libraryToolDepends = [ hpack ];
   executableHaskellDepends = [ base ];

@@ -8,7 +8,8 @@ in
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
   "gg is not available for OCaml ${ocaml.version}"
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation
+{
 
   pname = "ocaml${ocaml.version}-gg";
   inherit version;

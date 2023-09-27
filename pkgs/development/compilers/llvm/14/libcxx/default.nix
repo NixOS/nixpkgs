@@ -1,15 +1,22 @@
-{ lib, stdenv, llvm_meta
-, monorepoSrc, runCommand
-, cmake, python3, fixDarwinDylibNames, version
+{ lib
+, stdenv
+, llvm_meta
+, monorepoSrc
+, runCommand
+, cmake
+, python3
+, fixDarwinDylibNames
+, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt
+, libcxxabi
+, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
 
-# If headersOnly is true, the resulting package would only include the headers.
-# Use this to break the circular dependency between libcxx and libcxxabi.
-#
-# Some context:
-# https://reviews.llvm.org/rG1687f2bbe2e2aaa092f942d4a97d41fad43eedfb
+  # If headersOnly is true, the resulting package would only include the headers.
+  # Use this to break the circular dependency between libcxx and libcxxabi.
+  #
+  # Some context:
+  # https://reviews.llvm.org/rG1687f2bbe2e2aaa092f942d4a97d41fad43eedfb
 , headersOnly ? false
 }:
 
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
   pname = basename + lib.optionalString headersOnly "-headers";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" {} ''
+  src = runCommand "${pname}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${basename} "$out"
@@ -57,10 +64,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
-      "-DLIBCXX_ENABLE_THREADS=OFF"
-      "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
-      "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
+    "-DLIBCXX_ENABLE_THREADS=OFF"
+    "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+    "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+  ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   buildFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";

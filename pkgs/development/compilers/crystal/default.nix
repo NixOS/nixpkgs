@@ -54,23 +54,23 @@ let
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary = { version, sha256s, rel ? 1 }:
-  stdenv.mkDerivation rec {
-    pname = "crystal-binary";
-    inherit version;
+    stdenv.mkDerivation rec {
+      pname = "crystal-binary";
+      inherit version;
 
-    src = fetchurl {
-      url = binaryUrl version rel;
-      sha256 = sha256s.${stdenv.system};
+      src = fetchurl {
+        url = binaryUrl version rel;
+        sha256 = sha256s.${stdenv.system};
+      };
+
+      buildCommand = ''
+        mkdir -p $out
+        tar --strip-components=1 -C $out -xf ${src}
+        patchShebangs $out/bin/crystal
+      '';
+
+      meta.platforms = lib.attrNames sha256s;
     };
-
-    buildCommand = ''
-      mkdir -p $out
-      tar --strip-components=1 -C $out -xf ${src}
-      patchShebangs $out/bin/crystal
-    '';
-
-    meta.platforms = lib.attrNames sha256s;
-  };
 
   generic =
     { version
@@ -79,7 +79,7 @@ let
     , llvmPackages
     , doCheck ? true
     , extraBuildInputs ? [ ]
-    , buildFlags ? [ "all" "docs" "release=1"]
+    , buildFlags ? [ "all" "docs" "release=1" ]
     }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "crystal";
@@ -93,12 +93,12 @@ let
       };
 
       patches = [
-          (substituteAll {
-            src = ./tzdata.patch;
-            inherit tzdata;
-          })
-        ]
-        ++ lib.optionals (lib.versionOlder version "1.2.0") [
+        (substituteAll {
+          src = ./tzdata.patch;
+          inherit tzdata;
+        })
+      ]
+      ++ lib.optionals (lib.versionOlder version "1.2.0") [
         # add support for DWARF5 debuginfo, fixes builds on recent compilers
         # the PR is 8 commits from 2019, so just fetch the whole thing
         # and hope it doesn't change

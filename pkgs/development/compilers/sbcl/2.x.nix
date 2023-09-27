@@ -1,4 +1,11 @@
-{ lib, stdenv, callPackage, clisp, fetchurl, fetchpatch, writeText, zstd
+{ lib
+, stdenv
+, callPackage
+, clisp
+, fetchurl
+, fetchpatch
+, writeText
+, zstd
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
 , disableImmobileSpace ? false
@@ -106,19 +113,19 @@ stdenv.mkDerivation rec {
     sed -e '5,$d' -i contrib/sb-simple-streams/*test*.lisp
   ''
   + (if purgeNixReferences
-    then
-      # This is the default location to look for the core; by default in $out/lib/sbcl
-      ''
-        sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
-          -i src/runtime/runtime.c
-      ''
-    else
-      # Fix software version retrieval
-      ''
-        sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
-          src/code/run-program.lisp
-      ''
-    );
+  then
+  # This is the default location to look for the core; by default in $out/lib/sbcl
+    ''
+      sed 's@^\(#define SBCL_HOME\) .*$@\1 "/no-such-path"@' \
+        -i src/runtime/runtime.c
+    ''
+  else
+  # Fix software version retrieval
+    ''
+      sed -e "s@/bin/uname@$(command -v uname)@g" -i src/code/*-os.lisp \
+        src/code/run-program.lisp
+    ''
+  );
 
 
   preBuild = ''
@@ -145,8 +152,8 @@ stdenv.mkDerivation rec {
     # Should be fixed past 2.1.10 release.
     "-fcommon"
   ]
-    # Fails to find `O_LARGEFILE` otherwise.
-    ++ [ "-D_GNU_SOURCE" ]);
+  # Fails to find `O_LARGEFILE` otherwise.
+  ++ [ "-D_GNU_SOURCE" ]);
 
   buildPhase = ''
     runHook preBuild

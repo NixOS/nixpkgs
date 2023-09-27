@@ -105,14 +105,16 @@ let
       nativeLibs = [ mariadb.client ];
     };
     cl-ode = pkg: {
-      nativeLibs = let
-        ode' = ode.overrideAttrs (o: {
-          configureFlags = [
-            "--enable-shared"
-            "--enable-double-precision"
-          ];
-        });
-      in [ ode' ];
+      nativeLibs =
+        let
+          ode' = ode.overrideAttrs (o: {
+            configureFlags = [
+              "--enable-shared"
+              "--enable-double-precision"
+            ];
+          });
+        in
+        [ ode' ];
     };
     cl-opengl = pkg: {
       nativeLibs = [ libGL ];
@@ -230,10 +232,12 @@ let
     let
       builtPkg = build-asdf-system pkg;
       withExtras = pkg //
-                   (optionalAttrs
-                     (hasAttr pkg.pname extras)
-                     (extras.${pkg.pname} builtPkg));
+        (optionalAttrs
+          (hasAttr pkg.pname extras)
+          (extras.${pkg.pname} builtPkg));
       fixedUp = fixup withExtras;
-    in build-asdf-system fixedUp;
+    in
+    build-asdf-system fixedUp;
 
-in builtQlpkgs
+in
+builtQlpkgs

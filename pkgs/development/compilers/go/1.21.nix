@@ -147,12 +147,13 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
       rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
     ''}
-  '' else lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
-    rm -rf bin/*_*
-    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
-      rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
-    ''}
-  '');
+  '' else
+    lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
+      rm -rf bin/*_*
+      ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
+        rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+      ''}
+    '');
 
   installPhase = ''
     runHook preInstall

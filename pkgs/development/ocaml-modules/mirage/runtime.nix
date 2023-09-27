@@ -1,5 +1,10 @@
-{ lib, buildDunePackage, fetchurl, ipaddr, functoria-runtime
-, logs, lwt
+{ lib
+, buildDunePackage
+, fetchurl
+, ipaddr
+, functoria-runtime
+, logs
+, lwt
 , alcotest
 }:
 

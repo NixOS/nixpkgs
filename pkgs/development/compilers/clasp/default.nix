@@ -79,9 +79,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A Common Lisp implementation based on LLVM with C++ integration";
-    license = lib.licenses.lgpl21Plus ;
+    license = lib.licenses.lgpl21Plus;
     maintainers = lib.teams.lisp.members;
-    platforms = ["x86_64-linux" "x86_64-darwin"];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     # Upstream claims support, but breaks with:
     # error: use of undeclared identifier 'aligned_alloc'
     broken = stdenv.isDarwin;

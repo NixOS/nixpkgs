@@ -3,7 +3,8 @@
 lib.throwIfNot (lib.versionAtLeast "4.12" ocaml.version)
   "spacetime_lib is not available for OCaml ${ocaml.version}"
 
-buildDunePackage rec {
+  buildDunePackage
+rec {
   pname = "spacetime_lib";
   version = "0.3.0";
   duneVersion = "2";

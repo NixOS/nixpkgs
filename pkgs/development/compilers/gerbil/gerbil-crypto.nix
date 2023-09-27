@@ -21,9 +21,9 @@
 
   meta = with lib; {
     description = "Gerbil Crypto: Extra Cryptographic Primitives for Gerbil";
-    homepage    = "https://github.com/fare/gerbil-crypto";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/fare/gerbil-crypto";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 }

@@ -1,6 +1,13 @@
-{ lib, stdenv, llvm_meta, cmake, python3
-, monorepoSrc, runCommand
-, cxx-headers, libunwind, version
+{ lib
+, stdenv
+, llvm_meta
+, cmake
+, python3
+, monorepoSrc
+, runCommand
+, cxx-headers
+, libunwind
+, version
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
 
@@ -8,7 +15,7 @@ stdenv.mkDerivation rec {
   pname = "libcxxabi";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" {} ''
+  src = runCommand "${pname}-src-${version}" { } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${pname} "$out"
@@ -49,7 +56,8 @@ stdenv.mkDerivation rec {
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
   ];
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         if [ -L "$file" ]; then continue; fi

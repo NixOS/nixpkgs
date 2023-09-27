@@ -10,7 +10,8 @@
 let
   llvmPackages = llvmPackages_13;
   inherit (llvmPackages) stdenv;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "odin";
   version = "dev-2024-01";
 
@@ -22,7 +23,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    makeBinaryWrapper which
+    makeBinaryWrapper
+    which
   ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;

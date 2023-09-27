@@ -1,9 +1,32 @@
-{ lib, stdenv, fetchurl, bison, pkg-config, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib
-, withLLVM ? false, cacert, Foundation, libobjc, python3, version, sha256, autoconf, libtool, automake, cmake, which
+{ lib
+, stdenv
+, fetchurl
+, bison
+, pkg-config
+, glib
+, gettext
+, perl
+, libgdiplus
+, libX11
+, callPackage
+, ncurses
+, zlib
+, withLLVM ? false
+, cacert
+, Foundation
+, libobjc
+, python3
+, version
+, sha256
+, autoconf
+, libtool
+, automake
+, cmake
+, which
 , gnumake42
 , enableParallelBuilding ? true
 , srcArchiveSuffix ? "tar.bz2"
-, extraPatches ? []
+, extraPatches ? [ ]
 }:
 
 let
@@ -20,7 +43,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ automake bison cmake pkg-config which gnumake42 ];
   buildInputs = [
-    glib gettext perl libgdiplus libX11 ncurses zlib python3 autoconf libtool
+    glib
+    gettext
+    perl
+    libgdiplus
+    libX11
+    ncurses
+    zlib
+    python3
+    autoconf
+    libtool
   ] ++ lib.optionals stdenv.isDarwin [ Foundation libobjc ];
 
   configureFlags = [
@@ -82,12 +114,19 @@ stdenv.mkDerivation rec {
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
     license = with licenses; [
-      /* runtime, compilers, tools and most class libraries licensed */ mit
-      /* runtime includes some code licensed */ bsd3
-      /* mcs/class/I18N/mklist.sh marked GPLv2 and others just GPL */ gpl2Only
-      /* RabbitMQ.Client class libraries dual licensed */ mpl20 asl20
-      /* mcs/class/System.Core/System/TimeZoneInfo.Android.cs */ asl20
-      /* some documentation */ mspl
+      /* runtime, compilers, tools and most class libraries licensed */
+      mit
+      /* runtime includes some code licensed */
+      bsd3
+      /* mcs/class/I18N/mklist.sh marked GPLv2 and others just GPL */
+      gpl2Only
+      /* RabbitMQ.Client class libraries dual licensed */
+      mpl20
+      asl20
+      /* mcs/class/System.Core/System/TimeZoneInfo.Android.cs */
+      asl20
+      /* some documentation */
+      mspl
       # https://www.mono-project.com/docs/faq/licensing/
       # https://github.com/mono/mono/blob/main/LICENSE
     ];

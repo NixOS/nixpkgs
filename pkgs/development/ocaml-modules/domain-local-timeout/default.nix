@@ -1,6 +1,12 @@
-{ lib, buildDunePackage, ocaml, fetchurl
-, mtime, psq, thread-table
-, alcotest, mdx
+{ lib
+, buildDunePackage
+, ocaml
+, fetchurl
+, mtime
+, psq
+, thread-table
+, alcotest
+, mdx
 , domain-local-await
 }:
 

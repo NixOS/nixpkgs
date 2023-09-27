@@ -1,7 +1,7 @@
 { lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
-  pname   = "lesscpy";
+  pname = "lesscpy";
   version = "0.15.1";
 
   src = fetchPypi {
@@ -17,8 +17,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Python LESS Compiler";
-    homepage    = "https://github.com/lesscpy/lesscpy";
-    license     = licenses.mit;
+    homepage = "https://github.com/lesscpy/lesscpy";
+    license = licenses.mit;
     maintainers = with maintainers; [ s1341 ];
   };
 }

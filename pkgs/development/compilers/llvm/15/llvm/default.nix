@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta
+{ lib
+, stdenv
+, llvm_meta
 , pkgsBuildBuild
 , monorepoSrc
 , runCommand
@@ -22,13 +24,13 @@
 , buildLlvmTools
 , debugVersion ? false
 , doCheck ? (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
-  && (stdenv.hostPlatform == stdenv.buildPlatform)
+    && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 , enablePFM ? stdenv.isLinux /* PFM only supports Linux */
-  # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
-  # broken for the armv7l builder
-  && !stdenv.hostPlatform.isAarch
+    # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
+    # broken for the armv7l builder
+    && !stdenv.hostPlatform.isAarch
 , enablePolly ? true
 }:
 
@@ -56,20 +58,23 @@ let
   #
   # So, we "manually" assemble one python derivation for the package to depend
   # on, taking into account whether checks are enabled or not:
-  python = if doCheck then
+  python =
+    if doCheck then
     # Note that we _explicitly_ ask for a python interpreter for our host
     # platform here; the splicing that would ordinarily take care of this for
     # us does not seem to work once we use `withPackages`.
-    let
-      checkDeps = ps: with ps; [ psutil ];
-    in pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
-  else python3;
+      let
+        checkDeps = ps: with ps; [ psutil ];
+      in
+      pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
+    else python3;
 
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = runCommand "${pname}-src-${version}" {} (''
+  src = runCommand "${pname}-src-${version}" { } (''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${pname} "$out"
@@ -85,10 +90,11 @@ in stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ cmake ninja python ]
     ++ optionals enableManpages [
-      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-      # splicing does *not* work with the latter. (TODO: fix)
-      python3Packages.sphinx python3Packages.recommonmark
-    ];
+    # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+    # splicing does *not* work with the latter. (TODO: fix)
+    python3Packages.sphinx
+    python3Packages.recommonmark
+  ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -273,29 +279,31 @@ in stdenv.mkDerivation (rec {
   # version we were given.
   #
   # We do this check here, in the LLVM build, because it happens early.
-  postConfigure = let
-    v = lib.versions;
-    major = v.major release_version;
-    minor = v.minor release_version;
-    patch = v.patch release_version;
-  in ''
-    # $1: part, $2: expected
-    check_version() {
-      part="''${1^^}"
-      part="$(cat include/llvm/Config/llvm-config.h  | grep "#define LLVM_VERSION_''${part} " | cut -d' ' -f3)"
+  postConfigure =
+    let
+      v = lib.versions;
+      major = v.major release_version;
+      minor = v.minor release_version;
+      patch = v.patch release_version;
+    in
+    ''
+      # $1: part, $2: expected
+      check_version() {
+        part="''${1^^}"
+        part="$(cat include/llvm/Config/llvm-config.h  | grep "#define LLVM_VERSION_''${part} " | cut -d' ' -f3)"
 
-      if [[ "$part" != "$2" ]]; then
-        echo >&2 \
-          "mismatch in the $1 version! we have version ${release_version}" \
-          "and expected the $1 version to be '$2'; the source has '$part' instead"
-        exit 3
-      fi
-    }
+        if [[ "$part" != "$2" ]]; then
+          echo >&2 \
+            "mismatch in the $1 version! we have version ${release_version}" \
+            "and expected the $1 version to be '$2'; the source has '$part' instead"
+          exit 3
+        fi
+      }
 
-    check_version major ${major}
-    check_version minor ${minor}
-    check_version patch ${patch}
-  '';
+      check_version major ${major}
+      check_version minor ${minor}
+      check_version patch ${patch}
+    '';
 
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
@@ -316,8 +324,9 @@ in stdenv.mkDerivation (rec {
     ] ++ optionals enableSharedLibraries [
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
-  in flagsForLlvmConfig ++ [
-    "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
+  in
+  flagsForLlvmConfig ++ [
+    "-DLLVM_INSTALL_UTILS=ON" # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
@@ -366,8 +375,9 @@ in stdenv.mkDerivation (rec {
           "-DCMAKE_INSTALL_LIBDIR=${placeholder "lib"}/lib"
           "-DCMAKE_INSTALL_LIBEXECDIR=${placeholder "lib"}/libexec"
         ];
-      in "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
-      + lib.concatStringsSep ";" (lib.concatLists [
+      in
+      "-DCROSS_TOOLCHAIN_FLAGS_NATIVE:list="
+        + lib.concatStringsSep ";" (lib.concatLists [
         flagsForLlvmConfig
         nativeToolchainFlags
         nativeInstallFlags
@@ -422,7 +432,7 @@ in stdenv.mkDerivation (rec {
 } // lib.optionalAttrs enableManpages {
   pname = "llvm-manpages";
 
-  propagatedBuildInputs = [];
+  propagatedBuildInputs = [ ];
 
   ninjaFlags = [ "docs-llvm-man" ];
   installTargets = [ "install-docs-llvm-man" ];
