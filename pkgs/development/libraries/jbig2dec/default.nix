@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchurl, python3, autoreconfHook }:
+{ lib, stdenv, fetchurl, python3, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   pname = "jbig2dec";
-  version = "0.19";
+  version = "0.20";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9533/${pname}-${version}.tar.gz";
-    sha256 = "0dwa24kjqyg9hmm40fh048sdxfpnasz43l2rm8wlkw1qbdlpd517";
+    url = "https://github.com/ArtifexSoftware/jbig2dec/archive/${version}/jbig2dec-${version}.tar.gz";
+    hash = "sha256-qXBTaaZjOrpTJpNFDsgCxWI5fhuCRmLegJ7ekvZ6/yE=";
   };
 
   postPatch = ''
     patchShebangs test_jbig2dec.py
   '';
 
-  nativeBuildInputs = [ autoreconfHook ];
+  preConfigure = ''
+    ./autogen.sh
+  '';
+
+  nativeBuildInputs = [ autoconf automake libtool ];
 
   nativeCheckInputs = [ python3 ];
   doCheck = true;
