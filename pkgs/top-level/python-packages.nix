@@ -13929,6 +13929,8 @@ self: super: with self; {
 
   weboob = callPackage ../development/python-modules/weboob { };
 
+  webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
+
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
   websocket-client = callPackage ../development/python-modules/websocket-client { };
