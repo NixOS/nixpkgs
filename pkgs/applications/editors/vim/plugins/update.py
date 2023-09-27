@@ -74,7 +74,7 @@ class VimEditor(pluginupdate.Editor):
         with open(outfile, "w+") as f:
             f.write(HEADER)
             f.write(textwrap.dedent("""
-                { lib, buildVimPluginFrom2Nix, buildNeovimPlugin, fetchFromGitHub, fetchgit }:
+                { lib, buildVimPlugin, buildNeovimPlugin, fetchFromGitHub, fetchgit }:
 
                 final: prev:
                 {
@@ -103,7 +103,7 @@ class VimEditor(pluginupdate.Editor):
   }};
 
 """.format(
-        buildFn="buildNeovimPlugin" if isNeovim else "buildVimPluginFrom2Nix", plugin=plugin, src_nix=src_nix, repo=repo)
+        buildFn="buildNeovimPlugin" if isNeovim else "buildVimPlugin", plugin=plugin, src_nix=src_nix, repo=repo)
         log.debug(content)
         return content
 
