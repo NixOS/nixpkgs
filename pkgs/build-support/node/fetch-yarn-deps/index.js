@@ -37,7 +37,9 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 			res.on('end', () => {
 				file.close()
 				const h = hash.read()
-				if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h}`))
+				if (expectedHash === undefined){
+					console.log(`Warning: lockfile url ${url} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
+				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h}`))
 				resolve()
 			})
                         res.on('error', e => reject(e))
