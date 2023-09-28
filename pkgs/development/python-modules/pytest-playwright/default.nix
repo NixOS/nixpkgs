@@ -50,7 +50,7 @@ buildPythonPackage rec {
     export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
   '';
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_playwright"
   ];
 
