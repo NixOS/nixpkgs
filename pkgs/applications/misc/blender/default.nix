@@ -24,6 +24,7 @@
 let
   pythonPackages = python310Packages;
   inherit (pythonPackages) python;
+  blenderVersion = "4.0.2";
   buildEnv = callPackage ./wrapper.nix {};
   optix = fetchzip {
     # url taken from the archlinux blender PKGBUILD
@@ -34,22 +35,36 @@ let
     # Blender uses private APIs, need to patch to expose them
     patches = (old.patches or [ ]) ++ [ ./libdecor.patch ];
   });
+  blender-addons = fetchFromGitea {
+    domain = "projects.blender.org";
+    owner = "blender";
+    repo = "blender-addons";
+    rev = "v${blenderVersion}";
+    hash = "sha256-tJhI4d8drU0uRb4HLarRuihQ9FNs35e+ewclcuqB8jo=";
+
+    postFetch = "patch -p3 -d $out < ${./draco-p2.patch}";
+  };
 
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "4.0.2";
+  version = "${blenderVersion}";
 
   src = fetchFromGitea {
     domain = "projects.blender.org";
     owner = "blender";
     repo = "blender";
-    rev = "v${version}";
+    rev = "v${blenderVersion}";
     hash = "sha256-DLSiXfi+4F3a+mb96T9SWvM0dld5DQvQpHhFgePuwuQ=";
   };
 
+  prePatch = ''
+    mkdir scripts/addons
+    cp -Rv ${blender-addons}/* scripts/addons
+  '';
+
   patches = [
-    ./draco.patch
+    ./draco-p1.patch
   ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
 
   nativeBuildInputs =
