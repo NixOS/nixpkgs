@@ -10,6 +10,7 @@
 , pytz
 , pytestCheckHook
 , requests-oauthlib
+, six
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     python-magic
     pytz
     requests-oauthlib
+    six
   ];
 
   nativeCheckInputs = [
