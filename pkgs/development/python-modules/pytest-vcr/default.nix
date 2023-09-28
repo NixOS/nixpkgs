@@ -20,12 +20,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     vcrpy
-   ];
+  ];
 
   # Tests are using an obsolete attribute 'config'
   # https://github.com/ktosiek/pytest-vcr/issues/43
   doCheck = false;
-  pythonImportsCheck = [ "pytest_vcr" ];
+  pythonImportsExtrasCheck = [ "pytest_vcr" ];
 
   meta = with lib; {
     description = "Integration VCR.py into pytest";
