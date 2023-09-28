@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytest-cov
   ];
 
-  pythonImportsCheck = [ "pytest_cid" ];
+  pythonImportsExtrasCheck = [ "pytest_cid" ];
 
   meta = with lib; {
     homepage = "https://github.com/ntninja/pytest-cid";
