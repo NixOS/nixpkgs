@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, mkDerivation
 , SDL2
 , frei0r
 , ladspaPlugins
@@ -10,26 +9,26 @@
 , pkg-config
 , qtbase
 , qtmultimedia
-, qtx11extras
 , qtwebsockets
-, qtquickcontrols2
-, qtgraphicaleffects
-, qmake
+, cmake
 , qttools
+, wrapQtAppsHook
 , gitUpdater
+, stdenv
+, fftw
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "shotcut";
-  version = "21.09.20";
+  version = "23.07.29";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
+    hash = "sha256-hd8xUGvP/8eMO7KQfqLqIkIeG6Z5xENlMOOtNLRcvvU";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];
@@ -41,17 +40,13 @@ mkDerivation rec {
     mlt
     qtbase
     qtmultimedia
-    qtx11extras
     qtwebsockets
-    qtquickcontrols2
-    qtgraphicaleffects
+    fftw
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
-  qmakeFlags = [
-    "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
-    "SHOTCUT_VERSION=${version}"
-    "DEFINES+=SHOTCUT_NOUPGRADE"
+  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt -DSHOTCUT_NOUPGRADE";
+  cmakeFlags = [
+    "-DSHOTCUT_VERSION=${version}"
   ];
 
   prePatch = ''
@@ -71,7 +66,7 @@ mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/shotcut
-    cp -r src/qml $out/share/shotcut/
+    cp -r ../src/qml $out/share/shotcut/
   '';
 
   passthru.updateScript = gitUpdater {
