@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     webtest
+    aiohttp
   ];
 
   nativeCheckInputs = [
-    aiohttp
     pytest-aiohttp
     pytestCheckHook
   ];
