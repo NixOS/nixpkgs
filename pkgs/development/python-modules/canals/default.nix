@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     networkx
+    requests # not actually optional as advertised, required to import "canals"
   ];
 
   passthru.optional-dependencies = {
