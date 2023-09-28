@@ -5,6 +5,7 @@
 , fetchPypi
 , git
 , pep517
+, setuptools
 , pytestCheckHook
 , tomli
 , pythonOlder
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     build
     pep517
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
