@@ -3140,6 +3140,8 @@ self: super: with self; {
 
   dnspython = callPackage ../development/python-modules/dnspython { };
 
+  dns-lexicon = callPackage ../development/python-modules/dns-lexicon { };
+
   doc8 = callPackage ../development/python-modules/doc8 { };
 
   docformatter = callPackage ../development/python-modules/docformatter { };
