@@ -10,6 +10,7 @@
 , google-cloud-storage
 , google-cloud-testutils
 , google-resumable-media
+, packaging
 , grpcio
 , ipython
 , mock
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    packaging
     grpcio
     google-api-core
     google-cloud-core
