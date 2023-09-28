@@ -1914,6 +1914,8 @@ with pkgs;
 
   mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
 
+  mkosi-full = mkosi.override { withQemu = true; };
+
   monica = callPackage ../servers/web-apps/monica { };
 
   mpremote = python3Packages.callPackage ../tools/misc/mpremote { };
@@ -16862,6 +16864,8 @@ with pkgs;
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
     ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1
     ocamlformat_0_26_0;
+
+  inherit (ocamlPackages) odig;
 
   orc = callPackage ../development/compilers/orc { };
 

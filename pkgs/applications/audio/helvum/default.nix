@@ -5,6 +5,7 @@
 , fetchFromGitLab
 , glib
 , gtk4
+, libadwaita
 , meson
 , ninja
 , pipewire
@@ -17,20 +18,20 @@
 
 stdenv.mkDerivation rec {
   pname = "helvum";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pipewire";
     repo = pname;
     rev = version;
-    hash = "sha256-nBU8dk22tzVf60yznTYJBYRKG+ctwWl1epU90R0zXr0=";
+    hash = "sha256-9vlzLPpyZ9qtCEbCDvYhWDcV+8T63ukdos1l2U6fD+E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-kzu8dzKob9KxKEP3ElUYCCTdyvbzi+jSXTaaaaPMhYg=";
+    hash = "sha256-Xebm3XlsO6kBoMnxJsOk/3SO7avVoaGqi2CVWBRzr88=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     glib
     gtk4
+    libadwaita
     pipewire
   ];
 
