@@ -4,6 +4,7 @@
 , substituteAll
 , ffmpeg_4
 , python
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -27,6 +28,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i '/setup_requires=\["pip>19"\]/d' setup.py
   '';
+
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
+  ];
 
   checkPhase = ''
     runHook preCheck
