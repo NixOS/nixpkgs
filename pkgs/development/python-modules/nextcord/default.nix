@@ -4,6 +4,7 @@
 , pythonOlder
 , fetchFromGitHub
 , substituteAll
+, setuptools
 , ffmpeg
 , libopus
 , aiohttp
@@ -38,6 +39,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     aiodns
     aiohttp
     brotli
