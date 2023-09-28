@@ -47,7 +47,7 @@ buildPythonPackage rec {
   doCheck = false;
   passthru.tests.pytest = callPackage ./tests.nix {};
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_asyncio"
   ];
 
