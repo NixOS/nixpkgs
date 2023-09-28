@@ -12,6 +12,7 @@
 , optax
 , scipy
 , scikit-learn
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     scipy
+    typing-extensions
   ];
 
   nativeCheckInputs = [
