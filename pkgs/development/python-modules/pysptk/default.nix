@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , cython
+, setuptools
 , decorator
 , fetchPypi
 , numpy
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     decorator
     numpy
     scipy
