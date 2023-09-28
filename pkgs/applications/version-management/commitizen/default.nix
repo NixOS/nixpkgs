@@ -5,6 +5,7 @@
 , python3
 , stdenv
 , installShellFiles
+, nix-update-script
 , testers
 }:
 
@@ -95,6 +96,7 @@ python3.pkgs.buildPythonApplication rec {
       '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = commitizen;
       command = "cz version";
