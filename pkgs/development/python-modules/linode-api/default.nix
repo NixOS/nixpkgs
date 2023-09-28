@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, setuptools
 , requests
 , pytestCheckHook
 , mock
@@ -20,7 +21,10 @@ buildPythonPackage rec {
     sha256 = "0lqi15vks4fxbki1l7n1bfzygjy3w17d9wchjxvp22ijmas44yai";
   };
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
+    requests
+  ];
 
   nativeCheckInputs = [
     mock
