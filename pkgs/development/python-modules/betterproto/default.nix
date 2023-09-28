@@ -3,6 +3,7 @@
 , lib
 , pythonOlder
 , poetry-core
+, setuptools
 , grpclib
 , python-dateutil
 , black
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     grpclib
     python-dateutil
   ];
