@@ -56,7 +56,8 @@ maven.buildMavenPackage rec {
     !XMLSchemaDiagnosticsTest,
     !MissingChildElementCodeActionTest,
     !XSDValidationExternalResourcesTest,
-    !DocumentLifecycleParticipantTest"
+    !DocumentLifecycleParticipantTest,
+    !DTDValidationExternalResourcesTest"
   ];
 
   installPhase = ''
