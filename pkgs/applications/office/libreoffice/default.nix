@@ -183,8 +183,9 @@ let
       kwindowsystem
     ]);
   };
+  tarballPath = "external/tarballs";
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
   inherit version;
 
@@ -196,8 +197,6 @@ in stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.isLinux && stdenv.isAarch64 && variant == "still") [
     "-O2" # https://bugs.gentoo.org/727188
   ]);
-
-  tarballPath = "external/tarballs";
 
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
@@ -233,7 +232,7 @@ in stdenv.mkDerivation rec {
   disallowedRequisites = lib.optionals (!kdeIntegration)
     (lib.concatMap
       (x: lib.optional (x?dev) x.dev)
-      buildInputs);
+      finalAttrs.buildInputs);
 
   ### QT/KDE
   #
@@ -600,7 +599,7 @@ in stdenv.mkDerivation rec {
     zip
     zlib
   ]
-  ++ passthru.gst_packages
+  ++ finalAttrs.passthru.gst_packages
   ++ optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ]
   ++ optionals (lib.versionAtLeast (lib.versions.majorMinor version) "7.4") [ libwebp ];
 
@@ -663,4 +662,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-}
+})
