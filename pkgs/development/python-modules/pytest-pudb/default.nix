@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "pytest_pudb" ];
+  pythonImportsExtrasCheck = [ "pytest_pudb" ];
 
   meta = with lib; {
     description = "Pytest PuDB debugger integration";
