@@ -459,6 +459,7 @@
   ./services/desktops/gnome/sushi.nix
   ./services/desktops/gnome/tracker-miners.nix
   ./services/desktops/gnome/tracker.nix
+  ./services/desktops/gnome/xkb-settings.nix
   ./services/desktops/gsignond.nix
   ./services/desktops/gvfs.nix
   ./services/desktops/malcontent.nix
