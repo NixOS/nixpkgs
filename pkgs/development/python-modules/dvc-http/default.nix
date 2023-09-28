@@ -2,6 +2,7 @@
 , aiohttp-retry
 , buildPythonPackage
 , fetchFromGitHub
+, packaging
 , dvc-objects
 , fsspec
 , pythonOlder
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     dvc-objects
     fsspec
     aiohttp-retry
