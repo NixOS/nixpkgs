@@ -210,7 +210,6 @@
 , "purs-tidy"
 , "purty"
 , "pyright"
-, "react-tools"
 , "remod-cli"
 , "reveal.js"
 , "rimraf"

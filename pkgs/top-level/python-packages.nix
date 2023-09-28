@@ -3140,6 +3140,8 @@ self: super: with self; {
 
   dnspython = callPackage ../development/python-modules/dnspython { };
 
+  dns-lexicon = callPackage ../development/python-modules/dns-lexicon { };
+
   doc8 = callPackage ../development/python-modules/doc8 { };
 
   docformatter = callPackage ../development/python-modules/docformatter { };
@@ -10934,7 +10936,7 @@ self: super: with self; {
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
   pywlroots = callPackage ../development/python-modules/pywlroots {
-    wlroots = pkgs.wlroots_0_15;
+    wlroots = pkgs.wlroots_0_16;
   };
 
   pyws66i = callPackage ../development/python-modules/pyws66i { };
@@ -11054,7 +11056,7 @@ self: super: with self; {
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   qtile = callPackage ../development/python-modules/qtile {
-    wlroots = pkgs.wlroots_0_15;
+    wlroots = pkgs.wlroots_0_16;
   };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
