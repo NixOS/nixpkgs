@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , requests
 , requests-oauthlib
 , voluptuous
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     requests
     requests-oauthlib
     voluptuous
