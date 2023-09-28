@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 , attrs
 , funcsigs
 , requests-mock
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     attrs
     funcsigs
     requests-mock
