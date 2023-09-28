@@ -29,7 +29,7 @@ buildPythonPackage rec {
     py.test tests
   '';
 
-  pythonImportsCheck = [ "pytest_cov" ];
+  pythonImportsExtrasCheck = [ "pytest_cov" ];
 
   meta = with lib; {
     description = "Plugin for coverage reporting with support for both centralised and distributed testing, including subprocesses and multiprocessing";
