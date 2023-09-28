@@ -3,10 +3,9 @@
 , pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
-
 let
+  inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
+  inherit (pkgs.lib) optionalString;
   makeHostNameTest = hostName: domain: fqdnOrNull:
     let
       fqdn = hostName + (optionalString (domain != null) ".${domain}");
