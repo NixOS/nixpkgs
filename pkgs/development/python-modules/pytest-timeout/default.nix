@@ -35,7 +35,7 @@ buildPythonPackage rec {
     "-ra"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_timeout"
   ];
 
