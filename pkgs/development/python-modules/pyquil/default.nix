@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, packaging
 , deprecated
 , fetchFromGitHub
 , importlib-metadata
@@ -52,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     deprecated
     lark
     networkx
