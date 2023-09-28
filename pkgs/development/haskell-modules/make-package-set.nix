@@ -209,7 +209,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nixWithOptions = name: src: opts: args:
       let
-        checkOpts = x@{extraCabal2nixOptions ? "", srcModifier ? null}: x;
+        checkOpts = x@{extraCabal2nixOptions ? "", srcModifier ? null}: { inherit extraCabal2nixOptions srcModifier; };
         checkedOpts = if builtins.isString opts then checkOpts { extraCabal2nixOptions = opts; } else checkOpts opts;
         extraCabal2nixOptions = checkedOpts.extraCabal2nixOptions;
         srcModifier = checkedOpts.srcModifier;
