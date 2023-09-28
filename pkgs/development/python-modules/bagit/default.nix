@@ -4,6 +4,7 @@
 , gettext
 , mock
 , pytestCheckHook
+, setuptools
 , setuptools-scm
 }:
 
@@ -21,6 +22,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ gettext setuptools-scm ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  propagatedBuildInputs = [ setuptools ]; # needed for 'pkg_resources'
 
   nativeCheckInputs = [
     mock
