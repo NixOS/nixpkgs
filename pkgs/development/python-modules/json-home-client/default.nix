@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 # build inputs
+, setuptools
 , typing-extensions
 , uri-template
 }:
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     typing-extensions
     uri-template
   ];
