@@ -11,11 +11,13 @@
 , dm-env
 , plotnine
 , scikit-image
+, six
 , dm-tree
 , patsy
 , tensorflow-probability
 , dm-haiku
 , statsmodels
+, numpy
 , mizani
 , trfl
 , optax
@@ -34,19 +36,21 @@ let bsuite = buildPythonPackage rec {
     hash = "sha256-ak9McvXl7Nz5toUaPaRaJek9lurxiQiIW209GnZEjX0=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     absl-py
     dm-env
     dm-tree
     frozendict
     gym
     matplotlib
+    numpy
     mizani
     pandas
     patsy
     plotnine
     scikit-image
     scipy
+    six
     statsmodels
     termcolor
   ];
