@@ -100,7 +100,7 @@
 , langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "tr" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
-, mkDerivation ? null
+, wrapQtAppsHook ? null
 , qtbase ? null
 , qtx11extras ? null
 , qtwayland ? null
@@ -152,8 +152,6 @@ let
 
   langsSpaces = concatStringsSep " " langs;
 
-  mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
-
   srcs = {
     primary = primary-src;
     third_party =
@@ -186,7 +184,7 @@ let
     ]);
   };
 
-in mkDrv rec {
+in stdenv.mkDerivation rec {
   pname = "libreoffice";
   inherit version;
 
@@ -508,6 +506,8 @@ in mkDrv rec {
     jdk17
     libtool
     pkg-config
+  ] ++ optionals kdeIntegration [
+    wrapQtAppsHook
   ];
 
   buildInputs = with xorg; [
