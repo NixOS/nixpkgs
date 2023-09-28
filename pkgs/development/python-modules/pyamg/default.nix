@@ -6,6 +6,7 @@
 , pytest
 , python
 , pybind11
+, setuptools
 , setuptools-scm
 , pythonOlder
 }:
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     numpy
     scipy
     pytest
