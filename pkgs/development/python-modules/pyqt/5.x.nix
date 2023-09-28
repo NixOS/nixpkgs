@@ -68,8 +68,6 @@ buildPythonPackage rec {
     export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
 
-  outputs = [ "out" "dev" ];
-
   dontWrapQtApps = true;
 
   nativeBuildInputs = with libsForQt5; [
