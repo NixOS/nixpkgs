@@ -209,8 +209,10 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
     callCabal2nixWithOptions = name: src: opts: args:
       let
-        extraCabal2nixOptions = if builtins.isString opts then opts else opts.extraCabal2nixOptions or "";
-        srcModifier = opts.srcModifier or null;
+        checkOpts = x@{extraCabal2nixOptions ? "", srcModifier ? null}: x;
+        checkedOpts = if builtins.isString opts then checkOpts { extraCabal2nixOptions = opts; } else checkOpts opts;
+        extraCabal2nixOptions = checkedOpts.extraCabal2nixOptions;
+        srcModifier = checkedOpts.srcModifier;
         defaultFilter = path: type:
                    pkgs.lib.hasSuffix ".cabal" path ||
                    baseNameOf path == "package.yaml";
