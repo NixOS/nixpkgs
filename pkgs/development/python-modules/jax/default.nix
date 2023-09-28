@@ -115,7 +115,7 @@ buildPythonPackage rec {
     "tests/lax_test.py"
   ];
 
-  pythonImportsCheck = [ "jax" ];
+  pythonImportsExtrasCheck = [ "jax" ]; # requires jaxlib
 
   meta = with lib; {
     description = "Differentiate, compile, and transform Numpy code";
