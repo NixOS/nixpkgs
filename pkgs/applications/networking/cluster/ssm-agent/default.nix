@@ -8,9 +8,10 @@
 , dmidecode
 , util-linux
 , bashInteractive
-, overrideEtc ? true
+, nix-update-script
 , testers
 , ssm-agent
+, overrideEtc ? true
 }:
 
 let
@@ -131,9 +132,12 @@ buildGoPackage rec {
     wrapProgram $out/bin/amazon-ssm-agent --prefix PATH : ${bashInteractive}/bin
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = ssm-agent;
-    command = "amazon-ssm-agent --version";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = ssm-agent;
+      command = "amazon-ssm-agent --version";
+    };
   };
 
   meta = with lib; {
