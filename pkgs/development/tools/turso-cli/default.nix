@@ -20,7 +20,7 @@ buildGo121Module rec {
   tags = ["prod"];
   # Include version for `turso --version` reporting
   preBuild = ''
-    echo "v${version} (nix build)" > internal/cmd/version.txt
+    echo "v${version}" > internal/cmd/version.txt
   '';
 
   # Test_setDatabasesCache fails due to /homeless-shelter: read-only file system error.
