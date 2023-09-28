@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyvis";
-  version = "0.2.1";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "WestHealth";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-cER5XYxnURzRLtrisWBu2kxtOiRqgaRTJYyaCMh2qqE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-h5in3759thWRlI8ubXUbrSuDtp1v/obmpUBZvOYk734=";
   };
 
   patches = [

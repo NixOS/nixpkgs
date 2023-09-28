@@ -12,5 +12,5 @@ qtModule rec {
     rev = "v${version}";
     hash = "sha256-yyerVzz+nGT5kjNo24zYqZcJmrE50KCp38s3+samjd0=";
   };
-  qtInputs = [ qtbase ];
+  propagatedBuildInputs = [ qtbase ];
 }

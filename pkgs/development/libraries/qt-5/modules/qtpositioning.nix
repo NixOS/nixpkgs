@@ -8,7 +8,7 @@
 
 qtModule {
   pname = "qtpositioning";
-  qtInputs = [ qtbase qtdeclarative qtserialport ];
+  propagatedBuildInputs = [ qtbase qtdeclarative qtserialport ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 }

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "plyer";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "kivy";
     repo = pname;
-    rev = version;
-    sha256 = "15z1wpq6s69s76r6akzgg340bpc21l2r1j8270gp7i1rpnffcjwm";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-7Icb2MVj5Uit86lRHxal6b7y9gIJ3UT2HNqpA9DYWVE=";
   };
 
   patches = [

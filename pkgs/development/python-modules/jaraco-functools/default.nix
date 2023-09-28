@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "jaraco-functools";
-  version = "3.6.0";
+  version = "3.9.0";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jaraco.functools";
     inherit version;
-    hash = "sha256-Lho74Rq67O5fWrjdWJY4voMEzEy5E2H+Xmg/S22ft6M=";
+    hash = "sha256-ixN7D+rMF/70us7gTAEcnobyNBCZyHCh0S0743sypjg=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

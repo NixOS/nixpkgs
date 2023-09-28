@@ -48,6 +48,13 @@ buildPythonPackage rec {
     })
   ];
 
+  # ImportError: cannot import name 'setuptools' from 'setuptools'
+  # this is resolved in the next release, v2
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "from setuptools import Extension, setup, setuptools" "from setuptools import Extension, setup"
+  '';
+
   nativeBuildInputs = [ cmake setuptools-scm ];
 
   buildInputs = [ boost gmp.static pybind11 ];

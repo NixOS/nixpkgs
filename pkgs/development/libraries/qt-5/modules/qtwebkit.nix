@@ -22,7 +22,7 @@ let
 in
 qtModule {
   pname = "qtwebkit";
-  qtInputs = [ qtbase qtdeclarative qtlocation qtsensors qtwebchannel ]
+  propagatedBuildInputs = [ qtbase qtdeclarative qtlocation qtsensors qtwebchannel ]
     ++ lib.optional stdenv.isDarwin qtmultimedia;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base hyphen ]
     ++ lib.optionals stdenv.isDarwin [ ICU OpenGL ];

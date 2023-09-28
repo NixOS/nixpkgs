@@ -6,14 +6,16 @@
 
 buildPythonPackage rec {
   pname = "jaraco-classes";
-  version = "3.1.1";
+  version = "3.3.0";
+  format = "pyproject";
+
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.classes";
-    rev = "v${version}";
-    sha256 = "0wzrcsxi9gb65inayg0drm08iaw37jm1lqxhz3860i6pwjh503pr";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-DW8qf6G6997vBOaO1+Bdx4LBvKfpl/MiiFqWJYKE/pg=";
   };
 
   pythonNamespaces = [ "jaraco" ];

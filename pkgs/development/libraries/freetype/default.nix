@@ -28,11 +28,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freetype";
-  version = "2.13.1";
+  version = "2.13.2";
 
   src = let inherit (finalAttrs) pname version; in fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-6mfjsBmxEE0WZ6onT13DB9jL1gazmbwy3zCKd/GlZL8=";
+    sha256 = "sha256-EpkcTlXFBt1/m3ZZM+Yv0r4uBtQhUF15UKEy5PG7SE0=";
   };
 
   propagatedBuildInputs = [ zlib bzip2 brotli libpng ]; # needed when linking against freetype
@@ -101,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
       fonts.
     '';
     homepage = "https://www.freetype.org/";
+    changelog = "https://gitlab.freedesktop.org/freetype/freetype/-/raw/VER-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}/docs/CHANGES";
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
     platforms = platforms.all;
     pkgConfigModules = [ "freetype2" ];

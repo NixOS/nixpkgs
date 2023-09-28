@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-automodapi";
-  version = "0.14.1";
+  version = "0.16.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-olD9LIyFCNEu287wQIRqoabfrdcdyZpNc69jq/e1304=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7/b3PlgoqXyzmj4KDoHJf5gd3SUSiyhkpcDWl3u+0Bs=";
   };
 
   propagatedBuildInputs = [ sphinx ];

@@ -2,6 +2,6 @@
 
 qtModule {
   pname = "qtcharts";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
 }

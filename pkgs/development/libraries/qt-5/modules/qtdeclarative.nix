@@ -2,7 +2,7 @@
 
 qtModule {
   pname = "qtdeclarative";
-  qtInputs = [ qtbase qtsvg ];
+  propagatedBuildInputs = [ qtbase qtsvg ];
   nativeBuildInputs = [ python3 ];
   outputs = [ "out" "dev" "bin" ];
   preConfigure = ''

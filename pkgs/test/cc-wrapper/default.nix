@@ -30,6 +30,13 @@ in stdenv.mkDerivation {
     $CXX -o cxx-check ${./cxx-main.cc}
     ${emulator} ./cxx-check
 
+    # test for https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1431745905
+    # .../include/cxxabi.h:20:10: fatal error: '__cxxabi_config.h' file not found
+    # in libcxxStdenv
+    echo "checking whether cxxabi.h can be included... " >&2
+    $CXX -o include-cxxabi ${./include-cxxabi.cc}
+    ${emulator} ./include-cxxabi
+
     ${lib.optionalString (stdenv.isDarwin && stdenv.cc.isClang) ''
       echo "checking whether compiler can build with CoreFoundation.framework... " >&2
       mkdir -p foo/lib

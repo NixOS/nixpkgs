@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "myst-parser";
-  version = "1.0.0";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kewd6/4yawpRuyCe8Na0BGUMo59tr2fc97VlGbVJ8mI=";
+    hash = "sha256-1BW7Z+0rs5Up+VZ3vDygnhLzE9Y2BqEMnTnflboweu0=";
   };
 
   nativeBuildInputs = [ flit-core ];

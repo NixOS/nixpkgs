@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-spec";
-  version = "0.2.3";
+  version = "0.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "p1c2u";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Sa97DwPnGMLmT00hVdkoGO7C0vrvtwxvUvv9lq4nCY4=";
+    hash = "sha256-1Flb3XQCGhrAYzTvriSVhHDb/Z/uvCyZdbav2u7f3sg=";
   };
 
   postPatch = ''

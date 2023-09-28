@@ -1,13 +1,15 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 
 # build-system
 , cython
+, meson-python
+, meson
 , oldest-supported-numpy
-, setuptools
+, pkg-config
 , versioneer
 , wheel
 
@@ -63,24 +65,42 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "2.0.3";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wC83Kojg0X820wk6ZExzz8F4jodqfEvLQCCndRLiBDw=";
+  src = fetchFromGitHub {
+    owner = "pandas-dev";
+    repo = "pandas";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QwMW/qc1n51DaVhUnIaG0bdOvDitvvPh6ftoDawiYlc=";
   };
 
+  patches = [
+    # https://github.com/pandas-dev/pandas/issues/54888#issuecomment-1701186809
+    ./installer-fix.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "meson-python==0.13.1" "meson-python>=0.13.1" \
+      --replace "meson==1.0.1" "meson>=1.0.1"
+  '';
+
   nativeBuildInputs = [
-    setuptools
     cython
+    meson-python
+    meson
     numpy
-    oldest-supported-numpy
+    pkg-config
     versioneer
     wheel
-  ] ++ versioneer.optional-dependencies.toml;
+  ]
+  ++ versioneer.optional-dependencies.toml
+  ++ lib.optionals (pythonOlder "3.12") [
+    oldest-supported-numpy
+  ];
 
   enableParallelBuilding = true;
 
@@ -193,10 +213,9 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     # https://github.com/pandas-dev/pandas/blob/main/test_fast.sh
-    "--skip-db"
-    "--skip-slow"
-    "--skip-network"
-    "-m" "'not single_cpu and not slow_arm'"
+    "-m" "'not single_cpu and not slow and not network and not db and not slow_arm'"
+    # https://github.com/pandas-dev/pandas/issues/54907
+    "--no-strict-data-files"
     "--numprocesses" "4"
   ];
 

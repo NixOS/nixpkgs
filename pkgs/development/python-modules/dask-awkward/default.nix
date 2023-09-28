@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2023.8.1";
+  version = "2023.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sSsd35Psf3VEydkNxtd9mSBzV23S7fRM/jhbC9T62kY=";
+    hash = "sha256-eGdOFI2KCpheMQcUH1jokyBO96dqyUlcl98jcgdRkYA=";
   };
 
   patches = [

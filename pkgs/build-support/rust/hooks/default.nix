@@ -9,6 +9,10 @@
 , rust
 , rustc
 , stdenv
+
+# This confusingly-named parameter indicates the *subdirectory of
+# `target/` from which to copy the build artifacts.  It is derived
+# from a stdenv platform (or a JSON file; see below).
 , target ? rust.toRustTargetSpec stdenv.hostPlatform
 }:
 
@@ -17,24 +21,17 @@ let
 
   # see https://github.com/rust-lang/cargo/blob/964a16a28e234a3d397b2a7031d4ab4a428b1391/src/cargo/core/compiler/compile_kind.rs#L151-L168
   # the "${}" is needed to transform the path into a /nix/store path before baseNameOf
-  shortTarget = if targetIsJSON then
+  targetSubdirectory = if targetIsJSON then
       (lib.removeSuffix ".json" (builtins.baseNameOf "${target}"))
     else target;
-  ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
-  cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
-  ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-  cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
-  rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
-  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+
 in {
   cargoBuildHook = callPackage ({ }:
     makeSetupHook {
       name = "cargo-build-hook.sh";
       propagatedBuildInputs = [ cargo ];
       substitutions = {
-        inherit ccForBuild ccForHost cxxForBuild cxxForHost
-          rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
+        inherit (rust.envVars) rustHostPlatformSpec setEnv;
       };
     } ./cargo-build-hook.sh) {};
 
@@ -43,7 +40,7 @@ in {
       name = "cargo-check-hook.sh";
       propagatedBuildInputs = [ cargo ];
       substitutions = {
-        inherit rustTargetPlatformSpec;
+        inherit (rust.envVars) rustHostPlatformSpec;
       };
     } ./cargo-check-hook.sh) {};
 
@@ -52,7 +49,7 @@ in {
       name = "cargo-install-hook.sh";
       propagatedBuildInputs = [ ];
       substitutions = {
-        inherit shortTarget;
+        inherit targetSubdirectory;
       };
     } ./cargo-install-hook.sh) {};
 
@@ -61,7 +58,7 @@ in {
       name = "cargo-nextest-hook.sh";
       propagatedBuildInputs = [ cargo cargo-nextest ];
       substitutions = {
-        inherit rustTargetPlatformSpec;
+        inherit (rust.envVars) rustHostPlatformSpec;
       };
     } ./cargo-nextest-hook.sh) {};
 
@@ -78,23 +75,26 @@ in {
 
         cargoConfig = ''
           [target."${rust.toRustTarget stdenv.buildPlatform}"]
-          "linker" = "${ccForBuild}"
-          ${lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-            [target."${shortTarget}"]
-            "linker" = "${ccForHost}"
+          "linker" = "${rust.envVars.ccForBuild}"
+          ${lib.optionalString (stdenv.hostPlatform.config != stdenv.targetPlatform.config) ''
+            [target."${rust.toRustTarget stdenv.targetPlatform}"]
+            "linker" = "${rust.envVars.ccForTarget}"
           ''}
           "rustflags" = [ "-C", "target-feature=${if stdenv.hostPlatform.isStatic then "+" else "-"}crt-static" ]
         '';
       };
     } ./cargo-setup-hook.sh) {};
 
-  maturinBuildHook = callPackage ({ }:
+  maturinBuildHook = callPackage ({ pkgsHostTarget }:
     makeSetupHook {
       name = "maturin-build-hook.sh";
-      propagatedBuildInputs = [ cargo maturin rustc ];
+      propagatedBuildInputs = [
+        pkgsHostTarget.maturin
+        pkgsHostTarget.cargo
+        pkgsHostTarget.rustc
+      ];
       substitutions = {
-        inherit ccForBuild ccForHost cxxForBuild cxxForHost
-          rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
+        inherit (rust.envVars) rustTargetPlatformSpec setEnv;
       };
     } ./maturin-build-hook.sh) {};
 

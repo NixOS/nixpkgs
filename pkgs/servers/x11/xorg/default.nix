@@ -714,11 +714,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fontutil = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "font-util";
-    version = "1.4.0";
+    version = "1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/font/font-util-1.4.0.tar.xz";
-      sha256 = "0z8gsi0bz5nnpsl008fyb4isrkrqrmhxjar5ywwpx30j83wlnwlz";
+      url = "mirror://xorg/individual/font/font-util-1.4.1.tar.xz";
+      sha256 = "15fcd3rzlgm51fwgfapg6vzyd1kkd28rj149xq7iajqr7h9697sw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1439,11 +1439,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libpthreadstubs = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "libpthread-stubs";
-    version = "0.4";
+    version = "0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/xcb/libpthread-stubs-0.4.tar.bz2";
-      sha256 = "0cz7s9w8lqgzinicd4g36rjg08zhsbyngh0w68c3np8nlc8mkl74";
+      url = "mirror://xorg/individual/xcb/libpthread-stubs-0.5.tar.xz";
+      sha256 = "1g224hyy694jch54357zc895z46r90xs193hg4m7rfnfxinmdnjr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1455,11 +1455,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxcb = callPackage ({ stdenv, pkg-config, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python3 }: stdenv.mkDerivation {
     pname = "libxcb";
-    version = "1.15";
+    version = "1.16";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxcb-1.15.tar.xz";
-      sha256 = "0nd035rf83xf531cnjzsf9ykb5w9rdzz6bbyhi683xkwh57p8f6c";
+      url = "mirror://xorg/individual/lib/libxcb-1.16.tar.xz";
+      sha256 = "0w8xf6ff6axvla734lfb2291hrjrqqhn6mqabvdrdwgvl1m5cj23";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1807,11 +1807,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcbproto = callPackage ({ stdenv, pkg-config, fetchurl, python3 }: stdenv.mkDerivation {
     pname = "xcb-proto";
-    version = "1.15.2";
+    version = "1.16.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/proto/xcb-proto-1.15.2.tar.xz";
-      sha256 = "1vak6q53abwxnkfn6by7j24m48kd2iy7jnskkqzzx8l0ysqvwwkh";
+      url = "mirror://xorg/individual/proto/xcb-proto-1.16.0.tar.xz";
+      sha256 = "06aij66rs8g378wg8swd7b3g73wqrrbbwl8shhnsi29amm41hnm7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2159,11 +2159,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputlibinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
     pname = "xf86-input-libinput";
-    version = "1.3.0";
+    version = "1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.3.0.tar.xz";
-      sha256 = "1fqsik2hdibz7zx7bb2rkh6wadz0p31xpd50ljsnij9bl8hblihl";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.4.0.tar.xz";
+      sha256 = "1673ydfrvfqd4inz3vx1qyxa0mhr0f4bi0r7mrcmpisxi76i8g9s";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "linear_operator";
-  version = "0.5.1";
+  version = "0.5.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7NkcvVDwFaLHBZZhq7aKY3cWxe90qeKmodP6cVsdrPM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OuE6jx9Q4IU+b2a+mrglRdBOReN1tt/thetNXxwk1GI=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;

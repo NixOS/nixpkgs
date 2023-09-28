@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
   version = "4.2.8";
 
-  qtInputs = [
+  propagatedBuildInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
     qtgraphicaleffects qtspeech qtx11extras
   ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
-  buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
+  buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
   nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''

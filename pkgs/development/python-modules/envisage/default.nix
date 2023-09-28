@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "envisage";
-  version = "6.1.0";
+  version = "7.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AATsUNcYLB4vtyvuooAMDZx8p5fayijb6yJoUKTCW40=";
+    hash = "sha256-97GviL86j/8qmsbja7SN6pkp4/YSIEz+lK7WKwMWyeM=";
   };
 
   patches = [

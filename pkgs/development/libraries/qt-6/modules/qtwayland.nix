@@ -9,7 +9,7 @@
 
 qtModule {
   pname = "qtwayland";
-  qtInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ wayland libdrm ];
   nativeBuildInputs = [ pkg-config ];
 }

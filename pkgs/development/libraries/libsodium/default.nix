@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
-  version = "1.0.18";
+  version = "1.0.19";
 
   src = fetchurl {
     url = "https://download.libsodium.org/libsodium/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    sha256 = "1h9ncvj23qbbni958knzsli8dvybcswcjbx0qjjgi922nf848l3g";
+    sha256 = "sha256-AY15/goEXMoHMx03vQy1ey6DjFG8SP2DehRy5QBou+o=";
   };
 
   outputs = [ "out" "dev" ];

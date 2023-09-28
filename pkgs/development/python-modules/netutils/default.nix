@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , jinja2
+, jsonschema
 , napalm
 , poetry-core
 , pytestCheckHook
@@ -30,6 +31,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    jsonschema
+    napalm
+  ];
+
+  passthru.optional-dependencies.optionals = [
+    jsonschema
     napalm
   ];
 

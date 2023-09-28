@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "22.12.0";
+  version = "23.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nEnX519kaprqAq6QTAvBY5yP0UoBKS0rEjuNMHVkA00=";
+    hash = "sha256-/Cm9WrRyfI2s++Y29/tdxTuZgFti2hyWshSDYVn/cME=";
   };
 
   propagatedBuildInputs = [

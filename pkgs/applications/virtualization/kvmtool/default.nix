@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "sha256-wpc5DfHnui0lBVH4uOq6a7pXVUZStjNLRvauu6QpRvE=";
   };
 
+  patches = [ ./strlcpy-glibc-2.38-fix.patch ];
+
   buildInputs = lib.optionals stdenv.hostPlatform.isAarch64 [ dtc ];
 
   enableParallelBuilding = true;

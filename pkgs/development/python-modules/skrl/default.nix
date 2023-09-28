@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "skrl";
-  version = "0.10.2";
+  version = "1.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Toni-SM";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OY5+bUPg+G1eKFMvHlXSHwc2WWHTpyoyCKjY3MvlLyM=";
+    hash = "sha256-89OoJanmaB74SLF1qMI8WFBdN1czS7Yr7BmojaRdo4M=";
   };
 
   patches = [
