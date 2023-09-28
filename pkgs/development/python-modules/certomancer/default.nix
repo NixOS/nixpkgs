@@ -54,6 +54,7 @@ buildPythonPackage rec {
     python-dateutil
     pyyaml
     tzlocal
+    cryptography # not actually optional, required for import of "certomancer"
   ];
 
   passthru.optional-dependencies = {
