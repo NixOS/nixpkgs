@@ -32,7 +32,7 @@ buildPythonPackage rec {
   # pytest-socket require network for majority of tests
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_socket"
   ];
 
