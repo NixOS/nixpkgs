@@ -6,6 +6,7 @@
 , setuptools
 , importlib-metadata
 , pytestCheckHook
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -24,7 +25,9 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  propagatedBuildInputs = [
+    pytest
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [
     pytestCheckHook
