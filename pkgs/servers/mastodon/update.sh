@@ -78,7 +78,6 @@ trap cleanup EXIT
 echo "Fetching source code $REVISION"
 JSON=$(nix-prefetch-github "$OWNER" "$REPO" --rev "$REVISION" 2> $WORK_DIR/nix-prefetch-git.out)
 HASH="$(echo "$JSON" | jq -r .hash)"
-HASH="$(nix hash to-sri --type sha256 "$HASH")"
 
 echo "Creating version.nix"
 echo "\"$VERSION\"" | sed 's/^"v/"/' > version.nix
