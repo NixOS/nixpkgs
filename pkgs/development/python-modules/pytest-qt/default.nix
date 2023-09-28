@@ -31,7 +31,7 @@ buildPythonPackage rec {
     pyqt5
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytestqt"
   ];
 
