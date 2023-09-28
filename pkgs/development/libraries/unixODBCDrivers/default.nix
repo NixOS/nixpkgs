@@ -1,6 +1,19 @@
 { fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub }:
 
-# I haven't done any parameter tweaking.. So the defaults provided here might be bad
+# Each of these ODBC drivers can be configured in your odbcinst.ini file using
+# the various passthru and meta values. Of note are:
+#
+#   * `passthru.fancyName`, the typical name used to reference the driver
+#   * `passthru.driver`, the path to the driver within the built package
+#   * `meta.description`, a short description of the ODBC driver
+#
+# For example, you might generate it as follows:
+#
+# ''
+# [${package.fancyName}]
+# Description = ${package.meta.description}
+# Driver = ${package}/${package.driver}
+# ''
 
 {
   psql = stdenv.mkDerivation rec {
@@ -14,6 +27,7 @@
 
     buildInputs = [ unixODBC postgresql ];
 
+    # see the top of the file for an explanation
     passthru = {
       fancyName = "PostgreSQL";
       driver = "lib/psqlodbcw.so";
@@ -59,6 +73,7 @@
       "-DWITH_IODBC=OFF"
     ];
 
+    # see the top of the file for an explanation
     passthru = {
       fancyName = "MariaDB";
       driver = "lib/libmaodbc${stdenv.hostPlatform.extensions.sharedLibrary}";
@@ -87,6 +102,7 @@
 
     cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
 
+    # see the top of the file for an explanation
     passthru = {
       fancyName = "MySQL";
       driver = "lib/libmyodbc3-3.51.12.so";
@@ -122,6 +138,7 @@
       mv "$out"/*.* "$out/lib"
     '';
 
+    # see the top of the file for an explanation
     passthru = {
       fancyName = "SQLite";
       driver = "lib/libsqlite3odbc.so";
@@ -165,6 +182,7 @@
         $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 
+    # see the top of the file for an explanation
     passthru = {
       fancyName = "ODBC Driver ${versionMajor} for SQL Server";
       driver = "lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}";
@@ -249,6 +267,7 @@
         $out/${finalAttrs.passthru.driver}
     '';
 
+    # see the top of the file for an explanation
     passthru = {
       fancyName = "ODBC Driver ${finalAttrs.versionMajor} for SQL Server";
       driver = "lib/libmsodbcsql${if stdenv.isDarwin then ".${finalAttrs.versionMajor}.dylib" else "-${finalAttrs.versionMajor}.${finalAttrs.versionMinor}.so.${finalAttrs.versionAdditional}"}";
@@ -293,6 +312,7 @@
 
     buildInputs = [ unixODBC ];
 
+    # see the top of the file for an explanation
     passthru = {
       fancyName = "Amazon Redshift (x64)";
       driver = "lib/libamazonredshiftodbc64.so";
