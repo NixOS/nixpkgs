@@ -38,7 +38,7 @@ buildPythonPackage rec {
     "test_unittest_expected_failure"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_tap"
   ];
 
