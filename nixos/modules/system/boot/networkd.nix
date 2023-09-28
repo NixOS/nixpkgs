@@ -83,7 +83,7 @@ let
         (assertByteFormat "BitsPerSecond")
         (assertValueOneOf "Duplex" ["half" "full"])
         (assertValueOneOf "AutoNegotiation" boolValues)
-        (assertValueOneOf "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off"])
+        (assertValuesSomeOfOr "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon"] "off")
         (assertValueOneOf "Port" ["tp" "aui" "bnc" "mii" "fibre"])
         (assertValueOneOf "ReceiveChecksumOffload" boolValues)
         (assertValueOneOf "TransmitChecksumOffload" boolValues)
