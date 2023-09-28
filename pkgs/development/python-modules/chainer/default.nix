@@ -10,6 +10,7 @@
 , protobuf
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , six
 , typing-extensions
 }:
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     filelock
     numpy
     protobuf
