@@ -1170,7 +1170,7 @@ in {
           "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
             return 404;
           '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
+          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode(_arm64)?\\/proxy)\\.php(?:$|\\/)" = {
             priority = 500;
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi.conf;
