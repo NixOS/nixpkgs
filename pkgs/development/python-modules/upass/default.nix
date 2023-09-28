@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pyperclip
 , urwid
 }:
@@ -18,6 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     pyperclip
     urwid
   ];
