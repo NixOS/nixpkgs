@@ -17,6 +17,7 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , scipy
 , typing-extensions
 }:
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     numpy
     scipy
     typing-extensions
+    setuptools
   ];
 
   nativeCheckInputs = [
