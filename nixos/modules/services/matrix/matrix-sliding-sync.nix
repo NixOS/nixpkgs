@@ -44,7 +44,7 @@ in
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Freeform environment variables passed to the sliding sync proxy.
         Refer to <https://github.com/matrix-org/sliding-sync#setup> for all supported values.
       '';
