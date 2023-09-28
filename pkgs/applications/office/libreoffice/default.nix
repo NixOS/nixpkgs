@@ -145,29 +145,33 @@ let
   };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");
-
-  primary-src = importVariant "primary.nix" { inherit fetchurl; };
-
-  inherit (primary-src) major minor version;
-
-  langsSpaces = concatStringsSep " " langs;
-
+  # Update these files with:
+  # nix-shell maintainers/scripts/update.nix --argstr package libreoffice-$VARIANT.unwrapped
+  version = importVariant "version.nix";
+  srcsAttributes = {
+    main = importVariant "main.nix";
+    help = importVariant "help.nix";
+    translations = importVariant "translations.nix";
+    deps = (importVariant "deps.nix") ++ [
+      # TODO: Why is this needed?
+      (rec {
+        name = "unowinreg.dll";
+        url = "https://dev-www.libreoffice.org/extern/${md5name}";
+        sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
+        md5 = "185d60944ea767075d27247c3162b3bc";
+        md5name = "${md5}-${name}";
+      })
+    ];
+  };
   srcs = {
-    primary = primary-src;
-    third_party =
-      map (x: ((fetchurl { inherit (x) url sha256 name; }) // { inherit (x) md5name md5; }))
-        (importVariant "download.nix" ++ [
-          (rec {
-            name = "unowinreg.dll";
-            url = "https://dev-www.libreoffice.org/extern/${md5name}";
-            sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-            md5 = "185d60944ea767075d27247c3162b3bc";
-            md5name = "${md5}-${name}";
-          })
-        ]);
-
-    translations = primary-src.translations;
-    help = primary-src.help;
+    third_party = map (x:
+      (fetchurl {
+        inherit (x) url sha256 name;
+      }) // {
+        inherit (x) md5name md5;
+      }) srcsAttributes.deps;
+    translations = fetchurl srcsAttributes.translations;
+    help = fetchurl srcsAttributes.help;
   };
 
   # See `postPatch` for details
@@ -188,8 +192,7 @@ let
 in stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
   inherit version;
-
-  inherit (primary-src) src;
+  src = fetchurl srcsAttributes.main;
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
@@ -276,7 +279,7 @@ in stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     configureFlagsArray=(
       "--with-parallelism=$NIX_BUILD_CORES"
-      "--with-lang=${langsSpaces}"
+      "--with-lang=${concatStringsSep " " langs}"
     );
 
     chmod a+x ./bin/unpack-sources
@@ -609,6 +612,13 @@ in stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit srcs;
     jdk = jre';
+    updateScript = [
+      ./update.sh
+      # Pass it this file name as argument
+      (builtins.unsafeGetAttrPos "pname" finalAttrs.finalPackage).file
+      # And the variant
+      variant
+    ];
     inherit kdeIntegration;
     # For the wrapper.nix
     inherit gtk3;
