@@ -45,6 +45,8 @@ buildPythonPackage rec {
     packaging
     pygobject3
     pyopenssl
+    packaging
+    setuptools
   ];
 
   nativeCheckInputs = [
