@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-pDbrHGVMOeDJhqUWzuIYvqcUC1EPzv9j+X60/P89k94=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     absl-py
     dm-tree
     numpy
