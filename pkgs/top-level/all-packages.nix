@@ -7812,6 +7812,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
+
   volctl = callPackage ../tools/audio/volctl { };
 
   volk = if (stdenv.isDarwin && stdenv.isAarch64) then
