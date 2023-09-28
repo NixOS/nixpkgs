@@ -52,9 +52,11 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    "dataclasses_serialization.bson"
     "dataclasses_serialization.json"
     "dataclasses_serialization.serializer_base"
+  ];
+  pythonImportsExtrasCheck = [
+    "dataclasses_serialization.bson"
   ];
 
   meta = {
