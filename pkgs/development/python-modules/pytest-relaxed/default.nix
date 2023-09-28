@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_relaxed"
   ];
 
