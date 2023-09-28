@@ -55,6 +55,10 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.pandas;
 
   pythonImportsCheck = [
+    "coinmetrics.data_exporter"
+  ];
+  pythonImportsExtrasCheck = [
+    # requires pandas
     "coinmetrics.api_client"
   ];
 
