@@ -50,12 +50,25 @@ in with bepastyPython.pkgs; buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    pytest
+    build
+    codecov
+    flake8
+    pytestCheckHook
+    pytest-cov
     selenium
+    tox
+    twine
   ];
 
-  # No tests in sdist
-  doCheck = false;
+  disabledTestPaths = [
+    # Can be enabled when werkzeug is updated to >2.2, see #245145
+    # and https://github.com/bepasty/bepasty-server/pull/303
+    "src/bepasty/tests/test_rest_server.py"
+
+    # These require a web browser
+    "src/bepasty/tests/screenshots.py"
+    "src/bepasty/tests/test_website.py"
+  ];
 
   meta = {
     homepage = "https://github.com/bepasty/bepasty-server";
