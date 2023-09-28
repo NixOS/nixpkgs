@@ -18371,9 +18371,9 @@ with pkgs;
   # Needed for autogen
   guile_2_0 = callPackage ../development/interpreters/guile/2.0.nix { };
 
-  guile_2_2 = callPackage ../development/interpreters/guile/2.2.nix { };
+  guile_2_2 = darwin.apple_sdk_11_0.callPackage ../development/interpreters/guile/2.2.nix { };
 
-  guile_3_0 = callPackage ../development/interpreters/guile/3.0.nix { };
+  guile_3_0 = darwin.apple_sdk_11_0.callPackage ../development/interpreters/guile/3.0.nix { };
 
   guile = guile_3_0;
 
