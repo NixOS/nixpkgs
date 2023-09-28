@@ -32,7 +32,7 @@ buildPythonPackage rec {
     twisted
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_twisted"
   ];
 
