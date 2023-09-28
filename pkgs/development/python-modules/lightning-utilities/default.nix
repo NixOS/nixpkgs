@@ -31,6 +31,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     packaging
     typing-extensions
   ];
