@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+, setuptools
 , parver
 , pulumi
 , pythonOlder
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/sdk/python";
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     parver
     pulumi
     semver
