@@ -5,19 +5,22 @@
 , python3
 , stdenv
 , installShellFiles
+, nix-update-script
 , testers
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
-  version = "3.7.0";
+  version = "3.10.0";
   format = "pyproject";
+
+  disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-KfPIGQ4kIjV/Vuza5wdzp0R62LUluJQ5tY6I8BPFmGk=";
+    hash = "sha256-faHZBH/JrCDRQqZT9v6hsj4C9/PbLQxIr+6hNFzsEcg=";
   };
 
   pythonRelaxDeps = [
@@ -93,6 +96,7 @@ python3.pkgs.buildPythonApplication rec {
       '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = commitizen;
       command = "cz version";
@@ -104,6 +108,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/commitizen-tools/commitizen";
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "cz";
     maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };
 }

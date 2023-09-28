@@ -1,12 +1,12 @@
 { lib, appimageTools, fetchurl }:
 
 let
-  version = "1.6.4";
+  version = "1.7.5";
   pname = "lunatask";
 
   src = fetchurl {
     url = "https://lunatask.app/download/Lunatask-${version}.AppImage";
-    sha256 = "sha256-rvjjzVgtDNryj7GO+ZfK92nZvWRnRPFoy9hEIGjviqQ=";
+    sha256 = "sha256-J8Kj7b4x3WD/aEO4J9A+iP068Ax4ayhYBDgH2vmtlfk=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -17,9 +17,11 @@ in appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
-    install -m 444 -D ${appimageContents}/lunatask.desktop $out/share/applications/lunatask.desktop
-    install -m 444 -D ${appimageContents}/lunatask.png $out/share/icons/hicolor/0x0/apps/lunatask.png
-    substituteInPlace $out/share/applications/lunatask.desktop \
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
+
+    install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
+    install -m 444 -D ${appimageContents}/${pname}.png $out/share/icons/hicolor/512x512/apps/${pname}.png
+    substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
   '';
 
