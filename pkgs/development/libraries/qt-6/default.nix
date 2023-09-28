@@ -109,8 +109,8 @@ let
         patches = [
           (fetchpatch2 {
             # fix compatibility with protobuf 23
-            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-grpc/-/raw/d6b33bd915dc6e63b30db2cd29150d55b289d7ed/protobuf-23.patch";
-            hash = "sha256-KQAcrjQ3rK9pDQUOUK6AS4ej8YvtRv9WZOxby31Y5r4=";
+            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-grpc/-/raw/5cfb8728ca626af41d5dc2b1f642d026c011ec56/protobuf-23.patch";
+            hash = "sha256-msVQEAt0DewOnZIgymGijJEpIXbfmMUkdbIyJ0ZNuok=";
           })
         ];
       };
