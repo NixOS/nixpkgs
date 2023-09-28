@@ -5,8 +5,10 @@
 , fetchFromGitHub
 , coreutils
 , nettools
-, dmidecode
+, busybox
 , util-linux
+, stdenv
+, dmidecode
 , bashInteractive
 , nix-update-script
 , testers
@@ -68,24 +70,27 @@ buildGoPackage rec {
     "-w"
   ];
 
-  preConfigure = ''
+  postPatch = ''
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
-        --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
-        --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
-        --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
-
-    substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
-        --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
+      --replace "/usr/bin/uname" "${coreutils}/bin/uname" \
+      --replace '"/bin", "hostname"' '"${nettools}/bin/hostname"' \
+      --replace '"lsb_release"' '"${fake-lsb-release}/bin/lsb_release"'
 
     substituteInPlace agent/session/shell/shell_unix.go \
-        --replace '"script"' '"${util-linux}/bin/script"'
+      --replace '"script"' '"${util-linux}/bin/script"'
+
+    substituteInPlace agent/rebooter/rebooter_unix.go \
+      --replace "/sbin/shutdown" "shutdown"
 
     echo "${version}" > VERSION
   '' + lib.optionalString overrideEtc ''
     substituteInPlace agent/appconfig/constants_unix.go \
       --replace '"/etc/amazon/ssm/"' '"${placeholder "out"}/etc/amazon/ssm/"'
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace agent/managedInstances/fingerprint/hardwareInfo_unix.go \
+      --replace /usr/sbin/dmidecode ${dmidecode}/bin/dmidecode
   '';
 
   preBuild = ''
@@ -147,5 +152,8 @@ buildGoPackage rec {
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ copumpkin manveru anthonyroussel ];
+
+    # Darwin support is broken
+    broken = stdenv.isDarwin;
   };
 }
