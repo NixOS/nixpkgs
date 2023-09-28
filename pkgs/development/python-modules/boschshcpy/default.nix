@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, setuptools
 , cryptography
 , fetchFromGitHub
 , getmac
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     cryptography
     getmac
     requests
