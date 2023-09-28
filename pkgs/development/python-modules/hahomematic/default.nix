@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.9.4";
+  version = "2023.9.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -26,8 +26,14 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-sxUSUj9yJyY89Ma0R0hm5PCt/kiwb6Bj7CyK9Vc14uk=";
+    hash = "sha256-bs9rAlEgRYjQ2vEPfGxWo4sAn48hiC3IFh9VKVY33KY=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools~=68.2" "setuptools" \
+      --replace "wheel~=0.41.2" "wheel"
+  '';
 
   nativeBuildInputs = [
     setuptools
