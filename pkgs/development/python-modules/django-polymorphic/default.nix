@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, django, dj-database-url }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, setuptools, django, dj-database-url }:
 
 buildPythonPackage rec {
   pname = "django-polymorphic";
@@ -11,7 +11,10 @@ buildPythonPackage rec {
     hash = "sha256-JJY+FoMPSnWuSsNIas2JedGJpdm6RfPE3E1VIjGuXIc=";
   };
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [
+    django
+    setuptools # needed for 'pkg_resources'
+  ];
 
   nativeCheckInputs = [ dj-database-url ];
 
