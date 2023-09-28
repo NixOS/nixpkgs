@@ -1,4 +1,5 @@
 { lib
+, packaging
 , bcrypt
 , buildPythonPackage
 , dvc-objects
@@ -23,7 +24,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = [ bcrypt dvc-objects sshfs ];
+  propagatedBuildInputs = [
+    packaging
+    bcrypt
+    dvc-objects
+    sshfs
+  ];
 
   # bcrypt is enabled for sshfs in nixpkgs
   postPatch = ''
