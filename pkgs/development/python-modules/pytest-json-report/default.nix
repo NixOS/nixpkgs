@@ -40,7 +40,7 @@ buildPythonPackage rec {
     "test_bug_31"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_jsonreport"
   ];
 
