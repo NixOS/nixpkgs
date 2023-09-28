@@ -3,6 +3,7 @@
 , fetchPypi
 , numpy
 , pandas
+, packaging
 , six
 , astropy
 , oldest-supported-numpy
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     pandas
+    packaging
     six
   ];
 
