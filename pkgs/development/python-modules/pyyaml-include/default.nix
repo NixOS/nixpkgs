@@ -16,10 +16,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pyyaml
     setuptools-scm
     setuptools-scm-git-archive
     toml
+  ];
+
+  propagatedBuildInputs = [
+    pyyaml
   ];
 
   nativeCheckInputs = [
