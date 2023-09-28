@@ -3,6 +3,7 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, pytest
 , setuptools
 , setuptools-scm
 }:
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     hash = "sha256-UYZciEV1RfUftyARlC8KPGkB7p4ky/ttG53BNIuvvjc=";
   };
 
+  buildInputs = [
+    pytest
+  ];
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -28,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_subtests"
   ];
 
