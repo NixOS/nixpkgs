@@ -27,7 +27,7 @@ buildPythonPackage rec {
     imgdiff
   ];
 
-  pythonImportsCheck = [ "pytest_image_diff" ];
+  pythonImportsExtrasCheck = [ "pytest_image_diff" ];
 
   nativeCheckInputs = [
     pytestCheckHook
