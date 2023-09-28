@@ -2469,6 +2469,8 @@ self: super: with self; {
 
   daqp = callPackage ../development/python-modules/daqp { };
 
+  darkdetect = callPackage ../development/python-modules/darkdetect { };
+
   dasbus = callPackage ../development/python-modules/dasbus { };
 
   dash = callPackage ../development/python-modules/dash { };
