@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_httpbin"
   ];
 
