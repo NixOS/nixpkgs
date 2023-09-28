@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.0.6";
+  version = "1.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "msgpack";
     repo = "msgpack-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x2/upux5CnHBoP0OjN6ffSJxOAhqDs+zWx0MeXVn8XA=";
+    hash = "sha256-ayEyvKiTYPdhy4puUjtyGIR+jsTXd2HRINaAYxQGTZM=";
   };
 
   nativeBuildInputs = [
