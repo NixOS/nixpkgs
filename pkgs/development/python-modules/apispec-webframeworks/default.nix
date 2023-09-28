@@ -1,4 +1,5 @@
 { lib
+, setuptools
 , apispec
 , bottle
 , buildPythonPackage
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     apispec
   ] ++ apispec.optional-dependencies.yaml;
 
