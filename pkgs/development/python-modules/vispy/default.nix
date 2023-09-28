@@ -4,6 +4,7 @@
 , substituteAll
 , fetchPypi
 , cython
+, packaging
 , fontconfig
 , freetype-py
 , hsluv
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     fontconfig
     freetype-py
     hsluv
