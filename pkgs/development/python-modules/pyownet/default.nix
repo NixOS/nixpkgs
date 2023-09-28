@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,6 +18,10 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i '/use_2to3/d' setup.py
   '';
+
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
+  ];
 
   # tests access network
   doCheck = false;
