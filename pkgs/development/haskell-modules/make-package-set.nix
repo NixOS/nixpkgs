@@ -207,7 +207,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
          });
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nixGeneric = name: src: opts: args:
+    callCabal2nixWithOptions = name: src: opts: args:
       let
         extraCabal2nixOptions = if builtins.isString opts then opts else opts.extraCabal2nixOptions or "";
         srcModifier = opts.srcModifier or null;
@@ -225,7 +225,6 @@ in package-set { inherit pkgs lib callPackage; } self // {
            inherit src;
          }) (callPackageKeepDeriver expr args);
 
-    callCabal2nixWithOptions = name: src: extraCabal2nixOptions: args: self.callCabal2nixGeneric name src { inherit extraCabal2nixOptions; } args;
     callCabal2nix = name: src: args: self.callCabal2nixWithOptions name src "" args;
 
     # : { root : Path
