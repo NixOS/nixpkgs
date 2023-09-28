@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , filelock
+, attrs
 , pytest
 , mypy
 , setuptools-scm
@@ -20,11 +21,11 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [ mypy filelock ];
+  propagatedBuildInputs = [ attrs mypy filelock ];
 
   # does not contain tests
   doCheck = false;
-  pythonImportsCheck = [ "pytest_mypy" ];
+  pythonImportsExtrasCheck = [ "pytest_mypy" ];
 
   meta = with lib; {
     description = "Mypy static type checker plugin for Pytest";
