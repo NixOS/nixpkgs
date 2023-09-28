@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchurl
+, fetchgit
 , buildPackages
 , docbook_xml_dtd_44
 , docbook_xsl
@@ -18,9 +18,10 @@ stdenv.mkDerivation rec {
   pname = "pax-utils";
   version = "1.3.7";
 
-  src = fetchurl {
-    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EINi0pZo0lz3sMrcY7FaTBz8DbxxrcFRszxf597Ok5o=";
+  src = fetchgit {
+    url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
+    rev = "v${version}";
+    hash = "sha256-WyNng+UtfRz1+Eu4gwXLxUvBAg+m3mdrc8GdEPYRKVE=";
   };
 
   strictDeps = true;
