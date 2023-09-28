@@ -3,6 +3,7 @@
 , fetchPypi
 , inflection
 , ruamel-yaml
+, setuptools
 , setuptools-scm
 , six
 , coreapi
@@ -31,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     six
     inflection
     ruamel-yaml
