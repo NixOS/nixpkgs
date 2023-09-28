@@ -25,7 +25,7 @@ buildPythonPackage rec {
   # jaxlib is necessary for the pythonImportsCheckPhase.
   nativeCheckInputs = [ jaxlib ];
 
-  pythonImportsCheck = [ "augmax" ];
+  pythonImportsExtrasCheck = [ "augmax" ];
 
   meta = with lib; {
     description = "Efficiently Composable Data Augmentation on the GPU with Jax";
