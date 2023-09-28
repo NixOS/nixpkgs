@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-On69+StZPgDowcU4qpogvKXZLYQjESRxWsyWTVHZPGs=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     docutils
     pybtex
   ];
