@@ -8,6 +8,7 @@
 , numpy
 , pythonOlder
 , scipy
+, setuptools
 , setuptools-scm
 , wheel
 }:
@@ -39,6 +40,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     mpmath
+    numpy
+    scipy
+    setuptools # needed for 'pkg_resources'
   ];
 
   passthru.optional-dependencies = {
