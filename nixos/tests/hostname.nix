@@ -40,8 +40,9 @@ let
         assert "${getStr nodes.machine.networking.fqdn}" == "${getStr fqdnOrNull}"
 
         # The FQDN, domain name, and hostname detection should work as expected:
-        assert "${fqdn}" == machine.succeed("hostname --fqdn").strip()
-        assert "${optionalString (domain != null) domain}" == machine.succeed("dnsdomainname").strip()
+        assert "${hostName}" == machine.succeed("hostname --fqdn").strip()
+        assert "${optionalString (domain != null) domain}" == machine.succeed("hostname -y").replace("(none)", "").strip()
+
         assert (
             "${hostName}"
             == machine.succeed(
@@ -53,17 +54,17 @@ let
         assert (
             "localhost" == machine.succeed("getent hosts 127.0.0.1 | awk '{print $2}'").strip()
         )
+
         assert "localhost" == machine.succeed("getent hosts ::1 | awk '{print $2}'").strip()
 
         # 127.0.0.2 should resolve back to the FQDN and hostname:
-        fqdn_and_host_name = "${optionalString (domain != null) "${hostName}.${domain} "}${hostName}"
+        fqdn_or_host = "${hostName}${optionalString (domain != null) ".${domain}"}"
         assert (
-            fqdn_and_host_name
+            fqdn_or_host
             == machine.succeed("getent hosts 127.0.0.2 | awk '{print $2,$3}'").strip()
         )
       '';
     };
-
 in
 {
   noExplicitDomain = makeHostNameTest "ahost" null null;
