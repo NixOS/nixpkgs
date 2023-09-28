@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -14,6 +15,8 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "0nf8x4w2vh1a31wdb86nnvlic9xmr23j3in1f6fq4z6mv2jkwa87";
   };
+
+  propagatedBuildInputs = [ setuptools ]; # needed for pkg_resources
 
   pythonImportsCheck = [ "chameleon" ];
 
