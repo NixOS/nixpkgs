@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , webtest
+, setuptools
 , markupsafe
 , jinja2
 , pytestCheckHook
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     markupsafe
     jinja2
     pyramid
