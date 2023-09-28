@@ -53,12 +53,55 @@ rec {
       else converge f x';
 
   /*
-    `extends overlay f` applies the overlay `overlay` to the fixed-point function `f` to get a new fixed-point function.
-    Overlays allow modifying and extending fixed-point functions, specifically ones returning attribute sets.
+    Extend a function using an overlay.
 
-    A fixed-point function is a function which is intended to be evaluated by passing the result of itself as the argument, only possible due to Nix's lazy evaluation.
-    Here's an example of one:
+    Overlays allow modifying and extending fixed-point functions, specifically ones returning attribute sets.
+    A fixed-point function is a function which is intended to be evaluated by passing the result of itself as the argument.
+    This is possible due to Nix's lazy evaluation.
+
+
+    A fixed-point function returning an attribute set has the form
+
+    ```nix
+    final: { # attributes }
     ```
+
+    where `final` refers to the lazily evaluated attribute set returned by the fixed-point function.
+
+    An overlay to such a fixed-point function has the form
+
+    ```nix
+    final: prev: { # attributes }
+    ```
+
+    where `prev` refers to the result of the original function to `final`, and `final` is the result of the composition of the overlay and the original function.
+
+    Applying an overlay is done with `extends`:
+
+    ```nix
+    let
+      f = final: { # attributes };
+      overlay = final: prev: { # attributes };
+    in extends overlay f;
+    ```
+
+    To get the value of `final`, use `lib.fix`:
+
+    ```nix
+    let
+      f = final: { # attributes };
+      overlay = final: prev: { # attributes };
+      g = extends overlay f;
+    in fix g
+    ```
+
+    :::{.example}
+
+    # Extend a fixed-point function with an overlay
+
+    Define a fixed-point function `f` that expects its own output as the argument `final`:
+
+    ```nix-repl
     f = final: {
       # Constant value a
       a = 1;
@@ -67,15 +110,18 @@ rec {
       b = final.a + 2;
     }
     ```
-    We can evaluated this using [`lib.fix`](#function-library-lib.fixedPoints.fix) to get the final result:
-    ```
+
+    Evaluate this using [`lib.fix`](#function-library-lib.fixedPoints.fix) to get the final result:
+
+    ```nix-repl
     fix f
     => { a = 1; b = 3; }
     ```
 
     An overlay represents a modification or extension of such a fixed-point function.
     Here's an example of an overlay:
-    ```
+
+    ```nix-repl
     overlay = final: prev: {
       # Modify the previous value of a, available as prev.a
       a = prev.a + 10;
@@ -85,13 +131,17 @@ rec {
     }
     ```
 
-    We can now use `extends overlay f` to apply the overlay to the fixed-point function `f`, giving us a new fixed-point function `g` with the combined behavior of `f` and `overlay`.
-    ```
+    Use `extends overlay f` to apply the overlay to the fixed-point function `f`.
+    This produces a new fixed-point function `g` with the combined behavior of `f` and `overlay`:
+
+    ```nix-repl
     g = extends overlay f
     ```
+
     The result is a function, so we can't print it directly, but it's the same as:
-    ```
-    g = final: {
+
+    ```nix-repl
+    g' = final: {
       # The constant from f, but changed with the overlay
       a = 1 + 10;
 
@@ -103,11 +153,13 @@ rec {
     }
     ```
 
-    We can evaluate this using [`lib.fix`](#function-library-lib.fixedPoints.fix) again to get the final result:
-    ```
+    Evaluate this using [`lib.fix`](#function-library-lib.fixedPoints.fix) again to get the final result:
+
+    ```nix-repl
     fix g
     => { a = 11; b = 13; c = 24; }
     ```
+    :::
 
     Type:
       extends :: (Attrs -> Attrs -> Attrs) # The overlay to apply to the fixed-point function
@@ -128,6 +180,13 @@ rec {
 
       fix (extends (final: prev: { c = final.a + final.b; }) f)
       => { a = 1; b = 3; c = 4; }
+
+    :::{.note}
+    The argument to the given fixed-point function after applying an overlay will *not* refer to its own return value, but rather to the value after evaluating the overlay function.
+
+    The given fixed-point function is called with a separate argument than if it was evaluated with `lib.fix`.
+    The new argument
+    :::
   */
   extends =
     # The overlay to apply to the fixed-point function
