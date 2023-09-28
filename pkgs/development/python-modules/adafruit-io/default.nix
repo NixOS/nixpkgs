@@ -5,6 +5,7 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 , setuptools-scm
 }:
 
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # requires 'pkg_resources'
     paho-mqtt
     requests
   ];
