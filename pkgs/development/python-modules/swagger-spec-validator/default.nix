@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jsonschema, six, pytestCheckHook, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jsonschema, setuptools, six, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "swagger-spec-validator";
@@ -12,6 +12,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     pyyaml
     jsonschema
     six
