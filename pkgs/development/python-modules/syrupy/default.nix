@@ -46,7 +46,7 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  pythonImportsCheck = [ "syrupy" ];
+  pythonImportsExtrasCheck = [ "syrupy" ];
 
   meta = with lib; {
     changelog = "https://github.com/tophat/syrupy/releases/tag/v${version}";
