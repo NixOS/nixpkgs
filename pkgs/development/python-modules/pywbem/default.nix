@@ -41,6 +41,7 @@ buildPythonPackage rec {
     pbr
     ply
     pyyaml
+    requests
     six
     yamlloader
   ];
@@ -53,7 +54,6 @@ buildPythonPackage rec {
     lxml
     pytest
     pytz
-    requests
     requests-mock
     testfixtures
   ];
