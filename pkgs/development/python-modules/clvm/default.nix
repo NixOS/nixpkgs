@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , blspy
+, setuptools
 , setuptools-scm
 , pytestCheckHook
 }:
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     blspy
   ];
 
