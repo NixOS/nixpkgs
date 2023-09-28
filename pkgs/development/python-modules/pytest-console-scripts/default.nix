@@ -3,6 +3,7 @@
 , mock
 , fetchPypi
 , pytestCheckHook
+, pytest
 , python
 , pythonOlder
 , setuptools-scm
@@ -27,6 +28,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  buildInputs = [
+    pytest
+  ];
+
   propagatedBuildInputs = [
     setuptools
   ];
@@ -42,7 +47,7 @@ buildPythonPackage rec {
       --replace "#!/usr/bin/env python" "#!${python.interpreter}"
   '';
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_console_scripts"
   ];
 
