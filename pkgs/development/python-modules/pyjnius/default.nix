@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, setuptools
 , cython
 , fetchPypi
 , jdk
@@ -21,6 +22,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     jdk
     cython
+  ];
+
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
   ];
 
   pythonImportsCheck = [
