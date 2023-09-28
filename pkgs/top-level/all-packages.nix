@@ -1914,6 +1914,8 @@ with pkgs;
 
   mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
 
+  mkosi-full = mkosi.override { withQemu = true; };
+
   monica = callPackage ../servers/web-apps/monica { };
 
   mpremote = python3Packages.callPackage ../tools/misc/mpremote { };
