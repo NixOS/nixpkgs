@@ -35,7 +35,7 @@ buildPythonPackage rec {
     six
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_voluptuous"
   ];
 
