@@ -49,7 +49,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_regressions"
     "pytest_regressions.plugin"
   ];
