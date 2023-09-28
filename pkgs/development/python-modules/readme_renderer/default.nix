@@ -5,23 +5,29 @@
 , docutils
 , fetchPypi
 , mock
+, nh3
 , pygments
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "readme-renderer";
-  version = "40.0";
-  format = "setuptools";
+  version = "42.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "readme_renderer";
     inherit version;
-    hash = "sha256-n3e1GdltA9fX3ORJd7pUMJChQ5fE9g3ltutbgEgRCqQ=";
+    hash = "sha256-LVVIn4O+SZL+RFSTnRoFHDPturd46Cdh0GDJ/GswjNE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     bleach
@@ -32,13 +38,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
+    nh3
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cmarkgfm>=0.5.0,<0.7.0" "cmarkgfm>=0.5.0,<1"
-  '';
 
   disabledTests = [
     # https://github.com/pypa/readme_renderer/issues/221
