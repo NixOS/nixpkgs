@@ -106,6 +106,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/commitizen-tools/commitizen";
     changelog = "https://github.com/commitizen-tools/commitizen/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "cz";
     maintainers = with maintainers; [ lovesegfault anthonyroussel ];
   };
 }
