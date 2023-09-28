@@ -18,6 +18,10 @@ buildPythonPackage rec {
     hash = "sha256-argG+jMUqLiWo4lKWAmHmUxotHl+ddJuJZ/zcUl9u5Q=";
   };
 
+  propagatedBuildInputs = [
+    sphinx
+  ];
+
   nativeBuildInputs = [
     flit-core
   ];
@@ -28,7 +32,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    sphinx
   ];
 
   meta = with lib; {
