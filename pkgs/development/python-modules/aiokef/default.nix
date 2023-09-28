@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , tenacity
 }:
 
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    setuptools
     async-timeout
     tenacity
   ];
