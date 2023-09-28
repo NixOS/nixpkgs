@@ -25,7 +25,12 @@ buildPythonPackage rec {
     wheel
   ];
 
-  propagatedBuildInputs = [ packaging ply toml ];
+  propagatedBuildInputs = [
+    packaging
+    ply
+    setuptools
+    toml
+  ];
 
   # There aren't tests
   doCheck = false;
