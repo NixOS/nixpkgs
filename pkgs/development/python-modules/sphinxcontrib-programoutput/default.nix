@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, docutils
 , sphinx
 , sphinxcontrib-serializinghtml
 }:
@@ -16,6 +17,10 @@ buildPythonPackage rec {
 
   buildInputs = [
     sphinx
+  ];
+
+  propagatedBuildInputs = [
+    docutils
   ];
 
   # fails to import sphinxcontrib.serializinghtml
