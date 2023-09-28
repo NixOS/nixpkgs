@@ -20,7 +20,7 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
   nativeBuildInputs = [ setuptools-scm ];
   nativeCheckInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "pytest_datadir" ];
+  pythonImportsExtrasCheck = [ "pytest_datadir" ];
 
   meta = with lib; {
     description = "Pytest plugin for manipulating test data directories and files";
