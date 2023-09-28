@@ -4,6 +4,7 @@
   "date": "2021-05-18T15:57:40-04:00",
   "path": "/nix/store/j59y4s3bsv6d5nbmhhdgb043hmk8157k-tree-sitter-tsq",
   "sha256": "03bch2wp2jwxk69zjplvm0gbyw06qqdy7il9qkiafvhrbh03ayd9",
+  "hash": "sha256-qXk1AFwZbqfixInG4xvGBnC/HqibXvmTmZ1LcbmAbA0=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
