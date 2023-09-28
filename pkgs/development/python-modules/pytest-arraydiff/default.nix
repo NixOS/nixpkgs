@@ -36,7 +36,7 @@ buildPythonPackage rec {
   # The tests requires astropy, which itself requires pytest-arraydiff
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_arraydiff"
   ];
 
