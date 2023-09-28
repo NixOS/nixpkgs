@@ -21,17 +21,19 @@ buildPythonPackage rec {
     hash = "sha256-4946iE+VYaPndJtQLQE7Q7VSs4aXxrg3wL4p84oT5to=";
   };
 
+  buildInputs = [
+    pytest
+  ];
+
   propagatedBuildInputs = [
     pytablewriter
     tcolorpy
     typepy
   ];
 
-  buildInputs = [ pytest ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "pytest_md_report" ];
+  pythonImportsExtrasCheck = [ "pytest_md_report" ];
 
   meta = with lib; {
     description = "A pytest plugin to make a test results report with Markdown table format";
