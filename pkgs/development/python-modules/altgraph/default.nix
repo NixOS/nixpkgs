@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -13,6 +14,10 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "ad33358114df7c9416cdb8fa1eaa5852166c505118717021c6a8c7c7abbd03dd";
   };
+
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
+  ];
 
   pythonImportsCheck = [ "altgraph" ];
 
