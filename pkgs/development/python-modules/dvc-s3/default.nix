@@ -1,4 +1,5 @@
 { lib
+, packaging
 , aiobotocore
 , boto3
 , buildPythonPackage
@@ -30,7 +31,12 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
-    aiobotocore boto3 dvc-objects flatten-dict s3fs
+    packaging
+    aiobotocore
+    boto3
+    dvc-objects
+    flatten-dict
+    s3fs
   ];
 
   # Network access is needed for tests
