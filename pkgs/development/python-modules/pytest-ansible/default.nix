@@ -80,7 +80,7 @@ buildPythonPackage rec {
     "tests/test_adhoc_result.py"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_ansible"
   ];
 
