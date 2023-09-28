@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "jG6VP/P5sadrdrmneH36/ExSld9blyMAAG963QS9+p0=";
   };
 
-  nativeBuildInputs = [
+  propagatedBuildInputs = [
     cffi
   ];
 
