@@ -4,6 +4,7 @@
 , poetry-core
 , pytestCheckHook
 , sphinxHook
+, setuptools
 , sphinx-rtd-theme
 }:
 
@@ -27,6 +28,10 @@ buildPythonPackage rec {
     sphinxHook
     poetry-core
     sphinx-rtd-theme
+  ];
+
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
   ];
 
   pythonImportsCheck = [ "aiosql" ];
