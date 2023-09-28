@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pytest_mock" ];
+  pythonImportsExtrasCheck = [ "pytest_mock" ];
 
   meta = with lib; {
     description = "Thin wrapper around the mock package for easier use with pytest";
