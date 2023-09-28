@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   # No Tests
   doCheck = false;
-  pythonImportsCheck = [ "pytest_watch" ];
+  pythonImportsExtrasCheck = [ "pytest_watch" ];
 
   meta = with lib; {
     homepage = "https://github.com/joeyespo/pytest-watch";
