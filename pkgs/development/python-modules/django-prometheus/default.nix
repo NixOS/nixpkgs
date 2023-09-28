@@ -2,6 +2,8 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
+, django
 , prometheus-client
 , pytest-django
 , pytestCheckHook
@@ -30,6 +32,8 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
+    django
     prometheus-client
   ];
 
