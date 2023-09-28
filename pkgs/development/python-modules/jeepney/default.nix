@@ -54,6 +54,8 @@ buildPythonPackage rec {
     "jeepney.io.asyncio"
     "jeepney.io.blocking"
     "jeepney.io.threading"
+  ];
+  pythonImportsExtrasCheck = [
     "jeepney.io.trio"
   ];
 
