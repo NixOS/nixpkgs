@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "tests/test_strict_check.py"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_remotedata"
   ];
 
