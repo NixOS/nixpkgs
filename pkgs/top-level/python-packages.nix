@@ -1825,6 +1825,8 @@ self: super: with self; {
     inherit (pkgs) secp256k1;
   };
 
+  comicon = callPackage ../development/python-modules/comicon { };
+
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
@@ -3353,6 +3355,8 @@ self: super: with self; {
   easywatch = callPackage ../development/python-modules/easywatch { };
 
   ebaysdk = callPackage ../development/python-modules/ebaysdk { };
+
+  ebooklib = callPackage ../development/python-modules/ebooklib { };
 
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
 
@@ -6432,6 +6436,8 @@ self: super: with self; {
   malduck= callPackage ../development/python-modules/malduck { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
+
+  mandown = callPackage ../development/python-modules/mandown { };
 
   manhole = callPackage ../development/python-modules/manhole { };
 
