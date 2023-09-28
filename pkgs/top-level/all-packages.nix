@@ -7812,6 +7812,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
+
   volctl = callPackage ../tools/audio/volctl { };
 
   volk = if (stdenv.isDarwin && stdenv.isAarch64) then
@@ -12215,6 +12217,8 @@ with pkgs;
 
   ppl = callPackage ../development/libraries/ppl { };
 
+  pplite = callPackage ../development/libraries/pplite { };
+
   ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp { };
@@ -13499,8 +13503,6 @@ with pkgs;
 
   sumorobot-manager = python3Packages.callPackage ../applications/science/robotics/sumorobot-manager { };
 
-  super = callPackage ../tools/security/super { };
-
   supertag = callPackage ../tools/filesystems/supertag { };
 
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
@@ -13957,7 +13959,7 @@ with pkgs;
 
   tor = callPackage ../tools/security/tor { };
 
-  tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
+  tor-browser = callPackage ../applications/networking/browsers/tor-browser { };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
@@ -18673,6 +18675,8 @@ with pkgs;
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
+  electron-source = callPackage ../development/tools/electron { };
+
   inherit (callPackages ../development/tools/electron/binary { })
     electron-bin
     electron_10-bin
@@ -18693,7 +18697,6 @@ with pkgs;
     electron_25-bin
     electron_26-bin;
 
-  electron = electron-bin;
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
   electron_12 = electron_12-bin;
@@ -18709,8 +18712,9 @@ with pkgs;
   electron_22 = electron_22-bin;
   electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
-  electron_25 = electron_25-bin;
-  electron_26 = electron_26-bin;
+  electron_25 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_25 then electron-source.electron_25 else electron_25-bin;
+  electron_26 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_26 then electron-source.electron_26 else electron_26-bin;
+  electron = electron_26;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 

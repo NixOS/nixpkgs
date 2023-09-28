@@ -250,14 +250,20 @@ let
         fi
       done
 
-      # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
-      substituteInPlace native_client/SConstruct --replace "#! -*- python -*-" ""
+      if [[ -e native_client/SConstruct ]]; then
+        # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
+        substituteInPlace native_client/SConstruct --replace "#! -*- python -*-" ""
+      fi
       if [ -e third_party/harfbuzz-ng/src/src/update-unicode-tables.make ]; then
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
-      chmod -x third_party/webgpu-cts/src/tools/run_deno
-      chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
+      if [ -e third_party/webgpu-cts/src/tools/run_deno ]; then
+        chmod -x third_party/webgpu-cts/src/tools/run_deno
+      fi
+      if [ -e third_party/dawn/third_party/webgpu-cts/tools/run_deno ]; then
+        chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
+      fi
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \

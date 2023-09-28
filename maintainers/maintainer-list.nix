@@ -1768,6 +1768,15 @@
     githubId = 1222;
     name = "Aaron VonderHaar";
   };
+  aviallon = {
+    email = "antoine-nixos@lesviallon.fr";
+    github = "aviallon";
+    githubId = 7479436;
+    name = "Antoine Viallon";
+    keys = [{
+      fingerprint = "4AC4 A28D 7208 FC6F 2B51  5EA9 D126 B13A B555 E16F";
+    }];
+  };
   avitex = {
     email = "theavitex@gmail.com";
     github = "avitex";

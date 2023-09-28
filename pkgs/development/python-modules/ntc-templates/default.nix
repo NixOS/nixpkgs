@@ -14,7 +14,7 @@ buildPythonPackage rec {
   version = "3.5.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "networktocode";
@@ -46,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "TextFSM templates for parsing show commands of network devices";
     homepage = "https://github.com/networktocode/ntc-templates";
+    changelog = "https://github.com/networktocode/ntc-templates/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa ];
   };
