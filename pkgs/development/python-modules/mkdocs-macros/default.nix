@@ -23,6 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     jinja2
     termcolor
     python-dateutil
