@@ -29,7 +29,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    protobuf
     setuptools-scm
   ];
 
@@ -39,6 +38,7 @@ buildPythonPackage rec {
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
+    protobuf
     crc32c
     numpy
   ];
