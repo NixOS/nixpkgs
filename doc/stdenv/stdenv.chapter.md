@@ -991,8 +991,11 @@ Hook executed at the end of the fixup phase.
 
 If set to `true`, the standard environment will enable debug information in C/C++ builds. After installation, the debug information will be separated from the executables and stored in the output named `debug`. (This output is enabled automatically; you don’t need to set the `outputs` attribute explicitly.) To be precise, the debug information is stored in `debug/lib/debug/.build-id/XX/YYYY…`, where \<XXYYYY…\> is the \<build ID\> of the binary — a SHA-1 hash of the contents of the binary. Debuggers like GDB use the build ID to look up the separated debug information.
 
-For example, to make GDB able to find debug information for the `socat` package and its dependencies, you can use the following
-`shell.nix`:
+:::{.example #ex-gdb-debug-symbols-socat}
+
+# Enable debug symbols for use with GDB
+
+To make GDB find debug information for the `socat` package and its dependencies, you can use the following shell.nix`:
 
 ```.nix
 let
