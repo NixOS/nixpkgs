@@ -81,7 +81,7 @@ in buildPythonPackage {
     substituteInPlace pyproject.toml \
       --replace 'meson-python>=0.12.1,<0.14.0' 'meson-python' \
       --replace 'numpy==' 'numpy>=' \
-      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0" \
+      --replace "pybind11>=2.10.4,<2.11.1" "pybind11>=2.10.4,<2.12.0" \
       --replace 'wheel<0.41.0' 'wheel'
   '';
 
