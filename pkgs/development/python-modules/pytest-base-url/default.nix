@@ -46,7 +46,7 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_base_url"
   ];
 
