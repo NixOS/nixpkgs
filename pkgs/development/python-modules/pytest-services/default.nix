@@ -35,7 +35,7 @@ buildPythonPackage rec {
   # no tests in PyPI tarball
   doCheck = false;
 
-  pythonImportsCheck = [ "pytest_services" ];
+  pythonImportsExtrasCheck = [ "pytest_services" ];
 
   meta = with lib; {
     description = "Services plugin for pytest testing framework";
