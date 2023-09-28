@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, toml
+, tomli
 , pyyaml
 , packaging
 , pytestCheckHook
@@ -21,9 +21,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    toml
     pyyaml
     packaging
+  ] ++ lib.optionals pythonOlder "3.11" [
+    tomli
   ];
 
   nativeCheckInputs = [
