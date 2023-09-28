@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   # does not contain tests
   doCheck = false;
-  pythonImportsCheck = [ "pytest_black" ];
+  pythonImportsExtrasCheck = [ "pytest_black" ];
 
   meta = with lib; {
     description = "A pytest plugin to enable format checking with black";
