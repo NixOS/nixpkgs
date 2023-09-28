@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "aresponses"
   ];
 
@@ -56,4 +56,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ makefu ];
   };
 }
-
