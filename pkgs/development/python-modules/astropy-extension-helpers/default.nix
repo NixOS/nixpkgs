@@ -6,6 +6,7 @@
 , pytestCheckHook
 , pythonOlder
 , pip
+, setuptools
 , setuptools-scm
 , wheel
 }:
@@ -35,6 +36,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm
     wheel
+  ];
+
+  propagatedBuildInputs = [
+    setuptools
   ];
 
   nativeCheckInputs = [
