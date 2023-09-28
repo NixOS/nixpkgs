@@ -44,7 +44,7 @@ buildPythonPackage rec {
     trio-asyncio
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_aio"
   ];
 
