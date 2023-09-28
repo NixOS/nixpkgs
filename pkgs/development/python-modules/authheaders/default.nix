@@ -25,6 +25,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     authres
     dnspython
     dkimpy
