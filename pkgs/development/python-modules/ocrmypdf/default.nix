@@ -55,11 +55,11 @@ buildPythonPackage rec {
   patches = [
     (substituteAll {
       src = ./paths.patch;
-      gs = "${lib.getBin ghostscript}/bin/gs";
-      jbig2 = "${lib.getBin jbig2enc}/bin/jbig2";
-      pngquant = "${lib.getBin pngquant}/bin/pngquant";
-      tesseract = "${lib.getBin tesseract}/bin/tesseract";
-      unpaper = "${lib.getBin unpaper}/bin/unpaper";
+      gs = lib.getExe ghostscript;
+      jbig2 = lib.getExe jbig2enc;
+      pngquant = lib.getExe pngquant;
+      tesseract = lib.getExe tesseract;
+      unpaper = lib.getExe unpaper;
     })
   ];
 
