@@ -8,8 +8,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "qreactor-unstable";
-  version = "2018-09-29";
+  pname = "qreactor";
+  version = "unstable-2018-09-29";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
