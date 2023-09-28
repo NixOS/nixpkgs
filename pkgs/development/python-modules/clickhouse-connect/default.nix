@@ -63,6 +63,9 @@ buildPythonPackage rec {
     "clickhouse_connect"
     "clickhouse_connect.driverc.buffer"
     "clickhouse_connect.driverc.dataconv"
+  ];
+  pythonImportsExtrasCheck = [
+    # requires numpy
     "clickhouse_connect.driverc.npconv"
   ];
 
