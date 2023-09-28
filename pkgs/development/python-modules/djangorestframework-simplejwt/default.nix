@@ -7,6 +7,7 @@
 , pyjwt
 , python-jose
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     django
     djangorestframework
     pyjwt
