@@ -3,6 +3,8 @@
 , buildPythonPackage
 , deprecated
 , fetchFromGitHub
+, typing-extensions
+, packaging
 , pympler
 , pytest-asyncio
 , pytestCheckHook
@@ -33,6 +35,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     async-timeout
     deprecated
+    typing-extensions
+    packaging
     pympler
     wrapt
   ];
