@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , docutils
+, nh3
 , readme_renderer
 , packaging
 , pygments
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    nh3
     pytestCheckHook
   ];
 
