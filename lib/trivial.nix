@@ -467,6 +467,51 @@ rec {
     then v
     else k: v;
 
+  /* Ergonomic pattern matching on attribute sets.
+
+     withAttrRemainder :: String -> (attrs -> a) -> (attrs -> a)
+
+     Given `withAttrRemainder name f attrs`, `f` is a function taking
+     an attribute set, and `name` is an arbitrary choice of a new
+     attribute that will be passed to `f`, along with `attrs`. The
+     new attribute will contain all the attributes that were *not*
+     named in f's argument attributes.
+
+     This is similar to using `{ a, b, ... }@args` in your function,
+     where `args` binds to the entire input. The difference is that
+     in this expression
+
+       withAttrRemainder "_more" ({ a, b, _more, ... }@args: <body>)
+
+     `_more` is like `args` but with `a` and `b` removed, since your
+     function already binds them.
+
+     This is handy when you would have needed to use
+     `builtins.removeAttrs` to get rid of `a` and `b` manually.
+
+     If `f` does not actually accept an attribute named `name`, it
+     will not be provided. This allows `f` to be any arbitrary
+     function over attributes.
+
+     Example:
+       withAttrRemainder "_theRest" ({ a, _theRest, ... }: _theRest) { a = 1; b = 2; }
+       => { b = 2; }
+       withAttrRemainder "_theRest" ({ a }: 2) { a = 1; }
+       => 2
+  */
+  withAttrRemainder = leftoversName: f:
+    let args = lib.functionArgs f; in
+    lib.setFunctionArgs (attrs:
+      let
+        leftovers = builtins.removeAttrs attrs (builtins.attrNames args);
+        finalArgs = attrs // (if args?${leftoversName}
+                             then { ${leftoversName} = leftovers; }
+                             else {});
+      in f finalArgs
+    # Hide ${leftoversName} from callers because there's no way for them
+    # to pass that attribute and have it reach the function.
+    ) (builtins.removeAttrs args [leftoversName]);
+
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:
 
