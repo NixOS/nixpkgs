@@ -33,6 +33,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  propagatedBuildInputs = [
+    flatten-dict # not optional as advertised, needed to import "dvc_render"
+  ];
+
   passthru.optional-dependencies = {
     table = [
       flatten-dict
