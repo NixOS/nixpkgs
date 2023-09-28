@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "test_wait_raise_assertion_false" # racy
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_httpserver"
   ];
 
