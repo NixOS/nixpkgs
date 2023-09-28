@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # all tests access network: does not work in sandbox
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_localserver"
   ];
 
