@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , httpx
+, setuptools
 , pytest
 , pytest-asyncio
 , pytestCheckHook
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     httpx
   ];
 
@@ -44,7 +46,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_httpx"
   ];
 
