@@ -26580,6 +26580,7 @@ with pkgs;
   tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
+  tt-rss-plugin-readability = callPackage ../servers/tt-rss/plugin-readability { };
 
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
 
