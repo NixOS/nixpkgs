@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, setuptools
 , eth-hash
 , eth-typing
 , cytoolz
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     eth-hash
     eth-typing
   ] ++ lib.optional (!isPyPy) cytoolz
