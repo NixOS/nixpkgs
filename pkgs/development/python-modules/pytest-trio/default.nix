@@ -33,7 +33,7 @@ buildPythonPackage rec {
     PYTHONPATH=$PWD:$PYTHONPATH pytest
   '';
 
-  pythonImportsCheck = [ "pytest_trio" ];
+  pythonImportsExtrasCheck = [ "pytest_trio" ];
 
   meta = with lib; {
     description = "Pytest plugin for trio";
