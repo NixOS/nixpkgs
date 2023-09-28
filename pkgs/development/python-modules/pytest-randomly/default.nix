@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , importlib-metadata
 , numpy
+, pytest
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
@@ -29,6 +30,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  buildInputs = [
+    pytest
+  ];
+
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
@@ -47,7 +52,7 @@ buildPythonPackage rec {
     "no:randomly"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_randomly"
   ];
 
