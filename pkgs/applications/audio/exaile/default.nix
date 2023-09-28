@@ -8,7 +8,6 @@
 , notificationSupport ? true
 , scalableIconSupport ? true
 , translationSupport ? true
-, bpmCounterSupport ? false
 , ipythonSupport ? false
 , cdMetadataSupport ? false
 , lastfmSupport ? false
@@ -48,6 +47,9 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
   ]) ++ (with python3.pkgs; [
     bsddb3
     dbus-python
@@ -58,7 +60,6 @@ stdenv.mkDerivation rec {
   ]) ++ lib.optional deviceDetectionSupport udisks
   ++ lib.optional notificationSupport libnotify
   ++ lib.optional scalableIconSupport librsvg
-  ++ lib.optional bpmCounterSupport gst_all_1.gst-plugins-bad
   ++ lib.optional ipythonSupport python3.pkgs.ipython
   ++ lib.optional cdMetadataSupport python3.pkgs.discid
   ++ lib.optional lastfmSupport python3.pkgs.pylast
