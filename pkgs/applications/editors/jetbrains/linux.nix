@@ -107,9 +107,7 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     wrapProgram  "$out/$pname/bin/${loName}.sh" \
       --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git python3 ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
-        # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib libsecret e2fsprogs
-        libnotify
+        libsecret e2fsprogs libnotify
         # Required for Help -> Collect Logs
         # in at least rider and goland
         udev
