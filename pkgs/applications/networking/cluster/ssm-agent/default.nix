@@ -27,17 +27,17 @@ let
 in
 buildGoPackage rec {
   pname = "amazon-ssm-agent";
-  version = "3.2.1478.0";
+  version = "3.2.1630.0";
 
   goPackagePath = "github.com/aws/${pname}";
 
   nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
-    rev = version;
+    rev = "refs/tags/${version}";
     owner = "aws";
     repo = "amazon-ssm-agent";
-    hash = "sha256-SS0N3Wcksk2vq52K6GYE9z4hrckXGqiuCuYPHkH4SWc=";
+    hash = "sha256-0tN0rBfz2VZ4UkYLFDGg9218O9vyyRT2Lrppu9TETao=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ buildGoPackage rec {
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
   ];
 
-  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1478.0/makefile#L120-L138
+  # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1630.0/makefile#L120-L138
   # The updater is not built because it cannot work on NixOS
   subPackages = [
     "core"
