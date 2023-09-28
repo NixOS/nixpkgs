@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, setuptools
 , dataclasses-json
 , pycryptodome
 , setuptools-scm
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     dataclasses-json
     pycryptodome
     pytz
