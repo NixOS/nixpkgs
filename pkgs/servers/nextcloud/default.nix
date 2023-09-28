@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests
+{ lib, stdenv, zopfli, brotli, fetchurl, nixosTests
 , nextcloud27Packages
 , nextcloud26Packages
 , nextcloud25Packages
@@ -27,6 +27,26 @@ let
       tests = nixosTests.nextcloud;
       inherit packages;
     };
+
+    outputs = [ "out" "compressed" ];
+
+    nativeBuildInputs = [ zopfli brotli ];
+
+    buildPhase = ''
+      # Create missing static gzip and brotli files
+      shopt -s globstar
+      for f in apps/** core/** dist/** resources/** themes/**; do
+        if [ -f "$f" ]; then
+          case "$f" in
+          *.css | *.js | *.json | *.svg | *.ico | *.txt | *.md | *.xml | *.html | *.ttf | *.otf | *.eot)
+            mkdir -p "$compressed/''${f%/*}"
+            zopfli --gzip -c "$f" > "$compressed/$f.gz"
+            brotli --best --keep --output="$compressed/$f.br" "$f"
+            ;;
+          esac
+        fi
+      done
+    '';
 
     installPhase = ''
       runHook preInstall
