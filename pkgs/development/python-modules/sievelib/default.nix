@@ -3,6 +3,7 @@
 , fetchPypi
 , mock
 , pytestCheckHook
+, setuptools
 , setuptools-scm
 }:
 
@@ -18,6 +19,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
   ];
 
   nativeCheckInputs = [
