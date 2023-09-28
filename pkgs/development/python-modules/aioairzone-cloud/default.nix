@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aioairzone-cloud";
-  version = "0.2.2";
+  version = "0.2.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = "aioairzone-cloud";
     rev = "refs/tags/${version}";
-    hash = "sha256-SGHbM7D21ykFWwg4aTUUMIFpwZ0K8CQohZYtzXOPJQg=";
+    hash = "sha256-7sjiY20jDUHtEnqAMwEHsBboK9XCH5XjE0sHR82YvEA=";
   };
 
   nativeBuildInputs = [
