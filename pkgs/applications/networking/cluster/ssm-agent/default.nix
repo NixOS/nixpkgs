@@ -138,6 +138,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Agent to enable remote management of your Amazon EC2 instance configuration";
+    changelog = "https://github.com/aws/amazon-ssm-agent/releases/tag/${version}";
     homepage = "https://github.com/aws/amazon-ssm-agent";
     license = licenses.asl20;
     platforms = platforms.unix;
