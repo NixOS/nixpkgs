@@ -13,53 +13,45 @@
 , version
 , sha256
 
-# downstream dependencies
+  # downstream dependencies
 , python3
+, grpc
 
 , ...
 }:
 
-let
-  self = stdenv.mkDerivation {
-    pname = "protobuf";
-    inherit version;
+stdenv.mkDerivation (finalAttrs: {
+  pname = "protobuf";
+  inherit version;
 
-    src = fetchFromGitHub {
-      owner = "protocolbuffers";
-      repo = "protobuf";
-      rev = "v${version}";
-      inherit sha256;
-    };
+  src = fetchFromGitHub {
+    owner = "protocolbuffers";
+    repo = "protobuf";
+    rev = "v${version}";
+    inherit sha256;
+  };
 
-    # re-create submodule logic
-    postPatch = ''
-      rm -rf gmock
-      cp -r ${gtest.src}/googlemock third_party/gmock
-      cp -r ${gtest.src}/googletest third_party/
-      chmod -R a+w third_party/
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/google/protobuf/testing/googletest.cc \
+      --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
+  '';
 
-      ln -s ../googletest third_party/gmock/gtest
-      ln -s ../gmock third_party/googletest/googlemock
-      ln -s $(pwd)/third_party/googletest third_party/googletest/googletest
-    '' + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/google/protobuf/testing/googletest.cc \
-        --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
-    '';
+  patches = lib.optionals (lib.versionOlder version "3.22") [
+    # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
+    # https://github.com/protocolbuffers/protobuf/pull/10090
+    (fetchpatch {
+      url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
+      sha256 = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    ./static-executables-have-no-rpath.patch
+  ];
 
-    patches = lib.optionals (lib.versionOlder version "3.22") [
-      # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
-      # https://github.com/protocolbuffers/protobuf/pull/10090
-      (fetchpatch {
-        url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
-        sha256 = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
-      })
-    ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-      ./static-executables-have-no-rpath.patch
-    ];
-
-    nativeBuildInputs = let
+  nativeBuildInputs =
+    let
       protobufVersion = "${lib.versions.major version}_${lib.versions.minor version}";
-    in [
+    in
+    [
       cmake
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       # protoc of the same version must be available for build. For non-cross builds, it's able to
@@ -67,52 +59,57 @@ let
       buildPackages."protobuf${protobufVersion}"
     ];
 
-    buildInputs = [
-      zlib
-    ];
+  buildInputs = [
+    gtest
+    zlib
+  ];
 
-    propagatedBuildInputs = [
-      abseil-cpp
-    ];
+  propagatedBuildInputs = [
+    abseil-cpp
+  ];
 
-    cmakeDir = if lib.versionOlder version "3.22" then "../cmake" else null;
-    cmakeFlags = [
-      "-Dprotobuf_ABSL_PROVIDER=package"
-    ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
-      "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-    ]
-    # Tests fail to build on 32-bit platforms; fixed in 3.22
-    # https://github.com/protocolbuffers/protobuf/issues/10418
-    ++ lib.optional
-      (stdenv.targetPlatform.is32bit && lib.versionOlder version "3.22")
-      "-Dprotobuf_BUILD_TESTS=OFF";
+  strictDeps = true;
 
-    # unfortunately the shared libraries have yet to been patched by nix, thus tests will fail
-    doCheck = false;
+  cmakeDir = if lib.versionOlder version "3.22" then "../cmake" else null;
+  cmakeFlags = [
+    "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
+    "-Dprotobuf_ABSL_PROVIDER=package"
+  ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
+    "-Dprotobuf_BUILD_SHARED_LIBS=ON"
+  ]
+  # Tests fail to build on 32-bit platforms; fixed in 3.22
+  # https://github.com/protocolbuffers/protobuf/issues/10418
+  ++ lib.optionals (stdenv.targetPlatform.is32bit && lib.versionOlder version "3.22") [
+    "-Dprotobuf_BUILD_TESTS=OFF"
+  ];
 
-    passthru = {
-      tests = {
-        pythonProtobuf = python3.pkgs.protobuf.override(_: {
-          protobuf = self;
-        });
-      };
+  # FIXME: investigate.  3.24 and 3.23 have different errors.
+  # At least some of it is not reproduced on some other machine; example:
+  # https://hydra.nixos.org/build/235677717/nixlog/4/tail
+  doCheck = !(stdenv.isDarwin && lib.versionAtLeast version "3.23");
 
-      inherit abseil-cpp;
+  passthru = {
+    tests = {
+      pythonProtobuf = python3.pkgs.protobuf.override (_: {
+        protobuf = finalAttrs.finalPackage;
+      });
+      inherit grpc;
     };
 
-    meta = {
-      description = "Google's data interchange format";
-      longDescription = ''
-        Protocol Buffers are a way of encoding structured data in an efficient
-        yet extensible format. Google uses Protocol Buffers for almost all of
-        its internal RPC protocols and file formats.
-      '';
-      license = lib.licenses.bsd3;
-      platforms = lib.platforms.unix;
-      homepage = "https://developers.google.com/protocol-buffers/";
-      maintainers = with lib.maintainers; [ jonringer ];
-      mainProgram = "protoc";
-    };
+    inherit abseil-cpp;
   };
-in
-  self
+
+  meta = {
+    description = "Google's data interchange format";
+    longDescription = ''
+      Protocol Buffers are a way of encoding structured data in an efficient
+      yet extensible format. Google uses Protocol Buffers for almost all of
+      its internal RPC protocols and file formats.
+    '';
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    homepage = "https://protobuf.dev/";
+    maintainers = with lib.maintainers; [ jonringer ];
+    mainProgram = "protoc";
+  };
+})

@@ -115,7 +115,6 @@ in
 
     cmakeFlags = [
       "-DRSTUDIO_TARGET=${if server then "Server" else "Desktop"}"
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"

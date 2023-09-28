@@ -38,6 +38,10 @@ processor=0
 hardware_platform=0
 operating_system=0
 
+# With no OPTION, same as -s.
+if [[ $# -eq 0 ]]; then
+    kernel_name=1
+fi
 
 @getopt@/bin/getopt --test > /dev/null && rc=$? || rc=$?
 if [[ $rc -ne 4 ]]; then
@@ -52,11 +56,6 @@ else
   PARSED=`@getopt@/bin/getopt --options $SHORT --longoptions $LONG --name "$0" -- "$@"`
 
   eval set -- "$PARSED"
-fi
-
-# With no OPTION, same as -s.
-if [[ $# -eq 0 ]]; then
-    kernel_name=1
 fi
 
 # Process each argument, and set the appropriate flag if we recognize it.
@@ -132,44 +131,44 @@ fi
 #  Darwin *nodename* 22.1.0 Darwin Kernel Version 22.1.0: Sun Oct  9 20:14:30 PDT 2022; root:xnu-8792.41.9~2/RELEASE_ARM64_T8103 arm64 arm Darwin
 # NixOS:
 #  Linux *nodename* 6.0.13 #1-NixOS SMP PREEMPT_DYNAMIC Wed Dec 14 10:41:06 UTC 2022 x86_64 GNU/Linux
+output=()
 if [[ "$all" = "1" ]]; then
-    echo -n "$KERNEL_NAME_VAL $NODENAME_VAL $KERNEL_RELEASE_VAL $KERNEL_VERSION_VAL $MACHINE_VAL "
+    output+=("$KERNEL_NAME_VAL" "$NODENAME_VAL" "$KERNEL_RELEASE_VAL" "$KERNEL_VERSION_VAL" "$MACHINE_VAL")
     # in help:  except omit -p and -i if unknown.
-    #echo -n "$PROCESSOR_VAL $HARDWARE_PLATFORM_VAL\n"
-    echo -n "$OPERATING_SYSTEM_VAL"
+    # output+=($PROCESSOR_VAL $HARDWARE_PLATFORM_VAL)
+    output+=("$OPERATING_SYSTEM_VAL")
 fi
 
 if [[ "$kernel_name" = "1" ]]; then
-    echo -n "$KERNEL_NAME_VAL"
+    output+=("$KERNEL_NAME_VAL")
 fi
 
 if [[ "$nodename" = "1" ]]; then
-    echo -n "$NODENAME_VAL"
+    output+=("$NODENAME_VAL")
 fi
 
 if [[ "$kernel_release" = "1" ]]; then
-    echo -n "$KERNEL_RELEASE_VAL"
+    output+=("$KERNEL_RELEASE_VAL")
 fi
 
 if [[ "$kernel_version" = "1" ]]; then
-    echo -n "$KERNEL_VERSION_VAL"
+    output+=("$KERNEL_VERSION_VAL")
 fi
 
 if [[ "$machine" = "1" ]]; then
-    echo -n "$MACHINE_VAL"
+    output+=("$MACHINE_VAL")
 fi
 
 if [[ "$processor" = "1" ]]; then
-    echo -n "$PROCESSOR_VAL"
+    output+=("$PROCESSOR_VAL")
 fi
 
 if [[ "$hardware_platform" = "1" ]]; then
-    echo -n "$HARDWARE_PLATFORM_VAL"
+    output+=("$HARDWARE_PLATFORM_VAL")
 fi
 
 if [[ "$operating_system" = "1" ]]; then
-    echo -n "$OPERATING_SYSTEM_VAL"
+    output+=("$OPERATING_SYSTEM_VAL")
 fi
 
-# for newline.
-echo
+echo "${output[@]}"

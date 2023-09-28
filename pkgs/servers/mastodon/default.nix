@@ -7,7 +7,8 @@
 , pname ? "mastodon"
 , version ? import ./version.nix
 , srcOverride ? null
-, dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
+, dependenciesDir ? ./.  # Expected to contain gemset.nix
+, yarnHash ? import ./yarn-hash.nix
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      sha256 = "sha256-e3rl/WuKXaUdeDEYvo1sSubuIwtBjkbguCYdAijwXOA=";
+      hash = yarnHash;
     };
 
     nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];

@@ -1,45 +1,51 @@
-{lib, stdenv, fetchurl}:
+{ lib
+, stdenv
+, fetchzip
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unrar";
-  version = "6.2.5";
+  version = "6.2.11";
 
-  src = fetchurl {
-    url = "https://www.rarlab.com/rar/unrarsrc-${version}.tar.gz";
-    hash = "sha256-mjl0QQ0dNA45mN0qb5j6776DjK1VYmbnFK37Doz5N3w=";
+  src = fetchzip {
+    url = "https://www.rarlab.com/rar/unrarsrc-${finalAttrs.version}.tar.gz";
+    stripRoot = false;
+    hash = "sha256-HFglLjn4UE8dalp2ZIFlqqaE9FahahFrDNsPrKUIQPI=";
   };
 
+  sourceRoot = finalAttrs.src.name;
+
   postPatch = ''
-    substituteInPlace makefile \
+    substituteInPlace unrar/makefile \
       --replace "CXX=" "#CXX=" \
       --replace "STRIP=" "#STRIP=" \
       --replace "AR=" "#AR="
   '';
 
-  buildPhase = ''
-    # `make {unrar,lib}` call `make clean` implicitly
-    # move build results to another dir to avoid deleting them
-    mkdir -p bin
-
-    make unrar
-    mv unrar bin
-
-    make lib
-    mv libunrar.so bin
-  '';
-
   outputs = [ "out" "dev" ];
 
+  # `make {unrar,lib}` call `make clean` implicitly
+  # separate build into different dirs to avoid deleting them
+  buildPhase = ''
+    runHook preBuild
+
+    cp -a unrar libunrar
+    make -C libunrar lib
+    make -C unrar -j1
+
+    runHook postBuild
+  '';
+
   installPhase = ''
-    install -Dt "$out/bin" bin/unrar
+    runHook preInstall
 
-    mkdir -p $out/share/doc/unrar
-    cp acknow.txt license.txt \
-        $out/share/doc/unrar
+    install -Dm755 unrar/unrar -t $out/bin/
+    install -Dm644 unrar/{acknow.txt,license.txt} -t $out/share/doc/unrar/
 
-    install -Dm755 bin/libunrar.so $out/lib/libunrar.so
+    install -Dm755 libunrar/libunrar.so -t $out/lib/
+    install -Dm644 libunrar/dll.hpp -t $dev/include/unrar/
 
-    install -Dt $dev/include/unrar/ *.hpp
+    runHook postInstall
   '';
 
   setupHook = ./setup-hook.sh;
@@ -48,7 +54,7 @@ stdenv.mkDerivation rec {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
     license = licenses.unfreeRedistributable;
-    maintainers = [ maintainers.ehmry ];
+    maintainers = with maintainers; [ ehmry wegank ];
     platforms = platforms.all;
   };
-}
+})

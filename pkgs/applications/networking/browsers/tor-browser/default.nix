@@ -57,7 +57,7 @@
 }:
 
 lib.warnIf (useHardenedMalloc != null)
-  "tor-browser-bundle-bin: useHardenedMalloc is deprecated and enabling it can cause issues"
+  "tor-browser: useHardenedMalloc is deprecated and enabling it can cause issues"
 
 (let
   libPath = lib.makeLibraryPath libPkgs;
@@ -92,7 +92,7 @@ lib.warnIf (useHardenedMalloc != null)
   fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "12.5.4";
+  version = "12.5.5";
 
   lang = "ALL";
 
@@ -104,7 +104,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-AIwqIz8QG7Fq3Vvd22QTNFH1fnZgtH25qUaECX50QCQ=";
+      hash = "sha256-FS1ywm/UJDZiSYPf0WHikoX/o6WGIP+lQQGFeD0g2dc=";
     };
 
     i686-linux = fetchurl {
@@ -114,7 +114,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      hash = "sha256-s8UReyurIKlxG0bT0ecGUcXMTTHyYKy/AcygTE6ujqo=";
+      hash = "sha256-6ozGIQPC8QnZxS1oJ0ZEdZDMY2JkwRHs+7ZHUkqrL6U=";
     };
   };
 
@@ -132,7 +132,7 @@ lib.warnIf (useHardenedMalloc != null)
   });
 in
 stdenv.mkDerivation rec {
-  pname = "tor-browser-bundle-bin";
+  pname = "tor-browser";
   inherit version;
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
@@ -459,21 +459,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Tor Browser Bundle built by torproject.org";
-    longDescription = ''
-      Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of
-      Firefox), several essential extensions for Tor Browser, and some tools that glue those
-      together with a convenient UI.
-
-      `tor-browser-bundle-bin` package is the official version built by torproject.org patched with
-      `patchelf` to work under nix and with bundled scripts adapted to the read-only nature of
-      the `/nix/store`.
-    '';
+    description = "Privacy-focused browser routing traffic through the Tor network";
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
     platforms = attrNames sources;
     maintainers = with maintainers; [ felschr panicgh joachifm hax404 ];
-    mainProgram = "tor-browser";
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

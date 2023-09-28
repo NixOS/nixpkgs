@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p yarn2nix bundix coreutils diffutils nix-prefetch-github gnused jq
+#! nix-shell -i bash -p bundix coreutils diffutils nix-prefetch-github gnused jq prefetch-yarn-deps
 set -e
 
 OWNER=mastodon
@@ -77,7 +77,8 @@ trap cleanup EXIT
 
 echo "Fetching source code $REVISION"
 JSON=$(nix-prefetch-github "$OWNER" "$REPO" --rev "$REVISION" 2> $WORK_DIR/nix-prefetch-git.out)
-HASH=$(echo "$JSON" | jq -r .hash)
+HASH="$(echo "$JSON" | jq -r .sha256)"
+HASH="$(nix hash to-sri --type sha256 "$HASH")"
 
 echo "Creating version.nix"
 echo "\"$VERSION\"" | sed 's/^"v/"/' > version.nix
@@ -101,3 +102,8 @@ SOURCE_DIR="$(nix-build --no-out-link -E '(import <nixpkgs> {}).callPackage ./so
 echo "Creating gemset.nix"
 bundix --lockfile="$SOURCE_DIR/Gemfile.lock" --gemfile="$SOURCE_DIR/Gemfile"
 echo "" >> gemset.nix  # Create trailing newline to please EditorConfig checks
+
+echo "Creating yarn-hash.nix"
+YARN_HASH="$(prefetch-yarn-deps "$SOURCE_DIR/yarn.lock")"
+YARN_HASH="$(nix hash to-sri --type sha256 "$YARN_HASH")"
+printf '"%s"\n' "$YARN_HASH" > yarn-hash.nix

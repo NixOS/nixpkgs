@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
+    # At least on Linux bash memory allocator has pathological performance
+    # in scenarios involving use of larger memory:
+    #   https://lists.gnu.org/archive/html/bug-bash/2023-08/msg00052.html
+    # Various distributions default to system allocator. Let's nixpkgs
+    # do the same.
+    "--without-bash-malloc"
     (if interactive then "--with-installed-readline" else "--disable-readline")
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "bash_cv_job_control_missing=nomissing"
@@ -81,7 +87,6 @@ stdenv.mkDerivation rec {
     "bash_cv_dev_fd=standard"
     "bash_cv_termcap_lib=libncurses"
   ] ++ lib.optionals (stdenv.hostPlatform.libc == "musl") [
-    "--without-bash-malloc"
     "--disable-nls"
   ];
 

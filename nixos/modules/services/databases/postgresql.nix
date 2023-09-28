@@ -106,12 +106,14 @@ in
       identMap = mkOption {
         type = types.lines;
         default = "";
+        example = literalExample ''
+          map-name-0 system-username-0 database-username-0
+          map-name-1 system-username-1 database-username-1
+        '';
         description = lib.mdDoc ''
           Defines the mapping from system users to database users.
 
-          The general form is:
-
-          map-name system-username database-username
+          See the [auth doc](https://postgresql.org/docs/current/auth-username-maps.html).
         '';
       };
 
@@ -128,6 +130,11 @@ in
       initialScript = mkOption {
         type = types.nullOr types.path;
         default = null;
+        example = literalExpression ''
+          pkgs.writeText "init-sql-script" '''
+            alter user postgres with password 'myPassword';
+          ''';'';
+
         description = lib.mdDoc ''
           A file containing SQL statements to execute on first startup.
         '';
@@ -464,13 +471,16 @@ in
 
     services.postgresql.dataDir = mkDefault "/var/lib/postgresql/${cfg.package.psqlSchema}";
 
-    services.postgresql.authentication = mkAfter
+    services.postgresql.authentication = mkMerge [
+      (mkBefore "# Generated file; do not edit!")
+      (mkAfter
       ''
-        # Generated file; do not edit!
+        # default value of services.postgresql.authentication
         local all all              peer
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
-      '';
+      '')
+    ];
 
     users.users.postgres =
       { name = "postgres";

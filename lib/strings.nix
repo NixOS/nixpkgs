@@ -741,6 +741,64 @@ rec {
       name = head (splitString sep filename);
     in assert name != filename; name;
 
+  /* Create a "-D<feature>:<type>=<value>" string that can be passed to typical
+     CMake invocations.
+
+    Type: cmakeOptionType :: string -> string -> string -> string
+
+     @param feature The feature to be set
+     @param type The type of the feature to be set, as described in
+                 https://cmake.org/cmake/help/latest/command/set.html
+                 the possible values (case insensitive) are:
+                 BOOL FILEPATH PATH STRING INTERNAL
+     @param value The desired value
+
+     Example:
+       cmakeOptionType "string" "ENGINE" "sdl2"
+       => "-DENGINE:STRING=sdl2"
+  */
+  cmakeOptionType = type: feature: value:
+    assert (lib.elem (lib.toUpper type)
+      [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ]);
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    "-D${feature}:${lib.toUpper type}=${value}";
+
+  /* Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
+     CMake invocations.
+
+    Type: cmakeBool :: string -> bool -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       cmakeBool "ENABLE_STATIC_LIBS" false
+       => "-DENABLESTATIC_LIBS:BOOL=FALSE"
+  */
+  cmakeBool = condition: flag:
+    assert (lib.isString condition);
+    assert (lib.isBool flag);
+    cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
+
+  /* Create a -D<feature>:STRING=<value> string that can be passed to typical
+     CMake invocations.
+     This is the most typical usage, so it deserves a special case.
+
+    Type: cmakeFeature :: string -> string -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       cmakeFeature "MODULES" "badblock"
+       => "-DMODULES:STRING=badblock"
+  */
+  cmakeFeature = feature: value:
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    cmakeOptionType "string" feature value;
+
   /* Create a -D<feature>=<value> string that can be passed to typical Meson
      invocations.
 

@@ -100,12 +100,22 @@ in
     };
   };
 
+  beetle-pce = mkLibretroCore {
+    core = "mednafen-pce";
+    src = getCoreSrc "beetle-pce";
+    makefile = "Makefile";
+    meta = {
+      description = "Port of Mednafen's PC Engine core to libretro";
+      license = lib.licenses.gpl2Only;
+    };
+  };
+
   beetle-pce-fast = mkLibretroCore {
     core = "mednafen-pce-fast";
     src = getCoreSrc "beetle-pce-fast";
     makefile = "Makefile";
     meta = {
-      description = "Port of Mednafen's PC Engine core to libretro";
+      description = "Port of Mednafen's PC Engine fast core to libretro";
       license = lib.licenses.gpl2Only;
     };
   };
@@ -291,7 +301,11 @@ in
     core = "citra";
     extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
-    makeFlags = [ "HAVE_FFMPEG_STATIC=0" ];
+    makeFlags = [
+      "HAVE_FFMPEG_STATIC=0"
+      # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L90
+      "BUILD_DATE=01/01/1970_00:00"
+    ];
     meta = {
       description = "Port of Citra to libretro";
       license = lib.licenses.gpl2Plus;
@@ -506,15 +520,11 @@ in
     core = "mame";
     extraNativeBuildInputs = [ python3 ];
     extraBuildInputs = [ alsa-lib libGLU libGL ];
+    # Setting this is breaking compilation of src/3rdparty/genie for some reason
+    makeFlags = [ "ARCH=" ];
     meta = {
       description = "Port of MAME to libretro";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
-      # Build fail with errors:
-      # gcc: warning: <arch>: linker input file unused because linking not done
-      # gcc: error: <arch>: linker input file not found: No such file or directory
-      # Removing it from platforms instead of marking as broken to allow
-      # retroarchFull to be built
-      platforms = [ ];
     };
   };
 

@@ -134,7 +134,7 @@ If one of your favourite plugins isn't packaged, you can package it yourself:
 { config, pkgs, ... }:
 
 let
-  easygrep = pkgs.vimUtils.buildVimPluginFrom2Nix {
+  easygrep = pkgs.vimUtils.buildVimPlugin {
     name = "vim-easygrep";
     src = pkgs.fetchFromGitHub {
       owner = "dkprice";

@@ -3636,6 +3636,8 @@ self: super: with self; {
 
   exrex = callPackage ../development/python-modules/exrex { };
 
+  exitcode = callPackage ../development/python-modules/exitcode { };
+
   extractcode = callPackage ../development/python-modules/extractcode { };
 
   extractcode-7z = callPackage ../development/python-modules/extractcode/7z.nix {
@@ -4382,6 +4384,8 @@ self: super: with self; {
 
   gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
 
+  gitlike-commands = callPackage ../development/python-modules/gitlike-commands { };
+
   gitpython = callPackage ../development/python-modules/gitpython { };
 
   glad =  callPackage ../development/python-modules/glad { };
@@ -4802,6 +4806,8 @@ self: super: with self; {
   hdf5plugin = callPackage ../development/python-modules/hdf5plugin { };
 
   ha-ffmpeg = callPackage ../development/python-modules/ha-ffmpeg { };
+
+  ha-mqtt-discoverable = callPackage ../development/python-modules/ha-mqtt-discoverable { };
 
   ha-philipsjs = callPackage ../development/python-modules/ha-philipsjs{ };
 
@@ -8927,6 +8933,8 @@ self: super: with self; {
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
+  pybloom-live = callPackage ../development/python-modules/pybloom-live { };
+
   pybluez = callPackage ../development/python-modules/pybluez {
     inherit (pkgs) bluez;
   };
@@ -11785,6 +11793,8 @@ self: super: with self; {
     inherit (pkgs) sentencepiece;
   };
 
+  sentence-splitter = callPackage ../development/python-modules/sentence-splitter { };
+
   sentence-transformers = callPackage ../development/python-modules/sentence-transformers { };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
@@ -12505,6 +12515,8 @@ self: super: with self; {
 
   stim = callPackage ../development/python-modules/stim { };
 
+  stix2-patterns = callPackage ../development/python-modules/stix2-patterns { };
+
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
   stone = callPackage ../development/python-modules/stone { };
@@ -12903,6 +12915,8 @@ self: super: with self; {
   };
 
   thefuzz = callPackage ../development/python-modules/thefuzz { };
+
+  thelogrus = callPackage ../development/python-modules/thelogrus { };
 
   thermobeacon-ble = callPackage ../development/python-modules/thermobeacon-ble { };
 
