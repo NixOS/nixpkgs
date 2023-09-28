@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "pytest_helpers_namespace" ];
+  pythonImportsExtrasCheck = [ "pytest_helpers_namespace" ];
 
   meta = with lib; {
     homepage = "https://github.com/saltstack/pytest-helpers-namespace";
