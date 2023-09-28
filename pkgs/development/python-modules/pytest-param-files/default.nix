@@ -25,7 +25,7 @@ buildPythonPackage rec {
     pytest
   ];
 
-  pythonImportsCheck = [ "pytest_param_files" ];
+  pythonImportsExtrasCheck = [ "pytest_param_files" ];
 
   nativeCheckInputs = [
     pytestCheckHook
