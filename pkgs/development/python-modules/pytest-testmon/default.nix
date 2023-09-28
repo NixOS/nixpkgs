@@ -37,7 +37,7 @@ buildPythonPackage rec {
   # The project does not include tests since version 1.3.0
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "testmon"
   ];
 
