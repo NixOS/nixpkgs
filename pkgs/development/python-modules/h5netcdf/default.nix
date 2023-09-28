@@ -3,6 +3,7 @@
 , fetchPypi
 , fetchpatch
 , h5py
+, packaging
 , pytestCheckHook
 , netcdf4
 , pythonOlder
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     h5py
+    packaging
   ];
 
   nativeCheckInputs = [
