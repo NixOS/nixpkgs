@@ -3636,6 +3636,8 @@ self: super: with self; {
 
   exrex = callPackage ../development/python-modules/exrex { };
 
+  exitcode = callPackage ../development/python-modules/exitcode { };
+
   extractcode = callPackage ../development/python-modules/extractcode { };
 
   extractcode-7z = callPackage ../development/python-modules/extractcode/7z.nix {
@@ -8931,6 +8933,8 @@ self: super: with self; {
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
+  pybloom-live = callPackage ../development/python-modules/pybloom-live { };
+
   pybluez = callPackage ../development/python-modules/pybluez {
     inherit (pkgs) bluez;
   };
@@ -11789,6 +11793,8 @@ self: super: with self; {
     inherit (pkgs) sentencepiece;
   };
 
+  sentence-splitter = callPackage ../development/python-modules/sentence-splitter { };
+
   sentence-transformers = callPackage ../development/python-modules/sentence-transformers { };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
@@ -12508,6 +12514,8 @@ self: super: with self; {
   stickytape = callPackage ../development/python-modules/stickytape { };
 
   stim = callPackage ../development/python-modules/stim { };
+
+  stix2-patterns = callPackage ../development/python-modules/stix2-patterns { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 

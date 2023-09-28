@@ -225,7 +225,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit sources;
-    updateScript = callPackage ../tor-browser-bundle-bin/update.nix {
+    updateScript = callPackage ../tor-browser/update.nix {
       inherit pname version meta;
       baseUrl = "https://cdn.mullvad.net/browser/";
       prefix = "mullvad-browser-";
