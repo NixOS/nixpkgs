@@ -32,7 +32,7 @@ buildPythonPackage rec {
     aiomisc
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "aiomisc_pytest"
   ];
 
