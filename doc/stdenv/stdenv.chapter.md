@@ -1033,6 +1033,7 @@ in
     '';
   }
 ```
+:::
 
 ### The installCheck phase {#ssec-installCheck-phase}
 
