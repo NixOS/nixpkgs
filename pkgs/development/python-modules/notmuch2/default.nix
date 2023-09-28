@@ -16,7 +16,10 @@ buildPythonPackage {
     cffi
   ];
   buildInputs = [
-    python notmuch cffi
+    python notmuch
+  ];
+  propagatedBuildInputs = [
+    cffi
   ];
 
   # since notmuch 0.35, this package expects _notmuch_config.py that is
