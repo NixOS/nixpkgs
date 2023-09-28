@@ -39,7 +39,7 @@ buildGoModule rec {
     description = "Pat is a cross platform Winlink client written in Go.";
     homepage = "https://getpat.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ dotemup ];
+    maintainers = with maintainers; [ dotemup sarcasticadmin ];
     platforms = platforms.unix;
   };
 }
