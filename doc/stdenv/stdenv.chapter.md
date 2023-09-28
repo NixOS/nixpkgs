@@ -1033,6 +1033,13 @@ in
     '';
   }
 ```
+
+This setup works as follows:
+- Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
+- Create a derivation to combine all required debug symbols under one path with [`symlinkJoin`](#trivial-builder-symlinkJoin).
+- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use it for looking up debug symbols.
+- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell). Here we use [`lib.getBin`](#function-library-lib.attrsets.getBin) to ensure that the correct derivation output is selected rather than the default one.
+
 :::
 
 ### The installCheck phase {#ssec-installCheck-phase}
