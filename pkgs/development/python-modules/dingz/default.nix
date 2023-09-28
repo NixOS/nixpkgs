@@ -3,6 +3,7 @@
 , async-timeout
 , buildPythonPackage
 , click
+, setuptools
 , fetchFromGitHub
 , pythonOlder
 }:
@@ -25,6 +26,7 @@ buildPythonPackage rec {
     aiohttp
     async-timeout
     click
+    setuptools # needed for 'pkg_resources'
   ];
 
   # Project has no tests
