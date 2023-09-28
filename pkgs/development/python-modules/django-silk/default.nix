@@ -1,4 +1,5 @@
 { lib
+, setuptools
 , autopep8
 , buildPythonPackage
 , django
@@ -56,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     autopep8
     django
     gprof2dot
