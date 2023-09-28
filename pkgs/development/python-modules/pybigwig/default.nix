@@ -25,8 +25,11 @@ buildPythonPackage rec {
     zlib
   ];
 
-  nativeCheckInputs = [
+  propagatedBuildInputs = [
     numpy
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
