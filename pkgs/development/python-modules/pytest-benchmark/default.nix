@@ -45,7 +45,7 @@ buildPythonPackage rec {
     py-cpuinfo
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_benchmark"
   ];
 
