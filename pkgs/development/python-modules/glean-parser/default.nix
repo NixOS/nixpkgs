@@ -9,6 +9,7 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+, setuptools
 , setuptools-scm
 , yamllint
 }:
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     appdirs
     click
     diskcache
