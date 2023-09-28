@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , linetable
+, setuptools
 , pytestCheckHook
 , pythonOlder
 }:
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     linetable
   ];
 
