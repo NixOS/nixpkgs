@@ -12,6 +12,7 @@
 , setuptools-scm
 , stevedore
 , wheel
+, tomli
 }:
 
 buildPythonPackage rec {
@@ -50,6 +51,8 @@ buildPythonPackage rec {
     stevedore
     restructuredtext_lint
     pygments
+  ] ++ lib.optionals pythonOlder "3.11" [
+    tomli
   ];
 
   nativeCheckInputs = [
