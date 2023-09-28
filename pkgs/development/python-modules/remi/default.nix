@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, setuptools
 , matplotlib
 , python-snap7
 , opencv4
@@ -18,6 +19,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-VQn+Uzp6oGSit8ot0e8B0C2N41Q8+J+o91skyVN1gDA=";
   };
+
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
+  ];
 
   preCheck = ''
     # for some reason, REMI already deal with these using try blocks, but they fail
