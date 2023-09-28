@@ -43,7 +43,7 @@ buildPythonPackage rec {
   # makefun, pytest-*) have circular dependencies.
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_cases"
   ];
 
