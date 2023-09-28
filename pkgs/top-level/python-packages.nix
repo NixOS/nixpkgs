@@ -10913,6 +10913,8 @@ self: super: with self; {
 
   pyweatherflowrest = callPackage ../development/python-modules/pyweatherflowrest { };
 
+  pyweatherflowudp = callPackage ../development/python-modules/pyweatherflowudp { };
+
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
   pywebview = callPackage ../development/python-modules/pywebview { };
