@@ -16,6 +16,7 @@
 , pythonOlder
 , pyyaml
 , semantic-version
+, setuptools
 , setuptools-scm
 }:
 
@@ -58,6 +59,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     asdf-standard
     asdf-transform-schemas
     jmespath
