@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "pytest_error_for_skips" ];
+  pythonImportsExtrasCheck = [ "pytest_error_for_skips" ];
 
   meta = with lib; {
     description = "Pytest plugin to treat skipped tests a test failures";
