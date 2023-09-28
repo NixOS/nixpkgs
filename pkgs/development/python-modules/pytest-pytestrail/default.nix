@@ -34,7 +34,7 @@ buildPythonPackage rec {
   # all tests require network accesss
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_pytestrail"
   ];
 
