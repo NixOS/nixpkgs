@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , pyramid
 }:
 
@@ -13,7 +14,10 @@ buildPythonPackage rec {
     hash = "sha256-Tl2rYH/GifNfB9w4nG9UIqAQz0O6kujCED/4iZnPKDw=";
   };
 
-  propagatedBuildInputs = [ pyramid ];
+  propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
+    pyramid
+  ];
 
   pythonImportsCheck = [ "pyramid_exclog" ];
 
