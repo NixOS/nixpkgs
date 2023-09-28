@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, numpy }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, numpy, setuptools }:
 
 buildPythonPackage rec {
   pname = "jsonconversion";
@@ -12,6 +12,8 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py --replace "'pytest-runner'" ""
   '';
+
+  propagatedBuildInputs = [ setuptools ]; # needed for 'pkg_resources'
 
   nativeCheckInputs = [ pytestCheckHook numpy ];
 
