@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "sha256-kfEAYCXbK0HTf1Gut/APkpw2krMa6C6mU/dJ0dsqzS0=";
   };
 
-  checkInputs = [ django ];
+  propagatedBuildInputs = [ django ];
 
   checkPhase = ''
     ${python.interpreter} -m django test --settings=telepath.test_settings
