@@ -41,6 +41,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  propagatedBuildInputs = [
+    numpy
+  ];
+
   pythonImportsCheck = [
     "soxr"
   ];
