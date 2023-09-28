@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, packaging
+, typing-extensions
 , defusedxml
 , flaky
 , keyring
@@ -35,6 +37,8 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
+    packaging
+    typing-extensions
     defusedxml
     keyring
     requests-oauthlib
