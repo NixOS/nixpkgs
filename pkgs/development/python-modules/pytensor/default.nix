@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, setuptools
 , fetchFromGitHub
 , cython
 , versioneer
@@ -49,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools
     cons
     etuples
     filelock
