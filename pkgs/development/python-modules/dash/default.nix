@@ -17,6 +17,7 @@
 , pythonOlder
 , pyyaml
 , redis
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     flask
     flask-compress
     plotly
+    setuptools # needed for 'pkg_resources'
   ];
 
   passthru.optional-dependencies = {
