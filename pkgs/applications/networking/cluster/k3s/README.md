@@ -25,7 +25,7 @@ NixOS releases should avoid having deprecated software, or making major version 
 
 As such, we would like to have only the newest K3s version in each NixOS
 release at the time the release branch is branched off, which will ensure the
-K3s version in that release will receieve updates for the longest duration
+K3s version in that release will receive updates for the longest duration
 possible.
 
 However, this conflicts with another desire: we would like people to be able to upgrade between NixOS stable releases without needing to make a large enough k3s version jump that they violate the Kubernetes version skew policy.

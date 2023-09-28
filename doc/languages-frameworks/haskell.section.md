@@ -221,7 +221,7 @@ Sadly we currently don’t have tooling for this. For this you might be
 interested in the alternative [haskell.nix] framework, which, be warned, is
 completely incompatible with packages from `haskellPackages`.
 
-<!-- TODO(@maralorn) Link to package set generation docs in the contributers guide below. -->
+<!-- TODO(@maralorn) Link to package set generation docs in the contributors guide below. -->
 
 ## `haskellPackages.mkDerivation` {#haskell-mkderivation}
 
@@ -1192,7 +1192,7 @@ with GHC), it is recommended to use overlays for Nixpkgs to change them.
 Since the interrelated parts, i.e. the package set and GHC, are connected
 via the Nixpkgs fixpoint, we need to modify them both in a way that preserves
 their connection (or else we'd have to wire it up again manually). This is
-achieved by changing GHC and the package set in seperate overlays to prevent
+achieved by changing GHC and the package set in separate overlays to prevent
 the package set from pulling in GHC from `prev`.
 
 The result is two overlays like the ones shown below. Adjustable parts are

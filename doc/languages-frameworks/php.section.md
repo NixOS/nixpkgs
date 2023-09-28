@@ -200,7 +200,7 @@ Internally, the helper operates in three stages:
    composer repository on the filesystem containing dependencies specified in
    `composer.json`. This process uses the function
    `php.mkComposerRepository` which in turn uses the
-   `php.composerHooks.composerRepositoryHook` hook. Internaly this function uses
+   `php.composerHooks.composerRepositoryHook` hook. Internally this function uses
    a custom
    [Composer plugin](https://github.com/nix-community/composer-local-repo-plugin) to
    generate the repository.
