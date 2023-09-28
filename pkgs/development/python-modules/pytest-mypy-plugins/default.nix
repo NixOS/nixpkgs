@@ -46,7 +46,7 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pytest_mypy_plugins"
   ];
 
