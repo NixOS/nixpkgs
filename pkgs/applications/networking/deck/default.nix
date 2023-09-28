@@ -9,7 +9,7 @@ in buildGoModule rec {
     owner = "Kong";
     repo = "deck";
     rev = "v${version}";
-    hash = "sha256-DxmIHJfvRZKsMyFllbfpriT4Ts9f7ha4aZcfVr/b9eA=";
+    sha256 = "1q7mvfzmc7wpd6w1dvjzrx7gh95fx6vrar916fn94iggjwf8h68g";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -22,6 +22,8 @@ in buildGoModule rec {
   ];
 
   vendorHash = "sha256-jhLZvusYpX5fW1NCmJtwE/p9/wTwzA2hbwt657VsZts=";
+
+  passthru.updateScript = ./update.sh;
 
   postInstall = ''
     installShellCompletion --cmd deck \
