@@ -207,17 +207,19 @@ in package-set { inherit pkgs lib callPackage; } self // {
          });
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nixGeneric = name: src: {extraCabal2nixOptions ? "", extraSrcFilter ? _: _: true}: args:
+    callCabal2nixGeneric = name: src: opts: args:
       let
-        filter = path: type:
+        extraCabal2nixOptions = if builtins.isString opts then opts else opts.extraCabal2nixOptions or "";
+        srcModifier = opts.srcModifier or null;
+        defaultFilter = path: type:
                    pkgs.lib.hasSuffix ".cabal" path ||
-                   baseNameOf path == "package.yaml" ||
-                   extraSrcFilter path type;
+                   baseNameOf path == "package.yaml";
+        defaultSrc = if pkgs.lib.canCleanSource src
+                  then pkgs.lib.cleanSourceWith { inherit src; filter = defaultFilter; }
+                else src;
         expr = self.haskellSrc2nix {
           inherit name extraCabal2nixOptions;
-          src = if pkgs.lib.canCleanSource src
-                  then pkgs.lib.cleanSourceWith { inherit src filter; }
-                else src;
+          src = if srcModifier == null then defaultSrc else srcModifier src;
         };
       in overrideCabal (orig: {
            inherit src;
