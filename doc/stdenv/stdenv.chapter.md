@@ -1008,11 +1008,11 @@ let
 
   myDebugInfoDirs = pkgs.symlinkJoin {
     name = "myDebugInfoDirs";
-    paths = [
-      pkgs.glibc.debug
-      pkgs.ncurses.debug
-      pkgs.openssl.debug
-      pkgs.readline.debug
+    paths = with pkgs; [
+      glibc.debug
+      ncurses.debug
+      openssl.debug
+      readline.debug
     ];
   };
 in
