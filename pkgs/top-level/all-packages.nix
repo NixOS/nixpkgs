@@ -7756,6 +7756,8 @@ with pkgs;
 
   soupault = callPackage ../tools/typesetting/soupault { };
 
+  stash = callPackage ../servers/stash { };
+
   stratisd = callPackage ../tools/filesystems/stratisd { };
 
   stratis-cli = callPackage ../tools/filesystems/stratis-cli { };
