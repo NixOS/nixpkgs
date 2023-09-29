@@ -19,11 +19,11 @@ let
       sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
     };
 
-    "2.3.7" = {
-      sha256 = "sha256-aYFE+4BaMZGaYQ3pmauYOR1S62mK2qjKGbKPxu0Nmfc=";
-    };
     "2.3.8" = {
       sha256 = "sha256-QhVxsqyRbli+jrzqXvSr+NeQKGPbah0KXvqVAK3KDSk=";
+    };
+    "2.3.9" = {
+      sha256 = "sha256-fSiakSMgIgKL8BKJAMMr8A5MVDDDLyivBZTIpZKphlQ=";
     };
   };
 
