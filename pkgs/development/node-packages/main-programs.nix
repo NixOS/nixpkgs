@@ -52,7 +52,6 @@
   prettier = "prettier";
   purescript-psa = "psa";
   purs-tidy = "purs-tidy";
-  react-tools = "jsx";
   remod-cli = "remod";
   svelte-language-server = "svelteserver";
   teck-programmer = "teck-firmware-upgrade";

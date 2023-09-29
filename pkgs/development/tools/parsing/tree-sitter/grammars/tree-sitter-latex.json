@@ -4,6 +4,7 @@
   "date": "2022-10-26T10:55:26+02:00",
   "path": "/nix/store/zhx1vnr3xdrb0ry6kfjsfrzs6c3nf8i9-tree-sitter-latex",
   "sha256": "0lc42x604f04x3kkp88vyqa5dx90wqyisiwl7nn861lyxl6phjnf",
+  "hash": "sha256-zkp4De2eBoOsPZRHHT3mIPVWFPYboTvn6AQ4AkwXhFE=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
