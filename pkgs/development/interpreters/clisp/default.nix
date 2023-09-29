@@ -25,8 +25,8 @@
 , xorgproto
 , coreutils
 # build options
-, threadSupport ? stdenv.hostPlatform.isx86
-, x11Support ? stdenv.hostPlatform.isx86
+, threadSupport ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
+, x11Support ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
 , dllSupport ? true
 , withModules ? [
     "pcre"
