@@ -4419,8 +4419,6 @@ with pkgs;
 
   borg-sans-mono = callPackage ../data/fonts/borg-sans-mono { };
 
-  boringtun = callPackage ../tools/networking/boringtun { };
-
   book-summary = callPackage ../tools/text/book-summary { };
 
   bookstack = callPackage ../servers/web-apps/bookstack { };
