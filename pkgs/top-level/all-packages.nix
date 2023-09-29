@@ -30721,13 +30721,15 @@ with pkgs;
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
-  blender = callPackage  ../applications/misc/blender {
-    # LLVM 11 crashes when compiling GHOST_SystemCocoa.mm
-    stdenv = if stdenv.isDarwin then llvmPackages_10.stdenv else stdenv;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
-  };
+  blender = blenderVersions.stable;
 
-  blender-hip = blender.override { hipSupport = true; };
+  blender-lts = blenderVersions.lts;
+
+  blender-hip = blenderVersions.stable.override { hipSupport = true; };
+
+  blender-hip-lts = blenderVersions.lts.override { hipSupport = true; };
+
+  blenderVersions = recurseIntoAttrs (callPackage ../applications/misc/blender { });
 
   blflash = callPackage ../tools/misc/blflash { };
 
