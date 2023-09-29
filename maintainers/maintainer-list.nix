@@ -10338,12 +10338,6 @@
     githubId = 84395723;
     name = "Lukas Wurzinger";
   };
-  lukeadams = {
-    email = "luke.adams@belljar.io";
-    github = "lukeadams";
-    githubId = 3508077;
-    name = "Luke Adams";
-  };
   lukebfox = {
     email = "lbentley-fox1@sheffield.ac.uk";
     github = "lukebfox";
