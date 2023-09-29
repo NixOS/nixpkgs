@@ -1,26 +1,52 @@
-{ lib, fetchurl, perlPackages }:
+{ lib
+, fetchFromGitHub
+, perlPackages
+}:
+
 perlPackages.buildPerlPackage rec {
   pname = "shelldap";
-  version = "1.4.0";
-  src = fetchurl {
-    url = "https://bitbucket.org/mahlon/shelldap/downloads/shelldap-${version}.tar.gz";
-    sha256 = "07gkvvxcgw3pgkfy8p9mmidakciaq1rsq5zhmdqd8zcwgqkrr24i";
+  version = "1.5.1";
+
+  src = fetchFromGitHub {
+    owner = "mahlonsmith";
+    repo = "shelldap";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-67ttAXzu9pfeqjfhMfLMb9vWCXTrE+iUDCbamqswaLg=";
   };
-  buildInputs = with perlPackages; [ perl YAMLSyck perlldap AlgorithmDiff IOSocketSSL AuthenSASL TermReadLineGnu TermShell ];
+
+  buildInputs = with perlPackages; [
+    AlgorithmDiff
+    AuthenSASL
+    IOSocketSSL
+    perl
+    perlldap
+    TermReadLineGnu
+    TermShell
+    TieIxHash
+    YAMLSyck
+  ];
+
   prePatch = ''
     touch Makefile.PL
   '';
+
   installPhase = ''
     runHook preInstall
     install -Dm555 -t $out/bin shelldap
     runHook preInstall
   '';
+
+  # no make target 'test', not tests provided by source
+  doCheck = false;
+
   outputs = [ "out" ];
+
   meta = with lib; {
-    homepage = "https://bitbucket.org/mahlon/shelldap/";
+    homepage = "https://github.com/mahlonsmith/shelldap/";
     description = "A handy shell-like interface for browsing LDAP servers and editing their content";
+    changelog = "https://github.com/mahlonsmith/shelldap/blob/v${version}/CHANGELOG";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ tobiasBora ];
+    maintainers = with maintainers; [ clerie tobiasBora ];
     platforms = platforms.linux;
   };
 }
