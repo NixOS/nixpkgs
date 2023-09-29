@@ -15,6 +15,7 @@
 , potrace
 , openxr-loader
 , embree, gmp, libharu
+, openpgl
 , mesa
 , runCommand
 }:
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       potrace
       libharu
       libepoxy
+      openpgl
     ]
     ++ lib.optionals waylandSupport [
       wayland wayland-protocols libffi libdecor libxkbcommon dbus
