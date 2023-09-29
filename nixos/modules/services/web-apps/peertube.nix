@@ -352,6 +352,7 @@ in {
         };
         storage = {
           tmp = lib.mkDefault "/var/lib/peertube/storage/tmp/";
+          tmp_persistent = lib.mkDefault "/var/lib/peertube/storage/tmp_persistent/";
           bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
           videos = lib.mkDefault "/var/lib/peertube/storage/videos/";
