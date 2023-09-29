@@ -4,11 +4,14 @@
 , cmake
 , alsa-lib
 , gpsd
+, gpsdSupport ? false
 , hamlib
+, hamlibSupport ? true
 , perl
 , python3
 , espeak
 , udev
+, extraScripts ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -26,13 +29,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    espeak
-    gpsd
-    hamlib
-    perl
-    python3
-  ] ++ (lib.optionals stdenv.isLinux [ alsa-lib udev ]);
+  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib udev ]
+    ++ lib.optionals gpsdSupport [ gpsd ]
+    ++ lib.optionals hamlibSupport [ hamlib ]
+    ++ lib.optionals extraScripts [ python3 perl espeak ];
+
+  preConfigure = lib.optionals (!extraScripts) ''
+    echo "" > scripts/CMakeLists.txt
+  '';
 
   postPatch = ''
     substituteInPlace conf/CMakeLists.txt \
@@ -43,14 +47,16 @@ stdenv.mkDerivation rec {
     substituteInPlace src/decode_aprs.c \
       --replace /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
       --replace /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
-    patchShebangs scripts/dwespeak.sh
-    substituteInPlace scripts/dwespeak.sh \
-      --replace espeak ${espeak}/bin/espeak
     substituteInPlace cmake/cpack/direwolf.desktop.in \
       --replace 'Terminal=false' 'Terminal=true' \
       --replace 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
     substituteInPlace src/dwgpsd.c \
       --replace 'GPSD_API_MAJOR_VERSION > 11' 'GPSD_API_MAJOR_VERSION > 14'
+  ''
+  + lib.optionalString extraScripts ''
+    patchShebangs scripts/dwespeak.sh
+    substituteInPlace scripts/dwespeak.sh \
+      --replace espeak ${espeak}/bin/espeak
   '';
 
   meta = with lib; {
