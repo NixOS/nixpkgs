@@ -82,6 +82,6 @@ stdenv.mkDerivation rec {
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${version}/debian/changelog";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

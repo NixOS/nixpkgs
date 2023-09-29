@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
         feature is the possibility setting style properties from a CSS format
         file.'';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

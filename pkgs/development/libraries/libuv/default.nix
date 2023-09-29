@@ -113,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };

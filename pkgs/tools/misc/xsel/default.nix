@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     description = "Command-line program for getting and setting the contents of the X selection";
     homepage = "http://www.kfish.org/software/xsel";
     license = licenses.mit;
-    maintainers = [ maintainers.cstrahan ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }
