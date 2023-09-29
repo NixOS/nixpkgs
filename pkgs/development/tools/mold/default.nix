@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi nitsky paveloom ];
+    mainProgram = "mold";
     platforms = platforms.unix;
   };
 }

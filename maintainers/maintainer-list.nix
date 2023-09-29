@@ -12098,6 +12098,11 @@
     githubId = 59313755;
     name = "Maxim Karasev";
   };
+  mxmlnkn = {
+    github = "mxmlnkn";
+    githubId = 6842824;
+    name = "Maximilian Knespel";
+  };
   myaats = {
     email = "mats@mats.sh";
     github = "Myaats";
@@ -15289,6 +15294,12 @@
     github = "samhug";
     githubId = 171470;
     name = "Sam Hug";
+  };
+  SamirTalwar = {
+    email = "lazy.git@functional.computer";
+    github = "SamirTalwar";
+    githubId = 47852;
+    name = "Samir Talwar";
   };
   samlich = {
     email = "nixos@samli.ch";

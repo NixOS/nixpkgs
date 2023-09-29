@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ttyper";
-  version = "1.2.2";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "max-niederman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5U6+16gy5s+1zDSxy6rMheZFAbpiya3uxvr21VaHDZQ=";
+    hash = "sha256-b6yxl7dCPLWnzsrRKegubtLDLObOnCf7kvZtkobzC1o=";
   };
 
-  cargoHash = "sha256-O5fPV20OSEMv7Yw982ZorhN7y3NTzrprS79n2ID0LwU=";
+  cargoHash = "sha256-N+JJV+q/tIMN60x9DdD/i2+9Wp44kzpMb09dsrSceEk=";
 
   meta = with lib; {
     description = "Terminal-based typing test";
