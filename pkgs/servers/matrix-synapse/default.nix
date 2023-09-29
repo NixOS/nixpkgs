@@ -12,26 +12,30 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.92.1";
+  version = "1.93.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-rCxoYtdvh+Gu0O2T3uu0k2FFFFc7m09LuKJvkSky3M4=";
+    hash = "sha256-fmY5xjpbFwzrX47ijPxOUTI0w9stYVPpSV+HRF4GdlA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-yZeCENWdPv80Na1++/IQFOrhah/VHWwJDNV2dI/yTHg=";
+    hash = "sha256-9cCEfDV5X65JublgkUP6NVfMIObPawx+nXTmIG9lg5o=";
   };
 
   postPatch = ''
     # Remove setuptools_rust from runtime dependencies
     # https://github.com/matrix-org/synapse/blob/v1.69.0/pyproject.toml#L177-L185
     sed -i '/^setuptools_rust =/d' pyproject.toml
+
+    # Don't force pillow to be 10.0.1 because we already have patched it, and
+    # we don't use the pillow wheels.
+    sed -i 's/Pillow = ".*"/Pillow = ">=5.4.0"/' pyproject.toml
   '';
 
   nativeBuildInputs = [
