@@ -825,8 +825,8 @@ in {
   tor = handleTest ./tor.nix {};
   traefik = handleTestOn ["aarch64-linux" "x86_64-linux"] ./traefik.nix {};
   trafficserver = handleTest ./trafficserver.nix {};
+  transmission_3 = handleTest ./transmission.nix { transmission = pkgs.transmission_3; };
   transmission = handleTest ./transmission.nix { transmission = pkgs.transmission; };
-  transmission_4 = handleTest ./transmission.nix { transmission = pkgs.transmission_4; };
   # tracee requires bpf
   tracee = handleTestOn ["x86_64-linux"] ./tracee.nix {};
   trezord = handleTest ./trezord.nix {};

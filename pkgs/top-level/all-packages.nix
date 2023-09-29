@@ -36110,7 +36110,21 @@ with pkgs;
 
   transcribe = callPackage ../applications/audio/transcribe { };
 
-  transmission = callPackage ../applications/networking/p2p/transmission { };
+  transmission_3 = callPackage ../applications/networking/p2p/transmission/3.nix { };
+  libtransmission_3 = transmission_3.override {
+    installLib = true;
+    enableDaemon = false;
+    enableCli = false;
+  };
+  transmission_3-gtk = transmission_3.override { enableGTK3 = true; };
+  transmission_3-qt = transmission_3.override { enableQt = true; };
+
+  # Needs macOS >= 10.14.6
+  transmission = darwin.apple_sdk_11_0.callPackage ../applications/networking/p2p/transmission/default.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
+    fmt = fmt_9;
+    libutp = libutp_3_4;
+  };
   libtransmission = transmission.override {
     installLib = true;
     enableDaemon = false;
@@ -36118,20 +36132,6 @@ with pkgs;
   };
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
-
-  # Needs macOS >= 10.14.6
-  transmission_4 = darwin.apple_sdk_11_0.callPackage ../applications/networking/p2p/transmission/4.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
-    fmt = fmt_9;
-    libutp = libutp_3_4;
-  };
-  libtransmission_4 = transmission_4.override {
-    installLib = true;
-    enableDaemon = false;
-    enableCli = false;
-  };
-  transmission_4-gtk = transmission_4.override { enableGTK3 = true; };
-  transmission_4-qt = transmission_4.override { enableQt = true; };
 
   transmission-remote-gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk { };
 
