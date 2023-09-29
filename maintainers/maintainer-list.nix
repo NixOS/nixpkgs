@@ -18599,6 +18599,12 @@
     githubId = 7121530;
     name = "Wolf Honoré";
   };
+  wietsedv = {
+    email = "wietsedv@proton.me";
+    github = "wietsedv";
+    githubId = 13139101;
+    name = "Wietse de Vries";
+  };
   wigust = {
     name = "Oleg Pykhalov";
     email = "go.wigust@gmail.com";
