@@ -14,8 +14,8 @@ let
     sha256Hash = "sha256-IkxOt6DI4cBPUOztEBNJV0DHGruJjVdJ0skxcue+rdg=";
   };
   betaVersion = {
-    version = "2023.1.1.17"; # "Android Studio Hedgehog (2023.3.1)"
-    sha256Hash = "sha256-0sN+B1RxxlbgxXrEs8gft4qjvIYtazJS6DllHZ2h768=";
+    version = "2023.1.1.25"; # "Android Studio Hedgehog | 2023.1.1 RC 3"
+    sha256Hash = "sha256-jOqTAHYAk8j9+Ir01TLBsp20u7/iBKV8T/joZLITDs4=";
   };
   latestVersion = {
     version = "2023.2.1.1"; # Android Studio Iguana (2023.2.1) Canary 1
