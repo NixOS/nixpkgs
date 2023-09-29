@@ -1,26 +1,26 @@
 {
     "3_3": {
-        "version": "3.3.12",
+        "version": "3.3.14",
         "isLTS": true,
         "hashes": {
-            "blender": "sha256-xTdaUNayIm2SFMhIQSC3IYR9vy3Oh8A/ETHkwosOCPs=",
+            "blender": "sha256-hhRLkKvIr6AtgjqKb38cWaIAxrWT49eTRl24sKqQCAY=",
             "addons": "sha256-zrdVR1QuKoUdgZpOuQQgpjn2ehKqJ38KfJ0meFR/92s="
         }
     },
     "3_6": {
-        "version": "3.6.5",
+        "version": "3.6.7",
         "isLTS": true,
         "hashes": {
-            "blender": "sha256-U8z+xjz0vAZ9pUvRpVzcCcXfOvDmpFUPuOkgUvVwNow=",
+            "blender": "sha256-tSBnolfZHciH1HTbXL+p9DfGS42Rq0zD7G+IWxcFG/E=",
             "addons": "sha256-K4jbWuWaXtSjEqbmZC+7SnsNUJCcru1U1HuI4LCuuGM="
         }
     },
     "4_0": {
-      "version": "4.0.1",
+      "version": "4.0.2",
       "isLTS": false,
       "hashes": {
-          "blender": "sha256-pX5aa1Qlsus3NqDLfzxH3o37JpWqD7ciiQyBoQsE+/s=",
-          "addons": "sha256-NwX7JFaom2RmrYh4yHOzFSjmL9YBEXyRNa+B7xZCevY="
+          "blender": "sha256-DLSiXfi+4F3a+mb96T9SWvM0dld5DQvQpHhFgePuwuQ=",
+          "addons": "sha256-tJhI4d8drU0uRb4HLarRuihQ9FNs35e+ewclcuqB8jo="
       }
     }
 }
