@@ -229,25 +229,7 @@ in stdenv.mkDerivation (finalAttrs: {
       (x: lib.optional (x?dev) x.dev)
       finalAttrs.buildInputs);
 
-  ### QT/KDE
-  #
-  # configure.ac assumes that the first directory that contains headers and
-  # libraries during its checks contains *all* the relevant headers/libs which
-  # obviously doesn't work for us, so we have 2 options:
-  #
-  # 1. patch configure.ac in order to specify the direct paths to various Qt/KDE
-  # dependencies which is ugly and brittle, or
-  #
-  # 2. use symlinkJoin to pull in the relevant dependencies and just patch in
-  # that path which is *also* ugly, but far less likely to break
-  #
-  # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
-  # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
-  # add the missing dependencies to it).
   postPatch = ''
-    substituteInPlace shell/source/unix/exec/shellexec.cxx \
-      --replace xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
-
     # configure checks for header 'gpgme++/gpgmepp_version.h',
     # and if it is found (no matter where) uses a hardcoded path
     # in what presumably is an effort to make it possible to write
@@ -258,6 +240,21 @@ in stdenv.mkDerivation (finalAttrs: {
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
   '' + optionalString kdeIntegration ''
+    substituteInPlace shell/source/unix/exec/shellexec.cxx \
+      --replace xdg-open kde-open5
+    # configure.ac assumes that the first directory that contains headers and
+    # libraries during its checks contains *all* the relevant headers/libs which
+    # obviously doesn't work for us, so we have 2 options:
+    #
+    # 1. patch configure.ac in order to specify the direct paths to various Qt/KDE
+    # dependencies which is ugly and brittle, or
+    #
+    # 2. use symlinkJoin to pull in the relevant dependencies and just patch in
+    # that path which is *also* ugly, but far less likely to break
+    #
+    # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
+    # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
+    # add the missing dependencies to it).
     substituteInPlace configure.ac \
       --replace '$QT5INC ' '$QT5INC ${kdeDeps}/include ' \
       --replace '$QT5LIB ' '$QT5LIB ${kdeDeps}/lib ' \
