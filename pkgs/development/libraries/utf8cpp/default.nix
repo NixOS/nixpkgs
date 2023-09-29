@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/nemtrif/utfcpp";
+    changelog = "https://github.com/nemtrif/utfcpp/releases/tag/v${version}";
     description = "UTF-8 with C++ in a Portable Way";
     license = licenses.boost;
     maintainers = with maintainers; [ jobojeha ];
