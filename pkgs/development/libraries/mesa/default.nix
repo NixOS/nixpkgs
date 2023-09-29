@@ -43,7 +43,7 @@
     ++ lib.optionals (stdenv.hostPlatform.isAarch -> lib.versionAtLeast stdenv.hostPlatform.parsed.cpu.version "6") [
       # QEMU virtualized GPU (aka VirGL)
       # Requires ATOMIC_INT_LOCK_FREE == 2.
-      "virtio-experimental"
+      "virtio"
     ]
     ++ lib.optionals stdenv.isAarch64 [
       "broadcom" # Broadcom VC5 (Raspberry Pi 4, aka V3D)
@@ -84,8 +84,8 @@
 */
 
 let
-  version = "23.1.9";
-  hash = "sha256-KVuifCgUbtCSFOjOea+hZZ7fnRQt7MPJH4BFUtZPdRA=";
+  version = "23.3.1";
+  hash = "sha256-bkgSbXD9s/IP/rJGygwuQf/cg18GY6A9RSa4v120HeY=";
 
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
@@ -99,7 +99,7 @@ let
   # FIXME: these should really go into some sort of versioned LLVM package set
   rust-bindgen' = buildPackages.rust-bindgen.override {
     rust-bindgen-unwrapped = buildPackages.rust-bindgen.unwrapped.override {
-      clang = buildPackages.llvmPackages_15.clang;
+      clang = buildPackages.llvmPackages_16.clang;
     };
   };
   spirv-llvm-translator' = spirv-llvm-translator.override {
