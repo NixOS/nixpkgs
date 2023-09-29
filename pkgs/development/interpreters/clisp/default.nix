@@ -82,13 +82,16 @@ stdenv.mkDerivation {
   '';
 
   preConfigure = lib.optionalString stdenv.isDarwin (''
-    cd src
-    autoreconf -f -i -I m4 -I glm4
-    cd -
+    (
+      cd src
+      autoreconf -f -i -I m4 -I glm4
+    )
   '' + lib.concatMapStrings (x: ''
-    cd modules/${x}
-    autoreconf -f -i -I ../../src -I ../../src/m4 -I ../../src/glm4
-    cd -
+    (
+      root="$PWD"
+      cd modules/${x}
+      autoreconf -f -i -I "$root/src" -I "$root/src/m4" -I "$root/src/glm4"
+    )
   '') withModules);
 
   configureFlags = [ "builddir" ]
