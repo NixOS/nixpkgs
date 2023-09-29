@@ -467,12 +467,13 @@ for i in $(seq 1000); do
     tree[$i/a]=1
     tree[$i/b]=0
 done
-(
-    # Locally limit the maximum stack size to 100 * 1024 bytes
-    # If unions was implemented recursively, this would stack overflow
-    ulimit -s 100
-    checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
-)
+# This is actually really hard to test:
+# A lot of files would be needed to cause a stack overflow.
+# And while we could limit the maximum stack size using `ulimit -s`,
+# that turns out to not be very deterministic: https://github.com/NixOS/nixpkgs/pull/256417#discussion_r1339396686.
+# Meanwhile, the test infra here is not the fastest, creating 10000 would be too slow.
+# So, just using 1000 files for now.
+checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 
