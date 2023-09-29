@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MOw0WBdpo6dYXsjbUrqoIJl/sjQ4wSAcm4dPxDgTYgY=";
+    hash = "sha256-MOw0WBdpo6dYXsjbUrqoIJl/sjQ4wSAcm4dPxDgTYgY=";
   };
 
   cargoHash = "sha256-vnfviiXJ4L/j5M3N+LegOIvLuD6vYJB1QeBgZJVfDnI=";
@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xrelkd ];
     platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "sniffglue";
   };
 }
