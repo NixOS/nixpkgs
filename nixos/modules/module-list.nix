@@ -594,6 +594,7 @@
   ./services/matrix/mjolnir.nix
   ./services/matrix/mx-puppet-discord.nix
   ./services/matrix/pantalaimon.nix
+  ./services/matrix/matrix-sliding-sync.nix
   ./services/matrix/synapse.nix
   ./services/misc/airsonic.nix
   ./services/misc/ananicy.nix
