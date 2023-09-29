@@ -603,6 +603,8 @@ with pkgs;
 
   documenso = callPackage ../applications/office/documenso { };
 
+  domine = callPackage ../tools/misc/domine { };
+
   dsq = callPackage ../tools/misc/dsq { };
 
   dt = callPackage ../tools/text/dt { };
