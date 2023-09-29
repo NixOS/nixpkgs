@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
   version = "unstable-2023-07-19";
 
@@ -75,4 +75,4 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
-}
+})
