@@ -5254,6 +5254,12 @@ self: super: with self; {
 
   incremental = callPackage ../development/python-modules/incremental { };
 
+  indexed-bzip2 = callPackage ../development/python-modules/indexed-bzip2 { };
+
+  indexed-gzip = callPackage ../development/python-modules/indexed-gzip { inherit (pkgs) zlib; };
+
+  indexed-zstd = callPackage ../development/python-modules/indexed-zstd { inherit (pkgs) zstd; };
+
   infinity = callPackage ../development/python-modules/infinity { };
 
   inflect = callPackage ../development/python-modules/inflect { };
@@ -10768,6 +10774,8 @@ self: super: with self; {
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
+  python-xz = callPackage ../development/python-modules/python-xz { };
+
   python-zbar = callPackage ../development/python-modules/python-zbar { };
 
   pythran = callPackage ../development/python-modules/pythran {
@@ -11154,6 +11162,8 @@ self: super: with self; {
 
   rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
 
+  rapidgzip = callPackage ../development/python-modules/rapidgzip { inherit (pkgs) nasm; };
+
   rapt-ble = callPackage ../development/python-modules/rapt-ble { };
 
   rarfile = callPackage ../development/python-modules/rarfile {
@@ -11161,6 +11171,10 @@ self: super: with self; {
   };
 
   rasterio = callPackage ../development/python-modules/rasterio { };
+
+  ratarmountcore = callPackage ../development/python-modules/ratarmountcore { inherit (pkgs) zstd; };
+
+  ratarmount = callPackage ../development/python-modules/ratarmount { };
 
   ratelim = callPackage ../development/python-modules/ratelim { };
 
