@@ -19059,6 +19059,12 @@
       fingerprint = "85F8 E850 F8F2 F823 F934  535B EC50 6589 9AEA AF4C";
     }];
   };
+  yunfachi = {
+    email = "yunfachi@gmail.com";
+    github = "yunfachi";
+    githubId = 73419713;
+    name = "Yunfachi";
+  };
   yureien = {
     email = "contact@sohamsen.me";
     github = "Yureien";
