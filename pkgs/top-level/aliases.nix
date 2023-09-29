@@ -496,6 +496,7 @@ mapAliases ({
   erlang_23 = throw "erlangR23 has been removed in favor of newer versions."; # added 2023-09-11
   erlangR23 = erlang_23;
   esniper = throw "esniper has been removed because upstream no longer maintains it (and it no longer works)"; # Added 2021-04-12
+  etcd_3_3 = throw "etcd_3_3 has been removed because upstream no longer maintains it"; # Added 2023-09-29
   etcdctl = throw "'etcdctl' has been renamed to/replaced by 'etcd'"; # Converted to throw 2022-02-22
   eterm = throw "eterm was removed because it is still insecure: https://github.com/mej/Eterm/issues/7"; # Added 2023-09-10
   eteroj.lv2 = throw "'eteroj.lv2' has been renamed to/replaced by 'open-music-kontrollers.eteroj'"; # Added 2022-03-09

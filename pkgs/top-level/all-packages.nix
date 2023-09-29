@@ -26526,7 +26526,6 @@ with pkgs;
   ergochat = callPackage ../servers/irc/ergochat { };
 
   etcd = etcd_3_5;
-  etcd_3_3 = callPackage ../servers/etcd/3.3.nix { };
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
   etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
 
