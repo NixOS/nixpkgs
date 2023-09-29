@@ -7,12 +7,12 @@
 , dart-sass
 , rWrapper
 , rPackages
-, extraRPackages ? []
+, extraRPackages ? [ ]
 , makeWrapper
 , runCommand
 , python3
 , quarto
-, extraPythonPackages ? ps: with ps; []
+, extraPythonPackages ? ps: with ps; [ ]
 }:
 
 stdenv.mkDerivation (final: {
@@ -51,20 +51,20 @@ stdenv.mkDerivation (final: {
   '';
 
   installPhase = ''
-      runHook preInstall
+    runHook preInstall
 
-      mkdir -p $out/bin $out/share
+    mkdir -p $out/bin $out/share
 
-      rm -r bin/tools
+    rm -r bin/tools
 
-      mv bin/* $out/bin
-      mv share/* $out/share
+    mv bin/* $out/bin
+    mv share/* $out/share
 
-      runHook preInstall
+    runHook preInstall
   '';
 
   passthru.tests = {
-    quarto-check = runCommand "quarto-check" {} ''
+    quarto-check = runCommand "quarto-check" { } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check
       touch $out
@@ -74,14 +74,13 @@ stdenv.mkDerivation (final: {
   meta = with lib; {
     description = "Open-source scientific and technical publishing system built on Pandoc";
     longDescription = ''
-        Quarto is an open-source scientific and technical publishing system built on Pandoc.
-        Quarto documents are authored using markdown, an easy to write plain text format.
+      Quarto is an open-source scientific and technical publishing system built on Pandoc.
+      Quarto documents are authored using markdown, an easy to write plain text format.
     '';
     homepage = "https://quarto.org/";
     changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson mrtarantoga ];
-    platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
   };
 })
