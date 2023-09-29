@@ -42,8 +42,7 @@ let
     ];
 
   defaultPackageNames =
-    [ "nano"
-      "perl"
+    [ "perl"
       "rsync"
       "strace"
     ];

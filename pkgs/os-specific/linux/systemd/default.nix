@@ -88,7 +88,7 @@
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
-, withBootloader ? true # compiles systemd-boot, assumes EFI is available.
+, withBootloader ? !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
@@ -205,8 +205,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-f34f6ab04b443608497b73668365819343d0c2fe.tar.gz";
-        sha256 = "DFcLPvjQIxGEDADpP232ZRd7cOEKt6B48Ah29nIGTt4=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-eb8a86fee9eeae787cc0a58ef2ed087fd48d93eb.tar.gz";
+        sha256 = "tE2KpXLvOknIpEZFdOnNxvBmDvZrra3kvQp9tKxa51c=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
@@ -214,7 +214,6 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
       (musl-patches + "/0005-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
-      (musl-patches + "/0007-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0009-missing_type.h-add-comparison_fn_t.patch")
       (musl-patches + "/0010-add-fallback-parse_printf_format-implementation.patch")
       (musl-patches + "/0011-src-basic-missing.h-check-for-missing-strndupa.patch")
@@ -230,7 +229,8 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0022-Handle-__cpu_mask-usage.patch")
       (musl-patches + "/0023-Handle-missing-gshadow.patch")
       (musl-patches + "/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0026-src-boot-efi-efi-string.c-define-wchar_t-from-__WCHA.patch")
+      (musl-patches + "/0028-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
+      (musl-patches + "/0029-shared-Do-not-use-malloc_info-on-musl.patch")
     ]
   );
 
@@ -724,7 +724,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   https://github.com/NixOS/nixpkgs/issues/169693
   # The hack is to move EFI file out of lib/ before doStrip
   # run and return it after doStrip run.
-  preFixup = lib.optionalString withEfi ''
+  preFixup = lib.optionalString withBootloader ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
 
@@ -734,7 +734,7 @@ stdenv.mkDerivation (finalAttrs: {
       # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
       wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
     done
-  '' + lib.optionalString withEfi ''
+  '' + lib.optionalString withBootloader ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '' + lib.optionalString withUkify ''
     # To cross compile a derivation that builds a UKI with ukify, we need to wrap
