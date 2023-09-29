@@ -106,7 +106,9 @@ buildPythonPackage rec {
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py \
       --replace "qdarkstyle>=3.0.2,<3.1.0" "qdarkstyle" \
-      --replace "ipython>=7.31.1,<8.0.0" "ipython"
+      --replace "ipython>=7.31.1,<9.0.0,!=8.8.0,!=8.9.0,!=8.10.0,!=8.11.0,!=8.12.0,!=8.12.1" "ipython" \
+      --replace "jedi>=0.17.2,<0.19.0" "jedi" \
+      --replace "pylsp >=1.7.4,<1.8.0" "pylsp"
   '';
 
   postInstall = ''
