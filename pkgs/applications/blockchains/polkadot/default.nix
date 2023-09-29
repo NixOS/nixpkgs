@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   preBuild = ''
-    export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(cat .git_commit)
+    export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(< .git_commit)
     rm .git_commit
   '';
 
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p" "polkadot" ];
 
   # NOTE: tests currently fail to compile due to an issue with cargo-auditable
-  # and resolution of features flags, I think related to this:
+  # and resolution of features flags, potentially related to this:
   # https://github.com/rust-secure-code/cargo-auditable/issues/66
   doCheck = false;
 
