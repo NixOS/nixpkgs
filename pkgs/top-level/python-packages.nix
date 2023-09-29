@@ -2257,6 +2257,8 @@ self: super: with self; {
 
   contourpy = callPackage ../development/python-modules/contourpy { };
 
+  controku = callPackage ../development/python-modules/controku { };
+
   convertdate = callPackage ../development/python-modules/convertdate { };
 
   cookiecutter = callPackage ../development/python-modules/cookiecutter { };
@@ -12488,6 +12490,8 @@ self: super: with self; {
   };
 
   ssdp = callPackage ../development/python-modules/ssdp { };
+
+  ssdpy = callPackage ../development/python-modules/ssdpy { };
 
   sseclient = callPackage ../development/python-modules/sseclient { };
 
