@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   audioSupport ? true,
+  darwin,
   alsa-lib,
   pkg-config
 }:
@@ -19,8 +21,20 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-L8TCMe6eHS3QRy6HuTc1WvMfzsDhKx9YYupAkNeBwpk=";
 
-  nativeBuildInputs = lib.optional audioSupport pkg-config;
-  buildInputs = lib.optionals audioSupport [ alsa-lib ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals audioSupport [
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ] ++ lib.optionals (audioSupport && stdenv.isDarwin) [
+    darwin.apple_sdk.frameworks.AudioUnit
+  ] ++ lib.optionals (audioSupport && stdenv.isLinux) [
+    alsa-lib
+  ];
+
   buildFeatures = lib.optional audioSupport "audio";
 
   doCheck = true;
@@ -35,9 +49,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://www.uiua.org/";
     license = licenses.mit;
     mainProgram = "uiua";
-    maintainers = with maintainers; [cafkafk];
-    # TODO: add MacOS support, it should be possible, but I don't own a Mac to
-    # hack on
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ cafkafk ];
   };
 }
