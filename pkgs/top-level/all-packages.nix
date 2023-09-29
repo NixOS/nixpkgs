@@ -5210,8 +5210,6 @@ with pkgs;
 
   ekam = callPackage ../development/tools/build-managers/ekam { };
 
-  eksctl = callPackage ../tools/admin/eksctl { };
-
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
   electron-mail = callPackage ../applications/networking/mailreaders/electron-mail { };
