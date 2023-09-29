@@ -11460,6 +11460,8 @@ with pkgs;
 
   ppl = callPackage ../development/libraries/ppl { };
 
+  pplite = callPackage ../development/libraries/pplite { };
+
   ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp { };
