@@ -1158,6 +1158,8 @@ let
 
     mparser-pcre =  callPackage ../development/ocaml-modules/mparser/pcre.nix { };
 
+    msgpck = callPackage ../development/ocaml-modules/msgpck { };
+
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
 
     mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
