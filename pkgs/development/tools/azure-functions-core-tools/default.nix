@@ -11,6 +11,7 @@
   zlib,
   libuuid,
   openssl,
+  python3Packages,
 }: let
   platforms = {
     "aarch64-darwin" = {
@@ -60,6 +61,17 @@ in
     unpackPhase = ''
       unzip $src
     '';
+
+    postPatch = lib.optionalString stdenv.isLinux ''
+      # Patch hardcoded /bin/bash to /bin/sh in func.dll
+      ${python3Packages.python}/bin/python3 -c '
+bash = b"".join([x.to_bytes(2,"little") for x in b"/bin/bash"])
+sh = b"".join([x.to_bytes(2,"little") for x in b"/bin/sh\x00\x00"])
+with open("func.dll","rb+") as f:
+  patched = f.read().replace(bash, sh)
+  f.seek(0)
+  f.write(patched)'
+  '';
 
     installPhase =
       ''
