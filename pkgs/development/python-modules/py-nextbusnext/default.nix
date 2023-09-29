@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "py-nextbusnext";
-  version = "0.1.5";
+  version = "1.0.0";
 
   format = "setuptools";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "ViViDboarder";
     repo = "py_nextbus";
     rev = "v${version}";
-    hash = "sha256-uUHA8v5iTISmPaTgk0RvcLLRM34f3JXUjZClKGXdMoI=";
+    hash = "sha256-044VDg7bQNNnRGiPZW9gwo3Bzq0LPYKTrd3EgmBOcGA=";
   };
 
   nativeCheckInputs = [
