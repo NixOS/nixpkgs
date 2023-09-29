@@ -7,7 +7,7 @@
 , pandoc
 , pkg-config
 , zlib
-, Security
+, darwin
 , libiconv
 , installShellFiles
   # once eza upstream gets support for setting up a compatibilty symlink for exa, we should change
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles pandoc ];
   buildInputs = [ zlib ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional gitSupport "git";

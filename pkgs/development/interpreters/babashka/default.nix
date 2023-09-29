@@ -15,7 +15,7 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-O3pLELYmuuB+Bf1vHTWQ+u7Ymi3qYiMRpCwvEq+GeBQ=";
   };
 
-  graalvmDrv = graalvmCEPackages.graalvm19-ce;
+  graalvmDrv = graalvmCEPackages.graalvm-ce;
 
   executable = "bb";
 
@@ -38,7 +38,7 @@ buildGraalvmNativeImage rec {
 
   # As of v1.2.174, this will remove references to ${graalvmDrv}/conf/chronology,
   # not sure the implications of this but this file is not available in
-  # graalvm19-ce anyway.
+  # graalvm-ce anyway.
   postInstall = ''
     remove-references-to -t ${graalvmDrv} $out/bin/${executable}
   '';
