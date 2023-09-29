@@ -39,6 +39,13 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [ liff tricktron ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    mainProgram = "teams";
+    knownVulnerabilities = [] ++ optionals stdenv.isLinux [
+        "CVE-2022-29257"
+        "CVE-2022-29247"
+        "CVE-2022-21718"
+        "CVE-2021-39184"
+      ];
   };
 
   linux = stdenv.mkDerivation rec {
