@@ -5,6 +5,12 @@
 , installShellFiles
 , pytestCheckHook
 , isPy3k
+
+# for passthru.tests
+, django
+, django_4
+, django-silk
+, pgadmin
 }:
 
 buildPythonPackage rec {
@@ -27,6 +33,10 @@ buildPythonPackage rec {
   postInstall = ''
     installManPage docs/sqlformat.1
   '';
+
+  passthru.tests = {
+    inherit django django_4 django-silk pgadmin;
+  };
 
   meta = with lib; {
     description = "Non-validating SQL parser for Python";

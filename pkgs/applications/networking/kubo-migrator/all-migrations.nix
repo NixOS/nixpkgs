@@ -36,8 +36,9 @@ let
   };
 
   # Concatenation of the latest repo version and the version of that migration
-  version = "14.1.0.0";
+  version = "15.1.0.1";
 
+  fs-repo-14-to-15 = fs-repo-common "fs-repo-14-to-15" "1.0.1";
   fs-repo-13-to-14 = fs-repo-common "fs-repo-13-to-14" "1.0.0";
   fs-repo-12-to-13 = fs-repo-common "fs-repo-12-to-13" "1.0.0";
   fs-repo-11-to-12 = fs-repo-common "fs-repo-11-to-12" "1.0.2";
@@ -54,6 +55,7 @@ let
   fs-repo-0-to-1   = fs-repo-common "fs-repo-0-to-1"   "1.0.1";
 
   all-migrations = [
+    fs-repo-14-to-15
     fs-repo-13-to-14
     fs-repo-12-to-13
     fs-repo-11-to-12

@@ -461,6 +461,19 @@
         "232.9921.62": "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip"
       },
       "name": "netbeans-6-5-keymap"
+    },
+    "22407": {
+      "compatible": [
+        "clion",
+        "idea-ultimate",
+        "rust-rover"
+      ],
+      "builds": {
+        "232.9921.42": "https://plugins.jetbrains.com/files/22407/397545/intellij-rust-232.9921.62.zip",
+        "232.9921.47": "https://plugins.jetbrains.com/files/22407/397545/intellij-rust-232.9921.62.zip",
+        "232.9921.62": "https://plugins.jetbrains.com/files/22407/397545/intellij-rust-232.9921.62.zip"
+      },
+      "name": "rust"
     }
   },
   "files": {
@@ -477,6 +490,7 @@
     "https://plugins.jetbrains.com/files/164/390591/IdeaVim-2.5.1-signed.zip": "sha256-eFKMFSkzQ0rJKuTUjFo8Yj5Z/mdGoF6REtpSqg/WkNc=",
     "https://plugins.jetbrains.com/files/17718/391768/github-copilot-intellij-1.2.22.3129.zip": "sha256-SXzP1lg/FRroeaNQ4q5ePpDI+AiVF+dOE8tRWfm+sGk=",
     "https://plugins.jetbrains.com/files/18444/165585/NetBeans6.5Keymap.zip": "sha256-KrzZTKZMQqoEMw+vDUv2jjs0EX0leaPBkU8H/ecq/oI=",
+    "https://plugins.jetbrains.com/files/22407/397545/intellij-rust-232.9921.62.zip": "sha256-YTZZbObuUWxIZoU3vKnWve/nRtcDWLubx4Z43ljlCYI=",
     "https://plugins.jetbrains.com/files/631/395438/python-232.9921.47.zip": "sha256-+2ow+tbZUipK92SKp0AegcRwUL1OSQuGE4FlZPOAGSk=",
     "https://plugins.jetbrains.com/files/6954/381727/kotlin-plugin-223-1.9.10-release-459-IJ8836.35.zip": "sha256-gHkNQyWh6jtY1986aI7Qo6ZNrniPy+Yq4XLLA0pKJkA=",
     "https://plugins.jetbrains.com/files/6981/383851/ini-232.9559.64.zip": "sha256-XJoRZ3ExKHkUZljuuMjMzMCcFw0A+vOyJAwtf+soHU4=",
