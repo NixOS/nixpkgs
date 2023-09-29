@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qca-qt5";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/qca/${version}/qca-${version}.tar.xz";
-    sha256 = "sha256-7lnVMdS4L7FoX02NdMLKoHd/UBgA90JuqjchCaQwUkk=";
+    sha256 = "sha256-/uI0O1RofVvj4w+zPOKW7lCseuXiPXq3JfY//fevP0M=";
   };
 
   buildInputs = [ openssl qtbase ];
