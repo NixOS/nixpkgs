@@ -19,12 +19,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Yr+OiqaGv6DgsjxSoc4sAjy4OO/D+Q50vdSTPEeIrV8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook guile pkg-config texinfo ];
   buildInputs = [ guile ];
   propagatedBuildInputs = [ avahi gmp ];
 
   doCheck = true;
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-unused-function";
 
   meta = with lib; {
     description = "Bindings to Avahi for GNU Guile";
