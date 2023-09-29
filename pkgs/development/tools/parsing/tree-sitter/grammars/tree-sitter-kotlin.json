@@ -4,6 +4,7 @@
   "date": "2021-10-12T01:11:47+02:00",
   "path": "/nix/store/49cvpcypxjzpb0srcpd383ay9f0g19dy-tree-sitter-kotlin",
   "sha256": "1sisvx7cp95d309ykhimn8bhbwd1lzcwrpz3s0mdsb2i44p69469",
+  "hash": "sha256-yZBkLiFRLN0q0OPfzNmnofEFF7I1wukTGK2ky07fOuo=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

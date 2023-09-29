@@ -91,6 +91,9 @@ checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 # is the option.
 checkConfigOutput '^true$' config.result ./module-argument-default.nix
 
+# gvariant
+checkConfigOutput '^true$' config.assertion ./gvariant.nix
+
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
 checkConfigOutput '".*/store/0fb3ykw9r5hpayd05sr0cizwadzq1d8q-bash-5.2-p15"' config.pathInStore.ok2 ./types.nix

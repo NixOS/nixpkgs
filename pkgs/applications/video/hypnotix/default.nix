@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , cinnamon
+, circle-flags
 , gettext
 , gobject-introspection
 , mpv
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace usr/lib/hypnotix/hypnotix.py \
       --replace __DEB_VERSION__ ${version} \
+      --replace /usr/share/circle-flags-svg ${circle-flags}/share/circle-flags-svg \
       --replace /usr/share/hypnotix $out/share/hypnotix
   '';
 

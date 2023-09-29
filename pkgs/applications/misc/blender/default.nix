@@ -15,6 +15,7 @@
 , potrace
 , openxr-loader
 , embree, gmp, libharu
+, openpgl
 , mesa
 , runCommand
 }:
@@ -30,11 +31,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "blender";
-  version = "3.6.3";
+  version = "3.6.4";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    hash = "sha256-iRIwPrvPHwiIxHr7hpmG6NjS/liJkxcAgrzlk8LEFPg=";
+    hash = "sha256-zFL0GRWAtNC3C+SAspWZmGa8US92EiYQgVfiOsCJRx4=";
   };
 
   patches = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: rec {
       potrace
       libharu
       libepoxy
+      openpgl
     ]
     ++ lib.optionals waylandSupport [
       wayland wayland-protocols libffi libdecor libxkbcommon dbus
