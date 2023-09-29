@@ -274,8 +274,6 @@ with pkgs;
 
   asnmap = callPackage ../tools/security/asnmap { };
 
-  ast-grep = callPackage ../development/tools/misc/ast-grep { };
-
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   astronomer = callPackage ../tools/misc/astronomer { };
