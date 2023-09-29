@@ -31,7 +31,7 @@
 , glfw
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
-, lowerBitnessSupport ? stdenv.hostPlatform.is64bit # Support 32 bit on 64bit
+, lowerBitnessSupport ? stdenv.hostPlatform.isx86_64 # Support 32 bit on 64bit
 , nix-update-script
 }:
 
