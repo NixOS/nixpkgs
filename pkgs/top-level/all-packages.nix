@@ -14547,8 +14547,6 @@ with pkgs;
 
   wimboot = callPackage ../tools/misc/wimboot { };
 
-  wit-bindgen = callPackage ../tools/misc/wit-bindgen { };
-
   wire = callPackage ../development/tools/wire { };
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
