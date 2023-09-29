@@ -153,7 +153,7 @@ self: super: {
   };
 
   # The GitHub repository returns 404, which breaks the update script
-  bitbake-vim = lib.warn "The source repository doesn't exist anymore" buildVimPlugin {
+  bitbake-vim = buildVimPlugin {
     pname = "bitbake.vim";
     version = "2021-02-06";
     src = fetchFromGitHub {
@@ -166,7 +166,7 @@ self: super: {
   };
 
   # The GitHub repository returns 404, which breaks the update script
-  vim-pony = lib.warn "The source repository doesn't exist anymore" buildVimPlugin {
+  vim-pony = buildVimPlugin {
     pname = "vim-pony";
     version = "2018-07-27";
     src = fetchFromGitHub {
