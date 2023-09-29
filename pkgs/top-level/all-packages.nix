@@ -27216,7 +27216,9 @@ with pkgs;
   OVMF = callPackage ../applications/virtualization/OVMF { };
   OVMFFull = callPackage ../applications/virtualization/OVMF {
     secureBoot = true;
-    csmSupport = true;
+    # CSM support is a BIOS emulation mechanism,
+    # SeaBIOS is only available on x86.
+    csmSupport = stdenv.hostPlatform.isx86;
     httpSupport = true;
     tpmSupport = true;
   };
