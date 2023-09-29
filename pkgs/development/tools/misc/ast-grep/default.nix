@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.12.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-YxjqzjN+rDgoticiic93+C2dBuhcdLVjtccMnzPepd0=";
+    hash = "sha256-N9hfHgzqwV/G3/xNY2Vx1i2dW6BcABJ/4lkhnLuvIns=";
   };
 
-  cargoHash = "sha256-TEqTTM/AYLnFaWNrDyQWSjPWhkIehQAm04aCh+HC3LA=";
+  cargoHash = "sha256-3ntsPC6OWtSN3MH+3wN2BgOqH69jiW93/xfLY+niARI=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -25,10 +25,6 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # disable flaky test
     "--skip=test::test_load_parser_mac"
-
-    # BUG: Broke by 0.12.1 update (https://github.com/NixOS/nixpkgs/pull/256548)
-    # Please check if this is fixed in future updates of the package
-    "--skip=verify::test_case::tests::test_unmatching_id"
   ];
 
   meta = with lib; {
