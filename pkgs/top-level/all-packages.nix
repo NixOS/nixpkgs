@@ -13297,8 +13297,6 @@ with pkgs;
 
   snmpcheck = callPackage ../tools/networking/snmpcheck { };
 
-  sniffglue = callPackage ../tools/networking/sniffglue { };
-
   snobol4 = callPackage ../development/interpreters/snobol4 { };
 
   snort = callPackage ../applications/networking/ids/snort { };
