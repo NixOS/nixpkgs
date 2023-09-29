@@ -995,9 +995,9 @@ If set to `true`, the standard environment will enable debug information in C/C+
 
 # Enable debug symbols for use with GDB
 
-To make GDB find debug information for the `socat` package and its dependencies, you can use the following shell.nix`:
+To make GDB find debug information for the `socat` package and its dependencies, you can use the following `shell.nix`:
 
-```.nix
+```nix
 let
   pkgs = import ./. {
     config = {};
