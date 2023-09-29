@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
   patches = [ ./hardcoded-compiler.patch ./bin-ext.patch ];
   patchFlags = [ "-p3" ];
 
+  # Don't attempt the .so if static, as it would fail.
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed 's/^ILIBS\>.*/ILIBS = liblmdb.a/' -i Makefile
+  '';
+
   outputs = [ "bin" "out" "dev" ];
 
   buildInputs = lib.optional stdenv.hostPlatform.isWindows windows.pthreads;
