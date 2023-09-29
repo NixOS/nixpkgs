@@ -69,6 +69,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/molobrakos/volvooncall";
     changelog = "https://github.com/molobrakos/volvooncall/releases/tag/v${version}";
     license = licenses.unlicense;
+    mainProgram = "voc";
     maintainers = with maintainers; [ dotlambda ];
   };
 }
