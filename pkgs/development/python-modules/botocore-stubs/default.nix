@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "botocore-stubs";
-  version = "1.31.56";
+  version = "1.31.57";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "botocore_stubs";
     inherit version;
-    hash = "sha256-4VEL02Gs91XsrOQu6YQoGt/qb5ZpXtIqCKTO6r/mb18=";
+    hash = "sha256-4o88p6YnnwHc7EZjmAvoCqk9xOsu/MI5aFnOtkdiO4M=";
   };
 
   nativeBuildInputs = [
