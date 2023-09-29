@@ -34,9 +34,6 @@ in stdenv.mkDerivation {
     hash = "sha256-XgXUwyZV5N8buYTuiu1Y1ZU3uHXjZ/OZ1kbZ9d6Rt5I=";
   };
 
-  # errors on fsck_err function. Maybe miss-detection?
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
-
   nativeBuildInputs = [
     pkg-config
     cargo
