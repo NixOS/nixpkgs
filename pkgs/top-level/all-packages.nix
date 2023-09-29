@@ -9548,8 +9548,6 @@ with pkgs;
 
   junkie = callPackage ../tools/networking/junkie { };
 
-  just = callPackage ../development/tools/just { };
-
   go-jira = callPackage ../applications/misc/go-jira { };
 
   jogl = callPackage ../by-name/jo/jogl/package.nix {
