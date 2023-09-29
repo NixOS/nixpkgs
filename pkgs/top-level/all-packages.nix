@@ -32475,6 +32475,8 @@ with pkgs;
 
   levant = callPackage ../applications/networking/cluster/levant { };
 
+  libcamera-apps = callPackage ../applications/misc/libcamera-apps/default.nix { };
+
   lwm = callPackage ../applications/window-managers/lwm { };
 
   marker = callPackage ../applications/editors/marker { };
