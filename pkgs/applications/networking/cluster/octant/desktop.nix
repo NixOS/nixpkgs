@@ -69,6 +69,7 @@ let
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    knownVulnerabilities = [ "CVE-2023-5217" ];
   };
 
 in
