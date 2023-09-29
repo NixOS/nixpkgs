@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "slurm";
+  pname = "slurm-nm";
   version = "0.4.4";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A generic network load monitor";
     homepage = "https://github.com/mattthias/slurm";
     license = licenses.gpl2Plus;
-    platforms = with platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ mikaelfangel ];
     mainProgram = "slurm";
   };
