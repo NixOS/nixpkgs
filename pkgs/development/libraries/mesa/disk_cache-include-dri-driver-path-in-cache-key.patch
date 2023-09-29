@@ -1,17 +1,19 @@
-Author: David McFarland <corngood@gmail.com>
-Date:   Mon Aug 6 15:52:11 2018 -0300
+From 5a896da73883e18ae165391956ea19fa665ba0b4 Mon Sep 17 00:00:00 2001
+From: Cole Mickens <cole.mickens@gmail.com>
+Date: Sun, 5 Nov 2023 17:29:13 -0500
+Subject: [PATCH] disk2.patch
 
-    [PATCH] disk_cache: include dri driver path in cache key
-    
-    This fixes invalid cache hits on NixOS where all shared library
-    timestamps in /nix/store are zero.
+---
+ meson_options.txt     | 7 +++++++
+ src/util/disk_cache.c | 3 +++
+ src/util/meson.build  | 7 ++++++-
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
 diff --git a/meson_options.txt b/meson_options.txt
-index b8f753e2e1a..70d9071c8be 100644
+index 591ed957c85..6cb550593e3 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -452,7 +452,14 @@ option(
-   value : true,
+@@ -519,6 +519,13 @@ option(
    description : 'Enable direct rendering in GLX and EGL for DRI',
  )
  
@@ -26,10 +28,10 @@ index b8f753e2e1a..70d9071c8be 100644
    type : 'string',
    value : '',
 diff --git a/src/util/disk_cache.c b/src/util/disk_cache.c
-index 8dbe0938d11..498fe42de70 100644
+index 1d23b92af7e..fbb4b04f3cf 100644
 --- a/src/util/disk_cache.c
 +++ b/src/util/disk_cache.c
-@@ -194,8 +194,10 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
+@@ -218,8 +218,10 @@ disk_cache_type_create(const char *gpu_name,
  
     /* Create driver id keys */
     size_t id_size = strlen(driver_id) + 1;
@@ -40,7 +42,7 @@ index 8dbe0938d11..498fe42de70 100644
     cache->driver_keys_blob_size += gpu_name_size;
  
     /* We sometimes store entire structs that contains a pointers in the cache,
-@@ -216,6 +218,7 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
+@@ -240,6 +242,7 @@ disk_cache_type_create(const char *gpu_name,
     uint8_t *drv_key_blob = cache->driver_keys_blob;
     DRV_KEY_CPY(drv_key_blob, &cache_version, cv_size)
     DRV_KEY_CPY(drv_key_blob, driver_id, id_size)
@@ -49,13 +51,13 @@ index 8dbe0938d11..498fe42de70 100644
     DRV_KEY_CPY(drv_key_blob, &ptr_size, ptr_size_size)
     DRV_KEY_CPY(drv_key_blob, &driver_flags, driver_flags_size)
 diff --git a/src/util/meson.build b/src/util/meson.build
-index cd44e49bfb4..f17115515a5 100644
+index eb88f235c47..eae5c54cc10 100644
 --- a/src/util/meson.build
 +++ b/src/util/meson.build
-@@ -268,7 +268,12 @@ _libmesa_util = static_library(
-   include_directories : [inc_include, inc_src, inc_mapi, inc_mesa, inc_gallium, inc_gallium_aux],
+@@ -286,7 +286,12 @@ _libmesa_util = static_library(
+   include_directories : [inc_util, include_directories('format')],
    dependencies : deps_for_libmesa_util,
-   link_with: [libmesa_format, libmesa_util_sse41],
+   link_with: [libmesa_util_sse41],
 -  c_args : [c_msvc_compat_args],
 +  c_args : [
 +    c_msvc_compat_args,
@@ -66,3 +68,6 @@ index cd44e49bfb4..f17115515a5 100644
    gnu_symbol_visibility : 'hidden',
    build_by_default : false
  )
+-- 
+2.42.0
+
