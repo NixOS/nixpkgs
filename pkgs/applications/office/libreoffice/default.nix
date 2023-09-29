@@ -509,7 +509,7 @@ in stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = with xorg; [
+  buildInputs = with xorg; finalAttrs.passthru.gst_packages ++ [
     ArchiveZip
     CoinMP
     IOCompress
@@ -578,6 +578,7 @@ in stdenv.mkDerivation (finalAttrs: {
     libxshmfence
     libxslt
     libzmf
+    libwebp
     mdds
     mythes
     ncurses
@@ -598,10 +599,12 @@ in stdenv.mkDerivation (finalAttrs: {
     which
     zip
     zlib
-  ]
-  ++ finalAttrs.passthru.gst_packages
-  ++ optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ]
-  ++ optionals (lib.versionAtLeast (lib.versions.majorMinor version) "7.4") [ libwebp ];
+  ] ++ optionals kdeIntegration [
+    qtbase
+    qtx11extras
+    kcoreaddons
+    kio
+  ];
 
   passthru = {
     inherit srcs;
