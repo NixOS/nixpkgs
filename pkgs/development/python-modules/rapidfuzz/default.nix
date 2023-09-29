@@ -55,9 +55,9 @@ buildPythonPackage rec {
     "-fno-lto"  # work around https://github.com/NixOS/nixpkgs/issues/19098
   ]);
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  passthru.optional-dependencies = {
+    full = [ numpy ];
+  };
 
   preCheck = ''
     export RAPIDFUZZ_IMPLEMENTATION=cpp
