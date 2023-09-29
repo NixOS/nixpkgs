@@ -6610,6 +6610,11 @@
     githubId = 11212268;
     name = "gruve-p";
   };
+  grxnola = {
+    github = "grxnola";
+    githubId = 49906709;
+    name = "grxnola";
+  };
   gschwartz = {
     email = "gsch@pennmedicine.upenn.edu";
     github = "GregorySchwartz";
