@@ -6716,6 +6716,12 @@
     githubId = 1498782;
     name = "Jesse Haber-Kucharsky";
   };
+  halfdrie = {
+    email = "halfdrie@proton.me";
+    github = "halfdrie";
+    githubId = 146439939;
+    name = "Half Drie";
+  };
   hamburger1984 = {
     email = "hamburger1984@gmail.com";
     github = "hamburger1984";
