@@ -62,7 +62,7 @@ let
         fqdn_or_host = "${hostName}${optionalString (domain != null) ".${domain}"}"
         assert (
             fqdn_or_host
-            == machine.succeed("getent hosts 127.0.0.2 | awk '{print $2,$3}'").strip()
+            == machine.succeed("getent hosts 127.0.0.2 | awk '{print $2}'").strip()
         )
       '';
     };
