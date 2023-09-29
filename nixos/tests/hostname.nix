@@ -41,7 +41,7 @@ let
         emptyDomainNamePlaceholder="(none)"
 
         # The FQDN, domain name, and hostname detection should work as expected:
-        assert "${hostName}" == machine.succeed("hostname --fqdn").strip()
+        assert "${hostName}" == machine.succeed("hostname").strip()
         assert "${optionalString (domain != null) domain}" == machine.succeed("domainname").replace(emptyDomainNamePlaceholder, "").strip()
 
         assert (
