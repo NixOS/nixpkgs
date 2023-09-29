@@ -17,6 +17,8 @@ lib.makeScope newScope (self:
 
     asynctools = callPackage ../development/nim-packages/asynctools { };
 
+    atlas = callPackage ../development/nim-packages/atlas { };
+
     base32 = callPackage ../development/nim-packages/base32 { };
 
     base45 = callPackage ../development/nim-packages/base45 { };
