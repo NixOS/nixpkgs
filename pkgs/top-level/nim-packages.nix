@@ -68,6 +68,8 @@ lib.makeScope newScope (self:
 
     markdown = callPackage ../development/nim-packages/markdown { };
 
+    nimble = callPackage ../development/nim-packages/nimble { };
+
     nimcrypto = callPackage ../development/nim-packages/nimcrypto { };
 
     nimbox = callPackage ../development/nim-packages/nimbox { };
