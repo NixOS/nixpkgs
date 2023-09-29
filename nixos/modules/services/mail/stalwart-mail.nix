@@ -19,8 +19,20 @@ in {
       description = mdDoc ''
         Configuration options for the Stalwart email server.
         See <https://stalw.art/docs/category/configuration> for available options.
+      '';
+    };
 
-        By default, the module is configured to store everything locally.
+    settingsFile = mkOption {
+      type = types.path;
+      default = configFile;
+      defaultText = ''configFormat.generate "stalwart-mail.toml" config.services.stalwart-mail.settings'';
+      description = mdDoc ''
+        The path of the stalwart-mail server settings.toml file.
+        setting this options overrides [](#opt-services.stalwart-mail.settings).
+        ::: {.warning}
+        This file, along with any secret key it contains, will be copied
+        into the world-readable Nix store.
+        :::
       '';
     };
   };
@@ -30,12 +42,12 @@ in {
     services.stalwart-mail.settings = {
       global.tracing.method = mkDefault "stdout";
       global.tracing.level = mkDefault "info";
-      queue.path = mkDefault "${dataDir}/queue";
-      report.path = mkDefault "${dataDir}/reports";
-      store.db.path = mkDefault "${dataDir}/data/index.sqlite3";
-      store.blob.type = mkDefault "local";
-      store.blob.local.path = mkDefault "${dataDir}/data/blobs";
-      resolver.type = mkDefault "system";
+      #queue.path = mkDefault "${dataDir}/queue";
+      #report.path = mkDefault "${dataDir}/reports";
+      #store.db.path = mkDefault "${dataDir}/data/index.sqlite3";
+      #store.blob.type = mkDefault "local";
+      #store.blob.local.path = mkDefault "${dataDir}/data/blobs";
+      #resolver.type = mkDefault "system";
     };
 
     systemd.services.stalwart-mail = {
@@ -48,7 +60,7 @@ in {
 
       serviceConfig = {
         ExecStart =
-          "${cfg.package}/bin/stalwart-mail --config=${configFile}";
+          "${cfg.package}/bin/stalwart-mail --config=${cfg.settingsFile}";
 
         # Base from template resources/systemd/stalwart-mail.service
         Type = "simple";
