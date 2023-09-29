@@ -47,6 +47,6 @@ perlPackages.buildPerlPackage rec {
     changelog = "https://github.com/mahlonsmith/shelldap/blob/v${version}/CHANGELOG";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ clerie tobiasBora ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
