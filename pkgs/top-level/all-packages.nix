@@ -9652,8 +9652,6 @@ with pkgs;
 
   junkie = callPackage ../tools/networking/junkie { };
 
-  just = callPackage ../development/tools/just { };
-
   go-jira = callPackage ../applications/misc/go-jira { };
 
   john = callPackage ../tools/security/john { };
