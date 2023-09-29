@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wb2osz/direwolf/";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lasandell ];
+    maintainers = with maintainers; [ lasandell sarcasticadmin ];
   };
 }
