@@ -55,6 +55,6 @@ buildGoModule rec {
     description = "A way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
     homepage = "https://perkeep.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ cstrahan danderson kalbasit ];
+    maintainers = with maintainers; [ danderson kalbasit ];
   };
 }

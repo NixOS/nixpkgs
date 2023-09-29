@@ -190,7 +190,7 @@ in stdenv.mkDerivation rec {
     homepage = "http://www.mongodb.org";
     inherit license;
 
-    maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
+    maintainers = with maintainers; [ bluescreen303 offline ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
     broken = (versionOlder version "6.0" && stdenv.system == "aarch64-darwin");
   };

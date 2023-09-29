@@ -91,7 +91,7 @@ stdenv.mkDerivation {
     description = "A code-completion and comprehension server";
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rasendubi cstrahan lnl7 siriobalmelli ];
+    maintainers = with maintainers; [ rasendubi lnl7 siriobalmelli ];
     platforms = platforms.all;
   };
 }
