@@ -5,6 +5,7 @@
 , git
 , google-cloud-storage
 , numpy
+, openssl
 , pandas
 , psutil
 , pybind11
@@ -13,8 +14,11 @@
 }:
 
 buildPythonPackage rec {
-  inherit (duckdb) pname version src patches;
+  inherit (duckdb) pname version src;
   format = "setuptools";
+
+  BUILD_HTTPFS = 1;
+  patches = [ ./setup.patch ];
 
   postPatch = ''
     # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
@@ -23,20 +27,20 @@ buildPythonPackage rec {
     # 1. let nix control build cores
     # 2. unconstrain setuptools_scm version
     substituteInPlace setup.py \
-      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES" \
-      --replace "setuptools_scm<7.0.0" "setuptools_scm"
+      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
 
       # avoid dependency on mypy
       rm tests/stubs/test_stubs.py
   '';
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     git
     pybind11
     setuptools-scm
   ];
+
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [
     numpy
