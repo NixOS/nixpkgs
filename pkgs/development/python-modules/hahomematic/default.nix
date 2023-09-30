@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2023.9.7";
+  version = "2023.9.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-55aZS5jSLBQ+FFkP9l5H7NU+qjh5UU/XPx2KgdWr3fo=";
+    hash = "sha256-g8ddWQzfwvKx2bLh8c+RRwlk/QJWbCxOqseZE+AcTXg=";
   };
 
   postPatch = ''
