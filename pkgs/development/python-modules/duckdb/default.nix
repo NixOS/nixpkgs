@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , duckdb
+, fsspec
+, git
 , google-cloud-storage
 , numpy
 , pandas
@@ -31,6 +33,7 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
+    git
     pybind11
     setuptools-scm
   ];
@@ -41,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    fsspec
     google-cloud-storage
     psutil
     pytestCheckHook
@@ -53,6 +57,8 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME="$(mktemp -d)"
+    # duckdb directory prevents loading the python module
+    mv duckdb duckdb.pk
   '';
 
   pythonImportsCheck = [
