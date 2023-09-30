@@ -163,6 +163,7 @@ in {
       url = "https://nim-lang.org/download/nim-${version}.tar.xz";
       hash = "sha256-vWEB2EADb7eOk6ad9s8/n9DCHNdUtpX/hKO0rdjtCvc=";
     };
+
     patches = [
       ./NIM_CONFIG_DIR.patch
       # Override compiler configuration via an environmental variable
@@ -172,6 +173,9 @@ in {
 
       ./extra-mangling.patch
       # Mangle store paths of modules to prevent runtime dependence.
+
+      ./openssl.patch
+      # dlopen is widely used by Python, Ruby, Perl, ... what you're really telling me here is that your OS is fundamentally broken. That might be news for you, but it isn't for me.
     ];
   });
 
