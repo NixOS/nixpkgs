@@ -7,7 +7,6 @@
 , "@commitlint/config-conventional"
 , "@mermaid-js/mermaid-cli"
 , "@microsoft/rush"
-, "@nerdwallet/shepherd"
 , "@shopify/cli"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"
