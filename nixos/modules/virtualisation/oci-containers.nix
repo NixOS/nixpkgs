@@ -203,6 +203,13 @@ let
           '';
         };
 
+        hostname = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = lib.mdDoc "The hostname of the container.";
+          example = "hello-world";
+        };
+
         extraOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -266,6 +273,8 @@ let
       "--log-driver=${container.log-driver}"
     ] ++ optional (container.entrypoint != null)
       "--entrypoint=${escapeShellArg container.entrypoint}"
+      ++ optional (container.hostname != null)
+      "--hostname=${escapeShellArg container.hostname}"
       ++ lib.optionals (cfg.backend == "podman") [
         "--cidfile=/run/podman-${escapedName}.ctr-id"
         "--cgroups=no-conmon"
