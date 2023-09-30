@@ -41,7 +41,7 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "5.4.2";
+  version = "5.7.0";
 
   outputs = [
     "out"
@@ -55,7 +55,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "RadeonOpenCompute";
     repo = "rdc";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-dYacqkRp+zVejo/4dME1K6EN8t/1EBtIynEQ+AQ4JZo=";
+    hash = "sha256-xZD/WI/LfNtKK9j6ZjuU0OTTFZz3G4atyD5mVcSsQ8A=";
   };
 
   nativeBuildInputs = [

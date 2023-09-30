@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcc";
-  version = "5.4.2";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "HIPCC";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-PEwue4O43MiMkF8UmTeHsmlikBG2V3/nFQLKmtHrRWQ=";
+    hash = "sha256-lJX6nF1V4YmK5ai7jivXlRnG3doIOf6X9CWLHVdRuVg=";
   };
 
   patches = [

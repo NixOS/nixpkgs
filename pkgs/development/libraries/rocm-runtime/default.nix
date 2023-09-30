@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "5.4.3";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCR-Runtime";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-JkTXTQmdESHSFbA6HZdMK3pYEApz9aoAlMzdXayzdyY=";
+    hash = "sha256-D7Ahan5cxDhqPtV5iDDNys0A4FlxQ9oVRa2EeMoY5Qk=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

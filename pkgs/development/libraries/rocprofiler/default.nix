@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "5.4.3";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
     repo = "rocprofiler";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-CpD/+soMN8WTeSb5X7dsnZ596PMkw+4EVsVSvFtKCak=";
+    hash = "sha256-ue/2uiLbhOv/5XY4cIJuZ8DUMRhniYgxolq9xMwO1FY=";
   };
 
   patches = [ ./0000-dont-require-hsa_amd_aqlprofile.patch ];

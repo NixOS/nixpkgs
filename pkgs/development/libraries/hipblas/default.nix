@@ -18,7 +18,7 @@
 # Can also use cuBLAS
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas";
-  version = "5.4.3";
+  version = "5.7.0";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCmSoftwarePlatform";
     repo = "hipBLAS";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-mSZCq8UaiffMzWVflW1nAX6CQZ1DqwWJaSIzKslZSEk=";
+    hash = "sha256-abaEZN82dsoEC5gIF3/6epRDVz5ItUo6CkZsybu/G+g=";
   };
 
   nativeBuildInputs = [
