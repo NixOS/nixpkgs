@@ -38,8 +38,6 @@ let
         # Test if NixOS computes the correct FQDN (either a FQDN or an error/null):
         assert "${getStr nodes.machine.networking.fqdn}" == "${getStr fqdnOrNull}"
 
-        # This is returned by net tools (hostname, domainname) when domain is missing
-        emptyDomainNamePlaceholder="(none)"
 
         # The FQDN, domain name, and hostname detection should work as expected:
         assert "${hostName}" == machine.succeed("hostname").strip()
