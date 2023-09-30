@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3
-, util-linux, fetchpatch
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ragel
+, python3
+, util-linux
+, pkg-config
 , boost
+, pcre
 , withStatic ? false # build only shared libs by default, build static+shared if true
 }:
-
-# NOTICE: pkg-config, pcap and pcre intentionally omitted from build inputs
-#         pcap used only in examples, pkg-config used only to check for pcre
-#         which is fixed 8.41 version requirement (nixpkgs have 8.42+, and
-#         I not see any reason (for now) to backport 8.41.
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyperscan";
@@ -24,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ boost ];
   nativeBuildInputs = [
-    cmake ragel python3 util-linux
+    cmake ragel python3 util-linux pkg-config
   ];
 
   cmakeFlags = [
@@ -33,6 +35,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!stdenv.isDarwin) "-DFAT_RUNTIME=ON"
   ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
   ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+
+  # hyperscan CMake is completely broken for chimera builds when pcre is compiled
+  # the only option to make it build - building from source
+  # In case pcre is built from source, chimera build is turned on by default
+  preConfigure = lib.optional withStatic ''
+    mkdir -p pcre
+    tar xvf ${pcre.src} --strip-components 1 -C pcre
+  '';
 
   postPatch = ''
     sed -i '/examples/d' CMakeLists.txt
@@ -46,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preCheck
 
     bin/unit-hyperscan
+    ${lib.optionalString withStatic ''bin/unit-chimera''}
 
     runHook postCheck
   '';
