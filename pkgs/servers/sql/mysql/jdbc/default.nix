@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "MySQL Connector/J";
-    homepage = "https://dev.mysql.com/doc/connector-j/8.0/en/";
+    homepage = "https://dev.mysql.com/doc/connector-j/8.1/en/";
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.gpl2;
