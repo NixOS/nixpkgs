@@ -26,7 +26,6 @@
 , "audiosprite"
 , "autoprefixer"
 , "auto-changelog"
-, "aws-azure-login"
 , "aws-cdk"
 , "awesome-lint"
 , "bash-language-server"
