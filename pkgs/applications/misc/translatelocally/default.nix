@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, qt6, libarchive, pcre2, protobuf, gperftools, blas
+, runCommand, translatelocally, translatelocally-models
 }:
 
 let
@@ -52,6 +53,19 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DBLAS_LIBRARIES=-lblas"
     "-DCBLAS_LIBRARIES=-lcblas"
   ];
+
+  passthru.tests = {
+    cli-translate = runCommand "${finalAttrs.pname}-test-cli-translate" {
+      nativeBuildInputs = [
+        translatelocally
+        translatelocally-models.fr-en-tiny
+      ];
+    } ''
+      export LC_ALL="C.UTF-8"
+      echo "Bonjour" | translateLocally -m fr-en-tiny > $out
+      diff "$out" <(echo "Hello")
+    '';
+  };
 
   meta = with lib; {
     mainProgram = "translateLocally";
