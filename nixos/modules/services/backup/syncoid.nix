@@ -252,6 +252,30 @@ in
             environment.LD_LIBRARY_PATH = config.system.nssModules.path;
             serviceConfig = {
               ExecStartPre =
+                # Recursively remove any residual permissions
+                # given on local+descendant datasets (source, target or target's parent)
+                # to any currently unknown (hence unused) systemd dynamic users (UID/GID range 61184…65519),
+                # which happens when a crash has occurred
+                # during any previous run of a syncoid-*.service (not only this one).
+                map (dataset:
+                  "+" + pkgs.writeShellScript "zfs-unallow-unused-dynamic-users" ''
+                      set -eu
+                      zfs allow "$1" |
+                      sed -ne 's/^\t\(user\|group\) (unknown: \([0-9]\+\)).*/\1 \2/p' |
+                      {
+                        declare -a uids
+                        while read -r role id; do
+                          if [ "$id" -ge 61184 ] && [ "$id" -le 65519 ]; then
+                            case "$role" in
+                              (user) uids+=("$id");;
+                            esac
+                          fi
+                        done
+                        zfs unallow -r -u "$(printf %s, "''${uids[@]}")" "$1"
+                      }
+                  '' + " " + escapeShellArg dataset
+                  ) (localDatasetName c.source ++ localDatasetName c.target ++ map builtins.dirOf (localDatasetName c.target)) ++
+                # For a local source, allow the localSourceAllow ZFS permissions.
                 map (dataset:
                   "+/run/booted-system/sw/bin/zfs allow $USER " +
                     escapeShellArgs [ (concatStringsSep "," c.localSourceAllow) dataset ]
@@ -268,6 +292,8 @@ in
                     zfs allow "$USER" ${escapeShellArg (concatStringsSep "," c.localTargetAllow)} "$dataset"
                   '' + " " + escapeShellArg dataset
                   ) (localDatasetName c.target) ++
+                # Adding a user to an nftables set will not persist across a reboot,
+                # hence there is no need to cleanup residual dynamic users remaining in it after a crash.
                 optional cfg.nftables.enable
                   "+${pkgs.nftables}/bin/nft add element inet filter nixos-syncoid-uids { $USER }";
               ExecStopPost = let

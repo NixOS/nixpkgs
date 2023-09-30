@@ -119,6 +119,16 @@ in {
     assert len(source.succeed("zfs allow pool/sanoid")) == 0, "Sanoid dataset shouldn't have delegated permissions set after snapshotting"
     assert len(source.succeed("zfs allow pool/syncoid")) == 0, "Syncoid dataset shouldn't have delegated permissions set after snapshotting"
 
+    # Add some unused dynamic users to the stateful allow list of ZFS datasets,
+    # simulating a state where they remain after the system crashed,
+    # to check they'll be correctly removed by the syncoid services.
+    # Each syncoid service run from now may reuse at most one of them for itself.
+    source.succeed(
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool",
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool/sanoid",
+        "zfs allow -u $(printf %s, {61184..61200})65519 dedup pool/syncoid",
+    )
+
     # Sync snapshots
     target.wait_for_open_port(22)
     source.succeed("touch /mnt/pool/syncoid/test.txt")
