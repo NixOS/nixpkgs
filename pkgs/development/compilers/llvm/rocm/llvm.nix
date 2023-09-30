@@ -38,6 +38,7 @@
   )
 )]
 , extraPostInstall ? ""
+, hardeningDisable ? [ ]
 , requiredSystemFeatures ? [ ]
 , extraLicenses ? [ ]
 , isBroken ? false
@@ -153,7 +154,7 @@ in stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  inherit requiredSystemFeatures;
+  inherit hardeningDisable requiredSystemFeatures;
 
   meta = with lib; {
     description = "ROCm fork of the LLVM compiler infrastructure";
