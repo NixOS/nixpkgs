@@ -2732,4 +2732,9 @@ self: super: {
 
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
+
+  # Too strict bounds on base, ghc-prim, primitive
+  # https://github.com/kowainik/typerep-map/pull/128
+  typerep-map = doJailbreak super.typerep-map;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

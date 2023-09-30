@@ -5627,7 +5627,6 @@ broken-packages:
   - type-operators # failure in job https://hydra.nixos.org/build/233232802 at 2023-09-02
   - typeparams # failure in job https://hydra.nixos.org/build/233192078 at 2023-09-02
   - type-prelude # failure in job https://hydra.nixos.org/build/233221195 at 2023-09-02
-  - typerep-map # failure in job https://hydra.nixos.org/build/233202720 at 2023-09-02
   - type-safe-avl # failure in job https://hydra.nixos.org/build/233203946 at 2023-09-02
   - types-compat # failure in job https://hydra.nixos.org/build/233249850 at 2023-09-02
   - type-settheory # failure in job https://hydra.nixos.org/build/233209513 at 2023-09-02
