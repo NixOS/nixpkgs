@@ -43,7 +43,8 @@ let
 
         # The FQDN, domain name, and hostname detection should work as expected:
         assert "${hostName}" == machine.succeed("hostname").strip()
-        assert "${optionalString (domain != null) domain}" == machine.succeed("domainname").replace(emptyDomainNamePlaceholder, "").strip()
+        domain = "${if (domain == null) then "(none)" else domain}"
+        assert machine.succeed("domainname").strip() == domain
 
         assert (
             "${hostName}"
