@@ -17,7 +17,7 @@ cargoBuildHook() {
     fi
 
     if [ "${cargoBuildType}" != "debug" ]; then
-        cargoBuildProfileFlag="--${cargoBuildType}"
+        cargoBuildProfileFlag="--profile ${cargoBuildType}"
     fi
 
     if [ -n "${cargoBuildNoDefaultFeatures-}" ]; then

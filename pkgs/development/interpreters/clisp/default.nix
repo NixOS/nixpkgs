@@ -25,8 +25,8 @@
 , xorgproto
 , coreutils
 # build options
-, threadSupport ? stdenv.hostPlatform.isx86
-, x11Support ? stdenv.hostPlatform.isx86
+, threadSupport ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
+, x11Support ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
 , dllSupport ? true
 , withModules ? [
     "pcre"
@@ -82,13 +82,16 @@ stdenv.mkDerivation {
   '';
 
   preConfigure = lib.optionalString stdenv.isDarwin (''
-    cd src
-    autoreconf -f -i -I m4 -I glm4
-    cd -
+    (
+      cd src
+      autoreconf -f -i -I m4 -I glm4
+    )
   '' + lib.concatMapStrings (x: ''
-    cd modules/${x}
-    autoreconf -f -i -I ../../src -I ../../src/m4 -I ../../src/glm4
-    cd -
+    (
+      root="$PWD"
+      cd modules/${x}
+      autoreconf -f -i -I "$root/src" -I "$root/src/m4" -I "$root/src/glm4"
+    )
   '') withModules);
 
   configureFlags = [ "builddir" ]

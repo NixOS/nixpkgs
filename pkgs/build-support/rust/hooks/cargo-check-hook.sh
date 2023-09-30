@@ -17,7 +17,7 @@ cargoCheckHook() {
     fi
 
     if [ "${cargoCheckType}" != "debug" ]; then
-        cargoCheckProfileFlag="--${cargoCheckType}"
+        cargoCheckProfileFlag="--profile ${cargoCheckType}"
     fi
 
     if [ -n "${cargoCheckNoDefaultFeatures-}" ]; then
