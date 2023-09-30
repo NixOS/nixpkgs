@@ -24,8 +24,7 @@
 , targetDir ? "llvm"
 , targetProjects ? [ ]
 , targetRuntimes ? [ ]
-# "NATIVE" resolves into x86 or aarch64 depending on stdenv
-, llvmTargetsToBuild ? [ "NATIVE" ]
+, llvmTargetsToBuild ? [ "NATIVE" ] # "NATIVE" resolves into x86 or aarch64 depending on stdenv
 , extraPatches ? [ ]
 , extraNativeBuildInputs ? [ ]
 , extraBuildInputs ? [ ]
@@ -108,22 +107,20 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DLLVM_ENABLE_PROJECTS=${lib.concatStringsSep ";" targetProjects}"
   ] ++ lib.optionals ((finalAttrs.passthru.isLLVM || targetDir == "runtimes") && targetRuntimes != [ ]) [
     "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" targetRuntimes}"
-  ] ++ lib.optionals (finalAttrs.passthru.isLLVM || finalAttrs.passthru.isClang) [
-    "-DLLVM_ENABLE_RTTI=ON"
-    "-DLLVM_ENABLE_EH=ON"
+  ] ++ lib.optionals finalAttrs.passthru.isLLVM [
+    "-DLLVM_INSTALL_UTILS=ON"
+    "-DLLVM_INSTALL_GTEST=ON"
   ] ++ lib.optionals (buildDocs || buildMan) [
     "-DLLVM_INCLUDE_DOCS=ON"
     "-DLLVM_BUILD_DOCS=ON"
     # "-DLLVM_ENABLE_DOXYGEN=ON" Way too slow, only uses one core
     "-DLLVM_ENABLE_SPHINX=ON"
-    "-DLLVM_ENABLE_OCAMLDOC=OFF"
     "-DSPHINX_OUTPUT_HTML=ON"
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ] ++ lib.optionals buildTests [
     "-DLLVM_INCLUDE_TESTS=ON"
     "-DLLVM_BUILD_TESTS=ON"
-  ] ++ lib.optionals (buildTests && !finalAttrs.passthru.isLLVM) [
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/.lit-wrapped"
   ] ++ extraCMakeFlags;
 
@@ -141,10 +138,7 @@ in stdenv.mkDerivation (finalAttrs: {
   doCheck = buildTests;
   checkTarget = lib.concatStringsSep " " checkTargets;
 
-  postInstall = lib.optionalString finalAttrs.passthru.isLLVM ''
-    # `lit` expects these for some test suites
-    mv bin/{FileCheck,not,count,yaml2obj,obj2yaml} $out/bin
-  '' + lib.optionalString buildMan ''
+  postInstall = lib.optionalString buildMan ''
     mkdir -p $info
   '' + extraPostInstall;
 
