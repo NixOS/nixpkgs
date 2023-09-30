@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wyoming-piper";
-  version = "1.2.0";
+  version = "1.3.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "wyoming_piper";
     inherit version;
-    hash = "sha256-cdCWpejHNCjyYtIxGms9yaEerRmFnGllUN7+3uQy4mQ=";
+    hash = "sha256-WyoHwIF3xC5nOa7iQ8/esfdwahbU6YJzK5G2Vi3mV4M=";
   };
 
   patches = [
