@@ -1,7 +1,8 @@
 { lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
+, pythonOlder
+, hatchling
 , flask
 , itsdangerous
 , wtforms
@@ -11,13 +12,20 @@
 
 buildPythonPackage rec {
   pname = "flask-wtf";
-  version = "1.1.1";
+  version = "1.2.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "Flask-WTF";
+    pname = "flask_wtf";
     inherit version;
-    hash = "sha256-QcQkTprmJtY77UKuR4W5Bme4hbFTXVpAleH2MGDRKqk=";
+    hash = "sha256-i7Jp65u0a4fnyCM9fn3r3x+LdL+QzBeJmIwps3qXtpU=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [
     flask
@@ -38,5 +46,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ mic92 anthonyroussel ];
     homepage = "https://github.com/lepture/flask-wtf/";
+    changelog = "https://github.com/wtforms/flask-wtf/releases/tag/v${version}";
   };
 }

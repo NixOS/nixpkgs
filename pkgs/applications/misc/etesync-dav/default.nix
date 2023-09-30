@@ -30,8 +30,10 @@ let
       });
       flask-wtf = super.flask-wtf.overridePythonAttrs (old: rec {
         version = "0.15.1";
+        format = "setuptools";
         src = old.src.override {
           inherit version;
+          pname = "Flask-WTF";
           hash = "sha256-/xdxhfiRMC3CU0N/5jCB56RqTpmsph3+CG+yPlT/8tw=";
         };
         disabledTests = [
