@@ -15331,17 +15331,13 @@ with pkgs;
 
   nix-your-shell = callPackage ../shells/nix-your-shell { };
 
-  bash = lowPrio (callPackage ../shells/bash/5.nix {
-    binutils = stdenv.cc.bintools;
-  });
+  bash = lowPrio (callPackage ../shells/bash/5.nix { });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = callPackage ../shells/bash/5.nix {
-    binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;
   };
   bashInteractiveFHS = callPackage ../shells/bash/5.nix {
-    binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;
     forFHSEnv = true;
