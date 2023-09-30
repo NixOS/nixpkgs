@@ -271,7 +271,16 @@ stdenv.mkDerivation ({
     (if lib.versionAtLeast version "9.8"
       then ./docs-sphinx-7-ghc98.patch
       else ./docs-sphinx-7.patch )
+  ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
+    # Prevent the paths module from emitting symbols that we don't use
+    # when building with separate outputs.
+    #
+    # These cause problems as they're not eliminated by GHC's dead code
+    # elimination on aarch64-darwin. (see
+    # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+    ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
   ];
+
   postPatch = ''
     patchShebangs --build .
   '';
