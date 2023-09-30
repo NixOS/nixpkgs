@@ -1,7 +1,3 @@
-from contextlib import _GeneratorContextManager, nullcontext
-from pathlib import Path
-from queue import Queue
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 import base64
 import io
 import os
@@ -16,6 +12,10 @@ import sys
 import tempfile
 import threading
 import time
+from contextlib import _GeneratorContextManager, nullcontext
+from pathlib import Path
+from queue import Queue
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from test_driver.logger import rootlog
 
@@ -599,7 +599,7 @@ class Machine:
             return (-1, output.decode())
 
         # Get the return code
-        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
+        self.shell.send(b"echo ${PIPESTATUS[0]}\n")
         rc = int(self._next_newline_closed_block_from_shell().strip())
 
         return (rc, output.decode(errors="replace"))
@@ -1132,7 +1132,7 @@ class Machine:
             return
 
         assert self.shell
-        self.shell.send("poweroff\n".encode())
+        self.shell.send(b"poweroff\n")
         self.wait_for_shutdown()
 
     def crash(self) -> None:

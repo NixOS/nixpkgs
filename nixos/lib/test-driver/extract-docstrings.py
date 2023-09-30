@@ -59,15 +59,15 @@ def main() -> None:
     ]
     function_definitions.sort(key=lambda x: x.name)
 
-    for f in function_definitions:
-        docstr = ast.get_docstring(f)
+    for function in function_definitions:
+        docstr = ast.get_docstring(function)
         if docstr is not None:
-            args = ", ".join(a.arg for a in f.args.args[1:])
+            args = ", ".join(a.arg for a in function.args.args[1:])
             args = f"({args})"
 
-            docstr = "\n".join(f"    {l}" for l in docstr.strip().splitlines())
+            docstr = "\n".join(f"    {line}" for line in docstr.strip().splitlines())
 
-            print(f"{f.name}{args}\n\n:{docstr[1:]}\n")
+            print(f"{function.name}{args}\n\n:{docstr[1:]}\n")
 
 
 if __name__ == "__main__":

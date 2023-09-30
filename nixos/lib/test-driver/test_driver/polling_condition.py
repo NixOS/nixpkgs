@@ -1,6 +1,6 @@
-from typing import Callable, Optional
-from math import isfinite
 import time
+from math import isfinite
+from typing import Callable, Optional
 
 from .logger import rootlog
 
