@@ -26,7 +26,6 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests are outdated
-    "test_exception_msg"
     "test_method"
   ];
 
