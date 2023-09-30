@@ -20,7 +20,7 @@ php.buildComposerProject (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ _7zz cacert curl git unzip xz ]}
   '';
 
-  vendorHash = "sha256-S6LprixkLIbD+qqvg+eYjWsDe+jFl9NO1qWztWYKPXs=";
+  vendorHash = "sha256-yYlzCUJl/jPGaX+WA6D0iQJsrdHlcZr1CgjCpQsHtvU=";
 
   meta = {
     changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
