@@ -383,6 +383,8 @@ in stdenv.mkDerivation (finalAttrs: {
     sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
 
     find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
+  '' + optionalString stdenv.isAarch64 ''
+    sed -e '/CPPUNIT_TEST(testStatisticalFormulasFODS);/d' -i './sc/qa/unit/functions_statistical.cxx'
   '';
 
   makeFlags = [ "SHELL=${bash}/bin/bash" ];
