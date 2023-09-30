@@ -1,3 +1,6 @@
+# mypy: disable-error-code="no-untyped-call"
+# drop the above line when mypy is upgraded to include
+# https://github.com/python/typeshed/commit/49b717ca52bf0781a538b04c0d76a5513f7119b8
 from colorama import Style, Fore
 from contextlib import contextmanager
 from typing import Any, Dict, Iterator

@@ -22,6 +22,15 @@ line-length = 88
 select = ["E", "F", "I", "U", "N"]
 ignore = ["E501"]
 
+# xxx: we can import https://pypi.org/project/types-colorama/ here
+[[tool.mypy.overrides]]
+module = "colorama.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "ptpython.*"
+ignore_missing_imports = true
+
 [tool.black]
 line-length = 88
 target-version = ['py39']
