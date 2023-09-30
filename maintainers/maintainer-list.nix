@@ -6616,11 +6616,6 @@
     githubId = 11212268;
     name = "gruve-p";
   };
-  grxnola = {
-    github = "grxnola";
-    githubId = 49906709;
-    name = "grxnola";
-  };
   gschwartz = {
     email = "gsch@pennmedicine.upenn.edu";
     github = "GregorySchwartz";
@@ -12968,6 +12963,11 @@
     github = "offlinehacker";
     githubId = 585547;
     name = "Jaka Hudoklin";
+  };
+  offsetcyan = {
+    github = "offsetcyan";
+    githubId = 49906709;
+    name = "Dakota";
   };
   oida = {
     email = "oida@posteo.de";
