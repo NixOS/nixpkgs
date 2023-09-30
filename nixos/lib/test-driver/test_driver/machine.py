@@ -236,14 +236,14 @@ class LegacyStartCommand(StartCommand):
 
     def __init__(
         self,
-        netBackendArgs: Optional[str] = None,
-        netFrontendArgs: Optional[str] = None,
+        netBackendArgs: Optional[str] = None,  # noqa: N803
+        netFrontendArgs: Optional[str] = None,  # noqa: N803
         hda: Optional[Tuple[Path, str]] = None,
         cdrom: Optional[str] = None,
         usb: Optional[str] = None,
         bios: Optional[str] = None,
-        qemuBinary: Optional[str] = None,
-        qemuFlags: Optional[str] = None,
+        qemuBinary: Optional[str] = None,  # noqa: N803
+        qemuFlags: Optional[str] = None,  # noqa: N803
     ):
         if qemuBinary is not None:
             self._cmd = qemuBinary
