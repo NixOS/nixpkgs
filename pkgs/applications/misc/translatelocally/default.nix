@@ -3,17 +3,17 @@
 }:
 
 let
-  rev = "f8a2dba0a63989c6b3a7be36f736ed478cad1dd2";
+  rev = "a210037760ca3ca9016ca1831c97531318df70fe";
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "translatelocally";
-  version = "unstable-2023-08-25";
+  version = "unstable-2023-09-20";
 
   src = fetchFromGitHub {
     owner = "XapaJIaMnu";
     repo = "translateLocally";
     inherit rev;
-    hash = "sha256-uUdDi0CwCR/FQjw5D2s088d/Tp7NQOI0ia30oOhlGoc=";
+    hash = "sha256-T7cZdR09yDrPTwYxvDIaKTdV4mrB+gTHYVfch5BQ+PE=";
     fetchSubmodules = true;
   };
 
