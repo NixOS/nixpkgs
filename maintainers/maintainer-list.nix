@@ -14647,6 +14647,15 @@
     githubId = 165283;
     name = "Alexey Kutepov";
   };
+  rflg = {
+    email = "rflg@mailfence.com";
+    github = "rf1g";
+    githubId = 145844138;
+    name = "Red Flag";
+    keys = [{
+      fingerprint = "D4B7 668A 816D A4DB 97F9  0932 A127 586A B6B7 6CE3";
+    }];
+  };
   rgnns = {
     email = "jglievano@gmail.com";
     github = "rgnns";
