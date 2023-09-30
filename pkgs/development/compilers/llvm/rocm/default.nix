@@ -72,6 +72,8 @@ let
     extraPostInstall = ''
       mv bin/clang-tblgen $out/bin
     '';
+
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 
   lld = callPackage ./llvm.nix rec {
@@ -437,6 +439,8 @@ in rec {
       # Cleanup empty directories
       find $out -type d -empty -delete
     '';
+
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 
   # Projects
@@ -549,6 +553,7 @@ in rec {
     '';
 
     checkTargets = [ "check-${targetName}" ];
+    requiredSystemFeatures = [ "big-parallel" ];
   };
 
   polly = callPackage ./llvm.nix rec {
