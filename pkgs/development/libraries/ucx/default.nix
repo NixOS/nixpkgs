@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
 
   configureFlags = [
-    "--with-rdmacm=${rdma-core}"
+    "--with-rdmacm=${lib.getDev rdma-core}"
     "--with-dc"
     "--with-rc"
     "--with-dm"
-    "--with-verbs=${rdma-core}"
+    "--with-verbs=${lib.getDev rdma-core}"
   ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
 
