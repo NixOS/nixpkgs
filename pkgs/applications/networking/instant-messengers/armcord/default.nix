@@ -137,5 +137,6 @@ stdenv.mkDerivation rec {
     license = licenses.osl3;
     maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    knownVulnerabilities = [ "CVE-2023-4863" ];
   };
 }
