@@ -3,6 +3,7 @@
 , symlinkJoin
 , prismlauncher-unwrapped
 , wrapQtAppsHook
+, addOpenGLRunpath
 , qtbase  # needed for wrapQtAppsHook
 , qtsvg
 , qtwayland
@@ -85,7 +86,7 @@ symlinkJoin {
     in
     [ "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}" ]
     ++ lib.optionals stdenv.isLinux [
-      "--set LD_LIBRARY_PATH /run/opengl-driver/lib:${lib.makeLibraryPath runtimeLibs}"
+      "--set LD_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib:${lib.makeLibraryPath runtimeLibs}"
       # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"
     ];

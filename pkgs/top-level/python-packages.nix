@@ -224,6 +224,8 @@ self: super: with self; {
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
 
+  aiohttp-basicauth = callPackage ../development/python-modules/aiohttp-basicauth { };
+
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
@@ -317,6 +319,8 @@ self: super: with self; {
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
+
+  aioprometheus = callPackage ../development/python-modules/aioprometheus { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
@@ -4695,6 +4699,8 @@ self: super: with self; {
   grequests = callPackage ../development/python-modules/grequests { };
 
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
+
+  greynoise = callPackage ../development/python-modules/greynoise { };
 
   growattserver = callPackage ../development/python-modules/growattserver { };
 
@@ -11114,6 +11120,8 @@ self: super: with self; {
 
   quantiphy = callPackage ../development/python-modules/quantiphy { };
 
+  quantile-python = callPackage ../development/python-modules/quantile-python { };
+
   quantiphy-eval = callPackage ../development/python-modules/quantiphy-eval { };
 
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
@@ -13946,6 +13954,8 @@ self: super: with self; {
   webob = callPackage ../development/python-modules/webob { };
 
   weboob = callPackage ../development/python-modules/weboob { };
+
+  webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
 
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
