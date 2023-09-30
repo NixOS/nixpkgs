@@ -9,12 +9,12 @@
 }:
 buildPythonPackage rec {
   pname = "setuptools-odoo";
-  version = "3.1.12";
+  version = "3.2.0";
   src = fetchFromGitHub {
     owner = "acsone";
     repo = pname;
     rev = version;
-    hash = "sha256-GIX21gOENE0r3yFIyzwjaoEcb0XvuCqiPU8F3GLxNt4=";
+    hash = "sha256-+jrO6RJ838ewOHz2pCoIJN9U0bRlQqUPWDvEffxW+n0=";
   };
 
   propagatedBuildInputs = [
