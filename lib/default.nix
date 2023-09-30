@@ -48,6 +48,7 @@ let
     asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
     misc = callLibs ./deprecated.nix;
+    network = callLibs ./network.nix;
 
     # domain-specific
     fetchers = callLibs ./fetchers.nix;
@@ -163,6 +164,7 @@ let
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeHash fakeSha256 fakeSha512
       nixType imap;
+    inherit (self.network) ipv4;
     inherit (self.versions)
       splitVersion;
   });
