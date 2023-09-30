@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "consul";
-  version = "1.16.1";
+  version = "1.16.2";
   rev = "v${version}";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
@@ -17,7 +17,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     inherit rev;
-    hash = "sha256-EEreAhxBQm6Wj1JFGfC9Ql3NARPXNOhqZkzIDJ2NMkg=";
+    hash = "sha256-8hm/9gS6aZDMxGc+wAriEY58GP/zx8o+IZsMa4+8T94=";
   };
 
   passthru.tests.consul = nixosTests.consul;
@@ -26,7 +26,7 @@ buildGoModule rec {
   # has a split module structure in one repo
   subPackages = ["." "connect/certgen"];
 
-  vendorHash = "sha256-zERHmtmGrPrUPJ2fFc+J0pWKLKQc9TTSFkN2RUOXOoM=";
+  vendorHash = "sha256-0GL/M/fwrwFUgiBm7WBsVPMf98PchQEdcidfjRYZe54=";
 
   doCheck = false;
 
