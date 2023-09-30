@@ -3957,6 +3957,8 @@ self: super: with self; {
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
 
+  flask-mysqldb = callPackage ../development/python-modules/flask-mysqldb { };
+
   flask-openid = callPackage ../development/python-modules/flask-openid { };
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
