@@ -11,7 +11,7 @@ buildPythonPackage rec {
   version = "0.7.17";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "ponyorm";
