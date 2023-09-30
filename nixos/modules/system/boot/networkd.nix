@@ -517,17 +517,24 @@ let
         (assertValueOneOf "Unmanaged" boolValues)
         (assertInt "Group")
         (assertRange "Group" 0 2147483647)
-        (assertValueOneOf "RequiredForOnline" (boolValues ++ [
-          "missing"
-          "off"
-          "no-carrier"
-          "dormant"
-          "degraded-carrier"
-          "carrier"
-          "degraded"
-          "enslaved"
-          "routable"
-        ]))
+        (assertValueOneOf "RequiredForOnline" (boolValues ++ (
+          let
+            # https://freedesktop.org/software/systemd/man/networkctl.html#missing
+            operationalStates = [
+              "missing"
+              "off"
+              "no-carrier"
+              "dormant"
+              "degraded-carrier"
+              "carrier"
+              "degraded"
+              "enslaved"
+              "routable"
+            ];
+            operationalStateRanges = concatLists (imap0 (i: min: map (max: "${min}:${max}") (drop i operationalStates)) operationalStates);
+          in
+          operationalStates ++ operationalStateRanges
+        )))
         (assertValueOneOf "RequiredFamilyForOnline" [
           "ipv4"
           "ipv6"
