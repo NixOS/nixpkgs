@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmenumodel";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "qmenumodel";
     rev = finalAttrs.version;
-    hash = "sha256-cKolDRMamLWV8ASFLp1k0xslNAqVRCuM3/xvvBG98RI=";
+    hash = "sha256-zbKAfq9R5fD2IqVYOAhy903QX1TDom9m6Ib2qpkFMak=";
   };
 
   outputs = [ "out" "dev" ];
