@@ -16,6 +16,7 @@
   # downstream dependencies
 , python3
 , grpc
+, enableShared ? !stdenv.hostPlatform.isStatic
 
 , ...
 }:
@@ -74,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
     "-Dprotobuf_ABSL_PROVIDER=package"
-  ] ++ lib.optionals (!stdenv.targetPlatform.isStatic) [
+  ] ++ lib.optionals enableShared [
     "-Dprotobuf_BUILD_SHARED_LIBS=ON"
   ]
   # Tests fail to build on 32-bit platforms; fixed in 3.22
