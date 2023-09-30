@@ -320,6 +320,8 @@ self: super: with self; {
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
 
+  aioprometheus = callPackage ../development/python-modules/aioprometheus { };
+
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
   aiopurpleair = callPackage ../development/python-modules/aiopurpleair { };
