@@ -1,4 +1,6 @@
-{ lib, stdenv, llvmPackages }:
+{ lib, stdenv, llvmPackages, enableLibcxx ? false }:
+# enableLibcxx will use the c++ headers from clang instead of gcc.
+# This shouldn't have any effect on platforms that use clang as the default compiler already.
 
 let
   unwrapped = llvmPackages.clang-unwrapped;
@@ -9,7 +11,7 @@ in stdenv.mkDerivation {
   pname = "clang-tools";
   version = lib.getVersion unwrapped;
   dontUnpack = true;
-  clang = llvmPackages.clang;
+  clang = if enableLibcxx then llvmPackages.libcxxClang else llvmPackages.clang;
 
   installPhase = ''
     runHook preInstall

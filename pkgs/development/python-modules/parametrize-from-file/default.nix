@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, flit-core
 , pytestCheckHook
 , coveralls
 , numpy
@@ -16,7 +17,7 @@
 buildPythonPackage rec {
   pname = "parametrize-from-file";
   version = "0.17.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
@@ -39,6 +40,10 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace "more_itertools~=8.10" "more_itertools"
   '';
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   nativeCheckInputs = [
     numpy

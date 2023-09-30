@@ -391,15 +391,7 @@ self: super: {
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
 
-  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ]
-    # Adds a workaround to the API changes in the versions library
-    # Should be dropped by the next release
-    # https://github.com/cachix/cachix/pull/556
-    (appendPatch (fetchpatch {
-      url = "https://github.com/cachix/cachix/commit/078d2d2212d7533a6a4db000958bfc4373c4deeb.patch";
-      hash = "sha256-xfJaO2CuZWFHivq4gqbkNnTOWPiyFVjlwOPV6yibKH4=";
-      stripLen = 1;
-    }) super.cachix);
+  cachix = self.generateOptparseApplicativeCompletions [ "cachix" ] super.cachix;
 
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;

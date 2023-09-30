@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='Release'"
     "-DENABLE_FFMPEG='true'"
     "-DENABLE_LINK='true'"
     "-DSYSCONFDIR=etc"

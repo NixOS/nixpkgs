@@ -176,16 +176,12 @@ in
         '';
       type = types.listOf overlayType;
       description = lib.mdDoc ''
-        List of overlays to use with the Nix Packages collection.
-        (For details, see the Nixpkgs documentation.)  It allows
-        you to override packages globally. Each function in the list
-        takes as an argument the *original* Nixpkgs.
-        The first argument should be used for finding dependencies, and
-        the second should be used for overriding recipes.
+        List of overlays to apply to Nixpkgs.
+        This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
 
-        If `nixpkgs.pkgs` is set, overlays specified here
-        will be applied after the overlays that were already present
-        in `nixpkgs.pkgs`.
+        For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+        If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays` will be applied after the overlays that were already included in `nixpkgs.pkgs`.
       '';
     };
 

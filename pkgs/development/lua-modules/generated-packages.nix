@@ -5,7 +5,7 @@ nixpkgs$ ./maintainers/scripts/update-luarocks-packages
 You can customize the generated packages in pkgs/development/lua-modules/overrides.nix
 */
 
-{ self, stdenv, lib, fetchurl, fetchgit, callPackage, ... } @ args:
+{ stdenv, lib, fetchurl, fetchgit, callPackage, ... } @ args:
 final: prev:
 {
 alt-getopt = callPackage({ luaAtLeast, lua, luaOlder, fetchgit, buildLuarocksPackage }:

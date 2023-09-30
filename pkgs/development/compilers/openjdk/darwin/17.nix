@@ -11,20 +11,20 @@ let
   dist = {
     x86_64-darwin = {
       arch = "x64";
-      zuluVersion = "17.44.15";
-      jdkVersion = "17.0.8";
+      zuluVersion = "17.44.53";
+      jdkVersion = "17.0.8.1";
       hash =
-        if enableJavaFX then "sha256-gmDku/AkWzO+eDRitezM9wCtTYDrUMtXyMulxqi9tNI="
-        else "sha256-Ci18gBkAv/UUIQw9KlnfibcQMXwQRGx6K7L/NBB7b7Q=";
+        if enableJavaFX then "sha256-9U0XYZRA+LZTQ7eHrT5SWhgcxv43ajC9n9Tj3qPPLWA="
+        else "sha256-ZART6K/o/+D7Tc60U1+1DbnCg8ZGZe67C6aLGeZfSx8=";
     };
 
     aarch64-darwin = {
       arch = "aarch64";
-      zuluVersion = "17.44.15";
-      jdkVersion = "17.0.8";
+      zuluVersion = "17.44.53";
+      jdkVersion = "17.0.8.1";
       hash =
-        if enableJavaFX then "sha256-mvyfqpnAoA05HJB9EBewW2MDuhQBOvp6svzyayV1irI="
-        else "sha256-8b81QY6DGXVOsTKM8QDzJnYjXV0ipCbYWaaz6oF2A6k=";
+        if enableJavaFX then "sha256-udYW3nOADclWqVcVtS9dgjSY0w6xf2nsBpLzPmQCYlI="
+        else "sha256-MUsEVo7Arps2ugPJy9Qq3J4SZfdGeJI7GSl9ZuuE3Mo=";
     };
   }."${stdenv.hostPlatform.system}";
 

@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "jupyter-cache";
   version = "0.6.1";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 

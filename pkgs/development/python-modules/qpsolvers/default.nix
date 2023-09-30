@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , unittestCheckHook
+, flit-core
 , daqp
 , ecos
 , numpy
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "qpsolvers";
   version = "3.4.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    flit-core
     quadprog
     unittestCheckHook
   ];

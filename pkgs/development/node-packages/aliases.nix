@@ -102,8 +102,11 @@ mapAliases {
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = parcel; # added 2023-09-04
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
+  inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
+  react-native-cli = throw "react-native-cli was removed because it was deprecated"; # added 2023-09-25
   inherit (pkgs) react-static; # added 2023-08-21
+  react-tools = throw "react-tools was removed because it was deprecated"; # added 2023-09-25
   readability-cli = pkgs.readability-cli; # Added 2023-06-12
   inherit (pkgs) redoc-cli; # added 2023-09-12
   reveal-md = pkgs.reveal-md; # added 2023-07-31

@@ -60,6 +60,8 @@ let
 
     ### B ###
 
+    b0 = callPackage ../development/ocaml-modules/b0 { };
+
     bap = janeStreet_0_15.bap;
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -1294,6 +1296,8 @@ let
 
     ocf_ppx = callPackage ../development/ocaml-modules/ocf/ppx.nix { };
 
+    ocolor = callPackage ../development/ocaml-modules/ocolor { };
+
     ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
     ocp-indent = callPackage ../development/tools/ocaml/ocp-indent { };
@@ -1327,6 +1331,8 @@ let
     ocurl = callPackage ../development/ocaml-modules/ocurl { };
 
     odate = callPackage ../development/ocaml-modules/odate { };
+
+    odig = callPackage ../development/ocaml-modules/odig { };
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
@@ -1885,6 +1891,8 @@ let
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix { };
 
     buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { };
+
+    buildTopkgPackage = callPackage ../build-support/ocaml/topkg.nix { };
 
     # Apps from all-packages, to be eventually removed
 

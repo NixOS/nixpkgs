@@ -120,7 +120,7 @@ let
       kdebugsettings = callPackage ./kdebugsettings.nix {};
       kdeconnect-kde = callPackage ./kdeconnect-kde.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
-      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
+      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};

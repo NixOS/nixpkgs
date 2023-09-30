@@ -42,8 +42,9 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.AppKit
   ];
 
+  cmakeBuildType = "MinSizeRel";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='MinSizeRel'"
     "-Wno-dev"
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];

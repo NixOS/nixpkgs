@@ -191,6 +191,7 @@
 , "patch-package"
 , "peerflix"
 , "peerflix-server"
+, {"pgrok-build-deps": "../../tools/networking/pgrok/build-deps"}
 , "pkg"
 , "pm2"
 , "pnpm"
@@ -208,10 +209,7 @@
 , "purescript-psa"
 , "purs-tidy"
 , "purty"
-, "pxder"
 , "pyright"
-, "react-native-cli"
-, "react-tools"
 , "remod-cli"
 , "reveal.js"
 , "rimraf"

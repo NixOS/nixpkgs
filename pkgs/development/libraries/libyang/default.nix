@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_BUILD_TYPE:String=Release"
   ];
 
   passthru.updateScript = gitUpdater {

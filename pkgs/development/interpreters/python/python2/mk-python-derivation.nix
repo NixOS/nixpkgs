@@ -98,12 +98,10 @@
 
 , ... } @ attrs:
 
-assert lib.assertMsg (format != "flit") "flit is not a supported Python 2 format";
-
 let
   inherit (python) stdenv;
 
-  withDistOutput = lib.elem format ["pyproject" "setuptools" "flit" "wheel"];
+  withDistOutput = lib.elem format ["pyproject" "setuptools" "wheel"];
 
   name_ = name;
 
@@ -171,7 +169,7 @@ let
     nativeBuildInputs = [
       python
       wrapPython
-      ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+      ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, ...)?
       pythonRemoveTestsDirHook
     ] ++ lib.optionals catchConflicts [
       pythonCatchConflictsHook

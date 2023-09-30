@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = with lib; [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DBUILD_TESTING=ON"
     "-DUSE_LIBUDEV_OVER_LIBSYSTEMD=ON"
   ] ++ optional nvidia "-DNVML_INCLUDE_DIRS=${cudatoolkit}/include"

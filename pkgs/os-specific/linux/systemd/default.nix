@@ -55,7 +55,6 @@
 , e2fsprogs
 , elfutils
 , linuxHeaders ? stdenv.cc.libc.linuxHeaders
-, gnu-efi
 , iptables
 , withSelinux ? false
 , libselinux
@@ -89,9 +88,11 @@
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
+, withBootloader ? !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
+, withRepart ? true
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
@@ -116,6 +117,7 @@
 , withNss ? !stdenv.hostPlatform.isMusl
 , withOomd ? true
 , withPam ? true
+, withPasswordQuality ? false
 , withPCRE2 ? true
 , withPolkit ? true
 , withPortabled ? !stdenv.hostPlatform.isMusl
@@ -123,6 +125,7 @@
 , withResolved ? true
 , withShellCompletions ? true
 , withSysusers ? false # conflicts with the NixOS user management
+, withSysupdate ? true
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
@@ -146,17 +149,21 @@ assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
 assert withUkify -> withEfi;
+assert withRepart -> withCryptsetup;
+assert withBootloader -> withEfi;
+# passwdqc is not packaged in nixpkgs yet, if you want to fix this, please submit a PR.
+assert !withPasswordQuality;
 
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "253.6";
+  version = "254.3";
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
-  releaseTimestamp = "1676488940";
+  releaseTimestamp = "1690536449";
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
@@ -167,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
-    hash = "sha256-LZs6QuBe23W643bTuz+MD2pzHiapsBJBHoFXi/QjzG4=";
+    hash = "sha256-ObnsAiKwhwEb4ti611eS/wGpg3Sss/pUy/gANPAbXbs=";
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -194,12 +201,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0016-inherit-systemd-environment-when-calling-generators.patch
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
-    ./0019-bootctl-also-print-efi-files-not-owned-by-systemd-in.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-f34f6ab04b443608497b73668365819343d0c2fe.tar.gz";
-        sha256 = "DFcLPvjQIxGEDADpP232ZRd7cOEKt6B48Ah29nIGTt4=";
+        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-eb8a86fee9eeae787cc0a58ef2ed087fd48d93eb.tar.gz";
+        sha256 = "tE2KpXLvOknIpEZFdOnNxvBmDvZrra3kvQp9tKxa51c=";
       };
       musl-patches = oe-core + "/meta/recipes-core/systemd/systemd";
     in
@@ -207,7 +213,6 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0001-Adjust-for-musl-headers.patch")
       (musl-patches + "/0005-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0006-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
-      (musl-patches + "/0007-Add-sys-stat.h-for-S_IFDIR.patch")
       (musl-patches + "/0009-missing_type.h-add-comparison_fn_t.patch")
       (musl-patches + "/0010-add-fallback-parse_printf_format-implementation.patch")
       (musl-patches + "/0011-src-basic-missing.h-check-for-missing-strndupa.patch")
@@ -223,32 +228,21 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0022-Handle-__cpu_mask-usage.patch")
       (musl-patches + "/0023-Handle-missing-gshadow.patch")
       (musl-patches + "/0024-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch")
-      (musl-patches + "/0026-src-boot-efi-efi-string.c-define-wchar_t-from-__WCHA.patch")
+      (musl-patches + "/0028-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
+      (musl-patches + "/0029-shared-Do-not-use-malloc_info-on-musl.patch")
     ]
   );
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
-    substituteInPlace src/boot/efi/meson.build \
-      --replace \
-      "run_command(cc.cmd_array(), '-print-prog-name=objcopy', check: true).stdout().strip()" \
-      "'${stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + lib.optionalString withLibBPF ''
     substituteInPlace meson.build \
       --replace "find_program('clang'" "find_program('${stdenv.cc.targetPrefix}clang'"
-    # BPF does not work with stack protector
-    substituteInPlace src/core/bpf/meson.build \
-      --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
   '' + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
       --replace \
       "'readelf'" \
       "'${targetPackages.stdenv.cc.bintools.targetPrefix}readelf'"
-    # The objcopy dependency is removed in v254
-    substituteInPlace src/ukify/ukify.py \
-      --replace \
-      "'objcopy'" \
-      "'${targetPackages.stdenv.cc.bintools.targetPrefix}objcopy'"
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -325,6 +319,9 @@ stdenv.mkDerivation (finalAttrs: {
 
           # Support for PKCS#11 in systemd-cryptsetup, systemd-cryptenroll and systemd-homed
           { name = "libp11-kit.so.0"; pkg = opt (withHomed || withCryptsetup) p11-kit; }
+
+          # Password quality support
+          { name = "libpasswdqc.so.1"; pkg = opt withPasswordQuality null; }
         ];
 
       patchDlOpen = dl:
@@ -395,7 +392,7 @@ stdenv.mkDerivation (finalAttrs: {
       docbook_xml_dtd_42
       docbook_xml_dtd_45
       bash
-      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ]))
+      (buildPackages.python3Packages.python.withPackages (ps: with ps; [ lxml jinja2 ] ++ lib.optional withEfi ps.pyelftools))
     ]
     ++ lib.optionals withLibBPF [
       bpftools
@@ -422,7 +419,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withCompression [ bzip2 lz4 xz zstd ]
     ++ lib.optional withCoredump elfutils
     ++ lib.optional withCryptsetup (lib.getDev cryptsetup.dev)
-    ++ lib.optional withEfi gnu-efi
     ++ lib.optional withKexectools kexec-tools
     ++ lib.optional withKmod kmod
     ++ lib.optional withLibidn2 libidn2
@@ -498,6 +494,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibidn2=${lib.boolToString withLibidn2}"
     "-Dfirstboot=${lib.boolToString withFirstboot}"
     "-Dsysusers=${lib.boolToString withSysusers}"
+    "-Drepart=${lib.boolToString withRepart}"
+    "-Dsysupdate=${lib.boolToString withSysupdate}"
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
@@ -537,12 +535,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dman=true"
 
     "-Defi=${lib.boolToString withEfi}"
-    "-Dgnu-efi=${lib.boolToString withEfi}"
+    "-Dbootloader=${lib.boolToString withBootloader}"
 
     "-Dukify=${lib.boolToString withUkify}"
-  ] ++ lib.optionals withEfi [
-    "-Defi-libdir=${toString gnu-efi}/lib"
-    "-Defi-includedir=${toString gnu-efi}/include/efi"
   ] ++ lib.optionals (withShellCompletions == false) [
     "-Dbashcompletiondir=no"
     "-Dzshcompletiondir=no"
@@ -586,6 +581,7 @@ stdenv.mkDerivation (finalAttrs: {
           where = [
             "man/systemd-analyze.xml"
             "man/systemd.service.xml"
+            "man/systemd-run.xml"
             "src/analyze/test-verify.c"
             "src/test/test-env-file.c"
             "src/test/test-fileio.c"
@@ -595,7 +591,7 @@ stdenv.mkDerivation (finalAttrs: {
         {
           search = "/bin/cat";
           replacement = "${coreutils}/bin/cat";
-          where = [ "test/create-busybox-container" "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
+          where = [ "test/test-execute/exec-noexecpaths-simple.service" "src/journal/cat.c" ];
         }
         {
           search = "/usr/lib/systemd/systemd-fsck";
@@ -728,7 +724,7 @@ stdenv.mkDerivation (finalAttrs: {
   #   https://github.com/NixOS/nixpkgs/issues/169693
   # The hack is to move EFI file out of lib/ before doStrip
   # run and return it after doStrip run.
-  preFixup = lib.optionalString withEfi ''
+  preFixup = lib.optionalString withBootloader ''
     mv $out/lib/systemd/boot/efi $out/dont-strip-me
   '';
 
@@ -738,7 +734,7 @@ stdenv.mkDerivation (finalAttrs: {
       # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
       wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
     done
-  '' + lib.optionalString withEfi ''
+  '' + lib.optionalString withBootloader ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '' + lib.optionalString withUkify ''
     # To cross compile a derivation that builds a UKI with ukify, we need to wrap

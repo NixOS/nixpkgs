@@ -95,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DGMIC_QT_HOST=${if variant == "standalone" then "none" else variant}"
-    "-DENABLE_SYSTEM_GMIC=ON"
-    "-DENABLE_DYNAMIC_LINKING=ON"
+    (lib.cmakeFeature "GMIC_QT_HOST" (if variant == "standalone" then "none" else variant))
+    (lib.cmakeBool "ENABLE_SYSTEM_GMIC" true)
+    (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
   ];
 
   postFixup = lib.optionalString (variant == "gimp") ''
@@ -135,8 +135,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://gmic.eu/";
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.lilyinstarlight ];
-    platforms = lib.platforms.unix;
     mainProgram = "gmic_qt";
+    maintainers = [
+      lib.maintainers.AndersonTorres
+      lib.maintainers.lilyinstarlight
+    ];
+    platforms = lib.platforms.unix;
   };
 })

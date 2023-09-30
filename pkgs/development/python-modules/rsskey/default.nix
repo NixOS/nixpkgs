@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , feedparser
 , httpx
 , loca
@@ -11,12 +12,16 @@
 buildPythonPackage rec {
   pname = "rsskey";
   version = "0.2.0";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-QedLuwd0ES2LWhZ72Cjh3+ZZ7HbRyNsyLN9lNFbY5dQ=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     feedparser

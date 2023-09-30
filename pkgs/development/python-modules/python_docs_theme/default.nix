@@ -1,9 +1,9 @@
-{ lib, buildPythonPackage, fetchFromGitHub, sphinx }:
+{ lib, buildPythonPackage, fetchFromGitHub, flit-core, sphinx }:
 
 buildPythonPackage rec {
   pname = "python_docs_theme";
   version = "2023.7";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python";
@@ -11,6 +11,8 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     sha256 = "sha256-43/TlgYm7Q4ZtY25MiLU9fd1atDmiDUeUK6AYfDfmag=";
   };
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ sphinx ];
 

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "app-model";
-  version = "0.2.1";
+  version = "0.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1LldqihVCCgFdnsod751zWAAqkaaIH2qMpfsPYjWzgs=";
+    hash = "sha256-vo10BHUzvYlldAqTw/1LxgvSXgTM3LAls9jQIeB5LcU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

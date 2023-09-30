@@ -11,7 +11,7 @@ with python3Packages;
 buildPythonApplication rec {
   pname = "pynitrokey";
   version = "0.4.39";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -43,8 +43,12 @@ buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [
+    flit-core
     pythonRelaxDepsHook
   ];
+
+  # FIXME: does pythonRelaxDepsHook not work for pypaBuildHook + flit-core?
+  pypaBuildFlags = [ "--skip-dependency-check" ];
 
   pythonRelaxDeps = [
     "click"

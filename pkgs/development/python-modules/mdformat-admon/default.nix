@@ -24,7 +24,7 @@ let
 in python.pkgs.buildPythonPackage rec {
   pname = "mdformat-admon";
   version = "1.0.2";
-  format = "flit";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -34,6 +34,10 @@ in python.pkgs.buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-33Q3Re/axnoOHZ9XYA32mmK+efsSelJXW8sD7C1M/jU=";
   };
+
+  nativeBuildInputs = with python.pkgs; [
+    flit-core
+  ];
 
   buildInputs = with python.pkgs; [
     mdformat

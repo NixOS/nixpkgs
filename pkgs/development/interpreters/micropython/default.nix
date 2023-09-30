@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.19.1";
+  version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     rev = "v${version}";
-    sha256 = "sha256-BoX3Z3Zr/AQqkgRrq+UVgdoDqNESDTNsY9AtrElpzfA=";
+    sha256 = "sha256-XTkw0M2an13xlRlDusyHYqwNeHqhq4mryRC5/pk+5Ko=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   skippedTests = ""
-    + lib.optionalString (stdenv.isDarwin) " -e uasyncio_basic -e uasyncio_heaplock -e uasyncio_wait_task"
     + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) " -e ffi_callback"
     + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) " -e float_parse"
   ;
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    install -Dm755 ports/unix/micropython -t $out/bin
+    install -Dm755 ports/unix/build-standard/micropython -t $out/bin
     runHook postInstall
   '';
 

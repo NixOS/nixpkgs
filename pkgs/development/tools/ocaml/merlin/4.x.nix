@@ -15,7 +15,7 @@
 }:
 
 let
-  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.10" else "4.7";
+  merlinVersion = if lib.versionAtLeast ocaml.version "4.14" then "4.12" else "4.7";
 
   hashes = {
     "4.7-412" = "sha256-0U3Ia7EblKULNy8AuXFVKACZvGN0arYJv7BWiBRgT0Y=";
@@ -26,10 +26,18 @@ let
     "4.9-500" = "sha256-uQfGazoxTxclHSiTfjji+tKJv8MKqRdHMPD/xfMZlSY=";
     "4.10-414" = "sha256-/a1OqASISpb06eh2gsam1rE3wovM4CT8ybPV86XwR2c=";
     "4.10-500" = "sha256-m9+Qz8DT94yNSwpamTVLQKISHtRVBWnZD3t/yyujSZ0=";
+    "4.12-414" = "sha256-tgMUT4KyFeJubYVY1Sdv9ZvPB1JwcqEGcCuwuMqXHRQ=";
+    "4.12-500" = "sha256-j49R7KVzNKlXDL7WibTHxPG4VSOVv0uaz5/yMZZjkH8=";
+    "4.12-501" = "sha256-zMwzI1SXQDWQ9PaKL4o3J6JlRjmEs7lkXrwauy+QiMA=";
   };
 
-  ocamlVersionShorthand = lib.substring 0 3
-    (lib.concatStrings (lib.splitVersion ocaml.version));
+  ocamlVersionShorthand =
+    let
+      v = lib.splitVersion ocaml.version;
+      major = builtins.elemAt v 0;
+      minor = builtins.elemAt v 1;
+      minor_prefix = if builtins.stringLength minor < 2 then "0" else "";
+    in "${toString major}${minor_prefix}${toString minor}";
 
   version = "${merlinVersion}-${ocamlVersionShorthand}";
 in

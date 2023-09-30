@@ -8,33 +8,33 @@
 
 buildGoModule rec {
   pname = "mattermost";
-  version = "7.10.5";
+  version = "8.1.2";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-7R2ivfF0wC4Y5NMcBhcmbwwULuaTUTP7hq1idwYsLYs=";
-  };
+    hash = "sha256-hOt3xqrCs7akWyCv/6keiZN0ReF2adwiQNVibKFG3mk=";
+  } + "/server";
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-WTcQPXx9KYNDdA+cX46HWV2Cnq8ojUrsg0zn4IegR94=";
+    hash = "sha256-cIfUIGp51dyfmY3LnV+1F9CX+y5XyTCez6R8TLLz9fo=";
   };
 
-  vendorHash = "sha256-7YxbBmkKeb20a3BNllB3RtvjAJLZzoC2OBK4l1Ud1bw=";
+  vendorHash = "sha256-3OZUWg4e2h7g15FXxiFKk2EXceHP4phBTpyy/uY2Ni4=";
 
   subPackages = [ "cmd/mattermost" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/mattermost/mattermost-server/v6/model.Version=${version}"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildNumber=${version}-nixpkgs"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildDate=1970-01-01"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildHash=v${version}"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildHashEnterprise=v${version}"
-    "-X github.com/mattermost/mattermost-server/v6/model.BuildEnterpriseReady=false"
+    "-X github.com/mattermost/mattermost/server/public/model.Version=${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildNumber=${version}-nixpkgs"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildDate=1970-01-01"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHash=v${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildHashEnterprise=v${version}"
+    "-X github.com/mattermost/mattermost/server/public/model.BuildEnterpriseReady=false"
   ];
 
   postInstall = ''
