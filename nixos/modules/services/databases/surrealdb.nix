@@ -50,7 +50,7 @@ in {
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [ "--allow-all" "--auth" "--user root" "--pass root" ];
+        example = [ "--allow-all" "--auth" "--username root" "--password root" ];
         description = lib.mdDoc ''
           Specify a list of additional command line flags,
           which get escaped and are then passed to surrealdb.
