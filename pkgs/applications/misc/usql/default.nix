@@ -73,6 +73,7 @@ buildGoModule rec {
     homepage = "https://github.com/xo/usql";
     changelog = "https://github.com/xo/usql/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "usql";
     maintainers = with maintainers; [ georgyo anthonyroussel ];
     platforms = with platforms; linux ++ darwin;
   };
