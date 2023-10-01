@@ -1,0 +1,31 @@
+diff --git a/setup.py b/setup.py
+index 7ca6821..e0d270e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -14,25 +14,4 @@ See also:
+ """
+ from setuptools import setup
+ 
+-
+-# (1) check required versions (from https://medium.com/@daveshawley/safely-using-setup-cfg-for-metadata-1babbe54c108)
+-import pkg_resources
+-
+-pkg_resources.require("setuptools>=39.2")
+-pkg_resources.require("setuptools_scm")
+-
+-
+-# (2) Generate download url using git version
+-from setuptools_scm import get_version  # noqa: E402
+-
+-URL = "https://github.com/smarie/python-pytest-harvest"
+-DOWNLOAD_URL = URL + "/tarball/" + get_version()
+-
+-
+-# (3) Call setup() with as little args as possible
+-setup(
+-    download_url=DOWNLOAD_URL,
+-    use_scm_version={
+-        "write_to": "pytest_harvest/_version.py"
+-    },  # we can't put `use_scm_version` in setup.cfg yet unfortunately
+-)
++setup()
