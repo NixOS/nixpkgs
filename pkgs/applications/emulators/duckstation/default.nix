@@ -92,7 +92,8 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  doCheck = true;
+  #common-tests not found as of 2023-09-30
+  doCheck = false;
   checkPhase = ''
     runHook preCheck
     bin/common-tests
