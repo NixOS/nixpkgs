@@ -152,15 +152,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IuXhrZRB3o7kbnivv/6En/aAeF2F18sQw9pKs1WEJc4=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
-    # https://github.com/xianyi/OpenBLAS/pull/3626
-    (fetchpatch {
-      name = "openblas-0.3.21-fix-loong.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/openblas/files/openblas-0.3.21-fix-loong.patch?id=37ee4c70278eb41181f69e175575b0152b941655";
-      hash = "sha256-iWy11l3wEvzNV08LbhOjnSPj1SjPH8RMnb3ORz7V+gc";
-    })
-  ];
-
   postPatch = ''
     # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
     substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
