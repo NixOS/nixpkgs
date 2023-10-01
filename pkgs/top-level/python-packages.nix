@@ -9011,6 +9011,8 @@ self: super: with self; {
 
   pycarwings2 = callPackage ../development/python-modules/pycarwings2 { };
 
+  pycatch22 = callPackage ../development/python-modules/pycatch22 { };
+
   pycategories = callPackage ../development/python-modules/pycategories { };
 
   pycddl = callPackage ../development/python-modules/pycddl { };
@@ -13275,6 +13277,8 @@ self: super: with self; {
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
 
+  treelib = callPackage ../development/python-modules/treelib { };
+
   treelog = callPackage ../development/python-modules/treelog { };
 
   treeo = callPackage ../development/python-modules/treeo { };
@@ -13878,6 +13882,8 @@ self: super: with self; {
 
   wallbox = callPackage ../development/python-modules/wallbox { };
 
+  walrus = callPackage ../development/python-modules/walrus { };
+
   wand = callPackage ../development/python-modules/wand { };
 
   wandb = callPackage ../development/python-modules/wandb { };
@@ -14032,6 +14038,8 @@ self: super: with self; {
   wifi = callPackage ../development/python-modules/wifi { };
 
   wikipedia = callPackage ../development/python-modules/wikipedia { };
+
+  wikipedia-api = callPackage ../development/python-modules/wikipedia-api { };
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
 

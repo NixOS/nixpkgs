@@ -839,7 +839,7 @@ in {
   typesense = handleTest ./typesense.nix {};
   ucarp = handleTest ./ucarp.nix {};
   udisks2 = handleTest ./udisks2.nix {};
-  ulogd = handleTest ./ulogd.nix {};
+  ulogd = handleTest ./ulogd/ulogd.nix {};
   unbound = handleTest ./unbound.nix {};
   unifi = handleTest ./unifi.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
