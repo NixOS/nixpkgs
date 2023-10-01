@@ -9961,6 +9961,8 @@ with pkgs;
 
   lolcat = callPackage ../tools/misc/lolcat { };
 
+  lolcat-rs = callPackage ../tools/misc/lolcat-rs { };
+
   lottieconverter = callPackage ../tools/misc/lottieconverter { };
 
   loudgain = callPackage ../tools/audio/loudgain/default.nix { };
