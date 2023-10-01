@@ -1,0 +1,11 @@
+diff --git a/setup.cfg b/setup.cfg
+index 3280c08..24b71a4 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -1,5 +1,4 @@
+-[tool:pytest]
+-addopts = --showlocals --durations=20 --doctest-modules -rs --cov-report= --doctest-ignore-import-errors --cov=h5io
++
+ 
+ [flake8]
+ exclude = __init__.py,*externals*,constants.py
