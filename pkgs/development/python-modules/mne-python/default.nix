@@ -88,6 +88,6 @@ buildPythonPackage rec {
     homepage = "https://mne.tools";
     changelog = "https://mne.tools/stable/changes/v${version}.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin ];
+    maintainers = with maintainers; [ bcdarwin mbalatsko ];
   };
 }
