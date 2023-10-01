@@ -470,6 +470,7 @@ in rec {
     '';
 
     checkTargets = [ ];
+    isBroken = true; # ROCm 5.7.0 doesn't have IR/AttributeMask.h yet...?
   };
 
   lldb = callPackage ./llvm.nix rec {
