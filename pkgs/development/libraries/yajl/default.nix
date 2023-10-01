@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, which, testers }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yajl";
   version = "unstable-2022-04-20";
 
@@ -18,6 +18,13 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+  doCheck = true;
+  nativeCheckInputs = [ which ];
+
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "Yet Another JSON Library";
     longDescription = ''
@@ -26,7 +33,8 @@ stdenv.mkDerivation {
     '';
     homepage = "http://lloyd.github.com/yajl/";
     license = lib.licenses.isc;
+    pkgConfigModules = [ "yajl" ];
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ maggesi ];
   };
-}
+})
