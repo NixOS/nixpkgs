@@ -1,6 +1,5 @@
 { stdenv
 , fetchurl
-, fetchpatch
 , lib
 , substituteAll
 , pam
@@ -214,18 +213,11 @@ in stdenv.mkDerivation (finalAttrs: {
     tar -xf ${srcs.translations}
   '';
 
-  # Remove build config to reduce the amount of `-dev` outputs in the
-  # runtime closure. This was introduced in upstream commit
-  # cbfac11330882c7d0a817b6c37a08b2ace2b66f4, so the patch doesn't apply
-  # for 7.4.
-  patches = lib.optionals (lib.versionAtLeast version "7.5") [
+  patches = [
+    # Remove build config to reduce the amount of `-dev` outputs in the
+    # runtime closure. This behavior was introduced by upstream in commit
+    # cbfac11330882c7d0a817b6c37a08b2ace2b66f4
     ./0001-Strip-away-BUILDCONFIG.patch
-  ] ++ [
-    (fetchpatch {
-      name = "fix-curl-8.2.patch";
-      url = "https://github.com/LibreOffice/core/commit/2a68dc02bd19a717d3c86873206fabed1098f228.diff";
-      hash = "sha256-C+kts+oaLR3+GbnX/wrFguF7SzgerNataxP0SPxhyY8=";
-    })
   ];
 
   # libreoffice tries to reference the BUILDCONFIG (e.g. PKG_CONFIG_PATH)
@@ -410,13 +402,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
     cp -r sysui/desktop/icons  "$out/share"
     sed -re 's@Icon=libreoffice(dev)?[0-9.]*-?@Icon=@' -i "$out/share/applications/"*.desktop
-
-    # Install dolphin templates, like debian does
-    install -D extras/source/shellnew/soffice.* --target-directory="$out/share/templates/.source"
-    cp ${substituteAll {src = ./soffice-template.desktop; app="Writer";  ext="odt"; type="text";        }} $out/share/templates/soffice.odt.desktop
-    cp ${substituteAll {src = ./soffice-template.desktop; app="Calc";    ext="ods"; type="spreadsheet"; }} $out/share/templates/soffice.ods.desktop
-    cp ${substituteAll {src = ./soffice-template.desktop; app="Impress"; ext="odp"; type="presentation";}} $out/share/templates/soffice.odp.desktop
-    cp ${substituteAll {src = ./soffice-template.desktop; app="Draw";    ext="odg"; type="drawing";     }} $out/share/templates/soffice.odg.desktop
   '';
 
   # Wrapping is done in ./wrapper.nix
@@ -479,11 +464,15 @@ in stdenv.mkDerivation (finalAttrs: {
     "--without-system-libqxp"
     "--without-system-dragonbox"
     "--without-system-libfixmath"
+  # the "still" variant doesn't support Nixpkgs' mdds 2.1, only mdds 2.0
+  ] ++ optionals (variant == "still") [
+    "--without-system-mdds"
+  ] ++ optionals (variant == "fresh") [
     "--with-system-mdds"
+  ] ++ [
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
     "--without-system-xmlsec"
-    "--without-system-cuckoo"
     "--without-system-zxing"
   ] ++ optionals kdeIntegration [
     "--enable-kf5"
