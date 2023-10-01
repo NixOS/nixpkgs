@@ -5,6 +5,7 @@ use anyhow::{anyhow, bail};
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
+    cmp,
     collections::HashMap,
     env, fs,
     path::{Path, PathBuf},
@@ -185,13 +186,16 @@ fn main() -> anyhow::Result<()> {
         process::exit(1);
     }
 
-    if let Ok(jobs) = env::var("NIX_BUILD_CORES") {
-        if !jobs.is_empty() {
+    if let Ok(jobs_str) = env::var("NIX_BUILD_CORES") {
+        if !jobs_str.is_empty() {
+            let jobs = cmp::min(
+                4,
+                jobs_str
+                    .parse()
+                    .expect("NIX_BUILD_CORES must be a whole number"),
+            );
             rayon::ThreadPoolBuilder::new()
-                .num_threads(
-                    jobs.parse()
-                        .expect("NIX_BUILD_CORES must be a whole number"),
-                )
+                .num_threads(jobs)
                 .build_global()
                 .unwrap();
         }
