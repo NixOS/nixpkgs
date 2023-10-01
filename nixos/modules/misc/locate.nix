@@ -6,13 +6,20 @@ let
   cfg = config.services.locate;
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isPLocate = hasPrefix "plocate" cfg.locate.name;
-  isMorPLocate = (isMLocate || isPLocate);
+  isMorPLocate = isMLocate || isPLocate;
   isFindutils = hasPrefix "findutils" cfg.locate.name;
+  boolToStr = bool:
+    if bool then "yes" else "no";
+  autoRun = cfg.interval != "never";
+  dir = "/var/cache/locate"; # it gets its own directory in which it can do whatever it wants
+  db = "${dir}/locatedb";
+
 in
 {
   imports = [
     (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
     (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths")
+    (mkRemovedOptionModule [ "services" "locate" "output" ] "Systemd manages the path now")
   ];
 
   options.services.locate = with types; {
@@ -56,14 +63,6 @@ in
       default = [ ];
       description = lib.mdDoc ''
         Extra flags to pass to {command}`updatedb`.
-      '';
-    };
-
-    output = mkOption {
-      type = path;
-      default = "/var/cache/locatedb";
-      description = lib.mdDoc ''
-        The database file to build.
       '';
     };
 
@@ -210,42 +209,39 @@ in
 
     security.wrappers =
       let
-        common = {
+        common = attrs: {
+          source = lib.getExe cfg.locate;
           owner = "root";
           permissions = "u+rx,g+x,o+x";
           setgid = true;
           setuid = false;
-        };
-        mlocate = (mkIf isMLocate {
+        } // attrs;
+        mlocate = common {
           group = "mlocate";
-          source = "${cfg.locate}/bin/locate";
-        });
-        plocate = (mkIf isPLocate {
+        };
+        plocate = common {
           group = "plocate";
-          source = "${cfg.locate}/bin/plocate";
-        });
+        };
       in
       mkIf isMorPLocate {
-        locate = mkMerge [ common mlocate plocate ];
-        plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
+        locate = if isMLocate then mlocate else plocate;
+        plocate = mkIf isPLocate plocate;
       };
 
-    nixpkgs.config = { locate.dbfile = cfg.output; };
+    nixpkgs.config = { locate.dbfile = db; };
 
-    environment.systemPackages = [ cfg.locate ];
-
-    environment.variables = mkIf (!isMorPLocate) { LOCATE_PATH = cfg.output; };
-
-    environment.etc = {
+    environment = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
-      "updatedb.conf" = {
-        text = ''
-          PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
-          PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
-          PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
-          PRUNE_BIND_MOUNTS="${if cfg.pruneBindMounts then "yes" else "no"}"
-        '';
-      };
+      etc."updatedb.conf".text = ''
+        PRUNEFS="${lib.concatStringsSep " " cfg.pruneFS}"
+        PRUNENAMES="${lib.concatStringsSep " " cfg.pruneNames}"
+        PRUNEPATHS="${lib.concatStringsSep " " cfg.prunePaths}"
+        PRUNE_BIND_MOUNTS="${boolToStr cfg.pruneBindMounts}"
+      '';
+
+      systemPackages = [ cfg.locate ];
+
+      variables = mkIf (!isMorPLocate) { LOCATE_PATH = db; };
     };
 
     warnings = optional (isMorPLocate && cfg.localuser != null)
@@ -271,41 +267,53 @@ in
           in
           ''
             exec ${cfg.locate}/bin/updatedb \
-              --output ${toString cfg.output} ${concatStringsSep " " args} \
-              --prune-bind-mounts ${if cfg.pruneBindMounts then "yes" else "no"} \
+              --output ${db} ${concatStringsSep " " args} \
+              --prune-bind-mounts ${boolToStr cfg.pruneBindMounts} \
               ${concatStringsSep " " cfg.extraFlags}
           ''
         else ''
           exec ${cfg.locate}/bin/updatedb \
-            ${optionalString (cfg.localuser != null && !isMorPLocate) "--localuser=${cfg.localuser}"} \
-            --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
+            ${optionalString (cfg.localuser != null) "--localuser=${cfg.localuser}"} \
+            --output=${db} ${concatStringsSep " " cfg.extraFlags}
         '';
       environment = optionalAttrs (!isMorPLocate) {
         PRUNEFS = concatStringsSep " " cfg.pruneFS;
         PRUNEPATHS = concatStringsSep " " cfg.prunePaths;
         PRUNENAMES = concatStringsSep " " cfg.pruneNames;
-        PRUNE_BIND_MOUNTS = if cfg.pruneBindMounts then "yes" else "no";
+        PRUNE_BIND_MOUNTS = boolToStr cfg.pruneBindMounts;
       };
-      serviceConfig.Nice = 19;
-      serviceConfig.IOSchedulingClass = "idle";
-      serviceConfig.PrivateTmp = "yes";
-      serviceConfig.PrivateNetwork = "yes";
-      serviceConfig.NoNewPrivileges = "yes";
-      serviceConfig.ReadOnlyPaths = "/";
-      # Use dirOf cfg.output because mlocate creates temporary files next to
-      # the actual database. We could specify and create them as well,
-      # but that would make this quite brittle when they change something.
-      # NOTE: If /var/cache does not exist, this leads to the misleading error message:
-      # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
-      serviceConfig.ReadWritePaths = dirOf cfg.output;
+
+      unitConfig.ConditionACPower = true;
+
+      serviceConfig = {
+        Nice = 19;
+        CPUSchedulingPolicy = "idle";
+        IOSchedulingClass = "idle";
+        PrivateDevices = true;
+        PrivateTmp = true;
+        PrivateNetwork = true;
+        NoNewPrivileges = true;
+        ProtectHome = "read-only";
+        ProtectSystem = "strict";
+        CacheDirectory = baseNameOf dir;
+      };
     };
 
-    systemd.timers.update-locatedb = mkIf (cfg.interval != "never") {
-      description = "Update timer for locate database";
+    systemd.timers.update-locatedb = mkIf autoRun {
+      inherit (config.systemd.services.update-locatedb) description;
       partOf = [ "update-locatedb.service" ];
       wantedBy = [ "timers.target" ];
-      timerConfig.OnCalendar = cfg.interval;
+      timerConfig = {
+        OnCalendar = cfg.interval;
+        Persistent = true;
+      };
     };
+
+    system.activationScripts.locate.text = mkIf autoRun ''
+      if [ ! -f ${db} ]; then
+        ${lib.getBin pkgs.systemd}/bin/systemctl start update-locatedb.service --no-block
+      fi
+    '';
   };
 
   meta.maintainers = with lib.maintainers; [ SuperSandro2000 ];
