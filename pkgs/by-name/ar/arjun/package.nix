@@ -11,13 +11,13 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "s0md3v";
     repo = "Arjun";
-    rev = version;
+    rev = "refs/tags/${version});
     hash = "sha256-YxfUlD7aBwoYYsZE0zTZxoXg1TgU2yT1V+mglmsXtlo=";
   };
 
-  nativeBuildInputs = [
-    python3.pkgs.setuptools
-    python3.pkgs.wheel
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    wheel
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -25,12 +25,17 @@ python3.pkgs.buildPythonApplication rec {
     dicttoxml
   ];
 
-  pythonImportsCheck = [ "arjun" ];
+  # Project has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "arjun"
+  ];
 
   meta = with lib; {
     description = "HTTP parameter discovery suite";
     homepage = "https://github.com/s0md3v/Arjun";
-    changelog = "https://github.com/s0md3v/Arjun/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/s0md3v/Arjun/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ octodi ];
     mainProgram = "arjun";
