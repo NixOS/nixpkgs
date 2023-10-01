@@ -16,9 +16,19 @@ npmInstallHook() {
         cp "${npmWorkspace-.}/$file" "$dest"
     done < <(@jq@ --raw-output '.[0].files | map(.path) | join("\n")' <<< "$(npm pack --json --dry-run ${npmWorkspace+--workspace=$npmWorkspace} $npmPackFlags "${npmPackFlagsArray[@]}" $npmFlags "${npmFlagsArray[@]}")")
 
+    # Based on code from Python's buildPythonPackage wrap.sh script, for
+    # supporting both the case when makeWrapperArgs is an array and a
+    # IFS-separated string.
+    #
+    # TODO: remove the string branch when __structuredAttrs are used.
+    if [[ "${makeWrapperArgs+defined}" == "defined" && "$(declare -p makeWrapperArgs)" =~ ^'declare -a makeWrapperArgs=' ]]; then
+        local -a user_args=("${makeWrapperArgs[@]}")
+    else
+        local -a user_args="(${makeWrapperArgs:-})"
+    fi
     while IFS=" " read -ra bin; do
         mkdir -p "$out/bin"
-        makeWrapper @hostNode@ "$out/bin/${bin[0]}" --add-flags "$packageOut/${bin[1]}"
+        makeWrapper @hostNode@ "$out/bin/${bin[0]}" --add-flags "$packageOut/${bin[1]}" "${user_args[@]}"
     done < <(@jq@ --raw-output '(.bin | type) as $typ | if $typ == "string" then
         .name + " " + .bin
         elif $typ == "object" then .bin | to_entries | map(.key + " " + .value) | join("\n")
