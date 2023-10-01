@@ -11,6 +11,11 @@ stdenv.mkDerivation {
     hash = "sha256-9bMPA5FpyBp8fvG/kkT/MnhYtdqg3QzOnmDFXKwJVW0=";
   };
 
+  patches = [
+    # https://github.com/containers/yajl/pull/1
+    ./cmake-shared-static-fix.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   meta = {
