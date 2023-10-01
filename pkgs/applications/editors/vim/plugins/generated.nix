@@ -15799,7 +15799,7 @@ final: prev:
       owner = "piersolenski";
       repo = "wtf.nvim";
       rev = "3247bf923e93fb0b65920beb60b10778461d1234";
-      sha256 = "";
+      sha256 = "0505aybxfhf0kagyf2x4g08l9bh4ykxk859y7zci6n4dw8sqxgnf";
     };
     meta.homepage = "https://github.com/piersolenski/wtf.nvim/";
   };
