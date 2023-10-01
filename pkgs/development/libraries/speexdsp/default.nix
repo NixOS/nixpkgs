@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, fftw }:
+{ lib
+, stdenv
+, fetchurl
+, autoreconfHook
+, pkg-config
+, fftw
+, withFftw3 ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "speexdsp";
@@ -15,11 +22,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ fftw ];
+  buildInputs = lib.optionals withFftw3 [ fftw ];
 
-  configureFlags = [
-    "--with-fft=gpl-fftw3"
-  ] ++ lib.optional stdenv.isAarch64 "--disable-neon";
+  configureFlags = lib.optionals withFftw3 [ "--with-fft=gpl-fftw3" ]
+    ++ lib.optional stdenv.isAarch64 "--disable-neon";
 
   meta = with lib; {
     homepage = "https://www.speex.org/";
