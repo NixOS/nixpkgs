@@ -6624,6 +6624,8 @@ self: super: with self; {
 
   mediafile = callPackage ../development/python-modules/mediafile { };
 
+  mediafire-dl = callPackage ../development/python-modules/mediafire-dl { };
+
   mediapy = callPackage ../development/python-modules/mediapy { };
 
   meeko = callPackage ../development/python-modules/meeko { };
