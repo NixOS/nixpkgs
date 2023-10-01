@@ -9487,7 +9487,7 @@ self: super: with self; {
   # Protobuf 4.x
   protobuf = callPackage ../development/python-modules/protobuf {
     # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-    inherit (pkgs) protobuf;
+    protobuf = pkgs.protobuf_24;
   };
 
   # Protobuf 3.x
