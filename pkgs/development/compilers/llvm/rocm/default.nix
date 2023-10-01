@@ -475,7 +475,7 @@ in rec {
 
   lldb = callPackage ./llvm.nix rec {
     stdenv = rocmClangStdenv;
-    buildTests = false; # ld.lld: error: unable to find library -lllvm_gtest_main
+    buildTests = false; # FIXME: Bad pathing for clang executable in tests, using relative path most likely
     targetName = "lldb";
     targetDir = targetName;
     extraNativeBuildInputs = [ python3Packages.sphinx-automodapi ];
