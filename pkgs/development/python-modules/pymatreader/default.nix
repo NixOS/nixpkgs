@@ -1,0 +1,43 @@
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, h5py
+, numpy
+, scipy
+, xmltodict
+, pytestCheckHook
+}:
+
+buildPythonPackage rec {
+  pname = "pymatreader";
+  version = "0.0.31";
+  format = "setuptools";
+
+  src = fetchFromGitLab {
+    owner = "obob";
+    repo = "pymatreader";
+    rev = "v${version}";
+    hash = "sha256-pYObmvqA49sHjpZcwXkN828R/N5CSpmr0OyyxzDiodQ=";
+  };
+
+  propagatedBuildInputs = [
+    h5py
+    numpy
+    scipy
+    xmltodict
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "pymatreader" ];
+
+  meta = with lib; {
+    description = "A python package to read all kinds and all versions of Matlab mat files";
+    homepage = "https://gitlab.com/obob/pymatreader/";
+    changelog = "https://gitlab.com/obob/pymatreader/-/blob/${src.rev}/CHANGELOG.md";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ mbalatsko ];
+  };
+}
