@@ -95,6 +95,7 @@ let
     openssh
     pmutils
     systemd
+    mdevctl
   ] ++ lib.optionals enableIscsi [
     libiscsi
     openiscsi
