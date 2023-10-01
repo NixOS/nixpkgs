@@ -2724,9 +2724,12 @@ let
         description = lib.mdDoc ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
           This is useful on portable machines with a wired and a wireless interface, for example.
+
+          This is on by default if {option}`networking.useDHCP` is enabled.
         '';
         type = types.bool;
-        default = false;
+        defaultText = "config.networking.useDHCP";
+        default = config.networking.useDHCP;
       };
 
       ignoredInterfaces = mkOption {
