@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
     homepage = "http://catchenlab.life.illinois.edu/stacks/";
     maintainers = [ lib.maintainers.bzizou ];
     license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
   };
 }
