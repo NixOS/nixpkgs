@@ -2371,12 +2371,12 @@
   };
   vim = buildGrammar {
     language = "vim";
-    version = "0.0.0+rev=77e9e96";
+    version = "0.0.0+rev=32c76f1";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "tree-sitter-vim";
-      rev = "77e9e96c2ae5cff7343ce3dced263483acf95793";
-      hash = "sha256-YGE/up7TE1+a6FrN8iEeHbAJr6kEMcWLMPaeyQRRVLs=";
+      rev = "32c76f150347c1cd044e90b8e2bc73c00677fa55";
+      hash = "sha256-14lkrGZ5JpbPvb5Pm2UzLodhO1IEz5rBETTU0RZDFc4=";
     };
     meta.homepage = "https://github.com/neovim/tree-sitter-vim";
   };
@@ -2426,12 +2426,12 @@
   };
   wing = buildGrammar {
     language = "wing";
-    version = "0.0.0+rev=fac3f72";
+    version = "0.0.0+rev=602c8e5";
     src = fetchFromGitHub {
       owner = "winglang";
       repo = "wing";
-      rev = "fac3f72d80d379fea61d1eca782cb99ac6d78b62";
-      hash = "sha256-/PIqwqG5h2iFVzpTTlXOrAKEDNctcxRHIhGyv5jlkIw=";
+      rev = "602c8e51c4721a32cafaac0d1889a73de066e2f0";
+      hash = "sha256-vZjkYctoBNQfwIc08EybGKluKcAr6PmsgafcawGas08=";
     };
     location = "libs/tree-sitter-wing";
     generate = true;
