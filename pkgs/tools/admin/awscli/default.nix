@@ -3,6 +3,9 @@
 , fetchPypi
 , groff
 , less
+, nix-update-script
+, testers
+, awscli
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -37,10 +40,6 @@ python3.pkgs.buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru = {
-    python = python3; # for aws_shell
-  };
-
   doInstallCheck = true;
 
   installCheckPhase = ''
@@ -51,6 +50,19 @@ python3.pkgs.buildPythonApplication rec {
 
     runHook postInstallCheck
   '';
+
+  passthru = {
+    python = python3; # for aws_shell
+    updateScript = nix-update-script {
+      # Excludes 1.x versions from the Github tags list
+      extraArgs = [ "--version-regex" "^(1\.(.*))" ];
+    };
+    tests.version = testers.testVersion {
+      package = awscli;
+      command = "aws --version";
+      inherit version;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://aws.amazon.com/cli/";
