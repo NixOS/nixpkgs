@@ -1,8 +1,6 @@
-{ lib, stdenv, fetchurl, config }:
+{ lib, stdenv, fetchurl, config, dbfile ? config.locate.dbfile or "/var/cache/locatedb" }:
 
-let
-  dbfile = lib.attrByPath [ "locate" "dbfile" ] "/var/cache/locatedb" config;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "mlocate";
   version = "0.26";
 

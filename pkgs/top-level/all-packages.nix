@@ -27666,7 +27666,6 @@ with pkgs;
       inherit (buildPackages.darwin) bootstrap_cmds;
       udev = if stdenv.isLinux then udev else null;
       libdrm = if stdenv.isLinux then libdrm else null;
-      abiCompat = config.xorg.abiCompat or null; # `config` because we have no `xorg.override`
     };
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
@@ -35614,9 +35613,7 @@ with pkgs;
 
   lightdm-mobile-greeter = callPackage ../applications/display-managers/lightdm-mobile-greeter { };
 
-  lightdm-tiny-greeter = callPackage ../applications/display-managers/lightdm-tiny-greeter {
-    conf = config.lightdm-tiny-greeter.conf or "";
-  };
+  lightdm-tiny-greeter = callPackage ../applications/display-managers/lightdm-tiny-greeter { };
 
   ly = callPackage ../applications/display-managers/ly { };
 
