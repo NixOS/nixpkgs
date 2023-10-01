@@ -7,20 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.29.9"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.29.57"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8SmOu79FZESL1Hd15wdd1m1Uewswqaum2y8LOZAl9P8=";
+    hash = "sha256-+xME5GiDitxn61yrIkiEByx/xeMeXMrVS2rifIX6Ci8=";
   };
 
-  # https://github.com/aws/aws-cli/issues/4837
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "docutils>=0.10,<0.17" "docutils>=0.10" \
-      --replace "colorama>=0.2.5,<0.4.5" "colorama>=0.2.5,<0.5" \
-      --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
-  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     botocore
