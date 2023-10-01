@@ -2147,8 +2147,6 @@ self: super: with self; {
 
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
 
-  cntk = callPackage ../development/python-modules/cntk { };
-
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
   co2signal = callPackage ../development/python-modules/co2signal { };
