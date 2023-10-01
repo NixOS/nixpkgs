@@ -1,14 +1,13 @@
-{ lib, fetchgit, rustPlatform }:
+{ lib, fetchCrate, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lolcat-rs";
   version = "1.5.0";
 
-  src = fetchgit {
-    # owner = "ur0";
-    url = "https://github.com/ur0/lolcat.git";
-    rev = "9621f625e1d4e7b3294facdc7a2c1cf866af722e";
-    hash = "sha256-zy8BD2F49H5jdHxMMlqUJQkHePkrApRL088xC79oP5g=";
+  src = fetchCrate {
+    crateName = "lolcat";
+    inherit version;
+    hash = "sha256-RVYmBfF9BlS9WSBcnptlgZ2nF7b7NC+58cZMHVX7SxQ=";
   };
 
   cargoHash = "sha256-hfcQsB4c+0/BmAV7Q0NUcGjedc35teDGRv5fDyyvp2c=";
