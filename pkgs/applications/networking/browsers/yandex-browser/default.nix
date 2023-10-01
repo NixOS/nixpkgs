@@ -51,7 +51,7 @@
 
 stdenv.mkDerivation rec {
   pname = "yandex-browser";
-  version = "23.7.1.1148-1";
+  version = "23.9.1.837-1";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
