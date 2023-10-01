@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , installShellFiles
 , externalPlugins ? []
-, vendorHash ? "sha256-TvIswNQ7DL/MtYmMSxXf+VqKHcmzZVZwohOCvRWxBkY="
+, vendorHash ? "sha256-tp22jj6DNnYFQhtAFW2uLo10ty//dyNqIDH2egDgbOw="
 }:
 
 let
@@ -14,13 +14,13 @@ let
     builtins.map ({name, repo, version}: "${repo}@${version}") attrs;
 in buildGoModule rec {
   pname = "coredns";
-  version = "1.11.0";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
     rev = "v${version}";
-    sha256 = "sha256-Mn8hOsODTlnl6PJaevMcyIKkIx/1Lk2HGA7fSSizR20=";
+    sha256 = "sha256-XZoRN907PXNKV2iMn51H/lt8yPxhPupNfJ49Pymdm9Y=";
   };
 
   inherit vendorHash;

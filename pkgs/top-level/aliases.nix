@@ -1254,6 +1254,8 @@ mapAliases ({
   ocropus = throw "ocropus has been removed: abandoned by upstream"; # Added 2022-04-24
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set"; # Added 2021-01-24
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # Added 2021-07-12
+  octant = throw "octant has been dropped due to being archived and vulnerable"; # Added 2023-09-29
+  octant-desktop = throw "octant-desktop has been dropped due to being archived and vulnerable"; # Added 2023-09-29
   odpdown = throw "odpdown has been removed because it lacks python3 support"; # Added 2022-04-25
   ofp = throw "ofp is not compatible with odp-dpdk";
   ogre1_9 = throw "ogre1_9 has been removed, use ogre instead"; # Added 2023-03-22
@@ -1721,6 +1723,7 @@ mapAliases ({
   ssmtp = throw "'ssmtp' has been removed due to the software being unmaintained. 'msmtp' can be used as a replacement"; # Added 2022-04-17
   ssr = throw "ssr has been removed, because it was unmaintained in nixpkgs and depended on qt4"; # Added 2022-05-26
   stanchion = throw "Stanchion was part of riak-cs which is not maintained anymore"; # added 2020-10-14
+  starboard-octant-plugin = throw "starboard-octant-plugin has been dropped due to needing octant which is archived"; # Added 2023-09-29
   steam-run-native = steam-run; # added 2022-02-21
   stride = throw "'stride' aka. Atlassian Stride is dead since 2019 (bought by Slack)"; # added 2022-06-15
   structure-synth = throw "structure-synth has been removed, because it was unmaintained"; # Added 2022-05-09
