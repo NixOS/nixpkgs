@@ -964,6 +964,8 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
+    lun = callPackage ../development/ocaml-modules/lun { };
+
     lustre-v6 = callPackage ../development/ocaml-modules/lustre-v6 { };
 
     lutils = callPackage ../development/ocaml-modules/lutils { };
