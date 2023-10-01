@@ -413,6 +413,8 @@ in {
 
     mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { };
 
+    nct6687d = callPackage ../os-specific/linux/nct6687d { };
+
     new-lg4ff = callPackage ../os-specific/linux/new-lg4ff { };
 
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
