@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation {
   pname = "duckstation";
-  version = "unstable-2023-04-14";
+  version = "unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "stenzek";
     repo = "duckstation";
-    rev = "5fee6f5abee7f3aad65da5523e57896e10e2a53a";
-    sha256 = "sha256-sRs/b4GVXhF3zrOef8DSBKJJGYECUER/nNWZAqv7suA=";
+    rev = "d5608bf12df7a7e03750cb94a08a3d7999034ae2";
+    hash = "sha256-ktfZgacjkN6GQb1vLmyTZMr8QmmH12qAvFSIBTjgRSs=";
   };
 
   nativeBuildInputs = [
