@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "yajl";
-  version = "2.1.0";
+  version = "unstable-2022-04-20";
 
   src = fetchFromGitHub {
-    owner = "lloyd";
+    owner = "containers";
     repo = "yajl";
-    rev = "refs/tags/${version}";
-    sha256 = "00yj06drb6izcxfxfqlhimlrb089kka0w0x8k27pyzyiq7qzcvml";
+    rev = "49923ccb2143e36850bcdeb781e2bcdf5ce22f15";
+    hash = "sha256-9bMPA5FpyBp8fvG/kkT/MnhYtdqg3QzOnmDFXKwJVW0=";
   };
 
   nativeBuildInputs = [ cmake ];
