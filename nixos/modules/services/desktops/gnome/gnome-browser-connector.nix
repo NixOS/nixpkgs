@@ -42,6 +42,6 @@ in
 
     services.dbus.packages = [ pkgs.gnome-browser-connector ];
 
-    nixpkgs.config.firefox.enableGnomeExtensions = true;
+    programs.firefox.wrapperConfig.enableGnomeExtensions = true;
   };
 }

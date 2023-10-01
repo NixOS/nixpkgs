@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "godns";
-  version = "2.9.9";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = "TimothyYe";
     repo = "godns";
     rev = "refs/tags/v${version}";
-    hash = "sha256-R5f2h8bodP/9MP5gqGWBEbC/rLPEV4gEDoc5sMgmoLs=";
+    hash = "sha256-MmjPcJxz8wAgBwPg8UaYVniypDeY05yDxehkTL8zjro=";
   };
 
   vendorHash = "sha256-iAU62/0MjzxwuMvIobhIZEqDJUpRqwEabnazH7jBRTE=";

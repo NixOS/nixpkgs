@@ -1472,6 +1472,7 @@ mapAliases ({
   protobuf3_7 = throw "protobuf3_7 does not receive updates anymore and has been removed"; # Added 2022-10-03
   protobuf3_11 = throw "protobuf3_11 does not receive updates anymore and has been removed"; # Added 2022-09-28
   protobuf3_17 = throw "protobuf3_17 does not receive updates anymore and has been removed"; # Added 2023-05-21
+  protobuf3_19 = throw "protobuf3_19 does not receive updates anymore and has been removed"; # Added 2023-10-01
   protonup = protonup-ng; # Added 2022-11-06
   proxmark3-rrg = proxmark3; # Added 2023-07-25
   proxmark3-unstable = throw "removed in favor of rfidresearchgroup fork"; # Added 2023-07-25

@@ -12943,6 +12943,13 @@
       fingerprint = "939E F8A5 CED8 7F50 5BB5  B2D0 24BC 2738 5F70 234F";
     }];
   };
+  octodi = {
+    name = "octodi";
+    email = "octodi@proton.me";
+    matrix = "@octodi:matrix.org";
+    github = "octodi";
+    githubId = 127038896;
+  };
   oddlama = {
     email = "oddlama@oddlama.org";
     github = "oddlama";
