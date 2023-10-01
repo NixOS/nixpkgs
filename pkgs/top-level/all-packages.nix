@@ -10280,12 +10280,6 @@ with pkgs;
   nodejs-slim = nodejs-slim_18;
   corepack = hiPrio corepack_18;
 
-  nodejs_14 = callPackage ../development/web/nodejs/v14.nix { openssl = openssl_1_1; };
-  nodejs-slim_14 = callPackage ../development/web/nodejs/v14.nix {
-    openssl = openssl_1_1;
-    enableNpm = false;
-  };
-
   nodejs_16 = callPackage ../development/web/nodejs/v16.nix { };
   nodejs-slim_16 = callPackage ../development/web/nodejs/v16.nix { enableNpm = false; };
 

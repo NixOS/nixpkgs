@@ -600,7 +600,9 @@ mapAliases ({
   nixopsUnstable = nixops_unstable; # Added 2022-03-03
   nixosTest = testers.nixosTest; # Added 2022-05-05
   nmap-unfree = nmap; # Added 2021-04-06
+  nodejs_14 = throw "nodejs_14 has been removed. Use a newer version instead."; # Added 2023-10-01
   nodejs-14_x = nodejs_14; # Added 2022-11-06
+  nodejs-slim_14 = throw "nodejs-slim_14 has been removed. Use a newer version instead."; # Added 2023-10-01
   nodejs-slim-14_x = nodejs-slim_14; # Added 2022-11-06
   nodejs-16_x = nodejs_16; # Added 2022-11-06
   nodejs-16_x-openssl_1_1 = throw "nodejs-16_x-openssl_1_1 has been removed."; # Added 2023-02-04
