@@ -12,7 +12,9 @@ let
     pkgs = releaseLib.pkgsForCross crossSystem system;
   };
 in lib.mapAttrs (n: make) (with lib.systems.examples; {
-  # Sort following the sorting in `pkgs/stdenv/linux/default.nix` `bootstrapFiles` argument.
+  # NOTE: Only add platforms for which there are files in `./bootstrap-files`.
+  # Sort following the sorting in `./default.nix` `bootstrapFiles` argument.
+
   armv5tel   = sheevaplug;
   armv6l     = raspberryPi;
   armv7l     = armv7l-hf-multiplatform;
