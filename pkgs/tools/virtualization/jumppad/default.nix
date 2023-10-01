@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "jumppad";
-  version = "0.5.38";
+  version = "0.5.51";
 
   src = fetchFromGitHub {
     owner = "jumppad-labs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-s779QQ1fzVKFIMoj7X3MLLo1Z3NBSGPoKoDi3xM0fr8=";
+    hash = "sha256-Az/rNkGwwrYZfay+KjINjIT2PNsoGDNCwZnXZTeKqM4=";
   };
-  vendorHash = "sha256-37j7taSmWhs9NQbv41aljR07HCTRrLd3ddiktV/XKBs=";
+  vendorHash = "sha256-onUs7ZbnzJGbs+Q+1jvqUp9y9ecOxhtcdx/fkxZntmc=";
 
   ldflags = [
     "-s" "-w" "-X main.version=${version}"

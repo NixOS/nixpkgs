@@ -68,7 +68,9 @@ edk2 = stdenv.mkDerivation rec {
 
   makeFlags = [ "-C BaseTools" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type"
+    + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
+    + lib.optionalString (stdenv.isDarwin) " -Wno-error=macro-redefined";
 
   hardeningDisable = [ "format" "fortify" ];
 
