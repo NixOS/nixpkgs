@@ -872,6 +872,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreServices;
   };
 
+  auditok = callPackage ../development/python-modules/auditok { };
+
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
   };
