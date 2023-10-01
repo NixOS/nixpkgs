@@ -3,21 +3,26 @@
 , fetchFromGitHub
 , setuptools
 , pandas
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pycatch22";
   version = "0.4.3";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "DynamicsAndNeuralSystems";
     repo = "pycatch22";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-wjMklOzU9I3Y2HdZ+rOTiffoKda+6X9zwDsmB+HXrSY=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   nativeCheckInputs = [
     pandas
@@ -32,7 +37,10 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-  pythonImportsCheck = [ "pycatch22" ];
+
+  pythonImportsCheck = [
+    "pycatch22"
+  ];
 
   meta = with lib; {
     description = "Python implementation of catch22";
