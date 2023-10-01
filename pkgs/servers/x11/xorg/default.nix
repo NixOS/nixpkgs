@@ -698,11 +698,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fonttosfnt = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
     pname = "fonttosfnt";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/fonttosfnt-1.2.2.tar.bz2";
-      sha256 = "0r1s43ypy0a9z6hzdq5y02s2acj965rax4flwdyylvc54ppv86qs";
+      url = "mirror://xorg/individual/app/fonttosfnt-1.2.3.tar.xz";
+      sha256 = "1bv1glfz4jqvkwx8hmv2vqilvxxl6jww3rvbzv6zbl6b83r96yma";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
