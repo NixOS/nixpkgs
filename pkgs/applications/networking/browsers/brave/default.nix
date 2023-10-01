@@ -150,6 +150,9 @@ stdenv.mkDerivation rec {
       substituteInPlace $out/opt/brave.com/brave/default-app-block \
           --replace /opt/brave.com $out/opt/brave.com
 
+      # Fix permissions
+      chmod +x $out/share/applications/brave-browser.desktop
+
       # Correct icons location
       icon_sizes=("16" "24" "32" "48" "64" "128" "256")
 
