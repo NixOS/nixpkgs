@@ -9451,6 +9451,8 @@ self: super: with self; {
 
   pykaleidescape = callPackage ../development/python-modules/pykaleidescape { };
 
+  pykalman = callPackage ../development/python-modules/pykalman { };
+
   pykdl = callPackage ../development/python-modules/pykdl { };
 
   pykdtree = callPackage ../development/python-modules/pykdtree {
@@ -11210,7 +11212,7 @@ self: super: with self; {
 
   rawkit = callPackage ../development/python-modules/rawkit { };
 
-  ray = callPackage ../development/python-modules/ray { redis = pkgs.redis; };
+  ray = callPackage ../development/python-modules/ray { };
 
   razdel = callPackage ../development/python-modules/razdel { };
 
