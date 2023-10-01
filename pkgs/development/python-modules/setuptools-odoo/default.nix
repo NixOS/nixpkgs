@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "setuptools-odoo";
-  version = "3.2.0";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "acsone";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-+jrO6RJ838ewOHz2pCoIJN9U0bRlQqUPWDvEffxW+n0=";
+    hash = "sha256-aS2a1G9lssgGk3uqWgPPWpOpEnqUkCUzWsqPLQfU55k=";
   };
 
   propagatedBuildInputs = [
