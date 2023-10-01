@@ -2,6 +2,7 @@
 , pkgs
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , redis
 , unittestCheckHook
 }:
@@ -11,10 +12,12 @@ buildPythonPackage rec {
   version = "0.9.3";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = "walrus";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-jinYMGSBAY8HTg92qU/iU5vGIrrDr5SeQG0XjsBVfcc=";
   };
 
@@ -22,7 +25,9 @@ buildPythonPackage rec {
     redis
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
   preCheck = ''
     ${pkgs.redis}/bin/redis-server &
@@ -33,12 +38,14 @@ buildPythonPackage rec {
     kill $REDIS_PID
   '';
 
-  pythonImportsCheck = [ "walrus" ];
+  pythonImportsCheck = [
+    "walrus"
+  ];
 
   meta = with lib; {
     description = "Lightweight Python utilities for working with Redis";
     homepage = "https://github.com/coleifer/walrus";
-    changelog = "https://github.com/coleifer/walrus/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/coleifer/walrus/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ mbalatsko ];
   };
