@@ -17,5 +17,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ur0/lolcat";
     license = licenses.mit;
     maintainers = with maintainers; [ mirrorwitch ];
+    mainProgram = "lolcat";
   };
 }
