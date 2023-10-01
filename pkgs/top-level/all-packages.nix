@@ -24591,11 +24591,21 @@ with pkgs;
 
   protobuf = protobuf3_24;
 
+  # C++ 4.24 runtime, Python 4.24 runtime
+  protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
+  # C++ 4.23 runtime, Python 4.23 runtime
+  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix { };
+  # C++ 3.21 runtime, Python 4.21 runtime
+  protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
+    abseil-cpp = abseil-cpp_202103;
+  };
+
   protobuf3_24 = callPackage ../development/libraries/protobuf/3.24.nix { };
   protobuf3_23 = callPackage ../development/libraries/protobuf/3.23.nix { };
   protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix {
     abseil-cpp = abseil-cpp_202103;
   };
+
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
     abseil-cpp = abseil-cpp_202103;
   };
