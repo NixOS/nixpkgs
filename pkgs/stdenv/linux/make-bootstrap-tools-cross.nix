@@ -12,16 +12,19 @@ let
     pkgs = releaseLib.pkgsForCross crossSystem system;
   };
 in lib.mapAttrs (n: make) (with lib.systems.examples; {
+  # Sort following the sorting in `pkgs/stdenv/linux/default.nix` `bootstrapFiles` argument.
   armv5tel   = sheevaplug;
   armv6l     = raspberryPi;
   armv7l     = armv7l-hf-multiplatform;
   aarch64    = aarch64-multiplatform;
-  x86_64-musl  = musl64;
-  armv6l-musl  = muslpi;
-  aarch64-musl = aarch64-multiplatform-musl;
-  riscv64 = riscv64;
+  mipsel-linux-gnu         = mipsel-linux-gnu;
   mips64el-linux-gnuabin32 = mips64el-linux-gnuabin32;
   mips64el-linux-gnuabi64  = mips64el-linux-gnuabi64;
-  mipsel-linux-gnu         = mipsel-linux-gnu;
   powerpc64le = powernv;
+  riscv64 = riscv64;
+
+  # musl
+  aarch64-musl = aarch64-multiplatform-musl;
+  armv6l-musl  = muslpi;
+  x86_64-musl  = musl64;
 })
