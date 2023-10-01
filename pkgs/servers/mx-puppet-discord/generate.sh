@@ -9,7 +9,7 @@ curl $u/package.json |
     sed 's|\("dependencies": *{\)|\1\n"@discordjs/opus": "^0.8.0",|' >package.json
 
 node2nix \
-  --nodejs-14 \
+  --nodejs-18 \
   --node-env ../../development/node-packages/node-env.nix \
   --input package.json \
   --strip-optional-dependencies \
