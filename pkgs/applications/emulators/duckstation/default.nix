@@ -20,6 +20,7 @@
 , wayland
 , wrapQtAppsHook
 , enableWayland ? true
+, libbacktrace
 }:
 
 stdenv.mkDerivation {
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
     pkg-config
     qttools
     wrapQtAppsHook
+    libbacktrace
   ]
   ++ lib.optionals enableWayland [
     extra-cmake-modules
@@ -53,6 +55,7 @@ stdenv.mkDerivation {
     qtbase
     qtsvg
     vulkan-loader
+    libbacktrace
   ]
   ++ lib.optionals enableWayland [
     qtwayland
