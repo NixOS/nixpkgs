@@ -1,0 +1,64 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2b49e11288..0a3eaa7f4e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -248,22 +248,13 @@ find_package(Git)
+ if(Git_FOUND)
+   if (NOT DEFINED GIT_COMMIT_HASH)
+     execute_process(
+-            COMMAND ${GIT_EXECUTABLE} log -1 --format=%h
++            COMMAND ${GIT_EXECUTABLE} log -1 --format=%H
+             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+             RESULT_VARIABLE GIT_RESULT
+             OUTPUT_VARIABLE GIT_COMMIT_HASH
+             OUTPUT_STRIP_TRAILING_WHITESPACE)
+   endif()
+-  execute_process(
+-          COMMAND ${GIT_EXECUTABLE} describe --tags --abbrev=0
+-          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-          OUTPUT_VARIABLE GIT_LAST_TAG
+-          OUTPUT_STRIP_TRAILING_WHITESPACE)
+-  execute_process(
+-          COMMAND ${GIT_EXECUTABLE} describe --tags --long
+-          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+-          OUTPUT_VARIABLE GIT_ITERATION
+-          OUTPUT_STRIP_TRAILING_WHITESPACE)
++  set(GIT_ITERATION "${GIT_LAST_TAG}-0-g${GIT_COMMIT_HASH}")
+ else()
+   message("Git NOT FOUND")
+ endif()
+diff --git a/scripts/package_build.py b/scripts/package_build.py
+index f0d7535ed0..350d74f877 100644
+--- a/scripts/package_build.py
++++ b/scripts/package_build.py
+@@ -130,7 +130,7 @@ def git_commit_hash():
+     if 'SETUPTOOLS_SCM_PRETEND_HASH' in os.environ:
+         return os.environ['SETUPTOOLS_SCM_PRETEND_HASH']
+     try:
+-        return subprocess.check_output(['git', 'log', '-1', '--format=%h']).strip().decode('utf8')
++        return subprocess.check_output(['git', 'log', '-1', '--format=%H']).strip().decode('utf8')
+     except:
+         return "deadbeeff"
+ 
+diff --git a/tools/pythonpkg/setup.py b/tools/pythonpkg/setup.py
+index fdf2911019..c363cc518a 100644
+--- a/tools/pythonpkg/setup.py
++++ b/tools/pythonpkg/setup.py
+@@ -163,8 +163,6 @@ if 'BUILD_HTTPFS' in os.environ:
+ for ext in extensions:
+     toolchain_args.extend(['-DDUCKDB_EXTENSION_{}_LINKED'.format(ext.upper())])
+ 
+-toolchain_args.extend(['-DDUCKDB_EXTENSION_AUTOLOAD_DEFAULT=1', '-DDUCKDB_EXTENSION_AUTOINSTALL_DEFAULT=1'])
+-
+ 
+ class get_pybind_include(object):
+     def __init__(self, user=False):
+@@ -343,7 +341,7 @@ setup(
+     packages=packages,
+     include_package_data=True,
+     python_requires='>=3.7.0',
+-    setup_requires=setup_requires + ["setuptools_scm<7.0.0", 'pybind11>=2.6.0'],
++    setup_requires=setup_requires + ["setuptools_scm", 'pybind11>=2.6.0'],
+     use_scm_version=setuptools_scm_conf,
+     tests_require=['google-cloud-storage', 'mypy', 'pytest'],
+     classifiers=[

@@ -21,10 +21,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    deepClone = true;
+    leaveDotGit = true;
     rev = "v${version}";
     hash = "sha256-NFkeeTpsxazQOstKUUu0b27hXbnq3U5g/+24BIMqtJY=";
   };
+
+  patches = [ ./version.patch ];
 
   nativeBuildInputs = [ cmake git ninja ];
   buildInputs = [ openssl ]
@@ -33,8 +35,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     # use similar flags to what is defined in ${src}/.github/workflow/{LinuxRelease,OSX}.yml
-    "-DDEBUG_STACKTRACE=1"
     "-DDUCKDB_EXTENSION_CONFIGS=${src}/.github/config/bundled_extensions.cmake"
+    "-DGIT_LAST_TAG=${src.rev}"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ] ++ lib.optionals doInstallCheck [
