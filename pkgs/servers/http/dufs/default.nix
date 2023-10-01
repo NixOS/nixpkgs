@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , stdenv
 , darwin
 }:
@@ -18,6 +19,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-HZiWmqIh21b12DP+hnx1pWBWgSa5j71kp6GCRKGMHv0=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
@@ -29,6 +32,13 @@ rustPlatform.buildRustPackage rec {
     # tests depend on network interface, may fail with virtual IPs.
     "--skip=validate_printed_urls"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd dufs \
+      --bash <($out/bin/dufs --completions bash) \
+      --fish <($out/bin/dufs --completions fish) \
+      --zsh <($out/bin/dufs --completions zsh)
+  '';
 
   meta = with lib; {
     description = "A file server that supports static serving, uploading, searching, accessing control, webdav";
