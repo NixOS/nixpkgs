@@ -8027,6 +8027,12 @@
     githubId = 854319;
     name = "Matt McHenry";
   };
+  jerrysm64 = {
+    email = "jerry.starke@icloud.com";
+    github = "jerrysm64";
+    githubId = "42114389";
+    name = "Jerry Starke";
+  };
   jeschli = {
     email = "jeschli@gmail.com";
     github = "0mbi";
