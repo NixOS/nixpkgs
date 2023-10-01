@@ -49,7 +49,7 @@ buildGoModule rec {
       This program generates a custom OpenTelemetry Collector binary based on a given configuration.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ DavSanchez ];
+    maintainers = with maintainers; [ davsanchez ];
     mainProgram = "ocb";
   };
 }
