@@ -60,12 +60,13 @@ rec {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else (mkDerivationSuper args).overrideAttrs(finalAttrs: {
-        NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "") + " -static";
-      } // lib.optionalAttrs (!(finalAttrs.dontAddStaticConfigureFlags or false)) {
-        configureFlags = (finalAttrs.configureFlags or []) ++ [
-            "--disable-shared" # brrr...
-          ];
+      else (mkDerivationSuper args).overrideAttrs (args: {
+        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+      } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
+        configureFlags = (args.configureFlags or []) ++ [
+          "--disable-shared" # brrr...
+        ];
+        cmakeFlags = (args.cmakeFlags or []) ++ ["-DCMAKE_SKIP_INSTALL_RPATH=On"];
       }));
     } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
