@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "Userspace utilities for linux-erofs file system";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ ehmry nikstur ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
