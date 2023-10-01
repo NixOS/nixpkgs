@@ -1,19 +1,24 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
-, lib
-, nix-update-script
-, pytestCheckHook
 , git
+, pytestCheckHook
+, pythonOlder
 , setuptools-scm
 , writeScript
 }:
+
 buildPythonPackage rec {
   pname = "setuptools-odoo";
   version = "3.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "acsone";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-+jrO6RJ838ewOHz2pCoIJN9U0bRlQqUPWDvEffxW+n0=";
   };
 
@@ -23,6 +28,7 @@ buildPythonPackage rec {
 
   # HACK https://github.com/NixOS/nixpkgs/pull/229460
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   patchPhase = ''
     runHook prePatch
 
@@ -55,7 +61,11 @@ buildPythonPackage rec {
     preBuildHooks+=(setuptoolsOdooHook)
   '';
 
-  nativeCheckInputs = [ pytestCheckHook git ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    git
+  ];
+
   disabledTests = [
     "test_addon1_uncommitted_change"
     "test_addon1"
@@ -65,12 +75,11 @@ buildPythonPackage rec {
     "test_odoo_addon5_wheel"
   ];
 
-  passthru.updateScript = nix-update-script { };
-
-  meta = {
+  meta = with lib; {
     description = "Setuptools plugin for Odoo addons";
     homepage = "https://github.com/acsone/setuptools-odoo";
-    license = lib.licenses.lgpl3Only;
-    maintainers = with lib.maintainers; [ yajo ];
+    changelog = "https://github.com/acsone/setuptools-odoo/blob/${version}/CHANGES.rst";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ yajo ];
   };
 }
