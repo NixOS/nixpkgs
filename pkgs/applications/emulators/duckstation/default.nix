@@ -64,10 +64,9 @@ stdenv.mkDerivation {
   ++ cubeb.passthru.backendLibs;
 
   cmakeFlags = [
-    "-DUSE_DRMKMS=ON"
     "-DBUILD_TESTS=ON"
   ]
-  ++ lib.optionals enableWayland [ "-DUSE_WAYLAND=ON" ];
+  ++ lib.optionals enableWayland [ "-DENABLE_WAYLAND=ON" ];
 
   postPatch = ''
       substituteInPlace src/CMakeLists.txt \
