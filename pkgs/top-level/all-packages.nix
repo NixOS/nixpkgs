@@ -586,8 +586,8 @@ with pkgs;
   dinghy = with python3Packages; toPythonApplication dinghy;
 
   djgpp = djgpp_i586;
-  djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; };
-  djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; });
+  djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; stdenv = gccStdenv; };
+  djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; stdenv = gccStdenv; });
 
   djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
