@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
-, libuv, lua, ncurses, pkg-config
-, unibilium, gperf
+, libuv, lua, ncurses
+, unibilium
 , libvterm-neovim
 , tree-sitter
 , fetchurl
@@ -43,13 +43,8 @@ let
     luabitop
     mpack
   ] ++ lib.optionals doCheck [
-    nvim-client
     luv
-    coxpcall
     busted
-    luafilesystem
-    penlight
-    inspect
   ]
   );
   neovimLuaEnv = lua.withPackages requiredLuaPkgs;
@@ -91,7 +86,6 @@ in
     inherit lua;
 
     buildInputs = [
-      gperf
       libtermkey
       libuv
       libvterm-neovim
@@ -120,7 +114,6 @@ in
     nativeBuildInputs = [
       cmake
       gettext
-      pkg-config
     ];
 
     # extra programs test via `make functionaltest`
@@ -142,15 +135,7 @@ in
     # check that the above patching actually works
     disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
-    cmakeFlags = [
-      # Don't use downloaded dependencies. At the end of the configurePhase one
-      # can spot that cmake says this option was "not used by the project".
-      # That's because all dependencies were found and
-      # third-party/CMakeLists.txt is not read at all.
-      "-DUSE_BUNDLED=OFF"
-    ]
-    ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
-    ;
+    cmakeFlags = lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON";
 
     preConfigure = lib.optionalString lua.pkgs.isLuaJIT ''
       cmakeFlagsArray+=(
@@ -158,8 +143,6 @@ in
         "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
         "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
       )
-    '' + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '' + ''
       mkdir -p $out/lib/nvim/parser
     '' + lib.concatStrings (lib.mapAttrsToList
