@@ -6,6 +6,10 @@ let
 
   cfg = config.programs.gnupg;
 
+  agentSettingsFormat = pkgs.formats.keyValue {
+    mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
+  };
+
   xserverCfg = config.services.xserver;
 
   defaultPinentryFlavor =
@@ -82,6 +86,18 @@ in
       '';
     };
 
+    agent.settings = mkOption {
+      type = agentSettingsFormat.type;
+      default = { };
+      example = {
+        default-cache-ttl = 600;
+      };
+      description = lib.mdDoc ''
+        Configuration for /etc/gnupg/gpg-agent.conf.
+        See {manpage}`gpg-agent(1)` for supported options.
+      '';
+    };
+
     dirmngr.enable = mkOption {
       type = types.bool;
       default = false;
@@ -92,10 +108,13 @@ in
   };
 
   config = mkIf cfg.agent.enable {
-    environment.etc."gnupg/gpg-agent.conf".text =
-      lib.optionalString (cfg.agent.pinentryFlavor != null) ''
-      pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
-    '';
+    programs.gnupg.agent.settings = {
+      pinentry-program = lib.mkIf (cfg.agent.pinentryFlavor != null)
+        "${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry";
+    };
+
+    environment.etc."gnupg/gpg-agent.conf".source =
+      agentSettingsFormat.generate "gpg-agent.conf" cfg.agent.settings;
 
     # This overrides the systemd user unit shipped with the gnupg package
     systemd.user.services.gpg-agent = {
