@@ -7041,6 +7041,8 @@ with pkgs;
       protobuf = pkgs.protobuf3_21.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
+    openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
+
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
@@ -8098,6 +8100,8 @@ with pkgs;
   fcitx5-lua = callPackage ../tools/inputmethods/fcitx5/fcitx5-lua.nix { lua = lua5_3; };
 
   fcitx5-m17n = callPackage ../tools/inputmethods/fcitx5/fcitx5-m17n.nix { };
+
+  fcitx5-openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withFcitx5Support = true; };
 
   fcitx5-gtk = callPackage ../tools/inputmethods/fcitx5/fcitx5-gtk.nix { };
 
@@ -11529,8 +11533,6 @@ with pkgs;
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
-
-  openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { };
 
   openboard = libsForQt5.callPackage ../applications/graphics/openboard { };
 
