@@ -586,8 +586,8 @@ with pkgs;
   dinghy = with python3Packages; toPythonApplication dinghy;
 
   djgpp = djgpp_i586;
-  djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; };
-  djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; });
+  djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; stdenv = gccStdenv; };
+  djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; stdenv = gccStdenv; });
 
   djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
@@ -27038,7 +27038,10 @@ with pkgs;
 
   libcardiacarrest = callPackage ../misc/libcardiacarrest { };
 
-  easyeffects = callPackage ../applications/audio/easyeffects { };
+  easyeffects = callPackage ../applications/audio/easyeffects {
+    # Fix crashes with speexdsp effects
+    speexdsp = speexdsp.override { withFftw3 = false; };
+  };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
