@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -21,6 +22,8 @@ buildGoModule rec {
   vendorHash = "sha256-Hz6P+ptn1i+8Ek3pp8j+iB8NN5Xks50jyZuT8Ullxbo=";
 
   subPackages = [ "c2FmZQ-client" "c2FmZQ-server" ];
+
+  passthru.tests = { inherit (nixosTests) c2fmzq; };
 
   meta = with lib; {
     description = "Securely encrypt, store, and share files, including but not limited to pictures and videos";
