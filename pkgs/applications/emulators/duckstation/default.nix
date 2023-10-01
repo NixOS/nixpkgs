@@ -62,8 +62,14 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
+    "-DBUILD_TESTS=ON"
   ]
   ++ lib.optionals enableWayland [ "-DUSE_WAYLAND=ON" ];
+
+  postPatch = ''
+      substituteInPlace src/CMakeLists.txt \
+      --replace 'add_subdirectory(common-tests EXCLUDE_FROM_ALL)' 'add_subdirectory(common-tests)'
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -92,8 +98,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  #common-tests not found as of 2023-09-30
-  doCheck = false;
+  doCheck = true;
   checkPhase = ''
     runHook preCheck
     bin/common-tests
