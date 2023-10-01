@@ -26,7 +26,7 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    
+
     make ocb
 
     runHook postBuild
