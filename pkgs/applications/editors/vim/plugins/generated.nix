@@ -177,8 +177,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "LazyVim";
       repo = "LazyVim";
-      rev = "9d17c4308713e8db7ec03871ba62ff80a3bfb79c";
-      sha256 = "07czl4hm0ziqm9v6g6a8krs6766gz0zf1k1mfxl8yrs3c12j7ml5";
+      rev = "dd95de5dbe31ecb106305920cbd0e24e26c17afe";
+      sha256 = "1vmh1b8mwpwvfyigxhc5pnda1ddyccqgjz3jmn2pm101bwgg6424";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
   };
