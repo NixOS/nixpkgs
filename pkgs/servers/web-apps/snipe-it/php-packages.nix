@@ -15,10 +15,10 @@ let
     "arietimmerman/laravel-scim-server" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "arietimmerman-laravel-scim-server-9e8dd2d3958d3c3c05d0a99fe6475361ad9e9419";
+        name = "arietimmerman-laravel-scim-server-dda6dfb60d70fb6cca4b8d4ce1c5f4c19deaab2d";
         src = fetchurl {
-          url = "https://api.github.com/repos/grokability/laravel-scim-server/zipball/9e8dd2d3958d3c3c05d0a99fe6475361ad9e9419";
-          sha256 = "02if4yvnqagpwgrq8b0371nva24lsk0h3h06q51vjxyqjhqvc2nr";
+          url = "https://api.github.com/repos/grokability/laravel-scim-server/zipball/dda6dfb60d70fb6cca4b8d4ce1c5f4c19deaab2d";
+          sha256 = "0b08j7xfrbvp6ckv413sfpqq8v4qk59y9wcwch5kc19fb8y3dgiq";
         };
       };
     };
@@ -415,10 +415,10 @@ let
     "guzzlehttp/psr7" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "guzzlehttp-psr7-13388f00956b1503577598873fffb5ae994b5737";
+        name = "guzzlehttp-psr7-0454e12ef0cd597ccd2adb036f7bda4e7fface66";
         src = fetchurl {
-          url = "https://api.github.com/repos/guzzle/psr7/zipball/13388f00956b1503577598873fffb5ae994b5737";
-          sha256 = "05vc1q903nxfg11y9mcnlg253lm5d81jjg6wv76hjiwx8m47lbac";
+          url = "https://api.github.com/repos/guzzle/psr7/zipball/0454e12ef0cd597ccd2adb036f7bda4e7fface66";
+          sha256 = "1vlrryjzwjigf2q1nichnrxl43r75cw3yjf17d3dy7ixhvlpnlv6";
         };
       };
     };
@@ -845,10 +845,10 @@ let
     "nyholm/psr7" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "nyholm-psr7-f734364e38a876a23be4d906a2a089e1315be18a";
+        name = "nyholm-psr7-e874c8c4286a1e010fb4f385f3a55ac56a05cc93";
         src = fetchurl {
-          url = "https://api.github.com/repos/Nyholm/psr7/zipball/f734364e38a876a23be4d906a2a089e1315be18a";
-          sha256 = "0w8i5l1qg8dkc1zsyz1gpwn2awgkhlm295l1b8smmzabqdc65dcx";
+          url = "https://api.github.com/repos/Nyholm/psr7/zipball/e874c8c4286a1e010fb4f385f3a55ac56a05cc93";
+          sha256 = "0abjvcrg19km5p6bcjfmfhrravsb60hap71zzznpwmf83bq16l8r";
         };
       };
     };
@@ -1579,6 +1579,16 @@ let
         src = fetchurl {
           url = "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/f9e45c59496418227184626ad31e83470153c11f";
           sha256 = "04g9fkk4ifc8sj27jz3nj6rnqgfyls6b2p1ll59wm9d99rngyq72";
+        };
+      };
+    };
+    "tecnickcom/tcpdf" = {
+      targetDir = "";
+      src = composerEnv.buildZipPackage {
+        name = "tecnickcom-tcpdf-e3cffc9bcbc76e89e167e9eb0bbda0cab7518459";
+        src = fetchurl {
+          url = "https://api.github.com/repos/tecnickcom/TCPDF/zipball/e3cffc9bcbc76e89e167e9eb0bbda0cab7518459";
+          sha256 = "17769rpyfq6z8lw5bj7icvkz7003d6kbj1hiji5cixrkahvc57fy";
         };
       };
     };

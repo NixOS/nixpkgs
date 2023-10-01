@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 , setuptools
 , pybind11
 , numpy
@@ -26,6 +27,14 @@ buildPythonPackage rec {
     # Hence, we rely on the bundled eigen library.
     fetchSubmodules = true;
   };
+
+  patches = [
+    # See https://github.com/jax-ml/ml_dtypes/issues/106.
+    (fetchpatch {
+      url = "https://github.com/jax-ml/ml_dtypes/commit/c082a2df6bc0686b35c4b4a303fd1990485e181f.patch";
+      hash = "sha256-aVJy9vT00b98xOrJCdbCHSZBI3uyjafmN88Z2rjBS48=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

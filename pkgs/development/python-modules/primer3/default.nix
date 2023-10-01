@@ -5,6 +5,7 @@
 , cython
 , gcc
 , click
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -28,10 +29,18 @@ buildPythonPackage rec {
     gcc
   ];
 
-  # pytestCheckHook leads to a circular import issue
   nativeCheckInputs = [
     click
+    pytestCheckHook
   ];
+  # We are not sure why exactly this is need. It seems `pytestCheckHook`
+  # doesn't find extension modules installed in $out/${python.sitePackages},
+  # and the tests rely upon them. This was initially reported upstream at
+  # https://github.com/libnano/primer3-py/issues/120 and we investigate this
+  # downstream at: https://github.com/NixOS/nixpkgs/issues/255262.
+  preCheck = ''
+    python setup.py build_ext --inplace
+  '';
 
   pythonImportsCheck = [
     "primer3"

@@ -4866,6 +4866,12 @@
     githubId = 50854;
     name = "edef";
   };
+  edeneast = {
+    email = "edenofest@gmail.com";
+    github = "edeneast";
+    githubId = 2746374;
+    name = "edeneast";
+  };
   ederoyd46 = {
     email = "matt@ederoyd.co.uk";
     github = "ederoyd46";
@@ -12964,6 +12970,11 @@
     githubId = 585547;
     name = "Jaka Hudoklin";
   };
+  offsetcyan = {
+    github = "offsetcyan";
+    githubId = 49906709;
+    name = "Dakota";
+  };
   oida = {
     email = "oida@posteo.de";
     github = "oida";
@@ -17719,6 +17730,13 @@
     github = "trepetti";
     githubId = 25440339;
     name = "Tom Repetti";
+  };
+  trevdev = {
+    email = "trev@trevdev.ca";
+    matrix = "@trevdev:matrix.org";
+    github = "trev-dev";
+    githubId = 28788713;
+    name = "Trevor Richards";
   };
   trevorj = {
     email = "nix@trevor.joynson.io";

@@ -8558,9 +8558,7 @@ with pkgs;
 
   gitleaks = callPackage ../tools/security/gitleaks { };
 
-  gitaly = callPackage ../applications/version-management/gitlab/gitaly {
-    libgit2 = libgit2_1_5;
-  };
+  gitaly = callPackage ../applications/version-management/gitlab/gitaly { };
 
   gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
 
@@ -15333,17 +15331,13 @@ with pkgs;
 
   nix-your-shell = callPackage ../shells/nix-your-shell { };
 
-  bash = lowPrio (callPackage ../shells/bash/5.nix {
-    binutils = stdenv.cc.bintools;
-  });
+  bash = lowPrio (callPackage ../shells/bash/5.nix { });
   # WARNING: this attribute is used by nix-shell so it shouldn't be removed/renamed
   bashInteractive = callPackage ../shells/bash/5.nix {
-    binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;
   };
   bashInteractiveFHS = callPackage ../shells/bash/5.nix {
-    binutils = stdenv.cc.bintools;
     interactive = true;
     withDocs = true;
     forFHSEnv = true;
@@ -37469,6 +37463,8 @@ with pkgs;
   tts = callPackage ../tools/audio/tts { };
 
   wyoming-faster-whisper = callPackage ../tools/audio/wyoming/faster-whisper.nix { };
+
+  wyoming-openwakeword = callPackage ../tools/audio/wyoming/openwakeword.nix { };
 
   wyoming-piper = callPackage ../tools/audio/wyoming/piper.nix { };
 
