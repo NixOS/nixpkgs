@@ -481,6 +481,9 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (variant == "fresh") [
     "--without-system-dragonbox"
     "--without-system-libfixmath"
+    # Technically needed only when kdeIntegration is enabled in the "fresh"
+    # variant. Won't hurt to put it here for every "fresh" variant.
+    "--without-system-frozen"
   ];
 
   checkTarget = concatStringsSep " " [
