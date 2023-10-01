@@ -139,7 +139,6 @@ broken-packages:
   - altfloat # failure in job https://hydra.nixos.org/build/233197874 at 2023-09-02
   - alure # failure in job https://hydra.nixos.org/build/233230238 at 2023-09-02
   - amazon-emailer # failure in job https://hydra.nixos.org/build/233220018 at 2023-09-02
-  - amazonka # failure in job https://hydra.nixos.org/build/233220743 at 2023-09-02
   - amazonka-iam-policy # failure in job https://hydra.nixos.org/build/233233098 at 2023-09-02
   - amazon-products # failure in job https://hydra.nixos.org/build/233193877 at 2023-09-02
   - AMI # failure in job https://hydra.nixos.org/build/233232505 at 2023-09-02
