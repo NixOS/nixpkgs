@@ -6764,6 +6764,8 @@ self: super: with self; {
 
   mir_eval = callPackage ../development/python-modules/mir_eval { };
 
+  mirakuru = callPackage ../development/python-modules/mirakuru { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
@@ -8634,6 +8636,8 @@ self: super: with self; {
 
   portend = callPackage ../development/python-modules/portend { };
 
+  port-for = callPackage ../development/python-modules/port-for { };
+
   portpicker = callPackage ../development/python-modules/portpicker { };
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
@@ -10386,6 +10390,8 @@ self: super: with self; {
   pytest-playwright = callPackage ../development/python-modules/pytest-playwright {};
 
   pytest-plt = callPackage ../development/python-modules/pytest-plt { };
+
+  pytest-postgresql = callPackage ../development/python-modules/pytest-postgresql { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
