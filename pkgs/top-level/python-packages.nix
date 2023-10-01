@@ -2613,6 +2613,8 @@ self: super: with self; {
 
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
+  dctorch = callPackage ../development/python-modules/dctorch { };
+
   ddt = callPackage ../development/python-modules/ddt { };
 
   deal = callPackage ../development/python-modules/deal { };
@@ -11518,6 +11520,8 @@ self: super: with self; {
   ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
+
+  rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
 
