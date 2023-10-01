@@ -3106,6 +3106,8 @@ self: super: with self; {
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
+  django-webpush = callPackage ../development/python-modules/django-webpush { };
+
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
 
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
