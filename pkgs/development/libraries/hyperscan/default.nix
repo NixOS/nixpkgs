@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DFAT_RUNTIME=ON"
     "-DBUILD_AVX512=ON"
   ]
+  ++ lib.optional (!stdenv.isDarwin) "-DFAT_RUNTIME=ON"
   ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
   ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://www.hyperscan.io/";
     maintainers = with maintainers; [ avnik ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = licenses.bsd3;
   };
 })
