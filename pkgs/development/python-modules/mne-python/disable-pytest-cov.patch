@@ -1,0 +1,13 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index 8e7f70310..598d2368e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -40,7 +40,7 @@ ignore-decorators = [
+ ]
+ 
+ [tool.pytest.ini_options]
+-addopts = """--durations=20 --doctest-modules -ra --cov-report= --tb=short \
++addopts = """--durations=20 --doctest-modules -ra --tb=short \
+     --doctest-ignore-import-errors --junit-xml=junit-results.xml \
+     --ignore=doc --ignore=logo --ignore=examples --ignore=tutorials \
+     --ignore=mne/gui/_*.py --ignore=mne/icons --ignore=tools \

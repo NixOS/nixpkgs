@@ -1,56 +1,75 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools-scm
 , numpy
 , scipy
 , pytestCheckHook
 , pytest-timeout
-, h5py
+, pytest-harvest
 , matplotlib
-, nibabel
-, pandas
-, scikit-learn
 , decorator
 , jinja2
 , pooch
 , tqdm
-, setuptools
+, packaging
+, importlib-resources
+, lazy-loader
+, defusedxml
+, h5io
+, pymatreader
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mne-python";
-  version = "1.3.1";
+  version = "1.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mne-tools";
-    repo = pname;
+    repo = "mne-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jvrk6m1Cd5ig2LXq6sAIbHDhmtG1gH/7WNAc7oet+tg=";
+    hash = "sha256-djVQkj8ktIOxe1xmi+XuIvdS1WdDzozgTJNJhWAhuBo=";
   };
 
-  propagatedBuildInputs = [
-    decorator
-    jinja2
-    matplotlib
-    numpy
-    pooch
-    scipy
-    setuptools
-    tqdm
+  patches = [
+    ./disable-pytest-cov.patch
   ];
 
-  nativeCheckInputs = [
-    h5py
-    nibabel
-    pandas
-    pytestCheckHook
-    scikit-learn
-    pytest-timeout
+  nativeBuildInputs = [
+    setuptools-scm
   ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    matplotlib
+    tqdm
+    pooch
+    decorator
+    packaging
+    jinja2
+    lazy-loader
+    defusedxml
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
+
+  passthru.optional-dependencies = {
+    hdf5 = [
+      h5io
+      pymatreader
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-timeout
+    pytest-harvest
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   preCheck = ''
     export HOME=$TMP
@@ -58,8 +77,11 @@ buildPythonPackage rec {
     export MNE_SKIP_NETWORK_TESTS=1
   '';
 
-  # All tests pass, but Pytest hangs afterwards - probably some thread hasn't terminated
-  doCheck = false;
+  disabledTests = [
+    # touches internet
+    "test_adjacency_matches_ft"
+    "test_fetch_uncompressed_file"
+  ];
 
   pythonImportsCheck = [
     "mne"
@@ -68,6 +90,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Magnetoencephelography and electroencephalography in Python";
     homepage = "https://mne.tools";
+    changelog = "https://mne.tools/stable/whats_new.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };
