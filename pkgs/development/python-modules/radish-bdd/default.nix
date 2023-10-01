@@ -60,7 +60,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Behaviour-Driven-Development tool for python";
-    homepage = "http://radish-bdd.io";
+    homepage = "https://radish-bdd.github.io/";
+    changelog = "https://github.com/radish-bdd/radish/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
   };
