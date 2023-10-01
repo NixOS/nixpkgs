@@ -20718,6 +20718,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreServices;
   };
 
+  faun = callPackage ../development/libraries/audio/faun { };
+
   hercules-ci-agent = callPackage ../development/tools/continuous-integration/hercules-ci-agent { };
 
   hci = callPackage ../development/tools/continuous-integration/hci { };
