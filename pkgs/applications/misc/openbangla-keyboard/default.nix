@@ -11,6 +11,8 @@
 , ibus
 , qtbase
 , zstd
+, withFcitx5Support ? false
+, withIbusSupport ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -36,9 +38,11 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals withFcitx5Support [
     fcitx5
+  ] ++ lib.optionals withIbusSupport [
     ibus
+  ] ++ [
     qtbase
     zstd
   ];
@@ -52,8 +56,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-XMleyP2h1aBhtjXhuGHyU0BN+tuL12CGoj+kLY5uye0=";
   };
 
-  cmakeFlags = [
+  cmakeFlags = lib.optionals withFcitx5Support [
     "-DENABLE_FCITX=YES"
+  ] ++ lib.optionals withIbusSupport [
     "-DENABLE_IBUS=YES"
   ];
 
@@ -69,6 +74,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    isIbusEngine = withIbusSupport;
     description = "An OpenSource, Unicode compliant Bengali Input Method";
     homepage = "https://openbangla.github.io/";
     license = lib.licenses.gpl3Plus;
