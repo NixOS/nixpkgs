@@ -25,12 +25,13 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
   ];
 
   pythonImportsCheck = [
     "mdformat_simple_breaks"
+    "mdformat_simple_breaks.plugin"
   ];
 
   meta = with lib; {
