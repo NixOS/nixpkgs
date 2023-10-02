@@ -85,7 +85,8 @@ let
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
             ++ lib.optional (cfg.speechSynthesisSupport or false) speechd
-            ++ pkcs11Modules;
+            ++ pkcs11Modules
+            ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
       launcherName = "${applicationName}${nameSuffix}";
