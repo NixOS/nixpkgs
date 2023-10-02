@@ -30,4 +30,7 @@ mkDerivation {
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
  ];
+  meta = {
+    homepage = "https://api.kde.org/frameworks/kio/html/";
+  };
 }
