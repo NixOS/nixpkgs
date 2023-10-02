@@ -1,8 +1,7 @@
 { stdenv
 , callPackage
 , rocmUpdateScript
-# , hip
-# , rocm-comgr
+, clr
 , vulkan-headers
 , vulkan-loader
 , glslang
@@ -16,10 +15,9 @@ callPackage ../base.nix rec {
   buildMan = false; # No man pages to build
   targetName = "mlir";
   targetDir = targetName;
-  # extraNativeBuildInputs = [ hip ];
+  extraNativeBuildInputs = [ clr ];
 
   extraBuildInputs = [
-    # rocm-comgr
     vulkan-headers
     vulkan-loader
     glslang
@@ -27,7 +25,6 @@ callPackage ../base.nix rec {
   ];
 
   extraCMakeFlags = [
-    "-DCMAKE_POLICY_DEFAULT_CMP0116=NEW"
     "-DMLIR_INCLUDE_DOCS=ON"
     "-DMLIR_INCLUDE_TESTS=ON"
     "-DMLIR_ENABLE_ROCM_RUNNER=ON"
@@ -40,6 +37,10 @@ callPackage ../base.nix rec {
     chmod +w ../llvm
     mkdir -p ../llvm/build/bin
     ln -s ${lit}/bin/lit ../llvm/build/bin/llvm-lit
+
+    # `add_library cannot create target "llvm_gtest" because an imported target with the same name already exists`
+    substituteInPlace CMakeLists.txt \
+      --replace "EXISTS \''${UNITTEST_DIR}/googletest/include/gtest/gtest.h" "FALSE"
 
     substituteInPlace test/CMakeLists.txt \
       --replace "FileCheck count not" "" \
@@ -64,4 +65,5 @@ callPackage ../base.nix rec {
 
   checkTargets = [ "check-${targetName}" ];
   requiredSystemFeatures = [ "big-parallel" ];
+  isBroken = true; # `DebugTranslation.cpp:139:10: error: no matching function for call to 'get'`
 }

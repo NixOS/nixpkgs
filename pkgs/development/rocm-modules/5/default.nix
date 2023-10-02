@@ -10,7 +10,7 @@ let
   rocmUpdateScript = callPackage ./update.nix { };
 in rec {
   ## RadeonOpenCompute ##
-  llvm = recurseIntoAttrs (callPackage ./llvm/default.nix { inherit rocmUpdateScript; });
+  llvm = recurseIntoAttrs (callPackage ./llvm/default.nix { inherit rocmUpdateScript rocm-device-libs rocm-runtime rocm-thunk clr; });
 
   rocm-core = callPackage ./rocm-core {
     inherit rocmUpdateScript;
