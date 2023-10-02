@@ -689,18 +689,23 @@ rm -rf -- *
 # `(all files in directory)` should only be used if there's at least one file (otherwise it would be `(empty)`)
 # and this should be determined without doing a full search
 #
-# Create a 100 level deep path, which would cause a stack overflow with the below limit
-# if recursed into to figure out if the current directory is empty
-mkdir -p "b/$(seq -s/ 100)"
-# But that can be avoided by short-circuiting if the file a (here intentionally ordered before b) is checked first.
+# a is intentionally ordered first here in order to allow triggering the short-circuit behavior
+# We then check that b is not read
 # In a more realistic scenario, some directories might need to be recursed into,
 # but a file would be quickly found to trigger the short-circuit.
 touch a
-(
-    # Locally limit the stack to 100 * 1024 bytes, this would cause a stack overflow if the short-circuiting isn't implemented
-    ulimit -s 100
+mkdir b
+# We don't have lambda's in bash unfortunately,
+# so we just define a function instead and then pass its name
+# shellcheck disable=SC2317
+run() {
+    # This shouldn't read b/
     expectTrace './.' "$work"' (all files in directory)'
-)
+    # Remove all files immediately after, triggering delete_self events for all of them
+    rmdir b
+}
+# Runs the function while checking that b isn't read
+withFileMonitor run b
 rm -rf -- *
 
 # Partially included directories trace entries as they are evaluated
