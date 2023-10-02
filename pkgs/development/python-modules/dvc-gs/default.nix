@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , dvc-objects
+, packaging
 , fetchPypi
 , gcsfs
 , pythonRelaxDepsHook
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = [ gcsfs dvc-objects ];
+  propagatedBuildInputs = [ gcsfs dvc-objects packaging ];
 
   # Network access is needed for tests
   doCheck = false;
