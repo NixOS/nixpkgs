@@ -4,6 +4,7 @@
 , fetchpatch
 , flit-core
 , pytestCheckHook
+, pytest
 , coveralls
 , numpy
 , decopatch
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
+    pytest
   ];
 
   nativeCheckInputs = [
@@ -59,7 +61,7 @@ buildPythonPackage rec {
     toml
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "parametrize_from_file"
   ];
 
