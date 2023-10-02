@@ -41,7 +41,6 @@ stdenv.mkDerivation {
     pkg-config
     qttools
     wrapQtAppsHook
-    libbacktrace
   ]
   ++ lib.optionals enableWayland [
     extra-cmake-modules
