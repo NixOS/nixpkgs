@@ -436,11 +436,7 @@ in buildPythonPackage rec {
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-  } // lib.optionalAttrs cudaSupport {
-    # NOTE: supportedCudaCapabilities isn't computed unless cudaSupport is true, so we can't use
-    #   it in the passthru set above because a downstream package might try to access it even
-    #   when cudaSupport is false. Better to have it missing than null or an empty list by default.
-    cudaCapabilities = supportedCudaCapabilities;
+    cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
   };
 
   meta = with lib; {
