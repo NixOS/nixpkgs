@@ -211,7 +211,7 @@ In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json
 
 #### prefetch-npm-deps {#javascript-buildNpmPackage-prefetch-npm-deps}
 
-`prefetch-npm-deps` can calculate the hash of the dependencies of an npm project ahead of time.
+`prefetch-npm-deps` is a Nixpkgs package that calculates the hash of the dependencies of an npm project ahead of time.
 
 ```console
 $ ls
@@ -220,6 +220,15 @@ $ prefetch-npm-deps package-lock.json
 ...
 sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
 ```
+
+#### fetchNpmDeps {#javascript-buildNpmPackage-fetchNpmDeps}
+
+`fetchNpmDeps` is a Nix function that requires the following mandatory arguments:
+
+- `src`: A directory / tarball with `package-lock.json` file
+- `hash`: The output hash of the node dependencies defined in `package-lock.json`.
+
+It returns a derivation with all `package-lock.json` dependencies downloaded into `$out/`, usable as an npm cache.
 
 ### corepack {#javascript-corepack}
 
