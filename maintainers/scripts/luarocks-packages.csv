@@ -89,6 +89,7 @@ lyaml,,,,,,lblasc
 magick,,,,,,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
+middleclass,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
