@@ -59,6 +59,11 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
+  # Unfree
+  hsa-amd-aqlprofile-bin = callPackage ./hsa-amd-aqlprofile-bin {
+    stdenv = llvm.rocmClangStdenv;
+  };
+
   # Broken, too many errors
   rdc = callPackage ./rdc {
     inherit rocmUpdateScript rocm-smi rocm-runtime;
