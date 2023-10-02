@@ -16,9 +16,11 @@
 , bootstrapConfigs ? [
     "aarch64-apple-darwin"
     "aarch64-unknown-linux-gnu"
+    "aarch64-unknown-linux-musl"
     "i686-unknown-linux-gnu"
     "x86_64-apple-darwin"
     "x86_64-unknown-linux-gnu"
+    "x86_64-unknown-linux-musl"
   ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
