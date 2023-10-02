@@ -27,13 +27,14 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
     mdit-py-plugins
   ];
 
   pythonImportsCheck = [
     "mdformat_footnote"
+    "mdformat_footnote.plugin"
   ];
 
   meta = with lib; {
