@@ -24,7 +24,7 @@ in
   options.services.syncoid = {
     enable = mkEnableOption (lib.mdDoc "Syncoid ZFS synchronization service");
 
-    package = lib.mkPackageOption pkgs "sanoid" {};
+    package = lib.mkPackageOptionMD pkgs "sanoid" {};
 
     nftables.enable = mkEnableOption (lib.mdDoc ''
       maintaining an nftables set of the active syncoid UIDs.
@@ -187,9 +187,10 @@ in
             '';
           };
 
-          useCommonArgs = mkEnableOption (lib.mdDoc ''
-            configured common arguments to this command
-          '') // { default = true; };
+          useCommonArgs = mkEnableOption
+            (lib.mdDoc ''
+              configured common arguments to this command
+            '') // { default = true; };
 
           service = mkOption {
             type = types.attrs;
@@ -227,13 +228,15 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.nftables.enable -> config.networking.nftables.enable;
+      {
+        assertion = cfg.nftables.enable -> config.networking.nftables.enable;
         message = "config.networking.nftables.enable must be set when config.services.syncoid.nftables.enable is set";
       }
     ];
 
     systemd.services = mapAttrs'
-      (name: c: let
+      (name: c:
+        let
           sshKeyCred = builtins.split ":" c.sshKey;
         in
         nameValuePair "syncoid-${escapeUnitName name}" (mkMerge [
@@ -257,8 +260,9 @@ in
                 # to any currently unknown (hence unused) systemd dynamic users (UID/GID range 61184…65519),
                 # which happens when a crash has occurred
                 # during any previous run of a syncoid-*.service (not only this one).
-                map (dataset:
-                  "+" + pkgs.writeShellScript "zfs-unallow-unused-dynamic-users" ''
+                map
+                  (dataset:
+                    "+" + pkgs.writeShellScript "zfs-unallow-unused-dynamic-users" ''
                       set -eu
                       zfs allow "$1" |
                       sed -ne 's/^\t\(user\|group\) (unknown: \([0-9]\+\)).*/\1 \2/p' |
@@ -273,43 +277,49 @@ in
                         done
                         zfs unallow -r -u "$(printf %s, "''${uids[@]}")" "$1"
                       }
-                  '' + " " + escapeShellArg dataset
-                  ) (localDatasetName c.source ++ localDatasetName c.target ++ map builtins.dirOf (localDatasetName c.target)) ++
+                    '' + " " + escapeShellArg dataset
+                  )
+                  (localDatasetName c.source ++ localDatasetName c.target ++ map builtins.dirOf (localDatasetName c.target)) ++
                 # For a local source, allow the localSourceAllow ZFS permissions.
-                map (dataset:
-                  "+/run/booted-system/sw/bin/zfs allow $USER " +
-                    escapeShellArgs [ (concatStringsSep "," c.localSourceAllow) dataset ]
-                  ) (localDatasetName c.source) ++
+                map
+                  (dataset:
+                    "+/run/booted-system/sw/bin/zfs allow $USER " +
+                      escapeShellArgs [ (concatStringsSep "," c.localSourceAllow) dataset ]
+                  )
+                  (localDatasetName c.source) ++
                 # For a local target, check if the dataset exists before delegating permissions,
                 # and if it doesn't exist, delegate it to the parent dataset.
                 # This should solve the case of provisioning new datasets.
-                map (dataset:
-                  "+" + pkgs.writeShellScript "zfs-allow-target" ''
-                    dataset="$1"
-                    # Run a ZFS list on the dataset to check if it exists
-                    zfs list "$dataset" >/dev/null 2>/dev/null ||
-                      dataset="$(dirname "$dataset")"
-                    zfs allow "$USER" ${escapeShellArg (concatStringsSep "," c.localTargetAllow)} "$dataset"
-                  '' + " " + escapeShellArg dataset
-                  ) (localDatasetName c.target) ++
+                map
+                  (dataset:
+                    "+" + pkgs.writeShellScript "zfs-allow-target" ''
+                      dataset="$1"
+                      # Run a ZFS list on the dataset to check if it exists
+                      zfs list "$dataset" >/dev/null 2>/dev/null ||
+                        dataset="$(dirname "$dataset")"
+                      zfs allow "$USER" ${escapeShellArg (concatStringsSep "," c.localTargetAllow)} "$dataset"
+                    '' + " " + escapeShellArg dataset
+                  )
+                  (localDatasetName c.target) ++
                 # Adding a user to an nftables set will not persist across a reboot,
                 # hence there is no need to cleanup residual dynamic users remaining in it after a crash.
                 optional cfg.nftables.enable
                   "+${pkgs.nftables}/bin/nft add element inet filter nixos-syncoid-uids { $USER }";
-              ExecStopPost = let
+              ExecStopPost =
+                let
                   zfsUnallow = dataset: "+/run/booted-system/sw/bin/zfs unallow $USER " + escapeShellArg dataset;
                 in
                 map zfsUnallow (localDatasetName c.source) ++
-                # For a local target, unallow both the dataset and its parent,
-                # because at this stage we have no way of knowing if the allow command
-                # did execute on the parent dataset or not in the ExecStartPre=.
-                # We can't run the same if-then-else in the post hook
-                # since the dataset should have been created at this point.
-                concatMap
-                  (dataset: [ (zfsUnallow dataset) (zfsUnallow (builtins.dirOf dataset)) ])
-                  (localDatasetName c.target) ++
-                optional cfg.nftables.enable
-                  "+${pkgs.nftables}/bin/nft delete element inet filter nixos-syncoid-uids { $USER }";
+                  # For a local target, unallow both the dataset and its parent,
+                  # because at this stage we have no way of knowing if the allow command
+                  # did execute on the parent dataset or not in the ExecStartPre=.
+                  # We can't run the same if-then-else in the post hook
+                  # since the dataset should have been created at this point.
+                  concatMap
+                    (dataset: [ (zfsUnallow dataset) (zfsUnallow (builtins.dirOf dataset)) ])
+                    (localDatasetName c.target) ++
+                  optional cfg.nftables.enable
+                    "+${pkgs.nftables}/bin/nft delete element inet filter nixos-syncoid-uids { $USER }";
               ExecStart = lib.escapeShellArgs ([ "${cfg.package}/bin/syncoid" ]
                 ++ optionals c.useCommonArgs cfg.commonArgs
                 ++ optional c.recursive "--recursive"
@@ -387,9 +397,10 @@ in
               UMask = "0066";
             } //
             (
-            if length sshKeyCred > 1
-            then { LoadCredentialEncrypted = [ c.sshKey ]; }
-            else { LoadCredential = [ "sshKey:${c.sshKey}" ]; });
+              if length sshKeyCred > 1
+              then { LoadCredentialEncrypted = [ c.sshKey ]; }
+              else { LoadCredential = [ "sshKey:${c.sshKey}" ]; }
+            );
           }
           cfg.service
           c.service
