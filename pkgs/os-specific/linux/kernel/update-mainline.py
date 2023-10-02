@@ -89,8 +89,8 @@ def main():
     soup = BeautifulSoup(kernel_org.read().decode(), "lxml")
     release_table = soup.find(id="releases")
     if not release_table or isinstance(release_table, NavigableString):
-        print(release_table)
-        print("Failed to find the release table on https://kernel.org")
+        print(release_table, file=sys.stderr)
+        print("Failed to find the release table on https://kernel.org", file=sys.stderr)
         sys.exit(1)
 
     releases = release_table.find_all("tr")
@@ -111,7 +111,7 @@ def main():
         else:
             message = f"linux_{nixpkgs_branch}: {old_version} -> {kernel.version}"
 
-        print(message)
+        print(message, file=sys.stderr)
 
         all_kernels[branch] = {
             "version": kernel.version,

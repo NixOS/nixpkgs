@@ -13,9 +13,9 @@ buildDunePackage rec {
     sha256 = "sha256-BA7u09MKYMyspFX8AcAkDVA6UUG5DKAdbIDdt+b3Fc4=";
   };
 
-  duneVersion = "3";
-
-  propagatedBuildInputs = [ camomile ];
+  propagatedBuildInputs = [
+    (camomile.override { version = "1.0.2"; })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/frama-c/${pname}";

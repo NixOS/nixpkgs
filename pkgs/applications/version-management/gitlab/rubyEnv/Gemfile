@@ -19,6 +19,8 @@ gem 'rails', '~> 7.0.6'
 
 gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab'
 
+gem 'vite_rails'
+
 gem 'bootsnap', '~> 1.16.0', require: false
 
 gem 'openssl', '~> 3.0'
@@ -36,10 +38,10 @@ gem 'responders', '~> 3.0'
 
 gem 'sprockets', '~> 3.7.0'
 
-gem 'view_component', '~> 3.2.0'
+gem 'view_component', '~> 3.5.0'
 
 # Supported DBs
-gem 'pg', '~> 1.5.3'
+gem 'pg', '~> 1.5.4'
 
 gem 'neighbor', '~> 0.2.3'
 
@@ -58,7 +60,7 @@ gem 'devise-pbkdf2-encryptable', '~> 0.0.0', path: 'vendor/gems/devise-pbkdf2-en
 gem 'bcrypt', '~> 3.1', '>= 3.1.14'
 gem 'doorkeeper', '~> 5.6', '>= 5.6.6'
 gem 'doorkeeper-openid_connect', '~> 1.8', '>= 1.8.7'
-gem 'rexml', '~> 3.2.5'
+gem 'rexml', '~> 3.2.6'
 gem 'ruby-saml', '~> 1.15.0'
 gem 'omniauth', '~> 2.1.0'
 gem 'omniauth-auth0', '~> 3.1'
@@ -91,7 +93,7 @@ gem 'timfel-krb5-auth', '~> 0.8', group: :kerberos
 # Spam and anti-bot protection
 gem 'recaptcha', '~> 5.12', require: 'recaptcha/rails'
 gem 'akismet', '~> 3.0'
-gem 'invisible_captcha', '~> 2.0.0'
+gem 'invisible_captcha', '~> 2.1.0'
 
 # Two-factor authentication
 gem 'devise-two-factor', '~> 4.0.2'
@@ -99,7 +101,7 @@ gem 'rqrcode-rails3', '~> 0.1.7'
 gem 'attr_encrypted', '~> 3.2.4', path: 'vendor/gems/attr_encrypted'
 
 # GitLab Pages
-gem 'validates_hostname', '~> 1.0.11'
+gem 'validates_hostname', '~> 1.0.13'
 gem 'rubyzip', '~> 2.3.2', require: 'zip'
 # GitLab Pages letsencrypt support
 gem 'acme-client', '~> 2.0'
@@ -111,7 +113,7 @@ gem 'browser', '~> 5.3.1'
 gem 'ohai', '~> 17.9'
 
 # GPG
-gem 'gpgme', '~> 2.0.22'
+gem 'gpgme', '~> 2.0.23'
 
 # LDAP Auth
 # GitLab fork with several improvements to original library. For full list of changes
@@ -122,13 +124,13 @@ gem 'net-ldap', '~> 0.17.1'
 # API
 gem 'grape', '~> 1.7.1'
 gem 'grape-entity', '~> 0.10.0'
-gem 'rack-cors', '~> 1.1.1', require: 'rack/cors'
+gem 'rack-cors', '~> 2.0.1', require: 'rack/cors'
 gem 'grape-swagger', '~> 1.6.1', group: [:development, :test]
 gem 'grape-swagger-entity', '~> 0.5.1', group: [:development, :test]
 
 # GraphQL API
-gem 'graphql', '~> 1.13.12'
-gem 'graphiql-rails', '~> 1.8'
+gem 'graphql', '~> 1.13.19'
+gem 'graphiql-rails', '~> 1.8.0'
 gem 'apollo_upload_server', '~> 2.1.0'
 gem 'graphql-docs', '~> 2.1.0', group: [:development, :test]
 gem 'graphlient', '~> 0.5.0' # Used by BulkImport feature (group::import)
@@ -177,9 +179,6 @@ gem 'google-apis-serviceusage_v1', '~> 0.28.0'
 gem 'google-apis-sqladmin_v1beta4', '~> 0.41.0'
 gem 'google-apis-androidpublisher_v3', '~> 0.34.0'
 
-# for aws storage
-gem 'unf', '~> 0.1.4'
-
 # Seed data
 gem 'seed-fu', '~> 2.3.7'
 
@@ -187,15 +186,15 @@ gem 'seed-fu', '~> 2.3.7'
 gem 'elasticsearch-model', '~> 7.2'
 gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation'
 gem 'elasticsearch-api',   '7.13.3'
-gem 'aws-sdk-core', '~> 3.180.3'
+gem 'aws-sdk-core', '~> 3.181.1'
 gem 'aws-sdk-cloudformation', '~> 1'
-gem 'aws-sdk-s3', '~> 1.132.1'
+gem 'aws-sdk-s3', '~> 1.134.0'
 gem 'faraday_middleware-aws-sigv4', '~>0.3.0'
 gem 'typhoeus', '~> 1.4.0' # Used with Elasticsearch to support http keep-alive connections
 
 # Markdown and HTML processing
 gem 'html-pipeline', '~> 2.14.3'
-gem 'deckar01-task_list', '2.3.2'
+gem 'deckar01-task_list', '2.3.3'
 gem 'gitlab-markup', '~> 1.9.0', require: 'github/markup'
 gem 'commonmarker', '~> 0.23.10'
 gem 'kramdown', '~> 2.3.1'
@@ -225,7 +224,7 @@ gem 'rack', '~> 2.2.8'
 gem 'rack-timeout', '~> 0.6.3', require: 'rack/timeout/base'
 
 group :puma do
-  gem 'puma', '~> 6.3', require: false
+  gem 'puma', '~> 6.3', '>= 6.3.1', require: false
   gem 'sd_notify', '~> 0.1.0', require: false
 end
 
@@ -245,7 +244,7 @@ gem 'gitlab-sidekiq-fetcher', path: 'vendor/gems/sidekiq-reliable-fetch', requir
 gem 'fugit', '~> 1.8.1'
 
 # HTTP requests
-gem 'httparty', '~> 0.20.0'
+gem 'httparty', '~> 0.21.0'
 
 # Colored output to console
 gem 'rainbow', '~> 3.0'
@@ -254,7 +253,7 @@ gem 'rainbow', '~> 3.0'
 gem 'ruby-progressbar', '~> 1.10'
 
 # Linear-time regex library for untrusted regular expressions
-gem 're2', '~> 1.7.0'
+gem 're2', '2.0.0'
 
 # Misc
 
@@ -302,16 +301,14 @@ gem 'ruby-openai', '~> 3.7'
 gem 'circuitbox', '2.0.0'
 
 # Sanitize user input
-gem 'sanitize', '~> 6.0'
+gem 'sanitize', '~> 6.0.2'
 gem 'babosa', '~> 2.0'
 
 # Sanitizes SVG input
 gem 'loofah', '~> 2.21.3'
 
-# Working with license
-# Detects the open source license the repository includes
-# This version needs to be in sync with gitlab-org/gitaly
-gem 'licensee', '~> 9.15'
+# Used to provide license templates
+gem 'licensee', '~> 9.16'
 
 # Detect and convert string character encoding
 gem 'charlock_holmes', '~> 0.7.7'
@@ -320,13 +317,13 @@ gem 'charlock_holmes', '~> 0.7.7'
 gem 'ruby-magic', '~> 0.6'
 
 # Faster blank
-gem 'fast_blank'
+gem 'fast_blank', '~> 1.0.1'
 
 # Parse time & duration
 gem 'gitlab-chronic', '~> 0.10.5'
-gem 'gitlab_chronic_duration', '~> 0.10.6.2'
+gem 'gitlab_chronic_duration', '~> 0.11'
 
-gem 'rack-proxy', '~> 0.7.6'
+gem 'rack-proxy', '~> 0.7.7'
 
 gem 'sassc-rails', '~> 2.1.0'
 gem 'autoprefixer-rails', '10.2.5.1'
@@ -334,7 +331,7 @@ gem 'terser', '1.0.2'
 
 gem 'click_house-client', path: 'gems/click_house-client', require: 'click_house/client'
 gem 'addressable', '~> 2.8'
-gem 'tanuki_emoji', '~> 0.6'
+gem 'tanuki_emoji', '~> 0.7'
 gem 'gon', '~> 6.4.0'
 gem 'request_store', '~> 1.5.1'
 gem 'base32', '~> 0.3.0'
@@ -362,7 +359,6 @@ gem 'gitlab-labkit', '~> 0.34.0'
 gem 'thrift', '>= 0.16.0'
 
 # I18n
-gem 'ruby_parser', '~> 3.20', require: false
 gem 'rails-i18n', '~> 7.0'
 gem 'gettext_i18n_rails', '~> 1.11.0'
 gem 'gettext_i18n_rails_js', '~> 1.3'
@@ -381,7 +377,7 @@ gem 'snowplow-tracker', '~> 0.8.0'
 
 # Metrics
 gem 'webrick', '~> 1.8.1', require: false
-gem 'prometheus-client-mmap', '~> 0.27', require: 'prometheus/client'
+gem 'prometheus-client-mmap', '~> 0.28', require: 'prometheus/client'
 
 gem 'warning', '~> 1.3.0'
 
@@ -447,7 +443,7 @@ group :development, :test do
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 3.13.0', require: false
+  gem 'gitlab-dangerfiles', '~> 4.0.0', require: false
 end
 
 group :development, :test, :coverage do
@@ -477,13 +473,13 @@ group :test do
 
   gem 'capybara', '~> 3.39', '>= 3.39.2'
   gem 'capybara-screenshot', '~> 1.0.26'
-  gem 'selenium-webdriver', '= 4.11.0'
+  gem 'selenium-webdriver', '= 4.12.0'
 
   gem 'graphlyte', '~> 1.0.0'
 
   gem 'shoulda-matchers', '~> 5.1.0', require: false
   gem 'email_spec', '~> 2.2.0'
-  gem 'webmock', '~> 3.18.1'
+  gem 'webmock', '~> 3.19.1'
   gem 'rails-controller-testing'
   gem 'concurrent-ruby', '~> 1.1'
   gem 'test-prof', '~> 1.2.2'
@@ -494,10 +490,10 @@ group :test do
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false
 
-  gem 'gitlab_quality-test_tooling', '~> 0.9.3', require: false
+  gem 'gitlab_quality-test_tooling', '~> 1.0.0', require: false
 end
 
-gem 'octokit', '~> 4.15'
+gem 'octokit', '~> 6.0'
 
 gem 'gitlab-mail_room', '~> 0.0.23', require: 'mail_room'
 
@@ -529,23 +525,23 @@ gem 'ssh_data', '~> 1.3'
 gem 'spamcheck', '~> 1.3.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 16.2.0-rc4'
+gem 'gitaly', '~> 16.3.0-rc1'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.2.0'
 
 gem 'grpc', '~> 1.55.0'
 
-gem 'google-protobuf', '~> 3.23', '>= 3.23.4'
+gem 'google-protobuf', '~> 3.24', '>= 3.24.3'
 
 gem 'toml-rb', '~> 2.2.0'
 
 # Feature toggles
-gem 'flipper', '~> 0.25.0'
-gem 'flipper-active_record', '~> 0.25.0'
-gem 'flipper-active_support_cache_store', '~> 0.25.0'
+gem 'flipper', '~> 0.26.2'
+gem 'flipper-active_record', '~> 0.26.2'
+gem 'flipper-active_support_cache_store', '~> 0.26.2'
 gem 'unleash', '~> 3.2.2'
-gem 'gitlab-experiment', '~> 0.7.1'
+gem 'gitlab-experiment', '~> 0.8.0'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
@@ -575,7 +571,7 @@ gem 'mail-smtp_pool', '~> 0.1.0', path: 'vendor/gems/mail-smtp_pool', require: f
 gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer'
 
 # File encryption
-gem 'lockbox', '~> 1.1.1'
+gem 'lockbox', '~> 1.3.0'
 
 # Email validation
 gem 'valid_email', '~> 0.1'

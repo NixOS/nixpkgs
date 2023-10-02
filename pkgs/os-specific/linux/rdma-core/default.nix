@@ -26,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
+  outputs = [ "out" "man" "dev" ];
+
   nativeBuildInputs = [
     cmake
     docutils

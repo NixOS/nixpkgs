@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "orogene";
-  version = "0.3.27";
+  version = "0.3.32";
 
   src = fetchFromGitHub {
     owner = "orogene";
     repo = "orogene";
     rev = "v${version}";
-    hash = "sha256-y58S8oou1GBR1Cx77IzLvLmZ/MN88P9k1RGCFOVbHHc=";
+    hash = "sha256-UB/FI5LUyksKzAgzsza5NTDtYWou69hqj0M2GWV/FcA=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-hZQxzhq61h83geLazhEkoaB1oRz/xSXuwW7BuBWxfHs=";
+  cargoHash = "sha256-/Yb1QTsye60qL6B3TM6Wd1W8n4XMxMhu42CLvJcqIYw=";
 
   nativeBuildInputs = [
     pkg-config

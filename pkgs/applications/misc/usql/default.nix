@@ -10,18 +10,18 @@
 
 buildGoModule rec {
   pname = "usql";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
-    hash = "sha256-YjRbrhJSbX1OLEc7A72ubg1KtzJSWY0KphD4d8dAKQ8=";
+    hash = "sha256-thpVcJ1HRhoOAli7829zM4fermEcS9FwzKX7ZjHGhZg=";
   };
 
   buildInputs = [ unixODBC icu ];
 
-  vendorHash = "sha256-OZ/eui+LR+Gn1nmu9wryGmz3jiUMuDScmTZ5G8UKWP8=";
+  vendorHash = "sha256-S7fahA+ykviQoWc7p0CcTGfouswxQNBn4HH+tbl0fbI=";
   proxyVendor = true;
 
   # Exclude broken genji, hive & impala drivers (bad group)
@@ -73,6 +73,7 @@ buildGoModule rec {
     homepage = "https://github.com/xo/usql";
     changelog = "https://github.com/xo/usql/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "usql";
     maintainers = with maintainers; [ georgyo anthonyroussel ];
     platforms = with platforms; linux ++ darwin;
   };

@@ -413,9 +413,9 @@ in mkLicense lset) ({
     fullName = "Eiffel Forum License v2.0";
   };
 
-  elastic = {
-    fullName = "ELASTIC LICENSE";
-    url = "https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt";
+  elastic20 = {
+    fullName = "Elastic License 2.0";
+    url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
   };
 
@@ -479,6 +479,11 @@ in mkLicense lset) ({
     fullName = "Floodgap Free Software License";
     url = "https://www.floodgap.com/software/ffsl/license.html";
     free = false;
+  };
+
+  fraunhofer-fdk = {
+    fullName = "Fraunhofer FDK AAC Codec Library";
+    spdxId = "FDK-AAC";
   };
 
   free = {
@@ -838,6 +843,14 @@ in mkLicense lset) ({
   ncsa = {
     spdxId = "NCSA";
     fullName = "University of Illinois/NCSA Open Source License";
+  };
+
+  ncul1 = {
+    spdxId = "NCUL1";
+    fullName = "Netdata Cloud UI License v1.0";
+    free = false;
+    redistributable = true; # Only if used in Netdata products.
+    url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
   };
 
   nlpl = {

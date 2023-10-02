@@ -379,6 +379,16 @@ in
           the legacy definitions.
         '';
       }
+      {
+        assertion = opt.pkgs.isDefined -> cfg.config == {};
+        message = ''
+          Your system configures nixpkgs with an externally created instance.
+          `nixpkgs.config` options should be passed when creating the instance instead.
+
+          Current value:
+          ${lib.generators.toPretty { multiline = true; } opt.config}
+        '';
+      }
     ];
   };
 

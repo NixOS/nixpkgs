@@ -54,7 +54,7 @@ in
 # guess may not align with u-boot's nomenclature correctly, so it can
 # be overridden.
 # See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L81-106 for a list.
-, uInitrdArch ? stdenvNoCC.hostPlatform.linuxArch
+, uInitrdArch ? stdenvNoCC.hostPlatform.ubootArch
 
 # The name of the compression, as recognised by u-boot.
 # See https://gitlab.denx.de/u-boot/u-boot/-/blob/9bfb567e5f1bfe7de8eb41f8c6d00f49d2b9a426/common/image.c#L195-204 for a list.

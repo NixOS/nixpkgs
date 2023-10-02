@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     # fs-uae-launcher search side by side for fs-uae
     # see $src/fsgs/plugins/pluginexecutablefinder.py#find_executable
     ln -s ${fsuae}/bin/fs-uae $out/bin
+    ln -s ${fsuae}/bin/fs-uae-device-helper $out/bin
   '';
 
   meta = {

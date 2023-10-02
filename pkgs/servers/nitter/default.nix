@@ -11,6 +11,7 @@
 , karax
 , markdown
 , nimcrypto
+, openssl
 , packedjson
 , redis
 , redpool
@@ -46,6 +47,7 @@ buildNimPackage rec {
     karax
     markdown
     nimcrypto
+    openssl
     packedjson
     redis
     redpool
