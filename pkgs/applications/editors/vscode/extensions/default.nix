@@ -343,11 +343,16 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "0.0.97";
-          sha256 = "sha256-rNGW8WB3jBSjThiB0j4/ORKMRAaxFiMiBfaa+dbGu/w=";
+          version = "0.8.2";
+          sha256 = "0kw9asv91s37ql61blbb8pr7wb6c2ba1klchal53chp6ib55v5kn";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
+          description = "Vim-mode for VS Code using embedded Neovim";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim";
           license = lib.licenses.mit;
+          homepage = "https://github.com/vscode-neovim/vscode-neovim";
+          maintainers = [ lib.maintainers.mikaelfangel ];
         };
       };
 
