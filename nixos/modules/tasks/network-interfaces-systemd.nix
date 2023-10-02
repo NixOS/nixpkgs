@@ -28,9 +28,24 @@ let
     # TODO: warn the user that any address configured on those interfaces will be useless
     ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches);
 
+  defaultGateways = mkMerge (forEach [ cfg.defaultGateway cfg.defaultGateway6 ] (gateway:
+    optionalAttrs (gateway != null && gateway.interface != null) {
+      networks."40-${gateway.interface}" = {
+        matchConfig.Name = gateway.interface;
+        routes = [{
+          routeConfig = {
+            Gateway = gateway.address;
+          } // optionalAttrs (gateway.metric != null) {
+            Metric = gateway.metric;
+          };
+        }];
+      };
+    }
+  ));
+
   genericNetwork = override:
-    let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
-      ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
+    let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "" && cfg.defaultGateway.interface == null) cfg.defaultGateway.address
+      ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "" && cfg.defaultGateway6.interface == null) cfg.defaultGateway6.address;
         makeGateway = gateway: {
           routeConfig = {
             Gateway = gateway;
@@ -198,6 +213,7 @@ in
     # initrd.systemd.network.enable. By setting the latter and not the
     # former, the user retains full control over the configuration.
     boot.initrd.systemd.network = mkMerge [
+      defaultGateways
       (genericDhcpNetworks true)
       interfaceNetworks
       bridgeNetworks
@@ -213,12 +229,6 @@ in
     assertions = [ {
       assertion = cfg.defaultGatewayWindowSize == null;
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
-    } {
-      assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
-      message = "networking.defaultGateway.interface is not supported by networkd.";
-    } {
-      assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
-      message = "networking.defaultGateway6.interface is not supported by networkd.";
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
@@ -233,6 +243,7 @@ in
       mkMerge [ {
         enable = true;
       }
+      defaultGateways
       (genericDhcpNetworks false)
       interfaceNetworks
       bridgeNetworks
