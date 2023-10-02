@@ -28,17 +28,15 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
     mdit-py-plugins
-  ];
-
-  propagatedBuildInputs = [
     ruamel-yaml
   ];
 
   pythonImportsCheck = [
     "mdformat_frontmatter"
+    "mdformat_frontmatter.plugin"
   ];
 
   meta = with lib; {
