@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "icontract";
-  version = "2.6.2";
+  version = "2.6.3";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Parquery";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NUgMt/o9EpSQyOiAhYBVJtQKJn0Pd2lI45bKlo2z7mk=";
+    hash = "sha256-kLi00Yf/UkSaBTvc+GlgTw263M2SMkyzADnQYLbsMfw=";
   };
 
   preCheck = ''
@@ -51,12 +51,6 @@ buildPythonPackage rec {
     # doesn't check the python file provided in the test.
     "tests/test_mypy_decorators.py"
   ];
-
-  # Upstream adds some plain text files direct to the package's root directory
-  # https://github.com/Parquery/icontract/blob/master/setup.py#L63
-  postInstall = ''
-    rm -f $out/{LICENSE.txt,README.rst,requirements.txt}
-  '';
 
   pythonImportsCheck = [ "icontract" ];
 
