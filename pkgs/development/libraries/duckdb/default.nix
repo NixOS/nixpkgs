@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
         "test/sql/storage/compression/patas/patas_read.test"
         "test/sql/json/read_json_objects.test"
         "test/sql/json/read_json.test"
-	"test/sql/json/table/read_json_objects.test"
+        "test/sql/json/table/read_json_objects.test"
         "test/sql/json/table/read_json.test"
         "test/sql/copy/parquet/parquet_5968.test"
         "test/fuzzer/pedro/buffer_manager_out_of_memory.test"
