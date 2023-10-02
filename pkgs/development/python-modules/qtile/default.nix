@@ -5,6 +5,7 @@
 , dbus-next
 , dbus-python
 , glib
+, iwlib
 , libdrm
 , libinput
 , libxkbcommon
@@ -68,6 +69,7 @@ buildPythonPackage rec {
     (cairocffi.override { withXcffib = true; })
     dbus-next
     dbus-python
+    iwlib
     mpd2
     psutil
     pulsectl-asyncio
