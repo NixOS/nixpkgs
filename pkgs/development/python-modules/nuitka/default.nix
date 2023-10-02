@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , vmprof
-, pyqt4
 , isPyPy
 , pkgs
 , scons
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-8eWOcxATVS866nlN39b2VU1CuXAfcn0yQsDweHS2yDU=";
   };
 
-  nativeCheckInputs = [ vmprof pyqt4 ];
+  nativeCheckInputs = [ vmprof ];
   nativeBuildInputs = [ scons ];
   propagatedBuildInputs = [ chrpath ];
 

@@ -46,6 +46,8 @@
 , nlohmann_json
 , websocketpp
 , asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
 }:
 
 let
@@ -134,9 +136,17 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapGApps = true;
-  preFixup = ''
+  preFixup = let
+    wrapperLibraries = [
+      xorg.libX11
+      libvlc
+      libGL
+    ] ++ optionals decklinkSupport [
+      blackmagic-desktop-video
+    ];
+  in ''
     qtWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath [ xorg.libX11 libvlc libGL ]}"
+      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
       ''${gappsWrapperArgs[@]}
     )
   '';
@@ -154,7 +164,7 @@ stdenv.mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E V ];
+    maintainers = with maintainers; [ jb55 MP2E V materus ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

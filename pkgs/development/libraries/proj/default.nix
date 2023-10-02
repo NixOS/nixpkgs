@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
-  version = "9.2.0";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    hash = "sha256-NC5H7ufIXit+PVDwNDhz5cv44fduTytsdmNOWyqDDYQ=";
+    hash = "sha256-M1KUXzht4qIjPfHxvzPr7XUnisMwtbegKp18XQjNYHg=";
   };
 
   patches = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/docs/source/news.rst";
+    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/NEWS";
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;

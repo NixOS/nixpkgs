@@ -537,7 +537,7 @@ let
     mergeModules' prefix modules
       (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
 
-  mergeModules' = prefix: options: configs:
+  mergeModules' = prefix: modules: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName =
@@ -554,11 +554,11 @@ let
               else
                 mapAttrs
                   (n: option:
-                    [{ inherit (module) _file; options = option; }]
+                    [{ inherit (module) _file; pos = builtins.unsafeGetAttrPos n subtree; options = option; }]
                   )
                   subtree
               )
-            options);
+            modules);
 
       # The root of any module definition must be an attrset.
       checkedConfigs =
@@ -630,7 +630,13 @@ let
           loc = prefix ++ [name];
           defns = pushedDownDefinitionsByName.${name} or [];
           defns' = rawDefinitionsByName.${name} or [];
-          optionDecls = filter (m: isOption m.options) decls;
+          optionDecls = filter
+            (m: m.options?_type
+                && (m.options._type == "option"
+                    || throwDeclarationTypeError loc m.options._type m._file
+                )
+            )
+            decls;
         in
           if length optionDecls == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
@@ -692,6 +698,32 @@ let
           ) unmatchedDefnsByName);
     };
 
+  throwDeclarationTypeError = loc: actualTag: file:
+    let
+      name = lib.strings.escapeNixIdentifier (lib.lists.last loc);
+      path = showOption loc;
+      depth = length loc;
+
+      paragraphs = [
+        "In module ${file}: expected an option declaration at option path `${path}` but got an attribute set with type ${actualTag}"
+      ] ++ optional (actualTag == "option-type") ''
+          When declaring an option, you must wrap the type in a `mkOption` call. It should look somewhat like:
+              ${comment}
+              ${name} = lib.mkOption {
+                description = ...;
+                type = <the type you wrote for ${name}>;
+                ...
+              };
+        '';
+
+      # Ideally we'd know the exact syntax they used, but short of that,
+      # we can only reliably repeat the last. However, we repeat the
+      # full path in a non-misleading way here, in case they overlook
+      # the start of the message. Examples attract attention.
+      comment = optionalString (depth > 1) "\n    # ${showOption loc}";
+    in
+    throw (concatStringsSep "\n\n" paragraphs);
+
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.
      The exception is the ‘options’ attribute, which specifies
@@ -730,9 +762,16 @@ let
             else res.options;
         in opt.options // res //
           { declarations = res.declarations ++ [opt._file];
+            # In the case of modules that are generated dynamically, we won't
+            # have exact declaration lines; fall back to just the file being
+            # evaluated.
+            declarationPositions = res.declarationPositions
+              ++ (if opt.pos != null
+                then [opt.pos]
+                else [{ file = opt._file; line = null; column = null; }]);
             options = submodules;
           } // typeSet
-    ) { inherit loc; declarations = []; options = []; } opts;
+    ) { inherit loc; declarations = []; declarationPositions = []; options = []; } opts;
 
   /* Merge all the definitions of an option to produce the final
      config value. */

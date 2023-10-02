@@ -51,11 +51,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.18.5";
+  version = "4.18.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    hash = "sha256-CVJWrDMuHZ+/m3/3gj+SoyM9PtZYzn/JszkFwiQ/RH8=";
+    hash = "sha256-KEyKmUzpich81oCMOQ/LnQDDayGg3BqKdUdLZ8nnFec=";
   };
 
   outputs = [ "out" "dev" "man" ];

@@ -36,7 +36,10 @@ let
 
     debug = {
       # Necessary for BTF
-      DEBUG_INFO                = yes;
+      DEBUG_INFO                = mkMerge [
+        (whenOlder "5.2" (if (features.debug or false) then yes else no))
+        (whenBetween "5.2" "5.18" yes)
+      ];
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
@@ -59,8 +62,6 @@ let
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
       SCHED_DEBUG               = yes;
-
-      GDB_SCRIPTS               = yes;
     };
 
     power-management = {
@@ -602,8 +603,8 @@ let
 
     microcode = {
       MICROCODE       = yes;
-      MICROCODE_INTEL = yes;
-      MICROCODE_AMD   = yes;
+      MICROCODE_INTEL = whenOlder "6.6" yes;
+      MICROCODE_AMD   = whenOlder "6.6" yes;
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
       # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
@@ -912,7 +913,7 @@ let
       SECCOMP             = yes; # used by systemd >= 231
       SECCOMP_FILTER      = yes; # ditto
       POSIX_MQUEUE        = yes;
-      FRONTSWAP           = yes;
+      FRONTSWAP           = whenOlder "6.6" yes;
       FUSION              = yes; # Fusion MPT device support
       IDE                 = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
       IDLE_PAGE_TRACKING  = yes;
@@ -1011,6 +1012,7 @@ let
 
       X86_AMD_PLATFORM_DEVICE = yes;
       X86_PLATFORM_DRIVERS_DELL = whenAtLeast "5.12" yes;
+      X86_PLATFORM_DRIVERS_HP = whenAtLeast "6.1" yes;
 
       LIRC = mkMerge [ (whenOlder "4.16" module) (whenAtLeast "4.17" yes) ];
 

@@ -65,11 +65,7 @@ let
   isBuiltByBootstrapFilesCompiler =
     pkg: isFromNixpkgs pkg && isFromBootstrapFiles pkg.stdenv.cc.cc;
 
-  commonPreHook = pkgs: lib.optionalString (pkgs.darwin.system_cmds != null) ''
-    # Only use a response file on older systems with a small ARG_MAX (less than 1 MiB).
-    export NIX_CC_USE_RESPONSE_FILE=$(( "$("${lib.getBin pkgs.darwin.system_cmds}/bin/getconf" ARG_MAX)" < 1048576 ))
-    export NIX_LD_USE_RESPONSE_FILE=$NIX_CC_USE_RESPONSE_FILE
-  '' + ''
+  commonPreHook = ''
     export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
@@ -166,7 +162,7 @@ let
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
         '' + ''
-          ${commonPreHook prevStage}
+          ${commonPreHook}
           ${extraPreHook}
         '' + lib.optionalString (prevStage.darwin ? locale) ''
           export PATH_LOCALE=${prevStage.darwin.locale}/share/locale
@@ -216,7 +212,6 @@ in
       print-reexports = null;
       rewrite-tbd = null;
       sigtool = null;
-      system_cmds = null;
       CF = null;
       Libsystem = null;
     };
@@ -300,27 +295,6 @@ in
         rewrite-tbd = bootstrapTools;
 
         sigtool = bootstrapTools;
-
-        # The bootstrap only needs `getconf` from system_cmds, and it only needs to be able to
-        # query `ARG_MAX`. Using a small value here should be fine for the initial stage 1 build.
-        system_cmds = self.stdenv.mkDerivation {
-          name = "bootstrap-stage0-system_cmds";
-          buildCommand = ''
-            mkdir -p "$out/bin"
-            cat <<block > "$out/bin/getconf"
-            #!${bootstrapTools}/bin/bash
-            case "\$1" in
-              ARG_MAX)
-                echo "262144"
-                ;;
-              *)
-                exit 1
-            esac
-            block
-            chmod a+x "$out/bin/getconf"
-          '';
-          passthru.isFromBootstrapFiles = true;
-        };
       } // lib.optionalAttrs (! useAppleSDKLibs) {
         CF = self.stdenv.mkDerivation {
           name = "bootstrap-stage0-CF";
@@ -453,7 +427,7 @@ in
     assert lib.all isFromBootstrapFiles (with prevStage; [ bash coreutils cpio gnugrep pbzx ]);
 
     assert lib.all isFromBootstrapFiles (with prevStage.darwin; [
-      binutils-unwrapped cctools print-reexports rewrite-tbd sigtool system_cmds
+      binutils-unwrapped cctools print-reexports rewrite-tbd sigtool
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isFromBootstrapFiles (with prevStage.darwin; [ CF Libsystem ]);
@@ -486,9 +460,11 @@ in
       python3 = super.python3Minimal;
 
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
-        inherit (prevStage.darwin) system_cmds;
-
         signingUtils = prevStage.darwin.signingUtils.override {
+          inherit (selfDarwin) sigtool;
+        };
+
+        postLinkSignHook = prevStage.darwin.postLinkSignHook.override {
           inherit (selfDarwin) sigtool;
         };
 
@@ -536,7 +512,7 @@ in
     '';
   })
 
-  # Build sysctl, system_cmds and Python for use by LLVM’s check phase. These must be built in their
+  # Build sysctl and Python for use by LLVM’s check phase. These must be built in their
   # own stage, or an infinite recursion results on x86_64-darwin when using the source-based SDK.
   (prevStage:
     # previous stage1 stdenv:
@@ -553,8 +529,6 @@ in
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
       binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
-    assert lib.all isFromBootstrapFiles (with prevStage.darwin; [ system_cmds ]);
-
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
     assert    useAppleSDKLibs  -> lib.all                   isFromNixpkgs (with prevStage.darwin; [ CF Libsystem libobjc]);
     assert lib.all isFromNixpkgs (with prevStage.darwin; [ dyld launchd xnu ]);
@@ -651,7 +625,7 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool system_cmds
+      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
@@ -679,8 +653,7 @@ in
       darwin = super.darwin.overrideScope (_: superDarwin: {
         inherit (prevStage.darwin)
           CF Libsystem configd darwin-stubs dyld launchd libclosure libdispatch libobjc
-          locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool
-          system_cmds;
+          locale objc4 postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
 
         # Avoid building unnecessary Python dependencies due to building LLVM manpages.
         cctools-llvm = superDarwin.cctools-llvm.override { enableManpages = false; };
@@ -749,7 +722,7 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool system_cmds
+      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
@@ -786,7 +759,7 @@ in
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
           CF binutils-unwrapped cctools configd darwin-stubs launchd libobjc libtapi locale
-          objc4 print-reexports rewrite-tbd signingUtils sigtool system_cmds;
+          objc4 print-reexports rewrite-tbd signingUtils sigtool;
       });
 
       llvmPackages = super.llvmPackages // (
@@ -848,7 +821,7 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool system_cmds
+      binutils-unwrapped cctools locale libtapi print-reexports rewrite-tbd sigtool
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [ CF configd ]);
@@ -882,7 +855,7 @@ in
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin)
           Libsystem configd darwin-stubs launchd locale print-reexports rewrite-tbd
-          signingUtils sigtool system_cmds;
+          signingUtils sigtool;
 
         # Rewrap binutils so it uses the rebuilt Libsystem.
         binutils = superDarwin.binutils.override {
@@ -971,7 +944,7 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      locale print-reexports rewrite-tbd sigtool system_cmds
+      locale print-reexports rewrite-tbd sigtool
     ]);
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [
       binutils-unwrapped cctools libtapi
@@ -1011,7 +984,7 @@ in
         inherit (prevStage.darwin)
           CF Libsystem binutils binutils-unwrapped cctools cctools-llvm cctools-port configd
           darwin-stubs dyld launchd libclosure libdispatch libobjc libtapi locale objc4
-          postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool system_cmds;
+          postLinkSignHook print-reexports rewrite-tbd signingUtils sigtool;
       });
 
       llvmPackages = super.llvmPackages // (
@@ -1051,7 +1024,7 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage.darwin; [
-      locale print-reexports rewrite-tbd sigtool system_cmds
+      locale print-reexports rewrite-tbd sigtool
     ]);
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [
       binutils-unwrapped cctools libtapi
@@ -1191,7 +1164,7 @@ in
     ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [
-      binutils-unwrapped cctools libtapi locale print-reexports rewrite-tbd sigtool system_cmds
+      binutils-unwrapped cctools libtapi locale print-reexports rewrite-tbd sigtool
     ]);
 
     assert (! useAppleSDKLibs) -> lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [ CF Libsystem configd ]);
@@ -1226,7 +1199,8 @@ in
 
       inherit config;
 
-      preHook = (commonPreHook prevStage) + ''
+      preHook = ''
+        ${commonPreHook}
         stripDebugFlags="-S" # llvm-strip does not support "-p" for Mach-O
         export PATH_LOCALE=${prevStage.darwin.locale}/share/locale
       '';
@@ -1324,7 +1298,6 @@ in
         dyld
         libtapi
         locale
-        system_cmds
       ]
       ++ lib.optional useAppleSDKLibs [ objc4 ]
       ++ lib.optionals doSign [ postLinkSignHook sigtool signingUtils ]);
@@ -1341,7 +1314,7 @@ in
 
         darwin = super.darwin.overrideScope (_: _: {
           inherit (prevStage.darwin)
-            CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi system_cmds xnu;
+            CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi xnu;
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
           inherit (prevStage.darwin) binutils binutils-unwrapped cctools-llvm cctools-port;
         });

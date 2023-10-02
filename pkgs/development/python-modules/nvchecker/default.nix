@@ -49,6 +49,8 @@ buildPythonPackage rec {
     tomli
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     flaky
     pytest-asyncio

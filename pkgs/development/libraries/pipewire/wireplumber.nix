@@ -2,28 +2,26 @@
 , stdenv
 , fetchFromGitLab
 , nix-update-script
-, # base build deps
-  meson
+# base build deps
+, meson
 , pkg-config
 , ninja
-, # docs build deps
-  python3
+# docs build deps
+, python3
 , doxygen
 , graphviz
-, # GI build deps
-  gobject-introspection
-, # runtime deps
-  glib
+# GI build deps
+, gobject-introspection
+# runtime deps
+, glib
 , systemd
 , lua5_4
 , pipewire
-, # options
-  enableDocs ? true
+# options
+, enableDocs ? true
 , enableGI ? true
 }:
-let
-  mesonEnableFeature = b: if b then "enabled" else "disabled";
-in
+
 stdenv.mkDerivation rec {
   pname = "wireplumber";
   version = "0.4.14";
@@ -49,8 +47,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (enableDocs || enableGI) [
     doxygen
     (python3.pythonForBuild.withPackages (ps: with ps;
-    lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ] ++
-      lib.optionals enableGI [ lxml ]
+      lib.optionals enableDocs [ sphinx sphinx-rtd-theme breathe ]
+      ++ lib.optionals enableGI [ lxml ]
     ))
   ];
 
@@ -62,13 +60,13 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dsystem-lua=true"
-    "-Delogind=disabled"
-    "-Ddoc=${mesonEnableFeature enableDocs}"
-    "-Dintrospection=${mesonEnableFeature enableGI}"
-    "-Dsystemd-system-service=true"
-    "-Dsystemd-system-unit-dir=${placeholder "out"}/lib/systemd/system"
-    "-Dsysconfdir=/etc"
+    (lib.mesonBool "system-lua" true)
+    (lib.mesonEnable "elogind" false)
+    (lib.mesonEnable "doc" enableDocs)
+    (lib.mesonEnable "introspection" enableGI)
+    (lib.mesonBool "systemd-system-service" true)
+    (lib.mesonOption "systemd-system-unit-dir" "${placeholder "out"}/lib/systemd/system")
+    (lib.mesonOption "sysconfdir" "/etc")
   ];
 
   passthru.updateScript = nix-update-script { };

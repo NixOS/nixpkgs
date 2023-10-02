@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   # vendor directory is part of repository
-  vendorSha256 = null;
+  vendorHash = null;
 
   # make sure version gets set at compile time
   ldflags = [ "-s" "-w" "-X main.vshVersion=v${version}" ];

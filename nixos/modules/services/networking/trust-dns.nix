@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.trust-dns;
   toml = pkgs.formats.toml { };
@@ -55,7 +54,7 @@ in
         defaultText = "pkgs.trust-dns";
         description = mdDoc ''
           Trust-dns package to use.
-          Only `bin/named` need be provided: the other trust-dns utilities (client and resolver) are not needed.
+          Only `bin/trust-dns` need be provided: the other trust-dns utilities (client and resolver) are not needed.
         '';
       };
       quiet = mkOption {
@@ -136,7 +135,7 @@ in
           flags =  (lib.optional cfg.debug "--debug") ++ (lib.optional cfg.quiet "--quiet");
           flagsStr = builtins.concatStringsSep " " flags;
         in ''
-          ${cfg.package}/bin/named --config ${configFile} ${flagsStr}
+          ${cfg.package}/bin/trust-dns --config ${configFile} ${flagsStr}
         '';
         Type = "simple";
         Restart = "on-failure";

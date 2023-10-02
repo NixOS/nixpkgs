@@ -49,8 +49,10 @@ buildGoModule rec {
     fixup_yarn_lock yarn.lock
 
     # node-gyp tries to download always the headers and fails: https://github.com/NixOS/nixpkgs/issues/195404
-    yarn remove --offline jest-canvas-mock canvas
+    # playwright tries to download Chrome and fails
+    yarn remove --offline jest-canvas-mock canvas @playwright/test playwright
 
+    export PATH=$PATH:$(pwd)/node_modules/.bin
     NODE_ENV=production node node_modules/.bin/vite build
 
     popd
@@ -84,7 +86,5 @@ buildGoModule rec {
     homepage = "https://coder.com";
     license = lib.licenses.agpl3;
     maintainers = [ lib.maintainers.ghuntley lib.maintainers.urandom ];
-    # Failed to download Chromium 109.0.5414.46
-    broken = true; # At 2023-03-30
   };
 }

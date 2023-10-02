@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "s5cmd";
-  version = "2.1.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "peak";
     repo = "s5cmd";
     rev = "v${version}";
-    hash = "sha256-uH6KE3sTPc2FfqOxr6cB3A8DOq+VjGsJ3KoK8riOKXk=";
+    hash = "sha256-5BIyG6P2pfADSPWtz3KouGPVMpQRiY2X4wtotTCX4lo=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # Skip e2e tests requiring network access
   excludedPackages = [ "./e2e" ];

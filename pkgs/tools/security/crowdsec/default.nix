@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "crowdsec";
-  version = "1.5.2";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-260+XsRn3Mm/zCSvfEcBQ6j715KV4t1Z0CvXdriDzCs=";
+    hash = "sha256-5VwsuPNoAhCvhKUJDUkXnEVLMqHx2M1Nz11VoBASoxU=";
   };
 
-  vendorHash = "sha256-Mto0X/LMwWU10cmC2bjzX4lzp9t+nEgsWRP3JGkl++A=";
+  vendorHash = "sha256-6ODcb7UQPgM5n5RPN4AdkrY3+vlu+GXlUfrlTePywyY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,8 +23,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Version=v${version}"
-    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.BuildDate=1970-01-01_00:00:00"
+    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Version=v${version}"
+    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.BuildDate=1970-01-01_00:00:00"
+    "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Tag=${src.rev}"
+    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
+    "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
+    "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
   ];
 
   postBuild = "mv $GOPATH/bin/{crowdsec-cli,cscli}";

@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "bugaevc";
     repo = "wl-clipboard";
     rev = "v${version}";
-    hash = "sha256-L4k2jOZ2YtkFpDs2+LAUElYl5aNSC42QxkbMNJ2ZhWQ=";
+    hash = "sha256-BYRXqVpGt9FrEBYQpi2kHPSZyeMk9o1SXkxjjcduhiY=";
   };
 
   strictDeps = true;

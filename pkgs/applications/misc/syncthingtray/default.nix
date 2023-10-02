@@ -11,6 +11,7 @@
 , qtutilities
 , qtforkawesome
 , boost
+, wrapQtAppsHook
 , cmake
 , kio
 , plasma-framework
@@ -29,15 +30,15 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 , autostartExecPath ? "syncthingtray"
 }:
 
-mkDerivation rec {
-  version = "1.4.4";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.4.6";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
-    rev = "v${version}";
-    sha256 = "sha256-i13Mt4xASneE4sBIt9fbdoFV1KnoVfaGRwQXX+1NgI4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-/HAqO0eVFt4YLGeTbZSZcH2pOojvykukAGTBHZTfKLQ=";
   };
 
   buildInputs = [
@@ -54,6 +55,7 @@ mkDerivation rec {
   ;
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     cmake
     qttools
   ]
@@ -64,7 +66,7 @@ mkDerivation rec {
   # Don't test on Darwin because output is .app
   doInstallCheck = !stdenv.isDarwin;
   installCheckPhase = ''
-    $out/bin/syncthingtray --help | grep ${version}
+    $out/bin/syncthingtray --help | grep ${finalAttrs.version}
   '';
 
   cmakeFlags = [
@@ -85,4 +87,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.linux ++ platforms.darwin;
   };
-}
+})

@@ -221,13 +221,13 @@ dependencies = [
 
 [[package]]
 name = "async-imap"
-version = "0.9.0"
+version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "da93622739d458dd9a6abc1abf0e38e81965a5824a3b37f9500437c82a8bb572"
+checksum = "b538b767cbf9c162a6c5795d4b932bd2c20ba10b5a91a94d2b2b6886c1dce6a8"
 dependencies = [
  "async-channel",
  "base64 0.21.2",
- "byte-pool",
+ "bytes",
  "chrono",
  "futures",
  "imap-proto",
@@ -543,16 +543,6 @@ name = "bumpalo"
 version = "3.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3e2c3daef883ecc1b5d58c15adae93470a91d425f3532ba1695849656af3fc1"
-
-[[package]]
-name = "byte-pool"
-version = "0.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2f1b21189f50b5625efa6227cf45e9d4cfdc2e73582df2b879e9689e78a7158"
-dependencies = [
- "crossbeam-queue",
- "stable_deref_trait",
-]
 
 [[package]]
 name = "bytemuck"
@@ -925,16 +915,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "crossbeam-queue"
-version = "0.3.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d1cfb3ea8a53f37c40dea2c7bedcbd88bdfae54f5e2175d6ecaff1c988353add"
-dependencies = [
- "cfg-if",
- "crossbeam-utils",
-]
-
-[[package]]
 name = "crossbeam-utils"
 version = "0.8.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1123,7 +1103,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.118.0"
+version = "1.121.0"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1199,7 +1179,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.118.0"
+version = "1.121.0"
 dependencies = [
  "anyhow",
  "async-channel",
@@ -1223,7 +1203,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-repl"
-version = "1.118.0"
+version = "1.121.0"
 dependencies = [
  "ansi_term",
  "anyhow",
@@ -1238,7 +1218,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-rpc-server"
-version = "1.118.0"
+version = "1.121.0"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -1263,7 +1243,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat_ffi"
-version = "1.118.0"
+version = "1.121.0"
 dependencies = [
  "anyhow",
  "deltachat",
@@ -4597,12 +4577,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "stable_deref_trait"
-version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
-
-[[package]]
 name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4958,14 +4932,14 @@ dependencies = [
 
 [[package]]
 name = "tokio-tar"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a50188549787c32c1c3d9c8c71ad7e003ccf2f102489c5a96e385c84760477f4"
+checksum = "9d5714c010ca3e5c27114c1cdeb9d14641ace49874aa5626d7149e47aedace75"
 dependencies = [
  "filetime",
  "futures-core",
  "libc",
- "redox_syscall 0.2.16",
+ "redox_syscall 0.3.5",
  "tokio",
  "tokio-stream",
  "xattr",
@@ -5778,9 +5752,9 @@ dependencies = [
 
 [[package]]
 name = "xattr"
-version = "0.2.3"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d1526bbe5aaeb5eb06885f4d987bcdfa5e23187055de9b83fe00156a821fabc"
+checksum = "f4686009f71ff3e5c4dbcf1a282d0a44db3f021ba69350cd42086b3e5f1c6985"
 dependencies = [
  "libc",
 ]

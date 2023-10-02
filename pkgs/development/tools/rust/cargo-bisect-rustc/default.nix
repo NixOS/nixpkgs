@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bisect-rustc";
-  version = "0.6.6";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-i/MZslGbv72MZmd31SQFc2QdDRigs8edyN2/T5V5r4k=";
+    hash = "sha256-1edBGjnVsMNoP06HAEERQJ6HCkk0dRKlnt1b8GnJWsY=";
   };
 
   patches =
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
-  cargoHash = "sha256-dnR0V2MvW4Z3jtsjXSboCRFNb22fDGu01fC40N2Deho=";
+  cargoHash = "sha256-HzqGSuobGuIuLwoAPQJ1d6xUO2VJ0rcjfOYz2wdIbCk=";
 
   checkFlags = [
     "--skip test_github"  # requires internet

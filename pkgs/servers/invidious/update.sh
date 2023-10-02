@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nix-prefetch pkg-config
+#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nix-prefetch pkg-config pcre
 git_url='https://github.com/iv-org/invidious.git'
 git_branch='master'
 git_dir='/var/tmp/invidious.git'

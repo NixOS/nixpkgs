@@ -16,13 +16,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.3.3";
+  version = "3.4.0";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-dOs1bj+F8UIzeRATNgiBtnSPeAgcxoj/nW8PZzp2LRM=";
+    sha256 = "sha256-rum2CmyITTVBZLMJbEZX8yRFQYZgf4WdHOBdiZeYr50=";
   };
 
   buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --docdir=$doc/share/doc/${pname} --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --docdir=$doc/share/doc/${pname} --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev} --disable-extension-upgrades-install"
 
     makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin docdir=$doc/share/doc/${pname}"
   '';
@@ -76,5 +76,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
     inherit (postgresql.meta) platforms;
+    broken = versionOlder postgresql.version "12";
   };
 }

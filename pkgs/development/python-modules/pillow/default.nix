@@ -6,7 +6,7 @@
 , fetchpatch
 , isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
-, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook, setuptools
 # for passthru.tests
 , imageio, matplotlib, pilkit, pydicom, reportlab
 }@args:
@@ -23,6 +23,16 @@ import ./generic.nix (rec {
     inherit version;
     hash = "sha256-nIK1s+BDx68NlXktDSDM9o9hof7Gs1MOcYtohCJyc5Y=";
   };
+
+  patches = [
+    # Pull in zlib-1.3 fix pending upstream inclusion
+    #   https://github.com/python-pillow/Pillow/pull/7344
+    (fetchpatch {
+      name = "zlib-1.3.patch";
+      url = "https://github.com/python-pillow/Pillow/commit/9ef7cb39def45b0fe1cdf4828ca20838a1fc39d1.patch";
+      hash = "sha256-N7V6Xz+SBHSm3YIgmbty7zbqkv8MzpLMhU4Xxerhx8w=";
+    })
+  ];
 
   passthru.tests = {
     inherit imageio matplotlib pilkit pydicom reportlab;

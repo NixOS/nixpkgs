@@ -4,8 +4,11 @@
 , isPyPy
 , python
 , libev
+, cffi
+, cython_3
 , greenlet
 , setuptools
+, wheel
 , zope_event
 , zope_interface
 , pythonOlder
@@ -24,7 +27,11 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    cython_3
     setuptools
+    wheel
+  ] ++ lib.optionals (!isPyPy) [
+    cffi
   ];
 
   buildInputs = [

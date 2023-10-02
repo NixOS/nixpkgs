@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 1f8710308cee679b61629e0050952ea37d647ff4
-  ref: refs/tags/6.3.29
+  revision: 26857f6f23bbec8d6f1a0b7deaf921a8021a66cd
+  ref: refs/tags/6.3.35
   specs:
-    metasploit-framework (6.3.29)
+    metasploit-framework (6.3.35)
       actionpack (~> 7.0)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
@@ -41,6 +41,7 @@ GIT
       mqtt
       msgpack (~> 1.6.0)
       nessus_rest
+      net-imap
       net-ldap
       net-smtp
       net-ssh
@@ -80,6 +81,7 @@ GIT
       rex-text
       rex-zip
       ruby-macho
+      ruby-mysql
       ruby_smb (~> 3.2.0)
       rubyntlm
       rubyzip
@@ -103,25 +105,25 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    actionpack (7.0.7)
-      actionview (= 7.0.7)
-      activesupport (= 7.0.7)
+    actionpack (7.0.7.2)
+      actionview (= 7.0.7.2)
+      activesupport (= 7.0.7.2)
       rack (~> 2.0, >= 2.2.4)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (7.0.7)
-      activesupport (= 7.0.7)
+    actionview (7.0.7.2)
+      activesupport (= 7.0.7.2)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activemodel (7.0.7)
-      activesupport (= 7.0.7)
-    activerecord (7.0.7)
-      activemodel (= 7.0.7)
-      activesupport (= 7.0.7)
-    activesupport (7.0.7)
+    activemodel (7.0.7.2)
+      activesupport (= 7.0.7.2)
+    activerecord (7.0.7.2)
+      activemodel (= 7.0.7.2)
+      activesupport (= 7.0.7.2)
+    activesupport (7.0.7.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -132,13 +134,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.803.0)
-    aws-sdk-core (3.180.3)
+    aws-partitions (1.811.0)
+    aws-sdk-core (3.181.0)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-ec2 (1.397.0)
+    aws-sdk-ec2 (1.402.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-ec2instanceconnect (1.32.0)
@@ -150,8 +152,8 @@ GEM
     aws-sdk-kms (1.71.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.132.1)
-      aws-sdk-core (~> 3, >= 3.179.0)
+    aws-sdk-s3 (1.134.0)
+      aws-sdk-core (~> 3, >= 3.181.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.6)
     aws-sdk-ssm (1.156.0)
@@ -171,6 +173,7 @@ GEM
     cookiejar (0.3.3)
     crass (1.0.6)
     daemons (1.4.1)
+    date (3.3.3)
     dnsruby (1.70.0)
       simpleidn (~> 0.2.1)
     domain_name (0.5.20190701)
@@ -270,13 +273,16 @@ GEM
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     nessus_rest (0.1.6)
+    net-imap (0.3.7)
+      date
+      net-protocol
     net-ldap (0.18.0)
     net-protocol (0.2.1)
       timeout
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.2.0)
-    network_interface (0.0.2)
+    network_interface (0.0.4)
     nexpose (7.3.0)
     nio4r (2.5.9)
     nokogiri (1.14.5)
@@ -301,7 +307,7 @@ GEM
       ttfunk
     pg (1.5.3)
     public_suffix (5.0.3)
-    puma (6.3.0)
+    puma (6.3.1)
       nio4r (~> 2.0)
     racc (1.7.1)
     rack (2.2.8)
@@ -316,9 +322,9 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    railties (7.0.7)
-      actionpack (= 7.0.7)
-      activesupport (= 7.0.7)
+    railties (7.0.7.2)
+      actionpack (= 7.0.7.2)
+      activesupport (= 7.0.7.2)
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
@@ -327,10 +333,10 @@ GEM
     rasn1 (0.12.1)
       strptime (~> 0.2.5)
     rb-readline (0.5.5)
-    recog (3.1.1)
+    recog (3.1.2)
       nokogiri
     redcarpet (3.6.0)
-    reline (0.3.7)
+    reline (0.3.8)
       io-console (~> 0.5)
     rex-arch (0.1.14)
       rex-text
@@ -383,6 +389,7 @@ GEM
     rexml (3.2.6)
     rkelly-remix (0.0.7)
     ruby-macho (4.0.0)
+    ruby-mysql (4.0.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
     ruby_smb (3.2.5)
@@ -405,7 +412,7 @@ GEM
       tilt (~> 2.0)
     sqlite3 (1.6.3)
       mini_portile2 (~> 2.8.0)
-    sshkey (2.0.0)
+    sshkey (3.0.0)
     strptime (0.2.5)
     swagger-blocks (3.0.0)
     thin (1.8.2)
@@ -455,4 +462,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.4.17
+   2.4.19

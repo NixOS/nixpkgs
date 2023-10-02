@@ -2,17 +2,9 @@
 
 {
   options.programs.clash-verge = {
-    enable = lib.mkEnableOption (lib.mdDoc ''
-      Clash Verge.
-    '');
-
-    autoStart = lib.mkEnableOption (lib.mdDoc ''
-      Clash Verge Auto Launch.
-    '');
-
-    tunMode = lib.mkEnableOption (lib.mdDoc ''
-      Clash Verge Tun Mode.
-    '');
+    enable = lib.mkEnableOption (lib.mdDoc "Clash Verge");
+    autoStart = lib.mkEnableOption (lib.mdDoc "Clash Verge auto launch");
+    tunMode = lib.mkEnableOption (lib.mdDoc "Clash Verge TUN mode");
   };
 
   config =

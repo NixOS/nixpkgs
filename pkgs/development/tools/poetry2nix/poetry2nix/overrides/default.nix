@@ -2738,15 +2738,12 @@ lib.composeManyExtensions [
         }
       );
 
-      wheel = ((
-        pkgs.python3.pkgs.override {
-          python = self.python;
+      wheel = if self.python.isPy2 then
+        super.wheel.override {
+          inherit (self) bootstrapped-pip;
         }
-      ).wheel.override {
-        inherit (self) buildPythonPackage bootstrapped-pip setuptools;
-      }).overrideAttrs (old: {
-        inherit (super.wheel) pname name version src;
-      });
+      else
+        super.wheel;
 
       zipp = if super.zipp == null then null else
       super.zipp.overridePythonAttrs (
@@ -2756,20 +2753,6 @@ lib.composeManyExtensions [
           ];
         }
       );
-
-      packaging =
-        let
-          old = super.packaging;
-        in
-        # From 20.5 until 20.7, packaging used flit for packaging (heh)
-          # See https://github.com/pypa/packaging/pull/352 and https://github.com/pypa/packaging/pull/367
-        if (lib.versionAtLeast old.version "20.5" && lib.versionOlder old.version "20.8") then
-          addBuildSystem
-            {
-              inherit self;
-              drv = old;
-              attr = "flit-core";
-            } else old;
 
       psutil = super.psutil.overridePythonAttrs (
         old: {

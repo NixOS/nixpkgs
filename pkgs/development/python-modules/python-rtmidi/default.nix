@@ -6,43 +6,49 @@
 , CoreAudio
 , CoreMIDI
 , CoreServices
+, Foundation
+, cython_3
 , fetchPypi
 , flake8
 , libjack2
 , meson-python
+, ninja
 , pkg-config
 , pythonOlder
-, setuptools
 , tox
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "python-rtmidi";
-  version = "1.5.4";
+  version = "1.5.6";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "python_rtmidi";
     inherit version;
-    hash = "sha256-sLUGQoDba3iiYvqUFwMbIktSdZBb0OLhccfQ++FFRP0=";
+    hash = "sha256-sqCjmbtKXhpWR3eYr9QdAioYtelU9tD/krRbuZvuNxA=";
   };
 
   nativeBuildInputs = [
+    cython_3
     meson-python
+    ninja
     pkg-config
-    setuptools
+    wheel
   ];
 
   buildInputs = [
-    libjack2
   ] ++ lib.optionals stdenv.isLinux [
+    libjack2
     alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     CoreAudio
     CoreMIDI
     CoreServices
+    Foundation
   ];
 
   nativeCheckInputs = [

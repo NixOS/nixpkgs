@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-HD5OK8HjnLDbyC/TmVI2HfBRIUCyyHTbA3JvKoeXV5E=";
   };
 
-  vendorSha256 = null; #vendorSha256 = "";
+  vendorHash = null;
 
   meta = with lib; {
     description = "Reconnaissance tool for GitHub code search";

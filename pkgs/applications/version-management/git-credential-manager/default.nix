@@ -20,13 +20,13 @@
 assert withLibsecretSupport -> withGuiSupport;
 buildDotnetModule rec {
   pname = "git-credential-manager";
-  version = "2.2.2";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
     rev = "v${version}";
-    hash = "sha256-XXtir/sSjJ1rpv3UQHM3Kano/fMBch/sm8ZtYwGyFyQ=";
+    hash = "sha256-vfv6dCmTuDsh6MaD2HAKlxZtQGVE0B5HJZPnoAUwUnM=";
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";

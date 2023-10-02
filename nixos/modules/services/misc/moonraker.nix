@@ -1,8 +1,8 @@
 { config, lib, options, pkgs, ... }:
 with lib;
 let
-  pkg = pkgs.moonraker;
   cfg = config.services.moonraker;
+  pkg = cfg.package;
   opt = options.services.moonraker;
   format = pkgs.formats.ini {
     # https://github.com/NixOS/nixpkgs/pull/121613#issuecomment-885241996
@@ -17,6 +17,14 @@ in {
   options = {
     services.moonraker = {
       enable = mkEnableOption (lib.mdDoc "Moonraker, an API web server for Klipper");
+
+      package = mkOption {
+        type = with types; nullOr package;
+        default = pkgs.moonraker;
+        defaultText = literalExpression "pkgs.moonraker";
+        example = literalExpression "pkgs.moonraker.override { useGpiod = true; }";
+        description = lib.mdDoc "Moonraker package to use";
+      };
 
       klipperSocket = mkOption {
         type = types.path;

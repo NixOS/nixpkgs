@@ -2,6 +2,7 @@
 
 let
   release = {
+    "8.18.0+0.18.0".sha256 = "sha256-c+3yG9vcbek/uvQ27OOQGqqsIHU1VuQhQvNVOjfucbo=";
     "8.17.0+0.17.0".sha256 = "sha256-I81qvaXpJfXcbFw8vyzYLzlnhPg1QD0lTqAFXhoZ0rI=";
     "8.16.0+0.16.3".sha256 = "sha256-22Kawp8jAsgyBTppwN5vmN7zEaB1QfPs0qKxd6x/7Uc=";
     "8.15.0+0.15.0".sha256 = "1vh99ya2dq6a8xl2jrilgs0rpj4j227qx8zvzd2v5xylx0p4bbrp";
@@ -19,6 +20,7 @@ in
 
   defaultVersion =  with versions;
     lib.switch coq.version [
+      { case = isEq "8.18"; out = "8.18.0+0.18.0"; }
       { case = isEq "8.17"; out = "8.17.0+0.17.0"; }
       { case = isEq "8.16"; out = "8.16.0+0.16.3"; }
       { case = isEq "8.15"; out = "8.15.0+0.15.0"; }
@@ -86,6 +88,10 @@ in
     else if version == "8.14.0+0.14.0" || version == "8.15.0+0.15.0"
     then [
       ./janestreet-0.15.patch
+    ]
+    else if version == "8.16.0+0.16.3" || version == "8.17.0+0.17.0"
+    then [
+      ./janestreet-0.16.patch
     ]
     else [
     ];

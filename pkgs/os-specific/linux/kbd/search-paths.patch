@@ -52,10 +52,9 @@ Without this patch, kbd will only look inside
  };
 --- a/src/loadkeys.c
 +++ b/src/loadkeys.c
-@@ -27,6 +27,7 @@
+@@ -27,5 +27,6 @@
  
  static const char *const dirpath1[] = {
- 	"",
 +	"/etc/kbd/" KEYMAPDIR "/**",
  	DATADIR "/" KEYMAPDIR "/**",
  	KERNDIR "/",

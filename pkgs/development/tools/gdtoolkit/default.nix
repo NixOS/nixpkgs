@@ -1,7 +1,7 @@
 { lib
 , python3Packages
 , fetchFromGitHub
-, godot-server
+, godot3-server
 }:
 
 let lark080 = python3Packages.lark.overrideAttrs (old: rec {
@@ -43,12 +43,12 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     hypothesis
-    godot-server
+    godot3-server
   ];
 
   preCheck =
     let
-      godotServerMajorVersion = lib.versions.major godot-server.version;
+      godotServerMajorVersion = lib.versions.major godot3-server.version;
       gdtoolkitMajorVersion = lib.versions.major version;
       msg = ''
         gdtoolkit major version ${gdtoolkitMajorVersion} does not match godot-server major version ${godotServerMajorVersion}!

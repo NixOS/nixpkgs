@@ -4,7 +4,7 @@
 , rustPlatform
 , fetchFromGitHub
 , substituteAll
-, fetchpatch
+, just
 , pkg-config
 , wrapGAppsHook4
 , cairo
@@ -20,25 +20,18 @@
 , rclone
 }:
 
-let
-  # https://github.com/trevyn/librclone/pull/8
-  librclone-mismatched-types-patch = fetchpatch {
-    name = "use-c_char-to-be-platform-independent.patch";
-    url = "https://github.com/trevyn/librclone/commit/91fdf3fa5f5eea0dfd06981ba72e09034974fdad.patch";
-    hash = "sha256-8YDyUNP/ISP5jCliT6UCxZ89fdRFud+6u6P29XdPy58=";
-  };
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.5.2";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-pFtyfKGPlwum/twGXi/e82BjINy6/MMvvmVfrwWHTQg=";
+    hash = "sha256-U/6aqQig+uuWj/B9CODnV6chxY+KfMH7DqnPtSTDSA0=";
   };
 
-  cargoHash = "sha256-wcgu4KApkn68Tpk3PQ9Tkxif++/8CmS4f8AOOpCA/X8=";
+  cargoHash = "sha256-69LK/oicfmSPbUGGzWV9kvXkHqMvEzCG8xCu61MxSdk=";
 
   patches = [
     (substituteAll {
@@ -56,12 +49,11 @@ in rustPlatform.buildRustPackage rec {
     substituteInPlace .cargo-checksum.json \
       --replace $oldHash $(sha256sum build.rs | cut -d " " -f 1)
     popd
-    pushd $cargoDepsCopy/librclone
-    oldHash=$(sha256sum src/lib.rs | cut -d " " -f 1)
-    patch -p1 < ${librclone-mismatched-types-patch}
-    substituteInPlace .cargo-checksum.json \
-      --replace $oldHash $(sha256sum src/lib.rs | cut -d " " -f 1)
-    popd
+
+    substituteInPlace justfile \
+      --replace "{{ env_var('DESTDIR') }}/usr" "${placeholder "out"}"
+    # buildRustPackage takes care of installing the binary
+    sed -i "#/bin/celeste#d" justfile
   '';
 
   # Cargo.lock is outdated
@@ -80,6 +72,7 @@ in rustPlatform.buildRustPackage rec {
   RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
+    just
     pkg-config
     rustPlatform.bindgenHook
     wrapGAppsHook4
@@ -102,6 +95,10 @@ in rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libappindicator-gtk3 ]}"
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
+  '';
+
+  postInstall = ''
+    just install
   '';
 
   meta = {

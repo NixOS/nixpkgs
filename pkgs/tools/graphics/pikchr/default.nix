@@ -52,5 +52,6 @@ stdenv.mkDerivation {
     license = licenses.bsd0;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "pikchr";
   };
 }

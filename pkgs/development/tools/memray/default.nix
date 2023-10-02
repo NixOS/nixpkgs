@@ -37,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     ipython
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.11") [
+  ] ++ lib.optionals (pythonOlder "3.12") [
     greenlet
   ];
 

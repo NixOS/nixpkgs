@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     description = "A TLS-only terminal IRC client";
     platforms = platforms.unix;
+    mainProgram = "catgirl";
     maintainers = with maintainers; [ xfnw ];
   };
 }

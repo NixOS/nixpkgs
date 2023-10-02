@@ -39,11 +39,9 @@ let
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-    # "--add-flags" (lib.escapeShellArgs flags)
-    # wrapper args used both when generating the manifest and in the final neovim executable
-    commonWrapperArgs = (lib.optionals (lib.isList wrapperArgs) wrapperArgs)
+    commonWrapperArgs =
       # vim accepts a limited number of commands so we join them all
-          ++ [
+          [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
             # (lib.intersperse "|" hostProviderViml)
           ] ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [

@@ -12,6 +12,8 @@ from packaging import version
 updates_url = "https://www.jetbrains.com/updates/updates.xml"
 current_path = pathlib.Path(__file__).parent
 versions_file_path = current_path.joinpath("versions.json").resolve()
+fromVersions = {}
+toVersions = {}
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
@@ -74,6 +76,8 @@ def update_product(name, product):
             download_url = product["url-template"].format(version=version_or_build_number, versionMajorMinor=version_number)
             product["url"] = download_url
             if "sha256" not in product or product.get("build_number") != new_build_number:
+                fromVersions[name] = product["version"]
+                toVersions[name] = new_version
                 logging.info("Found a newer version %s with build number %s.", new_version, new_build_number)
                 product["version"] = new_version
                 product["build_number"] = new_build_number
@@ -101,6 +105,26 @@ with open(versions_file_path, "w") as versions_file:
     json.dump(versions, versions_file, indent=2)
     versions_file.write("\n")
 
+if len(toVersions) == 0:
+    # No Updates found
+    sys.exit(0)
+
+if len(toVersions) == 1:
+    commitMessage = ""
+else:
+    lowestVersion = min(fromVersions.values())
+    highestVersion = max(toVersions.values())
+    commitMessage = f"jetbrains: {lowestVersion} -> {highestVersion}"
+    commitMessage += "\n\n"
+
+for name in toVersions.keys():
+    commitMessage += f"jetbrains.{name}: {fromVersions[name]} -> {toVersions[name]}\n"
+
+# Commit the result
+logging.info("#### Committing changes... ####")
+subprocess.run(['git', 'commit', f'-m{commitMessage}', '--', f'{versions_file_path}'], check=True)
+
 logging.info("#### Updating plugins ####")
 plugin_script = current_path.joinpath("plugins/update_plugins.py").resolve()
 subprocess.call(plugin_script)
+

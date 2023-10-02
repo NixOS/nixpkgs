@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "irccloud";
     repo = "irccat";
     rev = "v${version}";
-    sha256 = "sha256-fr5x1usviJPbc4t5SpIVgV9Q6071XG8eYtyeyraddts=";
+    hash = "sha256-fr5x1usviJPbc4t5SpIVgV9Q6071XG8eYtyeyraddts=";
   };
 
-  vendorSha256 = "030hnkwh45yqppm96yy15j82skf7wmax5xkm7j5khr1l9lrz4591";
+  vendorHash = "sha256-IRXyM000ZDiLPHX20lXlx00tkCzBe5PqvdgXAvm0EAw=";
 
   meta = with lib; {
     homepage = "https://github.com/irccloud/irccat";

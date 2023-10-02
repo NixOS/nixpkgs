@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.0.4080";
 
   src = fetchurl {
-    url = "https://pubdl.clonehero.net/clonehero-v${finalAttrs.version}-final/clonehero-linux.tar.xz";
+    url = "https://github.com/clonehero-game/releases/releases/download/V${finalAttrs.version}/CloneHero-linux.tar.xz";
     hash = "sha256-YWLV+wgQ9RfKRSSWh/x0PMjB6tFA4YpHb9WtYOOgZZI=";
   };
 

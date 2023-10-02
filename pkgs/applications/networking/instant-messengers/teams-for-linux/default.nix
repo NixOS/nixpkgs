@@ -8,33 +8,30 @@
 , nodejs
 , fetchYarnDeps
 , fixup_yarn_lock
-, electron
+, electron_24
 , libpulseaudio
 , pipewire
 , alsa-utils
 , which
+, testers
+, teams-for-linux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "teams-for-linux";
-  version = "1.2.8";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5OocTsQjmNZCnzAY1RfrxD6Ad/kZTIkFl/3OmeJl1oI=";
+    hash = "sha256-xSNjAao8pv3jGRK68bkwGy0vo3nm8KRZjTtCEge4kHs=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-XUASMWrH8wWeYsr6gCdQGgV/7E6hLDWkJ0BXHZCepKQ=";
+    hash = "sha256-j5N6d270myUylDVDFQTScbsGp1wlpt5sISDJBRCV/GU=";
   };
-
-  patches = [
-    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
-    ./screensharing-wayland-hack-fix.patch
-  ];
 
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
 
@@ -55,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
-      -c.electronDist=${electron}/lib/electron \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=${electron_24}/libexec/electron \
+      -c.electronVersion=${electron_24.version}
 
     runHook postBuild
   '';
@@ -75,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
-    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
+    makeWrapper '${electron_24}/bin/electron' "$out/bin/teams-for-linux" \
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
@@ -96,12 +93,16 @@ stdenv.mkDerivation (finalAttrs: {
   })];
 
   passthru.updateScript = ./update.sh;
+  passthru.tests.version = testers.testVersion rec {
+    package = teams-for-linux;
+    command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
+  };
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
     homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ muscaln lilyinstarlight ];
+    maintainers = with lib.maintainers; [ muscaln lilyinstarlight qjoly ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

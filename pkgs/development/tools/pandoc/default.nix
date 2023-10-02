@@ -1,7 +1,8 @@
-{ stdenv, lib, haskellPackages, fetchpatch, haskell, removeReferencesTo }:
+{ stdenv, lib, haskellPackages, haskell, removeReferencesTo }:
 
 let
-  static = haskell.lib.compose.justStaticExecutables haskellPackages.pandoc;
+  # Since pandoc 3.0 the pandoc binary resides in the pandoc-cli package.
+  static = haskell.lib.compose.justStaticExecutables haskellPackages.pandoc-cli;
 
 in
   (haskell.lib.compose.overrideCabal (drv: {

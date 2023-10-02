@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.6";
+  version = "0.6.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,13 +27,12 @@ buildPythonPackage rec {
     owner = "randy3k";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-zA7R9UIB0hOWev10Y4oySIKeIxTOo0V6Q3Fxe+FeHSU=";
+    hash = "sha256-MEstbQj1dOcrukgDvMwL330L9INEZcIupebrSYMOrZk=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' "" \
-      --replace '0.3.39,<0.4.0' '0.3.39'
+      --replace '"pytest-runner"' ""
   '';
 
   nativeBuildInputs = [
@@ -58,6 +57,8 @@ buildPythonPackage rec {
     jedi
     git
   ];
+
+  makeWrapperArgs = [ "--set R_HOME ${R}/lib/R" ];
 
   preCheck = ''
     export HOME=$TMPDIR

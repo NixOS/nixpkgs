@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
-  version = "1.2.9";
+  version = "1.2.10";
 
   src = fetchurl {
     url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-52I9RSVZX5LhHOJe6al/IEChTG5NzQJ6qW4Gy854F70=";
+    sha256 = "sha256-EEti7H8Cp84WynefSBVhbfHMIZM1A3g6kQe1lE+DBjo=";
   };
 
   nativeBuildInputs = [ gettext makeWrapper ];

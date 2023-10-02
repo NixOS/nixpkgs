@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchYarnDeps
 , fetchzip
 , makeWrapper
 , makeDesktopItem
@@ -14,23 +15,26 @@ let
 in
   mkYarnPackage rec {
     pname = "micropad";
-    version = "4.2.1";
+    version = "4.3.0";
 
     src = fetchFromGitHub {
       owner = "MicroPad";
       repo = "Micropad-Electron";
       rev = "v${version}";
-      sha256 = "sha256-XmnKhyb0JMWP0ZGzPvLPtpkgAemW/mdxunbFW9WV9lE=";
+      hash = "sha256-Rr3mOz2OlCq2tibxutR8zBANhswnkz70aP9BBS/pXp0=";
     };
 
     micropad-core = fetchzip {
       url = "https://github.com/MicroPad/MicroPad-Core/releases/download/v${version}/micropad.tar.xz";
-      sha256 = "0mzyd2p4mmnc19ffvd4sd75x7xwb1g5masdaqpn2n3h91687jmsf";
+      hash = "sha256-7yFTD8bXsxT6kBKxBGGxwzYpa0rZYLYV6KRYtImQ58c=";
     };
 
     packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarn.nix;
+
+    offlineCache = fetchYarnDeps {
+      yarnLock = "${src}/yarn.lock";
+      hash = "sha256-PKCi1c8WY1BG/H1kUJ8xSCVoLF/9DEn5Kh29is2BTYY=";
+    };
 
     nativeBuildInputs = [ copyDesktopItems makeWrapper ]
       ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];

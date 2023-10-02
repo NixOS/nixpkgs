@@ -181,6 +181,19 @@ with lib.maintainers; {
     shortName = "Cosmopolitan";
   };
 
+  dotnet = {
+    members = [
+      ivar
+      mdarocha
+      corngood
+      raphaelr
+      jamiemagee
+      anpin
+    ];
+    scope = "Maintainers of the .NET build tools and packages";
+    shortName = "dotnet";
+  };
+
   deepin = {
     members = [
       rewine
@@ -274,11 +287,22 @@ with lib.maintainers; {
   };
 
   flutter = {
-    members = [ gilice mkg20001 RossComputerGuy FlafyDev hacker1024 ];
+    members = [ mkg20001 RossComputerGuy FlafyDev hacker1024 ];
     scope = "Maintain Flutter and Dart-related packages and build tools";
     shortName = "flutter";
     enableFeatureFreezePing = false;
     githubTeams = [ "flutter" ];
+  };
+
+  flyingcircus = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      theuni
+      dpausp
+      leona
+    ];
+    scope = "Team for Flying Circus employees who collectively maintain packages.";
+    shortName = "Flying Circus employees";
   };
 
   freedesktop = {
@@ -341,7 +365,7 @@ with lib.maintainers; {
       hedning
       jtojnar
       dasj19
-      maxeaubrey
+      amaxine
     ];
     githubTeams = [
       "gnome"
@@ -413,6 +437,7 @@ with lib.maintainers; {
 
   jupyter = {
     members = [
+      GaetanLepage
       natsukium
     ];
     scope = "Maintain Jupyter and related packages.";
@@ -624,15 +649,13 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
-  nixos-modules = {
+  module-system = {
     members = [
-      ericson2314
       infinisil
-      qyliss
       roberth
     ];
-    scope = "Maintain nixpkgs module system internals.";
-    shortName = "NixOS Modules / internals";
+    scope = "Maintain the Nixpkgs module system.";
+    shortName = "Module system";
     enableFeatureFreezePing = true;
   };
 
@@ -665,6 +688,17 @@ with lib.maintainers; {
     ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";
+  };
+
+  ororatech = {
+    # email: nixdevs@ororatech.com
+    shortName = "OroraTech GmbH. employees";
+    scope = "Team for packages maintained by employees of OroraTech GmbH.";
+    # Edits to this list should only be done by an already existing member.
+    members = [
+      kip93
+      victormeriqui
+    ];
   };
 
   pantheon = {
@@ -882,6 +916,18 @@ with lib.maintainers; {
     shortName = "Vim/Neovim";
   };
 
+  wdz = {
+    members = [
+      n0emis
+      netali
+      vidister
+      johannwagner
+      yuka
+    ];
+    scope = "Group registration for WDZ GmbH team members who collectively maintain packages.";
+    shortName = "WDZ GmbH";
+  };
+
   xfce = {
     members = [
       bobby285271
@@ -890,6 +936,16 @@ with lib.maintainers; {
     ];
     scope = "Maintain Xfce desktop environment and related packages.";
     shortName = "Xfce";
+    enableFeatureFreezePing = true;
+  };
+
+  zig = {
+    members = [
+      AndersonTorres
+      figsoda
+    ];
+    scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
+    shortName = "Zig";
     enableFeatureFreezePing = true;
   };
 }

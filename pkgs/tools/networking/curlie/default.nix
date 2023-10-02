@@ -15,7 +15,7 @@ buildGoModule rec {
     ./bump-golang-x-sys.patch
   ];
 
-  vendorSha256 = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
+  vendorHash = "sha256-VsPdMUfS4UVem6uJgFISfFHQEKtIumDQktHQFPC1muc=";
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

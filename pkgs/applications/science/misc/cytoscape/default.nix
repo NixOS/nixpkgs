@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cytoscape";
-  version = "3.10.0";
+  version = "3.10.1";
 
   src = fetchurl {
     url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-unix-${version}.tar.gz";
-    sha256 = "sha256-xfEVNOXptMpcrisr+a62JruXki1V0YjA/j4US7X8mXA=";
+    sha256 = "sha256-fqxAsnpMYCYj0hW2oxu/NH4PqesRlWPs5eDSeSjy1aU=";
   };
 
   patches = [

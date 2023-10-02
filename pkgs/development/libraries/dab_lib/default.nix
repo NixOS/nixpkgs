@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KSkOg0a5iq+13kClQqj+TaEP/PsLUrm8bMmiJEAZ+C4=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/library/";
+  sourceRoot = "${finalAttrs.src.name}/library";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ faad2 fftwFloat zlib ];

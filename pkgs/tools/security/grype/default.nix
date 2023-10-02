@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "grype";
-  version = "0.65.1";
+  version = "0.69.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-hmjg1W1E1pdrHxPA7qbEJP0R1mEiV0P54+y+RXxKH4c=";
+    hash = "sha256-AXw2mtN4FC6EKWN8dObrU04+WSHDWLY19FSWqQlkq/Q=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +28,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-VxsXhNOFj7Iwq7Sa2J8ADcfLt9Bz+D0RHwEGawveryU=";
+  vendorHash = "sha256-iitWThvWVfeJMLcJLgmFnVguFVF4DejObZPZ3qB5cY0=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,18 +45,18 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/anchore/grype/internal/version.version=${version}"
-    "-X=github.com/anchore/grype/internal/version.gitDescription=v${version}"
-    "-X=github.com/anchore/grype/internal/version.gitTreeState=clean"
+    "-X=main.version=${version}"
+    "-X=main.gitDescription=v${version}"
+    "-X=main.gitTreeState=clean"
   ];
 
   preBuild = ''
     # grype version also displays the version of the syft library used
     # we need to grab it from the go.sum and add an ldflag for it
     SYFT_VERSION="$(grep "github.com/anchore/syft" go.sum -m 1 | awk '{print $2}')"
-    ldflags+=" -X github.com/anchore/grype/internal/version.syftVersion=$SYFT_VERSION"
-    ldflags+=" -X github.com/anchore/grype/internal/version.gitCommit=$(cat COMMIT)"
-    ldflags+=" -X github.com/anchore/grype/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+    ldflags+=" -X main.syftVersion=$SYFT_VERSION"
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
   preCheck = ''
@@ -104,6 +104,6 @@ buildGoModule rec {
       container image or filesystem to find known vulnerabilities.
     '';
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab jk ];
+    maintainers = with maintainers; [ fab jk kashw2 ];
   };
 }

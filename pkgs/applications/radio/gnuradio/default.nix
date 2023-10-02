@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -299,6 +300,12 @@ stdenv.mkDerivation {
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
+    # https://github.com/gnuradio/gnuradio/pull/6808
+    (fetchpatch {
+      name = "gnuradio-fmt10.1.patch";
+      url = "https://github.com/gnuradio/gnuradio/commit/9357c17721a27cc0aae3fe809af140c84e492f37.patch";
+      hash = "sha256-w3b22PTqoORyYQ3RKRG+2htQWbITzQiOdSDyuejUtHQ=";
+    })
   ];
   passthru = shared.passthru // {
     # Deps that are potentially overridden and are used inside GR plugins - the same version must

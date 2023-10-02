@@ -25,14 +25,14 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  version = "16.1.13";
+  version = "16.1.41";
   pname = "jmol";
 
   src = let
     baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
   in fetchurl {
     url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
-    hash = "sha256-BiCv1meuefFgzuhm/u5XmQNzM94xBOQsGtJceEBnu6s=";
+    hash = "sha256-91vPipS5FTqCl7BUSu47aApIfq2e8dD1SW/LEGQWWio=";
   };
 
   patchPhase = ''

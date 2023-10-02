@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Beautiful GTK 4 terminal";
+    mainProgram = "blackbox";
     homepage = "https://gitlab.gnome.org/raggesilver/blackbox";
     changelog = "https://gitlab.gnome.org/raggesilver/blackbox/-/raw/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;

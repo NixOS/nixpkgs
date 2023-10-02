@@ -5,11 +5,8 @@ let
   integerSimpleExcludes = [
     "ghc865Binary"
     "ghc8102Binary"
-    "ghc8102BinaryMinimal"
     "ghc8107Binary"
-    "ghc8107BinaryMinimal"
     "ghc924Binary"
-    "ghc924BinaryMinimal"
     "ghcjs"
     "ghcjs810"
     "integer-simple"
@@ -26,6 +23,7 @@ let
     "ghc943"
     "ghc944"
     "ghc945"
+    "ghc946"
     "ghc94"
     "ghc96"
     "ghc962"
@@ -46,6 +44,7 @@ let
     "ghc943"
     "ghc944"
     "ghc945"
+    "ghc946"
     "ghc96"
     "ghc962"
     "ghcHEAD"
@@ -89,36 +88,20 @@ in {
       llvmPackages = pkgs.llvmPackages_9;
     };
 
-    ghc8102BinaryMinimal = callPackage ../development/compilers/ghc/8.10.2-binary.nix {
-      llvmPackages = pkgs.llvmPackages_9;
-      minimal = true;
-    };
-
     ghc8107Binary = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
       llvmPackages = pkgs.llvmPackages_12;
     };
 
-    ghc8107BinaryMinimal = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
-      llvmPackages = pkgs.llvmPackages_12;
-      minimal = true;
-    };
-
     ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
       llvmPackages = pkgs.llvmPackages_12;
-    };
-    ghc924BinaryMinimal = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
-      llvmPackages = pkgs.llvmPackages_12;
-      minimal = true;
     };
 
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       bootPkgs =
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # 8.10.2 is needed as using 8.10.7 is broken due to RTS-incompatibilities
-        if stdenv.isAarch64 then
-          packages.ghc8102BinaryMinimal
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        else if stdenv.hostPlatform.isMusl then
+        if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isMusl then
           packages.ghc8102Binary
         else
           packages.ghc865Binary;
@@ -129,12 +112,8 @@ in {
     ghc88 = compiler.ghc884;
     ghc8107 = callPackage ../development/compilers/ghc/8.10.7.nix {
       bootPkgs =
-        # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
         # the oldest ghc with aarch64-darwin support is 8.10.5
-        # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
-        if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
           packages.ghc865Binary
         else
@@ -150,11 +129,8 @@ in {
     ghc810 = compiler.ghc8107;
     ghc902 = callPackage ../development/compilers/ghc/9.0.2.nix {
       bootPkgs =
-        # aarch64 ghc8107Binary exceeds max output size on hydra
         # the oldest ghc with aarch64-darwin support is 8.10.5
-        if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc810
         else
           packages.ghc8107Binary;
@@ -166,10 +142,7 @@ in {
     ghc90 = compiler.ghc902;
     ghc924 = callPackage ../development/compilers/ghc/9.2.4.nix {
       bootPkgs =
-        # aarch64 ghc8107Binary exceeds max output size on hydra
-        if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc810
         else
           packages.ghc8107Binary;
@@ -183,10 +156,7 @@ in {
     };
     ghc925 = callPackage ../development/compilers/ghc/9.2.5.nix {
       bootPkgs =
-        # aarch64 ghc8107Binary exceeds max output size on hydra
-        if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc810
         else
           packages.ghc8107Binary;
@@ -200,10 +170,7 @@ in {
     };
     ghc926 = callPackage ../development/compilers/ghc/9.2.6.nix {
       bootPkgs =
-        # aarch64 ghc8107Binary exceeds max output size on hydra
-        if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc810
         else
           packages.ghc8107Binary;
@@ -217,10 +184,7 @@ in {
     };
     ghc927 = callPackage ../development/compilers/ghc/9.2.7.nix {
       bootPkgs =
-        # aarch64 ghc8107Binary exceeds max output size on hydra
-        if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc810
         else
           packages.ghc8107Binary;
@@ -234,10 +198,7 @@ in {
     };
     ghc928 = callPackage ../development/compilers/ghc/9.2.8.nix {
       bootPkgs =
-        # aarch64 ghc8107Binary exceeds max output size on hydra
-        if stdenv.hostPlatform.isAarch then
-          packages.ghc8107BinaryMinimal
-        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc810
         else
           packages.ghc8107Binary;
@@ -346,7 +307,31 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc94 = compiler.ghc945;
+    ghc946 = callPackage ../development/compilers/ghc/9.4.6.nix {
+      bootPkgs =
+        # Building with 9.2 is broken due to
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
+        # Use 8.10 as a workaround where possible to keep bootstrap path short.
+
+        # On ARM text won't build with GHC 8.10.*
+        if stdenv.hostPlatform.isAarch then
+          # TODO(@sternenseemann): package bindist
+          packages.ghc902
+        # No suitable bindists for powerpc64le
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc902
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
+      # Need to use apple's patched xattr until
+      # https://github.com/xattr/xattr/issues/44 and
+      # https://github.com/xattr/xattr/issues/55 are solved.
+      inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
+      # Support range >= 10 && < 14
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc94 = compiler.ghc946;
     ghc962 = callPackage ../development/compilers/ghc/9.6.2.nix {
       bootPkgs =
         # For GHC 9.2 no armv7l bindists are available.
@@ -354,8 +339,6 @@ in {
           packages.ghc924
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc924
-        else if stdenv.isAarch64 then
-          packages.ghc924BinaryMinimal
         else
           packages.ghc924Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -375,8 +358,6 @@ in {
           packages.ghc924
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc924
-        else if stdenv.isAarch64 then
-          packages.ghc924BinaryMinimal
         else
           packages.ghc924Binary;
       inherit (buildPackages.python3Packages) sphinx;
@@ -435,33 +416,15 @@ in {
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc8102BinaryMinimal = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8102BinaryMinimal;
-      ghc = bh.compiler.ghc8102BinaryMinimal;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
     ghc8107Binary = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc8107Binary;
       ghc = bh.compiler.ghc8107Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
-    ghc8107BinaryMinimal = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc8107BinaryMinimal;
-      ghc = bh.compiler.ghc8107BinaryMinimal;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
     ghc924Binary = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc924Binary;
       ghc = bh.compiler.ghc924Binary;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
-      packageSetConfig = bootstrapPackageSet;
-    };
-    ghc924BinaryMinimal = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc924BinaryMinimal;
-      ghc = bh.compiler.ghc924BinaryMinimal;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
@@ -529,7 +492,12 @@ in {
       ghc = bh.compiler.ghc945;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
     };
-    ghc94 = packages.ghc945;
+    ghc946 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc946;
+      ghc = bh.compiler.ghc946;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
+    };
+    ghc94 = packages.ghc946;
     ghc962 = callPackage ../development/haskell-modules {
       buildHaskellPackages = bh.packages.ghc962;
       ghc = bh.compiler.ghc962;

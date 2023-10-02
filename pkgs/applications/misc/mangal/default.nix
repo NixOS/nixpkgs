@@ -12,7 +12,7 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [ "-s" "-w" ];
 

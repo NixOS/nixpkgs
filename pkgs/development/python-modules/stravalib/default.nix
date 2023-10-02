@@ -3,6 +3,8 @@
 , fetchPypi
 , nose
 , setuptools
+, setuptools-scm
+, wheel
 , arrow
 , requests
 , units
@@ -22,6 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-P00oxUz0oVQB969c/N2wpKLe09wtvQWPH4DH4EZUaxc=";
   };
 
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
   nativeCheckInputs = [
     nose
   ];
@@ -33,7 +41,6 @@ buildPythonPackage rec {
     pint
     pydantic
     pytz
-    setuptools
     six
   ];
 

@@ -3,8 +3,11 @@
 , pythonOlder
 , fetchPypi
 , cython
+, oldest-supported-numpy
 , packaging
 , setuptools
+, setuptools-scm
+, wheel
 , numpy
 , pytestCheckHook
 }:
@@ -24,8 +27,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+    numpy
+    oldest-supported-numpy
     packaging
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

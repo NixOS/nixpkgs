@@ -1,11 +1,11 @@
 { lib
 , stdenv
 , fetchurl
+, asar
 , dpkg
 , electron_24
 , makeWrapper
 , nixosTests
-, nodePackages
 , undmg
 }:
 
@@ -22,9 +22,9 @@ let
       };
 
       nativeBuildInputs = [
+        asar
         dpkg
         makeWrapper
-        nodePackages.asar
       ];
 
       unpackPhase = "dpkg-deb -x $src .";

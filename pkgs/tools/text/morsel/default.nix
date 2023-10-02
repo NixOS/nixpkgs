@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "morsel";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "SamLee514";
     repo = "morsel";
     rev = "v${version}";
-    sha256 = "sha256-m4bCni/9rMTPhZSogpd5+ARrW11TPHSvQpdz3wUr9H4=";
+    hash = "sha256-bb+88GIyd92kHJAs25mJ9vmq0Ha2q0fdHnpTXhX2BFE=";
   };
 
-  cargoSha256 = "sha256-2xR2/013ocDKWS1oWitpAbSDPRwEJJqFcCIm6ZQpCoc=";
+  cargoHash = "sha256-XRl71n+rV6MTQMz957K5/25SX9HvYVW6qAuHTdfRLLs=";
 
   meta = with lib; {
     description = "Command line tool to translate morse code input to text in real time";

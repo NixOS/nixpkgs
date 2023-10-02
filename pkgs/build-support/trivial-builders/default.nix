@@ -336,10 +336,11 @@ rec {
     { name
     , text
     , runtimeInputs ? [ ]
+    , meta ? { }
     , checkPhase ? null
     }:
     writeTextFile {
-      inherit name;
+      inherit name meta;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -378,21 +379,21 @@ rec {
     };
 
   # Create a C binary
-  writeCBin = name: code:
-    runCommandCC name
+  writeCBin = pname: code:
+    runCommandCC pname
     {
-      inherit name code;
+      inherit pname code;
       executable = true;
       passAsFile = ["code"];
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
       meta = {
-        mainProgram = name;
+        mainProgram = pname;
       };
     }
     ''
-      n=$out/bin/$name
+      n=$out/bin/${pname}
       mkdir -p "$(dirname "$n")"
       mv "$codePath" code.c
       $CC -x c code.c -o "$n"
@@ -905,13 +906,17 @@ rec {
              ) + "-patched"
     , patches   ? []
     , postPatch ? ""
-    }: stdenvNoCC.mkDerivation {
+    , ...
+    }@args: stdenvNoCC.mkDerivation {
       inherit name src patches postPatch;
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = "unpackPhase patchPhase installPhase";
       installPhase = "cp -R ./ $out";
-    };
+    }
+    # Carry `meta` information from the underlying `src` if present.
+    // (optionalAttrs (src?meta) { inherit (src) meta; })
+    // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
 
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file" {

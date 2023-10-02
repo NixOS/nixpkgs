@@ -8,6 +8,7 @@ The stdenv built-in hooks are documented in [](#ssec-setup-hooks).
 autoconf.section.md
 automake.section.md
 autopatchelf.section.md
+bmake.section.md
 breakpoint.section.md
 cmake.section.md
 gdk-pixbuf.section.md
@@ -17,6 +18,7 @@ installShellFiles.section.md
 libiconv.section.md
 libxml2.section.md
 meson.section.md
+mpi-check-hook.section.md
 ninja.section.md
 patch-rc-path-hooks.section.md
 perl.section.md

@@ -98,6 +98,7 @@ mapAliases ({
   django_classytags = django-classy-tags; # added 2023-07-25
   django_colorful = django-colorful; # added 2023-07-25
   django_compat = django-compat; # added 2023-07-25
+  django-compat = throw "django-compat has been removed. It provided forward/backport compat for django 1.x, which is long end of life."; # added 2023-07-26
   django_contrib_comments = django-contrib-comments; # added 2023-07-25
   django-discover-runner = throw "django-discover-runner was removed because it is no longer maintained."; # added 2022-11-21
   django_environ = django-environ; # added 2021-12-25
@@ -130,8 +131,15 @@ mapAliases ({
   inherit (super.pkgs) fetchPypi; # added 2023-05-25
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
   flaskbabel = flask-babel; # added 2023-01-19
+  flask_assets = flask-assets; # added 2023-08-23
+  flask_elastic = flask-elastic; # added 2023-08-23
   flask_login = flask-login; # added 2022-10-17
+  flask_mail = flask-mail; # added 2023-08-23
+  flask_marshmallow = flask-marshmallow; # added 2023-08-16
+  flask_migrate = flask-migrate; # added 2023-08-23
+  flask_principal = flask-principal; # added 2023-08-23
   flask-restplus = throw "flask-restplus is no longer maintained, use flask-restx instead"; # added 2023-02-21
+  flask_script = flask-script; # added 2023-08-23
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
@@ -185,6 +193,7 @@ mapAliases ({
   JPype1 = jpype1; # added 2023-02-19
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
   jupyter_client = jupyter-client; # added 2021-10-15
+  jupyter_console = jupyter-console; # added  2023-07-31
   jupyter_core = jupyter-core; # added 2023-01-05
   jupyter_server = jupyter-server; # added 2023-01-05
   jupyter-server-ydoc = jupyter-collaboration; # added 2023-07-18
@@ -215,6 +224,7 @@ mapAliases ({
   mutmut = throw "mutmut has been promoted to a top-level attribute"; # added 2022-10-02
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
+  ninja-python = ninja; # add 2022-08-03
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   nose_progressive = throw "nose_progressive has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; #added 2023-02-21
   notifymuch = throw "notifymuch has been promoted to a top-level attribute"; # added 2022-10-02
@@ -264,6 +274,7 @@ mapAliases ({
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
+  pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyramid_hawkauth = throw "pyramid_hawkauth has been removed because it is no longer maintained"; # added 2023-02-2
   pyramid_jinja2 = pyramid-jinja2; # added 2023-06-06
   pyreadability = readability-lxml; # added 2022-05-24
@@ -279,6 +290,7 @@ mapAliases ({
   Pyro4 = pyro4; # added 2023-02-19
   Pyro5 = pyro5; # added 2023-02-19
   PyRSS2Gen = pyrss2gen; # added 2023-02-19
+  pyruckus = throw "pyruckus has been removed, it was deprecrated in favor of aioruckus."; # added 2023-09-07
   pysha3 = throw "pysha3 has been removed, use safe-pysha3 instead"; # added 2023-05-20
   pysmart-smartx = pysmart; # added 2021-10-22
   pysparse = throw "pysparse has been abandoned upstream."; # added 2023-02-28
@@ -354,6 +366,7 @@ mapAliases ({
   sphinx-navtree = throw "sphinx-navtree has been removed since it is not compatible with sphinx 3.3 and unmaintained"; # added 2023-07-03
   sqlalchemy_migrate = sqlalchemy-migrate; # added 2021-10-28
   SQLAlchemy-ImageAttach = throw "sqlalchemy-imageattach has been removed as it is incompatible with sqlalchemy 1.4 and unmaintained"; # added 2022-04-23
+  subdownloader = throw "subdownloader has been removed, because it depended on pyqt4"; # added 2022-06-09
   suds-jurko = throw "suds-jurko has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-02-27
   suseapi = throw "suseapi has been removed because it is no longer maintained"; # added 2023-02-27
   tensorflow-bin_2 = tensorflow-bin; # added 2021-11-25
@@ -374,6 +387,7 @@ mapAliases ({
   uproot3 = throw "uproot3 has been removed, use uproot instead"; # added 2022-12-13
   uproot3-methods = throw "uproot3-methods has been removed"; # added 2022-12-13
   validictory = throw "validictory has been removed, since it abandoned"; # added 2023-07-07
+  ViennaRNA = viennarna; # added 2023-08-23
   virtual-display = throw "virtual-display has been renamed to PyVirtualDisplay"; # added 2023-01-07
   Wand = wand; # added 2022-11-13
   wasm = throw "wasm has been removed because it no longer builds and is unmaintained"; # added 2023-05-20
@@ -393,4 +407,5 @@ mapAliases ({
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26
   zope_component = zope-component; # added 2023-07-28
+  zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
 })

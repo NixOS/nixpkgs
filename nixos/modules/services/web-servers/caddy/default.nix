@@ -24,21 +24,27 @@ let
         }
       '';
 
-  configFile =
-    let
-      Caddyfile = pkgs.writeTextDir "Caddyfile" ''
-        {
-          ${cfg.globalConfig}
-        }
-        ${cfg.extraConfig}
-      '';
+  settingsFormat = pkgs.formats.json { };
 
-      Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
-        mkdir -p $out
-        cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
-        caddy fmt --overwrite $out/Caddyfile
-      '';
-    in
+  configFile =
+    if cfg.settings != { } then
+      settingsFormat.generate "caddy.json" cfg.settings
+    else
+      let
+        Caddyfile = pkgs.writeTextDir "Caddyfile" ''
+          {
+            ${cfg.globalConfig}
+          }
+          ${cfg.extraConfig}
+          ${concatMapStringsSep "\n" mkVHostConf virtualHosts}
+        '';
+
+        Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
+          mkdir -p $out
+          cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+          caddy fmt --overwrite $out/Caddyfile
+        '';
+      in
       "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
 
   etcConfigFile = "caddy/caddy_config";
@@ -299,6 +305,27 @@ in
         which could delay the reload essentially indefinitely.
       '';
     };
+
+    settings = mkOption {
+      type = settingsFormat.type;
+      default = {};
+      description = lib.mdDoc ''
+        Structured configuration for Caddy to generate a Caddy JSON configuration file.
+        See <https://caddyserver.com/docs/json/> for available options.
+
+        ::: {.warning}
+        Using a [Caddyfile](https://caddyserver.com/docs/caddyfile) instead of a JSON config is highly recommended by upstream.
+        There are only very few exception to this.
+
+        Please use a Caddyfile via {option}`services.caddy.configFile`, {option}`services.caddy.virtualHosts` or
+        {option}`services.caddy.extraConfig` with {option}`services.caddy.globalConfig` instead.
+        :::
+
+        ::: {.note}
+        Takes presence over most `services.caddy.*` options, such as {option}`services.caddy.configFile` and {option}`services.caddy.virtualHosts`, if specified.
+        :::
+      '';
+    };
   };
 
   # implementation
@@ -314,7 +341,6 @@ in
       groups = config.users.groups;
     }) acmeHosts;
 
-    services.caddy.extraConfig = concatMapStringsSep "\n" mkVHostConf virtualHosts;
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
       ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}

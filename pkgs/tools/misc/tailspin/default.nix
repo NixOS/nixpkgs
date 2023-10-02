@@ -1,28 +1,25 @@
 { lib
-, buildGoModule
+, rustPlatform
 , fetchFromGitHub
 }:
 
-buildGoModule rec {
+rustPlatform.buildRustPackage rec {
   pname = "tailspin";
-  version = "0.1.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "bensadeh";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-f9VfOcLOWJ4yr/CS0lqaqiaTfzOgdoI9CaS70AMNdsc=";
+    repo = "tailspin";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Uqo47g0AXyRNFb1RmVVJzdFI2g1Oakx85Sg+zIN5B2A=";
   };
 
-  vendorHash = "sha256-gn7/pFw7JEhkkd/PBP4jLUKb5NBaRE/rb049Ic/Bu7A=";
-
-  CGO_ENABLED = 0;
-
-  subPackages = [ "." ];
+  cargoHash = "sha256-0ROLrdS3oBZuh+nXW9mTS2Jn/D+iLAUaYqhKvmKAPTo=";
 
   meta = with lib; {
-    description = "A log file highlighter and a drop-in replacement for `tail -f`";
+    description = "A log file highlighter";
     homepage = "https://github.com/bensadeh/tailspin";
+    changelog = "https://github.com/bensadeh/tailspin/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
     mainProgram = "spin";

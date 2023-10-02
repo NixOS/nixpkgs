@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-g1zn/CBpLv0oNhp32njeNhhli8aTCECgh92+zn5v+4U=";
   };
 
-  vendorSha256 = "sha256-0OsxCGCJT5k5bHXNSIL6QiJXj72bzYCZiI03gvHQuR8=";
+  vendorHash = "sha256-0OsxCGCJT5k5bHXNSIL6QiJXj72bzYCZiI03gvHQuR8=";
 
   meta = with lib; {
     description = "Syncthing CLI Tool";

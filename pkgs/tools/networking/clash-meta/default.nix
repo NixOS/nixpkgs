@@ -4,16 +4,16 @@
 }:
 buildGoModule rec {
   pname = "clash-meta";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "MetaCubeX";
     repo = "Clash.Meta";
     rev = "v${version}";
-    hash = "sha256-QXNMplVy4cDRbUUDwidto7jxgjStX5PmCLdAIW7Edn8=";
+    hash = "sha256-ORyjCYf2OPrSt/juiBk0Gf2Az4XoZipKBWWFXf8nIqE=";
   };
 
-  vendorHash = "sha256-lMeJ3z/iTHIbJI5kTzkQjNPMv5tGMJK/+PM36BUlpjE=";
+  vendorHash = "sha256-ySCmHLuMTCxBcAYo7YD8zOpUAa90PQmeLLt+uOn40Pk=";
 
   # Do not build testing suit
   excludedPackages = [ "./test" ];

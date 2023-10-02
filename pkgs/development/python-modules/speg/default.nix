@@ -14,7 +14,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  pythonImportChecks = [ "speg" ];
+  pythonImportsCheck = [ "speg" ];
 
   # checks fail for seemingly spurious reasons
   doCheck = false;

@@ -52,6 +52,8 @@ let
     buildInputs = [ openssl ];
 
     makeFlags = [
+      "HOSTCC=$(CC_FOR_BUILD)"
+      "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       # binutils 2.39 regression
       # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
@@ -87,6 +89,11 @@ in {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+    # Normally, arm-trusted-firmware builds the build tools for buildPlatform
+    # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
+    # for the hostPlatform here, we trick it by overriding the HOSTCC setting
+    # and, to be safe, remove CC_FOR_BUILD from the environment.
+    depsBuildBuild = [ ];
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
       "fiptool" "certtool"

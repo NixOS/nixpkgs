@@ -50,7 +50,7 @@ let
   mkLibretroCore =
     { core
     , src ? (getCoreSrc core)
-    , version ? "unstable-2023-03-13"
+    , version ? "unstable-2023-09-24"
     , ...
     }@args:
     import ./mkLibretroCore.nix ({
@@ -100,12 +100,22 @@ in
     };
   };
 
+  beetle-pce = mkLibretroCore {
+    core = "mednafen-pce";
+    src = getCoreSrc "beetle-pce";
+    makefile = "Makefile";
+    meta = {
+      description = "Port of Mednafen's PC Engine core to libretro";
+      license = lib.licenses.gpl2Only;
+    };
+  };
+
   beetle-pce-fast = mkLibretroCore {
     core = "mednafen-pce-fast";
     src = getCoreSrc "beetle-pce-fast";
     makefile = "Makefile";
     meta = {
-      description = "Port of Mednafen's PC Engine core to libretro";
+      description = "Port of Mednafen's PC Engine fast core to libretro";
       license = lib.licenses.gpl2Only;
     };
   };
@@ -291,7 +301,11 @@ in
     core = "citra";
     extraBuildInputs = [ libGLU libGL boost ffmpeg nasm ];
     makefile = "Makefile";
-    makeFlags = [ "HAVE_FFMPEG_STATIC=0" ];
+    makeFlags = [
+      "HAVE_FFMPEG_STATIC=0"
+      # https://github.com/libretro/citra/blob/1a66174355b5ed948de48ef13c0ed508b6d6169f/Makefile#L90
+      "BUILD_DATE=01/01/1970_00:00"
+    ];
     meta = {
       description = "Port of Citra to libretro";
       license = lib.licenses.gpl2Plus;
@@ -410,7 +424,9 @@ in
 
   flycast = mkLibretroCore {
     core = "flycast";
+    extraNativeBuildInputs = [ cmake ];
     extraBuildInputs = [ libGL libGLU ];
+    cmakeFlags = [ "-DLIBRETRO=ON" ];
     makefile = "Makefile";
     meta = {
       description = "Flycast libretro port";
@@ -502,7 +518,10 @@ in
 
   mame = mkLibretroCore {
     core = "mame";
-    extraBuildInputs = [ alsa-lib libGLU libGL portaudio python3 xorg.libX11 ];
+    extraNativeBuildInputs = [ python3 ];
+    extraBuildInputs = [ alsa-lib libGLU libGL ];
+    # Setting this is breaking compilation of src/3rdparty/genie for some reason
+    makeFlags = [ "ARCH=" ];
     meta = {
       description = "Port of MAME to libretro";
       license = with lib.licenses; [ bsd3 gpl2Plus ];
@@ -626,6 +645,13 @@ in
     src = getCoreSrc "mupen64plus";
     extraBuildInputs = [ libGLU libGL libpng nasm xorg.libX11 ];
     makefile = "Makefile";
+    makeFlags = [
+      "HAVE_PARALLEL_RDP=1"
+      "HAVE_PARALLEL_RSP=1"
+      "HAVE_THR_AL=1"
+      "LLE=1"
+      "WITH_DYNAREC=${stdenv.hostPlatform.parsed.cpu.name}"
+    ];
     meta = {
       description = "Libretro port of Mupen64 Plus, GL only";
       license = lib.licenses.gpl3Only;
@@ -698,6 +724,11 @@ in
     core = "parallel-n64";
     extraBuildInputs = [ libGLU libGL libpng ];
     makefile = "Makefile";
+    makeFlags = [
+      "HAVE_PARALLEL=1"
+      "HAVE_PARALLEL_RSP=1"
+      "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+    ];
     postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
       sed -i -e '1 i\CPUFLAGS += -DARM_FIX -DNO_ASM -DARM_ASM -DDONT_WANT_ARM_OPTIMIZATIONS -DARM64' Makefile \
       && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
@@ -842,19 +873,18 @@ in
     };
   };
 
-  scummvm = mkLibretroCore rec {
-    core = "scummvm";
-    version = "unstable-2022-04-06";
-    # Commit below introduces libretro platform, that uses libretro-{deps,common} as
-    # submodules. We will probably need to introduce this as separate derivations,
-    # but for now let's just use the last known version that does not use it.
-    # https://github.com/libretro/scummvm/commit/36446fa6eb33e67cc798f56ce1a31070260e2ada
-    src = fetchFromGitHub {
-      owner = "libretro";
-      repo = core;
-      rev = "2fb2e4c551c9c1510c56f6e890ee0300b7b3fca3";
-      hash = "sha256-wrlFqu+ONbYH4xMFDByOgySobGrkhVc7kYWI4JzA4ew=";
+  same_cdi = mkLibretroCore {
+    core = "same_cdi";
+    extraNativeBuildInputs = [ python3 ];
+    extraBuildInputs = [ alsa-lib libGLU libGL portaudio xorg.libX11 ];
+    meta = {
+      description = "SAME_CDI is a libretro core to play CD-i games";
+      license = with lib.licenses; [ bsd3 gpl2Plus ];
     };
+  };
+
+  scummvm = mkLibretroCore {
+    core = "scummvm";
     extraBuildInputs = [ fluidsynth libjpeg libvorbis libGLU libGL ];
     makefile = "Makefile";
     preConfigure = "cd backends/platform/libretro/build";

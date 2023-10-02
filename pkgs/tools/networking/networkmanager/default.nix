@@ -209,7 +209,7 @@ stdenv.mkDerivation rec {
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz maxeaubrey ]);
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz amaxine ]);
     platforms = platforms.linux;
   };
 }

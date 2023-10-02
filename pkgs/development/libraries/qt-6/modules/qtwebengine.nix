@@ -14,8 +14,6 @@
 , python3
 , which
 , nodejs
-, qtbase
-, perl
 , xorg
 , libXcursor
 , libXScrnSaver
@@ -51,8 +49,6 @@
 , systemd
 , pipewire
 , gn
-, runCommand
-, writeScriptBin
 , ffmpeg_4
 , lib
 , stdenv
@@ -60,10 +56,8 @@
 , libxml2
 , libxslt
 , lcms2
-, re2
 , libkrb5
 , mesa
-, xkeyboard_config
 , enableProprietaryCodecs ? true
   # darwin
 , llvmPackages_14
@@ -135,6 +129,11 @@ qtModule {
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
+
+    ../patches/qtwebengine-link-pulseaudio.patch
+
+    # Override locales install path so they go to QtWebEngine's $out
+    ../patches/qtwebengine-locales-path.patch
   ];
 
   postPatch = ''
@@ -224,7 +223,6 @@ qtModule {
     libxml2
     libxslt
     lcms2
-    re2
 
     libevent
     ffmpeg_4

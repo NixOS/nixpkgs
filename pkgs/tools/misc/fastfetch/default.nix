@@ -5,6 +5,7 @@
 , cmake
 , dbus
 , dconf
+, ddcutil
 , glib
 , imagemagick_light
 , libglvnd
@@ -24,6 +25,7 @@
 , vulkan-loader
 , wayland
 , xfce
+, yyjson
 , zlib
 , AppKit
 , Cocoa
@@ -40,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "1.12.2";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-l9fIm7+dBsOqGoFUYtpYESAjDy3496rDTUDQjbNU4U0=";
+    hash = "sha256-KYicfYpJiO7ZfQ2vlGDKuiNprIwXnxz6Razf3GrjRq8=";
   };
 
   nativeBuildInputs = [
@@ -59,10 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     chafa
     imagemagick_light
     sqlite
+    yyjson
   ]
   ++ lib.optionals stdenv.isLinux [
     dbus
     dconf
+    ddcutil
     glib
     libglvnd
     libpulseaudio
@@ -94,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
+    "-DENABLE_SYSTEM_YYJSON=YES"
   ];
 
   postInstall = ''
@@ -114,9 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Like neofetch, but much faster because written in C";
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/fastfetch-cli/fastfetch";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gerg-l khaneliman ];
+    maintainers = with lib.maintainers; [ gerg-l khaneliman federicoschonborn ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";
   };

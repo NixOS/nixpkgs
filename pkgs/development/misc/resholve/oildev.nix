@@ -9,8 +9,7 @@
 , # py-yajl deps
   git
 , # oil deps
-  cmark
-, file
+  file
 , glibcLocales
 , six
 , typing
@@ -80,8 +79,8 @@ rec {
     patchSrc = fetchFromGitHub {
       owner = "abathur";
       repo = "nix-py-dev-oil";
-      rev = "v0.14.0.0";
-      hash = "sha256-U6uR8G6yB2xwuDE/fznco23mVFSVdCxPUNdCRYz4Mj8=";
+      rev = "v0.14.0.1";
+      hash = "sha256-47+986+SohdtoNzTYAgF2vPPWgakyg0VCmR+MgxMzTk=";
     };
     patches = [
       "${patchSrc}/0001-add_setup_py.patch"
@@ -93,6 +92,7 @@ rec {
       "${patchSrc}/0010-disable-line-input.patch"
       "${patchSrc}/0011-disable-fanos.patch"
       "${patchSrc}/0012-disable-doc-cmark.patch"
+      "${patchSrc}/0013-fix-pyverify.patch"
     ];
 
     configureFlags = [
@@ -117,14 +117,6 @@ rec {
       # work around hard parse failure documented in oilshell/oil#1468
       substituteInPlace osh/cmd_parse.py --replace 'elif self.c_id == Id.Op_LParen' 'elif False'
     '';
-
-    /*
-    We did convince oil to upstream an env for specifying
-    this to support a shell.nix. Would need a patch if they
-    later drop this support. See:
-    https://github.com/oilshell/oil/blob/46900310c7e4a07a6223eb6c08e4f26460aad285/doctools/cmark.py#L30-L34
-    */
-    _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
 
     # See earlier note on glibcLocales TODO: verify needed?
     LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";

@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent openssl ];
 
+  enableParallelBuilding = true;
+
   configureFlags =
     let edf = c: o: if c then ["--enable-${o}"] else ["--disable-${o}"];
      in edf bind8Stats       "bind8-stats"

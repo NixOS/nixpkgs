@@ -1,0 +1,26 @@
+From a59bb5f9deeff156bd7bc9d22bc199e0f902b7dc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Rafael=20Fern=C3=A1ndez=20L=C3=B3pez?=
+ <ereslibre@ereslibre.es>
+Date: Mon, 4 Sep 2023 15:25:15 +0200
+Subject: [PATCH] Use `dep:` dependency due to `cargo-auditable` limitation
+
+`cargo-auditable` fails to process the current `Cargo.toml` as it
+is (cargo/rustc 1.72.0 is able to process this crate without any
+issues).
+---
+ crates/c-api/Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/crates/c-api/Cargo.toml b/crates/c-api/Cargo.toml
+index a464c0dbd..1e793432c 100644
+--- a/crates/c-api/Cargo.toml
++++ b/crates/c-api/Cargo.toml
+@@ -37,4 +37,4 @@ default = ['jitdump', 'wat', 'wasi', 'cache', 'parallel-compilation']
+ jitdump = ["wasmtime/jitdump"]
+ cache = ["wasmtime/cache"]
+ parallel-compilation = ['wasmtime/parallel-compilation']
+-wasi = ['wasi-cap-std-sync', 'wasmtime-wasi', 'cap-std', 'wasi-common']
++wasi = ['wasi-cap-std-sync', 'wasmtime-wasi', 'dep:cap-std', 'wasi-common']
+-- 
+2.40.1
+

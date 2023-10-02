@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "2023-04-02-16-53-51";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
     repo = "LenovoLegionLinux";
-    rev = "main${version}";
+    rev = "v${version}-prerelease";
     sha256 = "sha256-s4JFFmawokdC4qoqNvZDhuJSinhQ3YKSIfAYi79VTTA=";
   };
 

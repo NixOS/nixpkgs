@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , go
 , lib
+, libcap
 , libgcrypt
 , libgpg-error
 , libsecret
@@ -25,13 +26,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.16.0";
+  version = "2.16.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Yd53QUnoZ+5imt8kWpfGL6mkWeEFvqRrTpSu6efGgOA=";
+    hash = "sha256-UMWBn3DoEU1fG7qh6F0GOhOqod+grPwp15wSSdP0eCo=";
   };
   patches = [ ];
 
@@ -45,19 +46,19 @@ let
     inherit src patches;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-WKnc2nGXJVhzNluh0RFSdmPtGdo2QnNuEJ7r5xJCGi0=";
+    hash = "sha256-1wYTRc+NehiHwAd/2CmsJNv/TV6wH5wXwNiUdjzEUIk=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-XlOnUB0TO6rrLkWU9eT1sTOcDtJdz4yi/ejKcEfFcFc=";
+    hash = "sha256-oaKkQWMYkAy1c2biVt+GyjHBeYb2XkuRvFrWQJJIdPw=";
   };
   qtgleanDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-qtglean";
     preBuild = "cd qtglean";
-    hash = "sha256-BU++ZWb4Fp8LS2woohuDSD2iYo/3rBO6xgeLzyrdLkU=";
+    hash = "sha256-cqfiOBS8xFC2BbYp6BJWK6NHIU0tILSgu4eo3Ik4YqY=";
   };
 
 in
@@ -65,6 +66,7 @@ stdenv.mkDerivation {
   inherit pname version src patches;
 
   buildInputs = [
+    libcap
     libgcrypt
     libgpg-error
     libsecret

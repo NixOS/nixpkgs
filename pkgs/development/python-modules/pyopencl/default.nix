@@ -9,6 +9,7 @@
 , mesa_drivers
 , numpy
 , ocl-icd
+, oldest-supported-numpy
 , opencl-headers
 , platformdirs
 , pybind11
@@ -17,6 +18,7 @@
 , pytools
 , setuptools
 , six
+, wheel
 }:
 
 let
@@ -24,16 +26,19 @@ let
     if stdenv.isDarwin then [ mesa_drivers.dev ] else [ ocl-icd ];
 in buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2023.1.1";
-
+  version = "2023.1.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CtkleKlKC+De3Vyk/Lbie1p13k5frHV/BMkES9nUJEQ=";
+    hash = "sha256-6wDNV0BJ1ZK2edz4v+erSjbJSjn9Gssaa0XWwNe+mmg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  nativeBuildInputs = [
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
 
   buildInputs = [ opencl-headers pybind11 ] ++ os-specific-buildInputs;
 

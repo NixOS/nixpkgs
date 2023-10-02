@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Add `cgi-bin` to the default list to avoid pulling in whole
+  # of `gcc` into build closure.
+  stripDebugList = [ "cgi-bin" "lib" "lib32" "lib64" "libexec" "bin" "sbin" ];
+
   postInstall = ''
     substituteInPlace $out/lib/systemd/system-shutdown/nutshutdown \
       --replace /bin/sleep "${coreutils}/bin/sleep" \

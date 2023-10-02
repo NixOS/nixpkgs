@@ -221,6 +221,7 @@ let
       homepage = "https://www.openssl.org/";
       description = "A cryptographic library that implements the SSL and TLS protocols";
       license = licenses.openssl;
+      mainProgram = "openssl";
       pkgConfigModules = [
         "libcrypto"
         "libssl"
@@ -236,8 +237,8 @@ in {
   # the permitted insecure version to ensure it gets cached for our users
   # and backport this to stable release (23.05).
   openssl_1_1 = common {
-    version = "1.1.1v";
-    sha256 = "sha256-1ml+KHHncjhGBALpNi1H0YOCsV758karpse9eA04prA=";
+    version = "1.1.1w";
+    sha256 = "sha256-zzCYlQy02FOtlcCEHx+cbT3BAtzPys1SHZOSUgi3asg=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -254,17 +255,14 @@ in {
   };
 
   openssl_3 = common {
-    version = "3.0.9";
-    sha256 = "sha256-6xqwR4FHQ2D3fDGKuJ2MWgOrw45j1lpgPKu/GwCh3JA=";
+    version = "3.0.10";
+    sha256 = "sha256-F2HU9bE6ECi5tvPUuOF/6wztyTcPav5h1xk9LNzoMyM=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
-
-      # https://www.openssl.org/news/secadv/20230714.txt
-      ./3.0/CVE-2023-2975.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch

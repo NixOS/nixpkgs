@@ -3,7 +3,7 @@
 buildGoModule {
   pname = "kbfs";
 
-  inherit (keybase) src version vendorSha256;
+  inherit (keybase) src version vendorHash;
 
   modRoot = "go";
   subPackages = [ "kbfs/kbfsfuse" "kbfs/redirector" "kbfs/kbfsgit/git-remote-keybase" ];

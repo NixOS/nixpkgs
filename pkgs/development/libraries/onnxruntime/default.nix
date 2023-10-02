@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RELEASE"
+    "-DABSL_ENABLE_INSTALL=ON"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
     "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp.src}"
@@ -143,6 +143,7 @@ stdenv.mkDerivation rec {
     "-DFETCHCONTENT_SOURCE_DIR_MP11=${mp11}"
     "-DFETCHCONTENT_SOURCE_DIR_ONNX=${python3Packages.onnx.src}"
     "-DFETCHCONTENT_SOURCE_DIR_PYTORCH_CPUINFO=${pytorch_cpuinfo}"
+    "-DFETCHCONTENT_SOURCE_DIR_RE2=${re2.src}"
     "-DFETCHCONTENT_SOURCE_DIR_SAFEINT=${safeint}"
     "-DFETCHCONTENT_TRY_FIND_PACKAGE_MODE=ALWAYS"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"

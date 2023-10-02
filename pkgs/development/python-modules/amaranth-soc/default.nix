@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "amaranth-soc";
-  version = "unstable-2021-12-10";
+  version = "unstable-2023-09-15";
   # python setup.py --version
-  realVersion = "0.1.dev49+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.1.dev70+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-soc";
-    rev = "217d4ea76ad3b3bbf146980d168bc7b3b9d95a18";
-    sha256 = "dMip82L7faUn16RDeG3NgMv0nougpwTwDWLX0doD2YA=";
+    rev = "cce8a79a37498f4d5900be21a295ba77e51e6c9d";
+    sha256 = "sha256-hfkJaqICuy3iSTwLM9lbUPvSMDBLW8GdxqswyAOsowo=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

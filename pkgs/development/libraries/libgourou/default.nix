@@ -1,13 +1,21 @@
-{ lib, stdenv, fetchzip, pugixml, updfparser, curl, openssl, libzip
-, installShellFiles }:
+{ lib
+, stdenv
+, fetchzip
+, pugixml
+, updfparser
+, curl
+, openssl
+, libzip
+, installShellFiles
+}:
 
 stdenv.mkDerivation rec {
   name = "libgourou";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchzip {
     url = "https://indefero.soutade.fr/p/${name}/source/download/v${version}/";
-    sha256 = "sha256-X56K4z1+k62Q9pxnN8kx35oc7+uJJN/o/tpnKx1FjwE=";
+    sha256 = "sha256-adkrvBCgN07Ir+J3JFCy+X9p9609lj1w8nElrlHXTxc";
     extension = "zip";
   };
 

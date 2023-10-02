@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
-  version = "0.34.1";
+  version = "0.36.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ktl6YVYd8QpC6eaz3Xe6YyJZhB92ZLL9/XG4WSc2qS8=";
+    hash = "sha256-NFSJlBRVgeuhK7IXjNz2g6SbSgveSjaJpSQrxSACG04=";
   };
 
   propagatedBuildInputs = [

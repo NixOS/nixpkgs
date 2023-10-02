@@ -2,7 +2,6 @@
 , fetchpatch
 , python3
 , fetchPypi
-, docutils
 , sphinx
 , postfix
 , lynx
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    docutils
     sphinx
   ];
 

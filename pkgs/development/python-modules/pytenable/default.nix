@@ -1,5 +1,4 @@
 { lib
-, appdirs
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
@@ -33,26 +32,22 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    semver
-  ];
-
-  buildInputs = [
-    appdirs
     defusedxml
     marshmallow
     python-box
     python-dateutil
     requests
-    requests-pkcs12
     restfly
+    semver
     typing-extensions
   ];
 
   nativeCheckInputs = [
-    responses
     pytest-datafiles
     pytest-vcr
     pytestCheckHook
+    requests-pkcs12
+    responses
   ];
 
   disabledTests = [

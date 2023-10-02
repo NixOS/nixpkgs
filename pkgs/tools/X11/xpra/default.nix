@@ -16,6 +16,7 @@
 , gobject-introspection
 , gst_all_1
 , gtk3
+, libappindicator
 , libfakeXinerama
 , librsvg
 , libvpx
@@ -118,6 +119,7 @@ in buildPythonApplication rec {
     gdk-pixbuf
     glib
     gtk3
+    libappindicator
     librsvg
     libvpx
     libwebp

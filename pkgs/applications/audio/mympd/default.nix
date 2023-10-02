@@ -14,15 +14,15 @@
 , jq
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "10.3.3";
+  version = "12.0.2";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
-    rev = "v${version}";
-    sha256 = "sha256-LqIaRFAXB3XMidC1Dypax/ucayot/IJPAvPwzHQeH9k=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-7jE3erxrCPN2deI7EV0gDH1gy2XdwC1YdU2mo2xMI6Q=";
   };
 
   nativeBuildInputs = [
@@ -45,18 +45,17 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DENABLE_LUA=ON"
     # Otherwise, it tries to parse $out/etc/mympd.conf on startup.
     "-DCMAKE_INSTALL_SYSCONFDIR=/etc"
     # similarly here
     "-DCMAKE_INSTALL_LOCALSTATEDIR=/var/lib/mympd"
   ];
   hardeningDisable = [
-    # See https://github.com/jcorporation/myMPD/issues/315
-    "strictoverflow"
     # causes redefinition of _FORTIFY_SOURCE
     "fortify3"
   ];
+  # 5 tests out of 23 fail, probably due to the sandbox...
+  doCheck = false;
 
   meta = {
     homepage = "https://jcorporation.github.io/myMPD";
@@ -65,4 +64,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

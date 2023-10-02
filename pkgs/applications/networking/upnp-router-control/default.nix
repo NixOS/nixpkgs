@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "upnp-router-control";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchzip {
     url = "https://launchpad.net/upnp-router-control/trunk/${version}/+download/upnp-router-control-${version}.tar.xz";
-    hash = "sha256-724xcIYNufmSgrHwmIk3awEAVlta9huNa0o6Z0hdBwQ=";
+    hash = "sha256-d5NmA1tOQtYPjGXYfH0p9CCnWM+aVTX2KuV36QCDxd8=";
   };
 
   nativeBuildInputs = [

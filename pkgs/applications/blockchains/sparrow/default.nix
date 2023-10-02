@@ -21,11 +21,11 @@
 
 let
   pname = "sparrow";
-  version = "1.7.8";
+  version = "1.7.9";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
-    sha256 = "0nazqxffmai74x47dbkwryvx1pjm8k85rcfz5nr19h7fa1bj8rkc";
+    sha256 = "0bz8mx6mszqadx7nlb4ini45r2r57grdgmrq6k9lxgrgcpd8gasy";
   };
 
   launcher = writeScript "sparrow" ''

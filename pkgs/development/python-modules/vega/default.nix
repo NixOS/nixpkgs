@@ -1,20 +1,76 @@
-{ lib, buildPythonPackage , fetchPypi, pythonOlder
-, jupyter-core, pandas, ipywidgets, jupyter }:
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, pythonOlder
+, pythonRelaxDepsHook
+, altair
+, ipytablewidgets
+, ipywidgets
+, jupyter
+, jupyter-core
+, jupyterlab
+, pandas
+, poetry-core
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "3.6.0";
-  disabled = pythonOlder "3.6";
+  version = "4.0.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cO+7Ynbv/+uoNUOPQvDNZji04llHUBlm95Cyfy+Ny80=";
+    hash = "sha256-v1/8taHdN1n9+gy7L+g/wAJ2x9FwYCaxZiEdFqLct1Y=";
   };
 
-  propagatedBuildInputs = [ jupyter jupyter-core pandas ipywidgets ];
+  patches = [
+    # https://github.com/vega/ipyvega/pull/507
+    (fetchpatch {
+      name = "replace-poetry-with-poetry-core.patch";
+      url = "https://github.com/vega/ipyvega/commit/1a5028ee5d54e24b9650b66685f54c42b72c7899.patch";
+      hash = "sha256-W8UmMit7DJGKCM9+/OSRLTuRvC0ZR42AP/b/frVEvsk=";
+    })
+  ];
 
-  # currently, recommonmark is broken on python3
-  doCheck = false;
+  nativeBuildInputs = [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "pandas"
+  ];
+
+  propagatedBuildInputs = [
+    ipytablewidgets
+    jupyter
+    jupyter-core
+    pandas
+  ];
+
+  passthru.optional-dependencies = {
+    widget = [
+      ipywidgets
+    ];
+    jupyterlab = [
+      jupyterlab
+    ];
+  };
+
+  nativeCheckInputs = [
+    altair
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # these tests are broken with jupyter-notebook >= 7
+    "vega/tests/test_entrypoint.py"
+  ];
+
   pythonImportsCheck = [ "vega" ];
 
   meta = with lib; {
@@ -28,6 +84,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/vega/ipyvega";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
-    platforms = platforms.unix;
   };
 }

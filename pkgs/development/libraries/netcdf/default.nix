@@ -16,11 +16,11 @@ let
   inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
-  version = "4.9.0";
+  version = "4.9.2";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
-    hash = "sha256-TJVgIrecCOXhTu6N9RsTwo5hIcK35/qtwhs3WUlAC0k=";
+    hash = "sha256-zxG6u725lj8J9VB54LAZ9tA3H1L44SZKW6jp/asabEg=";
   };
 
   postPatch = ''
@@ -30,6 +30,10 @@ in stdenv.mkDerivation rec {
     for a in ncdap_test/Makefile.am ncdap_test/Makefile.in; do
       substituteInPlace $a --replace testurl.sh " "
     done
+
+    # Prevent building the tests from prepending `#!/bin/bash` and wiping out the patched shenbangs.
+    substituteInPlace nczarr_test/Makefile.in \
+      --replace '#!/bin/bash' '${stdenv.shell}'
   '';
 
   nativeBuildInputs = [ m4 removeReferencesTo ];
@@ -65,7 +69,7 @@ in stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
   '';
 
-  doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
+  doCheck = !mpiSupport;
   nativeCheckInputs = [ unzip ];
 
   preCheck = ''

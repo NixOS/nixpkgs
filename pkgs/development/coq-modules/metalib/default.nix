@@ -5,7 +5,7 @@
   owner = "plclub";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = range "8.14" "8.17"; out = "8.15"; }
+    { case = range "8.14" "8.18"; out = "8.15"; }
     { case = range "8.10" "8.13"; out = "8.10"; }
   ] null;
   releaseRev = v: "coq${v}";

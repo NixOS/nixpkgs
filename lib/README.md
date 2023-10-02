@@ -70,4 +70,7 @@ tests/filesystem.sh
 
 # Run the lib.path property tests
 path/tests/prop.sh
+
+# Run the lib.fileset tests
+fileset/tests.sh
 ```

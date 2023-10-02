@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.2.8";
+  version = "1.2.10";
 
   src = fetchurl {
     url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-udVYyR6rDOCAKggpvY58jjpoLmB6wXiivvdzYylkE9c=";
+    sha256 = "sha256-2Yf+4TYGWF/AMI1kNvVOx9g6CSIoeZKY63qC/zJNilc=";
   };
 
   outputs = [ "out" "dev" "doc" ];

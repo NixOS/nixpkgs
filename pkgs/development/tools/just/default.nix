@@ -72,6 +72,8 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/just.zsh
   '';
 
+  setupHook = ./setup-hook.sh;
+
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

@@ -8,14 +8,14 @@
 
 buildGraalvmNativeImage rec {
   pname = "babashka-unwrapped";
-  version = "1.3.181";
+  version = "1.3.184";
 
   src = fetchurl {
     url = "https://github.com/babashka/babashka/releases/download/v${version}/babashka-${version}-standalone.jar";
-    sha256 = "sha256-NzchlHRxOCSyUf9U0Jv8h4bgKd2Jwp+LmxIfeV8+8+M=";
+    sha256 = "sha256-O3pLELYmuuB+Bf1vHTWQ+u7Ymi3qYiMRpCwvEq+GeBQ=";
   };
 
-  graalvmDrv = graalvmCEPackages.graalvm19-ce;
+  graalvmDrv = graalvmCEPackages.graalvm-ce;
 
   executable = "bb";
 
@@ -38,7 +38,7 @@ buildGraalvmNativeImage rec {
 
   # As of v1.2.174, this will remove references to ${graalvmDrv}/conf/chronology,
   # not sure the implications of this but this file is not available in
-  # graalvm19-ce anyway.
+  # graalvm-ce anyway.
   postInstall = ''
     remove-references-to -t ${graalvmDrv} $out/bin/${executable}
   '';

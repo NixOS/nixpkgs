@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
-  version = "2.1.1";
+  version = "2.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Doist";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-mBQCC1beBAB+vDV/TrQHQB7cTjjoCDZlqpiYP8IphUA=";
+    hash = "sha256-Xi3B/Nl5bMbW0lYwrkEbBgFTEl07YkFyN18kN0WyGyw=";
   };
 
   patches = [

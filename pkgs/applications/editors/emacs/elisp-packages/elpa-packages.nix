@@ -158,6 +158,23 @@ self: let
         }
       );
 
+      xeft = super.xeft.overrideAttrs (old: let
+        libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+      in {
+        dontUnpack = false;
+
+        buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.xapian ];
+        buildPhase = (old.buildPhase or "") + ''
+          $CXX -shared -o xapian-lite${libExt} xapian-lite.cc $NIX_CFLAGS_COMPILE -lxapian
+        '';
+        postInstall = (old.postInstall or "") + "\n" + ''
+          outd=$out/share/emacs/site-lisp/elpa/xeft-*
+          install -m444 -t $outd xapian-lite${libExt}
+          rm $outd/xapian-lite.cc $outd/emacs-module.h $outd/emacs-module-prelude.h $outd/demo.gif $outd/Makefile
+        '';
+      });
+
+
     };
 
     elpaPackages = super // overrides;

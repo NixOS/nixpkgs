@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl, fetchDebianPatch
 , autoconf, gtkmm3, glib, pdftk, pkg-config, wrapGAppsHook
 }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Hu4Pk9voyc75+f5OwKEOCkXKjN5nzWzv+izmyEN1Lz0=";
+    hash = "sha256-Hu4Pk9voyc75+f5OwKEOCkXKjN5nzWzv+izmyEN1Lz0=";
   };
 
   nativeBuildInputs = [
@@ -20,23 +20,24 @@ stdenv.mkDerivation rec {
   ];
 
   patches = let
-    fetchDebianPatch = {name, sha256}: fetchpatch {
-      url = "https://salsa.debian.org/debian/pdfchain/raw/2d29107756a3194fb522bdea8e9b9e393b15a8f3/debian/patches/${name}";
-      inherit name sha256;
-    };
+    fetchDebianPatch' = args: fetchDebianPatch ({
+      inherit pname;
+      version = "1:0.4.4.2";
+      debianRevision = "2";
+    } // args);
   in
   [
-    (fetchDebianPatch {
-      name = "fix_crash_on_startup";
-      sha256 = "sha256-1UyMHHGrmUIFhY53ILdMMsyocSIbcV6CKQ7sLVNhNQw=";
+    (fetchDebianPatch' {
+      patch = "fix_crash_on_startup";
+      hash = "sha256-1UyMHHGrmUIFhY53ILdMMsyocSIbcV6CKQ7sLVNhNQw=";
     })
-    (fetchDebianPatch {
-      name = "fix_desktop_file";
-      sha256 = "sha256-L6lhUs7GqVN1XOQO6bbz6BT29n4upsJtlHCAIGzk1Bw=";
+    (fetchDebianPatch' {
+      patch = "fix_desktop_file";
+      hash = "sha256-L6lhUs7GqVN1XOQO6bbz6BT29n4upsJtlHCAIGzk1Bw=";
     })
-    (fetchDebianPatch {
-      name = "fix_spelling";
-      sha256 = "sha256-sOUUslPfcOo2K3zuaLcux+CNdgfWM0phsfe6g4GUFes=";
+    (fetchDebianPatch' {
+      patch = "fix_spelling";
+      hash = "sha256-sOUUslPfcOo2K3zuaLcux+CNdgfWM0phsfe6g4GUFes=";
     })
   ];
 
@@ -51,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://pdfchain.sourceforge.io";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ hqurve ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

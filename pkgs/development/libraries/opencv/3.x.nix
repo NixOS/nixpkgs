@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
-, glog, boost, gflags, protobuf
+, glog, boost, gflags, protobuf3_21
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -22,7 +22,6 @@
 , enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
-, enableVtk       ? false, vtk_8
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
@@ -187,11 +186,10 @@ stdenv.mkDerivation {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost gflags ]
-    ++ lib.optional useSystemProtobuf protobuf
+    ++ lib.optional useSystemProtobuf protobuf3_21
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
-    ++ lib.optional enableVtk vtk_8
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
@@ -252,6 +250,16 @@ stdenv.mkDerivation {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
+
+    # Disable unnecessary vendoring that's enabled by default only for Darwin.
+    # Note that the opencvFlag feature flags listed above still take
+    # precedence, so we can safely list everything here.
+    "-DBUILD_ZLIB=OFF"
+    "-DBUILD_TIFF=OFF"
+    "-DBUILD_JASPER=OFF"
+    "-DBUILD_JPEG=OFF"
+    "-DBUILD_PNG=OFF"
+    "-DBUILD_WEBP=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ] ++ lib.optionals enableEigen [

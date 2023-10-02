@@ -12,7 +12,7 @@ buildGoModule rec {
     sha256 = "sha256-sZfg8+LIu1Ejvmr/o4X3EOz3fv+RvLhrGRf2yy+6t8c=";
   };
 
-  vendorSha256 = "sha256-nb0lQEAaIYlGpodFQLhMk/24DmTgg5K3zQ4s/XY+Z1w=";
+  vendorHash = "sha256-nb0lQEAaIYlGpodFQLhMk/24DmTgg5K3zQ4s/XY+Z1w=";
 
   meta = with lib; {
     description = "Gitea official CLI client";

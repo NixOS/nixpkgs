@@ -11,12 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "famistudio";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchzip {
     url = "https://github.com/BleuBleu/FamiStudio/releases/download/${version}/FamiStudio${lib.strings.concatStrings (lib.splitVersion version)}-LinuxAMD64.zip";
     stripRoot = false;
-    hash = "sha256-fRNjboCfymBhr7Eg5ENnO1fchX0oTdeaJJ0SC3BKTVI=";
+    hash = "sha256-eAdv0oObczbs8QLGYbxCrdFk/gN5DOCJ1dp/tg8JWIc=";
   };
 
   strictDeps = true;

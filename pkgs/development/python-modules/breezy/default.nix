@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.3.3";
+  version = "3.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WrXmxp63uja5lfPIPjPnvh1d/KwrkoOIjh4MYeRwMOc=";
+    hash = "sha256-fEEvOfo8YWhx+xuiqD/KNstlso5/K1XJnGY64tkLIwE=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

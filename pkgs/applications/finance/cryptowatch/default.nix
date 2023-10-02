@@ -11,15 +11,16 @@
 , libXrandr
 , udev
 , unzip
+, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "cryptowatch-desktop";
-  version = "0.5.0";
+  version = "0.7.1";
 
   src = fetchurl {
     url = "https://cryptowat.ch/desktop/download/linux/${version}";
-    sha256 = "0lr5fsd0f44b1v9f2dvx0a0lmz9dyivyz5d98qx2gcv3jkngw34v";
+    hash = "sha256-ccyHfjp00CgQH+3SiDWx9yE1skOj0RWxnBomHWY/IaU=";
   };
 
   unpackPhase = "unzip $src";
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus
     udev
+    alsa-lib
   ];
 
   sourceRoot = ".";
@@ -53,6 +55,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ livnev ];
+    maintainers = with maintainers; [ livnev kashw2 ];
   };
 }

@@ -1,17 +1,18 @@
-{ cairo
-, cmake
+{ lib
+, stdenv
 , fetchFromGitHub
+, nix-update-script
+
+, cairo
+, cmake
 , ffmpeg
 , freetype
 , ghostscript
 , glfw
-, lib
 , libjpeg
 , libtiff
-, nix-update-script
 , qhull
 , qtbase
-, stdenv
 , wrapQtAppsHook
 , xorg
 , zeromq
@@ -19,14 +20,18 @@
 
 stdenv.mkDerivation rec {
   pname = "gr-framework";
-  version = "0.72.9";
+  version = "0.72.10";
 
   src = fetchFromGitHub {
     owner = "sciapp";
     repo = "gr";
     rev = "v${version}";
-    hash = "sha256-4rOcrMn0sxTeRQqiQMAWULzUV39i6J96Mb096Lyblns=";
+    hash = "sha256-ZFaun8PBtPTmhZ0+OHzUu27NvcJGxsImh+c7ZvCTNa0=";
   };
+
+  patches = [
+    ./Use-the-module-mode-to-search-for-the-LibXml2-package.patch
+  ];
 
   nativeBuildInputs = [
     cmake

@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-cGlYgay/t6XIl0U9XvrHkqNxZ6BXtXi0TIANY1WdZ3Y=";
   };
 
-  vendorSha256 = "sha256-iIBqx52fD12R+7MSjQNihMYYtZ9vPAdJndOG4YJVhy4=";
+  vendorHash = "sha256-iIBqx52fD12R+7MSjQNihMYYtZ9vPAdJndOG4YJVhy4=";
 
   meta = with lib; {
     description = "Go kernel for Jupyter notebooks";

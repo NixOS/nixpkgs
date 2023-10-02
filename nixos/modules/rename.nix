@@ -124,6 +124,9 @@ in
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
     '')
+    (mkRemovedOptionModule [ "services" "tedicross" ] ''
+      The corresponding package was broken and removed from nixpkgs.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

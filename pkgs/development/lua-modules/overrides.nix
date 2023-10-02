@@ -524,9 +524,7 @@ with prev;
       tar xf *.tar.gz
     '';
     # Without this, source root is wrongly set to ./readline-2.6/doc
-    setSourceRoot = ''
-      sourceRoot=./readline-${lib.versions.majorMinor oa.version}
-    '';
+    sourceRoot = "readline-${lib.versions.majorMinor oa.version}";
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {

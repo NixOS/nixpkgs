@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "mediainfo";
-  version = "23.06";
+  version = "23.07";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "sha256-TJd+6wzoN4co5k7yTyf+YrLFEW+/BUHIJKRDCfgP+Io=";
+    hash = "sha256-ttfanimZX9NKIhAIJbhD50wyx7xnrbARZrG+7epJ9dA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libzen libmediainfo zlib ];
 
-  sourceRoot = "./MediaInfo/Project/GNU/CLI/";
+  sourceRoot = "MediaInfo/Project/GNU/CLI";
 
   configureFlags = [ "--with-libmediainfo=${libmediainfo}" ];
 

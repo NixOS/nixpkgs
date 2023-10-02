@@ -5,10 +5,110 @@ with lib;
 let
   cfg = config.services.knot;
 
-  configFile = pkgs.writeTextFile {
+  yamlConfig = let
+    result = assert secsCheck; nix2yaml cfg.settings;
+
+    secAllow = n: hasPrefix "mod-" n || elem n [
+      "module"
+      "server" "xdp" "control"
+      "log"
+      "statistics" "database"
+      "keystore" "key" "remote" "remotes" "acl" "submission" "policy"
+      "template"
+      "zone"
+      "include"
+    ];
+    secsCheck = let
+      secsBad = filter (n: !secAllow n) (attrNames cfg.settings);
+    in if secsBad == [] then true else throw
+      ("services.knot.settings contains unknown sections: " + toString secsBad);
+
+    nix2yaml = nix_def: concatStrings (
+        # We output the config section in the upstream-mandated order.
+        # Ordering is important due to forward-references not being allowed.
+        # See definition of conf_export and 'const yp_item_t conf_schema'
+        # upstream for reference.  Last updated for 3.3.
+        # When changing the set of sections, also update secAllow above.
+        [ (sec_list_fa "id" nix_def "module") ]
+        ++ map (sec_plain nix_def)
+          [ "server" "xdp" "control" ]
+        ++ [ (sec_list_fa "target" nix_def "log") ]
+        ++ map (sec_plain nix_def)
+          [  "statistics" "database" ]
+        ++ map (sec_list_fa "id" nix_def)
+          [ "keystore" "key" "remote" "remotes" "acl" "submission" "policy" ]
+
+        # Export module sections before the template section.
+        ++ map (sec_list_fa "id" nix_def) (filter (hasPrefix "mod-") (attrNames nix_def))
+
+        ++ [ (sec_list_fa "id" nix_def "template") ]
+        ++ [ (sec_list_fa "domain" nix_def "zone") ]
+        ++ [ (sec_plain nix_def "include") ]
+      );
+
+    # A plain section contains directly attributes (we don't really check that ATM).
+    sec_plain = nix_def: sec_name: if !hasAttr sec_name nix_def then "" else
+      n2y "" { ${sec_name} = nix_def.${sec_name}; };
+
+    # This section contains a list of attribute sets.  In each of the sets
+    # there's an attribute (`fa_name`, typically "id") that must exist and come first.
+    # Alternatively we support using attribute sets instead of lists; example diff:
+    # -template = [ { id = "default"; /* other attributes */ }   { id = "foo"; } ]
+    # +template = { default = {       /* those attributes */ };  foo = { };      }
+    sec_list_fa = fa_name: nix_def: sec_name: if !hasAttr sec_name nix_def then "" else
+      let
+        elem2yaml = fa_val: other_attrs:
+          "  - " + n2y "" { ${fa_name} = fa_val; }
+          + "    " + n2y "    " other_attrs
+          + "\n";
+        sec = nix_def.${sec_name};
+      in
+        sec_name + ":\n" +
+          (if isList sec
+            then flip concatMapStrings sec
+              (elem: elem2yaml elem.${fa_name} (removeAttrs elem [ fa_name ]))
+            else concatStrings (mapAttrsToList elem2yaml sec)
+          );
+
+    # This convertor doesn't care about ordering of attributes.
+    # TODO: it could probably be simplified even more, now that it's not
+    # to be used directly, but we might want some other tweaks, too.
+    n2y = indent: val:
+      if doRecurse val then concatStringsSep "\n${indent}"
+        (mapAttrsToList
+          # This is a bit wacky - set directly under a set would start on bad indent,
+          # so we start those on a new line, but not other types of attribute values.
+          (aname: aval: "${aname}:${if doRecurse aval then "\n${indent}  " else " "}"
+            + n2y (indent + "  ") aval)
+          val
+        )
+        + "\n"
+        else
+      /*
+      if isList val && stringLength indent < 4 then concatMapStrings
+        (elem: "\n${indent}- " + n2y (indent + "  ") elem)
+        val
+        else
+      */
+      if isList val /* and long indent */ then
+        "[ " + concatMapStringsSep ", " quoteString val + " ]" else
+      if isBool val then (if val then "on" else "off") else
+      quoteString val;
+
+    # We don't want paths like ./my-zone.txt be converted to plain strings.
+    quoteString = s: ''"${if builtins.typeOf s == "path" then s else toString s}"'';
+    # We don't want to walk the insides of derivation attributes.
+    doRecurse = val: isAttrs val && !isDerivation val;
+
+  in result;
+
+  configFile = if cfg.settingsFile != null then
+    assert cfg.settings == {} && cfg.keyFiles == [];
+    cfg.settingsFile
+  else pkgs.writeTextFile {
     name = "knot.conf";
-    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" +
-           cfg.extraConfig;
+    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" + yamlConfig;
+    # TODO: maybe we could do some checks even when private keys complicate this?
     checkPhase = lib.optionalString (cfg.keyFiles == []) ''
       ${cfg.package}/bin/knotc --config=$out conf-check
     '';
@@ -60,11 +160,21 @@ in {
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+      settings = mkOption {
+        type = types.attrs;
+        default = {};
         description = lib.mdDoc ''
-          Extra lines to be added verbatim to knot.conf
+          Extra configuration as nix values.
+        '';
+      };
+
+      settingsFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          As alternative to ``settings``, you can provide whole configuration
+          directly in the almost-YAML format of Knot DNS.
+          You might want to utilize ``writeTextFile`` for this.
         '';
       };
 
@@ -78,6 +188,12 @@ in {
       };
     };
   };
+  imports = [
+    # Compatibility with NixOS 23.05.  At least partial, as it fails assert if used with keyFiles.
+    (mkChangedOptionModule [ "services" "knot" "extraConfig" ] [ "services" "knot" "settingsFile" ]
+      (config: pkgs.writeText "knot.conf" config.services.knot.extraConfig)
+    )
+  ];
 
   config = mkIf config.services.knot.enable {
     users.groups.knot = {};
@@ -86,6 +202,8 @@ in {
       group = "knot";
       description = "Knot daemon user";
     };
+
+    environment.etc."knot/knot.conf".source = configFile; # just for user's convenience
 
     systemd.services.knot = {
       unitConfig.Documentation = "man:knotd(8) man:knot.conf(5) man:knotc(8) https://www.knot-dns.cz/docs/${cfg.package.version}/html/";

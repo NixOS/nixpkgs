@@ -11,16 +11,15 @@ buildGoModule rec {
     owner = "nomad-software";
     repo = "meme";
     rev = "v${version}";
-    sha256 = "089r0v5az2d2njn0s3d3wd0861pcs4slg6zl0rj4cm1k5cj8yd1k";
+    hash = "sha256-MzSPJCszVEZkBvSbRzXR7AaDQOOjDQ2stKKJr8oGOSE=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "A command line utility for creating image macro style memes";
     homepage = "https://github.com/nomad-software/meme";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
-    platforms = with platforms; linux ++ darwin;
   };
 }

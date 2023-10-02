@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "ipinfo";
-  version = "2.10.1";
+  version = "3.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "cli";
     rev = "refs/tags/${pname}-${version}";
-    hash = "sha256-/CW+CmtKc96tVEh5cB6x+/Hb4WnbVi+3AZ0CEao0NE4=";
+    hash = "sha256-b6Rh5TJHqcdexZ4AHY+4jQsCMdn69J3MTbmgKXEaACw=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # Tests require network access
   doCheck = false;

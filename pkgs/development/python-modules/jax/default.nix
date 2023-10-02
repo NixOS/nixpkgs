@@ -27,7 +27,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.4.14";
+  version = "0.4.16";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -37,12 +37,16 @@ buildPythonPackage rec {
     repo = pname;
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-0KnILQkahSiA1uuyT+kgy1XaCcZ3cpx1q114e2pecvg=";
+    hash = "sha256-q+8CXGxK8JX0bUMK4KJB3qV/EaLHg68D1B5UrtRz0Eg=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
+
+  # The version is automatically set to ".dev" if this variable is not set.
+  # https://github.com/google/jax/commit/e01f2617b85c5bdffc5ffb60b3d8d8ca9519a1f3
+  JAX_RELEASE = "1";
 
   # jaxlib is _not_ included in propagatedBuildInputs because there are
   # different versions of jaxlib depending on the desired target hardware. The
@@ -96,6 +100,14 @@ buildPythonPackage rec {
     "test_for_loop_fixpoint_correctly_identifies_loop_varying_residuals_unrolled_for_loop"
     "testQdwhWithRandomMatrix3"
     "testScanGrad_jit_scan"
+
+    # See https://github.com/google/jax/issues/17867.
+    "test_array"
+    "test_async"
+    "test_copy0"
+    "test_device_put"
+    "test_make_array_from_callback"
+    "test_make_array_from_single_device_arrays"
   ];
 
   disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [

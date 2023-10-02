@@ -47,5 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emantor ];
     platforms = with lib.platforms; freebsd ++ linux ++ netbsd;
+    mainProgram = "seatd";
   };
 })

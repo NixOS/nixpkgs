@@ -146,6 +146,10 @@ let
     error_log ${cfg.logError};
     daemon off;
 
+    ${optionalString cfg.enableQuicBPF ''
+      quic_bpf on;
+    ''}
+
     ${cfg.config}
 
     ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
@@ -578,11 +582,13 @@ in
           };
         });
         default = [];
-        example = literalExpression ''[
-          { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
-          { addr = "0.0.0.0"; }
-          { addr = "[::0]"; }
-        ]'';
+        example = literalExpression ''
+          [
+            { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
+            { addr = "0.0.0.0"; }
+            { addr = "[::0]"; }
+          ]
+        '';
         description = lib.mdDoc ''
           If vhosts do not specify listen, use these addresses by default.
           This option takes precedence over {option}`defaultListenAddresses` and
@@ -778,6 +784,19 @@ in
           Reload nginx when configuration file changes (instead of restart).
           The configuration file is exposed at {file}`/etc/nginx/nginx.conf`.
           See also `systemd.services.*.restartIfChanged`.
+        '';
+      };
+
+      enableQuicBPF = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enables routing of QUIC packets using eBPF. When enabled, this allows
+          to support QUIC connection migration. The directive is only supported
+          on Linux 5.7+.
+          Note that enabling this option will make nginx run with extended
+          capabilities that are usually limited to processes running as root
+          namely `CAP_SYS_ADMIN` and `CAP_NET_ADMIN`.
         '';
       };
 
@@ -1124,6 +1143,14 @@ in
       }
 
       {
+        assertion = cfg.package.pname != "nginxQuic" -> !(cfg.enableQuicBPF);
+        message = ''
+          services.nginx.enableQuicBPF requires using nginxQuic package,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+        '';
+      }
+
+      {
         assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
         message = ''
           services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
@@ -1222,8 +1249,8 @@ in
         # New file permissions
         UMask = "0027"; # 0640 / 0750
         # Capabilities
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ] ++ optionals cfg.enableQuicBPF [ "CAP_SYS_ADMIN" "CAP_NET_ADMIN" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ] ++ optionals cfg.enableQuicBPF [ "CAP_SYS_ADMIN" "CAP_NET_ADMIN" ];
         # Security
         NoNewPrivileges = true;
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
@@ -1248,6 +1275,7 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ]
+          ++ optional cfg.enableQuicBPF [ "bpf" ]
           ++ optionals ((cfg.package != pkgs.tengine) && (cfg.package != pkgs.openresty) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
       };
     };

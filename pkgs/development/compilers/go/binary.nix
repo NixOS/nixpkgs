@@ -11,6 +11,7 @@ let
     "armv6l" = "armv6l";
     "armv7l" = "armv6l";
     "powerpc64le" = "ppc64le";
+    "riscv64" = "riscv64";
   }.${platform.parsed.cpu.name} or (throw "Unsupported CPU ${platform.parsed.cpu.name}");
 
   toGoPlatform = platform: "${toGoKernel platform}-${toGoCPU platform}";

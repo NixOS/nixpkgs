@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , unzip
+, installShellFiles
 , openssl
 , writeShellScript
 , curl
@@ -11,13 +12,13 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "0.7.3";
+  version = "1.0.3";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   strictDeps = true;
-  nativeBuildInputs = [ unzip ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ unzip installShellFiles ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
   buildInputs = [ openssl ];
 
   dontConfigure = true;
@@ -31,23 +32,38 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  postPhases = [ "postPatchelf" ];
+  postPatchelf = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+    completions_dir=$(mktemp -d)
+
+    SHELL="bash" $out/bin/bun completions $completions_dir
+    SHELL="zsh" $out/bin/bun completions $completions_dir
+    SHELL="fish" $out/bin/bun completions $completions_dir
+
+    installShellCompletion --name bun \
+      --bash $completions_dir/bun.completion.bash \
+      --zsh $completions_dir/_bun \
+      --fish $completions_dir/bun.fish
+  '';
+
   passthru = {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-9gs5PIbYxhhUC+lw/iEIhjdMIUYVnhP7oYrRqmE3HcU=";
+        hash = "sha256-M0OG9V+TVqUqNuEDvpPCJR1KvILty7M59JiYjOsRjS0=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-CFio1bgsgND54BrklkCVjfDvMDFxpYe1h77nGMOJdsc=";
+        hash = "sha256-0Nto5EikWEvW6PCX6801qxDdlB1PtWJ1iym0mwh/YJI=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-j6NpHAqSBRe2Wa4ztA1Ao4JYTKTEIwlYMCMMICKqZv0=";
+        hash = "sha256-3GUQk7Nv5Nx25SPk+Z+6EDNEsDbLW68IOXmLt8NkSYQ=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-05Duhv2WrYXWS6mKI3zB5QiIlitsysXwmuy+9XHBB9M=";
+        hash = "sha256-8xMBU3jloMsdekejKrnswWfzXhxwvsHFNgcUf4hn0W4=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -59,7 +75,7 @@ stdenvNoCC.mkDerivation rec {
           exit 0
       fi
       for platform in ${lib.escapeShellArgs meta.platforms}; do
-        update-source-version "bun" "0" "${lib.fakeSha256}" --source-key="sources.$platform"
+        update-source-version "bun" "0" "${lib.fakeHash}" --source-key="sources.$platform"
         update-source-version "bun" "$NEW_VERSION" --source-key="sources.$platform"
       done
     '';
@@ -76,7 +92,7 @@ stdenvNoCC.mkDerivation rec {
       mit # bun core
       lgpl21Only # javascriptcore and webkit
     ];
-    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman ];
+    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower ];
     platforms = builtins.attrNames passthru.sources;
   };
 }

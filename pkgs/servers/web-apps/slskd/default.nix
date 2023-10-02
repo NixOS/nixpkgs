@@ -10,13 +10,13 @@
 }:
 let
   pname = "slskd";
-  version = "0.17.8";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
     rev = version;
-    sha256 = "sha256-kqkJZNxg044RbgHFsRfvRMyFRBjnIubdHRqUuMjj2D0=";
+    sha256 = "sha256-hWK6nbXAZTjxukx9EzkJkyEFlqXUkjanmv4VfHZxW24=";
   };
 
   meta = with lib; {
@@ -34,9 +34,8 @@ let
 
     pname = "slskd-web";
     src = "${src}/src/web";
-    patches = [ ./package-lock.patch ];
     npmFlags = [ "--legacy-peer-deps" ];
-    npmDepsHash = "sha256-vURi36ebdJQofhBlElIH5m6T1b8tsVGAzXCiDYUcSww=";
+    npmDepsHash = "sha256-+2g3pCaGFbzQjKwhjmD6viuzVE5pRg+qSOXMrCtLQkI=";
     installPhase = ''
       cp -r build $out
     '';

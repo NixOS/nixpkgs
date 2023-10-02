@@ -5,14 +5,14 @@
 
 buildPythonPackage rec {
   pname = "tlds";
-  version = "2023050900";
+  version = "2023080900";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kichik";
     repo = "tlds";
     rev = "refs/tags/${version}";
-    hash = "sha256-Fm2cRhUb1Gsr7mrcym/JjYAeG8f3RDhUnxzYIvpxmQE=";
+    hash = "sha256-n6SGOBkwGrjnH01yFd9giODUDkPGVMwB1H/fozzwQwU=";
   };
 
   pythonImportsCheck = [

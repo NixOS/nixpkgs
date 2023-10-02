@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "magic-filter";
-  version = "1.0.10";
+  version = "1.0.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "magic-filter";
-    rev = "v${version}";
-    hash = "sha256-mHqq/ci8uMACNutwmxKX1nrl3nTSnSyU2x1VxzWxqzM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mfSq47UWOLyEDkAsdHsJuVl/rJ4KgiGPpDL7qSKEfws=";
   };
 
   nativeBuildInputs = [

@@ -2,6 +2,7 @@
 , file, libxslt, docbook_xml_dtd_412, docbook_xsl, xmlto
 , w3m, gnugrep, gnused, coreutils, xset, perlPackages
 , mimiSupport ? false, gawk
+, bash
 , glib
 , withXdgOpenUsePortalPatch ? true }:
 
@@ -48,6 +49,9 @@ stdenv.mkDerivation rec {
   # just needed when built from git
   nativeBuildInputs = [ libxslt docbook_xml_dtd_412 docbook_xsl xmlto w3m ];
 
+  # explicitly provide a runtime shell so patchShebangs is consistent across build platforms
+  buildInputs = [ bash ];
+
   postInstall = lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
   '' + ''
@@ -83,6 +87,5 @@ stdenv.mkDerivation rec {
     license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
-    broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
 }

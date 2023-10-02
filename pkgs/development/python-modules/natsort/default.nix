@@ -34,6 +34,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # timing sensitive test
+    # hypothesis.errors.DeadlineExceeded: Test took 524.23ms, which exceeds the deadline of 200.00ms
+    "test_string_component_transform_factory"
+  ];
+
   pythonImportsCheck = [
     "natsort"
   ];

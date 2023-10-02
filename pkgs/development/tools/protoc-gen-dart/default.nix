@@ -5,18 +5,18 @@
 
 buildDartApplication rec {
   pname = "protoc-gen-dart";
-  version = "2.1.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "protobuf.dart";
     rev = "protobuf-v${version}";
-    sha256 = "sha256-uBQ8s1NBSWm88mpLfZwobTe/BDDT6UymSra88oUuPIA=";
+    sha256 = "sha256-2QnLS6GHhDHMCnAY+2c1wMyPY3EKtlijWHQC+9AVt0k=";
   };
   sourceRoot = "${src.name}/protoc_plugin";
 
   pubspecLockFile = ./pubspec.lock;
-  vendorHash = "sha256-jyhHZ1OUFo6ce3C5jEQPqmtRL4hr2nTfgVMR0k6AXtM=";
+  vendorHash = "sha256-yNgQLCLDCbA07v9tIwPRks/xPAzLVykNtIk+8C0twYM=";
 
   meta = with lib; {
     description = "Protobuf plugin for generating Dart code";

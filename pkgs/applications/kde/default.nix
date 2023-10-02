@@ -73,6 +73,7 @@ let
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
       analitza = callPackage ./analitza.nix {};
+      arianna = callPackage ./arianna.nix {};
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       bomber = callPackage ./bomber.nix {};
@@ -99,7 +100,7 @@ let
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
-      kalendar = callPackage ./kalendar.nix {};
+      merkuro = callPackage ./merkuro.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};
@@ -119,7 +120,7 @@ let
       kdebugsettings = callPackage ./kdebugsettings.nix {};
       kdeconnect-kde = callPackage ./kdeconnect-kde.nix {};
       kdegraphics-mobipocket = callPackage ./kdegraphics-mobipocket.nix {};
-      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers.nix {};
+      kdegraphics-thumbnailers = callPackage ./kdegraphics-thumbnailers {};
       kdenetwork-filesharing = callPackage ./kdenetwork-filesharing.nix {};
       kdenlive = callPackage ./kdenlive {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};
@@ -134,7 +135,6 @@ let
       kdiamond = callPackage ./kdiamond.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
-      kfloppy = callPackage ./kfloppy.nix {};
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};

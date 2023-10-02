@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.3.1";
+  version = "5.3.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+E0cIaFSDBFsK30mWTkmWBGRQ1oDqnS3fJQbk8ocYhA=";
+    hash = "sha256-kCPfaoli2nnrMMDITV9IY9l5OkZjVMyTHX9yQjmW3ig=";
   };
 
   propagatedBuildInputs = [
@@ -95,6 +95,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
+    changelog = "https://github.com/celery/celery/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

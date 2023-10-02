@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/dosfstools/dosfstools/commit/2d3125c4a74895eae1f66b93287031d340324524.patch";
       sha256 = "nlIuRDsNjk23MKZL9cZ05odOfTXvsyQaKcv/xEr4c+U=";
     })
+    # reproducible builds fix backported from master
+    # (respect SOURCE_DATE_EPOCH)
+    # TODO: remove on the next release
+    (fetchpatch {
+      url = "https://github.com/dosfstools/dosfstools/commit/8da7bc93315cb0c32ad868f17808468b81fa76ec.patch";
+      sha256 = "sha256-Quegj5uYZgACgjSZef6cjrWQ64SToGQxbxyqCdl8C7o=";
+    })
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]

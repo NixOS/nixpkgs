@@ -6,8 +6,10 @@
 
 # build-system
 , cython
+, oldest-supported-numpy
 , setuptools
 , versioneer
+, wheel
 
 # propagates
 , numpy
@@ -75,7 +77,9 @@ buildPythonPackage rec {
     setuptools
     cython
     numpy
+    oldest-supported-numpy
     versioneer
+    wheel
   ] ++ versioneer.optional-dependencies.toml;
 
   enableParallelBuilding = true;
@@ -168,10 +172,6 @@ buildPythonPackage rec {
     all = lib.concatLists (lib.attrValues extras);
   };
 
-  # Doesn't work with -Werror,-Wunused-command-line-argument
-  # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
-
   nativeCheckInputs = [
     glibcLocales
     hypothesis
@@ -206,6 +206,8 @@ buildPythonPackage rec {
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # tests/generic/test_finalize.py::test_binops[and_-args4-right] - AssertionError: assert {} == {'a': 1}
     "test_binops"
+    # These tests are unreliable on aarch64-darwin. See https://github.com/pandas-dev/pandas/issues/38921.
+    "test_rolling"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions

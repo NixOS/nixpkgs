@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pydyf";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-paiMsG5b62Sh7yFH7oebDlE59f24J/2i/PFKAYx7EeY=";
+    hash = "sha256-sise8BYUG1SUGtZu1OA2p73/OcCzYJk7KDh1w/hU3Zo=";
   };
 
   postPatch = ''

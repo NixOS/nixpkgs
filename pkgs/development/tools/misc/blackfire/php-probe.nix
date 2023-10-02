@@ -12,42 +12,42 @@
 let
   phpMajor = lib.versions.majorMinor php.version;
 
-  version = "1.88.1";
+  version = "1.90.0";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-8t/9+USw4cun8kIsCkcFl/672rtgEBy6SgRMEzl47VU=";
-        "8.2" = "sha256-/sVDxfhJXMQZb1CdRh+qBjCt3gdYci65BN23K9Kfcys=";
+        "8.1" = "sha256-Cq44SJXe8B/RtVGFDDljDBPVs85ELa1K8B7q1u5SEug=";
+        "8.2" = "sha256-YZ6rEYfssG8bF40wpEGvW5zb1aoIpo3pM+AEZ7yU74E=";
       };
     };
     "i686-linux" = {
       system = "i386";
       hash = {
-        "8.1" = "sha256-ASZKa40D6dpNyzQhqci0+fEUoduyuyoJbWvY2UjVmxA=";
-        "8.2" = "sha256-CWSTPXPr0ZCcGnkDNIh8HhDf53gNy663IWLqIRObv28=";
+        "8.1" = "sha256-Gc0kin1z4WLT67lQjfQb1yxZ45bo/q9KV4RQN5zmnTc=";
+        "8.2" = "sha256-46OF4GMwHFG1CPQJfHI7OrMYGw2hJXgRIFLKcnaKnaI=";
       };
     };
     "aarch64-linux" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-HST8U3DJ1s+ricPQ7Q4bY/eZE+mSnGaJuLKwFpLb0JI=";
-        "8.2" = "sha256-uPCIlYw9i0MFPbca+GWyzpK4oHOOmTUxR46yEBB48mg=";
+        "8.1" = "sha256-rV4YoqGOOQWK2WR5RY7SQ/xePpD54vA4+Km8rFNpv4g=";
+        "8.2" = "sha256-9NuJfa/n3/tyiSn7lcrOUhD+eYUuanJsrzVAJ9cYWhs=";
       };
     };
     "aarch64-darwin" = {
       system = "arm64";
       hash = {
-        "8.1" = "sha256-4JJ7m4/ybVzu/yBtfpSwuSIKor7s80Xlt7FH3K8PwTU=";
-        "8.2" = "sha256-BW6c/qKWeOkJUBYf8TFGz7aYKPUb9kKzyfNGSv1XOhE=";
+        "8.1" = "sha256-G9cep5apYGFEdTOka3QClteCmEUktLtV8I+oIBzsZ9U=";
+        "8.2" = "sha256-3wGiekRaGUEHdTpUniPz0Nay2AM0DOQfgFUAC1ezBCs=";
       };
     };
     "x86_64-darwin" = {
       system = "amd64";
       hash = {
-        "8.1" = "sha256-O6gZwHNIFCXuC2r4yPMuk/wg1LbsMu6aRJmwbRR3B8s=";
-        "8.2" = "sha256-l4wTdt5fGIbGPqCT3/EiRTNovyGQOV1ZRzPjYvlHQIg=";
+        "8.1" = "sha256-BKdngfG78U0lHa7MTW1kndeM2umyEn7ns5T4mglLWnA=";
+        "8.2" = "sha256-02kXdXqj8HuJG0NblkwYPvgiAmbxC19X0xQ7XU2anhg=";
       };
     };
   };
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoPatchelfHook
   ];
 
-  setSourceRoot = "sourceRoot=`pwd`";
+  sourceRoot = ".";
 
   dontUnpack = true;
 

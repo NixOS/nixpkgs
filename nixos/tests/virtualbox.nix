@@ -519,4 +519,4 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
     destroy_vm_test1()
     destroy_vm_test2()
   '';
-} // (lib.optionalAttrs enableUnfree unfreeTests)
+} // (optionalAttrs enableUnfree unfreeTests)

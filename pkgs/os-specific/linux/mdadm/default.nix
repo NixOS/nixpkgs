@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     description = "Programs for managing RAID arrays under Linux";
     homepage = "http://neil.brown.name/blog/mdadm";
     license = licenses.gpl2;
+    mainProgram = "mdadm";
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.linux;
   };

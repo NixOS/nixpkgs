@@ -39,7 +39,7 @@ in
 assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
 
 let
-  version = "0.4.14";
+  version = "0.4.16";
 
   inherit (python) pythonVersion;
 
@@ -60,15 +60,15 @@ let
     {
       "x86_64-linux" = getSrcFromPypi {
         platform = "manylinux2014_x86_64";
-        hash = "sha256-nyylSZfqHeftlvVgJZFCN1ldjluZVJIYu4ZSsVxvXf8=";
+        hash = "sha256-4XyaDnKEMhAbfPEvN3RCDEjXTWbOL6tWrTlyYeiboVs=";
       };
       "aarch64-darwin" = getSrcFromPypi {
         platform = "macosx_11_0_arm64";
-        hash = "sha256-La3wYbGCjWTl7krBD6BaBRqyBD8R530Lckbz0AWv0FM=";
+        hash = "sha256-IG2pCui/Yj+LDMbQwBVlu7yl2llqnaxMzz/MtBvBr6U=";
       };
       "x86_64-darwin" = getSrcFromPypi {
         platform = "macosx_10_14_x86_64";
-        hash = "sha256-hDg5+qisgtgOrdvbjxsUgI73cW6Aah8NLjhPe4kMAsM=";
+        hash = "sha256-x5DqsmHqEb7Dl7dnxT5N0l30GKt5OPZpq3HGX9MFKmo=";
       };
     };
 
@@ -78,7 +78,7 @@ let
   # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
   gpuSrc = fetchurl {
     url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn86-cp310-cp310-manylinux2014_x86_64.whl";
-    hash = "sha256-CcQ5kjp4XfUX4/RwFY3T5G3kVKAeyoCTXu1Lo4O16Qo=";
+    hash = "sha256-eLOprP2kv6roodwRKZXVZFQCD1wC26TSTEDJBjMu/Uo=";
   };
 
 in

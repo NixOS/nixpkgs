@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-0UIJwpC5Y2TQqyZf6C6neICYBZdLQBWAZ8/K1l6KVRs=";
   };
 
-  vendorSha256 = "sha256-ypYuQKxRhRQGX1HtaWt6F6BD9vBpD8AJwx/4esLrJsw=";
+  vendorHash = "sha256-ypYuQKxRhRQGX1HtaWt6F6BD9vBpD8AJwx/4esLrJsw=";
 
   meta = with lib; {
     description = "Drone pipeline runner that executes builds directly on the host machine";

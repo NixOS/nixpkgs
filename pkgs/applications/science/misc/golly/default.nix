@@ -1,10 +1,10 @@
 {lib, stdenv, fetchurl, wxGTK, perl, python3, zlib, libGLU, libGL, libX11, SDL2}:
 stdenv.mkDerivation rec {
   pname = "golly";
-  version = "4.1";
+  version = "4.2";
 
   src = fetchurl {
-    sha256 = "1j30dpzy6wh8fv1j2750hzc6wb0nhk83knl9fapccxgxw9n5lrbc";
+    hash = "sha256-VpEoqSPaZMP/AGIYZAbk5R/f8Crqvx8pKYN1O9Bl6V0=";
     url="mirror://sourceforge/project/golly/golly/golly-${version}/golly-${version}-src.tar.gz";
   };
 
@@ -13,13 +13,10 @@ stdenv.mkDerivation rec {
   ];
 
   setSourceRoot = ''
-    sourceRoot=$(echo */gui-wx/)
+    sourceRoot=$(echo */gui-wx)
   '';
 
   postPatch = ''
-    sed -e '/gollydir =/agollydir += "/../share/golly/";' -i wxgolly.cpp
-    grep share/golly wxgolly.cpp
-
     sed -e 's@PYTHON_SHLIB@${python3}/lib/libpython3.so@' -i wxprefs.cpp
     sed -e 's@PERL_SHLIB@'"$(find "${perl}/lib/" -name libperl.so)"'@' -i wxprefs.cpp
     ! grep _SHLIB *.cpp
@@ -31,6 +28,7 @@ stdenv.mkDerivation rec {
   makeFlags=[
     "-f" "makefile-gtk"
     "ENABLE_SOUND=1" "ENABLE_PERL=1"
+    "GOLLYDIR=${placeholder "out"}/share/golly"
   ];
 
   installPhase = ''

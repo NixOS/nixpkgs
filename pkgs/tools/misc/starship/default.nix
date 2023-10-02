@@ -33,6 +33,10 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/starship completions bash) \
       --fish <($out/bin/starship completions fish) \
       --zsh <($out/bin/starship completions zsh)
+
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/.vuepress/public/presets/toml/*.toml $presetdir
   '';
 
   cargoHash = "sha256-ZHHrpepKZnSGufyEAjNDozaIKAt2GFRt+hU2ej7LceA=";

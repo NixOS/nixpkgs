@@ -1,10 +1,10 @@
 diff --git a/cloudinit/distros/__init__.py b/cloudinit/distros/__init__.py
-index b82852e1..c998b21e 100644
+index 7b83df8d..6d04de1a 100644
 --- a/cloudinit/distros/__init__.py
 +++ b/cloudinit/distros/__init__.py
-@@ -74,6 +74,7 @@ OSFAMILIES = {
+@@ -75,6 +75,7 @@ OSFAMILIES = {
      ],
-     "openEuler": ["openEuler"],
+     "openeuler": ["openeuler"],
      "OpenCloudOS": ["OpenCloudOS", "TencentOS"],
 +    "nixos": ["nixos"],
  }
@@ -12,7 +12,7 @@ index b82852e1..c998b21e 100644
  LOG = logging.getLogger(__name__)
 diff --git a/cloudinit/distros/nixos.py b/cloudinit/distros/nixos.py
 new file mode 100644
-index 00000000..d53d2a62
+index 00000000..954e564b
 --- /dev/null
 +++ b/cloudinit/distros/nixos.py
 @@ -0,0 +1,109 @@

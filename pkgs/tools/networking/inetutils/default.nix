@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, ncurses, perl, help2man
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, ncurses
+, perl
+, help2man
 , apparmorRulesFromClosure
 , libxcrypt
 }:
@@ -17,6 +23,11 @@ stdenv.mkDerivation rec {
   patches = [
     # https://git.congatec.com/yocto/meta-openembedded/commit/3402bfac6b595c622e4590a8ff5eaaa854e2a2a3
     ./inetutils-1_9-PATH_PROCNET_DEV.patch
+    (fetchpatch {
+      name = "CVE-2023-40303.patch";
+      url = "https://git.savannah.gnu.org/cgit/inetutils.git/patch/?id=e4e65c03f4c11292a3e40ef72ca3f194c8bffdd6";
+      hash = "sha256-I5skN537owfpFpAZr4vDKPHuERI6+oq5/hFW2RQeUxI=";
+    })
   ];
 
   strictDeps = true;
@@ -40,9 +51,7 @@ stdenv.mkDerivation rec {
     "--disable-rexec"
   ] ++ lib.optional stdenv.isDarwin  "--disable-servers";
 
-  # Test fails with "UNIX socket name too long", probably because our
-  # $TMPDIR is too long.
-  doCheck = false;
+  doCheck = true;
 
   installFlags = [ "SUIDMODE=" ];
 

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , environs
 , fetchFromGitHub
+, gitpython
 , grpcio
 , grpcio-testing
 , mmh3
@@ -13,11 +14,12 @@
 , scikit-learn
 , setuptools-scm
 , ujson
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pymilvus";
-  version = "2.2.13";
+  version = "2.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,18 +28,20 @@ buildPythonPackage rec {
     owner = "milvus-io";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NTzdbmI2vNvNBFhN+xyZewH4b6l1BbKkDDE7rLNJ4IE=";
+    hash = "sha256-hp00iUT1atyTQk532z7VAajpfvtnKE8W2la9MW7NxoE=";
   };
 
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [
     "grpcio"
   ];
 
   nativeBuildInputs = [
+    gitpython
     pythonRelaxDepsHook
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [

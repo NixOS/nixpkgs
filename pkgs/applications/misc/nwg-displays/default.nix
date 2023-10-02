@@ -8,6 +8,8 @@
 , pango
 , python310Packages
 , wrapGAppsHook
+, hyprlandSupport ? false
+, wlr-randr
 }:
 
 python310Packages.buildPythonApplication rec {
@@ -38,6 +40,8 @@ python310Packages.buildPythonApplication rec {
     python310Packages.gst-python
     python310Packages.i3ipc
     python310Packages.pygobject3
+  ] ++ lib.optionals hyprlandSupport [
+    wlr-randr
   ];
 
   dontWrapGApps = true;

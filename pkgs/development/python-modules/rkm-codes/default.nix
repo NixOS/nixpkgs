@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, flitBuildHook
+, flit-core
 , setuptools
 }:
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   format = "pyproject";
   nativeBuildInputs = [
-    flitBuildHook
+    flit-core
   ];
   propagatedBuildInputs = [
     setuptools

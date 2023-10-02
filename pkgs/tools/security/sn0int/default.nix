@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sn0int";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-+LplLeczLS+9EG0tZsiEs162/65zMCZfDDEq0iYQrGY=";
+    hash = "sha256-ze4OFKUuc/t6tXgmoWFFDjpAQraSY6RIekkcDBctPJo=";
   };
 
-  cargoHash = "sha256-FpoRO2g+R+Fo146kM0W8b1LHTEBHbGXURoX5jJk7lqY=";
+  cargoHash = "sha256-PAKmoifqB1YC02fVF2SRbXAAGrMcB+Wlvr3FwuqmPVU=";
 
   nativeBuildInputs = [
     pkg-config

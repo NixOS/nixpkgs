@@ -2,6 +2,8 @@
 , fetchFromGitHub
 , buildPythonApplication
 , setuptools
+, setuptools-scm
+, wheel
 , nss
 , nix-update-script
 }:
@@ -9,18 +11,19 @@
 buildPythonApplication rec {
   pname = "firefox_decrypt";
   version = "1.1.0";
-
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "unode";
     repo = pname;
     rev = "0931c0484d7429f7d4de3a2f5b62b01b7924b49f";
-    sha256 = "sha256-9HbH8DvHzmlem0XnDbcrIsMQRBuf82cHObqpLzQxNZM=";
+    hash = "sha256-9HbH8DvHzmlem0XnDbcrIsMQRBuf82cHObqpLzQxNZM=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   makeWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" (lib.makeLibraryPath [ nss ]) ];

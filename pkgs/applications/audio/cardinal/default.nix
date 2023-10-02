@@ -1,5 +1,4 @@
-{
-  stdenv
+{ stdenv
 , fetchFromGitHub
 , fetchurl
 , cmake
@@ -28,12 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "23.02";
+  version = "23.09";
 
   src = fetchurl {
-    url =
-      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal-${version}+deps.tar.xz";
-    sha256 = "sha256-5vEWTkEXIMG/re7Ex+YKh+ETLDuc2nihTPpYSg5LdRo=";
+    url = "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
+    hash = "sha256-q42ry47y4tTkUbejv6iN5jXcadXSSTPQ3omhMUevfqU=";
   };
 
   prePatch = ''
@@ -51,6 +49,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     python3
   ];
+
   buildInputs = [
     dbus
     fftwFloat
@@ -76,6 +75,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/Cardinal \
     --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
 
+    wrapProgram $out/bin/CardinalMini \
+    --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}
+
     # this doesn't work and is mainly just a test tool for the developers anyway.
     rm -f $out/bin/CardinalNative
   '';
@@ -84,7 +86,7 @@ stdenv.mkDerivation rec {
     description = "Plugin wrapper around VCV Rack";
     homepage = "https://github.com/DISTRHO/cardinal";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.magnetophon ];
+    maintainers = with lib.maintainers; [ magnetophon PowerUser64 ];
     mainProgram = "Cardinal";
     platforms = lib.platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs

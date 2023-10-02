@@ -9,22 +9,24 @@
 , requests
 , requests-file
 , responses
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname   = "tldextract";
-  version = "3.4.4";
-  format = "setuptools";
+  version = "3.6.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X+MhDFd0Y1RRkdRa1SLT1eeNVSGM6XIV6CAE3K4eEjQ=";
+    hash = "sha256-pdi2WDeR2sominWS6892QVL6SWF5g8SZFu6d6Zs2YiI=";
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 

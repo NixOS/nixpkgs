@@ -1,22 +1,24 @@
 { lib
 , buildGoModule
+, callPackage
 , fetchFromGitHub
-, nix-update-script
 }:
-
 buildGoModule rec {
   pname = "pgrok";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "pgrok";
     repo = "pgrok";
     rev = "v${version}";
-    hash = "sha256-lhcaJVIqZK7GnC/Q/+RDxTVFmgTana3vugDHr/SStFE=";
+    hash = "sha256-2k3XLXmf1Xnx4HvS7sD/aq+78Z4I7uY4djV958n5TX4=";
   };
-  vendorHash = "sha256-UzNx361cg4IDSQGlX5N9AxYZ8cYA0zsF5JF4Fe7efqM=";
+
+  vendorHash = "sha256-M0xVHRh9NKPxmUEmx1dDQUZc8aXcdAfHisQAnt72RdY=";
 
   outputs = [ "out" "server" ];
+
+  web = callPackage ./web.nix { inherit src version; };
 
   ldflags = [
     "-s"
@@ -26,11 +28,23 @@ buildGoModule rec {
     "-X main.date=unknown"
   ];
 
+  subPackages = [
+    "pgrok/pgrok"
+    "pgrokd/pgrokd"
+  ];
+
+  postPatch = ''
+    # rename packages due to naming conflict
+    mv pgrok/cli/ pgrok/pgrok/
+    mv pgrokd/cli/ pgrokd/pgrokd/
+    cp -r ${web} pgrokd/pgrokd/dist
+  '';
+
   postInstall = ''
     moveToOutput bin/pgrokd $server
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Selfhosted TCP/HTTP tunnel, ngrok alternative, written in Go";

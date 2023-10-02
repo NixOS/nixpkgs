@@ -481,6 +481,11 @@ in mkLicense lset) ({
     free = false;
   };
 
+  fraunhofer-fdk = {
+    fullName = "Fraunhofer FDK AAC Codec Library";
+    spdxId = "FDK-AAC";
+  };
+
   free = {
     fullName = "Unspecified free software license";
   };
@@ -610,7 +615,7 @@ in mkLicense lset) ({
   };
 
   inria-icesl = {
-    fullName = "INRIA Non-Commercial License Agreement for IceSL";
+    fullName = "End User License Agreement for IceSL Software";
     url      = "https://icesl.loria.fr/assets/pdf/EULA_IceSL_binary.pdf";
     free     = false;
   };
@@ -854,6 +859,11 @@ in mkLicense lset) ({
     fullName = "Obsidian End User Agreement";
     url = "https://obsidian.md/eula";
     free = false;
+  };
+
+  ocamlLgplLinkingException = {
+    spdxId = "OCaml-LGPL-linking-exception";
+    fullName = "OCaml LGPL Linking Exception";
   };
 
   ocamlpro_nc = {

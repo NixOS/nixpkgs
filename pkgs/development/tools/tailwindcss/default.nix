@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
     maintainers = [ maintainers.adamcstephens ];
+    mainProgram = "tailwindcss";
     platforms = platforms.darwin ++ platforms.linux;
   };
 }

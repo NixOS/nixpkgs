@@ -7,8 +7,6 @@
 , python
 , pythonOlder
 , buildPythonPackage
-, pypaBuildHook
-, pipInstallHook
 , cython
 , gfortran
 , meson-python
@@ -16,7 +14,7 @@
 , pythran
 , wheel
 , nose
-, pytest
+, pytestCheckHook
 , pytest-xdist
 , numpy
 , pybind11
@@ -33,11 +31,9 @@ let
   #
   #     nix-shell maintainers/scripts/update.nix --argstr package python3.pkgs.scipy
   #
-  # Even if you do update these hashes manually, don't change their base
-  # (base16 or base64), because the update script uses sed regexes to replace
-  # them with the updated hashes.
-  version = "1.11.1";
-  srcHash = "sha256-bgnYXe3EhzL7+Gfriz1cXCl2eYQJ8zF+rcIwHyZR8bQ=";
+  # The update script uses sed regexes to replace them with the updated hashes.
+  version = "1.11.2";
+  srcHash = "sha256-7FE740/yKUXtujVX60fQB/xvCZFfV69FRihvSi6+UWo=";
   datasetsHashes = {
     ascent = "1qjp35ncrniq9rhzb14icwwykqg2208hcssznn3hz27w39615kh3";
     ecg = "1bwbjp43b7znnwha5hv6wiz3g0bhwrpqpi75s12zidxrbwvd62pj";
@@ -59,7 +55,7 @@ let
   '';
 in buildPythonPackage {
   inherit pname version;
-  format = "other";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "scipy";
@@ -80,12 +76,22 @@ in buildPythonPackage {
     })
   ];
 
+  # Relax deps a bit
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0"
+      --replace 'numpy==' 'numpy>=' \
+      --replace "pybind11>=2.10.4,<2.11.0" "pybind11>=2.10.4,<2.12.0" \
+      --replace 'wheel<0.41.0' 'wheel'
   '';
 
-  nativeBuildInputs = [ pypaBuildHook pipInstallHook cython gfortran meson-python pythran pkg-config wheel ];
+  nativeBuildInputs = [
+    cython
+    gfortran
+    meson-python
+    pythran
+    pkg-config
+    wheel
+  ];
 
   buildInputs = [
     blas
@@ -99,14 +105,28 @@ in buildPythonPackage {
 
   propagatedBuildInputs = [ numpy ];
 
-  nativeCheckInputs = [ nose pytest pytest-xdist ];
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+  # See https://github.com/scipy/scipy/issues/18308
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+    "test_dst4_definition_ortho"
+    "test_load_mat4_le"
+    "hyp2f1_test_case47"
+    "hyp2f1_test_case3"
+    "test_uint64_max"
+  ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
-    # Relax deps a bit
-    substituteInPlace pyproject.toml \
-      --replace 'numpy==' 'numpy>='
     # Helps parallelization a bit
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
     # We download manually the datasets and this variable tells the pooch
@@ -140,9 +160,38 @@ in buildPythonPackage {
 
   checkPhase = ''
     runHook preCheck
+
+    # Adapted from pytestCheckHook because scipy uses a custom check phase.
+    # It needs to pass `$args` as a Python list to `scipy.test` rather than as
+    # arguments to pytest on the command-line.
+    args=""
+    if [ -n "$disabledTests" ]; then
+      disabledTestsString=$(_pytestComputeDisabledTestsString "''${disabledTests[@]}")
+      args+="'-k','$disabledTestsString'"
+    fi
+
+    if [ -n "''${disabledTestPaths-}" ]; then
+        eval "disabledTestPaths=($disabledTestPaths)"
+    fi
+
+    for path in ''${disabledTestPaths[@]}; do
+      if [ ! -e "$path" ]; then
+        echo "Disabled tests path \"$path\" does not exist. Aborting"
+        exit 1
+      fi
+      args+="''${args:+,}'--ignore=\"$path\"'"
+    done
+    args+="''${args:+,}$(printf \'%s\', "''${pytestFlagsArray[@]}")"
+    args=''${args%,}
+
     pushd "$out"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES) != True)"
+    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test(
+        'fast',
+        verbose=10,
+        extra_argv=[$args],
+        parallel=$NIX_BUILD_CORES
+    ) != True)"
     popd
     runHook postCheck
   '';

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tlsclient";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromSourcehut {
     owner = "~moody";
     repo = "tlsclient";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-36fhY9kO6tPUuRkpk3Jv9oBRYX/SnmdZg0Rzt/A6MQE=";
+    hash = "sha256-Ff41LZ5jbrqni2ptsUlI3L17SCHnGo4utg8etFubRNI=";
   };
 
   strictDeps = true;

@@ -42,6 +42,8 @@ buildPythonPackage rec {
     yarl
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     aresponses
     pytest-asyncio

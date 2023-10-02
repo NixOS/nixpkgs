@@ -42,20 +42,27 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.wait_for_open_port(9000)
     machine.succeed("[[ -f /var/lib/listmonk/.db_settings_initialized ]]")
 
+    assert json.loads(machine.succeed(generate_listmonk_request("GET", 'health')))['data'], 'Health endpoint returned unexpected value'
+
+    # A sample subscriber is guaranteed to exist at install-time
+    # A sample transactional template is guaranteed to exist at install-time
+    subscribers = json.loads(machine.succeed(generate_listmonk_request('GET', "subscribers")))['data']['results']
+    templates = json.loads(machine.succeed(generate_listmonk_request('GET', "templates")))['data']
+    tx_template = templates[2]
+
     # Test transactional endpoint
-    # subscriber_id=1 is guaranteed to exist at install-time
-    # template_id=2 is guaranteed to exist at install-time and is a transactional template (1 is a campaign template).
-    machine.succeed(
-      generate_listmonk_request('POST', 'tx', data={'subscriber_id': 1, 'template_id': 2})
-    )
-    assert 'Welcome John Doe' in machine.succeed(
+    print(machine.succeed(
+      generate_listmonk_request('POST', 'tx', data={'subscriber_id': subscribers[0]['id'], 'template_id': tx_template['id']})
+    ))
+
+    assert 'Welcome Anon Doe' in machine.succeed(
         "curl --fail http://localhost:8025/api/v2/messages"
-    )
+    ), "Failed to find Welcome John Doe inside the messages API endpoint"
 
     # Test campaign endpoint
     # Based on https://github.com/knadh/listmonk/blob/174a48f252a146d7e69dab42724e3329dbe25ebe/cmd/campaigns.go#L549 as docs do not exist.
     campaign_data = json.loads(machine.succeed(
-      generate_listmonk_request('POST', 'campaigns/1/test', data={'template_id': 1, 'subscribers': ['john@example.com'], 'name': 'Test', 'subject': 'NixOS is great', 'lists': [1], 'messenger': 'email'})
+      generate_listmonk_request('POST', 'campaigns/1/test', data={'template_id': templates[0]['id'], 'subscribers': ['john@example.com'], 'name': 'Test', 'subject': 'NixOS is great', 'lists': [1], 'messenger': 'email'})
     ))
 
     assert campaign_data['data']  # This is a boolean asserting if the test was successful or not: https://github.com/knadh/listmonk/blob/174a48f252a146d7e69dab42724e3329dbe25ebe/cmd/campaigns.go#L626

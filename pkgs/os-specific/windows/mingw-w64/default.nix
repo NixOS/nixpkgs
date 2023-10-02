@@ -36,6 +36,8 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--enable-idl"
     "--enable-secure-api"
+  ] ++ lib.optionals (stdenv.targetPlatform.libc == "ucrt") [
+    "--with-default-msvcrt=ucrt"
   ];
 
   enableParallelBuilding = true;

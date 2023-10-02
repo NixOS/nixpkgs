@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyaml";
-  version = "23.7.0";
+  version = "23.9.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DFELu4k4MJQA4LHkesFv2Q5W1lKAWpNBcSh4ZxjzNUY=";
+    sha256 = "sha256-Kyw5AXtxihJ775+WvFX4lBTZYIdmaNaYgKrmb0upiVc=";
   };
 
   propagatedBuildInputs = [

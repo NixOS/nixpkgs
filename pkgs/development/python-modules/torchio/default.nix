@@ -19,15 +19,16 @@
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.18.90";
+  version = "0.19.1";
   format = "pyproject";
-  disabled = pythonOlder "3.7";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "fepegar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-h8cvNhOkjMMbQ6Nry8FKtwnK+yhRYRGjXi/xp0i5yyY=";
+    hash = "sha256-SNX558kSRCS9Eks00Kj2kFmo7hCUgV6saYLsnx/Kus0=";
   };
 
   propagatedBuildInputs = [
@@ -57,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "http://www.torchio.org/";
+    homepage = "https://torchio.readthedocs.io";
     license = licenses.asl20;
     maintainers = [ maintainers.bcdarwin ];
   };

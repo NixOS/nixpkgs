@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "traceroute";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/traceroute/${pname}-${version}.tar.gz";
-    sha256 = "sha256-UHwmjyl3tOIYznPn6+1Fug2XCoykmV3Zy7H/6OmbWx8=";
+    sha256 = "sha256-BevHq6KKkQD5u65Uzuy/dcgsz0a9/Oi11kgGRZp+BBI=";
   };
 
   makeFlags = [

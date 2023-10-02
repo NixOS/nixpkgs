@@ -11,19 +11,28 @@
 , attr
 , bash
 , btrfs-progs
+, cdrkit
 , criu
 , dnsmasq
+, e2fsprogs
+, getent
 , gnutar
 , gptfdisk
 , gzip
 , iproute2
 , iptables
+, kmod
+, lvm2
+, minio
+, nftables
 , OVMF
 , qemu_kvm
 , qemu-utils
 , rsync
 , spice-gtk
 , squashfsTools
+, thin-provisioning-tools
+, util-linux
 , virtiofsd
 , xz
 }:
@@ -33,17 +42,26 @@ let
     attr
     bash
     btrfs-progs
+    cdrkit
     criu
     dnsmasq
+    e2fsprogs
+    getent
     gnutar
     gptfdisk
     gzip
     iproute2
     iptables
+    kmod
+    lvm2
+    minio
+    nftables
     qemu_kvm
     qemu-utils
     rsync
     squashfsTools
+    thin-provisioning-tools
+    util-linux
     virtiofsd
     xz
 

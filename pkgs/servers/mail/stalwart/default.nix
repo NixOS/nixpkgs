@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "0.3.4";
+  version = "0.3.6";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "v${version}";
-    hash = "sha256-SFHlcoc/8wCWPFGHOvU3SIVztBtW4nxU5/pvZzbjzsg=";
+    hash = "sha256-QZF51TkuV73EHWXABvqybEZ56CR4zXC/HrmWtVDuM0U=";
     fetchSubmodules = true;
   };
 
@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage {
       "mail-auth-0.3.2" = "sha256-CTafQCXPo91ZUlfS9JUqU+RfUf4+6EbdG97+nIqQtNw=";
       "mail-builder-0.3.1" = "sha256-r32iiHtQp0C94Qqc4Vspc08QaXZ+e1u7e39fNYoQGsY=";
       "mail-parser-0.8.2" = "sha256-XvKEgzQ+HDoLI16CmqE/RRgApg0q9Au9sqOOEpZz6W0=";
-      "mail-send-0.4.0" = "sha256-bMPI871hBj/RvrW4kESGS9XzfnkSo8r2/9uUwgE12EU=";
-      "sieve-rs-0.3.1" = "sha256-FJBQorFRXQYhiCzprAqiv69Qae9YI5OAipjayooFDAw=";
+      "mail-send-0.4.0" = "sha256-czfzadxvrLQD4qhw/yVI45ajo5EAVu1Bj2lwBY1dVQY=";
+      "sieve-rs-0.3.1" = "sha256-JIhOklif2IuU3kUVxZb68BZvMV1dR0NtQe3UOayC+vM=";
       "smtp-proto-0.1.1" = "sha256-HhKZQHQv3tMEfRZgCoAtyxVzwHbcB4FSjKlMoU1PkHg=";
     };
   };

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "dirty-equals";
-  version = "0.6.0";
+  version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-j+EqsKVRG2DDka1G3Px8ExYZt8QkqHkhojRnAHObdR4=";
+    hash = "sha256-ShbkPGj1whOQ11bFLUSTfvVEVlvc3JUzRDICbBohgMM=";
   };
 
   nativeBuildInputs = [

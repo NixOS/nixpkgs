@@ -31,6 +31,8 @@ buildPythonPackage rec {
     tornado
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     ipython
     pytestCheckHook

@@ -15,18 +15,18 @@
 , makeDesktopItem
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "12.5";
+  version = "13.0";
 
   src = fetchurl {
-    url = "https://freefilesync.org/download/FreeFileSync_${version}_Source.zip";
+    url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
     # The URL only redirects to the file on the second attempt
     postFetch = ''
       rm -f $out
       tryDownload "$url"
     '';
-    hash = "sha256-KTN/HbNLP/+z5rryp3wDRo6c7l03vi6tUxCXZPMGUoM=";
+    hash = "sha256-E0lYKNCVtkdnhI3NPx8828Fz6sfmIm18KSC0NSWgHfQ=";
   };
 
   sourceRoot = ".";
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };
-}
+})

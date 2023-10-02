@@ -12,11 +12,12 @@
 , gtksourceview5
 , enchant
 , icu
+, nix-update-script
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libspelling";
-  version = "unstable-2023-07-17";
+  version = "0.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -24,8 +25,8 @@ stdenv.mkDerivation {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "libspelling";
-    rev = "65185023db95ec464970aeaeab766fe3ba26ae7d";
-    hash = "sha256-R3nPs16y8XGamQvMSF7wb52h0jxt17H2FZPwauLDI/c=";
+    rev = version;
+    hash = "sha256-OOSQgdtnEx6/5yKwavCGdY/5L0Mr3XW0Srmd42ZTdUk=";
   };
 
   nativeBuildInputs = [
@@ -50,10 +51,13 @@ stdenv.mkDerivation {
     moveToOutput "share/doc" "$devdoc"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Spellcheck library for GTK 4";
     homepage = "https://gitlab.gnome.org/chergert/libspelling";
     license = licenses.lgpl21Plus;
+    changelog = "https://gitlab.gnome.org/chergert/libspelling/-/raw/${version}/NEWS";
     maintainers = with maintainers; [ chuangzhu ];
   };
 }

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ossfs";
-  version = "2023.5.0";
+  version = "2023.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-h9h5h2eJO1wzOR7oC2usrEx0ADSoKDu74YczAmZL9NU=";
+    hash = "sha256-v6QZgv1QwBrQpCwP/1z6704UNvQyoCrpQGkhTmncbjQ=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -15,12 +15,12 @@ let
   info = lib.splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
   plat = elemAt info 1;
-  shas =
+  hashes =
     {
-      x86_64-linux  = "d3d5e8906e64ae3c469e4df80e1c692ce1912e36f68ddf36b99b7019faf34aebaa329061904a6d2b6a32486c6e19d1c5f2ea30c25479a7960ed93bc1c0cb1691";
-      x86_64-darwin = "72a4499efbbbdf425f92beafc1b1d416e66e6ded60e76d9c9af9c3c13ce11862ba54dffbfbd5cbdef6afaad50f0d57532d3524f83acd88840aecc6891f748732";
-      aarch64-linux = "ce1b584e1cf98f8fb0e602352564a71efef4f53936dde7a056caed62675a6216624f0db2bc24d8239b8d01f06306bf173dda7a08a1787ba061db01ca0d88359a";
-      aarch64-darwin = "72a4499efbbbdf425f92beafc1b1d416e66e6ded60e76d9c9af9c3c13ce11862ba54dffbfbd5cbdef6afaad50f0d57532d3524f83acd88840aecc6891f748732";
+      x86_64-linux  = "sha512-09XokG5krjxGnk34DhxpLOGRLjb2jd82uZtwGfrzSuuqMpBhkEptK2oySGxuGdHF8uowwlR5p5YO2TvBwMsWkQ==";
+      x86_64-darwin = "sha512-cqRJnvu730Jfkr6vwbHUFuZube1g522cmvnDwTzhGGK6VN/7+9XL3vavqtUPDVdTLTUk+DrNiIQK7MaJH3SHMg==";
+      aarch64-linux = "sha512-zhtYThz5j4+w5gI1JWSnHv709Tk23eegVsrtYmdaYhZiTw2yvCTYI5uNAfBjBr8XPdp6CKF4e6Bh2wHKDYg1mg==";
+      aarch64-darwin = "sha512-cqRJnvu730Jfkr6vwbHUFuZube1g522cmvnDwTzhGGK6VN/7+9XL3vavqtUPDVdTLTUk+DrNiIQK7MaJH3SHMg==";
     };
 
 in stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${pname}-${version}-${plat}-${arch}.tar.gz";
-    sha512 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
+    hash = hashes.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [

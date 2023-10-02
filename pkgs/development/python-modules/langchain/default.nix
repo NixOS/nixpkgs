@@ -43,6 +43,7 @@
 , librosa
 , lxml
 , manifest-ml
+, markdownify
 , neo4j
 , networkx
 , nlpcloud
@@ -85,7 +86,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.254";
+  version = "0.0.285";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -94,7 +95,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YQFIF1tA/CjvmD6xGgVre2lbcHR+UYx/sy1dOfpvkPY=";
+    hash = "sha256-3vOfwn8qvPd9dPRnsX14bVSLQQKHLPS5r15S8yAQFpw=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -264,6 +265,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    markdownify
     pandas
     pytest-asyncio
     pytest-mock
