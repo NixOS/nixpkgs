@@ -26,7 +26,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
     mdformat-gfm
     mdit-py-plugins
@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "mdformat_mkdocs"
+    "mdformat_mkdocs.plugin"
   ];
 
   meta = with lib; {
