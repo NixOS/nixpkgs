@@ -5,7 +5,10 @@ with lib;
 let
   cfg = config.services.soju;
   stateDir = "/var/lib/soju";
-  listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") cfg.listen;
+  runtimeDir = "/run/soju";
+  listen = cfg.listen
+    ++ optional cfg.adminSocket.enable "unix+admin://${runtimeDir}/admin";
+  listenCfg = concatMapStringsSep "\n" (l: "listen ${l}") listen;
   tlsCfg = optionalString (cfg.tlsCertificate != null)
     "tls ${cfg.tlsCertificate} ${cfg.tlsCertificateKey}";
   logCfg = optionalString cfg.enableMessageLogging
@@ -68,6 +71,14 @@ in
       description = lib.mdDoc "Whether to enable message logging.";
     };
 
+    adminSocket.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = lib.mdDoc ''
+        Listen for admin connections from sojuctl at /run/soju/admin.
+      '';
+    };
+
     httpOrigins = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -119,6 +130,7 @@ in
         Restart = "always";
         ExecStart = "${cfg.package}/bin/soju -config ${configFile}";
         StateDirectory = "soju";
+        RuntimeDirectory = "soju";
       };
     };
   };
