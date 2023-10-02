@@ -1,5 +1,12 @@
-{ buildGoModule, fetchFromGitHub, lib, coreutils, makeWrapper
-, google-guest-configs, google-guest-oslogin, iproute2, procps
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, coreutils
+, makeWrapper
+, google-guest-configs
+, google-guest-oslogin
+, iproute2
+, procps
 }:
 
 buildGoModule rec {
@@ -9,8 +16,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-DP15KDnD09edBxOQDwP0cjVIFxjMzE1hu1Sbu6Faj9Y=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DP15KDnD09edBxOQDwP0cjVIFxjMzE1hu1Sbu6Faj9Y=";
   };
 
   vendorHash = "sha256-PGvyDjhLwIKhR6NmwzbzjfkBK+FqsziAdsybQmCbtCc=";
@@ -27,7 +34,12 @@ buildGoModule rec {
   '';
 
   # We don't add `shadow` here; it's added to PATH if `mutableUsers` is enabled.
-  binPath = lib.makeBinPath [ google-guest-configs google-guest-oslogin iproute2 procps ];
+  binPath = lib.makeBinPath [
+    google-guest-configs
+    google-guest-oslogin
+    iproute2
+    procps
+  ];
 
   # Skip tests which require networking.
   preCheck = ''
@@ -44,10 +56,11 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/GoogleCloudPlatform/guest-agent";
     description = "Guest Agent for Google Compute Engine";
+    homepage = "https://github.com/GoogleCloudPlatform/guest-agent";
+    changelog = "https://github.com/GoogleCloudPlatform/guest-agent/releases/tag/${version}";
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
+    platforms = platforms.linux;
   };
 }
