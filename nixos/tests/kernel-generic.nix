@@ -31,7 +31,6 @@ let
       linux_5_10_hardened
       linux_5_15_hardened
       linux_6_1_hardened
-      linux_6_4_hardened
       linux_6_5_hardened
       linux_rt_5_4
       linux_rt_5_10
