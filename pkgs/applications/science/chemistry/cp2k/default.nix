@@ -106,6 +106,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/cp2k
 
     cp exe/${arch}/* $out/bin
+    rm $out/bin/*_unittest.*
 
     for i in cp2k cp2k_shell graph; do
       wrapProgram $out/bin/$i.${cp2kVersion} \
