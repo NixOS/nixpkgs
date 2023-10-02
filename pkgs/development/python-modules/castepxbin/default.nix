@@ -1,16 +1,19 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , flit-core
 , numpy
 , scipy
-, pymatgen
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "castepxbin";
   version = "0.3.0";
+
+  disabled = pythonOlder "3.7";
+
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -27,7 +30,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     numpy
     scipy
-    pymatgen
   ];
 
   nativeCheckInputs = [

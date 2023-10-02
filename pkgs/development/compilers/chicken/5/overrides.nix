@@ -55,6 +55,8 @@ in
   leveldb = addToBuildInputs pkgs.leveldb;
   magic = addToBuildInputs pkgs.file;
   mdh = addToBuildInputs pkgs.pcre;
+  # missing dependency in upstream egg
+  mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
   opencl = addToBuildInputs ([ pkgs.opencl-headers pkgs.ocl-icd ]

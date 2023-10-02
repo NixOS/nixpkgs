@@ -3,7 +3,6 @@
 , fetchPypi
 , python-dateutil
 , pytz
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -21,16 +20,15 @@ buildPythonPackage rec {
     pytz
   ];
 
-  pythonImportsCheck = [
-    "snaptime"
-  ];
+  pythonImportsCheck = [ "snaptime" ];
 
-  doCheck = false; # git has tests, but no tags :(
+  # no tests on Pypi, no tags on github
+  doCheck = false;
 
   meta = with lib; {
     description = "Transform timestamps with a simple DSL";
     homepage = "https://github.com/zartstrom/snaptime";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ pbsds ];
   };
 }
