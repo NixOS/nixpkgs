@@ -5,7 +5,6 @@
 , qmake
 , qttools
 , wrapQtAppsHook
-, qttranslations
 , gdal
 , proj
 , qtsvg
@@ -48,7 +47,6 @@ stdenv.mkDerivation rec {
   '';
 
   qmakeFlags = [
-    "TRANSDIR_SYSTEM=${qttranslations}/translations"
     "USEWEBENGINE=1"
   ] ++ lib.optional withGeoimage "GEOIMAGE=1"
     ++ lib.optional withGpsdlib "GPSDLIB=1"

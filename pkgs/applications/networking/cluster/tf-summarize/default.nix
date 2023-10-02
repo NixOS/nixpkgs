@@ -13,10 +13,11 @@ buildGoModule rec {
     owner = "dineshba";
     repo = "tf-summarize";
     rev = "v${version}";
-    sha256 = "0c6fcz0n22mq8bqr82h9lfxx4n1bk9gjlc7d131lpf14yiacih3p";
+    hash = "sha256-d8DIVPQkuEvDCO0wKl+aK1jSu6MJCpTxQrgKYcFnzjA=";
   };
 
-  vendorSha256 = "cnybdZth7qlP2BHK8uvLCoqJtggMIkvaL2+YugiUZRE=";
+  vendorHash = "sha256-cnybdZth7qlP2BHK8uvLCoqJtggMIkvaL2+YugiUZRE=";
+
   ldflags = [
     "-s"
     "-w"

@@ -5,20 +5,19 @@
 , yt-dlp
 , docopt
 , pythonOlder
-, urllib3
 , pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "2023.8.10";
+  version = "2023.8.19";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9jSPFKS1+mGprgGj1c6hOrOo/w2e7A+OXSUjQUm+NCg=";
+    sha256 = "sha256-0atpOUJIfXgw/5fi5w2ciAFDMgWmVH4U8d84zwLCRXk=";
   };
 
   nativeBuildInputs = [
@@ -28,12 +27,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     internetarchive
     docopt
-    urllib3
     yt-dlp
   ];
 
   pythonRelaxDeps = [
-    "urllib3"
     "docopt"
   ];
 

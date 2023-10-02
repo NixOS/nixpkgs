@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     "VERSION_TAG=${version}"
     "USE_SYSTEM_OPENCL=1"
     "USE_SYSTEM_XXHASH=1"
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
+    "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
   ];
 
   enableParallelBuilding = true;
@@ -76,6 +78,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://hashcat.net/hashcat/";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ kierdavis zimbatm ];
+    maintainers = with maintainers; [ felixalbrigtsen kierdavis zimbatm ];
   };
 }

@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ttfb";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-o7kzQ8jtAqDwTUPtjeNqgotxREeWl7jQG+EDrYWJL/Q=";
+    hash = "sha256-GxjG8pyE2rY0h1dpAo+HRUbP31I5Pm4h1fAb6R7V+qU=";
   };
 
-  cargoHash = "sha256-ayyYrrFDVOYVjVo5TLaRn2mvmywe5BjQ7kRVV2r0iK8=";
+  cargoHash = "sha256-YdbVtVKt0bKb1R5IQxf9J/0ZA3ZHH+oZ8ryX6f4cGsY=";
 
   # The bin feature activates all dependencies of the binary. Otherwise,
   # only the library is build.

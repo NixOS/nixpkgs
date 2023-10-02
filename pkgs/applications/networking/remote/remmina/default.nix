@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitLab, cmake, ninja, pkg-config, wrapGAppsHook
+{ lib, stdenv, fetchFromGitLab, fetchpatch, cmake, ninja, pkg-config, wrapGAppsHook
+, desktopToDarwinBundle
 , glib, gtk3, gettext, libxkbfile, libX11, python3
 , freerdp, libssh, libgcrypt, gnutls, vte
 , pcre2, libdbusmenu-gtk3, libappindicator-gtk3
@@ -23,7 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-oEgpav4oQ9Sld9PY4TsutS5xEnhQgOHnpQhDesRFTeQ=";
   };
 
-  nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ];
+  patches = [
+    # https://gitlab.com/Remmina/Remmina/-/merge_requests/2525
+    (fetchpatch {
+      url = "https://gitlab.com/Remmina/Remmina/-/commit/2ce153411597035d0f3db5177d703541e09eaa06.patch";
+      hash = "sha256-RV/8Ze9aN4dW49Z+y3z0jFs4dyEWu7DK2FABtmse9Hc=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake ninja pkg-config wrapGAppsHook ]
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     gsettings-desktop-schemas

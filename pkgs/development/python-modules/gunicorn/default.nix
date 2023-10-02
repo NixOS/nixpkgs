@@ -6,7 +6,6 @@
 , eventlet
 , gevent
 , pytestCheckHook
-, setuptools
 }:
 
 buildPythonPackage rec {
@@ -28,7 +27,6 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    setuptools
     packaging
   ];
 

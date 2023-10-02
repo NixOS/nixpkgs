@@ -4,6 +4,7 @@
 , openssl
 , nushell
 , pkg-config
+, Security
 }:
 
 let
@@ -11,11 +12,11 @@ let
 in
 rustPlatform.buildRustPackage {
   inherit pname;
-  version = "0.83.1";
+  version = "0.85.0";
   src = nushell.src;
-  cargoHash = "sha256-qRKONc8rDRALEin8WGxi7Jma4uD+U+9Gu6zpmYWmGOc=";
+  cargoHash = "sha256-6luY3SIRRd9vaY9KIJcj8Q974FW0LtAvRjVpdpzkdLo=";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
   cargoBuildFlags = [ "--package nu_plugin_gstat" ];
   doCheck = false; # some tests fail
   meta = with lib; {

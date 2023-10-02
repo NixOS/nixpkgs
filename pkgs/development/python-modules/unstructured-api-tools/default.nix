@@ -28,7 +28,7 @@
 , pytest-mock
 }:
 let
-  version = "0.10.10";
+  version = "0.10.11";
 in
 buildPythonPackage {
   pname = "unstructured-api-tools";
@@ -40,8 +40,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-api-tools";
-    rev = version;
-    hash = "sha256-CJ5bsII24hw03JN4+8VywYRYCsnMlYHjmaIIn0zttIs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-t1fK40ayR2bxc1iMIwvn/OHuyVlR98Gq+NpIhOmaP+4=";
   };
 
   propagatedBuildInputs = [

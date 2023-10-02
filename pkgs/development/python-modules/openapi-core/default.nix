@@ -82,6 +82,8 @@ buildPythonPackage rec {
     ];
   };
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook

@@ -8,20 +8,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "awsbck";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
     rev = "v${version}";
-    hash = "sha256-L5hQ6vwuC9HuAGD9mvS8BGkPV3Ry5jJgRUF4Qf7fqaM=";
+    hash = "sha256-BitR4f1VzYs5L7hT5OCbBbe4JvPIOPDQ9byKEkfBDBY=";
   };
+
+  cargoHash = "sha256-J5BI6Gv20iAe2XCt1riLATCnlOg+pcj7q2Gzo2ZN0ms=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
-
-  cargoSha256 = "sha256-VKm27IzCUv3e1Mapb46SBJqvEwifgGxaRX2uM9MTNnQ=";
 
   doCheck = false;
 

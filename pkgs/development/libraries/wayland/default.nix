@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, substituteAll
 , meson
 , pkg-config
 , ninja

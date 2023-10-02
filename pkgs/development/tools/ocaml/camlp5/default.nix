@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, perl, makeWrapper
 , rresult, bos, ocaml_pcre, re, camlp-streams
+, legacy ? false
 }:
 
 if lib.versionOlder ocaml.version "4.02"
@@ -7,7 +8,7 @@ then throw "camlp5 is not available for OCaml ${ocaml.version}"
 else
 
 let params =
-  if lib.versionAtLeast ocaml.version "4.12"
+  if lib.versionAtLeast ocaml.version "4.12" && !legacy
   then rec {
     version = "8.00.05";
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-Q7wWoggJN2w2a2umQHx5TsVcugqpovBEtOKruNMZQ8A=";
   };
 
-  format = "flit";
+  format = "pyproject";
 
   nativeBuildInputs = [ flit-core ];
 

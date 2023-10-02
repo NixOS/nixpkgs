@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
       wlr-output-management protocol.
     '';
     license = licenses.mit;
+    mainProgram = "kanshi";
     maintainers = with maintainers; [ balsoft danielbarter ];
     platforms = platforms.linux;
   };

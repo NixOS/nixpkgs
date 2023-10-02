@@ -103,4 +103,6 @@ in {
       };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ nicoo ];
 }

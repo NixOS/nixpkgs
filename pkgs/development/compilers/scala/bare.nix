@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.0";
+  version = "3.3.1";
   pname = "scala-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/scala3-${version}.tar.gz";
-    hash = "sha256-Bk7lCKjjucaYQxAsg2qomJQUgCK/N688JqlGTfoQFHU=";
+    hash = "sha256-EcDqD3HEOvD7GzVd3kFL/vAaYMFyk2deI6RNAlJpzRU=";
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "http://dotty.epfl.ch/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [maintainers.karolchmist maintainers.virusdave];
+    maintainers = with maintainers; [ karolchmist virusdave kashw2 ];
   };
 }

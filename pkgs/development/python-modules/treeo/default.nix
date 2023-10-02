@@ -53,5 +53,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/cgarciae/treeo";
     license = licenses.mit;
     maintainers = with maintainers; [ ndl ];
+    # obsolete as of 2023-02-27 and not updated for more than a year as of 2023-08
+    broken = true;
   };
 }

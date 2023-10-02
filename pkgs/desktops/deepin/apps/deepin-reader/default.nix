@@ -17,24 +17,26 @@
 , openjpeg
 , djvulibre
 , qtbase
+, gtest
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-reader";
-  version = "5.10.29";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-IpgmTmnrPWc9EFZVM+S2nFxdpPjbgXqEWUnK/O9FmUg=";
+    hash = "sha256-69NCxa20wp/tyyGGH/FbHhZ83LECbJWAzaLRo7iYreA=";
   };
 
-  patches = [ ./use-pkg-config.diff ];
-
+  # don't use vendored htmltopdf
   postPatch = ''
-    substituteInPlace reader/{reader.pro,document/Model.cpp} htmltopdf/htmltopdf.pro 3rdparty/deepin-pdfium/src/src.pro \
-      --replace "/usr" "$out"
+    substituteInPlace deepin_reader.pro \
+      --replace "SUBDIRS += htmltopdf" " "
+    substituteInPlace reader/document/Model.cpp \
+      --replace "/usr/lib/deepin-reader/htmltopdf" "htmltopdf"
   '';
 
   nativeBuildInputs = [
@@ -56,6 +58,7 @@ stdenv.mkDerivation rec {
     libspectre
     djvulibre
     openjpeg
+    gtest
   ];
 
   qmakeFlags = [

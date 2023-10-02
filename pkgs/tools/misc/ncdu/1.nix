@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ncdu";
-  version = "1.17";
+  version = "1.18.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-gQdFqO0as3iMh9OupMwaFO327iJvdkvMOD4CS6Vq2/E=";
+    sha256 = "sha256-fA+h6ynYWq7UuhdBZL27jwEbXDkNAXxX1mj8cjEzJAU=";
   };
 
   buildInputs = [ ncurses ];
@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ pSub ];
+    mainProgram = "ncdu";
   };
 }

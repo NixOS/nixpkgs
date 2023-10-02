@@ -1,22 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, typing-inspect
-, marshmallow-enum
 , hypothesis
+, marshmallow-enum
+, poetry-core
+, poetry-dynamic-versioning
 , pytestCheckHook
+, pythonOlder
+, typing-inspect
 }:
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.9";
+  version = "0.6.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-2/J+d7SQvUs7nXw1n+qwy0DQCplK28eUrbP7+yQPB7g=";
+    hash = "sha256-pZohueZvEIGgY6isci2mGGBewfi9SwnHHy8OwyJGR0w=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+    poetry-dynamic-versioning
+  ];
 
   propagatedBuildInputs = [
     typing-inspect
@@ -35,11 +51,14 @@ buildPythonPackage rec {
     "tests/test_annotations.py"
   ];
 
-  pythonImportsCheck = [ "dataclasses_json" ];
+  pythonImportsCheck = [
+    "dataclasses_json"
+  ];
 
   meta = with lib; {
     description = "Simple API for encoding and decoding dataclasses to and from JSON";
     homepage = "https://github.com/lidatong/dataclasses-json";
+    changelog = "https://github.com/lidatong/dataclasses-json/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ albakham ];
   };

@@ -3,8 +3,10 @@
 , lib
 , mkDerivation
 , antiword
+, aspell
 , bison
 , catdoc
+, catdvi
 , chmlib
 , djvulibre
 , file
@@ -26,6 +28,7 @@
 , poppler_utils
 , python3Packages
 , qtbase
+, qttools
 , unrtf
 , untex
 , unzip
@@ -43,6 +46,7 @@ let filters = {
       awk = gawk;
       antiword = antiword;
       catppt = catdoc;
+      catdvi = catdvi;
       djvused = djvulibre;
       djvutxt = djvulibre;
       egrep = gnugrep;
@@ -66,11 +70,11 @@ in
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.33.4";
+  version = "1.35.0";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ffD49sGYWYEWAFPRtpyDU/CYFvkrEDL21Ddq3QsXCvc=";
+    hash = "sha256-5msEeHCdrpPS0VMCVohYNllaFJJdXRn8laY6BNBt+UE=";
   };
 
   configureFlags = [
@@ -100,18 +104,19 @@ mkDerivation rec {
     ./fix-datadir.patch
   ];
 
-  nativeBuildInputs = lib.optionals withGui [
-    qtbase
-  ] ++ [
+  nativeBuildInputs = [
+    makeWrapper
     pkg-config
+    which
+  ] ++ lib.optionals withGui [
+    qtbase
+    qttools
   ] ++ lib.optionals withPython [
     python3Packages.setuptools
-  ] ++ [
-    makeWrapper
-    which
   ];
 
   buildInputs = [
+    aspell
     bison
     chmlib
   ] ++ lib.optionals withPython [

@@ -1,0 +1,25 @@
+diff --git a/cps/tornado_wsgi.py b/cps/tornado_wsgi.py
+index af93219c..cf302042 100644
+--- a/cps/tornado_wsgi.py
++++ b/cps/tornado_wsgi.py
+@@ -53,7 +53,7 @@ class MyWSGIContainer(WSGIContainer):
+             return response.append
+ 
+         app_response = self.wsgi_application(
+-            MyWSGIContainer.environ(request), start_response
++            self.environ(request), start_response
+         )
+         try:
+             response.extend(app_response)
+@@ -86,9 +86,8 @@ class MyWSGIContainer(WSGIContainer):
+         request.connection.finish()
+         self._log(status_code, request)
+ 
+-    @staticmethod
+-    def environ(request: httputil.HTTPServerRequest) -> Dict[Text, Any]:
+-        environ = WSGIContainer.environ(request)
++    def environ(self, request: httputil.HTTPServerRequest) -> Dict[Text, Any]:
++        environ = super().environ(request)
+         environ['RAW_URI'] = request.path
+         return environ
+ 

@@ -17,7 +17,7 @@
 
 let
   pname = "chacha20poly1305-reuseable";
-  version = "0.3.0";
+  version = "0.4.2";
 in
 
 buildPythonPackage {
@@ -30,7 +30,7 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-/bXpwSBFr1IM04GNEczzsnsjdFV4miUAzJkvrQjfIq4=";
+    hash = "sha256-RBXEumw5A/XzB/LazUcvq8JM/Ahvcy9lCTYKpGcY7go=";
   };
 
   nativeBuildInputs = [

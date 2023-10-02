@@ -1,5 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub }:
-
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, stdenv
+}:
 buildGoModule rec {
   pname = "glow";
   version = "1.5.0";
@@ -17,11 +21,20 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd glow \
+      --bash <($out/bin/glow completion bash) \
+      --fish <($out/bin/glow completion fish) \
+      --zsh <($out/bin/glow completion zsh)
+  '';
+
   meta = with lib; {
     description = "Render markdown on the CLI, with pizzazz!";
     homepage = "https://github.com/charmbracelet/glow";
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne penguwin ];
+    mainProgram = "glow";
   };
 }

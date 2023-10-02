@@ -13,7 +13,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-V+lHnOmIWjI1qmoJ7+pp+cGmJAtSeY+r2I9zykswQzM=";
   };
-  vendorSha256 = null;
+  vendorHash = null;
 
   patchPhase = ''
     substituteInPlace main.go --replace 0.0.0 ${version}

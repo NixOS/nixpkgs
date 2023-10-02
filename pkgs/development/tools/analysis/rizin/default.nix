@@ -25,11 +25,11 @@
 
 let rizin = stdenv.mkDerivation rec {
   pname = "rizin";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-    hash = "sha256-apJJBu/fVHrFBGJ2f1rdU5AkNuekhi0sDiTKkbd2FQg=";
+    hash = "sha256-4poAo+IgBL3RAUbShrHM4OBhltQarkcpqvydeDIf+Gs=";
   };
 
   mesonFlags = [
@@ -118,7 +118,7 @@ let rizin = stdenv.mkDerivation rec {
       sigdb = pkgs.callPackage ./sigdb.nix { };
     };
     withPlugins = filter: pkgs.callPackage ./wrapper.nix {
-      unwrapped = rizin;
+      inherit rizin;
       plugins = filter plugins;
     };
   };
@@ -127,6 +127,7 @@ let rizin = stdenv.mkDerivation rec {
     description = "UNIX-like reverse engineering framework and command-line toolset.";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "rizin";
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
     platforms = with lib.platforms; unix;
   };

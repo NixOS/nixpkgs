@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transmission";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
     rev = version;
-    hash = "sha256-P7omd49xLmReo9Zrg0liO1msUVzCa5CxH7PGmH4oPzg=";
+    hash = "sha256-Sz3+5VvfOgET1aiormEnBOrF+yN79tiSQvjLAoGqTLw=";
     fetchSubmodules = true;
   };
 

@@ -216,7 +216,7 @@ stdenv.mkDerivation rec {
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pmenke michaeladler ];
+    maintainers = with maintainers; [ michaeladler ];
     inherit homepage;
   };
 }

@@ -14,16 +14,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smb3-foundry";
-  version = "1.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "mchlnix";
     repo = "SMB3-Foundry";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-iqqIyGp/sqWgShxk52omVcn7Q3WL2hK8sTLH4dashLE=";
+    hash = "sha256-8cf7VhvC372Cqi94n2FSHcoCGblpZoZvBXcXq5jU6CY=";
   };
-
-  patches = [ ./fix-relative-dirs.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -42,11 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    homepage = "https://github.com/mchlnix/SMB3-Foundry";
-    description = "A modern Super Mario Bros. 3 Level Editor";
     changelog = "https://github.com/mchlnix/SMB3-Foundry/releases/tag/${finalAttrs.version}";
+    description = "A modern Super Mario Bros. 3 Level Editor";
+    homepage = "https://github.com/mchlnix/SMB3-Foundry";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.unix;
+    mainProgram = "smb3-foundry";
     maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.unix;
   };
 })

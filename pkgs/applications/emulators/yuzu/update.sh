@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p nix nix-prefetch-git gnutar curl jq
+#! nix-shell -i bash -p nix nix-prefetch-git gnutar curl jq unzip
 
 set -euo pipefail
 

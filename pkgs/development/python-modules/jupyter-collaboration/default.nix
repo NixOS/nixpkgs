@@ -10,6 +10,7 @@
 , jupyter-server
 , jupyter-server-fileid
 , jupyter-ydoc
+, jupyterlab
 , ypy-websocket
 , pytest-asyncio
 , pytest-jupyter
@@ -18,16 +19,15 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "1.0.1";
+  version = "1.1.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.8";
-
-  format = "pyproject";
 
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-cf7BpF6WSoHQJQW0IXdpCAGTdkX9RNWZ4JovTHvcPho=";
+    hash = "sha256-3OxduJ93TmbS/fKSKmVXs5vj2IZMX5MqKPTeGklFCbM=";
   };
 
   postPatch = ''
@@ -38,6 +38,7 @@ buildPythonPackage rec {
     hatch-jupyter-builder
     hatch-nodejs-version
     hatchling
+    jupyterlab
     pythonRelaxDepsHook
   ];
 
@@ -53,12 +54,14 @@ buildPythonPackage rec {
     ypy-websocket
   ];
 
-  pythonImportsCheck = [ "jupyter_collaboration" ];
-
   nativeCheckInputs = [
     pytest-asyncio
     pytest-jupyter
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "jupyter_collaboration"
   ];
 
   pytestFlagsArray = [
@@ -69,11 +72,11 @@ buildPythonPackage rec {
     export HOME=$TEMP
   '';
 
-  meta = {
-    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
+  meta = with lib; {
     description = "JupyterLab Extension enabling Real-Time Collaboration";
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
-    license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = teams.jupyter.members;
   };
 }

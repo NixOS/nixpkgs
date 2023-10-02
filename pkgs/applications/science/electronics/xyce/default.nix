@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   srcs = [ xyce_src regression_src ];
 
-  sourceRoot = "./${xyce_src.name}";
+  sourceRoot = xyce_src.name;
 
   preConfigure = "./bootstrap";
 

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-DMxC5fv5ZLDv7gMajC/eyJd2YpO+OXFdvwAPYotnczw=";
   };
 
-  vendorSha256 = "sha256-f4rqXOu6yXUzNsseSaV9pb8c2KXItYOalB5pfH3Acnc=";
+  vendorHash = "sha256-f4rqXOu6yXUzNsseSaV9pb8c2KXItYOalB5pfH3Acnc=";
 
   meta = with lib; {
     homepage = "https://github.com/michaelmacinnis/oh";

@@ -26,7 +26,6 @@ let
     };
 
     cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DCRABNET_ENABLE_DLL=OFF"
     ];
 

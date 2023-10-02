@@ -1,28 +1,28 @@
-{ beautifulsoup4
-, bleach
-, buildPythonPackage
-, defusedxml
-, fetchPypi
-, fetchpatch
+{ lib
 , fetchurl
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
 , hatchling
-, importlib-metadata
-, ipywidgets
+, beautifulsoup4
+, bleach
+, defusedxml
 , jinja2
 , jupyter-core
 , jupyterlab-pygments
-, lib
 , markupsafe
 , mistune
 , nbclient
 , packaging
 , pandocfilters
 , pygments
-, pyppeteer
-, pytestCheckHook
-, pythonOlder
 , tinycss2
 , traitlets
+, importlib-metadata
+, flaky
+, ipywidgets
+, pyppeteer
+, pytestCheckHook
 }:
 
 let
@@ -33,15 +33,15 @@ let
   };
 in buildPythonPackage rec {
   pname = "nbconvert";
-  version = "7.2.5";
+  version = "7.7.3";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j9xE/X2UJNt/3G4eg0oC9rhiD/tlN2c4i+L56xb4QYQ=";
+    hash = "sha256-SlmWv1880WqgQxiXuhqkxkhCwgefQ0s9xrjEslLvM1U=";
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -85,6 +85,7 @@ in buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    flaky
     ipywidgets
     pyppeteer
     pytestCheckHook

@@ -191,7 +191,7 @@ let
             hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
           });
 
-      setSourceRoot = if overrideUnpackCmd then "sourceRoot=`pwd`" else null;
+      sourceRoot = if overrideUnpackCmd then "." else null;
       unpackCmd = if overrideUnpackCmd then "unzip -o $src -d $out" else null;
 
       installPhase =

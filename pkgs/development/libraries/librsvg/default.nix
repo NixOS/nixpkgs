@@ -4,6 +4,7 @@
 , pkg-config
 , glib
 , gdk-pixbuf
+, installShellFiles
 , pango
 , cairo
 , libxml2
@@ -28,6 +29,16 @@
 , common-updater-scripts
 , jq
 , nix
+
+# for passthru.tests
+, enlightenment
+, ffmpeg
+, gegl
+, gimp
+, imagemagick
+, imlib2
+, vips
+, xfce
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     gdk-pixbuf
+    installShellFiles
     pkg-config
     rustc
     cargo-auditable-cargo-wrapper
@@ -121,12 +133,10 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     GDK_PIXBUF=$out/lib/gdk-pixbuf-2.0/2.10.0
     mkdir -p $GDK_PIXBUF/loaders
-    sed -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
-        -i gdk-pixbuf-loader/Makefile
-    sed -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
-        -i gdk-pixbuf-loader/Makefile
-    sed -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#" \
-         -i gdk-pixbuf-loader/Makefile
+    sed -i gdk-pixbuf-loader/Makefile \
+      -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
+      -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
+      -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#"
 
     # Fix thumbnailer path
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
@@ -147,12 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
       cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
       mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
 
-      mkdir -p "$out/share/bash-completion/completions/"
-      ${emulator} $out/bin/rsvg-convert --completion bash > "$out/share/bash-completion/completions/rsvg-convert"
-      mkdir -p "$out/share/zsh/site-functions/"
-      ${emulator} $out/bin/rsvg-convert --completion zsh > "$out/share/zsh/site-functions/_rsvg-convert"
-      mkdir -p "$out/share/fish/vendor_completions.d/"
-      ${emulator} $out/bin/rsvg-convert --completion fish > "$out/share/fish/vendor_completions.d/rsvg-convert.fish"
+      installShellCompletion --cmd rsvg-convert \
+        --bash <(${emulator} $out/bin/rsvg-convert --completion bash) \
+        --fish <(${emulator} $out/bin/rsvg-convert --completion fish) \
+        --zsh <(${emulator} $out/bin/rsvg-convert --completion zsh)
     '';
 
   postFixup = lib.optionalString withIntrospection ''
@@ -195,6 +203,17 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateLockfile
       ];
+    tests = {
+      inherit
+        gegl
+        gimp
+        imagemagick
+        imlib2
+        vips;
+      inherit (enlightenment) efl;
+      inherit (xfce) xfwm4;
+      ffmpeg = ffmpeg.override { withSvg = true; };
+    };
   };
 
   meta = with lib; {

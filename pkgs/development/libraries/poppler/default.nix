@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
-  version = "23.07.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
+  version = "23.08.0"; # beware: updates often break cups-filters build, check texlive and scribus too!
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
-    hash = "sha256-8ptLS/R1cmERdkVMjyFQbXHSfspQEaOapEA4swuVfbA=";
+    hash = "sha256-Skv3/JA7nxoqt9BLfF2CINubxiYcxz/bmoJtwnL0mqg=";
   };
 
   nativeBuildInputs = [

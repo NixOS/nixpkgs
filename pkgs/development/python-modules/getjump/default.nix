@@ -4,6 +4,7 @@
 , fetchPypi
 , pillow
 , poetry-core
+, pythonRelaxDepsHook
 , requests
 , rich
 }:
@@ -20,6 +21,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # remove after https://github.com/eggplants/getjump/pull/123 is released
+    "pillow"
   ];
 
   propagatedBuildInputs = [
@@ -32,6 +39,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "getjump"
   ];
+
+  # all the tests talk to the internet
+  doCheck = false;
 
   meta = with lib; {
     description = "Get and save images from jump web viewer";

@@ -13,6 +13,7 @@
 , json-glib
 , glib
 , glib-networking
+, gobject-introspection
 , gtksourceview5
 , libxml2
 , libgee
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook4
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [

@@ -1,7 +1,7 @@
 [
   {
     "name": "file_manager",
-    "version": "0.2.0+65656565656565",
+    "version": "0.2.1+65656565656565",
     "kind": "root",
     "source": "root",
     "dependencies": [
@@ -38,7 +38,7 @@
   },
   {
     "name": "flutter_lints",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -60,6 +60,7 @@
     "dependencies": [
       "flutter",
       "test_api",
+      "matcher",
       "path",
       "fake_async",
       "clock",
@@ -69,15 +70,21 @@
       "boolean_selector",
       "characters",
       "collection",
-      "js",
-      "matcher",
       "material_color_utilities",
       "meta",
       "source_span",
       "stream_channel",
       "string_scanner",
-      "term_glyph"
+      "term_glyph",
+      "web"
     ]
+  },
+  {
+    "name": "web",
+    "version": "0.1.4-beta",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
   },
   {
     "name": "term_glyph",
@@ -97,7 +104,7 @@
   },
   {
     "name": "source_span",
-    "version": "1.9.1",
+    "version": "1.10.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -115,7 +122,7 @@
   },
   {
     "name": "collection",
-    "version": "1.17.1",
+    "version": "1.17.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
@@ -148,50 +155,19 @@
   },
   {
     "name": "material_color_utilities",
-    "version": "0.2.0",
+    "version": "0.5.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "characters",
+    "version": "1.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
-  },
-  {
-    "name": "matcher",
-    "version": "0.12.15",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "async",
-      "meta",
-      "stack_trace",
-      "term_glyph",
-      "test_api"
-    ]
-  },
-  {
-    "name": "test_api",
-    "version": "0.5.1",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "async",
-      "boolean_selector",
-      "collection",
-      "meta",
-      "source_span",
-      "stack_trace",
-      "stream_channel",
-      "string_scanner",
-      "term_glyph",
-      "matcher"
-    ]
-  },
-  {
-    "name": "stack_trace",
-    "version": "1.11.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "path"
-    ]
   },
   {
     "name": "boolean_selector",
@@ -204,27 +180,20 @@
     ]
   },
   {
-    "name": "js",
-    "version": "0.6.7",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "meta"
-    ]
-  },
-  {
-    "name": "characters",
-    "version": "1.3.0",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": []
-  },
-  {
     "name": "vector_math",
     "version": "2.1.4",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.11.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "path"
+    ]
   },
   {
     "name": "clock",
@@ -244,6 +213,36 @@
     ]
   },
   {
+    "name": "matcher",
+    "version": "0.12.16",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "meta",
+      "stack_trace",
+      "term_glyph",
+      "test_api"
+    ]
+  },
+  {
+    "name": "test_api",
+    "version": "0.6.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "async",
+      "boolean_selector",
+      "collection",
+      "meta",
+      "source_span",
+      "stack_trace",
+      "stream_channel",
+      "string_scanner",
+      "term_glyph"
+    ]
+  },
+  {
     "name": "flutter",
     "version": "0.0.0",
     "kind": "direct",
@@ -251,10 +250,10 @@
     "dependencies": [
       "characters",
       "collection",
-      "js",
       "material_color_utilities",
       "meta",
       "vector_math",
+      "web",
       "sky_engine"
     ]
   },
@@ -302,7 +301,7 @@
   },
   {
     "name": "ffi",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
@@ -320,7 +319,7 @@
   },
   {
     "name": "plugin_platform_interface",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -366,17 +365,17 @@
     "source": "sdk",
     "dependencies": [
       "flutter",
-      "js",
       "characters",
       "collection",
       "material_color_utilities",
       "meta",
-      "vector_math"
+      "vector_math",
+      "web"
     ]
   },
   {
     "name": "flutter_adaptive_scaffold",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -385,7 +384,7 @@
   },
   {
     "name": "flutter_markdown",
-    "version": "0.6.15",
+    "version": "0.6.17+1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -397,7 +396,7 @@
   },
   {
     "name": "markdown",
-    "version": "7.1.0",
+    "version": "7.1.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -434,7 +433,7 @@
   },
   {
     "name": "intl",
-    "version": "0.18.0",
+    "version": "0.18.1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -494,7 +493,7 @@
   },
   {
     "name": "sentry_flutter",
-    "version": "7.7.0",
+    "version": "7.9.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -507,7 +506,7 @@
   },
   {
     "name": "sentry",
-    "version": "7.7.0",
+    "version": "7.9.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -537,7 +536,7 @@
   },
   {
     "name": "path_provider_platform_interface",
-    "version": "2.0.6",
+    "version": "2.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -555,7 +554,7 @@
   },
   {
     "name": "path_provider_windows",
-    "version": "2.1.7",
+    "version": "2.2.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -568,7 +567,7 @@
   },
   {
     "name": "permission_handler",
-    "version": "10.3.0",
+    "version": "10.4.3",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -582,7 +581,7 @@
   },
   {
     "name": "permission_handler_platform_interface",
-    "version": "3.10.0",
+    "version": "3.11.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -593,7 +592,7 @@
   },
   {
     "name": "permission_handler_windows",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -603,7 +602,7 @@
   },
   {
     "name": "permission_handler_apple",
-    "version": "9.1.0",
+    "version": "9.1.4",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -613,7 +612,7 @@
   },
   {
     "name": "permission_handler_android",
-    "version": "10.2.3",
+    "version": "10.3.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -633,7 +632,7 @@
   },
   {
     "name": "shared_preferences",
-    "version": "2.1.2",
+    "version": "2.2.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -648,7 +647,7 @@
   },
   {
     "name": "shared_preferences_windows",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -662,7 +661,7 @@
   },
   {
     "name": "shared_preferences_platform_interface",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -682,7 +681,7 @@
   },
   {
     "name": "shared_preferences_web",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -693,7 +692,7 @@
   },
   {
     "name": "shared_preferences_linux",
-    "version": "2.2.0",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -707,7 +706,7 @@
   },
   {
     "name": "path_provider_linux",
-    "version": "2.1.11",
+    "version": "2.2.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -720,29 +719,17 @@
   },
   {
     "name": "xdg_directories",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "meta",
-      "path",
-      "process"
-    ]
-  },
-  {
-    "name": "process",
-    "version": "4.2.4",
-    "kind": "transitive",
-    "source": "hosted",
-    "dependencies": [
-      "file",
-      "path",
-      "platform"
+      "path"
     ]
   },
   {
     "name": "shared_preferences_foundation",
-    "version": "2.2.2",
+    "version": "2.3.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -752,7 +739,7 @@
   },
   {
     "name": "shared_preferences_android",
-    "version": "2.1.4",
+    "version": "2.2.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -861,7 +848,7 @@
   },
   {
     "name": "url_launcher",
-    "version": "6.1.11",
+    "version": "6.1.12",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -877,7 +864,7 @@
   },
   {
     "name": "url_launcher_windows",
-    "version": "3.0.6",
+    "version": "3.0.7",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -887,7 +874,7 @@
   },
   {
     "name": "url_launcher_platform_interface",
-    "version": "2.1.2",
+    "version": "2.1.3",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -897,7 +884,7 @@
   },
   {
     "name": "url_launcher_web",
-    "version": "2.0.17",
+    "version": "2.0.18",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -908,7 +895,7 @@
   },
   {
     "name": "url_launcher_macos",
-    "version": "3.0.5",
+    "version": "3.0.6",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -938,7 +925,7 @@
   },
   {
     "name": "url_launcher_android",
-    "version": "6.0.35",
+    "version": "6.0.38",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -948,7 +935,7 @@
   },
   {
     "name": "path_provider",
-    "version": "2.0.15",
+    "version": "2.1.0",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -962,7 +949,7 @@
   },
   {
     "name": "path_provider_foundation",
-    "version": "2.2.3",
+    "version": "2.3.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -972,7 +959,7 @@
   },
   {
     "name": "path_provider_android",
-    "version": "2.0.27",
+    "version": "2.1.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1010,11 +997,11 @@
       "characters",
       "clock",
       "collection",
-      "js",
       "material_color_utilities",
       "meta",
       "path",
-      "vector_math"
+      "vector_math",
+      "web"
     ]
   },
   {

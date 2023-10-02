@@ -9,7 +9,7 @@
 , zstd
 , stdenv
 , darwin
-, runCommand
+, testers
 , espup
 }:
 
@@ -62,15 +62,8 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/espup completions zsh)
   '';
 
-  passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
-      if [[ `${espup}/bin/espup --version` != *"${version}"*  ]]; then
-        echo "Error: program version does not match package version"
-        exit 1
-      fi
-
-      touch $out
-    '';
+  passthru.tests.version = testers.testVersion {
+    package = espup;
   };
 
   meta = with lib; {
@@ -78,5 +71,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/esp-rs/espup/";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ knightpp ];
+    mainProgram = "espup";
   };
 }

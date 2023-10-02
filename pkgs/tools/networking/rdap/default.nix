@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "rdap";
   version = "0.9.1";
-  vendorSha256 = "sha256-8b1EAnR8PkEAw9yLBqPKFeANJit0OCJG+fssAGR/iTk=";
+  vendorHash = "sha256-8b1EAnR8PkEAw9yLBqPKFeANJit0OCJG+fssAGR/iTk=";
 
   src = fetchFromGitHub {
     owner = "openrdap";

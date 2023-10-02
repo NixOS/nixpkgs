@@ -8,11 +8,12 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "cosmos72";
     repo = "gomacro";
-    sha256 = "0ci486zqrhzvs3njn2ygaxsgjx3fn8bbj2q3sd80xvjiyjvq866g";
     inherit rev;
+    hash = "sha256-zxiEt/RR7g5Q0wMLuRaybnT5dFfPCyvt0PvDjL9BJDI=";
   };
 
-  vendorSha256 = "1ib4h57drikyy5aq4ms6vc1p29djlpjrh7xd3bgyykr9zmm2w1kx";
+  vendorHash = "sha256-fQYuav0pT+/fGq0fmOWlsiVxA9tGV4JV8X7G3E6BZMU=";
+
   subPackages = [ "." ];
 
   meta = with lib; {

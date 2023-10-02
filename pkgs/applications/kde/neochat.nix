@@ -1,6 +1,5 @@
 { mkDerivation
 , lib
-, fetchpatch
 
 , cmake
 , extra-cmake-modules
@@ -16,6 +15,7 @@
 , kirigami2
 , kitemmodels
 , knotifications
+, kquickcharts
 , kquickimageedit
 , libpulseaudio
 , libquotient
@@ -25,6 +25,7 @@
 , qqc2-desktop-style
 , qtgraphicaleffects
 , qtkeychain
+, qtlocation
 , qtmultimedia
 , qtquickcontrols2
 , sonnet
@@ -32,14 +33,6 @@
 
 mkDerivation {
   pname = "neochat";
-
-  patches = [
-    (fetchpatch {
-      name = "libquotient-0.8.patch";
-      url = "https://invent.kde.org/network/neochat/-/commit/d9d5e17be2a2057ab2ee545561fab721cb211f7f.patch";
-      hash = "sha256-y1PEehFCW+69OH8YvL3SUGOb8Hhyf8xwRvSZzJ5J5Wc=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -58,6 +51,7 @@ mkDerivation {
     kirigami2
     kitemmodels
     knotifications
+    kquickcharts
     kquickimageedit
     libpulseaudio
     libquotient
@@ -66,6 +60,7 @@ mkDerivation {
     qcoro
     qtgraphicaleffects
     qtkeychain
+    qtlocation
     qtmultimedia
     qtquickcontrols2
     qqc2-desktop-style

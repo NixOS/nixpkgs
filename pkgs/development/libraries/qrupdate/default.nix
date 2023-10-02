@@ -1,21 +1,21 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, gfortran
-, blas
 , cmake
 , lapack
 , which
+, gfortran
+, blas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qrupdate";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "mpimd-csc";
     repo = "qrupdate-ng";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-dHxLPrN00wwozagY2JyfZkD3sKUD2+BcnbjNgZepzFg=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.unix;
   };
-}
+})

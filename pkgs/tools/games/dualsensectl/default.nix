@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     description = "Linux tool for controlling PS5 DualSense controller";
     homepage = "https://github.com/nowrep/dualsensectl";
     license = licenses.gpl2Only;
+    mainProgram = "dualsensectl";
     maintainers = with maintainers; [ azuwis ];
     platforms = platforms.linux;
   };

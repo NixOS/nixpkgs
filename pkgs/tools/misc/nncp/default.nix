@@ -1,17 +1,27 @@
-{ lib, stdenv, go, fetchurl, redo-apenwarr, curl, perl, genericUpdater
-, writeShellScript, cfgPath ? "/etc/nncp.hjson" }:
+{ cfgPath ? "/etc/nncp.hjson"
+, curl
+, fetchurl
+, lib
+, genericUpdater
+, go
+, perl
+, stdenv
+, writeShellScript
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
-  version = "8.8.3";
+  version = "8.9.0";
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
-    url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    hash = "sha256-IldQCEdH6XDYK+DW5lB/5HFFFGuq1nDkCwEaVo7vIvE=";
+    url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
+    hash = "sha256-JZ+svDNU7cwW58ZOJ4qszbR/+j7Cr+oLNig/RqqCS10=";
   };
 
-  nativeBuildInputs = [ go redo-apenwarr ];
+  nativeBuildInputs = [
+    go
+  ];
 
   # Build parameters
   CFGPATH = cfgPath;
@@ -19,11 +29,15 @@ stdenv.mkDerivation rec {
 
   preConfigure = "export GOCACHE=$NIX_BUILD_TOP/gocache";
 
+  buildPhase = ''
+    runHook preBuild
+    ./bin/build
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
-    export PREFIX=$out
-    rm -f INSTALL # work around case insensitivity
-    redo install
+    PREFIX=$out ./install
     runHook postInstall
   '';
 
@@ -31,12 +45,17 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "nncp-versionLister" ''
-      ${curl}/bin/curl -s ${meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
+      ${curl}/bin/curl -s ${finalAttrs.meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
     '';
   };
 
-  meta = with lib; {
+  meta = {
+    broken = stdenv.isDarwin;
+    changelog = "http://www.nncpgo.org/News.html";
     description = "Secure UUCP-like store-and-forward exchanging";
+    downloadPage = "http://www.nncpgo.org/Tarballs.html";
+    homepage = "http://www.nncpgo.org/";
+    license = lib.licenses.gpl3Only;
     longDescription = ''
       This utilities are intended to help build up small size (dozens of
       nodes) ad-hoc friend-to-friend (F2F) statically routed darknet
@@ -52,11 +71,7 @@ stdenv.mkDerivation rec {
       support. But online TCP daemon with full-duplex resumable data
       transmission exists.
     '';
-    homepage = "http://www.nncpgo.org/";
-    downloadPage = "http://www.nncpgo.org/Tarballs.html";
-    changelog = "http://www.nncpgo.org/News.html";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry woffs ];
+    maintainers = with lib.maintainers; [ ehmry woffs ];
+    platforms = lib.platforms.all;
   };
-}
+})

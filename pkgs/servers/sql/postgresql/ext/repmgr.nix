@@ -8,6 +8,7 @@
 , flex
 , curl
 , json_c
+, libxcrypt
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ postgresql openssl zlib readline curl json_c ];
+  buildInputs = [ postgresql openssl zlib readline curl json_c ]
+    ++ lib.optionals (stdenv.isLinux && lib.versionOlder postgresql.version "13") [ libxcrypt ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/postgresql/extension}

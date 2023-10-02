@@ -4,6 +4,21 @@ lib.makeScope pkgs.newScope (self:
   let
     gconf = pkgs.gnome2.GConf;
     inherit (self) callPackage;
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
+    inheritedArgs = {
+      inherit gconf;
+      inherit stdenv;
+
+      inherit (pkgs.darwin) sigtool;
+      inherit (pkgs.darwin.apple_sdk_11_0) llvmPackages_14;
+      inherit (pkgs.darwin.apple_sdk_11_0.frameworks)
+        Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit
+        Quartz QuartzCore UniformTypeIdentifiers WebKit;
+      gnutls =
+        if pkgs.stdenv.isDarwin
+        then pkgs.gnutls.override { inherit stdenv; inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security; }
+        else pkgs.gnutls;
+    };
   in {
     sources = import ./sources.nix {
       inherit lib;
@@ -12,14 +27,7 @@ lib.makeScope pkgs.newScope (self:
         fetchFromSavannah;
     };
 
-    emacs28 = callPackage (self.sources.emacs28) {
-      inherit gconf;
-
-      inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
-    };
+    emacs28 = callPackage (self.sources.emacs28) inheritedArgs;
 
     emacs28-gtk2 = self.emacs28.override {
       withGTK2 = true;
@@ -33,14 +41,7 @@ lib.makeScope pkgs.newScope (self:
       noGui = true;
     });
 
-    emacs29 = callPackage (self.sources.emacs29) {
-      inherit gconf;
-
-      inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
-    };
+    emacs29 = callPackage (self.sources.emacs29) inheritedArgs;
 
     emacs29-gtk3 = self.emacs29.override {
       withGTK3 = true;
@@ -54,21 +55,7 @@ lib.makeScope pkgs.newScope (self:
       withPgtk = true;
     };
 
-    emacs28-macport = callPackage (self.sources.emacs28-macport) {
-      inherit gconf;
+    emacs28-macport = callPackage (self.sources.emacs28-macport) inheritedArgs;
 
-      inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
-    };
-
-    emacs29-macport = callPackage (self.sources.emacs29-macport) {
-      inherit gconf;
-
-      inherit (pkgs.darwin) sigtool;
-      inherit (pkgs.darwin.apple_sdk.frameworks)
-        AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit Quartz
-        QuartzCore WebKit;
-    };
+    emacs29-macport = callPackage (self.sources.emacs29-macport) inheritedArgs;
   })

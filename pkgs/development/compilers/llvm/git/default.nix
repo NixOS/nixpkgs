@@ -184,11 +184,28 @@ in let
       inherit llvm_meta;
     };
 
-    lldb = callPackage ./lldb {
+    lldb = callPackage ../common/lldb.nix {
+      src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/lldb "$out"
+      '') { };
+      patches =
+        let
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
+        in
+        [
+          ./lldb/procfs.patch # FIXME: do we need this?
+          resourceDirPatch
+          ./lldb/gnu-install-dirs.patch
+        ];
       inherit llvm_meta;
-      inherit (darwin) libobjc bootstrap_cmds;
-      inherit (darwin.apple_sdk.libs) xpc;
-      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -198,7 +215,7 @@ in let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;
@@ -313,6 +330,19 @@ in let
       # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
+        # Note that if we use the regular stdenv here we'll get cycle errors
+        # when attempting to use this compiler in the stdenv.
+        #
+        # The final stdenv pulls `cxx-headers` from the package set where
+        # hostPlatform *is* the target platform which means that `stdenv` at
+        # that point attempts to use this toolchain.
+        #
+        # So, we use `stdenv_` (the stdenv containing `clang` from this package
+        # set, defined below) to sidestep this issue.
+        #
+        # Because we only use `cxx-headers` in `libcxxabi` (which depends on the
+        # clang stdenv _anyways_), this is okay.
+        stdenv = stdenv_;
         headersOnly = true;
       };
 
@@ -349,5 +379,6 @@ in let
       inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // libraries // tools
+in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)

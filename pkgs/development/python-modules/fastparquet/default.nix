@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , python
 , cython
+, oldest-supported-numpy
 , setuptools
-, substituteAll
+, setuptools-scm
 , numpy
 , pandas
 , cramjam
@@ -14,11 +15,12 @@
 , pytestCheckHook
 , pythonOlder
 , packaging
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "2023.4.0";
+  version = "2023.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,27 +29,26 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-1hWiwXjTgflQlmy0Dk2phUa1cgYBvvH99tb0TdUmDRI=";
+    hash = "sha256-pJ0zK0upEV7TyuNMIcozugkwBlYpK/Dg6BdB0kBpn9k=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     cython
+    oldest-supported-numpy
     setuptools
-  ];
-
-  patches = [
-    (substituteAll {
-      src = ./version.patch;
-      inherit version;
-    })
+    setuptools-scm
+    wheel
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "oldest-supported-numpy" "numpy"
+    substituteInPlace pyproject.toml \
+      --replace '"pytest-runner"' ""
 
-    sed -i '/"git", "status"/d' setup.py
+    sed -i \
+      -e "/pytest-runner/d" \
+      -e '/"git", "status"/d' setup.py
   '';
 
   propagatedBuildInputs = [

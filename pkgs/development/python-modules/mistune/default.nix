@@ -2,18 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mistune";
-  version = "2.0.5";
+  version = "3.0.1";
+
+  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
+    hash = "sha256-6RIRbBOqCUT53FMNs464j2p3CHqxKPSfhKSPTAXqFjw=";
   };
 
   nativeBuildInputs = [

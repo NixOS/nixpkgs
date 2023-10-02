@@ -15,6 +15,10 @@
 , wezterm
 , firefox
 , thunderbird
+# This only builds std for target and reuses the rustc from build.
+, fastCross
+, lndir
+, makeWrapper
 }:
 
 let
@@ -87,13 +91,13 @@ in stdenv.mkDerivation rec {
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs
     # scripts.
-    ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
+    ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform && !fastCross) [
       (rust.toRustTargetSpec stdenv.buildPlatform)
 
     # (host!=target): When building a cross-targeting compiler we
     # need to add the host platform as well so rustc can compile
     # build.rs scripts.
-    ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
+    ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
       (rust.toRustTargetSpec stdenv.hostPlatform)
     ])}"
 
@@ -131,6 +135,37 @@ in stdenv.mkDerivation rec {
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
   ];
+
+  # if we already have a rust compiler for build just compile the target std
+  # library and reuse compiler
+  buildPhase = if fastCross then "
+    runHook preBuild
+
+    mkdir -p build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-{std,rustc}/${rust.toRustTargetSpec stdenv.hostPlatform}/release/
+    ln -s ${rustc}/lib/rustlib/${rust.toRustTargetSpec stdenv.hostPlatform}/libstd-*.so build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-std/${rust.toRustTargetSpec stdenv.hostPlatform}/release/libstd.so
+    ln -s ${rustc}/lib/rustlib/${rust.toRustTargetSpec stdenv.hostPlatform}/librustc_driver-*.so build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-rustc/${rust.toRustTargetSpec stdenv.hostPlatform}/release/librustc.so
+    ln -s ${rustc}/bin/rustc build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-rustc/${rust.toRustTargetSpec stdenv.hostPlatform}/release/rustc-main
+    touch build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-std/${rust.toRustTargetSpec stdenv.hostPlatform}/release/.libstd.stamp
+    touch build/${rust.toRustTargetSpec stdenv.hostPlatform}/stage0-rustc/${rust.toRustTargetSpec stdenv.hostPlatform}/release/.librustc.stamp
+    python ./x.py --keep-stage=0 --stage=1 build library/std
+
+    runHook postBuild
+  " else null;
+
+  installPhase = if fastCross then ''
+    runHook preInstall
+
+    python ./x.py --keep-stage=0 --stage=1 install library/std
+    mkdir -v $out/bin $doc $man
+    makeWrapper ${rustc}/bin/rustc $out/bin/rustc --add-flags "--sysroot $out"
+    makeWrapper ${rustc}/bin/rustdoc $out/bin/rustdoc --add-flags "--sysroot $out"
+    ln -s ${rustc}/lib/rustlib/{manifest-rust-std-,}${rust.toRustTargetSpec stdenv.hostPlatform} $out/lib/rustlib/
+    echo rust-std-${rust.toRustTargetSpec stdenv.hostPlatform} >> $out/lib/rustlib/components
+    lndir ${rustc.doc} $doc
+    lndir ${rustc.man} $man
+
+    runHook postInstall
+  '' else null;
 
   # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
@@ -179,7 +214,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     file python3 rustc cmake
     which libffi removeReferencesTo pkg-config xz
-  ];
+  ]
+    ++ optionals fastCross [ lndir makeWrapper ];
 
   buildInputs = [ openssl ]
     ++ optionals stdenv.isDarwin [ libiconv Security ]
@@ -188,7 +224,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  postInstall = lib.optionalString enableRustcDev ''
+  postInstall = lib.optionalString (enableRustcDev && !fastCross) ''
     # install rustc-dev components. Necessary to build rls, clippy...
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz

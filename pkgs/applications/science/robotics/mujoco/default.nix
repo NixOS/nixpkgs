@@ -9,18 +9,18 @@
 }:
 
 let
-  # See https://github.com/deepmind/mujoco/blob/573d331b69845c5d651b70f5d1b0f3a0d2a3a233/cmake/MujocoDependencies.cmake#L21-L59
+  # See https://github.com/deepmind/mujoco/blob/c9246e1f5006379d599e0bcddf159a8616d31441/cmake/MujocoDependencies.cmake#L17-L55
   abseil-cpp = fetchFromGitHub {
     owner = "abseil";
     repo = "abseil-cpp";
-    rev = "8c0b94e793a66495e0b1f34a5eb26bd7dc672db0";
-    hash = "sha256-Od1FZOOWEXVQsnZBwGjDIExi6LdYtomyL0STR44SsG8=";
+    rev = "c2435f8342c2d0ed8101cb43adfd605fdc52dca2";
+    hash = "sha256-PLoI7ix+reUqkZ947kWzls8lujYqWXk9A9a55UcfahI=";
   };
   benchmark = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
-    rev = "d845b7b3a27d54ad96280a29d61fa8988d4fddcf";
-    hash = "sha256-XTnTM1k6xMGXUws/fKdJUbpCPcc4U0IelL6BPEEnpEQ=";
+    rev = "2dd015dfef425c866d9a43f2c67d8b52d709acb6";
+    hash = "sha256-pUW9YVaujs/y00/SiPqDgK4wvVsaM7QUp/65k0t7Yr0=";
   };
   ccd = fetchFromGitHub {
     owner = "danfis";
@@ -31,14 +31,14 @@ let
   eigen3 = fetchFromGitLab {
     owner = "libeigen";
     repo = "eigen";
-    rev = "3bb6a48d8c171cf20b5f8e48bfb4e424fbd4f79e";
-    hash = "sha256-k71DoEsx8JpC9AlQ0cCRI0fWMIWFBFL/Yscx+2iBtNM=";
+    rev = "211c5dfc6741a5570ad007983c113ef4d144f9f3";
+    hash = "sha256-oT/h8QkL0vwaflh46Zsnu9Db1b65AP6p//nAga8M5jI=";
   };
   googletest = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "58d77fa8070e8cec2dc1ed015d66b454c8d78850";
-    hash = "sha256-W+OxRTVtemt2esw4P7IyGWXOonUN5ZuscjvzqkYvZbM=";
+    rev = "b796f7d44681514f58a683a3a71ff17c94edb0c1";
+    hash = "sha256-LVLEn+e7c8013pwiLzJiiIObyrlbBHYaioO/SWbItPQ=";
   };
   lodepng = fetchFromGitHub {
     owner = "lvandeve";
@@ -49,8 +49,8 @@ let
   qhull = fetchFromGitHub {
     owner = "qhull";
     repo = "qhull";
-    rev = "3df027b91202cf179f3fba3c46eebe65bbac3790";
-    hash = "sha256-aHO5n9Y35C7/zb3surfMyjyMjo109DoZnkozhiAKpYQ=";
+    rev = "0c8fc90d2037588024d9964515c1e684f6007ecc";
+    hash = "sha256-Ptzxad3ewmKJbbcmrBT+os4b4SR976zlCG9F0nq0x94=";
   };
   tinyobjloader = fetchFromGitHub {
     owner = "tinyobjloader";
@@ -61,12 +61,12 @@ let
   tinyxml2 = fetchFromGitHub {
     owner = "leethomason";
     repo = "tinyxml2";
-    rev = "1dee28e51f9175a31955b9791c74c430fe13dc82";
-    hash = "sha256-AQQOctXi7sWIH/VOeSUClX6hlm1raEQUOp+VoPjLM14=";
+    rev = "9a89766acc42ddfa9e7133c7d81a5bda108a0ade";
+    hash = "sha256-YGAe4+Ttv/xeou+9FoJjmQCKgzupTYdDhd+gzvtz/88=";
   };
 
-  # See https://github.com/deepmind/mujoco/blob/573d331b69845c5d651b70f5d1b0f3a0d2a3a233/simulate/cmake/SimulateDependencies.cmake#L32-L35
-  glfw = fetchFromGitHub {
+  # See https://github.com/deepmind/mujoco/blob/c9246e1f5006379d599e0bcddf159a8616d31441/simulate/cmake/SimulateDependencies.cmake#L32-L35
+  glfw3 = fetchFromGitHub {
     owner = "glfw";
     repo = "glfw";
     rev = "7482de6071d21db77a7236155da44c172a7f6c9e";
@@ -75,13 +75,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mujoco";
-  version = "2.3.0";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = version;
-    hash = "sha256-FxMaXl7yfUAyY6LE1sxaw226dBtp1DOCWNnROp0WX2I=";
+    hash = "sha256-LgpA+iPGqciHuWBSD6/7yvZ7p+vo48ZYKjjrDZSnAwE=";
   };
 
   patches = [ ./dependencies.patch ];
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     ln -s ${benchmark} build/_deps/benchmark-src
     ln -s ${ccd} build/_deps/ccd-src
     ln -s ${eigen3} build/_deps/eigen3-src
-    ln -s ${glfw} build/_deps/glfw-src
+    ln -s ${glfw3} build/_deps/glfw3-src
     ln -s ${googletest} build/_deps/googletest-src
     ln -s ${lodepng} build/_deps/lodepng-src
     ln -s ${qhull} build/_deps/qhull-src

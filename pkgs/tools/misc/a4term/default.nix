@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "a4term";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "rpmohn";
     repo = "a4";
     rev = "v${version}";
-    hash = "sha256-hsAEiPOZBqjvmSZEmZwfDqHZV/8ym62RZPxl3DG4ntQ=";
+    hash = "sha256-AX5psz9+bLdFFeDR55TIrAWDAkhDygw6289OgIfOJTg=";
   };
 
   buildInputs = [

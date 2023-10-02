@@ -3,9 +3,9 @@
 , buildPythonPackage
 , fetchFromGitHub
 
-# build-syste
+# build-system
 , setuptools
-, versioneer
+, wheel
 
 # dependencies
 , click
@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2023.7.1";
+  version = "2023.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -47,12 +47,12 @@ buildPythonPackage rec {
     owner = "dask";
     repo = "dask";
     rev = "refs/tags/${version}";
-    hash = "sha256-1KnvIMEWT1MwlvkdgH10xk+lGSsGWJMLBonTtWwKjog=";
+    hash = "sha256-ZKjfxTJCu3EUOKz16+VP8+cPqQliFNc7AU1FPC1gOXw=";
   };
 
   nativeBuildInputs = [
     setuptools
-    versioneer
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -109,10 +109,12 @@ buildPythonPackage rec {
     echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
     substituteInPlace setup.py \
+      --replace "import versioneer" "" \
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
 
     substituteInPlace pyproject.toml \
+      --replace ', "versioneer[toml]==0.28"' "" \
       --replace " --durations=10" "" \
       --replace " --cov-config=pyproject.toml" "" \
       --replace "\"-v" "\" "
@@ -132,6 +134,8 @@ buildPythonPackage rec {
     # AttributeError: 'str' object has no attribute 'decode'
     "test_read_dir_nometa"
   ] ++ [
+    # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
+    "test_concat_categorical"
     # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
     "test_dot"
     "test_dot_nan"

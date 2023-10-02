@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "mecab-python3";
-  version = "1.0.6";
+  version = "1.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FvOKzkhAIL00RqEAVIKWeMHnuX8XQLWLAKMdWVz/Al4=";
+    hash = "sha256-cJiLqyY2lkVvddPYkQx1rqR3qdCAVK1++FvlRw3T9ls=";
   };
 
   nativeBuildInputs = [

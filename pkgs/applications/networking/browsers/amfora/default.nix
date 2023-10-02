@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-93xNzYPoy8VsbY2JyvDXt4J/gIbI2wzrCD83JUaP150=";
   };
 
-  vendorSha256 = "sha256-XtiGj2Tr6sSBduIjBspeZpYaSTd6x6EVf3VEVMXDAD0=";
+  vendorHash = "sha256-XtiGj2Tr6sSBduIjBspeZpYaSTd6x6EVf3VEVMXDAD0=";
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s:amfora:$out/bin/amfora:" amfora.desktop

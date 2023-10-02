@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, isPy3k
 , fetchPypi
 , substituteAll
 , ffmpeg_4
@@ -10,8 +9,7 @@
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
   version = "0.4.8";
-
-  disabled = !isPy3k;
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -24,6 +22,11 @@ buildPythonPackage rec {
       ffmpeg = "${ffmpeg_4}/bin/ffmpeg";
     })
   ];
+
+  # https://github.com/imageio/imageio-ffmpeg/issues/59
+  postPatch = ''
+    sed -i '/setup_requires=\["pip>19"\]/d' setup.py
+  '';
 
   checkPhase = ''
     runHook preCheck

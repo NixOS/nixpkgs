@@ -1,9 +1,9 @@
 { lib
-, python3
-, fetchFromGitHub
 , copyDesktopItems
-, wrapQtAppsHook
+, fetchFromGitHub
 , makeDesktopItem
+, python3
+, wrapQtAppsHook
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "casualsnek";
     repo = "onthespot";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-VaJBNsT7uNOGY43GnzhUqDQNiPoFZcc2UaIfOKgkufg=";
   };
 
@@ -54,11 +54,12 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
-  meta = {
+  meta = with lib; {
     description = " QT based Spotify music downloader written in Python";
     homepage = "https://github.com/casualsnek/onthespot";
-    license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ onny ];
-    platforms = lib.platforms.linux;
+    changelog = "https://github.com/casualsnek/onthespot/releases/tag/v${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ onny ];
+    platforms = platforms.linux;
   };
 }

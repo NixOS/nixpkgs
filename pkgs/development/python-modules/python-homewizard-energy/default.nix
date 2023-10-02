@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "2.0.2";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XTSnIL/hBL1Rsyv/tBce/WCvA3n7mZern0v3i6gTOeA=";
+    hash = "sha256-+RuUNH95Txs6JeObYqg2CQl7qxF4YLVQvBDfzj5L9Bk=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +33,8 @@ buildPythonPackage rec {
     awesomeversion
     aiohttp
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aresponses

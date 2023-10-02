@@ -12,13 +12,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "cartridges";
-  version = "2.1.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "kra-mo";
     repo = "cartridges";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-jycTLKTHKhxd4t+3NB23Tf1oAvqiDHHsNmS6uLikgGA=";
+    hash = "sha256-d0c0043kssPvGxs6FygDkTKZoYtFge2cH4MIhz2vVYk=";
   };
 
   buildInputs = [

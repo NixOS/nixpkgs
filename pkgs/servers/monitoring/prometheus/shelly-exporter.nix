@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-L0TuBDq5eEahQvzqd1WuvmXuQbbblCM+Nvj15IybnVo=";
   };
 
-  vendorSha256 = "sha256-BCrge2xLT4b4wpYA+zcsH64a/nfV8+HeZF7L49p2gEw=";
+  vendorHash = "sha256-BCrge2xLT4b4wpYA+zcsH64a/nfV8+HeZF7L49p2gEw=";
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) shelly; };
 

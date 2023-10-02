@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "ustream-ssl";
-  version = "unstable-2022-12-08-${ssl_implementation.pname}";
+  version = "unstable-2023-02-25";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/ustream-ssl.git";
-    rev = "9217ab46536353c7c792951b57163063f5ec7a3b";
-    sha256 = "1ldyyb3is213iljyccx98f56rb69rfpgdcb1kjxw9a176hvpipdd";
+    rev = "498f6e268d4d2b0ad33b430f4ba1abe397d31496";
+    hash = "sha256-qwF3pzJ/nUTaJ8NZtgLyXnSozekY3dovxK3ZWHPGORM=";
   };
 
   preConfigure = ''

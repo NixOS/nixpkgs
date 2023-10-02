@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "chars";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "antifuchs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aswosSXAh0wkO4N/y/H54dufMDrloWjpjrSWHvHR1rc=";
+    sha256 = "sha256-mBtwdPzIc6RgEFTyReStFlhS4UhhRWjBTKT6gD3tzpQ=";
   };
 
-  cargoSha256 = "sha256-CqPmasdpXWjCn65G2Ua0h3v+TVP0QPFAdtKOFyoYW/0=";
+  cargoHash = "sha256-wqyExG4haco6jg1zpbouz3xMR7sjiVIAC16PnDU2tc8=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 

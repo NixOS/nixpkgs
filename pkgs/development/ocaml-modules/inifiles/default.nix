@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace inifiles.ml --replace 'String.lowercase ' 'String.lowercase_ascii '
+  '';
+
   nativeBuildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ ocaml_pcre ];
 

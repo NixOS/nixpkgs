@@ -34,9 +34,7 @@ stdenv.mkDerivation rec {
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  setSourceRoot = ''
-    sourceRoot=$PWD
-  '';
+  sourceRoot = ".";
 
   dontBuild = true;
   dontConfigure = true;

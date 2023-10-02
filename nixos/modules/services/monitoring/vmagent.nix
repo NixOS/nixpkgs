@@ -62,6 +62,16 @@ in {
         Whether to open the firewall for the default ports.
       '';
     };
+
+    extraArgs = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = lib.mdDoc ''
+        Extra args to pass to `vmagent`. See the docs:
+        <https://docs.victoriametrics.com/vmagent.html#advanced-usage>
+        or {command}`vmagent -help` for more information.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -90,7 +100,7 @@ in {
         Type = "simple";
         Restart = "on-failure";
         WorkingDirectory = cfg.dataDir;
-        ExecStart = "${cfg.package}/bin/vmagent -remoteWrite.url=${cfg.remoteWriteUrl} -promscrape.config=${prometheusConfig}";
+        ExecStart = "${cfg.package}/bin/vmagent -remoteWrite.url=${cfg.remoteWriteUrl} -promscrape.config=${prometheusConfig} ${escapeShellArgs cfg.extraArgs}";
       };
     };
 

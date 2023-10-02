@@ -142,14 +142,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
   elm-test-rs = callPackage ./packages/elm-test-rs.nix { };
 
-  elm-test = nodePkgs.elm-test // {
-    meta = with lib; nodePkgs.elm-test.meta // {
-      description = "Runs elm-test suites from Node.js";
-      homepage = "https://github.com/rtfeldman/node-test-runner";
-      license = licenses.bsd3;
-      maintainers = [ maintainers.turbomack ];
-    };
-  };
+  elm-test = callPackage ./packages/elm-test.nix { };
 } // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
   elm-verify-examples = let
     patched = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {

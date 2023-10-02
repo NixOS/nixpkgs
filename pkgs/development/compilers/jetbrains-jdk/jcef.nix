@@ -76,11 +76,11 @@ buildType = if debugBuild then "Debug" else "Release";
 
 in stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "3dfde2a70f1f914c6a84ba967123a0e38f51053f";
+  rev = "1ac1c682c497f2b864f86050796461f22935ea64";
   # This is the commit number
-  # Currently from the 231 branch: https://github.com/JetBrains/jcef/tree/231
+  # Currently from the branch: https://github.com/JetBrains/jcef/tree/232
   # Run `git rev-list --count HEAD`
-  version = "654";
+  version = "672";
 
   nativeBuildInputs = [ cmake python3 jdk17 git rsync ant ninja ];
   buildInputs = [ libX11 libXdamage nss nspr ];
@@ -89,19 +89,19 @@ in stdenv.mkDerivation rec {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-g8jWzRI2uYzu8O7JHENn0u9yY08fvY6g0Uym02oYUMI=";
+    hash = "sha256-3HuW8upR/bZoK8euVti2KpCZh9xxfqgyHmgoG1NjxOI=";
   };
   cef-bin = let
-    fileName = "cef_binary_104.4.26+g4180781+chromium-104.0.5112.102_linux64_minimal";
+    fileName = "cef_binary_111.2.1+g870da30+chromium-111.0.5563.64_linux64_minimal";
     urlName = builtins.replaceStrings ["+"] ["%2B"] fileName;
   in fetchzip rec {
     name = fileName;
     url = "https://cef-builds.spotifycdn.com/${urlName}.tar.bz2";
-    hash = "sha256-0PAWWBR+9TO8hhejydWz8R6Df3d9A/Mb0VL8stlPz5Q=";
+    hash = "sha256-r+zXTmDN5s/bYLvbCnHufYdXIqQmCDlbWgs5pdOpLTw=";
   };
   clang-fmt = fetchurl {
-    url = "https://storage.googleapis.com/chromium-clang-format/942fc8b1789144b8071d3fc03ff0fcbe1cf81ac8";
-    hash = "sha256-5iAU49tQmLS7zkS+6iGT+6SEdERRo1RkyRpiRvc9nVY=";
+    url = "https://storage.googleapis.com/chromium-clang-format/dd736afb28430c9782750fc0fd5f0ed497399263";
+    hash = "sha256-4H6FVO9jdZtxH40CSfS+4VESAHgYgYxfCBFSMHdT0hE=";
   };
 
   configurePhase = ''

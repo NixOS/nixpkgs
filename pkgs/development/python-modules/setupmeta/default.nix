@@ -4,15 +4,17 @@
 , git
 , mock
 , pep440
+, pip
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
 , six
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "setupmeta";
-  version = "3.4.0";
+  version = "3.5.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +23,7 @@ buildPythonPackage rec {
     owner = "codrsquad";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-HNGoLCTidgnaU5QA+0d/PQuCswigjdvQC3/w19i+Xuc=";
+    hash = "sha256-r3pGlcdem+c5I2dKrRueksesqq9HTk0oEr/xJuM7vuc=";
   };
 
   preBuild = ''
@@ -30,12 +32,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    wheel
   ];
 
   nativeCheckInputs = [
     git
     mock
     pep440
+    pip
     pytestCheckHook
     six
   ];

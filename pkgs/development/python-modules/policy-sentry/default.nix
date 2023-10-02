@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "policy-sentry";
-  version = "0.12.7";
+  version = "0.12.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "salesforce";
     repo = "policy_sentry";
     rev = "refs/tags/${version}";
-    hash = "sha256-r2UQrMmgWaS1v8ZSFSvpwiSRdGw5uTAoWIlSbzrG6/g=";
+    hash = "sha256-Kha5fq5l1yXWjDZq9GFKk3gYRtrEyiCFjbEAdYGPSa8=";
   };
 
   propagatedBuildInputs = [

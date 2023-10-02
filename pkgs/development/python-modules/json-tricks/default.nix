@@ -10,19 +10,28 @@
 
 buildPythonPackage rec {
   pname = "json-tricks";
-  version = "3.15.5";
-  disabled = pythonOlder "3.5";
+  version = "3.17.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mverleg";
     repo = "pyjson_tricks";
-    rev = "v${version}";
-    sha256 = "wdpqCqMO0EzKyqE4ishL3CTsSw3sZPGvJ0HEktKFgZU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xddMc4PvVI+mqB3eeVqECZmdeSKAURsdbOnUAXahqM0=";
   };
 
-  nativeCheckInputs = [ numpy pandas pytz pytestCheckHook ];
+  nativeCheckInputs = [
+    numpy
+    pandas
+    pytz
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "json_tricks" ];
+  pythonImportsCheck = [
+    "json_tricks"
+  ];
 
   meta = with lib; {
     description = "Extra features for Python JSON handling";

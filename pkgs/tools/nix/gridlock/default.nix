@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage {
   pname = "gridlock";
-  version = "unstable-2023-03-03";
+  version = "unstable-2023-08-29";
 
   outputs = [ "out" "nyarr" ];
 
   src = fetchFromGitHub {
     owner = "lf-";
     repo = "gridlock";
-    rev = "15261abdb179e1d7e752772bf9db132b3ee343ea";
-    hash = "sha256-rnPAEJH3TebBH6lqgVo7B+nNiArDIkGDnIZWcteFNEw=";
+    rev = "a98abfa554e5f8e2b7242662c0c714b7f1d7ec29";
+    hash = "sha256-I4NGfgNX79ZhWXDeUDJyDzP2GxcNhHhazVmmmPlz5js=";
   };
 
-  cargoHash = "sha256-EPs5vJ2RkVXKxrTRtbT/1FbvCT0KJtNuW2WKIUq7G0U=";
+  cargoHash = "sha256-qz77c2IZGaWsinfkVTWqfEeBEtHng6W738jBwJAkrl4=";
 
   nativeBuildInputs = [
     pkg-config

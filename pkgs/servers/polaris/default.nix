@@ -5,6 +5,7 @@
 , nix-update-script
 , polaris-web
 , darwin
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,6 +59,7 @@ rustPlatform.buildRustPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  passthru.tests = nixosTests.polaris;
   passthru.updateScript = nix-update-script {
     attrPath = pname;
   };

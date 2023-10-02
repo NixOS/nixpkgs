@@ -10,7 +10,6 @@
 buildDunePackage rec {
   pname = "telegraml";
   version = "unstable-2021-06-17";
-  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "nv-vn";
@@ -18,6 +17,10 @@ buildDunePackage rec {
     rev = "3e28933a287e5eacd34c46b434c487f155397abc";
     sha256 = "sha256-2bMHARatwl8Zl/fWppvwbH6Ut+igJVKzwyQb8Q4gem4=";
   };
+
+  postPatch = ''
+    substituteInPlace src/dune --replace batteries batteries.unthreaded
+  '';
 
   propagatedBuildInputs = [
     batteries

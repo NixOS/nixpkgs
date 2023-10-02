@@ -17,7 +17,7 @@ let
         # Function that when called
         # - imports perl-packages.nix
         # - adds spliced package sets to the package set
-        ({ stdenv, pkgs, perl, callPackage, makeScopeWithSplicing }: let
+        ({ stdenv, pkgs, perl, callPackage, makeScopeWithSplicing' }: let
           perlPackagesFun = callPackage ../../../top-level/perl-packages.nix {
             # allow 'perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig; }; }' like in python3Packages
             # most perl packages aren't called with callPackage so it's not possible to override their arguments individually
@@ -34,13 +34,10 @@ let
             selfHostHost = perlOnHostForHost.pkgs;
             selfTargetTarget = perlOnTargetForTarget.pkgs or {};
           };
-          keep = self: { };
-          extra = spliced0: {};
-        in makeScopeWithSplicing
-          otherSplices
-          keep
-          extra
-          perlPackagesFun)
+        in makeScopeWithSplicing' {
+          inherit otherSplices;
+          f = perlPackagesFun;
+        })
         {
           perl = self;
         };
@@ -68,15 +65,6 @@ in rec {
   # Maint version
   perl538 = callPackage ./intepreter.nix {
     self = perl538;
-    version = "5.38.0";
-    sha256 = "sha256-IT71gInS8sly6jU1F9xg7DZW8FDcwCdmbhGLUIQj5Rc=";
-    inherit passthruFun;
-  };
-
-  # the latest Devel version
-  perldevel = callPackage ./intepreter.nix {
-    self = perldevel;
-    perlAttr = "perldevel";
     version = "5.38.0";
     sha256 = "sha256-IT71gInS8sly6jU1F9xg7DZW8FDcwCdmbhGLUIQj5Rc=";
     inherit passthruFun;

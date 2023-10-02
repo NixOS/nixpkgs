@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "9.5.2";
+  version = "9.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python-utils";
     rev = "refs/tags/${version}";
-    hash = "sha256-29by0YAQ7qc0gL/3lAFOk4FLDB5Qv4X9QDyK49gfyAo=";
+    hash = "sha256-/zgHgD2kf3ZG7Mu9AEBfOwqpcD0Ye0LVrFxLeuGurCM=";
   };
 
   propagatedBuildInputs = [

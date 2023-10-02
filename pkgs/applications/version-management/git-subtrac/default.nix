@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "apenwarr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0p1n29k2a2rpznwxlwzkmx38ic6g041k9vx7msvick7cydn417fx";
+    hash = "sha256-3Z1AbPPsTBa3rqfvNAMBz7CIRq/zc9q5/TcLJWYSNlw=";
   };
 
-  vendorSha256 = "0m64grnmhjvfsw7a56474s894sgd24rvcp5kamhzzyc4q556hqny";
+  vendorHash = "sha256-3mJoSsGE+f9hVbNctjMR7WmSkCaHmKIO125LWG1+xFQ=";
 
   doCheck = false;
 

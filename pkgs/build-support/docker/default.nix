@@ -5,7 +5,7 @@
 , closureInfo
 , coreutils
 , e2fsprogs
-, fakechroot
+, proot
 , fakeNss
 , fakeroot
 , go
@@ -487,7 +487,7 @@ rec {
       '';
     };
 
-  buildLayeredImage = { name, ... }@args:
+  buildLayeredImage = lib.makeOverridable ({ name, ... }@args:
     let
       stream = streamLayeredImage args;
     in
@@ -496,7 +496,8 @@ rec {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
-      } "${stream} | pigz -nTR > $out";
+      } "${stream} | pigz -nTR > $out"
+  );
 
   # 1. extract the base image
   # 2. create the layer
@@ -504,7 +505,7 @@ rec {
   # 4. compute the layer id
   # 5. put the layer in the image
   # 6. repack the image
-  buildImage =
+  buildImage = lib.makeOverridable (
     args@{
       # Image name.
       name
@@ -751,7 +752,8 @@ rec {
       '';
 
     in
-    checked result;
+    checked result
+  );
 
   # Merge the tarballs of images built with buildImage into a single
   # tarball that contains all images. Running `docker load` on the resulting
@@ -777,7 +779,7 @@ rec {
       fi
     done
     # Copy all layers from input images to output image directory
-    cp -R --no-clobber inputs/*/* image/
+    cp -R --update=none inputs/*/* image/
     # Merge repositories objects and manifests
     jq -s add "''${repos[@]}" > repositories
     jq -s add "''${manifests[@]}" > manifest.json
@@ -837,7 +839,7 @@ rec {
     })
   );
 
-  streamLayeredImage =
+  streamLayeredImage = lib.makeOverridable (
     {
       # Image Name
       name
@@ -887,6 +889,13 @@ rec {
         });
 
         contentsList = if builtins.isList contents then contents else [ contents ];
+        bind-paths = builtins.toString (builtins.map (path: "--bind=${path}:${path}!") [
+          "/dev/"
+          "/proc/"
+          "/sys/"
+          "${builtins.storeDir}/"
+          "$out/layer.tar"
+        ]);
 
         # We store the customisation layer as a tarball, to make sure that
         # things like permissions set on 'extraCommands' are not overridden
@@ -898,21 +907,14 @@ rec {
           nativeBuildInputs = [
             fakeroot
           ] ++ optionals enableFakechroot [
-            fakechroot
-            # for chroot
-            coreutils
-            # fakechroot needs getopt, which is provided by util-linux
-            util-linux
+            proot
           ];
           postBuild = ''
             mv $out old_out
             (cd old_out; eval "$extraCommands" )
 
             mkdir $out
-            ${optionalString enableFakechroot ''
-              export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out/layer.tar
-            ''}
-            ${optionalString enableFakechroot ''fakechroot chroot $PWD/old_out ''}fakeroot bash -c '
+            ${optionalString enableFakechroot ''proot -r $PWD/old_out ${bind-paths} --pwd=/ ''}fakeroot bash -c '
               source $stdenv/setup
               ${optionalString (!enableFakechroot) ''cd old_out''}
               eval "$fakeRootCommands"
@@ -1046,7 +1048,8 @@ rec {
           makeWrapper ${streamScript} $out --add-flags ${conf}
         '';
       in
-      result;
+      result
+  );
 
   # This function streams a docker image that behaves like a nix-shell for a derivation
   streamNixShellImage =

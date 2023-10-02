@@ -150,7 +150,7 @@ proc checkPhase*() =
   proc before(idx: int) =
     echo "check job ", idx, ": ", cmds[idx]
   for path in walkPattern("tests/t*.nim"):
-    cmds.add("nim r $#" % [path])
+    cmds.add("nim r $# $#" % [getenv("nimFlags"), path])
   let err = execProcesses(
     cmds, n = 1,
     beforeRunEvent = before)

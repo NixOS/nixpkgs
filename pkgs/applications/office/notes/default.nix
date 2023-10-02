@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "notes";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "nuttyartist";
     repo = "notes";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZfAm77UHyjs2aYOYb+AhKViz6uteb7+KKSedonSiMkY=";
+    hash = "sha256-ShChF87ysRoisKshY86kJTa3ZAiQhBOImuL8OsEqgBo=";
     fetchSubmodules = true;
   };
 
@@ -34,11 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     Cocoa
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
-    # temporary fix: https://github.com/nuttyartist/notes/issues/613
-    substituteInPlace $out/share/applications/io.github.nuttyartist.notes.desktop \
-       --replace 'Exec=notes' 'Exec=env QT_STYLE_OVERRIDE= notes'
-  '' + lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/Notes.app $out/Applications
   '';

@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "black";
-  version = "23.3.0";
+  version = "23.9.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HHuNYG5yikHqHMvXJkZ35JTofPYw45kmLO2S1KjayUA=";
+    hash = "sha256-JLaz/1xtnqCKiIj2l36uhY4fNA1yYM9W1wpJgjI2ti0=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,6 @@ buildPythonPackage rec {
     platformdirs
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
 

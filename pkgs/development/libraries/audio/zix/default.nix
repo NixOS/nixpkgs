@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [
+      fogti
       yuu
-      zseri
     ];
   };
 }

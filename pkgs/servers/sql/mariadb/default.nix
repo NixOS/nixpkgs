@@ -6,7 +6,7 @@ let
     # Native buildInputs components
     , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
     # Common components
-    , curl, libiconv, ncurses, openssl, openssl_1_1, pcre, pcre2
+    , curl, libiconv, ncurses, openssl, pcre2
     , libkrb5, libaio, liburing, systemd
     , CoreServices, cctools, perl
     , jemalloc, less, libedit
@@ -44,14 +44,13 @@ let
 
       buildInputs = [
         libiconv ncurses zlib
+        pcre2
+        openssl
+        curl
       ] ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
         ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
-        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
-        ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
-        ++ (if (lib.versionOlder version "10.5")
-            then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
-            else [ openssl curl ]);
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
 
       prePatch = ''
         sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -244,45 +243,38 @@ let
 in
   self: {
     # see https://mariadb.org/about/#maintenance-policy for EOLs
-    mariadb_104 = self.callPackage generic {
-      # Supported until 2024-06-18
-      version = "10.4.30";
-      hash = "sha256-/LvaZxxseEwDFQJiYj8NgYlMkRUz58PCdvJW8voSEAw=";
-      inherit (self.darwin) cctools;
-      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
-    };
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
-      version = "10.5.21";
-      hash = "sha256-yn63Mo4cAunZCxPfNpW3+ni9c92ZykniPjLWzImCIkI=";
+      version = "10.5.22";
+      hash = "sha256-PiOGu17iWo3c0hz/xIx2CX5cpBpuSgmPay7kASsNY44=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07-06
-      version = "10.6.14";
-      hash = "sha256-RQQ3x0qORMdrPAs0O5NH65AyAVRYUVZdeNmmJGdqsgI=";
+      version = "10.6.15";
+      hash = "sha256-sva9uhfq1NkcTSVPr8NKcorGsCfdHXF4vCZ1jc5pQzU=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1010 = self.callPackage generic {
       # Supported until 2023-11-17. TODO: remove ahead of 23.11 branchoff
-      version = "10.10.5";
-      hash = "sha256-kc1NQm04rwmFLr2vAOdCEXdexsyQf3TBruDUXN9dmWs=";
+      version = "10.10.6";
+      hash = "sha256-4eUwEZedKfDsJuE6uMr2E0gb8ClSBWb7loF1RhA5ONU=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1011 = self.callPackage generic {
       # Supported until 2028-02-16
-      version = "10.11.4";
-      hash = "sha256-zo2sElVozF9A2nTBchJ2fJLY+u2BBmWAtSakhaWREn0=";
+      version = "10.11.5";
+      hash = "sha256-TJSEBI1NDHHdB2qzP8KpzoUQvfdiiG3g1j/lJJbz27s=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_110 = self.callPackage generic {
       # Supported until 2024-06-07
-      version = "11.0.2";
-      hash = "sha256-PHFXbK0OpBaIInDjg/lMyJaTt/vM4fpPMG/j6THkZK4=";
+      version = "11.0.3";
+      hash = "sha256-Up8IoGTudzOhNuxHSkI56Kyb1tsTm4unC/+KfxMDg5o=";
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };

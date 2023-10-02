@@ -13,19 +13,20 @@
 , git
 , perl
 , darwin
+, libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stgit";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    sha256 = "sha256-pGGLY/Hu62dT3KP9GH9YmPg6hePDoPdijJtmap5gpEA=";
+    hash = "sha256-rQNX54zmVHZKplEUNaKyVtCrC8Q4DdxLzNSStiYvDGA=";
   };
-  cargoHash = "sha256-f0MQvCkFYR7ErbBDJ3n0r9ZetKfcWg9twhc4r4EpPS4=";
+  cargoHash = "sha256-ju8JQnohidBsydwwm6gNx1L24brmDWYXwNgfCl7G/aA=";
 
   nativeBuildInputs = [
     pkg-config installShellFiles makeWrapper asciidoc xmlto docbook_xsl
@@ -36,12 +37,7 @@ rustPlatform.buildRustPackage rec {
   nativeCheckInputs = [
     git perl
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.system_cmds darwin.libiconv
-  ];
-
-  patches = [
-    # Fixes tests, can be removed when stgit 2.3.1 is released
-    ./0001-fix-use-canonical-Message-ID-spelling.patch
+    darwin.system_cmds libiconv
   ];
 
   postPatch = ''
@@ -58,24 +54,22 @@ rustPlatform.buildRustPackage rec {
                 ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
   '';
 
-  makeFlags = lib.strings.concatStringsSep " " [
+  makeFlags = [
     "prefix=${placeholder "out"}"
-    "MAN_BASE_URL=${placeholder "out"}/share/man"
     "XMLTO_EXTRA=--skip-validation"
     "PERL_PATH=${perl}/bin/perl"
   ];
 
-  buildPhase = ''
-    make all ${makeFlags}
-  '';
+  dontCargoBuild = true;
+  buildFlags = [ "all" ];
 
-  checkPhase = ''
-    make test ${makeFlags}
-  '';
+  dontCargoCheck = true;
+  checkTarget = "test";
 
-  installPhase = ''
-    make install install-man install-html ${makeFlags}
+  dontCargoInstall = true;
+  installTargets = [ "install" "install-man" "install-html" ];
 
+  postInstall = ''
     wrapProgram $out/bin/stg --prefix PATH : ${lib.makeBinPath [ git ]}
 
     installShellCompletion --cmd stg \

@@ -64,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_LIB_STATIC=OFF"
-    "-DENABLE_CURL=OFF"
-    "-DENABLE_DYNAMIC_LINKING=ON"
-    "-DUSE_SYSTEM_CIMG=ON"
+    (lib.cmakeBool "BUILD_LIB_STATIC" false)
+    (lib.cmakeBool "ENABLE_CURL" false)
+    (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
+    (lib.cmakeBool "USE_SYSTEM_CIMG" true)
   ];
 
   postPatch = ''
@@ -115,7 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gmic.eu/";
     description = "Open and full-featured framework for image processing";
     license = lib.licenses.cecill21;
-    maintainers = [ lib.maintainers.lilyinstarlight ];
+    maintainers = [
+      lib.maintainers.AndersonTorres
+      lib.maintainers.lilyinstarlight
+    ];
     platforms = lib.platforms.unix;
   };
 })

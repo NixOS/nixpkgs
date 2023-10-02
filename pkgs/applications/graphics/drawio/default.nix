@@ -14,19 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "21.6.1";
+  version = "21.7.5";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-60fOecWDYGkn4rJzxmum14L4IAaHAG+uKyjNo9nkVHg=";
+    hash = "sha256-hf1sektdnW4c3dySun8sQ9vBrAqTocrLFAIYkemNC3I=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-Knk9ys8Kjk1QOl80vmIA2H6wP8Mj6iNcmb/bR4zMQgw=";
+    hash = "sha256-FVZq/voCjnRSBLtQtJkJbErGvprEHq+U/VZ9rEwbJsI=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
     yarn --offline run electron-builder --dir \
       --config electron-builder-linux-mac.json \
-      -c.electronDist=${electron}/lib/electron \
+      -c.electronDist=${electron}/libexec/electron \
       -c.electronVersion=${electron.version}
 
     runHook postBuild

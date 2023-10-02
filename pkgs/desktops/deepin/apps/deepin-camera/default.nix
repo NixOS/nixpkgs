@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-camera";
-  version = "1.4.13";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-h4oCxtj9GwaZqioZ4vFx2Cq8a1w7lYQvOhDAd7x9gMU=";
+    hash = "sha256-GQQFwlJNfdsi0GvDRMIorUnlbXrgbYl9H9aBedOm+ZQ=";
   };
 
   # QLibrary and dlopen work with LD_LIBRARY_PATH
@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
-    gst-plugins-bad
   ]);
 
   cmakeFlags = [ "-DVERSION=${version}" ];

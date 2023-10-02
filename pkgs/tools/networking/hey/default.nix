@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0gsdksrzlwpba14a43ayyy41l1hxpw4ayjpvqyd4ycakddlkvgzb";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   meta = with lib; {
     description = "HTTP load generator, ApacheBench (ab) replacement";

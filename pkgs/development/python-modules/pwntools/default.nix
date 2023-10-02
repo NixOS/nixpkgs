@@ -29,11 +29,11 @@ let
 in
 buildPythonPackage rec {
   pname = "pwntools";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WI6J6meFJ8C1tsru7n524xNS544vHPPdp7yaz1JuRG0=";
+    hash = "sha256-qF8ed380P5HiIdF14VI9AG7vHIEGwQ/S4zgoC6snP6Y=";
   };
 
   postPatch = ''

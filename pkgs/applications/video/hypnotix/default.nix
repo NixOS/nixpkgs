@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , substituteAll
 , cinnamon
+, circle-flags
 , gettext
 , gobject-introspection
 , mpv
@@ -12,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "3.5";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-qw22izmh0bQ1B1kRqkMcmEdqU665/DtLod24TUH86Ww=";
+    hash = "sha256-H8+KJ9+HLAorGIeljw8H3N8W3E2yYhAno1xy+jI54zM=";
   };
 
   patches = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace usr/lib/hypnotix/hypnotix.py \
       --replace __DEB_VERSION__ ${version} \
+      --replace /usr/share/circle-flags-svg ${circle-flags}/share/circle-flags-svg \
       --replace /usr/share/hypnotix $out/share/hypnotix
   '';
 

@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-myoBXoi7VqHOLmu/XrvnlfBDlEnXm+0fp8WQec+3EJY=";
   };
 
-  vendorSha256 = "sha256-xxZQz94sr7aSNhmvFWdRtVnS0yk2KQIkAHjwZeJPBwY=";
+  vendorHash = "sha256-xxZQz94sr7aSNhmvFWdRtVnS0yk2KQIkAHjwZeJPBwY=";
 
   meta = with lib; {
     description = "Tool to scan memory for secrets";

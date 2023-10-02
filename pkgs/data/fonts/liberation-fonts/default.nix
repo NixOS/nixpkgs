@@ -20,7 +20,10 @@ let
         installPhase = ''
           find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
 
-          install -m444 -Dt $out/share/doc/${pname}-${version} ${lib.concatStringsSep " " docsToInstall}
+          for i in ${toString docsToInstall}; do
+            # not all docs exist in all versions
+            install -m444 -Dt $out/share/doc/${pname}-${version} $i || true
+          done
         '';
 
         meta = with lib; {

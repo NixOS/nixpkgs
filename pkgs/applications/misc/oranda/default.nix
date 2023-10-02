@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, tailwindcss
 , oniguruma
 , stdenv
 , darwin
@@ -9,19 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oranda";
-  version = "0.2.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "oranda";
     rev = "v${version}";
-    hash = "sha256-1pkAIz6Zh0ArIDmRSLHTnIgySWdxrDx0amTkdZhY6vY=";
+    hash = "sha256-k4xrgRanQmkjmXGvfeaGU61+GP8asYPq4RQrao3rd4Q=";
   };
 
-  cargoHash = "sha256-TKpPAzqwWBH2dlBNvU2kuqqOVu5WhSnSR3wW5FsW7yk=";
+  cargoHash = "sha256-CLMhzPM11LnQdCVD66xC4Fk+8LnfRfFzk3FwQeXboes=";
 
   nativeBuildInputs = [
     pkg-config
+    tailwindcss
   ];
 
   buildInputs = [
@@ -33,10 +35,15 @@ rustPlatform.buildRustPackage rec {
   # requires internet access
   checkFlags = [
     "--skip=build"
+    "--skip=integration"
   ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
+    ORANDA_USE_TAILWIND_BINARY = true;
+  } // lib.optionalAttrs stdenv.isDarwin {
+    # without this, tailwindcss fails with OpenSSL configuration error
+    OPENSSL_CONF = "";
   };
 
   meta = with lib; {

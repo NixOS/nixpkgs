@@ -29,12 +29,12 @@ _Note: each language passed to `langs` must be an attribute name in `pkgs.hunspe
 
 ## Built-in emoji picker {#sec-ibus-typing-booster-emoji-picker}
 
-The `ibus-engines.typing-booster` package contains a program named `emoji-picker`. To display all emojis correctly, a special font such as `noto-fonts-emoji` is needed:
+The `ibus-engines.typing-booster` package contains a program named `emoji-picker`. To display all emojis correctly, a special font such as `noto-fonts-color-emoji` is needed:
 
 On NixOS, it can be installed using the following expression:
 
 ```nix
 { pkgs, ... }: {
-  fonts.packages = with pkgs; [ noto-fonts-emoji ];
+  fonts.packages = with pkgs; [ noto-fonts-color-emoji ];
 }
 ```

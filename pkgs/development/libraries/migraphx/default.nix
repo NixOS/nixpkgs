@@ -140,7 +140,7 @@ in stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv bin/test_* $test/bin
-    patchelf $test/bin/test_* --shrink-rpath --allowed-rpath-prefixes /nix/store
+    patchelf $test/bin/test_* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
   '';
 
   passthru.updateScript = rocmUpdateScript {

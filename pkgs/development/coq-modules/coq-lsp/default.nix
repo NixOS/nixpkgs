@@ -9,11 +9,13 @@ mkCoqDerivation rec {
 
   release."0.1.7+8.16".sha256 = "sha256-ZBxwrnnCmT5q4C7ocQ+M+aSJQNnEjeN2HFw4bzPozYs=";
   release."0.1.7+8.17".sha256 = "sha256-f671wzGQannGjRbmBRHFKXz24BTPX7oVeHUxnv4Vd6Y=";
+  release."0.1.7+8.18".sha256 = "sha256-J+bRIzjdIPRu7DvAGVBKB43O3UJliTo8XQ87OTzsFyc=";
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = isEq "8.16"; out = "0.1.7+8.16"; }
     { case = isEq "8.17"; out = "0.1.7+8.17"; }
+    { case = isEq "8.18"; out = "0.1.7+8.18"; }
   ] null;
 
   nativeBuildInputs = [ makeWrapper ];

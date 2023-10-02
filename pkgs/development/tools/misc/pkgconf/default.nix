@@ -4,13 +4,13 @@
 , removeReferencesTo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "1.9.5";
+  version = "2.0.2";
 
   src = fetchurl {
-    url = "https://distfiles.dereferenced.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-GsFlbeuydJdWMDb3v/woFJD4P5uEV8DWC8+2OPtrYXE=";
+    url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
+    hash = "sha256-6lol748lHrU3fsDiHHX7YYlEM8+9vwslWboz5MJmRAE=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "doc" ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     mv ${placeholder "dev"}/share ${placeholder "out"}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pkgconf/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
@@ -52,8 +52,10 @@ stdenv.mkDerivation rec {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
-    license = licenses.isc;
-    maintainers = with maintainers; [ zaninime AndersonTorres ];
-    platforms = platforms.all;
+    changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
+    license = lib.licenses.isc;
+    mainProgram = "pkgconf";
+    maintainers = with lib.maintainers; [ zaninime AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})

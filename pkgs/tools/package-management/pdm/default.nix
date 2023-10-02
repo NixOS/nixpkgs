@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchPypi
 , nix-update-script
+, runtimeShell
 }:
 let
   python = python3.override {
@@ -30,13 +31,13 @@ in
 with python.pkgs;
 buildPythonApplication rec {
   pname = "pdm";
-  version = "2.8.0";
+  version = "2.9.3";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BgsWKP2kZfLEHgZNISyp66Yww0ajMF4RWuI6TCzwJNo=";
+    hash = "sha256-CxGVtR6WMLWgsGPyffywEgy26ihPGkzZdaOibwhW0lM=";
   };
 
   nativeBuildInputs = [
@@ -83,6 +84,8 @@ buildPythonApplication rec {
 
   preCheck = ''
     export HOME=$TMPDIR
+    substituteInPlace tests/cli/test_run.py \
+      --replace "/bin/bash" "${runtimeShell}"
   '';
 
   disabledTests = [

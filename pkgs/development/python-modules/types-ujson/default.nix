@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-ujson";
-  version = "5.8.0.0";
+  version = "5.8.0.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KFao0Ig0db7IDBrHcsAG6mkSFcxV3tIWR7XIfIYknLs=";
+    hash = "sha256-KxQ4gkirTNH176jEZHYREll8zVfA2EI49zYxq+DiDP0=";
   };
 
   doCheck = false;

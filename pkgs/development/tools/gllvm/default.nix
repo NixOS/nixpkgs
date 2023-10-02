@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-CoreqnMRuPuv+Ci1uyF3HJCJFwK2jwB79okynv6AHTA=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeCheckInputs = with llvmPackages; [
     clang

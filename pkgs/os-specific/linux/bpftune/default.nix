@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftune";
-  version = "unstable-2023-08-02";
+  version = "unstable-2023-09-11";
 
   src = fetchFromGitHub {
-    owner = "oracle-samples";
+    owner = "oracle";
     repo = "bpftune";
-    rev = "f7e051a011d581a3c667b7f7b769862407d85f04";
-    hash = "sha256-1tfr2vB/XRnpGJVwo2NQkXomz+J6AzvpS1P3rcAyAyI=";
+    rev = "22926812a555eac910eac0699100bac0f8776f1b";
+    hash = "sha256-BflJc5lYWYFIo9LzKfb34F4V1qOI8ywVjnzOLz605DI=";
   };
 
   postPatch = ''
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     substituteInPlace include/bpftune/libbpftune.h \
       --replace /usr/lib64/bpftune/       "$out/lib/bpftune/" \
       --replace /usr/local/lib64/bpftune/ "$out/lib/bpftune/"
+    substituteInPlace src/libbpftune.c \
+      --replace /lib/modules /run/booted-system/kernel-modules/lib/modules
 
     substituteInPlace src/Makefile sample_tuner/Makefile \
       --replace 'BPF_INCLUDE := /usr/include' 'BPF_INCLUDE := ${lib.getDev libbpf}/include' \

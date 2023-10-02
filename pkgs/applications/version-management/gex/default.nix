@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gex";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "Piturnah";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-OCC2kHPHWFwqdE0THNZbH7d3gxTBD5MUMWY6PO5GuHU";
+    hash = "sha256-ADVF+Kb0DDiR3dS43uzhefFFEg1O8IC22i5fmziEp6I=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     libgit2_1_6
   ];
 
-  cargoHash = "sha256-28sMY47LAdaGmPNmxeu/w1Pn6AV3JlWbxFcit5pLkI0";
+  cargoHash = "sha256-XBBZ56jvBtYI5J/sSc4ckk/KXzCHNgM9A4jGolGKh2E=";
 
   meta = with lib; {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";

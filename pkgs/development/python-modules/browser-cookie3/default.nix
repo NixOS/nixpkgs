@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
@@ -43,6 +42,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ borisbabic ];
-    broken = stdenv.isDarwin;
   };
 }

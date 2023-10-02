@@ -40,6 +40,7 @@
 , udev
 , wayland
 , xdg-utils
+, coreutils
 , xorg
 , zlib
 
@@ -91,11 +92,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.56.20";
+  version = "1.58.135";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-ub44AI0Fu3V8SRhiBrQueJZaSdl4/cI6DQ3QYJfGseo=";
+    sha256 = "sha256-tJfpBIZvBr0diympUmImXYELPERJIzCSuOB0aovhodI=";
   };
 
   dontConfigure = true;
@@ -171,7 +172,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : ${rpath}
       --prefix PATH : ${binpath}
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils coreutils ]}
       ${optionalString (enableFeatures != []) ''
       --add-flags "--enable-features=${strings.concatStringsSep "," enableFeatures}"
       ''}

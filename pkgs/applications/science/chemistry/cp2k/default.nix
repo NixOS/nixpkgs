@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, gfortran, blas, lapack
+{ lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook, python3, gfortran, blas, lapack
 , fftw, libint, libvori, libxc, mpi, gsl, scalapack, openssh, makeWrapper
 , libxsmm, spglib, which, pkg-config, plumed, zlib
 , enableElpa ? false
@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
-                 -I${libxc}/include -I${libxsmm}/include \
+                 -I${libxc}/include -I${lib.getDev libxsmm}/include \
                  -I${libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"}
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
@@ -88,14 +88,18 @@ in stdenv.mkDerivation rec {
     EOF
   '';
 
+  nativeCheckInputs = [
+    mpiCheckPhaseHook
+    openssh
+  ];
+
   checkPhase = ''
-    export OMP_NUM_THREADS=1
+    runHook preCheck
 
-    export HYDRA_IFACE=lo  # Fix to make mpich run in a sandbox
-    export OMPI_MCA_rmaps_base_oversubscribe=1
     export CP2K_DATA_DIR=data
-
     mpirun -np 2 exe/${arch}/libcp2k_unittest.${cp2kVersion}
+
+    runHook postCheck
   '';
 
   installPhase = ''

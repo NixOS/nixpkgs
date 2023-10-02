@@ -8,7 +8,6 @@
 , alsa-lib
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , ffmpeg_4
 , flac
 , freetype
@@ -17,7 +16,6 @@
 , libGL
 , libGLU
 , libpulseaudio
-, libretro-core-info
 , libv4l
 , libX11
 , libXdmcp
@@ -32,10 +30,8 @@
 , pkg-config
 , python3
 , qtbase
-, retroarch-assets
 , SDL2
 , spirv-tools
-, substituteAll
 , udev
 , vulkan-loader
 , wayland
@@ -50,12 +46,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.15.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    hash = "sha256-kJOR3p3fKqGM8a5rgDPkz43uuf5AtS5fVnvr3tJgWbc=";
+    hash = "sha256-aP3/IDs18Q32efFlp4XYDKpdoAm2+QwzhrMxmt3pSvE=";
     rev = "v${version}";
   };
 

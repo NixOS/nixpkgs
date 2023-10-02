@@ -230,9 +230,7 @@ in
         plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
       };
 
-    nixpkgs.config = { locate.dbfile = cfg.output; };
-
-    environment.systemPackages = [ cfg.locate ];
+    environment.systemPackages = [ (cfg.locate.override { dbfile = cfg.output; }) ];
 
     environment.variables = mkIf (!isMorPLocate) { LOCATE_PATH = cfg.output; };
 

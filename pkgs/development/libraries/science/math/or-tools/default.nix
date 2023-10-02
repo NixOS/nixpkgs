@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/google/or-tools/commit/edd1544375bd55f79168db315151a48faa548fa0.patch";
       hash = "sha256-S//1YM3IoRCp3Ghg8zMF0XXgIpVmaw4gH8cVb9eUbqM=";
     })
+    # Don't use non-existent member of string_view. Partial patch from commit
+    # https://github.com/google/or-tools/commit/c5a2fa1eb673bf652cb9ad4f5049d054b8166e17.patch
+    ./fix-stringview-compile.patch
   ];
 
   # or-tools normally attempts to build Protobuf for the build platform when
@@ -88,7 +91,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     abseil-cpp
     protobuf
-    python.pkgs.protobuf
+    (python.pkgs.protobuf.override { protobuf = protobuf; })
     python.pkgs.numpy
   ];
   nativeCheckInputs = [

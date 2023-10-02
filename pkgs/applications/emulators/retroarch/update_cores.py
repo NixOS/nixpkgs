@@ -17,6 +17,7 @@ CORES = {
     "beetle-gba": {"repo": "beetle-gba-libretro"},
     "beetle-lynx": {"repo": "beetle-lynx-libretro"},
     "beetle-ngp": {"repo": "beetle-ngp-libretro"},
+    "beetle-pce": {"repo": "beetle-pce-libretro"},
     "beetle-pce-fast": {"repo": "beetle-pce-fast-libretro"},
     "beetle-pcfx": {"repo": "beetle-pcfx-libretro"},
     "beetle-psx": {"repo": "beetle-psx-libretro"},
@@ -41,7 +42,7 @@ CORES = {
     "fbalpha2012": {"repo": "fbalpha2012"},
     "fbneo": {"repo": "fbneo"},
     "fceumm": {"repo": "libretro-fceumm"},
-    "flycast": {"repo": "flycast"},
+    "flycast": {"repo": "flycast", "owner": "flyinghead", "fetch_submodules": True},
     "fmsx": {"repo": "fmsx-libretro"},
     "freeintv": {"repo": "freeintv"},
     "fuse": {"repo": "fuse-libretro"},
@@ -71,7 +72,10 @@ CORES = {
     "o2em": {"repo": "libretro-o2em"},
     "opera": {"repo": "opera-libretro"},
     "parallel-n64": {"repo": "parallel-n64"},
-    "pcsx2": {"repo": "pcsx2"},
+    # libretro/lrps2 is a hard-fork of pcsx2 with simplified code to target
+    # only libretro, while libretro/pcsx2 is supposedly closer to upstream.
+    # TODO: switch to libretro/pcsx2 since this is more up-to-date
+    "pcsx2": {"repo": "lrps2"},
     "pcsx_rearmed": {"repo": "pcsx_rearmed"},
     "picodrive": {"repo": "picodrive", "fetch_submodules": True},
     "play": {"repo": "Play-", "owner": "jpd002", "fetch_submodules": True},
@@ -81,7 +85,13 @@ CORES = {
     "puae": {"repo": "libretro-uae"},
     "quicknes": {"repo": "QuickNES_Core"},
     "sameboy": {"repo": "sameboy"},
-    "scummvm": {"repo": "scummvm"},
+    "same_cdi": {"repo": "same_cdi"},
+    # This is the old source code before they upstreamed the source code,
+    # so now the libretro related code lives in the scummvm/scummvm repository.
+    # However this broke the old way we were doing builds, so for now point
+    # to a mirror with the old source code until this issue is fixed.
+    # TODO: switch to libretro/scummvm since this is more up-to-date
+    "scummvm": {"repo": "scummvm", "owner": "libretro-mirrors"},
     "smsplus-gx": {"repo": "smsplus-gx"},
     "snes9x": {"repo": "snes9x", "owner": "snes9xgit"},
     "snes9x2002": {"repo": "snes9x2002"},

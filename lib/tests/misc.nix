@@ -349,6 +349,27 @@ runTests {
     expected = true;
   };
 
+  testRemovePrefixExample1 = {
+    expr = removePrefix "foo." "foo.bar.baz";
+    expected = "bar.baz";
+  };
+  testRemovePrefixExample2 = {
+    expr = removePrefix "xxx" "foo.bar.baz";
+    expected = "foo.bar.baz";
+  };
+  testRemovePrefixEmptyPrefix = {
+    expr = removePrefix "" "foo";
+    expected = "foo";
+  };
+  testRemovePrefixEmptyString = {
+    expr = removePrefix "foo" "";
+    expected = "";
+  };
+  testRemovePrefixEmptyBoth = {
+    expr = removePrefix "" "";
+    expected = "";
+  };
+
   testNormalizePath = {
     expr = strings.normalizePath "//a/b//c////d/";
     expected = "/a/b/c/d/";
@@ -484,6 +505,38 @@ runTests {
       };
     };
 
+  testFoldl'Empty = {
+    expr = foldl' (acc: el: abort "operation not called") 0 [ ];
+    expected = 0;
+  };
+
+  testFoldl'IntegerAdding = {
+    expr = foldl' (acc: el: acc + el) 0 [ 1 2 3 ];
+    expected = 6;
+  };
+
+  # The accumulator isn't forced deeply
+  testFoldl'NonDeep = {
+    expr = take 3 (foldl'
+      (acc: el: [ el ] ++ acc)
+      [ (abort "unevaluated list entry") ]
+      [ 1 2 3 ]);
+    expected = [ 3 2 1 ];
+  };
+
+  # Compared to builtins.foldl', lib.foldl' evaluates the first accumulator strictly too
+  testFoldl'StrictInitial = {
+    expr = (builtins.tryEval (foldl' (acc: el: el) (throw "hello") [])).success;
+    expected = false;
+  };
+
+  # Make sure we don't get a stack overflow for large lists
+  # This number of elements would notably cause a stack overflow if it was implemented without the `foldl'` builtin
+  testFoldl'Large = {
+    expr = foldl' (acc: el: acc + el) 0 (range 0 100000);
+    expected = 5000050000;
+  };
+
   testTake = testAllTrue [
     ([] == (take 0 [  1 2 3 ]))
     ([1] == (take 1 [  1 2 3 ]))
@@ -491,6 +544,44 @@ runTests {
     ([ 1 2 3 ] == (take 3 [  1 2 3 ]))
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
+
+  testListHasPrefixExample1 = {
+    expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
+    expected = true;
+  };
+  testListHasPrefixExample2 = {
+    expr = lists.hasPrefix [ 0 1 ] [ 1 2 3 4 ];
+    expected = false;
+  };
+  testListHasPrefixLazy = {
+    expr = lists.hasPrefix [ 1 ] [ 1 (abort "lib.lists.hasPrefix is not lazy") ];
+    expected = true;
+  };
+  testListHasPrefixEmptyPrefix = {
+    expr = lists.hasPrefix [ ] [ 1 2 ];
+    expected = true;
+  };
+  testListHasPrefixEmptyList = {
+    expr = lists.hasPrefix [ 1 2 ] [ ];
+    expected = false;
+  };
+
+  testListRemovePrefixExample1 = {
+    expr = lists.removePrefix [ 1 2 ] [ 1 2 3 4 ];
+    expected = [ 3 4 ];
+  };
+  testListRemovePrefixExample2 = {
+    expr = (builtins.tryEval (lists.removePrefix [ 0 1 ] [ 1 2 3 4 ])).success;
+    expected = false;
+  };
+  testListRemovePrefixEmptyPrefix = {
+    expr = lists.removePrefix [ ] [ 1 2 ];
+    expected = [ 1 2 ];
+  };
+  testListRemovePrefixEmptyList = {
+    expr = (builtins.tryEval (lists.removePrefix [ 1 2 ] [ ])).success;
+    expected = false;
+  };
 
   testFoldAttrs = {
     expr = foldAttrs (n: a: [n] ++ a) [] [
@@ -649,7 +740,7 @@ runTests {
       # should just return the initial value
       emptySet = foldlAttrs (throw "function not needed") 123 { };
       # should just evaluate to the last value
-      accNotNeeded = foldlAttrs (_acc: _name: v: v) (throw "accumulator not needed") { z = 3; a = 2; };
+      valuesNotNeeded = foldlAttrs (acc: _name: _v: acc) 3 { z = throw "value z not needed"; a = throw "value a not needed"; };
       # the accumulator doesnt have to be an attrset it can be as trivial as being just a number or string
       trivialAcc = foldlAttrs (acc: _name: v: acc * 10 + v) 1 { z = 1; a = 2; };
     };
@@ -659,7 +750,7 @@ runTests {
         names = [ "bar" "foo" ];
       };
       emptySet = 123;
-      accNotNeeded = 3;
+      valuesNotNeeded = 3;
       trivialAcc = 121;
     };
   };
@@ -886,6 +977,51 @@ runTests {
       [section 1]
       attribute1=5
       x=Me-se JarJar Binx
+    '';
+  };
+
+  testToGitINI = {
+    expr = generators.toGitINI {
+      user = {
+        email = "user@example.org";
+        name = "John Doe";
+        signingKey = "00112233445566778899AABBCCDDEEFF";
+      };
+      gpg.program = "path-to-gpg";
+      tag.gpgSign = true;
+      include.path = "~/path/to/config.inc";
+      includeIf."gitdif:~/src/dir".path = "~/path/to/conditional.inc";
+      extra = {
+        boolean = true;
+        integer = 38;
+        name = "value";
+        subsection.value = "test";
+      };};
+    expected = ''
+      [extra]
+      ${"\t"}boolean = true
+      ${"\t"}integer = 38
+      ${"\t"}name = "value"
+
+      [extra "subsection"]
+      ${"\t"}value = "test"
+
+      [gpg]
+      ${"\t"}program = "path-to-gpg"
+
+      [include]
+      ${"\t"}path = "~/path/to/config.inc"
+
+      [includeIf "gitdif:~/src/dir"]
+      ${"\t"}path = "~/path/to/conditional.inc"
+
+      [tag]
+      ${"\t"}gpgSign = true
+
+      [user]
+      ${"\t"}email = "user@example.org"
+      ${"\t"}name = "John Doe"
+      ${"\t"}signingKey = "00112233445566778899AABBCCDDEEFF"
     '';
   };
 

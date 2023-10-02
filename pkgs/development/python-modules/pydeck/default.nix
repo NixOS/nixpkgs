@@ -4,6 +4,7 @@
 , ipykernel
 , ipywidgets
 , jinja2
+, jupyter
 , numpy
 , pandas
 , pytestCheckHook
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    jinja2
+    jupyter
     setuptools
     wheel
   ];

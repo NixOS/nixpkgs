@@ -1,10 +1,10 @@
 { lib
 , stdenv
-, fetchFromGitHub
 , buildBazelPackage
+, fetchFromGitHub
 , bazel_4
-, flex
 , bison
+, flex
 , python3
 }:
 
@@ -17,8 +17,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2023-05-05";
-  GIT_VERSION = "v0.0-3253-gf85c768c";
+  GIT_DATE = "2023-08-29";
+  GIT_VERSION = "v0.0-3410-g398a8505";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
@@ -27,7 +27,7 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo = "verible";
     rev = "${GIT_VERSION}";
-    sha256 = "sha256-scLYQQt6spBImJEYG60ZbIsUfKqWBj2DINjZgFKESoI=";
+    sha256 = "sha256-qi//Dssgg5ITrL5jCpZXpSrhSm2xCqe53D9ctK7SQoU=";
   };
 
   patches = [
@@ -37,6 +37,7 @@ buildBazelPackage rec {
     ./remove-unused-deps.patch
   ];
 
+  bazel = bazel_4;
   bazelFlags = [
     "--//bazel:use_local_flex_bison"
     "--javabase=@bazel_tools//tools/jdk:remote_jdk11"
@@ -49,14 +50,14 @@ buildBazelPackage rec {
     # of the output derivation ? Is there a more robust way to do this ?
     # (Hashes extracted from the ofborg build logs)
     sha256 = {
-      aarch64-linux = "sha256-BrJyFeq3BB4sHIXMMxRIaYV+VJAfTs2bvK7pnw6faBY=";
-      x86_64-linux = "sha256-G6tqHWeQBi2Ph3IDFNu2sp+UU2BO93+lcyJ+kvpuRJo=";
+      aarch64-linux = "sha256-Hf/jF5Y7QS2ZNFmSx2LIb0b6gdjditE97HwWGqQJac8=";
+      x86_64-linux = "sha256-WBp5Fi5vvKLVgRWvQ3VB7sY6ySpbwCdhU5KqZH9sLy4=";
     }.${system} or (throw "No hash for system: ${system}");
   };
 
   nativeBuildInputs = [
-    flex       # We use local flex and bison as WORKSPACE sources fail
-    bison      # .. to compile with newer glibc
+    bison      # We use local flex and bison as WORKSPACE sources fail
+    flex       # .. to compile with newer glibc
     python3
   ];
 
@@ -72,7 +73,6 @@ buildBazelPackage rec {
       verilog/tools
   '';
 
-  bazel = bazel_4;
   removeRulesCC = false;
   bazelTargets = [ ":install-binaries" ];
   bazelTestTargets = [ "//..." ];
@@ -99,10 +99,10 @@ buildBazelPackage rec {
   };
 
   meta = with lib; {
-    homepage = "https://github.com/chipsalliance/verible";
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server.";
+    homepage = "https://github.com/chipsalliance/verible";
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ hzeller newam ];
+    platforms = platforms.linux;
   };
 }

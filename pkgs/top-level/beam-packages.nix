@@ -1,7 +1,6 @@
 { lib
 , beam
 , callPackage
-, openssl_1_1
 , wxGTK32
 , buildPackages
 , stdenv
@@ -82,21 +81,6 @@ in
       odbcSupport = true;
     };
 
-    erlang_23 = self.beamLib.callErlang ../development/interpreters/erlang/23.nix {
-      openssl = openssl_1_1;
-      wxGTK = wxGTK32;
-      # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
-    };
-    erlang_23_odbc = self.interpreters.erlang_23.override { odbcSupport = true; };
-    erlang_23_javac = self.interpreters.erlang_23.override { javacSupport = true; };
-    erlang_23_odbc_javac = self.interpreters.erlang_23.override {
-      javacSupport = true;
-      odbcSupport = true;
-    };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_24.elixir`.
@@ -116,6 +100,5 @@ in
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
     erlang_24 = self.packagesWith self.interpreters.erlang_24;
-    erlang_23 = self.packagesWith self.interpreters.erlang_23;
   } // packagesAliases;
 }

@@ -15,17 +15,14 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.69.0";
+  version = "0.72.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "sha256-Swt4uihsAtHVMkc0DxATwB8FvgxwtSJTN3E5cBtyXf8=";
+    sha256 = "sha256-DQ3TxxLxi8/W1+uBX7NEBIsVXBKnJBa6YNRBFleNrEA=";
     fetchSubmodules = true;
   };
-
-  # https://gitlab.com/ligolang/ligo/-/merge_requests/2706.diff
-  patches = [ ./2706.diff ];
 
   postPatch = ''
     substituteInPlace "vendors/tezos-ligo/src/lib_hacl/hacl.ml" \
@@ -78,6 +75,7 @@ ocamlPackages.buildDunePackage rec {
     decompress
     ppx_deriving
     ppx_deriving_yojson
+    ppx_yojson_conv
     ppx_expect
     ppx_import
     terminal_size

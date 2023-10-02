@@ -11,13 +11,15 @@
 , stdenv
 , swig
 , systemd
+# ImportError: cannot import name 'mlog' from 'mesonbuild'
+, withDocs ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnvme";
   version = "1.4";
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" ] ++ lib.optionals withDocs [ "man" ];
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=man"
-    "-Ddocs-build=true"
+    (lib.mesonBool "docs-build" withDocs)
   ];
 
   preConfigure = ''
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C Library for NVM Express on Linux";
     homepage = "https://github.com/linux-nvme/libnvme";
-    maintainers = with maintainers; [ zseri ];
+    maintainers = [ maintainers.fogti ];
     license = with licenses; [ lgpl21Plus ];
     platforms = platforms.linux;
   };

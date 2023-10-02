@@ -14,6 +14,7 @@
 , pillow
 , pyflakes
 , pythonOlder
+, pytz
 , requests
 , requests-oauthlib
 , tzlocal
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     future
     grappelli_safe
     pillow
+    pytz
     requests
     requests-oauthlib
     tzlocal

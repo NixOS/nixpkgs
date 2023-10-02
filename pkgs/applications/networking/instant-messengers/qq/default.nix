@@ -23,16 +23,16 @@
 }:
 
 let
-  version = "3.1.2-13107";
-  _hash = "ad5b5393";
+  version = "3.2.1-17153";
+  _hash = "b69de82d";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_amd64.deb";
-      hash = "sha256-mBfeexWEYpGybFFianUFvlzMv0HoFR4EeFcwlGVXIRA=";
+      hash = "sha256-+GjTjv0K2vnlkb46KhMvRRFWuIEBz23Lg3QhiA7QzkA=";
     };
     aarch64-linux = fetchurl {
       url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_arm64.deb";
-      hash = "sha256-V6kR2lb63nnNIEhn64Yg0BYYlz7W0Cw60TwnKaJuLgs=";
+      hash = "sha256-BtmmVpKZF15aU7RRmXl9g5leg2jz5sT4vYXluq9aIYk=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");

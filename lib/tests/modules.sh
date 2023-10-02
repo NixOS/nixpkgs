@@ -39,7 +39,7 @@ reportFailure() {
 checkConfigOutput() {
     local outputContains=$1
     shift
-    if evalConfig "$@" 2>/dev/null | grep --silent "$outputContains" ; then
+    if evalConfig "$@" 2>/dev/null | grep -E --silent "$outputContains" ; then
         ((++pass))
     else
         echo 2>&1 "error: Expected result matching '$outputContains', while evaluating"
@@ -90,6 +90,9 @@ checkConfigOutput '^true$' config.result ./test-mergeAttrDefinitionsWithPrio.nix
 # contradict the notion that an option has a single value, where _module.args
 # is the option.
 checkConfigOutput '^true$' config.result ./module-argument-default.nix
+
+# gvariant
+checkConfigOutput '^true$' config.assertion ./gvariant.nix
 
 # types.pathInStore
 checkConfigOutput '".*/store/0lz9p8xhf89kb1c1kk6jxrzskaiygnlh-bash-5.2-p15.drv"' config.pathInStore.ok1 ./types.nix
@@ -393,6 +396,11 @@ checkConfigError \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
 
+# Options: accidental use of an option-type instead of option (or other tagged type; unlikely)
+checkConfigError 'In module .*/options-type-error-typical.nix: expected an option declaration at option path .result. but got an attribute set with type option-type' config.result ./options-type-error-typical.nix
+checkConfigError 'In module .*/options-type-error-typical-nested.nix: expected an option declaration at option path .result.here. but got an attribute set with type option-type' config.result.here ./options-type-error-typical-nested.nix
+checkConfigError 'In module .*/options-type-error-configuration.nix: expected an option declaration at option path .result. but got an attribute set with type configuration' config.result ./options-type-error-configuration.nix
+
 # Check that that merging of option collisions doesn't depend on type being set
 checkConfigError 'The option .group..*would be a parent of the following options, but its type .<no description>. does not support nested options.\n\s*- option.s. with prefix .group.enable..*' config.group.enable ./merge-typeless-option.nix
 
@@ -438,6 +446,24 @@ checkConfigOutput '^"The option `a\.b. defined in `.*/doRename-warnings\.nix. ha
 # Anonymous modules get deduplicated by key
 checkConfigOutput '^"pear"$' config.once.raw ./merge-module-with-key.nix
 checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
+
+# Declaration positions
+# Line should be present for direct options
+checkConfigOutput '^10$' options.imported.line10.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.imported.line10.declarationPositions.0.file ./declaration-positions.nix
+# Generated options may not have line numbers but they will at least get the
+# right file
+checkConfigOutput '/declaration-positions.nix"$' options.generated.line18.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^null$' options.generated.line18.declarationPositions.0.line ./declaration-positions.nix
+# Submodules don't break it
+checkConfigOutput '^39$' config.submoduleLine34.submodDeclLine39.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine34.submodDeclLine39.0.file ./declaration-positions.nix
+# New options under freeform submodules get collected into the parent submodule
+# (consistent with .declarations behaviour, but weird; notably appears in system.build)
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.1.line ./declaration-positions.nix
+# nested options work
+checkConfigOutput '^30$' options.nested.nestedLine30.declarationPositions.0.line ./declaration-positions.nix
 
 cat <<EOF
 ====== module tests ======

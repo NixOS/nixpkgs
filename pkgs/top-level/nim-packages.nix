@@ -9,7 +9,6 @@ lib.makeScope newScope (self:
       callPackage ../development/nim-packages/build-nim-package {
         inherit (buildPackages.buildPackages.nimPackages) nim_builder;
       };
-    fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
     asciigraph = callPackage ../development/nim-packages/asciigraph { };
 
@@ -17,6 +16,8 @@ lib.makeScope newScope (self:
       callPackage ../development/nim-packages/astpatternmatching { };
 
     asynctools = callPackage ../development/nim-packages/asynctools { };
+
+    atlas = callPackage ../development/nim-packages/atlas { };
 
     base32 = callPackage ../development/nim-packages/base32 { };
 
@@ -31,6 +32,10 @@ lib.makeScope newScope (self:
     chroma = callPackage ../development/nim-packages/chroma { };
 
     coap = callPackage  ../development/nim-packages/coap { };
+
+    csvtools = callPackage ../development/nim-packages/csvtools { };
+
+    db_connector = callPackage ../development/nim-packages/db_connector { };
 
     docopt = callPackage ../development/nim-packages/docopt { };
 
@@ -47,7 +52,7 @@ lib.makeScope newScope (self:
 
     hashlib = callPackage ../development/nim-packages/hashlib { };
 
-    hts-nim = callPackage ../development/nim-packages/hts-nim { };
+    hts = callPackage ../development/nim-packages/hts { };
 
     illwill = callPackage ../development/nim-packages/illwill { };
 
@@ -64,6 +69,8 @@ lib.makeScope newScope (self:
     lscolors = callPackage ../development/nim-packages/lscolors { };
 
     markdown = callPackage ../development/nim-packages/markdown { };
+
+    nimble = callPackage ../development/nim-packages/nimble { };
 
     nimcrypto = callPackage ../development/nim-packages/nimcrypto { };
 
@@ -95,6 +102,8 @@ lib.makeScope newScope (self:
       inherit (pkgs) rocksdb;
     };
 
+    safeseq = callPackage ../development/nim-packages/safeseq { };
+
     safeset = callPackage ../development/nim-packages/safeset { };
 
     sass = callPackage ../development/nim-packages/sass { };
@@ -107,6 +116,8 @@ lib.makeScope newScope (self:
       callPackage ../development/nim-packages/snappy { inherit (pkgs) snappy; };
 
     nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
+
+    smtp = callPackage ../development/nim-packages/smtp { };
 
     spry = callPackage ../development/nim-packages/spry { };
 

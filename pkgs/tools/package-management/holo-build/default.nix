@@ -18,7 +18,7 @@ buildGoModule rec {
       --replace '/usr/lib/holo/holo-build' '${placeholder "out"}/lib/holo/holo-build'
   '';
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles perl ];
 

@@ -5,15 +5,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "2.4.0";
+  version = "2.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-gZXA+2zW25Dl8JmBgg7APZt6ZdpFOEFZXAkiZ+tn/4g=";
+    hash = "sha256-+lsejepg/iBHo6CRAGNHjiUC7ZgboHbKu7EDmlN3lVk=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
@@ -26,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     faraday-plugins
     itsdangerous
     psutil
+    pytenable
     python-gvm
     python-owasp-zap-v2-4
     pyyaml
@@ -38,11 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"pytest-runner",' ""
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d);

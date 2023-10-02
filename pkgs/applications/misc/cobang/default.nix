@@ -1,47 +1,60 @@
 { lib
+, atk
 , buildPythonApplication
 , fetchFromGitHub
-, wrapGAppsHook
-, atk
 , gdk-pixbuf
 , gobject-introspection
-, gtk3
 , gst-plugins-good
+, gst-python
+, gtk3
+, kiss-headers
 , libhandy
 , librsvg
+, logbook
 , networkmanager
 , pango
-, gst-python
-, kiss-headers
-, logbook
 , pillow
 , poetry-core
 , pygobject3
+, pytestCheckHook
 , python
 , python-zbar
+, pythonRelaxDepsHook
 , requests
 , single-version
-, pytestCheckHook }:
+, wrapGAppsHook
+}:
 
 buildPythonApplication rec {
   pname = "cobang";
-  version = "0.9.6";
+  version = "0.10.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
-    rev = "v${version}";
-    sha256 = "sha256-YcXQ2wAgFSsJEqcaDQotpX1put4pQaF511kwq/c2yHw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yNDnBTBmwcP3g51UkkLNyF4eHYjblwxPxS2lMwbFKUM=";
   };
 
-  patches = [
-    ./0001-Poetry-core-and-pillow-9.patch
+  pythonRelaxDeps = [
+    "logbook"
+    "Pillow"
   ];
 
   nativeBuildInputs = [
     gobject-introspection
+    pythonRelaxDepsHook
     wrapGAppsHook
+  ];
+
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    gst-plugins-good
+    libhandy
+    networkmanager
+    pango
   ];
 
   propagatedBuildInputs = [
@@ -54,15 +67,6 @@ buildPythonApplication rec {
     python-zbar
     requests
     single-version
-  ];
-
-  buildInputs = [
-    atk
-    gdk-pixbuf
-    gst-plugins-good
-    libhandy
-    networkmanager
-    pango
   ];
 
   nativeCheckInputs = [

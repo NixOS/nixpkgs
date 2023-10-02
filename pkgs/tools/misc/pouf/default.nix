@@ -5,16 +5,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pouf";
-  version = "0.5.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "mothsart";
     repo = pname;
     rev = version;
-    sha256 = "1zz91r37d6nqvdy29syq853krqdkigiqihwz7ww9kvagfvzvdh13";
+    hash = "sha256-tW86b9a7u1jyfmHjwjs+5DaUujRZH+VhGQsj0CBj0yk=";
   };
 
-  cargoSha256 = "1ikm9fqi37jznln2xsyzfm625lv8kwjzanpm3wglx2s1k1jkmcy9";
+  cargoHash = "sha256-rVJAaeg27SdM8cTx12rKLIGEYtXUhLHXUYpT78oVNlo=";
+
+  # Cargo.lock is outdated.
+  preConfigure = ''
+    cargo update --offline
+  '';
 
   postInstall = "make PREFIX=$out copy-data";
 

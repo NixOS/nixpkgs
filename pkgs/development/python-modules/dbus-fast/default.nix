@@ -1,17 +1,19 @@
 { lib
 , async-timeout
 , buildPythonPackage
+, cython_3
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "1.90.1";
+  version = "2.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,12 +22,18 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-B+NW7ORKIBtjxeR0W0tX7V1MgBtNoyGFX35TXUl7rVE=";
+    hash = "sha256-8kK0T5b5hzT8CBYKvYOrc7bKEQxXDsTgjApmrILecek=";
   };
 
+  # The project can build both an optimized cython version and an unoptimized
+  # python version. This ensures we fail if we build the wrong one.
+  env.REQUIRE_CYTHON = 1;
+
   nativeBuildInputs = [
+    cython_3
     poetry-core
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -58,11 +66,13 @@ buildPythonPackage rec {
     "test_export_alias"
     "test_export_introspection"
     "test_export_unexport"
+    "test_fast_disconnect"
     "test_glib_big_message"
     "test_high_level_service_fd_passing"
     "test_interface_add_remove_signal"
     "test_introspectable_interface"
     "test_methods"
+    "test_multiple_flags_in_message"
     "test_name_requests"
     "test_object_manager"
     "test_peer_interface"

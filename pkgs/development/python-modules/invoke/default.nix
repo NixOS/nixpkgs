@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "invoke";
-  version = "2.0.0";
+  version = "2.2.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-erXdnNdreH1WCnixqYENJSNnq1lZhcUGEnAr4h1nHdc=";
+    hash = "sha256-7my7EBrxqFnH/oTyomTAWQILDLf+NTX5QkMAq1aPa9U=";
   };
 
   postPatch = ''
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    changelog = "https://www.pyinvoke.org/changelog.html";
     description = "Pythonic task execution";
     homepage = "https://www.pyinvoke.org/";
     license = licenses.bsd2;
