@@ -32760,8 +32760,6 @@ with pkgs;
 
   pureref = callPackage ../applications/graphics/pureref { };
 
-  shepherd = nodePackages."@nerdwallet/shepherd";
-
   inherit (callPackage ../applications/virtualization/singularity/packages.nix { })
     apptainer
     singularity
