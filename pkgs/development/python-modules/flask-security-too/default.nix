@@ -23,6 +23,7 @@
 , phonenumbers
 
 # propagates
+, setuptools
 , blinker
 , email-validator
 , flask
@@ -63,6 +64,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     blinker
     email-validator
     flask
