@@ -30,13 +30,9 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [
-    mdformat
-    markdown-it-py
-    mdit-py-plugins
-  ];
-
   propagatedBuildInputs = [
+    mdformat
+    mdit-py-plugins
     mdformat-tables
     linkify-it-py
   ];
@@ -47,6 +43,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "mdformat_gfm"
+    "mdformat_gfm.plugin"
   ];
 
   meta = with lib; {
