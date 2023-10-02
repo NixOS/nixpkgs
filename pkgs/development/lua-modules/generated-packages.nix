@@ -2501,6 +2501,29 @@ buildLuarocksPackage {
   };
 }) {};
 
+middleclass = callPackage({ luaOlder, buildLuarocksPackage, fetchurl, lua }:
+buildLuarocksPackage {
+  pname = "middleclass";
+  version = "4.1.1-0";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/middleclass-4.1.1-0.rockspec";
+    sha256 = "10xzs48lr1dy7cx99581r956gl16px0a9gbdlfar41n19r96mhb1";
+  }).outPath;
+  src = fetchurl {
+    url    = "https://github.com/kikito/middleclass/archive/v4.1.1.tar.gz";
+    sha256 = "11ahv0b9wgqfnabv57rb7ilsvn2vcvxb1czq6faqrsqylvr5l7nh";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/kikito/middleclass";
+    description = "A simple OOP library for Lua";
+    license.fullName = "MIT";
+  };
+}) {};
+
 moonscript = callPackage({ lpeg, luaOlder, fetchgit, lua, buildLuarocksPackage, argparse, luafilesystem }:
 buildLuarocksPackage {
   pname = "moonscript";
