@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    # use similar flags to what is defined in ${src}/.github/workflow/{LinuxRelease,OSX}.yml
-    "-DDUCKDB_EXTENSION_CONFIGS=${src}/.github/config/bundled_extensions.cmake"
+    "-DDUCKDB_EXTENSION_CONFIGS=${src}/.github/config/in_tree_extensions.cmake"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ] ++ lib.optionals doInstallCheck [
