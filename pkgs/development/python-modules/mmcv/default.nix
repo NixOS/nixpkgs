@@ -20,6 +20,7 @@
 , lmdb
 , mmengine
 , symlinkJoin
+, pybind11
 }:
 
 let
@@ -96,7 +97,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ ninja which ]
     ++ lib.optionals cudaSupport [ cuda-native-redist ];
 
-  buildInputs = [ torch ] ++ lib.optionals cudaSupport [ cuda-redist ];
+  buildInputs = [ torch pybind11 ] ++ lib.optionals cudaSupport [ cuda-redist ];
 
   nativeCheckInputs = [ pytestCheckHook torchvision lmdb onnx onnxruntime scipy pyturbojpeg tifffile ];
 
