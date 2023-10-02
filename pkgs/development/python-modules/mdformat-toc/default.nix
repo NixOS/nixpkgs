@@ -26,7 +26,7 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
   ];
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "mdformat_toc"
+    "mdformat_toc.plugin"
   ];
 
   meta = with lib; {
