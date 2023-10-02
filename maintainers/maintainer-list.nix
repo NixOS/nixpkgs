@@ -19,7 +19,7 @@
     where
 
     - `handle` is the handle you are going to use in nixpkgs expressions,
-    - `name` is your, preferably real, name,
+    - `name` is a name that people would know and recognize you by,
     - `email` is your maintainer email address,
     - `matrix` is your Matrix user ID,
     - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
@@ -12942,6 +12942,13 @@
     keys = [{
       fingerprint = "939E F8A5 CED8 7F50 5BB5  B2D0 24BC 2738 5F70 234F";
     }];
+  };
+  octodi = {
+    name = "octodi";
+    email = "octodi@proton.me";
+    matrix = "@octodi:matrix.org";
+    github = "octodi";
+    githubId = 127038896;
   };
   oddlama = {
     email = "oddlama@oddlama.org";

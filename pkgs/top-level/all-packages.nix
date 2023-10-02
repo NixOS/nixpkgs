@@ -586,8 +586,8 @@ with pkgs;
   dinghy = with python3Packages; toPythonApplication dinghy;
 
   djgpp = djgpp_i586;
-  djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; };
-  djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; });
+  djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; stdenv = gccStdenv; };
+  djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; stdenv = gccStdenv; });
 
   djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
@@ -1303,10 +1303,6 @@ with pkgs;
   numworks-epsilon = callPackage ../applications/science/math/numworks-epsilon { };
 
   ociTools = callPackage ../build-support/oci-tools { };
-
-  octant = callPackage ../applications/networking/cluster/octant { };
-  octant-desktop = callPackage ../applications/networking/cluster/octant/desktop.nix { };
-  starboard-octant-plugin = callPackage ../applications/networking/cluster/octant/plugins/starboard-octant-plugin.nix { };
 
   inherit (
     callPackages ../build-support/setup-hooks/patch-rc-path-hooks { }
@@ -5209,8 +5205,6 @@ with pkgs;
   ego = callPackage ../tools/misc/ego { };
 
   ekam = callPackage ../development/tools/build-managers/ekam { };
-
-  eksctl = callPackage ../tools/admin/eksctl { };
 
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
@@ -11997,7 +11991,7 @@ with pkgs;
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
 
   phoc = callPackage ../applications/misc/phoc {
-    wlroots = wlroots_0_15;
+    wlroots = wlroots_0_16;
   };
 
   phockup = callPackage ../applications/misc/phockup { };
@@ -13139,8 +13133,6 @@ with pkgs;
   showmethekey = callPackage ../applications/video/showmethekey { };
 
   shrikhand = callPackage ../data/fonts/shrikhand { };
-
-  shopware-cli = callPackage ../tools/misc/shopware-cli { };
 
   shunit2 = callPackage ../tools/misc/shunit2 { };
 
@@ -21352,6 +21344,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  fastcdr = callPackage ../development/libraries/fastcdr { };
+
   fbthrift = callPackage ../development/libraries/fbthrift { };
 
   fb303 = callPackage ../development/libraries/fb303 { };
@@ -24754,9 +24748,6 @@ with pkgs;
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
     abseil-cpp = abseil-cpp_202103;
   };
-  protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix {
-    abseil-cpp = abseil-cpp_202103;
-  };
 
   protobufc = callPackage ../development/libraries/protobufc { };
 
@@ -27047,7 +27038,10 @@ with pkgs;
 
   libcardiacarrest = callPackage ../misc/libcardiacarrest { };
 
-  easyeffects = callPackage ../applications/audio/easyeffects { };
+  easyeffects = callPackage ../applications/audio/easyeffects {
+    # Fix crashes with speexdsp effects
+    speexdsp = speexdsp.override { withFftw3 = false; };
+  };
 
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
@@ -27670,7 +27664,6 @@ with pkgs;
       inherit (buildPackages.darwin) bootstrap_cmds;
       udev = if stdenv.isLinux then udev else null;
       libdrm = if stdenv.isLinux then libdrm else null;
-      abiCompat = config.xorg.abiCompat or null; # `config` because we have no `xorg.override`
     };
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
@@ -35618,9 +35611,7 @@ with pkgs;
 
   lightdm-mobile-greeter = callPackage ../applications/display-managers/lightdm-mobile-greeter { };
 
-  lightdm-tiny-greeter = callPackage ../applications/display-managers/lightdm-tiny-greeter {
-    conf = config.lightdm-tiny-greeter.conf or "";
-  };
+  lightdm-tiny-greeter = callPackage ../applications/display-managers/lightdm-tiny-greeter { };
 
   ly = callPackage ../applications/display-managers/ly { };
 

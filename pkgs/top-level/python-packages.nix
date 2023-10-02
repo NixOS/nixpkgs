@@ -872,6 +872,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreServices;
   };
 
+  auditok = callPackage ../development/python-modules/auditok { };
+
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
   };
@@ -2610,6 +2612,8 @@ self: super: with self; {
   db-dtypes = callPackage ../development/python-modules/db-dtypes { };
 
   dcmstack = callPackage ../development/python-modules/dcmstack { };
+
+  dctorch = callPackage ../development/python-modules/dctorch { };
 
   ddt = callPackage ../development/python-modules/ddt { };
 
@@ -6760,6 +6764,8 @@ self: super: with self; {
 
   mir_eval = callPackage ../development/python-modules/mir_eval { };
 
+  mirakuru = callPackage ../development/python-modules/mirakuru { };
+
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
@@ -8630,6 +8636,8 @@ self: super: with self; {
 
   portend = callPackage ../development/python-modules/portend { };
 
+  port-for = callPackage ../development/python-modules/port-for { };
+
   portpicker = callPackage ../development/python-modules/portpicker { };
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
@@ -8998,6 +9006,8 @@ self: super: with self; {
   pycares = callPackage ../development/python-modules/pycares { };
 
   pycarwings2 = callPackage ../development/python-modules/pycarwings2 { };
+
+  pycatch22 = callPackage ../development/python-modules/pycatch22 { };
 
   pycategories = callPackage ../development/python-modules/pycategories { };
 
@@ -10381,6 +10391,8 @@ self: super: with self; {
 
   pytest-plt = callPackage ../development/python-modules/pytest-plt { };
 
+  pytest-postgresql = callPackage ../development/python-modules/pytest-postgresql { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-pytestrail = callPackage ../development/python-modules/pytest-pytestrail { };
@@ -11516,6 +11528,8 @@ self: super: with self; {
   ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
+
+  rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
 
@@ -13251,6 +13265,8 @@ self: super: with self; {
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
 
+  treelib = callPackage ../development/python-modules/treelib { };
+
   treelog = callPackage ../development/python-modules/treelog { };
 
   treeo = callPackage ../development/python-modules/treeo { };
@@ -13854,6 +13870,8 @@ self: super: with self; {
 
   wallbox = callPackage ../development/python-modules/wallbox { };
 
+  walrus = callPackage ../development/python-modules/walrus { };
+
   wand = callPackage ../development/python-modules/wand { };
 
   wandb = callPackage ../development/python-modules/wandb { };
@@ -14008,6 +14026,8 @@ self: super: with self; {
   wifi = callPackage ../development/python-modules/wifi { };
 
   wikipedia = callPackage ../development/python-modules/wikipedia { };
+
+  wikipedia-api = callPackage ../development/python-modules/wikipedia-api { };
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
 

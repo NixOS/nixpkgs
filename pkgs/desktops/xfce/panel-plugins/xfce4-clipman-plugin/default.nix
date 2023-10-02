@@ -1,12 +1,35 @@
-{ lib, mkXfceDerivation, libXtst, libxfce4ui, xfce4-panel, xfconf }:
+{ lib
+, mkXfceDerivation
+, glib
+, gtk3
+, libX11
+, libXtst
+, libxfce4ui
+, libxfce4util
+, qrencode
+, xfce4-panel
+, xfconf
+, wayland
+}:
 
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-clipman-plugin";
-  version = "1.6.4";
-  sha256 = "sha256-N/e97C6xWyF1GUg7gMN0Wcw35awypflMmA+Pdg6alEw=";
+  version = "1.6.5";
+  sha256 = "sha256-aKcIwlNlaJEHgIq0S7+VG/os49+zRqkZXsQVse4B9oE=";
 
-  buildInputs = [ libXtst libxfce4ui xfce4-panel xfconf ];
+  buildInputs = [
+    glib
+    gtk3
+    libX11
+    libXtst
+    libxfce4ui
+    libxfce4util
+    qrencode
+    xfce4-panel
+    xfconf
+    wayland
+  ];
 
   meta = with lib; {
     description = "Clipboard manager for Xfce panel";

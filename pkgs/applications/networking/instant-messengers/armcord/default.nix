@@ -138,5 +138,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "armcord";
+    knownVulnerabilities = [ "CVE-2023-4863" ];
   };
 }
