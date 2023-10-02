@@ -3,7 +3,7 @@
 
 { lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security, nim-unwrapped
-, nim-unwrapped-2, nimble-unwrapped, nim }:
+, nim-unwrapped-2, nim }:
 
 let
   parseCpu = platform:
