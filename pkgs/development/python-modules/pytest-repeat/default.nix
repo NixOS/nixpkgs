@@ -1,30 +1,39 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools-scm
 , pytest
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-repeat";
   version = "0.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-eWc0Ra6ZruMzuBHH0AN660CPkzuImDdf8vT/8eO6aGs=";
+    hash = "sha256-eWc0Ra6ZruMzuBHH0AN660CPkzuImDdf8vT/8eO6aGs=";
   };
 
   nativeBuildInputs = [
     setuptools-scm
   ];
 
-  nativeCheckInputs = [
+  buildInputs = [
     pytest
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pytest_repeat"
+  ];
 
   meta = with lib; {
     description = "Pytest plugin for repeating tests";
