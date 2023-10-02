@@ -237,7 +237,7 @@ in
           # copy-pasted from the wrapper; TODO: figure out fix
           applicationName = cfg.package.binaryName or (lib.getName cfg.package);
 
-          nixpkgsConfig = config.nixpkgs.config.${applicationName} or {};
+          nixpkgsConfig = pkgs.config.${applicationName} or {};
           optionConfig = cfg.wrapperConfig;
           nmhConfig = {
             enableBrowserpass = nmh.browserpass;

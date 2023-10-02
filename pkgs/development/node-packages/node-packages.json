@@ -92,7 +92,6 @@
 , "conventional-changelog-cli"
 , "cpy-cli"
 , "create-cycle-app"
-, "create-react-app"
 , "create-react-native-app"
 , "cspell"
 , "csslint"
