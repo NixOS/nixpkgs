@@ -3,7 +3,6 @@
 let
   pname = "joplin-desktop";
   version = "2.12.18";
-  name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -24,7 +23,7 @@ let
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   meta = with lib; {
@@ -43,7 +42,7 @@ let
   };
 
   linux = appimageTools.wrapType2 rec {
-    inherit name src meta;
+    inherit pname version src meta;
 
     profile = ''
       export LC_ALL=C.UTF-8
@@ -52,7 +51,7 @@ let
     multiArch = false; # no 32bit needed
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${name},${pname}}
+      mv $out/bin/{${pname}-${version},${pname}}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
@@ -65,7 +64,7 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit name src meta;
+    inherit pname version src meta;
 
     nativeBuildInputs = [ undmg ];
 
