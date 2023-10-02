@@ -2,7 +2,6 @@
 , buildPythonPackage
 , duckdb
 , fsspec
-, git
 , google-cloud-storage
 , numpy
 , openssl
@@ -18,7 +17,6 @@ buildPythonPackage rec {
   format = "setuptools";
 
   BUILD_HTTPFS = 1;
-  patches = [ ./setup.patch ];
 
   postPatch = ''
     # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
@@ -33,6 +31,7 @@ buildPythonPackage rec {
     rm tests/stubs/test_stubs.py
   '';
 
+  BUILD_HTTPFS = 1;
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [

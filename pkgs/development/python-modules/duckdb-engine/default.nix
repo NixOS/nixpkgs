@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-T02nGF+YlughRQPinb0I3NC6xsarh4+qRhG8YfhTvhI=";
   };
 
-   patches = [ ./remote_data.patch ];
+  patches = [ ./remote_data.patch ];
 
   nativeBuildInputs = [
     poetry-core
