@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , grpc-google-iam-v1
 , google-api-core
 , google-cloud-access-context-manager
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     grpc-google-iam-v1
     google-api-core
     google-cloud-access-context-manager
