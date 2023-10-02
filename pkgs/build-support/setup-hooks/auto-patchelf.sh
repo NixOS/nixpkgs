@@ -63,6 +63,7 @@ autoPatchelf() {
 
     local appendRunpathsArray=($appendRunpaths)
     local runtimeDependenciesArray=($runtimeDependencies)
+    local patchelfFlagsArray=($patchelfFlags)
     @pythonInterpreter@ @autoPatchelfScript@                            \
         ${norecurse:+--no-recurse}                                      \
         --ignore-missing "${ignoreMissingDepsArray[@]}"                 \
@@ -70,7 +71,8 @@ autoPatchelf() {
         --libs "${autoPatchelfLibs[@]}"                                 \
                "${extraAutoPatchelfLibs[@]}"                            \
         --runtime-dependencies "${runtimeDependenciesArray[@]/%//lib}"  \
-        --append-rpaths "${appendRunpathsArray[@]}"
+        --append-rpaths "${appendRunpathsArray[@]}"                     \
+        --extra-args "${patchelfFlagsArray[@]}"
 }
 
 # XXX: This should ultimately use fixupOutputHooks but we currently don't have
