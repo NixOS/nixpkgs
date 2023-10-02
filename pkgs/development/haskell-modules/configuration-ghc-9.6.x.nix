@@ -272,4 +272,12 @@ self: super: {
 
   # The curl executable is required for withApplication tests.
   warp_3_3_28 = addTestToolDepend pkgs.curl super.warp_3_3_28;
+
+  # The NCG backend for aarch64 generates invalid jumps in some situations,
+  # the workaround on 9.6 is to revert to the LLVM backend (which is used
+  # for these sorts of situations even on 9.2 and 9.4).
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
+  tls = appendConfigureFlags
+    (lib.optionals pkgs.stdenv.hostPlatform.isAarch64 [ "--ghc-option=-fllvm" ])
+    super.tls;
 }
