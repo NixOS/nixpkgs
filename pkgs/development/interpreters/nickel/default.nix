@@ -8,13 +8,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-iHHZ2CXle8edJoJDIOMrUNucTdhyNZpSKfAPUmnt6eI=";
+    hash = "sha256-g7pRTwa2sniIOmgdYCxfYxGRtxnQP8zaVWuPjzEZTSg=";
   };
 
   cargoLock = {
