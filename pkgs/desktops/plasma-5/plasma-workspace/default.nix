@@ -148,6 +148,12 @@ mkDerivation {
   patches = [
     ./0001-startkde.patch
     ./0002-absolute-wallpaper-install-dir.patch
+
+    # Backport patch for cleaner shutdowns
+    (fetchpatch {
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/6ce8f434139f47e6a71bf0b68beae92be8845ce4.patch";
+      hash = "sha256-cYw/4/9tSnCbArLr72O8F8V0NLkVXdCVnJGoGxSzZMg=";
+    })
   ];
 
   # QT_INSTALL_BINS refers to qtbase, and qdbus is in qttools
