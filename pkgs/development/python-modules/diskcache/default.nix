@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "5.6.1";
+  version = "5.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "grantjenks";
     repo = "python-diskcache";
     rev = "v${version}";
-    hash = "sha256-AtqPwN3Yhmvgeq++W0bi17n6kE6/UYpkF6ImYTKfebc=";
+    hash = "sha256-1cDpdf+rLaG14TDd1wEHAiYXb69NFTFeOHD1Ib1oOVY=";
   };
 
   nativeCheckInputs = [
