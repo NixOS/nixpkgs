@@ -6737,6 +6737,8 @@ self: super: with self; {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
+  mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
+
   minexr = callPackage ../development/python-modules/minexr { };
 
   miniaudio = callPackage ../development/python-modules/miniaudio {
@@ -7087,9 +7089,15 @@ self: super: with self; {
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
 
-  mypy-boto3-ebs = callPackage ../development/python-modules/mypy-boto3-ebs { };
+  inherit (callPackage ../development/python-modules/mypy-boto3 { })
 
-  mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
+    mypy-boto3-cognito-idp
+
+    mypy-boto3-ebs
+
+    mypy-boto3-s3
+
+  ;
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
@@ -7485,6 +7493,8 @@ self: super: with self; {
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
+
+  python-tds = callPackage ../development/python-modules/python-tds { };
 
   python-yate = callPackage ../development/python-modules/python-yate { };
 

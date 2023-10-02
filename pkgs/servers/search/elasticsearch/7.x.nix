@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       binaryBytecode
       binaryNativeCode
     ];
-    license = licenses.elastic;
+    license = licenses.elastic20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];
   };
