@@ -1,17 +1,21 @@
-{ lib, python3Packages, fetchFromGitHub, substituteAll }:
+{ lib, pkgs, python310Packages, fetchFromGitHub, substituteAll }:
 
-python3Packages.buildPythonPackage rec {
+python310Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.9.9";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-D/5pwE2V+yXj92ECOUcl/dajMDbvVdz9YNJrl2Pzvts=";
+    hash = "sha256-164Gi1Oo9Tfd58aDq/3UjsWeS4rAZ39xCEhBgqv+GtI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ setuptools-git-versioning click distro psutil ];
+  nativeBuildInputs = with pkgs; [ wrapGAppsHook gobject-introspection ];
+
+  buildInputs = with pkgs; [ gtk3 ];
+
+  propagatedBuildInputs = with python310Packages; [ setuptools-git-versioning click distro psutil pygobject3 ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
@@ -23,11 +27,17 @@ python3Packages.buildPythonPackage rec {
       inherit version;
     })
 
+     # patch to prevent update
+    ./prevent-update.patch
+
     # patch to prevent script copying and to disable install
     ./prevent-install-and-copy.patch
-    # patch to prevent update
-    ./prevent-update.patch
-  ];
+ ];
+
+  postPatch = ''
+    substituteInPlace auto_cpufreq/core.py --replace '/opt/auto-cpufreq/override.pickle' /var/run/override.pickle
+    substituteInPlace scripts/org.auto-cpufreq.pkexec.policy --replace "/opt/auto-cpufreq/venv/bin/auto-cpufreq" $out/bin/auto-cpufreq
+    '';
 
   postInstall = ''
     # copy script manually
@@ -36,6 +46,16 @@ python3Packages.buildPythonPackage rec {
     # systemd service
     mkdir -p $out/lib/systemd/system
     cp ${src}/scripts/auto-cpufreq.service $out/lib/systemd/system
+
+    # desktop icon
+    mkdir -p $out/share/applications
+    mkdir $out/share/pixmaps
+    cp scripts/auto-cpufreq-gtk.desktop $out/share/applications
+    cp images/icon.png $out/share/pixmaps/auto-cpufreq.png
+
+    # polkit policy
+    mkdir -p $out/share/polkit-1/actions
+    cp scripts/org.auto-cpufreq.pkexec.policy $out/share/polkit-1/actions
   '';
 
   meta = with lib; {
