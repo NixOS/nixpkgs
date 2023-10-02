@@ -9,21 +9,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.29";
+  version = "1.32.1";
   pname = "fakeroot";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.gz";
-    sha256 = "sha256-j7uvt4DJFz46zkoEr7wdkA8zfzIWiDk59cfbNDG+fCA=";
+    url = "http://deb.debian.org/debian/pool/main/f/${pname}/${pname}_${version}.orig.tar.gz";
+    sha256 = "1rll7qc4mby1h4b0sh8crgj0q5zmhl8wdxqjc5dwri5gbgvb0wn0";
   };
 
   patches = lib.optionals stdenv.isLinux [
     ./einval.patch
-    (fetchpatch {
-      name = "also-wrap-stat-library-call.patch";
-      url = "https://sources.debian.org/data/main/f/fakeroot/1.29-1/debian/patches/also-wrap-stat-library-call.patch";
-      sha256 = "0p7lq6m31k3rqsnjbi06a8ykdqa3cp4y5ngsjyk3q1269gx59x8b";
-    })
 
     # patches needed for musl libc, borrowed from alpine packaging.
     # it is applied regardless of the environment to prevent patchrot
