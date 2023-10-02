@@ -12161,6 +12161,8 @@ self: super: with self; {
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
 
+  snaptime = callPackage ../development/python-modules/snaptime { };
+
   sniffio = callPackage ../development/python-modules/sniffio { };
 
   snitun = callPackage ../development/python-modules/snitun { };
