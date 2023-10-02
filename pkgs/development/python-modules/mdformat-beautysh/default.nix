@@ -28,18 +28,15 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  buildInputs = [
-    mdformat
-    mdformat-gfm
-    mdit-py-plugins
-  ];
-
   propagatedBuildInputs = [
     beautysh
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    mdformat
+    mdformat-gfm
+    mdit-py-plugins
   ];
 
   pythonImportsCheck = [
