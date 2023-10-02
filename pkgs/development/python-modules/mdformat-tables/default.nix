@@ -26,7 +26,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mdformat
   ];
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "mdformat_tables"
+    "mdformat_tables.plugin"
   ];
 
   meta = with lib; {
