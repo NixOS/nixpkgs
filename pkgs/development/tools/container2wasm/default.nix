@@ -19,6 +19,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X=github.com/ktock/container2wasm/version.Version=${version}"
   ];
 
   subPackages = [
