@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, git
 , ninja
 , openssl
 , openjdk11
@@ -21,13 +20,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    deepClone = true;
     rev = "v${version}";
     hash = "sha256-EKvDH7RwOC4Gu/lturrfnGpzXnJ9azIwAFeuVoa6L/Y=";
   };
 
-  nativeBuildInputs = [ cmake git ninja ];
+  patches = [ ./version.patch ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
+  '';
+
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ openssl ]
     ++ lib.optionals withJdbc [ openjdk11 ]
     ++ lib.optionals withOdbc [ unixODBC ];
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
 
   installCheckPhase =
     let
-      excludes = map (pattern: "exclude:'${pattern}'") ([
+      excludes = map (pattern: "exclude:'${pattern}'") [
         "[s3]"
         "Test closing database during long running query"
         "Test using a remote optimizer pass in case thats important to someone"
@@ -92,7 +95,7 @@ stdenv.mkDerivation rec {
         "test/sql/aggregate/aggregates/test_kurtosis.test"
         "test/sql/aggregate/aggregates/test_skewness.test"
         "test/sql/function/list/aggregates/skewness.test"
-      ]);
+      ];
     in
     ''
       runHook preInstallCheck
