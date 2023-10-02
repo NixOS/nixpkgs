@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, config, dbfile ? config.locate.dbfile or "/var/cache/locatedb" }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "mlocate";
@@ -8,9 +8,6 @@ stdenv.mkDerivation rec {
     url = "https://releases.pagure.org/mlocate/${pname}-${version}.tar.xz";
     sha256 = "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh";
   };
-
-  buildInputs = [ ];
-  makeFlags = [ "dbfile=${dbfile}" ];
 
   meta = with lib; {
     description = "Merging locate is an utility to index and quickly search for files";
