@@ -12,7 +12,7 @@
 let
   pname =
     if lib.hasPrefix "rocm-llvm-" name
-    then "rocmPackages_5.llvm.${lib.removePrefix "rocm-llvm-" name}"
+    then "llvm.${lib.removePrefix "rocm-llvm-" name}"
     else name;
 
   updateScript = writeScript "update.sh" ''
@@ -27,6 +27,6 @@ let
       version="''${version}.0"
     fi
 
-    update-source-version ${pname} "$version" --ignore-same-hash
+    update-source-version rocmPackages_5.${pname} "$version" --ignore-same-hash
   '';
 in [ updateScript ]
