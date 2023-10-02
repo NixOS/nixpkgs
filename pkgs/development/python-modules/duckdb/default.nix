@@ -13,7 +13,7 @@
 }:
 
 buildPythonPackage rec {
-  inherit (duckdb) pname version src;
+  inherit (duckdb) pname version src patches;
   format = "setuptools";
 
   postPatch = ''
