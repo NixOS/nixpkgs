@@ -147,15 +147,82 @@ expectTrace() {
     fi
 }
 
-# We conditionally use inotifywait in checkFileset.
+# We conditionally use inotifywait in withFileMonitor.
 # Check early whether it's available
 # TODO: Darwin support, though not crucial since we have Linux CI
 if type inotifywait 2>/dev/null >/dev/null; then
-    canMonitorFiles=1
+    canMonitor=1
 else
-    echo "Warning: Not checking that excluded files don't get accessed since inotifywait is not available" >&2
-    canMonitorFiles=
+    echo "Warning: Cannot check for paths not getting read since the inotifywait command (from the inotify-tools package) is not available" >&2
+    canMonitor=
 fi
+
+# Run a function while monitoring that it doesn't read certain paths
+# Usage: withFileMonitor FUNNAME PATH...
+# - FUNNAME should be a bash function that:
+#   - Performs some operation that should not read some paths
+#   - Delete the paths it shouldn't read without triggering any open events
+# - PATH... are the paths that should not get read
+#
+# This function outputs the same as FUNNAME
+withFileMonitor() {
+    local funName=$1
+    shift
+
+    # If we can't monitor files or have none to monitor, just run the function directly
+    if [[ -z "$canMonitor" ]] || (( "$#" == 0 )); then
+        "$funName"
+    else
+
+        # Use a subshell to start the coprocess in and use a trap to kill it when exiting the subshell
+        (
+            # Assigned by coproc, makes shellcheck happy
+            local watcher watcher_PID
+
+            # Start inotifywait in the background to monitor all excluded paths
+            coproc watcher {
+                # inotifywait outputs a string on stderr when ready
+                # Redirect it to stdout so we can access it from the coproc's stdout fd
+                # exec so that the coprocess is inotify itself, making the kill below work correctly
+                # See below why we listen to both open and delete_self events
+                exec inotifywait --format='%e %w' --event open,delete_self --monitor "$@" 2>&1
+            }
+
+            # This will trigger when this subshell exits, no matter if successful or not
+            # After exiting the subshell, the parent shell will continue executing
+            trap 'kill "${watcher_PID}"' exit
+
+            # Synchronously wait until inotifywait is ready
+            while read -r -u "${watcher[0]}" line && [[ "$line" != "Watches established." ]]; do
+                :
+            done
+
+            # Call the function that should not read the given paths and delete them afterwards
+            "$funName"
+
+            # Get the first event
+            read -r -u "${watcher[0]}" event file
+
+            # With funName potentially reading files first before deleting them,
+            # there's only these two possible event timelines:
+            # - open*, ..., open*, delete_self, ..., delete_self: If some excluded paths were read
+            # - delete_self, ..., delete_self: If no excluded paths were read
+            # So by looking at the first event we can figure out which one it is!
+            # This also means we don't have to wait to collect all events.
+            case "$event" in
+                OPEN*)
+                    die "$funName opened excluded file $file when it shouldn't have"
+                    ;;
+                DELETE_SELF)
+                    # Expected events
+                    ;;
+                *)
+                    die "During $funName, Unexpected event type '$event' on file $file that should be excluded"
+                    ;;
+            esac
+        )
+    fi
+}
 
 # Check whether a file set includes/excludes declared paths as expected, usage:
 #
@@ -166,7 +233,7 @@ fi
 # )
 # checkFileset './a' # Pass the fileset as the argument
 declare -A tree
-checkFileset() (
+checkFileset() {
     # New subshell so that we can have a separate trap handler, see `trap` below
     local fileset=$1
 
@@ -214,54 +281,21 @@ checkFileset() (
         touch "${filesToCreate[@]}"
     fi
 
-    # Start inotifywait in the background to monitor all excluded files (if any)
-    if [[ -n "$canMonitorFiles" ]] && (( "${#excludedFiles[@]}" != 0 )); then
-        coproc watcher {
-            # inotifywait outputs a string on stderr when ready
-            # Redirect it to stdout so we can access it from the coproc's stdout fd
-            # exec so that the coprocess is inotify itself, making the kill below work correctly
-            # See below why we listen to both open and delete_self events
-            exec inotifywait --format='%e %w' --event open,delete_self --monitor "${excludedFiles[@]}" 2>&1
-        }
-        # This will trigger when this subshell exits, no matter if successful or not
-        # After exiting the subshell, the parent shell will continue executing
-        # shellcheck disable=SC2154
-        trap 'kill "${watcher_PID}"' exit
-
-        # Synchronously wait until inotifywait is ready
-        while read -r -u "${watcher[0]}" line && [[ "$line" != "Watches established." ]]; do
-            :
-        done
-    fi
-
-    # Call toSource with the fileset, triggering open events for all files that are added to the store
     expression="toSource { root = ./.; fileset = $fileset; }"
-    storePath=$(expectStorePath "$expression")
 
-    # Remove all files immediately after, triggering delete_self events for all of them
-    rm -rf -- *
+    # We don't have lambda's in bash unfortunately,
+    # so we just define a function instead and then pass its name
+    # shellcheck disable=SC2317
+    run() {
+        # Call toSource with the fileset, triggering open events for all files that are added to the store
+        expectStorePath "$expression"
+        if (( ${#excludedFiles[@]} != 0 )); then
+            rm "${excludedFiles[@]}"
+        fi
+    }
 
-    # Only check for the inotify events if we actually started inotify earlier
-    if [[ -v watcher ]]; then
-        # Get the first event
-        read -r -u "${watcher[0]}" event file
-
-        # There's only these two possible event timelines:
-        # - open, ..., open, delete_self, ..., delete_self: If some excluded files were read
-        # - delete_self, ..., delete_self: If no excluded files were read
-        # So by looking at the first event we can figure out which one it is!
-        case "$event" in
-            OPEN)
-                die "$expression opened excluded file $file when it shouldn't have"
-                ;;
-            DELETE_SELF)
-                # Expected events
-                ;;
-            *)
-                die "Unexpected event type '$event' on file $file that should be excluded"
-                ;;
-        esac
-    fi
+    # Runs the function while checking that the given excluded files aren't read
+    storePath=$(withFileMonitor run "${excludedFiles[@]}")
 
     # For each path that should be included, make sure it does occur in the resulting store path
     for p in "${included[@]}"; do
@@ -276,7 +310,9 @@ checkFileset() (
             die "$expression included path $p when it shouldn't have"
         fi
     done
-)
+
+    rm -rf -- *
+}
 
 
 #### Error messages #####
