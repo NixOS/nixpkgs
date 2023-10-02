@@ -16,8 +16,6 @@ buildPythonPackage rec {
   inherit (duckdb) pname version src;
   format = "setuptools";
 
-  BUILD_HTTPFS = 1;
-
   postPatch = ''
     # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
     cd tools/pythonpkg
@@ -35,7 +33,6 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    git
     pybind11
     setuptools-scm
   ];
