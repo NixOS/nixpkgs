@@ -7766,6 +7766,9 @@ with pkgs;
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
+  rocmPackages = rocmPackages_5;
+  rocmPackages_5 = recurseIntoAttrs (callPackage ../development/rocm-modules/5 { });
+
   rune = callPackage ../development/interpreters/rune { };
 
   s9fes = callPackage ../development/interpreters/s9fes { };
@@ -15716,7 +15719,6 @@ with pkgs;
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv buildPackages.clang-sierraHack;
   libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
-  rocmClangStdenv = llvmPackages_rocm.rocmClangStdenv;
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -16771,8 +16773,6 @@ with pkgs;
     targetLlvm = targetPackages.llvmPackages_16.llvm or llvmPackages_16.llvm;
   }));
 
-  llvmPackages_rocm = recurseIntoAttrs (callPackage ../development/compilers/llvm/rocm { });
-
   lorri = callPackage ../tools/misc/lorri {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
@@ -16958,7 +16958,7 @@ with pkgs;
   rml = callPackage ../development/compilers/rml { };
 
   composable_kernel = callPackage ../development/libraries/composable_kernel {
-    inherit (llvmPackages_rocm) openmp clang-tools-extra;
+    inherit (rocmPackages.llvm) openmp clang-tools-extra;
     stdenv = rocmClangStdenv;
   };
 
@@ -16977,17 +16977,17 @@ with pkgs;
   };
 
   hip-common = callPackage ../development/compilers/hip-common {
-    inherit (llvmPackages_rocm) llvm;
+    inherit (rocmPackages.llvm) llvm;
     stdenv = rocmClangStdenv;
   };
 
   hipcc = callPackage ../development/compilers/hipcc {
-    inherit (llvmPackages_rocm) llvm;
+    inherit (rocmPackages.llvm) llvm;
     stdenv = rocmClangStdenv;
   };
 
   hip = callPackage ../development/compilers/hip {
-    inherit (llvmPackages_rocm) llvm;
+    inherit (rocmPackages.llvm) llvm;
     inherit (cudaPackages) cudatoolkit;
     stdenv = rocmClangStdenv;
   };
@@ -17009,7 +17009,7 @@ with pkgs;
   };
 
   hipsparse = callPackage ../development/libraries/hipsparse {
-    inherit (llvmPackages_rocm) openmp;
+    inherit (rocmPackages.llvm) openmp;
     stdenv = rocmClangStdenv;
   };
 
@@ -17018,7 +17018,7 @@ with pkgs;
   };
 
   hipfft = callPackage ../development/libraries/hipfft {
-    inherit (llvmPackages_rocm) openmp;
+    inherit (rocmPackages.llvm) openmp;
     stdenv = rocmClangStdenv;
   };
 
@@ -17031,7 +17031,7 @@ with pkgs;
   };
 
   migraphx = callPackage ../development/libraries/migraphx {
-    inherit (llvmPackages_rocm) clang-tools-extra openmp;
+    inherit (rocmPackages.llvm) clang-tools-extra openmp;
     stdenv = rocmClangStdenv;
     rocmlir = rocmlir-rock;
   };
@@ -17049,7 +17049,7 @@ with pkgs;
   };
 
   rocalution = callPackage ../development/libraries/rocalution {
-    inherit (llvmPackages_rocm) openmp;
+    inherit (rocmPackages.llvm) openmp;
     stdenv = rocmClangStdenv;
   };
 
@@ -17122,7 +17122,7 @@ with pkgs;
   };
 
   rocfft = callPackage ../development/libraries/rocfft {
-    inherit (llvmPackages_rocm) openmp;
+    inherit (rocmPackages.llvm) openmp;
     stdenv = rocmClangStdenv;
   };
 
@@ -17135,12 +17135,12 @@ with pkgs;
   };
 
   rocwmma = callPackage ../development/libraries/rocwmma {
-    inherit (llvmPackages_rocm) openmp;
+    inherit (rocmPackages.llvm) openmp;
     stdenv = rocmClangStdenv;
   };
 
   rocblas = callPackage ../development/libraries/rocblas {
-    inherit (llvmPackages_rocm) openmp;
+    inherit (rocmPackages.llvm) openmp;
     stdenv = rocmClangStdenv;
   };
 
@@ -17153,7 +17153,7 @@ with pkgs;
   };
 
   miopen = callPackage ../development/libraries/miopen {
-    inherit (llvmPackages_rocm) llvm clang-tools-extra;
+    inherit (rocmPackages.llvm) llvm clang-tools-extra;
     stdenv = rocmClangStdenv;
     rocmlir = rocmlir-rock;
     boost = boost179.override { enableStatic = true; };
@@ -17167,11 +17167,9 @@ with pkgs;
     useOpenCL = true;
   };
 
-  rocmUpdateScript = callPackage ../development/rocm-modules/update-script { };
-
   # Requires GCC
   roctracer = callPackage ../development/libraries/roctracer {
-    inherit (llvmPackages_rocm) clang;
+    inherit (rocmPackages.llvm) clang;
   };
 
   rtags = callPackage ../development/tools/rtags {
@@ -39477,7 +39475,7 @@ with pkgs;
   lie = callPackage ../applications/science/math/LiE { };
 
   inherit (callPackage ../development/libraries/science/math/magma {
-    inherit (llvmPackages_rocm) openmp;
+    inherit (rocmPackages.llvm) openmp;
   }) magma magma_2_7_2 magma_2_6_2;
 
   magma-cuda = magma.override {

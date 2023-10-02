@@ -8349,7 +8349,7 @@ self: super: with self; {
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
-  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.llvmPackages_rocm; };
+  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.rocmPackages.llvm; };
 
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
@@ -13902,7 +13902,7 @@ self: super: with self; {
       else pkgs.magma;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
-    inherit (pkgs.llvmPackages_rocm) openmp;
+    inherit (pkgs.rocmPackages.llvm) openmp;
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
