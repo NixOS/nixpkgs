@@ -60,9 +60,11 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME="$(mktemp -d)"
-    # duckdb directory prevents loading the python module
-    mv duckdb duckdb.pk
   '';
+
+  setupPyBuildFlags = [
+    "--inplace"
+  ];
 
   pythonImportsCheck = [
     "duckdb"
