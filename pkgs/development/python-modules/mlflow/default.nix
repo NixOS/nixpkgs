@@ -1,4 +1,5 @@
 { lib
+, setuptools
 , alembic
 , buildPythonPackage
 , click
@@ -61,6 +62,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pytz" "pyarrow" ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     alembic
     click
     cloudpickle
