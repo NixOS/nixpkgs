@@ -161,6 +161,8 @@ git config --global url."https://github.com/".insteadOf git://github.com/
 
 `buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)). It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
 
+Here's an example:
+
 ```nix
 { lib, buildNpmPackage, fetchFromGitHub }:
 
@@ -190,6 +192,8 @@ buildNpmPackage rec {
   };
 }
 ```
+
+In the default `installPhase` set by `buildNpmPackage`, it uses `npm pack --json --dry-run` to decide what files to install in `$out/lib/node_modules/$name/`, where `$name` is the `name` string defined in the package's `package.json`. Additionally, the `bin` and `man` keys in the source's `package.json` are used to decide what binaries and manpages are supposed to be installed. If these are not defined, `npm pack` may miss some files, and no binaries will be produced.
 
 #### Arguments {#javascript-buildNpmPackage-arguments}
 
