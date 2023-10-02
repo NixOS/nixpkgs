@@ -2,7 +2,6 @@
 , buildPythonPackage
 , duckdb
 , fsspec
-, git
 , google-cloud-storage
 , numpy
 , openssl
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
-    git
     pybind11
     setuptools-scm
   ];

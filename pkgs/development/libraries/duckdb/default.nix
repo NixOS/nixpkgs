@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, git
 , ninja
 , openssl
 , openjdk11
@@ -21,14 +20,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    leaveDotGit = true;
     rev = "v${version}";
-    hash = "sha256-NFkeeTpsxazQOstKUUu0b27hXbnq3U5g/+24BIMqtJY=";
+    hash = "sha256-EKvDH7RwOC4Gu/lturrfnGpzXnJ9azIwAFeuVoa6L/Y=";
   };
 
   patches = [ ./version.patch ];
 
-  nativeBuildInputs = [ cmake git ninja ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
+  '';
+
+  nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ openssl ]
     ++ lib.optionals withJdbc [ openjdk11 ]
     ++ lib.optionals withOdbc [ unixODBC ];
@@ -36,7 +38,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     # use similar flags to what is defined in ${src}/.github/workflow/{LinuxRelease,OSX}.yml
     "-DDUCKDB_EXTENSION_CONFIGS=${src}/.github/config/bundled_extensions.cmake"
-    "-DGIT_LAST_TAG=${src.rev}"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ] ++ lib.optionals doInstallCheck [
