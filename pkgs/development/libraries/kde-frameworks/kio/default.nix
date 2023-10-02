@@ -26,6 +26,7 @@ mkDerivation {
     kded
   ];
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
  ];
