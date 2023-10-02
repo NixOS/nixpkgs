@@ -31,5 +31,6 @@ appimageTools.wrapType2 {
     maintainers = with maintainers; [ gador ];
     license = licenses.gpl2Plus;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [ "Vendors libwebp vulnerable to CVE-2023-4863" ];
   };
 }
