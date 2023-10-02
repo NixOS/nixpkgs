@@ -11013,12 +11013,6 @@
     githubId = 4708337;
     name = "Marcelo A. de L. Santos";
   };
-  maxhille = {
-    email = "mh@lambdasoup.com";
-    github = "maxhille";
-    githubId = 693447;
-    name = "Max Hille";
-  };
   maximsmol = {
     email = "maximsmol@gmail.com";
     github = "maximsmol";
