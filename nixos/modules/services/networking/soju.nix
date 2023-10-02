@@ -25,6 +25,10 @@ let
 
     ${cfg.extraConfig}
   '';
+
+  sojuctl = pkgs.writeShellScriptBin "sojuctl" ''
+    exec ${pkgs.soju}/bin/sojuctl --config ${configFile} "$@"
+  '';
 in
 {
   ###### interface
@@ -117,6 +121,8 @@ in
         '';
       }
     ];
+
+    environment.systemPackages = [ sojuctl ];
 
     systemd.services.soju = {
       description = "soju IRC bouncer";
