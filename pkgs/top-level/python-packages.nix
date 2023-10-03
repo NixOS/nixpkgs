@@ -14781,6 +14781,8 @@ self: super: with self; {
 
     types-aiobotocore-ssm
 
+    types-aiobotocore-ssm-contacts
+
     types-aiobotocore-xray
 
   ;

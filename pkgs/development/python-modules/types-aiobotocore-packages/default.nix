@@ -680,5 +680,7 @@ rec {
 
   types-aiobotocore-ssm = buildTypesAiobotocorePackage "ssm" "2.6.0" "sha256-NxTwgcrDNOHZ8PReIgfTOGLTl7bL1948NKAyjJ0QYKc=";
 
+  types-aiobotocore-ssm-contacts = buildTypesAiobotocorePackage "ssm-contacts" "2.6.0" "sha256-fWnCKnG6ikXzDx40HFxlh9DyLVlX9pBB4CMcJxUt+Ps=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
