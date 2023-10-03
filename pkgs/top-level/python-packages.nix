@@ -14635,6 +14635,8 @@ self: super: with self; {
 
     types-aiobotocore-panorama
 
+    types-aiobotocore-payment-cryptography
+
     types-aiobotocore-xray
 
   ;

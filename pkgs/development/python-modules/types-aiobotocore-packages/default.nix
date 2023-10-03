@@ -534,5 +534,7 @@ rec {
 
   types-aiobotocore-panorama = buildTypesAiobotocorePackage "panorama" "2.6.0" "sha256-/XJsZV5Yhp5BMSheF9zVf+MSJsH2zUrpnrkSwo+4PfI=";
 
+  types-aiobotocore-payment-cryptography = buildTypesAiobotocorePackage "payment-cryptography" "2.6.0" "sha256-x6uUO578BIDl1kFdyKXSPnegKLAX3FG4U5rDjsQpVQQ=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
