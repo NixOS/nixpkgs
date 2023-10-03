@@ -14267,6 +14267,8 @@ self: super: with self; {
 
     types-aiobotocore-codedeploy
 
+    types-aiobotocore-codeguru-reviewer
+
     types-aiobotocore-xray
 
   ;
