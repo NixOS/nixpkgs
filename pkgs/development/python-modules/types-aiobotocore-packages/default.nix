@@ -538,5 +538,7 @@ rec {
 
   types-aiobotocore-payment-cryptography-data = buildTypesAiobotocorePackage "payment-cryptography-data" "2.6.0" "sha256-+eHgcPA+egPBR06Mddw0RXuivpiprPMnBhPfCmh0sS4=";
 
+  types-aiobotocore-personalize = buildTypesAiobotocorePackage "personalize" "2.6.0" "sha256-5s0KmOdQyPtcFtb+XkR/zHEiEdZcDwZwldwUy+dvC4s=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
