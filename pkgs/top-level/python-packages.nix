@@ -14591,6 +14591,8 @@ self: super: with self; {
 
     types-aiobotocore-mgn
 
+    types-aiobotocore-migration-hub-refactor-spaces
+
     types-aiobotocore-xray
 
   ;

@@ -490,5 +490,7 @@ rec {
 
   types-aiobotocore-mgn = buildTypesAiobotocorePackage "mgn" "2.6.0" "sha256-e6TTldFkZXf8A8bV7RKkIl6AD/lCC9elB6mT3WeWEiM=";
 
+  types-aiobotocore-migration-hub-refactor-spaces = buildTypesAiobotocorePackage "migration-hub-refactor-spaces" "2.6.0" "sha256-HVoia2UZMrjgH6aUQGit+MueUk0qW3KjWKYJy2pHlp0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
