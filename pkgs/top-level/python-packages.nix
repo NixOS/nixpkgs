@@ -14407,6 +14407,8 @@ self: super: with self; {
 
     types-aiobotocore-fsx
 
+    types-aiobotocore-gamelift
+
     types-aiobotocore-xray
 
   ;
