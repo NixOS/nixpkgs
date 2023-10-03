@@ -63,6 +63,15 @@ rec {
     then builtins.toFile (toRustTarget platform + ".json") (builtins.toJSON platform.rustc.platform)
     else toRustTarget platform;
 
+  # Returns the name of the rust target if it is standard, or the
+  # basename of the file containing the custom target spec, without
+  # the .json extension.
+  #
+  # This is the name used by Cargo for target subdirectories.
+  toRustTargetSpecShort = platform:
+    lib.removeSuffix ".json"
+      (baseNameOf "${toRustTargetSpec platform}");
+
   # When used as part of an environment variable name, triples are
   # uppercased and have all hyphens replaced by underscores:
   #
@@ -72,7 +81,7 @@ rec {
   toRustTargetForUseInEnvVars = platform:
     lib.strings.replaceStrings ["-"] ["_"]
       (lib.strings.toUpper
-        (toRustTarget platform));
+        (toRustTargetSpecShort platform));
 
   # Returns true if the target is no_std
   # https://github.com/rust-lang/rust/blob/2e44c17c12cec45b6a682b1e53a04ac5b5fcc9d2/src/bootstrap/config.rs#L415-L421
