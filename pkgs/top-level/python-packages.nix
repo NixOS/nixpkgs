@@ -7391,6 +7391,8 @@ self: super: with self; {
 
     mypy-boto3-iot-roborunner
 
+    mypy-boto3-iot1click-devices
+
     mypy-boto3-s3
 
     mypy-boto3-xray

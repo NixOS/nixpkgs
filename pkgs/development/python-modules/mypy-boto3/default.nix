@@ -352,6 +352,8 @@ rec {
 
   mypy-boto3-iot-roborunner = buildMypyBoto3Package "iot-roborunner" "1.28.36" "sha256-DFaWmHPzlgZztGfbbxeyDWu2rGLm69r8Ejww5cvzkRQ=";
 
+  mypy-boto3-iot1click-devices = buildMypyBoto3Package "iot1click-devices" "1.28.36" "sha256-GROHe78qVJLlPtw+wH73fzyBjTsrKkUbpVN0U26HsJs=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
