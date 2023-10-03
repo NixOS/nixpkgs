@@ -640,6 +640,8 @@ rec {
 
   mypy-boto3-schemas = buildMypyBoto3Package "schemas" "1.28.36" "sha256-gq8a1k0MEnXFdmB5IPE9zHYF1rfoSD3Vis7YOVyCTV8=";
 
+  mypy-boto3-sdb = buildMypyBoto3Package "sdb" "1.28.36" "sha256-pbH5y/bS15S6BeTPIZ0bw8h0elfLeHdab/IxJF4DNYU=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

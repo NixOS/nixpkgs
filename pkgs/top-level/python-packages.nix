@@ -7679,6 +7679,8 @@ self: super: with self; {
 
     mypy-boto3-schemas
 
+    mypy-boto3-sdb
+
     mypy-boto3-xray
 
   ;
