@@ -14321,6 +14321,8 @@ self: super: with self; {
 
     types-aiobotocore-dax
 
+    types-aiobotocore-detective
+
     types-aiobotocore-xray
 
   ;
