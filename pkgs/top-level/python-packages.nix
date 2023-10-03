@@ -14719,6 +14719,8 @@ self: super: with self; {
 
     types-aiobotocore-s3outposts
 
+    types-aiobotocore-sagemaker
+
     types-aiobotocore-xray
 
   ;
