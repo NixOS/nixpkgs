@@ -14741,6 +14741,8 @@ self: super: with self; {
 
     types-aiobotocore-sdb
 
+    types-aiobotocore-secretsmanager
+
     types-aiobotocore-xray
 
   ;

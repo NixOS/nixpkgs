@@ -640,5 +640,7 @@ rec {
 
   types-aiobotocore-sdb = buildTypesAiobotocorePackage "sdb" "2.6.0" "sha256-cLciwg4d5EZKYquNitl3yD+8eJnemEiF27LcXfxy0Zs=";
 
+  types-aiobotocore-secretsmanager = buildTypesAiobotocorePackage "secretsmanager" "2.6.0" "sha256-dvte4Yjl+a/UqL5v7xJ9626igVjx/ZPdM2SsLGsVdDk=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
