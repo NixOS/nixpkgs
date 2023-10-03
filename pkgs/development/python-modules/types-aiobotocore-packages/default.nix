@@ -736,5 +736,7 @@ rec {
 
   types-aiobotocore-wisdom = buildTypesAiobotocorePackage "wisdom" "2.6.0" "sha256-EInqI5EqriiI2L/tdQiy3/jY8tnZ6+QOk9PdEyDuSj4=";
 
+  types-aiobotocore-workdocs = buildTypesAiobotocorePackage "workdocs" "2.6.0" "sha256-cNegCM7a4QlI+NLzIRIoGHYzQqbFkNRKqDKLOqE3OUY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

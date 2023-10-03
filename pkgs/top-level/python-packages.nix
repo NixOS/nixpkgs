@@ -14837,6 +14837,8 @@ self: super: with self; {
 
     types-aiobotocore-wisdom
 
+    types-aiobotocore-workdocs
+
     types-aiobotocore-xray
 
   ;
