@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.7.3";
+  version = "0.7.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "banesullivan";
     repo = "scooby";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lu+iuO0871DpFRDPzDGClKXYnB8w/lVsUCc39JXDmNo=";
+    hash = "sha256-BgQwsgAYtRgxxjo7NHbgNME1maoZQpocGGBW7Vddr+o=";
   };
 
   nativeBuildInputs = [

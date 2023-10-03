@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiowaqi";
-  version = "1.1.1";
+  version = "2.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-waqi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JB1GtDLfz9FHVS7XEkHUCN2jwXvIwBBgoBisNuOpjL0=";
+    hash = "sha256-WEcCv4PCJ1gmRkQbjhIxx8qi1zps2Z65iFrdBHXPPvA=";
   };
 
   postPatch = ''

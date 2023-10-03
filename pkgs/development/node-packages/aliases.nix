@@ -46,6 +46,7 @@ mapAliases {
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
+  "@mermaid-js/mermaid-cli" = pkgs.mermaid-cli; # added 2023-10-01
   "@nerdwallet/shepherd" = pkgs.shepherd; # added 2023-09-30
   "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
   alloy = pkgs.titanium-alloy; # added 2023-08-17
@@ -98,6 +99,7 @@ mapAliases {
   markdownlint-cli = pkgs.markdownlint-cli; # added 2023-07-29
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
+  inherit (pkgs) mermaid-cli; # added 2023-10-01
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21

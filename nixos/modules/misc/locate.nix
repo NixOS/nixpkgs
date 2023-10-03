@@ -6,7 +6,7 @@ let
   cfg = config.services.locate;
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isPLocate = hasPrefix "plocate" cfg.locate.name;
-  isMorPLocate = (isMLocate || isPLocate);
+  isMorPLocate = isMLocate || isPLocate;
   isFindutils = hasPrefix "findutils" cfg.locate.name;
 in
 {
@@ -216,18 +216,18 @@ in
           setgid = true;
           setuid = false;
         };
-        mlocate = (mkIf isMLocate {
+        mlocate = mkIf isMLocate {
           group = "mlocate";
           source = "${cfg.locate}/bin/locate";
-        });
-        plocate = (mkIf isPLocate {
+        };
+        plocate = mkIf isPLocate {
           group = "plocate";
           source = "${cfg.locate}/bin/plocate";
-        });
+        };
       in
       mkIf isMorPLocate {
         locate = mkMerge [ common mlocate plocate ];
-        plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
+        plocate = mkIf isPLocate (mkMerge [ common plocate ]);
       };
 
     environment.systemPackages = [ cfg.locate ];
