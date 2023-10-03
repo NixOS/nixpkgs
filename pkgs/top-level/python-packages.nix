@@ -14697,6 +14697,8 @@ self: super: with self; {
 
     types-aiobotocore-robomaker
 
+    types-aiobotocore-rolesanywhere
+
     types-aiobotocore-xray
 
   ;

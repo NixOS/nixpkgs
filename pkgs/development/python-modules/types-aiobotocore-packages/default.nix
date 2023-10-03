@@ -596,5 +596,7 @@ rec {
 
   types-aiobotocore-robomaker = buildTypesAiobotocorePackage "robomaker" "2.6.0" "sha256-aKO/fGT4UANiYkZOUuOQ4ungKpW8p+yAT5+42WHgp3M=";
 
+  types-aiobotocore-rolesanywhere = buildTypesAiobotocorePackage "rolesanywhere" "2.6.0" "sha256-jTAe8nMwbXwb+1uf9ITVIKtKyOLIwFH6yi+2IYYVIyU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
