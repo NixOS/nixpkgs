@@ -79,6 +79,8 @@ stdenv.mkDerivation {
     --prefix PATH : ${xdg-utils}/bin
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Wavebox messaging application";
     homepage = "https://wavebox.io";
