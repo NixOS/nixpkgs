@@ -14637,6 +14637,8 @@ self: super: with self; {
 
     types-aiobotocore-payment-cryptography
 
+    types-aiobotocore-payment-cryptography-data
+
     types-aiobotocore-xray
 
   ;
