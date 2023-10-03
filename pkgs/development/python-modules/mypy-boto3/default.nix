@@ -114,6 +114,8 @@ rec {
 
   mypy-boto3-budgets = buildMypyBoto3Package "budgets" "1.28.57" "sha256-Af6omXHyctUeXbEOQC/KoiE3ux88r/hyxlWQoMM1eF4=";
 
+  mypy-boto3-ce = buildMypyBoto3Package "ce" "1.28.36" "sha256-lBrKm4s1QPGTuZHtHt+uNhX9zsMhNuV0l23822IYIDI=";
+
   mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.28.36" "sha256-pnLO62LZvr4sJsye3gWJROY+xHikSe7dX8erBTRXrPc=";
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
