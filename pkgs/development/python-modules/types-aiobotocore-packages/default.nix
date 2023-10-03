@@ -708,5 +708,7 @@ rec {
 
   types-aiobotocore-textract = buildTypesAiobotocorePackage "textract" "2.6.0" "sha256-vWUMopzR+1095nN6POsHShvCKZIcUwfW11oMOJ9R94c=";
 
+  types-aiobotocore-timestream-query = buildTypesAiobotocorePackage "timestream-query" "2.6.0" "sha256-4QpCK14NogeYR9DB877zh760GEXYieiyOgepB9DZd+8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

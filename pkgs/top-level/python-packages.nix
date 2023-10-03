@@ -14809,6 +14809,8 @@ self: super: with self; {
 
     types-aiobotocore-textract
 
+    types-aiobotocore-timestream-query
+
     types-aiobotocore-xray
 
   ;
