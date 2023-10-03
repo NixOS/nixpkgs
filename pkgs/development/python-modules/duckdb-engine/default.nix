@@ -26,6 +26,8 @@ buildPythonPackage rec {
     hash = "sha256-T02nGF+YlughRQPinb0I3NC6xsarh4+qRhG8YfhTvhI=";
   };
 
+  patches = [ ./remote_data.patch ];
+
   nativeBuildInputs = [
     poetry-core
   ];
@@ -42,8 +44,11 @@ buildPythonPackage rec {
   disabledTests = [
     # this test tries to download the httpfs extension
     "test_preload_extension"
+    "test_motherduck"
     # test should be skipped based on sqlalchemy version but isn't and fails
     "test_commit"
+    # rowcount no longer generates an attribute error.
+    "test_rowcount"
   ];
 
   nativeCheckInputs = [

@@ -1,8 +1,8 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 349af6acf7..7ffec0b4cb 100644
+index 2b49e11288..0a4a69b9a0 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -196,52 +196,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
+@@ -244,52 +244,7 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "SunOS")
    set(SUN TRUE)
  endif()
  
@@ -56,3 +56,25 @@ index 349af6acf7..7ffec0b4cb 100644
  
  message(STATUS "git hash ${GIT_COMMIT_HASH}, version ${DUCKDB_VERSION}")
  
+diff --git a/tools/pythonpkg/setup.py b/tools/pythonpkg/setup.py
+index fdf2911019..c363cc518a 100644
+--- a/tools/pythonpkg/setup.py
++++ b/tools/pythonpkg/setup.py
+@@ -163,8 +163,6 @@ if 'BUILD_HTTPFS' in os.environ:
+ for ext in extensions:
+     toolchain_args.extend(['-DDUCKDB_EXTENSION_{}_LINKED'.format(ext.upper())])
+ 
+-toolchain_args.extend(['-DDUCKDB_EXTENSION_AUTOLOAD_DEFAULT=1', '-DDUCKDB_EXTENSION_AUTOINSTALL_DEFAULT=1'])
+-
+ 
+ class get_pybind_include(object):
+     def __init__(self, user=False):
+@@ -343,7 +341,7 @@ setup(
+     packages=packages,
+     include_package_data=True,
+     python_requires='>=3.7.0',
+-    setup_requires=setup_requires + ["setuptools_scm<7.0.0", 'pybind11>=2.6.0'],
++    setup_requires=setup_requires + ["setuptools_scm", 'pybind11>=2.6.0'],
+     use_scm_version=setuptools_scm_conf,
+     tests_require=['google-cloud-storage', 'mypy', 'pytest'],
+     classifiers=[
