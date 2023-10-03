@@ -20,7 +20,7 @@
   extraMeta = {
     branch = "master";
     broken = stdenv.isAarch64;
-    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius ];
+    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius YellowOnion ];
   };
 
   structuredExtraConfig = with lib.kernel; {
