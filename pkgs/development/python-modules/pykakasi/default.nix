@@ -3,6 +3,7 @@
 , deprecated
 , fetchFromGitHub
 , importlib-metadata
+, setuptools
 , jaconv
 , py-cpuinfo
 , pytest-benchmark
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     jaconv
     deprecated
   ] ++ lib.optionals (pythonOlder "3.8") [
