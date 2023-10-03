@@ -7689,6 +7689,8 @@ self: super: with self; {
 
     mypy-boto3-serverlessrepo
 
+    mypy-boto3-service-quotas
+
     mypy-boto3-xray
 
   ;
