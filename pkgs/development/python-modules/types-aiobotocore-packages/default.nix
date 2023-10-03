@@ -674,5 +674,7 @@ rec {
 
   types-aiobotocore-snowball = buildTypesAiobotocorePackage "snowball" "2.6.0" "sha256-Wia4Xc/Kt8j6X5rZ9vvxupr6tCv1XQQQFOwRnugL0lE=";
 
+  types-aiobotocore-sns = buildTypesAiobotocorePackage "sns" "2.6.0" "sha256-hDPU7e14iYcpt8dXzjx7PgT4TQloAn2ZYrq6cMtMncc=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

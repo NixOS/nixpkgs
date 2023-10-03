@@ -14775,6 +14775,8 @@ self: super: with self; {
 
     types-aiobotocore-snowball
 
+    types-aiobotocore-sns
+
     types-aiobotocore-xray
 
   ;
