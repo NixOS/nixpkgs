@@ -101,6 +101,9 @@ import ./make-test-python.nix ({pkgs, ...}: {
   };
   testScript = { ... }: ''
     start_all()
+
+    router.systemctl("start network-online.target")
+    client.systemctl("start network-online.target")
     router.wait_for_unit("systemd-networkd-wait-online.service")
     client.wait_for_unit("systemd-networkd-wait-online.service")
     client.wait_until_succeeds("ping -c 5 10.0.2.1")
