@@ -718,6 +718,8 @@ rec {
 
   mypy-boto3-transcribe = buildMypyBoto3Package "transcribe" "1.28.36" "sha256-oBof0qzgKgS58e+2teI6bBiIY3svwiyS+Ztzb3wRtLI=";
 
+  mypy-boto3-transfer = buildMypyBoto3Package "transfer" "1.28.58" "sha256-aTpJa78Q/Z2xCtMCsExVqHsZwVlRlzBwKl3m/sWvXcM=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

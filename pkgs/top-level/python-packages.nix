@@ -7757,6 +7757,8 @@ self: super: with self; {
 
     mypy-boto3-transcribe
 
+    mypy-boto3-transfer
+
     mypy-boto3-xray
 
   ;
