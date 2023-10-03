@@ -500,6 +500,8 @@ rec {
 
   mypy-boto3-mq = buildMypyBoto3Package "mq" "1.28.36" "sha256-nHADqvj4clxfJjeS0eiadhtaVKFKeXWLBG93QOwQkR8=";
 
+  mypy-boto3-mturk = buildMypyBoto3Package "mturk" "1.28.36" "sha256-7h2xEOjgYe1QVV3mbxb7HMZJunHo4RtDdr2Jojr6XDU=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
