@@ -278,5 +278,7 @@ rec {
 
   types-aiobotocore-emr-containers = buildTypesAiobotocorePackage "emr-containers" "2.6.0" "sha256-pBr9zVqEbP0na385scKW28d0qIB+7HQdYC5QTdhxHNA=";
 
+  types-aiobotocore-emr-serverless = buildTypesAiobotocorePackage "emr-serverless" "2.6.0" "sha256-mdpuehCY0ki+sZSlNS0kIwijZphoyQixNWY4WKEcrMs=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
