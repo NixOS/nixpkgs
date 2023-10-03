@@ -208,5 +208,7 @@ rec {
 
   types-aiobotocore-cur = buildTypesAiobotocorePackage "cur" "2.6.0" "sha256-i+n53Eejdz26WGsHBmLR3V0ZxOBHPtTTzoxH0mmKPig=";
 
+  types-aiobotocore-customer-profiles = buildTypesAiobotocorePackage "customer-profiles" "2.6.0" "sha256-i1mv2M3bboOF3+iIKYhp4raYb7mHiQTirlWsttB/dXY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

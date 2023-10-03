@@ -14309,6 +14309,8 @@ self: super: with self; {
 
     types-aiobotocore-cur
 
+    types-aiobotocore-customer-profiles
+
     types-aiobotocore-xray
 
   ;
