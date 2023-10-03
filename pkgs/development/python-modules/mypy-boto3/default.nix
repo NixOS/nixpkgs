@@ -686,6 +686,8 @@ rec {
 
   mypy-boto3-ssm-incidents = buildMypyBoto3Package "ssm-incidents" "1.28.36" "sha256-0wYmsUl+q0s163UReHdCGSd18GOAhYh2aZKujT25aZc=";
 
+  mypy-boto3-ssm-sap = buildMypyBoto3Package "ssm-sap" "1.28.36" "sha256-aQtr5rgXtokfiI/CoVxD1g4KmP9ii0hELER08sJOu3g=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

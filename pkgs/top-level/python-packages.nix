@@ -7725,6 +7725,8 @@ self: super: with self; {
 
     mypy-boto3-ssm-incidents
 
+    mypy-boto3-ssm-sap
+
     mypy-boto3-xray
 
   ;
