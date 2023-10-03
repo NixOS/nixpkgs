@@ -7137,6 +7137,8 @@ self: super: with self; {
 
     mypy-boto3-autoscaling
 
+    mypy-boto3-autoscaling-plans
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
