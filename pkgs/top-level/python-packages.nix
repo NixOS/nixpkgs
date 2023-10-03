@@ -14477,6 +14477,8 @@ self: super: with self; {
 
     types-aiobotocore-iotthingsgraph
 
+    types-aiobotocore-iottwinmaker
+
     types-aiobotocore-xray
 
   ;
