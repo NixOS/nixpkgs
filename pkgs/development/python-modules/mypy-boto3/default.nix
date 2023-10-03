@@ -240,6 +240,8 @@ rec {
 
   mypy-boto3-ds = buildMypyBoto3Package "ds" "1.28.36" "sha256-l/k+1VhA6mi6mVRKCUis0gAv/dizqZB5JIqLmj9+IDI=";
 
+  mypy-boto3-dynamodb = buildMypyBoto3Package "dynamodb" "1.28.55" "sha256-owOfitoHohj5fwxwqC7Zz0YaDLUTMZT88eDoexXImaU=";
+
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
 
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
