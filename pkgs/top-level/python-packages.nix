@@ -14515,6 +14515,8 @@ self: super: with self; {
 
     types-aiobotocore-kms
 
+    types-aiobotocore-lakeformation
+
     types-aiobotocore-xray
 
   ;

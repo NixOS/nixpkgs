@@ -414,5 +414,7 @@ rec {
 
   types-aiobotocore-kms = buildTypesAiobotocorePackage "kms" "2.6.0" "sha256-mY26ICYSENAruEn4986zxi5R9ong4nyuRAHgMZDliqo=";
 
+  types-aiobotocore-lakeformation = buildTypesAiobotocorePackage "lakeformation" "2.6.0" "sha256-CR3Uopf6izBTlR16yIA3CUikWrS3OzkFZFpbJNDhBVs=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
