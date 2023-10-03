@@ -330,5 +330,7 @@ rec {
 
   types-aiobotocore-healthlake = buildTypesAiobotocorePackage "healthlake" "2.6.0" "sha256-8ofimJ4eTxq8yQjCc23FQ2OktMCNwlIBCn+eC+HLqlc=";
 
+  types-aiobotocore-honeycode = buildTypesAiobotocorePackage "honeycode" "2.6.0" "sha256-dCjt22yHlShPdG6Jipy3m4Rx3G4OLPiuUi1gyubcQ/g=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
