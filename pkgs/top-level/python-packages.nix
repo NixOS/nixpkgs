@@ -14143,6 +14143,12 @@ self: super: with self; {
 
   type-infer = callPackage ../development/python-modules/type-infer { };
 
+  inherit (callPackage ../development/python-modules/types-aiobotocore-packages { })
+
+    types-aiobotocore-accessanalyzer
+
+  ;
+
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
 
   types-awscrt = callPackage ../development/python-modules/types-awscrt { };
