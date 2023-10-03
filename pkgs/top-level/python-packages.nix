@@ -14411,6 +14411,8 @@ self: super: with self; {
 
     types-aiobotocore-gamesparks
 
+    types-aiobotocore-glacier
+
     types-aiobotocore-xray
 
   ;
