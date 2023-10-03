@@ -720,5 +720,7 @@ rec {
 
   types-aiobotocore-translate = buildTypesAiobotocorePackage "translate" "2.6.0" "sha256-cgxE6GYG9c4234RAiyFfF22NPHJ29oytOvLpETnjdS4=";
 
+  types-aiobotocore-verifiedpermissions = buildTypesAiobotocorePackage "verifiedpermissions" "2.6.0" "sha256-yg4zDBjgSB7JuuS2DXIUe3PFQq9stIfEJSMF1IP2BWI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

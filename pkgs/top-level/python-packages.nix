@@ -14821,6 +14821,8 @@ self: super: with self; {
 
     types-aiobotocore-translate
 
+    types-aiobotocore-verifiedpermissions
+
     types-aiobotocore-xray
 
   ;
