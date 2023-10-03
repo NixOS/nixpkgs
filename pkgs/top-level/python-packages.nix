@@ -7737,6 +7737,8 @@ self: super: with self; {
 
     mypy-boto3-storagegateway
 
+    mypy-boto3-sts
+
     mypy-boto3-xray
 
   ;
