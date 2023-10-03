@@ -420,5 +420,7 @@ rec {
 
   types-aiobotocore-lex-models = buildTypesAiobotocorePackage "lex-models" "2.6.0" "sha256-sIQ85LzkQgMvVfAKEc5HxIXx85Tckx4HVXcex2hxZ6I=";
 
+  types-aiobotocore-lex-runtime = buildTypesAiobotocorePackage "lex-runtime" "2.6.0" "sha256-IZvLF0Wg7od/LqC2bcCxtvNun0n9JViuXE/CQMoBdMc=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
