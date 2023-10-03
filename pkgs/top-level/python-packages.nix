@@ -7465,6 +7465,8 @@ self: super: with self; {
 
     mypy-boto3-license-manager
 
+    mypy-boto3-license-manager-linux-subscriptions
+
     mypy-boto3-s3
 
     mypy-boto3-xray
