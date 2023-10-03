@@ -14829,6 +14829,8 @@ self: super: with self; {
 
     types-aiobotocore-waf
 
+    types-aiobotocore-waf-regional
+
     types-aiobotocore-xray
 
   ;

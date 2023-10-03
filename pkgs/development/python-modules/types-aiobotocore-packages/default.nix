@@ -728,5 +728,7 @@ rec {
 
   types-aiobotocore-waf = buildTypesAiobotocorePackage "waf" "2.6.0" "sha256-adKf+AbPmeN57r93T36IewoiLZ+05CbpuS7NxCkQgMw=";
 
+  types-aiobotocore-waf-regional = buildTypesAiobotocorePackage "waf-regional" "2.6.0" "sha256-56SIq8Q6B405aqKU8UMddGHyrJeFaVKZSG4ImBWBZLU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
