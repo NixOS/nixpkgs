@@ -578,5 +578,7 @@ rec {
 
   types-aiobotocore-rds-data = buildTypesAiobotocorePackage "rds-data" "2.6.0" "sha256-GYddRqZeBP5f6chzZON9y59KcBiss9eWa8rVGo53C0g=";
 
+  types-aiobotocore-redshift = buildTypesAiobotocorePackage "redshift" "2.6.0" "sha256-6znZQUxNKE7SB6G+9l4iQSP9hZt+plKFA8VkE1scxrU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
