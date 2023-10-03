@@ -14179,6 +14179,8 @@ self: super: with self; {
 
     types-aiobotocore-appintegrations
 
+    types-aiobotocore-application-autoscaling
+
     types-aiobotocore-xray
 
   ;
