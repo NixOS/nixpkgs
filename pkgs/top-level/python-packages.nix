@@ -7167,6 +7167,8 @@ self: super: with self; {
 
     mypy-boto3-chime-sdk-voice
 
+    mypy-boto3-cleanrooms
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
