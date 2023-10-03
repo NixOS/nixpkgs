@@ -14327,6 +14327,8 @@ self: super: with self; {
 
     types-aiobotocore-devops-guru
 
+    types-aiobotocore-directconnect
+
     types-aiobotocore-xray
 
   ;
