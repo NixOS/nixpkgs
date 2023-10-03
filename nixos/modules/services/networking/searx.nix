@@ -43,12 +43,8 @@ in
       [ "services" "searx" "settingsFile" ])
   ];
 
-  ###### interface
-
   options = {
-
     services.searx = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -190,9 +186,6 @@ in
 
   };
 
-
-  ###### implementation
-
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
@@ -234,10 +227,10 @@ in
       };
     };
 
-    systemd.services.uwsgi = mkIf (cfg.runInUwsgi)
-      { requires = [ "searx-init.service" ];
-        after = [ "searx-init.service" ];
-      };
+    systemd.services.uwsgi = mkIf cfg.runInUwsgi {
+      requires = [ "searx-init.service" ];
+      after = [ "searx-init.service" ];
+    };
 
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
@@ -245,7 +238,7 @@ in
       redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
     };
 
-    services.uwsgi = mkIf (cfg.runInUwsgi) {
+    services.uwsgi = mkIf cfg.runInUwsgi {
       enable = true;
       plugins = [ "python3" ];
 
