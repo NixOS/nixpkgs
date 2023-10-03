@@ -14519,6 +14519,8 @@ self: super: with self; {
 
     types-aiobotocore-lambda
 
+    types-aiobotocore-lex-models
+
     types-aiobotocore-xray
 
   ;
