@@ -736,6 +736,8 @@ rec {
 
   mypy-boto3-wellarchitected = buildMypyBoto3Package "wellarchitected" "1.28.36" "sha256-Xsu8CV0MvpmbAMA6ZMoIPQHSMJn8okag1SxKW0SUv1I=";
 
+  mypy-boto3-wisdom = buildMypyBoto3Package "wisdom" "1.28.36" "sha256-paheK7r4sqDjBbUVieh6E5gPAbmVaEFAC3NsWsCWxBA=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

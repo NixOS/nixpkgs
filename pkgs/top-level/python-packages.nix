@@ -7775,6 +7775,8 @@ self: super: with self; {
 
     mypy-boto3-wellarchitected
 
+    mypy-boto3-wisdom
+
     mypy-boto3-xray
 
   ;
