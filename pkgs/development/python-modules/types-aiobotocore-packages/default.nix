@@ -488,5 +488,7 @@ rec {
 
   types-aiobotocore-mgh = buildTypesAiobotocorePackage "mgh" "2.6.0" "sha256-7wvX7X/NdB+GlWDogT2benTSC7ZCdVv97Zi6r+s5B2E=";
 
+  types-aiobotocore-mgn = buildTypesAiobotocorePackage "mgn" "2.6.0" "sha256-e6TTldFkZXf8A8bV7RKkIl6AD/lCC9elB6mT3WeWEiM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

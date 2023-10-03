@@ -14589,6 +14589,8 @@ self: super: with self; {
 
     types-aiobotocore-mgh
 
+    types-aiobotocore-mgn
+
     types-aiobotocore-xray
 
   ;
