@@ -14301,6 +14301,8 @@ self: super: with self; {
 
     types-aiobotocore-connectcampaigns
 
+    types-aiobotocore-connectcases
+
     types-aiobotocore-xray
 
   ;
