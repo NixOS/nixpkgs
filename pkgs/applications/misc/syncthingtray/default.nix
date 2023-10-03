@@ -33,14 +33,14 @@ https://github.com/NixOS/nixpkgs/issues/199596#issuecomment-1310136382 */
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.4.6";
+  version = "1.4.7";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-/HAqO0eVFt4YLGeTbZSZcH2pOojvykukAGTBHZTfKLQ=";
+    sha256 = "sha256-ddOyAyvFifsdNMbwcMZTyhA+5pvz6/Eu/VoBmdsHi54=";
   };
 
   buildInputs = [
