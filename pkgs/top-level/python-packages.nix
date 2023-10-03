@@ -7471,6 +7471,8 @@ self: super: with self; {
 
     mypy-boto3-lightsail
 
+    mypy-boto3-location
+
     mypy-boto3-s3
 
     mypy-boto3-xray
