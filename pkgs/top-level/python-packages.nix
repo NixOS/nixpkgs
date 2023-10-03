@@ -14759,6 +14759,8 @@ self: super: with self; {
 
     types-aiobotocore-ses
 
+    types-aiobotocore-sesv2
+
     types-aiobotocore-xray
 
   ;
