@@ -308,6 +308,8 @@ rec {
 
   mypy-boto3-gamesparks = buildMypyBoto3Package "gamesparks" "1.28.36" "sha256-6lQXNJ55FYvkFA14rgJGhRMjBHA3YrOybnsKNecX7So=";
 
+  mypy-boto3-glacier = buildMypyBoto3Package "glacier" "1.28.36" "sha256-L0a7CoD9I0wM8JvzaAxL8bm1SV1XmFi5lvs2SuGPtl4=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";

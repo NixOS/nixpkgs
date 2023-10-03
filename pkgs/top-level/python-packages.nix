@@ -7347,6 +7347,8 @@ self: super: with self; {
 
     mypy-boto3-gamesparks
 
+    mypy-boto3-glacier
+
     mypy-boto3-s3
 
     mypy-boto3-xray
