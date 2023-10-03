@@ -486,6 +486,8 @@ rec {
 
   mypy-boto3-mgh = buildMypyBoto3Package "mgh" "1.28.36" "sha256-7AGJAF8dh5FQz46IRinvrTX/PEC8cBkS2G/LMndjNS4=";
 
+  mypy-boto3-mgn = buildMypyBoto3Package "mgn" "1.28.36" "sha256-MMp+P5+6/vc/fSNFUVuKtZCZbyDh8XvGsPg1LFTtzxg=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
