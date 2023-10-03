@@ -472,5 +472,7 @@ rec {
 
   types-aiobotocore-mediapackage-vod = buildTypesAiobotocorePackage "mediapackage-vod" "2.6.0" "sha256-zw2mJFQgX9xqjsvldssfMeulgCEY0kqaNg+nUe9PpCc=";
 
+  types-aiobotocore-mediapackagev2 = buildTypesAiobotocorePackage "mediapackagev2" "2.6.0" "sha256-fdZn+f03iIzzkpSCdTh2uUY4WcU1DcyRxozP7SSkGyo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
