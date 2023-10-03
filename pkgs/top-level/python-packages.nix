@@ -7113,6 +7113,8 @@ self: super: with self; {
 
     mypy-boto3-appflow
 
+    mypy-boto3-appintegrations
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
