@@ -7477,6 +7477,8 @@ self: super: with self; {
 
     mypy-boto3-lookoutequipment
 
+    mypy-boto3-lookoutmetrics
+
     mypy-boto3-s3
 
     mypy-boto3-xray
