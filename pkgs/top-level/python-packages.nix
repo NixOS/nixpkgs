@@ -14399,6 +14399,8 @@ self: super: with self; {
 
     types-aiobotocore-fms
 
+    types-aiobotocore-forecast
+
     types-aiobotocore-xray
 
   ;
