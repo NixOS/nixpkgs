@@ -7491,6 +7491,8 @@ self: super: with self; {
 
     mypy-boto3-managedblockchain
 
+    mypy-boto3-managedblockchain-query
+
     mypy-boto3-s3
 
     mypy-boto3-xray
