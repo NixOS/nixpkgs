@@ -440,5 +440,7 @@ rec {
 
   types-aiobotocore-lookoutequipment = buildTypesAiobotocorePackage "lookoutequipment" "2.6.0" "sha256-ilPodAPj7J6xVCPEjsBQcQ4I5dNMEM2/hM1j8PJMUto=";
 
+  types-aiobotocore-lookoutmetrics = buildTypesAiobotocorePackage "lookoutmetrics" "2.6.0" "sha256-m/13nELWqdPNkZXmA3FhArlOKhB1CcbTaAsI9Iqzrik=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
