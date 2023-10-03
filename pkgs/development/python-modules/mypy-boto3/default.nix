@@ -506,6 +506,8 @@ rec {
 
   mypy-boto3-neptune = buildMypyBoto3Package "neptune" "1.28.36" "sha256-NEu+SKj/eoYlE2bRigVIFcXS+NRcyTwhB+xP0+SLh/s=";
 
+  mypy-boto3-neptunedata = buildMypyBoto3Package "neptunedata" "1.28.43" "sha256-IWYezgs1FUCYgGvmw6X/8u8QX5uHew5PXhv3gr9MzME=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
