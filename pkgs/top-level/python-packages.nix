@@ -14647,6 +14647,8 @@ self: super: with self; {
 
     types-aiobotocore-pi
 
+    types-aiobotocore-pinpoint
+
     types-aiobotocore-xray
 
   ;

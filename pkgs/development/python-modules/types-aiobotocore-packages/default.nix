@@ -546,5 +546,7 @@ rec {
 
   types-aiobotocore-pi = buildTypesAiobotocorePackage "pi" "2.6.0" "sha256-j0ngXkDGIhSh/b1RPn+NY6V2BAUZJdvuT18iALwRkAY=";
 
+  types-aiobotocore-pinpoint = buildTypesAiobotocorePackage "pinpoint" "2.6.0" "sha256-Txme0jlgoF9IYywdKqv71kcEqBfF1juTJcagi/2wQ20=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
