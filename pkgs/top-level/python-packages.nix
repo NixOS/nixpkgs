@@ -14495,6 +14495,8 @@ self: super: with self; {
 
     types-aiobotocore-kendra-ranking
 
+    types-aiobotocore-keyspaces
+
     types-aiobotocore-xray
 
   ;

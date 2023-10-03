@@ -394,5 +394,7 @@ rec {
 
   types-aiobotocore-kendra-ranking = buildTypesAiobotocorePackage "kendra-ranking" "2.6.0" "sha256-uaeHdW8lew6jq2KQApkY76eWRkYVLffN0h71icP9viE=";
 
+  types-aiobotocore-keyspaces = buildTypesAiobotocorePackage "keyspaces" "2.6.0" "sha256-vbWWkLbVnzfWHp3Yy3S6mh0+tHrkA/5Krw4GVSdILls=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
