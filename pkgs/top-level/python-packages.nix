@@ -14571,6 +14571,8 @@ self: super: with self; {
 
     types-aiobotocore-mediapackage
 
+    types-aiobotocore-mediapackage-vod
+
     types-aiobotocore-xray
 
   ;
