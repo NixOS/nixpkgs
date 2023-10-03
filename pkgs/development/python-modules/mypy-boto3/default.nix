@@ -380,6 +380,8 @@ rec {
 
   mypy-boto3-ivs = buildMypyBoto3Package "ivs" "1.28.39" "sha256-bsUwfBojGMRujL9yLhIqBLAxEpgz1H3KCSmhoQ/UrfM=";
 
+  mypy-boto3-ivs-realtime = buildMypyBoto3Package "ivs-realtime" "1.28.47" "sha256-f5aHtTu7H0TY3XYW1OJIkwKlKe6iZj0nxEjwlbEmc/4=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
