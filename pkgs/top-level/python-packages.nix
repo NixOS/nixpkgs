@@ -7733,6 +7733,8 @@ self: super: with self; {
 
     mypy-boto3-sso-oidc
 
+    mypy-boto3-stepfunctions
+
     mypy-boto3-xray
 
   ;

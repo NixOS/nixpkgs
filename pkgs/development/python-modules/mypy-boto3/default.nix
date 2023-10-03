@@ -694,6 +694,8 @@ rec {
 
   mypy-boto3-sso-oidc = buildMypyBoto3Package "sso-oidc" "1.28.52" "sha256-LGxlGXTsYZdBHiTFGzCCMvRW20Ny0kXMXLoP2YTAbKg=";
 
+  mypy-boto3-stepfunctions = buildMypyBoto3Package "stepfunctions" "1.28.36" "sha256-jHlOmKvFyiPvE+NR9Gu4Sd5jS6ym81KG4x5Y3t5Atoc=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
