@@ -7517,6 +7517,8 @@ self: super: with self; {
 
     mypy-boto3-mediatailor
 
+    mypy-boto3-medical-imaging
+
     mypy-boto3-s3
 
     mypy-boto3-xray
