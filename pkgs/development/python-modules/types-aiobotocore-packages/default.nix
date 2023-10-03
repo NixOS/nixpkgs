@@ -564,5 +564,7 @@ rec {
 
   types-aiobotocore-proton = buildTypesAiobotocorePackage "proton" "2.6.0" "sha256-rtJ+idGSdRVZafFNppQgIQUobKzClCKHf4RqlBtppBw=";
 
+  types-aiobotocore-qldb = buildTypesAiobotocorePackage "qldb" "2.6.0" "sha256-AqV8yAUYTT8nc3jQkq0qDzZRKxewsrxIR/kVJiX3fwI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

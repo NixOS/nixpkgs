@@ -14665,6 +14665,8 @@ self: super: with self; {
 
     types-aiobotocore-proton
 
+    types-aiobotocore-qldb
+
     types-aiobotocore-xray
 
   ;
