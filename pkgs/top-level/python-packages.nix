@@ -14377,6 +14377,8 @@ self: super: with self; {
 
     types-aiobotocore-emr
 
+    types-aiobotocore-emr-containers
+
     types-aiobotocore-xray
 
   ;
