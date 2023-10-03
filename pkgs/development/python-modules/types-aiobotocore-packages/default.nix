@@ -464,5 +464,7 @@ rec {
 
   types-aiobotocore-mediaconnect = buildTypesAiobotocorePackage "mediaconnect" "2.6.0" "sha256-hEwlISpSm6r+a1MXxSH3UrBOiNu+Cx9d1T2RsFfrcyA=";
 
+  types-aiobotocore-mediaconvert = buildTypesAiobotocorePackage "mediaconvert" "2.6.0" "sha256-VdxG2yvN6g9UAn54OP6uafHGN+iHjNrfO4H5f5h6w18=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
