@@ -358,6 +358,8 @@ rec {
 
   mypy-boto3-iotanalytics = buildMypyBoto3Package "iotanalytics" "1.28.36" "sha256-jO+/523WSPqhQCAOr6nFiag/tCHL1Up1A0q76jZ7/qE=";
 
+  mypy-boto3-iotdeviceadvisor = buildMypyBoto3Package "iotdeviceadvisor" "1.28.36" "sha256-0v8vHIOzHO7ZEZEA08hzukJV9EFSnTFh/1K1h3RhCyY=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";

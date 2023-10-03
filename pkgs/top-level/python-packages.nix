@@ -7397,6 +7397,8 @@ self: super: with self; {
 
     mypy-boto3-iotanalytics
 
+    mypy-boto3-iotdeviceadvisor
+
     mypy-boto3-s3
 
     mypy-boto3-xray
