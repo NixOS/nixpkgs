@@ -14241,6 +14241,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudformation
 
+    types-aiobotocore-cloudfront
+
     types-aiobotocore-xray
 
   ;
