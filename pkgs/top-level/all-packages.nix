@@ -6031,6 +6031,8 @@ with pkgs;
 
   moodle-dl = callPackage ../tools/networking/moodle-dl { };
 
+  moon-phases = callPackage ../tools/misc/moon-phases { };
+
   moonraker = callPackage ../servers/moonraker { };
 
   morsel = callPackage ../tools/text/morsel { };
