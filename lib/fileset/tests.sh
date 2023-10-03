@@ -415,7 +415,7 @@ expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.u
 expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 \('"$work"'/a\) does not exist.'
 expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 \('"$work"'/b\) does not exist.'
 
-# unions needs a list with at least 1 element
+# unions needs a list
 expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
 
 # The tree of later arguments should not be evaluated if a former argument already includes all files

@@ -258,7 +258,6 @@ If a directory does not recursively contain any file, it is omitted from the sto
   */
   unions =
     # A list of file sets.
-    # Must contain at least 1 element.
     # The elements can also be paths,
     # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
     filesets:
