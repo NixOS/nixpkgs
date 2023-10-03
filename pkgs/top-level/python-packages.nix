@@ -14613,6 +14613,8 @@ self: super: with self; {
 
     types-aiobotocore-networkmanager
 
+    types-aiobotocore-nimble
+
     types-aiobotocore-xray
 
   ;
