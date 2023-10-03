@@ -7147,6 +7147,8 @@ self: super: with self; {
 
     mypy-boto3-batch
 
+    mypy-boto3-billingconductor
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
