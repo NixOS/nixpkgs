@@ -30634,12 +30634,6 @@ with pkgs;
 
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
 
-  atomEnv = callPackage ../applications/editors/atom/env.nix { };
-
-  atomPackages = dontRecurseIntoAttrs (callPackage ../applications/editors/atom { });
-
-  inherit (atomPackages) atom atom-beta;
-
   pulsar = callPackage ../applications/editors/pulsar { };
 
   asap = callPackage ../tools/audio/asap { };

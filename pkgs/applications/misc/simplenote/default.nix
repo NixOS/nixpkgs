@@ -1,5 +1,4 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , dpkg
 , fetchurl
 , makeDesktopItem
@@ -7,7 +6,13 @@
 , lib
 , stdenv
 , udev
+, alsa-lib
+, mesa
+, nss
+, nspr
+, systemd
 , wrapGAppsHook
+, xorg
 }:
 
 let
@@ -40,9 +45,7 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url =
-        "https://github.com/Automattic/simplenote-electron/releases/download/"
-        + "v${version}/Simplenote-linux-${version}-amd64.deb";
+      url = "https://github.com/Automattic/simplenote-electron/releases/download/v${version}/Simplenote-linux-${version}-amd64.deb";
       inherit sha256;
     };
 
@@ -61,6 +64,7 @@ let
     dontPatchELF = true;
     dontWrapGApps = true;
 
+    # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
@@ -68,7 +72,16 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = [
+      alsa-lib
+      mesa
+      xorg.libXScrnSaver
+      xorg.libXtst
+      nss
+      nspr
+      stdenv.cc.cc
+      systemd
+    ];
 
     unpackPhase = "dpkg-deb -x $src .";
 
