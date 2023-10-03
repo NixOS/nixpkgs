@@ -228,5 +228,7 @@ rec {
 
   types-aiobotocore-directconnect = buildTypesAiobotocorePackage "directconnect" "2.6.0" "sha256-LwbqLf3BEwW/+f6vsddXt+FiyGkRKIPXfaqW5rtDrig=";
 
+  types-aiobotocore-discovery = buildTypesAiobotocorePackage "discovery" "2.6.0" "sha256-mBruXgMAELLGyEg7ON8PFesERMf5og8As58U9pvIKRc=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

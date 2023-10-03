@@ -14329,6 +14329,8 @@ self: super: with self; {
 
     types-aiobotocore-directconnect
 
+    types-aiobotocore-discovery
+
     types-aiobotocore-xray
 
   ;
