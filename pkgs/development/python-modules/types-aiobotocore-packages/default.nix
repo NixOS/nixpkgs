@@ -462,5 +462,7 @@ rec {
 
   types-aiobotocore-marketplacecommerceanalytics = buildTypesAiobotocorePackage "marketplacecommerceanalytics" "2.6.0" "sha256-iyHFWN8tWgQoShTO6bJQB89K+4JVWjMihzjMr2Lssvw=";
 
+  types-aiobotocore-mediaconnect = buildTypesAiobotocorePackage "mediaconnect" "2.6.0" "sha256-hEwlISpSm6r+a1MXxSH3UrBOiNu+Cx9d1T2RsFfrcyA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

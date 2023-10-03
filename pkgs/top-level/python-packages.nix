@@ -14563,6 +14563,8 @@ self: super: with self; {
 
     types-aiobotocore-marketplacecommerceanalytics
 
+    types-aiobotocore-mediaconnect
+
     types-aiobotocore-xray
 
   ;
