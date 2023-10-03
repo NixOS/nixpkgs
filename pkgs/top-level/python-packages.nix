@@ -14745,6 +14745,8 @@ self: super: with self; {
 
     types-aiobotocore-securityhub
 
+    types-aiobotocore-securitylake
+
     types-aiobotocore-xray
 
   ;

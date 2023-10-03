@@ -644,5 +644,7 @@ rec {
 
   types-aiobotocore-securityhub = buildTypesAiobotocorePackage "securityhub" "2.6.0" "sha256-36BIOCHnkFyEp3MPa5NfjNJNBeqVMCmx9C907Bw3YWQ=";
 
+  types-aiobotocore-securitylake = buildTypesAiobotocorePackage "securitylake" "2.6.0" "sha256-DKmk2ddd7b0g6mnt0d37Y1ofb6dgN/6XFBCElqdQ9+A=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
