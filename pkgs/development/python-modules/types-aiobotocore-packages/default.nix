@@ -296,5 +296,7 @@ rec {
 
   types-aiobotocore-fis = buildTypesAiobotocorePackage "fis" "2.6.0" "sha256-4T/EcdB+5TV8PnX1Z9c8Ato19kznO3yQPZohuWD1+J8=";
 
+  types-aiobotocore-fms = buildTypesAiobotocorePackage "fms" "2.6.0" "sha256-VIGEXyDyUEWshdYFUJ3VmCS1z/ZBOKq2PYCosalPZAw=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
