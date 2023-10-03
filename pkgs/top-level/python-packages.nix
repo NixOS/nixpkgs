@@ -14393,6 +14393,8 @@ self: super: with self; {
 
     types-aiobotocore-finspace-data
 
+    types-aiobotocore-firehose
+
     types-aiobotocore-xray
 
   ;
