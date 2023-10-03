@@ -158,5 +158,7 @@ rec {
 
   types-aiobotocore-codeartifact = buildTypesAiobotocorePackage "codeartifact" "2.6.0" "sha256-NuMqaomry4ezNNRKBLOJ0xNwGUO2Prl4nf/5O38oyqI=";
 
+  types-aiobotocore-codebuild = buildTypesAiobotocorePackage "codebuild" "2.6.0" "sha256-dYe3uLk0ssQPQPEo+3glh+ic6recgV5WPIN09lLuuA4=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

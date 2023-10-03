@@ -14259,6 +14259,8 @@ self: super: with self; {
 
     types-aiobotocore-codeartifact
 
+    types-aiobotocore-codebuild
+
     types-aiobotocore-xray
 
   ;
