@@ -7701,6 +7701,8 @@ self: super: with self; {
 
     mypy-boto3-sesv2
 
+    mypy-boto3-shield
+
     mypy-boto3-xray
 
   ;
