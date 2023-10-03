@@ -14197,6 +14197,8 @@ self: super: with self; {
 
     types-aiobotocore-athena
 
+    types-aiobotocore-auditmanager
+
     types-aiobotocore-xray
 
   ;
