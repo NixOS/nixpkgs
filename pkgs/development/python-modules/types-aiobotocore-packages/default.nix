@@ -480,5 +480,7 @@ rec {
 
   types-aiobotocore-mediatailor = buildTypesAiobotocorePackage "mediatailor" "2.6.0" "sha256-3F1Gpd2kOU1rS7iSyDr0pkRECqYsyeeEQKDH2OO9H/A=";
 
+  types-aiobotocore-medical-imaging = buildTypesAiobotocorePackage "medical-imaging" "2.6.0" "sha256-zUXGqquEveHHDqA8XeJX++Yc42rnyW9Vzt5A7LOImfk=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14581,6 +14581,8 @@ self: super: with self; {
 
     types-aiobotocore-mediatailor
 
+    types-aiobotocore-medical-imaging
+
     types-aiobotocore-xray
 
   ;
