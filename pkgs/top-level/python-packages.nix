@@ -14695,6 +14695,8 @@ self: super: with self; {
 
     types-aiobotocore-resourcegroupstaggingapi
 
+    types-aiobotocore-robomaker
+
     types-aiobotocore-xray
 
   ;

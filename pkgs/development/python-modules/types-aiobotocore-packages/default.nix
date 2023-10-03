@@ -594,5 +594,7 @@ rec {
 
   types-aiobotocore-resourcegroupstaggingapi = buildTypesAiobotocorePackage "resourcegroupstaggingapi" "2.6.0" "sha256-pW8/wn2Qk1jf1d2kYZ84yEaNUcl6xgHw+yuT0bHnsBE=";
 
+  types-aiobotocore-robomaker = buildTypesAiobotocorePackage "robomaker" "2.6.0" "sha256-aKO/fGT4UANiYkZOUuOQ4ungKpW8p+yAT5+42WHgp3M=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
