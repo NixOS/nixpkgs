@@ -112,5 +112,7 @@ rec {
 
   types-aiobotocore-billingconductor = buildTypesAiobotocorePackage "billingconductor" "2.6.0" "sha256-bDEICyyIUCRxbTWZFXHsj5yncQI+F+geC92vvsrKCxw=";
 
+  types-aiobotocore-braket = buildTypesAiobotocorePackage "braket" "2.6.0" "sha256-aobQZov192xNkN7cwIKLgJnhxltyLpWw1oKk2m1HkV8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

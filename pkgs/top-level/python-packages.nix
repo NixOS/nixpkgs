@@ -14213,6 +14213,8 @@ self: super: with self; {
 
     types-aiobotocore-billingconductor
 
+    types-aiobotocore-braket
+
     types-aiobotocore-xray
 
   ;
