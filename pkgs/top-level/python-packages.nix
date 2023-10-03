@@ -14391,6 +14391,8 @@ self: super: with self; {
 
     types-aiobotocore-finspace
 
+    types-aiobotocore-finspace-data
+
     types-aiobotocore-xray
 
   ;

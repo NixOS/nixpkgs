@@ -290,5 +290,7 @@ rec {
 
   types-aiobotocore-finspace = buildTypesAiobotocorePackage "finspace" "2.6.0" "sha256-fPG/13VJzvdfoADYZXTZ2ssdJrKQ/MEic6rhsNUE4tU=";
 
+  types-aiobotocore-finspace-data = buildTypesAiobotocorePackage "finspace-data" "2.6.0" "sha256-2mAHrKw7Hur/nrVQpuRwGae5CumbjbQb4V9Z6NlsSmo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
