@@ -14273,6 +14273,8 @@ self: super: with self; {
 
     types-aiobotocore-codeguruprofiler
 
+    types-aiobotocore-codepipeline
+
     types-aiobotocore-xray
 
   ;
