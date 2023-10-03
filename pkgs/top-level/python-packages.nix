@@ -14285,6 +14285,8 @@ self: super: with self; {
 
     types-aiobotocore-cognito-idp
 
+    types-aiobotocore-cognito-sync
+
     types-aiobotocore-xray
 
   ;
