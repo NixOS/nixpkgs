@@ -14401,6 +14401,8 @@ self: super: with self; {
 
     types-aiobotocore-forecast
 
+    types-aiobotocore-forecastquery
+
     types-aiobotocore-xray
 
   ;

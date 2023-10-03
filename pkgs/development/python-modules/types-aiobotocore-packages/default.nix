@@ -300,5 +300,7 @@ rec {
 
   types-aiobotocore-forecast = buildTypesAiobotocorePackage "forecast" "2.6.0" "sha256-rMjrKtR8BWtAYoyBY52o/5wbZCHqX1aFMRsVCunZTeo=";
 
+  types-aiobotocore-forecastquery = buildTypesAiobotocorePackage "forecastquery" "2.6.0" "sha256-rh53/1tmYyADrkUtQjrwrcEe78ji6II0yYnMQO38AOU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
