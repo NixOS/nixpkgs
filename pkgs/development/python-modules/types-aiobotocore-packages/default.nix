@@ -746,5 +746,7 @@ rec {
 
   types-aiobotocore-workspaces = buildTypesAiobotocorePackage "workspaces" "2.6.0" "sha256-xtsxrIzhjJSoGqd1fEgXP55bRtDsJTtdoWn8eooHCmY=";
 
+  types-aiobotocore-workspaces-web = buildTypesAiobotocorePackage "workspaces-web" "2.6.0" "sha256-J3lsLnwcttamV4NroDuXz9EupXrsoN/SumKrykQkwVU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

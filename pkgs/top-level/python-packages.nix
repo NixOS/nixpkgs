@@ -14847,6 +14847,8 @@ self: super: with self; {
 
     types-aiobotocore-workspaces
 
+    types-aiobotocore-workspaces-web
+
     types-aiobotocore-xray
 
   ;
