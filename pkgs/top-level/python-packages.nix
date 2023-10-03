@@ -14539,6 +14539,8 @@ self: super: with self; {
 
     types-aiobotocore-logs
 
+    types-aiobotocore-lookoutequipment
+
     types-aiobotocore-xray
 
   ;

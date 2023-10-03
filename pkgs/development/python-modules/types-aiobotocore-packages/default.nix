@@ -438,5 +438,7 @@ rec {
 
   types-aiobotocore-logs = buildTypesAiobotocorePackage "logs" "2.6.0" "sha256-qyA1uCrAFGZHMlfL8Dou1YkM6rb9xwcrDQmteSqOadM=";
 
+  types-aiobotocore-lookoutequipment = buildTypesAiobotocorePackage "lookoutequipment" "2.6.0" "sha256-ilPodAPj7J6xVCPEjsBQcQ4I5dNMEM2/hM1j8PJMUto=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
