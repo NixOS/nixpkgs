@@ -7529,6 +7529,8 @@ self: super: with self; {
 
     mypy-boto3-migration-hub-refactor-spaces
 
+    mypy-boto3-migrationhub-config
+
     mypy-boto3-s3
 
     mypy-boto3-xray
