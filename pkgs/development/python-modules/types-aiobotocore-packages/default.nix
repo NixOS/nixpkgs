@@ -428,5 +428,7 @@ rec {
 
   types-aiobotocore-license-manager = buildTypesAiobotocorePackage "license-manager" "2.6.0" "sha256-iNlzgcjg3VrIZJEi2f+7msFqrfWsUS24k7OERB28uRo=";
 
+  types-aiobotocore-license-manager-linux-subscriptions = buildTypesAiobotocorePackage "license-manager-linux-subscriptions" "2.6.0" "sha256-1exWgnbG5ikd1pHWClPGq3Luku5qyTtG6pwvqL/zWdk=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
