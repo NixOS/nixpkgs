@@ -14663,6 +14663,8 @@ self: super: with self; {
 
     types-aiobotocore-privatenetworks
 
+    types-aiobotocore-proton
+
     types-aiobotocore-xray
 
   ;

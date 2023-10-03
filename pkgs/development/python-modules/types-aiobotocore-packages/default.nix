@@ -562,5 +562,7 @@ rec {
 
   types-aiobotocore-privatenetworks = buildTypesAiobotocorePackage "privatenetworks" "2.6.0" "sha256-3e6/IA6QYgGhipt5XP/b4h3soko1tLntMieXOmeWjlI=";
 
+  types-aiobotocore-proton = buildTypesAiobotocorePackage "proton" "2.6.0" "sha256-rtJ+idGSdRVZafFNppQgIQUobKzClCKHf4RqlBtppBw=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
