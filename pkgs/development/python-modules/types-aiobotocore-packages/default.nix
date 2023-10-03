@@ -416,5 +416,7 @@ rec {
 
   types-aiobotocore-lakeformation = buildTypesAiobotocorePackage "lakeformation" "2.6.0" "sha256-CR3Uopf6izBTlR16yIA3CUikWrS3OzkFZFpbJNDhBVs=";
 
+  types-aiobotocore-lambda = buildTypesAiobotocorePackage "lambda" "2.6.0" "sha256-pkZMQu5himEPO7z/AF7INb7H7jjmkyQV1ql2epF4yYA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

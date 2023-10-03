@@ -14517,6 +14517,8 @@ self: super: with self; {
 
     types-aiobotocore-lakeformation
 
+    types-aiobotocore-lambda
+
     types-aiobotocore-xray
 
   ;
