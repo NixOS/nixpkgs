@@ -14253,6 +14253,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudtrail
 
+    types-aiobotocore-cloudtrail-data
+
     types-aiobotocore-xray
 
   ;

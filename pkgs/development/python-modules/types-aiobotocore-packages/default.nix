@@ -152,5 +152,7 @@ rec {
 
   types-aiobotocore-cloudtrail = buildTypesAiobotocorePackage "cloudtrail" "2.6.0" "sha256-/vpOE8tU7SsjHmn/YyVfku05ZGBZIiVuFsG6aK47K28=";
 
+  types-aiobotocore-cloudtrail-data = buildTypesAiobotocorePackage "cloudtrail-data" "2.6.0" "sha256-8W7TrB1EXp5JeBQ9xqkqFhf+Frflpd5bfVxpqju2ZPM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
