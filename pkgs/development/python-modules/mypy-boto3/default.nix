@@ -336,6 +336,8 @@ rec {
 
   mypy-boto3-imagebuilder = buildMypyBoto3Package "imagebuilder" "1.28.36" "sha256-2fJtgGfwkY3V07kXAiyi61TUmvq3BVqiN+EFzxTQkvI=";
 
+  mypy-boto3-importexport = buildMypyBoto3Package "importexport" "1.28.36" "sha256-806+dIMqKZ14MifNoDqKgj8MGPYBQVd8KnT+V+eOr/E=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
