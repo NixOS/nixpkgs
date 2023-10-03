@@ -130,6 +130,8 @@ rec {
 
   mypy-boto3-cleanrooms = buildMypyBoto3Package "cleanrooms" "1.28.38" "sha256-fbuCwuzXiK9ekk30m90WZW7LcDFLeR/Ta9BvFnT/wnU=";
 
+  mypy-boto3-cloud9 = buildMypyBoto3Package "cloud9" "1.28.47" "sha256-vV+cqYs7msRzBkIIz4uA123QM54gFpi1q9lXo997BOk=";
+
   mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.28.36" "sha256-pnLO62LZvr4sJsye3gWJROY+xHikSe7dX8erBTRXrPc=";
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
