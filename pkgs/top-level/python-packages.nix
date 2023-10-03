@@ -7177,6 +7177,8 @@ self: super: with self; {
 
     mypy-boto3-cloudformation
 
+    mypy-boto3-cloudfront
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
