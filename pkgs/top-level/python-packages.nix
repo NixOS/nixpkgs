@@ -14771,6 +14771,8 @@ self: super: with self; {
 
     types-aiobotocore-sms-voice
 
+    types-aiobotocore-snow-device-management
+
     types-aiobotocore-xray
 
   ;
