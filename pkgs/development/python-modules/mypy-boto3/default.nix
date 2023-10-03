@@ -488,6 +488,8 @@ rec {
 
   mypy-boto3-mgn = buildMypyBoto3Package "mgn" "1.28.36" "sha256-MMp+P5+6/vc/fSNFUVuKtZCZbyDh8XvGsPg1LFTtzxg=";
 
+  mypy-boto3-migration-hub-refactor-spaces = buildMypyBoto3Package "migration-hub-refactor-spaces" "1.28.36" "sha256-xfTzLCtQPfBM01l96ks/nGGYNgYYTy6GA3I/qU/y0II=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
