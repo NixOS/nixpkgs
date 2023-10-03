@@ -7663,6 +7663,8 @@ self: super: with self; {
 
     mypy-boto3-sagemaker-a2i-runtime
 
+    mypy-boto3-sagemaker-edge
+
     mypy-boto3-xray
 
   ;
