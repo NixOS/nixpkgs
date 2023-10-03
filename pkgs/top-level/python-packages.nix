@@ -14707,6 +14707,8 @@ self: super: with self; {
 
     types-aiobotocore-route53-recovery-readiness
 
+    types-aiobotocore-route53domains
+
     types-aiobotocore-xray
 
   ;
