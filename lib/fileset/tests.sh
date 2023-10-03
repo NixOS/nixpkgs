@@ -282,24 +282,27 @@ expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
+expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
-    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalVersion = 2; _type = "fileset"; }'
+    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalIsEmptyWithoutBase = false; _internalVersion = 3; _type = "fileset"; }'
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' \
-    '{ _type = "fileset"; _internalVersion = 2; }'
+    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
+expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 2; }' \
+    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
 
 # Future versions of the internal representation are unsupported
-expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 3; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-\s*- Internal version of the file set: 3
-\s*- Internal version of the library: 2
+expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 4; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
+\s*- Internal version of the file set: 4
+\s*- Internal version of the library: 3
 \s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
 expectEqual '{
   inherit (_coerce "<test>" (_create ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 2; }'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 3; }'
 
 #### Resulting store path ####
 
@@ -310,6 +313,12 @@ expectEqual 'toSource { root = ./.; fileset = ./.; }' 'sources.cleanSourceWith {
 tree=(
 )
 checkFileset './.'
+
+# The empty value without a base should also result in an empty result
+tree=(
+    [a]=0
+)
+checkFileset '_emptyWithoutBase'
 
 # Directories recursively containing no files are not included
 tree=(
@@ -408,12 +417,29 @@ expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.file
 
 # unions needs a list with at least 1 element
 expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ]; }' 'lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements.'
 
 # The tree of later arguments should not be evaluated if a former argument already includes all files
 tree=()
 checkFileset 'union ./. (_create ./. (abort "This should not be used!"))'
 checkFileset 'unions [ ./. (_create ./. (abort "This should not be used!")) ]'
+
+# unions doesn't include any files for an empty list or only empty values without a base
+tree=(
+    [x]=0
+    [y/z]=0
+)
+checkFileset 'unions [ ]'
+checkFileset 'unions [ _emptyWithoutBase ]'
+checkFileset 'unions [ _emptyWithoutBase _emptyWithoutBase ]'
+checkFileset 'union _emptyWithoutBase _emptyWithoutBase'
+
+# The empty value without a base is the left and right identity of union
+tree=(
+    [x]=1
+    [y/z]=0
+)
+checkFileset 'union ./x _emptyWithoutBase'
+checkFileset 'union _emptyWithoutBase ./x'
 
 # union doesn't include files that weren't specified
 tree=(
