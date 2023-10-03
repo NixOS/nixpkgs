@@ -636,6 +636,8 @@ rec {
 
   mypy-boto3-savingsplans = buildMypyBoto3Package "savingsplans" "1.28.36" "sha256-EuCyeSHWSlS2OC8DM5alD6IcZ3fewmJavMMHWXL12T0=";
 
+  mypy-boto3-scheduler = buildMypyBoto3Package "scheduler" "1.28.36" "sha256-dMEm7KqoZFFtFnqXR6upXHQ/CeKQO1xQ+v7CoR4o7Xs=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
