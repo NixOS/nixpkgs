@@ -7093,6 +7093,8 @@ self: super: with self; {
 
     mypy-boto3-amp
 
+    mypy-boto3-amplify
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
