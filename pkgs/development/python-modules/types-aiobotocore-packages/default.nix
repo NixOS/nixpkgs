@@ -486,5 +486,7 @@ rec {
 
   types-aiobotocore-meteringmarketplace = buildTypesAiobotocorePackage "meteringmarketplace" "2.6.0" "sha256-WsWw1y5XueMQnRTWYQP73GawsSzEsliPzu9Xlij3UAo=";
 
+  types-aiobotocore-mgh = buildTypesAiobotocorePackage "mgh" "2.6.0" "sha256-7wvX7X/NdB+GlWDogT2benTSC7ZCdVv97Zi6r+s5B2E=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

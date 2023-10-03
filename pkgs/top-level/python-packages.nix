@@ -14587,6 +14587,8 @@ self: super: with self; {
 
     types-aiobotocore-meteringmarketplace
 
+    types-aiobotocore-mgh
+
     types-aiobotocore-xray
 
   ;
