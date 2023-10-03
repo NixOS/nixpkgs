@@ -198,5 +198,7 @@ rec {
 
   types-aiobotocore-connect-contact-lens = buildTypesAiobotocorePackage "connect-contact-lens" "2.6.0" "sha256-3d2WJQpohaiwdsKOS2u5kNhHVsgELMxgjunHAk6v7Y8=";
 
+  types-aiobotocore-connectcampaigns = buildTypesAiobotocorePackage "connectcampaigns" "2.6.0" "sha256-lsDs0yxFf4ForZ2bU719LFCDHzR9lOE211XuYGYKZCw=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
