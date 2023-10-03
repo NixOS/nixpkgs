@@ -14483,6 +14483,8 @@ self: super: with self; {
 
     types-aiobotocore-ivs
 
+    types-aiobotocore-ivs-realtime
+
     types-aiobotocore-xray
 
   ;
