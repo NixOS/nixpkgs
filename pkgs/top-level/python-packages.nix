@@ -14527,6 +14527,8 @@ self: super: with self; {
 
     types-aiobotocore-lexv2-runtime
 
+    types-aiobotocore-license-manager
+
     types-aiobotocore-xray
 
   ;
