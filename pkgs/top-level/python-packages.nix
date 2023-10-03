@@ -14313,6 +14313,8 @@ self: super: with self; {
 
     types-aiobotocore-databrew
 
+    types-aiobotocore-dataexchange
+
     types-aiobotocore-xray
 
   ;

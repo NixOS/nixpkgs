@@ -212,5 +212,7 @@ rec {
 
   types-aiobotocore-databrew = buildTypesAiobotocorePackage "databrew" "2.6.0" "sha256-WMVPGbQkdbKc2T+gR9P3oWUxl5VSVf4IdcLeuW9SNUo=";
 
+  types-aiobotocore-dataexchange = buildTypesAiobotocorePackage "dataexchange" "2.6.0" "sha256-okcgm0Lx5s2AM2mprVwNjeI1TTmlR73FgjWbYa9uRdE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
