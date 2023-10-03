@@ -624,5 +624,7 @@ rec {
 
   types-aiobotocore-sagemaker-edge = buildTypesAiobotocorePackage "sagemaker-edge" "2.6.0" "sha256-O3oCXuvREHW7lcwDzbJRogb9Qa2Wfb8C5/rbpjhVm8A=";
 
+  types-aiobotocore-sagemaker-featurestore-runtime = buildTypesAiobotocorePackage "sagemaker-featurestore-runtime" "2.6.0" "sha256-mcU7ZGAGzbV7i8H1qMWFI9vm/8APRfmaAncxKBJL+NU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

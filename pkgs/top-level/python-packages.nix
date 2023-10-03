@@ -14725,6 +14725,8 @@ self: super: with self; {
 
     types-aiobotocore-sagemaker-edge
 
+    types-aiobotocore-sagemaker-featurestore-runtime
+
     types-aiobotocore-xray
 
   ;
