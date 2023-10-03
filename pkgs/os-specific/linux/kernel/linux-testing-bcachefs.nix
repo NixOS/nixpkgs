@@ -2,22 +2,22 @@
 , stdenv
 , fetchpatch
 , kernel
+, commitDate ? "2023-06-28"
 # bcachefs-tools stores the expected-revision in:
 #   https://evilpiepirate.org/git/bcachefs-tools.git/tree/.bcachefs_revision
 # but this does not means that it'll be the latest-compatible revision
-, version ? lib.importJSON ./bcachefs.json
+, currentCommit ? "4d2faeb4fb58c389dc9f76b8d5ae991ef4497e04"
+, diffHash ? "sha256-DtMc8P4lTRzvS6PVvD7WtWEPsfnxIXSpqMsKKWs+edI="
 , kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
 , argsOverride ? {}
 , ...
 } @ args:
-let localversion = "-bcachefs-unstable-${version.date}";
-in
 # NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
 (kernel.override ( args // {
 
   argsOverride = {
-    version = "${kernel.version}${localversion}";
-    modDirVersion = "${kernel.version}${localversion}";
+    version = "${kernel.version}-bcachefs-unstable-${commitDate}";
+    modDirVersion = kernel.modDirVersion;
 
     extraMeta = {
       homepage = "https://bcachefs.org/";
@@ -27,8 +27,6 @@ in
   } // argsOverride;
 
   structuredExtraConfig = with lib.kernel; {
-    # we need this for uname
-    LOCALVERSION = freeform localversion;
     BCACHEFS_FS = module;
     BCACHEFS_QUOTA = option yes;
     BCACHEFS_POSIX_ACL = option yes;
@@ -37,12 +35,12 @@ in
   };
 
   kernelPatches = [ {
-      name = "bcachefs-${version.commit}";
+      name = "bcachefs-${currentCommit}";
 
       patch = fetchpatch {
-        name = "bcachefs-${version.commit}.diff";
-        url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${version.commit}&id2=v${lib.versions.majorMinor kernel.version}";
-        sha256 = version.diffHash;
+        name = "bcachefs-${currentCommit}.diff";
+        url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${currentCommit}&id2=v${lib.versions.majorMinor kernel.version}";
+        sha256 = diffHash;
       };
     } ] ++ kernelPatches;
 }))
