@@ -734,6 +734,8 @@ rec {
 
   mypy-boto3-wafv2 = buildMypyBoto3Package "wafv2" "1.28.57" "sha256-7xrRaEm54cKtRZplu6l8UbTg+hF6Y5qP9/lgAV8D6AY=";
 
+  mypy-boto3-wellarchitected = buildMypyBoto3Package "wellarchitected" "1.28.36" "sha256-Xsu8CV0MvpmbAMA6ZMoIPQHSMJn8okag1SxKW0SUv1I=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

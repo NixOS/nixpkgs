@@ -7773,6 +7773,8 @@ self: super: with self; {
 
     mypy-boto3-wafv2
 
+    mypy-boto3-wellarchitected
+
     mypy-boto3-xray
 
   ;
