@@ -636,5 +636,7 @@ rec {
 
   types-aiobotocore-scheduler = buildTypesAiobotocorePackage "scheduler" "2.6.0" "sha256-2BnFCPgaAWxBsc+79oQT+DDj6IM7cV7F+LjqsFG6BBc=";
 
+  types-aiobotocore-schemas = buildTypesAiobotocorePackage "schemas" "2.6.0" "sha256-TW57DJw0QgnPrIWlOlAvESYSEPUD/UKbXVs+NYW+7r0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

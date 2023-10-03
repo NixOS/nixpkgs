@@ -14737,6 +14737,8 @@ self: super: with self; {
 
     types-aiobotocore-scheduler
 
+    types-aiobotocore-schemas
+
     types-aiobotocore-xray
 
   ;
