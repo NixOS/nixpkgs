@@ -258,5 +258,7 @@ rec {
 
   types-aiobotocore-ecs = buildTypesAiobotocorePackage "ecs" "2.6.0" "sha256-C660Ync/6dV8c9i+N7bgV0TYaPScrJ40KPdG3LItGGs=";
 
+  types-aiobotocore-efs = buildTypesAiobotocorePackage "efs" "2.6.0" "sha256-jhIpP0cJEv2SqvmBJtxNVoWF4AOWci2sPj04dN3N+bo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
