@@ -7579,6 +7579,8 @@ self: super: with self; {
 
     mypy-boto3-pca-connector-ad
 
+    mypy-boto3-personalize
+
     mypy-boto3-s3
 
     mypy-boto3-xray
