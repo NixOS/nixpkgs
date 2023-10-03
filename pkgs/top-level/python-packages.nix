@@ -7779,6 +7779,8 @@ self: super: with self; {
 
     mypy-boto3-workdocs
 
+    mypy-boto3-worklink
+
     mypy-boto3-xray
 
   ;

@@ -740,6 +740,8 @@ rec {
 
   mypy-boto3-workdocs = buildMypyBoto3Package "workdocs" "1.28.36" "sha256-dQysUcm1xlXJbcM1vdYZ7+migQgjHl4gSqHoZDKnhHg=";
 
+  mypy-boto3-worklink = buildMypyBoto3Package "worklink" "1.28.36" "sha256-oFjYLBxp/dZf1+IN5rj3usSUvZnRyhRMu63mRgdsrmI=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
