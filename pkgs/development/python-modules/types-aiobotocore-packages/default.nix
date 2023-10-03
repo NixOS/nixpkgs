@@ -446,5 +446,7 @@ rec {
 
   types-aiobotocore-m2 = buildTypesAiobotocorePackage "m2" "2.6.0" "sha256-DoFG4FxvJFnN54G5F2LZY5M0aYlCU9H5wwnAsiHaRmc=";
 
+  types-aiobotocore-machinelearning = buildTypesAiobotocorePackage "machinelearning" "2.6.0" "sha256-VZajCqSzofQLUBrXbMzdaPmbIDNp5YuUUk1wberVcFs=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
