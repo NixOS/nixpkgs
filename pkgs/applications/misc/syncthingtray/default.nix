@@ -17,6 +17,8 @@
 , plasma-framework
 , qttools
 , iconv
+, cppunit
+, syncthing
 , webviewSupport ? true
 , jsSupport ? true
 , kioPluginSupport ? stdenv.isLinux
@@ -58,18 +60,31 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
     cmake
     qttools
+    # Although these are test dependencies, we add them anyway so that we test
+    # whether the test units compile. On Darwin we don't run the tests but we
+    # still build them.
+    cppunit
+    syncthing
   ]
     ++ lib.optionals plasmoidSupport [ extra-cmake-modules ]
   ;
 
-  # No tests are available by upstream, but we test --help anyway
-  # Don't test on Darwin because output is .app
+  # syncthing server seems to hang on darwin, causing tests to fail.
+  doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+  '';
+  # don't test --help  on Darwin because output is .app
   doInstallCheck = !stdenv.isDarwin;
   installCheckPhase = ''
     $out/bin/syncthingtray --help | grep ${finalAttrs.version}
   '';
 
   cmakeFlags = [
+    "-DBUILD_TESTING=ON"
+    # See https://github.com/Martchus/syncthingtray/issues/208
+    "-DEXCLUDE_TESTS_FROM_ALL=OFF"
     "-DAUTOSTART_EXEC_PATH=${autostartExecPath}"
     # See https://github.com/Martchus/syncthingtray/issues/42
     "-DQT_PLUGIN_DIR:STRING=${placeholder "out"}/${qtbase.qtPluginPrefix}"
