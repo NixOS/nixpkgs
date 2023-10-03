@@ -732,5 +732,7 @@ rec {
 
   types-aiobotocore-wafv2 = buildTypesAiobotocorePackage "wafv2" "2.6.0" "sha256-nAGK0tN42UhDUmpztGeAPRS5FuuTt+LugQmcgkR0oLA=";
 
+  types-aiobotocore-wellarchitected = buildTypesAiobotocorePackage "wellarchitected" "2.6.0" "sha256-p/2uqdRwKgsS2EUCr8ZLds6WHUjVQz8mEv35qcyMTYA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

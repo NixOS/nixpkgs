@@ -14833,6 +14833,8 @@ self: super: with self; {
 
     types-aiobotocore-wafv2
 
+    types-aiobotocore-wellarchitected
+
     types-aiobotocore-xray
 
   ;
