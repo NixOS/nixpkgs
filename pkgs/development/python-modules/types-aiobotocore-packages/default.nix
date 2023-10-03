@@ -270,5 +270,7 @@ rec {
 
   types-aiobotocore-elastictranscoder = buildTypesAiobotocorePackage "elastictranscoder" "2.6.0" "sha256-vRVH67/SbkncE4q3gssGce4NtTYgFM56RLzDKyvBCpc=";
 
+  types-aiobotocore-elb = buildTypesAiobotocorePackage "elb" "2.6.0" "sha256-+mFIAOecS21QFsnB+V1EFyGLv6uW+oMzkRi051HvPGA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

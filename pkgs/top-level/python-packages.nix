@@ -14371,6 +14371,8 @@ self: super: with self; {
 
     types-aiobotocore-elastictranscoder
 
+    types-aiobotocore-elb
+
     types-aiobotocore-xray
 
   ;
