@@ -63,6 +63,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     installManPage doc/udiskie.8
+
+    installShellCompletion \
+      --bash completions/bash/* \
+      --zsh completions/zsh/*
   '';
 
   preFixup = ''
