@@ -704,5 +704,7 @@ rec {
 
   types-aiobotocore-swf = buildTypesAiobotocorePackage "swf" "2.6.0" "sha256-x9cBjUe4LC9uSsFpPciZP1QlUEqfNo3xZFKUqPuVV6E=";
 
+  types-aiobotocore-synthetics = buildTypesAiobotocorePackage "synthetics" "2.6.0" "sha256-Wew0A2xIYOGXzfZf3sBpHnRW/dZD1s6wHveNMwYj1s4=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

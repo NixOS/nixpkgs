@@ -14805,6 +14805,8 @@ self: super: with self; {
 
     types-aiobotocore-swf
 
+    types-aiobotocore-synthetics
+
     types-aiobotocore-xray
 
   ;
