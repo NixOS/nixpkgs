@@ -14729,6 +14729,8 @@ self: super: with self; {
 
     types-aiobotocore-sagemaker-geospatial
 
+    types-aiobotocore-sagemaker-metrics
+
     types-aiobotocore-xray
 
   ;
