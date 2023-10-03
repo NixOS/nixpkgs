@@ -7631,6 +7631,8 @@ self: super: with self; {
 
     mypy-boto3-resource-explorer-2
 
+    mypy-boto3-resource-groups
+
     mypy-boto3-s3
 
     mypy-boto3-xray
