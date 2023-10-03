@@ -156,5 +156,7 @@ rec {
 
   types-aiobotocore-cloudwatch = buildTypesAiobotocorePackage "cloudwatch" "2.6.0" "sha256-ntQkDjM3I3wuMH5jsifODEwRna2ctRW1M9bzyEjIF7w=";
 
+  types-aiobotocore-codeartifact = buildTypesAiobotocorePackage "codeartifact" "2.6.0" "sha256-NuMqaomry4ezNNRKBLOJ0xNwGUO2Prl4nf/5O38oyqI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

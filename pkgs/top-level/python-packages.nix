@@ -14257,6 +14257,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudwatch
 
+    types-aiobotocore-codeartifact
+
     types-aiobotocore-xray
 
   ;
