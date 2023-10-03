@@ -25,9 +25,9 @@ stdenvNoCC.mkDerivation {
   dontFixup = true;
   installPhase = ''
     runHook preInstall
-    APP_DIR="$out/Applications/${product}.app"
+    APP_DIR="$out/Applications/"
     mkdir -p "$APP_DIR"
-    cp -Tr "${product}.app" "$APP_DIR"
+    cp -r *.app "$APP_DIR"
     mkdir -p "$out/bin"
     cat << EOF > "$out/bin/${loname}"
     open -na '$APP_DIR' --args "\$@"
