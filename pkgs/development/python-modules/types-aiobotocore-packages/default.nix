@@ -678,5 +678,7 @@ rec {
 
   types-aiobotocore-sqs = buildTypesAiobotocorePackage "sqs" "2.6.0" "sha256-J5QSpJQjhO6T2uGpDstHdEVJTLuTIxilmYmKdtB7u6g=";
 
+  types-aiobotocore-ssm = buildTypesAiobotocorePackage "ssm" "2.6.0" "sha256-NxTwgcrDNOHZ8PReIgfTOGLTl7bL1948NKAyjJ0QYKc=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
