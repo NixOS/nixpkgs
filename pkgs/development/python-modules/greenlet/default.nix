@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPyPy
 , objgraph
 , psutil
 , pytestCheckHook
@@ -10,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "greenlet";
-  version = "2.0.2";
+  version = "3.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-58jcE699sJe+1koFHS3Unp8K9JXCaZXACp7oQmkNNMA=";
+    hash = "sha256-GYNOP5H0hUQq3B7kQBcexdmkhAofe9Xtl4M1RHGc4Qs=";
   };
 
   nativeCheckInputs = [
