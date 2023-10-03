@@ -378,5 +378,7 @@ rec {
 
   types-aiobotocore-iottwinmaker = buildTypesAiobotocorePackage "iottwinmaker" "2.6.0" "sha256-/h85AoG+poq4t0EvpXdofWfbaEBD6CiCxhdaGKLi4C0=";
 
+  types-aiobotocore-iotwireless = buildTypesAiobotocorePackage "iotwireless" "2.6.0" "sha256-kuOboqDTHpdSW6vD/JGOdLL2U639wM+2V2KaSm1j0xo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

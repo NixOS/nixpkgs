@@ -14479,6 +14479,8 @@ self: super: with self; {
 
     types-aiobotocore-iottwinmaker
 
+    types-aiobotocore-iotwireless
+
     types-aiobotocore-xray
 
   ;
