@@ -14549,6 +14549,8 @@ self: super: with self; {
 
     types-aiobotocore-machinelearning
 
+    types-aiobotocore-macie
+
     types-aiobotocore-xray
 
   ;
