@@ -14609,6 +14609,8 @@ self: super: with self; {
 
     types-aiobotocore-neptune
 
+    types-aiobotocore-network-firewall
+
     types-aiobotocore-xray
 
   ;
