@@ -238,5 +238,7 @@ rec {
 
   types-aiobotocore-docdb-elastic = buildTypesAiobotocorePackage "docdb-elastic" "2.6.0" "sha256-ro0xv2HHzTXA6tRNnr3eQjCj5iaqc1wOcsKny8j/hoQ=";
 
+  types-aiobotocore-drs = buildTypesAiobotocorePackage "drs" "2.6.0" "sha256-4CeNeftLpPSZYqw09LcPRC+8yVp+84azRHQ8O0JFOOo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
