@@ -325,6 +325,9 @@ in
         "network-online.target"
         "time-sync.target"
       ];
+      wants = [
+        "network-online.target"
+      ];
       wantedBy = [
         "multi-user.target"
       ];
@@ -371,6 +374,9 @@ in
       after = [
         "network-online.target"
         "time-sync.target"
+      ];
+      wants = [
+        "network-online.target"
       ];
       wantedBy = [
         "multi-user.target"
