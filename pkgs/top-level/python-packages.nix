@@ -7613,6 +7613,8 @@ self: super: with self; {
 
     mypy-boto3-ram
 
+    mypy-boto3-rbin
+
     mypy-boto3-s3
 
     mypy-boto3-xray
