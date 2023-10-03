@@ -14319,6 +14319,8 @@ self: super: with self; {
 
     types-aiobotocore-datasync
 
+    types-aiobotocore-dax
+
     types-aiobotocore-xray
 
   ;
