@@ -9877,9 +9877,13 @@ with pkgs;
 
   ldc = callPackage ../development/compilers/ldc { };
 
-  ligo = callPackage ../development/compilers/ligo {
-    coq = coq_8_14;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15;
+  ligo =
+    let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
+    callPackage ../development/compilers/ligo {
+    coq = coq_8_13.override {
+      customOCamlPackages = ocaml_p;
+    };
+    ocamlPackages = ocaml_p;
   };
 
   lego = callPackage ../tools/admin/lego { };
