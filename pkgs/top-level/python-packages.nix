@@ -14305,6 +14305,8 @@ self: super: with self; {
 
     types-aiobotocore-connectparticipant
 
+    types-aiobotocore-controltower
+
     types-aiobotocore-xray
 
   ;
