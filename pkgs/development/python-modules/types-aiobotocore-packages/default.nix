@@ -738,5 +738,7 @@ rec {
 
   types-aiobotocore-workdocs = buildTypesAiobotocorePackage "workdocs" "2.6.0" "sha256-cNegCM7a4QlI+NLzIRIoGHYzQqbFkNRKqDKLOqE3OUY=";
 
+  types-aiobotocore-worklink = buildTypesAiobotocorePackage "worklink" "2.6.0" "sha256-hMPU0wmTi0BQ+AWo4T6DIOl6FrAQbzdal8rcPoY3wP0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

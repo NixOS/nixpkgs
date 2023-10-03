@@ -14839,6 +14839,8 @@ self: super: with self; {
 
     types-aiobotocore-workdocs
 
+    types-aiobotocore-worklink
+
     types-aiobotocore-xray
 
   ;
