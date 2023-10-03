@@ -7671,6 +7671,8 @@ self: super: with self; {
 
     mypy-boto3-sagemaker-metrics
 
+    mypy-boto3-sagemaker-runtime
+
     mypy-boto3-xray
 
   ;

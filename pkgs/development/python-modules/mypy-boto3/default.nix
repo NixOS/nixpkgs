@@ -632,6 +632,8 @@ rec {
 
   mypy-boto3-sagemaker-metrics = buildMypyBoto3Package "sagemaker-metrics" "1.28.36" "sha256-DF36xuoA1csbTCz/NJ8UhU7NPYU/OgE0+Z1t5ppPKCA=";
 
+  mypy-boto3-sagemaker-runtime = buildMypyBoto3Package "sagemaker-runtime" "1.28.39" "sha256-BQFdGoaL6GPAtCgFBTT4ajdkSWXsPrxYcLGndAcZw2k=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
