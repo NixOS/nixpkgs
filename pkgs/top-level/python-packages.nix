@@ -7421,6 +7421,8 @@ self: super: with self; {
 
     mypy-boto3-ivs-realtime
 
+    mypy-boto3-ivschat
+
     mypy-boto3-s3
 
     mypy-boto3-xray
