@@ -14427,6 +14427,8 @@ self: super: with self; {
 
     types-aiobotocore-guardduty
 
+    types-aiobotocore-health
+
     types-aiobotocore-xray
 
   ;

@@ -326,5 +326,7 @@ rec {
 
   types-aiobotocore-guardduty = buildTypesAiobotocorePackage "guardduty" "2.6.0" "sha256-3bScTMTc7PMrHvZpfPYENj55w2JjnK/pVuNLcxCjw5Q=";
 
+  types-aiobotocore-health = buildTypesAiobotocorePackage "health" "2.6.0" "sha256-WBxZlnWrZ6b0MIEomvgUDqiKNe9KIIgOrNrRhRw07EA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
