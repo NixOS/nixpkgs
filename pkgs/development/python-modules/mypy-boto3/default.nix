@@ -422,6 +422,8 @@ rec {
 
   mypy-boto3-lexv2-models = buildMypyBoto3Package "lexv2-models" "1.28.36" "sha256-6DXon6AyJugNzp9bKXfvspvWGdD11dV5qxBZa7AikbE=";
 
+  mypy-boto3-lexv2-runtime = buildMypyBoto3Package "lexv2-runtime" "1.28.36" "sha256-6wP6YHyctJWXdPO8bmylwhxtJ3jltbWYyAxdu+5+X5w=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
