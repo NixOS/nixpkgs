@@ -364,5 +364,7 @@ rec {
 
   types-aiobotocore-iotevents = buildTypesAiobotocorePackage "iotevents" "2.6.0" "sha256-M3wUbFFGsYQesy7ASen+b6yokGkjXY0P5wpGexO2CGg=";
 
+  types-aiobotocore-iotevents-data = buildTypesAiobotocorePackage "iotevents-data" "2.6.0" "sha256-ESm7ZCtEvHo/r9LXnBaIAVAb4bQkGjIlmUNlo/JuzjE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
