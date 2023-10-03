@@ -7637,6 +7637,8 @@ self: super: with self; {
 
     mypy-boto3-robomaker
 
+    mypy-boto3-rolesanywhere
+
     mypy-boto3-s3
 
     mypy-boto3-xray
