@@ -14437,6 +14437,8 @@ self: super: with self; {
 
     types-aiobotocore-identitystore
 
+    types-aiobotocore-imagebuilder
+
     types-aiobotocore-xray
 
   ;

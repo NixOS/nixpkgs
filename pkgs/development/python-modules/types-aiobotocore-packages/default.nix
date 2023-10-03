@@ -336,5 +336,7 @@ rec {
 
   types-aiobotocore-identitystore = buildTypesAiobotocorePackage "identitystore" "2.6.0" "sha256-u4d+/kVZ+qtLyueNSGy6a2VoB0jIYdKZqvCQQfarbx4=";
 
+  types-aiobotocore-imagebuilder = buildTypesAiobotocorePackage "imagebuilder" "2.6.0" "sha256-uhkFIVr68n0ShrpZY9qyghd0XgMb0ZT6fF9WdjtF7g0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
