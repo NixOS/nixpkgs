@@ -14691,6 +14691,8 @@ self: super: with self; {
 
     types-aiobotocore-resource-explorer-2
 
+    types-aiobotocore-resource-groups
+
     types-aiobotocore-xray
 
   ;

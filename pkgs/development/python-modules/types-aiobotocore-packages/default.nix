@@ -590,5 +590,7 @@ rec {
 
   types-aiobotocore-resource-explorer-2 = buildTypesAiobotocorePackage "resource-explorer-2" "2.6.0" "sha256-cjBd3Ns1ckr7DT9gpaeb8CbXOrmwU3gENN5Is5BwrZI=";
 
+  types-aiobotocore-resource-groups = buildTypesAiobotocorePackage "resource-groups" "2.6.0" "sha256-GcbI21WVdMmwMcpbBkma4VrLsLVRP24/Uk43+4vE864=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
