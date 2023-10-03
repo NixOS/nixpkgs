@@ -14201,6 +14201,8 @@ self: super: with self; {
 
     types-aiobotocore-autoscaling
 
+    types-aiobotocore-autoscaling-plans
+
     types-aiobotocore-xray
 
   ;
