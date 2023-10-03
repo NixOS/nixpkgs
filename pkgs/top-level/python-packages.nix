@@ -14727,6 +14727,8 @@ self: super: with self; {
 
     types-aiobotocore-sagemaker-featurestore-runtime
 
+    types-aiobotocore-sagemaker-geospatial
+
     types-aiobotocore-xray
 
   ;
