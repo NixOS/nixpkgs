@@ -494,5 +494,7 @@ rec {
 
   types-aiobotocore-migrationhub-config = buildTypesAiobotocorePackage "migrationhub-config" "2.6.0" "sha256-hXju28oSNGlQ0qCwFD+qoyWFpKMbFkGWEXteOVOKiII=";
 
+  types-aiobotocore-migrationhuborchestrator = buildTypesAiobotocorePackage "migrationhuborchestrator" "2.6.0" "sha256-mo4vH/xsbRf1UViSRu4P2YzI+7LFkkzXsHeZZLdXg+U=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
