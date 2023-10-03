@@ -666,5 +666,7 @@ rec {
 
   types-aiobotocore-simspaceweaver = buildTypesAiobotocorePackage "simspaceweaver" "2.6.0" "sha256-WrkKQxXI7eIaX4GimyDyBqDWVjw0eF3jJTA40JScvG0=";
 
+  types-aiobotocore-sms = buildTypesAiobotocorePackage "sms" "2.6.0" "sha256-I//ZK5HolYkCfpTCPYhEDALfcn9AYcLk7x7vfRjTDlo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

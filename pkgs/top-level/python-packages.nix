@@ -14767,6 +14767,8 @@ self: super: with self; {
 
     types-aiobotocore-simspaceweaver
 
+    types-aiobotocore-sms
+
     types-aiobotocore-xray
 
   ;
