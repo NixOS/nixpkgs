@@ -380,5 +380,7 @@ rec {
 
   types-aiobotocore-iotwireless = buildTypesAiobotocorePackage "iotwireless" "2.6.0" "sha256-kuOboqDTHpdSW6vD/JGOdLL2U639wM+2V2KaSm1j0xo=";
 
+  types-aiobotocore-ivs = buildTypesAiobotocorePackage "ivs" "2.6.0" "sha256-CiMKW2suhsU2dZsLQkL3hK2qKRJ56FS4Ix7Dt347bMA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

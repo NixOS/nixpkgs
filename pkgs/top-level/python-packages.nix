@@ -14481,6 +14481,8 @@ self: super: with self; {
 
     types-aiobotocore-iotwireless
 
+    types-aiobotocore-ivs
+
     types-aiobotocore-xray
 
   ;
