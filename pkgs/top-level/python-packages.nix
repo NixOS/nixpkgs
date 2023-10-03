@@ -7155,6 +7155,8 @@ self: super: with self; {
 
     mypy-boto3-ce
 
+    mypy-boto3-chime
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
