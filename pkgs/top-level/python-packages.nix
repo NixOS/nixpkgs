@@ -14189,6 +14189,8 @@ self: super: with self; {
 
     types-aiobotocore-apprunner
 
+    types-aiobotocore-appstream
+
     types-aiobotocore-xray
 
   ;
