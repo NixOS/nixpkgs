@@ -14825,6 +14825,8 @@ self: super: with self; {
 
     types-aiobotocore-voice-id
 
+    types-aiobotocore-vpc-lattice
+
     types-aiobotocore-xray
 
   ;

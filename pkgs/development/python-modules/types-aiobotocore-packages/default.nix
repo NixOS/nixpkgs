@@ -724,5 +724,7 @@ rec {
 
   types-aiobotocore-voice-id = buildTypesAiobotocorePackage "voice-id" "2.6.0" "sha256-Pnn3CGL5rr3MtzaakjDXmReVKXnyB76IxSnAPnKU45I=";
 
+  types-aiobotocore-vpc-lattice = buildTypesAiobotocorePackage "vpc-lattice" "2.6.0" "sha256-kxniFLA2e7aDKulF5z1Ap3z6wbE3eY3QVqhK+CVhrcE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
