@@ -14225,6 +14225,8 @@ self: super: with self; {
 
     types-aiobotocore-chime-sdk-media-pipelines
 
+    types-aiobotocore-chime-sdk-meetings
+
     types-aiobotocore-xray
 
   ;

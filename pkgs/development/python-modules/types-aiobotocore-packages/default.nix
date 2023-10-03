@@ -124,5 +124,7 @@ rec {
 
   types-aiobotocore-chime-sdk-media-pipelines = buildTypesAiobotocorePackage "chime-sdk-media-pipelines" "2.6.0" "sha256-+2AioI5B/K5QhDsaBSAFyNW0Fd49EA8ZBVrULd3u7qQ=";
 
+  types-aiobotocore-chime-sdk-meetings = buildTypesAiobotocorePackage "chime-sdk-meetings" "2.6.0" "sha256-oxlFkYpDoi7pidqzDOYdeTazVl/HjnuZmnjMGZa/WIE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
