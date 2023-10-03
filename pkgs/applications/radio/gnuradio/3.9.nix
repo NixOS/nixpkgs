@@ -227,6 +227,11 @@ let
     gr-zeromq = {
       runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
@@ -262,6 +267,13 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   # Will still evaluate correctly if not used here. It only helps nix-update
   # find the right file in which version is defined.
   inherit (shared) src;
+  # Remove failing tests
+  preConfigure = (shared.preConfigure or "") + ''
+    # https://github.com/gnuradio/gnuradio/issues/3801
+    rm gr-blocks/python/blocks/qa_cpp_py_binding.py
+    rm gr-blocks/python/blocks/qa_cpp_py_binding_set.py
+    rm gr-blocks/python/blocks/qa_ctrlport_probes.py
+  '';
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch

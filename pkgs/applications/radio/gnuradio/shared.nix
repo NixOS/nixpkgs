@@ -112,9 +112,14 @@ in {
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
   dontWrapQtApps = true;
-  # Tests should succeed, but it's hard to get LD_LIBRARY_PATH right in order
-  # for it to happen.
-  doCheck = false;
+  # On darwin, it requires playing with DYLD_FALLBACK_LIBRARY_PATH to make if
+  # find libgnuradio-runtim.3.*.dylib .
+  doCheck = !stdenv.isDarwin;
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}"
+  '';
 
   meta = with lib; {
     description = "Software Defined Radio (SDR) software";

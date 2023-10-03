@@ -248,6 +248,11 @@ let
     gr-zeromq = {
       runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
     gr-network = {
       cmakeEnableFlag = "GR_NETWORK";
