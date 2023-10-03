@@ -14507,6 +14507,8 @@ self: super: with self; {
 
     types-aiobotocore-kinesis-video-webrtc-storage
 
+    types-aiobotocore-kinesisanalytics
+
     types-aiobotocore-xray
 
   ;
