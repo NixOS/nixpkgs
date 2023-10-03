@@ -14343,6 +14343,8 @@ self: super: with self; {
 
     types-aiobotocore-ds
 
+    types-aiobotocore-dynamodb
+
     types-aiobotocore-xray
 
   ;
