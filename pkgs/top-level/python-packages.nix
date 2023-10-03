@@ -14713,6 +14713,8 @@ self: super: with self; {
 
     types-aiobotocore-rum
 
+    types-aiobotocore-s3
+
     types-aiobotocore-xray
 
   ;

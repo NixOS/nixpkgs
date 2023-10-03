@@ -612,5 +612,7 @@ rec {
 
   types-aiobotocore-rum = buildTypesAiobotocorePackage "rum" "2.6.0" "sha256-e8LzXHMfEgkcJKx5a/I//L4/oCz1l7N487wNoTtBP1Y=";
 
+  types-aiobotocore-s3 = buildTypesAiobotocorePackage "s3" "2.6.0" "sha256-MIp/lGwJah2Jj/2KFfoeW2uQlV1DZbP8TYcdsNvEMU8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
