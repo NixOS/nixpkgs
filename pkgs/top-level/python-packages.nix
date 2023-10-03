@@ -7337,6 +7337,8 @@ self: super: with self; {
 
     mypy-boto3-forecast
 
+    mypy-boto3-forecastquery
+
     mypy-boto3-s3
 
     mypy-boto3-xray
