@@ -14487,6 +14487,8 @@ self: super: with self; {
 
     types-aiobotocore-ivschat
 
+    types-aiobotocore-kafka
+
     types-aiobotocore-xray
 
   ;
