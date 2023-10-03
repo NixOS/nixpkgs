@@ -14425,6 +14425,8 @@ self: super: with self; {
 
     types-aiobotocore-groundstation
 
+    types-aiobotocore-guardduty
+
     types-aiobotocore-xray
 
   ;

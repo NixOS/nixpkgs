@@ -324,5 +324,7 @@ rec {
 
   types-aiobotocore-groundstation = buildTypesAiobotocorePackage "groundstation" "2.6.0" "sha256-VGGDcARvtSeukjgVB9jwSamIrlrNCF+0pNszN6VkMC0=";
 
+  types-aiobotocore-guardduty = buildTypesAiobotocorePackage "guardduty" "2.6.0" "sha256-3bScTMTc7PMrHvZpfPYENj55w2JjnK/pVuNLcxCjw5Q=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
