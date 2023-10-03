@@ -696,6 +696,8 @@ rec {
 
   mypy-boto3-stepfunctions = buildMypyBoto3Package "stepfunctions" "1.28.36" "sha256-jHlOmKvFyiPvE+NR9Gu4Sd5jS6ym81KG4x5Y3t5Atoc=";
 
+  mypy-boto3-storagegateway = buildMypyBoto3Package "storagegateway" "1.28.36" "sha256-59qw52muZfYjmzO3quhIfgSk5xurzialMIEh+k+C69Q=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
