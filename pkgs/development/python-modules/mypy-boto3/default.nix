@@ -268,6 +268,8 @@ rec {
 
   mypy-boto3-elastictranscoder = buildMypyBoto3Package "elastictranscoder" "1.28.36" "sha256-lkz4up43fVyWCOO9dM4xI285wsAu1lnV4mICuJV8D4k=";
 
+  mypy-boto3-elb = buildMypyBoto3Package "elb" "1.28.36" "sha256-c9Re0WZOn+LaK58VJk+YlI3YWn/wrgT+/TdqrOisBnM=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
