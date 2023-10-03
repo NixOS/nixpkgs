@@ -14751,6 +14751,8 @@ self: super: with self; {
 
     types-aiobotocore-service-quotas
 
+    types-aiobotocore-servicecatalog
+
     types-aiobotocore-xray
 
   ;

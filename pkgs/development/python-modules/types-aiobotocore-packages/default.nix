@@ -650,5 +650,7 @@ rec {
 
   types-aiobotocore-service-quotas = buildTypesAiobotocorePackage "service-quotas" "2.6.0" "sha256-GcDl3LIy+urPEzXINmU4g7xgk8IIIJ6fBFFXhv18eSA=";
 
+  types-aiobotocore-servicecatalog = buildTypesAiobotocorePackage "servicecatalog" "2.6.0" "sha256-5IoQuLh6bh3mlzInR+Aci6yIRCSYJXfbvv49FEs2tPA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
