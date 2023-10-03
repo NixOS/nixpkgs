@@ -14651,6 +14651,8 @@ self: super: with self; {
 
     types-aiobotocore-pinpoint-email
 
+    types-aiobotocore-pinpoint-sms-voice
+
     types-aiobotocore-xray
 
   ;
