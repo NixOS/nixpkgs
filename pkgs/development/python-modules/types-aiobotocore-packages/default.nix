@@ -690,5 +690,7 @@ rec {
 
   types-aiobotocore-sso-admin = buildTypesAiobotocorePackage "sso-admin" "2.6.0" "sha256-idc5d/Kvjhd7RkTHuErSoP/f64/Q1+jg0TE3UMiL4pQ=";
 
+  types-aiobotocore-sso-oidc = buildTypesAiobotocorePackage "sso-oidc" "2.6.0" "sha256-3eJaNx/Tzy9XQtHSPGKlkMG7klB2KDgL60knGghWAn8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
