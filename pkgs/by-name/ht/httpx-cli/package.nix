@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, graalvm17-ce, maven, fetchurl }:
+{ lib, fetchFromGitHub, graalvm-ce, maven, fetchurl }:
 let
   mavenJdk17 = maven.override {
-    jdk = graalvm17-ce;
+    jdk = graalvm-ce;
   };
   metadataVersion = "0.3.4";
 in
@@ -43,6 +43,6 @@ mavenJdk17.buildMavenPackage rec {
     license = licenses.apsl20;
     mainProgram = "httpx-cli";
     maintainers = with maintainers; [ ghostbuster91 ];
-    inherit (graalvm17-ce.meta) platforms;
+    inherit (graalvm-ce.meta) platforms;
   };
 }
