@@ -7487,6 +7487,8 @@ self: super: with self; {
 
     mypy-boto3-macie
 
+    mypy-boto3-macie2
+
     mypy-boto3-s3
 
     mypy-boto3-xray
