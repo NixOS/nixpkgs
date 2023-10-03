@@ -560,5 +560,7 @@ rec {
 
   types-aiobotocore-pricing = buildTypesAiobotocorePackage "pricing" "2.6.0" "sha256-PccslOI6F2k50g03j22AYN3xtTsTW3ie4W4pEaT2XwY=";
 
+  types-aiobotocore-privatenetworks = buildTypesAiobotocorePackage "privatenetworks" "2.6.0" "sha256-3e6/IA6QYgGhipt5XP/b4h3soko1tLntMieXOmeWjlI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14661,6 +14661,8 @@ self: super: with self; {
 
     types-aiobotocore-pricing
 
+    types-aiobotocore-privatenetworks
+
     types-aiobotocore-xray
 
   ;
