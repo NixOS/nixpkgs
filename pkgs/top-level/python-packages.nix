@@ -7205,6 +7205,8 @@ self: super: with self; {
 
     mypy-boto3-codeguru-reviewer
 
+    mypy-boto3-codeguru-security
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
