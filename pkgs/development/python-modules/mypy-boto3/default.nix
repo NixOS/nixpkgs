@@ -466,6 +466,8 @@ rec {
 
   mypy-boto3-medialive = buildMypyBoto3Package "medialive" "1.28.45" "sha256-vcf1hxhHJ/F6S58p9Jb/Pic063aeLVc+HrzAnN9ph/A=";
 
+  mypy-boto3-mediapackage = buildMypyBoto3Package "mediapackage" "1.28.36" "sha256-ezPUrghBEb7oInGgyP8JlEf2yKSOPHRznBZ7BcNP6Oc=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
