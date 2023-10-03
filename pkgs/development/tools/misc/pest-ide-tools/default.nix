@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pest-ide-tools";
-  version = "0.3.3";
-  cargoSha256 = "sha256-TXsRGkhswxxLCPOk1qMTvDjs4de1sClRJMr/0o6u4Pg=";
+  version = "0.3.6";
+  cargoSha256 = "sha256-uFcEE5Hlb0fhOH0birqeH+hOuAyZVjQOYFhoMdR8czM=";
 
   src = fetchFromGitHub {
     owner = "pest-parser";
     repo = "pest-ide-tools";
     rev = "v${version}";
-    sha256 = "sha256-XAdQQFU8ZF0zarqCB6WlhpZVNqNyX6e4np4Wjalhobo=";
+    sha256 = "sha256-SymtMdj7QVOEiSeTjmVidejFeGK8swnM6nfT7u18URs=";
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
