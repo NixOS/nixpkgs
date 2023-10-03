@@ -412,5 +412,7 @@ rec {
 
   types-aiobotocore-kinesisvideo = buildTypesAiobotocorePackage "kinesisvideo" "2.6.0" "sha256-wyT6YahL3sRGHQcBTAyLd7l75wVWRp2waS+Q46Me/ok=";
 
+  types-aiobotocore-kms = buildTypesAiobotocorePackage "kms" "2.6.0" "sha256-mY26ICYSENAruEn4986zxi5R9ong4nyuRAHgMZDliqo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

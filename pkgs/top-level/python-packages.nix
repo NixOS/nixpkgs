@@ -14513,6 +14513,8 @@ self: super: with self; {
 
     types-aiobotocore-kinesisvideo
 
+    types-aiobotocore-kms
+
     types-aiobotocore-xray
 
   ;
