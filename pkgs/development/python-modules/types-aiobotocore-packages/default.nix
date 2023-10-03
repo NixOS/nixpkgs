@@ -354,5 +354,7 @@ rec {
 
   types-aiobotocore-iot-roborunner = buildTypesAiobotocorePackage "iot-roborunner" "2.6.0" "sha256-BFSV0lfXriD43UFXjdomHIQO60TjrYWmL6+htf9Z3mE=";
 
+  types-aiobotocore-iot1click-devices = buildTypesAiobotocorePackage "iot1click-devices" "2.6.0" "sha256-MRRil8KuR88NvjAOQHQSftplzk7+sdAJBb1Koxj1j8o=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
