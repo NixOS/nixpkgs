@@ -14149,6 +14149,8 @@ self: super: with self; {
 
     types-aiobotocore-account
 
+    types-aiobotocore-acm
+
     types-aiobotocore-xray
 
   ;
