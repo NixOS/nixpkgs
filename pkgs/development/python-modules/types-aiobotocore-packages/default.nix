@@ -572,5 +572,7 @@ rec {
 
   types-aiobotocore-ram = buildTypesAiobotocorePackage "ram" "2.6.0" "sha256-pZ/h8/1njNNp9+nhpbU/VhGevrZkSrWnhWm3weHAxWQ=";
 
+  types-aiobotocore-rbin = buildTypesAiobotocorePackage "rbin" "2.6.0" "sha256-TOI2FQdO71XT1NESXGrZN+UI6c7CGRmsBbp4ipuQwhg=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

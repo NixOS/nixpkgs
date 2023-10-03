@@ -14673,6 +14673,8 @@ self: super: with self; {
 
     types-aiobotocore-ram
 
+    types-aiobotocore-rbin
+
     types-aiobotocore-xray
 
   ;
