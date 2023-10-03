@@ -14567,6 +14567,8 @@ self: super: with self; {
 
     types-aiobotocore-mediaconvert
 
+    types-aiobotocore-medialive
+
     types-aiobotocore-xray
 
   ;
