@@ -232,5 +232,7 @@ rec {
 
   types-aiobotocore-dlm = buildTypesAiobotocorePackage "dlm" "2.6.0" "sha256-JLOVu9OlJgrfTBlmzVNN5saYO8AFk8N54hRzDAjq7WI=";
 
+  types-aiobotocore-dms = buildTypesAiobotocorePackage "dms" "2.6.0" "sha256-cWGwdGBTgEag5SeRDLvAJtCS1dAxtt5R0uanPI6RjkY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14333,6 +14333,8 @@ self: super: with self; {
 
     types-aiobotocore-dlm
 
+    types-aiobotocore-dms
+
     types-aiobotocore-xray
 
   ;
