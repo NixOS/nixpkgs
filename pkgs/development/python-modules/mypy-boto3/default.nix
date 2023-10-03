@@ -384,6 +384,8 @@ rec {
 
   mypy-boto3-ivschat = buildMypyBoto3Package "ivschat" "1.28.36" "sha256-WMq8phYMtEl8Ey7tDxBzVexuR4gmZQlO6qpDwYu8xwY=";
 
+  mypy-boto3-kafka = buildMypyBoto3Package "kafka" "1.28.36" "sha256-93kbJxpiLQsnhudgnGoGUimUPfhGMN0cc1x8qqsA/Jc=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
