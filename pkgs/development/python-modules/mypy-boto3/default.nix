@@ -300,6 +300,8 @@ rec {
 
   mypy-boto3-forecastquery = buildMypyBoto3Package "forecastquery" "1.28.36" "sha256-s2z8QZR9PP8Kj6yImCwUfh/gtbj4SKLn8wDTOYUVaEE=";
 
+  mypy-boto3-frauddetector = buildMypyBoto3Package "frauddetector" "1.28.36" "sha256-Zn3rGHErin7nPYnyC0Ojr0Kkc5T+YDD2KmZinYNV9Jg=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
