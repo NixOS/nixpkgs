@@ -14395,6 +14395,8 @@ self: super: with self; {
 
     types-aiobotocore-firehose
 
+    types-aiobotocore-fis
+
     types-aiobotocore-xray
 
   ;

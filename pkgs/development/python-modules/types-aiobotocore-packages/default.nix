@@ -294,5 +294,7 @@ rec {
 
   types-aiobotocore-firehose = buildTypesAiobotocorePackage "firehose" "2.6.0" "sha256-viWUrt2F0O1jVhkxK5G776A4r7d4jJJVI/5UsUS+cao=";
 
+  types-aiobotocore-fis = buildTypesAiobotocorePackage "fis" "2.6.0" "sha256-4T/EcdB+5TV8PnX1Z9c8Ato19kznO3yQPZohuWD1+J8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
