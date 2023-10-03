@@ -7185,6 +7185,8 @@ self: super: with self; {
 
     mypy-boto3-cloudsearch
 
+    mypy-boto3-cloudsearchdomain
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
