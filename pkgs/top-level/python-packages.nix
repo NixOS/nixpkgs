@@ -14743,6 +14743,8 @@ self: super: with self; {
 
     types-aiobotocore-secretsmanager
 
+    types-aiobotocore-securityhub
+
     types-aiobotocore-xray
 
   ;
