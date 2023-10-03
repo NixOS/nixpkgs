@@ -14295,6 +14295,8 @@ self: super: with self; {
 
     types-aiobotocore-config
 
+    types-aiobotocore-connect
+
     types-aiobotocore-xray
 
   ;
