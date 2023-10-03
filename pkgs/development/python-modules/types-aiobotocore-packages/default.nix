@@ -272,5 +272,7 @@ rec {
 
   types-aiobotocore-elb = buildTypesAiobotocorePackage "elb" "2.6.0" "sha256-+mFIAOecS21QFsnB+V1EFyGLv6uW+oMzkRi051HvPGA=";
 
+  types-aiobotocore-elbv2 = buildTypesAiobotocorePackage "elbv2" "2.6.0" "sha256-OIWzkp7AC2bK55bl3WvL2Zk7M0WRPc8jVHekPAGDtyw=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

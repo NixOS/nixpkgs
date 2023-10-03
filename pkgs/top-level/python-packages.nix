@@ -14373,6 +14373,8 @@ self: super: with self; {
 
     types-aiobotocore-elb
 
+    types-aiobotocore-elbv2
+
     types-aiobotocore-xray
 
   ;
