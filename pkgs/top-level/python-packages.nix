@@ -14561,6 +14561,8 @@ self: super: with self; {
 
     types-aiobotocore-marketplace-entitlement
 
+    types-aiobotocore-marketplacecommerceanalytics
+
     types-aiobotocore-xray
 
   ;
