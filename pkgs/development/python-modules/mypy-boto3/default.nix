@@ -216,6 +216,8 @@ rec {
 
   mypy-boto3-datasync = buildMypyBoto3Package "datasync" "1.28.49" "sha256-BcW47DW0aHb+Gabj6fybaiZgtKotWNvNChyKyaagIw4=";
 
+  mypy-boto3-dax = buildMypyBoto3Package "dax" "1.28.36" "sha256-t5DMgU3iSxWLSXpC9QaNonKKQpl0tr/gQPnPxO+dTbY=";
+
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
 
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
