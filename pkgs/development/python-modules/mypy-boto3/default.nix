@@ -294,6 +294,8 @@ rec {
 
   mypy-boto3-fis = buildMypyBoto3Package "fis" "1.28.36" "sha256-km9Ia9Hs/rZv3ljv+BVnR9pOxNK3u5luJOMaW670km0=";
 
+  mypy-boto3-fms = buildMypyBoto3Package "fms" "1.28.36" "sha256-mzumkMcF2TMrcnHoPPA0SlrmwFAw0TR1cMvSXF28gvM=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
