@@ -14631,6 +14631,8 @@ self: super: with self; {
 
     types-aiobotocore-osis
 
+    types-aiobotocore-outposts
+
     types-aiobotocore-xray
 
   ;

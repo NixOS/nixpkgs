@@ -530,5 +530,7 @@ rec {
 
   types-aiobotocore-osis = buildTypesAiobotocorePackage "osis" "2.6.0" "sha256-Q8EIdCvT0Zjj9udUNpWZzgNClVjNBWTW3V7emhdf+yg=";
 
+  types-aiobotocore-outposts = buildTypesAiobotocorePackage "outposts" "2.6.0" "sha256-tXAQ+tNeZUF1snrB+76Ku+j1Wdslah38s0YMBOINrlo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
