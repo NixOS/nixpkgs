@@ -184,7 +184,7 @@ in {
   ubootClearfog = buildUBoot {
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot-spl.kwb"];
+    filesToInstall = ["u-boot-with-spl.kwb"];
   };
 
   ubootCubieboard2 = buildUBoot {
