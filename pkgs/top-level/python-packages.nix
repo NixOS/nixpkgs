@@ -14687,6 +14687,8 @@ self: super: with self; {
 
     types-aiobotocore-rekognition
 
+    types-aiobotocore-resiliencehub
+
     types-aiobotocore-xray
 
   ;
