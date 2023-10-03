@@ -654,5 +654,7 @@ rec {
 
   types-aiobotocore-servicecatalog-appregistry = buildTypesAiobotocorePackage "servicecatalog-appregistry" "2.6.0" "sha256-l0xrQXkDYmB3+RFtwJ70l6GgKeA0z1V107HG8Ddvb8U=";
 
+  types-aiobotocore-servicediscovery = buildTypesAiobotocorePackage "servicediscovery" "2.6.0" "sha256-KLdOmaO6x7AmQInP1RRAf8s5rlpD0PpDHeBnor5gl2A=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
