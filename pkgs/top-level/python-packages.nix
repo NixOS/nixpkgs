@@ -7395,6 +7395,8 @@ self: super: with self; {
 
     mypy-boto3-iot1click-projects
 
+    mypy-boto3-iotanalytics
+
     mypy-boto3-s3
 
     mypy-boto3-xray
