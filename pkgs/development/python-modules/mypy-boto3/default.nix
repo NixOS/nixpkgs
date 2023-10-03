@@ -742,6 +742,8 @@ rec {
 
   mypy-boto3-worklink = buildMypyBoto3Package "worklink" "1.28.36" "sha256-oFjYLBxp/dZf1+IN5rj3usSUvZnRyhRMu63mRgdsrmI=";
 
+  mypy-boto3-workmail = buildMypyBoto3Package "workmail" "1.28.50" "sha256-OfRyehgMROua9Ydcc8HBvBp4eddo0re1w0fciBVUuS4=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
