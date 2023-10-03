@@ -158,6 +158,8 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "psycopg"
     "psycopg_c"
+  ];
+  pythonImportsExtrasCheck = [
     "psycopg_pool"
   ];
 
