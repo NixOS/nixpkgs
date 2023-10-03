@@ -514,5 +514,7 @@ rec {
 
   types-aiobotocore-nimble = buildTypesAiobotocorePackage "nimble" "2.6.0" "sha256-x+wmTG6jeK8KpSDdhOZkbkRZ7ai7N4xaU4cEmHhO5xA=";
 
+  types-aiobotocore-oam = buildTypesAiobotocorePackage "oam" "2.6.0" "sha256-Q/msYeaXs9MxXj6X0p8Gw08/Y4FvvV2xAbEXU6iqi2g=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

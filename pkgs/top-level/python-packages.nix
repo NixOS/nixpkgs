@@ -14615,6 +14615,8 @@ self: super: with self; {
 
     types-aiobotocore-nimble
 
+    types-aiobotocore-oam
+
     types-aiobotocore-xray
 
   ;
