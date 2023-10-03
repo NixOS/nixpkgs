@@ -5,9 +5,13 @@ stdenv.mkDerivation rec {
   version = "0.26";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/mlocate/${pname}-${version}.tar.xz";
+    url = "https://releases.pagure.org/mlocate/mlocate-${version}.tar.xz";
     sha256 = "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh";
   };
+
+  makeFlags = [
+    "dbfile=/var/cache/locatedb"
+  ];
 
   meta = with lib; {
     description = "Merging locate is an utility to index and quickly search for files";
