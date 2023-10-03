@@ -7657,6 +7657,8 @@ self: super: with self; {
 
     mypy-boto3-s3control
 
+    mypy-boto3-s3outposts
+
     mypy-boto3-xray
 
   ;
