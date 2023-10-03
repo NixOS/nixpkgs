@@ -14153,6 +14153,8 @@ self: super: with self; {
 
     types-aiobotocore-acm-pca
 
+    types-aiobotocore-alexaforbusiness
+
     types-aiobotocore-xray
 
   ;
