@@ -176,6 +176,8 @@ rec {
 
   mypy-boto3-codestar-connections = buildMypyBoto3Package "codestar-connections" "1.28.36" "sha256-1K0mrUUO0ycP7uBCqnESd/iGiElL0eqJfwLTpgPH5a0=";
 
+  mypy-boto3-codestar-notifications = buildMypyBoto3Package "codestar-notifications" "1.28.36" "sha256-BYTeNmL6fKXD6Ym0Z3DOZvLaTqRwANDWfCcWs9TUZ+Y=";
+
   mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.28.36" "sha256-pnLO62LZvr4sJsye3gWJROY+xHikSe7dX8erBTRXrPc=";
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
