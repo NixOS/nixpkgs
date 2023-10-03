@@ -482,5 +482,7 @@ rec {
 
   types-aiobotocore-medical-imaging = buildTypesAiobotocorePackage "medical-imaging" "2.6.0" "sha256-zUXGqquEveHHDqA8XeJX++Yc42rnyW9Vzt5A7LOImfk=";
 
+  types-aiobotocore-memorydb = buildTypesAiobotocorePackage "memorydb" "2.6.0" "sha256-FJ9aeZRCY+bhot3cU3qX4EuFAowPCc7kT2D0FGVTpys=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

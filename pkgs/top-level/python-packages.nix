@@ -14583,6 +14583,8 @@ self: super: with self; {
 
     types-aiobotocore-medical-imaging
 
+    types-aiobotocore-memorydb
+
     types-aiobotocore-xray
 
   ;
