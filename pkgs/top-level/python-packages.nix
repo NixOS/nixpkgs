@@ -14243,6 +14243,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudfront
 
+    types-aiobotocore-cloudhsm
+
     types-aiobotocore-xray
 
   ;

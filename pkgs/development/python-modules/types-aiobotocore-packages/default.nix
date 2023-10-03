@@ -142,5 +142,7 @@ rec {
 
   types-aiobotocore-cloudfront = buildTypesAiobotocorePackage "cloudfront" "2.6.0" "sha256-f9nqoXlg7sgY2QCkE1/+Q72N/8Besrl6gncmU+vNt/I=";
 
+  types-aiobotocore-cloudhsm = buildTypesAiobotocorePackage "cloudhsm" "2.6.0" "sha256-a3QRjQhW+cRJykNjhhJREGwuZxR0b+WxgRuS2yuGcTQ=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
