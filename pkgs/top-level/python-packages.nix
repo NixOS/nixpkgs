@@ -14735,6 +14735,8 @@ self: super: with self; {
 
     types-aiobotocore-savingsplans
 
+    types-aiobotocore-scheduler
+
     types-aiobotocore-xray
 
   ;

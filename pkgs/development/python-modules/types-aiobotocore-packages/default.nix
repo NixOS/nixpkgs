@@ -634,5 +634,7 @@ rec {
 
   types-aiobotocore-savingsplans = buildTypesAiobotocorePackage "savingsplans" "2.6.0" "sha256-6sIHmILzIg1aOskXnjbDDzbkygXDwFcnd9mfuuhRFZQ=";
 
+  types-aiobotocore-scheduler = buildTypesAiobotocorePackage "scheduler" "2.6.0" "sha256-2BnFCPgaAWxBsc+79oQT+DDj6IM7cV7F+LjqsFG6BBc=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
