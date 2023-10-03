@@ -14533,6 +14533,8 @@ self: super: with self; {
 
     types-aiobotocore-license-manager-user-subscriptions
 
+    types-aiobotocore-lightsail
+
     types-aiobotocore-xray
 
   ;

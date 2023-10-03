@@ -432,5 +432,7 @@ rec {
 
   types-aiobotocore-license-manager-user-subscriptions = buildTypesAiobotocorePackage "license-manager-user-subscriptions" "2.6.0" "sha256-0fLwCr5eDRxcGZdw3sqExh8awX1qu5XmEYMD63xhD3w=";
 
+  types-aiobotocore-lightsail = buildTypesAiobotocorePackage "lightsail" "2.6.0" "sha256-eiibXP8S+xvn+PTX8cd3WiN6yL2JmjK9EG9BryexFjY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
