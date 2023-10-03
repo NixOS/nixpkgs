@@ -14251,6 +14251,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudsearchdomain
 
+    types-aiobotocore-cloudtrail
+
     types-aiobotocore-xray
 
   ;
