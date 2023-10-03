@@ -7247,6 +7247,8 @@ self: super: with self; {
 
     mypy-boto3-customer-profiles
 
+    mypy-boto3-databrew
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
