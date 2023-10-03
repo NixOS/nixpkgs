@@ -14531,6 +14531,8 @@ self: super: with self; {
 
     types-aiobotocore-license-manager-linux-subscriptions
 
+    types-aiobotocore-license-manager-user-subscriptions
+
     types-aiobotocore-xray
 
   ;
