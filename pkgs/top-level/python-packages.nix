@@ -14827,6 +14827,8 @@ self: super: with self; {
 
     types-aiobotocore-vpc-lattice
 
+    types-aiobotocore-waf
+
     types-aiobotocore-xray
 
   ;

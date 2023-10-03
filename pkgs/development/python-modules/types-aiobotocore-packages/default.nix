@@ -726,5 +726,7 @@ rec {
 
   types-aiobotocore-vpc-lattice = buildTypesAiobotocorePackage "vpc-lattice" "2.6.0" "sha256-kxniFLA2e7aDKulF5z1Ap3z6wbE3eY3QVqhK+CVhrcE=";
 
+  types-aiobotocore-waf = buildTypesAiobotocorePackage "waf" "2.6.0" "sha256-adKf+AbPmeN57r93T36IewoiLZ+05CbpuS7NxCkQgMw=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
