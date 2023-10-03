@@ -3,7 +3,7 @@
 , aioresponses
 , buildPythonPackage
 , callee
-, fetchPypi
+, fetchFromGitHub
 , mock
 , poetry-core
 , poetry-dynamic-versioning
@@ -20,10 +20,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "auth0_python";
-    inherit version;
-    hash = "sha256-4XWxx0GlDVkABwK69laqOFZliWelQ5mWul3FcWnxuko=";
+  src = fetchFromGitHub {
+    owner = "auth0";
+    repo = "auth0-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RBkAuZQx7mBxVCpo5PoBiEge8+yTmp0XpcnxCkOsM6U=";
   };
 
   nativeBuildInputs = [
