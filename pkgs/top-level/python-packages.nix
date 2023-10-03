@@ -7143,6 +7143,8 @@ self: super: with self; {
 
     mypy-boto3-backup-gateway
 
+    mypy-boto3-backupstorage
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
