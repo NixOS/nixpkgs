@@ -14769,6 +14769,8 @@ self: super: with self; {
 
     types-aiobotocore-sms
 
+    types-aiobotocore-sms-voice
+
     types-aiobotocore-xray
 
   ;

@@ -668,5 +668,7 @@ rec {
 
   types-aiobotocore-sms = buildTypesAiobotocorePackage "sms" "2.6.0" "sha256-I//ZK5HolYkCfpTCPYhEDALfcn9AYcLk7x7vfRjTDlo=";
 
+  types-aiobotocore-sms-voice = buildTypesAiobotocorePackage "sms-voice" "2.6.0" "sha256-Qz+ZXVBSe3kHgGlqQjgxWoQhnguqauxmPKaISQbAG/8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
