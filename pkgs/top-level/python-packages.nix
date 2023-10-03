@@ -14559,6 +14559,8 @@ self: super: with self; {
 
     types-aiobotocore-marketplace-catalog
 
+    types-aiobotocore-marketplace-entitlement
+
     types-aiobotocore-xray
 
   ;
