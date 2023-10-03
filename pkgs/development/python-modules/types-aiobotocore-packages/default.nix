@@ -580,5 +580,7 @@ rec {
 
   types-aiobotocore-redshift = buildTypesAiobotocorePackage "redshift" "2.6.0" "sha256-6znZQUxNKE7SB6G+9l4iQSP9hZt+plKFA8VkE1scxrU=";
 
+  types-aiobotocore-redshift-data = buildTypesAiobotocorePackage "redshift-data" "2.6.0" "sha256-FRJeBjA5dfnnZ586VShmPt0CBgi5+ZYbldOUZIGR2L0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
