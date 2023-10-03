@@ -14417,6 +14417,8 @@ self: super: with self; {
 
     types-aiobotocore-glue
 
+    types-aiobotocore-grafana
+
     types-aiobotocore-xray
 
   ;
