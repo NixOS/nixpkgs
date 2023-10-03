@@ -14369,6 +14369,8 @@ self: super: with self; {
 
     types-aiobotocore-elasticbeanstalk
 
+    types-aiobotocore-elastictranscoder
+
     types-aiobotocore-xray
 
   ;
