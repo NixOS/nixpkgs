@@ -14815,6 +14815,8 @@ self: super: with self; {
 
     types-aiobotocore-tnb
 
+    types-aiobotocore-transcribe
+
     types-aiobotocore-xray
 
   ;

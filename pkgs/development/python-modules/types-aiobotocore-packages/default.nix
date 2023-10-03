@@ -714,5 +714,7 @@ rec {
 
   types-aiobotocore-tnb = buildTypesAiobotocorePackage "tnb" "2.6.0" "sha256-c4Y5kilT50Ips16/YhwduNbm89gB4iLHFv8eN8T4NDM=";
 
+  types-aiobotocore-transcribe = buildTypesAiobotocorePackage "transcribe" "2.6.0" "sha256-HB1CKe9mkD0+0TdFXmdiphDUqc+4xbwBIXSu0PulBE4=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
