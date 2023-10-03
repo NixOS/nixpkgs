@@ -494,6 +494,8 @@ rec {
 
   mypy-boto3-migrationhuborchestrator = buildMypyBoto3Package "migrationhuborchestrator" "1.28.36" "sha256-x5vC9TZD5y/wyNCUS4KbcJk3tfMbD6GxhxJQj+DYVo4=";
 
+  mypy-boto3-migrationhubstrategy = buildMypyBoto3Package "migrationhubstrategy" "1.28.36" "sha256-HvDtYoWRyBmQxzn/YZJ9nhXgpKAnnwfD8RtTG2RakDM=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
