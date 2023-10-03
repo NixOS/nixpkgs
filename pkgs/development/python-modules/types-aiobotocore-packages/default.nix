@@ -540,5 +540,7 @@ rec {
 
   types-aiobotocore-personalize = buildTypesAiobotocorePackage "personalize" "2.6.0" "sha256-5s0KmOdQyPtcFtb+XkR/zHEiEdZcDwZwldwUy+dvC4s=";
 
+  types-aiobotocore-personalize-events = buildTypesAiobotocorePackage "personalize-events" "2.6.0" "sha256-+9wtXNgXQhACa8NYfcjbZcJj0j9PlOavxs+c4NXy0kE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
