@@ -14231,6 +14231,8 @@ self: super: with self; {
 
     types-aiobotocore-chime-sdk-voice
 
+    types-aiobotocore-cleanrooms
+
     types-aiobotocore-xray
 
   ;
