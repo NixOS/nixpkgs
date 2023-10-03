@@ -14557,6 +14557,8 @@ self: super: with self; {
 
     types-aiobotocore-managedblockchain-query
 
+    types-aiobotocore-marketplace-catalog
+
     types-aiobotocore-xray
 
   ;

@@ -456,5 +456,7 @@ rec {
 
   types-aiobotocore-managedblockchain-query = buildTypesAiobotocorePackage "managedblockchain-query" "2.6.0" "sha256-swmAlpVrP1eSvJatWaJL6QDfgZ0xzBttrpHt1aNULUk=";
 
+  types-aiobotocore-marketplace-catalog = buildTypesAiobotocorePackage "marketplace-catalog" "2.6.0" "sha256-9yD3FIFrRDMAckbztjrKeUEyXCUOggF5UfsPe5hcQ1Q=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
