@@ -14291,6 +14291,8 @@ self: super: with self; {
 
     types-aiobotocore-comprehendmedical
 
+    types-aiobotocore-compute-optimizer
+
     types-aiobotocore-xray
 
   ;

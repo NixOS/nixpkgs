@@ -190,5 +190,7 @@ rec {
 
   types-aiobotocore-comprehendmedical = buildTypesAiobotocorePackage "comprehendmedical" "2.6.0" "sha256-C98s7dkFRgj8m4M+MmjvCWwrdohkLJafgo9j2ACQ2l4=";
 
+  types-aiobotocore-compute-optimizer = buildTypesAiobotocorePackage "compute-optimizer" "2.6.0" "sha256-4MRGtyFWceAuspTW6Xqwjf2ta0VC1SIoK/U80QZw7UA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
