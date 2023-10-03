@@ -662,5 +662,7 @@ rec {
 
   types-aiobotocore-shield = buildTypesAiobotocorePackage "shield" "2.6.0" "sha256-5NbnrGPo9jTCIxq7ubNX/OuKZOXU0PoSwgTjfuMvnKY=";
 
+  types-aiobotocore-signer = buildTypesAiobotocorePackage "signer" "2.6.0" "sha256-AZRsUZpKhzPiHoUcboBeX5zYlVD9kY6F4n6/ifRTpr8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

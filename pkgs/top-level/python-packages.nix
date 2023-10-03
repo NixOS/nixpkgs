@@ -14763,6 +14763,8 @@ self: super: with self; {
 
     types-aiobotocore-shield
 
+    types-aiobotocore-signer
+
     types-aiobotocore-xray
 
   ;
