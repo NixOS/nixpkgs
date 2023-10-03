@@ -56,6 +56,7 @@
 , parted ? null
 , systemd ? null
 , util-linux ? null
+, mdevctl ? null
 
   # Darwin
 , gmp
