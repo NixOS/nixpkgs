@@ -362,6 +362,8 @@ rec {
 
   mypy-boto3-iotevents = buildMypyBoto3Package "iotevents" "1.28.36" "sha256-27oaZTqmrBRJ3xlE9QKqLkau+dR30aYdeczVaWwK1Xs=";
 
+  mypy-boto3-iotevents-data = buildMypyBoto3Package "iotevents-data" "1.28.36" "sha256-De7a/DdIEmK9jkd6CekBQ+ZNlp+5hyavdY5ISYNLM20=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
