@@ -14223,6 +14223,8 @@ self: super: with self; {
 
     types-aiobotocore-chime-sdk-identity
 
+    types-aiobotocore-chime-sdk-media-pipelines
+
     types-aiobotocore-xray
 
   ;
