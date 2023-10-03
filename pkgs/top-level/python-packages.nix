@@ -7281,6 +7281,8 @@ self: super: with self; {
 
     mypy-boto3-dynamodb
 
+    mypy-boto3-dynamodbstreams
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
