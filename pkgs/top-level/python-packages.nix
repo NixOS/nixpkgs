@@ -7429,6 +7429,8 @@ self: super: with self; {
 
     mypy-boto3-kendra
 
+    mypy-boto3-kendra-ranking
+
     mypy-boto3-s3
 
     mypy-boto3-xray
