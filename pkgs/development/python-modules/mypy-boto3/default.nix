@@ -430,6 +430,8 @@ rec {
 
   mypy-boto3-license-manager-user-subscriptions = buildMypyBoto3Package "license-manager-user-subscriptions" "1.28.36" "sha256-KcTO20KTKnvcCykL5C4BqDFyj/Xrp0l6gH7JslRIzcQ=";
 
+  mypy-boto3-lightsail = buildMypyBoto3Package "lightsail" "1.28.36" "sha256-3euT5o4jOo39mco4y7geAA7PBF6z7A3lj451xXnB98o=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
