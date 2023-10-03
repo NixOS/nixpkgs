@@ -467,6 +467,46 @@ rec {
     then v
     else k: v;
 
+  /* Builds a lookup table from a list of values so
+     getting the index of a value becomes $O(1)$ instead
+     of $O(n)$
+
+     Type: mkLookupTable :: list -> attrs
+
+     Example:
+      mkLookupTable [ "a" "b" "c" ]
+      => {a = 0; b = 1; c = 2; }
+  */
+  mkLookupTable =
+    # List of values that are or can be converted to string.
+    mapping:
+    let
+      foldFn = a: b: a // {
+        "${b}" = a._index;
+        _index = a._index + 1;
+      };
+      folded = lib.foldl foldFn {_index = 0;} mapping;
+    in lib.attrsets.removeAttrs folded [ "_index" ];
+
+
+  /* Convert a hexadecimal representation to a positive integer
+
+     Type: fromHexString :: string -> int
+
+     Example:
+      fromHexString "0"
+      => 0
+
+      fromHexString "10"
+      => 16
+
+      fromHexString "FA"
+      => 250
+  */
+  fromHexString = representation:
+    lib.int-representations.fromStringRepresentation
+      lib.int-representations.mappings.hex representation;
+
   /* Convert the given positive integer to a string of its hexadecimal
      representation. For example:
 
@@ -477,21 +517,8 @@ rec {
      toHexString 250 => "FA"
   */
   toHexString = i:
-    let
-      toHexDigit = d:
-        if d < 10
-        then toString d
-        else
-          {
-            "10" = "A";
-            "11" = "B";
-            "12" = "C";
-            "13" = "D";
-            "14" = "E";
-            "15" = "F";
-          }.${toString d};
-    in
-      lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
+    lib.int-representations.toStringRepresentation
+      lib.int-representations.mappings.hex i;
 
   /* `toBaseDigits base i` converts the positive integer i to a list of its
      digits in the given base. For example:

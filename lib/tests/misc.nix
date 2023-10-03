@@ -159,6 +159,31 @@ runTests {
     expected = "FA";
   };
 
+  testFromHexString = {
+    expr = fromHexString "FA";
+    expected = 250;
+  };
+
+  testFromHexStringHashedSHA512 = {
+    expr = fromHexString (toUpper (builtins.hashString "sha512" "test"));
+    expected = -8183225288127633153; # the overflow is expected
+  };
+
+  testFromHexStringHashedSHA256 = {
+    expr = fromHexString (toUpper (builtins.hashString "sha256" "test"));
+    expected = -3360410906529887736; # the overflow is expected
+  };
+
+  testFromHexStringHashedSHA1 = {
+    expr = fromHexString (toUpper (builtins.hashString "sha1" "test"));
+    expected = -3201521091500590125; # the overflow is expected
+  };
+
+  testFromHexStringHashedMD5 = {
+    expr = fromHexString (toUpper (builtins.hashString "md5" "test"));
+    expected = -3828536308030524170; # the overflow is expected
+  };
+
   testToBaseDigits = {
     expr = toBaseDigits 2 6;
     expected = [ 1 1 0 ];
@@ -1939,4 +1964,52 @@ runTests {
   testGetExe'FailureSecondArg = testingThrow (
     getExe' { type = "derivation"; } "dir/executable"
   );
+
+  # BIT REPRESENTATION
+  testIntRepresentationsParseZero = {
+    expr = mapAttrs (k: v: int-representations.fromStringRepresentation v "0") int-representations.mappings;
+    expected = mapAttrs (k: v: 0) int-representations.mappings;
+  };
+
+  testIntRepresentationsStringifyMaxPlusOne = {
+    expr = int-representations.toStringRepresentation int-representations.mappings.hex 16;
+    expected = "10";
+  };
+
+  testIntRepresentationsStringifyExample = {
+    expr = int-representations.toStringRepresentation int-representations.mappings.hex 255;
+    expected = "FF";
+  };
+
+  testIntRepresentationsParseExample = {
+    expr = int-representations.fromStringRepresentation int-representations.mappings.hex "FF";
+    expected = 255;
+  };
+
+  # python code used to generate these numbers:
+  # from random import randint; x = randint(0, 999999); hx = hex(x); print(x, hx)
+  testIntRepresentationsStringifyFromPython-1 = {
+    expr = int-representations.toStringRepresentation int-representations.mappings.hex 158530;
+    expected = "26B42";
+  };
+
+  testIntRepresentationsStringifyFromPython-2 = {
+    expr = int-representations.toStringRepresentation int-representations.mappings.hex 10374;
+    expected = "2886";
+  };
+
+  testIntRepresentationsStringifyFromPython-3 = {
+    expr = int-representations.toStringRepresentation int-representations.mappings.hex 741819;
+    expected = "B51BB";
+  };
+
+  testIntRepresentationStringifyCustomRepresentation = {
+    expr = int-representations.toStringRepresentation [ "A" "U" "C" "G" ] 420;
+    expected = "UCCUA";
+  };
+  testIntRepresentationParseCustomRepresentation = {
+    expr = int-representations.fromStringRepresentation [ "A" "U" "C" "G" ] "UCCUA";
+    expected = 420;
+  };
+
 }

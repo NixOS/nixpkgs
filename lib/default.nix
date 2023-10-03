@@ -47,6 +47,7 @@ let
     # misc
     asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
+    int-representations = callLibs ./int-representations.nix;
     misc = callLibs ./deprecated.nix;
 
     # domain-specific
@@ -75,7 +76,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction toFunction
-      toHexString toBaseDigits inPureEvalMode;
+      mkLookupTable fromHexString toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
