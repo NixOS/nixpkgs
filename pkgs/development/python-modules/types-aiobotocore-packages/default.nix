@@ -522,5 +522,7 @@ rec {
 
   types-aiobotocore-opensearchserverless = buildTypesAiobotocorePackage "opensearchserverless" "2.6.0" "sha256-M2tvTKjIg8aEP3KZvrMTCgiJqb6oWL9T5ylkj+Fr184=";
 
+  types-aiobotocore-opsworks = buildTypesAiobotocorePackage "opsworks" "2.6.0" "sha256-XY9DqNQUjFaumcOd2dvX/kV2sWt67Ni26H5SzCarr2E=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14623,6 +14623,8 @@ self: super: with self; {
 
     types-aiobotocore-opensearchserverless
 
+    types-aiobotocore-opsworks
+
     types-aiobotocore-xray
 
   ;
