@@ -14535,6 +14535,8 @@ self: super: with self; {
 
     types-aiobotocore-lightsail
 
+    types-aiobotocore-location
+
     types-aiobotocore-xray
 
   ;

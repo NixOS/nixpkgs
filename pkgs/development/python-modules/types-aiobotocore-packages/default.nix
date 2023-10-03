@@ -434,5 +434,7 @@ rec {
 
   types-aiobotocore-lightsail = buildTypesAiobotocorePackage "lightsail" "2.6.0" "sha256-eiibXP8S+xvn+PTX8cd3WiN6yL2JmjK9EG9BryexFjY=";
 
+  types-aiobotocore-location = buildTypesAiobotocorePackage "location" "2.6.0" "sha256-3zQZyDgaMuj5SAQ7Nc+XzF5dUi1E9bAjv9mIscJxfqM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
