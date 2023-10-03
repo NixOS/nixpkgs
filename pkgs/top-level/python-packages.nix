@@ -14199,6 +14199,8 @@ self: super: with self; {
 
     types-aiobotocore-auditmanager
 
+    types-aiobotocore-autoscaling
+
     types-aiobotocore-xray
 
   ;
