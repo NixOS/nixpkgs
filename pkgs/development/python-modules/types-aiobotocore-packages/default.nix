@@ -710,5 +710,7 @@ rec {
 
   types-aiobotocore-timestream-query = buildTypesAiobotocorePackage "timestream-query" "2.6.0" "sha256-4QpCK14NogeYR9DB877zh760GEXYieiyOgepB9DZd+8=";
 
+  types-aiobotocore-timestream-write = buildTypesAiobotocorePackage "timestream-write" "2.6.0" "sha256-bBcMTJOVFq1mJQZtc9M/EMT45Xxxk2DqDgVHfM3qt3A=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

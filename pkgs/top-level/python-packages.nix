@@ -14811,6 +14811,8 @@ self: super: with self; {
 
     types-aiobotocore-timestream-query
 
+    types-aiobotocore-timestream-write
+
     types-aiobotocore-xray
 
   ;
