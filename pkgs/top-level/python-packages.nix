@@ -7123,6 +7123,8 @@ self: super: with self; {
 
     mypy-boto3-appmesh
 
+    mypy-boto3-apprunner
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
