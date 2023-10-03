@@ -14211,6 +14211,8 @@ self: super: with self; {
 
     types-aiobotocore-batch
 
+    types-aiobotocore-billingconductor
+
     types-aiobotocore-xray
 
   ;
