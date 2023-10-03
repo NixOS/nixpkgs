@@ -14183,6 +14183,8 @@ self: super: with self; {
 
     types-aiobotocore-application-insights
 
+    types-aiobotocore-applicationcostprofiler
+
     types-aiobotocore-xray
 
   ;
