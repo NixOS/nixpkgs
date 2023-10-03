@@ -14709,6 +14709,8 @@ self: super: with self; {
 
     types-aiobotocore-route53domains
 
+    types-aiobotocore-route53resolver
+
     types-aiobotocore-xray
 
   ;
