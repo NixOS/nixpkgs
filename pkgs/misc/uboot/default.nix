@@ -2,7 +2,6 @@
 , lib
 , bc
 , bison
-, dtc
 , fetchFromGitHub
 , fetchpatch
 , fetchurl
@@ -25,10 +24,10 @@
 }:
 
 let
-  defaultVersion = "2023.07.02";
+  defaultVersion = "2023.10";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
+    hash = "sha256-4A5sbwFOBGEBc50I0G8yiBHOvPWuEBNI9AnLvVXOaQA=";
   };
   buildUBoot = lib.makeOverridable ({
     version ? null
@@ -60,12 +59,10 @@ let
       ncurses # tools/kwboot
       bc
       bison
-      dtc
       flex
       installShellFiles
       openssl
       (buildPackages.python3.withPackages (p: [
-        p.libfdt
         p.setuptools # for pkg_resources
         p.pyelftools
       ]))
@@ -84,10 +81,7 @@ let
 
     enableParallelBuilding = true;
 
-    makeFlags = [
-      "DTC=dtc"
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ] ++ extraMakeFlags;
+    makeFlags = [ "CROSS_COMPILE=${stdenv.cc.targetPrefix}" ] ++ extraMakeFlags;
 
     passAsFile = [ "extraConfig" ];
 
