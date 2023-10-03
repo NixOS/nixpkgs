@@ -14659,6 +14659,8 @@ self: super: with self; {
 
     types-aiobotocore-polly
 
+    types-aiobotocore-pricing
+
     types-aiobotocore-xray
 
   ;

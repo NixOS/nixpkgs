@@ -558,5 +558,7 @@ rec {
 
   types-aiobotocore-polly = buildTypesAiobotocorePackage "polly" "2.6.0" "sha256-AKP23N3xMzdOti6J7vONDM/cwdqTHYkiM6c/njspSXI=";
 
+  types-aiobotocore-pricing = buildTypesAiobotocorePackage "pricing" "2.6.0" "sha256-PccslOI6F2k50g03j22AYN3xtTsTW3ie4W4pEaT2XwY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
