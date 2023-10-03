@@ -7303,6 +7303,8 @@ self: super: with self; {
 
     mypy-boto3-elasticache
 
+    mypy-boto3-elasticbeanstalk
+
     mypy-boto3-s3
 
     mypy-boto3-xray
