@@ -14209,6 +14209,8 @@ self: super: with self; {
 
     types-aiobotocore-backupstorage
 
+    types-aiobotocore-batch
+
     types-aiobotocore-xray
 
   ;

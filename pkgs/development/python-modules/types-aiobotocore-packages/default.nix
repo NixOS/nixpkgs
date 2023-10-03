@@ -108,5 +108,7 @@ rec {
 
   types-aiobotocore-backupstorage = buildTypesAiobotocorePackage "backupstorage" "2.6.0" "sha256-OC1xWUT0BjBoelAxHkprhD54kF+YbK30H/42Q3XxdwY=";
 
+  types-aiobotocore-batch = buildTypesAiobotocorePackage "batch" "2.6.0" "sha256-/5yrgR7NbQ6GbkC9SsHaAhDa3juBjyRt705wHTu6Mr8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
