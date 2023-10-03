@@ -318,5 +318,7 @@ rec {
 
   types-aiobotocore-grafana = buildTypesAiobotocorePackage "grafana" "2.6.0" "sha256-acNr8U/E2Eq4wp68Td0k8xdORhT6ZOJBOi0enBnaacE=";
 
+  types-aiobotocore-greengrass = buildTypesAiobotocorePackage "greengrass" "2.6.0" "sha256-9mqnIWlLUoz28qp8AH8LiNdDgcJ04P0Z+jxNb/91jUg=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

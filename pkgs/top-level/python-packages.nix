@@ -14419,6 +14419,8 @@ self: super: with self; {
 
     types-aiobotocore-grafana
 
+    types-aiobotocore-greengrass
+
     types-aiobotocore-xray
 
   ;
