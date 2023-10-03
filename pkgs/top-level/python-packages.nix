@@ -14797,6 +14797,8 @@ self: super: with self; {
 
     types-aiobotocore-storagegateway
 
+    types-aiobotocore-sts
+
     types-aiobotocore-xray
 
   ;

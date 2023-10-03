@@ -696,5 +696,7 @@ rec {
 
   types-aiobotocore-storagegateway = buildTypesAiobotocorePackage "storagegateway" "2.6.0" "sha256-Umq4Slts9RHPJRJCWRAIAizLxB9Clcz8GomLsUr5gNE=";
 
+  types-aiobotocore-sts = buildTypesAiobotocorePackage "sts" "2.6.0" "sha256-iRwalkojzQCUiAQcxl8hEYFFbnIxhuaJfrATnK18ltI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
