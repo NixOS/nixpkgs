@@ -722,6 +722,8 @@ rec {
 
   mypy-boto3-translate = buildMypyBoto3Package "translate" "1.28.36" "sha256-Q2FuBXtXWenPvkJ3PprDolsO6ur5QAAn0y1ORYEQIMM=";
 
+  mypy-boto3-verifiedpermissions = buildMypyBoto3Package "verifiedpermissions" "1.28.36" "sha256-HpiBOyeWvB/T/MquJ0R8Uk647VqCAlmC0Tryw9iojjA=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

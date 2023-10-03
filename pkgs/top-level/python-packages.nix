@@ -7761,6 +7761,8 @@ self: super: with self; {
 
     mypy-boto3-translate
 
+    mypy-boto3-verifiedpermissions
+
     mypy-boto3-xray
 
   ;
