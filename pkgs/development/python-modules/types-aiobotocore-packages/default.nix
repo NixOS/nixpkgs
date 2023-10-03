@@ -180,5 +180,7 @@ rec {
 
   types-aiobotocore-codestar-notifications = buildTypesAiobotocorePackage "codestar-notifications" "2.6.0" "sha256-7vWHwrG7Z80Zb3ncGBqN4ItKAVWLR0XHITJxMmE8y8Y=";
 
+  types-aiobotocore-cognito-identity = buildTypesAiobotocorePackage "cognito-identity" "2.6.0" "sha256-C1JRefgyuiKDOJMhShyDPDjfKp5S5OMCaHcnORLxnvY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

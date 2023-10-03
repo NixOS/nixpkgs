@@ -14281,6 +14281,8 @@ self: super: with self; {
 
     types-aiobotocore-codestar-notifications
 
+    types-aiobotocore-cognito-identity
+
     types-aiobotocore-xray
 
   ;
