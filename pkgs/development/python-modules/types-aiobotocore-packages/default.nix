@@ -210,5 +210,7 @@ rec {
 
   types-aiobotocore-customer-profiles = buildTypesAiobotocorePackage "customer-profiles" "2.6.0" "sha256-i1mv2M3bboOF3+iIKYhp4raYb7mHiQTirlWsttB/dXY=";
 
+  types-aiobotocore-databrew = buildTypesAiobotocorePackage "databrew" "2.6.0" "sha256-WMVPGbQkdbKc2T+gR9P3oWUxl5VSVf4IdcLeuW9SNUo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

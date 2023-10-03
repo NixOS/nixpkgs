@@ -14311,6 +14311,8 @@ self: super: with self; {
 
     types-aiobotocore-customer-profiles
 
+    types-aiobotocore-databrew
+
     types-aiobotocore-xray
 
   ;
