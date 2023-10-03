@@ -7745,6 +7745,8 @@ self: super: with self; {
 
     mypy-boto3-swf
 
+    mypy-boto3-synthetics
+
     mypy-boto3-xray
 
   ;

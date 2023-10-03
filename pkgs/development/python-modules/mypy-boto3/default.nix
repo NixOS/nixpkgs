@@ -706,6 +706,8 @@ rec {
 
   mypy-boto3-swf = buildMypyBoto3Package "swf" "1.28.36" "sha256-GO8hb3oVmSK0J8GB4ZT1RlqyBaRrOM2ZorOHkE3L8p0=";
 
+  mypy-boto3-synthetics = buildMypyBoto3Package "synthetics" "1.28.36" "sha256-6vRCRKjNplmMqmUpvDC/JVPl4q/YUYealQdXOComXNQ=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
