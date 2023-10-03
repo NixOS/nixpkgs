@@ -118,5 +118,7 @@ rec {
 
   types-aiobotocore-ce = buildTypesAiobotocorePackage "ce" "2.6.0" "sha256-eKYNFMlDt9uUaqsK8PPTpt1wghN3nGgM+idQBVei8eY=";
 
+  types-aiobotocore-chime = buildTypesAiobotocorePackage "chime" "2.6.0" "sha256-5d9LUaSDvYI/Nrsmg4MnM0ucXmyzUQKV4DpX9pZst2s=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

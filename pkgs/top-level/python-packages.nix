@@ -14219,6 +14219,8 @@ self: super: with self; {
 
     types-aiobotocore-ce
 
+    types-aiobotocore-chime
+
     types-aiobotocore-xray
 
   ;
