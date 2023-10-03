@@ -252,5 +252,7 @@ rec {
 
   types-aiobotocore-ec2-instance-connect = buildTypesAiobotocorePackage "ec2-instance-connect" "2.6.0" "sha256-0Lwxob43TzJHNcriUEa3BAZE64iqS9Js4TtfL20YRj0=";
 
+  types-aiobotocore-ecr = buildTypesAiobotocorePackage "ecr" "2.6.0" "sha256-bMPp7QPa2f8GCRmX3y78XvZTUyYNfYxXDKj5lckBBvE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

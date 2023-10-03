@@ -14353,6 +14353,8 @@ self: super: with self; {
 
     types-aiobotocore-ec2-instance-connect
 
+    types-aiobotocore-ecr
+
     types-aiobotocore-xray
 
   ;
