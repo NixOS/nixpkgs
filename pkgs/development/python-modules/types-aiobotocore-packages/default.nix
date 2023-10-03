@@ -264,5 +264,7 @@ rec {
 
   types-aiobotocore-elastic-inference = buildTypesAiobotocorePackage "elastic-inference" "2.6.0" "sha256-xjMVOk0fzyvDoSNb+kxVQT9emfvIG/6Ws3h3MfCCTOY=";
 
+  types-aiobotocore-elasticache = buildTypesAiobotocorePackage "elasticache" "2.6.0" "sha256-7iUYuPOerdp1+fxI/KdC4sEWDOTJQAgYYheEmSvjBFo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
