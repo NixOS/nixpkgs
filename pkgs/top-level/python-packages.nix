@@ -14337,6 +14337,8 @@ self: super: with self; {
 
     types-aiobotocore-docdb
 
+    types-aiobotocore-docdb-elastic
+
     types-aiobotocore-xray
 
   ;
