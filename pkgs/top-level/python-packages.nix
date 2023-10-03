@@ -14249,6 +14249,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudsearch
 
+    types-aiobotocore-cloudsearchdomain
+
     types-aiobotocore-xray
 
   ;

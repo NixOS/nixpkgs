@@ -148,5 +148,7 @@ rec {
 
   types-aiobotocore-cloudsearch = buildTypesAiobotocorePackage "cloudsearch" "2.6.0" "sha256-eKLM+GYjbm3cweMtF/XI6k+P8t9gaJeRCeMHQbc832g=";
 
+  types-aiobotocore-cloudsearchdomain = buildTypesAiobotocorePackage "cloudsearchdomain" "2.6.0" "sha256-wn03HlgBaZIAkw8gxPehSKpcfQGOhYp0U1CF/84M/lg=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
