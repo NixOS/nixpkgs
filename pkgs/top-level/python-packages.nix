@@ -7709,6 +7709,8 @@ self: super: with self; {
 
     mypy-boto3-sms
 
+    mypy-boto3-sms-voice
+
     mypy-boto3-xray
 
   ;
