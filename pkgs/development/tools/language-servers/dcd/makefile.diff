@@ -1,0 +1,23 @@
+--- a/makefile
++++ b/makefile
+@@ -10,7 +10,6 @@
+ DPARSE_DIR := libdparse
+ DSYMBOL_DIR := dsymbol
+ 
+-SHELL:=/bin/bash
+ 
+ githash:
+ 	@mkdir -p bin
+@@ -130,10 +130,10 @@
+ 	mkdir -p bin
+ 	${GDC} ${SERVER_SRC} ${GDC_SERVER_FLAGS}
+ 
+-ldcclient: githash
++ldcclient:
+ 	${LDC} ${CLIENT_SRC} ${LDC_CLIENT_FLAGS} -oq -of=bin/dcd-client
+ 
+-ldcserver: githash
++ldcserver:
+ 	${LDC} $(LDC_SERVER_FLAGS) ${SERVER_SRC} -oq -of=bin/dcd-server
+ 
+ test: debugserver dmdclient
