@@ -14671,6 +14671,8 @@ self: super: with self; {
 
     types-aiobotocore-quicksight
 
+    types-aiobotocore-ram
+
     types-aiobotocore-xray
 
   ;

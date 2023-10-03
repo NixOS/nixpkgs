@@ -570,5 +570,7 @@ rec {
 
   types-aiobotocore-quicksight = buildTypesAiobotocorePackage "quicksight" "2.6.0" "sha256-DOum/vx6URynxImQN9SRhAr5rFgZdSJMdtAMom5YHe8=";
 
+  types-aiobotocore-ram = buildTypesAiobotocorePackage "ram" "2.6.0" "sha256-pZ/h8/1njNNp9+nhpbU/VhGevrZkSrWnhWm3weHAxWQ=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
