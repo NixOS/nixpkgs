@@ -7555,6 +7555,8 @@ self: super: with self; {
 
     mypy-boto3-oam
 
+    mypy-boto3-omics
+
     mypy-boto3-s3
 
     mypy-boto3-xray
