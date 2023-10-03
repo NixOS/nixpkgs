@@ -630,6 +630,9 @@ in
 
   re2 = attrs: {
     buildInputs = [ re2 ];
+    buildFlags = [
+      "--enable-system-libraries"
+    ];
   };
 
   rest-client = attrs: {
