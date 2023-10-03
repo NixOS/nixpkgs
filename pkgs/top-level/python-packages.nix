@@ -14429,6 +14429,8 @@ self: super: with self; {
 
     types-aiobotocore-health
 
+    types-aiobotocore-healthlake
+
     types-aiobotocore-xray
 
   ;
