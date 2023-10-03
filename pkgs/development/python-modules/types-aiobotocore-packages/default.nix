@@ -452,5 +452,7 @@ rec {
 
   types-aiobotocore-macie2 = buildTypesAiobotocorePackage "macie2" "2.6.0" "sha256-IX2KY/guFLJ6jL4gRdTS6cQbNuFJuz8xa4QzqZ8j5h8=";
 
+  types-aiobotocore-managedblockchain = buildTypesAiobotocorePackage "managedblockchain" "2.6.0" "sha256-k/J7hBJDfGXMFR9jn7Tiec8bClrXIz6XyLMqLJad6oU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

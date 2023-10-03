@@ -14553,6 +14553,8 @@ self: super: with self; {
 
     types-aiobotocore-macie2
 
+    types-aiobotocore-managedblockchain
+
     types-aiobotocore-xray
 
   ;
