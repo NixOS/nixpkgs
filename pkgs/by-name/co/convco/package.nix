@@ -6,7 +6,7 @@
 , libiconv
 , openssl
 , pkg-config
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "A Conventional commit cli";

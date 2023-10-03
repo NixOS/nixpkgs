@@ -17382,10 +17382,6 @@ with pkgs;
 
   critcmp = callPackage ../development/tools/rust/critcmp { };
 
-  convco = callPackage ../development/tools/convco {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   devspace = callPackage ../development/tools/misc/devspace { };
 
   djlint = callPackage ../development/tools/djlint { };
