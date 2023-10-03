@@ -126,6 +126,13 @@ with pkgs;
 
   common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
+  # vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/updater.nix {
+  #   inherit (writers) writePython3Bin;
+  # };
+  vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/updater.nix {
+    inherit (python3Packages) buildPythonApplication ;
+  };
+
   genericUpdater = callPackage ../common-updater/generic-updater.nix { };
 
   _experimental-update-script-combinators = callPackage ../common-updater/combinators.nix { };
