@@ -14459,6 +14459,8 @@ self: super: with self; {
 
     types-aiobotocore-iot1click-projects
 
+    types-aiobotocore-iotanalytics
+
     types-aiobotocore-xray
 
   ;
