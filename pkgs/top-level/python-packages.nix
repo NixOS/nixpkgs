@@ -14445,6 +14445,8 @@ self: super: with self; {
 
     types-aiobotocore-inspector2
 
+    types-aiobotocore-internetmonitor
+
     types-aiobotocore-xray
 
   ;

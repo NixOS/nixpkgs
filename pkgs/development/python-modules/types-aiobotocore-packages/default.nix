@@ -344,5 +344,7 @@ rec {
 
   types-aiobotocore-inspector2 = buildTypesAiobotocorePackage "inspector2" "2.6.0" "sha256-kAhdyymMdbrPoCFzKiVCFzBlfpmz4aGlZ1Ilkrc8EiQ=";
 
+  types-aiobotocore-internetmonitor = buildTypesAiobotocorePackage "internetmonitor" "2.6.0" "sha256-3oJbkuU013LR7DUXvr8y0nbYh3caAF1c4GtgM1CizdU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
