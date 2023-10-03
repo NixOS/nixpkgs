@@ -702,6 +702,8 @@ rec {
 
   mypy-boto3-support = buildMypyBoto3Package "support" "1.28.36" "sha256-HjzL3qwEiQSvJvaiB6pJN/GUMRNseuIqxM7rfrfwRKs=";
 
+  mypy-boto3-support-app = buildMypyBoto3Package "support-app" "1.28.36" "sha256-p/v2QUgmGYRVKGUtrCt9i6c1LKCxqNoNKHnfbAw7qMU=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
