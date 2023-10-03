@@ -170,5 +170,7 @@ rec {
 
   types-aiobotocore-codeguru-security = buildTypesAiobotocorePackage "codeguru-security" "2.6.0" "sha256-1qgsFoogu8MnWoCeKnqy4KIY7UdMeUPnaS1zVSVl2Mg=";
 
+  types-aiobotocore-codeguruprofiler = buildTypesAiobotocorePackage "codeguruprofiler" "2.6.0" "sha256-7Nbb+l7y5ccrVGymZ46nKwnGoa5nThrIOZ1AG0ykPEw=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14271,6 +14271,8 @@ self: super: with self; {
 
     types-aiobotocore-codeguru-security
 
+    types-aiobotocore-codeguruprofiler
+
     types-aiobotocore-xray
 
   ;
