@@ -444,5 +444,7 @@ rec {
 
   types-aiobotocore-lookoutvision = buildTypesAiobotocorePackage "lookoutvision" "2.6.0" "sha256-gW+GFoQhI1Mj412Gh3MXfoSMKpNscUB4AqC9WMF4ACI=";
 
+  types-aiobotocore-m2 = buildTypesAiobotocorePackage "m2" "2.6.0" "sha256-DoFG4FxvJFnN54G5F2LZY5M0aYlCU9H5wwnAsiHaRmc=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14545,6 +14545,8 @@ self: super: with self; {
 
     types-aiobotocore-lookoutvision
 
+    types-aiobotocore-m2
+
     types-aiobotocore-xray
 
   ;
