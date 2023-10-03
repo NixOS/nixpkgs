@@ -14409,6 +14409,8 @@ self: super: with self; {
 
     types-aiobotocore-gamelift
 
+    types-aiobotocore-gamesparks
+
     types-aiobotocore-xray
 
   ;

@@ -308,5 +308,7 @@ rec {
 
   types-aiobotocore-gamelift = buildTypesAiobotocorePackage "gamelift" "2.6.0" "sha256-9qk0jvEAU6vh++k18ccjrZNLnYlOqiAGuVvBGS5QetQ=";
 
+  types-aiobotocore-gamesparks = buildTypesAiobotocorePackage "gamesparks" "2.6.0" "sha256-9iV7bpGMnzz9TH+g1YpPjbKBSKY3rcL/OJvMOzwLC1M=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
