@@ -14605,6 +14605,8 @@ self: super: with self; {
 
     types-aiobotocore-mturk
 
+    types-aiobotocore-mwaa
+
     types-aiobotocore-xray
 
   ;
