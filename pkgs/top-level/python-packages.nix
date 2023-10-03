@@ -14385,6 +14385,8 @@ self: super: with self; {
 
     types-aiobotocore-es
 
+    types-aiobotocore-events
+
     types-aiobotocore-xray
 
   ;
