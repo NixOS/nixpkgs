@@ -7367,6 +7367,8 @@ self: super: with self; {
 
     mypy-boto3-healthlake
 
+    mypy-boto3-honeycode
+
     mypy-boto3-s3
 
     mypy-boto3-xray
