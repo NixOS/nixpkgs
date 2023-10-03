@@ -14649,6 +14649,8 @@ self: super: with self; {
 
     types-aiobotocore-pinpoint
 
+    types-aiobotocore-pinpoint-email
+
     types-aiobotocore-xray
 
   ;

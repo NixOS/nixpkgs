@@ -548,5 +548,7 @@ rec {
 
   types-aiobotocore-pinpoint = buildTypesAiobotocorePackage "pinpoint" "2.6.0" "sha256-Txme0jlgoF9IYywdKqv71kcEqBfF1juTJcagi/2wQ20=";
 
+  types-aiobotocore-pinpoint-email = buildTypesAiobotocorePackage "pinpoint-email" "2.6.0" "sha256-c6tqmW7i5AXrH2PFyVPCpBkDaiMdTu2fmbHeuc3SzPg=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
