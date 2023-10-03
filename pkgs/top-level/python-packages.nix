@@ -14793,6 +14793,8 @@ self: super: with self; {
 
     types-aiobotocore-sso-oidc
 
+    types-aiobotocore-stepfunctions
+
     types-aiobotocore-xray
 
   ;
