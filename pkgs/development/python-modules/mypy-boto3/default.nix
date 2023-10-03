@@ -270,6 +270,8 @@ rec {
 
   mypy-boto3-elb = buildMypyBoto3Package "elb" "1.28.36" "sha256-c9Re0WZOn+LaK58VJk+YlI3YWn/wrgT+/TdqrOisBnM=";
 
+  mypy-boto3-elbv2 = buildMypyBoto3Package "elbv2" "1.28.42" "sha256-NXyhMxuIbuyyDifzBicvDNQB3ysbVx+azsqpTBhfnZ8=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
