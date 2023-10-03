@@ -14151,6 +14151,8 @@ self: super: with self; {
 
     types-aiobotocore-acm
 
+    types-aiobotocore-acm-pca
+
     types-aiobotocore-xray
 
   ;
