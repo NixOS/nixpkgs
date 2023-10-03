@@ -616,5 +616,7 @@ rec {
 
   types-aiobotocore-s3control = buildTypesAiobotocorePackage "s3control" "2.6.0" "sha256-eyiAFFT5KOtTDT2EZNah1KRdcWw1v1titjHwG3DnRj4=";
 
+  types-aiobotocore-s3outposts = buildTypesAiobotocorePackage "s3outposts" "2.6.0" "sha256-g4wAsVc3gqiovsXZtEey4XKmLp/UkIeKD1pEjiey5DE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
