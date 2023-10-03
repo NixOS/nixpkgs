@@ -14693,6 +14693,8 @@ self: super: with self; {
 
     types-aiobotocore-resource-groups
 
+    types-aiobotocore-resourcegroupstaggingapi
+
     types-aiobotocore-xray
 
   ;

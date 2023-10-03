@@ -592,5 +592,7 @@ rec {
 
   types-aiobotocore-resource-groups = buildTypesAiobotocorePackage "resource-groups" "2.6.0" "sha256-GcbI21WVdMmwMcpbBkma4VrLsLVRP24/Uk43+4vE864=";
 
+  types-aiobotocore-resourcegroupstaggingapi = buildTypesAiobotocorePackage "resourcegroupstaggingapi" "2.6.0" "sha256-pW8/wn2Qk1jf1d2kYZ84yEaNUcl6xgHw+yuT0bHnsBE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
