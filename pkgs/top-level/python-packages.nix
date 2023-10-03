@@ -7597,6 +7597,8 @@ self: super: with self; {
 
     mypy-boto3-pipes
 
+    mypy-boto3-polly
+
     mypy-boto3-s3
 
     mypy-boto3-xray

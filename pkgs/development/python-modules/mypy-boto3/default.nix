@@ -558,6 +558,8 @@ rec {
 
   mypy-boto3-pipes = buildMypyBoto3Package "pipes" "1.28.36" "sha256-wGVcXwhUGM729QsU3Tkmg8aD2s2cpg8/CTqOR1i8Lt4=";
 
+  mypy-boto3-polly = buildMypyBoto3Package "polly" "1.28.36" "sha256-fntpy/+K4DYhfdv35hhanDS4oq1P0kNxxDFkkHQRmuU=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
