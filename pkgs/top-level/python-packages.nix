@@ -7603,6 +7603,8 @@ self: super: with self; {
 
     mypy-boto3-privatenetworks
 
+    mypy-boto3-proton
+
     mypy-boto3-s3
 
     mypy-boto3-xray
