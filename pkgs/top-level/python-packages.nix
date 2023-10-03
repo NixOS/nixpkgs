@@ -14813,6 +14813,8 @@ self: super: with self; {
 
     types-aiobotocore-timestream-write
 
+    types-aiobotocore-tnb
+
     types-aiobotocore-xray
 
   ;
