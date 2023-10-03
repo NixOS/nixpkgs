@@ -14777,6 +14777,8 @@ self: super: with self; {
 
     types-aiobotocore-sns
 
+    types-aiobotocore-sqs
+
     types-aiobotocore-xray
 
   ;
