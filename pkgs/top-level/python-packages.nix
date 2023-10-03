@@ -14175,6 +14175,8 @@ self: super: with self; {
 
     types-aiobotocore-appfabric
 
+    types-aiobotocore-appflow
+
     types-aiobotocore-xray
 
   ;
