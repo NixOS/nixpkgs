@@ -14765,6 +14765,8 @@ self: super: with self; {
 
     types-aiobotocore-signer
 
+    types-aiobotocore-simspaceweaver
+
     types-aiobotocore-xray
 
   ;

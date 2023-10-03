@@ -664,5 +664,7 @@ rec {
 
   types-aiobotocore-signer = buildTypesAiobotocorePackage "signer" "2.6.0" "sha256-AZRsUZpKhzPiHoUcboBeX5zYlVD9kY6F4n6/ifRTpr8=";
 
+  types-aiobotocore-simspaceweaver = buildTypesAiobotocorePackage "simspaceweaver" "2.6.0" "sha256-WrkKQxXI7eIaX4GimyDyBqDWVjw0eF3jJTA40JScvG0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
