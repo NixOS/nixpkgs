@@ -14155,6 +14155,8 @@ self: super: with self; {
 
     types-aiobotocore-alexaforbusiness
 
+    types-aiobotocore-amp
+
     types-aiobotocore-xray
 
   ;
