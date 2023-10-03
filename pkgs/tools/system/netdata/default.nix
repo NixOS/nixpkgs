@@ -8,7 +8,7 @@
 , withDBengine ? true, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
-, withCloud ? (!stdenv.isDarwin)
+, withCloud ? false
 , withCloudUi ? false
 , withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
