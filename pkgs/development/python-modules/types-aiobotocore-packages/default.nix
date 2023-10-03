@@ -240,5 +240,7 @@ rec {
 
   types-aiobotocore-drs = buildTypesAiobotocorePackage "drs" "2.6.0" "sha256-4CeNeftLpPSZYqw09LcPRC+8yVp+84azRHQ8O0JFOOo=";
 
+  types-aiobotocore-ds = buildTypesAiobotocorePackage "ds" "2.6.0" "sha256-HZEA8fivN05Puxycyl+2z4kIJMbGtF0J7ohLOwx+IzM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
