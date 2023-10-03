@@ -598,5 +598,7 @@ rec {
 
   types-aiobotocore-rolesanywhere = buildTypesAiobotocorePackage "rolesanywhere" "2.6.0" "sha256-jTAe8nMwbXwb+1uf9ITVIKtKyOLIwFH6yi+2IYYVIyU=";
 
+  types-aiobotocore-route53 = buildTypesAiobotocorePackage "route53" "2.6.0" "sha256-RMIrcFD+1RbA3AcRw3TSjENBzmHQL1zHX7FoOFA+UP0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

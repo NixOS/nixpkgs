@@ -14699,6 +14699,8 @@ self: super: with self; {
 
     types-aiobotocore-rolesanywhere
 
+    types-aiobotocore-route53
+
     types-aiobotocore-xray
 
   ;
