@@ -14381,6 +14381,8 @@ self: super: with self; {
 
     types-aiobotocore-emr-serverless
 
+    types-aiobotocore-entityresolution
+
     types-aiobotocore-xray
 
   ;

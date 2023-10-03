@@ -280,5 +280,7 @@ rec {
 
   types-aiobotocore-emr-serverless = buildTypesAiobotocorePackage "emr-serverless" "2.6.0" "sha256-mdpuehCY0ki+sZSlNS0kIwijZphoyQixNWY4WKEcrMs=";
 
+  types-aiobotocore-entityresolution = buildTypesAiobotocorePackage "entityresolution" "2.6.0" "sha256-lFbcxmw7Le/rVVL70cOY/vEUShSRnsOdul+eI1jzX7Y=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
