@@ -476,5 +476,7 @@ rec {
 
   types-aiobotocore-mediastore = buildTypesAiobotocorePackage "mediastore" "2.6.0" "sha256-KoZKeJPlIWhgifauIOSSLZaSJWn3E0lSNUOhKPfI0Go=";
 
+  types-aiobotocore-mediastore-data = buildTypesAiobotocorePackage "mediastore-data" "2.6.0" "sha256-HT/Kvi15YJLEno70ayEXQLPi9Y6NlRD8134IRJ7gdRY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
