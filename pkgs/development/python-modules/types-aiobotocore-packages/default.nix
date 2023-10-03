@@ -686,5 +686,7 @@ rec {
 
   types-aiobotocore-ssm-sap = buildTypesAiobotocorePackage "ssm-sap" "2.6.0" "sha256-7NkEDcuph8xxjlDjuEiSuhvM5srAeY4QfAKLwFLhCsU=";
 
+  types-aiobotocore-sso = buildTypesAiobotocorePackage "sso" "2.6.0" "sha256-pM6yxg0MxTXjSWZ/CLsatlIMx4tO0p9ZKRzOhyJYXWc=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
