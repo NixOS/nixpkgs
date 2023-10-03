@@ -13011,6 +13011,15 @@
     githubId = 1237862;
     name = "Ollie Bunting";
   };
+  ollieP = {
+    email = "mrpauffley@gmail.com";
+    github = "oliverpauffley";
+    githubId = 17577623;
+    name = "Oliver Pauffley";
+    keys = [{
+      fingerprint = "898E 9AF3 BA55 8BBD 27CC  EC76 7763 33D2 65A5 4BED";
+    }];
+  };
   oluceps = {
     email = "nixos@oluceps.uk";
     github = "oluceps";
