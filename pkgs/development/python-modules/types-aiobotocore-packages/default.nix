@@ -396,5 +396,7 @@ rec {
 
   types-aiobotocore-keyspaces = buildTypesAiobotocorePackage "keyspaces" "2.6.0" "sha256-vbWWkLbVnzfWHp3Yy3S6mh0+tHrkA/5Krw4GVSdILls=";
 
+  types-aiobotocore-kinesis = buildTypesAiobotocorePackage "kinesis" "2.6.0" "sha256-n5u7dzAnZ7YRGIC2qyynlsALR7tONulc0ZmimW+xotk=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

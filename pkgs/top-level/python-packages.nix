@@ -14497,6 +14497,8 @@ self: super: with self; {
 
     types-aiobotocore-keyspaces
 
+    types-aiobotocore-kinesis
+
     types-aiobotocore-xray
 
   ;
