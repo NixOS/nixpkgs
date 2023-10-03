@@ -14331,6 +14331,8 @@ self: super: with self; {
 
     types-aiobotocore-discovery
 
+    types-aiobotocore-dlm
+
     types-aiobotocore-xray
 
   ;
