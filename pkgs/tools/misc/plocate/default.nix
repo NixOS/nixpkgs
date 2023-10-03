@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dsharedstatedir=/var/cache"
+    "-Ddbpath=locatedb"
   ];
 
   meta = with lib; {
