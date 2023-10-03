@@ -524,5 +524,7 @@ rec {
 
   types-aiobotocore-opsworks = buildTypesAiobotocorePackage "opsworks" "2.6.0" "sha256-XY9DqNQUjFaumcOd2dvX/kV2sWt67Ni26H5SzCarr2E=";
 
+  types-aiobotocore-opsworkscm = buildTypesAiobotocorePackage "opsworkscm" "2.6.0" "sha256-k1QO54TXJJG5jAvPcoEyZEdEXSmLzHdSPDyF60Zmf78=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

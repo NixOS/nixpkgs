@@ -14625,6 +14625,8 @@ self: super: with self; {
 
     types-aiobotocore-opsworks
 
+    types-aiobotocore-opsworkscm
+
     types-aiobotocore-xray
 
   ;
