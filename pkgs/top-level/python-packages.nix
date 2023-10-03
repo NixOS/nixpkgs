@@ -14289,6 +14289,8 @@ self: super: with self; {
 
     types-aiobotocore-comprehend
 
+    types-aiobotocore-comprehendmedical
+
     types-aiobotocore-xray
 
   ;
