@@ -7159,6 +7159,8 @@ self: super: with self; {
 
     mypy-boto3-chime-sdk-identity
 
+    mypy-boto3-chime-sdk-media-pipelines
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
