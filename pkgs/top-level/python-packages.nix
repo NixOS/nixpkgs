@@ -7711,6 +7711,8 @@ self: super: with self; {
 
     mypy-boto3-sms-voice
 
+    mypy-boto3-snow-device-management
+
     mypy-boto3-xray
 
   ;
