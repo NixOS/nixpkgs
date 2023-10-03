@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     description = "A Conventional commit cli";
     homepage = "https://github.com/convco/convco";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ hoverbear ];
+    maintainers = with maintainers; [ hoverbear cafkafk ];
   };
 }
