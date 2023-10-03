@@ -366,5 +366,7 @@ rec {
 
   types-aiobotocore-iotevents-data = buildTypesAiobotocorePackage "iotevents-data" "2.6.0" "sha256-ESm7ZCtEvHo/r9LXnBaIAVAb4bQkGjIlmUNlo/JuzjE=";
 
+  types-aiobotocore-iotfleethub = buildTypesAiobotocorePackage "iotfleethub" "2.6.0" "sha256-0NMp62HDGZ0FHVtyHOvgfMUaedqZG9bY46d2OrpGK7E=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
