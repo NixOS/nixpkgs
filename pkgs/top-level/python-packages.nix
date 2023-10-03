@@ -7769,6 +7769,8 @@ self: super: with self; {
 
     mypy-boto3-waf
 
+    mypy-boto3-waf-regional
+
     mypy-boto3-xray
 
   ;
