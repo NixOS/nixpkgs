@@ -14363,6 +14363,8 @@ self: super: with self; {
 
     types-aiobotocore-eks
 
+    types-aiobotocore-elastic-inference
+
     types-aiobotocore-xray
 
   ;

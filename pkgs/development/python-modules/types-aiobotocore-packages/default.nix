@@ -262,5 +262,7 @@ rec {
 
   types-aiobotocore-eks = buildTypesAiobotocorePackage "eks" "2.6.0" "sha256-MXMbA1QAyRMhTqihwKztK3EoRp1iesCvPEz30Xc/in8=";
 
+  types-aiobotocore-elastic-inference = buildTypesAiobotocorePackage "elastic-inference" "2.6.0" "sha256-xjMVOk0fzyvDoSNb+kxVQT9emfvIG/6Ws3h3MfCCTOY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
