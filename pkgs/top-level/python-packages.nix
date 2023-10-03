@@ -14823,6 +14823,8 @@ self: super: with self; {
 
     types-aiobotocore-verifiedpermissions
 
+    types-aiobotocore-voice-id
+
     types-aiobotocore-xray
 
   ;

@@ -722,5 +722,7 @@ rec {
 
   types-aiobotocore-verifiedpermissions = buildTypesAiobotocorePackage "verifiedpermissions" "2.6.0" "sha256-yg4zDBjgSB7JuuS2DXIUe3PFQq9stIfEJSMF1IP2BWI=";
 
+  types-aiobotocore-voice-id = buildTypesAiobotocorePackage "voice-id" "2.6.0" "sha256-Pnn3CGL5rr3MtzaakjDXmReVKXnyB76IxSnAPnKU45I=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
