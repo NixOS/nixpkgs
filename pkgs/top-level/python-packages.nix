@@ -14187,6 +14187,8 @@ self: super: with self; {
 
     types-aiobotocore-appmesh
 
+    types-aiobotocore-apprunner
+
     types-aiobotocore-xray
 
   ;
