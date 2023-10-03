@@ -7703,6 +7703,8 @@ self: super: with self; {
 
     mypy-boto3-shield
 
+    mypy-boto3-signer
+
     mypy-boto3-xray
 
   ;

@@ -664,6 +664,8 @@ rec {
 
   mypy-boto3-shield = buildMypyBoto3Package "shield" "1.28.36" "sha256-io8Ux5jD5gyQwZDENXuT/5/R1iqTWd4c34zzQtBxNyk=";
 
+  mypy-boto3-signer = buildMypyBoto3Package "signer" "1.28.36" "sha256-4Aji9L+AI66iB9NaiuV96YefuoEJ0s+BPdsOu/UwDpM=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
