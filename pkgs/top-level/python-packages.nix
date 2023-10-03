@@ -14163,6 +14163,8 @@ self: super: with self; {
 
     types-aiobotocore-amplifyuibuilder
 
+    types-aiobotocore-apigateway
+
     types-aiobotocore-xray
 
   ;
