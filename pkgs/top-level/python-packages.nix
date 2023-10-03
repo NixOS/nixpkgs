@@ -14413,6 +14413,8 @@ self: super: with self; {
 
     types-aiobotocore-glacier
 
+    types-aiobotocore-globalaccelerator
+
     types-aiobotocore-xray
 
   ;

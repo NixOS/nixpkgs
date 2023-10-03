@@ -312,5 +312,7 @@ rec {
 
   types-aiobotocore-glacier = buildTypesAiobotocorePackage "glacier" "2.6.0" "sha256-shUgv/KntAP0kuD8pJFLEAp/aIukEsLhte6C5odtNJs=";
 
+  types-aiobotocore-globalaccelerator = buildTypesAiobotocorePackage "globalaccelerator" "2.6.0" "sha256-U/74XOX/pXh4JJ4n6Fu6quL6gQwz+zt9bOWj/QYOS+8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
