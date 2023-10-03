@@ -542,6 +542,8 @@ rec {
 
   mypy-boto3-personalize = buildMypyBoto3Package "personalize" "1.28.36" "sha256-SCQqvz6rBi9Ohbw10A9BS3Yu0xPQLs03a0a0zC9mXoM=";
 
+  mypy-boto3-personalize-events = buildMypyBoto3Package "personalize-events" "1.28.36" "sha256-Znmc+a37B+wlkDCT387ZGCyfQ6kLrQeVcHCkplAAOAo=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
