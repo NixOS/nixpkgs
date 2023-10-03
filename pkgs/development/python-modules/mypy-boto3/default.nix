@@ -562,6 +562,8 @@ rec {
 
   mypy-boto3-pricing = buildMypyBoto3Package "pricing" "1.28.36" "sha256-zmtifAqoWolmES6GVNRHvcvsC43AWpI4BZLipns8vqU=";
 
+  mypy-boto3-privatenetworks = buildMypyBoto3Package "privatenetworks" "1.28.36" "sha256-JUaloEf/CtJBBwvf08tX1dfvMmo5zM85NFGKzLwd0zk=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
