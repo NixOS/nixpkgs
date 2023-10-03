@@ -744,5 +744,7 @@ rec {
 
   types-aiobotocore-workmailmessageflow = buildTypesAiobotocorePackage "workmailmessageflow" "2.6.0" "sha256-Mc3h0CSmJRoV+ncwhtd4Tu5LSoasWqK8V9hXK5+XYfs=";
 
+  types-aiobotocore-workspaces = buildTypesAiobotocorePackage "workspaces" "2.6.0" "sha256-xtsxrIzhjJSoGqd1fEgXP55bRtDsJTtdoWn8eooHCmY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
