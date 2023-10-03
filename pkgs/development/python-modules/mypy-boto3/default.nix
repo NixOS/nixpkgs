@@ -610,6 +610,8 @@ rec {
 
   mypy-boto3-route53domains = buildMypyBoto3Package "route53domains" "1.28.36" "sha256-0g6Xh6GS06L6o0De4V/zQdw0DMOQMFFW7NMWEY7I5fQ=";
 
+  mypy-boto3-route53resolver = buildMypyBoto3Package "route53resolver" "1.28.36" "sha256-o5wa4Jjskxw10OpjvVq62mdyi55nB8xsB1t52hEtrs8=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
