@@ -7181,6 +7181,8 @@ self: super: with self; {
 
     mypy-boto3-cloudhsm
 
+    mypy-boto3-cloudhsmv2
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
