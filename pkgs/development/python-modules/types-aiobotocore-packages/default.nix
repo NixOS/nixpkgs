@@ -234,5 +234,7 @@ rec {
 
   types-aiobotocore-dms = buildTypesAiobotocorePackage "dms" "2.6.0" "sha256-cWGwdGBTgEag5SeRDLvAJtCS1dAxtt5R0uanPI6RjkY=";
 
+  types-aiobotocore-docdb = buildTypesAiobotocorePackage "docdb" "2.6.0" "sha256-yYm/H31gRIDV+r2H+8cTHkc5h40aFFUQ7zlX1wyLPAI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

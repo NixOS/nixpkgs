@@ -14335,6 +14335,8 @@ self: super: with self; {
 
     types-aiobotocore-dms
 
+    types-aiobotocore-docdb
+
     types-aiobotocore-xray
 
   ;
