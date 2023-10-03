@@ -14217,6 +14217,8 @@ self: super: with self; {
 
     types-aiobotocore-budgets
 
+    types-aiobotocore-ce
+
     types-aiobotocore-xray
 
   ;
