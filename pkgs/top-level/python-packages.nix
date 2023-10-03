@@ -14303,6 +14303,8 @@ self: super: with self; {
 
     types-aiobotocore-connectcases
 
+    types-aiobotocore-connectparticipant
+
     types-aiobotocore-xray
 
   ;

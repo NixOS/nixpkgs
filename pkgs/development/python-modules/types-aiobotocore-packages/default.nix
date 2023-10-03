@@ -202,5 +202,7 @@ rec {
 
   types-aiobotocore-connectcases = buildTypesAiobotocorePackage "connectcases" "2.6.0" "sha256-/MRl46K5h5mtboGhWDop0psxPyxhm3tKhzvMpr91d/w=";
 
+  types-aiobotocore-connectparticipant = buildTypesAiobotocorePackage "connectparticipant" "2.6.0" "sha256-3E+8scTPCcNm8RDoxGWSm/u6drT12aiFqf3LbxWTy8w=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
