@@ -542,5 +542,7 @@ rec {
 
   types-aiobotocore-personalize-events = buildTypesAiobotocorePackage "personalize-events" "2.6.0" "sha256-+9wtXNgXQhACa8NYfcjbZcJj0j9PlOavxs+c4NXy0kE=";
 
+  types-aiobotocore-personalize-runtime = buildTypesAiobotocorePackage "personalize-runtime" "2.6.0" "sha256-tvLfXhaFpdivIBtFYp0G4/QihOMSGXK1nVDFKuMJCto=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

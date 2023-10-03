@@ -14643,6 +14643,8 @@ self: super: with self; {
 
     types-aiobotocore-personalize-events
 
+    types-aiobotocore-personalize-runtime
+
     types-aiobotocore-xray
 
   ;
