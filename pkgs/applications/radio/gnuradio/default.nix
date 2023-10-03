@@ -278,20 +278,11 @@ let
   inherit (shared.passthru) hasFeature; # function
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: (shared // {
   inherit pname version;
-  inherit (shared)
-    src
-    nativeBuildInputs
-    buildInputs
-    cmakeFlags
-    disallowedReferences
-    stripDebugList
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
+  # Will still evaluate correctly if not used here. It only helps nix-update
+  # find the right file in which version is defined.
+  inherit (shared) src;
   patches = [
     # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
     ./modtool-newmod-permissions.patch
@@ -327,4 +318,4 @@ stdenv.mkDerivation {
       ${removeReferencesTo}/bin/remove-references-to -t ${python.pkgs.pybind11} $out/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
     ''
   ;
-}
+}))
