@@ -286,5 +286,7 @@ rec {
 
   types-aiobotocore-events = buildTypesAiobotocorePackage "events" "2.6.0" "sha256-X0r0VZ/ZWYrn2NdE5dJrcS74OyWIvWMDJGSNheIOm0A=";
 
+  types-aiobotocore-evidently = buildTypesAiobotocorePackage "evidently" "2.6.0" "sha256-ec9XPmiGjhH+MsW81JtH13KACasiWqtmxOC/O8ewbgE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
