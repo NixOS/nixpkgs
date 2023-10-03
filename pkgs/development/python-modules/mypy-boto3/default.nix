@@ -660,6 +660,8 @@ rec {
 
   mypy-boto3-ses = buildMypyBoto3Package "ses" "1.28.36" "sha256-HYAl9ock3b9chpYp+wd+sR1DElFN+jxipHc3lGoIFR8=";
 
+  mypy-boto3-sesv2 = buildMypyBoto3Package "sesv2" "1.28.37" "sha256-TqnrgOc+YI6YA3BtJcN2BdU8Cm3By60yQJPxcWdQrEY=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
