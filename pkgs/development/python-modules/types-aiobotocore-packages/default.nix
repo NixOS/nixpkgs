@@ -574,5 +574,7 @@ rec {
 
   types-aiobotocore-rbin = buildTypesAiobotocorePackage "rbin" "2.6.0" "sha256-TOI2FQdO71XT1NESXGrZN+UI6c7CGRmsBbp4ipuQwhg=";
 
+  types-aiobotocore-rds = buildTypesAiobotocorePackage "rds" "2.6.0" "sha256-M0IDOMbqGdLl0WSipPirjDn3Fr4AQ06+j3m0Ci3jyBE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

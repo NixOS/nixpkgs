@@ -14675,6 +14675,8 @@ self: super: with self; {
 
     types-aiobotocore-rbin
 
+    types-aiobotocore-rds
+
     types-aiobotocore-xray
 
   ;
