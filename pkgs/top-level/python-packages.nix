@@ -14773,6 +14773,8 @@ self: super: with self; {
 
     types-aiobotocore-snow-device-management
 
+    types-aiobotocore-snowball
+
     types-aiobotocore-xray
 
   ;

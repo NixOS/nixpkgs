@@ -672,5 +672,7 @@ rec {
 
   types-aiobotocore-snow-device-management = buildTypesAiobotocorePackage "snow-device-management" "2.6.0" "sha256-Fh35RpHExkL/PeqEnWNR2pJYWERDJzOF9oE3SvIxxQ4=";
 
+  types-aiobotocore-snowball = buildTypesAiobotocorePackage "snowball" "2.6.0" "sha256-Wia4Xc/Kt8j6X5rZ9vvxupr6tCv1XQQQFOwRnugL0lE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
