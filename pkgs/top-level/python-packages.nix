@@ -7201,6 +7201,8 @@ self: super: with self; {
 
     mypy-boto3-codecommit
 
+    mypy-boto3-codedeploy
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
