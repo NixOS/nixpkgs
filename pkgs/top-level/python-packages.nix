@@ -7595,6 +7595,8 @@ self: super: with self; {
 
     mypy-boto3-pinpoint-sms-voice-v2
 
+    mypy-boto3-pipes
+
     mypy-boto3-s3
 
     mypy-boto3-xray
