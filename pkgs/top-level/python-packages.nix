@@ -14187,6 +14187,8 @@ self: super: with self; {
 
   types-requests = callPackage ../development/python-modules/types-requests { };
 
+  types-s3transfer = callPackage ../development/python-modules/types-s3transfer { };
+
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
 
   types-tabulate = callPackage ../development/python-modules/types-tabulate { };
