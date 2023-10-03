@@ -14423,6 +14423,8 @@ self: super: with self; {
 
     types-aiobotocore-greengrassv2
 
+    types-aiobotocore-groundstation
+
     types-aiobotocore-xray
 
   ;

@@ -322,5 +322,7 @@ rec {
 
   types-aiobotocore-greengrassv2 = buildTypesAiobotocorePackage "greengrassv2" "2.6.0" "sha256-+G6nPOY2Suxa8LPTG8SHOZfwaIJQIyVGTRcsAQYXZzY=";
 
+  types-aiobotocore-groundstation = buildTypesAiobotocorePackage "groundstation" "2.6.0" "sha256-VGGDcARvtSeukjgVB9jwSamIrlrNCF+0pNszN6VkMC0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
