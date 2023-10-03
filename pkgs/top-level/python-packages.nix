@@ -14325,6 +14325,8 @@ self: super: with self; {
 
     types-aiobotocore-devicefarm
 
+    types-aiobotocore-devops-guru
+
     types-aiobotocore-xray
 
   ;

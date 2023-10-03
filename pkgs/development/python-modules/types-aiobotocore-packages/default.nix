@@ -224,5 +224,7 @@ rec {
 
   types-aiobotocore-devicefarm = buildTypesAiobotocorePackage "devicefarm" "2.6.0" "sha256-Mc4Kl4dZyn9y+9V44QilacOHN9+E1M79uNLATsoH2Ks=";
 
+  types-aiobotocore-devops-guru = buildTypesAiobotocorePackage "devops-guru" "2.6.0" "sha256-pPn7O3oK75zRmOFMQmyzmRcjpRTswrVhdbkcqaI5Sj8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
