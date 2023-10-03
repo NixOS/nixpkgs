@@ -14757,6 +14757,8 @@ self: super: with self; {
 
     types-aiobotocore-servicediscovery
 
+    types-aiobotocore-ses
+
     types-aiobotocore-xray
 
   ;

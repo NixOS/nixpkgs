@@ -656,5 +656,7 @@ rec {
 
   types-aiobotocore-servicediscovery = buildTypesAiobotocorePackage "servicediscovery" "2.6.0" "sha256-KLdOmaO6x7AmQInP1RRAf8s5rlpD0PpDHeBnor5gl2A=";
 
+  types-aiobotocore-ses = buildTypesAiobotocorePackage "ses" "2.6.0" "sha256-QNjpM0m1PKSQx2f1eNkOeNP7pHN0PfHZlMFVQbGOgGU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
