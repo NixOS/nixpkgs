@@ -14633,6 +14633,8 @@ self: super: with self; {
 
     types-aiobotocore-outposts
 
+    types-aiobotocore-panorama
+
     types-aiobotocore-xray
 
   ;

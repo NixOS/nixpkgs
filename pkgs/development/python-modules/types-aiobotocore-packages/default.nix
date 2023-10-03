@@ -532,5 +532,7 @@ rec {
 
   types-aiobotocore-outposts = buildTypesAiobotocorePackage "outposts" "2.6.0" "sha256-tXAQ+tNeZUF1snrB+76Ku+j1Wdslah38s0YMBOINrlo=";
 
+  types-aiobotocore-panorama = buildTypesAiobotocorePackage "panorama" "2.6.0" "sha256-/XJsZV5Yhp5BMSheF9zVf+MSJsH2zUrpnrkSwo+4PfI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
