@@ -7129,6 +7129,8 @@ self: super: with self; {
 
     mypy-boto3-appsync
 
+    mypy-boto3-arc-zonal-shift
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
