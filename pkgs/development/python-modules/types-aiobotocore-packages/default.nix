@@ -146,5 +146,7 @@ rec {
 
   types-aiobotocore-cloudhsmv2 = buildTypesAiobotocorePackage "cloudhsmv2" "2.6.0" "sha256-FyktFlTQAbS6YnoXljvtn6CabJHGLkRv1jCgb9dbz+s=";
 
+  types-aiobotocore-cloudsearch = buildTypesAiobotocorePackage "cloudsearch" "2.6.0" "sha256-eKLM+GYjbm3cweMtF/XI6k+P8t9gaJeRCeMHQbc832g=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

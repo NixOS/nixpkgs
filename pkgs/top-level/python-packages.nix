@@ -14247,6 +14247,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudhsmv2
 
+    types-aiobotocore-cloudsearch
+
     types-aiobotocore-xray
 
   ;
