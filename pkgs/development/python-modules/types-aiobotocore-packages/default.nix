@@ -716,5 +716,7 @@ rec {
 
   types-aiobotocore-transcribe = buildTypesAiobotocorePackage "transcribe" "2.6.0" "sha256-HB1CKe9mkD0+0TdFXmdiphDUqc+4xbwBIXSu0PulBE4=";
 
+  types-aiobotocore-transfer = buildTypesAiobotocorePackage "transfer" "2.6.0" "sha256-59SvnKQ+WpAKUZNYunFywLLah1aBnF0maZrFbALXcIM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14817,6 +14817,8 @@ self: super: with self; {
 
     types-aiobotocore-transcribe
 
+    types-aiobotocore-transfer
+
     types-aiobotocore-xray
 
   ;
