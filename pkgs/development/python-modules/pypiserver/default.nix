@@ -28,12 +28,12 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    setuptools
     setuptools-git
     wheel
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     pip
   ];
 
