@@ -14575,6 +14575,8 @@ self: super: with self; {
 
     types-aiobotocore-mediapackagev2
 
+    types-aiobotocore-mediastore
+
     types-aiobotocore-xray
 
   ;
