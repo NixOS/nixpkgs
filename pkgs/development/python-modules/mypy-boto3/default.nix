@@ -588,6 +588,8 @@ rec {
 
   mypy-boto3-rekognition = buildMypyBoto3Package "rekognition" "1.28.37" "sha256-6eNlzJDFLLP9YsFdogWE1vtXvSNP//N+f4KpnFfnpa4=";
 
+  mypy-boto3-resiliencehub = buildMypyBoto3Package "resiliencehub" "1.28.36" "sha256-A6Nbwo6IxIBDbhCWqaKIDFYUvHCc1GRHh2IzCaYn6Nc=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
