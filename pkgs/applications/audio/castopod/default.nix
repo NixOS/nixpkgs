@@ -3,7 +3,7 @@
 , ffmpeg-headless
 , lib
 , nixosTests
-, stateDirectory ? "/var/lib/castopod"
+, dataDir ? "/var/lib/castopod"
 }:
 stdenv.mkDerivation {
   pname = "castopod";
@@ -20,13 +20,16 @@ stdenv.mkDerivation {
   postPatch = ''
     # not configurable at runtime unfortunately:
     substituteInPlace app/Config/Paths.php \
-      --replace "__DIR__ . '/../../writable'" "'${stateDirectory}/writable'"
+      --replace "__DIR__ . '/../../writable'" "'${dataDir}/writable'"
 
-    # configuration file must be writable, place it to ${stateDirectory}
+    substituteInPlace modules/Admin/Controllers/DashboardController.php \
+      --replace "disk_total_space('./')" "disk_total_space('${dataDir}')"
+
+    # configuration file must be writable, place it to ${dataDir}
     substituteInPlace modules/Install/Controllers/InstallController.php \
-      --replace "ROOTPATH" "'${stateDirectory}/'"
+      --replace "ROOTPATH" "'${dataDir}/'"
     substituteInPlace public/index.php spark \
-      --replace "DotEnv(ROOTPATH)" "DotEnv('${stateDirectory}')"
+      --replace "DotEnv(ROOTPATH)" "DotEnv('${dataDir}')"
 
     # ffmpeg is required for Video Clips feature
     substituteInPlace modules/MediaClipper/VideoClipper.php \
