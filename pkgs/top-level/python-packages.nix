@@ -7233,6 +7233,8 @@ self: super: with self; {
 
     mypy-boto3-connect
 
+    mypy-boto3-connect-contact-lens
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
