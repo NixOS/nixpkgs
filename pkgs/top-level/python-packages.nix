@@ -14383,6 +14383,8 @@ self: super: with self; {
 
     types-aiobotocore-entityresolution
 
+    types-aiobotocore-es
+
     types-aiobotocore-xray
 
   ;

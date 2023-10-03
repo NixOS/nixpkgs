@@ -282,5 +282,7 @@ rec {
 
   types-aiobotocore-entityresolution = buildTypesAiobotocorePackage "entityresolution" "2.6.0" "sha256-lFbcxmw7Le/rVVL70cOY/vEUShSRnsOdul+eI1jzX7Y=";
 
+  types-aiobotocore-es = buildTypesAiobotocorePackage "es" "2.6.0" "sha256-A/1kM0X4bKrPIXBpir9FuEkuYmUb/K06gfut6faGN0A=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
