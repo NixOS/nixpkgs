@@ -7381,6 +7381,8 @@ self: super: with self; {
 
     mypy-boto3-inspector2
 
+    mypy-boto3-internetmonitor
+
     mypy-boto3-s3
 
     mypy-boto3-xray
