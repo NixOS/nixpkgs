@@ -532,6 +532,8 @@ rec {
 
   mypy-boto3-outposts = buildMypyBoto3Package "outposts" "1.28.51" "sha256-iA+7Mxkp3n6hUJuFhxZ/Nf4vjeQcd3PoOEmjzk2ITI8=";
 
+  mypy-boto3-panorama = buildMypyBoto3Package "panorama" "1.28.36" "sha256-st4X3JA9Wf6zBqx9Gr2BxE9Z+1LeU0kiDpI8b+IVnjw=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
