@@ -7119,6 +7119,8 @@ self: super: with self; {
 
     mypy-boto3-application-insights
 
+    mypy-boto3-applicationcostprofiler
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
