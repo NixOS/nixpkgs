@@ -372,5 +372,7 @@ rec {
 
   types-aiobotocore-iotsecuretunneling = buildTypesAiobotocorePackage "iotsecuretunneling" "2.6.0" "sha256-8zvG95bDvJWNRmw9sCdBfPxQPdb4TNAzqMcth+hliLI=";
 
+  types-aiobotocore-iotsitewise = buildTypesAiobotocorePackage "iotsitewise" "2.6.0" "sha256-1i4Z4CE9PG7JByR9RpPazu7RmPIjNeDecnz5LH2ls2A=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

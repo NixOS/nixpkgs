@@ -14473,6 +14473,8 @@ self: super: with self; {
 
     types-aiobotocore-iotsecuretunneling
 
+    types-aiobotocore-iotsitewise
+
     types-aiobotocore-xray
 
   ;
