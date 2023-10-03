@@ -254,5 +254,7 @@ rec {
 
   types-aiobotocore-ecr = buildTypesAiobotocorePackage "ecr" "2.6.0" "sha256-bMPp7QPa2f8GCRmX3y78XvZTUyYNfYxXDKj5lckBBvE=";
 
+  types-aiobotocore-ecr-public = buildTypesAiobotocorePackage "ecr-public" "2.6.0" "sha256-O2RieTv4vyZ6/mR8BRltfbGcPUjAyIIqriskSlmNcb4=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
