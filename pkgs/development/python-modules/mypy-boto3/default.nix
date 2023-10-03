@@ -164,6 +164,8 @@ rec {
 
   mypy-boto3-codedeploy = buildMypyBoto3Package "codedeploy" "1.28.55" "sha256-jkN9DCiS5fKhBq7752gRzHwmfdohQBZOSNGaA1OxVbc=";
 
+  mypy-boto3-codeguru-reviewer = buildMypyBoto3Package "codeguru-reviewer" "1.28.36" "sha256-xUkKfYEBmqA0D8RKxbf8VF0XeYOgwNWh1y7ORnj1VpM=";
+
   mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.28.36" "sha256-pnLO62LZvr4sJsye3gWJROY+xHikSe7dX8erBTRXrPc=";
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
