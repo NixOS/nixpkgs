@@ -14601,6 +14601,8 @@ self: super: with self; {
 
     types-aiobotocore-mobile
 
+    types-aiobotocore-mq
+
     types-aiobotocore-xray
 
   ;

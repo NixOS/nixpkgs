@@ -500,5 +500,7 @@ rec {
 
   types-aiobotocore-mobile = buildTypesAiobotocorePackage "mobile" "2.6.0" "sha256-HKolI0fcGWye3Xow73qXOJRQ/Wb23ZXWLYyfA94zZT0=";
 
+  types-aiobotocore-mq = buildTypesAiobotocorePackage "mq" "2.6.0" "sha256-61iFbkOYLF6y1QUGePVAVEFqGgTmPbLYS7VDbvzmInA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
