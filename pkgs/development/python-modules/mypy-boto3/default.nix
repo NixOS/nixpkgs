@@ -680,6 +680,8 @@ rec {
 
   mypy-boto3-sqs = buildMypyBoto3Package "sqs" "1.28.36" "sha256-2cFZ4CDw7yJabVhQo2c+iyNjJyQ7pf/g0Tdirk/cDiE=";
 
+  mypy-boto3-ssm = buildMypyBoto3Package "ssm" "1.28.54" "sha256-cf246Qy7fhVgvU7M9w38JkqsdWQma4GI+YmNNpIJtJ8=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
