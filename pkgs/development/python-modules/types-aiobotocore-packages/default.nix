@@ -648,5 +648,7 @@ rec {
 
   types-aiobotocore-serverlessrepo = buildTypesAiobotocorePackage "serverlessrepo" "2.6.0" "sha256-PRzh/JFCHUqXTSAR4IoftxvkRBsVq4XEX7ihC9FzqSI=";
 
+  types-aiobotocore-service-quotas = buildTypesAiobotocorePackage "service-quotas" "2.6.0" "sha256-GcDl3LIy+urPEzXINmU4g7xgk8IIIJ6fBFFXhv18eSA=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

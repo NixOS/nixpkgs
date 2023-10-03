@@ -14749,6 +14749,8 @@ self: super: with self; {
 
     types-aiobotocore-serverlessrepo
 
+    types-aiobotocore-service-quotas
+
     types-aiobotocore-xray
 
   ;
