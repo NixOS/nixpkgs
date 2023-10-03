@@ -14205,6 +14205,8 @@ self: super: with self; {
 
     types-aiobotocore-backup
 
+    types-aiobotocore-backup-gateway
+
     types-aiobotocore-xray
 
   ;
