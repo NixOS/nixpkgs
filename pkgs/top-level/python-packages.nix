@@ -14449,6 +14449,8 @@ self: super: with self; {
 
     types-aiobotocore-iot
 
+    types-aiobotocore-iot-data
+
     types-aiobotocore-xray
 
   ;
