@@ -360,5 +360,7 @@ rec {
 
   types-aiobotocore-iotanalytics = buildTypesAiobotocorePackage "iotanalytics" "2.6.0" "sha256-uhxX742flhdDM7zoYm6yggc41NW7glGPijiql4XKJa4=";
 
+  types-aiobotocore-iotdeviceadvisor = buildTypesAiobotocorePackage "iotdeviceadvisor" "2.6.0" "sha256-jrOVxsJHgpEvyLhreMrzttu3yQ4FXm4+MVDlNNIKWVU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

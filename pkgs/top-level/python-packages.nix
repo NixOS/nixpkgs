@@ -14461,6 +14461,8 @@ self: super: with self; {
 
     types-aiobotocore-iotanalytics
 
+    types-aiobotocore-iotdeviceadvisor
+
     types-aiobotocore-xray
 
   ;
