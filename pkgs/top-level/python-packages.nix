@@ -14597,6 +14597,8 @@ self: super: with self; {
 
     types-aiobotocore-migrationhuborchestrator
 
+    types-aiobotocore-migrationhubstrategy
+
     types-aiobotocore-xray
 
   ;
