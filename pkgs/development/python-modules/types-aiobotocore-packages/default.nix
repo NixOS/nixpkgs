@@ -506,5 +506,7 @@ rec {
 
   types-aiobotocore-mwaa = buildTypesAiobotocorePackage "mwaa" "2.6.0" "sha256-3/LXxvsVmKHpZPr1BISTndLFPmF3LF75kihknSt2cMk=";
 
+  types-aiobotocore-neptune = buildTypesAiobotocorePackage "neptune" "2.6.0" "sha256-2EIBP4NhRy+/OeFuPP/SIf1q6BhlKU9CFH7AM+y3558=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

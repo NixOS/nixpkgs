@@ -14607,6 +14607,8 @@ self: super: with self; {
 
     types-aiobotocore-mwaa
 
+    types-aiobotocore-neptune
+
     types-aiobotocore-xray
 
   ;
