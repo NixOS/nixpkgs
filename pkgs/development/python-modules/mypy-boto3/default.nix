@@ -520,6 +520,8 @@ rec {
 
   mypy-boto3-opensearch = buildMypyBoto3Package "opensearch" "1.28.36" "sha256-97rGlw+REicstwKchMVjN6EuZBxQuSwmhSfBnbHxsS4=";
 
+  mypy-boto3-opensearchserverless = buildMypyBoto3Package "opensearchserverless" "1.28.36" "sha256-7V+wNpLTrYueSnPkOGD1ARqAewrNjbQzlIPDQJ/eEDY=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
