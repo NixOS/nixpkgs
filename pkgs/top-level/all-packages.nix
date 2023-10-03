@@ -27408,8 +27408,6 @@ with pkgs;
 
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
 
-  searx = callPackage ../servers/web-apps/searx { };
-
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
   shaarli = callPackage ../servers/web-apps/shaarli { };

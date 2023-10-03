@@ -149,8 +149,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.searx;
-        defaultText = literalExpression "pkgs.searx";
+        default = pkgs.searxng;
+        defaultText = literalExpression "pkgs.searxng";
         description = lib.mdDoc "searx package to use.";
       };
 
@@ -194,17 +194,6 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = (cfg.limiterSettings != { }) -> cfg.package.pname == "searxng";
-        message = "services.searx.limiterSettings requires services.searx.package to be searxng.";
-      }
-      {
-        assertion = cfg.redisCreateLocally -> cfg.package.pname == "searxng";
-        message = "services.searx.redisCreateLocally requires services.searx.package to be searxng.";
-      }
-    ];
-
     environment.systemPackages = [ cfg.package ];
 
     users.users.searx =
@@ -270,6 +259,7 @@ in
         enable-threads = true;
         module = "searx.webapp";
         env = [
+          # TODO: drop this as it is only required for searx
           "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
           # searxng compatibility https://github.com/searxng/searxng/issues/1519
           "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
