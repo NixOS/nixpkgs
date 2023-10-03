@@ -14443,6 +14443,8 @@ self: super: with self; {
 
     types-aiobotocore-inspector
 
+    types-aiobotocore-inspector2
+
     types-aiobotocore-xray
 
   ;

@@ -342,5 +342,7 @@ rec {
 
   types-aiobotocore-inspector = buildTypesAiobotocorePackage "inspector" "2.6.0" "sha256-dJQnb6AwtmScEIun0QB9CiiPkbdKti9+mc5LN3vf7e0=";
 
+  types-aiobotocore-inspector2 = buildTypesAiobotocorePackage "inspector2" "2.6.0" "sha256-kAhdyymMdbrPoCFzKiVCFzBlfpmz4aGlZ1Ilkrc8EiQ=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
