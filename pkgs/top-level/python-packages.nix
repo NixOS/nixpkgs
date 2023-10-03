@@ -14203,6 +14203,8 @@ self: super: with self; {
 
     types-aiobotocore-autoscaling-plans
 
+    types-aiobotocore-backup
+
     types-aiobotocore-xray
 
   ;
