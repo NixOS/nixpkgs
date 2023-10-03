@@ -172,6 +172,8 @@ rec {
 
   mypy-boto3-codepipeline = buildMypyBoto3Package "codepipeline" "1.28.36" "sha256-isqRkPLovlkHgmBuuYDPBTaBlOdu3LgwajD+z3luO8c=";
 
+  mypy-boto3-codestar = buildMypyBoto3Package "codestar" "1.28.36" "sha256-+D1SBuI6JMA0ISBv5OiGkA43dOESGH4d4m8CUN4Uhxk=";
+
   mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.28.36" "sha256-pnLO62LZvr4sJsye3gWJROY+xHikSe7dX8erBTRXrPc=";
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
