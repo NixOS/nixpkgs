@@ -14753,6 +14753,8 @@ self: super: with self; {
 
     types-aiobotocore-servicecatalog
 
+    types-aiobotocore-servicecatalog-appregistry
+
     types-aiobotocore-xray
 
   ;
