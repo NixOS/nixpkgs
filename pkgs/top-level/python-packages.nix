@@ -14193,6 +14193,8 @@ self: super: with self; {
 
     types-aiobotocore-appsync
 
+    types-aiobotocore-arc-zonal-shift
+
     types-aiobotocore-xray
 
   ;
