@@ -14307,6 +14307,8 @@ self: super: with self; {
 
     types-aiobotocore-controltower
 
+    types-aiobotocore-cur
+
     types-aiobotocore-xray
 
   ;
