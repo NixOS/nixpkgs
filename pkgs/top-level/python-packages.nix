@@ -7437,6 +7437,8 @@ self: super: with self; {
 
     mypy-boto3-kinesis-video-archived-media
 
+    mypy-boto3-kinesis-video-media
+
     mypy-boto3-s3
 
     mypy-boto3-xray
