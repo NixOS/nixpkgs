@@ -14683,6 +14683,8 @@ self: super: with self; {
 
     types-aiobotocore-redshift-data
 
+    types-aiobotocore-redshift-serverless
+
     types-aiobotocore-xray
 
   ;
