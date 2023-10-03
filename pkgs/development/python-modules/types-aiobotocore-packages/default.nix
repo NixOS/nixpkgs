@@ -134,5 +134,7 @@ rec {
 
   types-aiobotocore-cloud9 = buildTypesAiobotocorePackage "cloud9" "2.6.0" "sha256-W3ni8q7n4l8+SP/RyxibCTptextx4Vd8bmiQ3lhgszQ=";
 
+  types-aiobotocore-cloudcontrol = buildTypesAiobotocorePackage "cloudcontrol" "2.6.0" "sha256-qWbYfegOQ6QcEWA/gce9ZiIOBIVeWIj1qjfsksncDxY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
