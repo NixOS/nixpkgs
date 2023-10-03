@@ -14191,6 +14191,8 @@ self: super: with self; {
 
     types-aiobotocore-appstream
 
+    types-aiobotocore-appsync
+
     types-aiobotocore-xray
 
   ;
