@@ -14795,6 +14795,8 @@ self: super: with self; {
 
     types-aiobotocore-stepfunctions
 
+    types-aiobotocore-storagegateway
+
     types-aiobotocore-xray
 
   ;
