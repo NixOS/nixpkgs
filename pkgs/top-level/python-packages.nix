@@ -7109,6 +7109,8 @@ self: super: with self; {
 
     mypy-boto3-appconfigdata
 
+    mypy-boto3-appfabric
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
