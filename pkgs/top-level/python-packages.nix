@@ -14619,6 +14619,8 @@ self: super: with self; {
 
     types-aiobotocore-omics
 
+    types-aiobotocore-opensearch
+
     types-aiobotocore-xray
 
   ;
