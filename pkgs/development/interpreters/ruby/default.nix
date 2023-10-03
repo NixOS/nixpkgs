@@ -82,7 +82,7 @@ let
 
         strictDeps = true;
 
-        nativeBuildInputs = [ autoreconfHook bison ]
+        nativeBuildInputs = [ autoreconfHook bison removeReferencesTo ]
           ++ (op docSupport groff)
           ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
           ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
@@ -225,10 +225,10 @@ let
           ${
             lib.optionalString (!jitSupport) ''
               # Get rid of the CC runtime dependency
-              ${removeReferencesTo}/bin/remove-references-to \
+              remove-references-to \
                 -t ${stdenv.cc} \
                 $out/lib/libruby*
-              ${removeReferencesTo}/bin/remove-references-to \
+              remove-references-to \
                 -t ${stdenv.cc} \
                 $rbConfig
               sed -i '/CC_VERSION_MESSAGE/d' $rbConfig
@@ -270,7 +270,7 @@ let
           cp ${./rbconfig.rb} $devdoc/lib/ruby/site_ruby/rbconfig.rb
         '' + opString useBaseRuby ''
           # Prevent the baseruby from being included in the closure.
-          ${removeReferencesTo}/bin/remove-references-to \
+          remove-references-to \
             -t ${baseRuby} \
             $rbConfig $out/lib/libruby*
         '';
@@ -290,7 +290,7 @@ let
         '';
         doInstallCheck = true;
 
-        disallowedRequisites = op (!jitSupport) stdenv.cc.cc
+        disallowedRequisites = op (!jitSupport) stdenv.cc
           ++ op useBaseRuby baseRuby;
 
         meta = with lib; {
