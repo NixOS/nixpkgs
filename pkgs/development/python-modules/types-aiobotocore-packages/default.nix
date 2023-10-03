@@ -610,5 +610,7 @@ rec {
 
   types-aiobotocore-route53resolver = buildTypesAiobotocorePackage "route53resolver" "2.6.0" "sha256-55qUjFm6ryLjGAmxGLFkl9dPHXjDWyIINZQRQXe4bnk=";
 
+  types-aiobotocore-rum = buildTypesAiobotocorePackage "rum" "2.6.0" "sha256-e8LzXHMfEgkcJKx5a/I//L4/oCz1l7N487wNoTtBP1Y=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14711,6 +14711,8 @@ self: super: with self; {
 
     types-aiobotocore-route53resolver
 
+    types-aiobotocore-rum
+
     types-aiobotocore-xray
 
   ;
