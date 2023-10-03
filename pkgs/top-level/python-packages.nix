@@ -7243,6 +7243,8 @@ self: super: with self; {
 
     mypy-boto3-controltower
 
+    mypy-boto3-cur
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
