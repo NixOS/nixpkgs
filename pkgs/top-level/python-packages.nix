@@ -7089,6 +7089,8 @@ self: super: with self; {
 
     mypy-boto3-acm-pca
 
+    mypy-boto3-alexaforbusiness
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
