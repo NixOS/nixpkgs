@@ -14453,6 +14453,8 @@ self: super: with self; {
 
     types-aiobotocore-iot-jobs-data
 
+    types-aiobotocore-iot-roborunner
+
     types-aiobotocore-xray
 
   ;
