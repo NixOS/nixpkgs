@@ -7091,6 +7091,8 @@ self: super: with self; {
 
     mypy-boto3-alexaforbusiness
 
+    mypy-boto3-amp
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
