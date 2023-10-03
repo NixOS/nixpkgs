@@ -510,6 +510,8 @@ rec {
 
   mypy-boto3-network-firewall = buildMypyBoto3Package "network-firewall" "1.28.38" "sha256-MR+/d8G6cfpSEXsC9+mk1WXg/y1fQatMDV0uASI9bU0=";
 
+  mypy-boto3-networkmanager = buildMypyBoto3Package "networkmanager" "1.28.36" "sha256-KESRmtzmmm/IMlQw8s7alP2PSupcdnXRtx2ZHETPzLA=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
