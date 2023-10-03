@@ -14283,6 +14283,8 @@ self: super: with self; {
 
     types-aiobotocore-cognito-identity
 
+    types-aiobotocore-cognito-idp
+
     types-aiobotocore-xray
 
   ;
