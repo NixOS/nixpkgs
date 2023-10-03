@@ -14511,6 +14511,8 @@ self: super: with self; {
 
     types-aiobotocore-kinesisanalyticsv2
 
+    types-aiobotocore-kinesisvideo
+
     types-aiobotocore-xray
 
   ;
