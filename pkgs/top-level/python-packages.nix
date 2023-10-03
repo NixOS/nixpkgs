@@ -168,6 +168,8 @@ self: super: with self; {
 
   aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
 
+  aioboto3 = callPackage ../development/python-modules/aioboto3 { };
+
   aioblescan = callPackage ../development/python-modules/aioblescan { };
 
   aiocache = callPackage ../development/python-modules/aiocache { };
