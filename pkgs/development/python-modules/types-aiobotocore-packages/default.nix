@@ -356,5 +356,7 @@ rec {
 
   types-aiobotocore-iot1click-devices = buildTypesAiobotocorePackage "iot1click-devices" "2.6.0" "sha256-MRRil8KuR88NvjAOQHQSftplzk7+sdAJBb1Koxj1j8o=";
 
+  types-aiobotocore-iot1click-projects = buildTypesAiobotocorePackage "iot1click-projects" "2.6.0" "sha256-6YRdsbNw685KvSLCPP6cpCVA5zqht9gF/SthHHtjxfI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
