@@ -14585,6 +14585,8 @@ self: super: with self; {
 
     types-aiobotocore-memorydb
 
+    types-aiobotocore-meteringmarketplace
+
     types-aiobotocore-xray
 
   ;
