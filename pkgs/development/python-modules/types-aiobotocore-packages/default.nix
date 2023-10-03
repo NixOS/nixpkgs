@@ -516,5 +516,7 @@ rec {
 
   types-aiobotocore-oam = buildTypesAiobotocorePackage "oam" "2.6.0" "sha256-Q/msYeaXs9MxXj6X0p8Gw08/Y4FvvV2xAbEXU6iqi2g=";
 
+  types-aiobotocore-omics = buildTypesAiobotocorePackage "omics" "2.6.0" "sha256-UB0y0l2fb58yNJr36WpCeTDETAcdQkYd2ueETFEQSTo=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

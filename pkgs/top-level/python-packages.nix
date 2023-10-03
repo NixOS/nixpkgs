@@ -14617,6 +14617,8 @@ self: super: with self; {
 
     types-aiobotocore-oam
 
+    types-aiobotocore-omics
+
     types-aiobotocore-xray
 
   ;
