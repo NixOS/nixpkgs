@@ -176,5 +176,7 @@ rec {
 
   types-aiobotocore-codestar = buildTypesAiobotocorePackage "codestar" "2.6.0" "sha256-6b3QfRecmprhRU+loWafrcL1mWNLFmZXZOAhUMkpGqU=";
 
+  types-aiobotocore-codestar-connections = buildTypesAiobotocorePackage "codestar-connections" "2.6.0" "sha256-D/icEGVsuYSU7hCw2VEojLTkdaBcK6SoEZqpvD/NKV0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
