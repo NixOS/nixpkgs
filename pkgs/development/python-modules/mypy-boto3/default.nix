@@ -344,6 +344,8 @@ rec {
 
   mypy-boto3-internetmonitor = buildMypyBoto3Package "internetmonitor" "1.28.47" "sha256-qNv+Qi/5eZ5oUsysYokQufE3BgL32BzA9gdxWsJ6ocU=";
 
+  mypy-boto3-iot = buildMypyBoto3Package "iot" "1.28.56" "sha256-dLDUJEflskkXKb6soxoKRoPxko/Qb9lWkKjPnVklUWc=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
