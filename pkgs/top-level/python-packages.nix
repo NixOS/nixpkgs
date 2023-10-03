@@ -14543,6 +14543,8 @@ self: super: with self; {
 
     types-aiobotocore-lookoutmetrics
 
+    types-aiobotocore-lookoutvision
+
     types-aiobotocore-xray
 
   ;
