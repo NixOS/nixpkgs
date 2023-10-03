@@ -14803,6 +14803,8 @@ self: super: with self; {
 
     types-aiobotocore-support-app
 
+    types-aiobotocore-swf
+
     types-aiobotocore-xray
 
   ;

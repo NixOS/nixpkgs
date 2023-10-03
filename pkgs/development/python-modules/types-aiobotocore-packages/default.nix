@@ -702,5 +702,7 @@ rec {
 
   types-aiobotocore-support-app = buildTypesAiobotocorePackage "support-app" "2.6.0" "sha256-CXYfdtO1TdmEz39v2AEeCTJmgiA/EF1gmaBBYGRgYV0=";
 
+  types-aiobotocore-swf = buildTypesAiobotocorePackage "swf" "2.6.0" "sha256-x9cBjUe4LC9uSsFpPciZP1QlUEqfNo3xZFKUqPuVV6E=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
