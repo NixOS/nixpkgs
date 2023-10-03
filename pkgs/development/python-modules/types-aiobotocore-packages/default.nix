@@ -374,5 +374,7 @@ rec {
 
   types-aiobotocore-iotsitewise = buildTypesAiobotocorePackage "iotsitewise" "2.6.0" "sha256-1i4Z4CE9PG7JByR9RpPazu7RmPIjNeDecnz5LH2ls2A=";
 
+  types-aiobotocore-iotthingsgraph = buildTypesAiobotocorePackage "iotthingsgraph" "2.6.0" "sha256-6161RDBwnvqvBtJWs5bPieI6AdwKFCmiT6ixKRE9GuM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

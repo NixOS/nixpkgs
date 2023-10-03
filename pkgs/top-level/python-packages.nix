@@ -14475,6 +14475,8 @@ self: super: with self; {
 
     types-aiobotocore-iotsitewise
 
+    types-aiobotocore-iotthingsgraph
+
     types-aiobotocore-xray
 
   ;
