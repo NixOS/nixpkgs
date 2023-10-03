@@ -304,5 +304,7 @@ rec {
 
   types-aiobotocore-frauddetector = buildTypesAiobotocorePackage "frauddetector" "2.6.0" "sha256-ICRkb+GIWginbc2LvsJTzBaEXDlwg+JOqWQwNRzu+CI=";
 
+  types-aiobotocore-fsx = buildTypesAiobotocorePackage "fsx" "2.6.0" "sha256-vZiK+Kat3RKN/OcKny5qLF+pYljoVlJGG9Kdlb75GWk=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

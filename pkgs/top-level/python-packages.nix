@@ -14405,6 +14405,8 @@ self: super: with self; {
 
     types-aiobotocore-frauddetector
 
+    types-aiobotocore-fsx
+
     types-aiobotocore-xray
 
   ;
