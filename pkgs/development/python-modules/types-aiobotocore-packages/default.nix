@@ -390,5 +390,7 @@ rec {
 
   types-aiobotocore-kafkaconnect = buildTypesAiobotocorePackage "kafkaconnect" "2.6.0" "sha256-pOk51+FrlKDNPPDaa1mf3HjpCqlUskeRYITkFp91l6M=";
 
+  types-aiobotocore-kendra = buildTypesAiobotocorePackage "kendra" "2.6.0" "sha256-1WeJI++z4QiF0bZ4FyNgoNWY6X62ZCyq7PGNM9urFn4=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
