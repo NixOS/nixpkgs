@@ -658,6 +658,8 @@ rec {
 
   mypy-boto3-servicediscovery = buildMypyBoto3Package "servicediscovery" "1.28.52" "sha256-WaiZXFpKr59w0XtjF6mVI7kGt1X+vmbeWiDBNwEaeRw=";
 
+  mypy-boto3-ses = buildMypyBoto3Package "ses" "1.28.36" "sha256-HYAl9ock3b9chpYp+wd+sR1DElFN+jxipHc3lGoIFR8=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

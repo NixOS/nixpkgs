@@ -7697,6 +7697,8 @@ self: super: with self; {
 
     mypy-boto3-servicediscovery
 
+    mypy-boto3-ses
+
     mypy-boto3-xray
 
   ;
