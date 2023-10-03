@@ -19,13 +19,21 @@
 , rustPlatform
 , makeWrapper
 , fuseSupport ? false
-, version ? lib.importJSON ./version.json
 }:
+let
+  rev = "6b175a022496572416918bd38d083120c23ba5f2";
+in
 stdenv.mkDerivation {
   pname = "bcachefs-tools";
-  version = "unstable-${version.date}";
+  version = "unstable-2023-09-29";
 
-  src = fetchFromGitHub (builtins.removeAttrs version ["date"]);
+
+  src = fetchFromGitHub {
+    owner = "koverstreet";
+    repo = "bcachefs-tools";
+    inherit rev;
+    hash = "sha256-qC6Bq2zdO8Tj+bZbIUvcVBqvuKccqDEX3HIeOXsEloQ=";
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -63,7 +71,7 @@ stdenv.mkDerivation {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "VERSION=${lib.strings.substring 0 7 version.rev}"
+    "VERSION=${lib.strings.substring 0 7 rev}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
   ];
 
