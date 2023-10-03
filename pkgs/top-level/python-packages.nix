@@ -7509,6 +7509,8 @@ self: super: with self; {
 
     mypy-boto3-mediapackage-vod
 
+    mypy-boto3-mediapackagev2
+
     mypy-boto3-s3
 
     mypy-boto3-xray
