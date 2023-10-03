@@ -14159,6 +14159,8 @@ self: super: with self; {
 
     types-aiobotocore-amplify
 
+    types-aiobotocore-amplifybackend
+
     types-aiobotocore-xray
 
   ;
