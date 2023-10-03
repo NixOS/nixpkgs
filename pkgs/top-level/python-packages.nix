@@ -14733,6 +14733,8 @@ self: super: with self; {
 
     types-aiobotocore-sagemaker-runtime
 
+    types-aiobotocore-savingsplans
+
     types-aiobotocore-xray
 
   ;

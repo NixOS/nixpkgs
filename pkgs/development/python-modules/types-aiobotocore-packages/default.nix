@@ -632,5 +632,7 @@ rec {
 
   types-aiobotocore-sagemaker-runtime = buildTypesAiobotocorePackage "sagemaker-runtime" "2.6.0" "sha256-/7Zzo383eWFjEHxZST1QKzTNHunhR8mjSE2uEHUw9IE=";
 
+  types-aiobotocore-savingsplans = buildTypesAiobotocorePackage "savingsplans" "2.6.0" "sha256-6sIHmILzIg1aOskXnjbDDzbkygXDwFcnd9mfuuhRFZQ=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
