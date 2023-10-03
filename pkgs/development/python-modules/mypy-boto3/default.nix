@@ -646,6 +646,8 @@ rec {
 
   mypy-boto3-securityhub = buildMypyBoto3Package "securityhub" "1.28.43" "sha256-Ein8Q/bhJoThpGzGK9ow53WEWs5D5ARW/15s3qzLqnw=";
 
+  mypy-boto3-securitylake = buildMypyBoto3Package "securitylake" "1.28.36" "sha256-YKtv/32/5ngUo4GUqeplkL5mmdcWP7rYrypLPJtebQ0=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

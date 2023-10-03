@@ -7685,6 +7685,8 @@ self: super: with self; {
 
     mypy-boto3-securityhub
 
+    mypy-boto3-securitylake
+
     mypy-boto3-xray
 
   ;
