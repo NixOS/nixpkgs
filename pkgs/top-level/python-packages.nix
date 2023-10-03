@@ -7753,6 +7753,8 @@ self: super: with self; {
 
     mypy-boto3-timestream-write
 
+    mypy-boto3-tnb
+
     mypy-boto3-xray
 
   ;
