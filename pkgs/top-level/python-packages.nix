@@ -14783,6 +14783,8 @@ self: super: with self; {
 
     types-aiobotocore-ssm-contacts
 
+    types-aiobotocore-ssm-incidents
+
     types-aiobotocore-xray
 
   ;
