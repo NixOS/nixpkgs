@@ -42,11 +42,7 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, versionAttr ? {
-  major = "3.9";
-  minor = "8";
-  patch = "0";
-}
+, version ? "3.9.8.0"
 }:
 
 let
@@ -250,7 +246,7 @@ let
       removeReferencesTo
       featuresInfo
       features
-      versionAttr
+      version
       sourceSha256
       overrideSrc
       fetchFromGitHub
@@ -258,13 +254,12 @@ let
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared.passthru) hasFeature; # function
 in
 
 stdenv.mkDerivation {
-  inherit pname;
+  inherit pname version;
   inherit (shared)
-    version
     src
     nativeBuildInputs
     buildInputs
