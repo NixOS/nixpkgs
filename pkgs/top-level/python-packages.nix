@@ -14297,6 +14297,8 @@ self: super: with self; {
 
     types-aiobotocore-connect
 
+    types-aiobotocore-connect-contact-lens
+
     types-aiobotocore-xray
 
   ;
