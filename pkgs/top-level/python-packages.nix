@@ -14345,6 +14345,8 @@ self: super: with self; {
 
     types-aiobotocore-dynamodb
 
+    types-aiobotocore-dynamodbstreams
+
     types-aiobotocore-xray
 
   ;

@@ -244,5 +244,7 @@ rec {
 
   types-aiobotocore-dynamodb = buildTypesAiobotocorePackage "dynamodb" "2.6.0" "sha256-dFo/YsEQg7TXB5NENmFOv37R3B2GoN0TlIiULWEQr9I=";
 
+  types-aiobotocore-dynamodbstreams = buildTypesAiobotocorePackage "dynamodbstreams" "2.6.0" "sha256-8wsE774l7M8Qb3UiaxkAdN6sdnXs5oS4cFhncW0joBI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
