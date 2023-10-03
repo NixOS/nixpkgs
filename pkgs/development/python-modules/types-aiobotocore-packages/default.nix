@@ -588,5 +588,7 @@ rec {
 
   types-aiobotocore-resiliencehub = buildTypesAiobotocorePackage "resiliencehub" "2.6.0" "sha256-nXZ7ZrpEOSdXdcuGVMNI7hjx6oisnnej18vALIEEzGQ=";
 
+  types-aiobotocore-resource-explorer-2 = buildTypesAiobotocorePackage "resource-explorer-2" "2.6.0" "sha256-cjBd3Ns1ckr7DT9gpaeb8CbXOrmwU3gENN5Is5BwrZI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

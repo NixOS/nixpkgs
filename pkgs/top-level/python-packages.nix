@@ -14689,6 +14689,8 @@ self: super: with self; {
 
     types-aiobotocore-resiliencehub
 
+    types-aiobotocore-resource-explorer-2
+
     types-aiobotocore-xray
 
   ;
