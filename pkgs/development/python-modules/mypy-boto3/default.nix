@@ -282,6 +282,8 @@ rec {
 
   mypy-boto3-es = buildMypyBoto3Package "es" "1.28.36" "sha256-NfMTzKYwYgZ+dbyIzxn+3poLWo8zjF8ANGWQFtMRTbk=";
 
+  mypy-boto3-events = buildMypyBoto3Package "events" "1.28.46" "sha256-/a4rUcfBPQBFxqCnwt23NeZ655B3CEoo+SKHBZMJGtE=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
