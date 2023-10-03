@@ -7277,6 +7277,8 @@ self: super: with self; {
 
     mypy-boto3-drs
 
+    mypy-boto3-ds
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
