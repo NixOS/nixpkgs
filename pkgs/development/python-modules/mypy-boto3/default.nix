@@ -548,6 +548,8 @@ rec {
 
   mypy-boto3-pi = buildMypyBoto3Package "pi" "1.28.36" "sha256-sHhbm4A0BkC7h9SuYjOpIwQCLtvU5ukYzpgqNruvJnM=";
 
+  mypy-boto3-pinpoint = buildMypyBoto3Package "pinpoint" "1.28.55" "sha256-Qi9wlrmtGVeGW/BXYJggG12q0g2Jw8pu2A9jd+3ryKI=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";

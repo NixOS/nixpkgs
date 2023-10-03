@@ -7587,6 +7587,8 @@ self: super: with self; {
 
     mypy-boto3-pi
 
+    mypy-boto3-pinpoint
+
     mypy-boto3-s3
 
     mypy-boto3-xray
