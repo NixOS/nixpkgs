@@ -7,6 +7,7 @@
 , pytestCheckHook
 , libffi
 , pkg-config
+, setuptools
 , pycparser
 , pythonAtLeast
 }:
@@ -14,6 +15,7 @@
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
   version = "1.16.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -50,7 +52,7 @@ if isPyPy then null else buildPythonPackage rec {
 
   buildInputs = [ libffi ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config setuptools ];
 
   propagatedBuildInputs = [ pycparser ];
 
