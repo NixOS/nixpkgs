@@ -6,7 +6,7 @@ let
   metadataVersion = "0.3.4";
 in
 mavenJdk17.buildMavenPackage rec {
-  pname = "svchttpx";
+  pname = "httpx-cli";
   version = "v0.43.3";
 
   metadata = fetchurl {
@@ -32,7 +32,7 @@ mavenJdk17.buildMavenPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 target/httpx $out/bin/svchttpx/httpx
+    install -Dm555 target/httpx $out/bin/httpx-cli/httpx-cli
 
     runHook postInstall
   '';
@@ -41,7 +41,7 @@ mavenJdk17.buildMavenPackage rec {
     description = "httpx is a CLI to execute requests from JetBrains Http File";
     homepage = "https://github.com/servicex-sh/httpx";
     license = licenses.apsl20;
-    mainProgram = "httpx";
+    mainProgram = "httpx-cli";
     maintainers = with maintainers; [ ghostbuster91 ];
     inherit (graalvm17-ce.meta) platforms;
   };
