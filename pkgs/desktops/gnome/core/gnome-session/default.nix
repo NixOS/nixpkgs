@@ -1,4 +1,5 @@
 { fetchurl
+, fetchpatch
 , lib
 , stdenv
 , substituteAll
@@ -46,6 +47,12 @@ stdenv.mkDerivation rec {
       gsettings = "${glib.bin}/bin/gsettings";
       dbusLaunch = "${dbus.lib}/bin/dbus-launch";
       bash = "${bash}/bin/bash";
+    })
+    # See #226355. Can be removed on update to v45.
+    (fetchpatch {
+      name = "fix-gnome-boxes-crash.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-session/commit/fab1a3b91677035d541de2c141f8073c4057342c.patch";
+      hash = "sha256-2xeoNgV8UDexkufXDqimAplX0GC99tUWUqjw3kfN+5Q=";
     })
   ];
 
