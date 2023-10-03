@@ -14785,6 +14785,8 @@ self: super: with self; {
 
     types-aiobotocore-ssm-incidents
 
+    types-aiobotocore-ssm-sap
+
     types-aiobotocore-xray
 
   ;
