@@ -318,6 +318,8 @@ rec {
 
   mypy-boto3-greengrass = buildMypyBoto3Package "greengrass" "1.28.36" "sha256-vH/viSZe2UcjtbwGN2Zcf9IB1boBHhL3zmy3IHN1rpg=";
 
+  mypy-boto3-greengrassv2 = buildMypyBoto3Package "greengrassv2" "1.28.36" "sha256-VdsQUNg3a2PUaP8rgx3I1ZxUW4hqJsBCS0B8+7CfP1w=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";

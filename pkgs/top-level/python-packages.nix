@@ -7357,6 +7357,8 @@ self: super: with self; {
 
     mypy-boto3-greengrass
 
+    mypy-boto3-greengrassv2
+
     mypy-boto3-s3
 
     mypy-boto3-xray
