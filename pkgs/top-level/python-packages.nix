@@ -7695,6 +7695,8 @@ self: super: with self; {
 
     mypy-boto3-servicecatalog-appregistry
 
+    mypy-boto3-servicediscovery
+
     mypy-boto3-xray
 
   ;
