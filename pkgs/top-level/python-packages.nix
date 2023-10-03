@@ -7765,6 +7765,8 @@ self: super: with self; {
 
     mypy-boto3-voice-id
 
+    mypy-boto3-vpc-lattice
+
     mypy-boto3-xray
 
   ;
