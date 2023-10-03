@@ -7221,6 +7221,8 @@ self: super: with self; {
 
     mypy-boto3-cognito-idp
 
+    mypy-boto3-cognito-sync
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
