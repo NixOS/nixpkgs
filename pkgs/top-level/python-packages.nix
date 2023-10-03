@@ -14677,6 +14677,8 @@ self: super: with self; {
 
     types-aiobotocore-rds
 
+    types-aiobotocore-rds-data
+
     types-aiobotocore-xray
 
   ;

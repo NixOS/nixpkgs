@@ -576,5 +576,7 @@ rec {
 
   types-aiobotocore-rds = buildTypesAiobotocorePackage "rds" "2.6.0" "sha256-M0IDOMbqGdLl0WSipPirjDn3Fr4AQ06+j3m0Ci3jyBE=";
 
+  types-aiobotocore-rds-data = buildTypesAiobotocorePackage "rds-data" "2.6.0" "sha256-GYddRqZeBP5f6chzZON9y59KcBiss9eWa8rVGo53C0g=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
