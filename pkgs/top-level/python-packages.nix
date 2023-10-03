@@ -7265,6 +7265,8 @@ self: super: with self; {
 
     mypy-boto3-directconnect
 
+    mypy-boto3-discovery
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
