@@ -14469,6 +14469,8 @@ self: super: with self; {
 
     types-aiobotocore-iotfleethub
 
+    types-aiobotocore-iotfleetwise
+
     types-aiobotocore-xray
 
   ;
