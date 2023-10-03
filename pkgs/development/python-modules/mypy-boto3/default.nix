@@ -340,6 +340,8 @@ rec {
 
   mypy-boto3-inspector = buildMypyBoto3Package "inspector" "1.28.36" "sha256-plSUqqsTvOMxMeAYueWNpK8JFHdeOOr8DfgSZov9Gbw=";
 
+  mypy-boto3-inspector2 = buildMypyBoto3Package "inspector2" "1.28.36" "sha256-O20aGL3EhyS5HNYlY6Jv1n0OIUWPr3L2VVjReHwpAGM=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
