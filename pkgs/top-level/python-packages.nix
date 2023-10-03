@@ -7213,6 +7213,8 @@ self: super: with self; {
 
     mypy-boto3-codestar
 
+    mypy-boto3-codestar-connections
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
