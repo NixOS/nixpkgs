@@ -14269,6 +14269,8 @@ self: super: with self; {
 
     types-aiobotocore-codeguru-reviewer
 
+    types-aiobotocore-codeguru-security
+
     types-aiobotocore-xray
 
   ;
