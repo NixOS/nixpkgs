@@ -552,5 +552,7 @@ rec {
 
   types-aiobotocore-pinpoint-sms-voice = buildTypesAiobotocorePackage "pinpoint-sms-voice" "2.6.0" "sha256-qvVYusxMw+ZrMJAKXqk1HzEDYHsvaUthnYMDF6b0xbQ=";
 
+  types-aiobotocore-pinpoint-sms-voice-v2 = buildTypesAiobotocorePackage "pinpoint-sms-voice-v2" "2.6.0" "sha256-ErqAFQYtKfsNABPm+KpOKm88Mh5MmXou6bqJfsqXdt0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

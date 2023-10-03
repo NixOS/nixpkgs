@@ -14653,6 +14653,8 @@ self: super: with self; {
 
     types-aiobotocore-pinpoint-sms-voice
 
+    types-aiobotocore-pinpoint-sms-voice-v2
+
     types-aiobotocore-xray
 
   ;
