@@ -14701,6 +14701,8 @@ self: super: with self; {
 
     types-aiobotocore-route53
 
+    types-aiobotocore-route53-recovery-cluster
+
     types-aiobotocore-xray
 
   ;

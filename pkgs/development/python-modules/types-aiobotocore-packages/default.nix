@@ -600,5 +600,7 @@ rec {
 
   types-aiobotocore-route53 = buildTypesAiobotocorePackage "route53" "2.6.0" "sha256-RMIrcFD+1RbA3AcRw3TSjENBzmHQL1zHX7FoOFA+UP0=";
 
+  types-aiobotocore-route53-recovery-cluster = buildTypesAiobotocorePackage "route53-recovery-cluster" "2.6.0" "sha256-mBwT11n8moLt/j46AayYES6rjVo3Tpa5UWJ4Klb1N0g=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
