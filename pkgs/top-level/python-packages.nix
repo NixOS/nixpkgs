@@ -7209,6 +7209,8 @@ self: super: with self; {
 
     mypy-boto3-codeguruprofiler
 
+    mypy-boto3-codepipeline
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
