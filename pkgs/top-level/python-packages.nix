@@ -14569,6 +14569,8 @@ self: super: with self; {
 
     types-aiobotocore-medialive
 
+    types-aiobotocore-mediapackage
+
     types-aiobotocore-xray
 
   ;

@@ -468,5 +468,7 @@ rec {
 
   types-aiobotocore-medialive = buildTypesAiobotocorePackage "medialive" "2.6.0" "sha256-hrfqkhKWIcP+fjDaeFjvk6c6GBTgsY3yxPodx9fFpxk=";
 
+  types-aiobotocore-mediapackage = buildTypesAiobotocorePackage "mediapackage" "2.6.0" "sha256-c7XLKvwiQL6e0tWH0DmOyauTz3q5b0hOVpjVzR1rmH8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
