@@ -7287,6 +7287,8 @@ self: super: with self; {
 
     mypy-boto3-ec2
 
+    mypy-boto3-ec2-instance-connect
+
     mypy-boto3-s3
 
     mypy-boto3-xray
