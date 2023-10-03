@@ -14703,6 +14703,8 @@ self: super: with self; {
 
     types-aiobotocore-route53-recovery-cluster
 
+    types-aiobotocore-route53-recovery-control-config
+
     types-aiobotocore-xray
 
   ;
