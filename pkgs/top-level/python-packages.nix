@@ -7193,6 +7193,8 @@ self: super: with self; {
 
     mypy-boto3-cloudwatch
 
+    mypy-boto3-codeartifact
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
