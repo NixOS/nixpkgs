@@ -416,6 +416,8 @@ rec {
 
   mypy-boto3-lambda = buildMypyBoto3Package "lambda" "1.28.36" "sha256-cEmOb/a/1gt1hVPSf632kboWlXL6ygHCvUV9oLSLnP8=";
 
+  mypy-boto3-lex-models = buildMypyBoto3Package "lex-models" "1.28.36" "sha256-pe4WZgqSF3iodWqXn94fzNChq946ZydQlwJF7CB0HMc=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
