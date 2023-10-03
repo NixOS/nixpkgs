@@ -14237,6 +14237,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudcontrol
 
+    types-aiobotocore-clouddirectory
+
     types-aiobotocore-xray
 
   ;

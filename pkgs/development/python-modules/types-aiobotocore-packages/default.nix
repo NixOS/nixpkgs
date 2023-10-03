@@ -136,5 +136,7 @@ rec {
 
   types-aiobotocore-cloudcontrol = buildTypesAiobotocorePackage "cloudcontrol" "2.6.0" "sha256-qWbYfegOQ6QcEWA/gce9ZiIOBIVeWIj1qjfsksncDxY=";
 
+  types-aiobotocore-clouddirectory = buildTypesAiobotocorePackage "clouddirectory" "2.6.0" "sha256-5TzDHj/t0tqxbRYfnGRP9LNq9pSFj7aidadVB03ZY1k=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
