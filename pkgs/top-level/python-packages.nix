@@ -14433,6 +14433,8 @@ self: super: with self; {
 
     types-aiobotocore-honeycode
 
+    types-aiobotocore-iam
+
     types-aiobotocore-xray
 
   ;
