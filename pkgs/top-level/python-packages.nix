@@ -7293,6 +7293,8 @@ self: super: with self; {
 
     mypy-boto3-ecr-public
 
+    mypy-boto3-ecs
+
     mypy-boto3-s3
 
     mypy-boto3-xray
