@@ -14667,6 +14667,8 @@ self: super: with self; {
 
     types-aiobotocore-qldb
 
+    types-aiobotocore-qldb-session
+
     types-aiobotocore-xray
 
   ;
