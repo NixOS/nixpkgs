@@ -14185,6 +14185,8 @@ self: super: with self; {
 
     types-aiobotocore-applicationcostprofiler
 
+    types-aiobotocore-appmesh
+
     types-aiobotocore-xray
 
   ;
