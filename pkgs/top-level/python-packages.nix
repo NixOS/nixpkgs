@@ -14317,6 +14317,8 @@ self: super: with self; {
 
     types-aiobotocore-datapipeline
 
+    types-aiobotocore-datasync
+
     types-aiobotocore-xray
 
   ;

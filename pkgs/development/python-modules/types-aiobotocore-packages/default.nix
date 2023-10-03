@@ -216,5 +216,7 @@ rec {
 
   types-aiobotocore-datapipeline = buildTypesAiobotocorePackage "datapipeline" "2.6.0" "sha256-k0tYIWqPEnETISThasPHa9AaWdAs0p+hfrUuCI7VTJk=";
 
+  types-aiobotocore-datasync = buildTypesAiobotocorePackage "datasync" "2.6.0" "sha256-C138viPl57+Z79k1C0c4IjgdpMd4PhO352fUs6/YnE0=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
