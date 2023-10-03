@@ -14351,6 +14351,8 @@ self: super: with self; {
 
     types-aiobotocore-ec2
 
+    types-aiobotocore-ec2-instance-connect
+
     types-aiobotocore-xray
 
   ;
