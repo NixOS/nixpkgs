@@ -14293,6 +14293,8 @@ self: super: with self; {
 
     types-aiobotocore-compute-optimizer
 
+    types-aiobotocore-config
+
     types-aiobotocore-xray
 
   ;

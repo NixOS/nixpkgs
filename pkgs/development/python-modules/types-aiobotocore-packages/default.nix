@@ -192,5 +192,7 @@ rec {
 
   types-aiobotocore-compute-optimizer = buildTypesAiobotocorePackage "compute-optimizer" "2.6.0" "sha256-4MRGtyFWceAuspTW6Xqwjf2ta0VC1SIoK/U80QZw7UA=";
 
+  types-aiobotocore-config = buildTypesAiobotocorePackage "config" "2.6.0" "sha256-qW+R5X/fu784kjARjISaNxwzIJn74SXfUaPEuGqsM1M=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
