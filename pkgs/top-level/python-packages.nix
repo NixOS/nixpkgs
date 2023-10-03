@@ -14265,6 +14265,8 @@ self: super: with self; {
 
     types-aiobotocore-codecommit
 
+    types-aiobotocore-codedeploy
+
     types-aiobotocore-xray
 
   ;
