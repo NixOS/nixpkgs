@@ -14221,6 +14221,8 @@ self: super: with self; {
 
     types-aiobotocore-chime
 
+    types-aiobotocore-chime-sdk-identity
+
     types-aiobotocore-xray
 
   ;
