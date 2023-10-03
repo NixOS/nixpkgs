@@ -1,67 +1,72 @@
 { lib
-, nixosTests
 , stdenv
 , fetchurl
 , fetchpatch
-, pkg-config
 , autoreconfHook
+, dbus
 , file
 , glib
-# always required runtime dependencies
-, dbus
-, libmnl
 , gnutls
+, iptables
+, libmnl
+, libnftnl # for nftables
+, nixosTests
+, openconnect
+, openvpn
+, pkg-config
+, polkit
+, ppp
+, pptp
 , readline
-# configurable options
-, firewallType ? "iptables" # or "nftables"
-, iptables ? null
-, libnftnl ? null # for nftables
+, vpnc
 , dnsType ? "internal" # or "systemd-resolved"
-# optional features which are turned *on* by default
-, enableOpenconnect ? true
-, openconnect ? null
-, enableOpenvpn ? true
-, openvpn ? null
-, enableVpnc ? true
-, vpnc ? true
-, enablePolkit ? true
-, polkit ? null
-, enablePptp ? true
-, pptp ? null
-, ppp ? null
-, enableLoopback ? true
-, enableEthernet ? true
-, enableWireguard ? true
-, enableGadget ? true
-, enableWifi ? true
 , enableBluetooth ? true
-, enableOfono ? true
-, enableDundee ? true
-, enablePacrunner ? true
-, enableNeard ? true
-, enableWispr ? true
-, enableTools ? true
-, enableStats ? true
 , enableClient ? true
 , enableDatafiles ? true
-# optional features which are turned *off* by default
-, enableNetworkManager ? false
+, enableDundee ? true
+, enableEthernet ? true
+, enableGadget ? true
 , enableHh2serialGps ? false
-, enableL2tp ? false
 , enableIospm ? false
+, enableL2tp ? false
+, enableLoopback ? true
+, enableNeard ? true
+, enableNetworkManager ? null
+, enableNetworkManagerCompatibility ?
+  if enableNetworkManager == null
+  then false
+  else lib.warn "enableNetworkManager option is deprecated; use enableNetworkManagerCompatibility instead" enableNetworkManager
+, enableOfono ? true
+, enableOpenconnect ? true
+, enableOpenvpn ? true
+, enablePacrunner ? true
+, enablePolkit ? true
+, enablePptp ? true
+, enableStats ? true
 , enableTist ? false
+, enableTools ? true
+, enableVpnc ? true
+, enableWifi ? true
+, enableWireguard ? true
+, enableWispr ? true
+, firewallType ? "iptables" # or "nftables"
 }:
 
+let
+  inherit (lib)
+    enableFeature
+    enableFeatureAs
+    optionals
+    withFeatureAs;
+in
 assert lib.asserts.assertOneOf "firewallType" firewallType [ "iptables" "nftables" ];
 assert lib.asserts.assertOneOf "dnsType" dnsType [ "internal" "systemd-resolved" ];
-
-let inherit (lib) optionals; in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "connman";
   version = "1.42";
+
   src = fetchurl {
-    url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/network/connman/connman-${finalAttrs.version}.tar.xz";
     hash = "sha256-o+a65G/Age8una48qk92Sd6JLD3mIsICg6wMqBQjwqo=";
   };
 
@@ -77,114 +82,95 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [
+    autoreconfHook
+    file
+    pkg-config
+  ];
+
   buildInputs = [
     glib
     dbus
     libmnl
     gnutls
     readline
-  ] ++ optionals (enableOpenconnect) [ openconnect ]
-    ++ optionals (firewallType == "iptables") [ iptables ]
-    ++ optionals (firewallType == "nftables") [ libnftnl ]
-    ++ optionals (enablePolkit) [ polkit ]
-    ++ optionals (enablePptp) [ pptp ppp ]
+  ]
+  ++ optionals (firewallType == "iptables") [ iptables ]
+  ++ optionals (firewallType == "nftables") [ libnftnl ]
+  ++ optionals (enableOpenconnect) [ openconnect ]
+  ++ optionals (enablePolkit) [ polkit ]
+  ++ optionals (enablePptp) [ pptp ppp ]
   ;
 
-  nativeBuildInputs = [
-    pkg-config
-    file
-    autoreconfHook  # as long as we're patching configure.ac
-  ];
-
-  # fix invalid path to 'file'
   postPatch = ''
-    sed -i "s/\/usr\/bin\/file/file/g" ./configure
+    sed -i "s@/usr/bin/file@file@g" ./configure
   '';
 
   configureFlags = [
     # directories flags
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-dbusconfdir=${placeholder "out"}/share"
-    "--with-dbusdatadir=${placeholder "out"}/share"
-    "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-    "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-dns-backend=${dnsType}"
-    "--with-firewall=${firewallType}"
+  ] ++ [
     # production build flags
-    "--disable-maintainer-mode"
-    "--enable-session-policy-local=builtin"
+    (enableFeature false "maintainer-mode")
+    (enableFeatureAs true "session-policy-local" "builtin")
     # for building and running tests
-    # "--enable-tests" # installs the tests, we don't want that
-    "--enable-tools"
-  ]
-    ++ optionals (!enableLoopback) [ "--disable-loopback" ]
-    ++ optionals (!enableEthernet) [ "--disable-ethernet" ]
-    ++ optionals (!enableWireguard) [ "--disable-wireguard" ]
-    ++ optionals (!enableGadget) [ "--disable-gadget" ]
-    ++ optionals (!enableWifi) [ "--disable-wifi" ]
-    # enable IWD support for wifi as it doesn't require any new dependencies
-    # and it's easier for the NixOS module to use only one connman package when
-    # IWD is requested
-    ++ optionals (enableWifi) [ "--enable-iwd" ]
-    ++ optionals (!enableBluetooth) [ "--disable-bluetooth" ]
-    ++ optionals (!enableOfono) [ "--disable-ofono" ]
-    ++ optionals (!enableDundee) [ "--disable-dundee" ]
-    ++ optionals (!enablePacrunner) [ "--disable-pacrunner" ]
-    ++ optionals (!enableNeard) [ "--disable-neard" ]
-    ++ optionals (!enableWispr) [ "--disable-wispr" ]
-    ++ optionals (!enableTools) [ "--disable-tools" ]
-    ++ optionals (!enableStats) [ "--disable-stats" ]
-    ++ optionals (!enableClient) [ "--disable-client" ]
-    ++ optionals (!enableDatafiles) [ "--disable-datafiles" ]
-    ++ optionals (enableOpenconnect) [
-      "--enable-openconnect=builtin"
-      "--with-openconnect=${openconnect}/sbin/openconnect"
-    ]
-    ++ optionals (enableOpenvpn) [
-      "--enable-openvpn=builtin"
-      "--with-openvpn=${openvpn}/sbin/openvpn"
-    ]
-    ++ optionals (enableVpnc) [
-      "--enable-vpnc=builtin"
-      "--with-vpnc=${vpnc}/sbin/vpnc"
-    ]
-    ++ optionals (enablePolkit) [
-      "--enable-polkit"
-    ]
-    ++ optionals (enablePptp) [
-      "--enable-pptp"
-      "--with-pptp=${pptp}/sbin/pptp"
-    ]
-    ++ optionals (!enableWireguard) [
-      "--disable-wireguard"
-    ]
-    ++ optionals (enableNetworkManager) [
-      "--enable-nmcompat"
-    ]
-    ++ optionals (enableHh2serialGps) [
-      "--enable-hh2serial-gps"
-    ]
-    ++ optionals (enableL2tp) [
-      "--enable-l2tp"
-    ]
-    ++ optionals (enableIospm) [
-      "--enable-iospm"
-    ]
-    ++ optionals (enableTist) [
-      "--enable-tist"
-    ]
-  ;
+    # (enableFeature true "tests") # installs the tests, we don't want that
+    (enableFeature true "tools")
+    (enableFeature enableLoopback "loopback")
+    (enableFeature enableEthernet "ethernet")
+    (enableFeature enableWireguard "wireguard")
+    (enableFeature enableGadget "gadget")
+    (enableFeature enableWifi "wifi")
+    # enable IWD support for wifi as it doesn't require any new dependencies and
+    # it's easier for the NixOS module to use only one connman package when IWD
+    # is requested
+    (enableFeature enableWifi "iwd")
+    (enableFeature enableBluetooth "bluetooth")
+    (enableFeature enableOfono "ofono")
+    (enableFeature enableDundee "dundee")
+    (enableFeature enablePacrunner "pacrunner")
+    (enableFeature enableNeard "neard")
+    (enableFeature enableWispr "wispr")
+    (enableFeature enableTools "tools")
+    (enableFeature enableStats "stats")
+    (enableFeature enableClient "client")
+    (enableFeature enableDatafiles "datafiles")
+    (enableFeature enablePolkit "polkit")
+    (enableFeature enablePptp "pptp")
+    (enableFeature enableWireguard "wireguard")
+    (enableFeature enableNetworkManagerCompatibility "nmcompat")
+    (enableFeature enableHh2serialGps "hh2serial-gps")
+    (enableFeature enableL2tp "l2tp")
+    (enableFeature enableIospm "iospm")
+    (enableFeature enableTist "tist")
+  ] ++ [
+    (enableFeatureAs enableOpenconnect "openconnect" "builtin")
+    (enableFeatureAs enableOpenvpn "openvpn" "builtin")
+    (enableFeatureAs enableVpnc "vpnc" "builtin")
+  ] ++ [
+    (withFeatureAs true "dbusconfdir" "${placeholder "out"}/share")
+    (withFeatureAs true "dbusdatadir" "${placeholder "out"}/share")
+    (withFeatureAs true "tmpfilesdir" "${placeholder "out"}/tmpfiles.d")
+    (withFeatureAs true "systemdunitdir" "${placeholder "out"}/systemd/system")
+    (withFeatureAs true "dns-backend" "${dnsType}")
+    (withFeatureAs true "firewall" "${firewallType}")
+    (withFeatureAs enableOpenconnect "openconnect" "${openconnect}/sbin/openconnect")
+    (withFeatureAs enableOpenvpn "openvpn" "${openvpn}/sbin/openvpn")
+    (withFeatureAs enableVpnc "vpnc" "${vpnc}/sbin/vpnc")
+    (withFeatureAs enablePptp "pptp" "${pptp}/sbin/pptp")
+  ];
 
   doCheck = true;
 
   passthru.tests.connman = nixosTests.connman;
 
-  meta = with lib; {
+  meta = {
     description = "A daemon for managing internet connections";
-    homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/";
-    maintainers = with maintainers; [ eclairevoyant ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/about/";
+    license = lib.licenses.gpl2Only;
+    mainProgram = "connmanctl";
+    maintainers = with lib.maintainers; [ eclairevoyant AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})
