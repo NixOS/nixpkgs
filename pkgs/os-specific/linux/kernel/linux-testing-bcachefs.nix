@@ -27,6 +27,8 @@
     BCACHEFS_FS = module;
     BCACHEFS_QUOTA = option yes;
     BCACHEFS_POSIX_ACL = option yes;
+    # useful for bug reports
+    FTRACE = option yes;
   };
 
   kernelPatches = [ {
