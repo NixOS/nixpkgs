@@ -14551,6 +14551,8 @@ self: super: with self; {
 
     types-aiobotocore-macie
 
+    types-aiobotocore-macie2
+
     types-aiobotocore-xray
 
   ;
