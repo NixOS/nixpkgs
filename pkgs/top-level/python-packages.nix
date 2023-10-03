@@ -7721,6 +7721,8 @@ self: super: with self; {
 
     mypy-boto3-ssm
 
+    mypy-boto3-ssm-contacts
+
     mypy-boto3-xray
 
   ;
