@@ -604,5 +604,7 @@ rec {
 
   types-aiobotocore-route53-recovery-control-config = buildTypesAiobotocorePackage "route53-recovery-control-config" "2.6.0" "sha256-qYYT1FRpqxtR9LPGMOH+p0+kbeGvfrlIE6rp5Nupioc=";
 
+  types-aiobotocore-route53-recovery-readiness = buildTypesAiobotocorePackage "route53-recovery-readiness" "2.6.0" "sha256-66kGFeDv4PkKYd4UEL4Feqw5LnygBMGvHqctC4EWnNU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
