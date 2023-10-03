@@ -14739,6 +14739,8 @@ self: super: with self; {
 
     types-aiobotocore-schemas
 
+    types-aiobotocore-sdb
+
     types-aiobotocore-xray
 
   ;
