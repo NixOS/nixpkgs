@@ -626,6 +626,8 @@ rec {
 
   mypy-boto3-sagemaker-edge = buildMypyBoto3Package "sagemaker-edge" "1.28.36" "sha256-JsDQv4j8QB0wrXA3142LdNdYabJd8iB7PiLVZz0X3ss=";
 
+  mypy-boto3-sagemaker-featurestore-runtime = buildMypyBoto3Package "sagemaker-featurestore-runtime" "1.28.57" "sha256-vcK8WdiV8m7cqJ7WkGAqYFLjRmKdqX0qCuxmZKYlrtw=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
