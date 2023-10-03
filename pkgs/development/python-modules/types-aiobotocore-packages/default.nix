@@ -646,5 +646,7 @@ rec {
 
   types-aiobotocore-securitylake = buildTypesAiobotocorePackage "securitylake" "2.6.0" "sha256-DKmk2ddd7b0g6mnt0d37Y1ofb6dgN/6XFBCElqdQ9+A=";
 
+  types-aiobotocore-serverlessrepo = buildTypesAiobotocorePackage "serverlessrepo" "2.6.0" "sha256-PRzh/JFCHUqXTSAR4IoftxvkRBsVq4XEX7ihC9FzqSI=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

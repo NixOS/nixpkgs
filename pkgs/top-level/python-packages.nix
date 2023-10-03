@@ -14747,6 +14747,8 @@ self: super: with self; {
 
     types-aiobotocore-securitylake
 
+    types-aiobotocore-serverlessrepo
+
     types-aiobotocore-xray
 
   ;
