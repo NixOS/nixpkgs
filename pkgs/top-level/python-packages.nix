@@ -14761,6 +14761,8 @@ self: super: with self; {
 
     types-aiobotocore-sesv2
 
+    types-aiobotocore-shield
+
     types-aiobotocore-xray
 
   ;
