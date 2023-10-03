@@ -14843,6 +14843,8 @@ self: super: with self; {
 
     types-aiobotocore-workmail
 
+    types-aiobotocore-workmailmessageflow
+
     types-aiobotocore-xray
 
   ;
