@@ -14441,6 +14441,8 @@ self: super: with self; {
 
     types-aiobotocore-importexport
 
+    types-aiobotocore-inspector
+
     types-aiobotocore-xray
 
   ;
