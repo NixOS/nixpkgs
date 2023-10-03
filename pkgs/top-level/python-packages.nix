@@ -7197,6 +7197,8 @@ self: super: with self; {
 
     mypy-boto3-codebuild
 
+    mypy-boto3-codecatalyst
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs

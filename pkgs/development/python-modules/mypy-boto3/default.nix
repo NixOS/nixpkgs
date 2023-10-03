@@ -158,6 +158,8 @@ rec {
 
   mypy-boto3-codebuild = buildMypyBoto3Package "codebuild" "1.28.36" "sha256-po4qcd6jiYjqMQj7aP+eMzNJcmwjYP22Q92fHkx1q5U=";
 
+  mypy-boto3-codecatalyst = buildMypyBoto3Package "codecatalyst" "1.28.36" "sha256-IuFxPWpE6zCGfbVfhTBtueUSspeVaq9TrESkfHdrxI8=";
+
   mypy-boto3-cognito-idp = buildMypyBoto3Package "cognito-idp" "1.28.36" "sha256-pnLO62LZvr4sJsye3gWJROY+xHikSe7dX8erBTRXrPc=";
 
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
