@@ -14715,6 +14715,8 @@ self: super: with self; {
 
     types-aiobotocore-s3
 
+    types-aiobotocore-s3control
+
     types-aiobotocore-xray
 
   ;
