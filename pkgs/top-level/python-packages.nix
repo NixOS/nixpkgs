@@ -14403,6 +14403,8 @@ self: super: with self; {
 
     types-aiobotocore-forecastquery
 
+    types-aiobotocore-frauddetector
+
     types-aiobotocore-xray
 
   ;
