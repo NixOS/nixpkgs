@@ -424,5 +424,7 @@ rec {
 
   types-aiobotocore-lexv2-models = buildTypesAiobotocorePackage "lexv2-models" "2.6.0" "sha256-9eebhFQqnsParfZ1poJJX/ehx1lNHIynFwXEzAo10JM=";
 
+  types-aiobotocore-lexv2-runtime = buildTypesAiobotocorePackage "lexv2-runtime" "2.6.0" "sha256-ot+oM2a+CA/92d+tY54tqdOlsZWReknv+Pt3Aw8V1GU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

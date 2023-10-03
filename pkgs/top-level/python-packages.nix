@@ -14525,6 +14525,8 @@ self: super: with self; {
 
     types-aiobotocore-lexv2-models
 
+    types-aiobotocore-lexv2-runtime
+
     types-aiobotocore-xray
 
   ;
