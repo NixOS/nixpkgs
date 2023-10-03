@@ -678,6 +678,8 @@ rec {
 
   mypy-boto3-sns = buildMypyBoto3Package "sns" "1.28.36" "sha256-SXWRhkEBpRR9XS+nFRBIwMTLSxmvN0prcKwu+KrkMGY=";
 
+  mypy-boto3-sqs = buildMypyBoto3Package "sqs" "1.28.36" "sha256-2cFZ4CDw7yJabVhQo2c+iyNjJyQ7pf/g0Tdirk/cDiE=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

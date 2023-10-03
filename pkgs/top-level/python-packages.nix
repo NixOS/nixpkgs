@@ -7717,6 +7717,8 @@ self: super: with self; {
 
     mypy-boto3-sns
 
+    mypy-boto3-sqs
+
     mypy-boto3-xray
 
   ;
