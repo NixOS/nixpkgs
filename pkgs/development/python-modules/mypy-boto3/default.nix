@@ -582,6 +582,8 @@ rec {
 
   mypy-boto3-redshift = buildMypyBoto3Package "redshift" "1.28.36" "sha256-j0MCYKr0R42X1EtoGhNPM7lqTyoisvbYJPdCji8GvI8=";
 
+  mypy-boto3-redshift-data = buildMypyBoto3Package "redshift-data" "1.28.36" "sha256-fEoxqvIsAs8mUTY/dSTAbQOxNlf4+1qpyZO28Fe2PLA=";
+
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
 
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
