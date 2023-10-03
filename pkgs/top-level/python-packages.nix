@@ -14181,6 +14181,8 @@ self: super: with self; {
 
     types-aiobotocore-application-autoscaling
 
+    types-aiobotocore-application-insights
+
     types-aiobotocore-xray
 
   ;
