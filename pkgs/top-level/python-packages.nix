@@ -14835,6 +14835,8 @@ self: super: with self; {
 
     types-aiobotocore-wellarchitected
 
+    types-aiobotocore-wisdom
+
     types-aiobotocore-xray
 
   ;

@@ -734,5 +734,7 @@ rec {
 
   types-aiobotocore-wellarchitected = buildTypesAiobotocorePackage "wellarchitected" "2.6.0" "sha256-p/2uqdRwKgsS2EUCr8ZLds6WHUjVQz8mEv35qcyMTYA=";
 
+  types-aiobotocore-wisdom = buildTypesAiobotocorePackage "wisdom" "2.6.0" "sha256-EInqI5EqriiI2L/tdQiy3/jY8tnZ6+QOk9PdEyDuSj4=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
