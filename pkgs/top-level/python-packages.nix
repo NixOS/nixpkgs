@@ -14195,6 +14195,8 @@ self: super: with self; {
 
     types-aiobotocore-arc-zonal-shift
 
+    types-aiobotocore-athena
+
     types-aiobotocore-xray
 
   ;
