@@ -7669,6 +7669,8 @@ self: super: with self; {
 
     mypy-boto3-sagemaker-geospatial
 
+    mypy-boto3-sagemaker-metrics
+
     mypy-boto3-xray
 
   ;
