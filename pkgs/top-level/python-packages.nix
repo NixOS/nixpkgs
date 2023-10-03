@@ -7691,6 +7691,8 @@ self: super: with self; {
 
     mypy-boto3-service-quotas
 
+    mypy-boto3-servicecatalog
+
     mypy-boto3-xray
 
   ;

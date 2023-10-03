@@ -652,6 +652,8 @@ rec {
 
   mypy-boto3-service-quotas = buildMypyBoto3Package "service-quotas" "1.28.36" "sha256-qWw/5Q/S/60ZJ55wJf+1++YRnXS7fySFJSDLOm9neDE=";
 
+  mypy-boto3-servicecatalog = buildMypyBoto3Package "servicecatalog" "1.28.37" "sha256-BOhaddv6XQwCRLuYk3ybTmFSdAQfWkqMVW6IvB4q/78=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }
