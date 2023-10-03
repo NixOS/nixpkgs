@@ -8,7 +8,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   connmanFull = connman.override {
     # TODO: Why is this in `connmanFull` and not the default build? See TODO in
     # nixos/modules/services/networking/connman.nix (near the assertions)
-    enableNetworkManager = true;
+    enableNetworkManagerCompatibility = true;
     enableHh2serialGps = true;
     enableL2tp = true;
     enableIospm = true;
