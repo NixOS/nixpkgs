@@ -568,5 +568,7 @@ rec {
 
   types-aiobotocore-qldb-session = buildTypesAiobotocorePackage "qldb-session" "2.6.0" "sha256-N4YntFIEyhhryAaIFY8Gu4Uehw6D/VcTeIlBxx7ej4c=";
 
+  types-aiobotocore-quicksight = buildTypesAiobotocorePackage "quicksight" "2.6.0" "sha256-DOum/vx6URynxImQN9SRhAr5rFgZdSJMdtAMom5YHe8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
