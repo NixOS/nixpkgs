@@ -436,5 +436,7 @@ rec {
 
   types-aiobotocore-location = buildTypesAiobotocorePackage "location" "2.6.0" "sha256-3zQZyDgaMuj5SAQ7Nc+XzF5dUi1E9bAjv9mIscJxfqM=";
 
+  types-aiobotocore-logs = buildTypesAiobotocorePackage "logs" "2.6.0" "sha256-qyA1uCrAFGZHMlfL8Dou1YkM6rb9xwcrDQmteSqOadM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
