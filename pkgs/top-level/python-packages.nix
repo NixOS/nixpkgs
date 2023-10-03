@@ -14645,6 +14645,8 @@ self: super: with self; {
 
     types-aiobotocore-personalize-runtime
 
+    types-aiobotocore-pi
+
     types-aiobotocore-xray
 
   ;

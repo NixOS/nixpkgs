@@ -544,5 +544,7 @@ rec {
 
   types-aiobotocore-personalize-runtime = buildTypesAiobotocorePackage "personalize-runtime" "2.6.0" "sha256-tvLfXhaFpdivIBtFYp0G4/QihOMSGXK1nVDFKuMJCto=";
 
+  types-aiobotocore-pi = buildTypesAiobotocorePackage "pi" "2.6.0" "sha256-j0ngXkDGIhSh/b1RPn+NY6V2BAUZJdvuT18iALwRkAY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
