@@ -6574,6 +6574,18 @@ final: prev:
     meta.homepage = "https://github.com/folke/noice.nvim/";
   };
 
+  none-ls-nvim = buildVimPlugin {
+    pname = "none-ls.nvim";
+    version = "2023-10-01";
+    src = fetchFromGitHub {
+      owner = "nvimtools";
+      repo = "none-ls.nvim";
+      rev = "f39f627bbdfb33cc4ae4a95b4708e7dba7b9aafc";
+      sha256 = "1qh9bdxhs0c5mxyyv3dkmiyr03qi8g4rsbjcgzkprk4v5pz04g1v";
+    };
+    meta.homepage = "https://github.com/nvimtools/none-ls.nvim/";
+  };
+
   nord-nvim = buildVimPlugin {
     pname = "nord.nvim";
     version = "2023-08-30";
