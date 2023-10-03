@@ -10,18 +10,25 @@
 , argsOverride ? {}
 , ...
 } @ args:
-
+let localversion = "-bcachefs-unstable-${version.date}";
+in
 # NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
 (kernel.override ( args // {
-  version = "${kernel.version}-bcachefs-unstable-${version.date}";
 
-  extraMeta = {
-    branch = "master";
-    broken = stdenv.isAarch64;
-    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius YellowOnion ];
-  };
+  argsOverride = {
+    version = "${kernel.version}${localversion}";
+    modDirVersion = "${kernel.version}${localversion}";
+
+    extraMeta = {
+      homepage = "https://bcachefs.org/";
+      branch = "master";
+      maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius YellowOnion ];
+    };
+  } // argsOverride;
 
   structuredExtraConfig = with lib.kernel; {
+    # we need this for uname
+    LOCALVERSION = freeform localversion;
     BCACHEFS_FS = module;
     BCACHEFS_QUOTA = option yes;
     BCACHEFS_POSIX_ACL = option yes;
