@@ -128,5 +128,7 @@ rec {
 
   types-aiobotocore-chime-sdk-messaging = buildTypesAiobotocorePackage "chime-sdk-messaging" "2.6.0" "sha256-THOQl3ZUILwLRwYlBb7fQDgpYz7wkMyd+tSLEmHHBVY=";
 
+  types-aiobotocore-chime-sdk-voice = buildTypesAiobotocorePackage "chime-sdk-voice" "2.6.0" "sha256-RwMXK2NrM4BDzeg5lcpxfVzxFzrqjZw+xhZnJL81Uqw=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
