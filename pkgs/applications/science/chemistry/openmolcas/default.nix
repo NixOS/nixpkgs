@@ -104,7 +104,7 @@ stdenv.mkDerivation {
     "-DTOOLS=ON"
     "-DHDF5=ON"
     "-DFDE=ON"
-    "-DEXTERNAL_LIBXC=${libxc}"
+    "-DEXTERNAL_LIBXC=${lib.getDev libxc}"
     "-DDMRG=ON"
     "-DNEVPT2=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

@@ -2,11 +2,15 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "podcastparser";
   version = "0.6.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "gpodder";
@@ -16,17 +20,22 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    rm pytest.ini
+    substituteInPlace pytest.ini \
+      --replace "--cov=podcastparser --cov-report html --doctest-modules" ""
   '';
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  meta = {
-    description = "podcastparser is a simple, fast and efficient podcast parser written in Python.";
+  pythonImportsCheck = [
+    "podcastparser"
+  ];
+
+  meta = with lib; {
+    description = "Module to parse podcasts";
     homepage = "http://gpodder.org/podcastparser/";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ mic92 ];
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ mic92 ];
   };
 }

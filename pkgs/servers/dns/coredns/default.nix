@@ -33,7 +33,7 @@ in buildGoModule rec {
   modBuildPhase = ''
     for plugin in ${builtins.toString (attrsToPlugins externalPlugins)}; do echo $plugin >> plugin.cfg; done
     for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
-    go generate
+    GOOS= GOARCH= go generate
     go mod vendor
   '';
 
@@ -46,7 +46,7 @@ in buildGoModule rec {
     chmod -R u+w vendor
     mv -t . vendor/go.{mod,sum} vendor/plugin.cfg
 
-    go generate
+    GOOS= GOARCH= go generate
   '';
 
   postPatch = ''
