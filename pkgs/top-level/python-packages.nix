@@ -14255,6 +14255,8 @@ self: super: with self; {
 
     types-aiobotocore-cloudtrail-data
 
+    types-aiobotocore-cloudwatch
+
     types-aiobotocore-xray
 
   ;
