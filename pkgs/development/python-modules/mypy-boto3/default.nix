@@ -232,6 +232,8 @@ rec {
 
   mypy-boto3-dms = buildMypyBoto3Package "dms" "1.28.53" "sha256-CY3bGLiiciRnscCsqOSdFv04YKDG4gN7f/q3um7QwZ8=";
 
+  mypy-boto3-docdb = buildMypyBoto3Package "docdb" "1.28.36" "sha256-Dbg80rvJBHkXEzLLWeEi7jN6OrVZiJ6+C6wYkhM72J0=";
+
   mypy-boto3-ebs = buildMypyBoto3Package "ebs" "1.28.36" "sha256-w9OLKJAn9UBnA7x+uedhplSV8plZRYlBpviU9Gv1Ny8=";
 
   mypy-boto3-s3 = buildMypyBoto3Package "s3" "1.28.55" "sha256-sAiAn0SOdAdQEtT8VLAXbeC09JvDjjneMMoOdk63UFY=";
