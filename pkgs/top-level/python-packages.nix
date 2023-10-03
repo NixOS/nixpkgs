@@ -14263,6 +14263,8 @@ self: super: with self; {
 
     types-aiobotocore-codecatalyst
 
+    types-aiobotocore-codecommit
+
     types-aiobotocore-xray
 
   ;
