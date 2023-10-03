@@ -14801,6 +14801,8 @@ self: super: with self; {
 
     types-aiobotocore-support
 
+    types-aiobotocore-support-app
+
     types-aiobotocore-xray
 
   ;
