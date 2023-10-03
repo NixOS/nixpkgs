@@ -14147,6 +14147,8 @@ self: super: with self; {
 
     types-aiobotocore-accessanalyzer
 
+    types-aiobotocore-xray
+
   ;
 
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
