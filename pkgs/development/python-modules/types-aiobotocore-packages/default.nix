@@ -510,5 +510,7 @@ rec {
 
   types-aiobotocore-network-firewall = buildTypesAiobotocorePackage "network-firewall" "2.6.0" "sha256-3bVNQSzaMhkpiN1mhS9Lz2EfeEJpkSIcPCKPC6s02Uo=";
 
+  types-aiobotocore-networkmanager = buildTypesAiobotocorePackage "networkmanager" "2.6.0" "sha256-Pwmgi4ybpOtLWlY62+QcBHT0iF/6B4Hxbv4CQPA+7/o=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

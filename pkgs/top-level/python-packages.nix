@@ -14611,6 +14611,8 @@ self: super: with self; {
 
     types-aiobotocore-network-firewall
 
+    types-aiobotocore-networkmanager
+
     types-aiobotocore-xray
 
   ;
