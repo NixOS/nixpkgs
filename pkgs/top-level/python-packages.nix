@@ -14489,6 +14489,8 @@ self: super: with self; {
 
     types-aiobotocore-kafka
 
+    types-aiobotocore-kafkaconnect
+
     types-aiobotocore-xray
 
   ;
