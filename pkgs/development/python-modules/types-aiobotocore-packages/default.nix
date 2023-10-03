@@ -392,5 +392,7 @@ rec {
 
   types-aiobotocore-kendra = buildTypesAiobotocorePackage "kendra" "2.6.0" "sha256-1WeJI++z4QiF0bZ4FyNgoNWY6X62ZCyq7PGNM9urFn4=";
 
+  types-aiobotocore-kendra-ranking = buildTypesAiobotocorePackage "kendra-ranking" "2.6.0" "sha256-uaeHdW8lew6jq2KQApkY76eWRkYVLffN0h71icP9viE=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

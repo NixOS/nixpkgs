@@ -14493,6 +14493,8 @@ self: super: with self; {
 
     types-aiobotocore-kendra
 
+    types-aiobotocore-kendra-ranking
+
     types-aiobotocore-xray
 
   ;
