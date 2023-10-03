@@ -14503,6 +14503,8 @@ self: super: with self; {
 
     types-aiobotocore-kinesis-video-media
 
+    types-aiobotocore-kinesis-video-signaling
+
     types-aiobotocore-xray
 
   ;
