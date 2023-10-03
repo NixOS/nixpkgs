@@ -584,5 +584,7 @@ rec {
 
   types-aiobotocore-redshift-serverless = buildTypesAiobotocorePackage "redshift-serverless" "2.6.0" "sha256-lMNUId8z4h/m0FmusvEjYoQj+PUSLaiOREd27vF3qxI=";
 
+  types-aiobotocore-rekognition = buildTypesAiobotocorePackage "rekognition" "2.6.0" "sha256-8luG3yWj82hmMq5KYjNG58pbiDBMk+D6ykgzqE752T8=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

@@ -14685,6 +14685,8 @@ self: super: with self; {
 
     types-aiobotocore-redshift-serverless
 
+    types-aiobotocore-rekognition
+
     types-aiobotocore-xray
 
   ;
