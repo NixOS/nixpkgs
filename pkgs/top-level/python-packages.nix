@@ -14415,6 +14415,8 @@ self: super: with self; {
 
     types-aiobotocore-globalaccelerator
 
+    types-aiobotocore-glue
+
     types-aiobotocore-xray
 
   ;

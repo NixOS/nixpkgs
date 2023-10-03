@@ -314,5 +314,7 @@ rec {
 
   types-aiobotocore-globalaccelerator = buildTypesAiobotocorePackage "globalaccelerator" "2.6.0" "sha256-U/74XOX/pXh4JJ4n6Fu6quL6gQwz+zt9bOWj/QYOS+8=";
 
+  types-aiobotocore-glue = buildTypesAiobotocorePackage "glue" "2.6.0" "sha256-K2asnioD1r9BJCX2PaNaN+fKDyA+oQhvdM0h0LgxbEY=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
