@@ -14439,6 +14439,8 @@ self: super: with self; {
 
     types-aiobotocore-imagebuilder
 
+    types-aiobotocore-importexport
+
     types-aiobotocore-xray
 
   ;
