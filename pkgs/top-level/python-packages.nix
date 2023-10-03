@@ -7251,6 +7251,8 @@ self: super: with self; {
 
     mypy-boto3-dataexchange
 
+    mypy-boto3-datapipeline
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
