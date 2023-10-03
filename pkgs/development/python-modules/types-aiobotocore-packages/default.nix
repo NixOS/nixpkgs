@@ -384,5 +384,7 @@ rec {
 
   types-aiobotocore-ivs-realtime = buildTypesAiobotocorePackage "ivs-realtime" "2.6.0" "sha256-y4RRQdjaJS9GLW7HUNC9f3kWCOAGijlisrlB0MYQ1As=";
 
+  types-aiobotocore-ivschat = buildTypesAiobotocorePackage "ivschat" "2.6.0" "sha256-5ANdk601wY6vtjYbe8CxtY9lK4Fe6wbl5uB6Mq6uqII=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

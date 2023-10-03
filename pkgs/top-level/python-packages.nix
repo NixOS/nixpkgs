@@ -14485,6 +14485,8 @@ self: super: with self; {
 
     types-aiobotocore-ivs-realtime
 
+    types-aiobotocore-ivschat
+
     types-aiobotocore-xray
 
   ;
