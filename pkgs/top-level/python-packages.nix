@@ -14435,6 +14435,8 @@ self: super: with self; {
 
     types-aiobotocore-iam
 
+    types-aiobotocore-identitystore
+
     types-aiobotocore-xray
 
   ;
