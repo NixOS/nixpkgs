@@ -14287,6 +14287,8 @@ self: super: with self; {
 
     types-aiobotocore-cognito-sync
 
+    types-aiobotocore-comprehend
+
     types-aiobotocore-xray
 
   ;
