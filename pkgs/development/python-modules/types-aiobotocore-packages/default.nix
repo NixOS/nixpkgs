@@ -222,5 +222,7 @@ rec {
 
   types-aiobotocore-detective = buildTypesAiobotocorePackage "detective" "2.6.0" "sha256-UP8rTuCwNq6Eu5gYrMj5c+JaNy9grOOL9RRi/QsDvzE=";
 
+  types-aiobotocore-devicefarm = buildTypesAiobotocorePackage "devicefarm" "2.6.0" "sha256-Mc4Kl4dZyn9y+9V44QilacOHN9+E1M79uNLATsoH2Ks=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

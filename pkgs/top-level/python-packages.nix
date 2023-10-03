@@ -14323,6 +14323,8 @@ self: super: with self; {
 
     types-aiobotocore-detective
 
+    types-aiobotocore-devicefarm
+
     types-aiobotocore-xray
 
   ;
