@@ -14593,6 +14593,8 @@ self: super: with self; {
 
     types-aiobotocore-migration-hub-refactor-spaces
 
+    types-aiobotocore-migrationhub-config
+
     types-aiobotocore-xray
 
   ;
