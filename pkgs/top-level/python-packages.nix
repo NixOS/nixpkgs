@@ -14167,6 +14167,8 @@ self: super: with self; {
 
     types-aiobotocore-apigatewaymanagementapi
 
+    types-aiobotocore-apigatewayv2
+
     types-aiobotocore-xray
 
   ;
