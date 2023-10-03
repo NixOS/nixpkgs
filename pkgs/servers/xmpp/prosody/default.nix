@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg, buildPackages
 , icu
 , lua
 , nixosTests
@@ -54,9 +54,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--ostype=linux"
+    "--with-lua-bin=${lib.getBin buildPackages.lua}/bin"
     "--with-lua-include=${luaEnv}/include"
     "--with-lua=${luaEnv}"
+    "--c-compiler=${stdenv.cc.targetPrefix}cc"
+    "--linker=${stdenv.cc.targetPrefix}cc"
   ];
+  configurePlatforms = [];
 
   postBuild = ''
     make -C tools/migration

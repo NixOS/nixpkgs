@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ucx";
-  version = "1.14.1";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
-    sha256 = "sha256-oAigiCgbr27pX+kNl+RW1P10TKYFSKrHDK4U4z8WMko=";
+    sha256 = "sha256-VxIxrk9qKM6Ncfczl4p2EhXiLNgPaYTmjhqi6/w2ZNY=";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
 
   configureFlags = [
-    "--with-rdmacm=${rdma-core}"
+    "--with-rdmacm=${lib.getDev rdma-core}"
     "--with-dc"
     "--with-rc"
     "--with-dm"
-    "--with-verbs=${rdma-core}"
+    "--with-verbs=${lib.getDev rdma-core}"
   ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
 

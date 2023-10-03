@@ -2543,6 +2543,8 @@ self: super: with self; {
 
   datapoint = callPackage ../development/python-modules/datapoint { };
 
+  dataprep-ml = callPackage ../development/python-modules/dataprep-ml { };
+
   dataproperty = callPackage ../development/python-modules/dataproperty { };
 
   dataset = callPackage ../development/python-modules/dataset { };
@@ -5114,6 +5116,8 @@ self: super: with self; {
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
+  hyperscan = callPackage ../development/python-modules/hyperscan { };
+
   hyperion-py = callPackage ../development/python-modules/hyperion-py { };
 
   hyperlink = callPackage ../development/python-modules/hyperlink { };
@@ -6727,6 +6731,8 @@ self: super: with self; {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
+  mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
+
   minexr = callPackage ../development/python-modules/minexr { };
 
   miniaudio = callPackage ../development/python-modules/miniaudio {
@@ -7075,9 +7081,15 @@ self: super: with self; {
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
 
-  mypy-boto3-ebs = callPackage ../development/python-modules/mypy-boto3-ebs { };
+  inherit (callPackage ../development/python-modules/mypy-boto3 { })
 
-  mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
+    mypy-boto3-cognito-idp
+
+    mypy-boto3-ebs
+
+    mypy-boto3-s3
+
+  ;
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
@@ -7473,6 +7485,8 @@ self: super: with self; {
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
+
+  python-tds = callPackage ../development/python-modules/python-tds { };
 
   python-yate = callPackage ../development/python-modules/python-yate { };
 
@@ -10437,6 +10451,8 @@ self: super: with self; {
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
 
+  pytest-spec = callPackage ../development/python-modules/pytest-spec { };
+
   python-status = callPackage ../development/python-modules/python-status { };
 
   python-string-utils = callPackage ../development/python-modules/python-string-utils { };
@@ -11795,6 +11811,8 @@ self: super: with self; {
     python3 = self.python;
   });
 
+  seasonal = callPackage ../development/python-modules/seasonal { };
+
   seatconnect = callPackage ../development/python-modules/seatconnect { };
 
   seccomp = callPackage ../development/python-modules/seccomp { };
@@ -12156,6 +12174,8 @@ self: super: with self; {
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
+
+  snaptime = callPackage ../development/python-modules/snaptime { };
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
@@ -12780,6 +12800,8 @@ self: super: with self; {
 
   taxi = callPackage ../development/python-modules/taxi { };
 
+  tbats = callPackage ../development/python-modules/tbats { };
+
   tblib = callPackage ../development/python-modules/tblib { };
 
   tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
@@ -13306,6 +13328,8 @@ self: super: with self; {
   truststore = callPackage ../development/python-modules/truststore { };
 
   trytond = callPackage ../development/python-modules/trytond { };
+
+  tsfresh = callPackage ../development/python-modules/tsfresh { };
 
   tskit = callPackage ../development/python-modules/tskit { };
 

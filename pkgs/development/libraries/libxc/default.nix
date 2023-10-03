@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
         --replace "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
   '';
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''

@@ -40,7 +40,7 @@ stdenv.mkDerivation {
     ocamlPackages.mm
     ocamlPackages.ocaml_pcre
     ocamlPackages.menhir ocamlPackages.menhirLib
-    ocamlPackages.camomile
+    (ocamlPackages.camomile.override { version = "1.0.2"; })
     ocamlPackages.ocurl
     ocamlPackages.uri
     ocamlPackages.sedlex

@@ -230,9 +230,9 @@ in
         plocate = (mkIf isPLocate (mkMerge [ common plocate ]));
       };
 
-    environment.systemPackages = [ (cfg.locate.override { dbfile = cfg.output; }) ];
+    environment.systemPackages = [ cfg.locate ];
 
-    environment.variables = mkIf (!isMorPLocate) { LOCATE_PATH = cfg.output; };
+    environment.variables.LOCATE_PATH = cfg.output;
 
     environment.etc = {
       # write /etc/updatedb.conf for manual calls to `updatedb`
