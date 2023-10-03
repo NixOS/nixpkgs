@@ -746,6 +746,8 @@ rec {
 
   mypy-boto3-workmailmessageflow = buildMypyBoto3Package "workmailmessageflow" "1.28.36" "sha256-hfRjdhr/xJJNWYy4XDg8LT00sx/JGAEa4D+5GyR+FCo=";
 
+  mypy-boto3-workspaces = buildMypyBoto3Package "workspaces" "1.28.44" "sha256-/LXeiuXeNTgfAf8BrzC/z0kdK201Htkau79BH0MQEO4=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

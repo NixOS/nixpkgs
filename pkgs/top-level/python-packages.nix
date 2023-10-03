@@ -7785,6 +7785,8 @@ self: super: with self; {
 
     mypy-boto3-workmailmessageflow
 
+    mypy-boto3-workspaces
+
     mypy-boto3-xray
 
   ;
