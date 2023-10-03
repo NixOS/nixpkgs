@@ -95,6 +95,9 @@ stdenv.mkDerivation ({
         See https://github.com/NixOS/nixpkgs/pull/188492#issuecomment-1233802991 for context.
       */
       ./reenable_DT_HASH.patch
+
+      # https://sourceware.org/git/?p=glibc.git;a=blobdiff_plain;f=elf/dl-tunables.c;h=cae67efa0aacb9984c49874dcb95f170ecd1d86d;hp=62b7332d95b61ce3428040522271f6e93e9d53ed;hb=1056e5b4c3f2d90ed2b4a55f96add28da2f4c8fa;hpb=0d5f9ea97f1b39f2a855756078771673a68497e1
+      ./cve-2023-4911-first.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
