@@ -7163,6 +7163,8 @@ self: super: with self; {
 
     mypy-boto3-chime-sdk-meetings
 
+    mypy-boto3-chime-sdk-messaging
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
