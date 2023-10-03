@@ -14349,6 +14349,8 @@ self: super: with self; {
 
     types-aiobotocore-ebs
 
+    types-aiobotocore-ec2
+
     types-aiobotocore-xray
 
   ;
