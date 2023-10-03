@@ -14807,6 +14807,8 @@ self: super: with self; {
 
     types-aiobotocore-synthetics
 
+    types-aiobotocore-textract
+
     types-aiobotocore-xray
 
   ;

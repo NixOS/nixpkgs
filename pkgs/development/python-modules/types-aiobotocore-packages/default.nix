@@ -706,5 +706,7 @@ rec {
 
   types-aiobotocore-synthetics = buildTypesAiobotocorePackage "synthetics" "2.6.0" "sha256-Wew0A2xIYOGXzfZf3sBpHnRW/dZD1s6wHveNMwYj1s4=";
 
+  types-aiobotocore-textract = buildTypesAiobotocorePackage "textract" "2.6.0" "sha256-vWUMopzR+1095nN6POsHShvCKZIcUwfW11oMOJ9R94c=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
