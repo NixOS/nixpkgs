@@ -14279,6 +14279,8 @@ self: super: with self; {
 
     types-aiobotocore-codestar-connections
 
+    types-aiobotocore-codestar-notifications
+
     types-aiobotocore-xray
 
   ;
