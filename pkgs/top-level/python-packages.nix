@@ -14731,6 +14731,8 @@ self: super: with self; {
 
     types-aiobotocore-sagemaker-metrics
 
+    types-aiobotocore-sagemaker-runtime
+
     types-aiobotocore-xray
 
   ;
