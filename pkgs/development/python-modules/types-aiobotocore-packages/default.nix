@@ -350,5 +350,7 @@ rec {
 
   types-aiobotocore-iot-data = buildTypesAiobotocorePackage "iot-data" "2.6.0" "sha256-KpgEjoEsCSiC6aKyHy64it0k87XYICbxMhUFYUjCBuo=";
 
+  types-aiobotocore-iot-jobs-data = buildTypesAiobotocorePackage "iot-jobs-data" "2.6.0" "sha256-IQRarMn1ZAh+kUG1I4Cyt/6WrIoby07g3qcSzpWUWWM=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
