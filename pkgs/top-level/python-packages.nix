@@ -14215,6 +14215,8 @@ self: super: with self; {
 
     types-aiobotocore-braket
 
+    types-aiobotocore-budgets
+
     types-aiobotocore-xray
 
   ;
