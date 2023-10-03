@@ -14171,6 +14171,8 @@ self: super: with self; {
 
     types-aiobotocore-appconfig
 
+    types-aiobotocore-appconfigdata
+
     types-aiobotocore-xray
 
   ;
