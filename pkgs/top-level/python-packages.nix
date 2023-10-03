@@ -7173,6 +7173,8 @@ self: super: with self; {
 
     mypy-boto3-cloudcontrol
 
+    mypy-boto3-clouddirectory
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
