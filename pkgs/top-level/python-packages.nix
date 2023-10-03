@@ -14657,6 +14657,8 @@ self: super: with self; {
 
     types-aiobotocore-pipes
 
+    types-aiobotocore-polly
+
     types-aiobotocore-xray
 
   ;
