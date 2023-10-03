@@ -174,5 +174,7 @@ rec {
 
   types-aiobotocore-codepipeline = buildTypesAiobotocorePackage "codepipeline" "2.6.0" "sha256-cIvM4g/CldgLuN10a3lNhISz08gT6VxZHMS5xo+B2IA=";
 
+  types-aiobotocore-codestar = buildTypesAiobotocorePackage "codestar" "2.6.0" "sha256-6b3QfRecmprhRU+loWafrcL1mWNLFmZXZOAhUMkpGqU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }

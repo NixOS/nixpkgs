@@ -14275,6 +14275,8 @@ self: super: with self; {
 
     types-aiobotocore-codepipeline
 
+    types-aiobotocore-codestar
+
     types-aiobotocore-xray
 
   ;
