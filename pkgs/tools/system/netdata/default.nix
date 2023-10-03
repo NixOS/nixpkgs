@@ -2,13 +2,13 @@
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , netdata-go-plugins
-, bash, curl, jemalloc, libuv, zlib, libyaml
+, bash, curl, jemalloc, json_c, libuv, zlib, libyaml
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
 , withDBengine ? true, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
-, withCloud ? (!stdenv.isDarwin), json_c
+, withCloud ? (!stdenv.isDarwin)
 , withCloudUi ? false
 , withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
@@ -42,14 +42,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
   # bash is only used to rewrite shebangs
-  buildInputs = [ bash curl jemalloc libuv zlib libyaml ]
+  buildInputs = [ bash curl jemalloc json_c libuv zlib libyaml ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ lib.optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ lib.optionals withCups [ cups ]
     ++ lib.optionals withDBengine [ lz4 ]
     ++ lib.optionals withIpmi [ freeipmi ]
     ++ lib.optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ lib.optionals withCloud [ json_c ]
     ++ lib.optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ lib.optionals withConnPrometheus [ snappy ]
     ++ lib.optionals (withCloud || withConnPrometheus) [ protobuf ]
