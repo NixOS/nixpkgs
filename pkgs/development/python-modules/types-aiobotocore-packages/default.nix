@@ -288,5 +288,7 @@ rec {
 
   types-aiobotocore-evidently = buildTypesAiobotocorePackage "evidently" "2.6.0" "sha256-ec9XPmiGjhH+MsW81JtH13KACasiWqtmxOC/O8ewbgE=";
 
+  types-aiobotocore-finspace = buildTypesAiobotocorePackage "finspace" "2.6.0" "sha256-fPG/13VJzvdfoADYZXTZ2ssdJrKQ/MEic6rhsNUE4tU=";
+
   types-aiobotocore-xray = buildTypesAiobotocorePackage "xray" "2.6.0" "sha256-DPirH1s636ZW6VKyD4wMiJEfM+u9NknH0ODLQagaLrs=";
 }
