@@ -14315,6 +14315,8 @@ self: super: with self; {
 
     types-aiobotocore-dataexchange
 
+    types-aiobotocore-datapipeline
+
     types-aiobotocore-xray
 
   ;
