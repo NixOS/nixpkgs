@@ -7105,6 +7105,8 @@ self: super: with self; {
 
     mypy-boto3-apigatewayv2
 
+    mypy-boto3-appconfig
+
     mypy-boto3-cognito-idp
 
     mypy-boto3-ebs
