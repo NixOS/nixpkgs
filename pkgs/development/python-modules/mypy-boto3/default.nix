@@ -666,6 +666,8 @@ rec {
 
   mypy-boto3-signer = buildMypyBoto3Package "signer" "1.28.36" "sha256-4Aji9L+AI66iB9NaiuV96YefuoEJ0s+BPdsOu/UwDpM=";
 
+  mypy-boto3-simspaceweaver = buildMypyBoto3Package "simspaceweaver" "1.28.47" "sha256-13RYW3vObQUNBsBtp8uaZZ9JFAiwBwiaYQv8tJ0O85w=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

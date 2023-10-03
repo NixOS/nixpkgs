@@ -7705,6 +7705,8 @@ self: super: with self; {
 
     mypy-boto3-signer
 
+    mypy-boto3-simspaceweaver
+
     mypy-boto3-xray
 
   ;
