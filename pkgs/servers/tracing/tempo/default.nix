@@ -38,6 +38,5 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://grafana.com/oss/tempo/";
     maintainers = with maintainers; [ willibutz ];
-    platforms = platforms.linux;
   };
 }
