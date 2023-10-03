@@ -14789,6 +14789,8 @@ self: super: with self; {
 
     types-aiobotocore-sso
 
+    types-aiobotocore-sso-admin
+
     types-aiobotocore-xray
 
   ;
