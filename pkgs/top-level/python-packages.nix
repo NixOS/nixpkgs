@@ -7275,6 +7275,8 @@ self: super: with self; {
 
     mypy-boto3-docdb-elastic
 
+    mypy-boto3-drs
+
     mypy-boto3-ebs
 
     mypy-boto3-s3
