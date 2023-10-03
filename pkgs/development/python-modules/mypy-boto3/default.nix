@@ -700,6 +700,8 @@ rec {
 
   mypy-boto3-sts = buildMypyBoto3Package "sts" "1.28.58" "sha256-vv/scF8fC0Sdo8H1Ksdlhie7KJrs7BpECCZkecRuBTs=";
 
+  mypy-boto3-support = buildMypyBoto3Package "support" "1.28.36" "sha256-HjzL3qwEiQSvJvaiB6pJN/GUMRNseuIqxM7rfrfwRKs=";
+
   mypy-boto3-xray = buildMypyBoto3Package "xray" "1.28.47" "sha256-1OiTpbaBm2aAls4A7ZaZBNAM8DTRuQcwNKJDq3lOKMY=";
 
 }

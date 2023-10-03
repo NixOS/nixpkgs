@@ -7739,6 +7739,8 @@ self: super: with self; {
 
     mypy-boto3-sts
 
+    mypy-boto3-support
+
     mypy-boto3-xray
 
   ;
