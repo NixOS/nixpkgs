@@ -14233,6 +14233,8 @@ self: super: with self; {
 
     types-aiobotocore-cleanrooms
 
+    types-aiobotocore-cloud9
+
     types-aiobotocore-xray
 
   ;
