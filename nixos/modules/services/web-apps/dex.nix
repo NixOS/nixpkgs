@@ -108,8 +108,7 @@ in
         ProtectClock = true;
         ProtectHome = true;
         ProtectHostname = true;
-        # Would re-mount paths ignored by temporary root
-        #ProtectSystem = "strict";
+        ProtectSystem = "strict";
         ProtectControlGroups = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
@@ -121,9 +120,7 @@ in
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
-        TemporaryFileSystem = "/:ro";
-        # Does not work well with the temporary root
-        #UMask = "0066";
+        UMask = "0066";
       } // optionalAttrs (cfg.environmentFile != null) {
         EnvironmentFile = cfg.environmentFile;
       };
