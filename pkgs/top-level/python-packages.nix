@@ -14463,6 +14463,8 @@ self: super: with self; {
 
     types-aiobotocore-iotdeviceadvisor
 
+    types-aiobotocore-iotevents
+
     types-aiobotocore-xray
 
   ;
