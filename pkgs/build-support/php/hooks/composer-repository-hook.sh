@@ -17,7 +17,29 @@ composerRepositoryConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
-        echo "No composer.lock file found, consider adding one to your repository to ensure reproducible builds."
+        composer \
+            --no-ansi \
+            --no-install \
+            --no-interaction \
+            ${composerNoDev:+--no-dev} \
+            ${composerNoPlugins:+--no-plugins} \
+            ${composerNoScripts:+--no-scripts} \
+            update
+
+        mkdir -p $out
+        cp composer.lock $out/
+
+        echo
+        echo 'No composer.lock file found, consider adding one to your repository to ensure reproducible builds.'
+        echo "In the meantime, a composer.lock file has been generated for you in $out/composer.lock"
+        echo
+        echo 'To fix the issue:'
+        echo "1. Copy the composer.lock file from $out/composer.lock to the project's source:"
+        echo "  cp $out/composer.lock <path>"
+        echo '2. Add the composerLock attribute, pointing to the copied composer.lock file:'
+        echo '  composerLock = ./composer.lock;'
+        echo
+
         exit 1
     fi
 
