@@ -5,6 +5,7 @@
 , pythonOlder
 , writeText
 , catboost
+, packaging
 , cloudpickle
 , ipython
 , lightgbm
@@ -50,6 +51,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     cloudpickle
     numba
     numpy
@@ -133,13 +135,16 @@ buildPythonPackage rec {
     "shap"
     "shap.explainers"
     "shap.explainers.other"
-    "shap.plots"
-    "shap.plots.colors"
-    "shap.benchmark"
     "shap.maskers"
     "shap.utils"
     "shap.actions"
     "shap.models"
+  ];
+  pythonImportsExtrasCheck = [
+    # requires matplotlib
+    "shap.plots"
+    "shap.plots.colors"
+    "shap.benchmark"
   ];
 
   meta = with lib; {
