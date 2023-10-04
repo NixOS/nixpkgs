@@ -22,6 +22,7 @@
 , version
 , hash
 , vendorHash
+, extPatches ? null
 , cargoHash ? null
 , cargoLock ? null
 , yarnHash
@@ -111,11 +112,7 @@ buildGoModule rec {
     ++ lib.optionals (stdenv.isDarwin && withRdpClient) [ CoreFoundation Security AppKit ];
   nativeBuildInputs = [ makeWrapper pkg-config ];
 
-  patches = [
-    # https://github.com/NixOS/nixpkgs/issues/120738
-    ./tsh.patch
-    # https://github.com/NixOS/nixpkgs/issues/132652
-    ./test.patch
+  patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
   ];

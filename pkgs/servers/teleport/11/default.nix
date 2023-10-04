@@ -10,4 +10,10 @@ callPackage ../generic.nix ({
       "rdp-rs-0.1.0" = "sha256-GJfUyiYQwcDTMqt+iik3mFI0f6mu13RJ2XuoDzlg9sU=";
     };
   };
+  extPatches = [
+    # https://github.com/NixOS/nixpkgs/issues/120738
+    ../tsh.patch
+    # https://github.com/NixOS/nixpkgs/issues/132652
+    ../test.patch
+  ];
 } // builtins.removeAttrs args [ "callPackage" ])
