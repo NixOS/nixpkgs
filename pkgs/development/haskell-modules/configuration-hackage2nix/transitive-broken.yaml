@@ -482,9 +482,6 @@ dont-distribute-packages:
  - alsa-seq-tests
  - alto
  - amazon-emailer-client-snap
- - amazonka-contrib-rds-utils
- - amazonka-s3-encryption
- - amazonka-s3-streaming
  - amby
  - ampersand
  - amqp-streamly
@@ -500,17 +497,11 @@ dont-distribute-packages:
  - anonymous-sums-tests
  - antagonist
  - anticiv
- - antiope-athena
  - antiope-contract
  - antiope-core
  - antiope-dynamodb
- - antiope-es
- - antiope-messages
- - antiope-optparse-applicative
  - antiope-s3
  - antiope-shell
- - antiope-sns
- - antiope-sqs
  - antlrc
  - apecs-gloss
  - apecs-physics-gloss
@@ -587,7 +578,6 @@ dont-distribute-packages:
  - aws-configuration-tools
  - aws-dynamodb-conduit
  - aws-dynamodb-streams
- - aws-easy
  - aws-elastic-transcoder
  - aws-kinesis
  - aws-kinesis-client
@@ -596,9 +586,7 @@ dont-distribute-packages:
  - aws-mfa-credentials
  - aws-sdk
  - aws-sdk-xml-unordered
- - aws-ses-easy
  - aws-sign4
- - aws-simple
  - aws-sns
  - axel
  - axiom
@@ -698,7 +686,6 @@ dont-distribute-packages:
  - blink1
  - blip
  - blogination
- - bloodhound-amazonka-auth
  - bloxorz
  - blubber
  - bluetile
@@ -741,7 +728,6 @@ dont-distribute-packages:
  - bytable
  - bytehash
  - bytelog
- - bytepatch
  - bytestring-builder-varword
  - bytestring-read
  - ca
@@ -773,7 +759,6 @@ dont-distribute-packages:
  - cao
  - cap
  - capnp
- - caps
  - captcha-2captcha
  - captcha-capmonster
  - captcha-core
@@ -899,8 +884,6 @@ dont-distribute-packages:
  - cmv
  - cnc-spec-compiler
  - co-feldspar
- - co-log
- - co-log-polysemy-formatting
  - cobot-io
  - codec
  - codec-libevent
@@ -1003,8 +986,6 @@ dont-distribute-packages:
  - craftwerk-cairo
  - craftwerk-gtk
  - craze
- - credentials
- - credentials-cli
  - crf-chain1
  - crf-chain1-constrained
  - crf-chain2-generic
@@ -1205,11 +1186,9 @@ dont-distribute-packages:
  - dynamic-pipeline
  - dynamic-plot
  - dynamic-pp
- - dynamodb-simple
  - dynobud
  - easytensor
  - easytensor-vulkan
- - ec2-unikernel
  - ecdsa
  - edenskel
  - edentv
@@ -1227,7 +1206,6 @@ dont-distribute-packages:
  - egison-tutorial
  - ekg
  - ekg-carbon
- - ekg-cloudwatch
  - ekg-wai
  - elasticsearch-interchange
  - electrs-client
@@ -1468,6 +1446,7 @@ dont-distribute-packages:
  - gargoyle-postgresql
  - gargoyle-postgresql-connect
  - gargoyle-postgresql-nix
+ - gbs-downloader
  - gbu
  - gdax
  - gdiff-ig
@@ -1783,7 +1762,6 @@ dont-distribute-packages:
  - gridland
  - grisette
  - grisette-monad-coroutine
- - groot
  - gross
  - groundhog-converters
  - groundhog-inspector
@@ -2024,7 +2002,6 @@ dont-distribute-packages:
  - heavy-logger-instances
  - hecc
  - hedgehog-checkers-lens
- - hedgehog-gen
  - hedgehog-gen-json
  - hedis-pile
  - heist-aeson
@@ -2210,6 +2187,8 @@ dont-distribute-packages:
  - http-client-rustls
  - http-client-tls_0_3_6_3
  - http-enumerator
+ - http-exchange
+ - http-exchange-instantiations
  - http-io-streams
  - http-response-decoder
  - http2-client-exe
@@ -2230,7 +2209,6 @@ dont-distribute-packages:
  - hurl-xml
  - huzzy
  - hw-all
- - hw-aws-sqs-conduit
  - hw-json
  - hw-json-demo
  - hw-json-lens
@@ -2283,7 +2261,6 @@ dont-distribute-packages:
  - imj-base
  - imj-game-hamazed
  - imj-measure-stdout
- - imm
  - imparse
  - imperative-edsl
  - imperative-edsl-vhdl
@@ -2291,6 +2268,7 @@ dont-distribute-packages:
  - imprevu-happstack
  - improve
  - inch
+ - incipit
  - incremental-computing
  - incremental-maps
  - increments
@@ -2391,7 +2369,8 @@ dont-distribute-packages:
  - json-query
  - json-rpc-client
  - json-schema
- - json-spec
+ - json-spec-elm
+ - json-spec-elm-servant
  - json-spec-openapi
  - json-togo
  - json-tokens
@@ -2833,7 +2812,7 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
- - net-mqtt_0_8_5_0
+ - net-mqtt_0_8_6_0
  - net-spider
  - net-spider-cli
  - net-spider-pangraph
@@ -2865,6 +2844,7 @@ dont-distribute-packages:
  - neuron
  - newsletter-mailgun
  - newsynth
+ - ngx-export-distribution
  - ngx-export-tools-extra
  - nikepub
  - nirum
@@ -3082,6 +3062,8 @@ dont-distribute-packages:
  - polysemy-RandomFu
  - polysemy-account
  - polysemy-account-api
+ - polysemy-chronos
+ - polysemy-conc
  - polysemy-db
  - polysemy-extra
  - polysemy-fskvstore
@@ -3089,12 +3071,16 @@ dont-distribute-packages:
  - polysemy-hasql-test
  - polysemy-http
  - polysemy-kvstore-jsonfile
+ - polysemy-log
  - polysemy-log-co
+ - polysemy-log-di
  - polysemy-methodology
  - polysemy-methodology-co-log
  - polysemy-methodology-composite
  - polysemy-path
+ - polysemy-resume
  - polysemy-scoped-fs
+ - polysemy-time
  - polysemy-uncontrolled
  - polysemy-video
  - polysemy-vinyl
@@ -3123,7 +3109,6 @@ dont-distribute-packages:
  - potoki-conduit
  - potoki-hasql
  - potoki-zlib
- - powerqueue-sqs
  - pqueue-mtl
  - practice-room
  - pred-set
@@ -3168,9 +3153,6 @@ dont-distribute-packages:
  - proton
  - psc-ide
  - psql
- - ptera
- - ptera-core
- - ptera-th
  - puffytools
  - pugs-compat
  - pugs-hsregex
@@ -3267,6 +3249,7 @@ dont-distribute-packages:
  - rbr
  - rc
  - rdioh
+ - react
  - react-flux-servant
  - reactive
  - reactive-banana-sdl
@@ -3579,6 +3562,7 @@ dont-distribute-packages:
  - shady-gen
  - shady-graphics
  - shake-bindist
+ - shake-futhark
  - shake-minify-css
  - shakebook
  - shaker
@@ -3733,7 +3717,6 @@ dont-distribute-packages:
  - sql-simple-postgresql
  - sql-simple-sqlite
  - sqlite-simple-typed
- - sqsd-local
  - squeal-postgresql
  - squeal-postgresql-ltree
  - squeal-postgresql-uuid-ossp
@@ -3752,12 +3735,10 @@ dont-distribute-packages:
  - stackage
  - stackage-build-plan
  - stackage-cabal
- - stackage-curator
  - stackage-query
  - stackage-sandbox
  - stackage-setup
  - stackage-upload
- - stackage2nix
  - stackctl
  - starrover2
  - stateful-mtl
@@ -3847,6 +3828,7 @@ dont-distribute-packages:
  - tagsoup-navigate
  - tagstew
  - tahoe-chk
+ - tahoe-directory
  - tahoe-great-black-swamp
  - tahoe-ssk
  - tak-ai
@@ -3918,11 +3900,6 @@ dont-distribute-packages:
  - tip-haskell-frontend
  - tip-lib
  - titan
- - tlex
- - tlex-core
- - tlex-debug
- - tlex-encoding
- - tlex-th
  - tls-extra
  - tmpl
  - tn
@@ -4317,6 +4294,7 @@ dont-distribute-packages:
  - zerobin
  - zeromq3-conduit
  - zeroth
+ - zeugma
  - zifter-cabal
  - zifter-git
  - zifter-google-java-format
