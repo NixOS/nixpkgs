@@ -30,12 +30,12 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools
     setuptools-scm
     wheel
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     numpy
     tqdm
   ];
