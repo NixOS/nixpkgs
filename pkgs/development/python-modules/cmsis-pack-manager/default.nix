@@ -32,10 +32,9 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook rustPlatform.maturinBuildHook ];
-  propagatedNativeBuildInputs = [ cffi ];
   buildInputs = [ libiconv ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
-  propagatedBuildInputs = [ appdirs pyyaml ];
+  propagatedBuildInputs = [ appdirs cffi pyyaml ];
   nativeCheckInputs = [ hypothesis jinja2 pytestCheckHook unzip ];
 
   # remove cmsis_pack_manager source directory so that binaries can be imported
