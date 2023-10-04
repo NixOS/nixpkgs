@@ -32932,8 +32932,6 @@ with pkgs;
 
   ical2orgpy = callPackage ../tools/misc/ical2orgpy { };
 
-  icewm = callPackage ../applications/window-managers/icewm { };
-
   icon-library = callPackage ../applications/graphics/icon-library { };
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
