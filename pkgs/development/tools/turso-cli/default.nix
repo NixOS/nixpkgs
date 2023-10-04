@@ -42,6 +42,6 @@ buildGo121Module rec {
     homepage = "https://turso.tech";
     mainProgram = "turso";
     license = licenses.mit;
-    maintainers = with maintainers; [ zestsystem kashw2 ];
+    maintainers = with maintainers; [ zestsystem kashw2 fryuni ];
   };
 }
