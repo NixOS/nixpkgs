@@ -57,6 +57,8 @@ let
 
     nativeBuildInputs = [
       ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
       bc
       bison
       flex
@@ -71,11 +73,7 @@ let
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-    buildInputs = [
-      ncurses # tools/kwboot
-      libuuid # tools/mkeficapsule
-      gnutls # tools/mkeficapsule
-    ];
+    strictDeps = true;
 
     hardeningDisable = [ "all" ];
 
@@ -130,6 +128,13 @@ in {
     extraMakeFlags = [ "HOST_TOOLS_ALL=y" "CROSS_BUILD_TOOLS=1" "NO_SDL=1" "tools" ];
 
     outputs = [ "out" "man" ];
+
+    buildInputs = [
+      ncurses # tools/kwboot
+      libuuid # tools/mkeficapsule
+      gnutls # tools/mkeficapsule
+      openssl # tools/mkimage
+    ];
 
     postInstall = ''
       installManPage doc/*.1
