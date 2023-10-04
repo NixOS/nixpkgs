@@ -41320,7 +41320,7 @@ with pkgs;
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py { };
 
-  inherit (callPackage ../applications/networking/cluster/terraform { })
+  inherit (callPackage ../applications/networking/cluster/terraform { buildGoModule = buildGo121Module; })
     mkTerraform
     terraform_1
     terraform_plugins_test
