@@ -40,6 +40,7 @@ in
       etc.nanorc.text = (lib.optionalString cfg.syntaxHighlight ''
         # load syntax highlighting files
         include "${cfg.package}/share/nano/*.nanorc"
+        include "${cfg.package}/share/nano/extra/*.nanorc"
       '') + cfg.nanorc;
       systemPackages = [ cfg.package ];
     };
