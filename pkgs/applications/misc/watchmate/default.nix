@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "watchmate";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "azymohliad";
     repo = "watchmate";
     rev = "v${version}";
-    hash = "sha256-+E1tyDfFSu3J89fXd75bdYxh+Z1zTwKL6AmMTNQBEYY=";
+    hash = "sha256-4L9mfZWphwXON8VgRcGrz+k62wyPzd1phtRu9HQnVdE=";
   };
 
   cargoLock = {

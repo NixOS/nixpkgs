@@ -1,5 +1,10 @@
 # File set library
 
+This is the internal contributor documentation.
+The user documentation is [in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/unstable/#sec-fileset).
+
+## Goals
+
 The main goal of the file set library is to be able to select local files that should be added to the Nix store.
 It should have the following properties:
 - Easy:
