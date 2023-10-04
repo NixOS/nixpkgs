@@ -12653,8 +12653,6 @@ with pkgs;
 
   rlci = callPackage ../development/interpreters/rlci { };
 
-  rs = callPackage ../tools/text/rs { };
-
   rst2html5 = callPackage ../tools/text/rst2html5 { };
 
   rst2pdf = with python3Packages; toPythonApplication rst2pdf;
