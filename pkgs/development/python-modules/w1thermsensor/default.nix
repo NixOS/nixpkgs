@@ -51,7 +51,9 @@ buildPythonPackage rec {
   # https://github.com/timofurrer/w1thermsensor/issues/116
   doCheck = pythonOlder "3.11";
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # runs 'modprobe w1-gpio' and 'modprobe w1-therm' on import
+    # and thus requires W1THERMSENSOR_NO_KERNEL_MODULE
     "w1thermsensor"
   ];
 
