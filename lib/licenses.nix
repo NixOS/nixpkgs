@@ -620,6 +620,12 @@ in mkLicense lset) ({
     free     = false;
   };
 
+  inria-zelus = {
+    fullName = "INRIA Non-Commercial License Agreement for the Zélus compiler";
+    url = "https://github.com/INRIA/zelus/raw/829f2b97cba93b0543a9ca0272269e6b8fdad356/LICENSE";
+    free = false;
+  };
+
   ipa = {
     spdxId = "IPA";
     fullName = "IPA Font License";

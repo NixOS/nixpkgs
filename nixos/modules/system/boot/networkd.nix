@@ -83,7 +83,7 @@ let
         (assertByteFormat "BitsPerSecond")
         (assertValueOneOf "Duplex" ["half" "full"])
         (assertValueOneOf "AutoNegotiation" boolValues)
-        (assertValueOneOf "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon" "off"])
+        (assertValuesSomeOfOr "WakeOnLan" ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon"] "off")
         (assertValueOneOf "Port" ["tp" "aui" "bnc" "mii" "fibre"])
         (assertValueOneOf "ReceiveChecksumOffload" boolValues)
         (assertValueOneOf "TransmitChecksumOffload" boolValues)
@@ -2724,9 +2724,12 @@ let
         description = lib.mdDoc ''
           Whether to consider the network online when any interface is online, as opposed to all of them.
           This is useful on portable machines with a wired and a wireless interface, for example.
+
+          This is on by default if {option}`networking.useDHCP` is enabled.
         '';
         type = types.bool;
-        default = false;
+        defaultText = "config.networking.useDHCP";
+        default = config.networking.useDHCP;
       };
 
       ignoredInterfaces = mkOption {
@@ -2886,8 +2889,6 @@ let
     }
 
     (mkIf cfg.enable {
-
-      systemd.package = mkDefault pkgs.systemdStage1Network;
 
       # For networkctl
       systemd.dbus.enable = mkDefault true;

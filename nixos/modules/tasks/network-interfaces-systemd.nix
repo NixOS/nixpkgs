@@ -59,23 +59,14 @@ let
       # more likely to result in interfaces being configured to
       # use DHCP when they shouldn't.
 
-      # When wait-online.anyInterface is enabled, RequiredForOnline really
-      # means "sufficient for online", so we can enable it.
-      # Otherwise, don't block the network coming online because of default networks.
       matchConfig.Name = ["en*" "eth*"];
       DHCP = "yes";
-      linkConfig.RequiredForOnline =
-        lib.mkDefault (if initrd
-        then config.boot.initrd.systemd.network.wait-online.anyInterface
-        else config.systemd.network.wait-online.anyInterface);
       networkConfig.IPv6PrivacyExtensions = "kernel";
     };
     networks."99-wireless-client-dhcp" = {
       # Like above, but this is much more likely to be correct.
       matchConfig.WLANInterfaceType = "station";
       DHCP = "yes";
-      linkConfig.RequiredForOnline =
-        lib.mkDefault config.systemd.network.wait-online.anyInterface;
       networkConfig.IPv6PrivacyExtensions = "kernel";
       # We also set the route metric to one more than the default
       # of 1024, so that Ethernet is preferred if both are

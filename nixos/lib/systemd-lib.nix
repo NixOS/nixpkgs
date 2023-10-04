@@ -80,6 +80,10 @@ in rec {
     optional (attr ? ${name} && !elem attr.${name} values)
       "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
 
+  assertValuesSomeOfOr = name: values: default: group: attr:
+    optional (attr ? ${name} && !(all (x: elem x values) (splitString " " attr.${name}) || attr.${name} == default))
+      "Systemd ${group} field `${name}' cannot have value `${toString attr.${name}}'.";
+
   assertHasField = name: group: attr:
     optional (!(attr ? ${name}))
       "Systemd ${group} field `${name}' must exist.";
