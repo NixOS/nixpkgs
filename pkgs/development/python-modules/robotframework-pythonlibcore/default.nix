@@ -22,10 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-RJTn1zSVJYgbh93Idr77uHl02u0wpj6p6llSJfQVTQk=";
   };
 
+  propagatedBuildInputs = [
+    robotframework
+  ];
+
   nativeCheckInputs = [
     pytest-mockito
     pytestCheckHook
-    robotframework
   ];
 
   preCheck = ''
