@@ -39,7 +39,8 @@ buildPythonPackage rec {
   # No upstream tests available
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # requires gtk namespace
     "goocalendar"
   ];
 
