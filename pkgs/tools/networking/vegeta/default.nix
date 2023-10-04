@@ -6,7 +6,7 @@
 buildGoModule rec {
   pname = "vegeta";
   version = "12.11.1";
-  rev = "e04d9c0df8177e8633bff4afe7b39c2f3a9e7dea";
+  rev = "6fbe391628eeeae1adf39522a55078797e6e7f2e";
 
   src = fetchFromGitHub {
     owner = "tsenart";
