@@ -4,6 +4,10 @@
 , pythonOlder
 , click
 , redis
+, redisServer
+, pytestCheckHook
+, psutil
+, sentry-sdk
 }:
 
 buildPythonPackage rec {
@@ -25,8 +29,27 @@ buildPythonPackage rec {
     redis
   ];
 
-  # Tests require a running Redis rerver
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    psutil
+    sentry-sdk
+  ];
+
+  pytestFlagsArray = [
+    "tests/test_worker.py"
+  ];
+
+  preCheck = ''
+    ${redisServer}/bin/redis-server &
+    REDIS_PID=$!
+
+    substituteInPlace tests/test_worker.py \
+      --replace "'rqworker'" "'$out/bin/rqworker'"
+  '';
+
+  postCheck = ''
+    kill $REDIS_PID
+  '';
 
   pythonImportsCheck = [
     "rq"
@@ -34,7 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library for creating background jobs and processing them";
-    homepage = "https://github.com/nvie/rq/";
+    homepage = "https://github.com/rq/rq/";
     changelog = "https://github.com/rq/rq/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ mrmebelman ];

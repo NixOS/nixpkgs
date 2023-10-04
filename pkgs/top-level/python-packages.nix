@@ -12291,7 +12291,9 @@ self: super: with self; {
 
   rpyc = callPackage ../development/python-modules/rpyc { };
 
-  rq = callPackage ../development/python-modules/rq { };
+  rq = (callPackage ../development/python-modules/rq {
+    redisServer = pkgs.redis;
+  });
 
   rsa = callPackage ../development/python-modules/rsa { };
 
