@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , google-api-core
 , google-cloud-storage
 , google-cloud-testutils
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     google-api-core
     proto-plus
     protobuf
