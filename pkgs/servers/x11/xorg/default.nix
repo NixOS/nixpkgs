@@ -1180,11 +1180,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXpm = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXext, xorgproto, libXt, gettext }: stdenv.mkDerivation {
     pname = "libXpm";
-    version = "3.5.16";
+    version = "3.5.17";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXpm-3.5.16.tar.xz";
-      sha256 = "0lczckznwbzsf5pca487g8bzbqjgj3a96z78cz69pgcxlskmvg76";
+      url = "mirror://xorg/individual/lib/libXpm-3.5.17.tar.xz";
+      sha256 = "0hvf49qy55gwldpwpw7ihcmn5i2iinpjh2rbha63hzcy060izcv4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
