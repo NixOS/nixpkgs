@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # fails to import sphinxcontrib.serializinghtml
   doCheck = false;
 
-  pythonImportsCheck = [ "sphinxcontrib.programoutput" ];
+  pythonImportsExtrasCheck = [ "sphinxcontrib.programoutput" ];
 
   meta = with lib; {
     description = "Sphinx extension to include program output";
