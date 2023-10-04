@@ -13,6 +13,7 @@
 , pythonRelaxDepsHook
 , scikit-learn
 , setuptools-scm
+, setuptools
 , ujson
 , wheel
 }:
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     environs
     grpcio
     mmh3
