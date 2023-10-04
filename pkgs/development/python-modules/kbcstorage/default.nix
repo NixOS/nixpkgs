@@ -7,6 +7,7 @@
 , setuptools-scm
 
 # propagates
+, setuptools
 , azure-storage-blob
 , boto3
 , requests
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     azure-storage-blob
     boto3
     requests
