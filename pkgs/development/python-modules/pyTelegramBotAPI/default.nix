@@ -30,6 +30,10 @@ buildPythonPackage rec {
     hash = "sha256-R52j4JnoM0nlZvlcDox2Wz3WjTEstNaqbg8SPiPHD4c=";
   };
 
+  propagatedBuildInputs = [
+    requests
+  ];
+
   passthru.optional-dependencies = {
     json = [
       ujson
@@ -65,7 +69,6 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-    requests
   ] ++ passthru.optional-dependencies.watchdog
   ++ passthru.optional-dependencies.aiohttp;
 
