@@ -56,7 +56,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [ "pyocd" ];
+  # FIXME: requires cffi via cmsis-pack-manager, but buildPythonPath does not consider propagatedNativeBuildInputs
+  pythonImportsExtrasCheck = [ "pyocd" ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
