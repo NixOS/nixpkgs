@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot, setuptools }:
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
@@ -17,6 +17,8 @@ buildPythonPackage rec {
 
   # No tests
   doCheck = false;
+
+  propagatedBuildInputs = [ setuptools ]; # needed for 'pkg_resources'
 
   pythonImportsCheck = [ "buildbot_pkg" ];
 
