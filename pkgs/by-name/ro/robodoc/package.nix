@@ -4,14 +4,14 @@
 , autoreconfHook
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "robodoc";
   version = "4.99.44";
 
   src = fetchFromGitHub {
     owner = "gumpu";
     repo = "ROBODoc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
   };
 
@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; all;
+    platforms = platforms.all;
   };
-}
+})
