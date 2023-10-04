@@ -11,6 +11,7 @@
 }:
 
 let
+  pname = "stash";
   version = "0.22.1";
 
   # these hashes can be updated by update.sh
@@ -18,25 +19,29 @@ let
   srcHash = "sha256-QtAZ9+ujqHm4lMGOf4tiBYio/LKAeBc6WPkfDH2mKOE=";
   yarnHash = "sha256-qP/9EK7rZQ7Wn0WQmrWcJhiD73S5I6TnSfYE0fJqFsI=";
 
-  baseSrc = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "stashapp";
-    repo = "stash";
+    repo = pname;
     rev = "v${version}";
     hash = srcHash;
   };
+  uiSrc = "${src}/ui/v2.5";
 
-  ui = mkYarnPackage rec {
+  ui = mkYarnPackage {
     inherit version;
-    pname = "stash-ui";
-    src = "${baseSrc}/ui/v2.5";
+    pname = "${pname}-ui";
+
+    src = uiSrc;
+    packageJSON = "${uiSrc}/package.json";
 
     offlineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
+      yarnLock = "${uiSrc}/yarn.lock";
       hash = yarnHash;
     };
 
     postPatch = ''
-      substituteInPlace codegen.yml --replace "../../graphql/" "${baseSrc}/graphql/"
+      substituteInPlace codegen.yml \
+        --replace "../../graphql/" "${src}/graphql/"
     '';
 
     configurePhase = ''
@@ -60,9 +65,7 @@ let
   };
 in
 buildGoModule rec {
-  inherit version;
-  pname = "stash";
-  src = baseSrc;
+  inherit pname version src;
 
   vendorHash = null;
 
@@ -76,7 +79,7 @@ buildGoModule rec {
   ];
   tags = [ "sqlite_stat4" ];
 
-  subPackages = [ "cmd/phasher" "cmd/stash" ];
+  subPackages = [ "cmd/stash" ];
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa WebKit ]);
 
@@ -93,9 +96,7 @@ buildGoModule rec {
   '';
 
   postFixup = ''
-    for bin in $out/bin/phasher $out/bin/stash; do
-      wrapProgram $bin --prefix PATH : "${lib.makeBinPath [ ffmpeg-full vips ]}"
-    done
+    wrapProgram $out/bin/stash --prefix PATH : "${lib.makeBinPath [ ffmpeg-full vips ]}"
   '';
 
   passthru.updateScript = ./update.sh;
