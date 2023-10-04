@@ -24550,8 +24550,6 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
-  pyp = callPackage ../tools/text/pyp { };
-
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf3_24;
