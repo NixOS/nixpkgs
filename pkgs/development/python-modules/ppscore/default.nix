@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pandas
 , pytestCheckHook
 , pythonOlder
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     pandas
     scikit-learn
   ];
