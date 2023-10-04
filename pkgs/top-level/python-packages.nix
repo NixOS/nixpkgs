@@ -8473,6 +8473,8 @@ self: super: with self; {
 
   python-heatclient = callPackage ../development/python-modules/python-heatclient { };
 
+  python-hl7 = callPackage ../development/python-modules/python-hl7 { };
+
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
   python-ipware = callPackage ../development/python-modules/python-ipware { };
