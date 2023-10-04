@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , Accelerate
+, packaging
 , blis
 , buildPythonPackage
 , catalogue
@@ -49,6 +50,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    packaging
     blis
     catalogue
     confection
