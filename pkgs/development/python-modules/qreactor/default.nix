@@ -28,7 +28,8 @@ buildPythonPackage rec {
     pyqt5
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # requires Qt bindings
     "qreactor"
   ];
 
