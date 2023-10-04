@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , geojson
 , pysocks
 , pythonOlder
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     geojson
     pysocks
     requests
