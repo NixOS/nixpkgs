@@ -31,6 +31,7 @@ buildPythonPackage {
     opentelemetry-sdk
     opentelemetry-semantic-conventions
     wrapt
+    grpcio # not actually optional, required for pythonImportsCheck
   ];
 
   passthru.optional-dependencies = {
@@ -39,7 +40,6 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     opentelemetry-test-utils
-    grpcio
     pytestCheckHook
   ];
 
