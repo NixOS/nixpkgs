@@ -39,9 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiohttp_socks" ];
 
-  meta = {
+  meta = with lib; {
     description = "SOCKS proxy connector for aiohttp";
-    license = lib.licenses.asl20;
+    license = licenses.asl20;
     homepage = "https://github.com/romis2012/aiohttp-socks";
+    maintainers = with maintainers; [ mbalatsko ];
   };
 }
