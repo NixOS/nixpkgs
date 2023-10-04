@@ -29,7 +29,7 @@ in
 
       syntaxHighlight = lib.mkOption {
         type = lib.types.bool;
-        default = false;
+        default = true;
         description = lib.mdDoc "Whether to enable syntax highlight for various languages.";
       };
     };
