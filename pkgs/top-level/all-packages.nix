@@ -732,6 +732,11 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
+  rtthost = callPackage ../development/tools/rust/rtthost {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin) DarwinTools;
+  };
+
   mix2nix = callPackage ../development/tools/mix2nix { };
 
   n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
