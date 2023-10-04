@@ -29,6 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-7A5qFpISrjVrqQfKk6BPb7RhDWd9f90eF3bku+LsCcc=";
   };
 
+  postPatch = ''
+    substituteInPlace boxx/ylsys.py \
+      --replace "os.getenv('HOME')" "os.getenv('HOME', \"\")"
+  '';
+
   propagatedBuildInputs = [
     matplotlib
     scikit-image
