@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "a62ede784018f9d5aaf40587f71a1271429ab50b";
-    hash = "sha256-lIk8oPEkkkkkkkkkkkkuh2hIx/Qg1kf9tTFvH3gX8XA=";
+    hash = "sha256-L3ncmM7Ro60DvOF/Y0fjo2Smlw2LL8cPa8H6yVGdGAk=";
   };
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];

@@ -33064,8 +33064,6 @@ with pkgs;
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
-  imhex = callPackage ../applications/editors/imhex { };
-
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
