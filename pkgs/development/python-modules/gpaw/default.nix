@@ -114,7 +114,7 @@ in buildPythonPackage rec {
   '';
 
   doCheck = false; # Requires MPI runtime to work in the sandbox
-  pythonImportsCheck = [ "gpaw" ];
+  pythonImportsExtrasCheck = [ "gpaw" ];
 
   passthru = { inherit mpi; };
 
