@@ -30,9 +30,7 @@ let
   ui = mkYarnPackage {
     inherit version;
     pname = "${pname}-ui";
-
     src = uiSrc;
-    packageJSON = "${uiSrc}/package.json";
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${uiSrc}/yarn.lock";
@@ -57,14 +55,15 @@ let
 
       yarn --offline run gqlgen
       yarn --offline build
+      mv build $out
     '';
 
-    installPhase = "mv build $out";
-
     distPhase = "true";
+    dontInstall = true;
+    dontFixup = true;
   };
 in
-buildGoModule rec {
+buildGoModule {
   inherit pname version src;
 
   vendorHash = null;
@@ -86,7 +85,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   preBuild = ''
-    cp -R ${ui} ui/v2.5/build
+    cp -a ${ui} ui/v2.5/build
 
     # `go mod tidy` requires internet access and does nothing
     echo "skip_mod_tidy: true" >> gqlgen.yml
