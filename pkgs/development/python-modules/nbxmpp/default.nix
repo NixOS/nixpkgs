@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    # required for pythonImportsCheck otherwise libsoup cannot be found
+    # required for pythonImportsExtrasCheck otherwise libsoup cannot be found
     gobject-introspection
     setuptools
   ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "nbxmpp"
   ];
 
