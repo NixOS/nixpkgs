@@ -9,6 +9,7 @@ let
     _fileFilter
     _printFileset
     _intersection
+    _difference
     ;
 
   inherit (builtins)
@@ -365,6 +366,58 @@ If a directory does not recursively contain any file, it is omitted from the sto
       ];
     in
     _intersection
+      (elemAt filesets 0)
+      (elemAt filesets 1);
+
+  /*
+    The file set containing all files from the first file set that are not in the second file set.
+    See also [Difference (set theory)](https://en.wikipedia.org/wiki/Complement_(set_theory)#Relative_complement).
+
+    The given file sets are evaluated as lazily as possible,
+    with the first argument being evaluated first if needed.
+
+    Type:
+      union :: FileSet -> FileSet -> FileSet
+
+    Example:
+      # Create a file set containing all files from the current directory,
+      # except ones under ./tests
+      difference ./. ./tests
+
+      let
+        # A set of Nix-related files
+        nixFiles = unions [ ./default.nix ./nix ./tests/default.nix ];
+      in
+      # Create a file set containing all files under ./tests, except ones in `nixFiles`,
+      # meaning only without ./tests/default.nix
+      difference ./tests nixFiles
+  */
+  difference =
+    # The positive file set.
+    # The result can only contain files that are also in this file set.
+    #
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    positive:
+    # The negative file set.
+    # The result will never contain files that are also in this file set.
+    #
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    negative:
+    let
+      filesets = _coerceMany "lib.fileset.difference" [
+        {
+          context = "first argument (positive set)";
+          value = positive;
+        }
+        {
+          context = "second argument (negative set)";
+          value = negative;
+        }
+      ];
+    in
+    _difference
       (elemAt filesets 0)
       (elemAt filesets 1);
 
