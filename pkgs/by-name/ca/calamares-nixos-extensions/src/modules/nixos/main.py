@@ -54,21 +54,12 @@ cfgbootnone = """  # Disable bootloader.
 
 """
 
-cfgbootcrypt = """  # Setup keyfile
+cfgbootgrubcrypt = """  # Setup keyfile
   boot.initrd.secrets = {
     "/crypto_keyfile.bin" = null;
   };
 
-"""
-
-cfgbootgrubcrypt = """  # Enable grub cryptodisk
   boot.loader.grub.enableCryptodisk=true;
-
-"""
-
-cfgswapcrypt = """  # Enable swap on luks
-  boot.initrd.luks.devices."@@swapdev@@".device = "/dev/disk/by-uuid/@@swapuuid@@";
-  boot.initrd.luks.devices."@@swapdev@@".keyFile = "/crypto_keyfile.bin";
 
 """
 
@@ -383,12 +374,16 @@ def run():
     else:
         cfg += cfgbootnone
 
+    # Setup encrypted swap devices. nixos-generate-config doesn't seem to notice them.
+    for part in gs.value("partitions"):
+        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and part["fs"] == "linuxswap":
+            cfg += """  boot.initrd.luks.devices."{}".device = "/dev/disk/by-uuid/{}";\n""".format(
+                part["luksMapperName"], part["uuid"])
+
     # Check partitions
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks":
-            cfg += cfgbootcrypt
-            if fw_type != "efi":
-                cfg += cfgbootgrubcrypt
+        if part["claimed"] == True and part["fsName"] == "luks" and fw_type != "efi":
+            cfg += cfgbootgrubcrypt
             status = _("Setting up LUKS")
             libcalamares.job.setprogress(0.15)
             try:
@@ -403,18 +398,10 @@ def run():
                 return (_("Failed to create /crypto_keyfile.bin"), _("Check if you have enough free space on your partition."))
             break
 
-    # Setup keys in /crypto_keyfile. If we use systemd-boot (EFI), don't add /
-    # Goal is to have one password prompt when booted
+    # Setup keys in /crypto_keyfile if using BIOS and Grub cryptodisk
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and not (fw_type == "efi" and part["mountPoint"] == "/"):
-            if part["fs"] == "linuxswap":
-                cfg += cfgswapcrypt
-                catenate(variables, "swapdev", part["luksMapperName"])
-                uuid = part["uuid"]
-                catenate(variables, "swapuuid", uuid)
-            else:
-                cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(
-                    part["luksMapperName"])
+        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and fw_type != "efi":
+            cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(part["luksMapperName"])
 
             try:
                 # Add luks drives to /crypto_keyfile.bin
