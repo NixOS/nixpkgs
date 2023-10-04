@@ -18,6 +18,7 @@
   "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";
   "@vue/cli" = "vue";
+  "@vue/language-server" = "vue-language-server";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
   "@webassemblyjs/wasm-text-gen-1.11.1" = "wasmgen";

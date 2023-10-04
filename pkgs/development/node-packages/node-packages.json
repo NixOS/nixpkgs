@@ -15,6 +15,7 @@
 , "@uppy/companion"
 , "@volar/vue-language-server"
 , "@vue/cli"
+, "@vue/language-server"
 , {"@webassemblyjs/cli": "1.11.1"}
 , {"@webassemblyjs/repl": "1.11.1"}
 , "@webassemblyjs/wasm-strip"
