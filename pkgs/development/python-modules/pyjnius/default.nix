@@ -28,7 +28,8 @@ buildPythonPackage rec {
     setuptools # needed for 'pkg_resources'
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # needs jdk
     "jnius"
   ];
 
