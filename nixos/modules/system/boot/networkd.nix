@@ -2876,8 +2876,6 @@ let
 
     (mkIf cfg.enable {
 
-      systemd.package = mkDefault pkgs.systemdStage1Network;
-
       # For networkctl
       systemd.dbus.enable = mkDefault true;
 
