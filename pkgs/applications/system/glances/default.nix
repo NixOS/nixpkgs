@@ -16,7 +16,7 @@ buildPythonApplication rec {
     owner = "nicolargo";
     repo = "glances";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TakQqyHKuiFdBL73JQzflNUMYmBINyY0flqitqoIpmg=";
+    hash = "sha256-TakQqyHKuiFdBL73JQzflNUMYmBINyY0flqitqoIpmg=";
   };
 
   # On Darwin this package segfaults due to mismatch of pure and impure
