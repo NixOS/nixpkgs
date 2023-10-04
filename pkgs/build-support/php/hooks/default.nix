@@ -1,9 +1,11 @@
-{ makeSetupHook
+{ lib
+, makeSetupHook
 , jq
 , moreutils
 , makeBinaryWrapper
 , php
 , cacert
+, buildPackages
 }:
 
 {
@@ -18,6 +20,10 @@
     {
       name = "composer-install-hook.sh";
       propagatedBuildInputs = [ jq makeBinaryWrapper moreutils php cacert ];
-      substitutions = { };
+      substitutions = {
+        # Specify the stdenv's `diff` by abspath to ensure that the user's build
+        # inputs do not cause us to find the wrong `diff`.
+        diff = "${lib.getBin buildPackages.diffutils}/bin/diff";
+      };
     } ./composer-install-hook.sh;
 }
