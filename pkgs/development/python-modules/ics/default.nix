@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, attrs
 , tatsu
 , arrow
 , pytestCheckHook
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    attrs
     arrow
     tatsu
   ];
