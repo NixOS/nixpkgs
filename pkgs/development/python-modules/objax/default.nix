@@ -36,7 +36,8 @@ buildPythonPackage rec {
     tensorboard
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # requires jaxlib
     "objax"
   ];
 
