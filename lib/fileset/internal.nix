@@ -461,6 +461,22 @@ rec {
     else
       nonEmpty;
 
+  # Transforms the filesetTree of a file set to a shorter base path, e.g.
+  # _shortenTreeBase [ "foo" ] (_create /foo/bar null)
+  # => { bar = null; }
+  _shortenTreeBase = targetBaseComponents: fileset:
+    let
+      recurse = index:
+        # If we haven't reached the required depth yet
+        if index < length fileset._internalBaseComponents then
+          # Create an attribute set and recurse as the value, this can be lazily evaluated this way
+          { ${elemAt fileset._internalBaseComponents index} = recurse (index + 1); }
+        else
+          # Otherwise we reached the appropriate depth, here's the original tree
+          fileset._internalTree;
+    in
+    recurse (length targetBaseComponents);
+
   # Computes the union of a list of filesets.
   # The filesets must already be coerced and validated to be in the same filesystem root
   # Type: [ Fileset ] -> Fileset
@@ -497,11 +513,7 @@ rec {
       # So the tree under `/foo/bar` gets nested under `{ bar = ...; ... }`,
       # while the tree under `/foo/baz` gets nested under `{ baz = ...; ... }`
       # Therefore allowing combined operations over them.
-      trees = map (fileset:
-        setAttrByPath
-          (drop (length commonBaseComponents) fileset._internalBaseComponents)
-          fileset._internalTree
-        ) filesetsWithBase;
+      trees = map (_shortenTreeBase commonBaseComponents) filesetsWithBase;
 
       # Folds all trees together into a single one using _unionTree
       # We do not use a fold here because it would cause a thunk build-up
