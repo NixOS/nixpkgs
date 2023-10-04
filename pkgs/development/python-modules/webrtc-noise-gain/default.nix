@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "webrtc-noise-gain";
-  version = "1.2.2";
+  version = "1.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "webrtc-noise-gain";
     rev = "v${version}";
-    hash = "sha256-yHuCa2To9/9kD+tLG239I1aepuhcPUV4a4O1TQtBPlE=";
+    hash = "sha256-DFEtuO49zXNixLwBjQ/WOiARDhMAXVH+5hfc3eSdPIo=";
   };
 
   nativeBuildInputs = [
