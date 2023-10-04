@@ -66,10 +66,10 @@ in
     };
 
     systemd.tmpfiles.rules = let
-      user = config.services.greetd.settings.default_session.user;
+      group = config.users.users.${config.services.greetd.settings.default_session.user}.group;
     in [
-      "d /var/log/regreet 0755 greeter ${user} - -"
-      "d /var/cache/regreet 0755 greeter ${user} - -"
+      "d /var/log/regreet 0755 greeter ${group} - -"
+      "d /var/cache/regreet 0755 greeter ${group} - -"
     ];
   };
 }

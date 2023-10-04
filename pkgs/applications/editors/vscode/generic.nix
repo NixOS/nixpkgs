@@ -1,6 +1,6 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
-, atomEnv, at-spi2-atk, autoPatchelfHook
+, at-spi2-atk, autoPatchelfHook, alsa-lib, mesa, nss, nspr, xorg
 , systemd, fontconfig, libdbusmenu, glib, buildFHSEnv, wayland
 , libglvnd, libkrb5
 
@@ -67,7 +67,7 @@ let
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
-      ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk libkrb5 ] ++ atomEnv.packages);
+      ++ lib.optionals (!stdenv.isDarwin) [ alsa-lib at-spi2-atk libkrb5 mesa nss nspr systemd xorg.libxkbfile ];
 
     runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland libsecret ];
 

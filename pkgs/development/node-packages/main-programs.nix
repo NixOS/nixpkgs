@@ -14,8 +14,6 @@
   "@babel/cli" = "babel";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
-  "@mermaid-js/mermaid-cli" = "mmdc";
-  "@nerdwallet/shepherd" = "shepherd";
   "@prisma/language-server" = "prisma-language-server";
   "@tailwindcss/language-server" = "tailwindcss-language-server";
   "@uppy/companion" = "companion";

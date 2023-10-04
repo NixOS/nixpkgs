@@ -177,8 +177,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "LazyVim";
       repo = "LazyVim";
-      rev = "2aea5c7210882a2f98526ee29115fe2e1a41d7b4";
-      sha256 = "1m19ys3nzy44783vqip02j31r28119zqb84w63ngnhj8nm516fz7";
+      rev = "dd95de5dbe31ecb106305920cbd0e24e26c17afe";
+      sha256 = "1vmh1b8mwpwvfyigxhc5pnda1ddyccqgjz3jmn2pm101bwgg6424";
     };
     meta.homepage = "https://github.com/LazyVim/LazyVim/";
   };
@@ -7191,8 +7191,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "8c0b85272c9c2a4d9e07bc86c5a628c55bf1fbca";
-      sha256 = "07g3x9wcml4l1vydycmvxq64gj4lsfcmcwqimhkmswk2h3ixvlgi";
+      rev = "eb1b53162755888ff75e495797071644d983bff7";
+      sha256 = "04kgsf3rhr0wk3vyx6lawlxj5icvaryx925flh72f234vkhigmq2";
     };
     meta.homepage = "https://github.com/neovim/nvim-lspconfig/";
   };

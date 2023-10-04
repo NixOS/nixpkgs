@@ -9,7 +9,6 @@
   packageOverrides = super: with super; lib.mapAttrs (_: set: recurseIntoAttrs set) {
     inherit (super)
       apacheHttpdPackages
-      atomPackages
       fdbPackages
       fusePackages
       gns3Packages

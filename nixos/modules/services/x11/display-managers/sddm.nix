@@ -33,6 +33,8 @@ let
 
       # Implementation is done via pkgs/applications/display-managers/sddm/sddm-default-session.patch
       DefaultSession = optionalString (dmcfg.defaultSession != null) "${dmcfg.defaultSession}.desktop";
+
+      DisplayServer = if cfg.wayland.enable then "wayland" else "x11";
     };
 
     Theme = {
@@ -62,6 +64,7 @@ let
     Wayland = {
       EnableHiDPI = cfg.enableHidpi;
       SessionDir = "${dmcfg.sessionData.desktops}/share/wayland-sessions";
+      CompositorCommand = lib.optionalString cfg.wayland.enable cfg.wayland.compositorCommand;
     };
   } // lib.optionalAttrs dmcfg.autoLogin.enable {
     Autologin = {
@@ -182,6 +185,32 @@ in
           description = lib.mdDoc ''
             Minimum user ID for auto-login user.
           '';
+        };
+      };
+
+      # Experimental Wayland support
+      wayland = {
+        enable = mkEnableOption "experimental Wayland support";
+
+        compositorCommand = mkOption {
+          type = types.str;
+          internal = true;
+
+          # This is basically the upstream default, but with Weston referenced by full path
+          # and the configuration generated from NixOS options.
+          default = let westonIni = (pkgs.formats.ini {}).generate "weston.ini" {
+              libinput = {
+                enable-tap = xcfg.libinput.mouse.tapping;
+                left-handed = xcfg.libinput.mouse.leftHanded;
+              };
+              keyboard = {
+                keymap_model = xcfg.xkbModel;
+                keymap_layout = xcfg.layout;
+                keymap_variant = xcfg.xkbVariant;
+                keymap_options = xcfg.xkbOptions;
+              };
+            }; in "${pkgs.weston}/bin/weston --shell=fullscreen-shell.so -c ${westonIni}";
+          description = lib.mdDoc "Command used to start the selected compositor";
         };
       };
     };

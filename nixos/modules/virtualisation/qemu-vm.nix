@@ -1121,11 +1121,12 @@ in
       }) cfg.emptyDiskImages)
     ];
 
-    # Use mkVMOverride to enable building test VMs (e.g. via `nixos-rebuild
-    # build-vm`) of a system configuration, where the regular value for the
-    # `fileSystems' attribute should be disregarded (since those filesystems
-    # don't necessarily exist in the VM).
-    fileSystems = mkVMOverride cfg.fileSystems;
+    # By default, use mkVMOverride to enable building test VMs (e.g. via
+    # `nixos-rebuild build-vm`) of a system configuration, where the regular
+    # value for the `fileSystems' attribute should be disregarded (since those
+    # filesystems don't necessarily exist in the VM). You can disable this
+    # override by setting `virtualisation.fileSystems = lib.mkForce { };`.
+    fileSystems = lib.mkIf (cfg.fileSystems != { }) (mkVMOverride cfg.fileSystems);
 
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:

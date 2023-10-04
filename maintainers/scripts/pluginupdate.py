@@ -321,8 +321,14 @@ def load_plugins_from_csv(
     return plugins
 
 
-def run_nix_expr(expr):
-    with CleanEnvironment() as nix_path:
+
+def run_nix_expr(expr, nixpkgs: str):
+    '''
+    :param expr nix expression to fetch current plugins
+    :param nixpkgs Path towards a nixpkgs checkout
+    '''
+    # local_pkgs = str(Path(__file__).parent.parent.parent)
+    with CleanEnvironment(nixpkgs) as nix_path:
         cmd = [
             "nix",
             "eval",
@@ -396,9 +402,9 @@ class Editor:
         """CSV spec"""
         print("the update member function should be overriden in subclasses")
 
-    def get_current_plugins(self) -> List[Plugin]:
+    def get_current_plugins(self, nixpkgs) -> List[Plugin]:
         """To fill the cache"""
-        data = run_nix_expr(self.get_plugins)
+        data = run_nix_expr(self.get_plugins, nixpkgs)
         plugins = []
         for name, attr in data.items():
             p = Plugin(name, attr["rev"], attr["submodules"], attr["sha256"])
@@ -414,7 +420,7 @@ class Editor:
         raise NotImplementedError()
 
     def get_update(self, input_file: str, outfile: str, config: FetchConfig):
-        cache: Cache = Cache(self.get_current_plugins(), self.cache_file)
+        cache: Cache = Cache(self.get_current_plugins(self.nixpkgs), self.cache_file)
         _prefetch = functools.partial(prefetch, cache=cache)
 
         def update() -> dict:
@@ -452,6 +458,12 @@ class Editor:
                 Updates nix derivations for {self.name} plugins.\n
                 By default from {self.default_in} to {self.default_out}"""
             ),
+        )
+        common.add_argument(
+            "--nixpkgs",
+            type=str,
+            default=os.getcwd(),
+            help="Adjust log level",
         )
         common.add_argument(
             "--input-names",
@@ -541,22 +553,27 @@ class Editor:
         command = args.command or "update"
         log.setLevel(LOG_LEVELS[args.debug])
         log.info("Chose to run command: %s", command)
+        self.nixpkgs = args.nixpkgs
 
-        if not args.no_commit:
-            self.nixpkgs_repo = git.Repo(self.root, search_parent_directories=True)
+        self.nixpkgs_repo = git.Repo(args.nixpkgs, search_parent_directories=True)
 
         getattr(self, command)(args)
 
 
 class CleanEnvironment(object):
+    def __init__(self, nixpkgs):
+        self.local_pkgs = nixpkgs
+
     def __enter__(self) -> str:
-        self.old_environ = os.environ.copy()
+        """
         local_pkgs = str(Path(__file__).parent.parent.parent)
+        """
+        self.old_environ = os.environ.copy()
         self.empty_config = NamedTemporaryFile()
         self.empty_config.write(b"{}")
         self.empty_config.flush()
-        os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
-        return f"localpkgs={local_pkgs}"
+        # os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
+        return f"localpkgs={self.local_pkgs}"
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         os.environ.update(self.old_environ)
@@ -758,7 +775,8 @@ def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
 
 
 def update_plugins(editor: Editor, args):
-    """The main entry function of this module. All input arguments are grouped in the `Editor`."""
+    """The main entry function of this module.
+    All input arguments are grouped in the `Editor`."""
 
     log.info("Start updating plugins")
     fetch_config = FetchConfig(args.proc, args.github_token)

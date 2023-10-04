@@ -19,6 +19,8 @@ from codecs import iterdecode
 from datetime import datetime
 from urllib.request import urlopen
 
+os.chdir(os.path.dirname(__file__))
+
 depot_tools_checkout = tempfile.TemporaryDirectory()
 subprocess.check_call([
     "nix-prefetch-git",
