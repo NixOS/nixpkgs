@@ -8,24 +8,17 @@
 , requests
 , tqdm
 , urllib3
+, bleach
 }:
 
 buildPythonPackage rec {
   pname = "kaggle";
-  version = "1.5.13";
+  version = "1.5.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-g2TFbDYSXLgZWHbZEdC8nvvBcxZ+ljuenveTeJupp/4=";
+    sha256 = "sha256-prNUL1kM80GlrUQdWuAhvpO9ZEQclsdYsVSQNJWjpgA=";
   };
-
-  # The version bounds in the setup.py file are unnecessarily restrictive.
-  # They have both python-slugify and slugify, don't know why
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3' \
-      --replace " 'slugify'," " "
-    '';
 
   propagatedBuildInputs = [
     certifi
@@ -35,6 +28,7 @@ buildPythonPackage rec {
     six
     tqdm
     urllib3
+    bleach
   ];
 
   # Tests try to access the network.
