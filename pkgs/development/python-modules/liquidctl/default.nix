@@ -73,11 +73,11 @@ buildPythonPackage rec {
   ];
 
   postBuild = ''
-    # needed for pythonImportsCheck
+    # needed for pythonImportsExtrasCheck
     export XDG_RUNTIME_DIR=$TMPDIR
   '';
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "liquidctl"
   ];
 
