@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "dcgm-exporter";
-  version = "3.1.8-3.1.5";
+  version = "3.2.5-3.1.7";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Jzv3cU3gmGIXV+DV3wV/1zSWwz18s3Jax6JC7WZW7Z4=";
+    hash = "sha256-+Hviq+iu1LBcy2VwmCX5xOq1I/zevfydesVlrVorGOI=";
   };
 
   # Upgrade to go 1.17 during the vendoring FOD build because it fails otherwise.
@@ -42,7 +42,7 @@ buildGoModule rec {
     cp vendor/go.mod go.mod
   '';
 
-  vendorHash = "sha256-KMCV79kUY1sNYysH0MmB7pVU98r7v+DpLIoYHxyyG4U=";
+  vendorHash = "sha256-Fjvx15e/psxoqoS6c6GhiQfe7g2aI40EmPR26xLhrzg=";
 
   nativeBuildInputs = [
     cudaPackages.autoAddOpenGLRunpathHook
