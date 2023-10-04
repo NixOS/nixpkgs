@@ -22,8 +22,8 @@ buildPythonPackage rec {
     jax
   ];
 
-  pythonImportsCheck = [
-    "jmp"
+  pythonImportsExtrasCheck = [
+    "jmp" # requires jaxlib
   ];
 
   nativeCheckInputs = [
