@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncview";
-  version = "2.1.8";
+  version = "2.1.9";
 
   src = fetchurl {
-    url = "ftp://cirrus.ucsd.edu/pub/ncview/ncview-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6LrcUHubd0gBKI0cLVnreasxsATfSFjQZ07Q2H38kb4=";
+    url = "https://cirrus.ucsd.edu/~pierce/ncview/ncview-${finalAttrs.version}.tar.gz";
+    hash = "sha256-4jF6wJSvYvCtz2hCHXBlgglDaq40RkCVnsiXWmRYka8=";
   };
 
   strictDeps = true;
