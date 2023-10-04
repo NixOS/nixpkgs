@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "gumpu";
     repo = "ROBODoc";
     rev = "v${version}";
-    sha256 = "l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
+    hash = "sha256-l3prSdaGhOvXmZfCPbsZJNocO7y20zJjLQpajRTJOqE=";
   };
 
   postConfigure = lib.optionalString stdenv.isDarwin ''
