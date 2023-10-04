@@ -174,7 +174,7 @@ mirror://xorg/individual/lib/libICE-1.1.1.tar.xz
 mirror://xorg/individual/lib/libpciaccess-0.17.tar.xz
 mirror://xorg/individual/lib/libSM-1.2.4.tar.xz
 mirror://xorg/individual/lib/libWindowsWM-1.0.1.tar.bz2
-mirror://xorg/individual/lib/libX11-1.8.6.tar.xz
+mirror://xorg/individual/lib/libX11-1.8.7.tar.xz
 mirror://xorg/individual/lib/libXau-1.0.11.tar.xz
 mirror://xorg/individual/lib/libXaw-1.0.15.tar.xz
 mirror://xorg/individual/lib/libxcb-1.16.tar.xz
@@ -193,7 +193,7 @@ mirror://xorg/individual/lib/libXinerama-1.1.5.tar.xz
 mirror://xorg/individual/lib/libxkbfile-1.1.2.tar.xz
 mirror://xorg/individual/lib/libXmu-1.1.4.tar.xz
 mirror://xorg/individual/lib/libXp-1.0.4.tar.xz
-mirror://xorg/individual/lib/libXpm-3.5.16.tar.xz
+mirror://xorg/individual/lib/libXpm-3.5.17.tar.xz
 mirror://xorg/individual/lib/libXpresent-1.0.1.tar.xz
 mirror://xorg/individual/lib/libXrandr-1.5.3.tar.xz
 mirror://xorg/individual/lib/libXrender-0.9.11.tar.xz
