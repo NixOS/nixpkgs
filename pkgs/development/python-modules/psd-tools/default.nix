@@ -6,6 +6,7 @@
 , pillow
 , scikit-image
 , aggdraw
+, attrs
 , pytestCheckHook
 , ipython
 , cython
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aggdraw
+    attrs
     docopt
     ipython
     pillow
