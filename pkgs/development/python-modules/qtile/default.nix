@@ -5,6 +5,7 @@
 , dbus-next
 , dbus-python
 , glib
+, iwlib
 , libdrm
 , libinput
 , libxkbcommon
@@ -60,31 +61,32 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    setuptools-scm
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    xcffib
     (cairocffi.override { withXcffib = true; })
-    python-dateutil
-    dbus-python
     dbus-next
+    dbus-python
+    iwlib
     mpd2
     psutil
     pulsectl-asyncio
-    pyxdg
     pygobject3
+    python-dateutil
     pywayland
     pywlroots
+    pyxdg
+    xcffib
     xkbcommon
   ];
 
   buildInputs = [
     libinput
+    libxkbcommon
     wayland
     wlroots
-    libxkbcommon
     xcbutilwm
   ];
 
