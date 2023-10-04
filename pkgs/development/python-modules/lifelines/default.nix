@@ -1,4 +1,5 @@
 { lib
+, setuptools
 , autograd
 , autograd-gamma
 , buildPythonPackage
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed or 'pkg_resources'
     autograd
     autograd-gamma
     formulaic
