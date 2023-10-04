@@ -5,14 +5,14 @@
 , libvterm-neovim
 }:
 
-stdenv.mkDerivation rec {
-  pname = "a4term";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "a4";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "rpmohn";
     repo = "a4";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AX5psz9+bLdFFeDR55TIrAWDAkhDygw6289OgIfOJTg=";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     libvterm-neovim
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "A dynamic terminal window manager";
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "a4";
   };
-}
+})

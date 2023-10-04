@@ -55,6 +55,7 @@ mapAliases ({
 
   ### A ###
 
+  a4term = a4; # Added 2023-10-06
   airfield = throw "airfield has been removed due to being unmaintained"; # Added 2023-05-19
   alertmanager-bot = throw "alertmanager-bot is broken and has been archived by upstream" ; # Added 2023-07-28
   alsaLib = alsa-lib; # Added 2021-06-09
