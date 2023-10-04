@@ -45,6 +45,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     limits
     redis
+    starlette
   ];
 
   nativeCheckInputs = [
@@ -52,7 +53,6 @@ buildPythonPackage rec {
     hiro
     mock
     pytestCheckHook
-    starlette
   ];
 
   disabledTests = [
