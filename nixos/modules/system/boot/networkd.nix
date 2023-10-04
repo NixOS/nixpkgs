@@ -2858,6 +2858,17 @@ let
     })
   ];
 
+  stage1Options = {
+    options.boot.initrd.systemd.network.networks = mkOption {
+      type = with types; attrsOf (submodule {
+        # Default in initrd is dhcp-on-stop, which is correct if flushBeforeStage2 = false
+        config = mkIf config.boot.initrd.network.flushBeforeStage2 {
+          networkConfig.KeepConfiguration = mkDefault false;
+        };
+      });
+    };
+  };
+
   stage1Config = let
     cfg = config.boot.initrd.systemd.network;
   in mkMerge [
@@ -2921,45 +2932,14 @@ let
       ];
       kernelModules = [ "af_packet" ];
 
-      systemd.services.nixos-flush-networkd = mkIf config.boot.initrd.network.flushBeforeStage2 {
-        description = "Flush Network Configuration";
-        wantedBy = ["initrd.target"];
-        after = ["systemd-networkd.service" "dbus.socket" "dbus.service"];
-        before = ["shutdown.target" "initrd-switch-root.target"];
-        conflicts = ["shutdown.target" "initrd-switch-root.target"];
-        unitConfig.DefaultDependencies = false;
-        serviceConfig = {
-          # This service does nothing when starting, but brings down
-          # interfaces when switching root. This is the easiest way to
-          # ensure proper ordering while stopping. See systemd.unit(5)
-          # section on Before= and After=. The important part is that
-          # we are stopped before units we need, like dbus.service,
-          # and that we are stopped before starting units like
-          # initrd-switch-root.target
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "/bin/true";
-        };
-        # systemd-networkd doesn't bring down interfaces on its own
-        # when it exits (see: systemd-networkd(8)), so we have to do
-        # it ourselves. The networkctl command doesn't have a way to
-        # bring all interfaces down, so we have to iterate over the
-        # list and filter out unmanaged interfaces to bring them down
-        # individually.
-        preStop = ''
-          networkctl list --full --no-legend | while read _idx link _type _operational setup _; do
-            [ "$setup" = unmanaged ] && continue
-            networkctl down "$link"
-          done
-        '';
-      };
-
     })
   ];
 
 in
 
 {
+  imports = [ stage1Options ];
+
   options = {
     systemd.network = commonOptions true;
     boot.initrd.systemd.network = commonOptions "shallow";
