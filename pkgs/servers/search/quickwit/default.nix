@@ -9,7 +9,7 @@
 
 let
   pname = "quickwit";
-  version = "0.6.3";
+  version = "0.6.4";
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "quickwit-oss";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-u8t6QIoislQUQO/xMKfNx/vVTgeEoh8ZIhJ+RvD3YCw=";
+    hash = "sha256-stlm3oDMQVoMza3s4JApynXbzhrarfXw3uAxGMZQJqs=";
   };
 
   postPatch = ''
