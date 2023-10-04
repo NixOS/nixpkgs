@@ -24,7 +24,7 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_1_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_17_0;
+    process = self.process_1_6_18_0;
   }));
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
@@ -50,7 +50,7 @@ self: super: {
           # cabal-install, but we need to recompile process even if the correct
           # version is available to prevent inconsistent dependencies:
           # process depends on directory.
-          process = cself.process_1_6_17_0;
+          process = cself.process_1_6_18_0;
 
           # hspec < 2.10 depends on ghc (the library) directly which in turn
           # depends on directory, causing a dependency conflict which is practically
