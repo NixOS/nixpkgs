@@ -13,7 +13,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pyenchant pygobject3 gtk3 ];
 
   doCheck = false; # there are no tests
-  pythonImportsCheck = [ "gtkspellcheck" ];
+  pythonImportsExtrasCheck = [ "gtkspellcheck" ]; # requires gtk namespace
 
   meta = with lib; {
     homepage = "https://github.com/koehlma/pygtkspellcheck";
