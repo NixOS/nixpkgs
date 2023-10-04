@@ -26,6 +26,23 @@ composerInstallConfigureHook() {
         exit 1
     fi
 
+    echo "Validating consistency between composer.lock and ${composerRepository}/composer.lock"
+    if ! @diff@ composer.lock "${composerRepository}/composer.lock"; then
+        echo
+        echo "ERROR: vendorHash is out of date"
+        echo
+        echo "composer.lock is not the same in $composerRepository"
+        echo
+        echo "To fix the issue:"
+        echo '1. Set vendorHash to an empty string: `vendorHash = "";`'
+        echo '2. Build the derivation and wait for it to fail with a hash mismatch'
+        echo '3. Copy the "got: sha256-..." value back into the vendorHash field'
+        echo '   You should have: vendorHash = "sha256-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX=";'
+        echo
+
+        exit 1
+    fi
+
     chmod +w composer.json composer.lock
 
     echo "Finished composerInstallConfigureHook"
