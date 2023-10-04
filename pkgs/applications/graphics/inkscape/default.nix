@@ -10,6 +10,7 @@
 , ghostscript
 , glib
 , glibmm
+, gobject-introspection
 , gsl
 , gspell
 , gtk-mac-integration
@@ -47,6 +48,7 @@ let
       appdirs
       beautifulsoup4
       cachecontrol
+      filelock
       numpy
       lxml
       packaging
@@ -104,6 +106,7 @@ stdenv.mkDerivation rec {
     glib # for setup hook
     gdk-pixbuf # for setup hook
     wrapGAppsHook
+    gobject-introspection
   ] ++ (with perlPackages; [
     perl
     XMLParser
