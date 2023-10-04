@@ -1,7 +1,6 @@
 { lib, stdenv, fetchurl, libX11, libXext, libXt, imake, gccmakedep}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xzoom";
   version = "0.3";
   patch = "24";
