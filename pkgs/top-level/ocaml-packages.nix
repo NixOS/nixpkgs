@@ -1880,6 +1880,8 @@ let
 
     zed = callPackage ../development/ocaml-modules/zed { };
 
+    zelus = callPackage ../development/ocaml-modules/zelus { };
+
     zmq = callPackage ../development/ocaml-modules/zmq { };
 
     zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
