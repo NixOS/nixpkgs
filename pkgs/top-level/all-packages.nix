@@ -13756,7 +13756,10 @@ with pkgs;
   teleport_12 = callPackage ../servers/teleport/12 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   };
-  teleport = teleport_12;
+  teleport_13 = callPackage ../servers/teleport/13 {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+  };
+  teleport = teleport_13;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
