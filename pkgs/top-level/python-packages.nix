@@ -1817,7 +1817,9 @@ self: super: with self; {
 
   celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
 
-  celery-singleton = callPackage ../development/python-modules/celery-singleton { };
+  celery-singleton = callPackage ../development/python-modules/celery-singleton {
+    redisServer = pkgs.redis;
+  };
 
   celery-types = callPackage ../development/python-modules/celery-types { };
 
