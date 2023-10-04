@@ -12,13 +12,13 @@
 , gzip
 , gawk
 , heirloom
-, binutils-mes
+, binutils
 , linux-headers
 }:
 let
   pname = "glibc";
 
-  buildGlibc = { version, src, patches, configureFlags, gcc, binutils, CC, CPP }:
+  buildGlibc = { version, src, patches, configureFlags, gcc, CC, CPP }:
     bash.runCommand "${pname}-${version}" {
       inherit pname version;
 
@@ -114,7 +114,6 @@ in
     ];
 
     gcc = gcc2-mes;
-    binutils = binutils-mes;
     CC = "gcc -D MES_BOOTSTRAP=1 -D BOOTSTRAP_GLIBC=1 -L $(pwd)";
     CPP = "gcc -E -D MES_BOOTSTRAP=1 -D BOOTSTRAP_GLIBC=1";
   };
