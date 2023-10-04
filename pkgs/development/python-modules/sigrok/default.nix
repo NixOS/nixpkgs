@@ -4,6 +4,7 @@
 , toPythonModule
 , python
 , autoreconfHook
+, wrapPython
 , pythonImportsCheckHook
 , pythonCatchConflictsHook
 , swig
@@ -31,6 +32,7 @@ toPythonModule ((libsigrok.override {
     swig
     numpy
   ] ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    wrapPython
     pythonImportsCheckHook
     pythonCatchConflictsHook
   ];
@@ -51,7 +53,7 @@ toPythonModule ((libsigrok.override {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
   '';
 
-  pythonImportsCheck = [ "sigrok" "sigrok.core" ];
+  pythonImportsExtrasCheck = [ "sigrok" "sigrok.core" ];
 
   meta = orig.meta // {
     description = "Python bindings for libsigrok";
