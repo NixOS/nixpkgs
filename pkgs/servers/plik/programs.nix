@@ -1,13 +1,13 @@
 { lib, buildGoModule, fetchFromGitHub, fetchurl, makeWrapper, runCommand }:
 
 let
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "root-gg";
     repo = "plik";
     rev = version;
-    hash = "sha256-Agkwo1oat1LDP6EJBVOoq+d+p80BGOLS4K7WTue5Nbg=";
+    hash = "sha256-WCtfkzlZnyzZDwNDBrW06bUbLYTL2C704Y7aXbiVi5c=";
   };
 
   vendorHash = null;
