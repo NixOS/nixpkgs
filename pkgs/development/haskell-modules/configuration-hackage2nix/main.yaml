@@ -662,6 +662,7 @@ unsupported-platforms:
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
+  reflex-dom:                                   [ platforms.darwin ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
@@ -687,7 +688,7 @@ unsupported-platforms:
   webkit2gtk3-javascriptcore:                   [ platforms.darwin ]
   wiringPi:                                     [ aarch64-darwin ]
   xattr:                                        [ platforms.darwin ]
-  xgboost-haskell:                              [ aarch64-linux, armv7l-linux ]
+  xgboost-haskell:                              [ aarch64-linux, armv7l-linux, platforms.darwin ]
   xmobar:                                       [ platforms.darwin ]
   xmonad-extras:                                [ platforms.darwin ]
   xmonad-volume:                                [ platforms.darwin ]
