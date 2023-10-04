@@ -34,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    setuptools # needed for 'pkg_resources'
     dateparser
     pdfminer-six
     pillow
