@@ -98,6 +98,7 @@ in
 
       services.minio = {
         description = "Minio Object Storage";
+        wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
