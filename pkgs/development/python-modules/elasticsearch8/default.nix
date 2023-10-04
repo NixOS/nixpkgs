@@ -20,11 +20,8 @@ buildPythonPackage rec {
     hash = "sha256-Wb2l0FL7rm9Ck7HSWs9PmPyeShn9Hd9fCKnh/jWVy3o=";
   };
 
-  propagatedNativeBuildInputs = [
-    elastic-transport
-  ];
-
   propagatedBuildInputs = [
+    elastic-transport
     requests
   ];
 
