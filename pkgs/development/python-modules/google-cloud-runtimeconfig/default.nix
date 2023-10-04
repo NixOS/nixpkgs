@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , google-api-core
 , google-cloud-core
 , mock
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    setuptools # needed for 'pkg_resources'
     google-api-core
     google-cloud-core
   ];
