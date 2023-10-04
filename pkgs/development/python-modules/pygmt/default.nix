@@ -61,7 +61,8 @@ buildPythonPackage rec {
     export HOME=$TMP
   '';
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # requires $HOME
     "pygmt"
   ];
 
