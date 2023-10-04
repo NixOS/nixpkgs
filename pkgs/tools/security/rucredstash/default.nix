@@ -1,35 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, openssl, stdenv, Security }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rucredstash";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "psibi";
     repo = "rucredstash";
     rev = "v${version}";
-    sha256 = "1jwsj2y890nxpgmlfbr9hms2raspp5h89ykzsh014mf7lb3yxzwg";
+    hash = "sha256-trupBiinULzD8TAy3eh1MYXhQilO08xu2a4yN7wwhwk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-TYobVjjzrK3gprZcYyY98EvdASkq4urB+WiLlbJbwmk=";
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   # Disable tests since it requires network access and relies on the
   # presence of certain AWS infrastructure
   doCheck = false;
 
-  # update Cargo.lock to work with openssl 3
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
-
   meta = with lib; {
-    description = "Rust port for credstash. Manages credentials securely in AWS cloud";
+    description = "Utility for managing credentials securely in AWS cloud";
     homepage = "https://github.com/psibi/rucredstash";
     license = licenses.mit;
     maintainers = with maintainers; [ psibi ];

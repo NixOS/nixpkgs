@@ -17392,10 +17392,6 @@ with pkgs;
 
   critcmp = callPackage ../development/tools/rust/critcmp { };
 
-  convco = callPackage ../development/tools/convco {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   devspace = callPackage ../development/tools/misc/devspace { };
 
   djlint = callPackage ../development/tools/djlint { };
@@ -32933,8 +32929,6 @@ with pkgs;
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   ical2orgpy = callPackage ../tools/misc/ical2orgpy { };
-
-  icewm = callPackage ../applications/window-managers/icewm { };
 
   icon-library = callPackage ../applications/graphics/icon-library { };
 

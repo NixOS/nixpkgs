@@ -4,15 +4,14 @@
 , fetchurl
 , bootBash
 , gnumake
+, gnupatch
 , gnused
 , gnugrep
 , gnutar
 , gawk
 , gzip
-, gcc
-, glibc
-, binutils
-, linux-headers
+, diffutils
+, tinycc
 , derivationWithMeta
 , bash
 , coreutils
@@ -25,19 +24,26 @@ let
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
     sha256 = "132qng0jy600mv1fs95ylnlisx2wavkkgpb19c6kmz7lnmjhjwhk";
   };
+
+  patches = [
+    # flush output for generated code
+    ./mksignames-flush.patch
+  ];
 in
 bootBash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    gcc
-    binutils
+    coreutils
+    tinycc.compiler
     gnumake
+    gnupatch
     gnused
     gnugrep
     gnutar
     gawk
     gzip
+    diffutils
   ];
 
   passthru.runCommand = name: env: buildCommand:
@@ -78,22 +84,23 @@ bootBash.runCommand "${pname}-${version}" {
   tar xzf ${src}
   cd bash-${version}
 
+  # Patch
+  ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
+
   # Configure
-  export CC="gcc -I${glibc}/include -I${linux-headers}/include"
-  export LIBRARY_PATH="${glibc}/lib"
-  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
-  export ac_cv_func_dlopen=no
+  export CC="tcc -B ${tinycc.libs}/lib"
+  export AR="tcc -ar"
+  export LD=tcc
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
-    --disable-nls \
-    --disable-net-redirections
+    --without-bash-malloc
 
   # Build
-  make SHELL=bash
+  make -j $NIX_BUILD_CORES SHELL=bash
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
   ln -s bash $out/bin/sh
 ''

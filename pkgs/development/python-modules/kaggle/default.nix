@@ -9,6 +9,7 @@
 , requests
 , tqdm
 , urllib3
+, bleach
 }:
 
 buildPythonPackage rec {
@@ -20,14 +21,6 @@ buildPythonPackage rec {
     sha256 = "sha256-prNUL1kM80GlrUQdWuAhvpO9ZEQclsdYsVSQNJWjpgA=";
   };
 
-  # The version bounds in the setup.py file are unnecessarily restrictive.
-  # They have both python-slugify and slugify, don't know why
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace 'urllib3 >= 1.21.1, < 1.25' 'urllib3' \
-      --replace " 'slugify'," " "
-    '';
-
   propagatedBuildInputs = [
     bleach
     certifi
@@ -37,6 +30,7 @@ buildPythonPackage rec {
     six
     tqdm
     urllib3
+    bleach
   ];
 
   # Tests try to access the network.
@@ -52,6 +46,6 @@ buildPythonPackage rec {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mbalatsko ];
   };
 }
