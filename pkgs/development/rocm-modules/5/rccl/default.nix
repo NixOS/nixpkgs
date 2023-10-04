@@ -5,10 +5,13 @@
 , cmake
 , rocm-cmake
 , rocm-smi
-, hip
+, clr
+, perl
+, hipify
 , gtest
 , chrpath
 , buildTests ? false
+, gpuTargets ? [ ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
+    perl
+    hipify
   ];
 
   buildInputs = [
@@ -42,22 +47,25 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
+    "-DBUILD_BFD=OFF" # Can't get it to detect bfd.h
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DBUILD_TESTS=ON"
   ];
 
-  # Replace the manually set parallel jobs to NIX_BUILD_CORES
   postPatch = ''
+    patchShebangs src tools
+
+    # Really strange behavior, `#!/usr/bin/env perl` should work...
     substituteInPlace CMakeLists.txt \
-      --replace "8 P" "$NIX_BUILD_CORES P" \
-      --replace "8)" "$NIX_BUILD_CORES)"
+      --replace "\''$ \''${hipify-perl_executable}" "${perl}/bin/perl ${hipify}/bin/hipify-perl"
   '';
 
   postInstall = lib.optionalString buildTests ''

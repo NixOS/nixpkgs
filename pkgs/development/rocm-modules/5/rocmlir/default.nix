@@ -3,28 +3,35 @@
 , fetchFromGitHub
 , rocmUpdateScript
 , cmake
+, rocm-cmake
 , ninja
-, hip
-, rocminfo
+, clr
 , git
 , libxml2
 , libedit
+, zstd
 , zlib
 , ncurses
-, python3
+, python3Packages
 , buildRockCompiler ? false
+, buildTests ? false # `argument of type 'NoneType' is not iterable`
 }:
 
 # Theoretically, we could have our MLIR have an output
 # with the source and built objects so that we can just
 # use it as the external LLVM repo for this
 let
+  suffix =
+    if buildRockCompiler
+    then "-rock"
+    else "";
+
   llvmNativeTarget =
     if stdenv.isx86_64 then "X86"
     else if stdenv.isAarch64 then "AArch64"
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
-  pname = "rocmlir";
+  pname = "rocmlir${suffix}";
   version = "5.7.0";
 
   outputs = [
@@ -42,33 +49,48 @@ in stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    rocm-cmake
     ninja
-  ] ++ lib.optionals (!buildRockCompiler) [
-    hip
+    clr
+    python3Packages.python
+    python3Packages.tomli
   ];
 
   buildInputs = [
     git
     libxml2
     libedit
-    python3
   ];
 
   propagatedBuildInputs = [
+    zstd
     zlib
     ncurses
   ];
 
   cmakeFlags = [
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
+    "-DLLVM_ENABLE_ZSTD=ON"
     "-DLLVM_ENABLE_ZLIB=ON"
     "-DLLVM_ENABLE_TERMINFO=ON"
+    "-DROCM_PATH=${clr}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ] ++ lib.optionals buildRockCompiler [
     "-DBUILD_FAT_LIBROCKCOMPILER=ON"
   ] ++ lib.optionals (!buildRockCompiler) [
-    "-DROCM_PATH=${rocminfo}"
     "-DROCM_TEST_CHIPSET=gfx000"
   ];
+
+  postPatch = ''
+    patchShebangs mlir
+
+    substituteInPlace mlir/utils/performance/common/CMakeLists.txt \
+      --replace "/opt/rocm" "${clr}"
+  '';
 
   dontBuild = true;
   doCheck = true;
@@ -76,10 +98,12 @@ in stdenv.mkDerivation (finalAttrs: {
   # Certain libs aren't being generated, try enabling tests next update
   checkTarget = if buildRockCompiler
                 then "librockCompiler"
-                else "check-mlir-miopen-build-only";
+                else if buildTests
+                then "check-rocmlir"
+                else "check-rocmlir-build-only";
 
   postInstall = let
-    libPath = lib.makeLibraryPath [ zlib ncurses hip stdenv.cc.cc ];
+    libPath = lib.makeLibraryPath [ zstd zlib ncurses clr stdenv.cc.cc ];
   in lib.optionals (!buildRockCompiler) ''
     mkdir -p $external/lib
     cp -a external/llvm-project/llvm/lib/{*.a*,*.so*} $external/lib

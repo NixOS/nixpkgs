@@ -4,11 +4,12 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, clr
 , gtest
 , gbenchmark
 , buildTests ? false
 , buildBenchmarks ? false
+, gpuTargets ? [ ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
   ];
 
   buildInputs = lib.optionals buildTests [
@@ -46,12 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DHIP_ROOT_DIR=${hip}"
+    "-DHIP_ROOT_DIR=${clr}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DBUILD_TEST=ON"
   ] ++ lib.optionals buildBenchmarks [

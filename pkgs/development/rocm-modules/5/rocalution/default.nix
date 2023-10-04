@@ -8,7 +8,7 @@
 , rocsparse
 , rocprim
 , rocrand
-, hip
+, clr
 , git
 , openmp
 , openmpi
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
     git
   ];
 
@@ -60,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DROCM_PATH=${hip}"
-    "-DHIP_ROOT_DIR=${hip}"
+    "-DROCM_PATH=${clr}"
+    "-DHIP_ROOT_DIR=${clr}"
     "-DSUPPORT_HIP=ON"
     "-DSUPPORT_OMP=ON"
     "-DSUPPORT_MPI=ON"
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm $sample/bin/rocalution-bench || true
 
     patchelf --set-rpath \
-      $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ hip ])} \
+      $out/lib:${lib.makeLibraryPath (finalAttrs.buildInputs ++ [ clr ])} \
       $sample/bin/*
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
     rmdir $out/bin

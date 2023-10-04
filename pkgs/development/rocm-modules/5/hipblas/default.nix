@@ -4,7 +4,7 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, clr
 , gfortran
 , rocblas
 , rocsolver
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
     gfortran
   ];
 
@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    # Fixed in develop branch by using C++17 and related refactor
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || buildTests || buildBenchmarks || buildSamples;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

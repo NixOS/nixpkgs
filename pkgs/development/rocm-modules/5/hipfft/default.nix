@@ -4,7 +4,7 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, clr
 , git
 , rocfft
 , gtest
@@ -15,6 +15,7 @@
 , buildTests ? false
 , buildBenchmarks ? false
 , buildSamples ? false
+, gpuTargets ? [ ]
 }:
 
 # Can also use cuFFT
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    hip
+    clr
     git
     cmake
     rocm-cmake
@@ -60,14 +61,16 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DCMAKE_MODULE_PATH=${hip}/lib/cmake/hip"
-    "-DHIP_ROOT_DIR=${hip}"
-    "-DHIP_PATH=${hip}"
+    "-DCMAKE_MODULE_PATH=${clr}/lib/cmake/hip"
+    "-DHIP_ROOT_DIR=${clr}"
+    "-DHIP_PATH=${clr}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DBUILD_CLIENTS_TESTS=ON"
   ] ++ lib.optionals buildBenchmarks [

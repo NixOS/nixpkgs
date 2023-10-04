@@ -4,7 +4,8 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, rocm-opencl-runtime
+, clr
+, clblast
 , texlive
 , doxygen
 , sphinx
@@ -53,11 +54,10 @@ in stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
+    clr
   ];
 
-  buildInputs = [
-    rocm-opencl-runtime
-  ] ++ lib.optionals buildDocs [
+  buildInputs = lib.optionals buildDocs [
     latex
     doxygen
     sphinx
@@ -65,6 +65,9 @@ in stdenv.mkDerivation (finalAttrs: {
     python3Packages.breathe
   ] ++ lib.optionals buildTests [
     openblas
+  ] ++ lib.optionals buildBenchmarks [
+    clblast
+    python3Packages.openai-triton
   ];
 
   cmakeFlags = [
@@ -77,10 +80,8 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DOPENBLAS=ON"
   ] ++ lib.optionals buildBenchmarks [
     "-DAPI_BENCH_MIOGEMM=ON"
-    # Needs https://github.com/CNugteren/CLBlast
-    # "-DAPI_BENCH_CLBLAST=ON"
-    # Needs https://github.com/openai/triton
-    # "-DAPI_BENCH_ISAAC=ON"
+    "-DAPI_BENCH_CLBLAST=ON"
+    "-DAPI_BENCH_ISAAC=ON"
   ];
 
   # Unfortunately, it seems like we have to call make on these manually
@@ -118,6 +119,8 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
+    # They are not making tags or releases, this may break other derivations in the future
+    # Use version major instead of minor, 6.0 will HOPEFULLY have a release or tag
+    broken = versions.major finalAttrs.version != versions.major stdenv.cc.version;
   };
 })

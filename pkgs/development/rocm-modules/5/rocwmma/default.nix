@@ -4,44 +4,24 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, rocm-smi
+, clr
 , openmp
 , gtest
 , rocblas
-, texlive
-, doxygen
-, sphinx
-, python3Packages
-, buildDocs ? true
-, buildTests ? false
+, buildTests ? false # Will likely fail building because wavefront shifts are not supported for certain archs
 , buildExtendedTests ? false
 , buildBenchmarks ? false
 , buildSamples ? false
 , gpuTargets ? [ ] # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
 }:
 
-let
-  latex = lib.optionalAttrs buildDocs texlive.combine {
-    inherit (texlive) scheme-small
-    latexmk
-    tex-gyre
-    fncychap
-    wrapfig
-    capt-of
-    framed
-    needspace
-    tabulary
-    varwidth
-    titlesec;
-  };
-in stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
   version = "5.7.0";
 
   outputs = [
     "out"
-  ] ++ lib.optionals buildDocs [
-    "doc"
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
     "test"
   ] ++ lib.optionals buildBenchmarks [
@@ -64,28 +44,21 @@ in stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
   ];
 
   buildInputs = [
     openmp
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
+    rocm-smi
     gtest
     rocblas
-  ] ++ lib.optionals buildDocs [
-    latex
-    doxygen
-    sphinx
-    python3Packages.sphinx-rtd-theme
-    python3Packages.breathe
   ];
 
   cmakeFlags = [
     "-DCMAKE_CXX_COMPILER=hipcc"
     "-DROCWMMA_BUILD_TESTS=${if buildTests || buildBenchmarks then "ON" else "OFF"}"
-    "-DROCWMMA_BUILD_VALIDATION_TESTS=ON"
     "-DROCWMMA_BUILD_SAMPLES=${if buildSamples then "ON" else "OFF"}"
-    "-DROCWMMA_VALIDATE_WITH_ROCBLAS=ON"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -100,21 +73,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DROCWMMA_BENCHMARK_WITH_ROCBLAS=ON"
   ];
 
-  postPatch = lib.optionalString buildDocs ''
-    patchShebangs docs/*.sh
-  '';
-
-  # Unfortunately, it seems like we have to call make on this manually
-  # -DROCWMMA_BUILD_DOCS=ON is invalid, despite being on the README
-  postBuild = lib.optionalString buildDocs ''
-    export HOME=$(mktemp -d)
-    ../docs/run_doc.sh
-  '';
-
-  postInstall = lib.optionalString buildDocs ''
-    mv ../docs/source/_build/html $out/share/doc/rocwmma
-    mv ../docs/source/_build/latex/rocWMMA.pdf $out/share/doc/rocwmma
-  '' + lib.optionalString (buildTests || buildBenchmarks) ''
+  postInstall = lib.optionalString (buildTests || buildBenchmarks) ''
     mkdir -p $test/bin
     mv $out/bin/{*_test,*-validate} $test/bin
   '' + lib.optionalString buildBenchmarks ''

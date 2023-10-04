@@ -5,11 +5,12 @@
 , pkg-config
 , cmake
 , rocm-cmake
-, hip
+, clr
 , clang-tools-extra
 , openmp
 , rocblas
 , rocmlir
+, composable_kernel
 , miopengemm
 , miopen
 , protobuf
@@ -19,6 +20,8 @@
 , sqlite
 , oneDNN_2
 , blaze
+, cppcheck
+, rocm-device-libs
 , texlive
 , doxygen
 , sphinx
@@ -67,7 +70,7 @@ in stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
     rocm-cmake
-    hip
+    clr
     clang-tools-extra
     python3Packages.python
   ] ++ lib.optionals buildDocs [
@@ -84,6 +87,7 @@ in stdenv.mkDerivation (finalAttrs: {
     openmp
     rocblas
     rocmlir
+    composable_kernel
     miopengemm
     miopen
     protobuf
@@ -93,18 +97,16 @@ in stdenv.mkDerivation (finalAttrs: {
     sqlite
     oneDNN_2
     blaze
+    cppcheck
     python3Packages.pybind11
     python3Packages.onnx
   ];
 
   cmakeFlags = [
-    "-DCMAKE_POLICY_DEFAULT_CMP0079=NEW"
-    # "-DCMAKE_C_COMPILER=hipcc"
-    # "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DMIGRAPHX_ENABLE_GPU=OFF" # GPU compilation is broken, don't know why
+    "-DMIGRAPHX_ENABLE_GPU=ON"
     "-DMIGRAPHX_ENABLE_CPU=ON"
     "-DMIGRAPHX_ENABLE_FPGA=ON"
-    "-DMIGRAPHX_ENABLE_MLIR=ON"
+    "-DMIGRAPHX_ENABLE_MLIR=OFF" # LLVM or rocMLIR mismatch?
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -113,10 +115,20 @@ in stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # We need to not use hipcc and define the CXXFLAGS manually due to `undefined hidden symbol: tensorflow:: ...`
+    export CXXFLAGS+="--rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
     patchShebangs tools
 
+    # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
+    substituteInPlace CMakeLists.txt \
+      --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
+
+    # JIT library was removed from composable_kernel...
+    # https://github.com/ROCmSoftwarePlatform/composable_kernel/issues/782
     substituteInPlace src/targets/gpu/CMakeLists.txt \
-      --replace "CMAKE_CXX_COMPILER MATCHES \".*clang\\\+\\\+\$\"" "TRUE"
+      --replace " COMPONENTS jit_library" "" \
+      --replace " composable_kernel::jit_library" "" \
+      --replace "if(WIN32)" "if(TRUE)"
   '' + lib.optionalString (!buildDocs) ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(doc)" ""

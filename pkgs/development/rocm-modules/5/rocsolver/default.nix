@@ -5,7 +5,8 @@
 , cmake
 , rocm-cmake
 , rocblas
-, hip
+, rocsparse
+, clr
 , fmt
 , gtest
 , gfortran
@@ -37,13 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
     gfortran
   ];
 
   buildInputs = [
     rocblas
+    rocsparse
     fmt
   ] ++ lib.optionals buildTests [
     gtest
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_CXX_COMPILER=hipcc"
+    "-DCMAKE_CXX_FLAGS=-Wno-switch" # Way too many warnings
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"

@@ -5,13 +5,14 @@
 , cmake
 , rocm-cmake
 , rocsparse
-, hip
+, clr
 , gfortran
 , git
 , gtest
 , openmp
 , buildTests ? false
 , buildSamples ? false
+, gpuTargets ? [ ]
 }:
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE
@@ -37,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
     gfortran
   ];
 
@@ -59,16 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DBUILD_CLIENTS_TESTS=ON"
   ];
 
   # We have to manually generate the matrices
   # CMAKE_MATRICES_DIR seems to be reset in clients/tests/CMakeLists.txt
-  postPatch = ''
-    substituteInPlace clients/common/utility.cpp \
-      --replace "#ifdef __cpp_lib_filesystem" " #if true"
-  '' + lib.optionalString buildTests ''
+  postPatch = lib.optionalString buildTests ''
     mkdir -p matrices
 
     ln -s ${rocsparse.passthru.matrices.matrix-01}/*.mtx matrices
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $sample/bin
     mv clients/staging/example_* $sample/bin
     patchelf --set-rpath $out/lib:${lib.makeLibraryPath (
-      finalAttrs.buildInputs ++ [ hip gfortran.cc ])} $sample/bin/example_*
+      finalAttrs.buildInputs ++ [ clr gfortran.cc ])} $sample/bin/example_*
   '';
 
   passthru.updateScript = rocmUpdateScript {

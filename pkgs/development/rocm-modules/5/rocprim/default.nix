@@ -4,11 +4,12 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, clr
 , gtest
 , gbenchmark
 , buildTests ? false
 , buildBenchmarks ? false
+, gpuTargets ? [ ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
   ];
 
   buildInputs = lib.optionals buildTests [
@@ -49,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals buildTests [
     "-DBUILD_TEST=ON"
   ] ++ lib.optionals buildBenchmarks [
@@ -58,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = lib.optionalString buildTests ''
     mkdir -p $test/bin
     mv $out/bin/test_* $test/bin
+    mv $out/bin/rocprim $test/bin
   '' + lib.optionalString buildBenchmarks ''
     mkdir -p $benchmark/bin
     mv $out/bin/benchmark_* $benchmark/bin

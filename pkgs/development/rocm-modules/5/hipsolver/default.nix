@@ -4,7 +4,7 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, clr
 , gfortran
 , rocblas
 , rocsolver
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
     gfortran
   ];
 

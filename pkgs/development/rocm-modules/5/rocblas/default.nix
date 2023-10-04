@@ -4,7 +4,7 @@
 , rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, clr
 , python3
 , tensile
 , msgpack
@@ -18,13 +18,14 @@
 , buildTests ? false
 , buildBenchmarks ? false
 , tensileLogic ? "asm_full"
-, tensileCOVersion ? "V3"
+, tensileCOVersion ? "default"
 , tensileSepArch ? true
 , tensileLazyLib ? true
 , tensileLibFormat ? "msgpack"
 , gpuTargets ? [ "all" ]
 }:
 
+# rocBLAS is 3.7GB... I'll have to figure out hydra in another PR
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocblas";
   version = "5.7.0";
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
   ];
 
   buildInputs = [
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     msgpack
     libxml2
     python3Packages.msgpack
+    python3Packages.joblib
   ] ++ lib.optionals buildTests [
     gtest
   ] ++ lib.optionals (buildTests || buildBenchmarks) [

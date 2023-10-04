@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , rocmUpdateScript
 , cmake
-, hip
+, clr
 , python3
 , rocm-cmake
 , sqlite
@@ -14,73 +14,9 @@
 , gtest
 , openmp
 , rocrand
-# NOTE: Update the default GPU targets on every update
-, gpuTargets ? [
-  "gfx803"
-  "gfx900"
-  "gfx906"
-  "gfx908"
-  "gfx90a"
-  "gfx1030"
-  "gfx1100"
-  "gfx1102"
-]
+, gpuTargets ? [ ]
 }:
 
-let
-  # To avoid output limit exceeded errors in hydra, we build kernel
-  # device libs and the kernel RTC cache database in separate derivations
-  kernelDeviceLibs = map
-    (target:
-      (rocfft.overrideAttrs (prevAttrs: {
-        pname = "rocfft-device-${target}";
-
-        patches = prevAttrs.patches ++ [
-          # Add back install rule for device library
-          # This workaround is needed because rocm_install_targets
-          # doesn't support an EXCLUDE_FROM_ALL option
-          ./device-install.patch
-        ];
-
-        buildFlags = [ "rocfft-device-${target}" ];
-
-        installPhase = ''
-          runHook preInstall
-          cmake --install . --component device
-          runHook postInstall
-        '';
-
-        requiredSystemFeatures = [ "big-parallel" ];
-      })).override {
-        gpuTargets = [ target ];
-      }
-    )
-    gpuTargets;
-
-  # TODO: Figure out how to also split this by GPU target
-  #
-  # It'll be bit more complicated than what we're doing for the kernel
-  # device libs, because the kernel cache needs to be compiled into
-  # one sqlite database (whereas the device libs can be linked into
-  # rocfft as separate libraries for each GPU target).
-  #
-  # It's not clear why this needs to even be a db in the first place.
-  # It would simplify things A LOT if we could just store these
-  # pre-compiled kernels as files (but that'd need a lot of patching).
-  kernelRtcCache = rocfft.overrideAttrs (_: {
-    pname = "rocfft-kernel-cache";
-
-    buildFlags = [ "rocfft_kernel_cache_target" ];
-
-    installPhase = ''
-      runHook preInstall
-      cmake --install . --component kernel_cache
-      runHook postInstall
-    '';
-
-    requiredSystemFeatures = [ "big-parallel" ];
-  });
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
   version = "5.7.0";
@@ -92,39 +28,27 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-GZSi03geTT+NUztBWhGYyghLqJGsFjUQzVAKQ7d03uA=";
   };
 
-  patches = [
-    # Exclude kernel compilation & installation from "all" target,
-    # and split device libraries by GPU target
-    ./split-kernel-compilation.patch
-  ];
-
   nativeBuildInputs = [
     cmake
-    hip
+    clr
     python3
     rocm-cmake
   ];
 
-  buildInputs = [
-    sqlite
-  ] ++ lib.optionals (finalAttrs.pname == "rocfft") kernelDeviceLibs;
+  buildInputs = [ sqlite ];
 
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
     "-DCMAKE_CXX_COMPILER=hipcc"
-    "-DUSE_HIP_CLANG=ON"
     "-DSQLITE_USE_SYSTEM_PACKAGE=ON"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
-
-  postInstall = lib.optionalString (finalAttrs.pname == "rocfft") ''
-    ln -s ${kernelRtcCache}/lib/rocfft_kernel_cache.db "$out/lib"
-  '';
 
   passthru = {
     test = stdenv.mkDerivation {
@@ -135,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       nativeBuildInputs = [
         cmake
-        hip
+        clr
         rocm-cmake
       ];
 
@@ -168,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       nativeBuildInputs = [
         cmake
-        hip
+        clr
         rocm-cmake
       ];
 
@@ -201,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       nativeBuildInputs = [
         cmake
-        hip
+        clr
         rocm-cmake
       ];
 
@@ -231,6 +155,8 @@ stdenv.mkDerivation (finalAttrs: {
       repo = finalAttrs.src.repo;
     };
   };
+
+  requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "FFT implementation for ROCm";

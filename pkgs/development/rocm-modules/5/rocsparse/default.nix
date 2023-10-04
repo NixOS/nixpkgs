@@ -6,7 +6,7 @@
 , cmake
 , rocm-cmake
 , rocprim
-, hip
+, clr
 , gfortran
 , git
 , gtest
@@ -14,6 +14,7 @@
 , python3Packages
 , buildTests ? false
 , buildBenchmarks ? false # Seems to depend on tests
+, gpuTargets ? [ ]
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
     gfortran
   ];
 
@@ -59,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ] ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ] ++ lib.optionals (buildTests || buildBenchmarks) [
     "-DBUILD_CLIENTS_TESTS=ON"
     "-DCMAKE_MATRICES_DIR=/build/source/matrices"
