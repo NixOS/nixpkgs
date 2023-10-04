@@ -1,33 +1,38 @@
 { lib
 , acl
-, autoreconfHook
+, bubblewrap
 , dbus
+, docbook_xml_dtd_412
+, docbook_xml_dtd_43
+, docbook_xsl
 , fetchFromGitHub
 , flatpak
 , fuse3
-, bubblewrap
-, systemdMinimal
+, gdk-pixbuf
 , geoclue2
 , glib
 , gsettings-desktop-schemas
 , json-glib
 , libportal
+, librsvg
 , libxml2
+, meson
+, ninja
 , nixosTests
 , pipewire
-, gdk-pixbuf
-, librsvg
-, python3
 , pkg-config
-, stdenv
+, python3
 , runCommand
+, stdenv
+, systemdMinimal
 , wrapGAppsHook
+, xmlto
 , enableGeoLocation ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.16.0";
+  version = "1.18.0";
 
   outputs = [ "out" "installedTests" ];
 
@@ -35,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    sha256 = "sha256-5VNauinTvZrSaQzyP/quL/3p2RPcTJUDLscEQMJpvYA=";
+    hash = "sha256-zp7HBqnjHVs7y6CI1LyL65/UIdxl8VgmP6DtscWYWWg=";
   };
 
   patches = [
@@ -49,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     libxml2
     pkg-config
     wrapGAppsHook
@@ -57,16 +63,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     acl
+    bubblewrap
     dbus
+    docbook_xml_dtd_412
+    docbook_xml_dtd_43
+    docbook_xsl
     flatpak
     fuse3
-    bubblewrap
-    systemdMinimal # libsystemd
     glib
     gsettings-desktop-schemas
     json-glib
     libportal
     pipewire
+    systemdMinimal # libsystemd
+    xmlto
 
     # For icon validator
     gdk-pixbuf
@@ -74,22 +84,30 @@ stdenv.mkDerivation (finalAttrs: {
 
     # For document-fuse installed test.
     (python3.withPackages (pp: with pp; [
+      dbus-python
+      docutils
       pygobject3
+      pytest
+      python-dbusmock
     ]))
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
   ];
 
-  configureFlags = [
-    "--enable-installed-tests"
+  mesonFlags = [
+    "--datadir=${placeholder "out"}/share"
+    "--libexecdir=${placeholder "out"}/libexec"
+    "--localedir=${placeholder "out"}/share/locale"
+    "--sysconfdir=${placeholder "out"}/etc"
+    (lib.mesonOption "installed-tests" "true")
   ] ++ lib.optionals (!enableGeoLocation) [
-    "--disable-geoclue"
+    (lib.mesonOption "geoclue" "false")
   ];
 
-  makeFlags = [
-    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal"
-    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/xdg-desktop-portal"
-  ];
+  postInstall = ''
+    moveToOutput "libexec/installed-tests" "$installedTests"
+    moveToOutput "share/installed-tests" "$installedTests"
+  '';
 
   passthru = {
     tests = {
