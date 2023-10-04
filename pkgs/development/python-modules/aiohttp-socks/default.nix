@@ -1,22 +1,43 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, aiohttp, python-socks, attrs }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, aiohttp
+, python-socks
+, attrs
+, pytestCheckHook
+, pytest-asyncio
+, trustme
+, flask
+, anyio
+, tiny-proxy
+}:
 
 buildPythonPackage rec {
   pname = "aiohttp-socks";
-  version = "0.8.1";
+  version = "0.8.4";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "aiohttp_socks";
-    hash = "sha256-duWEJDS5Ts3EWNRZ8MJcD7buMh3FRKA+bJiO3P7QWz0=";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "romis2012";
+    repo = "aiohttp-socks";
+    rev = "v${version}";
+    hash = "sha256-KQeZxwxvWvjS24DoS6G/AIZ9tCpZZtnpJ8adVB+TQpA=";
   };
 
-  propagatedBuildInputs = [ aiohttp attrs python-socks ];
+  propagatedBuildInputs = [ aiohttp python-socks ];
 
-  # Checks needs internet access
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    trustme
+    flask
+    anyio
+    tiny-proxy
+  ];
+
   pythonImportsCheck = [ "aiohttp_socks" ];
-
-  disabled = pythonOlder "3.5.3";
 
   meta = {
     description = "SOCKS proxy connector for aiohttp";
