@@ -54,11 +54,11 @@ buildPythonPackage rec {
     "test/test_submodule.py"
   ];
 
-  # Tests require certificates
+  # Tests and import check require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "pygit2"
   ];
 
