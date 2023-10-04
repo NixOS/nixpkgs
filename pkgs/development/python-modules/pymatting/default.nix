@@ -29,7 +29,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pythonImportsCheck = [ "pymatting" ];
+  pythonImportsExtrasCheck = [ "pymatting" ]; # AoT compilation in first import requires gcc
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -52,4 +52,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ blaggacao ];
   };
 }
-
