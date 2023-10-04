@@ -5,7 +5,6 @@
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
-, "@mermaid-js/mermaid-cli"
 , "@microsoft/rush"
 , "@shopify/cli"
 , "@tailwindcss/aspect-ratio"

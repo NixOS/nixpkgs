@@ -1,5 +1,10 @@
 # File set library
 
+This is the internal contributor documentation.
+The user documentation is [in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/unstable/#sec-fileset).
+
+## Goals
+
 The main goal of the file set library is to be able to select local files that should be added to the Nix store.
 It should have the following properties:
 - Easy:
@@ -41,8 +46,15 @@ An attribute set with these values:
 - `_type` (constant string `"fileset"`):
   Tag to indicate this value is a file set.
 
-- `_internalVersion` (constant `2`, the current version):
+- `_internalVersion` (constant `3`, the current version):
   Version of the representation.
+
+- `_internalIsEmptyWithoutBase` (bool):
+  Whether this file set is the empty file set without a base path.
+  If `true`, `_internalBase*` and `_internalTree` are not set.
+  This is the only way to represent an empty file set without needing a base path.
+
+  Such a value can be used as the identity element for `union` and the return value of `unions []` and co.
 
 - `_internalBase` (path):
   Any files outside of this path cannot influence the set of files.
@@ -110,6 +122,26 @@ Arguments:
   only removing files explicitly referenced by paths can break a file set expression.
 - (+) This can be removed later, if we discover it's too restrictive
 - (-) It leads to errors when a sensible result could sometimes be returned, such as in the above example.
+
+### Empty file set without a base
+
+There is a special representation for an empty file set without a base path.
+This is used for return values that should be empty but when there's no base path that would makes sense.
+
+Arguments:
+- Alternative: This could also be represented using `_internalBase = /.` and `_internalTree = null`.
+  - (+) Removes the need for a special representation.
+  - (-) Due to [influence tracking](#influence-tracking),
+    `union empty ./.` would have `/.` as the base path,
+    which would then prevent `toSource { root = ./.; fileset = union empty ./.; }` from working,
+    which is not as one would expect.
+  - (-) With the assumption that there can be multiple filesystem roots (as established with the [path library](../path/README.md)),
+    this would have to cause an error with `union empty pathWithAnotherFilesystemRoot`,
+    which is not as one would expect.
+- Alternative: Do not have such a value and error when it would be needed as a return value
+  - (+) Removes the need for a special representation.
+  - (-) Leaves us with no identity element for `union` and no reasonable return value for `unions []`.
+    From a set theory perspective, which has a well-known notion of empty sets, this is unintuitive.
 
 ### Empty directories
 

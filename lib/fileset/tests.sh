@@ -282,24 +282,27 @@ expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `
 
 # File sets cannot be evaluated directly
 expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
+expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
-    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalVersion = 2; _type = "fileset"; }'
+    '{ _internalBase = ./.; _internalBaseComponents = path.subpath.components (path.splitRoot ./.).subpath; _internalBaseRoot = /.; _internalIsEmptyWithoutBase = false; _internalVersion = 3; _type = "fileset"; }'
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 1; }' \
-    '{ _type = "fileset"; _internalVersion = 2; }'
+    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
+expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 2; }' \
+    '{ _type = "fileset"; _internalIsEmptyWithoutBase = false; _internalVersion = 3; }'
 
 # Future versions of the internal representation are unsupported
-expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 3; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
-\s*- Internal version of the file set: 3
-\s*- Internal version of the library: 2
+expectFailure '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 4; }' '<tests>: value is a file set created from a future version of the file set library with a different internal representation:
+\s*- Internal version of the file set: 4
+\s*- Internal version of the library: 3
 \s*Make sure to update your Nixpkgs to have a newer version of `lib.fileset`.'
 
 # _create followed by _coerce should give the inputs back without any validation
 expectEqual '{
   inherit (_coerce "<test>" (_create ./. "directory"))
     _internalVersion _internalBase _internalTree;
-}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 2; }'
+}' '{ _internalBase = ./.; _internalTree = "directory"; _internalVersion = 3; }'
 
 #### Resulting store path ####
 
@@ -310,6 +313,12 @@ expectEqual 'toSource { root = ./.; fileset = ./.; }' 'sources.cleanSourceWith {
 tree=(
 )
 checkFileset './.'
+
+# The empty value without a base should also result in an empty result
+tree=(
+    [a]=0
+)
+checkFileset '_emptyWithoutBase'
 
 # Directories recursively containing no files are not included
 tree=(
@@ -406,14 +415,31 @@ expectFailure 'toSource { root = ./.; fileset = union ./. ./b; }' 'lib.fileset.u
 expectFailure 'toSource { root = ./.; fileset = unions [ ./a ./. ]; }' 'lib.fileset.unions: element 0 \('"$work"'/a\) does not exist.'
 expectFailure 'toSource { root = ./.; fileset = unions [ ./. ./b ]; }' 'lib.fileset.unions: element 1 \('"$work"'/b\) does not exist.'
 
-# unions needs a list with at least 1 element
+# unions needs a list
 expectFailure 'toSource { root = ./.; fileset = unions null; }' 'lib.fileset.unions: Expected argument to be a list, but got a null.'
-expectFailure 'toSource { root = ./.; fileset = unions [ ]; }' 'lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements.'
 
 # The tree of later arguments should not be evaluated if a former argument already includes all files
 tree=()
 checkFileset 'union ./. (_create ./. (abort "This should not be used!"))'
 checkFileset 'unions [ ./. (_create ./. (abort "This should not be used!")) ]'
+
+# unions doesn't include any files for an empty list or only empty values without a base
+tree=(
+    [x]=0
+    [y/z]=0
+)
+checkFileset 'unions [ ]'
+checkFileset 'unions [ _emptyWithoutBase ]'
+checkFileset 'unions [ _emptyWithoutBase _emptyWithoutBase ]'
+checkFileset 'union _emptyWithoutBase _emptyWithoutBase'
+
+# The empty value without a base is the left and right identity of union
+tree=(
+    [x]=1
+    [y/z]=0
+)
+checkFileset 'union ./x _emptyWithoutBase'
+checkFileset 'union _emptyWithoutBase ./x'
 
 # union doesn't include files that weren't specified
 tree=(
@@ -467,12 +493,13 @@ for i in $(seq 1000); do
     tree[$i/a]=1
     tree[$i/b]=0
 done
-(
-    # Locally limit the maximum stack size to 100 * 1024 bytes
-    # If unions was implemented recursively, this would stack overflow
-    ulimit -s 100
-    checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
-)
+# This is actually really hard to test:
+# A lot of files would be needed to cause a stack overflow.
+# And while we could limit the maximum stack size using `ulimit -s`,
+# that turns out to not be very deterministic: https://github.com/NixOS/nixpkgs/pull/256417#discussion_r1339396686.
+# Meanwhile, the test infra here is not the fastest, creating 10000 would be too slow.
+# So, just using 1000 files for now.
+checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 

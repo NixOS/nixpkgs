@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyftpdlib";
-  version = "1.5.7";
+  version = "1.5.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fqPOQTfbggmvH2ueoCBZD0YsY+18ehJAvVluTTp7ZW4=";
+    hash = "sha256-v22rtn3/MrP/BA4oJf/7xrjecDc7ydm1U0gMxNdQTWw=";
   };
 
   propagatedBuildInputs = [

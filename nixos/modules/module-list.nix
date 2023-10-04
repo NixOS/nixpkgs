@@ -1302,6 +1302,7 @@
   ./services/web-apps/writefreely.nix
   ./services/web-apps/youtrack.nix
   ./services/web-apps/zabbix.nix
+  ./services/web-apps/zitadel.nix
   ./services/web-servers/agate.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/caddy/default.nix

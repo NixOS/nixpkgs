@@ -964,6 +964,8 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
+    lun = callPackage ../development/ocaml-modules/lun { };
+
     lustre-v6 = callPackage ../development/ocaml-modules/lustre-v6 { };
 
     lutils = callPackage ../development/ocaml-modules/lutils { };
@@ -1159,6 +1161,8 @@ let
     mparser =  callPackage ../development/ocaml-modules/mparser { };
 
     mparser-pcre =  callPackage ../development/ocaml-modules/mparser/pcre.nix { };
+
+    msgpck = callPackage ../development/ocaml-modules/msgpck { };
 
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
 
@@ -1485,6 +1489,8 @@ let
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
+
+    ppx_lun = callPackage ../development/ocaml-modules/lun/ppx.nix { };
 
     ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
 
