@@ -26,13 +26,13 @@
 
 let
   pname = "mozillavpn";
-  version = "2.16.1";
+  version = "2.17.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-UMWBn3DoEU1fG7qh6F0GOhOqod+grPwp15wSSdP0eCo=";
+    hash = "sha256-sxkah+tVCbw62A57ia0JnOgmdqojL7inoSStilEhoMg=";
   };
   patches = [ ];
 
@@ -46,19 +46,19 @@ let
     inherit src patches;
     name = "${pname}-${version}-extension-bridge";
     preBuild = "cd extension/bridge";
-    hash = "sha256-1wYTRc+NehiHwAd/2CmsJNv/TV6wH5wXwNiUdjzEUIk=";
+    hash = "sha256-3sncaaeUdCQd8yZHu9z54BaXEvNOqn7sqsUREIOIxDY=";
   };
   signatureDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-signature";
     preBuild = "cd signature";
-    hash = "sha256-oaKkQWMYkAy1c2biVt+GyjHBeYb2XkuRvFrWQJJIdPw=";
+    hash = "sha256-E/DutZai+Jq/5pq5wQ4haZUkb4Roq2Loh0epZNGxOtw=";
   };
   qtgleanDeps = rustPlatform.fetchCargoTarball {
     inherit src patches;
     name = "${pname}-${version}-qtglean";
     preBuild = "cd qtglean";
-    hash = "sha256-cqfiOBS8xFC2BbYp6BJWK6NHIU0tILSgu4eo3Ik4YqY=";
+    hash = "sha256-1uGAP/OLo/lr4PHEBS+R4odkpNJl7oSIYx9cfCQKsC4=";
   };
 
 in
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
   dontCargoSetupPostUnpack = true;
 
   postPatch = ''
-    substituteInPlace src/apps/vpn/cmake/linux.cmake \
+    substituteInPlace src/cmake/linux.cmake \
       --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
       --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
       --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
