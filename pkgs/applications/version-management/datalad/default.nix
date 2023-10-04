@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, python3, git, git-annex }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, python3, git, git-annex, less }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "datalad";
@@ -69,13 +69,16 @@ python3.pkgs.buildPythonApplication rec {
     installShellCompletion --cmd datalad \
          --bash <($out/bin/datalad shell-completion) \
          --zsh  <($out/bin/datalad shell-completion)
-    wrapProgram $out/bin/datalad --prefix PYTHONPATH : "$PYTHONPATH"
+    wrapProgram $out/bin/datalad \
+      --prefix PYTHONPATH : "$program_PYTHONPATH" \
+      --prefix PATH : "${git}/bin:${less}/bin"
   '';
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "datalad" ];
+  # needs git in PATH
+  pythonImportsExtrasCheck = [ "datalad" ];
 
   meta = with lib; {
     description = "Keep code, data, containers under control with git and git-annex";
