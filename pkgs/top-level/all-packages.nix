@@ -24552,8 +24552,6 @@ with pkgs;
 
   pyp = callPackage ../tools/text/pyp { };
 
-  pru = callPackage ../tools/text/pru { };
-
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf3_24;
