@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, glibc, nixosTests }:
+{ stdenv
+, lib
+, autoreconfHook
+, fetchFromGitHub
+, glibc
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "catatonit";
