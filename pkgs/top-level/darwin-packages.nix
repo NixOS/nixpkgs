@@ -223,24 +223,25 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
   # See doc/builders/special/darwin-builder.section.md
-  linux-builder = lib.makeOverridable ({ modules }:
+  linux-builder = lib.makeOverridable ({ modules, guestSystem }:
     let
-      toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
-
       nixos = import ../../nixos {
         configuration = {
           imports = [
             ../../nixos/modules/profiles/macos-builder.nix
           ] ++ modules;
 
-          virtualisation.host = { inherit pkgs; };
+          # Default to the same pkgs as the host system, but allow overriding.
+          virtualisation.host.pkgs = lib.mkOverride 900 pkgs;
         };
 
-        system = toGuest stdenv.hostPlatform.system;
+        system = guestSystem;
       };
-
     in
-      nixos.config.system.build.macos-builder-installer) { modules = [ ]; };
+      nixos.config.system.build.macos-builder-installer) {
+        modules = [ ];
+        guestSystem = builtins.replaceStrings [ "darwin" ] [ "linux" ] stdenv.hostPlatform.system;
+      };
 
 } // lib.optionalAttrs config.allowAliases {
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
