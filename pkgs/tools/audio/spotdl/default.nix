@@ -6,18 +6,7 @@
 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
-        version = "0.25.1";
-        src = fetchPypi {
-          inherit (old) pname;
-          inherit version;
-          hash = "sha256-uc/fgDetSYaCRzff0SzfbRhs3TaKrfE2h6roWkkj8yQ=";
-        };
-      });
-    };
-  };
+  python = python3;
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
   version = "4.2.1";

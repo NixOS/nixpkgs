@@ -2,16 +2,17 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "psysh";
-  version = "0.11.20";
+  version = "0.11.21";
 
   src = fetchFromGitHub {
     owner = "bobthecow";
     repo = "psysh";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Bcpmn0rCjNMeGvF1CGg4uatakUtMY1H1o759CK15b0o=";
+    hash = "sha256-YuBn4mrgOzGeMGfGcyZySAISmQdv3WRGn91PRozyxdI=";
   };
 
-  vendorHash = "sha256-1XPDgaiWVenGSGluDciQAm9qQTL9vGJk9AqkTviRa+c=";
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-FZFeO7UiVssxTf0JX6wdjrAE+jucYnfQJA1eOng39lQ=";
 
   meta = {
     changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";

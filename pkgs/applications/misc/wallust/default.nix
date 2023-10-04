@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitea
 , rustPlatform
+, nix-update-script
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wallust";
@@ -14,7 +15,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-WhL2HWM1onRrCqWJPLnAVMd/f/xfLrK3mU8jFSLFjAM=";
   };
 
-  cargoSha256 = "sha256-pR2vdqMGJZ6zvXwwKUIPjb/lWzVgYqQ7C7/sk/+usc4= ";
+  cargoSha256 = "sha256-pR2vdqMGJZ6zvXwwKUIPjb/lWzVgYqQ7C7/sk/+usc4=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A better pywal";

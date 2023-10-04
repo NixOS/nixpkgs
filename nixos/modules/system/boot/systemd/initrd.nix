@@ -135,8 +135,13 @@ in {
       '';
     };
 
-    package = mkPackageOptionMD pkgs "systemd" {
-      default = "systemdStage1";
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = config.systemd.package;
+      defaultText = lib.literalExpression "config.systemd.package";
+      description = ''
+        The systemd package to use.
+      '';
     };
 
     extraConfig = mkOption {

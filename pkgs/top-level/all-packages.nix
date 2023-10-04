@@ -17390,10 +17390,6 @@ with pkgs;
 
   critcmp = callPackage ../development/tools/rust/critcmp { };
 
-  convco = callPackage ../development/tools/convco {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   devspace = callPackage ../development/tools/misc/devspace { };
 
   djlint = callPackage ../development/tools/djlint { };
@@ -28962,20 +28958,6 @@ with pkgs;
     withUkify = false;
     withBootloader = false;
   };
-  systemdStage1 = systemdMinimal.override {
-    pname = "systemd-stage-1";
-    withAcl = true;
-    withCryptsetup = true;
-    withFido2 = true;
-    withKmod = true;
-    withTpm2Tss = true;
-    withRepart = true;
-  };
-  systemdStage1Network = systemdStage1.override {
-    pname = "systemd-stage-1-network";
-    withNetworkd = true;
-    withLibidn2 = true;
-  };
 
 
   udev =
@@ -32945,8 +32927,6 @@ with pkgs;
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   ical2orgpy = callPackage ../tools/misc/ical2orgpy { };
-
-  icewm = callPackage ../applications/window-managers/icewm { };
 
   icon-library = callPackage ../applications/graphics/icon-library { };
 

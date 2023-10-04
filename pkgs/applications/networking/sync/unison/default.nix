@@ -6,7 +6,6 @@
 , copyDesktopItems
 , makeDesktopItem
 , wrapGAppsHook
-, glib
 , gsettings-desktop-schemas
 , zlib
 , enableX11 ? true
@@ -26,10 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ glib wrapGAppsHook ocamlPackages.ocaml ]
-    ++ lib.optional enableX11 copyDesktopItems;
-  buildInputs = [ gsettings-desktop-schemas ncurses zlib ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
+  nativeBuildInputs = [ ocamlPackages.ocaml ]
+    ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook ];
+  buildInputs = [ ncurses zlib ]
+    ++ lib.optionals enableX11 [ gsettings-desktop-schemas ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   preBuild = lib.optionalString enableX11 ''
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk3}"/lib/ocaml/*/site-lib/lablgtk3)|" src/Makefile.OCaml
