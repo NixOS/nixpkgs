@@ -43,10 +43,10 @@ buildPythonPackage rec {
     inform
     quantiphy
     requests
+    nestedtext
   ];
 
   nativeCheckInputs = [
-    nestedtext
     parametrize-from-file
     pytestCheckHook
     shlib
