@@ -1,15 +1,8 @@
 { lib
 , stdenv
 , fetchurl
-, atomEnv
 , electron_26
-, systemd
-, pulseaudio
-, libxshmfence
-, libnotify
-, libappindicator-gtk3
 , makeWrapper
-, autoPatchelfHook
 }:
 
 let
@@ -38,18 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl (srcs."${system}" or (throw "Unsupported system ${system}"));
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-
-  buildInputs = atomEnv.packages ++ [
-    libxshmfence
-  ];
-
-  runtimeDependencies = [
-    (lib.getLib systemd)
-    pulseaudio
-    libnotify
-    libappindicator-gtk3
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall

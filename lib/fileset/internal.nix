@@ -28,6 +28,7 @@ let
     drop
     elemAt
     filter
+    findFirst
     findFirstIndex
     foldl'
     head
@@ -64,7 +65,7 @@ rec {
   # - Increment this version
   # - Add an additional migration function below
   # - Update the description of the internal representation in ./README.md
-  _currentVersion = 2;
+  _currentVersion = 3;
 
   # Migrations between versions. The 0th element converts from v0 to v1, and so on
   migrations = [
@@ -89,7 +90,33 @@ rec {
         _internalVersion = 2;
       }
     )
+
+    # Convert v2 into v3: filesetTree's now have a representation for an empty file set without a base path
+    (
+      filesetV2:
+      filesetV2 // {
+        # All v1 file sets are not the new empty file set
+        _internalIsEmptyWithoutBase = false;
+        _internalVersion = 3;
+      }
+    )
   ];
+
+  _noEvalMessage = ''
+    lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
+
+  # The empty file set without a base path
+  _emptyWithoutBase = {
+    _type = "fileset";
+
+    _internalVersion = _currentVersion;
+
+    # The one and only!
+    _internalIsEmptyWithoutBase = true;
+
+    # Double __ to make it be evaluated and ordered first
+    __noEval = throw _noEvalMessage;
+  };
 
   # Create a fileset, see ./README.md#fileset
   # Type: path -> filesetTree -> fileset
@@ -103,14 +130,15 @@ rec {
       _type = "fileset";
 
       _internalVersion = _currentVersion;
+
+      _internalIsEmptyWithoutBase = false;
       _internalBase = base;
       _internalBaseRoot = parts.root;
       _internalBaseComponents = components parts.subpath;
       _internalTree = tree;
 
       # Double __ to make it be evaluated and ordered first
-      __noEval = throw ''
-        lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
+      __noEval = throw _noEvalMessage;
     };
 
   # Coerce a value to a fileset, erroring when the value cannot be coerced.
@@ -155,14 +183,20 @@ rec {
         _coerce "${functionContext}: ${context}" value
       ) list;
 
-      firstBaseRoot = (head filesets)._internalBaseRoot;
+      # Find the first value with a base, there may be none!
+      firstWithBase = findFirst (fileset: ! fileset._internalIsEmptyWithoutBase) null filesets;
+      # This value is only accessed if first != null
+      firstBaseRoot = firstWithBase._internalBaseRoot;
 
       # Finds the first element with a filesystem root different than the first element, if any
       differentIndex = findFirstIndex (fileset:
-        firstBaseRoot != fileset._internalBaseRoot
+        # The empty value without a base doesn't have a base path
+        ! fileset._internalIsEmptyWithoutBase
+        && firstBaseRoot != fileset._internalBaseRoot
       ) null filesets;
     in
-    if differentIndex != null then
+    # Only evaluates `differentIndex` if there are any elements with a base
+    if firstWithBase != null && differentIndex != null then
       throw ''
         ${functionContext}: Filesystem roots are not the same:
             ${(head list).context}: root "${toString firstBaseRoot}"
@@ -311,7 +345,7 @@ rec {
     # Special case because the code below assumes that the _internalBase is always included in the result
     # which shouldn't be done when we have no files at all in the base
     # This also forces the tree before returning the filter, leads to earlier error messages
-    if tree == null then
+    if fileset._internalIsEmptyWithoutBase || tree == null then
       empty
     else
       nonEmpty;
@@ -321,7 +355,12 @@ rec {
   # Type: [ Fileset ] -> Fileset
   _unionMany = filesets:
     let
-      first = head filesets;
+      # All filesets that have a base, aka not the ones that are the empty value without a base
+      filesetsWithBase = filter (fileset: ! fileset._internalIsEmptyWithoutBase) filesets;
+
+      # The first fileset that has a base.
+      # This value is only accessed if there are at all.
+      firstWithBase = head filesetsWithBase;
 
       # To be able to union filesetTree's together, they need to have the same base path.
       # Base paths can be unioned by taking their common prefix,
@@ -332,14 +371,14 @@ rec {
       # so this cannot cause a stack overflow due to a build-up of unevaluated thunks.
       commonBaseComponents = foldl'
         (components: el: commonPrefix components el._internalBaseComponents)
-        first._internalBaseComponents
+        firstWithBase._internalBaseComponents
         # We could also not do the `tail` here to avoid a list allocation,
         # but then we'd have to pay for a potentially expensive
         # but unnecessary `commonPrefix` call
-        (tail filesets);
+        (tail filesetsWithBase);
 
       # The common base path assembled from a filesystem root and the common components
-      commonBase = append first._internalBaseRoot (join commonBaseComponents);
+      commonBase = append firstWithBase._internalBaseRoot (join commonBaseComponents);
 
       # A list of filesetTree's that all have the same base path
       # This is achieved by nesting the trees into the components they have over the common base path
@@ -351,14 +390,18 @@ rec {
         setAttrByPath
           (drop (length commonBaseComponents) fileset._internalBaseComponents)
           fileset._internalTree
-        ) filesets;
+        ) filesetsWithBase;
 
       # Folds all trees together into a single one using _unionTree
       # We do not use a fold here because it would cause a thunk build-up
       # which could cause a stack overflow for a large number of trees
       resultTree = _unionTrees trees;
     in
-    _create commonBase resultTree;
+    # If there's no values with a base, we have no files
+    if filesetsWithBase == [ ] then
+      _emptyWithoutBase
+    else
+      _create commonBase resultTree;
 
   # The union of multiple filesetTree's with the same base path.
   # Later elements are only evaluated if necessary.

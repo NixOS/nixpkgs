@@ -1,29 +1,9 @@
-{ lib, stdenv
-, libXScrnSaver
-, makeWrapper
-, fetchurl
-, wrapGAppsHook
-, glib
-, gtk3
-, unzip
-, atomEnv
-, libuuid
-, at-spi2-atk
-, at-spi2-core
-, libdrm
-, mesa
-, libxkbcommon
-, libappindicator-gtk3
-, libxshmfence
-, libglvnd
-, wayland
-}@args:
+{ callPackage }:
 
 let
-  mkElectron = import ./generic.nix args;
+  mkElectron = callPackage ./generic.nix { };
 in
 rec {
-
   electron-bin = electron_26-bin;
 
   electron_10-bin = mkElectron "10.4.7" {

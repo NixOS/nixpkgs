@@ -126,6 +126,13 @@ with pkgs;
 
   common-updater-scripts = callPackage ../common-updater/scripts.nix { };
 
+  # vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/updater.nix {
+  #   inherit (writers) writePython3Bin;
+  # };
+  vimPluginsUpdater = callPackage ../applications/editors/vim/plugins/updater.nix {
+    inherit (python3Packages) buildPythonApplication ;
+  };
+
   genericUpdater = callPackage ../common-updater/generic-updater.nix { };
 
   _experimental-update-script-combinators = callPackage ../common-updater/combinators.nix { };
@@ -273,8 +280,6 @@ with pkgs;
   asn = callPackage ../applications/networking/asn { };
 
   asnmap = callPackage ../tools/security/asnmap { };
-
-  ast-grep = callPackage ../development/tools/misc/ast-grep { };
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
@@ -9874,9 +9879,13 @@ with pkgs;
 
   ldc = callPackage ../development/compilers/ldc { };
 
-  ligo = callPackage ../development/compilers/ligo {
-    coq = coq_8_14;
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15;
+  ligo =
+    let ocaml_p = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15; in
+    callPackage ../development/compilers/ligo {
+    coq = coq_8_13.override {
+      customOCamlPackages = ocaml_p;
+    };
+    ocamlPackages = ocaml_p;
   };
 
   lego = callPackage ../tools/admin/lego { };
@@ -11858,7 +11867,6 @@ with pkgs;
   percona-xtrabackup = percona-xtrabackup_8_0;
   percona-xtrabackup_8_0 = callPackage ../tools/backup/percona-xtrabackup/8_0.nix {
     boost = boost177;
-    openssl = openssl_1_1;
   };
 
   pick = callPackage ../tools/misc/pick { };
@@ -30628,12 +30636,6 @@ with pkgs;
   artha = callPackage ../applications/misc/artha { };
 
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
-
-  atomEnv = callPackage ../applications/editors/atom/env.nix { };
-
-  atomPackages = dontRecurseIntoAttrs (callPackage ../applications/editors/atom { });
-
-  inherit (atomPackages) atom atom-beta;
 
   pulsar = callPackage ../applications/editors/pulsar { };
 

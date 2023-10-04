@@ -156,7 +156,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
           lib.fileset.toSource: `root` is of type ${typeOf root}, but it should be a path instead.''
     # Currently all Nix paths have the same filesystem root, but this could change in the future.
     # See also ../path/README.md
-    else if rootFilesystemRoot != filesetFilesystemRoot then
+    else if ! fileset._internalIsEmptyWithoutBase && rootFilesystemRoot != filesetFilesystemRoot then
       throw ''
         lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` ("${toString root}"):
             `root`: root "${toString rootFilesystemRoot}"
@@ -170,7 +170,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
         lib.fileset.toSource: `root` (${toString root}) is a file, but it should be a directory instead. Potential solutions:
             - If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
             - If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as ${toString (dirOf root)}, and set `fileset` to the file path.''
-    else if ! hasPrefix root fileset._internalBase then
+    else if ! fileset._internalIsEmptyWithoutBase && ! hasPrefix root fileset._internalBase then
       throw ''
         lib.fileset.toSource: `fileset` could contain files in ${toString fileset._internalBase}, which is not under the `root` (${toString root}). Potential solutions:
             - Set `root` to ${toString fileset._internalBase} or any directory higher up. This changes the layout of the resulting store path.
@@ -258,15 +258,11 @@ If a directory does not recursively contain any file, it is omitted from the sto
   */
   unions =
     # A list of file sets.
-    # Must contain at least 1 element.
     # The elements can also be paths,
     # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
     filesets:
     if ! isList filesets then
       throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf filesets}."
-    else if filesets == [ ] then
-      # TODO: This could be supported, but requires an extra internal representation for the empty file set, which would be special for not having a base path.
-      throw "lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements."
     else
       pipe filesets [
         # Annotate the elements with context, used by _coerceMany for better errors

@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/gourlaysama/girouette";
     changelog = "https://github.com/gourlaysama/girouette/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ linuxissuper ];
+    maintainers = with maintainers; [ linuxissuper cafkafk ];
     mainProgram = "girouette";
   };
 }
