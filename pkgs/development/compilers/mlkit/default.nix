@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlkit";
-  version = "4.7.3";
+  version = "4.7.4";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
     rev = "v${version}";
-    sha256 = "sha256-sJY2w1+hv5KrRunf6Dfwc+eY6X9HYghVyAlWLlHvv+E=";
+    sha256 = "sha256-ASWPINMxR5Rlly1C0yB3llfhju/dDW2HBbHSIF4ecR8=";
   };
 
   nativeBuildInputs = [ autoreconfHook mlton ];
