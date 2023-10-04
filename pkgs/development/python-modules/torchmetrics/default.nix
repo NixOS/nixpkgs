@@ -62,7 +62,8 @@ buildPythonPackage {
     "tests/bases/test_collections.py"
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # requires torch
     "torchmetrics"
   ];
 
@@ -75,4 +76,3 @@ buildPythonPackage {
     ];
   };
 }
-
