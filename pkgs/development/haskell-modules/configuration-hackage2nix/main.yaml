@@ -662,7 +662,6 @@ unsupported-platforms:
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
-  reflex-dom:                                   [ platforms.darwin, aarch64-linux ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
@@ -713,6 +712,7 @@ supported-platforms:
   evdev:                                        [ platforms.linux ]
   evdev-streamly:                               [ platforms.linux ]
   geomancy:                                     [ platforms.x86 ] # x86 intrinsics
+  geomancy-layout:                              [ platforms.x86 ] # x86 intrinsics
   gi-gtkosxapplication:                         [ platforms.darwin ]
   gtk-mac-integration:                          [ platforms.darwin ]
   gtk3-mac-integration:                         [ platforms.darwin ]
