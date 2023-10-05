@@ -2495,7 +2495,9 @@ with pkgs;
 
   labctl = callPackage ../tools/networking/labctl { };
 
-  lefthook = callPackage ../applications/version-management/lefthook { };
+  lefthook = callPackage ../applications/version-management/lefthook {
+    buildGoModule = buildGo121Module;
+  };
 
   legit = callPackage ../applications/version-management/legit { };
 
