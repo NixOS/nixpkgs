@@ -38,13 +38,13 @@ final: prev: let
     + ".tar.gz";
 
   tensorRTVersions = {
-    "8.6.0" = [
+    "8.6.1" = [
       rec {
-        fileVersionCuda = "11.8";
-        fullVersion = "8.6.0.12";
-        sha256 = "sha256-wXMqEJPFerefoLaH8GG+Np5EnJwXeStmDzZj7Nj6e2M=";
+        fileVersionCuda = "12.0";
+        fullVersion = "8.6.1.6";
+        sha256 = "sha256-D4FXpfxTKZQ7M4uJNZE3M1CvqQyoEjnNrddYDNHrolQ=";
         tarball = tarballURL { inherit fileVersionCuda fullVersion; };
-        supportedCudaVersions = [ "11.0" "11.1" "11.2" "11.3" "11.4" "11.5" "11.6" "11.7" "11.8" ];
+        supportedCudaVersions = [ "12.0" "12.1" ];
       }
     ];
     "8.5.3" = [
@@ -133,6 +133,8 @@ final: prev: let
     "11.6" = "8.4.0";
     "11.7" = "8.5.3";
     "11.8" = "8.5.3";
+    "12.0" = "8.6.1";
+    "12.1" = "8.6.1";
   }.${cudaVersion} or "8.4.0";
 
 in tensorRTPackages
