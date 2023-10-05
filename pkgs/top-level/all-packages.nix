@@ -36102,7 +36102,9 @@ with pkgs;
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
 
-  transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
+  # Needs macOS >= 10.14.6
+  transmission_4 = darwin.apple_sdk_11_0.callPackage ../applications/networking/p2p/transmission/4.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
     fmt = fmt_9;
     libutp = libutp_3_4;
   };
