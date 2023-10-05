@@ -34,6 +34,9 @@ let
     # This variable allows overriding the timeout for connecting to
     # the hashed mirrors.
     "NIX_CONNECT_TIMEOUT"
+
+    # This variable allows using custom certificates
+    "NIX_SSL_CERT_FILE"
   ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
 
 in
