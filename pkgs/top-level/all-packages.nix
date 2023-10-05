@@ -17903,6 +17903,9 @@ with pkgs;
 
   konf = callPackage ../development/tools/konf { };
 
+  lambda-lisp = callPackage ../development/interpreters/lambda-lisp { };
+  lambda-lisp-blc = lambda-lisp;
+
   lolcode = callPackage ../development/interpreters/lolcode { };
 
   love_0_10 = callPackage ../development/interpreters/love/0.10.nix { };
