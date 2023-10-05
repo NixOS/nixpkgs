@@ -40,7 +40,7 @@ let
   };
 
   pname = "torchvision";
-  version = "0.15.2";
+  version = "0.16.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -49,7 +49,7 @@ buildPythonPackage {
     owner = "pytorch";
     repo = "vision";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KNbOgd6PCINZqZ24c/Ev+ODux3ik5iUlzem9uUfQArM=";
+    hash = "sha256-TsYBDtedTQ3+F3LM4JwzkGH2XOr0WSp1Au5YoR07rSA=";
   };
 
   nativeBuildInputs = [ libpng ninja which ] ++ lib.optionals cudaSupport [ cuda-native-redist ];
