@@ -1,14 +1,14 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, flavour ? [ "frappe" ]
-, accents ? [ "blue" ]
+, flavour ? [ "Frappe" ]
+, accents ? [ "Blue" ]
 , winDecStyles ? [ "modern" ]
 }:
 
 let
-  validFlavours = [ "mocha" "macchiato" "frappe" "latte" ];
-  validAccents = [ "rosewater" "flamingo" "pink" "mauve" "red" "maroon" "peach" "yellow" "green" "teal" "sky" "sapphire" "blue" "lavender" ];
+  validFlavours = [ "Mocha" "Macchiato" "Frappe" "Latte" ];
+  validAccents = [ "Rosewater" "Flamingo" "Pink" "Mauve" "Red" "Maroon" "Peach" "Yellow" "Green" "Teal" "Sky" "Sapphire" "Blue" "Lavender" ];
   validWinDecStyles = [ "modern" "classic" ];
 
   installScript = ./install.sh;
