@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "tagoio-sdk";
-  version = "4.1.1";
+  version = "4.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tago-io";
     repo = "sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GHjkw7B/T+XZ3F3XCI0INpx9NWjORr0lbuGse/W25wY=";
+    hash = "sha256-ebNiEvQ1U0RLrH3OOt/oRRPElg+9jibj7fsEEd1hdmU=";
   };
 
   pythonRelaxDeps = [
