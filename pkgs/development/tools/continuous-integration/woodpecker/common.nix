@@ -32,5 +32,8 @@ in
     homepage = "https://woodpecker-ci.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ambroisie techknowlogick ];
+    knownVulnerabilities = [
+      "CVE-2023-40034"
+    ];
   };
 }
