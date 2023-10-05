@@ -18,6 +18,9 @@ let
     libusermetrics = callPackage ./development/libusermetrics { };
     lomiri-api = callPackage ./development/lomiri-api { };
 
+    #### QML / QML-related
+    lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
+
     #### Services
     biometryd = callPackage ./services/biometryd { };
   };
