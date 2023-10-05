@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-OG7ZvXJOTQzSpMoj94K9JwG6ZQRQSSp+k2slkK6BJ9I=";
+    hash = "sha256-xXS0uNR5rlmUjt9/TW/X/pQc5MS/MwHSQGCp7BkAVYg=";
   };
 
   postPatch = ''
