@@ -25,4 +25,7 @@ callPackage ../base.nix rec {
     "-DCLANG_TABLEGEN_EXE=${clang-unwrapped}/bin/clang-tblgen"
     "-DFLANG_INCLUDE_TESTS=OFF" # `The dependency target "Bye" of target ...`
   ];
+
+  # `flang/lib/Semantics/check-omp-structure.cpp:1905:1: error: no member named 'v' in 'Fortran::parser::OmpClause::OmpxDynCgroupMem'`
+  isBroken = true;
 }
