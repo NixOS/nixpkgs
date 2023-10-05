@@ -33,6 +33,7 @@ dont-distribute-packages:
  - BPS
  - Barracuda
  - BerlekampAlgorithm
+ - BesselJ
  - BioHMM
  - Biobase
  - BiobaseBlast
@@ -113,6 +114,7 @@ dont-distribute-packages:
  - Fin
  - Finance-Treasury
  - FiniteCategories
+ - FiniteCategoriesGraphViz
  - FiniteMap
  - FirstOrderTheory
  - Flippi
@@ -1149,6 +1151,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
+ - dl-fedora_1_0
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1933,7 +1936,6 @@ dont-distribute-packages:
  - haskoin-crypto
  - haskoin-protocol
  - haskoin-script
- - haskoin-store
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
@@ -2027,6 +2029,7 @@ dont-distribute-packages:
  - hesql
  - heterolist
  - hetzner
+ - hetzner_0_4_0_1
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2845,6 +2848,7 @@ dont-distribute-packages:
  - newsletter-mailgun
  - newsynth
  - ngx-export-distribution
+ - ngx-export-healthcheck
  - ngx-export-tools-extra
  - nikepub
  - nirum
@@ -3827,9 +3831,7 @@ dont-distribute-packages:
  - tagged-th
  - tagsoup-navigate
  - tagstew
- - tahoe-chk
  - tahoe-directory
- - tahoe-great-black-swamp
  - tahoe-ssk
  - tak-ai
  - takahashi
@@ -4178,7 +4180,6 @@ dont-distribute-packages:
  - workflow-extra
  - workflow-pure
  - workflow-types
- - wraxml
  - wrecker
  - wrecker-ui
  - wright
