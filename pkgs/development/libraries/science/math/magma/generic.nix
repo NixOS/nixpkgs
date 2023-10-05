@@ -18,15 +18,12 @@
 , gfortran
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , gpuTargets ? [ ] # Non-CUDA targets, that is HIP
-, hip
-, hipblas
-, hipsparse
+, rocmPackages
 , lapack
 , lib
 , libpthreadstubs
 , magmaRelease
 , ninja
-, openmp
 , rocmSupport ? false
 , static ? false
 , stdenv
@@ -47,7 +44,7 @@ let
   # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
-  rocmArches = lists.map (x: strings.removePrefix "gfx" x) hip.gpuTargets;
+  rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
   supportedRocmArches = lists.intersectLists rocmArches supportedGpuTargets;
   unsupportedRocmArches = lists.subtractLists supportedRocmArches rocmArches;
 
@@ -125,10 +122,10 @@ stdenv.mkDerivation {
   ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
     cuda_profiler_api.dev # <cuda_profiler_api.h>
   ]) ++ lists.optionals rocmSupport [
-    hip
-    hipblas
-    hipsparse
-    openmp
+    rocmPackages.clr
+    rocmPackages.hipblas
+    rocmPackages.hipsparse
+    rocmPackages.llvm.openmp
   ];
 
   cmakeFlags = [
@@ -142,8 +139,8 @@ stdenv.mkDerivation {
     "-DCMAKE_CXX_COMPILER=${backendStdenv.cc}/bin/c++"
     "-DMAGMA_ENABLE_CUDA=ON"
   ] ++ lists.optionals rocmSupport [
-    "-DCMAKE_C_COMPILER=${hip}/bin/hipcc"
-    "-DCMAKE_CXX_COMPILER=${hip}/bin/hipcc"
+    "-DCMAKE_C_COMPILER=${rocmPackages.clr}/bin/hipcc"
+    "-DCMAKE_CXX_COMPILER=${rocmPackages.clr}/bin/hipcc"
     "-DMAGMA_ENABLE_HIP=ON"
   ];
 

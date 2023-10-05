@@ -30690,7 +30690,6 @@ with pkgs;
     # LLVM 11 crashes when compiling GHOST_SystemCocoa.mm
     stdenv = if stdenv.isDarwin then llvmPackages_10.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
-    inherit (rocmPackages) hip;
   };
 
   blender-with-packages = callPackage ../applications/misc/blender/wrapper.nix { };
@@ -39262,10 +39261,7 @@ with pkgs;
 
   lie = callPackage ../applications/science/math/LiE { };
 
-  inherit (callPackage ../development/libraries/science/math/magma {
-    inherit (rocmPackages.llvm) openmp;
-    inherit (rocmPackages) hip hipblas hipsparse;
-  }) magma magma_2_7_2 magma_2_6_2;
+  inherit (callPackage ../development/libraries/science/math/magma { }) magma magma_2_7_2 magma_2_6_2;
 
   magma-cuda = magma.override {
     cudaSupport = true;
@@ -39276,8 +39272,7 @@ with pkgs;
     static = true;
   };
 
-  # TODO:AMD won't compile with anything newer than 2.6.2 -- it fails at the linking stage.
-  magma-hip = magma_2_6_2.override {
+  magma-hip = magma.override {
     cudaSupport = false;
     rocmSupport = true;
   };

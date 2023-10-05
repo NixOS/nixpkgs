@@ -13904,7 +13904,6 @@ self: super: with self; {
       else pkgs.magma;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
-    inherit (pkgs.rocmPackages.llvm) openmp;
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
