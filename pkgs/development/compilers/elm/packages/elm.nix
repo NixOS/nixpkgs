@@ -28,4 +28,5 @@ mkDerivation {
   homepage = "https://elm-lang.org";
   description = "The `elm` command line interface";
   license = lib.licenses.bsd3;
+  mainProgram = "elm";
 }
