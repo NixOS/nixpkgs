@@ -9,8 +9,6 @@ buildGo121Module rec {
   pname = "turso-cli";
   version = "0.85.3";
 
-  nativeBuildInputs = [ installShellFiles ];
-
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
@@ -20,11 +18,17 @@ buildGo121Module rec {
 
   vendorHash = "sha256-Hv4CacBrRX2YT3AkbNzyWrA9Ex6YMDPrPvezukwMkTE=";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   # Build with production code
   tags = ["prod"];
   # Include version for `turso --version` reporting
   preBuild = ''
     echo "v${version}" > internal/cmd/version.txt
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -33,9 +37,6 @@ buildGo121Module rec {
       --fish <($out/bin/turso completion fish) \
       --zsh <($out/bin/turso completion zsh)
   '';
-
-  # Test_setDatabasesCache fails due to /homeless-shelter: read-only file system error.
-  doCheck = false;
 
   meta = with lib; {
     description = "This is the command line interface (CLI) to Turso.";
