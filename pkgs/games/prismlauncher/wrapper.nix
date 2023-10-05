@@ -51,15 +51,15 @@ let
   # Warning: This can make the program start slower, by about four milliseconds.
   shellWrapper = withWaylandGLFW;
 
-  prismlauncherFinal = prismlauncher-unwrapped.override {
+  prismlauncher' = prismlauncher-unwrapped.override {
     inherit msaClientID gamemodeSupport;
   };
 in
 
 symlinkJoin {
-  name = "prismlauncher-${prismlauncherFinal.version}";
+  name = "prismlauncher-${prismlauncher'.version}";
 
-  paths = [ prismlauncherFinal ];
+  paths = [ prismlauncher' ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -124,5 +124,5 @@ symlinkJoin {
       "--prefix PATH : ${lib.makeBinPath runtimePrograms}"
     ];
 
-  inherit (prismlauncherFinal) meta;
+  inherit (prismlauncher') meta;
 }
