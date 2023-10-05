@@ -1,0 +1,24 @@
+From d7a8aaac8acffb38cebba68c6008e8fd01a38a60 Mon Sep 17 00:00:00 2001
+From: peigongdsd <51317171+peigongdsd@users.noreply.github.com>
+Date: Thu, 5 Oct 2023 19:04:45 +0800
+Subject: [PATCH] Accept text/xml as an alternative to application/xml
+
+---
+ src/xb-builder-source.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/xb-builder-source.c b/src/xb-builder-source.c
+index 1ac3474..fa772ca 100644
+--- a/src/xb-builder-source.c
++++ b/src/xb-builder-source.c
+@@ -467,6 +467,10 @@ xb_builder_source_get_istream(XbBuilderSource *self, GCancellable *cancellable,
+ 			return NULL;
+ 		if (g_strcmp0(content_type, "application/xml") == 0)
+ 			break;
++		/* Also accept the text/xml alias, just in case the user’s content-type database is slightly broken
++		 * (application/xml should normally be what’s used): */
++		if (g_strcmp0(content_type, "text/xml") == 0)
++			break;
+ 
+ 		/* convert the stream */
+ 		item = xb_builder_source_get_adapter_by_mime(self, content_type);
