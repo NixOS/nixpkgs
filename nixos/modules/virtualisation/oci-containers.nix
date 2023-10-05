@@ -66,6 +66,15 @@ let
           '';
         };
 
+        labels = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = lib.mdDoc "Labels to attach to the container at runtime.";
+          example = literalExpression ''
+            [ "com.example.foo=bar" ]
+          '';
+        };
+
         entrypoint = mkOption {
           type = with types; nullOr str;
           description = lib.mdDoc "Override the default entrypoint of the image.";
@@ -277,6 +286,7 @@ let
       ++ map (p: "-p ${escapeShellArg p}") container.ports
       ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
       ++ map (v: "-v ${escapeShellArg v}") container.volumes
+      ++ map(l: "-l ${escapedName l}") container.labels
       ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
       ++ map escapeShellArg container.extraOptions
       ++ [container.image]
