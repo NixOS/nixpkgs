@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3.pkgs.sphinx
     texinfo
+    protobufc
   ];
 
   buildInputs = [
