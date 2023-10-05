@@ -86,7 +86,7 @@ in rec {
 
   # Replaces hip, opencl-runtime, and rocclr
   clr = callPackage ./clr {
-    inherit rocmUpdateScript hip-common hipcc rocm-device-libs rocm-comgr rocm-runtime roctracer rocminfo;
+    inherit rocmUpdateScript hip-common hipcc rocm-device-libs rocm-comgr rocm-runtime roctracer rocminfo rocm-smi;
     inherit (llvm) clang;
     stdenv = llvm.rocmClangStdenv;
   };

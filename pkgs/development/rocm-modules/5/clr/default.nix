@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
 , rocmUpdateScript
 , makeWrapper
@@ -13,6 +14,7 @@
 , rocm-runtime
 , roctracer
 , rocminfo
+, rocm-smi
 , numactl
 , libGL
 , libxml2
@@ -34,6 +36,11 @@ let
 in stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
   version = "5.7.0";
+
+  outputs = [
+    "out"
+    "icd"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm-Developer-Tools";
@@ -106,6 +113,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     # Just link rocminfo, it's easier
     ln -s ${rocminfo}/bin/* $out/bin
+
+    # Replace rocm-opencl-icd functionality
+    mkdir -p $icd/etc/OpenCL/vendors
+    echo "$out/lib/libamdocl64.so" > $icd/etc/OpenCL/vendors/amdocl64.icd
   '';
 
   passthru = {
@@ -133,6 +144,13 @@ in stdenv.mkDerivation (finalAttrs: {
       name = finalAttrs.pname;
       owner = finalAttrs.src.owner;
       repo = finalAttrs.src.repo;
+    };
+
+    impureTests = {
+      clr-icd = callPackage ./test.nix {
+        inherit rocm-smi;
+        clr = finalAttrs.finalPackage;
+      };
     };
   };
 
