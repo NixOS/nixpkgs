@@ -5,6 +5,7 @@
 , libevdev
 , openssl
 , makeWrapper
+, nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,10 @@ rustPlatform.buildRustPackage rec {
 
     wrapProgram $out/bin/rkvm-certificate-gen --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) rkvm;
+  };
 
   meta = with lib; {
     description = "Virtual KVM switch for Linux machines";
