@@ -119,7 +119,10 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # gcc->clang "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
-+ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc) ''
++ lib.optionalString (targetPlatform != hostPlatform &&
+                      withoutTargetLibc &&
+                      targetPlatform.config == hostPlatform.config &&
+                      (stdenv.cc.isClang || stdenv.targetPlatform.useLLVM)) ''
   export inhibit_libc=true
 ''
 

@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "faadelays";
-  version = "2023.8.0";
+  version = "2023.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VAQQI9cMRKGe7RAUxoI1bBojzRq6cRz2jpeDA+GMuUI=";
+    hash = "sha256-ngMFd+BE3hKeaeGEX4xHpzDIrtGFDsSwxBbrc4ZMFas=";
   };
 
   nativeBuildInputs = [
