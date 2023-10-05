@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tank-utility";
-  version = "1.4.1";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "krismolendyke";
     repo = pname;
     rev = version;
-    hash = "sha256-2cxAaSyreIzQzCUtiolEV7JbGFKL8Mob3337J0jlMsU=";
+    hash = "sha256-h9y3X+FSzSFt+bd/chz+x0nocHaKZ8DvreMxAYMs8/E=";
   };
 
   postPatch = ''
