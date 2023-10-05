@@ -1,4 +1,10 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, unixtools, php82, python3, makeWrapper
+{ lib
+, fetchFromGitHub
+, unixtools
+, php82
+, python3
+, makeWrapper
+, nixosTests
 # run-time dependencies
 , graphviz
 , ipmitool
@@ -95,7 +101,10 @@ in phpPackage.buildComposerProject rec {
     runHook postInstall
   '';
 
-  passthru = { phpPackage = phpPackage; };
+  passthru = {
+    phpPackage = phpPackage;
+    tests.librenms = nixosTests.librenms;
+  };
 
   meta = with lib; {
     description = "A auto-discovering PHP/MySQL/SNMP based network monitoring";
