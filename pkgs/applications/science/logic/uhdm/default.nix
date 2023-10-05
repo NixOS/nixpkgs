@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "UHDM";
-  version = "1.74";
+  version = "1.75";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DiwLo/3RcXY+wG2+7aDx4p6UuQm/eNX/kG35TJzIbe0=";
+    hash = "sha256-VZkrpbPPXVyC96NWDHqUGbZ36YTcTOIvL9phx+K1ZhU=";
     fetchSubmodules = false;  # we use all dependencies from nix
   };
 
