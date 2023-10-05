@@ -14147,6 +14147,8 @@ self: super: with self; {
 
   type-infer = callPackage ../development/python-modules/type-infer { };
 
+  types-aioboto3 = callPackage ../development/python-modules/types-aioboto3 { };
+
   types-aiobotocore = callPackage ../development/python-modules/types-aiobotocore { };
 
   inherit (callPackage ../development/python-modules/types-aiobotocore-packages { })
