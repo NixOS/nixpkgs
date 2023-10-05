@@ -3,9 +3,7 @@
 , hostPlatform
 , fetchurl
 , bash
-, gcc
-, glibc
-, linux-headers
+, tinycc
 , binutils
 , gnumake
 , gnupatch
@@ -32,23 +30,10 @@ let
   };
 
   patches = [
-    # This patch enables building gcc-4.6.4 using gcc-2.95.3 and glibc-2.2.5
-    # * Tweak Makefile to allow overriding NATIVE_SYSTEM_HEADER_DIR using #:makeflags
-    # * Add missing limits.h include.
-    # * Add SSIZE_MAX define.  The SSIZE_MAX define has been added to Mes
-    #   upstream and can be removed with the next Mes release.
-    # * Remove -fbuilding-libgcc flag, it assumes features being present from a
-    #   newer gcc or glibc.
-    # * [MES_BOOTSTRAP_GCC]: Disable threads harder.
-    (fetchurl {
-      url = "https://git.savannah.gnu.org/cgit/guix.git/plain/gnu/packages/patches/gcc-boot-4.6.4.patch?id=50249cab3a98839ade2433456fe618acc6f804a5";
-      sha256 = "1zzd8gnihw6znrgb6c6pfsmm0vix89xw3giv1nnsykm57j0v3z0d";
-    })
-    ./libstdc++-target.patch
+    # Remove hardcoded NATIVE_SYSTEM_HEADER_DIR
+    ./no-system-headers.patch
   ];
 
-  # To reduce the set of pre-built bootstrap inputs, build
-  # GMP & co. from GCC.
   gmpVersion = "4.3.2";
   gmp = fetchurl {
     url = "mirror://gnu/gmp/gmp-${gmpVersion}.tar.gz";
@@ -71,7 +56,7 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
-    gcc
+    tinycc.compiler
     binutils
     gnumake
     gnupatch
@@ -83,10 +68,6 @@ bash.runCommand "${pname}-${version}" {
     gnutar
     gzip
   ];
-
-  # condition in ./libcpp/configure requires `env` which is not available in this coreutils
-  am_cv_CXX_dependencies_compiler_type = "gcc";
-  am_cv_CC_dependencies_compiler_type = "gcc";
 
   passthru.tests.get-version = result:
     bash.runCommand "${pname}-get-version-${version}" {} ''
@@ -118,18 +99,21 @@ bash.runCommand "${pname}-${version}" {
   ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
   # Configure
-  export C_INCLUDE_PATH="${gcc}/lib/gcc-lib/${hostPlatform.config}/${gcc.version}/include:${linux-headers}/include:${glibc}/include:$(pwd)/mpfr/src"
+  export CC="tcc -B ${tinycc.libs}/lib"
+  export C_INCLUDE_PATH="${tinycc.libs}/include:$(pwd)/mpfr/src"
   export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
-  export LDFLAGS="-B${glibc}/lib -Wl,-dynamic-linker -Wl,${glibc}"
-  export LDFLAGS_FOR_TARGET=$LDFLAGS
-  export LIBRARY_PATH="${glibc}/lib:${gcc}/lib"
-  export LIBS="-lc -lnss_files -lnss_dns -lresolv"
+
+  # Avoid "Link tests are not allowed after GCC_NO_EXECUTABLES"
+  export lt_cv_shlibpath_overrides_runpath=yes
+  export ac_cv_func_memcpy=yes
+  export ac_cv_func_strerror=yes
+
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
-    --with-native-system-header-dir=${glibc}/include \
-    --with-build-sysroot=${glibc}/include \
+    --with-native-system-header-dir=${tinycc.libs}/include \
+    --with-build-sysroot=${tinycc.libs}/include \
     --disable-bootstrap \
     --disable-decimal-float \
     --disable-libatomic \
@@ -146,7 +130,7 @@ bash.runCommand "${pname}-${version}" {
     --disable-multilib \
     --disable-plugin \
     --disable-threads \
-    --enable-languages=c,c++ \
+    --enable-languages=c \
     --enable-static \
     --disable-shared \
     --enable-threads=single \
@@ -154,8 +138,8 @@ bash.runCommand "${pname}-${version}" {
     --disable-build-with-cxx
 
   # Build
-  make
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''

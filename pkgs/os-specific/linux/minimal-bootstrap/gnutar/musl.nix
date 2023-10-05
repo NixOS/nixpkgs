@@ -5,19 +5,18 @@
 , bash
 , tinycc
 , gnumake
-, gnused
 , gnugrep
-, gawk
-, gnutar
-, gzip
+, gnused
 }:
 let
-  pname = "xz";
-  version = "5.4.3";
+  # gnutar with musl preserves modify times, allowing make to not try
+  # rebuilding pregenerated files
+  pname = "gnutar-musl";
+  version = "1.12";
 
   src = fetchurl {
-    url = "https://tukaani.org/xz/xz-${version}.tar.gz";
-    hash = "sha256-HDguC8Lk4K9YOYqQPdYv/35RAXHS3keh6+BtFSjpt+k=";
+    url = "mirror://gnu/tar/tar-${version}.tar.gz";
+    hash = "sha256-xsN+iIsTbM76uQPFEUn0t71lnWnUrqISRfYQU6V6pgo=";
   };
 in
 bash.runCommand "${pname}-${version}" {
@@ -28,43 +27,44 @@ bash.runCommand "${pname}-${version}" {
     gnumake
     gnused
     gnugrep
-    gawk
-    gnutar
-    gzip
   ];
 
   passthru.tests.get-version = result:
     bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/xz --version
+      ${result}/bin/tar --version
       mkdir $out
     '';
 
   meta = with lib; {
-    description = "A general-purpose data compression software, successor of LZMA";
-    homepage = "https://tukaani.org/xz";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    description = "GNU implementation of the `tar' archiver";
+    homepage = "https://www.gnu.org/software/tar";
+    license = licenses.gpl3Plus;
     maintainers = teams.minimal-bootstrap.members;
+    mainProgram = "tar";
     platforms = platforms.unix;
   };
 } ''
   # Unpack
-  tar xzf ${src}
-  cd xz-${version}
+  ungz --file ${src} --output tar.tar
+  untar --file tar.tar
+  rm tar.tar
+  cd tar-${version}
 
   # Configure
   export CC="tcc -B ${tinycc.libs}/lib"
-  export AR="tcc -ar"
   export LD=tcc
+  export ac_cv_sizeof_unsigned_long=4
+  export ac_cv_sizeof_long_long=8
+  export ac_cv_header_netdb_h=no
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
-    --disable-shared \
-    --disable-assembler
+    --disable-nls
 
   # Build
-  make -j $NIX_BUILD_CORES
+  make AR="tcc -ar"
 
   # Install
-  make -j $NIX_BUILD_CORES install
+  make install
 ''
