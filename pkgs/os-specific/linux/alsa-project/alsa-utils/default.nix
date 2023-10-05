@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, alsa-lib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
+{lib, stdenv, fetchurl, fetchpatch, alsa-lib, gettext, makeWrapper, ncurses, libsamplerate, pciutils, which, fftw}:
 
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
@@ -8,6 +8,17 @@ stdenv.mkDerivation rec {
     url = "mirror://alsa/utils/${pname}-${version}.tar.bz2";
     sha256 = "sha256-EEti7H8Cp84WynefSBVhbfHMIZM1A3g6kQe1lE+DBjo=";
   };
+  patches = [
+    # Backport fixes for musl libc. Remove on next release
+    (fetchpatch {
+      url = "https://github.com/alsa-project/alsa-utils/commit/8c229270f6bae83b705a03714c46067a7aa57b02.patch";
+      hash = "sha256-sUaBHY8EHf4805nF6tyNV5jYXcJf3O+r04VXFu4dUCE=";
+    })
+    (fetchpatch {
+      url = "https://github.com/alsa-project/alsa-utils/commit/0925ad7f09b2dc77015784f9ac2f5e34dd0dd5c3.patch";
+      hash = "sha256-bgGU9On82AUbOjo+KN6WfuhqUAWM87OHnKN7plpG284=";
+    })
+  ];
 
   nativeBuildInputs = [ gettext makeWrapper ];
   buildInputs = [ alsa-lib ncurses libsamplerate fftw ];
