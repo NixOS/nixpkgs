@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "pprint";
-  version = "20220103";
+  version = "20230830";
 
   useDune2 = true;
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "fpottier";
     repo = pname;
     rev = version;
-    sha256 = "sha256:09y6nwnjldifm47406q1r9987njlk77g4ifqg6qs54dckhr64vax";
+    sha256 = "sha256-avf71vAgCL1MU8O7Q3FNN3wEdCDtbNZP0ipETnn8AqA=";
   };
 
   meta = with lib; {
