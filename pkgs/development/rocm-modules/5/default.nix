@@ -70,6 +70,8 @@ in rec {
     # stdenv = llvm.rocmClangStdenv;
   };
 
+  rocm-docs-core = python3Packages.callPackage ./rocm-docs-core { };
+
   ## ROCm-Developer-Tools ##
   hip-common = callPackage ./hip-common {
     inherit rocmUpdateScript;
