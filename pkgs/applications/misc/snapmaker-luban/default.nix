@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.simonkampe ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [ "CVE-2023-5217" ];
   };
 }
