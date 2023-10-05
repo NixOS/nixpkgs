@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://faker.readthedocs.io";
     changelog = "https://github.com/joke2k/faker/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 mbalatsko ];
   };
 }
