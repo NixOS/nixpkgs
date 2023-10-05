@@ -133,7 +133,7 @@ jobs:
             echo "  - Nixpkgs commit: [$rev](https://github.com/${GITHUB_REPOSITORY}/commit/$rev)"
             echo "  - Store path: \`$(realpath result)\`"
             echo "- Tested Nixpkgs:"
-            echo "  - Base branch $GITHUB_BASE_REF"
+            echo "  - Base branch: $GITHUB_BASE_REF"
             echo "  - Latest base branch commit: [$baseSha](https://github.com/${GITHUB_REPOSITORY}/commit/$baseSha)"
             echo "  - Latest PR commit: [$headSha](https://github.com/${GITHUB_REPOSITORY}/commit/$headSha)"
             echo "  - Merge commit: [$mergedSha](https://github.com/${GITHUB_REPOSITORY}/commit/$mergedSha)"
