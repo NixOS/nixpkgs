@@ -1,47 +1,39 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , freezegun
-, pillow
 , pytestCheckHook
 , python-dateutil
-, text-unidecode
-, ukpostcodeparser
 , validators
 }:
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "17.3.0";
+  version = "19.6.2";
 
-  src = fetchPypi {
-    pname = "Faker";
-    inherit version;
-    hash = "sha256-JrKGSlMyCU8sfzlo3uurzmm+Oe1dtNvyK0+guj0aza4=";
+  src = fetchFromGitHub {
+    owner = "joke2k";
+    repo = "faker";
+    rev = "v${version}";
+    hash = "sha256-Ex1bGztYXoysdpkXbT4P3M9smBRjcwlURvkOKHYE6ss=";
   };
 
   propagatedBuildInputs = [
     python-dateutil
-    text-unidecode
   ];
 
   nativeCheckInputs = [
-    freezegun
-    pillow
     pytestCheckHook
-    ukpostcodeparser
+    freezegun
     validators
   ];
 
-  # avoid tests which import random2, an abandoned library
-  pytestFlagsArray = [
-    "--ignore=tests/providers/test_ssn.py"
-  ];
   pythonImportsCheck = [ "faker" ];
 
   meta = with lib; {
     description = "Python library for generating fake user data";
-    homepage = "http://faker.rtfd.org";
+    homepage = "https://faker.readthedocs.io";
+    changelog = "https://github.com/joke2k/faker/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];
   };
