@@ -15,6 +15,11 @@ callPackage ../base.nix rec {
   buildMan = false; # No man pages to build
   targetName = "mlir";
   targetDir = targetName;
+
+  # Fix `DebugTranslation.cpp:139:10: error: no matching function for call to 'get'`
+  # We patch at a different source root, so we modify the patch and include it locally
+  # https://github.com/RadeonOpenCompute/llvm-project/commit/f1d1e10ec7e1061bf0b90abbc1e298d9438a5e74.patch
+  extraPatches = [ ./0000-mlir-fix-debugtranslation.patch ];
   extraNativeBuildInputs = [ clr ];
 
   extraBuildInputs = [
@@ -34,28 +39,12 @@ callPackage ../base.nix rec {
   ];
 
   extraPostPatch = ''
-    chmod +w ../llvm
-    mkdir -p ../llvm/build/bin
-    ln -s ${lit}/bin/lit ../llvm/build/bin/llvm-lit
-
     # `add_library cannot create target "llvm_gtest" because an imported target with the same name already exists`
     substituteInPlace CMakeLists.txt \
       --replace "EXISTS \''${UNITTEST_DIR}/googletest/include/gtest/gtest.h" "FALSE"
 
-    substituteInPlace test/CMakeLists.txt \
-      --replace "FileCheck count not" "" \
-      --replace "list(APPEND MLIR_TEST_DEPENDS mlir_rocm_runtime)" ""
-
-    substituteInPlace lib/ExecutionEngine/CMakeLists.txt \
-      --replace "return()" ""
-
-    # Remove problematic tests
-    rm test/CAPI/execution_engine.c
-    rm test/Target/LLVMIR/llvmir-intrinsics.mlir
-    rm test/Target/LLVMIR/llvmir.mlir
-    rm test/Target/LLVMIR/openmp-llvm.mlir
-    rm test/mlir-cpu-runner/*.mlir
-    rm test/mlir-vulkan-runner/*.mlir
+    # Mainly `No such file or directory`
+    cat ${./1001-mlir-failing-tests.list} | xargs -d \\n rm
   '';
 
   extraPostInstall = ''
@@ -65,5 +54,4 @@ callPackage ../base.nix rec {
 
   checkTargets = [ "check-${targetName}" ];
   requiredSystemFeatures = [ "big-parallel" ];
-  isBroken = true; # `DebugTranslation.cpp:139:10: error: no matching function for call to 'get'`
 }
