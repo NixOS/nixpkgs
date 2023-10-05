@@ -17893,6 +17893,15 @@
     github = "twitchyliquid64";
     githubId = 6328589;
   };
+  twkstar = {
+    email = "tvvkstar@proton.me";
+    github = "twkstar";
+    githubId = 146908613;
+    name = "Twinkling Stars";
+    keys = [{
+      fingerprint = "A557 4B7F FC19 F1E3 7479  8F38 F135 6423 6871 D937";
+    }];
+  };
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
