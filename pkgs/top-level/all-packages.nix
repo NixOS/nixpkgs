@@ -14434,6 +14434,8 @@ with pkgs;
 
   vexctl = callPackage ../tools/security/vexctl { };
 
+  veyon = libsForQt5.callPackage ../applications/networking/veyon { };
+
   vgrep = callPackage ../tools/text/vgrep { };
 
   vhd2vl = callPackage ../applications/science/electronics/vhd2vl { };
