@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
-  version = "9.1.2";
+  version = "9.1.3";
 
   src = fetchFromGitHub {
     owner = "nodejs";
     repo = "llhttp";
     rev = "release/v${finalAttrs.version}";
-    hash = "sha256-kW6u9ETZJcJBh150chfE3SEwFpT7evZ0cqz8caM7fbQ=";
+    hash = "sha256-QacjukWkRCuQA4qzUq45521YOBLPuOSKNR1pVxgxe9o=";
   };
 
   outputs = [ "out" "dev" ];
