@@ -247,6 +247,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
           # see upstream issue https://github.com/dillonkearns/elm-pages/issues/305 for dealing with the read-only problem
           preFixup = ''
             patch $out/lib/node_modules/elm-pages/generator/src/codegen.js ${./packages/elm-pages-fix-read-only.patch}
+            patch $out/lib/node_modules/elm-pages/generator/src/init.js ${./packages/elm-pages-fix-init-read-only.patch}
           '';
 
           postFixup = ''

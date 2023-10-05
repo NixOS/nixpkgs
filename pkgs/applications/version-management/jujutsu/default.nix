@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jujutsu";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "martinvonz";
     repo = "jj";
     rev = "v${version}";
-    sha256 = "sha256-5RN2xaH591/83iNXRcW9i/TyU5ndPZq3P/BesHM9I6w=";
+    hash = "sha256-LJW4Px3K5cz6RJ4sUbwUXsp2+rzEW5wowi+DALHajYA=";
   };
 
-  cargoHash = "sha256-G4W3GeTWTuIZO1PupuZ0hACwhNoNBQhULyT9f6qVckg=";
+  cargoHash = "sha256-fs1cWhBFp2u3HiEx/mMnbwvgwKo97KmftA/sr4dGsiM=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
