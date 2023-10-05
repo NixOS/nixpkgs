@@ -5204,6 +5204,8 @@ self: super: with self; {
     inherit (pkgs) igraph;
   };
 
+  iisignature = callPackage ../development/python-modules/iisignature { };
+
   ijson = callPackage ../development/python-modules/ijson { };
 
   ilua = callPackage ../development/python-modules/ilua { };
