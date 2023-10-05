@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Makefile \
       --replace "-static" ""
+    substituteInPlace include/str.h \
+      --replace "struct str *str_create();" "struct str *str_create(void);"
+    substituteInPlace src/string.c \
+      --replace "struct str *str_create() {" "struct str *str_create(void) {"
   '';
 
   makeFlags = [
