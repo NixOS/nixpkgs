@@ -237,6 +237,7 @@ in rec {
   };
 
   composable_kernel = callPackage ./composable_kernel {
+    inherit rocmUpdateScript rocm-cmake clr;
     inherit (llvm) openmp clang-tools-extra;
     stdenv = llvm.rocmClangStdenv;
   };

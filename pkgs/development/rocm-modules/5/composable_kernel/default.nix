@@ -1,10 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, unstableGitUpdater
+, rocmUpdateScript
 , cmake
 , rocm-cmake
-, hip
+, clr
 , openmp
 , clang-tools-extra
 , gtest
@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "composable_kernel";
-  version = "unstable-2023-01-16";
+  version = "5.7.0";
 
   outputs = [
     "out"
@@ -25,24 +25,21 @@ stdenv.mkDerivation (finalAttrs: {
     "example"
   ];
 
-  # ROCm 5.6 should release composable_kernel as stable with a tag in the future
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "composable_kernel";
-    rev = "80e05267417f948e4f7e63c0fe807106d9a0c0ef";
-    hash = "sha256-+c0E2UtlG/abweLwCWWjNHDO5ZvSIVKwwwettT9mqR4=";
+    rev = "rocm-${finalAttrs.version}";
+    hash = "sha256-Z9X+S2SijGJ8bhr9ghkkWicBUzLzs9fxPpqZxX6BBM4=";
   };
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    hip
+    clr
     clang-tools-extra
   ];
 
-  buildInputs = [
-    openmp
-  ];
+  buildInputs = [ openmp ];
 
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
@@ -71,7 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/example_* $example/bin
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = rocmUpdateScript {
+    name = finalAttrs.pname;
+    owner = finalAttrs.src.owner;
+    repo = finalAttrs.src.repo;
+  };
 
   # Times out otherwise
   requiredSystemFeatures = [ "big-parallel" ];
@@ -82,5 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
+    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })
