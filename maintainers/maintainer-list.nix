@@ -10001,6 +10001,11 @@
     githubId = 591860;
     name = "Lionello Lunesu";
   };
+  liperium = {
+    email = "mattysgervais@gmail.com";
+    github = "liperium";
+    githubId = 48138387;
+  }
   livnev = {
     email = "lev@liv.nev.org.uk";
     github = "livnev";
