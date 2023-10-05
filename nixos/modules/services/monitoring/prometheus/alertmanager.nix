@@ -17,7 +17,10 @@ let
     yml = if cfg.configText != null then
         pkgs.writeText "alertmanager.yml" cfg.configText
         else mkConfigFile;
-    in checkedConfig yml;
+    in
+      if cfg.configSource != null then
+      checkedConfig cfg.configSource
+      else checkedConfig yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--config.file /tmp/alert-manager-substituted.yaml"
@@ -69,6 +72,17 @@ in {
           defines the text that is written to alertmanager.yml. If null, the
           contents of alertmanager.yml is generated from the structured config
           options.
+        '';
+      };
+
+      configSource = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          Alertmanager configuration as YAML file. If non-null, this option
+          defines the text that is written to alertmanager.yml. If null, the
+          contents of alertmanager.yml is generated from the structured config
+          options or configText.
         '';
       };
 
@@ -171,9 +185,9 @@ in {
   config = mkMerge [
     (mkIf cfg.enable {
       assertions = singleton {
-        assertion = cfg.configuration != null || cfg.configText != null;
+        assertion = cfg.configuration != null || cfg.configText != null || cfg.configSource != null;
         message = "Can not enable alertmanager without a configuration. "
-         + "Set either the `configuration` or `configText` attribute.";
+         + "Set either the `configuration`, `configText` or `configSource` attribute.";
       };
     })
     (mkIf cfg.enable {
