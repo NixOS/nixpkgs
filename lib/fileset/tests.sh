@@ -57,17 +57,34 @@ with lib.fileset;'
 expectEqual() {
     local actualExpr=$1
     local expectedExpr=$2
-    if ! actualResult=$(nix-instantiate --eval --strict --show-trace \
+    if actualResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/actualStderr \
         --expr "$prefixExpression ($actualExpr)"); then
-        die "$actualExpr failed to evaluate, but it was expected to succeed"
+        actualExitCode=$?
+    else
+        actualExitCode=$?
     fi
-    if ! expectedResult=$(nix-instantiate --eval --strict --show-trace \
+    actualStderr=$(< "$tmp"/actualStderr)
+
+    if expectedResult=$(nix-instantiate --eval --strict --show-trace 2>"$tmp"/expectedStderr \
         --expr "$prefixExpression ($expectedExpr)"); then
-        die "$expectedExpr failed to evaluate, but it was expected to succeed"
+        expectedExitCode=$?
+    else
+        expectedExitCode=$?
+    fi
+    expectedStderr=$(< "$tmp"/expectedStderr)
+
+    if [[ "$actualExitCode" != "$expectedExitCode" ]]; then
+        echo "$actualStderr" >&2
+        echo "$actualResult" >&2
+        die "$actualExpr should have exited with $expectedExitCode, but it exited with $actualExitCode"
     fi
 
     if [[ "$actualResult" != "$expectedResult" ]]; then
         die "$actualExpr should have evaluated to $expectedExpr:\n$expectedResult\n\nbut it evaluated to\n$actualResult"
+    fi
+
+    if [[ "$actualStderr" != "$expectedStderr" ]]; then
+        die "$actualExpr should have had this on stderr:\n$expectedStderr\n\nbut it was\n$actualStderr"
     fi
 }
 
@@ -84,14 +101,14 @@ expectStorePath() {
     crudeUnquoteJSON <<< "$result"
 }
 
-# Check that a nix expression fails to evaluate (strictly, coercing to json, read-write-mode).
+# Check that a nix expression fails to evaluate (strictly, read-write-mode).
 # And check the received stderr against a regex
 # The expression has `lib.fileset` in scope.
 # Usage: expectFailure NIX REGEX
 expectFailure() {
     local expr=$1
     local expectedErrorRegex=$2
-    if result=$(nix-instantiate --eval --strict --json --read-write-mode --show-trace 2>"$tmp/stderr" \
+    if result=$(nix-instantiate --eval --strict --read-write-mode --show-trace 2>"$tmp/stderr" \
         --expr "$prefixExpression $expr"); then
         die "$expr evaluated successfully to $result, but it was expected to fail"
     fi
@@ -101,15 +118,111 @@ expectFailure() {
     fi
 }
 
-# We conditionally use inotifywait in checkFileset.
+# Check that the traces of a Nix expression are as expected when evaluated.
+# The expression has `lib.fileset` in scope.
+# Usage: expectTrace NIX STR
+expectTrace() {
+    local expr=$1
+    local expectedTrace=$2
+
+    nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTrace \
+        --expr "$prefixExpression trace ($expr)" || true
+
+    actualTrace=$(sed -n 's/^trace: //p' "$tmp/stderrTrace")
+
+    nix-instantiate --eval --show-trace >/dev/null 2>"$tmp"/stderrTraceVal \
+        --expr "$prefixExpression traceVal ($expr)" || true
+
+    actualTraceVal=$(sed -n 's/^trace: //p' "$tmp/stderrTraceVal")
+
+    # Test that traceVal returns the same trace as trace
+    if [[ "$actualTrace" != "$actualTraceVal" ]]; then
+        cat "$tmp"/stderrTrace >&2
+        die "$expr traced this for lib.fileset.trace:\n\n$actualTrace\n\nand something different for lib.fileset.traceVal:\n\n$actualTraceVal"
+    fi
+
+    if [[ "$actualTrace" != "$expectedTrace" ]]; then
+        cat "$tmp"/stderrTrace >&2
+        die "$expr should have traced this:\n\n$expectedTrace\n\nbut this was actually traced:\n\n$actualTrace"
+    fi
+}
+
+# We conditionally use inotifywait in withFileMonitor.
 # Check early whether it's available
 # TODO: Darwin support, though not crucial since we have Linux CI
 if type inotifywait 2>/dev/null >/dev/null; then
-    canMonitorFiles=1
+    canMonitor=1
 else
-    echo "Warning: Not checking that excluded files don't get accessed since inotifywait is not available" >&2
-    canMonitorFiles=
+    echo "Warning: Cannot check for paths not getting read since the inotifywait command (from the inotify-tools package) is not available" >&2
+    canMonitor=
 fi
+
+# Run a function while monitoring that it doesn't read certain paths
+# Usage: withFileMonitor FUNNAME PATH...
+# - FUNNAME should be a bash function that:
+#   - Performs some operation that should not read some paths
+#   - Delete the paths it shouldn't read without triggering any open events
+# - PATH... are the paths that should not get read
+#
+# This function outputs the same as FUNNAME
+withFileMonitor() {
+    local funName=$1
+    shift
+
+    # If we can't monitor files or have none to monitor, just run the function directly
+    if [[ -z "$canMonitor" ]] || (( "$#" == 0 )); then
+        "$funName"
+    else
+
+        # Use a subshell to start the coprocess in and use a trap to kill it when exiting the subshell
+        (
+            # Assigned by coproc, makes shellcheck happy
+            local watcher watcher_PID
+
+            # Start inotifywait in the background to monitor all excluded paths
+            coproc watcher {
+                # inotifywait outputs a string on stderr when ready
+                # Redirect it to stdout so we can access it from the coproc's stdout fd
+                # exec so that the coprocess is inotify itself, making the kill below work correctly
+                # See below why we listen to both open and delete_self events
+                exec inotifywait --format='%e %w' --event open,delete_self --monitor "$@" 2>&1
+            }
+
+            # This will trigger when this subshell exits, no matter if successful or not
+            # After exiting the subshell, the parent shell will continue executing
+            trap 'kill "${watcher_PID}"' exit
+
+            # Synchronously wait until inotifywait is ready
+            while read -r -u "${watcher[0]}" line && [[ "$line" != "Watches established." ]]; do
+                :
+            done
+
+            # Call the function that should not read the given paths and delete them afterwards
+            "$funName"
+
+            # Get the first event
+            read -r -u "${watcher[0]}" event file
+
+            # With funName potentially reading files first before deleting them,
+            # there's only these two possible event timelines:
+            # - open*, ..., open*, delete_self, ..., delete_self: If some excluded paths were read
+            # - delete_self, ..., delete_self: If no excluded paths were read
+            # So by looking at the first event we can figure out which one it is!
+            # This also means we don't have to wait to collect all events.
+            case "$event" in
+                OPEN*)
+                    die "$funName opened excluded file $file when it shouldn't have"
+                    ;;
+                DELETE_SELF)
+                    # Expected events
+                    ;;
+                *)
+                    die "During $funName, Unexpected event type '$event' on file $file that should be excluded"
+                    ;;
+            esac
+        )
+    fi
+}
 
 # Check whether a file set includes/excludes declared paths as expected, usage:
 #
@@ -120,7 +233,7 @@ fi
 # )
 # checkFileset './a' # Pass the fileset as the argument
 declare -A tree
-checkFileset() (
+checkFileset() {
     # New subshell so that we can have a separate trap handler, see `trap` below
     local fileset=$1
 
@@ -168,54 +281,21 @@ checkFileset() (
         touch "${filesToCreate[@]}"
     fi
 
-    # Start inotifywait in the background to monitor all excluded files (if any)
-    if [[ -n "$canMonitorFiles" ]] && (( "${#excludedFiles[@]}" != 0 )); then
-        coproc watcher {
-            # inotifywait outputs a string on stderr when ready
-            # Redirect it to stdout so we can access it from the coproc's stdout fd
-            # exec so that the coprocess is inotify itself, making the kill below work correctly
-            # See below why we listen to both open and delete_self events
-            exec inotifywait --format='%e %w' --event open,delete_self --monitor "${excludedFiles[@]}" 2>&1
-        }
-        # This will trigger when this subshell exits, no matter if successful or not
-        # After exiting the subshell, the parent shell will continue executing
-        # shellcheck disable=SC2154
-        trap 'kill "${watcher_PID}"' exit
-
-        # Synchronously wait until inotifywait is ready
-        while read -r -u "${watcher[0]}" line && [[ "$line" != "Watches established." ]]; do
-            :
-        done
-    fi
-
-    # Call toSource with the fileset, triggering open events for all files that are added to the store
     expression="toSource { root = ./.; fileset = $fileset; }"
-    storePath=$(expectStorePath "$expression")
 
-    # Remove all files immediately after, triggering delete_self events for all of them
-    rm -rf -- *
+    # We don't have lambda's in bash unfortunately,
+    # so we just define a function instead and then pass its name
+    # shellcheck disable=SC2317
+    run() {
+        # Call toSource with the fileset, triggering open events for all files that are added to the store
+        expectStorePath "$expression"
+        if (( ${#excludedFiles[@]} != 0 )); then
+            rm "${excludedFiles[@]}"
+        fi
+    }
 
-    # Only check for the inotify events if we actually started inotify earlier
-    if [[ -v watcher ]]; then
-        # Get the first event
-        read -r -u "${watcher[0]}" event file
-
-        # There's only these two possible event timelines:
-        # - open, ..., open, delete_self, ..., delete_self: If some excluded files were read
-        # - delete_self, ..., delete_self: If no excluded files were read
-        # So by looking at the first event we can figure out which one it is!
-        case "$event" in
-            OPEN)
-                die "$expression opened excluded file $file when it shouldn't have"
-                ;;
-            DELETE_SELF)
-                # Expected events
-                ;;
-            *)
-                die "Unexpected event type '$event' on file $file that should be excluded"
-                ;;
-        esac
-    fi
+    # Runs the function while checking that the given excluded files aren't read
+    storePath=$(withFileMonitor run "${excludedFiles[@]}")
 
     # For each path that should be included, make sure it does occur in the resulting store path
     for p in "${included[@]}"; do
@@ -230,7 +310,9 @@ checkFileset() (
             die "$expression included path $p when it shouldn't have"
         fi
     done
-)
+
+    rm -rf -- *
+}
 
 
 #### Error messages #####
@@ -281,8 +363,12 @@ expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.to
 expectFailure 'toSource { root = ./.; fileset = ./a; }' 'lib.fileset.toSource: `fileset` \('"$work"'/a\) does not exist.'
 
 # File sets cannot be evaluated directly
-expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
-expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'
+expectFailure 'union ./. ./.' 'lib.fileset: Directly evaluating a file set is not supported.
+\s*To turn it into a usable source, use `lib.fileset.toSource`.
+\s*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
+expectFailure '_emptyWithoutBase' 'lib.fileset: Directly evaluating a file set is not supported.
+\s*To turn it into a usable source, use `lib.fileset.toSource`.
+\s*To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'
 
 # Past versions of the internal representation are supported
 expectEqual '_coerce "<tests>: value" { _type = "fileset"; _internalVersion = 0; _internalBase = ./.; }' \
@@ -500,6 +586,147 @@ done
 # Meanwhile, the test infra here is not the fastest, creating 10000 would be too slow.
 # So, just using 1000 files for now.
 checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
+
+## Tracing
+
+# The second trace argument is returned
+expectEqual 'trace ./. "some value"' 'builtins.trace "(empty)" "some value"'
+
+# The fileset traceVal argument is returned
+expectEqual 'traceVal ./.' 'builtins.trace "(empty)" (_create ./. "directory")'
+
+# The tracing happens before the final argument is needed
+expectEqual 'trace ./.' 'builtins.trace "(empty)" (x: x)'
+
+# Tracing an empty directory shows it as such
+expectTrace './.' '(empty)'
+
+# This also works if there are directories, but all recursively without files
+mkdir -p a/b/c
+expectTrace './.' '(empty)'
+rm -rf -- *
+
+# The empty file set without a base also prints as empty
+expectTrace '_emptyWithoutBase' '(empty)'
+expectTrace 'unions [ ]' '(empty)'
+
+# If a directory is fully included, print it as such
+touch a
+expectTrace './.' "$work"' (all files in directory)'
+rm -rf -- *
+
+# If a directory is not fully included, recurse
+mkdir a b
+touch a/{x,y} b/{x,y}
+expectTrace 'union ./a/x ./b' "$work"'
+- a
+  - x (regular)
+- b (all files in directory)'
+rm -rf -- *
+
+# If an included path is a file, print its type
+touch a x
+ln -s a b
+mkfifo c
+expectTrace 'unions [ ./a ./b ./c ]' "$work"'
+- a (regular)
+- b (symlink)
+- c (unknown)'
+rm -rf -- *
+
+# Do not print directories without any files recursively
+mkdir -p a/b/c
+touch b x
+expectTrace 'unions [ ./a ./b ]' "$work"'
+- b (regular)'
+rm -rf -- *
+
+# If all children are either fully included or empty directories,
+# the parent should be printed as fully included
+touch a
+mkdir b
+expectTrace 'union ./a ./b' "$work"' (all files in directory)'
+rm -rf -- *
+
+mkdir -p x/b x/c
+touch x/a
+touch a
+# If all children are either fully excluded or empty directories,
+# the parent should be shown (or rather not shown) as fully excluded
+expectTrace 'unions [ ./a ./x/b ./x/c ]' "$work"'
+- a (regular)'
+rm -rf -- *
+
+# Completely filtered out directories also print as empty
+touch a
+expectTrace '_create ./. {}' '(empty)'
+rm -rf -- *
+
+# A general test to make sure the resulting format makes sense
+# Such as indentation and ordering
+mkdir -p bar/{qux,someDir}
+touch bar/{baz,qux,someDir/a} foo
+touch bar/qux/x
+ln -s x bar/qux/a
+mkfifo bar/qux/b
+expectTrace 'unions [
+  ./bar/baz
+  ./bar/qux/a
+  ./bar/qux/b
+  ./bar/someDir/a
+  ./foo
+]' "$work"'
+- bar
+  - baz (regular)
+  - qux
+    - a (symlink)
+    - b (unknown)
+  - someDir (all files in directory)
+- foo (regular)'
+rm -rf -- *
+
+# For recursively included directories,
+# `(all files in directory)` should only be used if there's at least one file (otherwise it would be `(empty)`)
+# and this should be determined without doing a full search
+#
+# a is intentionally ordered first here in order to allow triggering the short-circuit behavior
+# We then check that b is not read
+# In a more realistic scenario, some directories might need to be recursed into,
+# but a file would be quickly found to trigger the short-circuit.
+touch a
+mkdir b
+# We don't have lambda's in bash unfortunately,
+# so we just define a function instead and then pass its name
+# shellcheck disable=SC2317
+run() {
+    # This shouldn't read b/
+    expectTrace './.' "$work"' (all files in directory)'
+    # Remove all files immediately after, triggering delete_self events for all of them
+    rmdir b
+}
+# Runs the function while checking that b isn't read
+withFileMonitor run b
+rm -rf -- *
+
+# Partially included directories trace entries as they are evaluated
+touch a b c
+expectTrace '_create ./. { a = null; b = "regular"; c = throw "b"; }' "$work"'
+- b (regular)'
+
+# Except entries that need to be evaluated to even figure out if it's only partially included:
+# Here the directory could be fully excluded or included just from seeing a and b,
+# so c needs to be evaluated before anything can be traced
+expectTrace '_create ./. { a = null; b = null; c = throw "c"; }' ''
+expectTrace '_create ./. { a = "regular"; b = "regular"; c = throw "c"; }' ''
+rm -rf -- *
+
+# We can trace large directories (10000 here) without any problems
+filesToCreate=({0..9}{0..9}{0..9}{0..9})
+expectedTrace=$work$'\n'$(printf -- '- %s (regular)\n' "${filesToCreate[@]}")
+# We need an excluded file so it doesn't print as `(all files in directory)`
+touch 0 "${filesToCreate[@]}"
+expectTrace 'unions (mapAttrsToList (n: _: ./. + "/${n}") (removeAttrs (builtins.readDir ./.) [ "0" ]))' "$expectedTrace"
+rm -rf -- *
 
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 

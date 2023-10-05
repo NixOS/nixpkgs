@@ -102,7 +102,7 @@ in
       unitConfig = {
         Description = "GnuPG cryptographic agent and passphrase cache";
         Documentation = "man:gpg-agent(1)";
-        Requires = [ "gpg-agent.socket" ];
+        Requires = [ "sockets.target" ];
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/gpg-agent --supervised";
