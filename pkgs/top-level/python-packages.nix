@@ -14183,7 +14183,9 @@ self: super: with self; {
 
   torchaudio = callPackage ../development/python-modules/torchaudio { };
 
-  torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
+  torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix {
+    cudaPackages = pkgs.cudaPackages_12;
+  };
 
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
