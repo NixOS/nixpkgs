@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.71.0";
+  version = "0.72.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-vwYq5b+cMYf/gnpCwLEpErYKqYw/RwcvyBjhp+5+bTY=";
+    hash = "sha256-Hcc/1+whRTl5ity4FgyDhNKhHED7EUU5jHUrFlmqC/k=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
@@ -25,11 +25,17 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-j9iaxXfMlG9dT6fvYgPQg6Y0QvCRiBU1peO0YgsGHOY=";
+    hash = "sha256-UBP7IwBpmrzmiGCmS3TFuhou6RzbBTYlPIfHY4D5cb8=";
   };
 
   configurePhase = ''
     export HOME=$(mktemp -d)/yarn_home
+
+    substituteInPlace server/migrations/20230815063834-migrate-emoji-in-document-title.js \
+      --replace "node " "${nodejs}/bin/node "
+
+    substituteInPlace server/migrations/20230827234031-migrate-emoji-in-revision-title.js \
+      --replace "node " "${nodejs}/bin/node "
   '';
 
   buildPhase = ''
