@@ -10,12 +10,13 @@
 , pythonOlder
 , segno
 , setuptools
+, trustme
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "62";
+  version = "63";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-5XCF67YuelS4RDUxfImSAELfdb3rJWGprIYQeQPp+yk=";
+    hash = "sha256-am11pFgYMRccUNaK/iKdp6mfk5NQ4QnU41xbFiGCMPs=";
   };
 
   postPatch = ''
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
+    trustme
   ];
 
   pytestFlagsArray = [

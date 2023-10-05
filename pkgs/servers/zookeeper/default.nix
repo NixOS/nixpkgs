@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nathan-gs cstrahan pradeepchhetri ztzg ];
+    maintainers = with maintainers; [ nathan-gs pradeepchhetri ztzg ];
     platforms = platforms.unix;
   };
 }

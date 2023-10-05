@@ -10792,6 +10792,8 @@ self: super: with self; {
 
   pyserial-asyncio = callPackage ../development/python-modules/pyserial-asyncio { };
 
+  pyserial-asyncio-fast = callPackage ../development/python-modules/pyserial-asyncio-fast { };
+
   pyserial = callPackage ../development/python-modules/pyserial { };
 
   pysftp = callPackage ../development/python-modules/pysftp { };

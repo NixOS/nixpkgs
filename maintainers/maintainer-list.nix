@@ -3683,12 +3683,6 @@
     githubId = 398996;
     name = "Christopher Singley";
   };
-  cstrahan = {
-    email = "charles@cstrahan.com";
-    github = "cstrahan";
-    githubId = 143982;
-    name = "Charles Strahan";
-  };
   cswank = {
     email = "craigswank@gmail.com";
     github = "cswank";
@@ -10349,12 +10343,6 @@
     github = "lukaswrz";
     githubId = 84395723;
     name = "Lukas Wurzinger";
-  };
-  lukeadams = {
-    email = "luke.adams@belljar.io";
-    github = "lukeadams";
-    githubId = 3508077;
-    name = "Luke Adams";
   };
   lukebfox = {
     email = "lbentley-fox1@sheffield.ac.uk";

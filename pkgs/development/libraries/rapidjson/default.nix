@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }
