@@ -59,7 +59,9 @@ in stdenv.mkDerivation rec {
       --replace "/opt/Roam Research/roam-research" "roam-research"
   '';
 
+  # autoPatchelfHook/patchelf are not used because they cause the binary to coredump.
   dontPatchELF = true;
+
   meta = with lib; {
     description = "A note-taking tool for networked thought";
     homepage = "https://roamresearch.com/";
