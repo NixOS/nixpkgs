@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.5.36";
+  version = "0.5.37";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5eA9fqL748VigNgy1G7bZtMstV7EI9LLPhv6xZnCEFA=";
+    hash = "sha256-HKtUSINJNREvu5t2jMEirkwMG6O9tBnWhACMv4L01TE=";
   };
 
   propagatedBuildInputs = [
