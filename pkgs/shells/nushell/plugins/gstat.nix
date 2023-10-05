@@ -21,7 +21,10 @@ rustPlatform.buildRustPackage rec {
     cargo test --manifest-path crates/nu_plugin_gstat/Cargo.toml
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    # Skip the version check and only check the hash because we inherit version from nushell.
+    extraArgs = [ "--version=skip" ];
+  };
 
   meta = with lib; {
     description = "A git status plugin for Nushell";
