@@ -37,14 +37,14 @@
 , apparmorRulesFromClosure
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
   version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Sz3+5VvfOgET1aiormEnBOrF+yN79tiSQvjLAoGqTLw=";
     fetchSubmodules = true;
   };
@@ -167,4 +167,4 @@ stdenv.mkDerivation rec {
     # Needs macOS >= 10.14.6
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };
-}
+})
