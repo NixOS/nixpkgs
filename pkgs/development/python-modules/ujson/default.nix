@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ultrajson/ultrajson";
     changelog = "https://github.com/ultrajson/ultrajson/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ mbalatsko ];
   };
 }
