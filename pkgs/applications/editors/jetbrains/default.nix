@@ -124,7 +124,7 @@ let
           server with your local machine, downloads necessary components on the
           backend, and opens your project in JetBrains Client.
         '';
-        maintainers = with maintainers; [ kouyk ];
+        maintainers = with maintainers; [ ];
       };
     });
 
