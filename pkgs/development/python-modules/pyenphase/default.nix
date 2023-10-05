@@ -56,6 +56,11 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  disabledTests = [
+    # https://github.com/pyenphase/pyenphase/issues/97
+    "test_with_7_x_firmware"
+  ];
+
   pythonImportsCheck = [
     "pyenphase"
   ];
