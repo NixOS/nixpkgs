@@ -22,15 +22,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
     rev = "v${version}";
-    hash = "sha256-sHpW2yjqYz4ePR6aQFUBD6BZwgDt3DT22/kWuKr9fAc=";
+    hash = "sha256-iEHTFofga/HV/1jSAqTsqV55zC22tqI7UW7m4PZgz0M=";
   };
 
-  cargoSha256 = "sha256-Pg3V6Bd+drFPiJtUwsoKxu6snN88KvM+lsvnWBK/rvk=";
+  cargoHash = "sha256-ijlivyBezLECBSaWBYVy9tVcSO8U+yGDQyU4dIATR6k=";
 
   nativeBuildInputs = [
     pkg-config
