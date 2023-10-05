@@ -3551,6 +3551,8 @@ self: super: with self; {
 
   es-client = callPackage ../development/python-modules/es-client { };
 
+  esig = callPackage ../development/python-modules/esig { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
