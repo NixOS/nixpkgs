@@ -2,6 +2,7 @@
 , fetchFromSourcehut
 , buildGoModule
 , nix-update-script
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -17,7 +18,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-dWzojV3tDA5lLdpAQNC9NaADGyvV7dNOS3x8mfgNNtA=";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = nixosTests.systemd-lock-handler;
+  };
 
   # The Makefile expects to find the binary in the source root. Make
   # the one built by `buildGoModule` available so that `make install`
