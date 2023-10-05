@@ -9,7 +9,6 @@
 , requests
 , tqdm
 , urllib3
-, bleach
 }:
 
 buildPythonPackage rec {
