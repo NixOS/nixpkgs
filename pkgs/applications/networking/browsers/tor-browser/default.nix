@@ -99,8 +99,8 @@ lib.warnIf (useHardenedMalloc != null)
   sources = {
     x86_64-linux = fetchurl {
       urls = [
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
@@ -109,8 +109,8 @@ lib.warnIf (useHardenedMalloc != null)
 
     i686-linux = fetchurl {
       urls = [
-        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://archive.torproject.org/tor-package-archive/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
