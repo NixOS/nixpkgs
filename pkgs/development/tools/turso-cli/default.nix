@@ -1,20 +1,27 @@
 {
   lib,
-  buildGoModule,
+  buildGo121Module,
   fetchFromGitHub,
 }:
-buildGoModule rec {
+buildGo121Module rec {
   pname = "turso-cli";
-  version = "0.82.0";
+  version = "0.85.3";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso-cli";
     rev = "v${version}";
-    hash = "sha256-JFuD10EhR1/nmYPMnNsR/8PUR5ScvWyS+vhg7ZO5TpI=";
+    hash = "sha256-dJpHrqPyikkUnE4Un1fGOEJL49U5IiInYeSWmI04r18=";
   };
 
-  vendorHash = "sha256-Y/pg8+w6B1YQqaZ5wj8QZxiBHAG0Tf3Zec5WlVyA4eI=";
+  vendorHash = "sha256-Hv4CacBrRX2YT3AkbNzyWrA9Ex6YMDPrPvezukwMkTE=";
+
+  # Build with production code
+  tags = ["prod"];
+  # Include version for `turso --version` reporting
+  preBuild = ''
+    echo "v${version}" > internal/cmd/version.txt
+  '';
 
   # Test_setDatabasesCache fails due to /homeless-shelter: read-only file system error.
   doCheck = false;
@@ -22,6 +29,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "This is the command line interface (CLI) to Turso.";
     homepage = "https://turso.tech";
+    mainProgram = "turso";
     license = licenses.mit;
     maintainers = with maintainers; [ zestsystem kashw2 ];
   };

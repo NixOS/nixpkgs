@@ -28,5 +28,11 @@ mkDerivation {
   outputs = [ "out" "dev" ];
   patches = [
     ./0001-Remove-impure-smbd-search-path.patch
+
+    # Fix a crash when saving files.
+    (fetchpatch {
+      url = "https://invent.kde.org/frameworks/kio/-/commit/48322f44323a1fc09305d66d9093fe6c3780709e.patch";
+      hash = "sha256-4NxI2mD/TdthvrzgatCAlM6VN3N38i3IJUHh0Bs8Fjk=";
+    })
  ];
 }

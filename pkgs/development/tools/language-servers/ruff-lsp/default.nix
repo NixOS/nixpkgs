@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ruff-lsp";
-  version = "0.0.39";
+  version = "0.0.40";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -24,22 +24,8 @@ buildPythonPackage rec {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "v${version}";
-    hash = "sha256-hbnSx59uSzXHeAhZPZnCzxl+mCZIdr29uUPfQCsm/Ww=";
+    hash = "sha256-CQ4SDIGhUTn7fdvoGag+XM7HcY+qJyp9McyzpoTQ0tM=";
   };
-
-  patches = [
-    # update tests to fix compatibility with ruff 0.0.291
-    # https://github.com/astral-sh/ruff-lsp/pull/250
-    (fetchpatch {
-      name = "bump-ruff-version.patch";
-      url = "https://github.com/astral-sh/ruff-lsp/commit/35691407c4f489416a46fd2e88ef037b1204feb7.patch";
-      hash = "sha256-D6k2BWDUqN4GBhjspRwg84Idr7fvKMbmAAkG3I1YOH4=";
-      excludes = [
-        "requirements.txt"
-        "requirements-dev.txt"
-      ];
-    })
-  ];
 
   postPatch = ''
     # ruff binary added to PATH in wrapper so it's not needed

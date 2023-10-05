@@ -37,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-desktop";
-  version = "10.8";
+  version = "10.8.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-fOsTBnKtwBGQSPkBBrzwHEB3+OcJYtPIdvZsV31oi6g=";
+    hash = "sha256-KhCQ5v6R6sS5Vjl10QhSuAxAPTDDAvJ6uu6VKTdX7m4=";
   };
 
   patches = [

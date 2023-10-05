@@ -1,7 +1,6 @@
 { lib
 , bash
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , nix-update-script
 , nixosTests
@@ -12,28 +11,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sudo-rs";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "memorysafety";
     repo = "sudo-rs";
     rev = "v${version}";
-    hash = "sha256-Kk5D3387hdl6eGWTSV003r+XajuDh6YgHuqYlj9NnaQ=";
+    hash = "sha256-EQEdNDUXEMMiFZKuu9LR9ywjvKWyM5bWcRHHUB9+gp4=";
   };
-  cargoHash = "sha256-yeMK37tOgJcs9pW3IclpR5WMXx0gMDJ2wcmInxJYbQ8=";
+  cargoHash = "sha256-Zs9/A7u4yMLKY4cAUCnsqRHgkxI8R3w1JwkAd2lw0eo=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
 
   buildInputs = [ pam ];
-
-  patches = [
-    (fetchpatch {
-      # @R-VdP's patch to work with NixOS' suid wrappers
-      name = "Skip self_check when executed as root.patch";
-      url = "https://github.com/R-VdP/sudo-rs/commit/a44541dcb36b94f938daaed66b3ff06cfc1c2b40.patch";
-      hash = "sha256-PdmOqp/NDjFy8ve4jEOi58e0N9xUnaVKioQwdC5Jf1U=";
-    })
-  ];
 
   # Don't attempt to generate the docs in a (pan)Docker container
   postPatch = ''

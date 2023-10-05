@@ -1,22 +1,32 @@
 { lib
 , stdenv
 , git
-, runtimeShell
 , fetchurl
 , wrapGAppsHook
+, alsa-lib
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
 , glib
 , gtk3
-, atomEnv
+, mesa
+, nss
+, nspr
 , xorg
+, libdrm
+, libsecret
 , libxkbcommon
-, hunspell
+, pango
+, systemd
 , hunspellDicts
 , useHunspell ? true
 , languages ? [ "en_US" ]
 , withNemoAction ? true
 , makeDesktopItem
 , copyDesktopItems
-, makeWrapper
 , asar
 , python3
 }:
@@ -32,13 +42,35 @@ let
     aarch64-linux.hash = "sha256-GdPnmhMZR3Y2WB2j98JEWomdKFZuTgxN8oga/tBwA4U=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  additionalLibs = lib.makeLibraryPath [
+  newLibpath = lib.makeLibraryPath [
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    libsecret
+    mesa
+    nss
+    nspr
+    libdrm
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
     xorg.libxshmfence
     libxkbcommon
     xorg.libxkbfile
+    pango
     stdenv.cc.cc.lib
+    systemd
   ];
-  newLibpath = "${atomEnv.libPath}:${additionalLibs}";
 
   # Hunspell
   hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;

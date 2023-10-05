@@ -316,7 +316,12 @@ self: super: {
 
   # Overriding the version pandoc dependency uses as the latest release has version bounds
   # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  patat = super.patat.override { pandoc = self.pandoc_3_1_6_1; };
+  #
+  # The patch can be removed once the commit being pulled is in a release.
+  patat = appendPatch (fetchpatch {
+    url = "https://github.com/jaspervdj/patat/pull/143/commits/cb5d5b6439204b5bd52939e42a11518ac81139fe.patch";
+    sha256 = "sha256-EPiyxziPtn2fAExKknI2uKUGahWCFnv7K8bpVkAgezQ=";
+  }) (super.patat.override { pandoc = self.pandoc_3_1_8; });
 
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
@@ -347,7 +352,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0fg3q7apdijnlgyb0yps1znjjd2nv3016r9cyxyw209sqn3whnx5";
+      sha256 = "sha256-+buXiG9auq46+reMrs2rBWoxHgPkHmP8BY5BugooU+Q=";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -518,13 +523,8 @@ self: super: {
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 
-  jacinda = appendPatches [
-    (pkgs.fetchpatch {
-      name = "jacinda-alex-3.3.patch";
-      url = "https://github.com/vmchale/jacinda/commit/b8e18871900402e6ab0addae2e41a0f360682ae3.patch";
-      sha256 = "0c1b9hp9j44zafzjidp301dz0m54vplgfisqvb1zrh1plk6vsxsa";
-    })
-  ] (overrideCabal { revision = null; editedCabalFile = null; } super.jacinda);
+  # Requires alex >= 3.4
+  jacinda = super.jacinda.override { alex = self.alex_3_4_0_0; };
 
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year;                # http://hydra.cryp.to/build/497858/log/raw
@@ -1468,31 +1468,6 @@ self: super: {
     });
   };
 
-  jsaddle-webkit2gtk =
-    appendPatches [
-      (pkgs.fetchpatch {
-        name = "jsaddle-webkit2gtk-ghc-9.2.patch";
-        url = "https://github.com/ghcjs/jsaddle/commit/d2ce9e6be1dcba0ab417314a0b848012d1a47e03.diff";
-        stripLen = 1;
-        includes = [ "jsaddle-webkit2gtk.cabal" ];
-        sha256 = "16pcs3l7s8shhcnrhi80bwjgy7w23csd9b8qpmc5lnxn4wxr4c2r";
-      })
-      (pkgs.fetchpatch {
-        name = "jsaddle-webkit2gtk-ghc-9.6.patch";
-        url = "https://github.com/ghcjs/jsaddle/commit/99b23dac8b4c5b23f5ed7963e681a46c1abdd1a5.patch";
-        sha256 = "02rdifap9vzf6bhjp5siw68ghjrxh2phzd0kwjihf3hxi4a2xlp3";
-        stripLen = 1;
-        includes = [ "jsaddle-webkit2gtk.cabal" ];
-      })
-    ]
-    (overrideCabal (old: {
-      postPatch = old.postPatch or "" + ''
-        sed -i 's/aeson.*,/aeson,/' jsaddle-webkit2gtk.cabal
-        sed -i 's/text.*,/text,/' jsaddle-webkit2gtk.cabal
-      '';
-    })
-    super.jsaddle-webkit2gtk);
-
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
@@ -1861,15 +1836,6 @@ self: super: {
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
 
-  # while waiting for a new release: https://github.com/brendanhay/amazonka/pull/572
-  amazonka = appendPatches [
-    (fetchpatch {
-      relative = "amazonka";
-      url = "https://github.com/brendanhay/amazonka/commit/43ddd87b1ebd6af755b166e16336259ec025b337.patch";
-      sha256 = "sha256-9Ed3qrLGRaNCdvqWMyg8ydAnqDkFqWKLLoObv/5jG54=";
-    })
-  ] (doJailbreak super.amazonka);
-
   # Test suite does not compile.
   feed = dontCheck super.feed;
 
@@ -1915,23 +1881,27 @@ self: super: {
   inherit (let
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
-      pandoc = self.pandoc_3_1_6_1;
+      pandoc = self.pandoc_3_1_8;
 
       # pandoc depends on crypton-connection, which requires tls >= 1.7
-      tls = self.tls_1_7_1;
+      tls = self.tls_1_9_0;
       crypton-connection = unmarkBroken super.crypton-connection;
 
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
       http-client-tls = self.http-client-tls_0_3_6_3;
+
+      # pandoc depends on skylighting >= 0.14
+      skylighting = self.skylighting_0_14;
+      skylighting-core = self.skylighting-core_0_14;
     };
   in {
     pandoc-cli = super.pandoc-cli.overrideScope pandoc-cli-overlay;
-    pandoc_3_1_6_1 = doDistribute (super.pandoc_3_1_6_1.overrideScope pandoc-cli-overlay);
+    pandoc_3_1_8 = doDistribute (super.pandoc_3_1_8.overrideScope pandoc-cli-overlay);
     pandoc-lua-engine = super.pandoc-lua-engine.overrideScope pandoc-cli-overlay;
   })
     pandoc-cli
-    pandoc_3_1_6_1
+    pandoc_3_1_8
     pandoc-lua-engine
     ;
 
@@ -2135,27 +2105,6 @@ self: super: {
     relative = "yi-language";
     sha256 = "sha256-AVQLvul3ufxGQyoXud05qauclNanf6kunip0oJ/9lWQ=";
   }) (dontCheck super.yi-language);
-
-  # 2022-03-16: Upstream is not bumping bounds https://github.com/ghcjs/jsaddle/issues/123
-  # 2023-07-14: Upstream is also not releasing fixes.
-  jsaddle = appendPatch
-    (fetchpatch {
-      name = "jsaddle-casemapping.patch";
-      url = "https://github.com/ghcjs/jsaddle/commit/f90df85fec84fcc4927bfb67452e31342f5aec1f.patch";
-      sha256 = "sha256-xCtDxpjZbus8VSeBUEV0OnJlcQKjeL1PbYSHnhpFuyI=";
-      relative = "jsaddle";
-    })
-    (overrideCabal (drv: {
-    # lift conditional version constraint on ref-tf
-    postPatch = ''
-      sed -i 's/ref-tf.*,/ref-tf,/' jsaddle.cabal
-      sed -i 's/attoparsec.*,/attoparsec,/' jsaddle.cabal
-      sed -i 's/time.*,/time,/' jsaddle.cabal
-      sed -i 's/vector.*,/vector,/' jsaddle.cabal
-      sed -i 's/(!name)/(! name)/' src/Language/Javascript/JSaddle/Object.hs
-    '' + (drv.postPatch or "");
-    })
-    (doJailbreak super.jsaddle));
 
   # 2022-03-22: Jailbreak for base bound: https://github.com/reflex-frp/reflex-dom/pull/433
   reflex-dom = assert super.reflex-dom.version == "0.6.1.1"; doJailbreak super.reflex-dom;
@@ -2757,6 +2706,7 @@ self: super: {
 
   # Tests fail due to the newly-build fourmolu not being in PATH
   # https://github.com/fourmolu/fourmolu/issues/231
+  fourmolu_0_14_0_0 = dontCheck super.fourmolu_0_14_0_0;
   fourmolu_0_13_1_0 = dontCheck super.fourmolu_0_13_1_0;
 
   # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
@@ -2773,4 +2723,9 @@ self: super: {
 
   # The hackage source is somehow missing a file present in the repo (tests/ListStat.hs).
   sym = dontCheck super.sym;
+
+  # Too strict bounds on base, ghc-prim, primitive
+  # https://github.com/kowainik/typerep-map/pull/128
+  typerep-map = doJailbreak super.typerep-map;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

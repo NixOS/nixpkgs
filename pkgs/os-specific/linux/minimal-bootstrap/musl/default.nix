@@ -70,8 +70,8 @@ bash.runCommand "${pname}-${version}" {
     --host=${hostPlatform.config}
 
   # Build
-  make
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''

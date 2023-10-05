@@ -7,11 +7,14 @@ let
     isString
     pathExists
     readDir
-    typeOf
+    seq
     split
+    trace
+    typeOf
     ;
 
   inherit (lib.attrsets)
+    attrNames
     attrValues
     mapAttrs
     setAttrByPath
@@ -28,6 +31,7 @@ let
     drop
     elemAt
     filter
+    findFirst
     findFirstIndex
     foldl'
     head
@@ -64,7 +68,7 @@ rec {
   # - Increment this version
   # - Add an additional migration function below
   # - Update the description of the internal representation in ./README.md
-  _currentVersion = 2;
+  _currentVersion = 3;
 
   # Migrations between versions. The 0th element converts from v0 to v1, and so on
   migrations = [
@@ -89,7 +93,37 @@ rec {
         _internalVersion = 2;
       }
     )
+
+    # Convert v2 into v3: filesetTree's now have a representation for an empty file set without a base path
+    (
+      filesetV2:
+      filesetV2 // {
+        # All v1 file sets are not the new empty file set
+        _internalIsEmptyWithoutBase = false;
+        _internalVersion = 3;
+      }
+    )
   ];
+
+  _noEvalMessage = ''
+    lib.fileset: Directly evaluating a file set is not supported.
+      To turn it into a usable source, use `lib.fileset.toSource`.
+      To pretty-print the contents, use `lib.fileset.trace` or `lib.fileset.traceVal`.'';
+
+  # The empty file set without a base path
+  _emptyWithoutBase = {
+    _type = "fileset";
+
+    _internalVersion = _currentVersion;
+
+    # The one and only!
+    _internalIsEmptyWithoutBase = true;
+
+    # Due to alphabetical ordering, this is evaluated last,
+    # which makes the nix repl output nicer than if it would be ordered first.
+    # It also allows evaluating it strictly up to this error, which could be useful
+    _noEval = throw _noEvalMessage;
+  };
 
   # Create a fileset, see ./README.md#fileset
   # Type: path -> filesetTree -> fileset
@@ -103,14 +137,17 @@ rec {
       _type = "fileset";
 
       _internalVersion = _currentVersion;
+
+      _internalIsEmptyWithoutBase = false;
       _internalBase = base;
       _internalBaseRoot = parts.root;
       _internalBaseComponents = components parts.subpath;
       _internalTree = tree;
 
-      # Double __ to make it be evaluated and ordered first
-      __noEval = throw ''
-        lib.fileset: Directly evaluating a file set is not supported. Use `lib.fileset.toSource` to turn it into a usable source instead.'';
+      # Due to alphabetical ordering, this is evaluated last,
+      # which makes the nix repl output nicer than if it would be ordered first.
+      # It also allows evaluating it strictly up to this error, which could be useful
+      _noEval = throw _noEvalMessage;
     };
 
   # Coerce a value to a fileset, erroring when the value cannot be coerced.
@@ -155,14 +192,20 @@ rec {
         _coerce "${functionContext}: ${context}" value
       ) list;
 
-      firstBaseRoot = (head filesets)._internalBaseRoot;
+      # Find the first value with a base, there may be none!
+      firstWithBase = findFirst (fileset: ! fileset._internalIsEmptyWithoutBase) null filesets;
+      # This value is only accessed if first != null
+      firstBaseRoot = firstWithBase._internalBaseRoot;
 
       # Finds the first element with a filesystem root different than the first element, if any
       differentIndex = findFirstIndex (fileset:
-        firstBaseRoot != fileset._internalBaseRoot
+        # The empty value without a base doesn't have a base path
+        ! fileset._internalIsEmptyWithoutBase
+        && firstBaseRoot != fileset._internalBaseRoot
       ) null filesets;
     in
-    if differentIndex != null then
+    # Only evaluates `differentIndex` if there are any elements with a base
+    if firstWithBase != null && differentIndex != null then
       throw ''
         ${functionContext}: Filesystem roots are not the same:
             ${(head list).context}: root "${toString firstBaseRoot}"
@@ -203,22 +246,22 @@ rec {
       // value;
 
   /*
-    Simplify a filesetTree recursively:
-    - Replace all directories that have no files with `null`
+    A normalisation of a filesetTree suitable filtering with `builtins.path`:
+    - Replace all directories that have no files with `null`.
       This removes directories that would be empty
-    - Replace all directories with all files with `"directory"`
+    - Replace all directories with all files with `"directory"`.
       This speeds up the source filter function
 
     Note that this function is strict, it evaluates the entire tree
 
     Type: Path -> filesetTree -> filesetTree
   */
-  _simplifyTree = path: tree:
+  _normaliseTreeFilter = path: tree:
     if tree == "directory" || isAttrs tree then
       let
         entries = _directoryEntries path tree;
-        simpleSubtrees = mapAttrs (name: _simplifyTree (path + "/${name}")) entries;
-        subtreeValues = attrValues simpleSubtrees;
+        normalisedSubtrees = mapAttrs (name: _normaliseTreeFilter (path + "/${name}")) entries;
+        subtreeValues = attrValues normalisedSubtrees;
       in
       # This triggers either when all files in a directory are filtered out
       # Or when the directory doesn't contain any files at all
@@ -228,9 +271,111 @@ rec {
       else if all isString subtreeValues then
         "directory"
       else
-        simpleSubtrees
+        normalisedSubtrees
     else
       tree;
+
+  /*
+    A minimal normalisation of a filesetTree, intended for pretty-printing:
+    - If all children of a path are recursively included or empty directories, the path itself is also recursively included
+    - If all children of a path are fully excluded or empty directories, the path itself is an empty directory
+    - Other empty directories are represented with the special "emptyDir" string
+      While these could be replaced with `null`, that would take another mapAttrs
+
+    Note that this function is partially lazy.
+
+    Type: Path -> filesetTree -> filesetTree (with "emptyDir"'s)
+  */
+  _normaliseTreeMinimal = path: tree:
+    if tree == "directory" || isAttrs tree then
+      let
+        entries = _directoryEntries path tree;
+        normalisedSubtrees = mapAttrs (name: _normaliseTreeMinimal (path + "/${name}")) entries;
+        subtreeValues = attrValues normalisedSubtrees;
+      in
+      # If there are no entries, or all entries are empty directories, return "emptyDir".
+      # After this branch we know that there's at least one file
+      if all (value: value == "emptyDir") subtreeValues then
+        "emptyDir"
+
+      # If all subtrees are fully included or empty directories
+      # (both of which are coincidentally represented as strings), return "directory".
+      # This takes advantage of the fact that empty directories can be represented as included directories.
+      # Note that the tree == "directory" check allows avoiding recursion
+      else if tree == "directory" || all (value: isString value) subtreeValues then
+        "directory"
+
+      # If all subtrees are fully excluded or empty directories, return null.
+      # This takes advantage of the fact that empty directories can be represented as excluded directories
+      else if all (value: isNull value || value == "emptyDir") subtreeValues then
+        null
+
+      # Mix of included and excluded entries
+      else
+        normalisedSubtrees
+    else
+      tree;
+
+  # Trace a filesetTree in a pretty way when the resulting value is evaluated.
+  # This can handle both normal filesetTree's, and ones returned from _normaliseTreeMinimal
+  # Type: Path -> filesetTree (with "emptyDir"'s) -> Null
+  _printMinimalTree = base: tree:
+    let
+      treeSuffix = tree:
+        if isAttrs tree then
+          ""
+        else if tree == "directory" then
+          " (all files in directory)"
+        else
+          # This does "leak" the file type strings of the internal representation,
+          # but this is the main reason these file type strings even are in the representation!
+          # TODO: Consider removing that information from the internal representation for performance.
+          # The file types can still be printed by querying them only during tracing
+          " (${tree})";
+
+      # Only for attribute set trees
+      traceTreeAttrs = prevLine: indent: tree:
+        foldl' (prevLine: name:
+          let
+            subtree = tree.${name};
+
+            # Evaluating this prints the line for this subtree
+            thisLine =
+              trace "${indent}- ${name}${treeSuffix subtree}" prevLine;
+          in
+          if subtree == null || subtree == "emptyDir" then
+            # Don't print anything at all if this subtree is empty
+            prevLine
+          else if isAttrs subtree then
+            # A directory with explicit entries
+            # Do print this node, but also recurse
+            traceTreeAttrs thisLine "${indent}  " subtree
+          else
+            # Either a file, or a recursively included directory
+            # Do print this node but no further recursion needed
+            thisLine
+        ) prevLine (attrNames tree);
+
+      # Evaluating this will print the first line
+      firstLine =
+        if tree == null || tree == "emptyDir" then
+          trace "(empty)" null
+        else
+          trace "${toString base}${treeSuffix tree}" null;
+    in
+    if isAttrs tree then
+      traceTreeAttrs firstLine "" tree
+    else
+      firstLine;
+
+  # Pretty-print a file set in a pretty way when the resulting value is evaluated
+  # Type: fileset -> Null
+  _printFileset = fileset:
+    if fileset._internalIsEmptyWithoutBase then
+      trace "(empty)" null
+    else
+      _printMinimalTree fileset._internalBase
+        (_normaliseTreeMinimal fileset._internalBase fileset._internalTree);
 
   # Turn a fileset into a source filter function suitable for `builtins.path`
   # Only directories recursively containing at least one files are recursed into
@@ -239,7 +384,7 @@ rec {
     let
       # Simplify the tree, necessary to make sure all empty directories are null
       # which has the effect that they aren't included in the result
-      tree = _simplifyTree fileset._internalBase fileset._internalTree;
+      tree = _normaliseTreeFilter fileset._internalBase fileset._internalTree;
 
       # The base path as a string with a single trailing slash
       baseString =
@@ -311,7 +456,7 @@ rec {
     # Special case because the code below assumes that the _internalBase is always included in the result
     # which shouldn't be done when we have no files at all in the base
     # This also forces the tree before returning the filter, leads to earlier error messages
-    if tree == null then
+    if fileset._internalIsEmptyWithoutBase || tree == null then
       empty
     else
       nonEmpty;
@@ -321,7 +466,12 @@ rec {
   # Type: [ Fileset ] -> Fileset
   _unionMany = filesets:
     let
-      first = head filesets;
+      # All filesets that have a base, aka not the ones that are the empty value without a base
+      filesetsWithBase = filter (fileset: ! fileset._internalIsEmptyWithoutBase) filesets;
+
+      # The first fileset that has a base.
+      # This value is only accessed if there are at all.
+      firstWithBase = head filesetsWithBase;
 
       # To be able to union filesetTree's together, they need to have the same base path.
       # Base paths can be unioned by taking their common prefix,
@@ -332,14 +482,14 @@ rec {
       # so this cannot cause a stack overflow due to a build-up of unevaluated thunks.
       commonBaseComponents = foldl'
         (components: el: commonPrefix components el._internalBaseComponents)
-        first._internalBaseComponents
+        firstWithBase._internalBaseComponents
         # We could also not do the `tail` here to avoid a list allocation,
         # but then we'd have to pay for a potentially expensive
         # but unnecessary `commonPrefix` call
-        (tail filesets);
+        (tail filesetsWithBase);
 
       # The common base path assembled from a filesystem root and the common components
-      commonBase = append first._internalBaseRoot (join commonBaseComponents);
+      commonBase = append firstWithBase._internalBaseRoot (join commonBaseComponents);
 
       # A list of filesetTree's that all have the same base path
       # This is achieved by nesting the trees into the components they have over the common base path
@@ -351,14 +501,18 @@ rec {
         setAttrByPath
           (drop (length commonBaseComponents) fileset._internalBaseComponents)
           fileset._internalTree
-        ) filesets;
+        ) filesetsWithBase;
 
       # Folds all trees together into a single one using _unionTree
       # We do not use a fold here because it would cause a thunk build-up
       # which could cause a stack overflow for a large number of trees
       resultTree = _unionTrees trees;
     in
-    _create commonBase resultTree;
+    # If there's no values with a base, we have no files
+    if filesetsWithBase == [ ] then
+      _emptyWithoutBase
+    else
+      _create commonBase resultTree;
 
   # The union of multiple filesetTree's with the same base path.
   # Later elements are only evaluated if necessary.

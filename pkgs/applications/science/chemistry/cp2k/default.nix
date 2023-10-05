@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
                  -ftree-vectorize -funroll-loops -msse2 \
                  -std=f2008 \
                  -fopenmp -ftree-vectorize -funroll-loops \
-                 -I${libxc}/include -I${libxsmm}/include \
+                 -I${lib.getDev libxc}/include -I${lib.getDev libxsmm}/include \
                  -I${libint}/include ${lib.optionalString enableElpa "$(pkg-config --variable=fcflags elpa)"}
     LIBS       = -lfftw3 -lfftw3_threads \
                  -lscalapack -lblas -llapack \
@@ -106,6 +106,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/cp2k
 
     cp exe/${arch}/* $out/bin
+    rm $out/bin/*_unittest.*
 
     for i in cp2k cp2k_shell graph; do
       wrapProgram $out/bin/$i.${cp2kVersion} \

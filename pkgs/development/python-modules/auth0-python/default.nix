@@ -3,7 +3,7 @@
 , aioresponses
 , buildPythonPackage
 , callee
-, fetchPypi
+, fetchFromGitHub
 , mock
 , pyjwt
 , pytestCheckHook
@@ -13,14 +13,16 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "4.4.0";
+  version = "4.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Yf8/NmQygdikQXv9sUukQEKKd+FcpSPnGbbi8kzVyLo=";
+  src = fetchFromGitHub {
+    owner = "auth0";
+    repo = "auth0-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RBkAuZQx7mBxVCpo5PoBiEge8+yTmp0XpcnxCkOsM6U=";
   };
 
   propagatedBuildInputs = [

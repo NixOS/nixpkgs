@@ -1601,7 +1601,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-cli"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "clap 4.4.3",
  "clap_complete",
@@ -1666,7 +1666,7 @@ dependencies = [
 
 [[package]]
 name = "nickel-lang-lsp"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "anyhow",
  "assert_cmd",
@@ -2046,7 +2046,7 @@ dependencies = [
 
 [[package]]
 name = "pyckel"
-version = "1.2.1"
+version = "1.2.2"
 dependencies = [
  "codespan-reporting",
  "nickel-lang-core",

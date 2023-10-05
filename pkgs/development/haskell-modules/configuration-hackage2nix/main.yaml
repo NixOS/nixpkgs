@@ -45,10 +45,14 @@ default-package-overrides:
   # breaking change was introduced in implicit-hie-0.1.3.0.
   # https://github.com/haskell/haskell-language-server/blob/feb596592de95f09cf4ee885f3e74178161919f1/ghcide/ghcide.cabal#L107-L111
   - implicit-hie < 0.1.3
+  - hie-bios < 0.13
 
   # 2023-07-06: newer versions of stylish-haskell require
   # ghc-lib-parser-ex >= 9.6, but LTS-21 contains ghc-lib-parser-ex-9.4
   - stylish-haskell < 0.14.5.0
+
+  # 2023-09-17: reflex-dom 0.6.3.0 is broken https://github.com/reflex-frp/reflex-dom/issues/462
+  - reflex-dom < 0.6.2.0
 
   # Only an older version of dependent-sum-template is compatible with ghc 9.4
   # https://github.com/obsidiansystems/dependent-sum-template/issues/5
@@ -121,6 +125,7 @@ extra-packages:
   - ormolu == 0.5.2.0                   # 2023-08-08: for hls on ghc 9.0 and 9.2
   - fourmolu == 0.9.0.0                 # 2022-09-21: for hls on ghc 8.10
   - fourmolu == 0.10.1.0                # 2023-04-18: for hls on ghc 9.0 and 9.2
+  - fourmolu == 0.13.*                  # 2023-09-16: latest version compatible with hls 2.2.* on ghc 9.6
   - mod == 0.1.2.2                      # needed for hls on ghc 8.10
   - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
@@ -128,6 +133,7 @@ extra-packages:
   - sbv == 7.13                         # required for pkgs.petrinizer
   - stylish-haskell == 0.14.3.0         # 2022-09-19: needed for hls on ghc 8.8
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
+  - text == 2.0.2                       # 2023-09-14: Needed for elm (which is currently on ghc-8.10)
   - th-abstraction < 0.6                # 2023-09-11: needed for aeson-2.2.0.0
   - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
@@ -656,7 +662,7 @@ unsupported-platforms:
   Raincat:                                      [ platforms.darwin ]
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
-  reflex-dom:                                   [ platforms.darwin, aarch64-linux ]
+  reflex-dom:                                   [ platforms.darwin ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
@@ -682,7 +688,7 @@ unsupported-platforms:
   webkit2gtk3-javascriptcore:                   [ platforms.darwin ]
   wiringPi:                                     [ aarch64-darwin ]
   xattr:                                        [ platforms.darwin ]
-  xgboost-haskell:                              [ aarch64-linux, armv7l-linux ]
+  xgboost-haskell:                              [ aarch64-linux, armv7l-linux, platforms.darwin ]
   xmobar:                                       [ platforms.darwin ]
   xmonad-extras:                                [ platforms.darwin ]
   xmonad-volume:                                [ platforms.darwin ]
@@ -707,6 +713,7 @@ supported-platforms:
   evdev:                                        [ platforms.linux ]
   evdev-streamly:                               [ platforms.linux ]
   geomancy:                                     [ platforms.x86 ] # x86 intrinsics
+  geomancy-layout:                              [ platforms.x86 ] # x86 intrinsics
   gi-gtkosxapplication:                         [ platforms.darwin ]
   gtk-mac-integration:                          [ platforms.darwin ]
   gtk3-mac-integration:                         [ platforms.darwin ]

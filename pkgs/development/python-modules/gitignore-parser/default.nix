@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "gitignore-parser";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mherrmann";
     repo = "gitignore_parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RAtXh57WU67fKQhhItdOm25BYfh3ucc0eyWUHGksnLg=";
+    hash = "sha256-Zw7BuhdUzd0pjlRHf3KbkOUhLuBVvlKhWIzZocKOU30=";
   };
 
   nativeCheckInputs = [

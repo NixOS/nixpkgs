@@ -17,46 +17,46 @@ lib.makeScope
 
     bash = callPackage ./bash {
       bootBash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
-      gawk = gawk-mes;
+      tinycc = tinycc-musl;
+      coreutils = coreutils-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     binutils = callPackage ./binutils {
       bash = bash_2_05;
-      gcc = gcc2;
-      binutils = binutils-mes;
-      glibc = glibc22;
-      sed = heirloom.sed;
-      gawk = gawk-mes;
-    };
-    binutils-mes = callPackage ./binutils {
-      bash = bash_2_05;
-      tinycc = tinycc-mes;
-      sed = heirloom.sed;
-      gawk = gawk-mes;
-      mesBootstrap = true;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     bzip2 = callPackage ./bzip2 {
       bash = bash_2_05;
-      tinycc = tinycc-mes;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
+    coreutils-musl = callPackage ./coreutils/musl.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
+    };
 
     diffutils = callPackage ./diffutils {
       bash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
-      gawk = gawk-mes;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     findutils = callPackage ./findutils {
       bash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
-      gawk = gawk-mes;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     gawk-mes = callPackage ./gawk/mes.nix {
@@ -67,34 +67,34 @@ lib.makeScope
 
     gawk = callPackage ./gawk {
       bash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
       bootGawk = gawk-mes;
     };
 
     gcc2 = callPackage ./gcc/2.nix {
       bash = bash_2_05;
       gcc = gcc2-mes;
-      binutils = binutils-mes;
       glibc = glibc22;
     };
     gcc2-mes = callPackage ./gcc/2.nix {
       bash = bash_2_05;
       tinycc = tinycc-mes;
-      binutils = binutils-mes;
       mesBootstrap = true;
     };
 
     gcc46 = callPackage ./gcc/4.6.nix {
-      gcc = gcc2;
-      glibc = glibc22;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
+      # FIXME: not sure why new gawk doesn't work
       gawk = gawk-mes;
     };
 
     inherit (callPackage ./glibc {
       bash = bash_2_05;
       gnused = gnused-mes;
-      gawk = gawk-mes;
     }) glibc22;
 
     gnugrep = callPackage ./gnugrep {
@@ -104,23 +104,34 @@ lib.makeScope
 
     gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
 
+    gnumake-musl = callPackage ./gnumake/musl.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-musl;
+      gawk = gawk-mes;
+      gnumakeBoot = gnumake;
+    };
+
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
     gnused = callPackage ./gnused {
       bash = bash_2_05;
-      gcc = gcc2;
-      glibc = glibc22;
+      tinycc = tinycc-musl;
       gnused = gnused-mes;
     };
-    gnused-mes = callPackage ./gnused {
+    gnused-mes = callPackage ./gnused/mes.nix {
       bash = bash_2_05;
       tinycc = tinycc-mes;
-      mesBootstrap = true;
     };
 
-    gnutar = callPackage ./gnutar {
+    gnutar = callPackage ./gnutar/mes.nix {
       bash = bash_2_05;
       tinycc = tinycc-mes;
+      gnused = gnused-mes;
+    };
+
+    gnutar-musl = callPackage ./gnutar/musl.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-musl;
       gnused = gnused-mes;
     };
 
@@ -152,6 +163,7 @@ lib.makeScope
 
     musl = callPackage ./musl {
       gcc = gcc46;
+      gnumake = gnumake-musl;
     };
 
     stage0-posix = callPackage ./stage0-posix { };
@@ -167,9 +179,9 @@ lib.makeScope
 
     xz = callPackage ./xz {
       bash = bash_2_05;
-      tinycc = tinycc-mes;
-      gawk = gawk-mes;
-      inherit (heirloom) sed;
+      tinycc = tinycc-musl;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
     };
 
     inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
@@ -178,8 +190,8 @@ lib.makeScope
       echo ${bash.tests.get-version}
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}
-      echo ${binutils-mes.tests.get-version}
       echo ${bzip2.tests.get-version}
+      echo ${coreutils-musl.tests.get-version}
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
       echo ${gawk-mes.tests.get-version}
@@ -191,6 +203,7 @@ lib.makeScope
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
       echo ${gnutar.tests.get-version}
+      echo ${gnutar-musl.tests.get-version}
       echo ${gzip.tests.get-version}
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}

@@ -169,7 +169,6 @@ stdenv.mkDerivation rec {
     cp -r $NWCHEM_TOP/src/data $out/share/nwchem/
     cp -r $NWCHEM_TOP/src/basis/libraries $out/share/nwchem/data
     cp -r $NWCHEM_TOP/src/nwpw/libraryps $out/share/nwchem/data
-    cp -r $NWCHEM_TOP/QA $out/share/nwchem
 
     wrapProgram $out/bin/nwchem \
       --set-default NWCHEM_BASIS_LIBRARY $out/share/nwchem/data/libraries/
@@ -196,7 +195,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     # run a simple water test
-    mpirun -np 2 $out/bin/nwchem $out/share/nwchem/QA/tests/h2o/h2o.nw > h2o.out
+    mpirun -np 2 $out/bin/nwchem $NWCHEM_TOP/QA/tests/h2o/h2o.nw > h2o.out
     grep "Total SCF energy" h2o.out  | grep 76.010538
 
     runHook postInstallCheck

@@ -77,6 +77,7 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.vim.x86_64-darwin
               jobs.cachix.x86_64-darwin
+              jobs.darwin.linux-builder.x86_64-darwin
 
               # UI apps
               # jobs.firefox-unwrapped.x86_64-darwin
@@ -157,6 +158,7 @@ let
               jobs.vim.x86_64-darwin
               jobs.inkscape.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
+              jobs.darwin.linux-builder.x86_64-darwin
               /*
               jobs.tests.cc-wrapper.default.x86_64-darwin
               jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-darwin

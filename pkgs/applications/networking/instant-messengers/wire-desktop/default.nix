@@ -1,5 +1,4 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , dpkg
 , fetchurl
 , makeDesktopItem
@@ -11,7 +10,11 @@
 , cpio
 , xar
 , libdbusmenu
-, libxshmfence
+, alsa-lib
+, mesa
+, nss
+, nspr
+, systemd
 }:
 
 let
@@ -64,8 +67,7 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/"
-        + "Wire-${version}_amd64.deb";
+      url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
       inherit hash;
     };
 
@@ -85,6 +87,7 @@ let
     dontPatchELF = true;
     dontWrapGApps = true;
 
+    # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
@@ -92,7 +95,13 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = [ libxshmfence ] ++ atomEnv.packages;
+    buildInputs = [
+      alsa-lib
+      mesa
+      nss
+      nspr
+      systemd
+    ];
 
     unpackPhase = ''
       runHook preUnpack
@@ -132,8 +141,7 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://github.com/wireapp/wire-desktop/releases/download/"
-        + "macos%2F${version}/Wire.pkg";
+      url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${version}/Wire.pkg";
       inherit hash;
     };
 

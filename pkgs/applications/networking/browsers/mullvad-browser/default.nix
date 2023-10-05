@@ -78,15 +78,19 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "12.5.5";
+  version = "12.5.6";
 
   sources = {
     x86_64-linux = fetchurl {
       urls = [
         "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
         "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
       ];
-      hash = "sha256-ISmhKitFReHSADGygzpoKwlBOJH2HfPDEtMjTB6fMhs=";
+      hash = "sha256-e7gRkRMipnEG1hMlhs25LUJ5KDGt8qP3wpbSG2K2aK8=";
     };
   };
 

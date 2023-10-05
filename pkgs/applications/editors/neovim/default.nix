@@ -7,6 +7,7 @@
 , buildPackages
 , treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
+, fixDarwinDylibNames
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc), see
@@ -16,8 +17,29 @@
 }:
 
 let
+  nvim-lpeg-dylib = luapkgs: if stdenv.isDarwin
+    then (luapkgs.lpeg.overrideAttrs (oa: {
+      preConfigure = ''
+        # neovim wants clang .dylib
+        sed -i makefile -e "s/CC = gcc/CC = clang/"
+        sed -i makefile -e "s/-bundle/-dynamiclib/"
+      '';
+      preBuild = ''
+        # there seems to be implicit calls to Makefile from luarocks, we need to
+        # add a stage to build our dylib
+        make macosx
+        mkdir -p $out/lib
+        mv lpeg.so $out/lib/lpeg.dylib
+      '';
+      nativeBuildInputs =
+        oa.nativeBuildInputs
+        ++ (
+          lib.optional stdenv.isDarwin fixDarwinDylibNames
+        );
+    }))
+    else luapkgs.lpeg;
   requiredLuaPkgs = ps: (with ps; [
-    lpeg
+    (nvim-lpeg-dylib ps)
     luabitop
     mpack
   ] ++ lib.optionals doCheck [
@@ -40,10 +62,11 @@ let
             deterministicStringIds = true;
             self = deterministicLuajit;
           };
-        in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
+        in deterministicLuajit.withPackages(ps: [ ps.mpack (nvim-lpeg-dylib ps) ])
       else lua.luaOnBuild;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
+
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";

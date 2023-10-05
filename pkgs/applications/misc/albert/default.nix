@@ -13,22 +13,24 @@
 , qt5compat
 , wrapQtAppsHook
 , nix-update-script
+, pkg-config
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "albert";
-  version = "0.22.4";
+  version = "0.22.9";
 
   src = fetchFromGitHub {
     owner = "albertlauncher";
     repo = "albert";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-M5wMi/yH5c08Y7tpHpOulcz0utnnduGsR5z3EHeBecM=";
+    sha256 = "sha256-MhZHklb//VH2GkAzK46P7EwCIa50l5y+2VssrgpTlWA=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     wrapQtAppsHook
   ];
 

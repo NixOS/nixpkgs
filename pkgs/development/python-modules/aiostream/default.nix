@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-w5FVXksR3k9uKQ4fZIbR7KRf38bD9nj6wGrhue/7Nus=";
+    hash = "sha256-YdVvUP1b/NfXpbJ83ktjtXaVLHS6CQUGCw+EVygB4fU=";
   };
 
   postPatch = ''

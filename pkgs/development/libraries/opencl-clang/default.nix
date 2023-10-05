@@ -1,19 +1,16 @@
 { lib
 , stdenv
+, applyPatches
 , fetchFromGitHub
 , fetchpatch
 , cmake
 , git
-, llvmPackages_11
+, llvmPackages_14
 , spirv-llvm-translator
 , buildWithPatches ? true
 }:
 
 let
-  llvmPkgs = llvmPackages_11 // {
-    inherit spirv-llvm-translator;
-  };
-
   addPatches = component: pkg: pkg.overrideAttrs (oldAttrs: {
     postPatch = oldAttrs.postPatch or "" + ''
       for p in ${passthru.patchesOut}/${component}/*; do
@@ -22,8 +19,13 @@ let
     '';
   });
 
+  llvmPkgs = llvmPackages_14;
+  inherit (llvmPkgs) llvm;
+  spirv-llvm-translator' = spirv-llvm-translator.override { inherit llvm; };
+  libclang = if buildWithPatches then passthru.libclang else llvmPkgs.libclang;
+
   passthru = rec {
-    spirv-llvm-translator = llvmPkgs.spirv-llvm-translator.override { llvm = llvmPackages_11.llvm; };
+    spirv-llvm-translator = spirv-llvm-translator';
     llvm = addPatches "llvm" llvmPkgs.llvm;
     libclang = addPatches "clang" llvmPkgs.libclang;
 
@@ -34,7 +36,7 @@ let
 
     patchesOut = stdenv.mkDerivation {
       pname = "opencl-clang-patches";
-      inherit (library) version src patches;
+      inherit version src;
       # Clang patches assume the root is the llvm root dir
       # but clang root in nixpkgs is the clang sub-directory
       postPatch = ''
@@ -52,56 +54,66 @@ let
     };
   };
 
-  library = let
-    inherit (llvmPackages_11) llvm;
-    inherit (if buildWithPatches then passthru else llvmPkgs) libclang spirv-llvm-translator;
-  in
-    stdenv.mkDerivation {
-      pname = "opencl-clang";
-      version = "unstable-2022-03-16";
-
-
-      src = fetchFromGitHub {
-        owner = "intel";
-        repo = "opencl-clang";
-        rev = "bbdd1587f577397a105c900be114b56755d1f7dc";
-        sha256 = "sha256-qEZoQ6h4XAvSnJ7/gLXBb1qrzeYa6Jp6nij9VFo8MwQ=";
-      };
-
-      patches = [
-        # Build script tries to find Clang OpenCL headers under ${llvm}
-        # Work around it by specifying that directory manually.
-        ./opencl-headers-dir.patch
-      ];
-
-      # Uses linker flags that are not supported on Darwin.
-      postPatch = lib.optionalString stdenv.isDarwin ''
-        sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
-        substituteInPlace CMakeLists.txt \
-          --replace '-Wl,--no-undefined' ""
-      '';
-
-      nativeBuildInputs = [ cmake git llvm.dev ];
-
-      buildInputs = [ libclang llvm spirv-llvm-translator ];
-
-      cmakeFlags = [
-        "-DPREFERRED_LLVM_VERSION=${lib.getVersion llvm}"
-        "-DOPENCL_HEADERS_DIR=${libclang.lib}/lib/clang/${lib.getVersion libclang}/include/"
-
-        "-DLLVMSPIRV_INCLUDED_IN_LLVM=OFF"
-        "-DSPIRV_TRANSLATOR_DIR=${spirv-llvm-translator}"
-      ];
-
-      inherit passthru;
-
-      meta = with lib; {
-        homepage    = "https://github.com/intel/opencl-clang/";
-        description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
-        license     = licenses.ncsa;
-        platforms   = platforms.all;
-        maintainers = with maintainers; [ ];
-      };
+  version = "unstable-2023-06-12";
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "intel";
+      repo = "opencl-clang";
+      # https://github.com/intel/opencl-clang/compare/ocl-open-140
+      rev = "cf95b338d14685e4f3402ab1828bef31d48f1fd6";
+      hash = "sha256-To1RlQX9IJ+1zAwEXaW7ua3VNfjK9mu7pgsRPsfa8g8=";
     };
+
+    patches = [
+      # Build script tries to find Clang OpenCL headers under ${llvm}
+      # Work around it by specifying that directory manually.
+      ./opencl-headers-dir.patch
+
+      # fix CMake throwing errors
+      (fetchpatch {
+        url = "https://github.com/intel/opencl-clang/commit/321e3b99c1a8d54c8475f5ae998452069cc5eb71.patch";
+        hash = "sha256-cATbH+AMVtcabhl3EkzAH7w3wGreUV53hQYHVUUEP4g=";
+      })
+    ];
+
+    postPatch = ''
+      # fix not be able to find clang from PATH
+      substituteInPlace cl_headers/CMakeLists.txt \
+        --replace " NO_DEFAULT_PATH" ""
+    '' + lib.optionalString stdenv.isDarwin ''
+      # Uses linker flags that are not supported on Darwin.
+      sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
+      substituteInPlace CMakeLists.txt \
+        --replace '-Wl,--no-undefined' ""
+    '';
+  };
 in
-  library
+
+stdenv.mkDerivation {
+  pname = "opencl-clang";
+  inherit version src;
+
+  nativeBuildInputs = [ cmake git llvm.dev ];
+
+  buildInputs = [ libclang llvm spirv-llvm-translator' ];
+
+  cmakeFlags = [
+    "-DPREFERRED_LLVM_VERSION=${lib.getVersion llvm}"
+    "-DOPENCL_HEADERS_DIR=${libclang.lib}/lib/clang/${lib.getVersion libclang}/include/"
+
+    "-DLLVMSPIRV_INCLUDED_IN_LLVM=OFF"
+    "-DSPIRV_TRANSLATOR_DIR=${spirv-llvm-translator'}"
+  ];
+
+  inherit passthru;
+
+  meta = with lib; {
+    homepage = "https://github.com/intel/opencl-clang/";
+    description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
+    license = licenses.ncsa;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.all;
+    # error: invalid value 'CL3.0' in '-cl-std=CL3.0'
+    broken = stdenv.isDarwin;
+  };
+}

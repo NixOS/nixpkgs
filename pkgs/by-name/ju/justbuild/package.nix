@@ -1,5 +1,5 @@
 {
-  stdenv,
+  gccStdenv,
   fetchFromGitHub,
   fetchurl,
 
@@ -23,6 +23,8 @@
   curl,
   libarchive,
 }:
+let stdenv = gccStdenv;
+in
 stdenv.mkDerivation rec {
   pname = "justbuild";
   version = "1.2.1";
@@ -31,7 +33,14 @@ stdenv.mkDerivation rec {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "v${version}";
-    sha256 = "sha256-5Fz/ID7xKbt6pq2B5/MOS6f2xUnKGvmNAYuPboPwKJY=";
+    sha256 = "sha256-36njngcGmRtYh/U3wkZUAU6ivPQ8qP8zVj1JzI9TuDY=";
+
+    # The source contains both test/end-to-end/targets and
+    # test/end-to-end/TARGETS, causing issues on case-insensitive filesystems.
+    # Remove them, since we're not running end-to-end tests.
+    postFetch = ''
+      rm -rf $out/test/end-to-end/targets $out/test/end-to-end/TARGETS
+    '';
   };
 
   bazelapi = fetchurl {
@@ -91,6 +100,8 @@ stdenv.mkDerivation rec {
     mv etc/repos.json.patched etc/repos.json
     jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
     mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
   '';
 
   /* The build phase follows the bootstrap procedure that is explained in
@@ -131,7 +142,7 @@ stdenv.mkDerivation rec {
     # Bootstrap just
     export PACKAGE=YES
     export NON_LOCAL_DEPS='[ "google_apis", "bazel_remote_apis" ]'
-    export JUST_BUILD_CONF=`echo $PATH | jq -R '{ ENV: { PATH: . }, "ADD_CFLAGS": ["-Wno-error=pedantic"], "ADD_CXXFLAGS": ["-Wno-error=pedantic"] }'`
+    export JUST_BUILD_CONF=`echo $PATH | jq -R '{ ENV: { PATH: . }, "ADD_CFLAGS": ["-Wno-error=pedantic"], "ADD_CXXFLAGS": ["-Wno-error=pedantic", "-D__unix__", "-DFMT_HEADER_ONLY"], "ARCH": "'$(uname -m)'" }'`
 
     mkdir ../build
     python3 ./bin/bootstrap.py `pwd` ../build "`pwd`/.distfiles"

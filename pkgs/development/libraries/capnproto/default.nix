@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     '';
     license     = licenses.mit;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

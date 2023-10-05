@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pymyq";
-  version = "3.1.9";
+  version = "3.1.11";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Python-MyQ";
     repo = "Python-MyQ";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7fGm7VGE9D6vmQkNmiB52+il3GE/rTqTqxqAORy88l4=";
+    hash = "sha256-hQnIrmt4CNxIL2+VenGaKL6xMOb/6IMq9NEFLvbbYsE=";
   };
 
   nativeBuildInputs = [

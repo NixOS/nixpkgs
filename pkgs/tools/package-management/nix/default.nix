@@ -192,8 +192,8 @@ in lib.makeExtensible (self: ({
   };
 
   nix_2_18 = common {
-    version = "2.18.0";
-    hash = "sha256-ggISAuGpTkKp6JXt1BbcLtLDYOPECWqrVnPVgQEFHYc=";
+    version = "2.18.1";
+    hash = "sha256-WNmifcTsN9aG1ONkv+l2BC4sHZZxtNKy0keqBHXXQ7w=";
   };
 
   # The minimum Nix version supported by Nixpkgs
@@ -215,7 +215,7 @@ in lib.makeExtensible (self: ({
 
   stable = self.nix_2_17;
 
-  unstable = self.nix_2_18;
+  unstable = self.stable;
 } // lib.optionalAttrs config.allowAliases {
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
