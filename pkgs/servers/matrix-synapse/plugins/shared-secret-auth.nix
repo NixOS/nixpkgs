@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   doCheck = false;
-  pythonImportsCheck = [ "shared_secret_authenticator" ];
+  pythonImportsExtrasCheck = [ "shared_secret_authenticator" ]; # requires 'synapse'
 
   buildInputs = [ matrix-synapse-unwrapped ];
   propagatedBuildInputs = [ twisted ];
