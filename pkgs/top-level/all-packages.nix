@@ -29285,6 +29285,8 @@ with pkgs;
 
   caladea = callPackage ../data/fonts/caladea { };
 
+  candy-icons = callPackage ../data/icons/candy-icons { };
+
   canta-theme = callPackage ../data/themes/canta { };
 
   cantarell-fonts = callPackage ../data/fonts/cantarell-fonts { };
