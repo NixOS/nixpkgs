@@ -1,10 +1,6 @@
-#!/usr/bin/env nix-shell
-#!nix-shell update-shell.nix -i python
-
 import json
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
-from os import environ
 from os.path import dirname, join
 
 configs = json.loads(
@@ -74,8 +70,3 @@ def update_grammars(lockfile: str, treesitter_source_path: str):
         generated_file += "}\n"
 
     open(join(dirname(treesitter_source_path), "generated.nix"), "w").write(generated_file)
-
-
-if __name__ == "__main__":
-    # TODO add lockfile
-    update_grammars()
