@@ -36656,6 +36656,8 @@ with pkgs;
 
   _20kly = callPackage ../games/20kly { };
 
+  _4d-minesweeper = callPackage ../games/4d-minesweeper { };
+
   _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
 
   aaaaxy = callPackage ../games/aaaaxy { };

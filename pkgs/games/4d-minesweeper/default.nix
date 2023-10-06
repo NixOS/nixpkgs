@@ -1,0 +1,108 @@
+{ lib
+, copyDesktopItems
+, fetchFromGitHub
+, makeDesktopItem
+, stdenv
+, unzip
+, alsa-lib
+, gcc-unwrapped
+, git
+, godot3-export-templates
+, godot3-headless
+, libGLU
+, libX11
+, libXcursor
+, libXext
+, libXfixes
+, libXi
+, libXinerama
+, libXrandr
+, libXrender
+, libglvnd
+, libpulseaudio
+, zlib
+}:
+
+
+stdenv.mkDerivation rec {
+  pname = "4D-Minesweeper";
+  version = "2.0";
+
+  src = fetchFromGitHub {
+    owner = "gapophustu";
+    repo = pname;
+    rev = "db176d8aa5981a597bbae6a1a74aeebf0f376df4";
+    sha256 = "sha256-A5QKqCo9TTdzmK13WRSAfkrkeUqHc4yQCzy4ZZ9uX2M=";
+  };
+
+  nativeBuildInputs = [
+    copyDesktopItems
+    godot3-headless
+    unzip
+  ];
+
+  buildInputs = [
+    alsa-lib
+    gcc-unwrapped.lib
+    git
+    libGLU
+    libX11
+    libXcursor
+    libXext
+    libXfixes
+    libXi
+    libXinerama
+    libXrandr
+    libXrender
+    libglvnd
+    libpulseaudio
+    zlib
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    # Cannot create file '/homeless-shelter/.config/godot/projects/...'
+    export HOME=$TMPDIR
+
+    # Link the export-templates to the expected location. The --export commands
+    # expects the template-file at .../templates/3.2.3.stable/linux_x11_64_release
+    # with 3.2.3 being the version of godot.
+    mkdir -p $HOME/.local/share/godot
+    ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
+
+    mkdir -p $out/bindontInstall = true;
+    cd source/
+    godot3-headless --export "Linux/X11" $out/bin/4d-minesweeper
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    mkdir -p $out/icons/hicolor/48x48/apps/
+    cp source/icon.svg $out/icons/hicolor/48x48/apps/
+  '';
+
+  dontFixup = true;
+  dontStrip = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "4D Minesweeper";
+      exec = "4d-minesweeper";
+      icon = "icon.svg";
+      comment = meta.description;
+      desktopName = "4D Minesweeper";
+      genericName = "4D Minesweeper";
+      categories = [ "Game" ];
+    })
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/gapophustu/4D-Minesweeper";
+    description = "A 4D Minesweeper game written in godot";
+    license = licenses.mpl20;
+    platforms   = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ merspieler ];
+  };
+}
