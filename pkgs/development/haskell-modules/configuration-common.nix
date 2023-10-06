@@ -316,12 +316,7 @@ self: super: {
 
   # Overriding the version pandoc dependency uses as the latest release has version bounds
   # defined as >= 3.1  && < 3.2, can be removed once pandoc gets bumped by Stackage.
-  #
-  # The patch can be removed once the commit being pulled is in a release.
-  patat = appendPatch (fetchpatch {
-    url = "https://github.com/jaspervdj/patat/pull/143/commits/cb5d5b6439204b5bd52939e42a11518ac81139fe.patch";
-    sha256 = "sha256-EPiyxziPtn2fAExKknI2uKUGahWCFnv7K8bpVkAgezQ=";
-  }) (super.patat.override { pandoc = self.pandoc_3_1_8; });
+  patat = super.patat.override { pandoc = self.pandoc_3_1_8; };
 
   # http2 also overridden in all-packages.nix for mailctl.
   # twain is currently only used by mailctl, so the .overrideScope shouldn't
