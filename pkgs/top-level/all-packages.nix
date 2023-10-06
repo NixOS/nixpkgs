@@ -12990,8 +12990,6 @@ with pkgs;
 
   scdl = callPackage ../tools/misc/scdl { };
 
-  scdoc = callPackage ../tools/typesetting/scdoc { };
-
   scorecard = callPackage ../tools/security/scorecard { };
 
   scream = callPackage ../applications/audio/scream { };
