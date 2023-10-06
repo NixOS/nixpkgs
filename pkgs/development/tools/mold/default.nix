@@ -4,7 +4,6 @@
 , cmake
 , mimalloc
 , ninja
-, openssl
 , zlib
 , testers
 , mold
@@ -13,22 +12,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4W6quVSkxS2I6KEy3fVyBTypD0fg4EecgeEVM0Yw58s=";
+    hash = "sha256-ePX80hzzIzSJdGUX96GyxYWcdbXxXyuyNQqj5RDSkKU=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ];
+  nativeBuildInputs = [ cmake ninja ];
 
   buildInputs = [
-    openssl
     zlib
   ] ++ lib.optionals (!stdenv.isDarwin) [
     mimalloc
