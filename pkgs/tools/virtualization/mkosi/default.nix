@@ -50,23 +50,15 @@ let
 in
 buildPythonApplication rec {
   pname = "mkosi";
-  version = "17.1";
+  version = "18";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "mkosi";
     rev = "v${version}";
-    hash = "sha256-v6so6MFOkxPOnPDgAgni517NX4vUnkPd7o4UMSUHL24=";
+    hash = "sha256-bnd2P6lq1XqKed3m4hDYrR9IcdrPaJxNBL2Z6jCruV4=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fix tests. Remove in next release.
-      url = "https://github.com/systemd/mkosi/commit/3e2642c743b2ccb78fd0a99e75993824034f7124.patch";
-      hash = "sha256-x9xb8Pz7l2FA8pfhQd7KqITxbnjjwBUh0676uggcukI=";
-    })
-  ];
 
   # Fix ctypes finding library
   # https://github.com/NixOS/nixpkgs/issues/7307
