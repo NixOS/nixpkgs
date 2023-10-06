@@ -108,8 +108,8 @@ rec {
      package a module should use for some purpose.
 
      The package is specified in the third argument under `default` as a list of strings
-     representing its attribute path in nixpkgs (or another package set).
-     Because of this, you need to pass nixpkgs itself (or a subset) as the first argument.
+     representing its attribute path in nixpkgs.
+     Because of this, you need to pass nixpkgs itself as the first argument.
 
      The second argument may be either a string or a list of strings.
      It provides the display name of the package in the description of the generated option
@@ -118,43 +118,66 @@ rec {
 
      To include extra information in the description, pass `extraDescription` to
      append arbitrary text to the generated description.
+
      You can also pass an `example` value, either a literal string or an attribute path.
 
-     The default argument can be omitted if the provided name is
-     an attribute of pkgs (if name is a string) or a
-     valid attribute path in pkgs (if name is a list).
+     The `default` argument can be omitted if the provided name is
+     an attribute of pkgs (if `name` is a string) or a valid attribute path in pkgs (if `name` is a list).
+     You can also set `default` to just a string in which case it is interpreted as an attribute name
+     (a singleton attribute path, if you will).
 
      If you wish to explicitly provide no default, pass `null` as `default`.
 
-     Type: mkPackageOption :: pkgs -> (string|[string]) -> { default? :: [string], example? :: null|string|[string], extraDescription? :: string } -> option
+     If you want users to be able to set no package, pass `nullable = true`.
+     In this mode a `default = null` will not be interpreted as no default and is interpreted literally.
+
+     Type: mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
-       => { _type = "option"; default = «derivation /nix/store/3r2vg51hlxj3cx5vscp0vkv60bqxkaq0-hello-2.10.drv»; defaultText = { ... }; description = "The hello package to use."; type = { ... }; }
+       => { ...; default = pkgs.hello; defaultText = literalExpression "pkgs.hello"; description = "The hello package to use."; type = package; }
 
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
          example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
-       => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
+       => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
 
      Example:
-       mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
+       mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
          extraDescription = "This is an example and doesn't actually do anything.";
        }
-       => { _type = "option"; default = «derivation /nix/store/gvqgsnc4fif9whvwd9ppa568yxbkmvk8-python3.9-pytorch-1.10.2.drv»; defaultText = { ... }; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = { ... }; }
+       => { ...; default = pkgs.python3Packages.pytorch; defaultText = literalExpression "pkgs.python3Packages.pytorch"; description = "The pytorch package to use. This is an example and doesn't actually do anything."; type = package; }
 
+     Example:
+       mkPackageOption pkgs "nushell" {
+         nullable = true;
+       }
+       => { ...; default = pkgs.nushell; defaultText = literalExpression "pkgs.nushell"; description = "The nushell package to use."; type = nullOr package; }
+
+     Example:
+       mkPackageOption pkgs "coreutils" {
+         default = null;
+       }
+       => { ...; description = "The coreutils package to use."; type = package; }
+
+     Example:
+       mkPackageOption pkgs "dbus" {
+         nullable = true;
+         default = null;
+       }
+       => { ...; default = null; description = "The dbus package to use."; type = nullOr package; }
   */
   mkPackageOption =
-    # Package set (a specific version of nixpkgs or a subset)
+    # Package set (an instantiation of nixpkgs such as pkgs in modules)
     pkgs:
       # Name for the package, shown in option description
       name:
       {
-        # Whether the package can be null, for example to disable installing a package altogether.
+        # Whether the package can be null, for example to disable installing a package altogether (defaults to false)
         nullable ? false,
-        # The attribute path where the default package is located (may be omitted)
+        # The attribute path where the default package is located (may be omitted, in which case it is copied from `name`)
         default ? name,
         # A string or an attribute path to use as an example (may be omitted)
         example ? null,
