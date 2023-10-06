@@ -65,6 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace "include(ImportFETK)" "" \
       --replace 'import_fetk(''${FETK_VERSION})' ""
+
+    # U was removed in python 3.11 because it had no effect
+    substituteInPlace tools/manip/inputgen.py \
+      --replace '"rU"' '"r"'
   '';
 
   nativeBuildInputs = [
