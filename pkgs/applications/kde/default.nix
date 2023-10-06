@@ -181,6 +181,7 @@ let
       kontactinterface = callPackage ./kontactinterface.nix {};
       kopeninghours = callPackage ./kopeninghours.nix {};
       korganizer = callPackage ./korganizer.nix {};
+      kosmindoormap = callPackage ./kosmindoormap.nix {};
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kpkpass = callPackage ./kpkpass.nix {};
