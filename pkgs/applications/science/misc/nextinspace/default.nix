@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
     "nextinspace"
   ];
 
