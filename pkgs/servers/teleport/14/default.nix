@@ -1,9 +1,9 @@
 { callPackage, ... }@args:
 callPackage ../generic.nix ({
-  version = "12.4.20";
-  hash = "sha256-Qz+JOS4YPj2865Fkj7eVJMdilHMOGbTD179bQ5wHY7A=";
-  vendorHash = "sha256-cS8ylLujgp9Is+D2JjoK4yGgWRCVRyRw3NPQAAuE2vY=";
-  yarnHash = "sha256-tOdT7X8jM+tl1GZ7lBN2aW8KRiVW/zWK9fZIU7CSHVE=";
+  version = "14.0.1";
+  hash = "sha256-esQwk2PFnk3/REzLr3ExtzEcUs2q4Tn/2KpfFWAx5uU=";
+  vendorHash = "sha256-lzwrkW0dHxCHBSJjzNhXgq3Av8Zj8xEn3kfTRtT/q04=";
+  yarnHash = "sha256-Y2dVxRyKPLD2xjwr0QqrKHf/4gnMCErmDzievu5zTGg=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -12,8 +12,6 @@ callPackage ../generic.nix ({
   };
   extPatches = [
     # https://github.com/NixOS/nixpkgs/issues/120738
-    ../tsh.patch
-    # https://github.com/NixOS/nixpkgs/issues/132652
-    ../test.patch
+    ../tsh_14.patch
   ];
 } // builtins.removeAttrs args [ "callPackage" ])
