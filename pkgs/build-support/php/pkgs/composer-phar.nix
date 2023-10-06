@@ -10,15 +10,17 @@
   , stdenvNoCC
   , unzip
   , xz
+  , version
+  , pharHash
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer-phar";
-  version = "2.6.5";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/composer/composer/releases/download/${finalAttrs.version}/composer.phar";
-    hash = "sha256-mhjho6rby5TBuv1sSpj/kx9LQ6RW70hXUTBGbhnwXdY=";
+    hash = pharHash;
   };
 
   dontUnpack = true;

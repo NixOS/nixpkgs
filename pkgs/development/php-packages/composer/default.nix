@@ -1,7 +1,16 @@
 { lib, callPackage, fetchFromGitHub, php, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
 
 php.buildComposerProject (finalAttrs: {
-  composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix { };
+  # Hash used by ../../../build-support/php/pkgs/composer-phar.nix to
+  # use together with the version from this package to keep the
+  # bootstrap phar file up-to-date together with the end user composer
+  # package.
+  passthru.pharHash = "sha256-mhjho6rby5TBuv1sSpj/kx9LQ6RW70hXUTBGbhnwXdY=";
+
+  composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix {
+    inherit (finalAttrs) version;
+    inherit (finalAttrs.passthru) pharHash;
+  };
 
   pname = "composer";
   version = "2.6.5";
