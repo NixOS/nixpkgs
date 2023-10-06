@@ -108,8 +108,14 @@ rec {
      package a module should use for some purpose.
 
      The package is specified in the third argument under `default` as a list of strings
-     representing its attribute path in nixpkgs.
-     Because of this, you need to pass nixpkgs itself as the first argument.
+     representing its attribute path in nixpkgs (or another package set).
+     Because of this, you need to pass nixpkgs itself (usually `pkgs` in a module;
+     alternatively to nixpkgs itself, another package set) as the first argument.
+
+     If you pass another package set you should set the `pkgsText` option.
+     This option is used to display the expression for the package set. It is `"pkgs"` by default.
+     If your expression is complex you should parenthesize it, as the `pkgsText` argument
+     is usually immediately followed by an attribute lookup (`.`).
 
      The second argument may be either a string or a list of strings.
      It provides the display name of the package in the description of the generated option
@@ -131,7 +137,7 @@ rec {
      If you want users to be able to set no package, pass `nullable = true`.
      In this mode a `default = null` will not be interpreted as no default and is interpreted literally.
 
-     Type: mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string } -> option
+     Type: mkPackageOption :: pkgs -> (string|[string]) -> { nullable? :: bool, default? :: string|[string], example? :: null|string|[string], extraDescription? :: string, pkgsText? :: string } -> option
 
      Example:
        mkPackageOption pkgs "hello" { }
@@ -168,9 +174,16 @@ rec {
          default = null;
        }
        => { ...; default = null; description = "The dbus package to use."; type = nullOr package; }
+
+     Example:
+       mkPackageOption pkgs.javaPackages "OpenJFX" {
+         default = "openjfx20";
+         pkgsText = "pkgs.javaPackages";
+       }
+       => { ...; default = pkgs.javaPackages.openjfx20; defaultText = literalExpression "pkgs.javaPackages.openjfx20"; description = "The OpenJFX package to use."; type = package; }
   */
   mkPackageOption =
-    # Package set (an instantiation of nixpkgs such as pkgs in modules)
+    # Package set (an instantiation of nixpkgs such as pkgs in modules or another package set)
     pkgs:
       # Name for the package, shown in option description
       name:
@@ -183,6 +196,8 @@ rec {
         example ? null,
         # Additional text to include in the option description (may be omitted)
         extraDescription ? "",
+        # Representation of the package set passed as pkgs (defaults to `"pkgs"`)
+        pkgsText ? "pkgs"
       }:
       let
         name' = if isList name then last name else name;
@@ -194,15 +209,15 @@ rec {
         default' = if isList default then default else [ default ];
         defaultPath = concatStringsSep "." default';
         defaultValue = attrByPath default'
-          (throw "${defaultPath} cannot be found in pkgs") pkgs;
+          (throw "${defaultPath} cannot be found in ${pkgsText}") pkgs;
       in {
         default = defaultValue;
-        defaultText = literalExpression ("pkgs." + defaultPath);
+        defaultText = literalExpression ("${pkgsText}." + defaultPath);
       } else if nullable then {
         default = null;
       } else { }) // lib.optionalAttrs (example != null) {
         example = literalExpression
-          (if isList example then "pkgs." + concatStringsSep "." example else example);
+          (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
 
   /* Alias of mkPackageOption. Previously used to create options with markdown
