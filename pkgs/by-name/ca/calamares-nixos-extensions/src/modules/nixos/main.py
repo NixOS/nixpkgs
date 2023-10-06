@@ -54,14 +54,12 @@ cfgbootnone = """  # Disable bootloader.
 
 """
 
-cfgbootgrubcrypt = """  # Enable grub cryptodisk
+cfgbootgrubcrypt = """  # Setup keyfile
+  boot.initrd.secrets = {
+    "/crypto_keyfile.bin" = null;
+  };
+
   boot.loader.grub.enableCryptodisk=true;
-
-"""
-
-cfgswapcrypt = """  # Enable swap on luks
-  boot.initrd.luks.devices."@@swapdev@@".device = "/dev/disk/by-uuid/@@swapuuid@@";
-  boot.initrd.luks.devices."@@swapdev@@".keyFile = "/crypto_keyfile.bin";
 
 """
 
@@ -376,44 +374,34 @@ def run():
     else:
         cfg += cfgbootnone
 
-    # Don't use keyfile if no encrypted extra encrypted partitions
-    needkeyfile = False
+    # Setup encrypted swap devices. nixos-generate-config doesn't seem to notice them.
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and not part["mountPoint"] == "/":
-            needkeyfile = True
-            break
+        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and part["fs"] == "linuxswap":
+            cfg += """  boot.initrd.luks.devices."{}".device = "/dev/disk/by-uuid/{}";\n""".format(
+                part["luksMapperName"], part["uuid"])
 
     # Check partitions
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks":
-            if fw_type != "efi":
-                cfg += cfgbootgrubcrypt
+        if part["claimed"] == True and part["fsName"] == "luks" and fw_type != "efi":
+            cfg += cfgbootgrubcrypt
             status = _("Setting up LUKS")
             libcalamares.job.setprogress(0.15)
-            if needkeyfile:
-                try:
-                    # Create /crypto_keyfile.bin
-                    libcalamares.utils.host_env_process_output(
-                        ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], None)
-                    libcalamares.utils.host_env_process_output(
-                        ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
-                except subprocess.CalledProcessError:
-                    libcalamares.utils.error(
-                        "Failed to create /crypto_keyfile.bin")
-                    return (_("Failed to create /crypto_keyfile.bin"), _("Check if you have enough free space on your partition."))
+            try:
+                # Create /crypto_keyfile.bin
+                libcalamares.utils.host_env_process_output(
+                    ["dd", "bs=512", "count=4", "if=/dev/random", "of="+root_mount_point+"/crypto_keyfile.bin", "iflag=fullblock"], None)
+                libcalamares.utils.host_env_process_output(
+                    ["chmod", "600", root_mount_point+"/crypto_keyfile.bin"], None)
+            except subprocess.CalledProcessError:
+                libcalamares.utils.error(
+                    "Failed to create /crypto_keyfile.bin")
+                return (_("Failed to create /crypto_keyfile.bin"), _("Check if you have enough free space on your partition."))
             break
 
-    # Setup keys in /crypto_keyfile. Do not add rootfs
+    # Setup keys in /crypto_keyfile if using BIOS and Grub cryptodisk
     for part in gs.value("partitions"):
-        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and not part["mountPoint"] == "/":
-            if part["fs"] == "linuxswap":
-                cfg += cfgswapcrypt
-                catenate(variables, "swapdev", part["luksMapperName"])
-                uuid = part["uuid"]
-                catenate(variables, "swapuuid", uuid)
-            else:
-                cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(
-                    part["luksMapperName"])
+        if part["claimed"] == True and part["fsName"] == "luks" and part["device"] is not None and fw_type != "efi":
+            cfg += """  boot.initrd.luks.devices."{}".keyFile = "/crypto_keyfile.bin";\n""".format(part["luksMapperName"])
 
             try:
                 # Add luks drives to /crypto_keyfile.bin
