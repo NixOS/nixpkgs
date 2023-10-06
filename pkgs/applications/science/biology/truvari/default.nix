@@ -83,6 +83,7 @@ in python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Structural variant comparison tool for VCFs";
     homepage = "https://github.com/ACEnglish/truvari";
+    changelog = "https://github.com/ACEnglish/truvari/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium scalavision ];
     longDescription = ''
