@@ -201,21 +201,21 @@ rec {
       }:
       let
         name' = if isList name then last name else name;
-      in mkOption ({
-        type = with lib.types; (if nullable then nullOr else lib.id) package;
+        default' = if isList default then default else [ default ];
+        defaultText = concatStringsSep "." default';
+        defaultValue = attrByPath default'
+          (throw "${defaultText} cannot be found in ${pkgsText}") pkgs;
+        defaults = if default != null then {
+          default = defaultValue;
+          defaultText = literalExpression ("${pkgsText}." + defaultText);
+        } else optionalAttrs nullable {
+          default = null;
+        };
+      in mkOption (defaults // {
         description = "The ${name'} package to use."
           + (if extraDescription == "" then "" else " ") + extraDescription;
-      } // (if default != null then let
-        default' = if isList default then default else [ default ];
-        defaultPath = concatStringsSep "." default';
-        defaultValue = attrByPath default'
-          (throw "${defaultPath} cannot be found in ${pkgsText}") pkgs;
-      in {
-        default = defaultValue;
-        defaultText = literalExpression ("${pkgsText}." + defaultPath);
-      } else if nullable then {
-        default = null;
-      } else { }) // lib.optionalAttrs (example != null) {
+        type = with lib.types; (if nullable then nullOr else lib.id) package;
+      } // optionalAttrs (example != null) {
         example = literalExpression
           (if isList example then "${pkgsText}." + concatStringsSep "." example else example);
       });
