@@ -2728,4 +2728,6 @@ self: super: {
   # https://github.com/kowainik/typerep-map/pull/128
   typerep-map = doJailbreak super.typerep-map;
 
+  # Too strict bounds on base
+  ihp-hsx = doJailbreak super.ihp-hsx;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
