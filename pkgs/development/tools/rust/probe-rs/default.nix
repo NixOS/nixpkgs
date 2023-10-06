@@ -11,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-rs";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-IjeQPsHDHmKmS0UeivgmM8dQyhwak1PBIBw31KlVu64=";
+    hash = "sha256-3L4dvEIPxbNYh+Z5G1iccqLLYi13RTRaFnOD4U/zNtE=";
   };
 
-  cargoHash = "sha256-BkYidZzqiI7EIgEuYbeGC7qeVvhC1GARFC4EZpDdBmg=";
+  cargoHash = "sha256-peCXG9TrsnBqQOy+pgRNGstn0bwKNCdWQ3Jn5r0fcOI=";
 
   cargoBuildFlags = [ "--features=cli" ];
 
