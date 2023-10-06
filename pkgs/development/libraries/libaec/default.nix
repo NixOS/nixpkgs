@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  doCheck = true;
+
   meta = with lib; {
     homepage = "https://gitlab.dkrz.de/k202009/libaec";
     description = "Adaptive Entropy Coding library";
