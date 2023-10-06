@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 # See https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html for dependencies explanations
@@ -120,6 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Disable tests that fail in the sandbox
     ./no-adapter-tests.patch
+
+    # Upstream for for gcc-13 support
+    # TODO: drop when update to 4.5.0.0 release.
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/EttusResearch/uhd/commit/1a6b554c0e1905f238a8d7f6a13f2c90318cd8cf.patch";
+      hash = "sha256-BEuasep7pegxWFVZ/nhYTEv5POG6Kycs0NIXVxm03JM=";
+    })
   ];
 
   postPhases = [ "installFirmware" "removeInstalledTests" ]
