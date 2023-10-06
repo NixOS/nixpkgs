@@ -1,6 +1,7 @@
 { buildPythonApplication
 , nix
 , makeWrapper
+, nurl
 , python3Packages
 , lib
 , nix-prefetch-git
@@ -39,7 +40,11 @@ buildPythonApplication {
     cp ${../../../../../maintainers/scripts/pluginupdate.py} $out/lib/pluginupdate.py
 
     # wrap python scripts
-    makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [ nix nix-prefetch-git my_neovim ]}" --prefix PYTHONPATH : "$out/lib" )
+    makeWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ nix nurl nix-prefetch-git my_neovim ]}" \
+      --prefix PYTHONPATH : "$out/lib" \
+      --prefix NVIM_TREESITTER : "${vimPlugins.nvim-treesitter}" \
+    )
     wrapPythonPrograms
   '';
 
