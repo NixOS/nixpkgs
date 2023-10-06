@@ -8351,7 +8351,7 @@ self: super: with self; {
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
-  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.rocmPackages.llvm; };
+  openai-triton = callPackage ../development/python-modules/openai-triton { cudaPackages = pkgs.cudaPackages_12_0; };
 
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
