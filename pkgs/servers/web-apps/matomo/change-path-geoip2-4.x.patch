@@ -8,4 +8,3 @@
 +    'path.geoip2' => PIWIK_USER_PATH . '/misc/',
      'geopip2.ispEnabled' => true
  ];
-\ Pas de fin de ligne à la fin du fichier
