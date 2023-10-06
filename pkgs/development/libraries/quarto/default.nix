@@ -13,6 +13,7 @@
 , python3
 , quarto
 , extraPythonPackages ? ps: with ps; []
+, sysctl
 }:
 
 stdenv.mkDerivation (final: {
@@ -64,7 +65,9 @@ stdenv.mkDerivation (final: {
   '';
 
   passthru.tests = {
-    quarto-check = runCommand "quarto-check" {} ''
+    quarto-check = runCommand "quarto-check" {
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+    } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check
       touch $out
