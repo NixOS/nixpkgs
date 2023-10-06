@@ -235,6 +235,8 @@ checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtra
 checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
 checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
+checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
+checkConfigOutput '^"hello-other"$' options.packageFromOtherSet.default.pname ./declare-mkPackageOption.nix
 
 # submoduleWith
 

@@ -41,5 +41,13 @@ in {
     nullablePackageWithDefault = lib.mkPackageOption pkgs "hello" {
       nullable = true;
     };
+
+    packageWithPkgsText = lib.mkPackageOption pkgs "hello" {
+      pkgsText = "myPkgs";
+    };
+
+    packageFromOtherSet = let myPkgs = {
+      hello = pkgs.hello // { pname = "hello-other"; };
+    }; in lib.mkPackageOption myPkgs "hello" { };
   };
 }
