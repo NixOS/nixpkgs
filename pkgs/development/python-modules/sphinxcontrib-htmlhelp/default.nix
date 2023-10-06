@@ -17,6 +17,8 @@ buildPythonPackage rec {
   # Check is disabled due to circular dependency of sphinx
   doCheck = false;
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Sphinx extension which renders HTML help files";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-htmlhelp";

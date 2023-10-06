@@ -28,6 +28,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinxcontrib.tikz" ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "TikZ extension for Sphinx";
     homepage = "https://bitbucket.org/philexander/tikz";

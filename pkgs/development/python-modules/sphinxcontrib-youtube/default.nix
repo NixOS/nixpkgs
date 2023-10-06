@@ -27,6 +27,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinxcontrib.youtube" ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Youtube extension for Sphinx";
     homepage = "https://github.com/sphinx-contrib/youtube";

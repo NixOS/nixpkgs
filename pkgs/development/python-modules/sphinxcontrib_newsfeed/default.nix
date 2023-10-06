@@ -15,6 +15,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sphinx ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
     homepage = "https://bitbucket.org/prometheus/sphinxcontrib-newsfeed";

@@ -31,6 +31,8 @@ buildPythonPackage rec {
     sphinx
   ];
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     description = "Extension to include jQuery on newer Sphinx releases";
     longDescription = ''

@@ -36,6 +36,8 @@ buildPythonPackage rec {
 
   doCheck = false;
 
+  pythonNamespaces = [ "sphinxcontrib" ];
+
   meta = with lib; {
     homepage = "https://github.com/ikalnytskyi/sphinxcontrib-openapi";
     description = "OpenAPI (fka Swagger) spec renderer for Sphinx";
