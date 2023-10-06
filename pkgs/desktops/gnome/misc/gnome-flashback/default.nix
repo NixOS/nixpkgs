@@ -23,6 +23,7 @@
 , upower
 , pam
 , wrapGAppsHook
+, makeWrapper
 , writeTextFile
 , xkeyboard_config
 , xorg
@@ -127,7 +128,7 @@ let
         versionPolicy = "odd-unstable";
       };
 
-      mkSessionForWm = { wmName, wmLabel, wmCommand, enableGnomePanel, panelModulePackages }:
+      mkSessionForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
         let
           wmApplication = writeTextFile {
             name = "gnome-flashback-${wmName}-wm";
@@ -156,28 +157,15 @@ let
             '';
           };
 
-          # gnome-panel will only look for applets in a single directory so symlink them into here.
-          panelModulesEnv = buildEnv {
-            name = "gnome-panel-modules-env";
-            # We always want to find the built-in panel applets.
-            paths = [ gnome-panel gnome-flashback ] ++ panelModulePackages;
-            pathsToLink = [ "/lib/gnome-panel/modules" ];
-          };
-
           executable = stdenv.mkDerivation {
             name = "gnome-flashback-${wmName}";
-            nativeBuildInputs = [ glib wrapGAppsHook ];
-            buildInputs = [ gnome-flashback ] ++ lib.optionals enableGnomePanel ([ gnome-panel ] ++ panelModulePackages);
 
-            # We want to use the wrapGAppsHook mechanism to wrap gnome-session
-            # with the environment that gnome-flashback and gnome-panel need to
-            # run, including the configured applet packages. This is only possible
-            # in the fixup phase, so turn everything else off.
+            nativeBuildInputs = [ makeWrapper ];
+
             dontUnpack = true;
             dontConfigure = true;
             dontBuild = true;
             dontInstall = true;
-            dontWrapGApps = true; # We want to do the wrapping ourselves.
 
             # gnome-flashback and gnome-panel need to be added to XDG_DATA_DIRS so that their .desktop files can be found by gnome-session.
             # We need to pass the --builtin flag so that gnome-session invokes gnome-session-binary instead of systemd.
@@ -186,9 +174,7 @@ let
               makeWrapper ${gnome-session}/bin/gnome-session $out \
                 --add-flags "--session=gnome-flashback-${wmName} --builtin" \
                 --set-default XDG_CURRENT_DESKTOP 'GNOME-Flashback:GNOME' \
-                --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" ([ wmApplication gnomeSession gnome-flashback ] ++ lib.optional enableGnomePanel gnome-panel)}' \
-                "''${gappsWrapperArgs[@]}" \
-                ${lib.optionalString enableGnomePanel "--set NIX_GNOME_PANEL_MODULESDIR '${panelModulesEnv}/lib/gnome-panel/modules'"}
+                --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" [ wmApplication gnomeSession gnome-flashback ]}'
             '';
           };
 
@@ -211,7 +197,7 @@ let
         };
 
       mkSystemdTargetForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
-        runCommand "gnome-flashback-${wmName}.target" {} ''
+        runCommand "gnome-flashback-${wmName}.target" { } ''
           mkdir -p $out/lib/systemd/user
           cp -r "${gnome-flashback}/lib/systemd/user/gnome-session@gnome-flashback-metacity.target.d" \
             "$out/lib/systemd/user/gnome-session@gnome-flashback-${wmName}.target.d"
