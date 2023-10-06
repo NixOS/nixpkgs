@@ -80,7 +80,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.80";
+    version = "0.3.81";
 
     outputs = [
       "out"
@@ -98,7 +98,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-6Ka83Bqd/nsfp8rv0GTBerpGP226MeZvC5u/j62FzP0=";
+      sha256 = "sha256-VYsw6c2LWuVorczozO1ZPkJT2HCsnsfsNnO/zAvQvK4=";
     };
 
     patches = [
@@ -116,12 +116,6 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-
-      # backport fix for building with webrtc-audio-processing 0.3 on platforms where we don't have 1.x
-      (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/1f1c308c9766312e684f0b53fc2d1422c7414d31.patch";
-        hash = "sha256-ECM7/84G99yzXsg5A2DkFnXFGJSV9lz3vD0IRSzR8vU=";
-      })
     ];
 
     strictDeps = true;
