@@ -14,11 +14,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer-phar";
-  version = "2.6.4";
+  version = "2.6.5";
 
   src = fetchurl {
     url = "https://github.com/composer/composer/releases/download/${finalAttrs.version}/composer.phar";
-    hash = "sha256-Wjnz4s5bo5HuP+yyJ/ryE5D1t+1cVvFMq54cMEi8+Lg=";
+    hash = "sha256-mhjho6rby5TBuv1sSpj/kx9LQ6RW70hXUTBGbhnwXdY=";
   };
 
   dontUnpack = true;

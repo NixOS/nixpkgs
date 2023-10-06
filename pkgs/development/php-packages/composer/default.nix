@@ -1,19 +1,16 @@
-{ lib, callPackage, fetchgit, php, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
+{ lib, callPackage, fetchFromGitHub, php, unzip, _7zz, xz, git, curl, cacert, makeBinaryWrapper }:
 
 php.buildComposerProject (finalAttrs: {
   composer = callPackage ../../../build-support/php/pkgs/composer-phar.nix { };
 
   pname = "composer";
-  version = "2.6.4";
+  version = "2.6.5";
 
-
-  # We use `fetchgit` instead of `fetchFromGitHub` to ensure the existence
-  # of the `composer.lock` file, which is omitted in the archive downloaded
-  # via `fetchFromGitHub`.
-  src = fetchgit {
-    url = "https://github.com/composer/composer.git";
+  src = fetchFromGitHub {
+    owner = "composer";
+    repo = "composer";
     rev = finalAttrs.version;
-    hash = "sha256-8lylMfTARff+gBZpIRqttmE0jeXdJnLHZKVmqHY3p+s=";
+    hash = "sha256-CKP7CYOuMKpuWdVveET2iLJPKJyCnv5YVjx4DE68UoE=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
