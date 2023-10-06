@@ -1,4 +1,5 @@
 { stdenv, lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript
+, runCommand, quartus-prime-lite
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
 }:
@@ -110,5 +111,13 @@ in buildFHSEnv rec {
   # Run the wrappers directly, instead of going via bash.
   runScript = "";
 
-  passthru = { inherit unwrapped; };
+  passthru = {
+    inherit unwrapped;
+    tests = {
+      modelsimEncryptedModel = runCommand "quartus-prime-lite-test-modelsim-encrypted-model" {} ''
+        "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/modelsim_ase/altera/verilog/src/arriav_atoms_ncrypt.v"
+        touch "$out"
+      '';
+    };
+  };
 }
