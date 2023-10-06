@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "protocolbuffers";
     repo = "protobuf";
     rev = "v${version}";
-    sha256 = hash;
+    inherit hash;
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/protocolbuffers/protobuf/pull/10090
     (fetchpatch {
       url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
-      sha256 = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
+      hash = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     ./static-executables-have-no-rpath.patch
