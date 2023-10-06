@@ -18940,11 +18940,11 @@
     name = "Uli Baum";
   };
   xfix = {
-    email = "konrad@borowski.pw";
+    email = "k@borowski.pw";
     matrix = "@xfix:matrix.org";
     github = "xfix";
     githubId = 1297598;
-    name = "Konrad Borowski";
+    name = "K. Borowsk.";
   };
   xfnw = {
     email = "xfnw+nixos@riseup.net";
