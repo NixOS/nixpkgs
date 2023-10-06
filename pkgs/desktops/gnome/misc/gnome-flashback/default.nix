@@ -146,18 +146,19 @@ let
           '';
         };
 
-      mkSessionForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
-        let
-          gnomeSession = writeTextFile {
-            name = "gnome-flashback-${wmName}-gnome-session";
-            destination = "/share/gnome-session/sessions/gnome-flashback-${wmName}.session";
-            text = ''
-              [GNOME Session]
-              Name=GNOME Flashback (${wmLabel})
-              ${requiredComponents wmName enableGnomePanel}
-            '';
-          };
+      mkGnomeSession = { wmName, wmLabel, enableGnomePanel }:
+        writeTextFile {
+          name = "gnome-flashback-${wmName}-gnome-session";
+          destination = "/share/gnome-session/sessions/gnome-flashback-${wmName}.session";
+          text = ''
+            [GNOME Session]
+            Name=GNOME Flashback (${wmLabel})
+            ${requiredComponents wmName enableGnomePanel}
+          '';
+        };
 
+      mkSessionForWm = { wmName, wmLabel, wmCommand }:
+        let
           executable = stdenv.mkDerivation {
             name = "gnome-flashback-${wmName}";
 
@@ -175,7 +176,7 @@ let
               makeWrapper ${gnome-session}/bin/gnome-session $out \
                 --add-flags "--session=gnome-flashback-${wmName} --builtin" \
                 --set-default XDG_CURRENT_DESKTOP 'GNOME-Flashback:GNOME' \
-                --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" [ gnomeSession gnome-flashback ]}'
+                --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" [ gnome-flashback ]}'
             '';
           };
 

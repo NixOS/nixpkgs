@@ -294,7 +294,7 @@ in
           map
             (wm:
               pkgs.gnome.gnome-flashback.mkSessionForWm {
-                inherit (wm) wmName wmLabel wmCommand enableGnomePanel;
+                inherit (wm) wmName wmLabel wmCommand;
               }
             ) flashbackWms;
 
@@ -313,7 +313,9 @@ in
         })
       ]
       # For /share/applications/${wmName}.desktop
-      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms);
+      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
+      # For /share/gnome-session/sessions/gnome-flashback-${wmName}.session
+      ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
     (mkIf serviceCfg.core-os-services.enable {
