@@ -102,32 +102,32 @@ in mkDerivation rec {
   ];
 
   buildInputs = [
-    openssl
-    proj
-    geos
-    sqlite
-    gsl
-    qwt
     exiv2
-    protobuf
     fcgi
+    geos
+    gsl
+    hdf5
     libspatialindex
     libspatialite
-    postgresql
-    txt2tags
     libzip
-    hdf5
     netcdf
-    qtbase
-    qtsensors
+    openssl
+    pdal
+    postgresql
+    proj
+    protobuf
     qca-qt5
-    qtkeychain
     qscintilla
+    qt3d
+    qtbase
+    qtkeychain
     qtlocation
+    qtsensors
     qtserialport
     qtxmlpatterns
-    qt3d
-    pdal
+    qwt
+    sqlite
+    txt2tags
     zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
