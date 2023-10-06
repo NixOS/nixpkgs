@@ -7,6 +7,28 @@ in {
   options = {
     package = lib.mkPackageOption pkgs "hello" { };
 
+    namedPackage = lib.mkPackageOption pkgs "Hello" {
+      default = [ "hello" ];
+    };
+
+    namedPackageSingletonDefault = lib.mkPackageOption pkgs "Hello" {
+      default = "hello";
+    };
+
+    pathPackage = lib.mkPackageOption pkgs [ "hello" ] { };
+
+    packageWithExample = lib.mkPackageOption pkgs "hello" {
+      example = "pkgs.hello.override { stdenv = pkgs.clangStdenv; }";
+    };
+
+    packageWithPathExample = lib.mkPackageOption pkgs "hello" {
+      example = [ "hello" ];
+    };
+
+    packageWithExtraDescription = lib.mkPackageOption pkgs "hello" {
+      extraDescription = "Example extra description.";
+    };
+
     undefinedPackage = lib.mkPackageOption pkgs "hello" {
       default = null;
     };
@@ -14,6 +36,10 @@ in {
     nullablePackage = lib.mkPackageOption pkgs "hello" {
       nullable = true;
       default = null;
+    };
+
+    nullablePackageWithDefault = lib.mkPackageOption pkgs "hello" {
+      nullable = true;
     };
   };
 }
