@@ -8,6 +8,7 @@
 , pythonOlder
 , pyyaml
 , qcelemental
+, msgpack
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,7 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     qcelemental
+    msgpack
   ];
 
   nativeCheckInputs = [

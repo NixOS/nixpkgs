@@ -732,6 +732,11 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
+  rtthost = callPackage ../development/tools/rust/rtthost {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin) DarwinTools;
+  };
+
   mix2nix = callPackage ../development/tools/mix2nix { };
 
   n98-magerun = callPackage ../development/tools/misc/n98-magerun { };
@@ -2986,8 +2991,6 @@ with pkgs;
   contour = libsForQt5.callPackage ../applications/terminal-emulators/contour { fmt = fmt_8; };
 
   cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
-
-  ctx = callPackage ../applications/terminal-emulators/ctx { };
 
   darklua = callPackage ../development/tools/darklua { };
 
@@ -6035,6 +6038,8 @@ with pkgs;
   monsoon = callPackage ../tools/security/monsoon { };
 
   moodle-dl = callPackage ../tools/networking/moodle-dl { };
+
+  moon-phases = callPackage ../tools/misc/moon-phases { };
 
   moonraker = callPackage ../servers/moonraker { };
 
@@ -15029,8 +15034,6 @@ with pkgs;
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
-  xmldiff = python3Packages.callPackage ../tools/text/xml/xmldiff { };
-
   xmlformat = callPackage ../tools/text/xml/xmlformat { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff { };
@@ -17904,6 +17907,9 @@ with pkgs;
   kona = callPackage ../development/interpreters/kona { };
 
   konf = callPackage ../development/tools/konf { };
+
+  lambda-lisp = callPackage ../development/interpreters/lambda-lisp { };
+  lambda-lisp-blc = lambda-lisp;
 
   lolcode = callPackage ../development/interpreters/lolcode { };
 

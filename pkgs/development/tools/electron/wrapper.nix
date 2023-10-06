@@ -2,6 +2,10 @@
 , electron-unwrapped
 , wrapGAppsHook
 , makeWrapper
+, gsettings-desktop-schemas
+, glib
+, gtk3
+, gtk4
 }:
 
 stdenv.mkDerivation {
@@ -9,9 +13,14 @@ stdenv.mkDerivation {
   inherit (electron-unwrapped) version;
 
   nativeBuildInputs = [ wrapGAppsHook makeWrapper ];
+  buildInputs = [
+    # needed for GSETTINGS_SCHEMAS_PATH
+    gsettings-desktop-schemas glib gtk3 gtk4
+  ];
   dontWrapGApps = true;
 
   buildCommand = ''
+    gappsWrapperArgsHook
     mkdir -p $out/bin
     makeWrapper "${electron-unwrapped}/libexec/electron/electron" "$out/bin/electron" \
       "''${gappsWrapperArgs[@]}" \
