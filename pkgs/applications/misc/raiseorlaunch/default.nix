@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
-  pythonImportsCheck = [ "raiseorlaunch" ];
+  pythonImportsExtrasCheck = [ "raiseorlaunch" ];
 
   meta = with lib; {
     maintainers = with maintainers; [ winpat ];
