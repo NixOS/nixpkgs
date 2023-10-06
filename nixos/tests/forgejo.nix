@@ -23,6 +23,25 @@ let
   signingPrivateKeyId = "4D642DE8B678C79D";
 
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
+  supportedRunners = [ "gitea-actions-runner" "forgejo-actions-runner" ];
+  mkRunnerSpecialisation = runnerName: (mkMerge [
+    {
+      inheritParentConfig = true;
+      configuration.services.gitea-actions-runner.instances."test" = {
+        enable = true;
+        name = "ci";
+        url = "http://localhost:3000";
+        labels = [
+          # don't require docker/podman
+          "native:host"
+        ];
+        tokenFile = "/var/lib/forgejo/runner_token";
+      };
+    }
+    (optionalAttrs (runnerName == "forgejo-actions-runner") {
+      configuration.services.gitea-actions-runner.package = pkgs.forgejo-actions-runner;
+    })
+  ]);
   makeGForgejoTest = type: nameValuePair type (makeTest {
     name = "forgejo-${type}";
     meta.maintainers = with maintainers; [ bendlas emilylange ];
@@ -40,19 +59,7 @@ let
         environment.systemPackages = [ config.services.forgejo.package pkgs.gnupg pkgs.jq ];
         services.openssh.enable = true;
 
-        specialisation.runner = {
-          inheritParentConfig = true;
-          configuration.services.gitea-actions-runner.instances."test" = {
-            enable = true;
-            name = "ci";
-            url = "http://localhost:3000";
-            labels = [
-              # don't require docker/podman
-              "native:host"
-            ];
-            tokenFile = "/var/lib/forgejo/runner_token";
-          };
-        };
+        specialisation = genAttrs supportedRunners mkRunnerSpecialisation;
       };
       client1 = { config, pkgs, ... }: {
         environment.systemPackages = [ pkgs.git ];
@@ -143,13 +150,14 @@ let
             timeout=10
         )
 
-        with subtest("Testing runner registration"):
-            server.succeed(
-                "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
-            )
-            server.succeed("${serverSystem}/specialisation/runner/bin/switch-to-configuration test")
-            server.wait_for_unit("gitea-runner-test.service")
-            server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
+        for runner_specialisation in [${concatStringsSep ", " (map (runnerName: ''"${runnerName}"'') supportedRunners)}]:
+            with subtest(f"Testing {runner_specialisation} registration"):
+                server.succeed(
+                    "su -l forgejo -c 'GITEA_WORK_DIR=/var/lib/forgejo gitea actions generate-runner-token' | sed 's/^/TOKEN=/' | tee /var/lib/forgejo/runner_token"
+                )
+                server.succeed(f"${serverSystem}/specialisation/{runner_specialisation}/bin/switch-to-configuration test")
+                server.wait_for_unit("gitea-runner-test.service")
+                server.succeed("journalctl -o cat -u gitea-runner-test.service | grep -q 'Runner registered successfully'")
       '';
   });
 in
