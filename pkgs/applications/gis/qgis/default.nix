@@ -3,12 +3,14 @@
 , nixosTests
 , symlinkJoin
 
-, extraPythonPackages ? (ps: [ ])
+, ltrRelease ? false
 
+, extraPythonPackages ? (ps: [ ])
 , libsForQt5
 }:
+
 let
-  qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {  };
+  qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix { ltrRelease = ltrRelease; };
 in symlinkJoin rec {
 
   inherit (qgis-unwrapped) version;
@@ -37,6 +39,7 @@ in symlinkJoin rec {
   passthru = {
     unwrapped = qgis-unwrapped;
     tests.qgis = nixosTests.qgis;
+    tests.qgis-ltr = nixosTests.qgis-ltr;
   };
 
   meta = qgis-unwrapped.meta;
