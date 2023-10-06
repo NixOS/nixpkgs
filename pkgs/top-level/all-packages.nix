@@ -35771,6 +35771,10 @@ with pkgs;
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
+  supersonic-wayland = supersonic.override {
+    waylandSupport = true;
+  };
+
   svkbd = callPackage ../applications/accessibility/svkbd { };
 
   swaglyrics = callPackage ../tools/misc/swaglyrics { };
