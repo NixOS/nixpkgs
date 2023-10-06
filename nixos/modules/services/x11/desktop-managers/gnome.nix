@@ -311,7 +311,9 @@ in
         (gnome-panel-with-modules.override {
           panelModulePackages = cfg.flashback.panelModulePackages;
         })
-      ];
+      ]
+      # For /share/applications/${wmName}.desktop
+      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms);
     })
 
     (mkIf serviceCfg.core-os-services.enable {

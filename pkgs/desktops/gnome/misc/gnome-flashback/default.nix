@@ -128,25 +128,26 @@ let
         versionPolicy = "odd-unstable";
       };
 
+      mkWmApplication = { wmName, wmLabel, wmCommand }:
+        writeTextFile {
+          name = "gnome-flashback-${wmName}-wm";
+          destination = "/share/applications/${wmName}.desktop";
+          text = ''
+            [Desktop Entry]
+            Type=Application
+            Encoding=UTF-8
+            Name=${wmLabel}
+            Exec=${wmCommand}
+            NoDisplay=true
+            X-GNOME-WMName=${wmLabel}
+            X-GNOME-Autostart-Phase=WindowManager
+            X-GNOME-Provides=windowmanager
+            X-GNOME-Autostart-Notify=false
+          '';
+        };
+
       mkSessionForWm = { wmName, wmLabel, wmCommand, enableGnomePanel }:
         let
-          wmApplication = writeTextFile {
-            name = "gnome-flashback-${wmName}-wm";
-            destination = "/share/applications/${wmName}.desktop";
-            text = ''
-              [Desktop Entry]
-              Type=Application
-              Encoding=UTF-8
-              Name=${wmLabel}
-              Exec=${wmCommand}
-              NoDisplay=true
-              X-GNOME-WMName=${wmLabel}
-              X-GNOME-Autostart-Phase=WindowManager
-              X-GNOME-Provides=windowmanager
-              X-GNOME-Autostart-Notify=false
-            '';
-          };
-
           gnomeSession = writeTextFile {
             name = "gnome-flashback-${wmName}-gnome-session";
             destination = "/share/gnome-session/sessions/gnome-flashback-${wmName}.session";
@@ -174,7 +175,7 @@ let
               makeWrapper ${gnome-session}/bin/gnome-session $out \
                 --add-flags "--session=gnome-flashback-${wmName} --builtin" \
                 --set-default XDG_CURRENT_DESKTOP 'GNOME-Flashback:GNOME' \
-                --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" [ wmApplication gnomeSession gnome-flashback ]}'
+                --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" [ gnomeSession gnome-flashback ]}'
             '';
           };
 
