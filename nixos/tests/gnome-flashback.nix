@@ -49,9 +49,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
           assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
 
       with subtest("Wait for Metacity"):
-          machine.wait_until_succeeds(
-              "pgrep metacity"
-          )
+          machine.wait_until_succeeds("pgrep metacity")
+
+      with subtest("Regression test for #233920"):
+          machine.wait_until_succeeds("pgrep -fa gnome-flashback-media-keys")
           machine.sleep(20)
           machine.screenshot("screen")
     '';
