@@ -150,6 +150,7 @@ in mkDerivation rec {
   '';
 
   cmakeFlags = [
+    (lib.cmakeBool "WITH_SERVER" true)
     (lib.cmakeBool "WITH_3D" true)
     (lib.cmakeBool "WITH_PDAL" true)
     (lib.cmakeBool "ENABLE_TESTS" false)

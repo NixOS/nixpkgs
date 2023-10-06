@@ -32,6 +32,14 @@ in symlinkJoin rec {
     wrapProgram $out/bin/qgis \
       --prefix PATH : $program_PATH \
       --set PYTHONPATH $program_PYTHONPATH
+
+    wrapProgram $out/bin/qgis_mapserver \
+      --prefix PATH : $program_PATH \
+      --set PYTHONPATH $program_PYTHONPATH
+
+    wrapProgram $out/bin/qgis_mapserv.fcgi \
+      --prefix PATH : $program_PATH \
+      --set PYTHONPATH $program_PYTHONPATH
   '';
 
   passthru = {
