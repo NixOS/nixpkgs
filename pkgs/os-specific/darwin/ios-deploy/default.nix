@@ -3,7 +3,7 @@
 # Note this is impure, using system XCode to build ios-deploy. We
 # should have a special flag for users to enable this.
 
-let version = "1.11.0";
+let version = "1.12.2";
 in stdenvNoCC.mkDerivation {
   pname = "ios-deploy";
   inherit version;
@@ -11,7 +11,7 @@ in stdenvNoCC.mkDerivation {
     owner = "ios-control";
     repo = "ios-deploy";
     rev = version;
-    sha256 = "0hqwikdrcnslx4kkw9b0n7n443gzn2gbrw15pp2fnkcw5s0698sc";
+    sha256 = "082w7j490khfpbv1diwrjixjbg9g93wdr2khyzdhv8xmzzwq4lad";
   };
   nativeBuildInputs = [ rsync ];
   buildPhase = ''
