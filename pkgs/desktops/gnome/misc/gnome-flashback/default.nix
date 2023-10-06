@@ -23,7 +23,6 @@
 , upower
 , pam
 , wrapGAppsHook
-, makeWrapper
 , writeTextFile
 , xkeyboard_config
 , xorg
@@ -158,29 +157,6 @@ let
         };
 
       mkSessionForWm = { wmName, wmLabel, wmCommand }:
-        let
-          executable = stdenv.mkDerivation {
-            name = "gnome-flashback-${wmName}";
-
-            nativeBuildInputs = [ makeWrapper ];
-
-            dontUnpack = true;
-            dontConfigure = true;
-            dontBuild = true;
-            dontInstall = true;
-
-            # gnome-flashback and gnome-panel need to be added to XDG_DATA_DIRS so that their .desktop files can be found by gnome-session.
-            # We need to pass the --builtin flag so that gnome-session invokes gnome-session-binary instead of systemd.
-            # If systemd is used, it doesn't use the environment we set up here and so it can't find the .desktop files.
-            preFixup = ''
-              makeWrapper ${gnome-session}/bin/gnome-session $out \
-                --add-flags "--session=gnome-flashback-${wmName} --builtin" \
-                --set-default XDG_CURRENT_DESKTOP 'GNOME-Flashback:GNOME' \
-                --prefix XDG_DATA_DIRS : '${lib.makeSearchPath "share" [ gnome-flashback ]}'
-            '';
-          };
-
-        in
         writeTextFile
           {
             name = "gnome-flashback-${wmName}-xsession";
@@ -189,7 +165,7 @@ let
               [Desktop Entry]
               Name=GNOME Flashback (${wmLabel})
               Comment=This session logs you into GNOME Flashback with ${wmLabel}
-              Exec=${executable}
+              Exec=${gnome-session}/bin/gnome-session --session=gnome-flashback-${wmName}
               TryExec=${wmCommand}
               Type=Application
               DesktopNames=GNOME-Flashback;GNOME;
