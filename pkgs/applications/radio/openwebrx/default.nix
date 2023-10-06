@@ -17,6 +17,10 @@ let
       sha256 = "1j80zclg1cl5clqd00qqa16prz7cyc32bvxqz2mh540cirygq24w";
     };
 
+    propagatedBuildInputs = [
+      setuptools # needed for 'pkg_resources'
+    ];
+
     pythonImportsCheck = [ "js8py" "test" ];
 
     meta = with lib; {
