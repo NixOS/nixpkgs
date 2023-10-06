@@ -93,6 +93,7 @@
   tree-sitter-tsq = lib.importJSON ./tree-sitter-tsq.json;
   tree-sitter-turtle = lib.importJSON ./tree-sitter-turtle.json;
   tree-sitter-typescript = lib.importJSON ./tree-sitter-typescript.json;
+  tree-sitter-typst = lib.importJSON ./tree-sitter-typst.json;
   tree-sitter-verilog = lib.importJSON ./tree-sitter-verilog.json;
   tree-sitter-vim = lib.importJSON ./tree-sitter-vim.json;
   tree-sitter-vue = lib.importJSON ./tree-sitter-vue.json;
