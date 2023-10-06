@@ -6328,6 +6328,10 @@ with pkgs;
       inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rblake3sum = callPackage ../tools/security/rblake3sum {
+      inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   reg = callPackage ../tools/virtualization/reg { };
 
   retool = callPackage ../applications/misc/retool { };
