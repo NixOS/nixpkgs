@@ -27722,7 +27722,7 @@ with pkgs;
   mapserver = callPackage ../servers/geospatial/mapserver { };
 
   martin = callPackage ../servers/geospatial/martin {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
