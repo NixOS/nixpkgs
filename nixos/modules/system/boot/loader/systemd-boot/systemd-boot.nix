@@ -22,6 +22,16 @@ let
 
     timeout = optionalString (config.boot.loader.timeout != null) config.boot.loader.timeout;
 
+    installBootloaderFiles = if cfg.installBootloaderFiles then "True" else "False";
+
+    imageDir = if cfg.imageDir == "/" then "" else cfg.imageDir;
+
+    kernelSigningKey = optionalString (cfg.kernelSigningKey != null) cfg.kernelSigningKey;
+
+    kernelSigningCert = optionalString (cfg.kernelSigningCert != null) cfg.kernelSigningCert;
+
+    sbsigntool = optionalString (cfg.kernelSigningKey != null && cfg.kernelSigningCert != null) pkgs.sbsigntool;
+
     editor = if cfg.editor then "True" else "False";
 
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
@@ -80,6 +90,80 @@ in {
       type = types.bool;
 
       description = lib.mdDoc "Whether to enable the systemd-boot (formerly gummiboot) EFI boot manager";
+    };
+
+    installBootloaderFiles = mkOption {
+      default = true;
+
+      type = types.bool;
+
+      description = lib.mdDoc ''
+        Whether to actually install the systemd-boot bootloader files.
+        Setting this to false makes it so the module only copies the
+        kernels to the boot partition and generates boot loader specification
+        entries for them. This is useful for when you want to use a
+        bootloader - not managed by NixOS - that is able to boot using such
+        boot loader specification entries.
+
+        The `memtest86` option is unaffected by this option: if that option
+        is set to `true`, the MemTest86 image will be copied and a boot loader
+        specification entry will be created for it, even if this is set to false.
+      '';
+    };
+
+    imageDir = mkOption {
+      default = "/EFI/nixos";
+
+      type = types.str;
+
+      apply = x: assert (hasPrefix "/" x || abort "Image directory path does not start with a forward slash as required"); x;
+
+      description = lib.mdDoc ''
+        The path on the boot partition where kernels and initrd files will
+        be copied to. You must specify a value for this option that starts
+        with a forward slash, because it will be prefixed by
+        `boot.loader.efi.efiSysMountPoint` during the copy operations. Note
+        that the systemd-boot module will remove all files in this path
+        that match the path name glob pattern
+        `????????????????????????????????-*.efi` (i.e. files whose name has
+        a dash as the 33rd character - NixOS prefixes kernels and initrd
+        images with base32 hashes - and ends in `.efi`), but that aren't
+        being kept based on option
+        `boot.loader.systemd-boot.configurationLimit`. Subdirectories and
+        files inside them are not affected.
+      '';
+    };
+
+    kernelSigningKey = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = lib.mdDoc ''
+        The path to the PEM-encoded RSA private key to use for signing kernels,
+        so that they may be booted as EFI images in a UEFI Secure Boot environment.
+        This option is intended to be used when using a bootloader - other than
+        systemd-boot - that can EFISTUB-boot linux kernel images. In this case,
+        `boot.loader.systemd-boot.installBootloaderFiles` should be set to false.
+        This option doesn't make the module sign the systemd-boot bootloader files.
+
+        Kernel images will not be signed if either this option or
+        `boot.loader.systemd-boot.kernelSigningCert` are `null`.
+      '';
+    };
+
+    kernelSigningCert = mkOption {
+      default = null;
+      type = types.nullOr types.str;
+      description = lib.mdDoc ''
+        The path to the X.509 certificate to use for signing kernels,
+        so that they may be booted as EFI images in a UEFI Secure Boot environment.
+        This option is intended to be used when using a bootloader - other than
+        systemd-boot - that can EFISTUB-boot linux kernel images. In this case,
+        `boot.loader.systemd-boot.installBootloaderFiles` should be set to false.
+        This option doesn't make the module sign the systemd-boot bootloader files.
+
+        Kernel images will not be signed if either this option or
+        `boot.loader.systemd-boot.kernelSigningKey` are `null`.
+      '';
     };
 
     editor = mkOption {

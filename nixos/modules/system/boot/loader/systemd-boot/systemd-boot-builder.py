@@ -15,6 +15,7 @@ import re
 import datetime
 import glob
 import os.path
+import tempfile
 from typing import NamedTuple, List, Optional
 from packaging import version
 
@@ -24,9 +25,35 @@ class SystemIdentifier(NamedTuple):
     specialisation: Optional[str]
 
 
-def copy_if_not_exists(source: str, dest: str) -> None:
+def maybe_sign(source: str, is_kernel: bool) -> str:
+    # just return the clean image if we are not signing
+    # or if the image is not even a kernel image
+    if "@sbsigntool@" == "" or not is_kernel:
+        return source
+
+    signed_source = tempfile.mktemp()
+    subprocess.check_call(
+        [
+            "@sbsigntool@/bin/sbsign",
+            "--key",
+            "@kernelSigningKey@",
+            "--cert",
+            "@kernelSigningCert@",
+            "--output",
+            signed_source,
+            source
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
+
+    return signed_source
+
+
+def copy_if_not_exists(source: str, dest: str, is_kernel: bool) -> None:
     if not os.path.exists(dest):
-        shutil.copyfile(source, dest)
+        file_to_copy = maybe_sign(source, is_kernel)
+        shutil.copyfile(file_to_copy, dest)
 
 
 def generation_dir(profile: Optional[str], generation: int) -> str:
@@ -79,9 +106,9 @@ def copy_from_profile(profile: Optional[str], generation: int, specialisation: O
     store_file_path = profile_path(profile, generation, specialisation, name)
     suffix = os.path.basename(store_file_path)
     store_dir = os.path.basename(os.path.dirname(store_file_path))
-    efi_file_path = "/efi/nixos/%s-%s.efi" % (store_dir, suffix)
+    efi_file_path = "@imageDir@/%s-%s.efi" % (store_dir, suffix)
     if not dry_run:
-        copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
+        copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path), name == "kernel")
     return efi_file_path
 
 
@@ -205,7 +232,7 @@ def remove_old_entries(gens: List[SystemIdentifier]) -> None:
             continue
         if not (prof, gen_number, None) in gens:
             os.unlink(path)
-    for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
+    for path in glob.iglob("@efiSysMountPoint@@imageDir@/????????????????????????????????-*.efi"):
         if not path in known_paths and not os.path.isdir(path):
             os.unlink(path)
 
@@ -250,7 +277,11 @@ def main() -> None:
     if "@graceful@" == "1":
         bootctl_flags.append("--graceful")
 
-    if os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
+    if not @installBootloaderFiles@:
+        # There is nothing to do here if we don't actually want to install or
+        # update the systemd-boot bootloader files on the boot partition.
+        pass
+    elif os.getenv("NIXOS_INSTALL_BOOTLOADER") == "1":
         # bootctl uses fopen() with modes "wxe" and fails if the file exists.
         if os.path.exists("@efiSysMountPoint@/loader/loader.conf"):
             os.unlink("@efiSysMountPoint@/loader/loader.conf")
@@ -286,7 +317,7 @@ def main() -> None:
                 print("updating systemd-boot from %s to %s" % (installed_version, available_version))
                 subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
 
-    mkdir_p("@efiSysMountPoint@/efi/nixos")
+    mkdir_p("@efiSysMountPoint@@imageDir@")
     mkdir_p("@efiSysMountPoint@/loader/entries")
 
     gens = get_generations()
@@ -299,7 +330,7 @@ def main() -> None:
             write_entry(*gen, machine_id, current=is_default)
             for specialisation in get_specialisations(*gen):
                 write_entry(*specialisation, machine_id, current=is_default)
-            if is_default:
+            if @installBootloaderFiles@ and is_default:
                 write_loader_conf(*gen)
         except OSError as e:
             # See https://github.com/NixOS/nixpkgs/issues/114552
