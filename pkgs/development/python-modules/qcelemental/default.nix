@@ -6,21 +6,25 @@
 , numpy
 , pint
 , pydantic
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.25.1";
-  format = "setuptools";
+  version = "0.26.0";
+
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4+DlP+BH0UdWcYRBBApdc3E18L2zPvsdY6GTW5WCGnQ=";
+    hash = "sha256-oU6FEM2/2mRe8UYcGv0C77WZMRcz27pfg/zR1haKbd0=";
   };
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     networkx
