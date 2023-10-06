@@ -7,11 +7,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "soundconverter";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchurl {
     url = "https://launchpad.net/soundconverter/trunk/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "sha256-hzIG/4LD3705erPYvXb7uoRwF9LtKKIKB3jrhpYMsZ0=";
+    hash = "sha256-15TeNxFQzE6pzADuBN8jEzpPPna4pt0x4GXsaxi0gr4=";
   };
 
   buildInputs = [
@@ -56,7 +56,7 @@ python3Packages.buildPythonApplication rec {
     # FIXME: Fails due to weird Gio.file_parse_name() behavior.
     sed -i '49 a\    @unittest.skip("Gio.file_parse_name issues")' tests/testcases/names.py
   '' + lib.optionalString (!faacSupport) ''
-    substituteInPlace tests/testcases/integration.py --replace \
+    substituteInPlace tests/testcases/gui_integration.py --replace \
       "for encoder in ['fdkaacenc', 'faac', 'avenc_aac']:" \
       "for encoder in ['fdkaacenc', 'avenc_aac']:"
   '';
@@ -65,6 +65,10 @@ python3Packages.buildPythonApplication rec {
     runHook preCheck
     xvfb-run python tests/test.py
     runHook postCheck
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/soundconverter --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
   # Necessary to set GDK_PIXBUF_MODULE_FILE.
