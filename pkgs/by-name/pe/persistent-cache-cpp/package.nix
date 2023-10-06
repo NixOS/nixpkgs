@@ -69,6 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     lomiri.cmake-extras
+  ];
+
+  propagatedBuildInputs = [
     leveldb
   ];
 
