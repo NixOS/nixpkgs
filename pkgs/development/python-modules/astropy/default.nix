@@ -26,25 +26,15 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "5.3.3";
+  version = "5.3.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AzDfn116IlQ2fpuM9EJVuhBwsGEjGIxqcu3BgEk/k7s=";
+    hash = "sha256-1JD34vqsLMwBySRCAtYpFUJZr4qXkQTO2J3ErOTm8dg=";
   };
-  patches = [
-    # Fixes running tests in parallel issue
-    # https://github.com/astropy/astropy/issues/15316. Fix from
-    # https://github.com/astropy/astropy/pull/15327
-    (fetchpatch {
-      url = "https://github.com/astropy/astropy/commit/1042c0fb06a992f683bdc1eea2beda0b846ed356.patch";
-      hash = "sha256-bApAcGBRrJ94thhByoYvdqw2e6v77+FmTfgmGcE6MMk=";
-    })
-  ];
-
   # Relax cython dependency to allow this to build, upstream only doesn't
   # support cython 3 as of writing. See:
   # https://github.com/astropy/astropy/issues/15315
@@ -84,6 +74,11 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [
     "astropy"
+  ];
+  disabledTests = [
+    # May fail due to parallelism, see:
+    # https://github.com/astropy/astropy/issues/15441
+    "TestUnifiedOutputRegistry"
   ];
 
   meta = {
