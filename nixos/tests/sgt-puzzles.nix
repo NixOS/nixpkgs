@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ...} :
 {
-  name = "sgtpuzzles";
+  name = "sgt-puzzles";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ tomfitzhenry ];
   };
@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
     services.xserver.enable = true;
     environment.systemPackages = with pkgs; [
-      sgtpuzzles
+      sgt-puzzles
     ];
   };
 

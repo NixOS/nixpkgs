@@ -14,7 +14,8 @@
 buildPythonPackage rec {
   pname = "qcelemental";
   version = "0.26.0";
-  format = "pyproject";
+
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 

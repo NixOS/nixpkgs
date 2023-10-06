@@ -307,10 +307,9 @@ in
         gnome-flashback
       ] ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      # gnome-panel needs these for menu applet
-      environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gnome.gnome-flashback}/share" ];
-      # TODO: switch to sessionVariables (resolve conflict)
-      environment.variables.XDG_CONFIG_DIRS = [ "${pkgs.gnome.gnome-flashback}/etc/xdg" ];
+      environment.systemPackages = with pkgs.gnome; [
+        gnome-flashback
+      ];
     })
 
     (mkIf serviceCfg.core-os-services.enable {

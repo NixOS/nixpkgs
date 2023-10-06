@@ -38478,11 +38478,14 @@ with pkgs;
 
   sfrotz = callPackage ../games/sfrotz { };
 
-  sgtpuzzles = callPackage ../games/sgt-puzzles { };
+  sgt-puzzles = callPackage ../games/sgt-puzzles { };
 
-  sgtpuzzles-mobile = callPackage ../games/sgt-puzzles {
+  sgt-puzzles-mobile = callPackage ../games/sgt-puzzles {
     isMobile = true;
   };
+
+  sgtpuzzles = throw "sgtpuzzles has been renamed to sgt-puzzles."; # 2023-10-06
+  sgtpuzzles-mobile = throw "sgtpuzzles-mobile has been renamed to sgt-puzzles-mobile."; # 2023-10-06
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
@@ -41330,7 +41333,7 @@ with pkgs;
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py { };
 
-  inherit (callPackage ../applications/networking/cluster/terraform { })
+  inherit (callPackage ../applications/networking/cluster/terraform { buildGoModule = buildGo121Module; })
     mkTerraform
     terraform_1
     terraform_plugins_test

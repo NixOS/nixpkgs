@@ -17,6 +17,9 @@
 #include <syscall.h>
 #include <byteswap.h>
 
+// imported from glibc
+#include "unsecvars.h"
+
 #ifndef SOURCE_PROG
 #error SOURCE_PROG should be defined via preprocessor commandline
 #endif
@@ -151,8 +154,54 @@ static int make_caps_ambient(const char *self_path) {
     return 0;
 }
 
+// These are environment variable aliases for glibc tunables.
+// This list shouldn't grow further, since this is a legacy mechanism.
+// Any future tunables are expected to only be accessible through GLIBC_TUNABLES.
+//
+// They are not included in the glibc-provided UNSECURE_ENVVARS list,
+// since any SUID executable ignores them. This wrapper also serves
+// executables that are merely granted ambient capabilities, rather than
+// being SUID, and hence don't run in secure mode. We'd like them to
+// defend those in depth as well, so we clear these explicitly.
+//
+// Except for MALLOC_CHECK_ (which is marked SXID_ERASE), these are all
+// marked SXID_IGNORE (ignored in secure mode), so even the glibc version
+// of this wrapper would leave them intact.
+#define UNSECURE_ENVVARS_TUNABLES \
+    "MALLOC_CHECK_\0" \
+    "MALLOC_TOP_PAD_\0" \
+    "MALLOC_PERTURB_\0" \
+    "MALLOC_MMAP_THRESHOLD_\0" \
+    "MALLOC_TRIM_THRESHOLD_\0" \
+    "MALLOC_MMAP_MAX_\0" \
+    "MALLOC_ARENA_MAX\0" \
+    "MALLOC_ARENA_TEST\0"
+
 int main(int argc, char **argv) {
     ASSERT(argc >= 1);
+
+    int debug = getenv(wrapper_debug) != NULL;
+
+    // Drop insecure environment variables explicitly
+    //
+    // glibc does this automatically in SUID binaries, but we'd like to cover this:
+    //
+    //  a) before it gets to glibc
+    //  b) in binaries that are only granted ambient capabilities by the wrapper,
+    //     but don't run with an altered effective UID/GID, nor directly gain
+    //     capabilities themselves, and thus don't run in secure mode.
+    //
+    // We're using musl, which doesn't drop environment variables in secure mode,
+    // and we'd also like glibc-specific variables to be covered.
+    //
+    // If we don't explicitly unset them, it's quite easy to just set LD_PRELOAD,
+    // have it passed through to the wrapped program, and gain privileges.
+    for (char *unsec = UNSECURE_ENVVARS_TUNABLES UNSECURE_ENVVARS; *unsec; unsec = strchr(unsec, 0) + 1) {
+        if (debug) {
+            fprintf(stderr, "unsetting %s\n", unsec);
+        }
+        unsetenv(unsec);
+    }
 
     // Read the capabilities set on the wrapper and raise them in to
     // the ambient set so the program we're wrapping receives the

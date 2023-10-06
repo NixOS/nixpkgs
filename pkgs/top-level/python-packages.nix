@@ -3555,6 +3555,8 @@ self: super: with self; {
 
   es-client = callPackage ../development/python-modules/es-client { };
 
+  esig = callPackage ../development/python-modules/esig { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
@@ -5209,6 +5211,8 @@ self: super: with self; {
   igraph = callPackage ../development/python-modules/igraph {
     inherit (pkgs) igraph;
   };
+
+  iisignature = callPackage ../development/python-modules/iisignature { };
 
   ijson = callPackage ../development/python-modules/ijson { };
 
