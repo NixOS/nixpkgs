@@ -7,9 +7,12 @@
 , libtermkey
 , unibilium
 }:
-stdenv.mkDerivation rec {
-  pname = "libtickit";
+let
   version = "0.4.3";
+in
+stdenv.mkDerivation {
+  pname = "libtickit";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "leonerd";
@@ -18,24 +21,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-QCrym8g5J1qwsFpU/PB8zZIWdM3YzOySknISSbQE4Sc=";
   };
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "LIBTOOL=${lib.getExe libtool}"
+  patches = [
+    # Disabled on darwin, since test assumes TERM=linux
+    ./001-skip-test-18term-builder-on-macos.patch
   ];
 
   nativeBuildInputs = [
     pkg-config
     libtool
   ];
+
   buildInputs = [
     libtermkey
     unibilium
   ];
+
   nativeCheckInputs = [ perl ];
 
-  patches = [
-    ./skipTestMacOS.patch
+  makeFlags = [
+    "LIBTOOL=${lib.getExe libtool}"
   ];
+
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  enableParallelBuilding = true;
 
   doCheck = true;
 
