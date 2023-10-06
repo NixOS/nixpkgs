@@ -417,6 +417,7 @@ fi
 tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
 exit_handlers+=(remove_tmpHomePath)
 HOME="$tmpHomePath"
+ln -s /build/.netrc "$HOME/"
 unset XDG_CONFIG_HOME
 export GIT_CONFIG_NOSYSTEM=1
 

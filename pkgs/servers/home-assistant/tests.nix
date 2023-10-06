@@ -5,6 +5,7 @@
 let
   # some components' tests have additional dependencies
   extraCheckInputs = with home-assistant.python.pkgs; {
+    airzone_cloud = [ aioairzone ];
     alexa = [ av ];
     bluetooth = [ pyswitchbot ];
     bthome = [ xiaomi-ble ];
@@ -19,6 +20,7 @@ let
     homeassistant_sky_connect = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp zwave-js-server-python ];
     homeassistant_yellow = [ bellows zha-quirks zigpy-deconz zigpy-xbee zigpy-zigate zigpy-znp ];
     lovelace = [ pychromecast ];
+    matrix = [ pydantic ];
     mopeka = [ pyswitchbot ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];

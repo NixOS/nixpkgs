@@ -2,14 +2,14 @@
 
 let
   pname = "phpstan";
-  version = "1.10.33";
+  version = "1.10.37";
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-    sha256 = "sha256-dFIuCVYmZr6E0181jegKs6d3mA9jPoFqoIY+lyWl7P8=";
+    sha256 = "sha256-i1h3N11MsKhHx/RJxAthnUbjacA5yZJF6bzmQnmEKzg=";
   };
 
   dontUnpack = true;

@@ -134,16 +134,6 @@ let
         };
       });
 
-      plexapi = super.plexapi.overridePythonAttrs (oldAttrs: rec {
-        version = "4.13.2";
-        src = fetchFromGitHub {
-          owner = "pkkid";
-          repo = "python-plexapi";
-          rev = "refs/tags/${version}";
-          hash = "sha256-5YwINPgQ4efZBvu5McsLYicW/7keKSi011lthJUR9zw=";
-        };
-      });
-
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -282,16 +272,6 @@ let
         };
       });
 
-      zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
-        version = "0.98.0";
-        src = fetchFromGitHub {
-          owner = "python-zeroconf";
-          repo = "python-zeroconf";
-          rev = "refs/tags/${version}";
-          hash = "sha256-oajSXGQTsJsajRAnS/MkkbSyxTeVvdjvw1eiJaPzZMY=";
-        };
-      });
-
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
@@ -316,7 +296,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2023.9.3";
+  hassVersion = "2023.10.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -332,7 +312,7 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tcIGYJ+r2+0jnf3xUxnFdwnLiOK9P0Y6sw0Mpd/YIT0=";
+    hash = "sha256-UmgIQJRQRDMzjUO9lJVpKsIvrFHBzoXc5Kig69ZHttU=";
   };
 
   # Secondary source is git for tests
@@ -340,7 +320,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-zAUMevj2xvRkhZg4wuHDz0+X//cEU/D/HmokmX9oeCU=";
+    hash = "sha256-M8TuH9oF4+6PuHDCHiGWxSnrQcOw/OsJVSfX/8XfyIM=";
   };
 
   nativeBuildInputs = with python.pkgs; [
