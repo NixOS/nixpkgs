@@ -1,5 +1,5 @@
 { lib
-, fetchurl
+, fetchzip
 , tcl
 , critcl
 , withCritcl ? true
@@ -9,9 +9,9 @@ tcl.mkTclDerivation rec {
   pname = "tcllib";
   version = "1.21";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "mirror://sourceforge/tcllib/tcllib-${version}.tar.gz";
-    sha256 = "sha256-RrK7XsgEk2OuAWRa8RvaO9tdsQYp6AfYHRrUbNG+rVA=";
+    hash = "sha256-p8thpRpC+9k/LvbBFaSOIpDXuhMlEWhs0qbrjtKcTzQ=";
   };
 
   nativeBuildInputs = lib.optional withCritcl critcl;
