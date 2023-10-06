@@ -61,7 +61,7 @@ stdenv.mkDerivation (final: {
       mv bin/* $out/bin
       mv share/* $out/share
 
-      runHook preInstall
+      runHook postInstall
   '';
 
   passthru.tests = {
