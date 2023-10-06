@@ -32,12 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/commit/3ed84ee1d32a27d183de2cb5f9feffc3f48fd9a1.patch";
       hash = "sha256-aNZ6KVHAsLVYlAcPNNkjUlOPRDZxzN5tzk4/1KuVaSY=";
     })
+
     # Fix build on current Boost
     # Remove when version > 1.0.5
     (fetchpatch {
       url = "https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/commit/a590ffcccec252caa7b19a2922c678502069b057.patch";
       hash = "sha256-OhlsnUVhclt17brkncYkJ0+lXrJO671mtwopaAGPrtY=";
     })
+
+    # PersistentStringCacheImpl.exceptions test fails on LLVM's libcxx, it depends on std::system_error producing a very specific exception text
+    # Expects "Unknown error 666", gets "unspecified generic_category error"
+    # https://gitlab.com/ubports/development/core/lib-cpp/persistent-cache-cpp/-/blob/1.0.5/tests/core/internal/persistent_string_cache_impl/persistent_string_cache_impl_test.cpp?ref_type=tags#L1298
+    ./0001-persistent-cache-cpp-Lenient-exception-test-matching.patch
   ];
 
   postPatch = ''
