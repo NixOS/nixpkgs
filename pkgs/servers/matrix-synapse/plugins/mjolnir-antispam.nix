@@ -16,7 +16,7 @@ buildPythonPackage rec {
   buildInputs = [ matrix-synapse-unwrapped ];
 
   doCheck = false; # no tests
-  pythonImportsCheck = [ "mjolnir" ];
+  pythonImportsExtrasCheck = [ "mjolnir" ]; # requires 'twisted' from synapse
 
   meta = with lib; {
     description = "AntiSpam / Banlist plugin to be used with mjolnir";
