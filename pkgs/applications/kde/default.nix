@@ -179,6 +179,7 @@ let
       kontact = callPackage ./kontact.nix {};
       konversation = callPackage ./konversation.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
+      kopeninghours = callPackage ./kopeninghours.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpat = callPackage ./kpat.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
