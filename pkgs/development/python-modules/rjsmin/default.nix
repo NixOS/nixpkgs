@@ -20,6 +20,10 @@ buildPythonPackage rec {
   # tests auto-discovery
   doCheck = false;
 
+  pythonImportsCheck = [
+    "rjsmin"
+  ];
+
   meta = with lib; {
     description = "Module to minify Javascript";
     homepage = "http://opensource.perlig.de/rjsmin/";
