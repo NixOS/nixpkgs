@@ -11636,6 +11636,8 @@ with pkgs;
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
+  opentofu = callPackage ../applications/networking/cluster/opentofu { };
+
   opentrack = libsForQt5.callPackage ../applications/misc/opentrack { };
 
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
