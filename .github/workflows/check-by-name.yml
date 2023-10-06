@@ -17,16 +17,24 @@ jobs:
     # as specified in nixos/release-combined.nix
     runs-on: ubuntu-latest
     steps:
+      - name: Resolving the merge commit
+        run: |
+          if result=$(git ls-remote --exit-code ${{ github.event.pull_request.base.repo.clone_url }} refs/pull/${{ github.event.pull_request.number }}/merge); then
+            mergedSha=$(cut -f1 <<< "$result")
+            echo "The PR appears to not have any conflicts, checking the merge commit $mergedSha"
+          else
+            echo "The PR may have a merge conflict"
+            exit 1
+          fi
+          echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           # pull_request_target checks out the base branch by default
-          ref: refs/pull/${{ github.event.pull_request.number }}/merge
+          ref: ${{ env.mergedSha }}
           # Fetches the merge commit and its parents
           fetch-depth: 2
       - name: Determining PR git hashes
         run: |
-          echo "mergedSha=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
-
           # For pull_request_target this is the same as $GITHUB_SHA
           echo "baseSha=$(git rev-parse HEAD^1)" >> "$GITHUB_ENV"
 
