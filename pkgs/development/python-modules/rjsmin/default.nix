@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+}:
+
 buildPythonPackage rec {
   pname = "rjsmin";
   version = "1.2.2";
@@ -13,8 +17,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    description = "Module to minify Javascript";
     homepage = "http://opensource.perlig.de/rjsmin/";
     license = licenses.asl20;
-    description = "Javascript minifier written in python";
+    maintainers = with maintainers; [ ];
   };
 }
