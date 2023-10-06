@@ -153,6 +153,7 @@ in
             postgresPassword = cfg.postgres.password;
             inherit (cfg)
               datastorePath
+              networkSubnet
               sslCertificate
               sslCertificateKey
               redisPassword
