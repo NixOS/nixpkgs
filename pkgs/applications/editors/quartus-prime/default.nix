@@ -1,4 +1,4 @@
-{ stdenv, lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript
+{ lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript, runtimeShell
 , runCommand, quartus-prime-lite
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
@@ -77,7 +77,7 @@ in buildFHSEnv rec {
         wrapped="$out/$relname"
         progs_wrapped+=("$wrapped")
         mkdir -p "$(dirname "$wrapped")"
-        echo "#!${stdenv.shell}" >> "$wrapped"
+        echo "#!${runtimeShell}" >> "$wrapped"
         case "$relname" in
             modelsim_ase/*)
                 echo "export NIXPKGS_IS_MODELSIM_WRAPPER=1" >> "$wrapped"
