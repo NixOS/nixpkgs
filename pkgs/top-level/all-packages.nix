@@ -34123,6 +34123,8 @@ with pkgs;
 
   nqptp = callPackage ../tools/networking/nqptp { };
 
+  mailbase = callPackage ../applications/networking/mailreaders/mailbase { };
+
   mailspring = callPackage ../applications/networking/mailreaders/mailspring { };
 
   memento = libsForQt5.callPackage ../applications/video/memento { };
