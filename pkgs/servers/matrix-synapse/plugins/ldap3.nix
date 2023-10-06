@@ -31,11 +31,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  buildInputs = [  matrix-synapse-unwrapped ];
+
   propagatedBuildInputs = [ service-identity ldap3 twisted ];
 
-  nativeCheckInputs = [ ldaptor matrix-synapse-unwrapped pytestCheckHook ];
+  nativeCheckInputs = [ ldaptor pytestCheckHook ];
 
-  pythonImportsCheck = [ "ldap_auth_provider" ];
+  pythonImportsExtrasCheck = [ "ldap_auth_provider" ]; # requires 'synapse'
 
   meta = with lib; {
     description = "LDAP3 auth provider for Synapse";
