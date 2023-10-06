@@ -11705,6 +11705,8 @@ self: super: with self; {
 
   pywerview = callPackage ../development/python-modules/pywerview { };
 
+  pywfa = callPackage ../development/python-modules/pywfa { };
+
   pywilight = callPackage ../development/python-modules/pywilight { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
