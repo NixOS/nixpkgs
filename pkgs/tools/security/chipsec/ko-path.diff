@@ -1,0 +1,13 @@
+diff --git a/chipsec/helper/linux/linuxhelper.py b/chipsec/helper/linux/linuxhelper.py
+index 2fd65140..f3f26bcb 100644
+--- a/chipsec/helper/linux/linuxhelper.py
++++ b/chipsec/helper/linux/linuxhelper.py
+@@ -153,7 +153,7 @@ class LinuxHelper(Helper):
+             else:
+                 a2 = f'a2=0x{phys_mem_access_prot}'
+ 
+-        driver_path = os.path.join(chipsec.file.get_main_dir(), "chipsec", "helper", "linux", "chipsec.ko")
++        driver_path = os.path.join(chipsec.file.get_main_dir(), "drivers", "linux", "chipsec.ko")
+         if not os.path.exists(driver_path):
+             driver_path += ".xz"
+             if not os.path.exists(driver_path):

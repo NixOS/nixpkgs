@@ -1,0 +1,13 @@
+diff --git a/docs/users_guide/ghc_config.py.in b/docs/users_guide/ghc_config.py.in
+index 2670ad3cf1..d2f9d85c31 100644
+--- a/docs/users_guide/ghc_config.py.in
++++ b/docs/users_guide/ghc_config.py.in
+@@ -1,6 +1,6 @@
+ extlinks = {
+-    'ghc-ticket': ('https://gitlab.haskell.org/ghc/ghc/issues/%s', 'Issue #'),
+-    'ghc-wiki': ('https://gitlab.haskell.org/ghc/ghc/wikis/%s', 'GHC Wiki'),
++    'ghc-ticket': ('https://gitlab.haskell.org/ghc/ghc/issues/%s', 'Issue %s'),
++    'ghc-wiki': ('https://gitlab.haskell.org/ghc/ghc/wikis/%s', 'GHC Wiki %s'),
+ }
+ 
+ libs_base_uri = '../libraries'

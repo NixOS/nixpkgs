@@ -1,0 +1,13 @@
+diff -Naur a/GUI/i7z_GUI.pro b/GUI/i7z_GUI.pro
+--- a/GUI/i7z_GUI.pro	2013-10-12 21:59:19.000000000 +0100
++++ b/GUI/i7z_GUI.pro	2016-11-05 13:54:30.118655672 +0000
+@@ -3,7 +3,8 @@
+ ######################################################################
+ 
+ TEMPLATE = app
+-TARGET = 
++TARGET = i7z_GUI
++QT += widgets
+ DEPENDPATH += .
+ INCLUDEPATH += .
+ CONFIG += debug

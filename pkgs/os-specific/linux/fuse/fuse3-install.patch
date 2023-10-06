@@ -1,0 +1,25 @@
+--- a/util/install_helper.sh	2019-07-10 12:00:15.984840142 +0200
++++ b/util/install_helper.sh	2019-07-10 12:28:56.343011401 +0200
+@@ -37,10 +37,10 @@
+ fi
+ 
+ install -D -m 644 "${MESON_SOURCE_ROOT}/util/udev.rules" \
+-        "${DESTDIR}${udevrulesdir}/99-fuse3.rules"
++        "${sysconfdir}${udevrulesdir}/99-fuse3.rules"
+ 
+ install -D -m 755 "${MESON_SOURCE_ROOT}/util/init_script" \
+-        "${DESTDIR}/etc/init.d/fuse3"
++        "${sysconfdir}/init.d/fuse3"
+ 
+ 
+ if test -x /usr/sbin/update-rc.d && test -z "${DESTDIR}"; then
+diff --git a/util/meson.build b/util/meson.build
+index aa0e734..06d4378 100644
+--- a/util/meson.build
++++ b/util/meson.build
+@@ -1,4 +1,4 @@
+-fuseconf_path = join_paths(get_option('prefix'), get_option('sysconfdir'), 'fuse.conf')
++fuseconf_path = join_paths('/', get_option('sysconfdir'), 'fuse.conf')
+ 
+ executable('fusermount3', ['fusermount.c', '../lib/mount_util.c'],
+            include_directories: include_dirs,

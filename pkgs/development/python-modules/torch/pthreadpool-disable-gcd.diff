@@ -1,0 +1,45 @@
+diff --git a/third_party/pthreadpool/CMakeLists.txt b/third_party/pthreadpool/CMakeLists.txt
+index 0db3264..1ba91c4 100644
+--- a/third_party/pthreadpool/CMakeLists.txt
++++ b/third_party/pthreadpool/CMakeLists.txt
+@@ -74,9 +74,7 @@ IF(EMSCRIPTEN)
+   LIST(APPEND PTHREADPOOL_SRCS src/shim.c)
+ ELSE()
+   LIST(APPEND PTHREADPOOL_SRCS src/portable-api.c src/memory.c)
+-  IF(APPLE AND (PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "default" OR PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "gcd"))
+-    LIST(APPEND PTHREADPOOL_SRCS src/gcd.c)
+-  ELSEIF(CMAKE_SYSTEM_NAME MATCHES "^(Windows|CYGWIN|MSYS)$" AND (PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "default" OR PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "event"))
++  IF(CMAKE_SYSTEM_NAME MATCHES "^(Windows|CYGWIN|MSYS)$" AND (PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "default" OR PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "event"))
+     LIST(APPEND PTHREADPOOL_SRCS src/windows.c)
+   ELSE()
+     LIST(APPEND PTHREADPOOL_SRCS src/pthreads.c)
+@@ -111,10 +109,6 @@ ELSEIF(PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "futex")
+   TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_FUTEX=1)
+   TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_GCD=0)
+   TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_EVENT=0)
+-ELSEIF(PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "gcd")
+-  TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_FUTEX=0)
+-  TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_GCD=1)
+-  TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_EVENT=0)
+ ELSEIF(PTHREADPOOL_SYNC_PRIMITIVE STREQUAL "event")
+   TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_FUTEX=0)
+   TARGET_COMPILE_DEFINITIONS(pthreadpool PRIVATE PTHREADPOOL_USE_GCD=0)
+diff --git a/third_party/pthreadpool/src/threadpool-common.h b/third_party/pthreadpool/src/threadpool-common.h
+index ca84744..244d0ca 100644
+--- a/third_party/pthreadpool/src/threadpool-common.h
++++ b/third_party/pthreadpool/src/threadpool-common.h
+@@ -14,14 +14,6 @@
+ 	#endif
+ #endif
+ 
+-#ifndef PTHREADPOOL_USE_GCD
+-	#if defined(__APPLE__)
+-		#define PTHREADPOOL_USE_GCD 1
+-	#else
+-		#define PTHREADPOOL_USE_GCD 0
+-	#endif
+-#endif
+-
+ #ifndef PTHREADPOOL_USE_EVENT
+ 	#if defined(_WIN32) || defined(__CYGWIN__)
+ 		#define PTHREADPOOL_USE_EVENT 1

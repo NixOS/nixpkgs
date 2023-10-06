@@ -1,0 +1,11 @@
+--- a/genisoimage/genisoimage.h
++++ b/genisoimage/genisoimage.h
+@@ -377,7 +377,7 @@ extern int	use_fileversion;
+ extern int	split_SL_component;
+ extern int	split_SL_field;
+ extern char	*trans_tbl;
+-char		*outfile;
++extern char	*outfile;
+ 
+ #define	JMAX		64	/* maximum Joliet file name length (spec) */
+ #define	JLONGMAX	103	/* out of spec Joliet file name length */

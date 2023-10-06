@@ -1,0 +1,73 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e4e5547af..a3017d197 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -175,13 +175,12 @@ if(BUILD_LAUNCHER)
+ endif()
+ message(STATUS "Fltk Libraries: ${FLTK_LIBRARIES}")
+ 
+-set(JA2_INCLUDES "")
++set(JA2_INCLUDES "include/stracciatella")
+ set(JA2_SOURCES "")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/externalized")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/game")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/sgp")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-smacker")
+-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-stracciatella")
+ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-string_theory")
+ 
+ if(BUILD_LAUNCHER)
+@@ -239,14 +238,12 @@ string(LENGTH "${CMAKE_SOURCE_DIR}/src/" SOURCE_PATH_SIZE)
+ add_definitions("-DSOURCE_PATH_SIZE=${SOURCE_PATH_SIZE}")
+ 
+ add_executable(${JA2_BINARY} ${JA2_SOURCES})
+-target_link_libraries(${JA2_BINARY} ${SDL2_LIBRARY} ${GTEST_LIBRARIES} smacker ${STRACCIATELLA_LIBRARIES} string_theory-internal)
+-add_dependencies(${JA2_BINARY} stracciatella)
++target_link_libraries(${JA2_BINARY} ${SDL2_LIBRARY} ${GTEST_LIBRARIES} smacker lib/libstracciatella_c_api.a dl pthread string_theory-internal)
+ set_property(SOURCE ${CMAKE_SOURCE_DIR}/src/game/GameVersion.cc APPEND PROPERTY COMPILE_DEFINITIONS "GAME_VERSION=v${ja2-stracciatella_VERSION}")
+ 
+ if(BUILD_LAUNCHER)
+     add_executable(${LAUNCHER_BINARY} ${LAUNCHER_SOURCES})
+-    target_link_libraries(${LAUNCHER_BINARY} ${FLTK_LIBRARIES} ${STRACCIATELLA_LIBRARIES} string_theory-internal)
+-    add_dependencies(${LAUNCHER_BINARY} stracciatella)
++    target_link_libraries(${LAUNCHER_BINARY} ${FLTK_LIBRARIES} lib/libstracciatella_c_api.a dl pthread string_theory-internal)
+ endif()
+ 
+ macro(copy_assets_dir_to_ja2_binary_after_build DIR)
+@@ -375,12 +372,12 @@ set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}_${CPACK_PACKAGE_VERSION}_${PACKAGE_
+ 
+ include(CPack)
+ 
+-if (UNIX AND NOT MINGW AND NOT APPLE)
++if (UNIX)
+     install(TARGETS ${JA2_BINARY} RUNTIME DESTINATION bin)
+     if(BUILD_LAUNCHER)
+         install(TARGETS ${LAUNCHER_BINARY} RUNTIME DESTINATION bin)
+     endif()
+-    install(PROGRAMS "${CMAKE_BINARY_DIR}/lib-stracciatella/bin/ja2-resource-pack${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION bin)
++    install(PROGRAMS "bin/ja2-resource-pack" DESTINATION bin)
+     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/externalized assets/mods assets/unittests DESTINATION share/ja2)
+     if(WITH_EDITOR_SLF)
+         install(FILES "${EDITORSLF_FILE}" DESTINATION share/ja2)
+@@ -400,7 +397,7 @@ else()
+     if(BUILD_LAUNCHER)
+         install(TARGETS ${LAUNCHER_BINARY} RUNTIME DESTINATION .)
+     endif()
+-    install(PROGRAMS "${CMAKE_BINARY_DIR}/lib-stracciatella/bin/ja2-resource-pack${CMAKE_EXECUTABLE_SUFFIX}" DESTINATION .)
++    install(PROGRAMS "bin/ja2-resource-pack" DESTINATION .)
+     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/assets/externalized assets/mods assets/unittests DESTINATION .)
+     if(WITH_EDITOR_SLF)
+         install(FILES "${EDITORSLF_FILE}" DESTINATION .)
+@@ -428,12 +425,6 @@ if (MINGW)
+     install(SCRIPT "${CMAKE_CURRENT_BINARY_DIR}/install-dlls-mingw.cmake")
+ endif()
+ 
+-if(APPLE)
+-    file(GLOB APPLE_DIST_FILES "${CMAKE_CURRENT_SOURCE_DIR}/assets/distr-files-mac/*.txt")
+-    install(FILES ${APPLE_DIST_FILES} DESTINATION .)
+-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/lib-SDL2-2.0.8-macos/SDL2.framework DESTINATION .)
+-endif()
+-
+ ## Uninstall
+ 
+ add_custom_templated_target("uninstall")
