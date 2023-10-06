@@ -46,7 +46,8 @@ buildPythonPackage rec {
   # Tests need network access
   doCheck = false;
 
-  pythonImportsCheck = [
+  pythonImportsExtrasCheck = [
+    # requires 'synapse'
     "s3_storage_provider"
   ];
 
