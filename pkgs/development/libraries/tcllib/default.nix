@@ -1,4 +1,9 @@
-{ lib, fetchurl, tcl }:
+{ lib
+, fetchurl
+, tcl
+, critcl
+, withCritcl ? true
+}:
 
 tcl.mkTclDerivation rec {
   pname = "tcllib";
@@ -8,6 +13,10 @@ tcl.mkTclDerivation rec {
     url = "mirror://sourceforge/tcllib/tcllib-${version}.tar.gz";
     sha256 = "sha256-RrK7XsgEk2OuAWRa8RvaO9tdsQYp6AfYHRrUbNG+rVA=";
   };
+
+  nativeBuildInputs = lib.optional withCritcl critcl;
+
+  buildFlags = [ "all" ] ++ lib.optional withCritcl "critcl";
 
   meta = {
     homepage = "https://core.tcl-lang.org/tcllib/";
