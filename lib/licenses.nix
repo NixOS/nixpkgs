@@ -854,6 +854,11 @@ in mkLicense lset) ({
     fullName = "Mozilla Public License 2.0";
   };
 
+  mplus = {
+    spdxId = "mplus";
+    fullName = "M+ Font License";
+  };
+
   mspl = {
     spdxId = "MS-PL";
     fullName = "Microsoft Public License";
