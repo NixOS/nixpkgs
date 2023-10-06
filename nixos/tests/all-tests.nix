@@ -714,7 +714,7 @@ in {
   service-runner = handleTest ./service-runner.nix {};
   sftpgo = runTest ./sftpgo.nix;
   sfxr-qt = handleTest ./sfxr-qt.nix {};
-  sgtpuzzles = handleTest ./sgtpuzzles.nix {};
+  sgt-puzzles = handleTest ./sgt-puzzles.nix {};
   shadow = handleTest ./shadow.nix {};
   shadowsocks = handleTest ./shadowsocks {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
