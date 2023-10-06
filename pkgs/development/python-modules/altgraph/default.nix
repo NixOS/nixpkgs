@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "altgraph";
-  version = "0.17.3";
+  version = "0.17.4";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ad33358114df7c9416cdb8fa1eaa5852166c505118717021c6a8c7c7abbd03dd";
+    sha256 = "sha256-G1r7uY9sTcrbLirmq5+plLu4wddfT6ltNA+UN65FRAY=";
   };
 
   pythonImportsCheck = [ "altgraph" ];
