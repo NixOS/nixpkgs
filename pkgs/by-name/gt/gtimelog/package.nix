@@ -37,6 +37,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  postInstall = ''
+    install -Dm644 gtimelog.desktop $out/share/applications/gtimelog.desktop
+    install -Dm644 src/gtimelog/gtimelog.png $out/share/icons/hicolor/48x48/apps/gtimelog.png
+    install -Dm644 src/gtimelog/gtimelog-large.png $out/share/icons/hicolor/256x256/apps/gtimelog.png
+  '';
+
   meta = with lib; {
     description = "A time tracking app";
     longDescription = ''
