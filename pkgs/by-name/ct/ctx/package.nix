@@ -1,41 +1,41 @@
 { lib
 , stdenv
 , fetchgit
-, pkg-config
-, xxd
 , SDL2
 , alsa-lib
 , babl
 , bash
-, cairo
 , curl
 , libdrm # Not documented
+, pkg-config
+, xxd
 , enableFb ? false
 , nixosTests
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctx";
-  version = "unstable-2023-06-05";
+  version = "unstable-2023-09-03";
 
   src = fetchgit {
     name = "ctx-source"; # because of a dash starting the directory
     url = "https://ctx.graphics/.git/";
-    rev = "2eb3886919d0a0b8c305e4f9e18428dad5e73ca0";
-    sha256 = "sha256-PLUyGArxLU742IKIgpzxdBdc94mWWSkHNFoXGW8L/Zo=";
+    rev = "1bac18c152eace3ca995b3c2b829a452085d46fb";
+    hash = "sha256-fOcQJ2XCeomdtAUmy0A+vU7Vt325OSwrb1+ccW+gZ38=";
   };
 
   patches = [
-    ./0001-Make-arch-detection-optional-and-fix-targets.patch
+    # Many problematic things fixed - it should be upstreamed somehow:
+    # - babl changed its name in pkg-config files
+    # - arch detection made optional
+    # - LD changed to CCC
+    # - remove inexistent reference to static/*/*
+    ./0001-fix-detections.diff
   ];
 
   postPatch = ''
     patchShebangs ./tools/gen_fs.sh
   '';
-
-  strictDeps = true;
-
-  env.ARCH = stdenv.hostPlatform.parsed.cpu.arch;
 
   nativeBuildInputs = [
     pkg-config
@@ -47,10 +47,13 @@ stdenv.mkDerivation {
     alsa-lib
     babl
     bash # for ctx-audioplayer
-    cairo
     curl
     libdrm
   ];
+
+  strictDeps = true;
+
+  env.ARCH = stdenv.hostPlatform.parsed.cpu.arch;
 
   configureScript = "./configure.sh";
   configureFlags = lib.optional enableFb "--enable-fb";
@@ -64,16 +67,16 @@ stdenv.mkDerivation {
 
   passthru.tests.test = nixosTests.terminal-emulators.ctx;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ctx.graphics/";
     description = "Vector graphics terminal";
-    longDescription= ''
+    longDescription = ''
       ctx is an interactive 2D vector graphics, audio, text- canvas and
       terminal, with escape sequences that enable a 2D vector drawing API using
       a vector graphics protocol.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

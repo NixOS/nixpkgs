@@ -30,6 +30,14 @@ in mkLicense lset) ({
     fullName = "Abstyles License";
   };
 
+  acsl14 = {
+    fullName = "Anti-Capitalist Software License v1.4";
+    url = "https://anticapitalist.software/";
+    /* restrictions on corporations apply for both use and redistribution */
+    free = false;
+    redistributable = false;
+  };
+
   afl20 = {
     spdxId = "AFL-2.0";
     fullName = "Academic Free License v2.0";

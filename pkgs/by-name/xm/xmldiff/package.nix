@@ -1,29 +1,27 @@
 { lib
-, buildPythonApplication
+, python3
 , fetchFromGitHub
-, lxml
-, setuptools
-, six
 }:
 
-buildPythonApplication rec {
-  pname = "xmldiff";
-  version = "2.4";
-
+let
+  version = "2.6.3";
   src = fetchFromGitHub {
     owner = "Shoobx";
-    repo = pname;
+    repo = "xmldiff";
     rev = version;
-    hash = "sha256-xqudHYfwOce2C0pcFzId0JDIIC6R5bllmVKsH+CvTdE=";
+    hash = "sha256-qn8gGultTSNKPUro6Ap4xJGcbpxV+lKgZFpKvyPdhtc=";
   };
+in
+python3.pkgs.buildPythonApplication {
+  pname = "xmldiff";
+  inherit version src;
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     lxml
     setuptools
-    six
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://xmldiff.readthedocs.io/en/stable/";
     description = "A library and command line utility for diffing xml";
     longDescription = ''
@@ -37,7 +35,7 @@ buildPythonApplication rec {
       would not be be readable by a human. xmldiff provides tools to make human
       readable diffs in those situations.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres anpryl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres anpryl ];
   };
 }
