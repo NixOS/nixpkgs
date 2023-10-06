@@ -10894,6 +10894,18 @@ final: prev:
     meta.homepage = "https://github.com/Marskey/telescope-sg/";
   };
 
+  telescope-smart-history-nvim = buildVimPlugin {
+    pname = "telescope-smart-history.nvim";
+    version = "2022-12-15";
+    src = fetchFromGitHub {
+      owner = "nvim-telescope";
+      repo = "telescope-smart-history.nvim";
+      rev = "81a4cceaa54d65d5f7c7c26178ee63b634d3e26d";
+      sha256 = "sha256-riBl0vSkRtM9Gtw/FNSKodSmqgGUpDnH7d5w+uU4ReQ=";
+    };
+    meta.homepage = "https://github.com/nvim-telescope/telescope-smart-history.nvim/";
+  };
+
   telescope-symbols-nvim = buildVimPlugin {
     pname = "telescope-symbols.nvim";
     version = "2023-11-24";
