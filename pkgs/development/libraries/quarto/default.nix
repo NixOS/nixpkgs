@@ -81,7 +81,7 @@ stdenv.mkDerivation (final: {
     changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson mrtarantoga ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin"];
+    platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
   };
 })
