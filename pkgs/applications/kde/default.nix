@@ -94,6 +94,7 @@ let
       grantleetheme = callPackage ./grantleetheme {};
       gwenview = callPackage ./gwenview.nix {};
       incidenceeditor = callPackage ./incidenceeditor.nix {};
+      itinerary = callPackage ./itinerary.nix {};
       juk = callPackage ./juk.nix {};
       k3b = callPackage ./k3b.nix {};
       kaccounts-integration = callPackage ./kaccounts-integration.nix {};
