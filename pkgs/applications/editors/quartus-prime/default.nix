@@ -77,6 +77,11 @@ in buildFHSEnv rec {
         progs_wrapped+=("$wrapped")
         mkdir -p "$(dirname "$wrapped")"
         echo "#!${stdenv.shell}" >> "$wrapped"
+        case "$relname" in
+            modelsim_ase/*)
+                echo "export NIXPKGS_IS_MODELSIM_WRAPPER=1" >> "$wrapped"
+                ;;
+        esac
         echo "$wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
@@ -86,13 +91,20 @@ in buildFHSEnv rec {
     ln --symbolic --relative --target-directory ./bin ''${progs_wrapped[@]}
   '';
 
-  # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
-  # starting most operations in many containerized environments, including WSL2, Docker, and LXC
-  # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
-  # we use the name so that quartus can load the 64 bit verson and modelsim can load the 32 bit version
-  # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
   profile = ''
-    export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}libudev.so.0
+    # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
+    # starting most operations in many containerized environments, including WSL2, Docker, and LXC
+    # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
+    # we use the name so that quartus can load the 64 bit verson and modelsim can load the 32 bit version
+    # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
+    #
+    # But, as can be seen in the above resource, LD_PRELOADing libudev breaks
+    # compiling encrypted device libraries in ModelSim (with error
+    # `(vlog-2163) Macro `<protected> is undefined.`), so only use LD_PRELOAD
+    # for non-ModelSim wrappers.
+    if [ "$NIXPKGS_IS_MODELSIM_WRAPPER" != 1 ]; then
+        export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}libudev.so.0
+    fi
   '';
 
   # Run the wrappers directly, instead of going via bash.
