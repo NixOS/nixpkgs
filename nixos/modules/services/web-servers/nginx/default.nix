@@ -1340,6 +1340,11 @@ in
       nginx.gid = config.ids.gids.nginx;
     };
 
+    # do not delete the default temp directories created upon nginx startup
+    systemd.tmpfiles.rules = [
+      "X /tmp/systemd-private-%b-nginx.service-*/tmp/nginx_*"
+    ];
+
     services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
       files = "/var/log/nginx/*.log";
       frequency = "weekly";

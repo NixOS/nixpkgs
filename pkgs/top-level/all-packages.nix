@@ -2495,7 +2495,9 @@ with pkgs;
 
   labctl = callPackage ../tools/networking/labctl { };
 
-  lefthook = callPackage ../applications/version-management/lefthook { };
+  lefthook = callPackage ../applications/version-management/lefthook {
+    buildGoModule = buildGo121Module;
+  };
 
   legit = callPackage ../applications/version-management/legit { };
 
@@ -13765,7 +13767,14 @@ with pkgs;
   teleport_12 = callPackage ../servers/teleport/12 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   };
-  teleport = teleport_12;
+  teleport_13 = callPackage ../servers/teleport/13 {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+  };
+  teleport_14 = callPackage ../servers/teleport/14 {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+    buildGoModule = buildGo121Module;
+  };
+  teleport = teleport_14;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
@@ -20427,7 +20436,9 @@ with pkgs;
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
-  terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
+  terraform-ls = callPackage ../development/tools/misc/terraform-ls {
+    buildGoModule = buildGo121Module;
+  };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
@@ -27726,7 +27737,7 @@ with pkgs;
   mapserver = callPackage ../servers/geospatial/mapserver { };
 
   martin = callPackage ../servers/geospatial/martin {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
@@ -35771,6 +35782,10 @@ with pkgs;
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
+  supersonic-wayland = supersonic.override {
+    waylandSupport = true;
+  };
+
   svkbd = callPackage ../applications/accessibility/svkbd { };
 
   swaglyrics = callPackage ../tools/misc/swaglyrics { };
@@ -37879,6 +37894,9 @@ with pkgs;
   };
 
   exult = callPackage ../games/exult { };
+
+  fallout-ce = callPackage ../games/fallout-ce/fallout-ce.nix { };
+  fallout2-ce = callPackage ../games/fallout-ce/fallout2-ce.nix { };
 
   flare = callPackage ../games/flare {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -41863,6 +41881,8 @@ with pkgs;
   pynitrokey = callPackage ../tools/security/pynitrokey { };
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
+
+  nitrokey-app2 = libsForQt5.callPackage ../tools/security/nitrokey-app2 { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 

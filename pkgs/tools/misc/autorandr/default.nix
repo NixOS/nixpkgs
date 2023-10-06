@@ -72,5 +72,6 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ coroa globin ];
     platforms = platforms.unix;
+    mainProgram = "autorandr";
   };
 }

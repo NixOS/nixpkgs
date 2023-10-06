@@ -28,9 +28,9 @@ let
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
             })
-          (optionalAttrs (!config.node.pkgsReadOnly) {
+          ({ options, ... }: {
             key = "nodes.nix-pkgs";
-            config = {
+            config = mkIf (!options.nixpkgs.pkgs.isDefined) {
               # Ensure we do not use aliases. Ideally this is only set
               # when the test framework is used by Nixpkgs NixOS tests.
               nixpkgs.config.allowAliases = false;
