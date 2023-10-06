@@ -28,12 +28,37 @@ mesonConfigurePhase() {
         echo "meson: enabled parallel building"
     fi
 
-    if ! [[ -v enableParallelInstalling ]]; then
-        enableParallelInstalling=1
-        echo "meson: enabled parallel installing"
+    if [[ ${checkPhase-ninjaCheckPhase} = ninjaCheckPhase && -z $dontUseMesonCheck ]]; then
+        checkPhase=mesonCheckPhase
+    fi
+    if [[ ${installPhase-ninjaInstallPhase} = ninjaInstallPhase && -z $dontUseMesonInstall ]]; then
+        installPhase=mesonInstallPhase
     fi
 
     runHook postConfigure
+}
+
+mesonCheckPhase() {
+    runHook preCheck
+
+    local flagsArray=($mesonCheckFlags "${mesonCheckFlagsArray[@]}")
+
+    echoCmd 'check flags' "${flagsArray[@]}"
+    meson test --no-rebuild "${flagsArray[@]}"
+
+    runHook postCheck
+}
+
+mesonInstallPhase() {
+    runHook preInstall
+
+    # shellcheck disable=SC2086
+    local flagsArray=($mesonInstallFlags "${mesonInstallFlagsArray[@]}")
+
+    echoCmd 'install flags' "${flagsArray[@]}"
+    meson install --no-rebuild "${flagsArray[@]}"
+
+    runHook postInstall
 }
 
 if [ -z "${dontUseMesonConfigure-}" -a -z "${configurePhase-}" ]; then
