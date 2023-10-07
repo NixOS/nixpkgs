@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stressapptest";
-  version = "1.0.9";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1qzj6h6adx042rb9aiz916jna269whibvj5ys4p5nwdp17fqh922";
+    sha256 = "sha256-lZpF7PdUwKnV0ha6xkLvi7XYFZQ4Avy0ltlXxukuWjM=";
   };
 
   buildInputs = [ libaio ];
