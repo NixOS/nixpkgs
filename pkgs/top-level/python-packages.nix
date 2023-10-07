@@ -12515,6 +12515,8 @@ self: super: with self; {
 
   stack-data = callPackage ../development/python-modules/stack-data { };
 
+  stanio = callPackage ../development/python-modules/stanio { };
+
   stanza = callPackage ../development/python-modules/stanza { };
 
   starlette = callPackage ../development/python-modules/starlette {
