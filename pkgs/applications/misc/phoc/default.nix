@@ -17,6 +17,7 @@
 , libxkbcommon
 , wlroots
 , xorg
+, nixosTests
 }:
 
 let
@@ -69,6 +70,8 @@ in stdenv.mkDerivation rec {
     chmod +x build-aux/post_install.py
     patchShebangs build-aux/post_install.py
   '';
+
+  passthru.tests.phosh = nixosTests.phosh;
 
   meta = with lib; {
     description = "Wayland compositor for mobile phones like the Librem 5";

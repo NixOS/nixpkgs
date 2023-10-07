@@ -87,5 +87,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/liquidctl/liquidctl/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ arturcygan evils ];
+    mainProgram = "liquidctl";
   };
 }

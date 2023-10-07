@@ -14,6 +14,7 @@
 , libjpeg
 , libsndfile
 , libvpx
+, libwebp
 , mpg123
 , ninja
 , openal
@@ -25,14 +26,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
     rev = "g${version}";
     fetchSubmodules = true;
-    hash = "sha256-F3p2X/hjPV9fuaA7T2bQTP6SlKcfc8GniJgv8BcopGw=";
+    hash = "sha256-F3FXV76jpwkOE6QoNi1+TjLOt9x7q3pcZq3hQmRfL5E=";
   };
 
   outputs = [ "out" "doc" ];
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libsndfile
     libvpx
+    libwebp
     mpg123
     openal
     vulkan-loader

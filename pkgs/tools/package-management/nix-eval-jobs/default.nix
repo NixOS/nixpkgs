@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  # Since this package is intimately tied to a specific Nix release, we
+  # propagate the Nix used for building it to make it easier for users
+  # downstream to reference it.
+  passthru = { inherit nix; };
+
   meta = {
     description = "Hydra's builtin hydra-eval-jobs as a standalone";
     homepage = "https://github.com/nix-community/nix-eval-jobs";

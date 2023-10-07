@@ -3551,6 +3551,8 @@ self: super: with self; {
 
   es-client = callPackage ../development/python-modules/es-client { };
 
+  esig = callPackage ../development/python-modules/esig { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
@@ -5203,6 +5205,8 @@ self: super: with self; {
   igraph = callPackage ../development/python-modules/igraph {
     inherit (pkgs) igraph;
   };
+
+  iisignature = callPackage ../development/python-modules/iisignature { };
 
   ijson = callPackage ../development/python-modules/ijson { };
 
@@ -10596,6 +10600,8 @@ self: super: with self; {
 
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
+  pyqt5-stubs = callPackage ../development/python-modules/pyqt5-stubs { };
+
   pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override {
@@ -11701,6 +11707,8 @@ self: super: with self; {
 
   pywerview = callPackage ../development/python-modules/pywerview { };
 
+  pywfa = callPackage ../development/python-modules/pywfa { };
+
   pywilight = callPackage ../development/python-modules/pywilight { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
@@ -11816,6 +11824,8 @@ self: super: with self; {
   qscintilla = self.qscintilla-qt5;
 
   qstylizer = callPackage ../development/python-modules/qstylizer { };
+
+  qt-material = callPackage ../development/python-modules/qt-material { };
 
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
