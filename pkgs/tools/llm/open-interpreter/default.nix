@@ -53,5 +53,6 @@ python3.pkgs.buildPythonApplication {
     license = licenses.mit;
     changelog = "https://github.com/KillianLucas/open-interpreter/releases/tag/v${version}";
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "interpreter";
   };
 }
