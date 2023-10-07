@@ -55,6 +55,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     inherit (blast.meta) description homepage license;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ natsukium ];
   };
 }
