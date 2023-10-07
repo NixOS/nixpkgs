@@ -68,5 +68,7 @@ buildGoModule rec {
     description = "GTK client for Music Player Daemon (MPD)";
     license = licenses.asl20;
     maintainers = with maintainers; [ foo-dogsquared ];
+    mainProgram = "ymuse";
+    platforms = platforms.unix;
   };
 }
