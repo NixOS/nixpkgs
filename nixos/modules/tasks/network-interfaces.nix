@@ -190,9 +190,11 @@ let
         type = types.nullOr types.bool;
         default = null;
         description = lib.mdDoc ''
-          Whether this interface should be configured with dhcp.
-          Null implies the old behavior which depends on whether ip addresses
-          are specified or not.
+          Whether this interface should be configured with DHCP. Overrides the
+          default set by {option}`networking.useDHCP`. If `null` (the default),
+          DHCP is enabled if the interface has no IPv4 addresses configured
+          with {option}`networking.interfaces.<name>.ipv4.addresses`, and
+          disabled otherwise.
         '';
       };
 
@@ -640,9 +642,7 @@ in
           } ];
         };
       description = lib.mdDoc ''
-        The configuration for each network interface.  If
-        {option}`networking.useDHCP` is true, then every
-        interface not listed here will be configured using DHCP.
+        The configuration for each network interface.
 
         Please note that {option}`systemd.network.netdevs` has more features
         and is better maintained. When building new things, it is advised to
@@ -1304,8 +1304,8 @@ in
       default = true;
       description = lib.mdDoc ''
         Whether to use DHCP to obtain an IP address and other
-        configuration for all network interfaces that are not manually
-        configured.
+        configuration for all network interfaces that do not have any manually
+        configured IPv4 addresses.
       '';
     };
 

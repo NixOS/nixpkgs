@@ -185,7 +185,11 @@ let
       nodes.router = router;
       nodes.client = { lib, ... }: {
         # Disable test driver default config
-        networking.interfaces = lib.mkForce {};
+        networking.interfaces = lib.mkForce {
+          # Make sure DHCP defaults correctly even when some unrelated config
+          # is set on the interface (nothing, in this case).
+          enp1s0 = {};
+        };
         networking.useNetworkd = networkd;
         virtualisation.interfaces.enp1s0.vlan = 1;
       };
