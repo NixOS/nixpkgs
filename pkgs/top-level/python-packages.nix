@@ -572,6 +572,8 @@ self: super: with self; {
 
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
+  anthemav = callPackage ../development/python-modules/anthemav { };
+
   anthropic = callPackage ../development/python-modules/anthropic { };
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
