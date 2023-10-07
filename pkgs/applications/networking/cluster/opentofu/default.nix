@@ -65,6 +65,14 @@ let
 
   opentofu_plugins_test = let
     mainTf = writeText "main.tf" ''
+      terraform {
+        required_providers {
+          random = {
+            source  = "registry.terraform.io/hashicorp/random"
+          }
+        }
+      }
+
       resource "random_id" "test" {}
     '';
     opentofu = package.withPlugins (p: [ p.random ]);
