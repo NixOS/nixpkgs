@@ -162,7 +162,8 @@
     "anova" = ps: with ps; [
     ]; # missing inputs: anova-wifi
     "anthemav" = ps: with ps; [
-    ]; # missing inputs: anthemav
+      anthemav
+    ];
     "anwb_energie" = ps: with ps; [
     ];
     "apache_kafka" = ps: with ps; [
@@ -5020,6 +5021,7 @@
     "android_ip_webcam"
     "androidtv"
     "androidtv_remote"
+    "anthemav"
     "apache_kafka"
     "apcupsd"
     "api"
