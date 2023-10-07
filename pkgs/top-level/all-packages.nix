@@ -8251,6 +8251,8 @@ with pkgs;
 
   fbcat = callPackage ../tools/misc/fbcat { };
 
+  fbjni = callPackage ../development/libraries/fbjni { };
+
   fbv = callPackage ../tools/graphics/fbv { };
 
   fbvnc = callPackage ../tools/admin/fbvnc { };
