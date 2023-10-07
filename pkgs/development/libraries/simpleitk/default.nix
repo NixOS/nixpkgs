@@ -4,6 +4,7 @@
 , cmake
 , swig4
 , lua
+, elastix
 , itk
 }:
 
@@ -23,6 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     swig4
   ];
   buildInputs = [
+    elastix
     lua
     itk
   ];
@@ -30,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   # 2.0.0: linker error building examples
   cmakeFlags = [
     "-DBUILD_EXAMPLES=OFF"
-    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_SHARED_LIBS=OFF"
+    "-DSimpleITK_USE_ELASTIX=ON"
   ];
 
   meta = with lib; {

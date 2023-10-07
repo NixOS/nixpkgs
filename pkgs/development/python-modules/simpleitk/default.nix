@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , cmake
 , swig4
+, elastix
 , itk
 , numpy
 , simpleitk
@@ -20,8 +21,17 @@ buildPythonPackage rec {
     make
   '';
 
-  nativeBuildInputs = [ cmake swig4 scikit-build ];
-  propagatedBuildInputs = [ itk simpleitk numpy ];
+  nativeBuildInputs = [
+    cmake
+    swig4
+    scikit-build
+  ];
+  propagatedBuildInputs = [
+    elastix
+    itk
+    simpleitk
+    numpy
+  ];
 
   pythonImportsCheck = [ "SimpleITK" ];
 }
