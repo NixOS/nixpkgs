@@ -8802,6 +8802,12 @@
     githubId = 1189739;
     name = "Julio Borja Barra";
   };
+  jue89 = {
+    email = "me@jue.yt";
+    github = "jue89";
+    githubId = 6105784;
+    name = "Juergen Fitschen";
+  };
   jugendhacker = {
     name = "j.r";
     email = "j.r@jugendhacker.de";
