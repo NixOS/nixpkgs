@@ -19141,6 +19141,8 @@ with pkgs;
     inherit (llvmPackages_8) llvm libclang;
   };
 
+  cruft = with python3Packages; toPythonApplication cruft;
+
   cscope = callPackage ../development/tools/misc/cscope { };
 
   csmith = callPackage ../development/tools/misc/csmith { };
