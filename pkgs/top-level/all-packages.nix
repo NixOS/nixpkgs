@@ -685,6 +685,8 @@ with pkgs;
 
   frugal = callPackage ../development/tools/frugal { };
 
+  frugally-deep = callPackage ../development/libraries/frugally-deep { };
+
   functiontrace-server = callPackage ../development/tools/functiontrace-server { };
 
   gendef = callPackage ../development/tools/gendef { };
