@@ -572,6 +572,8 @@ self: super: with self; {
 
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
+  anthemav = callPackage ../development/python-modules/anthemav { };
+
   anthropic = callPackage ../development/python-modules/anthropic { };
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
@@ -3969,6 +3971,8 @@ self: super: with self; {
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
 
+  flask-mysqldb = callPackage ../development/python-modules/flask-mysqldb { };
+
   flask-openid = callPackage ../development/python-modules/flask-openid { };
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
@@ -6366,6 +6370,8 @@ self: super: with self; {
   loopy = callPackage ../development/python-modules/loopy { };
 
   looseversion = callPackage ../development/python-modules/looseversion { };
+
+  loqedapi = callPackage ../development/python-modules/loqedapi { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
@@ -9929,6 +9935,8 @@ self: super: with self; {
 
   pyeclib = callPackage ../development/python-modules/pyeclib { };
 
+  pyecoforest = callPackage ../development/python-modules/pyecoforest { };
+
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
   pyecowitt = callPackage ../development/python-modules/pyecowitt { };
@@ -11748,6 +11756,8 @@ self: super: with self; {
   pyyaml-env-tag = callPackage ../development/python-modules/pyyaml-env-tag { };
 
   pyyaml-include = callPackage ../development/python-modules/pyyaml-include { };
+
+  pyyardian = callPackage ../development/python-modules/pyyardian { };
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
 

@@ -22,12 +22,15 @@
 }:
 
 let
-  version = "1.30.1";
+  # FIXME: unstable, stable needs #252945 (details in #258964)
+  # Next version bump should be stabilized
+  version = "unstable-2023-10-01";
+  patterns_version = "1.31.0";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
-    rev = "ImHex-v${version}";
+    rev = "ImHex-v${patterns_version}";
     hash = "sha256-lTTXu9RxoD582lXWI789gNcWvJmxmBIlBRIiyY3DseM=";
   };
 
@@ -40,8 +43,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     owner = "WerWolv";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-3s9Dgdhl+k2KjMoSHNl59YOoCEwqK+37DOzKdGP88/4=";
+    rev = "a62ede784018f9d5aaf40587f71a1271429ab50b";
+    hash = "sha256-L3ncmM7Ro60DvOF/Y0fjo2Smlw2LL8cPa8H6yVGdGAk=";
   };
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
@@ -81,7 +84,7 @@ stdenv.mkDerivation rec {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
     license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [ luis kashw2 ];
+    maintainers = with maintainers; [ luis kashw2 cafkafk ];
     platforms = platforms.linux;
   };
 }

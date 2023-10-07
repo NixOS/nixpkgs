@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "python_docs_theme";
-  version = "2023.7";
+  version = "2023.9";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "python-docs-theme";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-43/TlgYm7Q4ZtY25MiLU9fd1atDmiDUeUK6AYfDfmag=";
+    sha256 = "sha256-XVwMEfprTNdNnaW38HMCAu4CswdVjBXYtNWBgqXfbno=";
   };
 
   nativeBuildInputs = [ flit-core ];

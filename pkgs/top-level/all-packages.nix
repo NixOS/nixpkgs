@@ -22527,6 +22527,8 @@ with pkgs;
 
   lensfun = callPackage ../development/libraries/lensfun { };
 
+  lesbar = callPackage ../applications/window-managers/lesbar { };
+
   lesstif = callPackage ../development/libraries/lesstif { };
 
   leveldb = callPackage ../development/libraries/leveldb { };
@@ -33065,8 +33067,6 @@ with pkgs;
   img-cat = callPackage ../applications/graphics/img-cat { };
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
-
-  imhex = callPackage ../applications/editors/imhex { };
 
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
