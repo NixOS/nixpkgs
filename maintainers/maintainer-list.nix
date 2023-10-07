@@ -8542,6 +8542,12 @@
     github = "jorsn";
     githubId = 4646725;
   };
+  joscha = {
+    name = "Joscha Loos";
+    email = "j.loos@posteo.net";
+    github = "jooooscha";
+    githubId = 57965027;
+  };
   josephst = {
     name = "Joseph Stahl";
     email = "hello@josephstahl.com";
