@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "simple-websocket";
-  version = "0.10.1";
+  version = "1.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "simple-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OdgMYi2UobIlE4cDl5aNtVaFiHPTpf5TcuohG+TCSpg=";
+    hash = "sha256-5dUZnbjHzH1sQ93CbFdEoW9j2zY4Z+8wNsYfmOrgC8E=";
   };
 
   nativeBuildInputs = [

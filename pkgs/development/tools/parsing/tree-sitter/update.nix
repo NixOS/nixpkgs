@@ -143,6 +143,10 @@ let
       repo = "tree-sitter-sql";
       branch = "gh-pages";
     };
+    "tree-sitter-typst" = {
+      orga = "uben0";
+      repo = "tree-sitter-typst";
+    };
     "tree-sitter-vim" = {
       orga = "vigoux";
       repo = "tree-sitter-viml";

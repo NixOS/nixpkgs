@@ -331,7 +331,6 @@ in {
   graylog = handleTest ./graylog.nix {};
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
-  guacamole-client = handleTest ./guacamole-client.nix {};
   guacamole-server = handleTest ./guacamole-server.nix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };
@@ -555,6 +554,7 @@ in {
   nginx-sandbox = handleTestOn ["x86_64-linux"] ./nginx-sandbox.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nginx-status-page = handleTest ./nginx-status-page.nix {};
+  nginx-tmpdir = handleTest ./nginx-tmpdir.nix {};
   nginx-variants = handleTest ./nginx-variants.nix {};
   nifi = handleTestOn ["x86_64-linux"] ./web-apps/nifi.nix {};
   nitter = handleTest ./nitter.nix {};

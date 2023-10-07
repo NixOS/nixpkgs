@@ -21,7 +21,7 @@
 , dht
 , libnatpmp
 , libiconv
-, darwin
+, Foundation
   # Build options
 , enableGTK3 ? false
 , gtkmm3
@@ -37,14 +37,14 @@
 , apparmorRulesFromClosure
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
   version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Sz3+5VvfOgET1aiormEnBOrF+yN79tiSQvjLAoGqTLw=";
     fetchSubmodules = true;
   };
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enableGTK3 [ gtkmm3 xorg.libpthreadstubs ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Foundation ];
+  ++ lib.optionals stdenv.isDarwin [ libiconv Foundation ];
 
   postInstall = ''
     mkdir $apparmor
@@ -164,7 +164,5 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl2Plus mit ];
     maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
-    # Needs macOS >= 10.14.6
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
-}
+})

@@ -1,4 +1,9 @@
-{ stdenv, python3, fetchPypi, src, version }:
+{ stdenv
+, python3
+, fetchPypi
+, src
+, version
+}:
 
 let
   buildAzureCliPackage = with py.pkgs; buildPythonPackage;
@@ -60,16 +65,10 @@ let
           tabulate
         ];
 
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace "requests[socks]~=2.25.1" "requests[socks]~=2.25" \
-            --replace "cryptography>=3.2,<3.4" "cryptography" \
-            --replace "msal-extensions>=0.3.1,<0.4" "msal-extensions" \
-            --replace "msal[broker]==1.24.0b1" "msal[broker]" \
-            --replace "packaging>=20.9,<22.0" "packaging"
-        '';
         nativeCheckInputs = with self; [ pytest ];
+
         doCheck = stdenv.isLinux;
+
         # ignore tests that does network call, or assume powershell
         checkPhase = ''
           rm azure/{,cli/}__init__.py
@@ -205,8 +204,8 @@ let
       azure-mgmt-devtestlabs = overrideAzureMgmtPackage super.azure-mgmt-devtestlabs "4.0.0" "zip"
         "sha256-WVScTEBo8mRmsQl7V0qOUJn7LNbIvgoAOVsG07KeJ40=r";
 
-      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "10.0.0" "zip"
-        "sha256-9+cXsY8Qr5ds9lYw39duWdcqm6QUTedQbjn8x6zJoyE=";
+      azure-mgmt-netapp = overrideAzureMgmtPackage super.azure-mgmt-netapp "10.1.0" "zip"
+        "sha256-eJiWTOCk2C79Jotku9bKlu3vU6H8004hWrX+h76MjQM=";
 
       azure-mgmt-dns = overrideAzureMgmtPackage super.azure-mgmt-dns "8.0.0" "zip"
         "sha256-QHwtrLM1E/++nKS+Wt216dS64Mt++mE8P31THve/jeg=";
@@ -348,15 +347,6 @@ let
           inherit version;
           hash = "sha256-0Lti2L+OGWuQPzlxukr6RI5P4U6DlOv83ZQdhNYuyv4=";
           extension = "zip";
-        };
-      });
-
-      azure-storage-blob = super.azure-storage-blob.overrideAttrs (oldAttrs: rec {
-        version = "1.5.0";
-        src = fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          hash = "sha256-8YeoeOehkfTgmBWZBPcrQUbPcOGquvZISrS6cvxvJSw=";
         };
       });
 

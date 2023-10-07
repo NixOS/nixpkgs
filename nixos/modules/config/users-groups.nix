@@ -449,6 +449,8 @@ let
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
   sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
+  groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
+  usersWithoutExistingGroup = lib.filterAttrs (n: u: !lib.elem u.group groupNames) cfg.users;
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -749,6 +751,18 @@ in {
       }
       { assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
         message = "systemd initrd UIDs and GIDs must be unique!";
+      }
+      { assertion = usersWithoutExistingGroup == {};
+        message =
+          let
+            errUsers = lib.attrNames usersWithoutExistingGroup;
+            missingGroups = lib.unique (lib.mapAttrsToList (n: u: u.group) usersWithoutExistingGroup);
+            mkConfigHint = group: "users.groups.${group} = {};";
+          in ''
+            The following users have a primary group that is undefined: ${lib.concatStringsSep " " errUsers}
+            Hint: Add this to your NixOS configuration:
+              ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
+          '';
       }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that

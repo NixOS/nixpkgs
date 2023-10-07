@@ -2495,7 +2495,9 @@ with pkgs;
 
   labctl = callPackage ../tools/networking/labctl { };
 
-  lefthook = callPackage ../applications/version-management/lefthook { };
+  lefthook = callPackage ../applications/version-management/lefthook {
+    buildGoModule = buildGo121Module;
+  };
 
   legit = callPackage ../applications/version-management/legit { };
 
@@ -7655,8 +7657,6 @@ with pkgs;
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
 
-  a4term = callPackage ../tools/misc/a4term { };
-
   erofs-utils = callPackage ../tools/filesystems/erofs-utils { };
 
   e2tools = callPackage ../tools/filesystems/e2tools { };
@@ -8248,6 +8248,8 @@ with pkgs;
   fermyon-spin = callPackage ../development/tools/fermyon-spin { };
 
   fbcat = callPackage ../tools/misc/fbcat { };
+
+  fbjni = callPackage ../development/libraries/fbjni { };
 
   fbv = callPackage ../tools/graphics/fbv { };
 
@@ -12990,8 +12992,6 @@ with pkgs;
 
   scdl = callPackage ../tools/misc/scdl { };
 
-  scdoc = callPackage ../tools/typesetting/scdoc { };
-
   scorecard = callPackage ../tools/security/scorecard { };
 
   scream = callPackage ../applications/audio/scream { };
@@ -13765,7 +13765,14 @@ with pkgs;
   teleport_12 = callPackage ../servers/teleport/12 {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
   };
-  teleport = teleport_12;
+  teleport_13 = callPackage ../servers/teleport/13 {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+  };
+  teleport_14 = callPackage ../servers/teleport/14 {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security AppKit;
+    buildGoModule = buildGo121Module;
+  };
+  teleport = teleport_14;
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
@@ -18462,7 +18469,7 @@ with pkgs;
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
   rtx = callPackage ../tools/misc/rtx {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   ### DEVELOPMENT / TOOLS
@@ -20427,7 +20434,9 @@ with pkgs;
   terracognita = callPackage ../development/tools/misc/terracognita { };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
-  terraform-ls = callPackage ../development/tools/misc/terraform-ls { };
+  terraform-ls = callPackage ../development/tools/misc/terraform-ls {
+    buildGoModule = buildGo121Module;
+  };
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
@@ -27341,6 +27350,7 @@ with pkgs;
   prometheus-nut-exporter = callPackage ../servers/monitoring/prometheus/nut-exporter.nix { };
   prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix { } ;
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
+  prometheus-pgbouncer-exporter = callPackage ../servers/monitoring/prometheus/pgbouncer-exporter.nix { };
   prometheus-php-fpm-exporter = callPackage ../servers/monitoring/prometheus/php-fpm-exporter.nix { };
   prometheus-pihole-exporter = callPackage ../servers/monitoring/prometheus/pihole-exporter.nix {  };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
@@ -27735,7 +27745,7 @@ with pkgs;
   mapserver = callPackage ../servers/geospatial/mapserver { };
 
   martin = callPackage ../servers/geospatial/martin {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
@@ -28334,8 +28344,6 @@ with pkgs;
   linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
   linuxPackages_6_1_hardened = linuxKernel.packages.linux_6_1_hardened;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
-  linuxPackages_6_4_hardened = linuxKernel.packages.linux_6_4_hardened;
-  linux_6_4_hardened = linuxKernel.kernels.linux_6_4_hardened;
   linuxPackages_6_5_hardened = linuxKernel.packages.linux_6_5_hardened;
   linux_6_5_hardened = linuxKernel.kernels.linux_6_5_hardened;
 
@@ -30223,6 +30231,10 @@ with pkgs;
   source-han-sans = sourceHanPackages.sans;
   source-han-serif = sourceHanPackages.serif;
   source-han-mono = sourceHanPackages.mono;
+  source-han-sans-vf-otf = sourceHanPackages.sans-vf-otf;
+  source-han-sans-vf-ttf = sourceHanPackages.sans-vf-ttf;
+  source-han-serif-vf-otf = sourceHanPackages.serif-vf-otf;
+  source-han-serif-vf-ttf = sourceHanPackages.serif-vf-ttf;
 
   spleen = callPackage ../data/fonts/spleen { };
 
@@ -31180,6 +31192,12 @@ with pkgs;
   convchain = callPackage ../tools/graphics/convchain { };
 
   cordless = callPackage ../applications/networking/instant-messengers/cordless { };
+
+  cosmic-comp = callPackage ../applications/window-managers/cosmic/comp { };
+
+  cosmic-applets = callPackage ../applications/window-managers/cosmic/applets { };
+
+  cosmic-panel = callPackage ../applications/window-managers/cosmic/panel { };
 
   coursera-dl = callPackage ../applications/misc/coursera-dl { };
 
@@ -35780,6 +35798,10 @@ with pkgs;
 
   sunvox = callPackage ../applications/audio/sunvox { };
 
+  supersonic-wayland = supersonic.override {
+    waylandSupport = true;
+  };
+
   svkbd = callPackage ../applications/accessibility/svkbd { };
 
   swaglyrics = callPackage ../tools/misc/swaglyrics { };
@@ -36115,7 +36137,9 @@ with pkgs;
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
 
-  transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
+  # Needs macOS >= 10.14.6
+  transmission_4 = darwin.apple_sdk_11_0.callPackage ../applications/networking/p2p/transmission/4.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
     fmt = fmt_9;
     libutp = libutp_3_4;
   };
@@ -37888,6 +37912,9 @@ with pkgs;
   };
 
   exult = callPackage ../games/exult { };
+
+  fallout-ce = callPackage ../games/fallout-ce/fallout-ce.nix { };
+  fallout2-ce = callPackage ../games/fallout-ce/fallout2-ce.nix { };
 
   flare = callPackage ../games/flare {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -41872,6 +41899,8 @@ with pkgs;
   pynitrokey = callPackage ../tools/security/pynitrokey { };
 
   nitrokey-app = libsForQt5.callPackage ../tools/security/nitrokey-app { };
+
+  nitrokey-app2 = libsForQt5.callPackage ../tools/security/nitrokey-app2 { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 
