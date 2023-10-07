@@ -4,11 +4,10 @@
 }@args:
 
 callPackage ./common.nix ({
-  # Details from https://www.azul.com/downloads/?version=java-8-lts&os=macos&package=jdk
+  # Details from https://www.azul.com/downloads/?version=java-8-lts&package=jdk
   # Note that the latest build may differ by platform
   dists = {
     x86_64-darwin = {
-      arch = "x64";
       zuluVersion = "8.72.0.17";
       jdkVersion = "8.0.382";
       hash =
@@ -17,7 +16,6 @@ callPackage ./common.nix ({
     };
 
     aarch64-darwin = {
-      arch = "aarch64";
       zuluVersion = "8.72.0.17";
       jdkVersion = "8.0.382";
       hash =

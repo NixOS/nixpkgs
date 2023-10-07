@@ -10,6 +10,18 @@ let
   dist = dists.${stdenv.hostPlatform.system}
     or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
+  arch = {
+    "aarch64" = "aarch64";
+    "x86_64" = "x64";
+  }.${stdenv.hostPlatform.parsed.cpu.name}
+    or (throw "Unsupported architecture: ${stdenv.hostPlatform.parsed.cpu.name}");
+
+  platform = {
+    "darwin" = "macosx";
+    "linux" = "linux";
+  }.${stdenv.hostPlatform.parsed.kernel.name}
+    or (throw "Unsupported platform: ${stdenv.hostPlatform.parsed.kernel.name}");
+
   jce-policies = fetchurl {
     url = "https://web.archive.org/web/20211126120343/http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
     hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
@@ -24,7 +36,7 @@ let
     version = dist.jdkVersion;
 
     src = fetchurl {
-      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-macosx_${dist.arch}.tar.gz";
+      url = "https://cdn.azul.com/zulu/bin/zulu${dist.zuluVersion}-${javaPackage}${dist.jdkVersion}-${platform}_${arch}.tar.gz";
       inherit (dist) hash;
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
@@ -39,7 +51,7 @@ let
       mv -f ZuluJCEPolicies/*.jar $out/${lib.optionalString isJdk8 "jre/"}lib/security/
 
       # jni.h expects jni_md.h to be in the header search path.
-      ln -s $out/include/darwin/*_md.h $out/include/
+      ln -s $out/include/${stdenv.hostPlatform.parsed.kernel.name}/*_md.h $out/include/
 
       if [ -f $out/LICENSE ]; then
         install -D $out/LICENSE $out/share/zulu/LICENSE
@@ -62,7 +74,7 @@ let
 
     # fixupPhase is moving the man to share/man which breaks it because it's a
     # relative symlink.
-    postFixup = ''
+    postFixup = lib.optionalString stdenv.isDarwin ''
       ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
     '';
 
