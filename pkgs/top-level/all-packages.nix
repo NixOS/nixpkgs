@@ -22527,6 +22527,8 @@ with pkgs;
 
   lensfun = callPackage ../development/libraries/lensfun { };
 
+  lesbar = callPackage ../applications/window-managers/lesbar { };
+
   lesstif = callPackage ../development/libraries/lesstif { };
 
   leveldb = callPackage ../development/libraries/leveldb { };
