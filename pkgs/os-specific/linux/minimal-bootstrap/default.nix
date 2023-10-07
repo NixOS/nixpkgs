@@ -99,6 +99,14 @@ lib.makeScope
       gawk = gawk-mes;
     };
 
+    gcc8 = callPackage ./gcc/8.nix {
+      gcc = gcc46-cxx;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
+    };
+
     inherit (callPackage ./glibc {
       bash = bash_2_05;
       gnused = gnused-mes;
@@ -214,6 +222,7 @@ lib.makeScope
       echo ${gcc2-mes.tests.get-version}
       echo ${gcc46.tests.get-version}
       echo ${gcc46-cxx.tests.hello-world}
+      echo ${gcc8.tests.hello-world}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
