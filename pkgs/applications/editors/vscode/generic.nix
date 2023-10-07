@@ -20,8 +20,69 @@
 , ripgrep
 }:
 
-let
-  unwrapped = stdenv.mkDerivation {
+  stdenv.mkDerivation (finalAttrs:
+  let
+
+  # Vscode and variants allow for users to download and use extensions
+  # which often include the usage of pre-built binaries.
+  # This has been an on-going painpoint for many users, as
+  # a full extension update cycle has to be done through nixpkgs
+  # in order to create or update extensions.
+  # See: #83288 #91179 #73810 #41189
+  #
+  # buildFHSEnv allows for users to use the existing vscode
+  # extension tooling without significant pain.
+  fhs = { additionalPkgs ? pkgs: [] }: buildFHSEnv {
+    # also determines the name of the wrapped command
+    name = executableName;
+
+    # additional libraries which are commonly needed for extensions
+    targetPkgs = pkgs: (with pkgs; [
+      # ld-linux-x86-64-linux.so.2 and others
+      glibc
+
+      # dotnet
+      curl
+      icu
+      libunwind
+      libuuid
+      lttng-ust
+      openssl
+      zlib
+
+      # mono
+      krb5
+    ]) ++ additionalPkgs pkgs;
+
+    extraBwrapArgs = [
+      "--bind-try /etc/nixos/ /etc/nixos/"
+    ];
+
+    # symlink shared assets, including icons and desktop entries
+    extraInstallCommands = ''
+      ln -s "${finalAttrs.finalPackage}/share" "$out/"
+    '';
+
+    runScript = "${finalAttrs.finalPackage}/bin/${executableName}";
+
+    # vscode likes to kill the parent so that the
+    # gui application isn't attached to the terminal session
+    dieWithParent = false;
+
+    passthru = {
+      inherit executableName;
+      inherit (finalAttrs.finalPackage) pname version; # for home-manager module
+    };
+
+    meta = meta // {
+      description = ''
+        Wrapped variant of ${pname} which launches in a FHS compatible environment.
+        Should allow for easy usage of extensions without nix-specific modifications.
+      '';
+    };
+  };
+  in
+  {
 
     inherit pname version src sourceRoot dontFixup;
 
@@ -158,65 +219,4 @@ let
     '';
 
     inherit meta;
-  };
-
-  # Vscode and variants allow for users to download and use extensions
-  # which often include the usage of pre-built binaries.
-  # This has been an on-going painpoint for many users, as
-  # a full extension update cycle has to be done through nixpkgs
-  # in order to create or update extensions.
-  # See: #83288 #91179 #73810 #41189
-  #
-  # buildFHSEnv allows for users to use the existing vscode
-  # extension tooling without significant pain.
-  fhs = { additionalPkgs ? pkgs: [] }: buildFHSEnv {
-    # also determines the name of the wrapped command
-    name = executableName;
-
-    # additional libraries which are commonly needed for extensions
-    targetPkgs = pkgs: (with pkgs; [
-      # ld-linux-x86-64-linux.so.2 and others
-      glibc
-
-      # dotnet
-      curl
-      icu
-      libunwind
-      libuuid
-      lttng-ust
-      openssl
-      zlib
-
-      # mono
-      krb5
-    ]) ++ additionalPkgs pkgs;
-
-    extraBwrapArgs = [
-      "--bind-try /etc/nixos/ /etc/nixos/"
-    ];
-
-    # symlink shared assets, including icons and desktop entries
-    extraInstallCommands = ''
-      ln -s "${unwrapped}/share" "$out/"
-    '';
-
-    runScript = "${unwrapped}/bin/${executableName}";
-
-    # vscode likes to kill the parent so that the
-    # gui application isn't attached to the terminal session
-    dieWithParent = false;
-
-    passthru = {
-      inherit executableName;
-      inherit (unwrapped) pname version; # for home-manager module
-    };
-
-    meta = meta // {
-      description = ''
-        Wrapped variant of ${pname} which launches in a FHS compatible environment.
-        Should allow for easy usage of extensions without nix-specific modifications.
-      '';
-    };
-  };
-in
-  unwrapped
+  })
