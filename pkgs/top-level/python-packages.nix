@@ -4446,6 +4446,8 @@ self: super: with self; {
 
   glom = callPackage ../development/python-modules/glom { };
 
+  gluonts = callPackage ../development/python-modules/gluonts { };
+
   glymur = callPackage ../development/python-modules/glymur { };
 
   gmpy2 = callPackage ../development/python-modules/gmpy2 { };
