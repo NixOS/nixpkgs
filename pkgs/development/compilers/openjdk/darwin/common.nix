@@ -1,10 +1,25 @@
 { lib
 , stdenv
 , fetchurl
-, unzip
 , setJavaClassPath
 , enableJavaFX ? false
 , dists
+  # minimum dependencies
+, unzip
+, autoPatchelfHook
+, makeWrapper
+, alsa-lib
+, fontconfig
+, freetype
+, zlib
+, xorg
+  # runtime dependencies
+, cups
+  # runtime dependencies for GTK+ Look and Feel
+, gtkSupport ? stdenv.isLinux
+, cairo
+, glib
+, gtk3
 }:
 let
   dist = dists.${stdenv.hostPlatform.system}
@@ -21,6 +36,16 @@ let
     "linux" = "linux";
   }.${stdenv.hostPlatform.parsed.kernel.name}
     or (throw "Unsupported platform: ${stdenv.hostPlatform.parsed.kernel.name}");
+
+  runtimeDependencies = [
+    cups
+  ] ++ lib.optionals gtkSupport [
+    cairo
+    glib
+    gtk3
+  ];
+
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
   jce-policies = fetchurl {
     url = "https://web.archive.org/web/20211126120343/http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
@@ -41,7 +66,25 @@ let
       curlOpts = "-H Referer:https://www.azul.com/downloads/zulu/";
     };
 
-    nativeBuildInputs = [ unzip ];
+    nativeBuildInputs = [
+      unzip
+    ] ++ lib.optionals stdenv.isLinux [
+      autoPatchelfHook
+      makeWrapper
+    ];
+
+    buildInputs = lib.optionals stdenv.isLinux [
+      alsa-lib # libasound.so wanted by lib/libjsound.so
+      fontconfig
+      freetype
+      stdenv.cc.cc # libstdc++.so.6
+      xorg.libX11
+      xorg.libXext
+      xorg.libXi
+      xorg.libXrender
+      xorg.libXtst
+      zlib
+    ];
 
     installPhase = ''
       mkdir -p $out
@@ -70,6 +113,21 @@ let
       cat <<EOF >> $out/nix-support/setup-hook
       if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
       EOF
+    '' + lib.optionalString stdenv.isLinux ''
+      # We cannot use -exec since wrapProgram is a function but not a command.
+      #
+      # jspawnhelper is executed from JVM, so it doesn't need to wrap it, and it
+      # breaks building OpenJDK (#114495).
+      for bin in $( find "$out" -executable -type f -not -name jspawnhelper ); do
+        if patchelf --print-interpreter "$bin" &> /dev/null; then
+          wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
+        fi
+      done
+    ''
+    # FIXME: move all of the above to installPhase.
+    + lib.optionalString stdenv.isLinux ''
+      find "$out" -name libfontmanager.so -exec \
+        patchelf --add-needed libfontconfig.so {} \;
     '';
 
     # fixupPhase is moving the man to share/man which breaks it because it's a
