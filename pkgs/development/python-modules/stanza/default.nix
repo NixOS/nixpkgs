@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "stanza";
-  version = "1.5.1";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "stanfordnlp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-c7FaqI/8h6loLJJ9xOaJCyepWp+bc6IcqQlpGlW7u6g=";
+    hash = "sha256-AyO/BC5JpkxaXXjj8pAVa4WGnK/GTw4xrmUvGLbLt3U=";
   };
 
   propagatedBuildInputs = [
