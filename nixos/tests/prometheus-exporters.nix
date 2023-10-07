@@ -966,6 +966,36 @@ let
       '';
     };
 
+    pgbouncer = {
+      exporterConfig = {
+        enable = true;
+        connectionString = "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+      };
+
+      metricProvider = {
+        services.postgresql.enable = true;
+        services.pgbouncer = {
+          # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+          ignoreStartupParameters = "extra_float_digits";
+          enable = true;
+          listenAddress = "*";
+          databases = { postgres = "host=/run/postgresql/ port=5432 auth_user=postgres dbname=postgres"; };
+          authType = "any";
+          maxClientConn = 99;
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("postgresql.service")
+        wait_for_unit("pgbouncer.service")
+        wait_for_unit("prometheus-pgbouncer-exporter.service")
+        wait_for_open_port(9127)
+        succeed("curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_up 1'")
+        succeed(
+            "curl -sSf http://localhost:9127/metrics | grep 'pgbouncer_config_max_client_connections 99'"
+        )
+      '';
+    };
+
     php-fpm = {
       nodeName = "php_fpm";
       exporterConfig = {
