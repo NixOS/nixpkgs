@@ -9929,6 +9929,8 @@ self: super: with self; {
 
   pyeclib = callPackage ../development/python-modules/pyeclib { };
 
+  pyecoforest = callPackage ../development/python-modules/pyecoforest { };
+
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
   pyecowitt = callPackage ../development/python-modules/pyecowitt { };

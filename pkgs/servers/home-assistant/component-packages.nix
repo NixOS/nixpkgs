@@ -957,7 +957,8 @@
       python-ecobee-api
     ];
     "ecoforest" = ps: with ps; [
-    ]; # missing inputs: pyecoforest
+      pyecoforest
+    ];
     "econet" = ps: with ps; [
       pyeconet
     ];
@@ -5133,6 +5134,7 @@
     "eafm"
     "easyenergy"
     "ecobee"
+    "ecoforest"
     "econet"
     "ecowitt"
     "edl21"
