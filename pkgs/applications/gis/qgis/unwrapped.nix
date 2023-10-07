@@ -150,11 +150,11 @@ in mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DWITH_3D=True"
-    "-DWITH_PDAL=TRUE"
-    "-DENABLE_TESTS=False"
-  ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+    (lib.cmakeBool "WITH_3D" true)
+    (lib.cmakeBool "WITH_PDAL" true)
+    (lib.cmakeBool "ENABLE_TESTS" false)
+    (lib.cmakeBool "WITH_QTWEBKIT" withWebKit)
+  ] ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
