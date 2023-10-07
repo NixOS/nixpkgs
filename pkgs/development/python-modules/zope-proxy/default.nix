@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "zope-proxy";
-  version = "5.0.0";
+  version = "5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.proxy";
     inherit version;
-    hash = "sha256-b6RMl6QStNxR4vX9Tcc8W9SZ01KA+IzSvNJviuHkV3s=";
+    hash = "sha256-d3e9P4986nRSFyYgLhptUVPb9knyBOJQBYrQOvRqQxg=";
   };
 
   nativeBuildInputs = [
