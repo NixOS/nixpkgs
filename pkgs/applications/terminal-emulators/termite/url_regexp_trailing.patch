@@ -1,0 +1,27 @@
+Based on https://github.com/thestinger/termite/pull/516
+Modified to apply to v13
+
+From 65a454ffa8e681f3f14729cba7c42e1570a85e8a Mon Sep 17 00:00:00 2001
+From: Paul Baecher <pbaecher@gmail.com>
+Date: Thu, 7 Sep 2017 22:58:51 +0200
+Subject: [PATCH] Do not match punctuation at the end of URLs
+
+Punctuation at the end of URLs is most likely part of natural language
+or markup (for example in Markdown). Do not match it as part of the URL.
+---
+ url_regex.hh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/url_regex.hh b/url_regex.hh
+index 2ec6be8..3039b53 100644
+--- a/url_regex.hh
++++ b/url_regex.hh
+@@ -9,7 +9,7 @@
+ #define PORT            "(?:\\:[[:digit:]]{1,5})?"
+ #define SCHEME          "(?:[[:alpha:]][+-.[:alnum:]]*:)"
+ #define USERPASS        USERCHARS_CLASS "+(?:\\:" PASSCHARS_CLASS "+)?"
+-#define URLPATH         "(?:/[[:alnum:]\\Q-_.!~*'();/?:@&=+$,#%\\E]*)?"
++#define URLPATH         "(?:/[[:alnum:]\\Q-_.!~*'();/?:@&=+$,#%\\E]*(?<![\\Q.,:;()!?\\E]))?"
+ 
+ const char * const url_regex = SCHEME "//(?:" USERPASS "\\@)?" HOST PORT URLPATH;
+ 

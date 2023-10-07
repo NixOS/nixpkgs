@@ -1,0 +1,31 @@
+diff --git a/cmake/developer_package/linux_name.cmake b/cmake/developer_package/linux_name.cmake
+index 3e8c775770..2d5e00fb8b 100644
+--- a/cmake/developer_package/linux_name.cmake
++++ b/cmake/developer_package/linux_name.cmake
+@@ -6,25 +6,7 @@ include(target_flags)
+ 
+ if(LINUX)
+     function(get_linux_name res_var)
+-        if(EXISTS "/etc/lsb-release")
+-            # linux version detection using cat /etc/lsb-release
+-            file(READ "/etc/lsb-release" release_data)
+-            set(name_regex "DISTRIB_ID=([^ \n]*)\n")
+-            set(version_regex "DISTRIB_RELEASE=([0-9]+(\\.[0-9]+)?)")
+-        else()
+-            execute_process(COMMAND find -L /etc/ -maxdepth 1 -type f -name *-release -exec cat {} \;
+-                            OUTPUT_VARIABLE release_data
+-                            RESULT_VARIABLE result)
+-            string(REPLACE "Red Hat" "CentOS" release_data "${release_data}")
+-            set(name_regex "NAME=\"([^ \"\n]*).*\"\n")
+-            set(version_regex "VERSION=\"([0-9]+(\\.[0-9]+)?)[^\n]*\"")
+-        endif()
+-
+-        string(REGEX MATCH ${name_regex} name ${release_data})
+-        set(os_name ${CMAKE_MATCH_1})
+-
+-        string(REGEX MATCH ${version_regex} version ${release_data})
+-        set(os_name "${os_name} ${CMAKE_MATCH_1}")
++        set(os_name "NixOS @version@")
+ 
+         if(os_name)
+             set(${res_var} ${os_name} PARENT_SCOPE)

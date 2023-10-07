@@ -1,0 +1,12 @@
+--- a/make/Docs.gmk       2019-07-24 13:07:37.013405090 -0400
++++ b/make/Docs.gmk       2019-07-24 13:07:28.406550535 -0400
+@@ -274,7 +274,7 @@
+   $1_INDIRECT_EXPORTS := $$(call FindTransitiveIndirectDepsForModules, $$($1_MODULES))
+   $1_ALL_MODULES := $$(sort $$($1_MODULES) $$($1_INDIRECT_EXPORTS))
+ 
+-  $1_JAVA_ARGS := -Dextlink.spec.version=$$(VERSION_SPECIFICATION)
++  $1_JAVA_ARGS := -Dextlink.spec.version=$$(VERSION_SPECIFICATION) -Xmx1G
+ 
+   ifeq ($$(ENABLE_FULL_DOCS), true)
+     # Tell the ModuleGraph taglet to generate html links to soon-to-be-created
+

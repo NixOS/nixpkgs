@@ -1,0 +1,16 @@
+diff --git a/celeste/src/launch.rs b/celeste/src/launch.rs
+index 5227170..e3cf189 100644
+--- a/celeste/src/launch.rs
++++ b/celeste/src/launch.rs
+@@ -172,10 +172,7 @@ impl TrayApp {
+         perms.set_mode(0o755);
+         file.set_permissions(perms).unwrap();
+ 
+-        #[cfg(debug_assertions)]
+-        let tray_file = include_bytes!("../../target/debug/celeste-tray");
+-        #[cfg(not(debug_assertions))]
+-        let tray_file = include_bytes!("../../target/release/celeste-tray");
++        let tray_file = include_bytes!(concat!("../../target/@rustTarget@/", env!("cargoBuildType"), "/celeste-tray"));
+ 
+         file.write_all(tray_file).unwrap();
+         drop(file);

@@ -1,0 +1,25 @@
+From b64b03be9edf23a80fce0c76de61ffff0914ddce Mon Sep 17 00:00:00 2001
+From: Thiago Kenji Okada <thiagokokada@gmail.com>
+Date: Mon, 8 Aug 2022 10:28:33 +0100
+Subject: [PATCH] Set plugindir to $PREFIX/lib/audacious
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index 3f7996f72..ab09d6476 100644
+--- a/meson.build
++++ b/meson.build
+@@ -160,7 +160,7 @@ if (cxx.has_header('libintl.h'))
+ endif
+ 
+ 
+-install_plugindir = audacious_dep.get_variable(pkgconfig: 'plugin_dir')
++install_plugindir = join_paths(get_option('prefix'), 'lib/audacious')
+ 
+ 
+ conf.set_quoted('INSTALL_PLUGINDIR', install_plugindir)
+-- 
+2.36.0
+

@@ -1,0 +1,35 @@
+diff --git a/src/core/RS.cpp b/src/core/RS.cpp
+index d8a135d6f..659795dbb 100644
+--- a/src/core/RS.cpp
++++ b/src/core/RS.cpp
+@@ -151,7 +151,7 @@ QStringList RS::getDirectoryList(const QString& subDirectory) {
+     dirList.append(appDir + "/../../../" + subDirectory);
+     dirList.append(QDir::currentPath() + "/" + subDirectory);
+ #else
+-    dirList.append(appDir + "/" + subDirectory);
++    dirList.append(appDir + "/../lib/" + subDirectory);
+ #endif
+ 
+     /*
+diff --git a/src/core/RSettings.cpp b/src/core/RSettings.cpp
+index c6c31cbf5..c51b59ce6 100644
+--- a/src/core/RSettings.cpp
++++ b/src/core/RSettings.cpp
+@@ -367,6 +367,8 @@ QString RSettings::getApplicationPath() {
+         ret.cdUp();
+     }
+ 
++    ret.cd("../lib");
++
+     return ret.path();
+ }
+ 
+@@ -1268,7 +1270,7 @@ QString RSettings::getRevisionString() {
+ }
+ 
+ QString RSettings::getReleaseDate() {
+-    return __DATE__;
++    return "";
+ }
+ 
+ int RSettings::getSnapRange() {

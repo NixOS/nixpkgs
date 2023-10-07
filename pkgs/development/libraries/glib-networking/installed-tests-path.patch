@@ -1,0 +1,27 @@
+diff --git a/meson.build b/meson.build
+index 01e18a9..5dbb2fc 100644
+--- a/meson.build
++++ b/meson.build
+@@ -12,8 +12,8 @@ libdir = join_paths(prefix, get_option('libdir'))
+ libexecdir = join_paths(prefix, get_option('libexecdir'))
+ localedir = join_paths(prefix, get_option('localedir'))
+ 
+-installed_tests_metadir = join_paths(datadir, 'installed-tests', meson.project_name())
+-installed_tests_execdir = join_paths(libexecdir, 'installed-tests', meson.project_name())
++installed_tests_metadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', meson.project_name())
++installed_tests_execdir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', meson.project_name())
+ 
+ cc = meson.get_compiler('c')
+ host_system = host_machine.system()
+diff --git a/meson_options.txt b/meson_options.txt
+index c566ccd..80f7c33 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -10,6 +10,7 @@ option('environment_proxy', type: 'feature', value: 'auto', description: 'suppor
+ option('libproxy', type: 'feature', value: 'auto', description: 'support for libproxy proxy configration')
+ option('gnome_proxy', type: 'feature', value: 'auto', description: 'support for GNOME desktop proxy configuration')
+ option('installed_tests', type: 'boolean', value: false, description: 'enable installed tests')
++option('installed_test_prefix', type: 'string', value: '', description: 'Prefix for installed tests')
+ option('debug_logs', type: 'boolean', value: false, description: 'enable debug log messages (slow)')
+ 
+ # Deprecated, use -Ddefault_library=static instead.

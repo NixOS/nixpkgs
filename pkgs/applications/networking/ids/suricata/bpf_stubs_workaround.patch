@@ -1,0 +1,19 @@
+*** suricata-5.0.0/ebpf/Makefile.in	2019-10-16 22:39:13.174649416 +0200
+--- suricata-5.0.0/ebpf/Makefile.in.fixed	2019-10-16 22:38:41.822201802 +0200
+***************
+*** 527,533 ****
+  @BUILD_EBPF_TRUE@$(BPF_TARGETS): %.bpf: %.c
+  #      From C-code to LLVM-IR format suffix .ll (clang -S -emit-llvm)
+  @BUILD_EBPF_TRUE@	${CLANG} -Wall $(BPF_CFLAGS) -O2 \
+! @BUILD_EBPF_TRUE@		-I/usr/include/$(build_cpu)-$(build_os)/ \
+  @BUILD_EBPF_TRUE@		-D__KERNEL__ -D__ASM_SYSREG_H \
+  @BUILD_EBPF_TRUE@		-target bpf -S -emit-llvm $< -o ${@:.bpf=.ll}
+  #      From LLVM-IR to BPF-bytecode in ELF-obj file
+--- 527,533 ----
+  @BUILD_EBPF_TRUE@$(BPF_TARGETS): %.bpf: %.c
+  #      From C-code to LLVM-IR format suffix .ll (clang -S -emit-llvm)
+  @BUILD_EBPF_TRUE@	${CLANG} -Wall $(BPF_CFLAGS) -O2 \
+! @BUILD_EBPF_TRUE@		-idirafter ../bpf_stubs_workaround \
+  @BUILD_EBPF_TRUE@		-D__KERNEL__ -D__ASM_SYSREG_H \
+  @BUILD_EBPF_TRUE@		-target bpf -S -emit-llvm $< -o ${@:.bpf=.ll}
+  #      From LLVM-IR to BPF-bytecode in ELF-obj file
