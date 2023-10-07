@@ -1,19 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zope-deprecation";
-  version = "4.4.0";
+  version = "5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "zope.deprecation";
     inherit version;
-    sha256 = "0d453338f04bacf91bbfba545d8bcdf529aa829e67b705eac8c1a7fdce66e2df";
+    hash = "sha256-t8MtM5IDayFFxAsxA+cyLbaGYqsJtyZ6/hUyqdk/ZA8=";
   };
 
   nativeBuildInputs = [
