@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.proxy";
+  pname = "zope-proxy";
   version = "5.0.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.proxy";
+    inherit version;
     hash = "sha256-b6RMl6QStNxR4vX9Tcc8W9SZ01KA+IzSvNJviuHkV3s=";
   };
 

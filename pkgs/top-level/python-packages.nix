@@ -15901,7 +15901,7 @@ self: super: with self; {
 
   zope_location = callPackage ../development/python-modules/zope_location { };
 
-  zope_proxy = callPackage ../development/python-modules/zope_proxy { };
+  zope-proxy = callPackage ../development/python-modules/zope-proxy { };
 
   zope_schema = callPackage ../development/python-modules/zope_schema { };
 

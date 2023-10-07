@@ -408,4 +408,5 @@ mapAliases ({
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26
   zope_component = zope-component; # added 2023-07-28
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
+  zope_proxy = zope-proxy; # added 2023-10-07
 })
