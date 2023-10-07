@@ -4891,6 +4891,8 @@ self: super: with self; {
 
   heatzypy = callPackage ../development/python-modules/heatzypy { };
 
+  help2man = callPackage ../development/python-modules/help2man { };
+
   helpdev = callPackage ../development/python-modules/helpdev { };
 
   helper = callPackage ../development/python-modules/helper { };
