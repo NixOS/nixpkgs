@@ -15881,7 +15881,7 @@ self: super: with self; {
 
   zope-deferredimport = callPackage ../development/python-modules/zope-deferredimport { };
 
-  zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
+  zope-deprecation = callPackage ../development/python-modules/zope-deprecation { };
 
   zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
 
