@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
 , graalvmPackages
 , useMusl ? false
@@ -9,4 +10,5 @@ graalvmPackages.buildGraalvm {
   src = fetchurl (import ./hashes.nix).hashes.${stdenv.system};
   version = (import ./hashes.nix).version;
   meta.platforms = builtins.attrNames (import ./hashes.nix).hashes;
+  meta.license = lib.licenses.unfree;
 }
