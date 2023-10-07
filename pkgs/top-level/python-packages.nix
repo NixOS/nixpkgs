@@ -9109,6 +9109,8 @@ self: super: with self; {
 
   pynx584 = callPackage ../development/python-modules/pynx584 { };
 
+  pyod = callPackage ../development/python-modules/pyod { };
+
   pyorthanc = callPackage ../development/python-modules/pyorthanc { };
 
   pyoutbreaksnearme = callPackage ../development/python-modules/pyoutbreaksnearme { };
