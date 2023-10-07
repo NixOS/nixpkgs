@@ -17,7 +17,7 @@ let
 
   # Returns an attributeset of users who are not system users.
   normalUsers = config:
-    filterAttrs (name: user: user.isNormalUser) config.users.users;
+    lib.filterAttrs (name: user: user.isNormalUser) config.users.users;
 
   # Returns true if a user is a member of the given group
   isMemberOf =
@@ -26,7 +26,7 @@ let
     groupName:
     # users.users attrset
     user:
-      any (x: x == user.name) config.users.groups.${groupName}.members;
+      lib.any (x: x == user.name) config.users.groups.${groupName}.members;
 
   # Generates a valid SFTPGo user configuration for a given user
   # Will be converted to JSON and loaded on application startup.
@@ -52,7 +52,7 @@ let
       # inside the dataprovider they will be automatically created.
       # You have to create the folder on the filesystem yourself
       virtual_folders =
-        lib.optional (lib.isMemberOf config sharedFolderName user) {
+        lib.optional (isMemberOf config sharedFolderName user) {
           name = sharedFolderName;
           mapped_path = "${config.services.sftpgo.dataDir}/${sharedFolderName}";
           virtual_path = "/${sharedFolderName}";
@@ -63,7 +63,7 @@ let
         lib.recursiveUpdate {
           "/" = [ "list" ];     # read-only top level directory
           "/private" = [ "*" ]; # private subdirectory, not shared with others
-        } (lib.optionalAttrs (lib.isMemberOf config "shared" user) {
+        } (lib.optionalAttrs (isMemberOf config "shared" user) {
           "/shared" = [ "*" ];
         });
 
@@ -89,7 +89,7 @@ let
   # of users and folders to import to SFTPGo.
   loadDataJson = config: pkgs.writeText "users-and-folders.json" (builtins.toJSON {
     users =
-      lib.mapAttrsToList (name: user: lib.generateUserAttrSet config user) (normalUsers config);
+      lib.mapAttrsToList (name: user: generateUserAttrSet config user) (normalUsers config);
 
     folders = [
       {
@@ -144,7 +144,7 @@ in
 {
   name = "sftpgo";
 
-  meta.maintainers = with maintainers; [ yayayayaka ];
+  meta.maintainers = with lib.maintainers; [ yayayayaka ];
 
   nodes = {
     server = { nodes, ... }: {
@@ -228,7 +228,7 @@ in
           # Created shared folder directories
           "d ${statePath}/${sharedFolderName} 2770 ${sftpgoUser} ${sharedFolderName}   -"
         ]
-        ++ mapAttrsToList (name: user:
+        ++ lib.mapAttrsToList (name: user:
           # Create private user directories
           ''
             d ${statePath}/users/${user.name} 0700 ${sftpgoUser} ${sftpgoGroup} -
@@ -273,12 +273,12 @@ in
           networking.firewall.allowedTCPPorts = [ 22 80 ];
           services.sftpgo = {
             settings = {
-              sftpd.bindings = mkForce [{
+              sftpd.bindings = lib.mkForce [{
                 address = "";
                 port = 22;
               }];
 
-              httpd.bindings = mkForce [{
+              httpd.bindings = lib.mkForce [{
                 address = "";
                 port = 80;
               }];

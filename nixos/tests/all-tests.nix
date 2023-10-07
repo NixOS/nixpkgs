@@ -331,7 +331,6 @@ in {
   graylog = handleTest ./graylog.nix {};
   grocy = handleTest ./grocy.nix {};
   grub = handleTest ./grub.nix {};
-  guacamole-client = handleTest ./guacamole-client.nix {};
   guacamole-server = handleTest ./guacamole-server.nix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop = import ./hadoop { inherit handleTestOn; package=pkgs.hadoop; };

@@ -1,25 +1,25 @@
-{
-  lib,
-  stdenv,
-  rustPlatform,
-  fetchFromGitHub,
-  audioSupport ? true,
-  darwin,
-  alsa-lib,
-  pkg-config
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, audioSupport ? true
+, darwin
+, alsa-lib
 }:
-rustPlatform.buildRustPackage {
+
+rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "unstable-2023-09-28";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
-    rev = "9b8c65332396f521f170b0ed3ce104b7a8bcf7c0";
-    hash = "sha256-+pleCEEwgRj+p+k9oKIvbsGUWC49qByV/juv76ZdBcc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CMuCl4idoO5qIpXdkXBbglsZQBWVT8w9azbn2rRxviA=";
   };
 
-  cargoHash = "sha256-L8TCMe6eHS3QRy6HuTc1WvMfzsDhKx9YYupAkNeBwpk=";
+  cargoHash = "sha256-BLP9OGTnksM9NscfhtVWxE0/CqZgkqqlIMgRclCzEzs=";
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     rustPlatform.bindgenHook
@@ -37,8 +37,6 @@ rustPlatform.buildRustPackage {
 
   buildFeatures = lib.optional audioSupport "audio";
 
-  doCheck = true;
-
   meta = with lib; {
     description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
     longDescription = ''
@@ -49,6 +47,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://www.uiua.org/";
     license = licenses.mit;
     mainProgram = "uiua";
-    maintainers = with maintainers; [ cafkafk ];
+    maintainers = with maintainers; [ cafkafk tomasajt ];
   };
 }

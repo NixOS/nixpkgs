@@ -30,13 +30,15 @@ let
             })
           ({ options, ... }: {
             key = "nodes.nix-pkgs";
-            config = mkIf (!options.nixpkgs.pkgs.isDefined) {
-              # Ensure we do not use aliases. Ideally this is only set
-              # when the test framework is used by Nixpkgs NixOS tests.
-              nixpkgs.config.allowAliases = false;
-              # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
-              nixpkgs.system = hostPkgs.stdenv.hostPlatform.system;
-            };
+            config = optionalAttrs (!config.node.pkgsReadOnly) (
+              mkIf (!options.nixpkgs.pkgs.isDefined) {
+                # Ensure we do not use aliases. Ideally this is only set
+                # when the test framework is used by Nixpkgs NixOS tests.
+                nixpkgs.config.allowAliases = false;
+                # TODO: switch to nixpkgs.hostPlatform and make sure containers-imperative test still evaluates.
+                nixpkgs.system = hostPkgs.stdenv.hostPlatform.system;
+              }
+            );
           })
           testModuleArgs.config.extraBaseModules
         ];
