@@ -18,7 +18,7 @@
 , python3
 , buildPackages
 , enableExamples ? false
-, enableUtils ? false
+, enableUtils ? true
 , libusb1
 # Disable dpdk for now due to compilation issues.
 , enableDpdk ? false
@@ -149,6 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/udev/rules.d
     mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
+
+  disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
+    python3
+  ];
 
   meta = with lib; {
     description = "USRP Hardware Driver (for Software Defined Radio)";
