@@ -4,9 +4,12 @@
 , unzip
 , setJavaClassPath
 , enableJavaFX ? false
-, dist
+, dists
 }:
 let
+  dist = dists.${stdenv.hostPlatform.system}
+    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
   jce-policies = fetchurl {
     url = "https://web.archive.org/web/20211126120343/http://cdn.azul.com/zcek/bin/ZuluJCEPolicies.zip";
     hash = "sha256-gCGii4ysQbRPFCH9IQoKCCL8r4jWLS5wo1sv9iioZ1o=";
@@ -69,7 +72,18 @@ let
       home = jdk;
     };
 
-    meta = import ./meta.nix lib version;
+    meta = (import ../../openjdk/meta.nix lib version) // {
+      description = "Certified builds of OpenJDK";
+      longDescription = ''
+        Certified builds of OpenJDK that can be deployed across multiple
+        operating systems, containers, hypervisors and Cloud platforms.
+      '';
+      homepage = "https://www.azul.com/products/zulu/";
+      mainProgram = "java";
+      maintainers = [ ];
+      platforms = builtins.attrNames dists;
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode binaryNativeCode ];
+    };
   };
 in
 jdk

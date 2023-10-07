@@ -1,13 +1,12 @@
 { callPackage
 , enableJavaFX ? false
-, stdenv
 , ...
 }@args:
 
 callPackage ./common.nix ({
   # Details from https://www.azul.com/downloads/?version=java-18-sts&os=macos&package=jdk
   # Note that the latest build may differ by platform
-  dist = {
+  dists = {
     x86_64-darwin = {
       arch = "x64";
       zuluVersion = "18.32.13";
@@ -25,5 +24,5 @@ callPackage ./common.nix ({
         if enableJavaFX then "sha256-tNx0a1u9iamcN9VFOJ3eqDEA6C204dtIBJZvuAH2Vjk="
         else "sha256-jAZDgxtWMq/74yKAxA69oOU0C9nXvKG5MjmZLsK04iM=";
     };
-  }."${stdenv.hostPlatform.system}";
+  };
 } // builtins.removeAttrs args [ "callPackage" ])

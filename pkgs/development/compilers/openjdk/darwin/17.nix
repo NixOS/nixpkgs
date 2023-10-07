@@ -1,13 +1,12 @@
 { callPackage
 , enableJavaFX ? false
-, stdenv
 , ...
 }@args:
 
 callPackage ./common.nix ({
   # Details from https://www.azul.com/downloads/?version=java-17-lts&os=macos&package=jdk
   # Note that the latest build may differ by platform
-  dist = {
+  dists = {
     x86_64-darwin = {
       arch = "x64";
       zuluVersion = "17.44.53";
@@ -25,5 +24,5 @@ callPackage ./common.nix ({
         if enableJavaFX then "sha256-udYW3nOADclWqVcVtS9dgjSY0w6xf2nsBpLzPmQCYlI="
         else "sha256-MUsEVo7Arps2ugPJy9Qq3J4SZfdGeJI7GSl9ZuuE3Mo=";
     };
-  }."${stdenv.hostPlatform.system}";
+  };
 } // builtins.removeAttrs args [ "callPackage" ])
