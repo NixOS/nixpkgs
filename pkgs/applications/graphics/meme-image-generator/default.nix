@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "meme-image-generator";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "nomad-software";
     repo = "meme";
     rev = "v${version}";
-    hash = "sha256-MzSPJCszVEZkBvSbRzXR7AaDQOOjDQ2stKKJr8oGOSE=";
+    hash = "sha256-L+JpNg9X3RSNXTozv2H1n2JiQx75i9gFGaQmDFaMIf0=";
   };
 
   vendorHash = null;
