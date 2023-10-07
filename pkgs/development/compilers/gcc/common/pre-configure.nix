@@ -122,7 +122,7 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 + lib.optionalString (targetPlatform != hostPlatform &&
                       withoutTargetLibc &&
                       targetPlatform.config == hostPlatform.config &&
-                      (stdenv.cc.isClang || stdenv.targetPlatform.useLLVM)) ''
+                      (stdenv.cc.isClang || stdenv.targetPlatform.useLLVM or false)) ''
   export inhibit_libc=true
 ''
 
