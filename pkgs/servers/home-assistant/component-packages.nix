@@ -2404,10 +2404,11 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      loqedapi
       mutagen
       pyturbojpeg
       webrtc-noise-gain
-    ]; # missing inputs: loqedAPI
+    ];
     "lovelace" = ps: with ps; [
     ];
     "luci" = ps: with ps; [
@@ -5350,6 +5351,7 @@
     "logi_circle"
     "london_air"
     "lookin"
+    "loqed"
     "lovelace"
     "luftdaten"
     "lutron_caseta"
