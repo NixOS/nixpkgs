@@ -4880,7 +4880,8 @@
     "yandextts" = ps: with ps; [
     ];
     "yardian" = ps: with ps; [
-    ]; # missing inputs: pyyardian
+      pyyardian
+    ];
     "yeelight" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
@@ -5748,6 +5749,7 @@
     "yamaha_musiccast"
     "yandex_transport"
     "yandextts"
+    "yardian"
     "yeelight"
     "yolink"
     "youless"

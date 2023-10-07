@@ -11755,6 +11755,8 @@ self: super: with self; {
 
   pyyaml-include = callPackage ../development/python-modules/pyyaml-include { };
 
+  pyyardian = callPackage ../development/python-modules/pyyardian { };
+
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
 
   pyzmq = callPackage ../development/python-modules/pyzmq { };
