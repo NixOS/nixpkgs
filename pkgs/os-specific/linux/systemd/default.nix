@@ -88,7 +88,7 @@
 , withAnalyze ? true
 , withApparmor ? true
 , withAudit ? true
-, withBootloader ? !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
+, withBootloader ? withEfi && !stdenv.hostPlatform.isMusl # compiles systemd-boot, assumes EFI is available.
 , withCompression ? true  # adds bzip2, lz4, xz and zstd
 , withCoredump ? true
 , withCryptsetup ? true
