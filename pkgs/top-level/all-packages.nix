@@ -7487,6 +7487,8 @@ with pkgs;
 
   diffutils = callPackage ../tools/text/diffutils { };
 
+  dscanner = callPackage ../development/tools/dscanner { };
+
   dsp = callPackage ../tools/audio/dsp { };
 
   dirdiff = callPackage ../tools/text/dirdiff { };

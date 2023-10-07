@@ -1,0 +1,19 @@
+--- a/makefile
++++ b/makefile
+@@ -86,7 +86,6 @@
+ 	WRITE_TO_TARGET_NAME = -o $@
+ endif
+ 
+-SHELL:=/usr/bin/env bash
+ 
+ GITHASH = bin/githash.txt
+ 
+@@ -97,7 +96,7 @@
+ $(UT_OBJ_DIR)/$(DC)/%.o: %.d
+ 	${DC} ${DC_TEST_FLAGS} ${VERSIONS} ${INCLUDE_PATHS} -c $< ${WRITE_TO_TARGET_NAME}
+ 
+-${DSCANNER_BIN}: ${GITHASH} ${OBJ_BY_DC} | ${DSCANNER_BIN_DIR}
++${DSCANNER_BIN}: ${OBJ_BY_DC} | ${DSCANNER_BIN_DIR}
+ 	${DC} ${OBJ_BY_DC} ${WRITE_TO_TARGET_NAME}
+ 
+ ${OBJ_BY_DC}: | ${OBJ_BY_DC_DIR}
