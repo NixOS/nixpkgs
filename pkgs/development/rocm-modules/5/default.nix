@@ -242,6 +242,11 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
+  half = callPackage ./half {
+    inherit rocmUpdateScript rocm-cmake;
+    stdenv = llvm.rocmClangStdenv;
+  };
+
   miopen = callPackage ./miopen {
     inherit rocmUpdateScript rocm-cmake rocblas clang-ocl miopengemm composable_kernel rocm-comgr clr rocm-docs-core half;
     inherit (llvm) clang-tools-extra;
