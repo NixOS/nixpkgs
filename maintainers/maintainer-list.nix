@@ -8584,6 +8584,12 @@
     githubId = 1918771;
     name = "Joe Doyle";
   };
+  jpentland = {
+    email = "joe.pentland@gmail.com";
+    github = "jpentland";
+    githubId = 1135582;
+    name = "Joe Pentland";
+  };
   jperras = {
     email = "joel@nerderati.com";
     github = "jperras";
