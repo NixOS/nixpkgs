@@ -21,6 +21,7 @@
 , armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
 , buildPackages
+, fetchpatch2
 }:
 
 let
@@ -47,7 +48,11 @@ let
     src = if src == null then defaultSrc else src;
 
     patches = [
-      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+      ./0001-rpi.env-allow-for-bigger-kernels.patch
+      (fetchpatch2 {
+        url = "https://patchwork.ozlabs.org/project/uboot/patch/20230923205017.1754340-1-sjg@chromium.org/raw/";
+        hash = "sha256-GJHmfYDmJjqHBY+fgkyHrqyJYMzgvJksHXSZz8sK1A8=";
+      })
     ] ++ extraPatches;
 
     postPatch = ''
