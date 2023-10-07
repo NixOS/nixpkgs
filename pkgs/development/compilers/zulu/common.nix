@@ -142,7 +142,7 @@ let
       home = jdk;
     };
 
-    meta = (import ../../openjdk/meta.nix lib version) // {
+    meta = (import ../openjdk/meta.nix lib version) // {
       description = "Certified builds of OpenJDK";
       longDescription = ''
         Certified builds of OpenJDK that can be deployed across multiple
