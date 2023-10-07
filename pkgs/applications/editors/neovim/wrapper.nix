@@ -159,7 +159,7 @@ let
 
     nativeBuildInputs = [ makeWrapper lndir ];
     passthru = {
-      inherit providerLuaRc packpathDirs;
+      inherit providerLuaRc packpathDirs rubyEnv;
       unwrapped = neovim;
       initRc = neovimRcContent;
 
