@@ -29,6 +29,10 @@ pkgs.mkShell {
 
 ... all the attributes of `stdenv.mkDerivation`.
 
+## Variants {#sec-pkgs-mkShell-variants}
+
+`pkgs.mkShellNoCC` is a variant that uses `stdenvNoCC` instead of `stdenv` as base environment. This is useful if no C compiler is needed in the shell environment.
+
 ## Building the shell {#sec-pkgs-mkShell-building}
 
 This derivation output will contain a text file that contains a reference to
