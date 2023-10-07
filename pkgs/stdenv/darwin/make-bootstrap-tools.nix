@@ -211,7 +211,7 @@ in rec {
   };
 
   bootstrapTools = derivation {
-    inherit (localSystem) system;
+    inherit (stdenv.hostPlatform) system;
 
     name = "bootstrap-tools";
     builder = "${bootstrapFiles.tools}/bin/bash";
