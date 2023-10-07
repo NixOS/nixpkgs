@@ -28,7 +28,6 @@ let
     # TODO: warn the user that any address configured on those interfaces will be useless
     ++ concatMap (i: attrNames (filterAttrs (_: config: config.type != "internal") i.interfaces)) (attrValues cfg.vswitches);
 
-  domains = cfg.search ++ (optional (cfg.domain != null) cfg.domain);
   genericNetwork = override:
     let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
       ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
@@ -40,8 +39,6 @@ let
         };
     in optionalAttrs (gateway != [ ]) {
       routes = override (map makeGateway gateway);
-    } // optionalAttrs (domains != [ ]) {
-      domains = override domains;
     };
 
   genericDhcpNetworks = initrd: mkIf cfg.useDHCP {
