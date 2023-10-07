@@ -17,14 +17,17 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [ ./pywb.patch ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "jinja2<3.0.0" "jinja2" \
-      --replace "redis<3.0" "redis" \
-      --replace "markupsafe<2.1.0" "markupsafe" \
-      --replace "fakeredis<1.0" "fakeredis" \
-      --replace "gevent==21.12.0" "gevent"
-  '';
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "jinja2"
+    "redis"
+    "markupsafe"
+    "fakeredis"
+    "gevent"
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     brotlipy
@@ -52,10 +55,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
-  ];
-
-  checkInputs = with python3.pkgs; [
-    pytest
     mock
     webtest
     urllib3
