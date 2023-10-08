@@ -5,13 +5,13 @@
 , doctest
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xsimd";
   version = "11.1.0";
   src = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-l6IRzndjb95hIcFCCm8zmlNHWtKduqy2t/oml/9Xp+w=";
   };
   patches = [
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTS=${if (doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
+    "-DBUILD_TESTS=${if (finalAttrs.doCheck && stdenv.hostPlatform == stdenv.buildPlatform) then "ON" else "OFF"}"
   ];
 
   doCheck = true;
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tobim ];
     platforms = platforms.all;
   };
-}
+})
