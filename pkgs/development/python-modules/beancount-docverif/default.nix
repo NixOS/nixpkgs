@@ -1,14 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi
 , setuptools-scm
 , beancount
-, pytest, sh
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   version = "1.0.1";
   pname = "beancount-docverif";
-
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     pname = "beancount_docverif";
@@ -25,13 +24,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest
-    sh
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/siriobalmelli/beancount_docverif";
