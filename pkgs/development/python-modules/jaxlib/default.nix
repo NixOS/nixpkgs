@@ -54,7 +54,7 @@ let
   inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
-  version = "0.4.17";
+  version = "0.4.18";
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -151,7 +151,7 @@ let
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
-      hash = "sha256-Lxi/lBBq7VlsT6CgnXPFcwbRU+T8630rBdm693E2jok=";
+      hash = "sha256-rDvWHa8jYCAA9iKbWaFUXdE/9L7AepFiNzmqOcc/090=";
     };
 
     nativeBuildInputs = [
@@ -264,10 +264,10 @@ let
       ];
 
       sha256 = (if cudaSupport then {
-        x86_64-linux = "sha256-nRvvFAuP/9D8BWWVPjuZijVtk+F9IrBBHsNc5Daluy4=";
+        x86_64-linux = "sha256-0CfGWlwKsUFP1DHUN6+6wX3cHr5x3TE6NbqYlV5me1E=";
       } else {
-        x86_64-linux = "sha256-pPIJOELN62GqUuaKpcpaqHu7wbJHiZgtb2PVUPRr1Ek=";
-        aarch64-linux = "sha256-Q0PYZkOkUYUHVtSHZDlWitslDZbjNq6yRZv/ZkhTmyc=";
+        x86_64-linux = "sha256-sljmyIligXC7d9fdlpqR32xyMR0UslWs04gXJBD8FTA=";
+        aarch64-linux = "sha256-eJ4KIkHdcA2EVvyBoNum2cOPcHPFoBOtUTAGufO8FJA=";
       }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
     };
 
