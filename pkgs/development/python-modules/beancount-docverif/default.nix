@@ -6,12 +6,13 @@
 
 buildPythonPackage rec {
   version = "1.0.1";
-  pname = "beancount_docverif";
+  pname = "beancount-docverif";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "beancount_docverif";
+    inherit version;
     hash = "sha256-CFBv1FZP5JO+1MPnD86ttrO42zZlvE157zqig7s4HOg=";
   };
 
