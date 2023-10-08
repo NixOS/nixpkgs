@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "poethepoet";
-  version = "0.24.0";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nat-n";
     repo = "poethepoet";
     rev = "v${version}";
-    hash = "sha256-fW457R8DvkHdgNcPatEf1nJNjMYTmliiRHrYyAAoZuo=";
+    hash = "sha256-cIIMwQF0jqGQhNyX2qDBeKZlUNvdC6sBTv5LCxk8MMQ=";
   };
 
   nativeBuildInputs = [
