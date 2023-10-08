@@ -100,13 +100,13 @@ let
       the Nix configured list of IDs
       */
       + lib.optionalString s.override ''
-        old_conf_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} --raw-output '.[].${s.GET_IdAttrName}')"
-        for id in ''${old_conf_${conf_type}_ids}; do
-          if echo ${lib.concatStringsSep " " s.new_conf_IDs} | grep -q $id; then
-            continue
-          else
-            curl -X DELETE ${s.baseAddress}/$id
-          fi
+        stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
+          --argjson new_ids ${lib.escapeShellArg (builtins.toJSON s.new_conf_IDs)} \
+          --raw-output \
+          '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
+        )"
+        for id in ''${stale_${conf_type}_ids}; do
+          curl -X DELETE ${s.baseAddress}/$id
         done
       ''
     ))
