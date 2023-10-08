@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   cmakeDir = "../llvm/llvm";
   cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
     "-DLLVM_ENABLE_BINDINGS=OFF"
     "-DLLVM_ENABLE_OCAMLDOC=OFF"
     "-DLLVM_BUILD_EXAMPLES=OFF"
@@ -60,12 +61,16 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/modules/GenVersionFile.cmake --replace "unknown git version" "${src.rev}"
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    mv bin/{{fir,hls}tool,circt-{as,dis,lsp-server,opt,reduce,translate}} $out/bin
-    runHook postInstall
+  # Only keep circt-related binaries in $bin/bin
+  # Also note that bin/llvm-config may contain $dev string in its content, causing cycle references between $bin and $dev
+  postInstall = ''
+    mkdir -p $dev/bin bin-backup
+    mv $bin/bin/{fir,hls}tool $bin/bin/circt-* bin-backup
+    mv $bin/bin/* $dev/bin
+    mv bin-backup/* $bin/bin
   '';
+
+  outputs = [ "bin" "lib" "dev" "out" ];
 
   doCheck = true;
   checkTarget = "check-circt check-circt-integration";
