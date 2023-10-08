@@ -116,8 +116,8 @@ in rec {
 
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
-    inherit (unstable) version;
-    hash = "sha256-8uxXyt3zu+LuFJbTQD+bv+Zmnzb18Dhlo3ign1lFT2s=";
+    version = "8.17.1";
+    hash = "sha256-h36NDFYsI0y8TG41IH10IdF4QEuBkBewQ3knZ9iwDpg=";
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";
