@@ -43,6 +43,8 @@ in stdenv.mkDerivation rec {
     find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
 
+  outputs = [ "out" "man" ];
+
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
