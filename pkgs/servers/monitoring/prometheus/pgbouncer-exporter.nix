@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "prometheus-community";
     repo = "pgbouncer_exporter";
     rev = "v${version}";
-    sha256 = "sha256-2N8FaGk6AU39j4q22B2Om5E7BeR7iw9drl3PTOBO2kg=";
+    hash = "sha256-2N8FaGk6AU39j4q22B2Om5E7BeR7iw9drl3PTOBO2kg=";
   };
 
-  vendorSha256 = "sha256-2aaUlOokqYkjMpcM12mU+O+N09/mDPlIrJ4Z1iXJAyk=";
+  vendorHash = "sha256-2aaUlOokqYkjMpcM12mU+O+N09/mDPlIrJ4Z1iXJAyk=";
 
   meta = with lib; {
     description = "Prometheus exporter for PgBouncer";
