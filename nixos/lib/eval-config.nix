@@ -34,9 +34,6 @@ evalConfigArgs@
                  in lib.optional (e != "") (import e)
 }:
 
-let pkgs_ = pkgs;
-in
-
 let
   inherit (lib) optional;
 
@@ -58,8 +55,9 @@ let
         nixpkgs.system = lib.mkDefault system;
       })
       ++
-      (optional (pkgs_ != null) {
-        _module.args.pkgs = lib.mkForce pkgs_;
+      (optional (pkgs != null) {
+        # This should be default priority, so it conflicts with any user-defined pkgs.
+        nixpkgs.pkgs = pkgs;
       })
     );
   };
