@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
       comment = "draw.io desktop";
       mimeTypes = [ "application/vnd.jgraph.mxfile" "application/vnd.visio" ];
       categories = [ "Graphics" ];
-      startupWMClass = "drawio";
+      startupWMClass = "draw.io";
     })
   ];
 
