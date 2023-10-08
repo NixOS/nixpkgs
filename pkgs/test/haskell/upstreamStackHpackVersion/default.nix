@@ -25,7 +25,7 @@ let
   # This is a statically linked version of stack, so it should be usable within
   # the Nixpkgs builder (at least on x86_64-linux).
   stackDownloadUrl =
-    "https://github.com/commercialhaskell/stack/releases/download/v${stack.version}/stack-${stack.version}-linux-x86_64-static.tar.gz";
+    "https://github.com/commercialhaskell/stack/releases/download/v${stack.version}/stack-${stack.version}-linux-x86_64.tar.gz";
 
   # This test code has been explicitly pulled out of the derivation below so
   # that it can be hashed and added to the `name` of the derivation.  This is
@@ -49,10 +49,11 @@ let
     )
 
     # Fetch the statically-linked upstream Stack binary.
+    echo "Trying to download a statically linked stack binary from ${stackDownloadUrl} to ./stack.tar.gz ..."
     "''${curl[@]}" "${stackDownloadUrl}" > ./stack.tar.gz
     tar xf ./stack.tar.gz
 
-    upstream_stack_version_output="$(./stack-${stack.version}-linux-x86_64-static/stack --version)"
+    upstream_stack_version_output="$(./stack-${stack.version}-linux-x86_64/stack --version)"
     echo "upstream \`stack --version\` output: $upstream_stack_version_output"
 
     nixpkgs_stack_version_output="$(stack --version)"
