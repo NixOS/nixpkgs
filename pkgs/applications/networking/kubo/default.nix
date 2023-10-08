@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchurl
 , nixosTests
+, callPackage
 }:
 
 buildGoModule rec {
@@ -29,7 +30,10 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ipfs" ];
 
-  passthru.tests.kubo = nixosTests.kubo;
+  passthru.tests = {
+    inherit (nixosTests) kubo;
+    repoVersion = callPackage ./test-repoVersion.nix {};
+  };
 
   vendorHash = null;
 
