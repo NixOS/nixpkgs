@@ -74,7 +74,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    rm -f $out/lib/*.la
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
    '';
 
   postFixup = ''
