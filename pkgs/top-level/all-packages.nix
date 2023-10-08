@@ -436,6 +436,8 @@ with pkgs;
 
   catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
 
+  catppuccin-k9s = callPackage ../data/themes/catppuccin-k9s { };
+
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
 
   catppuccin-kvantum = callPackage ../data/themes/catppuccin-kvantum { };
