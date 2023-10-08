@@ -27024,6 +27024,8 @@ with pkgs;
 
   quark = callPackage ../servers/http/quark { };
 
+  sharkey = callPackage ../servers/sharkey { };
+
   soft-serve = callPackage ../servers/soft-serve { };
 
   sympa = callPackage ../servers/mail/sympa { };
