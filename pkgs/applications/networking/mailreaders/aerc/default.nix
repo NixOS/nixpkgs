@@ -8,6 +8,9 @@
 , w3m
 , dante
 , gawk
+, testers
+, aerc
+, fetchpatch
 }:
 
 buildGoModule rec {
@@ -31,6 +34,13 @@ buildGoModule rec {
 
   patches = [
     ./runtime-libexec.patch
+    # Fixes version number for 0.16.0
+    # Remove for the next release
+    (fetchpatch {
+      name = "version.patch";
+      url = "https://git.sr.ht/~rjarry/aerc/commit/d179485eefe50da9d21abdd392cffd865e369509.patch";
+      hash = "sha256-eSCAxUrKGjBf3jYiVdDqi+jFmj5NiFla2IQu6qFO+BA=";
+    })
   ];
 
   postPatch = ''
@@ -67,6 +77,11 @@ buildGoModule rec {
       --prefix PATH ":" ${lib.makeBinPath [ w3m dante ]}
     patchShebangs $out/libexec/aerc/filters
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = aerc;
+    command = "aerc -v";
+  };
 
   meta = with lib; {
     description = "An email client for your terminal";
