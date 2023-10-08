@@ -7,6 +7,22 @@ callPackage ./common.nix ({
   # Details from https://www.azul.com/downloads/?version=java-21-lts&package=jdk
   # Note that the latest build may differ by platform
   dists = {
+    x86_64-linux = {
+      zuluVersion = "21.28.85";
+      jdkVersion = "21.0.0";
+      hash =
+        if enableJavaFX then "sha256-ew/tgSdkrPdk1CTguk9nyl30w7se+YZYqyqOTaeketk="
+        else "sha256-DA6t+9xHp8pkrqtRucBh9xtuTSXS2HZ0US6bY4fp46Y=";
+    };
+
+    aarch64-linux = {
+      zuluVersion = "21.28.85";
+      jdkVersion = "21.0.0";
+      hash =
+        if enableJavaFX then throw "JavaFX is not available for aarch64-linux"
+        else "sha256-H7ZLgDbF1GPYq1mvBr9bawBoEeYBLjsOtrzPV/HFWDU=";
+    };
+
     x86_64-darwin = {
       zuluVersion = "21.28.85";
       jdkVersion = "21.0.0";
