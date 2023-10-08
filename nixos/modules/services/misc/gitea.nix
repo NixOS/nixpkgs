@@ -246,6 +246,13 @@ in
         description = lib.mdDoc "Path to a file containing the SMTP password.";
       };
 
+      metricsTokenFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/metrics_token";
+        description = lib.mdDoc "Path to a file containing the metrics authentication token.";
+      };
+
       settings = mkOption {
         default = {};
         description = lib.mdDoc ''
@@ -433,6 +440,10 @@ in
         PASSWD = "#mailerpass#";
       };
 
+      metrics = mkIf (cfg.metricsTokenFile != null) {
+        TOKEN = "#metricstoken#";
+      };
+
       oauth2 = {
         JWT_SECRET = "#oauth2jwtsecret#";
       };
@@ -558,6 +569,10 @@ in
 
             ${lib.optionalString (cfg.mailerPasswordFile != null) ''
               ${replaceSecretBin} '#mailerpass#' '${cfg.mailerPasswordFile}' '${runConfig}'
+            ''}
+
+            ${lib.optionalString (cfg.metricsTokenFile != null) ''
+              ${replaceSecretBin} '#metricstoken#' '${cfg.metricsTokenFile}' '${runConfig}'
             ''}
             chmod u-w '${runConfig}'
           }
