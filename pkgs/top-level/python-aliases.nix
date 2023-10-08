@@ -164,6 +164,7 @@ mapAliases ({
   gpyopt = throw "gpyopt was remove because it's been archived upstream"; # added 2023-06-07
   graphite_api = throw "graphite_api was removed, because it is no longer maintained"; # added 2022-07-10
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
+  grappelli_safe = grappelli-safe; # added 2023-10-08
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
