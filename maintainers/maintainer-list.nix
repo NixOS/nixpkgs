@@ -15392,7 +15392,7 @@
   schinmai-akamai = {
     email = "schinmai@akamai.com";
     github = "schinmai-akamai";
-    gitubId = 70169773;
+    githubId = 70169773;
     name = "Tarun Chinmai Sekar";
   };
   schmitthenner = {
