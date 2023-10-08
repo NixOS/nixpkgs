@@ -29091,7 +29091,9 @@ with pkgs;
   uclibc = uclibc-ng;
   uclibcCross = uclibc-ng-cross;
 
-  eudev = callPackage ../os-specific/linux/eudev { util-linux = util-linuxMinimal; };
+  eudev = callPackage ../by-name/eu/eudev/package.nix {
+    util-linux = util-linuxMinimal;
+  };
 
   libudev0-shim = callPackage ../os-specific/linux/libudev0-shim { };
 
