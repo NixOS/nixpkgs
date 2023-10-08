@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.2.3";
+  version = "1.3.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OTSzDKG58pI3bZ2xWxlEYIjRLsWGKbw/DaKP1V+2M6E=";
+    hash = "sha256-1FQGF2SMtfiVcw8a2MgqZfLa0BZvV7dfPKVHWcTWeoU=";
   };
 
   postPatch = ''
@@ -26,8 +26,7 @@ buildPythonPackage rec {
     sed -i "/addopts/d" tox.ini
   '';
 
-  propagatedBuildInputs = [ python-dateutil ]
-    ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  propagatedBuildInputs = [ python-dateutil ];
 
   nativeCheckInputs = [
     pytestCheckHook
