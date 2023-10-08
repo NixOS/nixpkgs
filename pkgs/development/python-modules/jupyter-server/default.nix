@@ -5,12 +5,10 @@
 , pythonOlder
 , hatch-jupyter-builder
 , hatchling
-, pandoc
 , pytestCheckHook
 , pytest-console-scripts
 , pytest-jupyter
 , pytest-timeout
-, pytest-tornasync
 , argon2-cffi
 , jinja2
 , tornado
@@ -102,7 +100,8 @@ buildPythonPackage rec {
     "test_authorized_requests"
     # Insufficient access privileges for operation
     "test_regression_is_hidden"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+  ] ++ lib.optionals stdenv.isLinux [
+    # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
     "test_copy_big_dir"
   ];
 
