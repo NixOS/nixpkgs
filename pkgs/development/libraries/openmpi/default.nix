@@ -58,8 +58,8 @@ in stdenv.mkDerivation rec {
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
     ++ lib.optionals stdenv.isLinux  [
-      "--with-libnl=${libnl.dev}"
-      "--with-pmix=${pmix}"
+      "--with-libnl=${lib.getDev libnl}"
+      "--with-pmix=${lib.getDev pmix}"
       "--with-pmix-libdir=${pmix}/lib"
       "--enable-mpi-cxx"
     ] ++ lib.optional enableSGE "--with-sge"
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
-    ++ lib.optionals fabricSupport [ "--with-psm2=${libpsm2}" "--with-libfabric=${libfabric}" ]
+    ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
     ;
 
   enableParallelBuilding = true;
