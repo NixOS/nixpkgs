@@ -14,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.8.1";
-  format = "setuptools";
+  version = "5.9.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
-    repo = pname;
+    repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GufQIVV8OXlsUmk/FQZhrJ84P28He5Qc3pz67nLhppU=";
+    hash = "sha256-iaX1+SHGAJ9V2Jv76as5BcL5DcxURwX3aGa+R9YVtXY=";
   };
 
   propagatedBuildInputs = [

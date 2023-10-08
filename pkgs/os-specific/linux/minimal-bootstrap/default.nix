@@ -99,6 +99,22 @@ lib.makeScope
       gawk = gawk-mes;
     };
 
+    gcc8 = callPackage ./gcc/8.nix {
+      gcc = gcc46-cxx;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
+    };
+
+    gcc-latest = callPackage ./gcc/latest.nix {
+      gcc = gcc8;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
+    };
+
     inherit (callPackage ./glibc {
       bash = bash_2_05;
       gnused = gnused-mes;
@@ -140,6 +156,13 @@ lib.makeScope
       bash = bash_2_05;
       tinycc = tinycc-musl;
       gnused = gnused-mes;
+    };
+
+    # FIXME: better package naming scheme
+    gnutar-latest = callPackage ./gnutar/latest.nix {
+      gcc = gcc46;
+      gnumake = gnumake-musl;
+      gnutarBoot = gnutar-musl;
     };
 
     gzip = callPackage ./gzip {
@@ -207,11 +230,14 @@ lib.makeScope
       echo ${gcc2-mes.tests.get-version}
       echo ${gcc46.tests.get-version}
       echo ${gcc46-cxx.tests.hello-world}
+      echo ${gcc8.tests.hello-world}
+      echo ${gcc-latest.tests.hello-world}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
       echo ${gnutar.tests.get-version}
       echo ${gnutar-musl.tests.get-version}
+      echo ${gnutar-latest.tests.get-version}
       echo ${gzip.tests.get-version}
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}

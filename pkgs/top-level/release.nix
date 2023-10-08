@@ -10,9 +10,18 @@
 */
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; revision = "0000000000000000000000000000000000000000"; }
 , officialRelease ? false
-  # The platforms for which we build Nixpkgs.
+  # The platform doubles for which we build Nixpkgs.
 , supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ]
-, limitedSupportedSystems ? [ "i686-linux" ]
+  # The platform triples for which we build bootstrap tools.
+, bootstrapConfigs ? [
+    "aarch64-apple-darwin"
+    "aarch64-unknown-linux-gnu"
+    "aarch64-unknown-linux-musl"
+    "i686-unknown-linux-gnu"
+    "x86_64-apple-darwin"
+    "x86_64-unknown-linux-gnu"
+    "x86_64-unknown-linux-musl"
+  ]
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
@@ -35,12 +44,10 @@ with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; 
 
 let
 
-  systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
-
   supportDarwin = lib.genAttrs [
     "x86_64"
     "aarch64"
-  ] (arch: builtins.elem "${arch}-darwin" systemsWithAnySupport);
+  ] (arch: builtins.elem "${arch}-darwin" supportedSystems);
 
   nonPackageJobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease supportedSystems; };
@@ -177,21 +184,21 @@ let
         };
 
       stdenvBootstrapTools = with lib;
-        genAttrs systemsWithAnySupport (system:
-          if hasSuffix "-linux" system then
+        genAttrs bootstrapConfigs (config:
+          if hasInfix "-linux-" config then
             let
               bootstrap = import ../stdenv/linux/make-bootstrap-tools.nix {
                 pkgs = import ../.. {
-                  localSystem = { inherit system; };
+                  localSystem = { inherit config; };
                 };
               };
             in {
               inherit (bootstrap) dist test;
             }
-          else if hasSuffix "-darwin" system then
+          else if hasSuffix "-darwin" config then
             let
               bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix {
-                localSystem = { inherit system; };
+                localSystem = { inherit config; };
               };
             in {
               # Lightweight distribution and test
@@ -201,7 +208,7 @@ let
               #inherit (bootstrap.test-pkgs) stdenv;
             }
           else
-            abort "No bootstrap implementation for system: ${system}"
+            abort "No bootstrap implementation for system: ${config}"
         );
     };
 
