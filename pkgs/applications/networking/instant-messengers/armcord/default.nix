@@ -20,7 +20,6 @@
 , glib
 , gtk3
 , libappindicator-gtk3
-, libdbusmenu
 , libdrm
 , libnotify
 , libpulseaudio
@@ -35,26 +34,28 @@
 , xorg
 , wayland
 , pipewire
+,
 }:
-
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.4";
+  version = "3.2.4-libwebp";
 
   src =
     let
       base = "https://github.com/ArmCord/ArmCord/releases/download";
+      versionBase = builtins.head (builtins.split "-" version);
     in
       {
         x86_64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          hash = "sha256-IUHcDHIJeGx7QKjxl3fUFHqUfs1JdIFxesvDXt3mVw0=";
+          url = "${base}/v${version}/ArmCord_${versionBase}_amd64.deb";
+          hash = "sha256-WeHgai9vTaN04zMdAXmhemKroKH+kwHuOr/E85mfurE=";
         };
         aarch64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          hash = "sha256-TWVlEjakdRyZmOuBq9HLO+R7y5jmgstFtyEHjf8nxxM=";
+          url = "${base}/v${version}/ArmCord_${versionBase}_arm64.deb";
+          hash = "sha256-4/vGdWXv8wrbF/EhMK6kJPjta0EOGH6C3kUyM0OTB8M=";
         };
-      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      }.${stdenv.hostPlatform.system}
+        or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
 
@@ -120,7 +121,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      --suffix PATH : ${lib.makeBinPath [xdg-utils]}
 
     # Fix desktop link
     substituteInPlace $out/share/applications/armcord.desktop \
@@ -138,6 +139,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "armcord";
-    knownVulnerabilities = [ "CVE-2023-4863" ];
   };
 }
