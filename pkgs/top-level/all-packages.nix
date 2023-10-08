@@ -17694,6 +17694,8 @@ with pkgs;
 
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu11 = callPackage ../development/compilers/zulu/11.nix { };
+  zulu17 = callPackage ../development/compilers/zulu/17.nix { };
+  zulu21 = callPackage ../development/compilers/zulu/21.nix { };
   zulu = zulu11;
 
   ### DEVELOPMENT / INTERPRETERS
