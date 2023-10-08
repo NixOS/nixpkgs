@@ -1,10 +1,12 @@
 { lib
 , stdenv
 , fetchurl
+, cmake
 , desktop-file-utils
 , gettext
+, glibmm_2_68
 , gspell
-, gtkmm3
+, gtkmm4
 , itstool
 , libsecret
 , libuuid
@@ -19,16 +21,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnote";
-  version = "44.1";
+  version = "45.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-aWelUGgiMguuGcHrC8dFFmRPnp61TtwslCU+rhDHYE0=";
+    hash = "sha256-XRb9h9FA7HL7s1ewVp2u+4Io4HgUcBVG5r3mVyGTwko=";
   };
 
   buildInputs = [
     gspell
-    gtkmm3
+    gtkmm4
     libsecret
     libuuid
     libxml2
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
     itstool
     meson
     ninja
+    cmake
+    glibmm_2_68
     pkg-config
     wrapGAppsHook
   ];
