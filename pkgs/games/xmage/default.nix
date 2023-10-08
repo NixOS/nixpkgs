@@ -4,12 +4,13 @@
 , unzip
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname   = "xmage";
   version = "1.4.50V2";
 
   src = fetchurl {
-    url    = "https://github.com/magefree/mage/releases/download/xmage_${version}/xmage_${version}.zip";
+    url    =
+    "https://github.com/magefree/mage/releases/download/xmage_${finalAttrs.version}/xmage_${finalAttrs.version}.zip";
     sha256 = "sha256-t1peHYwCRy3wiIIwOD3nUyoxSOxbw6B/g++A1ofIbmg=";
   };
 
@@ -38,5 +39,5 @@ EOS
     homepage = "http://xmage.de/";
   };
 
-}
+})
 
