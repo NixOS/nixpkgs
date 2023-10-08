@@ -6795,6 +6795,12 @@
     githubId = 33523827;
     name = "Harrison Thorne";
   };
+  haruki7049 = {
+    email = "tontonkirikiri@gmail.com";
+    github = "haruki7049";
+    githubId = 64677724;
+    name = "haruki7049";
+  };
   harvidsen = {
     email = "harvidsen@gmail.com";
     github = "harvidsen";
