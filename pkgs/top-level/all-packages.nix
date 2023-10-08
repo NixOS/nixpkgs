@@ -440,6 +440,8 @@ with pkgs;
 
   catppuccin-kvantum = callPackage ../data/themes/catppuccin-kvantum { };
 
+  catppuccin-lazygit = callPackage ../data/themes/catppuccin-lazygit { };
+
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
   catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
