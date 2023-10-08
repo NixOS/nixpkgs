@@ -14912,6 +14912,12 @@
     githubId = 496447;
     name = "Robert Hensing";
   };
+  robert-manchester = {
+    email = "robert.manchester@gmail.com";
+    github = "robert-manchester";
+    githubId = 86313040;
+    name = "Robert Manchester";
+  };
   robertodr = {
     email = "roberto.diremigio@gmail.com";
     github = "robertodr";
