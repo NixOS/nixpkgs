@@ -974,7 +974,6 @@ broken-packages:
   - cryptoids-types # failure in job https://hydra.nixos.org/build/233242596 at 2023-09-02
   - crypto-keys-ssh # failure in job https://hydra.nixos.org/build/233222227 at 2023-09-02
   - crypto-multihash # failure in job https://hydra.nixos.org/build/233220770 at 2023-09-02
-  - crypton-connection # failure in job https://hydra.nixos.org/build/233230068 at 2023-09-02
   - crypto-numbers # failure in job https://hydra.nixos.org/build/233225721 at 2023-09-02
   - crypto-pubkey-openssh # failure in job https://hydra.nixos.org/build/233207007 at 2023-09-02
   - crypto-random-effect # failure in job https://hydra.nixos.org/build/233236324 at 2023-09-02

@@ -1188,6 +1188,11 @@ self: super: {
       jailbreak = assert drv.version == "1.0.9" && drv.revision == "1"; true;
     }) super.dhall-nixpkgs);
 
+  crypton-connection = super.crypton-connection.override {
+    # requires tls >= 1.7
+    tls = self.tls_1_9_0;
+  };
+
   stack =
     lib.pipe
       super.stack
@@ -1872,10 +1877,6 @@ self: super: {
     pandoc-cli-overlay = self: super: {
       # pandoc-cli requires pandoc >= 3.1
       pandoc = self.pandoc_3_1_8;
-
-      # pandoc depends on crypton-connection, which requires tls >= 1.7
-      tls = self.tls_1_9_0;
-      crypton-connection = unmarkBroken super.crypton-connection;
 
       # pandoc depends on http-client-tls, which only starts depending
       # on crypton-connection in http-client-tls-0.3.6.2.
