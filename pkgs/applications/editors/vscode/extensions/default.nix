@@ -3516,8 +3516,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.12";
-          sha256 = "sha256-clVVRJihErAiZHcGImgFoxdD97o6S7NJm8BqfH41MFE=";
+          version = "0.0.15";
+          sha256 = "sha256-q+hSssxOIfeRUw2z9nMiCmH8cAF+GPTvlmc1jl/L4uU=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
