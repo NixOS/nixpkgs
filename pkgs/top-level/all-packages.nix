@@ -28870,9 +28870,7 @@ with pkgs;
     buildBarebox
     bareboxTools;
 
-  uclibc-ng = callPackage ../os-specific/linux/uclibc-ng { };
-
-  uclibc-ng-cross = callPackage ../os-specific/linux/uclibc-ng {
+  uclibc-ng-cross = uclibc-ng.override {
     stdenv = crossLibcStdenv;
   };
 
