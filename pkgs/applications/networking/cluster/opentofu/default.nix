@@ -14,15 +14,15 @@
 let
   package =  buildGoModule rec {
     pname = "opentofu";
-    version = "1.6.0-alpha1";
+    version = "1.6.0-alpha2";
 
     src = fetchFromGitHub {
       owner = "opentofu";
       repo = "opentofu";
       rev = "v${version}";
-      hash = "sha256-0FO55H1nOyhAd+ex1zA0XycH6x/HKkLlxzuIJNoaI9g=";
+      hash = "sha256-29vF5vWCPxJJHsQ1dkLcIaqEQVYxp2YjZ4LK5r4/dlo=";
     };
-    vendorHash = "sha256-3jQfIIZOgOmNHQ06rXz+3QTZ37WcuCc7A7/MhC7udrg=";
+    vendorHash = "sha256-qhnQ47K9N7HoTMUXhX2RlUuQaCgeAB/Sshh56A5rhpk=";
     ldflags = [ "-s" "-w" ];
 
     postConfigure = ''
@@ -65,6 +65,14 @@ let
 
   opentofu_plugins_test = let
     mainTf = writeText "main.tf" ''
+      terraform {
+        required_providers {
+          random = {
+            source  = "registry.terraform.io/hashicorp/random"
+          }
+        }
+      }
+
       resource "random_id" "test" {}
     '';
     opentofu = package.withPlugins (p: [ p.random ]);

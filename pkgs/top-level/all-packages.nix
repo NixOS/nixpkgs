@@ -7657,8 +7657,6 @@ with pkgs;
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
 
-  a4term = callPackage ../tools/misc/a4term { };
-
   erofs-utils = callPackage ../tools/filesystems/erofs-utils { };
 
   e2tools = callPackage ../tools/filesystems/e2tools { };
@@ -18469,7 +18467,7 @@ with pkgs;
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
   rtx = callPackage ../tools/misc/rtx {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   ### DEVELOPMENT / TOOLS
@@ -22528,6 +22526,8 @@ with pkgs;
   ldb = callPackage ../development/libraries/ldb { };
 
   lensfun = callPackage ../development/libraries/lensfun { };
+
+  lesbar = callPackage ../applications/window-managers/lesbar { };
 
   lesstif = callPackage ../development/libraries/lesstif { };
 
@@ -27341,6 +27341,7 @@ with pkgs;
   prometheus-nut-exporter = callPackage ../servers/monitoring/prometheus/nut-exporter.nix { };
   prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix { } ;
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
+  prometheus-pgbouncer-exporter = callPackage ../servers/monitoring/prometheus/pgbouncer-exporter.nix { };
   prometheus-php-fpm-exporter = callPackage ../servers/monitoring/prometheus/php-fpm-exporter.nix { };
   prometheus-pihole-exporter = callPackage ../servers/monitoring/prometheus/pihole-exporter.nix {  };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
@@ -30221,6 +30222,10 @@ with pkgs;
   source-han-sans = sourceHanPackages.sans;
   source-han-serif = sourceHanPackages.serif;
   source-han-mono = sourceHanPackages.mono;
+  source-han-sans-vf-otf = sourceHanPackages.sans-vf-otf;
+  source-han-sans-vf-ttf = sourceHanPackages.sans-vf-ttf;
+  source-han-serif-vf-otf = sourceHanPackages.serif-vf-otf;
+  source-han-serif-vf-ttf = sourceHanPackages.serif-vf-ttf;
 
   spleen = callPackage ../data/fonts/spleen { };
 
@@ -33062,8 +33067,6 @@ with pkgs;
   img-cat = callPackage ../applications/graphics/img-cat { };
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
-
-  imhex = callPackage ../applications/editors/imhex { };
 
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
@@ -36117,7 +36120,9 @@ with pkgs;
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
 
-  transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
+  # Needs macOS >= 10.14.6
+  transmission_4 = darwin.apple_sdk_11_0.callPackage ../applications/networking/p2p/transmission/4.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
     fmt = fmt_9;
     libutp = libutp_3_4;
   };

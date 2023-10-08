@@ -162,7 +162,8 @@
     "anova" = ps: with ps; [
     ]; # missing inputs: anova-wifi
     "anthemav" = ps: with ps; [
-    ]; # missing inputs: anthemav
+      anthemav
+    ];
     "anwb_energie" = ps: with ps; [
     ];
     "apache_kafka" = ps: with ps; [
@@ -957,7 +958,8 @@
       python-ecobee-api
     ];
     "ecoforest" = ps: with ps; [
-    ]; # missing inputs: pyecoforest
+      pyecoforest
+    ];
     "econet" = ps: with ps; [
       pyeconet
     ];
@@ -2403,10 +2405,11 @@
       hass-nabucasa
       hassil
       home-assistant-intents
+      loqedapi
       mutagen
       pyturbojpeg
       webrtc-noise-gain
-    ]; # missing inputs: loqedAPI
+    ];
     "lovelace" = ps: with ps; [
     ];
     "luci" = ps: with ps; [
@@ -4877,7 +4880,8 @@
     "yandextts" = ps: with ps; [
     ];
     "yardian" = ps: with ps; [
-    ]; # missing inputs: pyyardian
+      pyyardian
+    ];
     "yeelight" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
@@ -5020,6 +5024,7 @@
     "android_ip_webcam"
     "androidtv"
     "androidtv_remote"
+    "anthemav"
     "apache_kafka"
     "apcupsd"
     "api"
@@ -5133,6 +5138,7 @@
     "eafm"
     "easyenergy"
     "ecobee"
+    "ecoforest"
     "econet"
     "ecowitt"
     "edl21"
@@ -5348,6 +5354,7 @@
     "logi_circle"
     "london_air"
     "lookin"
+    "loqed"
     "lovelace"
     "luftdaten"
     "lutron_caseta"
@@ -5742,6 +5749,7 @@
     "yamaha_musiccast"
     "yandex_transport"
     "yandextts"
+    "yardian"
     "yeelight"
     "yolink"
     "youless"
