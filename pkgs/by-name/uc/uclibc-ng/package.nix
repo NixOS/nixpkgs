@@ -56,12 +56,12 @@ let
     UCLIBC_HAS_FPU n
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
   version = "1.0.44";
 
   src = fetchurl {
-    url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.xz";
+    url = "https://downloads.uclibc-ng.org/releases/${finalAttrs.version}/uClibc-ng-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-ffnZh5VYJzgvHCQA2lE0Vr7Ltvhovf03c3Jl8cvuyZQ=";
   };
 
@@ -108,7 +108,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    # Derivations may check for the existance of this attribute, to know what to
+    # link to.
+    libiconv = libiconvReal;
+  };
+
+  meta = {
     homepage = "https://uclibc-ng.org";
     description = "Embedded C library";
     longDescription = ''
@@ -126,16 +132,9 @@ stdenv.mkDerivation rec {
       processors. Alpha, FR-V, HPPA, IA64, LM32, NIOS2, Tile and Sparc64 are
       experimental and need more testing.
     '';
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ rasendubi AndersonTorres ];
-    platforms = platforms.linux;
-    badPlatforms = platforms.aarch64;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ rasendubi AndersonTorres ];
+    platforms = lib.platforms.linux;
+    badPlatforms = lib.platforms.aarch64;
   };
-
-  passthru = {
-    # Derivations may check for the existance of this attribute, to know what to
-    # link to.
-    libiconv = libiconvReal;
-  };
-
-}
+})
