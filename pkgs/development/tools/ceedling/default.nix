@@ -1,11 +1,13 @@
 { lib
 , bundlerApp
+, ruby_3_0
 }:
 
 bundlerApp {
   pname = "ceedling";
   gemdir = ./.;
   exes = [ "ceedling" ];
+  ruby = ruby_3_0;
 
   meta = with lib; {
     description = "A build system for C projects that is something of an extension around Ruby's Rake";
