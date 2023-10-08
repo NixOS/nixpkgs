@@ -432,6 +432,8 @@ with pkgs;
 
   catppuccin-bat = callPackage ../data/themes/catppuccin-bat { };
 
+  catppuccin-btop = callPackage ../data/themes/catppuccin-btop { };
+
   catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
 
   catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
