@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     ./autogen.pl
   '';
 
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {
