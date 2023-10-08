@@ -6905,17 +6905,38 @@ with pkgs;
 
   conspy = callPackage ../os-specific/linux/conspy { };
 
-  connmanPackages =
-    recurseIntoAttrs (callPackage ../tools/networking/connman { });
-  inherit (connmanPackages)
-    connman
-    connmanFull
-    connmanMinimal
-    connman_dmenu
-    connman-gtk
-    connman-ncurses
-    connman-notify
-  ;
+  connmanFull = connman.override {
+    # TODO: Why is this in `connmanFull` and not the default build? See TODO in
+    # nixos/modules/services/networking/connman.nix (near the assertions)
+    enableNetworkManagerCompatibility = true;
+    enableHh2serialGps = true;
+    enableL2tp = true;
+    enableIospm = true;
+    enableTist = true;
+  };
+
+  connmanMinimal = connman.override {
+    # enableDatafiles = false; # If disabled, configuration and data files are not installed
+    # enableEthernet = false; # If disabled no ethernet connection can be performed
+    # enableWifi = false; # If disabled no WiFi connection can be performed
+    enableBluetooth = false;
+    enableClient = false;
+    enableDundee = false;
+    enableGadget = false;
+    enableLoopback = false;
+    enableNeard = false;
+    enableOfono = false;
+    enableOpenconnect = false;
+    enableOpenvpn = false;
+    enablePacrunner = false;
+    enablePolkit = false;
+    enablePptp = false;
+    enableStats = false;
+    enableTools = false;
+    enableVpnc = false;
+    enableWireguard = false;
+    enableWispr = false;
+  };
 
   convertlit = callPackage ../tools/text/convertlit { };
 
