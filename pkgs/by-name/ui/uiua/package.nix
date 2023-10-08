@@ -6,6 +6,10 @@
 , audioSupport ? true
 , darwin
 , alsa-lib
+
+# passthru.tests.run
+, runCommand
+, uiua
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,6 +40,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildFeatures = lib.optional audioSupport "audio";
+
+  passthru.tests.run = runCommand "uiua-test-run" {nativeBuildInputs = [uiua];} ''
+    uiua init;
+    diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+    touch $out;
+  '';
 
   meta = with lib; {
     description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
