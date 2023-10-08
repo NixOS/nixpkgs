@@ -230,6 +230,13 @@ in {
       };
       wantedBy = [ "multi-user.target" ];
     };
+
+    systemd.tmpfiles.settings = mkIf (cfg.backupDir != null) {
+      "10-vaultwarden".${cfg.backupDir}.d = {
+        inherit user group;
+        mode = "0770";
+      };
+    };
   };
 
   # uses attributes of the linked package
