@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
       blackmagic-desktop-video
     ];
   in ''
-    #Remove libcef before patchelf, otherwise it will fail
+    # Remove libcef before patchelf, otherwise it will fail
     rm  $out/lib/obs-plugins/libcef.so
 
     qtWrapperArgs+=(
@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
     addOpenGLRunpath $out/lib/lib*.so
     addOpenGLRunpath $out/lib/obs-plugins/*.so
 
-    #Link libcef again after patchelf for other libs
+    # Link libcef again after patchelfing other libs
     ln -s ${libcef}/lib/libcef.so $out/lib/obs-plugins/libcef.so
   '';
 
