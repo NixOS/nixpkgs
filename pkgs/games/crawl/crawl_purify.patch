@@ -7,7 +7,7 @@ index 9ba151e982..496e2cf2bf 100755
  # font-config with other directories, you don't need to edit this -- that case
  # is handled by the `fc-list` call below.
 -FONTDIRS="/usr/share/fonts /usr/local/share/fonts /usr/*/lib/X11/fonts"
-+FONTDIRS="${fontsPath}/share/fonts"
++FONTDIRS="@fontsPath@/share/fonts"
  
  name=$1
  [ "$name" ] || { echo "Usage: $0 <fontname.ttf>" >&2; exit 100; }

@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     echo "${finalAttrs.version}" > util/release_ver
     patchShebangs 'util'
     patchShebangs util/gen-mi-enum
+    substituteAllInPlace util/find_font
     rm -rf contrib
   '';
 
