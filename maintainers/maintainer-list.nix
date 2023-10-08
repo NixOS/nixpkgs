@@ -12992,6 +12992,12 @@
     githubId = 152312;
     name = "Periklis Tsirakidis";
   };
+  perstark = {
+    email = "perstark.se@gmail.com";
+    github = "perstarkse";
+    githubId = 63069986;
+    name = "Per Stark";
+  };
   petercommand = {
     email = "petercommand@gmail.com";
     github = "petercommand";
