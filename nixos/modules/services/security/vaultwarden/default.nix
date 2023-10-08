@@ -55,6 +55,7 @@ in {
       description = lib.mdDoc ''
         The directory under which vaultwarden will backup its persistent data.
       '';
+      example = "/var/backup/vaultwarden";
     };
 
     config = mkOption {
