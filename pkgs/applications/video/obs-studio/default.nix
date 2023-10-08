@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
     ];
   in ''
     # Remove libcef before patchelf, otherwise it will fail
-    rm  $out/lib/obs-plugins/libcef.so
+    rm $out/lib/obs-plugins/libcef.so
 
     qtWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
