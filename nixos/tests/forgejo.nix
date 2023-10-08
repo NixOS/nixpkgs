@@ -44,7 +44,7 @@ let
   ]);
   makeGForgejoTest = type: nameValuePair type (makeTest {
     name = "forgejo-${type}";
-    meta.maintainers = with maintainers; [ bendlas emilylange ];
+    meta.maintainers = with maintainers; [ bendlas emilylange yayayayaka ];
 
     nodes = {
       server = { config, pkgs, ... }: {
