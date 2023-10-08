@@ -2,13 +2,17 @@
 , buildPythonPackage
 , fetchFromGitHub
 , google-ai-generativelanguage
+, google-api-core
+, google-auth
+, protobuf
 , pythonOlder
 , pythonRelaxDepsHook
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.1.0";
+  version = "0.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -17,7 +21,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "generative-ai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-caFq7BZKRuNU7fKJWeWSbbDFNpav7OrIET4OQSHkPz4=";
+    hash = "sha256-zlLfA8wlXCsBXvzTHNW8y30/DvWMgf7DnpShsvjZXZ4=";
   };
 
   pythonRelaxDeps = [
@@ -30,6 +34,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     google-ai-generativelanguage
+    google-auth
+    google-api-core
+    protobuf
+    tqdm
   ];
 
   # Issue with the google.ai module. Check with the next release

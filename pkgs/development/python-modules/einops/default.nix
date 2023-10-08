@@ -5,7 +5,6 @@
 , hatchling
 , jupyter
 , nbconvert
-, nbformat
 , numpy
 , parameterized
 , pillow
@@ -33,7 +32,6 @@ buildPythonPackage rec {
     chainer
     jupyter
     nbconvert
-    nbformat
     numpy
     parameterized
     pillow

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.7.0";
+  version = "3.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0uroUD8Pb5SEhG34sIepU5zY0yo19n9QBTz9sCuYlh4=";
+    hash = "sha256-/dkW5ZqEqowC6BSNf907O2I8V7DB/3H0MpfOjlD8Hqs=";
   };
 
   propagatedBuildInputs = [

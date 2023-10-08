@@ -8,13 +8,19 @@
 , boost
 , ncurses
 , enableCApi ? true
-# requires numpy
+# Although we handle the Python API's dependencies in pythonEnvArg, this
+# feature is currently disabled as upstream attempts to run `python setup.py
+# install` by itself, and it fails because the Python's environment's prefix is
+# not a writable directly. Adding support for this feature would require using
+# python's pypa/build nad pypa/install hooks directly, and currently it is hard
+# to do that because it all happens after a long buildPhase of the C API.
 , enablePythonApi ? false
 , python3
 , buildPackages
 , enableExamples ? false
-, enableUtils ? false
+, enableUtils ? true
 , libusb1
+# Disable dpdk for now due to compilation issues.
 , enableDpdk ? false
 , dpdk
 # Devices
@@ -143,6 +149,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/udev/rules.d
     mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
+
+  disallowedReferences = optionals (!enablePythonApi && !enableUtils) [
+    python3
+  ];
 
   meta = with lib; {
     description = "USRP Hardware Driver (for Software Defined Radio)";

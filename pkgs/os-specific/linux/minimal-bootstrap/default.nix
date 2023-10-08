@@ -91,6 +91,13 @@ lib.makeScope
       # FIXME: not sure why new gawk doesn't work
       gawk = gawk-mes;
     };
+    gcc46-cxx = callPackage ./gcc/4.6.cxx.nix {
+      gcc = gcc46;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-musl;
+      # FIXME: not sure why new gawk doesn't work
+      gawk = gawk-mes;
+    };
 
     inherit (callPackage ./glibc {
       bash = bash_2_05;
@@ -199,6 +206,7 @@ lib.makeScope
       echo ${gcc2.tests.get-version}
       echo ${gcc2-mes.tests.get-version}
       echo ${gcc46.tests.get-version}
+      echo ${gcc46-cxx.tests.hello-world}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
