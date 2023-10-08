@@ -1199,27 +1199,20 @@ self: super: {
       [
         (self.generateOptparseApplicativeCompletions [ "stack" ])
 
-        # Seems to be an unnecessarily strict dep on ansi-terminal
-        doJailbreak
-
-        # The below patch has unix line endings, but the actual file
-        # has CRLF line endings.  The following override changes the
-        # file to unix line endings before applying the patch.
-        (overrideCabal (oldAttrs: {
-          prePatch = oldAttrs.prePatch or "" + ''
-            "${lib.getBin pkgs.buildPackages.dos2unix}/bin/dos2unix" src/main/BuildInfo.hs
-          '';
+        # stack-2.13.1 requires a bunch of the latest packages.
+        (drv: drv.overrideScope (hfinal: hprev: {
+          ansi-terminal = hprev.ansi-terminal_1_0; # needs ansi-terminal >= 1.0
+          crypton = hprev.crypton_0_33; # needs crypton >= 0.33
+          hedgehog = doJailbreak hprev.hedgehog; # has too strict version bound for ansi-terminal
+          hpack = hprev.hpack_0_36_0; # needs hpack == 0.36.0
+          http-client-tls = hprev.http-client-tls_0_3_6_3; # needs http-client-tls >= 0.3.6.2
+          http-download = dontCheck hprev.http-download_0_2_1_0; # needs http-download >= 0.2.1.0, tests access network
+          optparse-applicative = hprev.optparse-applicative_0_18_1_0; # needs optparse-applicative >= 0.18.1.0
+          pantry = dontCheck hprev.pantry_0_9_2; # needs pantry >= 0.9.2, tests access network
+          syb = dontCheck hprev.syb; # cyclic dependencies
+          tar-conduit = hprev.tar-conduit_0_4_0; # pantry needs tar-conduit >= 0.4.0
+          temporary = dontCheck hprev.temporary; # cyclic dependencies
         }))
-        # stack-2.11.1 has a bug when building without git.
-        # https://github.com/commercialhaskell/stack/pull/6127
-        (appendPatch
-          (fetchpatch {
-            name = "stack-fix-building-without-git.patch";
-            url = "https://github.com/commercialhaskell/stack/pull/6127/commits/086f93933d547736a7007fc4110f7816ef21f691.patch";
-            hash = "sha256-1nwzMoumWceVu8RNnH2mmSxYT24G1FAnFRJvUMeD3po=";
-            includes = [ "src/main/BuildInfo.hs" ];
-          })
-        )
       ];
 
   # Too strict version bound on hashable-time.
