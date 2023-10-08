@@ -1460,6 +1460,16 @@ in
       ]
       ++ bridgeStp;
 
+    # Wake-on-LAN configuration is shared by the scripted and networkd backends.
+    systemd.network.links = pipe interfaces [
+      (filter (i: i.wakeOnLan.enable))
+      (map (i: nameValuePair "40-${i.name}" {
+        matchConfig.OriginalName = i.name;
+        linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
+      }))
+      listToAttrs
+    ];
+
     # The network-interfaces target is kept for backwards compatibility.
     # New modules must NOT use it.
     systemd.targets.network-interfaces =
