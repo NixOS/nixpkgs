@@ -40,6 +40,7 @@ let
     history-service = callPackage ./services/history-service { };
     lomiri-download-manager = callPackage ./services/lomiri-download-manager { };
     lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
+    lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
     lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
     mediascanner2 = callPackage ./services/mediascanner2 { };
   };
