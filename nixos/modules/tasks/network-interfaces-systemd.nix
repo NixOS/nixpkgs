@@ -389,6 +389,16 @@ in
         };
       })))
       vlanNetworks
+      {
+        systemd.network.links = pipe interfaces [
+          (filter (i: i.wakeOnLan.enable))
+          (map (i: nameValuePair "40-${i.name}" {
+            matchConfig.OriginalName = i.name;
+            linkConfig.WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
+          }))
+          listToAttrs
+        ];
+      }
     ];
 
     # We need to prefill the slaved devices with networking options
