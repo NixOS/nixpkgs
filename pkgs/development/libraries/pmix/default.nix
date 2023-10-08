@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent hwloc munge zlib ];
 
   configureFlags = [
-    "--with-libevent=${libevent.dev}"
+    "--with-libevent=${lib.getDev libevent}"
     "--with-munge=${munge}"
-    "--with-hwloc=${hwloc.dev}"
+    "--with-hwloc=${lib.getDev hwloc}"
   ];
 
   preConfigure = ''
