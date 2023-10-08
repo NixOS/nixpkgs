@@ -213,7 +213,7 @@ in {
 
     openjdk21 = mkOpenjdk
       ../development/compilers/openjdk/21.nix
-      ../development/compilers/openjdk/darwin/21.nix
+      ../development/compilers/zulu/21.nix
       {
         openjdk21-bootstrap = temurin-bin.jdk-20;
         openjfx = openjfx21;
