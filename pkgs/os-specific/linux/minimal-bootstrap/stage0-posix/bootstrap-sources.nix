@@ -7,7 +7,7 @@ rec {
   version = "unstable-2023-05-02";
   rev = "3189b5f325b7ef8b88e3edec7c1cde4fce73c76c";
   outputHashAlgo = "sha256";
-  outputHash = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
+  outputHash = "sha256-7Y9+csTwZIQp0WGbagX+Q4f2zavN7AUk1TSBp/H5Xks=";
 
   /*
   Since `make-minimal-bootstrap-sources` requires nixpkgs and nix it
