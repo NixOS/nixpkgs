@@ -5569,8 +5569,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  cimg = callPackage  ../development/libraries/cimg { };
-
   gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
 
   gpg-tui = callPackage ../tools/security/gpg-tui {
