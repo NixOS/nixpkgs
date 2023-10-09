@@ -3,6 +3,7 @@ let
   queryPort  =  9090;
   minioPort  =  9000;
   pushgwPort =  9091;
+  frontPort  =  9092;
 
   s3 = {
     accessKey = "BKIKJAA5BMMU2RHO6IBB";
@@ -156,6 +157,11 @@ in import ./make-test-python.nix {
           "prometheus:${toString grpcPort}"
         ];
       };
+      services.thanos.query-frontend = {
+        enable = true;
+        http-address = "0.0.0.0:${toString frontPort}";
+        query-frontend.downstream-url = "http://127.0.0.1:${toString queryPort}";
+      };
     };
 
     store = { pkgs, ... }: {
@@ -261,6 +267,10 @@ in import ./make-test-python.nix {
     # Test if the Thanos query service can correctly retrieve the metric that was send above.
     query.wait_for_unit("thanos-query.service")
     wait_for_metric(query)
+
+    # Test Thanos query frontend service
+    query.wait_for_unit("thanos-query-frontend.service")
+    query.succeed("curl -sS http://localhost:${toString frontPort}/-/healthy")
 
     # Test if the Thanos sidecar has correctly uploaded its TSDB to S3, if the
     # Thanos storage service has correctly downloaded it from S3 and if the Thanos
