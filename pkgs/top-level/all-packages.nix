@@ -10318,6 +10318,8 @@ with pkgs;
 
   keama = callPackage ../tools/networking/keama { };
 
+  ktailctl = libsForQt5.callPackage ../applications/networking/ktailctl {};
+
   iredis = callPackage ../tools/admin/iredis { };
 
   ispell = callPackage ../tools/text/ispell { };
