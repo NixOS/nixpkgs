@@ -15026,6 +15026,12 @@
     githubId = 203168;
     name = "Stefan Fehrenbach";
   };
+  stefanschroeder = {
+    email = "ondekoza@gmail.com";
+    github = "StefanSchroeder";
+    githubId = 1130199;
+    name = "Stefan Schroeder";
+  };
   stehessel = {
     email = "stephan@stehessel.de";
     github = "stehessel";
