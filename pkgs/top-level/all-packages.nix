@@ -5569,7 +5569,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  gmic = callPackage ../tools/graphics/gmic { };
+  cimg = callPackage  ../development/libraries/cimg { };
 
   gmic-qt = libsForQt5.callPackage ../tools/graphics/gmic-qt { };
 
@@ -20993,8 +20993,6 @@ with pkgs;
   cdk-go = callPackage ../tools/security/cdk-go { };
 
   cdo = callPackage ../development/libraries/cdo { };
-
-  cimg = callPackage  ../development/libraries/cimg { };
 
   cista = callPackage ../development/libraries/cista { };
 
