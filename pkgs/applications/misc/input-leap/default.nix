@@ -26,13 +26,13 @@
 
 mkDerivation rec {
   pname = "input-leap";
-  version = "unstable-2023-05-24";
+  version = "unstable-2023-08-08";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "5e2f37bf9ec17627ae33558d99f90b7608ace422";
-    hash = "sha256-55RqdRu/Hi2OTiLjAFJ6Gdgg9iO5NIIJCsOkUQjR9hk=";
+    rev = "3e681454b737633a70f2f3b789046a5cb1946708";
+    hash = "sha256-OZMVz075oC7UQI7F9uDz8F6eBr1WN4aYxLFq9bc3M6g=";
     fetchSubmodules = true;
   };
 
