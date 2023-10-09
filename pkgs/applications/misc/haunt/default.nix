@@ -3,6 +3,7 @@
 , fetchurl
 , fetchpatch
 , autoreconfHook
+, callPackage
 , guile
 , guile-commonmark
 , guile-reader
@@ -10,12 +11,12 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "haunt";
   version = "0.2.6";
 
   src = fetchurl {
-    url = "https://files.dthompson.us/${pname}/${pname}-${version}.tar.gz";
+    url = "https://files.dthompson.us/haunt/haunt-${finalAttrs.version}.tar.gz";
     hash = "sha256-vPKLQ9hDJdimEAXwIBGgRRlefM8/77xFQoI+0J/lkNs=";
   };
 
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
   ];
+
   buildInputs = [
     guile
     guile-commonmark
@@ -55,14 +57,13 @@ stdenv.mkDerivation rec {
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/haunt --version
-    runHook postInstallCheck
-  '';
+  passthru = {
+    tests = {
+      expectVersion = callPackage ./tests/001-test-version.nix { };
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dthompson.us/projects/haunt.html";
     description = "Guile-based static site generator";
     longDescription = ''
@@ -81,8 +82,8 @@ stdenv.mkDerivation rec {
       feeds, authors should feel empowered to tweak, replace, or create builders
       to do things that aren't provided out-of-the-box.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres AluisioASG ];
-    platforms = guile.meta.platforms;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres AluisioASG ];
+    inherit (guile.meta) platforms;
   };
-}
+})
