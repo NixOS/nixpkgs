@@ -227,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!enablePassim) [
     "-Dpassim=disabled"
   ] ++ lib.optionals (!haveDell) [
-    "-Dplugin_dell=disabled"
     "-Dplugin_synaptics_mst=disabled"
   ] ++ lib.optionals (!haveRedfish) [
     "-Dplugin_redfish=disabled"
