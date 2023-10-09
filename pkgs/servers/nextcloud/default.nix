@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests
+{ lib, stdenvNoCC, fetchurl, nixosTests
 , nextcloud27Packages
 , nextcloud26Packages
 }:
@@ -8,7 +8,7 @@ let
     version, hash
   , eol ? false, extraVulnerabilities ? []
   , packages
-  }: stdenv.mkDerivation rec {
+  }: stdenvNoCC.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
