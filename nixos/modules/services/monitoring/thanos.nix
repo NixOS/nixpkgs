@@ -430,6 +430,12 @@ let
       '';
     };
 
+    query-frontend = params.common cfg.query-frontend // {
+      query-frontend.downstream-url = mkParamDef types.str "http://localhost:9090" ''
+        URL of downstream Prometheus Query compatible API.
+      '';
+    };
+
     rule = params.common cfg.rule // params.objstore cfg.rule // {
 
       labels = mkAttrsParam "label" ''
@@ -684,6 +690,13 @@ in {
       arguments = mkArgumentsOption "query";
     };
 
+    query-frontend = paramsToOptions params.query-frontend // {
+      enable = mkEnableOption
+        (lib.mdDoc ("the Thanos query frontend implements a service deployed in front of queriers to
+          improve query parallelization and caching."));
+      arguments = mkArgumentsOption "query-frontend";
+    };
+
     rule = paramsToOptions params.rule // {
       enable = mkEnableOption
         (lib.mdDoc ("the Thanos ruler service which evaluates Prometheus rules against" +
@@ -764,6 +777,18 @@ in {
           DynamicUser = true;
           Restart = "always";
           ExecStart = thanos "query";
+        };
+      };
+    })
+
+    (mkIf cfg.query-frontend.enable {
+      systemd.services.thanos-query-frontend = {
+        wantedBy = [ "multi-user.target" ];
+        after    = [ "network.target" ];
+        serviceConfig = {
+          DynamicUser = true;
+          Restart = "always";
+          ExecStart = thanos "query-frontend";
         };
       };
     })
