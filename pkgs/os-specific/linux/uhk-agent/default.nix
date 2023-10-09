@@ -33,7 +33,7 @@ in appimageTools.wrapType2 {
     description = "Agent is the configuration application of the Ultimate Hacking Keyboard";
     homepage = "https://github.com/UltimateHackingKeyboard/agent";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ ngiger ];
+    maintainers = with maintainers; [ ngiger nickcao ];
     platforms = [ "x86_64-linux" ];
   };
 }
