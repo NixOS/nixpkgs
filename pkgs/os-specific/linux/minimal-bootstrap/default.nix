@@ -44,6 +44,11 @@ lib.makeScope
       gnumake = gnumake-musl;
       gnutar = gnutar-musl;
     };
+    coreutils-static = callPackage ./coreutils/static.nix {
+      gcc = gcc-latest;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+    };
 
     diffutils = callPackage ./diffutils {
       bash = bash_2_05;
@@ -206,6 +211,7 @@ lib.makeScope
       echo ${binutils.tests.get-version}
       echo ${bzip2.tests.get-version}
       echo ${coreutils-musl.tests.get-version}
+      echo ${coreutils-static.tests.get-version}
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
       echo ${gawk-mes.tests.get-version}
