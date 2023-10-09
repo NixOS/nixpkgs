@@ -7,6 +7,7 @@
   gnupatch,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bootstrap-coreutils";
   version = "5.0";
 
@@ -73,21 +74,13 @@ let
 in
 kaem.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
       gnumake
       gnupatch
     ];
-
-    meta = {
-      description = "GNU Core Utilities";
-      homepage = "https://www.gnu.org/software/coreutils";
-      license = lib.licenses.gpl3Plus;
-      teams = [ lib.teams.minimal-bootstrap ];
-      platforms = lib.platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -96,25 +89,25 @@ kaem.runCommand "${pname}-${version}"
     rm coreutils.tar
     cd coreutils-${version}
 
-    # Patch
-    ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+      # Patch
+      ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
 
-    # Configure
-    catm config.h
-    cp lib/fnmatch_.h lib/fnmatch.h
-    cp lib/ftw_.h lib/ftw.h
-    cp lib/search_.h lib/search.h
-    rm src/dircolors.h
+      # Configure
+      catm config.h
+      cp lib/fnmatch_.h lib/fnmatch.h
+      cp lib/ftw_.h lib/ftw.h
+      cp lib/search_.h lib/search.h
+      rm src/dircolors.h
 
-    # Build
-    make -f ${makefile} \
-      CC="tcc -B ${tinycc.libs}/lib" \
-      PREFIX=''${out}
+      # Build
+      make -f ${makefile} \
+        CC="tcc -B ${tinycc.libs}/lib" \
+        PREFIX=''${out}
 
-    # Check
-    ./src/echo "Hello coreutils!"
+      # Check
+      ./src/echo "Hello coreutils!"
 
-    # Install
-    ./src/mkdir -p ''${out}/bin
-    make -f ${makefile} install PREFIX=''${out}
+      # Install
+      ./src/mkdir -p ''${out}/bin
+      make -f ${makefile} install PREFIX=''${out}
   ''
