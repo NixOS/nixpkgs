@@ -817,7 +817,7 @@ $ cargo test
 ## Using community maintained Rust toolchains {#using-community-maintained-rust-toolchains}
 
 ::: {.note}
-Note: The following projects cannot be used within nixpkgs since [IFD](#ssec-import-from-derivation) is disallowed.
+The following projects cannot be used within Nixpkgs since [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs.
 To package things that require Rust nightly, `RUSTC_BOOTSTRAP = true;` can sometimes be used as a hack.
 :::
 
