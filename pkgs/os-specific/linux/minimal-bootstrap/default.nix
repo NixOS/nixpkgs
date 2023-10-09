@@ -249,6 +249,12 @@ lib.makeScope
         gnutar = gnutar-musl;
       };
 
+      zlib = callPackage ./zlib {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
+
       inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
       test = kaem.runCommand "minimal-bootstrap-test" { } ''
