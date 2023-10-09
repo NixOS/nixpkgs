@@ -1070,7 +1070,7 @@ in {
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
             ProtectSystem = "strict";
-            ReadWritePaths = [ cfg.dataDir ];
+            ReadWritePaths = [ cfg.dataDir cfg.settings.media_store_path ];
             RemoveIPC = true;
             RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
             RestrictNamespaces = true;
