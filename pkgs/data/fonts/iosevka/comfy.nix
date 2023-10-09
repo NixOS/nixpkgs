@@ -1,4 +1,4 @@
-{ lib, iosevka, fetchFromSourcehut, fetchFromGitHub, buildNpmPackage }:
+{ lib, iosevka, fetchFromGitHub, buildNpmPackage }:
 
 let
   sets = [
@@ -21,8 +21,8 @@ let
     "comfy-wide-motion-duo"   # Slab   | Wide    | Duospaced  | Yes       |
   ];
   version = "1.4.0";
-  src = fetchFromSourcehut {
-    owner = "~protesilaos";
+  src = fetchFromGitHub {
+    owner = "protesilaos";
     repo = "iosevka-comfy";
     rev = version;
     sha256 = "sha256-kfEEJ6F1/dsG9CSLWcr0QOOnQxHPgPgb4QhgFrHTklE=";
