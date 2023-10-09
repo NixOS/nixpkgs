@@ -2614,6 +2614,10 @@ with pkgs;
 
   dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
 
+  dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
+    inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
+  };
+
   duckstation = qt6Packages.callPackage ../applications/emulators/duckstation { };
 
   dynamips = callPackage ../applications/emulators/dynamips { };
