@@ -5927,6 +5927,8 @@ with pkgs;
 
   maliit-keyboard = libsForQt5.callPackage ../applications/misc/maliit-keyboard { };
 
+  maloja = with python3Packages; toPythonApplication maloja;
+
   mandown = callPackage ../tools/misc/mandown { };
 
   mantra = callPackage ../tools/security/mantra { };

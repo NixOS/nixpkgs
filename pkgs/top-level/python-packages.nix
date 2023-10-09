@@ -3222,6 +3222,8 @@ self: super: with self; {
 
   dopy = callPackage ../development/python-modules/dopy { };
 
+  doreah = callPackage ../development/python-modules/doreah { };
+
   dotty-dict = callPackage ../development/python-modules/dotty-dict { };
 
   dot2tex = callPackage ../development/python-modules/dot2tex {
@@ -6465,6 +6467,8 @@ self: super: with self; {
 
   malduck= callPackage ../development/python-modules/malduck { };
 
+  maloja = callPackage ../development/python-modules/maloja { };
+
   managesieve = callPackage ../development/python-modules/managesieve { };
 
   mandown = callPackage ../development/python-modules/mandown { };
@@ -8013,6 +8017,8 @@ self: super: with self; {
   niluclient = callPackage ../development/python-modules/niluclient { };
 
   nimfa = callPackage ../development/python-modules/nimfa { };
+
+  nimrodel = callPackage ../development/python-modules/nimrodel { };
 
   nine = callPackage ../development/python-modules/nine { };
 
