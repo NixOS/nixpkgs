@@ -343,11 +343,16 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "0.0.97";
-          sha256 = "sha256-rNGW8WB3jBSjThiB0j4/ORKMRAaxFiMiBfaa+dbGu/w=";
+          version = "0.8.2";
+          sha256 = "0kw9asv91s37ql61blbb8pr7wb6c2ba1klchal53chp6ib55v5kn";
         };
         meta = {
+          changelog = "https://marketplace.visualstudio.com/items/asvetliakov.vscode-neovim/changelog";
+          description = "Vim-mode for VS Code using embedded Neovim";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=asvetliakov.vscode-neovim";
           license = lib.licenses.mit;
+          homepage = "https://github.com/vscode-neovim/vscode-neovim";
+          maintainers = [ lib.maintainers.mikaelfangel ];
         };
       };
 
@@ -896,8 +901,8 @@ let
         mktplcRef = {
           name = "vscode-markdownlint";
           publisher = "DavidAnson";
-          version = "0.51.0";
-          sha256 = "sha256-Xtr8cqcPrcrKpJBxQcY1j9Gl4CC6U3ZazS4bdBtdzUk=";
+          version = "0.52.0";
+          sha256 = "sha256-Y8qkcNEvJ/yzT8PDeErRzKGxYBNKKfbNNsJVaFDeIV4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint/changelog";
@@ -1400,8 +1405,8 @@ let
         mktplcRef = {
           name = "vscode-firefox-debug";
           publisher = "firefox-devtools";
-          version = "2.9.8";
-          sha256 = "sha256-MCL562FPgEfhUM1KH5LMl7BblbjIkQ4UEwB67RlO5Mk=";
+          version = "2.9.10";
+          sha256 = "sha256-xuvlE8L/qjOn8Qhkv9sutn/xRbwC9V/IIfEr4Ixm1vA=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/firefox-devtools.vscode-firefox-debug/changelog";
@@ -3504,6 +3509,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      uiua-lang.uiua-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "uiua-vscode";
+          publisher = "uiua-lang";
+          version = "0.0.15";
+          sha256 = "sha256-q+hSssxOIfeRUw2z9nMiCmH8cAF+GPTvlmc1jl/L4uU=";
+        };
+        meta = {
+          description = "VSCode language extension for Uiua";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=uiua-lang.uiua-vscode";
+          homepage = "https://github.com/uiua-lang/uiua-vscode";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.wackbyte ];
         };
       };
 

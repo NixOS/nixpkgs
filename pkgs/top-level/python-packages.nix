@@ -858,7 +858,7 @@ self: super: with self; {
 
   atpublic = callPackage ../development/python-modules/atpublic { };
 
-  atsim_potentials = callPackage ../development/python-modules/atsim_potentials { };
+  atsim-potentials = callPackage ../development/python-modules/atsim-potentials { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
@@ -9190,6 +9190,8 @@ self: super: with self; {
   python-google-nest = callPackage ../development/python-modules/python-google-nest { };
 
   python-heatclient = callPackage ../development/python-modules/python-heatclient { };
+
+  python-hl7 = callPackage ../development/python-modules/python-hl7 { };
 
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 

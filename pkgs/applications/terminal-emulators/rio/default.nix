@@ -103,5 +103,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ otavio oluceps ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
+    mainProgram = "rio";
   };
 }
