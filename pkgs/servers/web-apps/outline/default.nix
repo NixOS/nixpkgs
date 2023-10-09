@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.71.0";
+  version = "0.72.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-vwYq5b+cMYf/gnpCwLEpErYKqYw/RwcvyBjhp+5+bTY=";
+    hash = "sha256-+pkYh77bMnAUg/gyBbWSYsmnVrWCbrGKxdlxUTaVBrw";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-j9iaxXfMlG9dT6fvYgPQg6Y0QvCRiBU1peO0YgsGHOY=";
+    hash = "sha256-u7N1kituTZUEDKtlUo6zkNw9XcrEMDeNjRpI/pe93V4";
   };
 
   configurePhase = ''
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ cab404 yrd xanderio ];
+    maintainers = with maintainers; [ cab404 yrd xanderio sironheart ];
     platforms = platforms.linux;
   };
 }
