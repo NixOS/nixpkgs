@@ -11,6 +11,28 @@ let
 
   localhostMultiple = any (elem "localhost") (attrValues (removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]));
 
+  localServicesFile =
+    pkgs.runCommand "etc-services" { preferLocalBuild = true; } (let
+      overrides = lib.pipe cfg.services [
+        (lib.attrsets.mapAttrsToList (name:
+          { port, protocols, aliases }:
+          (map (proto: "${name} ${toString port}/${proto} ${toString aliases}")
+            protocols)))
+        lib.lists.flatten
+        lib.strings.concatLines
+      ];
+      deletions =
+        map (name: "-e '/^${name} .*/d'") (builtins.attrNames cfg.services);
+    in ''
+      cat << EOF > $out
+      ${overrides}
+      EOF
+      sed \
+        ${toString deletions} \
+        < ${pkgs.iana-etc}/etc/services \
+        >> $out
+    '');
+
 in
 
 {
@@ -146,6 +168,45 @@ in
         '';
       };
     };
+
+    networking.services = lib.mkOption {
+      description = "Internet network services list overrides";
+      default = { };
+      example = {
+        netstat = {
+          port = 15;
+          protocols = [ "tcp" ];
+        };
+        qotd = {
+          port = 17;
+          protocols = [ "tcp" ];
+          aliases = [ "quote" ];
+        };
+        msp = {
+          port = 18;
+          protocols = [ "tcp" "udp" ];
+        };
+      };
+      type = with lib.types;
+        attrsOf (submodule {
+          options = {
+            port = lib.mkOption {
+              description = "Port number.";
+              type = port;
+            };
+            protocols = lib.mkOption {
+              description = "Type of protocol. Typical values include tcp and udp.";
+              type = listOf str;
+            };
+            aliases = lib.mkOption {
+              description = "List of other names for this service.";
+              type = listOf str;
+              default = [ ];
+            };
+          };
+        });
+    };
+
   };
 
   config = {
@@ -190,7 +251,10 @@ in
 
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
-        services.source = pkgs.iana-etc + "/etc/services";
+        services.source =
+          if cfg.services == {}
+          then "${pkgs.iana-etc}/etc/services"
+          else localServicesFile;
 
         # /etc/protocols: IP protocol numbers.
         protocols.source  = pkgs.iana-etc + "/etc/protocols";
