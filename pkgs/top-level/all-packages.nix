@@ -16426,7 +16426,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20;
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -16460,6 +16460,11 @@ with pkgs;
   openjdk20_headless = javaPackages.compiler.openjdk20.headless;
   jdk20 = openjdk20;
   jdk20_headless = openjdk20_headless;
+
+  openjdk21 = javaPackages.compiler.openjdk21;
+  openjdk21_headless = javaPackages.compiler.openjdk21.headless;
+  jdk21 = openjdk21;
+  jdk21_headless = openjdk21_headless;
 
   /* default JDK */
   jdk = jdk19;
@@ -17691,6 +17696,8 @@ with pkgs;
 
   zulu8 = callPackage ../development/compilers/zulu/8.nix { };
   zulu11 = callPackage ../development/compilers/zulu/11.nix { };
+  zulu17 = callPackage ../development/compilers/zulu/17.nix { };
+  zulu21 = callPackage ../development/compilers/zulu/21.nix { };
   zulu = zulu11;
 
   ### DEVELOPMENT / INTERPRETERS
@@ -27594,8 +27601,6 @@ with pkgs;
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
 
   searx = callPackage ../servers/web-apps/searx { };
-
-  searxng = python3Packages.toPythonModule (callPackage ../servers/web-apps/searxng { });
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
@@ -40465,10 +40470,6 @@ with pkgs;
   dumb = callPackage ../misc/dumb { };
 
   dump = callPackage ../tools/backup/dump { };
-
-  dxvk = callPackage ../misc/dxvk { };
-  dxvk_1 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "1.10"; };
-  dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { };
 
   ec2stepshell = callPackage ../tools/security/ec2stepshell { };
 

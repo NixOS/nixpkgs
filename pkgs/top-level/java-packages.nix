@@ -8,11 +8,12 @@ let
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17.nix { };
   openjfx19 = callPackage ../development/compilers/openjdk/openjfx/19.nix { };
   openjfx20 = callPackage ../development/compilers/openjdk/openjfx/20.nix { };
+  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21.nix { };
 
   mavenfod = pkgs.maven.buildMavenPackage;
 
 in {
-  inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19 openjfx20;
+  inherit mavenfod openjfx11 openjfx15 openjfx17 openjfx19 openjfx20 openjfx21;
 
   compiler = let
 
@@ -208,6 +209,14 @@ in {
       {
         openjdk20-bootstrap = temurin-bin.jdk-20;
         openjfx = openjfx20;
+      };
+
+    openjdk21 = mkOpenjdk
+      ../development/compilers/openjdk/21.nix
+      ../development/compilers/zulu/21.nix
+      {
+        openjdk21-bootstrap = temurin-bin.jdk-20;
+        openjfx = openjfx21;
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (

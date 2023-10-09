@@ -6,20 +6,24 @@
 , audioSupport ? true
 , darwin
 , alsa-lib
+
+# passthru.tests.run
+, runCommand
+, uiua
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.0.16";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = "refs/tags/${version}";
-    hash = "sha256-CMuCl4idoO5qIpXdkXBbglsZQBWVT8w9azbn2rRxviA=";
+    hash = "sha256-vZo3JKvvlL//4P+EqcsDXyamAMnCBARSF/H6OJTayF4=";
   };
 
-  cargoHash = "sha256-BLP9OGTnksM9NscfhtVWxE0/CqZgkqqlIMgRclCzEzs=";
+  cargoHash = "sha256-AkBcvFz7mrYUNTokcfoSXwWpw7SupI0+52GL4QXUu24=";
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [
     rustPlatform.bindgenHook
@@ -36,6 +40,12 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildFeatures = lib.optional audioSupport "audio";
+
+  passthru.tests.run = runCommand "uiua-test-run" {nativeBuildInputs = [uiua];} ''
+    uiua init;
+    diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+    touch $out;
+  '';
 
   meta = with lib; {
     description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";

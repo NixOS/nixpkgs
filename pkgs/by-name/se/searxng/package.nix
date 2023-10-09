@@ -3,15 +3,15 @@
 , fetchFromGitHub
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.toPythonModule (python3.pkgs.buildPythonApplication rec {
   pname = "searxng";
-  version = "unstable-2023-07-19";
+  version = "unstable-2023-10-01";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "a446dea1bb492eac417de9a900fae7cdf94aeec0";
-    sha256 = "sha256-iZDaKCkDlp3O3IixWdXVykNRIxas+irG0dWAOU4wycI=";
+    rev = "d56b31d67473e0970bc457469b0cbec2e35f8b10";
+    hash = "sha256-/lMjL2dl7UVYRjafFKmV3XsIH6QehUWCozCuBuxFgpQ=";
   };
 
   postPatch = ''
@@ -73,6 +73,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/searxng/searxng";
     description = "A fork of Searx, a privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 _999eagle ];
   };
-}
+})
