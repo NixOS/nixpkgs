@@ -1,4 +1,7 @@
 { stdenv, symlinkJoin, lib, makeWrapper
+, bundlerEnv
+, ruby
+, nodejs
 , writeText
 , nodePackages
 , python3
@@ -15,12 +18,14 @@ neovim-unwrapped:
 let
   wrapper = {
       extraName ? ""
-    # should contain all args but the binary. Can be either a string or list
+    # passed as args but the binary. Can be either a string or list
     , wrapperArgs ? []
     # a limited RC script used only to generate the manifest for remote plugins
     , manifestRc ? null
     , withPython2 ? false
-    , withPython3 ? true,  python3Env ? python3
+    , withPython3 ? true
+    # TODO deprecate
+    , python3Env ? python3
     , withNodeJs ? false
     , withPerl ? false
     , rubyEnv ? null
@@ -33,8 +38,8 @@ let
     # (e.g., in ~/.config/init.vim or project/.nvimrc)
     , wrapRc ? true
     , neovimRcContent ? ""
-    # entry to load in packpath
-    # , packpathDirs
+    /* the function you would have passed to lua.withPackages */
+    , extraLuaPackages ? (_: [])
 
     , plugins ? []
 
@@ -76,18 +81,6 @@ let
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-    # "--add-flags" (lib.escapeShellArgs flags)
-    # wrapper args used both when generating the manifest and in the final neovim executable
-    commonWrapperArgs =
-      # vim accepts a limited number of commands so we join them all
-          [
-            "--add-flags" ''--cmd "lua ${finalAttrs.providerLuaRc}"''
-            # (lib.intersperse "|" hostProviderViml)
-          ] ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
-            "--add-flags" ''--cmd "set packpath^=${vimUtils.packDir packpathDirs}"''
-            "--add-flags" ''--cmd "set rtp^=${vimUtils.packDir packpathDirs}"''
-          ]
-          ;
     # If configure != {}, we can't generate the rplugin.vim file with e.g
     # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
     # the wrapper. That's why only when configure != {} (tested both here and
@@ -102,10 +95,39 @@ let
       ;
 
     perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
-  in
-  assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
 
-  stdenv.mkDerivation (finalAttrs: {
+    # finalAttrs.
+    luaEnv = neovim-unwrapped.lua.withPackages(extraLuaPackages);
+
+    ## Here we calculate all of the arguments to the 1st call of `makeWrapper`
+    # We start with the executable itself NOTE we call this variable "initial"
+    # because if configure != {} we need to call makeWrapper twice, in order to
+    # avoid double wrapping, see comment near finalMakeWrapperArgs
+    generatedWrapperArgs =
+        let
+          binPath = lib.makeBinPath (lib.optionals finalAttrs.withRuby [ rubyEnv ]
+            ++ lib.optionals finalAttrs.withNodeJs [ nodejs ]);
+  in
+        [
+          "--inherit-argv0"
+        ] ++ lib.optionals finalAttrs.withRuby [
+          "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+        ] ++ lib.optionals (binPath != "") [
+          "--suffix" "PATH" ":" binPath
+        ] ++ lib.optionals (luaEnv != null) [
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
+        ]
+        ;
+
+    commonWrapperArgs = generatedWrapperArgs
+          ++ lib.optionals (packpathDirs.myNeovimPackages.start != [] || packpathDirs.myNeovimPackages.opt != []) [
+            "--add-flags" ''--cmd "set packpath^=${vimUtils.packDir packpathDirs}"''
+            "--add-flags" ''--cmd "set rtp^=${vimUtils.packDir packpathDirs}"''
+          ]
+          ;
+
+    in {
       name = "neovim-${lib.getVersion neovim-unwrapped}${extraName}";
 
       inherit plugins;
