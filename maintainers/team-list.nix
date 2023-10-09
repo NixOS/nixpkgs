@@ -275,7 +275,7 @@ with lib.maintainers; {
   flyingcircus = {
     # Verify additions by approval of an already existing member of the team.
     members = [
-      ctheune
+      theuni
       dpausp
       leona
     ];
