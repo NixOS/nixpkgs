@@ -65,7 +65,6 @@ buildPythonApplication rec {
     colorama
     configargparse
     cyclonedx-python-lib
-    deep_merge
     docker
     dockerfile-parse
     dpath
