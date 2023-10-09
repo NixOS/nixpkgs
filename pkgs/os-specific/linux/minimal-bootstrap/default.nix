@@ -52,18 +52,18 @@ lib.makeScope
         gnutar = gnutar-musl;
       };
 
-    coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
-    coreutils-musl = callPackage ./coreutils/musl.nix {
-      bash = bash_2_05;
-      tinycc = tinycc-musl;
-      gnumake = gnumake-musl;
-      gnutar = gnutar-musl;
-    };
-    coreutils-static = callPackage ./coreutils/static.nix {
-      gcc = gcc-latest;
-      gnumake = gnumake-musl;
-      gnutar = gnutar-latest;
-    };
+      coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
+      coreutils-musl = callPackage ./coreutils/musl.nix {
+        bash = bash_2_05;
+        tinycc = tinycc-musl;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-musl;
+      };
+      coreutils-static = callPackage ./coreutils/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
 
       diffutils = callPackage ./diffutils {
         bash = bash_2_05;
@@ -155,17 +155,23 @@ lib.makeScope
         gnused = gnused-mes;
       };
 
+      # FIXME: better package naming scheme
+      gnutar-latest = callPackage ./gnutar/latest.nix {
+        gcc = gcc46;
+        gnumake = gnumake-musl;
+        gnutarBoot = gnutar-musl;
+      };
+
       gnutar-musl = callPackage ./gnutar/musl.nix {
         bash = bash_2_05;
         tinycc = tinycc-musl;
         gnused = gnused-mes;
       };
 
-      # FIXME: better package naming scheme
-      gnutar-latest = callPackage ./gnutar/latest.nix {
-        gcc = gcc46;
+      gnutar-static = callPackage ./gnutar/static.nix {
+        gcc = gcc-latest;
         gnumake = gnumake-musl;
-        gnutarBoot = gnutar-musl;
+        gnutarBoot = gnutar-latest;
       };
 
       gzip = callPackage ./gzip {
@@ -239,34 +245,36 @@ lib.makeScope
 
       inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
 
-    test = kaem.runCommand "minimal-bootstrap-test" {} ''
-      echo ${bash.tests.get-version}
-      echo ${bash_2_05.tests.get-version}
-      echo ${binutils.tests.get-version}
-      echo ${bzip2.tests.get-version}
-      echo ${coreutils-musl.tests.get-version}
-      echo ${coreutils-static.tests.get-version}
-      echo ${diffutils.tests.get-version}
-      echo ${findutils.tests.get-version}
-      echo ${gawk-mes.tests.get-version}
-      echo ${gawk.tests.get-version}
-      echo ${gcc46.tests.get-version}
-      echo ${gcc46-cxx.tests.hello-world}
-      echo ${gcc8.tests.hello-world}
-      echo ${gcc-latest.tests.hello-world}
-      echo ${gnugrep.tests.get-version}
-      echo ${gnused.tests.get-version}
-      echo ${gnused-mes.tests.get-version}
-      echo ${gnutar.tests.get-version}
-      echo ${gnutar-musl.tests.get-version}
-      echo ${gnutar-latest.tests.get-version}
-      echo ${gzip.tests.get-version}
-      echo ${heirloom.tests.get-version}
-      echo ${mes.compiler.tests.get-version}
-      echo ${musl.tests.hello-world}
-      echo ${tinycc-mes.compiler.tests.chain}
-      echo ${tinycc-musl.compiler.tests.hello-world}
-      echo ${xz.tests.get-version}
-      mkdir ''${out}
-    '';
-  })
+      test = kaem.runCommand "minimal-bootstrap-test" { } ''
+        echo ${bash.tests.get-version}
+        echo ${bash_2_05.tests.get-version}
+        echo ${binutils.tests.get-version}
+        echo ${bzip2.tests.get-version}
+        echo ${coreutils-musl.tests.get-version}
+        echo ${coreutils-static.tests.get-version}
+        echo ${diffutils.tests.get-version}
+        echo ${findutils.tests.get-version}
+        echo ${gawk-mes.tests.get-version}
+        echo ${gawk.tests.get-version}
+        echo ${gcc46.tests.get-version}
+        echo ${gcc46-cxx.tests.hello-world}
+        echo ${gcc8.tests.hello-world}
+        echo ${gcc-latest.tests.hello-world}
+        echo ${gnugrep.tests.get-version}
+        echo ${gnused.tests.get-version}
+        echo ${gnused-mes.tests.get-version}
+        echo ${gnutar.tests.get-version}
+        echo ${gnutar-latest.tests.get-version}
+        echo ${gnutar-musl.tests.get-version}
+        echo ${gnutar-static.tests.get-version}
+        echo ${gzip.tests.get-version}
+        echo ${heirloom.tests.get-version}
+        echo ${mes.compiler.tests.get-version}
+        echo ${musl.tests.hello-world}
+        echo ${tinycc-mes.compiler.tests.chain}
+        echo ${tinycc-musl.compiler.tests.hello-world}
+        echo ${xz.tests.get-version}
+        mkdir ''${out}
+      '';
+    }
+  )
