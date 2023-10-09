@@ -4,20 +4,26 @@
   hostPlatform,
   fetchurl,
   bash,
-  tinycc,
+  gcc,
+  musl,
+  binutils,
   gnumake,
   gnused,
   gnugrep,
+  gawk,
+  diffutils,
+  findutils,
+  gnutarBoot,
+  gzip,
 }:
 let
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "gnutar";
-  # >= 1.13 is incompatible with mes-libc
-  version = "1.12";
+  pname = "gnutar-static";
+  version = "1.35";
 
   src = fetchurl {
     url = "mirror://gnu/tar/tar-${version}.tar.gz";
-    sha256 = "02m6gajm647n8l9a5bnld6fnbgdpyi4i3i83p7xcwv0kif47xhy6";
+    hash = "sha256-FNVeMgY+qVJuBX+/Nfyr1TN452l4fv95GcN1WwLStX4=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -25,10 +31,17 @@ bash.runCommand "${pname}-${version}"
     inherit pname version meta;
 
     nativeBuildInputs = [
-      tinycc.compiler
+      gcc
+      musl
+      binutils
       gnumake
       gnused
       gnugrep
+      gawk
+      diffutils
+      findutils
+      gnutarBoot
+      gzip
     ];
 
     passthru.tests.get-version =
@@ -40,22 +53,20 @@ bash.runCommand "${pname}-${version}"
   }
   ''
     # Unpack
-    ungz --file ${src} --output tar.tar
-    untar --file tar.tar
-    rm tar.tar
+    tar xzf ${src}
     cd tar-${version}
 
-      # Configure
-      export CC="tcc -B ${tinycc.libs}/lib"
-      bash ./configure \
-        --build=${buildPlatform.config} \
-        --host=${hostPlatform.config} \
-        --disable-nls \
-        --prefix=$out
+    # Configure
+    bash ./configure \
+      --prefix=$out \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      CC=musl-gcc \
+      CFLAGS=-static
 
-      # Build
-      make AR="tcc -ar"
+    # Build
+    make -j $NIX_BUILD_CORES
 
-      # Install
-      make install
+    # Install
+    make -j $NIX_BUILD_CORES install
   ''

@@ -12,6 +12,7 @@
 let
   # gnutar with musl preserves modify times, allowing make to not try
   # rebuilding pregenerated files
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnutar-musl";
   version = "1.12";
 
@@ -22,7 +23,7 @@ let
 in
 bash.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -37,15 +38,6 @@ bash.runCommand "${pname}-${version}"
         ${result}/bin/tar --version
         mkdir $out
       '';
-
-    meta = with lib; {
-      description = "GNU implementation of the `tar' archiver";
-      homepage = "https://www.gnu.org/software/tar";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "tar";
-      platforms = platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -54,21 +46,21 @@ bash.runCommand "${pname}-${version}"
     rm tar.tar
     cd tar-${version}
 
-    # Configure
-    export CC="tcc -B ${tinycc.libs}/lib"
-    export LD=tcc
-    export ac_cv_sizeof_unsigned_long=4
-    export ac_cv_sizeof_long_long=8
-    export ac_cv_header_netdb_h=no
-    bash ./configure \
-      --prefix=$out \
-      --build=${buildPlatform.config} \
-      --host=${hostPlatform.config} \
-      --disable-nls
+      # Configure
+      export CC="tcc -B ${tinycc.libs}/lib"
+      export LD=tcc
+      export ac_cv_sizeof_unsigned_long=4
+      export ac_cv_sizeof_long_long=8
+      export ac_cv_header_netdb_h=no
+      bash ./configure \
+        --prefix=$out \
+        --build=${buildPlatform.config} \
+        --host=${hostPlatform.config} \
+        --disable-nls
 
-    # Build
-    make AR="tcc -ar"
+      # Build
+      make AR="tcc -ar"
 
-    # Install
-    make install
+      # Install
+      make install
   ''
