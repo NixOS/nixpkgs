@@ -15,6 +15,6 @@
   };
   varnish74Packages = rec {
     varnish = varnish74;
-    modules = (callPackages ./modules.nix { inherit varnish; }).modules22;
+    modules = (callPackages ./modules.nix { inherit varnish; }).modules23;
   };
 }
