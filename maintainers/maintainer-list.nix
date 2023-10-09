@@ -829,6 +829,12 @@
     githubId = 5892756;
     name = "Alec Snyder";
   };
+  allusive = {
+    email = "jasper@allusive.dev";
+    name = "Allusive";
+    github = "allusive-dev";
+    githubId = 99632976;
+  };
   almac = {
     email = "alma.cemerlic@gmail.com";
     github = "a1mac";
@@ -19091,7 +19097,7 @@
     ];
   };
   yayayayaka = {
-    email = "nixpkgs@uwu.is";
+    email = "github@uwu.is";
     matrix = "@yaya:uwu.is";
     github = "yayayayaka";
     githubId = 73759599;
