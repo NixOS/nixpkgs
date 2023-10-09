@@ -3956,7 +3956,7 @@
   };
   davidarmstronglewis = {
     email = "davidlewis@mac.com";
-    github = "davidarmstronglewis";
+    github = "oceanlewis";
     githubId = 6754950;
     name = "David Armstrong Lewis";
   };
@@ -15094,15 +15094,6 @@
     }];
     name = "Rahul Butani";
   };
-  rs0vere = {
-    email = "rs0vere@proton.me";
-    github = "rs0vere";
-    githubId = 140035635;
-    keys = [{
-      fingerprint = "C6D8 B5C2 FA79 901B DCCF  95E1 FEC4 5C5A ED00 C58D";
-    }];
-    name = "Red Star Over Earth";
-  };
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
@@ -15358,7 +15349,7 @@
   };
   SamirTalwar = {
     email = "lazy.git@functional.computer";
-    github = "SamirTalwar";
+    github = "abstracte";
     githubId = 47852;
     name = "Samir Talwar";
   };
@@ -17760,12 +17751,6 @@
     github = "travisbhartwell";
     githubId = 10110;
     name = "Travis B. Hartwell";
-  };
-  travisdavis-ops = {
-    email = "travisdavismedia@gmail.com";
-    github = "TravisDavis-ops";
-    githubId = 52011418;
-    name = "Travis Davis";
   };
   traxys = {
     email = "quentin+dev@familleboyer.net";
