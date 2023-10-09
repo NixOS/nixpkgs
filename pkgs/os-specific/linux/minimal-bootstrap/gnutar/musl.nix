@@ -11,6 +11,7 @@
 let
   # gnutar with musl preserves modify times, allowing make to not try
   # rebuilding pregenerated files
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnutar-musl";
   version = "1.12";
 
@@ -20,7 +21,7 @@ let
   };
 in
 bash.runCommand "${pname}-${version}" {
-  inherit pname version;
+  inherit pname version meta;
 
   nativeBuildInputs = [
     tinycc.compiler
@@ -34,15 +35,6 @@ bash.runCommand "${pname}-${version}" {
       ${result}/bin/tar --version
       mkdir $out
     '';
-
-  meta = with lib; {
-    description = "GNU implementation of the `tar' archiver";
-    homepage = "https://www.gnu.org/software/tar";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    mainProgram = "tar";
-    platforms = platforms.unix;
-  };
 } ''
   # Unpack
   ungz --file ${src} --output tar.tar

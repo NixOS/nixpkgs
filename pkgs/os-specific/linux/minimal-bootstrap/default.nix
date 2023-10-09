@@ -141,17 +141,23 @@ lib.makeScope
       gnused = gnused-mes;
     };
 
+    # FIXME: better package naming scheme
+    gnutar-latest = callPackage ./gnutar/latest.nix {
+      gcc = gcc46;
+      gnumake = gnumake-musl;
+      gnutarBoot = gnutar-musl;
+    };
+
     gnutar-musl = callPackage ./gnutar/musl.nix {
       bash = bash_2_05;
       tinycc = tinycc-musl;
       gnused = gnused-mes;
     };
 
-    # FIXME: better package naming scheme
-    gnutar-latest = callPackage ./gnutar/latest.nix {
-      gcc = gcc46;
+    gnutar-static = callPackage ./gnutar/static.nix {
+      gcc = gcc-latest;
       gnumake = gnumake-musl;
-      gnutarBoot = gnutar-musl;
+      gnutarBoot = gnutar-latest;
     };
 
     gzip = callPackage ./gzip {
@@ -224,8 +230,9 @@ lib.makeScope
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
       echo ${gnutar.tests.get-version}
-      echo ${gnutar-musl.tests.get-version}
       echo ${gnutar-latest.tests.get-version}
+      echo ${gnutar-musl.tests.get-version}
+      echo ${gnutar-static.tests.get-version}
       echo ${gzip.tests.get-version}
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
