@@ -25,13 +25,19 @@ let
 
   pname = "wire-desktop";
 
-  version = {
+  version = let
     x86_64-darwin = "3.32.4589";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
     x86_64-linux = "3.32.3079";
   }.${system} or throwSystem;
 
-  hash = {
+  hash = let
     x86_64-darwin = "sha256-PDAZCnkgzlausdtwycK+PHfp+zmL33VnX6RzCsgBTZ4=";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
     x86_64-linux = "sha256-+4aRis141ctI50BtBwipoVtPoMGRs82ENqZ+y2ZlL58=";
   }.${system} or throwSystem;
 
@@ -57,8 +63,7 @@ let
       kiwi
       toonn
     ];
-    platforms = [
-      "x86_64-darwin"
+    platforms = platforms.darwin ++ [
       "x86_64-linux"
     ];
   };
