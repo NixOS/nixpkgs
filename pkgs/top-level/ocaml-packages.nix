@@ -40,6 +40,8 @@ let
 
     arp = callPackage ../development/ocaml-modules/arp { };
 
+    asai = callPackage ../development/ocaml-modules/asai { };
+
     asetmap = callPackage ../development/ocaml-modules/asetmap { };
 
     asn1-combinators = callPackage ../development/ocaml-modules/asn1-combinators { };
