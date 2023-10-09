@@ -1,32 +1,40 @@
 { lib
 , fetchurl
 , bash
+, gcc
+, musl
+, binutils
+, gnumake
+, gnused
+, gnugrep
+, gawk
+, diffutils
+, findutils
 , gnutar
 , xz
 }:
 let
-  # WARNING: You probably don't want to use this package outside minimal-bootstrap
-  #
-  # We need some set of Linux kernel headers to build our bootstrap packages
-  # (gcc/binutils/glibc etc.) against. As long as it compiles it is "good enough".
-  # Therefore the requirement for correctness, completeness, platform-specific
-  # features, and being up-to-date, are very loose.
-  #
-  # Rebuilding the Linux headers from source correctly is something we can defer
-  # till we have access to gcc/binutils/perl. For now we can use Guix's assembled
-  # kernel header distribution and assume it's good enough.
   pname = "linux-headers";
-  version = "4.14.67";
+  version = "6.5.6";
 
   src = fetchurl {
-    url = "mirror://gnu/gnu/guix/bootstrap/i686-linux/20190815/linux-libre-headers-stripped-4.14.67-i686-linux.tar.xz";
-    sha256 = "0sm2z9x4wk45bh6qfs94p0w1d6hsy6dqx9sw38qsqbvxwa1qzk8s";
+    url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
+    hash = "sha256-eONtQhRUcFHCTfIUD0zglCjWxRWtmnGziyjoCUqV0vY=";
   };
 in
 bash.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
+    gcc
+    musl
+    binutils
+    gnumake
+    gnused
+    gnugrep
+    gawk
+    diffutils
+    findutils
     gnutar
     xz
   ];
@@ -35,15 +43,18 @@ bash.runCommand "${pname}-${version}" {
     description = "Header files and scripts for Linux kernel";
     license = licenses.gpl2;
     maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" ];
   };
 } ''
   # Unpack
-  cp ${src} linux-headers.tar.xz
-  unxz linux-headers.tar.xz
-  tar xf linux-headers.tar
+  tar xf ${src}
+  cd linux-${version}
+
+  # Build
+  make -j $NIX_BUILD_CORES CC=musl-gcc HOSTCC=musl-gcc ARCH=x86 headers
 
   # Install
-  mkdir $out
-  cp -r include $out
+  find usr/include -name '.*' -exec rm {} +
+  mkdir -p $out
+  cp -rv usr/include $out/
 ''
