@@ -2,6 +2,10 @@
 , buildGoModule
 , fetchFromGitHub
 , go
+, nix-update-script
+, nixosTests
+, testers
+, thanos
 }:
 
 buildGoModule rec {
@@ -29,6 +33,17 @@ buildGoModule rec {
     "-X ${t}.BuildDate=unknown"
     "-X ${t}.GoVersion=${lib.getVersion go}"
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) prometheus;
+      version = testers.testVersion {
+        command = "thanos --version";
+        package = thanos;
+      };
+    };
+  };
 
   meta = with lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";
