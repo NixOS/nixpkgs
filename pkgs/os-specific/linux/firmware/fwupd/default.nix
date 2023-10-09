@@ -18,8 +18,6 @@
 , curl
 , libjcat
 , elfutils
-, libsmbios
-, efivar
 , valgrind
 , meson
 , libuuid
@@ -194,7 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
     bash-completion
     pango
     tpm2-tss
-    efivar
     fwupd-efi
     protobufc
     modemmanager
@@ -202,8 +199,6 @@ stdenv.mkDerivation (finalAttrs: {
     libcbor
     libqmi
     xz # for liblzma
-  ] ++ lib.optionals haveDell [
-    libsmbios
   ] ++ lib.optionals haveFlashrom [
     flashrom
   ];
