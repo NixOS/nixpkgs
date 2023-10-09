@@ -30,7 +30,7 @@ let
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont = set:
     let superBuildNpmPackage = buildNpmPackage; in
-    (iosevka.override rec {
+    (iosevka.override {
       inherit set privateBuildPlan;
       buildNpmPackage = args: superBuildNpmPackage
         (args // {
