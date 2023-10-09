@@ -216,6 +216,12 @@ lib.makeScope
         gnumake = gnumake-musl;
       };
 
+      python = callPackage ./python {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
+
       stage0-posix = callPackage ./stage0-posix { };
 
       inherit (self.stage0-posix)
@@ -284,6 +290,7 @@ lib.makeScope
         echo ${heirloom.tests.get-version}
         echo ${mes.compiler.tests.get-version}
         echo ${musl.tests.hello-world}
+        echo ${python.tests.get-version}
         echo ${tinycc-mes.compiler.tests.chain}
         echo ${tinycc-musl.compiler.tests.hello-world}
         echo ${xz.tests.get-version}
