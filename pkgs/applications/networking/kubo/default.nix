@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchurl, nixosTests, openssl, pkg-config }:
+{ lib
+, buildGoModule
+, fetchurl
+, nixosTests
+}:
 
 buildGoModule rec {
   pname = "kubo";
@@ -7,7 +11,7 @@ buildGoModule rec {
 
   passthru.repoVersion = "14"; # Also update kubo-migrator when changing the repo version
 
-  # Kubo makes changes to it's source tarball that don't match the git source.
+  # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
     hash = "sha256-TX5ZM8Kyj3LZ12Ro7MsHRd+P5XLk/mU7DUxZaopSEV0=";
