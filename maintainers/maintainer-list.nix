@@ -6424,6 +6424,10 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+  gm6k = {
+    email = "nix@quidecco.pl";
+    name = "Isidor Zeuner";
+  };
   gmemstr = {
     email = "git@gmem.ca";
     github = "gmemstr";
