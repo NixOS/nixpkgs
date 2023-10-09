@@ -4,7 +4,6 @@
 , poetry-core
 , pytest
 , pythonOlder
-, setuptoolsBuildHook
 }:
 
 buildPythonPackage rec {

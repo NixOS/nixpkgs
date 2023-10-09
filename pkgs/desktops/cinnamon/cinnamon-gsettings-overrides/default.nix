@@ -1,10 +1,8 @@
 { lib
 , runCommand
-, nixos-artwork
 , glib
 , gnome
 , gtk3
-, gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
 , extraGSettingsOverridePackages ? [ ]
 , mint-artwork

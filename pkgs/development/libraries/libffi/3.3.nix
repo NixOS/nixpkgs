@@ -1,5 +1,4 @@
 { lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
 
 , doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
 , dejagnu

@@ -1,8 +1,6 @@
 { lib, stdenv
 , buildNpmPackage
 , fetchFromGitHub
-, fetchurl
-, unzip
 , dotnetCorePackages
 , buildDotnetModule
 , mono

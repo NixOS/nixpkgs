@@ -12,7 +12,6 @@
 , csscompressor
 , calmjs
 , jinja2
-, python
 }:
 
 buildPythonPackage rec {

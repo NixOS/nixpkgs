@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
-, pythonAtLeast
 , pythonOlder
 , idna
 , multidict

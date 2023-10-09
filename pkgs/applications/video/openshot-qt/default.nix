@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivationWith
 , fetchFromGitHub
-, fetchpatch
 , doxygen
 , gtk3
 , libopenshot

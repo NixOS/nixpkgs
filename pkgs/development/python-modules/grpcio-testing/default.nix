@@ -4,7 +4,6 @@
 , grpcio
 , protobuf
 , pythonOlder
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {

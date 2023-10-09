@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, callPackage
 , fetchurl
 , fetchFromGitHub
 , fetchYarnDeps

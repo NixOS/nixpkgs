@@ -11,7 +11,6 @@
 , gnutar
 
 # native
-, libsoxr
 
 # tests
 , pytestCheckHook

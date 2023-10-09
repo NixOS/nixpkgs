@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , setuptools
 , pytestCheckHook
-, pytest-asyncio
 , colorlog
 , smpp_pdu
 , pyscard

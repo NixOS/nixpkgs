@@ -31,7 +31,6 @@
 , pythonOlder
 , requests
 , ruamel-yaml
-, stdenv
 , toml
 , typogrify
 , unidecode

@@ -2,7 +2,6 @@
 , buildGoModule
 , fetchFromGitHub
 , git
-, stdenv
 , testers
 , crc
 , runtimeShell

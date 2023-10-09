@@ -2,7 +2,6 @@
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
-, pytestCheckHook
 , pythonOlder
 }:
 

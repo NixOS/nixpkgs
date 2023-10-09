@@ -5,7 +5,6 @@
 , fetchPypi
 , pythonOlder
 , requests
-, urllib3
 }:
 
 buildPythonPackage rec {

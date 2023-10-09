@@ -12,7 +12,6 @@
 , importlib-metadata
 , substituteAll
 , runCommand
-, fetchpatch
 
 , config
 

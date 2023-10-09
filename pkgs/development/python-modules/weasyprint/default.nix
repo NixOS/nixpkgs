@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , buildPythonPackage
-, cairosvg
 , cffi
 , cssselect2
 , fetchPypi

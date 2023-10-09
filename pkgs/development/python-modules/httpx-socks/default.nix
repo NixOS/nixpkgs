@@ -1,7 +1,6 @@
 { lib
 , async-timeout
 , buildPythonPackage
-, curio
 , fetchFromGitHub
 , flask
 , httpcore
@@ -13,7 +12,6 @@
 , python-socks
 , pythonOlder
 , setuptools
-, sniffio
 , starlette
 , tiny-proxy
 , trio

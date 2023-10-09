@@ -19,13 +19,6 @@
 , findutils
 , ccze
 , ncurses
-, python3
-, wget
-, libcaca
-, newsboat
-, rsstail
-, w3m
-, ticker
 , tmux
 }:
 

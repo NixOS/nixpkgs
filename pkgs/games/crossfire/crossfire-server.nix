@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchsvn
-, autoreconfHook
 , autoconf
 , automake
 , libtool
@@ -10,7 +9,6 @@
 , check
 , pkg-config
 , python39 # crossfire-server relies on a parser wich was removed in python >3.9
-, version
 , rev
 , sha256
 , maps

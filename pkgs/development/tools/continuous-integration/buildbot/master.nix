@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, buildPythonPackage
 , buildPythonApplication
 , fetchPypi
 , makeWrapper
@@ -33,7 +32,6 @@
 , openssh
 , glibcLocales
 , nixosTests
-, callPackage
 }:
 
 let

@@ -6,7 +6,6 @@
 , pythonOlder
 , openssl
 , perl
-, pkgs
 }:
 
 buildPythonPackage rec {

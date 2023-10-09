@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, typing-extensions
 }:
 
 buildPythonPackage rec {

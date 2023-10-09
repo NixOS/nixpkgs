@@ -3,7 +3,6 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
-, isPy27
 , mock
 , pyparsing
 , pytest-forked

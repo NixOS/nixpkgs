@@ -1,10 +1,8 @@
 { lib
-, stdenv
 , buildGoModule
 , buildGo121Module
 , fetchFromGitHub
 , fetchFromGitLab
-, callPackage
 , config
 , writeShellScript
 

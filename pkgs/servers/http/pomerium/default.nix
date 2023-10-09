@@ -1,6 +1,5 @@
 { buildGoModule
 , fetchFromGitHub
-, callPackage
 , lib
 , envoy
 , mkYarnPackage

@@ -1,7 +1,6 @@
 { lib
 , llvmPackages
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , ninja
 , python3
@@ -14,7 +13,6 @@
 # currently for BLAKE3 hash function
 , rustSupport ? true
 
-, corrosion
 , rustc
 , cargo
 , rustPlatform

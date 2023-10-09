@@ -2,12 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
-, black
-, codespell
-, isort
-, mypy
-, pre-commit
-, pygobject3
 }:
 
 buildPythonPackage rec {

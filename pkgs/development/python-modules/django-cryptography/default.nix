@@ -3,7 +3,6 @@
 , django
 , django-appconf
 , fetchFromGitHub
-, fetchpatch
 , lib
 , python
 , pythonOlder

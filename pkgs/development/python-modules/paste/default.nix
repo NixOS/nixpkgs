@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , setuptools
 , six

@@ -9,7 +9,6 @@
 , mock
 , pyasn1
 , pynacl
-, pytest-relaxed
 , pytestCheckHook
 , six
 }:

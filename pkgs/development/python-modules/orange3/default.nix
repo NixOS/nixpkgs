@@ -6,7 +6,6 @@
 , copyDesktopItems
 , cython
 , fetchFromGitHub
-, fetchurl
 , httpx
 , joblib
 , keyring

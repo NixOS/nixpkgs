@@ -13,7 +13,6 @@
 , boost
 , python3
 , readline
-, autoPatchelfHook
 , withPython ? false
 , withMpi ? false
 }:

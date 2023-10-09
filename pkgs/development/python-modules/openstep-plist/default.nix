@@ -4,7 +4,6 @@
 , setuptools-scm
 , pytestCheckHook
 , cython
-, pythonImportsCheckHook
 }:
 
 buildPythonPackage rec {

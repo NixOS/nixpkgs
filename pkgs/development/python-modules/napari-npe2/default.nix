@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , magicgui
 , napari # reverse dependency, for tests
-, psygnal
 , pydantic
 , pythonOlder
 , pytomlpp

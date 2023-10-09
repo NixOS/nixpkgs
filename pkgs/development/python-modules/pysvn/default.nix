@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchurl
-, isPy3k
 , python
 , apr
 , aprutil

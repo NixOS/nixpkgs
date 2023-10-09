@@ -4,8 +4,6 @@
 , fetchFromGitHub
 , rustPlatform
 , writeText
-, clang
-, llvmPackages
 
 , runtimeShell
 , writeScript

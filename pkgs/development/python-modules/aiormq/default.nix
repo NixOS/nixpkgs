@@ -8,7 +8,6 @@
 , yarl
 , setuptools
 , poetry-core
-, aiomisc
 }:
 
 buildPythonPackage rec {

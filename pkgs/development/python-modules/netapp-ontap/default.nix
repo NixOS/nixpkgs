@@ -3,7 +3,6 @@
 , fetchPypi
 , cliche
 , marshmallow
-, pytestCheckHook
 , recline
 , requests
 , requests-toolbelt

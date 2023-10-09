@@ -1,13 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pkgs
 , setuptools
 , aiofiles
 , click
-, coverage
 , tomli
-, pytest
 , pytest-mock
 , pytest-asyncio
 , pytestCheckHook

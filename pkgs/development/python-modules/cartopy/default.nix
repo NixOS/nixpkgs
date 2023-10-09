@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, fetchpatch
 , cython
 , setuptools-scm
 , geos

@@ -3,7 +3,6 @@
 , cython_3
 , fetchFromGitHub
 , msgpack
-, poetry-core
 , pytestCheckHook
 , pythonOlder
 , pyyaml

@@ -1,5 +1,4 @@
 { lib
-, fetchpatch
 , writeScript
 , buildPythonApplication
 , fetchFromGitHub

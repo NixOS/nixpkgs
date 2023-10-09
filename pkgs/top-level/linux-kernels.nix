@@ -3,7 +3,6 @@
 , config
 , buildPackages
 , callPackage
-, makeOverridable
 , recurseIntoAttrs
 , dontRecurseIntoAttrs
 , stdenv

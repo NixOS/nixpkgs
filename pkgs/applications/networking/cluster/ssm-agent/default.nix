@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , coreutils
 , nettools
-, busybox
 , util-linux
 , stdenv
 , dmidecode

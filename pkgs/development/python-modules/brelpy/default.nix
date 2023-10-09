@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pycryptodome
-, pygithub
 , pythonOlder
 }:
 

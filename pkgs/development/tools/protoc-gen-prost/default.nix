@@ -1,7 +1,6 @@
 { fetchCrate
 , lib
 , rustPlatform
-, protobuf
 }:
 
 rustPlatform.buildRustPackage rec {

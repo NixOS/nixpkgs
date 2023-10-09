@@ -5,7 +5,6 @@
 , pythonOlder
 , pytestCheckHook
 , aiohttp
-, aiohttp-cors
 , click
 , colorama
 , hatch-fancy-pypi-readme
@@ -19,7 +18,6 @@
 , platformdirs
 , tokenize-rt
 , tomli
-, typed-ast
 , typing-extensions
 , uvloop
 }:

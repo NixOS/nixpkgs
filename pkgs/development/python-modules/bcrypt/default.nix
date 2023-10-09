@@ -5,7 +5,6 @@
 , rustc
 , setuptools
 , setuptools-rust
-, isPyPy
 , fetchPypi
 , pythonOlder
 , cffi

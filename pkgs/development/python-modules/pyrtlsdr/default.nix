@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , rtl-sdr
 , setuptools
 , pythonOlder

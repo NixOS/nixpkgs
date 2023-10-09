@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, python
 , fetchPypi
 , defusedxml
 , requests

@@ -8,7 +8,6 @@
 , pretend
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
 , pythonOlder
 , simplejson
 , typing-extensions

@@ -1,9 +1,7 @@
 { fetchFromGitHub
-, gitMinimal
 , gfold
 , lib
 , libiconv
-, makeWrapper
 , rustPlatform
 , Security
 , stdenv

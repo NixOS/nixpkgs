@@ -5,8 +5,6 @@
 , fetchPypi
 , lib
 , substituteAll
-, makeFontsConf
-, freefont_ttf
 , pikepdf
 , pytestCheckHook
 , cairo

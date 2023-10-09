@@ -5,7 +5,6 @@
 , pyopenssl
 , pythonOlder
 , requests
-, setuptools
 }:
 
 buildPythonPackage rec {

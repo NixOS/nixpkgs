@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, substituteAll
 , hatchling
 , ipykernel
 , ipython

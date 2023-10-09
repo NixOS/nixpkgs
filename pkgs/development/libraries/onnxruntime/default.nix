@@ -2,8 +2,6 @@
 , lib
 , fetchFromGitHub
 , fetchFromGitLab
-, fetchpatch
-, fetchurl
 , Foundation
 , abseil-cpp
 , cmake

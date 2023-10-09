@@ -20,7 +20,6 @@
 , tornado
 , requests
 , gitpython
-, jupyter-server
 , jupyter-server-mathjax
 , notebook
 , jinja2

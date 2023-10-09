@@ -12,7 +12,6 @@
 , gunicorn
 , lib
 , moto
-, numpy
 , pyramid
 , pytest-asyncio
 , pytestCheckHook

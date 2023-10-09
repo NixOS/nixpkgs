@@ -9,7 +9,6 @@
 , pyparsing
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {

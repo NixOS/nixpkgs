@@ -5,7 +5,6 @@
 , cmake
 , autoPatchelfHook
 , stdenv
-, libxcrypt
 }:
 
 let

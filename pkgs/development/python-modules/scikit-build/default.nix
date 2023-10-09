@@ -14,7 +14,6 @@
 , cmake
 , cython
 , git
-, path
 , pytestCheckHook
 , pytest-mock
 , requests

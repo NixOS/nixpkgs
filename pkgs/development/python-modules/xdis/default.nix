@@ -2,7 +2,6 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
 , pythonAtLeast
 , pythonOlder

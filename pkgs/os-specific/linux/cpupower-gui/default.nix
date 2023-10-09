@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , fetchFromGitHub
 , fetchpatch
 , buildPythonApplication
@@ -18,7 +17,6 @@
 , pkg-config
 , pygobject3
 , pyxdg
-, systemd
 , wrapGAppsHook
 }:
 

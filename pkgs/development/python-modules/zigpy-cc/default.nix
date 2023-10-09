@@ -2,7 +2,6 @@
 , asynctest
 , buildPythonPackage
 , fetchFromGitHub
-, pyserial
 , pyserial-asyncio
 , pytest-asyncio
 , pytestCheckHook

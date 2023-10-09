@@ -2,9 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, hypothesis
-, hypothesmith
-, python
 }:
 
 buildPythonPackage rec {

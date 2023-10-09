@@ -34,7 +34,6 @@
 # tests
 , freezegun
 , pytestCheckHook
-, pytest-xdist
 , sure
 }:
 

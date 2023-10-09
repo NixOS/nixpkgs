@@ -4,7 +4,6 @@
 , caja-extensions
 , caja
 , extensions ? [ caja-extensions ]
-, mateUpdateScript
 }:
 
 stdenv.mkDerivation {

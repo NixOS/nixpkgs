@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, speg
 }:
 
 buildPythonPackage rec {

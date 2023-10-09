@@ -17,7 +17,6 @@
 , pytest-lazy-fixture
 , pkg-config
 , scipy
-, fetchpatch
 , setuptools-scm
 }:
 

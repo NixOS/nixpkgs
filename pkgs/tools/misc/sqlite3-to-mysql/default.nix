@@ -4,7 +4,6 @@
 , nixosTests
 , testers
 , sqlite3-to-mysql
-, fetchPypi
 , mysql80
 }:
 

@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
 , boost
 , autoconf
 , automake

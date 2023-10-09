@@ -1,10 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
-, glibcLocales
 , pythonOlder
-, unittestCheckHook
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, fetchurl
 , clickgen
 , attrs
 }:

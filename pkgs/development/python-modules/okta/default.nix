@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , aenum
 , aiohttp
 , buildPythonPackage

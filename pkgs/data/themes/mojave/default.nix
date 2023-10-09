@@ -1,7 +1,6 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
-, fetchurl
 , glib
 , gnome-shell
 , gtk-engine-murrine

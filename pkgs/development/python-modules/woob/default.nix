@@ -2,7 +2,6 @@
 , babel
 , buildPythonPackage
 , fetchFromGitLab
-, fetchpatch
 , gnupg
 , html2text
 , libyaml

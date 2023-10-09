@@ -2,8 +2,6 @@
 , fetchurl
 , gcc-unwrapped
 , dpkg
-, util-linux
-, bash
 , makeWrapper
 , electron
 }:

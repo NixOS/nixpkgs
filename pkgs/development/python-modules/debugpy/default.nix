@@ -5,7 +5,6 @@
 , pythonAtLeast
 , fetchFromGitHub
 , substituteAll
-, fetchpatch
 , gdb
 , django
 , flask

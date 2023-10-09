@@ -9,7 +9,6 @@
 , orjson
 , packaging
 , pillow
-, poetry-core
 , py
 , pydantic
 , pyjwt

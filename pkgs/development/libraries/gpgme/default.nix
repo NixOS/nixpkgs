@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , libgpg-error
 , gnupg
@@ -9,7 +8,6 @@
 , glib
 , pth
 , libassuan
-, file
 , which
 , ncurses
 , texinfo

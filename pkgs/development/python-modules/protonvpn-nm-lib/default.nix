@@ -16,7 +16,6 @@
 , pkgs-systemd
 , python
 , xdg-utils
-, makeWrapper
 }:
 
 buildPythonPackage rec {

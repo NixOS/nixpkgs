@@ -1,5 +1,4 @@
 { stdenv
-, config
 , callPackages
 , lib
 , pkgs
@@ -42,7 +41,6 @@
 , uwimap
 , valgrind
 , zlib
-, fetchpatch
 }:
 
 lib.makeScope pkgs.newScope (self: with self; {

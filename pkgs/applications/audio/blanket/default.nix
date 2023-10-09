@@ -5,7 +5,6 @@
 , pkg-config
 , wrapGAppsHook4
 , desktop-file-utils
-, appstream-glib
 , python3Packages
 , glib
 , gtk4

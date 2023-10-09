@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, nix-gitignore
 }:
 
 rustPlatform.buildRustPackage rec {

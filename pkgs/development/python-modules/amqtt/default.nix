@@ -2,7 +2,6 @@
 , buildPythonPackage
 , docopt
 , fetchFromGitHub
-, fetchpatch
 , hypothesis
 , passlib
 , poetry-core

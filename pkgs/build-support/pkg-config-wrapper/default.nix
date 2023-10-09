@@ -3,7 +3,6 @@
 
 { stdenvNoCC
 , lib
-, buildPackages
 , pkg-config
 , baseBinName ? "pkg-config"
 , propagateDoc ? pkg-config != null && pkg-config ? man

@@ -9,7 +9,6 @@
 , pythonOlder
 , textual
 , typer
-, typing-extensions
 }:
 
 buildPythonPackage rec {

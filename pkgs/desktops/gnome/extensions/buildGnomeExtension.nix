@@ -6,7 +6,6 @@ let
     # Every gnome extension has a UUID. It's the name of the extension folder once unpacked
     # and can always be found in the metadata.json of every extension.
     uuid,
-    name,
     pname,
     description,
     # extensions.gnome.org extension URL

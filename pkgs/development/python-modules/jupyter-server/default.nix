@@ -5,12 +5,10 @@
 , pythonOlder
 , hatch-jupyter-builder
 , hatchling
-, pandoc
 , pytestCheckHook
 , pytest-console-scripts
 , pytest-jupyter
 , pytest-timeout
-, pytest-tornasync
 , argon2-cffi
 , jinja2
 , tornado

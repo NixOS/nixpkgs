@@ -9,7 +9,6 @@
 , nbformat
 , ndjson
 , numpy
-, opencv
   # , opencv-python
 , packaging
 , pillow
@@ -20,7 +19,6 @@
 , pytestCheckHook
 , pythonOlder
 , pythonRelaxDepsHook
-, rasterio
 , requests
 , shapely
 , tqdm

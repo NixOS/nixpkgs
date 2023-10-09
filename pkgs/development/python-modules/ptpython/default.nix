@@ -5,7 +5,6 @@
 , appdirs
 , black
 , importlib-metadata
-, isPy3k
 , jedi
 , prompt-toolkit
 , pygments

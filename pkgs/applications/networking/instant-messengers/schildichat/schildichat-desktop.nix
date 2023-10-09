@@ -11,9 +11,6 @@
 , nodejs
 , fixup_yarn_lock
 , electron
-, Security
-, AppKit
-, CoreServices
 , sqlcipher
 }:
 

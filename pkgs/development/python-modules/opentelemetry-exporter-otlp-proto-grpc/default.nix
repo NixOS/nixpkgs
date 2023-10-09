@@ -8,7 +8,6 @@
 , opentelemetry-api
 , opentelemetry-test-utils
 , opentelemetry-exporter-otlp-proto-common
-, pytest-grpc
 , pytestCheckHook
 }:
 

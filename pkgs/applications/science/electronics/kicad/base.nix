@@ -43,7 +43,6 @@
 , valgrind
 
 , stable
-, baseName
 , kicadSrc
 , kicadVersion
 , withNgspice

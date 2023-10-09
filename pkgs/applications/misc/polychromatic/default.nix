@@ -1,10 +1,6 @@
 { lib
 , fetchFromGitHub
-, bash
-, glib
-, gdk-pixbuf
 , gettext
-, imagemagick
 , ninja
 , meson
 , sassc

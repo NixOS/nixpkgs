@@ -8,13 +8,11 @@
 , swig
 , ncurses
 , pam
-, libnotify
 , buildPackages
 , coreutils
 , bash
 , gnugrep
 , gnused
-, kmod
 , writeShellScript
 , closureInfo
 , runCommand

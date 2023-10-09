@@ -38,7 +38,6 @@
 , sqlite
 , unbound
 , vimPlugins
-, vimUtils
 , yajl
 , zlib
 , zziplib

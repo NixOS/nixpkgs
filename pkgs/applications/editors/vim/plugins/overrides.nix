@@ -22,10 +22,8 @@
 , dasht
 , deno
 , direnv
-, fish
 , fzf
 , gawk
-, git
 , gnome
 , himalaya
 , htop
@@ -37,10 +35,8 @@
 , nim
 , nodePackages
 , openscad
-, pandoc
 , parinfer-rust
 , phpactor
-, ripgrep
 , skim
 , sqlite
 , statix

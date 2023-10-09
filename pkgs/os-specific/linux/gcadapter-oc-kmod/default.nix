@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , kernel
-, kmod
 }:
 
 let

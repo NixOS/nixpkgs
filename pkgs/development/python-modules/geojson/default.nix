@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, glibcLocales
 , unittestCheckHook
  }:
 

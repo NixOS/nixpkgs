@@ -25,7 +25,6 @@
 , scipy
 , setuptools
 , simpleitk
-, six
 , tifffile
 , wheel
 }:

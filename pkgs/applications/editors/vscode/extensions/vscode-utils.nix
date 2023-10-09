@@ -2,7 +2,6 @@
 let
   buildVscodeExtension = a@{
     name,
-    src,
     # Same as "Unique Identifier" on the extension's web page.
     # For the moment, only serve as unique extension dir.
     vscodeExtPublisher,

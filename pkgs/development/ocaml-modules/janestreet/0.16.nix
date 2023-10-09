@@ -1,6 +1,5 @@
 { self
 , bash
-, fetchpatch
 , fzf
 , lib
 , openssl

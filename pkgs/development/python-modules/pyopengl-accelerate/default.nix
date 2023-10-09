@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, pythonAtLeast
 , fetchPypi
 , cython_3
 , numpy

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {

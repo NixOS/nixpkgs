@@ -1,6 +1,4 @@
 { stdenv
-, meta
-, lib
 , fetchurl
 , mpv
 , graphicsmagick

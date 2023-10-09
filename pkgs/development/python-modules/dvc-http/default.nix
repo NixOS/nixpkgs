@@ -5,7 +5,6 @@
 , dvc-objects
 , fsspec
 , pythonOlder
-, pythonRelaxDepsHook
 , setuptools-scm
 }:
 

@@ -5,7 +5,6 @@
 , protobuf
 , pycryptodomex
 , pyogg
-, pytestCheckHook
 , pythonRelaxDepsHook
 , requests
 , websocket-client

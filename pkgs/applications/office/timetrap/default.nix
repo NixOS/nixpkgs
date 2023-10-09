@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, pkgs
 , bundlerEnv
 , bundlerApp
 , bundlerUpdateScript

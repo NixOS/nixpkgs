@@ -6,7 +6,6 @@
 , clang
 , llvm
 , python3
-, zlib
 , z3
 , stp
 , cryptominisat

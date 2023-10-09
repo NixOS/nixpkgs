@@ -13,7 +13,6 @@
 , opencl-headers
 , platformdirs
 , pybind11
-, pytest
 , pytestCheckHook
 , pytools
 , setuptools

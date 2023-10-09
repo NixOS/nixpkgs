@@ -2,7 +2,6 @@
 , buildPythonPackage
 , cerberus
 , fetchFromGitHub
-, fetchpatch
 , pythonOlder
 , pyyaml
 , ruamel-yaml

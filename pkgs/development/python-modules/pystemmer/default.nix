@@ -1,6 +1,5 @@
 { lib
 , python
-, fetchPypi
 , fetchFromGitHub
 , fetchpatch
 , buildPythonPackage

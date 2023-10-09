@@ -3,17 +3,13 @@
 , callPackage
 , fetchurl
 , jdk
-, cmake
-, gdb
 , zlib
 , python3
 , icu
-, lldb
 , dotnet-sdk_7
 , maven
 , autoPatchelfHook
 , libdbusmenu
-, patchelf
 , openssl
 , expat
 , libxcrypt-legacy

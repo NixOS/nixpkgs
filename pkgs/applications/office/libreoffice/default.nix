@@ -88,7 +88,6 @@
 , glm
 , gst_all_1
 , gdb
-, commonsLogging
 , librdf_rasqal
 , gnome
 , glib

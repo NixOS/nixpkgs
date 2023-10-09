@@ -10,7 +10,6 @@
 , toPythonModule
 , namePrefix
 , update-python-libraries
-, setuptools
 , pypaBuildHook
 , pypaInstallHook
 , pythonCatchConflictsHook

@@ -2,8 +2,6 @@
 , buildPythonPackage
 , django
 , fetchFromGitHub
-, pytest
-, pytest-django
 , pythonOlder
 , python
 }:

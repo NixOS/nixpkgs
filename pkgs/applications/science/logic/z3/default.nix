@@ -10,7 +10,6 @@
 , ocaml ? null
 , findlib ? null
 , zarith ? null
-, writeScript
 }:
 
 assert javaBindings -> jdk != null;

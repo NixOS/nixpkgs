@@ -5,7 +5,6 @@
 , cinnamon
 , glib
 , gspell
-, gtk3
 , gobject-introspection
 , gitUpdater
 }:

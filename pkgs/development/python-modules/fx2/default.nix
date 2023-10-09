@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, python
 , fetchFromGitHub
 , sdcc
 , libusb1

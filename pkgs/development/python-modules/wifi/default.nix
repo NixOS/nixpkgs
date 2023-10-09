@@ -4,7 +4,6 @@
 , pbkdf2
 , pytestCheckHook
 , pythonOlder
-, substituteAll
 , wirelesstools
 }:
 

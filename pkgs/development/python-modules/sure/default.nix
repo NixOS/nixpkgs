@@ -5,7 +5,6 @@
 , mock
 , six
 , isPyPy
-, pythonOlder
 }:
 
 buildPythonPackage rec {

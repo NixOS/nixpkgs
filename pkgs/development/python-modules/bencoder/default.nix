@@ -1,7 +1,6 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, setuptools
 }:
 buildPythonPackage rec {
   pname = "bencoder";

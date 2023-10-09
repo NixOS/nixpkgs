@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , pkg-config
 , enableUdev ? stdenv.isLinux && !stdenv.targetPlatform.isStatic

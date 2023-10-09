@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , python
 , cairocffi

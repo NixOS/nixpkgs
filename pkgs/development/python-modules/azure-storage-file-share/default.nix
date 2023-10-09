@@ -4,7 +4,6 @@
 , cryptography
 , fetchPypi
 , isodate
-, msrest
 , pythonOlder
 , typing-extensions
 }:

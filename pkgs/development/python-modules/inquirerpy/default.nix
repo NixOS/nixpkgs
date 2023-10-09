@@ -1,16 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, furo
-, myst-parser
 , pfzy
 , poetry-core
 , prompt-toolkit
 , pytestCheckHook
-, pythonOlder
-, sphinx
-, sphinx-autobuild
-, sphinx-copybutton
 }:
 
 buildPythonPackage rec {

@@ -10,11 +10,8 @@
 , lockfile
 , pytest-qt
 , pytestCheckHook
-, python
 , qasync
 , qt5
-, writeShellScript
-, xvfb-run
 }:
 
 buildPythonPackage rec {

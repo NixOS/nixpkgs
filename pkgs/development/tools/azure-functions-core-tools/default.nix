@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  config,
   fetchurl,
   unzip,
   makeWrapper,

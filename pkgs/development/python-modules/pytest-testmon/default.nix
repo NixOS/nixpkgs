@@ -2,7 +2,6 @@
 , buildPythonPackage
 , coverage
 , fetchFromGitHub
-, poetry-core
 , pytest
 , pythonOlder
 , setuptools

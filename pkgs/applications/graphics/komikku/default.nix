@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitLab
-, fetchpatch
 , desktop-file-utils
 , gettext
 , glib

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, writers
 , adoptopenjdk-jre-bin
 , fetchurl
 , makeWrapper

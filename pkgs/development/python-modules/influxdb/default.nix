@@ -2,7 +2,6 @@
 , buildPythonPackage
 , python-dateutil
 , fetchPypi
-, fetchpatch
 , mock
 , msgpack
 , nose

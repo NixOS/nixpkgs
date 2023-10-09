@@ -2,7 +2,6 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, llvmPackages
 , rocksdb_6_23
 , Security
 }:

@@ -6,7 +6,6 @@
 , future
 , numpy
 , pillow
-, fetchpatch
 , scipy
 , scikit-learn
 , scikit-image

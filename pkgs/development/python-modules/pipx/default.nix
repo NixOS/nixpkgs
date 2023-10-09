@@ -5,7 +5,6 @@
 , hatchling
 , importlib-metadata
 , packaging
-, pip
 , platformdirs
 , pytestCheckHook
 , pythonOlder

@@ -2,7 +2,6 @@
 , attrs
 , buildPythonPackage
 , deprecated
-, fetchFromGitHub
 , fetchPypi
 , hatch-vcs
 , hatchling
@@ -10,7 +9,6 @@
 , pandas
 , pytestCheckHook
 , pythonOlder
-, setuptools-scm
 , tabulate
 }:
 

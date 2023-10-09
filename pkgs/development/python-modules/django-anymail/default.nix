@@ -5,7 +5,6 @@
 , requests
 , django
 , boto3
-, python
 , mock
 , pytestCheckHook
 , pytest-django

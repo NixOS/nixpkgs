@@ -6,7 +6,6 @@
 , chardet
 , charset-normalizer
 , fetchPypi
-, fetchpatch
 , idna
 , pysocks
 , pytest-mock

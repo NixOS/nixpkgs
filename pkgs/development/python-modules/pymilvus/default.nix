@@ -8,7 +8,6 @@
 , mmh3
 , pandas
 , pytestCheckHook
-, python
 , pythonOlder
 , pythonRelaxDepsHook
 , scikit-learn

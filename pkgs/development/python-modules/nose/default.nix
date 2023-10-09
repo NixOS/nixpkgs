@@ -5,7 +5,6 @@
 , isPyPy
 , python
 , coverage
-, buildPackages
 }:
 
 buildPythonPackage rec {

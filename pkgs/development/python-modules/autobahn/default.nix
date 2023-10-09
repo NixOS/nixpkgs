@@ -10,7 +10,6 @@
 , cryptography
 , ecdsa
 , eth-abi
-, eth-account
 , flatbuffers
 , jinja2
 , hkdf

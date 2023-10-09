@@ -2,7 +2,6 @@
 , fetchPypi
 , lib
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
 }:
 

@@ -1,7 +1,6 @@
 { lib
 , astropy
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , matplotlib
 , numpy

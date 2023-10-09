@@ -1,6 +1,5 @@
 { lib
 , python310
-, fetchPypi
 , fetchFromGitHub
 , gdk-pixbuf
 , gnome

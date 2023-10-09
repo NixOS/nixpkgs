@@ -3,7 +3,6 @@
 , bx-py-utils
 , colorlog
 , fetchFromGitHub
-, fetchPypi
 , importlib-resources
 , jaraco-classes
 , jaraco-collections

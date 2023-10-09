@@ -4,7 +4,6 @@
 , fastprogress
 , fastcore
 , fastdownload
-, torch
 , torchvision
 , matplotlib
 , pillow

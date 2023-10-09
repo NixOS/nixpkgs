@@ -4,7 +4,6 @@
 , fetchpatch
 , flit-core
 , pytestCheckHook
-, coveralls
 , numpy
 , decopatch
 , more-itertools

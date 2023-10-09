@@ -4,7 +4,6 @@
 , boost
 , catch2
 , cmake
-, gtest
 , python3
 }:
 

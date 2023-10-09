@@ -19,7 +19,6 @@
 , tornado
 , urllib3
 , versioneer
-, wheel
 , zict
 }:
 

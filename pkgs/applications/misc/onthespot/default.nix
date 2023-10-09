@@ -1,7 +1,6 @@
 { lib
 , copyDesktopItems
 , fetchFromGitHub
-, makeDesktopItem
 , python3
 , wrapQtAppsHook
 }:

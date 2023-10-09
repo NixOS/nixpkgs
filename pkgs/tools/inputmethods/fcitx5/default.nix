@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules

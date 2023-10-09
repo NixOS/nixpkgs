@@ -9,7 +9,6 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
-, pytz
 }:
 
 buildPythonPackage rec {

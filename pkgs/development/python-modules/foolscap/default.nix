@@ -5,7 +5,6 @@
 , pyopenssl
 , pytestCheckHook
 , pythonOlder
-, service-identity
 , six
 , twisted
 , txi2p-tahoe

@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , bcrypt
 , buildPythonPackage
 , cryptography

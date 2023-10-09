@@ -8,7 +8,6 @@
 , libusb1
 , mock
 , pyasn1
-, pythonAtLeast
 , pycryptodome
 , pytestCheckHook
 , rsa

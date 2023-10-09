@@ -15,7 +15,6 @@
 , jinja2
 , tomli
 , pythonOlder
-, jupyter-packaging
 }:
 
 buildPythonPackage rec {

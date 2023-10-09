@@ -2,8 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools-scm
-, toml
 , pytestCheckHook
 , pytest-benchmark
 , hatch-vcs

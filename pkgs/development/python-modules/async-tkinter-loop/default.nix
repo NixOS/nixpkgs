@@ -1,11 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python3Packages
 , poetry-core
 , tkinter
 , pythonRelaxDepsHook
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {

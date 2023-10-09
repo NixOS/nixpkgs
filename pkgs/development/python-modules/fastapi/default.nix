@@ -6,7 +6,6 @@
 , pytestCheckHook
 , pytest-asyncio
 , aiosqlite
-, databases
 , flask
 , httpx
 , hatchling

@@ -1,7 +1,6 @@
 { callPackage
 , fetchFromGitHub
 , nixos
-, conmon
 }:
 let
   apptainer = callPackage

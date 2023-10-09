@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, matplotlib
 , niapy
 , numpy
 , poetry-core

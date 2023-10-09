@@ -1,10 +1,7 @@
 { lib
-, stdenv
-, buildPythonPackage
 , pythonOlder
 , fetchPypi
 , fetchpatch
-, isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook, setuptools
 # for passthru.tests

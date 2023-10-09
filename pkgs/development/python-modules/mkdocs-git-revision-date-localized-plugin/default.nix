@@ -6,7 +6,6 @@
 , mkdocs
 , pytz
 , pytestCheckHook
-, git
 }:
 
 buildPythonPackage rec {

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , pyasn1
 , pyasn1-modules
-, pythonAtLeast
 , pythonOlder
 , pytestCheckHook
 , openldap

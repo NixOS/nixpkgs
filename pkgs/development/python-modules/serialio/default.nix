@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest-asyncio
-, pytestCheckHook
 , pythonOlder
 , pyserial
 , sockio

@@ -7,7 +7,6 @@
 , gdk-pixbuf
 , fontconfig
 , pango
-, gnome
 , atk
 , at-spi2-atk
 , at-spi2-core

@@ -1,8 +1,6 @@
 { stdenv
-, fetchpatch
 , bashInteractive
 , diffPlugins
-, glibcLocales
 , gobject-introspection
 , gst_all_1
 , lib
@@ -12,14 +10,6 @@
 , writeScript
 
   # plugin deps
-, aacgain
-, essentia-extractor
-, ffmpeg
-, flac
-, imagemagick
-, keyfinder-cli
-, mp3gain
-, mp3val
 
 , src
 , version

@@ -5,7 +5,6 @@
 , pythonOlder
 , pytestCheckHook
 , pyjwt
-, pytest
 , mock
 , requests
 , requests-toolbelt

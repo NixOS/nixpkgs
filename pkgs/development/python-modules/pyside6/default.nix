@@ -5,7 +5,6 @@
 , python
 , moveBuildTree
 , shiboken6
-, libxcrypt
 }:
 
 stdenv.mkDerivation rec {

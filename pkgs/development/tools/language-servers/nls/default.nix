@@ -1,7 +1,6 @@
 { lib
 , rustPlatform
 , nickel
-, stdenv
 }:
 
 rustPlatform.buildRustPackage {

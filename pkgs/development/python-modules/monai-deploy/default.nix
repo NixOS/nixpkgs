@@ -6,7 +6,6 @@
 , pytest-lazy-fixture
 , numpy
 , networkx
-, pydicom
 , colorama
 , typeguard
 , versioneer

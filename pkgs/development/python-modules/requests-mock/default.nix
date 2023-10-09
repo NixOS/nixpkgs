@@ -4,7 +4,6 @@
 , fixtures
 , purl
 , pytestCheckHook
-, python
 , requests
 , requests-futures
 , six

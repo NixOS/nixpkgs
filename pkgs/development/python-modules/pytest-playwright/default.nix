@@ -5,11 +5,9 @@
 , playwright-driver
 , pytest
 , pytest-base-url
-, pytestCheckHook
 , python-slugify
 , pythonOlder
 , setuptools-scm
-, django
 }:
 
 buildPythonPackage rec {

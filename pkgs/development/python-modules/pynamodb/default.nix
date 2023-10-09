@@ -7,7 +7,6 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
-, requests
 , typing-extensions
 }:
 

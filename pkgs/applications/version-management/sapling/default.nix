@@ -3,7 +3,6 @@
 , python3Packages
 , fetchFromGitHub
 , fetchurl
-, sd
 , cargo
 , curl
 , pkg-config

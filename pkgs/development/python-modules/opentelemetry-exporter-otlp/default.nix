@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, backoff
 , hatchling
 , opentelemetry-api
 , opentelemetry-exporter-otlp-proto-grpc

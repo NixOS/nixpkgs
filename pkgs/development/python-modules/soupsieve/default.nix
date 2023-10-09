@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , hatchling
-, isPy3k
 }:
 
 buildPythonPackage rec {

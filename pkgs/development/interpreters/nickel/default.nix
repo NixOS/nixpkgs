@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , python3
 , nix-update-script
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {

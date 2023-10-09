@@ -5,7 +5,6 @@
 , cryptography
 , cssselect
 , fetchPypi
-, fetchpatch
 , glibcLocales
 , installShellFiles
 , itemadapter

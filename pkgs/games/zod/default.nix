@@ -1,5 +1,4 @@
 { lib
-, config
 , fetchzip
 , stdenv
 , SDL

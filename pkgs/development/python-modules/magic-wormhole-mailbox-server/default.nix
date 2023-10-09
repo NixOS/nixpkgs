@@ -6,8 +6,6 @@
 , six
 , attrs
 , twisted
-, pyopenssl
-, service-identity
 , autobahn
 , treq
 , mock

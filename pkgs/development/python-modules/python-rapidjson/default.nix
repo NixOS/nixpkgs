@@ -6,7 +6,6 @@
 , rapidjson
 , pytestCheckHook
 , pytz
-, glibcLocales
 }:
 
 let

@@ -1,7 +1,6 @@
 { lib
 , azure-common
 , azure-mgmt-core
-, azure-mgmt-nspkg
 , buildPythonPackage
 , fetchPypi
 , isodate

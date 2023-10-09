@@ -7,7 +7,6 @@
 , pkg-config
 , glib
 , python3
-, gobject-introspection
 }:
 
 python3.pkgs.buildPythonApplication rec {

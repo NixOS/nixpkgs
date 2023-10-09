@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python
 , proj
 , pythonOlder
 , substituteAll

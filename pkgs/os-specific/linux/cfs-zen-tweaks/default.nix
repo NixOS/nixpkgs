@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, makeWrapper
 , gawk
 }:
 

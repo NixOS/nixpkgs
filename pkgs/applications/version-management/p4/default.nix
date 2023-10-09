@@ -9,7 +9,6 @@
 , libcxx
 , libcxxabi
 , openssl
-, xcbuild
 , CoreServices
 , Foundation
 , Security

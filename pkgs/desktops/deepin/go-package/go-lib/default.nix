@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 }:
 
 stdenv.mkDerivation rec {

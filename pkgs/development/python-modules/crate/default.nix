@@ -7,7 +7,6 @@
 , sqlalchemy
 , pytestCheckHook
 , pytz
-, stdenv
 }:
 
 buildPythonPackage rec {

@@ -1,7 +1,6 @@
 { python3Packages
 , lib
 , fetchFromGitHub
-, perlPackages
 , gettext
 , gtk3
 , gobject-introspection

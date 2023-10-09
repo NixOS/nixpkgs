@@ -11,7 +11,6 @@
 , pytestCheckHook
 , pythonOlder
 , rustPlatform
-, setuptools-rust
 }:
 
 buildPythonPackage rec {

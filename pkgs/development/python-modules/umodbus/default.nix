@@ -4,7 +4,6 @@
 , pyserial
 , pytestCheckHook
 , pythonOlder
-, setuptools
 }:
 
 buildPythonPackage rec {

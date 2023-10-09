@@ -2,7 +2,6 @@
 , SDL2
 , cmake
 , fetchFromGitHub
-, git
 , gym
 , importlib-metadata
 , importlib-resources
@@ -11,7 +10,6 @@
 , numpy
 , pybind11
 , pytestCheckHook
-, python
 , pythonOlder
 , setuptools
 , stdenv

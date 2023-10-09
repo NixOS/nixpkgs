@@ -3,7 +3,6 @@
 , fetchPypi
 , substituteAll
 , graphviz
-, python
 , pytestCheckHook
 , chardet
 , pythonOlder

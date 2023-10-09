@@ -1,6 +1,5 @@
 { lib
 , stdenvNoCC
-, fetchFromGitHub
 , pkgsCross
 , stdenv
 , bash

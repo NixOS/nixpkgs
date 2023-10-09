@@ -2,7 +2,6 @@
 , dotnetCorePackages
 , fetchFromGitHub
 , lib
-, stdenv
 , runCommand
 , expect
 }:

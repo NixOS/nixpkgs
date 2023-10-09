@@ -2,7 +2,6 @@
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
-, callPackage
 }:
 
 buildDotnetModule rec {

@@ -6,7 +6,6 @@
 , databricks-cli
 , docker
 , entrypoints
-, fetchpatch
 , fetchPypi
 , flask
 , gitpython
@@ -30,7 +29,6 @@
 , requests
 , scikit-learn
 , scipy
-, shap
 , simplejson
 , sqlalchemy
 , sqlparse

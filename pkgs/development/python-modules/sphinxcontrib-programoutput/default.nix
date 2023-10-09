@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , sphinx
-, sphinxcontrib-serializinghtml
 }:
 
 buildPythonPackage rec {

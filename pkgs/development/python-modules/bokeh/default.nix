@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchPypi
 , fetchFromGitHub
@@ -8,7 +7,6 @@
 , colorama
 , contourpy
 , jinja2
-, mock
 , numpy
 , nodejs
 , packaging

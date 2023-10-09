@@ -3,7 +3,6 @@
 , asgiref
 , buildPythonPackage
 , django
-, djangorestframework
 , falcon
 , fetchFromGitHub
 , flask

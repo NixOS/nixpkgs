@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools-scm
-, pytestCheckHook
 , pythonOlder
 }:
 

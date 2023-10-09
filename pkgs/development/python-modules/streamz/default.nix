@@ -3,7 +3,6 @@
 , buildPythonPackage
 , confluent-kafka
 , distributed
-, fetchpatch
 , fetchPypi
 , flaky
 , graphviz

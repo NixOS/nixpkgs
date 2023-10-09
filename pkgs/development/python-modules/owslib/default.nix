@@ -10,7 +10,6 @@
 , pytz
 , pyyaml
 , requests
-, python
 }:
 
 buildPythonPackage rec {

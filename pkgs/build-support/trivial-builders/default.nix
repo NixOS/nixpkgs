@@ -528,7 +528,6 @@ rec {
    */
   symlinkJoin =
     args_@{ name
-         , paths
          , preferLocalBuild ? true
          , allowSubstitutes ? false
          , postBuild ? ""

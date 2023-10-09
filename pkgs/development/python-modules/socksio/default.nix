@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
-, pythonAtLeast
 , flit-core
 , pytestCheckHook
 }:

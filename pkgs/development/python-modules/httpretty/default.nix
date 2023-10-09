@@ -3,7 +3,6 @@
 , fetchPypi
 , sure
 , six
-, pytest
 , freezegun
 , pytestCheckHook
 }:

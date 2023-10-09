@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchgit
-, wrapLisp
 , openssl
 , sbcl
 }:

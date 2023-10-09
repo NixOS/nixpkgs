@@ -12,7 +12,6 @@
 , reportlab
 , setuptools
 , webcolors
-, python
 }:
 
 buildPythonPackage rec {

@@ -2,7 +2,6 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 , six
 , pygraphviz
 , pytestCheckHook

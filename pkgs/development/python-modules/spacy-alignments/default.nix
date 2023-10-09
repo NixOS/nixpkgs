@@ -2,7 +2,6 @@
 , stdenv
 , cargo
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
 , isPy3k
 , rustPlatform

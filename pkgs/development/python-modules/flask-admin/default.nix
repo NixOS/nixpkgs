@@ -5,7 +5,6 @@
 , buildPythonPackage
 , colour
 , email-validator
-, enum34
 , fetchpatch
 , fetchPypi
 , flask

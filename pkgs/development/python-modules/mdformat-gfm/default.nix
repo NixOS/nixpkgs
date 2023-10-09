@@ -4,7 +4,6 @@
 , linkify-it-py
 , markdown-it-py
 , mdformat
-, mdformat-gfm
 , mdformat-tables
 , mdit-py-plugins
 , poetry-core

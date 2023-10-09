@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , pythonOlder
 , rich
-, typer
 }:
 
 buildPythonPackage rec {

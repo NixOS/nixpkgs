@@ -3,7 +3,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , paho-mqtt
-, pytestCheckHook
 , pythonOlder
 , requests
 , retrying

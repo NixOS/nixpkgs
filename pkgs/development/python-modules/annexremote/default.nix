@@ -1,8 +1,6 @@
 { lib
-, isPy3k
 , buildPythonPackage
 , fetchFromGitHub
-, pytestCheckHook
 , nose
 , pythonOlder
 }:

@@ -11,11 +11,9 @@
 , markdown-it-py
 , mdurl
 , pygments
-, pytest
 , pytestCheckHook
 , pythonOlder
 , pyyaml
-, reptor
 , requests
 , rich
 , setuptools

@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , flit-core
 , mdformat
-, mdit-py-plugins
 , pytestCheckHook
 , pythonOlder
 }:

@@ -1,5 +1,4 @@
 { lib
-, callPackage
 , fetchFromGitHub
 , perl
 , rustPlatform

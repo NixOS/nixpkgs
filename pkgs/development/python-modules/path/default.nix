@@ -8,8 +8,6 @@
 
 # tests
 , pytestCheckHook
-, appdirs
-, packaging
 }:
 
 buildPythonPackage rec {

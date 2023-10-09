@@ -7,7 +7,6 @@
 , numpy
 , pybind11
 , scikit-build-core
-, typing-extensions
 }:
 
 buildPythonPackage rec {

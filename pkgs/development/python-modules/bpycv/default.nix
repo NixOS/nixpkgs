@@ -8,13 +8,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchPypi
-, fetchurl
 , minexr
 , opencv3
 , python3Packages
 , requests
 , runCommand
-, writeText
 , zcs
 }:
 

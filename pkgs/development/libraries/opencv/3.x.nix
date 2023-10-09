@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
 , glog, boost, gflags, protobuf3_21
 , config

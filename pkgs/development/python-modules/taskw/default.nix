@@ -1,8 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
-, tox
 , six
 , python-dateutil
 , kitchen

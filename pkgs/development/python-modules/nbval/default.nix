@@ -8,7 +8,6 @@
 , nbformat
 , pytestCheckHook
 , pytest
-, six
 , glibcLocales
 , matplotlib
 , sympy

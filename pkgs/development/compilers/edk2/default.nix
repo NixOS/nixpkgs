@@ -1,9 +1,7 @@
 { stdenv
-, clangStdenv
 , fetchFromGitHub
 , fetchpatch
 , runCommand
-, libuuid
 , python3
 , bc
 , lib

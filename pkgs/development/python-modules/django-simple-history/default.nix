@@ -2,7 +2,6 @@
 , buildPythonPackage
 , django
 , fetchFromGitHub
-, pytest-django
 , python
 , pythonOlder
 , setuptools-scm

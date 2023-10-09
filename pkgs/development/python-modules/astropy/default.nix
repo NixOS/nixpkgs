@@ -15,7 +15,6 @@
 , pytestCheckHook
 , pytest-xdist
 , pytest-astropy
-, python
 
 # runtime
 , numpy

@@ -5,8 +5,6 @@
 , packbits
 , pillow
 , pyusb
-, pytest
-, mock
 , click
 , attrs
 , lib

@@ -1,7 +1,6 @@
 { lib
 , gcc9Stdenv
 , fetchFromGitHub
-, autoreconfHook
 , cmake
 , ncurses6
 , runtimeShell
