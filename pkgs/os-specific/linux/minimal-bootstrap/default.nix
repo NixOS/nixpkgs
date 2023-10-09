@@ -73,17 +73,6 @@ lib.makeScope
       bootGawk = gawk-mes;
     };
 
-    gcc2 = callPackage ./gcc/2.nix {
-      bash = bash_2_05;
-      gcc = gcc2-mes;
-      glibc = glibc22;
-    };
-    gcc2-mes = callPackage ./gcc/2.nix {
-      bash = bash_2_05;
-      tinycc = tinycc-mes;
-      mesBootstrap = true;
-    };
-
     gcc46 = callPackage ./gcc/4.6.nix {
       tinycc = tinycc-musl;
       gnumake = gnumake-musl;
@@ -114,11 +103,6 @@ lib.makeScope
       # FIXME: not sure why new gawk doesn't work
       gawk = gawk-mes;
     };
-
-    inherit (callPackage ./glibc {
-      bash = bash_2_05;
-      gnused = gnused-mes;
-    }) glibc22;
 
     gnugrep = callPackage ./gnugrep {
       bash = bash_2_05;
@@ -226,8 +210,6 @@ lib.makeScope
       echo ${findutils.tests.get-version}
       echo ${gawk-mes.tests.get-version}
       echo ${gawk.tests.get-version}
-      echo ${gcc2.tests.get-version}
-      echo ${gcc2-mes.tests.get-version}
       echo ${gcc46.tests.get-version}
       echo ${gcc46-cxx.tests.hello-world}
       echo ${gcc8.tests.hello-world}

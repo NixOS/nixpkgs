@@ -29107,7 +29107,9 @@ with pkgs;
   uclibc = uclibc-ng;
   uclibcCross = uclibc-ng-cross;
 
-  eudev = callPackage ../os-specific/linux/eudev { util-linux = util-linuxMinimal; };
+  eudev = callPackage ../by-name/eu/eudev/package.nix {
+    util-linux = util-linuxMinimal;
+  };
 
   libudev0-shim = callPackage ../os-specific/linux/libudev0-shim { };
 
@@ -36840,6 +36842,8 @@ with pkgs;
   x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
 
   picom = callPackage ../applications/window-managers/picom { };
+
+  picom-allusive = callPackage ../applications/window-managers/picom/picom-allusive.nix { };
 
   picom-jonaburg = callPackage ../applications/window-managers/picom/picom-jonaburg.nix { };
 
