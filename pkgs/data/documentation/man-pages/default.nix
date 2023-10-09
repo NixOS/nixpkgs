@@ -19,6 +19,16 @@ stdenv.mkDerivation rec {
   # Don't build html or pdf for now
   buildFlags = [ "build-catman" ];
 
+  # Append `.*` to share/lint/groff/man.ignore.grep to ignore troff errors
+  preBuild = ''
+    # troff warnings cause the build to fail
+    # (see the `groff_man_ignore_grep` make variable and
+    # the `_CATMAN_MAN_set` build target in share/mk/build/catman.mk)
+
+    # Append .* to man.ignore.grep to effectively ignore groff errors
+    echo ".*" >> share/lint/groff/man.ignore.grep
+  '';
+
   postInstall = ''
     # conflict with shadow-utils
     rm $out/share/man/man5/passwd.5 \
