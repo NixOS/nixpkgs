@@ -829,6 +829,12 @@
     githubId = 5892756;
     name = "Alec Snyder";
   };
+  allusive = {
+    email = "jasper@allusive.dev";
+    name = "Allusive";
+    github = "allusive-dev";
+    githubId = 99632976;
+  };
   almac = {
     email = "alma.cemerlic@gmail.com";
     github = "a1mac";
