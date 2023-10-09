@@ -36050,6 +36050,7 @@ with pkgs;
 
   timidity = callPackage ../tools/misc/timidity {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
+    inherit (darwin) libobjc;
   };
 
   tint2 = callPackage ../applications/misc/tint2 { };
