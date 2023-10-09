@@ -13,9 +13,7 @@
 , libgmpris
 , libusb-compat-0_1
 , llvmPackages_14
-, meson
 , mpg123
-, ninja
 , rpmextract
 , wavpack
 
@@ -28,11 +26,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.34.0-100sse42";
+  version = "5.2.0-6";
 
   src = fetchurl {
-    url = "https://www.signalyst.eu/bins/${pname}/fc36/${pname}-${version}.fc36.x86_64.rpm";
-    hash = "sha256-MCRZ0XKi6pztVTuPQpPEn6wHsOwtSxR0Px9r12jnC9U=";
+    url = "https://www.signalyst.eu/bins/${pname}/fc37/${pname}-${version}.fc37.x86_64.rpm";
+    hash = "sha256-AJKSj7t1yog3EXrzdods9Jk35ibEbegnXQzFcsr2N7I=";
   };
 
   unpackPhase = ''
