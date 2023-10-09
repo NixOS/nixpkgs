@@ -28447,7 +28447,9 @@ with pkgs;
 
   golint = callPackage ../development/tools/golint { };
 
-  golangci-lint = callPackage ../development/tools/golangci-lint { };
+  golangci-lint = callPackage ../development/tools/golangci-lint {
+    buildGoModule = buildGo121Module;
+  };
 
   golangci-lint-langserver = callPackage ../development/tools/golangci-lint-langserver { };
 
