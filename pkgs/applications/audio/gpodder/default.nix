@@ -63,6 +63,7 @@ python3Packages.buildPythonApplication rec {
     eyeD3
     podcastparser
     html5lib
+    mutagen
   ];
 
   makeFlags = [
