@@ -40054,13 +40054,6 @@ with pkgs;
 
   caffeine-ng = callPackage ../tools/X11/caffeine-ng { };
 
-  cntk = callPackage ../applications/science/math/cntk {
-    stdenv = gcc7Stdenv;
-    inherit (linuxPackages) nvidia_x11;
-    opencv3 = opencv3WithoutCuda; # Used only for image loading.
-    inherit (config) cudaSupport;
-  };
-
   dap = callPackage ../applications/science/math/dap { };
 
   ecm = callPackage ../applications/science/math/ecm { };
