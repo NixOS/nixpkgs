@@ -13,6 +13,7 @@
 , sqlite
 , stdenv
 , xercesc
+, zxing-cpp
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
   };
 
+  patches = [
+    # zxing-cpp 2.0+ requires C++ 17
+    # Manual backport as upstream ran formatters in the meantime
+    ./backport-cpp17.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
       --replace "jsoncpp_object" "jsoncpp" \
@@ -38,7 +45,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_STATIC=NO" # Do not build static libraries
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
     "-DENABLE_STRICT=NO" # Do not build with -Werror
-    "-DENABLE_QRCODE=NO" # Does not build with zxing-cpp 2
   ];
 
   buildInputs = [
@@ -56,6 +62,7 @@ stdenv.mkDerivation rec {
     (python3.withPackages (ps: [ ps.pystache ps.six ]))
     sqlite
     xercesc
+    zxing-cpp
   ];
 
   nativeBuildInputs = [

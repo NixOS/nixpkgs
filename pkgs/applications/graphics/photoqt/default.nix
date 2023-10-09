@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "3.3";
+  version = "3.4";
 
   src = fetchurl {
     url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-AD+Uww/tmXRiAkmeuHBBollE6Y9L7c+fB882ALVtSXQ=";
+    hash = "sha256-kVf9+zI9rtEMmS0N4qrN673T/1fnqfcV3hQPnMXMLas=";
   };
 
   # error: no member named 'setlocale' in namespace 'std'; did you mean simply 'setlocale'?
