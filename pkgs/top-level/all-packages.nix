@@ -9736,6 +9736,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  kdoctor = callPackage ../development/tools/kdoctor { };
+
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
   kdigger = callPackage ../tools/security/kdigger { };
@@ -10317,6 +10319,8 @@ with pkgs;
   kea = callPackage ../tools/networking/kea { };
 
   keama = callPackage ../tools/networking/keama { };
+
+  ktailctl = libsForQt5.callPackage ../applications/networking/ktailctl {};
 
   iredis = callPackage ../tools/admin/iredis { };
 

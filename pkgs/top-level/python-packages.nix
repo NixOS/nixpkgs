@@ -2659,8 +2659,6 @@ self: super: with self; {
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
 
-  deep_merge = callPackage ../development/python-modules/deep_merge { };
-
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
   deepdish = callPackage ../development/python-modules/deepdish { };

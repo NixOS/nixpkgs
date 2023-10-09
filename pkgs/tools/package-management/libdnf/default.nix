@@ -4,7 +4,6 @@
 , cmake
 , gettext
 , pkg-config
-, gpgme
 , libsolv
 , openssl
 , check
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.70.2";
+  version = "0.71.0";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-br3RNqR9/hwvu1V3vG5gFmQCob2Ksz3pPQrBONVOMP0=";
+    hash = "sha256-kRpB80ntb5CbqnWpc3M3i7w06CkstPlJfo2X3WsuME8=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     check
-    gpgme
     openssl
     json_c
     libsmartcols

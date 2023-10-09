@@ -106,7 +106,7 @@ in
       identMap = mkOption {
         type = types.lines;
         default = "";
-        example = literalExample ''
+        example = ''
           map-name-0 system-username-0 database-username-0
           map-name-1 system-username-1 database-username-1
         '';
