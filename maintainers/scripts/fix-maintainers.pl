@@ -13,6 +13,10 @@ STDOUT->autoflush(1);
 
 my $ua = LWP::UserAgent->new();
 
+if (!defined $ENV{GH_TOKEN}) {
+    die "Set GH_TOKEN before running this script";
+}
+
 keys %$maintainers_json; # reset the internal iterator so a prior each() doesn't affect the loop
 while(my($k, $v) = each %$maintainers_json) {
     my $current_user = %$v{'github'};
