@@ -11,7 +11,7 @@ mkYarnPackage rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd-ui";
-    rev = "0.2";
+    rev = "refs/tags/${version}";
     sha256 = "sha256-DygWNktangFlAqinBm6wWsRLGmX6yjhmRJ2iU0yjcgk=";
   };
 
