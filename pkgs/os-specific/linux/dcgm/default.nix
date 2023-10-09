@@ -85,7 +85,7 @@ let
 # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/build.sh#L22
 in gcc11Stdenv.mkDerivation rec {
   pname = "dcgm";
-  version = "3.2.5";
+  version = "3.2.5"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
