@@ -52,6 +52,12 @@ lib.makeScope
         gnutar = gnutar-latest;
       };
 
+      bison = callPackage ./bison {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
+
       bzip2 = callPackage ./bzip2 {
         tinycc = tinycc-musl;
         gnumake = gnumake-musl;
@@ -274,6 +280,7 @@ lib.makeScope
         echo ${bash_2_05.tests.get-version}
         echo ${binutils.tests.get-version}
         echo ${binutils-static.tests.get-version}
+        echo ${bison.tests.get-version}
         echo ${bzip2.tests.get-version}
         echo ${coreutils-musl.tests.get-version}
         echo ${coreutils-static.tests.get-version}
