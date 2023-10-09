@@ -66,6 +66,7 @@ let
     platforms = platforms.darwin ++ [
       "x86_64-linux"
     ];
+    hydraPlatforms = [];
   };
 
   linux = stdenv.mkDerivation rec {
