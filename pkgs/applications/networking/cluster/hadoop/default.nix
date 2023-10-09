@@ -40,10 +40,11 @@ let
       doCheck = true;
 
       # Build the container executor binary from source
-      containerExecutor = callPackage ./containerExecutor.nix {
+      # InstallPhase is not lazily evaluating containerExecutor for some reason
+      containerExecutor = if stdenv.isLinux then (callPackage ./containerExecutor.nix {
         inherit (finalAttrs) version;
         inherit platformAttrs;
-      };
+      }) else "";
 
       nativeBuildInputs = [ makeWrapper ]
                           ++ optionals stdenv.isLinux [ autoPatchelfHook ];

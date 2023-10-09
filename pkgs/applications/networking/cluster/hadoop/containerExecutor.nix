@@ -32,6 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     maintainers = with maintainers; [ illustris ];
-    platforms = attrNames platformAttrs;
+    platforms = filter (strings.hasSuffix "linux") (attrNames platformAttrs);
   };
 })
