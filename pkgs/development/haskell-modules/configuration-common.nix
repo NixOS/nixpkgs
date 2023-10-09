@@ -885,10 +885,6 @@ self: super: {
     '';
   }) super.ghc-mod;
 
-  # 2022-03-20: descriptive is unmaintained since 2018 and archived on github.com
-  # It does not support aeson 2.0
-  descriptive = super.descriptive.override { aeson = self.aeson_1_5_6_0; };
-
   # Apply compatibility patches until a new release arrives
   # https://github.com/phadej/spdx/issues/33
   spdx = appendPatches [
@@ -1214,10 +1210,6 @@ self: super: {
           temporary = dontCheck hprev.temporary; # cyclic dependencies
         }))
       ];
-
-  # Too strict version bound on hashable-time.
-  # Tests require newer package version.
-  aeson_1_5_6_0 = dontCheck (doJailbreak super.aeson_1_5_6_0);
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -2432,11 +2424,6 @@ self: super: {
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
   hasura-ekg-core = doJailbreak super.hasura-ekg-core;
-
-  # https://github.com/Synthetica9/nix-linter/issues/65
-  nix-linter = super.nix-linter.overrideScope (self: super: {
-    aeson = self.aeson_1_5_6_0;
-  });
 
   # Test suite doesn't support hspec 2.8
   # https://github.com/zellige/hs-geojson/issues/29
