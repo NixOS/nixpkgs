@@ -60,6 +60,9 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
+  # https://github.com/nextcloud/documentation/pull/11179
+  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2";
+
 in {
 
   imports = [
@@ -1080,10 +1083,6 @@ in {
               }
             '';
           };
-          "/" = {
-            priority = 900;
-            extraConfig = "rewrite ^ /index.php;";
-          };
           "~ ^/store-apps" = {
             priority = 201;
             extraConfig = "root ${cfg.home};";
@@ -1108,15 +1107,23 @@ in {
               try_files $uri $uri/ =404;
             '';
           };
-          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
-            return 404;
-          '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
+          "~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/)" = {
+            priority = 450;
+            extraConfig = ''
+              return 404;
+            '';
+          };
+          "~ ^/(?:\\.|autotest|occ|issue|indie|db_|console)" = {
+            priority = 450;
+            extraConfig = ''
+              return 404;
+            '';
+          };
+          "~ \\.php(?:$|/)" = {
             priority = 500;
             extraConfig = ''
+              # legacy support (i.e. static files and directories in cfg.package)
+              rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[s${optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"}]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
               include ${config.services.nginx.package}/conf/fastcgi.conf;
               fastcgi_split_path_info ^(.+?\.php)(\\/.*)$;
               set $path_info $fastcgi_path_info;
@@ -1132,19 +1139,30 @@ in {
               fastcgi_read_timeout ${builtins.toString cfg.fastcgiTimeout}s;
             '';
           };
-          "~ \\.(?:css|js|woff2?|svg|gif|map)$".extraConfig = ''
+          "~ \\.(?:css|js|mjs|svg|gif|png|jpg|jpeg|ico|wasm|tflite|map|html|ttf|bcmap|mp4|webm)$".extraConfig = ''
             try_files $uri /index.php$request_uri;
             expires 6M;
             access_log off;
+            location ~ \.wasm$ {
+              default_type application/wasm;
+            }
           '';
-          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
+          "~ ^\\/(?:updater|ocs-provider${optionalString (!ocmProviderIsNotAStaticDirAnymore) "|ocm-provider"})(?:$|\\/)".extraConfig = ''
             try_files $uri/ =404;
             index index.php;
           '';
-          "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
-            try_files $uri /index.php$request_uri;
-            access_log off;
-          '';
+          "/remote" = {
+            priority = 1500;
+            extraConfig = ''
+              return 301 /remote.php$request_uri;
+            '';
+          };
+          "/" = {
+            priority = 1600;
+            extraConfig = ''
+              try_files $uri $uri/ /index.php$request_uri;
+            '';
+          };
         };
         extraConfig = ''
           index index.php index.html /index.php$request_uri;
