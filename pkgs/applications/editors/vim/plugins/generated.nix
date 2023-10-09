@@ -15173,6 +15173,18 @@ final: prev:
     meta.homepage = "https://github.com/preservim/vim-pencil/";
   };
 
+  vim-pets = buildVimPlugin {
+    pname = "vim-pets";
+    version = "2024-07-26";
+    src = fetchFromGitHub {
+      owner = "MeF0504";
+      repo = "vim-pets";
+      rev = "17d33f160c8fd3fb6492e7cd76f397ddaa26ad8d";
+      sha256 = "0zn6kf088kqfdf5y0x6sd8rr3skrjwppsdfxmf044qk1h07lcgcc";
+    };
+    meta.homepage = "https://github.com/MeF0504/vim-pets/";
+  };
+
   vim-phabricator = buildVimPlugin {
     pname = "vim-phabricator";
     version = "2021-11-06";
