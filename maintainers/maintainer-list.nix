@@ -14087,6 +14087,12 @@
     githubId = 107703;
     name = "Samuel Rivas";
   };
+  samueltardieu = {
+    email = "nixpkgs@sam.rfc1149.net";
+    github = "samueltardieu";
+    githubId = 44656;
+    name = "Samuel Tardieu";
+  };
   samw = {
     email = "sam@wlcx.cc";
     github = "wlcx";
