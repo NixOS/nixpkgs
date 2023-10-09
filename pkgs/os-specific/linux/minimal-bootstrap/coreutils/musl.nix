@@ -13,6 +13,7 @@
   gzip,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "bootstrap-coreutils-musl";
   version = "9.4";
 
@@ -34,9 +35,8 @@ let
     "gl_cv_have_unlimited_file_name_length=no"
   ];
 in
-bash.runCommand "${pname}-${version}"
-  {
-    inherit pname version;
+bash.runCommand "${pname}-${version}" {
+  inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
@@ -48,25 +48,15 @@ bash.runCommand "${pname}-${version}"
       gzip
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/cat --version
-        mkdir $out
-      '';
-
-    meta = with lib; {
-      description = "GNU Core Utilities";
-      homepage = "https://www.gnu.org/software/coreutils";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      platforms = platforms.unix;
-    };
-  }
-  ''
-    # Unpack
-    tar xzf ${src}
-    cd coreutils-${version}
+  passthru.tests.get-version = result:
+    bash.runCommand "${pname}-get-version-${version}" {} ''
+      ${result}/bin/cat --version
+      mkdir $out
+    '';
+} ''
+  # Unpack
+  tar xzf ${src}
+  cd coreutils-${version}
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
