@@ -448,6 +448,105 @@ rec {
     else
       [];
 
+  /* Recursively collect values produced by function `f` that verify a given
+     predicate named `pred` from the set `attrs`. The recursion is stopped
+     when the predicate is verified.
+
+     If `pred` verifies the given `attrs` set, the result is a list with a
+     single element `f [ ] attrs`.
+
+     Attention:
+       Using this function on attribute sets that refer to themselves will cause
+       infinite recursion if the predicate allows that.
+
+     Example:
+       collect'
+         (_: v: isDerivation v)
+         (path: value: { inherit path value; })
+         {
+           a = «derivation 1»;
+           b = {
+             c = «derivation 2»;
+           };
+           not-a-derivation = 42;
+         }
+       => [
+            { path = [ "a" ]; value = «derivation 1»; }
+            { path = [ "b" "c" ]; value = «derivation 2»; }
+          ]
+
+     Type:
+       collect' :: ([String] -> a -> Bool) -> ([String] -> a -> b) -> AttrSet -> [b]
+  */
+  collect' =
+  # Given an attribute's path and value, determine if recursion should stop.
+  pred:
+  # Given an attribute's path and value, produce the value to collect.
+  f:
+  # The attribute set to recursively collect.
+  attrs:
+    let
+      recurse = prefix: attrs:
+        concatMap
+          (name: visit (prefix ++ [ name ]) attrs.${name})
+          (attrNames attrs);
+      visit = path: value:
+        if pred path value then
+          [ (f path value) ]
+        else if isAttrs value then
+          recurse path value
+        else
+          [ ];
+    in
+    visit [ ] attrs;
+
+  /* Flatten an attribute set `attrs` with nested attributes where leaf nodes
+     verify a given predicate named `pred`. That is, a flattened set will have
+     all leaf values at top level. Attribute paths are transformed to names
+     using the function `f`.
+
+     Attention:
+       Using this function on attribute sets that refer to themselves will cause
+       infinite recursion if the predicate allows that.
+
+     Example:
+       flattenAttrs
+         isDerivation
+         (concatStringsSep "-")
+         {
+           foo = «derivation 1»;
+           bar = {
+             linux = «derivation 2»;
+             darwin = «derivation 3»;
+           };
+           baz = {
+             brr = 42;
+           };
+         }
+       => {
+            foo = «derivation 1»;
+            bar-linux = «derivation 2»;
+            bar-darwin = «derivation 3»;
+            baz-brr = 42;
+          }
+
+     Type:
+       flattenAttrs :: (Any -> Bool) -> ([String] -> String) -> AttrSet -> AttrSet
+  */
+  flattenAttrs =
+  # Given an attribute's value, determine if recursion should stop.
+  pred:
+  # Given an attribute's path, produce the top-level name in new attribute set.
+  f:
+  # The attribute set to recursively flatten.
+  attrs:
+    if pred attrs then attrs
+    else
+      listToAttrs (map (x: nameValuePair (f x.path) x.value) (collect'
+        (_: v: pred v || !isAttrs v)
+        (path: value: { inherit path value; })
+        attrs));
+
   /* Return the cartesian product of attribute set value combinations.
 
     Example:

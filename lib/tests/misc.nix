@@ -781,6 +781,115 @@ runTests {
     };
 
   # code from the example
+  testCollect'Example = let
+    drvf = name: derivation { inherit name; builder = "builder"; system = "system"; };
+    drv1 = drvf "drv1";
+    drv2 = drvf "drv2";
+  in {
+    expr = collect'
+      (_: v: isDerivation v)
+      (path: value: { inherit path value; })
+      {
+        a = drv1;
+        b = {
+          c = drv2;
+        };
+        not-a-derivation = 42;
+      };
+    expected = [
+      { path = [ "a" ]; value = drv1; }
+      { path = [ "b" "c" ]; value = drv2; }
+    ];
+  };
+
+  testCollect'TopLevel = let
+    attrs = {
+      a = 1;
+      b = {
+        c = 2;
+      };
+    };
+  in {
+    expr = collect'
+      (_: _: true)
+      (path: value: { inherit path value; })
+      attrs;
+    expected = [
+      { path = [ ]; value = attrs; }
+    ];
+  };
+
+  # code from the example
+  testFlattenAttrsExample = let
+    drvf = name: derivation { inherit name; builder = "builder"; system = "system"; };
+    drv1 = drvf "drv1";
+    drv2 = drvf "drv2";
+    drv3 = drvf "drv3";
+  in {
+    expr = flattenAttrs
+      isDerivation
+      (concatStringsSep "-")
+      {
+        foo = drv1;
+        bar = {
+          linux = drv2;
+          darwin = drv3;
+        };
+        baz = {
+          brr = 42;
+        };
+      };
+    expected = {
+      foo = drv1;
+      bar-linux = drv2;
+      bar-darwin = drv3;
+      baz-brr = 42;
+    };
+  };
+
+  testFlattenAttrsShortestDuplicateTakesPrecedence = {
+    expr = flattenAttrs
+      (_: false) # always recurse
+      (concatStringsSep "-")
+      {
+        foo = {
+          bar = 1;
+        };
+        foo-bar = 2;
+
+        a = {
+          b = {
+            c = 1;
+          };
+          b-c = 2;
+        };
+        a-b-c = 3;
+      };
+    expected = {
+      foo-bar = 1;
+      a-b-c = 1;
+    };
+  };
+
+  testFlattenAttrsNoRecurse = let
+    attrs = {
+      a = {
+        b = {
+          c = 1;
+        };
+        b-c = 2;
+      };
+      a-b-c = 3;
+    };
+  in {
+    expr = flattenAttrs
+      (_: true)
+      (throw "never recurses")
+      attrs;
+    expected = attrs;
+  };
+
+  # code from the example
   testRecursiveUpdateUntil = {
     expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
       # first attribute set
