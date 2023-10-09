@@ -2,11 +2,11 @@
 
 let
   pname = "youtube-music";
-  version = "1.20.0";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "https://github.com/th-ch/youtube-music/releases/download/v${version}/YouTube-Music-${version}.AppImage";
-    hash = "sha256-eTPWLD9KUs2ZsLbYRkknnx5uDyrNSbFHPyv6gU+wL/c=";
+    hash = "sha256-VqAKhdo7dqge1k1VUZYGOIxt2RsgMT8IOV5rMJxqzcc=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
