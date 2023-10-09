@@ -29,6 +29,15 @@ python3.override {
           hash = "sha256-AkYRPLJJLbh1xr5Wl0p8iTMzvybNkokchfYxUc7gnTQ=";
         };
       });
+
+      # django-q tests fail with redis 5.0.0.
+      redis = super.redis.overridePythonAttrs ({ pname, ... }: rec {
+        version = "4.5.4";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-c+w12k2iZ9aEfkf2hzD91fYuLKaePvWIXGp4qTdMOJM=";
+        };
+      });
     })
 
     overlay;
