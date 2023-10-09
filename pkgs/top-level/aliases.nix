@@ -133,6 +133,15 @@ mapAliases ({
   inherit (libsForQt5.mauiPackages) clip; # added 2022-05-17
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
   crispyDoom = crispy-doom; # Added 2023-05-01
+  clasp = clingo; # added 2022-12-22
+  claws-mail-gtk3 = claws-mail; # Added 2021-07-10
+  codimd = hedgedoc; # Added 2020-11-29
+  inherit (libsForQt5.mauiPackages) communicator; # added 2022-05-17
+  compton = throw "'compton' has been renamed to/replaced by 'picom'"; # Converted to throw 2023-09-10
+  concurrencykit = libck; # Added 2021-03
+  connmanPackages = throw "'connmanPackages' was removed and their subpackages/attributes were promoted to top level."; # Added 2023-10-08
+  cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
+  cvs_fast_export = cvs-fast-export; # Added 2021-06-10
 
   # these are for convenience, not for backward compat and shouldn't expire
   clang5Stdenv = lowPrio llvmPackages_5.stdenv;
@@ -148,20 +157,8 @@ mapAliases ({
   clang15Stdenv = lowPrio llvmPackages_15.stdenv;
   clang16Stdenv = lowPrio llvmPackages_16.stdenv;
 
-  clasp = clingo; # added 2022-12-22
-  claws-mail-gtk3 = claws-mail; # Added 2021-07-10
-  codimd = hedgedoc; # Added 2020-11-29
-  inherit (libsForQt5.mauiPackages) communicator; # added 2022-05-17
-  compton = throw "'compton' has been renamed to/replaced by 'picom'"; # Converted to throw 2023-09-10
-  concurrencykit = libck; # Added 2021-03
-  connmanPackages = throw "'connmanPackages' was removed and their subpackages/attributes were promoted to top level."; # Added 2023-10-08
-
-  cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
-  cvs_fast_export = cvs-fast-export; # Added 2021-06-10
-
   ### D ###
 
-  oroborus = throw "oroborus was removed, because it was abandoned years ago."; #Added 2023-09-10
   dart_stable = dart; # Added 2020-01-15
   dat = nodePackages.dat;
   deadpixi-sam = deadpixi-sam-unstable;
@@ -610,10 +607,10 @@ mapAliases ({
   openssl_3_0 = openssl_3; # Added 2022-06-27
   openvpn_24 = throw "openvpn_24 has been removed, because it went EOL. 2.5.x or newer is still available"; # Added 2023-01-23
   orchis = orchis-theme; # Added 2021-06-09
+  oroborus = throw "oroborus was removed, because it was abandoned years ago."; #Added 2023-09-10
   osxfuse = macfuse-stubs; # Added 2021-03-20
 
   ### P ###
-
 
   packet-cli = metal-cli; # Added 2021-10-25
   palemoon = throw "palemoon has been dropped due to python2 being EOL and marked insecure. Use 'palemoon-bin' instead"; # Added 2023-05-18
