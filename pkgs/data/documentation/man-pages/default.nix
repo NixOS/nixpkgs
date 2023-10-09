@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, groff, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "man-pages";
@@ -9,7 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ibFEXP4uPei9E5dYx48Is3gTz/IXufscjfVf2UB4daY=";
   };
 
+  buildInputs = [
+    groff
+  ];
+
   makeFlags = [ "prefix=$(out)" ];
+
+  # Only build regular man pages
+  # Don't build html or pdf for now
+  buildFlags = [ "build-catman" ];
+
   postInstall = ''
     # conflict with shadow-utils
     rm $out/share/man/man5/passwd.5 \
