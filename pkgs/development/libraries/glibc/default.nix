@@ -3,8 +3,9 @@
 , profilingLibraries ? false
 , withGd ? false
 , withLibcrypt? false
-, buildPackages
-, libgcc
+, pkgsBuildHost
+, pkgsHostHost
+, libgccHostHost ? pkgsHostHost.libgcc
 }:
 
 let
@@ -17,7 +18,7 @@ in
 
 (callPackage ./common.nix { inherit stdenv; } {
   inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
-  pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
+  pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgccHostHost==null) "-nolibgcc";
 }).overrideAttrs(previousAttrs: {
 
     # Note:
@@ -91,8 +92,8 @@ in
     #
     makeFlags =
       (previousAttrs.makeFlags or [])
-      ++ lib.optionals (libgcc != null) [
-        "user-defined-trusted-dirs=${libgcc}/lib"
+      ++ lib.optionals (libgccHostHost != null) [
+        "user-defined-trusted-dirs=${libgccHostHost}/lib"
       ];
 
     postInstall = previousAttrs.postInstall + (if stdenv.hostPlatform == stdenv.buildPlatform then ''
@@ -101,11 +102,11 @@ in
     '' else lib.optionalString stdenv.buildPlatform.isLinux ''
       # This is based on http://www.linuxfromscratch.org/lfs/view/development/chapter06/glibc.html
       # Instead of using their patch to build a build-native localedef,
-      # we simply use the one from buildPackages
+      # we simply use the one from pkgsBuildHost
       pushd ../glibc-2*/localedata
       export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
-      mkdir -p $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale
-      ${lib.getBin buildPackages.glibc}/bin/localedef \
+      mkdir -p $NIX_BUILD_TOP/${pkgsBuildHost.glibc}/lib/locale
+      ${lib.getBin pkgsBuildHost.glibc}/bin/localedef \
         --alias-file=../intl/locale.alias \
         -i locales/C \
         -f charmaps/UTF-8 \
@@ -115,7 +116,7 @@ in
           else
             "--big-endian"} \
         C.UTF-8
-      cp -r $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale $out/lib
+      cp -r $NIX_BUILD_TOP/${pkgsBuildHost.glibc}/lib/locale $out/lib
       popd
     '') + ''
 
@@ -167,10 +168,9 @@ in
 
     passthru =
       (previousAttrs.passthru or {})
-      // lib.optionalAttrs (libgcc != null) {
-        inherit libgcc;
+      // lib.optionalAttrs (libgccHostHost != null) {
+        libgcc = libgccHostHost;
       };
 
   meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };
 })
-

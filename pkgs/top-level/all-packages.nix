@@ -21787,10 +21787,10 @@ with pkgs;
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
     stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
-    libgcc = callPackage ../development/libraries/gcc/libgcc {
-      gcc = gccCrossLibcStdenv.cc;
-      glibc = glibcCross.override { libgcc = null; };
-      stdenvNoLibs = gccCrossLibcStdenv;
+    libgccHostHost = pkgsHostHost.callPackage ../development/libraries/gcc/libgcc {
+      gcc = pkgsHostHost.gccCrossLibcStdenv.cc;
+      glibc = pkgsHostHost.glibcCross.override { libgccHostHost = null; };
+      stdenvNoLibs = pkgsHostHost.gccCrossLibcStdenv;
     };
   };
 
