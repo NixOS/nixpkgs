@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libayatana-common";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "libayatana-common";
     rev = finalAttrs.version;
-    hash = "sha256-5cHFjBQ3NgNaoprPrFytnrwBRL7gDG7QZLWomgGBJMg=";
+    hash = "sha256-IBLJPgi+dKZKbR0Yjr2aNjCdpY+PE1k9QLSsk++6Wqo=";
   };
 
   postPatch = ''

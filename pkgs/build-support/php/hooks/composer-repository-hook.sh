@@ -17,6 +17,7 @@ composerRepositoryConfigureHook() {
     fi
 
     if [[ ! -f "composer.lock" ]]; then
+        COMPOSER_ROOT_VERSION="${version}" \
         composer \
             --no-ansi \
             --no-install \
