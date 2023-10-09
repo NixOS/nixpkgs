@@ -631,7 +631,7 @@ let
         Data directory relative to `/var/lib` of TSDB.
       '';
 
-      labels = mkAttrsParam "labels" ''
+      labels = mkAttrsParam "label" ''
         External labels to announce.
 
         This flag will be removed in the future when handling multiple tsdb
