@@ -41899,8 +41899,6 @@ with pkgs;
 
   fpm2 = callPackage ../tools/security/fpm2 { };
 
-  simplenote = callPackage ../applications/misc/simplenote { };
-
   hy = with python3Packages; toPythonApplication hy;
 
   wmic-bin = callPackage ../servers/monitoring/plugins/wmic-bin.nix { };
