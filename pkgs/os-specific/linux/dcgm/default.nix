@@ -1,8 +1,6 @@
 { lib
-, callPackage
 , gcc11Stdenv
 , fetchFromGitHub
-, addOpenGLRunpath
 , catch2
 , cmake
 , cudaPackages_10_2
