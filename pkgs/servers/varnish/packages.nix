@@ -1,4 +1,4 @@
-{ callPackages, callPackage, varnish60, varnish72, varnish73, fetchFromGitHub }: {
+{ callPackages, callPackage, varnish60, fetchFromGitHub }: {
   varnish60Packages = rec {
     varnish = varnish60;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules15;
@@ -12,13 +12,5 @@
       version = "0.4";
       sha256 = "1n94slrm6vn3hpymfkla03gw9603jajclg84bjhwb8kxsk3rxpmk";
     };
-  };
-  varnish72Packages = rec {
-    varnish = varnish72;
-    modules = (callPackages ./modules.nix { inherit varnish; }).modules20;
-  };
-  varnish73Packages = rec {
-    varnish = varnish73;
-    modules = (callPackages ./modules.nix { inherit varnish; }).modules22;
   };
 }

@@ -14849,11 +14849,11 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish72 varnish73;
+    varnish60;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish72Packages varnish73Packages;
+    varnish60Packages;
 
-  varnishPackages = varnish72Packages;
+  varnishPackages = varnish60Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
