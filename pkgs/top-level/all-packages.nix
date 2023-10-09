@@ -1749,6 +1749,8 @@ with pkgs;
 
   ttchat = callPackage ../tools/misc/ttchat { };
 
+  ttfsample = callPackage ../tools/misc/ttfsample { };
+
   ukmm = callPackage ../tools/games/ukmm { };
 
   unflac = callPackage ../tools/audio/unflac { };
