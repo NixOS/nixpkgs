@@ -3,22 +3,22 @@
 , hostPlatform
 , fetchurl
 , bash
-, coreutils
+, gcc
+, musl
+, binutils
 , gnumake
 , gnupatch
 , gnused
 , gnugrep
 , gawk
 , diffutils
+, findutils
 , gnutar
 , xz
-, tinycc
 }:
-
 let
-  # Based on https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a1-static-binutils.nix
   inherit (import ./common.nix { inherit lib; }) meta;
-  pname = "binutils";
+  pname = "binutils-static";
   version = "2.41";
 
   src = fetchurl {
@@ -32,9 +32,12 @@ let
   ];
 
   configureFlags = [
+    "CC=musl-gcc"
+    "LDFLAGS=--static"
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
+
     "--with-sysroot=/"
     "--enable-deterministic-archives"
     # depends on bison
@@ -55,13 +58,16 @@ bash.runCommand "${pname}-${version}" {
   inherit pname version meta;
 
   nativeBuildInputs = [
-    tinycc.compiler
+    gcc
+    musl
+    binutils
     gnumake
     gnupatch
     gnused
     gnugrep
     gawk
     diffutils
+    findutils
     gnutar
     xz
   ];
@@ -73,35 +79,19 @@ bash.runCommand "${pname}-${version}" {
     '';
 } ''
   # Unpack
-  cp ${src} binutils.tar.xz
-  unxz binutils.tar.xz
-  tar xf binutils.tar
-  rm binutils.tar
+  tar xf ${src}
   cd binutils-${version}
 
   # Patch
   ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
-  sed -i 's|/bin/sh|${bash}/bin/bash|' \
-    missing install-sh mkinstalldirs
-  # see libtool's 74c8993c178a1386ea5e2363a01d919738402f30
-  sed -i 's/| \$NL2SP/| sort | $NL2SP/' ltmain.sh
-  # alias makeinfo to true
-  mkdir aliases
-  ln -s ${coreutils}/bin/true aliases/makeinfo
-  export PATH="$(pwd)/aliases/:$PATH"
 
   # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export AR="tcc -ar"
-  export lt_cv_sys_max_cmd_len=32768
-  export CFLAGS="-D__LITTLE_ENDIAN__=1"
   bash ./configure ${lib.concatStringsSep " " configureFlags}
 
   # Build
-  make -j $NIX_BUILD_CORES all-libiberty all-gas all-bfd all-libctf all-zlib all-gprof
-  make all-ld # race condition on ld/.deps/ldwrite.Po, serialize
   make -j $NIX_BUILD_CORES
 
   # Install
-  make -j $NIX_BUILD_CORES install
+  # strip to remove build dependency store path references
+  make -j $NIX_BUILD_CORES install-strip
 ''

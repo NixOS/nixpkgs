@@ -30,6 +30,12 @@ lib.makeScope
       gnutar = gnutar-musl;
     };
 
+    binutils-static = callPackage ./binutils/static.nix {
+      gcc = gcc-latest;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+    };
+
     bzip2 = callPackage ./bzip2 {
       bash = bash_2_05;
       tinycc = tinycc-musl;
@@ -215,6 +221,7 @@ lib.makeScope
       echo ${bash.tests.get-version}
       echo ${bash_2_05.tests.get-version}
       echo ${binutils.tests.get-version}
+      echo ${binutils-static.tests.get-version}
       echo ${bzip2.tests.get-version}
       echo ${coreutils-musl.tests.get-version}
       echo ${coreutils-static.tests.get-version}
