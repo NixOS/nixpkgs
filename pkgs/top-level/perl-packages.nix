@@ -15237,11 +15237,11 @@ with self; {
   # TODO: use CPAN version
   MHonArc = buildPerlPackage rec {
     pname = "MHonArc";
-    version = "2.6.19";
+    version = "2.6.24";
 
     src = fetchurl {
-      url = "https://www.mhonarc.org/release/MHonArc/tar/MHonArc-${version}.tar.gz";
-      hash = "sha256-+L8odObqN4MLDVFV+5ms94gAWHffdXPxJ2NE6Ufag1I=";
+      url = "mirror://cpan/authors/id/L/LD/LDIDRY/MHonArc-2.6.24.tar.gz";
+      hash = "sha256-RX3HN07lnLdaBynlHO8vLFK0gYD3Odj9lW6hmIKBXzM=";
     };
 
     patches = [ ../development/perl-modules/mhonarc.patch ];
