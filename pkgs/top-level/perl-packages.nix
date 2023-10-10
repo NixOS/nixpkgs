@@ -22983,10 +22983,10 @@ with self; {
 
   SyntaxKeywordTry = buildPerlModule {
     pname = "Syntax-Keyword-Try";
-    version = "0.27";
+    version = "0.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.27.tar.gz";
-      hash = "sha256-JG4bAz4/8i/VQgVQ1Lbg1WtDjNy7nTXL6LG1uhV03iM=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-0.29.tar.gz";
+      hash = "sha256-zDIHGdNgjaqVFHQ6Q9rCvpnLjM2Ymx/vooUpDLHVnY8=";
     };
     propagatedBuildInputs = [ XSParseKeyword ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
