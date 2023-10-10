@@ -22337,10 +22337,10 @@ with self; {
 
   StringCRC32 = buildPerlPackage {
     pname = "String-CRC32";
-    version = "2";
+    version = "2.100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-2.tar.gz";
-      hash = "sha256-7bf+rlDsn9cSV9j7IeH+1/9N/jDXmLGvIm0q96a92S0=";
+      url = "mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-2.100.tar.gz";
+      hash = "sha256-lwYJOy0Gi2cV01tMWPUVWON5YAgyAhKfuwClfhmnRxM=";
     };
     meta = {
       description = "Perl interface for cyclic redundancy check generation";
