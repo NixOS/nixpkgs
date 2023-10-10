@@ -8271,10 +8271,10 @@ with self; {
 
   EmailMIMEContentType = buildPerlPackage {
     pname = "Email-MIME-ContentType";
-    version = "1.024";
+    version = "1.028";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-ContentType-1.024.tar.gz";
-      hash = "sha256-QtFkrH/03C6oSOcQ/iH6hVCaO8u5HtLTVuSrqVHtiDU=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-ContentType-1.028.tar.gz";
+      hash = "sha256-55UCRkM/ftbD5P1N8iJ+DyNBE3w8qxmJAY/DcPWBRcQ=";
     };
     propagatedBuildInputs = [ TextUnidecode ];
     meta = {
