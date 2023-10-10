@@ -26796,10 +26796,10 @@ with self; {
 
   TypeTinyXS = buildPerlPackage {
     pname = "Type-Tiny-XS";
-    version = "0.022";
+    version = "0.025";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-XS-0.022.tar.gz";
-      hash = "sha256-vMNKMffcHTDMgDiJtcj5Dkdztztb7L2zhg9avn4i/wA=";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-XS-0.025.tar.gz";
+      hash = "sha256-mmFFDdqQKU9gbNej+kTzsaNmvNiKQZkXsFTuXiPRSL0=";
     };
     meta = {
       description = "Provides an XS boost for some of Type::Tiny's built-in type constraints";
