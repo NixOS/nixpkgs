@@ -40,6 +40,12 @@ lib.makeScope
         gnutar = gnutar-musl;
       };
 
+      bash-static = callPackage ./bash/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
+
       binutils = callPackage ./binutils {
         tinycc = tinycc-musl;
         gnumake = gnumake-musl;
@@ -359,9 +365,9 @@ lib.makeScope
       };
 
       inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
-
       test = kaem.runCommand "minimal-bootstrap-test" { } ''
         echo ${bash.tests.get-version}
+        echo ${bash-static.tests.get-version}
         echo ${bash_2_05.tests.get-version}
         echo ${binutils.tests.get-version}
         echo ${binutils-static.tests.get-version}
