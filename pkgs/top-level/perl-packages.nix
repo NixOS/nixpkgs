@@ -12972,10 +12972,10 @@ with self; {
 
   JSONParse = buildPerlPackage {
     pname = "JSON-Parse";
-    version = "0.61";
+    version = "0.62";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BK/BKB/JSON-Parse-0.61.tar.gz";
-      hash = "sha256-zo5V5wvvm8u6LpavYx0QpgWQCWGiLK2XfnGqtWw/KAY=";
+      url = "mirror://cpan/authors/id/B/BK/BKB/JSON-Parse-0.62.tar.gz";
+      hash = "sha256-YnMYD5OSSXQB3dbYIHBvWqhsG+iIkd1qq02Qa1z/Ztk=";
     };
     meta = {
       description = "Parse JSON";
