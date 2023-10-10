@@ -23130,10 +23130,10 @@ with self; {
 
   TAPParserSourceHandlerpgTAP = buildPerlModule {
     pname = "TAP-Parser-SourceHandler-pgTAP";
-    version = "3.35";
+    version = "3.36";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.35.tar.gz";
-      hash = "sha256-hO45b6fOw9EfD172hB1f6wl80Mz8ACAMPs2zQM8YpZg=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.36.tar.gz";
+      hash = "sha256-B75RUy4GPqxu2OWBUFRw7ryB1VBkQa8tzzK8Dr7pjGc=";
     };
     doCheck = !stdenv.isDarwin;
     meta = {
