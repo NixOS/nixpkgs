@@ -6,6 +6,7 @@
   gnupatch,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnumake";
   version = "4.4.1";
 
@@ -156,21 +157,12 @@ let
 in
 kaem.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
       gnupatch
     ];
-
-    meta = with lib; {
-      description = "Tool to control the generation of non-source files from sources";
-      homepage = "https://www.gnu.org/software/make";
-      license = licenses.gpl3Plus;
-      teams = [ teams.minimal-bootstrap ];
-      mainProgram = "make";
-      platforms = platforms.unix;
-    };
   }
   ''
     # Unpack
@@ -179,26 +171,26 @@ kaem.runCommand "${pname}-${version}"
     rm make.tar
     cd make-${version}
 
-    # Patch
-    ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
+      # Patch
+      ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
-    # Configure
-    catm src/config.h src/mkconfig.h src/mkcustom.h
-    cp lib/glob.in.h lib/glob.h
-    cp lib/fnmatch.in.h lib/fnmatch.h
+      # Configure
+      catm src/config.h src/mkconfig.h src/mkcustom.h
+      cp lib/glob.in.h lib/glob.h
+      cp lib/fnmatch.in.h lib/fnmatch.h
 
-    # Compile
-    alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
-    ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
+      # Compile
+      alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
+      ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
-    # Link
-    CC -o make ${lib.concatStringsSep " " objects}
+      # Link
+      CC -o make ${lib.concatStringsSep " " objects}
 
-    # Check
-    ./make --version
+      # Check
+      ./make --version
 
-    # Install
-    mkdir -p ''${out}/bin
-    cp ./make ''${out}/bin
-    chmod 555 ''${out}/bin/make
+      # Install
+      mkdir -p ''${out}/bin
+      cp ./make ''${out}/bin
+      chmod 555 ''${out}/bin/make
   ''
