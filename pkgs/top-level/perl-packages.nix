@@ -18382,10 +18382,10 @@ with self; {
 
   NetPrometheus = buildPerlModule {
     pname = "Net-Prometheus";
-    version = "0.11";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.11.tar.gz";
-      hash = "sha256-IvgJ4njq1Rk2rVOVgGUbTOXLyRwgnkpXesgjg82fcmo=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Prometheus-0.12.tar.gz";
+      hash = "sha256-rs73NJygSW/yNahKkQ+KBDZtB/WqQfrieixKxbip6SM=";
     };
     propagatedBuildInputs = [ RefUtil StructDumb URI ];
     buildInputs = [ HTTPMessage TestFatal ];
