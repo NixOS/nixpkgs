@@ -4987,10 +4987,10 @@ with self; {
 
   CryptJWT = buildPerlPackage {
     pname = "Crypt-JWT";
-    version = "0.029";
+    version = "0.035";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.029.tar.gz";
-      hash = "sha256-D8z/KQZaAJju8VHe6zPBLA1o4WoctOdGWybrvUwYzS8=";
+      url = "mirror://cpan/authors/id/M/MI/MIK/Crypt-JWT-0.035.tar.gz";
+      hash = "sha256-XPvVX63DrtNtZ0/AU6zoZ7XT4aTOiiDPu3wmef3wlkE=";
     };
     propagatedBuildInputs = [ CryptX JSON ];
     meta = {
