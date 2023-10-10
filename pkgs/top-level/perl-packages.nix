@@ -15304,10 +15304,10 @@ with self; {
 
   MIMELite = buildPerlPackage {
     pname = "MIME-Lite";
-    version = "3.031";
+    version = "3.033";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/MIME-Lite-3.031.tar.gz";
-      hash = "sha256-8SNYZkgrZ/AIWLPtqk/0z5Ce+QDx0V2ImUi/nAOlkeA=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/MIME-Lite-3.033.tar.gz";
+      hash = "sha256-eKJ58dLiQlUcNH75ehP8Z1dmYCy4TCqAxWlAD082i6s=";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
