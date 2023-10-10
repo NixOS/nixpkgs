@@ -8239,10 +8239,10 @@ with self; {
 
   EmailMIME = buildPerlPackage {
     pname = "Email-MIME";
-    version = "1.949";
+    version = "1.953";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-1.949.tar.gz";
-      hash = "sha256-Owrfa7QTz+Uddfi6eayoDer8mNwReap7LXp5r/Wmq5w=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-1.953.tar.gz";
+      hash = "sha256-mPsGeFBpmiJLq8NI8c7+MNdExg2okC56XOnYt+c99zU=";
     };
     propagatedBuildInputs = [ EmailAddressXS EmailMIMEContentType EmailMIMEEncodings EmailMessageID EmailSimple MIMETypes ModuleRuntime ];
     meta = {
