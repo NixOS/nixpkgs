@@ -13270,10 +13270,10 @@ with self; {
 
   libwwwperl = buildPerlPackage {
     pname = "libwww-perl";
-    version = "6.70";
+    version = "6.72";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/libwww-perl-6.70.tar.gz";
-      hash = "sha256-NPANI0R1e5wLVa01gI1T6T19kvekZOyDf+anPFH7WWk=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.72.tar.gz";
+      hash = "sha256-6bg1T9XiC+IHr+I93VhPzVm/gpmNwHfez2hLodrloF0=";
     };
     buildInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
     propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookieJar HTTPCookies HTTPDate HTTPMessage HTTPNegotiate LWPMediaTypes NetHTTP TryTiny URI WWWRobotRules ];
