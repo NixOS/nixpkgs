@@ -188,9 +188,16 @@ lib.makeScope
         tinycc = tinycc-musl;
         gnused = gnused-mes;
       };
+
       gnused-mes = callPackage ./gnused/mes.nix {
         bash = bash_2_05;
         tinycc = tinycc-bootstrappable;
+      };
+
+      gnused-static = callPackage ./gnused/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
       };
 
       gnutar = callPackage ./gnutar/mes.nix {
@@ -317,6 +324,7 @@ lib.makeScope
         echo ${gnum4.tests.get-version}
         echo ${gnused.tests.get-version}
         echo ${gnused-mes.tests.get-version}
+        echo ${gnused-static.tests.get-version}
         echo ${gnutar.tests.get-version}
         echo ${gnutar-latest.tests.get-version}
         echo ${gnutar-musl.tests.get-version}
