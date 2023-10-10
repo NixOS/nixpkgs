@@ -20362,10 +20362,10 @@ with self; {
 
   ProcProcessTable = buildPerlPackage {
     pname = "Proc-ProcessTable";
-    version = "0.59";
+    version = "0.636";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JW/JWB/Proc-ProcessTable-0.59.tar.gz";
-      hash = "sha256-+MxQVNeMNaDOOft1QwtO9ALiqZAT0uw355l/MWWUYGw=";
+      url = "mirror://cpan/authors/id/J/JW/JWB/Proc-ProcessTable-0.636.tar.gz";
+      hash = "sha256-lEIk/7APwe81BpYzdwoK/ahiO1x1MtHkq0ip3zlIkP0=";
     };
     meta = {
       description = "Perl extension to access the unix process table";
