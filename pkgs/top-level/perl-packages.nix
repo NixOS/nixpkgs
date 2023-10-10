@@ -892,10 +892,10 @@ with self; {
 
   AppPackager =  buildPerlPackage {
     pname = "App-Packager";
-    version = "1.430.1";
+    version = "1.440";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/App-Packager-1.430.1.tar.gz";
-      hash = "sha256-V/TQFEWDh/ni7S39hhXR4lRbimUEsQryJIZXjYvjdKM=";
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Packager-1.440.tar.gz";
+      hash = "sha256-VoFBa+b9eJe+mEg8TqKOsN3gzGWzwg5o1HswRN7PKHo=";
     };
     meta = {
       description = "Abstraction for Packagers";
