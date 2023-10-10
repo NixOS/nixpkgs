@@ -26074,10 +26074,10 @@ with self; {
 
   TextTemplate = buildPerlPackage {
     pname = "Text-Template";
-    version = "1.59";
+    version = "1.61";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.59.tar.gz";
-      hash = "sha256-HdLHiMBTA+2alw4YgRCWQhUfqT4Cx6gNTHBggna6se4=";
+      url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Text-Template-1.61.tar.gz";
+      hash = "sha256-opXqfR7yQa4mQMH3hktij45vmewU+x2ngbL18haNzwk=";
     };
     buildInputs = [ TestMoreUTF8 TestWarnings ];
     meta = {
