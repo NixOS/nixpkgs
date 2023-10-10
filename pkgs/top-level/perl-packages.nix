@@ -27316,10 +27316,10 @@ with self; {
 
   WWWMechanize = buildPerlPackage {
     pname = "WWW-Mechanize";
-    version = "2.03";
+    version = "2.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-2.03.tar.gz";
-      hash = "sha256-Px3XTfYdYVIsAnDxluzG6AxAj4xNGDW5nh/OCg2ThF4=";
+      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/WWW-Mechanize-2.17.tar.gz";
+      hash = "sha256-nAIAPoRiHeoSyYDEEB555PjK5OOCzT2iOfqovRmPBjo=";
     };
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
     doCheck = false;
