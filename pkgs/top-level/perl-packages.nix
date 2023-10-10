@@ -847,10 +847,10 @@ with self; {
 
   Applify = buildPerlPackage {
     pname = "Applify";
-    version = "0.22";
+    version = "0.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Applify-0.22.tar.gz";
-      hash = "sha256-iiSlTkuhclGss88IO2drzqCYsClF9iMsV4nQd3ImxHg=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Applify-0.23.tar.gz";
+      hash = "sha256-fI3Z55e9DsJgDTAOzUnul4EZgxxlay0L3q7OoENIoRI=";
     };
     meta = {
       description = "Write object oriented scripts with ease";
