@@ -8683,10 +8683,10 @@ with self; {
 
   ExcelWriterXLSX = buildPerlPackage {
     pname = "Excel-Writer-XLSX";
-    version = "1.09";
+    version = "1.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Excel-Writer-XLSX-1.09.tar.gz";
-      hash = "sha256-1nnGrBnpPDKrd1lMeT5BuUjHuzhztgDnCtY30JPcoYc=";
+      url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/Excel-Writer-XLSX-1.11.tar.gz";
+      hash = "sha256-yzMA0jEZxpiGTvC3PBmnLLpxi/wG7QBzWaUxP5YcwqA=";
     };
     propagatedBuildInputs = [ ArchiveZip ];
     meta = {
