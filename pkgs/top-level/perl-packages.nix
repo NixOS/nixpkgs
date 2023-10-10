@@ -17477,10 +17477,10 @@ with self; {
 
   MP3Tag = buildPerlPackage {
     pname = "MP3-Tag";
-    version = "1.15";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.15.zip";
-      hash = "sha256-qqxI9GN+3KQI/Xk4G8C/8PmxG9jh6U3gWdrpkzZfVtE=";
+      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/MP3-Tag-1.16.zip";
+      hash = "sha256-UDhQk6owAFa8Jiu2pACpbiGVl3wcXh6/FaXgdak3e4Y=";
     };
     buildInputs = [ pkgs.unzip ];
 
