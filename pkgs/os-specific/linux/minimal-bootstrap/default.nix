@@ -82,18 +82,24 @@ lib.makeScope
       gnutar = gnutar-musl;
     };
 
-    gawk-mes = callPackage ./gawk/mes.nix {
-      bash = bash_2_05;
-      tinycc = tinycc-mes;
-      gnused = gnused-mes;
-    };
-
     gawk = callPackage ./gawk {
       bash = bash_2_05;
       tinycc = tinycc-musl;
       gnumake = gnumake-musl;
       gnutar = gnutar-musl;
       bootGawk = gawk-mes;
+    };
+
+    gawk-mes = callPackage ./gawk/mes.nix {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+      gnused = gnused-mes;
+    };
+
+    gawk-static = callPackage ./gawk/static.nix {
+      gcc = gcc-latest;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
     };
 
     gcc46 = callPackage ./gcc/4.6.nix {
@@ -269,8 +275,9 @@ lib.makeScope
       echo ${coreutils-static.tests.get-version}
       echo ${diffutils.tests.get-version}
       echo ${findutils.tests.get-version}
-      echo ${gawk-mes.tests.get-version}
       echo ${gawk.tests.get-version}
+      echo ${gawk-mes.tests.get-version}
+      echo ${gawk-static.tests.get-version}
       echo ${gcc46.tests.get-version}
       echo ${gcc46-cxx.tests.hello-world}
       echo ${gcc8.tests.hello-world}
