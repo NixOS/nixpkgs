@@ -4111,10 +4111,10 @@ with self; {
 
   ConfigINI = buildPerlPackage {
     pname = "Config-INI";
-    version = "0.025";
+    version = "0.029";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-INI-0.025.tar.gz";
-      hash = "sha256-Yov3bVuR+J3eItSBPsAzAm6/cbdyu2HM2pCdoAyGlzI=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-INI-0.029.tar.gz";
+      hash = "sha256-C755enMCEGRKkH2QzUqisjrVgMsnvTk5O/xqfvn9/eo=";
     };
     propagatedBuildInputs = [ MixinLinewise ];
     meta = {
