@@ -21898,10 +21898,10 @@ with self; {
 
   SpecioLibraryPathTiny = buildPerlPackage {
     pname = "Specio-Library-Path-Tiny";
-    version = "0.04";
+    version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Specio-Library-Path-Tiny-0.04.tar.gz";
-      hash = "sha256-72gT6or1FyQwREmZjbIeoqk7JYJVSet50/HpFx/qzjM=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Specio-Library-Path-Tiny-0.05.tar.gz";
+      hash = "sha256-YN8Lubza6yxmoHi/bfmVTqT5Qz1stoCImULlQsfCelE=";
     };
     propagatedBuildInputs = [ PathTiny Specio ];
     buildInputs = [ Filepushd TestFatal ];
