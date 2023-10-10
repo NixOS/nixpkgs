@@ -5621,10 +5621,10 @@ with self; {
 
   DataDump = buildPerlPackage {
     pname = "Data-Dump";
-    version = "1.23";
+    version = "1.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/Data-Dump-1.23.tar.gz";
-      hash = "sha256-r1OwXvE4e0yrRCfmeJF5KD5PDajPA26NtRbds0RRK2U=";
+      url = "mirror://cpan/authors/id/G/GA/GARU/Data-Dump-1.25.tar.gz";
+      hash = "sha256-pKpuDdvznVrUm93+D4nZ2oZOO8APYnEl0bxYBHL1P70=";
     };
     meta = {
       description = "Pretty printing of data structures";
