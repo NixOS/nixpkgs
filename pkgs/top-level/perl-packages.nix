@@ -8637,10 +8637,10 @@ with self; {
 
   EV = buildPerlPackage {
     pname = "EV";
-    version = "4.33";
+    version = "4.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.33.tar.gz";
-      hash = "sha256-Su6DkbiBE7Qhh/kf1JJF/cjpsZOhWsIC9RnKriqo6jU=";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.34.tar.gz";
+      hash = "sha256-EhFoPc57Z3H0q3EMwVNxK913umFXoTKU0LtzSR/QZWA=";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
