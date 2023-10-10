@@ -8373,10 +8373,10 @@ with self; {
 
   EmailStuffer = buildPerlPackage {
     pname = "Email-Stuffer";
-    version = "0.018";
+    version = "0.020";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Stuffer-0.018.tar.gz";
-      hash = "sha256-0ACijvCWNpmx6ytORptYq3w6DPpKdDGeDnRhVuG9igs=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Stuffer-0.020.tar.gz";
+      hash = "sha256-Ch77fy3t05BSsSb3GMotO1hFpBI6OTkv2d+gx25gV8c=";
     };
     buildInputs = [ Moo TestFatal ];
     propagatedBuildInputs = [ EmailMIME EmailSender ModuleRuntime ParamsUtil ];
