@@ -22373,10 +22373,10 @@ with self; {
 
   StringErrf = buildPerlPackage {
     pname = "String-Errf";
-    version = "0.008";
+    version = "0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Errf-0.008.tar.gz";
-      hash = "sha256-rhNveD2sZYeuotItZOwgUnIVOoP5VLB1dm49KYpO1ts=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Errf-0.009.tar.gz";
+      hash = "sha256-4f7b+bT9ZLZOqBA43bdqTGzYX12xW8IfEGVqKYNJ3B8=";
     };
     buildInputs = [ JSONMaybeXS TimeDate ];
     propagatedBuildInputs = [ StringFormatter ];
