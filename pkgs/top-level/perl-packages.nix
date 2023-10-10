@@ -26964,10 +26964,10 @@ with self; {
 
   URI = buildPerlPackage {
     pname = "URI";
-    version = "5.05";
+    version = "5.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.05.tar.gz";
-      hash = "sha256-pcET0tAnBtn73KaobykMWwWy+Gg21Of+FEfwYyYbeew=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/URI-5.21.tar.gz";
+      hash = "sha256-liZYYM1hveFuhBXc+/EIBW3hYsqgrDf4HraVydLgq3c=";
     };
     buildInputs = [ TestNeeds ];
     meta = {
