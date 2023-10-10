@@ -13484,10 +13484,10 @@ with self; {
 
   LinguaTranslit = buildPerlPackage {
     pname = "Lingua-Translit";
-    version = "0.28";
+    version = "0.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AL/ALINKE/Lingua-Translit-0.28.tar.gz";
-      hash = "sha256-ET+R2PwsYwQ3FTpJ+3pSsCOvj2J47ZbAcLH2CCS46uE=";
+      url = "mirror://cpan/authors/id/A/AL/ALINKE/Lingua-Translit-0.29.tar.gz";
+      hash = "sha256-GtL6vAB52tcIt9nVVDfJ67GS5hC/lgryWUWFi5JZd1I=";
     };
     doCheck = false;
     meta = {
