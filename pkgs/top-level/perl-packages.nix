@@ -13714,10 +13714,10 @@ with self; {
 
   LocaleCodes = buildPerlPackage {
     pname = "Locale-Codes";
-    version = "3.66";
+    version = "3.76";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.66.tar.gz";
-      hash = "sha256-mfrNbVbijKaPMj0Cy3/GyOuYM7BpalqDPvSsP15cV+c=";
+      url = "mirror://cpan/authors/id/S/SB/SBECK/Locale-Codes-3.76.tar.gz";
+      hash = "sha256-Qo00GFUJ7fbaYoYoAJcohrsCwySTRU/L4Y+Zmk9DXzk=";
     };
     buildInputs = [ TestInter ];
     meta = {
