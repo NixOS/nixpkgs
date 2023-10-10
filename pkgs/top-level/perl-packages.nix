@@ -26046,10 +26046,10 @@ with self; {
 
   TextTable = buildPerlModule {
     pname = "Text-Table";
-    version = "1.134";
+    version = "1.135";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.134.tar.gz";
-      hash = "sha256-us9Cmxi3wLIsCIIZBVBj45AnSVMdSI69exfqt3V80Qs=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Text-Table-1.135.tar.gz";
+      hash = "sha256-/KPBboMSf3xE3ePT9+PHPqUNEJoQVERd6Agv6nlMpdI=";
     };
     propagatedBuildInputs = [ TextAligner ];
     meta = {
