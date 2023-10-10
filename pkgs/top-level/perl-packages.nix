@@ -6056,10 +6056,10 @@ with self; {
 
   DataULID = buildPerlPackage {
     pname = "Data-ULID";
-    version = "1.0.0";
+    version = "1.2.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.0.0.tar.gz";
-      hash = "sha256-TXV0dYk9utUWXwplxEbTi0fzkBnTb3fanSnJjL8nIG8=";
+      url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.2.1.tar.gz";
+      hash = "sha256-SbThGyY0inXfNONGF0UuMZ/XpygasJQgYvFieeqKHSc=";
     };
     propagatedBuildInputs = [ DateTime EncodeBase32GMP MathRandomSecure ];
     meta = {
