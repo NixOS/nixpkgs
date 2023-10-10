@@ -6491,10 +6491,10 @@ with self; {
 
   DateTimeFormatStrptime = buildPerlPackage {
     pname = "DateTime-Format-Strptime";
-    version = "1.77";
+    version = "1.79";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.77.tar.gz";
-      hash = "sha256-L6Q8g47PU1byIakaQcgduiLnhgxUdLSmFyMlmJgXPko=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.79.tar.gz";
+      hash = "sha256-cB5GgCyG7U2IaVwabay76QszkL7reU84fnx5IwADdXk=";
     };
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTime ];
