@@ -6415,10 +6415,10 @@ with self; {
 
   DateTimeFormatISO8601 = buildPerlPackage {
     pname = "DateTime-Format-ISO8601";
-    version = "0.15";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-0.15.tar.gz";
-      hash = "sha256-FJdow2i5134fJdM5bH8D4kKRAB/RTCxdq2p2JbKm2qk=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-0.16.tar.gz";
+      hash = "sha256-WChH9uApBlM0oAVk8gzXwo9OXNTsIVE9D2klMe07VuE=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     buildInputs = [ Test2Suite ];
