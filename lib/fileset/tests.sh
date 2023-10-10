@@ -678,6 +678,73 @@ tree=(
 checkFileset 'intersection (unions [ ./a/b ./c/d ./c/e ]) (unions [ ./a ./c/d/f ./c/e ])'
 
 
+## File filter
+
+# The predicate is not called when there's no files
+tree=()
+checkFileset 'fileFilter (file: abort "this is not needed") ./.'
+checkFileset 'fileFilter (file: abort "this is not needed") _emptyWithoutBase'
+
+# The predicate must be able to handle extra attributes
+touch a
+expectFailure 'toSource { root = ./.; fileset = fileFilter ({ name, type }: true) ./.; }' 'called with unexpected argument '\''"lib.fileset.fileFilter: The predicate function passed as the first argument must be able to handle extra attributes for future compatibility. If you'\''re using `\{ name, file \}:`, use `\{ name, file, ... \}:` instead."'\'
+rm -rf -- *
+
+# .name is the name, and it works correctly, even recursively
+tree=(
+    [a]=1
+    [b]=0
+    [c/a]=1
+    [c/b]=0
+    [d/c/a]=1
+    [d/c/b]=0
+)
+checkFileset 'fileFilter (file: file.name == "a") ./.'
+tree=(
+    [a]=0
+    [b]=1
+    [c/a]=0
+    [c/b]=1
+    [d/c/a]=0
+    [d/c/b]=1
+)
+checkFileset 'fileFilter (file: file.name != "a") ./.'
+
+# `.type` is the file type
+mkdir d
+touch d/a
+ln -s d/b d/b
+mkfifo d/c
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type == "regular") ./.; }' \
+    'toSource { root = ./.; fileset = ./d/a; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type == "symlink") ./.; }' \
+    'toSource { root = ./.; fileset = ./d/b; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type == "unknown") ./.; }' \
+    'toSource { root = ./.; fileset = ./d/c; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type != "regular") ./.; }' \
+    'toSource { root = ./.; fileset = union ./d/b ./d/c; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type != "symlink") ./.; }' \
+    'toSource { root = ./.; fileset = union ./d/a ./d/c; }'
+expectEqual \
+    'toSource { root = ./.; fileset = fileFilter (file: file.type != "unknown") ./.; }' \
+    'toSource { root = ./.; fileset = union ./d/a ./d/b; }'
+rm -rf -- *
+
+# It's lazy
+tree=(
+    [b]=1
+    [c/a]=1
+)
+# Note that union evaluates the first argument first if necessary, that's why we can use ./c/a here
+checkFileset 'union ./c/a (fileFilter (file: assert file.name != "a"; true) ./.)'
+# but here we need to use ./c
+checkFileset 'union (fileFilter (file: assert file.name != "a"; true) ./.) ./c'
+
 ## Tracing
 
 # The second trace argument is returned
