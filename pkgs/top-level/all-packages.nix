@@ -5052,8 +5052,6 @@ with pkgs;
 
   dialect = callPackage ../applications/misc/dialect { };
 
-  dialog = callPackage ../tools/misc/dialog { };
-
   dialogbox = libsForQt5.callPackage ../tools/misc/dialogbox { };
 
   dibbler = callPackage ../tools/networking/dibbler { };
