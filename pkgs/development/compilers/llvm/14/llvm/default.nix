@@ -237,6 +237,26 @@ in stdenv.mkDerivation (rec {
     )
   ];
 
+  # Make sure dependencies are propagated to the native compiler when cross-compiling LLVM.
+  env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) (
+    let
+      nativeCC = pkgsBuildBuild.targetPackages.stdenv.cc;
+      deps = lib.concatMap (x: x.all) nativeCC.depsTargetTargetPropagated;
+      devs = lib.pipe deps [
+        (lib.filter (x: x.outputName == "dev"))
+        (map (x: "-isystem ${x}/include"))
+      ];
+      libs = lib.pipe deps [
+        (lib.filter (x: x.outputName == "lib" || x.outputName == "out"))
+        (map (x: "-L${x}/lib"))
+      ];
+    in
+    {
+      "NIX_CFLAGS_COMPILE_${nativeCC.suffixSalt}" = lib.concatStringsSep " " devs;
+      "NIX_LDFLAGS_${nativeCC.suffixSalt}" = lib.concatStringsSep " " libs;
+    }
+  );
+
   postBuild = ''
     rm -fR $out
   '';
