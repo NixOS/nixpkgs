@@ -20652,10 +20652,10 @@ with self; {
 
   PodChecker = buildPerlPackage {
     pname = "Pod-Checker";
-    version = "1.74";
+    version = "1.75";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.74.tar.gz";
-      hash = "sha256-LiFirwqIYORXAxiGbsGO++ezf+uNmQs0hIuffFJKpYg=";
+      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.75.tar.gz";
+      hash = "sha256-82O1dOxmCvbtvT5dTJ/8UVodRsvxx8ytmkbO0oh5wiE=";
     };
     meta = {
       description = "Verifies POD documentation contents for compliance with the POD format specifications";
