@@ -15502,10 +15502,10 @@ with self; {
 
   ModuleBuild = buildPerlPackage {
     pname = "Module-Build";
-    version = "0.4231";
+    version = "0.4234";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4231.tar.gz";
-      hash = "sha256-fg9MaSwXQMGshOoU1+o9i8eYsvsmwJh3Ip4E9DCytxc=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4234.tar.gz";
+      hash = "sha256-Zq6sYSdBi+XkcerTdEZIx2a9AUgoJcW2ZlJnXyvIao8=";
     };
     postConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # for unknown reason, the first run of Build fails
