@@ -107,10 +107,10 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
-  withExtraArgs = nixosSystem: nixosSystem // {
+  withExtraAttrs = nixosSystem: nixosSystem // {
     inherit extraArgs;
     inherit (nixosSystem._module.args) pkgs;
-    extendModules = args: withExtraArgs (nixosSystem.extendModules args);
+    extendModules = args: withExtraAttrs (nixosSystem.extendModules args);
   };
 in
-withWarnings (withExtraArgs nixosWithUserModules)
+withWarnings (withExtraAttrs nixosWithUserModules)
