@@ -19695,10 +19695,10 @@ with self; {
 
   PerlCriticCommunity = buildPerlModule {
     pname = "Perl-Critic-Community";
-    version = "1.0.0";
+    version = "1.0.3";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.0.tar.gz";
-      hash = "sha256-MRt3XaQZPp3pTPUiXpk8xU3Qlq4efvYHOM2uHZuIVOc=";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Perl-Critic-Community-v1.0.3.tar.gz";
+      hash = "sha256-Ed3bt5F5/mIp8zPKOS+U/firXNmJzJfZk1IaidXEetU=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ PPI PathTiny PerlCritic PerlCriticPolicyVariablesProhibitLoopOnHash PerlCriticPulp ];
