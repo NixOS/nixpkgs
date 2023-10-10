@@ -13153,10 +13153,10 @@ with self; {
 
   LexicalSealRequireHints = buildPerlModule {
     pname = "Lexical-SealRequireHints";
-    version = "0.0011";
+    version = "0.012";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Lexical-SealRequireHints-0.011.tar.gz";
-      hash = "sha256-npGO0RjvaF1uCdqxzW5m7gox13b+JLumPlJDkG9WATo=";
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/Lexical-SealRequireHints-0.012.tar.gz";
+      hash = "sha256-wyvcOOBvjWyQdlu74xaMNYJH2n2uhbgLqEotoXY3V90=";
     };
     meta = {
       description = "Prevent leakage of lexical hints";
