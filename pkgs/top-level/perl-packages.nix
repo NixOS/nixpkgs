@@ -21442,10 +21442,10 @@ with self; {
 
   RTClientREST = buildPerlModule {
     pname = "RT-Client-REST";
-    version = "0.60";
+    version = "0.72";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DJ/DJZORT/RT-Client-REST-0.60.tar.gz";
-      hash = "sha256-Dm8to9lpA0kbQ7GcYSIcvuqIQUJk+QcxLyd9qvFEJIs=";
+      url = "mirror://cpan/authors/id/D/DJ/DJZORT/RT-Client-REST-0.72.tar.gz";
+      hash = "sha256-KPIBWKD3sfNLdM423lvdVimeuUAUBHLISXyVNYIm/bM=";
     };
     buildInputs = [ CGI HTTPServerSimple TestException ];
     propagatedBuildInputs = [ DateTimeFormatDateParse Error LWP ParamsValidate ];
