@@ -7572,10 +7572,10 @@ with self; {
 
   DigestHMAC = buildPerlPackage {
     pname = "Digest-HMAC";
-    version = "1.03";
+    version = "1.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GA/GAAS/Digest-HMAC-1.03.tar.gz";
-      hash = "sha256-O8csbT/xRNc677kOmnjTNhLVjPHNFjHs+4mFupbaSlk=";
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/Digest-HMAC-1.04.tar.gz";
+      hash = "sha256-1ryBVqonXETXlLfBj0TNrEpYFAJFyVnmsZssODiwjtQ=";
     };
     meta = {
       description = "Keyed-Hashing for Message Authentication";
