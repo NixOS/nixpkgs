@@ -28208,10 +28208,10 @@ with self; {
 
   YAMLLibYAML = buildPerlPackage {
     pname = "YAML-LibYAML";
-    version = "0.83";
+    version = "0.88";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.83.tar.gz";
-      hash = "sha256-tHF1tP85etdaT3eB09g8CGN9pv8LrjJq87OJ2FS+xJA=";
+      url = "mirror://cpan/authors/id/I/IN/INGY/YAML-LibYAML-0.88.tar.gz";
+      hash = "sha256-qKJzjMzDMqj3VJxMJ/PgCQyasR7vD2yFZEUXc5gTVng=";
     };
     meta = {
       description = "Perl YAML Serialization using XS and libyaml";
