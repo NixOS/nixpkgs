@@ -4384,10 +4384,10 @@ with self; {
 
   ConvertColor = buildPerlModule {
     pname = "Convert-Color";
-    version = "0.11";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Convert-Color-0.11.tar.gz";
-      hash = "sha256-tBIXxykxA0ukQX16nh4pmfBFgNTmsxxwmT/tzMJEDTg=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Convert-Color-0.17.tar.gz";
+      hash = "sha256-5/jDN8VSXqoDd3xXaD6hGvm5j/HQURojSvH4CkMiTsc=";
     };
     buildInputs = [ TestNumberDelta ];
     propagatedBuildInputs = [ ListUtilsBy ModulePluggable ];
