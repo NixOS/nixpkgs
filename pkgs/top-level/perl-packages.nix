@@ -6163,10 +6163,10 @@ with self; {
 
   DataValidateIP = buildPerlPackage {
     pname = "Data-Validate-IP";
-    version = "0.27";
+    version = "0.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Data-Validate-IP-0.27.tar.gz";
-      hash = "sha256-4aqSI13LnG/ZtsjNoYTRr3NTfMd/T4Og+IIHqL+/t9Y=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Data-Validate-IP-0.31.tar.gz";
+      hash = "sha256-c0r/hrb5ytQOHE2oHyj68Y4IAsdqVm2V5WE9QxgYL8E=";
     };
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ NetAddrIP ];
