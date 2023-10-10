@@ -9884,10 +9884,10 @@ with self; {
 
   FileTouch = buildPerlPackage {
     pname = "File-Touch";
-    version = "0.11";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/File-Touch-0.11.tar.gz";
-      hash = "sha256-43ml/4lCDPOZBuXO/zCbjOlY+Z+cPletUrUAKjmC2Tw=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/File-Touch-0.12.tar.gz";
+      hash = "sha256-KgTcQk30jpjFRVbGBFyrAmpJ43N6qUohz0l3YbDy5Zw=";
     };
     meta = {
       description = "Update file access and modification times, optionally creating files if needed";
