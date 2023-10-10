@@ -3165,10 +3165,10 @@ with self; {
 
   Chart = buildPerlPackage {
     pname = "Chart";
-    version = "2.4.10";
+    version = "2.403.9";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHARTGRP/Chart-2.4.10.tar.gz";
-      hash = "sha256-hL2ZoaDOckd7FeNYgeYSA5i7P1U67rXo1ysIhSDk9r8=";
+      url = "mirror://cpan/authors/id/L/LI/LICHTKIND/Chart-v2.403.9.tar.gz";
+      hash = "sha256-V8aCi7TIpyFw/rZ9wfFIq/Gcqzgnd54wh3tGEe1n86s=";
     };
     propagatedBuildInputs = [ GD ];
     meta = {
