@@ -21280,10 +21280,10 @@ with self; {
 
   RESTClient = buildPerlPackage {
     pname = "REST-Client";
-    version = "273";
+    version = "281";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/K/KK/KKANE/REST-Client-273.tar.gz";
-      hash = "sha256-qGUqIhQwj6/yxovlzmTJBNzMxehr5/MjdsFZCGnQGEQ=";
+      url = "mirror://cpan/authors/id/A/AK/AKHUETTEL/REST-Client-281.tar.gz";
+      hash = "sha256-+hDSGgA35oJgHv5mc4p1j/dSEJSqASKek8iIpnmyyPY=";
     };
     propagatedBuildInputs = [ LWPProtocolHttps ];
     meta = {
