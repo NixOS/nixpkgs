@@ -57,6 +57,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     platforms = platforms.unix;
     mainProgram = "sonic";
-    maintainers = with maintainers; [ pleshevskiy ];
+    maintainers = with maintainers; [ pleshevskiy anthonyroussel ];
   };
 }
