@@ -28133,10 +28133,10 @@ with self; {
 
   XXX = buildPerlPackage {
     pname = "XXX";
-    version = "0.35";
+    version = "0.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/XXX-0.35.tar.gz";
-      hash = "sha256-pmY2DEl9zgf0HL5FtfjExW24G8iPDHU/Qaxv0QYU86s=";
+      url = "mirror://cpan/authors/id/I/IN/INGY/XXX-0.38.tar.gz";
+      hash = "sha256-0QUQ6gD2Gav0erKZ8Ui9WzYM+gfcDtUYE4t87HJpLSo=";
     };
     propagatedBuildInputs = [ YAMLPP ];
     meta = {
