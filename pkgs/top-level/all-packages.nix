@@ -17766,7 +17766,8 @@ with pkgs;
     electron_23-bin
     electron_24-bin
     electron_25-bin
-    electron_26-bin;
+    electron_26-bin
+    electron_27-bin;
 
   electron = electron-bin;
   electron_9 = electron_9-bin;
@@ -17787,6 +17788,7 @@ with pkgs;
   electron_24 = electron_24-bin;
   electron_25 = electron_25-bin;
   electron_26 = electron_26-bin;
+  electron_27 = electron_27-bin;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
