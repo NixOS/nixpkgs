@@ -18485,7 +18485,8 @@ with pkgs;
     electron_23-bin
     electron_24-bin
     electron_25-bin
-    electron_26-bin;
+    electron_26-bin
+    electron_27-bin;
 
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
@@ -18504,6 +18505,7 @@ with pkgs;
   electron_24 = electron_24-bin;
   electron_25 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_25 then electron-source.electron_25 else electron_25-bin;
   electron_26 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_26 then electron-source.electron_26 else electron_26-bin;
+  electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
   electron = electron_26;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
