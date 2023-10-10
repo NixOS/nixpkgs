@@ -17916,10 +17916,10 @@ with self; {
 
   NetCIDR = buildPerlPackage {
     pname = "Net-CIDR";
-    version = "0.20";
+    version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.20.tar.gz";
-      hash = "sha256-x17caBi7Ng1xwTkWn9ZK1lw1//bSufrHufnmxGfxh7U=";
+      url = "mirror://cpan/authors/id/M/MR/MRSAM/Net-CIDR-0.21.tar.gz";
+      hash = "sha256-MPMDwHNZSNozNw3sx+h8+mi8QwqkS4HRj42CO20av78=";
     };
     meta = {
       description = "Manipulate IPv4/IPv6 netblocks in CIDR notation";
