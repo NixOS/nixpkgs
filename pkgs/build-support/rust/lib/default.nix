@@ -124,21 +124,9 @@ rec {
     #
     setEnv = ''
     env \
-    ''
-    # Due to a bug in how splicing and targetPackages works, in
-    # situations where targetPackages is irrelevant
-    # targetPackages.stdenv.cc is often simply wrong.  We must omit
-    # the following lines when rustTargetPlatform collides with
-    # rustHostPlatform.
-    + lib.optionalString (rustTargetPlatform != rustHostPlatform) ''
-      "CC_${toRustTargetForUseInEnvVars stdenv.targetPlatform}=${ccForTarget}" \
-      "CXX_${toRustTargetForUseInEnvVars stdenv.targetPlatform}=${cxxForTarget}" \
-      "CARGO_TARGET_${toRustTargetForUseInEnvVars stdenv.targetPlatform}_LINKER=${ccForTarget}" \
-    '' + ''
       "CC_${toRustTargetForUseInEnvVars stdenv.hostPlatform}=${ccForHost}" \
       "CXX_${toRustTargetForUseInEnvVars stdenv.hostPlatform}=${cxxForHost}" \
       "CARGO_TARGET_${toRustTargetForUseInEnvVars stdenv.hostPlatform}_LINKER=${ccForHost}" \
-    '' + ''
       "CC_${toRustTargetForUseInEnvVars stdenv.buildPlatform}=${ccForBuild}" \
       "CXX_${toRustTargetForUseInEnvVars stdenv.buildPlatform}=${cxxForBuild}" \
       "CARGO_TARGET_${toRustTargetForUseInEnvVars stdenv.buildPlatform}_LINKER=${ccForBuild}" \
