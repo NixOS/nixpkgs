@@ -3660,10 +3660,10 @@ with self; {
 
   ClassObservable = buildPerlPackage {
     pname = "Class-Observable";
-    version = "1.04";
+    version = "2.004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CW/CWINTERS/Class-Observable-1.04.tar.gz";
-      hash = "sha256-PvGHM6DwPBE/O8+KxQR24Jyh/mI09KqsqiTfypUWgJQ=";
+      url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/Class-Observable-2.004.tar.gz";
+      hash = "sha256-bfMun+XwCIkfxO+k5PReqhQE0wIgRZyPyKUB8KfPLmk=";
     };
     propagatedBuildInputs = [ ClassISA ];
     meta = {
