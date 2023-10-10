@@ -3,16 +3,16 @@
         "deps": {
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-tQzmHL107F2jO6oDhkSDSOM+q91wxfYvrM9dw7jNlRE=",
+                "hash": "sha256-UIOHCvqMXuCCrduDo6tnxc6qJuHw2LX4Kgmiu/geiR8=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v27.0.0-beta.9"
+                "rev": "v27.0.0"
             },
             "src": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-5X2g/SjWsEER6gla4TG6BvGWsVLAr3HR4W74QTTM4k8=",
+                "hash": "sha256-dT23fhZ9RDY2j7YChaK/hUePkHULTXoXyHNpldmh4Gw=",
                 "url": "https://chromium.googlesource.com/chromium/src.git",
-                "rev": "118.0.5993.18",
+                "rev": "118.0.5993.54",
                 "postFetch": "rm -r $out/third_party/blink/web_tests; rm -r $out/third_party/hunspell/tests; rm -r $out/content/test/data; rm -r $out/courgette/testdata; rm -r $out/extensions/test/data; rm -r $out/media/test/data; "
             },
             "src/third_party/clang-format/script": {
@@ -77,9 +77,9 @@
             },
             "src/third_party/angle": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-TP2ZFHIPbyPWnVBS6R8VsKNnmRDLP29sXD1G6Uo4LMg=",
+                "hash": "sha256-It05E3+qG17dEbhbaX/VQJaydWOQ1mpsj95dT5IJkgo=",
                 "url": "https://chromium.googlesource.com/angle/angle.git",
-                "rev": "17c4741d70dd5a98724a5a8316dc7e05a9b6d48e"
+                "rev": "05f45adc147393562b518ca1f82a3ccba7ee40f7"
             },
             "src/third_party/angle/third_party/glmark2/src": {
                 "fetcher": "fetchFromGitiles",
@@ -257,9 +257,9 @@
             },
             "src/third_party/devtools-frontend/src": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-Uc8Rww8zppFWxZZSnSGwyaB5m7WqZMXhHv84wSl7f7o=",
+                "hash": "sha256-D3W8U19i5pHWPLviMKbpzhiDoF6A0+tClYJcZWdbTqk=",
                 "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-                "rev": "666c79779cdc48a2fd41d7cbc5ee79ecd289e79a"
+                "rev": "bcf0ed097be848d234fb5290c1e4d69672dc5405"
             },
             "src/third_party/dom_distiller_js/dist": {
                 "fetcher": "fetchFromGitiles",
@@ -521,9 +521,9 @@
             },
             "src/third_party/libvpx/source/libvpx": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-jYy35aQyO+1iNwTT2lzLHwJc7avryC6q2f3uPAEKKVg=",
+                "hash": "sha256-5x0Sk8/DXaTCIydK79vWZgIx3IHeQbLUxoNyE7E+Sdo=",
                 "url": "https://chromium.googlesource.com/webm/libvpx.git",
-                "rev": "6da1bd01d64d3d246b633bf25c766dfe751345b7"
+                "rev": "38a707faef72eeff89d669c553e7bfe9e08dba8f"
             },
             "src/third_party/libwebm/source": {
                 "fetcher": "fetchFromGitiles",
@@ -581,9 +581,9 @@
             },
             "src/third_party/openscreen/src": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-JkOKXDRuzZxc+xhnUNwhz6Y7ElhxrTdCfyEJEtbWjvM=",
+                "hash": "sha256-CtCGOoKbbyUGUHfqd7n3uPlv9GEExuYgMTCIaU+ypOA=",
                 "url": "https://chromium.googlesource.com/openscreen",
-                "rev": "91b081e995ec03894ce54eded84ebd3b45247d13"
+                "rev": "fd0e81e558086c30fa91a4af89361cef8d1327e4"
             },
             "src/third_party/openscreen/src/third_party/tinycbor/src": {
                 "fetcher": "fetchFromGitiles",
@@ -791,9 +791,9 @@
             },
             "src/third_party/webrtc": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-GEv2JBC7GJeNOC3kG/Z3R4dTWOgSkMIt6Eytj8jfRGI=",
+                "hash": "sha256-KpiNGAue945kGCuQYGhxiWVUFTE1tcntSAXBZdkrE9A=",
                 "url": "https://webrtc.googlesource.com/src.git",
-                "rev": "5afcec093c1403fe9e3872706d04671cbc6d2983"
+                "rev": "d8f2b0380b3ec980af35ce4b92ba6a211ec8c76d"
             },
             "src/third_party/wuffs/src": {
                 "fetcher": "fetchFromGitiles",
@@ -833,9 +833,9 @@
             },
             "src/v8": {
                 "fetcher": "fetchFromGitiles",
-                "hash": "sha256-5lGIgzBWnKwRCKRmLrTTyaSfFgKZsd0f01zxqDvhkzA=",
+                "hash": "sha256-+y24A6/c4tl4zu1GcxsiEWvAMMCsat7X0jl2XCmBX6g=",
                 "url": "https://chromium.googlesource.com/v8/v8.git",
-                "rev": "748d3360122aeb3bcb450fb4b7c1b18049cab004"
+                "rev": "6b05d242aae3392bef6b86fbe44428126607b3d0"
             },
             "src/third_party/nan": {
                 "fetcher": "fetchFromGitHub",
@@ -873,12 +873,12 @@
                 "rev": "78d3966b3c331292ea29ec38661b25df0a245948"
             }
         },
-        "version": "27.0.0-beta.9",
+        "version": "27.0.0",
         "modules": "118",
-        "chrome": "118.0.5993.18",
+        "chrome": "118.0.5993.54",
         "node": "18.17.1",
         "chromium": {
-            "version": "118.0.5993.18",
+            "version": "118.0.5993.54",
             "deps": {
                 "gn": {
                     "version": "2023-08-10",
@@ -888,8 +888,8 @@
                 }
             }
         },
-        "chromium_npm_hash": "sha256-5cjqpYB45nw2gop54VP+tL7/0w63nQGfQ4x6a6KS7XQ=",
-        "electron_yarn_hash": "039zdwb38982h6qinhipja8abza33ihihb4i5fadpsgh0cl7ldsy"
+        "electron_yarn_hash": "039zdwb38982h6qinhipja8abza33ihihb4i5fadpsgh0cl7ldsy",
+        "chromium_npm_hash": "sha256-5cjqpYB45nw2gop54VP+tL7/0w63nQGfQ4x6a6KS7XQ="
     },
     "26": {
         "deps": {
@@ -2552,7 +2552,7 @@
                 }
             }
         },
-        "electron_yarn_hash": "0fq44b91ha1lbgakwfz16z0g10y66c7m8gvlkg1ci81rzjrj0qpz",
-        "chromium_npm_hash": "sha256-WFkyT1V4jNkWUyyHF68yEe50GhdlNZJBXuQvVVGPk6A="
+        "chromium_npm_hash": "sha256-WFkyT1V4jNkWUyyHF68yEe50GhdlNZJBXuQvVVGPk6A=",
+        "electron_yarn_hash": "0fq44b91ha1lbgakwfz16z0g10y66c7m8gvlkg1ci81rzjrj0qpz"
     }
 }
