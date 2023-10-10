@@ -2969,10 +2969,10 @@ with self; {
 
   CGI = buildPerlPackage {
     pname = "CGI";
-    version = "4.51";
+    version = "4.59";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.51.tar.gz";
-      hash = "sha256-C9IV5wEvn1Lmp9P+aV7jDvlZ15bo5TRy+g7YxT+6YAo=";
+      url = "mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.59.tar.gz";
+      hash = "sha256-be5LibiLEOd8lvPAjRm1hq74M7F6Ql1hiq19KMJi+Rw=";
     };
     buildInputs = [ TestDeep TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ HTMLParser ];
