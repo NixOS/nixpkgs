@@ -10686,10 +10686,10 @@ with self; {
 
   GraphViz = buildPerlPackage {
     pname = "GraphViz";
-    version = "2.24";
+    version = "2.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/GraphViz-2.24.tgz";
-      hash = "sha256-2V76xM3u2xgoMQDv4+AMWcGt1STZzojByKNYNZEi9a0=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/GraphViz-2.26.tar.gz";
+      hash = "sha256-ml0lILMmK/MEdSct12SkRfjn+TG++Ivg49O/9EXacyg=";
     };
 
     # XXX: It'd be nicer it `GraphViz.pm' could record the path to graphviz.
