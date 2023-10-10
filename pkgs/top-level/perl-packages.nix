@@ -14266,10 +14266,10 @@ with self; {
 
   LWPProtocolHttps = buildPerlPackage {
     pname = "LWP-Protocol-https";
-    version = "6.09";
+    version = "6.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/LWP-Protocol-https-6.09.tar.gz";
-      hash = "sha256-Fs/hpRFpCwZttWZ8hxSALuK5xdKKMaPnvTb7xwo69ZI=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/LWP-Protocol-https-6.11.tar.gz";
+      hash = "sha256-ATLdvwNmFWXKhQUPKlCU+5Jjy7w8yxpNnEGsm7CDuRc=";
     };
     patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [ IOSocketSSL LWP ];
