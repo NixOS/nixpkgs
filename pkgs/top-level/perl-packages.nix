@@ -7460,10 +7460,10 @@ with self; {
 
   DevelOverloadInfo = buildPerlPackage {
     pname = "Devel-OverloadInfo";
-    version = "0.005";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILMARI/Devel-OverloadInfo-0.005.tar.gz";
-      hash = "sha256-i/3i/6R8mUb4rcjPxEXC+XuNHN1ngRG+6fRE6C96puc=";
+      url = "mirror://cpan/authors/id/I/IL/ILMARI/Devel-OverloadInfo-0.007.tar.gz";
+      hash = "sha256-IaGEFjuQ+R8G/8f13guWg1ZUaum0AKnXXFc8lYwkYiI=";
     };
     propagatedBuildInputs = [ MROCompat PackageStash SubIdentify ];
     buildInputs = [ TestFatal ];
