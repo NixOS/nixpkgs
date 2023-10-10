@@ -1,8 +1,8 @@
-From 32df59bea18bebc18d6d308750e88be325522d2e Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Juan=20Pedro=20Bol=C3=ADvar=20Puente?= <raskolnikov@gnu.org>
-Date: Thu, 10 Aug 2023 14:15:34 +0200
-Subject: [PATCH 2/3] Check in the QML folder of this library does actually
- exist
+From 617d27ee91aaa59c59c4f3a2cca7bab8167d9f5f Mon Sep 17 00:00:00 2001
+From: Nick Cao <nickcao@nichi.co>
+Date: Tue, 10 Oct 2023 10:17:00 -0400
+Subject: [PATCH 11/11] qtbase: check in the QML folder of this library does
+ actually exist
 
 In a modularized installation, this folder will be the location where
 `qtbase` itself is installed, but `qtbase` does not have any QML
@@ -12,10 +12,10 @@ code, and `qmlimportscanner` will complain that it does not exist.
  1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/src/tools/macdeployqt/shared/shared.cpp b/src/tools/macdeployqt/shared/shared.cpp
-index b8fcc9c9bd..676d34d545 100644
+index 48979195f40..8415680ecda 100644
 --- a/src/tools/macdeployqt/shared/shared.cpp
 +++ b/src/tools/macdeployqt/shared/shared.cpp
-@@ -1290,9 +1290,12 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
+@@ -1293,9 +1293,12 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf
      }
      for (const QString &importPath : qmlImportPaths)
          argumentList << "-importPath" << importPath;
@@ -28,8 +28,8 @@ index b8fcc9c9bd..676d34d545 100644
 +        argumentList.append(qmlImportsPath);
 +    }
  
-     // run qmlimportscanner
-     QProcess qmlImportScanner;
+     // In a modularized installation of qt as we have in Nix, instead, we will
+     // read the paths from the environment, as they are spread in multiple
 -- 
-2.26.2
+2.42.0
 
