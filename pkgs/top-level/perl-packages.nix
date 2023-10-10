@@ -5806,10 +5806,10 @@ with self; {
 
   DataMessagePack = buildPerlModule {
     pname = "Data-MessagePack";
-    version = "1.01";
+    version = "1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.01.tar.gz";
-      hash = "sha256-j6DtAQHQTmYYIae3jo1izj4ZspknW7/tF44rqJEmY+o=";
+      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Data-MessagePack-1.02.tar.gz";
+      hash = "sha256-wz20R5CqjSVBR4guI3jf/pcK1gMxNQveBi0XlTSCsbc=";
     };
     buildInputs = [ ModuleBuildXSUtil TestRequires ];
     meta = {
