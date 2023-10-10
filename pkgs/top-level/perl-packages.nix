@@ -25158,10 +25158,10 @@ with self; {
 
   TestSynopsis = buildPerlPackage {
     pname = "Test-Synopsis";
-    version = "0.16";
+    version = "0.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.16.tar.gz";
-      hash = "sha256-GxPsc7z3JGLAYPiBlJFETXRz8+qK60wO2CgmPu0OCSU=";
+      url = "mirror://cpan/authors/id/Z/ZO/ZOFFIX/Test-Synopsis-0.17.tar.gz";
+      hash = "sha256-0mjJizPS+hTbsisg1lYbq0ie6CWH374ZrSd2IMe4tt4=";
     };
     meta = {
       description = "Test your SYNOPSIS code";
