@@ -11979,10 +11979,10 @@ with self; {
 
   HTTPTinyish = buildPerlPackage {
     pname = "HTTP-Tinyish";
-    version = "0.17";
+    version = "0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.17.tar.gz";
-      hash = "sha256-R70RHkdFZtczxBhw4jdMgWidteC1pDrcSK22ZdifsGc=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/HTTP-Tinyish-0.18.tar.gz";
+      hash = "sha256-gDgLjTPGv6lrsBBPpqQcJ9zE6cg6SN8frTkJf1/c/eU=";
     };
     propagatedBuildInputs = [ FileWhich IPCRun3 ];
     meta = {
