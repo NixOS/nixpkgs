@@ -8123,10 +8123,10 @@ with self; {
 
   Dumbbench = buildPerlPackage {
     pname = "Dumbbench";
-    version = "0.111";
+    version = "0.503";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Dumbbench-0.111.tar.gz";
-      hash = "sha256-0x08p9ZyvZKBg8y/KdMnXqWU99Mkrl9J22GClnxassc=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Dumbbench-0.503.tar.gz";
+      hash = "sha256-0BYBmoGDE+cERk8oDPZB72Dodx0HeRtZuZ4XoeyAH6k=";
     };
     propagatedBuildInputs = [ CaptureTiny ClassXSAccessor DevelCheckOS NumberWithError StatisticsCaseResampling ];
     meta = {
