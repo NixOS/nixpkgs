@@ -9381,10 +9381,10 @@ with self; {
 
   FileFindObjectRule = buildPerlModule {
     pname = "File-Find-Object-Rule";
-    version = "0.0312";
+    version = "0.0313";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-Find-Object-Rule-0.0312.tar.gz";
-      hash = "sha256-Pgtsja32Ni5l8jEFMLG+Y37WqsETOZ0QxvkSnnNK//k=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/File-Find-Object-Rule-0.0313.tar.gz";
+      hash = "sha256-gZQPKZ1khySPvzDY8ft99sajSz35RApWIbE1yONPz/I=";
     };
     propagatedBuildInputs = [ FileFindObject NumberCompare TextGlob ];
     # restore t/sample-data which is corrupted by patching shebangs
