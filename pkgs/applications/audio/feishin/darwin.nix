@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation {
-  inherit pname version;
+  inherit pname version meta;
 
   src = fetchurl {
     url = "https://github.com/jeffvli/feishin/releases/download/v${version}/${appname}-${version}-mac-x64.zip";
