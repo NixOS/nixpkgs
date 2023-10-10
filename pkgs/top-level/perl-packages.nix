@@ -25341,10 +25341,10 @@ with self; {
 
   TestWWWMechanize = buildPerlPackage {
     pname = "Test-WWW-Mechanize";
-    version = "1.54";
+    version = "1.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Test-WWW-Mechanize-1.54.tar.gz";
-      hash = "sha256-3KiLWxdBFL9apseC/58OzFDBRCuDJMEdORd1LqNDmvw=";
+      url = "mirror://cpan/authors/id/P/PE/PETDANCE/Test-WWW-Mechanize-1.60.tar.gz";
+      hash = "sha256-I/1y5+0b553h0CotFfDfCTQV4Oq2/GFf9rtoh0Emhnc=";
     };
     buildInputs = [ TestLongString ];
     propagatedBuildInputs = [ CarpAssertMore HTTPServerSimple WWWMechanize ];
