@@ -2659,10 +2659,10 @@ with self; {
 
   CatalystPluginSession = buildPerlPackage {
     pname = "Catalyst-Plugin-Session";
-    version = "0.41";
+    version = "0.43";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Plugin-Session-0.41.tar.gz";
-      hash = "sha256-hWEKF8ofQOuZ3b615TRi8ebVaOiv2Z1Pl1uwf1IKhSg=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-Session-0.43.tar.gz";
+      hash = "sha256-Xn180rlbH8IkS8buuPRPg11gPqB/WjkRCIHbYJKLFMQ=";
     };
     buildInputs = [ TestDeep TestException TestWWWMechanizePSGI ];
     propagatedBuildInputs = [ CatalystRuntime ObjectSignature ];
