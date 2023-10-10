@@ -13993,10 +13993,10 @@ with self; {
 
   LogDispatch = buildPerlPackage {
     pname = "Log-Dispatch";
-    version = "2.70";
+    version = "2.71";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.70.tar.gz";
-      hash = "sha256-o9kcxSRn06PGaDED899EctceQFpF9VMolEhxOsQpPyE=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.71.tar.gz";
+      hash = "sha256-nWDZZIw1zidUcx603rfwWAns4b1jO3TXR5Wu2exzJXA=";
     };
     propagatedBuildInputs = [ DevelGlobalDestruction ParamsValidationCompiler Specio namespaceautoclean ];
     buildInputs = [ IPCRun3 TestFatal TestNeeds ];
