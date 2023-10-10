@@ -4013,6 +4013,7 @@ with self; {
         LIB          = ${pkgs.zlib.out}/lib
         OLD_ZLIB     = False
         GZIP_OS_CODE = AUTO_DETECT
+        USE_ZLIB_NG  = False
       EOF
     '';
 
