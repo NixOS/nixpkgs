@@ -819,6 +819,7 @@ in {
   timezone = handleTest ./timezone.nix {};
   tinc = handleTest ./tinc {};
   tinydns = handleTest ./tinydns.nix {};
+  tinyproxy = handleTest ./tinyproxy.nix {};
   tinywl = handleTest ./tinywl.nix {};
   tmate-ssh-server = handleTest ./tmate-ssh-server.nix { };
   tomcat = handleTest ./tomcat.nix {};
@@ -855,8 +856,7 @@ in {
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   varnish60 = handleTest ./varnish.nix { package = pkgs.varnish60; };
-  varnish72 = handleTest ./varnish.nix { package = pkgs.varnish72; };
-  varnish73 = handleTest ./varnish.nix { package = pkgs.varnish73; };
+  varnish74 = handleTest ./varnish.nix { package = pkgs.varnish74; };
   vault = handleTest ./vault.nix {};
   vault-agent = handleTest ./vault-agent.nix {};
   vault-dev = handleTest ./vault-dev.nix {};
