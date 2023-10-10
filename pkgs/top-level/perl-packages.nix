@@ -11687,24 +11687,6 @@ with self; {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Daemon-6.16.tar.gz";
       hash = "sha256-s40JJyXm+k4MTcKkfhVwcEkbr6Db4Wx4o1joBqp+Fz0=";
     };
-    patches = [
-      # Patches for CVE-2022-3108, from upstream pre 6.15
-      (fetchpatch {
-        url = "https://github.com/libwww-perl/HTTP-Daemon/commit/331d5c1d1f0e48e6b57ef738c2a8509b1eb53376.patch";
-        hash = "sha256-vRSyiO38jnsSeKeGbCnKi+VLaTqQSB349eybl1Wa8SQ=";
-        name = "HTTP-Daemon-CVE-2022-3108-pre.patch";
-      })
-      (fetchpatch {
-        url = "https://github.com/libwww-perl/HTTP-Daemon/commit/e84475de51d6fd7b29354a997413472a99db70b2.patch";
-        hash = "sha256-z8RXcbVEpjSZcm8dUZcDWYeQHtVZODOGCdcDTfXQpfA=";
-        name = "HTTP-Daemon-CVE-2022-3108-1.patch";
-      })
-      (fetchpatch {
-        url = "https://github.com/libwww-perl/HTTP-Daemon/commit/8dc5269d59e2d5d9eb1647d82c449ccd880f7fd0.patch";
-        hash = "sha256-e1lxt+AJGfbjNOZoKj696H2Ftkx9wlTF557WkZCLE5Q=";
-        name = "HTTP-Daemon-CVE-2022-3108-2.patch";
-      })
-    ];
     buildInputs = [ ModuleBuildTiny TestNeeds ];
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
