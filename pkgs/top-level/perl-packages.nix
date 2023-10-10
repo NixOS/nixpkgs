@@ -715,10 +715,10 @@ with self; {
 
   AppCLI = buildPerlPackage {
     pname = "App-CLI";
-    version = "0.50";
+    version = "0.52";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PT/PTC/App-CLI-0.50.tar.gz";
-      hash = "sha256-UdP1gzq1GftG5VUrYOVFXk+cHGgn0e7kFT0LQJ8qk0U=";
+      url = "mirror://cpan/authors/id/P/PT/PTC/App-CLI-0.52.tar.gz";
+      hash = "sha256-Ur1D9VWRPML/1kBfmVHSqr1Gr2PXAdm140amMycJ8M4=";
     };
     propagatedBuildInputs = [ CaptureTiny ClassLoad ];
     buildInputs = [ TestKwalitee TestPod ];
