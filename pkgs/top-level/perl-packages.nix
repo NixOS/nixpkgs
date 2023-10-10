@@ -10823,10 +10823,10 @@ with self; {
 
   Gtk2Unique = buildPerlPackage {
     pname = "Gtk2-Unique";
-    version = "0.05";
+    version = "0.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PO/POTYL/Gtk2-Unique-0.05.tar.gz";
-      hash = "sha256-ro37D2hE3aos57W0RVNBlJDI6Dwk/TXEMUBqWPa+D08=";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gtk2-Unique-0.07.tar.gz";
+      hash = "sha256-nOX2ikFgC8z31u/eMMBwqxFOk57XqKx8O3rZE5mJGGc=";
     };
     propagatedBuildInputs = [ pkgs.libunique pkgs.gtk2 Gtk2 ];
     meta = {
