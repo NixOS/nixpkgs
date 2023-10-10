@@ -2985,10 +2985,10 @@ with self; {
 
   CGICompile = buildPerlModule {
     pname = "CGI-Compile";
-    version = "0.25";
+    version = "0.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.25.tar.gz";
-      hash = "sha256-9Et07t+9Hrjw+WiPndrhVCLl+kiueL4hsK/LnjJJDqU=";
+      url = "mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.26.tar.gz";
+      hash = "sha256-TzhcEMLJd+tgPzjNFT4OA2jfA3H9vSP1qm7nL0/GXcg=";
     };
     propagatedBuildInputs = [ Filepushd SubName ];
     buildInputs = [ CGI CaptureTiny ModuleBuildTiny SubIdentify Switch TestNoWarnings TestRequires TryTiny ];
