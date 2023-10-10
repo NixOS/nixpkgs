@@ -20728,10 +20728,10 @@ with self; {
 
   PodEventual = buildPerlPackage {
     pname = "Pod-Eventual";
-    version = "0.094001";
+    version = "0.094003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Eventual-0.094001.tar.gz";
-      hash = "sha256-vp+4kQsQjl0aZvACtlmtIlduiNd5twPf+dFRIsP4CDQ=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Eventual-0.094003.tar.gz";
+      hash = "sha256-fwYMw00RZWzgadsGHj1g7cDKvI+JpKLcfqrpXayFbS0=";
     };
     propagatedBuildInputs = [ MixinLinewise ];
     buildInputs = [ TestDeep ];
