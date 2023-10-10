@@ -22677,10 +22677,10 @@ with self; {
 
   SubExporterForMethods = buildPerlPackage {
     pname = "Sub-Exporter-ForMethods";
-    version = "0.100052";
+    version = "0.100055";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-ForMethods-0.100052.tar.gz";
-      hash = "sha256-Qh+7pPb/zxPEM18sIGMNcJ5vplnAdUXQlNvFpVitMAY=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-ForMethods-0.100055.tar.gz";
+      hash = "sha256-eR9CA7p8D32DgLwBvsICFffIvHDX7QPlUu7kRUGr6U4=";
     };
     buildInputs = [ namespaceautoclean ];
     propagatedBuildInputs = [ SubExporter SubName ];
