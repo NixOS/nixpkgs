@@ -2831,10 +2831,10 @@ with self; {
 
   CatalystViewTT = buildPerlPackage {
     pname = "Catalyst-View-TT";
-    version = "0.45";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-View-TT-0.45.tar.gz";
-      hash = "sha256-KN8SU3w9Xg5aSJ/GZL2+rgEyfZvegkW/QJjfgt+870s=";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-View-TT-0.46.tar.gz";
+      hash = "sha256-7aRFfbv4GkJBtzWl1GnZcn2KMJHSSvGuPJog8CTeUcw=";
     };
     propagatedBuildInputs = [ CatalystRuntime ClassAccessor TemplateTimer ];
     meta = {
