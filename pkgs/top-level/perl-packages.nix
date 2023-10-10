@@ -27142,10 +27142,10 @@ with self; {
 
   UUID4Tiny = buildPerlPackage {
     pname = "UUID4-Tiny";
-    version = "0.002";
+    version = "0.003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.002.tar.gz";
-      hash = "sha256-51NbMeOG1DLex63eIUNIOJ4dXPdT5+0H8a4ExDYIQM8=";
+      url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.003.tar.gz";
+      hash = "sha256-4S9sgrg1dcORd3O0HA+1HPeDx8bPcuDJkWks4u8Hg2I=";
     };
     postPatch = lib.optionalString (stdenv.isAarch64) ''
       # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
