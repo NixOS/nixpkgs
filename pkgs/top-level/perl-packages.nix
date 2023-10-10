@@ -18724,10 +18724,10 @@ with self; {
 
   NumberFraction = buildPerlModule {
     pname = "Number-Fraction";
-    version = "3.0.3";
+    version = "3.0.4";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-v3.0.3.tar.gz";
-      hash = "sha256-OwCqQz/lFGviH9chZHa6lkG5Y0NlfEzc9A72/KxpEO8=";
+      url = "mirror://cpan/authors/id/D/DA/DAVECROSS/Number-Fraction-v3.0.4.tar.gz";
+      hash = "sha256-xkGcird4/XKbENfmp487ewf8CJV8H3nlZm3Ny01iwIU=";
     };
     propagatedBuildInputs = [ Moo MooXTypesMooseLike ];
     meta = {
