@@ -1,4 +1,5 @@
 { lib
+, bitarray
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -8,25 +9,33 @@
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "4.0.2";
+  version = "4.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "scott-griffiths";
-    repo = pname;
+    repo = "bitstring";
     rev = "bitstring-${version}";
-    hash = "sha256-LghfDjf/Z1dEU0gjH1cqMb04ChnW+aGDjmN+RAhMWW8=";
+    hash = "sha256-e4OnXwEuXz5m8d2PZOL5zDw8iGEzUg8LLk+xs/eGleA=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  propagatedBuildInputs = [
+    bitarray
+  ];
 
-  pythonImportsCheck = [ "bitstring" ];
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "bitstring"
+  ];
 
   meta = with lib; {
     description = "Module for binary data manipulation";
