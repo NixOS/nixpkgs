@@ -12592,10 +12592,10 @@ with self; {
 
   IOTty = buildPerlPackage {
     pname = "IO-Tty";
-    version = "1.15";
+    version = "1.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.15.tar.gz";
-      hash = "sha256-Q/nMD4diC7sVngiQ4ZayOo5kGcvQQiTBDz3O6Uj2tRo=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.17.tar.gz";
+      hash = "sha256-pfGoMCC8W13WwbVw9Ix1RuCo9/rBCgaHQLA5Ja2eFOg=";
     };
     doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
     meta = {
