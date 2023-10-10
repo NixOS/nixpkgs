@@ -20941,10 +20941,10 @@ with self; {
 
   PodSpell = buildPerlPackage {
     pname = "Pod-Spell";
-    version = "1.20";
+    version = "1.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOLMEN/Pod-Spell-1.20.tar.gz";
-      hash = "sha256-Y4P3v+IrwNg5oIBXoM54BpiwRhhK6pNb5IM9lJht0Dw=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Pod-Spell-1.26.tar.gz";
+      hash = "sha256-LwW/yc+wS5b8v6LIVE0eaukIWW02lsRuDiZVa3UK+78=";
     };
     propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
