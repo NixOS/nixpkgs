@@ -8776,10 +8776,10 @@ with self; {
 
   ExporterLite = buildPerlPackage {
     pname = "Exporter-Lite";
-    version = "0.08";
+    version = "0.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/Exporter-Lite-0.08.tar.gz";
-      hash = "sha256-wFs5Ca9MuG82SV6UpZnSPrq0K+ehjv0NFB/BWGMJ2sI=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Exporter-Lite-0.09.tar.gz";
+      hash = "sha256-edixT9UBOSLGPoUPFb9RBZ8lAkBFNetmkO8jYSwqGY0=";
     };
     meta = {
       description = "Lightweight exporting of functions and variables";
