@@ -26102,10 +26102,10 @@ with self; {
 
   TestVars = buildPerlModule {
     pname = "Test-Vars";
-    version = "0.014";
+    version = "0.015";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Test-Vars-0.014.tar.gz";
-      hash = "sha256-p/ehLpdx/SH8HsPePjdSJ6dL/uOye70480WkrCfAKGM=";
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/Test-Vars-0.015.tar.gz";
+      hash = "sha256-4Y3RWCcuTsmTnh37M8dDGrTnXGtAsoDDi16AT9pHGlQ=";
     };
 
     buildInputs = [ ModuleBuildTiny ];
