@@ -19151,10 +19151,10 @@ with self; {
 
   ParallelPipes = buildPerlModule {
     pname = "Parallel-Pipes";
-    version = "0.102";
+    version = "0.200";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Parallel-Pipes-0.102.tar.gz";
-      hash = "sha256-JjZfgQXcYGsUC9HUX41w1cMFQ5D3Xk/bdISj5ZHL+pc=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Parallel-Pipes-0.200.tar.gz";
+      hash = "sha256-iLmFDqzJ1hjz6RpRyqOGxKZOgswYc1AzUkTjSbgREQY=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
