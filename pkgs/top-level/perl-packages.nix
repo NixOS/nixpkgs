@@ -12181,10 +12181,10 @@ with self; {
 
   IO = buildPerlPackage {
     pname = "IO";
-    version = "1.42";
+    version = "1.51";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-1.42.tar.gz";
-      hash = "sha256-7sXMM6bN26i10kJbYHUogq3X5NQbdDGg6k3Nc8wfjMo=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/IO-1.51.tar.gz";
+      hash = "sha256-VJPqVZmHKM0rfsuCNMWPtdXfJwmNDwet3KIkRNdhbOA=";
     };
     doCheck = false;
     meta = {
