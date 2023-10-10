@@ -15077,10 +15077,10 @@ with self; {
 
   MaxMindDBReaderXS = buildPerlModule {
     pname = "MaxMind-DB-Reader-XS";
-    version = "1.000008";
+    version = "1.000009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-XS-1.000008.tar.gz";
-      hash = "sha256-hKr7yC+sjP7q2amOLkhX2+v0Sem4Ff6QiRUNf04Nx4c=";
+      url = "mirror://cpan/authors/id/M/MA/MAXMIND/MaxMind-DB-Reader-XS-1.000009.tar.gz";
+      hash = "sha256-qm+4f+0Z1UnymxNd55l+6SsSJ9Ymyw6JBgCpHK3DBTo=";
     };
     propagatedBuildInputs = [ pkgs.libmaxminddb MathInt128 MaxMindDBReader ];
     buildInputs = [ NetWorks PathClass TestFatal TestNumberDelta TestRequires ];
