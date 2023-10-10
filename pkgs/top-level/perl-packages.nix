@@ -15944,10 +15944,10 @@ with self; {
 
   ModuleRefresh = buildPerlPackage {
     pname = "Module-Refresh";
-    version = "0.17";
+    version = "0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AL/ALEXMV/Module-Refresh-0.17.tar.gz";
-      hash = "sha256-azCmzt3GUSq0SQwWNy7PMJolnyyhR9Yi5HisVOCFEcM=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/Module-Refresh-0.18.tar.gz";
+      hash = "sha256-4JTaqQmv32SJqeKzJzP2haLBy1zIh2BhB1SGEJsN71k=";
     };
     buildInputs = [ PathClass ];
     meta = {
