@@ -11147,10 +11147,10 @@ with self; {
 
   HTMLEscape = buildPerlModule {
     pname = "HTML-Escape";
-    version = "1.10";
+    version = "1.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/HTML-Escape-1.10.tar.gz";
-      hash = "sha256-scusQVetje2saRThYohV4FuNyIWkAH0uTfgXfGqbcPs=";
+      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/HTML-Escape-1.11.tar.gz";
+      hash = "sha256-Wl7viWUA0epsJKkIXs++mkOr7mjPxmwD+InSostoml0=";
     };
     buildInputs = [ ModuleBuildPluggablePPPort TestRequires ];
     perlPreHook = lib.optionalString stdenv.isi686 "export LD=$CC"; # fix undefined reference to `__stack_chk_fail_local'
