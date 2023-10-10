@@ -6461,10 +6461,10 @@ with self; {
 
   DateTimeFormatMySQL = buildPerlModule {
     pname = "DateTime-Format-MySQL";
-    version = "0.06";
+    version = "0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XM/XMIKEW/DateTime-Format-MySQL-0.06.tar.gz";
-      hash = "sha256-mBjUFi7JzsYTm6l7OeBInSF1gaHUP7txPzvv/oD5jx0=";
+      url = "mirror://cpan/authors/id/X/XM/XMIKEW/DateTime-Format-MySQL-0.08.tar.gz";
+      hash = "sha256-Gctw6YWEZV41TS1qjnHMXKkC3dw6xEQWcS+RY9Eiueg=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     meta = {
