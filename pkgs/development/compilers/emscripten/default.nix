@@ -85,6 +85,9 @@ stdenv.mkDerivation rec {
     cp -r . $appdir
     chmod -R +w $appdir
 
+    mkdir -p $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules
+
     mkdir -p $out/bin
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
