@@ -16232,10 +16232,10 @@ with self; {
 
   MojoliciousPluginWebpack = buildPerlPackage {
     pname = "Mojolicious-Plugin-Webpack";
-    version = "1.01";
+    version = "1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-1.01.tar.gz";
-      hash = "sha256-detndnGR/zMzwNAXsK1vZxHHxIW66i5+6XtTtPzJzfA=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-Webpack-1.02.tar.gz";
+      hash = "sha256-REzqioOZquelrWt8iQ/yFgk8WM6uaxyKBl77cBC3zn0=";
     };
     propagatedBuildInputs = [ Mojolicious Filechdir ];
     meta = {
