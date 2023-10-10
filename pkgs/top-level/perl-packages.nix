@@ -862,10 +862,10 @@ with self; {
 
   AppMusicChordPro = buildPerlPackage {
     pname = "App-Music-ChordPro";
-    version = "6.010";
+    version = "6.030";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-6.010.tar.gz";
-      hash = "sha256-SqTkbR2bWIMcU5gSRf2WW6s1ckHtJVPkxj/bBO9X4kM=";
+      url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-6.030.tar.gz";
+      hash = "sha256-a+5H8U5gmYPkrBUyxxwajPQy9m6sWeDlaeHTfg2cwnc=";
     };
     buildInputs = [ PodParser ];
     propagatedBuildInputs = [ AppPackager FileLoadLines FileHomeDir IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
