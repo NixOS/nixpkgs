@@ -3528,10 +3528,10 @@ with self; {
 
   ClassMethodModifiers = buildPerlPackage {
     pname = "Class-Method-Modifiers";
-    version = "2.13";
+    version = "2.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.13.tar.gz";
-      hash = "sha256-q1gH9xAYqELea3pIJtbB8kuNWwn8zlAFozCc9upA/WM=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.15.tar.gz";
+      hash = "sha256-Zc2Fv+R10GbpGG96jMY2BwmFswsOuxzehoHPBiwuFfw=";
     };
     buildInputs = [ TestFatal TestNeeds ];
     meta = {
