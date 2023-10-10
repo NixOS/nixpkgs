@@ -20744,10 +20744,10 @@ with self; {
 
   PodParser = buildPerlPackage {
     pname = "Pod-Parser";
-    version = "1.63";
+    version = "1.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Parser-1.63.tar.gz";
-      hash = "sha256-2+C1YSmXWy+DoChB6ODtR76A8GBobGbqN+Up2XqnDM0=";
+      url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Parser-1.66.tar.gz";
+      hash = "sha256-IpKKe//mG0UsBbu7j1IW1LnPn+KoSbd2wlUA0k0g33w=";
     };
     meta = {
       description = "Modules for parsing/translating POD format documents";
