@@ -10489,10 +10489,10 @@ with self; {
 
   Gnome2VFS = buildPerlPackage {
     pname = "Gnome2-VFS";
-    version = "1.083";
+    version = "1.084";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-VFS-1.083.tar.gz";
-      hash = "sha256-7Kl0Zp305/IbT87blsijKEIjacaLjCzZm5zpzF16eXk=";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-VFS-1.084.tar.gz";
+      hash = "sha256-PI2Mlca2XCN9ueiJx57bK7gIvzfAhKvfu9mFn+93h8w=";
     };
     propagatedBuildInputs = [ pkgs.gnome2.gnome_vfs Glib ];
     meta = {
