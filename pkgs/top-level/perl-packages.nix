@@ -4813,10 +4813,10 @@ with self; {
 
   CryptCurve25519 = buildPerlPackage {
     pname = "Crypt-Curve25519";
-    version = "0.06";
+    version = "0.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AJ/AJGB/Crypt-Curve25519-0.06.tar.gz";
-      hash = "sha256-n0hwPbTuyiluqCwtZuShOfInC437C+38T/lEVLt7IMc=";
+      url = "mirror://cpan/authors/id/K/KA/KARASIK/Crypt-Curve25519-0.07.tar.gz";
+      hash = "sha256-Z6mIcTclIdb34R/dYnyq21wdVAFCag6c9CFnpDxbSx0=";
     };
     patches = [
       (fetchpatch {
