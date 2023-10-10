@@ -14493,10 +14493,10 @@ with self; {
 
   MailDKIM = buildPerlPackage {
     pname = "Mail-DKIM";
-    version = "1.20200907";
+    version = "1.20230911";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-1.20200907.tar.gz";
-      hash = "sha256-q/8RvQl3ubjDssP8Kg290tONoklWhphxD+wQAtQlG/U=";
+      url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-1.20230911.tar.gz";
+      hash = "sha256-kecxcoK3JM+9LJtuZjDvFDKISLb8UgPv1w3sL7hyaMo=";
     };
     propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNS ];
     doCheck = false; # tries to access the domain name system
