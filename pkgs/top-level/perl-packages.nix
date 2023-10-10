@@ -312,10 +312,10 @@ with self; {
 
   AlienLibxml2 = buildPerlPackage {
     pname = "Alien-Libxml2";
-    version = "0.17";
+    version = "0.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.17.tar.gz";
-      hash = "sha256-c7RSRPC1w25TMsM1abgqGrLDPiY/HQB4XSADvK7GjbM=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.19.tar.gz";
+      hash = "sha256-9KZ0CZu9V0fAw7derYQfOyRJNdnvQro1NoAkvWERdMk=";
     };
     strictDeps = true;
     nativeBuildInputs = [ pkgs.pkg-config ];
