@@ -4560,10 +4560,10 @@ with self; {
 
   CPANAudit = buildPerlPackage {
     pname = "CPAN-Audit";
-    version = "20230309.004";
+    version = "20230826.001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/CPAN-Audit-20230309.004.tar.gz";
-      hash = "sha256-RzrvktoYTMY1SqiG8QvwRnjvovHpmxZ/o+nvXOGmS14=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/CPAN-Audit-20230826.001.tar.gz";
+      hash = "sha256-DXU7O9fdpXweIKycWScKcKTNkfttfN4mJEPoVUy2Geo=";
     };
     buildInputs = [ CaptureTiny YAMLTiny ];
     propagatedBuildInputs = [ CPANDistnameInfo IOInteractive JSON ModuleCPANfile ModuleExtractVERSION PerlIOgzip Mojolicious ];
