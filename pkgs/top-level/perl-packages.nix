@@ -8390,10 +8390,10 @@ with self; {
 
   EmailValid = buildPerlPackage {
     pname = "Email-Valid";
-    version = "1.202";
+    version = "1.203";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-1.202.tar.gz";
-      hash = "sha256-0CEIm2YqYOagyKvbcr2cXkaEjSSNmKmMHqKt3xqsE6I=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Valid-1.203.tar.gz";
+      hash = "sha256-ICG/ux4sJ55evYRoDllvlzRNQphQsjIme3b0kDdSK5M=";
     };
     propagatedBuildInputs = [ IOCaptureOutput MailTools NetDNS NetDomainTLD ];
     doCheck = false;
