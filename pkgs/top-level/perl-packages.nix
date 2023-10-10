@@ -336,7 +336,7 @@ with self; {
     strictDeps = true;
     nativeBuildInputs = [ pkgs.pkg-config ];
     propagatedBuildInputs = [ AlienBuild ];
-    buildInputs = [ pkgs.libxml2 MojoDOM58 SortVersions Test2Suite URI ];
+    buildInputs = [ pkgs.libxml2 AlienBuildPluginDownloadGitLab MojoDOM58 SortVersions Test2Suite URI ];
     meta = {
       description = "Install the C libxml2 library on your system";
       homepage = "https://metacpan.org/pod/Alien::Libxml2";
