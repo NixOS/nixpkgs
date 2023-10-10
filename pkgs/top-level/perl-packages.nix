@@ -17402,10 +17402,10 @@ with self; {
 
   MooseXTypesPerl = buildPerlPackage {
     pname = "MooseX-Types-Perl";
-    version = "0.101343";
+    version = "0.101344";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Types-Perl-0.101343.tar.gz";
-      hash = "sha256-8IS+rzwzIJxo0F1NvCTCXWBKZFi5c42W3OsIbI7xMlo=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Types-Perl-0.101344.tar.gz";
+      hash = "sha256-h2RDVPdPplI1yyv8pEJ3kwp+q+UazF+B+2MVMKg1XiQ=";
     };
     propagatedBuildInputs = [ MooseXTypes ];
     meta = {
