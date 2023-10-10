@@ -793,6 +793,12 @@
     githubId = 5053729;
     name = "Alias Gram";
   };
+  alias-dev = {
+    email = "alias-dev@protonmail.com";
+    github = "alias-dev";
+    githubId = 30437811;
+    name = "Alex Andrews";
+  };
   alibabzo = {
     email = "alistair.bill@gmail.com";
     github = "alistairbill";
@@ -14142,6 +14148,12 @@
     github = "progval";
     githubId = 406946;
     name = "Valentin Lorentz";
+  };
+  prominentretail = {
+    email = "me@jakepark.me";
+    github = "ProminentRetail";
+    githubId = 94048404;
+    name = "Jake Park";
   };
   proofconstruction = {
     email = "source@proof.construction";
