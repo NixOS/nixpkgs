@@ -18568,10 +18568,10 @@ with self; {
 
   NetSSHPerl = buildPerlPackage {
     pname = "Net-SSH-Perl";
-    version = "2.14";
+    version = "2.142";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SC/SCHWIGON/Net-SSH-Perl-2.14.tar.gz";
-      hash = "sha256-K10bsTWQtYcBFnBOfx3OmpgjxPgP9UYbl7smoxc5MBc=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Net-SSH-Perl-2.142.tar.gz";
+      hash = "sha256-UAHbPllS/BjYXDF5Uhr2kT0VQ+tP30/ZfcYDpHSMLJY=";
     };
     propagatedBuildInputs = [ CryptCurve25519 CryptIDEA CryptX FileHomeDir MathGMP StringCRC32 ];
     preCheck = "export HOME=$TMPDIR";
