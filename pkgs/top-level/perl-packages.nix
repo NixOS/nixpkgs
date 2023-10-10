@@ -5476,10 +5476,10 @@ with self; {
 
   CSSMinifierXS = buildPerlModule {
     pname = "CSS-Minifier-XS";
-    version = "0.09";
+    version = "0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.09.tar.gz";
-      hash = "sha256-iKaZf6DfazlNHjRr0OV81WWFfiF9gHtlLxdrAGvm2tc=";
+      url = "mirror://cpan/authors/id/G/GT/GTERMARS/CSS-Minifier-XS-0.13.tar.gz";
+      hash = "sha256-xBnjCM3IKvHCXWuNB7L/JjR6Yit6Y+wghWq+jbQFH4I=";
     };
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
