@@ -13,7 +13,6 @@ import sys
 import warnings
 from typing import NamedTuple
 
-from packaging import version
 
 libc = ctypes.CDLL("libc.so.6")
 
@@ -260,18 +259,12 @@ def install_bootloader(args: argparse.Namespace) -> None:
         if available_match is None:
             raise Exception("could not determine systemd-boot version")
 
-        installed_version = version.parse(installed_match.group(1))
-        available_version = version.parse(available_match.group(1))
+        installed_version = installed_match.group(1)
+        available_version = available_match.group(1)
 
-        # systemd 252 has a regression that leaves some machines unbootable, so we skip that update.
-        # The fix is in 252.2
-        # See https://github.com/systemd/systemd/issues/25363 and https://github.com/NixOS/nixpkgs/pull/201558#issuecomment-1348603263
         if installed_version < available_version:
-            if version.parse('252') <= available_version < version.parse('252.2'):
-                print("skipping systemd-boot update to %s because of known regression" % available_version)
-            else:
-                print("updating systemd-boot from %s to %s" % (installed_version, available_version))
-                subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@"] + bootctl_flags + ["update"])
+            print("updating systemd-boot from %s to %s" % (installed_version, available_version))
+            subprocess.check_call(["@systemd@/bin/bootctl", "--esp-path=@efiSysMountPoint@", "update"])
 
     os.makedirs("@efiSysMountPoint@/efi/nixos", exist_ok=True)
     os.makedirs("@efiSysMountPoint@/loader/entries", exist_ok=True)
