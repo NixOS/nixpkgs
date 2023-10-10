@@ -22,12 +22,12 @@ let
     hash = product.hash;
   };
 
-  name = "burpsuite-${version}";
+  pname = "burpsuite";
   description = "An integrated platform for performing security testing of web applications";
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "burpsuite";
-    exec = name;
-    icon = name;
+    exec = pname;
+    icon = pname;
     desktopName = product.productDesktop;
     comment = description;
     categories = [ "Development" "Security" "System" ];
@@ -35,7 +35,7 @@ let
 
 in
 buildFHSEnv {
-  inherit name;
+  inherit pname version;
 
   runScript = "${jdk}/bin/java -jar ${src}";
 
@@ -65,7 +65,6 @@ buildFHSEnv {
   ];
 
   extraInstallCommands = ''
-    mv "$out/bin/${name}" "$out/bin/burpsuite" # name includes the version number
     mkdir -p "$out/share/pixmaps"
     ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/pixmaps/burpsuite.png"
     cp -r ${desktopItem}/share/applications $out/share
