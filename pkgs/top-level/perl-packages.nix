@@ -9943,10 +9943,10 @@ with self; {
 
   FileWhich = buildPerlPackage {
     pname = "File-Which";
-    version = "1.23";
+    version = "1.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-Which-1.23.tar.gz";
-      hash = "sha256-t53CJEstl7bycWf8O3eZ72GheQQPOr12zh4KOwvE4Hg=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-Which-1.27.tar.gz";
+      hash = "sha256-MgHxpg4/FkhAguYEXIloQiYfw0Xen7LmIP0qLHrzqTo=";
     };
     meta = {
       description = "Perl implementation of the which utility as an API";
