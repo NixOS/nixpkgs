@@ -28195,10 +28195,10 @@ with self; {
 
   YAMLTiny = buildPerlPackage {
     pname = "YAML-Tiny";
-    version = "1.73";
+    version = "1.74";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/YAML-Tiny-1.73.tar.gz";
-      hash = "sha256-vDFfoS6PHj7l4vQw2Qtwil3H5HyGfbqNzjprj74ld0Q=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/YAML-Tiny-1.74.tar.gz";
+      hash = "sha256-ezjKn1084kIwpri9wfR/Wy2zSOf3+WZsJvWVVjbjPWw=";
     };
     meta = {
       description = "Read/Write YAML files with as little code as possible";
