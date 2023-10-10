@@ -9970,10 +9970,10 @@ with self; {
 
   Filter = buildPerlPackage {
     pname = "Filter";
-    version = "1.60";
+    version = "1.64";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.60.tar.gz";
-      hash = "sha256-4R7y8u6HJ7f2Zv0kmjIm92jm6t/VHZzbSbPD8aNUZPk=";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/Filter-1.64.tar.gz";
+      hash = "sha256-E+f7fh0yZZjjZgEDzxl0vun2kKxbQ7M58sAi8rX87yw=";
     };
     meta = {
       description = "Source Filters";
