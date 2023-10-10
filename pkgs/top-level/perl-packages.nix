@@ -20988,10 +20988,10 @@ with self; {
 
   PodWeaver = buildPerlPackage {
     pname = "Pod-Weaver";
-    version = "4.015";
+    version = "4.019";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Weaver-4.015.tar.gz";
-      hash = "sha256-WvJbKaVXg+SVqd9e9ikyQOLJqwJ2RhPXnx7VCxLexa4=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Weaver-4.019.tar.gz";
+      hash = "sha256-aUatHwTq+aoR8kzFRJTh1Xli9Y4FkS82S3T5WT595/c=";
     };
     buildInputs = [ PPI SoftwareLicense TestDifferences ];
     propagatedBuildInputs = [ ConfigMVPReaderINI DateTime ListMoreUtils LogDispatchouli PodElemental ];
