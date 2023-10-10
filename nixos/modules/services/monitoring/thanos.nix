@@ -266,14 +266,14 @@ let
         Maximum size of concurrently allocatable bytes for chunks.
       '';
 
-      store.grpc.series-sample-limit = mkParamDef types.int 0 ''
-        Maximum amount of samples returned via a single Series call.
+      store.limits.request-samples = mkParamDef types.int 0 ''
+        The maximum samples allowed for a single Series request.
+        The Series call fails if this limit is exceeded.
 
         `0` means no limit.
 
-        NOTE: for efficiency we take 120 as the number of samples in chunk (it
-        cannot be bigger than that), so the actual number of samples might be
-        lower, even though the maximum could be hit.
+        NOTE: For efficiency the limit is internally implemented as 'chunks limit'
+        considering each chunk contains a maximum of 120 samples.
       '';
 
       store.grpc.series-max-concurrency = mkParamDef types.int 20 ''
@@ -371,24 +371,25 @@ let
         Maximum number of queries processed concurrently by query node.
       '';
 
-      query.replica-label = mkParam types.str ''
-        Label to treat as a replica indicator along which data is
+      query.replica-labels = mkAttrsParam "query.replica-label" ''
+        Labels to treat as a replica indicator along which data is
+
         deduplicated.
 
         Still you will be able to query without deduplication using
-        `dedup=false` parameter.
+        'dedup=false' parameter. Data includes time series, recording
+        rules, and alerting rules.
       '';
 
       selector-labels = mkAttrsParam "selector-label" ''
         Query selector labels that will be exposed in info endpoint.
       '';
 
-      store.addresses = mkListParam "store" ''
-        Addresses of statically configured store API servers.
+      endpoints = mkListParam "endpoint" ''
+        Addresses of statically configured Thanos API servers (repeatable).
 
-        The scheme may be prefixed with `dns+` or
-        `dnssrv+` to detect store API servers through
-        respective DNS lookups.
+        The scheme may be prefixed with 'dns+' or 'dnssrv+' to detect
+        Thanos API servers through respective DNS lookups.
       '';
 
       store.sd-files = mkListParam "store.sd-files" ''
@@ -453,7 +454,7 @@ let
         Rule files that should be used by rule manager. Can be in glob format.
       '';
 
-      eval-interval = mkParamDef types.str "30s" ''
+      eval-interval = mkParamDef types.str "1m" ''
         The default evaluation interval to use.
       '';
 
@@ -601,10 +602,6 @@ let
         This is not recommended as querying long time ranges without
         non-downsampled data is not efficient and useful e.g it is not possible
         to render all samples for a human eye anyway
-      '';
-
-      block-sync-concurrency = mkParamDef types.int 20 ''
-        Number of goroutines to use when syncing block metadata from object storage.
       '';
 
       compact.concurrency = mkParamDef types.int 1 ''
