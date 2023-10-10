@@ -905,10 +905,10 @@ with self; {
 
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
-    version = "0.89";
+    version = "0.98";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.89.tar.gz";
-      hash = "sha256-D/pYdfYMe0L3yDK5Qtyaq+L8KHYXEjvd6bj8rW31eQI=";
+      url = "mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.98.tar.gz";
+      hash = "sha256-oWD3ESJYjdU12pTbsLgwHkjlONJaRCobE/cZCWKIWTI=";
     };
     buildInputs = [ pkgs.curl FileWhich IOAll ModuleBuildTiny PathClass TestException TestNoWarnings TestOutput TestSpec TestTempDirTiny ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl PodParser locallib ];
