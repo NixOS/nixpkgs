@@ -12945,10 +12945,10 @@ with self; {
 
   JSONPP = buildPerlPackage {
     pname = "JSON-PP";
-    version = "4.05";
+    version = "4.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-4.05.tar.gz";
-      hash = "sha256-1aK8przPTUT0Ouqs4PRa5lQbt/UNtaSJtdL/X76L8M4=";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-PP-4.16.tar.gz";
+      hash = "sha256-i8LxYrr8QmRcSJkFrXJUDw08KEs2DJYpkJUYPDDMl4k=";
     };
     meta = {
       description = "JSON::XS compatible pure-Perl module";
