@@ -749,6 +749,7 @@ in {
           User = "prometheus";
           Restart = "always";
           ExecStart = thanos "sidecar";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };
     })
@@ -764,6 +765,7 @@ in {
             StateDirectory = cfg.store.stateDir;
             Restart = "always";
             ExecStart = thanos "store";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }
@@ -777,6 +779,7 @@ in {
           DynamicUser = true;
           Restart = "always";
           ExecStart = thanos "query";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };
     })
@@ -789,6 +792,7 @@ in {
           DynamicUser = true;
           Restart = "always";
           ExecStart = thanos "query-frontend";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };
     })
@@ -804,6 +808,7 @@ in {
             StateDirectory = cfg.rule.stateDir;
             Restart = "always";
             ExecStart = thanos "rule";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }
@@ -822,6 +827,7 @@ in {
               DynamicUser = true;
               StateDirectory = cfg.compact.stateDir;
               ExecStart = thanos "compact";
+              ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
             };
           } // optionalAttrs (!wait) { inherit (cfg.compact) startAt; };
       }
@@ -838,6 +844,7 @@ in {
             StateDirectory = cfg.downsample.stateDir;
             Restart = "always";
             ExecStart = thanos "downsample";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }
@@ -854,6 +861,7 @@ in {
             StateDirectory = cfg.receive.stateDir;
             Restart = "always";
             ExecStart = thanos "receive";
+            ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           };
         };
       }
