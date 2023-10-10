@@ -23774,10 +23774,10 @@ with self; {
 
   TestAbortable = buildPerlPackage {
     pname = "Test-Abortable";
-    version = "0.002";
+    version = "0.003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Abortable-0.002.tar.gz";
-      hash = "sha256-l5C3+bl2mOosUwQ2xgkMJRGcb1vS9w14r8SZIsPwJ20=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Abortable-0.003.tar.gz";
+      hash = "sha256-TVPDXvPLf5wXUrqfEdOpeiETt9hMJg6rj5p8G4Aba40=";
     };
     propagatedBuildInputs = [ SubExporter ];
     buildInputs = [ TestNeeds ];
