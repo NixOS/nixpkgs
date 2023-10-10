@@ -5607,10 +5607,10 @@ with self; {
 
   DataCompare = buildPerlPackage {
     pname = "Data-Compare";
-    version = "1.27";
+    version = "1.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.27.tar.gz";
-      hash = "sha256-gYog8fOPdOZSU8+Lz2/tf5SlqN1mL3UzDcr0sRfO6L0=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.29.tar.gz";
+      hash = "sha256-U8nbO5MmPIiqo8QHLYGere0CTXo2s4wMN3N9KI1a+ow=";
     };
     propagatedBuildInputs = [ Clone FileFindRule ];
     meta = {
