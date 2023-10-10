@@ -22779,10 +22779,10 @@ with self; {
 
   SubName = buildPerlPackage {
     pname = "Sub-Name";
-    version = "0.26";
+    version = "0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Sub-Name-0.26.tar.gz";
-      hash = "sha256-LS8taX1RbIlUfnxDB/HnlEFkHK4sc5XnMZswbTkN8QU=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Sub-Name-0.27.tar.gz";
+      hash = "sha256-7PNvuhxHypPh2qOUlo7TnEGGhnRZ2c0XPEIeK5cgQ+g=";
     };
     buildInputs = [ BC DevelCheckBin ];
     meta = {
