@@ -15395,10 +15395,10 @@ with self; {
 
   MinionBackendmysql = buildPerlPackage {
     pname = "Minion-Backend-mysql";
-    version = "1.000";
+    version = "1.003";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PR/PREACTION/Minion-Backend-mysql-1.000.tar.gz";
-      hash = "sha256-cGS+CHHxmbSwTl1yQprfNbLkr2qHGorM0Mm1wqP9E00=";
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Minion-Backend-mysql-1.003.tar.gz";
+      hash = "sha256-aaJcJAyw5NTvTxqjKgTt+Nolt+jTqCDP1kVhWZ7aRUI=";
     };
     buildInputs = [ Testmysqld ];
     propagatedBuildInputs = [ Minion Mojomysql ];
