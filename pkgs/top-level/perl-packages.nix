@@ -13243,13 +13243,6 @@ with self; {
       url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.15.tar.gz";
       hash = "sha256-px9NtYDhp2fWk2+qW6848fpheCQ0LaB4tWEoPob49KI=";
     };
-    patches = [
-      (fetchpatch {
-        name = "deterministic-libnet.cfg";
-        url = "https://github.com/steve-m-hay/perl-libnet/commit/7d076c4352f67ee4ed64092cfad3963a2321bd53.patch";
-        hash = "sha256-GyPx0ZQ/u/+DaFM7eNDvXrMFC0+d3GyLxVZJBKrg6V0=";
-      })
-    ];
     meta = {
       description = "Collection of network protocol modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
