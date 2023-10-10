@@ -4714,10 +4714,10 @@ with self; {
 
   CPANPLUS = buildPerlPackage {
     pname = "CPANPLUS";
-    version = "0.9908";
+    version = "0.9914";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9908.tar.gz";
-      hash = "sha256-WPastH15HtjjCm68wlCJIYusrZbkbajmIakrd4xWndQ=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9914.tar.gz";
+      hash = "sha256-dsPl2mI6SvYP5krexEj7H44Mrp9nmKNraIZZdAROm2c=";
     };
     propagatedBuildInputs = [ ArchiveExtract ModulePluggable ObjectAccessor PackageConstants TermUI ];
     meta = {
