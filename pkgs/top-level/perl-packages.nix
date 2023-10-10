@@ -18312,10 +18312,10 @@ with self; {
 
   NetMQTTSimple = buildPerlPackage {
     pname = "Net-MQTT-Simple";
-    version = "1.26";
+    version = "1.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.26.tar.gz";
-      hash = "sha256-ERxNNnu1AgXci8AjFfDGuw3mDRwwfQLnUuQuwRtPiLQ=";
+      url = "mirror://cpan/authors/id/J/JU/JUERD/Net-MQTT-Simple-1.28.tar.gz";
+      hash = "sha256-Sp6hB+a8IuJrUzZ4oKPMbEI7N4TsP8ROjjM5t8Vr7gM=";
     };
     meta = {
       description = "Minimal MQTT version 3 interface";
