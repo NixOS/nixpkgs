@@ -1993,10 +1993,10 @@ with self; {
 
   CacheFastMmap = buildPerlPackage {
     pname = "Cache-FastMmap";
-    version = "1.54";
+    version = "1.57";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.54.tar.gz";
-      hash = "sha256-NULiALmAJ3rkVqvjbgyp+bjyvya7FVivJOFAgUrWeVI=";
+      url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.57.tar.gz";
+      hash = "sha256-4Es6KNmJ7bj7lur6zcK4f57MuE8EfrLifLJqp9CMx7g=";
     };
     buildInputs = [ TestDeep ];
     meta = {
