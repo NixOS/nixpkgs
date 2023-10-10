@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     # changes
     license = licenses.gpl3Plus;
     mainProgram = "gama-local";
+    maintainers = with maintainers; [cafkafk];
     platforms = platforms.all;
   };
 }
