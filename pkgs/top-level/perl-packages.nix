@@ -4054,10 +4054,10 @@ with self; {
 
   ConfigAutoConf = buildPerlPackage {
     pname = "Config-AutoConf";
-    version = "0.319";
+    version = "0.320";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RE/REHSACK/Config-AutoConf-0.319.tar.gz";
-      hash = "sha256-ME9mzCZTJkwP4SfSFmnobT0YzXLyV02PUTG+7DGgoz4=";
+      url = "mirror://cpan/authors/id/A/AM/AMBS/Config-AutoConf-0.320.tar.gz";
+      hash = "sha256-u1epWO9J0/cWInba4Up71a9D/R2FEyMa811mVFlFQCM=";
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
