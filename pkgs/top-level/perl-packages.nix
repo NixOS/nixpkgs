@@ -23242,10 +23242,10 @@ with self; {
 
   TclpTk = buildPerlPackage {
     pname = "Tcl-pTk";
-    version = "1.10";
+    version = "1.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.10.tar.gz";
-      hash = "sha256-sMb4KXzTL7KhkF17OSbWMb8p+iM/jYTNHtb+2J85/QQ=";
+      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.11.tar.gz";
+      hash = "sha256-05PxKxzN7I8ZbN27WJHZSEx5qpQQWmN22f+cRg2CDN0=";
     };
     propagatedBuildInputs = [
       ClassISA
