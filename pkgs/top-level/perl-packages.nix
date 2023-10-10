@@ -4934,10 +4934,10 @@ with self; {
 
   CryptFormat = buildPerlPackage {
     pname = "Crypt-Format";
-    version = "0.10";
+    version = "0.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Format-0.10.tar.gz";
-      hash = "sha256-id3AEKbJHVvnoYdKUo7tbto58sQBwY5j2A3fv3En4t0=";
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Format-0.12.tar.gz";
+      hash = "sha256-p1cdS+9XeOGln0O2XPLVaAtJ+nu78z89IfRSL0Pmp9o=";
     };
     buildInputs = [ TestException TestFailWarnings ];
     meta = {
