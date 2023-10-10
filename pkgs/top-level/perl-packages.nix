@@ -1615,10 +1615,10 @@ with self; {
 
   BHooksEndOfScope = buildPerlPackage {
     pname = "B-Hooks-EndOfScope";
-    version = "0.24";
+    version = "0.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.24.tar.gz";
-      hash = "sha256-A6o9/l0KpkcalvQ/6DGBedGXlNSmQHCPAoj5IW7HrMY=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.26.tar.gz";
+      hash = "sha256-Od8vjAB6dUZyB1+VuQeXuuvpetptlEsZemNScJyzBnE=";
     };
     propagatedBuildInputs = [ ModuleImplementation SubExporterProgressive ];
     meta = {
