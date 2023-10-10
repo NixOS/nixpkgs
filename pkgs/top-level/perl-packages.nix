@@ -15757,10 +15757,10 @@ with self; {
 
   ModuleInstall = buildPerlPackage {
     pname = "Module-Install";
-    version = "1.19";
+    version = "1.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Module-Install-1.19.tar.gz";
-      hash = "sha256-GlOnjd86uePAP8XjVLQ2MZqUTLpCgbrwuQT6kyoTARs=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Module-Install-1.21.tar.gz";
+      hash = "sha256-+/kQB/MFZfOSDhBgVf0NQoeYHV59rYs1MjzktzPxWns=";
     };
     propagatedBuildInputs = [ FileRemove ModuleBuild ModuleScanDeps YAMLTiny ];
     meta = {
