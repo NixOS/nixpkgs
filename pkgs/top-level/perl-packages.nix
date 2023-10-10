@@ -22444,10 +22444,10 @@ with self; {
 
   StringInterpolate = buildPerlPackage {
     pname = "String-Interpolate";
-    version = "0.32";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/String-Interpolate-0.32.tar.gz";
-      hash = "sha256-xynYmEj1WjV7z5e3m3i2uSsmPkw8knR+fe02Of5d3JU=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/String-Interpolate-0.33.tar.gz";
+      hash = "sha256-qH7Qk4kH0xr32qltc6BjL1xko40d4N6HxLRCWDEpxBM=";
     };
     meta = {
       # https://metacpan.org/pod/String::Interpolate
