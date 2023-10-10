@@ -14708,10 +14708,10 @@ with self; {
 
   MathBigInt = buildPerlPackage {
     pname = "Math-BigInt";
-    version = "1.999818";
+    version = "1.999842";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-1.999818.tar.gz";
-      hash = "sha256-snY0NWzir5t8ASOsg5WomjL7Fa6ugvzTnegVbK0njBU=";
+      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-1.999842.tar.gz";
+      hash = "sha256-VGAcUMaZPn7hPYw6wzRs8VpNgGMUnNu+husB5WEORnU=";
     };
     meta = {
       description = "Arbitrary size integer/float math package";
