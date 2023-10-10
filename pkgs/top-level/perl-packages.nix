@@ -17848,10 +17848,10 @@ with self; {
 
   NetAsyncHTTPServer = buildPerlModule {
     pname = "Net-Async-HTTP-Server";
-    version = "0.13";
+    version = "0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-Server-0.13.tar.gz";
-      hash = "sha256-yk3kcfIieNI5PIqy7G56xO8hfbRjXS3Mi6KoynIhFO4=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-Server-0.14.tar.gz";
+      hash = "sha256-6nG3kcEtD6X3JubMA/Zuo20bRhNxj2xb84EzvRinsrY=";
     };
     buildInputs = [ TestIdentity TestMetricsAny TestRefcount TestSimple13 ];
     propagatedBuildInputs = [ HTTPMessage IOAsync MetricsAny ];
