@@ -24173,10 +24173,10 @@ with self; {
 
   TestFatal = buildPerlPackage {
     pname = "Test-Fatal";
-    version = "0.016";
+    version = "0.017";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.016.tar.gz";
-      hash = "sha256-coPUMPK6IDC4zZea4wOdPxsuw93hoRymrgn5kqZveI8=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Fatal-0.017.tar.gz";
+      hash = "sha256-N9//2vuEt2Lv6WsC+yqkHzcCbHPmuDWQ23YilpfzxKY=";
     };
     propagatedBuildInputs = [ TryTiny ];
     meta = {
