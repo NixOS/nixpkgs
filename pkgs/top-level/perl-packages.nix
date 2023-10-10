@@ -17531,10 +17531,10 @@ with self; {
 
   MozillaCA = buildPerlPackage {
     pname = "Mozilla-CA";
-    version = "20200520";
+    version = "20230821";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20200520.tar.gz";
-      hash = "sha256-s8oAAjEL8koWwNWSC96pei9G53574+c3foUNAzOHxyY=";
+      url = "mirror://cpan/authors/id/L/LW/LWP/Mozilla-CA-20230821.tar.gz";
+      hash = "sha256-MuHQBFKZAEBFucTRbC2q5FOiFiCIc97qJED3EmCnzaE=";
     };
 
     postPatch = ''
