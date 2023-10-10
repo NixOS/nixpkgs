@@ -8286,10 +8286,10 @@ with self; {
 
   EmailMIMEEncodings = buildPerlPackage {
     pname = "Email-MIME-Encodings";
-    version = "1.315";
+    version = "1.317";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Encodings-1.315.tar.gz";
-      hash = "sha256-THEEVQezHshT3WAVK0DjO6N0F3nA9JuxQ7UM+NJDq1w=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MIME-Encodings-1.317.tar.gz";
+      hash = "sha256-SppBZxqdFQTE2iQb5BmpUD+jSGJiUm7bgeyp4uvqC68=";
     };
     buildInputs = [ CaptureTiny ];
     meta = {
