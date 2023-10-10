@@ -6868,10 +6868,10 @@ with self; {
 
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
-    version = "1.58";
+    version = "1.59";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.58.tar.gz";
-      hash = "sha256-ux6/ASQQE5blu4PerQ8U8S3V8XXLE3ilnaUpXGLJxzw=";
+      url = "mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.59.tar.gz";
+      hash = "sha256-ClqllTq2XPeQaB5sBFLjGK1X2ArCf1dfhJGMYDqkdAY=";
     };
     propagatedBuildInputs = [ DBI ];
     buildInputs = [ ModuleBuildTiny TestException ];
