@@ -10085,10 +10085,10 @@ with self; {
 
   FunctionParameters = buildPerlPackage {
     pname = "Function-Parameters";
-    version = "2.001003";
+    version = "2.002004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.001003.tar.gz";
-      hash = "sha256-6qIsa0PAJJnsfbB1jC3SGKOyq0enFLK9+AELXuETwkI=";
+      url = "mirror://cpan/authors/id/M/MA/MAUKE/Function-Parameters-2.002004.tar.gz";
+      hash = "sha256-KKvqWODAnOMnmaCMvXr3DaHimXd8KZEZQpygaacYg+g=";
     };
     buildInputs = [ DirSelf TestFatal ];
     meta = {
