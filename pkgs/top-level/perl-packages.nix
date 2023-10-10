@@ -8139,10 +8139,10 @@ with self; {
 
   EmailAbstract = buildPerlPackage {
     pname = "Email-Abstract";
-    version = "3.008";
+    version = "3.010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Abstract-3.008.tar.gz";
-      hash = "sha256-/HFprLbEPffwBefvatCO6MputnlrXRYEWTyZczfMgkA=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Abstract-3.010.tar.gz";
+      hash = "sha256-jBL2i1l0yvyZ10lCq+/IWXGTA1qv0nYxKOaqr8pLftY=";
     };
     propagatedBuildInputs = [ EmailSimple MROCompat ModulePluggable ];
     meta = {
