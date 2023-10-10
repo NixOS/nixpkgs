@@ -27834,10 +27834,10 @@ with self; {
 
   XMLXPath = buildPerlPackage {
     pname = "XML-XPath";
-    version = "1.44";
+    version = "1.48";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MANWAR/XML-XPath-1.44.tar.gz";
-      hash = "sha256-HMkRBwUWXcCd0Jl03XwLZwnJNR1raxzvWnEQVfiR3Q8=";
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/XML-XPath-1.48.tar.gz";
+      hash = "sha256-e8db42sjnlsucAqVcNK1O0MJPUZ/Kr5qdD+f+Qk3kM0=";
     };
     buildInputs = [ PathTiny ];
     propagatedBuildInputs = [ XMLParser ];
