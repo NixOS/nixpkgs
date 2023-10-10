@@ -10503,10 +10503,10 @@ with self; {
 
   Gnome2Wnck = buildPerlPackage {
     pname = "Gnome2-Wnck";
-    version = "0.16";
+    version = "0.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TS/TSCH/Gnome2-Wnck-0.16.tar.gz";
-      hash = "sha256-YEqOzoisKfEy1ZsMqsJ2V+wxNxwWBqRpiiFg6IrFhuU=";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-Wnck-0.18.tar.gz";
+      hash = "sha256-RL7OyLLX9B8ngKc7CSJp/bec1JJluuDI/zkQN8RWSjU=";
     };
     buildInputs = [ pkgs.libwnck2 pkgs.glib pkgs.gtk2 ];
     propagatedBuildInputs = [ Gtk2 ];
