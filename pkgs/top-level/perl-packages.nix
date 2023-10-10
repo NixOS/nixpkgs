@@ -15683,10 +15683,10 @@ with self; {
 
   ModuleExtractUse = buildPerlModule {
     pname = "Module-ExtractUse";
-    version = "0.343";
+    version = "0.345";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOMM/Module-ExtractUse-0.343.tar.gz";
-      hash = "sha256-SFJGW0g2GhIM15hyBYF5Lbpa2lJs7vWJHiVNbPl7DAI=";
+      url = "mirror://cpan/authors/id/D/DO/DOMM/Module-ExtractUse-0.345.tar.gz";
+      hash = "sha256-juJOh0KrnaeSKL4Yfdoxm01fUKkaHs+H1JQhO1uzDdE=";
     };
     propagatedBuildInputs = [ ParseRecDescent PodStrip ];
     buildInputs = [ TestDeep TestNoWarnings ];
