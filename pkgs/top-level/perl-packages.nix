@@ -12902,10 +12902,10 @@ with self; {
 
   JSONAny = buildPerlPackage {
     pname = "JSON-Any";
-    version = "1.39";
+    version = "1.40";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-Any-1.39.tar.gz";
-      hash = "sha256-rkl1XPNxCmoydqN6t9XD5+DArrLas1Ss12gsCad5V8M=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/JSON-Any-1.40.tar.gz";
+      hash = "sha256-CDJWJVpICU/ZrBI54P6ooQojg6nNHvSxxyZO3htEAKs=";
     };
     buildInputs = [ TestFatal TestRequires TestWarnings TestWithoutModule ];
     meta = {
