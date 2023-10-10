@@ -9294,10 +9294,10 @@ with self; {
 
   FileCopyRecursiveReduced = buildPerlPackage {
     pname = "File-Copy-Recursive-Reduced";
-    version = "0.006";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JK/JKEENAN/File-Copy-Recursive-Reduced-0.006.tar.gz";
-      hash = "sha256-5hj5k6afQ1UgXFj///aYJgnyi0f2RuxuJE5BtcZwfiw=";
+      url = "mirror://cpan/authors/id/J/JK/JKEENAN/File-Copy-Recursive-Reduced-0.007.tar.gz";
+      hash = "sha256-07WFIuaYA6kUN+KcCZ63Bug3Px7vBRik3DZp3T383Cc=";
     };
     buildInputs = [ CaptureTiny PathTiny ];
     meta = {
