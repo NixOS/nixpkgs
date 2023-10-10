@@ -4612,10 +4612,10 @@ with self; {
 
   CPAN02PackagesSearch = buildPerlModule {
     pname = "CPAN-02Packages-Search";
-    version = "0.001";
+    version = "0.100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/CPAN-02Packages-Search-0.001.tar.gz";
-      hash = "sha256-Z1wVLOaOcz9MQPVuzcGhkVxv/1X2IrBEFCqlrOjFrwk=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/CPAN-02Packages-Search-0.100.tar.gz";
+      hash = "sha256-prabrHmiUwA0RrKD76bzrv+mCdDBxStCCYeCEtpw+as=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ TieHandleOffset ];
