@@ -6223,10 +6223,10 @@ with self; {
 
   DateExtract = buildPerlPackage {
     pname = "Date-Extract";
-    version = "0.06";
+    version = "0.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AL/ALEXMV/Date-Extract-0.06.tar.gz";
-      hash = "sha256-vHZY1cUMNSXsDvy1Ujal3i1dT8BvwUf6OSnI8JU82is=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Date-Extract-0.07.tar.gz";
+      hash = "sha256-+geIBK3k7uwd4UcuDguwR65i5MjU1QIHAbnlBXfFuPQ=";
     };
     buildInputs = [ TestMockTime ];
     propagatedBuildInputs = [ DateTimeFormatNatural ];
