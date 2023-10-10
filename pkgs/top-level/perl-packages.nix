@@ -13610,10 +13610,10 @@ with self; {
 
   ListAllUtils = buildPerlPackage {
     pname = "List-AllUtils";
-    version = "0.18";
+    version = "0.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.18.tar.gz";
-      hash = "sha256-t8S/gAkLKBxKFWDHahqBkJTDoSlDAvd6+4xgykhi7Pk=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-AllUtils-0.19.tar.gz";
+      hash = "sha256-MKgUarIad4e4xW1YKc+afysVJ207P8oHM2rDjTAC/7w=";
     };
     propagatedBuildInputs = [ ListSomeUtils ListUtilsBy ];
     meta = {
