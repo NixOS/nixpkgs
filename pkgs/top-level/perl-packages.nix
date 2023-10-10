@@ -16451,10 +16451,10 @@ with self; {
 
   Moo = buildPerlPackage {
     pname = "Moo";
-    version = "2.004004";
+    version = "2.005005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Moo-2.004004.tar.gz";
-      hash = "sha256-cUt3sRV4hwjG2KtvGO6hc/gQnTl67NNOMsxxoP/PIkY=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Moo-2.005005.tar.gz";
+      hash = "sha256-+1opUmSfrtBzc/Igt4AEqcaro4dzkTN0DBdw6bH0sQg=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ClassMethodModifiers ModuleRuntime RoleTiny SubQuote ];
