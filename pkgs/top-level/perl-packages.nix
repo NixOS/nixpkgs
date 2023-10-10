@@ -20590,10 +20590,10 @@ with self; {
 
   PerlPrereqScanner = buildPerlPackage {
     pname = "Perl-PrereqScanner";
-    version = "1.023";
+    version = "1.100";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.023.tar.gz";
-      hash = "sha256-KAocRxA5CGX7nzEKhho0cgsotMvlBgnIQa9c8tOivO0=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.100.tar.gz";
+      hash = "sha256-ARgdOKLnr/g40mISJWPFBja6SzZS7l0dT471uj9bGGs=";
     };
     propagatedBuildInputs = [ GetoptLongDescriptive ListMoreUtils ModulePath Moose PPI StringRewritePrefix namespaceautoclean ];
     meta = {
