@@ -19977,10 +19977,10 @@ with self; {
 
   Plack = buildPerlPackage {
     pname = "Plack";
-    version = "1.0048";
+    version = "1.0050";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0048.tar.gz";
-      hash = "sha256-MPXyXhm0N4WRVqJSb2HKmrcI1Q1XMMJ5GJQDqr/lQqY=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Plack-1.0050.tar.gz";
+      hash = "sha256-0mUa3oLrv/er4KOhifyTLa3Ed5GGzolGjlbQGJ6qbtQ=";
     };
     buildInputs = [ AuthenSimplePasswd CGIEmulatePSGI FileShareDirInstall HTTPRequestAsCGI HTTPServerSimplePSGI IOHandleUtil LWP LWPProtocolhttp10 LogDispatchArray MIMETypes TestMockTimeHiRes TestRequires TestSharedFork TestTCP ];
     propagatedBuildInputs = [ ApacheLogFormatCompiler CookieBaker DevelStackTraceAsHTML FileShareDir FilesysNotifySimple HTTPEntityParser HTTPHeadersFast HTTPMessage TryTiny ];
