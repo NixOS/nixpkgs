@@ -9612,10 +9612,10 @@ with self; {
 
   FileMap = buildPerlModule {
     pname = "File-Map";
-    version = "0.67";
+    version = "0.71";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.67.tar.gz";
-      hash = "sha256-Enhdvt/CzN+jjbTZenhGSSWRjbNy/Rm67PL6l68i+8I=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/File-Map-0.71.tar.gz";
+      hash = "sha256-yOJpM4BOhw1KupJiO3iGrIs8dgyY+/zTvcSyMFxGR1k=";
     };
     perlPreHook = "export LD=$CC";
     propagatedBuildInputs = [ PerlIOLayers SubExporterProgressive ];
