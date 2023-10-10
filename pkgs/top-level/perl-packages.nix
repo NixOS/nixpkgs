@@ -22631,10 +22631,10 @@ with self; {
 
   StringUtil = buildPerlModule {
     pname = "String-Util";
-    version = "1.31";
+    version = "1.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BA/BAKERSCOT/String-Util-1.31.tar.gz";
-      hash = "sha256-+7yafqQMgylOBCuzud6x71LMkaDUgye1RC4cT4Df0m0=";
+      url = "mirror://cpan/authors/id/B/BA/BAKERSCOT/String-Util-1.34.tar.gz";
+      hash = "sha256-MZzozWZTQeVlIfoVXZYqGTKOkNn3A2dlklzN4mclxGk=";
     };
     buildInputs = [ ModuleBuildTiny ];
     meta = {
