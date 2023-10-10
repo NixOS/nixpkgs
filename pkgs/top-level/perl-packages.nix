@@ -8030,10 +8030,10 @@ with self; {
 
   DistZillaPluginTestPortability = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-Portability";
-    version = "2.001000";
+    version = "2.001001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Portability-2.001000.tar.gz";
-      hash = "sha256-4I/1vZ4kz5UDBVMwFIkTgI2Ro9/jIKK9+LD8Y4cZsXk=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-Portability-2.001001.tar.gz";
+      hash = "sha256-07kxVx4VoidI6BJwmq/aclEKdMAA/AaiyrWHVYEACyA=";
     };
     buildInputs = [ ModuleBuildTiny TestDeep TestPortabilityFiles TestWarnings ];
     propagatedBuildInputs = [ DistZilla ];
