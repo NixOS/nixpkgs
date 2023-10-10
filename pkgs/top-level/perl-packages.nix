@@ -4576,10 +4576,10 @@ with self; {
 
   CPANMini = buildPerlPackage {
     pname = "CPAN-Mini";
-    version = "1.111016";
+    version = "1.111017";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111016.tar.gz";
-      hash = "sha256-Wil6/D42etgIEUZNTrfk3Tyv+LpJnN0rVY9ieUQ6dlc=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/CPAN-Mini-1.111017.tar.gz";
+      hash = "sha256-8gQpO+JqyEGsyHBEoYjbD1kegIgTFseiiK7A7s4wYVU=";
     };
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileHomeDir LWPProtocolHttps ];
