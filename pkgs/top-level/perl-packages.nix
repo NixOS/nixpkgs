@@ -9416,10 +9416,10 @@ with self; {
 
   FileFindRulePerl = buildPerlPackage {
     pname = "File-Find-Rule-Perl";
-    version = "1.15";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/File-Find-Rule-Perl-1.15.tar.gz";
-      hash = "sha256-mkhDP4bgjOGOA1JuKYLeUhYuuQnRlzVGDwfu/K9GPqY=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/File-Find-Rule-Perl-1.16.tar.gz";
+      hash = "sha256-rhiGBQ2cohIjwHPihwq9yA3DDj9VKJoRw32jggqDIf8=";
     };
     propagatedBuildInputs = [ FileFindRule ParamsUtil ];
     meta = {
