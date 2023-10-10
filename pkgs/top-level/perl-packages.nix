@@ -20219,10 +20219,10 @@ with self; {
 
   POE = buildPerlPackage {
     pname = "POE";
-    version = "1.368";
+    version = "1.370";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/POE-1.368.tar.gz";
-      hash = "sha256-t7Hcdh421Is5BoNJtXba/A7MvDudtRxnfeDhqvrf4SE=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/POE-1.370.tar.gz";
+      hash = "sha256-V94rY1sV+joxqeVd1REiFJ5UFOEVjugiNQYmNO4YppM=";
     };
     # N.B. removing TestPodLinkCheck from buildInputs because tests requiring
     # this module don't disable themselves when "run_network_tests" is
