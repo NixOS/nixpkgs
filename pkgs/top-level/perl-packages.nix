@@ -11696,10 +11696,10 @@ with self; {
 
   HTTPDate = buildPerlPackage {
     pname = "HTTP-Date";
-    version = "6.05";
+    version = "6.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Date-6.05.tar.gz";
-      hash = "sha256-Nl1ilN+9N+vFHe+LZbget5s5NOy8laLsLU2Cfv5qkis=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Date-6.06.tar.gz";
+      hash = "sha256-e2hRkcasw+dz0fwCyV7h+frpT3d4MXX154wYHMktK1I=";
     };
     propagatedBuildInputs = [ TimeDate ];
     meta = {
