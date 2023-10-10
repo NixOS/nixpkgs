@@ -5177,10 +5177,10 @@ with self; {
 
   CryptURandom = buildPerlPackage {
     pname = "Crypt-URandom";
-    version = "0.36";
+    version = "0.39";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.36.tar.gz";
-      hash = "sha256-gf7JkhrcXTyRy+CtjLK7ibBFxPsN6cs8Q/F+WOR3+KE=";
+      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.39.tar.gz";
+      hash = "sha256-Jol7PPualWAJFRLWCHMaPVv08pn20Pj3LIXzmQEkQSI=";
     };
     meta = {
       description = "Provide non blocking randomness";
