@@ -15222,10 +15222,10 @@ with self; {
 
   MetricsAny = buildPerlModule {
     pname = "Metrics-Any";
-    version = "0.06";
+    version = "0.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Metrics-Any-0.06.tar.gz";
-      hash = "sha256-nFKd+Oiid7sVjWJBxzvRp+oIrq6eHtu1WDoaB0j7mDc=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Metrics-Any-0.10.tar.gz";
+      hash = "sha256-qQ6t+civJKUWu5obZwYfZBhT+QuP7p/8JNK7lyDouZs=";
     };
     buildInputs = [ TestFatal ];
     meta = {
