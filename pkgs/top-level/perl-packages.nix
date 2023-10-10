@@ -16297,10 +16297,10 @@ with self; {
 
   Mojomysql = buildPerlPackage rec {
     pname = "Mojo-mysql";
-    version = "1.25";
+    version = "1.26";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-mysql-1.25.tar.gz";
-      hash = "sha256-YC14GXw0HdCPLLH1XZg31P3gFHQz1k2+vxloaAtVzMs=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojo-mysql-1.26.tar.gz";
+      hash = "sha256-H9LjBlr4Je9N2x2W9g9MVc9NCCD77L0wrHGdTeJx5rw=";
     };
     propagatedBuildInputs = [ DBDmysql Mojolicious SQLAbstract ];
     buildInputs = [ TestDeep ];
