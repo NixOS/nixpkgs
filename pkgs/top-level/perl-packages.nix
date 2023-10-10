@@ -7242,10 +7242,10 @@ with self; {
 
   DBIxDBSchema = buildPerlPackage {
     pname = "DBIx-DBSchema";
-    version = "0.45";
+    version = "0.47";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IV/IVAN/DBIx-DBSchema-0.45.tar.gz";
-      hash = "sha256-eiqXj7bZ/qo+SxCcccljsmoAii0TDFh27PJMWnIzih0=";
+      url = "mirror://cpan/authors/id/I/IV/IVAN/DBIx-DBSchema-0.47.tar.gz";
+      hash = "sha256-7u4hDcFKjWPrAawtZsZ6HcJ5+Sib6WphckyJUXkcUhI=";
     };
     propagatedBuildInputs = [ DBI ];
     meta = {
