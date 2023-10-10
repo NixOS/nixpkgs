@@ -5059,7 +5059,7 @@ with self; {
     };
   };
 
-  CryptPasswdMD5 = buildPerlModule {
+  CryptPasswdMD5 = buildPerlPackage {
     pname = "Crypt-PasswdMD5";
     version = "1.42";
     src = fetchurl {
