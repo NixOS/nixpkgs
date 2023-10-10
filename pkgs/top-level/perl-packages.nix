@@ -3117,10 +3117,10 @@ with self; {
 
   CGISimple = buildPerlModule {
     pname = "CGI-Simple";
-    version = "1.25";
+    version = "1.280";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.25.tar.gz";
-      hash = "sha256-5ebPNuoG8OZ7vc3Zz7aY80yZNR6usy3U+mNviZQ+9H4=";
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.280.tar.gz";
+      hash = "sha256-GOAen/uBTl5O6neshImyBp/oNlGFUPN/bCIT61Wcar8=";
     };
     propagatedBuildInputs = [ IOStringy ];
     buildInputs = [ TestException TestNoWarnings ];
