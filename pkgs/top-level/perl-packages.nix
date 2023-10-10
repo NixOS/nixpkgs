@@ -16466,10 +16466,10 @@ with self; {
 
   Moose = buildPerlPackage {
     pname = "Moose";
-    version = "2.2013";
+    version = "2.2206";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2013.tar.gz";
-      hash = "sha256-33TceAiJIReO33LYJwF9bJJzfJhmWfLa3FM64kZ153w=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2206.tar.gz";
+      hash = "sha256-Z5csTivDn72jhRgXevDme7vrVIVi5OxLdZoaelg+UFs=";
     };
     buildInputs = [ CPANMetaCheck TestCleanNamespaces TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassLoadXS DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS SubExporter ];
