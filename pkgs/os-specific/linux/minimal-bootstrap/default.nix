@@ -107,6 +107,11 @@ lib.makeScope
         tinycc = tinycc-mes;
         gnused = gnused-mes;
       };
+      findutils-static = callPackage ./findutils/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
 
       gawk = callPackage ./gawk {
         bash = bash_2_05;
@@ -337,6 +342,7 @@ lib.makeScope
         echo ${diffutils.tests.get-version}
         echo ${diffutils-static.tests.get-version}
         echo ${findutils.tests.get-version}
+        echo ${findutils-static.tests.get-version}
         echo ${gawk.tests.get-version}
         echo ${gawk-mes.tests.get-version}
         echo ${gawk-static.tests.get-version}
