@@ -70,7 +70,14 @@ lib.makeScope
         gnutar = gnutar-musl;
       };
 
+      bzip2-static = callPackage ./bzip2/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
+
       coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
+
       coreutils-musl = callPackage ./coreutils/musl.nix {
         bash = bash_2_05;
         tinycc = tinycc-musl;
@@ -355,6 +362,7 @@ lib.makeScope
         echo ${bison.tests.get-version}
         echo ${busybox-static.tests.get-version}
         echo ${bzip2.tests.get-version}
+        echo ${bzip2-static.tests.get-version}
         echo ${coreutils-musl.tests.get-version}
         echo ${coreutils-static.tests.get-version}
         echo ${diffutils.tests.get-version}
