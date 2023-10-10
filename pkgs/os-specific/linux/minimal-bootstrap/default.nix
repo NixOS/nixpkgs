@@ -195,6 +195,12 @@ lib.makeScope
 
       gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
+      gnupatch-static = callPackage ./gnupatch/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
+
       gnused = callPackage ./gnused {
         bash = bash_2_05;
         tinycc = tinycc-musl;
@@ -362,6 +368,7 @@ lib.makeScope
         echo ${gnum4.tests.get-version}
         echo ${gnumake-musl.tests.get-version}
         echo ${gnumake-static.tests.get-version}
+        echo ${gnupatch-static.tests.get-version}
         echo ${gnused.tests.get-version}
         echo ${gnused-mes.tests.get-version}
         echo ${gnused-static.tests.get-version}
