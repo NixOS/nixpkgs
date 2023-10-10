@@ -3762,10 +3762,10 @@ with self; {
 
   CLIHelpers = buildPerlPackage {
     pname = "CLI-Helpers";
-    version = "1.8";
+    version = "2.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-1.8.tar.gz";
-      hash = "sha256-In25W2MzgnAkVUzDLvcI0wwaf/uW39RCX4/g46/18cE=";
+      url = "mirror://cpan/authors/id/B/BL/BLHOTSKY/CLI-Helpers-2.0.tar.gz";
+      hash = "sha256-yhpPFnTzsfMmjyekfJiAszgmrenxI34sEUXnAqfIePY=";
     };
     buildInputs = [ PodCoverageTrustPod TestPerlCritic ];
     propagatedBuildInputs = [ CaptureTiny RefUtil SubExporter TermReadKey YAML ];
