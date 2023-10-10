@@ -18003,10 +18003,10 @@ with self; {
 
   NetDNSResolverMock = buildPerlPackage {
     pname = "Net-DNS-Resolver-Mock";
-    version = "1.20200215";
+    version = "1.20230216";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20200215.tar.gz";
-      hash = "sha256-vvfxUOUw5VZbi67VmOqvdLb5X60Sit4NH3VQE1ghZ+c=";
+      url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20230216.tar.gz";
+      hash = "sha256-7UkwV3/Rop1kNbWHVTPTso9cElijWDP+bKLLaiaFpJs=";
     };
     propagatedBuildInputs = [ NetDNS ];
     buildInputs = [ TestException ];
