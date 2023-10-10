@@ -7343,10 +7343,10 @@ with self; {
 
   DevelCamelcadedb = buildPerlPackage {
     pname = "Devel-Camelcadedb";
-    version = "2021.2";
+    version = "2023.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HU/HURRICUP/Devel-Camelcadedb-v2021.2.tar.gz";
-      hash = "sha256-iKHZ6V05j/5NQRSGHiHDb3wiMVs9A+f3ZMy84BirPkc=";
+      url = "mirror://cpan/authors/id/H/HU/HURRICUP/Devel-Camelcadedb-v2023.1.tar.gz";
+      hash = "sha256-z/jSTllF45RN6/ITmVprFVuR5YE0aRVrE9Ws819qXZ8=";
     };
     propagatedBuildInputs = [ HashStoredIterator JSONXS PadWalker ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
