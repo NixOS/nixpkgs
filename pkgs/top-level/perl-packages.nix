@@ -1935,10 +1935,10 @@ with self; {
 
   BusinessISSN = buildPerlPackage {
     pname = "Business-ISSN";
-    version = "1.004";
+    version = "1.005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.004.tar.gz";
-      hash = "sha256-l+yrFdJNEeKFK/Cyj4TIeYvThAKgpp4Xvg5mibJycV4=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISSN-1.005.tar.gz";
+      hash = "sha256-OwmwJn8KZmD7krb1DEx3lu9qJjtirTu+qgcYmgx8ObM=";
     };
     meta = {
       description = "Perl extension for International Standard Serial Numbers";
