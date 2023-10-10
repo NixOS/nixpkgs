@@ -3841,10 +3841,10 @@ with self; {
 
   CodeTidyAll = buildPerlPackage {
     pname = "Code-TidyAll";
-    version = "0.78";
+    version = "0.83";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.78.tar.gz";
-      hash = "sha256-Ml67QdhZAG7jK2Qmu+hlhnjqywPAESCqYoZZ9uY3ubY=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Code-TidyAll-0.83.tar.gz";
+      hash = "sha256-FqBS0DprF/xYqEqZb68p5C7O124sQMRyc+uKsxzBXKE=";
     };
     propagatedBuildInputs = [ CaptureTiny ConfigINI FileWhich Filepushd IPCRun3 IPCSystemSimple ListCompare ListSomeUtils LogAny Moo ScopeGuard SpecioLibraryPathTiny TextDiff TimeDate TimeDurationParse ];
     buildInputs = [ TestClass TestClassMost TestDeep TestDifferences TestException TestFatal TestMost TestWarn TestWarnings librelative ];
