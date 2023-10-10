@@ -22228,10 +22228,10 @@ with self; {
 
   StatisticsDescriptive = buildPerlModule {
     pname = "Statistics-Descriptive";
-    version = "3.0800";
+    version = "3.0801";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0800.tar.gz";
-      hash = "sha256-sE7e6ia/7UNapgKZVnmMKB9/UtRUXz9Fsq1ElU6W+Tk=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Statistics-Descriptive-3.0801.tar.gz";
+      hash = "sha256-BHtwpj/cqpFhaOD/LVjhVeDrvGjtTMvXOnIT3KMCj2U=";
     };
     propagatedBuildInputs = [ ListMoreUtils ];
     meta = {
