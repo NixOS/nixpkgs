@@ -23638,10 +23638,10 @@ with self; {
 
   TermUI = buildPerlPackage {
     pname = "Term-UI";
-    version = "0.46";
+    version = "0.50";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/Term-UI-0.46.tar.gz";
-      hash = "sha256-kZRsgNf0qrDKS/7cO74KdbN8qxopvXvKOzt0VtQX6aY=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/Term-UI-0.50.tar.gz";
+      hash = "sha256-YL/dbUwVi4jTcBM/xlsgSFo2pFsS2QYAC4HHjKUkFj0=";
     };
     propagatedBuildInputs = [ LogMessageSimple ];
     meta = {
