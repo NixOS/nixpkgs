@@ -4040,10 +4040,10 @@ with self; {
 
   ConfigAny = buildPerlPackage {
     pname = "Config-Any";
-    version = "0.32";
+    version = "0.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Config-Any-0.32.tar.gz";
-      hash = "sha256-aNoqXPJfrt1NJM89DVcJlcGZ1blQEIot541A3s7TYVA=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Config-Any-0.33.tar.gz";
+      hash = "sha256-wGaOtfLNNVvyBVfwTcGKJUdLegvPp5Vi4xZdmjx4kzM=";
     };
     propagatedBuildInputs = [ ModulePluggable ];
     meta = {
