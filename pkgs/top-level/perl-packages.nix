@@ -2250,10 +2250,10 @@ with self; {
 
   Carton = buildPerlPackage {
     pname = "Carton";
-    version = "1.0.34";
+    version = "1.0.35";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Carton-v1.0.34.tar.gz";
-      hash = "sha256-d9QrknMrz8GKWdNB5WzkdiBbHE04Dqs6ByJPV0XCPkU=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Carton-v1.0.35.tar.gz";
+      hash = "sha256-nEVYypfNCLaf37UrKMPdwgQ+9S8GJ7kOU9BaQIc0QXU=";
     };
     propagatedBuildInputs = [ MenloLegacy PathTiny TryTiny ];
     meta = {
