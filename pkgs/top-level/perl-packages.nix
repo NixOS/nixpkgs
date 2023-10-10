@@ -26512,10 +26512,10 @@ with self; {
 
   TimeDurationParse = buildPerlPackage {
     pname = "Time-Duration-Parse";
-    version = "0.15";
+    version = "0.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/Time-Duration-Parse-0.15.tar.gz";
-      hash = "sha256-YdgUOo5pgcwfepdIBNSSA55eVnFnZ4KdXkvNntdK44E=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Time-Duration-Parse-0.16.tar.gz";
+      hash = "sha256-EISmRj7ieQ+ZIVvXaxNcpFr+K/ppmPpv1UcLaeG6vBI=";
     };
     buildInputs = [ TimeDuration ];
     propagatedBuildInputs = [ ExporterLite ];
