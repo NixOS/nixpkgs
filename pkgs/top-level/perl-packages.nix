@@ -7825,10 +7825,10 @@ with self; {
 
   DistZillaPluginPodWeaver = buildPerlPackage {
     pname = "Dist-Zilla-Plugin-PodWeaver";
-    version = "4.008";
+    version = "4.010";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-Plugin-PodWeaver-4.008.tar.gz";
-      hash = "sha256-H9njgz8qEsTQSQ9FXgb2gZ87+Bt1I46kSOKToo2IwTk=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Dist-Zilla-Plugin-PodWeaver-4.010.tar.gz";
+      hash = "sha256-Zm1S1UXUjSpn8VN63HTPOMdkofmVHQtiNiP2IGDLYj4=";
     };
     propagatedBuildInputs = [ DistZilla PodElementalPerlMunger PodWeaver ];
     meta = {
