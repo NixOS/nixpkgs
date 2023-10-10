@@ -6372,10 +6372,10 @@ with self; {
 
   DateTimeFormatFlexible = buildPerlPackage {
     pname = "DateTime-Format-Flexible";
-    version = "0.32";
+    version = "0.34";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.32.tar.gz";
-      hash = "sha256-UKe5/rKHuxSycyOlPCMkSGGBo6tss/THZi1CvpAa2O4=";
+      url = "mirror://cpan/authors/id/T/TH/THINC/DateTime-Format-Flexible-0.34.tar.gz";
+      hash = "sha256-g2rvXSXm/4gnMIpDv/dBkeXSAiDao9ISAFC8w0FI/PE=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ListMoreUtils ModulePluggable ];
     buildInputs = [ TestException TestMockTime TestNoWarnings ];
