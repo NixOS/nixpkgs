@@ -16982,10 +16982,10 @@ with self; {
 
   MooseXGetopt = buildPerlModule {
     pname = "MooseX-Getopt";
-    version = "0.74";
+    version = "0.75";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Getopt-0.74.tar.gz";
-      hash = "sha256-HeDfO0Mevp81Y730Vp6s1+B+hlqDl/KpkNDLV9TLLCQ=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Getopt-0.75.tar.gz";
+      hash = "sha256-Y/O+W7K8OB6eSLW5XAMw8hcYtmVuj/sZyZ0u4KwU68g=";
     };
     buildInputs = [ ModuleBuildTiny MooseXStrictConstructor PathTiny TestDeep TestFatal TestNeeds TestTrap TestWarnings ];
     propagatedBuildInputs = [ GetoptLongDescriptive MooseXRoleParameterized ];
