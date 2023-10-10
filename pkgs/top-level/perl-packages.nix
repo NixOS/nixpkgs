@@ -9556,10 +9556,10 @@ with self; {
 
   FileListing = buildPerlPackage {
     pname = "File-Listing";
-    version = "6.14";
+    version = "6.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-Listing-6.14.tar.gz";
-      hash = "sha256-FbOkhx4jFko28iY4G3TUUK9B8SzJSYX1kqZp/Kx7SP8=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-Listing-6.16.tar.gz";
+      hash = "sha256-GJs6E/wKG6QSudnsWQHp5eREzHRrnwFW1DmTcNM2VcY=";
     };
     propagatedBuildInputs = [ HTTPDate ];
     meta = {
