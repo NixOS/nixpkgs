@@ -3799,10 +3799,10 @@ with self; {
 
   Clone = buildPerlPackage {
     pname = "Clone";
-    version = "0.45";
+    version = "0.46";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Clone-0.45.tar.gz";
-      hash = "sha256-y7buNIr6lUMuSHiJO0Z1JUnnDcaP5tnkMNHS6ZB5qeY=";
+      url = "mirror://cpan/authors/id/G/GA/GARU/Clone-0.46.tar.gz";
+      hash = "sha256-qt7tXkyL1rvfaMDdAGbLUT4Wq55bQ4LcSgqv1ViQaXs=";
     };
     buildInputs = [ BCOW ];
     meta = {
