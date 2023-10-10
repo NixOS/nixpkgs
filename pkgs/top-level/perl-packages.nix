@@ -22662,10 +22662,10 @@ with self; {
 
   SubExporter = buildPerlPackage {
     pname = "Sub-Exporter";
-    version = "0.987";
+    version = "0.990";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.987.tar.gz";
-      hash = "sha256-VDyy6AOrkT1EJyx9pqcLtiwZ5GfzsSqqxMlSMlmwg9Y=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-0.990.tar.gz";
+      hash = "sha256-vGTsWgaGX5zGdiFcBqlEizoMizl0/7I6JPjirQkFRPw=";
     };
     propagatedBuildInputs = [ DataOptList ];
     meta = {
