@@ -22667,7 +22667,7 @@ with self; {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.14.tar.gz";
       hash = "sha256-E8FIU2sQ4oxuC04TLynkym5ptXSQWcRBV6J+hKVFlDY=";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [ Test2Suite ];
     meta = {
       description = "Make simple lightweight record-like structures";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
