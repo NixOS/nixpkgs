@@ -25404,10 +25404,10 @@ with self; {
 
   TestXPath = buildPerlModule {
     pname = "Test-XPath";
-    version = "0.19";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MANWAR/Test-XPath-0.19.tar.gz";
-      hash = "sha256-3vzMDBRY569dkrxzAD5oZ8Z+L6SVWqccVLOE5xEiwPM=";
+      url = "mirror://cpan/authors/id/M/MA/MANWAR/Test-XPath-0.20.tar.gz";
+      hash = "sha256-36phHnFGrZyXabW89oiUmXa4Ny3354ekC5M6FI2JIDk=";
     };
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
