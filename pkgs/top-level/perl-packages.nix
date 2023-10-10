@@ -11803,10 +11803,10 @@ with self; {
 
   HTTPMessage = buildPerlPackage {
     pname = "HTTP-Message";
-    version = "6.26";
+    version = "6.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.26.tar.gz";
-      hash = "sha256-bObDWd51w7uGaWo5AYm0heyT4//FUya20ET6kA8XJeE=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.45.tar.gz";
+      hash = "sha256-AcuEBmEqP3OIQtHpcxOuTYdIcNG41tZjMfFgAJQ9TL4=";
     };
     buildInputs = [ TryTiny ];
     propagatedBuildInputs = [ EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
