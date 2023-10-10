@@ -22500,10 +22500,10 @@ with self; {
 
   StringRewritePrefix = buildPerlPackage {
     pname = "String-RewritePrefix";
-    version = "0.008";
+    version = "0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-RewritePrefix-0.008.tar.gz";
-      hash = "sha256-5Fox1pFOj1/HIu9I2IGUANr8AhBeDGFBSqu/AbziCOs=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-RewritePrefix-0.009.tar.gz";
+      hash = "sha256-RJGL7JalSvjKN8qJfkNnCewoSgeyhRbvPM5GZoaWRtU=";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
