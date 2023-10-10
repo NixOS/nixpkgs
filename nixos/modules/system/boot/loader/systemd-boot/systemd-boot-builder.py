@@ -66,6 +66,8 @@ def write_loader_conf(profile: str | None, generation: int, specialisation: str 
         if not @editor@:
             f.write("editor 0\n")
         f.write("console-mode @consoleMode@\n")
+        f.flush()
+        os.fsync(f.fileno())
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
 
@@ -143,6 +145,8 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
                     description=describe_generation(profile, generation, specialisation)))
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
+        f.flush()
+        os.fsync(f.fileno())
     os.rename(tmp_path, entry_file)
 
 
