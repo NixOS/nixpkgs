@@ -75,6 +75,12 @@ lib.makeScope
       gnutar = gnutar-musl;
     };
 
+    diffutils-static = callPackage ./diffutils/static.nix {
+      gcc = gcc-latest;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+    };
+
     findutils = callPackage ./findutils {
       bash = bash_2_05;
       tinycc = tinycc-musl;
@@ -287,6 +293,7 @@ lib.makeScope
       echo ${coreutils-musl.tests.get-version}
       echo ${coreutils-static.tests.get-version}
       echo ${diffutils.tests.get-version}
+      echo ${diffutils-static.tests.get-version}
       echo ${findutils.tests.get-version}
       echo ${gawk.tests.get-version}
       echo ${gawk-mes.tests.get-version}
