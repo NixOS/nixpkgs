@@ -176,7 +176,7 @@ File sets do not support Nix store paths in strings such as `"/nix/store/...-sou
 
 Arguments:
 - (+) Such paths are usually produced by derivations, which means `toSource` would either:
-  - Require IFD if `builtins.path` is used as the underlying primitive
+  - Require [Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) if `builtins.path` is used as the underlying primitive
   - Require importing the entire `root` into the store such that derivations can be used to do the filtering
 - (+) The convenient path coercion like `union ./foo ./bar` wouldn't work for absolute paths, requiring more verbose alternate interfaces:
   - `let root = "/nix/store/...-source"; in union "${root}/foo" "${root}/bar"`
