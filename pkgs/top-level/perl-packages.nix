@@ -22165,10 +22165,10 @@ with self; {
 
   Starman = buildPerlModule {
     pname = "Starman";
-    version = "0.4015";
+    version = "0.4017";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4015.tar.gz";
-      hash = "sha256-EPUJe8o5pDJ/9uaec/B2CdOmWaeJa+OWS0nMJBKxM/g=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/Starman-0.4017.tar.gz";
+      hash = "sha256-b/q5FfMj9gCJ4+v4Urm5cH1pFyZt+K/XNw+sBL/f7k4=";
     };
     buildInputs = [ LWP ModuleBuildTiny TestRequires TestTCP ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
