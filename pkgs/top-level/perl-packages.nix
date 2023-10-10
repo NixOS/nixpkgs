@@ -6684,10 +6684,10 @@ with self; {
 
   DevelChecklib = buildPerlPackage {
     pname = "Devel-CheckLib";
-    version = "1.14";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MATTN/Devel-CheckLib-1.14.tar.gz";
-      hash = "sha256-8hxeKZrTzg/cDLD0E3jcqFpw6NbJp1mfDlapVyAOwpQ=";
+      url = "mirror://cpan/authors/id/M/MA/MATTN/Devel-CheckLib-1.16.tar.gz";
+      hash = "sha256-hp04wljmRtzvZ2YJ8N18qQ8IX1bPb9cAGwGaXVuDH8o=";
     };
     buildInputs = [ CaptureTiny MockConfig ];
     meta = {
