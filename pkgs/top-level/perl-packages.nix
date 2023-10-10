@@ -22430,10 +22430,10 @@ with self; {
 
   StringFormatter = buildPerlPackage {
     pname = "String-Formatter";
-    version = "0.102084";
+    version = "1.235";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Formatter-0.102084.tar.gz";
-      hash = "sha256-gzVBEv0MZt8eEuAi33XvvzDr20NYHACJfIbsHDOonFY=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Formatter-1.235.tar.gz";
+      hash = "sha256-CCNqkTuRHOZSzwhZjnwH0t8/Np/Ee/QBpIWlBKFmB4M=";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
