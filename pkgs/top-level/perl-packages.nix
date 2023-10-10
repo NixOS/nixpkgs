@@ -8716,10 +8716,10 @@ with self; {
 
   ExceptionClass = buildPerlPackage {
     pname = "Exception-Class";
-    version = "1.44";
+    version = "1.45";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Exception-Class-1.44.tar.gz";
-      hash = "sha256-M/P7+LE407BOpOwLqD+w32uomIBrz07zk9TK/Boj7g0=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/Exception-Class-1.45.tar.gz";
+      hash = "sha256-VIKnfvAnyh+fOeH0jFWDVulUk2/I+73ubIEcUScBskk=";
     };
     propagatedBuildInputs = [ ClassDataInheritable DevelStackTrace ];
     meta = {
