@@ -22693,10 +22693,10 @@ with self; {
 
   SubExporterGlobExporter = buildPerlPackage {
     pname = "Sub-Exporter-GlobExporter";
-    version = "0.005";
+    version = "0.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-GlobExporter-0.005.tar.gz";
-      hash = "sha256-L8Re7+beB80/2K+eeZxpf701oC7NW/m82MlM77bbemM=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Exporter-GlobExporter-0.006.tar.gz";
+      hash = "sha256-3nQ/CAJnAcKmoiKotBxM3CVLGkr+fvmJh806ukzlJpY=";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
