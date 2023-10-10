@@ -2451,10 +2451,10 @@ with self; {
 
   CatalystModelDBICSchema = buildPerlPackage {
     pname = "Catalyst-Model-DBIC-Schema";
-    version = "0.65";
+    version = "0.66";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GB/GBJK/Catalyst-Model-DBIC-Schema-0.65.tar.gz";
-      hash = "sha256-JqkR7173/8gbbOZcMVb3H7NQg8RWrSfm2C0twCST7uo=";
+      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Model-DBIC-Schema-0.66.tar.gz";
+      hash = "sha256-GST0wA6PD/HF0a+hbv5PhW8cXnT+VW7Cxfj1v2OtA0g=";
     };
     buildInputs = [ DBDSQLite TestException TestRequires ];
     propagatedBuildInputs = [ CatalystComponentInstancePerContext CatalystXComponentTraits DBIxClassSchemaLoader MooseXMarkAsMethods MooseXNonMoose MooseXTypesLoadableClass TieIxHash ];
