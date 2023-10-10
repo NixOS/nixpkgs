@@ -24746,10 +24746,10 @@ with self; {
 
   TestPerlTidy = buildPerlModule rec {
     pname = "Test-PerlTidy";
-    version = "20200930";
+    version = "20230226";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-${version}.tar.gz";
-      hash = "sha256-n29omXRe17bNtREFsJSUp/ohdVBMxAgWrkYGfUp0V7Y=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-PerlTidy-20230226.tar.gz";
+      hash = "sha256-wOJCEQeVeV1Nu2xEFmzlV09cftuninidG8rnZoXYA8E=";
     };
     propagatedBuildInputs = [ PathTiny PerlTidy TextDiff ];
     buildInputs = [ TestPerlCritic ];
