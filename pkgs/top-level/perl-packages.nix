@@ -8061,10 +8061,10 @@ with self; {
 
   DistZillaPluginTestUnusedVars = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-UnusedVars";
-    version = "2.000007";
+    version = "2.001001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-UnusedVars-2.000007.tar.gz";
-      hash = "sha256-6gGZo6AEMhPdwTJQi57ZsTHvcXc1uPk9eCkRkdBLQ8I=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-UnusedVars-2.001001.tar.gz";
+      hash = "sha256-df7W0NzCv0B/8nrJ4W7yFTRnFEuYbPovmPhpuqWNdkc=";
     };
     buildInputs = [ TestDeep TestOutput TestVars ];
     propagatedBuildInputs = [ DistZilla ];
