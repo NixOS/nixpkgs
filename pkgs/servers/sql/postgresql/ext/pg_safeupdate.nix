@@ -14,8 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/bin # for buildEnv, see https://github.com/NixOS/nixpkgs/issues/22653
-    install -D safeupdate.so -t $out/lib
+    install -D safeupdate${postgresql.dlSuffix} -t $out/lib
   '';
 
   meta = with lib; {
