@@ -701,10 +701,10 @@ with self; {
 
   ApacheTest = buildPerlPackage {
     pname = "Apache-Test";
-    version = "1.42";
+    version = "1.43";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/Apache-Test-1.42.tar.gz";
-      hash = "sha256-BoHwfX2KlCnQ7fioxa1qZVvn/oGtoUJnCyuOd2s7s+s=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/Apache-Test-1.43.tar.gz";
+      hash = "sha256-qZmfAqeBpYkhi1ibGHnBHEladFrwlXXly7It/LZWgKw=";
     };
     doCheck = false;
     meta = {
