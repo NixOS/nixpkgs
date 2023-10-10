@@ -15485,10 +15485,10 @@ with self; {
 
   Modulecpmfile = buildPerlModule {
     pname = "Module-cpmfile";
-    version = "0.002";
+    version = "0.006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SK/SKAJI/Module-cpmfile-0.002.tar.gz";
-      hash = "sha256-iEk/pG307LIe8RdaNJTyUQsGc+nNtN2AVzzo9nhhvaE=";
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Module-cpmfile-0.006.tar.gz";
+      hash = "sha256-G8l24pN3JIlsn26unl3KmB4n+YQwuS3icO41FP0ArA8=";
     };
     buildInputs = [ ModuleBuildTiny ModuleCPANfile Test2Suite ];
     propagatedBuildInputs = [ YAMLPP ];
