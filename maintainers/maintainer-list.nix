@@ -14143,6 +14143,12 @@
     githubId = 406946;
     name = "Valentin Lorentz";
   };
+  prominentretail = {
+    email = "me@jakepark.me";
+    github = "ProminentRetail";
+    githubId = 94048404;
+    name = "Jake Park";
+  };
   proofconstruction = {
     email = "source@proof.construction";
     github = "proofconstruction";
