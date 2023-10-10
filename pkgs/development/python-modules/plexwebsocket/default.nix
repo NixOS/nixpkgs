@@ -1,14 +1,16 @@
 { lib
+, aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, aiohttp
-, isPy27
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "plexwebsocket";
   version = "0.0.14";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jjlawren";
@@ -21,17 +23,16 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  # package does not include tests
+  # Package does not include tests
   doCheck = false;
 
-  # at least guarantee the module can be imported
   pythonImportsCheck = [
     "plexwebsocket"
   ];
 
   meta = with lib; {
+    description = "Library to react to events issued over Plex websockets";
     homepage = "https://github.com/jjlawren/python-plexwebsocket/";
-    description = "Async library to react to events issued over Plex websockets";
     changelog = "https://github.com/jjlawren/python-plexwebsocket/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ colemickens ];
