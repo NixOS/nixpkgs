@@ -1337,10 +1337,10 @@ with self; {
 
   AuthenSASL = buildPerlPackage {
     pname = "Authen-SASL";
-    version = "2.16";
+    version = "2.1700";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GB/GBARR/Authen-SASL-2.16.tar.gz";
-      hash = "sha256-ZhT6dRjwlPhTdBtjxz82JxaMXTrKibHQKxAW3DKFTgk=";
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.1700.tar.gz";
+      hash = "sha256-uG1aV2uNOHruJPOfR6VK/RS7ZrCQA9tQZQAfHeA6js4=";
     };
     propagatedBuildInputs = [ DigestHMAC ];
     meta = {
