@@ -9843,10 +9843,10 @@ with self; {
 
   FileSlurper = buildPerlPackage {
     pname = "File-Slurper";
-    version = "0.012";
+    version = "0.014";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/File-Slurper-0.012.tar.gz";
-      hash = "sha256-TvsupBaxEKG9pvgTNUnMbqNnZALjyvdSn84DEyUKpXg=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/File-Slurper-0.014.tar.gz";
+      hash = "sha256-1aNkhzOYiMPNdY5kgWDuHXDrQVPKy6/1eEbbzvs0Sww=";
     };
     buildInputs = [ TestWarnings ];
     meta = {
