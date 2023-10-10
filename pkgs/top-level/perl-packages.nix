@@ -14094,10 +14094,10 @@ with self; {
 
   MCE = buildPerlPackage {
     pname = "MCE";
-    version = "1.874";
+    version = "1.889";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.874.tar.gz";
-      hash = "sha256-2AnjAYR1EVrX7MuL70m9478+dau7zYBWRyi7z6uG09A=";
+      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.889.tar.gz";
+      hash = "sha256-22FT5HTQRvwlMFC/U8VAAthM1Mp30hwrnfVv7rgJu+0=";
     };
     meta = {
       description = "Many-Core Engine for Perl providing parallel processing capabilities";
