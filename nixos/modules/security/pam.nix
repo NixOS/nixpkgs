@@ -597,6 +597,7 @@ let
           (map (rule: concatStringsSep " " (
             [ type rule.control rule.modulePath ]
             ++ map formatModuleArgument rule.args
+            ++ [ "# ${rule.name} (order ${toString rule.order})" ]
           )))
           (concatStringsSep "\n")
         ];
