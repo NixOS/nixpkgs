@@ -1906,10 +1906,10 @@ with self; {
 
   BusinessISBNData = buildPerlPackage {
     pname = "Business-ISBN-Data";
-    version = "20191107";
+    version = "20231006.001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-Data-20191107.tar.gz";
-      hash = "sha256-hExPZPGT04k0C0RlodW8NMYPDI5C5caayK/j07vFyg0=";
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-Data-20231006.001.tar.gz";
+      hash = "sha256-KhazbjIzXOjI337m8ig2LzSuc8T8wSNQCVCiyMd/F0g=";
     };
     meta = {
       description = "Data pack for Business::ISBN";
