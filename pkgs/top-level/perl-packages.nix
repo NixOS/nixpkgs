@@ -6961,11 +6961,11 @@ with self; {
 
   DBDOracle = buildPerlPackage {
     pname = "DBD-Oracle";
-    version = "1.80";
+    version = "1.83";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MJ/MJEVANS/DBD-Oracle-1.80.tar.gz";
-      hash = "sha256-8F4lKCNuPRNWXAuRI54HdZTb8GV6xZSY9Uov7psZ6uc=";
+      url = "mirror://cpan/authors/id/Z/ZA/ZARQUON/DBD-Oracle-1.83.tar.gz";
+      hash = "sha256-Uf6cFYlV/aDKkXqAaGPwvFEGi1M/u8dCOzzErVle0VM=";
     };
 
     ORACLE_HOME = "${pkgs.oracle-instantclient.lib}/lib";
