@@ -2624,6 +2624,10 @@ with pkgs;
 
   dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
 
+  dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
+    inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
+  };
+
   duckstation = qt6Packages.callPackage ../applications/emulators/duckstation { };
 
   dynamips = callPackage ../applications/emulators/dynamips { };
@@ -11492,9 +11496,7 @@ with pkgs;
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
   opensnitch = callPackage ../tools/networking/opensnitch/daemon.nix {
-    # Build currently fails on Go > 1.18
-    # See https://github.com/evilsocket/opensnitch/issues/851
-    buildGoModule = buildGo118Module;
+    buildGoModule = buildGo121Module;
   };
 
   opensnitch-ui = libsForQt5.callPackage ../tools/networking/opensnitch/ui.nix { };
@@ -38345,7 +38347,7 @@ with pkgs;
   openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
   openmw = libsForQt5.callPackage ../games/openmw {
-    inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) CoreMedia VideoDecodeAcceleration VideoToolbox;
   };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };

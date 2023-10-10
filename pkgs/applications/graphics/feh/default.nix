@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.10";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "derf";
     repo = pname;
     rev = version;
-    hash = "sha256-9NJ6zgQHcFJPmRlqJuCMXcKjLvDPUG+QvKGTJlWvWK4=";
+    hash = "sha256-1dz04RcaoP79EoE+SsatXm2wMRCbNnmAzMECYk3y3jg=";
   };
 
   outputs = [ "out" "man" "doc" ];

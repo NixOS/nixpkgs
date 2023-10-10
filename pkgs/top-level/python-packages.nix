@@ -618,6 +618,8 @@ self: super: with self; {
 
   appdirs = callPackage ../development/python-modules/appdirs { };
 
+  apple-weatherkit = callPackage ../development/python-modules/apple-weatherkit { };
+
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
 
   appnope = callPackage ../development/python-modules/appnope { };
