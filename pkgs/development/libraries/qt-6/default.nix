@@ -105,15 +105,7 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
-      qtgrpc = callPackage ./modules/qtgrpc.nix {
-        patches = [
-          (fetchpatch2 {
-            # fix compatibility with protobuf 23
-            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-grpc/-/raw/5cfb8728ca626af41d5dc2b1f642d026c011ec56/protobuf-23.patch";
-            hash = "sha256-msVQEAt0DewOnZIgymGijJEpIXbfmMUkdbIyJ0ZNuok=";
-          })
-        ];
-      };
+      qtgrpc = callPackage ./modules/qtgrpc.nix { };
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
       qtlanguageserver = callPackage ./modules/qtlanguageserver.nix { };
