@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "plexwebsocket";
-  version = "0.0.13";
+  version = "0.0.14";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jjlawren";
     repo = "python-plexwebsocket";
     rev = "v${version}";
-    hash = "sha256-u9zO3d0d4Qg+u4ezVRGkNDpJqHkYIMrEMJzBK5WKk8Y=";
+    hash = "sha256-gT9RWpaR33ROs6ttjH2joNPi99Ng94Tp/R9eZY1eGZk=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
