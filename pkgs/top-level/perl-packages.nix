@@ -14794,10 +14794,10 @@ with self; {
 
   MathGMP = buildPerlPackage {
     pname = "Math-GMP";
-    version = "2.20";
+    version = "2.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Math-GMP-2.20.tar.gz";
-      hash = "sha256-Ftpfge9SdChiuzyHhASq/bJM2rT4rL/KEoAzJIe8VV8=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Math-GMP-2.25.tar.gz";
+      hash = "sha256-OCtx5Udi9jnppCqbBpNBUZh7pX0Ru3DTXjvsiNUEUM4=";
     };
     buildInputs = [ pkgs.gmp AlienGMP ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
