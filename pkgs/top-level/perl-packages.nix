@@ -4188,10 +4188,10 @@ with self; {
 
   ConfigMVP = buildPerlPackage {
     pname = "Config-MVP";
-    version = "2.200011";
+    version = "2.200013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-2.200011.tar.gz";
-      hash = "sha256-I8lWZvxDxK2uvMCTsbVgke/CpqotdTZqIW0Y7alq1xY=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-2.200013.tar.gz";
+      hash = "sha256-AY0WFiPuOmf4YNnmgOIuYbeermAY8OfDtSX8k09bfUU=";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ ModulePluggable MooseXOneArgNew RoleHasMessage RoleIdentifiable Throwable TieIxHash ];
