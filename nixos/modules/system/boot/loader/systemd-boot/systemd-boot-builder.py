@@ -67,6 +67,8 @@ def write_loader_conf(profile: Optional[str], generation: int, specialisation: O
         f.write("default %s\n" % generation_conf_filename(profile, generation, specialisation))
         if not @editor@:
             f.write("editor 0\n");
+        if @rebootForBitlocker@:
+            f.write("reboot-for-bitlocker yes\n");
         f.write("console-mode @consoleMode@\n");
     os.rename("@efiSysMountPoint@/loader/loader.conf.tmp", "@efiSysMountPoint@/loader/loader.conf")
 
