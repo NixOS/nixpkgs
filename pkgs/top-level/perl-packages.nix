@@ -7920,10 +7920,10 @@ with self; {
 
   DistZillaPluginTestDistManifest = buildPerlModule {
     pname = "Dist-Zilla-Plugin-Test-DistManifest";
-    version = "2.000005";
+    version = "2.000006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DO/DOHERTY/Dist-Zilla-Plugin-Test-DistManifest-2.000005.tar.gz";
-      hash = "sha256-Twrye7OHRdLex9lBvPdJ5tf76vjnvPinmhMQqWObD2U=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-DistManifest-2.000006.tar.gz";
+      hash = "sha256-Wj2kW/yYzjhf7X3BZTp4kGEfC57xVsABOueFdPiWYH0=";
     };
     buildInputs = [ TestDeep TestDistManifest TestOutput ];
     propagatedBuildInputs = [ DistZilla ];
