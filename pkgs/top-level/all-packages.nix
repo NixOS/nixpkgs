@@ -39063,8 +39063,6 @@ with pkgs;
 
   antiprism = callPackage ../applications/science/geometry/antiprism { };
 
-  gama = callPackage ../applications/science/geometry/gama { };
-
   drgeo = callPackage ../applications/science/geometry/drgeo {
     inherit (gnome2) libglade;
     guile = guile_1_8;
