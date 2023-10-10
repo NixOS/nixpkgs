@@ -2079,10 +2079,10 @@ with self; {
 
   Cairo = buildPerlPackage {
     pname = "Cairo";
-    version = "1.108";
+    version = "1.109";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Cairo-1.108.tar.gz";
-      hash = "sha256-YELLfcUWdasjQ3BZxjhHE8X7vOhExMYAF9LgYZSPBdo=";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Cairo-1.109.tar.gz";
+      hash = "sha256-ghlzbkAcIxHaX1FXdd5D/YfmOEtQTaNqGS8rIXZDB38=";
     };
     buildInputs = [ pkgs.cairo ];
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
