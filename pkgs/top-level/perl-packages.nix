@@ -5005,10 +5005,10 @@ with self; {
 
   CryptPasswdMD5 = buildPerlModule {
     pname = "Crypt-PasswdMD5";
-    version = "1.40";
+    version = "1.42";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.40.tgz";
-      hash = "sha256-t31q7qJTAa975nn3RS6JTKiK+XEL/9bgHWZaFBw5GUg=";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Crypt-PasswdMD5-1.42.tgz";
+      hash = "sha256-/Tlubn9E7rkj6TyZOUC49nqa7Vb8dKrK8Dj8QFPvO1k=";
     };
     meta = {
       description = "Provide interoperable MD5-based crypt() functions";
