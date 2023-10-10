@@ -5147,10 +5147,10 @@ with self; {
 
   CryptRandPasswd = buildPerlPackage {
     pname = "Crypt-RandPasswd";
-    version = "0.06";
+    version = "0.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.06.tar.gz";
-      hash = "sha256-sb2QR42cx19MffpNvub9DApAoaUpKI33JpeHMwgpSDE=";
+      url = "mirror://cpan/authors/id/J/JA/JANITOR/Crypt-RandPasswd-0.07.tar.gz";
+      hash = "sha256-bd26Sdx+DwBRr6oKvhbxN4OiRM0eu1+B2qEay2KKSWE=";
     };
     meta = {
       description = "Random password generator based on FIPS-181";
