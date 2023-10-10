@@ -26780,10 +26780,10 @@ with self; {
 
   TypeTiny = buildPerlPackage {
     pname = "Type-Tiny";
-    version = "1.012000";
+    version = "2.004000";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.012000.tar.gz";
-      hash = "sha256-09sSIBYcKuprC4oiJcT+9Sbo275WtL/+naq8A+Lv6pA=";
+      url = "mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-2.004000.tar.gz";
+      hash = "sha256-aX5/d17fyF9M8HeS0E/RmwnCUoX5j1k46O/E90UHoSg=";
     };
     propagatedBuildInputs = [ ExporterTiny ];
     buildInputs = [ TestMemoryCycle ];
