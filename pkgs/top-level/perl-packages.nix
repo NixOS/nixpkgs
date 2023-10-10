@@ -13685,10 +13685,10 @@ with self; {
 
   ListSomeUtils = buildPerlPackage {
     pname = "List-SomeUtils";
-    version = "0.58";
+    version = "0.59";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-SomeUtils-0.58.tar.gz";
-      hash = "sha256-lur7NZM50ivyot5CEpiEejxA9qKLbUQAXQll2oalRp0=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/List-SomeUtils-0.59.tar.gz";
+      hash = "sha256-+rMDcuTGe/WkYGLaONHQyHVief6tqGbrQ5+ilXGi3Hs=";
     };
     buildInputs = [ TestLeakTrace ];
     propagatedBuildInputs = [ ModuleImplementation ];
