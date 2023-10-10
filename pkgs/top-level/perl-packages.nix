@@ -3778,10 +3778,10 @@ with self; {
 
   Clipboard = buildPerlModule {
     pname = "Clipboard";
-    version = "0.26";
+    version = "0.28";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.26.tar.gz";
-      hash = "sha256-iGrkPchTj5v8Tgf9vPCbf71u5Zwx82RhjIWd4UlTxYo=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Clipboard-0.28.tar.gz";
+      hash = "sha256-no15AVGUJjNXwloPXQlIAP/0O9v5+GAew7DtXrCWbSY=";
     };
     propagatedBuildInputs = [ CGI ];
     # Disable test on darwin because MacPasteboard fails when not logged in interactively.
