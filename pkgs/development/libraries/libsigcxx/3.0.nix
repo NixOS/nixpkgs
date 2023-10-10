@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "AuJjD/tc6TzVLDhCNSHf5wYzKIY6bpbUHXZaYRa4cH4=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [
     pkg-config
     meson

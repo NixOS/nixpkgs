@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-I1pAvsc0bHuCtqjKrgRWNT3AbnHxS8QUvMhYrxg4cZo=";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkg-config meson ninja ];
 
   doCheck = true;
