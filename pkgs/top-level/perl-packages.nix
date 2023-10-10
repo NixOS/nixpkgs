@@ -18282,10 +18282,10 @@ with self; {
 
   NetNetmask = buildPerlPackage {
     pname = "Net-Netmask";
-    version = "2.0001";
+    version = "2.0002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JM/JMASLAK/Net-Netmask-2.0001.tar.gz";
-      hash = "sha256-FzVu+GZ/s4xEEKHDzH+kxzVn2/VnS/l/USNtbkiPUXE=";
+      url = "mirror://cpan/authors/id/J/JM/JMASLAK/Net-Netmask-2.0002.tar.gz";
+      hash = "sha256-JKmy58a8wTAteXROukwCG/PeR/FJqvrM2U+bBC/dv5Q=";
     };
     buildInputs = [ Test2Suite TestUseAllModules ];
     meta = {
