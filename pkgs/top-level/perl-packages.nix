@@ -27757,10 +27757,10 @@ with self; {
 
   XMLLibXSLT = buildPerlPackage {
     pname = "XML-LibXSLT";
-    version = "1.99";
+    version = "2.002001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-1.99.tar.gz";
-      hash = "sha256-En4XqHf7YeR7nouHv42q0xM5pioAEh+XUdUitDiw9/A=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-2.002001.tar.gz";
+      hash = "sha256-34knxP8ZSfYlgNHB5vAPDNVrU9OpV+5LFxtZv/pjssA=";
     };
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
