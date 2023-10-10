@@ -130,7 +130,7 @@ let
           description = lib.mdDoc ''
             Path to YAML file that contains tracing configuration.
 
-            See format details: <https://thanos.io/tracing.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/tracing.md/#configuration>
           '';
         };
       };
@@ -147,7 +147,7 @@ let
 
             If {option}`tracing.config-file` is set this option has no effect.
 
-            See format details: <https://thanos.io/tracing.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/tracing.md/#configuration>
           '';
         };
     };
@@ -195,7 +195,7 @@ let
           description = lib.mdDoc ''
             Path to YAML file that contains object store configuration.
 
-            See format details: <https://thanos.io/storage.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage>
           '';
         };
       };
@@ -212,7 +212,7 @@ let
 
             If {option}`objstore.config-file` is set this option has no effect.
 
-            See format details: <https://thanos.io/storage.md/#configuration>
+            See format details: <https://thanos.io/tip/thanos/storage.md/#configuring-access-to-object-storage>
           '';
         };
     };
@@ -718,8 +718,7 @@ in {
 
     receive = paramsToOptions params.receive // {
       enable = mkEnableOption
-        (lib.mdDoc ("the Thanos receiver which accept Prometheus remote write API requests " +
-         "and write to local tsdb (EXPERIMENTAL, this may change drastically without notice)"));
+        (lib.mdDoc ("the Thanos receiver which accept Prometheus remote write API requests and write to local tsdb"));
       arguments = mkArgumentsOption "receive";
     };
   };
