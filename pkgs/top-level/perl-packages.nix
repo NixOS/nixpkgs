@@ -17093,10 +17093,10 @@ with self; {
 
   MooseXOneArgNew = buildPerlPackage {
     pname = "MooseX-OneArgNew";
-    version = "0.005";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-OneArgNew-0.005.tar.gz";
-      hash = "sha256-fk/PR06mxCRPCIXxBmcpz9xHL71xkN1BtLVbzWfDED8=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-OneArgNew-0.007.tar.gz";
+      hash = "sha256-hCgkNfEWnPCddRP6k4fiCReRY1zzWgeLUAuCmu6gYTg=";
     };
     propagatedBuildInputs = [ MooseXRoleParameterized ];
     meta = {
