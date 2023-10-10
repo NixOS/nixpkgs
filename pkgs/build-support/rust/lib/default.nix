@@ -124,11 +124,7 @@ rec {
     #
     setEnv = ''
     env \
-      "CC_${toRustTargetForUseInEnvVars stdenv.hostPlatform}=${ccForHost}" \
-      "CXX_${toRustTargetForUseInEnvVars stdenv.hostPlatform}=${cxxForHost}" \
       "CARGO_TARGET_${toRustTargetForUseInEnvVars stdenv.hostPlatform}_LINKER=${ccForHost}" \
-      "CC_${toRustTargetForUseInEnvVars stdenv.buildPlatform}=${ccForBuild}" \
-      "CXX_${toRustTargetForUseInEnvVars stdenv.buildPlatform}=${cxxForBuild}" \
       "CARGO_TARGET_${toRustTargetForUseInEnvVars stdenv.buildPlatform}_LINKER=${ccForBuild}" \
       "CARGO_BUILD_TARGET=${rustBuildPlatform}" \
       "HOST_CC=${buildPackages.stdenv.cc}/bin/cc" \
