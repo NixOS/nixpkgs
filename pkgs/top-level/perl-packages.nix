@@ -14009,10 +14009,10 @@ with self; {
 
   LogDispatchFileRotate = buildPerlPackage {
     pname = "Log-Dispatch-FileRotate";
-    version = "1.36";
+    version = "1.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Log-Dispatch-FileRotate-1.36.tar.gz";
-      hash = "sha256-RyyxCw+sa71nKYvCjxSVhZrYWy356IxKH366c0+IlW4=";
+      url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Log-Dispatch-FileRotate-1.38.tar.gz";
+      hash = "sha256-tV1s7ePwoGQmSI+/pVT0VhMgsBTBAjiTztKVCOW85Ow=";
     };
     propagatedBuildInputs = [ DateManip LogDispatch ];
     buildInputs = [ PathTiny TestWarn ];
