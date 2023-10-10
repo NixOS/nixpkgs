@@ -14509,10 +14509,10 @@ with self; {
 
   MailIMAPClient = buildPerlPackage {
     pname = "Mail-IMAPClient";
-    version = "3.42";
+    version = "3.43";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLOBBES/Mail-IMAPClient-3.42.tar.gz";
-      hash = "sha256-HCJk1QxUyDmj44zi+O3aPSTzDMYHlA11dL6rGcsAzn4=";
+      url = "mirror://cpan/authors/id/P/PL/PLOBBES/Mail-IMAPClient-3.43.tar.gz";
+      hash = "sha256-CTyX+sFbR6j+TSk27y3zd6v3fMirdAktISi7lF0ftG8=";
     };
     propagatedBuildInputs = [ ParseRecDescent ];
     meta = {
