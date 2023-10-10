@@ -6285,10 +6285,10 @@ with self; {
 
   DateTime = buildPerlPackage {
     pname = "DateTime";
-    version = "1.54";
+    version = "1.59";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.54.tar.gz";
-      hash = "sha256-sS7abZAHE/Inlk3E3A4u+4bSlOi8Lxa+npW2WflTsuc=";
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-1.59.tar.gz";
+      hash = "sha256-3j6aY84VRwtNtK2tS6asjsKX2IwMbGs1SwgYg7CmdpU=";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTimeLocale DateTimeTimeZone ];
