@@ -22765,10 +22765,10 @@ with self; {
 
   SubInstall = buildPerlPackage {
     pname = "Sub-Install";
-    version = "0.928";
+    version = "0.929";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Install-0.928.tar.gz";
-      hash = "sha256-YeVnp2eViIh7e4bUJ7xHbqbXf//n4NF9ZA+JAH2Y7w8=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Sub-Install-0.929.tar.gz";
+      hash = "sha256-gLHigdjNOysx2scR9cihZXqHzYC75przkkvL605dsHc=";
     };
     meta = {
       description = "Install subroutines into packages easily";
