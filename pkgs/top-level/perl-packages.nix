@@ -6193,10 +6193,10 @@ with self; {
 
   DataVisitor = buildPerlPackage {
     pname = "Data-Visitor";
-    version = "0.31";
+    version = "0.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Data-Visitor-0.31.tar.gz";
-      hash = "sha256-K7FpMou80tzO3Lk4Yn6HIOf0w/jjGCMCD7TCBQXTTG4=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Data-Visitor-0.32.tar.gz";
+      hash = "sha256-sZQpDyV8xidaA5N0ERVUxmahZQ5MAa15nB4KJ39HkX0=";
     };
     buildInputs = [ TestNeeds ];
     propagatedBuildInputs = [ Moose TieToObject namespaceclean ];
