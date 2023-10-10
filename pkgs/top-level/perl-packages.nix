@@ -11629,10 +11629,10 @@ with self; {
 
   HTTPCookieJar = buildPerlPackage {
     pname = "HTTP-CookieJar";
-    version = "0.010";
+    version = "0.014";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.010.tar.gz";
-      hash = "sha256-VuMz6CPF2HKiiSQEgrlM3oQesDe38v/U0bQ6opjG9dA=";
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.014.tar.gz";
+      hash = "sha256-cJTqXJH1NtJjuF6Dq06alj4RxECM4I7K5VP6nAzEfnM=";
     };
     propagatedBuildInputs = [ HTTPDate ];
     buildInputs = [ TestDeep TestRequires URI ];
