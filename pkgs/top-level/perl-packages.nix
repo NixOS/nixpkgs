@@ -21227,10 +21227,10 @@ with self; {
 
   RegexpGrammars = buildPerlModule {
     pname = "Regexp-Grammars";
-    version = "1.057";
+    version = "1.058";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.057.tar.gz";
-      hash = "sha256-r1PBmBhGHNcBrrV8Sd/9tGPtxL+PZY2epObVNKwXcEE=";
+      url = "mirror://cpan/authors/id/D/DC/DCONWAY/Regexp-Grammars-1.058.tar.gz";
+      hash = "sha256-6ojVjiUWdPrjm0n007U0LqzLj8tVhWzTBKoaX/PUHJI=";
     };
     meta = {
       description = "Add grammatical parsing features to Perl 5.10 regexes";
