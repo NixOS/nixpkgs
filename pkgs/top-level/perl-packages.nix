@@ -24202,10 +24202,10 @@ with self; {
 
   TestFileContents = buildPerlModule {
     pname = "Test-File-Contents";
-    version = "0.23";
+    version = "0.242";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/Test-File-Contents-0.23.tar.gz";
-      hash = "sha256-zW+t+5ELNLS1OZH/Ix2tmZKcqIUKvsOtDigQxL17Hz0=";
+      url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/Test-File-Contents-0.242.tar.gz";
+      hash = "sha256-qDisC29uEOiWE7UMphdzzbqbpHh7qC57tl2q9whKpQs=";
     };
     propagatedBuildInputs = [ TextDiff ];
     meta = {
