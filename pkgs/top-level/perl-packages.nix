@@ -3192,10 +3192,10 @@ with self; {
 
   CLASS = buildPerlPackage {
     pname = "CLASS";
-    version = "1.00";
+    version = "1.1.8";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSCHWERN/CLASS-1.00.tar.gz";
-      hash = "sha256-xRhWIIFXAbP+whMUzNjFaT5r/VGUMVJ9ozcKgWQiBnE=";
+      url = "mirror://cpan/authors/id/J/JD/JDEGUEST/CLASS-v1.1.8.tar.gz";
+      hash = "sha256-IZAaUmXL29iRJ36X/Gs0X3nby/B3RFePX/iGaltddgM=";
     };
     meta = {
       description = "Alias for __PACKAGE__";
