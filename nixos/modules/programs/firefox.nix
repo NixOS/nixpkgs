@@ -67,7 +67,16 @@ in
         Some of these might be able to be configured more ergonomically
         using policies.
 
+        You should use full strings like [preferences within policies.](https://mozilla.github.io/policy-templates/#preferences)
+
         ${organisationInfo}
+      '';
+      example = literalExpression ''
+        # should be full strings like preferences within policies
+        # https://mozilla.github.io/policy-templates/#preferences
+        {
+          "browser.tabs.tabmanager.enabled" = false;
+        }
       '';
     };
 
