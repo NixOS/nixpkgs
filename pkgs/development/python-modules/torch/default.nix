@@ -101,6 +101,11 @@ let
       rocminfo rocm-thunk rocm-comgr rocm-device-libs
       rocm-runtime clr.icd hipify
     ];
+
+    # Fix `setuptools` not being found
+    postBuild = ''
+      rm -rf $out/nix-support
+    '';
   };
 
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
