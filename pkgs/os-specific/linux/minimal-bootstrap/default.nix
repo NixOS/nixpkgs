@@ -117,6 +117,7 @@ lib.makeScope
         # FIXME: not sure why new gawk doesn't work
         gawk = gawk-mes;
       };
+
       gcc46-cxx = callPackage ./gcc/4.6.cxx.nix {
         gcc = gcc46;
         gnumake = gnumake-musl;
@@ -174,6 +175,7 @@ lib.makeScope
         tinycc = tinycc-musl;
         gnused = gnused-mes;
       };
+
       gnused-mes = callPackage ./gnused/mes.nix {
         bash = bash_2_05;
         tinycc = tinycc-bootstrappable;
@@ -226,6 +228,7 @@ lib.makeScope
       ln-boot = callPackage ./ln-boot { };
 
       mes = callPackage ./mes { };
+
       mes-libc = callPackage ./mes/libc.nix { };
 
       musl11-intermediate = callPackage ./musl/1.1.nix {
@@ -233,6 +236,7 @@ lib.makeScope
         tinycc = tinycc-mes;
         gnused = gnused-mes;
       };
+
       musl11 = callPackage ./musl/1.1.nix {
         bash = bash_2_05;
         tinycc = tinycc-musl-intermediate;
@@ -260,7 +264,9 @@ lib.makeScope
         ;
 
       tinycc-bootstrappable = lib.recurseIntoAttrs (callPackage ./tinycc/bootstrappable.nix { });
+
       tinycc-mes = lib.recurseIntoAttrs (callPackage ./tinycc/mes.nix { });
+
       tinycc-musl-intermediate = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
@@ -268,6 +274,7 @@ lib.makeScope
           tinycc = tinycc-mes;
         }
       );
+
       tinycc-musl = lib.recurseIntoAttrs (
         callPackage ./tinycc/musl.nix {
           bash = bash_2_05;
@@ -275,6 +282,12 @@ lib.makeScope
           tinycc = tinycc-musl-intermediate;
         }
       );
+
+      gawk-static = callPackage ./gawk/static.nix {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+      };
 
       xz = callPackage ./xz {
         bash = bash_2_05;
@@ -303,8 +316,9 @@ lib.makeScope
         echo ${coreutils-static.tests.get-version}
         echo ${diffutils.tests.get-version}
         echo ${findutils.tests.get-version}
-        echo ${gawk-mes.tests.get-version}
         echo ${gawk.tests.get-version}
+        echo ${gawk-mes.tests.get-version}
+        echo ${gawk-static.tests.get-version}
         echo ${gcc46.tests.get-version}
         echo ${gcc46-cxx.tests.hello-world}
         echo ${gcc8.tests.hello-world}
