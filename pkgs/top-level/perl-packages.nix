@@ -5436,10 +5436,10 @@ with self; {
 
   CryptPerl = buildPerlPackage {
     pname = "Crypt-Perl";
-    version = "0.34";
+    version = "0.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.34.tar.gz";
-      hash = "sha256-DhyyI98AQfbZsBDxHm+XqXq1WhGKJzk460/oXUA/GxE=";
+      url = "mirror://cpan/authors/id/F/FE/FELIPE/Crypt-Perl-0.38.tar.gz";
+      hash = "sha256-eJdUj7AeFqIK5JDt3UZX+Br3sZKEFLkvbbQsY10ax+A=";
     };
     nativeCheckInputs = [ pkgs.openssl MathBigIntGMP ];
     buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
