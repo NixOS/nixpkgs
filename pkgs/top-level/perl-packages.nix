@@ -22402,10 +22402,10 @@ with self; {
 
   StringFlogger = buildPerlPackage {
     pname = "String-Flogger";
-    version = "1.101245";
+    version = "1.101246";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Flogger-1.101245.tar.gz";
-      hash = "sha256-qgPAjgH4AqNYwXXGCTwCrflohlmgh6jd79w+nO9yZAs=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/String-Flogger-1.101246.tar.gz";
+      hash = "sha256-FfhJHgeBi7PPqfa9Oqv2QwuptOMJ8YEUNYvj2Bv/Og8=";
     };
     propagatedBuildInputs = [ JSONMaybeXS SubExporter ];
     meta = {
