@@ -8225,10 +8225,10 @@ with self; {
 
   EmailMessageID = buildPerlPackage {
     pname = "Email-MessageID";
-    version = "1.406";
+    version = "1.408";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MessageID-1.406.tar.gz";
-      hash = "sha256-7EJd2/OV4OGsfG+VtJM8VcV6yfHnUUADx8kE7GzTQrg=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-MessageID-1.408.tar.gz";
+      hash = "sha256-Hz1bT/Cxx7OemsfDGPs3rc0LrJVWA2VGSU0U8G3FZDw=";
     };
     meta = {
       description = "Generate world unique message-ids";
