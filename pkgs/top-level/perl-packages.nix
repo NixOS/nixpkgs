@@ -19350,10 +19350,10 @@ with self; {
 
   ParsePlainConfig = buildPerlPackage {
     pname = "Parse-PlainConfig";
-    version = "3.05";
+    version = "3.06";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/CORLISS/Parse-PlainConfig/Parse-PlainConfig-3.05.tar.gz";
-      hash = "sha256-a3ioVSOYsNLXBjUFyTs8/tBDLFss9uALjlH+v0EcHvo=";
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Parse-PlainConfig/Parse-PlainConfig-3.06.tar.gz";
+      hash = "sha256-8ffT5OWawrbPbJjaDKpBxdTl2GVcIQdRSBlplS/+G4c=";
     };
     propagatedBuildInputs = [ ClassEHierarchy Paranoid ];
     meta = {
