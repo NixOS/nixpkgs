@@ -15112,10 +15112,10 @@ with self; {
 
   Memoize = buildPerlPackage {
     pname = "Memoize";
-    version = "1.03";
+    version = "1.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MJ/MJD/Memoize-1.03.tgz";
-      hash = "sha256-UjnMX2RKULDen/6qUfqZkesG7LG/RniHPjq4mvnA2vM=";
+      url = "mirror://cpan/authors/id/A/AR/ARISTOTLE/Memoize-1.16.tar.gz";
+      hash = "sha256-CRlSvPSS7O41ueW41ykgxYAjRB15IIwduHg3xcV4B74=";
     };
     meta = {
       description = "Make functions faster by trading space for time";
