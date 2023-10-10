@@ -1539,10 +1539,10 @@ with self; {
 
   BCOW = buildPerlPackage {
     pname = "B-COW";
-    version = "0.004";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.004.tar.gz";
-      hash = "sha256-/K+3de2EpFvCwGxf/XE0LLPAb7C9zVwbUbDBL4tYX1E=";
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.007.tar.gz";
+      hash = "sha256-EpDa8ifosJiJoxzxguKRBvHPnxpOm/d1L53pLtEVi0Q=";
     };
     meta = {
       description = "B::COW additional B helpers to check COW status";
