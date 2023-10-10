@@ -19478,10 +19478,10 @@ with self; {
 
   PathTiny = buildPerlPackage {
     pname = "Path-Tiny";
-    version = "0.114";
+    version = "0.144";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.114.tar.gz";
-      hash = "sha256-zQ+I83pY/DZn7AZXZ/4B5z7m76GKESv9NQjPZXnKAOE=";
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.144.tar.gz";
+      hash = "sha256-9uoJTs6EXJUqAsJ4kzJXk1TejUEKcH+bcEW9JBIGSH0=";
     };
     preConfigure =
       ''
