@@ -20348,10 +20348,10 @@ with self; {
 
   ProcBackground = buildPerlPackage {
     pname = "Proc-Background";
-    version = "1.21";
+    version = "1.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NERDVANA/Proc-Background-1.21.tar.gz";
-      hash = "sha256-kbalrrhBscMTSYx4+tCON9F1lXAtxiBbWtOO9plJt+4=";
+      url = "mirror://cpan/authors/id/N/NE/NERDVANA/Proc-Background-1.32.tar.gz";
+      hash = "sha256-Wxp4DduSnKQnJeuQtRgyFCX/d4tKE3+G+sldn7nNKWc=";
     };
     meta = {
       description = "Run asynchronous child processes under Unix or Windows";
