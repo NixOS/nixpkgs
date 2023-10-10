@@ -5705,10 +5705,10 @@ with self; {
 
   DataGUID = buildPerlPackage {
     pname = "Data-GUID";
-    version = "0.049";
+    version = "0.051";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-GUID-0.049.tar.gz";
-      hash = "sha256-uK9DfUn9BCWiPr/z5ZidrmTe6vDgRqpfQTZlzTFpp3s=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Data-GUID-0.051.tar.gz";
+      hash = "sha256-aOp3xz/KiROC8gbhJEkJRQG2+/Llf1SQLVBkInz9ji4=";
     };
     propagatedBuildInputs = [ DataUUID SubExporter ];
     meta = {
