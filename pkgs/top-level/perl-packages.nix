@@ -10412,10 +10412,10 @@ with self; {
 
   Glib = buildPerlPackage {
     pname = "Glib";
-    version = "1.3293";
+    version = "1.3294";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3293.tar.gz";
-      hash = "sha256-cxagwefMXLPbchEhT0XXvcI1Q2WmgKxL06yL8G0ctQA=";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3294.tar.gz";
+      hash = "sha256-1xX1qGvMGHB13oXnrlvAewcU1u3BlqktpDmG76ROXLs=";
     };
     buildInputs = [ pkgs.glib ];
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
