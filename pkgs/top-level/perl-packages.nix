@@ -8568,10 +8568,10 @@ with self; {
 
   enum = buildPerlPackage {
     pname = "enum";
-    version = "1.11";
+    version = "1.12";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/enum-1.11.tar.gz";
-      hash = "sha256-0vNrUBXx419kAVmGe2C/XVzWa1bNXkLTP1Mb5o5e7jU=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/enum-1.12.tar.gz";
+      hash = "sha256-aaeokc04iO2LAsXpmh9In5KmLsNRwLx4lP1719FEfqk=";
     };
     meta = {
       description = "C style enumerated types and bitmask flags in Perl";
