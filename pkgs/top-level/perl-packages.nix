@@ -13223,10 +13223,10 @@ with self; {
 
   libintl-perl = buildPerlPackage {
     pname = "libintl-perl";
-    version = "1.32";
+    version = "1.33";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.32.tar.gz";
-      hash = "sha256-gBCCmPJWTsv8cRCjBCAI5mXtAMLhVbNrAYjmwRNc66U=";
+      url = "mirror://cpan/authors/id/G/GU/GUIDO/libintl-perl-1.33.tar.gz";
+      hash = "sha256-USbtqczQ7rENuC3e9jy8r329dx54zA+xEMw7WmuGeec=";
     };
     meta = {
       description = "Portable l10n and i10n functions";
