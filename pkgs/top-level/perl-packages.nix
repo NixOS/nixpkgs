@@ -1151,10 +1151,10 @@ with self; {
 
   AstroFITSHeader = buildPerlModule rec {
     pname = "Astro-FITS-Header";
-    version = "3.07";
+    version = "3.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TJ/TJENNESS/${pname}-${version}.tar.gz";
-      hash = "sha256-Uw1Z7wwJNfmGLRhxh6LXWDsSxjm7Z9sU+YMyKxYYktk=";
+      url = "mirror://cpan/authors/id/G/GS/GSB/Astro-FITS-Header-3.09.tar.gz";
+      hash = "sha256-cq1oveWku+zv8VFtZ3A/4tACFDlwQpo81pplFlLVaYY=";
     };
     meta = {
       description = "Object-oriented interface to FITS HDUs";
