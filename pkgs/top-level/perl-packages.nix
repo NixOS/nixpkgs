@@ -20712,10 +20712,10 @@ with self; {
 
   PodElementalPerlMunger = buildPerlPackage {
     pname = "Pod-Elemental-PerlMunger";
-    version = "0.200006";
+    version = "0.200007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-PerlMunger-0.200006.tar.gz";
-      hash = "sha256-Cf07XVMRlDegHc7Wa0Lq/c1TiVs8MqKw94Hzb9oPZls=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-PerlMunger-0.200007.tar.gz";
+      hash = "sha256-UYleTEGgeere+fJPXcSOMkWlwG40BO15yF+lzv63lak=";
     };
     buildInputs = [ TestDifferences ];
     propagatedBuildInputs = [ PPI PodElemental ];
