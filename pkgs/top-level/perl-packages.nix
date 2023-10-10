@@ -12884,10 +12884,10 @@ with self; {
 
   JSON = buildPerlPackage {
     pname = "JSON";
-    version = "4.02";
+    version = "4.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-4.02.tar.gz";
-      hash = "sha256-REqIdVqJ/6KlQkq07R0R3KYYCOvvV+gSQ0JGGanoYnw=";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/JSON-4.10.tar.gz";
+      hash = "sha256-34tRQ9mn3pnEe1XxoXC9H2n3EZNcGGptwKtW3QV1jjU=";
     };
     # Do not abort cross-compilation on failure to load native JSON module into host perl
     preConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
