@@ -18090,10 +18090,10 @@ with self; {
 
   NetHTTP = buildPerlPackage {
     pname = "Net-HTTP";
-    version = "6.19";
+    version = "6.23";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/Net-HTTP-6.19.tar.gz";
-      hash = "sha256-UrduwTlZUiyuZNll8V2j2Z3LRF7d2F0s5OT03zhbL8Q=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/Net-HTTP-6.23.tar.gz";
+      hash = "sha256-DWXAndbIWJsq4RGBdNPBphcDtuz8FKNEKox0r2XgyU4=";
     };
     propagatedBuildInputs = [ URI ];
     __darwinAllowLocalNetworking = true;
