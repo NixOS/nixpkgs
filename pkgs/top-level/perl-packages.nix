@@ -21310,10 +21310,10 @@ with self; {
 
   RpcXML = buildPerlPackage {
     pname = "RPC-XML";
-    version = "0.80";
+    version = "0.82";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.80.tar.gz";
-      hash = "sha256-6g18qHqrcMEoF99Yk/a/4Eks5j9uDmPAtFLjdTRMfvc=";
+      url = "mirror://cpan/authors/id/R/RJ/RJRAY/RPC-XML-0.82.tar.gz";
+      hash = "sha256-UnnrDRNsUz/4l/aTTDqtbyBQS5l/smBuUsXbvZJ1jnM=";
     };
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false;
