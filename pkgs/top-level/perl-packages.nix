@@ -3131,14 +3131,13 @@ with self; {
     };
   };
 
-  CGISimple = buildPerlModule {
+  CGISimple = buildPerlPackage {
     pname = "CGI-Simple";
     version = "1.280";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MANWAR/CGI-Simple-1.280.tar.gz";
       hash = "sha256-GOAen/uBTl5O6neshImyBp/oNlGFUPN/bCIT61Wcar8=";
     };
-    propagatedBuildInputs = [ IOStringy ];
     buildInputs = [ TestException TestNoWarnings ];
     meta = {
       description = "A Simple totally OO CGI interface that is CGI.pm compliant";
