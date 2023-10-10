@@ -7256,10 +7256,10 @@ with self; {
 
   DBIxSearchBuilder = buildPerlPackage {
     pname = "DBIx-SearchBuilder";
-    version = "1.71";
+    version = "1.78";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.71.tar.gz";
-      hash = "sha256-5C/dpvbmSSe7h3dIPlZtaDA6iwkY0YjKD+VRo6PUQr0=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.78.tar.gz";
+      hash = "sha256-86W3IpVUbqwdcf7o8f8J2T3WTKVbFDjja9haX1zKp9Q=";
     };
     buildInputs = [ DBDSQLite ];
     propagatedBuildInputs = [ CacheSimpleTimedExpiry ClassAccessor ClassReturnValue Clone DBIxDBSchema Want capitalization ];
