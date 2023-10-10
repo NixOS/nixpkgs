@@ -19104,10 +19104,10 @@ with self; {
 
   PackageStashXS = buildPerlPackage {
     pname = "Package-Stash-XS";
-    version = "0.29";
+    version = "0.30";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-XS-0.29.tar.gz";
-      hash = "sha256-02drqUZB4D1qMOlR8JJmxMPKP1tYqnsxSmfyjkGYeKo=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-XS-0.30.tar.gz";
+      hash = "sha256-JrrWXBlZxXN5s+E53HdvvsX3ApBmF+8nzcKT3fEjkjE=";
     };
     buildInputs = [ TestFatal TestRequires ];
     meta = {
