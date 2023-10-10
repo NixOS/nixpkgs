@@ -8932,10 +8932,10 @@ with self; {
 
   ExtUtilsInstall = buildPerlPackage {
     pname = "ExtUtils-Install";
-    version = "2.18";
+    version = "2.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Install-2.18.tar.gz";
-      hash = "sha256-5d2He6I7Z7uybHhMR8/aHUEasaiZbu5ehNozPuZ+MMU=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-Install-2.22.tar.gz";
+      hash = "sha256-M3Jbr77Tgp1hPkxlHC4a0SBnDH0qxc8F+DdX/Jddb/I=";
     };
     meta = {
       description = "Install files from here to there";
