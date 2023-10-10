@@ -3146,10 +3146,10 @@ with self; {
 
   CHI = buildPerlPackage {
     pname = "CHI";
-    version = "0.60";
+    version = "0.61";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JS/JSWARTZ/CHI-0.60.tar.gz";
-      hash = "sha256-x/Gis1cKj+3khOkz+Juhcp4KvQWTV5HRRsUi3RIO6FE=";
+      url = "mirror://cpan/authors/id/A/AS/ASB/CHI-0.61.tar.gz";
+      hash = "sha256-WDVFyeUxK7QZOrFt6fVf+PS0p97RKM7o3SywIdRni1s=";
     };
     preConfigure = ''
       # fix error 'Unescaped left brace in regex is illegal here in regex'
