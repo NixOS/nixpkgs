@@ -14739,10 +14739,10 @@ with self; {
 
   MathBigIntLite = buildPerlPackage {
     pname = "Math-BigInt-Lite";
-    version = "0.19";
+    version = "0.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-Lite-0.19.tar.gz";
-      hash = "sha256-MPYDS/XSXAKBPISo5aKpivhuLbyoFJwlqSd3GN8mFRo=";
+      url = "mirror://cpan/authors/id/P/PJ/PJACKLAM/Math-BigInt-Lite-0.29.tar.gz";
+      hash = "sha256-R4YN/KYxl4txxKqZkaGynk7LrzYbW7nrOVl1t//Nd/U=";
     };
     propagatedBuildInputs = [ MathBigInt ];
     meta = {
