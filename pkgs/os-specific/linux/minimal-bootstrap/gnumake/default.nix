@@ -6,6 +6,7 @@
   gnupatch,
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnumake";
   version = "4.4.1";
 
@@ -156,21 +157,12 @@ let
 in
 kaem.runCommand "${pname}-${version}"
   {
-    inherit pname version;
+    inherit pname version meta;
 
     nativeBuildInputs = [
       tinycc.compiler
       gnupatch
     ];
-
-    meta = {
-      description = "Tool to control the generation of non-source files from sources";
-      homepage = "https://www.gnu.org/software/make";
-      license = lib.licenses.gpl3Plus;
-      teams = [ lib.teams.minimal-bootstrap ];
-      mainProgram = "make";
-      platforms = lib.platforms.unix;
-    };
   }
   ''
     # Unpack
