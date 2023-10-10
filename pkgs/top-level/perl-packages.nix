@@ -11647,10 +11647,10 @@ with self; {
 
   HTTPCookies = buildPerlPackage {
     pname = "HTTP-Cookies";
-    version = "6.09";
+    version = "6.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.09.tar.gz";
-      hash = "sha256-kD8Bevqlt4WZzJDvwU7MzIzC6/tjbrjAL48WuoYdH+A=";
+      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.10.tar.gz";
+      hash = "sha256-4282Yzxc5rXkuHb/z3R4fMXv4HNt1/SHvdc8FPC9cAc=";
     };
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
