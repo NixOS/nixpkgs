@@ -15652,10 +15652,10 @@ with self; {
 
   ModuleCPANTSAnalyse = buildPerlPackage {
     pname = "Module-CPANTS-Analyse";
-    version = "1.01";
+    version = "1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.01.tar.gz";
-      hash = "sha256-vZkLpNAFG22yKEyrhAaZ4zr1QtiBgv1FTPpw6tMeyEk=";
+      url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.02.tar.gz";
+      hash = "sha256-nhFzm5zQi6LXWllzfx+yl/RYA/KJBjxcdZv8eP1Rbns=";
     };
     propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff DataBinary FileFindObject PerlPrereqScannerNotQuiteLite SoftwareLicense ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings ];
