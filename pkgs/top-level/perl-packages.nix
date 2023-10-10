@@ -6475,10 +6475,10 @@ with self; {
 
   DateTimeFormatPg = buildPerlModule {
     pname = "DateTime-Format-Pg";
-    version = "0.16013";
+    version = "0.16014";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DM/DMAKI/DateTime-Format-Pg-0.16013.tar.gz";
-      hash = "sha256-f4YupeUb1Fvrxsb5cISXuYlkky5aOevK/jQCNRzgUZs=";
+      url = "mirror://cpan/authors/id/D/DM/DMAKI/DateTime-Format-Pg-0.16014.tar.gz";
+      hash = "sha256-OLuWZlJNw4TDNm9jQsuWVsULrA+XFqPUTxz1Usy+Drk=";
     };
     propagatedBuildInputs = [ DateTimeFormatBuilder ];
     buildInputs = [ ModuleBuildTiny ];
