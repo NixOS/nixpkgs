@@ -26351,10 +26351,10 @@ with self; {
 
   TieFile = buildPerlPackage {
     pname = "Tie-File";
-    version = "1.05";
+    version = "1.07";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/Tie-File-1.05.tar.gz";
-      hash = "sha256-ipgLV3/0sQ/hEGLtjHdIV/qMmDPFMF8ui/szR69j8Tk=";
+      url = "mirror://cpan/authors/id/T/TO/TODDR/Tie-File-1.07.tar.gz";
+      hash = "sha256-S1NUpB/pVBvc6lK0/VMBRPMVME0D8F3Q/vwynYHCawg=";
     };
     meta = {
       description = "Access the lines of a disk file via a Perl array";
