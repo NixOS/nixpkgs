@@ -23880,10 +23880,10 @@ with self; {
 
   TestClass = buildPerlPackage {
     pname = "Test-Class";
-    version = "0.50";
+    version = "0.52";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Class-0.50.tar.gz";
-      hash = "sha256-CZFU7YyvP/l8cSN/q5UiZKwcA9knBzelYHHKvmWZE1A=";
+      url = "mirror://cpan/authors/id/S/SZ/SZABGAB/Test-Class-0.52.tar.gz";
+      hash = "sha256-QMGx04jwqGdHacJ1KfDMNjTKD9nY9ysZbAUxYRk0vII=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ MROCompat ModuleRuntime TryTiny ];
