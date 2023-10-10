@@ -10383,10 +10383,10 @@ with self; {
 
   GitRepository = buildPerlPackage {
     pname = "Git-Repository";
-    version = "1.324";
+    version = "1.325";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOOK/Git-Repository-1.324.tar.gz";
-      hash = "sha256-gU360QSpVGNJ+eD9SSyGE33oJ+vChAF6kaUmfBIK1PY=";
+      url = "mirror://cpan/authors/id/B/BO/BOOK/Git-Repository-1.325.tar.gz";
+      hash = "sha256-mypPoZT0oOtFI1XQyAhyfl6cFsFFrH0kw+qW0Kvv7UM=";
     };
     buildInputs = [ TestRequiresGit ];
     propagatedBuildInputs = [ GitVersionCompare SystemCommand namespaceclean ];
