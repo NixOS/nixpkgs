@@ -25877,10 +25877,10 @@ with self; {
 
   TextParsewords = buildPerlPackage {
     pname = "Text-ParseWords";
-    version = "3.30";
+    version = "3.31";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CH/CHORNY/Text-ParseWords-3.30.tar.gz";
-      hash = "sha256-heAjgXndQ5l+WMZr1RYRGCvH1TNQUCmi2w0yMu2v9eg=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Text-ParseWords-3.31.tar.gz";
+      hash = "sha256-KuVVughNdbK4/u640aAJESdoFa2oa8yxRSI2lk1aL8c=";
     };
     meta = {
       description = "Parse text into an array of tokens or array of arrays";
