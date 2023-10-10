@@ -4289,10 +4289,10 @@ with self; {
 
   Connector = buildPerlModule {
     pname = "Connector";
-    version = "1.47";
+    version = "1.53";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.47.tar.gz";
-      hash = "sha256-I2R4pAq53cIVgu4na6krnjgbP8XtljkKLe2o4nSGeoM=";
+      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.53.tar.gz";
+      hash = "sha256-1D50VEcZ/7lKDgZFhqetRXVbKTZPGJHZ4ncEFqsSTPo=";
     };
     buildInputs = [ ModuleBuildTiny ConfigMerge ConfigStd ConfigVersioned DBDSQLite DBI IOSocketSSL JSON LWP LWPProtocolHttps ProcSafeExec TemplateToolkit YAML ];
     propagatedBuildInputs = [ LogLog4perl Moose ];
