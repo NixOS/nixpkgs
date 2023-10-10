@@ -21368,10 +21368,10 @@ with self; {
 
   RoleIdentifiable = buildPerlPackage {
     pname = "Role-Identifiable";
-    version = "0.007";
+    version = "0.009";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Role-Identifiable-0.007.tar.gz";
-      hash = "sha256-VhNG0aGgekW9hR2FmoJaf2eSWno7pbpY4M2ti7mQc60=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Role-Identifiable-0.009.tar.gz";
+      hash = "sha256-WnNen3F3+euuBH63uuKbfsKewCCuN2N66lNQ0wwIe3Y=";
     };
     propagatedBuildInputs = [ Moose ];
     meta = {
