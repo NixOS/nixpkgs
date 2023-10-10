@@ -2466,10 +2466,10 @@ with self; {
 
   CatalystRuntime = buildPerlPackage {
     pname = "Catalyst-Runtime";
-    version = "5.90128";
+    version = "5.90131";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Runtime-5.90128.tar.gz";
-      hash = "sha256-pt87Da9fZsW0NxDDvyLjSL6LBTdf8dloYIfm9pRiYPk=";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90131.tar.gz";
+      hash = "sha256-nWQe+s8PmTXm7LmPWjtHbJYbH4Gb0vjyOmR9HYZ+GEk=";
     };
     buildInputs = [ TestFatal TypeTiny ];
     propagatedBuildInputs = [ CGISimple CGIStruct ClassC3AdoptNEXT DataDump HTTPBody ModulePluggable MooseXEmulateClassAccessorFast MooseXGetopt MooseXMethodAttributes MooseXRoleWithOverloading PathClass PerlIOutf8_strict PlackMiddlewareFixMissingBodyInRedirect PlackMiddlewareMethodOverride PlackMiddlewareRemoveRedundantBody PlackMiddlewareReverseProxy PlackTestExternalServer SafeIsa StringRewritePrefix TaskWeaken TextSimpleTable TreeSimpleVisitorFactory URIws ];
