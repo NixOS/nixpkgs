@@ -10099,10 +10099,10 @@ with self; {
 
   Furl = buildPerlModule {
     pname = "Furl";
-    version = "3.13";
+    version = "3.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Furl-3.13.tar.gz";
-      hash = "sha256-iHrPu7zcq71HQVD5v+nG5QfTUWdbhivM/XZ/6dMWqvM=";
+      url = "mirror://cpan/authors/id/S/SY/SYOHEX/Furl-3.14.tar.gz";
+      hash = "sha256-Nd29iIDXHxniAkM+F2H9EXc4XmML9QaFvEi2t6y4V7k=";
     };
     propagatedBuildInputs = [ ClassAccessorLite HTTPParserXS MozillaCA ];
     buildInputs = [ HTTPCookieJar HTTPProxy ModuleBuildTiny Plack Starlet TestFakeHTTPD TestRequires TestSharedFork TestTCP TestValgrind URI ];
