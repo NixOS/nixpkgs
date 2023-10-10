@@ -16690,10 +16690,10 @@ with self; {
 
   MooseXStorageFormatJSONpm = buildPerlPackage {
     pname = "MooseX-Storage-Format-JSONpm";
-    version = "0.093093";
+    version = "0.093094";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Storage-Format-JSONpm-0.093093.tar.gz";
-      hash = "sha256-6+BAen6xhwJw4OJXnwl9/X3yrqMwf7cfMk+2niQsxY8=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/MooseX-Storage-Format-JSONpm-0.093094.tar.gz";
+      hash = "sha256-9sgItyC99HI4VaZ4sblQLHSSABXFq8YL2uasYNFGxYQ=";
     };
     buildInputs = [ Moose TestDeepJSON TestWithoutModule DigestHMAC MooseXTypes ];
     propagatedBuildInputs = [ JSON MooseXRoleParameterized MooseXStorage namespaceautoclean ];
