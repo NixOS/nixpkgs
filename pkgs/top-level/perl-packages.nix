@@ -7285,10 +7285,10 @@ with self; {
 
   DBMDeep = buildPerlPackage {
     pname = "DBM-Deep";
-    version = "2.0016";
+    version = "2.0017";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/S/SP/SPROUT/DBM-Deep-2.0016.tar.gz";
-      hash = "sha256-kCp8eqBIjY0KDops89oOlrQJOuRx5rdy8MbViY5HDk0=";
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/DBM-Deep-2.0017.tar.gz";
+      hash = "sha256-1yNFIFdVO72UXWMhXr/gqnepLsbg+jOw2spXrhuKTSQ=";
     };
     buildInputs = [ TestDeep TestException TestPod TestPodCoverage TestWarn ];
     meta = {
