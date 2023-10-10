@@ -22648,10 +22648,10 @@ with self; {
 
   StructDumb = buildPerlModule {
     pname = "Struct-Dumb";
-    version = "0.12";
+    version = "0.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.12.tar.gz";
-      hash = "sha256-Us5wxDPmlirRwg6eKXpTkeC3SkRSD7zi5IL1RONlf3M=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Struct-Dumb-0.14.tar.gz";
+      hash = "sha256-E8FIU2sQ4oxuC04TLynkym5ptXSQWcRBV6J+hKVFlDY=";
     };
     buildInputs = [ TestFatal ];
     meta = {
