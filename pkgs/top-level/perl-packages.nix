@@ -10398,10 +10398,10 @@ with self; {
 
   GitVersionCompare = buildPerlPackage {
     pname = "Git-Version-Compare";
-    version = "1.004";
+    version = "1.005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOOK/Git-Version-Compare-1.004.tar.gz";
-      hash = "sha256-Y+gmTtNRyyNxtHhSpyNmIUFktfP62dvWgwnH/GPQZJE=";
+      url = "mirror://cpan/authors/id/B/BO/BOOK/Git-Version-Compare-1.005.tar.gz";
+      hash = "sha256-NX/e2eVflesvUWoY9dwbRyCp3u+eLA52vNX+SuubPLs=";
     };
     buildInputs = [ TestNoWarnings ];
     meta = {
