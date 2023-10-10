@@ -23648,8 +23648,6 @@ with pkgs;
 
   libsigcxx = callPackage ../development/libraries/libsigcxx { };
 
-  libsigcxx12 = callPackage ../development/libraries/libsigcxx/1.2.nix { };
-
   libsigcxx30 = callPackage ../development/libraries/libsigcxx/3.0.nix { };
 
   libsigsegv = callPackage ../development/libraries/libsigsegv { };
