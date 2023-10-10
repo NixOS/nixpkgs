@@ -141,16 +141,6 @@ self: super: {
     sha256 = "0w4y3v69nd3yafpml4gr23l94bdhbmx8xky48a59lckmz5x9fgxv";
   }) (doJailbreak super.language-haskell-extract);
 
-  # Patch for support of mtl-2.3
-  monad-par = appendPatch
-    (pkgs.fetchpatch {
-      name = "monad-par-mtl-2.3.patch";
-      url = "https://github.com/simonmar/monad-par/pull/75/commits/ce53f6c1f8246224bfe0223f4aa3d077b7b6cc6c.patch";
-      sha256 = "1jxkl3b3lkjhk83f5q220nmjxbkmni0jswivdw4wfbzp571djrlx";
-      stripLen = 1;
-    })
-    (doJailbreak super.monad-par);
-
   # Patch 0.17.1 for support of mtl-2.3
   xmonad-contrib = appendPatch
     (pkgs.fetchpatch {
