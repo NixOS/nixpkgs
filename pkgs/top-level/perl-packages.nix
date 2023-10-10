@@ -5453,10 +5453,10 @@ with self; {
 
   CryptEd25519 = buildPerlPackage {
     pname = "Crypt-Ed25519";
-    version = "1.04";
+    version = "1.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Crypt-Ed25519-1.04.tar.gz";
-      hash = "sha256-WFBKYedGQB6HiEEE/MmNAxM51T9IfElV//tesdAykMs=";
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Crypt-Ed25519-1.05.tar.gz";
+      hash = "sha256-sdEaWU/rUeQG2BsUfcDRClV8z0yrgcDbP4mBAmd9JKg=";
     };
 
     nativeBuildInputs = [ CanaryStability ];
