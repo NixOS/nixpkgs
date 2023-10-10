@@ -12245,10 +12245,10 @@ with self; {
 
   IOAsyncSSL = buildPerlModule {
     pname = "IO-Async-SSL";
-    version = "0.23";
+    version = "0.25";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-SSL-0.23.tar.gz";
-      hash = "sha256-0vyuFuJ+F6yjkDpK1aK/L7wmjQZRzn8ARabQVG9YTy4=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-SSL-0.25.tar.gz";
+      hash = "sha256-Te9IXbHv9OE5tLWRIgLA/WHDrtLOw1vVq4v3u9g/WnU=";
     };
     patches = [
       (fetchpatch {
