@@ -8358,10 +8358,10 @@ with self; {
 
   EmailSimple = buildPerlPackage {
     pname = "Email-Simple";
-    version = "2.216";
+    version = "2.218";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.216.tar.gz";
-      hash = "sha256-2F9jzRCI0RMREDZ2qM9Jj/9WSiAbU43lLNdTteXKi9Q=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Simple-2.218.tar.gz";
+      hash = "sha256-Lc4daP3pnVPbnKQ+IRtpsWm6Lvrs+HpVyzOpM2BHyW0=";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
