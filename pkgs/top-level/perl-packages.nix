@@ -13236,10 +13236,10 @@ with self; {
 
   libnet = buildPerlPackage {
     pname = "libnet";
-    version = "3.12";
+    version = "3.15";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.13.tar.gz";
-      hash = "sha256-WjX7Hy1KopFoDrGvOImfq0U8IsKOcffHvTdHtaPbNIw=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/libnet-3.15.tar.gz";
+      hash = "sha256-px9NtYDhp2fWk2+qW6848fpheCQ0LaB4tWEoPob49KI=";
     };
     patches = [
       (fetchpatch {
