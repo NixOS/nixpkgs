@@ -15986,7 +15986,8 @@ with self; {
       url = "mirror://cpan/authors/id/R/RS/RSCHUPP/Module-ScanDeps-1.34.tar.gz";
       hash = "sha256-ysUw5c/EE+BneXx9I3xsXNMpFcPZ+u5dlANcjzqFUOs=";
     };
-    buildInputs = [ TestRequires ];
+    buildInputs = [ TestRequires IPCRun3 ];
+    propagatedBuildInputs = [ TextParsewords ];
     meta = {
       description = "Recursively scan Perl code for dependencies";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
