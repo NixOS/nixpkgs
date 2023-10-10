@@ -7666,10 +7666,10 @@ with self; {
 
   DigestSHA3 = buildPerlPackage {
     pname = "Digest-SHA3";
-    version = "1.04";
+    version = "1.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSHELOR/Digest-SHA3-1.04.tar.gz";
-      hash = "sha256-Smi2fFA09A+7E0SzBM1myqpeMg61IwBSAcwk921HDBQ=";
+      url = "mirror://cpan/authors/id/M/MS/MSHELOR/Digest-SHA3-1.05.tar.gz";
+      hash = "sha256-rfG5B5sreBdV5XBId6FDCl8SmX6oIgX9KWbJzEZahSI=";
     };
     meta = {
       description = "Perl extension for SHA-3";
