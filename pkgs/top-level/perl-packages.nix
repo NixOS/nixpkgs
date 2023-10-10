@@ -21559,10 +21559,10 @@ with self; {
 
   SearchXapian = buildPerlPackage rec {
     pname = "Search-Xapian";
-    version = "1.2.25.4";
+    version = "1.2.25.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.4.tar.gz";
-      hash = "sha256-hxlDGZuA79mOMfS0cRuwcKV2yRvmkhk9ikOv+tZFdN0=";
+      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-1.2.25.5.tar.gz";
+      hash = "sha256-IE+9xxLWcR/6tmjB9M/AB7Y5qftkrX4ZyyD8EKkQuos=";
     };
     buildInputs = [ pkgs.xapian DevelLeak ];
     meta = {
