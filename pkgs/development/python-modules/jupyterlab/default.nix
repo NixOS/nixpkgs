@@ -69,5 +69,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     homepage = "https://jupyter.org/";
     maintainers = lib.teams.jupyter.members;
+    mainProgram = "jupyter-lab";
   };
 }
