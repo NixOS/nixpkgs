@@ -37,11 +37,7 @@
 # and for Nvidia see https://github.com/cp2k/cp2k/blob/master/INSTALL.md#2i-cuda-optional-improved-performance-on-gpu-systems
 , gpuVersion ? "Mi100"
 , gpuArch ? "gfx908"
-, rocm-core
-, hip
-, hipblas
-, hipfft
-, rocblas
+, rocmPackages
 }:
 
 assert builtins.elem gpuBackend [ "none" "cuda" "rocm" ];
@@ -86,7 +82,13 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional enableElpa elpa
   ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-  ++ lib.optional (gpuBackend == "rocm") [hip rocm-core hipblas hipfft rocblas]
+  ++ lib.optional (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocm-core
+    rocmPackages.hipblas
+    rocmPackages.hipfft
+    rocmPackages.rocblas
+  ]
   ;
 
   propagatedBuildInputs = [ mpi ];
@@ -126,7 +128,7 @@ stdenv.mkDerivation rec {
     ${lib.strings.optionalString (gpuBackend == "rocm") ''
     GPUVER = ${gpuVersion}
     OFFLOAD_CC = hipcc
-    OFFLOAD_FLAGS = -fopenmp -m64 -pthread -fPIC -D__GRID_HIP -O2 --offload-arch=${gpuArch} --rocm-path=${rocm-core}
+    OFFLOAD_FLAGS = -fopenmp -m64 -pthread -fPIC -D__GRID_HIP -O2 --offload-arch=${gpuArch} --rocm-path=${rocmPackages.rocm-core}
     OFFLOAD_TARGET = hip
     CXX = mpicxx
     CXXFLAGS = -std=c++11 -fopenmp -D__HIP_PLATFORM_AMD__

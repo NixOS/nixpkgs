@@ -1299,6 +1299,8 @@ self: super: with self; {
     inherit (pkgs.ocaml-ng.ocamlPackages) bap;
   };
 
+  barectf = callPackage ../development/python-modules/barectf { };
+
   baron = callPackage ../development/python-modules/baron { };
 
   base36 = callPackage ../development/python-modules/base36 { };
@@ -8349,7 +8351,7 @@ self: super: with self; {
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
-  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.llvmPackages_rocm; };
+  openai-triton = callPackage ../development/python-modules/openai-triton { cudaPackages = pkgs.cudaPackages_12_0; };
 
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
@@ -13906,7 +13908,6 @@ self: super: with self; {
       else pkgs.magma;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
-    inherit (pkgs.llvmPackages_rocm) openmp;
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
