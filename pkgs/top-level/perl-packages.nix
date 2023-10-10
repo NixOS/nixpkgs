@@ -5720,10 +5720,10 @@ with self; {
 
   DataHexDump = buildPerlPackage {
     pname = "Data-HexDump";
-    version = "0.02";
+    version = "0.04";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/F/FT/FTASSIN/Data-HexDump-0.02.tar.gz";
-      hash = "sha256-Gp2EPn9mfBxvd8Z69dd+dGL/I7QZN8sXRU0DU1zZvnA=";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/Data-HexDump-0.04.tar.gz";
+      hash = "sha256-vDb0BEOKw2rSuSlVOSJ9Nvmc0WI/HjR693xZTEDMvPg=";
     };
     meta = {
       description = "Hexadecial Dumper";
