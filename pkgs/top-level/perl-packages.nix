@@ -190,10 +190,10 @@ with self; {
 
   AlgorithmCheckDigits = buildPerlModule {
     pname = "Algorithm-CheckDigits";
-    version = "1.3.5";
+    version = "1.3.6";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MAMAWE/Algorithm-CheckDigits-v1.3.5.tar.gz";
-      hash = "sha256-qVbQUXGA1tkEL0fXOqaicot1/L1UaUDS2+Cn589Cj3M=";
+      url = "mirror://cpan/authors/id/M/MA/MAMAWE/Algorithm-CheckDigits-v1.3.6.tar.gz";
+      hash = "sha256-DySHqP0fMbGcUbJlCELyJkwed9liSHoTtSG74GbEtLw=";
     };
     buildInputs = [ ProbePerl ];
     meta = {
