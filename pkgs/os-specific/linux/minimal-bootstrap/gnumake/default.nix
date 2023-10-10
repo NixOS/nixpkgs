@@ -5,6 +5,7 @@
 , gnupatch
 }:
 let
+  inherit (import ./common.nix { inherit lib; }) meta;
   pname = "gnumake";
   version = "4.4.1";
 
@@ -146,18 +147,9 @@ let
   objects = map (x: lib.replaceStrings [".c"] [".o"] (builtins.baseNameOf x)) sources;
 in
 kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+  inherit pname version meta;
 
   nativeBuildInputs = [ tinycc.compiler gnupatch ];
-
-  meta = with lib; {
-    description = "A tool to control the generation of non-source files from sources";
-    homepage = "https://www.gnu.org/software/make";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    mainProgram = "make";
-    platforms = platforms.unix;
-  };
 } ''
   # Unpack
   ungz --file ${src} --output make.tar

@@ -179,6 +179,12 @@ lib.makeScope
       gnumakeBoot = gnumake;
     };
 
+    gnumake-static = callPackage ./gnumake/static.nix {
+      gcc = gcc-latest;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+    };
+
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
     gnused = callPackage ./gnused {
@@ -313,6 +319,8 @@ lib.makeScope
       echo ${gnugrep.tests.get-version}
       echo ${gnugrep-static.tests.get-version}
       echo ${gnum4.tests.get-version}
+      echo ${gnumake-musl.tests.get-version}
+      echo ${gnumake-static.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${gnused-mes.tests.get-version}
       echo ${gnused-static.tests.get-version}
