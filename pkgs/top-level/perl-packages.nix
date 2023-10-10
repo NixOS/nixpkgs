@@ -23357,10 +23357,10 @@ with self; {
 
   TemplateTiny = buildPerlPackage {
     pname = "Template-Tiny";
-    version = "1.12";
+    version = "1.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AD/ADAMK/Template-Tiny-1.12.tar.gz";
-      hash = "sha256-Bz4GLGMLUd+3Jc1khaMpFVy3LVxZboy2mOtnxFZvCko=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Template-Tiny-1.14.tar.gz";
+      hash = "sha256-gZz6tgREg8/ijOsof938MXaiAlsbbw6YCy3MJtImm0w=";
     };
     meta = {
       description = "Template Toolkit reimplemented in as little code as possible";
