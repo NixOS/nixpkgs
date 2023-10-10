@@ -6597,10 +6597,10 @@ with self; {
 
   DateTimeXEasy = buildPerlPackage {
     pname = "DateTimeX-Easy";
-    version = "0.089";
+    version = "0.091";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROKR/DateTimeX-Easy-0.089.tar.gz";
-      hash = "sha256-F+bSAuesYElSMEjpe7jxlePHkghXDaFQT0MTWE5Ienk=";
+      url = "mirror://cpan/authors/id/J/JJ/JJNAPIORK/DateTimeX-Easy-0.091.tar.gz";
+      hash = "sha256-pfjbvntpZdUD4VJYIBXaKk+B46WGA9/t1Oc9H92s/II=";
     };
     buildInputs = [ TestMost ];
     propagatedBuildInputs = [ DateTimeFormatFlexible DateTimeFormatICal DateTimeFormatNatural TimeDate ];
