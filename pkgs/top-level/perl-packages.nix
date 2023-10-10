@@ -8154,10 +8154,10 @@ with self; {
 
   EmailAddress = buildPerlPackage {
     pname = "Email-Address";
-    version = "1.912";
+    version = "1.913";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.912.tar.gz";
-      hash = "sha256-D6N4UpjML2eA5j46X7HKgU3Lw2DOtZ7Y+oTrT/oG+e8=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Email-Address-1.913.tar.gz";
+      hash = "sha256-avtUH232tTXM92QtNhrhjXqVo/k6zhvFNz9kwkEMpa8=";
     };
     meta = {
       description = "RFC 2822 Address Parsing and Creation";
