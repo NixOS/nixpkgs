@@ -3979,10 +3979,10 @@ with self; {
 
   CompressRawLzma = buildPerlPackage {
     pname = "Compress-Raw-Lzma";
-    version = "2.101";
+    version = "2.206";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.101.tar.gz";
-      hash = "sha256-uyZ/0xmB7aEfREA4+KD8pLlKUa5hsttxJGq/ak0yKjY=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.206.tar.gz";
+      hash = "sha256-4BpwQLhL3GdZLRPuwMeIWQ4faW0dTwfHCXvXKk+IbrQ=";
     };
     preConfigure = ''
       cat > config.in <<EOF
