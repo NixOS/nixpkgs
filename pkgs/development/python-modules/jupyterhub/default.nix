@@ -15,6 +15,8 @@
 , jsonschema
 , jupyter-telemetry
 , jupyterlab
+, jupyter-core
+, jupyter-server
 , mock
 , nbclassic
 , nodePackages
@@ -138,6 +140,8 @@ buildPythonPackage rec {
     sqlalchemy
     tornado
     traitlets
+    jupyter-core
+    jupyter-server
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
   ];
