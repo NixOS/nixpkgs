@@ -5089,10 +5089,10 @@ with self; {
 
   CryptRandom = buildPerlPackage rec {
     pname = "Crypt-Random";
-    version = "1.52";
+    version = "1.54";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/V/VI/VIPUL/Crypt-Random-1.52.tar.gz";
-      hash = "sha256-qTwG3kCeby6y6YaOptTmU9mfL3kAssGDHh9lrODE74Q=";
+      url = "mirror://cpan/authors/id/V/VI/VIPUL/Crypt-Random-1.54.tar.gz";
+      hash = "sha256-1m+OF+3Dh3zHl/3VneU045kGNvjxpecmBiFZr35n2sw=";
     };
     propagatedBuildInputs = [ ClassLoader MathPari StatisticsChiSquare ];
     meta = {
