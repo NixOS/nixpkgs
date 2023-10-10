@@ -6756,10 +6756,10 @@ with self; {
 
   DevelPPPort = buildPerlPackage {
     pname = "Devel-PPPort";
-    version = "3.62";
+    version = "3.68";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.62.tar.gz";
-      hash = "sha256-8Z0ExG8uWQpBHCMAeew2KEsucaDAv3oExXARMHqtgZs=";
+      url = "mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.68.tar.gz";
+      hash = "sha256-UpDVu4TN6enmEROiDGe11HJn645loRmookjMlqrAuts=";
     };
     meta = {
       description = "Perl/Pollution/Portability";
