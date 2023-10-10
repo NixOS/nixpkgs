@@ -10534,10 +10534,10 @@ with self; {
 
   GnuPGInterface = buildPerlPackage {
     pname = "GnuPG-Interface";
-    version = "1.02";
+    version = "1.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPS/GnuPG-Interface-1.02.tar.gz";
-      hash = "sha256-wnpIw9SOGpIF42Lu6mbUawMr2EY3mR/fCxOCi8r90+Y=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/GnuPG-Interface-1.03.tar.gz";
+      hash = "sha256-WvVmMPD6wpDXJCGD9kSaoOAoKfRhHcYrxunps4CPGHo=";
     };
     buildInputs = [ pkgs.which pkgs.gnupg1compat ];
     propagatedBuildInputs = [ MooXHandlesVia MooXlate ];
