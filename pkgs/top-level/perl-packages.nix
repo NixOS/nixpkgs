@@ -14638,10 +14638,10 @@ with self; {
 
   MathBase85 = buildPerlPackage {
     pname = "Math-Base85";
-    version = "0.4";
+    version = "0.5";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PT/PTC/Math-Base85-0.4.tar.gz";
-      hash = "sha256-nqhYYA+SXh/8fwqGO3g1iS2Ymfz0Sz5QkOyjpGm5iw0=";
+      url = "mirror://cpan/authors/id/P/PT/PTC/Math-Base85-0.5.tar.gz";
+      hash = "sha256-CwX3+2UKh5ezktjqkPLnK/uNCFBcmi4LlV39RacqNOU=";
     };
     meta = {
       description = "Perl extension for base 85 numbers, as referenced by RFC 1924";
