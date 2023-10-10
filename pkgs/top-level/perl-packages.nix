@@ -15412,10 +15412,10 @@ with self; {
 
   MixinLinewise = buildPerlPackage {
     pname = "Mixin-Linewise";
-    version = "0.108";
+    version = "0.111";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Mixin-Linewise-0.108.tar.gz";
-      hash = "sha256-ffIGeEdMCXOTCkcrDFXj+Ohbd5C2irGO9hj5xFPIrvI=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Mixin-Linewise-0.111.tar.gz";
+      hash = "sha256-0o6IUWzptSlcMWMdzM3A/I8qt9ilzIdrsbIBMQh7Ads=";
     };
     propagatedBuildInputs = [ PerlIOutf8_strict SubExporter ];
     meta = {
