@@ -10,7 +10,7 @@
 , installShellFiles
 
 , android-tools
-, ffmpeg
+, ffmpeg-full
 , libusb1
 , SDL2
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper meson ninja pkg-config installShellFiles ];
 
-  buildInputs = [ ffmpeg SDL2 libusb1 ];
+  buildInputs = [ ffmpeg-full SDL2 libusb1 ];
 
   # Manually install the server jar to prevent Meson from "fixing" it
   preConfigure = ''
