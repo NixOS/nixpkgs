@@ -23095,10 +23095,10 @@ with self; {
 
   SystemCommand = buildPerlPackage {
     pname = "System-Command";
-    version = "1.121";
+    version = "1.122";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BOOK/System-Command-1.121.tar.gz";
-      hash = "sha256-Q95ezSDB2kbopvT86rKeBGl6KJCpm/apGzygBKRookE=";
+      url = "mirror://cpan/authors/id/B/BO/BOOK/System-Command-1.122.tar.gz";
+      hash = "sha256-2bgjsmYZqmn3oGFmUKeBDolajfBi3p0iQNZdvlz+dHo=";
     };
     propagatedBuildInputs = [ IPCRun ];
     buildInputs = [ PodCoverageTrustPod TestCPANMeta TestPod TestPodCoverage ];
