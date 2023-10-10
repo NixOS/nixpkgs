@@ -8183,10 +8183,10 @@ with self; {
 
   EmailAddressXS = buildPerlPackage {
     pname = "Email-Address-XS";
-    version = "1.04";
+    version = "1.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PA/PALI/Email-Address-XS-1.04.tar.gz";
-      hash = "sha256-mV9tBKe0h91eG1XjtSythMh3UJN8lv624k6PHxDNWT4=";
+      url = "mirror://cpan/authors/id/P/PA/PALI/Email-Address-XS-1.05.tar.gz";
+      hash = "sha256-FRC38Q1nIBA3zVDSLJ1rJu7KVe3tpM20a7yiflmk6hY=";
     };
     meta = {
       description = "Parse and format RFC 5322 email addresses and groups";
