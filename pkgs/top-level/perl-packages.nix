@@ -19782,10 +19782,10 @@ with self; {
 
   PerlIOeol = buildPerlPackage {
     pname = "PerlIO-eol";
-    version = "0.17";
+    version = "0.19";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/PerlIO-eol-0.17.tar.gz";
-      hash = "sha256-zszL/kVFsZZdESqGKY3/5Q1oBhgAkMa+x9dXto+4Xrk=";
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/PerlIO-eol-0.19.tar.gz";
+      hash = "sha256-/3O+xgRP2EepbEGZZPNw5Qn9Nv1XH3o7fDUXX1iviFk=";
     };
     meta = {
       description = "PerlIO layer for normalizing line endings";
