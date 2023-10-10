@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     rev = "refs/tags/${version}";
-    hash = "sha256-x2VN/6Kg/n6BW5S4nLKfG67dYrSR/G+Aowf6d2Vbc+0=";
+    hash = "sha256-SujnalAooIlzKZcjt0E4tSBO0J5QRkSE0X1PVpnbIF4=";
   };
 
   patches = [
@@ -74,6 +74,15 @@ python3.pkgs.buildPythonApplication rec {
       excludes = [
         "docs/yaml/objects/dep.yaml"
       ];
+    })
+
+    # Revert patch breaking mesa build on bindgen:
+    #   https://github.com/mesonbuild/meson/issues/12326
+    (fetchpatch {
+      name = "bindgen-flags-revert.patch";
+      url = "https://github.com/mesonbuild/meson/commit/d5546bdceaa2f3040d16a33fcbd824ba94b8cfde.patch";
+      hash = "sha256-qOSiWGkjfxJmUfXmqV05yl7wTgAIE0Z7qZqTko9f/LE=";
+      revert = true;
     })
   ];
 
