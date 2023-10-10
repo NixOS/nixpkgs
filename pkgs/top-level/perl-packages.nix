@@ -20270,10 +20270,10 @@ with self; {
 
   PPI = buildPerlPackage {
     pname = "PPI";
-    version = "1.270";
+    version = "1.277";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.270.tar.gz";
-      hash = "sha256-YippjHgbuF0r33u/4ED+cNM7eXdMmuAfziN13HP69Fc=";
+      url = "mirror://cpan/authors/id/M/MI/MITHALDU/PPI-1.277.tar.gz";
+      hash = "sha256-h8efg7aHbiBgUZZdUBnSUHxVH4GahnUAgOx+xDsuCvg=";
     };
     buildInputs = [ ClassInspector TestDeep TestNoWarnings TestObject TestSubCalls ];
     propagatedBuildInputs = [ Clone IOString ParamsUtil TaskWeaken ];
