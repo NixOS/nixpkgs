@@ -27262,10 +27262,10 @@ with self; {
 
   W3CLinkChecker = buildPerlPackage {
     pname = "W3C-LinkChecker";
-    version = "4.81";
+    version = "5.0.0";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SC/SCOP/W3C-LinkChecker-4.81.tar.gz";
-      hash = "sha256-Yjn2GyDZHc57IeTU9iark6jx4vIH2lAVWQ1QjPbGamU=";
+      url = "mirror://cpan/authors/id/D/DH/DHM/W3C-LinkChecker-5.0.0.tar.gz";
+      hash = "sha256-CvdY0ZUMswTdqvqnoDmHaHTYjC/teL2KYx6zkG5U+6Y=";
     };
     outputs = [ "out" ];
     propagatedBuildInputs = [ CGI CSSDOM ConfigGeneral LWP LocaleCodes NetIP TermReadKey ];
