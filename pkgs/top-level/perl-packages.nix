@@ -248,10 +248,10 @@ with self; {
 
   AlienBaseModuleBuild = buildPerlModule {
     pname = "Alien-Base-ModuleBuild";
-    version = "1.15";
+    version = "1.17";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Base-ModuleBuild-1.15.tar.gz";
-      hash = "sha256-E8lDLPQbNMsU3yRUoD5UDivV3J65yCgktq0PTGd5Ov0=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Base-ModuleBuild-1.17.tar.gz";
+      hash = "sha256-/nJwrHNa3ehk5GjiHGQqRxuoi6Ja0w2pRXiDITLyufQ=";
     };
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ AlienBuild ArchiveExtract CaptureTiny Filechdir PathTiny ShellConfigGenerate ShellGuess SortVersions URI ];
