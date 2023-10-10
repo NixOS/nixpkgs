@@ -142,6 +142,14 @@ lib.makeScope
         gawk = gawk-mes;
       };
 
+      glibc = callPackage ./glibc {
+        gcc = gcc-latest;
+        gnumake = gnumake-musl;
+        gnutar = gnutar-latest;
+        gnugrep = gnugrep-static;
+        gawk = gawk-static;
+      };
+
       gnugrep = callPackage ./gnugrep {
         bash = bash_2_05;
         tinycc = tinycc-mes;
@@ -323,6 +331,7 @@ lib.makeScope
         echo ${gcc46-cxx.tests.hello-world}
         echo ${gcc8.tests.hello-world}
         echo ${gcc-latest.tests.hello-world}
+        echo ${glibc.tests.hello-world}
         echo ${gnugrep.tests.get-version}
         echo ${gnugrep-static.tests.get-version}
         echo ${gnum4.tests.get-version}
