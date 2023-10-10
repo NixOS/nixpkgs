@@ -24906,10 +24906,10 @@ with self; {
 
   TestRoutine = buildPerlPackage {
     pname = "Test-Routine";
-    version = "0.027";
+    version = "0.031";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.027.tar.gz";
-      hash = "sha256-utQOEupgikPogy9W5BqLSfNmN7L5wz3pQcdfsUEY01g=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Test-Routine-0.031.tar.gz";
+      hash = "sha256-f9kp7TPyVMoJkCJQGSYInHeU71d7uoYHbn2YFlYPXAc=";
     };
     buildInputs = [ TestAbortable TestFatal ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
