@@ -4990,10 +4990,10 @@ with self; {
 
   CryptPassphraseBcrypt = buildPerlPackage {
     pname = "Crypt-Passphrase-Bcrypt";
-    version = "0.001";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.001.tar.gz";
-      hash = "sha256-M44nA4RH/eAjznyaC1dPR+4zeQRKDAgxrJRx8UMNxMU=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.007.tar.gz";
+      hash = "sha256-/k1NHTm9TxODQaJZUFzhE3EnCnZ8nndH90H7dGH9sA8=";
     };
     propagatedBuildInputs = [ CryptEksblowfish CryptPassphrase ];
     meta = {
