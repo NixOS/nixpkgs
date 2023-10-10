@@ -26691,10 +26691,10 @@ with self; {
 
   TreeDAGNode = buildPerlPackage {
     pname = "Tree-DAG_Node";
-    version = "1.31";
+    version = "1.32";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-DAG_Node-1.31.tgz";
-      hash = "sha256-HIuml3JWizdYBUJHCXUSxVDv4xUXwyn7Ze73r8zJ0wQ=";
+      url = "mirror://cpan/authors/id/R/RS/RSAVAGE/Tree-DAG_Node-1.32.tgz";
+      hash = "sha256-ItnePW5vSv2J5tglxmT5SCh4vUninLgTQqcHr0BULT0=";
     };
     propagatedBuildInputs = [ FileSlurpTiny ];
     meta = {
