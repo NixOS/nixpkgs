@@ -4426,10 +4426,10 @@ with self; {
 
   curry = buildPerlPackage {
     pname = "curry";
-    version = "1.001000";
+    version = "2.000001";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MS/MSTROUT/curry-1.001000.tar.gz";
-      hash = "sha256-ixhgeSAgZPs9zCXPcpCqP11VHZjRuG1YRHBqdgwfVtQ=";
+      url = "mirror://cpan/authors/id/M/MS/MSTROUT/curry-2.000001.tar.gz";
+      hash = "sha256-yY/iBQ+t7KOYGdboDVROkSGE/oRsvnNTnGhpT7G1HAg=";
     };
     meta = {
       description = "Create automatic curried method call closures for any class or object";
