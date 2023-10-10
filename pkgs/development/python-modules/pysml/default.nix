@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysml";
-  version = "0.0.12";
+  version = "0.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mtdcr";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-DgfTSlgDC92l/hOgrMZrkZi1wzRUDY8tNl4xU3OQgJ8=";
+    hash = "sha256-m1dh607hFqcd4CXWiMfGDmI5s8A0UkdyPzq/V+5OUto=";
   };
 
   nativeBuildInputs = [

@@ -985,6 +985,7 @@
   ./services/networking/ndppd.nix
   ./services/networking/nebula.nix
   ./services/networking/netbird.nix
+  ./services/networking/netclient.nix
   ./services/networking/networkd-dispatcher.nix
   ./services/networking/networkmanager.nix
   ./services/networking/nextdns.nix
@@ -1082,6 +1083,7 @@
   ./services/networking/thelounge.nix
   ./services/networking/tinc.nix
   ./services/networking/tinydns.nix
+  ./services/networking/tinyproxy.nix
   ./services/networking/tmate-ssh-server.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/tox-node.nix

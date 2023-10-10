@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pv";
-  version = "1.7.24";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://www.ivarch.com/programs/sources/pv-${version}.tar.gz";
-    sha256 = "sha256-O/Q8WAnI1QBm6urqWhFfZQPFejjBUZdbcQqivuhXtl4=";
+    sha256 = "sha256-XOxPc3gmoO3atHHdO3Wlh70poufPowBo1X8pQ5olH98=";
   };
 
   meta = {

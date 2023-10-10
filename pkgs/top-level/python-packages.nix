@@ -2655,8 +2655,6 @@ self: super: with self; {
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
 
-  deep_merge = callPackage ../development/python-modules/deep_merge { };
-
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
   deepdish = callPackage ../development/python-modules/deepdish { };
@@ -6476,6 +6474,8 @@ self: super: with self; {
   malduck= callPackage ../development/python-modules/malduck { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
+
+  mando = callPackage ../development/python-modules/mando { };
 
   mandown = callPackage ../development/python-modules/mandown { };
 
@@ -11911,6 +11911,8 @@ self: super: with self; {
   radiotherm = callPackage ../development/python-modules/radiotherm { };
 
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
+
+  radon = callPackage ../development/python-modules/radon { };
 
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
 

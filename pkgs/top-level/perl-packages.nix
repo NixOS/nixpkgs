@@ -4558,6 +4558,22 @@ with self; {
     };
   };
 
+  CPANAudit = buildPerlPackage {
+    pname = "CPAN-Audit";
+    version = "20230309.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/CPAN-Audit-20230309.004.tar.gz";
+      hash = "sha256-RzrvktoYTMY1SqiG8QvwRnjvovHpmxZ/o+nvXOGmS14=";
+    };
+    buildInputs = [ CaptureTiny YAMLTiny ];
+    propagatedBuildInputs = [ CPANDistnameInfo IOInteractive JSON ModuleCPANfile ModuleExtractVERSION PerlIOgzip Mojolicious ];
+    meta = {
+      homepage = "https://github.com/briandfoy/cpan-audit";
+      description = "Audit CPAN distributions for known vulnerabilities";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CPANMini = buildPerlPackage {
     pname = "CPAN-Mini";
     version = "1.111016";
@@ -15680,6 +15696,20 @@ with self; {
     };
   };
 
+  ModuleExtractVERSION = buildPerlPackage {
+    pname = "Module-Extract-VERSION";
+    version = "1.116";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/Module-Extract-VERSION-1.116.tar.gz";
+      hash = "sha256-QZA6BoUXgoU0X12oVdkluUVO5xCpeV48TDJ7ri9Vdpg=";
+    };
+    meta = {
+      homepage = "https://github.com/briandfoy/module-extract-version";
+      description = "Extract a module version safely";
+      license = lib.licenses.artistic2;
+    };
+  };
+
   ModuleFind = buildPerlPackage {
     pname = "Module-Find";
     version = "0.15";
@@ -16102,6 +16132,21 @@ with self; {
       description = "Globally Recognized Avatars for Mojolicious";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ sgo ];
+    };
+  };
+
+  MojoliciousPluginI18N = buildPerlModule {
+    pname = "Mojolicious-Plugin-I18N";
+    version = "1.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHARIFULN/Mojolicious-Plugin-I18N-1.6.tar.gz";
+      hash = "sha256-Mvte+AN9lUt+zr71wbKyS0IKvYKXAjEvStQnlPUrUU0=";
+    };
+    propagatedBuildInputs = [ Mojolicious ];
+    meta = {
+      homepage = "https://github.com/sharifulin/Mojolicious-Plugin-I18N";
+      description = "Internationalization Plugin for Mojolicious";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -28184,6 +28229,22 @@ with self; {
     buildInputs = [ TestDeep TestWarn ];
     meta = {
       description = "YAML 1.2 Processor";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Yancy = buildPerlPackage {
+    pname = "Yancy";
+    version = "1.088";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PR/PREACTION/Yancy-1.088.tar.gz";
+      hash = "sha256-addqs5ilrGiQc0Paisybr9UZ+0x4WrAU7CagUhA2vSo=";
+    };
+    buildInputs = [ FileShareDirInstall ];
+    propagatedBuildInputs = [ ClassMethodModifiers JSONValidator Mojolicious MojoliciousPluginI18N MojoliciousPluginOpenAPI RoleTiny ];
+    meta = {
+      homepage = "http://preaction.me/yancy/";
+      description = "The Best Web Framework Deserves the Best CMS";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

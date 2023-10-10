@@ -124,7 +124,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.5";
+  version = "1.9.6";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-dqbFgVgG2RQM5ZHIEIIJOmrjtwlaRXEyY+2OdDs4PGo=";
+    hash = "sha256-9mA6gETnOmmkI+cdF0kP1moPV6DDvASq1JXarupM/tU=";
   };
 
   patches = [
@@ -213,6 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_dummy=true"
     # We are building the official releases.
     "-Dsupported_build=enabled"
+    "-Dlaunchd=disabled"
     "-Dudevdir=lib/udev"
     "-Dsystemd_root_prefix=${placeholder "out"}"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -226,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!enablePassim) [
     "-Dpassim=disabled"
   ] ++ lib.optionals (!haveDell) [
-    "-Dplugin_dell=disabled"
     "-Dplugin_synaptics_mst=disabled"
   ] ++ lib.optionals (!haveRedfish) [
     "-Dplugin_redfish=disabled"
@@ -350,8 +350,6 @@ stdenv.mkDerivation (finalAttrs: {
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
       "grub.d/35_fwupd"
-    ] ++ lib.optionals haveDell [
-      "fwupd/remotes.d/dell-esrt.conf"
     ];
 
     # DisabledPlugins key in fwupd/daemon.conf

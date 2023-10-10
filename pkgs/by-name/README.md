@@ -3,6 +3,10 @@
 The structure of this directory maps almost directly to top-level package attributes.
 This is the recommended way to add new top-level packages to Nixpkgs [when possible](#limitations).
 
+Packages found in the named-based structure do not need to be explicitly added to the
+`top-level/all-packages.nix` file unless they require overriding the default value
+of an implicit attribute (see below).
+
 ## Example
 
 The top-level package `pkgs.some-package` may be declared by setting up this file structure:
