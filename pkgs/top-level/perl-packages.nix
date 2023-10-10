@@ -6521,10 +6521,10 @@ with self; {
 
   DateTimeFormatW3CDTF = buildPerlPackage {
     pname = "DateTime-Format-W3CDTF";
-    version = "0.07";
+    version = "0.08";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/G/GW/GWILLIAMS/DateTime-Format-W3CDTF-0.07.tar.gz";
-      hash = "sha256-aaArZhu/HaoUpIE8tnhuqmbb3ydD8LP0WOMCNMOiYmg=";
+      url = "mirror://cpan/authors/id/G/GW/GWILLIAMS/DateTime-Format-W3CDTF-0.08.tar.gz";
+      hash = "sha256-3MIAoHOiHLpIEipdrgtqh135PT+MiunURtzdm++qQTo=";
     };
     propagatedBuildInputs = [ DateTime ];
     meta = {
