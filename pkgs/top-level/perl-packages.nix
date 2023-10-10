@@ -25299,10 +25299,10 @@ with self; {
 
   TestWarnings = buildPerlPackage {
     pname = "Test-Warnings";
-    version = "0.030";
+    version = "0.032";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.030.tar.gz";
-      hash = "sha256-iaSUfd8VZK4BEiJ1WEQz1/bENwNwvPN2iSLXlpVq4k8=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.032.tar.gz";
+      hash = "sha256-Ryfa4kFunwfkHi3DqRQ7pq/8HsV2UhF8mdUAOOMT6dk=";
     };
     buildInputs = [ CPANMetaCheck PadWalker ];
     meta = {
