@@ -5018,10 +5018,10 @@ with self; {
 
   CryptPKCS10 = buildPerlModule {
     pname = "Crypt-PKCS10";
-    version = "2.001";
+    version = "2.005";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Crypt-PKCS10-2.001.tar.gz";
-      hash = "sha256-95RbdqLY9Njs9iey646k9B0AHmqRXv6C5x1rl/6j/6k=";
+      url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Crypt-PKCS10-2.005.tar.gz";
+      hash = "sha256-LdEv0JHCPjp8NKZqw1rDq/kHQCOUtVV0mO3kj8QUU6c=";
     };
     buildInputs = [ pkgs.unzip ModuleBuildTiny ];
     propagatedBuildInputs = [ ConvertASN1 ];
