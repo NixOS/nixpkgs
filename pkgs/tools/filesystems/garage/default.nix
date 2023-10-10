@@ -31,8 +31,6 @@ let
     # on version changes for checking if changes are required here
     buildFeatures = [
       "kubernetes-discovery"
-    ] ++
-    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "metrics"
@@ -41,7 +39,7 @@ let
       "lmdb"
       "sqlite"
       "consul-discovery"
-    ]);
+    ];
 
     # To make integration tests pass, we include the optional k2v feature here,
     # but in buildFeatures only for version 0.8+, where it's enabled by default.
@@ -49,13 +47,11 @@ let
     checkFeatures = [
       "k2v"
       "kubernetes-discovery"
-    ] ++
-    (lib.optionals (lib.versionAtLeast version "0.8") [
       "bundled-libs"
       "sled"
       "lmdb"
       "sqlite"
-    ]);
+    ];
 
     passthru.tests = nixosTests.garage;
 
@@ -73,15 +69,6 @@ in
     # Until Garage hits 1.0, 0.7.3 is equivalent to 7.3.0 for now, therefore
     # we have to keep all the numbers in the version to handle major/minor/patch level.
     # for <1.0.
-
-    garage_0_7_3 = generic {
-      version = "0.7.3";
-      sha256 = "sha256-WDhe2L+NalMoIy2rhfmv8KCNDMkcqBC9ezEKKocihJg=";
-      cargoSha256 = "sha256-5m4c8/upBYN8nuysDhGKEnNVJjEGC+yLrraicrAQOfI=";
-      eol = true; # Confirmed with upstream maintainers over Matrix.
-    };
-
-    garage_0_7 = garage_0_7_3;
 
     garage_0_8_4 = generic {
       version = "0.8.4";

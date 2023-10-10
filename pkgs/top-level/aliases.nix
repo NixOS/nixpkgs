@@ -256,6 +256,8 @@ mapAliases ({
   ### G ###
 
   g4py = python3Packages.geant4; # Added 2020-06-06
+  garage_0_7 = throw "garage 0.7.x has been removed as it is EOL. Please upgrade to 0.8 series."; # Added 2023-10-10
+  garage_0_7_3 = throw "garage 0.7.x has been removed as it is EOL. Please upgrade to 0.8 series."; # Added 2023-10-10
   garmindev = throw "'garmindev' has been removed as the dependent software 'qlandkartegt' has been removed"; # Added 2023-04-17
   geekbench4 = throw "'geekbench4' has been renamed to 'geekbench_4'"; # Added 2023-03-10
   geekbench5 = throw "'geekbench5' has been renamed to 'geekbench_5'"; # Added 2023-03-10

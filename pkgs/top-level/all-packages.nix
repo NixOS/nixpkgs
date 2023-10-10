@@ -8441,8 +8441,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   })
     garage
-      garage_0_7 garage_0_8
-      garage_0_7_3 garage_0_8_4;
+      garage_0_8
+      garage_0_8_4;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
