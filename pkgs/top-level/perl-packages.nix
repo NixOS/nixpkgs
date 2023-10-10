@@ -8974,10 +8974,10 @@ with self; {
 
   ExtUtilsMakeMaker = buildPerlPackage {
     pname = "ExtUtils-MakeMaker";
-    version = "7.62";
+    version = "7.70";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.62.tar.gz";
-      hash = "sha256-UCKthX/Xa9P2sWrwmf4jJGOdmTLgjyHokfsxPZyuFwU=";
+      url = "mirror://cpan/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.70.tar.gz";
+      hash = "sha256-8Qi9RkINLwDSQoJfhlsPaIUQhJJJJPkiYdaExJ4+enQ=";
     };
     meta = {
       description = "Create a module Makefile";
