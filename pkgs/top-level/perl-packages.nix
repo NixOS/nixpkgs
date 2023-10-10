@@ -11811,8 +11811,8 @@ with self; {
       url = "mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Message-6.45.tar.gz";
       hash = "sha256-AcuEBmEqP3OIQtHpcxOuTYdIcNG41tZjMfFgAJQ9TL4=";
     };
-    buildInputs = [ TryTiny ];
-    propagatedBuildInputs = [ EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
+    buildInputs = [ TestNeeds TryTiny ];
+    propagatedBuildInputs = [ Clone EncodeLocale HTTPDate IOHTML LWPMediaTypes URI ];
     meta = {
       description = "HTTP style message (base class)";
       homepage = "https://github.com/libwww-perl/HTTP-Message";
