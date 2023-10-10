@@ -24618,10 +24618,10 @@ with self; {
 
   TestMost = buildPerlPackage {
     pname = "Test-Most";
-    version = "0.37";
+    version = "0.38";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.37.tar.gz";
-      hash = "sha256-UzNwFB658Yz0rDgPbe0qtXgCpuGEAIqA/SMEv8xHT8c=";
+      url = "mirror://cpan/authors/id/O/OV/OVID/Test-Most-0.38.tar.gz";
+      hash = "sha256-CJ64lPe6zkw3xjNODikOsgM47hAiOvDILL5ygceDgt8=";
     };
     propagatedBuildInputs = [ ExceptionClass ];
     buildInputs = [ TestDeep TestDifferences TestException TestWarn ];
