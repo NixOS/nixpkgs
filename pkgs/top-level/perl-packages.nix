@@ -19087,10 +19087,10 @@ with self; {
 
   PackageStash = buildPerlPackage {
     pname = "Package-Stash";
-    version = "0.39";
+    version = "0.40";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.39.tar.gz";
-      hash = "sha256-kWX1VREuCASTzg6RKd4Ihtowslk/s1Oiq9HHay0mIbU=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/Package-Stash-0.40.tar.gz";
+      hash = "sha256-WpcixtnLKe4TPl97CKU2J2KgtWM/9RcGQqWwaG6V4GY=";
     };
     buildInputs = [ CPANMetaCheck TestFatal TestNeeds TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
