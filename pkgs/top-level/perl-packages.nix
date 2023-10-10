@@ -2208,10 +2208,10 @@ with self; {
 
   CarpAssert = buildPerlPackage {
     pname = "Carp-Assert";
-    version = "0.21";
+    version = "0.22";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/N/NE/NEILB/Carp-Assert-0.21.tar.gz";
-      hash = "sha256-kk+OK048s9iyYka1+cB82qS4gAzvNF+ggR1ykw1zpU4=";
+      url = "mirror://cpan/authors/id/Y/YV/YVES/Carp-Assert-0.22.tar.gz";
+      hash = "sha256-gH6pfGvtdqwuSWnvun2uSP7+ufKHl/ESZxs6yKSTVfc=";
     };
     meta = {
       description = "Executable comments";
