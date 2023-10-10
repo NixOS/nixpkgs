@@ -21353,10 +21353,10 @@ with self; {
 
   RoleHasMessage = buildPerlPackage {
     pname = "Role-HasMessage";
-    version = "0.006";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Role-HasMessage-0.006.tar.gz";
-      hash = "sha256-9qbb4Edv+V7h/774JesY2bArBhjeukaG58Y7mdV21NM=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Role-HasMessage-0.007.tar.gz";
+      hash = "sha256-XiZ6TXYgs2hIEgTIjqIES4sqWP+LBVd/JxeydUwEFM4=";
     };
     propagatedBuildInputs = [ MooseXRoleParameterized StringErrf ];
     meta = {
