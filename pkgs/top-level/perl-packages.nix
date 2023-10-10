@@ -11179,10 +11179,10 @@ with self; {
 
   HTMLForm = buildPerlPackage {
     pname = "HTML-Form";
-    version = "6.07";
+    version = "6.11";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/O/OA/OALDERS/HTML-Form-6.07.tar.gz";
-      hash = "sha256-faqMfq/0AFUBw0Mci/R41Yu+57g2+GNYGqFK/htLYic=";
+      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/HTML-Form-6.11.tar.gz";
+      hash = "sha256-Q7+qcIc5NIfS1RJhoap/b4Gpex2P73pI/PbvMrFtZFQ=";
     };
     propagatedBuildInputs = [ HTMLParser ];
     meta = {
