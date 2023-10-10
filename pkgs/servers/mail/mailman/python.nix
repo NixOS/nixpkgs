@@ -20,6 +20,14 @@ python3.override {
       */
       django = super.django_3;
 
+      elasticsearch = super.elasticsearch.overridePythonAttrs ({ pname, ... }: rec {
+        version = "7.17.9";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-ZsTs4q3+fMEg4rameYof1cd3rs+C7sObuVzvfPx+orM=";
+        };
+      });
+
       # https://gitlab.com/mailman/hyperkitty/-/merge_requests/541
       mistune = super.mistune.overridePythonAttrs (old: rec {
         version = "2.0.5";
