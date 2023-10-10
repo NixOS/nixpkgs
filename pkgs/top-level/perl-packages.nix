@@ -8358,7 +8358,7 @@ with self; {
       hash = "sha256-7MZ10DDXnZpPsGRWfqiFxmsXw4Yjea0w+CBaKBzY7ik=";
     };
     buildInputs = [ CaptureTiny ];
-    propagatedBuildInputs = [ EmailAbstract EmailAddress MooXTypesMooseLike SubExporter Throwable TryTiny ];
+    propagatedBuildInputs = [ EmailAbstract EmailAddressXS EmailSimple ModuleRuntime Moo MooXTypesMooseLike SubExporter Throwable TryTiny ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     postPatch = ''
       patchShebangs --build util
