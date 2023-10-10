@@ -4204,10 +4204,10 @@ with self; {
 
   ConfigMVPReaderINI = buildPerlPackage {
     pname = "Config-MVP-Reader-INI";
-    version = "2.101463";
+    version = "2.101465";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-Reader-INI-2.101463.tar.gz";
-      hash = "sha256-aakWvzcR68nn1MqqcPPGlekYuTpZI5WHczA+DaC21EU=";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/Config-MVP-Reader-INI-2.101465.tar.gz";
+      hash = "sha256-E8eqJ8HfmM0zraOZ5Z/zj6v6nWVRPkKvAvcsLT9jYkc=";
     };
     propagatedBuildInputs = [ ConfigINI ConfigMVP ];
     meta = {
