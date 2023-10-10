@@ -18195,10 +18195,10 @@ with self; {
 
   NetIPv6Addr = buildPerlPackage {
     pname = "Net-IPv6Addr";
-    version = "1.01";
+    version = "1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BK/BKB/Net-IPv6Addr-1.01.tar.gz";
-      hash = "sha256-J+J/A/61X9kVFnOXNbGetUHK+HmVNjKd1+OhKQqkCwE=";
+      url = "mirror://cpan/authors/id/B/BK/BKB/Net-IPv6Addr-1.02.tar.gz";
+      hash = "sha256-sjQBwSJv7o3+Yn9a4OkMVaxUcBDso5gRDcFjH0HJ7H0=";
     };
     propagatedBuildInputs = [ MathBase85 NetIPv4Addr ];
     meta = {
