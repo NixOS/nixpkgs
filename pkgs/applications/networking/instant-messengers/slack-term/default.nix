@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "slack-term";
-  version = "0.5.0";
+  version = "0.5.0-master";
 
   src = fetchFromGitHub {
     owner = "erroneousboat";
     repo = "slack-term";
-    rev = "v${version}";
-    sha256 = "1fbq7bdhy70hlkklppimgdjamnk0v059pg73xm9ax1f4616ki1m6";
+    rev = "c19c20a3e5c597d6d60582fcba1a3523415e8fe4";
+    sha256 = "D+3qpRJkADTZyDxQQSFFKZz2WVQIaR8fzS7S90vMlLk=";
   };
   vendorHash = null;
 
