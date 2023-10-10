@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = [ ];
     platforms = lib.platforms.unix;
+    mainProgram = "xsel";
   };
 }
