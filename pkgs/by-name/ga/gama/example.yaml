@@ -1,0 +1,49 @@
+defaults:
+  sigma-apr : 5
+  conf-pr:    0.95
+
+description: >-
+  Example: a simple network
+
+points:
+  - id:  1783
+    y:   453500.000
+    x:   104500.000
+    adj: xy
+
+  - id:  2044
+    y:   461000.000
+    x:   101000.000
+    fix: xy
+
+observations:
+  - from: 1783
+    obs:
+      - type:  direction
+        to:    776
+        val:   29.51661
+        stdev: 2.0
+
+      - type:  direction
+        to:    351
+        val:   94.22790
+        stdev: 2.0
+
+  - from: 351
+    obs:
+      - type:  direction
+        to:    2044
+        val:   170.48370
+        stdev: 2.0
+
+      - type:  distance
+        to:    1783
+        val:   5522.668
+        stdev: 10.0
+
+  - from: 462
+    obs:
+      - type:  direction
+        to:    2505
+        val:   299.99973
+        stdev: 2.0

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<gama-local-adjustment xmlns="http://www.gnu.org/software/gama/gama-local-adjustment">
+
+<error category="gamaLocalParserError">
+<description>GNU Gama - error on reading XML input configuration file!</description>
+<description>syntax error</description>
+<lineNumber>1</lineNumber>
+</error>
+
+</gama-local-adjustment>

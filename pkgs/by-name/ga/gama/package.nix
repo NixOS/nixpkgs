@@ -7,13 +7,17 @@
   zip,
   octave,
   libxml2,
+
+  # passthru.tests.run
+  runCommand,
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs:  {
   pname = "gama";
   version = "2.26";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = with finalAttrs; "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-8zKPPpbp66tD2zMmcv2H5xeCSdDhUk0uYPhqwpGqx9Y=";
   };
 
@@ -23,6 +27,14 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [octave libxml2];
   doCheck = true;
+
+  passthru.tests.run = runCommand "gama-test-run" {
+    local = ./.;
+    nativeBuildInputs = [finalAttrs.finalPackage];
+  } ''
+    diff -U3 --color=auto <(gama-local $local/example.yaml) <(cat $local/result.yaml);
+    touch $out;
+  '';
 
   meta = with lib; {
     description = "Tools for adjustment of geodetic networks";
@@ -44,7 +56,7 @@ stdenv.mkDerivation rec {
       for observed 3D vectors, distances and coordinates.
     '';
     homepage = "https://www.gnu.org/software/gama/";
-    downloadPage = "https://mirrors.dotsrc.org/gnu/${pname}/${pname}-${version}.tar.gz";
+    downloadPage = with finalAttrs; "https://mirrors.dotsrc.org/gnu/${pname}/${pname}-${version}.tar.gz";
     changelog = "https://git.savannah.gnu.org/cgit/gama.git/tree/NEWS";
     # See https://git.savannah.gnu.org/cgit/gama.git/tree/ChangeLog for code
     # changes
@@ -53,4 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [cafkafk];
     platforms = platforms.all;
   };
-}
+})
