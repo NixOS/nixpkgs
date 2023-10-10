@@ -20305,10 +20305,10 @@ with self; {
 
   PPIxRegexp = buildPerlModule {
     pname = "PPIx-Regexp";
-    version = "0.076";
+    version = "0.088";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.076.tar.gz";
-      hash = "sha256-EGB9kyJyjEs3ZMCf4dy0qTmv8Nq+psSMpPhUogd6AUo=";
+      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.088.tar.gz";
+      hash = "sha256-iFQz+bEC+tT9NrIccyC7A2A2ERyvmYExv0FvfNXul2Q=";
     };
     propagatedBuildInputs = [ PPI ];
     meta = {
