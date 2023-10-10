@@ -1,6 +1,9 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
+, testers
+, sonic-server
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,12 +40,23 @@ rustPlatform.buildRustPackage rec {
       --replace /etc/sonic.cfg $out/etc/sonic/config.cfg
   '';
 
+  passthru = {
+    tests = {
+      version = testers.testVersion {
+        command = "sonic --version";
+        package = sonic-server;
+      };
+    };
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Fast, lightweight and schema-less search backend";
     homepage = "https://github.com/valeriansaliou/sonic";
     changelog = "https://github.com/valeriansaliou/sonic/releases/tag/v${version}";
     license = licenses.mpl20;
     platforms = platforms.unix;
+    mainProgram = "sonic";
     maintainers = with maintainers; [ pleshevskiy ];
   };
 }
