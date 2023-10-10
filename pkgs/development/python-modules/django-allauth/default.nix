@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "django-allauth";
-  version = "0.55.2";
+  version = "0.57.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "pennersr";
     repo = pname;
     rev = version;
-    hash = "sha256-i0thQymrEDkx2Yt9kM10j4LxL7yChHkG9vsS0508EQA=";
+    hash = "sha256-zhKqvm43rw28UKNFdfJ2C1dIeZfPqmchb1rJykm1lx4=";
   };
 
   nativeBuildInputs = [
@@ -73,11 +73,6 @@ buildPythonPackage rec {
   ]
   ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  disabledTestPaths = [
-    # tests are out of date
-    "allauth/socialaccount/providers/cern/tests.py"
-  ];
-
   passthru.tests = {
     inherit dj-rest-auth;
   };
@@ -85,7 +80,7 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/pennersr/django-allauth/blob/${version}/ChangeLog.rst";
     description = "Integrated set of Django applications addressing authentication, registration, account management as well as 3rd party (social) account authentication";
-    downloadPage = " https://github.com/pennersr/django-allauth";
+    downloadPage = "https://github.com/pennersr/django-allauth";
     homepage = "https://www.intenct.nl/projects/django-allauth";
     license = licenses.mit;
     maintainers = with maintainers; [ derdennisop ];
