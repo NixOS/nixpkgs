@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  pkgsBuildBuild = [
+  depsBuildBuild = [
     pkg-config
   ];
 
