@@ -1299,6 +1299,8 @@ self: super: with self; {
     inherit (pkgs.ocaml-ng.ocamlPackages) bap;
   };
 
+  barectf = callPackage ../development/python-modules/barectf { };
+
   baron = callPackage ../development/python-modules/baron { };
 
   base36 = callPackage ../development/python-modules/base36 { };
@@ -8357,7 +8359,7 @@ self: super: with self; {
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
-  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.llvmPackages_rocm; };
+  openai-triton = callPackage ../development/python-modules/openai-triton { cudaPackages = pkgs.cudaPackages_12_0; };
 
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
@@ -12129,6 +12131,8 @@ self: super: with self; {
 
   requests-pkcs12 = callPackage ../development/python-modules/requests-pkcs12 { };
 
+  requests-ratelimiter = callPackage ../development/python-modules/requests-ratelimiter { };
+
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
@@ -13427,6 +13431,8 @@ self: super: with self; {
 
   subzerod = callPackage ../development/python-modules/subzerod { };
 
+  succulent = callPackage ../development/python-modules/succulent { };
+
   sumo = callPackage ../development/python-modules/sumo { };
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
@@ -13918,7 +13924,6 @@ self: super: with self; {
       else pkgs.magma;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
-    inherit (pkgs.llvmPackages_rocm) openmp;
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
