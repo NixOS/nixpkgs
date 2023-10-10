@@ -801,10 +801,10 @@ with self; {
 
   Appcpanminus = buildPerlPackage {
     pname = "App-cpanminus";
-    version = "1.7045";
+    version = "1.7047";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7045.tar.gz";
-      hash = "sha256-rE5K3CP+wKtU8IispRH1pX2V5sl6EqHLmO7R/g/g6Zw=";
+      url = "mirror://cpan/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7047.tar.gz";
+      hash = "sha256-lj5jxuGocl/y9iTpCGOWrhUNtR3QozfDeB0JqZSvBaU=";
     };
     # Use TLS endpoints for downloads and metadata by default
     preConfigure = ''
