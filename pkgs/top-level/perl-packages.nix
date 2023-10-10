@@ -12790,10 +12790,10 @@ with self; {
 
   InlineC = buildPerlPackage {
     pname = "Inline-C";
-    version = "0.81";
+    version = "0.82";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TI/TINITA/Inline-C-0.81.tar.gz";
-      hash = "sha256-8YUljZBQ1/ebTwDxJiXMRpwvcA/2LT6DHLGNgNLIeqw=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Inline-C-0.82.tar.gz";
+      hash = "sha256-EPvPHhWNHI134d2TTjeRZbEmpFwTZFrQvp3AfRUd0Mw=";
     };
     buildInputs = [ FileCopyRecursive TestWarn YAMLLibYAML ];
     propagatedBuildInputs = [ Inline ParseRecDescent Pegex ];
