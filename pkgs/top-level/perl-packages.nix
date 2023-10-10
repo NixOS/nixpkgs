@@ -26979,10 +26979,10 @@ with self; {
 
   URIdb = buildPerlModule {
     pname = "URI-db";
-    version = "0.20";
+    version = "0.21";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.20.tar.gz";
-      hash = "sha256-FMjaFawgljG445/BJFHJsTEa0LXKX5Aye9+peLfRPxQ=";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/URI-db-0.21.tar.gz";
+      hash = "sha256-pkM9wVF6kH4YmRKkx2td/HYzLj/X/Is4oTfkAZx4CzQ=";
     };
     propagatedBuildInputs = [ URINested ];
     meta = {
