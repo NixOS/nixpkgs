@@ -22053,8 +22053,8 @@ with self; {
       url = "mirror://cpan/authors/id/V/VE/VEESH/SQL-SplitStatement-1.00023.tar.gz";
       hash = "sha256-GnSEIM0q00HCUk7xGFt273Fylp8XqeS6tvQ3bw3p814=";
     };
-    buildInputs = [ TestException ];
-    propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
+    buildInputs = [ TestDifferences TestException ];
+    propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon ];
     meta = {
       description = "Split any SQL code into atomic statements";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
