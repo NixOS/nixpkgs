@@ -13563,10 +13563,10 @@ with self; {
 
   LinuxFD = buildPerlModule {
     pname = "Linux-FD";
-    version = "0.011";
+    version = "0.014";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Linux-FD-0.011.tar.gz";
-      hash = "sha256-a7V51HZEyw7TVib/d+kJrmkGMHPGrAmqBhT+8A+jc1Y=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Linux-FD-0.014.tar.gz";
+      hash = "sha256-eDHcJkxG2bh/dkNhdNdmFBRSQ2Mwg+CQqrTZo1LwQ60=";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ SubExporter ];
