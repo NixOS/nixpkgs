@@ -25055,10 +25055,10 @@ with self; {
 
   TestScript = buildPerlPackage {
     pname = "Test-Script";
-    version = "1.26";
+    version = "1.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.26.tar.gz";
-      hash = "sha256-bUIjeuzi8NxB+mZTN5V0Z0BhhI8CCs1NY962uBtac7c=";
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.29.tar.gz";
+      hash = "sha256-iS5+bB6nsWcQkJlCz1wL2rcO7i79SqnBbqlS4rkPiVA=";
     };
 
     buildInputs = [ Test2Suite ];
