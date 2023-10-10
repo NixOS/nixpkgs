@@ -17448,10 +17448,10 @@ with self; {
 
   MooseXTypesURI = buildPerlModule {
     pname = "MooseX-Types-URI";
-    version = "0.08";
+    version = "0.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-URI-0.08.tar.gz";
-      hash = "sha256-0xDSD6Nh/i3/dYI234eUnMe/mOXPOnx5EVNl7M3mzME=";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-URI-0.09.tar.gz";
+      hash = "sha256-Jxd1Ta25EIbhHSH+oGy6qaEuYBtB0VRDFQ7dfZUI7+g=";
     };
     buildInputs = [ ModuleBuildTiny TestSimple13 ];
     propagatedBuildInputs = [ MooseXTypesPathClass URIFromHash ];
