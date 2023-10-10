@@ -20291,10 +20291,10 @@ with self; {
 
   PPIxQuoteLike = buildPerlModule {
     pname = "PPIx-QuoteLike";
-    version = "0.013";
+    version = "0.023";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-QuoteLike-0.013.tar.gz";
-      hash = "sha256-jR4zg4J40lKrb1hoQPzucOGbtzUgNbqF/TIkdSYtGBc=";
+      url = "mirror://cpan/authors/id/W/WY/WYANT/PPIx-QuoteLike-0.023.tar.gz";
+      hash = "sha256-NXajFJ0sU+B+lze3iSvlz7hKSZpu8d8JC3E7BUQjTSE=";
     };
     propagatedBuildInputs = [ PPI Readonly ];
     meta = {
