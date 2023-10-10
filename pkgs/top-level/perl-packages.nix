@@ -15378,10 +15378,10 @@ with self; {
 
   MinionBackendSQLite = buildPerlModule {
     pname = "Minion-Backend-SQLite";
-    version = "5.0.6";
+    version = "5.0.7";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.6.tar.gz";
-      hash = "sha256-/uDUEe9WsAkru8BTN5InaH3hQZUoy2t0T3U9vcH7FNk=";
+      url = "mirror://cpan/authors/id/D/DB/DBOOK/Minion-Backend-SQLite-v5.0.7.tar.gz";
+      hash = "sha256-zd49IrGv+n32seErKlLp88G2gci1k6G+TeO+aOTaXHI=";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ Minion MojoSQLite ];
