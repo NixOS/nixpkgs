@@ -9742,10 +9742,10 @@ with self; {
 
   FileShare = buildPerlPackage {
     pname = "File-Share";
-    version = "0.25";
+    version = "0.27";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/I/IN/INGY/File-Share-0.25.tar.gz";
-      hash = "sha256-jp0lbgrEOEIoOEtK0qV4GaFj7bOfIJiO1cExjAFAcHA=";
+      url = "mirror://cpan/authors/id/I/IN/INGY/File-Share-0.27.tar.gz";
+      hash = "sha256-1uj0tV69OOC7ReRDkuP6J9wf3harxdH/U+FX4ZpXVb4=";
     };
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
