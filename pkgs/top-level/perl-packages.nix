@@ -12811,11 +12811,11 @@ with self; {
 
   InlineJava = buildPerlPackage {
     pname = "Inline-Java";
-    version = "0.66";
+    version = "0.67";
 
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/Inline-Java-0.66.tar.gz";
-      hash = "sha256-x0PgaOb28b2HMGH+R6h05cJIpP2ks8fM6J8P2/oz2Ug=";
+      url = "mirror://cpan/authors/id/E/ET/ETJ/Inline-Java-0.67.tar.gz";
+      hash = "sha256-9YVLMcvOFjwz4mJN0jFODA2X4JRDcbcYjlkBuj9vpMk=";
     };
 
     propagatedBuildInputs = [ Inline ];
