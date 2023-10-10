@@ -280,6 +280,12 @@ lib.makeScope
       gnumake = gnumake-musl;
     };
 
+    patchelf-static = callPackage ./patchelf/static.nix {
+      gcc = gcc-latest;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+    };
+
     python = callPackage ./python {
       gcc = gcc-latest;
       gnumake = gnumake-musl;
@@ -353,6 +359,7 @@ lib.makeScope
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${musl.tests.hello-world}
+      echo ${patchelf-static.tests.get-version}
       echo ${python.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
       echo ${tinycc-musl.compiler.tests.hello-world}
