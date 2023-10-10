@@ -65,6 +65,7 @@ let
         qtdatavis3d
         qtdeclarative
         qtdoc
+        qtgraphs
         qtgrpc
         qthttpserver
         qtimageformats
@@ -105,6 +106,7 @@ let
       qtdatavis3d = callPackage ./modules/qtdatavis3d.nix { };
       qtdeclarative = callPackage ./modules/qtdeclarative.nix { };
       qtdoc = callPackage ./modules/qtdoc.nix { };
+      qtgraphs = callPackage ./modules/qtgraphs.nix { };
       qtgrpc = callPackage ./modules/qtgrpc.nix { };
       qthttpserver = callPackage ./modules/qthttpserver.nix { };
       qtimageformats = callPackage ./modules/qtimageformats.nix { };
