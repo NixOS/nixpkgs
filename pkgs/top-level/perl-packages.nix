@@ -10456,10 +10456,10 @@ with self; {
 
   Gnome2 = buildPerlPackage {
     pname = "Gnome2";
-    version = "1.047";
+    version = "1.048";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-1.047.tar.gz";
-      hash = "sha256-zMhcXcPBT5Fe0aGG0jhoHYP+89F+7RwgABSZ/1a2OQw=";
+      url = "mirror://cpan/authors/id/X/XA/XAOC/Gnome2-1.048.tar.gz";
+      hash = "sha256-ZPzDgnFKvY1XaSrDdjKMOiDGy8i81zKwB9FMv5ooLd0=";
     };
     buildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig Glib Gnome2Canvas Gnome2VFS Gtk2 ];
     propagatedBuildInputs = [ pkgs.gnome2.libgnomeui ];
