@@ -27040,10 +27040,10 @@ with self; {
 
   UserIdentity = buildPerlPackage {
     pname = "User-Identity";
-    version = "1.00";
+    version = "1.02";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARKOV/User-Identity-1.00.tar.gz";
-      hash = "sha256-khm0Jxz+tyYzDpVkWJ6jp9tLbdb29EI3RgSN8aCOn0o=";
+      url = "mirror://cpan/authors/id/M/MA/MARKOV/User-Identity-1.02.tar.gz";
+      hash = "sha256-OySu5/UnjGXD8EEVsHyG5kaTTpnqQJJANj8wiZE+uJk=";
     };
     meta = {
       description = "Collect information about a user";
