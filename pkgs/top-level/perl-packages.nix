@@ -23954,10 +23954,10 @@ with self; {
 
   TestCompile = buildPerlModule {
     pname = "Test-Compile";
-    version = "2.4.1";
+    version = "3.3.1";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EG/EGILES/Test-Compile-v2.4.1.tar.gz";
-      hash = "sha256-VqejRZ213g+SQZApzxtNUcRN0C1GkM/zxO7fZm9tjUY=";
+      url = "mirror://cpan/authors/id/E/EG/EGILES/Test-Compile-v3.3.1.tar.gz";
+      hash = "sha256-gIRQ89Ref0GapNZo4pgodonp6jY4hpO/8YDXhwzj5iE=";
     };
     propagatedBuildInputs = [ UNIVERSALrequire ];
     meta = {
