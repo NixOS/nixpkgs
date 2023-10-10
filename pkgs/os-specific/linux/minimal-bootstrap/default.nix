@@ -239,6 +239,12 @@ lib.makeScope
       gnused = gnused-mes;
     };
 
+    gzip-static = callPackage ./gzip/static.nix {
+      gcc = gcc-latest;
+      gnumake = gnumake-musl;
+      gnutar = gnutar-latest;
+    };
+
     heirloom = callPackage ./heirloom {
       bash = bash_2_05;
       tinycc = tinycc-mes;
@@ -336,6 +342,7 @@ lib.makeScope
       echo ${gnutar-musl.tests.get-version}
       echo ${gnutar-static.tests.get-version}
       echo ${gzip.tests.get-version}
+      echo ${gzip-static.tests.get-version}
       echo ${heirloom.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${musl.tests.hello-world}
