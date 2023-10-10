@@ -12296,10 +12296,10 @@ with self; {
 
   IOCompress = buildPerlPackage {
     pname = "IO-Compress";
-    version = "2.102";
+    version = "2.206";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.102.tar.gz";
-      hash = "sha256-1vp/mlvu5EZFKg+8Q1iaDHP+fpJcB1uYYosBgEjccqQ=";
+      url = "mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.206.tar.gz";
+      hash = "sha256-fTBiuaSU91fo0GFPIg2D8icxu9oa6198/w5yqD9DPTU=";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     # Same as CompressRawZlib
