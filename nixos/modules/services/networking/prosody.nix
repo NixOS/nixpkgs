@@ -780,10 +780,9 @@ in
       admins = ${toLua cfg.admins}
 
       -- we already build with libevent, so we can just enable it for a more performant server
-      use_libevent = true
+      network_backend = "event"
 
       modules_enabled = {
-
         ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
           (name: val: optionalString val "${toLua name};")
         cfg.modules) }
