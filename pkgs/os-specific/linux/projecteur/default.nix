@@ -1,6 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub,
-  cmake, pkg-config,
-  qtbase, qtgraphicaleffects, wrapQtAppsHook }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qtbase
+, qtgraphicaleffects
+, wrapQtAppsHook
+}:
+
 mkDerivation rec {
   pname = "projecteur";
   version = "0.9.2";
@@ -10,7 +17,7 @@ mkDerivation rec {
     repo = "Projecteur";
     rev = "v${version}";
     fetchSubmodules = false;
-    sha256 = "sha256-kg6oYtJ4H5A6RNATBg+XvMfCb9FlhEBFjfxamGosMQg=";
+    hash = "sha256-kg6oYtJ4H5A6RNATBg+XvMfCb9FlhEBFjfxamGosMQg=";
   };
 
   patches = [
@@ -23,8 +30,16 @@ mkDerivation rec {
     sed '1i#include <array>' -i src/device.h # gcc12
   '';
 
-  buildInputs = [ qtbase qtgraphicaleffects ];
-  nativeBuildInputs = [ wrapQtAppsHook cmake pkg-config ];
+  buildInputs = [
+    qtbase
+    qtgraphicaleffects
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX:PATH=${placeholder "out"}"
@@ -32,11 +47,12 @@ mkDerivation rec {
     "-DCMAKE_INSTALL_UDEVRULESDIR=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linux/X11 application for the Logitech Spotlight device (and similar devices).";
     homepage = "https://github.com/jahnf/Projecteur";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ benneti ];
+    license = lib.licenses.mit;
+    mainProgram = "projecteur";
+    maintainers = with lib.maintainers; [ benneti ];
+    platforms = lib.platforms.linux;
   };
 }
