@@ -18409,8 +18409,6 @@ with pkgs;
     nix = nixVersions.nix_2_16;
   };
 
-  nls = callPackage ../development/tools/language-servers/nls { };
-
   openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
 
   perlnavigator = callPackage ../development/tools/language-servers/perlnavigator { };
