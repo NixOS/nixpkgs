@@ -120,6 +120,7 @@ let
               jobs.cargo.x86_64-linux
               jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
+              jobs.nix.x86_64-linux
               jobs.pandoc.x86_64-linux
               jobs.python3.x86_64-linux
               # Needed by contributors to test PRs (by inclusion of the PR template)
@@ -132,6 +133,8 @@ let
               jobs.cachix.x86_64-linux
 
               /*
+              TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
+
               jobs.tests.cc-wrapper.default.x86_64-linux
               jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
               jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
@@ -158,6 +161,7 @@ let
               jobs.go.x86_64-darwin
               jobs.python3.x86_64-darwin
               jobs.nixpkgs-review.x86_64-darwin
+              jobs.nix.x86_64-darwin
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -180,6 +184,23 @@ let
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
+            ]
+            ++ lib.optionals supportDarwin.aarch64 [
+              jobs.stdenv.aarch64-darwin
+              jobs.cargo.aarch64-darwin
+              jobs.cachix.aarch64-darwin
+              jobs.go.aarch64-darwin
+              jobs.python3.aarch64-darwin
+              jobs.nixpkgs-review.aarch64-darwin
+              jobs.nix.aarch64-darwin
+              jobs.nix-info.aarch64-darwin
+              jobs.nix-info-tested.aarch64-darwin
+              jobs.git.aarch64-darwin
+              jobs.mariadb.aarch64-darwin
+              jobs.vim.aarch64-darwin
+              jobs.inkscape.aarch64-darwin
+              jobs.qt5.qtmultimedia.aarch64-darwin
+              /* consider adding tests, as suggested above for x86_64-darwin */
             ];
         };
 

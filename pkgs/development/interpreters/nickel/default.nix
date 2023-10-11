@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , python3
 , nix-update-script
-, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,11 +28,18 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  cargoBuildFlags = [ "-p nickel-lang-cli" ];
+  cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
 
   nativeBuildInputs = [
     python3
   ];
+
+  outputs = [ "out" "nls" ];
+
+  postInstall = ''
+    mkdir -p $nls/bin
+    mv $out/bin/nls $nls/bin/nls
+  '';
 
   passthru.updateScript = nix-update-script { };
 
