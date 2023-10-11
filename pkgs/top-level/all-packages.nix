@@ -340,7 +340,7 @@ with pkgs;
 
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
 
-  beeper = qt5.callPackage ../applications/networking/instant-messengers/beeper { };
+  beeper = callPackage ../applications/networking/instant-messengers/beeper { };
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
