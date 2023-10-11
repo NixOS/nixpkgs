@@ -42119,4 +42119,6 @@ with pkgs;
   ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
 
   code-maat = callPackage ../development/tools/code-maat {};
+
+  cowsql = callPackage ../by-name/co/cowsql/package.nix { };
 }
