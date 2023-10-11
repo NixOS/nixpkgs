@@ -9,31 +9,26 @@ with lib;
 let
   cfg = config.services.prosody;
 
-  sslOpts =
-    { ... }:
-    {
+  sslOpts = _: {
+    options = {
+      key = mkOption {
+        type = types.path;
+        description = "Path to the key file.";
+      };
 
-      options = {
+      # TODO: rename to certificate to match the prosody config
+      cert = mkOption {
+        type = types.path;
+        description = "Path to the certificate file.";
+      };
 
-        key = mkOption {
-          type = types.path;
-          description = "Path to the key file.";
-        };
-
-        # TODO: rename to certificate to match the prosody config
-        cert = mkOption {
-          type = types.path;
-          description = "Path to the certificate file.";
-        };
-
-        extraOptions = mkOption {
-          type = types.attrs;
-          default = { };
-          description = "Extra SSL configuration options.";
-        };
-
+      extraOptions = mkOption {
+        type = types.attrs;
+        default = { };
+        description = "Extra SSL configuration options.";
       };
     };
+  };
 
   discoOpts = {
     options = {
@@ -301,240 +296,221 @@ let
     };
   '';
 
-  mucOpts =
-    { ... }:
-    {
-      options = {
-        domain = mkOption {
-          type = types.str;
-          description = "Domain name of the MUC";
-        };
-        name = mkOption {
-          type = types.str;
-          description = "The name to return in service discovery responses for the MUC service itself";
-          default = "Prosody Chatrooms";
-        };
-        restrictRoomCreation = mkOption {
-          type = types.enum [
-            true
-            false
-            "admin"
-            "local"
-          ];
-          default = false;
-          description = "Restrict room creation to server admins";
-        };
-        maxHistoryMessages = mkOption {
-          type = types.int;
-          default = 20;
-          description = "Specifies a limit on what each room can be configured to keep";
-        };
-        roomLocking = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            Enables room locking, which means that a room must be
-            configured before it can be used. Locked rooms are invisible
-            and cannot be entered by anyone but the creator
-          '';
-        };
-        roomLockTimeout = mkOption {
-          type = types.int;
-          default = 300;
-          description = ''
-            Timeout after which the room is destroyed or unlocked if not
-            configured, in seconds
-          '';
-        };
-        tombstones = mkOption {
-          type = types.bool;
-          default = true;
-          description = ''
-            When a room is destroyed, it leaves behind a tombstone which
-            prevents the room being entered or recreated. It also allows
-            anyone who was not in the room at the time it was destroyed
-            to learn about it, and to update their bookmarks. Tombstones
-            prevents the case where someone could recreate a previously
-            semi-anonymous room in order to learn the real JIDs of those
-            who often join there.
-          '';
-        };
-        tombstoneExpiry = mkOption {
-          type = types.int;
-          default = 2678400;
-          description = ''
-            This settings controls how long a tombstone is considered
-            valid. It defaults to 31 days. After this time, the room in
-            question can be created again.
-          '';
-        };
-        allowners_muc = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Add module allowners, any user in chat is able to
-            kick other. Usefull in jitsi-meet to kick ghosts.
-          '';
-        };
-        vcard_muc = mkOption {
-          type = types.bool;
-          default = true;
-          description = "Adds the ability to set vCard for Multi User Chat rooms";
-        };
-
-        # Extra parameters. Defaulting to prosody default values.
-        # Adding them explicitly to make them visible from the options
-        # documentation.
-        #
-        # See https://prosody.im/doc/modules/mod_muc for more details.
-        roomDefaultPublic = mkOption {
-          type = types.bool;
-          default = true;
-          description = "If set, the MUC rooms will be public by default.";
-        };
-        roomDefaultMembersOnly = mkOption {
-          type = types.bool;
-          default = false;
-          description = "If set, the MUC rooms will only be accessible to the members by default.";
-        };
-        roomDefaultModerated = mkOption {
-          type = types.bool;
-          default = false;
-          description = "If set, the MUC rooms will be moderated by default.";
-        };
-        roomDefaultPublicJids = mkOption {
-          type = types.bool;
-          default = false;
-          description = "If set, the MUC rooms will display the public JIDs by default.";
-        };
-        roomDefaultChangeSubject = mkOption {
-          type = types.bool;
-          default = false;
-          description = "If set, the rooms will display the public JIDs by default.";
-        };
-        roomDefaultHistoryLength = mkOption {
-          type = types.int;
-          default = 20;
-          description = "Number of history message sent to participants by default.";
-        };
-        roomDefaultLanguage = mkOption {
-          type = types.str;
-          default = "en";
-          description = "Default room language.";
-        };
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
-          description = "Additional MUC specific configuration";
-        };
+  mucOpts = _: {
+    options = {
+      domain = mkOption {
+        type = types.str;
+        description = "Domain name of the MUC";
       };
-    };
-
-  uploadHttpOpts =
-    { ... }:
-    {
-      options = {
-        domain = mkOption {
-          type = types.nullOr types.str;
-          description = "Domain name for the http-upload service";
-        };
-        uploadFileSizeLimit = mkOption {
-          type = types.str;
-          default = "50 * 1024 * 1024";
-          description = "Maximum file size, in bytes. Defaults to 50MB.";
-        };
-        uploadExpireAfter = mkOption {
-          type = types.str;
-          default = "60 * 60 * 24 * 7";
-          description = "Max age of a file before it gets deleted, in seconds.";
-        };
-        userQuota = mkOption {
-          type = types.nullOr types.int;
-          default = null;
-          example = 1234;
-          description = ''
-            Maximum size of all uploaded files per user, in bytes. There
-            will be no quota if this option is set to null.
-          '';
-        };
-        httpUploadPath = mkOption {
-          type = types.str;
-          description = ''
-            Directory where the uploaded files will be stored when the http_upload module is used.
-            By default, uploaded files are put in a sub-directory of the default Prosody storage path (usually /var/lib/prosody).
-          '';
-          default = "/var/lib/prosody";
-        };
+      name = mkOption {
+        type = types.str;
+        description = "The name to return in service discovery responses for the MUC service itself";
+        default = "Prosody Chatrooms";
       };
-    };
-
-  httpFileShareOpts =
-    { ... }:
-    {
-      freeformType =
-        with types;
-        let
-          atom = oneOf [
-            int
-            bool
-            str
-            (listOf atom)
-          ];
-        in
-        attrsOf (nullOr atom)
-        // {
-          description = "int, bool, string or list of them";
-        };
-      options.domain = mkOption {
-        type = with types; nullOr str;
-        description = "Domain name for a http_file_share service.";
+      restrictRoomCreation = mkOption {
+        type = types.enum [
+          true
+          false
+          "admin"
+          "local"
+        ];
+        default = false;
+        description = "Restrict room creation to server admins";
       };
-    };
-
-  vHostOpts =
-    { ... }:
-    {
-
-      options = {
-
-        # TODO: require attribute
-        domain = mkOption {
-          type = types.str;
-          description = "Domain name";
-        };
-
-        enabled = mkOption {
-          type = types.bool;
-          default = false;
-          description = "Whether to enable the virtual host";
-        };
-
-        ssl = mkOption {
-          type = types.nullOr (types.submodule sslOpts);
-          default = null;
-          description = "Paths to SSL files";
-        };
-
-        extraConfig = mkOption {
-          type = types.lines;
-          default = "";
-          description = "Additional virtual host specific configuration";
-        };
-
+      maxHistoryMessages = mkOption {
+        type = types.int;
+        default = 20;
+        description = "Specifies a limit on what each room can be configured to keep";
+      };
+      roomLocking = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Enables room locking, which means that a room must be
+          configured before it can be used. Locked rooms are invisible
+          and cannot be entered by anyone but the creator
+        '';
+      };
+      roomLockTimeout = mkOption {
+        type = types.int;
+        default = 300;
+        description = ''
+          Timeout after which the room is destroyed or unlocked if not
+          configured, in seconds
+        '';
+      };
+      tombstones = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          When a room is destroyed, it leaves behind a tombstone which
+          prevents the room being entered or recreated. It also allows
+          anyone who was not in the room at the time it was destroyed
+          to learn about it, and to update their bookmarks. Tombstones
+          prevents the case where someone could recreate a previously
+          semi-anonymous room in order to learn the real JIDs of those
+          who often join there.
+        '';
+      };
+      tombstoneExpiry = mkOption {
+        type = types.int;
+        default = 2678400;
+        description = ''
+          This settings controls how long a tombstone is considered
+          valid. It defaults to 31 days. After this time, the room in
+          question can be created again.
+        '';
+      };
+      allowners_muc = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Add module allowners, any user in chat is able to
+          kick other. Useful in jitsi-meet to kick ghosts.
+        '';
+      };
+      vcard_muc = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Adds the ability to set vCard for Multi User Chat rooms";
       };
 
+      # Extra parameters. Defaulting to prosody default values.
+      # Adding them explicitly to make them visible from the options
+      # documentation.
+      #
+      # See https://prosody.im/doc/modules/mod_muc for more details.
+      roomDefaultPublic = mkOption {
+        type = types.bool;
+        default = true;
+        description = "If set, the MUC rooms will be public by default.";
+      };
+      roomDefaultMembersOnly = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If set, the MUC rooms will only be accessible to the members by default.";
+      };
+      roomDefaultModerated = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If set, the MUC rooms will be moderated by default.";
+      };
+      roomDefaultPublicJids = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If set, the MUC rooms will display the public JIDs by default.";
+      };
+      roomDefaultChangeSubject = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If set, the rooms will display the public JIDs by default.";
+      };
+      roomDefaultHistoryLength = mkOption {
+        type = types.int;
+        default = 20;
+        description = "Number of history message sent to participants by default.";
+      };
+      roomDefaultLanguage = mkOption {
+        type = types.str;
+        default = "en";
+        description = "Default room language.";
+      };
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional MUC specific configuration";
+      };
     };
+  };
 
+  uploadHttpOpts = _: {
+    options = {
+      domain = mkOption {
+        type = types.nullOr types.str;
+        description = "Domain name for the http-upload service";
+      };
+      uploadFileSizeLimit = mkOption {
+        type = types.str;
+        default = "50 * 1024 * 1024";
+        description = "Maximum file size, in bytes. Defaults to 50MB.";
+      };
+      uploadExpireAfter = mkOption {
+        type = types.str;
+        default = "60 * 60 * 24 * 7";
+        description = "Max age of a file before it gets deleted, in seconds.";
+      };
+      userQuota = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        example = 1234;
+        description = ''
+          Maximum size of all uploaded files per user, in bytes. There
+          will be no quota if this option is set to null.
+        '';
+      };
+      httpUploadPath = mkOption {
+        type = types.str;
+        description = ''
+          Directory where the uploaded files will be stored when the http_upload module is used.
+          By default, uploaded files are put in a sub-directory of the default Prosody storage path (usually /var/lib/prosody).
+        '';
+        default = "/var/lib/prosody";
+      };
+    };
+  };
+
+  httpFileShareOpts = _: {
+    freeformType =
+      with types;
+      let
+        atom = oneOf [
+          int
+          bool
+          str
+          (listOf atom)
+        ];
+      in
+      attrsOf (nullOr atom)
+      // {
+        description = "int, bool, string or list of them";
+      };
+    options.domain = mkOption {
+      type = with types; nullOr str;
+      description = "Domain name for a http_file_share service.";
+    };
+  };
+
+  vHostOpts = _: {
+    options = {
+      # TODO: require attribute
+      domain = mkOption {
+        type = types.str;
+        description = "Domain name";
+      };
+
+      enabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable the virtual host";
+      };
+
+      ssl = mkOption {
+        type = types.nullOr (types.submodule sslOpts);
+        default = null;
+        description = "Paths to SSL files";
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional virtual host specific configuration";
+      };
+    };
+  };
 in
-
 {
-
-  ###### interface
-
   options = {
-
     services.prosody = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -818,14 +794,10 @@ in
           }
         '';
       };
-
     };
   };
 
-  ###### implementation
-
   config = mkIf cfg.enable {
-
     assertions =
       let
         genericErrMsg = ''
@@ -916,21 +888,16 @@ in
         c2s_require_encryption = ${toLua cfg.c2sRequireEncryption}
 
         s2s_require_encryption = ${toLua cfg.s2sRequireEncryption}
-
         s2s_secure_auth = ${toLua cfg.s2sSecureAuth}
-
         s2s_insecure_domains = ${toLua cfg.s2sInsecureDomains}
-
         s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
 
         authentication = ${toLua cfg.authentication}
 
         http_interfaces = ${toLua cfg.httpInterfaces}
-
         https_interfaces = ${toLua cfg.httpsInterfaces}
 
         http_ports = ${toLua cfg.httpPorts}
-
         https_ports = ${toLua cfg.httpsPorts}
 
         ${cfg.extraConfig}
@@ -1025,7 +992,6 @@ in
         })
       ];
     };
-
   };
 
   meta.doc = ./prosody.md;
