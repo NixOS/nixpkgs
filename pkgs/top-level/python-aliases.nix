@@ -282,8 +282,13 @@ mapAliases ({
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
+  pyramid_beaker = pyramid-beaker; # added 2023-08-23
+  pyramid_chameleon = pyramid-chameleon; # added 2023-08-23
+  pyramid_exclog = pyramid-exclog; # added 2023-08-24
   pyramid_hawkauth = throw "pyramid_hawkauth has been removed because it is no longer maintained"; # added 2023-02-2
   pyramid_jinja2 = pyramid-jinja2; # added 2023-06-06
+  pyramid_mako = pyramid-mako; # added 2023-08-24
+  pyramid_multiauth = pyramid-multiauth; # added 2023-08-24
   pyreadability = readability-lxml; # added 2022-05-24
   pyres = throw "pyres has been removed, since it is abandoned and broken"; # added 2023-06-20
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16
