@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "6.26.0";
+  version = "6.28.1";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-7UUnDtTRf162xKMUuZoKh+y47oeUtrOsFHUTAvtOryM=";
+    hash = "sha256-ZoJN8weAXUQkxalRtVtEaychc30+l2kfzG9Tm5jZh9g=";
   };
 
   patches = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-2V8H6ElvzS5yw1di+XZvMssuokUT5zP3aTzpDpMsMac=";
+      hash = "sha256-eTzwo8aAIJnZTIZ/8DqCQi3ZbKxycEdiv+UxRuxo12g=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
