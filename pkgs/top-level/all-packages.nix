@@ -5856,7 +5856,7 @@ with pkgs;
 
   lexend = callPackage ../data/fonts/lexend { };
 
-  lexicon = callPackage ../tools/admin/lexicon { };
+  lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
   lenpaste = callPackage ../servers/lenpaste { };
 
