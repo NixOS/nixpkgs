@@ -116,13 +116,12 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 
 # Normally (for host != target case) --without-headers automatically
 # enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
-# gcc->clang "cross"-compilation manages to evade it: there
+# gcc->clang or dynamic->static "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
 + lib.optionalString (targetPlatform != hostPlatform &&
                       withoutTargetLibc &&
-                      targetPlatform.config == hostPlatform.config &&
-                      (stdenv.cc.isClang || stdenv.targetPlatform.useLLVM or false)) ''
+                      targetPlatform.config == hostPlatform.config) ''
   export inhibit_libc=true
 ''
 
