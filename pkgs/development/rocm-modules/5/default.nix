@@ -1,9 +1,14 @@
 { callPackage
 , recurseIntoAttrs
+, fetchFromGitHub
 , cudaPackages
 , python3Packages
 , elfutils
 , boost179
+, opencv
+, ffmpeg_4
+, libjpeg_turbo
+, rapidjson-unstable
 }:
 
 let
@@ -288,6 +293,47 @@ in rec {
   };
 
   rpp-cpu = rpp.override {
+    useOpenCL = false;
+    useCPU = true;
+  };
+
+  mivisionx = callPackage ./mivisionx {
+    inherit rocmUpdateScript rocm-cmake rocm-device-libs clr rpp rocblas miopengemm miopen migraphx half rocm-docs-core;
+    inherit (llvm) clang openmp;
+    opencv = opencv.override { enablePython = true; };
+    ffmpeg = ffmpeg_4;
+    rapidjson = rapidjson-unstable;
+    stdenv = llvm.rocmClangStdenv;
+
+    # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice
+    # See: https://github.com/GPUOpen-ProfessionalCompute-Libraries/MIVisionX/issues/1051
+    libjpeg_turbo = libjpeg_turbo.overrideAttrs {
+      version = "2.0.6.1";
+
+      src = fetchFromGitHub {
+        owner = "rrawther";
+        repo = "libjpeg-turbo";
+        rev = "640d7ee1917fcd3b6a5271aa6cf4576bccc7c5fb";
+        sha256 = "sha256-T52whJ7nZi8jerJaZtYInC2YDN0QM+9tUDqiNr6IsNY=";
+      };
+    };
+  };
+
+  mivisionx-hip = mivisionx.override {
+    rpp = rpp-hip;
+    useOpenCL = false;
+    useCPU = false;
+  };
+
+  mivisionx-opencl = mivisionx.override {
+    rpp = rpp-opencl;
+    miopen = miopen-opencl;
+    useOpenCL = true;
+    useCPU = false;
+  };
+
+  mivisionx-cpu = mivisionx.override {
+    rpp = rpp-cpu;
     useOpenCL = false;
     useCPU = true;
   };
