@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "zope-exceptions";
-  version = "4.6";
+  version = "5.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.exceptions";
     inherit version;
-    hash = "sha256-YZ0kpMZb7Zez3QUV5zLoK2nxVdQsyUlV0b6MKCiGg80=";
+    hash = "sha256-MPxT5TOfX72dEzXg97afd/FePwbisXt/t++SXMJP3ZY=";
   };
 
   nativeBuildInputs = [
