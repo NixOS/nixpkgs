@@ -30551,8 +30551,6 @@ with pkgs;
 
   jxplorer  = callPackage ../applications/networking/jxplorer {};
 
-  join-desktop = callPackage ../applications/misc/join-desktop { };
-
   joincap = callPackage ../tools/security/joincap { };
 
   json-plot = callPackage ../applications/graphics/json-plot { };
