@@ -17389,12 +17389,8 @@ with pkgs;
   tinycc = darwin.apple_sdk_11_0.callPackage ../development/compilers/tinycc { };
 
   tinygo = callPackage ../development/compilers/tinygo {
-    llvmPackages = llvmPackages_14;
-    avrgcc = pkgsCross.avr.buildPackages.gcc;
+    llvmPackages = llvmPackages_16;
     wasi-libc = pkgsCross.wasi32.wasilibc;
-    # go 1.20 build failure
-    go = go_1_19;
-    buildGoModule = buildGo119Module;
   };
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
