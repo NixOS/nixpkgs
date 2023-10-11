@@ -11,6 +11,12 @@ This API may be changed over time if the CI workflow making use of it is adjuste
 - Command line: `nixpkgs-check-by-name <NIXPKGS>`
 - Arguments:
   - `<NIXPKGS>`: The path to the Nixpkgs to check
+  - `--version <VERSION>`: The version of the checks to perform.
+
+    Possible values:
+    - `v0` (default)
+
+    See [validation](#validity-checks) for the differences.
 - Exit code:
   - `0`: If the [validation](#validity-checks) is successful
   - `1`: If the [validation](#validity-checks) is not successful
