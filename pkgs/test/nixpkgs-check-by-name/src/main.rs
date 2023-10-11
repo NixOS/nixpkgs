@@ -30,6 +30,8 @@ pub struct Args {
 pub enum Version {
     /// Initial version
     V0,
+    /// Empty argument check
+    V1,
 }
 
 fn main() -> ExitCode {
@@ -65,7 +67,7 @@ fn main() -> ExitCode {
 /// - `Ok(true)` if the structure is valid, nothing will have been written to `error_writer`.
 pub fn check_nixpkgs<W: io::Write>(
     nixpkgs_path: &Path,
-    _version: Version,
+    version: Version,
     eval_accessible_paths: Vec<&Path>,
     error_writer: &mut W,
 ) -> anyhow::Result<bool> {
@@ -88,7 +90,7 @@ pub fn check_nixpkgs<W: io::Write>(
 
         if error_writer.empty {
             // Only if we could successfully parse the structure, we do the semantic checks
-            eval::check_values(&mut error_writer, &nixpkgs, eval_accessible_paths)?;
+            eval::check_values(version, &mut error_writer, &nixpkgs, eval_accessible_paths)?;
             references::check_references(&mut error_writer, &nixpkgs)?;
         }
     }
@@ -188,7 +190,7 @@ mod tests {
         // We don't want coloring to mess up the tests
         let writer = temp_env::with_var("NO_COLOR", Some("1"), || -> anyhow::Result<_> {
             let mut writer = vec![];
-            check_nixpkgs(&path, Version::V0, vec![&extra_nix_path], &mut writer)
+            check_nixpkgs(&path, Version::V1, vec![&extra_nix_path], &mut writer)
                 .context(format!("Failed test case {name}"))?;
             Ok(writer)
         })?;

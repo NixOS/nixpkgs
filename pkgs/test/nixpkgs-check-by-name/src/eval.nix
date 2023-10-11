@@ -25,6 +25,8 @@ let
               toString fn
             else
               null;
+          CallPackage.empty_arg =
+            args == { };
         };
       in
       if builtins.isAttrs result then
