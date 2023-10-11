@@ -1368,7 +1368,7 @@ self: super: with self; {
 
   beancount-parser = callPackage ../development/python-modules/beancount-parser { };
 
-  beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
+  beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
@@ -3720,7 +3720,7 @@ self: super: with self; {
 
   face-recognition-models = callPackage ../development/python-modules/face-recognition/models.nix { };
 
-  factory_boy = callPackage ../development/python-modules/factory_boy { };
+  factory-boy = callPackage ../development/python-modules/factory-boy { };
 
   fairscale = callPackage ../development/python-modules/fairscale { };
 
@@ -4697,7 +4697,7 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
-  grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
+  grappelli-safe = callPackage ../development/python-modules/grappelli-safe { };
 
   graspologic = callPackage ../development/python-modules/graspologic { };
 
@@ -6666,7 +6666,7 @@ self: super: with self; {
 
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
-  memory_profiler = callPackage ../development/python-modules/memory_profiler { };
+  memory-profiler = callPackage ../development/python-modules/memory-profiler { };
 
   meraki = callPackage ../development/python-modules/meraki { };
 
@@ -10690,19 +10690,19 @@ self: super: with self; {
 
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
 
-  pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
+  pyramid-beaker = callPackage ../development/python-modules/pyramid-beaker { };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
 
-  pyramid_chameleon = callPackage ../development/python-modules/pyramid_chameleon { };
+  pyramid-chameleon = callPackage ../development/python-modules/pyramid-chameleon { };
 
-  pyramid_exclog = callPackage ../development/python-modules/pyramid_exclog { };
+  pyramid-exclog = callPackage ../development/python-modules/pyramid-exclog { };
 
   pyramid-jinja2 = callPackage ../development/python-modules/pyramid-jinja2 { };
 
-  pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
+  pyramid-mako = callPackage ../development/python-modules/pyramid-mako { };
 
-  pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
+  pyramid-multiauth = callPackage ../development/python-modules/pyramid-multiauth { };
 
   pyrate-limiter = callPackage ../development/python-modules/pyrate-limiter { };
 

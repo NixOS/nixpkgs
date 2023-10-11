@@ -57,6 +57,7 @@ mapAliases ({
   backports_tempfile = throw "backports_tempfile has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
   backports_unittest-mock = throw "backports_unittest-mock has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
   backports_weakref = throw "backports_weakref has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
+  beancount_docverif = beancount-docverif; # added 2023-10-08
   bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15
   BlinkStick = blinkstick; # added 2023-02-19
@@ -129,6 +130,7 @@ mapAliases ({
   Fabric = fabric; # addedd 2023-02-19
   face_recognition = face-recognition; # added 2022-10-15
   face_recognition_models = face-recognition-models; # added 2022-10-15
+  factory_boy = factory-boy; # added 2023-10-08
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   inherit (super.pkgs) fetchPypi; # added 2023-05-25
@@ -167,6 +169,7 @@ mapAliases ({
   gpyopt = throw "gpyopt was remove because it's been archived upstream"; # added 2023-06-07
   graphite_api = throw "graphite_api was removed, because it is no longer maintained"; # added 2022-07-10
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
+  grappelli_safe = grappelli-safe; # added 2023-10-08
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
@@ -220,6 +223,7 @@ mapAliases ({
   mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
   manticore = throw "manticore has been removed because its dependency wasm no longer builds and is unmaintained"; # added 2023-05-20
   markerlib = throw "markerlib has been removed because it's abandoned since 2013"; # added 2023-05-19
+  memory_profiler = memory-profiler; # added 2023-10-09
   mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
   mistune_2_0 = mistune; # added 2022-08-12
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
@@ -278,8 +282,13 @@ mapAliases ({
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
   pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
+  pyramid_beaker = pyramid-beaker; # added 2023-08-23
+  pyramid_chameleon = pyramid-chameleon; # added 2023-08-23
+  pyramid_exclog = pyramid-exclog; # added 2023-08-24
   pyramid_hawkauth = throw "pyramid_hawkauth has been removed because it is no longer maintained"; # added 2023-02-2
   pyramid_jinja2 = pyramid-jinja2; # added 2023-06-06
+  pyramid_mako = pyramid-mako; # added 2023-08-24
+  pyramid_multiauth = pyramid-multiauth; # added 2023-08-24
   pyreadability = readability-lxml; # added 2022-05-24
   pyres = throw "pyres has been removed, since it is abandoned and broken"; # added 2023-06-20
   pyroute2-core = throw "pyroute2 migrated back to a single package scheme in version 0.7.1"; # added 2022-07-16

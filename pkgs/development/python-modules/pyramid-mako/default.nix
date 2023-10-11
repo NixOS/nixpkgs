@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyramid_mako";
+  pname = "pyramid-mako";
   version = "1.1.0";
 
   src = fetchPypi {

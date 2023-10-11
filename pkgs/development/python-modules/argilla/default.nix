@@ -61,7 +61,7 @@
 , pytest-cov
 , pytest-mock
 , pytest-asyncio
-, factory_boy
+, factory-boy
 }:
 let
   pname = "argilla";
@@ -166,7 +166,7 @@ buildPythonPackage {
     pytest-cov
     pytest-mock
     pytest-asyncio
-    factory_boy
+    factory-boy
   ]
     ++ optional-dependencies.server
     ++ optional-dependencies.postgresql

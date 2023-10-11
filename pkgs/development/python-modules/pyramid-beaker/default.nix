@@ -1,11 +1,12 @@
 { lib, buildPythonPackage, fetchPypi, pytest, beaker, pyramid }:
 
 buildPythonPackage rec {
-  pname = "pyramid_beaker";
+  pname = "pyramid-beaker";
   version = "0.8";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pyramid_beaker";
+    inherit version;
     sha256 = "0hflx3qkcdml1mwpq53sz46s7jickpfn0zy0ns2c7j445j66bp3p";
   };
 
