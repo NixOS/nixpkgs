@@ -11520,6 +11520,8 @@ self: super: with self; {
 
   python-unshare = callPackage ../development/python-modules/python-unshare { };
 
+  python_ulid = callPackage ../development/python-modules/python_ulid { };
+
   python-utils = callPackage ../development/python-modules/python-utils { };
 
   python-vagrant = callPackage ../development/python-modules/python-vagrant { };
