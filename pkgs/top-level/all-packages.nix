@@ -42121,4 +42121,6 @@ with pkgs;
   code-maat = callPackage ../development/tools/code-maat {};
 
   cowsql = callPackage ../by-name/co/cowsql/package.nix { };
+
+  incus = callPackage ../by-name/in/incus/package.nix { };
 }
