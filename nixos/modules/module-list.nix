@@ -293,6 +293,7 @@
   ./security/apparmor.nix
   ./security/audit.nix
   ./security/auditd.nix
+  ./security/bubblewrap.nix
   ./security/ca.nix
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
