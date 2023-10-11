@@ -242,7 +242,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [
     daphne
-    factory_boy
+    factory-boy
     imagehash
     pdfminer-six
     pytest-django

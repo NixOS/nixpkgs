@@ -257,6 +257,8 @@ let
       withJIT = if jitSupport then this else jitToggle;
       withoutJIT = if jitSupport then jitToggle else this;
 
+      dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
+
       pkgs = let
         scope = {
           postgresql = this;

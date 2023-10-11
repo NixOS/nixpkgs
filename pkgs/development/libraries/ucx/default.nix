@@ -4,7 +4,7 @@
 , enableCuda ? config.cudaSupport
 , cudatoolkit
 , enableRocm ? false
-, rocm-core, rocm-runtime, rocm-device-libs, hip
+, rocmPackages
 }:
 
 let
@@ -13,9 +13,12 @@ let
     inherit (cudatoolkit) name meta;
     paths = [ cudatoolkit cudatoolkit.lib ];
   };
+
+  rocmList = with rocmPackages; [ rocm-core rocm-runtime rocm-device-libs clr ];
+
   rocm = symlinkJoin {
     name = "rocm";
-    paths = [ rocm-core rocm-runtime rocm-device-libs hip ];
+    paths = rocmList;
   };
 
 in
@@ -40,7 +43,7 @@ stdenv.mkDerivation rec {
     rdma-core
     zlib
   ] ++ lib.optional enableCuda cudatoolkit
-  ++ lib.optionals enableRocm [ rocm-core rocm-runtime rocm-device-libs hip ];
+  ++ lib.optionals enableRocm rocmList;
 
   configureFlags = [
     "--with-rdmacm=${lib.getDev rdma-core}"

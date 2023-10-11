@@ -542,6 +542,36 @@ rec {
     attrs:
     map (name: f name attrs.${name}) (attrNames attrs);
 
+  /*
+    Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
+    Each element of the resulting list is an attribute set with these attributes:
+    - `name` (string): The name of the attribute
+    - `value` (any): The value of the attribute
+
+    The following is always true:
+    ```nix
+    builtins.listToAttrs (attrsToList attrs) == attrs
+    ```
+
+    :::{.warning}
+    The opposite is not always true. In general expect that
+    ```nix
+    attrsToList (builtins.listToAttrs list) != list
+    ```
+
+    This is because the `listToAttrs` removes duplicate names and doesn't preserve the order of the list.
+    :::
+
+    Example:
+      attrsToList { foo = 1; bar = "asdf"; }
+      => [ { name = "bar"; value = "asdf"; } { name = "foo"; value = 1; } ]
+
+    Type:
+      attrsToList :: AttrSet -> [ { name :: String; value :: Any; } ]
+
+  */
+  attrsToList = mapAttrsToList nameValuePair;
+
 
   /* Like `mapAttrs`, except that it recursively applies itself to
      the *leaf* attributes of a potentially-nested attribute set:

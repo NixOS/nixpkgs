@@ -57,6 +57,7 @@ mapAliases ({
   backports_tempfile = throw "backports_tempfile has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
   backports_unittest-mock = throw "backports_unittest-mock has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
   backports_weakref = throw "backports_weakref has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
+  beancount_docverif = beancount-docverif; # added 2023-10-08
   bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15
   BlinkStick = blinkstick; # added 2023-02-19
@@ -74,6 +75,7 @@ mapAliases ({
   carrot = throw "carrot has been removed, as its development was discontinued in 2012"; # added 2022-01-18
   cchardet = faust-cchardet; # added 2023-03-02
   class-registry = phx-class-registry; # added 2021-10-05
+  cntk = throw "cntk has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-10-09
   codespell = throw "codespell has been promoted to a top-level attribute"; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
   CommonMark = commonmark; # added 2023-02-1
@@ -128,6 +130,7 @@ mapAliases ({
   Fabric = fabric; # addedd 2023-02-19
   face_recognition = face-recognition; # added 2022-10-15
   face_recognition_models = face-recognition-models; # added 2022-10-15
+  factory_boy = factory-boy; # added 2023-10-08
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   inherit (super.pkgs) fetchPypi; # added 2023-05-25
@@ -409,5 +412,7 @@ mapAliases ({
   zc_buildout_nix = throw "zc_buildout_nix was pinned to a version no longer compatible with other modules";
   zope_broken = throw "zope_broken has been removed because it is obsolete and not needed in zodb>=3.10"; # added 2023-07-26
   zope_component = zope-component; # added 2023-07-28
+  zope_deprecation = zope-deprecation; # added 2023-10-07
   zope_i18nmessageid = zope-i18nmessageid; # added 2023-07-29
+  zope_proxy = zope-proxy; # added 2023-10-07
 })

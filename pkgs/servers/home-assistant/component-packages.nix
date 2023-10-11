@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.10.0";
+  version = "2023.10.1";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -4698,7 +4698,8 @@
       pyweatherflowudp
     ];
     "weatherkit" = ps: with ps; [
-    ]; # missing inputs: apple_weatherkit
+      apple-weatherkit
+    ];
     "webhook" = ps: with ps; [
       aiohttp-cors
     ];
@@ -5722,6 +5723,7 @@
     "waze_travel_time"
     "weather"
     "weatherflow"
+    "weatherkit"
     "webhook"
     "webostv"
     "websocket_api"

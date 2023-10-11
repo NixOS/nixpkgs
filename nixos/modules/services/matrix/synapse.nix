@@ -12,7 +12,9 @@ let
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
-    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
+    usePostgresql
+    && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]))
+    && config.services.postgresql.enable;
   hasWorkers = cfg.workers != { };
 
   listenerSupportsResource = resource: listener:
@@ -945,23 +947,6 @@ in {
         '';
       }
       {
-        assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
-        message = ''
-          Cannot deploy matrix-synapse with a configuration for a local postgresql database
-            and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
-            database (please read the thread in https://github.com/NixOS/nixpkgs/pull/80447 for
-            further reference).
-
-            If you
-            - try to deploy a fresh synapse, you need to configure the database yourself. An example
-              for this can be found in <nixpkgs/nixos/tests/matrix/synapse.nix>
-            - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
-              to your configuration.
-
-          For further information about this update, please read the release-notes of 20.03 carefully.
-        '';
-      }
-      {
         assertion = hasWorkers -> cfg.settings.redis.enabled;
         message = ''
           Workers for matrix-synapse require configuring a redis instance. This can be done
@@ -1034,9 +1019,11 @@ in {
             partOf = [ "matrix-synapse.target" ];
             wantedBy = [ "matrix-synapse.target" ];
             unitConfig.ReloadPropagatedFrom = "matrix-synapse.target";
+            requires = optional hasLocalPostgresDB "postgresql.service";
           }
           else {
             after = [ "network-online.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
+            requires = optional hasLocalPostgresDB "postgresql.service";
             wantedBy = [ "multi-user.target" ];
           };
         baseServiceConfig = {
@@ -1070,7 +1057,7 @@ in {
             ProtectKernelTunables = true;
             ProtectProc = "invisible";
             ProtectSystem = "strict";
-            ReadWritePaths = [ cfg.dataDir ];
+            ReadWritePaths = [ cfg.dataDir cfg.settings.media_store_path ];
             RemoveIPC = true;
             RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
             RestrictNamespaces = true;
