@@ -2,7 +2,6 @@
 , fetchpatch
 , python3
 , fetchPypi
-, sphinx
 , postfix
 , lynx
 }:
