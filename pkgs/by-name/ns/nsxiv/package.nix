@@ -10,7 +10,7 @@
 , conf ? null
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
   version = "31";
 
@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "nsxiv";
     repo = "nsxiv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-X1ZMr5OADs9GIe/kp/kEqKMMHZMymd58m9+f0SPzn7s=";
   };
+
+  outputs = [ "out" "man" "doc" ];
 
   buildInputs = [
     giflib
@@ -30,11 +32,11 @@ stdenv.mkDerivation rec {
     libwebp
   ] ++ lib.optional stdenv.isDarwin libinotify-kqueue;
 
-  preBuild = lib.optionalString (conf!=null) ''
+  postPatch = lib.optionalString (conf != null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h
   '';
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-linotify";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-linotify";
 
   makeFlags = [ "CC:=$(CC)" ];
 
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-all" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nsxiv.codeberg.page/";
     description = "New Suckless X Image Viewer";
     longDescription = ''
@@ -59,9 +61,9 @@ stdenv.mkDerivation rec {
       - Display image information in status bar
       - Display image name/path in X title
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres sikmir ];
-    platforms = platforms.unix;
-    changelog = "https://codeberg.org/nsxiv/nsxiv/src/tag/${src.rev}/etc/CHANGELOG.md";
+    changelog = "https://codeberg.org/nsxiv/nsxiv/src/tag/${finalAttrs.src.rev}/etc/CHANGELOG.md";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres sikmir ];
+    platforms = lib.platforms.unix;
   };
-}
+})
