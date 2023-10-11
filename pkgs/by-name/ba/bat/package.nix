@@ -12,15 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.23.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "bat";
     rev = "v${version}";
-    hash = "sha256-cGHxB3Wp8yEcJBMtSOec6l7iBsMLhUtJ7nh5fijnWZs=";
+    hash = "sha256-1RjlJEmY/jMf0IYQbrWrT1CHFyiqgarOl72u9xjjQiQ=";
   };
-  cargoHash = "sha256-wZNdYGCLKD80gV1QUTgKsFSNYkbDubknPB3e6dsyEgs=";
+  cargoHash = "sha256-b7wNWdKQ4QLeCf7bNZRfzT9hD/D/oDglU7Xyb65IrGY=";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
@@ -38,7 +38,21 @@ rustPlatform.buildRustPackage rec {
       --prefix PATH : "${lib.makeBinPath [ less ]}"
   '';
 
-  checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
+  # Skip test cases which depends on `more`
+  checkFlags = [
+    "--skip=alias_pager_disable_long_overrides_short"
+    "--skip=config_read_arguments_from_file"
+    "--skip=env_var_bat_paging"
+    "--skip=pager_arg_override_env_noconfig"
+    "--skip=pager_arg_override_env_withconfig"
+    "--skip=pager_basic"
+    "--skip=pager_basic_arg"
+    "--skip=pager_env_bat_pager_override_config"
+    "--skip=pager_env_pager_nooverride_config"
+    "--skip=pager_more"
+    "--skip=pager_most"
+    "--skip=pager_overwrite"
+  ];
 
   doInstallCheck = true;
   installCheckPhase = ''
