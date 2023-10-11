@@ -18,19 +18,23 @@ let
     callPackage = fn: args:
       let
         result = super.callPackage fn args;
+        variantInfo._attributeVariant = {
+          # These names are used by the deserializer on the Rust side
+          CallPackage.path =
+            if builtins.isPath fn then
+              toString fn
+            else
+              null;
+        };
       in
       if builtins.isAttrs result then
         # If this was the last overlay to be applied, we could just only return the `_callPackagePath`,
         # but that's not the case because stdenv has another overlays on top of user-provided ones.
         # So to not break the stdenv build we need to return the mostly proper result here
-        result // {
-          _callPackagePath = fn;
-        }
+        result // variantInfo
       else
         # It's very rare that callPackage doesn't return an attribute set, but it can occur.
-        {
-          _callPackagePath = fn;
-        };
+        variantInfo;
   };
 
   pkgs = import nixpkgsPath {
@@ -45,11 +49,7 @@ let
     in
     {
     # These names are used by the deserializer on the Rust side
-    call_package_path =
-      if value ? _callPackagePath && builtins.isPath value._callPackagePath then
-        toString value._callPackagePath
-      else
-        null;
+    variant = value._attributeVariant or { Other = null; };
     is_derivation = pkgs.lib.isDerivation value;
   };
 

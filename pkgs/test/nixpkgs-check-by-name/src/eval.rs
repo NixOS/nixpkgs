@@ -13,8 +13,17 @@ use tempfile::NamedTempFile;
 /// Attribute set of this structure is returned by eval.nix
 #[derive(Deserialize)]
 struct AttributeInfo {
-    call_package_path: Option<PathBuf>,
+    variant: AttributeVariant,
     is_derivation: bool,
+}
+
+#[derive(Deserialize)]
+enum AttributeVariant {
+    /// The attribute is defined as a pkgs.callPackage <path>
+    /// The path is None when the <path> argument isn't a path
+    CallPackage { path: Option<PathBuf> },
+    /// The attribute is not defined as pkgs.callPackage
+    Other,
 }
 
 const EXPR: &str = include_str!("eval.nix");
@@ -97,14 +106,18 @@ pub fn check_values<W: io::Write>(
         let absolute_package_file = nixpkgs.path.join(&relative_package_file);
 
         if let Some(attribute_info) = actual_files.get(package_name) {
-            let is_expected_file =
-                if let Some(call_package_path) = &attribute_info.call_package_path {
-                    absolute_package_file == *call_package_path
-                } else {
-                    false
-                };
+            let valid = match &attribute_info.variant {
+                AttributeVariant::CallPackage { path } => {
+                    if let Some(call_package_path) = path {
+                        absolute_package_file == *call_package_path
+                    } else {
+                        false
+                    }
+                }
+                AttributeVariant::Other => false,
+            };
 
-            if !is_expected_file {
+            if !valid {
                 error_writer.write(&format!(
                     "pkgs.{package_name}: This attribute is not defined as `pkgs.callPackage {} {{ ... }}`.",
                     relative_package_file.display()
