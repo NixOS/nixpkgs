@@ -4259,8 +4259,6 @@ with pkgs;
 
   bar = callPackage ../tools/system/bar { };
 
-  base16-shell-preview = callPackage ../misc/base16-shell-preview { };
-
   base16-builder = callPackage ../misc/base16-builder { };
 
   basex = callPackage ../tools/text/xml/basex { };
