@@ -198,20 +198,7 @@ let
               jobs.vim.aarch64-darwin
               jobs.inkscape.aarch64-darwin
               jobs.qt5.qtmultimedia.aarch64-darwin
-              /*
-              jobs.tests.cc-wrapper.x86_64-darwin
-              jobs.tests.cc-wrapper-gcc7.x86_64-darwin
-              # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
-              jobs.tests.cc-wrapper-clang.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-5.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-6.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
-              jobs.tests.stdenv-inputs.x86_64-darwin
-              jobs.tests.macOSSierraShared.x86_64-darwin
-              jobs.tests.patch-shebangs.x86_64-darwin
-              */
+              /* consider adding tests, as suggested above for x86_64-darwin */
             ];
         };
 
