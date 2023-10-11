@@ -5,7 +5,7 @@
 
 buildGoModule rec {
   pname = "ipinfo";
-  version = "3.0.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
