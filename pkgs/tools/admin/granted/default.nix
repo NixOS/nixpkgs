@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.17.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+XdbHCa7XtngX1v/uH0p7EbQVcZY+vT2ox9saDOKYE0=";
+    sha256 = "sha256-BvrMfQ/fiAMJCROwOqzt17ae/qqDC2KFdBK2epVImus=";
   };
 
   vendorHash = "sha256-vHOGnflLC85hrONPPAAuuaPxNkv3t5T616nAnDEZbAY=";
