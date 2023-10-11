@@ -1368,7 +1368,7 @@ self: super: with self; {
 
   beancount-parser = callPackage ../development/python-modules/beancount-parser { };
 
-  beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
+  beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
