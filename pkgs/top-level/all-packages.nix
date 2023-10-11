@@ -28148,8 +28148,6 @@ with pkgs;
   # hardened kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
   linux_hardened = linuxPackages_hardened.kernel;
-  linuxPackages_4_14_hardened = linuxKernel.packages.linux_4_14_hardened;
-  linux_4_14_hardened = linuxPackages_4_14_hardened.kernel;
   linuxPackages_4_19_hardened = linuxKernel.packages.linux_4_19_hardened;
   linux_4_19_hardened = linuxPackages_4_19_hardened.kernel;
   linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
