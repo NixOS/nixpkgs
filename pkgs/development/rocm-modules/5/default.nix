@@ -193,7 +193,7 @@ in rec {
   };
 
   rocblas = callPackage ./rocblas {
-    inherit rocmUpdateScript rocm-cmake clr tensile;
+    inherit rocblas rocmUpdateScript rocm-cmake clr tensile;
     inherit (llvm) openmp;
     stdenv = llvm.rocmClangStdenv;
   };
