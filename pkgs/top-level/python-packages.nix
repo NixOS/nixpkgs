@@ -15918,7 +15918,7 @@ self: super: with self; {
 
   zope-deferredimport = callPackage ../development/python-modules/zope-deferredimport { };
 
-  zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
+  zope-deprecation = callPackage ../development/python-modules/zope-deprecation { };
 
   zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
 
@@ -15938,7 +15938,7 @@ self: super: with self; {
 
   zope_location = callPackage ../development/python-modules/zope_location { };
 
-  zope_proxy = callPackage ../development/python-modules/zope_proxy { };
+  zope-proxy = callPackage ../development/python-modules/zope-proxy { };
 
   zope_schema = callPackage ../development/python-modules/zope_schema { };
 
