@@ -5999,12 +5999,12 @@ final: prev:
 
   neogit = buildVimPlugin {
     pname = "neogit";
-    version = "2023-10-10";
+    version = "2023-10-11";
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "76182ae5c6501b6238a7cd9971e3a607c7122cd7";
-      sha256 = "1bq3djhagli58gmjwv7qbr14rflk0m967rrwbz0376l9sxd5yf87";
+      rev = "d3fbf8b48f4f8bc406eb23f8b06eb912776f8cb0";
+      sha256 = "0czznf4n24aaw0l45qy7dlb4sx2c3gmdb2q4z3wqmw7525n2lik6";
     };
     meta.homepage = "https://github.com/NeogitOrg/neogit/";
   };
@@ -10289,6 +10289,18 @@ final: prev:
       sha256 = "0j3vvj1hdsxj36pi4fnfcnj34hk26igicnvzk6xch4rwjlakqlaq";
     };
     meta.homepage = "https://github.com/folke/twilight.nvim/";
+  };
+
+  typescript-tools-nvim = buildVimPlugin {
+    pname = "typescript-tools.nvim";
+    version = "2023-10-04";
+    src = fetchFromGitHub {
+      owner = "pmizio";
+      repo = "typescript-tools.nvim";
+      rev = "ebddb35900bbf5fa41fffa0463b676bf08e474e6";
+      sha256 = "13npmhilg10hrhlbywxc9y1cxz4mmgch8m80jffshrfw7q14nbal";
+    };
+    meta.homepage = "https://github.com/pmizio/typescript-tools.nvim/";
   };
 
   typescript-vim = buildVimPlugin {
@@ -15959,18 +15971,6 @@ final: prev:
       sha256 = "0dc1mg9x8flda59vl8d89m1ri1n0jl72q4jhmxj7mg9gp2r39l3m";
     };
     meta.homepage = "https://github.com/nanotee/zoxide.vim/";
-  };
-
-  typescript-tools-nvim = buildVimPlugin {
-    pname = "typescript-tools.nvim";
-    version = "2023-10-04";
-    src = fetchFromGitHub {
-      owner = "pmizio";
-      repo = "typescript-tools.nvim";
-      rev = "ebddb35900bbf5fa41fffa0463b676bf08e474e6";
-      sha256 = "13npmhilg10hrhlbywxc9y1cxz4mmgch8m80jffshrfw7q14nbal";
-    };
-    meta.homepage = "https://github.com/pmizio/typescript-tools.nvim/";
   };
 
   catppuccin-nvim = buildVimPlugin {
