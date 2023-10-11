@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    sha256 = "sha256-irzzG8qLJaBdRULGRyoYkn0tc4Yfcg/xe2SLriD8mtM=";
+    hash = "sha256-irzzG8qLJaBdRULGRyoYkn0tc4Yfcg/xe2SLriD8mtM=";
   };
 
   buildCommand = ''
