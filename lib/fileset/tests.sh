@@ -587,6 +587,97 @@ done
 # So, just using 1000 files for now.
 checkFileset 'unions (mapAttrsToList (name: _: ./. + "/${name}/a") (builtins.readDir ./.))'
 
+
+## lib.fileset.intersection
+
+
+# Different filesystem roots in root and fileset are not supported
+mkdir -p {foo,bar}/mock-root
+expectFailure 'with ((import <nixpkgs/lib>).extend (import <nixpkgs/lib/fileset/mock-splitRoot.nix>)).fileset;
+  toSource { root = ./.; fileset = intersection ./foo/mock-root ./bar/mock-root; }
+' 'lib.fileset.intersection: Filesystem roots are not the same:
+\s*first argument: root "'"$work"'/foo/mock-root"
+\s*second argument: root "'"$work"'/bar/mock-root"
+\s*Different roots are not supported.'
+rm -rf -- *
+
+# Coercion errors show the correct context
+expectFailure 'toSource { root = ./.; fileset = intersection ./a ./.; }' 'lib.fileset.intersection: first argument \('"$work"'/a\) does not exist.'
+expectFailure 'toSource { root = ./.; fileset = intersection ./. ./b; }' 'lib.fileset.intersection: second argument \('"$work"'/b\) does not exist.'
+
+# The tree of later arguments should not be evaluated if a former argument already excludes all files
+tree=(
+    [a]=0
+)
+checkFileset 'intersection _emptyWithoutBase (_create ./. (abort "This should not be used!"))'
+# We don't have any combinators that can explicitly remove files yet, so we need to rely on internal functions to test this for now
+checkFileset 'intersection (_create ./. { a = null; }) (_create ./. { a = abort "This should not be used!"; })'
+
+# If either side is empty, the result is empty
+tree=(
+    [a]=0
+)
+checkFileset 'intersection _emptyWithoutBase _emptyWithoutBase'
+checkFileset 'intersection _emptyWithoutBase (_create ./. null)'
+checkFileset 'intersection (_create ./. null) _emptyWithoutBase'
+checkFileset 'intersection (_create ./. null) (_create ./. null)'
+
+# If the intersection base paths are not overlapping, the result is empty and has no base path
+mkdir a b c
+touch {a,b,c}/x
+expectEqual 'toSource { root = ./c; fileset = intersection ./a ./b; }' 'toSource { root = ./c; fileset = _emptyWithoutBase; }'
+rm -rf -- *
+
+# If the intersection exists, the resulting base path is the longest of them
+mkdir a
+touch x a/b
+expectEqual 'toSource { root = ./a; fileset = intersection ./a ./.; }' 'toSource { root = ./a; fileset = ./a; }'
+expectEqual 'toSource { root = ./a; fileset = intersection ./. ./a; }' 'toSource { root = ./a; fileset = ./a; }'
+rm -rf -- *
+
+# Also finds the intersection with null'd filesetTree's
+tree=(
+    [a]=0
+    [b]=1
+    [c]=0
+)
+checkFileset 'intersection (_create ./. { a = "regular"; b = "regular"; c = null; }) (_create ./. { a = null; b = "regular"; c = "regular"; })'
+
+# Actually computes the intersection between files
+tree=(
+    [a]=0
+    [b]=0
+    [c]=1
+    [d]=1
+    [e]=0
+    [f]=0
+)
+checkFileset 'intersection (unions [ ./a ./b ./c ./d ]) (unions [ ./c ./d ./e ./f ])'
+
+tree=(
+    [a/x]=0
+    [a/y]=0
+    [b/x]=1
+    [b/y]=1
+    [c/x]=0
+    [c/y]=0
+)
+checkFileset 'intersection ./b ./.'
+checkFileset 'intersection ./b (unions [ ./a/x ./a/y ./b/x ./b/y ./c/x ./c/y ])'
+
+# Complicated case
+tree=(
+    [a/x]=0
+    [a/b/i]=1
+    [c/d/x]=0
+    [c/d/f]=1
+    [c/x]=0
+    [c/e/i]=1
+    [c/e/j]=1
+)
+checkFileset 'intersection (unions [ ./a/b ./c/d ./c/e ]) (unions [ ./a ./c/d/f ./c/e ])'
+
+
 ## Tracing
 
 # The second trace argument is returned
@@ -609,6 +700,10 @@ rm -rf -- *
 # The empty file set without a base also prints as empty
 expectTrace '_emptyWithoutBase' '(empty)'
 expectTrace 'unions [ ]' '(empty)'
+mkdir foo bar
+touch {foo,bar}/x
+expectTrace 'intersection ./foo ./bar' '(empty)'
+rm -rf -- *
 
 # If a directory is fully included, print it as such
 touch a

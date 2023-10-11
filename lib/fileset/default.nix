@@ -7,6 +7,7 @@ let
     _toSourceFilter
     _unionMany
     _printFileset
+    _intersection
     ;
 
   inherit (builtins)
@@ -18,6 +19,7 @@ let
     ;
 
   inherit (lib.lists)
+    elemAt
     imap0
     ;
 
@@ -275,6 +277,45 @@ If a directory does not recursively contain any file, it is omitted from the sto
         (_coerceMany "lib.fileset.unions")
         _unionMany
       ];
+
+  /*
+    The file set containing all files that are in both of two given file sets.
+    See also [Intersection (set theory)](https://en.wikipedia.org/wiki/Intersection_(set_theory)).
+
+    The given file sets are evaluated as lazily as possible,
+    with the first argument being evaluated first if needed.
+
+    Type:
+      intersection :: FileSet -> FileSet -> FileSet
+
+    Example:
+      # Limit the selected files to the ones in ./., so only ./src and ./Makefile
+      intersection ./. (unions [ ../LICENSE ./src ./Makefile ])
+  */
+  intersection =
+    # The first file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset1:
+    # The second file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset2:
+    let
+      filesets = _coerceMany "lib.fileset.intersection" [
+        {
+          context = "first argument";
+          value = fileset1;
+        }
+        {
+          context = "second argument";
+          value = fileset2;
+        }
+      ];
+    in
+    _intersection
+      (elemAt filesets 0)
+      (elemAt filesets 1);
 
   /*
     Incrementally evaluate and trace a file set in a pretty way.
