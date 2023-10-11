@@ -507,6 +507,121 @@ let
       };
     };
   };
+
+  configFile =
+    let
+      httpDiscoItems =
+        optional (cfg.uploadHttp != null) {
+          url = cfg.uploadHttp.domain;
+          description = "HTTP upload endpoint";
+        }
+        ++ optional (cfg.httpFileShare != null) {
+          url = cfg.httpFileShare.domain;
+          description = "HTTP file share endpoint";
+        };
+      mucDiscoItems = builtins.foldl' (
+        acc: muc:
+        [
+          {
+            url = muc.domain;
+            description = "${muc.domain} MUC endpoint";
+          }
+        ]
+        ++ acc
+      ) [ ] cfg.muc;
+      discoItems = cfg.disco_items ++ httpDiscoItems ++ mucDiscoItems;
+    in
+    pkgs.writeText "prosody.cfg.lua" ''
+      pidfile = "/run/prosody/prosody.pid"
+
+      log = ${cfg.log}
+
+      data_path = "${cfg.dataDir}"
+      plugin_paths = {
+        ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths)}
+      }
+
+      ${optionalString (cfg.ssl != null) (createSSLOptsStr cfg.ssl)}
+
+      admins = ${toLua cfg.admins}
+
+      modules_enabled = {
+
+        ${lib.concatStringsSep "\n  " (
+          lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
+        )}
+        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
+        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
+      };
+
+      disco_items = {
+      ${lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
+      };
+
+      allow_registration = ${toLua cfg.allowRegistration}
+
+      c2s_require_encryption = ${toLua cfg.c2sRequireEncryption}
+
+      s2s_require_encryption = ${toLua cfg.s2sRequireEncryption}
+      s2s_secure_auth = ${toLua cfg.s2sSecureAuth}
+      s2s_insecure_domains = ${toLua cfg.s2sInsecureDomains}
+      s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
+
+      authentication = ${toLua cfg.authentication}
+
+      http_interfaces = ${toLua cfg.httpInterfaces}
+      https_interfaces = ${toLua cfg.httpsInterfaces}
+
+      http_ports = ${toLua cfg.httpPorts}
+      https_ports = ${toLua cfg.httpsPorts}
+
+      ${cfg.extraConfig}
+
+      ${lib.concatMapStrings (muc: ''
+        Component ${toLua muc.domain} "muc"
+            modules_enabled = { "muc_mam"; ${optionalString muc.vcard_muc ''"vcard_muc";''} ${optionalString muc.allowners_muc ''"muc_allowners";''}  }
+            name = ${toLua muc.name}
+            restrict_room_creation = ${toLua muc.restrictRoomCreation}
+            max_history_messages = ${toLua muc.maxHistoryMessages}
+            muc_room_locking = ${toLua muc.roomLocking}
+            muc_room_lock_timeout = ${toLua muc.roomLockTimeout}
+            muc_tombstones = ${toLua muc.tombstones}
+            muc_tombstone_expiry = ${toLua muc.tombstoneExpiry}
+            muc_room_default_public = ${toLua muc.roomDefaultPublic}
+            muc_room_default_members_only = ${toLua muc.roomDefaultMembersOnly}
+            muc_room_default_moderated = ${toLua muc.roomDefaultModerated}
+            muc_room_default_public_jids = ${toLua muc.roomDefaultPublicJids}
+            muc_room_default_change_subject = ${toLua muc.roomDefaultChangeSubject}
+            muc_room_default_history_length = ${toLua muc.roomDefaultHistoryLength}
+            muc_room_default_language = ${toLua muc.roomDefaultLanguage}
+            ${muc.extraConfig}
+      '') cfg.muc}
+
+      ${lib.optionalString (cfg.uploadHttp != null) ''
+        Component ${toLua cfg.uploadHttp.domain} "http_upload"
+            http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
+            http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
+            ${lib.optionalString (
+              cfg.uploadHttp.userQuota != null
+            ) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
+            http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
+      ''}
+
+      ${lib.optionalString (cfg.httpFileShare != null) ''
+        Component ${toLua cfg.httpFileShare.domain} "http_file_share"
+        ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
+      ''}
+
+      ${lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (n: v: ''
+          VirtualHost "${v.domain}"
+            enabled = ${boolToString v.enabled};
+            ${optionalString (v.ssl != null) (createSSLOptsStr v.ssl)}
+            ${v.extraConfig}
+        '') cfg.virtualHosts
+      )}
+    '';
+
 in
 {
   options = {
@@ -515,6 +630,13 @@ in
         type = types.bool;
         default = false;
         description = "Whether to enable the prosody server";
+      };
+
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        example = false;
+        description = "Check the configuration file with `prosodyctl check config`";
       };
 
       xmppComplianceSuite = mkOption {
@@ -832,120 +954,19 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc."prosody/prosody.cfg.lua".text =
-      let
-        httpDiscoItems =
-          optional (cfg.uploadHttp != null) {
-            url = cfg.uploadHttp.domain;
-            description = "HTTP upload endpoint";
+    environment.etc."prosody/prosody.cfg.lua".source =
+      if cfg.checkConfig then
+        pkgs.runCommandLocal "prosody.cfg.lua-checked"
+          {
+            nativeBuildInputs = [ cfg.package ];
           }
-          ++ optional (cfg.httpFileShare != null) {
-            url = cfg.httpFileShare.domain;
-            description = "HTTP file share endpoint";
-          };
-        mucDiscoItems = builtins.foldl' (
-          acc: muc:
-          [
-            {
-              url = muc.domain;
-              description = "${muc.domain} MUC endpoint";
-            }
-          ]
-          ++ acc
-        ) [ ] cfg.muc;
-        discoItems = cfg.disco_items ++ httpDiscoItems ++ mucDiscoItems;
-      in
-      ''
-
-        pidfile = "/run/prosody/prosody.pid"
-
-        log = ${cfg.log}
-
-        data_path = "${cfg.dataDir}"
-        plugin_paths = {
-          ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths)}
-        }
-
-        ${optionalString (cfg.ssl != null) (createSSLOptsStr cfg.ssl)}
-
-        admins = ${toLua cfg.admins}
-
-        modules_enabled = {
-
-          ${lib.concatStringsSep "\n  " (
-            lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
-          )}
-          ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
-          ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
-        };
-
-        disco_items = {
-        ${lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
-        };
-
-        allow_registration = ${toLua cfg.allowRegistration}
-
-        c2s_require_encryption = ${toLua cfg.c2sRequireEncryption}
-
-        s2s_require_encryption = ${toLua cfg.s2sRequireEncryption}
-        s2s_secure_auth = ${toLua cfg.s2sSecureAuth}
-        s2s_insecure_domains = ${toLua cfg.s2sInsecureDomains}
-        s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
-
-        authentication = ${toLua cfg.authentication}
-
-        http_interfaces = ${toLua cfg.httpInterfaces}
-        https_interfaces = ${toLua cfg.httpsInterfaces}
-
-        http_ports = ${toLua cfg.httpPorts}
-        https_ports = ${toLua cfg.httpsPorts}
-
-        ${cfg.extraConfig}
-
-        ${lib.concatMapStrings (muc: ''
-          Component ${toLua muc.domain} "muc"
-              modules_enabled = { "muc_mam"; ${optionalString muc.vcard_muc ''"vcard_muc";''} ${optionalString muc.allowners_muc ''"muc_allowners";''}  }
-              name = ${toLua muc.name}
-              restrict_room_creation = ${toLua muc.restrictRoomCreation}
-              max_history_messages = ${toLua muc.maxHistoryMessages}
-              muc_room_locking = ${toLua muc.roomLocking}
-              muc_room_lock_timeout = ${toLua muc.roomLockTimeout}
-              muc_tombstones = ${toLua muc.tombstones}
-              muc_tombstone_expiry = ${toLua muc.tombstoneExpiry}
-              muc_room_default_public = ${toLua muc.roomDefaultPublic}
-              muc_room_default_members_only = ${toLua muc.roomDefaultMembersOnly}
-              muc_room_default_moderated = ${toLua muc.roomDefaultModerated}
-              muc_room_default_public_jids = ${toLua muc.roomDefaultPublicJids}
-              muc_room_default_change_subject = ${toLua muc.roomDefaultChangeSubject}
-              muc_room_default_history_length = ${toLua muc.roomDefaultHistoryLength}
-              muc_room_default_language = ${toLua muc.roomDefaultLanguage}
-              ${muc.extraConfig}
-        '') cfg.muc}
-
-        ${lib.optionalString (cfg.uploadHttp != null) ''
-          Component ${toLua cfg.uploadHttp.domain} "http_upload"
-              http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
-              http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
-              ${lib.optionalString (
-                cfg.uploadHttp.userQuota != null
-              ) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
-              http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
-        ''}
-
-        ${lib.optionalString (cfg.httpFileShare != null) ''
-          Component ${toLua cfg.httpFileShare.domain} "http_file_share"
-          ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
-        ''}
-
-        ${lib.concatStringsSep "\n" (
-          lib.mapAttrsToList (n: v: ''
-            VirtualHost "${v.domain}"
-              enabled = ${boolToString v.enabled};
-              ${optionalString (v.ssl != null) (createSSLOptsStr v.ssl)}
-              ${v.extraConfig}
-          '') cfg.virtualHosts
-        )}
-      '';
+          ''
+            cp ${configFile} prosody.cfg.lua
+            prosodyctl --config ./prosody.cfg.lua check config
+            touch $out
+          ''
+      else
+        configFile;
 
     users.users.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
