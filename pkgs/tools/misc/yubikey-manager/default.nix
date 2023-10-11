@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.2.0";
+  version = "5.2.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
     rev = version;
-    hash = "sha256-33Y2adUuGIDi5gdenkwZJKKKk2NtcHwLzxy1NXhBa9M=";
+    hash = "sha256-CUe/oB/+Hq9evnLwl8r0k5ObhI3vDt7oX79+20yMfjY=";
   };
 
   postPatch = ''
@@ -25,7 +25,6 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
-    pythonRelaxDepsHook
     installShellFiles
   ];
 
@@ -35,10 +34,6 @@ python3Packages.buildPythonPackage rec {
     fido2
     click
     keyring
-  ];
-
-  pythonRelaxDeps = [
-    "keyring"
   ];
 
   postInstall = ''
