@@ -58,6 +58,8 @@ stdenv.mkDerivation rec {
   # Socket address collisions between tests
   enableParallelChecking = false;
 
+  postFixup = "echo test";
+
   meta = with lib; {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
