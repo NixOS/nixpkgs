@@ -3,39 +3,43 @@
 , fetchPypi
 , substituteAll
 , supervise
-, isPy3k
-, whichcraft
-, util-linux
+, setuptools
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "supervise-api";
   version = "0.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "supervise_api";
     inherit version;
-    sha256 = "1230f42294910e83421b7d3b08a968d27d510a4a709e966507ed70db5da1b9de";
+    hash = "sha256-EjD0IpSRDoNCG307CKlo0n1RCkpwnpZlB+1w212hud4=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./supervise-path.patch;
-      inherit supervise;
-    })
+  postPatch = ''
+    substituteInPlace supervise_api/supervise.py \
+      --replace 'which("supervise")' '"${supervise}/bin/supervise"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  # In the git repo, supervise_api lives inside a python subdir
-  patchFlags = [ "-p2" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = lib.optional (!isPy3k) whichcraft;
-
-  nativeCheckInputs = [ util-linux ];
+  pythonImportsCheck = [
+    "supervise_api"
+  ];
 
   meta = {
     description = "An API for running processes safely and securely";
     homepage = "https://github.com/catern/supervise";
-    license = lib.licenses.lgpl3;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ catern ];
   };
 }
