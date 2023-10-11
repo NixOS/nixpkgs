@@ -39,14 +39,18 @@ let
     overlays = [ callPackageOverlay ];
   };
 
-  attrInfo = attr: {
+  attrInfo = attr:
+    let
+      value = pkgs.${attr};
+    in
+    {
     # These names are used by the deserializer on the Rust side
     call_package_path =
-      if pkgs.${attr} ? _callPackagePath && builtins.isPath pkgs.${attr}._callPackagePath then
-        toString pkgs.${attr}._callPackagePath
+      if value ? _callPackagePath && builtins.isPath value._callPackagePath then
+        toString value._callPackagePath
       else
         null;
-    is_derivation = pkgs.lib.isDerivation pkgs.${attr};
+    is_derivation = pkgs.lib.isDerivation value;
   };
 
   attrInfos = builtins.listToAttrs (map (name: {
