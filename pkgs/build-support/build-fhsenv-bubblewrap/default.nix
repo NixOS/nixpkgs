@@ -116,6 +116,8 @@ let
 
   indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
+    export PATH="$PATH:${bubblewrap}/bin"
+
     ignored=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
@@ -179,8 +181,10 @@ let
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
+    # We pick up bwrap from PATH, with the nixpkgs one as a fallback,
+    # in case a setuid version is available ambiently
     cmd=(
-      ${bubblewrap}/bin/bwrap
+      bwrap
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
