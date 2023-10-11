@@ -133,6 +133,8 @@ let
               jobs.cachix.x86_64-linux
 
               /*
+              TODO: re-add tests; context: https://github.com/NixOS/nixpkgs/commit/36587a587ab191eddd868179d63c82cdd5dee21b
+
               jobs.tests.cc-wrapper.default.x86_64-linux
               jobs.tests.cc-wrapper.gcc7Stdenv.x86_64-linux
               jobs.tests.cc-wrapper.gcc8Stdenv.x86_64-linux
