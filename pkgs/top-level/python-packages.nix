@@ -8753,6 +8753,8 @@ self: super: with self; {
 
   pdb2pqr = callPackage ../development/python-modules/pdb2pqr { };
 
+  pdbfixer = callPackage ../development/python-modules/pdbfixer { };
+
   pdf2docx = callPackage ../development/python-modules/pdf2docx { };
 
   pdf2image = callPackage ../development/python-modules/pdf2image { };
