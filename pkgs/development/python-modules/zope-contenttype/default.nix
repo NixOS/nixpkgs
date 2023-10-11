@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.contenttype";
+  pname = "zope-contenttype";
   version = "4.6";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.contenttype";
+    inherit version;
     hash = "sha256-NnVoeLxSWzY2TQ1b2ZovCw/TuaUND+m73Eqxs4rCOAA=";
   };
 
