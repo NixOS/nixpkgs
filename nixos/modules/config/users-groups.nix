@@ -330,6 +330,20 @@ let
           administrator before being able to use the system again.
         '';
       };
+
+      linger = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to enable lingering for this user. If true, systemd user
+          units will start at boot, rather than starting at login and stopping
+          at logout. This is the declarative equivalent of running
+          `loginctl enable-linger` for this user.
+
+          If false, user units will not be started until the user logs in, and
+          may be stopped on logout depending on the settings in `logind.conf`.
+        '';
+      };
     };
 
     config = mkMerge
@@ -662,6 +676,20 @@ in {
         -w ${./update-users-groups.pl} ${spec}
       '';
     };
+
+    system.activationScripts.update-lingering = let
+      lingerDir = "/var/lib/systemd/linger";
+      lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
+      lingeringUsersFile = builtins.toFile "lingering-users"
+        (concatStrings (map (s: "${s}\n")
+          (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
+    in stringAfter [ "users" ] ''
+      if [ -e ${lingerDir} ] ; then
+        cd ${lingerDir}
+        ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
+        ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
+      fi
+    '';
 
     # Warn about user accounts with deprecated password hashing schemes
     system.activationScripts.hashes = {

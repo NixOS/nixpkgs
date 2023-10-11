@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, zope_proxy
+, zope-proxy
 , zope_testrunner
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Orvw4YwfF2WRTs0dQbVJ5NBFshso5AZfsMHeCtc2ssM=";
   };
 
-  propagatedBuildInputs = [ zope_proxy ];
+  propagatedBuildInputs = [ zope-proxy ];
 
   nativeCheckInputs = [ zope_testrunner ];
 

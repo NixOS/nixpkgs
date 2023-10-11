@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "lit";
-  version = "16.0.6";
+  version = "17.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hGI8nCO2sUdj1jf05j5rchs0Rq2kC/cAHY/ucLjnepo=";
+    hash = "sha256-RIZ65Xa1eQVnsSC8Pw2fAh2slCTRsIQMdazYX0YQrAQ=";
   };
 
   passthru = {
