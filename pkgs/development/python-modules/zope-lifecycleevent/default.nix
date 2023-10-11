@@ -7,11 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "zope.lifecycleevent";
+  pname = "zope-lifecycleevent";
   version = "4.4";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "zope.lifecycleevent";
+    inherit version;
     hash = "sha256-9ahU6J/5fe6ke/vqN4u77yeJ0uDMkKHB2lfZChzmfLU=";
   };
 
