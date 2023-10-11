@@ -31,6 +31,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
+    changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/v${version}";
     description = "Sitemap generator for Sphinx";
     homepage = "https://github.com/jdillard/sphinx-sitemap";
     maintainers = with maintainers; [ alejandrosame ];
