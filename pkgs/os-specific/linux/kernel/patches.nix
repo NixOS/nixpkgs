@@ -44,8 +44,6 @@
       patch = ./modinst-arg-list-too-long.patch;
     };
 
-  cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
-
   hardened = let
     mkPatch = kernelVersion: { version, sha256, patch }: let src = patch; in {
       name = lib.removeSuffix ".patch" src.name;
