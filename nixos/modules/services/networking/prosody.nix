@@ -4,10 +4,8 @@ with lib;
 let
   cfg = config.services.prosody;
 
-  sslOpts = { ... }: {
-
+  sslOpts = _: {
     options = {
-
       key = mkOption {
         type = types.path;
         description = lib.mdDoc "Path to the key file.";
@@ -24,7 +22,6 @@ let
         default = {};
         description = lib.mdDoc "Extra SSL configuration options.";
       };
-
     };
   };
 
@@ -275,7 +272,7 @@ let
     };
   '';
 
-  mucOpts = { ... }: {
+  mucOpts = _: {
     options = {
       domain = mkOption {
         type = types.str;
@@ -339,7 +336,7 @@ let
       vcard_muc = mkOption {
         type = types.bool;
         default = true;
-      description = lib.mdDoc "Adds the ability to set vCard for Multi User Chat rooms";
+        description = lib.mdDoc "Adds the ability to set vCard for Multi User Chat rooms";
       };
 
       # Extra parameters. Defaulting to prosody default values.
@@ -390,7 +387,7 @@ let
     };
   };
 
-  uploadHttpOpts = { ... }: {
+  uploadHttpOpts = _: {
     options = {
       domain = mkOption {
         type = types.nullOr types.str;
@@ -427,10 +424,8 @@ let
     };
   };
 
-  vHostOpts = { ... }: {
-
+  vHostOpts = _: {
     options = {
-
       # TODO: require attribute
       domain = mkOption {
         type = types.str;
@@ -454,21 +449,14 @@ let
         default = "";
         description = lib.mdDoc "Additional virtual host specific configuration";
       };
-
     };
-
   };
 
 in
 
 {
-
-  ###### interface
-
   options = {
-
     services.prosody = {
-
       enable = mkOption {
         type = types.bool;
         default = false;
@@ -633,7 +621,6 @@ in
         '';
       };
 
-
       modules = moduleOpts;
 
       extraModules = mkOption {
@@ -687,7 +674,6 @@ in
             enabled = true;
           };
         };
-
       };
 
       ssl = mkOption {
@@ -715,15 +701,10 @@ in
         default = "";
         description = lib.mdDoc "Additional prosody configuration";
       };
-
     };
   };
 
-
-  ###### implementation
-
   config = mkIf cfg.enable {
-
     assertions = let
       genericErrMsg = ''
 
@@ -768,49 +749,43 @@ in
 
       data_path = "${cfg.dataDir}"
       plugin_paths = {
-        ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths) }
+        ${lib.concatStringsSep ", " (map (n: "\"${n}\"") cfg.extraPluginPaths)}
       }
 
-      ${ optionalString  (cfg.ssl != null) (createSSLOptsStr cfg.ssl) }
+      ${optionalString (cfg.ssl != null) (createSSLOptsStr cfg.ssl)}
 
       admins = ${toLua cfg.admins}
 
       modules_enabled = {
 
-        ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
+        ${lib.concatStringsSep "\n  " (lib.mapAttrsToList
           (name: val: optionalString val "${toLua name};")
-        cfg.modules) }
-        ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
-        ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
+        cfg.modules)}
+        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
+        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
 
       disco_items = {
-      ${ lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
+      ${lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
       };
 
       allow_registration = ${toLua cfg.allowRegistration}
 
       c2s_require_encryption = ${toLua cfg.c2sRequireEncryption}
-
       s2s_require_encryption = ${toLua cfg.s2sRequireEncryption}
-
       s2s_secure_auth = ${toLua cfg.s2sSecureAuth}
-
       s2s_insecure_domains = ${toLua cfg.s2sInsecureDomains}
-
       s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
 
       authentication = ${toLua cfg.authentication}
 
       http_interfaces = ${toLua cfg.httpInterfaces}
-
       https_interfaces = ${toLua cfg.httpsInterfaces}
 
       http_ports = ${toLua cfg.httpPorts}
-
       https_ports = ${toLua cfg.httpsPorts}
 
-      ${ cfg.extraConfig }
+      ${cfg.extraConfig}
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
@@ -832,7 +807,7 @@ in
             ${ muc.extraConfig }
         '') cfg.muc}
 
-      ${ lib.optionalString (cfg.uploadHttp != null) ''
+      ${lib.optionalString (cfg.uploadHttp != null) ''
         -- TODO: think about migrating this to mod-http_file_share instead.
         Component ${toLua cfg.uploadHttp.domain} "http_upload"
             http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
@@ -841,12 +816,12 @@ in
             http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
       ''}
 
-      ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''
         VirtualHost "${v.domain}"
           enabled = ${boolToString v.enabled};
-          ${ optionalString (v.ssl != null) (createSSLOptsStr v.ssl) }
-          ${ v.extraConfig }
-        '') cfg.virtualHosts) }
+          ${optionalString (v.ssl != null) (createSSLOptsStr v.ssl)}
+          ${v.extraConfig }
+        '') cfg.virtualHosts)}
     '';
 
     users.users.prosody = mkIf (cfg.user == "prosody") {
@@ -894,7 +869,6 @@ in
         })
       ];
     };
-
   };
 
   meta.doc = ./prosody.md;
