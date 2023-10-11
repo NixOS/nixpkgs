@@ -682,6 +682,18 @@ with lib.maintainers; {
     shortName = "Numtide team";
   };
 
+  ocaml = {
+    members = [
+      alizter
+    ];
+    githubTeams = [
+      "ocaml"
+    ];
+    scope = "Maintain the OCaml compiler and package set.";
+    shortName = "OCaml";
+    enableFeatureFreezePing = true;
+  };
+
   openstack = {
     members = [
       SuperSandro2000
