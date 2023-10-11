@@ -19,7 +19,11 @@ struct AttributeInfo {
 
 #[derive(Deserialize)]
 enum AttributeVariant {
-    /// The attribute is defined as a pkgs.callPackage <path>
+    /// The attribute is auto-called as pkgs.callPackage using pkgs/by-name,
+    /// and it is not overridden by a definition in all-packages.nix
+    AutoCalled,
+    /// The attribute is defined as a pkgs.callPackage <path>,
+    /// and overridden by all-packages.nix
     /// The path is None when the <path> argument isn't a path
     CallPackage { path: Option<PathBuf> },
     /// The attribute is not defined as pkgs.callPackage
@@ -107,6 +111,7 @@ pub fn check_values<W: io::Write>(
 
         if let Some(attribute_info) = actual_files.get(package_name) {
             let valid = match &attribute_info.variant {
+                AttributeVariant::AutoCalled => true,
                 AttributeVariant::CallPackage { path } => {
                     if let Some(call_package_path) = path {
                         absolute_package_file == *call_package_path

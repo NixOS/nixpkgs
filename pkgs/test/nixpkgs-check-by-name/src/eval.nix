@@ -35,6 +35,23 @@ let
       else
         # It's very rare that callPackage doesn't return an attribute set, but it can occur.
         variantInfo;
+
+    _internalCallByNamePackageFile = file:
+      let
+        result = super._internalCallByNamePackageFile file;
+        variantInfo._attributeVariant = {
+          # This name is used by the deserializer on the Rust side
+          AutoCalled = null;
+        };
+      in
+      if builtins.isAttrs result then
+        # If this was the last overlay to be applied, we could just only return the `_callPackagePath`,
+        # but that's not the case because stdenv has another overlays on top of user-provided ones.
+        # So to not break the stdenv build we need to return the mostly proper result here
+        result // variantInfo
+      else
+        # It's very rare that callPackage doesn't return an attribute set, but it can occur.
+        variantInfo;
   };
 
   pkgs = import nixpkgsPath {
