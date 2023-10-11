@@ -269,4 +269,26 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
     rocmlir = rocmlir-rock;
   };
+
+  ## GPUOpen-ProfessionalCompute-Libraries ##
+  rpp = callPackage ./rpp {
+    inherit rocmUpdateScript rocm-cmake rocm-docs-core clr half;
+    inherit (llvm) openmp;
+    stdenv = llvm.rocmClangStdenv;
+  };
+
+  rpp-hip = rpp.override {
+    useOpenCL = false;
+    useCPU = false;
+  };
+
+  rpp-opencl = rpp.override {
+    useOpenCL = true;
+    useCPU = false;
+  };
+
+  rpp-cpu = rpp.override {
+    useOpenCL = false;
+    useCPU = true;
+  };
 }
