@@ -58,7 +58,8 @@ An attribute set with these values:
 
 - `_internalBase` (path):
   Any files outside of this path cannot influence the set of files.
-  This is always a directory.
+  This is always a directory and should be as long as possible.
+  This is used by `lib.fileset.toSource` to check that all files are under the `root` argument
 
 - `_internalBaseRoot` (path):
   The filesystem root of `_internalBase`, same as `(lib.path.splitRoot _internalBase).root`.
@@ -172,7 +173,8 @@ Arguments:
 
 ### Empty directories
 
-File sets can only represent a _set_ of local files, directories on their own are not representable.
+File sets can only represent a _set_ of local files.
+Directories on their own are not representable.
 
 Arguments:
 - (+) There does not seem to be a sensible set of combinators when directories can be represented on their own.
