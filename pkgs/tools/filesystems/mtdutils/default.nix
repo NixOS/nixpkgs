@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchgit {
     url = "git://git.infradead.org/mtd-utils.git";
     rev = "v${version}";
-    sha256 = "sha256-Ph9Xjb2Nyo7l3T1pDgW2gnSJxn0pOC6uvCGUfCh0MXU=";
+    sha256 = "sha256-NMYzUPt/91lv8f7E1ytX91SqwbBEOtHjCL54EcumcZA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
