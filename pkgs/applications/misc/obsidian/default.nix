@@ -29,8 +29,8 @@ let
   };
 
   icon = fetchurl {
-    url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
-    hash = "sha256-EZsBuWyZ9zYJh0LDKfRAMTtnY70q6iLK/ggXlplDEoA=";
+    url = "https://forum.obsidian.md/uploads/default/original/3X/9/f/9f1b5b46aed533f5386cf276ab2cdce48cbd2e25.png";
+    hash = "sha256-GujZZXexbv7aYCzZ7uRvX1uhOQ7vU9+SaGc4ht0qzhI=";
   };
 
   desktopItem = makeDesktopItem {
@@ -59,7 +59,7 @@ let
         -t $out/share/applications/
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        convert -background none -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
+        convert -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
       done
       runHook postInstall
     '';
