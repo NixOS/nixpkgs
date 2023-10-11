@@ -11,7 +11,7 @@
 , translationstring
 , venusian
 , webob
-, zope_deprecation
+, zope-deprecation
 , zope_interface
 , pythonOlder
 }:
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     translationstring
     venusian
     webob
-    zope_deprecation
+    zope-deprecation
     zope_interface
   ];
 
