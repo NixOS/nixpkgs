@@ -1828,6 +1828,8 @@ with pkgs;
 
   godspeed = callPackage ../tools/networking/godspeed { };
 
+  goodhosts = callPackage ../tools/networking/goodhosts { };
+
   goose = callPackage ../tools/misc/goose { };
 
   gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
