@@ -2,8 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , sphinx
-, pytest
-,
+, pytestCheckHook
 }:
 let
   pname = "sphinx-sitemap";
@@ -11,6 +10,7 @@ let
 in
 buildPythonPackage {
   inherit pname version;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,13 +22,14 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "--fixtures tests"
   ];
 
   doCheck = true;
-  checkPhase = ''
-    pytest --fixtures tests
-  '';
 
   meta = with lib; {
     changelog = "https://github.com/jdillard/sphinx-sitemap/releases/tag/v${version}";
