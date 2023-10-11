@@ -56,11 +56,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mupdf";
-  version = "1.23.0";
+  version = "1.23.4";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/mupdf-${finalAttrs.version}-source.tar.gz";
-    hash = "sha256-3kFAaS5pMULDEeAwrBVuOO4XXXq2wb4QxcmuljhGFk4=";
+    hash = "sha256-3rA0ej+c4JZ2EdR5qKB7V+LHMLCq8J3OKO5Bq7msSDg=";
   };
 
   patches = [
