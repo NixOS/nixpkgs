@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, pythonOlder
 , setuptools
 , zope_event
 , zope_interface
@@ -9,13 +9,15 @@
 
 buildPythonPackage rec {
   pname = "zope-lifecycleevent";
-  version = "4.4";
+  version = "5.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "zope.lifecycleevent";
     inherit version;
-    hash = "sha256-9ahU6J/5fe6ke/vqN4u77yeJ0uDMkKHB2lfZChzmfLU=";
+    hash = "sha256-6tP7SW52FPm1adFtrUt4BSsKwhh1utjWbKNQNS2bb50=";
   };
 
   nativeBuildInputs = [
@@ -27,8 +29,7 @@ buildPythonPackage rec {
   # namespace colides with local directory
   doCheck = false;
 
-  # zope uses pep 420 namespaces for python3, doesn't work with nix + python2
-  pythonImportsCheck = lib.optionals isPy3k [
+  pythonImportsCheck = [
     "zope.lifecycleevent"
     "zope.interface"
   ];
