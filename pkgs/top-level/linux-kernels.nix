@@ -205,14 +205,6 @@ in {
       ];
     };
 
-    linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
-    };
-
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
     zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
@@ -628,8 +620,6 @@ in {
     linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
 
-    hardkernel_4_14 = recurseIntoAttrs (packagesFor kernels.linux_hardkernel_4_14);
-
     linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
     linux_latest_libre = recurseIntoAttrs (packagesFor kernels.linux_latest_libre);
@@ -647,7 +637,6 @@ in {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;
-    linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
