@@ -29,6 +29,13 @@ in {
         default = 8080;
         description = lib.mdDoc "The port of the Shiori web application";
       };
+
+      webRoot = mkOption {
+        type = types.str;
+        default = "/";
+        example = "/shiori";
+        description = lib.mdDoc "The root of the Shiori web application";
+      };
     };
   };
 
@@ -40,7 +47,7 @@ in {
       environment.SHIORI_DIR = "/var/lib/shiori";
 
       serviceConfig = {
-        ExecStart = "${package}/bin/shiori serve --address '${address}' --port '${toString port}'";
+        ExecStart = "${package}/bin/shiori serve --address '${address}' --port '${toString port}' --webroot '${webRoot}'";
 
         DynamicUser = true;
         StateDirectory = "shiori";
