@@ -1,0 +1,22 @@
+From e1f212477b16c4857b55bf19e9b78382240dffa0 Mon Sep 17 00:00:00 2001
+From: Pol Dellaiera <pol.dellaiera@protonmail.com>
+Date: Wed, 11 Oct 2023 21:52:57 +0200
+Subject: [PATCH] udev: update udev rule, add `group` and `mode`
+
+---
+ 55-projecteur.rules.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/55-projecteur.rules.in b/55-projecteur.rules.in
+index aff6749..9b3e5ad 100644
+--- a/55-projecteur.rules.in
++++ b/55-projecteur.rules.in
+@@ -17,4 +17,4 @@ SUBSYSTEMS=="input", ENV{LIBINPUT_DEVICE_GROUP}="5/46d/b503*", ATTRS{name}=="SPO
+ 
+ # Rules for uninput: Essential for creating a virtual input device that 
+ # Projecteur use for forwarding device events to the system after grabbing it
+-KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"
++KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput", GROUP="input", MODE="0660"
+-- 
+2.42.0
+

@@ -13,6 +13,12 @@ mkDerivation rec {
     sha256 = "sha256-kg6oYtJ4H5A6RNATBg+XvMfCb9FlhEBFjfxamGosMQg=";
   };
 
+  patches = [
+    # Add a patch to update the udev rule.
+    # This patch can be removed when this PR land: https://github.com/jahnf/Projecteur/pull/204
+    ./0001-udev-update-udev-rule-add-group-and-mode.patch
+  ];
+
   postPatch = ''
     sed '1i#include <array>' -i src/device.h # gcc12
   '';
