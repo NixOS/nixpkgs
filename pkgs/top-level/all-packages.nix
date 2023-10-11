@@ -430,7 +430,7 @@ with pkgs;
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
-  catppuccin-bat = callPackage ../data/themes/catppuccin-bat { };
+  catppuccin = callPackage ../data/themes/catppuccin { };
 
   catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
 

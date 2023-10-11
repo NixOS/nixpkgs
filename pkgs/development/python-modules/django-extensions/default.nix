@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , django
-, factory_boy
+, factory-boy
 , mock
 , pip
 , pygments
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     mock
     pip
     pygments # not explicitly declared in setup.py, but some tests require it

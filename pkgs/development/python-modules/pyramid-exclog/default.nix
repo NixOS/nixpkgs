@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyramid_exclog";
+  pname = "pyramid-exclog";
   version = "1.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pyramid_exclog";
+    inherit version;
     hash = "sha256-Tl2rYH/GifNfB9w4nG9UIqAQz0O6kujCED/4iZnPKDw=";
   };
 
