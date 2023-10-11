@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "tyxml";
-  version = "4.5.0";
+  version = "4.6.0";
 
   useDune2 = true;
 
   src = fetchurl {
     url = "https://github.com/ocsigen/tyxml/releases/download/${version}/tyxml-${version}.tbz";
-    sha256 = "0s30f72m457c3gbdmdwbx7ls9zg806nvm83aiz9qkpglbppwr6n6";
+    sha256 = "sha256-v+tnPGtOEgpOykxIRIrdR9w/jQLCtA9j/9zMTpHJAt0=";
   };
 
   propagatedBuildInputs = [ uutf re ];
