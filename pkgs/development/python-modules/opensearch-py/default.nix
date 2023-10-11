@@ -9,20 +9,25 @@
 , pytestCheckHook
 , pyyaml
 , requests
+, setuptools
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "2.3.1";
-  format = "setuptools";
+  version = "2.3.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-aM3N47GM5ABvkjP+SZ+Uvnoh6eTF6wvAPJ1xR10ohJg=";
+    hash = "sha256-MkrYCi/iz1OqqrwCZknfcZSEyZNPj+CZFiMycJQk+aQ=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     botocore
