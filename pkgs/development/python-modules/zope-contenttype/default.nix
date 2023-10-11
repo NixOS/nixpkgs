@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , setuptools
 , zope_testrunner
 , pytestCheckHook
@@ -8,13 +9,15 @@
 
 buildPythonPackage rec {
   pname = "zope-contenttype";
-  version = "4.6";
+  version = "5.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "zope.contenttype";
     inherit version;
-    hash = "sha256-NnVoeLxSWzY2TQ1b2ZovCw/TuaUND+m73Eqxs4rCOAA=";
+    hash = "sha256-AAHvG2XKZQUZBW3OUwxY0LOWlXzPBQIyPIoVSdtk0xc=";
   };
 
   nativeBuildInputs = [
