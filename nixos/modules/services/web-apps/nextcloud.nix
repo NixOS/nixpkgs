@@ -60,6 +60,8 @@ let
   mysqlLocal = cfg.database.createLocally && cfg.config.dbtype == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.config.dbtype == "pgsql";
 
+  # https://github.com/nextcloud/documentation/pull/11179
+  ocmProviderIsNotAStaticDirAnymore = versionAtLeast cfg.package.version "27.1.2";
 in {
 
   imports = [
@@ -1141,7 +1143,7 @@ in {
           "~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console)".extraConfig = ''
             return 404;
           '';
-          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[ms]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
+          "~ ^\\/(?:index|remote|public|cron|core\\/ajax\\/update|status|ocs\\/v[12]|updater\\/.+|oc[${optionalString (!ocmProviderIsNotAStaticDirAnymore) "m"}s]-provider\\/.+|.+\\/richdocumentscode\\/proxy)\\.php(?:$|\\/)" = {
             priority = 500;
             extraConfig = ''
               include ${config.services.nginx.package}/conf/fastcgi.conf;
@@ -1164,7 +1166,7 @@ in {
             expires 6M;
             access_log off;
           '';
-          "~ ^\\/(?:updater|ocs-provider|ocm-provider)(?:$|\\/)".extraConfig = ''
+          "~ ^\\/(?:updater|ocs-provider${optionalString (!ocmProviderIsNotAStaticDirAnymore) "|ocm-provider"})(?:$|\\/)".extraConfig = ''
             try_files $uri/ =404;
             index index.php;
           '';
