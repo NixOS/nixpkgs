@@ -343,5 +343,11 @@
       "batime@martin.zurowietz.de",
       "batterytime@typeof.pw"
     ]
+  },
+  "45": {
+    "applications-menu": [
+      "apps-menu@gnome-shell-extensions.gcampax.github.com",
+      "Applications_Menu@rmy.pobox.com"
+    ]
   }
 }
