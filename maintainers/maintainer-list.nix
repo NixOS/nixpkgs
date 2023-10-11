@@ -7442,6 +7442,12 @@
     githubId = 993484;
     name = "Greg Hale";
   };
+  imbearchild = {
+    name = "Nianqing Yao";
+    email = "imbearchild@outlook.com";
+    github = "Nianqing Yao";
+    githubId = 29907700;
+  };
   imgabe = {
     email = "gabrielpmonte@hotmail.com";
     github = "ImGabe";
