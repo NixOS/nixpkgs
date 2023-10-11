@@ -119,7 +119,7 @@ pub fn check_values<W: io::Write>(
 
             if !valid {
                 error_writer.write(&format!(
-                    "pkgs.{package_name}: This attribute is not defined as `pkgs.callPackage {} {{ ... }}`.",
+                    "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}`.",
                     relative_package_file.display()
                 ))?;
                 continue;
