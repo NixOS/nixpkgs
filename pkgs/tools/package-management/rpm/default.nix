@@ -1,91 +1,105 @@
 { stdenv
 , lib
-, pkg-config
+, audit
 , autoreconfHook
-, pandoc
-, fetchurl
-, cpio
-, zlib
 , bzip2
-, file
+, cmake
+, cpio
+, db
+, dbus
 , elfutils
-, libbfd
-, libgcrypt
+, fetchurl
+, file
+, gettext
 , libarchive
+, libbfd
+, libcap
+, libgcrypt
+, libselinux
+, llvmPackages
+, lua
 , nspr
 , nss
+, pandoc
+, pkg-config
 , popt
-, db
-, xz
 , python
-, lua
-, llvmPackages
 , sqlite
+, xz
+, zlib
 , zstd
-, libcap
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: with finalAttrs; {
   pname = "rpm";
-  version = "4.18.1";
+  version = "4.19.0";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/rpm/releases/rpm-${lib.versions.majorMinor version}.x/rpm-${version}.tar.bz2";
-    hash = "sha256-N/O0LAlmlB4q0/EP3jY5gkplkdBxl7qP0IacoHeeH1Y=";
+    hash = "sha256-swkW3BSMvqsHd5fp/DZXApMeOpp+rPcK3YQVO1SbP3c=";
   };
 
   outputs = [ "out" "dev" "man" ];
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
-  buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-    ++ lib.optional stdenv.isLinux libcap;
+  nativeBuildInputs = [
+    cmake
+    gettext
+    pkg-config
+    pandoc
+  ];
+
+  buildInputs = [
+    audit
+    bzip2
+    cpio
+    db
+    dbus
+    file
+    libarchive
+    libgcrypt
+    libselinux
+    lua
+    nspr
+    nss
+    python
+    sqlite
+    xz
+    zlib
+    zstd
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ] ++ lib.optionals stdenv.isLinux [
+    libcap
+  ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
     ++ lib.optional stdenv.isLinux elfutils;
 
+  nativeCheckInputs = [
+    autoconf
+  ];
+
   env.NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
-  configureFlags = [
-    "--with-external-db"
-    "--with-lua"
-    "--enable-python"
-    "--enable-ndb"
-    "--enable-sqlite"
-    "--enable-zstd"
-    "--localstatedir=/var"
-    "--sharedstatedir=/com"
-  ] ++ lib.optional stdenv.isLinux "--with-cap";
-
-  postPatch = ''
-    substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""
-  '';
+  cmakeFlags = [
+    "-DWITH_INTERNAL_OPENPGP=ON"  # TODO: disable and provide `rpm-sequoia` to buildInputs
+    "-DENABLE_PYTHON=OFF"  # TODO: re-enable
+    "-DENABLE_PLUGINS=OFF"  # TODO: re-enable
+    "-DWITH_CAP=${if stdenv.isLinux then "ON" else "OFF"}"
+    "-DENABLE_TESTSUITE=${if doCheck then "ON" else "OFF"}"
+  ];
 
   preFixup = ''
-    # Don't keep a reference to RPM headers or manpages
-    for f in $out/lib/rpm/platform/*/macros; do
-      substituteInPlace $f --replace "$dev" "/rpm-dev-path-was-here"
-      substituteInPlace $f --replace "$man" "/rpm-man-path-was-here"
-    done
-
-    # Avoid macros like '%__ld' pointing to absolute paths
-    for tool in ld nm objcopy objdump strip; do
-      sed -i $out/lib/rpm/macros -e "s/^%__$tool.*/%__$tool $tool/"
-    done
-
     # Avoid helper scripts pointing to absolute paths
-    for tool in find-provides find-requires; do
+    for tool in check-rpaths check-rpaths-worker find-provides find-requires; do
       sed -i $out/lib/rpm/$tool -e "s#/usr/lib/rpm/#$out/lib/rpm/#"
     done
-
-    # symlinks produced by build are incorrect
-    ln -sf $out/bin/{rpm,rpmquery}
-    ln -sf $out/bin/{rpm,rpmverify}
   '';
 
   enableParallelBuilding = true;
+  doCheck = false;  # TODO: remove
 
   meta = with lib; {
     homepage = "https://www.rpm.org/";
@@ -97,4 +111,4 @@ stdenv.mkDerivation rec {
     # This can be re-enables for apple_sdk.version >= 13.0.
     badPlatforms = platforms.darwin;
   };
-}
+})
