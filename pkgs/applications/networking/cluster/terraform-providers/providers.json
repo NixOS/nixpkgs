@@ -952,6 +952,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
+  "project": {
+    "hash": "sha256-MrzuyL0aVOzMuIeJLzH/oElbY6nG0xPG5H0vovBsVgA=",
+    "homepage": "https://registry.terraform.io/providers/jfrog/project",
+    "owner": "jfrog",
+    "repo": "terraform-provider-project",
+    "rev": "v1.3.1",
+    "spdx": "Apache-2.0",
+    "vendorHash": "sha256-AdkyM9Uvv9BLfxex9a+KFom0cV9GrQSVaZ3qw/UehLQ="
+  },
   "rabbitmq": {
     "hash": "sha256-ArteHTNNUxgiBJamnR1bJFDrvNnqjbJ6D3mj1XlpVUA=",
     "homepage": "https://registry.terraform.io/providers/cyrilgdn/rabbitmq",
