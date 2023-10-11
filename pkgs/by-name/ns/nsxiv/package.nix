@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nsxiv";
-  version = "31";
+  version = "32";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "nsxiv";
     repo = "nsxiv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-X1ZMr5OADs9GIe/kp/kEqKMMHZMymd58m9+f0SPzn7s=";
+    hash = "sha256-UWaet7hVtgfuWTiNY4VcsMWTfS6L9r5w1fb/0dWz8SI=";
   };
 
   outputs = [ "out" "man" "doc" ];
