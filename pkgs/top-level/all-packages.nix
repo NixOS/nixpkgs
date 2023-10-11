@@ -34327,7 +34327,6 @@ with pkgs;
     jdk19 = openjdk19.override { enableJavaFX = true; };
   };
 
-  mupdf = callPackage ../applications/misc/mupdf { };
   mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17.nix { };
 
   muso = callPackage ../applications/audio/muso {
