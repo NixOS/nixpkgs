@@ -4,7 +4,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pySmartDL";
+  pname = "pysmartdl";
   version = "1.3.4";
   src = fetchFromGitHub ({
     owner = "iTaybb";
