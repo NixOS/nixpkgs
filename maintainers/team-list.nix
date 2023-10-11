@@ -350,6 +350,7 @@ with lib.maintainers; {
       mic92
       zowoq
       qbit
+      mfrw
     ];
     githubTeams = [
       "golang"
