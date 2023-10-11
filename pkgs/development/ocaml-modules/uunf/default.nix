@@ -5,7 +5,7 @@
 let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";
-  version = "15.0.0";
+  version = "15.1.0";
 in
 
 if lib.versionOlder ocaml.version "4.03"
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "sha256-B/prPAwfqS8ZPS3fyDDIzXWRbKofwOCyCfwvh9veuug=";
+    sha256 = "sha256-D8yvb7hVWaYxMqMZ5089/5tWDfvyGXKUOjhfU/4zSeQ=";
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
