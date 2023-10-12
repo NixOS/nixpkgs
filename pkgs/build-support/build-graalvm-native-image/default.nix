@@ -13,6 +13,7 @@
 , nativeImageBuildArgs ? [
     (lib.optionalString stdenv.isDarwin "-H:-CheckToolchain")
     "-H:Name=${executable}"
+    "-march=compatibility"
     "--verbose"
   ]
   # Extra arguments to be passed to the native-image
