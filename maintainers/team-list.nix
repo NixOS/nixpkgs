@@ -611,6 +611,7 @@ with lib.maintainers; {
 
   minimal-bootstrap = {
     members = [
+      alejandrosame
       artturin
       emilytrau
       ericson2314
