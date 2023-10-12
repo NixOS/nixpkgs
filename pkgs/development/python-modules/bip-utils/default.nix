@@ -10,6 +10,7 @@
 , py-sr25519-bindings
 , cbor2
 , pycryptodome
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -40,6 +41,10 @@ buildPythonPackage rec {
     ed25519-blake2b
     py-sr25519-bindings
     pycryptodome
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
