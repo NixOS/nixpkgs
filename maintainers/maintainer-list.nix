@@ -7206,6 +7206,12 @@
       fingerprint = "731A 7A05 AD8B 3AE5 956A  C227 4A03 18E0 4E55 5DE5";
     }];
   };
+  hubble = {
+    name = "Hubble the Wolverine";
+    matrix = "@hubofeverything:bark.lgbt";
+    github = "the-furry-hubofeverything";
+    githubId = 53921912;
+  };
   hufman = {
     email = "hufman@gmail.com";
     github = "hufman";
