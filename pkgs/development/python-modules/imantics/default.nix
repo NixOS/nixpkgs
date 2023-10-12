@@ -2,10 +2,10 @@
 , fetchFromGitHub
 , lib
 , numpy
-, opencv3
-, sphinx-rtd-theme
+, opencv4
 , lxml
 , xmljson
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -21,8 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    opencv3
-    sphinx-rtd-theme
+    opencv4
     lxml
     xmljson
   ];
@@ -32,8 +31,7 @@ buildPythonPackage rec {
       --replace "'opencv-python>=3'," ""
   '';
 
-  # failing on NixOS
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "imantics" ];
 
