@@ -11290,6 +11290,8 @@ with pkgs;
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
+  panicparse = callPackage ../tools/misc/panicparse {};
+
   panoply = callPackage ../tools/misc/panoply { };
 
   patray = callPackage ../tools/audio/patray { };
