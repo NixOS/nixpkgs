@@ -14,9 +14,9 @@
 buildPythonPackage rec {
   pname = "pyvex";
   version = "9.2.72";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
