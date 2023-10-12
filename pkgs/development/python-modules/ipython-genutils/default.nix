@@ -1,25 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , nose
-, glibcLocales
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ipython-genutils";
   version = "0.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "ipython_genutils";
     inherit version;
-    sha256 = "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8";
+    hash = "sha256-6y4RbnXs751NIo/cZq9UJpr6JqtEYwQuM3hbiHxii6g=";
   };
 
-  nativeCheckInputs = [ nose glibcLocales ];
+  nativeBuildInputs = [
+    setuptools
+  ];
 
-  checkPhase = ''
-    LC_ALL="en_US.UTF-8" nosetests -v ipython_genutils/tests
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    substituteInPlace ipython_genutils/tests/test_path.py \
+      --replace "setUp" "setup_method" \
+      --replace "tearDown" "teardown_method"
   '';
+
+  pythonImportsCheck = [
+    "ipython_genutils"
+  ];
 
   meta = {
     description = "Vestigial utilities from IPython";
