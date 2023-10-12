@@ -33,13 +33,13 @@
 buildPythonPackage rec {
   pname = "angr";
   version = "9.2.72";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "angr";
+    repo = "angr";
     rev = "refs/tags/v${version}";
     hash = "sha256-k36RT6E9Ye5F3dmTWS17D2/k3maXOlHhW6ygklolWjY=";
   };
