@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
-
   pname = "tslib";
   version = "1.22";
 
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.tslib.org";
     description = "C library for filtering touchscreen events";
     license = lib.licenses.lgpl21;
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ liarokapisv ];
   };
 }
