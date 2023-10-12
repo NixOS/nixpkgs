@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, python3
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3
 , libGLU, libepoxy, libX11, libdrm, mesa
 }:
 
@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libGLU libepoxy libX11 libdrm mesa ];
 
-  nativeBuildInputs = [ cmake meson ninja pkg-config python3 ];
-
-  dontUseCmakeConfigure = true;
+  nativeBuildInputs = [ meson ninja pkg-config python3 ];
 
   meta = with lib; {
     description = "A virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
