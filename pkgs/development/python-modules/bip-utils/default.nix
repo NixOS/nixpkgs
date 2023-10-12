@@ -10,11 +10,12 @@
 , py-sr25519-bindings
 , cbor2
 , pycryptodome
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "bip-utils";
-  version = "2.7.0";
+  version = "2.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "ebellocchia";
     repo = "bip_utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m7/CC5/T6qR2Ot4y5WQlzOAR0czz6XHCjJskES+2nns=";
+    hash = "sha256-QrCkLiGBdZTQCnbWSTN0PeoAsQfg2CoSGdZcbhqTvOk=";
   };
 
   postPatch = ''
@@ -40,6 +41,10 @@ buildPythonPackage rec {
     ed25519-blake2b
     py-sr25519-bindings
     pycryptodome
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

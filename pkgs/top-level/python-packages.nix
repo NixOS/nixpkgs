@@ -1438,7 +1438,7 @@ self: super: with self; {
 
   biplist = callPackage ../development/python-modules/biplist { };
 
-  bip_utils = callPackage ../development/python-modules/bip_utils { };
+  bip-utils = callPackage ../development/python-modules/bip-utils { };
 
   bitarray = callPackage ../development/python-modules/bitarray { };
 
