@@ -50,6 +50,8 @@ lib.makeScope newScope (self:
     getdns = callPackage ../development/nim-packages/getdns {
       inherit (pkgs) getdns; };
 
+    gintro = callPackage ../development/nim-packages/gintro { };
+
     hashlib = callPackage ../development/nim-packages/hashlib { };
 
     hts = callPackage ../development/nim-packages/hts { };
