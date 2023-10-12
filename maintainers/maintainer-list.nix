@@ -8174,6 +8174,12 @@
     githubId = 6445082;
     name = "Joseph Lukasik";
   };
+  jgoux = {
+    email = "hi@jgoux.dev";
+    github = "jgoux";
+    githubId = 1443499;
+    name = "Julien Goux";
+  };
   jhh = {
     email = "jeff@j3ff.io";
     github = "jhh";
