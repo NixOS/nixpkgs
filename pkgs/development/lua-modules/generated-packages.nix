@@ -2603,6 +2603,36 @@ buildLuarocksPackage {
   };
 }) {};
 
+nui-nvim = callPackage( { fetchgit, buildLuarocksPackage }:
+buildLuarocksPackage {
+  pname = "nui.nvim";
+  version = "0.2.0-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/nui.nvim-0.2.0-1.rockspec";
+    sha256 = "0v2z6lgl6hrzcjlzhis8nrkdkh9kvx8zg3q5svi5gyklg7vmcbc2";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/MunifTanjim/nui.nvim.git",
+  "rev": "9e3916e784660f55f47daa6f26053ad044db5d6a",
+  "date": "2023-07-20T10:45:09+06:00",
+  "path": "/nix/store/8zdhjgipjjhi9b1y40r2yk5np4lp39as-nui.nvim",
+  "sha256": "14a73dwl56kah9h36b40ir6iylvfs261ysz17qvi9vhp63vjq9cx",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+
+  meta = {
+    homepage = "https://github.com/MunifTanjim/nui.nvim";
+    description = "UI Component Library for Neovim.";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 nvim-client = callPackage({ coxpcall, fetchurl, mpack, lua, luaOlder, luv, buildLuarocksPackage }:
 buildLuarocksPackage {
   pname = "nvim-client";
