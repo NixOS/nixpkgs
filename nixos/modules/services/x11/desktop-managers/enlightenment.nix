@@ -90,7 +90,7 @@ in
         };
     };
 
-    environment.etc."X11/xkb".source = xcfg.xkbDir;
+    environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
     fonts.packages = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 
