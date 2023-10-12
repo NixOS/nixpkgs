@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-4mFn5cY7ipAU4vOiHC2s69fxYJwShQEQ1eA8t5JvOP0=";
   };
 
+  patches = [
+    ./clang.patch
+  ];
+
   nativeBuildInputs = [ perl gettext pkg-config ];
   buildInputs = [ libidn2 libiconv ];
 
