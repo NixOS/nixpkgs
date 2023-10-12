@@ -72,6 +72,7 @@ lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
+luarocks-build-rust-mlua,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
