@@ -3,7 +3,7 @@
 , buildNpmPackage
 , cargo
 , dbus
-, electron_24
+, electron_25
 , fetchFromGitHub
 , glib
 , gnome
@@ -26,7 +26,7 @@ let
   icon = "bitwarden";
 
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
-  electron = electron_24;
+  electron = electron_25;
 
   desktopItem = makeDesktopItem {
     name = "bitwarden";
@@ -38,24 +38,24 @@ let
   };
 in buildNpmPackage' rec {
   pname = "bitwarden";
-  version = "2023.9.0";
+  version = "2023.9.3";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-8rNJmDpKLzTre5c2wktle7tthp1owZK5WAQP80/2R0g=";
+    hash = "sha256-NiMJmtCx+yD24BCyMgHLpRApNwoIJRps5qmmlVdB0G0=";
   };
 
   makeCacheWritable = true;
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-0q3XoC87kfC2PYMsNse4DV8M8OXjckiLTdN3LK06lZY=";
+  npmDepsHash = "sha256-HQPxmATA9bUc4NTfvYsL6fGuicU9baySCmNHahs8EF4=";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-YF3UHQWCSuWAg2frE8bo1XrLn44P6+1A7YUh4RZxwo0=";
+    hash = "sha256-mFxvK9cmSBRVnUwEbzADUa5W5TCL51wcUHxuR5JZwLE=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
