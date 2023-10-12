@@ -2623,8 +2623,6 @@ with pkgs;
     SDL = if stdenv.isDarwin then SDL else SDL_compat;
   };
 
-  dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
-
   dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
     inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
   };
@@ -3009,17 +3007,11 @@ with pkgs;
 
   foot = callPackage ../applications/terminal-emulators/foot { };
 
-  germinal = callPackage ../applications/terminal-emulators/germinal { };
-
   guake = callPackage ../applications/terminal-emulators/guake { };
-
-  havoc = callPackage ../applications/terminal-emulators/havoc { };
 
   hyper = callPackage ../applications/terminal-emulators/hyper { };
 
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 { };
-
-  kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     go = go_1_21;
@@ -3090,10 +3082,6 @@ with pkgs;
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
   termonad = callPackage ../applications/terminal-emulators/termonad { };
-
-  tilda = callPackage ../applications/terminal-emulators/tilda {
-    gtk = gtk3;
-  };
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
@@ -4271,8 +4259,6 @@ with pkgs;
 
   bar = callPackage ../tools/system/bar { };
 
-  base16-shell-preview = callPackage ../misc/base16-shell-preview { };
-
   base16-builder = callPackage ../misc/base16-builder { };
 
   basex = callPackage ../tools/text/xml/basex { };
@@ -4292,10 +4278,6 @@ with pkgs;
   barcode = callPackage ../tools/graphics/barcode { };
 
   bashmount = callPackage ../tools/filesystems/bashmount { };
-
-  bat = callPackage ../tools/misc/bat {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
 
@@ -5856,7 +5838,7 @@ with pkgs;
 
   lexend = callPackage ../data/fonts/lexend { };
 
-  lexicon = callPackage ../tools/admin/lexicon { };
+  lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
   lenpaste = callPackage ../servers/lenpaste { };
 
@@ -8902,8 +8884,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  robodoc = callPackage ../tools/text/robodoc { };
-
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
   groff = callPackage ../tools/text/groff { };
@@ -11364,8 +11344,6 @@ with pkgs;
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk { };
 
-  nickel = callPackage ../development/interpreters/nickel { };
-
   npiet = callPackage ../development/interpreters/npiet { };
 
   npth = callPackage ../development/libraries/npth { };
@@ -12011,6 +11989,8 @@ with pkgs;
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   peco = callPackage ../tools/text/peco { };
+
+  percollate = callPackage ../tools/text/percollate { };
 
   pg_activity = callPackage ../development/tools/database/pg_activity { };
 
@@ -12669,10 +12649,6 @@ with pkgs;
 
   rlci = callPackage ../development/interpreters/rlci { };
 
-  rs = callPackage ../tools/text/rs { };
-
-  rst2html5 = callPackage ../tools/text/rst2html5 { };
-
   rst2pdf = with python3Packages; toPythonApplication rst2pdf;
 
   rstcheck = with python3Packages; toPythonApplication rstcheck;
@@ -13025,8 +13001,6 @@ with pkgs;
   scorecard = callPackage ../tools/security/scorecard { };
 
   scream = callPackage ../applications/audio/scream { };
-
-  scimark = callPackage ../misc/scimark { };
 
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
@@ -14216,8 +14190,6 @@ with pkgs;
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
 
   twurl = callPackage ../tools/misc/twurl { };
-
-  txr = callPackage ../tools/text/txr { };
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
@@ -18413,8 +18385,6 @@ with pkgs;
     nix = nixVersions.nix_2_16;
   };
 
-  nls = callPackage ../development/tools/language-servers/nls { };
-
   openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
 
   perlnavigator = callPackage ../development/tools/language-servers/perlnavigator { };
@@ -18610,9 +18580,7 @@ with pkgs;
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = callPackage ../development/tools/bazel-watcher {
-    go = go_1_18;
-  };
+  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
   bazel-gazelle = callPackage ../development/tools/bazel-gazelle { };
 
@@ -24579,10 +24547,6 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
-  pyp = callPackage ../tools/text/pyp { };
-
-  pru = callPackage ../tools/text/pru { };
-
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf3_24;
@@ -27054,7 +27018,9 @@ with pkgs;
   OVMF = callPackage ../applications/virtualization/OVMF { };
   OVMFFull = callPackage ../applications/virtualization/OVMF {
     secureBoot = true;
-    csmSupport = true;
+    # CSM support is a BIOS emulation mechanism,
+    # SeaBIOS is only available on x86.
+    csmSupport = stdenv.hostPlatform.isx86;
     httpSupport = true;
     tpmSupport = true;
   };
@@ -27149,6 +27115,7 @@ with pkgs;
   prometheus-graphite-exporter = callPackage ../servers/monitoring/prometheus/graphite-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-idrac-exporter = callPackage ../servers/monitoring/prometheus/idrac-exporter.nix { };
+  prometheus-imap-mailstat-exporter = callPackage ../servers/monitoring/prometheus/imap-mailstat-exporter.nix { };
   prometheus-influxdb-exporter = callPackage ../servers/monitoring/prometheus/influxdb-exporter.nix { };
   prometheus-ipmi-exporter = callPackage ../servers/monitoring/prometheus/ipmi-exporter.nix { };
   prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
@@ -28906,9 +28873,7 @@ with pkgs;
     buildBarebox
     bareboxTools;
 
-  uclibc-ng = callPackage ../os-specific/linux/uclibc-ng { };
-
-  uclibc-ng-cross = callPackage ../os-specific/linux/uclibc-ng {
+  uclibc-ng-cross = uclibc-ng.override {
     stdenv = crossLibcStdenv;
   };
 
@@ -30560,8 +30525,6 @@ with pkgs;
   jnetmap = callPackage ../applications/networking/jnetmap { };
 
   jxplorer  = callPackage ../applications/networking/jxplorer {};
-
-  join-desktop = callPackage ../applications/misc/join-desktop { };
 
   joincap = callPackage ../tools/security/joincap { };
 
@@ -32481,8 +32444,6 @@ with pkgs;
     wxGTK = wxGTK32;
   };
 
-  haunt = callPackage ../applications/misc/haunt { };
-
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
   hugo = callPackage ../applications/misc/hugo { };
@@ -34328,7 +34289,7 @@ with pkgs;
   };
 
   mupdf = callPackage ../applications/misc/mupdf { };
-  mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17.nix { };
+  mupdf_1_17 = callPackage ../applications/misc/mupdf/1.17 { };
 
   muso = callPackage ../applications/audio/muso {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -35402,7 +35363,7 @@ with pkgs;
     imlib2 = imlib2Full;
   };
 
-  nsxiv = callPackage ../applications/graphics/nsxiv {
+  nsxiv = callPackage ../by-name/ns/nsxiv/package.nix {
     imlib2 = imlib2Full;
   };
 
@@ -36813,8 +36774,6 @@ with pkgs;
   };
 
   xscope = callPackage ../applications/misc/xscope { };
-
-  xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
 
   xsubfind3r = callPackage ../tools/security/xsubfind3r {  };
 
@@ -41136,8 +41095,6 @@ with pkgs;
   snscrape = with python3Packages; toPythonApplication snscrape;
 
   soundmodem = callPackage ../applications/radio/soundmodem { };
-
-  sound-of-sorting = callPackage ../misc/sound-of-sorting { };
 
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;
