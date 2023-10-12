@@ -15,7 +15,7 @@
 , nose
 , numba
 , numpy
-, opencv3
+, opencv4
 , pandas
 , pims
 , pyqt5
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    opencv3
+    opencv4
     pyqt5
     pyqtgraph
     numpy
