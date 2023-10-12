@@ -95,7 +95,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = [ "fortify" "stackprotector" "pie" "relro" "bindnow" ];
 
   doCheck = true;
   enableParallelChecking = false;
