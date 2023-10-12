@@ -19257,6 +19257,13 @@
     github = "YorikSar";
     githubId = 428074;
   };
+  YoshiRulz = {
+    name = "YoshiRulz";
+    email = "OSSYoshiRulz+Nixpkgs@gmail.com";
+    matrix = "@YoshiRulz:matrix.org";
+    github = "YoshiRulz";
+    githubId = 13409956;
+  };
   yrashk = {
     email = "yrashk@gmail.com";
     github = "yrashk";
