@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gromit-mpx";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "bk138";
     repo = "gromit-mpx";
     rev = version;
-    sha256 = "sha256-nbSyWcccu07FZbvOESFhlnuxgTNgJ+/6ujVQvEyQGGo=";
+    sha256 = "sha256-I2/9zRKpMkiB0IhnYuOrJHp4nNyG6pfful5D7OqCILQ=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
