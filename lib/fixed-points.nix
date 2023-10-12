@@ -3,12 +3,16 @@ rec {
   /*
     `fix f` computes the fixed point of the given function `f`. In other words, the return value is `x` in `x = f x`.
 
-    `f` is usually returns an attribute set that expects its final, non-recursive representation as an argument.
     `f` must be a lazy function.
+    This means that `x` must be a value that can be partially evaluated,
+    such as an attribute set, a list, or a function.
+    This way, `f` can use one part of `x` to compute another part.
 
-    **How it works**
+    **Relation to syntactic recursion**
 
-    For context, Nix lets you define attribute set values in terms of other attributes using the `rec { }` attribute set literal syntax.
+    This section explains `fix` by refactoring from syntactic recursion to a call of `fix` instead.
+
+    For context, Nix lets you define attributes in terms of other attributes syntactically using the [`rec { }` syntax](https://nixos.org/manual/nix/stable/language/constructs.html#recursive-sets).
 
     ```nix
     nix-repl> rec {
@@ -19,7 +23,8 @@ rec {
     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
     ```
 
-    This is convenient when constructing a value to pass to a function for example, but a similar effect can be achieved with a `let` binding:
+    This is convenient when constructing a value to pass to a function for example,
+    but an equivalent effect can be achieved with the `let` binding syntax:
 
     ```nix
     nix-repl> let self = {
@@ -30,7 +35,7 @@ rec {
     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
     ```
 
-    `let` bindings are nice, but as it is with `let` bindings in general, we may get more reuse out of the code by defining a function.
+    But in general you can get more reuse out of `let` bindings by refactoring them to a function.
 
     ```nix
     nix-repl> f = self: {
@@ -40,27 +45,32 @@ rec {
     }
     ```
 
-    This is where `fix` comes in. Note that the body of the `fix` function
-    looks a lot like our earlier `let` binding, and that's no coincidence.
-    Fix is no more than such a recursive `let` binding, but with everything
-    except the recursion factored out into a function parameter `f`.
+    This is where `fix` comes in, it contains the syntactic that's not in `f` anymore.
 
     ```nix
-    fix = f:
+    nix-repl> fix = f:
       let self = f self; in self;
     ```
 
-    So applying `fix` is another way to express our earlier examples.
+    By applying `fix` we get the final result.
 
-    ```
+    ```nix
     nix-repl> fix f
     { bar = "bar"; foo = "foo"; foobar = "foobar"; }
     ```
 
-    This example did not _need_ `fix`, and arguably it shouldn't be used in such an example.
-    However, `fix` is useful when your `f` is a parameter, or when it is constructed from higher order functions.
+    Such a refactored `f` using `fix` is not useful by itself.
+    See [`extends`](#function-library-lib.fixedPoints.extends) for an example use case.
+    There `self` is also often called `final`.
 
     Type: fix :: (a -> a) -> a
+
+    Example:
+      fix (self: { foo = "foo"; bar = "bar"; foobar = self.foo + self.bar; })
+      => { bar = "bar"; foo = "foo"; foobar = "foobar"; }
+
+      fix (self: [ 1 2 (elemAt self 0 + elemAt self 1) ])
+      => [ 1 2 3 ]
   */
   fix = f: let x = f x; in x;
 
