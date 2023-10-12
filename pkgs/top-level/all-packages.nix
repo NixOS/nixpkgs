@@ -24689,6 +24689,7 @@ with pkgs;
     physfs;
 
   pico-sdk = callPackage ../development/libraries/pico-sdk { };
+  pico-sdk-minimal = pico-sdk.override { minimal = true; };
 
   pinocchio = callPackage ../development/libraries/pinocchio { };
 
