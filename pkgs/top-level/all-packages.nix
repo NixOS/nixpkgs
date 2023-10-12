@@ -20306,6 +20306,8 @@ with pkgs;
 
   trellis = callPackage ../development/embedded/fpga/trellis { };
 
+  ttags = callPackage ../development/tools/misc/ttags { };
+
   ttyd = callPackage ../servers/ttyd { };
 
   turbogit = callPackage ../development/tools/turbogit {
