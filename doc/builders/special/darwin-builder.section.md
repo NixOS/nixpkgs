@@ -157,3 +157,17 @@ in the example below and rebuild.
 You may make any other changes to your VM in this attribute set. For example,
 you could enable Docker or X11 forwarding to your Darwin host.
 
+## Troubleshooting the generated configuration {#sec-darwin-builder-troubleshoot}
+
+The `linux-builder` package exposes the attributes `nixosConfig` and `nixosOptions` that allow you to inspect the generated NixOS configuration in the `nix repl`. For example:
+
+```
+$ nix repl --file ~/src/nixpkgs --argstr system aarch64-darwin
+
+nix-repl> darwin.linux-builder.nixosConfig.nix.package
+«derivation /nix/store/...-nix-2.17.0.drv»
+
+nix-repl> :p darwin.linux-builder.nixosOptions.virtualisation.memorySize.definitionsWithLocations
+[ { file = "/home/user/src/nixpkgs/nixos/modules/profiles/macos-builder.nix"; value = 3072; } ]
+
+```
