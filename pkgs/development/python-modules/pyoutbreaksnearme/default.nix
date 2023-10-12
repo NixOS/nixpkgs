@@ -16,9 +16,9 @@
 buildPythonPackage rec {
   pname = "pyoutbreaksnearme";
   version = "2023.10.0";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
