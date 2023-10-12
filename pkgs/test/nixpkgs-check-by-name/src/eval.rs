@@ -1,5 +1,6 @@
 use crate::structure;
 use crate::utils::ErrorWriter;
+use crate::Version;
 use std::path::Path;
 
 use anyhow::Context;
@@ -13,8 +14,25 @@ use tempfile::NamedTempFile;
 /// Attribute set of this structure is returned by eval.nix
 #[derive(Deserialize)]
 struct AttributeInfo {
-    call_package_path: Option<PathBuf>,
+    variant: AttributeVariant,
     is_derivation: bool,
+}
+
+#[derive(Deserialize)]
+enum AttributeVariant {
+    /// The attribute is auto-called as pkgs.callPackage using pkgs/by-name,
+    /// and it is not overridden by a definition in all-packages.nix
+    AutoCalled,
+    /// The attribute is defined as a pkgs.callPackage <path> <args>,
+    /// and overridden by all-packages.nix
+    CallPackage {
+        /// The <path> argument or None if it's not a path
+        path: Option<PathBuf>,
+        /// true if <args> is { }
+        empty_arg: bool,
+    },
+    /// The attribute is not defined as pkgs.callPackage
+    Other,
 }
 
 const EXPR: &str = include_str!("eval.nix");
@@ -23,6 +41,7 @@ const EXPR: &str = include_str!("eval.nix");
 /// of the form `callPackage <package_file> { ... }`.
 /// See the `eval.nix` file for how this is achieved on the Nix side
 pub fn check_values<W: io::Write>(
+    version: Version,
     error_writer: &mut ErrorWriter<W>,
     nixpkgs: &structure::Nixpkgs,
     eval_accessible_paths: Vec<&Path>,
@@ -97,16 +116,29 @@ pub fn check_values<W: io::Write>(
         let absolute_package_file = nixpkgs.path.join(&relative_package_file);
 
         if let Some(attribute_info) = actual_files.get(package_name) {
-            let is_expected_file =
-                if let Some(call_package_path) = &attribute_info.call_package_path {
-                    absolute_package_file == *call_package_path
-                } else {
-                    false
-                };
+            let valid = match &attribute_info.variant {
+                AttributeVariant::AutoCalled => true,
+                AttributeVariant::CallPackage { path, empty_arg } => {
+                    let correct_file = if let Some(call_package_path) = path {
+                        absolute_package_file == *call_package_path
+                    } else {
+                        false
+                    };
+                    // Only check for the argument to be non-empty if the version is V1 or
+                    // higher
+                    let non_empty = if version >= Version::V1 {
+                        !empty_arg
+                    } else {
+                        true
+                    };
+                    correct_file && non_empty
+                }
+                AttributeVariant::Other => false,
+            };
 
-            if !is_expected_file {
+            if !valid {
                 error_writer.write(&format!(
-                    "pkgs.{package_name}: This attribute is not defined as `pkgs.callPackage {} {{ ... }}`.",
+                    "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}` with a non-empty second argument.",
                     relative_package_file.display()
                 ))?;
                 continue;
