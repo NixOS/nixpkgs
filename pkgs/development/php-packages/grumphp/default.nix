@@ -2,11 +2,11 @@
 
 mkDerivation (finalAttrs: {
   pname = "grumphp";
-  version = "1.15.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/phpro/grumphp/releases/download/v${finalAttrs.version}/grumphp.phar";
-    sha256 = "sha256-EqzJb7DYZb7PnebErLVI/EZLxj0m26cniZlsu1feif0=";
+    sha256 = "sha256-7HoikoxhMGivMD7HH+L1b+o9Wi4bU5npFJbVxAcqNqc=";
   };
 
   dontUnpack = true;
