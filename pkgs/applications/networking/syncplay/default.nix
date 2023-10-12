@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildPythonApplication
 , fetchpatch
+, pem
 , pyside6
 , twisted
 , certifi
@@ -30,10 +31,11 @@ buildPythonApplication rec {
       url = "https://github.com/Syncplay/syncplay/commit/b62b038cdf58c54205987dfc52ebf228505ad03b.patch";
       hash = "sha256-pSP33Qn1I+nJBW8T1E1tSJKRh5OnZMRsbU+jr5z4u7c=";
     })
+    ./trusted_certificates.patch
   ];
 
   buildInputs = lib.optionals enableGUI [ (if stdenv.isLinux then qt6.qtwayland else qt6.qtbase) ];
-  propagatedBuildInputs = [ twisted certifi ]
+  propagatedBuildInputs = [ certifi pem twisted ]
     ++ twisted.optional-dependencies.tls
     ++ lib.optional enableGUI pyside6
     ++ lib.optional (stdenv.isDarwin && enableGUI) appnope;

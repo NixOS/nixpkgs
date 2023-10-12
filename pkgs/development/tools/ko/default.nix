@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "ko";
-  version = "0.13.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-KVJqqvp46BAUscG5Xj/g4ThUXKFsuJdzEB++uBskFiw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jBysfeoZ9W94c07xFODBASrWGJbZRHsUODfEul9f4Ug=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -24,6 +24,11 @@ buildGoModule rec {
   subPackages = ".";
 
   ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
+
+  checkFlags = [
+    # requires docker daemon
+    "-skip=TestNewPublisherCanPublish"
+  ];
 
   nativeCheckInputs = [ git ];
   preCheck = ''

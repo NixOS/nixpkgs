@@ -7,7 +7,6 @@
 , flac
 , libogg
 , libvorbis
-, grpcSupport ? false, grpc, which
 , iceSupport ? true, zeroc-ice
 , jackSupport ? false, libjack2
 , pipewireSupport ? true, pipewire
@@ -100,12 +99,10 @@ let
         "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
         "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
         "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
-      ]
-      ++ lib.optional grpcSupport "-D grpc=ON";
+      ];
 
     buildInputs = [ libcap ]
-      ++ lib.optional iceSupport zeroc-ice
-      ++ lib.optionals grpcSupport [ grpc which ];
+      ++ lib.optional iceSupport zeroc-ice;
   } source;
 
   source = rec {

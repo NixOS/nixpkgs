@@ -55,7 +55,6 @@ in {
         intel2200BGFirmware
         rtl8192su-firmware
         rt5677-firmware
-        rtl8723bs-firmware
         rtl8761b-firmware
         rtw88-firmware
         zd1211fw
@@ -70,7 +69,7 @@ in {
     })
     (mkIf cfg.enableAllFirmware {
       assertions = [{
-        assertion = !cfg.enableAllFirmware || config.nixpkgs.config.allowUnfree;
+        assertion = !cfg.enableAllFirmware || pkgs.config.allowUnfree;
         message = ''
           the list of hardware.enableAllFirmware contains non-redistributable licensed firmware files.
             This requires nixpkgs.config.allowUnfree to be true.

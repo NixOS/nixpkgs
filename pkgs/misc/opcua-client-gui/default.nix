@@ -1,22 +1,32 @@
 { lib
-, python3
+, stdenv
+, python3Packages
 , fetchFromGitHub
 , makeDesktopItem
 , copyDesktopItems
+, desktopToDarwinBundle
+, wrapQtAppsHook
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "opcua-client-gui";
   version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "FreeOpcUa";
-    repo = pname;
+    repo = "opcua-client-gui";
     rev = version;
     hash = "sha256-0BH1Txr3z4a7iFcsfnovmBUreXMvIX2zpZa8QivQVx8=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [ copyDesktopItems wrapQtAppsHook ]
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     pyqt5
     asyncua
     opcua-widgets
@@ -43,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "OPC UA GUI Client";
     homepage = "https://github.com/FreeOpcUa/opcua-client-gui";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ janik ];
   };

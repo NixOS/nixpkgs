@@ -42,8 +42,7 @@ let
     ];
 
   defaultPackageNames =
-    [ "nano"
-      "perl"
+    [ "perl"
       "rsync"
       "strace"
     ];
@@ -116,8 +115,14 @@ in
       extraOutputsToInstall = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        example = [ "doc" "info" "devdoc" ];
-        description = lib.mdDoc "List of additional package outputs to be symlinked into {file}`/run/current-system/sw`.";
+        example = [ "dev" "info" ];
+        description = lib.mdDoc ''
+          Entries listed here will be appended to the `meta.outputsToInstall` attribute for each package in `environment.systemPackages`, and the files from the corresponding derivation outputs symlinked into {file}`/run/current-system/sw`.
+
+          For example, this can be used to install the `dev` and `info` outputs for all packages in the system environment, if they are available.
+
+          To use specific outputs instead of configuring them globally, select the corresponding attribute on the package derivation, e.g. `libxml2.dev` or `coreutils.info`.
+        '';
       };
 
       extraSetup = mkOption {

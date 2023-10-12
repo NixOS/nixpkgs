@@ -1,11 +1,16 @@
-{ lib, version, buildPlatform, hostPlatform, targetPlatform
+{ lib
+, stdenv
+, version, buildPlatform, hostPlatform, targetPlatform
 , gnat-bootstrap ? null
 , langAda ? false
+, langFortran
 , langJava ? false
 , langJit ? false
 , langGo
-, crossStageStatic
+, withoutTargetLibc
+, enableShared
 , enableMultilib
+, pkgsBuildTarget
 }:
 
 assert langJava -> lib.versionOlder version "7";
@@ -22,6 +27,15 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export lib=$out;
 '' + lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
+''
+
+# For a cross-built native compiler, i.e. build!=(host==target), the
+# bundled libgfortran needs a gfortran which can run on the
+# buildPlatform and emit code for the targetPlatform.  The compiler
+# which is built alongside gfortran in this configuration doesn't
+# meet that need: it runs on the hostPlatform.
++ lib.optionalString (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform)) ''
+  export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
 ''
 
 # On x86_64-darwin, the gnat-bootstrap bootstrap compiler that we need to build a
@@ -69,7 +83,7 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # This fix would not be necessary if ANY of the above were false:
 #  - If Nix used native headers for each different MacOS version, aligned_alloc
 #    would be in the headers on Catalina.
-#  - If Nix used the same libary binaries for each MacOS version, aligned_alloc
+#  - If Nix used the same library binaries for each MacOS version, aligned_alloc
 #    would not be in the library binaries.
 #  - If Catalina did not include aligned_alloc, this wouldn't be a problem.
 #  - If the configure scripts looked for header presence as well as
@@ -77,8 +91,12 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 #  - If GCC allowed implicit declaration of symbols, it would not fail during
 #    compilation even if the configure scripts did not check header presence.
 #
-+ lib.optionalString (hostPlatform.isDarwin) ''
-  export ac_cv_func_aligned_alloc=no
++ lib.optionalString (buildPlatform.isDarwin) ''
+    export build_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (hostPlatform.isDarwin) ''
+    export host_configargs=ac_cv_func_aligned_alloc=no
+'' + lib.optionalString (targetPlatform.isDarwin) ''
+    export target_configargs=ac_cv_func_aligned_alloc=no
 ''
 
 # In order to properly install libgccjit on macOS Catalina, strip(1)
@@ -98,23 +116,14 @@ in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 
 # Normally (for host != target case) --without-headers automatically
 # enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
-# gcc->clang "cross"-compilation manages to evade it: there
+# gcc->clang or dynamic->static "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
-+ lib.optionalString (targetPlatform != hostPlatform && crossStageStatic) ''
++ lib.optionalString (targetPlatform != hostPlatform &&
+                      withoutTargetLibc &&
+                      targetPlatform.config == hostPlatform.config) ''
   export inhibit_libc=true
 ''
 
-+ lib.optionalString (!enableMultilib && hostPlatform.is64bit && !hostPlatform.isMips64n32) ''
-  export linkLib64toLib=1
-''
-
-# On mips platforms, gcc follows the IRIX naming convention:
-#
-#  $PREFIX/lib   = mips32
-#  $PREFIX/lib32 = mips64n32
-#  $PREFIX/lib64 = mips64
-#
-+ lib.optionalString (!enableMultilib && targetPlatform.isMips64n32) ''
-  export linkLib32toLib=1
-''
++ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared)
+  (import ./libgcc-buildstuff.nix { inherit lib stdenv; })

@@ -1,21 +1,29 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "aardvark-dns";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-l240kejJjv3rVb4S9ngXo88kmByuS/Co3AB/SSv+iIA=";
+    hash = "sha256-bScL8hFV/Kot7P9nJRMDDhB8pllPUsejtJpbjmQ8skI=";
   };
 
-  cargoHash = "sha256-d3u/He8+Ei+tX37EgYTGW5gjcalawlTdPekV9iLK7XI=";
+  cargoHash = "sha256-rrn+ZTAsFs7UTP4xQL3Cy8G6RG7vwT0wMKnXHHIkB90=";
+
+  patches = [
+    (fetchpatch { # https://github.com/containers/aardvark-dns/issues/379
+      url = "https://github.com/containers/aardvark-dns/commit/b13f0434f410934b515f086334414c6f5f55096e.diff";
+      hash = "sha256-6XReIShEe8+WKc5jK5NzCNMEd4INdOn9Sf8UrQLbj+s=";
+    })
+  ];
 
   passthru.tests = { inherit (nixosTests) podman; };
 

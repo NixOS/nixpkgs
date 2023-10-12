@@ -1,13 +1,23 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "json-c";
   version = "0.16";
 
-  src = fetchurl {
-    url    = "https://s3.amazonaws.com/json-c_releases/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256-jkWsj5bsd5Hq87t+5Q6cIQC7vIe40PHQMMW6igKI2Ws=";
+  src = fetchFromGitHub {
+    owner = "json-c";
+    repo = "json-c";
+    rev = "json-c-0.16-20220414";
+    sha256 = "sha256-KbnUWLgpg6/1wvXhUoYswyqDcgiwEcvgaWCPjNcX20o=";
   };
+
+  patches = [
+    # needed for emscripten, which uses LLVM 15+
+    (fetchpatch {
+      url = "https://github.com/json-c/json-c/commit/6eca65617aacd19f4928acd5766b8dd20eda0b34.patch";
+      sha256 = "sha256-fyugX+HgYlt/4AVtfNDaKS+blyUt8JYTNqkmhURb9dk=";
+    })
+  ];
 
   outputs = [ "out" "dev" ];
 

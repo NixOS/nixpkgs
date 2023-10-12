@@ -66,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

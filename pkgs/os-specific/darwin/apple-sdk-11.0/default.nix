@@ -62,6 +62,7 @@ let
     if stdenv.isAarch64 then stdenv
     else
       (overrideCC stdenv (mkCc stdenv.cc)).override {
+        extraBuildInputs = [ pkgs.darwin.apple_sdk_11_0.frameworks.CoreFoundation ];
         targetPlatform = stdenv.targetPlatform // {
           darwinMinVersion = "10.12";
           darwinSdkVersion = "11.0";
@@ -71,7 +72,13 @@ let
   stdenvs = {
     stdenv = mkStdenv stdenv;
   } // builtins.listToAttrs (map
-    (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
+    (v: {
+      name = "llvmPackages_${v}";
+      value = pkgs."llvmPackages_${v}" // {
+        stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
+        clang = mkCc pkgs."llvmPackages_${v}".clang;
+      };
+    })
     [ "12" "13" "14" "15" "16" ]
   );
 

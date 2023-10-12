@@ -5,16 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nix-your-shell";
-  version = "1.1.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "MercuryTechnologies";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g5TC+4DGbTAlG39R8QIM5cB3/mtkp/vz8puB0Kr6aag=";
+    sha256 = "sha256-5zHjz0NOKcZCuR6QaLrwOXih3Xoqf2uBrJnxTX/TQok=";
   };
 
-  cargoSha256 = "sha256-AiWKSWwMh6KWCTTRRCBxekv2rukz+ijnRit11K/AnhU=";
+  cargoSha256 = "sha256-4Z/z4VgnJQd8Uc0tMDnx7sChzXtG5ZDL88jTlhPSonM=";
 
   meta = with lib; {
     description = "A `nix` and `nix-shell` wrapper for shells other than `bash`";

@@ -16,11 +16,9 @@
 , libsixel
 , microsoft-gsl
 , chafa
-, libuuid
-, libossp_uuid
 , enableOpencv ? stdenv.isLinux
 , opencv
-, enableSway ? stdenv.isLinux
+, enableWayland ? stdenv.isLinux
 , extra-cmake-modules
 , wayland
 , wayland-protocols
@@ -32,24 +30,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.5";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-WnrKwbh7m84xlKMuixkB8LLw8Pzb8+mZV9cHWiI6cBY=";
+    hash = "sha256-yIohpJRytmwt+6DLCWpmBiuCm9GcCHsGmpTI64/3d8U=";
   };
-
-  # error: no member named 'ranges' in namespace 'std'
-  postPatch = lib.optionalString withoutStdRanges ''
-    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp; do
-      sed -i "1i #include <range/v3/algorithm/for_each.hpp>" $f
-      substituteInPlace $f \
-        --replace "#include <ranges>" "" \
-        --replace "std::ranges" "ranges"
-    done
-  '';
 
   strictDeps = true;
 
@@ -72,10 +60,9 @@ stdenv.mkDerivation rec {
     microsoft-gsl
     chafa
     cli11
-    (if stdenv.isLinux then libuuid else libossp_uuid)
   ] ++ lib.optionals enableOpencv [
     opencv
-  ] ++ lib.optionals enableSway [
+  ] ++ lib.optionals enableWayland [
     extra-cmake-modules
     wayland
     wayland-protocols
@@ -88,8 +75,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optionals (!enableOpencv) [
     "-DENABLE_OPENCV=OFF"
-  ] ++ lib.optionals enableSway [
-    "-DENABLE_SWAY=ON"
+  ] ++ lib.optionals enableWayland [
+    "-DENABLE_WAYLAND=ON"
   ] ++ lib.optionals (!enableX11) [
     "-DENABLE_X11=OFF"
   ];
@@ -97,10 +84,6 @@ stdenv.mkDerivation rec {
   # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
   preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     export MACOSX_DEPLOYMENT_TARGET=10.14
-  '';
-
-  postInstall = ''
-    ln -s $out/bin/ueberzug $out/bin/ueberzugpp
   '';
 
   meta = with lib; {

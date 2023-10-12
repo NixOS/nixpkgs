@@ -8,7 +8,6 @@ self:
 
 let
   inherit (self) callPackage;
-  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
 
   namePrefix = python.libPrefix + "-";
 
@@ -33,12 +32,17 @@ let
       }
       else result;
 
-  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+  mkPythonDerivation = if python.isPy3k then
+    ./mk-python-derivation.nix
+  else
+    ./python2/mk-python-derivation.nix;
+
+  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
   }));
 
-  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
   }));
@@ -92,7 +96,6 @@ in {
   inherit lib pkgs stdenv;
   inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit buildPythonPackage buildPythonApplication;
-  inherit (pkgs) fetchPypi;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;

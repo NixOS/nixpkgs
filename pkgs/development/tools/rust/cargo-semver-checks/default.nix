@@ -1,9 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
+, cmake
 , zlib
 , stdenv
 , darwin
@@ -12,25 +10,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.20.1";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pDyF8KCgAhugzTuMSVqfCda5kRAvJwR+OF+G+ZfjeDo=";
+    hash = "sha256-K6csc/jJ0iDegK9ZSOy1aNb0GSxSXHMSOVUtFEYUBhc=";
   };
 
-  cargoSha256 = "sha256-zbraVGjEayJJcBH9/GVnTcQGLcNgxaRhbgdJeHCGEEo=";
+  cargoHash = "sha256-9tWzJ64UlMHQ61SRbEXACNDA+4hTPjQTBzSjEO+0rik=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   buildInputs = [
-    libgit2
-    openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   nativeCheckInputs = [
@@ -40,7 +38,6 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # requires nightly version of cargo-rustdoc
     "--skip=both_passing_manifest_path_and_directory_works"
-    "--skip=rustdoc_cmd::tests"
     "--skip=verify_binary_contains_lints"
 
     # requires internet access
@@ -52,9 +49,6 @@ rustPlatform.buildRustPackage rec {
     git init
     scripts/regenerate_test_rustdocs.sh
   '';
-
-  # use system openssl
-  OPENSSL_NO_VENDOR = true;
 
   meta = with lib; {
     description = "A tool to scan your Rust crate for semver violations";

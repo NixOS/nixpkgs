@@ -7,17 +7,17 @@
 
 buildGoModule rec {
   pname = "alertmanager";
-  version = "0.25.0";
+  version = "0.26.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    hash = "sha256-h87m3flE2GRAXMBgaAC+sOsPWEs7l9loQt6jGaSdXfQ=";
+    hash = "sha256-DCVxXSgoa4PrW4qBBWa1SOPN1GwcJFERz7+itsCdtGI=";
   };
 
-  vendorHash = "sha256-BX4mT0waYtKvNyOW3xw5FmXI8TLmv857YBFTnV7XXD8=";
+  vendorHash = "sha256-GCcoT7Db0bQf+IGUP54GdxRmHCp1k2261B3T2htmbjk=";
 
   subPackages = [ "cmd/alertmanager" "cmd/amtool" ];
 
@@ -45,6 +45,5 @@ buildGoModule rec {
     changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
-    platforms = platforms.unix;
   };
 }

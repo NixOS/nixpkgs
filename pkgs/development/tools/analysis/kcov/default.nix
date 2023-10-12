@@ -17,13 +17,13 @@ let
   self =
     stdenv.mkDerivation rec {
       pname = "kcov";
-      version = "41";
+      version = "42";
 
       src = fetchFromGitHub {
         owner = "SimonKagstrom";
         repo = "kcov";
         rev = "v${version}";
-        sha256 = "sha256-Kit4Yn5Qeg3uAc6+RxwlVEhDKN6at+Uc7V38yhDPrAY=";
+        sha256 = "sha256-8/182RjuNuyFzSyCgyyximGaveDyhStwIQg29S5U/pI=";
       };
 
       preConfigure = "patchShebangs src/bin-to-c-source.py";

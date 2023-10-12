@@ -14,8 +14,6 @@
 , python3
 , which
 , nodejs
-, qtbase
-, perl
 , xorg
 , libXcursor
 , libXScrnSaver
@@ -51,8 +49,6 @@
 , systemd
 , pipewire
 , gn
-, runCommand
-, writeScriptBin
 , ffmpeg_4
 , lib
 , stdenv
@@ -60,13 +56,11 @@
 , libxml2
 , libxslt
 , lcms2
-, re2
 , libkrb5
 , mesa
-, xkeyboard_config
 , enableProprietaryCodecs ? true
   # darwin
-, clang_14
+, llvmPackages_14
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -113,7 +107,7 @@ qtModule {
     gn
     nodejs
   ] ++ lib.optionals stdenv.isDarwin [
-    clang_14
+    llvmPackages_14.clang
     bootstrap_cmds
     cctools
     xcbuild
@@ -135,6 +129,11 @@ qtModule {
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
+
+    ../patches/qtwebengine-link-pulseaudio.patch
+
+    # Override locales install path so they go to QtWebEngine's $out
+    ../patches/qtwebengine-locales-path.patch
   ];
 
   postPatch = ''
@@ -224,7 +223,6 @@ qtModule {
     libxml2
     libxslt
     lcms2
-    re2
 
     libevent
     ffmpeg_4
@@ -309,7 +307,6 @@ qtModule {
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isx86_64;
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

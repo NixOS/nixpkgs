@@ -1,6 +1,6 @@
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2498,6 +2498,7 @@ dependencies = [
+@@ -2534,6 +2534,7 @@ dependencies = [
   "typetag",
   "winres",
   "yaml-rust",
@@ -8,7 +8,7 @@
  ]
  
  [[package]]
-@@ -4052,4 +4053,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
+@@ -4113,4 +4114,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
  dependencies = [
   "cc",
   "libc",
@@ -16,11 +16,11 @@
  ]
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -49,6 +49,7 @@ time-humanize = { version = "0.1.3", features = ["time"] }
- tokei = "12.1.2"
+@@ -51,6 +51,7 @@ tokei = "12.1.2"
  typetag = "0.2"
  yaml-rust = "0.4.5"
+ parking_lot = "0.12"
 +zstd = { version = "*", features = ["pkg-config"] }
  
  [dev-dependencies]
- criterion = "0.4.0"
+ criterion = "0.5.1"

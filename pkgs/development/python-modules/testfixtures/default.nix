@@ -7,7 +7,7 @@
 , pythonOlder
 , sybil
 , twisted
-, zope_component
+, zope-component
 }:
 
 buildPythonPackage rec {
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytestCheckHook
     sybil
     twisted
-    zope_component
+    zope-component
   ];
 
   disabledTestPaths = [

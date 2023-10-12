@@ -14,18 +14,18 @@ let
   archive_fmt = "tar.gz";
 
   sha256 = {
-    x86_64-linux = "194akxb692xpqppakw49aywp5ma43yfcwv5imw4pm05cna0n06b1";
-    x86_64-darwin = "0bgjx54c00v0nb88rzdv09g92yw9qsf2fxd8565g6fsw591va1pa";
-    aarch64-linux = "0z07aikjhk9055apbvyaxdp8cgjl291fqgwgfbp9y3826q7s0riq";
-    aarch64-darwin = "0garlx458jy6dpqbfd0y2p7xj9hagm815cflybbbxf5yz2v9da01";
+    x86_64-linux = "e85c5f2ddca89caa6b44c61554c1dffeacdabc96c25a7e6881dc5722515270d1";
+    x86_64-darwin = "eddbcde10271f791eb1473ba00b85b442aa059cdfee38021b8f8880f33754821";
+    aarch64-linux = "9793a6db476492802ffec7f933d7f8f107a1c89fee09c8eb6bdb975b1fccecea";
+    aarch64-darwin = "46c8a82a71da5731c108d24b4a960a507af66d91bba7b7246dd3a3415afaf7d3";
   }.${system} or throwSystem;
 in
   stdenv.mkDerivation (finalAttrs: {
     pname = "infisical";
-    version = "0.3.7";
+    version = "0.14.2";
 
     src = fetchurl {
-      url = "https://github.com/Infisical/infisical/releases/download/v${finalAttrs.version}/infisical_${finalAttrs.version}_${plat}.tar.gz";
+      url = "https://github.com/Infisical/infisical/releases/download/infisical-cli%2Fv${finalAttrs.version}/infisical_${finalAttrs.version}_${plat}.tar.gz";
       inherit sha256;
     };
 
@@ -53,7 +53,7 @@ in
       homepage = "https://infisical.com/";
       downloadPage = "https://github.com/Infisical/infisical/releases/";
       license = licenses.mit;
-      maintainers = [ maintainers.ivanmoreau ];
+      maintainers = [ maintainers.ivanmoreau maintainers.jgoux ];
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
     };
   })

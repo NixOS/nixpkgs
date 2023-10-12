@@ -1,211 +1,119 @@
 {
-  "d44b5a94c976fbb65815374f61ab5392a220b084" = {
-    "flutter_patched_sdk.zip" = "sha256-uLMzCF3dsBeSZnoY9YQ2bBQhw+hUAksoDKEWr3TCnhk=";
-    "flutter_patched_sdk_product.zip" = "sha256-0NbvAGSK0VgU6jSyboyhviP9H+wID7JoTS6xMqbZs2w=";
-    "android-arm" = {
-      "artifacts.zip" = "sha256-NZde8sVeknhR6bxchb/RURNIlKnJw6j5PZAWmmjiZvM=";
+  "9064459a8b0dcd32877107f6002cc429a71659d1" = {
+    skyNotice = "sha256-bJMktK26wC9fVzdhLNcTHqOg5sHRZ535LB5u5dgwjlY=";
+    flutterNotice = "sha256-pZjblLYpD/vhC17PkRBXtqlDNRxyf92p5fKJHWhwCiA=";
+    android-arm = {
+      "artifacts.zip" = "sha256-AABHJH/EOOQzEcD0O/XftA1AAV8tNFX3dj0OsJJ3/9A=";
     };
-    "android-arm-profile" = {
-      "artifacts.zip" = "sha256-BTs1tuSdjVP8zAGCxV+uQ7sAAbCt0dML4g7/85IOFEs=";
-      "linux-x64.zip" = "sha256-GpjP5omeAjHBLZjJQdUMUnPoEgYBLppicLPUTY0fHqM=";
+    android-arm-profile = {
+      "artifacts.zip" = "sha256-MLlQFtjrGDQc3mH2T7CUlR/wDOPS7HRfgUuoLXjtd+E=";
+      "linux-x64.zip" = "sha256-S2/5ZFhNkDxUqsUZCFrwTERTUZIZpOiFijhcLZnozLI=";
+      "darwin-x64.zip" = "sha256-IwtYSpcg+5JmnkHuj6LGVp7GWiuUzETOPgKYRQczWzc=";
     };
-    "android-arm-release" = {
-      "artifacts.zip" = "sha256-ip2GnYkKq8aLWjVPk9no3aOf0c3k1h9foznhgLpZ17U=";
-      "linux-x64.zip" = "sha256-mGnmbraE98rqKRdO6keoITOaNCP0K3iYNRadihwOpxc=";
+    android-arm-release = {
+      "artifacts.zip" = "sha256-NLvwaB4UkYBRzg4cxzNZkileDFQk6GT/8nRugHU98Is=";
+      "linux-x64.zip" = "sha256-dua4xvVqsJY1d/eyA8j6NPnpAbotigPIs8SRj28F87w=";
+      "darwin-x64.zip" = "sha256-2B1+s6sngbN0+sPP1qKVpeMF6RIZZToF88baiqcNQT4=";
     };
-    "android-arm64" = {
-      "artifacts.zip" = "sha256-Sl7S/TNZWrlM4Z9UGN5rgGfpKk4UWKz6CKlQbz1qcZ4=";
+    android-arm64 = {
+      "artifacts.zip" = "sha256-Hf+S8XuAzD9HCU4FVmjN0jvTTxPtzEm+k++8IgaXOyM=";
     };
-    "android-arm64-profile" = {
-      "artifacts.zip" = "sha256-zNZtTxM8254y+KKSVYlBUYyIV2J04XN1cmnSjkQLJs8=";
-      "linux-x64.zip" = "sha256-M8AbEwFV2zedeqMoNeb+2UbR7i9I9rGh6LXBQcPO4iA=";
+    android-arm64-profile = {
+      "artifacts.zip" = "sha256-k4miTzdDL+gg9LxzjBVRtAuwhKELBiVDsvQ+aVeWTeI=";
+      "linux-x64.zip" = "sha256-2ErIxNdX1NfHrjiqZzNwISKybeS9SGOlqFh7G8KCAcE=";
+      "darwin-x64.zip" = "sha256-1FdvI6llPjAeSc7+e97rvG7SvvFHqZH+4MREuRyF1DA=";
     };
-    "android-arm64-release" = {
-      "artifacts.zip" = "sha256-PdnAIcYccdRs3r6M8rwmgl2x+TsBPMRF/iAEgwLbt/4=";
-      "linux-x64.zip" = "sha256-kmLkKXBj/70B3v5GJ50trTlV8epj16jOlQrh1U4/pVA=";
+    android-arm64-release = {
+      "artifacts.zip" = "sha256-y64Xhi5QFirZadU+fW8MOpkEarq/KPoEmmo0XRYf3/E=";
+      "linux-x64.zip" = "sha256-8dKrP9wQ9hDHNNrz1ZiYLV6zeGB60ikyrRFS6xdu+4Q=";
+      "darwin-x64.zip" = "sha256-2/eyFFAAUnuDtDoVh6L5emRXaQ03kwNRf6yIceWX3eU=";
     };
-    "android-x86" = {
-      "artifacts.zip" = "sha256-J1kgvNvdWo05HMHJMlVFECLMVnoCqUm1oP4K394w+xc=";
+    android-x64 = {
+      "artifacts.zip" = "sha256-b3AtOxad05vaXQzeCBtSf3G8ZiM0tOG0JRu4vbNtfgI=";
     };
-    "android-x86-jit-release" = {
-      "artifacts.zip" = "sha256-Tz/veYh/73px0eH0FOXbN4G8fVjXmEHv7G8lRm3YLtY=";
+    android-x64-profile = {
+      "artifacts.zip" = "sha256-TVOtSjKc8WkvYsY+aK7OH9eTA/q7tmtnSdQArPWS2vM=";
+      "linux-x64.zip" = "sha256-IHv3TGI1Yvhoq1ehVyVUn3JtPTCFyEtxdysvr/SWFxY=";
+      "darwin-x64.zip" = "sha256-B4XooSrLRJh3XADfIAv/YBDCT/Mpg2di0oE4SZlU8I8=";
     };
-    "android-x64" = {
-      "artifacts.zip" = "sha256-+WT7oT31XwE+ykLbiAUvnKw+WVR0VeFXPGpcMUHbsTg=";
+    android-x64-release = {
+      "artifacts.zip" = "sha256-EaImhQlUnG/zYHDROkdgQdGHD9AfDJULowS785aVoCM=";
+      "linux-x64.zip" = "sha256-ZBvtCVUNf0D1P1lz4vmIrhsn9hZmJZ5Tn65v9Wot6bk=";
+      "darwin-x64.zip" = "sha256-IbMANAKyz7uFG5oqOKMj0KTVhaCBryBKdobvgS9bOgI=";
     };
-    "android-x64-profile" = {
-      "artifacts.zip" = "sha256-f298VAJoZ2x+w0bxma7wu5h7Bn6+kCdrHh5qtjhhhhc=";
-      "linux-x64.zip" = "sha256-73Br9XgafwmagxAf61NSHn4BHn4q90pHJYEXCfAG8qY=";
+    android-x86 = {
+      "artifacts.zip" = "sha256-ElFkaxlyLVbexdocyQ1AIKgfr93ol1EDyf+aFDt4I10=";
     };
-    "android-x64-release" = {
-      "artifacts.zip" = "sha256-63hQCvObPmIxTcKyBQlXgGY6FfKp9PrbBY0RkSr1D/U=";
-      "linux-x64.zip" = "sha256-i5WQeePNxUNAbVR06Lz2XCXvZZTJxaFB6txtpVn2h9I=";
+    android-x86-jit-release = {
+      "artifacts.zip" = "sha256-ptrhyXrx8xGuRQYs8nBryzyDuCiIMsgMmqxi3kHXQ4s=";
     };
-    "linux-arm64" = {
-      "artifacts.zip" = "sha256-LTdVexuy7cL6dJqdM14YteI7Jo/z5wYOHakbX/BiV38=";
-      "font-subset.zip" = "sha256-cqLjvl3maO6NpN47/e718xyuSL8L8cHqU6ybuwlD+fA=";
+    darwin-arm64 = {
+      "artifacts.zip" = "sha256-nG23DmYeKoMJnuTPMnvouPHzK3XNKBrEIZ5zijiCoAg=";
+      "font-subset.zip" = "sha256-Kx3G5FmN2bVgIvYiQP9og8kgl28ZCXThpcmByAv+f6U=";
     };
-    "linux-arm64-debug" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-SRlKQllg5UWHk2kOIQ6ZwbqG5FoeFGCl2F9tTI+XVOE=";
+    darwin-arm64-profile = {
+      "artifacts.zip" = "sha256-Uzg5F2NPlVN/cui4ixJ3JxBttn0KQMEyKEVLmecssuU=";
     };
-    "linux-arm64-profile" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-4wERBO+eimsSKFt8/P6mQqgzv+HURK+O/YFHAUHpklA=";
+    darwin-arm64-release = {
+      "artifacts.zip" = "sha256-qZ1jYvvkBcaIHqZszFTOcuCDWnEmm/vsJt2aSZvgO+s=";
     };
-    "linux-arm64-release" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-1XHdFiW//1Yd+qOLrRlk0vma99HlGDC/RA0An8db/oY=";
+    darwin-x64 = {
+      "FlutterEmbedder.framework.zip" = "sha256-6ApkTiLh++bwgfYOGRoqnXglboqCWxc0VpNcYitjLLk=";
+      "FlutterMacOS.framework.zip" = "sha256-PP2E+PY1HB2OkX8a8/E/HpUBPRoDJyo/2BNUKd1Xd2s=";
+      "artifacts.zip" = "sha256-aZf99m1KlIpEuwwMMWAksp9d/SQQXt8jOTs/6GJUhcw=";
+      "font-subset.zip" = "sha256-ZfdDnRPDOqNsj3dCHStLWXWCMOzodmR4ojQrMQt6hQY=";
+      "gen_snapshot.zip" = "sha256-1xi4EJsiOIJSaBSIhl7p4L0aWtLYR1vGz4yYzNdVuQw=";
     };
-    "linux-x64" = {
-      "artifacts.zip" = "sha256-Bl0BRxUfVqNX6y7HdUXu5lIFzMLB2GUJauhOLEeInEE=";
-      "font-subset.zip" = "sha256-v02HV8QOqwdv30RiHpKu8ujTXOQmupGr9HCfpBUvrKM=";
+    darwin-x64-profile = {
+      "FlutterMacOS.framework.zip" = "sha256-zDTey1dN4TYfi2/tDlxHPZhW3szZuGTMSaObNNH4zZo=";
+      "artifacts.zip" = "sha256-kZ6io/+ohx5jKhu1i/l0UZbTB1gk6BSn1VryZJxPcjU=";
+      "gen_snapshot.zip" = "sha256-5AUul5CQ6A8YGb6/PAfbPH7G/c+9rElDftmL3WIi4ZQ=";
     };
-    "linux-x64-debug" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-xjScsvWgPO8qeccw5BGzNrMLNzn5O+CvOpoPkvlrX0o=";
+    darwin-x64-release = {
+      "FlutterMacOS.dSYM.zip" = "sha256-DN5R/U+pcCgFyR6wLcp11Bjvov4sS0J3crMWOx0dNBI=";
+      "FlutterMacOS.framework.zip" = "sha256-9rEkGe0iz51aVXtCXK+KolJqjNUOEMwjeRHdF6kBjPs=";
+      "artifacts.zip" = "sha256-Lpz0WLAdspPybLhTnS2fsReTAZ0qkJmMvY+u8iCe53s=";
+      "gen_snapshot.zip" = "sha256-RLO5V6B/xzI5ljbIY7Yj4m1aFYYJ0PeO6nAyAN/ufnM=";
     };
-    "linux-x64-profile" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-52nMjoHQZ/ve7yJW9d8YK02U8mowe9xHZpkTwbGq9vU=";
+    "flutter_patched_sdk.zip" = "sha256-d1KBJex2XgFbM0GgtcMFGDG2MN00zPd5HyAP54vBIaw=";
+    "flutter_patched_sdk_product.zip" = "sha256-TG0OfcYQHy7Um1nl7xHXGl0oGGkna1tKSWhtnLTo2Ic="
+    ;
+    ios = {
+      "artifacts.zip" = "sha256-bTtAJ4mrJZmT9IcDppfvm1ih3lNqJqywgatN3k48hoI=";
     };
-    "linux-x64-release" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-SA7Th1Qasaj4Q5wFr89Rv8PNQx6s6zvHsDxT1EKKZV0=";
+    ios-profile = {
+      "artifacts.zip" = "sha256-4bqMbZ0ASURIRp6Zfs25Nww+5FasRqdXcppX2KSWK0g=";
     };
-  };
-  "1a65d409c7a1438a34d21b60bf30a6fd5db59314" = {
-    "flutter_patched_sdk.zip" = "sha256-Pvsjttm5OwpJ/pW4UQXvvEiJYCM5CoZZfVXz5jef37k=";
-    "flutter_patched_sdk_product.zip" = "sha256-fhj2uUOrLwrzHrM6RNVpPNize5Qu6mLQDcSzLT2TbRA=";
-    "android-arm" = {
-      "artifacts.zip" = "sha256-KDMiI6SQoZHfFV5LJJZ7VOGyEKC4UxzRc777j4BbXgM=";
+    ios-release = {
+      "Flutter.dSYM.zip" = "sha256-LsYX9BTj9FXaW4f+7q6S/raZNx97FmGdJvegYrFiCAc=";
+      "artifacts.zip" = "sha256-KZBpNSeXCqfRydOdFzcaYdde3OCw7oI7x9/1l/4WlSk=";
     };
-    "android-arm-profile" = {
-      "artifacts.zip" = "sha256-MErLoGJWXg4yJ6b6c5bqP8Nat6O7eYSfM71mMNAAQf4=";
-      "linux-x64.zip" = "sha256-0TZQ05HR7NRqHzeoHZ/sOrjKiSvCpMUH85YXXzV4URg=";
+    linux-arm64 = {
+      "artifacts.zip" = "sha256-YBXe02wlxxpWT2pDUSILK/GXpKGx2vQo55E8zDOd4IQ=";
+      "font-subset.zip" = "sha256-02PHMUCPn6VBaQazfjEqVCGDPeGRXVTMXW8eAOuQRhY=";
     };
-    "android-arm-release" = {
-      "artifacts.zip" = "sha256-hU4S4FOqUGokByZ47nzOqQ4A9QFshruqrpJvJUBHUho=";
-      "linux-x64.zip" = "sha256-AqNlqjOht+c2sdW5ReoF66ZJWJl1W4vGKbQ3YyderRY=";
+    linux-arm64-debug = {
+      "linux-arm64-flutter-gtk.zip" = "sha256-ZTWenA3msfvFjoPA5ByX1/kXTDtd6H0H6i8AP2K9Zt8=";
     };
-    "android-arm64" = {
-      "artifacts.zip" = "sha256-ApNg3Uu9gyGNsx7sdpTCz1yADVAI5ZuNHgvgiuH9IpQ=";
+    linux-arm64-profile = {
+      "linux-arm64-flutter-gtk.zip" = "sha256-CDXfWkg/WHT9A8EAzo78KiUI3uN1rZyvrPSDH5fyiQU=";
     };
-    "android-arm64-profile" = {
-      "artifacts.zip" = "sha256-D/8+WKPIkOaV3PwkCHiJROFlokm4lWWmtPQb93Yqwr0=";
-      "linux-x64.zip" = "sha256-S0RHLov6/C22VvGdvZV87Ybaxun8YBrw1gTgNklRcM0=";
+    linux-arm64-release = {
+      "linux-arm64-flutter-gtk.zip" = "sha256-62dlbrqCj5mbIQXxMPzXTXHSJdJH4nao1a1c1WOSB1Y=";
     };
-    "android-arm64-release" = {
-      "artifacts.zip" = "sha256-OoYqHtwmT+VWJ+G+sMXM5+ux3h1Fnyo9Vj2za9cm5eE=";
-      "linux-x64.zip" = "sha256-NuXclg1a+Ofw5AWJ1tajpn2jYEZw6DluWxrFVL8rPfg=";
+    linux-x64 = {
+      "artifacts.zip" = "sha256-YVKajJeP6hFkLJk0HPIrEg/ig0tzkGj34z3ZA3VB8fE=";
+      "font-subset.zip" = "sha256-OFWcMnVi6AQoXKYcyMU8JN4/XM3OgSes0hzz8odTc8w=";
     };
-    "android-x86" = {
-      "artifacts.zip" = "sha256-nN66nIrcbJHq2S4oIT5e2NCv7mS5Kw+HBv3ReHs+d3Y=";
+    linux-x64-debug = {
+      "linux-x64-flutter-gtk.zip" = "sha256-Z8xCDor+sBwXg63r0o7RudzoWj5AsAUkc53F6dvEsLY=";
     };
-    "android-x86-jit-release" = {
-      "artifacts.zip" = "sha256-A8F6K78Ykp1rMsUmjD7B9nFFPAubZnqAqgWSzbNCRwk=";
+    linux-x64-profile = {
+      "linux-x64-flutter-gtk.zip" = "sha256-x7n84R4y7/jH/rUbe86Gm0oLM5aLSTB2UjjeIpRJ1zQ=";
     };
-    "android-x64" = {
-      "artifacts.zip" = "sha256-hrBvnzCj/24h5kat96avlgXi6WhMsos5aPlkgxOYo8Q=";
-    };
-    "android-x64-profile" = {
-      "artifacts.zip" = "sha256-xzSj/2ah9aQoosaNGkSWFP3bMNJqRSFc0+78XEBHwzM=";
-      "linux-x64.zip" = "sha256-HfBiz1JWlBQ8KEfmf8uDlVzFlDt3+VF2VeY82tsMjHs=";
-    };
-    "android-x64-release" = {
-      "artifacts.zip" = "sha256-TcfMeA+8Uf9yRrYdEIsjip0cKmSUm2Ow1tkoE9803XY=";
-      "linux-x64.zip" = "sha256-D6efb6pj9+xjPnJu3O+ZCmwfatBzasuFZEFRntAiU9U=";
-    };
-    "linux-arm64" = {
-      "artifacts.zip" = "sha256-xyKVaEFb5gVkVrPzDrOql5BmXGO0FnCSeXOoQ10ZFrw=";
-      "font-subset.zip" = "sha256-Ulwb6q2SzB4suMJhAM3zAwWOzlEImlu9Ha+w5u4QqIU=";
-    };
-    "linux-arm64-debug" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-SiYOH++py4zeoD3BkNayqy/C9Zz9OiYQ5+u+pDLIpWg=";
-    };
-    "linux-arm64-profile" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-xB0eqrBYD7vhOwYUgJwNaBftNZJgdwxA9AUpEfX0iFs=";
-    };
-    "linux-arm64-release" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-aHLKV129WIRsLUG6xTMwCKB4eXD3jonqinjI8KSsOus=";
-    };
-    "linux-x64" = {
-      "artifacts.zip" = "sha256-+zIABFXUpiqn3OMoLcU4NDLxZ1y9z0r46iCTNRHAkz8=";
-      "font-subset.zip" = "sha256-W4SRPvA4rraVqN1ehbY6MFL7ZIWDHVJhjlLtxyUJJKY=";
-    };
-    "linux-x64-debug" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-boICnuJF4zqGb7kaN5haO/df9hC9KeJidt3uIK06S7M=";
-    };
-    "linux-x64-profile" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-AnkLMPW3mwiXdiDz3Zo802QZRi+8EMCy4Mx2ODSbMOU=";
-    };
-    "linux-x64-release" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-RAsgupVF18IxLaP8tJ7XRQ8y/um46nlpA8fDITPwLqY=";
-    };
-  };
-  "57d3bac3dd5cb5b0e464ab70e7bc8a0d8cf083ab" = {
-    "flutter_patched_sdk.zip" = "sha256-A/y5Y+Aw0CUhXABbdyQcGCSnSbO7Ask+71m8LZDSjH4=";
-    "flutter_patched_sdk_product.zip" = "sha256-VPxF4NrTUhFbpztyPnLEiC9Cy0kDDbYvy21kA5ES4HM=";
-    "android-arm" = {
-      "artifacts.zip" = "sha256-3igOO+rgFh0fNTIIiiucqSmqC+NKFPG5H1CnIa9bDcM=";
-    };
-    "android-arm-profile" = {
-      "artifacts.zip" = "sha256-qai254LNrQXJBsaoQgXao6mBpzzcYHh4sUESurSyxNA=";
-      "linux-x64.zip" = "sha256-hBkntf1fX5w752ly6lVUHm6wEM/4ep9guJGma3SKjxU=";
-    };
-    "android-arm-release" = {
-      "artifacts.zip" = "sha256-7yuXIJyErb1PZyk56+TtlJY0o1EOwmdAvpVfGGAteuA=";
-      "linux-x64.zip" = "sha256-v/jBnE662XOX/fOhYbve7ZiQwVu0haIMOD532Vdj9Yw=";
-    };
-    "android-arm64" = {
-      "artifacts.zip" = "sha256-Llxu8+SkYEtnoiMf01rffPpF/AjrlV+QPuAW850oMzo=";
-    };
-    "android-arm64-profile" = {
-      "artifacts.zip" = "sha256-su4U80supv8Q+2kE/5FTybiA5NFbKNMHqdB0NHCqrVI=";
-      "linux-x64.zip" = "sha256-yGt0SztNxYHDwZ1DwzLg5REE8rmMRKNn7GfCQ+GEHBw=";
-    };
-    "android-arm64-release" = {
-      "artifacts.zip" = "sha256-+p1+SXSEglR3jqWc/jKgmtR9nOGgMRGC+anoTs1kRc8=";
-      "linux-x64.zip" = "sha256-5UiG5gxOso8NO+7nkb6bjxW8e/Tr7mlvPRUagSRTCNs=";
-    };
-    "android-x86" = {
-      "artifacts.zip" = "sha256-Cbo17VYWaclyO1RLHkwjbqoFVZ283IgGdN0uDdiWvQs=";
-    };
-    "android-x86-jit-release" = {
-      "artifacts.zip" = "sha256-gSPm2tClTj2vEYtGKgobD/mebWLNlDp8nEoFX0rhEOk=";
-    };
-    "android-x64" = {
-      "artifacts.zip" = "sha256-PVb1aKMMTlDT41O2MZRAUjCq8h+m/s2h5qOnEFPd77w=";
-    };
-    "android-x64-profile" = {
-      "artifacts.zip" = "sha256-gZSSRCDy42AMLMiu/KH7YsDuFVaxRcoyXzUgV8V025Y=";
-      "linux-x64.zip" = "sha256-9+LCjeI18u/GlPDMIl6Jx6b++lc90fJ5tVBlDR+ctDs=";
-    };
-    "android-x64-release" = {
-      "artifacts.zip" = "sha256-rsS08VP86/b2S0TEYusCEJBvS4BuevsmV9REAxRgJIc=";
-      "linux-x64.zip" = "sha256-H4nFCJ+iCUzIwHogYzS+h33eDMaFnz71dcDLSQW1aPg=";
-    };
-    "linux-arm64" = {
-      "artifacts.zip" = "sha256-kCxsKQQQX6wzhD46bfoflKdz3AYYkoSyavhfyTDuHLU=";
-      "font-subset.zip" = "sha256-Yk6JsNWe7ftEQU/TsjDUZSFeLzeIbcS63lhl8fsWsdk=";
-      "linux-arm64-flutter-gtk.zip" = "sha256-girVdkXrTO5tssoi+eKwG9ykstCR/VOx8zWtcAz8AKM=";
-    };
-    "linux-arm64-debug" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-girVdkXrTO5tssoi+eKwG9ykstCR/VOx8zWtcAz8AKM=";
-    };
-    "linux-arm64-profile" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-VL5cwYaZ1FOJ3TwJzbgvHDQwkU9NrHGnf/tQhZ/dAGg=";
-    };
-    "linux-arm64-release" = {
-      "linux-arm64-flutter-gtk.zip" = "sha256-27hy7mLFCLkqJbn+5p5eJdYnfBKTyfFe98iUMmKyz4g=";
-    };
-    "linux-x64" = {
-      "artifacts.zip" = "sha256-JgEX+rKxdcWBBaxyR42eC7qOAvaawF9M2+rfaD4IgeA=";
-      "font-subset.zip" = "sha256-5EoxBrxSjaLLd+rKrxVYNoUZaejk0qcQ5LVsmqtKc2g=";
-      "linux-x64-flutter-gtk.zip" = "sha256-MH5HDPoXXi/KpQLQ0U1tQzZ0sbZx1RVhZtQ7L+WhZgk=";
-    };
-    "linux-x64-debug" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-MH5HDPoXXi/KpQLQ0U1tQzZ0sbZx1RVhZtQ7L+WhZgk=";
-    };
-    "linux-x64-profile" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-r2hB/AKrB5vNga2fve4tTM4j+Zp9KDqNlTjKQhQvbaI=";
-    };
-    "linux-x64-release" = {
-      "linux-x64-flutter-gtk.zip" = "sha256-muREs2iUiHCZM+SGN5q3HRRGnejJapKN582Aeog49MI=";
+    linux-x64-release = {
+      "linux-x64-flutter-gtk.zip" = "sha256-B/Rtkln/rLS9M1gciXRnKvhPwR6bJrjGhrE9o1waamI=";
     };
   };
 }
+

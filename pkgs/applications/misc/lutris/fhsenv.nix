@@ -18,6 +18,9 @@ in buildFHSEnv {
 
   runScript = "lutris";
 
+  # Many native and WINE games need 32bit
+  multiArch = true;
+
   targetPkgs = pkgs: with pkgs; [
     lutris-unwrapped
 
@@ -48,7 +51,7 @@ in buildFHSEnv {
     fluidsynth hidapi mesa libdrm
 
     # MAME
-    qt48 fontconfig SDL2_ttf
+    fontconfig SDL2_ttf
 
     # Mednafen
     freeglut mesa_glu
@@ -61,9 +64,6 @@ in buildFHSEnv {
 
     # Mupen64Plus
     boost dash
-
-    # Osmose
-    qt4
 
     # Overwatch 2
     libunwind

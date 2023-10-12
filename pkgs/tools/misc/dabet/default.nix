@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dabet";
-  version = "3.0.0";
+  version = "3.0.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "annaaurora";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-B5z2RUkvztnGCKeVsjp/yzrI8m/6mjBB0DS1yhFZhM4=";
+    hash = "sha256-BYE+GGwf84zENf+lPS98OzZQbXxd7kykWL+B3guyVNI=";
   };
 
-  cargoSha256 = "sha256-v1lc2quqxuNUbBQHaTtIDUPPTMyz8nj+TNCdSjrfrOA=";
+  cargoHash = "sha256-kguQmCXP5+E6e8CSKP18faa93VKToU2pcQixDOBrd+8=";
 
   meta = with lib; {
     description = "Print the duration between two times";

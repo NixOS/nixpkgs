@@ -4,20 +4,14 @@
 , undmg
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raycast";
-  version = "1.52.0";
+  version = "1.59.0";
 
   src = fetchurl {
-    # https://github.com/NixOS/nixpkgs/pull/223495
-    # official download API: https://api.raycast.app/v2/download
-    # this returns an AWS CloudFront signed URL with expiration timestamp and signature
-    # the returned URL will always be the latest Raycast which might result in an impure derivation
-    # the package maintainer created a repo (https://github.com/stepbrobd/raycast-overlay)
-    # to host GitHub Actions to periodically check for updates
-    # and re-release the `.dmg` file to Internet Archive (https://archive.org/details/raycast)
-    url = "https://archive.org/download/raycast/raycast-${version}.dmg";
-    sha256 = "sha256-Xg3kdODBy0PSZ33C/Ye9Srbnuq6HVJbSFgddunAQD1I=";
+    name = "Raycast.dmg";
+    url = "https://releases.raycast.com/releases/${finalAttrs.version}/download?build=universal";
+    hash = "sha256-EA8DzfJtd1lM0/N1bQ8x9GQ8KiILwRKPIFKk6XlaBhg=";
   };
 
   dontPatch = true;
@@ -41,9 +35,9 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Control your tools with a few keystrokes";
     homepage = "https://raycast.app/";
-    license = licenses.unfree;
+    license = with licenses; [ unfree ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ lovesegfault stepbrobd ];
-    platforms = platforms.darwin;
+    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
   };
-}
+})

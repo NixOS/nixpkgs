@@ -21,7 +21,7 @@ buildGoModule rec {
     description = "Infra manages access to infrastructure such as Kubernetes";
     homepage = "https://github.com/infrahq/infra";
     changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = licenses.elastic20;
     maintainers = with maintainers; [ peterromfeldhk ];
   };
 }

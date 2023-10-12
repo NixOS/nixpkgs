@@ -3,8 +3,9 @@
 , fetchFromGitHub
 , fetchpatch
 , django
-, factory_boy
+, factory-boy
 , mock
+, pip
 , pygments
 , pytest-django
 , pytestCheckHook
@@ -44,8 +45,9 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
-    factory_boy
+    factory-boy
     mock
+    pip
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest-django
     pytestCheckHook

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "apko";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-02W9YOnV/zXopH3C9UNKu5gepNVS2gzoGa10uaKYu94=";
+    hash = "sha256-Dyu/cPoYI8dm/p/91oL5g8ilz9ksw4i0opsPT6rGztc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -24,7 +24,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-h1uAAL3FBskx6Qv9E5WY+UPeXK49WW/hFoNN4QyKevU=";
+  vendorHash = "sha256-Jsp4rGIltszpQe05S3W+UFzPxhb6N5lCzUaZWBkXNWY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -45,6 +45,8 @@ buildGoModule rec {
     # networking required to fetch alpine-keys
     # pulled out into a separate library next release
     "-skip=TestInitDB"
+    # fails to build image on read-only filesystem
+    "-skip=TestPublish"
   ];
 
   postInstall = ''

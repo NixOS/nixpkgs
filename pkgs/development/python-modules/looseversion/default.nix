@@ -2,17 +2,22 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+, hatchling
 }:
 
 buildPythonPackage rec {
   pname = "looseversion";
-  version = "1.1.2";
-  format = "flit";
+  version = "1.3.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-lNgL29C21XwRuIYUe6FgH30VMVcWIbgZM7NFN8vkaa0=";
+    sha256 = "sha256-695l8/a7lTGoEBbG/vPrlaYRga3Ee3+UnpwOpHkRZp4=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

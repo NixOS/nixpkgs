@@ -20,8 +20,8 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion = with versions; lib.switch coq.coq-version [
       { case = isGe "8.15"; out = "1.17.0"; }
-      { case = range "8.16" "8.17"; out = "2.0.0"; }
-      { case = range "8.13" "8.17"; out = "1.16.0"; }
+      { case = range "8.16" "8.18"; out = "2.0.0"; }
+      { case = range "8.13" "8.18"; out = "1.16.0"; }
       { case = range "8.14" "8.16"; out = "1.15.0"; }
       { case = range "8.11" "8.15"; out = "1.14.0"; }
       { case = range "8.11" "8.15"; out = "1.13.0"; }
@@ -55,8 +55,7 @@ let
   packages = [ "ssreflect" "fingroup" "algebra" "solvable" "field" "character" "all" ];
 
   mathcomp_ = package: let
-      mathcomp-deps = if package == "single" then []
-        else map mathcomp_ (head (splitList (lib.pred.equal package) packages));
+      mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ (head (splitList (lib.pred.equal package) packages)));
       pkgpath = if package == "single" then "mathcomp" else "mathcomp/${package}";
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''

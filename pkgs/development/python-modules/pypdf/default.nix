@@ -15,16 +15,17 @@
 , typing-extensions
 
 # optionals
-, pycryptodome
+, cryptography
 , pillow
 
 # tests
 , pytestCheckHook
+, pytest-timeout
 }:
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "3.5.2";
+  version = "3.15.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-f+M4sfUzDy8hxHUiWG9hyu0EYvnjNA46OtHzBSJdID0=";
+    hash = "sha256-0KMZnMIeTkra2Il4HGDBtm8HLP8zpMXgUD4V5U5fYy0=";
   };
 
   outputs = [
@@ -62,7 +63,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = rec {
     full = crypto ++ image;
     crypto = [
-      pycryptodome
+      cryptography
     ];
     image = [
       pillow
@@ -75,11 +76,17 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-timeout
   ] ++ passthru.optional-dependencies.full;
 
   pytestFlagsArray = [
     # don't access the network
     "-m" "'not enable_socket'"
+  ];
+
+  disabledTests = [
+    # requires fpdf2 which we don't package yet
+    "test_compression"
   ];
 
   meta = with lib; {

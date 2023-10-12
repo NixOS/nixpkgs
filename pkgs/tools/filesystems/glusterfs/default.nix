@@ -2,7 +2,7 @@
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
  liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
- rsync, glibc, rpcsvc-proto, libtirpc, gperftools, nixosTests
+ rsync, getent, rpcsvc-proto, libtirpc, gperftools, nixosTests
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -42,7 +42,7 @@ let
     e2fsprogs # tune2fs
     findutils # find
     gawk # awk
-    glibc # getent
+    getent # getent
     gnugrep # grep
     gnused # sed
     lvm2 # lvs

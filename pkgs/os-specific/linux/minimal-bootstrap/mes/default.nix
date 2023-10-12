@@ -222,7 +222,6 @@ let
     mkdir -p ''${out}/bin
 
     ${srcPost.bin}/bin/mes-m2 -e main ${srcPost.bin}/bin/mescc.scm -- \
-      --base-address 0x08048000 \
       -L ''${srcPrefix}/lib \
       -L ${libs}/lib \
       -lc \

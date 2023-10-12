@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://bitreich.org/releases/sacc/sacc-${version}.tar.gz";
-    sha512 = "7a895e432e1d28b7d9b2bb2a5326ca32350876a2c80d39dc6c19e75347d72a4847f1aa4ff11f07e8a9adea14ea71b84d70890dcc170ff6ce0b779e1d6586b4fa";
+    hash = "sha512-eoleQy4dKLfZsrsqUybKMjUIdqLIDTncbBnnU0fXKkhH8apP8R8H6Kmt6hTqcbhNcIkNzBcP9s4Ld54dZYa0+g==";
   };
 
   inherit patches;

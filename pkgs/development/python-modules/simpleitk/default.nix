@@ -15,7 +15,7 @@ buildPythonPackage rec {
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
-  sourceRoot = "source/Wrapping/Python";
+  sourceRoot = "${src.name}/Wrapping/Python";
   preBuild = ''
     make
   '';

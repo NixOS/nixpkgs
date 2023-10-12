@@ -2,8 +2,6 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
-, curl
-, libgit2_1_5
 , openssl
 , zlib
 , stdenv
@@ -12,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-shuttle";
-  version = "0.17.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "shuttle-hq";
     repo = "shuttle";
     rev = "v${version}";
-    hash = "sha256-w2PkrkHMthGRqWW8PQIoRY41S3qPib5JDKDV6I6ESAw=";
+    hash = "sha256-BanM3ChZqP1qE6D1EWEdhyKlhGCKVRRKTcyzjvyhriw=";
   };
 
   cargoLock = {
@@ -30,13 +28,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [
-    curl
     pkg-config
   ];
 
   buildInputs = [
-    curl
-    libgit2_1_5
     openssl
     zlib
   ] ++ lib.optionals stdenv.isDarwin [
@@ -50,11 +45,6 @@ rustPlatform.buildRustPackage rec {
     # other tests are failing for different reasons
     "init::shuttle_init_tests::"
   ];
-
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo metadata --offline
-  '';
 
   meta = with lib; {
     description = "A cargo command for the shuttle platform";

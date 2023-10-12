@@ -66,6 +66,8 @@ buildPythonPackage rec {
     description = "Functions and classes to access online data resources";
     homepage = "https://astroquery.readthedocs.io/";
     license = licenses.bsd3;
+    # Broken since a certain astropy update, due to API incompatibility
+    broken = true;
     maintainers = [ maintainers.smaret ];
   };
 }

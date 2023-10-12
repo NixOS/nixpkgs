@@ -14,31 +14,32 @@
 , libXtst
 , zlib
 , maven
-, webkitgtk_4_1
+, webkitgtk
 , glib-networking
-, javaPackages
 }:
 
-(javaPackages.mavenfod.override {
-  inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
-}) rec {
+let
+  mavenJdk17 = maven.override {
+    jdk = jdk17;
+  };
+in
+mavenJdk17.buildMavenPackage rec {
   pname = "dbeaver";
-  version = "22.2.2"; # When updating also update mvnSha256
+  version = "22.2.2"; # When updating also update mvnHash
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
+    hash = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
   };
 
-  mvnSha256 = "uu7UNRIuAx2GOh4+YxxoGRcV5QO8C72q32e0ynJdgFo=";
+  mvnHash = "sha256-ERZYDsPxp1YXteSmunFIgTGZUYqjZJhqrNytLnIUNBQ=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    maven
   ];
 
   buildInputs = [
@@ -52,7 +53,7 @@
     libXtst
     zlib
   ] ++ lib.optionals stdenv.isLinux [
-    webkitgtk_4_1
+    webkitgtk
     glib-networking
   ];
 
@@ -76,7 +77,7 @@
         aarch64-darwin = "aarch64";
         aarch64-linux = "aarch64";
         x86_64-darwin = "x86_64";
-        x86_64-linux  = "x86_64";
+        x86_64-linux = "x86_64";
       };
 
       systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw "dbeaver not supported on ${stdenv.hostPlatform.system}");
@@ -108,7 +109,7 @@
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
         --prefix PATH : ${jdk17}/bin \
-        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk_4_1 glib-networking ])} \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
         --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
 
@@ -129,10 +130,11 @@
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # dependencies from maven
+      binaryBytecode # dependencies from maven
     ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
+    mainProgram = "dbeaver";
   };
 }

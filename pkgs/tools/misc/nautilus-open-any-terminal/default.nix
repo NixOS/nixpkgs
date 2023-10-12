@@ -9,7 +9,6 @@
 , gsettings-desktop-schemas
 , gtk3
 , python3
-, substituteAll
 , wrapGAppsHook
 }:
 

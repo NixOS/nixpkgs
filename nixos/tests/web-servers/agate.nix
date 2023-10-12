@@ -20,7 +20,7 @@
     geminiserver.wait_for_open_port(1965)
 
     with subtest("check is serving over gemini"):
-      response = geminiserver.succeed("${pkgs.gmni}/bin/gmni -j once -i -N gemini://localhost:1965")
+      response = geminiserver.succeed("${pkgs.gemget}/bin/gemget --header -o - gemini://localhost:1965")
       print(response)
       assert "Hello NixOS!" in response
   '';

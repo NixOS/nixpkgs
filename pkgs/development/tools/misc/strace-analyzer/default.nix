@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Analyzes strace output";
     homepage = "https://github.com/wookietreiber/strace-analyzer";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -38,7 +38,7 @@ update_version() {
 
   (cd "$root" && update-source-version "sourcehut.python.pkgs.$1" "$version")
 
-  # Update vendorSha256 of Go modules
+  # Update vendorHash of Go modules
   retry=true
   while "$retry"; do
     retry=false;

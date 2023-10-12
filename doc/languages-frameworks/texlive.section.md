@@ -22,7 +22,7 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
   texlive.combine {
     # inherit (texlive) whatever-you-want;
     pkgFilter = pkg:
-      pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "cm-super";
+      pkg.tlType == "run" || pkg.tlType == "bin" || pkg.hasManpages || pkg.pname == "cm-super";
     # elem tlType [ "run" "bin" "doc" "source" ]
     # there are also other attributes: version, name
   }

@@ -41,6 +41,11 @@ gsmakeDerivation rec {
       revert = true;
       sha256 = "02awigkbhqa60hfhqfh2wjsa960y3q6557qck1k2l231piz2xasa";
     })
+    # https://github.com/gnustep/libs-base/issues/294
+    (fetchpatch {
+      url = "https://github.com/gnustep/libs-base/commit/37913d006d96a6bdcb963f4ca4889888dcce6094.patch";
+      sha256 = "PyOmzRIirSKG5SQY+UwD6moCidPb8PXCx3aFgfwxsXE=";
+    })
   ];
 
   meta = {

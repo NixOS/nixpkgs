@@ -8,12 +8,14 @@ buildGoModule rec {
     owner = "slok";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gi6lj3dpckhsx6hdpdnr8rclqgfkbdmkzx966nlxyi52bjfzbsv";
+    hash = "sha256-W6/v5BIl+k6tMan/Wdua7mHKMsq23QZN13Cy24akJr4=";
   };
-  vendorSha256 = "1jwzx6hp04y8hfpwfvf9zmhqjj3ghvr3gmgnllpcff1lai78vdrw";
+
+  vendorHash = "sha256-PLeNTlQ0OMcupfbVN/KGb0iJYf3Jbcevg8gTcKHpn8s=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.Version=${version}"
   ];
 

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "lifelines";
-  version = "0.27.7";
+  version = "0.27.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "CamDavidsonPilon";
     repo = "lifelines";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6ulg3R59QHy31CXit8tddi6F0vPKVRZDIu0zdS19xu0=";
+    hash = "sha256-2AjqN4TtBY1KtgFlY0E2UcFUHniHe2Hge+JaUQd4gO8=";
   };
 
   propagatedBuildInputs = [

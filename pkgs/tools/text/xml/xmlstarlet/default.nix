@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt ];
 
+  patches = [
+    # Fixes an incompatible function pointer error with clang 16.
+    ./fix-incompatible-function-pointer.patch
+  ];
+
   preConfigure =
     ''
       export LIBXSLT_PREFIX=${libxslt.dev}
@@ -29,6 +34,7 @@ stdenv.mkDerivation rec {
     description = "A command line tool for manipulating and querying XML data";
     homepage = "https://xmlstar.sourceforge.net/";
     license = lib.licenses.mit;
+    mainProgram = "xmlstarlet";
     platforms = lib.platforms.unix;
   };
 }

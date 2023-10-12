@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
-  version = "3.2.0";
+  version = "3.2.4-libwebp";
 
   src =
     let
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     in
       {
         x86_64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
-          sha256 = "sha256-7lT69fU7tGujhbDTX0tYpkEquoswMCZOGAUhk2Nr+C0=";
+          url = "${base}/v${version}/ArmCord_${builtins.head (lib.splitString "-" version)}_amd64.deb";
+          hash = "sha256-WeHgai9vTaN04zMdAXmhemKroKH+kwHuOr/E85mfurE=";
         };
         aarch64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
-          sha256 = "sha256-a5qLK8WjrlmKF24U9SiEpY+SNWuHf6gHJBym5IM8HZ4=";
+          url = "${base}/v${version}/ArmCord_${builtins.head (lib.splitString "-" version)}_arm64.deb";
+          hash = "sha256-4/vGdWXv8wrbF/EhMK6kJPjta0EOGH6C3kUyM0OTB8M=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -131,10 +131,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";
-    homepage = "https://github.com/ArmCord/ArmCord";
+    homepage = "https://armcord.app";
+    downloadPage = "https://github.com/ArmCord/ArmCord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling ];
+    maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "armcord";
   };
 }

@@ -1,19 +1,20 @@
-{ pkgs, lib, tree-sitter, ... }:
+{ pkgs, lib }:
 
 let
-  libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+  libExt = pkgs.stdenv.hostPlatform.extensions.sharedLibrary;
   grammarToAttrSet = drv:
-      {
-        name = "lib/lib${lib.strings.removeSuffix "-grammar" (lib.strings.getName drv)}${libExt}";
-        path = "${drv}/parser";
-      };
-in
-{
-  with-all-grammars = pkgs.linkFarm "emacs-treesit-grammars"
-    (map grammarToAttrSet pkgs.tree-sitter.allGrammars);
+    {
+      name = "lib/lib${lib.strings.removeSuffix "-grammar" (lib.strings.getName drv)}${libExt}";
+      path = "${drv}/parser";
+    };
 
-  # Use this one like this:
-  # treesit-grammars.with-grammars (grammars: with grammars; [tree-sitter-bash])
+  # Usage:
+  # treesit-grammars.with-grammars (p: [ p.tree-sitter-bash p.tree-sitter-c ... ])
   with-grammars = fn: pkgs.linkFarm "emacs-treesit-grammars"
     (map grammarToAttrSet (fn pkgs.tree-sitter.builtGrammars));
+in
+{
+  inherit with-grammars;
+
+  with-all-grammars = with-grammars builtins.attrValues;
 }

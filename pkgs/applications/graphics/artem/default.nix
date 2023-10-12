@@ -2,28 +2,30 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, pkg-config
-, openssl
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "artem";
-  version = "1.1.7";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "finefindus";
-    repo = pname;
+    repo = "artem";
     rev = "v${version}";
-    sha256 = "sha256-wd8csdt7qOWFhUBRjqfJSEGnNDyHD7lJA8CtW+q4Kxg=";
+    hash = "sha256-t8L1lylaacEHGg3wxVgiB2XmBHDGzql774oHrg/vUC0=";
   };
 
-  cargoSha256 = "sha256-zFXQUQVPqTur7m+aL0JhSiZI+EEFo9nCTVu1yAOgp/I=";
+  cargoHash = "sha256-rsgl8g6AqNmdq2gJ3PHvKMb7eid8ewtheajGWSWbeBw=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  buildInputs = [ openssl ];
-
-  OPENSSL_NO_VENDOR = 1;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   checkFlags = [
     # require internet access

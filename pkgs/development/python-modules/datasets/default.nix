@@ -21,22 +21,17 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.12.0";
+  version = "2.14.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-o/LUzRmpM4tjiCh31KoQXzU1Z/p/91uamh7G4SGnxQM=";
+    hash = "sha256-2XC5k546JvqUV4xeL1SRQOHDzItL1CE3bJQMjva3IkY=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "responses<0.19" "responses"
-  '';
 
   propagatedBuildInputs = [
     aiohttp
@@ -56,10 +51,10 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  # Tests require pervasive internet access.
+  # Tests require pervasive internet access
   doCheck = false;
 
-  # Module import will attempt to create a cache directory.
+  # Module import will attempt to create a cache directory
   postFixup = "export HF_MODULES_CACHE=$TMPDIR";
 
   pythonImportsCheck = [

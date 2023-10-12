@@ -6,7 +6,7 @@
 , eth-hash
 , eth-typing
 , eth-utils
-, factory_boy
+, factory-boy
 , hypothesis
 , isPyPy
 , pyasn1
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     asn1tools
-    factory_boy
+    factory-boy
     hypothesis
     pyasn1
     pytestCheckHook
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     description = "Common API for Ethereum key operations";
     homepage = "https://github.com/ethereum/eth-keys";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

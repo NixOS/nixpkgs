@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "colorpicker";
-  version = "unstable-2018-01-14";
+  version = "unstable-2017-09-01";
 
   src = fetchFromGitHub {
-    owner = "Ancurio";
+    owner = "Jack12816";
     repo = "colorpicker";
-    rev = "287676947e6e3b5b0cee784aeb1638cf22f0ce17";
-    sha256 = "1kj1dpb79llrfpszraaz6r7ci114zqi5rmqxwsvq2dnnpjxyi29r";
+    rev = "a4455b92fde1dfbac81e7852f171093932154a30";
+    sha256 = "z2asxTIP8WcsWcePmIg0k4bOF2JwkqOxNqSpQv4/a40=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Click on a pixel on your screen and print its color value in RGB";
-    homepage = "https://github.com/Ancurio/colorpicker";
+    homepage = "https://github.com/Jack12816/colorpicker";
     maintainers = with maintainers; [ jb55 ];
     license = licenses.mit;
     mainProgram = "colorpicker";

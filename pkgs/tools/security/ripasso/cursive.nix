@@ -2,7 +2,6 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 , pkg-config
 , python3
 , openssl
@@ -10,7 +9,6 @@
 , gpgme
 , xorg
 , nettle
-, llvmPackages
 , clang
 , AppKit
 , Security

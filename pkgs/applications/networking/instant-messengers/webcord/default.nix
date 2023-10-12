@@ -1,18 +1,28 @@
-{ lib, stdenv, buildNpmPackage, fetchFromGitHub, copyDesktopItems
-, python3, pipewire, libpulseaudio, xdg-utils, electron_24, makeDesktopItem }:
+{ lib
+, buildNpmPackage
+, fetchFromGitHub
+, copyDesktopItems
+, python3
+, pipewire
+, libpulseaudio
+, xdg-utils
+, electron_25
+, makeDesktopItem
+, nix-update-script
+}:
 
 buildNpmPackage rec {
   pname = "webcord";
-  version = "4.2.0";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "v${version}";
-    sha256 = "sha256-530iWNvehImwSYt5HnZaqa4TAslrwxAOZi3gRm1K2/w=";
+    hash = "sha256-23YmyRU+xBXpC7bZtBY3RZeVpLFQ3I/Ag5Tvi3m9cIs=";
   };
 
-  npmDepsHash = "sha256-YguZtGn8CT4EqOQWS0GeNGBdZSC3Lj1gFR0ZiegWTJU=";
+  npmDepsHash = "sha256-gHX5ZdcC46BwMu22G05Q8UhvZ6CtQ1HSf6KLLlN2iX0=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -46,7 +56,7 @@ buildNpmPackage rec {
     install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
     # Add xdg-utils to path via suffix, per PR #181171
-    makeWrapper '${electron_24}/bin/electron' $out/bin/webcord \
+    makeWrapper '${electron_25}/bin/electron' $out/bin/webcord \
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
@@ -66,13 +76,16 @@ buildNpmPackage rec {
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
-    description = "A Discord and Fosscord electron-based client implemented without Discord API";
+    description = "A Discord and SpaceBar electron-based client implemented without Discord API";
     homepage = "https://github.com/SpacingBat3/WebCord";
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
     license = licenses.mit;
+    mainProgram = "webcord";
     maintainers = with maintainers; [ huantian ];
-    platforms = electron_24.meta.platforms;
+    platforms = platforms.linux;
   };
 }

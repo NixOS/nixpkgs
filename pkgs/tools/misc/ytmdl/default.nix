@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ytmdl";
-  version = "2022.03.16";
+  version = "2023.07.27";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
-    sha256 = "sha256-2lEOgwSi4fAVK+gJXvjWQDBWIb1cODFmUiq0FUfpyXA=";
+    sha256 = "sha256-sBRzbUR+zqS8Zzg/uU4bjJUr/n1/tb0K6u/FVTEIRsk=";
   };
 
   postPatch = ''

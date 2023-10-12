@@ -2,16 +2,16 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.7.1";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r27ydv258c6pc82za0wq8q8fj0j3r50c8wxc6r7dwr6wx8q3asx";
+    sha256 = "sha256-D/5pwE2V+yXj92ECOUcl/dajMDbvVdz9YNJrl2Pzvts=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ click distro psutil ];
+  propagatedBuildInputs = with python3Packages; [ setuptools-git-versioning click distro psutil ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
@@ -25,6 +25,8 @@ python3Packages.buildPythonPackage rec {
 
     # patch to prevent script copying and to disable install
     ./prevent-install-and-copy.patch
+    # patch to prevent update
+    ./prevent-update.patch
   ];
 
   postInstall = ''
@@ -34,10 +36,10 @@ python3Packages.buildPythonPackage rec {
     # systemd service
     mkdir -p $out/lib/systemd/system
     cp ${src}/scripts/auto-cpufreq.service $out/lib/systemd/system
-    substituteInPlace $out/lib/systemd/system/auto-cpufreq.service --replace "/usr/local" $out
   '';
 
   meta = with lib; {
+    mainProgram = "${pname}";
     homepage = "https://github.com/AdnanHodzic/auto-cpufreq";
     description = "Automatic CPU speed & power optimizer for Linux";
     license = licenses.lgpl3Plus;

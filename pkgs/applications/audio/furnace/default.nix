@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, gitUpdater
 , testers
 , furnace
 , fetchFromGitHub
@@ -10,6 +9,7 @@
 , fftw
 , fmt_8
 , libsndfile
+, libX11
 , rtmidi
 , SDL2
 , zlib
@@ -17,19 +17,32 @@
 , libjack2
 , withGUI ? true
 , Cocoa
+, portaudio
+, alsa-lib
+# Enable GL/GLES rendering
+, withGL ? !stdenv.hostPlatform.isDarwin
+# Use GLES instead of GL, some platforms have better support for one than the other
+, preferGLES ? stdenv.hostPlatform.isAarch
 }:
 
 stdenv.mkDerivation rec {
   pname = "furnace";
-  version = "0.6pre4-hotfix";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-lJtV/0GnWN5mSjv2LaPEMnkuThaNeijBMjLGFPOJX4k=";
+    hash = "sha256-8we7vKyGWjM9Rx0MJjSKLJcKBHiHt5vjuy17HHx/pP8=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    # To offer scaling detection on X11, furnace checks if libX11.so is available via dlopen and uses some of its functions
+    # But it's being linked against a versioned libX11.so.VERSION via SDL, so the unversioned one is not on the rpath
+    substituteInPlace src/gui/scaling.cpp \
+      --replace 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -45,8 +58,12 @@ stdenv.mkDerivation rec {
     rtmidi
     SDL2
     zlib
+    portaudio
   ] ++ lib.optionals withJACK [
     libjack2
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # portaudio pkg-config is pulling this in as a link dependency, not set in propagatedBuildInputs
+    alsa-lib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
@@ -59,15 +76,15 @@ stdenv.mkDerivation rec {
     "-DSYSTEM_RTMIDI=ON"
     "-DSYSTEM_SDL2=ON"
     "-DSYSTEM_ZLIB=ON"
+    "-DSYSTEM_PORTAUDIO=ON"
     "-DWITH_JACK=${if withJACK then "ON" else "OFF"}"
+    "-DWITH_PORTAUDIO=ON"
+    "-DWITH_RENDER_SDL=ON"
+    "-DWITH_RENDER_OPENGL=${lib.boolToString withGL}"
     "-DWARNINGS_ARE_ERRORS=ON"
+  ] ++ lib.optionals withGL [
+    "-DUSE_GLES=${lib.boolToString preferGLES}"
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but breaks on darwin (with clang) or aarch64 (old gcc)
-    "-Wno-error=mismatched-new-delete"
-    "-Wno-error=use-after-free"
-  ]);
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
@@ -86,9 +103,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-    };
+    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = furnace;
     };
@@ -97,6 +112,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
+    changelog = "https://github.com/tildearrow/furnace/releases/tag/v${version}";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;

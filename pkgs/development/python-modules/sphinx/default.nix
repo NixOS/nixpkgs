@@ -3,7 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
+, isPyPy
 
 # nativeBuildInputs
 , flit-core
@@ -144,6 +144,19 @@ buildPythonPackage rec {
     "test_auth_header_no_match"
     "test_follows_redirects_on_GET"
     "test_connect_to_selfsigned_fails"
+  ] ++ lib.optionals isPyPy [
+    # PyPy has not __builtins__ which get asserted
+    # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
+    "test_autosummary_generate_content_for_module"
+    "test_autosummary_generate_content_for_module_skipped"
+    # internals are asserted which are sightly different in PyPy
+    "test_autodoc_inherited_members_None"
+    "test_automethod_for_builtin"
+    "test_builtin_function"
+    "test_cython"
+    "test_isattributedescriptor"
+    "test_methoddescriptor"
+    "test_partialfunction"
   ];
 
   meta = with lib; {

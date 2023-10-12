@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "terraform-backend-git";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "plumber-cd";
     repo = "terraform-backend-git";
     rev = "v${version}";
-    hash = "sha256-nRh2eIVVBdb8jFfgmPoOk4y0TDoCeng50TRA+nphn58=";
+    hash = "sha256-ryHFuHIEJ4i1R3oBW3w3aAvtv+vIrO745qwx0+SqBF4=";
   };
 
   vendorHash = "sha256-Y/4UgG/2Vp+gxBnGrNpAgRNfPZWJXhVo8TVa/VfOYt0=";

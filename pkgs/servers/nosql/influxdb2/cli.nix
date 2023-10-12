@@ -29,5 +29,6 @@ in buildGoModule {
     license = licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with maintainers; [ abbradar danderson ];
+    mainProgram = "influx";
   };
 }

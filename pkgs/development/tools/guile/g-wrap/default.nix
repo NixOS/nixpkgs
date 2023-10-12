@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libffi ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
   doCheck = true;
 
   meta = with lib; {

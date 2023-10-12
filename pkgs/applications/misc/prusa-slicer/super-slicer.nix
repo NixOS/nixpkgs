@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, prusa-slicer }:
+{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, wxGTK31, prusa-slicer }:
 let
   appname = "SuperSlicer";
   pname = "super-slicer";
@@ -83,6 +83,18 @@ let
     passthru = allVersions;
 
   };
-  allVersions = builtins.mapAttrs (_name: version: (prusa-slicer.overrideAttrs (override version))) versions;
+ wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.1.4";
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "489f6118256853cf5b299d595868641938566cdb";
+      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
+      fetchSubmodules = true;
+    };
+  });
+  prusa-slicer-wxGTK-override = prusa-slicer.override { wxGTK-override = wxGTK31-prusa; };
+  allVersions = builtins.mapAttrs (_name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))) versions;
 in
 allVersions.stable

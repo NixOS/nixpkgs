@@ -4,15 +4,6 @@
 
 let
   sources = {
-    "@types/node-18.15.11" = {
-      name = "_at_types_slash_node";
-      packageName = "@types/node";
-      version = "18.15.11";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-18.15.11.tgz";
-        sha512 = "E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==";
-      };
-    };
     "fsevents-2.3.2" = {
       name = "fsevents";
       packageName = "fsevents";
@@ -22,30 +13,39 @@ let
         sha512 = "xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==";
       };
     };
-    "playwright-core-1.31.1" = {
+    "playwright-1.38.0" = {
+      name = "playwright";
+      packageName = "playwright";
+      version = "1.38.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/playwright/-/playwright-1.38.0.tgz";
+        sha512 = "fJGw+HO0YY+fU/F1N57DMO+TmXHTrmr905J05zwAQE9xkuwP/QLDk63rVhmyxh03dYnEhnRbsdbH9B0UVVRB3A==";
+      };
+    };
+    "playwright-core-1.38.0" = {
       name = "playwright-core";
       packageName = "playwright-core";
-      version = "1.31.1";
+      version = "1.38.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/playwright-core/-/playwright-core-1.31.1.tgz";
-        sha512 = "JTyX4kV3/LXsvpHkLzL2I36aCdml4zeE35x+G5aPc4bkLsiRiQshU5lWeVpHFAuC8xAcbI6FDcw/8z3q2xtJSQ==";
+        url = "https://registry.npmjs.org/playwright-core/-/playwright-core-1.38.0.tgz";
+        sha512 = "f8z1y8J9zvmHoEhKgspmCvOExF2XdcxMW8jNRuX4vkQFrzV4MlZ55iwb5QeyiFQgOFCUolXiRHgpjSEnqvO48g==";
       };
     };
   };
 in
 {
-  "@playwright/test-1.31.1" = nodeEnv.buildNodePackage {
+  "@playwright/test-1.38.0" = nodeEnv.buildNodePackage {
     name = "_at_playwright_slash_test";
     packageName = "@playwright/test";
-    version = "1.31.1";
+    version = "1.38.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/@playwright/test/-/test-1.31.1.tgz";
-      sha512 = "IsytVZ+0QLDh1Hj83XatGp/GsI1CDJWbyDaBGbainsh0p2zC7F4toUocqowmjS6sQff2NGT3D9WbDj/3K2CJiA==";
+      url = "https://registry.npmjs.org/@playwright/test/-/test-1.38.0.tgz";
+      sha512 = "xis/RXXsLxwThKnlIXouxmIvvT3zvQj1JE39GsNieMUrMpb3/GySHDh2j8itCG22qKVD4MYLBp7xB73cUW/UUw==";
     };
     dependencies = [
-      sources."@types/node-18.15.11"
       sources."fsevents-2.3.2"
-      sources."playwright-core-1.31.1"
+      sources."playwright-1.38.0"
+      sources."playwright-core-1.38.0"
     ];
     buildInputs = globalBuildInputs;
     meta = {

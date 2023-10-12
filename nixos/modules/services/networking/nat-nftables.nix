@@ -145,28 +145,28 @@ in
       }
     ];
 
-    networking.nftables.ruleset = ''
-      table ip nixos-nat {
-        ${mkTable {
+    networking.nftables.tables = {
+      "nixos-nat" = {
+        family = "ip";
+        content = mkTable {
           ipVer = "ip";
           inherit dest ipSet;
           forwardPorts = filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
           inherit (cfg) dmzHost;
-        }}
-      }
-
-      ${optionalString cfg.enableIPv6 ''
-        table ip6 nixos-nat {
-          ${mkTable {
-            ipVer = "ip6";
-            dest = destIPv6;
-            ipSet = ipv6Set;
-            forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
-            dmzHost = null;
-          }}
-        }
-      ''}
-    '';
+        };
+      };
+      "nixos-nat6" = mkIf cfg.enableIPv6 {
+        family = "ip6";
+        name = "nixos-nat";
+        content = mkTable {
+          ipVer = "ip6";
+          dest = destIPv6;
+          ipSet = ipv6Set;
+          forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
+          dmzHost = null;
+        };
+      };
+    };
 
     networking.firewall.extraForwardRules = optionalString config.networking.firewall.filterForward ''
       ${optionalString (ifaceSet != "") ''

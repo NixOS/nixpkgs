@@ -327,6 +327,24 @@ let
           default = false;
           description = lib.mdDoc "Whether to enable wol on this interface.";
         };
+        policy = mkOption {
+          type = with types; listOf (
+            enum ["phy" "unicast" "multicast" "broadcast" "arp" "magic" "secureon"]
+          );
+          default = ["magic"];
+          description = lib.mdDoc ''
+            The [Wake-on-LAN policy](https://www.freedesktop.org/software/systemd/man/systemd.link.html#WakeOnLan=)
+            to set for the device.
+
+            The options are
+            - `phy`: Wake on PHY activity
+            - `unicast`: Wake on unicast messages
+            - `multicast`: Wake on multicast messages
+            - `broadcast`: Wake on broadcast messages
+            - `arp`: Wake on ARP
+            - `magic`: Wake on receipt of a magic packet
+          '';
+        };
       };
     };
 
@@ -1396,14 +1414,12 @@ in
     security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
       /run/wrappers/bin/ping {
         include <abstractions/base>
-        include <nixos/security.wrappers>
+        include <nixos/security.wrappers/ping>
         rpx /run/wrappers/wrappers.*/ping,
       }
       /run/wrappers/wrappers.*/ping {
         include <abstractions/base>
-        include <nixos/security.wrappers>
-        r /run/wrappers/wrappers.*/ping.real,
-        mrpx ${config.security.wrappers.ping.source},
+        include <nixos/security.wrappers/ping>
         capability net_raw,
         capability setpcap,
       }
@@ -1496,7 +1512,7 @@ in
           in
           ''
             # override to ${msg} for ${i.name}
-            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
+            ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
           '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})

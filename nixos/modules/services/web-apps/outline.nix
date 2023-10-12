@@ -3,8 +3,12 @@
 let
   defaultUser = "outline";
   cfg = config.services.outline;
+  inherit (lib) mkRemovedOptionModule;
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "outline" "sequelizeArguments" ] "Database migration are run agains configurated database by outline directly")
+  ];
   # See here for a reference of all the options:
   #   https://github.com/outline/outline/blob/v0.67.0/.env.sample
   #   https://github.com/outline/outline/blob/v0.67.0/app.json
@@ -25,7 +29,7 @@ in
           # to still land in the same team. Note that this effectively makes
           # Outline a single-team instance.
           patchPhase = ${"''"}
-            sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' server/routes/auth/providers/oidc.ts
+            sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' plugins/oidc/server/auth/oidc.ts
           ${"''"};
         })
       '';
@@ -48,15 +52,6 @@ in
       description = lib.mdDoc ''
         Group under which the service should run. If this is the default value,
         the group will be created.
-      '';
-    };
-
-    sequelizeArguments = lib.mkOption {
-      type = lib.types.str;
-      default = "";
-      example = "--env=production-ssl-disabled";
-      description = lib.mdDoc ''
-        Optional arguments to pass to `sequelize` calls.
       '';
     };
 
@@ -583,16 +578,6 @@ in
     systemd.services.outline = let
       localRedisUrl = "redis+unix:///run/redis-outline/redis.sock";
       localPostgresqlUrl = "postgres://localhost/outline?host=/run/postgresql";
-
-      # Create an outline-sequalize wrapper (a wrapper around the wrapper) that
-      # has the config file's path baked in. This is necessary because there is
-      # at least two occurrences of outline calling this from its own code.
-      sequelize = pkgs.writeShellScriptBin "outline-sequelize" ''
-        exec ${cfg.package}/bin/outline-sequelize \
-          --config $RUNTIME_DIRECTORY/database.json \
-          ${cfg.sequelizeArguments} \
-          "$@"
-      '';
     in {
       description = "Outline wiki and knowledge base";
       wantedBy = [ "multi-user.target" ];
@@ -603,7 +588,6 @@ in
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
       path = [
         pkgs.openssl # Required by the preStart script
-        sequelize
       ];
 
 
@@ -687,37 +671,6 @@ in
           openssl rand -hex 32 > ${lib.escapeShellArg cfg.utilsSecretFile}
         fi
 
-        # The config file is required for the sequelize CLI.
-        ${if (cfg.databaseUrl == "local") then ''
-          cat <<EOF > $RUNTIME_DIRECTORY/database.json
-          {
-            "production-ssl-disabled": {
-              "host": "/run/postgresql",
-              "username": null,
-              "password": null,
-              "dialect": "postgres"
-            }
-          }
-          EOF
-        '' else ''
-          cat <<EOF > $RUNTIME_DIRECTORY/database.json
-          {
-            "production": {
-              "use_env_variable": "DATABASE_URL",
-              "dialect": "postgres",
-              "dialectOptions": {
-                "ssl": {
-                  "rejectUnauthorized": false
-                }
-              }
-            },
-            "production-ssl-disabled": {
-              "use_env_variable": "DATABASE_URL",
-              "dialect": "postgres"
-            }
-          }
-          EOF
-        ''}
       '';
 
       script = ''

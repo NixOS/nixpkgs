@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "tensorly";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6iZvUgsoYf8fDGEuAODgfr4jCkiJwaJXlQUAsaOF9JU=";
+    hash = "sha256-hwpdExW/ESOavFkL3old1Efo5WC+PYmcgJp5/oLelaA=";
   };
 
   propagatedBuildInputs = [
@@ -54,8 +54,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # tries to download data:
-    "test_kinetic"
+    # this can fail on hydra and other peoples machines, check with others before re-enabling
     # AssertionError: Partial_SVD took too long, maybe full_matrices set wrongly
     "test_svd_time"
   ];
@@ -65,6 +64,5 @@ buildPythonPackage rec {
     homepage = "https://tensorly.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
-    broken = stdenv.isLinux && stdenv.isAarch64;  # test failures: test_TTOI and test_validate_tucker_rank
   };
 }

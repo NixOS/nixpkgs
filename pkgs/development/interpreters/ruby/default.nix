@@ -349,4 +349,11 @@ in {
     sha256 = "sha256-lsV1WIcaZ0jeW8nydOk/S1qtBs2PN776Do2U57ikI7w=";
     cargoSha256 = "sha256-6du7RJo0DH+eYMOoh3L31F3aqfR5+iG1iKauSV1uNcQ=";
   };
+
+  ruby_3_3 = generic {
+    version = rubyVersion "3" "3" "0" "preview2";
+    sha256 = "sha256-MM6LD+EbN7WsCI9aV2V0S5NerEW7ianjgXMVMxRPWZE=";
+    cargoSha256 = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
+  };
+
 }

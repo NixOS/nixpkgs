@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "roxterm";
-  version = "3.12.1";
+  version = "3.14.1";
 
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
     rev = version;
-    sha256 = "sha256-jVcf/nrEq8dM8rw40ZhXGJjt3DQLroCePtIAdAsVIfs=";
+    sha256 = "sha256-IHJ30qXNVv9tUdePskHl1hd5kPivBb2kH1oOstBr/9s=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook libxslt ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       Tabbed, VTE-based terminal emulator. Similar to gnome-terminal without
       the dependencies on Gnome.
     '';
-    maintainers = with maintainers; [ cdepillabout ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

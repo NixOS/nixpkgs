@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , python3Packages
-, ffmpeg
 , installShellFiles
 , scdoc
 }:

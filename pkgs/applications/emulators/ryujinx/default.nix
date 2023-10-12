@@ -1,7 +1,6 @@
 { lib
 , buildDotnetModule
 , dotnetCorePackages
-, stdenvNoCC
 , fetchFromGitHub
 , wrapGAppsHook
 , libX11
@@ -29,13 +28,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.819"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1012"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "4ca78eded52f21089400cc28351b9353279b8171";
-    sha256 = "13g5sgql14rr7qmsiavm6kkjkv9sqqq7cmwpy9iiahbfzc9w1wc1";
+    rev = "e6700b314f1384f015666767baf9ea1d8411e330";
+    sha256 = "1szgmvwril7zwfbvqz850xavrk70i56i1yyqfh9mxpxlc3n9xxzr";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -114,7 +113,7 @@ buildDotnetModule rec {
     install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
     substituteInPlace $out/share/applications/Ryujinx.desktop \
-      --replace "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
+      --replace "Ryujinx %f" "$out/bin/Ryujinx %f"
 
     ln -s $out/bin/Ryujinx $out/bin/ryujinx
 

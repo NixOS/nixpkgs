@@ -42,6 +42,11 @@ in {
       <https://github.com/swaywm/sway/wiki> and
       "man 5 sway" for more information'');
 
+    enableRealtime = mkEnableOption (lib.mdDoc ''
+      add CAP_SYS_NICE capability on `sway` binary for realtime scheduling
+      privileges. This may improve latency and reduce stuttering, specially in
+      high load scenarios'') // { default = true; };
+
     package = mkOption {
       type = with types; nullOr package;
       default = defaultSwayPackage;
@@ -49,7 +54,7 @@ in {
       description = lib.mdDoc ''
         Sway package to use. Will override the options
         'wrapperFeatures', 'extraSessionCommands', and 'extraOptions'.
-        Set to <code>null</code> to not add any Sway package to your
+        Set to `null` to not add any Sway package to your
         path. This should be done if you want to use the Home Manager Sway
         module to install Sway.
       '';
@@ -147,6 +152,14 @@ in {
             '';
           } // optionalAttrs (cfg.package != null) {
             "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
+          };
+        };
+        security.wrappers = mkIf (cfg.enableRealtime && cfg.package != null) {
+          sway = {
+            owner = "root";
+            group = "root";
+            source = "${cfg.package}/bin/sway";
+            capabilities = "cap_sys_nice+ep";
           };
         };
         # To make a Sway session available if a display manager like SDDM is enabled:

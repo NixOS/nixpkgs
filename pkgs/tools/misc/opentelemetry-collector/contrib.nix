@@ -21,7 +21,7 @@ buildGoModule rec {
   vendorHash = "sha256-ABaRedZXPr2q2AmslVNIJUvONZa4tv7OkxBLR9GuBRE=";
 
   # there is a nested go.mod
-  sourceRoot = "source/cmd/otelcontribcol";
+  sourceRoot = "${src.name}/cmd/otelcontribcol";
 
   # upstream strongly recommends disabling CGO
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream

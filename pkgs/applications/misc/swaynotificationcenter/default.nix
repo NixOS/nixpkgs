@@ -28,14 +28,18 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
-    repo = "SwayNotificationCenter";
+    repo = pname;
     rev = "v${version}";
-    hash = "sha256-E9CjNx/xzkkOZ39XbfIb1nJFheZVFpj/lwmITKtpb7A=";
+    hash = "sha256-mwwSTs4d9jUXUy33nSYJCRFlpH6naCmbRUSpfVacMBE=";
   };
+
+  patches = [
+    ./001-backport-pr296.patch
+  ];
 
   nativeBuildInputs = [
     bash-completion
@@ -70,6 +74,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+
+    substituteInPlace src/functions.vala --replace /usr/local/etc $out/etc
   '';
 
   passthru.tests.version = testers.testVersion {

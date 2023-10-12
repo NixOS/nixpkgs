@@ -16,14 +16,16 @@
 
 buildPythonPackage rec {
   pname = "jaxopt";
-  version = "0.5.5";
-  disabled = pythonOlder "3.7";
+  version = "0.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "refs/tags/${pname}-v${version}";
-    hash = "sha256-WOsr/Dvguu9/qX6+LMlAKM3EANtYPtDu8Uo2157+bs0=";
+    hash = "sha256-5+GfRFzXyc1Ukp86NeK0qstTq9fkx+eDb4iXvxzRoKs=";
   };
 
   propagatedBuildInputs = [
@@ -50,9 +52,15 @@ buildPythonPackage rec {
     "jaxopt.tree_util"
   ];
 
+  disabledTests = [
+    # Stack frame issue
+    "test_bisect"
+  ];
+
   meta = with lib; {
     homepage = "https://jaxopt.github.io";
     description = "Hardware accelerated, batchable and differentiable optimizers in JAX";
+    changelog = "https://github.com/google/jaxopt/releases/tag/jaxopt-v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ bcdarwin ];
   };

@@ -16,9 +16,7 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  setSourceRoot = ''
-    sourceRoot=$PWD
-  '';
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall

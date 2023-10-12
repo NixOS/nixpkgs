@@ -14,6 +14,7 @@
 , openal
 , libvorbis
 , sqlite
+, lua5_1
 , luajit
 , freetype
 , gettext
@@ -93,8 +94,9 @@ let
     nativeBuildInputs = [ cmake doxygen graphviz ninja ];
 
     buildInputs = [
-      irrlichtmtInput luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      irrlichtmtInput jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
+    ] ++ [ (if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1) ] ++ [
     ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [

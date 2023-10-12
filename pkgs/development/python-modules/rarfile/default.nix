@@ -8,14 +8,14 @@ assert !useUnrar -> libarchive != null;
 
 buildPythonPackage rec {
   pname = "rarfile";
-  version = "4.0";
+  version = "4.1";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "markokr";
     repo = "rarfile";
     rev = "v${version}";
-    sha256 = "0gpriqkvcb6bsccvq8b099xjv5fkjs0d7g4636d5jphy417jxk5m";
+    sha256 = "sha256-9PT4/KgkdFhTjZIia2xiSM5VnaZ4040Ww7bG9Nr3XDU=";
   };
 
   nativeCheckInputs = [ pytestCheckHook nose glibcLocales ];

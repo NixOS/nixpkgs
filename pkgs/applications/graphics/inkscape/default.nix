@@ -4,11 +4,13 @@
 , boost
 , cairo
 , cmake
+, desktopToDarwinBundle
 , fetchurl
 , gettext
 , ghostscript
 , glib
 , glibmm
+, gobject-introspection
 , gsl
 , gspell
 , gtk-mac-integration
@@ -46,6 +48,7 @@ let
       appdirs
       beautifulsoup4
       cachecontrol
+      filelock
       numpy
       lxml
       packaging
@@ -78,16 +81,15 @@ stdenv.mkDerivation rec {
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
     })
+    (substituteAll {
+      # Fix path to ps2pdf binary
+      src = ./fix-ps2pdf-path.patch;
+      inherit ghostscript;
+    })
   ];
 
   postPatch = ''
     patchShebangs share/extensions
-    substituteInPlace share/extensions/eps_input.inx \
-      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
-    substituteInPlace share/extensions/ps_input.inx \
-      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
-    substituteInPlace share/extensions/ps_input.py \
-      --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
 
@@ -104,10 +106,13 @@ stdenv.mkDerivation rec {
     glib # for setup hook
     gdk-pixbuf # for setup hook
     wrapGAppsHook
+    gobject-introspection
   ] ++ (with perlPackages; [
     perl
     XMLParser
-  ]);
+  ]) ++ lib.optionals stdenv.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = [
     boehmgc
@@ -157,6 +162,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.all;
+    mainProgram = "inkscape";
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
       files in the W3C SVG (Scalable Vector Graphics) file format.

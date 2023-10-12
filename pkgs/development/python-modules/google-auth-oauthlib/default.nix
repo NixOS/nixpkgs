@@ -33,8 +33,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # some tests require loopback networking
-  __darwinAllowLocalNetworking = true;
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
+    "test_run_local_server_bind_addr"
+  ];
 
   pythonImportsCheck = [
     "google_auth_oauthlib"
@@ -44,6 +46,6 @@ buildPythonPackage rec {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 terlar ];
+    maintainers = with maintainers; [ terlar ];
   };
 }

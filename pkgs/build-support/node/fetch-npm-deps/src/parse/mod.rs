@@ -3,11 +3,14 @@ use lock::UrlOrString;
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
-    fs, io,
+    fs,
+    io::Write,
     process::{Command, Stdio},
 };
 use tempfile::{tempdir, TempDir};
 use url::Url;
+
+use crate::util;
 
 pub mod lock;
 
@@ -103,7 +106,7 @@ impl Package {
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
-                let mut body = ureq::get(hosted.as_str()).call()?.into_reader();
+                let body = util::get_url_body_with_retry(&hosted)?;
 
                 let workdir = tempdir()?;
 
@@ -117,7 +120,7 @@ impl Package {
                     .stdin(Stdio::piped())
                     .spawn()?;
 
-                io::copy(&mut body, &mut cmd.stdin.take().unwrap())?;
+                cmd.stdin.take().unwrap().write_all(&body)?;
 
                 let exit = cmd.wait()?;
 
@@ -136,9 +139,9 @@ impl Package {
             None => Specifics::Registry {
                 integrity: pkg
                     .integrity
-                    .expect("non-git dependencies should have assosciated integrity")
+                    .expect("non-git dependencies should have associated integrity")
                     .into_best()
-                    .expect("non-git dependencies should have non-empty assosciated integrity"),
+                    .expect("non-git dependencies should have non-empty associated integrity"),
             },
         };
 
@@ -151,16 +154,7 @@ impl Package {
 
     pub fn tarball(&self) -> anyhow::Result<Vec<u8>> {
         match &self.specifics {
-            Specifics::Registry { .. } => {
-                let mut body = Vec::new();
-
-                ureq::get(self.url.as_str())
-                    .call()?
-                    .into_reader()
-                    .read_to_end(&mut body)?;
-
-                Ok(body)
-            }
+            Specifics::Registry { .. } => Ok(util::get_url_body_with_retry(&self.url)?),
             Specifics::Git { workdir } => Ok(Command::new("tar")
                 .args([
                     "--sort=name",

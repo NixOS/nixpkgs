@@ -5,15 +5,7 @@
 , installShellFiles
 , installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
 , installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
-, pkg-config
-, Security
-, libiconv
-, openssl
 , notmuch
-, withRusttlsTls ? true
-, withRusttlsNativeCerts ? withRusttlsTls
-, withNativeTls ? false
-, withNativeTlsVendored ? withNativeTls
 , withImapBackend ? true
 , withNotmuchBackend ? false
 , withSmtpSender ? true
@@ -21,31 +13,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "himalaya";
-  version = "0.7.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = pname;
     rev = "v${version}";
-    sha256 = "HmH4qL70ii8rS8OeUnUxsy9/wMx+f2SBd1AyRqlfKfc=";
+    hash = "sha256-AImLYRRCL6IvoSeMFH2mbkNOvUmLwIvhWB3cOoqDljk=";
   };
 
-  cargoSha256 = "NJFOtWlfKZRLr9vvDvPQjpT4LGMeytk0JFJb0r77bwE=";
+  cargoSha256 = "deJZPaZW6rb7A6wOL3vcphBXu0F7EXc1xRwSDY/v8l4=";
 
-  nativeBuildInputs = [ ]
-    ++ lib.optional (installManPages || installShellCompletions) installShellFiles
-    ++ lib.optional (withNativeTls && !stdenv.hostPlatform.isDarwin) pkg-config;
+  nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  buildInputs = [ ]
-    ++ lib.optional withNativeTls (if stdenv.hostPlatform.isDarwin then [ Security libiconv ] else [ openssl ])
-    ++ lib.optional withNotmuchBackend notmuch;
+  buildInputs = lib.optional withNotmuchBackend notmuch;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ ]
-    ++ lib.optional withRusttlsTls "rustls-tls"
-    ++ lib.optional withRusttlsNativeCerts "rustls-native-certs"
-    ++ lib.optional withNativeTls "native-tls"
-    ++ lib.optional withNativeTlsVendored "native-tls-vendored"
     ++ lib.optional withImapBackend "imap-backend"
     ++ lib.optional withNotmuchBackend "notmuch-backend"
     ++ lib.optional withSmtpSender "smtp-sender";

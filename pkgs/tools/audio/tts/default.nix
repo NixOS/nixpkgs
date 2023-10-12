@@ -10,19 +10,20 @@ let
     packageOverrides = self: super: {
       torch = super.torch-bin;
       torchvision = super.torchvision-bin;
+      tensorflow = super.tensorflow-bin;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.14.0";
+  version = "0.17.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AVU4ULz++t9850pYeNrG5HKNvUZcMld4O1/zu697rzk=";
+    hash = "sha256-yZHdPqvYmlq/ZKeinez4MmO9+jCIl9JAD0t/tc/Uz8c=";
   };
 
   postPatch = let
@@ -41,9 +42,15 @@ python.pkgs.buildPythonApplication rec {
   in ''
     sed -r -i \
       ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
+        ''-e 's/${package}\s*[<>=]+.+/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
+
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's/${package}\s*[<>=]+[^"]+/${package}/g' \''
+      ) relaxedConstraints)}
+    pyproject.toml
     # only used for notebooks and visualization
     sed -r -i -e '/umap-learn/d' requirements.txt
   '';
@@ -60,6 +67,7 @@ python.pkgs.buildPythonApplication rec {
     bnunicodenormalizer
     coqpit
     einops
+    encodec
     flask
     fsspec
     g2pkk

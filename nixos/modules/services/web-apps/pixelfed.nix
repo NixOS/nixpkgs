@@ -24,7 +24,7 @@ let
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
-    $sudo ${cfg.phpPackage}/bin/php artisan "$@"
+    $sudo ${phpPackage}/bin/php artisan "$@"
   '';
   dbSocket = {
     "pgsql" = "/run/postgresql";
@@ -356,7 +356,8 @@ in {
         ExecStart = "${pixelfed-manage}/bin/pixelfed-manage schedule:run";
         User = user;
         Group = group;
-        StateDirectory = cfg.dataDir;
+        StateDirectory =
+          lib.mkIf (cfg.dataDir == "/var/lib/pixelfed") "pixelfed";
       };
     };
 
@@ -379,6 +380,12 @@ in {
       };
 
       script = ''
+        # Before running any PHP program, cleanup the code cache.
+        # It's necessary if you upgrade the application otherwise you might
+        # try to import non-existent modules.
+        rm -f ${cfg.runtimeDir}/app.php
+        rm -rf ${cfg.runtimeDir}/cache/*
+
         # Concatenate non-secret .env and secret .env
         rm -f ${cfg.dataDir}/.env
         cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env
@@ -391,6 +398,9 @@ in {
         rsync -av --no-perms ${pixelfed}/storage-static/ ${cfg.dataDir}/storage
         chmod -R +w ${cfg.dataDir}/storage
 
+        chmod g+x ${cfg.dataDir}/storage ${cfg.dataDir}/storage/app
+        chmod -R g+rX ${cfg.dataDir}/storage/app/public
+
         # Link the app.php in the runtime folder.
         # We cannot link the cache folder only because bootstrap folder needs to be writeable.
         ln -sf ${pixelfed}/bootstrap-static/app.php ${cfg.runtimeDir}/app.php
@@ -401,11 +411,6 @@ in {
 
         # Install Horizon
         # FIXME: require write access to public/ — should be done as part of install — pixelfed-manage horizon:publish
-
-        # Before running any PHP program, cleanup the bootstrap.
-        # It's necessary if you upgrade the application otherwise you might
-        # try to import non-existent modules.
-        rm -rf ${cfg.runtimeDir}/bootstrap/*
 
         # Perform the first migration.
         [[ ! -f ${cfg.dataDir}/.initial-migration ]] && pixelfed-manage migrate --force && touch ${cfg.dataDir}/.initial-migration
@@ -441,14 +446,14 @@ in {
     ];
 
     # Enable NGINX to access our phpfpm-socket.
-    users.users."${config.services.nginx.group}".extraGroups = [ cfg.group ];
+    users.users."${config.services.nginx.user}".extraGroups = [ cfg.group ];
     services.nginx = mkIf (cfg.nginx != null) {
       enable = true;
       virtualHosts."${cfg.domain}" = mkMerge [
         cfg.nginx
         {
           root = lib.mkForce "${pixelfed}/public/";
-          locations."/".tryFiles = "$uri $uri/ /index.php?query_string";
+          locations."/".tryFiles = "$uri $uri/ /index.php?$query_string";
           locations."/favicon.ico".extraConfig = ''
             access_log off; log_not_found off;
           '';

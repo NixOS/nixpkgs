@@ -3,8 +3,6 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-DEPS_FILE="$(realpath "./deps.nix")"
-
 # provide a github token so you don't get rate limited
 # if you use gh cli you can use:
 #     `export GITHUB_TOKEN="$(cat ~/.config/gh/config.yml | yq '.hosts."github.com".oauth_token' -r)"`
@@ -75,4 +73,4 @@ fi
 
 echo "building Nuget lockfile"
 
-$(nix-build -A ryujinx.fetch-deps --no-out-link) "$DEPS_FILE"
+$(nix-build -A ryujinx.fetch-deps --no-out-link)

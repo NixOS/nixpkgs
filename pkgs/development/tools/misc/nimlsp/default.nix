@@ -22,6 +22,8 @@ nimPackages.buildNimPackage rec {
 
   nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";

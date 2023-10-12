@@ -4,21 +4,28 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "aioqsw";
-  version = "0.3.2";
-  format = "setuptools";
+  version = "0.3.5";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Z7Q9b+ameddvGu9KJUNsaqOHiu0qXnpzuiZwg+/0+64=";
+    hash = "sha256-kSwTHwVSMGyXA0SF74f9gyBN82XhdjdN6DWrQV0PiaU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     aiohttp

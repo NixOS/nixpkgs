@@ -1,4 +1,4 @@
-{ stdenv, lib, dict }:
+{ stdenv, lib, dict, libfaketime }:
 ({ dictlist, allowList ? [ "127.0.0.1" ], denyList ? [ ] }:
 
 /*
@@ -56,7 +56,8 @@ let
         ln -s "$i".dict.dz
       else
         cp "$i".dict .
-        dictzip "$base".dict
+        source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
+        faketime -f "$source_date" dictzip "$base".dict
       fi
       ln -s "$i".index .
       dictfmt_index2word --locale $locale < "$base".index > "$base".word || true
@@ -76,6 +77,7 @@ in
 stdenv.mkDerivation {
   name = "dictd-dbs";
 
+  nativeBuildInputs = [ libfaketime ];
   buildInputs = [ dict ];
 
   dontUnpack = true;

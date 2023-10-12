@@ -1,119 +1,35 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.6.0)
-      public_suffix (>= 2.0.2, < 4.0)
-    amq-protocol (2.0.1)
-    amqp (1.6.0)
-      amq-protocol (>= 2.0.1)
-      eventmachine
-    bond (0.5.1)
-    childprocess (0.5.8)
-      ffi (~> 1.0, >= 1.0.11)
-    cookiejar (0.3.3)
-    czmq-ffi-gen (0.15.0)
-      ffi (~> 1.9.10)
-    cztop (0.13.1)
-      czmq-ffi-gen (~> 0.15.0)
     data_uri (0.1.0)
-    em-http-request (1.1.5)
-      addressable (>= 2.3.4)
-      cookiejar (!= 0.3.1)
-      em-socksify (>= 0.3)
-      eventmachine (>= 1.0.3)
-      http_parser.rb (>= 0.6.0)
-    em-http-server (0.1.8)
-      eventmachine
-    em-socksify (0.3.2)
-      eventmachine (>= 1.0.0.beta.4)
-    em-worker (0.0.2)
-      eventmachine
-    eventmachine (1.2.7)
-    ffi (1.9.21)
+    ffi (1.15.5)
     ffi-rzmq (2.0.7)
       ffi-rzmq-core (>= 1.0.7)
     ffi-rzmq-core (1.0.7)
       ffi
-    http_parser.rb (0.6.0)
-    iruby (0.3)
-      bond (~> 0.5)
+    io-console (0.6.0)
+    irb (1.7.4)
+      reline (>= 0.3.6)
+    iruby (0.7.4)
       data_uri (~> 0.1)
-      mimemagic (~> 0.3)
+      ffi-rzmq
+      irb
+      mime-types (>= 3.3.1)
       multi_json (~> 1.11)
-    mimemagic (0.3.3)
-    multi_json (1.13.1)
-    oj (2.18.1)
-    parse-cron (0.1.4)
-    public_suffix (3.0.3)
-    rbczmq (1.7.9)
-    sensu (1.6.2)
-      em-http-request (= 1.1.5)
-      em-http-server (= 0.1.8)
-      eventmachine (= 1.2.7)
-      parse-cron (= 0.1.4)
-      sensu-extension (= 1.5.2)
-      sensu-extensions (= 1.10.0)
-      sensu-json (= 2.1.1)
-      sensu-logger (= 1.2.2)
-      sensu-redis (= 2.4.0)
-      sensu-settings (= 10.14.0)
-      sensu-spawn (= 2.5.0)
-      sensu-transport (= 8.2.0)
-    sensu-extension (1.5.2)
-      eventmachine
-    sensu-extensions (1.10.0)
-      sensu-extension
-      sensu-extensions-check-dependencies (= 1.1.0)
-      sensu-extensions-debug (= 1.0.0)
-      sensu-extensions-json (= 1.0.0)
-      sensu-extensions-occurrences (= 1.2.0)
-      sensu-extensions-only-check-output (= 1.0.0)
-      sensu-extensions-ruby-hash (= 1.0.0)
-      sensu-json (>= 1.1.0)
-      sensu-logger
-      sensu-settings
-    sensu-extensions-check-dependencies (1.1.0)
-      sensu-extension
-    sensu-extensions-debug (1.0.0)
-      sensu-extension
-    sensu-extensions-json (1.0.0)
-      sensu-extension
-    sensu-extensions-occurrences (1.2.0)
-      sensu-extension
-    sensu-extensions-only-check-output (1.0.0)
-      sensu-extension
-    sensu-extensions-ruby-hash (1.0.0)
-      sensu-extension
-    sensu-json (2.1.1)
-      oj (= 2.18.1)
-    sensu-logger (1.2.2)
-      eventmachine
-      sensu-json
-    sensu-redis (2.4.0)
-      eventmachine
-    sensu-settings (10.14.0)
-      parse-cron
-      sensu-json (>= 1.1.0)
-    sensu-spawn (2.5.0)
-      childprocess (= 0.5.8)
-      em-worker (= 0.0.2)
-      eventmachine
-      ffi (= 1.9.21)
-    sensu-transport (8.2.0)
-      amq-protocol (= 2.0.1)
-      amqp (= 1.6.0)
-      eventmachine
-      sensu-redis (>= 1.0.0)
+      native-package-installer
+    mime-types (3.5.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2023.0808)
+    multi_json (1.15.0)
+    native-package-installer (1.1.8)
+    reline (0.3.8)
+      io-console (~> 0.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  cztop
-  ffi-rzmq
-  iruby
-  rbczmq
-  sensu
+  iruby (= 0.7.4)
 
 BUNDLED WITH
-   1.17.2
+   2.4.19

@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    homepage = "https://gitlab.gnome.org/GNOME/adwaita-icon-theme";
     platforms = with platforms; linux ++ darwin;
     maintainers = teams.gnome.members;
     license = licenses.cc-by-sa-30;

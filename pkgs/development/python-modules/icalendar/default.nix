@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "5.0.4";
+  version = "5.0.7";
   pname = "icalendar";
   format = "setuptools";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ch0i6hxEnHV/Xu4PqpRVt30KLOHHgtCAI2W9UyXo15E=";
+    hash = "sha256-fblcbyctnvd7DOc+tMWzg+90NHzZvH5xiY6BfJakQVo=";
   };
 
   propagatedBuildInputs = [

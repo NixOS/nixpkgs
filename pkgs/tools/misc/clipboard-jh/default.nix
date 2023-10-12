@@ -4,22 +4,23 @@
 , cmake
 , libffi
 , pkg-config
-, patchelf
 , wayland-protocols
 , wayland
 , xorg
 , darwin
+, nix-update-script
+, alsa-lib
 }:
 
 stdenv.mkDerivation rec {
   pname = "clipboard-jh";
-  version = "0.7.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "Slackadays";
     repo = "clipboard";
     rev = version;
-    hash = "sha256-RLb7R4BXnP7J5gX8hsE9yi6N3kezsutP1HqkmjR3yRs=";
+    hash = "sha256-G0zOr56dR9rmymQ9MwPNnMZ2LZuuz4NiswRQIvdS9MY=";
   };
 
   postPatch = ''
@@ -36,12 +37,14 @@ stdenv.mkDerivation rec {
     wayland-protocols
     wayland
     xorg.libX11
+    alsa-lib
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 
+  cmakeBuildType = "MinSizeRel";
+
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='MinSizeRel'"
     "-Wno-dev"
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
@@ -49,6 +52,8 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/cb --add-rpath $out/lib
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";

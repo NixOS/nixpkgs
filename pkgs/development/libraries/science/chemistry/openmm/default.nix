@@ -11,7 +11,8 @@
 , enableOpencl ? true
 , opencl-headers
 , ocl-icd
-, enableCuda ? false
+, config
+, enableCuda ? config.cudaSupport
 , cudaPackages
 , addOpenGLRunpath
 }:

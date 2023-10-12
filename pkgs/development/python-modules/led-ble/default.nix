@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "led-ble";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XAb/tJPUe/sNvcU7t63inMPBIz+AREioWXBuQa/c9T0=";
+    hash = "sha256-8DBA01QjW99OVYI9zC1Q+utnwzc10idUG7y+lmUbO4A=";
   };
 
   postPatch = ''
@@ -34,10 +34,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    async-timeout
     bleak
     bleak-retry-connector
     flux-led
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [

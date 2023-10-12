@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e16";
-  version = "1.0.27";
+  version = "1.0.28";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
-    hash = "sha256-Lr5OC14N6KTZNU3Ei4O9taYGL+1NZd5JmejYBmmELUE=";
+    hash = "sha256-k3W2IoBc75DNQ2QSjChsC/yVRO/aZT3E31Tl/njgH30=";
   };
 
   nativeBuildInputs = [

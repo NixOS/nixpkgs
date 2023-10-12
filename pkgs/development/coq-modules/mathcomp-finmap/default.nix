@@ -7,8 +7,9 @@ mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ]  [
-      { cases = [ (range "8.13" "8.17")  (isGe "1.12") ];         out = "1.5.2"; }
-      { cases = [ (isGe "8.10")          (isGe "1.11") ];         out = "1.5.1"; }
+      { cases = [ (range "8.16" "8.18")  (isGe "2.0") ];          out = "2.0.0"; }
+      { cases = [ (range "8.13" "8.18")  (range "1.12" "1.17") ]; out = "1.5.2"; }
+      { cases = [ (isGe "8.10")          (range "1.11" "1.17") ]; out = "1.5.1"; }
       { cases = [ (range "8.7" "8.11")   "1.11.0" ];              out = "1.5.0"; }
       { cases = [ (isEq "8.11")          (range "1.8" "1.10") ];  out = "1.4.0+coq-8.11"; }
       { cases = [ (range "8.7" "8.11.0") (range "1.8" "1.10") ];  out = "1.4.0"; }
@@ -17,6 +18,7 @@ mkCoqDerivation {
       { cases = [ (range "8.6" "8.7")    (range "1.6.1" "1.7") ]; out = "1.0.0"; }
     ] null;
   release = {
+    "2.0.0".sha256          = "sha256-0Wr1ZUYVuZH74vawO4EZlZ+K3kq+s1xEz/BfzyKj+wk=";
     "1.5.2".sha256          = "sha256-0KmmSjc2AlUo6BKr9RZ4FjL9wlGISlTGU0X1Eu7l4sw=";
     "1.5.1".sha256          = "0ryfml4pf1dfya16d8ma80favasmrygvspvb923n06kfw9v986j7";
     "1.5.0".sha256          = "0vx9n1fi23592b3hv5p5ycy7mxc8qh1y5q05aksfwbzkk5zjkwnq";

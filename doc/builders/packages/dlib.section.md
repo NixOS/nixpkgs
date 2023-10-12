@@ -1,6 +1,6 @@
 # DLib {#dlib}
 
-[DLib](http://dlib.net/) is a modern, C++-based toolkit which provides several machine learning algorithms.
+[DLib](http://dlib.net/) is a modern, C++\-based toolkit which provides several machine learning algorithms.
 
 ## Compiling without AVX support {#compiling-without-avx-support}
 

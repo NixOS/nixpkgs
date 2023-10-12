@@ -1,20 +1,150 @@
+diff --git a/meson.build b/meson.build
+index 6c6e473e..9b8fb73a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -88,11 +88,6 @@ datadir = join_paths(prefix, get_option('datadir'))
+ localedir = join_paths(prefix, get_option('localedir'))
+ podir = join_paths(meson.source_root(), 'po')
+ 
+-cdata.set_quoted('DATADIR', datadir)
+-cdata.set_quoted('SYSCONFDIR', confdir)
+-cdata.set_quoted('LOCALEDIR', localedir)
+-cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
+-
+ # Handle i18n on the .desktop file
+ # Originally stolem from TingPing:
+ # https://github.com/vinszent/gnome-twitch/blob/master/data/meson.build
+@@ -111,23 +106,10 @@ cdata.set_quoted('MODULEDIR', plugin_libdir)
+ cdata.set_quoted('MODULE_DATA_DIR', plugin_datadir)
+ cdata.set_quoted('RAVEN_PLUGIN_LIBDIR', raven_plugin_libdir)
+ cdata.set_quoted('RAVEN_PLUGIN_DATADIR', raven_plugin_datadir)
+-
+-if prefix == '/usr' or prefix == '/usr/local'
+-    cdata.set('HAS_SECONDARY_PLUGIN_DIRS', true)
+-
+-    if prefix == '/usr'
+-        secondary_libdir_root = join_paths(prefix, 'local', get_option('libdir'), meson.project_name())
+-        secondary_datadir_root = join_paths(prefix, 'local', get_option('datadir'), meson.project_name())
+-    else
+-        secondary_libdir_root = join_paths('/usr', get_option('libdir'), meson.project_name())
+-        secondary_datadir_root = join_paths('/usr', get_option('datadir'), meson.project_name())
+-    endif
+-
+-    cdata.set_quoted('MODULEDIR_SECONDARY', join_paths(secondary_libdir_root, 'plugins'))
+-    cdata.set_quoted('MODULE_DATA_DIR_SECONDARY', join_paths(secondary_datadir_root, 'plugins'))
+-    cdata.set_quoted('RAVEN_PLUGIN_LIBDIR_SECONDARY', join_paths(secondary_libdir_root, 'raven-plugins'))
+-    cdata.set_quoted('RAVEN_PLUGIN_DATADIR_SECONDARY', join_paths(secondary_datadir_root, 'raven-plugins'))
+-endif
++cdata.set_quoted('DATADIR', datadir)
++cdata.set_quoted('SYSCONFDIR', confdir)
++cdata.set_quoted('LOCALEDIR', localedir)
++cdata.set_quoted('PACKAGE_URL', 'https://buddiesofbudgie.org')
+ 
+ with_bluetooth = get_option('with-bluetooth')
+ if with_bluetooth == true
+diff --git a/src/config/budgie-config.c b/src/config/budgie-config.c
+index 3ffe3632..da53e054 100644
+--- a/src/config/budgie-config.c
++++ b/src/config/budgie-config.c
+@@ -11,7 +11,6 @@
+ 
+ #ifndef CONFIG_H_INCLUDED
+ #include "config.h"
+-#include <stdbool.h>
+ #include <stddef.h>
+ 
+ /**
+@@ -22,20 +21,6 @@ const char* BUDGIE_MODULE_DATA_DIRECTORY = MODULE_DATA_DIR;
+ const char* BUDGIE_RAVEN_PLUGIN_LIBDIR = RAVEN_PLUGIN_LIBDIR;
+ const char* BUDGIE_RAVEN_PLUGIN_DATADIR = RAVEN_PLUGIN_DATADIR;
+ 
+-#ifdef HAS_SECONDARY_PLUGIN_DIRS
+-const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS = true;
+-const char* BUDGIE_MODULE_DIRECTORY_SECONDARY = MODULEDIR_SECONDARY;
+-const char* BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY = MODULE_DATA_DIR_SECONDARY;
+-const char* BUDGIE_RAVEN_PLUGIN_LIBDIR_SECONDARY = RAVEN_PLUGIN_LIBDIR_SECONDARY;
+-const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY = RAVEN_PLUGIN_DATADIR_SECONDARY;
+-#else
+-const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS = false;
+-const char* BUDGIE_MODULE_DIRECTORY_SECONDARY = NULL;
+-const char* BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY = NULL;
+-const char* BUDGIE_RAVEN_PLUGIN_LIBDIR_SECONDARY = NULL;
+-const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY = NULL;
+-#endif
+-
+ const char* BUDGIE_DATADIR = DATADIR;
+ const char* BUDGIE_VERSION = PACKAGE_VERSION;
+ const char* BUDGIE_WEBSITE = PACKAGE_URL;
+diff --git a/src/config/budgie-config.h b/src/config/budgie-config.h
+index b7581203..11df4347 100644
+--- a/src/config/budgie-config.h
++++ b/src/config/budgie-config.h
+@@ -12,7 +12,6 @@
+ #ifndef _BUDGIE_CONFIG_H_
+ #define _BUDGIE_CONFIG_H_
+ 
+-#include <stdbool.h>
+ #include <stddef.h>
+ 
+ /* i.e. /usr/lib/budgie-desktop */
+@@ -27,12 +26,6 @@ extern const char* BUDGIE_RAVEN_PLUGIN_LIBDIR;
+ /* i.e. /usr/share/budgie-desktop/raven-plugins */
+ extern const char* BUDGIE_RAVEN_PLUGIN_DATADIR;
+ 
+-extern const bool BUDGIE_HAS_SECONDARY_PLUGIN_DIRS;
+-extern const char* BUDGIE_MODULE_DIRECTORY_SECONDARY;
+-extern const char* BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY;
+-extern const char* BUDGIE_RAVEN_PLUGIN_LIBDIR_SECONDARY;
+-extern const char* BUDGIE_RAVEN_PLUGIN_DATADIR_SECONDARY;
+-
+ /* i.e. /usr/share/ */
+ extern const char* BUDGIE_DATADIR;
+ 
+diff --git a/src/config/budgie-config.vapi b/src/config/budgie-config.vapi
+index 5eb445d1..7d27e348 100644
+--- a/src/config/budgie-config.vapi
++++ b/src/config/budgie-config.vapi
+@@ -22,21 +22,6 @@ namespace Budgie {
+ 	[CCode (cheader_filename="budgie-config.h")]
+ 	public extern const string RAVEN_PLUGIN_DATADIR;
+ 
+-	[CCode (cheader_filename="budgie-config.h")]
+-	public extern const bool HAS_SECONDARY_PLUGIN_DIRS;
+-
+-	[CCode (cheader_filename="budgie-config.h")]
+-	public extern const string? MODULE_DIRECTORY_SECONDARY;
+-
+-	[CCode (cheader_filename="budgie-config.h")]
+-    public extern const string? MODULE_DATA_DIRECTORY_SECONDARY;
+-
+-	[CCode (cheader_filename="budgie-config.h")]
+-	public extern const string? RAVEN_PLUGIN_LIBDIR_SECONDARY;
+-
+-	[CCode (cheader_filename="budgie-config.h")]
+-	public extern const string? RAVEN_PLUGIN_DATADIR_SECONDARY;
+-
+     [CCode (cheader_filename="budgie-config.h")]
+     public extern const string DATADIR;
+ 
 diff --git a/src/panel/plugin_manager.vala b/src/panel/plugin_manager.vala
-index d3cdb65c..9d569bd1 100644
+index f4f2e4da..3dfee49a 100644
 --- a/src/panel/plugin_manager.vala
 +++ b/src/panel/plugin_manager.vala
-@@ -40,10 +40,26 @@ namespace Budgie {
+@@ -40,13 +40,26 @@ namespace Budgie {
  			}
  
  			/* System path */
 -			var dir = Environment.get_user_data_dir();
 -			engine.add_search_path(Budgie.MODULE_DIRECTORY, Budgie.MODULE_DATA_DIRECTORY);
+-			if (Budgie.HAS_SECONDARY_PLUGIN_DIRS) {
+-				engine.add_search_path(Budgie.MODULE_DIRECTORY_SECONDARY, Budgie.MODULE_DATA_DIRECTORY_SECONDARY);
 +			var libdir = Environment.get_variable("BUDGIE_PLUGIN_LIBDIR");
 +			if (libdir != null) {
 +				debug("BUDGIE_PLUGIN_LIBDIR is set to %s", libdir);
 +			} else {
 +				debug("BUDGIE_PLUGIN_LIBDIR is unset, defaulting to %s", Budgie.MODULE_DIRECTORY);
 +				libdir = Budgie.MODULE_DIRECTORY;
-+			}
++ 			}
 +
 +			var datadir = Environment.get_variable("BUDGIE_PLUGIN_DATADIR");
 +			if (datadir != null) {
@@ -22,43 +152,45 @@ index d3cdb65c..9d569bd1 100644
 +			} else {
 +				debug("BUDGIE_PLUGIN_DATADIR is unset, defaulting to %s", Budgie.MODULE_DATA_DIRECTORY);
 +				datadir = Budgie.MODULE_DATA_DIRECTORY;
-+			}
-+
-+			engine.add_search_path(libdir, datadir);
+ 			}
  
++			engine.add_search_path(libdir, datadir);
++
  			/* User path */
 +			var dir = Environment.get_user_data_dir();
  			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "plugins");
  			var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "data");
  			engine.add_search_path(user_mod, hdata);
 diff --git a/src/raven/plugin_manager.vala b/src/raven/plugin_manager.vala
-index b0814693..d671109a 100644
+index 01f32553..2826b7e5 100644
 --- a/src/raven/plugin_manager.vala
 +++ b/src/raven/plugin_manager.vala
-@@ -51,10 +51,26 @@ namespace Budgie {
+@@ -51,13 +51,26 @@ namespace Budgie {
  			}
  
  			/* System path */
 -			var dir = Environment.get_user_data_dir();
 -			engine.add_search_path(Budgie.RAVEN_PLUGIN_LIBDIR, Budgie.RAVEN_PLUGIN_DATADIR);
+-			if (Budgie.HAS_SECONDARY_PLUGIN_DIRS) {
+-				engine.add_search_path(Budgie.RAVEN_PLUGIN_LIBDIR_SECONDARY, Budgie.RAVEN_PLUGIN_DATADIR_SECONDARY);
 +			var libdir = Environment.get_variable("RAVEN_PLUGIN_LIBDIR");
 +			if (libdir != null) {
 +				debug("RAVEN_PLUGIN_LIBDIR is set to %s", libdir);
 +			} else {
 +				debug("RAVEN_PLUGIN_LIBDIR is unset, defaulting to %s", Budgie.RAVEN_PLUGIN_LIBDIR);
 +				libdir = Budgie.RAVEN_PLUGIN_LIBDIR;
-+			}
-+
+ 			}
+ 
 +			var datadir = Environment.get_variable("RAVEN_PLUGIN_DATADIR");
 +			if (datadir != null) {
 +				debug("RAVEN_PLUGIN_DATADIR is set to %s", datadir);
 +			} else {
 +				debug("RAVEN_PLUGIN_DATADIR is unset, defaulting to %s", Budgie.RAVEN_PLUGIN_DATADIR);
 +				datadir = Budgie.RAVEN_PLUGIN_DATADIR;
-+			}
++ 			}
 +
 +			engine.add_search_path(libdir, datadir);
- 
++
  			/* User path */
 +			var dir = Environment.get_user_data_dir();
  			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "raven-plugins");

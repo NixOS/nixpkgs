@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "manifest-ml";
-  version = "0.1.7";
+  version = "0.1.8";
   format = "setuptools";
 
   disalbed = pythonOlder "3.8";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "HazyResearch";
     repo = "manifest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wrslrzMAPBVAlb4ieB+DcLfWjZdlaUBnGXbzcMhlf34=";
+    hash = "sha256-d34TIZYDB8EDEIZUH5mDzfDHzFT290DwjPLJkNneklc=";
   };
 
   propagatedBuildInputs = [
@@ -95,6 +95,12 @@ buildPythonPackage rec {
     "test_get"
     # this test has network access
     "test_retry_handling"
+    # Test is time-senstive
+    "test_timing"
+  ];
+
+  pythonImportsCheck = [
+    "manifest"
   ];
 
   meta = with lib; {

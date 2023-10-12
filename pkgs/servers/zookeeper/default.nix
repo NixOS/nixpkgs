@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${pname}-${version}/apache-${pname}-${version}-bin.tar.gz";
-    sha512 = "sha512-kQNiilB0X6GiibymZv2kqcCOwXxVzxPmaIfnunbpPbrmCh8f/WwQeYvjoWBpNE7LwAzrspvwPZzXCWzNCY7QEQ==";
+    hash = "sha512-kQNiilB0X6GiibymZv2kqcCOwXxVzxPmaIfnunbpPbrmCh8f/WwQeYvjoWBpNE7LwAzrspvwPZzXCWzNCY7QEQ==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nathan-gs cstrahan pradeepchhetri ztzg ];
+    maintainers = with maintainers; [ nathan-gs pradeepchhetri ztzg ];
     platforms = platforms.unix;
   };
 }

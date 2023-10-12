@@ -2,19 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "9.0.2";
+  version = "13.0.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Fnc3iepxHr7WjorFoabHE6ZM/zK1T5W/gkxL+AEcVgU=";
+    hash = "sha256-D8Osn/vlPr9eg5F8O0K/eC/M0prHQM7U96k8Cx9D1/4=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-7Q5aJU0sYzRLgjiSNLIrydYRJ3ozABjDo4VtmexS3po=";
+  cargoHash = "sha256-nFKk6T3S86lPxn/JCEid2Xd9c5zQPOMFcKTi6eM89uE=";
 
   cargoBuildFlags = [ "--package" "wasmtime-cli" "--package" "wasmtime-c-api" ];
+  cargoPatches = [
+    # this patch is necessary until cargo-auditable is bumped on the rust platform
+    ./patches/0001-Use-dep-dependency-due-to-cargo-auditable-limitation.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
@@ -36,6 +40,10 @@ rustPlatform.buildRustPackage rec {
     install -m0644 $src/crates/c-api/include/*.h $dev/include
     install -m0644 $src/crates/c-api/include/wasmtime/*.h $dev/include/wasmtime
     install -m0644 $src/crates/c-api/wasm-c-api/include/* $dev/include
+  '' + lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id \
+      $dev/lib/libwasmtime.dylib \
+      $dev/lib/libwasmtime.dylib
   '';
 
   meta = with lib; {
@@ -43,6 +51,7 @@ rustPlatform.buildRustPackage rec {
       "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
     license = licenses.asl20;
+    mainProgram = "wasmtime";
     maintainers = with maintainers; [ ereslibre matthewbauer ];
     platforms = platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${version}/RELEASES.md";

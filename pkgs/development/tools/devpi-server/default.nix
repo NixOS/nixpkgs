@@ -36,7 +36,7 @@ buildPythonApplication rec {
     hash = "sha256-tevQ/Ocusz2PythGnedP6r4xARgetVosAc8uTD49H3M=";
   };
 
-  sourceRoot = "source/server";
+  sourceRoot = "${src.name}/server";
 
   postPatch = ''
     substituteInPlace tox.ini \

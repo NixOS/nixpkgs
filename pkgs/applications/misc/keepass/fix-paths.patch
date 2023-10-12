@@ -53,44 +53,43 @@ index af02803..8a32c9d 100644
  
  			int iSep = str.IndexOf(':');
 diff --git a/KeePass/Util/ClipboardUtil.Unix.cs b/KeePass/Util/ClipboardUtil.Unix.cs
-index ab49ee2..7f6c50f 100644
 --- a/KeePass/Util/ClipboardUtil.Unix.cs
 +++ b/KeePass/Util/ClipboardUtil.Unix.cs
-@@ -62,7 +62,7 @@ namespace KeePass.Util
- 			//	"-out -selection clipboard");
- 			// if(str != null) return str;
+@@ -65,7 +65,7 @@
+ 				//	"-out -selection clipboard");
+ 				// if(str != null) return str;
  
--			string str = NativeLib.RunConsoleApp("xsel",
-+			string str = NativeLib.RunConsoleApp("@xsel@",
- 				"--output --clipboard", null, XSelFlags);
- 			if(str != null) return str;
- 
-@@ -83,10 +83,10 @@ namespace KeePass.Util
- 			if(string.IsNullOrEmpty(str))
- 			{
- 				// xsel with an empty input can hang, thus use --clear
--				if(NativeLib.RunConsoleApp("xsel", "--clear --primary",
-+				if(NativeLib.RunConsoleApp("@xsel@", "--clear --primary",
- 					null, XSelFlags) != null)
+-				string str = NativeLib.RunConsoleApp("xsel",
++				string str = NativeLib.RunConsoleApp("@xsel@",
+ 					"--output --clipboard", null, XSelFlags);
+ 				if(str != null) return str;
+ 			}
+@@ -93,10 +93,10 @@
+ 				if(string.IsNullOrEmpty(str))
  				{
--					NativeLib.RunConsoleApp("xsel", "--clear --clipboard",
-+					NativeLib.RunConsoleApp("@xsel@", "--clear --clipboard",
- 						null, XSelFlags);
+ 					// xsel with an empty input can hang, thus use --clear
+-					if(NativeLib.RunConsoleApp("xsel", "--clear --primary",
++					if(NativeLib.RunConsoleApp("@xsel@", "--clear --primary",
+ 						null, XSelFlags) != null)
+ 					{
+-						NativeLib.RunConsoleApp("xsel", "--clear --clipboard",
++						NativeLib.RunConsoleApp("@xsel@", "--clear --clipboard",
+ 							null, XSelFlags);
+ 						return;
+ 					}
+@@ -107,10 +107,10 @@
+ 				}
+ 
+ 				// xsel does not support --primary and --clipboard together
+-				if(NativeLib.RunConsoleApp("xsel", "--input --primary",
++				if(NativeLib.RunConsoleApp("@xsel@", "--input --primary",
+ 					str, XSelFlags) != null)
+ 				{
+-					NativeLib.RunConsoleApp("xsel", "--input --clipboard",
++					NativeLib.RunConsoleApp("@xsel@", "--input --clipboard",
+ 						str, XSelFlags);
  					return;
  				}
-@@ -97,10 +97,10 @@ namespace KeePass.Util
- 			}
- 
- 			// xsel does not support --primary and --clipboard together
--			if(NativeLib.RunConsoleApp("xsel", "--input --primary",
-+			if(NativeLib.RunConsoleApp("@xsel@", "--input --primary",
- 				str, XSelFlags) != null)
- 			{
--				NativeLib.RunConsoleApp("xsel", "--input --clipboard",
-+				NativeLib.RunConsoleApp("@xsel@", "--input --clipboard",
- 					str, XSelFlags);
- 				return;
- 			}
 diff --git a/KeePassLib/Native/ClipboardU.cs b/KeePassLib/Native/ClipboardU.cs
 index 291c51d..3c76380 100644
 --- a/KeePassLib/Native/ClipboardU.cs

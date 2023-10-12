@@ -1,43 +1,55 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, setuptools
+, fetchFromGitHub
+, poetry-core
+, anyio
+, distro
 , httpx
-, importlib-metadata
-, requests
+, pydantic
+, pytest-asyncio
+, respx
 , tokenizers
-, aiohttp
+, typing-extensions
+, pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.2.9";
+  version = "0.3.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LURWTTYsztbo5mI2bk3n+U3NxsthNGpeUoNZsK/B8vM=";
+  src = fetchFromGitHub {
+    owner = "anthropics";
+    repo = "anthropic-sdk-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bjagT0I0/N76CGf1b8EBNyOTzPBWybr2I2yO5NWO3po=";
   };
 
   nativeBuildInputs = [
-    setuptools
+    poetry-core
   ];
 
   propagatedBuildInputs = [
+    anyio
+    distro
     httpx
-    requests
+    pydantic
     tokenizers
-    aiohttp
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
+    typing-extensions
   ];
 
-  # try downloading tokenizer in tests
-  # relates https://github.com/anthropics/anthropic-sdk-python/issues/24
-  doCheck = false;
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    respx
+  ];
+
+  disabledTests = [
+    "api_resources"
+  ];
 
   pythonImportsCheck = [
     "anthropic"

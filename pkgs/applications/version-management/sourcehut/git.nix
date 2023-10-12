@@ -22,35 +22,35 @@ let
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
+    vendorHash = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   gitDispatch = buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatch";
     modRoot = "gitsrht-dispatch";
-    vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
+    vendorHash = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
   };
 
   gitKeys = buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
     modRoot = "gitsrht-keys";
-    vendorSha256 = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
+    vendorHash = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
   };
 
   gitShell = buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
     modRoot = "gitsrht-shell";
-    vendorSha256 = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
+    vendorHash = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
   };
 
   gitUpdateHook = buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
     modRoot = "gitsrht-update-hook";
-    vendorSha256 = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
+    vendorHash = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
   };
 
 in

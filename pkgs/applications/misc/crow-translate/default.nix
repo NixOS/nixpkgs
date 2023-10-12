@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchzip
-, substituteAll
 , cmake
 , extra-cmake-modules
 , qttools
@@ -10,7 +9,6 @@
 , tesseract4
 , qtmultimedia
 , qtx11extras
-, qttranslations
 , wrapQtAppsHook
 , gst_all_1
 , testers
@@ -19,20 +17,12 @@
 
 stdenv.mkDerivation rec {
   pname = "crow-translate";
-  version = "2.10.5";
+  version = "2.10.10";
 
   src = fetchzip {
     url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}-source.tar.gz";
-    hash = "sha256-sAjgG2f0rAWakPd2cZNGXkooIxQQM5OPHm11ahyY1WU=";
+    hash = "sha256-PvfruCqmTBFLWLeIL9NV6+H2AifXcY97ImHzD1zEs28=";
   };
-
-  patches = [
-    (substituteAll {
-      # See https://github.com/NixOS/nixpkgs/issues/86054
-      src = ./fix-qttranslations-path.patch;
-      inherit qttranslations;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace data/io.crow_translate.CrowTranslate.desktop \

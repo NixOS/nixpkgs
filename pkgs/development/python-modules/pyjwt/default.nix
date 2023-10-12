@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyjwt";
-  version = "2.6.0";
+  version = "2.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyJWT";
     inherit version;
-    hash = "sha256-aShcfjH8RPaKH+swnpSODfUyWdV5KV5s/isXkjKfBf0=";
+    hash = "sha256-V+KNFW49XBAIjgxoq7kL+sPfgrQKcb0NqiDGXM1cI94=";
   };
 
   postPatch = ''
@@ -45,9 +45,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ (lib.flatten (lib.attrValues passthru.optional-dependencies));
 
+  disabledTests = [
+    # requires internet connection
+    "test_get_jwt_set_sslcontext_default"
+  ];
+
   pythonImportsCheck = [ "jwt" ];
 
   meta = with lib; {
+    changelog = "https://github.com/jpadilla/pyjwt/blob/${version}/CHANGELOG.rst";
     description = "JSON Web Token implementation in Python";
     homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;

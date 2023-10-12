@@ -1,9 +1,9 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchurl
+, fetchzip
 , python310
-, nodePackages
+, rtlcss
 , wkhtmltopdf
 , nixosTests
 }:
@@ -44,31 +44,26 @@ let
     };
   };
 
-  odoo_version = "15.0";
-  odoo_release = "20230317";
+  odoo_version = "16.0";
+  odoo_release = "20230722";
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
   format = "setuptools";
 
-  # latest release is at https://github.com/odoo/docker/blob/master/15.0/Dockerfile
-  src = fetchurl {
-    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.tar.gz";
+  # latest release is at https://github.com/odoo/docker/blob/master/16.0/Dockerfile
+  src = fetchzip {
+    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "${pname}-${version}";
-    hash = "sha256-nJEFPtZhq7DLLDCL9xt0RV75d/a45o6hBKsUlQAWh1U="; # odoo
+    hash = "sha256-pSycpYSiqJ6DKENvCWwLz+JaPUXT5dmaq8x4Aency60="; # odoo
   };
-
-  unpackPhase = ''
-    tar xfz $src
-    cd odoo*
-  '';
 
   # needs some investigation
   doCheck = false;
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}"
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

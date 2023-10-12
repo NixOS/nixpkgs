@@ -1,59 +1,107 @@
-{ lib, stdenv, fetchurl, makeWrapper, wrapGAppsHook
+{ lib
+, stdenv
+, fetchurl
+, SDL
+, check
+, curl
+, expat
+, gtk2
+, gtk3
+, libXcursor
+, libXrandr
+, libidn
+, libjpeg
+, libpng
+, libwebp
+, libxml2
+, makeWrapper
+, openssl
+, perlPackages
+, pkg-config
+, wrapGAppsHook
+, xxd
 
-# Buildtime dependencies.
-, check, pkg-config, xxd
-
-# Runtime dependencies.
-, curl, expat, libXcursor, libXrandr, libidn, libjpeg, libpng, libwebp, libxml2
-, openssl, perl, perlPackages
-
-# uilib-specific dependencies
-, gtk2 # GTK 2
-, gtk3 # GTK 3
-, SDL  # Framebuffer
+# Netsurf-specific dependencies
+, buildsystem
+, libcss
+, libdom
+, libhubbub
+, libnsbmp
+, libnsfb
+, libnsgif
+, libnslog
+, libnspsl
+, libnsutils
+, libparserutils
+, libsvgtiny
+, libutf8proc
+, libwapcaplet
+, nsgenbind
 
 # Configuration
 , uilib
-
-# Netsurf-specific dependencies
-, libcss, libdom, libhubbub, libnsbmp, libnsfb, libnsgif
-, libnslog, libnspsl, libnsutils, libparserutils, libsvgtiny, libutf8proc
-, libwapcaplet, nsgenbind
 }:
 
-let
-  inherit (lib) optional optionals;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf";
   version = "3.10";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/netsurf/releases/source/${pname}-${version}-src.tar.gz";
-    sha256 = "sha256-NkhEKeGTYUaFwv8kb1W9Cm3d8xoBi+5F4NH3wohRmV4=";
+    url = "http://download.netsurf-browser.org/netsurf/releases/source/netsurf-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-NkhEKeGTYUaFwv8kb1W9Cm3d8xoBi+5F4NH3wohRmV4=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    perl
     perlPackages.HTMLParser
+    perlPackages.perl
     pkg-config
     xxd
   ]
-  ++ optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook
-  ;
+  ++ lib.optional (uilib == "gtk2" || uilib == "gtk3") wrapGAppsHook;
 
   buildInputs = [
-    check curl libXcursor libXrandr libidn libjpeg libpng libwebp libxml2 openssl
-    # Netsurf-specific libraries
-    nsgenbind libnsfb libwapcaplet libparserutils libnslog libcss
-    libhubbub libdom libnsbmp libnsgif libsvgtiny libnsutils libnspsl
+    check
+    curl
+    libXcursor
+    libXrandr
+    libidn
+    libjpeg
+    libpng
+    libwebp
+    libxml2
+    openssl
+
+    libcss
+    libdom
+    libhubbub
+    libnsbmp
+    libnsfb
+    libnsgif
+    libnslog
+    libnspsl
+    libnsutils
+    libparserutils
+    libsvgtiny
     libutf8proc
+    libwapcaplet
+    nsgenbind
   ]
-  ++ optionals (uilib == "framebuffer") [ expat SDL ]
-  ++ optional (uilib == "gtk2") gtk2
-  ++ optional (uilib == "gtk3") gtk3
+  ++ lib.optionals (uilib == "framebuffer") [ expat SDL ]
+  ++ lib.optional (uilib == "gtk2") gtk2
+  ++ lib.optional (uilib == "gtk3") gtk3
   ;
+
+  # Since at least 2018 AD, GCC and other compilers run in `-fno-common` mode as
+  # default, in order to comply with C standards and also get rid of some bad
+  # quality code. Because of this, many codebases that weren't updated need to
+  # be patched -- or the `-fcommon` flag should be explicitly passed to the
+  # compiler
+
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85678
+  # https://github.com/NixOS/nixpkgs/issues/54506
+
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure = ''
     cat <<EOF > Makefile.conf
@@ -67,7 +115,7 @@ stdenv.mkDerivation rec {
     "TARGET=${uilib}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.netsurf-browser.org/";
     description = "A free, open source, small web browser";
     longDescription = ''
@@ -76,8 +124,7 @@ stdenv.mkDerivation rec {
       layout and rendering engine entirely written from scratch. It is small and
       capable of handling many of the web standards in use today.
     '';
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    inherit (buildsystem.meta) maintainers platforms;
   };
-}
+})

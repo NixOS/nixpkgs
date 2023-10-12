@@ -61,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/quintusdias/glymur";
     changelog = "https://github.com/quintusdias/glymur/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

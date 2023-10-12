@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, matrix-synapse, twisted }:
+{ lib, buildPythonPackage, fetchFromGitHub, matrix-synapse-unwrapped, twisted }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-shared-secret-auth";
@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "shared_secret_authenticator" ];
 
-  buildInputs = [ matrix-synapse ];
+  buildInputs = [ matrix-synapse-unwrapped ];
   propagatedBuildInputs = [ twisted ];
 
   meta = with lib; {

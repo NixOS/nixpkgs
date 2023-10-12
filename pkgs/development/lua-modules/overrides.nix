@@ -15,6 +15,7 @@
 , gnulib
 , gnum4
 , gobject-introspection
+, imagemagick
 , installShellFiles
 , lib
 , libevent
@@ -477,6 +478,25 @@ with prev;
     ];
   });
 
+  magick = prev.magick.overrideAttrs (oa: {
+    buildInputs = oa.buildInputs ++ [
+      imagemagick
+    ];
+
+    # Fix MagickWand not being found in the pkg-config search path
+    patches = [
+      ./magick.patch
+    ];
+
+    postPatch = ''
+      substituteInPlace magick/wand/lib.lua \
+        --replace @nix_wand@ ${imagemagick}/lib/libMagickWand-7.Q16HDRI.so
+    '';
+
+    # Requires ffi
+    meta.broken = !isLuaJIT;
+  });
+
   mpack = prev.mpack.overrideAttrs (drv: {
     buildInputs = (drv.buildInputs or []) ++ [ libmpack ];
     env = {
@@ -504,9 +524,7 @@ with prev;
       tar xf *.tar.gz
     '';
     # Without this, source root is wrongly set to ./readline-2.6/doc
-    setSourceRoot = ''
-      sourceRoot=./readline-${lib.versions.majorMinor oa.version}
-    '';
+    sourceRoot = "readline-${lib.versions.majorMinor oa.version}";
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
@@ -541,7 +559,7 @@ with prev;
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
-    meta.broken = (luaOlder "5.1" || luaAtLeast "5.3");
+    meta.broken = (luaOlder "5.1" || luaAtLeast "5.4");
   });
 
   vusted = prev.vusted.overrideAttrs (_: {

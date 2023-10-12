@@ -26,7 +26,7 @@ in {
 
     aggressive = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = lib.mdDoc "If true, favors higher default fan speeds.";
     };
 
@@ -38,17 +38,20 @@ in {
 
         options.general.low_temp = mkOption {
           type = types.int;
-          default = 63;
+          default = (if cfg.aggressive then 55 else 63);
+          defaultText = literalExpression "55";
           description = lib.mdDoc "If temperature is below this, fans will run at minimum speed.";
         };
         options.general.high_temp = mkOption {
           type = types.int;
-          default = 66;
+          default = (if cfg.aggressive then 58 else 66);
+          defaultText = literalExpression "58";
           description = lib.mdDoc "If temperature is above this, fan speed will gradually increase.";
         };
         options.general.max_temp = mkOption {
           type = types.int;
-          default = 86;
+          default = (if cfg.aggressive then 78 else 86);
+          defaultText = literalExpression "78";
           description = lib.mdDoc "If temperature is above this, fans will run at maximum speed.";
         };
         options.general.polling_interval = mkOption {
@@ -70,13 +73,6 @@ in {
   ];
 
   config = mkIf cfg.enable {
-    services.mbpfan.settings = mkIf cfg.aggressive {
-      general.min_fan1_speed = mkDefault 2000;
-      general.low_temp = mkDefault 55;
-      general.high_temp = mkDefault 58;
-      general.max_temp = mkDefault 70;
-    };
-
     boot.kernelModules = [ "coretemp" "applesmc" ];
     environment.systemPackages = [ cfg.package ];
     environment.etc."mbpfan.conf".source = settingsFile;
@@ -86,6 +82,7 @@ in {
       wantedBy = [ "sysinit.target" ];
       after = [ "syslog.target" "sysinit.target" ];
       restartTriggers = [ config.environment.etc."mbpfan.conf".source ];
+
       serviceConfig = {
         Type = "simple";
         ExecStart = "${cfg.package}/bin/mbpfan -f${verbose}";

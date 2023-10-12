@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 
 # build time
 , bison
@@ -51,6 +52,15 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-7Z9Y7uUjtjdQbB+xV/fvO18xB18VV7fBZqw1fI7U0jQ=";
   };
+
+  patches = [
+    # fixes pkgsMusl.intel-gpu-tools
+    # https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/issues/138
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/111918317d06598fe1459dbe139923404f3f4b9d/srcpkgs/igt-gpu-tools/patches/musl.patch";
+      hash = "sha256-cvtwZg7js7O/Ww7puBTfVzLRji2bHTyV91+PvpH8qrg=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison

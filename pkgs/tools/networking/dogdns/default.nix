@@ -41,6 +41,10 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+  dontUseJustInstall = true;
+
   postPatch = ''
     # update Cargo.lock to work with openssl 3
     ln -sf ${./Cargo.lock} Cargo.lock

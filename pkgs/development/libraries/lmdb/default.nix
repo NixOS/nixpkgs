@@ -2,20 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
-  version = "0.9.30";
+  version = "0.9.31";
 
   src = fetchFromGitLab {
     domain = "git.openldap.org";
     owner = "openldap";
     repo = "openldap";
     rev = "LMDB_${version}";
-    sha256 = "sha256-zLa9BtSPzujHAIZKDl69lTo72cI3m/GZejFw5v8bFsg=";
+    sha256 = "sha256-SBbo7MX3NST+OFPDtQshevIYrIsZD9bOkSsH91inMBw=";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
   patches = [ ./hardcoded-compiler.patch ./bin-ext.patch ];
   patchFlags = [ "-p3" ];
+
+  # Don't attempt the .so if static, as it would fail.
+  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed 's/^ILIBS\>.*/ILIBS = liblmdb.a/' -i Makefile
+  '';
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -46,6 +51,9 @@ stdenv.mkDerivation rec {
     Cflags: -I$dev/include
     Libs: -L$out/lib -llmdb
     EOF
+
+    # Expected by Rust libraries.
+    ln -s lmdb.pc "$dev/lib/pkgconfig/liblmdb.pc"
   '';
 
   meta = with lib; {

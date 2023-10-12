@@ -17,7 +17,8 @@
 # that in nix as well. It would make some things easier and less confusing, but
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
-, cudaSupport ? false
+, config
+, cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
 , cudaCapabilities ? cudaPackages.cudaFlags.cudaCapabilities
 , mklSupport ? false, mkl
@@ -447,7 +448,10 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ abbradar ];
       platforms = with platforms; linux ++ darwin;
-      broken = !(xlaSupport -> cudaSupport);
+      # More vulnerabilities in 2.11.1 really; https://github.com/tensorflow/tensorflow/releases
+      knownVulnerabilities = [ "CVE-2023-33976" ];
+      broken = true || # most likely needs dealing with protobuf/abseil updates
+        !(xlaSupport -> cudaSupport) || python.pythonVersion == "3.11";
     } // lib.optionalAttrs stdenv.isDarwin {
       timeout = 86400; # 24 hours
       maxSilent = 14400; # 4h, double the default of 7200s

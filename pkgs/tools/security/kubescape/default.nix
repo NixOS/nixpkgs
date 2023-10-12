@@ -2,21 +2,23 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, kubescape
+, testers
 }:
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.3.3";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-0mGsL3u3ilPBJCZrUx5UeNkFmeUoESdxZINH1e5y0VY=";
+    hash = "sha256-FKWR3pxFtJBEa14Mn3RKsLvrliHaj6TuF4F2JLtw2qA=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-tHFwseR6vQ78MX+YOiShW5/mQ7dyG2JxGOluy/Vo8ME=";
+  vendorHash = "sha256-zcv8oYm6srwkwT3pUECtTewyqVVpCIcs3i0VRTRft68=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -25,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/kubescape/kubescape/v2/core/cautils.BuildNumber=v${version}"
+    "-X=github.com/kubescape/kubescape/v2/core/cautils.BuildNumber=v${version}"
   ];
 
   subPackages = [ "." ];
@@ -42,6 +44,7 @@ buildGoModule rec {
     # remove tests that use networking
     rm core/pkg/resourcehandler/urlloader_test.go
     rm core/pkg/opaprocessor/*_test.go
+    rm core/cautils/getter/downloadreleasedpolicy_test.go
 
     # remove tests that use networking
     substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
@@ -60,14 +63,11 @@ buildGoModule rec {
       --zsh <($out/bin/kubescape completion zsh)
   '';
 
-  doInstallCheck = true;
-
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/kubescape --help
-    $out/bin/kubescape version | grep "v${version}"
-    runHook postInstallCheck
-  '';
+  passthru.tests.version = testers.testVersion {
+    package = kubescape;
+    command = "kubescape version";
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";

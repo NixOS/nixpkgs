@@ -41,6 +41,7 @@ let
 
     # serialization
     cli = callLibs ./cli.nix;
+    gvariant = callLibs ./gvariant.nix;
     generators = callLibs ./generators.nix;
 
     # misc
@@ -54,6 +55,7 @@ let
     # Eval-time filesystem handling
     path = callLibs ./path;
     filesystem = callLibs ./filesystem.nix;
+    fileset = callLibs ./fileset;
     sources = callLibs ./sources.nix;
 
     # back-compat aliases
@@ -79,8 +81,8 @@ let
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues getAttrs catAttrs filterAttrs
       filterAttrsRecursive foldlAttrs foldAttrs collect nameValuePair mapAttrs
-      mapAttrs' mapAttrsToList concatMapAttrs mapAttrsRecursive mapAttrsRecursiveCond
-      genAttrs isDerivation toDerivation optionalAttrs
+      mapAttrs' mapAttrsToList attrsToList concatMapAttrs mapAttrsRecursive
+      mapAttrsRecursiveCond genAttrs isDerivation toDerivation optionalAttrs
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting showAttrPath getOutput getBin
       getLib getDev getMan chooseDevOutputs zipWithNames zip
@@ -104,6 +106,7 @@ let
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion
+      cmakeOptionType cmakeBool cmakeFeature
       mesonOption mesonBool mesonEnable
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber
@@ -112,11 +115,11 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
-      makeScope makeScopeWithSplicing;
+      makeScope makeScopeWithSplicing makeScopeWithSplicing';
     inherit (self.derivations) lazyDerivation;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
-      hiPrioSet getLicenseFromSpdxId getExe;
+      hiPrioSet getLicenseFromSpdxId getExe getExe';
     inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile;
     inherit (self.sources) cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
@@ -138,7 +141,7 @@ let
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
-      scrubOptionValue literalExpression literalExample literalDocBook
+      scrubOptionValue literalExpression literalExample
       showOption showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption mkPackageOptionMD
       mdDoc literalMD;

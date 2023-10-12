@@ -1,11 +1,5 @@
-import * as toml from "https://deno.land/std@0.148.0/encoding/toml.ts";
-import {
-  getExistingVersion,
-  logger,
-  run,
-  write,
-} from "./common.ts";
-
+import * as toml from "https://deno.land/std@0.202.0/toml/mod.ts";
+import { getExistingVersion, logger, run, write } from "./common.ts";
 
 const log = logger("librusty_v8");
 
@@ -18,14 +12,14 @@ interface PrefetchResult {
   sha256: string;
 }
 
-const getLibrustyV8Version = async (
+const getCargoLock = async (
   owner: string,
   repo: string,
   version: string,
 ) =>
-  fetch(`https://github.com/${owner}/${repo}/raw/${version}/Cargo.toml`)
+  fetch(`https://github.com/${owner}/${repo}/raw/${version}/Cargo.lock`)
     .then((res) => res.text())
-    .then((txt) => toml.parse(txt).workspace.dependencies.v8.version);
+    .then((txt) => toml.parse(txt));
 
 const fetchArchShaTasks = (version: string, arches: Architecture[]) =>
   arches.map(
@@ -74,7 +68,10 @@ export async function updateLibrustyV8(
 ) {
   log("Starting librusty_v8 update");
   // 0.0.0
-  const version = await getLibrustyV8Version(owner, repo, denoVersion);
+  const cargoLockData = await getCargoLock(owner, repo, denoVersion);
+  console.log(cargoLockData);
+  const packageItem = cargoLockData.package.find(({ name }) => name === "v8");
+  const version = packageItem.version;
   if (typeof version !== "string") {
     throw "no librusty_v8 version";
   }

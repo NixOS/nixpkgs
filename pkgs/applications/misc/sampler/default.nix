@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, darwin, libiconv, alsa-lib, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, darwin, alsa-lib, stdenv }:
 
 buildGoModule rec {
   pname = "sampler";
@@ -8,18 +8,18 @@ buildGoModule rec {
     owner = "sqshq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lanighxhnn28dfzils7i55zgxbw2abd6y723mq7x9wg1aa2bd0z";
+    hash = "sha256-H7QllAqPp35wHeJ405YSfPX3S4lH0/hdQ8Ja2OGLVtE=";
   };
 
   patches = [
     # fix build with go 1.17
     (fetchpatch {
       url = "https://github.com/sqshq/sampler/commit/97a4a0ebe396a780d62f50f112a99b27044e832b.patch";
-      sha256 = "1czns7jc85mzdf1mg874jimls8x32l35x3lysxfgfah7cvvwznbk";
+      hash = "sha256-c9nP92YHKvdc156OXgYVoyNNa5TkoFeDa78WxOTR9rM=";
     })
   ];
 
-  vendorSha256 = "02cfzqadpsk2vkzsp7ciji9wisjza0yp35pw42q44navhbzcb4ji";
+  vendorHash = "sha256-UZLF/oJbWUKwIPyWcT1QX+rIU5SRnav/3GLq2xT+jgk=";
 
   doCheck = false;
 
@@ -35,6 +35,5 @@ buildGoModule rec {
     homepage = "https://sampler.dev";
     license = licenses.gpl3;
     maintainers = with maintainers; [ uvnikita ];
-    platforms = platforms.unix;
   };
 }

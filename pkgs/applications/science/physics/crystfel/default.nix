@@ -83,7 +83,7 @@ let
         else
           fetchurl {
             url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-linux-64-noX11.zip";
-            sha256 = "1rqh3nprxfmnyihllw31nb8i3wfhybmsic6y7z6wn4rafyv3w4fk";
+            hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
           };
       mosflmBinary = if stdenv.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
     in

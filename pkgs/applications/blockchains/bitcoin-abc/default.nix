@@ -72,5 +72,6 @@ mkDerivation rec {
     license = licenses.mit;
     broken = stdenv.isDarwin;
     platforms = platforms.unix;
+    mainProgram = "bitcoin-cli";
   };
 }

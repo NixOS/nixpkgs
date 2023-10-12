@@ -1,62 +1,80 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
-, entrypoints
-, glibcLocales
-, ipython
-, jinja2
-, jsonschema
-, numpy
-, pandas
-, pytestCheckHook
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
-, recommonmark
-, six
-, sphinx
+
+# Runtime dependencies
+, hatchling
 , toolz
-, typing ? null
+, numpy
+, jsonschema
+, typing-extensions
+, pandas
+, jinja2
+, packaging
+
+# Build, dev and test dependencies
+, anywidget
+, ipython
+, pytestCheckHook
 , vega_datasets
+, sphinx
 }:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "4.2.2";
-  disabled = isPy27;
+  # current version, 5.0.1, is broken with jsonschema>=4.18
+  # we use unstable version instead of patch due to many changes
+  version = "unstable-2023-08-12";
+  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-OTmaJnxJsw0QLBBBHmerJjdBVqhLGuufzRUUBCm6ScU=";
+  src = fetchFromGitHub {
+    owner = "altair-viz";
+    repo = "altair";
+    rev = "56b3b66daae7160c8d82777d2646131afcc3dab4";
+    hash = "sha256-uVE3Bth1D1mIhaULB4IxEtOzhQd51Pscqyfdys65F6A=";
   };
 
+  nativeBuildInputs = [
+    hatchling
+  ];
+
   propagatedBuildInputs = [
-    entrypoints
+    jinja2
     jsonschema
     numpy
+    packaging
     pandas
-    six
     toolz
-    jinja2
-  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
+  ] ++ lib.optional (pythonOlder "3.11") typing-extensions;
 
   nativeCheckInputs = [
-    glibcLocales
+    anywidget
     ipython
-    pytestCheckHook
-    recommonmark
     sphinx
     vega_datasets
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "altair" ];
 
-  # avoid examples directory, which fetches web resources
-  preCheck = ''
-    cd altair/tests
-  '';
+  disabledTestPaths = [
+    # Disabled because it requires internet connectivity
+    "tests/test_examples.py"
+    # TODO: Disabled because of missing altair_viewer package
+    "tests/vegalite/v5/test_api.py"
+    # avoid updating files and dependency on black
+    "tests/test_toplevel.py"
+    # require vl-convert package
+    "tests/utils/test_compiler.py"
+  ];
 
   meta = with lib; {
     description = "A declarative statistical visualization library for Python.";
-    homepage = "https://github.com/altair-viz/altair";
+    homepage = "https://altair-viz.github.io";
+    downloadPage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ teh vinetos ];
   };
 }

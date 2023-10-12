@@ -1,9 +1,14 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , ipykernel
+, ipython_genutils
 , ipywidgets
 , matplotlib
+, numpy
+, pillow
+, traitlets
 }:
 
 buildPythonPackage rec {
@@ -11,13 +16,22 @@ buildPythonPackage rec {
   version = "0.9.3";
   format = "wheel";
 
+  disabled = pythonOlder "3.5";
+
   src = fetchPypi {
     inherit pname version format;
     hash = "sha256-0RPNVYkbr+myfvmbbdERqHvra7KuVQxAQpInIQO+gBM=";
   };
 
-
-  propagatedBuildInputs = [ ipykernel ipywidgets matplotlib ];
+  propagatedBuildInputs = [
+    ipykernel
+    ipython_genutils
+    ipywidgets
+    matplotlib
+    numpy
+    pillow
+    traitlets
+  ];
 
   # There are no unit tests in repository
   doCheck = false;

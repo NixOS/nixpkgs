@@ -19,15 +19,11 @@ let
       sha256 = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
     };
 
-    # The loosely held nixpkgs convention for SBCL is to keep the last two
-    # versions.
-    # https://github.com/NixOS/nixpkgs/pull/200994#issuecomment-1315042841
-    "2.3.2" = {
-      sha256 = "sha256-RMwWLPpjMqmojHoSHRkDiCikuk9r/7d+8cexdAfLHqo=";
+    "2.3.8" = {
+      sha256 = "sha256-QhVxsqyRbli+jrzqXvSr+NeQKGPbah0KXvqVAK3KDSk=";
     };
-
-    "2.3.4" = {
-      sha256 = "sha256-8RtHZMbqvbJ+WpxGshcgTRG82lNOc7+XBz1Xgx0gnE4=";
+    "2.3.9" = {
+      sha256 = "sha256-fSiakSMgIgKL8BKJAMMr8A5MVDDDLyivBZTIpZKphlQ=";
     };
   };
 

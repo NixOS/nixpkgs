@@ -4,12 +4,12 @@
 
 let
   pname = "elixir-ls";
-  version = "0.14.6";
+  version = "0.16.0";
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
-    hash = "sha256-O977DZLWPyLafIaOTPZKI4MOtK9E9TDProf2xyk05aI";
+    hash = "sha256-tEKwM5o3uXJ0cLY5USnQJ+HOGTSv6NDJvq+F/iqFEWs=";
     fetchSubmodules = true;
   };
 in
@@ -21,7 +21,7 @@ mixRelease  {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
-    sha256 = "sha256-jF1Plkz1D85aWkiNgeBlJmHndhr7us+8+m/gMkXHvDw=";
+    hash = "sha256-jpjqMIQ9fS4nkkKWZ80Mx5vULm5bvnNHy52ZQcR0y8c=";
   };
 
   # elixir-ls is an umbrella app
@@ -49,6 +49,10 @@ mixRelease  {
     substitute release/language_server.sh $out/bin/elixir-ls \
       --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
     chmod +x $out/bin/elixir-ls
+
+    substitute release/debugger.sh $out/bin/elixir-debugger \
+      --replace 'exec "''${dir}/launch.sh"' "exec $out/lib/launch.sh"
+    chmod +x $out/bin/elixir-debugger
     # prepare the launcher
     substituteInPlace $out/lib/launch.sh \
       --replace "ERL_LIBS=\"\$SCRIPTPATH:\$ERL_LIBS\"" \
@@ -70,6 +74,7 @@ mixRelease  {
     '';
     license = licenses.asl20;
     platforms = platforms.unix;
+    mainProgram = "elixir-ls";
     maintainers = teams.beam.members;
   };
   passthru.updateScript = nix-update-script { };

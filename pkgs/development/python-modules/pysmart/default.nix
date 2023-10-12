@@ -1,25 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, smartmontools
+, chardet
 , humanfriendly
 , pytestCheckHook
 , pythonOlder
+, setuptools-scm
+, smartmontools
 }:
 
 buildPythonPackage rec {
   pname = "pysmart";
-  version = "1.2.3";
-  format = "setuptools";
+  version = "1.2.5";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "truenas";
     repo = "py-SMART";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-5VoZEgHWmHUDkm2KhBP0gfmhOJUYJUqDLWBp/kU1404=";
+    rev = "v${version}";
+    hash = "sha256-NqE7Twl1kxXrASyxw35xIOTB+LThU0a45NCxh8SUxfI=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pySMART/utils.py \
@@ -27,7 +31,12 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    chardet
     humanfriendly
+  ];
+
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   nativeCheckInputs = [

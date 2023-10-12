@@ -1,20 +1,20 @@
 { lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
-, nodePackages, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+, asar, alsa-lib, gtk3, libxshmfence, mesa, nss }:
 
 stdenv.mkDerivation rec {
   pname = "morgen";
-  version = "2.7.0";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "https://download.todesktop.com/210203cqcj00tw1/morgen-${version}.deb";
-    sha256 = "sha256-v01mytnyJA1GQ/9/+7/HDIbwW1Jl4dpgf+84k0sRf4o=";
+    sha256 = "sha256-lj+V5mntZzED2ZS62Uwlt/vTXwSuwzXeuEw8y/bA6og=";
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
     makeWrapper
-    nodePackages.asar
+    asar
   ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];

@@ -97,12 +97,12 @@ let
   # Handbrake maintains a set of ffmpeg patches. In particular, these
   # patches are required for subtitle timing to work correctly. See:
   # https://github.com/HandBrake/HandBrake/issues/4029
-  ffmpeg-version = "5.1.1";
+  ffmpeg-version = "5.1.2";
   ffmpeg-hb = ffmpeg_5-full.overrideAttrs (old: {
     version = ffmpeg-version;
     src = fetchurl {
       url = "https://www.ffmpeg.org/releases/ffmpeg-${ffmpeg-version}.tar.bz2";
-      hash = "sha256-zQ4W+QNCEmbVzN3t97g7nldUrvS596fwbOnkyALwVFs=";
+      hash = "sha256-OaC8yNmFSfFsVwYkZ4JGpqxzbAZs69tAn5UC6RWyLys=";
     };
     patches = old.patches or [ ] ++ [
       "${src}/contrib/ffmpeg/A01-qsv-libavfilter-qsvvpp-change-the-output-frame-s-width-a.patch"
@@ -133,7 +133,8 @@ let
       "${src}/contrib/ffmpeg/A26-Update-the-min-version-to-1.4.23.0-for-AMF-SDK.patch"
       "${src}/contrib/ffmpeg/A27-avcodec-amfenc-Fixes-the-color-information-in-the-ou.patch"
       "${src}/contrib/ffmpeg/A28-avcodec-amfenc-HDR-metadata.patch"
-      "${src}/contrib/ffmpeg/A30-svt-av1-backports.patch"
+      # This patch is not applying since ffmpeg 5.1.1, probably it was backported by upstream
+      # "${src}/contrib/ffmpeg/A30-svt-av1-backports.patch"
     ];
   });
 

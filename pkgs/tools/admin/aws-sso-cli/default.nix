@@ -6,15 +6,15 @@
 }:
 buildGoModule rec {
   pname = "aws-sso-cli";
-  version = "1.9.10";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "synfinatic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hDXCH5B4bc0SKv/qzk92bPm366LmdYWTuVVn8KI0avo=";
+    hash = "sha256-QwixApaGUzTmvc9TfFk8bdMU7dxyaeUo5aWucV4tH1c=";
   };
-  vendorHash = "sha256-myjHRZXTjsLXD8kibcdf1/Nhvx50fDsFtmZd63DpiiI=";
+  vendorHash = "sha256-/6DCrjOqjbz+olRp7rs8ui4uUrcor0zAc0yOIz+ZcEo=";
 
   nativeBuildInputs = [ makeWrapper ];
 

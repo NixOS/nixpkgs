@@ -109,9 +109,9 @@ class GitLabRepo:
                 "GITALY_SERVER_VERSION",
                 "GITLAB_PAGES_VERSION",
                 "GITLAB_SHELL_VERSION",
+                "GITLAB_ELASTICSEARCH_INDEXER_VERSION",
             ]
         }
-
         passthru["GITLAB_WORKHORSE_VERSION"] = version
 
         return dict(
@@ -187,7 +187,7 @@ def update_rubyenv():
     )
 
     # Fetch vendored dependencies temporarily in order to build the gemset.nix
-    subprocess.check_output(["mkdir", "-p", "vendor/gems"], cwd=rubyenv_dir)
+    subprocess.check_output(["mkdir", "-p", "vendor/gems", "gems"], cwd=rubyenv_dir)
     subprocess.check_output(
         [
             "sh",
@@ -195,6 +195,14 @@ def update_rubyenv():
             f"curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=vendor/gems | tar -xj --strip-components=3",
         ],
         cwd=f"{rubyenv_dir}/vendor/gems",
+    )
+    subprocess.check_output(
+        [
+            "sh",
+            "-c",
+            f"curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=gems | tar -xj --strip-components=3",
+        ],
+        cwd=f"{rubyenv_dir}/gems",
     )
 
     # Undo our gemset.nix patches so that bundix runs through
@@ -213,11 +221,13 @@ def update_rubyenv():
             "1i\\src:",
             "-e",
             's:path = \\(vendor/[^;]*\\);:path = "${src}/\\1";:g',
+            "-e",
+            's:path = \\(gems/[^;]*\\);:path = "${src}/\\1";:g',
             "gemset.nix",
         ],
         cwd=rubyenv_dir,
     )
-    subprocess.check_output(["rm", "-rf", "vendor"], cwd=rubyenv_dir)
+    subprocess.check_output(["rm", "-rf", "vendor", "gems"], cwd=rubyenv_dir)
 
 
 @cli.command("update-gitaly")
@@ -225,16 +235,7 @@ def update_gitaly():
     """Update gitaly"""
     logger.info("Updating gitaly")
     data = _get_data_json()
-    gitaly_server_version = data["passthru"]["GITALY_SERVER_VERSION"]
-    repo = GitLabRepo(repo="gitaly")
-    gitaly_dir = pathlib.Path(__file__).parent / "gitaly"
-
-    for fn in ["Gemfile.lock", "Gemfile"]:
-        with open(gitaly_dir / fn, "w") as f:
-            f.write(repo.get_file(f"ruby/{fn}", f"v{gitaly_server_version}"))
-
-    subprocess.check_output(["bundle", "lock"], cwd=gitaly_dir)
-    subprocess.check_output(["bundix"], cwd=gitaly_dir)
+    gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
 
     _call_nix_update("gitaly", gitaly_server_version)
 
@@ -306,6 +307,14 @@ def update_gitlab_container_registry(rev: str, commit: bool):
         )
 
 
+@cli.command('update-gitlab-elasticsearch-indexer')
+def update_gitlab_elasticsearch_indexer():
+    """Update gitlab-elasticsearch-indexer"""
+    data = _get_data_json()
+    gitlab_elasticsearch_indexer_version = data['passthru']['GITLAB_ELASTICSEARCH_INDEXER_VERSION']
+    _call_nix_update('gitlab-elasticsearch-indexer', gitlab_elasticsearch_indexer_version)
+
+
 @cli.command("update-all")
 @click.option("--rev", default="latest", help="The rev to use (vX.Y.Z-ee), or 'latest'")
 @click.option(
@@ -326,6 +335,7 @@ def update_all(ctx, rev: str, commit: bool):
     ctx.invoke(update_gitlab_pages)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
+    ctx.invoke(update_gitlab_elasticsearch_indexer)
     if commit:
         commit_gitlab(
             old_data_json["version"], new_data_json["version"], new_data_json["rev"]
@@ -351,6 +361,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
             "gitlab-pages",
             "gitlab-shell",
             "gitlab-workhorse",
+            "gitlab-elasticsearch-indexer",
         ],
         cwd=GITLAB_DIR,
     )
@@ -373,7 +384,7 @@ def commit_container_registry(old_version: str, new_version: str) -> None:
             "git",
             "commit",
             "--message",
-            f"gitlab-container-registry: {old_version} -> {new_version}",
+            f"gitlab-container-registry: {old_version} -> {new_version}\n\nhttps://gitlab.com/gitlab-org/container-registry/-/blob/v{new_version}-gitlab/CHANGELOG.md",
         ],
         cwd=GITLAB_DIR,
     )

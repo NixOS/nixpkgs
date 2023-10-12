@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "tempest";
-  version = "34.1.0";
+  version = "36.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VLcTyiJ+ce2VqhD1OYRUa+ep34ry/mb61qntiqVsTCQ=";
+    hash = "sha256-97Z5C7IluOXSkkUamFuljzzvD3QxdHZ/p8mXE9jW/2I=";
   };
 
   propagatedBuildInputs = [

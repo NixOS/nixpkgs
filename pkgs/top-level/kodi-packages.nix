@@ -3,7 +3,7 @@
 with lib;
 
 let
-  inherit (libretro) genesis-plus-gx mgba snes9x;
+  inherit (libretro) fuse genesis-plus-gx mgba nestopia snes9x twenty-fortyeight;
 in
 
 let self = rec {
@@ -62,9 +62,15 @@ let self = rec {
 
   libretro = callPackage ../applications/video/kodi/addons/libretro { };
 
+  libretro-2048 = callPackage ../applications/video/kodi/addons/libretro-2048 { inherit twenty-fortyeight; };
+
+  libretro-fuse = callPackage ../applications/video/kodi/addons/libretro-fuse { inherit fuse; };
+
   libretro-genplus = callPackage ../applications/video/kodi/addons/libretro-genplus { inherit genesis-plus-gx; };
 
   libretro-mgba = callPackage ../applications/video/kodi/addons/libretro-mgba { inherit mgba; };
+
+  libretro-nestopia = callPackage ../applications/video/kodi/addons/libretro-nestopia { inherit nestopia; };
 
   libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
 
@@ -96,9 +102,11 @@ let self = rec {
 
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
-  vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
-
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+
+  vfs-rar = callPackage ../applications/video/kodi/addons/vfs-rar { };
+
+  vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
 
   visualization-fishbmc = callPackage ../applications/video/kodi/addons/visualization-fishbmc { };
 

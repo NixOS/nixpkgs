@@ -14,7 +14,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.4.2";
+  version = "2.5.0";
 
   format = "setuptools";
 
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-lQMJVSY3JeZYYOFDyV29Ye2j8r+ngE/ta2wQYipy4hU=";
+    hash = "sha256-wIXh7dzygjzSXo51LBt1BW+sar6qUELWC6oTGPDGgcE=";
   };
 
   patches = [
@@ -63,6 +63,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postInstall = ''
     installManPage doc/udiskie.8
+
+    installShellCompletion \
+      --bash completions/bash/* \
+      --zsh completions/zsh/*
   '';
 
   preFixup = ''

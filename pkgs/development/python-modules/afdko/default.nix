@@ -23,6 +23,7 @@
 , setuptools-scm
 , scikit-build
 , cmake
+, ninja
 , antlr4_9
 , libxml2
 , pytestCheckHook
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     setuptools-scm
     scikit-build
     cmake
+    ninja
   ];
 
   buildInputs = [

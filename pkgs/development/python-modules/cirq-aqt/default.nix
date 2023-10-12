@@ -8,7 +8,7 @@ buildPythonPackage rec {
   pname = "cirq-aqt";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \

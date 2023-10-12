@@ -1,6 +1,6 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitLab
-, fetchpatch
 , python3
 , librsync
 , ncftp
@@ -12,12 +12,8 @@
 , makeWrapper
 , gettext
 }:
-let
-  pythonPackages = python3.pkgs;
-  inherit (lib.versions) majorMinor splitVersion;
-  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
-in
-pythonPackages.buildPythonApplication rec {
+
+python3.pkgs.buildPythonApplication rec {
   pname = "duplicity";
   version = "0.8.23";
 
@@ -54,14 +50,15 @@ pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     gettext
-    pythonPackages.wrapPython
-    pythonPackages.setuptools-scm
+    python3.pkgs.wrapPython
+    python3.pkgs.setuptools-scm
   ];
+
   buildInputs = [
     librsync
   ];
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python3.pkgs; [
     b2sdk
     boto3
     cffi
@@ -85,7 +82,7 @@ pythonPackages.buildPythonApplication rec {
     par2cmdline # Add 'par2' to PATH.
   ] ++ lib.optionals stdenv.isLinux [
     util-linux # Add 'setsid' to PATH.
-  ] ++ (with pythonPackages; [
+  ] ++ (with python3.pkgs; [
     lockfile
     mock
     pexpect
@@ -130,6 +127,6 @@ pythonPackages.buildPythonApplication rec {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0v3j7rw917wnmp4lyjscqzk4qf4azfiz70ynbq3wl4gwp1m783vv";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
   nativeBuildInputs = [ git ];
 
   meta = with lib; {

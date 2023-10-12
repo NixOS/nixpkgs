@@ -34,19 +34,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "17.0";
+  version = "17.3";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
-    hash = "sha256-boFXzARVG2At92j9gSavteAQ8qTjgJ91hIefVr/e6og=";
+    hash = "sha256-PV7xX4xYAIOT8xF7SM/bCO98p5gYJwT2U+dEXKhaIf4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
-    hash = "sha256-3itblnHlY1L8g/EGCi1BIWGD6INOpnvLCwJ7zL7KV4w=";
+    hash = "sha256-Mck5letI7gOqeuMsZPzdys0VD8cWESznzezR2ZQXbDE=";
   };
 
   nativeBuildInputs = [

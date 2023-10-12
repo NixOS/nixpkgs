@@ -13,7 +13,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   installPhase = ''
     runHook preInstall

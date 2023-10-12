@@ -4,6 +4,7 @@
 , pkg-config
 , glib
 , gdk-pixbuf
+, installShellFiles
 , pango
 , cairo
 , libxml2
@@ -28,35 +29,48 @@
 , common-updater-scripts
 , jq
 , nix
+
+# for passthru.tests
+, enlightenment
+, ffmpeg
+, gegl
+, gimp
+, imagemagick
+, imlib2
+, vips
+, xfce
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.55.1";
+  version = "2.56.3";
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "a69IqdOlb9E7v7ufH3Z1myQLcKH6Ig/SOEdNZqkm+Yw=";
+    url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
+    hash = "sha256-WjKASKAtAUZFzSf2EUD04LESgPssfyohhk/gxZrBzog=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-nRmOB9Jo+mmB0+wXrQvoII4e0ucV7bNCDeuk6CbcPdk=";
+    inherit (finalAttrs) src;
+    name = "librsvg-deps-${finalAttrs.version}";
+    hash = "sha256-s7eNMSdajr2VhB/BPVUFftHhHKCqpR9sTfxfWwag1mI=";
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
 
   strictDeps = true;
 
-  depsBuildBuild = [ pkg-config ];
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     gdk-pixbuf
+    installShellFiles
     pkg-config
     rustc
     cargo-auditable-cargo-wrapper
@@ -100,6 +114,12 @@ stdenv.mkDerivation rec {
     ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
   '';
 
+  # librsvg only links Foundation, but it also requiers libobjc. The Framework.tbd in the 11.0 SDK
+  # reexports libobjc, but the one in the 10.12 SDK does not, so link it manually.
+  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    NIX_LDFLAGS = "-lobjc";
+  };
+
   preConfigure = ''
     PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
     export PKG_CONFIG_VAPIGEN_VAPIGEN
@@ -113,12 +133,10 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     GDK_PIXBUF=$out/lib/gdk-pixbuf-2.0/2.10.0
     mkdir -p $GDK_PIXBUF/loaders
-    sed -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
-        -i gdk-pixbuf-loader/Makefile
-    sed -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
-        -i gdk-pixbuf-loader/Makefile
-    sed -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#" \
-         -i gdk-pixbuf-loader/Makefile
+    sed -i gdk-pixbuf-loader/Makefile \
+      -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
+      -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
+      -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#"
 
     # Fix thumbnailer path
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
@@ -133,11 +151,17 @@ stdenv.mkDerivation rec {
   '';
 
   # Not generated when cross compiling.
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-    # Merge gdkpixbuf and librsvg loaders
-    cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
-    mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
-  '';
+  postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+      # Merge gdkpixbuf and librsvg loaders
+      cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+      mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+
+      installShellCompletion --cmd rsvg-convert \
+        --bash <(${emulator} $out/bin/rsvg-convert --completion bash) \
+        --fish <(${emulator} $out/bin/rsvg-convert --completion fish) \
+        --zsh <(${emulator} $out/bin/rsvg-convert --completion zsh)
+    '';
 
   postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -179,6 +203,17 @@ stdenv.mkDerivation rec {
         updateSource
         updateLockfile
       ];
+    tests = {
+      inherit
+        gegl
+        gimp
+        imagemagick
+        imlib2
+        vips;
+      inherit (enlightenment) efl;
+      inherit (xfce) xfwm4;
+      ffmpeg = ffmpeg.override { withSvg = true; };
+    };
   };
 
   meta = with lib; {
@@ -189,4 +224,4 @@ stdenv.mkDerivation rec {
     mainProgram = "rsvg-convert";
     platforms = platforms.unix;
   };
-}
+})

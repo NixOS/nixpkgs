@@ -1,6 +1,8 @@
 { config, stdenv, lib, fetchFromGitHub, cmake, gtest, doCheck ? true
-, cudaSupport ? config.cudaSupport or false, openclSupport ? false, mpiSupport ? false, javaWrapper ? false, hdfsSupport ? false
-, rLibrary ? false, cudaPackages, opencl-headers, ocl-icd, boost, llvmPackages, openmpi, openjdk, swig, hadoop, R, rPackages }:
+, cudaSupport ? config.cudaSupport or false, openclSupport ? false
+, mpiSupport ? false, javaWrapper ? false, hdfsSupport ? false, pythonLibrary ? false
+, rLibrary ? false, cudaPackages, opencl-headers, ocl-icd, boost
+, llvmPackages, openmpi, openjdk, swig, hadoop, R, rPackages, pandoc }:
 
 assert doCheck -> mpiSupport != true;
 assert openclSupport -> cudaSupport != true;
@@ -21,14 +23,14 @@ stdenv.mkDerivation rec {
   #   in \
   #   rWrapper.override{ packages = [ lgbm ]; }"
   pname = lib.optionalString rLibrary "r-" + pnameBase;
-  version = "3.3.5";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = pnameBase;
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-QRuBbMVtD5J5ECw+bAp57bWaRc/fATMcTq+AKikhj1I=";
+    hash = "sha256-AhXe/Mlor/i0y84wI9jVPKSnyVbSyAV52Y4yiNm7yLQ=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -38,13 +40,14 @@ stdenv.mkDerivation rec {
     ++ lib.optionals hdfsSupport [ hadoop ]
     ++ lib.optionals (hdfsSupport || javaWrapper) [ openjdk ]
     ++ lib.optionals javaWrapper [ swig ]
-    ++ lib.optionals rLibrary [ R ];
+    ++ lib.optionals rLibrary [ R pandoc ];
 
   buildInputs = [ gtest ]
     ++ lib.optional cudaSupport cudaPackages.cudatoolkit;
 
   propagatedBuildInputs = lib.optionals rLibrary [
     rPackages.data_table
+    rPackages.rmarkdown
     rPackages.jsonlite
     rPackages.Matrix
     rPackages.R6
@@ -62,6 +65,7 @@ stdenv.mkDerivation rec {
       external_libs/compute/include/boost/compute/cl_ext.hpp \
       --replace "include <OpenCL/" "include <CL/"
     substituteInPlace build_r.R \
+      --replace "shQuote(normalizePath" "shQuote(type = 'cmd', string = normalizePath" \
       --replace "file.path(getwd(), \"lightgbm_r\")" "'$out/tmp'" \
       --replace \
         "install_args <- c(\"CMD\", \"INSTALL\", \"--no-multiarch\", \"--with-keep.source\", tarball)" \
@@ -74,10 +78,14 @@ stdenv.mkDerivation rec {
     ++ lib.optionals mpiSupport [ "-DUSE_MPI=ON" ]
     ++ lib.optionals hdfsSupport [
       "-DUSE_HDFS=ON"
-      "-DHDFS_LIB=${hadoop}/lib/hadoop-3.3.1/lib/native/libhdfs.so"
-      "-DHDFS_INCLUDE_DIR=${hadoop}/lib/hadoop-3.3.1/include" ]
-    ++ lib.optionals javaWrapper [ "-DUSE_SWIG=ON" ]
-    ++ lib.optionals rLibrary [ "-D__BUILD_FOR_R=ON" ];
+      "-DHDFS_LIB=${hadoop}/lib/hadoop-${hadoop.version}/lib/native/libhdfs.so"
+      "-DHDFS_INCLUDE_DIR=${hadoop}/lib/hadoop-${hadoop.version}/include" ]
+    ++ lib.optionals javaWrapper [
+      "-DUSE_SWIG=ON"
+      # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+      "-DCMAKE_SKIP_BUILD_RPATH=ON" ]
+    ++ lib.optionals rLibrary [ "-D__BUILD_FOR_R=ON" ]
+    ++ lib.optionals pythonLibrary [ "-D__BUILD_FOR_PYTHON=ON" ];
 
   configurePhase = lib.optionals rLibrary ''
     export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
@@ -98,28 +106,28 @@ stdenv.mkDerivation rec {
       mkdir -p $out/bin
       cp -r ../include $out
       install -Dm755 ../lib_lightgbm.so $out/lib/lib_lightgbm.so
+    '' + lib.optionalString (!rLibrary && !pythonLibrary) ''
       install -Dm755 ../lightgbm $out/bin/lightgbm
     '' + lib.optionalString javaWrapper ''
       cp -r java $out
       cp -r com $out
       cp -r lightgbmlib.jar $out
     '' + ''
-    '' + lib.optionalString javaWrapper ''
-      cp -r java $out
-      cp -r com $out
-      cp -r lightgbmlib.jar $out
     '' + lib.optionalString rLibrary ''
       mkdir $out
       mkdir $out/tmp
       mkdir $out/library
       mkdir $out/library/lightgbm
     '' + lib.optionalString (rLibrary && (!openclSupport)) ''
-      Rscript build_r.R
+      Rscript build_r.R \
+        -j$NIX_BUILD_CORES
       rm -rf $out/tmp
     '' + lib.optionalString (rLibrary && openclSupport) ''
       Rscript build_r.R --use-gpu \
         --opencl-library=${ocl-icd}/lib/libOpenCL.so \
-        --boost-librarydir=${boost}
+        --opencl-include-dir=${opencl-headers}/include \
+        --boost-librarydir=${boost} \
+        -j$NIX_BUILD_CORES
       rm -rf $out/tmp
     '' + ''
       runHook postInstall

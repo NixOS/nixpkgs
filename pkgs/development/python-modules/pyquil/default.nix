@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, deprecated
 , fetchFromGitHub
 , importlib-metadata
 , ipython
@@ -20,13 +21,15 @@
 , retry
 , rpcq
 , scipy
+, tenacity
+, types-deprecated
 , types-python-dateutil
 , types-retry
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "3.5.0";
+  version = "3.5.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +38,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Fr9SnAzDHaSKp0AYra/gCZOJ5Fzcx1EO56ahZQZP2Ss=";
+    hash = "sha256-GQ7vzuUu0PCeLkqKWUSNJyJ01wseOwNL2jJaVTNGF9s=";
   };
 
   pythonRelaxDeps = [
@@ -49,6 +52,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    deprecated
     lark
     networkx
     numpy
@@ -56,6 +60,8 @@ buildPythonPackage rec {
     retry
     rpcq
     scipy
+    tenacity
+    types-deprecated
     types-python-dateutil
     types-retry
   ] ++ lib.optionals (pythonOlder "3.8") [

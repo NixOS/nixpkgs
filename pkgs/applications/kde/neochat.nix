@@ -15,6 +15,7 @@
 , kirigami2
 , kitemmodels
 , knotifications
+, kquickcharts
 , kquickimageedit
 , libpulseaudio
 , libquotient
@@ -24,6 +25,7 @@
 , qqc2-desktop-style
 , qtgraphicaleffects
 , qtkeychain
+, qtlocation
 , qtmultimedia
 , qtquickcontrols2
 , sonnet
@@ -49,6 +51,7 @@ mkDerivation {
     kirigami2
     kitemmodels
     knotifications
+    kquickcharts
     kquickimageedit
     libpulseaudio
     libquotient
@@ -57,6 +60,7 @@ mkDerivation {
     qcoro
     qtgraphicaleffects
     qtkeychain
+    qtlocation
     qtmultimedia
     qtquickcontrols2
     qqc2-desktop-style

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "2.9.0";
+  version = "2.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m2rntQn8KUvay4TQ8+qOIOLFSotLvjnFcHY1/sIU7/M=";
+    hash = "sha256-k0sx6tXzmU5TYPn/V1CYLFtrEWBNwHK8RSwlll4Hbcc=";
   };
 
   propagatedBuildInputs = [
@@ -89,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-storage";
     changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

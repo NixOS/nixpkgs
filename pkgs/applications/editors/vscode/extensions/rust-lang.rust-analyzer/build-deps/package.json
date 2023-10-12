@@ -1,6 +1,6 @@
 {
   "name": "rust-analyzer",
-  "version": "0.3.1426",
+  "version": "0.3.1607",
   "dependencies": {
     "anser": "^2.1.1",
     "d3": "^7.6.1",

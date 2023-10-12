@@ -11,13 +11,13 @@ assert trackerSearch -> (python3 != null);
 
 mkDerivation rec {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
-  version = "4.5.2";
+  version = "4.5.5";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
-    hash = "sha256-U0JDLLyIrMBqP4EqRAj48sdv9Om9cwdx4vP/0Ob1QB8=";
+    hash = "sha256-rWv+KGw+3385GOKK4MvoSP0CepotUZELiDVFpyDf+9k=";
   };
 
   enableParallelBuilding = true;
@@ -53,6 +53,6 @@ mkDerivation rec {
     changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ Anton-Latukha ];
+    maintainers = with maintainers; [ Anton-Latukha kashw2 ];
   };
 }

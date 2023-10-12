@@ -1,79 +1,92 @@
 { lib
+, bash
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, pythonRelaxDepsHook
 , poetry-core
-, numpy
-, pyyaml
-, sqlalchemy
-, requests
-, async-timeout
 , aiohttp
-, numexpr
-, openapi-schema-pydantic
+, async-timeout
 , dataclasses-json
-, tqdm
+, langsmith
+, numexpr
+, numpy
+, openapi-schema-pydantic
+, pydantic
+, pyyaml
+, requests
+, sqlalchemy
 , tenacity
-, bash
   # optional dependencies
 , anthropic
+, atlassian-python-api
+, azure-core
+, azure-cosmos
+, azure-identity
+, beautifulsoup4
+, chardet
+, clarifai
 , cohere
-, openai
-, nlpcloud
+, duckduckgo-search
+, elasticsearch
+, esprima
+, faiss
+, google-api-python-client
+, google-auth
+, google-search-results
+, gptcache
+, html2text
 , huggingface-hub
+, jinja2
+, jq
+, lark
+, librosa
+, lxml
 , manifest-ml
+, markdownify
+, neo4j
+, networkx
+, nlpcloud
+, nltk
+, openai
+, opensearch-py
+, pdfminer-six
+, pgvector
+, pinecone-client
+, psycopg2
+, pyowm
+, pypdf
+, pytesseract
+, python-arango
+, qdrant-client
+, rdflib
+, redis
+, requests-toolbelt
+, sentence-transformers
+, spacy
+, steamship
+, tiktoken
 , torch
 , transformers
-, qdrant-client
-, sentence-transformers
-, azure-identity
-, azure-cosmos
-, azure-core
-, elasticsearch
-, opensearch-py
-, faiss
-, spacy
-, nltk
-, beautifulsoup4
-, tiktoken
-, jinja2
-, pinecone-client
 , weaviate-client
-, redis
-, google-api-python-client
-, pypdf
-, networkx
-, psycopg2
-, boto3
-, pyowm
-, pytesseract
-, html2text
-, atlassian-python-api
-, duckduckgo-search
-, lark
-, jq
-, steamship
-, pdfminer-six
-, lxml
-, chardet
-, requests-toolbelt
-, neo4j
+, wikipedia
   # test dependencies
-, pytest-vcr
+, freezegun
+, pandas
+, pexpect
 , pytest-asyncio
 , pytest-mock
 , pytest-socket
-, pandas
-, toml
-, freezegun
-, responses
-, pexpect
+, pytest-vcr
 , pytestCheckHook
+, responses
+, syrupy
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.180";
+  version = "0.0.285";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -82,8 +95,10 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5ZA5CXS9+NCyOXGbjgGk+iNCF/B2Wm4xRpR6t5uJ+yg=";
+    hash = "sha256-3vOfwn8qvPd9dPRnsX14bVSLQQKHLPS5r15S8yAQFpw=";
   };
+
+  sourceRoot = "${src.name}/libs/langchain";
 
   postPatch = ''
     substituteInPlace langchain/utilities/bash.py \
@@ -94,6 +109,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+    pythonRelaxDepsHook
   ];
 
   buildInputs = [
@@ -101,39 +117,48 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    numpy
-    pyyaml
+    pydantic
     sqlalchemy
     requests
-    aiohttp
-    numexpr
+    pyyaml
+    numpy
     openapi-schema-pydantic
     dataclasses-json
-    tqdm
     tenacity
+    aiohttp
+    numexpr
+    langsmith
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
-  ] ++ passthru.optional-dependencies.all;
+  ];
 
   passthru.optional-dependencies = {
     llms = [
       anthropic
+      clarifai
       cohere
       openai
+      # openllm
+      # openlm
       nlpcloud
       huggingface-hub
       manifest-ml
       torch
       transformers
+      # xinference
     ];
     qdrant = [
       qdrant-client
     ];
     openai = [
       openai
+      tiktoken
     ];
     text_helpers = [
       chardet
+    ];
+    clarifai = [
+      clarifai
     ];
     cohere = [
       cohere
@@ -144,14 +169,22 @@ buildPythonPackage rec {
     embeddings = [
       sentence-transformers
     ];
+    javascript = [
+      esprima
+    ];
     azure = [
       azure-identity
       azure-cosmos
       openai
       azure-core
+      # azure-ai-formrecognizer
+      # azure-ai-vision
+      # azure-cognitiveservices-speech
+      # azure-search-documents
     ];
     all = [
       anthropic
+      clarifai
       cohere
       openai
       nlpcloud
@@ -160,13 +193,13 @@ buildPythonPackage rec {
       manifest-ml
       elasticsearch
       opensearch-py
-      # google-search-results
+      google-search-results
       faiss
       sentence-transformers
       transformers
       spacy
       nltk
-      # wikipedia
+      wikipedia
       beautifulsoup4
       tiktoken
       torch
@@ -176,6 +209,7 @@ buildPythonPackage rec {
       weaviate-client
       redis
       google-api-python-client
+      google-auth
       # wolframalpha
       qdrant-client
       # tensorflow-text
@@ -184,14 +218,14 @@ buildPythonPackage rec {
       # nomic
       # aleph-alpha-client
       # deeplake
-      # pgvector
+      # libdeeplake
+      pgvector
       psycopg2
-      boto3
       pyowm
       pytesseract
       html2text
       atlassian-python-api
-      # gptcache
+      gptcache
       duckduckgo-search
       # arxiv
       azure-identity
@@ -214,20 +248,34 @@ buildPythonPackage rec {
       # azure-ai-formrecognizer
       # azure-ai-vision
       # azure-cognitiveservices-speech
+      # momento
+      # singlestoredb
+      # tigrisdb
+      # nebula3-python
+      # awadb
+      # esprima
+      # octoai-sdk
+      rdflib
+      # amadeus
+      # xinference
+      librosa
+      python-arango
     ];
   };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-vcr
+    freezegun
+    markdownify
+    pandas
+    pytest-asyncio
     pytest-mock
     pytest-socket
-    pytest-asyncio
-    pandas
-    toml
-    freezegun
+    pytest-vcr
+    pytestCheckHook
     responses
-  ];
+    syrupy
+    toml
+  ] ++ passthru.optional-dependencies.all;
 
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.

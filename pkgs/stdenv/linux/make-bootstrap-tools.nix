@@ -78,7 +78,8 @@ in with pkgs; rec {
         cp -d ${libc.out}/lib/libutil*.so* $out/lib
         cp -d ${libc.out}/lib/libnss*.so* $out/lib
         cp -d ${libc.out}/lib/libresolv*.so* $out/lib
-        cp -d ${libc.out}/lib/crt?.o $out/lib
+        # Copy all runtime files to enable non-PIE, PIE, static PIE and profile-generated builds
+        cp -d ${libc.out}/lib/*.o $out/lib
 
         # Hacky compat with our current unpack-bootstrap-tools.sh
         ln -s librt.so "$out"/lib/librt-dummy.so
@@ -130,7 +131,7 @@ in with pkgs; rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
 
-        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre2.out}/lib/libpcre2*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
         cp -d ${bootGCC.out}/bin/gcc $out/bin

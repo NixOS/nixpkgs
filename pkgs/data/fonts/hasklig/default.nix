@@ -23,6 +23,6 @@ stdenvNoCC.mkDerivation rec {
     description = "A font with ligatures for Haskell code based off Source Code Pro";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ davidrusu Profpatsch ];
+    maintainers = with maintainers; [ davidrusu ];
   };
 }

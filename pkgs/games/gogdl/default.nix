@@ -1,4 +1,5 @@
 { lib
+, fetchpatch
 , writeScript
 , buildPythonApplication
 , fetchFromGitHub
@@ -10,14 +11,14 @@
 
 buildPythonApplication rec {
   pname = "gogdl";
-  version = "0.7.1";
+  version = "0.7.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "heroic-gogdl";
-    rev = "8bfb965090153c946c616bb0f82e3dc432e0d0e1";
-    sha256 = "sha256-ZdPyJk4WPVBtKMTf/AHNpG8QTV2qmpD1DT1D3gK5g2I=";
+    rev = "89d15f1593cc26f15a5f8f409bb623764c095d37";
+    hash = "sha256-EECpXGVhcwihKB8fLObVvYzFD8uh7CxYKtFiGc0Jqbk=";
   };
 
   disabled = pythonOlder "3.8";

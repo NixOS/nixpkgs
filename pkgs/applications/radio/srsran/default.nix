@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "srsran";
-  version = "23.04";
+  version = "23.04.1";
 
   src = fetchFromGitHub {
     owner = "srsran";
     repo = "srsran";
     rev = "release_${builtins.replaceStrings ["."] ["_"] version}";
-    sha256 = "sha256-k2KUejn2eBFGknVQCHeYuZd4UUC2Jv0WEI9le9fYoFE=";
+    sha256 = "sha256-4Mwdar1WUIgT23VjI9CtA5FT5gCm0Su+xK5dld3qfho=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -33,6 +33,10 @@ buildPythonPackage rec {
       --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5}"'
   '';
 
+  env = lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+    GSSAPI_SUPPORT_DETECT = "false";
+  };
+
   nativeBuildInputs = [
     cython
     krb5

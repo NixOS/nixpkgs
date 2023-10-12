@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-CgD9b5eHDK/8QhQmrqT09Jf9snn9WItNMtTNbJFT2sI=";
   };
 
-  vendorSha256 = "sha256-QnrzEei4Pt4C0vCJu4YN28lWWAqEikmNLrqshd3knx4=";
+  vendorHash = "sha256-QnrzEei4Pt4C0vCJu4YN28lWWAqEikmNLrqshd3knx4=";
 
   meta = with lib; {
     description = "NoSql Injection tool for finding vulnerable websites using MongoDB";

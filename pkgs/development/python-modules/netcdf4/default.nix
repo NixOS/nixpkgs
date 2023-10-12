@@ -3,7 +3,9 @@
 , fetchPypi
 , isPyPy
 , python
+, oldest-supported-numpy
 , setuptools
+, wheel
 , numpy
 , zlib
 , netcdf
@@ -26,7 +28,12 @@ buildPythonPackage rec {
     hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
   };
 
-  nativeBuildInputs = [ setuptools cython ];
+  nativeBuildInputs = [
+    cython
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     cftime

@@ -2,7 +2,11 @@
 
 (haskellPackages.shellFor {
   packages = p: [ p.constraints p.linear ];
-  extraDependencies = p: { libraryHaskellDepends = [ p.releaser ]; };
+  # WARNING: When updating this, make sure that the libraries passed to
+  # `extraDependencies` are not actually transitive dependencies of libraries in
+  # `packages` above.  We explicitly want to test that it is possible to specify
+  # `extraDependencies` that are not in the closure of `packages`.
+  extraDependencies = p: { libraryHaskellDepends = [ p.conduit ]; };
   nativeBuildInputs = [ cabal-install ];
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
   unpackPhase = ''
@@ -18,13 +22,19 @@
     mkdir -p $HOME/.cabal
     touch $HOME/.cabal/config
 
-    # Check extraDependencies.libraryHaskellDepends arg
+    # Check that the extraDependencies.libraryHaskellDepends arg is correctly
+    # picked up. This uses ghci to interpret a small Haskell program that uses
+    # a package from extraDependencies.
     ghci <<EOF
-    :m + Releaser.Primitives
-    :m + System.IO
-    writeFile "done" "done"
+    :set -XOverloadedStrings
+    :m + Conduit
+    runResourceT $ connect (yield "done") (sinkFile "outfile")
     EOF
-    [[ done == $(cat done) ]]
+
+    if [[ "done" != "$(cat outfile)" ]]; then
+      echo "ERROR: extraDependencies appear not to be available in the environment"
+      exit 1
+    fi
 
     # Check packages arg
     cabal v2-build --offline --verbose constraints linear --ghc-options="-O0 -j$NIX_BUILD_CORES"

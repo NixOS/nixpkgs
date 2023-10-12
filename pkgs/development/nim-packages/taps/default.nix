@@ -2,12 +2,12 @@
 
 buildNimPackage rec {
   pname = "taps";
-  version = "20221228";
+  version = "20230331";
   src = fetchFromSourcehut {
     owner = "~ehmry";
     repo = "nim_${pname}";
     rev = version;
-    hash = "sha256-0EjMP5pIPJg4/3nzj6ECC68f709TS06OrJlTZ0tavEo=";
+    hash = "sha256-p2DBJWFwS82oHPq0uMCtZWFbn8GFndEJBjhkHeuPGos=";
   };
   propagatedBuildInputs = [ getdns ];
   doCheck = false;

@@ -1,10 +1,8 @@
 { lib, mkDerivation, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, minizinc }:
+
 mkDerivation rec {
   pname = "minizinc-ide";
   version = "2.5.5";
-
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtwebengine qtwebkit ];
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
@@ -14,7 +12,10 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  sourceRoot = "source/MiniZincIDE";
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase qtwebengine qtwebkit ];
+
+  sourceRoot = "${src.name}/MiniZincIDE";
 
   dontWrapQtApps = true;
 
@@ -25,7 +26,6 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
-
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
       language. It is high-level enough to express most
@@ -33,7 +33,6 @@ mkDerivation rec {
       that it can be mapped onto existing solvers easily and consistently.
       It is a subset of the higher-level language Zinc.
     '';
-
     license = licenses.mpl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.dtzWill ];

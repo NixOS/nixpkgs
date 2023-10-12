@@ -62,10 +62,11 @@ gcc10Stdenv.mkDerivation rec {
     patchShebangs utils
   '';
 
+  cmakeBuildType = "RelWithDebInfo";
+
   cmakeFlags = [
     "-DUSE_MAINTAINER_MODE=OFF"
     "-DUSE_GOOGLE_TESTS=OFF"
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
 
     # avoid reading /proc/cpuinfo for feature detection
     "-DTARGET_ARCHITECTURE=${targetArch}"

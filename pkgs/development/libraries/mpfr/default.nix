@@ -11,7 +11,7 @@
 # files.
 
 stdenv.mkDerivation rec {
-  version = "4.2.0";
+  version = "4.2.1";
   pname = "mpfr";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       "https://www.mpfr.org/${pname}-${version}/${pname}-${version}.tar.xz"
       "mirror://gnu/mpfr/${pname}-${version}.tar.xz"
     ];
-    hash = "sha256-BqN43xNQEkjBsttaqXeiyBJq6Emp2be+JUb7Spwm2ZM=";
+    hash = "sha256-J3gHNTpnJpeJlpRa8T5Sgp46vXqaW3+yeTiU4Y8fy7I=";
   };
 
   outputs = [ "out" "dev" "doc" "info" ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe"
     ++ lib.optional stdenv.hostPlatform.is64bit "--with-pic"
-    ++ lib.optional stdenv.hostPlatform.isPower64 [
+    ++ lib.optionals stdenv.hostPlatform.isPower64 [
       # Without this, the `tget_set_d128` test experiences a link
       # error due to missing `__dpd_trunctdkf`.
       "--disable-decimal-float"

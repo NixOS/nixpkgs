@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-SL3YHsNeFw8K8lPrzJXAoTkHxS+1sTREfzjawBxdnf0=";
   };
 
-  vendorSha256 = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
+  vendorHash = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
 
   excludedPackages = [ "test/e2e" ];
 

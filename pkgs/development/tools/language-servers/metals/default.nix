@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "0.11.12";
+  version = "1.0.1";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
         -r bintray:scalacenter/releases \
         -r sonatype:snapshots > deps
       mkdir -p $out/share/java
-      cp -n $(< deps) $out/share/java/
+      cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-3zYjjrd3Hc2T4vwnajiAMNfTDUprKJZnZp2waRLQjI4=";
+    outputHash = "sha256-AamUE6mr9fwjbDndQtzO2Yscu2T6zUW/DiXMYwv35YE=";
   };
 
   nativeBuildInputs = [ makeWrapper setJavaClassPath ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
-    description = "Work-in-progress language server for Scala";
+    description = "Language server for Scala";
     maintainers = with maintainers; [ fabianhjr tomahna ];
   };
 }
