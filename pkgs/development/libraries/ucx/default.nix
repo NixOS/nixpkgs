@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VxIxrk9qKM6Ncfczl4p2EhXiLNgPaYTmjhqi6/w2ZNY=";
   };
 
+  outputs = [ "out" "doc" "dev" ];
+
   nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];
 
   buildInputs = [
@@ -53,6 +55,14 @@ stdenv.mkDerivation rec {
     "--with-verbs=${lib.getDev rdma-core}"
   ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
   ++ lib.optional enableRocm "--with-rocm=${rocm}";
+
+  postInstall = ''
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
+
+    moveToOutput bin/ucx_info $dev
+
+    moveToOutput share/ucx/examples $doc
+  '';
 
   enableParallelBuilding = true;
 
