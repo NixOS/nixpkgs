@@ -1,6 +1,6 @@
-{ lib, buildGo118Module, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "ssl-proxy";
   version = "0.2.7";
 

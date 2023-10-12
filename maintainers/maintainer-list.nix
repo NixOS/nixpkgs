@@ -6464,6 +6464,10 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+  gm6k = {
+    email = "nix@quidecco.pl";
+    name = "Isidor Zeuner";
+  };
   gmemstr = {
     email = "git@gmem.ca";
     github = "gmemstr";
@@ -14798,6 +14802,12 @@
     githubId = 42619;
     name = "Wei-Ming Yang";
   };
+  rickvanprim = {
+    email = "me@rickvanprim.com";
+    github = "rickvanprim";
+    githubId = 13792812;
+    name = "James Leitch";
+  };
   rickynils = {
     email = "rickynils@gmail.com";
     github = "rickynils";
@@ -15535,6 +15545,12 @@
     github = "scalavision";
     githubId = 3958212;
     name = "Tom Sorlie";
+  };
+  schinmai-akamai = {
+    email = "schinmai@akamai.com";
+    github = "schinmai-akamai";
+    githubId = 70169773;
+    name = "Tarun Chinmai Sekar";
   };
   schmitthenner = {
     email = "development@schmitthenner.eu";

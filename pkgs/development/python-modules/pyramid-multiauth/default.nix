@@ -5,11 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pyramid_multiauth";
+  pname = "pyramid-multiauth";
   version = "1.0.1";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "pyramid-multiauth";
+    inherit version;
     sha256 = "6d8785558e1d0bbe0d0da43e296efc0fbe0de5071d1f9b1091e891f0e4ec9682";
   };
 

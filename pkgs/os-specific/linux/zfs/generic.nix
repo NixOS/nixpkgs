@@ -83,6 +83,9 @@ stdenv'.mkDerivation {
       substituteInPlace ./udev/vdev_id \
         --replace "PATH=/bin:/sbin:/usr/bin:/usr/sbin" \
          "PATH=${makeBinPath [ coreutils gawk gnused gnugrep systemd ]}"
+      substituteInPlace ./config/zfs-build.m4 \
+        --replace "bashcompletiondir=/etc/bash_completion.d" \
+          "bashcompletiondir=$out/share/bash-completion/completions"
     '' else ''
       substituteInPlace ./etc/zfs/Makefile.am --replace "\$(sysconfdir)/zfs" "$out/etc/zfs"
 
