@@ -702,7 +702,8 @@ in {
 
     environment.profiles = [
       "$HOME/.nix-profile"
-      "\${XDG_STATE_HOME:-$HOME/.local/state}/nix/profile"
+      "\${XDG_STATE_HOME}/nix/profile"
+      "$HOME/.local/state/nix/profile"
       "/etc/profiles/per-user/$USER"
     ];
 
