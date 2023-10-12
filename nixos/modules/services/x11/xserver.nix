@@ -365,6 +365,7 @@ in
       };
 
       xkb = mkOption {
+        default = { };
         description = "X keyboard extension (XKB) configuration";
         type = types.submodule {
           options = {
