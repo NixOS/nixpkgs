@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "headsetcontrol";
-  version = "2.6.1";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Sapd";
     repo = "HeadsetControl";
     rev = version;
-    sha256 = "sha256-SVOcRzR52RYZsk/OWAr1/s+Nm6x48OxG0TF7yQ+Kb94=";
+    sha256 = "sha256-tAndkfLEgj81JWzXtDBNspRxzKAL6XaRw0aDI1XbC1E=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   /*
-  Test depends on having the apropiate headsets connected.
+  Tests depend on having the appropriate headsets connected.
   */
   doCheck = false;
 
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Sapd/HeadsetControl";
     license = licenses.gpl3Plus;
+    mainProgram = "headsetcontrol";
     maintainers = with maintainers; [ leixb ];
     platforms = platforms.all;
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, qt4, openssl, pkg-config }:
+{ stdenv, fetchurl, lib, openssl, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "yate";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # TODO zaptel ? postgres ?
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ qt4 openssl ];
+  buildInputs = [ openssl ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
   postPatch =

@@ -14,7 +14,7 @@ buildGoModule rec {
     hash = "sha256-e6No8Md/KZUFNtPJOrSdv1GlGmxX7+tmWNjQGFdtJpc=";
   };
 
-  vendorSha256 = "sha256-IxrAJaltg7vo3SQRC7OokSD5SM8xiX7iG8ZxKYEe9/E=";
+  vendorHash = "sha256-IxrAJaltg7vo3SQRC7OokSD5SM8xiX7iG8ZxKYEe9/E=";
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/$pname

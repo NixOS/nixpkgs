@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "router";
-  version = "1.18.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g5QDKYdXwZuVZZLpT0qA/Mp0kR9cZaGKa0VqLX6gyec=";
+    sha256 = "sha256-IuS7NmlTNmHHnnSZ+YIbV6BnxJW2xprOQ5mkz5FuJEQ=";
   };
 
-  cargoHash = "sha256-n7FV2Gu0ZoJo2TPPBwzcM0ztEZzwPckqQHdjuUv03to=";
+  cargoHash = "sha256-yeb+4lgRDssjkEx6bYfGIbn4DJGpZZ/JDmuwFjQ+U+8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A configurable, high-performance routing runtime for Apollo Federation";
     homepage = "https://www.apollographql.com/docs/router/";
-    license = licenses.elastic;
+    license = licenses.elastic20;
     maintainers = [ maintainers.bbigras ];
   };
 }

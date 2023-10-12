@@ -10,9 +10,20 @@
 , CoreAudio
 }:
 
+let
+  # TODO: recheck after 1.59
+  miniaudio' = miniaudio.overrideAttrs (oldAttrs: rec {
+    version = "0.11.16"; # cffi breakage with 0.11.17
+    src = fetchFromGitHub {
+      inherit (oldAttrs.src) owner repo;
+      rev = "refs/tags/${version}";
+      hash = "sha256-POe/dYPJ25RKNGIhaLoqxm9JJ08MrTyHVN4NmaGOdwM=";
+    };
+  });
+in
 buildPythonPackage rec {
   pname = "miniaudio";
-  version = "1.58";
+  version = "1.59";
 
   disabled = pythonOlder "3.6";
 
@@ -22,12 +33,12 @@ buildPythonPackage rec {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uIjQerxMU4hMCJtpqYPt2kicql3s7jyho9r6/kRHTbk=";
+    hash = "sha256-tMQOGqEThtownW3cnNpCzWye0Uo/Es7E8abVySo1QnQ=";
   };
 
   postPatch = ''
     rm -r miniaudio
-    ln -s ${miniaudio} miniaudio
+    ln -s ${miniaudio'} miniaudio
     substituteInPlace build_ffi_module.py \
       --replace "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
     substituteInPlace miniaudio.c \

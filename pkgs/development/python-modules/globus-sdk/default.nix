@@ -2,7 +2,6 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
-, mypy
 , pyjwt
 , pytestCheckHook
 , pythonOlder
@@ -13,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.19.0";
+  version = "3.28.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-sdk-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-xdzDKzlqQRBrKT/j6PWSgDu33XlVHKsHfv5AgrT6SB8=";
+    hash = "sha256-mKtqfEpnWftpGReaUrmXf3LftZnMtEizPi4RbIwgnUM=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    mypy
     pytestCheckHook
     responses
   ];

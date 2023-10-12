@@ -2,13 +2,13 @@
 
 sway-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "swayfx";
-  version = "0.3";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
     rev = version;
-    sha256 = "sha256-3Odyeb10AGbNf6TI1W79sLiwB4PrszC5VzjCr7FuPz4=";
+    sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
   };
 
   # This patch was backported into SwayFX

@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bpp-core bpp-seq bpp-phyl bpp-popgen ];
 
   meta = bpp-core.meta // {
+    homepage = "https://github.com/BioPP/bppsuite";
     changelog = "https://github.com/BioPP/bppsuite/blob/master/ChangeLog";
   };
 }

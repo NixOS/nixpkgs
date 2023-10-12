@@ -10,7 +10,7 @@ buildGoModule rec {
     sha256 = "sha256-2k8AsmyhQNNZCzpVt6JdgvI8IFb5pRi4ic6Yn2NqHMM=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [ "." ];
 
@@ -18,7 +18,6 @@ buildGoModule rec {
     description = "Prometheus service discovery for Equinix Metal";
     homepage = "https://github.com/packethost/prometheus-packet-sd";
     license = licenses.asl20;
-    platforms = platforms.unix;
     maintainers = [ ];
     mainProgram = "prometheus-packet-sd";
   };

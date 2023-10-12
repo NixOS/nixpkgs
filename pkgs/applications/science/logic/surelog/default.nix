@@ -10,19 +10,19 @@
 , gtest
 , uhdm
 , antlr4
-, flatbuffers
 , capnproto
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "surelog";
-  version = "1.57";
+  version = "1.73";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Gty0OSNG5Nonyw7v2KiKP51LhiugMY7uqI6aJ6as0SQ=";
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-z47Eqs3fP53pbEb3s66CqMiO4UpEwox+fKakxtRBakQ=";
+    fetchSubmodules = false;  # we use all dependencies from nix
   };
 
   nativeBuildInputs = [
@@ -40,14 +40,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libuuid
     gperftools
-    flatbuffers
     uhdm
     capnproto
     antlr4.runtime.cpp
   ];
 
   cmakeFlags = [
-    "-DSURELOG_USE_HOST_FLATBUFFERS=On"
+    "-DSURELOG_USE_HOST_CAPNP=On"
     "-DSURELOG_USE_HOST_UHDM=On"
     "-DSURELOG_USE_HOST_GTEST=On"
     "-DSURELOG_USE_HOST_ANTLR=On"
@@ -66,7 +65,8 @@ stdenv.mkDerivation rec {
     description = "SystemVerilog 2017 Pre-processor, Parser, Elaborator, UHDM Compiler";
     homepage = "https://github.com/chipsalliance/Surelog";
     license = lib.licenses.asl20;
+    mainProgram = "surelog";
     maintainers = with lib.maintainers; [ matthuszagh ];
     platforms = lib.platforms.all;
   };
-}
+})

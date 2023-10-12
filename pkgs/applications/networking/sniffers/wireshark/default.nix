@@ -49,7 +49,7 @@
 assert withQt -> qt6 != null;
 
 let
-  version = "4.0.5";
+  version = "4.0.8";
   variant = if withQt then "qt" else "cli";
 in
 stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-9U0V2oLVyzq+3HxvOuD8Uzj1tjoMtYBws43fn5RfGhQ=";
+    hash = "sha256-bNg0yhNb1GRsTclNWWO+Bamm2wOnUjVKU+JftJu+LTo=";
   };
 
   cmakeFlags = [
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ asciidoctor bison cmake ninja flex makeWrapper pkg-config python3 perl ]
     ++ lib.optionals withQt [ qt6.wrapQtAppsHook wrapGAppsHook ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ buildPackages.stdenv.cc ];
 
   buildInputs = [
     gettext
@@ -177,7 +177,7 @@ stdenv.mkDerivation {
     '';
 
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz ];
+    maintainers = with maintainers; [ bjornfor fpletz paveloom ];
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }

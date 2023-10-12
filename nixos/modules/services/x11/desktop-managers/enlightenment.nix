@@ -90,9 +90,9 @@ in
         };
     };
 
-    environment.etc."X11/xkb".source = xcfg.xkbDir;
+    environment.etc."X11/xkb".source = xcfg.xkb.dir;
 
-    fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
+    fonts.packages = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;

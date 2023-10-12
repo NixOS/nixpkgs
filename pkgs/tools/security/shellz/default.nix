@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "evilsocket";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mhl1y0jkycyl1hgwxavxkm1f6kdx1sz3bvpmkr46sdijji06imi";
+    hash = "sha256-sUYDopSxaUPyrHev8XXobRoX6uxbdf5goJ75KYEPFNY=";
   };
 
-  vendorSha256 = "14rd9xd7s5sfmxgv5p9ka8x12xcimv5hrq7hzy0d1c3ddf50rr7n";
+  vendorHash = "sha256-9uQMimttsNCA//DgDMuukXUROlIz3bJfr04XfVpPLZM=";
 
   ldflags = [
     "-s"

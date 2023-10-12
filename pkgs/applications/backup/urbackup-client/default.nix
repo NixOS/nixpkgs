@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "urbackup-client";
-  version = "2.5.20";
+  version = "2.5.24";
 
   src = fetchzip {
     url = "https://hndl.urbackup.org/Client/${version}/urbackup-client-${version}.tar.gz";
-    sha256 = "sha256-i1g3xUhspqQRfIUhy6STOWNuncK3tMFocJw652r1X9g=";
+    sha256 = "sha256-n0/NVClZz6ANgEdPCtdZxsEvllIl32vwDjC2nq5R8Z4=";
   };
 
   buildInputs = [

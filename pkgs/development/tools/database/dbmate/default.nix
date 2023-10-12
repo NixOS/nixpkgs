@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "dbmate";
-  version = "2.3.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "amacneil";
     repo = "dbmate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bWmRdrULXXVIaO5f3rntsVURnyojYFbhbZ43WvGzoZk=";
+    hash = "sha256-5dYWCcCQymwzWGY67lds5QQzHHkKt3OGkvqXDLwt/q8=";
   };
 
-  vendorHash = "sha256-m1Nbu1bE04iOXnxW5kJfI9W95FU87eRKkOzg+YVvRsg=";
+  vendorHash = "sha256-1sfIwawsWefh+nj4auqRjU4dWuDbgpvhAc8cF8DhICg=";
 
   doCheck = false;
 
@@ -24,6 +24,5 @@ buildGoModule rec {
     changelog = "https://github.com/amacneil/dbmate/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ manveru ];
-    platforms = platforms.unix;
   };
 }

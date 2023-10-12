@@ -1,18 +1,19 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.30.1";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-enPnj4/p83hQkVv821MGyGipgEmVo12IZzy/3y8UprQ=";
+    hash = "sha256-8ffrS5iWFP35KAI80bsvpibuTLAa6vykeocyTm09cGM=";
   };
-  vendorSha256 = "sha256-U3zslBDVz5nvhNgcn5L84hSUolf7XFCuh7zMZxyW/gQ=";
 
-  ldflags = [ "-s" "-w" "-X main.version=v${version}" "-X main.prerelease=" ];
+  vendorHash = "sha256-umDiI84xGmJc0tl7X/6g0dLJzdudOR48wpr67ZEKz0s=";
+
+  ldflags = [ "-s" "-w" ];
 
   # There's a mixture of tests that use networking and several that fail on aarch64
   doCheck = false;
@@ -21,7 +22,7 @@ buildGoModule rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/terraform-ls --help
-    $out/bin/terraform-ls version | grep "v${version}"
+    $out/bin/terraform-ls --version | grep "${version}"
     runHook postInstallCheck
   '';
 

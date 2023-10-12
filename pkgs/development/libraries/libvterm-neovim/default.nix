@@ -8,11 +8,11 @@
 stdenv.mkDerivation rec {
   pname = "libvterm-neovim";
   # Releases are not tagged, look at commit history to find latest release
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchurl {
     url = "https://www.leonerd.org.uk/code/libvterm/libvterm-${version}.tar.gz";
-    sha256 = "sha256-JaitnBVIU2jf0Kip3KGuyP6lwn2j+nTsUY1dN4fww5c=";
+    sha256 = "sha256-ketQiAafTm7atp4UxCEvbaAZLmVpWVbcBIAWoNq4vPY=";
   };
 
   nativeBuildInputs = [ perl libtool ];

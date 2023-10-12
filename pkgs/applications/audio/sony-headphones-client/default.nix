@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config copyDesktopItems ];
   buildInputs = [ bluez dbus glew glfw imgui ];
 
-  sourceRoot = "./source/Client";
+  sourceRoot = "${src.name}/Client";
 
   cmakeFlags = [ "-Wno-dev" ];
 

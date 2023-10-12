@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "0f45ai1s4njhcvbv088yn10i3vdvlm6wlfi0ijq5gak1dg02klma";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
   ldflags = [ "-X main.progVersion=${version}" ];
 
   meta = with lib; {

@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.isLinux && withIntrospection;
+  separateDebugInfo = true;
 
   postPatch = ''
     patchShebangs ./tool/test-*.sh

@@ -22,14 +22,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.3.259";
+  version = "2.5.7";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-TQSty1X0jD4Z5gZfl8ecpt4/7FLOjpNBXs5hVblwKvs=";
+    hash = "sha256-w9clUN/g7pKxqQNw6RwG66UOoUCaNm2tCC6+/ofs8HM=";
   };
 
   patches = [
@@ -37,11 +37,12 @@ buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
-    "dpath"
     "bc-detect-secrets"
     "bc-python-hcl2"
-    "pycep-parser"
+    "dpath"
+    "license-expression"
     "networkx"
+    "pycep-parser"
   ];
 
   nativeBuildInputs = [
@@ -64,7 +65,6 @@ buildPythonApplication rec {
     colorama
     configargparse
     cyclonedx-python-lib
-    deep_merge
     docker
     dockerfile-parse
     dpath
@@ -82,6 +82,7 @@ buildPythonApplication rec {
     prettytable
     pycep-parser
     pyyaml
+    rustworkx
     semantic-version
     spdx-tools
     tabulate

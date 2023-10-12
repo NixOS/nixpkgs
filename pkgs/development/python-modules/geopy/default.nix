@@ -1,5 +1,5 @@
 { lib
-, async_generator
+, async-generator
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "geopy";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-bHfjUfuiEH3AxRDTLmbm67bKOw6fBuMQDUQA2NLg800=";
+    hash = "sha256-3Sq76DcnoG0Uv/KPF/B3oep0MO96vemKiANjgR7/k/I=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    async_generator
+    async-generator
     docutils
     pytestCheckHook
     pytz

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   src = freebsd.ports;
 
-  sourceRoot = "source/devel/evdev-proto";
+  sourceRoot = "${freebsd.ports.name}/devel/evdev-proto";
 
   useTempPrefix = true;
 

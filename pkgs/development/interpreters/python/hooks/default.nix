@@ -1,9 +1,10 @@
-self: super: with self;
+self: dontUse: with self;
 
 let
-  pythonInterpreter = super.python.pythonForBuild.interpreter;
-  pythonSitePackages = super.python.sitePackages;
-  pythonCheckInterpreter = super.python.interpreter;
+  inherit (python) pythonForBuild;
+  pythonInterpreter = pythonForBuild.interpreter;
+  pythonSitePackages = python.sitePackages;
+  pythonCheckInterpreter = python.interpreter;
   setuppy = ../run_setup.py;
 in {
   makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
@@ -44,15 +45,6 @@ in {
       propagatedBuildInputs = [ ];
     } ./egg-unpack-hook.sh) {};
 
-  flitBuildHook = callPackage ({ makePythonHook, flit }:
-    makePythonHook {
-      name = "flit-build-hook";
-      propagatedBuildInputs = [ flit ];
-      substitutions = {
-        inherit pythonInterpreter;
-      };
-    } ./flit-build-hook.sh) {};
-
   pipBuildHook = callPackage ({ makePythonHook, pip, wheel }:
     makePythonHook {
       name = "pip-build-hook.sh";
@@ -62,6 +54,26 @@ in {
       };
     } ./pip-build-hook.sh) {};
 
+  pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
+    makePythonHook {
+      name = "pypa-build-hook.sh";
+      propagatedBuildInputs = [ wheel ];
+      substitutions = {
+        inherit build;
+      };
+      # A test to ensure that this hook never propagates any of its dependencies
+      #   into the build environment.
+      # This prevents false positive alerts raised by catchConflictsHook.
+      # Such conflicts don't happen within the standard nixpkgs python package
+      #   set, but in downstream projects that build packages depending on other
+      #   versions of this hook's dependencies.
+      passthru.tests = import ./pypa-build-hook-tests.nix {
+        inherit pythonForBuild runCommand;
+      };
+    } ./pypa-build-hook.sh) {
+      inherit (pythonForBuild.pkgs) build;
+    };
+
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
       name = "pip-install-hook";
@@ -70,6 +82,17 @@ in {
         inherit pythonInterpreter pythonSitePackages;
       };
     } ./pip-install-hook.sh) {};
+
+  pypaInstallHook = callPackage ({ makePythonHook, installer }:
+    makePythonHook {
+      name = "pypa-install-hook";
+      propagatedBuildInputs = [ installer ];
+      substitutions = {
+        inherit pythonInterpreter pythonSitePackages;
+      };
+    } ./pypa-install-hook.sh) {
+      inherit (pythonForBuild.pkgs) installer;
+    };
 
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
     makePythonHook {
@@ -97,11 +120,12 @@ in {
       };
     } ./python-imports-check-hook.sh) {};
 
-  pythonNamespacesHook = callPackage ({ makePythonHook, findutils }:
+  pythonNamespacesHook = callPackage ({ makePythonHook, buildPackages }:
     makePythonHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
-        inherit pythonSitePackages findutils;
+        inherit pythonSitePackages;
+        inherit (buildPackages) findutils;
       };
     } ./python-namespaces-hook.sh) {};
 
@@ -123,9 +147,8 @@ in {
   pythonRelaxDepsHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "python-relax-deps-hook";
-      propagatedBuildInputs = [ wheel ];
       substitutions = {
-        inherit pythonInterpreter;
+        inherit pythonInterpreter pythonSitePackages wheel;
       };
     } ./python-relax-deps-hook.sh) {};
 
@@ -160,6 +183,20 @@ in {
       };
     } ./setuptools-check-hook.sh) {};
 
+    setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust, rust }:
+      makePythonHook {
+        name = "setuptools-rust-setup-hook";
+        propagatedBuildInputs = [ setuptools-rust ];
+        substitutions = {
+          pyLibDir = "${python}/lib/${python.libPrefix}";
+          cargoBuildTarget = rust.toRustTargetSpec stdenv.hostPlatform;
+          cargoLinkerVar = lib.toUpper (
+              builtins.replaceStrings ["-"] ["_"] (
+                rust.toRustTarget stdenv.hostPlatform));
+          targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+        };
+      } ./setuptools-rust-hook.sh) {};
+
   unittestCheckHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "unittest-check-hook";
@@ -187,9 +224,9 @@ in {
     inherit (pkgs.buildPackages) makeWrapper;
   };
 
-  sphinxHook = callPackage ({ makePythonHook, sphinx, installShellFiles }:
+  sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
-      propagatedBuildInputs = [ sphinx installShellFiles ];
+      propagatedBuildInputs = [ pythonForBuild.pkgs.sphinx installShellFiles ];
     } ./sphinx-hook.sh) {};
 }

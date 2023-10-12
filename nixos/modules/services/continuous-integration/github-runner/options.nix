@@ -208,4 +208,12 @@ with lib;
     '';
     default = null;
   };
+
+  nodeRuntimes = mkOption {
+    type = with types; nonEmptyListOf (enum [ "node16" "node20" ]);
+    default = [ "node20" ];
+    description = mdDoc ''
+      List of Node.js runtimes the runner should support.
+    '';
+  };
 }

@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "age";
   version = "1.1.1";
-  vendorSha256 = "sha256-MumPdRTz840+hoisJ7ADgBhyK3n8P6URobbRJYDFkDY=";
+  vendorHash = "sha256-MumPdRTz840+hoisJ7ADgBhyK3n8P6URobbRJYDFkDY=";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
@@ -57,6 +57,7 @@ buildGoModule rec {
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
     license = licenses.bsd3;
+    mainProgram = "age";
     maintainers = with maintainers; [ tazjin ];
   };
 }

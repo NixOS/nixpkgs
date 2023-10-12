@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "kakoune-unwrapped";
-  version = "2022.10.31";
+  version = "2023.08.05";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
     rev = "v${version}";
-    sha256 = "sha256-vmzGaGl0KSjseSD/s6DXxvMUTmAle+Iv/ZP9llaFnXk=";
+    sha256 = "sha256-RR3kw39vEjsg+6cIY6cK2i3ecGHlr1yzuBKaDtGlOGo=";
   };
   makeFlags = [ "debug=no" "PREFIX=${placeholder "out"}" ];
 

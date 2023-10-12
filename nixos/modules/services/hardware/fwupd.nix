@@ -13,16 +13,13 @@ let
   };
 
   customEtc = {
-    "fwupd/daemon.conf" = {
-      source = format.generate "daemon.conf" {
+    "fwupd/fwupd.conf" = {
+      source = format.generate "fwupd.conf" {
         fwupd = cfg.daemonSettings;
-      };
-    };
-
-    "fwupd/uefi_capsule.conf" = {
-      source = format.generate "uefi_capsule.conf" {
         uefi_capsule = cfg.uefiCapsuleSettings;
       };
+      # fwupd tries to chmod the file if it doesn't have the right permissions
+      mode = "0640";
     };
   };
 
@@ -53,7 +50,7 @@ let
     # to install it because it would create a cyclic dependency between
     # the outputs. We also need to enable the remote,
     # which should not be done by default.
-    if cfg.enableTestRemote then (enableRemote cfg.package.installedTests "fwupd-tests") else {}
+    lib.optionalAttrs cfg.enableTestRemote (enableRemote cfg.package.installedTests "fwupd-tests")
   );
 
 in {

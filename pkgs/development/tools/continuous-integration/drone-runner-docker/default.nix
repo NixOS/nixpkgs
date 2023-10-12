@@ -18,5 +18,6 @@ buildGoModule rec {
     license = licenses.unfreeRedistributable;
     homepage = "https://github.com/drone-runners/drone-runner-docker";
     description = "Drone pipeline runner that executes builds inside Docker containers";
+    mainProgram = "drone-runner-docker";
   };
 }

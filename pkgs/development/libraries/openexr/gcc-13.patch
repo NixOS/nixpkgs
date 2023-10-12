@@ -1,0 +1,33 @@
+https://github.com/AcademySoftwareFoundation/openexr/pull/1264
+https://github.com/AcademySoftwareFoundation/openexr/commit/d0088a3c6943a9a53fc24e29885414d082d531fe.patch
+
+--- a/OpenEXR/IlmImf/ImfDwaCompressor.cpp
++++ b/OpenEXR/IlmImf/ImfDwaCompressor.cpp
+@@ -159,6 +159,7 @@
+ #include <limits>
+ 
+ #include <cstddef>
++#include <cstdint>
+ 
+ 
+ // Windows specific addition to prevent the indirect import of the redefined min/max macros
+--- a/OpenEXR/IlmImf/ImfHuf.cpp
++++ b/OpenEXR/IlmImf/ImfHuf.cpp
+@@ -53,6 +53,7 @@
+ #include <cstring>
+ #include <cassert>
+ #include <algorithm>
++#include <cstdint>
+ 
+ 
+ using namespace std;
+--- a/OpenEXR/IlmImf/ImfMisc.cpp
++++ b/OpenEXR/IlmImf/ImfMisc.cpp
+@@ -52,6 +52,7 @@
+ #include <ImfConvert.h>
+ #include <ImfPartType.h>
+ #include <ImfTileDescription.h>
++#include <cstdint>
+ #include "ImfNamespace.h"
+ 
+ OPENEXR_IMF_INTERNAL_NAMESPACE_SOURCE_ENTER

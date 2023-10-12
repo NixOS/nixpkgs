@@ -7,6 +7,8 @@ let
     concatStringsSep escapeShellArgs optionalString
     literalExpression mkEnableOption mkIf mkOption mkOptionDefault types;
 
+  requiresSetcapWrapper = config.boot.kernelPackages.kernelOlder "5.7" && cfg.bindInterface;
+
   browserDefault = chromium: concatStringsSep " " [
     ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
     ''${chromium}/bin/chromium''
@@ -23,11 +25,23 @@ let
   desktopItem = pkgs.makeDesktopItem {
     name = "captive-browser";
     desktopName = "Captive Portal Browser";
-    exec = "/run/wrappers/bin/captive-browser";
+    exec = "captive-browser";
     icon = "nix-snowflake";
     categories = [ "Network" ];
   };
 
+  captive-browser-configured = pkgs.writeShellScriptBin "captive-browser" ''
+    export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
+    export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
+      browser = """${cfg.browser}"""
+      dhcp-dns = """${cfg.dhcp-dns}"""
+      socks5-addr = """${cfg.socks5-addr}"""
+      ${optionalString cfg.bindInterface ''
+        bind-device = """${cfg.interface}"""
+      ''}
+    ''}
+    exec ${cfg.package}/bin/captive-browser
+  '';
 in
 {
   ###### interface
@@ -101,6 +115,7 @@ in
       (pkgs.runCommand "captive-browser-desktop-item" { } ''
         install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
       '')
+      captive-browser-configured
     ];
 
     programs.captive-browser.dhcp-dns =
@@ -131,22 +146,11 @@ in
       source = "${pkgs.busybox}/bin/udhcpc";
     };
 
-    security.wrappers.captive-browser = {
+    security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
       owner = "root";
       group = "root";
       capabilities = "cap_net_raw+p";
-      source = pkgs.writeShellScript "captive-browser" ''
-        export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
-        export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
-                                  browser = """${cfg.browser}"""
-                                  dhcp-dns = """${cfg.dhcp-dns}"""
-                                  socks5-addr = """${cfg.socks5-addr}"""
-                                  ${optionalString cfg.bindInterface ''
-                                    bind-device = """${cfg.interface}"""
-                                  ''}
-                                ''}
-        exec ${cfg.package}/bin/captive-browser
-      '';
+      source = "${captive-browser-configured}/bin/captive-browser";
     };
   };
 }

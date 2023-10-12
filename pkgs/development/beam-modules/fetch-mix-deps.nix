@@ -2,7 +2,8 @@
 
 { pname
 , version
-, sha256
+, hash ? ""
+, sha256 ? ""
 , src
 , mixEnv ? "prod"
 , debug ? false
@@ -13,6 +14,12 @@
 , ...
 }@attrs:
 
+let
+  hash_ =
+    if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+    else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+    else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
+in
 stdenvNoCC.mkDerivation (attrs // {
   nativeBuildInputs = [ elixir hex cacert git ];
 
@@ -51,10 +58,8 @@ stdenvNoCC.mkDerivation (attrs // {
     runHook postInstall
   '';
 
-  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = sha256;
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   inherit meta;
-})
+} // hash_)

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK32 }:
+{ lib, stdenv, fetchurl, cmake, expat, openssl, zlib, lmdb, curl, wxGTK32, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UGPMp1mAarHWuLbZu2wWpjgCdf8ZKj0Mwkqp32U5/8w=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake wrapGAppsHook ];
   buildInputs = [
     expat
     openssl
     zlib
-    db
+    lmdb
     (curl.override { inherit openssl; })
     wxGTK32
   ];

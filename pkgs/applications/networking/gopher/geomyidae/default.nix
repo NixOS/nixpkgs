@@ -3,16 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "geomyidae";
-  version = "0.51";
+  version = "0.69";
 
   src = fetchurl {
     url = "gopher://bitreich.org/9/scm/geomyidae/tag/geomyidae-v${version}.tar.gz";
-    sha512 = "3lGAa7BCrspGBcQqjduBkIACpf3u/CkeSCBnaJ3rrz3OIidn4o4dNwZNe7u8swaJxN2dhDSKKeVT3RnFQUaXdg==";
+    hash = "sha256-C0mAjyS2wZVipXP/sKxa/d7gDyYQ/MvmwqQ/QMzmcRE=";
   };
 
   buildInputs = [ libressl ];
-
-  patches = lib.optionals stdenv.isDarwin [ ./modification-time.patch ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

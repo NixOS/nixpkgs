@@ -66,6 +66,17 @@ let
           '';
         };
 
+        labels = mkOption {
+          type = with types; attrsOf str;
+          default = {};
+          description = lib.mdDoc "Labels to attach to the container at runtime.";
+          example = literalExpression ''
+            {
+              "traefik.https.routers.example.rule" = "Host(`example.container`)";
+            }
+          '';
+        };
+
         entrypoint = mkOption {
           type = with types; nullOr str;
           description = lib.mdDoc "Override the default entrypoint of the image.";
@@ -277,6 +288,7 @@ let
       ++ map (p: "-p ${escapeShellArg p}") container.ports
       ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
       ++ map (v: "-v ${escapeShellArg v}") container.volumes
+      ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
       ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
       ++ map escapeShellArg container.extraOptions
       ++ [container.image]

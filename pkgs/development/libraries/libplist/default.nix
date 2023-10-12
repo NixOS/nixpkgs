@@ -10,20 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libplist";
-  version = "2.2.0+date=2022-04-05";
+  version = "2.3.0";
 
   outputs = [ "bin" "dev" "out" ] ++ lib.optional enablePython "py";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "db93bae96d64140230ad050061632531644c46ad";
-    hash = "sha256-8e/PFDhsyrOgmI3vLT1YhcROmbJgArDAJSe8Z2bZafo=";
+    rev = version;
+    hash = "sha256-fZfDSWVRg73dN+WF6LbgRSj8vtyeKeyjC8pWXFxUmBg=";
   };
-
-  postPatch = ''
-    echo '${version}' > .tarball-version
-  '';
 
   nativeBuildInputs = [
     autoreconfHook
@@ -35,9 +31,17 @@ stdenv.mkDerivation rec {
     python3.pkgs.cython
   ];
 
-  configureFlags = lib.optionals (!enablePython) [
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
+  '';
+
+  configureFlags = [
+    "--enable-debug"
+  ] ++ lib.optionals (!enablePython) [
     "--without-cython"
   ];
+
+  doCheck = true;
 
   postFixup = lib.optionalString enablePython ''
     moveToOutput "lib/${python3.libPrefix}" "$py"
@@ -49,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ infinisil ];
     platforms = platforms.unix;
+    mainProgram = "plistutil";
   };
 }

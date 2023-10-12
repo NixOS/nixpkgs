@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchDartDeps, writeText, dartHooks, makeWrapper, dart, nodejs }:
+{ lib, stdenv, fetchDartDeps, runCommand, writeText, dartHooks, makeWrapper, dart, cacert, nodejs, darwin }:
 
 { pubGetScript ? "dart pub get"
 
@@ -30,7 +30,13 @@
 }@args:
 
 let
-  dartDeps = fetchDartDeps {
+  dartDeps = (fetchDartDeps.override {
+    dart = runCommand "dart-fod" { nativeBuildInputs = [ makeWrapper ]; } ''
+      mkdir -p "$out/bin"
+      makeWrapper "${dart}/bin/dart" "$out/bin/dart" \
+        --add-flags "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
+    '';
+  }) {
     buildDrvArgs = args;
     inherit pubGetScript vendorHash pubspecLockFile;
   };
@@ -54,6 +60,8 @@ stdenv.mkDerivation (args // {
     dartBuildHook
     dartInstallHook
     makeWrapper
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.sigtool
   ];
 
   # When stripping, it seems some ELF information is lost and the dart VM cli

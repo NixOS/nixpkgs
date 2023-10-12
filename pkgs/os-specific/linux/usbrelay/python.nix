@@ -1,6 +1,6 @@
 { buildPythonPackage, usbrelay }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "usbrelay_py";
   inherit (usbrelay) version src;
 

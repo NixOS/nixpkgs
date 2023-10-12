@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   inherit version;
 
   inherit src;
-  sourceRoot = "source/compiler-rt";
+  sourceRoot = "${src.name}/compiler-rt";
 
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;

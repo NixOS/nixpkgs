@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.46.6";
+  version = "1.47.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-vy/MfuUXj+c6MFf34qo/5S6Yt7tGFQnGewIboA+Uxvc=";
+    hash = "sha256-Zmev3lbu8MavJmhJdEAOTSKI6knpRBv15iKRldUaNXg=";
   };
 
   # fuse2fs adds 14mb of dependencies
@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
       sha256 = "1gfcsr0i3q8q2f0lqza8na0iy4l4p3cbii51ds6zmj0y4hz2dwhb";
       excludes = [ "lib/ext2fs/hashmap.h" ];
       extraPrefix = "";
+    })
+    # Avoid trouble with older systems like NixOS 23.05.
+    # TODO: most likely drop this at some point, e.g. when 23.05 loses support.
+    (fetchurl {
+      name = "mke2fs-avoid-incompatible-features.patch";
+      url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/plain/debian/patches/disable-metadata_csum_seed-and-orphan_file-by-default?h=debian/master&id=3fb3d18baba90e5d48d94f4c0b79b2d271b0c913";
+      hash = "sha256-YD11K4s2bqv0rvzrxtaiodzLp3ztULlOlPUf1XcpxRY=";
     })
   ];
 

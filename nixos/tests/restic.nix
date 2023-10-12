@@ -97,9 +97,9 @@ import ./make-test-python.nix (
       server.start()
       server.wait_for_unit("dbus.socket")
       server.fail(
-          "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots",
-          '${pkgs.restic}/bin/restic -r ${remoteFromFileRepository} -p ${passwordFile} snapshots"',
-          "${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots",
+          "restic-remotebackup snapshots",
+          'restic-remote-from-file-backup snapshots"',
+          "restic-rclonebackup snapshots",
           "grep 'backup.* /opt' /root/fake-restic.log",
       )
       server.succeed(
@@ -112,20 +112,20 @@ import ./make-test-python.nix (
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
           "rm /root/backupCleanupCommand",
-          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that restoring that snapshot produces the same directory
           "mkdir /tmp/restore-1",
-          "${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} restore latest -t /tmp/restore-1",
+          "restic-remotebackup restore latest -t /tmp/restore-1",
           "diff -ru ${testDir} /tmp/restore-1/opt",
 
           # test that remote-from-file-backup produces a snapshot
           "systemctl start restic-backups-remote-from-file-backup.service",
-          '${pkgs.restic}/bin/restic -r ${remoteFromFileRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+          'restic-remote-from-file-backup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that rclonebackup produces a snapshot
           "systemctl start restic-backups-rclonebackup.service",
-          '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+          'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
           # test that custompackage runs both `restic backup` and `restic check` with reasonable commandlines
           "systemctl start restic-backups-custompackage.service",
@@ -158,12 +158,12 @@ import ./make-test-python.nix (
           "rm /root/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
 
-          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
-          '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
+          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
+          'restic-rclonebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 4"',
 
           # test that remoteprune brings us back to 1 snapshot in remotebackup
           "systemctl start restic-backups-remoteprune.service",
-          '${pkgs.restic}/bin/restic -r ${remoteRepository} -p ${passwordFile} snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
+          'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
       )
     '';

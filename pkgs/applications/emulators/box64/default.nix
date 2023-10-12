@@ -15,13 +15,13 @@ assert withDynarec -> stdenv.hostPlatform.isAarch64;
 
 stdenv.mkDerivation rec {
   pname = "box64";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-aIvL0H0k0/lz2lCLxB17RxNm0cxVozYthy0z85/FuUE=";
+    hash = "sha256-iCZv/WvqZkH6i23fSLA/p0nG5/CgzjyU5glVgje4c3w=";
   };
 
   nativeBuildInputs = [

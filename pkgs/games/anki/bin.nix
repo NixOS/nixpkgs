@@ -3,22 +3,22 @@
 let
   pname = "anki-bin";
   # Update hashes for both Linux and Darwin!
-  version = "2.1.64";
+  version = "2.1.66";
 
   sources = {
     linux = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-linux-qt6.tar.zst";
-      sha256 = "sha256-J3bfqqleE5DSfEUnzbWBYdMg653MokW9LYN3rnLd/mU=";
+      sha256 = "sha256-P1PEKz0vblPxiLri34QrP0+qOsltJsvPL2JVmYj1wFg=";
     };
 
     # For some reason anki distributes completely separate dmg-files for the aarch64 version and the x86_64 version
     darwin-x86_64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-intel-qt6.dmg";
-      sha256 = "sha256-5vve6eiH/OlCqa2HINQfuwmGDpjc1uiiVJSc6iF5rlo=";
+      sha256 = "sha256-cFYuw+ZSQd5Rw+x7eIKEDzV9UyvuxX3iZ8drmtQNZ78=";
     };
     darwin-aarch64 = fetchurl {
       url = "https://github.com/ankitects/anki/releases/download/${version}/anki-${version}-mac-apple-qt6.dmg";
-      sha256 = "sha256-SJWRAI1Xi92pIcOUaW8c4sLAAJTUWteL4oqXm66OWvs=";
+      sha256 = "sha256-0xtHT0rq7QnHqhIySpBKtO+kMAu88Q5nWmWvMSxVtBo=";
     };
   };
 
@@ -58,7 +58,7 @@ let
     targetPkgs = pkgs: (with pkgs; [ xorg.libxkbfile xcb-util-cursor-HEAD krb5 ]);
 
     runScript = writeShellScript "anki-wrapper.sh" ''
-      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs }
+      exec ${unpacked}/bin/anki ${ lib.strings.escapeShellArgs commandLineArgs } "$@"
     '';
 
     extraInstallCommands = ''

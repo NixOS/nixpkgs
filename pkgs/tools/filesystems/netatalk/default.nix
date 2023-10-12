@@ -1,16 +1,13 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , acl
 , autoreconfHook
 , avahi
 , db
-, ed
 , libevent
 , libgcrypt
 , libiconv
-, libtirpc
 , openssl
 , pam
 , perl

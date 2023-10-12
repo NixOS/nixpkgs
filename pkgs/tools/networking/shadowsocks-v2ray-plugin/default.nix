@@ -12,10 +12,10 @@ buildGoModule rec {
     owner = "shadowsocks";
     repo = "v2ray-plugin";
     rev = "v${version}";
-    sha256 = "0aq445gnqk9dxs1hkw7rvk86wg0iyiy0h740lvyh6d9zsqhf61wb";
+    hash = "sha256-iwfjINY/NQP9poAcCHz0ETxu0Nz58AmD7i1NbF8hBCs=";
   };
 
-  vendorSha256 = "0vzd9v33p4a32f5ic9ir4g5ckis06wpdf07a649h9qalimxnvzfz";
+  vendorHash = "sha256-3/1te41U4QQTMeoA1y43QMfJyiM5JhaLE0ORO8ZO7W8=";
 
   meta = with lib; {
     description = "Yet another SIP003 plugin for shadowsocks, based on v2ray";

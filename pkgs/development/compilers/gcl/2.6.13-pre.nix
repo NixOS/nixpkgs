@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sed -e 's/<= obj-date/<= (if (= 0 obj-date) 1 obj-date)/' -i lsp/make.lisp
   '';
 
-  sourceRoot = "gcl/gcl";
+  sourceRoot = "${src.name}/gcl";
 
   # breaks when compiling in parallel
   enableParallelBuilding = false;

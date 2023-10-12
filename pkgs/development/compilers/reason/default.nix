@@ -1,15 +1,16 @@
 { lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_3
 , ncurses
 , fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
+, dune-build-info
 }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
-  version = "3.8.2";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
-    sha256 = "sha256-etzEXbILje+CrfJxIhH7jthEMoSJdS6O33QoG8HrLvI=";
+    hash = "sha256-F+rUwoZK9yc/VtCtYsRWS+Lq3nbT2oex04HtW0T0Zss=";
   };
 
   strictDeps = true;
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    dune-build-info
     fix
     menhirSdk
     ppxlib

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tank-utility";
-  version = "1.4.1";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,15 +20,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "krismolendyke";
     repo = pname;
-    rev = version;
-    hash = "sha256-2cxAaSyreIzQzCUtiolEV7JbGFKL8Mob3337J0jlMsU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-h9y3X+FSzSFt+bd/chz+x0nocHaKZ8DvreMxAYMs8/E=";
   };
-
-  postPatch = ''
-    # urllib3[secure] is not picked-up
-    substituteInPlace setup.py \
-      --replace "urllib3[secure]" "urllib3"
-  '';
 
   propagatedBuildInputs = [
     requests
@@ -49,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for the Tank Utility API";
     homepage = "https://github.com/krismolendyke/tank-utility";
+    changelog = "https://github.com/krismolendyke/tank-utility/blob/${version}/HISTORY.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -5,7 +5,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
-  version = "0.9.1";
+  version = "0.9.4";
 
   format = "pyproject";
 
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "ep1cman";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-L7uM5v2CYGFHYxzBUKlMF+ChtjBM24GZ8NuyoQaOU6U=";
+    hash = "sha256-MFg518iodxdHbr7k5kpkTWI59Kk7pPwyIVswVcjasl8=";
   };
 
   pythonRelaxDeps = [
@@ -33,6 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     aiorun
     aiosqlite
     apprise
+    async-lru
     click
     expiring-dict
     python-dateutil

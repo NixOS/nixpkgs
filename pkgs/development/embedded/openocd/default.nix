@@ -25,7 +25,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ hidapi jimtcl libftdi1 libjaylink libusb1 ]
-    ++ lib.optional stdenv.isLinux libgpiod;
+    ++
+    # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
+    lib.optional stdenv.isLinux (libgpiod.overrideAttrs (old: rec {
+      version = "1.6.4";
+      src = fetchurl {
+        url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
+        sha256 = "sha256-gp1KwmjfB4U2CdZ8/H9HbpqnNssqaKYwvpno+tGXvgo=";
+      };
+    }));
 
   configureFlags = [
     "--disable-werror"

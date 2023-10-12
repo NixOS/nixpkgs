@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mozilla-services/cornice";
     description = "Build Web Services with Pyramid";
     license = licenses.mpl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

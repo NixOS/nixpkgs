@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "csfml";
-  version = "2.5.1";
+  version = "2.5.2";
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";
     rev   = version;
-    sha256 = "sha256-a46V5CakKVygNfr3/nZwlsCyqNsbti4a3cr7itK5QfI=";
+    sha256 = "sha256-A5C/4SnxUX7mW1wkPWJWX3dwMhrJ79DkBuZ7UYzTOqE=";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sfml ];

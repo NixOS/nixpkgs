@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, lib, ... } : {
   name = "apparmor";
   meta.maintainers = with lib.maintainers; [ julm ];
 
@@ -27,7 +27,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
       # 4. Using `diff` against the expected output.
       with subtest("apparmorRulesFromClosure"):
           machine.succeed(
-              "${pkgs.diffutils}/bin/diff ${pkgs.writeText "expected.rules" ''
+              "${pkgs.diffutils}/bin/diff -u ${pkgs.writeText "expected.rules" ''
                   mr ${pkgs.bash}/lib/**.so*,
                   r ${pkgs.bash},
                   r ${pkgs.bash}/etc/**,
@@ -64,6 +64,12 @@ import ./make-test-python.nix ({ pkgs, ... } : {
                   r ${pkgs.libunistring}/lib/**,
                   r ${pkgs.libunistring}/share/**,
                   x ${pkgs.libunistring}/foo/**,
+                  mr ${pkgs.glibc.libgcc}/lib/**.so*,
+                  r ${pkgs.glibc.libgcc},
+                  r ${pkgs.glibc.libgcc}/etc/**,
+                  r ${pkgs.glibc.libgcc}/lib/**,
+                  r ${pkgs.glibc.libgcc}/share/**,
+                  x ${pkgs.glibc.libgcc}/foo/**,
               ''} ${pkgs.runCommand "actual.rules" { preferLocalBuild = true; } ''
                   ${pkgs.gnused}/bin/sed -e 's:^[^ ]* ${builtins.storeDir}/[^,/-]*-\([^/,]*\):\1 \0:' ${
                       pkgs.apparmorRulesFromClosure {

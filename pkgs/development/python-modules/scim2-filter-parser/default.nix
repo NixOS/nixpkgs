@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , django
 , sly
@@ -19,6 +20,15 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-QEPTYpWlRPWO6Evyt4zoqUST4ousF67GmiOpD7WUqcI=";
   };
+
+  patches = [
+    # https://github.com/15five/scim2-filter-parser/pull/43
+    (fetchpatch {
+      name = "replace-poetry-with-poetry-core.patch";
+      url = "https://github.com/15five/scim2-filter-parser/commit/675d85f3a3ff338e96a408827d64d9e893fa5255.patch";
+      hash = "sha256-PjJH1S5CDe/BMI0+mB34KdpNNcHfexBFYBmHolsWH4o=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , dtkwidget
 , cmake
 , qttools
@@ -16,27 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "image-editor";
-  version = "1.0.24";
+  version = "1.0.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0p/aicuBfaEyvfZomnz49IJLospWIdl23ZreDe+Bzqc=";
+    hash = "sha256-mA2pqWXa3i19jCymvUXnG6YUVezDSfRkHx2EoxAhnqU=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "feat_check_PREFIX_value_before_set.patch";
-      url = "https://github.com/linuxdeepin/image-editor/commit/dae86e848cf53ba0ece879d81e8d5335d61a7473.patch";
-      sha256 = "sha256-lxmR+nIrMWVyhl1jpA17x2yqJ40h5vnpqKKcjd8j9RY=";
-    })
-    (fetchpatch {
-      name = "feat_use_FULL_install_path.patch";
-      url = "https://github.com/linuxdeepin/image-editor/commit/855ae53a0444ac628aa0fe893932df6263b82e2e.patch";
-      sha256 = "sha256-3Dynlwl/l/b6k6hOHjTdoDQ/VGBDfyRz9b8QY8FEsCc=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace libimageviewer/service/ffmpegvideothumbnailer.cpp \
@@ -57,7 +43,9 @@ stdenv.mkDerivation rec {
     pcre
   ];
 
-  cmakeFlags = [ "-DVERSION=${version}" ];
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+  ];
 
   meta = with lib; {
     description = "Image editor lib for dtk";

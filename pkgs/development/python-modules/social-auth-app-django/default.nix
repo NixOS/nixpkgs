@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "social-auth-app-django";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-app-django";
     rev = "refs/tags/${version}";
-    hash = "sha256-GLOZfiSXkUnTK8Mxg+5jbxkE6Mo0kW5vMZsPe9G/dpU=";
+    hash = "sha256-YJsE8YfLaUsBjwehheic6YG+6robWeBzKL3T7V0c8E8=";
   };
 
   propagatedBuildInputs = [

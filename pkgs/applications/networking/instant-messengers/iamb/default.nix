@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "iamb";
-  version = "0.0.7";
+  version = "0.0.8";
 
   src = fetchFromGitHub {
     owner = "ulyssa";
     repo = "iamb";
     rev = "v${version}";
-    hash = "sha256-KKr7dfFSffkFgqcREy/3RIIn5c5IxhFR7CjFJqCmqdM=";
+    hash = "sha256-Mt4/UWySC6keoNvb1VDCVPoK24F0rmd0R47ZRPADkaw=";
   };
 
-  cargoHash = "sha256-/OBGRE9zualLnMh9Ikh9s9IE9b8mEmAC/H5KUids8a8=";
+  cargoHash = "sha256-UbmeEcmUr3zx05Hk36tjsl0Y9ay7DNM1u/3lPqlXN2o=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.AppKit

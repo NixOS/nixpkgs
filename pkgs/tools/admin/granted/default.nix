@@ -1,7 +1,10 @@
 { bash
 , buildGoModule
 , fetchFromGitHub
+
+, withFish ? false
 , fish
+
 , lib
 , makeWrapper
 , xdg-utils
@@ -9,16 +12,16 @@
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.11.1";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-m6cFAX8FMyv9H1IKm6meWu2yNEZz4g1Q+h2rRijYJsc=";
+    sha256 = "sha256-BvrMfQ/fiAMJCROwOqzt17ae/qqDC2KFdBK2epVImus=";
   };
 
-  vendorSha256 = "sha256-8BPntTgd7QqO2T3vyWXC1z5yE/ovg3D3iilnislqV30=";
+  vendorHash = "sha256-vHOGnflLC85hrONPPAAuuaPxNkv3t5T616nAnDEZbAY=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -36,6 +39,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    ln -s $out/bin/granted $out/bin/assumego
+
     # Install shell script
     install -Dm755 $src/scripts/assume $out/bin/assume
     substituteInPlace $out/bin/assume \
@@ -44,6 +49,7 @@ buildGoModule rec {
     wrapProgram $out/bin/assume \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
+  '' + lib.optionalString withFish ''
     # Install fish script
     install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
     substituteInPlace $out/share/assume.fish \

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "django-mysql";
-  version = "4.9.0";
+  version = "4.11.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-mysql";
     rev = "refs/tags/${version}";
-    hash = "sha256-mXAdwNqSIrWMh+YcCjksiqmkLSXGAd+ofyzJmiG+gNo=";
+    hash = "sha256-4PxJH5P/a4oNigbTjrZa3q+FeDQTdkvCKonUUl4I8m0=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://django-mysql.readthedocs.io/en/latest/changelog.html";
+    changelog = "https://github.com/adamchainz/django-mysql/blob/${version}/docs/changelog.rst";
     description = "Extensions to Django for use with MySQL/MariaD";
     homepage = "https://github.com/adamchainz/django-mysql";
     license = licenses.mit;

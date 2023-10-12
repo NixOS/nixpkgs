@@ -1,36 +1,41 @@
 # Generates the documentation for library functions via nixdoc.
 
-{ pkgs, locationsXml, libsets }:
+{ pkgs, nixpkgs, libsets }:
 
-with pkgs; stdenv.mkDerivation {
+with pkgs;
+
+let
+  locationsJSON = import ./lib-function-locations.nix { inherit pkgs nixpkgs libsets; };
+in
+stdenv.mkDerivation {
   name = "nixpkgs-lib-docs";
   src = ../../lib;
 
   buildInputs = [ nixdoc ];
   installPhase = ''
     function docgen {
-      # TODO: wrap lib.$1 in <literal>, make nixdoc not escape it
-      if [[ -e "../lib/$1.nix" ]]; then
-        nixdoc -c "$1" -d "lib.$1: $2" -f "$1.nix" > "$out/$1.xml"
+      name=$1
+      baseName=$2
+      description=$3
+      # TODO: wrap lib.$name in <literal>, make nixdoc not escape it
+      if [[ -e "../lib/$baseName.nix" ]]; then
+        nixdoc -c "$name" -d "lib.$name: $description" -l ${locationsJSON} -f "$baseName.nix" > "$out/$name.md"
       else
-        nixdoc -c "$1" -d "lib.$1: $2" -f "$1/default.nix" > "$out/$1.xml"
+        nixdoc -c "$name" -d "lib.$name: $description" -l ${locationsJSON} -f "$baseName/default.nix" > "$out/$name.md"
       fi
-      echo "<xi:include href='$1.xml' />" >> "$out/index.xml"
+      echo "$out/$name.md" >> "$out/index.md"
     }
 
     mkdir -p "$out"
 
-    cat > "$out/index.xml" << 'EOF'
-    <?xml version="1.0" encoding="utf-8"?>
-    <root xmlns:xi="http://www.w3.org/2001/XInclude">
+    cat > "$out/index.md" << 'EOF'
+    ```{=include=} sections
     EOF
 
-    ${lib.concatMapStrings ({ name, description }: ''
-      docgen ${name} ${lib.escapeShellArg description}
+    ${lib.concatMapStrings ({ name, baseName ? name, description }: ''
+      docgen ${name} ${baseName} ${lib.escapeShellArg description}
     '') libsets}
 
-    echo "</root>" >> "$out/index.xml"
-
-    ln -s ${locationsXml} $out/locations.xml
+    echo '```' >> "$out/index.md"
   '';
 }

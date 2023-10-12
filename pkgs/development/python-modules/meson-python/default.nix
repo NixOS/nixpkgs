@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "meson-python";
-  version = "0.12.1";
+  version = "0.13.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "meson_python";
-    hash = "sha256-PVs+WB1wpYqXucEWp16Xp2zEtMfnX6Blj8g5I3Hi8sI=";
+    hash = "sha256-Y7MXAAFCXEL6TP7a25BRy9KJJf+O7XxA02ugCZ48dhg=";
   };
 
   nativeBuildInputs = [
@@ -39,13 +39,9 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
   ];
-
-  # Ugly work-around. Drop ninja dependency.
-  # We already have ninja, but it comes without METADATA.
-  # Building ninja-python-distributions is the way to go.
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace "'ninja'," ""
-  '';
+  setupHooks = [
+    ./add-build-flags.sh
+  ];
 
   meta = {
     changelog = "https://github.com/mesonbuild/meson-python/blob/${version}/CHANGELOG.rst";

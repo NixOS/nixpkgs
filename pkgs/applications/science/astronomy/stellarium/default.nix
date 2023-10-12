@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , perl
 , wrapGAppsHook
@@ -10,25 +11,33 @@
 , qtpositioning
 , qtmultimedia
 , qtserialport
-, qttranslations
 , qtwayland
 , qtwebengine
 , calcmysky
 , qxlsx
 , indilib
 , libnova
+, qttools
 }:
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
-  version = "23.1";
+  version = "23.3";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    hash = "sha256-7jzS3pRklPsCTgCr3nrywfHCNlBDHuyuGGvrVoI9+A0=";
+    hash = "sha256-bYvGmYu9jMHk2IUICz2kCVh56Ymz8JHqurdWV+xEdJY=";
   };
+
+  patches = [
+    # Compatibility with INDI 2.0 series from https://github.com/Stellarium/stellarium/pull/3269
+    (fetchpatch {
+      url = "https://github.com/Stellarium/stellarium/commit/31fd7bebf33fa710ce53ac8375238a24758312bc.patch";
+      hash = "sha256-eJEqqitZgtV6noeCi8pDBYMVTFIVWXZU1fiEvoilX8o=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
@@ -43,6 +52,7 @@ stdenv.mkDerivation rec {
     perl
     wrapGAppsHook
     wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
@@ -51,7 +61,6 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtmultimedia
     qtserialport
-    qttranslations
     qtwebengine
     calcmysky
     qxlsx
@@ -83,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://stellarium.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kilianar ];
   };
 }

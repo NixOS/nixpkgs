@@ -165,14 +165,14 @@ in
         enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
 
         proxy = mkOption {
-          type = types.nullOr types.str;
-          default = null;
+          type = types.str;
+          default = "";
           description = lib.mdDoc "URL to a HTTP/HTTPS proxy.";
         };
 
         proxyAuth = mkOption {
-          type = types.nullOr types.str;
-          default = null;
+          type = types.str;
+          default = "";
           description = lib.mdDoc "Credentials for proxy.";
         };
 
@@ -334,7 +334,8 @@ in
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+        wants = [ "network-online.target" ];
+        after = [ "network-online.target" ];
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "nitter";

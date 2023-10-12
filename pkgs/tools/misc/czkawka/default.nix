@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -8,6 +9,7 @@
 , gdk-pixbuf
 , atk
 , gtk4
+, Foundation
 , wrapGAppsHook4
 , gobject-introspection
 , xvfb-run
@@ -17,16 +19,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "5.1.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    hash = "sha256-3nHsdCndZx7TIbRXhuGdQx8fh8Ff7gYBQyNXIkJ2zPc=";
+    hash = "sha256-aMQq44vflpsI66CyaXekMfYh/ssH7UkCX0zsO55st3Y=";
   };
 
-  cargoHash = "sha256-jBl7+ElK+SEe92qygTocd6R1sgdHf+RpTVJZymhf3mQ=";
+  cargoHash = "sha256-1D87O4fje82Oxyj2Q9kAEey4uEzsNT7kTd8IbNT4WXE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -41,6 +43,8 @@ rustPlatform.buildRustPackage rec {
     gdk-pixbuf
     atk
     gtk4
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Foundation
   ];
 
   nativeCheckInputs = [
@@ -52,6 +56,9 @@ rustPlatform.buildRustPackage rec {
     xvfb-run cargo test
     runHook postCheck
   '';
+
+  doCheck = stdenv.hostPlatform.isLinux
+          && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   passthru.tests.version = testers.testVersion {
     package = czkawka;

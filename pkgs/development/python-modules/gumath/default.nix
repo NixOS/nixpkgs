@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, fetchpatch
 , python
 , numba
 , ndtypes
@@ -13,10 +14,26 @@
 
 buildPythonPackage {
   pname = "gumath";
+  format = "setuptools";
   disabled = isPy27;
   inherit (libgumath) src version meta;
 
+  patches = [
+    # https://github.com/xnd-project/gumath/pull/42
+    (fetchpatch {
+      name = "remove-np-warnings-call.patch";
+      url = "https://github.com/xnd-project/gumath/commit/83ab3aa3b07d55654b4e6e75e5ec6be8190fca97.patch";
+      hash = "sha256-7lUXNVH5M+Go1iEu0bud03XI8cyGbdLNdLraMZplDaM=";
+    })
+    (fetchpatch {
+      name = "remove-np-1.25-bartlett-test-assertion.patch";
+      url = "https://github.com/xnd-project/gumath/commit/8741e31f2967ded08c96a7f0631e1e38fe813870.patch";
+      hash = "sha256-flltk3RNPHalbcIV0BrkxWuhqqJBrycos7Fyv3P3mWg=";
+    })
+  ];
+
   nativeCheckInputs = [ numba ];
+
   propagatedBuildInputs = [ ndtypes xnd ];
 
   postPatch = ''
@@ -42,6 +59,5 @@ buildPythonPackage {
     python test_xndarray.py
     popd
   '';
-
 }
 

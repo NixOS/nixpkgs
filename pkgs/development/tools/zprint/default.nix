@@ -1,12 +1,12 @@
-{ lib, buildGraalvmNativeImage, fetchurl  }:
+{ lib, buildGraalvmNativeImage, fetchurl }:
 
 buildGraalvmNativeImage rec {
   pname = "zprint";
-  version = "1.2.5";
+  version = "1.2.8";
 
   src = fetchurl {
     url = "https://github.com/kkinnear/${pname}/releases/download/${version}/${pname}-filter-${version}";
-    sha256 = "sha256-PWdR5jqyzvTk9HoxqDldwtZNik34dmebBtZZ5vtva4A=";
+    sha256 = "sha256-o0yoW45a5r+sTGvjEqr5VZgQKm72qsPH/kbLTbMTgEM=";
   };
 
   extraNativeImageBuildArgs = [
@@ -28,5 +28,6 @@ buildGraalvmNativeImage rec {
     homepage = "https://github.com/kkinnear/zprint";
     license = licenses.mit;
     maintainers = with maintainers; [ stelcodes ];
+    mainProgram = "zprint";
   };
 }

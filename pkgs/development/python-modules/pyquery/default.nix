@@ -33,6 +33,8 @@ buildPythonPackage rec {
     lxml
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "pyquery" ];
 
   checkInputs = [

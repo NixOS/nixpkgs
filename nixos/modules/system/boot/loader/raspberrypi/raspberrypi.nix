@@ -52,6 +52,10 @@ in
           Whether to create files with the system generations in
           `/boot`.
           `/boot/old` will hold files from old generations.
+
+          ::: {.note}
+          These options are deprecated, unsupported, and may not work like expected.
+          :::
         '';
       };
 
@@ -67,6 +71,10 @@ in
           type = types.bool;
           description = lib.mdDoc ''
             Enable using uboot as bootmanager for the raspberry pi.
+
+            ::: {.note}
+            These options are deprecated, unsupported, and may not work like expected.
+            :::
           '';
         };
 
@@ -76,6 +84,10 @@ in
           type = types.int;
           description = lib.mdDoc ''
             Maximum number of configurations in the boot menu.
+
+            ::: {.note}
+            These options are deprecated, unsupported, and may not work like expected.
+            :::
           '';
         };
 
@@ -87,19 +99,53 @@ in
         description = lib.mdDoc ''
           Extra options that will be appended to `/boot/config.txt` file.
           For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
+
+          ::: {.note}
+          These options are deprecated, unsupported, and may not work like expected.
+          :::
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = singleton {
-      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
-      message = "Only Raspberry Pi >= 3 supports aarch64.";
-    };
+  config = mkMerge[
+    (mkIf cfg.uboot.enable {
+      warnings = [
+        ''
+          The option set for `boot.loader.raspberrypi.uboot` has been recommended against
+          for years, and is now formally deprecated.
 
-    system.build.installBootLoader = builder;
-    system.boot.loader.id = "raspberrypi";
-    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
-  };
+          It is possible it already did not work like you expected.
+
+          It never worked on the Raspberry Pi 4 family.
+
+          These options will be removed by NixOS 24.11.
+        ''
+      ];
+    })
+    (mkIf cfg.enable {
+      warnings = [
+        ''
+          The option set for `boot.loader.raspberrypi` has been recommended against
+          for years, and is now formally deprecated.
+
+          It is possible it already did not work like you expected.
+
+          It never worked on the Raspberry Pi 4 family.
+
+          These options will be removed by NixOS 24.11.
+        ''
+      ];
+    })
+    (mkIf cfg.enable {
+      assertions = singleton {
+        assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
+        message = "Only Raspberry Pi >= 3 supports aarch64.";
+      };
+
+      system.build.installBootLoader = builder;
+      system.boot.loader.id = "raspberrypi";
+      system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
+    })
+  ];
 }

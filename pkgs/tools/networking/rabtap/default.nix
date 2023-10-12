@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-l35MHr7NWBlzKcGSDGjHTwGfnDrOpjeJp9/YAp1Areo=";
   };
 
-  vendorSha256 = "sha256-sJFMef9VnU6iKGf9UwEK60axLUBkubFWgI+pWKjaWNU=";
+  vendorHash = "sha256-sJFMef9VnU6iKGf9UwEK60axLUBkubFWgI+pWKjaWNU=";
 
   meta = with lib; {
     description = "RabbitMQ wire tap and swiss army knife";

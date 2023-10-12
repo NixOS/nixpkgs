@@ -36,6 +36,12 @@ in
       ];
     };
 
+    wrapperConfig = mkOption {
+      type = types.attrs;
+      default = {};
+      description = mdDoc "Arguments to pass to Firefox wrapper";
+    };
+
     policies = mkOption {
       type = policyFormat.type;
       default = { };
@@ -53,7 +59,7 @@ in
     };
 
     preferences = mkOption {
-      type = with types; attrsOf (oneOf [ bool int string ]);
+      type = with types; attrsOf (oneOf [ bool int str ]);
       default = { };
       description = mdDoc ''
         Preferences to set from `about:config`.
@@ -227,17 +233,22 @@ in
         ] ++ optionals nmh.passff [
           passff-host
         ];
+        cfg = let
+          # copy-pasted from the wrapper; TODO: figure out fix
+          applicationName = cfg.package.binaryName or (lib.getName cfg.package);
+
+          nixpkgsConfig = pkgs.config.${applicationName} or {};
+          optionConfig = cfg.wrapperConfig;
+          nmhConfig = {
+            enableBrowserpass = nmh.browserpass;
+            enableBukubrow = nmh.bukubrow;
+            enableTridactylNative = nmh.tridactyl;
+            enableUgetIntegrator = nmh.ugetIntegrator;
+            enableFXCastBridge = nmh.fxCast;
+          };
+        in nixpkgsConfig // optionConfig // nmhConfig;
       })
     ];
-
-    nixpkgs.config.firefox = {
-      enableBrowserpass = nmh.browserpass;
-      enableBukubrow = nmh.bukubrow;
-      enableEUWebID = nmh.euwebid;
-      enableTridactylNative = nmh.tridactyl;
-      enableUgetIntegrator = nmh.ugetIntegrator;
-      enableFXCastBridge = nmh.fxCast;
-    };
 
     environment.etc =
       let

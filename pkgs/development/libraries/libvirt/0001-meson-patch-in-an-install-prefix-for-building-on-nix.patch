@@ -401,10 +401,10 @@ index 1bda59849b..392bc2cb2e 100644
    ]
  endif
 diff --git a/src/security/apparmor/meson.build b/src/security/apparmor/meson.build
-index 990f00b4f3..e5a7a14e1d 100644
+index b9257c816d..98701755d8 100644
 --- a/src/security/apparmor/meson.build
 +++ b/src/security/apparmor/meson.build
-@@ -19,22 +19,22 @@ foreach name : apparmor_gen_profiles
+@@ -57,7 +57,7 @@ foreach name : apparmor_gen_profiles
      output: name,
      configuration: apparmor_gen_profiles_conf,
      install: true,
@@ -412,25 +412,32 @@ index 990f00b4f3..e5a7a14e1d 100644
 +    install_dir: install_prefix + apparmor_dir,
    )
  endforeach
- 
- install_data(
-   [ 'libvirt-qemu', 'libvirt-lxc' ],
--  install_dir: apparmor_dir / 'abstractions',
-+  install_dir: install_prefix + apparmor_dir / 'abstractions',
- )
- 
+
+@@ -68,13 +68,13 @@ foreach name : apparmor_gen_abstractions
+     command: apparmor_gen_cmd,
+     capture: true,
+     install: true,
+-    install_dir: apparmor_dir / 'abstractions',
++    install_dir: install_prefix + apparmor_dir / 'abstractions',
+   )
+ endforeach
+
  install_data(
    [ 'TEMPLATE.qemu', 'TEMPLATE.lxc' ],
 -  install_dir: apparmor_dir / 'libvirt',
 +  install_dir: install_prefix + apparmor_dir / 'libvirt',
  )
- 
- install_data(
-   'usr.lib.libvirt.virt-aa-helper.local',
--  install_dir: apparmor_dir / 'local',
-+  install_dir: install_prefix + apparmor_dir / 'local',
-   rename: 'usr.lib.libvirt.virt-aa-helper',
- )
+
+ if not conf.has('WITH_APPARMOR_3')
+@@ -83,7 +83,7 @@ if not conf.has('WITH_APPARMOR_3')
+   # files in order to limit the amount of filesystem clutter.
+   install_data(
+     'usr.lib.libvirt.virt-aa-helper.local',
+-    install_dir: apparmor_dir / 'local',
++    install_dir: install_prefix + apparmor_dir / 'local',
+     rename: 'usr.lib.libvirt.virt-aa-helper',
+   )
+ endif
 diff --git a/src/storage/meson.build b/src/storage/meson.build
 index 26e7ff1a1a..ad5c6eddc3 100644
 --- a/src/storage/meson.build

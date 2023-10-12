@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
       fitting.  There are over 1000 functions in total with an
       extensive test suite.
     '';
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.all;
   };
 }

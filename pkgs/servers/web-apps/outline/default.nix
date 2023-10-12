@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchYarnDeps
 , makeWrapper
 , nodejs
 , yarn
@@ -10,24 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.69.2";
+  version = "0.71.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-XevrCUvPmAbPTysJ/o7i2xAZTQ+UFYtVal/aZKvt+Ls=";
+    hash = "sha256-vwYq5b+cMYf/gnpCwLEpErYKqYw/RwcvyBjhp+5+bTY=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
   buildInputs = [ yarn nodejs ];
 
-  # Replace the inline calls to yarn with our sequalize wrapper. These should be
-  # the two occurrences:
-  # https://github.com/outline/outline/search?l=TypeScript&q=yarn
-  patches = [ ./sequelize-command.patch ];
-
-  yarnOfflineCache = yarn2nix-moretea.importOfflineCache ./yarn.nix;
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-j9iaxXfMlG9dT6fvYgPQg6Y0QvCRiBU1peO0YgsGHOY=";
+  };
 
   configurePhase = ''
     export HOME=$(mktemp -d)/yarn_home
@@ -63,14 +62,6 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
-      --set NODE_ENV production \
-      --set NODE_PATH $node_modules
-
-    makeWrapper ${nodejs}/bin/node $out/bin/outline-sequelize \
-      --add-flags $node_modules/.bin/sequelize \
-      --add-flags "--migrations-path $server/migrations" \
-      --add-flags "--models-path $server/models" \
-      --add-flags "--seeders-path $server/models/fixtures" \
       --set NODE_ENV production \
       --set NODE_PATH $node_modules
 

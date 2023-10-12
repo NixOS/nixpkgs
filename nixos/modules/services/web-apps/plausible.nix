@@ -238,17 +238,20 @@ in {
           path = [ cfg.package ]
             ++ optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
-            export CONFIG_DIR=$CREDENTIALS_DIRECTORY
-
             export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
+            export ADMIN_USER_PWD="$(< $CREDENTIALS_DIRECTORY/ADMIN_USER_PWD )"
+            export SECRET_KEY_BASE="$(< $CREDENTIALS_DIRECTORY/SECRET_KEY_BASE )"
+
+            ${lib.optionalString (cfg.mail.smtp.passwordFile != null)
+              ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
 
             # setup
             ${cfg.package}/createdb.sh
             ${cfg.package}/migrate.sh
+            export IP_GEOLOCATION_DB=${pkgs.dbip-country-lite}/share/dbip/dbip-country-lite.mmdb
+            ${cfg.package}/bin/plausible eval "(Plausible.Release.prepare() ; Plausible.Auth.create_user(\"$ADMIN_USER_NAME\", \"$ADMIN_USER_EMAIL\", \"$ADMIN_USER_PWD\"))"
             ${optionalString cfg.adminUser.activate ''
-              if ! ${cfg.package}/init-admin.sh | grep 'already exists'; then
-                psql -d plausible <<< "UPDATE users SET email_verified=true;"
-              fi
+              psql -d plausible <<< "UPDATE users SET email_verified=true where email = '$ADMIN_USER_EMAIL';"
             ''}
 
             exec plausible start

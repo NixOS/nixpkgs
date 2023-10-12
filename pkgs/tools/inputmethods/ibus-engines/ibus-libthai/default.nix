@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, ibus, gtk3, libthai }:
+{ lib, stdenv, fetchurl, pkg-config, ibus, gtk3, libthai }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libthai";
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     description = "Thai input method engine for IBus";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

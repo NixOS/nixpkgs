@@ -3,8 +3,10 @@
 , fetchFromGitHub
 , cmake
 , kwindowsystem
+, libexif
 , libfm-qt
 , lxqt-qtplugin
+, menu-cache
 , qtx11extras
 , gitUpdater
 , extraQtStyles ? []
@@ -27,8 +29,10 @@ mkDerivation rec {
 
   buildInputs = [
     kwindowsystem
+    libexif
     libfm-qt
     lxqt-qtplugin
+    menu-cache
     qtx11extras
   ]
   ++ extraQtStyles;

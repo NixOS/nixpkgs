@@ -26,7 +26,7 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.14.0";
+  version = "1.14.2";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -34,8 +34,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString threadsafe "-threadsafe";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
+    url = let
+        majorMinor = lib.versions.majorMinor version;
+        majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
+      in "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
+    sha256 = "sha256-6jxeJX7zIq9ed/weUurTrWvzu0rAZIDdF+45ANeiTPs=";
   };
 
   passthru = {
@@ -89,18 +92,6 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5c++' "''${!outputDev}"
     moveToOutput 'bin/h5fc' "''${!outputDev}"
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
-  '';
-
-  # Remove reference to /build, which get introduced
-  # into AM_CPPFLAGS since hdf5-1.14.0. Cmake of various
-  # packages using HDF5 gets confused trying access the non-existent path.
-  postFixup = ''
-    for i in h5cc h5pcc h5c++; do
-      if [ -f $dev/bin/$i ]; then
-        substituteInPlace $dev/bin/$i --replace \
-          '-I/build/hdf5-${version}/src/H5FDsubfiling' ""
-      fi
-    done
   '';
 
   enableParallelBuilding = true;

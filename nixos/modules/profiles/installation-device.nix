@@ -102,9 +102,9 @@ with lib;
         jq # for closureInfo
         # For boot.initrd.systemd
         makeInitrdNGTool
-        systemdStage1
-        systemdStage1Network
       ];
+
+    boot.swraid.enable = true;
 
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
@@ -118,5 +118,8 @@ with lib;
       [PStore]
       Unlink=no
     '';
+
+    # allow nix-copy to live system
+    nix.settings.trusted-users = [ "root" "nixos" ];
   };
 }

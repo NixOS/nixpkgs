@@ -62,7 +62,6 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski",
       "volume_scroller@francislavoie.github.io"
     ]
   },
@@ -138,7 +137,6 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski",
       "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
@@ -166,6 +164,10 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
     ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
@@ -197,7 +199,6 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski",
       "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
@@ -218,6 +219,10 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
+    ],
     "clipboard-indicator": [
       "clipboard-indicator@tudmotu.com",
       "clipboard-indicator@Dieg0Js.github.io"
@@ -225,6 +230,10 @@
     "noannoyance": [
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
+    ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
     ],
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
@@ -244,7 +253,6 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@noskoski",
       "volume_scroller@francislavoie.github.io"
     ],
     "auto-activities": [
@@ -265,6 +273,10 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "lock-keys": [
+      "lockkeys@vaina.lt",
+      "lockkeys@fawtytoo"
+    ],
     "persian-calendar": [
       "PersianCalendar@oxygenws.com",
       "persian-calendar@iamrezamousavi.gmail.com"
@@ -284,6 +296,10 @@
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
+    ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
     ],
     "battery-time": [
       "batime@martin.zurowietz.de",
@@ -307,6 +323,10 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+    "persian-calendar": [
+      "PersianCalendar@oxygenws.com",
+      "persian-calendar@iamrezamousavi.gmail.com"
+    ],
     "clipboard-indicator": [
       "clipboard-indicator@tudmotu.com",
       "clipboard-indicator@Dieg0Js.github.io"
@@ -314,6 +334,14 @@
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
+    ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
+    "battery-time": [
+      "batime@martin.zurowietz.de",
+      "batterytime@typeof.pw"
     ]
   }
 }

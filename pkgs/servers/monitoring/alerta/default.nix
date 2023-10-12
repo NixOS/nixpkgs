@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     requests-hawk
     sentry-sdk
+    setuptools
   ];
 
   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server

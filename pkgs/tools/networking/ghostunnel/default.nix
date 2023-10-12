@@ -16,7 +16,7 @@ buildGoModule rec {
     hash = "sha256-yG9PfpYqW95X7EfbAhKEDmqBue7SjFULXUO73V4s3t4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   deleteVendor = true;
 

@@ -46,10 +46,7 @@ let
           inherit sha256;
         };
         extraMeta = {
-          broken =
-            kernel.meta.broken ||
-            lib.versions.majorMinor version == "4.14" ||
-            (stdenv.isx86_64 && lib.versionAtLeast version "4.19" && lib.versionOlder version "5.5");
+          broken = kernel.meta.broken;
         };
       };
       kernelPatches = kernel.kernelPatches ++ [
@@ -99,7 +96,8 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_14 = callPackage ../os-specific/linux/kernel/linux-4.14.nix {
+    linux_4_14 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "4.14";
       kernelPatches =
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
@@ -110,7 +108,8 @@ in {
         ];
     };
 
-    linux_4_19 = callPackage ../os-specific/linux/kernel/linux-4.19.nix {
+    linux_4_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "4.19";
       kernelPatches =
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
@@ -118,7 +117,8 @@ in {
         ];
     };
 
-    linux_5_4 = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
+    linux_5_4 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "5.4";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -130,11 +130,11 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.CVE-2023-32233
       ];
     };
 
-    linux_5_10 = callPackage ../os-specific/linux/kernel/linux-5.10.nix {
+    linux_5_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "5.10";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -146,15 +146,14 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
-        kernelPatches.CVE-2023-32233
       ];
     };
 
-    linux_5_15 = callPackage ../os-specific/linux/kernel/linux-5.15.nix {
+    linux_5_15 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "5.15";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.fix-em-ice-bonding
       ];
     };
 
@@ -166,11 +165,11 @@ in {
       ];
     };
 
-    linux_6_1 = callPackage ../os-specific/linux/kernel/linux-6.1.nix {
+    linux_6_1 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.1";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.fix-em-ice-bonding
       ];
     };
 
@@ -178,21 +177,24 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.fix-em-ice-bonding
         kernelPatches.export-rt-sched-migrate
+        kernelPatches.dell_xps_regression
       ];
     };
 
-    linux_6_3 = callPackage ../os-specific/linux/kernel/linux-6.3.nix {
+    linux_6_5 = callPackage ../os-specific/linux/kernel/mainline.nix {
+      branch = "6.5";
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.fix-em-ice-bonding
       ];
     };
 
     linux_testing = let
-      testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
+      testing = callPackage ../os-specific/linux/kernel/mainline.nix {
+        # A special branch that tracks the kernel under the release process
+        # i.e. which has at least a public rc1 and is not released yet.
+        branch = "testing";
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
@@ -205,17 +207,15 @@ in {
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
       # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = buildLinux rec {
-        version = "6.1.3";
-        modDirVersion = lib.versions.pad 3 version;
-        extraMeta.branch = lib.versions.majorMinor version;
-        src = fetchurl {
-          url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
-          hash = "sha256-bcia56dRPkM8WXxzRu1/9L/RFepDo7XiemvbOMVYAxc=";
-        };
+      kernel = callPackage ../os-specific/linux/kernel/mainline.nix {
+        branch = "6.4";
       };
-      kernelPatches = linux_6_1.kernelPatches;
-   };
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.dell_xps_regression
+      ];
+    };
 
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
       kernelPatches = [
@@ -261,12 +261,22 @@ in {
 
     linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
 
-    linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 { };
-    linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
-    linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
+    linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    };
+    linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    };
+    linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
+    linux_6_5_hardened = hardenedKernelFor kernels.linux_6_5 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
@@ -274,6 +284,8 @@ in {
     linux_5_19 = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0 = throw "linux 6.0 was removed because it has reached its end of life upstream";
     linux_6_2 = throw "linux 6.2 was removed because it has reached its end of life upstream";
+    linux_6_3 = throw "linux 6.3 was removed because it has reached its end of life upstream";
+    linux_6_4 = throw "linux 6.4 was removed because it has reached its end of life upstream";
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -338,6 +350,8 @@ in {
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
 
+    decklink = callPackage ../os-specific/linux/decklink { };
+
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
@@ -348,10 +362,11 @@ in {
 
     evdi = callPackage ../os-specific/linux/evdi { };
 
+    fanout = callPackage ../os-specific/linux/fanout { };
+
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
     gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
-    hid-nintendo = callPackage ../os-specific/linux/hid-nintendo { };
 
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
@@ -374,6 +389,10 @@ in {
     ena = callPackage ../os-specific/linux/ena {};
 
     kvdo = callPackage ../os-specific/linux/kvdo {};
+
+    lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
+
+    linux-gpib = callPackage ../applications/science/electronics/linux-gpib/kernel.nix { };
 
     liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
@@ -402,6 +421,8 @@ in {
     nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
     nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
+    nvidia_dc              = nvidiaPackages.dc;
+    nvidia_dc_520          = nvidiaPackages.dc_520;
 
     # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
@@ -426,8 +447,6 @@ in {
 
     rtl8189fs = callPackage ../os-specific/linux/rtl8189fs { };
 
-    rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
-
     rtl8723ds = callPackage ../os-specific/linux/rtl8723ds { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
@@ -445,13 +464,14 @@ in {
     rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
 
     rtw88 = callPackage ../os-specific/linux/rtw88 { };
-    rtlwifi_new = rtw88;
 
     rtw89 = if lib.versionOlder kernel.version "5.16" then callPackage ../os-specific/linux/rtw89 { } else null;
 
     openafs_1_8 = callPackage ../servers/openafs/1.8/module.nix { };
     # Current stable release; don't backport release updates!
     openafs = openafs_1_8;
+
+    opensnitch-ebpf = if lib.versionAtLeast kernel.version "5.10" then callPackage ../os-specific/linux/opensnitch-ebpf { } else null;
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
@@ -479,8 +499,6 @@ in {
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
-    sch_cake = callPackage ../os-specific/linux/sch_cake { };
-
     isgx = callPackage ../os-specific/linux/isgx { };
 
     rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
@@ -504,6 +522,8 @@ in {
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
+
+    trelay = callPackage ../os-specific/linux/trelay { };
 
     usbip = callPackage ../os-specific/linux/usbip { };
 
@@ -560,6 +580,9 @@ in {
 
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
+    hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
+    sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
+    rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
   });
 
@@ -573,13 +596,15 @@ in {
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
-    linux_6_3 = recurseIntoAttrs (packagesFor kernels.linux_6_3);
+    linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = throw "linux 5.19 was removed because it reached its end of life upstream"; # Added 2022-11-01
     linux_6_0 = throw "linux 6.0 was removed because it reached its end of life upstream"; # Added 2023-01-20
     linux_6_2 = throw "linux 6.2 was removed because it reached its end of life upstream"; # Added 2023-05-26
+    linux_6_3 = throw "linux 6.3 was removed because it reached its end of life upstream"; # Added 2023-07-22
+    linux_6_4 = throw "linux 6.4 was removed because it reached its end of life upstream"; # Added 2023-10-02
   };
 
   rtPackages = {
@@ -603,23 +628,15 @@ in {
     linux_testing = packagesFor kernels.linux_testing;
     linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
-    linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
+    linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
-    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 {
-      stdenv = gcc10Stdenv;
-      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
-    });
-    linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 {
-      stdenv = gcc10Stdenv;
-      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
-    });
-    linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 {
-      stdenv = gcc10Stdenv;
-      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
-    });
-    linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
-    linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
-    linux_6_1_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_6_1 { });
+    linux_4_14_hardened = recurseIntoAttrs (packagesFor kernels.linux_4_14_hardened);
+    linux_4_19_hardened = recurseIntoAttrs (packagesFor kernels.linux_4_19_hardened);
+    linux_5_4_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_4_hardened);
+    linux_5_10_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_10_hardened);
+    linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
+    linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
+    linux_6_5_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_5_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -642,7 +659,7 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_3;
+    linux_latest = packages.linux_6_5;
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;

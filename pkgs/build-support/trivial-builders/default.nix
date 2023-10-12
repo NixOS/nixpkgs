@@ -88,6 +88,12 @@ rec {
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
     }
+    // lib.optionalAttrs (! derivationArgs?meta) {
+      pos = let args = builtins.attrNames derivationArgs; in
+        if builtins.length args > 0
+        then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
+        else null;
+    }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
           allowSubstitutes = false;
@@ -135,9 +141,15 @@ rec {
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     }:
+    let
+      matches = builtins.match "/bin/([^/]+)" destination;
+    in
     runCommand name
-      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
+      { inherit text executable checkPhase allowSubstitutes preferLocalBuild;
         passAsFile = [ "text" ];
+        meta = lib.optionalAttrs (executable && matches != null) {
+          mainProgram = lib.head matches;
+        } // meta;
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -230,7 +242,11 @@ rec {
 
 
   */
-  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}"; meta.mainProgram = name;};
+  writeScriptBin = name: text: writeTextFile {
+    inherit name text;
+    executable = true;
+    destination = "/bin/${name}";
+  };
 
   /*
     Similar to writeScript. Writes a Shell script and checks its syntax.
@@ -320,10 +336,11 @@ rec {
     { name
     , text
     , runtimeInputs ? [ ]
+    , meta ? { }
     , checkPhase ? null
     }:
     writeTextFile {
-      inherit name;
+      inherit name meta;
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -342,32 +359,41 @@ rec {
       '';
 
       checkPhase =
+        # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
+        # but we still want to use writeShellApplication on those platforms
+        let
+          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck.compiler;
+          shellcheckCommand = lib.optionalString shellcheckSupported ''
+            # use shellcheck which does not include docs
+            # pandoc takes long to build and documentation isn't needed for just running the cli
+            ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+          '';
+        in
         if checkPhase == null then ''
           runHook preCheck
           ${stdenv.shellDryRun} "$target"
-          # use shellcheck which does not include docs
-          # pandoc takes long to build and documentation isn't needed for in nixpkgs usage
-          ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+          ${shellcheckCommand}
           runHook postCheck
         ''
         else checkPhase;
-
-      meta.mainProgram = name;
     };
 
   # Create a C binary
-  writeCBin = name: code:
-    runCommandCC name
+  writeCBin = pname: code:
+    runCommandCC pname
     {
-      inherit name code;
+      inherit pname code;
       executable = true;
       passAsFile = ["code"];
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
+      meta = {
+        mainProgram = pname;
+      };
     }
     ''
-      n=$out/bin/$name
+      n=$out/bin/${pname}
       mkdir -p "$(dirname "$n")"
       mv "$codePath" code.c
       $CC -x c code.c -o "$n"
@@ -617,6 +643,10 @@ rec {
     script:
     runCommand name
       (substitutions // {
+        # TODO(@Artturin:) substitutions should be inside the env attrset
+        # but users are likely passing non-substitution arguments through substitutions
+        # turn off __structuredAttrs to unbreak substituteAll
+        __structuredAttrs = false;
         inherit meta;
         inherit depsTargetTargetPropagated;
         propagatedBuildInputs =
@@ -804,9 +834,10 @@ rec {
         or
           nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
-      hashAlgo = if hash != null then ""
+      hashAlgo = if hash != null then (builtins.head (lib.strings.splitString "-" hash))
             else if sha256 != null then "sha256"
             else "sha1";
+      hashAlgo_ = if hash != null then "" else hashAlgo;
       hash_ = if hash != null then hash
          else if sha256 != null then sha256
          else sha1;
@@ -815,7 +846,7 @@ rec {
     stdenvNoCC.mkDerivation {
       name = name_;
       outputHashMode = hashMode;
-      outputHashAlgo = hashAlgo;
+      outputHashAlgo = hashAlgo_;
       outputHash = hash_;
       preferLocalBuild = true;
       allowSubstitutes = false;
@@ -875,13 +906,17 @@ rec {
              ) + "-patched"
     , patches   ? []
     , postPatch ? ""
-    }: stdenvNoCC.mkDerivation {
+    , ...
+    }@args: stdenvNoCC.mkDerivation {
       inherit name src patches postPatch;
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = "unpackPhase patchPhase installPhase";
       installPhase = "cp -R ./ $out";
-    };
+    }
+    # Carry `meta` information from the underlying `src` if present.
+    // (optionalAttrs (src?meta) { inherit (src) meta; })
+    // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
 
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file" {

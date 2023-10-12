@@ -1,17 +1,33 @@
-{ stdenv, lib, fetchFromGitHub, python, makeWrapper
-, eigen, fftw, libtiff, libpng, zlib, ants, bc
-, qt5, libGL, libGLU, libX11, libXext
-, withGui ? true, less }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, python
+, makeWrapper
+, eigen
+, fftw
+, libtiff
+, libpng
+, zlib
+, ants
+, bc
+, qt5
+, libGL
+, libGLU
+, libX11
+, libXext
+, less
+, withGui ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "mrtrix";
-  version = "unstable-2021-11-25";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
-    owner  = "MRtrix3";
-    repo   = "mrtrix3";
-    rev    = "994498557037c9e4f7ba67f255820ef84ea899d9";
-    sha256 = "sha256-8eFDS5z4ZxMzi9Khk90KAS4ndma/Syd6JDXM2Fpr0M8=";
+    owner = "MRtrix3";
+    repo = "mrtrix3";
+    rev = "refs/tags/${version}";
+    hash = "sha256-87zBAoBLWQPccGS37XyQ8H0GhL01k8GQFgcLL6IwbcM=";
     fetchSubmodules = true;
   };
 

@@ -51,7 +51,6 @@ mkDerivation rec {
     "-DPYTHON_LIBRARY=${python}/lib/lib${python.libPrefix}.so"
     "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
     "-DCMAKE_VERBOSE_MAKEFILE=True"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_PYTHONQT:BOOL=ON"
   ];
 

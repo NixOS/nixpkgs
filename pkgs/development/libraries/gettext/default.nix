@@ -9,14 +9,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gettext";
-  version = "0.21";
+  version = "0.21.1";
 
   src = fetchurl {
     url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "04kbg1sx0ncfrsbr85ggjslqkzzb243fcw9nyh3rrv1a22ihszf7";
+    sha256 = "sha256-6MNlDh2M7odcTzVWQjgsHfgwWL1aEe6FVcDPJ21kbUU=";
   };
   patches = [
     ./absolute-paths.diff
+    # fix reproducibile output, in particular in the grub2 build
+    # https://savannah.gnu.org/bugs/index.php?59658
+    ./0001-msginit-Do-not-use-POT-Creation-Date.patch
   ] ++ lib.optional stdenv.hostPlatform.isWindows (fetchpatch {
     url = "https://aur.archlinux.org/cgit/aur.git/plain/gettext_formatstring-ruby.patch?h=mingw-w64-gettext&id=e8b577ee3d399518d005e33613f23363a7df07ee";
     name = "gettext_formatstring-ruby.patch";
@@ -47,14 +50,6 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
     sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-  '' +
-  # This change to gettext's vendored copy of gnulib is already
-  # merged upstream; we can drop this patch on the next version
-  # bump.  It must be applied twice because gettext vendors gnulib
-  # not once, but twice!
-  ''
-    patch -p2 -d gettext-tools/gnulib-lib/ < ${gnulib.passthru.longdouble-redirect-patch}
-    patch -p2 -d gettext-tools/libgrep/    < ${gnulib.passthru.longdouble-redirect-patch}
   '';
 
   strictDeps = true;
@@ -62,9 +57,13 @@ stdenv.mkDerivation rec {
     xz
     xz.bin
   ];
-  buildInputs = [ bash ]
-  # HACK, see #10874 (and 14664)
-    ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [ libiconv ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
+    bash
+  ]
+  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
+    # HACK, see #10874 (and 14664)
+    libiconv
+  ];
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash

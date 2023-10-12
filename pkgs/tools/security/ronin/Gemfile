@@ -2,4 +2,8 @@
 
 source "https://rubygems.org"
 
+gem "net-ftp"
+gem "net-imap"
+gem "net-pop"
+gem "net-smtp"
 gem "ronin"

@@ -146,6 +146,10 @@ let
     error_log ${cfg.logError};
     daemon off;
 
+    ${optionalString cfg.enableQuicBPF ''
+      quic_bpf on;
+    ''}
+
     ${cfg.config}
 
     ${optionalString (cfg.eventsConfig != "" || cfg.config == "") ''
@@ -261,23 +265,6 @@ let
 
       ${proxyCachePathConfig}
 
-      ${optionalString cfg.statusPage ''
-        server {
-          listen ${toString cfg.defaultHTTPListenPort};
-          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
-
-          server_name localhost;
-
-          location /nginx_status {
-            stub_status on;
-            access_log off;
-            allow 127.0.0.1;
-            ${optionalString enableIPv6 "allow ::1;"}
-            deny all;
-          }
-        }
-      ''}
-
       ${vhosts}
 
       ${cfg.appendHttpConfig}
@@ -352,7 +339,7 @@ let
           + ";"))
           + "
             listen ${addr}:${toString port} "
-          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
@@ -362,7 +349,9 @@ let
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
-        acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
+        # The acme-challenge location doesn't need to be added if we are not using any automated
+        # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
+        acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
@@ -395,6 +384,9 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString (hasSSL && vhost.http2 && !oldHTTP2) ''
+            http2 on;
+          ''}
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
@@ -478,6 +470,8 @@ let
   );
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+
+  oldHTTP2 = versionOlder cfg.package.version "1.25.1";
 in
 
 {
@@ -588,11 +582,13 @@ in
           };
         });
         default = [];
-        example = literalExpression ''[
-          { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
-          { addr = "0.0.0.0"; }
-          { addr = "[::0]"; }
-        ]'';
+        example = literalExpression ''
+          [
+            { addr = "10.0.0.12"; proxyProtocol = true; ssl = true; }
+            { addr = "0.0.0.0"; }
+            { addr = "[::0]"; }
+          ]
+        '';
         description = lib.mdDoc ''
           If vhosts do not specify listen, use these addresses by default.
           This option takes precedence over {option}`defaultListenAddresses` and
@@ -713,7 +709,7 @@ in
           Configuration lines appended to the generated Nginx
           configuration file. Commonly used by different modules
           providing http snippets. {option}`appendConfig`
-          can be specified more than once and it's value will be
+          can be specified more than once and its value will be
           concatenated (contrary to {option}`config` which
           can be set only once).
         '';
@@ -788,6 +784,19 @@ in
           Reload nginx when configuration file changes (instead of restart).
           The configuration file is exposed at {file}`/etc/nginx/nginx.conf`.
           See also `systemd.services.*.restartIfChanged`.
+        '';
+      };
+
+      enableQuicBPF = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enables routing of QUIC packets using eBPF. When enabled, this allows
+          to support QUIC connection migration. The directive is only supported
+          on Linux 5.7+.
+          Note that enabling this option will make nginx run with extended
+          capabilities that are usually limited to processes running as root
+          namely `CAP_SYS_ADMIN` and `CAP_NET_ADMIN`.
         '';
       };
 
@@ -1134,6 +1143,14 @@ in
       }
 
       {
+        assertion = cfg.package.pname != "nginxQuic" -> !(cfg.enableQuicBPF);
+        message = ''
+          services.nginx.enableQuicBPF requires using nginxQuic package,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+        '';
+      }
+
+      {
         assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
         message = ''
           services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
@@ -1174,6 +1191,21 @@ in
 
     services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
+
+    services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
+      listenAddresses = lib.mkDefault ([
+        "0.0.0.0"
+      ] ++ lib.optional enableIPv6 "[::]");
+      locations."/nginx_status" = {
+        extraConfig = ''
+          stub_status on;
+          access_log off;
+          allow 127.0.0.1;
+          ${optionalString enableIPv6 "allow ::1;"}
+          deny all;
+        '';
+      };
+    };
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
@@ -1217,8 +1249,8 @@ in
         # New file permissions
         UMask = "0027"; # 0640 / 0750
         # Capabilities
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ];
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ] ++ optionals cfg.enableQuicBPF [ "CAP_SYS_ADMIN" "CAP_NET_ADMIN" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" "CAP_SYS_RESOURCE" ] ++ optionals cfg.enableQuicBPF [ "CAP_SYS_ADMIN" "CAP_NET_ADMIN" ];
         # Security
         NoNewPrivileges = true;
         # Sandboxing (sorted by occurrence in https://www.freedesktop.org/software/systemd/man/systemd.exec.html)
@@ -1243,6 +1275,7 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ]
+          ++ optional cfg.enableQuicBPF [ "bpf" ]
           ++ optionals ((cfg.package != pkgs.tengine) && (cfg.package != pkgs.openresty) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
       };
     };
@@ -1306,6 +1339,11 @@ in
     users.groups = optionalAttrs (cfg.group == "nginx") {
       nginx.gid = config.ids.gids.nginx;
     };
+
+    # do not delete the default temp directories created upon nginx startup
+    systemd.tmpfiles.rules = [
+      "X /tmp/systemd-private-%b-nginx.service-*/tmp/nginx_*"
+    ];
 
     services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
       files = "/var/log/nginx/*.log";

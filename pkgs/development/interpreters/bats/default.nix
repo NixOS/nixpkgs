@@ -22,13 +22,13 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-nKBNbqJYRd/3tO85E6KrOh32yOaNKpLXxz5gQ5Uvmcc=";
+    sha256 = "sha256-gy4dyoKRlf2WFmH1/mSNwhVR3df92BgpT4TjTpV4FyQ=";
   };
 
   patchPhase = ''
@@ -93,6 +93,7 @@ resholve.mkDerivation rec {
         "${placeholder "out"}/libexec/bats-core/bats-exec-test" = true;
         "$BATS_LINE_REFERENCE_FORMAT" = "comma_line";
         "$BATS_LOCKING_IMPLEMENTATION" = "${flock}/bin/flock";
+        "$parallel_binary_name" = "${parallel}/bin/parallel";
       };
       execer = [
         /*

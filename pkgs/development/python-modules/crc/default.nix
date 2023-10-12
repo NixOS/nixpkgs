@@ -3,27 +3,38 @@
 , fetchFromGitHub
 , poetry-core
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "crc";
-  version = "4.2.0";
+  version = "4.3.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Nicoretti";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-h/RVMIJX+Lyted0FHNBcKY54EiirSclkBXCpAQSATq8=";
+    hash = "sha256-rH/jc6/gxww3NSCYrhu+InZX1HTTdJFfa52ioU8AclY=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  pythonImportsCheck = [ "crc" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [
+    "crc"
+  ];
 
-  disabledTestPaths = [ "test/bench" ];
+  disabledTestPaths = [
+    "test/bench"
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/Nicoretti/crc/releases/tag/${version}";

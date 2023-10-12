@@ -4,18 +4,18 @@
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, mesa, valgrind, libepoxy, libglvnd
+, mesa, libepoxy, libglvnd, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2023-05-01";
+  version = "unstable-2023-08-15";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "dcb5069ff76bd293e86928804208737e6cee2ccc";
-    sha256 = "0c3wnx51kbpzy9x8i9wm0ng16h35kgqsigrygrmwvxxn7zgv72ma";
+    rev = "0532942ac6176a66ef184fb728a4cbb02958fc0b";
+    sha256 = "sha256-FcRXxu0Nc8qHQl8PoA92MeuhpV+vgl658uILEpmDy3A=";
     fetchSubmodules = true;
   };
 
@@ -53,6 +53,8 @@ stdenv.mkDerivation {
     # Required for linking downstream binaries.
     abseil-cpp openh264 usrsctp libevent libvpx openssl
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     license = licenses.bsd3;

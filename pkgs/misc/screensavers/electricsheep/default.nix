@@ -11,7 +11,7 @@
 , pkg-config
 , flam3
 , libgtop
-, boost
+, boost179
 , tinyxml
 , freeglut
 , libGLU
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     flam3
     libgtop
-    boost
+    boost179
     tinyxml
     freeglut
     libGLU

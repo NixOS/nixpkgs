@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, boost
+, boost179 # probably needs to match the one from ndn-cxx
 , fetchFromGitHub
 , libpcap
 , ndn-cxx
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
-    "--boost-includes=${boost.dev}/include"
-    "--boost-libs=${boost.out}/lib"
+    "--boost-includes=${boost179.dev}/include"
+    "--boost-libs=${boost179.out}/lib"
     "--with-tests"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
 

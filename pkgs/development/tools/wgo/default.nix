@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoModule rec {
+let
   pname = "wgo";
-  version = "0.5.1";
+  version = "0.5.3";
+in
+buildGoModule {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "bokwoon95";
     repo = "wgo";
     rev = "v${version}";
-    hash = "sha256-kfa3Lm2oJomhoHbtSPLylRr+BFGV/y7xqSIv3xHHg3Q=";
+    hash = "sha256-Uny5FiMox0oIaJ+WE7p3kw4guSzktEF+WzuxjgFXh2I=";
   };
 
-  vendorSha256 = "sha256-jxyO3MGrC+y/jJuwur/+tLIsbxGnT57ZXYzaf1lCv7A=";
+  vendorHash = "sha256-w6UJxZToHbbQmuXkyqFzyssFcE+7uVNqOuIF/XKdEsU=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -21,7 +27,6 @@ buildGoModule rec {
     description = "Live reload for Go apps";
     homepage = "https://github.com/bokwoon95/wgo";
     license = licenses.mit;
-    maintainers = with maintainers; [ bokwoon95 ];
+    maintainers = with maintainers; [ ];
   };
 }
-

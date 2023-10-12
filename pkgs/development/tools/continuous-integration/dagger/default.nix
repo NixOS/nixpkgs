@@ -1,24 +1,33 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, dagger }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, testers, dagger }:
 
 buildGoModule rec {
   pname = "dagger";
-  version = "0.5.3";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "dagger";
     repo = "dagger";
     rev = "v${version}";
-    hash = "sha256-yMegSRO9wkpw2o429mLoDmUmysXmR93MULHjtc/V/cQ=";
+    hash = "sha256-EHAQRmBgQEM0ypfUwuaoPnoKsQb1S+tarO1nHdmY5RI=";
   };
 
-  vendorHash = "sha256-LuCbo7T0lXoQUBfSeCGw3SLydA2iM7dv7pYCterapHU=";
+  vendorHash = "sha256-fUNet9P6twEJP4eYooiHZ6qaJ3jEkJUwQ2zPzk3+eIs=";
   proxyVendor = true;
 
   subPackages = [
     "cmd/dagger"
   ];
 
-  ldflags = [ "-s" "-w" "-X=github.com/dagger/dagger/internal/engine.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X github.com/dagger/dagger/engine.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd dagger \
+      --bash <($out/bin/dagger completion bash) \
+      --fish <($out/bin/dagger completion fish) \
+      --zsh <($out/bin/dagger completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = dagger;

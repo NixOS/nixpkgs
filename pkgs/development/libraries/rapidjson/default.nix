@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "1.1.0";
 
   src = fetchFromGitHub {
-    owner = "miloyip";
+    owner = "Tencent";
     repo = "rapidjson";
     rev = "v${version}";
     sha256 = "1jixgb8w97l9gdh3inihz7avz7i770gy2j2irvvlyrq3wi41f5ab";
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "http://rapidjson.org/";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

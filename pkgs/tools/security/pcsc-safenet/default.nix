@@ -1,13 +1,11 @@
 { stdenv
 , lib
-, runCommand
 , fetchzip
 , autoPatchelfHook
 , dpkg
 , gtk3
 , openssl_1_1
 , pcsclite
-, unzip
 }:
 
 stdenv.mkDerivation rec {

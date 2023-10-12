@@ -7,7 +7,7 @@
 , qtbase
 , qtimageformats
 , qtwebengine
-, qtx11extras ? null # qt5 only
+, qtx11extras
 , libarchive
 , libXdmcp
 , libpthreadstubs
@@ -19,50 +19,50 @@ let
   isQt5 = lib.versions.major qtbase.version == "5";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.6.1.20230320";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "a617ae5e06b95cec99bae058650e55b98613916d";
-    hash = "sha256-WL2uqA0sZ5Q3lZIA9vkLVyfec/jBkfGcWb6XQ7AuM94=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-s1FaazHVtWE697BO0hIOgZVowdkq68R9x327ZnJRnlo=";
   };
 
-  # we only need this if we are using a version that hasn't been released. We
-  # could also match on the "VERSION x.y.z" bit but then it would have to be
-  # updated based on whatever is the latest release, so instead just rewrite the
-  # line.
   postPatch = ''
-    sed -i CMakeLists.txt \
-      -e 's@^project.*@project(Zeal VERSION ${version})@'
-  '' + lib.optionalString (!isQt5) ''
-    substituteInPlace src/app/CMakeLists.txt \
-      --replace "COMPONENTS Widgets" "COMPONENTS Widgets QmlIntegration"
+    substituteInPlace CMakeLists.txt \
+      --replace 'ZEAL_VERSION_SUFFIX "-dev"' 'ZEAL_VERSION_SUFFIX ""'
   '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
+    libXdmcp
+    libarchive
+    libpthreadstubs
     qtbase
     qtimageformats
     qtwebengine
-    libarchive
-    libXdmcp
-    libpthreadstubs
     xcbutilkeysyms
-  ] ++ lib.optionals isQt5 [ qtx11extras ];
+  ]
+  ++ lib.optionals isQt5 [ qtx11extras ];
 
-  meta = with lib; {
+  meta = {
     description = "A simple offline API documentation browser";
     longDescription = ''
       Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
     homepage = "https://zealdocs.org/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ skeidel peterhoeg ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/zealdocs/zeal/releases";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ skeidel peterhoeg AndersonTorres ];
+    inherit (qtbase.meta) platforms;
   };
-}
+})

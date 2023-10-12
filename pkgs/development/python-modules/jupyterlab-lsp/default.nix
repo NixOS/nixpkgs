@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-lsp";
-  version = "4.0.1";
+  version = "4.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1VPRfs+F24h2xJeoJglZQpuCcPDk6Ptf8cWrAW3G5to=";
+    hash = "sha256-OqsByMrAQKjTqev6QIUiOwVLf71iGdPHtWD2qXZsovM=";
   };
 
   propagatedBuildInputs = [
@@ -28,5 +28,8 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ];
+    # No support for Jupyterlab > 4
+    # https://github.com/jupyter-lsp/jupyterlab-lsp/pull/949
+    broken = lib.versionAtLeast jupyterlab.version "4.0";
   };
 }

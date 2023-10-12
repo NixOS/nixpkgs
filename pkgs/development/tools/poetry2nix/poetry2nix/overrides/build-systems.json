@@ -316,7 +316,7 @@
     "setuptools"
   ],
   "aiohttp-remotes": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "aiohttp-retry": [
@@ -348,7 +348,7 @@
     "setuptools"
   ],
   "aiojobs": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "aiokafka": [
@@ -428,7 +428,6 @@
   ],
   "aioprocessing": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "aiopulse": [
@@ -476,7 +475,7 @@
     "setuptools"
   ],
   "aiorun": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "aiosenseme": [
@@ -920,7 +919,7 @@
     "setuptools"
   ],
   "argon2-cffi": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "argon2-cffi-bindings": [
@@ -1077,6 +1076,9 @@
   "astunparse": [
     "setuptools"
   ],
+  "asv": [
+    "setuptools"
+  ],
   "async-cache": [
     "setuptools"
   ],
@@ -1140,7 +1142,7 @@
     "setuptools"
   ],
   "asyncstdlib": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "asynctest": [
@@ -1193,7 +1195,22 @@
     "setuptools"
   ],
   "attrs": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "23.1.0"
+    },
+    {
+      "buildSystem": "hatchling",
+      "from": "23.1.0"
+    },
+    {
+      "buildSystem": "hatch-vcs",
+      "from": "23.1.0"
+    },
+    {
+      "buildSystem": "hatch-fancy-pypi-readme",
+      "from": "23.1.0"
+    }
   ],
   "aubio": [
     "setuptools"
@@ -1249,6 +1266,7 @@
     "setuptools"
   ],
   "autoflake": [
+    "setuptools",
     "hatchling"
   ],
   "autograd": [
@@ -1290,6 +1308,9 @@
     "setuptools"
   ],
   "avro3k": [
+    "setuptools"
+  ],
+  "awacs": [
     "setuptools"
   ],
   "awesome-slugify": [
@@ -1966,6 +1987,9 @@
   "baron": [
     "setuptools"
   ],
+  "base32-crockford": [
+    "setuptools"
+  ],
   "base36": [
     "setuptools"
   ],
@@ -1989,7 +2013,7 @@
     "setuptools"
   ],
   "bash-kernel": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "bashlex": [
@@ -2031,6 +2055,9 @@
   "bcrypt": [
     "setuptools"
   ],
+  "beaker": [
+    "setuptools"
+  ],
   "beancount": [
     "setuptools"
   ],
@@ -2045,6 +2072,7 @@
     "setuptools"
   ],
   "beautifulsoup4": [
+    "hatchling",
     "setuptools"
   ],
   "beautifultable": [
@@ -2153,6 +2181,9 @@
     "setuptools"
   ],
   "bitmath": [
+    "setuptools"
+  ],
+  "bitsandbytes": [
     "setuptools"
   ],
   "bitstring": [
@@ -2473,8 +2504,14 @@
     "setuptools"
   ],
   "build": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.10.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "0.10.0"
+    }
   ],
   "buildbot": [
     "setuptools"
@@ -2733,6 +2770,9 @@
     "setuptools"
   ],
   "cfn-lint": [
+    "setuptools"
+  ],
+  "cfnresponse": [
     "setuptools"
   ],
   "cfscrape": [
@@ -3020,6 +3060,9 @@
     "poetry-core",
     "setuptools"
   ],
+  "cloudinary": [
+    "setuptools"
+  ],
   "cloudpickle": [
     "setuptools"
   ],
@@ -3248,9 +3291,11 @@
   "confluent-kafka": [
     "setuptools"
   ],
+  "confusable-homoglyphs": [
+    "setuptools"
+  ],
   "confuse": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "connect-box": [
@@ -3319,11 +3364,17 @@
     "poetry-core",
     "poetry-dynamic-versioning"
   ],
+  "copier-template-tester": [
+    "poetry-core"
+  ],
   "coqpit": [
     "setuptools"
   ],
   "coqui-trainer": [
     "setuptools"
+  ],
+  "corallium": [
+    "poetry-core"
   ],
   "coreapi": [
     "setuptools"
@@ -3458,6 +3509,9 @@
   "css-parser": [
     "setuptools"
   ],
+  "cssbeautifier": [
+    "setuptools"
+  ],
   "csscompressor": [
     "setuptools"
   ],
@@ -3496,6 +3550,9 @@
     "setuptools"
   ],
   "curve25519-donna": [
+    "setuptools"
+  ],
+  "customerio": [
     "setuptools"
   ],
   "cvxopt": [
@@ -3542,6 +3599,9 @@
   ],
   "cysimdjson": [
     "cython"
+  ],
+  "cysystemd": [
+    "setuptools"
   ],
   "cython": [
     "setuptools"
@@ -3596,7 +3656,11 @@
     "setuptools"
   ],
   "dask": [
-    "setuptools"
+    "setuptools",
+    {
+      "buildSystem": "versioneer",
+      "from": "2.0.0"
+    }
   ],
   "dask-gateway": [
     "setuptools"
@@ -4080,7 +4144,11 @@
     "setuptools"
   ],
   "distributed": [
-    "setuptools"
+    "setuptools",
+    {
+      "buildSystem": "versioneer",
+      "from": "2.0.0"
+    }
   ],
   "distro": [
     "setuptools"
@@ -4127,6 +4195,9 @@
   "django-auth-ldap": [
     "setuptools",
     "setuptools-scm"
+  ],
+  "django-bootstrap-form": [
+    "setuptools"
   ],
   "django-cache-memoize": [
     "setuptools"
@@ -4304,6 +4375,10 @@
   "django-pglocks": [
     "setuptools"
   ],
+  "django-phonenumber-field": [
+    "setuptools",
+    "setuptools-scm"
+  ],
   "django-picklefield": [
     "setuptools"
   ],
@@ -4327,6 +4402,9 @@
     "setuptools"
   ],
   "django-redis": [
+    "setuptools"
+  ],
+  "django-registration": [
     "setuptools"
   ],
   "django-rest-auth": [
@@ -4438,6 +4516,9 @@
   "djangorestframework-types": [
     "poetry"
   ],
+  "djlint": [
+    "poetry"
+  ],
   "djmail": [
     "setuptools"
   ],
@@ -4535,6 +4616,9 @@
     "setuptools"
   ],
   "docrep": [
+    "setuptools"
+  ],
+  "docstr-coverage": [
     "setuptools"
   ],
   "docstring-parser": [
@@ -4773,7 +4857,6 @@
   ],
   "ecs-logging": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "ed25519": [
@@ -5076,7 +5159,7 @@
   "exceptiongroup": [
     "flit-core",
     "flit-scm",
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "exchangelib": [
@@ -5100,6 +5183,9 @@
     "setuptools"
   ],
   "exifread": [
+    "setuptools"
+  ],
+  "expandvars": [
     "setuptools"
   ],
   "expects": [
@@ -5153,6 +5239,9 @@
   "fabric2": [
     "setuptools"
   ],
+  "fabric3": [
+    "setuptools"
+  ],
   "fabulous": [
     "setuptools"
   ],
@@ -5191,6 +5280,9 @@
     "cython",
     "setuptools"
   ],
+  "fancycompleter": [
+    "setuptools"
+  ],
   "faraday-agent-parameters-types": [
     "setuptools"
   ],
@@ -5198,7 +5290,7 @@
     "setuptools"
   ],
   "fastapi": [
-    "flitBuildHook",
+    "flit-core",
     "hatchling",
     "setuptools"
   ],
@@ -5305,6 +5397,9 @@
     "setuptools"
   ],
   "ffmpeg-python": [
+    "setuptools"
+  ],
+  "ffmpy": [
     "setuptools"
   ],
   "fhconfparser": [
@@ -5431,11 +5526,29 @@
   "flake8-bugbear": [
     "setuptools"
   ],
+  "flake8-builtins": [
+    "setuptools"
+  ],
+  "flake8-coding": [
+    "setuptools"
+  ],
+  "flake8-commas": [
+    "setuptools"
+  ],
+  "flake8-comprehensions": [
+    "setuptools"
+  ],
   "flake8-debugger": [
     "poetry-core",
     "setuptools"
   ],
+  "flake8-deprecated": [
+    "setuptools"
+  ],
   "flake8-docstrings": [
+    "setuptools"
+  ],
+  "flake8-ensure-ascii": [
     "setuptools"
   ],
   "flake8-future-import": [
@@ -5447,7 +5560,19 @@
   "flake8-length": [
     "setuptools"
   ],
+  "flake8-mock": [
+    "setuptools"
+  ],
+  "flake8-mutable": [
+    "setuptools"
+  ],
   "flake8-noqa": [
+    "setuptools"
+  ],
+  "flake8-pep3101": [
+    "setuptools"
+  ],
+  "flake8-plone-hasattr": [
     "setuptools"
   ],
   "flake8-plugin-utils": [
@@ -5465,7 +5590,22 @@
   "flake8-pytest-style": [
     "poetry-core"
   ],
+  "flake8-quotes": [
+    "setuptools"
+  ],
   "flake8-simplify": [
+    "setuptools"
+  ],
+  "flake8-string-format": [
+    "setuptools"
+  ],
+  "flake8-super-call": [
+    "setuptools"
+  ],
+  "flake8-todo": [
+    "setuptools"
+  ],
+  "flake8-tuple": [
     "setuptools"
   ],
   "flaky": [
@@ -5657,6 +5797,13 @@
   "fleep": [
     "setuptools"
   ],
+  "flet": [
+    "poetry-core"
+  ],
+  "flet-core": [
+    "poetry-core",
+    "setuptools"
+  ],
   "flexmock": [
     "setuptools"
   ],
@@ -5668,11 +5815,7 @@
     "setuptools"
   ],
   "flit": [
-    "flit-core",
-    "setuptools"
-  ],
-  "flit-core": [
-    "setuptools"
+    "flit-core"
   ],
   "flit-scm": [
     "flit-core",
@@ -5751,7 +5894,7 @@
     "setuptools"
   ],
   "formbox": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "formencode": [
@@ -5771,9 +5914,6 @@
     "setuptools"
   ],
   "foundationdb61": [
-    "setuptools"
-  ],
-  "foundationdb71": [
     "setuptools"
   ],
   "fountains": [
@@ -5861,7 +6001,7 @@
     "setuptools"
   ],
   "furo": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "fuse": [
@@ -5997,6 +6137,9 @@
     "cython",
     "setuptools"
   ],
+  "genson": [
+    "setuptools"
+  ],
   "gentools": [
     "setuptools"
   ],
@@ -6102,7 +6245,7 @@
     "setuptools"
   ],
   "gidgethub": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "gigalixir": [
@@ -6122,6 +6265,9 @@
   ],
   "git-annex-adapter": [
     "setuptools"
+  ],
+  "git-autoshare": [
+    "setuptools-scm"
   ],
   "git-filter-repo": [
     "setuptools",
@@ -6583,6 +6729,9 @@
   "grpcio-gcp": [
     "setuptools"
   ],
+  "grpcio-reflection": [
+    "setuptools"
+  ],
   "grpcio-status": [
     "setuptools"
   ],
@@ -6716,6 +6865,9 @@
     "setuptools"
   ],
   "hammett": [
+    "setuptools"
+  ],
+  "hammock": [
     "setuptools"
   ],
   "handout": [
@@ -6919,6 +7071,12 @@
   ],
   "html-sanitizer": [
     "setuptools"
+  ],
+  "html-tag-names": [
+    "poetry"
+  ],
+  "html-void-elements": [
+    "poetry"
   ],
   "html2text": [
     "setuptools"
@@ -7211,6 +7369,9 @@
   "igraph": [
     "setuptools"
   ],
+  "ihatemoney": [
+    "setuptools"
+  ],
   "ijson": [
     "setuptools"
   ],
@@ -7374,9 +7535,11 @@
   "insegel": [
     "setuptools"
   ],
-  "installer": [
-    "flit-core",
+  "insights-core": [
     "setuptools"
+  ],
+  "installer": [
+    "flit-core"
   ],
   "insteon-frontend-home-assistant": [
     "setuptools"
@@ -7446,14 +7609,17 @@
     "setuptools"
   ],
   "ipfshttpclient": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "iptools": [
     "setuptools"
   ],
   "ipwhl": [
-    "flitBuildHook",
+    "flit-core",
+    "setuptools"
+  ],
+  "ipwhois": [
     "setuptools"
   ],
   "ipy": [
@@ -7822,7 +7988,19 @@
     "setuptools"
   ],
   "jsonref": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.3.0"
+    },
+    {
+      "buildSystem": "poetry",
+      "from": "0.3.0",
+      "until": "1.1.0"
+    },
+    {
+      "buildSystem": "pdm-pep517",
+      "from": "1.1.0"
+    }
   ],
   "jsonrpc-async": [
     "setuptools"
@@ -7887,7 +8065,6 @@
   ],
   "jupyter-book": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "jupyter-c-kernel": [
@@ -7984,8 +8161,22 @@
     "setuptools"
   ],
   "jupyterlab": [
-    "jupyter-packaging",
-    "setuptools"
+    {
+      "buildSystem": "jupyter-packaging",
+      "until": "4"
+    },
+    {
+      "buildSystem": "setuptools",
+      "until": "4"
+    },
+    {
+      "buildSystem": "hatchling",
+      "from": "4"
+    },
+    {
+      "buildSystem": "hatch-jupyter-builder",
+      "from": "4"
+    }
   ],
   "jupyterlab-code-formatter": [
     "jupyter-packaging"
@@ -8191,6 +8382,10 @@
   ],
   "konnected": [
     "setuptools"
+  ],
+  "kopf": [
+    "setuptools",
+    "setuptools-scm"
   ],
   "korean-lunar-calendar": [
     "setuptools"
@@ -8505,6 +8700,9 @@
   "liquidctl": [
     "setuptools"
   ],
+  "lit": [
+    "setuptools"
+  ],
   "littleutils": [
     "setuptools"
   ],
@@ -8522,6 +8720,10 @@
   ],
   "lizard": [
     "setuptools"
+  ],
+  "llama-cpp-python": [
+    "setuptools",
+    "scikit-build"
   ],
   "llfuse": [
     "cython",
@@ -8549,7 +8751,7 @@
     "setuptools"
   ],
   "loca": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "localimport": [
@@ -8668,6 +8870,9 @@
   ],
   "lxml": [
     "cython",
+    "setuptools"
+  ],
+  "lxml-stubs": [
     "setuptools"
   ],
   "lyricwikia": [
@@ -8889,6 +9094,9 @@
   "maxminddb": [
     "setuptools"
   ],
+  "maxminddb-geolite2": [
+    "setuptools"
+  ],
   "maya": [
     "setuptools"
   ],
@@ -8954,7 +9162,6 @@
   ],
   "mediafile": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "mediapy": [
@@ -9135,6 +9342,9 @@
   "mixer": [
     "setuptools"
   ],
+  "mixpanel": [
+    "setuptools"
+  ],
   "mizani": [
     "setuptools"
   ],
@@ -9150,10 +9360,16 @@
     "poetry",
     "setuptools"
   ],
+  "mkdocs-awesome-pages-plugin": [
+    "poetry"
+  ],
   "mkdocs-drawio-exporter": [
     "setuptools"
   ],
   "mkdocs-exclude": [
+    "setuptools"
+  ],
+  "mkdocs-exclude-search": [
     "setuptools"
   ],
   "mkdocs-gen-files": [
@@ -9315,7 +9531,6 @@
   ],
   "more-itertools": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "more-properties": [
@@ -9552,10 +9767,16 @@
   "mypy-boto3-dynamodb": [
     "setuptools"
   ],
+  "mypy-boto3-ec2": [
+    "setuptools"
+  ],
   "mypy-boto3-events": [
     "setuptools"
   ],
   "mypy-boto3-lambda": [
+    "setuptools"
+  ],
+  "mypy-boto3-logs": [
     "setuptools"
   ],
   "mypy-boto3-rds": [
@@ -9565,6 +9786,9 @@
     "setuptools"
   ],
   "mypy-boto3-s3control": [
+    "setuptools"
+  ],
+  "mypy-boto3-secretsmanager": [
     "setuptools"
   ],
   "mypy-boto3-sns": [
@@ -9600,12 +9824,10 @@
   ],
   "myst-nb": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "myst-parser": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "nad-receiver": [
@@ -9825,6 +10047,9 @@
   "networkx": [
     "setuptools"
   ],
+  "newrelic": [
+    "setuptools"
+  ],
   "newversion": [
     "poetry-core",
     "setuptools"
@@ -9907,7 +10132,7 @@
     "setuptools"
   ],
   "nkdfu": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "nltk": [
@@ -10027,6 +10252,9 @@
     "setuptools"
   ],
   "nplusone": [
+    "setuptools"
+  ],
+  "npm": [
     "setuptools"
   ],
   "npyscreen": [
@@ -10486,6 +10714,9 @@
   "option": [
     "poetry-core"
   ],
+  "optional-django": [
+    "setuptools"
+  ],
   "opuslib": [
     "setuptools"
   ],
@@ -10596,6 +10827,9 @@
   "overly": [
     "setuptools"
   ],
+  "overrides": [
+    "setuptools"
+  ],
   "ovh": [
     "setuptools"
   ],
@@ -10622,8 +10856,24 @@
     "setuptools"
   ],
   "packaging": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "20.4"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "20.4",
+      "until": "20.8"
+    },
+    {
+      "buildSystem": "setuptools",
+      "from": "20.8",
+      "until": "22.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "22.0"
+    }
   ],
   "packbits": [
     "setuptools"
@@ -10676,7 +10926,11 @@
   ],
   "pandas": [
     "cython",
-    "setuptools"
+    "setuptools",
+    {
+      "buildSystem": "versioneer",
+      "from": "2.0.0"
+    }
   ],
   "pandas-datareader": [
     "setuptools"
@@ -10698,6 +10952,9 @@
     "setuptools"
   ],
   "panflute": [
+    "setuptools"
+  ],
+  "pao": [
     "setuptools"
   ],
   "papermill": [
@@ -10889,6 +11146,10 @@
   "pdb2pqr": [
     "setuptools"
   ],
+  "pdbpp": [
+    "setuptools",
+    "setuptools-scm"
+  ],
   "pdbtools": [
     "setuptools"
   ],
@@ -10949,7 +11210,13 @@
     "setuptools",
     "setuptools-scm"
   ],
+  "peft": [
+    "setuptools"
+  ],
   "pelican": [
+    "setuptools"
+  ],
+  "pem": [
     "setuptools"
   ],
   "pencompy": [
@@ -10964,7 +11231,6 @@
   ],
   "pep440": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "pep440-version-utils": [
@@ -11006,7 +11272,6 @@
   ],
   "pex": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "pexif": [
@@ -11136,6 +11401,10 @@
   ],
   "pip-api": [
     "setuptools"
+  ],
+  "pip-licenses": [
+    "setuptools",
+    "pytest-runner"
   ],
   "pip-requirements-parser": [
     "setuptools",
@@ -11755,6 +12024,10 @@
   "py-cid": [
     "setuptools"
   ],
+  "py-cord": [
+    "setuptools",
+    "setuptools-scm"
+  ],
   "py-cpuinfo": [
     "setuptools"
   ],
@@ -11796,6 +12069,9 @@
     "setuptools"
   ],
   "py-nightscout": [
+    "setuptools"
+  ],
+  "py-partiql-parser": [
     "setuptools"
   ],
   "py-scrypt": [
@@ -11871,6 +12147,9 @@
   ],
   "pyairnow": [
     "poetry-core",
+    "setuptools"
+  ],
+  "pyairtable": [
     "setuptools"
   ],
   "pyairvisual": [
@@ -12690,6 +12969,9 @@
   "pykrakenapi": [
     "setuptools"
   ],
+  "pykube-ng": [
+    "setuptools"
+  ],
   "pykulersky": [
     "setuptools"
   ],
@@ -12764,7 +13046,8 @@
     "setuptools"
   ],
   "pylint-plugin-utils": [
-    "setuptools"
+    "setuptools",
+    "poetry"
   ],
   "pylint-venv": [
     "poetry-core"
@@ -12828,6 +13111,9 @@
     "setuptools"
   ],
   "pymanopt": [
+    "setuptools"
+  ],
+  "pymarkdown": [
     "setuptools"
   ],
   "pymarshal": [
@@ -13139,6 +13425,9 @@
   "pypck": [
     "setuptools"
   ],
+  "pypdf": [
+    "flit"
+  ],
   "pypdf2": [
     "setuptools"
   ],
@@ -13309,16 +13598,31 @@
   "pyramid-chameleon": [
     "setuptools"
   ],
+  "pyramid-deferred-sqla": [
+    "setuptools"
+  ],
   "pyramid-exclog": [
+    "setuptools"
+  ],
+  "pyramid-force-https": [
     "setuptools"
   ],
   "pyramid-hawkauth": [
     "setuptools"
   ],
+  "pyramid-heroku": [
+    "setuptools"
+  ],
   "pyramid-jinja2": [
     "setuptools"
   ],
+  "pyramid-jwt": [
+    "setuptools"
+  ],
   "pyramid-mako": [
+    "setuptools"
+  ],
+  "pyramid-mixpanel": [
     "setuptools"
   ],
   "pyramid-multiauth": [
@@ -13326,6 +13630,21 @@
   ],
   "pyramid-openapi3": [
     "poetry"
+  ],
+  "pyramid-redirect": [
+    "setuptools"
+  ],
+  "pyramid-redis": [
+    "setuptools"
+  ],
+  "pyramid-retry": [
+    "setuptools"
+  ],
+  "pyramid-splinter": [
+    "setuptools"
+  ],
+  "pyramid-tm": [
+    "setuptools"
   ],
   "pyreadability": [
     "setuptools"
@@ -13794,7 +14113,8 @@
     "setuptools-scm"
   ],
   "pytest-bdd": [
-    "setuptools"
+    "setuptools",
+    "poetry-core"
   ],
   "pytest-benchmark": [
     "setuptools"
@@ -13814,15 +14134,15 @@
     "setuptools"
   ],
   "pytest-celery": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "pytest-check": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "pytest-cid": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "pytest-clarity": [
@@ -13980,7 +14300,6 @@
   ],
   "pytest-param-files": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "pytest-profiling": [
@@ -14002,7 +14321,6 @@
   ],
   "pytest-raisin": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "pytest-random-order": [
@@ -14043,12 +14361,21 @@
   "pytest-shutil": [
     "setuptools"
   ],
+  "pytest-skip-slow": [
+    "setuptools"
+  ],
   "pytest-snapshot": [
     "setuptools",
     "setuptools-scm"
   ],
   "pytest-socket": [
     "poetry-core",
+    "setuptools"
+  ],
+  "pytest-splinter": [
+    "setuptools"
+  ],
+  "pytest-splinter4": [
     "setuptools"
   ],
   "pytest-subprocess": [
@@ -14339,6 +14666,9 @@
     "pbr",
     "setuptools"
   ],
+  "python-language-server": [
+    "setuptools"
+  ],
   "python-ldap": [
     "setuptools"
   ],
@@ -14496,9 +14826,6 @@
     "setuptools"
   ],
   "python-ptrace": [
-    "setuptools"
-  ],
-  "python-pushover": [
     "setuptools"
   ],
   "python-rabbitair": [
@@ -14662,6 +14989,9 @@
     "setuptools"
   ],
   "pythonnet": [
+    "setuptools"
+  ],
+  "pythonping": [
     "setuptools"
   ],
   "pythran": [
@@ -15183,8 +15513,18 @@
   "rcssmin": [
     "setuptools"
   ],
-  "rdflib": [
+  "rdbms-subsetter": [
     "setuptools"
+  ],
+  "rdflib": [
+    {
+      "buildSystem": "setuptools",
+      "until": "6.3.0"
+    },
+    {
+      "buildSystem": "poetry",
+      "from": "6.3.0"
+    }
   ],
   "rdkit": [
     "setuptools"
@@ -15288,6 +15628,9 @@
     "setuptools"
   ],
   "reparser": [
+    "setuptools"
+  ],
+  "repath": [
     "setuptools"
   ],
   "repeated-test": [
@@ -15404,6 +15747,9 @@
   "respx": [
     "setuptools"
   ],
+  "resteasy": [
+    "setuptools"
+  ],
   "restfly": [
     "setuptools"
   ],
@@ -15469,6 +15815,9 @@
   "rich": [
     "poetry-core",
     "setuptools"
+  ],
+  "rich-argparse-plus": [
+    "flit"
   ],
   "rich-rst": [
     "setuptools"
@@ -15655,7 +16004,7 @@
     "setuptools"
   ],
   "rsskey": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "rst2ansi": [
@@ -15918,7 +16267,7 @@
     "cython",
     "setuptools"
   ],
-  "scikit-image": [
+  "scikitimage": [
     "cython",
     "setuptools"
   ],
@@ -16362,6 +16711,9 @@
   "skytemple-ssb-debugger": [
     "setuptools"
   ],
+  "slack-bolt": [
+    "setuptools"
+  ],
   "slack-sdk": [
     "setuptools"
   ],
@@ -16514,7 +16866,7 @@
     "setuptools"
   ],
   "solo-python": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "somajo": [
@@ -16528,6 +16880,9 @@
   ],
   "sonarr": [
     "setuptools"
+  ],
+  "sonora": [
+    "poetry-core"
   ],
   "sopel": [
     "setuptools"
@@ -16613,6 +16968,7 @@
   ],
   "sphinx": [
     "cython",
+    "flit-core",
     "setuptools"
   ],
   "sphinx-argparse": [
@@ -16644,19 +17000,17 @@
   ],
   "sphinx-design": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "sphinx-external-toc": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "sphinx-fortran": [
     "setuptools"
   ],
   "sphinx-inline-tabs": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "sphinx-jinja": [
@@ -16674,7 +17028,6 @@
   ],
   "sphinx-mdinclude": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "sphinx-multitoc-numbering": [
@@ -16685,7 +17038,6 @@
   ],
   "sphinx-pytest": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "sphinx-rtd-theme": [
@@ -16875,7 +17227,14 @@
     "setuptools"
   ],
   "sqlparse": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.4.4"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "0.4.4"
+    }
   ],
   "srp": [
     "setuptools"
@@ -16970,6 +17329,9 @@
     "cython",
     "setuptools"
   ],
+  "statuscake": [
+    "setuptools"
+  ],
   "stdiomask": [
     "setuptools"
   ],
@@ -17056,7 +17418,7 @@
     "setuptools"
   ],
   "structlog": [
-    "flitBuildHook",
+    "flit-core",
     "hatch-fancy-pypi-readme",
     "hatch-vcs",
     "hatchling",
@@ -17108,6 +17470,9 @@
     "setuptools"
   ],
   "subzerod": [
+    "setuptools"
+  ],
+  "suds-community": [
     "setuptools"
   ],
   "sumo": [
@@ -17233,6 +17598,10 @@
   "tabview": [
     "setuptools"
   ],
+  "tacacs-plus": [
+    "setuptools",
+    "pytest-runner"
+  ],
   "tadasets": [
     "setuptools"
   ],
@@ -17253,7 +17622,26 @@
     "setuptools"
   ],
   "tan": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "22.12.0"
+    },
+    {
+      "buildSystem": "setuptools-scm",
+      "until": "22.12.0"
+    },
+    {
+      "buildSystem": "hatchling",
+      "from": "22.12.0"
+    },
+    {
+      "buildSystem": "hatch-vcs",
+      "from": "22.12.0"
+    },
+    {
+      "buildSystem": "hatch-fancy-pypi-readme",
+      "from": "22.12.0"
+    }
   ],
   "tank-utility": [
     "setuptools"
@@ -17548,7 +17936,7 @@
     "setuptools"
   ],
   "threadpoolctl": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "threat9-test-bed": [
@@ -17619,7 +18007,6 @@
   ],
   "tinycss2": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "tinydb": [
@@ -17635,6 +18022,9 @@
   "titlecase": [
     "setuptools",
     "setuptools-scm"
+  ],
+  "tkcalendar": [
+    "setuptools"
   ],
   "tkinter": [
     "setuptools"
@@ -17694,9 +18084,18 @@
   "toml-sort": [
     "poetry"
   ],
+  "tomlcheck": [
+    "poetry"
+  ],
   "tomli": [
-    "flit-core",
-    "setuptools"
+    {
+      "buildSystem": "poetry-core",
+      "until": "1.0.2"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "1.0.2"
+    }
   ],
   "tomli-w": [
     "flit-core",
@@ -17725,6 +18124,9 @@
     "setuptools"
   ],
   "torchaudio-bin": [
+    "setuptools"
+  ],
+  "torchfile": [
     "setuptools"
   ],
   "torchgpipe": [
@@ -17924,7 +18326,7 @@
     "setuptools"
   ],
   "turnt": [
-    "flitBuildHook",
+    "flit-core",
     "setuptools"
   ],
   "tusker": [
@@ -18031,6 +18433,9 @@
     "setuptools-scm"
   ],
   "typecode-libmagic": [
+    "setuptools"
+  ],
+  "typecov": [
     "setuptools"
   ],
   "typed-argument-parser": [
@@ -18162,6 +18567,9 @@
     "setuptools"
   ],
   "types-pygments": [
+    "setuptools"
+  ],
+  "types-pyopenssl": [
     "setuptools"
   ],
   "types-python-dateutil": [
@@ -18437,7 +18845,7 @@
     "setuptools"
   ],
   "url-normalize": [
-    "poetry-core",
+    "poetry",
     "setuptools"
   ],
   "urlextract": [
@@ -18447,6 +18855,14 @@
     "setuptools"
   ],
   "urllib3": [
+    {
+      "buildSystem": "flit-core",
+      "until": "2.0.2"
+    },
+    {
+      "buildSystem": "hatchling",
+      "from": "2.0.2"
+    },
     "setuptools"
   ],
   "urlpy": [
@@ -18675,6 +19091,9 @@
     "setuptools"
   ],
   "volvooncall": [
+    "setuptools"
+  ],
+  "vonage": [
     "setuptools"
   ],
   "vowpalwabbit": [
@@ -18918,7 +19337,14 @@
     "setuptools"
   ],
   "wheel": [
-    "setuptools"
+    {
+      "buildSystem": "setuptools",
+      "until": "0.40.0"
+    },
+    {
+      "buildSystem": "flit-core",
+      "from": "0.40.0"
+    }
   ],
   "wheel-filename": [
     "setuptools"
@@ -18961,6 +19387,9 @@
     "setuptools"
   ],
   "wifi": [
+    "setuptools"
+  ],
+  "wikitextparser": [
     "setuptools"
   ],
   "willow": [
@@ -19265,6 +19694,9 @@
   "yara-python": [
     "setuptools"
   ],
+  "yaralyzer": [
+    "poetry"
+  ],
   "yarg": [
     "setuptools"
   ],
@@ -19399,7 +19831,6 @@
   ],
   "zeversolarlocal": [
     "flit-core",
-    "flitBuildHook",
     "setuptools"
   ],
   "zfec": [
@@ -19518,6 +19949,9 @@
     "setuptools"
   ],
   "zope-size": [
+    "setuptools"
+  ],
+  "zope-sqlalchemy": [
     "setuptools"
   ],
   "zope-testbrowser": [

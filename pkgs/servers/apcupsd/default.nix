@@ -14,36 +14,39 @@ stdenv.mkDerivation rec {
     sha256 = "0rwqiyzlg9p0szf3x6q1ppvrw6f6dbpn2rc5z623fk3bkdalhxyv";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ util-linux man ] ++ lib.optional enableCgiScripts gd;
+  nativeBuildInputs = [ pkg-config man util-linux ];
+  buildInputs = lib.optional enableCgiScripts gd;
 
   prePatch = ''
     sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
         -i ./src/apcagent/Makefile ./autoconf/targets.mak
   '';
 
+  preConfigure = ''
+    sed -i 's|/bin/cat|${coreutils}/bin/cat|' configure
+  '';
+
   # ./configure ignores --prefix, so we must specify some paths manually
   # There is no real reason for a bin/sbin split, so just use bin.
-  preConfigure = ''
-    export ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown
-    export ac_cv_path_WALL=${wall}/bin/wall
-    sed -i 's|/bin/cat|${coreutils}/bin/cat|' configure
-    export configureFlags="\
-        --bindir=$out/bin \
-        --sbindir=$out/bin \
-        --sysconfdir=$out/etc/apcupsd \
-        --mandir=$out/share/man \
-        --with-halpolicydir=$out/share/halpolicy \
-        --localstatedir=/var/ \
-        --with-nologin=/run \
-        --with-log-dir=/var/log/apcupsd \
-        --with-pwrfail-dir=/run/apcupsd \
-        --with-lock-dir=/run/lock \
-        --with-pid-dir=/run \
-        --enable-usb \
-        ${lib.optionalString enableCgiScripts "--enable-cgi --with-cgi-bin=$out/libexec/cgi-bin"}
-        "
-  '';
+  configureFlags = [
+    "--bindir=${placeholder "out"}/bin"
+    "--sbindir=${placeholder "out"}/bin"
+    "--sysconfdir=${placeholder "out"}/etc/apcupsd"
+    "--mandir=${placeholder "out"}/share/man"
+    "--with-halpolicydir=${placeholder "out"}/share/halpolicy"
+    "--localstatedir=/var"
+    "--with-nologin=/run"
+    "--with-log-dir=/var/log/apcupsd"
+    "--with-pwrfail-dir=/run/apcupsd"
+    "--with-lock-dir=/run/lock"
+    "--with-pid-dir=/run"
+    "--enable-usb"
+    "ac_cv_path_SHUTDOWN=${systemd}/sbin/shutdown"
+    "ac_cv_path_WALL=${wall}/bin/wall"
+  ] ++ lib.optionals enableCgiScripts [
+    "--enable-cgi"
+    "--with-cgi-bin=${placeholder "out"}/libexec/cgi-bin"
+  ];
 
   postInstall = ''
     for file in "$out"/etc/apcupsd/*; do

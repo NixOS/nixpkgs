@@ -35,6 +35,9 @@ let
     };
 
     nativeBuildInputs = [ cmake ninja flex bison ];
+
+    # https://github.com/nanomq/idl-serial/issues/36
+    hardeningDisable = [ "fortify3" ];
   };
 
 in stdenv.mkDerivation (finalAttrs: {

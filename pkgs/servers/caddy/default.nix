@@ -7,12 +7,12 @@
 , installShellFiles
 }:
 let
-  version = "2.6.4";
+  version = "2.7.5";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     rev = "v${version}";
-    hash = "sha256-SJO1q4g9uyyky9ZYSiqXJgNIvyxT5RjrpYd20YDx8ec=";
+    hash = "sha256-b4cDDUcdVoB7kU677nrKf8W/5QMnB5vEaPYVBMllEA8=";
   };
 in
 buildGoModule {
@@ -23,10 +23,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    hash = "sha256-3a3+nFHmGONvL/TyQRqgJtrSDIn0zdGy9YwhZP17mU0=";
+    hash = "sha256-0IZZ7mkEzZI2Y8ed//m0tbBQZ0YcCXA0/b10ntNIXUk=";
   };
 
-  vendorHash = "sha256-toi6efYZobjDV3YPT9seE/WZAzNaxgb1ioVG4txcuXM=";
+  vendorHash = "sha256-YNcQtjPGQ0XMSog+sWlH4lG/QdbdI0Lyh/fUGqQUFaY=";
 
   subPackages = [ "cmd/caddy" ];
 
@@ -46,7 +46,7 @@ buildGoModule {
     $out/bin/caddy manpage --directory manpages
     installManPage manpages/*
 
-    installShellCompletion --cmd metal \
+    installShellCompletion --cmd caddy \
       --bash <($out/bin/caddy completion bash) \
       --fish <($out/bin/caddy completion fish) \
       --zsh <($out/bin/caddy completion zsh)

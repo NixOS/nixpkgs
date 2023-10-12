@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "jmhobbs";
     repo = "terminal-parrot";
     rev = version;
-    sha256 = "1b4vr4s1zpkpf5kc1r2kdlp3hf88qp1f7h05g8kd62zf4sfbj722";
+    hash = "sha256-Qhy5nCbuC9MmegXA48LFCDk4Lm1T5MBmcXfeHzTJm6w=";
   };
 
-  vendorSha256 = "1qalnhhq3fmyzj0hkzc5gk9wbypr558mz3ik5msw7fid68k2i48c";
+  vendorHash = "sha256-DJEoJjItusN1LTOOX1Ep+frF03yF/QmB/L66gSG0VOE=";
 
   doCheck = false;
 

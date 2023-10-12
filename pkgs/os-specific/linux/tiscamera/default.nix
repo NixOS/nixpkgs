@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     wrapGAppsHook
+    gobject-introspection
   ] ++ lib.optionals withDoc [
     sphinx
     graphviz
@@ -81,7 +82,6 @@ stdenv.mkDerivation rec {
     pcre
     zstd
     glib
-    gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

@@ -4,7 +4,6 @@
 , verilog
 , verilator
 , gnumake
-, gcc
 , edalize
 , fastjsonschema
 , pyparsing

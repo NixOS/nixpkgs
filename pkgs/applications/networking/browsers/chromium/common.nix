@@ -1,4 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch
+, buildPackages
+, pkgsBuildBuild
+, pkgsBuildTarget
 # Channel data:
 , channel, upstream-info
 # Helper functions:
@@ -8,7 +11,9 @@
 , ninja, pkg-config
 , python3, perl
 , which
-, llvmPackages
+, llvmPackages_attrName
+, libuuid
+, overrideCC
 # postPatch:
 , pkgsBuildHost
 # configurePhase:
@@ -115,6 +120,33 @@ let
     inherit (upstream-info.deps.ungoogled-patches) rev sha256;
   };
 
+  # There currently isn't a (much) more concise way to get a stdenv
+  # that uses lld as its linker without bootstrapping pkgsLLVM; see
+  # https://github.com/NixOS/nixpkgs/issues/142901
+  buildPlatformLlvmStdenv =
+    let
+      llvmPackages = pkgsBuildBuild.${llvmPackages_attrName};
+    in
+      overrideCC llvmPackages.stdenv
+        (llvmPackages.stdenv.cc.override {
+          inherit (llvmPackages) bintools;
+        });
+
+  chromiumRosettaStone = {
+    cpu = platform:
+      let name = platform.parsed.cpu.name;
+      in ({ "x86_64" = "x64";
+            "i686" = "x86";
+            "arm" = "arm";
+            "aarch64" = "arm64";
+          }.${platform.parsed.cpu.name}
+        or (throw "no chromium Rosetta Stone entry for cpu: ${name}"));
+    os = platform:
+      if platform.isLinux
+      then "linux"
+      else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
+  };
+
   base = rec {
     pname = "${packageName}-unwrapped";
     inherit (upstream-info) version;
@@ -129,16 +161,35 @@ let
       ninja pkg-config
       python3WithPackages perl
       which
-      llvmPackages.bintools
+      buildPackages.${llvmPackages_attrName}.bintools
       bison gperf
     ];
+
+    depsBuildBuild = [
+      buildPlatformLlvmStdenv
+      buildPlatformLlvmStdenv.cc
+      pkg-config
+      libuuid
+      libpng # needed for "host/generate_colors_info"
+    ]
+    # When cross-compiling, chromium builds a huge proportion of its
+    # components for both the `buildPlatform` (which it calls
+    # `host`) as well as for the `hostPlatform` -- easily more than
+    # half of the dependencies are needed here.  To avoid having to
+    # maintain a separate list of buildPlatform-dependencies, we
+    # simply throw in the kitchen sink.
+    ++ buildInputs
+    ;
 
     buildInputs = [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
       bzip2 flac speex opusWithCustomModes
       libevent expat libjpeg snappy
       libcap
-      xdg-utils minizip libwebp
+    ] ++ lib.optionals (!xdg-utils.meta.broken) [
+      xdg-utils
+    ] ++ [
+      minizip libwebp
       libusb1 re2
       ffmpeg libxslt libxml2
       nasm
@@ -155,13 +206,13 @@ let
       curl
       libepoxy
       libffi
-    ] ++ lib.optionals (chromiumVersionAtLeast "114") [
       libevdev
     ] ++ lib.optional systemdSupport systemd
       ++ lib.optionals cupsSupport [ libgcrypt cups ]
       ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
+      ./cross-compile.patch
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
@@ -170,6 +221,13 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+      # We need to revert this patch to build M114+ with LLVM 16:
+      (githubPatch {
+        # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
+        commit = "54969766fd2029c506befc46e9ce14d67c7ed02a";
+        sha256 = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
+        revert = true;
+      })
     ];
 
     postPatch = ''
@@ -192,14 +250,20 @@ let
         fi
       done
 
-      # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
-      substituteInPlace native_client/SConstruct --replace "#! -*- python -*-" ""
+      if [[ -e native_client/SConstruct ]]; then
+        # Required for patchShebangs (unsupported interpreter directive, basename: invalid option -- '*', etc.):
+        substituteInPlace native_client/SConstruct --replace "#! -*- python -*-" ""
+      fi
       if [ -e third_party/harfbuzz-ng/src/src/update-unicode-tables.make ]; then
         substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
-      chmod -x third_party/webgpu-cts/src/tools/run_deno
-      chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
+      if [ -e third_party/webgpu-cts/src/tools/run_deno ]; then
+        chmod -x third_party/webgpu-cts/src/tools/run_deno
+      fi
+      if [ -e third_party/dawn/third_party/webgpu-cts/tools/run_deno ]; then
+        chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
+      fi
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
@@ -218,6 +282,7 @@ let
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
+    '' + lib.optionalString (!xdg-utils.meta.broken) ''
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
@@ -234,6 +299,12 @@ let
       # We need the fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1254408:
       base64 --decode ${clangFormatPython3} > buildtools/linux64/clang-format
 
+      # Add final newlines to scripts that do not end with one.
+      # This is a temporary workaround until https://github.com/NixOS/nixpkgs/pull/255463 (or similar) has been merged,
+      # as patchShebangs hard-crashes when it encounters files that contain only a shebang and do not end with a final
+      # newline.
+      find . -type f -perm -0100 -exec sed -i -e '$a\' {} +
+
       patchShebangs .
       # Link to our own Node.js and Java (required during the build):
       mkdir -p third_party/node/linux/node-linux-x64/bin
@@ -243,7 +314,7 @@ let
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
-    '' + lib.optionalString stdenv.isAarch64 ''
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '' + lib.optionalString ungoogled ''
@@ -261,9 +332,27 @@ let
       # weaken or disable security measures like sandboxing or ASLR):
       is_official_build = true;
       disable_fieldtrial_testing_config = true;
+
+      # note: chromium calls buildPlatform "host" and calls hostPlatform "target"
+      host_cpu      = chromiumRosettaStone.cpu stdenv.buildPlatform;
+      host_os       = chromiumRosettaStone.os  stdenv.buildPlatform;
+      target_cpu    = chromiumRosettaStone.cpu stdenv.hostPlatform;
+      v8_target_cpu = chromiumRosettaStone.cpu stdenv.hostPlatform;
+      target_os     = chromiumRosettaStone.os  stdenv.hostPlatform;
+
       # Build Chromium using the system toolchain (for Linux distributions):
+      #
+      # What you would expect to be caled "target_toolchain" is
+      # actually called either "default_toolchain" or "custom_toolchain",
+      # depending on which part of the codebase you are in; see:
+      # https://github.com/chromium/chromium/blob/d36462cc9279464395aea5e65d0893d76444a296/build/config/BUILDCONFIG.gn#L17-L44
       custom_toolchain = "//build/toolchain/linux/unbundle:default";
-      host_toolchain = "//build/toolchain/linux/unbundle:default";
+      host_toolchain = "//build/toolchain/linux/unbundle:host";
+      v8_snapshot_toolchain = "//build/toolchain/linux/unbundle:host";
+
+      host_pkg_config = "${pkgsBuildBuild.pkg-config}/bin/pkg-config";
+      pkg_config      = "${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config";
+
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
       # Because we use a different toolchain / compiler version:
@@ -283,7 +372,6 @@ let
 
       # Optional features:
       use_gio = true;
-      use_gnome_keyring = false; # Superseded by libsecret
       use_cups = cupsSupport;
 
       # Feature overrides:
@@ -297,11 +385,20 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
-      clang_base_path = "${llvmPackages.clang}";
+      clang_base_path = "${pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc}";
       use_qt = false;
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
+      # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
+      # We do intentionally not set rustc_version as nixpkgs will never do incremental
+      # rebuilds, thus leaving this empty is fine.
+      rust_sysroot_absolute = "${buildPackages.rustc}";
+      # Building with rust is disabled for now - this matches the flags in other major distributions.
+      enable_rust = false;
+    } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
+      # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
+      arm_control_flow_integrity = "none";
     } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -331,6 +428,11 @@ let
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
     env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+    env.BUILD_CC = "$CC_FOR_BUILD";
+    env.BUILD_CXX = "$CXX_FOR_BUILD";
+    env.BUILD_AR = "$AR_FOR_BUILD";
+    env.BUILD_NM = "$NM_FOR_BUILD";
+    env.BUILD_READELF = "$READELF_FOR_BUILD";
 
     buildPhase = let
       buildCommand = target: ''
@@ -363,7 +465,12 @@ let
         gn = gnChromium;
       };
     };
-  };
+  }
+  # overwrite `version` with the exact same `version` from the same source,
+  # except it internally points to `upstream-info.nix` for
+  # `builtins.unsafeGetAttrPos`, which is used by ofborg to decide
+  # which maintainers need to be pinged.
+  // builtins.removeAttrs upstream-info (builtins.filter (e: e != "version") (builtins.attrNames upstream-info));
 
 # Remove some extraAttrs we supplied to the base attributes already.
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [

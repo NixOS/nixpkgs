@@ -1,0 +1,1 @@
+pkgs.nonDerivation: This attribute defined by pkgs/by-name/no/nonDerivation/package.nix is not a derivation

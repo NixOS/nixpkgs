@@ -4,7 +4,6 @@
 , python3Packages
 , gnupg
 , pass
-, makeWrapper
 }:
 
 python3Packages.buildPythonApplication rec {

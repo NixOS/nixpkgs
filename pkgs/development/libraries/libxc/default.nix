@@ -2,14 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "libxc";
-  version = "6.1.0";
+  version = "6.2.2";
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    hash = "sha256-PqKqZbL9Y7lKu7tKo+DfAhoEeFSsYWEcwiFX41VhRIs=";
+    hash = "sha256-JYhuyW95I7Q0edLIe7H//+ej5vh6MdAGxXjmNxDMuhQ=";
   };
+
+  # Timeout increase has already been included upstream in master.
+  # Check upon updates if this can be removed.
+  postPatch = ''
+    substituteInPlace testsuite/CMakeLists.txt \
+        --replace "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
+  '';
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ perl cmake gfortran ];
 
@@ -20,6 +29,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_FORTRAN=ON"
     "-DBUILD_SHARED_LIBS=ON"
+    "-DENABLE_XHOST=OFF"
     # Force compilation of higher derivatives
     "-DDISABLE_VXC=0"
     "-DDISABLE_FXC=0"

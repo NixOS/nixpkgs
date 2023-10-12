@@ -1,6 +1,4 @@
-{ fetchgit
-, lib
-, makeDesktopItem
+{ lib
 , node_webkit
 , pkgs
 , runCommand
@@ -25,10 +23,10 @@ let
   # define a shortcut to get to onlykey.
   onlykey = self."${onlykeyPkg}";
 
-  super = (import ./onlykey.nix {
+  super = import ./onlykey.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
-  });
+  };
 
   self = super // {
     "${onlykeyPkg}" = super."${onlykeyPkg}".override (attrs: {
@@ -48,14 +46,6 @@ let
   script = writeShellScript "${onlykey.packageName}-starter-${onlykey.version}" ''
     ${node_webkit}/bin/nw ${onlykey}/lib/node_modules/${onlykey.packageName}/build
   '';
-
-  desktop = makeDesktopItem {
-    name = onlykey.packageName;
-    exec = script;
-    icon = "${onlykey}/lib/node_modules/${onlykey.packageName}/resources/onlykey_logo_128.png";
-    desktopName = onlykey.packageName;
-    genericName = onlykey.packageName;
-  };
 in
 runCommand "${onlykey.packageName}-${onlykey.version}" { } ''
   mkdir -p $out/bin

@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Scalable Machine Learn with Dask";
     homepage = "https://github.com/dask/dask-ml";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

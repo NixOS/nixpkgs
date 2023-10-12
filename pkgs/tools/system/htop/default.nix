@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       "--enable-capabilities"
       "--enable-delayacct"
     ]
-    ++ lib.optional sensorsSupport "--with-sensors"
+    ++ lib.optional sensorsSupport "--enable-sensors"
   ;
 
   postFixup =
@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ rob relrod SuperSandro2000 ];
     changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
+    mainProgram = "htop";
   };
 }

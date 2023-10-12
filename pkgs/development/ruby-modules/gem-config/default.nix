@@ -25,7 +25,7 @@
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
-, bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
+, bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 , autoSignDarwinBinariesHook, fetchpatch
 }@args:
@@ -239,9 +239,9 @@ in
   };
 
   gio2 = attrs: {
-    nativeBuildInputs = [ pkg-config ]
+    nativeBuildInputs = [ pkg-config gobject-introspection ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
-    buildInputs = [ gtk2 pcre pcre2 gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
+    buildInputs = [ gtk2 pcre pcre2 ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -281,6 +281,15 @@ in
 
   prettier = attrs: {
     meta.mainProgram = "rbprettier";
+  };
+
+  prometheus-client-mmap = attrs: {
+    dontBuild = false;
+    postPatch = let
+      getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
+    in ''
+      substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
+    '';
   };
 
   glib2 = attrs: {
@@ -564,9 +573,14 @@ in
   };
 
   pg = attrs: {
-    buildFlags = [
-      "--with-pg-config=${postgresql}/bin/pg_config"
-    ];
+    # Force pkg-config lookup for libpq.
+    # See https://github.com/ged/ruby-pg/blob/6629dec6656f7ca27619e4675b45225d9e422112/ext/extconf.rb#L34-L55
+    #
+    # Note that setting --with-pg-config=${postgresql}/bin/pg_config would add
+    # an unnecessary reference to the entire postgresql package.
+    buildFlags = [ "--with-pg-config=ignore" ];
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ postgresql ];
   };
 
   psych = attrs: {
@@ -616,6 +630,9 @@ in
 
   re2 = attrs: {
     buildInputs = [ re2 ];
+    buildFlags = [
+      "--enable-system-libraries"
+    ];
   };
 
   rest-client = attrs: {
@@ -696,6 +713,16 @@ in
     # https://github.com/NixOS/nixpkgs/issues/19098
     buildFlags = [ "--disable-lto" ];
   });
+
+  sass-embedded = attrs: {
+    # Patch the Rakefile to use our dart-sass and not try to fetch anything.
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace ext/sass/Rakefile \
+        --replace \'dart-sass/sass\' \'${dart-sass}/bin/sass\' \
+        --replace ' => %w[dart-sass]' ""
+    '';
+  };
 
   scrypt = attrs: lib.optionalAttrs stdenv.isDarwin {
     dontBuild = false;

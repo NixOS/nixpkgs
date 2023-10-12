@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "zkg";
-  version = "2.13.0";
+  version = "2.14.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "zeek";
     repo = "package-manager";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kQFm8VlbvJ791Ll8b0iu6xqaxhYTf41jTmvGxLgIzuE=";
+    hash = "sha256-HdOzxSU3XWz1ZH96woDWrHzKbpJW3/IKkpc2tGfyi9o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -11,19 +11,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scryer-prolog";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "mthom";
     repo = "scryer-prolog";
     rev = "v${version}";
-    sha256 = "bDLVOXX9nv6Guu5czRFkviJf7dBiaqt5O8SLUJlcBZo=";
+    hash = "sha256-68wtRFkJh8OIdauSIyJ29en399TLnaRaRxw+5bkykxk=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "dashu-0.3.1" = "sha256-bovPjLs98oj8/e/X/9GIYCzArzGfshjoeHU7IHdnq30=";
+      "libffi-3.2.0" = "sha256-GcNcXJCfiJp/7X5FXQJ/St0SmsPlCyeM8/s9FR+VE+M=";
       "modular-bitfield-0.11.2" = "sha256-vcx+xt5owZVWOlKwudAr0EB1zlLLL5pVfWokw034BQI=";
+      "num-modular-0.5.2" = "sha256-G4Kr3BMbXprC6tbG3mY/fOi2sQzaepOTeC4vDiOKWUM=";
     };
   };
 

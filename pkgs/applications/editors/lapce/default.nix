@@ -7,8 +7,6 @@
 , pkg-config
 , perl
 , fontconfig
-, copyDesktopItems
-, makeDesktopItem
 , glib
 , gtk3
 , openssl
@@ -24,21 +22,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.2.7";
+  version = "0.2.8";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xq/xLoVvETGp+Yxlh3wbg74R+U9eqjFOKJyt/AUybvU=";
+    sha256 = "sha256-cfQQ+PaInUB6B61sZ9iS/zt3L6Vc/vPOJTtEwR0BLco=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "druid-0.7.0" = "sha256-PJH+Y5PScM6KnPeb5lBLKpqe9nbG3bXIJK2y4V1IM9o=";
-      "druid-derive-0.4.0" = "sha256-PJH+Y5PScM6KnPeb5lBLKpqe9nbG3bXIJK2y4V1IM9o=";
-      "druid-shell-0.7.0" = "sha256-PJH+Y5PScM6KnPeb5lBLKpqe9nbG3bXIJK2y4V1IM9o=";
       "font-kit-0.11.0" = "sha256-MsUbFhWd3GdqchzwrRPuzpz3mNYde00HwA9EIRBc2SQ=";
       "fount-0.1.0" = "sha256-ptPnisGuzip3tQUuwtPU+ETiIzxMvIgAvlIGyGw/4wI=";
       "human-sort-0.2.2" = "sha256-tebgIJGXOY7pwWRukboKAzXY47l4Cn//0xMKQTaGu8w=";
@@ -86,11 +82,14 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  postPatch = ''
+    substituteInPlace lapce-ui/Cargo.toml --replace ", \"lapce-data/updater\"" ""
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
     perl
-    copyDesktopItems
     wrapGAppsHook # FIX: No GSettings schemas are installed on the system
     gobject-introspection
   ];
@@ -114,18 +113,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/lapce.svg
+    install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
+    install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
   '';
-
-  desktopItems = [ (makeDesktopItem {
-    name = "lapce";
-    exec = "lapce %F";
-    icon = "lapce";
-    desktopName = "Lapce";
-    comment = meta.description;
-    genericName = "Code Editor";
-    categories = [ "Development" "Utility" "TextEditor" ];
-  }) ];
 
   passthru.updateScript = nix-update-script { };
 

@@ -3,6 +3,7 @@
 , fetchCrate
 , curl
 , pkg-config
+, libgit2_1_5
 , openssl
 , stdenv
 , darwin
@@ -10,14 +11,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-unused-features";
-  version = "0.1.7";
+  version = "0.2.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-PdSR2nZbRzV2Kg2LNEpI7/Us+r8Gy6XLdUzMLei5r8c=";
+    hash = "sha256-gdwIbbQDw/DgBV9zY2Rk/oWjPv1SS/+oFnocsMo2Axo=";
   };
 
-  cargoSha256 = "sha256-Y0U5Qzj+S7zoXWemcSfMn0YS7wCAPj+ER0jao+f2B28=";
+  cargoHash = "sha256-K9I7Eg43BS2SKq5zZ3eZrMkmuHAx09OX240sH0eGs+k=";
 
   nativeBuildInputs = [
     curl.dev
@@ -26,17 +27,18 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     curl
+    libgit2_1_5
     openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreFoundation
-    Security
-  ]);
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreFoundation
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   meta = with lib; {
     description = "A tool to find potential unused enabled feature flags and prune them";
     homepage = "https://github.com/timonpost/cargo-unused-features";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
     mainProgram = "unused-features";
   };
 }

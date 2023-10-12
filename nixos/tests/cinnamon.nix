@@ -3,7 +3,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   meta.maintainers = lib.teams.cinnamon.members;
 
-  nodes.machine = { nodes, ... }: {
+  nodes.machine = { ... }: {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.desktopManager.cinnamon.enable = true;
@@ -13,7 +13,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   testScript = { nodes, ... }:
     let
-      user = nodes.machine.config.users.users.alice;
+      user = nodes.machine.users.users.alice;
       uid = toString user.uid;
       bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
       display = "DISPLAY=:0.0";

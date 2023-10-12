@@ -4,6 +4,7 @@ use File::Path qw(make_path);
 use File::Slurp;
 use Getopt::Long;
 use JSON;
+use Time::Piece;
 
 # Keep track of deleted uids and gids.
 my $uidMapFile = "/var/lib/nixos/uid-map";
@@ -20,6 +21,13 @@ sub updateFile {
     my ($path, $contents, $perms) = @_;
     return if $is_dry;
     write_file($path, { atomic => 1, binmode => ':utf8', perms => $perms // 0644 }, $contents) or die;
+}
+
+# Converts an ISO date to number of days since 1970-01-01
+sub dateToDays {
+    my ($date) = @_;
+    my $time = Time::Piece->strptime($date, "%Y-%m-%d");
+    return $time->epoch / 60 / 60 / 24;
 }
 
 sub nscdInvalidate {
@@ -147,7 +155,7 @@ foreach my $g (@{$spec->{groups}}) {
     if (defined $existing) {
         $g->{gid} = $existing->{gid} if !defined $g->{gid};
         if ($g->{gid} != $existing->{gid}) {
-            dry_print("warning: not applying", "warning: would not apply", "GID change of group ‘$name’ ($existing->{gid} -> $g->{gid})");
+            dry_print("warning: not applying", "warning: would not apply", "GID change of group ‘$name’ ($existing->{gid} -> $g->{gid}) in /etc/group");
             $g->{gid} = $existing->{gid};
         }
         $g->{password} = $existing->{password}; # do we want this?
@@ -209,7 +217,7 @@ foreach my $u (@{$spec->{users}}) {
     if (defined $existing) {
         $u->{uid} = $existing->{uid} if !defined $u->{uid};
         if ($u->{uid} != $existing->{uid}) {
-            dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid})");
+            dry_print("warning: not applying", "warning: would not apply", "UID change of user ‘$name’ ($existing->{uid} -> $u->{uid}) in /etc/passwd");
             $u->{uid} = $existing->{uid};
         }
     } else {
@@ -231,12 +239,12 @@ foreach my $u (@{$spec->{users}}) {
         chmod oct($u->{homeMode}), $u->{home};
     }
 
-    if (defined $u->{passwordFile}) {
-        if (-e $u->{passwordFile}) {
-            $u->{hashedPassword} = read_file($u->{passwordFile});
+    if (defined $u->{hashedPasswordFile}) {
+        if (-e $u->{hashedPasswordFile}) {
+            $u->{hashedPassword} = read_file($u->{hashedPasswordFile});
             chomp $u->{hashedPassword};
         } else {
-            warn "warning: password file ‘$u->{passwordFile}’ does not exist\n";
+            warn "warning: password file ‘$u->{hashedPasswordFile}’ does not exist\n";
         }
     } elsif (defined $u->{password}) {
         $u->{hashedPassword} = hashPassword($u->{password});
@@ -285,22 +293,26 @@ my %shadowSeen;
 
 foreach my $line (-f "/etc/shadow" ? read_file("/etc/shadow", { binmode => ":utf8" }) : ()) {
     chomp $line;
-    my ($name, $hashedPassword, @rest) = split(':', $line, -9);
-    my $u = $usersOut{$name};;
+    # struct name copied from `man 3 shadow`
+    my ($sp_namp, $sp_pwdp, $sp_lstch, $sp_min, $sp_max, $sp_warn, $sp_inact, $sp_expire, $sp_flag) = split(':', $line, -9);
+    my $u = $usersOut{$sp_namp};;
     next if !defined $u;
-    $hashedPassword = "!" if !$spec->{mutableUsers};
-    $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
-    chomp $hashedPassword;
-    push @shadowNew, join(":", $name, $hashedPassword, @rest) . "\n";
-    $shadowSeen{$name} = 1;
+    $sp_pwdp = "!" if !$spec->{mutableUsers};
+    $sp_pwdp = $u->{hashedPassword} if defined $u->{hashedPassword} && !$spec->{mutableUsers}; # FIXME
+    $sp_expire = dateToDays($u->{expires}) if defined $u->{expires};
+    chomp $sp_pwdp;
+    push @shadowNew, join(":", $sp_namp, $sp_pwdp, $sp_lstch, $sp_min, $sp_max, $sp_warn, $sp_inact, $sp_expire, $sp_flag) . "\n";
+    $shadowSeen{$sp_namp} = 1;
 }
 
 foreach my $u (values %usersOut) {
     next if defined $shadowSeen{$u->{name}};
     my $hashedPassword = "!";
     $hashedPassword = $u->{hashedPassword} if defined $u->{hashedPassword};
+    my $expires = "";
+    $expires = dateToDays($u->{expires}) if defined $u->{expires};
     # FIXME: set correct value for sp_lstchg.
-    push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::::") . "\n";
+    push @shadowNew, join(":", $u->{name}, $hashedPassword, "1::::", $expires, "") . "\n";
 }
 
 updateFile("/etc/shadow", \@shadowNew, 0640);

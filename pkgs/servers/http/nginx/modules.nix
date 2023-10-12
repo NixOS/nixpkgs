@@ -508,8 +508,8 @@ let self = {
     name = "njs";
     src = fetchhg {
       url = "https://hg.nginx.org/njs";
-      rev = "0.7.10";
-      sha256 = "sha256-/yKzY+BUFxLk8bWo+mqKfRVRsC2moe+WvhaRYIGdr6Y=";
+      rev = "0.8.1";
+      sha256 = "sha256-bFHrcA1ROMwYf+s0EWOXzkru6wvfRLvjvN8BV/r2tMc=";
       name = "nginx-njs";
     };
 
@@ -690,8 +690,8 @@ let self = {
       name = "set-misc";
       owner = "openresty";
       repo = "set-misc-nginx-module";
-      rev = "v0.32";
-      sha256 = "048a6jwinbjgxiprjj9ml3fdp0mhkx89g6ggams57fsx9m5vaxax";
+      rev = "v0.33";
+      hash = "sha256-jMMj3Ki1uSfQzagoB/O4NarxPjiaF9YRwjSKo+cgMxo=";
     };
 
     meta = with lib; {
@@ -1004,15 +1004,15 @@ let self = {
       name = "vts";
       owner = "vozlt";
       repo = "nginx-module-vts";
-      rev = "v0.2.1";
-      sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
+      rev = "v0.2.2";
+      sha256 = "sha256-ReTmYGVSOwtnYDMkQDMWwxw09vT4iHYfYZvgd8iBotk=";
     };
 
     meta = with lib; {
       description = "Virtual host traffic status module";
       homepage = "https://github.com/vozlt/nginx-module-vts";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 
@@ -1032,7 +1032,7 @@ let self = {
       description = "Nginx modules for the Zstandard compression";
       homepage = "https://github.com/tokers/zstd-nginx-module";
       license = with licenses; [ bsd2 ];
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };
 }; in self // lib.optionalAttrs config.allowAliases {

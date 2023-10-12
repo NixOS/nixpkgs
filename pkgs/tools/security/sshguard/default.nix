@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, autoreconfHook, bison, flex}:
 
 stdenv.mkDerivation rec {
-  version = "2.4.2";
+  version = "2.4.3";
   pname = "sshguard";
 
   src = fetchurl {
     url = "mirror://sourceforge/sshguard/${pname}-${version}.tar.gz";
-    sha256 = "1s1prqdbxjrd1n3j4x8ggy9gl2j0ax6xhkzcvyzajw7awmvbfw17";
+    sha256 = "sha256-ZAKd7/bekP3u+x9JfUFPDkBFB2aTqR2hpw63WV6X7+s=";
   };
 
   doCheck = true;

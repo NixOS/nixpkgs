@@ -8,7 +8,7 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "json-data-encoding";
-    rev = "${version}";
+    rev = version;
     hash = "sha256-ticulOKiFNQIZNFOQE9UQOw/wqRfygQwLVIc4kkmwg4=";
   };
 

@@ -8,6 +8,8 @@
 , pkg-config
 , numpy
 , openblas
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -23,6 +25,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     patchShebangs .
+
+    substituteInPlace pyproject.toml \
+      --replace 'numpy==' 'numpy>='
   '';
 
   nativeBuildInputs = [
@@ -30,7 +35,10 @@ buildPythonPackage rec {
     gfortran
     git
     meson-python
+    numpy
     pkg-config
+    setuptools
+    wheel
   ];
 
   buildInputs = [

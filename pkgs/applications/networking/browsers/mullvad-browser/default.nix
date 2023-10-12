@@ -6,6 +6,7 @@
 , makeWrapper
 , writeText
 , wrapGAppsHook
+, callPackage
 
 # Common run-time dependencies
 , zlib
@@ -77,12 +78,19 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "12.0.6";
+  version = "12.5.6";
 
-  srcs = {
+  sources = {
     x86_64-linux = fetchurl {
-      url = "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz";
-      hash = "sha256-XE6HFU38FhnikxGHRHxIGS3Z3Y2JNWH0yq2NejqbROI=";
+      urls = [
+        "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://dist.torproject.org/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://archive.torproject.org/tor-package-archive/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+        "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
+      ];
+      hash = "sha256-e7gRkRMipnEG1hMlhs25LUJ5KDGt8qP3wpbSG2K2aK8=";
     };
   };
 
@@ -103,7 +111,7 @@ stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
 
@@ -219,11 +227,20 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    inherit sources;
+    updateScript = callPackage ../tor-browser/update.nix {
+      inherit pname version meta;
+      baseUrl = "https://cdn.mullvad.net/browser/";
+      prefix = "mullvad-browser-";
+    };
+  };
+
   meta = with lib; {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     homepage = "https://mullvad.net/en/browser";
-    platforms = attrNames srcs;
-    maintainers = with maintainers; [ felschr ];
+    platforms = attrNames sources;
+    maintainers = with maintainers; [ felschr panicgh ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

@@ -1,4 +1,9 @@
-{ lib, python3, fetchFromGitHub, nixosTests }:
+{ lib
+, python3
+, fetchFromGitHub
+, fetchpatch
+, nixosTests
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
@@ -11,6 +16,15 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-V0nqgxGUxcTRAYFuxpKUEVB/g/Mbvw+9OIcvAexXwuM=";
   };
 
+  patches = [
+    # https://github.com/Kozea/Radicale/pull/1328
+    (fetchpatch {
+      name = "fix-python3.11-tests.patch";
+      url = "https://github.com/Kozea/Radicale/commit/110ec3a7885f523ce894a8c0e336c1a081dcd092.patch";
+      hash = "sha256-WEiwzJ+Vzv8PXmZUi1X7Qzs+oE6qgmpvHqm/xiOMrt0=";
+    })
+  ];
+
   postPatch = ''
     sed -i '/addopts/d' setup.cfg
   '';
@@ -22,6 +36,8 @@ python3.pkgs.buildPythonApplication rec {
     python-dateutil
     pytz # https://github.com/Kozea/Radicale/issues/816
   ] ++ passlib.optional-dependencies.bcrypt;
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

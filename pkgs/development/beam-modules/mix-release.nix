@@ -50,6 +50,7 @@ stdenv.mkDerivation (overridable // {
   # some older dependencies still use rebar
   MIX_REBAR = "${rebar}/bin/rebar";
   MIX_REBAR3 = "${rebar3}/bin/rebar3";
+  LC_ALL = "C.UTF-8";
 
   postUnpack = ''
     export HEX_HOME="$TEMPDIR/hex"
@@ -79,6 +80,27 @@ stdenv.mkDerivation (overridable // {
     # to be available
     # Phoenix projects for example will need compile.phoenix
     mix deps.compile --no-deps-check --skip-umbrella-children
+
+    # Symlink dependency sources. This is needed for projects that require
+    # access to the source of their dependencies. For example, Phoenix
+    # applications need javascript assets to build asset bundles.
+    ${lib.optionalString (mixNixDeps != { }) ''
+      mkdir -p deps
+
+      ${lib.concatMapStringsSep "\n" (dep: ''
+        dep_name=$(basename ${dep} | cut -d '-' -f2)
+        dep_path="deps/$dep_name"
+        if [ -d "${dep}/src" ]; then
+          ln -s ${dep}/src $dep_path
+        fi
+      '') (builtins.attrValues mixNixDeps)}
+    ''}
+
+    # Symlink deps to build root. Similar to above, but allows for mixFodDeps
+    # Phoenix projects to find javascript assets.
+    ${lib.optionalString (mixFodDeps != null) ''
+      ln -s ../deps ./
+    ''}
 
     runHook postConfigure
   '';

@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-vhxIm20ZUi+RusrAsSY54tv/D570/oMO5qLz9dNqgqo=";
   };
 
-  vendorSha256 = "sha256-xY9xNuJhkWPgtqA/FBVIp7GuWOv+3nrz6l3vaZVLlIE=";
+  vendorHash = "sha256-xY9xNuJhkWPgtqA/FBVIp7GuWOv+3nrz6l3vaZVLlIE=";
 
   postInstall = ''
     mkdir -p $out/share/

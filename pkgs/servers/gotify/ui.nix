@@ -1,62 +1,47 @@
-{ yarn2nix-moretea
-, fetchFromGitHub, applyPatches
+{ stdenv
+, yarn
+, fixup_yarn_lock
+, nodejs-slim
+, fetchFromGitHub
+, fetchYarnDeps
+, gotify-server
 }:
 
-yarn2nix-moretea.mkYarnPackage rec {
+stdenv.mkDerivation rec {
   pname = "gotify-ui";
+  inherit (gotify-server) version;
 
-  packageJSON = ./package.json;
-  yarnNix = ./yarndeps.nix;
+  src = gotify-server.src + "/ui";
 
-  version = import ./version.nix;
-
-  src_all = applyPatches {
-    src = fetchFromGitHub {
-      owner = "gotify";
-      repo = "server";
-      rev = "v${version}";
-      sha256 = import ./source-sha.nix;
-    };
-    postPatch = ''
-      substituteInPlace ui/yarn.lock \
-        --replace \
-          "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001237.tgz" \
-          "https___registry.npmjs.org_caniuse_lite___caniuse_lite_1.0.30001237.tgz"
-    '';
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-ejHzo6NHCMlNiYePWvfMY9Blb58pj3UQ5PFI0V84flI=";
   };
-  src = "${src_all}/ui";
 
-  buildPhase = ''
-    export HOME=$(mktemp -d)
-    export WRITABLE_NODE_MODULES="$(pwd)/tmp"
-    export NODE_OPTIONS=--openssl-legacy-provider
-    mkdir -p "$WRITABLE_NODE_MODULES"
+  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs-slim ];
 
-    # react-scripts requires a writable node_modules/.cache, so we have to copy the symlink's contents back
-    # into `node_modules/`.
-    # See https://github.com/facebook/create-react-app/issues/11263
-    cd deps/gotify-ui
-    node_modules="$(readlink node_modules)"
-    rm node_modules
-    mkdir -p "$WRITABLE_NODE_MODULES"/.cache
-    cp -r $node_modules/* "$WRITABLE_NODE_MODULES"
-
-    # In `node_modules/.bin` are relative symlinks that would be broken after copying them over,
-    # so we take care of them here.
-    mkdir -p "$WRITABLE_NODE_MODULES"/.bin
-    for x in "$node_modules"/.bin/*; do
-      ln -sfv "$node_modules"/.bin/"$(readlink "$x")" "$WRITABLE_NODE_MODULES"/.bin/"$(basename "$x")"
-    done
-
-    ln -sfv "$WRITABLE_NODE_MODULES" node_modules
-    cd ../..
-
-    yarn build
-
-    cd deps/gotify-ui
-    rm -rf node_modules
-    ln -sf $node_modules node_modules
-    cd ../..
+  postPatch = ''
+    export HOME=$NIX_BUILD_TOP/fake_home
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup_yarn_lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    export NODE_OPTIONS=--openssl-legacy-provider
+    yarn --offline build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mv build $out
+
+    runHook postInstall
+  '';
 }

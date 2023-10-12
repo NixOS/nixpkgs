@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";
-  version = "4.0.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
     rev = "v${version}";
-    sha256 = "sha256-Dp3O41nzo7j5rqxDEkR4bFPv0CNGOO4kWXAf8iy+jDg=";
+    sha256 = "sha256-oGaYiSkOhqfjUl+mHTs3gqFcxli3cgkRtT6tbjy3ht0=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

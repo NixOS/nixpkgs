@@ -2,13 +2,13 @@
 
 buildNimPackage rec {
   pname = "illwill";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "johnnovak";
     repo = "illwill";
     rev = "v${version}";
-    hash = "sha256-9YBkad5iUKRb375caAuoYkfp5G6KQDhX/yXQ7vLu/CA=";
+    hash = "sha256-4DHGVWzN/WTAyDRBBpXlcfKnYIcbFt42/iWInaBUwi4=";
   };
 
   meta = with lib;

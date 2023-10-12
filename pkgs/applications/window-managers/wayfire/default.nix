@@ -21,16 +21,16 @@
 , xorg
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wayfire";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
-    repo = pname;
-    rev = "v${version}";
+    repo = "wayfire";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Z+rR9pY244I3i/++XZ4ROIkq3vtzMgcxxHvJNxFD9is=";
+    hash = "sha256-Z+rR9pY244I3i/++XZ4ROIkq3vtzMgcxxHvJNxFD9is=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     pkg-config
     wayland-scanner
   ];
-
 
   buildInputs = [
     wf-config
@@ -78,11 +77,12 @@ stdenv.mkDerivation rec {
 
   passthru.providedSessions = [ "wayfire" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
-    license = licenses.mit;
-    maintainers = with maintainers; [ qyliss wucke13 rewine ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss wucke13 rewine ];
+    platforms = lib.platforms.unix;
+    mainProgram = "wayfire";
   };
-}
+})

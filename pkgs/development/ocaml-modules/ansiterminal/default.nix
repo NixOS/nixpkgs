@@ -9,6 +9,10 @@ buildDunePackage rec {
     hash = "sha256-q3OyGLajAmfSu8QzEtzzE5gbiwvsVV2SsGuHZkst0w4=";
   };
 
+  postPatch = ''
+    substituteInPlace src/dune --replace 'libraries unix bytes' 'libraries unix'
+  '';
+
   doCheck = true;
 
   meta = with lib; {

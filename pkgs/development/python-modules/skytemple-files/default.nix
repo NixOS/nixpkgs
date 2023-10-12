@@ -20,7 +20,7 @@
 , graphql-core
 , gql
 , armips
-# tests
+  # tests
 , pytestCheckHook
 , parameterized
 , xmldiff
@@ -28,19 +28,19 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
-  version = "1.4.7";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    hash = "sha256-SLRZ9ThrH2UWqfr5BbjJKDM/SRkCfMNK70XZT4+Ks7w=";
+    hash = "sha256-PVHI3SuXXH+XpSaBhtSUT5I6wYK3WmwW67nJmPLKdg4=";
     fetchSubmodules = true;
   };
 
   postPatch = ''
-    substituteInPlace skytemple_files/patch/arm_patcher.py \
-      --replace "exec_name = os.getenv('SKYTEMPLE_ARMIPS_EXEC', f'{prefix}armips')" "exec_name = \"${armips}/bin/armips\""
+    substituteInPlace skytemple_files/patch/arm_patcher.py skytemple_files/data/data_cd/armips_importer.py \
+      --replace "exec_name = os.getenv(\"SKYTEMPLE_ARMIPS_EXEC\", f\"{prefix}armips\")" "exec_name = \"${armips}/bin/armips\""
   '';
 
   buildInputs = [ armips ];
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook parameterized xmldiff ] ++ passthru.optional-dependencies.spritecollab;
-  pytestFlagsArray = "test/";
+  pytestFlagsArray = [ "test/" ];
   disabledTestPaths = [
     "test/skytemple_files_test/common/spritecollab/sc_online_test.py"
     "test/skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test

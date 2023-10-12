@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     # it is known to cause problems. Search online for "rpl_malloc" and
     # "rpl_realloc" to find out more.
     ./fix-rpl_malloc.patch
+    ./suse-bug-580609.patch
+    ./suse-bug-955687.patch
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -92,5 +92,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
+    mainProgram = "pcsxr";
   };
 }

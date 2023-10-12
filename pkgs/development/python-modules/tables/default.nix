@@ -30,6 +30,14 @@ buildPythonPackage rec {
     hash = "sha256-NPP6I2bOILGPHfVzp3wdJzBs4fKkHZ+e/2IbUZLqh4g=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "numpy-1.25-compatibility.patch";
+      url = "https://github.com/PyTables/PyTables/commit/337792561e5924124efd20d6fea6bbbd2428b2aa.patch";
+      hash = "sha256-pz3A/jTPWXXlzr+Yl5PRUvdSAinebFsoExfek4RUHkc=";
+    })
+  ];
+
   nativeBuildInputs = [
     blosc2
     cython

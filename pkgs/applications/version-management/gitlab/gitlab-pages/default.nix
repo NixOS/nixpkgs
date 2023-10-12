@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "gitlab-pages";
-  version = "15.11.6";
+  version = "16.4.1";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-pages";
     rev = "v${version}";
-    sha256 = "sha256-Dl/NCsZCi5S9BKjtQzRg3mj8lzvIa4FMCqprLKXKlHw=";
+    hash = "sha256-aUpuzgFbxMJwKjTn+QAudOeMBSLtLTjaTmwe25f6qxg=";
   };
 
-  vendorHash = "sha256-s3HHoz9URACuVVhePQQFviTqlQU7vCLOjTJPBlus1Vo=";
+  vendorHash = "sha256-ko0ycT8HlqVfXf7tck0xcs6rDJMpHxjSoI59gTLgqDQ=";
   subPackages = [ "." ];
 
   meta = with lib; {
@@ -19,6 +19,6 @@ buildGoModule rec {
     homepage = "https://gitlab.com/gitlab-org/gitlab-pages";
     changelog = "https://gitlab.com/gitlab-org/gitlab-pages/-/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ajs124 das_j ];
+    maintainers = with maintainers; [ ajs124 das_j ] ++ teams.gitlab.members;
   };
 }

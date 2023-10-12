@@ -1,18 +1,27 @@
-{ lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome, gtk3, wrapGAppsHook
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, glibcLocales
+, gnome
 , gobject-introspection
+, gtk3
+, intltool
+, python3
+, python3Packages
+, wrapGAppsHook
+, xdg-utils
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.21";
+  version = "3.11.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0n73jm5ypsj962gpr0dk10lqh83giqsczm63wchyhmrkyf1wgga1";
+    sha256 = "p8BgpvMK1kP4VnRfmcvSMbXmWs5DmWBZ6te7L9b+UJQ=";
   };
 
   patches = [
@@ -54,6 +63,7 @@ python3Packages.buildPythonApplication rec {
     eyeD3
     podcastparser
     html5lib
+    mutagen
   ];
 
   makeFlags = [
@@ -71,6 +81,10 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
+
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
+
+  passthru.updateScript = gitUpdater {};
 
   meta = with lib; {
     description = "A podcatcher written in python";
