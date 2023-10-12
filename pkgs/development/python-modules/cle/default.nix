@@ -30,13 +30,13 @@ in
 buildPythonPackage rec {
   pname = "cle";
   inherit version;
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
-    repo = pname;
+    repo = "cle";
     rev = "refs/tags/v${version}";
     hash = "sha256-Zmontxj0RdFrVh0v2209TSpyoEe3jJsS/WvR6h1HE10=";
   };
