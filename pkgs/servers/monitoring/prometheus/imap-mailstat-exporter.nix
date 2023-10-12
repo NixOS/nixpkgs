@@ -15,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-aR/94C9SI+FPs3zg3bpexmgGYrhxghyHwpXj25x0yuw=";
   };
 
-  vendorSha256 = "sha256-M5Ho4CiO5DC6mWzenXEo2pu0WLHj5S8AV3oEFwD31Sw=";
+  vendorHash = "sha256-M5Ho4CiO5DC6mWzenXEo2pu0WLHj5S8AV3oEFwD31Sw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
