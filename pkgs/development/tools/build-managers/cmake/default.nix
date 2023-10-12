@@ -40,11 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.26.4";
+  version = "3.27.7";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MTtogMKRvU/jHAqlHW5iZZKCpSHmlfMNXMDSWrvVwgg=";
+    hash = "sha256-CPcaEGA2vwUfaSdg75VYwFd8Qqw56Wugl+dmK9QVjY4=";
   };
 
   patches = [
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
   ] ++ (if useSharedLibraries
-        then [ "--no-system-jsoncpp" "--system-libs" ]
+        then [ "--no-system-cppdap" "--no-system-jsoncpp" "--system-libs" ]
         else [ "--no-system-libs" ]) # FIXME: cleanup
   ++ lib.optional qt5UI "--qt-gui"
   ++ lib.optionals buildDocs [
