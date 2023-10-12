@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/Sapd/HeadsetControl";
     license = licenses.gpl3Plus;
+    mainProgram = "headsetcontrol";
     maintainers = with maintainers; [ leixb ];
     platforms = platforms.all;
   };

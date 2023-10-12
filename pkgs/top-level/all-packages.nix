@@ -10140,7 +10140,7 @@ with pkgs;
   };
 
   mdcat = callPackage ../tools/text/mdcat {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
     inherit (python3Packages) ansi2html;
   };
 
@@ -11287,6 +11287,8 @@ with pkgs;
   pandoc-fignos = python3Packages.callPackage ../tools/misc/pandoc-fignos { };
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
+
+  panicparse = callPackage ../tools/misc/panicparse {};
 
   panoply = callPackage ../tools/misc/panoply { };
 
@@ -18487,7 +18489,8 @@ with pkgs;
     electron_23-bin
     electron_24-bin
     electron_25-bin
-    electron_26-bin;
+    electron_26-bin
+    electron_27-bin;
 
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
@@ -18506,7 +18509,8 @@ with pkgs;
   electron_24 = electron_24-bin;
   electron_25 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_25 then electron-source.electron_25 else electron_25-bin;
   electron_26 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_26 then electron-source.electron_26 else electron_26-bin;
-  electron = electron_26;
+  electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
+  electron = electron_27;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -24670,6 +24674,8 @@ with pkgs;
 
   rapidjson = callPackage ../development/libraries/rapidjson { };
 
+  rapidjson-unstable = callPackage ../development/libraries/rapidjson/unstable.nix { };
+
   rapidxml = callPackage ../development/libraries/rapidxml { };
 
   rapidyaml = callPackage ../development/libraries/rapidyaml {};
@@ -27384,8 +27390,6 @@ with pkgs;
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
-
-  searx = callPackage ../servers/web-apps/searx { };
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
@@ -41421,7 +41425,7 @@ with pkgs;
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
   inherit (callPackage ../servers/web-apps/wordpress {})
-    wordpress wordpress6_1 wordpress6_2 wordpress6_3;
+    wordpress wordpress6_3;
 
   wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
