@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils, buildPackages }:
+{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils, gawk, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "parallel";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils ]}"
+      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils gawk ]}"
   '';
 
   doCheck = true;
