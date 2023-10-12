@@ -230,9 +230,9 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/solo5-virtio-mkimage \
-      --replace "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
-      --replace "/usr/share/syslinux" "${syslinux}/share/syslinux" \
-      --replace "cp " "cp --no-preserve=mode "
+      --replace-fail "/usr/lib/syslinux" "${syslinux}/share/syslinux" \
+      --replace-fail "/usr/share/syslinux" "${syslinux}/share/syslinux" \
+      --replace-fail "cp " "cp --no-preserve=mode "
 
     wrapProgram $out/bin/solo5-virtio-mkimage \
       --prefix PATH : ${lib.makeBinPath [ dosfstools mtools parted syslinux ]}
@@ -1217,9 +1217,20 @@ postInstall = ''
 
 Performs string substitution on the contents of \<infile\>, writing the result to \<outfile\>. The substitutions in \<subs\> are of the following form:
 
-#### `--replace` \<s1\> \<s2\> {#fun-substitute-replace}
+#### `--replace-fail` \<s1\> \<s2\> {#fun-substitute-replace-fail}
 
 Replace every occurrence of the string \<s1\> by \<s2\>.
+Will error if no change is made.
+
+#### `--replace-warn` \<s1\> \<s2\> {#fun-substitute-replace-warn}
+
+Replace every occurrence of the string \<s1\> by \<s2\>.
+Will print a warning if no change is made.
+
+#### `--replace-quiet` \<s1\> \<s2\> {#fun-substitute-replace-quiet}
+
+Replace every occurrence of the string \<s1\> by \<s2\>.
+Will do nothing if no change can be made.
 
 #### `--subst-var` \<varName\> {#fun-substitute-subst-var}
 
@@ -1233,8 +1244,8 @@ Example:
 
 ```shell
 substitute ./foo.in ./foo.out \
-    --replace /usr/bin/bar $bar/bin/bar \
-    --replace "a string containing spaces" "some other text" \
+    --replace-fail /usr/bin/bar $bar/bin/bar \
+    --replace-fail "a string containing spaces" "some other text" \
     --subst-var someVar
 ```
 
