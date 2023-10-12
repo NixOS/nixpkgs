@@ -206,7 +206,7 @@ stdenv.mkDerivation {
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
     description = "A fast, lightweight and minimalistic Wayland terminal emulator";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = [ maintainers.sternenseemann maintainers.abbe ];
     platforms = platforms.linux;
     # From (presumably) ncurses version 6.3, it will ship a foot
     # terminfo file. This however won't include some non-standard
