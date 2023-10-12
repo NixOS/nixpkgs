@@ -18962,7 +18962,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  devbox = callPackage ../development/tools/devbox { };
+  devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo121Module; };
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
