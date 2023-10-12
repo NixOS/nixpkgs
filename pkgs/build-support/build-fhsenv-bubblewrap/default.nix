@@ -223,6 +223,7 @@ let
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
 in runCommandLocal name {
+  inherit pname version;
   inherit meta;
 
   passthru = passthru // {
