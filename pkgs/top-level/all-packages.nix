@@ -37738,8 +37738,6 @@ with pkgs;
 
   forge-mtg = callPackage ../games/forge-mtg { };
 
-  freecell-solver = callPackage ../games/freecell-solver { };
-
   freeciv = callPackage ../games/freeciv {
     sdl2Client = false;
     gtkClient = true;
