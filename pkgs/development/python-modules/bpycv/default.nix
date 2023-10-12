@@ -10,7 +10,7 @@
 , fetchPypi
 , fetchurl
 , minexr
-, opencv3
+, opencv4
 , python3Packages
 , requests
 , runCommand
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     minexr
     zcs
     requests
-    opencv3
+    opencv4
     boxx
   ];
 
