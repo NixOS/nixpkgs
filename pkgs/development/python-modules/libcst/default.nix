@@ -92,6 +92,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
+    changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 psfl ];
     maintainers = with maintainers; [ ];
   };
