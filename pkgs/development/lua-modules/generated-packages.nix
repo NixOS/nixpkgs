@@ -3098,7 +3098,7 @@ buildLuarocksPackage {
   };
 }) {};
 
-vstruct = callPackage({ fetchgit, lua, buildLuarocksPackage, luaOlder, luarocks-build-rust-mlua}:
+vstruct = callPackage({ fetchgit, lua, buildLuarocksPackage, luaOlder }:
 buildLuarocksPackage {
   pname = "vstruct";
   version = "2.1.1-1";
