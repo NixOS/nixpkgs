@@ -2066,6 +2066,35 @@ buildLuarocksPackage {
   };
 }) {};
 
+luarocks-build-rust-mlua = callPackage({ fetchgit, buildLuarocksPackage }:
+buildLuarocksPackage {
+  pname = "luarocks-build-rust-mlua";
+  version = "0.1.2-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/luarocks-build-rust-mlua-0.1.2-1.rockspec";
+    sha256 = "1sx908fm2ihpxz2mm54xzkfmdzlqdvrqjkh1zz7rcjgmqba4mh1j";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/khvzak/luarocks-build-rust-mlua",
+  "rev": "c8080aa0832563b7f8b2cb85a195c1598ce312e0",
+  "date": "2023-06-29T16:47:41+01:00",
+  "path": "/nix/store/n7id28r1m11xd550hayv99xhz96vpdjq-luarocks-build-rust-mlua",
+  "sha256": "1zh1p5k7xpczi5db3k0fw0ljw9w0xxk1qjjcfg5rcznqjf48i3x7",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+
+  meta = {
+    homepage = "https://github.com/khvzak/luarocks-build-rust-mlua";
+    description = "A LuaRocks build backend for Lua modules written in Rust using mlua";
+    license.fullName = "MIT";
+  };
+}) {};
+
 luasec = callPackage({ fetchgit, luaOlder, luasocket, buildLuarocksPackage, lua }:
 buildLuarocksPackage {
   pname = "luasec";
@@ -3039,7 +3068,7 @@ buildLuarocksPackage {
   };
 }) {};
 
-vstruct = callPackage({ fetchgit, lua, buildLuarocksPackage, luaOlder }:
+vstruct = callPackage({ fetchgit, lua, buildLuarocksPackage, luaOlder, luarocks-build-rust-mlua}:
 buildLuarocksPackage {
   pname = "vstruct";
   version = "2.1.1-1";
