@@ -7,6 +7,7 @@ let
     "ghc8102Binary"
     "ghc8107Binary"
     "ghc924Binary"
+    "ghc947Binary"
     "ghcjs"
     "ghcjs810"
     "integer-simple"
@@ -101,6 +102,10 @@ in {
     };
 
     ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix {
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+
+    ghc947Binary = callPackage ../development/compilers/ghc/9.4.7-binary.nix {
       llvmPackages = pkgs.llvmPackages_12;
     };
 
@@ -403,13 +408,13 @@ in {
     ghc96 = compiler.ghc963;
     ghc981 = callPackage ../development/compilers/ghc/9.8.1.nix {
       bootPkgs =
-        # For GHC 9.2 no armv7l bindists are available.
+        # For GHC 9.4 no armv7l bindists are available.
         if stdenv.hostPlatform.isAarch32 then
           packages.ghc947
         else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
           packages.ghc947
         else
-          packages.ghc947;
+          packages.ghc947Binary;
       inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
@@ -495,6 +500,12 @@ in {
       buildHaskellPackages = bh.packages.ghc924Binary;
       ghc = bh.compiler.ghc924Binary;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc947Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc947Binary;
+      ghc = bh.compiler.ghc947Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc884 = callPackage ../development/haskell-modules {
