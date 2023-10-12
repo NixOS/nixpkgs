@@ -7,9 +7,11 @@
 , pkg-config
 , desktopToDarwinBundle
 , xorg
+, wayland
+, wayland-protocols
+, libxkbcommon
 , libglvnd
 , mpv
-, glfw3
 , darwin
 , waylandSupport ? false
 }:
@@ -45,10 +47,17 @@ buildGoModule rec {
   ] ++ lib.optionals stdenv.isLinux [
     xorg.libXxf86vm
     xorg.libX11
-  ]
-  ++ (builtins.filter (p: !(lib.hasPrefix "apple-framework" p.name))
-    (glfw3.override { inherit waylandSupport; }).buildInputs)
-  ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.isLinux && !waylandSupport) [
+    xorg.libXrandr
+    xorg.libXinerama
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXext
+  ] ++ lib.optionals (stdenv.isLinux && waylandSupport) [
+    wayland
+    wayland-protocols
+    libxkbcommon
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
     darwin.apple_sdk_11_0.frameworks.Kernel
     darwin.apple_sdk_11_0.frameworks.OpenGL
