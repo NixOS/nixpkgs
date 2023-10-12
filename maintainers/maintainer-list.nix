@@ -15283,6 +15283,12 @@
       fingerprint = "E4F4 1EAB BF0F C785 06D8  62EF EF68 CF41 D42A 593D";
     }];
   };
+  ryangibb = {
+    email = "ryan@freumh.org";
+    github = "ryangibb";
+    githubId = 22669046;
+    name = "Ryan Gibb";
+  };
   ryanorendorff = {
     github = "ryanorendorff";
     githubId = 12442942;

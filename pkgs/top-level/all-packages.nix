@@ -3709,6 +3709,8 @@ with pkgs;
 
   delayarchitect = callPackage ../applications/audio/delayarchitect { };
 
+  dell-command-configure = callPackage ../tools/system/dell-command-configure { };
+
   deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
