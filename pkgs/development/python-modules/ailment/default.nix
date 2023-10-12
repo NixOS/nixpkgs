@@ -9,9 +9,9 @@
 buildPythonPackage rec {
   pname = "ailment";
   version = "9.2.72";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "angr";
@@ -31,7 +31,9 @@ buildPythonPackage rec {
   # Tests depend on angr (possibly a circular dependency)
   doCheck = false;
 
-  #pythonImportsCheck = [ "ailment" ];
+  pythonImportsCheck = [
+    "ailment"
+  ];
 
   meta = with lib; {
     description = "The angr Intermediate Language";
