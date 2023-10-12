@@ -124,7 +124,7 @@ in stdenv.mkDerivation rec {
     "${setBuild}.llvm-config=${llvmSharedForBuild.dev}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost.dev}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget.dev}/bin/llvm-config"
-  ] ++ optionals (stdenv.isLinux && !stdenv.targetPlatform.isRedox) [
+  ] ++ optionals ((stdenv.isLinux || stdenv.isDarwin) && !stdenv.targetPlatform.isRedox) [
     "--enable-profiler" # build libprofiler_builtins
   ] ++ optionals stdenv.buildPlatform.isMusl [
     "${setBuild}.musl-root=${pkgsBuildBuild.targetPackages.stdenv.cc.libc}"
