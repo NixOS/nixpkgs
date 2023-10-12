@@ -1,0 +1,134 @@
+From 92fd36dd54de9ac845549944692eb33c5aee7343 Mon Sep 17 00:00:00 2001
+From: Jay Satiro <raysatiro@yahoo.com>
+Date: Mon, 9 Oct 2023 17:15:44 -0400
+Subject: [PATCH] socks: return error if hostname too long for remote resolve
+
+Prior to this change the state machine attempted to change the remote
+resolve to a local resolve if the hostname was longer than 255
+characters. Unfortunately that did not work as intended and caused a
+security issue.
+
+This patch applies to curl versions 7.87.0 - 8.1.2. Other versions
+that are affected take a different patch. Refer to the CVE advisory
+for more information.
+
+Bug: https://curl.se/docs/CVE-2023-38545.html
+---
+ lib/socks.c             |  8 +++----
+ tests/data/Makefile.inc |  2 +-
+ tests/data/test728      | 64 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 69 insertions(+), 5 deletions(-)
+ create mode 100644 tests/data/test728
+
+diff --git a/lib/socks.c b/lib/socks.c
+index d491e08..e7da5b4 100644
+--- a/lib/socks.c
++++ b/lib/socks.c
+@@ -539,9 +539,9 @@ static CURLproxycode do_SOCKS5(struct Curl_cfilter *cf,
+ 
+     /* RFC1928 chapter 5 specifies max 255 chars for domain name in packet */
+     if(!socks5_resolve_local && hostname_len > 255) {
+-      infof(data, "SOCKS5: server resolving disabled for hostnames of "
+-            "length > 255 [actual len=%zu]", hostname_len);
+-      socks5_resolve_local = TRUE;
++      failf(data, "SOCKS5: the destination hostname is too long to be "
++            "resolved remotely by the proxy.");
++      return CURLPX_LONG_HOSTNAME;
+     }
+ 
+     if(auth & ~(CURLAUTH_BASIC | CURLAUTH_GSSAPI))
+@@ -882,7 +882,7 @@ static CURLproxycode do_SOCKS5(struct Curl_cfilter *cf,
+       }
+       else {
+         socksreq[len++] = 3;
+-        socksreq[len++] = (char) hostname_len; /* one byte address length */
++        socksreq[len++] = (unsigned char) hostname_len; /* one byte length */
+         memcpy(&socksreq[len], sx->hostname, hostname_len); /* w/o NULL */
+         len += hostname_len;
+       }
+diff --git a/tests/data/Makefile.inc b/tests/data/Makefile.inc
+index 3e0221a..64b11de 100644
+--- a/tests/data/Makefile.inc
++++ b/tests/data/Makefile.inc
+@@ -99,7 +99,7 @@ test679 test680 test681 test682 test683 test684 test685 \
+ \
+ test700 test701 test702 test703 test704 test705 test706 test707 test708 \
+ test709 test710 test711 test712 test713 test714 test715 test716 test717 \
+-test718 test719 test720 test721 \
++test718 test719 test720 test721 test728 \
+ \
+ test800 test801 test802 test803 test804 test805 test806 test807 test808 \
+ test809 test810 test811 test812 test813 test814 test815 test816 test817 \
+diff --git a/tests/data/test728 b/tests/data/test728
+new file mode 100644
+index 0000000..05bcf28
+--- /dev/null
++++ b/tests/data/test728
+@@ -0,0 +1,64 @@
++<testcase>
++<info>
++<keywords>
++HTTP
++HTTP GET
++SOCKS5
++SOCKS5h
++followlocation
++</keywords>
++</info>
++
++#
++# Server-side
++<reply>
++# The hostname in this redirect is 256 characters and too long (> 255) for
++# SOCKS5 remote resolve. curl must return error CURLE_PROXY in this case.
++<data>
++HTTP/1.1 301 Moved Permanently
++Location: http://AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/
++Content-Length: 0
++Connection: close
++
++</data>
++</reply>
++
++#
++# Client-side
++<client>
++<features>
++proxy
++</features>
++<server>
++http
++socks5
++</server>
++ <name>
++SOCKS5h with HTTP redirect to hostname too long
++ </name>
++ <command>
++--no-progress-meter --location --proxy socks5h://%HOSTIP:%SOCKSPORT http://%HOSTIP:%HTTPPORT/%TESTNUMBER
++</command>
++</client>
++
++#
++# Verify data after the test has been "shot"
++<verify>
++<protocol crlf="yes">
++GET /%TESTNUMBER HTTP/1.1
++Host: %HOSTIP:%HTTPPORT
++User-Agent: curl/%VERSION
++Accept: */*
++
++</protocol>
++<errorcode>
++97
++</errorcode>
++# the error message is verified because error code CURLE_PROXY (97) may be
++# returned for any number of reasons and we need to make sure it is
++# specifically for the reason below so that we know the check is working.
++<stderr mode="text">
++curl: (97) SOCKS5: the destination hostname is too long to be resolved remotely by the proxy.
++</stderr>
++</verify>
++</testcase>
+-- 
+2.7.4
+
