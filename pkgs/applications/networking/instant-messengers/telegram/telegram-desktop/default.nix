@@ -94,6 +94,13 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/telegram-desktop/-/raw/09b363ed5a4fcd8ecc3282b9bfede5fbb83f97ef/debian/patches/Disable-register-custom-scheme.patch";
       hash = "sha256-B8X5lnSpwwdp1HlvyXJWQPybEN+plOwimdV5gW6aY2Y=";
     })
+    # lib_base: Add missing include for Qt 6.6
+    (fetchpatch {
+      url = "https://github.com/desktop-app/lib_base/commit/5ca91dbb811c84591780236abc31431e313faf39.patch";
+      stripLen = 1;
+      extraPrefix = "Telegram/lib_base/";
+      hash = "sha256-eZkyMnPaAmUFYXiCmPhLRTw2Xdx0lylY+UVOckCsiaA=";
+    })
   ];
 
   postPatch = ''
