@@ -2736,9 +2736,10 @@ with pkgs;
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
-  ppsspp = callPackage ../applications/emulators/ppsspp { };
-
-  ppsspp-sdl = ppsspp;
+  ppsspp-sdl = ppsspp.override {
+    enableQt = false;
+    enableVulkan = true;
+  };
 
   ppsspp-sdl-wayland = ppsspp.override {
     forceWayland = true;
@@ -11164,12 +11165,9 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud24 nextcloud25 nextcloud26 nextcloud27;
+    nextcloud25 nextcloud26 nextcloud27;
 
-  nextcloud24Packages = throw "Nextcloud24 is EOL!";
-  nextcloud25Packages = callPackage ../servers/nextcloud/packages {
-    apps = lib.importJSON ../servers/nextcloud/packages/25.json;
-  };
+  nextcloud25Packages = throw "Nextcloud25 is EOL!";
   nextcloud26Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/26.json;
   };
@@ -18022,6 +18020,8 @@ with pkgs;
 
   bundler-audit = callPackage ../tools/security/bundler-audit { };
 
+  sol2 = callPackage ../development/libraries/sol2 { };
+
   solargraph = rubyPackages.solargraph;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
@@ -18966,7 +18966,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  devbox = callPackage ../development/tools/devbox { };
+  devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo121Module; };
 
   libcxx = llvmPackages.libcxx;
   libcxxabi = llvmPackages.libcxxabi;
@@ -19649,7 +19649,10 @@ with pkgs;
 
   modd = callPackage ../development/tools/modd { };
 
-  mold = callPackage ../development/tools/mold { };
+  mold = callPackage ../development/tools/mold {
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.llvmPackages_13.stdenv else stdenv;
+    tbb = tbb_2021_8;
+  };
 
   mold-wrapped = wrapBintoolsWith {
     bintools = mold;
@@ -34247,6 +34250,8 @@ with pkgs;
   };
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
+
+  typora = callPackage ../applications/editors/typora { };
 
   taxi = callPackage ../applications/networking/ftp/taxi { };
 

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
-  version = "1.0.7";
+  version = "1.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pogzyb";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-OiDi9hD2IDDfQoQoPhLpClBnJyI/wlZfGyzqmVI94yA=";
+    hash = "sha256-fYXxoS4bGTat5QT98ETmWk/VKXJmg9mtkUu02SZT4Eo=";
   };
 
   propagatedBuildInputs = [
