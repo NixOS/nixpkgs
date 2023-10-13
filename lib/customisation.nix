@@ -69,8 +69,8 @@ rec {
      "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
      related to its use.
   */
-  makeOverridable = f: origArgs:
-    let
+  makeOverridable = f: lib.setFunctionArgs
+    (origArgs: let
       result = f origArgs;
 
       # Creates a functor with the same arguments as f
@@ -95,7 +95,8 @@ rec {
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
         }
-      else result;
+      else result)
+    (lib.functionArgs f);
 
 
   /* Call the package function in the file `fn` with the required
