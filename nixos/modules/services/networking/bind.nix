@@ -277,6 +277,8 @@ in
         ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
       };
 
+      restartTriggers = [ confFile ];
+
       unitConfig.Documentation = "man:named(8)";
     };
   };
