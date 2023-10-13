@@ -261,6 +261,21 @@ in
       '';
     };
 
+    environmentFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      description = mdDoc ''
+        File which may contain secrets in the format of an EnvironmentFile as described
+        by systemd.exec(5). Variables here can be used in the Prosody configuration
+        file by prefixing the environment variable name with `ENV_` in the configuration.
+
+        ::: {.note}
+        Environment variables in this file should *not* begin with an `ENV_` prefix, only
+        when referenced in the Prosody configuration file.
+        :::
+      '';
+    };
+
     openFirewall = mkOption {
       type = types.bool;
       default = false;
@@ -305,13 +320,19 @@ in
       description = mdDoc ''
         Values specified here are applied to the whole server, and are the default for all
         virtual hosts. Refer to <https://prosody.im/doc/configure> for additional details.
+
+        ::: {.note}
+        It's also possible to refer to environment variables (defined in
+        [services.prosody.environmentFile](#opt-services.prosody.environmentFile)) using the
+        syntax `"ENV_VARIABLE_NAME"` where the environment file contains a `VARIABLE_NAME` entry.
+        :::
       '';
       example = literalExpression ''
         {
-          disco_items = [
-            [ "channels.example.net" "Public channels" ]
-            [ "irc.jabberfr.org" "A public IRC gateway using biboumi" ]
-          ];
+          modules_enabled = [ "turn_external" ];
+          turn_external_host = "turn.example.com";
+          turn_external_port = 3478;
+          turn_external_secret = "ENV_TURN_EXTERNAL_SECRET";
         }
       '';
     };
@@ -653,6 +674,7 @@ in
           PIDFile = cfg.settings.pidfile;
           ExecStart = "${cfg.package}/bin/prosodyctl start";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+          EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
 
           MemoryDenyWriteExecute = true;
           PrivateDevices = true;
