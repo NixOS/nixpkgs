@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "canopen";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vBJrsdy2Ljs02KEuOKB7WqgxnBdFfJv+II8Lu9qQ/2E=";
+    hash = "sha256-XxhlG5325HabmILpafk0rnc+8kpFqrwzNLWGmCBI0Iw=";
   };
 
   nativeBuildInputs = [
