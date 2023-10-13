@@ -9,8 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
   version = "6.0.3";
-
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -21,6 +20,10 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace tox.ini \
       --replace "--flake8" ""
   '';
+
+  nativeBuildInputs = [
+    python3.pkgs.setuptools
+  ];
 
   buildInputs = [
     glibcLocales
@@ -66,6 +69,10 @@ python3.pkgs.buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "devpi"
+  ];
 
   meta = with lib; {
     description = "Client for devpi, a pypi index server and packaging meta tool";
