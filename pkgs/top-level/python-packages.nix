@@ -12645,6 +12645,8 @@ self: super: with self; {
 
   setupmeta = callPackage ../development/python-modules/setupmeta { };
 
+  setuptools-changelog-shortener = callPackage ../development/python-modules/setuptools-changelog-shortener { };
+
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
 
   setuptools-generate = callPackage ../development/python-modules/setuptools-generate { };
