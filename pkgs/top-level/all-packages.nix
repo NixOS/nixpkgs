@@ -8157,7 +8157,7 @@ with pkgs;
     icu = icu63;
   };
 
-  fluent-bit = callPackage ../tools/misc/fluent-bit { };
+  fluent-bit = darwin.apple_sdk_11_0.callPackage ../tools/misc/fluent-bit { };
 
   fluent-reader = callPackage ../applications/networking/feedreaders/fluent-reader { };
 
@@ -14039,6 +14039,10 @@ with pkgs;
 
   trunk-io = callPackage ../development/tools/trunk-io { };
 
+  trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   tthsum = callPackage ../applications/misc/tthsum { };
 
   ttdl = callPackage ../applications/misc/ttdl { };
@@ -19646,6 +19650,14 @@ with pkgs;
   modd = callPackage ../development/tools/modd { };
 
   mold = callPackage ../development/tools/mold { };
+
+  mold-wrapped = wrapBintoolsWith {
+    bintools = mold;
+    extraBuildCommands = ''
+      wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold}/bin/ld.mold
+      wrap ${targetPackages.stdenv.cc.bintools.targetPrefix}mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${mold}/bin/mold
+    '';
+  };
 
   mommy = callPackage ../tools/misc/mommy { };
 
