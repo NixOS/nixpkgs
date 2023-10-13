@@ -1099,6 +1099,8 @@ with pkgs;
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
+  fetchFromBittorrent = callPackage ../build-support/fetchbittorrent { };
+
   fetchsvn = if stdenv.buildPlatform != stdenv.hostPlatform
     # hack around splicing being crummy with things that (correctly) don't eval.
     then buildPackages.fetchsvn
