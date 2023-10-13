@@ -26,8 +26,6 @@
 , zlibSupport ? true, zlib
 , zstdSupport ? false, zstd
 
-, darwin
-
 # for passthru.tests
 , coeurl
 , curlpp
@@ -71,10 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   nativeBuildInputs = [ pkg-config perl ];
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
   # "-lz -lssl", which aren't necessary direct build inputs of

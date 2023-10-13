@@ -1,30 +1,33 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, nix-update-script
+
 , cmake
 , mimalloc
 , ninja
-, openssl
+, tbb
 , zlib
-, testers
-, mold
-, nix-update-script
-, runCommandCC
-, mold-wrapped
-, hello
+, zstd
+
 , buildPackages
+, hello
+, mold
+, mold-wrapped
+, runCommandCC
+, testers
 , useMoldLinker
 }:
 
 stdenv.mkDerivation rec {
   pname = "mold";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "rui314";
-    repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-4W6quVSkxS2I6KEy3fVyBTypD0fg4EecgeEVM0Yw58s=";
+    repo = "mold";
+    rev = "v${version}";
+    hash = "sha256-ePX80hzzIzSJdGUX96GyxYWcdbXxXyuyNQqj5RDSkKU=";
   };
 
   nativeBuildInputs = [
@@ -33,14 +36,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    openssl
+    tbb
     zlib
+    zstd
   ] ++ lib.optionals (!stdenv.isDarwin) [
     mimalloc
   ];
 
   cmakeFlags = [
     "-DMOLD_USE_SYSTEM_MIMALLOC:BOOL=ON"
+    "-DMOLD_USE_SYSTEM_TBB:BOOL=ON"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
@@ -103,8 +108,8 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/rui314/mold";
     changelog = "https://github.com/rui314/mold/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ azahi nitsky paveloom ];
-    mainProgram = "mold";
     platforms = platforms.unix;
+    mainProgram = "mold";
+    maintainers = with maintainers; [ azahi nitsky paveloom ];
   };
 }

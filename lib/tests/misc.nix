@@ -43,6 +43,18 @@ in
 
 runTests {
 
+# CUSTOMIZATION
+
+  testFunctionArgsMakeOverridable = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null}: {}));
+    expected = { a = false; b = false; c = true; };
+  };
+
+  testFunctionArgsMakeOverridableOverride = {
+    expr = functionArgs (makeOverridable ({ a, b, c ? null }: {}) { a = 1; b = 2; }).override;
+    expected = { a = false; b = false; c = true; };
+  };
+
 # TRIVIAL
 
   testId = {
