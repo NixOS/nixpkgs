@@ -4,13 +4,13 @@
 , cmake
 , lua
 }:
-stdenv.mkDerivation rec{
+stdenv.mkDerivation (finalAttrs: {
   pname = "sol2";
   version = "3.3.1";
   src = fetchFromGitHub {
     owner = "ThePhD";
     repo = "sol2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7QHZRudxq3hdsfEAYKKJydc4rv6lyN6UIt/2Zmaejx8=";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec{
     license = licenses.mit;
     maintainers = with maintainers; [ mrcjkb ];
   };
-}
+})
