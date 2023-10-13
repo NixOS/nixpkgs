@@ -6,24 +6,22 @@
 , pkg-config
 , wayland-scanner
 , freetype
+, libglvnd
+, libxkbcommon
 , wayland
 , wayland-protocols
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sov";
-  version = "0.73";
+  version = "0.92b";
 
   src = fetchFromGitHub {
     owner = "milgra";
     repo = "sov";
     rev = finalAttrs.version;
-    sha256 = "sha256-cjbTSvW1fCPl2wZ848XrUPU0bDQ4oXy+D8GqyBMaTwQ=";
+    hash = "sha256-1L5D0pzcXbkz3VS7VB6ID8BJEbGeNxjo3xCr71CGcIo=";
   };
-
-  postPatch = ''
-    substituteInPlace src/sov/main.c --replace '/usr' $out
-  '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -34,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     freetype
+    libglvnd
+    libxkbcommon
     wayland
     wayland-protocols
   ];
