@@ -5544,6 +5544,15 @@
     githubId = 17859309;
     name = "Fuzen";
   };
+  fwam = {
+    name = "Legion Orsetti";
+    email = "fwam@queereen.dev";
+    github = "fwam";
+    githubId = 113541944;
+    keys = [{
+      fingerprint = "3822 20B8 57ED 0602 3786  8A7A 18E1 AE22 D704 B4FC";
+    }];
+  };
   fxfactorial = {
     email = "edgar.factorial@gmail.com";
     github = "fxfactorial";

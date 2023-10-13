@@ -106,6 +106,17 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
       sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
     })
+
+    # screenshot: Some fixes to shortcut handling
+    # https://gitlab.gnome.org/GNOME/gnome-shell/-/merge_requests/2944
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/39b0c0030b0f86727da06d55f23e04a1b313797c.patch";
+      sha256 = "Z9s1zxiZoApYCOO2OhVB5tvnkbOShCNy4PuWf/U8ryU=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/23e24a4eba4679167746e613240ba9813a689dbb.patch";
+      sha256 = "OBuP6fDGDgaRx/YpBQaZ/RWc9i5XAkqBdSnBeVAxWow=";
+    })
   ];
 
   nativeBuildInputs = [
