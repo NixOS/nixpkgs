@@ -70,6 +70,7 @@
 , tinycompress
 , ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
+, libselinux
 }:
 
 # Bluetooth codec only makes sense if general bluetooth enabled
@@ -80,7 +81,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.81";
+    version = "0.3.82";
 
     outputs = [
       "out"
@@ -98,7 +99,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-VYsw6c2LWuVorczozO1ZPkJT2HCsnsfsNnO/zAvQvK4=";
+      sha256 = "sha256-/DZ1hjlsqxlX02UGFwSFuxjC3tmUsCw7h/wfHPpg6Ps=";
     };
 
     patches = [
@@ -136,6 +137,7 @@ let
       glib
       libjack2
       libusb1
+      libselinux
       libsndfile
       lilv
       ncurses
