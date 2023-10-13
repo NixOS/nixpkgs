@@ -98,7 +98,7 @@ in stdenv.mkDerivation {
     description = "A markdown editor, a markdown reader";
     homepage = "https://typora.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jensbin npulidomateo ];
+    maintainers = with maintainers; [ npulidomateo ];
     platforms = [ "x86_64-linux" ];
   };
 }
