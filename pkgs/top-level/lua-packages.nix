@@ -138,10 +138,6 @@ rec {
     inherit (pkgs.darwin.apple_sdk.frameworks) AppKit;
   };
 
-  toml = callPackage ../development/lua-modules/toml { };
-
-  toml-edit = callPackage ../development/lua-modules/toml-edit { };
-
   vicious = callPackage ({ fetchFromGitHub }: stdenv.mkDerivation rec {
     pname = "vicious";
     version = "2.6.0";
