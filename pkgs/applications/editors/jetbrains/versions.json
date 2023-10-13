@@ -354,10 +354,10 @@
     "rust-rover": {
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
-      "version": "2023.2 EAP",
+      "version": "2023.3 EAP",
       "sha256": "9c4f26089697f6cb394e971dac8ef4fe974b5ecffd63311fcf0be66d4b4aec59",
       "url": "https://download.jetbrains.com/rustrover/RustRover-233.8264.22-aarch64.dmg",
-      "build_number": "233.8264.22-aarch64"
+      "build_number": "233.8264.22"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
