@@ -1,44 +1,86 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake
-, perl, gmp, libtap, gperf
-, perlPackages, python3 }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, cmocka
+, gmp
+, gperf
+, libtap
+, ninja
+, perl
+, pkg-config
+, python3
+, rinutils
+}:
 
-with lib;
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "freecell-solver";
-  version = "4.18.0";
+  version = "6.8.0";
 
   src = fetchurl {
-    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/${pname}-${version}.tar.xz";
-    sha256 = "1cmaib69pijmcpvgjvrdry8j4xys8l906l80b8z21vvyhdwrfdnn";
+    url = "https://fc-solve.shlomifish.org/downloads/fc-solve/freecell-solver-${finalAttrs.version}.tar.xz";
+    hash = "sha256-lfeKSxXS+jQCcf5PzFNUBlloGRuiLbDUDoGykbjVPTI=";
   };
 
-  nativeBuildInputs = [
-    cmake perl pkg-config
-  ] ++ (with perlPackages; TaskFreecellSolverTesting.buildInputs ++ [
-    GamesSolitaireVerify StringShellQuote TaskFreecellSolverTesting TemplateToolkit
-  ]);
+  outputs = [ "out" "dev" "doc" "man" ];
 
-  buildInputs = [
-    gmp libtap gperf
-    python3 python3.pkgs.random2
+  pythonPath = with python3.pkgs; [
+    cffi
+    pysol-cards
+    random2
+    six
   ];
 
-  # "ninja t/CMakeFiles/delta-states-test.t.exe.dir/__/delta_states.c.o" fails
-  # to depend on the generated "is_king.h".
-  enableParallelBuilding = false;
+  nativeBuildInputs = [
+    cmake
+    cmocka
+    gperf
+    ninja
+    perl
+    pkg-config
+    python3
+  ]
+  ++ (with perl.pkgs; TaskFreecellSolverTesting.buildInputs ++ [
+    GamesSolitaireVerify
+    HTMLTemplate
+    Moo
+    PathTiny
+    StringShellQuote
+    TaskFreecellSolverTesting
+    TemplateToolkit
+    TextTemplate
+  ])
+  ++ [ python3.pkgs.wrapPython ]
+  ++ finalAttrs.pythonPath;
+
+  buildInputs = [
+    gmp
+    libtap
+    rinutils
+  ];
+
+  strictDeps = true;
+
+  cmakeFlags = [
+    (lib.cmakeBool "FCS_WITH_TEST_SUITE" false) # needs freecell-solver
+    (lib.cmakeBool "BUILD_STATIC_LIBRARY" false)
+  ];
+
+  postFixup = ''
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+  '';
 
   meta = {
+    homepage = "https://fc-solve.shlomifish.org/";
     description = "A FreeCell automatic solver";
     longDescription = ''
-      FreeCell Solver is a program that automatically solves layouts
-      of Freecell and similar variants of Card Solitaire such as Eight
-      Off, Forecell, and Seahaven Towers, as well as Simple Simon
-      boards.
+      FreeCell Solver is a program that automatically solves layouts of Freecell
+      and similar variants of Card Solitaire such as Eight Off, Forecell, and
+      Seahaven Towers, as well as Simple Simon boards.
     '';
-    homepage = "https://fc-solve.shlomifish.org/";
-    license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    mainProgram = "fc-solve";
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
