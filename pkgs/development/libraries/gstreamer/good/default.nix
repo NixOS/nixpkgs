@@ -53,25 +53,14 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
-  version = "1.22.5";
+  version = "1.22.6";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-tnsxMTpUxpKbgpadQdPP3y9Y21c/tfSR5rul2ErqB3g=";
+    hash = "sha256-s7B/4/HOf+k6qb5yF4ZgRFSPNcSneSKA7sfhCKMvmBc=";
   };
-
-  # TODO: Patch is conditional to spare rebuilds during the current staging-next cycle and should be removed during the next bump
-  patches = lib.optionals qt5Support [
-    # Needed until https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/5083 is merged and released
-    (fetchpatch {
-      name = "gst-plugins-good-fix-qt5-without-viv-fb.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/03d8ef0b7c6e70eb936de0514831c1aafc763dcf.diff";
-      hash = "sha256-17XU/W/TMPg5669O1EBXByAN/VwFu/0idTg5ze3M/D4=";
-      stripLen = 2;
-    })
-  ];
 
   strictDeps = true;
 
@@ -91,6 +80,7 @@ stdenv.mkDerivation rec {
     hotdoc
   ] ++ lib.optionals qt5Support (with qt5; [
     qtbase
+    qttools
   ]) ++ lib.optionals qt6Support (with qt6; [
     qtbase
     qttools

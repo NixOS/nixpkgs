@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
-      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
+      "https://github.com/curl/curl/releases/download/curl-${builtins.replaceStrings [ "."  ] [ "_"  ] finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
     ];
     hash = "sha256-UdKvcieZE7XUyrH+Hzi5RM9wkEyIvuJGtb1XWETnA1o=";
   };
@@ -60,8 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
 
-    # Affected versions: 7.84.0 to and including 8.1.2
+    # https://curl.se/docs/CVE-2023-32001.html
     ./CVE-2023-32001.patch
+
+    # https://curl.se/docs/CVE-2023-38039.html
+    ./CVE-2023-38039.patch
+
+    # https://curl.se/docs/CVE-2023-38545.html
+    ./CVE-2023-38545.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];

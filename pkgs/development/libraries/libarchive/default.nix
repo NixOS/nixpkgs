@@ -43,6 +43,19 @@ assert xarSupport -> libxml2 != null;
 
   outputs = [ "out" "lib" "dev" ];
 
+  patches = [
+    (fetchpatch {
+      name = "security-fixes-pax-writer.patch";
+      url = "https://github.com/libarchive/libarchive/commit/1b4e0d0f9d445ba3e4d0c7db7ce0b30300572fe8.patch";
+      hash = "sha256-Ei0FMBu0SKZhJdOzHni/gyi8VTmF2cC0K4gEJDSPXpU=";
+    })
+    (fetchpatch {
+      name = "security-fixes-cpio-list_item_verbose.patch";
+      url = "https://github.com/libarchive/libarchive/commit/ee312cfd05c1d1d38f3a5dd10872b97cbc11902c.patch";
+      hash = "sha256-n1cZBgRmcNCx+PzGub5KE/TMY1oPXihMTVjkdF9Ws3k=";
+    })
+  ];
+
   postPatch = let
     skipTestPaths = [
       # test won't work in nix sandbox
@@ -122,7 +135,7 @@ assert xarSupport -> libxml2 != null;
 })).overrideAttrs(previousAttrs:
   assert previousAttrs.version == "3.6.2";
   lib.optionalAttrs stdenv.hostPlatform.isStatic {
-    patches = [
+    patches = previousAttrs.patches ++ [
       # fixes static linking; upstream in releases after 3.6.2
       # https://github.com/libarchive/libarchive/pull/1825 merged upstream
       (fetchpatch {
