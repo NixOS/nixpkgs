@@ -4895,6 +4895,8 @@ self: super: with self; {
 
   heatzypy = callPackage ../development/python-modules/heatzypy { };
 
+  help2man = callPackage ../development/python-modules/help2man { };
+
   helpdev = callPackage ../development/python-modules/helpdev { };
 
   helper = callPackage ../development/python-modules/helper { };
@@ -12644,6 +12646,8 @@ self: super: with self; {
   setupmeta = callPackage ../development/python-modules/setupmeta { };
 
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
+
+  setuptools-generate = callPackage ../development/python-modules/setuptools-generate { };
 
   setuptools-gettext = callPackage ../development/python-modules/setuptools-gettext { };
 
