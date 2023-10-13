@@ -1,33 +1,40 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, gtk2 }:
-
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libspnav,
+  qtbase,
+  wrapQtAppsHook,
+}:
 stdenv.mkDerivation rec {
   pname = "spnavcfg";
-  version = "0.3.1";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "FreeSpacenav";
     repo = pname;
     rev = "v${version}";
-    sha256 = "180mkdis15gxs79rr3f7hpwa1p6v81bybw37pzzdjnmqwqrc08a0";
+    fetchLFS = true;
+    sha256 = "sha256-P3JYhZnaCxzJETwC4g5m4xAGBk28/Va7Z/ybqwacIaA=";
   };
 
   patches = [
-    # Changes the pidfile path from /run/spnavd.pid to $XDG_RUNTIME_DIR/spnavd.pid
-    # to allow for a user service
-    ./configure-pidfile-path.patch
-    # Changes the config file path from /etc/spnavrc to $XDG_CONFIG_HOME/spnavrc or $HOME/.config/spnavrc
-    # to allow for a user service
-    ./configure-cfgfile-path.patch
+    (fetchpatch {
+      url = "https://github.com/FreeSpacenav/spnavcfg/commit/fd9aa10fb8e19a257398757943b3d8e79906e583.patch";
+      hash = "sha256-XKEyLAFrA4qRU3zkBozblb/fKtLKsaItze0xv1uLnq0=";
+    })
   ];
 
-  postPatch = ''
-    sed -i s/4775/775/ Makefile.in
-  '';
-
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 ];
-
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    libspnav
+  ];
 
   meta = with lib; {
     homepage = "https://spacenav.sourceforge.net/";
