@@ -38,11 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  meta = with lib; {
-    description = "An overlay that shows schemas for all workspaces to make navigation in sway easier.";
+  meta = {
+    description = "Workspace overview app for sway";
     homepage = "https://github.com/milgra/sov";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "sov";
+    maintainers = with lib.maintainers; [ eclairevoyant ];
+    platforms = lib.platforms.linux;
   };
 })
