@@ -28,7 +28,7 @@ let
         "https://dl.dell.com/FOLDER08911312M/1/command-configure_${version}.ubuntu20_amd64.tar.gz";
       # The CDN blocks the Curl user-agent, so set to blank instead.
       curlOpts = ''-A=""'';
-      sha256 = "sha256-l5oHgDkFBF6llNsHufTmuDzjkhGmXHYXlOJ4hvZfRoE=";
+      hash = "sha256-l5oHgDkFBF6llNsHufTmuDzjkhGmXHYXlOJ4hvZfRoE=";
     };
 
     dontBuild = true;
@@ -47,7 +47,6 @@ let
     '';
   };
 
-
   # Contains a fopen() wrapper for finding the firmware package
   wrapperLibName = "wrapper-lib.so";
   wrapperLib = stdenv.mkDerivation {
@@ -56,15 +55,14 @@ let
 
     src = ./.;
 
-    dontUnpack = true;
-    buildPhase = ''
-      substitute ${./wrapper-lib.c} lib.c \
+    postPatch = ''
+      ls -al
+      substitute wrapper-lib.c lib.c \
         --subst-var-by to "${unpacked}/srvadmin-hapi/opt/dell/srvadmin/etc/omreg.d/omreg-hapi.cfg"
       cc -fPIC -shared lib.c -o ${wrapperLibName}
     '';
     installPhase = ''
-      mkdir -p $out/lib
-      cp ${wrapperLibName} $out/lib/
+      install -D ${wrapperLibName} -t $out/lib
     '';
   };
 
@@ -79,13 +77,12 @@ in stdenv.mkDerivation rec {
   src = unpacked;
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib
-    install -t $out/lib -m644 -v command-configure/opt/dell/dcc/libhapiintf.so
-    install -t $out/lib -m644 -v command-configure/opt/dell/dcc/libsmbios_c.so.2
-    install -t $out/bin -m755 -v command-configure/opt/dell/dcc/cctk
-    install -t $out/bin -m755 -v srvadmin-hapi/opt/dell/srvadmin/sbin/dchcfg
+    install -D -t $out/lib -m644 -v command-configure/opt/dell/dcc/libhapiintf.so
+    install -D -t $out/lib -m644 -v command-configure/opt/dell/dcc/libsmbios_c.so.2
+    install -D -t $out/bin -m755 -v command-configure/opt/dell/dcc/cctk
+    install -D -t $out/bin -m755 -v srvadmin-hapi/opt/dell/srvadmin/sbin/dchcfg
     for lib in $(find srvadmin-hapi/opt/dell/srvadmin/lib64 -type l); do
-        install -t $out/lib -m644 -v $lib
+        install -D -t $out/lib -m644 -v $lib
     done
   '';
 
