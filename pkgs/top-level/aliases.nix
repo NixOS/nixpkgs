@@ -755,8 +755,8 @@ mapAliases ({
   rocm-comgr = throw "'rocm-comgr' has been replaced with 'rocmPackages.rocm-comgr'"; # Added 2023-10-08
   rocm-core = throw "'rocm-core' has been replaced with 'rocmPackages.rocm-core'"; # Added 2023-10-08
   rocm-device-libs = throw "'rccl' has been replaced with 'rocmPackages.rocm-device-libs'"; # Added 2023-10-08
-  rocm-opencl-icd = lib.warn "'rocm-opencl-icd' has been replaced with 'rocmPackages.clr.icd'" rocmPackages.clr.icd; # Added 2023-10-08
-  rocm-opencl-runtime = lib.warn "'rocm-opencl-runtime' has been replaced with 'rocmPackages.clr'" rocmPackages.clr; # Added 2023-10-08
+  rocm-opencl-icd = rocmPackages.clr.icd; # Added 2023-10-08 Convert to throw after 23.11 is released
+  rocm-opencl-runtime = rocmPackages.clr; # Added 2023-10-08 Convert to throw after 23.11 is released
   rocm-runtime = throw "'rocm-runtime' has been replaced with 'rocmPackages.rocm-runtime'"; # Added 2023-10-08
   rocm-smi = throw "'rocm-smi' has been replaced with 'rocmPackages.rocm-smi'"; # Added 2023-10-08
   rocm-thunk = throw "'rocm-thunk' has been replaced with 'rocmPackages.rocm-thunk'"; # Added 2023-10-08
