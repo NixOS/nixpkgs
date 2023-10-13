@@ -10,9 +10,9 @@
     ]
   },
   "calendar": {
-    "sha256": "14jf0vrjkscz6j2xsf2xn18v3vwqkd8qi47iyyz2wlzdgi25zl6v",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.5.1/calendar-v4.5.1.tar.gz",
-    "version": "4.5.1",
+    "sha256": "1827l5hxsvfnyc2m78rs95cnb2fwi14nl7ricpl25ndh1j0a7ccz",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v4.5.2/calendar-v4.5.2.tar.gz",
+    "version": "4.5.2",
     "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "mail": {
-    "sha256": "1n5z683ws6206vcy0qza342ihwv4wl5kvr1nscji84hvl18ccdfr",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.4.0/mail-v3.4.0.tar.gz",
-    "version": "3.4.0",
+    "sha256": "0p9iv172ivypyr6ccsmkfnb7b77nyghqbva24g8ymphw95pirwag",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.4.1/mail-v3.4.1.tar.gz",
+    "version": "3.4.1",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -120,9 +120,9 @@
     ]
   },
   "maps": {
-    "sha256": "1rcmqnm5364h5gaq1yy6b6d7k17napgn0yc9ymrnn75bps9s71v9",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.1.1/maps-1.1.1.tar.gz",
-    "version": "1.1.1",
+    "sha256": "19zx3fhv8dil7vm84lhnhlxzd2zyab7h8j20hiwsd4rrj0gzhjdf",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.2.0-1-nightly/maps-1.2.0-1-nightly.tar.gz",
+    "version": "1.2.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "memories": {
-    "sha256": "1w17cy5ciybq2yf42rmiim77mkfdrjg49l2l3b2v2dxpfv36is1s",
-    "url": "https://github.com/pulsejet/memories/releases/download/v5.4.1/memories.tar.gz",
-    "version": "5.4.1",
+    "sha256": "10qd41lkvmgv5bw15gfzivjwf9asn22gv43f1k9l9158rrpzsgph",
+    "url": "https://github.com/pulsejet/memories/releases/download/v5.5.1/memories.tar.gz",
+    "version": "5.5.1",
     "description": "# Memories: Photo Management for Nextcloud\n\nMemories is a *batteries-included* photo management solution for Nextcloud with advanced features including:\n\n- **📸 Timeline**: Sort photos and videos by date taken, parsed from Exif data.\n- **⏪ Rewind**: Jump to any time in the past instantly and relive your memories.\n- **🤖 AI Tagging**: Group photos by people and objects, powered by [recognize](https://github.com/nextcloud/recognize) and [facerecognition](https://github.com/matiasdelellis/facerecognition).\n- **🖼️ Albums**: Create albums to group photos and videos together. Then share these albums with others.\n- **🫱🏻‍🫲🏻 External Sharing**: Share photos and videos with people outside of your Nextcloud instance.\n- **📱 Mobile Support**: Work from any device, of any shape and size through the web app.\n- **✏️ Edit Metadata**: Edit dates and other metadata on photos quickly and in bulk.\n- **📦 Archive**: Store photos you don't want to see in your timeline in a separate folder.\n- **📹 Video Transcoding**: Transcode videos and use HLS for maximal performance.\n- **🗺️ Map**: View your photos on a map, tagged with accurate reverse geocoding.\n- **📦 Migration**: Migrate easily from Nextcloud Photos and Google Takeout.\n- **⚡️ Performance**: Do all this very fast.\n\n## 🚀 Installation\n\n1. Install the app from the Nextcloud app store (try a demo [here](https://demo.memories.gallery/apps/memories/)).\n1. Perform the recommended [configuration steps](https://memories.gallery/config/).\n1. Run `php occ memories:index` to generate metadata indices for existing photos.\n1. Open the 📷 Memories app in Nextcloud and set the directory containing your photos.",
     "homepage": "https://memories.gallery",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "news": {
-    "sha256": "1j9dhqz5anwsmw3f8hbhvqc2h1fp15zmxzdbpnz1p3vwqf8f5cjs",
-    "url": "https://github.com/nextcloud/news/releases/download/23.0.0/news.tar.gz",
-    "version": "23.0.0",
+    "sha256": "1bkh73h0ibxyjpy3cmvhnlr7isvgqkcxdw2dw15mxksj2cln9wki",
+    "url": "https://github.com/nextcloud/news/releases/download/24.0.0/news.tar.gz",
+    "version": "24.0.0",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
