@@ -171,18 +171,18 @@ self: super: {
   stylish-haskell = super.stylish-haskell_0_14_5_0;
 
   # Newer version of servant required for GHC 9.6
-  servant = self.servant_0_20;
+  servant = self.servant_0_20_1;
   servant-server = self.servant-server_0_20;
   servant-client = self.servant-client_0_20;
   servant-client-core = self.servant-client-core_0_20;
-  # Select versions compatible with servant_0_20
+  # Select versions compatible with servant_0_20_1
   servant-docs = self.servant-docs_0_13;
   servant-swagger = self.servant-swagger_1_2;
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
   # Jailbreak strict upper bounds: http-api-data <0.6
-  servant_0_20 = doJailbreak super.servant_0_20;
+  servant_0_20_1 = doJailbreak super.servant_0_20_1;
   servant-server_0_20 = doJailbreak super.servant-server_0_20;
   servant-client_0_20 = doJailbreak super.servant-client_0_20;
   servant-client-core_0_20 = doJailbreak super.servant-client-core_0_20;
