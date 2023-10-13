@@ -34242,6 +34242,8 @@ with pkgs;
 
   synfigstudio = callPackage ../applications/graphics/synfigstudio { };
 
+  typora = callPackage ../applications/editors/typora { };
+
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
   taxi-cli = with python3Packages; toPythonApplication taxi;
