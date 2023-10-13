@@ -8,13 +8,13 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "castor";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "jolicode";
     repo = "castor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rJz4BY74BI8gyT4ZlABc4PA+SCsd8guM0m2MTej350g=";
+    hash = "sha256-zTtMNBZcWjEQB70/6i4pvYEepDVCItJgkwrQ2xrXDAU=";
   };
 
   vendorHash = "sha256-Jh4mNNYEM9sy0Dp+dZtD+xrMICjAuspe9D9BDXcfUPM=";

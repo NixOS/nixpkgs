@@ -234,8 +234,6 @@ with pkgs;
 
   adcli = callPackage ../os-specific/linux/adcli { };
 
-  aether = callPackage ../applications/networking/aether { };
-
   alda = callPackage ../development/interpreters/alda { };
 
   align = callPackage ../tools/text/align { };
@@ -30305,17 +30303,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  pdfstudio2021 = callPackage ../applications/misc/pdfstudio {
-    year = "2021";
-  };
+  pdfstudio2021 = callPackage ../applications/misc/pdfstudio { year = "2021"; };
 
-  pdfstudio2022 = callPackage ../applications/misc/pdfstudio {
-    year = "2022";
-  };
+  pdfstudio2022 = callPackage ../applications/misc/pdfstudio { year = "2022"; };
 
-  pdfstudioviewer = callPackage ../applications/misc/pdfstudio {
-    program = "pdfstudioviewer";
-  };
+  pdfstudio2023 = callPackage ../applications/misc/pdfstudio { year = "2023"; };
+
+  pdfstudioviewer = callPackage ../applications/misc/pdfstudio { program = "pdfstudioviewer"; };
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 

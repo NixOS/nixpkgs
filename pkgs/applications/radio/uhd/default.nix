@@ -49,9 +49,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhd";
-  # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
-  # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "4.4.0.0";
+  # NOTE: Use the following command to update the package, and the uhdImageSrc attribute:
+  #
+  #     nix-shell maintainers/scripts/update.nix --argstr package uhd --argstr commit true
+  #
+  version = "4.5.0.0";
 
   outputs = [ "out" "dev" ];
 
@@ -59,14 +61,24 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "EttusResearch";
     repo = "uhd";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-khVOHlvacZc4EMg4m55rxEqPvLY1xURpAfOW905/3jg=";
+    # The updateScript relies on the `src` using `hash`, and not `sha256. To
+    # update the correct hash for the `src` vs the `uhdImagesSrc`
+    hash = "sha256-0EqMBaQiNr8PE542YNkPvX3o1HhnhrO0Kz1euphY6Ps=";
   };
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/v${finalAttrs.version}/uhd-images_${finalAttrs.version}.tar.xz";
-    sha256 = "V8ldW8bvYWbrDAvpWpHcMeLf9YvF8PIruDAyNK/bru4=";
+    # Please don't convert this to a hash, in base64, see comment near src's
+    # hash.
+    sha256 = "13cn41wv7vldk4vx7vy3jbb3wb3a5vpfg3ay893klpi6vzxc1dly";
   };
-  # TODO: Add passthru.updateScript that will update both of the above hashes...
+  passthru = {
+    updateScript = [
+      ./update.sh
+      # Pass it this file name as argument
+      (builtins.unsafeGetAttrPos "pname" finalAttrs.finalPackage).file
+    ];
+  };
 
   cmakeFlags = [
     "-DENABLE_LIBUHD=ON"
