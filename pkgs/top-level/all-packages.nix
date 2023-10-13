@@ -37612,7 +37612,7 @@ with pkgs;
 
   spacenav-cube-example = callPackage ../applications/misc/spacenav-cube-example { };
 
-  spnavcfg = callPackage ../applications/misc/spnavcfg { };
+  spnavcfg = libsForQt5.callPackage ../applications/misc/spnavcfg { };
 
   splix = callPackage ../misc/cups/drivers/splix { };
 
