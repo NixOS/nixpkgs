@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.64.4";
+  version = "0.64.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6zZgbUKszSo13qmrWKo5UAPqS/QaS8omoTJQgWFfULk=";
+    hash = "sha256-cCzvltq3DFbfRp0gO8RQxGUwBtYJcJoeYHIz06FA7vM=";
   };
 
   postPatch = ''
