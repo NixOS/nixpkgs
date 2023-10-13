@@ -12,7 +12,7 @@ autoconf in the bootstrap loop just to regenerate a patched configure.ac.
        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
  printf "%s\n" "yes" >&6; }
 -      LDFLAGS="$LDFLAGS -framework CoreFoundation -framework CoreServices -framework SystemConfiguration"
-+      LDFLAGS="$LDFLAGS -framework CoreFoundation -framework CoreServices"
++      LDFLAGS="$LDFLAGS -framework CoreFoundation"
      else
        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
  printf "%s\n" "no" >&6; }
