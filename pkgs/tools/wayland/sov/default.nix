@@ -10,14 +10,14 @@
 , wayland-protocols
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sov";
   version = "0.73";
 
   src = fetchFromGitHub {
     owner = "milgra";
-    repo = pname;
-    rev = version;
+    repo = "sov";
+    rev = finalAttrs.version;
     sha256 = "sha256-cjbTSvW1fCPl2wZ848XrUPU0bDQ4oXy+D8GqyBMaTwQ=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
-}
+})
