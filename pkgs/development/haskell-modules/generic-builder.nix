@@ -272,47 +272,8 @@ let
 
   isHaskellPkg = x: x ? isHaskellLibrary;
 
-  # Work around a Cabal bug requiring pkg-config --static --libs to work even
-  # when linking dynamically, affecting Cabal 3.8 and 3.9.
-  # https://github.com/haskell/cabal/issues/8455
-  #
-  # For this, we treat the runtime system/pkg-config dependencies of a Haskell
-  # derivation as if they were propagated from their dependencies which allows
-  # pkg-config --static to work in most cases.
-  allPkgconfigDepends =
-    let
-      # If __onlyPropagateKnownPkgConfigModules is set, packages without
-      # meta.pkgConfigModules will be filtered out, otherwise all packages in
-      # buildInputs and propagatePlainBuildInputs are propagated.
-      propagateValue = drv:
-        lib.isDerivation drv
-        && (__onlyPropagateKnownPkgConfigModules -> drv ? meta.pkgConfigModules);
-
-      # Take list of derivations and return list of the transitive dependency
-      # closure, only taking into account buildInputs. Loosely based on
-      # closePropagationFast.
-      propagatePlainBuildInputs = drvs:
-        builtins.map (i: i.val) (
-          builtins.genericClosure {
-            startSet = builtins.map (drv:
-              { key = drv.outPath; val = drv; }
-            ) (builtins.filter propagateValue drvs);
-            operator = { val, ... }:
-              builtins.concatMap (drv:
-                if propagateValue drv
-                then [ { key = drv.outPath; val = drv; } ]
-                else [ ]
-              ) (val.buildInputs or [ ] ++ val.propagatedBuildInputs or [ ]);
-          }
-        );
-    in
-
-    if __propagatePkgConfigDepends
-    then propagatePlainBuildInputs allPkgconfigDepends'
-    else allPkgconfigDepends';
-  allPkgconfigDepends' =
-    pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
-    optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
+  allPkgconfigDepends = pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+                        optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
   depsBuildBuild = [ nativeGhc ]
     # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
