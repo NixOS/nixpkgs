@@ -54,6 +54,7 @@
 , vamp-plugin-sdk
 , wafHook
 , xjadeo
+, optimize ? true # disable to print Lua DSP script output to stdout
 , videoSupport ? true
 }:
 stdenv.mkDerivation rec {
@@ -155,11 +156,10 @@ stdenv.mkDerivation rec {
     "--docs"
     "--freedesktop"
     "--no-phone-home"
-    "--optimize"
     "--ptformat"
     "--run-tests"
     "--test"
-  ];
+  ] ++ lib.optional optimize "--optimize";
   # removed because it fixes https://tracker.ardour.org/view.php?id=8161 and https://tracker.ardour.org/view.php?id=8437
   # "--use-external-libs"
 
