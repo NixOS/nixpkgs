@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "0.18.1";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-un+GQflxhMHCMH5UEeUVsYx59ryn7MR4ApooeOuhccc=";
+    hash = "sha256-QlTAYfd0taXfK370nzqictwK7bZ4bnh1oPBJKZzhnMo=";
   };
 
   cargoLock = {
@@ -37,10 +37,15 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ curl CoreServices Security ];
 
   checkFlags = [
-    # Disabled because they accesses the network.
+    # Disabled because they access the network.
     "--skip=test_build_basic_extension"
     "--skip=test_build_basic_function"
+    "--skip=test_build_basic_zip_extension"
+    "--skip=test_build_basic_zip_function"
+    "--skip=test_build_event_type_function"
+    "--skip=test_build_http_feature_function"
     "--skip=test_build_http_function"
+    "--skip=test_build_internal_zip_extension"
     "--skip=test_build_logs_extension"
     "--skip=test_build_telemetry_extension"
     "--skip=test_download_example"

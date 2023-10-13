@@ -11,6 +11,13 @@ This API may be changed over time if the CI workflow making use of it is adjuste
 - Command line: `nixpkgs-check-by-name <NIXPKGS>`
 - Arguments:
   - `<NIXPKGS>`: The path to the Nixpkgs to check
+  - `--version <VERSION>`: The version of the checks to perform.
+
+    Possible values:
+    - `v0` (default)
+    - `v1`
+
+    See [validation](#validity-checks) for the differences.
 - Exit code:
   - `0`: If the [validation](#validity-checks) is successful
   - `1`: If the [validation](#validity-checks) is not successful
@@ -35,6 +42,7 @@ These checks are performed by this tool:
 
 ### Nix evaluation checks
 - `pkgs.${name}` is defined as `callPackage pkgs/by-name/${shard}/${name}/package.nix args` for some `args`.
+  - **Only after --version v1**: If `pkgs.${name}` is not auto-called from `pkgs/by-name`, `args` must not be empty
 - `pkgs.lib.isDerivation pkgs.${name}` is `true`.
 
 ## Development

@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     sed -i 's,set --, set -x; set --,' Makefile
   '';
   pname = "tinycdb";
-  version = "0.78";
+  version = "0.80";
   # In general, static library (.a) goes to "dev", shared (.so) to
   # "lib". In case of static build, there is no .so library, so "lib"
   # output is useless and empty.
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.corpit.ru/mjt/tinycdb/${pname}-${version}.tar.gz";
-    sha256 = "0g6n1rr3lvyqc85g6z44lw9ih58f2k1i3v18yxlqvnla5m1qyrsh";
+    sha256 = "sha256-wyG5BekCwsqZo/+Kjd39iCMkf+Ht7IpLuF+Dhpxjn7g=";
   };
 
   meta = with lib; {

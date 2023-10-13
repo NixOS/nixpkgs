@@ -234,8 +234,6 @@ with pkgs;
 
   adcli = callPackage ../os-specific/linux/adcli { };
 
-  aether = callPackage ../applications/networking/aether { };
-
   alda = callPackage ../development/interpreters/alda { };
 
   align = callPackage ../tools/text/align { };
@@ -2623,8 +2621,6 @@ with pkgs;
     SDL = if stdenv.isDarwin then SDL else SDL_compat;
   };
 
-  dosbox-staging = callPackage ../applications/emulators/dosbox-staging { };
-
   dosbox-x = darwin.apple_sdk_11_0.callPackage ../applications/emulators/dosbox-x {
     inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
   };
@@ -3009,17 +3005,11 @@ with pkgs;
 
   foot = callPackage ../applications/terminal-emulators/foot { };
 
-  germinal = callPackage ../applications/terminal-emulators/germinal { };
-
   guake = callPackage ../applications/terminal-emulators/guake { };
-
-  havoc = callPackage ../applications/terminal-emulators/havoc { };
 
   hyper = callPackage ../applications/terminal-emulators/hyper { };
 
   iterm2 = callPackage ../applications/terminal-emulators/iterm2 { };
-
-  kermit-terminal = callPackage ../applications/terminal-emulators/kermit-terminal { };
 
   kitty = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/kitty {
     go = go_1_21;
@@ -3090,10 +3080,6 @@ with pkgs;
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
   termonad = callPackage ../applications/terminal-emulators/termonad { };
-
-  tilda = callPackage ../applications/terminal-emulators/tilda {
-    gtk = gtk3;
-  };
 
   tilix = callPackage ../applications/terminal-emulators/tilix { };
 
@@ -4271,8 +4257,6 @@ with pkgs;
 
   bar = callPackage ../tools/system/bar { };
 
-  base16-shell-preview = callPackage ../misc/base16-shell-preview { };
-
   base16-builder = callPackage ../misc/base16-builder { };
 
   basex = callPackage ../tools/text/xml/basex { };
@@ -4292,10 +4276,6 @@ with pkgs;
   barcode = callPackage ../tools/graphics/barcode { };
 
   bashmount = callPackage ../tools/filesystems/bashmount { };
-
-  bat = callPackage ../tools/misc/bat {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   bat-extras = recurseIntoAttrs (callPackages ../tools/misc/bat-extras { });
 
@@ -8902,8 +8882,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  robodoc = callPackage ../tools/text/robodoc { };
-
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
   groff = callPackage ../tools/text/groff { };
@@ -10158,7 +10136,7 @@ with pkgs;
   };
 
   mdcat = callPackage ../tools/text/mdcat {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
     inherit (python3Packages) ansi2html;
   };
 
@@ -11306,6 +11284,8 @@ with pkgs;
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
+  panicparse = callPackage ../tools/misc/panicparse {};
+
   panoply = callPackage ../tools/misc/panoply { };
 
   patray = callPackage ../tools/audio/patray { };
@@ -11361,8 +11341,6 @@ with pkgs;
   nlopt = callPackage ../development/libraries/nlopt { octave = null; };
 
   npapi_sdk = callPackage ../development/libraries/npapi-sdk { };
-
-  nickel = callPackage ../development/interpreters/nickel { };
 
   npiet = callPackage ../development/interpreters/npiet { };
 
@@ -12009,6 +11987,8 @@ with pkgs;
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   peco = callPackage ../tools/text/peco { };
+
+  percollate = callPackage ../tools/text/percollate { };
 
   pg_activity = callPackage ../development/tools/database/pg_activity { };
 
@@ -12667,10 +12647,6 @@ with pkgs;
 
   rlci = callPackage ../development/interpreters/rlci { };
 
-  rs = callPackage ../tools/text/rs { };
-
-  rst2html5 = callPackage ../tools/text/rst2html5 { };
-
   rst2pdf = with python3Packages; toPythonApplication rst2pdf;
 
   rstcheck = with python3Packages; toPythonApplication rstcheck;
@@ -13023,8 +12999,6 @@ with pkgs;
   scorecard = callPackage ../tools/security/scorecard { };
 
   scream = callPackage ../applications/audio/scream { };
-
-  scimark = callPackage ../misc/scimark { };
 
   screen = callPackage ../tools/misc/screen {
     inherit (darwin.apple_sdk.libs) utmp;
@@ -14063,6 +14037,10 @@ with pkgs;
 
   trunk-io = callPackage ../development/tools/trunk-io { };
 
+  trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   tthsum = callPackage ../applications/misc/tthsum { };
 
   ttdl = callPackage ../applications/misc/ttdl { };
@@ -14214,8 +14192,6 @@ with pkgs;
   twtxt = python3Packages.callPackage ../applications/networking/twtxt { };
 
   twurl = callPackage ../tools/misc/twurl { };
-
-  txr = callPackage ../tools/text/txr { };
 
   txt2man = callPackage ../tools/misc/txt2man { };
 
@@ -18411,8 +18387,6 @@ with pkgs;
     nix = nixVersions.nix_2_16;
   };
 
-  nls = callPackage ../development/tools/language-servers/nls { };
-
   openscad-lsp = callPackage ../development/tools/language-servers/openscad-lsp { };
 
   perlnavigator = callPackage ../development/tools/language-servers/perlnavigator { };
@@ -18515,7 +18489,8 @@ with pkgs;
     electron_23-bin
     electron_24-bin
     electron_25-bin
-    electron_26-bin;
+    electron_26-bin
+    electron_27-bin;
 
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
@@ -18534,7 +18509,8 @@ with pkgs;
   electron_24 = electron_24-bin;
   electron_25 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_25 then electron-source.electron_25 else electron_25-bin;
   electron_26 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_26 then electron-source.electron_26 else electron_26-bin;
-  electron = electron_26;
+  electron_27 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_27 then electron-source.electron_27 else electron_27-bin;
+  electron = electron_27;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -18608,9 +18584,7 @@ with pkgs;
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
-  bazel-watcher = callPackage ../development/tools/bazel-watcher {
-    go = go_1_18;
-  };
+  bazel-watcher = callPackage ../development/tools/bazel-watcher { };
 
   bazel-gazelle = callPackage ../development/tools/bazel-gazelle { };
 
@@ -24568,10 +24542,6 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
-  pyp = callPackage ../tools/text/pyp { };
-
-  pru = callPackage ../tools/text/pru { };
-
   prospector = callPackage ../development/tools/prospector { };
 
   protobuf = protobuf3_24;
@@ -24694,6 +24664,8 @@ with pkgs;
   rapidfuzz-cpp = callPackage ../development/libraries/rapidfuzz-cpp { };
 
   rapidjson = callPackage ../development/libraries/rapidjson { };
+
+  rapidjson-unstable = callPackage ../development/libraries/rapidjson/unstable.nix { };
 
   rapidxml = callPackage ../development/libraries/rapidxml { };
 
@@ -27043,7 +27015,9 @@ with pkgs;
   OVMF = callPackage ../applications/virtualization/OVMF { };
   OVMFFull = callPackage ../applications/virtualization/OVMF {
     secureBoot = true;
-    csmSupport = true;
+    # CSM support is a BIOS emulation mechanism,
+    # SeaBIOS is only available on x86.
+    csmSupport = stdenv.hostPlatform.isx86;
     httpSupport = true;
     tpmSupport = true;
   };
@@ -27407,8 +27381,6 @@ with pkgs;
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
 
   rss-bridge = callPackage ../servers/web-apps/rss-bridge { };
-
-  searx = callPackage ../servers/web-apps/searx { };
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
@@ -28896,9 +28868,7 @@ with pkgs;
     buildBarebox
     bareboxTools;
 
-  uclibc-ng = callPackage ../os-specific/linux/uclibc-ng { };
-
-  uclibc-ng-cross = callPackage ../os-specific/linux/uclibc-ng {
+  uclibc-ng-cross = uclibc-ng.override {
     stdenv = crossLibcStdenv;
   };
 
@@ -30335,17 +30305,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  pdfstudio2021 = callPackage ../applications/misc/pdfstudio {
-    year = "2021";
-  };
+  pdfstudio2021 = callPackage ../applications/misc/pdfstudio { year = "2021"; };
 
-  pdfstudio2022 = callPackage ../applications/misc/pdfstudio {
-    year = "2022";
-  };
+  pdfstudio2022 = callPackage ../applications/misc/pdfstudio { year = "2022"; };
 
-  pdfstudioviewer = callPackage ../applications/misc/pdfstudio {
-    program = "pdfstudioviewer";
-  };
+  pdfstudio2023 = callPackage ../applications/misc/pdfstudio { year = "2023"; };
+
+  pdfstudioviewer = callPackage ../applications/misc/pdfstudio { program = "pdfstudioviewer"; };
 
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
@@ -32462,8 +32428,6 @@ with pkgs;
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
   };
-
-  haunt = callPackage ../applications/misc/haunt { };
 
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
@@ -35384,7 +35348,7 @@ with pkgs;
     imlib2 = imlib2Full;
   };
 
-  nsxiv = callPackage ../applications/graphics/nsxiv {
+  nsxiv = callPackage ../by-name/ns/nsxiv/package.nix {
     imlib2 = imlib2Full;
   };
 
@@ -36795,8 +36759,6 @@ with pkgs;
   };
 
   xscope = callPackage ../applications/misc/xscope { };
-
-  xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
 
   xsubfind3r = callPackage ../tools/security/xsubfind3r {  };
 
@@ -41119,8 +41081,6 @@ with pkgs;
 
   soundmodem = callPackage ../applications/radio/soundmodem { };
 
-  sound-of-sorting = callPackage ../misc/sound-of-sorting { };
-
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;
   };
@@ -41446,7 +41406,7 @@ with pkgs;
   wmutils-opt = callPackage ../tools/X11/wmutils-opt { };
 
   inherit (callPackage ../servers/web-apps/wordpress {})
-    wordpress wordpress6_1 wordpress6_2 wordpress6_3;
+    wordpress wordpress6_3;
 
   wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
     plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;

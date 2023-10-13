@@ -1,9 +1,15 @@
 { callPackage
 , recurseIntoAttrs
+, symlinkJoin
+, fetchFromGitHub
 , cudaPackages
 , python3Packages
 , elfutils
 , boost179
+, opencv
+, ffmpeg_4
+, libjpeg_turbo
+, rapidjson-unstable
 }:
 
 let
@@ -187,7 +193,7 @@ in rec {
   };
 
   rocblas = callPackage ./rocblas {
-    inherit rocmUpdateScript rocm-cmake clr tensile;
+    inherit rocblas rocmUpdateScript rocm-cmake clr tensile;
     inherit (llvm) openmp;
     stdenv = llvm.rocmClangStdenv;
   };
@@ -268,5 +274,255 @@ in rec {
     inherit (llvm) openmp clang-tools-extra;
     stdenv = llvm.rocmClangStdenv;
     rocmlir = rocmlir-rock;
+  };
+
+  ## GPUOpen-ProfessionalCompute-Libraries ##
+  rpp = callPackage ./rpp {
+    inherit rocmUpdateScript rocm-cmake rocm-docs-core clr half;
+    inherit (llvm) openmp;
+    stdenv = llvm.rocmClangStdenv;
+  };
+
+  rpp-hip = rpp.override {
+    useOpenCL = false;
+    useCPU = false;
+  };
+
+  rpp-opencl = rpp.override {
+    useOpenCL = true;
+    useCPU = false;
+  };
+
+  rpp-cpu = rpp.override {
+    useOpenCL = false;
+    useCPU = true;
+  };
+
+  mivisionx = callPackage ./mivisionx {
+    inherit rocmUpdateScript rocm-cmake rocm-device-libs clr rpp rocblas miopengemm miopen migraphx half rocm-docs-core;
+    inherit (llvm) clang openmp;
+    opencv = opencv.override { enablePython = true; };
+    ffmpeg = ffmpeg_4;
+    rapidjson = rapidjson-unstable;
+    stdenv = llvm.rocmClangStdenv;
+
+    # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice
+    # See: https://github.com/GPUOpen-ProfessionalCompute-Libraries/MIVisionX/issues/1051
+    libjpeg_turbo = libjpeg_turbo.overrideAttrs {
+      version = "2.0.6.1";
+
+      src = fetchFromGitHub {
+        owner = "rrawther";
+        repo = "libjpeg-turbo";
+        rev = "640d7ee1917fcd3b6a5271aa6cf4576bccc7c5fb";
+        sha256 = "sha256-T52whJ7nZi8jerJaZtYInC2YDN0QM+9tUDqiNr6IsNY=";
+      };
+    };
+  };
+
+  mivisionx-hip = mivisionx.override {
+    rpp = rpp-hip;
+    useOpenCL = false;
+    useCPU = false;
+  };
+
+  mivisionx-opencl = mivisionx.override {
+    rpp = rpp-opencl;
+    miopen = miopen-opencl;
+    useOpenCL = true;
+    useCPU = false;
+  };
+
+  mivisionx-cpu = mivisionx.override {
+    rpp = rpp-cpu;
+    useOpenCL = false;
+    useCPU = true;
+  };
+
+  ## Meta ##
+  # Emulate common ROCm meta layout
+  # These are mainly for users. I strongly suggest NOT using these in nixpkgs derivations
+  # Don't put these into `propagatedBuildInputs` unless you want PATH/PYTHONPATH issues!
+  # See: https://rocm.docs.amd.com/en/latest/_images/image.004.png
+  # See: https://rocm.docs.amd.com/en/latest/deploy/linux/os-native/package_manager_integration.html
+  meta = rec {
+    rocm-developer-tools = symlinkJoin {
+      name = "rocm-developer-tools-meta";
+
+      paths = [
+        hsa-amd-aqlprofile-bin
+        rocm-core
+        rocr-debug-agent
+        roctracer
+        rocdbgapi
+        rocprofiler
+        rocgdb
+        rocm-language-runtime
+      ];
+    };
+
+    rocm-ml-sdk = symlinkJoin {
+      name = "rocm-ml-sdk-meta";
+
+      paths = [
+        rocm-core
+        miopen-hip
+        rocm-hip-sdk
+        rocm-ml-libraries
+      ];
+    };
+
+    rocm-ml-libraries = symlinkJoin {
+      name = "rocm-ml-libraries-meta";
+
+      paths = [
+        llvm.clang
+        llvm.mlir
+        llvm.openmp
+        rocm-core
+        miopen-hip
+        rocm-hip-libraries
+      ];
+    };
+
+    rocm-hip-sdk = symlinkJoin {
+      name = "rocm-hip-sdk-meta";
+
+      paths = [
+        rocprim
+        rocalution
+        hipfft
+        rocm-core
+        hipcub
+        hipblas
+        rocrand
+        rocfft
+        rocsparse
+        rccl
+        rocthrust
+        rocblas
+        hipsparse
+        hipfort
+        rocwmma
+        hipsolver
+        rocsolver
+        rocm-hip-libraries
+        rocm-hip-runtime-devel
+      ];
+    };
+
+    rocm-hip-libraries = symlinkJoin {
+      name = "rocm-hip-libraries-meta";
+
+      paths = [
+        rocblas
+        hipfort
+        rocm-core
+        rocsolver
+        rocalution
+        rocrand
+        hipblas
+        rocfft
+        hipfft
+        rccl
+        rocsparse
+        hipsparse
+        hipsolver
+        rocm-hip-runtime
+      ];
+    };
+
+    rocm-openmp-sdk = symlinkJoin {
+      name = "rocm-openmp-sdk-meta";
+
+      paths = [
+        rocm-core
+        llvm.clang
+        llvm.mlir
+        llvm.openmp # openmp-extras-devel (https://github.com/ROCm-Developer-Tools/aomp)
+        rocm-language-runtime
+      ];
+    };
+
+    rocm-opencl-sdk = symlinkJoin {
+      name = "rocm-opencl-sdk-meta";
+
+      paths = [
+        rocm-core
+        rocm-runtime
+        clr
+        clr.icd
+        rocm-thunk
+        rocm-opencl-runtime
+      ];
+    };
+
+    rocm-opencl-runtime = symlinkJoin {
+      name = "rocm-opencl-runtime-meta";
+
+      paths = [
+        rocm-core
+        clr
+        clr.icd
+        rocm-language-runtime
+      ];
+    };
+
+    rocm-hip-runtime-devel = symlinkJoin {
+      name = "rocm-hip-runtime-devel-meta";
+
+      paths = [
+        clr
+        rocm-core
+        hipify
+        rocm-cmake
+        llvm.clang
+        llvm.mlir
+        llvm.openmp
+        rocm-thunk
+        rocm-runtime
+        rocm-hip-runtime
+      ];
+    };
+
+    rocm-hip-runtime = symlinkJoin {
+      name = "rocm-hip-runtime-meta";
+
+      paths = [
+        rocm-core
+        rocminfo
+        clr
+        rocm-language-runtime
+      ];
+    };
+
+    rocm-language-runtime = symlinkJoin {
+      name = "rocm-language-runtime-meta";
+
+      paths = [
+        rocm-runtime
+        rocm-core
+        rocm-comgr
+        llvm.openmp # openmp-extras-runtime (https://github.com/ROCm-Developer-Tools/aomp)
+      ];
+    };
+
+    rocm-all = symlinkJoin {
+      name = "rocm-all-meta";
+
+      paths = [
+        rocm-developer-tools
+        rocm-ml-sdk
+        rocm-ml-libraries
+        rocm-hip-sdk
+        rocm-hip-libraries
+        rocm-openmp-sdk
+        rocm-opencl-sdk
+        rocm-opencl-runtime
+        rocm-hip-runtime-devel
+        rocm-hip-runtime
+        rocm-language-runtime
+      ];
+    };
   };
 }
