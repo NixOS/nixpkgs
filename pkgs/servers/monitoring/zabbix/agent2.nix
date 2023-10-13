@@ -17,8 +17,6 @@ import ./versions.nix ({ version, sha256, vendorHash ? throw "unsupported versio
     nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ libiconv openssl pcre zlib ];
 
-    inherit (buildGoModule.go) GOOS GOARCH;
-
     # need to provide GO* env variables & patch for reproducibility
     postPatch = ''
       substituteInPlace src/go/Makefile.am \

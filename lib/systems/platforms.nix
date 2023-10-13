@@ -3,7 +3,7 @@
 # targetPlatform, etc) containing at least the minimal set of attrs
 # required (see types.parsedPlatform in lib/systems/parse.nix).  This
 # file takes an already-valid platform and further elaborates it with
-# optional fields; currently these are: linux-kernel, gcc, and rustc.
+# optional fields; currently these are: linux-kernel, gcc, rustc, go.
 
 { lib }:
 rec {

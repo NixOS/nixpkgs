@@ -17,8 +17,6 @@ buildGoModule rec {
   vendorHash = "sha256-TwPbxoNu9PYAFEbUT5htyUY1RbkGow712ARJW6y496E=";
 
   CGO_ENABLED = 0;
-  GO111MODULE = "on";
-  GOFLAGS = "-trimpath";
 
   subPackages = [ "cli/slsa-verifier" ];
 

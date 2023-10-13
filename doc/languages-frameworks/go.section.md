@@ -164,3 +164,19 @@ Specified as a string or list of strings. Limits the builder from building child
 ### `excludedPackages` {#var-go-excludedPackages}
 
 Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values. If `excludedPackages` is not specified, all child packages will be built.
+
+## Cross compilation {#ssec-go-cross-compilation}
+
+By default, Go packages are compiled for the host platform, just like any other
+package is. That is, `GOOS`, `GOARCH` and other environment variables passed to
+Go toolchain are computed from `stdenv.hostPlatform`. It is possible to
+customize them, for example, to fine-tune architecture-specific environment
+variables:
+
+```nix
+import <nixpkgs> {
+  crossSystem = (import <nixpkgs/lib>).systems.examples.gnu32 // {
+    goPlatform.GO386 = "softfloat";
+  };
+}
+```

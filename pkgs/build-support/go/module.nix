@@ -1,4 +1,4 @@
-{ go, cacert, git, lib, stdenv }:
+{ go, goPlatform, cacert, git, lib, stdenv }:
 
 { name ? "${args'.pname}-${args'.version}"
 , src
@@ -32,7 +32,7 @@
   # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, CGO_ENABLED ? go.CGO_ENABLED
+, CGO_ENABLED ? goPlatform.host.env.CGO_ENABLED or true
 
 , meta ? { }
 
@@ -50,7 +50,9 @@ assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGo
 assert (args' ? vendorHash && args' ? vendorSha256) -> throw "both `vendorHash` and `vendorSha256` set. only one can be set.";
 
 let
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
+  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" "CGO_ENABLED" ];
+
+  inherit (goPlatform.host.env) GOOS GOARCH;
 
   GO111MODULE = "on";
   GOTOOLCHAIN = "local";
@@ -62,8 +64,10 @@ let
     nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
 
     inherit (args) src;
-    inherit (go) GOOS GOARCH;
-    inherit GO111MODULE GOTOOLCHAIN;
+
+    env = goPlatform.host.env // {
+      inherit GO111MODULE GOTOOLCHAIN;
+    };
 
     # The following inheritence behavior is not trivial to expect, and some may
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
@@ -149,10 +153,16 @@ let
   package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
-    inherit (go) GOOS GOARCH;
+    env = goPlatform.host.env // {
+      inherit CGO_ENABLED GO111MODULE GOTOOLCHAIN;
+      GOFLAGS = lib.concatStringsSep " " (
+        lib.optionals (goPlatform.host.env ? GOFLAGS) [ goPlatform.host.env.GOFLAGS ]
+        ++ lib.optionals (!proxyVendor) [ "-mod=vendor" ]
+        ++ lib.optionals (!allowGoReference) [ "-trimpath" ]
+      );
+    } // (args.env or { });
 
-    GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
-    inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
+    inherit enableParallelBuilding;
 
     configurePhase = args.configurePhase or (''
       runHook preConfigure
@@ -247,10 +257,10 @@ let
         echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done
-    '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    '' + lib.optionalString (goPlatform.isCross) ''
       # normalize cross-compiled builds w.r.t. native builds
       (
-        dir=$GOPATH/bin/${go.GOOS}_${go.GOARCH}
+        dir=$GOPATH/bin/${GOOS}_${GOARCH}
         if [[ -n "$(shopt -s nullglob; echo $dir/*)" ]]; then
           mv $dir/* $dir/..
         fi

@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, makeGoPlatform
 , fetchurl
 , tzdata
 , substituteAll
@@ -13,30 +14,11 @@
 , threadsCross
 , testers
 , skopeo
-, buildGo121Module
 }:
 
 let
   useGccGoBootstrap = stdenv.buildPlatform.isMusl;
   goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap121.nix { };
-
-  skopeoTest = skopeo.override { buildGoModule = buildGo121Module; };
-
-  goarch = platform: {
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
-    "i686" = "386";
-    "mips" = "mips";
-    "mips64el" = "mips64le";
-    "mipsel" = "mipsle";
-    "powerpc64le" = "ppc64le";
-    "riscv64" = "riscv64";
-    "s390x" = "s390x";
-    "x86_64" = "amd64";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -44,7 +26,12 @@ let
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs:
+let
+  goPlatform = makeGoPlatform { go = finalAttrs.finalPackage; };
+  skopeoTest = skopeo.override { inherit (goPlatform) buildGoModule; };
+in
+{
   pname = "go";
   version = "1.21.1";
 
@@ -89,32 +76,24 @@ stdenv.mkDerivation (finalAttrs: {
     ./go_no_vendor_checks-1.21.patch
   ];
 
-  GOOS = stdenv.targetPlatform.parsed.kernel.name;
-  GOARCH = goarch stdenv.targetPlatform;
-  # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
-  # Go will nevertheless build a for host system that we will copy over in
-  # the install phase.
-  GOHOSTOS = stdenv.buildPlatform.parsed.kernel.name;
-  GOHOSTARCH = goarch stdenv.buildPlatform;
+  env = goPlatform.target.env // {
+    # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
+    # Go will nevertheless build a for host system that we will copy over in
+    # the install phase.
+    GOHOSTOS = goPlatform.build.env.GOOS;
+    GOHOSTARCH = goPlatform.build.env.GOARCH;
 
-  # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
-  # to be different from CC/CXX
-  CC_FOR_TARGET =
-    if isCross then
-      "${targetCC}/bin/${targetCC.targetPrefix}cc"
-    else
-      null;
-  CXX_FOR_TARGET =
-    if isCross then
-      "${targetCC}/bin/${targetCC.targetPrefix}c++"
-    else
-      null;
+    GOARM = goPlatform.host.env.GOARM or "";
+    GO386 = goPlatform.host.env.GO386 or "softfloat"; # from Arch: don't assume sse2 on i686
+    CGO_ENABLED = 1;
 
-  GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
-  GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
-
-  GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
+    GOROOT_BOOTSTRAP = if useGccGoBootstrap then goBootstrap else "${goBootstrap}/share/go";
+  } // lib.optionalAttrs (isCross) {
+    # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expects those
+    # to be different from CC/CXX.
+    CC_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}cc";
+    CXX_FOR_TARGET = "${targetCC}/bin/${targetCC.targetPrefix}c++";
+  };
 
   buildPhase = ''
     runHook preBuild
@@ -144,13 +123,13 @@ stdenv.mkDerivation (finalAttrs: {
   '' + (if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then ''
     mv bin/*_*/* bin
     rmdir bin/*_*
-    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
-      rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
+    ${lib.optionalString (!(finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH} pkg/tool/${finalAttrs.env.GOHOSTOS}_${finalAttrs.env.GOHOSTARCH}
     ''}
   '' else lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
     rm -rf bin/*_*
-    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
-      rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+    ${lib.optionalString (!(finalAttrs.env.GOHOSTARCH == finalAttrs.env.GOARCH && finalAttrs.env.GOOS == finalAttrs.env.GOHOSTOS)) ''
+      rm -rf pkg/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH} pkg/tool/${finalAttrs.env.GOOS}_${finalAttrs.env.GOARCH}
     ''}
   '');
 
