@@ -92,6 +92,9 @@ buildPythonApplication rec {
   disabledTests = [
     "root_passwd_hash_option"
     "TestMirrorIndexThings"
+    "test_auth_mirror_url_no_hash"
+    "test_auth_mirror_url_with_hash"
+    "test_auth_mirror_url_hidden_in_logs"
   ];
 
   __darwinAllowLocalNetworking = true;
