@@ -72,6 +72,7 @@ lualogging,,,,,,
 luaossl,,,,,5.1,
 luaposix,,,,34.1.1-1,,vyp lblasc
 luarepl,,,,,,
+luarocks-build-rust-mlua,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasocket,,,,,,
 luasql-sqlite3,,,,,,vyp
@@ -92,6 +93,7 @@ mediator_lua,,,,,,
 middleclass,,,,,,
 mpack,,,,,,
 moonscript,https://github.com/leafo/moonscript.git,dev-1,,,,arobyn
+nui-nvim,,,,,,mrcjkb
 nvim-client,https://github.com/neovim/lua-client.git,,,,,
 nvim-cmp,https://github.com/hrsh7th/nvim-cmp,,,,,
 penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
@@ -109,5 +111,7 @@ teal-language-server,,,http://luarocks.org/dev,,,
 telescope.nvim,,,,,5.1,
 telescope-manix,,,,,,
 tl,,,,,,mephistophiles
+toml,,,,,,mrcjkb
+toml-edit,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda
