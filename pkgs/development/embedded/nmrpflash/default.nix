@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
-  version = "0.9.20";
+  version = "0.9.21";
 
   src = fetchFromGitHub {
     owner  = "jclehner";
     repo   = "nmrpflash";
     rev    = "v${version}";
-    sha256 = "sha256-xfKZXaKzSTnCOC8qt6Zc/eidc1bnrKZOJPw/wwMoCaM=";
+    sha256 = "sha256-nW+VD2a0vmgODbJi4H8Esnq502bEkeCKjXQi23DfdqA=";
   };
 
   nativeBuildInputs = [ pkg-config ];

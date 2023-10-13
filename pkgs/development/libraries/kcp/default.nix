@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "A Fast and Reliable ARQ Protocol";
     homepage = "https://github.com/skywind3000/kcp";
     license = licenses.mit;
-    maintainers = with maintainers; [ rs0vere ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }

@@ -22,7 +22,7 @@
 , gnome
 , vala
 , writeScript
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages
 , gobject-introspection
 , _experimental-update-script-combinators
