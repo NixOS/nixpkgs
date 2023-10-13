@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, fetchFromGitHub
 , fetchurl
 , fetchpatch
 , aqbanking
@@ -97,8 +98,25 @@ stdenv.mkDerivation rec {
   enableParallelChecking = true;
   checkTarget = "check";
 
+  passthru.docs = stdenv.mkDerivation {
+    pname = "gnucash-docs";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "Gnucash";
+      repo = "gnucash-docs";
+      rev = version;
+      hash = "sha256-aPxQEcpo8SPv8lPQbxMl1wg8ijH9Rz0oo4K5lp3C/bw=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ libxml2 libxslt ];
+  };
+
   preFixup = ''
     gappsWrapperArgs+=(
+      # documentation
+      --prefix XDG_DATA_DIRS : ${passthru.docs}/share
       # db drivers location
       --set GNC_DBD_DIR ${libdbiDrivers}/lib/dbd
       # gsettings schema location on Nix
