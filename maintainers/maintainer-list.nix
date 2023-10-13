@@ -3701,6 +3701,12 @@
     githubId = 490965;
     name = "Craig Swank";
   };
+  ctron = {
+    email = "ctron@dentrassi.de";
+    github = "ctron";
+    githubId = 202474;
+    name = "Jens Reimann";
+  };
   cust0dian = {
     email = "serg@effectful.software";
     github = "cust0dian";

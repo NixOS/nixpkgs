@@ -14037,6 +14037,10 @@ with pkgs;
 
   trunk-io = callPackage ../development/tools/trunk-io { };
 
+  trunk-ng = callPackage ../by-name/tr/trunk-ng/package.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   tthsum = callPackage ../applications/misc/tthsum { };
 
   ttdl = callPackage ../applications/misc/ttdl { };
