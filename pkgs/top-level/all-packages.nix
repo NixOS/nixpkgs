@@ -917,9 +917,17 @@ with pkgs;
   dotnet-aspnetcore_7 = dotnetCorePackages.aspnetcore_7_0;
   dotnet-aspnetcore_8 = dotnetCorePackages.aspnetcore_8_0;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_6_0;
+  dotnet-sdk-lts = dotnetCorePackages.sdk_6_0;
+  dotnet-runtime-lts = dotnetCorePackages.runtime_6_0;
+  dotnet-aspnetcore-lts = dotnetCorePackages.aspnetcore_6_0;
+
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.runtime_7_0;
+  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_7_0;
+
+  dotnet-sdk-preview = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime-preview = dotnetCorePackages.runtime_8_0;
+  dotnet-aspnetcore-preview = dotnetCorePackages.aspnetcore_8_0;
 
   buildDotnetModule = callPackage ../build-support/dotnet/build-dotnet-module { };
   nuget-to-nix = callPackage ../build-support/dotnet/nuget-to-nix { };
