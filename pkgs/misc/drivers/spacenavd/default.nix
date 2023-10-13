@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+  postInstall = ''
+    install -Dm644 $src/contrib/systemd/spacenavd.service -t $out/lib/systemd/system
+    substituteInPlace $out/lib/systemd/system/spacenavd.service \
+      --replace-fail "/usr/local/bin/spacenavd" "$out/bin/spacenavd"
+  '';
+
   meta = with lib; {
     homepage = "https://spacenav.sourceforge.net/";
     description = "Device driver and SDK for 3Dconnexion 3D input devices";
