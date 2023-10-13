@@ -3098,6 +3098,70 @@ buildLuarocksPackage {
   };
 }) {};
 
+toml = callPackage({ lua, fetchgit, luaOlder, buildLuarocksPackage }:
+buildLuarocksPackage {
+  pname = "toml";
+  version = "0.3.0-0";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/toml-0.3.0-0.rockspec";
+    sha256 = "0y4qdzsvf4xwnr49xcpbqclrq9d6snv83cbdkrchl0cn4cx6zpxy";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/LebJe/toml.lua.git",
+  "rev": "319e9accf8c5cedf68795354ba81e54c817d1277",
+  "date": "2023-02-19T23:00:49-05:00",
+  "path": "/nix/store/p6a98sqp9a4jwsw6ghqcwpn9lxmhvkdg-toml.lua",
+  "sha256": "05p33bq0ajl41vbsw9bx73shpf0p11n5gb6yy8asvp93zh2m51hq",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/LebJe/toml.lua";
+    description = "TOML v1.0.0 parser and serializer for Lua. Powered by toml++.";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
+toml-edit = callPackage({ luaOlder, luarocks-build-rust-mlua, buildLuarocksPackage, lua, fetchgit }:
+buildLuarocksPackage {
+  pname = "toml-edit";
+  version = "0.1.4-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/toml-edit-0.1.4-1.rockspec";
+    sha256 = "05bcc1xafcspdf1rcka9bhg7b6z617b4jrcahs1r7grcp78w89vf";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/vhyrro/toml-edit.lua",
+  "rev": "f6efdab4ca6fab276f172060971781dc42a94f2d",
+  "date": "2023-10-02T16:54:10+02:00",
+  "path": "/nix/store/p1368agmqg4jwb1qvf2iff3fdrq9vkdj-toml-edit.lua",
+  "sha256": "1aa8znjnmm84392gnl7w0hm069xfv7niym3i8my7kyk0vdgxja06",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua luarocks-build-rust-mlua ];
+
+  meta = {
+    homepage = "https://github.com/vhyrro/toml-edit.lua";
+    description = "TOML Parser + Formatting and Comment-Preserving Editor";
+    maintainers = with lib.maintainers; [ mrcjkb ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 vstruct = callPackage({ fetchgit, lua, buildLuarocksPackage, luaOlder }:
 buildLuarocksPackage {
   pname = "vstruct";

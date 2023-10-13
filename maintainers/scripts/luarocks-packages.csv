@@ -111,5 +111,7 @@ teal-language-server,,,http://luarocks.org/dev,,,
 telescope.nvim,,,,,5.1,
 telescope-manix,,,,,,
 tl,,,,,,mephistophiles
+toml,,,,,,mrcjkb
+toml-edit,,,,,5.1,mrcjkb
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,
 vusted,,,,,,figsoda
