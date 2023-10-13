@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, pkg-config, wayland-scanner, ninja
-, wayland, wayland-protocols, freetype,
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland-scanner
+, freetype
+, wayland
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +26,17 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
-  buildInputs = [ wayland wayland-protocols freetype ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    wayland-scanner
+  ];
+  buildInputs = [
+    freetype
+    wayland
+    wayland-protocols
+  ];
 
   meta = with lib; {
     description = "An overlay that shows schemas for all workspaces to make navigation in sway easier.";
