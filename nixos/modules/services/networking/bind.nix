@@ -252,13 +252,14 @@ in
       };
     users.groups.${bindUser} = {};
 
+    environment.etc."bind/named.conf".source = confFile;
+
     systemd.services.bind = {
       description = "BIND Domain Name Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        mkdir -m 0755 -p /etc/bind
         if ! [ -f "/etc/bind/rndc.key" ]; then
           ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
         fi
@@ -271,7 +272,7 @@ in
       '';
 
       serviceConfig = {
-        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+        ExecStart = "${bindPkg.out}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c /etc/bind/named.conf -f";
         ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
         ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
       };
