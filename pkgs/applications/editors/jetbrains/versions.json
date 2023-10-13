@@ -108,10 +108,10 @@
     "rust-rover": {
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.tar.gz",
-      "version": "2023.2 EAP",
-      "sha256": "1f67e1a82f5cbb7c84382c7f251ae06b1e2699fa7d2fa4129e23ec2e43251687",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62.tar.gz",
-      "build_number": "232.9921.62"
+      "version": "2023.3 EAP",
+      "sha256": "3dd8e99b066164efc11e86e3289e444c5238dfce8e9142fe2d3a8c340eeeb175",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-233.8264.22.tar.gz",
+      "build_number": "233.8264.22"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -231,10 +231,10 @@
     "rust-rover": {
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}.dmg",
-      "version": "2023.2 EAP",
-      "sha256": "dfde444bff011783cb4a5aa2aafae8ea989874c19535b01da8214df5eb3174fb",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62.dmg",
-      "build_number": "232.9921.62"
+      "version": "2023.3 EAP",
+      "sha256": "889ed748efbd44b76da03186efac063baf36c2208d919550dd97cf2dae8f40e3",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-233.8264.22.dmg",
+      "build_number": "233.8264.22"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
@@ -355,9 +355,9 @@
       "update-channel": "RustRover EAP",
       "url-template": "https://download.jetbrains.com/rustrover/RustRover-{version}-aarch64.dmg",
       "version": "2023.2 EAP",
-      "sha256": "35d44a4f72c027283843aaa6409de701d14274cdc5a614c3fdc53121383f9389",
-      "url": "https://download.jetbrains.com/rustrover/RustRover-232.9921.62-aarch64.dmg",
-      "build_number": "232.9921.62"
+      "sha256": "9c4f26089697f6cb394e971dac8ef4fe974b5ecffd63311fcf0be66d4b4aec59",
+      "url": "https://download.jetbrains.com/rustrover/RustRover-233.8264.22-aarch64.dmg",
+      "build_number": "233.8264.22-aarch64"
     },
     "webstorm": {
       "update-channel": "WebStorm RELEASE",
