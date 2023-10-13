@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "deal-solver";
-  version = "0.1.1";
+  version = "0.1.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "life4";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LXBAWbm8fT/jYNbzB95YeBL9fEknMNJvkTRMbc+nf6c=";
+    hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 
   nativeBuildInputs = [
