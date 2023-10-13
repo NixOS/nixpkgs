@@ -4,6 +4,7 @@
 , removeReferencesTo
 , fetchurl
 , writeScript
+, installShellFiles
 }:
 
 let
@@ -20,7 +21,7 @@ let
 
     executable = "bb";
 
-    nativeBuildInputs = [ removeReferencesTo ];
+    nativeBuildInputs = [ removeReferencesTo installShellFiles ];
 
     extraNativeImageBuildArgs = [
       "-H:+ReportExceptionStackTraces"
@@ -42,6 +43,9 @@ let
     # graalvm-ce anyway.
     postInstall = ''
       remove-references-to -t ${graalvmDrv} $out/bin/${executable}
+      installShellCompletion --cmd bb --bash ${./completions/bb.bash}
+      installShellCompletion --cmd bb --zsh ${./completions/bb.zsh}
+      installShellCompletion --cmd bb --fish ${./completions/bb.fish}
     '';
 
     passthru.updateScript = writeScript "update-babashka" ''
