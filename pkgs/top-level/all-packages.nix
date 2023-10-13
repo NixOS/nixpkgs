@@ -726,11 +726,6 @@ with pkgs;
     inherit (darwin) DarwinTools;
   };
 
-  probe-run = callPackage ../development/tools/rust/probe-run {
-    inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
-    inherit (darwin) DarwinTools;
-  };
-
   rtthost = callPackage ../development/tools/rust/rtthost {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     inherit (darwin) DarwinTools;
