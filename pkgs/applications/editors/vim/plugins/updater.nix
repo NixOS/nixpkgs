@@ -4,17 +4,12 @@
 , python3Packages
 , lib
 , nix-prefetch-git
+, nurl
 
 # optional
 , vimPlugins
 , neovim
 }:
-let
-  my_neovim = neovim.override {
-    configure.packages.all.start = [ vimPlugins.nvim-treesitter ];
-  };
-
-in
 buildPythonApplication {
   format = "other";
   pname = "vim-plugins-updater";
@@ -39,7 +34,8 @@ buildPythonApplication {
     cp ${../../../../../maintainers/scripts/pluginupdate.py} $out/lib/pluginupdate.py
 
     # wrap python scripts
-    makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [ nix nix-prefetch-git my_neovim ]}" --prefix PYTHONPATH : "$out/lib" )
+    makeWrapperArgs+=( --prefix PATH : "${lib.makeBinPath [
+      nix nix-prefetch-git neovim nurl ]}" --prefix PYTHONPATH : "$out/lib" )
     wrapPythonPrograms
   '';
 
