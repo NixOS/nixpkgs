@@ -1,4 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
+, setuptools
 , requests
 , py
 , pytestCheckHook
@@ -8,6 +9,7 @@
 buildPythonPackage rec {
   pname = "devpi-common";
   version = "3.7.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,6 +20,9 @@ buildPythonPackage rec {
     substituteInPlace tox.ini \
       --replace "--flake8" ""
   '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     requests
@@ -30,9 +35,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "devpi_common"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
+    changelog = "https://github.com/devpi/devpi/blob/common-${version}/common/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];
     # It fails to build because it depends on packaging <22 while we
