@@ -6,6 +6,7 @@
 , flit-core
 , linkify-it-py
 , markdown
+, mdit-py-plugins
 , mdurl
 , mistletoe
 , mistune
@@ -69,6 +70,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     compare = [ commonmark markdown mistletoe mistune panflute ];
     linkify = [ linkify-it-py ];
+    plugins = [ mdit-py-plugins ];
     rtd = [ attrs myst-parser pyyaml sphinx sphinx-copybutton sphinx-design sphinx-book-theme ];
   };
 
