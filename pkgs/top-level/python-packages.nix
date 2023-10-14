@@ -4449,6 +4449,8 @@ self: super: with self; {
 
   get-video-properties = callPackage ../development/python-modules/get-video-properties { };
 
+  getpass-asterisk = callPackage ../development/python-modules/getpass-asterisk { };
+
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = callPackage ../development/python-modules/geventhttpclient { };
