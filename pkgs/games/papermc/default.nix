@@ -1,40 +1,50 @@
-{ lib, stdenv, fetchurl, bash, jre }:
-
-stdenv.mkDerivation rec {
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  jre,
+  makeBinaryWrapper,
+}:
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "papermc";
-  version = "1.20.1.83";
+  version = "1.20.2.234";
 
-  jar = let
-    mcVersion = lib.versions.pad 3 version;
-    buildNum = builtins.elemAt (lib.versions.splitVersion version) 3;
-  in fetchurl {
-    url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
-    sha256 = "sha256-HQpc3MOXa1wkXqgm9ciQj04FUIyuupnYiu+2RZ/sXE4=";
-  };
-
-  preferLocalBuild = true;
-
-  dontUnpack = true;
-  dontConfigure = true;
-
-  buildPhase = ''
-    cat > minecraft-server << EOF
-    #!${bash}/bin/sh
-    exec ${jre}/bin/java \$@ -jar $out/share/papermc/papermc.jar nogui
-  '';
+  src =
+    let
+      mcVersion = lib.versions.pad 3 finalAttrs.version;
+      buildNum = builtins.elemAt (lib.splitVersion finalAttrs.version) 3;
+    in
+    fetchurl {
+      url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
+      hash = "sha256-fR7Dq09iFGVXodQjrS7Hg4NcrKPJbNg0hexU520JC6c=";
+    };
 
   installPhase = ''
-    install -Dm444 ${jar} $out/share/papermc/papermc.jar
-    install -Dm555 -t $out/bin minecraft-server
+    runHook preInstall
+
+    install -D $src $out/share/papermc/papermc.jar
+
+    makeWrapper ${lib.getExe jre} "$out/bin/minecraft-server" \
+      --append-flags "-jar $out/share/papermc/papermc.jar nogui"
+
+    runHook postInstall
   '';
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
+  dontUnpack = true;
+  preferLocalBuild = true;
+  allowSubstitutes = false;
 
   meta = {
     description = "High-performance Minecraft Server";
-    homepage    = "https://papermc.io/";
+    homepage = "https://papermc.io/";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
-    license     = lib.licenses.gpl3Only;
-    platforms   = lib.platforms.unix;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aaronjanse neonfuz ];
     mainProgram = "minecraft-server";
   };
-}
+})
