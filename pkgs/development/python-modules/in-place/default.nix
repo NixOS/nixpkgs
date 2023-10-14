@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , lib
 , pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
@@ -9,6 +10,8 @@ buildPythonPackage rec {
   pname = "in-place";
   version = "1.0.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jwodder";
