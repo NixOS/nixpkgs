@@ -765,7 +765,7 @@ with pkgs;
   protoc-gen-go-vtproto = callPackage ../development/tools/protoc-gen-go-vtproto { };
 
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
@@ -1089,7 +1089,7 @@ with pkgs;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
     icu =  icu69;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli { };
@@ -2665,7 +2665,7 @@ with pkgs;
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
 
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   gopsuinfo = callPackage ../tools/system/gopsuinfo { };
@@ -4156,7 +4156,7 @@ with pkgs;
   amoco = callPackage ../tools/security/amoco { };
 
   anbox = callPackage ../os-specific/linux/anbox {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   androidenv = callPackage ../development/mobile/androidenv { };
@@ -4706,7 +4706,7 @@ with pkgs;
   common-licenses = callPackage ../data/misc/common-licenses { };
 
   compactor = callPackage ../applications/networking/compactor {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   consul = callPackage ../servers/consul { };
@@ -5520,7 +5520,7 @@ with pkgs;
   ghdorker = callPackage ../tools/security/ghdorker { };
 
   ghidra = darwin.apple_sdk_11_0.callPackage ../tools/security/ghidra/build.nix {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
@@ -6840,7 +6840,7 @@ with pkgs;
   clementine = libsForQt5.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
@@ -7043,7 +7043,7 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       stdenv = clangStdenv;
-      protobuf = pkgs.protobuf3_21.overrideDerivation (_: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf_21.overrideDerivation (_: { stdenv = clangStdenv; });
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -10237,7 +10237,7 @@ with pkgs;
 
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
   # Exposed here so the bots can auto-upgrade it
   netdata-go-plugins = callPackage ../tools/system/netdata/go.d.plugin.nix { };
@@ -11375,7 +11375,7 @@ with pkgs;
   nq = callPackage ../tools/system/nq { };
 
   nsjail = callPackage ../tools/security/nsjail {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd { };
@@ -11507,7 +11507,7 @@ with pkgs;
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
   ola = callPackage ../applications/misc/ola {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   olive-editor = qt6Packages.callPackage ../applications/video/olive-editor {
@@ -11784,7 +11784,7 @@ with pkgs;
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
   p4c = callPackage ../development/compilers/p4c {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   p7zip = callPackage ../tools/archivers/p7zip { };
@@ -15175,7 +15175,7 @@ with pkgs;
   zasm = callPackage ../development/compilers/zasm { };
 
   zbackup = callPackage ../tools/backup/zbackup {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   zbar = libsForQt5.callPackage ../tools/graphics/zbar {
@@ -20120,12 +20120,12 @@ with pkgs;
   };
 
   spoofer = callPackage ../tools/networking/spoofer {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   spoofer-gui = callPackage ../tools/networking/spoofer {
     withGUI = true;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   spooles = callPackage ../development/libraries/science/math/spooles { };
@@ -20860,7 +20860,7 @@ with pkgs;
   cmrt = callPackage ../development/libraries/cmrt { };
 
   codecserver = callPackage ../applications/audio/codecserver {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   coeurl = callPackage ../development/libraries/coeurl { };
@@ -21372,7 +21372,7 @@ with pkgs;
   gallia = callPackage ../tools/security/gallia { };
 
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   game-music-emu = callPackage ../development/libraries/audio/game-music-emu { };
@@ -23396,7 +23396,7 @@ with pkgs;
   libptytty = callPackage ../development/libraries/libptytty { };
 
   libpulsar = callPackage ../development/libraries/libpulsar {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   libpwquality = callPackage ../development/libraries/libpwquality {
@@ -23805,7 +23805,7 @@ with pkgs;
   lightspark = callPackage ../misc/lightspark { };
 
   lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   ligolo-ng = callPackage ../tools/networking/ligolo-ng { };
@@ -24566,13 +24566,14 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf3_24;
+  protobuf = protobuf_24;
 
-  protobuf3_24 = callPackage ../development/libraries/protobuf/3.24.nix { };
-  protobuf3_23 = callPackage ../development/libraries/protobuf/3.23.nix { };
-  protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix {
+  protobuf_24 = callPackage ../development/libraries/protobuf/24.nix { };
+  protobuf_23 = callPackage ../development/libraries/protobuf/23.nix { };
+  protobuf_21 = callPackage ../development/libraries/protobuf/21.nix {
     abseil-cpp = abseil-cpp_202103;
   };
+
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix {
     abseil-cpp = abseil-cpp_202103;
   };
@@ -24744,7 +24745,7 @@ with pkgs;
   qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
 
   qradiolink = callPackage ../applications/radio/qradiolink {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
@@ -25422,7 +25423,7 @@ with pkgs;
 
   valhalla = callPackage ../development/libraries/valhalla {
     boost = boost.override { enablePython = true; python = python38; };
-    protobuf = protobuf3_21.override {
+    protobuf = protobuf_21.override {
       abseil-cpp = abseil-cpp_202103.override {
         cxxStandard = "17";
       };
@@ -26965,7 +26966,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost177; # Configure checks for specific version.
     icu = icu69;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
@@ -27254,7 +27255,7 @@ with pkgs;
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
     libtool = darwin.cctools;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   rippled = callPackage ../servers/rippled {
@@ -28698,7 +28699,7 @@ with pkgs;
   sgx-ssl = callPackage ../os-specific/linux/sgx/ssl { };
 
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   shadow = callPackage ../os-specific/linux/shadow { };
@@ -30462,7 +30463,7 @@ with pkgs;
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
     vim = vim-full.override { features = "normal"; };
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
@@ -32492,7 +32493,7 @@ with pkgs;
   };
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
@@ -33987,14 +33988,14 @@ with pkgs;
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
-      protobuf = protobuf3_21;
+      protobuf = protobuf_21;
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
-      protobuf = protobuf3_21;
+      protobuf = protobuf_21;
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
@@ -34122,7 +34123,7 @@ with pkgs;
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   p4 = callPackage ../applications/version-management/p4 {
@@ -34231,7 +34232,7 @@ with pkgs;
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
     opencv = opencv3;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
@@ -34596,7 +34597,7 @@ with pkgs;
   osmo-sip-connector = callPackage ../servers/osmocom/osmo-sip-connector { };
 
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server {
-    protobuf = protobuf3_21.override {
+    protobuf = protobuf_21.override {
       abseil-cpp = abseil-cpp_202103.override {
         cxxStandard = "17";
       };
@@ -35115,7 +35116,7 @@ with pkgs;
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
 
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   ries = callPackage ../applications/science/math/ries { };
@@ -35438,7 +35439,7 @@ with pkgs;
 
   curaengine = callPackage ../applications/misc/curaengine {
     inherit (python3.pkgs) libarcus;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   cura = libsForQt5.callPackage ../applications/misc/cura { };
@@ -35827,7 +35828,7 @@ with pkgs;
   tijolo = callPackage ../applications/editors/tijolo { };
 
   tilemaker = callPackage ../applications/misc/tilemaker {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
@@ -37027,11 +37028,11 @@ with pkgs;
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
     withGui = true;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
   bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
     mkDerivation = stdenv.mkDerivation;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
     withGui = false;
   };
 
@@ -37606,7 +37607,7 @@ with pkgs;
   ckan = callPackage ../games/ckan { };
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   commandergenius = callPackage ../games/commandergenius { };
@@ -38201,12 +38202,12 @@ with pkgs;
   pong3d = callPackage ../games/pong3d { };
 
   pokerth = libsForQt5.callPackage ../games/pokerth {
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth {
     target = "server";
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
   };
 
   pokete = callPackage ../games/pokete { };
@@ -39297,7 +39298,7 @@ with pkgs;
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     python = python3;
-    protobuf = protobuf3_21;
+    protobuf = protobuf_21;
     # or-tools builds with -std=c++20, so abseil-cpp must
     # also be built that way
     abseil-cpp = abseil-cpp_202206.override {

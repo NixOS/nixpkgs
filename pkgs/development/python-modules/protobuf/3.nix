@@ -3,36 +3,22 @@
 , fetchpatch
 , isPyPy
 , lib
-, numpy
 , protobuf
 , pytestCheckHook
 , pythonAtLeast
-, substituteAll
 , tzdata
 }:
 
-assert lib.versionOlder protobuf.version "21" -> throw "Protobuf 21 or newer required";
+assert lib.versionAtLeast protobuf.version "3.21" -> throw "Protobuf 3.20 or older required";
 
-let
-  protobufVersionMajor = lib.versions.major protobuf.version;
-  protobufVersionMinor = lib.versions.minor protobuf.version;
-in
 buildPythonPackage {
   inherit (protobuf) pname src;
 
-  # protobuf 21 corresponds with its python library 4.21
-  version = "4.${protobufVersionMajor}.${protobufVersionMinor}";
+  version = protobuf.version;
 
   sourceRoot = "${protobuf.src.name}/python";
 
-  patches = lib.optionals (lib.versionAtLeast protobuf.version "22") [
-    # Replace the vendored abseil-cpp with nixpkgs'
-    (substituteAll {
-      src = ./use-nixpkgs-abseil-cpp.patch;
-      abseil_cpp_include_path = "${lib.getDev protobuf.abseil-cpp}/include";
-    })
-  ]
-  ++ lib.optionals (pythonAtLeast "3.11" && lib.versionOlder protobuf.version "22") [
+  patches = lib.optionals (pythonAtLeast "3.11") [
     (fetchpatch {
       name = "support-python311.patch";
       url = "https://github.com/protocolbuffers/protobuf/commit/2206b63c4649cf2e8a06b66c9191c8ef862ca519.diff";
@@ -67,15 +53,13 @@ buildPythonPackage {
 
   propagatedNativeBuildInputs = [
     # For protoc of the same version.
-    buildPackages."protobuf_${protobufVersionMajor}"
+    buildPackages."protobuf${lib.versions.major protobuf.version}_${lib.versions.minor protobuf.version}"
   ];
 
   setupPyGlobalFlags = [ "--cpp_implementation" ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [
-    numpy
   ];
 
   disabledTests = lib.optionals isPyPy [
@@ -86,18 +70,6 @@ buildPythonPackage {
     "testUnknownFieldsNoMemoryLeak"
     # assertion is not raised for some reason
     "testStrictUtf8Check"
-  ];
-
-  disabledTestPaths = lib.optionals (lib.versionAtLeast protobuf.version "23") [
-    # The following commit (I think) added some internal test logic for Google
-    # that broke generator_test.py. There is a new proto file that setup.py is
-    # not generating into a .py file. However, adding this breaks a bunch of
-    # conflict detection in descriptor_test.py that I don't understand. So let's
-    # just disable generator_test.py for now.
-    #
-    #   https://github.com/protocolbuffers/protobuf/commit/5abab0f47e81ac085f0b2d17ec3b3a3b252a11f1
-    #
-    "google/protobuf/internal/generator_test.py"
   ];
 
   pythonImportsCheck = [

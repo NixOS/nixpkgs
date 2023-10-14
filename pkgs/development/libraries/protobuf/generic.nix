@@ -11,7 +11,7 @@
 , gtest
 , zlib
 , version
-, sha256
+, hash
 
   # downstream dependencies
 , python3
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "protocolbuffers";
     repo = "protobuf";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
-  patches = lib.optionals (lib.versionOlder version "3.22") [
+  patches = lib.optionals (lib.versionOlder version "22") [
     # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
     # https://github.com/protocolbuffers/protobuf/pull/10090
     (fetchpatch {
       url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
-      sha256 = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
+      hash = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     ./static-executables-have-no-rpath.patch
@@ -71,23 +71,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  cmakeDir = if lib.versionOlder version "3.22" then "../cmake" else null;
+  cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
   cmakeFlags = [
     "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
     "-Dprotobuf_ABSL_PROVIDER=package"
   ] ++ lib.optionals enableShared [
     "-Dprotobuf_BUILD_SHARED_LIBS=ON"
   ]
-  # Tests fail to build on 32-bit platforms; fixed in 3.22
+  # Tests fail to build on 32-bit platforms; fixed in 22.x
   # https://github.com/protocolbuffers/protobuf/issues/10418
-  ++ lib.optionals (stdenv.targetPlatform.is32bit && lib.versionOlder version "3.22") [
+  ++ lib.optionals (stdenv.targetPlatform.is32bit && lib.versionOlder version "22") [
     "-Dprotobuf_BUILD_TESTS=OFF"
   ];
 
-  # FIXME: investigate.  3.24 and 3.23 have different errors.
+  # FIXME: investigate.  24.x and 23.x have different errors.
   # At least some of it is not reproduced on some other machine; example:
   # https://hydra.nixos.org/build/235677717/nixlog/4/tail
-  doCheck = !(stdenv.isDarwin && lib.versionAtLeast version "3.23");
+  doCheck = !(stdenv.isDarwin && lib.versionAtLeast version "23");
 
   passthru = {
     tests = {
