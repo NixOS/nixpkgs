@@ -13,7 +13,7 @@
     buildInputs = [ stdenv.cc.cc.lib ];
   };
   "8182" = {
-    # Rust
+    # Rust (deprecated)
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ stdenv.cc.cc.lib ];
     buildPhase = ''
@@ -58,6 +58,16 @@
       }
       fix_offset PAYLOAD_POSITION
       fix_offset PRELUDE_POSITION
+    '';
+  };
+  "22407" = {
+    # Rust
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [ stdenv.cc.cc.lib ];
+    buildPhase = ''
+      runHook preBuild
+      chmod +x -R bin
+      runHook postBuild
     '';
   };
 }

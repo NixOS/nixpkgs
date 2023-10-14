@@ -1,0 +1,41 @@
+From e7d9098e81289ae99d07ec3eac1fec1d303b8fe4 Mon Sep 17 00:00:00 2001
+From: Thiago Kenji Okada <thiagokokada@gmail.com>
+Date: Thu, 5 Oct 2023 15:23:35 +0100
+Subject: [PATCH] drop ambient capabilities
+
+Within NixOS the only possibility to gain cap_sys_nice is using the
+security.wrapper infrastructure. However to pass the capabilities to the
+wrapped program, they are raised to the ambient set. To fix this we make
+sure to drop the ambient capabilities during sway startup and realtime
+setup. Otherwise all programs started by sway also gain cap_sys_nice,
+which is not something we want.
+
+Co-authored-by: Rouven Czerwinski <rouven@czerwinskis.de>
+---
+ sway/realtime.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/sway/realtime.c b/sway/realtime.c
+index 11154af0..06f872a8 100644
+--- a/sway/realtime.c
++++ b/sway/realtime.c
+@@ -3,6 +3,7 @@
+ #include <unistd.h>
+ #include <pthread.h>
+ #include "sway/server.h"
++#include "sys/prctl.h"
+ #include "log.h"
+ 
+ static void child_fork_callback(void) {
+@@ -10,6 +11,8 @@ static void child_fork_callback(void) {
+ 
+ 	param.sched_priority = 0;
+ 
++	prctl(PR_CAP_AMBIENT, PR_CAP_AMBIENT_CLEAR_ALL, 0, 0, 0);
++
+ 	int ret = pthread_setschedparam(pthread_self(), SCHED_OTHER, &param);
+ 	if (ret != 0) {
+ 		sway_log(SWAY_ERROR, "Failed to reset scheduler policy on fork");
+-- 
+2.42.0
+

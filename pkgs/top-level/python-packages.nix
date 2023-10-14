@@ -168,6 +168,8 @@ self: super: with self; {
 
   aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
 
+  aioboto3 = callPackage ../development/python-modules/aioboto3 { };
+
   aioblescan = callPackage ../development/python-modules/aioblescan { };
 
   aiocache = callPackage ../development/python-modules/aiocache { };
@@ -223,6 +225,8 @@ self: super: with self; {
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
+
+  aiohttp-basicauth = callPackage ../development/python-modules/aiohttp-basicauth { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
 
@@ -317,6 +321,8 @@ self: super: with self; {
   aiopg = callPackage ../development/python-modules/aiopg { };
 
   aioprocessing = callPackage ../development/python-modules/aioprocessing { };
+
+  aioprometheus = callPackage ../development/python-modules/aioprometheus { };
 
   aiopulse = callPackage ../development/python-modules/aiopulse { };
 
@@ -413,6 +419,8 @@ self: super: with self; {
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
+
+  aiowithings = callPackage ../development/python-modules/aiowithings { };
 
   aioxmpp = callPackage ../development/python-modules/aioxmpp { };
 
@@ -566,6 +574,8 @@ self: super: with self; {
 
   ansiwrap = callPackage ../development/python-modules/ansiwrap { };
 
+  anthemav = callPackage ../development/python-modules/anthemav { };
+
   anthropic = callPackage ../development/python-modules/anthropic { };
 
   antlr4-python3-runtime = callPackage ../development/python-modules/antlr4-python3-runtime {
@@ -609,6 +619,8 @@ self: super: with self; {
   app-model = callPackage ../development/python-modules/app-model { };
 
   appdirs = callPackage ../development/python-modules/appdirs { };
+
+  apple-weatherkit = callPackage ../development/python-modules/apple-weatherkit { };
 
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
 
@@ -850,7 +862,7 @@ self: super: with self; {
 
   atpublic = callPackage ../development/python-modules/atpublic { };
 
-  atsim_potentials = callPackage ../development/python-modules/atsim_potentials { };
+  atsim-potentials = callPackage ../development/python-modules/atsim-potentials { };
 
   attrdict = callPackage ../development/python-modules/attrdict { };
 
@@ -867,6 +879,8 @@ self: super: with self; {
   audiotools = callPackage ../development/python-modules/audiotools {
     inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreServices;
   };
+
+  auditok = callPackage ../development/python-modules/auditok { };
 
   augeas = callPackage ../development/python-modules/augeas {
     inherit (pkgs) augeas;
@@ -1287,6 +1301,8 @@ self: super: with self; {
     inherit (pkgs.ocaml-ng.ocamlPackages) bap;
   };
 
+  barectf = callPackage ../development/python-modules/barectf { };
+
   baron = callPackage ../development/python-modules/baron { };
 
   base36 = callPackage ../development/python-modules/base36 { };
@@ -1354,7 +1370,7 @@ self: super: with self; {
 
   beancount-parser = callPackage ../development/python-modules/beancount-parser { };
 
-  beancount_docverif = callPackage ../development/python-modules/beancount_docverif { };
+  beancount-docverif = callPackage ../development/python-modules/beancount-docverif { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
@@ -1424,7 +1440,7 @@ self: super: with self; {
 
   biplist = callPackage ../development/python-modules/biplist { };
 
-  bip_utils = callPackage ../development/python-modules/bip_utils { };
+  bip-utils = callPackage ../development/python-modules/bip-utils { };
 
   bitarray = callPackage ../development/python-modules/bitarray { };
 
@@ -1564,6 +1580,8 @@ self: super: with self; {
   };
 
   boto3 = callPackage ../development/python-modules/boto3 { };
+
+  boto3-stubs = callPackage ../development/python-modules/boto3-stubs { };
 
   boto = callPackage ../development/python-modules/boto { };
 
@@ -1824,6 +1842,8 @@ self: super: with self; {
   coincurve = callPackage ../development/python-modules/coincurve {
     inherit (pkgs) secp256k1;
   };
+
+  comicon = callPackage ../development/python-modules/comicon { };
 
   connect-box = callPackage ../development/python-modules/connect_box { };
 
@@ -2133,8 +2153,6 @@ self: super: with self; {
 
   cmsis-svd = callPackage ../development/python-modules/cmsis-svd { };
 
-  cntk = callPackage ../development/python-modules/cntk { };
-
   cnvkit = callPackage ../development/python-modules/cnvkit { };
 
   co2signal = callPackage ../development/python-modules/co2signal { };
@@ -2254,6 +2272,8 @@ self: super: with self; {
   contexttimer = callPackage ../development/python-modules/contexttimer { };
 
   contourpy = callPackage ../development/python-modules/contourpy { };
+
+  controku = callPackage ../development/python-modules/controku { };
 
   convertdate = callPackage ../development/python-modules/convertdate { };
 
@@ -2467,6 +2487,8 @@ self: super: with self; {
 
   daqp = callPackage ../development/python-modules/daqp { };
 
+  darkdetect = callPackage ../development/python-modules/darkdetect { };
+
   dasbus = callPackage ../development/python-modules/dasbus { };
 
   dash = callPackage ../development/python-modules/dash { };
@@ -2530,6 +2552,8 @@ self: super: with self; {
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
   datapoint = callPackage ../development/python-modules/datapoint { };
+
+  dataprep-ml = callPackage ../development/python-modules/dataprep-ml { };
 
   dataproperty = callPackage ../development/python-modules/dataproperty { };
 
@@ -2601,6 +2625,8 @@ self: super: with self; {
 
   dcmstack = callPackage ../development/python-modules/dcmstack { };
 
+  dctorch = callPackage ../development/python-modules/dctorch { };
+
   ddt = callPackage ../development/python-modules/ddt { };
 
   deal = callPackage ../development/python-modules/deal { };
@@ -2632,8 +2658,6 @@ self: super: with self; {
   deemix = callPackage ../development/python-modules/deemix { };
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
-
-  deep_merge = callPackage ../development/python-modules/deep_merge { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
@@ -3092,6 +3116,8 @@ self: super: with self; {
 
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
+  django-webpush = callPackage ../development/python-modules/django-webpush { };
+
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
 
   dj-database-url = callPackage ../development/python-modules/dj-database-url { };
@@ -3139,6 +3165,8 @@ self: super: with self; {
   dnslib = callPackage ../development/python-modules/dnslib { };
 
   dnspython = callPackage ../development/python-modules/dnspython { };
+
+  dns-lexicon = callPackage ../development/python-modules/dns-lexicon { };
 
   doc8 = callPackage ../development/python-modules/doc8 { };
 
@@ -3352,6 +3380,8 @@ self: super: with self; {
 
   ebaysdk = callPackage ../development/python-modules/ebaysdk { };
 
+  ebooklib = callPackage ../development/python-modules/ebooklib { };
+
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
 
   eccodes = toPythonModule (pkgs.eccodes.override {
@@ -3527,6 +3557,8 @@ self: super: with self; {
 
   es-client = callPackage ../development/python-modules/es-client { };
 
+  esig = callPackage ../development/python-modules/esig { };
+
   espeak-phonemizer = callPackage ../development/python-modules/espeak-phonemizer { };
 
   esphome-dashboard-api = callPackage ../development/python-modules/esphome-dashboard-api { };
@@ -3636,6 +3668,8 @@ self: super: with self; {
 
   exrex = callPackage ../development/python-modules/exrex { };
 
+  exitcode = callPackage ../development/python-modules/exitcode { };
+
   extractcode = callPackage ../development/python-modules/extractcode { };
 
   extractcode-7z = callPackage ../development/python-modules/extractcode/7z.nix {
@@ -3686,7 +3720,7 @@ self: super: with self; {
 
   face-recognition-models = callPackage ../development/python-modules/face-recognition/models.nix { };
 
-  factory_boy = callPackage ../development/python-modules/factory_boy { };
+  factory-boy = callPackage ../development/python-modules/factory-boy { };
 
   fairscale = callPackage ../development/python-modules/fairscale { };
 
@@ -3941,6 +3975,8 @@ self: super: with self; {
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
 
+  flask-mysqldb = callPackage ../development/python-modules/flask-mysqldb { };
+
   flask-openid = callPackage ../development/python-modules/flask-openid { };
 
   flask-paginate = callPackage ../development/python-modules/flask-paginate { };
@@ -4069,6 +4105,8 @@ self: super: with self; {
   skia-pathops = callPackage ../development/python-modules/skia-pathops {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
   };
+
+  oelint-parser = callPackage ../development/python-modules/oelint-parser { };
 
   openllm = callPackage ../development/python-modules/openllm { };
 
@@ -4657,7 +4695,7 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
-  grappelli_safe = callPackage ../development/python-modules/grappelli_safe { };
+  grappelli-safe = callPackage ../development/python-modules/grappelli-safe { };
 
   graspologic = callPackage ../development/python-modules/graspologic { };
 
@@ -4675,6 +4713,8 @@ self: super: with self; {
   grequests = callPackage ../development/python-modules/grequests { };
 
   gremlinpython = callPackage ../development/python-modules/gremlinpython { };
+
+  greynoise = callPackage ../development/python-modules/greynoise { };
 
   growattserver = callPackage ../development/python-modules/growattserver { };
 
@@ -4858,6 +4898,8 @@ self: super: with self; {
   heatshrink2 = callPackage ../development/python-modules/heatshrink2 { };
 
   heatzypy = callPackage ../development/python-modules/heatzypy { };
+
+  help2man = callPackage ../development/python-modules/help2man { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
 
@@ -5090,6 +5132,8 @@ self: super: with self; {
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
+  hyperscan = callPackage ../development/python-modules/hyperscan { };
+
   hyperion-py = callPackage ../development/python-modules/hyperion-py { };
 
   hyperlink = callPackage ../development/python-modules/hyperlink { };
@@ -5172,6 +5216,8 @@ self: super: with self; {
     inherit (pkgs) igraph;
   };
 
+  iisignature = callPackage ../development/python-modules/iisignature { };
+
   ijson = callPackage ../development/python-modules/ijson { };
 
   ilua = callPackage ../development/python-modules/ilua { };
@@ -5239,6 +5285,12 @@ self: super: with self; {
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
+
+  indexed-bzip2 = callPackage ../development/python-modules/indexed-bzip2 { };
+
+  indexed-gzip = callPackage ../development/python-modules/indexed-gzip { inherit (pkgs) zlib; };
+
+  indexed-zstd = callPackage ../development/python-modules/indexed-zstd { inherit (pkgs) zstd; };
 
   infinity = callPackage ../development/python-modules/infinity { };
 
@@ -5366,7 +5418,7 @@ self: super: with self; {
 
   ipytablewidgets = callPackage ../development/python-modules/ipytablewidgets { };
 
-  ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
+  ipython-genutils = callPackage ../development/python-modules/ipython-genutils { };
 
   ipython = callPackage ../development/python-modules/ipython { };
 
@@ -6325,6 +6377,8 @@ self: super: with self; {
 
   looseversion = callPackage ../development/python-modules/looseversion { };
 
+  loqedapi = callPackage ../development/python-modules/loqedapi { };
+
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
@@ -6428,6 +6482,10 @@ self: super: with self; {
   malduck= callPackage ../development/python-modules/malduck { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
+
+  mando = callPackage ../development/python-modules/mando { };
+
+  mandown = callPackage ../development/python-modules/mandown { };
 
   manhole = callPackage ../development/python-modules/manhole { };
 
@@ -6608,7 +6666,7 @@ self: super: with self; {
 
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
-  memory_profiler = callPackage ../development/python-modules/memory_profiler { };
+  memory-profiler = callPackage ../development/python-modules/memory-profiler { };
 
   meraki = callPackage ../development/python-modules/meraki { };
 
@@ -6695,6 +6753,8 @@ self: super: with self; {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
+  mindsdb-evaluator = callPackage ../development/python-modules/mindsdb-evaluator { };
+
   minexr = callPackage ../development/python-modules/minexr { };
 
   miniaudio = callPackage ../development/python-modules/miniaudio {
@@ -6731,6 +6791,8 @@ self: super: with self; {
   mip = callPackage ../development/python-modules/mip { };
 
   mir_eval = callPackage ../development/python-modules/mir_eval { };
+
+  mirakuru = callPackage ../development/python-modules/mirakuru { };
 
   misaka = callPackage ../development/python-modules/misaka { };
 
@@ -6811,6 +6873,8 @@ self: super: with self; {
   mnist = callPackage ../development/python-modules/mnist { };
 
   moat-ble = callPackage ../development/python-modules/moat-ble { };
+
+  mobi = callPackage ../development/python-modules/mobi { };
 
   mobly = callPackage ../development/python-modules/mobly { };
 
@@ -7039,9 +7103,719 @@ self: super: with self; {
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
 
-  mypy-boto3-ebs = callPackage ../development/python-modules/mypy-boto3-ebs { };
+  inherit (callPackage ../development/python-modules/mypy-boto3 { })
 
-  mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
+    mypy-boto3-accessanalyzer
+
+    mypy-boto3-account
+
+    mypy-boto3-acm
+
+    mypy-boto3-acm-pca
+
+    mypy-boto3-alexaforbusiness
+
+    mypy-boto3-amp
+
+    mypy-boto3-amplify
+
+    mypy-boto3-amplifybackend
+
+    mypy-boto3-amplifyuibuilder
+
+    mypy-boto3-apigateway
+
+    mypy-boto3-apigatewaymanagementapi
+
+    mypy-boto3-apigatewayv2
+
+    mypy-boto3-appconfig
+
+    mypy-boto3-appconfigdata
+
+    mypy-boto3-appfabric
+
+    mypy-boto3-appflow
+
+    mypy-boto3-appintegrations
+
+    mypy-boto3-application-autoscaling
+
+    mypy-boto3-application-insights
+
+    mypy-boto3-applicationcostprofiler
+
+    mypy-boto3-appmesh
+
+    mypy-boto3-apprunner
+
+    mypy-boto3-appstream
+
+    mypy-boto3-appsync
+
+    mypy-boto3-arc-zonal-shift
+
+    mypy-boto3-athena
+
+    mypy-boto3-auditmanager
+
+    mypy-boto3-autoscaling
+
+    mypy-boto3-autoscaling-plans
+
+    mypy-boto3-backup
+
+    mypy-boto3-backup-gateway
+
+    mypy-boto3-backupstorage
+
+    mypy-boto3-batch
+
+    mypy-boto3-billingconductor
+
+    mypy-boto3-braket
+
+    mypy-boto3-budgets
+
+    mypy-boto3-ce
+
+    mypy-boto3-chime
+
+    mypy-boto3-chime-sdk-identity
+
+    mypy-boto3-chime-sdk-media-pipelines
+
+    mypy-boto3-chime-sdk-meetings
+
+    mypy-boto3-chime-sdk-messaging
+
+    mypy-boto3-chime-sdk-voice
+
+    mypy-boto3-cleanrooms
+
+    mypy-boto3-cloud9
+
+    mypy-boto3-cloudcontrol
+
+    mypy-boto3-clouddirectory
+
+    mypy-boto3-cloudformation
+
+    mypy-boto3-cloudfront
+
+    mypy-boto3-cloudhsm
+
+    mypy-boto3-cloudhsmv2
+
+    mypy-boto3-cloudsearch
+
+    mypy-boto3-cloudsearchdomain
+
+    mypy-boto3-cloudtrail
+
+    mypy-boto3-cloudtrail-data
+
+    mypy-boto3-cloudwatch
+
+    mypy-boto3-codeartifact
+
+    mypy-boto3-codebuild
+
+    mypy-boto3-codecatalyst
+
+    mypy-boto3-codecommit
+
+    mypy-boto3-codedeploy
+
+    mypy-boto3-codeguru-reviewer
+
+    mypy-boto3-codeguru-security
+
+    mypy-boto3-codeguruprofiler
+
+    mypy-boto3-codepipeline
+
+    mypy-boto3-codestar
+
+    mypy-boto3-codestar-connections
+
+    mypy-boto3-codestar-notifications
+
+    mypy-boto3-cognito-identity
+
+    mypy-boto3-cognito-idp
+
+    mypy-boto3-cognito-sync
+
+    mypy-boto3-comprehend
+
+    mypy-boto3-comprehendmedical
+
+    mypy-boto3-compute-optimizer
+
+    mypy-boto3-config
+
+    mypy-boto3-connect
+
+    mypy-boto3-connect-contact-lens
+
+    mypy-boto3-connectcampaigns
+
+    mypy-boto3-connectcases
+
+    mypy-boto3-connectparticipant
+
+    mypy-boto3-controltower
+
+    mypy-boto3-cur
+
+    mypy-boto3-customer-profiles
+
+    mypy-boto3-databrew
+
+    mypy-boto3-dataexchange
+
+    mypy-boto3-datapipeline
+
+    mypy-boto3-datasync
+
+    mypy-boto3-dax
+
+    mypy-boto3-detective
+
+    mypy-boto3-devicefarm
+
+    mypy-boto3-devops-guru
+
+    mypy-boto3-directconnect
+
+    mypy-boto3-discovery
+
+    mypy-boto3-dlm
+
+    mypy-boto3-dms
+
+    mypy-boto3-docdb
+
+    mypy-boto3-docdb-elastic
+
+    mypy-boto3-drs
+
+    mypy-boto3-ds
+
+    mypy-boto3-dynamodb
+
+    mypy-boto3-dynamodbstreams
+
+    mypy-boto3-ebs
+
+    mypy-boto3-ec2
+
+    mypy-boto3-ec2-instance-connect
+
+    mypy-boto3-ecr
+
+    mypy-boto3-ecr-public
+
+    mypy-boto3-ecs
+
+    mypy-boto3-efs
+
+    mypy-boto3-eks
+
+    mypy-boto3-elastic-inference
+
+    mypy-boto3-elasticache
+
+    mypy-boto3-elasticbeanstalk
+
+    mypy-boto3-elastictranscoder
+
+    mypy-boto3-elb
+
+    mypy-boto3-elbv2
+
+    mypy-boto3-emr
+
+    mypy-boto3-emr-containers
+
+    mypy-boto3-emr-serverless
+
+    mypy-boto3-entityresolution
+
+    mypy-boto3-es
+
+    mypy-boto3-events
+
+    mypy-boto3-evidently
+
+    mypy-boto3-finspace
+
+    mypy-boto3-finspace-data
+
+    mypy-boto3-firehose
+
+    mypy-boto3-fis
+
+    mypy-boto3-fms
+
+    mypy-boto3-forecast
+
+    mypy-boto3-forecastquery
+
+    mypy-boto3-frauddetector
+
+    mypy-boto3-fsx
+
+    mypy-boto3-gamelift
+
+    mypy-boto3-gamesparks
+
+    mypy-boto3-glacier
+
+    mypy-boto3-globalaccelerator
+
+    mypy-boto3-glue
+
+    mypy-boto3-grafana
+
+    mypy-boto3-greengrass
+
+    mypy-boto3-greengrassv2
+
+    mypy-boto3-groundstation
+
+    mypy-boto3-guardduty
+
+    mypy-boto3-health
+
+    mypy-boto3-healthlake
+
+    mypy-boto3-honeycode
+
+    mypy-boto3-iam
+
+    mypy-boto3-identitystore
+
+    mypy-boto3-imagebuilder
+
+    mypy-boto3-importexport
+
+    mypy-boto3-inspector
+
+    mypy-boto3-inspector2
+
+    mypy-boto3-internetmonitor
+
+    mypy-boto3-iot
+
+    mypy-boto3-iot-data
+
+    mypy-boto3-iot-jobs-data
+
+    mypy-boto3-iot-roborunner
+
+    mypy-boto3-iot1click-devices
+
+    mypy-boto3-iot1click-projects
+
+    mypy-boto3-iotanalytics
+
+    mypy-boto3-iotdeviceadvisor
+
+    mypy-boto3-iotevents
+
+    mypy-boto3-iotevents-data
+
+    mypy-boto3-iotfleethub
+
+    mypy-boto3-iotfleetwise
+
+    mypy-boto3-iotsecuretunneling
+
+    mypy-boto3-iotsitewise
+
+    mypy-boto3-iotthingsgraph
+
+    mypy-boto3-iottwinmaker
+
+    mypy-boto3-iotwireless
+
+    mypy-boto3-ivs
+
+    mypy-boto3-ivs-realtime
+
+    mypy-boto3-ivschat
+
+    mypy-boto3-kafka
+
+    mypy-boto3-kafkaconnect
+
+    mypy-boto3-kendra
+
+    mypy-boto3-kendra-ranking
+
+    mypy-boto3-keyspaces
+
+    mypy-boto3-kinesis
+
+    mypy-boto3-kinesis-video-archived-media
+
+    mypy-boto3-kinesis-video-media
+
+    mypy-boto3-kinesis-video-signaling
+
+    mypy-boto3-kinesis-video-webrtc-storage
+
+    mypy-boto3-kinesisanalytics
+
+    mypy-boto3-kinesisanalyticsv2
+
+    mypy-boto3-kinesisvideo
+
+    mypy-boto3-kms
+
+    mypy-boto3-lakeformation
+
+    mypy-boto3-lambda
+
+    mypy-boto3-lex-models
+
+    mypy-boto3-lex-runtime
+
+    mypy-boto3-lexv2-models
+
+    mypy-boto3-lexv2-runtime
+
+    mypy-boto3-license-manager
+
+    mypy-boto3-license-manager-linux-subscriptions
+
+    mypy-boto3-license-manager-user-subscriptions
+
+    mypy-boto3-lightsail
+
+    mypy-boto3-location
+
+    mypy-boto3-logs
+
+    mypy-boto3-lookoutequipment
+
+    mypy-boto3-lookoutmetrics
+
+    mypy-boto3-lookoutvision
+
+    mypy-boto3-m2
+
+    mypy-boto3-machinelearning
+
+    mypy-boto3-macie
+
+    mypy-boto3-macie2
+
+    mypy-boto3-managedblockchain
+
+    mypy-boto3-managedblockchain-query
+
+    mypy-boto3-marketplace-catalog
+
+    mypy-boto3-marketplace-entitlement
+
+    mypy-boto3-marketplacecommerceanalytics
+
+    mypy-boto3-mediaconnect
+
+    mypy-boto3-mediaconvert
+
+    mypy-boto3-medialive
+
+    mypy-boto3-mediapackage
+
+    mypy-boto3-mediapackage-vod
+
+    mypy-boto3-mediapackagev2
+
+    mypy-boto3-mediastore
+
+    mypy-boto3-mediastore-data
+
+    mypy-boto3-mediatailor
+
+    mypy-boto3-medical-imaging
+
+    mypy-boto3-memorydb
+
+    mypy-boto3-meteringmarketplace
+
+    mypy-boto3-mgh
+
+    mypy-boto3-mgn
+
+    mypy-boto3-migration-hub-refactor-spaces
+
+    mypy-boto3-migrationhub-config
+
+    mypy-boto3-migrationhuborchestrator
+
+    mypy-boto3-migrationhubstrategy
+
+    mypy-boto3-mobile
+
+    mypy-boto3-mq
+
+    mypy-boto3-mturk
+
+    mypy-boto3-mwaa
+
+    mypy-boto3-neptune
+
+    mypy-boto3-neptunedata
+
+    mypy-boto3-network-firewall
+
+    mypy-boto3-networkmanager
+
+    mypy-boto3-nimble
+
+    mypy-boto3-oam
+
+    mypy-boto3-omics
+
+    mypy-boto3-opensearch
+
+    mypy-boto3-opensearchserverless
+
+    mypy-boto3-opsworks
+
+    mypy-boto3-opsworkscm
+
+    mypy-boto3-organizations
+
+    mypy-boto3-osis
+
+    mypy-boto3-outposts
+
+    mypy-boto3-panorama
+
+    mypy-boto3-payment-cryptography
+
+    mypy-boto3-payment-cryptography-data
+
+    mypy-boto3-pca-connector-ad
+
+    mypy-boto3-personalize
+
+    mypy-boto3-personalize-events
+
+    mypy-boto3-personalize-runtime
+
+    mypy-boto3-pi
+
+    mypy-boto3-pinpoint
+
+    mypy-boto3-pinpoint-email
+
+    mypy-boto3-pinpoint-sms-voice
+
+    mypy-boto3-pinpoint-sms-voice-v2
+
+    mypy-boto3-pipes
+
+    mypy-boto3-polly
+
+    mypy-boto3-pricing
+
+    mypy-boto3-privatenetworks
+
+    mypy-boto3-proton
+
+    mypy-boto3-qldb
+
+    mypy-boto3-qldb-session
+
+    mypy-boto3-quicksight
+
+    mypy-boto3-ram
+
+    mypy-boto3-rbin
+
+    mypy-boto3-rds
+
+    mypy-boto3-rds-data
+
+    mypy-boto3-redshift
+
+    mypy-boto3-redshift-data
+
+    mypy-boto3-redshift-serverless
+
+    mypy-boto3-rekognition
+
+    mypy-boto3-resiliencehub
+
+    mypy-boto3-resource-explorer-2
+
+    mypy-boto3-resource-groups
+
+    mypy-boto3-resourcegroupstaggingapi
+
+    mypy-boto3-robomaker
+
+    mypy-boto3-rolesanywhere
+
+    mypy-boto3-route53
+
+    mypy-boto3-route53-recovery-cluster
+
+    mypy-boto3-route53-recovery-control-config
+
+    mypy-boto3-route53-recovery-readiness
+
+    mypy-boto3-route53domains
+
+    mypy-boto3-route53resolver
+
+    mypy-boto3-rum
+
+    mypy-boto3-s3
+
+    mypy-boto3-s3control
+
+    mypy-boto3-s3outposts
+
+    mypy-boto3-sagemaker
+
+    mypy-boto3-sagemaker-a2i-runtime
+
+    mypy-boto3-sagemaker-edge
+
+    mypy-boto3-sagemaker-featurestore-runtime
+
+    mypy-boto3-sagemaker-geospatial
+
+    mypy-boto3-sagemaker-metrics
+
+    mypy-boto3-sagemaker-runtime
+
+    mypy-boto3-savingsplans
+
+    mypy-boto3-scheduler
+
+    mypy-boto3-schemas
+
+    mypy-boto3-sdb
+
+    mypy-boto3-secretsmanager
+
+    mypy-boto3-securityhub
+
+    mypy-boto3-securitylake
+
+    mypy-boto3-serverlessrepo
+
+    mypy-boto3-service-quotas
+
+    mypy-boto3-servicecatalog
+
+    mypy-boto3-servicecatalog-appregistry
+
+    mypy-boto3-servicediscovery
+
+    mypy-boto3-ses
+
+    mypy-boto3-sesv2
+
+    mypy-boto3-shield
+
+    mypy-boto3-signer
+
+    mypy-boto3-simspaceweaver
+
+    mypy-boto3-sms
+
+    mypy-boto3-sms-voice
+
+    mypy-boto3-snow-device-management
+
+    mypy-boto3-snowball
+
+    mypy-boto3-sns
+
+    mypy-boto3-sqs
+
+    mypy-boto3-ssm
+
+    mypy-boto3-ssm-contacts
+
+    mypy-boto3-ssm-incidents
+
+    mypy-boto3-ssm-sap
+
+    mypy-boto3-sso
+
+    mypy-boto3-sso-admin
+
+    mypy-boto3-sso-oidc
+
+    mypy-boto3-stepfunctions
+
+    mypy-boto3-storagegateway
+
+    mypy-boto3-sts
+
+    mypy-boto3-support
+
+    mypy-boto3-support-app
+
+    mypy-boto3-swf
+
+    mypy-boto3-synthetics
+
+    mypy-boto3-textract
+
+    mypy-boto3-timestream-query
+
+    mypy-boto3-timestream-write
+
+    mypy-boto3-tnb
+
+    mypy-boto3-transcribe
+
+    mypy-boto3-transfer
+
+    mypy-boto3-translate
+
+    mypy-boto3-verifiedpermissions
+
+    mypy-boto3-voice-id
+
+    mypy-boto3-vpc-lattice
+
+    mypy-boto3-waf
+
+    mypy-boto3-waf-regional
+
+    mypy-boto3-wafv2
+
+    mypy-boto3-wellarchitected
+
+    mypy-boto3-wisdom
+
+    mypy-boto3-workdocs
+
+    mypy-boto3-worklink
+
+    mypy-boto3-workmail
+
+    mypy-boto3-workmailmessageflow
+
+    mypy-boto3-workspaces
+
+    mypy-boto3-workspaces-web
+
+    mypy-boto3-xray
+
+  ;
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
 
@@ -7438,6 +8212,8 @@ self: super: with self; {
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
+  python-tds = callPackage ../development/python-modules/python-tds { };
+
   python-yate = callPackage ../development/python-modules/python-yate { };
 
   python-youtube = callPackage ../development/python-modules/python-youtube { };
@@ -7581,7 +8357,7 @@ self: super: with self; {
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
 
-  openai-triton = callPackage ../development/python-modules/openai-triton { llvmPackages = pkgs.llvmPackages_rocm; };
+  openai-triton = callPackage ../development/python-modules/openai-triton { cudaPackages = pkgs.cudaPackages_12_0; };
 
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
@@ -8423,6 +9199,8 @@ self: super: with self; {
 
   python-heatclient = callPackage ../development/python-modules/python-heatclient { };
 
+  python-hl7 = callPackage ../development/python-modules/python-hl7 { };
+
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
   python-ipware = callPackage ../development/python-modules/python-ipware { };
@@ -8600,6 +9378,8 @@ self: super: with self; {
 
   portend = callPackage ../development/python-modules/portend { };
 
+  port-for = callPackage ../development/python-modules/port-for { };
+
   portpicker = callPackage ../development/python-modules/portpicker { };
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
@@ -8742,6 +9522,8 @@ self: super: with self; {
   };
 
   psutil-home-assistant = callPackage ../development/python-modules/psutil-home-assistant { };
+
+  psychrolib = callPackage ../development/python-modules/psychrolib { };
 
   psycopg = callPackage ../development/python-modules/psycopg { };
 
@@ -8931,6 +9713,8 @@ self: super: with self; {
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
+  pybloom-live = callPackage ../development/python-modules/pybloom-live { };
+
   pybluez = callPackage ../development/python-modules/pybluez {
     inherit (pkgs) bluez;
   };
@@ -8964,6 +9748,8 @@ self: super: with self; {
   pycares = callPackage ../development/python-modules/pycares { };
 
   pycarwings2 = callPackage ../development/python-modules/pycarwings2 { };
+
+  pycatch22 = callPackage ../development/python-modules/pycatch22 { };
 
   pycategories = callPackage ../development/python-modules/pycategories { };
 
@@ -9158,6 +9944,8 @@ self: super: with self; {
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyeclib = callPackage ../development/python-modules/pyeclib { };
+
+  pyecoforest = callPackage ../development/python-modules/pyecoforest { };
 
   pyeconet = callPackage ../development/python-modules/pyeconet { };
 
@@ -9404,6 +10192,8 @@ self: super: with self; {
   pykakasi = callPackage ../development/python-modules/pykakasi { };
 
   pykaleidescape = callPackage ../development/python-modules/pykaleidescape { };
+
+  pykalman = callPackage ../development/python-modules/pykalman { };
 
   pykdl = callPackage ../development/python-modules/pykdl { };
 
@@ -9828,6 +10618,8 @@ self: super: with self; {
 
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
+  pyqt5-stubs = callPackage ../development/python-modules/pyqt5-stubs { };
+
   pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override {
@@ -9892,19 +10684,19 @@ self: super: with self; {
 
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
 
-  pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
+  pyramid-beaker = callPackage ../development/python-modules/pyramid-beaker { };
 
   pyramid = callPackage ../development/python-modules/pyramid { };
 
-  pyramid_chameleon = callPackage ../development/python-modules/pyramid_chameleon { };
+  pyramid-chameleon = callPackage ../development/python-modules/pyramid-chameleon { };
 
-  pyramid_exclog = callPackage ../development/python-modules/pyramid_exclog { };
+  pyramid-exclog = callPackage ../development/python-modules/pyramid-exclog { };
 
   pyramid-jinja2 = callPackage ../development/python-modules/pyramid-jinja2 { };
 
-  pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
+  pyramid-mako = callPackage ../development/python-modules/pyramid-mako { };
 
-  pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
+  pyramid-multiauth = callPackage ../development/python-modules/pyramid-multiauth { };
 
   pyrate-limiter = callPackage ../development/python-modules/pyrate-limiter { };
 
@@ -10011,6 +10803,8 @@ self: super: with self; {
   pysensors = callPackage ../development/python-modules/pysensors { };
 
   pyserial-asyncio = callPackage ../development/python-modules/pyserial-asyncio { };
+
+  pyserial-asyncio-fast = callPackage ../development/python-modules/pyserial-asyncio-fast { };
 
   pyserial = callPackage ../development/python-modules/pyserial { };
 
@@ -10345,6 +11139,8 @@ self: super: with self; {
 
   pytest-plt = callPackage ../development/python-modules/pytest-plt { };
 
+  pytest-postgresql = callPackage ../development/python-modules/pytest-postgresql { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-pytestrail = callPackage ../development/python-modules/pytest-pytestrail { };
@@ -10388,6 +11184,8 @@ self: super: with self; {
   pytest-snapshot = callPackage ../development/python-modules/pytest-snapshot { };
 
   pytest-shutil = callPackage ../development/python-modules/pytest-shutil { };
+
+  pytest-spec = callPackage ../development/python-modules/pytest-spec { };
 
   python-status = callPackage ../development/python-modules/python-status { };
 
@@ -10746,6 +11544,8 @@ self: super: with self; {
 
   python-xmp-toolkit = callPackage ../development/python-modules/python-xmp-toolkit { };
 
+  python-xz = callPackage ../development/python-modules/python-xz { };
+
   python-zbar = callPackage ../development/python-modules/python-zbar { };
 
   pythran = callPackage ../development/python-modules/pythran {
@@ -10915,6 +11715,8 @@ self: super: with self; {
 
   pyweatherflowrest = callPackage ../development/python-modules/pyweatherflowrest { };
 
+  pyweatherflowudp = callPackage ../development/python-modules/pyweatherflowudp { };
+
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
   pywebview = callPackage ../development/python-modules/pywebview { };
@@ -10923,6 +11725,8 @@ self: super: with self; {
 
   pywerview = callPackage ../development/python-modules/pywerview { };
 
+  pywfa = callPackage ../development/python-modules/pywfa { };
+
   pywilight = callPackage ../development/python-modules/pywilight { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
@@ -10930,7 +11734,7 @@ self: super: with self; {
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
   pywlroots = callPackage ../development/python-modules/pywlroots {
-    wlroots = pkgs.wlroots_0_15;
+    wlroots = pkgs.wlroots_0_16;
   };
 
   pyws66i = callPackage ../development/python-modules/pyws66i { };
@@ -10962,6 +11766,8 @@ self: super: with self; {
   pyyaml-env-tag = callPackage ../development/python-modules/pyyaml-env-tag { };
 
   pyyaml-include = callPackage ../development/python-modules/pyyaml-include { };
+
+  pyyardian = callPackage ../development/python-modules/pyyardian { };
 
   pyzerproc = callPackage ../development/python-modules/pyzerproc { };
 
@@ -11039,6 +11845,8 @@ self: super: with self; {
 
   qstylizer = callPackage ../development/python-modules/qstylizer { };
 
+  qt-material = callPackage ../development/python-modules/qt-material { };
+
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
   qt6 = pkgs.qt6.override {
@@ -11050,7 +11858,7 @@ self: super: with self; {
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   qtile = callPackage ../development/python-modules/qtile {
-    wlroots = pkgs.wlroots_0_15;
+    wlroots = pkgs.wlroots_0_16;
   };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
@@ -11067,6 +11875,8 @@ self: super: with self; {
   quantities = callPackage ../development/python-modules/quantities { };
 
   quantiphy = callPackage ../development/python-modules/quantiphy { };
+
+  quantile-python = callPackage ../development/python-modules/quantile-python { };
 
   quantiphy-eval = callPackage ../development/python-modules/quantiphy-eval { };
 
@@ -11110,6 +11920,8 @@ self: super: with self; {
 
   radish-bdd = callPackage ../development/python-modules/radish-bdd { };
 
+  radon = callPackage ../development/python-modules/radon { };
+
   railroad-diagrams = callPackage ../development/python-modules/railroad-diagrams { };
 
   rainbowstream = callPackage ../development/python-modules/rainbowstream { };
@@ -11130,6 +11942,8 @@ self: super: with self; {
 
   rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
 
+  rapidgzip = callPackage ../development/python-modules/rapidgzip { inherit (pkgs) nasm; };
+
   rapt-ble = callPackage ../development/python-modules/rapt-ble { };
 
   rarfile = callPackage ../development/python-modules/rarfile {
@@ -11137,6 +11951,10 @@ self: super: with self; {
   };
 
   rasterio = callPackage ../development/python-modules/rasterio { };
+
+  ratarmountcore = callPackage ../development/python-modules/ratarmountcore { inherit (pkgs) zstd; };
+
+  ratarmount = callPackage ../development/python-modules/ratarmount { };
 
   ratelim = callPackage ../development/python-modules/ratelim { };
 
@@ -11150,7 +11968,7 @@ self: super: with self; {
 
   rawkit = callPackage ../development/python-modules/rawkit { };
 
-  ray = callPackage ../development/python-modules/ray { redis = pkgs.redis; };
+  ray = callPackage ../development/python-modules/ray { };
 
   razdel = callPackage ../development/python-modules/razdel { };
 
@@ -11302,6 +12120,8 @@ self: super: with self; {
   requests-oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
 
   requests-pkcs12 = callPackage ../development/python-modules/requests-pkcs12 { };
+
+  requests-ratelimiter = callPackage ../development/python-modules/requests-ratelimiter { };
 
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
@@ -11468,6 +12288,8 @@ self: super: with self; {
   ropgadget = callPackage ../development/python-modules/ropgadget { };
 
   ropper = callPackage ../development/python-modules/ropper { };
+
+  rotary-embedding-torch = callPackage ../development/python-modules/rotary-embedding-torch { };
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
 
@@ -11733,6 +12555,8 @@ self: super: with self; {
     python3 = self.python;
   });
 
+  seasonal = callPackage ../development/python-modules/seasonal { };
+
   seatconnect = callPackage ../development/python-modules/seatconnect { };
 
   seccomp = callPackage ../development/python-modules/seccomp { };
@@ -11789,6 +12613,8 @@ self: super: with self; {
     inherit (pkgs) sentencepiece;
   };
 
+  sentence-splitter = callPackage ../development/python-modules/sentence-splitter { };
+
   sentence-transformers = callPackage ../development/python-modules/sentence-transformers { };
 
   sentinel = callPackage ../development/python-modules/sentinel { };
@@ -11824,6 +12650,8 @@ self: super: with self; {
   setupmeta = callPackage ../development/python-modules/setupmeta { };
 
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
+
+  setuptools-generate = callPackage ../development/python-modules/setuptools-generate { };
 
   setuptools-gettext = callPackage ../development/python-modules/setuptools-gettext { };
 
@@ -11938,6 +12766,8 @@ self: super: with self; {
   simplekml = callPackage ../development/python-modules/simplekml { };
 
   simplekv = callPackage ../development/python-modules/simplekv { };
+
+  simplemma = callPackage ../development/python-modules/simplemma { };
 
   simplenote = callPackage ../development/python-modules/simplenote { };
 
@@ -12090,6 +12920,8 @@ self: super: with self; {
   snapcast = callPackage ../development/python-modules/snapcast { };
 
   snapshottest = callPackage ../development/python-modules/snapshottest { };
+
+  snaptime = callPackage ../development/python-modules/snaptime { };
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
@@ -12391,6 +13223,8 @@ self: super: with self; {
 
   spyse-python = callPackage ../development/python-modules/spyse-python { };
 
+  sqids = callPackage ../development/python-modules/sqids { };
+
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   sqlalchemy-citext = callPackage ../development/python-modules/sqlalchemy-citext { };
@@ -12447,6 +13281,8 @@ self: super: with self; {
 
   ssdp = callPackage ../development/python-modules/ssdp { };
 
+  ssdpy = callPackage ../development/python-modules/ssdpy { };
+
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
@@ -12460,6 +13296,8 @@ self: super: with self; {
   sslib = callPackage ../development/python-modules/sslib { };
 
   stack-data = callPackage ../development/python-modules/stack-data { };
+
+  stanio = callPackage ../development/python-modules/stanio { };
 
   stanza = callPackage ../development/python-modules/stanza { };
 
@@ -12508,6 +13346,8 @@ self: super: with self; {
   stickytape = callPackage ../development/python-modules/stickytape { };
 
   stim = callPackage ../development/python-modules/stim { };
+
+  stix2-patterns = callPackage ../development/python-modules/stix2-patterns { };
 
   stm32loader = callPackage ../development/python-modules/stm32loader { };
 
@@ -12582,6 +13422,8 @@ self: super: with self; {
   subunit2sql = callPackage ../development/python-modules/subunit2sql { };
 
   subzerod = callPackage ../development/python-modules/subzerod { };
+
+  succulent = callPackage ../development/python-modules/succulent { };
 
   sumo = callPackage ../development/python-modules/sumo { };
 
@@ -12709,6 +13551,8 @@ self: super: with self; {
   tatsu = callPackage ../development/python-modules/tatsu { };
 
   taxi = callPackage ../development/python-modules/taxi { };
+
+  tbats = callPackage ../development/python-modules/tbats { };
 
   tblib = callPackage ../development/python-modules/tblib { };
 
@@ -13072,7 +13916,6 @@ self: super: with self; {
       else pkgs.magma;
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
-    inherit (pkgs.llvmPackages_rocm) openmp;
   };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
@@ -13195,6 +14038,8 @@ self: super: with self; {
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
 
+  treelib = callPackage ../development/python-modules/treelib { };
+
   treelog = callPackage ../development/python-modules/treelog { };
 
   treeo = callPackage ../development/python-modules/treeo { };
@@ -13234,6 +14079,8 @@ self: super: with self; {
   truststore = callPackage ../development/python-modules/truststore { };
 
   trytond = callPackage ../development/python-modules/trytond { };
+
+  tsfresh = callPackage ../development/python-modules/tsfresh { };
 
   tskit = callPackage ../development/python-modules/tskit { };
 
@@ -13341,6 +14188,718 @@ self: super: with self; {
 
   type-infer = callPackage ../development/python-modules/type-infer { };
 
+  types-aiobotocore = callPackage ../development/python-modules/types-aiobotocore { };
+
+  inherit (callPackage ../development/python-modules/types-aiobotocore-packages { })
+
+    types-aiobotocore-accessanalyzer
+
+    types-aiobotocore-account
+
+    types-aiobotocore-acm
+
+    types-aiobotocore-acm-pca
+
+    types-aiobotocore-alexaforbusiness
+
+    types-aiobotocore-amp
+
+    types-aiobotocore-amplify
+
+    types-aiobotocore-amplifybackend
+
+    types-aiobotocore-amplifyuibuilder
+
+    types-aiobotocore-apigateway
+
+    types-aiobotocore-apigatewaymanagementapi
+
+    types-aiobotocore-apigatewayv2
+
+    types-aiobotocore-appconfig
+
+    types-aiobotocore-appconfigdata
+
+    types-aiobotocore-appfabric
+
+    types-aiobotocore-appflow
+
+    types-aiobotocore-appintegrations
+
+    types-aiobotocore-application-autoscaling
+
+    types-aiobotocore-application-insights
+
+    types-aiobotocore-applicationcostprofiler
+
+    types-aiobotocore-appmesh
+
+    types-aiobotocore-apprunner
+
+    types-aiobotocore-appstream
+
+    types-aiobotocore-appsync
+
+    types-aiobotocore-arc-zonal-shift
+
+    types-aiobotocore-athena
+
+    types-aiobotocore-auditmanager
+
+    types-aiobotocore-autoscaling
+
+    types-aiobotocore-autoscaling-plans
+
+    types-aiobotocore-backup
+
+    types-aiobotocore-backup-gateway
+
+    types-aiobotocore-backupstorage
+
+    types-aiobotocore-batch
+
+    types-aiobotocore-billingconductor
+
+    types-aiobotocore-braket
+
+    types-aiobotocore-budgets
+
+    types-aiobotocore-ce
+
+    types-aiobotocore-chime
+
+    types-aiobotocore-chime-sdk-identity
+
+    types-aiobotocore-chime-sdk-media-pipelines
+
+    types-aiobotocore-chime-sdk-meetings
+
+    types-aiobotocore-chime-sdk-messaging
+
+    types-aiobotocore-chime-sdk-voice
+
+    types-aiobotocore-cleanrooms
+
+    types-aiobotocore-cloud9
+
+    types-aiobotocore-cloudcontrol
+
+    types-aiobotocore-clouddirectory
+
+    types-aiobotocore-cloudformation
+
+    types-aiobotocore-cloudfront
+
+    types-aiobotocore-cloudhsm
+
+    types-aiobotocore-cloudhsmv2
+
+    types-aiobotocore-cloudsearch
+
+    types-aiobotocore-cloudsearchdomain
+
+    types-aiobotocore-cloudtrail
+
+    types-aiobotocore-cloudtrail-data
+
+    types-aiobotocore-cloudwatch
+
+    types-aiobotocore-codeartifact
+
+    types-aiobotocore-codebuild
+
+    types-aiobotocore-codecatalyst
+
+    types-aiobotocore-codecommit
+
+    types-aiobotocore-codedeploy
+
+    types-aiobotocore-codeguru-reviewer
+
+    types-aiobotocore-codeguru-security
+
+    types-aiobotocore-codeguruprofiler
+
+    types-aiobotocore-codepipeline
+
+    types-aiobotocore-codestar
+
+    types-aiobotocore-codestar-connections
+
+    types-aiobotocore-codestar-notifications
+
+    types-aiobotocore-cognito-identity
+
+    types-aiobotocore-cognito-idp
+
+    types-aiobotocore-cognito-sync
+
+    types-aiobotocore-comprehend
+
+    types-aiobotocore-comprehendmedical
+
+    types-aiobotocore-compute-optimizer
+
+    types-aiobotocore-config
+
+    types-aiobotocore-connect
+
+    types-aiobotocore-connect-contact-lens
+
+    types-aiobotocore-connectcampaigns
+
+    types-aiobotocore-connectcases
+
+    types-aiobotocore-connectparticipant
+
+    types-aiobotocore-controltower
+
+    types-aiobotocore-cur
+
+    types-aiobotocore-customer-profiles
+
+    types-aiobotocore-databrew
+
+    types-aiobotocore-dataexchange
+
+    types-aiobotocore-datapipeline
+
+    types-aiobotocore-datasync
+
+    types-aiobotocore-dax
+
+    types-aiobotocore-detective
+
+    types-aiobotocore-devicefarm
+
+    types-aiobotocore-devops-guru
+
+    types-aiobotocore-directconnect
+
+    types-aiobotocore-discovery
+
+    types-aiobotocore-dlm
+
+    types-aiobotocore-dms
+
+    types-aiobotocore-docdb
+
+    types-aiobotocore-docdb-elastic
+
+    types-aiobotocore-drs
+
+    types-aiobotocore-ds
+
+    types-aiobotocore-dynamodb
+
+    types-aiobotocore-dynamodbstreams
+
+    types-aiobotocore-ebs
+
+    types-aiobotocore-ec2
+
+    types-aiobotocore-ec2-instance-connect
+
+    types-aiobotocore-ecr
+
+    types-aiobotocore-ecr-public
+
+    types-aiobotocore-ecs
+
+    types-aiobotocore-efs
+
+    types-aiobotocore-eks
+
+    types-aiobotocore-elastic-inference
+
+    types-aiobotocore-elasticache
+
+    types-aiobotocore-elasticbeanstalk
+
+    types-aiobotocore-elastictranscoder
+
+    types-aiobotocore-elb
+
+    types-aiobotocore-elbv2
+
+    types-aiobotocore-emr
+
+    types-aiobotocore-emr-containers
+
+    types-aiobotocore-emr-serverless
+
+    types-aiobotocore-entityresolution
+
+    types-aiobotocore-es
+
+    types-aiobotocore-events
+
+    types-aiobotocore-evidently
+
+    types-aiobotocore-finspace
+
+    types-aiobotocore-finspace-data
+
+    types-aiobotocore-firehose
+
+    types-aiobotocore-fis
+
+    types-aiobotocore-fms
+
+    types-aiobotocore-forecast
+
+    types-aiobotocore-forecastquery
+
+    types-aiobotocore-frauddetector
+
+    types-aiobotocore-fsx
+
+    types-aiobotocore-gamelift
+
+    types-aiobotocore-gamesparks
+
+    types-aiobotocore-glacier
+
+    types-aiobotocore-globalaccelerator
+
+    types-aiobotocore-glue
+
+    types-aiobotocore-grafana
+
+    types-aiobotocore-greengrass
+
+    types-aiobotocore-greengrassv2
+
+    types-aiobotocore-groundstation
+
+    types-aiobotocore-guardduty
+
+    types-aiobotocore-health
+
+    types-aiobotocore-healthlake
+
+    types-aiobotocore-honeycode
+
+    types-aiobotocore-iam
+
+    types-aiobotocore-identitystore
+
+    types-aiobotocore-imagebuilder
+
+    types-aiobotocore-importexport
+
+    types-aiobotocore-inspector
+
+    types-aiobotocore-inspector2
+
+    types-aiobotocore-internetmonitor
+
+    types-aiobotocore-iot
+
+    types-aiobotocore-iot-data
+
+    types-aiobotocore-iot-jobs-data
+
+    types-aiobotocore-iot-roborunner
+
+    types-aiobotocore-iot1click-devices
+
+    types-aiobotocore-iot1click-projects
+
+    types-aiobotocore-iotanalytics
+
+    types-aiobotocore-iotdeviceadvisor
+
+    types-aiobotocore-iotevents
+
+    types-aiobotocore-iotevents-data
+
+    types-aiobotocore-iotfleethub
+
+    types-aiobotocore-iotfleetwise
+
+    types-aiobotocore-iotsecuretunneling
+
+    types-aiobotocore-iotsitewise
+
+    types-aiobotocore-iotthingsgraph
+
+    types-aiobotocore-iottwinmaker
+
+    types-aiobotocore-iotwireless
+
+    types-aiobotocore-ivs
+
+    types-aiobotocore-ivs-realtime
+
+    types-aiobotocore-ivschat
+
+    types-aiobotocore-kafka
+
+    types-aiobotocore-kafkaconnect
+
+    types-aiobotocore-kendra
+
+    types-aiobotocore-kendra-ranking
+
+    types-aiobotocore-keyspaces
+
+    types-aiobotocore-kinesis
+
+    types-aiobotocore-kinesis-video-archived-media
+
+    types-aiobotocore-kinesis-video-media
+
+    types-aiobotocore-kinesis-video-signaling
+
+    types-aiobotocore-kinesis-video-webrtc-storage
+
+    types-aiobotocore-kinesisanalytics
+
+    types-aiobotocore-kinesisanalyticsv2
+
+    types-aiobotocore-kinesisvideo
+
+    types-aiobotocore-kms
+
+    types-aiobotocore-lakeformation
+
+    types-aiobotocore-lambda
+
+    types-aiobotocore-lex-models
+
+    types-aiobotocore-lex-runtime
+
+    types-aiobotocore-lexv2-models
+
+    types-aiobotocore-lexv2-runtime
+
+    types-aiobotocore-license-manager
+
+    types-aiobotocore-license-manager-linux-subscriptions
+
+    types-aiobotocore-license-manager-user-subscriptions
+
+    types-aiobotocore-lightsail
+
+    types-aiobotocore-location
+
+    types-aiobotocore-logs
+
+    types-aiobotocore-lookoutequipment
+
+    types-aiobotocore-lookoutmetrics
+
+    types-aiobotocore-lookoutvision
+
+    types-aiobotocore-m2
+
+    types-aiobotocore-machinelearning
+
+    types-aiobotocore-macie
+
+    types-aiobotocore-macie2
+
+    types-aiobotocore-managedblockchain
+
+    types-aiobotocore-managedblockchain-query
+
+    types-aiobotocore-marketplace-catalog
+
+    types-aiobotocore-marketplace-entitlement
+
+    types-aiobotocore-marketplacecommerceanalytics
+
+    types-aiobotocore-mediaconnect
+
+    types-aiobotocore-mediaconvert
+
+    types-aiobotocore-medialive
+
+    types-aiobotocore-mediapackage
+
+    types-aiobotocore-mediapackage-vod
+
+    types-aiobotocore-mediapackagev2
+
+    types-aiobotocore-mediastore
+
+    types-aiobotocore-mediastore-data
+
+    types-aiobotocore-mediatailor
+
+    types-aiobotocore-medical-imaging
+
+    types-aiobotocore-memorydb
+
+    types-aiobotocore-meteringmarketplace
+
+    types-aiobotocore-mgh
+
+    types-aiobotocore-mgn
+
+    types-aiobotocore-migration-hub-refactor-spaces
+
+    types-aiobotocore-migrationhub-config
+
+    types-aiobotocore-migrationhuborchestrator
+
+    types-aiobotocore-migrationhubstrategy
+
+    types-aiobotocore-mobile
+
+    types-aiobotocore-mq
+
+    types-aiobotocore-mturk
+
+    types-aiobotocore-mwaa
+
+    types-aiobotocore-neptune
+
+    types-aiobotocore-network-firewall
+
+    types-aiobotocore-networkmanager
+
+    types-aiobotocore-nimble
+
+    types-aiobotocore-oam
+
+    types-aiobotocore-omics
+
+    types-aiobotocore-opensearch
+
+    types-aiobotocore-opensearchserverless
+
+    types-aiobotocore-opsworks
+
+    types-aiobotocore-opsworkscm
+
+    types-aiobotocore-organizations
+
+    types-aiobotocore-osis
+
+    types-aiobotocore-outposts
+
+    types-aiobotocore-panorama
+
+    types-aiobotocore-payment-cryptography
+
+    types-aiobotocore-payment-cryptography-data
+
+    types-aiobotocore-personalize
+
+    types-aiobotocore-personalize-events
+
+    types-aiobotocore-personalize-runtime
+
+    types-aiobotocore-pi
+
+    types-aiobotocore-pinpoint
+
+    types-aiobotocore-pinpoint-email
+
+    types-aiobotocore-pinpoint-sms-voice
+
+    types-aiobotocore-pinpoint-sms-voice-v2
+
+    types-aiobotocore-pipes
+
+    types-aiobotocore-polly
+
+    types-aiobotocore-pricing
+
+    types-aiobotocore-privatenetworks
+
+    types-aiobotocore-proton
+
+    types-aiobotocore-qldb
+
+    types-aiobotocore-qldb-session
+
+    types-aiobotocore-quicksight
+
+    types-aiobotocore-ram
+
+    types-aiobotocore-rbin
+
+    types-aiobotocore-rds
+
+    types-aiobotocore-rds-data
+
+    types-aiobotocore-redshift
+
+    types-aiobotocore-redshift-data
+
+    types-aiobotocore-redshift-serverless
+
+    types-aiobotocore-rekognition
+
+    types-aiobotocore-resiliencehub
+
+    types-aiobotocore-resource-explorer-2
+
+    types-aiobotocore-resource-groups
+
+    types-aiobotocore-resourcegroupstaggingapi
+
+    types-aiobotocore-robomaker
+
+    types-aiobotocore-rolesanywhere
+
+    types-aiobotocore-route53
+
+    types-aiobotocore-route53-recovery-cluster
+
+    types-aiobotocore-route53-recovery-control-config
+
+    types-aiobotocore-route53-recovery-readiness
+
+    types-aiobotocore-route53domains
+
+    types-aiobotocore-route53resolver
+
+    types-aiobotocore-rum
+
+    types-aiobotocore-s3
+
+    types-aiobotocore-s3control
+
+    types-aiobotocore-s3outposts
+
+    types-aiobotocore-sagemaker
+
+    types-aiobotocore-sagemaker-a2i-runtime
+
+    types-aiobotocore-sagemaker-edge
+
+    types-aiobotocore-sagemaker-featurestore-runtime
+
+    types-aiobotocore-sagemaker-geospatial
+
+    types-aiobotocore-sagemaker-metrics
+
+    types-aiobotocore-sagemaker-runtime
+
+    types-aiobotocore-savingsplans
+
+    types-aiobotocore-scheduler
+
+    types-aiobotocore-schemas
+
+    types-aiobotocore-sdb
+
+    types-aiobotocore-secretsmanager
+
+    types-aiobotocore-securityhub
+
+    types-aiobotocore-securitylake
+
+    types-aiobotocore-serverlessrepo
+
+    types-aiobotocore-service-quotas
+
+    types-aiobotocore-servicecatalog
+
+    types-aiobotocore-servicecatalog-appregistry
+
+    types-aiobotocore-servicediscovery
+
+    types-aiobotocore-ses
+
+    types-aiobotocore-sesv2
+
+    types-aiobotocore-shield
+
+    types-aiobotocore-signer
+
+    types-aiobotocore-simspaceweaver
+
+    types-aiobotocore-sms
+
+    types-aiobotocore-sms-voice
+
+    types-aiobotocore-snow-device-management
+
+    types-aiobotocore-snowball
+
+    types-aiobotocore-sns
+
+    types-aiobotocore-sqs
+
+    types-aiobotocore-ssm
+
+    types-aiobotocore-ssm-contacts
+
+    types-aiobotocore-ssm-incidents
+
+    types-aiobotocore-ssm-sap
+
+    types-aiobotocore-sso
+
+    types-aiobotocore-sso-admin
+
+    types-aiobotocore-sso-oidc
+
+    types-aiobotocore-stepfunctions
+
+    types-aiobotocore-storagegateway
+
+    types-aiobotocore-sts
+
+    types-aiobotocore-support
+
+    types-aiobotocore-support-app
+
+    types-aiobotocore-swf
+
+    types-aiobotocore-synthetics
+
+    types-aiobotocore-textract
+
+    types-aiobotocore-timestream-query
+
+    types-aiobotocore-timestream-write
+
+    types-aiobotocore-tnb
+
+    types-aiobotocore-transcribe
+
+    types-aiobotocore-transfer
+
+    types-aiobotocore-translate
+
+    types-aiobotocore-verifiedpermissions
+
+    types-aiobotocore-voice-id
+
+    types-aiobotocore-vpc-lattice
+
+    types-aiobotocore-waf
+
+    types-aiobotocore-waf-regional
+
+    types-aiobotocore-wafv2
+
+    types-aiobotocore-wellarchitected
+
+    types-aiobotocore-wisdom
+
+    types-aiobotocore-workdocs
+
+    types-aiobotocore-worklink
+
+    types-aiobotocore-workmail
+
+    types-aiobotocore-workmailmessageflow
+
+    types-aiobotocore-workspaces
+
+    types-aiobotocore-workspaces-web
+
+    types-aiobotocore-xray
+
+  ;
+
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
 
   types-awscrt = callPackage ../development/python-modules/types-awscrt { };
@@ -13390,6 +14949,8 @@ self: super: with self; {
   types-retry = callPackage ../development/python-modules/types-retry { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
+
+  types-s3transfer = callPackage ../development/python-modules/types-s3transfer { };
 
   types-setuptools = callPackage ../development/python-modules/types-setuptools { };
 
@@ -13798,6 +15359,8 @@ self: super: with self; {
 
   wallbox = callPackage ../development/python-modules/wallbox { };
 
+  walrus = callPackage ../development/python-modules/walrus { };
+
   wand = callPackage ../development/python-modules/wand { };
 
   wandb = callPackage ../development/python-modules/wandb { };
@@ -13883,6 +15446,8 @@ self: super: with self; {
 
   weboob = callPackage ../development/python-modules/weboob { };
 
+  webrtc-noise-gain = callPackage ../development/python-modules/webrtc-noise-gain { };
+
   webrtcvad = callPackage ../development/python-modules/webrtcvad { };
 
   websocket-client = callPackage ../development/python-modules/websocket-client { };
@@ -13950,6 +15515,8 @@ self: super: with self; {
   wifi = callPackage ../development/python-modules/wifi { };
 
   wikipedia = callPackage ../development/python-modules/wikipedia { };
+
+  wikipedia-api = callPackage ../development/python-modules/wikipedia-api { };
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
 
@@ -14343,7 +15910,7 @@ self: super: with self; {
 
   zope-deferredimport = callPackage ../development/python-modules/zope-deferredimport { };
 
-  zope_deprecation = callPackage ../development/python-modules/zope_deprecation { };
+  zope-deprecation = callPackage ../development/python-modules/zope-deprecation { };
 
   zope_dottedname = callPackage ../development/python-modules/zope_dottedname { };
 
@@ -14363,7 +15930,7 @@ self: super: with self; {
 
   zope_location = callPackage ../development/python-modules/zope_location { };
 
-  zope_proxy = callPackage ../development/python-modules/zope_proxy { };
+  zope-proxy = callPackage ../development/python-modules/zope-proxy { };
 
   zope_schema = callPackage ../development/python-modules/zope_schema { };
 

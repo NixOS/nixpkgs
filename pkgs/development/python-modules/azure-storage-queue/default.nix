@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-queue";
-  version = "12.7.1";
+  version = "12.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zBt5z13ZRxB1xMLA3xEWf7mSoil43JLl8q46w0n/avY=";
+    hash = "sha256-sDVzLTLT9mQ3eWYZM4CzDkv99rR2dHhDVExaXyE1VYk=";
   };
 
   propagatedBuildInputs = [

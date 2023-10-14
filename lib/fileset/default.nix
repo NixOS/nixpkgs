@@ -6,16 +6,20 @@ let
     _coerceMany
     _toSourceFilter
     _unionMany
+    _printFileset
+    _intersection
     ;
 
   inherit (builtins)
     isList
     isPath
     pathExists
+    seq
     typeOf
     ;
 
   inherit (lib.lists)
+    elemAt
     imap0
     ;
 
@@ -156,7 +160,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
           lib.fileset.toSource: `root` is of type ${typeOf root}, but it should be a path instead.''
     # Currently all Nix paths have the same filesystem root, but this could change in the future.
     # See also ../path/README.md
-    else if rootFilesystemRoot != filesetFilesystemRoot then
+    else if ! fileset._internalIsEmptyWithoutBase && rootFilesystemRoot != filesetFilesystemRoot then
       throw ''
         lib.fileset.toSource: Filesystem roots are not the same for `fileset` and `root` ("${toString root}"):
             `root`: root "${toString rootFilesystemRoot}"
@@ -170,7 +174,7 @@ If a directory does not recursively contain any file, it is omitted from the sto
         lib.fileset.toSource: `root` (${toString root}) is a file, but it should be a directory instead. Potential solutions:
             - If you want to import the file into the store _without_ a containing directory, use string interpolation or `builtins.path` instead of this function.
             - If you want to import the file into the store _with_ a containing directory, set `root` to the containing directory, such as ${toString (dirOf root)}, and set `fileset` to the file path.''
-    else if ! hasPrefix root fileset._internalBase then
+    else if ! fileset._internalIsEmptyWithoutBase && ! hasPrefix root fileset._internalBase then
       throw ''
         lib.fileset.toSource: `fileset` could contain files in ${toString fileset._internalBase}, which is not under the `root` (${toString root}). Potential solutions:
             - Set `root` to ${toString fileset._internalBase} or any directory higher up. This changes the layout of the resulting store path.
@@ -258,15 +262,11 @@ If a directory does not recursively contain any file, it is omitted from the sto
   */
   unions =
     # A list of file sets.
-    # Must contain at least 1 element.
     # The elements can also be paths,
     # which get [implicitly coerced to file sets](#sec-fileset-path-coercion).
     filesets:
     if ! isList filesets then
       throw "lib.fileset.unions: Expected argument to be a list, but got a ${typeOf filesets}."
-    else if filesets == [ ] then
-      # TODO: This could be supported, but requires an extra internal representation for the empty file set, which would be special for not having a base path.
-      throw "lib.fileset.unions: Expected argument to be a list with at least one element, but it contains no elements."
     else
       pipe filesets [
         # Annotate the elements with context, used by _coerceMany for better errors
@@ -278,4 +278,132 @@ If a directory does not recursively contain any file, it is omitted from the sto
         _unionMany
       ];
 
+  /*
+    The file set containing all files that are in both of two given file sets.
+    See also [Intersection (set theory)](https://en.wikipedia.org/wiki/Intersection_(set_theory)).
+
+    The given file sets are evaluated as lazily as possible,
+    with the first argument being evaluated first if needed.
+
+    Type:
+      intersection :: FileSet -> FileSet -> FileSet
+
+    Example:
+      # Limit the selected files to the ones in ./., so only ./src and ./Makefile
+      intersection ./. (unions [ ../LICENSE ./src ./Makefile ])
+  */
+  intersection =
+    # The first file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset1:
+    # The second file set.
+    # This argument can also be a path,
+    # which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    fileset2:
+    let
+      filesets = _coerceMany "lib.fileset.intersection" [
+        {
+          context = "first argument";
+          value = fileset1;
+        }
+        {
+          context = "second argument";
+          value = fileset2;
+        }
+      ];
+    in
+    _intersection
+      (elemAt filesets 0)
+      (elemAt filesets 1);
+
+  /*
+    Incrementally evaluate and trace a file set in a pretty way.
+    This function is only intended for debugging purposes.
+    The exact tracing format is unspecified and may change.
+
+    This function takes a final argument to return.
+    In comparison, [`traceVal`](#function-library-lib.fileset.traceVal) returns
+    the given file set argument.
+
+    This variant is useful for tracing file sets in the Nix repl.
+
+    Type:
+      trace :: FileSet -> Any -> Any
+
+    Example:
+      trace (unions [ ./Makefile ./src ./tests/run.sh ]) null
+      =>
+      trace: /home/user/src/myProject
+      trace: - Makefile (regular)
+      trace: - src (all files in directory)
+      trace: - tests
+      trace:   - run.sh (regular)
+      null
+  */
+  trace =
+    /*
+    The file set to trace.
+
+    This argument can also be a path,
+    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    */
+    fileset:
+    let
+      # "fileset" would be a better name, but that would clash with the argument name,
+      # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
+      actualFileset = _coerce "lib.fileset.trace: argument" fileset;
+    in
+    seq
+      (_printFileset actualFileset)
+      (x: x);
+
+  /*
+    Incrementally evaluate and trace a file set in a pretty way.
+    This function is only intended for debugging purposes.
+    The exact tracing format is unspecified and may change.
+
+    This function returns the given file set.
+    In comparison, [`trace`](#function-library-lib.fileset.trace) takes another argument to return.
+
+    This variant is useful for tracing file sets passed as arguments to other functions.
+
+    Type:
+      traceVal :: FileSet -> FileSet
+
+    Example:
+      toSource {
+        root = ./.;
+        fileset = traceVal (unions [
+          ./Makefile
+          ./src
+          ./tests/run.sh
+        ]);
+      }
+      =>
+      trace: /home/user/src/myProject
+      trace: - Makefile (regular)
+      trace: - src (all files in directory)
+      trace: - tests
+      trace:   - run.sh (regular)
+      "/nix/store/...-source"
+  */
+  traceVal =
+    /*
+    The file set to trace and return.
+
+    This argument can also be a path,
+    which gets [implicitly coerced to a file set](#sec-fileset-path-coercion).
+    */
+    fileset:
+    let
+      # "fileset" would be a better name, but that would clash with the argument name,
+      # and we cannot change that because of https://github.com/nix-community/nixdoc/issues/76
+      actualFileset = _coerce "lib.fileset.traceVal: argument" fileset;
+    in
+    seq
+      (_printFileset actualFileset)
+      # We could also return the original fileset argument here,
+      # but that would then duplicate work for consumers of the fileset, because then they have to coerce it again
+      actualFileset;
 }

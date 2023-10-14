@@ -19,6 +19,8 @@
 , gnupg
 , runtimeShell
 , systemLocale ? config.i18n.defaultLocale or "en_US"
+, patchelfUnstable  # have to use patchelfUnstable to support --no-clobber-old-sections
+, makeWrapper
 }:
 
 let
@@ -57,6 +59,19 @@ let
 
   pname = "firefox-${channel}-bin-unwrapped";
 
+  # FIXME: workaround for not being able to pass flags to patchelf
+  # Remove after https://github.com/NixOS/nixpkgs/pull/256525
+  wrappedPatchelf = stdenv.mkDerivation {
+    pname = "patchelf-wrapped";
+    inherit (patchelfUnstable) version;
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    buildCommand = ''
+      mkdir -p $out/bin
+      makeWrapper ${patchelfUnstable}/bin/patchelf $out/bin/patchelf --append-flags "--no-clobber-old-sections"
+    '';
+  };
 in
 
 stdenv.mkDerivation {
@@ -64,7 +79,7 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit (source) url sha256; };
 
-  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook ];
+  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook wrappedPatchelf ];
   buildInputs = [
     gtk3
     adwaita-icon-theme

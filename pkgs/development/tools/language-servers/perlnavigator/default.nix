@@ -4,12 +4,12 @@
 }:
 
 let
-  version = "0.6.0";
+  version = "0.6.3";
   src = fetchFromGitHub {
     owner = "bscan";
     repo = "PerlNavigator";
     rev = "v${version}";
-    hash = "sha256-RMxM8g3ZdSt1B8WgwmcQgjpPZOCrVYYkhOt610SgbIw=";
+    hash = "sha256-CNsgFf+W7YQwAR++GwfTka4Cy8woRu02BQIJRmRAxK4=";
   };
   browser-ext = buildNpmPackage {
     pname = "perlnavigator-web-server";

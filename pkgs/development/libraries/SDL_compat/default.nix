@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "SDL_compat";
-  version = "1.2.64";
+  version = "1.2.68";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + version;
-    hash = "sha256-Ctl7RElRWaB4IpBZD5Sm0rYOcv5zaIag78VTKoFlbVs=";
+    hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ]

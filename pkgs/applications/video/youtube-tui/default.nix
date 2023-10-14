@@ -7,24 +7,29 @@
 , stdenv
 , python3
 , libsixel
+, mpv
 , CoreFoundation
 , Security
 , AppKit
-,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "youtube-tui";
-  version = "0.7.4";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Siriusmart";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-UN70V+RGYlYJxCQGPH8cnQDSqpihGuwzETYEhbG6Ggo=";
+    hash = "sha256-FOiK3yQcQuwdCEjBtRPW4iBd+8uNsvZ6l5tclHVzL+M=";
   };
 
-  cargoHash = "sha256-kAhxsSFIJAoKlmN7hVUoTSSHQ2G23f21rEvxcIRQ+kw=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "libmpv-2.0.1" = "sha256-efbXk0oXkzlIqgbP4wKm7sWlVZBT2vzDSN3iwsw2vL0=";
+    };
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -35,6 +40,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     xorg.libxcb
     libsixel
+    mpv
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     Security

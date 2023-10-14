@@ -30,6 +30,14 @@ in mkLicense lset) ({
     fullName = "Abstyles License";
   };
 
+  acsl14 = {
+    fullName = "Anti-Capitalist Software License v1.4";
+    url = "https://anticapitalist.software/";
+    /* restrictions on corporations apply for both use and redistribution */
+    free = false;
+    redistributable = false;
+  };
+
   afl20 = {
     spdxId = "AFL-2.0";
     fullName = "Academic Free License v2.0";
@@ -413,9 +421,9 @@ in mkLicense lset) ({
     fullName = "Eiffel Forum License v2.0";
   };
 
-  elastic = {
-    fullName = "ELASTIC LICENSE";
-    url = "https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE.txt";
+  elastic20 = {
+    fullName = "Elastic License 2.0";
+    url = "https://github.com/elastic/elasticsearch/blob/main/licenses/ELASTIC-LICENSE-2.0.txt";
     free = false;
   };
 
@@ -479,6 +487,11 @@ in mkLicense lset) ({
     fullName = "Floodgap Free Software License";
     url = "https://www.floodgap.com/software/ffsl/license.html";
     free = false;
+  };
+
+  fraunhofer-fdk = {
+    fullName = "Fraunhofer FDK AAC Codec Library";
+    spdxId = "FDK-AAC";
   };
 
   free = {
@@ -613,6 +626,12 @@ in mkLicense lset) ({
     fullName = "End User License Agreement for IceSL Software";
     url      = "https://icesl.loria.fr/assets/pdf/EULA_IceSL_binary.pdf";
     free     = false;
+  };
+
+  inria-zelus = {
+    fullName = "INRIA Non-Commercial License Agreement for the Zélus compiler";
+    url = "https://github.com/INRIA/zelus/raw/829f2b97cba93b0543a9ca0272269e6b8fdad356/LICENSE";
+    free = false;
   };
 
   ipa = {
@@ -838,6 +857,14 @@ in mkLicense lset) ({
   ncsa = {
     spdxId = "NCSA";
     fullName = "University of Illinois/NCSA Open Source License";
+  };
+
+  ncul1 = {
+    spdxId = "NCUL1";
+    fullName = "Netdata Cloud UI License v1.0";
+    free = false;
+    redistributable = true; # Only if used in Netdata products.
+    url = "https://raw.githubusercontent.com/netdata/netdata/master/web/gui/v2/LICENSE.md";
   };
 
   nlpl = {

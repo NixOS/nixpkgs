@@ -7,7 +7,6 @@
 , gdb
 , zlib
 , python3
-, icu
 , lldb
 , dotnet-sdk_7
 , maven
@@ -17,6 +16,7 @@
 , openssl
 , expat
 , libxcrypt-legacy
+, fontconfig
 , vmopts ? null
 }:
 
@@ -27,8 +27,7 @@ let
   inherit (stdenv.hostPlatform) system;
 
   versions = builtins.fromJSON (lib.readFile (./versions.json));
-  versionKey = if stdenv.isLinux then "linux" else system;
-  products = versions.${versionKey} or (throw "Unsupported system: ${system}");
+  products = versions.${system} or (throw "Unsupported system: ${system}");
 
   package = if stdenv.isDarwin then ./darwin.nix else ./linux.nix;
   mkJetBrainsProduct = callPackage package { inherit vmopts; };
@@ -124,7 +123,7 @@ let
           server with your local machine, downloads necessary components on the
           backend, and opens your project in JetBrains Client.
         '';
-        maintainers = with maintainers; [ kouyk ];
+        maintainers = with maintainers; [ ];
       };
     });
 
@@ -252,8 +251,6 @@ let
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
       product = "Rider";
-      # icu is required by Rider.Backend
-      extraLdPath = [ icu ];
       meta = with lib; {
         homepage = "https://www.jetbrains.com/rider/";
         inherit description license platforms;
@@ -268,15 +265,28 @@ let
         maintainers = with maintainers; [ raphaelr ];
       };
     }).overrideAttrs (attrs: {
-      postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''
-        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp \
-          lib/ReSharperHost/linux-x64/Rider.Backend \
-          plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
+      nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
+        autoPatchelfHook
+      ];
+      buildInputs = (attrs.buildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
+        stdenv.cc.cc
+        zlib
+        fontconfig  # plugins/dotTrace/DotFiles/linux-x64/libSkiaSharp.so
+      ];
+      dontAutoPatchelf = true;
+      postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+        (
+          cd $out/rider
 
-        rm -rf lib/ReSharperHost/linux-x64/dotnet
-        ln -s ${dotnet-sdk_7} lib/ReSharperHost/linux-x64/dotnet
-      '');
+          # Remove dotnet copy first so it's not considered by autoPatchElf
+          rm -rf lib/ReSharperHost/linux-x64/dotnet
+          autoPatchelf \
+            lib/ReSharperHost/linux-x64/ \
+            plugins/dotCommon/DotFiles/linux-x64/ \
+            plugins/dotTrace/DotFiles/linux-x64/
+          ln -s ${dotnet-sdk_7} lib/ReSharperHost/linux-x64/dotnet
+        )
+      '';
     });
 
   buildRubyMine = { pname, version, src, license, description, wmClass, buildNumber, ... }:

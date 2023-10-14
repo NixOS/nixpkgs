@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flashfocus";
-  version = "2.4.0";
+  version = "2.4.1";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-TKqPUJq3t2EjX6sY3NSuW0sCq4IS4PNMaaFNe+5hvoY=";
+    sha256 = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
   };
 
   postPatch = ''

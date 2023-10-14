@@ -89,6 +89,21 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
     if [ -d "plugins/remote-dev-server" ]; then
       patch -p1 < ${./JetbrainsRemoteDev.patch}
     fi
+
+    vmopts_file=bin/linux/${vmoptsName}
+    if [[ ! -f $vmopts_file ]]; then
+      vmopts_file=bin/${vmoptsName}
+      if [[ ! -f $vmopts_file ]]; then
+        echo "ERROR: $vmopts_file not found"
+        exit 1
+      fi
+    fi
+    echo -Djna.library.path=${lib.makeLibraryPath ([
+      libsecret e2fsprogs libnotify
+      # Required for Help -> Collect Logs
+      # in at least rider and goland
+      udev
+    ])} >> $vmopts_file
   '';
 
   installPhase = ''
@@ -106,21 +121,14 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
     wrapProgram  "$out/$pname/bin/${loName}.sh" \
       --prefix PATH : "$out/libexec/${pname}:${lib.makeBinPath [ jdk coreutils gnugrep which git python3 ]}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath ([
-        # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib libsecret e2fsprogs
-        libnotify
-        # Required for Help -> Collect Logs
-        # in at least rider and goland
-        udev
-      ] ++ extraLdPath)}" \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath extraLdPath}" \
       ${lib.concatStringsSep " " extraWrapperArgs} \
       --set-default JDK_HOME "$jdk" \
       --set-default ANDROID_JAVA_HOME "$jdk" \
       --set-default JAVA_HOME "$jdk" \
       --set-default JETBRAINSCLIENT_JDK "$jdk" \
-      --set ${hiName}_JDK "$jdk" \
-      --set ${hiName}_VM_OPTIONS ${vmoptsFile}
+      --set-default ${hiName}_JDK "$jdk" \
+      --set-default ${hiName}_VM_OPTIONS ${vmoptsFile}
 
     ln -s "$out/$pname/bin/${loName}.sh" $out/bin/$pname
     echo -e '#!/usr/bin/env bash\n'"$out/$pname/bin/remote-dev-server.sh"' "$@"' > $out/$pname/bin/remote-dev-server-wrapped.sh

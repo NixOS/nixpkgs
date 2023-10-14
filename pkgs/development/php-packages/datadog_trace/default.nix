@@ -13,20 +13,20 @@
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "0.89.0";
+  version = "0.92.2";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-wTGQV80XQsBdmTQ+xaBKtFwLO3S+//9Yli9aReXDlLA=";
+    hash = "sha256-8h05ar16s1r1movP7zJgOsVAXJbU+Wi+wzmgVZ3nPbw=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "datadog-profiling-2.2.0" = "sha256-PWzC+E2u0hM0HhU0mgZJZvFomEJdQag/3ZK1FibSLG8=";
+      "datadog-profiling-4.0.0" = "sha256-HoRELMxNkxkISscBksH4wMj/cuK/XQANr2WQUKwrevg=";
     };
   };
 

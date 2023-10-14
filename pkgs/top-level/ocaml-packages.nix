@@ -60,6 +60,8 @@ let
 
     ### B ###
 
+    b0 = callPackage ../development/ocaml-modules/b0 { };
+
     bap = janeStreet_0_15.bap;
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
@@ -962,6 +964,8 @@ let
 
     lua-ml = callPackage ../development/ocaml-modules/lua-ml { };
 
+    lun = callPackage ../development/ocaml-modules/lun { };
+
     lustre-v6 = callPackage ../development/ocaml-modules/lustre-v6 { };
 
     lutils = callPackage ../development/ocaml-modules/lutils { };
@@ -1158,6 +1162,8 @@ let
 
     mparser-pcre =  callPackage ../development/ocaml-modules/mparser/pcre.nix { };
 
+    msgpck = callPackage ../development/ocaml-modules/msgpck { };
+
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
 
     mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
@@ -1330,6 +1336,8 @@ let
 
     odate = callPackage ../development/ocaml-modules/odate { };
 
+    odig = callPackage ../development/ocaml-modules/odig { };
+
     odoc = callPackage ../development/ocaml-modules/odoc { };
 
     odoc-parser = callPackage ../development/ocaml-modules/odoc-parser { };
@@ -1481,6 +1489,8 @@ let
     ppx_import = callPackage ../development/ocaml-modules/ppx_import {};
 
     ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
+
+    ppx_lun = callPackage ../development/ocaml-modules/lun/ppx.nix { };
 
     ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
 
@@ -1876,6 +1886,10 @@ let
 
     zed = callPackage ../development/ocaml-modules/zed { };
 
+    zelus = callPackage ../development/ocaml-modules/zelus { };
+
+    zelus-gtk = callPackage ../development/ocaml-modules/zelus-gtk { };
+
     zmq = callPackage ../development/ocaml-modules/zmq { };
 
     zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
@@ -1887,6 +1901,8 @@ let
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix { };
 
     buildOasisPackage = callPackage ../build-support/ocaml/oasis.nix { };
+
+    buildTopkgPackage = callPackage ../build-support/ocaml/topkg.nix { };
 
     # Apps from all-packages, to be eventually removed
 

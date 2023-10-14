@@ -106,12 +106,6 @@ rec {
           url = "https://github.com/moby/moby/pull/43136.patch";
           hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
         })
-      ] ++ lib.optionals (lib.versionOlder version "23.0.5") [
-        (fetchpatch {
-          name = "fix-issue-with-go-1.20.6.patch";
-          url = "https://github.com/moby/moby/pull/45972.patch";
-          hash = "sha256-zxFh/bI6+INOYSg6QFs0S9rdl9Z21KUIZFmzpNVjpSA=";
-        })
       ];
 
       postPatch = ''
@@ -188,14 +182,6 @@ rec {
     buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23") [
       glibc
       glibc.static
-    ];
-
-    patches = lib.optionals (lib.versionOlder version "23.0.5") [
-      (fetchpatch {
-        name = "fix-issue-with-go-1.20.6.patch";
-        url = "https://github.com/docker/cli/pull/4441.patch";
-        hash = "sha256-F4ueSbdBk1w8OqC4Dgh8+4Ql4zTjehaM368ET7k6Yx8=";
-      })
     ];
 
     postPatch = ''
@@ -283,15 +269,15 @@ rec {
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
-    version = "20.10.25";
+    version = "20.10.26";
     cliRev = "v${version}";
-    cliHash = "sha256-Wi/NHn8erqvKEVEJqkc99cO/sfPHptwMT44Savcuw2M=";
+    cliHash = "sha256-EPhsng0kLnweVbC8ZnH0NK1/yHlYSA5Sred4rWJX/Gs=";
     mobyRev = "v${version}";
-    mobyHash = "sha256-trJjQMYF/Uog7nvUlELyUYbsTPGz8Rn21v1/V5xhu+A=";
-    runcRev = "v1.1.5";
-    runcHash = "sha256-r5as3hb0zt+XPfxAPeH+YIc/n6IRlscPOZMGfhVE5C4=";
-    containerdRev = "v1.6.20";
-    containerdHash = "sha256-Nd3S6hmvA8LBFUN4XaQJMApbmwGIp6GTnFQimnYagZg=";
+    mobyHash = "sha256-IJ7m2mQnsLiom0EuZLpuLY6fYEko7rEy35igJv1AY04=";
+    runcRev = "v1.1.8";
+    runcHash = "sha256-rDJYEc64KW4Qa3Eg2oUjJqIKrg6THb5hxQFFbvb9Zp4=";
+    containerdRev = "v1.6.22";
+    containerdHash = "sha256-In7OkK3xm7Cz3H1jzG9b4tsZbmo44QCq8pNU+PPy8dY=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

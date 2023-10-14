@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stellar-core";
-  version = "19.13.0";
+  version = "19.14.0";
 
   src = fetchFromGitHub {
     owner = "stellar";
     repo = "stellar-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-C775tL+x1IX4kfCM/7gOg/V8xunq/rkhIfdkwkhLENk=";
+    hash = "sha256-lxBn/T01Tsa7tid3mRJUigUwv9d3BAPZhV9Mp1lywBU=";
     fetchSubmodules = true;
   };
 

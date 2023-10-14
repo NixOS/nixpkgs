@@ -92,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.delorie.com/djgpp/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ hughobrien ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

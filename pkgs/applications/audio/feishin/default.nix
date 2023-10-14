@@ -8,7 +8,7 @@ let
   extraArgs = removeAttrs args [ "callPackage" ];
 
   pname = "feishin";
-  version = "0.3.0";
+  version = "0.4.1";
   appname = "Feishin";
 
   meta = with lib; {
@@ -21,6 +21,7 @@ let
     maintainers = with maintainers; [ onny ];
   };
 
-in if stdenv.isDarwin
+in
+if stdenv.isDarwin
 then callPackage ./darwin.nix (extraArgs // { inherit pname appname version meta; })
 else callPackage ./linux.nix (extraArgs // { inherit pname appname version meta; })

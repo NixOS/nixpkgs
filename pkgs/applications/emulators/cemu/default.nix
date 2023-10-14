@@ -13,6 +13,7 @@
 , fmt_9
 , glm
 , gtk3
+, hidapi
 , imgui
 , libpng
 , libzip
@@ -31,13 +32,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
-  version = "2.0-45";
+  version = "2.0-47";
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
-    hash = "sha256-Bi2ws08e+6rNv83ypLrgB/KZWt95i7UkFrqhCr/0Zko=";
+    hash = "sha256-0N/bJJHWMHF+ZlVxNHV8t/1jFr3ER3GNF8CPAHVSsak=";
   };
 
   patches = [
@@ -64,6 +65,7 @@ stdenv.mkDerivation rec {
     fmt_9
     glm
     gtk3
+    hidapi
     imgui
     libpng
     libzip

@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, rust
 , rustPlatform
 , fetchFromGitHub
 , substituteAll
@@ -22,23 +21,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "celeste";
-  version = "0.5.8";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hwittenborn";
     repo = "celeste";
     rev = "v${version}";
-    hash = "sha256-U/6aqQig+uuWj/B9CODnV6chxY+KfMH7DqnPtSTDSA0=";
+    hash = "sha256-fqPAQCbuPnFyn3wioWDETmcXu53808nvnlEzcdUevI4=";
   };
 
-  cargoHash = "sha256-69LK/oicfmSPbUGGzWV9kvXkHqMvEzCG8xCu61MxSdk=";
-
-  patches = [
-    (substituteAll {
-      src = ./target-dir.patch;
-      rustTarget = rust.toRustTarget stdenv.hostPlatform;
-    })
-  ];
+  cargoHash = "sha256-mVl7CsCX7HMlGC2EIKEfHnPNjmrexjsrpDK/Uq/GwpY=";
 
   postPatch = ''
     pushd $cargoDepsCopy/librclone-sys
@@ -59,14 +51,6 @@ rustPlatform.buildRustPackage rec {
   # Cargo.lock is outdated
   preConfigure = ''
     cargo update --offline
-  '';
-
-  # We need to build celeste-tray first because celeste/src/launch.rs reads that file at build time.
-  # Upstream does the same: https://github.com/hwittenborn/celeste/blob/765dfa2/justfile#L1-L3
-  cargoBuildFlags = [ "--bin" "celeste-tray" ];
-  postConfigure = ''
-    cargoBuildHook
-    cargoBuildFlags=
   '';
 
   RUSTC_BOOTSTRAP = 1;

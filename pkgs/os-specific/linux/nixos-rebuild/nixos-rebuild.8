@@ -421,6 +421,14 @@ nixpkgs=./my-nixpkgs
 Additional options to be passed to
 .Ic ssh
 on the command line.
+.Ed
+.
+.It Ev NIXOS_SWITCH_USE_DIRTY_ENV
+Expose the the current environment variables to post activation scripts. Will
+skip usage of
+.Ic systemd-run
+during system activation. Possibly dangerous, specially in remote environments
+(e.g.: via SSH). Will be removed in the future.
 .El
 .
 .

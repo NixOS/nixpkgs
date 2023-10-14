@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
@@ -14,14 +15,16 @@
 
 buildPythonPackage rec {
   pname = "edk2-pytool-library";
-  version = "0.18.0";
-  format = "pyproject";
+  version = "0.19.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2-pytool-library";
     rev = "v${version}";
-    hash = "sha256-O7K439nAIHHTWSoR8mZWEu9sXcrhYfZto3RTgHZcOuA=";
+    hash = "sha256-xSW9ZeE2+vo2m2KaCW8lyotkHy7WVvNX16TDQEeQbQ4=";
   };
 
   nativeBuildInputs = [

@@ -2,15 +2,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "pdepend";
-  version = "2.14.0";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "pdepend";
     repo = "pdepend";
     rev = finalAttrs.version;
-    hash = "sha256-ZmgMuOpUsx5JWTcPRS6qKbTWZvuOrBVOVdPMcvvTV20=";
+    hash = "sha256-tVWOR0rKMnQDeHk3MHhEVOjn+dSpoMx+Ln+AwFRMwYs=";
   };
 
+  composerLock = ./composer.lock;
   vendorHash = "sha256-MWm8urRB9IujqrIl22x+JFFCRR+nINLQqnHUywT2pi0=";
 
   meta = {

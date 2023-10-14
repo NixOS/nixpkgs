@@ -3,6 +3,7 @@
 , cmake
 , openmw
 , fetchFromGitHub
+, fetchpatch
 , luajit
 , makeWrapper
 , symlinkJoin
@@ -85,8 +86,15 @@ let
         --replace "\"./\"" "\"$out/bin/\""
     '';
 
-    # https://github.com/TES3MP/openmw-tes3mp/issues/552
-    patches = oldAttrs.patches ++ [ ./tes3mp.patch ];
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.com/OpenMW/openmw/-/commit/98a7d90ee258ceef9c70b0b2955d0458ec46f048.patch";
+        sha256 = "sha256-RhbIGeE6GyqnipisiMTwWjcFnIiR055hUPL8IkjPgZw=";
+      })
+
+      # https://github.com/TES3MP/openmw-tes3mp/issues/552
+      ./tes3mp.patch
+    ];
 
     env.NIX_CFLAGS_COMPILE = "-fpermissive";
 

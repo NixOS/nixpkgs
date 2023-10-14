@@ -83,7 +83,11 @@ rec {
   # Phase-2b Build catm from hex2 #
   #################################
 
-  catm = run "catm" hex2-0 ["${src}/${stage0Arch}/catm_${stage0Arch}.hex2" out];
+  catm =
+    if hostPlatform.isAarch64 then
+      run "catm" hex1 ["${src}/${stage0Arch}/catm_${stage0Arch}.hex1" out]
+    else
+      run "catm" hex2-0 ["${src}/${stage0Arch}/catm_${stage0Arch}.hex2" out];
 
   # catm removes the need for cat or shell support for redirection by providing
   # equivalent functionality via catm output_file input1 input2 ... inputN

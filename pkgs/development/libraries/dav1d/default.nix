@@ -4,6 +4,13 @@
 , withTools ? false # "dav1d" binary
 , withExamples ? false, SDL2 # "dav1dplay" binary
 , useVulkan ? false, libplacebo, vulkan-loader, vulkan-headers
+
+# for passthru.tests
+, ffmpeg
+, gdal
+, handbrake
+, libavif
+, libheif
 }:
 
 assert useVulkan -> withExamples;
@@ -33,6 +40,15 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit
+      ffmpeg
+      gdal
+      handbrake
+      libavif
+      libheif;
+  };
 
   meta = with lib; {
     description = "A cross-platform AV1 decoder focused on speed and correctness";

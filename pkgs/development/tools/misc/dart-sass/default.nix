@@ -13,23 +13,23 @@ let
   sass-language = fetchFromGitHub {
     owner = "sass";
     repo = "sass";
-    rev = "refs/tags/embedded-protocol-2.2.0";
-    hash = "sha256-rSjhQZnLL4UXhp8rBIcaEtQyE81utTfljJTkyhQW5wA=";
+    rev = "refs/tags/embedded-protocol-2.3.0";
+    hash = "sha256-J2heASfIwj4lxjsRs/0zRHSaF2tij9bO7IgXp0u/eiI=";
   };
 in
 buildDartApplication rec {
   pname = "dart-sass";
-  version = "1.68.0";
+  version = "1.69.0";
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
-    hash = "sha256-Q7pXYcEOqROxVMw5irB23i44PwhFz7YWBVJcftzu998=";
+    hash = "sha256-kn3cwi1k2CkzbS+Q/JaYy8Nq3Ej0GyWifG1Bq5ZEVHA=";
   };
 
   pubspecLockFile = ./pubspec.lock;
-  vendorHash = "sha256-ypKiiLW4Zr0rhTLTXzOoRqZsFC3nGzqUhPFdKKIWDmk=";
+  vendorHash = "sha256-PQvY+qFXovSXH5wuc60wCrt5RiooKcaGKYzbjKSvqso=";
 
   nativeBuildInputs = [
     buf

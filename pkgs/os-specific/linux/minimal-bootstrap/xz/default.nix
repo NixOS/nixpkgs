@@ -5,18 +5,19 @@
 , bash
 , tinycc
 , gnumake
+, gnused
 , gnugrep
 , gawk
-, sed
+, gnutar
+, gzip
 }:
 let
   pname = "xz";
-  # >=5.2 uses poll.h, unsupported by meslibc
-  version = "5.0.8";
+  version = "5.4.3";
 
   src = fetchurl {
-    url = "https://tukaani.org/xz/xz-${version}.tar.bz2";
-    sha256 = "1nkb68dyrf16xwyqichcy1vhgbfg20dxz459rcsdx85h1gczk1i2";
+    url = "https://tukaani.org/xz/xz-${version}.tar.gz";
+    hash = "sha256-HDguC8Lk4K9YOYqQPdYv/35RAXHS3keh6+BtFSjpt+k=";
   };
 in
 bash.runCommand "${pname}-${version}" {
@@ -25,9 +26,11 @@ bash.runCommand "${pname}-${version}" {
   nativeBuildInputs = [
     tinycc.compiler
     gnumake
+    gnused
     gnugrep
     gawk
-    sed
+    gnutar
+    gzip
   ];
 
   passthru.tests.get-version = result:
@@ -45,34 +48,23 @@ bash.runCommand "${pname}-${version}" {
   };
 } ''
   # Unpack
-  unbz2 --file ${src} --output xz.tar
-  untar --file xz.tar
-  rm xz.tar
+  tar xzf ${src}
   cd xz-${version}
 
   # Configure
-  export CC="tcc -B ${tinycc.libs}/lib -include${./stubs.h}"
-  export CPP="tcc -E"
-  export LD=tcc
+  export CC="tcc -B ${tinycc.libs}/lib"
   export AR="tcc -ar"
-  export SED=sed
-  export ac_cv_prog_cc_c99=
-  export ac_cv_header_fcntl_h=yes
-  export ac_cv_header_limits_h=yes
-  export ac_cv_header_sys_time_h=yes
-  export ac_cv_func_utime=no
+  export LD=tcc
   bash ./configure \
     --prefix=$out \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \
     --disable-shared \
-    --disable-nls \
-    --disable-threads \
     --disable-assembler
 
   # Build
-  make all
+  make -j $NIX_BUILD_CORES
 
   # Install
-  make install
+  make -j $NIX_BUILD_CORES install
 ''

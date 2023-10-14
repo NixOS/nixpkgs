@@ -17,6 +17,7 @@ CORES = {
     "beetle-gba": {"repo": "beetle-gba-libretro"},
     "beetle-lynx": {"repo": "beetle-lynx-libretro"},
     "beetle-ngp": {"repo": "beetle-ngp-libretro"},
+    "beetle-pce": {"repo": "beetle-pce-libretro"},
     "beetle-pce-fast": {"repo": "beetle-pce-fast-libretro"},
     "beetle-pcfx": {"repo": "beetle-pcfx-libretro"},
     "beetle-psx": {"repo": "beetle-psx-libretro"},

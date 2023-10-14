@@ -121,11 +121,11 @@ in
     environment.sessionVariables = {
       # runtime override supported by multiple libraries e. g. libxkbcommon
       # https://xkbcommon.org/doc/current/group__include-path.html
-      XKB_CONFIG_ROOT = config.services.xserver.xkbDir;
+      XKB_CONFIG_ROOT = config.services.xserver.xkb.dir;
     };
 
     services.xserver = {
-      xkbDir = "${xkb_patched}/etc/X11/xkb";
+      xkb.dir = "${xkb_patched}/etc/X11/xkb";
       exportConfiguration = config.services.xserver.displayManager.startx.enable
         || config.services.xserver.displayManager.sx.enable;
     };

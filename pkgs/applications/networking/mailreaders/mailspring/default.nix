@@ -99,5 +99,6 @@ stdenv.mkDerivation rec {
     homepage = "https://getmailspring.com";
     downloadPage = "https://github.com/Foundry376/Mailspring";
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [ "CVE-2023-4863" ];
   };
 }

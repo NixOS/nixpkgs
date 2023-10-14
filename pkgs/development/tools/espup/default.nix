@@ -9,22 +9,22 @@
 , zstd
 , stdenv
 , darwin
-, runCommand
+, testers
 , espup
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "espup";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
     rev = "v${version}";
-    hash = "sha256-Eb0Q+Ju5nTXL0XvNhAo4Mc+ZP/vOfld313H9/oI3I2U=";
+    hash = "sha256-2LSlnGte65eemlDw67mPhmf+RuLwnbavNyMYMLgrx/E=";
   };
 
-  cargoHash = "sha256-ZKku6ElEtYXxwqeWTDKcCuZ4Wgqonc0B9nMyNd0VcdU=";
+  cargoHash = "sha256-4Gm8nQIsZzaPYtqf7eAyX0iX0rUFBnEiavJR1qcc8/g=";
 
   nativeBuildInputs = [
     pkg-config
@@ -62,15 +62,8 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/espup completions zsh)
   '';
 
-  passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
-      if [[ `${espup}/bin/espup --version` != *"${version}"*  ]]; then
-        echo "Error: program version does not match package version"
-        exit 1
-      fi
-
-      touch $out
-    '';
+  passthru.tests.version = testers.testVersion {
+    package = espup;
   };
 
   meta = with lib; {
@@ -78,5 +71,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/esp-rs/espup/";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ knightpp ];
+    mainProgram = "espup";
   };
 }

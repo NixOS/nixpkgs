@@ -229,7 +229,7 @@ in
         panelModulePackages = mkOption {
           default = [ pkgs.gnome.gnome-applets ];
           defaultText = literalExpression "[ pkgs.gnome.gnome-applets ]";
-          type = types.listOf types.path;
+          type = types.listOf types.package;
           description = lib.mdDoc ''
             Packages containing modules that should be made available to `gnome-panel` (usually for applets).
 
@@ -282,9 +282,6 @@ in
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
-
-       # If gnome is installed, build vim for gtk3 too.
-      nixpkgs.config.vim.gui = "gtk3";
     })
 
     (mkIf flashbackEnabled {
@@ -297,8 +294,7 @@ in
           map
             (wm:
               pkgs.gnome.gnome-flashback.mkSessionForWm {
-                inherit (wm) wmName wmLabel wmCommand enableGnomePanel;
-                inherit (cfg.flashback) panelModulePackages;
+                inherit (wm) wmName wmLabel wmCommand;
               }
             ) flashbackWms;
 
@@ -310,10 +306,16 @@ in
         gnome-flashback
       ] ++ map gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      # gnome-panel needs these for menu applet
-      environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gnome.gnome-flashback}/share" ];
-      # TODO: switch to sessionVariables (resolve conflict)
-      environment.variables.XDG_CONFIG_DIRS = [ "${pkgs.gnome.gnome-flashback}/etc/xdg" ];
+      environment.systemPackages = with pkgs.gnome; [
+        gnome-flashback
+        (gnome-panel-with-modules.override {
+          panelModulePackages = cfg.flashback.panelModulePackages;
+        })
+      ]
+      # For /share/applications/${wmName}.desktop
+      ++ (map (wm: gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }) flashbackWms)
+      # For /share/gnome-session/sessions/gnome-flashback-${wmName}.session
+      ++ (map (wm: gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }) flashbackWms);
     })
 
     (mkIf serviceCfg.core-os-services.enable {

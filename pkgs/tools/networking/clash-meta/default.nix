@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "MetaCubeX";
     repo = "Clash.Meta";
     rev = "v${version}";
-    hash = "sha256-N7uCvzKBqOWYBfY1FBS9TjuHUfoKeMJF6o4k8C3f4z4=";
+    hash = "sha256-ORyjCYf2OPrSt/juiBk0Gf2Az4XoZipKBWWFXf8nIqE=";
   };
 
   vendorHash = "sha256-ySCmHLuMTCxBcAYo7YD8zOpUAa90PQmeLLt+uOn40Pk=";

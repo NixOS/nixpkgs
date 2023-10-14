@@ -53,7 +53,7 @@ let
   };
 in
 
-vimUtils.buildVimPluginFrom2Nix {
+vimUtils.buildVimPlugin {
   pname = "vim-clap";
   inherit version src meta;
 

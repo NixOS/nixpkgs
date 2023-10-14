@@ -12,6 +12,7 @@
 , addict
 , ninja
 , which
+, pybind11
 , onnx
 , onnxruntime
 , scipy
@@ -49,16 +50,16 @@ let
 in
 buildPythonPackage rec {
   pname = "mmcv";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
-    repo = pname;
+    repo = "mmcv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-36PcvoB0bM0VoNb2psURYFo3krmgHG47OufU6PVjHyw=";
+    hash = "sha256-w40R8ftLQIu66F2EtXFAqvLGxR/6wvxLhxxIdsQLZhI=";
   };
 
   preConfigure = ''
@@ -96,7 +97,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ ninja which ]
     ++ lib.optionals cudaSupport [ cuda-native-redist ];
 
-  buildInputs = [ torch ] ++ lib.optionals cudaSupport [ cuda-redist ];
+  buildInputs = [ pybind11 torch ] ++ lib.optionals cudaSupport [ cuda-redist ];
 
   nativeCheckInputs = [ pytestCheckHook torchvision lmdb onnx onnxruntime scipy pyturbojpeg tifffile ];
 

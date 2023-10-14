@@ -10,13 +10,13 @@
 
   hexmap = stdenv.mkDerivation {
     pname = "hexmap";
-    version = "unstable-2020-06-06";
+    version = "unstable-2023-01-26";
 
     src = fetchFromGitHub {
       owner = "lifelike";
       repo = "hexmapextension";
-      rev = "11401e23889318bdefb72df6980393050299d8cc";
-      sha256 = "1a4jhva624mbljj2k43wzi6hrxacjz4626jfk9y2fg4r4sga22mm";
+      rev = "241c9512d0113e8193b7cf06b69ef2c4730b0295";
+      hash = "sha256-pSPAupp3xLlbODE2BGu1Xiiiu1Y6D4gG4HhZwccAZ2E=";
     };
 
     preferLocalBuild = true;

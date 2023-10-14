@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     sed -i '/xssep/d;/xsgsep/d;/xssyevr/d' TESTING/CMakeLists.txt
   '';
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ cmake ];
   nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
   buildInputs = [ blas lapack ];

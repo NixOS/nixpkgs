@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, intltool, autoreconfHook, pkg-config, libqalculate, gtk3, curl, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, intltool, autoreconfHook, pkg-config, libqalculate, gtk3, curl, wrapGAppsHook, desktopToDarwinBundle }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-gtk";
@@ -13,7 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ intltool pkg-config autoreconfHook wrapGAppsHook ];
+  nativeBuildInputs = [ intltool pkg-config autoreconfHook wrapGAppsHook ]
+    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
   buildInputs = [ libqalculate gtk3 curl ];
   enableParallelBuilding = true;
 

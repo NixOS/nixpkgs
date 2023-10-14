@@ -3,12 +3,7 @@
 , chainer
 , fetchFromGitHub
 , hatchling
-, jupyter
-, keras
-  #, mxnet
 , nbconvert
-, nbformat
-, nose
 , numpy
 , parameterized
 , pytestCheckHook
@@ -33,12 +28,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     chainer
-    jupyter
-    keras
-    # mxnet (has issues with some CPUs, segfault)
     nbconvert
-    nbformat
-    nose
     numpy
     parameterized
     pytestCheckHook

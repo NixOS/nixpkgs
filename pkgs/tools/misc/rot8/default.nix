@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rot8";
-  version = "0.1.5";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "efernau";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-i+VLVA/XKZiFPEeFHR3CpZKi8CWA/tiaZJerciqQHJ0=";
+    hash = "sha256-dHx3vFY0ztyTIlzUi22TYphPD5hvgfHrWaaeoGxnvW0=";
   };
 
-  cargoHash = "sha256-Zz3RK79pMBn9JcpOVHf8vrvQzOJuV7anm136HcTBhJE=";
+  cargoHash = "sha256-KDg6Ggnm6Cl/1fXqNcc7/jRFJ6KTLVGveJ6Fs3NLlHE=";
 
   meta = with lib; {
-    description = "screen rotation daemon for X11 and sway";
+    description = "screen rotation daemon for X11 and wlroots";
     homepage = "https://github.com/efernau/rot8";
     license = licenses.mit;
     maintainers = [ maintainers.smona ];

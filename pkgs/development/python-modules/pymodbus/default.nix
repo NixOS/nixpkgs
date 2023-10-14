@@ -3,14 +3,15 @@
 , buildPythonPackage
 , click
 , fetchFromGitHub
-, mock
 , prompt-toolkit
 , pygments
 , pyserial
 , pytest-asyncio
 , pytest-xdist
 , pytestCheckHook
+, pythonOlder
 , redis
+, setuptools
 , sqlalchemy
 , twisted
 , typer
@@ -18,15 +19,21 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.5.2";
-  format = "setuptools";
+  version = "3.5.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FOmR9yqLagqcsAVxqHxziEcnZ5M9QpL2qIp8x2gS2PU=";
+    hash = "sha256-IgGDYNIRS39t8vHkJSGnDGCTKxpeIYZyedLzyS5pOI0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   passthru.optional-dependencies = {
     repl = [
@@ -42,7 +49,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    mock
     pytest-asyncio
     pytest-xdist
     pytestCheckHook

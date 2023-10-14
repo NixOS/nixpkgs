@@ -4,21 +4,31 @@
 , copyDesktopItems
 , makeDesktopItem
 , makeWrapper
-, libuuid
-, libunwind
-, libxkbcommon
-, icu
-, openssl
-, zlib
-, curl
-, at-spi2-core
+, alsa-lib
 , at-spi2-atk
+, at-spi2-core
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, gdk-pixbuf
+, glib
 , gnutar
-, atomEnv
-, libkrb5
+, gtk3
+, icu
 , libdrm
+, libunwind
+, libuuid
+, libxkbcommon
 , mesa
+, nspr
+, nss
+, openssl
+, pango
+, systemd
 , xorg
+, zlib
 }:
 
 # from justinwoo/azuredatastudio-nix
@@ -115,20 +125,34 @@ stdenv.mkDerivation rec {
   sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/4.7.1.6";
 
   rpath = lib.concatStringsSep ":" [
-    atomEnv.libPath
-    (
-      lib.makeLibraryPath [
-        libuuid
-        at-spi2-core
-        at-spi2-atk
-        stdenv.cc.cc.lib
-        libkrb5
-        libdrm
-        libxkbcommon
-        mesa
-        xorg.libxshmfence
-      ]
-    )
+    (lib.makeLibraryPath [
+      alsa-lib
+      at-spi2-atk
+      cairo
+      cups
+      dbus
+      expat
+      gdk-pixbuf
+      glib
+      gtk3
+      mesa
+      nss
+      nspr
+      libdrm
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+      xorg.libxshmfence
+      libxkbcommon
+      xorg.libxkbfile
+      pango
+      stdenv.cc.cc.lib
+      systemd
+    ])
     targetPath
     sqltoolsserviceRpath
   ];

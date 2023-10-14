@@ -65,7 +65,7 @@ self: super: {
   # Version deviations from Stackage LTS
   #
 
-  doctest = doDistribute super.doctest_0_22_0;
+  doctest = doDistribute super.doctest_0_22_1;
   http-api-data = doDistribute self.http-api-data_0_6; # allows base >= 4.18
   some = doDistribute self.some_1_0_5;
   th-abstraction = doDistribute self.th-abstraction_0_6_0_0;
@@ -88,7 +88,7 @@ self: super: {
 
   ghc-lib = doDistribute self.ghc-lib_9_6_2_20230523;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_6_2_20230523;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_1;
+  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_6_0_2;
 
   # v0.1.6 forbids base >= 4.18
   singleton-bool = doDistribute super.singleton-bool_0_1_7;
@@ -176,7 +176,7 @@ self: super: {
     };
 
   fourmolu = super.fourmolu_0_13_1_0;
-  ormolu = super.ormolu_0_7_1_0;
+  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
   stylish-haskell = super.stylish-haskell_0_14_5_0;
 
   # Newer version of servant required for GHC 9.6
@@ -272,4 +272,12 @@ self: super: {
 
   # The curl executable is required for withApplication tests.
   warp_3_3_28 = addTestToolDepend pkgs.curl super.warp_3_3_28;
+
+  # The NCG backend for aarch64 generates invalid jumps in some situations,
+  # the workaround on 9.6 is to revert to the LLVM backend (which is used
+  # for these sorts of situations even on 9.2 and 9.4).
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/23746#note_525318
+  tls = appendConfigureFlags
+    (lib.optionals pkgs.stdenv.hostPlatform.isAarch64 [ "--ghc-option=-fllvm" ])
+    super.tls;
 }

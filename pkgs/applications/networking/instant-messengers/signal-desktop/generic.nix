@@ -156,9 +156,10 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
     )
 
-    # Fix the desktop link
+    # Fix the desktop link and fix showing application icon in tray
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace "/opt/${dir}/${pname}" $out/bin/${pname}
+      --replace "/opt/${dir}/${pname}" $out/bin/${pname} \
+      ${if pname == "signal-desktop" then "--replace \"bin/signal-desktop\" \"bin/signal-desktop --use-tray-icon\"" else ""}
 
     autoPatchelf --no-recurse -- "$out/lib/${dir}/"
     patchelf --add-needed ${libpulseaudio}/lib/libpulse.so "$out/lib/${dir}/resources/app.asar.unpacked/node_modules/@signalapp/ringrtc/build/linux/libringrtc-x64.node"

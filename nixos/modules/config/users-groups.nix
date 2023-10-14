@@ -341,6 +341,20 @@ let
           administrator before being able to use the system again.
         '';
       };
+
+      linger = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether to enable lingering for this user. If true, systemd user
+          units will start at boot, rather than starting at login and stopping
+          at logout. This is the declarative equivalent of running
+          `loginctl enable-linger` for this user.
+
+          If false, user units will not be started until the user logs in, and
+          may be stopped on logout depending on the settings in `logind.conf`.
+        '';
+      };
     };
 
     config = mkMerge
@@ -460,6 +474,8 @@ let
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
   sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
+  groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
+  usersWithoutExistingGroup = lib.filterAttrs (n: u: !lib.elem u.group groupNames) cfg.users;
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -672,6 +688,20 @@ in {
       '';
     };
 
+    system.activationScripts.update-lingering = let
+      lingerDir = "/var/lib/systemd/linger";
+      lingeringUsers = map (u: u.name) (attrValues (flip filterAttrs cfg.users (n: u: u.linger)));
+      lingeringUsersFile = builtins.toFile "lingering-users"
+        (concatStrings (map (s: "${s}\n")
+          (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
+    in stringAfter [ "users" ] ''
+      if [ -e ${lingerDir} ] ; then
+        cd ${lingerDir}
+        ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
+        ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
+      fi
+    '';
+
     # Warn about user accounts with deprecated password hashing schemes
     system.activationScripts.hashes = {
       deps = [ "users" ];
@@ -711,7 +741,8 @@ in {
 
     environment.profiles = [
       "$HOME/.nix-profile"
-      "\${XDG_STATE_HOME:-$HOME/.local/state}/nix/profile"
+      "\${XDG_STATE_HOME}/nix/profile"
+      "$HOME/.local/state/nix/profile"
       "/etc/profiles/per-user/$USER"
     ];
 
@@ -760,6 +791,18 @@ in {
       }
       { assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
         message = "systemd initrd UIDs and GIDs must be unique!";
+      }
+      { assertion = usersWithoutExistingGroup == {};
+        message =
+          let
+            errUsers = lib.attrNames usersWithoutExistingGroup;
+            missingGroups = lib.unique (lib.mapAttrsToList (n: u: u.group) usersWithoutExistingGroup);
+            mkConfigHint = group: "users.groups.${group} = {};";
+          in ''
+            The following users have a primary group that is undefined: ${lib.concatStringsSep " " errUsers}
+            Hint: Add this to your NixOS configuration:
+              ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
+          '';
       }
       { # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that

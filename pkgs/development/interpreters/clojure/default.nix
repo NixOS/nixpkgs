@@ -61,11 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     #!nix-shell -i bash -p curl common-updater-scripts jq
 
     set -euo pipefail
+    shopt -s inherit_errexit
 
     # `jq -r '.[0].name'` results in `v0.0`
-    readonly latest_version="$(curl \
+    latest_version="$(curl \
       ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \
-      -s "https://api.github.com/repos/clojure/brew-install/tags" \
+      -fsL "https://api.github.com/repos/clojure/brew-install/tags" \
       | jq -r '.[1].name')"
 
     update-source-version clojure "$latest_version"

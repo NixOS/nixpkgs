@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-os-config";
-  version = "1.15.2";
+  version = "1.15.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WgrqxnVsbA0ppvfcqxW+kA8vjn71bMU9qAyZraqYt8g=";
+    hash = "sha256-KNM4wASyfgoBqhXa5k+8tf+AN9VljHDDK0U849N5qHI=";
   };
 
   propagatedBuildInputs = [
@@ -37,8 +37,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Test requires a project ID
     "test_patch_deployment"
     "test_patch_job"
+    "test_list_patch_jobs"
   ];
 
   meta = with lib; {

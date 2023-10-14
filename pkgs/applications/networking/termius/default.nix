@@ -1,14 +1,15 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , squashfsTools
+, alsa-lib
 , fetchurl
 , makeDesktopItem
 , makeWrapper
 , stdenv
 , lib
+, libsecret
+, mesa
 , udev
 , wrapGAppsHook
-, libxshmfence
 }:
 
 stdenv.mkDerivation rec {
@@ -41,9 +42,14 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
+  # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
 
-  buildInputs = atomEnv.packages ++ [ libxshmfence ];
+  buildInputs = [
+    alsa-lib
+    libsecret
+    mesa
+  ];
 
   unpackPhase = ''
     runHook preUnpack
