@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "arximboldi";
     repo = "lager";
     rev = "v${version}";
-    hash = "sha256-7xTMDhPIx1I1PiYNanGUsK8pdrWuemMWM7BW+NQs2BB=";
+    hash = "sha256-KTHrVV/186l4klwlcfDwFsKVoOVqWCUPzHnIbWuatbg=";
   };
 
   nativeBuildInputs = [ cmake ];
