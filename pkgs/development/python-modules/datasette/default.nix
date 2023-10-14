@@ -29,22 +29,21 @@
 
 buildPythonPackage rec {
   pname = "datasette";
-  version = "0.64.4";
+  version = "0.64.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6zZgbUKszSo13qmrWKo5UAPqS/QaS8omoTJQgWFfULk=";
+    hash = "sha256-cCzvltq3DFbfRp0gO8RQxGUwBtYJcJoeYHIz06FA7vM=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' "" \
-      --replace "click-default-group-wheel>=1.2.2" "click-default-group"
+      --replace '"pytest-runner"' "
   '';
 
   propagatedBuildInputs = [
