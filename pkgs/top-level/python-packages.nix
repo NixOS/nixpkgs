@@ -1506,6 +1506,8 @@ self: super: with self; {
 
   blinkstick = callPackage ../development/python-modules/blinkstick { };
 
+  blip = callPackage ../development/python-modules/blip { };
+
   blis = callPackage ../development/python-modules/blis { };
 
   blobfile = callPackage ../development/python-modules/blobfile { };
