@@ -16695,6 +16695,16 @@
     githubId = 853468;
     name = "Steven Roose";
   };
+  stfr = {
+    name = "The Starfire";
+    email = "stfr@pissmail.com";
+    matrix = "@starsfire:mozilla.org";
+    github = "stf1re";
+    githubId = 147901952;
+    keys = [{
+      fingerprint = "C772 5ECE 3EB6 7A6B 4E81  E305 EE30 6F66 485B 6D4D";
+    }];
+  };
   stianlagstad = {
     email = "stianlagstad@gmail.com";
     github = "stianlagstad";
