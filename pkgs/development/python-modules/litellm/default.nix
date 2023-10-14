@@ -8,7 +8,7 @@
 , tiktoken
 }:
 let
-  version = "0.1.590";
+  version = "0.1.738";
 in
 buildPythonPackage rec {
   pname = "litellm";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "BerriAI";
     repo = "litellm";
-    rev = "7cb96e86b4753008cbf8d116aca514750e98d360";
-    hash = "sha256-ITMcwGjelNfNGnfBmmdu0Xwph4u0mxiFSfHnysUxWCQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-1Ft2E5I3OkVZUfmQHN1Qe/Z3cvLid8ie3BCeZoAii8U=";
   };
 
   postPatch = ''

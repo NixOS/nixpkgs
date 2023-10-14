@@ -17,12 +17,14 @@
 , expat
 , libxcrypt-legacy
 , fontconfig
+, libxml2
+, xz
 , vmopts ? null
 }:
 
 let
   platforms = lib.platforms.linux ++ [ "x86_64-darwin" "aarch64-darwin" ];
-  ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" ];
+  ideaPlatforms = [ "x86_64-darwin" "i686-darwin" "i686-linux" "x86_64-linux" "aarch64-darwin" "aarch64-linux" ];
 
   inherit (stdenv.hostPlatform) system;
 
@@ -58,6 +60,9 @@ let
         openssl.out
         expat
         libxcrypt-legacy
+      ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+        libxml2
+        xz
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
@@ -65,12 +70,12 @@ let
           cd $out/clion
 
           # I think the included gdb has a couple of patches, so we patch it instead of replacing
-          ls -d $PWD/bin/gdb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
 
-          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
@@ -271,7 +276,7 @@ let
       buildInputs = (attrs.buildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
         stdenv.cc.cc
         zlib
-        fontconfig  # plugins/dotTrace/DotFiles/linux-x64/libSkiaSharp.so
+        fontconfig  # plugins/dotTrace/DotFiles/linux-*/libSkiaSharp.so
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
@@ -279,12 +284,15 @@ let
           cd $out/rider
 
           # Remove dotnet copy first so it's not considered by autoPatchElf
-          rm -rf lib/ReSharperHost/linux-x64/dotnet
+          rm -rf lib/ReSharperHost/linux-*/dotnet
           autoPatchelf \
-            lib/ReSharperHost/linux-x64/ \
-            plugins/dotCommon/DotFiles/linux-x64/ \
-            plugins/dotTrace/DotFiles/linux-x64/
-          ln -s ${dotnet-sdk_7} lib/ReSharperHost/linux-x64/dotnet
+            lib/ReSharperHost/linux-*/ \
+            plugins/dotCommon/DotFiles/linux-*/ \
+            plugins/dotTrace/DotFiles/linux-*/
+
+          for dir in lib/ReSharperHost/linux-*; do
+            ln -s ${dotnet-sdk_7} $dir/dotnet
+          done
         )
       '';
     });
@@ -320,6 +328,10 @@ let
         libdbusmenu
         openssl.out
         libxcrypt-legacy
+      ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+        expat
+        libxml2
+        xz
       ];
       dontAutoPatchelf = true;
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
@@ -327,12 +339,12 @@ let
           cd $out/rust-rover
 
           # Copied over from clion (gdb seems to have a couple of patches)
-          ls -d $PWD/bin/gdb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/gdb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
 
-          ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
+          ls -d $PWD/bin/lldb/linux/*/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
@@ -340,8 +352,8 @@ let
           autoPatchelf $PWD/bin
 
           interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-          patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
-          chmod +x $PWD/plugins/intellij-rust/bin/linux/x86-64/intellij-rust-native-helper
+          patchelf --set-interpreter $interp $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
+          chmod +x $PWD/plugins/intellij-rust/bin/linux/*/intellij-rust-native-helper
         )
       '';
     });
