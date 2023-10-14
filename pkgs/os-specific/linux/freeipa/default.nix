@@ -167,5 +167,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.s1341 ];
     platforms = platforms.linux;
+    mainProgram = "ipa";
   };
 }
