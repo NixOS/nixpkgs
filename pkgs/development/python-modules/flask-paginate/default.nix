@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -12,17 +13,27 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-P6Q/Q6+kUzby+wXPjO7TqjeL9LydqbNgceu2juWeEpM=";
+  src = fetchFromGitHub {
+    owner = "lixxu";
+    repo = "flask-paginate";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QXXuXwMY3CwSv1P5zDK6q/LZfh96/BL3fbdbg53BJ6o=";
   };
 
   propagatedBuildInputs = [
     flask
   ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [
     "flask_paginate"
+  ];
+
+  pytestFlagsArray = [
+    "tests/tests.py"
   ];
 
   meta = with lib; {
