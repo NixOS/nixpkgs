@@ -8000,7 +8000,7 @@ with pkgs;
   esshader = callPackage ../tools/graphics/esshader { };
 
   etcher = callPackage ../tools/misc/etcher {
-    electron = electron_19;
+    electron = electron_25;
   };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
