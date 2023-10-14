@@ -182,7 +182,9 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.pname}-${gtk3.version}"
   '';
 
-  passthru.updateScript = ./update.py;
+  # We only want automatic updates for stable, beta and dev will get updated by the same script
+  # and are only used for testing.
+  passthru = {} // lib.optionalAttrs (channel == "stable") { updateScript = ./update.py; };
 
   meta = with lib; {
     homepage = "https://www.microsoft.com/en-us/edge";
