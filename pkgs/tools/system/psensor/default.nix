@@ -10,6 +10,7 @@
 , udisks2
 , libXNVCtrl
 , wrapGAppsHook
+, libappindicator
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     gtk3
     libnotify
     udisks2
+    libappindicator
   ];
 
   preConfigure = ''
