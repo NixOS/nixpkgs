@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "jwodder";
     repo = "inplace";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TfWfSb1GslzcT30/xvBg5Xui7ptp7+g89Fq/giLCoQ8=";
+    hash = "sha256-TfWfSb1GslzcT30/xvBg5Xui7ptp7+g89Fq/giLCoQ8=";
   };
 
   postPatch = ''
@@ -32,6 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "In-place file processing";
     homepage = "https://github.com/jwodder/inplace";
+    changelog = "https://github.com/jwodder/inplace/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };
