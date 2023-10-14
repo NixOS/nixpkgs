@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mrsqm";
-  version = "0.0.5";
+  version = "0.0.6";
   format = "setuptools";
 
   disable = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VlAbyTWQCj6fgndEPI1lQKvL+D6TJnqglIT8dRZyEWc=";
+    hash = "sha256-dBwWiJEL76aXqM2vKn4uQsd86Rm3bMeDSsRRs/aLWCE=";
   };
 
   buildInputs = [ fftw ];
