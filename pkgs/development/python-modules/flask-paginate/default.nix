@@ -21,6 +21,10 @@ buildPythonPackage rec {
     flask
   ];
 
+  pythonImportsCheck = [
+    "flask_paginate"
+  ];
+
   meta = with lib; {
     description = "Pagination support for Flask";
     homepage = "https://github.com/lixxu/flask-paginate";
