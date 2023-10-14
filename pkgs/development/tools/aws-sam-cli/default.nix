@@ -6,11 +6,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.90.0";
+  version = "1.98.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JXUfc37O6cTTOCTTtWE05m+GR4iDyBsmRPyXoTRxFmo=";
+    hash = "sha256-T7Tywkzrf7htXbJccUzLxfQPp6Kk9mQgI5ZlPOOmOX4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
