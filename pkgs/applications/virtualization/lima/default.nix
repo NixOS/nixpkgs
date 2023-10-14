@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "0.17.2";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0yWQhyDSDGZT6K/SeVntTdqnDzyGD244+r5kG1MFh1c=";
+    sha256 = "sha256-sOOpqgEvDBVvD/o1wFL3ebqWw0XpSdEqY8cZmtdXyxE=";
   };
 
-  vendorHash = "sha256-yA6qwnbRFR/V2Aaf53jLTejPKuNzbod2dVnLEQLoQkM=";
+  vendorHash = "sha256-vJlnptEja3nBfj/c1hSZjY9DZPQ970ZIMnHBPndd2vQ=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ];
