@@ -100,7 +100,6 @@ penlight,https://github.com/lunarmodules/Penlight.git,,,,,alerque
 plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,5.1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 rest.nvim,,,,,5.1,teto
-readline,,,,,,
 say,https://github.com/Olivine-Labs/say.git,,,,,
 serpent,,,,,,lockejan
 sqlite,,,,,,
