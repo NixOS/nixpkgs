@@ -14,7 +14,7 @@ let
     paths = [ cudatoolkit cudatoolkit.lib ];
   };
 
-  rocmList = with rocmPackages; [ rocm-core rocm-runtime rocm-device-libs clr ];
+  rocmList = with rocmPackages; [ rocm-core rocm-thunk rocm-runtime rocm-device-libs clr ];
 
   rocm = symlinkJoin {
     name = "rocm";
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "--with-dm"
     "--with-verbs=${lib.getDev rdma-core}"
   ] ++ lib.optional enableCuda "--with-cuda=${cudatoolkit'}"
-  ++ lib.optional enableRocm "--with-rocm=${rocm}";
+  ++ lib.optionals enableRocm [ "--with-rocm=${rocm}" "--without-knem" ];
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;
