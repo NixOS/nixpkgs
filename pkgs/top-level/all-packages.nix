@@ -16644,6 +16644,8 @@ with pkgs;
 
   koka = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../development/compilers/koka { });
 
+  kokkos = callPackage ../by-name/ko/kokkos/package.nix { };
+
   kotlin = callPackage ../development/compilers/kotlin { };
   kotlin-native = callPackage ../development/compilers/kotlin/native.nix { };
 
