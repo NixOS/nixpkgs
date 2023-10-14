@@ -1,15 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi, flask }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flask
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "flask-paginate";
   version = "2023.10.8";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-P6Q/Q6+kUzby+wXPjO7TqjeL9LydqbNgceu2juWeEpM=";
+    hash = "sha256-P6Q/Q6+kUzby+wXPjO7TqjeL9LydqbNgceu2juWeEpM=";
   };
 
-  propagatedBuildInputs = [ flask ];
+  propagatedBuildInputs = [
+    flask
+  ];
 
   meta = with lib; {
     description = "Pagination support for Flask";
