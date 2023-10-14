@@ -14,6 +14,9 @@ let
     gmenuharness = callPackage ./development/gmenuharness { };
     libusermetrics = callPackage ./development/libusermetrics { };
     lomiri-api = callPackage ./development/lomiri-api { };
+
+    #### Services
+    biometryd = callPackage ./services/biometryd { };
   };
 in
   lib.makeScope libsForQt5.newScope packages
