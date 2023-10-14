@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wlcs";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
     rev = "v${version}";
-    hash = "sha256-+YM5dT45p9wk0gJeATmhWDFJJMaUdcTfw8GLS/vMkw4=";
+    hash = "sha256-YYrhcN1BSJISn/7lxu7Db5YaOK+okdHVJuMwqSDzAIU=";
   };
 
   nativeBuildInputs = [
