@@ -13711,6 +13711,8 @@ self: super: with self; {
 
   takethetime = callPackage ../development/python-modules/takethetime { };
 
+  taming-transformers-rom1504 = callPackage ../development/python-modules/taming-transformers-rom1504 { };
+
   tank-utility = callPackage ../development/python-modules/tank-utility { };
 
   tappy = callPackage ../development/python-modules/tappy { };
