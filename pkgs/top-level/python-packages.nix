@@ -14172,6 +14172,8 @@ self: super: with self; {
 
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
+  torch-fidelity = callPackage ../development/python-modules/torch-fidelity { };
+
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
