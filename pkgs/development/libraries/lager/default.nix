@@ -2,6 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, sass
+, boost
+, immer
+, zug
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +20,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ boost immer zug ];
+
+  cmakeFlags = [
+    "-Dlager_BUILD_TESTS=OFF"
+    "-Dlager_BUILD_EXAMPLES=OFF"
+  ];
 
   meta = with lib; {
     description = "C++ library for value-oriented design using the unidirectional data-flow architecture — Redux for C++";
