@@ -14286,8 +14286,10 @@ with self; {
     };
     patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [ IOSocketSSL LWP ];
-    doCheck = false; # tries to connect to https://www.apache.org/.
-    buildInputs = [ TestRequiresInternet ];
+    preCheck = ''
+      export NO_NETWORK_TESTING=1
+    '';
+    buildInputs = [ TestRequiresInternet TestNeeds ];
     meta = {
       description = "Provide https support for LWP::UserAgent";
       homepage = "https://github.com/libwww-perl/LWP-Protocol-https";
