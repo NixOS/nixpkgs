@@ -559,20 +559,10 @@ let
         compilerNames.ghc902
         compilerNames.ghc928
       ];
-      ghc-tags = [
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc924
-        compilerNames.ghc925
-        compilerNames.ghc926
-        compilerNames.ghc927
-        compilerNames.ghc928
-        compilerNames.ghc945
-        compilerNames.ghc946
-        compilerNames.ghc947
-        compilerNames.ghc962
-        compilerNames.ghc963
-      ];
+      ghc-tags = lib.subtractLists [
+        compilerNames.ghc884
+        compilerNames.ghc981
+      ] released;
       hashable = lib.subtractLists [
         compilerNames.ghc981
       ] released;
