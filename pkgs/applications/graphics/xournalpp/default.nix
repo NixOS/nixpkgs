@@ -36,8 +36,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
   buildInputs =
-    [
+    lib.optionals stdenv.isLinux [
       alsa-lib
+    ] ++ [
       glib
       gsettings-desktop-schemas
       gtk3
@@ -63,6 +64,6 @@ stdenv.mkDerivation rec {
     changelog   = "https://github.com/xournalpp/xournalpp/blob/v${version}/CHANGELOG.md";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ andrew-d sikmir ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }
