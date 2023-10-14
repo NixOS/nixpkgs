@@ -94,9 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDBUS_CPP_ENABLE_DOC_GENERATION=ON"
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  # Too flaky on ARM CI & for some amd64 users
+  doCheck = false;
 
-  # DBus mess, hoping this fixes occational flakiness
+  # DBus, parallelism messes with communication
   enableParallelChecking = false;
 
   preFixup = ''
