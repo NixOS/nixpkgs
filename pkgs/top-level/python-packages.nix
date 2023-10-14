@@ -9067,6 +9067,8 @@ self: super: with self; {
 
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
+  picklescan = callPackage ../development/python-modules/picklescan { };
+
   picobox = callPackage ../development/python-modules/picobox { };
 
   picos = callPackage ../development/python-modules/picos { };
