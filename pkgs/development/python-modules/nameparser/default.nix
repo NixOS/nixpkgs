@@ -1,20 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
+, pythonOlder
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "nameparser";
   version = "1.1.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-qiQArXHM+AcGdbQDEaJXyTRln5GFSxVOG6bCZHYcBJ0=";
   };
 
-  LC_ALL="en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "nameparser"
+  ];
 
   meta = with lib; {
     description = "Module for parsing human names into their individual components";
