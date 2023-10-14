@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "umlaeute";
     repo = "Gem";
     rev = "4ec12eef8716822c68f7c02a5a94668d2427037d";
-    sha256 = "Y/Z7oJdKGd7+aSk8eAN9qu4ss+BOvzaXWpWGjfJqGJ8=";
+    hash = "sha256-Y/Z7oJdKGd7+aSk8eAN9qu4ss+BOvzaXWpWGjfJqGJ8=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Graphics Environment for Multimedia";
     homepage = "http://puredata.info/downloads/gem";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.raboof maintainers.carlthome ];
+    maintainers = with maintainers; [ raboof carlthome ];
     platforms = platforms.linux;
   };
 }
