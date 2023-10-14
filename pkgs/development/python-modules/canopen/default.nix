@@ -38,8 +38,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/christiansandberg/canopen/";
     description = "CANopen stack implementation";
+    homepage = "https://github.com/christiansandberg/canopen/";
+    changelog = "https://github.com/christiansandberg/canopen/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ sorki ];
   };
