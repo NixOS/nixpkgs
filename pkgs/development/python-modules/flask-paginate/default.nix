@@ -12,8 +12,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ flask ];
 
   meta = with lib; {
-    homepage = "https://github.com/lixxu/flask-paginate";
     description = "Pagination support for Flask";
+    homepage = "https://github.com/lixxu/flask-paginate";
+    changelog = "https://github.com/lixxu/flask-paginate/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
   };
