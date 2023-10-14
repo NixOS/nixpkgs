@@ -24,8 +24,8 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.26.4";
-    rev = "cfa32deca25ac57c2bbecdad72807a9b13493fc1";
+    version = "1.27.1";
+    rev = "6b9db09c69965d5bfb37bdd29693f8b7f9e9e9ec";
   };
 in
 buildBazelPackage rec {
@@ -36,7 +36,7 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
-    hash = "sha256-j5QyqT+9tpChg5JxdSw21rtb9AI036vIiAmzCNzGWGc=";
+    hash = "sha256-eZ3UCVqQbtK2GbawUVef5+BMSQbqe+owtwH+b887mQE=";
 
     postFetch = ''
       chmod -R +w $out
@@ -59,6 +59,9 @@ buildBazelPackage rec {
 
     # use system Go, not bazel-fetched binary Go
     ./0002-nixpkgs-use-system-Go.patch
+
+    # use system C/C++ tools
+    ./0003-nixpkgs-use-system-C-C-toolchains.patch
   ];
 
   nativeBuildInputs = [
@@ -80,8 +83,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "sha256-MvY4cLdLOeb7+Zt7Oz7Kzz1+dsUceemP/V02egvHg+M=";
-      aarch64-linux = "sha256-U5mnAq8RHDygxiYeNc0HDeOgoaGyrd0MPjHKdyUkM0A=";
+      x86_64-linux = "sha256-bBi+3sAwtj5qu1npFpNMK2C99Q0ZI3zaSmMsTcreD8Y=";
+      aarch64-linux = "sha256-piIekotpxB02COglAon9w7a+1jXlHX29/VkrgKFsQ3c=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
