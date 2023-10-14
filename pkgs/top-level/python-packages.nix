@@ -12162,6 +12162,8 @@ self: super: with self; {
 
   reactivex = callPackage ../development/python-modules/reactivex { };
 
+  realesrgan = callPackage ../development/python-modules/realesrgan { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };

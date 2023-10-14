@@ -1,0 +1,13 @@
+diff --git a/realesrgan/utils.py b/realesrgan/utils.py
+index 67e5232..3d36793 100644
+--- a/realesrgan/utils.py
++++ b/realesrgan/utils.py
+@@ -8,7 +8,7 @@ import torch
+ from basicsr.utils.download_util import load_file_from_url
+ from torch.nn import functional as F
+ 
+-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
++ROOT_DIR = f'{os.getcwd()}/src/realesrgan'
+ 
+ 
+ class RealESRGANer():
