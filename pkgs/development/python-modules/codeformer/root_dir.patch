@@ -1,0 +1,13 @@
+diff --git a/facelib/utils/misc.py b/facelib/utils/misc.py
+index 0240187..0570161 100644
+--- a/facelib/utils/misc.py
++++ b/facelib/utils/misc.py
+@@ -10,7 +10,7 @@ from urllib.parse import urlparse
+ import gdown
+ 
+ 
+-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
++ROOT_DIR = f'{os.getcwd()}/models/facelib'
+ 
+ 
+ def download_pretrained_models(file_ids, save_path_root):

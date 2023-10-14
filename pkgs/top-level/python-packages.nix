@@ -2198,6 +2198,8 @@ self: super: with self; {
 
   codecov = callPackage ../development/python-modules/codecov { };
 
+  codeformer = callPackage ../development/python-modules/codeformer { };
+
   codepy = callPackage ../development/python-modules/codepy { };
 
   cogapp = callPackage ../development/python-modules/cogapp { };
