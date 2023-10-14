@@ -89,7 +89,7 @@ let
     networks."40-${i.name}" = mkMerge [ (genericNetwork id) {
       name = mkDefault i.name;
       DHCP = mkForce (dhcpStr
-        (if i.useDHCP != null then i.useDHCP else false));
+        (if i.useDHCP != null then i.useDHCP else (config.networking.useDHCP && i.ipv4.addresses == [ ])));
       address = forEach (interfaceIps i)
         (ip: "${ip.address}/${toString ip.prefixLength}");
       routes = forEach (interfaceRoutes i)
