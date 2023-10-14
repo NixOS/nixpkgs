@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "iteration-utilities";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "MSeifert04";
     repo = "iteration_utilities";
-    rev = "v${version}";
-    hash = "sha256-Q/ZuwAf+NPikN8/eltwaUilnLw4DKFm864tUe6GLDak=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KdL0lwlmBEG++JRociR92HdYxzArTeL5uEyUjvvwi1Y=";
   };
 
   nativeCheckInputs = [
