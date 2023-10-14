@@ -12444,16 +12444,26 @@ with pkgs;
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
-  ouch = callPackage ../tools/compression/ouch { };
-
-  outils = callPackage ../tools/misc/outils { };
-
   mpi = openmpi; # this attribute should used to build MPI applications
   mpiCheckPhaseHook = callPackage ../build-support/setup-hooks/mpi-check-hook { };
 
   ucc = callPackage ../development/libraries/ucc { };
 
   ucx = callPackage ../development/libraries/ucx { };
+
+  ucx-cuda = ucx.override {
+    enableCuda = true;
+    enableRocm = false;
+  };
+
+  ucx-rocm = ucx.override {
+    enableCuda = false;
+    enableRocm = true;
+  };
+
+  ouch = callPackage ../tools/compression/ouch { };
+
+  outils = callPackage ../tools/misc/outils { };
 
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
