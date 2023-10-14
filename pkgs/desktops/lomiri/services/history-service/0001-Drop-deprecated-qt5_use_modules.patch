@@ -1,0 +1,247 @@
+From 007e8cc4118869cab193d049db297bea3ee89269 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Sun, 19 Feb 2023 22:39:14 +0100
+Subject: [PATCH] Drop deprecated qt5_use_modules
+
+Also seems broken on Nixpkgs, cannot pick up Qml (from qtdeclarative.dev).
+---
+ CMakeLists.txt                         | 1 +
+ Lomiri/History/CMakeLists.txt          | 2 +-
+ cmake/modules/GenerateTest.cmake       | 6 +++---
+ daemon/CMakeLists.txt                  | 2 +-
+ plugins/sqlite/CMakeLists.txt          | 2 +-
+ plugins/sqlite/schema/CMakeLists.txt   | 2 +-
+ src/CMakeLists.txt                     | 2 +-
+ tests/Lomiri.History/CMakeLists.txt    | 4 ++--
+ tests/common/CMakeLists.txt            | 4 ++--
+ tests/common/mock/CMakeLists.txt       | 2 +-
+ tests/libhistoryservice/CMakeLists.txt | 2 +-
+ tests/plugins/sqlite/CMakeLists.txt    | 6 +++---
+ tools/maketextevents/CMakeLists.txt    | 2 +-
+ tools/makevoiceevents/CMakeLists.txt   | 2 +-
+ tools/reader/CMakeLists.txt            | 2 +-
+ 15 files changed, 21 insertions(+), 20 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e61fea5..a8e6417 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -18,6 +18,7 @@ find_package(Qt5Qml)
+ find_package(Qt5Quick)
+ find_package(Qt5Test)
+ find_package(Qt5Network)
++find_package(Qt5Sql)
+ find_package(LibPhoneNumber REQUIRED)
+ 
+ include(qt5)
+diff --git a/Lomiri/History/CMakeLists.txt b/Lomiri/History/CMakeLists.txt
+index eb5e18e..cf20761 100644
+--- a/Lomiri/History/CMakeLists.txt
++++ b/Lomiri/History/CMakeLists.txt
+@@ -36,7 +36,7 @@ include_directories(
+ 
+ add_library(history-qml MODULE ${plugin_SRCS} ${plugin_HDRS})
+ 
+-qt5_use_modules(history-qml Contacts Core Qml Quick)
++target_link_libraries(history-qml Qt5::Contacts Qt5::Core Qt5::Qml Qt5::Quick)
+ 
+ target_link_libraries(history-qml
+     historyservice
+diff --git a/cmake/modules/GenerateTest.cmake b/cmake/modules/GenerateTest.cmake
+index 6cec32e..24615d1 100644
+--- a/cmake/modules/GenerateTest.cmake
++++ b/cmake/modules/GenerateTest.cmake
+@@ -46,7 +46,7 @@ function(generate_test TESTNAME)
+     endif ()
+ 
+     if (NOT DEFINED ARG_QT5_MODULES)
+-        set(ARG_QT5_MODULES Core Test)
++        set(ARG_QT5_MODULES Qt5::Core Qt5::Test)
+     endif ()
+ 
+     if (${ARG_USE_UI})
+@@ -72,7 +72,7 @@ function(generate_test TESTNAME)
+ 
+         # No QML test, regular binary compiled test.
+         add_executable(${TESTNAME} ${ARG_SOURCES})
+-        qt5_use_modules(${TESTNAME} ${ARG_QT5_MODULES})
++        target_link_libraries(${TESTNAME} ${ARG_QT5_MODULES})
+ 
+         if (${ARG_USE_DBUS})
+             execute_process(COMMAND mktemp -d OUTPUT_VARIABLE TMPDIR)
+@@ -136,7 +136,7 @@ function(generate_telepathy_test TESTNAME)
+     endif(NOT DEFINED ARG_LIBRARIES)
+ 
+     if (NOT DEFINED ARG_QT5_MODULES)
+-        set(ARG_QT5_MODULES Core DBus Test Qml)
++        set(ARG_QT5_MODULES Qt5::Core Qt5::DBus Qt5::Test Qt5::Qml)
+     endif (NOT DEFINED ARG_QT5_MODULES)
+     generate_test(${TESTNAME} ${ARGN}
+                   TASKS ${TASKS}
+diff --git a/daemon/CMakeLists.txt b/daemon/CMakeLists.txt
+index d9493a1..791a362 100644
+--- a/daemon/CMakeLists.txt
++++ b/daemon/CMakeLists.txt
+@@ -21,7 +21,7 @@ include_directories(
+ qt5_add_dbus_adaptor(daemon_SRCS HistoryService.xml historyservicedbus.h HistoryServiceDBus)
+ 
+ add_executable(history-daemon ${daemon_SRCS} ${daemon_HDRS})
+-qt5_use_modules(history-daemon Core DBus)
++target_link_libraries(history-daemon Qt5::Core Qt5::DBus)
+ 
+ target_link_libraries(history-daemon
+     ${TP_QT5_LIBRARIES}
+diff --git a/plugins/sqlite/CMakeLists.txt b/plugins/sqlite/CMakeLists.txt
+index 1a6fdfb..93bbe7a 100644
+--- a/plugins/sqlite/CMakeLists.txt
++++ b/plugins/sqlite/CMakeLists.txt
+@@ -22,7 +22,7 @@ include_directories(
+ qt5_add_resources(plugin_RES sqlitehistoryplugin.qrc)
+ 
+ add_library(sqlitehistoryplugin SHARED ${plugin_SRCS} ${plugin_HDRS} ${plugin_RES})
+-qt5_use_modules(sqlitehistoryplugin Core DBus Sql)
++target_link_libraries(sqlitehistoryplugin Qt5::Core Qt5::DBus Qt5::Sql)
+ 
+ # update the .qrc file automatically when there are new schema files
+ file(GLOB QRC_RESOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/schema/*.sql ${CMAKE_CURRENT_SOURCE_DIR}/schema/*.info)
+diff --git a/plugins/sqlite/schema/CMakeLists.txt b/plugins/sqlite/schema/CMakeLists.txt
+index fc1530d..c35bfdf 100644
+--- a/plugins/sqlite/schema/CMakeLists.txt
++++ b/plugins/sqlite/schema/CMakeLists.txt
+@@ -13,7 +13,7 @@ add_custom_command(
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
+ add_executable(generate_schema generate_schema.cpp ${CMAKE_CURRENT_SOURCE_DIR}/../sqlitedatabase.cpp)
+-qt5_use_modules(generate_schema Core DBus Sql)
++target_link_libraries(generate_schema Qt5::Core Qt5::DBus Qt5::Sql)
+ target_link_libraries(generate_schema historyservice ${SQLITE3_LIBRARIES})
+ 
+ add_custom_target(schema_update DEPENDS ${SCHEMA_FILE} ${VERSION_FILE})
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 7e8dd69..4fca2db 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -101,7 +101,7 @@ set_target_properties(historyservice PROPERTIES
+                       VERSION ${HISTORY_VERSION_MAJOR}.${HISTORY_VERSION_MINOR}.${HISTORY_VERSION_PATCH})
+ 
+ target_link_libraries(historyservice ${LibPhoneNumber_LIBRARIES} ${TP_QT5_LIBRARIES})
+-qt5_use_modules(historyservice Contacts Core DBus)
++target_link_libraries(historyservice Qt5::Contacts Qt5::Core Qt5::DBus)
+ 
+ install(TARGETS historyservice DESTINATION ${CMAKE_INSTALL_LIBDIR})
+ 
+diff --git a/tests/Lomiri.History/CMakeLists.txt b/tests/Lomiri.History/CMakeLists.txt
+index 615b772..7d3bd34 100644
+--- a/tests/Lomiri.History/CMakeLists.txt
++++ b/tests/Lomiri.History/CMakeLists.txt
+@@ -41,7 +41,7 @@ set(HistoryGroupedThreadsModelTest_SOURCES
+ generate_test(HistoryGroupedThreadsModelTest
+               SOURCES ${HistoryGroupedThreadsModelTest_SOURCES}
+               LIBRARIES historyservice
+-              QT5_MODULES Core Qml Test
++              QT5_MODULES Qt5::Core Qt5::Qml Qt5::Test
+               USE_DBUS
+               USE_XVFB
+               TASKS --task ${CMAKE_BINARY_DIR}/daemon/history-daemon --ignore-return --task-name history-daemon
+@@ -53,7 +53,7 @@ set(HistoryManagerTest_SOURCES
+ generate_test(HistoryManagerTest
+             SOURCES ${HistoryManagerTest_SOURCES}
+             LIBRARIES historyservice
+-            QT5_MODULES Core Qml Test
++            QT5_MODULES Qt5::Core Qt5::Qml Qt5::Test
+             USE_DBUS
+             USE_XVFB
+             TASKS --task ${CMAKE_BINARY_DIR}/daemon/history-daemon --ignore-return --task-name history-daemon
+diff --git a/tests/common/CMakeLists.txt b/tests/common/CMakeLists.txt
+index 0cc4bd9..cdf0203 100644
+--- a/tests/common/CMakeLists.txt
++++ b/tests/common/CMakeLists.txt
+@@ -4,10 +4,10 @@ include_directories(${TP_QT5_INCLUDE_DIRS}
+ configure_file(dbus-session.conf.in ${CMAKE_CURRENT_BINARY_DIR}/dbus-session.conf)
+ 
+ add_library(mockcontroller STATIC mockcontroller.cpp mockcontroller.h)
+-qt5_use_modules(mockcontroller Core DBus)
++target_link_libraries(mockcontroller Qt5::Core Qt5::DBus)
+ 
+ add_library(telepathytest STATIC telepathytest.cpp telepathytest.h)
+-qt5_use_modules(telepathytest Core DBus)
++target_link_libraries(telepathytest Qt5::Core Qt5::DBus)
+ target_link_libraries(telepathytest ${TP_QT5_LIBRARIES})
+ 
+ add_subdirectory(mock)
+diff --git a/tests/common/mock/CMakeLists.txt b/tests/common/mock/CMakeLists.txt
+index acaf621..8e8b1b4 100644
+--- a/tests/common/mock/CMakeLists.txt
++++ b/tests/common/mock/CMakeLists.txt
+@@ -15,5 +15,5 @@ set(mock_SRCS main.cpp protocol.cpp connection.cpp textchannel.cpp callchannel.c
+ qt5_add_dbus_adaptor(mock_SRCS MockConnection.xml mockconnectiondbus.h MockConnectionDBus)
+ 
+ add_executable(telepathy-mock ${mock_SRCS})
+-qt5_use_modules(telepathy-mock Core DBus)
++target_link_libraries(telepathy-mock Qt5::Core Qt5::DBus)
+ target_link_libraries(telepathy-mock ${TP_QT5_LIBRARIES} ${TELEPATHY_QT5_SERVICE_LIBRARIES} ${OFONO_QT_LIBRARIES} ${PULSEAUDIO_LIBRARIES} ${Qt5Network_LIBRARIES})
+diff --git a/tests/libhistoryservice/CMakeLists.txt b/tests/libhistoryservice/CMakeLists.txt
+index d96daa6..9f9a991 100644
+--- a/tests/libhistoryservice/CMakeLists.txt
++++ b/tests/libhistoryservice/CMakeLists.txt
+@@ -40,4 +40,4 @@ generate_test(EventViewTest
+ # Telepathy-based tests
+ generate_telepathy_test(ContactMatcherTest
+                         SOURCES ContactMatcherTest.cpp
+-                        QT5_MODULES Core DBus Test Qml Contacts)
++                        QT5_MODULES Qt5::Core Qt5::DBus Qt5::Test Qt5::Qml Qt5::Contacts)
+diff --git a/tests/plugins/sqlite/CMakeLists.txt b/tests/plugins/sqlite/CMakeLists.txt
+index f2bc520..c06f942 100644
+--- a/tests/plugins/sqlite/CMakeLists.txt
++++ b/tests/plugins/sqlite/CMakeLists.txt
+@@ -4,6 +4,6 @@ include_directories(
+     ${CMAKE_CURRENT_BINARY_DIR}
+     )
+ 
+-generate_test(SqlitePluginTest SOURCES SqlitePluginTest.cpp LIBRARIES historyservice sqlitehistoryplugin QT5_MODULES Core DBus Test Sql)
+-generate_test(SqliteThreadViewTest SOURCES SqliteThreadViewTest.cpp LIBRARIES historyservice sqlitehistoryplugin QT5_MODULES Core DBus Test Sql)
+-generate_test(SqliteEventViewTest SOURCES SqliteEventViewTest.cpp LIBRARIES historyservice sqlitehistoryplugin QT5_MODULES Core DBus Test Sql)
++generate_test(SqlitePluginTest SOURCES SqlitePluginTest.cpp LIBRARIES historyservice sqlitehistoryplugin QT5_MODULES Qt5::Core Qt5::DBus Qt5::Test Qt5::Sql)
++generate_test(SqliteThreadViewTest SOURCES SqliteThreadViewTest.cpp LIBRARIES historyservice sqlitehistoryplugin QT5_MODULES Qt5::Core Qt5::DBus Qt5::Test Qt5::Sql)
++generate_test(SqliteEventViewTest SOURCES SqliteEventViewTest.cpp LIBRARIES historyservice sqlitehistoryplugin QT5_MODULES Qt5::Core Qt5::DBus Qt5::Test Qt5::Sql)
+diff --git a/tools/maketextevents/CMakeLists.txt b/tools/maketextevents/CMakeLists.txt
+index e1d4e3e..c539bc5 100644
+--- a/tools/maketextevents/CMakeLists.txt
++++ b/tools/maketextevents/CMakeLists.txt
+@@ -5,7 +5,7 @@ include_directories(
+     )
+ 
+ add_executable(history-maketextevents ${maketextevents_SRCS})
+-qt5_use_modules(history-maketextevents Core)
++target_link_libraries(history-maketextevents Qt5::Core)
+ 
+ target_link_libraries(history-maketextevents historyservice)
+ install(TARGETS history-maketextevents RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git a/tools/makevoiceevents/CMakeLists.txt b/tools/makevoiceevents/CMakeLists.txt
+index a8358bd..d5f4c49 100644
+--- a/tools/makevoiceevents/CMakeLists.txt
++++ b/tools/makevoiceevents/CMakeLists.txt
+@@ -5,7 +5,7 @@ include_directories(
+     )
+ 
+ add_executable(history-makevoiceevents ${makevoiceevents_SRCS})
+-qt5_use_modules(history-makevoiceevents Core)
++target_link_libraries(history-makevoiceevents Qt5::Core)
+ 
+ target_link_libraries(history-makevoiceevents historyservice)
+ install(TARGETS history-makevoiceevents RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+diff --git a/tools/reader/CMakeLists.txt b/tools/reader/CMakeLists.txt
+index 220a7b6..00848bd 100644
+--- a/tools/reader/CMakeLists.txt
++++ b/tools/reader/CMakeLists.txt
+@@ -5,6 +5,6 @@ include_directories(
+     )
+ 
+ add_executable(history-reader ${reader_SRCS})
+-qt5_use_modules(history-reader Core)
++target_link_libraries(history-reader Qt5::Core)
+ 
+ target_link_libraries(history-reader historyservice)
+-- 
+2.38.3
+
