@@ -6,11 +6,16 @@
 # - Make a separate section for each GNOME version. Collisions will come back eventually
 #   as the extensions are updated.
 {
-
-  # ####### GNOME 44 #######
+  # ####### GNOME 45 #######
 
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
+
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+
+  # ####### GNOME 44 #######
 
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
@@ -29,10 +34,6 @@
 
   "batime@martin.zurowietz.de" = "battery-time";
   "batterytime@typeof.pw" = "battery-time-2";
-
-  # ############################################################################
-  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
-  # Make sure to move them up once they are updated
 
   # ####### GNOME 43 #######
 
