@@ -17,9 +17,10 @@ buildPythonPackage rec {
   buildInputs = [ glibcLocales ];
 
   meta = with lib; {
-    description = "A simple Python module for parsing human names into their individual components";
+    description = "Module for parsing human names into their individual components";
     homepage = "https://github.com/derek73/python-nameparser";
+    changelog = "https://github.com/derek73/python-nameparser/releases/tag/v${version}";
     license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ ];
   };
-
 }
