@@ -20479,7 +20479,7 @@ with self; {
       url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-0.011.tar.gz";
       hash = "sha256-jbFIDzyJ64bUFM9fR/7tjfMRKzjEY8uPZbTAZOILHhM=";
     };
-    buildInputs = [ HTTPMessage Plack TestException ];
+    buildInputs = [ HTTPMessage Plack TestException TestWarn ];
     meta = {
       description = "A tiny Prometheus client";
       homepage = "https://github.com/robn/Prometheus-Tiny";
