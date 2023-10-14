@@ -22299,6 +22299,8 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+  lager = callPackage ../development/libraries/lager { };
+
   languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix {
     inherit pkgs;
   });
