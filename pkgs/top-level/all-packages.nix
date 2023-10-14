@@ -12305,7 +12305,11 @@ with pkgs;
 
   pmacct = callPackage ../tools/networking/pmacct { };
 
-  pmix = callPackage ../development/libraries/pmix { };
+  pmix = pmix_3;
+
+  pmix_3 = callPackage ../development/libraries/pmix { };
+
+  pmix_5 = callPackage ../development/libraries/pmix/5.nix { };
 
   polygraph = callPackage ../tools/networking/polygraph { };
 
