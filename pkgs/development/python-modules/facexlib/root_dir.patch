@@ -1,0 +1,41 @@
+diff --git a/facexlib/detection/__init__.py b/facexlib/detection/__init__.py
+index f5d34ea..9e3b247 100644
+--- a/facexlib/detection/__init__.py
++++ b/facexlib/detection/__init__.py
+@@ -1,5 +1,6 @@
+ import torch
+ from copy import deepcopy
++import os
+ 
+ from facexlib.utils import load_file_from_url
+ from .retinaface import RetinaFace
+@@ -16,7 +17,7 @@ def init_detection_model(model_name, half=False, device='cuda', model_rootpath=N
+         raise NotImplementedError(f'{model_name} is not implemented.')
+ 
+     model_path = load_file_from_url(
+-        url=model_url, model_dir='facexlib/weights', progress=True, file_name=None, save_dir=model_rootpath)
++        url=model_url, model_dir=f'{os.getcwd()}/src/facexlib/weights', progress=True, file_name=None, save_dir=model_rootpath)
+ 
+     # TODO: clean pretrained model
+     load_net = torch.load(model_path, map_location=lambda storage, loc: storage)
+diff --git a/facexlib/parsing/__init__.py b/facexlib/parsing/__init__.py
+index 9be36a3..eb4da3f 100644
+--- a/facexlib/parsing/__init__.py
++++ b/facexlib/parsing/__init__.py
+@@ -3,6 +3,7 @@ import torch
+ from facexlib.utils import load_file_from_url
+ from .bisenet import BiSeNet
+ from .parsenet import ParseNet
++import os
+ 
+ 
+ def init_parsing_model(model_name='bisenet', half=False, device='cuda', model_rootpath=None):
+@@ -16,7 +17,7 @@ def init_parsing_model(model_name='bisenet', half=False, device='cuda', model_ro
+         raise NotImplementedError(f'{model_name} is not implemented.')
+ 
+     model_path = load_file_from_url(
+-        url=model_url, model_dir='facexlib/weights', progress=True, file_name=None, save_dir=model_rootpath)
++        url=model_url, model_dir=f'{os.getcwd()}/src/facexlib/weights', progress=True, file_name=None, save_dir=model_rootpath)
+     load_net = torch.load(model_path, map_location=lambda storage, loc: storage)
+     model.load_state_dict(load_net, strict=True)
+     model.eval()
