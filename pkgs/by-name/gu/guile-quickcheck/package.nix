@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-y5msW+mbQ7YeucRS2VNUPokOKoP8g6ysKJ2UMWiIvA4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [ guile pkg-config ];
   buildInputs = [ guile ];
 
   doCheck = !stdenv.isDarwin;
