@@ -1,44 +1,87 @@
-{ lib, fetchurl, appimageTools, makeWrapper }:
+{ lib
+, fetchFromGitHub
+, buildNpmPackage
+, makeWrapper
+, electron_25
+, python3
+, copyDesktopItems
+, makeDesktopItem
+}:
 
 let
   pname = "youtube-music";
-  version = "1.20.0";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "https://github.com/th-ch/youtube-music/releases/download/v${version}/YouTube-Music-${version}.AppImage";
-    hash = "sha256-eTPWLD9KUs2ZsLbYRkknnx5uDyrNSbFHPyv6gU+wL/c=";
+  src = fetchFromGitHub {
+    owner = "th-ch";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-aYEEUv+dybzcH0aNJlZ19XF++8cswFunrU0H+ZaKm4Y=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
+  electron = electron_25;
+
 in
-(appimageTools.wrapType2 rec {
+buildNpmPackage rec {
   inherit pname version src;
-  extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
-    ++ [ pkgs.libappindicator ];
 
-  extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},${pname}}
-    wrapProgram "$out/bin/${pname}" \
-       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+  nativeBuildInputs = [ makeWrapper python3 copyDesktopItems ];
 
-    install -m 444 \
-        -D ${appimageContents}/youtube-music.desktop \
-        -t $out/share/applications
-    substituteInPlace \
-        $out/share/applications/youtube-music.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
-    cp -r ${appimageContents}/usr/share/icons $out/share
+  npmDepsHash = "sha256-XGV0mTywYYxpMitojzIILB/Eu/8dfk/aCvUxIkx4SDQ=";
+  makeCacheWritable = true;
+
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+  };
+
+  postBuild = ''
+    npm exec electron-builder -- \
+      --dir \
+      -c.electronDist=${electron}/libexec/electron \
+      -c.electronVersion=${electron.version}
   '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/share/lib/youtube-music"
+    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
+
+    pushd assets/generated/icons/png
+    for file in *.png; do
+      install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
+    done
+    popd
+
+    runHook postInstall
+  '';
+
+  postFixup = ''
+    makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
+      --add-flags $out/share/lib/youtube-music/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
+  '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "youtube-music";
+      exec = "youtube-music %u";
+      icon = "youtube-music";
+      desktopName = "Youtube Music";
+      startupWMClass = "Youtube Music";
+      categories = ["AudioVideo"];
+    })
+  ];
 
   meta = with lib; {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
     license = licenses.mit;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
+    inherit (electron.meta) platforms;
     maintainers = [ maintainers.aacebedo ];
     mainProgram = "youtube-music";
   };
-}).overrideAttrs ({ nativeBuildInputs ? [ ], ... }: {
-  nativeBuildInputs = nativeBuildInputs ++ [ makeWrapper ];
-})
+}
