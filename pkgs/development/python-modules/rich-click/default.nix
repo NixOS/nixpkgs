@@ -5,11 +5,12 @@
 , pythonOlder
 , rich
 , typer
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "rich-click";
-  version = "1.6.1";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,12 +19,13 @@ buildPythonPackage rec {
     owner = "ewels";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Be6okg3zmbdbdlB4/uwioUxn6CZUay/istiIoiFrsJk=";
+    hash = "sha256-Fmdxs7yeaHe8++LSQGuYK3Qwc0CdPvV9UCSXa09Djt4=";
   };
 
   propagatedBuildInputs = [
     click
     rich
+    typing-extensions
   ];
 
   # Module has no test

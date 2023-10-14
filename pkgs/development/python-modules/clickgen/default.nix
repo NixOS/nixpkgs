@@ -6,13 +6,14 @@
 , pillow
 , toml
 , numpy
+, pyyaml
 , python
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clickgen";
-  version = "2.1.3";
+  version = "2.1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,10 +22,10 @@ buildPythonPackage rec {
     owner = "ful1e5";
     repo = "clickgen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qDaSfIeKCbyl3C2iKz9DYQc1oNwTe5xDlGg/yYhakSw=";
+    hash = "sha256-mSaltlX2eNRLJ09zN5Tim8mW8mnjPi10W4QIEpiBQvI=";
   };
 
-  propagatedBuildInputs = [ pillow toml numpy ];
+  propagatedBuildInputs = [ pillow toml numpy pyyaml ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

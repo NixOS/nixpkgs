@@ -57,7 +57,6 @@ let
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
     "systemd-halt.service"
-    "systemd-hibernate-resume@.service"
     "systemd-journald-audit.socket"
     "systemd-journald-dev-log.socket"
     "systemd-journald.service"
@@ -136,8 +135,13 @@ in {
       '';
     };
 
-    package = mkPackageOptionMD pkgs "systemd" {
-      default = "systemdStage1";
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = config.systemd.package;
+      defaultText = lib.literalExpression "config.systemd.package";
+      description = ''
+        The systemd package to use.
+      '';
     };
 
     extraConfig = mkOption {

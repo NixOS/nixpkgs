@@ -86,9 +86,6 @@ mkDerivation rec {
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];
 
-  # causes redefinition of _FORTIFY_SOURCE
-  hardeningDisable = [ "fortify3" ];
-
   postBuild = ''
     make doc-man
   '';

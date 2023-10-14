@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "valeronoi";
-  version = "0.1.9";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "ccoors";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Xa70kOPQLavuJTF9PxCgpKYj15C2fna++cFlCId0a08=";
+    sha256 = "sha256-4BTBF6h/BEVr0E3E0EvvKOQGHZ4wCtdXgKBWLSfOcOI=";
   };
 
   buildInputs = [

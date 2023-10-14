@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       attrPath = "libsigcxx";
       versionPolicy = "odd-unstable";
-      freeze = true;
+      freeze = "2.99.1";
     };
   };
 

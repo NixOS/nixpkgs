@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-shaderfilter";
-  version = "v1.22";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-shaderfilter";
     rev = version;
-    sha256 = "sha256-CqqYzGRhlHO8Zva+so8uo9+EIlzTfoFVl3NzZMsE7Xc=";
+    sha256 = "sha256-CEe/NUIYhVdvs7/ZvrvuwKPRNofWE+WZxN6yN8RACs8=";
   };
 
   nativeBuildInputs = [ cmake ];

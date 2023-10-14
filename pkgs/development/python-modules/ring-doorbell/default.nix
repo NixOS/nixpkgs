@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , oauthlib
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , pytz
@@ -12,16 +13,20 @@
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.7.3";
-  format = "setuptools";
+  version = "0.7.4";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-HYRuQZpdtBkVfFBdqQupAjzQpLIBvKGm42cCumc03GM=";
+    hash = "sha256-hto3MwlC6ADjKkcB/4l/uFyw+0CgvLZM0sp3FF62XUA=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     oauthlib

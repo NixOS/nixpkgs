@@ -47,7 +47,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     # "-DUSE_DEVICE_TREZOR=ON"
     # "-DBUILD_GUI_DEPS=ON"
     "-DReadline_ROOT_DIR=${readline.dev}"

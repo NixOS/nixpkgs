@@ -4,6 +4,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, borgbackup
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "msgpack"
   ];
+
+  passthru.tests = {
+    # borgbackup is sensible to msgpack versions: https://github.com/borgbackup/borg/issues/3753
+    # please be mindful before bumping versions.
+    inherit borgbackup;
+  };
 
   meta = with lib;  {
     description = "MessagePack serializer implementation";

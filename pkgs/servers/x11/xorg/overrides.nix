@@ -1,5 +1,4 @@
-{ abiCompat ? null,
-  callPackage,
+{ callPackage,
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
@@ -135,7 +134,15 @@ self: super:
     };
   });
 
-  libxcvt = addMainProgram super.libxcvt { mainProgram = "cvt"; };
+  libxcvt = super.libxcvt.overrideAttrs ({ meta ? {}, ... }: {
+    meta = meta // {
+      homepage = "https://gitlab.freedesktop.org/xorg/lib/libxcvt";
+      mainProgram = "cvt";
+      badPlatforms = meta.badPlatforms or [] ++ [
+        lib.systems.inspect.platformPatterns.isStatic
+      ];
+    };
+  });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "man" ];
@@ -738,24 +745,18 @@ self: super:
   });
 
   xorgserver = with xorg; super.xorgserver.overrideAttrs (attrs_passed:
-    # exchange attrs if abiCompat is set
     let
-      version = lib.getVersion attrs_passed;
-      attrs =
-        if (abiCompat == null || lib.hasPrefix abiCompat version) then
-          attrs_passed // {
-            buildInputs = attrs_passed.buildInputs ++
-              lib.optional (libdrm != null) libdrm.dev;
-            postPatch = ''
-              for i in dri3/*.c
-              do
-                sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
-              done
-            '';
-            meta = attrs_passed.meta // { mainProgram = "X"; };
-          }
-        else throw "unsupported xorg abiCompat ${abiCompat} for ${attrs_passed.name}";
-
+      attrs = attrs_passed // {
+        buildInputs = attrs_passed.buildInputs ++
+          lib.optional (libdrm != null) libdrm.dev;
+        postPatch = ''
+          for i in dri3/*.c
+          do
+            sed -i -e "s|#include <drm_fourcc.h>|#include <libdrm/drm_fourcc.h>|" $i
+          done
+        '';
+        meta = attrs_passed.meta // { mainProgram = "X"; };
+      };
     in attrs //
     (let
       version = lib.getVersion attrs;

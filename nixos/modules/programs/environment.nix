@@ -22,7 +22,6 @@ in
         # be specified here; do so in the default value of programs.less.envVariables instead
         PAGER = mkDefault "less";
         EDITOR = mkDefault "nano";
-        XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
       };
 
     # since we set PAGER to this above, make sure it's installed
@@ -32,6 +31,11 @@ in
       [ "/nix/var/nix/profiles/default"
         "/run/current-system/sw"
       ];
+
+    environment.sessionVariables =
+      {
+        XDG_CONFIG_DIRS = [ "/etc/xdg" ]; # needs to be before profile-relative paths to allow changes through environment.etc
+      };
 
     # TODO: move most of these elsewhere
     environment.profileRelativeSessionVariables =

@@ -7,19 +7,20 @@
 , jaxtyping
 , typing-extensions
 , beartype
+, optax
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "equinox";
-  version = "0.10.11";
-  format = "pyproject";
+  version = "0.11.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
-    repo = pname;
+    repo = "equinox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JffuPplIROPog29FBsWH9cQHSkrFKuXjaTjjEwIqW/0=";
+    hash = "sha256-iYVAbUIZG90kgWger+M+DZmS/kQ3nEPXQFU+90lHgK0=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     beartype
+    optax
     pytestCheckHook
   ];
 

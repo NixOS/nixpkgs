@@ -50,6 +50,20 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_window("io.elementary.wingpanel")
         machine.wait_until_succeeds("pgrep plank")
         machine.wait_for_window("plank")
+        machine.wait_until_succeeds("pgrep -f gsd-media-keys")
+        machine.wait_for_unit("bamfdaemon.service", "${user.name}")
+        machine.wait_for_unit("io.elementary.files.xdg-desktop-portal.service", "${user.name}")
+
+    with subtest("Open elementary videos"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.videos >&2 &'")
+        machine.sleep(2)
+        machine.wait_for_window("io.elementary.videos")
+        machine.wait_for_text("No Videos Open")
+
+    with subtest("Open elementary calendar"):
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.calendar >&2 &'")
+        machine.sleep(2)
+        machine.wait_for_window("io.elementary.calendar")
 
     with subtest("Open system settings"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.switchboard >&2 &'")
@@ -63,7 +77,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 
     with subtest("Check if gala has ever coredumped"):
         machine.fail("coredumpctl --json=short | grep gala")
-        machine.sleep(20)
+        # So you can see the dock in the below screenshot.
+        machine.succeed("su - ${user.name} -c 'DISPLAY=:0 xdotool mousemove 450 1000 >&2 &'")
+        machine.sleep(10)
         machine.screenshot("screen")
   '';
 })

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , libXScrnSaver
 , makeWrapper
 , fetchurl
@@ -6,17 +7,23 @@
 , glib
 , gtk3
 , unzip
-, atomEnv
-, libuuid
 , at-spi2-atk
-, at-spi2-core
 , libdrm
 , mesa
 , libxkbcommon
-, libappindicator-gtk3
 , libxshmfence
 , libglvnd
-, wayland
+, alsa-lib
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
+, nss
+, nspr
+, xorg
+, pango
+, systemd
 }:
 
 version: hashes:
@@ -64,13 +71,35 @@ let
     passthru.headers = headersFetcher version hashes.headers;
   };
 
-  electronLibPath = with lib; makeLibraryPath (
-    [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 wayland ]
-    ++ optionals (versionAtLeast version "9.0.0") [ libdrm mesa ]
-    ++ optionals (versionOlder version "10.0.0") [ libXScrnSaver ]
-    ++ optionals (versionAtLeast version "11.0.0") [ libxkbcommon ]
-    ++ optionals (versionAtLeast version "12.0.0") [ libxshmfence ]
-    ++ optionals (versionAtLeast version "17.0.0") [ libglvnd ]
+  electronLibPath = lib.makeLibraryPath ([
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    nss
+    nspr
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
+    xorg.libxkbfile
+    pango
+    stdenv.cc.cc.lib
+    systemd
+  ]
+    ++ lib.optionals (lib.versionAtLeast version "9.0.0") [ libdrm mesa ]
+    ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
+    ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
+    ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]
+    ++ lib.optionals (lib.versionAtLeast version "17.0.0") [ libglvnd ]
   );
 
   linux = {
@@ -95,7 +124,7 @@ let
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/libexec/electron" \
+        --set-rpath "${electronLibPath}:$out/libexec/electron" \
         $out/libexec/electron/.electron-wrapped \
         ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
     '';

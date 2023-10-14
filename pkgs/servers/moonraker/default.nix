@@ -1,23 +1,26 @@
-{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater, nixosTests }:
+{ lib, stdenvNoCC, fetchFromGitHub, python3, makeWrapper, unstableGitUpdater, nixosTests, useGpiod ? false }:
 
 let
-  pythonEnv = python3.withPackages (packages: with packages; [
-    tornado
-    pyserial-asyncio
-    pillow
-    lmdb
-    streaming-form-data
-    distro
-    inotify-simple
-    libnacl
-    paho-mqtt
-    pycurl
-    zeroconf
-    preprocess-cancellation
-    jinja2
-    dbus-next
-    apprise
-  ]);
+  pythonEnv = python3.withPackages (packages:
+    with packages; [
+      tornado
+      pyserial-asyncio
+      pillow
+      lmdb
+      streaming-form-data
+      distro
+      inotify-simple
+      libnacl
+      paho-mqtt
+      pycurl
+      zeroconf
+      preprocess-cancellation
+      jinja2
+      dbus-next
+      apprise
+    ]
+    ++ (lib.optionals useGpiod [ libgpiod ])
+  );
 in stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
   version = "unstable-2023-08-03";

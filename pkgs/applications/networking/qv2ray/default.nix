@@ -42,7 +42,6 @@ mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DQV2RAY_DISABLE_AUTO_UPDATE=on"
     "-DQV2RAY_USE_V5_CORE=on"
     "-DQV2RAY_TRANSLATION_PATH=${placeholder "out"}/share/qv2ray/lang"

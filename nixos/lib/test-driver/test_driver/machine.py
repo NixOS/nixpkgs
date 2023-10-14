@@ -1,7 +1,3 @@
-from contextlib import _GeneratorContextManager, nullcontext
-from pathlib import Path
-from queue import Queue
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 import base64
 import io
 import os
@@ -16,6 +12,10 @@ import sys
 import tempfile
 import threading
 import time
+from contextlib import _GeneratorContextManager, nullcontext
+from pathlib import Path
+from queue import Queue
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from test_driver.logger import rootlog
 
@@ -236,14 +236,14 @@ class LegacyStartCommand(StartCommand):
 
     def __init__(
         self,
-        netBackendArgs: Optional[str] = None,
-        netFrontendArgs: Optional[str] = None,
+        netBackendArgs: Optional[str] = None,  # noqa: N803
+        netFrontendArgs: Optional[str] = None,  # noqa: N803
         hda: Optional[Tuple[Path, str]] = None,
         cdrom: Optional[str] = None,
         usb: Optional[str] = None,
         bios: Optional[str] = None,
-        qemuBinary: Optional[str] = None,
-        qemuFlags: Optional[str] = None,
+        qemuBinary: Optional[str] = None,  # noqa: N803
+        qemuFlags: Optional[str] = None,  # noqa: N803
     ):
         if qemuBinary is not None:
             self._cmd = qemuBinary
@@ -599,7 +599,7 @@ class Machine:
             return (-1, output.decode())
 
         # Get the return code
-        self.shell.send("echo ${PIPESTATUS[0]}\n".encode())
+        self.shell.send(b"echo ${PIPESTATUS[0]}\n")
         rc = int(self._next_newline_closed_block_from_shell().strip())
 
         return (rc, output.decode(errors="replace"))
@@ -843,6 +843,9 @@ class Machine:
 
             while True:
                 chunk = self.shell.recv(1024)
+                # No need to print empty strings, it means we are waiting.
+                if len(chunk) == 0:
+                    continue
                 self.log(f"Guest shell says: {chunk!r}")
                 # NOTE: for this to work, nothing must be printed after this line!
                 if b"Spawning backdoor root shell..." in chunk:
@@ -1129,7 +1132,7 @@ class Machine:
             return
 
         assert self.shell
-        self.shell.send("poweroff\n".encode())
+        self.shell.send(b"poweroff\n")
         self.wait_for_shutdown()
 
     def crash(self) -> None:

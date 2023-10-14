@@ -245,8 +245,13 @@ python3.pkgs.buildPythonApplication rec {
     "test_symlink_root"
   ];
 
+  disabledTestPaths = [
+    # fails due to https://github.com/NixOS/nixpkgs/issues/256896
+    # should be removed once that issue is resolved in coreboot or diffoscope
+    "tests/comparators/test_cbfs.py"
+  ]
   # Flaky tests on Darwin
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     "tests/comparators/test_git.py"
     "tests/comparators/test_java.py"
     "tests/comparators/test_uimage.py"

@@ -15,19 +15,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "cargo-leptos";
-  version = "0.1.11";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "leptos-rs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hZevu2lwyYFenABu1uV7/mZc7SXfLzR6Pdmc3zHJ2vw=";
+    hash = "sha256-+qAXBLV+Jn1qWG7TThn4twUBvN7lO4MX2SSo/gdjgFY=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "leptos_hot_reload-0.3.0" = "sha256-Pl3nZaz5r5ZFagytLMczIyXEWQ6AFLb3+TrI/6Sevig=";
+      "leptos_hot_reload-0.5.0" = "sha256-huOwadWMYPGGWmZHxztFPPzs4UhIPEmq9rKOB6WPCTE=";
     };
   };
 

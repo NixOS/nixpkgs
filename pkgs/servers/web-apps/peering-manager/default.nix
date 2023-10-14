@@ -7,47 +7,32 @@
 , plugins ? ps: []
 }:
 
-let
-  py = python3.override {
-    packageOverrides = final: prev: {
-      django = final.django_4;
-      drf-nested-routers = prev.drf-nested-routers.overridePythonAttrs (oldAttrs: {
-        patches = [
-          # all for django 4 compat
-          (fetchpatch {
-            url = "https://github.com/alanjds/drf-nested-routers/commit/59764cc356f7f593422b26845a9dfac0ad196120.diff";
-            hash = "sha256-mq3vLHzQlGl2EReJ5mVVQMMcYgGIVt/T+qi1STtQ0aI=";
-          })
-          (fetchpatch {
-            url = "https://github.com/alanjds/drf-nested-routers/commit/723a5729dd2ffcb66fe315f229789ca454986fa4.diff";
-            hash = "sha256-UCbBjwlidqsJ9vEEWlGzfqqMOr0xuB2TAaUxHsLzFfU=";
-          })
-          (fetchpatch {
-            url = "https://github.com/alanjds/drf-nested-routers/commit/38e49eb73759bc7dcaaa9166169590f5315e1278.diff";
-            hash = "sha256-IW4BLhHHhXDUZqHaXg46qWoQ89pMXv0ZxKjOCTnDcI0=";
-          })
-        ];
-      });
-    };
-  };
-
-in py.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "peering-manager";
-  version = "1.7.4";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mXva4c5Rtjq/jFJl3yGGlVrggzGJ3awN0+xoDnDWBSA=";
+    sha256 = "sha256-N34piaSP+QKZzjT42nAR47DTtqGtZ/GMeTeTyRQw3/4=";
   };
+
+  patches = [
+    # restore support unix sockets for redis connections
+    # https://github.com/peering-manager/peering-manager/pull/773
+    (fetchpatch {
+      url = "https://github.com/peering-manager/peering-manager/commit/ff66823c04d8c545a46dcec91d61eda7c21f99aa.patch";
+      hash = "sha256-x5E0LFhGrc5LPY4pwAMNUtigltLGqqbRCe1PIm0yLA8=";
+    })
+  ];
 
   format = "other";
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     django
     djangorestframework
-    django-cacheops
+    django-redis
     django-debug-toolbar
     django-filter
     django-postgresql-netfields
@@ -56,16 +41,18 @@ in py.pkgs.buildPythonApplication rec {
     django-tables2
     django-taggit
     drf-spectacular
+    drf-spectacular-sidecar
     jinja2
     markdown
     napalm
     packaging
     psycopg2
+    pyixapi
     pynetbox
     pyyaml
     requests
     tzdata
-  ] ++ plugins py.pkgs;
+  ] ++ plugins python3.pkgs;
 
   buildPhase = ''
     runHook preBuild
@@ -87,8 +74,8 @@ in py.pkgs.buildPythonApplication rec {
 
   passthru = {
     # PYTHONPATH of all dependencies used by the package
-    python = py;
-    pythonPath = py.pkgs.makePythonPath propagatedBuildInputs;
+    python = python3;
+    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
 
     tests = {
       inherit (nixosTests) peering-manager;

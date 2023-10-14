@@ -2,40 +2,15 @@
 
 let
   cfg = config.services.peering-manager;
-  configFile = pkgs.writeTextFile {
-    name = "configuration.py";
-    text = ''
-      ALLOWED_HOSTS = ['*']
-      DATABASE = {
-        'NAME': 'peering-manager',
-        'USER': 'peering-manager',
-        'HOST': '/run/postgresql',
-      }
 
-      # Redis database settings. Redis is used for caching and for queuing background tasks such as webhook events. A separate
-      # configuration exists for each. Full connection details are required in both sections, and it is strongly recommended
-      # to use two separate database IDs.
-      REDIS = {
-        'tasks': {
-          'UNIX_SOCKET_PATH': '${config.services.redis.servers.peering-manager.unixSocket}',
-          'DATABASE': 0,
-        },
-        'caching': {
-          'UNIX_SOCKET_PATH': '${config.services.redis.servers.peering-manager.unixSocket}',
-          'DATABASE': 1,
-        }
-      }
-
-      with open("${cfg.secretKeyFile}", "r") as file:
-        SECRET_KEY = file.readline()
-    '' + lib.optionalString (cfg.peeringdbApiKeyFile != null) ''
-      with open("${cfg.peeringdbApiKeyFile}", "r") as file:
-        PEERINGDB_API_KEY = file.readline()
-    '' + ''
-
-      ${cfg.extraConfig}
-    '';
+  pythonFmt = pkgs.formats.pythonVars {};
+  settingsFile = pythonFmt.generate "peering-manager-settings.py" cfg.settings;
+  extraConfigFile = pkgs.writeTextFile {
+    name = "peering-manager-extraConfig.py";
+    text = cfg.extraConfig;
   };
+  configFile = pkgs.concatText "configuration.py" [ settingsFile extraConfigFile ];
+
   pkg = (pkgs.peering-manager.overrideAttrs (old: {
     postInstall = ''
       ln -s ${configFile} $out/opt/peering-manager/peering_manager/configuration.py
@@ -106,6 +81,30 @@ in {
       '';
     };
 
+    settings = lib.mkOption {
+      description = lib.mdDoc ''
+        Configuration options to set in `configuration.py`.
+        See the [documentation](https://peering-manager.readthedocs.io/en/stable/configuration/optional-settings/) for more possible options.
+      '';
+
+      default = { };
+
+      type = lib.types.submodule {
+        freeformType = pythonFmt.type;
+
+        options = {
+          ALLOWED_HOSTS = lib.mkOption {
+            type = with lib.types; listOf str;
+            default = ["*"];
+            description = lib.mdDoc ''
+              A list of valid fully-qualified domain names (FQDNs) and/or IP
+              addresses that can be used to reach the peering manager service.
+            '';
+          };
+        };
+      };
+    };
+
     extraConfig = mkOption {
       type = types.lines;
       default = "";
@@ -135,7 +134,39 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.peering-manager.plugins = lib.mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+    services.peering-manager = {
+      settings = {
+        DATABASE = {
+          NAME = "peering-manager";
+          USER = "peering-manager";
+          HOST = "/run/postgresql";
+        };
+
+        # Redis database settings. Redis is used for caching and for queuing background tasks such as webhook events. A separate
+        # configuration exists for each. Full connection details are required in both sections, and it is strongly recommended
+        # to use two separate database IDs.
+        REDIS = {
+          tasks = {
+            UNIX_SOCKET_PATH = config.services.redis.servers.peering-manager.unixSocket;
+            DATABASE = 0;
+          };
+          caching = {
+            UNIX_SOCKET_PATH = config.services.redis.servers.peering-manager.unixSocket;
+            DATABASE = 1;
+          };
+        };
+      };
+
+      extraConfig = ''
+        with open("${cfg.secretKeyFile}", "r") as file:
+          SECRET_KEY = file.readline()
+      '' + lib.optionalString (cfg.peeringdbApiKeyFile != null) ''
+        with open("${cfg.peeringdbApiKeyFile}", "r") as file:
+          PEERINGDB_API_KEY = file.readline()
+      '';
+
+      plugins = lib.mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+    };
 
     system.build.peeringManagerPkg = pkg;
 

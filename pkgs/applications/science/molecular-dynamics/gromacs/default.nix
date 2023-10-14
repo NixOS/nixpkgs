@@ -27,6 +27,10 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-vOFIByfksruQBBO3XZmjJm81B4d9pPWy1JHfeY+fza4=";
   };
 
+  patches = [ ./pkgconfig.patch ];
+
+  outputs = [ "out" "dev" "man" ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
@@ -64,10 +68,8 @@ in stdenv.mkDerivation rec {
      ]
   ) ++ lib.optional enableCuda "-DGMX_GPU=CUDA";
 
-  postFixup = ''
-    substituteInPlace "$out"/lib/pkgconfig/*.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace "$out/$out/" "$out/"
+  postInstall = ''
+    moveToOutput share/cmake $dev
   '';
 
   meta = with lib; {

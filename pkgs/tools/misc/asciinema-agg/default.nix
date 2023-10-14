@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agg";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "agg";
     rev = "v${version}";
-    sha256 = "sha256-pyXGWSL2HnRfcLo1V/pFKNI08B51ZvmJsYhl893CUl0=";
+    sha256 = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "avt-0.6.0" = "sha256-JA1Ln90Pew6m5YOZp8weOC9JdKJqjFG0PDPNL2kDWUc=";
+      "avt-0.8.0" = "sha256-5IN8P/2UWJ2EmkbbTSGWECTqiD8TeOd8LgwLZ+W2z90=";
     };
   };
 

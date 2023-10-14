@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, yasm
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -83,6 +83,18 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-IH+ZWbBUlU5fbciYe+dNGnTFFCte2BXxAlLcvmzdAeY=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://www.openwall.com/lists/oss-security/2023/09/28/5
+      name = "CVE-2023-5217.patch";
+      url = "https://github.com/webmproject/libvpx/commit/3fbd1dca6a4d2dad332a2110d646e4ffef36d590.patch";
+      hash = "sha256-1hHUd/dNGm8dmdYYN60j1aOgC2pdIIq7vqJZ7mTXfps=";
+      includes = [
+        "vp8/encoder/onyx_if.c"
+      ];
+    })
+  ];
 
   postPatch = ''
     patchShebangs --build \

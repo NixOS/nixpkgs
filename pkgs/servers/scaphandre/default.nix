@@ -1,10 +1,8 @@
-{ stdenv
-, lib
+{ lib
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
-, powercap
 , nix-update-script
 , runCommand
 , dieHook
@@ -66,7 +64,7 @@ rustPlatform.buildRustPackage rec {
     description = "Electrical power consumption metrology agent";
     homepage = "https://github.com/hubblo-org/scaphandre";
     license = licenses.asl20;
-    platforms = with platforms; [ "x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ gaelreyrol ];
   };
 }

@@ -54,5 +54,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam zowoq SuperSandro2000 figsoda ];
+    mainProgram = "delta";
   };
 }

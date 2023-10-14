@@ -28,13 +28,13 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
-    hash = "sha256-BjdPe3wQBSVMYpeCifq93Cqt/G4bzsZYgOPBTilHqD8=";
+    hash = "sha256-J1iLN2FF3Ml/3zmntXYlfkv6dZcwl62A9X4ruAH1ll4=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -79,6 +79,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/catppuccin/gtk";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.fufexan ];
+    maintainers = with maintainers; [ fufexan PlayerNameHere ];
   };
 }

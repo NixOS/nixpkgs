@@ -188,6 +188,7 @@ in
           nativeBuildInputs = [
             cfg.package
             pkgs.fakeroot
+            pkgs.util-linux
           ] ++ fileSystemTools;
         } ''
         amendedRepartDefinitions=$(${amendRepartDefinitions} ${partitions} ${definitionsDirectory})
@@ -195,7 +196,7 @@ in
         mkdir -p $out
         cd $out
 
-        fakeroot systemd-repart \
+        unshare --map-root-user fakeroot systemd-repart \
           --dry-run=no \
           --empty=create \
           --size=auto \

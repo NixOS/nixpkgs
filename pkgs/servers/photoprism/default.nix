@@ -1,40 +1,40 @@
 { pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, imagemagick, makeWrapper, testers }:
 
 let
-  version = "230719-73fa7bbe8";
+  version = "231011-63f708417";
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-MRRF+XCk25dGK6A2AdD6/4PdXWoZNHuh/EsYOY0i7y0=";
+    hash = "sha256-g/j+L++vb+wiE23d/lm6lga0MeaPrCotEojD9Sajkmg=";
   };
 
   libtensorflow = pkgs.callPackage ./libtensorflow.nix { };
   backend = pkgs.callPackage ./backend.nix { inherit libtensorflow src version; };
   frontend = pkgs.callPackage ./frontend.nix { inherit src version; };
 
-  fetchModel = { name, sha256 }:
+  fetchModel = { name, hash }:
     fetchzip {
-      inherit sha256;
+      inherit hash;
       url = "https://dl.photoprism.org/tensorflow/${name}.zip";
       stripRoot = false;
     };
 
   facenet = fetchModel {
     name = "facenet";
-    sha256 = "sha256-aS5kkNhxOLSLTH/ipxg7NAa1w9X8iiG78jmloR1hpRo=";
+    hash = "sha256-aS5kkNhxOLSLTH/ipxg7NAa1w9X8iiG78jmloR1hpRo=";
   };
 
   nasnet = fetchModel {
     name = "nasnet";
-    sha256 = "sha256-bF25jPmZLyeSWy/CGXZE/VE2UupEG2q9Jmr0+1rUYWE=";
+    hash = "sha256-bF25jPmZLyeSWy/CGXZE/VE2UupEG2q9Jmr0+1rUYWE=";
   };
 
   nsfw = fetchModel {
     name = "nsfw";
-    sha256 = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
+    hash = "sha256-zy/HcmgaHOY7FfJUY6I/yjjsMPHR2Ote9ppwqemBlfg=";
   };
 
   assets_path = "$out/share/${pname}";

@@ -130,6 +130,17 @@ buildPythonPackage rec {
     # tries to download duckdb extensions
     "--deselect=ibis/backends/duckdb/tests/test_register.py::test_register_sqlite"
     "--deselect=ibis/backends/duckdb/tests/test_register.py::test_read_sqlite"
+
+    # duckdb does not respect sample_size=2 (reads 3 lines of csv).
+    "--deselect=ibis/backends/tests/test_register.py::test_csv_reregister_schema"
+
+    # duckdb fails with:
+    # "This function can not be called with an active transaction!, commit or abort the existing one first"
+    "--deselect=ibis/backends/tests/test_udf.py::test_vectorized_udf"
+    "--deselect=ibis/backends/tests/test_udf.py::test_map_merge_udf"
+    "--deselect=ibis/backends/tests/test_udf.py::test_udf"
+    "--deselect=ibis/backends/tests/test_udf.py::test_map_udf"
+
     # pyarrow13 is not supported yet.
     "--deselect=ibis/backends/tests/test_temporal.py::test_date_truncate"
     "--deselect=ibis/backends/tests/test_temporal.py::test_integer_to_interval_timestamp"

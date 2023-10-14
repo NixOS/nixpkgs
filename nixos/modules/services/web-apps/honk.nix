@@ -116,7 +116,7 @@ in
       unitConfig = {
         ConditionPathExists = [
           # Skip this service if the database already exists
-          "!$STATE_DIRECTORY/honk.db"
+          "!%S/honk/honk.db"
         ];
       };
     };

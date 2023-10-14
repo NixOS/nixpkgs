@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.15.1";
+  version = "1.15.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "mwouts";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XGjAPeMtg2Epu85JiqQPyZJVez5Z8uA+E40SFcZM7WY=";
+    hash = "sha256-GvMoz2BsYWk0atrT3xmSnbV7AuO5RJoM/bOJlZ5YIn4=";
   };
 
   # Follow https://github.com/mwouts/jupytext/pull/1119 to see if the patch

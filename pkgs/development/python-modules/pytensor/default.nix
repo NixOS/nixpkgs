@@ -1,40 +1,51 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
-, cons
-, cython
-, etuples
 , fetchFromGitHub
+, cython
+, versioneer
+, cons
+, etuples
 , filelock
-, jax
-, jaxlib
 , logical-unification
 , minikanren
-, numba
-, numba-scipy
 , numpy
-, pytestCheckHook
-, pythonOlder
 , scipy
 , typing-extensions
+, jax
+, jaxlib
+, numba
+, numba-scipy
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+# Tensorflow is currently (2023/10/04) broken.
+# Thus, we don't provide this optional test dependency.
+# , tensorflow-probability
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.11.3";
-  format = "setuptools";
+  version = "2.17.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
-    repo = pname;
+    repo = "pytensor";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-4GDur8S19i8pZkywKHZUelmd2e0jZmC5HzF7o2esDl4=";
+    hash = "sha256-xXS0uNR5rlmUjt9/TW/X/pQc5MS/MwHSQGCp7BkAVYg=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "versioneer[toml]==0.28" "versioneer[toml]"
+  '';
 
   nativeBuildInputs = [
     cython
+    versioneer
   ];
 
   propagatedBuildInputs = [
@@ -48,18 +59,17 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jax
     jaxlib
     numba
     numba-scipy
+    pytest-mock
     pytestCheckHook
+    # Tensorflow is currently (2023/10/04) broken.
+    # Thus, we don't provide this optional test dependency.
+    # tensorflow-probability
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--durations=50" ""
-  '';
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -76,13 +86,14 @@ buildPythonPackage rec {
     "test_logsumexp_benchmark"
     "test_scan_multiple_output"
     "test_vector_taps_benchmark"
+    # Temporarily disabled because of broken tensorflow-probability
+    "test_tfp_ops"
   ];
 
   disabledTestPaths = [
     # Don't run the most compute-intense tests
     "tests/scan/"
     "tests/tensor/"
-    "tests/sandbox/"
     "tests/sparse/sandbox/"
   ];
 

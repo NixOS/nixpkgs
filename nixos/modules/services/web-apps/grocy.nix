@@ -8,6 +8,8 @@ in {
   options.services.grocy = {
     enable = mkEnableOption (lib.mdDoc "grocy");
 
+    package = mkPackageOptionMD pkgs "grocy" { };
+
     hostName = mkOption {
       type = types.str;
       description = lib.mdDoc ''
@@ -143,7 +145,7 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${pkgs.grocy}/public";
+        { root = "${cfg.package}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';

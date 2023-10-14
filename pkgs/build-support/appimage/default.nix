@@ -206,6 +206,7 @@ rec {
       libtool.lib # for Synfigstudio
       xorg.libxshmfence # for apple-music-electron
       at-spi2-core
+      pciutils # for FreeCAD
     ];
   };
 }

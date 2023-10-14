@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
     rev = "v${version}";
-    sha256 = "sha256-qD49NExR0OZ6hgt5ejGiltxF9xkmseJjhJNzEGofnhw=";
+    sha256 = "sha256-0obIMnPBvMO30o+qXqwtINNRobBR6cFO65B/xjVt+2w=";
     fetchSubmodules = true;
   };
 

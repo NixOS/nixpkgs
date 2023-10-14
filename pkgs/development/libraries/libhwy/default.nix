@@ -1,23 +1,21 @@
-{ lib, stdenv, cmake, ninja, gtest, fetchFromGitHub, fetchpatch }:
+{ lib
+, stdenv
+, cmake
+, ninja
+, gtest
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "libhwy";
-  version = "1.0.5";
+  version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "highway";
     rev = version;
-    hash = "sha256-Gym2iHq5ws9kuG4HWSQndD8hVugV4USZt6dUFnEkLwY=";
+    hash = "sha256-Z+mAR9nSAbCskUvo6oK79Yd85bu0HtI2aR5THS1EozM=";
   };
-  patches = [
-    # backport for compilation issue on aarch64
-    # https://github.com/google/highway/issues/1613
-    (fetchpatch {
-      url = "https://github.com/google/highway/commit/7ad89efa911cb906ccf3f78fe510db415e921801.diff";
-      hash = "sha256-hTSkeCh2QLMqeIKG/CAqJXaPqD/66Z02gjGXk591f+U=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ninja ];
 
@@ -53,7 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Performance-portable, length-agnostic SIMD with runtime dispatch";
     homepage = "https://github.com/google/highway";
-    license = licenses.asl20;
+    license = with licenses; [ asl20 bsd3 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ zhaofengli ];
   };

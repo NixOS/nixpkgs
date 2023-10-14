@@ -31,6 +31,7 @@ def download_channels():
     return {
         channel["@name"]: channel
         for product in products
+        if "channel" in product
         for channel in one_or_more(product["channel"])
     }
 

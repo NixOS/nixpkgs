@@ -1,0 +1,13 @@
+--- a/link.c
++++ b/link.c
+@@ -1522,8 +1522,9 @@ static void *mainloop (void UNUSED_ATTR *unused)
+             if (pdf && nameddest && *nameddest) {
+                 fz_point xy;
+                 struct pagedim *pdim;
+-                int pageno = pdf_lookup_anchor (state.ctx, pdf, nameddest,
++                fz_location location = fz_resolve_link (state.ctx, state.doc, nameddest,
+                                                 &xy.x, &xy.y);
++                int pageno = location.page;
+                 pdim = pdimofpageno (pageno);
+                 xy = fz_transform_point (xy, pdim->ctm);
+                 printd ("a %d %d %d", pageno, (int) xy.x, (int) xy.y);

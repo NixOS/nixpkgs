@@ -179,6 +179,9 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms   = lib.platforms.unix;
 
+    # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/1089
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
+
     longDescription = ''
       PulseAudio is a sound server for POSIX and Win32 systems.  A
       sound server is basically a proxy for your sound applications.

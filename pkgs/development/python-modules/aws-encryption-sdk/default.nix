@@ -48,7 +48,7 @@ buildPythonPackage rec {
     homepage = "https://aws-encryption-sdk-python.readthedocs.io/";
     changelog = "https://github.com/aws/aws-encryption-sdk-python/blob/v${version}/CHANGELOG.rst";
     description = "Fully compliant, native Python implementation of the AWS Encryption SDK.";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ anthonyroussel ];
   };
 }

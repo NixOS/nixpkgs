@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LEv9yURkYvONObTbIA4CS+umwCRMH8gRQaDtzbCzID4=";
+    hash = "sha256-EKvDH7RwOC4Gu/lturrfnGpzXnJ9azIwAFeuVoa6L/Y=";
   };
 
   patches = [ ./version.patch ];
@@ -36,19 +36,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    "-DBUILD_AUTOCOMPLETE_EXTENSION=ON"
-    "-DBUILD_ICU_EXTENSION=ON"
-    "-DBUILD_PARQUET_EXTENSION=ON"
-    "-DBUILD_TPCH_EXTENSION=ON"
-    "-DBUILD_TPCDS_EXTENSION=ON"
-    "-DBUILD_FTS_EXTENSION=ON"
-    "-DBUILD_HTTPFS_EXTENSION=ON"
-    "-DBUILD_VISUALIZER_EXTENSION=ON"
-    "-DBUILD_JSON_EXTENSION=ON"
-    "-DBUILD_JEMALLOC_EXTENSION=ON"
-    "-DBUILD_EXCEL_EXTENSION=ON"
-    "-DBUILD_INET_EXTENSION=ON"
-    "-DBUILD_TPCE=ON"
+    "-DDUCKDB_EXTENSION_CONFIGS=${src}/.github/config/in_tree_extensions.cmake"
     "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
     "-DJDBC_DRIVER=${enableFeature withJdbc}"
   ] ++ lib.optionals doInstallCheck [
@@ -69,6 +57,7 @@ stdenv.mkDerivation rec {
       excludes = map (pattern: "exclude:'${pattern}'") [
         "[s3]"
         "Test closing database during long running query"
+        "Test using a remote optimizer pass in case thats important to someone"
         "test/common/test_cast_hugeint.test"
         "test/sql/copy/csv/test_csv_remote.test"
         "test/sql/copy/parquet/test_parquet_remote.test"
@@ -79,6 +68,8 @@ stdenv.mkDerivation rec {
         "test/sql/storage/compression/patas/patas_read.test"
         "test/sql/json/read_json_objects.test"
         "test/sql/json/read_json.test"
+        "test/sql/json/table/read_json_objects.test"
+        "test/sql/json/table/read_json.test"
         "test/sql/copy/parquet/parquet_5968.test"
         "test/fuzzer/pedro/buffer_manager_out_of_memory.test"
         "test/sql/storage/compression/bitpacking/bitpacking_size_calculation.test"
@@ -90,6 +81,7 @@ stdenv.mkDerivation rec {
         "test/sql/copy/parquet/delta_byte_array_multiple_pages.test"
         "test/sql/copy/csv/test_csv_httpfs_prepared.test"
         "test/sql/copy/csv/test_csv_httpfs.test"
+        "test/sql/settings/test_disabled_file_system_httpfs.test"
         "test/sql/copy/csv/parallel/test_parallel_csv.test"
         "test/sql/copy/csv/parallel/csv_parallel_httpfs.test"
         "test/common/test_cast_struct.test"

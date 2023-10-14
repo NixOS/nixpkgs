@@ -14,7 +14,7 @@
 , pythran
 , wheel
 , nose
-, pytest
+, pytestCheckHook
 , pytest-xdist
 , numpy
 , pybind11
@@ -107,7 +107,22 @@ in buildPythonPackage {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ nose pytest pytest-xdist ];
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+    pytest-xdist
+  ];
+
+  # The following tests are broken on aarch64-darwin with newer compilers and library versions.
+  # See https://github.com/scipy/scipy/issues/18308
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    "test_a_b_neg_int_after_euler_hypergeometric_transformation"
+    "test_dst4_definition_ortho"
+    "test_load_mat4_le"
+    "hyp2f1_test_case47"
+    "hyp2f1_test_case3"
+    "test_uint64_max"
+  ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
@@ -145,9 +160,38 @@ in buildPythonPackage {
 
   checkPhase = ''
     runHook preCheck
+
+    # Adapted from pytestCheckHook because scipy uses a custom check phase.
+    # It needs to pass `$args` as a Python list to `scipy.test` rather than as
+    # arguments to pytest on the command-line.
+    args=""
+    if [ -n "$disabledTests" ]; then
+      disabledTestsString=$(_pytestComputeDisabledTestsString "''${disabledTests[@]}")
+      args+="'-k','$disabledTestsString'"
+    fi
+
+    if [ -n "''${disabledTestPaths-}" ]; then
+        eval "disabledTestPaths=($disabledTestPaths)"
+    fi
+
+    for path in ''${disabledTestPaths[@]}; do
+      if [ ! -e "$path" ]; then
+        echo "Disabled tests path \"$path\" does not exist. Aborting"
+        exit 1
+      fi
+      args+="''${args:+,}'--ignore=\"$path\"'"
+    done
+    args+="''${args:+,}$(printf \'%s\', "''${pytestFlagsArray[@]}")"
+    args=''${args%,}
+
     pushd "$out"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
-    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES) != True)"
+    ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test(
+        'fast',
+        verbose=10,
+        extra_argv=[$args],
+        parallel=$NIX_BUILD_CORES
+    ) != True)"
     popd
     runHook postCheck
   '';

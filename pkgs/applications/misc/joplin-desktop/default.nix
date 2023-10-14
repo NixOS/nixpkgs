@@ -2,8 +2,7 @@
 
 let
   pname = "joplin-desktop";
-  version = "2.12.16";
-  name = "${pname}-${version}";
+  version = "2.12.18";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -17,14 +16,14 @@ let
   src = fetchurl {
     url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}${suffix}";
     sha256 = {
-      x86_64-linux = "sha256-9ib8lymmSINqC0oXUxkKcpKfPh7qmU3YytU1/4aKMLg=";
-      x86_64-darwin = "sha256-vWc5yx3i5Ru8vrQbrTQwr43ZMBzOAb9254cxTHg6A/Q=";
-      aarch64-darwin = "sha256-dhwPqT+zfBYOVUV5JprPfgrSJR2ZNsC3LJmRHGJVM4k=";
+      x86_64-linux = "1fwcqgqni7d9x0prdy3p8ccc5lzgn57rhph4498vs1q40kyq8823";
+      x86_64-darwin = "sha256-atd7nkefLvilTq39nTLbXQhm1zzBCHOLL7MRJwlTSMk=";
+      aarch64-darwin = "sha256-xiWXD+ULSVJ80uruYz0uRFkDRT1QOUd6FSWDKK9yLMc=";
     }.${system} or throwSystem;
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   meta = with lib; {
@@ -43,7 +42,7 @@ let
   };
 
   linux = appimageTools.wrapType2 rec {
-    inherit name src meta;
+    inherit pname version src meta;
 
     profile = ''
       export LC_ALL=C.UTF-8
@@ -52,7 +51,7 @@ let
     multiArch = false; # no 32bit needed
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
-      mv $out/bin/{${name},${pname}}
+      mv $out/bin/{${pname}-${version},${pname}}
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
@@ -65,7 +64,7 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit name src meta;
+    inherit pname version src meta;
 
     nativeBuildInputs = [ undmg ];
 

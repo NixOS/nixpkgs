@@ -7,7 +7,7 @@ in
   options.services.matrix-synapse.sliding-sync = {
     enable = lib.mkEnableOption (lib.mdDoc "sliding sync");
 
-    package = lib.mkPackageOption pkgs "matrix-sliding-sync" { };
+    package = lib.mkPackageOptionMD pkgs "matrix-sliding-sync" { };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -44,7 +44,7 @@ in
         };
       };
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Freeform environment variables passed to the sliding sync proxy.
         Refer to <https://github.com/matrix-org/sliding-sync#setup> for all supported values.
       '';

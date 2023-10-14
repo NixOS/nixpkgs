@@ -4,6 +4,7 @@
 , rustPlatform
 , pkg-config
 , openssl
+, CoreServices
 , Security
 }:
 
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
     Security
   ];
 
@@ -36,5 +38,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Xithrius/twitch-tui/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = [ maintainers.taha ];
+    mainProgram = "twt";
   };
 }

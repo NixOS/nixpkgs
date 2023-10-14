@@ -56,5 +56,5 @@ in
 
   # Otherwise the instance may not have a working network-online.target,
   # making the fetch-ssh-keys.service fail
-  networking.useNetworkd = true;
+  networking.useNetworkd = lib.mkDefault true;
 }

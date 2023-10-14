@@ -423,7 +423,7 @@ let
     seqinr = [ pkgs.zlib.dev ];
     webp = [ pkgs.pkg-config ];
     seqminer = with pkgs; [ zlib.dev bzip2 ];
-    sf = with pkgs; [ gdal proj geos ];
+    sf = with pkgs; [ gdal proj geos libtiff curl ];
     terra = with pkgs; [ gdal proj geos ];
     showtext = with pkgs; [ zlib libpng icu freetype.dev ];
     simplexreg = [ pkgs.gsl ];

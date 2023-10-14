@@ -1,14 +1,14 @@
-from contextlib import contextmanager
-from pathlib import Path
-from typing import Any, Dict, Iterator, List, Union, Optional, Callable, ContextManager
 import os
 import re
 import tempfile
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
 
 from test_driver.logger import rootlog
 from test_driver.machine import Machine, NixStartScript, retry
-from test_driver.vlan import VLan
 from test_driver.polling_condition import PollingCondition
+from test_driver.vlan import VLan
 
 
 def get_tmp_dir() -> Path:

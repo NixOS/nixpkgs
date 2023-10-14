@@ -29,6 +29,12 @@
         "rev": "65460e3a9ad529f6901caf669abbda11f437ab55",
         "hash": "sha256-+xfD1ZMKtbv5Lp12+5RM7Vl3eEF38kykKW8wj/2EN5w="
     },
+    "beetle-pce": {
+        "owner": "libretro",
+        "repo": "beetle-pce-libretro",
+        "rev": "541463bd937dad175aec09c2a0c8d6a52d175386",
+        "hash": "sha256-wWS9reb6aN71Q7OlGst+32T8XX1yMCSOHUKHkXht3hg="
+    },
     "beetle-pce-fast": {
         "owner": "libretro",
         "repo": "beetle-pce-fast-libretro",

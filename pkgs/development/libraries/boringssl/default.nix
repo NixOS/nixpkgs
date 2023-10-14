@@ -10,17 +10,18 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 buildGoModule {
   pname = "boringssl";
-  version = "2021-07-09";
+  version = "unstable-2023-09-27";
 
   src = fetchgit {
-    url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "268a4a6ff3bd656ae65fe41ef1185daa85cfae21";
-    sha256 = "04fja4fdwhc69clmvg8i12zm6ks3sfl3r8i5bxn4x63b9dj5znlx";
+    url = "https://boringssl.googlesource.com/boringssl";
+    rev = "d24a38200fef19150eef00cad35b138936c08767";
+    hash = "sha256-FBQ7y4N2rCM/Cyd6LBnDUXpSa2O3osUXukECTBjZL6s=";
   };
 
   nativeBuildInputs = [ cmake ninja perl ];
 
-  vendorHash = null;
+  vendorHash = "sha256-EJPcx07WuvHPAgiS1ASU6WHlHkxjUOO72if4TkmrqwY=";
+  proxyVendor = true;
 
   # hack to get both go and cmake configure phase
   # (if we use postConfigure then cmake will loop runHook postConfigure)

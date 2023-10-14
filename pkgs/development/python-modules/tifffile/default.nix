@@ -55,6 +55,9 @@ buildPythonPackage rec {
     "tifffile"
   ];
 
+  # flaky, often killed due to OOM or timeout
+  env.SKIP_LARGE = "1";
+
   meta = with lib; {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";

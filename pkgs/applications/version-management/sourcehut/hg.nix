@@ -3,7 +3,7 @@
 , buildGoModule
 , buildPythonPackage
 , srht
-, hglib
+, python-hglib
 , scmsrht
 , unidiff
 , python
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     srht
-    hglib
+    python-hglib
     scmsrht
     unidiff
   ];

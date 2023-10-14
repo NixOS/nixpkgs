@@ -25,7 +25,7 @@
 , systemdMinimal
 , elogind
 , buildPackages
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -39,7 +39,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "122";
+  version = "123";
 
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     owner = "polkit";
     repo = "polkit";
     rev = version;
-    sha256 = "fLY8i8h4McAnwVt8dLOqbyHM7v3SkbWqATz69NkUudU=";
+    hash = "sha256-/kjWkh6w2FYgtYWzw3g3GlWJKKpkJ3cqwfE0iDqJctw=";
   };
 
   patches = [

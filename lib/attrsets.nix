@@ -338,7 +338,7 @@ rec {
     );
 
    /*
-    Like builtins.foldl' but for attribute sets.
+    Like [`lib.lists.foldl'`](#function-library-lib.lists.foldl-prime) but for attribute sets.
     Iterates over every name-value pair in the given attribute set.
     The result of the callback function is often called `acc` for accumulator. It is passed between callbacks from left to right and the final `acc` is the return value of `foldlAttrs`.
 
@@ -372,9 +372,9 @@ rec {
         123
 
       foldlAttrs
-        (_: _: v: v)
-        (throw "initial accumulator not needed")
-        { z = 3; a = 2; };
+        (acc: _: _: acc)
+        3
+        { z = throw "value not needed"; a = throw "value not needed"; };
       ->
         3
 
@@ -541,6 +541,36 @@ rec {
     # Attribute set to map over.
     attrs:
     map (name: f name attrs.${name}) (attrNames attrs);
+
+  /*
+    Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
+    Each element of the resulting list is an attribute set with these attributes:
+    - `name` (string): The name of the attribute
+    - `value` (any): The value of the attribute
+
+    The following is always true:
+    ```nix
+    builtins.listToAttrs (attrsToList attrs) == attrs
+    ```
+
+    :::{.warning}
+    The opposite is not always true. In general expect that
+    ```nix
+    attrsToList (builtins.listToAttrs list) != list
+    ```
+
+    This is because the `listToAttrs` removes duplicate names and doesn't preserve the order of the list.
+    :::
+
+    Example:
+      attrsToList { foo = 1; bar = "asdf"; }
+      => [ { name = "bar"; value = "asdf"; } { name = "foo"; value = 1; } ]
+
+    Type:
+      attrsToList :: AttrSet -> [ { name :: String; value :: Any; } ]
+
+  */
+  attrsToList = mapAttrsToList nameValuePair;
 
 
   /* Like `mapAttrs`, except that it recursively applies itself to

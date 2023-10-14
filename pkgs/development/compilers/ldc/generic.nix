@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J${pathConfig}"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   postConfigure = ''

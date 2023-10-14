@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  version = "1.0.1";
+  version = "1.0.2";
   pname = "pyfiglet";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-x9kIim+CG99pxY2XVzeAhadogWJrIwjmu9pwcSFgfxg=";
+    sha256 = "sha256-dYeIAYq4+q3cCYTh6gX/Mw08ZL5mPFE8wfEF9qMGbas=";
   };
 
   doCheck = false;

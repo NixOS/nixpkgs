@@ -264,6 +264,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     memcached = callPackage ../development/php-packages/memcached { };
 
+    meminfo = callPackage ../development/php-packages/meminfo { };
+
     mongodb = callPackage ../development/php-packages/mongodb {
       inherit (pkgs) darwin;
     };
@@ -311,6 +313,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     redis = callPackage ../development/php-packages/redis { };
 
     relay = callPackage ../development/php-packages/relay { inherit php; };
+
+    rrd = callPackage ../development/php-packages/rrd { };
 
     smbclient = callPackage ../development/php-packages/smbclient { };
 

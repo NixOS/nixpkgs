@@ -1,28 +1,27 @@
-{ lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
+{ lib, stdenv, nodejs-slim, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 , fetchYarnDeps, fixup_yarn_lock
 , brotli
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
-, version ? import ./version.nix
-, srcOverride ? null
-, dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
+, version ? srcOverride.version
+  # src is a package
+, srcOverride ? callPackage ./source.nix {}
+, gemset ? ./. + "/gemset.nix"
+, yarnHash ? srcOverride.yarnHash
 }:
 
 stdenv.mkDerivation rec {
   inherit pname version;
 
-  # Using overrideAttrs on src does not build the gems and modules with the overridden src.
-  # Putting the callPackage up in the arguments list also does not work.
-  src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
+  src = srcOverride;
 
   mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
-    inherit version;
+    inherit version gemset;
     ruby = ruby_3_0;
     gemdir = src;
-    gemset = dependenciesDir + "/gemset.nix";
     # This fix (copied from https://github.com/NixOS/nixpkgs/pull/76765) replaces the gem
     # symlinks with directories, resolving this error when running rake:
     #   /nix/store/451rhxkggw53h7253izpbq55nrhs7iv0-mastodon-gems-3.0.1/lib/ruby/gems/2.6.0/gems/bundler-1.17.3/lib/bundler/settings.rb:6:in `<module:Bundler>': uninitialized constant Bundler::Settings (NameError)
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      sha256 = "sha256-e3rl/WuKXaUdeDEYvo1sSubuIwtBjkbguCYdAijwXOA=";
+      hash = yarnHash;
     };
 
     nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];

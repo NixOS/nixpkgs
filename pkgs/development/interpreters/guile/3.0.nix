@@ -10,6 +10,7 @@
 , libffi
 , libtool
 , libunistring
+, libxcrypt
 , makeWrapper
 , pkg-config
 , pkgsBuildBuild
@@ -48,6 +49,8 @@ builder rec {
     libtool
     libunistring
     readline
+  ] ++ lib.optionals stdenv.isLinux [
+    libxcrypt
   ];
   propagatedBuildInputs = [
     boehmgc
@@ -59,6 +62,8 @@ builder rec {
     # flags, see below.
     libtool
     libunistring
+  ] ++ lib.optionals stdenv.isLinux [
+    libxcrypt
   ];
 
   # According to
@@ -114,8 +119,9 @@ builder rec {
   + ''
     sed -i "$out/lib/pkgconfig/guile"-*.pc    \
         -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
+            s|-lcrypt|-L${libxcrypt}/lib -lcrypt|g ;
+            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
             s|includedir=$out|includedir=$dev|g
             "
     '';

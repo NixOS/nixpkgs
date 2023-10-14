@@ -3,13 +3,15 @@
 , buildPythonPackage
 , clean-fid
 , clip-anytorch
+, dctorch
 , einops
 , fetchFromGitHub
 , jsonmerge
 , kornia
 , pillow
 , pythonOlder
-, resize-right
+, rotary-embedding-torch
+, safetensors
 , scikit-image
 , scipy
 , torch
@@ -22,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "k-diffusion";
-  version = "0.0.16";
+  version = "0.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,20 +33,22 @@ buildPythonPackage rec {
     owner = "crowsonkb";
     repo = "k-diffusion";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tOWDFt0/hGZF5HENiHPb9a2pBlXdSvDvCNTsCMZljC4=";
+    hash = "sha256-ef4NhViHQcV+4T+GXpg+Qev5IC0Cid+XWE3sFVx7w4w=";
   };
 
   propagatedBuildInputs = [
     accelerate
     clean-fid
     clip-anytorch
+    dctorch
     einops
     jsonmerge
     kornia
     pillow
-    resize-right
+    rotary-embedding-torch
     scikit-image
     scipy
+    safetensors
     torch
     torchdiffeq
     torchsde

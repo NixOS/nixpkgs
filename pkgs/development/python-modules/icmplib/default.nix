@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "icmplib";
-  version = "3.0.3";
+  version = "3.0.4";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ValentinBELYN";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EQyu7lV8F/U8cZklYYIMk9ut1FTcoBvGc8Ggx6JerDk=";
+    hash = "sha256-PnBcGiUvftz/KYg9Qd2GaIcF3OW4lYH301uI5/M5CBI=";
   };
 
   propagatedBuildInputs = [

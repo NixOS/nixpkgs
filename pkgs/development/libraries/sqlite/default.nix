@@ -7,6 +7,8 @@
 , interactive ? false
 # TODO: can be removed since 3.36 since it is the default now.
 , enableDeserialize ? false
+
+, gitUpdater
 }:
 
 let
@@ -15,13 +17,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.42.0";
+  version = "3.43.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-erz9FhxuJ0LKXGwIldH4U8lA8gMwSgtJ2k4eyl0IjKY=";
+    hash = "sha256-ORFslOdmMPItVM2Cw86jCFZfFxX3FtGyUn8cnJabpNk=";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -87,9 +89,18 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails to link against tcl
 
-  passthru.tests = {
-    inherit (python3Packages) sqlalchemy;
-    inherit sqldiff sqlite-analyzer tracker;
+  passthru = {
+    tests = {
+      inherit (python3Packages) sqlalchemy;
+      inherit sqldiff sqlite-analyzer tracker;
+    };
+
+    updateScript = gitUpdater {
+      # No nicer place to look for patest version.
+      url = "https://github.com/sqlite/sqlite.git";
+      # Expect tags like "version-3.43.0".
+      rev-prefix = "version-";
+    };
   };
 
   meta = with lib; {

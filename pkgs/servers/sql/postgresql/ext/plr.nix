@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     export USE_PGXS=1
   '';
   installPhase = ''
-    install -D plr.so -t $out/lib/
+    install -D plr${postgresql.dlSuffix} -t $out/lib/
     install -D {plr--*.sql,plr.control} -t $out/share/postgresql/extension
   '';
 

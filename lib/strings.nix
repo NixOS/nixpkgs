@@ -741,6 +741,64 @@ rec {
       name = head (splitString sep filename);
     in assert name != filename; name;
 
+  /* Create a "-D<feature>:<type>=<value>" string that can be passed to typical
+     CMake invocations.
+
+    Type: cmakeOptionType :: string -> string -> string -> string
+
+     @param feature The feature to be set
+     @param type The type of the feature to be set, as described in
+                 https://cmake.org/cmake/help/latest/command/set.html
+                 the possible values (case insensitive) are:
+                 BOOL FILEPATH PATH STRING INTERNAL
+     @param value The desired value
+
+     Example:
+       cmakeOptionType "string" "ENGINE" "sdl2"
+       => "-DENGINE:STRING=sdl2"
+  */
+  cmakeOptionType = type: feature: value:
+    assert (lib.elem (lib.toUpper type)
+      [ "BOOL" "FILEPATH" "PATH" "STRING" "INTERNAL" ]);
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    "-D${feature}:${lib.toUpper type}=${value}";
+
+  /* Create a -D<condition>={TRUE,FALSE} string that can be passed to typical
+     CMake invocations.
+
+    Type: cmakeBool :: string -> bool -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       cmakeBool "ENABLE_STATIC_LIBS" false
+       => "-DENABLESTATIC_LIBS:BOOL=FALSE"
+  */
+  cmakeBool = condition: flag:
+    assert (lib.isString condition);
+    assert (lib.isBool flag);
+    cmakeOptionType "bool" condition (lib.toUpper (lib.boolToString flag));
+
+  /* Create a -D<feature>:STRING=<value> string that can be passed to typical
+     CMake invocations.
+     This is the most typical usage, so it deserves a special case.
+
+    Type: cmakeFeature :: string -> string -> string
+
+     @param condition The condition to be made true or false
+     @param flag The controlling flag of the condition
+
+     Example:
+       cmakeFeature "MODULES" "badblock"
+       => "-DMODULES:STRING=badblock"
+  */
+  cmakeFeature = feature: value:
+    assert (lib.isString feature);
+    assert (lib.isString value);
+    cmakeOptionType "string" feature value;
+
   /* Create a -D<feature>=<value> string that can be passed to typical Meson
      invocations.
 
@@ -796,7 +854,7 @@ rec {
     assert (lib.isBool flag);
     mesonOption feature (if flag then "enabled" else "disabled");
 
-  /* Create an --{enable,disable}-<feat> string that can be passed to
+  /* Create an --{enable,disable}-<feature> string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -805,11 +863,12 @@ rec {
        enableFeature false "shared"
        => "--disable-shared"
   */
-  enableFeature = enable: feat:
-    assert isString feat; # e.g. passing openssl instead of "openssl"
-    "--${if enable then "enable" else "disable"}-${feat}";
+  enableFeature = flag: feature:
+    assert lib.isBool flag;
+    assert lib.isString feature; # e.g. passing openssl instead of "openssl"
+    "--${if flag then "enable" else "disable"}-${feature}";
 
-  /* Create an --{enable-<feat>=<value>,disable-<feat>} string that can be passed to
+  /* Create an --{enable-<feature>=<value>,disable-<feature>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -818,9 +877,10 @@ rec {
        enableFeatureAs false "shared" (throw "ignored")
        => "--disable-shared"
   */
-  enableFeatureAs = enable: feat: value: enableFeature enable feat + optionalString enable "=${value}";
+  enableFeatureAs = flag: feature: value:
+    enableFeature flag feature + optionalString flag "=${value}";
 
-  /* Create an --{with,without}-<feat> string that can be passed to
+  /* Create an --{with,without}-<feature> string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -829,11 +889,11 @@ rec {
        withFeature false "shared"
        => "--without-shared"
   */
-  withFeature = with_: feat:
-    assert isString feat; # e.g. passing openssl instead of "openssl"
-    "--${if with_ then "with" else "without"}-${feat}";
+  withFeature = flag: feature:
+    assert isString feature; # e.g. passing openssl instead of "openssl"
+    "--${if flag then "with" else "without"}-${feature}";
 
-  /* Create an --{with-<feat>=<value>,without-<feat>} string that can be passed to
+  /* Create an --{with-<feature>=<value>,without-<feature>} string that can be passed to
      standard GNU Autoconf scripts.
 
      Example:
@@ -842,7 +902,8 @@ rec {
        withFeatureAs false "shared" (throw "ignored")
        => "--without-shared"
   */
-  withFeatureAs = with_: feat: value: withFeature with_ feat + optionalString with_ "=${value}";
+  withFeatureAs = flag: feature: value:
+    withFeature flag feature + optionalString flag "=${value}";
 
   /* Create a fixed width string with additional prefix to match
      required width.

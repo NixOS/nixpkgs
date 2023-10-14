@@ -1,11 +1,11 @@
 { stdenvNoCC
 , lib
 , babashka-unwrapped
-, clojure
+, callPackage
 , makeWrapper
 , rlwrap
-
-, jdkBabashka ? clojure.jdk
+, clojureToolsBabashka ? callPackage ./clojure-tools.nix { }
+, jdkBabashka ? clojureToolsBabashka.jdk
 
   # rlwrap is a small utility to allow the editing of keyboard input, see
   # https://book.babashka.org/#_repl
@@ -18,7 +18,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "babashka";
-  inherit (babashka-unwrapped) version meta doInstallCheck installCheckPhase;
+  inherit (babashka-unwrapped) version meta doInstallCheck;
 
   dontUnpack = true;
   dontBuild = true;
@@ -29,13 +29,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     let unwrapped-bin = "${babashka-unwrapped}/bin/bb"; in
     ''
       mkdir -p $out/clojure_tools
-      ln -s -t $out/clojure_tools ${clojure}/*.edn
-      ln -s -t $out/clojure_tools ${clojure}/libexec/*
+      ln -s -t $out/clojure_tools ${clojureToolsBabashka}/*.edn
+      ln -s -t $out/clojure_tools ${clojureToolsBabashka}/libexec/*
 
       makeWrapper "${babashka-unwrapped}/bin/bb" "$out/bin/bb" \
         --inherit-argv0 \
         --set-default DEPS_CLJ_TOOLS_DIR $out/clojure_tools \
-        --set-default DEPS_CLJ_TOOLS_VERSION ${clojure.version} \
         --set-default JAVA_HOME ${jdkBabashka}
 
     '' +
@@ -44,5 +43,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         --replace '"${unwrapped-bin}"' '"${rlwrap}/bin/rlwrap" "${unwrapped-bin}"'
     '';
 
+  installCheckPhase = ''
+    ${babashka-unwrapped.installCheckPhase}
+    # Needed for Darwin compat, see https://github.com/borkdude/deps.clj/issues/114
+    export CLJ_CONFIG="$TMP/.clojure"
+    $out/bin/bb clojure --version | grep -wF '${clojureToolsBabashka.version}'
+  '';
+
   passthru.unwrapped = babashka-unwrapped;
+  passthru.clojure-tools = clojureToolsBabashka;
 })

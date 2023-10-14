@@ -8,7 +8,7 @@
 , fetchPypi
 , filebrowser_safe
 , future
-, grappelli_safe
+, grappelli-safe
 , isPyPy
 , pep8
 , pillow
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     django-contrib-comments
     filebrowser_safe
     future
-    grappelli_safe
+    grappelli-safe
     pillow
     pytz
     requests

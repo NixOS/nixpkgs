@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt --replace '@libirc_includes@' '${libirc.out}'
   '';
 
+  cmakeBuildType = "None";
+
   cmakeFlags = [
     "-S" "/build/source/src"
-    "-DCMAKE_BUILD_TYPE=None"
     "-DINSTALL_DATA_DIR=bin"
     "-DQT5_BUILD=ON"
     "-DWEB_ENGINE=ON"

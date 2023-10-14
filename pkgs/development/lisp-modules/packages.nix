@@ -1,4 +1,4 @@
-{ build-asdf-system, spec, quicklispPackagesFor, pkgs, ... }:
+{ build-asdf-system, spec, quicklispPackagesFor, stdenv, pkgs, ... }:
 
 let
 
@@ -80,6 +80,7 @@ let
       url = "https://github.com/cffi/cffi/archive/3f842b92ef808900bf20dae92c2d74232c2f6d3a.tar.gz";
       sha256 = "1jilvmbbfrmb23j07lwmkbffc6r35wnvas5s4zjc84i856ccclm2";
     };
+    patches = optionals stdenv.isDarwin [ ./patches/cffi-libffi-darwin-ffi-h.patch ];
   };
 
   cl-unicode = build-with-compile-into-pwd {
@@ -668,29 +669,64 @@ let
     ];
   };
 
+  trivial-clock = build-asdf-system {
+    pname = "trivial-clock";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "ak-coram";
+      repo = "cl-trivial-clock";
+      rev = "641e12ab1763914996beb1ceee67aabc9f1a3b1e";
+      hash = "sha256-mltQEJ2asxyQ/aS/9BuWmN3XZ9bGmmkopcF5YJU1cPk=";
+    };
+    systems = [ "trivial-clock" "trivial-clock/test" ];
+    lispLibs = [ self.cffi self.fiveam ];
+  };
+
+  frugal-uuid = build-asdf-system {
+    pname = "frugal-uuid";
+    version = "trunk";
+    src = pkgs.fetchFromGitHub {
+      owner = "ak-coram";
+      repo = "cl-frugal-uuid";
+      rev = "be27972333a16fc3f16bc7fbf9e3013b2123d75c";
+      hash = "sha256-rWO43vWMibF8/OxL70jle5nhd9oRWC7+MI44KWrQD48=";
+    };
+    systems = [ "frugal-uuid"
+                "frugal-uuid/non-frugal"
+                "frugal-uuid/benchmark"
+                "frugal-uuid/test" ];
+    lispLibs = with self; [
+      babel
+      bordeaux-threads
+      fiveam
+      ironclad
+      trivial-benchmark
+      trivial-clock
+    ];
+  };
+
   duckdb = build-asdf-system {
     pname = "duckdb";
     version = "trunk";
     src = pkgs.fetchFromGitHub {
       owner = "ak-coram";
       repo = "cl-duckdb";
-      rev = "2f0df62f59fbede0addd8d72cf286f4007818a3e";
-      hash = "sha256-+jeOuXtCFZwMvF0XvlRaqTNHIAAFKMx6y1pz6u8Wxug=";
+      rev = "3ed1df5ba5c738a0b7fed7aa73632ec86f558d09";
+      hash = "sha256-AJMxhtDACe6WTwEOxLsC8y6uBaPqjt8HLRw/eIZI02E=";
     };
     systems = [ "duckdb" "duckdb/test" "duckdb/benchmark" ];
-    lispLibs = with super; [
+    lispLibs = with self; [
       bordeaux-threads
       cffi-libffi
       cl-ascii-table
       cl-spark
-      fiveam
+      cl-ppcre
+      frugal-uuid
+      let-plus
       local-time
       local-time-duration
       periods
-      trivial-benchmark
-      serapeum
-      str
-      uuid
+      float-features
     ];
     nativeLibs = with pkgs; [
       duckdb libffi

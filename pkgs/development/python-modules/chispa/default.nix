@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "chispa";
-  version = "0.9.3";
+  version = "0.9.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "MrPowers";
     repo = "chispa";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C+fodrQ7PztGzFHAi9SF+rkwtf4bdjDE2u0uORDXBbE=";
+    hash = "sha256-VF7k0u7QpoG3PXvU5M7jrM9pht6xeRUpYH9znMdLOxk=";
   };
 
   nativeBuildInputs = [

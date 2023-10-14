@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
       "--with-yaml=${libyaml.dev}"
-      "--with-ofed=${rdma-core}"
+      "--with-ofed=${lib.getDev rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"
       "--with-bpf=${libbpf}"

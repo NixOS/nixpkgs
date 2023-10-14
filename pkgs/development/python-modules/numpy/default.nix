@@ -12,6 +12,7 @@
 , lapack
 , writeTextFile
 , cython
+, pythonAtLeast
 , pythonOlder
 }:
 
@@ -43,7 +44,7 @@ in buildPythonPackage rec {
   pname = "numpy";
   version = "1.25.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;

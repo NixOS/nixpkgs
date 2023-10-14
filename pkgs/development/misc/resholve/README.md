@@ -203,7 +203,7 @@ more copies of their specification/behavior than I like, and continuing to
 add more at this early date will only ensure that I spend more time updating
 docs and less time filling in feature gaps.
 
-Full documentation may be greatly accellerated if someone can help me sort out
+Full documentation may be greatly accelerated if someone can help me sort out
 single-sourcing. See: https://github.com/abathur/resholve/issues/19
 -->
 

@@ -46,7 +46,8 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://aws-encryption-sdk-cli.readthedocs.io/";
     changelog = "https://github.com/aws/aws-encryption-sdk-cli/blob/v${version}/CHANGELOG.rst";
     description = "CLI wrapper around aws-encryption-sdk-python";
-    license = licenses.apsl20;
+    license = licenses.asl20;
+    mainProgram = "aws-encryption-cli";
     maintainers = with maintainers; [ anthonyroussel ];
   };
 }

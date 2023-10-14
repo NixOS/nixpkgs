@@ -137,7 +137,7 @@ following will happen:
     This is a list of Haskell packages that are known to be broken.
 
 -   [`hackage-packages.nix`](hackage-packages.nix) will be regenerated.  This
-    will mark all Haskell pacakges in `configuration-hackage2nix/broken.yaml`
+    will mark all Haskell packages in `configuration-hackage2nix/broken.yaml`
     as `broken`.
 
 -   The

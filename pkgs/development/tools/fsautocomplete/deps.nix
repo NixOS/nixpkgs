@@ -39,7 +39,7 @@
   (fetchNuGet { pname = "Fake.IO.Zip"; version = "5.23.1"; sha256 = "0iac86jlxb5bwgiich3zzvr7bz5aw8xq53ly263mwxhv9lrsd815"; })
   (fetchNuGet { pname = "Fake.Net.Http"; version = "5.23.1"; sha256 = "1g0dpxi5b78qh7myz09pmjxzb0iblj3rqx5mpaammbppbbazvzdk"; })
   (fetchNuGet { pname = "Fake.Tools.Git"; version = "5.23.1"; sha256 = "0cg1sbp7zl1d18cjhbs94ix8580hr6gyaxjw17q246lbaj9bfg8l"; })
-  (fetchNuGet { pname = "fantomas"; version = "6.1.0"; sha256 = "0qk983ybs66infm6q60qsn6sl9i17i6rjavsygcld6w3vfzza9kx"; })
+  (fetchNuGet { pname = "fantomas"; version = "6.2.0"; sha256 = "0jmr63c2a4maf1blcsiyxz9najrc31xk1ignc7j7l2sswis6hx7k"; })
   (fetchNuGet { pname = "Fantomas.Client"; version = "0.9.0"; sha256 = "1zixwk61fyk7y9q6f8266kwxi6byr8fmyp1lf57qhbbvhq2waj9d"; })
   (fetchNuGet { pname = "Fantomas.Core"; version = "6.2.0"; sha256 = "07yl2hr06zk1nl66scm24di3nf1zbrnd6329prwirnv370rz4q92"; })
   (fetchNuGet { pname = "Fantomas.FCS"; version = "6.2.0"; sha256 = "1hhsa7hbxsm2d8ap4sqzwlzjmf4wsgg74i731rprr0nshjvd8ic7"; })
