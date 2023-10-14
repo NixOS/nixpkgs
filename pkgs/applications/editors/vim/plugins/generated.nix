@@ -1253,6 +1253,18 @@ final: prev:
     meta.homepage = "https://github.com/uga-rosa/ccc.nvim/";
   };
 
+  cellular-automaton-nvim = buildVimPlugin {
+    pname = "cellular-automaton.nvim";
+    version = "2023-09-01";
+    src = fetchFromGitHub {
+      owner = "Eandrju";
+      repo = "cellular-automaton.nvim";
+      rev = "b7d056dab963b5d3f2c560d92937cb51db61cb5b";
+      sha256 = "0n7w29gz13ngypkjcn4ljx42j6fzgihqscs54d2v67z1dvmdsdmk";
+    };
+    meta.homepage = "https://github.com/Eandrju/cellular-automaton.nvim/";
+  };
+
   chadtree = buildVimPlugin {
     pname = "chadtree";
     version = "2023-09-05";
