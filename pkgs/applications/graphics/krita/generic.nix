@@ -4,7 +4,7 @@
 , kio, kcrash, breeze-icons
 , boost, immer, libraw, fftw, eigen, exiv2, libheif, lcms2, gsl, openexr, giflib, libjxl
 , openjpeg, opencolorio, xsimd, poppler, curl, ilmbase, libmypaint, libwebp
-, qtmultimedia, qtx11extras, quazip
+, qtmultimedia, qtx11extras, quazip, zug
 , python3Packages
 , version
 , kde-channel
@@ -30,7 +30,7 @@ mkDerivation rec {
     openjpeg opencolorio poppler curl ilmbase libmypaint libwebp
     qtmultimedia qtx11extras quazip
     python3Packages.pyqt5
-    xsimd
+    xsimd zug
   ];
 
   env.NIX_CFLAGS_COMPILE = toString ([ "-I${ilmbase.dev}/include/OpenEXR" ]
