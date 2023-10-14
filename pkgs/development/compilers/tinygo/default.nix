@@ -54,6 +54,15 @@ buildGoModule rec {
   patches = [
     ./0001-Makefile.patch
 
+    # clang.cc does not have any paths in the include path.
+    # For TinyGo, we want to have no include paths, _except_ for the built-in
+    # Clang header files (things like stdint.h). That's why we use -nostdlibinc.
+    # So to make Clang work like we want, we will have to manually add this one
+    # include path.
+    # We can't use a regular clang command (something like
+    # llvmPackages.clangUseLLVM) because there are various bugs, see:
+    # https://github.com/NixOS/nixpkgs/issues/259397
+    # https://github.com/NixOS/nixpkgs/issues/259386
     (substituteAll {
       src = ./0002-Add-clang-header-path.patch;
       clang_include = "${clang.cc.lib}/lib/clang/${llvmMajor}/include";
@@ -108,10 +117,9 @@ buildGoModule rec {
     substituteInPlace builder/buildid.go \
       --replace "OUT_PATH" "$out"
 
-    # TODO: Fix mingw and darwin
-    # Disable windows and darwin cross-compile tests
+    # TODO: Fix mingw
+    # Disable windows cross-compile tests
     sed -i "/GOOS=windows/d" Makefile
-    sed -i "/GOOS=darwin/d" Makefile
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace Makefile \
       --replace "./build/tinygo" "${buildPackages.tinygo}/bin/tinygo"

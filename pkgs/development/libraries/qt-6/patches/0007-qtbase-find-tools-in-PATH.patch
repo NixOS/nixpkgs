@@ -1,7 +1,7 @@
-From 31d808a7b0d52a01c3f2875202cd29410a94b39a Mon Sep 17 00:00:00 2001
+From 95b6bc2a414d381fdeab0899a3b02499c43695e7 Mon Sep 17 00:00:00 2001
 From: rewine <luhongxu@deepin.org>
 Date: Wed, 29 Mar 2023 11:51:33 +0800
-Subject: [PATCH] qtbase-find-tools-in-PATH
+Subject: [PATCH 07/11] qtbase-find-tools-in-PATH
 
 1. find qt's tools in `QTTOOLSPATH` env
    qt assumes that all components use the same install prefix
@@ -14,13 +14,12 @@ Subject: [PATCH] qtbase-find-tools-in-PATH
    We can guarantee the build order of qt components in nixpkgs
    tools in qttools always build before qtdoc
    qdoc_bin is not a build target now, since we find it in `QTTOOLSPATH`
-
 ---
  cmake/QtDocsHelpers.cmake | 11 ++++++++---
  1 file changed, 8 insertions(+), 3 deletions(-)
 
 diff --git a/cmake/QtDocsHelpers.cmake b/cmake/QtDocsHelpers.cmake
-index 48ed5a32..9409d22d 100644
+index 48ed5a324bf..91d8d41fb1f 100644
 --- a/cmake/QtDocsHelpers.cmake
 +++ b/cmake/QtDocsHelpers.cmake
 @@ -47,9 +47,14 @@ function(qt_internal_add_docs)
@@ -42,5 +41,5 @@ index 48ed5a32..9409d22d 100644
      get_target_property(target_type ${target} TYPE)
      if (NOT target_type STREQUAL "INTERFACE_LIBRARY")
 -- 
-2.38.1
+2.42.0
 

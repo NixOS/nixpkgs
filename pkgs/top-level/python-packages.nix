@@ -420,6 +420,8 @@ self: super: with self; {
 
   aiowinreg = callPackage ../development/python-modules/aiowinreg { };
 
+  aiowithings = callPackage ../development/python-modules/aiowithings { };
+
   aioxmpp = callPackage ../development/python-modules/aioxmpp { };
 
   aioymaps = callPackage ../development/python-modules/aioymaps { };
@@ -4894,6 +4896,8 @@ self: super: with self; {
   heatshrink2 = callPackage ../development/python-modules/heatshrink2 { };
 
   heatzypy = callPackage ../development/python-modules/heatzypy { };
+
+  help2man = callPackage ../development/python-modules/help2man { };
 
   helpdev = callPackage ../development/python-modules/helpdev { };
 
@@ -12644,6 +12648,8 @@ self: super: with self; {
   setupmeta = callPackage ../development/python-modules/setupmeta { };
 
   setuptools-declarative-requirements = callPackage ../development/python-modules/setuptools-declarative-requirements { };
+
+  setuptools-generate = callPackage ../development/python-modules/setuptools-generate { };
 
   setuptools-gettext = callPackage ../development/python-modules/setuptools-gettext { };
 

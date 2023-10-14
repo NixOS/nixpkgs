@@ -62,7 +62,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-XU0jMeYOaLlwnY+P9/H9KathHiVrmpnNNHFIWKihaIo=";
+    hash = "sha256-h84j83DPq/bvGSjA/i8fnJmuFfDg3c2dr2OgvC2/46s=";
   };
 
   pythonRelaxDeps = [

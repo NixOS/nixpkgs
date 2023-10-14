@@ -192,8 +192,8 @@ rec {
   useMoldLinker = stdenv: let
     bintools = stdenv.cc.bintools.override {
       extraBuildCommands = ''
-        wrap ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
-        wrap ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
       '';
     };
   in stdenv.override (old: {
@@ -201,7 +201,10 @@ rec {
       inherit bintools;
     };
     allowedRequisites =
-      lib.mapNullable (rs: rs ++ [ bintools pkgs.mold (lib.getLib pkgs.mimalloc) (lib.getLib pkgs.openssl) ]) (stdenv.allowedRequisites or null);
+      (lib.optional (stdenv.allowedRequisites or null != null) stdenv.allowedRequisites)
+        ++ [ bintools pkgs.mold ]
+        # need to `outputSpecified = false` to make getLib work
+        ++ (builtins.map (p: lib.getLib (p // { outputSpecified = false; })) pkgs.mold.buildInputs);
       # gcc >12.1.0 supports '-fuse-ld=mold'
       # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
     # https://github.com/rui314/mold#how-to-use

@@ -3,15 +3,15 @@
 stdenv.mkDerivation rec {
   pname = "tds_fdw";
   # Move to stable version when it's released.
-  version = "unstable-2023-07-20";
+  version = "unstable-2023-09-28";
 
   buildInputs = [ postgresql freetds ];
 
   src = fetchFromGitHub {
     owner  = "tds-fdw";
     repo   = "tds_fdw";
-    rev    = "2323efe2007d012b043fe91ea97a736b85eddce3";
-    hash   = "sha256-QdIQVQvOIY8dPi5KcbPQ/9crtD59hXstKOkHRfM1kNI=";
+    rev    = "22ee5d3f46909b35efb2600b44ec19a35179630e";
+    hash   = "sha256-MmaLN1OWUJMWJhPUXBevSyBmMgZqeEFPGuxuLPSp4Pk=";
   };
 
   installPhase = ''
