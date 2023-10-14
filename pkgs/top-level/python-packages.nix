@@ -6483,6 +6483,8 @@ self: super: with self; {
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
+  lpips = callPackage ../development/python-modules/lpips { };
+
   lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
 
   lru-dict = callPackage ../development/python-modules/lru-dict { };
