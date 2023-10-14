@@ -17,7 +17,14 @@ in {
 
     motherboard = mkOption {
       type = types.nullOr (types.enum [ "amd" "intel" ]);
-      default = null;
+      default = if config.hardware.cpu.intel.updateMicrocode then "intel"
+        else if config.hardware.cpu.amd.updateMicrocode then "amd"
+        else null;
+      defaultText = literalMD ''
+        if config.hardware.cpu.intel.updateMicrocode then "intel"
+        else if config.hardware.cpu.amd.updateMicrocode then "amd"
+        else null;
+      '';
       description = lib.mdDoc "CPU family of motherboard. Allows for addition motherboard i2c support.";
     };
 
@@ -34,14 +41,15 @@ in {
     services.udev.packages = [ cfg.package ];
 
     boot.kernelModules = [ "i2c-dev" ]
-     ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix" ]
+     ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
      ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
 
     systemd.services.openrgb = {
       description = "OpenRGB server daemon";
       wantedBy = [ "multi-user.target" ];
-
       serviceConfig = {
+        StateDirectory = "OpenRGB";
+        WorkingDirectory = "/var/lib/OpenRGB";
         ExecStart = "${cfg.package}/bin/openrgb --server --server-port ${toString cfg.server.port}";
         Restart = "always";
       };

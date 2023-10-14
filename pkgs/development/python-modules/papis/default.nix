@@ -8,6 +8,7 @@
 , click
 , colorama
 , configparser
+, dominate
 , fetchFromGitHub
 , filetype
 , habanero
@@ -31,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.12";
+  version = "0.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     owner = "papis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-WKsU/5LXqXiFpWyTZGpvZn4lyANPosbvuhYH3opbBRs=";
+    hash = "sha256-iRrf37hq+9D01JRaQIqg7yTPbLX6I0ZGnzG3r1DX464=";
   };
 
   propagatedBuildInputs = [
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     click
     colorama
     configparser
+    dominate
     filetype
     habanero
     isbnlib
@@ -69,14 +71,11 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # Remove when https://github.com/papis/papis/pull/478 lands in upstream
-    substituteInPlace setup.py \
-      --replace "etc/bash_completion.d/" "share/bash-completion/completions/"
     substituteInPlace setup.cfg \
       --replace "--cov=papis" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -90,6 +89,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "tests/downloaders"
+    "papis/downloaders/usenix.py"
   ];
 
   disabledTests = [
@@ -98,7 +98,9 @@ buildPythonPackage rec {
     "test_doi_to_data"
     "test_downloader_getter"
     "test_general"
+    "test_get_config_dirs"
     "test_get_data"
+    "test_valid_dblp_key"
     "test_validate_arxivid"
     "test_yaml"
   ] ++ lib.optionals stdenv.isDarwin [

@@ -6,11 +6,13 @@
 , gtk4
 , lib
 , libadwaita
+, cargo
 , meson
 , ninja
 , nix-update-script
 , pkg-config
 , rustPlatform
+, rustc
 , stdenv
 , wrapGAppsHook4
 }:
@@ -41,11 +43,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gst_all_1.gst-libav

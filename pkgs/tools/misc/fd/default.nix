@@ -13,8 +13,6 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-AstE8KGICgPhqRKlJecrE9iPUUWaOvca6ocWf85IzNo=";
 
-  auditable = true; # TODO: remove when this is the default
-
   nativeBuildInputs = [ installShellFiles ];
 
   # skip flaky test
@@ -47,5 +45,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
+    mainProgram = "fd";
   };
 }

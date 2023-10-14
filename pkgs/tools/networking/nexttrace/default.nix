@@ -2,23 +2,27 @@
 
 buildGoModule rec {
   pname = "nexttrace";
-  version = "1.1.3";
+  version = "1.2.2.2";
 
   src = fetchFromGitHub {
-    owner = "sjlleo";
-    repo = pname;
+    owner = "nxtrace";
+    repo = "NTrace-core";
     rev = "v${version}";
-    sha256 = "sha256-sOTQBh6j8od24s36J0e2aKW1mWmAD/ThfY6pd1SsSlY=";
+    sha256 = "sha256-a9l6nsrbgwmk6cq/rPBwPwZ8yhH35VxKmn9x5PgcqGI=";
   };
-  vendorHash = "sha256-ckGoDV4GNp0mG+bkCKoLBO+ap53R5zrq/ZSKiFmVf9U=";
+  vendorHash = "sha256-YAmGvmHkR1G2MLlDja5aPJqX2F3etogebasqD72YJ3M=";
 
   doCheck = false; # Tests require a network connection.
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/xgadget-lab/nexttrace/printer.version=v${version}"
+    "-X github.com/nxtrace/NTrace-core/config.Version=v${version}"
   ];
+
+  postInstall = ''
+    mv $out/bin/NTrace-core $out/bin/nexttrace
+  '';
 
   meta = with lib; {
     description = "An open source visual route tracking CLI tool";

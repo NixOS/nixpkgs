@@ -9,17 +9,17 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "giac${lib.optionalString enableGUI "-with-xcas"}";
-  version = "1.9.0-29"; # TODO try to remove preCheck phase on upgrade
+  version = "1.9.0-43"; # TODO try to remove preCheck phase on upgrade
 
   src = fetchurl {
     url = "https://www-fourier.ujf-grenoble.fr/~parisse/debian/dists/stable/main/source/giac_${version}.tar.gz";
-    sha256 = "sha256-9jUVcsrV8jMfqrmnymZ4vIaWlabF9ppCuq7VDlZ5Cw4=";
+    sha256 = "sha256-466jB8ZRqHkU5XCY+j0Fh7Dq/mMaOu10rHECKbtNGrs=";
   };
 
   patches = [
     (fetchpatch {
       name = "pari_2_11.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/pari_2_11.patch?id=21ba7540d385a9864b44850d6987893dfa16bfc0";
+      url = "https://raw.githubusercontent.com/sagemath/sage/21ba7540d385a9864b44850d6987893dfa16bfc0/build/pkgs/giac/patches/pari_2_11.patch";
       sha256 = "sha256-vEo/5MNzMdYRPWgLFPsDcMT1W80Qzj4EPBjx/B8j68k=";
     })
 
@@ -27,22 +27,18 @@ stdenv.mkDerivation rec {
     # the compiler rightfully warns about (with an error nowadays).
     (fetchpatch {
       name = "fix-string-compiler-error.patch";
-      url = "https://salsa.debian.org/science-team/giac/-/raw/08cb807ef41f5216b712928886ebf74f69d5ddf6/debian/patches/fix-string-compiler-error.patch";
-      sha256 = "sha256-K4KAJY1F9Y4DTZFmVEOCXTnxBmHo4//3A10UR3Wlliw=";
+      url = "https://salsa.debian.org/science-team/giac/-/raw/9ca8dbf4bb16d9d96948aa4024326d32485d7917/debian/patches/fix-string-compiler-error.patch";
+      sha256 = "sha256-r+M+9MRPRqhHcdhYWI6inxyNvWbXUbBcPCeDY7aulvk=";
     })
 
-    # increase pari stack size for test chk_fhan4
-    (fetchpatch {
-      name = "increase-pari-stack-size.patch";
-      url = "https://salsa.debian.org/science-team/giac/-/raw/08cb807ef41f5216b712928886ebf74f69d5ddf6/debian/patches/increase-pari-size.patch";
-      sha256 = "sha256-764P0IJ7ndURap7hotOmYJK0wAhYdqMbQNOnhJxVNt0=";
-    })
+    # increase pari stack size for test chk_fhan{4,6}
+    ./increase-pari-stack-size.patch
   ] ++ lib.optionals (!enableGUI) [
     # when enableGui is false, giac is compiled without fltk. That
     # means some outputs differ in the make check. Patch around this:
     (fetchpatch {
       name = "nofltk-check.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/giac/patches/nofltk-check.patch?id=7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26";
+      url = "https://raw.githubusercontent.com/sagemath/sage/7553a3c8dfa7bcec07241a07e6a4e7dcf5bb4f26/build/pkgs/giac/patches/nofltk-check.patch";
       sha256 = "sha256-nAl5q3ufLjK3X9s0qMlGNowdRRf3EaC24eVtJABzdXY=";
     })
   ];

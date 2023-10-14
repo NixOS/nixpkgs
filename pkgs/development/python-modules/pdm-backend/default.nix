@@ -15,15 +15,17 @@
 
 buildPythonPackage rec {
   pname = "pdm-backend";
-  version = "2.0.5";
+  version = "2.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-backend";
     rev = "refs/tags/${version}";
-    hash = "sha256-d5kr5pr9tBc6So0wTy3/ASgk8KTOf2AV8Vfsmml5Qh0=";
+    hash = "sha256-46HTamiy+8fiGVeviYqXsjwu+PEBE38y19cBVRc+zm0=";
   };
+
+  env.PDM_BUILD_SCM_VERSION = version;
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
     importlib-metadata
@@ -39,6 +41,12 @@ buildPythonPackage rec {
     pytestCheckHook
     setuptools
   ];
+
+  preCheck = ''
+    unset PDM_BUILD_SCM_VERSION
+  '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     homepage = "https://github.com/pdm-project/pdm-backend";

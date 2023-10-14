@@ -45,7 +45,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.22.1";
+  version = "1.24.0";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    sha256 = "RgwEp60Anr+CpJws6srIv/Qzk2r9NoekeNQ0UT3FRZ0=";
+    sha256 = "sha256-gTcgEZ7cs4jq8w5Genxtio9nVFy7y3n0nNXJ6SVtYHY=";
   };
 
   patches = [
@@ -132,5 +132,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
+    changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
   };
 }

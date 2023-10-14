@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , gperf
 , guile
 , guile-lib
@@ -28,9 +27,9 @@ stdenv.mkDerivation rec {
     libffi
   ];
 
-  GUILE_SITE="${guile-lib}/share/guile/site";
+  env.GUILE_SITE = "${guile-lib}/${guile.siteDir}";
 
-  configureFlags = [ "--with-guilemoduledir=$(out)/share/guile/site" ];
+  configureFlags = [ "--with-guilemoduledir=$(out)/${guile.siteDir}" ];
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/guile-reader/";
@@ -46,6 +45,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.gnu;
+    platforms = guile.meta.platforms;
   };
 }

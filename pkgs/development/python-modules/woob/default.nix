@@ -16,6 +16,7 @@
 , pythonOlder
 , pyyaml
 , requests
+, rich
 , termcolor
 , testers
 , unidecode
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.5";
+  version = "3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
     owner = "woob";
     repo = pname;
     rev = version;
-    hash = "sha256-Yb3AgUSqr9r2TIymiEUIhKThNC7yjQEkhi8GSI9fqNA=";
+    hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     pycountry
     pyyaml
     requests
+    rich
     termcolor
     unidecode
   ];

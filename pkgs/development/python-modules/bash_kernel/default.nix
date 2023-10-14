@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
+, flit-core
 , ipykernel
 , isPy27
 , python
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "bash_kernel";
   version = "0.9.0";
-  format = "flit";
+  format = "pyproject";
   disabled = isPy27;
 
   src = fetchPypi {
@@ -32,6 +33,8 @@ buildPythonPackage rec {
       --replace "'bash'" "'${bash}/bin/bash'" \
       --replace "\"bash\"" "'${bash}/bin/bash'"
   '';
+
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [ ipykernel pexpect ];
 

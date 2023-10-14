@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, bash, ocaml, dune_3, version }:
+{ lib, stdenv, fetchFromGitHub, bash, ocaml, ocamlPackages, dune_3, version }:
 
 stdenv.mkDerivation {
   pname = "rescript-editor-analysis";
@@ -8,10 +8,10 @@ stdenv.mkDerivation {
     owner = "rescript-lang";
     repo = "rescript-vscode";
     rev = version;
-    sha256 = "sha256-a8otK0BxZbl0nOp4QWQRkjb5fM85JA4nVkLuKAz71xU=";
+    sha256 = "sha256-+Ht8qWwxtFWHFMiV/aoZIs2S3SxkOWgdwSKN+akp/LU=";
   };
 
-  nativeBuildInputs = [ ocaml dune_3 ];
+  nativeBuildInputs = [ ocaml dune_3 ocamlPackages.cppo ];
 
   # Skip testing phases because they need to download and install node modules
   postPatch = ''

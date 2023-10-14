@@ -1,5 +1,5 @@
 { runCommand, lib, toolchainName, sdkName
-, writeText, version, xcodePlatform }:
+, writeText, xcodePlatform, sdkVer, productBuildVer }:
 
 let
   inherit (lib.generators) toPlist toJSON;
@@ -8,14 +8,16 @@ let
     CanonicalName = sdkName;
     DisplayName = sdkName;
     Toolchains = [ toolchainName ];
-    Version = version;
-    MaximumDeploymentTarget = version;
+    Version = sdkVer;
+    MaximumDeploymentTarget = sdkVer;
     isBaseSDK = "YES";
   };
 
-  SystemVersion = {
+  SystemVersion = lib.optionalAttrs (productBuildVer != null) {
+    ProductBuildVersion = productBuildVer;
+  } // {
     ProductName = "Mac OS X";
-    ProductVersion = version;
+    ProductVersion = sdkVer;
   };
 in
 

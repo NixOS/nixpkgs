@@ -11,17 +11,26 @@
 , numpy
 , pytestCheckHook
 , libxcrypt
-}:
-
-buildPythonPackage rec {
+, makeSetupHook
+}: let
+  setupHook = makeSetupHook {
+    name = "pybind11-setup-hook";
+    substitutions = {
+      out = placeholder "out";
+      pythonInterpreter = python.pythonForBuild.interpreter;
+      pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
+      pythonSitePackages = "${python}/${python.sitePackages}";
+    };
+  } ./setup-hook.sh;
+in buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.3";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Rlr6Ec6BEujTxQkQ9UP+6u0cYeFsJlj7U346MtRM6QM=";
+    hash = "sha256-sO/Fa+QrAKyq2EYyYMcjPrYI+bdJIrDoj6L3JHoDo3E=";
   };
 
   postPatch = ''
@@ -30,6 +39,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  propagatedBuildInputs = [ setupHook ];
 
   dontUseCmakeBuildDir = true;
 
@@ -43,7 +53,6 @@ buildPythonPackage rec {
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
   ];
@@ -78,11 +87,13 @@ buildPythonPackage rec {
     "tests/extra_setuptools/test_setuphelper.py"
   ];
 
-  disabledTests = lib.optionals (stdenv.isDarwin) [
+  disabledTests = lib.optionals stdenv.isDarwin [
     # expects KeyError, gets RuntimeError
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"
   ];
+
+  hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "fortify";
 
   meta = with lib; {
     homepage = "https://github.com/pybind/pybind11";

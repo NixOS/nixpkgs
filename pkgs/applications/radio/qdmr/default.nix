@@ -22,13 +22,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "qdmr";
-  version = "0.11.2";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${version}";
-    sha256 = "sha256-zT31tzsm5OM99vz8DzGCdPmnemiwiJpKccYwECnUgOQ=";
+    sha256 = "sha256-YLGsKGcKIPd0ihd5IzlT71dYkxZfeH7BpnKQMEyY8dI=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,10 @@ stdenv.mkDerivation rec {
       --replace /usr/share/xml/docbook/stylesheet/docbook-xsl/manpages/docbook\.xsl ${docbook_xsl_ns}/xml/xsl/docbook/manpages/docbook.xsl
   '';
 
-  cmakeFlags = [ "-DBUILD_MAN=ON" ];
+  cmakeFlags = [
+    "-DBUILD_MAN=ON"
+    "-DINSTALL_UDEV_RULES=OFF"
+  ];
 
   postInstall = ''
     installManPage doc/dmrconf.1 doc/qdmr.1

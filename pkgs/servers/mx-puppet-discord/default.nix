@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitLab, pkgs, lib, nodejs-14_x, pkg-config
+{ stdenv, fetchFromGitLab, pkgs, lib, nodejs_18, pkg-config
 , libjpeg, pixman, cairo, pango, which, postgresql }:
 
 let
-  nodejs = nodejs-14_x;
+  nodejs = nodejs_18;
 
   version = "0.1.1";
 

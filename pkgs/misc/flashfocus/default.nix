@@ -1,12 +1,14 @@
-{ lib, python3, netcat-openbsd, nix-update-script }:
+{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "flashfocus";
-  version = "2.3.1";
+  version = "2.4.1";
 
-  src = python3.pkgs.fetchPypi {
+  format = "pyproject";
+
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XT3CKJWn1uKnPPsJC+MWlEAd8sWdVTEXz5b3n0UUedY=";
+    sha256 = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
   };
 
   postPatch = ''
@@ -14,8 +16,9 @@ python3.pkgs.buildPythonApplication rec {
       --replace "nc" "${lib.getExe netcat-openbsd}"
   '';
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python3Packages; [
     pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -23,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     "xcffib"
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python3Packages; [
     i3ipc
     xcffib
     click

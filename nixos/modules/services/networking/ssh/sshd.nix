@@ -27,14 +27,11 @@ let
       mkValueString = mkValueStringSshd;
     } " ";});
 
-  configFile = settingsFormat.generate "config" cfg.settings;
-  sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
+  configFile = settingsFormat.generate "sshd.conf-settings" cfg.settings;
+  sshconf = pkgs.runCommand "sshd.conf-final" { } ''
     cat ${configFile} - >$out <<EOL
     ${cfg.extraConfig}
     EOL
-
-    ssh-keygen -q -f mock-hostkey -N ""
-    sshd -t -f $out -h mock-hostkey
   '';
 
   cfg  = config.services.openssh;
@@ -77,6 +74,19 @@ let
       };
     };
 
+    options.openssh.authorizedPrincipals = mkOption {
+      type = with types; listOf types.singleLineStr;
+      default = [];
+      description = mdDoc ''
+        A list of verbatim principal names that should be added to the user's
+        authorized principals.
+      '';
+      example = [
+        "example@host"
+        "foo@bar"
+      ];
+    };
+
   };
 
   authKeysFiles = let
@@ -91,6 +101,16 @@ let
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
   in listToAttrs (map mkAuthKeyFile usersWithKeys);
+
+  authPrincipalsFiles = let
+    mkAuthPrincipalsFile = u: nameValuePair "ssh/authorized_principals.d/${u.name}" {
+      mode = "0444";
+      text = concatStringsSep "\n" u.openssh.authorizedPrincipals;
+    };
+    usersWithPrincipals = attrValues (flip filterAttrs config.users.users (n: u:
+      length u.openssh.authorizedPrincipals != 0
+    ));
+  in listToAttrs (map mkAuthPrincipalsFile usersWithPrincipals);
 
 in
 
@@ -279,13 +299,23 @@ in
       settings = mkOption {
         description = lib.mdDoc "Configuration for `sshd_config(5)`.";
         default = { };
-        example = literalExpression ''{
-          UseDns = true;
-          PasswordAuthentication = false;
-        }'';
+        example = literalExpression ''
+          {
+            UseDns = true;
+            PasswordAuthentication = false;
+          }
+        '';
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
+            AuthorizedPrincipalsFile = mkOption {
+              type = types.str;
+              default = "none"; # upstream default
+              description = lib.mdDoc ''
+                Specifies a file that lists principal names that are accepted for certificate authentication. The default
+                is `"none"`, i.e. not to use	a principals file.
+              '';
+            };
             LogLevel = mkOption {
               type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
               default = "INFO"; # upstream default
@@ -365,9 +395,6 @@ in
                 "hmac-sha2-512-etm@openssh.com"
                 "hmac-sha2-256-etm@openssh.com"
                 "umac-128-etm@openssh.com"
-                "hmac-sha2-512"
-                "hmac-sha2-256"
-                "umac-128@openssh.com"
               ];
               description = lib.mdDoc ''
                 Allowed MACs
@@ -376,6 +403,13 @@ in
                 <https://stribika.github.io/2015/01/04/secure-secure-shell.html>
                 and
                 <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
+              '';
+            };
+            StrictModes = mkOption {
+              type = types.bool;
+              default = true;
+              description = lib.mdDoc ''
+                Whether sshd should check file modes and ownership of directories
               '';
             };
             Ciphers = mkOption {
@@ -441,7 +475,7 @@ in
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
     services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
 
-    environment.etc = authKeysFiles //
+    environment.etc = authKeysFiles // authPrincipalsFiles //
       { "ssh/moduli".source = cfg.moduliFile;
         "ssh/sshd_config".source = sshconf;
       };
@@ -474,10 +508,10 @@ in
                       mkdir -m 0755 -p "$(dirname '${k.path}')"
                       ssh-keygen \
                         -t "${k.type}" \
-                        ${if k ? bits then "-b ${toString k.bits}" else ""} \
-                        ${if k ? rounds then "-a ${toString k.rounds}" else ""} \
-                        ${if k ? comment then "-C '${k.comment}'" else ""} \
-                        ${if k ? openSSHFormat && k.openSSHFormat then "-o" else ""} \
+                        ${optionalString (k ? bits) "-b ${toString k.bits}"} \
+                        ${optionalString (k ? rounds) "-a ${toString k.rounds}"} \
+                        ${optionalString (k ? comment) "-C '${k.comment}'"} \
+                        ${optionalString (k ? openSSHFormat && k.openSSHFormat) "-o"} \
                         -f "${k.path}" \
                         -N ""
                   fi
@@ -524,7 +558,7 @@ in
 
       };
 
-    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
+    networking.firewall.allowedTCPPorts = optionals cfg.openFirewall cfg.ports;
 
     security.pam.services.sshd =
       { startSession = true;
@@ -536,7 +570,9 @@ in
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
-      [ "%h/.ssh/authorized_keys" "%h/.ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+      [ "%h/.ssh/authorized_keys" "/etc/ssh/authorized_keys.d/%u" ];
+
+    services.openssh.settings.AuthorizedPrincipalsFile = mkIf (authPrincipalsFiles != {}) "/etc/ssh/authorized_principals.d/%u";
 
     services.openssh.extraConfig = mkOrder 0
       ''
@@ -550,7 +586,7 @@ in
         '') cfg.ports}
 
         ${concatMapStrings ({ port, addr, ... }: ''
-          ListenAddress ${addr}${if port != null then ":" + toString port else ""}
+          ListenAddress ${addr}${optionalString (port != null) (":" + toString port)}
         '') cfg.listenAddresses}
 
         ${optionalString cfgc.setXAuthLocation ''
@@ -571,13 +607,43 @@ in
         '')}
       '';
 
+    system.checks = [
+      (pkgs.runCommand "check-sshd-config"
+        {
+          nativeBuildInputs = [ validationPackage ];
+        } ''
+        ${concatMapStringsSep "\n"
+          (lport: "sshd -G -T -C lport=${toString lport} -f ${sshconf} > /dev/null")
+          cfg.ports}
+        ${concatMapStringsSep "\n"
+          (la: "sshd -G -T -C ${escapeShellArg "laddr=${la.addr},lport=${toString la.port}"} -f ${sshconf} > /dev/null")
+          cfg.listenAddresses}
+        touch $out
+      '')
+    ];
+
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
-                    message = "cannot enable X11 forwarding without setting xauth location";}]
+                    message = "cannot enable X11 forwarding without setting xauth location";}
+                  (let
+                    duplicates =
+                      # Filter out the groups with more than 1 element
+                      lib.filter (l: lib.length l > 1) (
+                        # Grab the groups, we don't care about the group identifiers
+                        lib.attrValues (
+                          # Group the settings that are the same in lower case
+                          lib.groupBy lib.strings.toLower (attrNames cfg.settings)
+                        )
+                      );
+                    formattedDuplicates = lib.concatMapStringsSep ", " (dupl: "(${lib.concatStringsSep ", " dupl})") duplicates;
+                  in
+                  {
+                    assertion = lib.length duplicates == 0;
+                    message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
+                  })]
       ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });
-
   };
 
 }

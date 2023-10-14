@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-ayatana";
-  version = "unstable-2021-12-18";
+  version = "unstable-2023-04-18";
 
   src = fetchFromGitHub {
     owner = "Lafydev";
     repo = pname;
-    rev = "5749f753ca64ce58232a46b9045949b3f8219827";
-    sha256 = "sha256-kuEVw62IDTyC3hRRcWv2RihPOohGqEt8YLr44SurwPM=";
+    rev = "d554663b4e199d44c1f1d53b5cc39b9a775b3f1c";
+    sha256 = "sha256-dEk0exLh+TGuQt7be2YRTS2EzPD55+edR8WibthXwhI=";
   };
 
   patches = [

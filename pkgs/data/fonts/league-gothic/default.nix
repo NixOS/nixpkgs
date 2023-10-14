@@ -1,11 +1,11 @@
 { lib, fetchzip, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "league-gothic";
   version = "1.601";
 
   src = fetchzip {
-    url = "https://github.com/theleagueof/league-gothic/releases/download/${self.version}/LeagueGothic-${self.version}.tar.xz";
+    url = "https://github.com/theleagueof/league-gothic/releases/download/${finalAttrs.version}/LeagueGothic-${finalAttrs.version}.tar.xz";
     hash = "sha256-emkXKyQw4R0Zgg02oJsvBkqV0jmczP0tF0K2IKqJHMA=";
   };
 

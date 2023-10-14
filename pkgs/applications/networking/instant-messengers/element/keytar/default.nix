@@ -12,7 +12,7 @@ in stdenv.mkDerivation rec {
     owner = "atom";
     repo = "node-keytar";
     rev = "v${version}";
-    sha256 = pinData.srcHash;
+    hash = pinData.srcHash;
   };
 
   nativeBuildInputs = [

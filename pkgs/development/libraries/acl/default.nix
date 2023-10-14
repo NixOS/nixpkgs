@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dgxhxokBs3/dXu/ur0wMeia9/disdHoe3/HODiQ8Ea8=";
   };
 
+  patches = [
+    ./LFS64.patch
+  ];
+
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   nativeBuildInputs = [ gettext ];
@@ -24,7 +28,7 @@ stdenv.mkDerivation rec {
 
   # Upstream use C++-style comments in C code. Remove them.
   # This comment breaks compilation if too strict gcc flags are used.
-  patchPhase = ''
+  postPatch = ''
     echo "Removing C++-style comments from include/acl.h"
     sed -e '/^\/\//d' -i include/acl.h
 

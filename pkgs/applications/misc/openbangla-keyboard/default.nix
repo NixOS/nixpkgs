@@ -1,9 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
 , pkg-config
 , rustPlatform
+, rustc
 , wrapQtAppsHook
 , ibus
 , qtbase
@@ -25,8 +27,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     rustPlatform.cargoSetupHook
     wrapQtAppsHook
   ];
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
     postPatch = ''
       cp ${./Cargo.lock} Cargo.lock
     '';
-    sourceRoot = "source/${cargoRoot}";
+    sourceRoot = "${src.name}/${cargoRoot}";
     sha256 = "sha256-01MWuUUirsgpoprMArRp3qxKNayPHTkYWk31nXcIC34=";
   };
 

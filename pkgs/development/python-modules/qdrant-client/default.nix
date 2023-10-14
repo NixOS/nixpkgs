@@ -1,34 +1,70 @@
-{ lib, buildPythonPackage, fetchPypi, python3Packages, numpy, httpx, grpcio, typing-extensions, grpcio-tools, pydantic, urllib3, h2 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, grpcio
+, grpcio-tools
+, httpx
+, numpy
+, pytestCheckHook
+, poetry-core
+, pydantic
+, pythonOlder
+, urllib3
+, portalocker
+, fastembed
+# check inputs
+, pytest-asyncio
+}:
 
 buildPythonPackage rec {
   pname = "qdrant-client";
-  version = "1.1.0";
-
-  src = fetchPypi {
-    pname = "qdrant_client";
-    inherit version;
-    hash = "sha256-tiWPQXjYkUM77rgKYbQG4jdi9c/I2WTMq5y+9zLax/0=";
-  };
-
+  version = "1.5.4";
   format = "pyproject";
 
-  nativeBuildInputs = with python3Packages; [
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "qdrant";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9aZBUrGCNRQjYRF1QmIwVqeT5Tdgv7CCkyOUsbZbmVM=";
+  };
+
+  nativeBuildInputs = [
     poetry-core
   ];
 
+  propagatedBuildInputs = [
+    numpy
+    httpx
+    grpcio
+    # typing-extensions
+    grpcio-tools
+    pydantic
+    urllib3
+    portalocker
+  ] ++ httpx.optional-dependencies.http2;
 
-  # postPatch = ''
-  #   substituteInPlace setup.cfg \
-  #     --replace "validators>=0.18.2,<0.20.0" "validators>=0.18.2,<0.21.0"
-  # '';
+  pythonImportsCheck = [
+    "qdrant_client"
+  ];
 
-  propagatedBuildInputs = [ numpy httpx grpcio typing-extensions grpcio-tools pydantic urllib3 h2 ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
+  # tests require network access
   doCheck = false;
 
+  passthru.optional-dependencies = {
+    fastembed = [ fastembed ];
+  };
+
   meta = with lib; {
-    homepage = "https://github.com/qdrant/qdrant-client";
     description = "Python client for Qdrant vector search engine";
+    homepage = "https://github.com/qdrant/qdrant-client";
+    changelog = "https://github.com/qdrant/qdrant-client/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
   };

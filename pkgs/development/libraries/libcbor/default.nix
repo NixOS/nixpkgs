@@ -22,7 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-ZTa+wG1g9KsVoqJG/yqxo2fJ7OhPnaI9QcfOmpOT3pg=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    cmocka # cmake expects cmocka module
+  ];
 
   cmakeFlags = lib.optional finalAttrs.doCheck "-DWITH_TESTS=ON"
     ++ lib.optional (!stdenv.hostPlatform.isStatic) "-DBUILD_SHARED_LIBS=ON";

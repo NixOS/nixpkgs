@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "cdcs";
-  version = "0.1.9";
+  version = "0.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,9 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "pycdcs";
-    # https://github.com/usnistgov/pycdcs/issues/1
-    rev = "0a770b752301c27e227ca40a4752f305b55dee20";
-    hash = "sha256-AUrVEFea4VtBJXWWgECqdBFCqKuHWAlh07Dljp+HBa0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WiNjMMcpp5K+Re44ryB7LNzr2LnnYzLZ5b0iT7u1ZiA=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for performing REST calls to configurable data curation system (CDCS) databases";
     homepage = "https://github.com/usnistgov/pycdcs";
+    changelog = "https://github.com/usnistgov/pycdcs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

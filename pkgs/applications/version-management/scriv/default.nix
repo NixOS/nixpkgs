@@ -9,11 +9,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "scriv";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-le39dmQs965rXNQJdVRdivWPY5jKv+g/91Xo7tuN3U4=";
+    hash = "sha256-TfWX7gp7PcwNUxXXZJ3wke/LGz/wjwtRppg0ByfRcRg=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

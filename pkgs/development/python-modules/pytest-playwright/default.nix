@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , playwright
+, playwright-driver
 , pytest
 , pytest-base-url
 , pytestCheckHook
@@ -13,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
-  version = "0.3.0";
+  version = "0.4.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-pytest";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fHzQxbQBSEkCFu/ualjzSmIt3SiEa2ktTvIJKPZLT9Q=";
+    hash = "sha256-yYFzaIPYOsuvS8bGcuwQQNS/CtvGUe1XQdORmfEJQmU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -46,7 +47,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   preCheck = ''
-    export PLAYWRIGHT_BROWSERS_PATH=${playwright.browsers}
+    export PLAYWRIGHT_BROWSERS_PATH=${playwright-driver.browsers}
   '';
 
   pythonImportsCheck = [

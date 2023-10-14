@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "blackbox";
-  version = "2.0.0";
+  version = "1.20220610";
 
   src = fetchFromGitHub {
     owner = "stackexchange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1plwdmzds6dq2rlp84dgiashrfg0kg4yijhnxaapz2q4d1vvx8lq";
+    hash = "sha256-g0oNV7Nj7ZMmsVQFVTDwbKtF4a/Fb3WDB+NRx9IGSWA=";
   };
 
   buildInputs = [ gnupg ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --replace "PREFIX?=/usr/local" "PREFIX=$out"
 
     substituteInPlace tools/confidence_test.sh \
-      --replace 'PATH="''${blackbox_home}:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/local/bin:/usr/pkg/bin:/usr/pkg/gnu/bin:''${blackbox_home}"' \
+      --replace 'PATH="''${blackbox_home}:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/local/bin:/usr/pkg/bin:/usr/pkg/gnu/bin:/usr/local/MacGPG2/bin:/opt/homebrew/bin:''${blackbox_home}"' \
         "PATH=/build/source/bin/:$PATH"
   '';
 

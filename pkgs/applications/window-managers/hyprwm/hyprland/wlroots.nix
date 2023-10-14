@@ -1,15 +1,11 @@
 { fetchFromGitLab
 , hyprland
 , wlroots
-, xwayland
-, fetchpatch
 , lib
 , libdisplay-info
 , libliftoff
 , hwdata
-, hidpiXWayland ? true
-, enableXWayland ? true
-, nvidiaPatches ? false
+, enableNvidiaPatches ? false
 }:
 let
   libdisplay-info-new = libdisplay-info.overrideAttrs (old: {
@@ -38,10 +34,7 @@ let
     ];
   });
 in
-assert (lib.assertMsg (hidpiXWayland -> enableXWayland) ''
-  wlroots-hyprland: cannot have hidpiXWayland when enableXWayland is false.
-'');
-(wlroots.overrideAttrs
+wlroots.overrideAttrs
   (old: {
     version = "0.17.0-dev";
 
@@ -49,65 +42,29 @@ assert (lib.assertMsg (hidpiXWayland -> enableXWayland) ''
       domain = "gitlab.freedesktop.org";
       owner = "wlroots";
       repo = "wlroots";
-      rev = "7abda952d0000b72d240fe1d41457b9288f0b6e5";
-      hash = "sha256-LmI/4Yp/pOOoI4RxLRx9I90NBsiqdRLVOfbATKlgpkg=";
+      rev = "98a745d926d8048bc30aef11b421df207a01c279";
+      hash = "sha256-LEIUGXvKR5DYFQUTavC3yifcObvG4XZUUHfxXmu8nEM=";
     };
 
     pname =
       old.pname
       + "-hyprland"
-      + (
-        if hidpiXWayland
-        then "-hidpi"
-        else ""
-      )
-      + (
-        if nvidiaPatches
-        then "-nvidia"
-        else ""
-      );
+      + lib.optionalString enableNvidiaPatches "-nvidia";
 
     patches =
       (old.patches or [ ])
-      ++ (lib.optionals (enableXWayland && hidpiXWayland) [
-        "${hyprland.src}/nix/wlroots-hidpi.patch"
-        (fetchpatch {
-          url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/18595000f3a21502fd60bf213122859cc348f9af.diff";
-          sha256 = "sha256-jvfkAMh3gzkfuoRhB4E9T5X1Hu62wgUjj4tZkJm0mrI=";
-          revert = true;
-        })
-      ])
-      ++ (lib.optionals nvidiaPatches [
-        (fetchpatch {
-          url = "https://aur.archlinux.org/cgit/aur.git/plain/nvidia.patch?h=hyprland-nvidia-git&id=757614af7729352fda534abe9eb1a88fe77dfe04";
-          sha256 = "A9f1p5EW++mGCaNq8w7ZJfeWmvTfUm4iO+1KDcnqYX8=";
-        })
+      ++ (lib.optionals enableNvidiaPatches [
+        "${hyprland.src}/nix/patches/wlroots-nvidia.patch"
       ]);
 
-    postPatch =
-      (old.postPatch or "")
-      + (
-        if nvidiaPatches
-        then ''
-          substituteInPlace render/gles2/renderer.c --replace "glFlush();" "glFinish();"
-        ''
-        else ""
-      );
+    # don't need old.postPatch for hwdata's path in wlroots 0.16
+    postPatch = lib.optionalString enableNvidiaPatches ''
+      substituteInPlace render/gles2/renderer.c --replace "glFlush();" "glFinish();"
+    '';
 
-    buildInputs =
-      old.buildInputs
-      ++ [
-        hwdata
-        libdisplay-info-new
-        libliftoff-new
-      ];
-  })).override {
-  xwayland = xwayland.overrideAttrs (old: {
-    patches =
-      (old.patches or [ ])
-      ++ (lib.optionals hidpiXWayland [
-        "${hyprland.src}/nix/xwayland-vsync.patch"
-        "${hyprland.src}/nix/xwayland-hidpi.patch"
-      ]);
-  });
-}
+    buildInputs = old.buildInputs ++ [
+      hwdata
+      libdisplay-info-new
+      libliftoff-new
+    ];
+  })

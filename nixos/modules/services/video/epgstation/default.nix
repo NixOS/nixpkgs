@@ -80,11 +80,11 @@ in
   options.services.epgstation = {
     enable = lib.mkEnableOption (lib.mdDoc description);
 
-    package = lib.mkOption {
-      default = pkgs.epgstation;
-      type = lib.types.package;
-      defaultText = lib.literalExpression "pkgs.epgstation";
-      description = lib.mdDoc "epgstation package to use";
+    package = lib.mkPackageOptionMD pkgs "epgstation" { };
+
+    ffmpeg = lib.mkPackageOptionMD pkgs "ffmpeg" {
+      default = [ "ffmpeg-headless" ];
+      example = "pkgs.ffmpeg-full";
     };
 
     usePreconfiguredStreaming = lib.mkOption {
@@ -264,6 +264,9 @@ in
       description = "EPGStation user";
       group = config.users.groups.epgstation.name;
       isSystemUser = true;
+
+      # NPM insists on creating ~/.npm
+      home = "/var/cache/epgstation";
     };
 
     users.groups.epgstation = { };
@@ -275,6 +278,8 @@ in
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       # FIXME: enable once mysqljs supports auth_socket
+      # https://github.com/mysqljs/mysql/issues/1507
+      #
       # ensureUsers = [ {
       #   name = username;
       #   ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
@@ -292,8 +297,8 @@ in
             database = cfg.database.name;
           };
 
-          ffmpeg = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffmpeg";
-          ffprobe = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffprobe";
+          ffmpeg = lib.mkDefault "${cfg.ffmpeg}/bin/ffmpeg";
+          ffprobe = lib.mkDefault "${cfg.ffmpeg}/bin/ffprobe";
 
           # for disambiguation with TypeScript files
           recordedFileExtension = lib.mkDefault ".m2ts";
@@ -305,9 +310,15 @@ in
       ];
 
     systemd.tmpfiles.rules = [
+      "d '/var/lib/epgstation/key' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/drop' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/recorded' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/thumbnail' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/subscribers' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/migrations/mysql' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/migrations/postgres' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/migrations/sqlite' - ${username} ${groupname} - -"
     ];
 
     systemd.services.epgstation = {
@@ -318,11 +329,14 @@ in
         ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
         ++ lib.optional config.services.mysql.enable "mysql.service";
 
+      environment.NODE_ENV = "production";
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/epgstation start";
         ExecStartPre = "+${preStartScript}";
         User = username;
         Group = groupname;
+        CacheDirectory = "epgstation";
         StateDirectory = "epgstation";
         LogsDirectory = "epgstation";
         ConfigurationDirectory = "epgstation";

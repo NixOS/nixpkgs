@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "libarchive-qt";
-  version = "2.0.7";
+  version = "2.0.8";
 
   src = fetchFromGitLab {
     owner = "marcusbritanicus";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KRywB+Op44N00q9tgO2WNCliRgUDRvrCms1O8JYt62o=";
+    sha256 = "sha256-31a6DsxObSJWyLfT6mVtyjloT26IwFHpH53iuyC2mco=";
   };
 
   nativeBuildInputs = [

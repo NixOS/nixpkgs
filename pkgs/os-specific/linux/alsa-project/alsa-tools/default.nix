@@ -8,12 +8,12 @@
 , pkg-config
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-tools";
   version = "1.2.5";
 
   src = fetchurl {
-    url = "mirror://alsa/tools/alsa-tools-${self.version}.tar.bz2";
+    url = "mirror://alsa/tools/alsa-tools-${finalAttrs.version}.tar.bz2";
     hash = "sha256-NacQJ6AfTX3kci4iNSDpQN5os8VwtsZxaRVnrij5iT4=";
   };
 

@@ -42,7 +42,7 @@ let
 
   writeTmpfiles = { rules, user ? null }:
     let
-      suffix = if user == null then "" else "-${user}";
+      suffix = optionalString (user != null) "-${user}";
     in
     pkgs.writeTextFile {
       name = "nixos-user-tmpfiles.d${suffix}";
@@ -230,5 +230,9 @@ in {
           });
         })
         cfg.tmpfiles.users;
+
+    system.userActivationScripts.tmpfiles = ''
+      ${config.systemd.package}/bin/systemd-tmpfiles --user --create --remove
+    '';
   };
 }

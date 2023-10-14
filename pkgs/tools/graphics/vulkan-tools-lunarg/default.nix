@@ -5,6 +5,7 @@
 , python3
 , jq
 , expat
+, jsoncpp
 , libX11
 , libXdmcp
 , libXrandr
@@ -24,14 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
-  # The version must match that in vulkan-headers
-  version = "1.3.239.0";
+  version = "1.3.261";
 
   src = fetchFromGitHub {
    owner = "LunarG";
    repo = "VulkanTools";
-   rev = "sdk-${version}";
-   hash = "sha256-zgkuTy9ccg8D/riA1CM/PnbXW1R0jWEINtcEVilETwk=";
+   rev = "v${version}";
+   hash = "sha256-Kem3nWVaMeDEsidKYMsWr9Bu0yBgjjennDB0sKBDogA=";
    fetchSubmodules = true;
  };
 
@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
+    jsoncpp
     libX11
     libXdmcp
     libXrandr
@@ -71,6 +72,8 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/*
     sed -i '/^git /d' $update
     ./$update
+
+    substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
   '';
 
   # Include absolute paths to layer libraries in their associated
@@ -82,7 +85,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patches = [ ./gtest.patch ];
+  patches = [
+    ./gtest.patch
+  ];
 
   # Same as vulkan-validation-layers
   dontPatchELF = true;
@@ -102,6 +107,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = [ maintainers.expipiplus1 ];
-    broken = (version != vulkan-headers.version);
   };
 }

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     description = "Insanely fast image printing in your terminal";
     maintainers = with maintainers; [ ryantm ];
     platforms = platforms.unix;
+    mainProgram = "catimg";
   };
 
 }

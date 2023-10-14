@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "singeli";
-  version = "unstable-2023-01-23";
+  version = "unstable-2023-09-12";
 
   src = fetchFromGitHub {
     owner = "mlochbaum";
     repo = "Singeli";
-    rev = "0bc519ccbbe4051204d40bfc861a5bed7132e95f";
-    hash = "sha256-zo4yr9t3hp6BOX1ac3md6R/O+hl5MphZdCmI8nNP9Yc=";
+    rev = "49a6a90d83992171a2db749e9f7fd400ec65ef2c";
+    hash = "sha256-9Dc6yrrXV6P9s1uwGlXB+ZBquOLejWe41k0TSpJGDgE=";
   };
 
   dontConfigure = true;
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/mlochbaum/Singeli";
     description = "A metaprogramming DSL for SIMD";
     license = licenses.isc;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk detegr ];
     platforms = platforms.all;
   };
 }

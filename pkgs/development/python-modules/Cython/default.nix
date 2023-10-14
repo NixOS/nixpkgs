@@ -24,12 +24,12 @@ let
 
 in buildPythonPackage rec {
   pname = "cython";
-  version = "0.29.33";
+  version = "0.29.36";
 
   src = fetchPypi {
     pname = "Cython";
     inherit version;
-    hash = "sha256-UEB2TEpNLOlko5XaJPDRrlgUSZXauSxrlvRMP01yKGo=";
+    hash = "sha256-QcDP0tdU44PJ7rle/8mqSrhH0Ml0cHfd18Dctow7wB8=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,10 @@ in buildPythonPackage rec {
   # Temporary solution
   doCheck = false;
   # doCheck = !stdenv.isDarwin;
+
+  # force regeneration of generated code in source distributions
+  # https://github.com/cython/cython/issues/5089
+  setupHook = ./setup-hook.sh;
 
   meta = {
     changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";

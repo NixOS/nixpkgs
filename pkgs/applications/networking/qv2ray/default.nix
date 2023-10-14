@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "qv2ray";
-  version = "unstable-2022-09-25";
+  version = "unstable-2023-06-09";
 
   src = fetchFromGitHub {
     owner = "Qv2ray";
     repo = "Qv2ray";
-    rev = "fb44fb1421941ab192229ff133bc28feeb4a8ce5";
-    sha256 = "sha256-TngDgLXKyAoQFnXpBNaz4QjfkVwfZyuQwatdhEiI57U=";
+    rev = "aea9981cc28fe25de55207b93d86036b30d467d2";
+    hash = "sha256-ySXAF6fkkKsafuSa3DxkOuRjSyiCDUZRevcfJRp7LPM=";
     fetchSubmodules = true;
   };
 
@@ -42,7 +42,6 @@ mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DQV2RAY_DISABLE_AUTO_UPDATE=on"
     "-DQV2RAY_USE_V5_CORE=on"
     "-DQV2RAY_TRANSLATION_PATH=${placeholder "out"}/share/qv2ray/lang"

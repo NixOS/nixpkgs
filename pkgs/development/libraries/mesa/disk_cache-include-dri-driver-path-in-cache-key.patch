@@ -10,16 +10,18 @@ diff --git a/meson_options.txt b/meson_options.txt
 index b8f753e2e1a..70d9071c8be 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -452,6 +452,12 @@ option(
+@@ -452,7 +452,14 @@ option(
    value : true,
    description : 'Enable direct rendering in GLX and EGL for DRI',
  )
+ 
 +option(
 +  'disk-cache-key',
 +  type : 'string',
 +  value : '',
 +  description : 'Mesa cache key.'
 +)
++
  option('egl-lib-suffix',
    type : 'string',
    value : '',

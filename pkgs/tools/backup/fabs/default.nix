@@ -58,6 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/openafs-contrib/fabs";
     license = with licenses; [ isc ];
     maintainers = with maintainers; [ spacefrogg ];
+    broken = lib.versionAtLeast python3.pkgs.sqlalchemy.version "2.0";
     badPlatforms = [
       "x86_64-darwin"
       "aarch64-darwin"

@@ -3,11 +3,12 @@
 , fetchFromGitHub
 , testers
 , pokete
+, faketty
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pokete";
-  version = "0.9.0";
+  version = "0.9.1";
 
   format = "other";
 
@@ -15,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "lxgr-linux";
     repo = "pokete";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-55BqUSZJPDz5g1FTdkuWa9wcsrLwh6YagD5bQ9ZpQv4=";
+    sha256 = "sha256-T18908Einsgful8hYMVHl0cL4sIYFvhpy0MbLIcVhxs=";
   };
 
   pythonPath = with python3.pkgs; [
@@ -41,7 +42,8 @@ python3.pkgs.buildPythonApplication rec {
   passthru.tests = {
     pokete-version = testers.testVersion {
       package = pokete;
-      command = "pokete --help";
+      command = "${faketty}/bin/faketty pokete --help";
+      version = "v${version}";
     };
   };
 

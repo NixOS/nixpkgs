@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "8.3.1";
+  version = "8.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UXWVSS3eVwpP1ranb2REQMG6UeIzjIpnHX8Edf2o+f0=";
+    hash = "sha256-RTEsSg5VB1k9oZPe3QSrsUaSU7YB7K9jRFrYDwoepYE=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,12 @@ buildPythonPackage rec {
     hypothesis
     pytest-mock
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # timing sensitive test
+    # hypothesis.errors.DeadlineExceeded: Test took 524.23ms, which exceeds the deadline of 200.00ms
+    "test_string_component_transform_factory"
   ];
 
   pythonImportsCheck = [

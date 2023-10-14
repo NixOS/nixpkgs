@@ -43,6 +43,8 @@ in
     services.uptime-kuma.settings = {
       DATA_DIR = "/var/lib/uptime-kuma/";
       NODE_ENV = mkDefault "production";
+      HOST = mkDefault "127.0.0.1";
+      PORT = mkDefault "3001";
     };
 
     systemd.services.uptime-kuma = {

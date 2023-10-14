@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-, openssl_1_1
+, openssl
 , avahi
 , alsa-lib
 , libplist
@@ -34,21 +34,41 @@
 , enableLibdaemon ? false
 }:
 
+let
+  inherit (lib) optional optionals;
+in
+
 stdenv.mkDerivation rec {
-  version = "4.1.1";
   pname = "shairport-sync";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
-    rev = version;
     repo = "shairport-sync";
     owner = "mikebrady";
-    hash = "sha256-EKt5mH9GmzeR4zdPDFOt26T9STpG1khVrY4DFIv5Maw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Yj0SKMKACj2B/ADPkUzO4EvaYZX39erKmjaTsr5UN0s=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    # For glib we want the `dev` output for the same library we are
+    # also linking against, since pkgsHostTarget.glib.dev exposes
+    # some extra tools that are built for build->host execution.
+    # To achieve this, we coerce the output to a string to prevent
+    # mkDerivation's splicing logic from kicking in.
+    "${glib.dev}"
+  ] ++ optional enableAirplay2 [
+    unixtools.xxd
+  ];
 
-  buildInputs = with lib; [
-    openssl_1_1
+  makeFlags = [
+    # Workaround for https://github.com/mikebrady/shairport-sync/issues/1705
+    "AR=${stdenv.cc.bintools.targetPrefix}ar"
+  ];
+
+  buildInputs = [
+    openssl
     avahi
     popt
     libconfig
@@ -65,7 +85,6 @@ stdenv.mkDerivation rec {
     libgcrypt
     libuuid
     ffmpeg
-    unixtools.xxd
   ]
   ++ optional stdenv.isLinux glib;
 
@@ -76,7 +95,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = with lib; [
+  configureFlags = [
     "--without-configfiles"
     "--sysconfdir=/etc"
     "--with-ssl=openssl"
@@ -95,6 +114,8 @@ stdenv.mkDerivation rec {
   ++ optional enableMpris "--with-mpris-interface"
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
+
+  strictDeps = true;
 
   meta = with lib; {
     homepage = "https://github.com/mikebrady/shairport-sync";

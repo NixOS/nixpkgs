@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "snscrape";
-  version = "0.6.0.20230303";
+  version = "0.7.0.20230622";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "JustAnotherArchivist";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FY8byS+0yAhNSRxWsrsQMR5kdZmnHutru5Z6SWVfpiE=";
+    hash = "sha256-9xAUMr1SWFePEvIz6DFEexk9Txex3u8wPNfMAdxEUCA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

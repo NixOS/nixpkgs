@@ -4,14 +4,14 @@
 , installShellFiles
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dxa";
   version = "0.1.5";
 
   src = fetchurl {
     urls = [
-      "https://www.floodgap.com/retrotech/xa/dists/dxa-${self.version}.tar.gz"
-      "https://www.floodgap.com/retrotech/xa/dists/unsupported/dxa-${self.version}.tar.gz"
+      "https://www.floodgap.com/retrotech/xa/dists/dxa-${finalAttrs.version}.tar.gz"
+      "https://www.floodgap.com/retrotech/xa/dists/unsupported/dxa-${finalAttrs.version}.tar.gz"
     ];
     hash = "sha256-jkDtd4FlgfmtlaysLtaaL7KseFDkM9Gc1oQZOkWCZ5k=";
   };

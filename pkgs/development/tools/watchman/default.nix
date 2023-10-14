@@ -1,6 +1,6 @@
 { boost
+, cargo
 , cmake
-, config
 , CoreServices
 , cpptoml
 , double-conversion
@@ -21,10 +21,10 @@
 , libunwind
 , lz4
 , openssl
-, pcre
+, pcre2
 , pkg-config
-, python3
 , rustPlatform
+, rustc
 , stateDir ? "/tmp"
 , stdenv
 , wangle
@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "watchman";
-  version = "2023.01.30.00";
+  version = "2023.08.14.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    sha256 = "sha256-ZtCUlxx3YgfwKa9J8o9GkdkHquJbh+EytLiGNRlABls=";
+    hash = "sha256-41bBPFlLYFHySyX4/GUllT1pNywSRcH7x/pnb5iN/1o=";
   };
 
   cmakeFlags = [
@@ -56,16 +56,14 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     ensureNewerSourcesForZipFilesHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
-    pcre
+    pcre2
     openssl
-    python3
     gtest
     glog
     boost
@@ -101,7 +99,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Watches files and takes action when they change";
     homepage = "https://facebook.github.io/watchman";
-    maintainers = with maintainers; [ cstrahan kylesferrazza ];
+    maintainers = with maintainers; [ kylesferrazza ];
     platforms = platforms.unix;
     license = licenses.mit;
   };

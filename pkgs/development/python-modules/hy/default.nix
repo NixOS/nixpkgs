@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "hy";
-  version = "0.26.0";
+  version = "0.27.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "hylang";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Ow3FAiH97lSaI3oSx702+jgScfNgf+JstuDpgPSB8LM=";
+    hash = "sha256-Emzz6m5voH3dCAw7/7d0XLlLEEOjnfrVNZ8WWKa38Ow=";
   };
 
   # https://github.com/hylang/hy/blob/1.0a4/get_version.py#L9-L10
@@ -42,11 +42,6 @@ buildPythonPackage rec {
     # For test_bin_hy
     export PATH="$out/bin:$PATH"
   '';
-
-  disabledTests = [
-    "test_circular_macro_require"
-    "test_macro_require"
-  ];
 
   pythonImportsCheck = [ "hy" ];
 

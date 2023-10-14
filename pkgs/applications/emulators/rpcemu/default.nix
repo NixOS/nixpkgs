@@ -7,13 +7,13 @@
 let
   inherit (qt5) qtbase qtmultimedia wrapQtAppsHook;
 in
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpcemu";
   version = "0.9.4";
 
   src = fetchhg {
     url = "http://www.home.marutan.net/hg/rpcemu";
-    rev = "release_${self.version}";
+    rev = "release_${finalAttrs.version}";
     sha256 = "sha256-UyjfTfUpSvJNFPkQWPKppxp/kO0hVGo5cE9RuCU8GJI=";
   };
 

@@ -2,9 +2,11 @@
 , lib
 , fetchFromGitHub
 , nix-update-script
+, cargo
 , meson
 , ninja
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libshumate
@@ -19,34 +21,29 @@
 , desktop-file-utils
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ashpd-demo";
-  version = "0.2.2";
+  version = "0.3.0";
 
-  src =
-    let
-      share = fetchFromGitHub {
-        owner = "bilelmoussaoui";
-        repo = "ashpd";
-        rev = version;
-        sha256 = "9O6XqM4oys/hXgztQQ8tTobJV8U52db/VY6FlTMUvGY=";
-      };
-    in
-    "${share}/ashpd-demo";
+  src = fetchFromGitHub {
+    owner = "bilelmoussaoui";
+    repo = "ashpd";
+    rev = "${finalAttrs.version}-demo";
+    hash = "sha256-isc0+Mke6XeCCLiuxnjHqrnlGqYuQnmcU1acM14UOno=";
+  };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-eFq42m16zzrUBbAqv7BsAf4VxyO93WynLjvIzKbZwnQ=";
+    src = "${finalAttrs.src}/ashpd-demo";
+    hash = "sha256-9L/WFL2fLCRahjGCVdgV+3HfDMrntdIWcuuOJbzdPiI=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
     rustPlatform.bindgenHook
     desktop-file-utils
@@ -64,13 +61,9 @@ stdenv.mkDerivation rec {
     libshumate
   ];
 
-  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
-  # https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
-  env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
-
-  passthru = {
-    updateScript = nix-update-script { };
-  };
+  postPatch = ''
+    cd ashpd-demo
+  '';
 
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";
@@ -79,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
-}
+})

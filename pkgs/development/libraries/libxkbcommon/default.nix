@@ -63,5 +63,10 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ primeos ttuegel ];
     mainProgram = "xkbcli";
     platforms = with platforms; unix;
+    pkgConfigModules = [
+      "xkbcommon"
+      "xkbcommon-x11"
+      "xkbregistry"
+    ];
   };
 }

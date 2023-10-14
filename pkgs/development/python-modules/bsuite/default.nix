@@ -10,7 +10,7 @@
 , absl-py
 , dm-env
 , plotnine
-, scikitimage
+, scikit-image
 , dm-tree
 , patsy
 , tensorflow-probability
@@ -45,7 +45,7 @@ let bsuite = buildPythonPackage rec {
     pandas
     patsy
     plotnine
-    scikitimage
+    scikit-image
     scipy
     statsmodels
     termcolor

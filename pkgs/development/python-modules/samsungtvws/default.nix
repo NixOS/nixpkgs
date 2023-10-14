@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "samsungtvws";
-  version = "2.5.0";
+  version = "2.6.0";
   format = "setuptools";
   disabled = isPy27;
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "xchwarze";
     repo = "samsung-tv-ws-api";
     rev = "v${version}";
-    hash = "sha256-AimG5tyTRBETpivC2BwCuoR4o7y98YT6u5sogJlcmoo=";
+    hash = "sha256-mkjfimzu7paz+ZskartL052AfUBtL1xU0eOlrHgD1UE=";
   };
 
   propagatedBuildInputs = [
@@ -63,6 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Samsung Smart TV WS API wrapper";
     homepage = "https://github.com/xchwarze/samsung-tv-ws-api";
+    changelog = "https://github.com/xchwarze/samsung-tv-ws-api/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

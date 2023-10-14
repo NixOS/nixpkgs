@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "2.1.1";
+  version = "2.3.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uJ6fdRPDK76qKHE4E6dI01vKgvfqbc6A1RCwnOtuOTY=";
+    hash = "sha256-aM3N47GM5ABvkjP+SZ+Uvnoh6eTF6wvAPJ1xR10ohJg=";
   };
 
   propagatedBuildInputs = [

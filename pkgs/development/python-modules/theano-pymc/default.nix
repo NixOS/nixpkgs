@@ -44,5 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/majidaldo/Theano-PyMC";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nidabdella ];
+    broken = true;
   };
 }

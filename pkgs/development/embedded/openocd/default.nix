@@ -3,6 +3,8 @@
 , fetchurl
 , pkg-config
 , hidapi
+, jimtcl
+, libjaylink
 , libusb1
 , libgpiod
 
@@ -22,11 +24,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ hidapi libftdi1 libusb1 ]
-    ++ lib.optional stdenv.isLinux libgpiod;
+  buildInputs = [ hidapi jimtcl libftdi1 libjaylink libusb1 ]
+    ++
+    # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
+    lib.optional stdenv.isLinux (libgpiod.overrideAttrs (old: rec {
+      version = "1.6.4";
+      src = fetchurl {
+        url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
+        sha256 = "sha256-gp1KwmjfB4U2CdZ8/H9HbpqnNssqaKYwvpno+tGXvgo=";
+      };
+    }));
 
   configureFlags = [
     "--disable-werror"
+    "--disable-internal-jimtcl"
+    "--disable-internal-libjaylink"
     "--enable-jtag_vpi"
     "--enable-buspirate"
     "--enable-remote-bitbang"

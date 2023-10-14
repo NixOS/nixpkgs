@@ -2,14 +2,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
-  version = "7.0.1";
+  version = "8.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "copier-org";
     repo = "copier";
     rev = "v${version}";
-    sha256 = "sha256-8lTvyyKfAkvnUvw3e+r9C/49QASR8Zeokm509jxGK2g=";
+    # Conflict on APFS on darwin
+    postFetch = ''
+      rm $out/tests/demo/doc/ma*ana.txt
+    '';
+    hash = "sha256-PxyXlmEZ9cqZgDWcdeNznEC4F1J4NFMiwy0D7g+YZUs=";
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -21,7 +25,9 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     colorama
+    decorator
     dunamai
+    funcy
     iteration-utilities
     jinja2
     jinja2-ansible-filters

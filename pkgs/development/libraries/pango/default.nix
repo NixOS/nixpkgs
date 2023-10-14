@@ -17,19 +17,19 @@
 , glib
 , python3
 , x11Support? !stdenv.isDarwin, libXft
-, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.12";
+  version = "1.50.14";
 
   outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "yu+W0nu+eSpr6ScnxzRo2DKxPaV8gHHvebnfae4Fj+M=";
+    sha256 = "HWfyBb/DGMJ6Kc/ftoKFaN9WZ5XfDLUdIYnN5/LVgeg=";
   };
 
   depsBuildBuild = [
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
       packageName = pname;
       versionPolicy = "odd-unstable";
       # 1.90 is alpha for API 2.
-      freeze = true;
+      freeze = "1.90.0";
     };
   };
 
@@ -119,5 +119,14 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.unix;
+
+    pkgConfigModules = [
+      "pango"
+      "pangocairo"
+      "pangofc"
+      "pangoft2"
+      "pangoot"
+      "pangoxft"
+    ];
   };
 }

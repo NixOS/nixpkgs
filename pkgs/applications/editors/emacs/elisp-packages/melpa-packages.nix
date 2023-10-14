@@ -125,7 +125,7 @@ let
         ligo-mode =
           if super.ligo-mode.version == "0.3"
           then markBroken super.ligo-mode
-          else super.ligo-mode;
+          else null; # auto-updater is failing; use manual one
 
         # upstream issue: missing file header
         link = markBroken super.link;
@@ -314,7 +314,9 @@ let
 
         ivy-rtags = fix-rtags super.ivy-rtags;
 
-        jinx = super.jinx.overrideAttrs (old: {
+        jinx = super.jinx.overrideAttrs (old: let
+          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        in {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
             pkgs.pkg-config
           ];
@@ -324,15 +326,37 @@ let
           postBuild = ''
             pushd working/jinx
             NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
-            $CC -shared -o jinx-mod.so jinx-mod.c -lenchant-2
+            $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
             popd
           '';
 
           postInstall = (old.postInstall or "") + "\n" + ''
             pushd source
             outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
-            install -m444 --target-directory=$outd jinx-mod.so
+            install -m444 --target-directory=$outd jinx-mod${libExt}
             rm $outd/jinx-mod.c $outd/emacs-module.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
+
+        sqlite3 = super.sqlite3.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            pushd working/sqlite3
+            make
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$out/share/emacs/site-lisp/elpa/sqlite3-*
+            install -m444 -t $outd sqlite3-api.so
+            rm $outd/*.c $outd/*.h
             popd
           '';
 
@@ -450,6 +474,13 @@ let
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
+        pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace pikchr-mode.el \
+              --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+          '';
+        });
+
         rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
         rtags-xref = dontConfigure super.rtags;
@@ -498,10 +529,24 @@ let
           '';
         });
 
+        tokei = super.tokei.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace tokei.el \
+              --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
+          '';
+        });
+
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
+        });
+
+        typst-mode = super.typst-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace typst-mode.el \
+              --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+          '';
         });
 
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {

@@ -7,6 +7,18 @@ let
   serverConfigFile = settingsFormat.generate "server.toml" (filterConfig cfg.serverSettings);
   clientConfigFile = settingsFormat.generate "kanidm-config.toml" (filterConfig cfg.clientSettings);
   unixConfigFile = settingsFormat.generate "kanidm-unixd.toml" (filterConfig cfg.unixSettings);
+  certPaths = builtins.map builtins.dirOf [ cfg.serverSettings.tls_chain cfg.serverSettings.tls_key ];
+
+  # Merge bind mount paths and remove paths where a prefix is already mounted.
+  # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
+  # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
+  hasPrefixInList = list: newPath: lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
+  mergePaths = lib.foldl' (merged: newPath: let
+      # If the new path is a prefix to some existing path, we need to filter it out
+      filteredPaths = lib.filter (p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
+      # If a prefix of the new path is already in the list, do not add it
+      filteredNew = lib.optional (!hasPrefixInList filteredPaths newPath) newPath;
+    in filteredPaths ++ filteredNew) [];
 
   defaultServiceConfig = {
     BindReadOnlyPaths = [
@@ -16,7 +28,7 @@ let
       "-/etc/hosts"
       "-/etc/localtime"
     ];
-    CapabilityBoundingSet = "";
+    CapabilityBoundingSet = [];
     # ProtectClock= adds DeviceAllow=char-rtc r
     DeviceAllow = "";
     # Implies ProtectSystem=strict, which re-mounts all paths
@@ -56,6 +68,8 @@ in
     enableClient = lib.mkEnableOption (lib.mdDoc "the Kanidm client");
     enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
     enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration");
+
+    package = lib.mkPackageOptionMD pkgs "kanidm" {};
 
     serverSettings = lib.mkOption {
       type = lib.types.submodule {
@@ -110,8 +124,8 @@ in
           };
           log_level = lib.mkOption {
             description = lib.mdDoc "Log level of the server.";
-            default = "default";
-            type = lib.types.enum [ "default" "verbose" "perfbasic" "perffull" ];
+            default = "info";
+            type = lib.types.enum [ "info" "debug" "trace" ];
           };
           role = lib.mkOption {
             description = lib.mdDoc "The role of this server. This affects the replication relationship and thereby available features.";
@@ -123,7 +137,7 @@ in
       default = { };
       description = lib.mdDoc ''
         Settings for Kanidm, see
-        [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/server_configuration.md)
+        [the documentation](https://kanidm.github.io/kanidm/stable/server_configuration.html)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/server.toml)
         for possible values.
       '';
@@ -141,7 +155,7 @@ in
       };
       description = lib.mdDoc ''
         Configure Kanidm clients, needed for the PAM daemon. See
-        [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/client_tools.md#kanidm-configuration)
+        [the documentation](https://kanidm.github.io/kanidm/stable/client_tools.html#kanidm-configuration)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/config)
         for possible values.
       '';
@@ -159,7 +173,7 @@ in
       };
       description = lib.mdDoc ''
         Configure Kanidm unix daemon.
-        See [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/pam_and_nsswitch.md#the-unix-daemon)
+        See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
         for possible values.
       '';
@@ -210,28 +224,40 @@ in
         }
       ];
 
-    environment.systemPackages = lib.mkIf cfg.enableClient [ pkgs.kanidm ];
+    environment.systemPackages = lib.mkIf cfg.enableClient [ cfg.package ];
 
     systemd.services.kanidm = lib.mkIf cfg.enableServer {
       description = "kanidm identity management daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      serviceConfig = defaultServiceConfig // {
-        StateDirectory = "kanidm";
-        StateDirectoryMode = "0700";
-        ExecStart = "${pkgs.kanidm}/bin/kanidmd server -c ${serverConfigFile}";
-        User = "kanidm";
-        Group = "kanidm";
+      serviceConfig = lib.mkMerge [
+        # Merge paths and ignore existing prefixes needs to sidestep mkMerge
+        (defaultServiceConfig // {
+          BindReadOnlyPaths = mergePaths (defaultServiceConfig.BindReadOnlyPaths ++ certPaths);
+        })
+        {
+          StateDirectory = "kanidm";
+          StateDirectoryMode = "0700";
+          RuntimeDirectory = "kanidmd";
+          ExecStart = "${cfg.package}/bin/kanidmd server -c ${serverConfigFile}";
+          User = "kanidm";
+          Group = "kanidm";
 
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
-        # This would otherwise override the CAP_NET_BIND_SERVICE capability.
-        PrivateUsers = false;
-        # Port needs to be exposed to the host network
-        PrivateNetwork = false;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        TemporaryFileSystem = "/:ro";
-      };
+          BindPaths = [
+            # To create the socket
+            "/run/kanidmd:/run/kanidmd"
+          ];
+
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+          CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
+          # This would otherwise override the CAP_NET_BIND_SERVICE capability.
+          PrivateUsers = lib.mkForce false;
+          # Port needs to be exposed to the host network
+          PrivateNetwork = lib.mkForce false;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+          TemporaryFileSystem = "/:ro";
+        }
+      ];
       environment.RUST_LOG = "info";
     };
 
@@ -240,34 +266,34 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       restartTriggers = [ unixConfigFile clientConfigFile ];
-      serviceConfig = defaultServiceConfig // {
-        CacheDirectory = "kanidm-unixd";
-        CacheDirectoryMode = "0700";
-        RuntimeDirectory = "kanidm-unixd";
-        ExecStart = "${pkgs.kanidm}/bin/kanidm_unixd";
-        User = "kanidm-unixd";
-        Group = "kanidm-unixd";
+      serviceConfig = lib.mkMerge [
+        defaultServiceConfig
+        {
+          CacheDirectory = "kanidm-unixd";
+          CacheDirectoryMode = "0700";
+          RuntimeDirectory = "kanidm-unixd";
+          ExecStart = "${cfg.package}/bin/kanidm_unixd";
+          User = "kanidm-unixd";
+          Group = "kanidm-unixd";
 
-        BindReadOnlyPaths = [
-          "/nix/store"
-          "-/etc/resolv.conf"
-          "-/etc/nsswitch.conf"
-          "-/etc/hosts"
-          "-/etc/localtime"
-          "-/etc/kanidm"
-          "-/etc/static/kanidm"
-          "-/etc/ssl"
-          "-/etc/static/ssl"
-        ];
-        BindPaths = [
-          # To create the socket
-          "/run/kanidm-unixd:/var/run/kanidm-unixd"
-        ];
-        # Needs to connect to kanidmd
-        PrivateNetwork = false;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        TemporaryFileSystem = "/:ro";
-      };
+          BindReadOnlyPaths = [
+            "-/etc/kanidm"
+            "-/etc/static/kanidm"
+            "-/etc/ssl"
+            "-/etc/static/ssl"
+            "-/etc/passwd"
+            "-/etc/group"
+          ];
+          BindPaths = [
+            # To create the socket
+            "/run/kanidm-unixd:/var/run/kanidm-unixd"
+          ];
+          # Needs to connect to kanidmd
+          PrivateNetwork = lib.mkForce false;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+          TemporaryFileSystem = "/:ro";
+        }
+      ];
       environment.RUST_LOG = "info";
     };
 
@@ -278,7 +304,7 @@ in
       partOf = [ "kanidm-unixd.service" ];
       restartTriggers = [ unixConfigFile clientConfigFile ];
       serviceConfig = {
-        ExecStart = "${pkgs.kanidm}/bin/kanidm_unixd_tasks";
+        ExecStart = "${cfg.package}/bin/kanidm_unixd_tasks";
 
         BindReadOnlyPaths = [
           "/nix/store"
@@ -304,12 +330,16 @@ in
         ProtectHome = false;
         RestrictAddressFamilies = [ "AF_UNIX" ];
         TemporaryFileSystem = "/:ro";
+        Restart = "on-failure";
       };
       environment.RUST_LOG = "info";
     };
 
     # These paths are hardcoded
     environment.etc = lib.mkMerge [
+      (lib.mkIf cfg.enableServer {
+        "kanidm/server.toml".source = serverConfigFile;
+      })
       (lib.mkIf options.services.kanidm.clientSettings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })
@@ -318,7 +348,7 @@ in
       })
     ];
 
-    system.nssModules = lib.mkIf cfg.enablePam [ pkgs.kanidm ];
+    system.nssModules = lib.mkIf cfg.enablePam [ cfg.package ];
 
     system.nssDatabases.group = lib.optional cfg.enablePam "kanidm";
     system.nssDatabases.passwd = lib.optional cfg.enablePam "kanidm";
@@ -337,7 +367,7 @@ in
           description = "Kanidm server";
           isSystemUser = true;
           group = "kanidm";
-          packages = with pkgs; [ kanidm ];
+          packages = [ cfg.package ];
         };
       })
       (lib.mkIf cfg.enablePam {

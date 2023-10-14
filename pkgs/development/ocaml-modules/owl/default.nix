@@ -3,7 +3,7 @@
 , dune-configurator
 , fetchFromGitHub
 , alcotest
-, eigen
+, ctypes
 , stdio
 , openblasCompat
 , owl-base
@@ -21,7 +21,7 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   buildInputs = [ dune-configurator stdio ];
   propagatedBuildInputs = [
-    eigen
+    ctypes
     openblasCompat
     owl-base
     npy

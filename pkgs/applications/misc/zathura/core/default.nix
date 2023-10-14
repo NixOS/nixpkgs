@@ -6,12 +6,12 @@
 , gtk-mac-integration
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
   version = "0.5.2";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
     sha256 = "15314m9chmh5jkrd9vk2h2gwcwkcffv2kjcxkd4v3wmckz5sfjy6";
   };
 
@@ -25,16 +25,17 @@ stdenv.mkDerivation rec {
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
     # Make sure tests are enabled for doCheck
-    "-Dtests=enabled"
-  ] ++ lib.optional (!stdenv.isLinux) "-Dseccomp=disabled";
+    (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
+    (lib.mesonEnable "seccomp" stdenv.hostPlatform.isLinux)
+  ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config desktop-file-utils python3.pkgs.sphinx
-    gettext wrapGAppsHook libxml2 check appstream-glib
+    meson ninja pkg-config desktop-file-utils python3.pythonForBuild.pkgs.sphinx
+    gettext wrapGAppsHook libxml2 appstream-glib
   ];
 
   buildInputs = [
-    gtk girara libintl sqlite glib file librsvg
+    gtk girara libintl sqlite glib file librsvg check
     texlive.bin.core
   ] ++ lib.optional stdenv.isLinux libseccomp
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
@@ -48,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ globin ];
   };
-}
+})

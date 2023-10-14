@@ -177,6 +177,7 @@ rec {
   genJqSecretsReplacementSnippet' = attr: set: output:
     let
       secrets = recursiveGetAttrWithJqPrefix set attr;
+      stringOrDefault = str: def: if str == "" then def else str;
     in ''
       if [[ -h '${output}' ]]; then
         rm '${output}'
@@ -195,10 +196,12 @@ rec {
                (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' "
-    + lib.escapeShellArg (concatStringsSep
-      " | "
-      (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets)))
+    + lib.escapeShellArg (stringOrDefault
+          (concatStringsSep
+            " | "
+            (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
+                   (attrNames secrets)))
+          ".")
     + ''
        <<'EOF'
       ${builtins.toJSON set}
@@ -226,5 +229,8 @@ rec {
     lib = import ./systemd-lib.nix { inherit lib config pkgs; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
+    network = {
+      units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
+    };
   };
 }

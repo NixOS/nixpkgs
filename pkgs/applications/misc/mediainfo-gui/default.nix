@@ -5,18 +5,20 @@ let
   inherit (darwin.apple_sdk.frameworks) Cocoa;
 in
 stdenv.mkDerivation rec {
-  version = "22.12";
   pname = "mediainfo-gui";
+  version = "23.07";
+
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
-    sha256 = "sha256-kyuCc59zjn22A89bsXByBzGp58YdFFwqVKq7PNC3U7w=";
+    hash = "sha256-ttfanimZX9NKIhAIJbhD50wyx7xnrbARZrG+7epJ9dA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
   buildInputs = [ libmediainfo wxGTK32 desktop-file-utils libSM imagemagick ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  sourceRoot = "./MediaInfo/Project/GNU/GUI/";
+  sourceRoot = "MediaInfo/Project/GNU/GUI";
 
   enableParallelBuilding = true;
 
@@ -30,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
+    mainProgram = "mediainfo-gui";
   };
 }

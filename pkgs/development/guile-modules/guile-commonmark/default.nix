@@ -4,22 +4,24 @@
 , autoreconfHook
 , guile
 , pkg-config
+, texinfo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "guile-commonmark";
-  version = "0.1.2";
+  version = "unstable-2020-04-30";
 
   src = fetchFromGitHub {
     owner = "OrangeShark";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-qYDcIiObKOU8lmcfk327LMPx/2Px9ecI3QLrSWWLxMo=";
+    repo = "guile-commonmark";
+    rev = "538ffea25ca69d9f3ee17033534ba03cc27ba468";
+    hash = "sha256-9cA7iQ/GGEx+HwsdAxKC3IssqkT/Yg8ZxaiIprS5VuI=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    texinfo # for makeinfo
   ];
   buildInputs = [
     guile

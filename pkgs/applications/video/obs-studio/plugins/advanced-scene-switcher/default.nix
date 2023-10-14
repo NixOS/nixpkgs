@@ -1,33 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{ alsa-lib
 , asio
 , cmake
 , curl
+, fetchFromGitHub
+, lib
+, libremidi
 , obs-studio
 , opencv
 , procps
 , qtbase
+, stdenv
 , websocketpp
 , xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.20.5";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    sha256 = "04k7f7v756vdsan95g73cc29lrs61jis738v37a3ihi3ivps3ma3";
+    hash = "sha256-rpZ/vR9QbWgr8n6LDv6iTRsKXSIDGy0IpPu1Uatb0zw=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
+    alsa-lib
     asio
     curl
+    libremidi
     obs-studio
     opencv
     procps
@@ -37,6 +41,11 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapQtApps = true;
+
+  postUnpack = ''
+    cp -r ${libremidi.src}/* $sourceRoot/deps/libremidi
+    chmod -R +w $sourceRoot/deps/libremidi
+  '';
 
   postInstall = ''
     mkdir $out/lib $out/share

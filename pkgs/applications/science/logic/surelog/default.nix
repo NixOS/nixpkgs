@@ -7,32 +7,23 @@
 , libuuid
 , openjdk
 , gperftools
-, flatbuffers
-, fetchpatch
+, gtest
+, uhdm
+, antlr4
+, capnproto
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "surelog";
-  version = "1.45";
+  version = "1.73";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/SSKcEIhmWDOKN4v3djWTwZ5/nQvR8ibflzSVFDt/rM=";
-    fetchSubmodules = true;
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-z47Eqs3fP53pbEb3s66CqMiO4UpEwox+fKakxtRBakQ=";
+    fetchSubmodules = false;  # we use all dependencies from nix
   };
-
-  # This prevents race conditions in unit tests that surface since we run
-  # ctest in parallel.
-  # This patch can be removed with the next version of surelog
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/chipsalliance/Surelog/commit/9a54efbd156becf65311a4272104810f36041fa6.patch";
-      sha256 = "sha256-rU1Z/0wlVTgnPLqTN/87n+gI1iJ+6k/+sunVVd0ulhQ=";
-      name = "parallel-test-running.patch";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -42,16 +33,24 @@ stdenv.mkDerivation rec {
       psutil
       orderedmultidict
     ]))
+    gtest
+    antlr4
   ];
 
   buildInputs = [
     libuuid
     gperftools
-    flatbuffers
+    uhdm
+    capnproto
+    antlr4.runtime.cpp
   ];
 
   cmakeFlags = [
-    "-DSURELOG_USE_HOST_FLATBUFFERS=On"
+    "-DSURELOG_USE_HOST_CAPNP=On"
+    "-DSURELOG_USE_HOST_UHDM=On"
+    "-DSURELOG_USE_HOST_GTEST=On"
+    "-DSURELOG_USE_HOST_ANTLR=On"
+    "-DANTLR_JAR_LOCATION=${antlr4.jarLocation}"
   ];
 
   doCheck = true;
@@ -62,16 +61,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    mv $out/lib/surelog/* $out/lib/
-    mv $out/lib/pkg $out/lib/surelog/
-  '';
-
   meta = {
     description = "SystemVerilog 2017 Pre-processor, Parser, Elaborator, UHDM Compiler";
     homepage = "https://github.com/chipsalliance/Surelog";
     license = lib.licenses.asl20;
+    mainProgram = "surelog";
     maintainers = with lib.maintainers; [ matthuszagh ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
-}
+})

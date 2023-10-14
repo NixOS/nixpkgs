@@ -7,17 +7,16 @@
 , withTreeVisualization ? false
 , lxml
 , withXmlSupport ? false
-, pyqt4
 , pyqt5
 }:
 
 buildPythonPackage rec {
   pname = "ete3";
-  version = "3.1.2";
+  version = "3.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4fc987b8c529889d6608fab1101f1455cb5cbd42722788de6aea9c7d0a8e59e9";
+    sha256 = "sha256-BqO3+o7ZAYewdqjbvlsbYqzulCAdPG6CL1X0SWAe9vI=";
   };
 
 
@@ -25,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ete3" ];
 
   propagatedBuildInputs = [ six numpy ]
-    ++ lib.optional withTreeVisualization (if isPy3k then pyqt5 else pyqt4)
+    ++ lib.optional withTreeVisualization pyqt5
     ++ lib.optional withXmlSupport lxml;
 
   meta = with lib; {

@@ -4,12 +4,8 @@ with lib;
 
 let
   cfg = config.programs.neovim;
-
-  runtime' = filter (f: f.enable) (attrValues cfg.runtime);
-
-  runtime = pkgs.linkFarm "neovim-runtime" (map (x: { name = "etc/${x.target}"; path = x.source; }) runtime');
-
-in {
+in
+{
   options.programs.neovim = {
     enable = mkOption {
       type = types.bool;
@@ -70,7 +66,7 @@ in {
 
     configure = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       example = literalExpression ''
         {
           customRC = '''
@@ -105,7 +101,7 @@ in {
     };
 
     runtime = mkOption {
-      default = {};
+      default = { };
       example = literalExpression ''
         { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';
@@ -115,14 +111,15 @@ in {
 
       type = with types; attrsOf (submodule (
         { name, config, ... }:
-        { options = {
+        {
+          options = {
 
             enable = mkOption {
               type = types.bool;
               default = true;
               description = lib.mdDoc ''
-                Whether this /etc file should be generated.  This
-                option allows specific /etc files to be disabled.
+                Whether this runtime directory should be generated.  This
+                option allows specific runtime files to be disabled.
               '';
             };
 
@@ -141,20 +138,16 @@ in {
             };
 
             source = mkOption {
-              type = types.path;
+              default = null;
+              type = types.nullOr types.path;
               description = lib.mdDoc "Path of the source file.";
             };
 
           };
 
-          config = {
-            target = mkDefault name;
-            source = mkIf (config.text != null) (
-              let name' = "neovim-runtime" + baseNameOf name;
-              in mkDefault (pkgs.writeText name' config.text));
-          };
-
-        }));
+          config.target = mkDefault name;
+        }
+      ));
 
     };
   };
@@ -165,14 +158,19 @@ in {
     ];
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "nvim");
 
-    programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
-      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby;
-      configure = cfg.configure // {
+    environment.etc = listToAttrs (attrValues (mapAttrs
+      (name: value: {
+        name = "xdg/nvim/${name}";
+        value = removeAttrs
+          (value // {
+            target = "xdg/nvim/${value.target}";
+          })
+          (optionals (isNull value.source) [ "source" ]);
+      })
+      cfg.runtime));
 
-        customRC = (cfg.configure.customRC or "") + ''
-          set runtimepath^=${runtime}/etc
-        '';
-      };
+    programs.neovim.finalPackage = pkgs.wrapNeovim cfg.package {
+      inherit (cfg) viAlias vimAlias withPython3 withNodeJs withRuby configure;
     };
   };
 }

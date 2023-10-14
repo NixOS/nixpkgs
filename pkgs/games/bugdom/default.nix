@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
     mv Data $out/share/bugdom
     install -Dm755 {.,$out/bin}/Bugdom
     wrapProgram $out/bin/Bugdom --run "cd $out/share/bugdom"
+    install -Dm644 $src/packaging/bugdom.desktop $out/share/applications/bugdom.desktop
+    install -Dm644 $src/packaging/bugdom-desktopicon.png $out/share/pixmaps/bugdom-desktopicon.png
   '') + ''
 
     runHook postInstall

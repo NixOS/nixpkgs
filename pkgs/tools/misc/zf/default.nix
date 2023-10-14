@@ -1,44 +1,48 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  zig,
-  testers,
-  zf,
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, testers
+, zig_0_11
+, callPackage
 }:
-stdenv.mkDerivation rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    fetchSubmodules = true;
-    hash = "sha256-MzlSU5x2lb6PJZ/iNAi2aebfuClBprlfHMIG/4OPmuc=";
+    repo = "zf";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-qzGr72EnWlGZgd7/r+8Iv+1i/Q9qvWpf/cgkr+TrgkE=";
   };
 
-  nativeBuildInputs = [ zig ];
+  nativeBuildInputs = [
+    installShellFiles
+    zig_0_11.hook
+  ];
 
-  dontConfigure = true;
-
-  preBuild = ''
-    export HOME=$TMPDIR
+  postPatch = ''
+    ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  installPhase = ''
-    runHook preInstall
-    zig build -Drelease-safe -Dcpu=baseline --prefix $out install
-    runHook postInstall
+  postInstall = ''
+    installManPage doc/zf.1
+    installShellCompletion \
+      --bash complete/zf \
+      --fish complete/zf.fish \
+      --zsh complete/_zf
   '';
 
-  passthru.tests.version = testers.testVersion {package = zf;};
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/natecraddock/zf";
     description = "A commandline fuzzy finder that prioritizes matches on filenames";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ dit7ya mmlb ];
+    changelog = "https://github.com/natecraddock/zf/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ dit7ya figsoda mmlb ];
   };
-}
+})

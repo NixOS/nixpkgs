@@ -6,21 +6,28 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dbx";
-  version = "0.8.8";
+  version = "0.8.18";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nx6fz+atlnB/KxdznnZArHpyv41cuBDQauG0irq1Zyc=";
+    hash = "sha256-5qjEABNTSUD9I2uAn49HQ4n+gbAcmfnqS4Z2M9MvFXQ=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mlflow-skinny>=1.28.0,<3.0.0" "mlflow" \
-      --replace "rich==12.6.0" "rich"
-  '';
+  pythonRelaxDeps = [
+    "rich"
+    "typer"
+  ];
+
+  pythonRemoveDeps = [
+    "mlflow-skinny"
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -36,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     retry
     rich
+    tenacity
     typer
     watchdog
   ] ++ typer.optional-dependencies.all;

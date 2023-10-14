@@ -12,6 +12,7 @@
 , libepoxy
 , libpcap
 , libsamplerate
+, libslirp
 , makeDesktopItem
 , mesa
 , meson
@@ -25,15 +26,15 @@
 , wrapGAppsHook
 }:
 
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.85";
+  version = "0.7.111";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
-    rev = "v${self.version}";
-    hash = "sha256-sVUkB2KegdKlHlqMvSwB1nLdJGun2x2x9HxtNHnpp1s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-j7VNNKGm8mFEz+8779ylw1Yjd+jDuoL19Sw52kJll4s=";
     fetchSubmodules = true;
   };
 
@@ -60,6 +61,7 @@ stdenv.mkDerivation (self: {
     libepoxy
     libpcap
     libsamplerate
+    libslirp
     mesa
     openssl
     vte
@@ -89,20 +91,14 @@ stdenv.mkDerivation (self: {
     })
   ];
 
-  preConfigure = let
-    # When the data below can't be obtained through git, the build process tries
-    # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
-    branch = "master";
-    commit = "d8fa50e524c22f85ecb2e43108fd6a5501744351";
-    inherit (self) version;
-  in ''
+  preConfigure = ''
     patchShebangs .
     configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
     substituteInPlace ./scripts/xemu-version.sh \
       --replace 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
-    echo '${commit}' > XEMU_COMMIT
-    echo '${branch}' > XEMU_BRANCH
-    echo '${version}' > XEMU_VERSION
+    # When the data below can't be obtained through git, the build process tries
+    # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
+    echo '${finalAttrs.version}' > XEMU_VERSION
   '';
 
   preBuild = ''
@@ -133,9 +129,10 @@ stdenv.mkDerivation (self: {
       Xbox game console, enabling people to play their original Xbox games on
       Windows, macOS, and Linux systems.
     '';
-    changelog = "https://github.com/xemu-project/xemu/releases/tag/v${self.version}";
+    changelog = "https://github.com/xemu-project/xemu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres genericnerdyusername ];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
+    mainProgram = "xemu";
   };
 })

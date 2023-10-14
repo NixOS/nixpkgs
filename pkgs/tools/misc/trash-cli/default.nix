@@ -1,17 +1,22 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, installShellFiles, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.23.2.13.2";
+  version = "0.23.9.23";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    hash = "sha256-TJEi7HKIrfOdb+LLRt2DN5gWdFzUeo6isb59lFLK4bQ=";
+    hash = "sha256-EbW7P9fl7CDA6etOba7qcOtcxB2GkCd+zoi+NW0ZP9c=";
   };
 
   propagatedBuildInputs = with python3Packages; [ psutil six ];
+
+  nativeBuildInputs = with python3Packages; [
+    installShellFiles
+    shtab
+  ];
 
   nativeCheckInputs = with python3Packages; [
     mock
@@ -42,6 +47,13 @@ python3Packages.buildPythonApplication rec {
     [[ $($out/bin/trash-list) == "" ]]
 
     runHook postInstallCheck
+  '';
+  postInstall = ''
+    for bin in trash-empty trash-list trash-restore trash-put trash; do
+      installShellCompletion --cmd "$bin" \
+        --bash <("$out/bin/$bin" --print-completion bash) \
+        --zsh  <("$out/bin/$bin" --print-completion zsh)
+    done
   '';
 
   meta = with lib; {

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "hiredis";
-  version = "2.2.2";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     repo = "hiredis-py";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-VfiYXkvLcdokT4P5ks1ReDh5sBe6pdNxWyscmSaJ1Lo=";
+    hash = "sha256-OT8zFEHKSAebXV+VzagZDJRPidAhSrqvD2/F1YezVGs=";
   };
 
   pythonImportsCheck = [

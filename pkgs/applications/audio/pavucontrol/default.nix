@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ abbradar globin ];
     platforms = platforms.linux;
+    mainProgram = "pavucontrol";
   };
 }

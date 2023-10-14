@@ -1,22 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
-, qtquickcontrols, qtgraphicaleffects, qmake, nixosTests }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, mkDerivation
+, qtbase
+, qtquick1
+, qmltermwidget
+, qtquickcontrols2
+, qtgraphicaleffects
+, qmake
+, nixosTests
+}:
 
 mkDerivation rec {
-  version = "1.1.1";
+  version = "1.2.0";
   pname = "cool-retro-term";
 
   src = fetchFromGitHub {
     owner = "Swordfish90";
     repo = "cool-retro-term";
-    rev = version;
-    sha256 = "0mird4k88ml6y61hky2jynrjmnxl849fvhsr5jfdlnv0i7r5vwi5";
+    rev = "refs/tags/${version}";
+    hash = "sha256-PewHLVmo+RTBHIQ/y2FBkgXsIvujYd7u56JdFC10B4c=";
   };
 
   patchPhase = ''
     sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
-  buildInputs = [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
+  buildInputs = [
+    qtbase
+    qtquick1
+    qmltermwidget
+    qtquickcontrols2
+    qtgraphicaleffects
+  ];
+
   nativeBuildInputs = [ qmake ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];

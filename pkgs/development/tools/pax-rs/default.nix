@@ -1,7 +1,6 @@
 { lib, fetchFromGitHub, fetchurl, rustPlatform, runCommand } :
-with rustPlatform;
 
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "pax-rs";
   version = "0.4.0";
 

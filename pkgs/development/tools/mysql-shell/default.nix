@@ -27,7 +27,6 @@
 , re2
 , ncurses
 , libfido2
-, v8
 , python3
 , cyrus_sasl
 , openldap
@@ -37,26 +36,30 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell";
-  version = "8.0.32";
+  version = "8.0.34";
 
   srcs = [
     (fetchurl {
-      url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${version}-src.tar.gz";
-      hash = "sha256-GUkeZ856/olOssiqkb3qc8ddnianVGXwrcW6hrIG3wE=";
+      url = "https://cdn.mysql.com//Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
+      hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
     })
     (fetchurl {
-      url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
-      hash = "sha256-Hw2SojeJgkRxbdWB95k1bgc8LaY8Oy5KAeEDLL7VDig=";
+      url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
+      hash = "sha256-QY1PmhGw3PhqZ79+H/Xbb9uOvmrBlFQRS7idnV5OXF0=";
     })
   ];
 
-  sourceRoot = "mysql-shell-${version}-src";
+  sourceRoot = "mysql-shell-${finalAttrs.version}-src";
+
+  postUnpack = ''
+    mv mysql-${finalAttrs.version} mysql
+  '';
 
   postPatch = ''
-    substituteInPlace ../mysql-${version}/cmake/libutils.cmake --replace /usr/bin/libtool libtool
-    substituteInPlace ../mysql-${version}/cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace ../mysql/cmake/libutils.cmake --replace /usr/bin/libtool libtool
+    substituteInPlace ../mysql/cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
 
     substituteInPlace cmake/libutils.cmake --replace /usr/bin/libtool libtool
   '';
@@ -83,7 +86,6 @@ stdenv.mkDerivation rec {
     libfido2
     cyrus_sasl
     openldap
-    v8
     python3
     antlr.runtime.cpp
   ] ++ pythonDeps
@@ -95,36 +97,31 @@ stdenv.mkDerivation rec {
     echo "Building mysqlclient mysqlxclient"
 
     cmake -DWITH_BOOST=system -DWITH_SYSTEM_LIBS=ON -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
-      -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql-${version} -B ../mysql-${version}/build
+      -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql -B ../mysql/build
 
-    cmake --build ../mysql-${version}/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
+    cmake --build ../mysql/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
   '';
 
   cmakeFlags = [
-    "-DMYSQL_SOURCE_DIR=../mysql-${version}"
-    "-DMYSQL_BUILD_DIR=../mysql-${version}/build"
-    "-DMYSQL_CONFIG_EXECUTABLE=../../mysql-${version}/build/scripts/mysql_config"
+    "-DMYSQL_SOURCE_DIR=../mysql"
+    "-DMYSQL_BUILD_DIR=../mysql/build"
+    "-DMYSQL_CONFIG_EXECUTABLE=../../mysql/build/scripts/mysql_config"
     "-DWITH_ZSTD=system"
     "-DWITH_LZ4=system"
     "-DWITH_ZLIB=system"
     "-DWITH_PROTOBUF=${protobuf}"
-    "-DHAVE_V8=1"
-    "-DV8_INCLUDE_DIR=${v8}/include"
-    "-DV8_LIB_DIR=${v8}/lib"
     "-DHAVE_PYTHON=1"
   ];
-
-  CXXFLAGS = [ "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1" ];
 
   postFixup = ''
     wrapProgram $out/bin/mysqlsh --set PYTHONPATH "${lib.makeSearchPath python3.sitePackages pythonDeps}"
   '';
 
   meta = with lib; {
-    homepage = "https://dev.mysql.com/doc/mysql-shell/${lib.versions.majorMinor version}/en/";
+    homepage = "https://dev.mysql.com/doc/mysql-shell/${lib.versions.majorMinor finalAttrs.version}/en/";
     description = "A new command line scriptable shell for MySQL";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aaronjheng ];
     mainProgram = "mysqlsh";
   };
-}
+})

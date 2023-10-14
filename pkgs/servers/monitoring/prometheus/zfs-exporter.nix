@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "zfs_exporter";
-  version = "2.2.7";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "pdf";
     repo = pname;
     rev = "v" + version;
-    hash = "sha256-bc9bmGrRGhm58JzrVLLJBUc1zaGXqz2fqx+ZphidFbc=";
+    hash = "sha256-EM7CHvpqPwCKgb5QU+jYmMaovHp12hJD1zVxcYygHdU=";
   };
 
-  vendorHash = "sha256-jQiw3HlqWcsjdadDdovCsDMBB3rnWtacfbtzDb5rc9c=";
+  vendorHash = "sha256-AgZo+5gYJ2EaxSI+Jxl7ldu6iZ+uSncYR0n+D2mMC4w=";
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} *.md
@@ -25,6 +25,5 @@ buildGoModule rec {
     homepage = "https://github.com/pdf/zfs_exporter";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
   };
 }

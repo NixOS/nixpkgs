@@ -9,15 +9,18 @@ buildGoModule rec {
     owner = "golang";
     repo = "tools";
     rev = "v${version}";
-    # The gopls folder contains a Go submodule which causes a build failure
-    # and lives in its own package named gopls.
-    postFetch = ''
-      rm -r $out/gopls
-    '';
-    sha256 = "sha256-6Sdo6oKJHYXWkvJmbte7Wc7tov5AHzn70Bi1QdQ5HR4=";
+    sha256 = "sha256-z5XJ7tflOfDBtv4rp7WEjnHsXIyjNw205PhazEvaYcw=";
   };
 
-  vendorSha256 = "sha256-fp0pb3EcGRDWlSpgel4pYRdsPJGk8/d57EjWJ+fzq7g=";
+  postPatch = ''
+    # The gopls folder contains a Go submodule which causes a build failure
+    # and lives in its own package named gopls.
+    rm -r gopls
+    # getgo is an experimental go installer which adds generic named server and client binaries to $out/bin
+    rm -r cmd/getgo
+  '';
+
+  vendorHash = "sha256-fp0pb3EcGRDWlSpgel4pYRdsPJGk8/d57EjWJ+fzq7g=";
 
   doCheck = false;
 

@@ -10,7 +10,7 @@
 , glib
 , gtk3
 , libpeas
-, libsoup
+, libsoup_3
 , libxml2
 , libsecret
 , libnotify
@@ -36,11 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "rhythmbox";
-  version = "3.4.6";
+  version = "3.4.7";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "+VaCEM5V5BHpKcj7leERohHb0ZzEf1ePKRxdMZtesDQ=";
+    sha256 = "L21WwT/BpkxTT1AHiPtIKTbOVHs0PtkMZ94fK84M+n4=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +52,12 @@ stdenv.mkDerivation rec {
     itstool
     wrapGAppsHook
     desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
     python3
-    libsoup
+    libsoup_3
     libxml2
     tdb
     json-glib
@@ -72,7 +73,6 @@ stdenv.mkDerivation rec {
     brasero
     grilo
 
-    gobject-introspection
     python3.pkgs.pygobject3
 
     gst_all_1.gstreamer
@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+    "-Ddaap=enabled"
     "-Dtests=disabled"
   ];
 

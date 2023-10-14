@@ -1,22 +1,20 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 }:
 
 buildGoModule rec {
   pname = "lndhub-go";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "lndhub.go";
-    rev = "${version}";
-    sha256 = "sha256-ZyqE6xFNsOwTBbLLn14jwNp9UkagTRgAQS+SEl+POaY=";
+    rev = version;
+    sha256 = "sha256-m+Sc/rsYIbvd1oOqG4OT+wPtSxlgFq8m03n28eZIWJU=";
   };
 
-  vendorHash = "sha256-Wsejz/vYaT/maN7dYcrXPTXg30jZaldaslXbHcgHlRs=";
+  vendorHash = "sha256-a4yVuEfhLNM8IEYnafWf///SNLqQL5XZfGgJ5AZLx3c=";
 
   doCheck = false; # tests require networking
 
@@ -25,6 +23,5 @@ buildGoModule rec {
     homepage = "https://github.com/getAlby/lndhub.go";
     license = licenses.gpl3;
     maintainers = with maintainers; [ prusnak ];
-    platforms = platforms.unix;
   };
 }

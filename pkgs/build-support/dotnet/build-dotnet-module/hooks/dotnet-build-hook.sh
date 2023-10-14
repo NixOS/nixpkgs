@@ -15,7 +15,7 @@ dotnetBuildHook() {
     fi
 
     if [ "${selfContainedBuild-}" ]; then
-        dotnetBuildFlags+=(--runtime "@runtimeId@" "-p:SelfContained=true")
+        dotnetBuildFlags+=("-p:SelfContained=true")
     else
         dotnetBuildFlags+=("-p:SelfContained=false")
     fi
@@ -30,6 +30,12 @@ dotnetBuildHook() {
 
     dotnetBuild() {
         local -r project="${1-}"
+
+        runtimeIdFlags=()
+        if [[ "$project" == *.csproj ]] || [ "${selfContainedBuild-}" ]; then
+            runtimeIdFlags+=("--runtime @runtimeId@")
+        fi
+
         env dotnet build ${project-} \
             -maxcpucount:$maxCpuFlag \
             -p:BuildInParallel=$parallelBuildFlag \
@@ -38,6 +44,7 @@ dotnetBuildHook() {
             --configuration "@buildType@" \
             --no-restore \
             ${versionFlag-} \
+            ${runtimeIdFlags[@]} \
             ${dotnetBuildFlags[@]}  \
             ${dotnetFlags[@]}
     }

@@ -1,4 +1,4 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript, six, requests, inputstreamhelper }:
+{ lib, buildKodiAddon, fetchzip, addonUpdateScript, six, requests, infotagger, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "youtube";
@@ -13,6 +13,7 @@ buildKodiAddon rec {
   propagatedBuildInputs = [
     six
     requests
+    infotagger
     inputstreamhelper
   ];
 

@@ -71,10 +71,14 @@
 , unixODBC
 , unixODBCDrivers
   # darwin
+, moveBuildTree
 , xcbuild
 , AGL
 , AVFoundation
 , AppKit
+, Contacts
+, CoreBluetooth
+, EventKit
 , GSS
 , MetalKit
   # optional dependencies
@@ -89,6 +93,7 @@
 , libGL
 , debug ? false
 , developerBuild ? false
+, qttranslations ? null
 }:
 
 let
@@ -166,17 +171,20 @@ stdenv.mkDerivation rec {
     AGL
     AVFoundation
     AppKit
+    Contacts
+    CoreBluetooth
+    EventKit
     GSS
     MetalKit
   ] ++ lib.optional libGLSupported libGL;
 
   buildInputs = [
-    python3
     at-spi2-core
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libinput
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     AppKit
+    CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
   ++ lib.optional developerBuild gdb
@@ -184,9 +192,12 @@ stdenv.mkDerivation rec {
   ++ lib.optional (libmysqlclient != null) libmysqlclient
   ++ lib.optional (postgresql != null) postgresql;
 
-  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ];
+  nativeBuildInputs = [ bison flex gperf lndir perl pkg-config which cmake xmlstarlet ninja ]
+    ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
 
   propagatedNativeBuildInputs = [ lndir ];
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
@@ -204,14 +215,13 @@ stdenv.mkDerivation rec {
   preHook = ''
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
-    . ${../hooks/move-qt-dev-tools.sh}
-    . ${../hooks/fix-qmake-libtool.sh}
   '';
 
   qtPluginPrefix = "lib/qt-6/plugins";
   qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
+    "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
     "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
     "-DINSTALL_QMLDIR=${qtQmlPrefix}"
     "-DQT_FEATURE_libproxy=ON"
@@ -224,7 +234,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
-  ];
+  ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
 
   NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"
@@ -233,59 +243,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  postInstall = ''
-    moveToOutput "mkspecs" "$dev"
-  '';
-
-  devTools = [
-    "libexec/moc"
-    "libexec/rcc"
-    "libexec/syncqt.pl"
-    "libexec/qlalr"
-    "libexec/ensure_pro_file.cmake"
-    "libexec/cmake_automoc_parser"
-    "libexec/qvkgen"
-    "libexec/tracegen"
-    "libexec/uic"
-    "bin/fixqt4headers.pl"
-    "bin/moc"
-    "bin/qdbuscpp2xml"
-    "bin/qdbusxml2cpp"
-    "bin/qlalr"
-    "bin/qmake"
-    "bin/qmake6"
-    "bin/qt-cmake"
-    "bin/qt-cmake-private"
-    "bin/qt-cmake-private-install.cmake"
-    "bin/qt-cmake-standalone-test"
-    "bin/rcc"
-    "bin/syncqt.pl"
-    "bin/uic"
-  ];
+  moveToDev = false;
 
   postFixup = ''
-    # Don't retain build-time dependencies like gdb.
-    sed '/QMAKE_DEFAULT_.*DIRS/ d' -i $dev/mkspecs/qconfig.pri
-    fixQtModulePaths "''${!outputDev}/mkspecs/modules"
-    fixQtBuiltinPaths "''${!outputDev}" '*.pr?'
-
-    # Move development tools to $dev
-    moveQtDevTools
-    moveToOutput libexec "$dev"
-
-    # fixup .pc file (where to find 'moc' etc.)
-    if [ -f "$dev/lib/pkgconfig/Qt6Core.pc" ]; then
-      sed -i "$dev/lib/pkgconfig/Qt6Core.pc" \
-        -e "/^bindir=/ c bindir=$dev/bin" \
-        -e "/^libexecdir=/ c libexecdir=$dev/libexec"
-    fi
-
-    patchShebangs $out $dev
-
-    # QTEST_ASSERT and other macros keeps runtime reference to qtbase.dev
-    if [ -f "$dev/include/QtTest/qtestassert.h" ]; then
-      substituteInPlace "$dev/include/QtTest/qtestassert.h" --replace "__FILE__" "__BASE_FILE__"
-    fi
+    moveToOutput      "mkspecs/modules" "$dev"
+    fixQtModulePaths  "$dev/mkspecs/modules"
+    fixQtBuiltinPaths "$out" '*.pr?'
   '';
 
   dontStrip = debugSymbols;

@@ -2,14 +2,16 @@
 
 let
   cfg = config.programs.nano;
-  LF = "\n";
 in
 
 {
-  ###### interface
-
   options = {
     programs.nano = {
+      enable = lib.mkEnableOption (lib.mdDoc "nano") // {
+        default = true;
+      };
+
+      package = lib.mkPackageOptionMD pkgs "nano" { };
 
       nanorc = lib.mkOption {
         type = lib.types.lines;
@@ -24,19 +26,22 @@ in
           set tabsize 2
         '';
       };
+
       syntaxHighlight = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = false;
         description = lib.mdDoc "Whether to enable syntax highlight for various languages.";
       };
     };
   };
 
-  ###### implementation
-
-  config = lib.mkIf (cfg.nanorc != "" || cfg.syntaxHighlight) {
-    environment.etc.nanorc.text = lib.concatStrings [ cfg.nanorc
-      (lib.optionalString cfg.syntaxHighlight ''${LF}include "${pkgs.nano}/share/nano/*.nanorc"'') ];
+  config = lib.mkIf cfg.enable {
+    environment = {
+      etc.nanorc.text = (lib.optionalString cfg.syntaxHighlight ''
+        # load syntax highlighting files
+        include "${cfg.package}/share/nano/*.nanorc"
+      '') + cfg.nanorc;
+      systemPackages = [ cfg.package ];
+    };
   };
-
 }

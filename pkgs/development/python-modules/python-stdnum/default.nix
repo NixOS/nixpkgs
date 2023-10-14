@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-stdnum";
-  version = "1.18";
+  version = "1.19";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vMdj2cSa4j2l0remhtX9He7J2QUTQRYKENGscjomvsA=";
+    hash = "sha256-Ez7IL1Y5DqdMGQVp6Y8vsUuGmAix1UeFcI8i0P6tiz8=";
   };
 
   postPatch = ''

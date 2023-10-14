@@ -2,12 +2,12 @@
 , licenseAccepted ? false
 }:
 
-{ cmdLineToolsVersion ? "8.0"
+{ cmdLineToolsVersion ? "11.0"
 , toolsVersion ? "26.1.1"
-, platformToolsVersion ? "33.0.3"
-, buildToolsVersions ? [ "33.0.1" ]
+, platformToolsVersion ? "34.0.4"
+, buildToolsVersions ? [ "34.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "31.3.14"
+, emulatorVersion ? "32.1.14"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -15,7 +15,7 @@
 , abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "25.1.8937393"
+, ndkVersion ? "25.2.9519653"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -116,6 +116,7 @@ rec {
   deployAndroidPackages = callPackage ./deploy-androidpackages.nix {
     inherit stdenv lib mkLicenses;
   };
+
   deployAndroidPackage = ({package, os ? null, buildInputs ? [], patchInstructions ? "", meta ? {}, ...}@args:
     let
       extraParams = removeAttrs args [ "package" "os" "buildInputs" "patchInstructions" ];
@@ -127,15 +128,25 @@ rec {
     } // extraParams
   ));
 
+  # put a much nicer error message that includes the available options.
+  check-version = packages: package: version:
+    if lib.hasAttrByPath [ package version ] packages then
+      packages.${package}.${version}
+    else
+      throw ''
+        The version ${version} is missing in package ${package}.
+        The only available versions are ${builtins.concatStringsSep ", " (builtins.attrNames packages.${package})}.
+      '';
+
   platform-tools = callPackage ./platform-tools.nix {
     inherit deployAndroidPackage;
     os = if stdenv.system == "aarch64-darwin" then "macosx" else os; # "macosx" is a universal binary here
-    package = packages.platform-tools.${platformToolsVersion};
+    package = check-version packages "platform-tools" platformToolsVersion;
   };
 
   tools = callPackage ./tools.nix {
     inherit deployAndroidPackage os;
-    package = packages.tools.${toolsVersion};
+    package = check-version packages "tools" toolsVersion;
 
     postInstall = ''
       ${linkPlugin { name = "platform-tools"; plugin = platform-tools; }}
@@ -152,7 +163,7 @@ rec {
   build-tools = map (version:
     callPackage ./build-tools.nix {
       inherit deployAndroidPackage os;
-      package = packages.build-tools.${version};
+      package = check-version packages "build-tools" version;
 
       postInstall = ''
         ${linkPlugin { name = "tools"; plugin = tools; check = toolsVersion != null; }}
@@ -162,7 +173,7 @@ rec {
 
   emulator = callPackage ./emulator.nix {
     inherit deployAndroidPackage os;
-    package = packages.emulator.${emulatorVersion};
+    package = check-version packages "emulator" emulatorVersion;
 
     postInstall = ''
       ${linkSystemImages { images = system-images; check = includeSystemImages; }}
@@ -172,14 +183,14 @@ rec {
   platforms = map (version:
     deployAndroidPackage {
       inherit os;
-      package = packages.platforms.${version};
+      package = check-version packages "platforms" version;
     }
   ) platformVersions;
 
   sources = map (version:
     deployAndroidPackage {
       inherit os;
-      package = packages.sources.${version};
+      package = check-version packages "sources" version;
     }
   ) platformVersions;
 
@@ -223,7 +234,7 @@ rec {
   cmake = map (version:
     callPackage ./cmake.nix {
       inherit deployAndroidPackage os;
-      package = packages.cmake.${version};
+      package = check-version packages "cmake" version;
     }
   ) cmakeVersions;
 
@@ -243,14 +254,14 @@ rec {
   google-apis = map (version:
     deployAndroidPackage {
       inherit os;
-      package = addons.addons.${version}.google_apis;
+      package = (check-version addons "addons" version).google_apis;
     }
   ) (builtins.filter (platformVersion: platformVersion < "26") platformVersions); # API level 26 and higher include Google APIs by default
 
   google-tv-addons = map (version:
     deployAndroidPackage {
       inherit os;
-      package = addons.addons.${version}.google_tv_addon;
+      package = (check-version addons "addons" version).google_tv_addon;
     }
   ) platformVersions;
 
@@ -303,6 +314,8 @@ rec {
       '') plugins}
     ''; # */
 
+  cmdline-tools-package = check-version packages "cmdline-tools" cmdLineToolsVersion;
+
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
   # requested and throws.
@@ -318,9 +331,9 @@ rec {
       by an environment variable for a single invocation of the nix tools.
         $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
   '' else callPackage ./cmdline-tools.nix {
-    inherit deployAndroidPackage os cmdLineToolsVersion;
+    inherit deployAndroidPackage os;
 
-    package = packages.cmdline-tools.${cmdLineToolsVersion};
+    package = cmdline-tools-package;
 
     postInstall = ''
       # Symlink all requested plugins
@@ -364,7 +377,7 @@ rec {
           ln -s $i $out/bin
       done
 
-      find $ANDROID_SDK_ROOT/cmdline-tools/${cmdLineToolsVersion}/bin -type f -executable | while read i; do
+      find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
           ln -s $i $out/bin
       done
 

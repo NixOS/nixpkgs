@@ -26,7 +26,7 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.14.0";
+  version = "1.14.2";
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -34,8 +34,11 @@ stdenv.mkDerivation rec {
     + lib.optionalString threadsafe "-threadsafe";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
-    sha256 = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
+    url = let
+        majorMinor = lib.versions.majorMinor version;
+        majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
+      in "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
+    sha256 = "sha256-6jxeJX7zIq9ed/weUurTrWvzu0rAZIDdF+45ANeiTPs=";
   };
 
   passthru = {
@@ -91,11 +94,13 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit (python3.pkgs) h5py;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
       HDF5 supports an unlimited variety of datatypes, and is designed for flexible and efficient
@@ -103,8 +108,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    license = licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = [ maintainers.markuskowa ];
     homepage = "https://www.hdfgroup.org/HDF5/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

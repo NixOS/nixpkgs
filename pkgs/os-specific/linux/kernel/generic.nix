@@ -47,8 +47,7 @@
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc" ||
-                       stdenv.hostPlatform != stdenv.buildPlatform
+, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc"
 , extraMeta ? {}
 
 , isZen      ? false
@@ -224,7 +223,7 @@ let
             + toString (lib.attrNames (if lib.isAttrs args then args else args {}))
           ) overridableKernel;
       };
-    in [ (nixosTests.kernel-generic.testsForKernel overridableKernel) ] ++ kernelTests;
+    in [ (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel) ] ++ kernelTests;
   };
 
   finalKernel = lib.extendDerivation true passthru kernel;

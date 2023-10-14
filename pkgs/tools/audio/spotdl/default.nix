@@ -1,12 +1,15 @@
 { lib
 , python3
+, fetchPypi
 , fetchFromGitHub
 , ffmpeg
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3;
+in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.0.7";
+  version = "4.2.1";
 
   format = "pyproject";
 
@@ -14,17 +17,17 @@ python3.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+hkdrPi3INs16SeAl+iXOE9KFDzG/TYXB3CDd8Tigwk=";
+    hash = "sha256-xKas3WO3uigY1iFfxIN3+d+5U31vM7cLv08oMef8trc=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with python.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
     spotipy
     ytmusicapi
     pytube
@@ -41,9 +44,13 @@ python3.pkgs.buildPythonApplication rec {
     platformdirs
     pykakasi
     syncedlyrics
-  ];
+    typing-extensions
+    soundcloud-v2
+    bandcamp-api
+    setuptools # for pkg_resources
+  ] ++ python-slugify.optional-dependencies.unidecode;
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     pytest-mock
     pytest-vcr
@@ -66,20 +73,13 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # require networking
-    "test_album_from_string"
     "test_album_from_url"
-    "test_album_length"
-    "test_artist_from_url"
-    "test_artist_from_string"
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
-    "test_playlist_from_string"
-    "test_playlist_from_url"
-    "test_playlist_length"
     "test_preload_song"
-    "test_song_from_search_term"
-    "test_song_from_url"
+    "test_ytm_get_results"
+    "test_ytm_search"
   ];
 
   makeWrapperArgs = [

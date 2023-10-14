@@ -1,33 +1,30 @@
 { lib
-, stdenv
-, fetchzip
+, fetchFromGitHub
 , imagemagick
-, autoPatchelfHook
-, gtk3
-, libsecret
-, jsoncpp
-, wrapGAppsHook
+, mesa
+, libdrm
+, flutter
+, pulseaudio
 , makeDesktopItem
-, openssl
-, olm
+, gnome
 }:
 
 let
-  # map of nix platform -> expected url platform
-  platformMap = {
-    x86_64-linux = "linux-x86";
-    aarch64-linux = "linux-arm64";
-  };
+  libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
 in
-stdenv.mkDerivation rec {
-  version = "1.10.0";
-  name = "fluffychat";
+flutter.buildFlutterApplication rec {
+  pname = "fluffychat";
+  version = "1.14.1";
 
-  src = fetchzip {
-    url = "https://gitlab.com/api/v4/projects/16112282/packages/generic/fluffychat/${version}/fluffychat-${platformMap.${stdenv.hostPlatform.system}}.tar.gz";
-    stripRoot = false;
-    sha256 = "sha256-SbzTEMeJRFEUN0nZF9hL0UEzTWl1VtHVPIx/AGgQvM8=";
+  src = fetchFromGitHub {
+    owner = "krille-chan";
+    repo = "fluffychat";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-VTpZvoyZXJ5SCKr3Ocfm4iT6Z/+AWg+SCw/xmp68kMg=";
   };
+
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-uGrz7QwETZGlwLbfKr1vDo0p/emK1ZCjCX2w0nNVJsA=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -37,18 +34,12 @@ stdenv.mkDerivation rec {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
-  buildInputs = [ gtk3 libsecret jsoncpp ];
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook imagemagick ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share
-    mv * $out/share
-
-    makeWrapper "$out/share/fluffychat" "$out/bin/fluffychat" \
-      --prefix "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ openssl olm ]}"
-
-    FAV=$out/share/data/flutter_assets/assets/favicon.png
+  nativeBuildInputs = [ imagemagick ];
+  runtimeDependencies = [ pulseaudio ];
+  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
+  postInstall = ''
+    FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
 
     install -D $FAV $ICO/fluffychat.png
@@ -61,7 +52,11 @@ stdenv.mkDerivation rec {
     done
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
+
+    patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
   '';
+
+  env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 
   meta = with lib; {
     description = "Chat with your friends (matrix client)";
@@ -69,6 +64,6 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ sourceTypes.fromSource ];
   };
 }

@@ -130,7 +130,7 @@ let
     ''}
 
     # Disable all input echo for the whole stage. We could use read -s
-    # instead but that would ocasionally leak characters between read
+    # instead but that would occasionally leak characters between read
     # invocations.
     stty -echo
   '';
@@ -350,6 +350,12 @@ let
         new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
 
         new_response="$(ykchalresp -${toString dev.yubikey.slot} -x $new_challenge 2>/dev/null)"
+
+        if [ -z "$new_response" ]; then
+            echo "Warning: Unable to generate new challenge response, current challenge persists!"
+            umount /crypt-storage
+            return
+        fi
 
         if [ ! -z "$k_user" ]; then
             new_k_luks="$(echo -n $k_user | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response | rbtohex)"
@@ -861,7 +867,7 @@ in
             '';
             description = lib.mdDoc ''
               Commands that should be run right before we try to mount our LUKS device.
-              This can be useful, if the keys needed to open the drive is on another partion.
+              This can be useful, if the keys needed to open the drive is on another partition.
             '';
           };
 
@@ -980,7 +986,7 @@ in
       ++ luks.cryptoModules
       # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
       # remove once 'modprobe --show-depends xts' shows ecb as a dependency
-      ++ (if builtins.elem "xts" luks.cryptoModules then ["ecb"] else []);
+      ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = let
@@ -1024,13 +1030,12 @@ in
         copy_bin_and_libs ${pkgs.gnupg}/libexec/scdaemon
 
         ${concatMapStringsSep "\n" (x:
-          if x.gpgCard != null then
+          optionalString (x.gpgCard != null)
             ''
               mkdir -p $out/secrets/gpg-keys/${x.device}
               cp -a ${x.gpgCard.encryptedPass} $out/secrets/gpg-keys/${x.device}/cryptkey.gpg
               cp -a ${x.gpgCard.publicKey} $out/secrets/gpg-keys/${x.device}/pubkey.asc
             ''
-          else ""
           ) (attrValues luks.devices)
         }
       ''}

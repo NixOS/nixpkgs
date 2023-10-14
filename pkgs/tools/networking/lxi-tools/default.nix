@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxi-tools";
-  version = "2.5";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "lxi-tools";
     rev = "v${version}";
-    sha256 = "sha256-F9svLaQnQyVyC5KzDnaGwB8J/nBZ3zzOVwYNxWBPifU=";
+    sha256 = "sha256-69B3wW4lg6GxSpEKhuFYKTuAyd+QYb4WNbNVdZnRUt8=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://lxi-tools.github.io/";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.vq ];
   };
 }

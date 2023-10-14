@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "alkalami";
-  version = "2.000";
+  version = "3.000";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${version}.zip";
-    hash = "sha256-rT0HzTFbooHr+l5BQ9GVYKxxNk7TESdkOQfWBeVpwYI=";
+    hash = "sha256-ra664VbUKc8XpULCWhLMVnc1mW4pqZvbvwuBvRQRhcY=";
   };
 
   installPhase = ''

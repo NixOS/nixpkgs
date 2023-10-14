@@ -36,7 +36,6 @@ mkDerivation rec {
   qmakeFlags = [
     "DEFINES+=USE_LOCAL_STK"
     "DEFINES+=USE_LOCAL_QCUSTOMPLOT"
-    "INCLUDEPATH+=${libjack2}/include/jack"
   ];
 
   meta = with lib; {

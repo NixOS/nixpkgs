@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "huggle";
-  version = "3.4.10";
+  version = "3.4.12";
 
   src = fetchFromGitHub {
     owner = "huggle";
     repo = "huggle3-qt-lx";
     rev = version;
-    sha256 = "UzoX4kdzYU50W0MUhfpo0HaSfvG3eINNC8u5t/gKuqI=";
+    sha256 = "scNGmMVZ6z9FTQuZCdwRYk0WP5qKfdb/M9Co8TbiMDE=";
     fetchSubmodules = true;
   };
 
@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt --replace '@libirc_includes@' '${libirc.out}'
   '';
 
+  cmakeBuildType = "None";
+
   cmakeFlags = [
     "-S" "/build/source/src"
-    "-DCMAKE_BUILD_TYPE=None"
     "-DINSTALL_DATA_DIR=bin"
     "-DQT5_BUILD=ON"
     "-DWEB_ENGINE=ON"

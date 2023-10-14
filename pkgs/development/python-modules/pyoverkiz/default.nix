@@ -2,6 +2,7 @@
 , aiohttp
 , attrs
 , backoff
+, backports-strenum
 , boto3
 , buildPythonPackage
 , fetchFromGitHub
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.7.7";
+  version = "1.12.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +25,7 @@ buildPythonPackage rec {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QYvnSFt0pJL3clDxN2axJUMU8M/maj3iSeUfVRgQGFg=";
+    hash = "sha256-PmdCFeKk2Lz9sKDKcRqNkItpASIaFs9hvGvA1gE1c0E=";
   };
 
   postPatch = ''
@@ -37,11 +38,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    attrs
     aiohttp
+    attrs
     backoff
-    pyhumps
+    backports-strenum
     boto3
+    pyhumps
     warrant-lite
   ];
 

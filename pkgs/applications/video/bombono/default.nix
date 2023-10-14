@@ -3,7 +3,7 @@
 , pkg-config
 , fetchpatch
 , scons
-, boost172
+, boost
 , dvdauthor
 , dvdplusrwtools
 , enca
@@ -22,7 +22,7 @@ let
   fetchPatchFromAur = {name, sha256}:
     fetchpatch {
       inherit name sha256;
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=e6cc6bc80c672aaa1a2260abfe8823da299a192c";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=766dd4ba1715fc921fe26ce1bdcf22c30f4fc073";
     };
 in
 stdenv.mkDerivation rec {
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
     {name="fix_throw_specifications.patch";   sha256="sha256-NjCDGwXRCSLcuW2HbPOpXRgNvNQHy7i7hoOgyvGIr7g=";}
     {name="fix_operator_ambiguity.patch";     sha256="sha256-xx7WyrxEdDrDuz5YoFrM/u2qJru9u6X/4+Y5rJdmmmQ=";}
     {name="fix_ffmpeg30.patch";               sha256="sha256-vKEbvbjYVRzEaVYC8XOJBPmk6FDXI/WA0X/dldRRO8c=";}
+    {name="inc_boost_header.patch";           sha256="sha256-76vjkf62VsNJ5FmBEs+X7ZBqjvJ372mjSIreBxNQym8=";}
   ]);
 
   postPatch = ''
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
 
   buildInputs = [
-    boost172
+    boost
     dvdauthor
     dvdplusrwtools
     enca

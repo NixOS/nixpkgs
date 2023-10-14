@@ -4,13 +4,13 @@
 , removeReferencesTo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "1.9.4";
+  version = "2.0.3";
 
   src = fetchurl {
-    url = "https://distfiles.dereferenced.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-2szxu+WjDRSbVWx9L//+r9dte1FOJJJxq91QFTPB2K4=";
+    url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
+    hash = "sha256-yr3zxHRSmFT3zM6Fc8WsaK00p+YhA3U1y8OYH2sjg2w=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "doc" ];
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
   # reason, but in this case the dev output is for the `libpkgconf` library,
   # while the aclocal stuff is for the tool. The tool is already for use during
   # development, so there is no reason to have separate "dev-bin" and "dev-lib"
-  # outputs or someting.
+  # outputs or something.
   + ''
     mv ${placeholder "dev"}/share ${placeholder "out"}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pkgconf/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
@@ -52,8 +52,10 @@ stdenv.mkDerivation rec {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
-    license = licenses.isc;
-    maintainers = with maintainers; [ zaninime AndersonTorres ];
-    platforms = platforms.all;
+    changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
+    license = lib.licenses.isc;
+    mainProgram = "pkgconf";
+    maintainers = with lib.maintainers; [ zaninime AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cloudpickle
 , scikit-learn
-, scikitimage
+, scikit-image
 , packaging
 , psutil
 , py-deprecate
@@ -15,7 +15,7 @@
 
 let
   pname = "torchmetrics";
-  version = "0.11.3";
+  version = "0.11.4";
 in
 buildPythonPackage {
   inherit pname version;
@@ -24,7 +24,7 @@ buildPythonPackage {
     owner = "PyTorchLightning";
     repo = "metrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cyzAY5NKP+SgoZmwBBLsI0yQ1M4jdOB6/9+/k/+5mns=";
+    hash = "sha256-K8QLdDpnS4N8s3zXsifFloRXW/QXEm36mJXXKEBEJBs=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytorch-lightning
     scikit-learn
-    scikitimage
+    scikit-image
     cloudpickle
     psutil
     pytestCheckHook

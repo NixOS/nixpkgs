@@ -7,7 +7,7 @@
 , gnome/*.gnome-shell*/
 , browserpass, gnome-browser-connector, uget-integrator, plasma5Packages, bukubrow, pipewire
 , tridactyl-native
-, fx_cast_bridge
+, fx-cast-bridge
 , udev
 , libkrb5
 , libva
@@ -69,7 +69,7 @@ let
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome-browser-connector
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma5Packages.plasma-browser-integration
-          ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
+          ++ lib.optional (cfg.enableFXCastBridge or false) fx-cast-bridge
           ++ extraNativeMessagingHosts
         ;
       libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
@@ -84,8 +84,9 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or false) speechd
-            ++ pkcs11Modules;
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd
+            ++ pkcs11Modules
+            ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
 
       launcherName = "${applicationName}${nameSuffix}";
@@ -303,7 +304,7 @@ let
           "''${executablePath}${nameSuffix}" \
             --prefix LD_LIBRARY_PATH ':' "$libs" \
             --suffix-each GTK_PATH ':' "$gtk_modules" \
-            --suffix PATH ':' "${xdg-utils}/bin" \
+            ${lib.optionalString (!xdg-utils.meta.broken) "--suffix PATH ':' \"${xdg-utils}/bin\""} \
             --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${launcherName}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
@@ -362,7 +363,7 @@ let
 
         extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
         for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
-          jq -s '.[0] + .[1]' "$POL_PATH" $extraPoliciesFile > .tmp.json
+          jq -s '.[0] * .[1]' "$POL_PATH" $extraPoliciesFile > .tmp.json
           mv .tmp.json "$POL_PATH"
         done
 

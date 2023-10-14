@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchgit, ncurses, tcl, openssl, pam, libkrb5
-, openldap, libxcrypt, gitUpdater
+{ lib
+, stdenv
+, fetchgit
+, buildPackages
+, ncurses
+, tcl
+, openssl
+, pam
+, libkrb5
+, openldap
+, libxcrypt
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +21,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-cJyUBatQBjD6RG+jesJ0JRhWghPRBACc/HQl+2aCTd0=";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [
     ncurses tcl openssl pam libkrb5 openldap libxcrypt

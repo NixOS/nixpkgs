@@ -18,8 +18,14 @@ final: prev: let
   # E.g. for cudaPackages_11_8 we use gcc11 with gcc12's libstdc++
   # Cf. https://github.com/NixOS/nixpkgs/pull/218265 for context
   backendStdenv = final.callPackage ./stdenv.nix {
-    nixpkgsStdenv = prev.pkgs.stdenv;
-    nvccCompatibleStdenv = prev.pkgs.buildPackages."${finalVersion.gcc}Stdenv";
+    # We use buildPackages (= pkgsBuildHost) because we look for a gcc that
+    # runs on our build platform, and that produces executables for the host
+    # platform (= platform on which we deploy and run the downstream packages).
+    # The target platform of buildPackages.gcc is our host platform, so its
+    # .lib output should be the libstdc++ we want to be writing in the runpaths
+    # Cf. https://github.com/NixOS/nixpkgs/pull/225661#discussion_r1164564576
+    nixpkgsCompatibleLibstdcxx = final.pkgs.buildPackages.gcc.cc.lib;
+    nvccCompatibleCC = final.pkgs.buildPackages."${finalVersion.gcc}".cc;
   };
 
   ### Add classic cudatoolkit package
@@ -32,10 +38,39 @@ final: prev: let
 
   cudaFlags = final.callPackage ./flags.nix {};
 
+  # Internal hook, used by cudatoolkit and cuda redist packages
+  # to accommodate automatic CUDAToolkit_ROOT construction
+  markForCudatoolkitRootHook = (final.callPackage
+    ({ makeSetupHook }:
+      makeSetupHook
+        { name = "mark-for-cudatoolkit-root-hook"; }
+        ./hooks/mark-for-cudatoolkit-root-hook.sh)
+    { });
+
+  # Normally propagated by cuda_nvcc or cudatoolkit through their depsHostHostPropagated
+  setupCudaHook = (final.callPackage
+    ({ makeSetupHook, backendStdenv }:
+      makeSetupHook
+        {
+          name = "setup-cuda-hook";
+
+          substitutions.ccRoot = "${backendStdenv.cc}";
+
+          # Required in addition to ccRoot as otherwise bin/gcc is looked up
+          # when building CMakeCUDACompilerId.cu
+          substitutions.ccFullPath = "${backendStdenv.cc}/bin/${backendStdenv.cc.targetPrefix}c++";
+        }
+        ./hooks/setup-cuda-hook.sh)
+    { });
+
 in
 {
   inherit
     backendStdenv
     cudatoolkit
-    cudaFlags;
+    cudaFlags
+    markForCudatoolkitRootHook
+    setupCudaHook;
+
+    saxpy = final.callPackage ./saxpy { };
 }

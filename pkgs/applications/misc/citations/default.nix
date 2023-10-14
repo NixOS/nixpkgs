@@ -1,4 +1,5 @@
-{ darwin
+{ cargo
+, darwin
 , desktop-file-utils
 , fetchFromGitLab
 , gettext
@@ -12,26 +13,29 @@
 , pkg-config
 , poppler
 , rustPlatform
+, rustc
 , stdenv
 , testers
 , wrapGAppsHook4
+, clippy
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    hash = "sha256-QPK6Nw0tDdttUDFKMgThTYMTxGXsn5OReqf1LNAai7g=";
+    hash = "sha256-QofsVqulFMiyYKci2vHdQAUJoIIgnPyTRizoBDvYG+g=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "nom-bibtex-0.3.0" = "sha256-Dy7xauwXGnMtK/w/T5gZgqJ8fPyyd/FfZTLjvwMODFI=";
+      "nom-bibtex-0.4.0" = "sha256-hulMoH3gkhD2HurrXdIqqkfKkZGujV9We0m0jsgHFfM=";
     };
   };
 
@@ -43,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     wrapGAppsHook4
   ];
 
@@ -59,6 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  nativeCheckInputs = [ clippy ];
+
+  preCheck = ''
+    sed -i -e '/PATH=/d' ../src/meson.build
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

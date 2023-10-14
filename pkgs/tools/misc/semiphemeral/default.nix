@@ -1,12 +1,13 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "semiphemeral";
   version = "0.6";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "c90d73b14c826f262b1339d1f5926c5abc6431181090ea87177af821c0866fb7";
   };

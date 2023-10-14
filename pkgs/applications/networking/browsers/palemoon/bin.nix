@@ -13,21 +13,22 @@
 , libpulseaudio
 , makeDesktopItem
 , wrapGAppsHook
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "palemoon-bin";
-  version = "32.0.1";
+  version = "32.4.1";
 
   src = fetchzip {
     urls = [
-      "https://rm-eu.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
-      "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+      "https://rm-eu.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
+      "https://rm-us.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
-      "sha256-CSAsZTMIeInuvN7mddiMDtzzNKuYST2zp1XczKAP1mQ="
+      "sha256-c/rfnMpiLWqlNZppqPRNWXsgAQ1FofAdel5EFnK+mrY="
     else
-      "sha256-bvdy4tqnuoUxVVz/8zp7VwfS3wH51eKCzXDqgDWMb3A=";
+      "sha256-27njFdqq2DUctlz/UOtH5tlOduQNpoapuCYS+48K9dk=";
   };
 
   preferLocalBuild = true;
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   desktopItems = [(makeDesktopItem rec {
-    name = pname;
+    name = "palemoon-bin";
     desktopName = "Pale Moon Web Browser";
     comment = "Browse the World Wide Web";
     keywords = [
@@ -152,12 +153,17 @@ stdenv.mkDerivation rec {
     wrapGApp $out/lib/palemoon/palemoon
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     homepage = "https://www.palemoon.org/";
     description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
+
       Pale Moon offers you a browsing experience in a browser completely built
       from its own, independently developed source that has been forked off from
       Firefox/Mozilla code a number of years ago, with carefully selected
@@ -180,4 +186,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
   };
-}
+})

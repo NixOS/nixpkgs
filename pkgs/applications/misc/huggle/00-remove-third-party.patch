@@ -1,8 +1,8 @@
 diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index a37976e..5669366 100644
+index b7530e8f..af94a62d 100644
 --- a/src/CMakeLists.txt
 +++ b/src/CMakeLists.txt
-@@ -59,16 +59,12 @@ if(NOT MINGW AND WIN32)
+@@ -59,8 +59,7 @@ if(NOT MINGW AND WIN32)
      set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}/Debug)
  endif()
  
@@ -11,15 +11,4 @@ index a37976e..5669366 100644
 +include_directories(@libirc_includes@)
  
  # YAML
--option(YAML_CPP_BUILD_TOOLS "Disable tests" OFF)
--option(YAML_CPP_BUILD_TESTS "Enable testing" OFF)
--option(YAML_CPP_BUILD_TOOLS "Enable parse tools" OFF)
--option(BUILD_SHARED_LIBS "Build as shared" ON)
--include_directories("3rd/yaml-cpp/include/")
--add_subdirectory(3rd/yaml-cpp)
-+find_package(YAML-CPP 0.6.3 QUIET)
-+include_directories(YAML_CPP_INCLUDE_DIR)
-+
- if (HUGGLE_EXT)
-     if(NOT MINGW AND WIN32)
-         set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}/Release/extensions)
+ find_package(YAML-CPP 0.6.3 QUIET)

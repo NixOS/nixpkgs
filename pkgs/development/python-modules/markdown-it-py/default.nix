@@ -6,6 +6,7 @@
 , flit-core
 , linkify-it-py
 , markdown
+, mdit-py-plugins
 , mdurl
 , mistletoe
 , mistune
@@ -16,8 +17,10 @@
 , sphinx-book-theme
 , sphinx-copybutton
 , sphinx-design
+, stdenv
 , pytest-regressions
 , pytestCheckHook
+, pythonRelaxDepsHook
 , pythonOlder
 }:
 
@@ -35,7 +38,13 @@ buildPythonPackage rec {
     hash = "sha256-qdRU1BxczFDGoIEtl0ZMkKNn4p5tec8YuPt5ZwX5fYM=";
   };
 
+  # fix downstrem usage of markdown-it-py[linkify]
+  pythonRelaxDeps = [
+    "linkify-it-py"
+  ];
+
   nativeBuildInputs = [
+    pythonRelaxDepsHook
     flit-core
   ];
 
@@ -52,6 +61,7 @@ buildPythonPackage rec {
   preCheck = ''
     rm -r benchmarking
   '';
+  doCheck = !stdenv.isi686;
 
   pythonImportsCheck = [
     "markdown_it"
@@ -60,6 +70,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     compare = [ commonmark markdown mistletoe mistune panflute ];
     linkify = [ linkify-it-py ];
+    plugins = [ mdit-py-plugins ];
     rtd = [ attrs myst-parser pyyaml sphinx sphinx-copybutton sphinx-design sphinx-book-theme ];
   };
 

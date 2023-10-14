@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
+{ lib, stdenv, fetchurl, xorg, jre, makeDesktopItem, makeWrapper, unzip, language ? "en_US" }:
 let
   pname = "geogebra";
-  version = "5-0-745-0";
+  version = "5-0-785-0";
 
   srcIcon = fetchurl {
     url = "http://static.geogebra.org/images/geogebra-logo.svg";
@@ -27,7 +27,7 @@ let
       calculus in one easy-to-use package.
     '';
     homepage = "https://www.geogebra.org/";
-    maintainers = with maintainers; [ sikmir imsofi ];
+    maintainers = with maintainers; [ sikmir soupglasses ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
     sourceProvenance = with sourceTypes; [
       binaryBytecode
@@ -45,9 +45,9 @@ let
     src = fetchurl {
       urls = [
         "https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
-        "https://web.archive.org/web/20221126102702/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
+        "https://web.archive.org/web/20230627211902/https://download.geogebra.org/installers/5.0/GeoGebra-Linux-Portable-${version}.tar.bz2"
       ];
-      hash = "sha256-DhZ9inK/6Cc/vunYNHhyP4tI/9/toUOgV4lZWmFIj3c=";
+      hash = "sha256-cL4ERKZpE9Y6IdOjvYiX3nIIW3E2qoqkpMyTszvFseM=";
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +55,11 @@ let
     installPhase = ''
       install -D geogebra/* -t "$out/libexec/geogebra/"
 
+      # The bundled jogl (required for 3D graphics) links to libXxf86vm
+      # OpenGL versions newer than 3.0 cause "javax.media.opengl.GLException: Not a GL2 implementation"
       makeWrapper "$out/libexec/geogebra/geogebra" "$out/bin/geogebra" \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm ]}" \
+        --set MESA_GL_VERSION_OVERRIDE 3.0 \
         --set JAVACMD "${jre}/bin/java" \
         --set GG_PATH "$out/libexec/geogebra" \
         --add-flags "--language=${language}"
@@ -75,10 +79,10 @@ let
 
     src = fetchurl {
       urls = [
-        "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
-        "https://web.archive.org/web/20221126102602/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}.zip"
+        "https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}-x64.zip"
+        "https://web.archive.org/web/20230627211427/https://download.geogebra.org/installers/5.0/GeoGebra-MacOS-Installer-withJava-${version}-x64.zip"
       ];
-      hash = "sha256-La7NzEoao4ExUw3mBGstvSHm94/JM5LHlhOE9ewJePY=";
+      hash = "sha256-KHjNH8c3/aMJ5CcwCwW9z0QRxJwqYU5I610zpMMruBQ=";
     };
 
     dontUnpack = true;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ./conf-symlink.patch
     # This patch solves a duplicate symbol error when building with a clang stdenv
     # Before removing this patch, please ensure the package still builds by running eg.
-    # nix-build -E 'with import ./. {}; pkgs.keyutils.override { stdenv = pkgs.llvmPackages_latest.stdenv; }'
+    # nix-build -E 'with import ./. {}; pkgs.keyutils.override { stdenv = pkgs.clangStdenv; }'
     ./0001-Remove-unused-function-after_eq.patch
 
     # Fix build for s390-linux, where size_t is different from ptrdiff_t.

@@ -1,5 +1,4 @@
-{ stdenv
-, buildPythonPackage
+{ buildPythonPackage
 , dm-haiku
 , chex
 , cloudpickle
@@ -12,13 +11,14 @@
 , bsuite
 , frozendict
 , dm-env
-, scikitimage
+, scikit-image
 , rlax
 , distrax
 , tensorflow-probability
-, optax }:
+, optax
+}:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dm-haiku-tests";
   inherit (dm-haiku) version;
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pytestCheckHook
     optax
     rlax
-    scikitimage
+    scikit-image
     tensorflow
     tensorflow-probability
   ];

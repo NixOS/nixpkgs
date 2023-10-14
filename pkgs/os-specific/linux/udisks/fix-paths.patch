@@ -8,101 +8,12 @@ index ca802cce..bfd1c29e 100644
  #
 -SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="raid", ENV{ID_FS_TYPE}=="linux_raid_member", ENV{UDISKS_MD_MEMBER_LEVEL}=="", IMPORT{program}="/bin/sh -c '/sbin/mdadm --examine --export $tempnode | /bin/sed s/^MD_/UDISKS_MD_MEMBER_/g'"
 +SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="raid", ENV{ID_FS_TYPE}=="linux_raid_member", ENV{UDISKS_MD_MEMBER_LEVEL}=="", IMPORT{program}="@sh@ -c '@mdadm@ --examine --export $tempnode | @sed@ s/^MD_/UDISKS_MD_MEMBER_/g'"
- 
+
 -SUBSYSTEM=="block", KERNEL=="md*", ENV{DEVTYPE}!="partition", IMPORT{program}="/bin/sh -c '/sbin/mdadm --detail --export $tempnode | /bin/sed s/^MD_/UDISKS_MD_/g'"
 +SUBSYSTEM=="block", KERNEL=="md*", ENV{DEVTYPE}!="partition", IMPORT{program}="@sh@ -c '@mdadm@ --detail --export $tempnode | @sed@ s/^MD_/UDISKS_MD_/g'"
- 
+
  LABEL="udisks_probe_end"
- 
-diff --git a/modules/zram/data/udisks2-zram-setup@.service.in b/modules/zram/data/udisks2-zram-setup@.service.in
-index ac868e84..03fdd887 100644
---- a/modules/zram/data/udisks2-zram-setup@.service.in
-+++ b/modules/zram/data/udisks2-zram-setup@.service.in
-@@ -8,7 +8,7 @@ Requires=dev-%i.device
- Type=oneshot
- RemainAfterExit=no
- EnvironmentFile=-@zramconfdir@/%i
--ExecStart=-/bin/sh -c 'if [ -n "$ZRAM_NUM_STR" ]; then echo "$ZRAM_NUM_STR" > /sys/class/block/%i/max_comp_streams; fi'
--ExecStart=-/bin/sh -c 'if [ -n "$ZRAM_DEV_SIZE" ]; then echo "$ZRAM_DEV_SIZE" > /sys/class/block/%i/disksize; fi'
--ExecStart=-/bin/sh -c 'if [ "$SWAP" = "y" ]; then mkswap /dev/%i && swapon /dev/%i; fi'
--# ExecStop=-/bin/sh -c 'echo 1 > /sys/class/block/%i/reset'
-+ExecStart=-@sh@ -c 'if [ -n "$ZRAM_NUM_STR" ]; then echo "$ZRAM_NUM_STR" > /sys/class/block/%i/max_comp_streams; fi'
-+ExecStart=-@sh@ -c 'if [ -n "$ZRAM_DEV_SIZE" ]; then echo "$ZRAM_DEV_SIZE" > /sys/class/block/%i/disksize; fi'
-+ExecStart=-@sh@ -c 'if [ "$SWAP" = "y" ]; then @mkswap@ /dev/%i && @swapon@ /dev/%i; fi'
-+# ExecStop=-@sh@ -c 'echo 1 > /sys/class/block/%i/reset'
-diff --git a/modules/zram/udiskslinuxmanagerzram.c b/modules/zram/udiskslinuxmanagerzram.c
-index f647f653..df81e910 100644
---- a/modules/zram/udiskslinuxmanagerzram.c
-+++ b/modules/zram/udiskslinuxmanagerzram.c
-@@ -243,7 +243,7 @@ create_conf_files (guint64   num_devices,
- 
-       g_snprintf (tmp, 255, "zram%" G_GUINT64_FORMAT, i);
-       filename = g_build_filename (PACKAGE_ZRAMCONF_DIR, tmp, NULL);
--      contents = g_strdup_printf ("#!/bin/bash\n"
-+      contents = g_strdup_printf ("#!@bash@\n"
-                                   "# UDisks2 managed ZRAM configuration\n\n"
-                                   "ZRAM_NUM_STR=%" G_GUINT64_FORMAT "\n"
-                                   "ZRAM_DEV_SIZE=%" G_GUINT64_FORMAT "\n"
-diff --git a/src/tests/install-udisks/runtest.sh b/src/tests/install-udisks/runtest.sh
-index e7df4ed2..ab4356d9 100644
---- a/src/tests/install-udisks/runtest.sh
-+++ b/src/tests/install-udisks/runtest.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!@bash@
- # vim: dict+=/usr/share/beakerlib/dictionary.vim cpt=.,w,b,u,t,i,k
- # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- #
-diff --git a/src/tests/integration-test b/src/tests/integration-test
-index 07e4e029..3bd8ec51 100755
---- a/src/tests/integration-test
-+++ b/src/tests/integration-test
-@@ -299,7 +299,7 @@ class UDisksTestCase(unittest.TestCase):
-         if not device:
-             device = cls.devname(partition)
-         result = {}
--        cmd = subprocess.Popen(['blkid', '-p', '-o', 'udev', device], stdout=subprocess.PIPE)
-+        cmd = subprocess.Popen(['@blkid@', '-p', '-o', 'udev', device], stdout=subprocess.PIPE)
-         for l in cmd.stdout:
-             (key, value) = l.decode('UTF-8').split('=', 1)
-             result[key] = value.strip()
-@@ -437,7 +437,7 @@ class UDisksTestCase(unittest.TestCase):
-                 f.write('KERNEL=="sr*", ENV{DISK_EJECT_REQUEST}!="?*", '
-                         'ATTRS{model}=="scsi_debug*", '
-                         'ENV{ID_CDROM_MEDIA}=="?*", '
--                        'IMPORT{program}="/sbin/blkid -o udev -p -u noraid $tempnode"\n')
-+                        'IMPORT{program}="@blkid@ -o udev -p -u noraid $tempnode"\n')
-             # reload udev
-             subprocess.call('sync; pkill --signal HUP udevd || '
-                             'pkill --signal HUP systemd-udevd',
-@@ -1142,7 +1142,7 @@ class FS(UDisksTestCase):
-         self.assertFalse(os.access(f, os.X_OK))
- 
-         f = os.path.join(mount_point, 'simple.exe')
--        shutil.copy('/bin/bash', f)
-+        shutil.copy('@bash@', f)
-         self.assertTrue(os.access(f, os.R_OK))
-         self.assertTrue(os.access(f, os.W_OK))
-         self.assertTrue(os.access(f, os.X_OK))
-@@ -1155,7 +1155,7 @@ class FS(UDisksTestCase):
-         self.assertFalse(os.access(f, os.X_OK))
- 
-         f = os.path.join(mount_point, 'subdir', 'subdir.exe')
--        shutil.copy('/bin/bash', f)
-+        shutil.copy('@bash@', f)
-         self.assertTrue(os.access(f, os.R_OK))
-         self.assertTrue(os.access(f, os.W_OK))
-         self.assertTrue(os.access(f, os.X_OK))
-diff --git a/src/tests/storadectl/runtest.sh b/src/tests/storadectl/runtest.sh
-index f03885f9..baca6a93 100644
---- a/src/tests/storadectl/runtest.sh
-+++ b/src/tests/storadectl/runtest.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!@bash@
- # vim: dict+=/usr/share/beakerlib/dictionary.vim cpt=.,w,b,u,t,i,k
- # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- #
+
 diff --git a/src/tests/test.c b/src/tests/test.c
 index 3ddbdf2c..a87f960a 100644
 --- a/src/tests/test.c
@@ -110,7 +21,7 @@ index 3ddbdf2c..a87f960a 100644
 @@ -71,7 +71,7 @@ test_spawned_job_successful (void)
  {
    UDisksSpawnedJob *job;
- 
+
 -  job = udisks_spawned_job_new ("/bin/true", NULL, getuid (), geteuid (), NULL, NULL);
 +  job = udisks_spawned_job_new ("@true@", NULL, getuid (), geteuid (), NULL, NULL);
    udisks_spawned_job_start (job);
@@ -119,7 +30,7 @@ index 3ddbdf2c..a87f960a 100644
 @@ -84,10 +84,10 @@ test_spawned_job_failure (void)
  {
    UDisksSpawnedJob *job;
- 
+
 -  job = udisks_spawned_job_new ("/bin/false", NULL, getuid (), geteuid (), NULL, NULL);
 +  job = udisks_spawned_job_new ("@false@", NULL, getuid (), geteuid (), NULL, NULL);
    udisks_spawned_job_start (job);
@@ -128,9 +39,9 @@ index 3ddbdf2c..a87f960a 100644
 +                             (gpointer) "Command-line `@false@' exited with non-zero exit status 1: ");
    g_object_unref (job);
  }
- 
+
 @@ -119,7 +119,7 @@ test_spawned_job_cancelled_at_start (void)
- 
+
    cancellable = g_cancellable_new ();
    g_cancellable_cancel (cancellable);
 -  job = udisks_spawned_job_new ("/bin/true", NULL, getuid (), geteuid (), NULL, cancellable);
@@ -140,7 +51,7 @@ index 3ddbdf2c..a87f960a 100644
                               (gpointer) "Operation was cancelled (g-io-error-quark, 19)");
 @@ -144,7 +144,7 @@ test_spawned_job_cancelled_midway (void)
    GCancellable *cancellable;
- 
+
    cancellable = g_cancellable_new ();
 -  job = udisks_spawned_job_new ("/bin/sleep 0.5", NULL, getuid (), geteuid (), NULL, cancellable);
 +  job = udisks_spawned_job_new ("@sleep@ 0.5", NULL, getuid (), geteuid (), NULL, cancellable);
@@ -150,7 +61,7 @@ index 3ddbdf2c..a87f960a 100644
 @@ -197,7 +197,7 @@ test_spawned_job_premature_termination (void)
  {
    UDisksSpawnedJob *job;
- 
+
 -  job = udisks_spawned_job_new ("/bin/sleep 1000", NULL, getuid (), geteuid (), NULL, NULL /* GCancellable */);
 +  job = udisks_spawned_job_new ("@sleep@ 1000", NULL, getuid (), geteuid (), NULL, NULL /* GCancellable */);
    udisks_spawned_job_start (job);

@@ -23,13 +23,13 @@ lib.checkListOfEnum "${pname}: tweaks" [ "solid" "float" "round" "blur" "noborde
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-12-15";
+  version = "2023-06-20";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-lGT6MIpc7cdAznZlbSJJ7aBzZPHucyfR8ZNMdJI0LP8=";
+    hash = "sha256-hUXlzLdcWeOHEJx3+vCMpxvJst6Rr8ISvlzlsUgCrhg=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
       ${lib.optionalString (sizeVariants != []) "--size " + builtins.toString sizeVariants} \
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+      --icon nixos \
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share

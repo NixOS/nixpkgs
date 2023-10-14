@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , python3
+, fetchPypi
 , ffmpeg
 }:
 
@@ -9,7 +10,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.3";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit version pname;
     hash = "sha256-4Zsb/OBtU/jV0gThEYe8bcrb+6hW+hnzQS19q1H409Q=";
   };

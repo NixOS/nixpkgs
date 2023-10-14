@@ -5,6 +5,7 @@
 , curl
 , darwin
 , libgit2
+, gtk3
 , libssh2
 , openssl
 , sqlite
@@ -39,6 +40,7 @@
 , autoconf
 , automake
 , libtool
+, seatd # =libseat
 , ...
 }:
 
@@ -145,6 +147,11 @@ in
     buildInputs = [ gdk-pixbuf ];
   };
 
+  gtk-sys = attrs: {
+    buildInputs = [ gtk3 ];
+    nativeBuildInputs = [ pkg-config ];
+  };
+
   gtk4-sys = attrs: {
     buildInputs = [ gtk4 ];
     nativeBuildInputs = [ pkg-config ];
@@ -164,6 +171,11 @@ in
     LIBGIT2_SYS_USE_PKG_CONFIG = true;
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ openssl zlib libgit2 ];
+  };
+
+  libseat-sys = attrs: {
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ seatd ];
   };
 
   libsqlite3-sys = attrs: {
@@ -187,8 +199,8 @@ in
   };
 
   graphene-sys = attrs: {
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ graphene gobject-introspection ];
+    nativeBuildInputs = [ pkg-config gobject-introspection ];
+    buildInputs = [ graphene ];
   };
 
   nettle-sys = attrs: {

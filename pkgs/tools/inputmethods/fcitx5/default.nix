@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
@@ -31,6 +32,7 @@
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
+, nixosTests
 }:
 let
   enDictVer = "20121020";
@@ -41,13 +43,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.23";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-zS25XeNtBN7QIi+Re/p1uLoH/Q4xKAsFrEmgk2LYRu8=";
+    hash = "sha256-R8stzpfQttBZFFSu8ikUz/2eL+b98/X672uVFsha9H0=";
   };
 
   prePatch = ''
@@ -89,7 +91,12 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
-  passthru.updateScript = ./update.py;
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      inherit (nixosTests) fcitx5;
+    };
+  };
 
   meta = with lib; {
     description = "Next generation of fcitx";

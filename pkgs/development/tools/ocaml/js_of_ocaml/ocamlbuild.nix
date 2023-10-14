@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "js_of_ocaml-ocamlbuild";
   version = "5.0";
 
-  minimalOCamlVersion = "4.02";
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/ocsigen/js_of_ocaml-ocamlbuild/releases/download/${version}/js_of_ocaml-ocamlbuild-${version}.tbz";

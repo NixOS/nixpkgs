@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "gentium";
-  version = "6.101";
+  version = "6.200";
 
   src = fetchzip {
     url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
-    hash = "sha256-iKD1Q7/lsbZCuJQoJqySQHwplrHv8yzmph+QwKpYgMU=";
+    hash = "sha256-gpVOtmF4Kp3y1Rm00c4o3WQEskO7mY1Z5SVaYHI0hzg=";
   };
 
   installPhase = ''

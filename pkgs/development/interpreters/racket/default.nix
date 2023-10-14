@@ -9,7 +9,6 @@
 , libGL
 , libGLU
 , libjpeg
-, xorg
 , ncurses
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -25,7 +24,7 @@ let
     fontDirectories = [ freefont_ttf ];
   };
 
-  libPath = lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath ([
     cairo
     fontconfig
     glib
@@ -33,8 +32,6 @@ let
     gtk3
     gsettings-desktop-schemas
     libedit
-    libGL
-    libGLU
     libjpeg
     libpng
     mpfr
@@ -44,13 +41,16 @@ let
     poppler
     readline
     sqlite
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
+    libGLU
+  ]);
 
 in
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "8.8"; # always change at once with ./minimal.nix
+  version = "8.10"; # always change at once with ./minimal.nix
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
-    sha256 = "sha256-OYQi4rQjc+FOTg+W2j2Vy1dEJHuj9z6pmBX7aTwnFKs=";
+    sha256 = "sha256-Dklj2iwX5/bVdCi9odz2Ttp0N+Lya7bMSLR/QXo9k6M=";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -149,6 +149,7 @@ stdenv.mkDerivation rec {
       GUIs and charts.
     '';
     homepage = "https://racket-lang.org/";
+    changelog = "https://github.com/racket/racket/releases/tag/v${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];

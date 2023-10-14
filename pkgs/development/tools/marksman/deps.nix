@@ -3,6 +3,8 @@
 
 { fetchNuGet }: [
   (fetchNuGet { pname = "coverlet.collector"; version = "3.1.2"; sha256 = "0gsk2q93qw7pqxwd4pdyq5364wz0lvldcqqnf4amz13jaq86idmz"; })
+  (fetchNuGet { pname = "dotnet-fsharplint"; version = "0.21.2"; sha256 = "188xbqd5hg11lrfwn6vnajwsm8azlri3mk143m8q75br7jbjig7p"; })
+  (fetchNuGet { pname = "fantomas"; version = "5.0.0-beta-009"; sha256 = "0h0ajyllqrj0hj8acracfd9gc9c45i7rbxyn5cljdwy0hqy12xm8"; })
   (fetchNuGet { pname = "FSharp.Core"; version = "6.0.0"; sha256 = "1hjhvr39c1vpgrdmf8xln5q86424fqkvy9nirkr29vl2461d2039"; })
   (fetchNuGet { pname = "FSharp.Core"; version = "6.0.5"; sha256 = "07929km96znf6xnqzmxdk3h48kz2rg9msf4c5xxmnjqr0ikfb8c6"; })
   (fetchNuGet { pname = "FSharp.SystemCommandLine"; version = "0.13.0-beta4"; sha256 = "10h58gqfdg2hdy9laf6ry8djfysrdmwlj9n0d7ydwyszb6zgnd20"; })

@@ -11,7 +11,7 @@
 , boost
 , catch2
 , fmt
-, microsoft_gsl
+, microsoft-gsl
 , range-v3
 , yaml-cpp
 , ncurses
@@ -47,6 +47,8 @@ mkDerivation rec {
     sha256 = "sha256-TpxVC0GFZD3jGISnDWHKEetgVVpznm5k/Vc2dwVfSG4=";
   };
 
+  outputs = [ "out" "terminfo" ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -62,7 +64,7 @@ mkDerivation rec {
     boost
     catch2
     fmt
-    microsoft_gsl
+    microsoft-gsl
     range-v3
     yaml-cpp
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.libs.utmp ];
@@ -84,6 +86,12 @@ mkDerivation rec {
 
     # Don't fix Darwin app bundle
     sed -i '/fixup_bundle/d' src/contour/CMakeLists.txt
+  '';
+
+  postInstall = ''
+    mkdir -p $out/nix-support $terminfo/share
+    mv $out/share/terminfo $terminfo/share/
+    echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
   passthru.tests.test = nixosTests.terminal-emulators.contour;

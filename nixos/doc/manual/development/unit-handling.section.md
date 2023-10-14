@@ -25,8 +25,11 @@ checks:
     since changes in their values are applied by systemd when systemd is
     reloaded.
 
-  - `.mount` units are **reload**ed. These mostly come from the `/etc/fstab`
-    parser.
+  - `.mount` units are **reload**ed if only their `Options` changed. If anything
+    else changed (like `What`), they are **restart**ed unless they are the mount
+    unit for `/` or `/nix` in which case they are reloaded to prevent the system
+    from crashing. Note that this is the case for `.mount` units and not for
+    mounts from `/etc/fstab`. These are explained in [](#sec-switching-systems).
 
   - `.socket` units are currently ignored. This is to be fixed at a later
     point.

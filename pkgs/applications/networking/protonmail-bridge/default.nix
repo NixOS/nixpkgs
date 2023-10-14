@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protonmail-bridge";
-  version = "3.1.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "ProtonMail";
     repo = "proton-bridge";
     rev = "v${version}";
-    hash = "sha256-jCoTFpxEHk0ITEzJ3RaVeUpzX4E7tuI9ZBKwabtOT6w=";
+    hash = "sha256-nYr9M9jRtKDZdtCWirpLAKA/tgz07N6/EI6JV4NzjXM=";
   };
 
-  vendorHash = "sha256-zWcqEAeHbBUVRLPw37NgWOoiq/CXCcP/geP3lfo4TWg=";
+  vendorHash = "sha256-I7vDmSLccJSov5RlTtzrQTc+uCprMxwOrHkroL9oZXE=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -50,7 +50,7 @@ buildGoModule rec {
       An application that runs on your computer in the background and seamlessly encrypts
       and decrypts your mail as it enters and leaves your computer.
 
-      To work, gnome-keyring service must be enabled.
+      To work, use secret-service freedesktop.org API (e.g. Gnome keyring) or pass.
     '';
   };
 }

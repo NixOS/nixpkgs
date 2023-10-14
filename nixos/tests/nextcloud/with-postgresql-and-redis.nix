@@ -25,11 +25,9 @@ in {
           redis = true;
           memcached = false;
         };
+        database.createLocally = true;
         config = {
           dbtype = "pgsql";
-          dbname = "nextcloud";
-          dbuser = "nextcloud";
-          dbhost = "/run/postgresql";
           inherit adminuser;
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
@@ -48,23 +46,6 @@ in {
 
       services.redis.servers."nextcloud".enable = true;
       services.redis.servers."nextcloud".port = 6379;
-
-      systemd.services.nextcloud-setup= {
-        requires = ["postgresql.service"];
-        after = [
-          "postgresql.service"
-        ];
-      };
-
-      services.postgresql = {
-        enable = true;
-        ensureDatabases = [ "nextcloud" ];
-        ensureUsers = [
-          { name = "nextcloud";
-            ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-          }
-        ];
-      };
     };
   };
 
@@ -79,7 +60,7 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -108,5 +89,8 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
     nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${adminuser}\"")
+
+    # redis cache should not be empty
+    nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
   '';
 })) args

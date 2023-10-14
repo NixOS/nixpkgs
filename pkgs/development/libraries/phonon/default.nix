@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://community.kde.org/Phonon";
     description = "Multimedia API for Qt";
     license = lib.licenses.lgpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 
@@ -52,9 +52,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-fPIC";
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   dontWrapQtApps = true;
 

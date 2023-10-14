@@ -1,10 +1,10 @@
-{ pkgs, lib, makeWrapper }:
+{ pkgs
+, lib
+, makeWrapper
+, nodejs ? pkgs.nodejs_18
+}:
 
 let
-
-  # To control nodejs version we pass down
-  nodejs = pkgs.nodejs-14_x;
-
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
   # Haskell packages that require ghc 8.10
@@ -107,8 +107,6 @@ let
 
       # elm-format requires text >= 2.0
       text = self.text_2_0_2;
-      # elm-format-lib requires hspec-golden < 0.2
-      hspec-golden = self.hspec-golden_0_1_0_3;
       # unorderd-container's tests indirectly depend on text < 2.0
       unordered-containers = overrideCabal (drv: { doCheck = false; }) super.unordered-containers;
       # relude-1.1.0.0's tests depend on hedgehog < 1.2, which indirectly depends on text < 2.0
@@ -117,15 +115,14 @@ let
   };
 
   nodePkgs = pkgs.callPackage ./packages/node-composition.nix {
-    inherit pkgs;
-    nodejs = pkgs.nodejs-14_x;
+    inherit pkgs nodejs;
     inherit (pkgs.stdenv.hostPlatform) system;
   };
 
 in lib.makeScope pkgs.newScope (self: with self; {
   inherit fetchElmDeps nodejs;
 
-  /* Node/NPM based dependecies can be upgraded using script `packages/generate-node-packages.sh`.
+  /* Node/NPM based dependencies can be upgraded using script `packages/generate-node-packages.sh`.
 
       * Packages which rely on `bin-wrap` will fail by default
         and can be patched using `patchBinwrap` function defined in `packages/lib.nix`.
@@ -145,16 +142,10 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
   elm-test-rs = callPackage ./packages/elm-test-rs.nix { };
 
-  elm-test = nodePkgs.elm-test // {
-    meta = with lib; nodePkgs.elm-test.meta // {
-      description = "Runs elm-test suites from Node.js";
-      homepage = "https://github.com/rtfeldman/node-test-runner";
-      license = licenses.bsd3;
-      maintainers = [ maintainers.turbomack ];
-    };
-  };
+  elm-test = callPackage ./packages/elm-test.nix { };
 } // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
-  elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
+  elm-verify-examples = let
+    patched = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
     meta = with lib; nodePkgs.elm-verify-examples.meta // {
       description = "Verify examples in your docs";
       homepage = "https://github.com/stoeffel/elm-verify-examples";
@@ -162,6 +153,14 @@ in lib.makeScope pkgs.newScope (self: with self; {
       maintainers = [ maintainers.turbomack ];
     };
   };
+  in patched.override (old: {
+    preRebuild = (old.preRebuild or "") + ''
+      # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
+      # in case of just this package
+      # TODO: investigate, same as for elm-coverage below
+      sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
+    '';
+  });
 
   elm-coverage = let
       patched = patchNpmElm (patchBinwrap [elmi-to-json] nodePkgs.elm-coverage);
@@ -248,6 +247,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
           # see upstream issue https://github.com/dillonkearns/elm-pages/issues/305 for dealing with the read-only problem
           preFixup = ''
             patch $out/lib/node_modules/elm-pages/generator/src/codegen.js ${./packages/elm-pages-fix-read-only.patch}
+            patch $out/lib/node_modules/elm-pages/generator/src/init.js ${./packages/elm-pages-fix-init-read-only.patch}
           '';
 
           postFixup = ''

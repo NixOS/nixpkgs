@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, pkg-config, ppp, libevent, openssl }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, ppp, libevent, openssl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "sstp-client";
-  version = "1.0.18";
+  version = "unstable-2023-03-25";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/sstp-client/sstp-client/sstp-client-${version}.tar.gz";
-    sha256 = "sha256-2Hn081q36uh0hu3Ei1D5mpr2X162+0QnmTyleLsODcg=";
+  src = fetchFromGitLab {
+    owner = "sstp-project";
+    repo = pname;
+    rev = "3f7835df9ac5e84729903ca536cf65e4a7b04c6c";
+    hash = "sha256-8VF5thSABqf5SXEDCa+0dyDt7kVrQcs6deWLlYWM8dg=";
   };
 
   postPatch = ''
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
     "--with-pppd-plugin-dir=$(out)/lib/pppd"
   ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [ libevent openssl ppp ];
 

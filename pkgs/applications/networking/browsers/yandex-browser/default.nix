@@ -46,15 +46,16 @@
 , systemd
 , at-spi2-atk
 , at-spi2-core
+, libqt5pas
 }:
 
 stdenv.mkDerivation rec {
   pname = "yandex-browser";
-  version = "22.9.1.1110-1";
+  version = "23.7.1.1148-1";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
-    sha256 = "sha256-u6pY7AmXgnkSVuko+PUyhDqY72i+UHv7qmePbu2wAf0=";
+    sha256 = "sha256-SJbuT2MnsXcqOSk4xCUokseDotjbWgAnvwnfNPF9zi4=";
   };
 
   nativeBuildInputs = [
@@ -106,6 +107,7 @@ stdenv.mkDerivation rec {
     nss
     pango
     stdenv.cc.cc.lib
+    libqt5pas
   ];
 
   unpackPhase = ''
@@ -118,6 +120,7 @@ stdenv.mkDerivation rec {
     cp $TMP/ya/{usr/share,opt} $out/ -R
     substituteInPlace $out/share/applications/yandex-browser-beta.desktop --replace /usr/ $out/
     ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser
+    ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser-beta
   '';
 
   runtimeDependencies = map lib.getLib [
@@ -131,14 +134,7 @@ stdenv.mkDerivation rec {
     homepage = "https://browser.yandex.ru/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
     platforms = [ "x86_64-linux" ];
-
-    knownVulnerabilities = [
-      ''
-      Trusts a Russian government issued CA certificate for some websites.
-      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
-      ''
-    ];
   };
 }

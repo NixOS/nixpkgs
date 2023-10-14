@@ -31,15 +31,15 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
-  version = "2.8.0";
+  version = "2.11.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
-    hash = "sha256-gHGsbGXxhewsdv6FCflNmf6ggFGf3CBvkIqSDV4F/kM=";
+    hash = "sha256-PL3tzgw/DgSC1hvi10WGg758188UsO5q37rduA9bNqU=";
   };
 
   nativeBuildInputs = [
@@ -76,12 +76,6 @@ buildPythonPackage rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  preCheck = ''
-    # Disable doctest plugin because it causes pytest to hang
-    substituteInPlace pytest.ini \
-      --replace "--doctest-modules" ""
-  '';
-
   disabledTestPaths = [
     "tests/test_proxy_connect.py"
     "tests/test_utils_display.py"
@@ -104,6 +98,7 @@ buildPythonPackage rec {
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+    "test_persist"
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
     # Depends on uvloop
@@ -114,6 +109,8 @@ buildPythonPackage rec {
     "test_peek_one_element"
     "test_peek_lifo"
     "test_callback_kwargs"
+    # Test fails on Hydra
+    "test_start_requests_laziness"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_xmliter_encoding"
     "test_download"

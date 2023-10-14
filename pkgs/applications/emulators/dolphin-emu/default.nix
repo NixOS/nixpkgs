@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -12,6 +13,7 @@
 , enet
 , ffmpeg
 , fmt_8
+, gtest
 , hidapi
 , libevdev
 , libGL
@@ -22,6 +24,7 @@
 , libXdmcp
 , libXext
 , libXrandr
+, lzo
 , mbedtls_2
 , mgba
 , miniupnpc
@@ -29,12 +32,13 @@
 , openal
 , pugixml
 , qtbase
+, qtsvg
 , sfml
-, soundtouch
 , udev
 , vulkan-loader
 , xxHash
 , xz
+, zlib-ng
 
   # Used in passthru
 , common-updater-scripts
@@ -46,6 +50,7 @@
   # Darwin-only dependencies
 , CoreBluetooth
 , ForceFeedback
+, IOBluetooth
 , IOKit
 , moltenvk
 , OpenGL
@@ -54,77 +59,92 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-18498";
+  version = "5.0-19870";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "46b99671d9158e0ca840c1d8ef249db0f321ced7";
-    sha256 = "sha256-K+OF8o8I1XDLQQcsWC8p8jUuWeb+RoHlBG3cEZ1aWIU=";
+    rev = "032c77b462a220016f23c5079e71bb23e0ad2adf";
+    sha256 = "sha256-TgRattksYsMGcbfu4T5mCFO9BkkHRX0NswFxGwZWjEw=";
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/dolphin-emu/dolphin/commit/c43c9101c07376297abbbbc40ef9a1965a1681cd.diff";
+      sha256 = "sha256-yHlyG86ta76YKrJsyefvFh521dNbQOqiPOpRUVxKuZM=";
+    })
+    # Remove when merged https://github.com/dolphin-emu/dolphin/pull/12070
+    ./find-minizip-ng.patch
+  ];
+
   nativeBuildInputs = [
+    stdenv.cc
     cmake
     pkg-config
     wrapQtAppsHook
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreBluetooth
+    ForceFeedback
+    IOBluetooth
+    IOKit
+    moltenvk
+    OpenGL
+    VideoToolbox
+  ] ++ [
     bzip2
     cubeb
     curl
     enet
     ffmpeg
     fmt_8
+    gtest
     hidapi
-    libGL
     libiconv
     libpulseaudio
     libspng
     libusb1
     libXdmcp
+    lzo
     mbedtls_2
     miniupnpc
     minizip-ng
     openal
     pugixml
     qtbase
+    qtsvg
     sfml
-    soundtouch
     xxHash
-    xz
+    xz # LibLZMA
+    zlib-ng
   ] ++ lib.optionals stdenv.isLinux [
     alsa-lib
     bluez
     libevdev
+    libGL
     libXext
     libXrandr
-    mgba # Derivation doesn't support Darwin
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
+    #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreBluetooth
-    ForceFeedback
-    IOKit
-    moltenvk
-    OpenGL
-    VideoToolbox
   ];
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
-    "-DUSE_SHARED_ENET=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
     "-DUSE_BUNDLED_MOLTENVK=OFF"
+    "-DMACOS_CODE_SIGNING=OFF"
     # Bundles the application folder into a standalone executable, so we cannot devendor libraries
     "-DSKIP_POSTPROCESS_BUNDLE=ON"
     # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
-    # Note: The updater isn't available on linux, so we dont need to disable it there.
+    # Note: The updater isn't available on linux, so we don't need to disable it there.
     "-DENABLE_AUTOUPDATE=OFF"
   ];
 
@@ -181,7 +201,5 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
-    # Requires both LLVM and SDK bump
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

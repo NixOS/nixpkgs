@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sorts-mill-goudy";
   version = "2011-05-25";
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = self.pname;
+    repo = finalAttrs.pname;
     rev = "06072890c7b05f274215a24f17449655ccb2c8af";
     hash = "sha256-NEfLBJatUmdUL5gJEimJHZfOd1OtI7pxTN97eWMODyM=";
   };

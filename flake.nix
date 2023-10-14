@@ -57,6 +57,19 @@
 
       nixosModules = {
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
+
+        /*
+          Make the `nixpkgs.*` configuration read-only. Guarantees that `pkgs`
+          is the way you initialize it.
+
+          Example:
+
+              {
+                imports = [ nixpkgs.nixosModules.readOnlyPkgs ];
+                nixpkgs.pkgs = nixpkgs.legacyPackages.x86_64-linux;
+              }
+        */
+        readOnlyPkgs = ./nixos/modules/misc/nixpkgs/read-only.nix;
       };
     };
 }

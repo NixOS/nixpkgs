@@ -4,7 +4,6 @@
 , cmake
 , extra-cmake-modules
 , inotify-tools
-, installShellFiles
 , libcloudproviders
 , librsvg
 , libsecret
@@ -26,7 +25,7 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.8.0";
+  version = "3.10.0";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +33,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-kwSETOz/0/LMypbTmwvMMrGzZdquBjkXfoSrLgTfPiQ=";
+    sha256 = "sha256-BNqMKL888DKuRiM537V7CBuCabg5YmGYGpWARtvs7go=";
   };
 
   patches = [

@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "uosc";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchFromGitHub {
     owner = "tomasklaen";
     repo = "uosc";
     rev = finalAttrs.version;
-    hash = "sha256-AxApKlSaRLPl6VsXsARfaT3kWDK6AB2AAEmIHYiuFaM=";
+    hash = "sha256-JqlBjhwRgmXl6XfHYTwtNWZj656EDHjcdWOlCgihF5I=";
   };
 
   postPatch = ''

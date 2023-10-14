@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizip-ng";
-  version = "3.0.9";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    sha256 = "sha256-yuHJUy/Ed7dutmosmcbedz5nZoCc5imLDOXikIde8bs=";
+    sha256 = "sha256-3bCGZupdJWcwp2d+XeqKZG3GxzXFm1UftV/PiN0u5iA=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMZ_OPENSSL=ON"
     "-DMZ_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
     "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+    "-DMZ_LIB_SUFFIX='-ng'"
   ] ++ lib.optionals stdenv.isDarwin [
     # missing header file
     "-DMZ_LIBCOMP=OFF"

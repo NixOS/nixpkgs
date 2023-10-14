@@ -14,15 +14,15 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
-  version = "0.21.3";
+  version = "0.23.0";
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
-    sha256 = "sha256-OB44/6ha72882SzaMpotchU8RrU10rvUL58sCiCKcok=";
+    hash = "sha256-3q/dizGTuwg0GsyBklx9jPIfarDhAxIzXz7x8zFK0Ic=";
   };
 
-  vendorSha256 = "sha256-8g3jhxKIT0EGUXh0hrvDbw3i04khqlAfGzM6k4q3O8g=";
+  vendorHash = "sha256-fJg1fcnLQII5sybuamZBE5CHSOEg+zlee4Pvzt8yyA0=";
 
   ui = mkYarnPackage {
     inherit version;
@@ -37,7 +37,7 @@ buildGoModule rec {
     buildPhase = ''
       runHook preBuild
       yarn --offline build
-      runHook postbuild
+      runHook postBuild
     '';
 
     installPhase = ''

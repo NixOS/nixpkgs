@@ -142,6 +142,13 @@ in stdenv.mkDerivation (rec {
     # It's not clear to me why this isn't an issue for LLVM developers running
     # on macOS (nothing about this _seems_ nix specific)..
     ./lit-shell-script-runner-set-dyld-library-path.patch
+
+    # Fix musl build.
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+      relative = "llvm";
+      hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
+    })
   ] ++ lib.optionals enablePolly [
     ./gnu-install-dirs-polly.patch
 
@@ -291,6 +298,8 @@ in stdenv.mkDerivation (rec {
   # E.g. mesa.drivers use the build-id as a cache key (see #93946):
   LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
 
+  cmakeBuildType = if debugVersion then "Debug" else "Release";
+
   cmakeFlags = with stdenv; let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
@@ -306,7 +315,6 @@ in stdenv.mkDerivation (rec {
       "-DLLVM_LINK_LLVM_DYLIB=ON"
     ];
   in flagsForLlvmConfig ++ [
-    "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
     "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"

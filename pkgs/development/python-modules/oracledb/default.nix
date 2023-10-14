@@ -1,32 +1,33 @@
 { lib
 , buildPythonPackage
+, cryptography
+, cython_3
 , fetchPypi
 , pythonOlder
-, cryptography
-, cython
 }:
 
 buildPythonPackage rec {
   pname = "oracledb";
-  version = "1.3.0";
+  version = "1.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8QWkcFkWoo0z4pGPo2NAl/6DVSv16oGvw6emhSjJ4vM=";
+    hash = "sha256-v2IlgQNsfTdWZDOANv4X7/0SStEjyDZeIvJ0LQvSN68=";
   };
 
   nativeBuildInputs = [
-    cython
+    cython_3
   ];
 
   propagatedBuildInputs = [
     cryptography
   ];
 
-  doCheck = false;  # Checks need an Oracle database
+  # Checks need an Oracle database
+  doCheck = false;
 
   pythonImportsCheck = [
     "oracledb"

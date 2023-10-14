@@ -42,13 +42,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.15";
+  version = "1.0.20";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-P7M7UIRFr0pABNhb63pV3TqIdTP8Xox4f0BT2ii9rRE=";
+    hash = "sha256-/utd2uYoxPHQ4kQwA0tZW5HwmN90vXL23EiNFh3wXoE=";
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -116,5 +116,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
     platforms = platforms.linux;
+    mainProgram = "strawberry";
   };
 }

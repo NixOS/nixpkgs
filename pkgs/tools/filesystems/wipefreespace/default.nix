@@ -1,5 +1,4 @@
 { stdenv
-, pkgs
 , lib
 , fetchurl
 , e2fsprogs

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "xmodem";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "tehmaze";
     repo = "xmodem";
-    rev = version;
-    sha256 = "1xx7wd8bnswxa1fv3bfim2gcamii79k7qmwg7dbxbjvrhbcjjc0l";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-kwPA/lYiv6IJSKGRuH13tBofZwp19vebwQniHK7A/i8=";
   };
 
   nativeCheckInputs = [ pytest which lrzsz ];

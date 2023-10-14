@@ -1,8 +1,32 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{ config, options, lib, pkgs, ... }:
 
 let
+  inherit (lib)
+    all
+    concatMap
+    concatMapStrings
+    concatStrings
+    concatStringsSep
+    escapeShellArg
+    flip
+    foldr
+    forEach
+    hasPrefix
+    mapAttrsToList
+    literalExpression
+    makeBinPath
+    mkDefault
+    mkIf
+    mkMerge
+    mkOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionals
+    optionalString
+    replaceStrings
+    types
+  ;
 
   cfg = config.boot.loader.grub;
 
@@ -12,13 +36,8 @@ let
     # Package set of targeted architecture
     if cfg.forcei686 then pkgs.pkgsi686Linux else pkgs;
 
-  realGrub = if cfg.version == 1 then grubPkgs.grub
-    else if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
-    else if cfg.trustedBoot.enable
-         then if cfg.trustedBoot.isHPLaptop
-              then grubPkgs.trustedGrub-for-HP
-              else grubPkgs.trustedGrub
-         else grubPkgs.grub2;
+  realGrub = if cfg.zfsSupport then grubPkgs.grub2.override { zfsSupport = true; }
+    else grubPkgs.grub2;
 
   grub =
     # Don't include GRUB if we're only generating a GRUB menu (e.g.,
@@ -28,12 +47,11 @@ let
     else realGrub;
 
   grubEfi =
-    # EFI version of Grub v2
-    if cfg.efiSupport && (cfg.version == 2)
+    if cfg.efiSupport
     then realGrub.override { efiSupport = cfg.efiSupport; }
     else null;
 
-  f = x: if x == null then "" else "" + x;
+  f = x: optionalString (x != null) ("" + x);
 
   grubConfig = args:
     let
@@ -46,33 +64,38 @@ let
       backgroundColor = f cfg.backgroundColor;
       entryOptions = f cfg.entryOptions;
       subEntryOptions = f cfg.subEntryOptions;
-      grub = f grub;
+      # PC platforms (like x86_64-linux) have a non-EFI target (`grubTarget`), but other platforms
+      # (like aarch64-linux) have an undefined `grubTarget`. Avoid providing the path to a non-EFI
+      # GRUB on those platforms.
+      grub = f (if (grub.grubTarget or "") != "" then grub else "");
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
       fullName = lib.getName realGrub;
       fullVersion = lib.getVersion realGrub;
       grubEfi = f grubEfi;
-      grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
+      grubTargetEfi = optionalString cfg.efiSupport (f (grubEfi.grubTarget or ""));
       bootPath = args.path;
       storePath = config.boot.loader.grub.storePath;
       bootloaderId = if args.efiBootloaderId == null then "${config.system.nixos.distroName}${efiSysMountPoint'}" else args.efiBootloaderId;
       timeout = if config.boot.loader.timeout == null then -1 else config.boot.loader.timeout;
-      users = if cfg.users == {} || cfg.version != 1 then cfg.users else throw "GRUB version 1 does not support user accounts.";
       theme = f cfg.theme;
       inherit efiSysMountPoint;
       inherit (args) devices;
       inherit (efi) canTouchEfiVariables;
       inherit (cfg)
-        version extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
+        extraConfig extraPerEntryConfig extraEntries forceInstall useOSProber
         extraGrubInstallArgs
         extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels
-        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios;
+        default fsIdentifier efiSupport efiInstallAsRemovable gfxmodeEfi gfxmodeBios gfxpayloadEfi gfxpayloadBios
+        users
+        timeoutStyle
+      ;
       path = with pkgs; makeBinPath (
         [ coreutils gnused gnugrep findutils diffutils btrfs-progs util-linux mdadm ]
-        ++ optional (cfg.efiSupport && (cfg.version == 2)) efibootmgr
+        ++ optional cfg.efiSupport efibootmgr
         ++ optionals cfg.useOSProber [ busybox os-prober ]);
-      font = if cfg.font == null then ""
-        else (if lib.last (lib.splitString "." cfg.font) == "pf2"
+      font = lib.optionalString (cfg.font != null) (
+             if lib.last (lib.splitString "." cfg.font) == "pf2"
              then cfg.font
              else "${convertedFont}");
     });
@@ -109,14 +132,8 @@ in
       };
 
       version = mkOption {
-        default = 2;
-        example = 1;
+        visible = false;
         type = types.int;
-        description = lib.mdDoc ''
-          The version of GRUB to use: `1` for GRUB
-          Legacy (versions 0.9x), or `2` (the
-          default) for GRUB 2.
-        '';
       };
 
       device = mkOption {
@@ -157,7 +174,7 @@ in
           (as opposed to external files) will be copied into the Nix store, and
           will be visible to all local users.
         '';
-        type = with types; attrsOf (submodule {
+        type = types.attrsOf (types.submodule {
           options = {
             hashedPasswordFile = mkOption {
               example = "/path/to/file";
@@ -364,10 +381,6 @@ in
         default = "";
         type = types.lines;
         example = ''
-          # GRUB 1 example (not GRUB 2 compatible)
-          title Windows
-            chainloader (hd0,1)+1
-
           # GRUB 2 example
           menuentry "Windows 7" {
             chainloader (hd0,4)+1
@@ -422,14 +435,6 @@ in
           Set to `null` to run GRUB in text mode.
 
           ::: {.note}
-          For grub 1:
-          It must be a 640x480,
-          14-colour image in XPM format, optionally compressed with
-          {command}`gzip` or {command}`bzip2`.
-          :::
-
-          ::: {.note}
-          For grub 2:
           File must be one of .png, .tga, .jpg, or .jpeg. JPEG images must
           not be progressive.
           The image will be scaled if necessary to fit the screen.
@@ -443,10 +448,28 @@ in
         default = null;
         description = lib.mdDoc ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
+        '';
+      };
+
+      timeoutStyle = mkOption {
+        default = "menu";
+        type = types.enum [ "menu" "countdown" "hidden" ];
+        description = lib.mdDoc ''
+           - `menu` shows the menu.
+           - `countdown` uses a text-mode countdown.
+           - `hidden` hides GRUB entirely.
+
+          When using a theme, the default value (`menu`) is appropriate for the graphical countdown.
+
+          When attempting to do flicker-free boot, `hidden` should be used.
+
+          See the [GRUB documentation section about `timeout_style`](https://www.gnu.org/software/grub/manual/grub/html_node/timeout.html).
 
           ::: {.note}
-          This options has no effect for GRUB 1.
+          If this option is set to ‘countdown’ or ‘hidden’ [...] and ESC or F4 are pressed, or SHIFT is held down during that time, it will display the menu and wait for input.
           :::
+
+          From: [Simple configuration handling page, under GRUB_TIMEOUT_STYLE](https://www.gnu.org/software/grub/manual/grub/html_node/Simple-configuration.html).
         '';
       };
 
@@ -455,10 +478,6 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           Options applied to the primary NixOS menu entry.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -467,10 +486,6 @@ in
         type = types.nullOr types.str;
         description = lib.mdDoc ''
           Options applied to the secondary NixOS submenu entry.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -480,10 +495,6 @@ in
         default = null;
         description = lib.mdDoc ''
           Grub theme to be used.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -492,10 +503,6 @@ in
         default = "stretch";
         description = lib.mdDoc ''
           Whether to stretch the image or show the image in the top-left corner unstretched.
-
-          ::: {.note}
-          This options has no effect for GRUB 1.
-          :::
         '';
       };
 
@@ -604,8 +611,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether GRUB should be built against libzfs.
-          ZFS support is only available for GRUB v2.
-          This option is ignored for GRUB v1.
         '';
       };
 
@@ -614,8 +619,6 @@ in
         type = types.bool;
         description = lib.mdDoc ''
           Whether GRUB should be built with EFI support.
-          EFI support is only available for GRUB v2.
-          This option is ignored for GRUB v1.
         '';
       };
 
@@ -682,39 +685,6 @@ in
         '';
       };
 
-      trustedBoot = {
-
-        enable = mkOption {
-          default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
-            Enable trusted boot. GRUB will measure all critical components during
-            the boot process to offer TCG (TPM) support.
-          '';
-        };
-
-        systemHasTPM = mkOption {
-          default = "";
-          example = "YES_TPM_is_activated";
-          type = types.str;
-          description = lib.mdDoc ''
-            Assertion that the target system has an activated TPM. It is a safety
-            check before allowing the activation of 'trustedBoot.enable'. TrustedBoot
-            WILL FAIL TO BOOT YOUR SYSTEM if no TPM is available.
-          '';
-        };
-
-        isHPLaptop = mkOption {
-          default = false;
-          type = types.bool;
-          description = lib.mdDoc ''
-            Use a special version of TrustedGRUB that is needed by some HP laptops
-            and works only for the HP laptops.
-          '';
-        };
-
-      };
-
     };
 
   };
@@ -724,14 +694,7 @@ in
 
   config = mkMerge [
 
-    { boot.loader.grub.splashImage = mkDefault (
-        if cfg.version == 1 then pkgs.fetchurl {
-          url = "http://www.gnome-look.org/CONTENT/content-files/36909-soft-tux.xpm.gz";
-          sha256 = "14kqdx2lfqvh40h6fjjzqgff1mwk74dmbjvmqphi6azzra7z8d59";
-        }
-        # GRUB 1.97 doesn't support gzipped XPMs.
-        else defaultSplash);
-    }
+    { boot.loader.grub.splashImage = mkDefault defaultSplash; }
 
     (mkIf (cfg.splashImage == defaultSplash) {
       boot.loader.grub.backgroundColor = mkDefault "#2F302F";
@@ -784,14 +747,10 @@ in
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/cp -pf "${v}" "@bootPath@/${n}"
+          ${pkgs.coreutils}/bin/install -Dp "${v}" "${efi.efiSysMountPoint}/"${escapeShellArg n}
         '') config.boot.loader.grub.extraFiles);
 
       assertions = [
-        {
-          assertion = !cfg.zfsSupport || cfg.version == 2;
-          message = "Only GRUB version 2 provides ZFS support";
-        }
         {
           assertion = cfg.mirroredBoots != [ ];
           message = "You must set the option ‘boot.loader.grub.devices’ or "
@@ -802,28 +761,16 @@ in
           message = "You cannot have duplicated devices in mirroredBoots";
         }
         {
-          assertion = !cfg.trustedBoot.enable || cfg.version == 2;
-          message = "Trusted GRUB is only available for GRUB 2";
-        }
-        {
-          assertion = !cfg.efiSupport || !cfg.trustedBoot.enable;
-          message = "Trusted GRUB does not have EFI support";
-        }
-        {
-          assertion = !cfg.zfsSupport || !cfg.trustedBoot.enable;
-          message = "Trusted GRUB does not have ZFS support";
-        }
-        {
-          assertion = !cfg.trustedBoot.enable || cfg.trustedBoot.systemHasTPM == "YES_TPM_is_activated";
-          message = "Trusted GRUB can break the system! Confirm that the system has an activated TPM by setting 'systemHasTPM'.";
-        }
-        {
           assertion = cfg.efiInstallAsRemovable -> cfg.efiSupport;
           message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn on boot.loader.grub.efiSupport";
         }
         {
           assertion = cfg.efiInstallAsRemovable -> !config.boot.loader.efi.canTouchEfiVariables;
           message = "If you wish to to use boot.loader.grub.efiInstallAsRemovable, then turn off boot.loader.efi.canTouchEfiVariables";
+        }
+        {
+          assertion = !(options.boot.loader.grub.version.isDefined && cfg.version == 1);
+          message = "Support for version 0.9x of GRUB was removed after being unsupported upstream for around a decade";
         }
       ] ++ flip concatMap cfg.mirroredBoots (args: [
         {
@@ -844,6 +791,11 @@ in
       }));
     })
 
+    (mkIf options.boot.loader.grub.version.isDefined {
+      warnings = [ ''
+        The boot.loader.grub.version option does not have any effect anymore, please remove it from your configuration.
+      '' ];
+    })
   ];
 
 
@@ -855,6 +807,10 @@ in
       (mkRenamedOptionModule [ "boot" "grubDevice" ] [ "boot" "loader" "grub" "device" ])
       (mkRenamedOptionModule [ "boot" "bootMount" ] [ "boot" "loader" "grub" "bootDevice" ])
       (mkRenamedOptionModule [ "boot" "grubSplashImage" ] [ "boot" "loader" "grub" "splashImage" ])
+      (mkRemovedOptionModule [ "boot" "loader" "grub" "trustedBoot" ] ''
+        Support for Trusted GRUB has been removed, because the project
+        has been retired upstream.
+      '')
       (mkRemovedOptionModule [ "boot" "loader" "grub" "extraInitrd" ] ''
         This option has been replaced with the bootloader agnostic
         boot.initrd.secrets option. To migrate to the initrd secrets system,

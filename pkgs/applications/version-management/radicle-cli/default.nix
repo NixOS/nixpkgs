@@ -38,6 +38,9 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  # Otherwise, there are errors due to the `abigen` macro from `ethers`.
+  auditable = false;
+
   nativeBuildInputs = [
     pkg-config
     cmake

@@ -8,7 +8,13 @@ let
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
   user = "mediawiki";
-  group = config.services.httpd.group;
+  group =
+    if cfg.webserver == "apache" then
+      config.services.httpd.group
+    else if cfg.webserver == "nginx" then
+      config.services.nginx.group
+    else "mediawiki";
+
   cacheDir = "/var/cache/mediawiki";
   stateDir = "/var/lib/mediawiki";
 
@@ -70,13 +76,18 @@ let
       ## For more information on customizing the URLs
       ## (like /w/index.php/Page_title to /wiki/Page_title) please see:
       ## https://www.mediawiki.org/wiki/Manual:Short_URL
-      $wgScriptPath = "";
+      $wgScriptPath = "${lib.optionalString (cfg.webserver == "nginx") "/w"}";
 
       ## The protocol and server name to use in fully-qualified URLs
-      $wgServer = "${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}";
+      $wgServer = "${cfg.url}";
 
       ## The URL path to static resources (images, scripts, etc.)
       $wgResourceBasePath = $wgScriptPath;
+
+      ${lib.optionalString (cfg.webserver == "nginx") ''
+        $wgArticlePath = "/wiki/$1";
+        $wgUsePathInfo = true;
+      ''}
 
       ## The URL path to the logo.  Make sure you change this from the default,
       ## or else you'll overwrite your logo when you upgrade!
@@ -87,8 +98,7 @@ let
       $wgEnableEmail = true;
       $wgEnableUserEmail = true; # UPO
 
-      $wgEmergencyContact = "${if cfg.virtualHost.adminAddr != null then cfg.virtualHost.adminAddr else config.services.httpd.adminAddr}";
-      $wgPasswordSender = $wgEmergencyContact;
+      $wgPasswordSender = "${cfg.passwordSender}";
 
       $wgEnotifUserTalk = false; # UPO
       $wgEnotifWatchlist = false; # UPO
@@ -175,6 +185,7 @@ let
       ${cfg.extraConfig}
   '';
 
+  withTrailingSlash = str: if lib.hasSuffix "/" str then str else "${str}/";
 in
 {
   # interface
@@ -190,11 +201,43 @@ in
         description = lib.mdDoc "Which MediaWiki package to use.";
       };
 
+      finalPackage = mkOption {
+        type = types.package;
+        readOnly = true;
+        default = pkg;
+        defaultText = literalExpression "pkg";
+        description = lib.mdDoc ''
+          The final package used by the module. This is the package that will have extensions and skins installed.
+        '';
+      };
+
       name = mkOption {
         type = types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
         description = lib.mdDoc "Name of the wiki.";
+      };
+
+      url = mkOption {
+        type = types.str;
+        default =
+          if cfg.webserver == "apache" then
+            "${if cfg.httpd.virtualHost.addSSL || cfg.httpd.virtualHost.forceSSL || cfg.httpd.virtualHost.onlySSL then "https" else "http"}://${cfg.httpd.virtualHost.hostName}"
+          else if cfg.webserver == "nginx" then
+            let
+              hasSSL = host: host.forceSSL || host.addSSL;
+            in
+            "${if hasSSL config.services.nginx.virtualHosts.${cfg.nginx.hostName} then "https" else "http"}://${cfg.nginx.hostName}"
+          else
+            "http://localhost";
+        defaultText = literalExpression ''
+          if cfg.webserver == "apache" then
+            "''${if cfg.httpd.virtualHost.addSSL || cfg.httpd.virtualHost.forceSSL || cfg.httpd.virtualHost.onlySSL then "https" else "http"}://''${cfg.httpd.virtualHost.hostName}"
+          else
+            "http://localhost";
+        '';
+        example = "https://wiki.example.org";
+        description = lib.mdDoc "URL of the wiki.";
       };
 
       uploadsDir = mkOption {
@@ -210,6 +253,24 @@ in
         type = types.path;
         description = lib.mdDoc "A file containing the initial password for the admin user.";
         example = "/run/keys/mediawiki-password";
+      };
+
+      passwordSender = mkOption {
+        type = types.str;
+        default =
+          if cfg.webserver == "apache" then
+            if cfg.httpd.virtualHost.adminAddr != null then
+              cfg.httpd.virtualHost.adminAddr
+            else
+              config.services.httpd.adminAddr else "root@localhost";
+        defaultText = literalExpression ''
+          if cfg.webserver == "apache" then
+            if cfg.httpd.virtualHost.adminAddr != null then
+              cfg.httpd.virtualHost.adminAddr
+            else
+              config.services.httpd.adminAddr else "root@localhost"
+        '';
+        description = lib.mdDoc "Contact address for password reset.";
       };
 
       skins = mkOption {
@@ -239,6 +300,12 @@ in
             ParserFunctions = null;
           }
         '';
+      };
+
+      webserver = mkOption {
+        type = types.enum [ "apache" "none" "nginx" ];
+        default = "apache";
+        description = lib.mdDoc "Webserver to use.";
       };
 
       database = {
@@ -318,7 +385,17 @@ in
         };
       };
 
-      virtualHost = mkOption {
+      nginx.hostName = mkOption {
+        type = types.str;
+        example = literalExpression ''wiki.example.com'';
+        default = "localhost";
+        description = lib.mdDoc ''
+          The hostname to use for the nginx virtual host.
+          This is used to generate the nginx configuration.
+        '';
+      };
+
+      httpd.virtualHost = mkOption {
         type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExpression ''
           {
@@ -366,6 +443,10 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "mediawiki" "virtualHost" ] [ "services" "mediawiki" "httpd" "virtualHost" ])
+  ];
+
   # implementation
   config = mkIf cfg.enable {
 
@@ -412,36 +493,101 @@ in
     services.phpfpm.pools.mediawiki = {
       inherit user group;
       phpEnv.MEDIAWIKI_CONFIG = "${mediawikiConfig}";
-      settings = {
+      settings = (if (cfg.webserver == "apache") then {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
-      } // cfg.poolConfig;
+      } else if (cfg.webserver == "nginx") then {
+        "listen.owner" = config.services.nginx.user;
+        "listen.group" = config.services.nginx.group;
+      } else {
+        "listen.owner" = user;
+        "listen.group" = group;
+      }) // cfg.poolConfig;
     };
 
-    services.httpd = {
+    services.httpd = lib.mkIf (cfg.webserver == "apache") {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${pkg}/share/mediawiki";
-        extraConfig = ''
-          <Directory "${pkg}/share/mediawiki">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+      virtualHosts.${cfg.httpd.virtualHost.hostName} = mkMerge [
+        cfg.httpd.virtualHost
+        {
+          documentRoot = mkForce "${pkg}/share/mediawiki";
+          extraConfig = ''
+            <Directory "${pkg}/share/mediawiki">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            Require all granted
-            DirectoryIndex index.php
-            AllowOverride All
-          </Directory>
-        '' + optionalString (cfg.uploadsDir != null) ''
-          Alias "/images" "${cfg.uploadsDir}"
-          <Directory "${cfg.uploadsDir}">
-            Require all granted
-          </Directory>
-        '';
-      } ];
+              Require all granted
+              DirectoryIndex index.php
+              AllowOverride All
+            </Directory>
+          '' + optionalString (cfg.uploadsDir != null) ''
+            Alias "/images" "${cfg.uploadsDir}"
+            <Directory "${cfg.uploadsDir}">
+              Require all granted
+            </Directory>
+          '';
+        }
+      ];
+    };
+    # inspired by https://www.mediawiki.org/wiki/Manual:Short_URL/Nginx
+    services.nginx = lib.mkIf (cfg.webserver == "nginx") {
+      enable = true;
+      virtualHosts.${config.services.mediawiki.nginx.hostName} = {
+        root = "${pkg}/share/mediawiki";
+        locations = {
+          "~ ^/w/(index|load|api|thumb|opensearch_desc|rest|img_auth)\\.php$".extraConfig = ''
+            rewrite ^/w/(.*) /$1 break;
+            include ${config.services.nginx.package}/conf/fastcgi_params;
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_pass unix:${config.services.phpfpm.pools.mediawiki.socket};
+          '';
+          "/w/images/".alias = withTrailingSlash cfg.uploadsDir;
+          # Deny access to deleted images folder
+          "/w/images/deleted".extraConfig = ''
+            deny all;
+          '';
+          # MediaWiki assets (usually images)
+          "~ ^/w/resources/(assets|lib|src)" = {
+            tryFiles = "$uri =404";
+            extraConfig = ''
+              add_header Cache-Control "public";
+              expires 7d;
+            '';
+          };
+          # Assets, scripts and styles from skins and extensions
+          "~ ^/w/(skins|extensions)/.+\\.(css|js|gif|jpg|jpeg|png|svg|wasm|ttf|woff|woff2)$" = {
+            tryFiles = "$uri =404";
+            extraConfig = ''
+              add_header Cache-Control "public";
+              expires 7d;
+            '';
+          };
+
+          # Handling for Mediawiki REST API, see [[mw:API:REST_API]]
+          "/w/rest.php".tryFiles = "$uri $uri/ /rest.php?$query_string";
+
+          # Handling for the article path (pretty URLs)
+          "/wiki/".extraConfig = ''
+            rewrite ^/wiki/(?<pagename>.*)$ /w/index.php;
+          '';
+
+          # Explicit access to the root website, redirect to main page (adapt as needed)
+          "= /".extraConfig = ''
+            return 301 /wiki/Main_Page;
+          '';
+
+          # Every other entry point will be disallowed.
+          # Add specific rules for other entry points/images as needed above this
+          "/".extraConfig = ''
+             return 404;
+          '';
+        };
+      };
     };
 
     systemd.tmpfiles.rules = [
@@ -489,13 +635,14 @@ in
       };
     };
 
-    systemd.services.httpd.after = optional (cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service"
-      ++ optional (cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
+    systemd.services.httpd.after = optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "mysql") "mysql.service"
+      ++ optional (cfg.webserver == "apache" && cfg.database.createLocally && cfg.database.type == "postgres") "postgresql.service";
 
     users.users.${user} = {
       group = group;
       isSystemUser = true;
     };
+    users.groups.${group} = {};
 
     environment.systemPackages = [ mediawikiScripts ];
   };

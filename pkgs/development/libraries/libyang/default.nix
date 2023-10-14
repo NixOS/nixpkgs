@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libyang";
-  version = "2.1.55";
+  version = "2.1.111";
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
-    sha256 = "sha256-fNVhsZPjqdMOmESy/MinjdaNE5jWMWSeVidAs9JGV38=";
+    sha256 = "sha256-CJAIlEPbrjc2juYiPOQuQ0y7ggOxb/fHb7Yoo6/dYQc=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    "-DCMAKE_BUILD_TYPE:String=Release"
   ];
 
   passthru.updateScript = gitUpdater {

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "asyauth";
-  version = "0.0.13";
+  version = "0.0.16";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tVvqzKsCvvSgKB3xRBMnIQLEDzCaPO/h8cM8WMpzi6M=";
+    hash = "sha256-ktmL2EFWDTzZwhxfleYEeJtMiiDP28JaCGbsvxx73Ok=";
   };
 
   propagatedBuildInputs = [

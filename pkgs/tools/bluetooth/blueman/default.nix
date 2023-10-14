@@ -1,5 +1,5 @@
 { config, stdenv, lib, fetchurl, intltool, pkg-config, python3Packages, bluez, gtk3
-, obex_data_server, xdg-utils, dnsmasq, dhcp, libappindicator, iproute2
+, obex_data_server, xdg-utils, dnsmasq, dhcpcd, iproute2
 , gnome, librsvg, wrapGAppsHook, gobject-introspection
 , networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wgYzghQ38yydPRkOzXDR4vclXXSn1pefInEb3C5WAVI=";
+    sha256 = "sha256-stIa/fd6Bs2G2vVAJAb30qU0WYF+KeC+vEkR1PDc/aE=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome.adwaita-icon-theme iproute2 networkmanager ]
+                  gnome.adwaita-icon-theme networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
@@ -36,11 +36,13 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    # Don't check for runtime dependency `ip` during the configure
+    "--disable-runtime-deps-check"
     (lib.enableFeature withPulseAudio "pulseaudio")
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcp iproute2 ]}"
+    "--prefix PATH ':' ${lib.makeBinPath [ dnsmasq dhcpcd iproute2 ]}"
     "--suffix PATH ':' ${lib.makeBinPath [ xdg-utils ]}"
   ];
 
@@ -55,6 +57,7 @@ in stdenv.mkDerivation rec {
     description = "GTK-based Bluetooth Manager";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
     maintainers = with maintainers; [ abbradar ];
   };
 }

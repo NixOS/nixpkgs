@@ -39,17 +39,17 @@
 , makeWrapper
 , wrapGAppsHook
 , withQt ? true
-, qt5 ? null
+, qt6 ? null
 , ApplicationServices
 , SystemConfiguration
 , gmp
 , asciidoctor
 }:
 
-assert withQt -> qt5 != null;
+assert withQt -> qt6 != null;
 
 let
-  version = "4.0.4";
+  version = "4.0.8";
   variant = if withQt then "qt" else "cli";
 in
 stdenv.mkDerivation {
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-x7McplQVdLczTov+u9eqmT1Ons22KqRsCN65pUuwYGw=";
+    hash = "sha256-bNg0yhNb1GRsTclNWWO+Bamm2wOnUjVKU+JftJu+LTo=";
   };
 
   cmakeFlags = [
@@ -70,6 +70,7 @@ stdenv.mkDerivation {
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DLEMON_C_COMPILER=cc"
+    "-DUSE_qt6=ON"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
     "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
@@ -79,9 +80,9 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = toString [ "-DQT_NO_DEBUG" ];
 
   nativeBuildInputs = [ asciidoctor bison cmake ninja flex makeWrapper pkg-config python3 perl ]
-    ++ lib.optionals withQt [ qt5.wrapQtAppsHook wrapGAppsHook ];
+    ++ lib.optionals withQt [ qt6.wrapQtAppsHook wrapGAppsHook ];
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ buildPackages.stdenv.cc ];
 
   buildInputs = [
     gettext
@@ -108,11 +109,10 @@ stdenv.mkDerivation {
     c-ares
     glib
     zlib
-  ] ++ lib.optionals withQt (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
-  ++ lib.optionals (withQt && stdenv.isLinux) [ qt5.qtwayland ]
+  ] ++ lib.optionals withQt (with qt6; [ qtbase qtmultimedia qtsvg qttools qt5compat ])
+  ++ lib.optionals (withQt && stdenv.isLinux) [ qt6.qtwayland ]
   ++ lib.optionals stdenv.isLinux [ libcap libnl sbc ]
-  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ]
-  ++ lib.optionals (withQt && stdenv.isDarwin) (with qt5; [ qtmacextras ]);
+  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
   strictDeps = true;
 
@@ -138,9 +138,7 @@ stdenv.mkDerivation {
   '' else
     lib.optionalString withQt ''
       pwd
-      install -Dm644 -t $out/share/applications ../resources/freedesktop/org.wireshark.Wireshark.desktop
 
-      install -Dm644 ../resources/icons/wsicon.svg $out/share/icons/wireshark.svg
       mkdir -pv $dev/include/{epan/{wmem,ftypes,dfilter},wsutil/wmem,wiretap}
 
       cp config.h $dev/include/wireshark/
@@ -179,7 +177,7 @@ stdenv.mkDerivation {
     '';
 
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ bjornfor fpletz ];
+    maintainers = with maintainers; [ bjornfor fpletz paveloom ];
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }

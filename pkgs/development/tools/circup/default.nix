@@ -5,20 +5,25 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "circup";
-  version = "1.1.4";
+  version = "1.2.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-nXDje+MJR6olG3G7RO3esf6UAKynMvCP8YetIhnqoeE=";
+    hash = "sha256-6RjZHMZBL8p72+JeZOzyD/x1qiZay2ApJEmp9IXXpDA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+  pythonRelaxDeps = [
+    "semver"
+  ];
+
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

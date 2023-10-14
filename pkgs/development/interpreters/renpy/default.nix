@@ -3,34 +3,36 @@
 , makeWrapper
 }:
 
-stdenv.mkDerivation rec {
-  pname = "renpy";
-
+let
   # https://renpy.org/doc/html/changelog.html#versioning
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
-  base_version = "8.0.3";
-  vc_version = "22090809";
+  base_version = "8.1.1";
+  vc_version = "23060707";
+in stdenv.mkDerivation rec {
+  pname = "renpy";
+
   version = "${base_version}.${vc_version}";
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "renpy";
     rev = version;
-    sha256 = "sha256-0/wkUk7PMPbBSGzDuSd82yxRzvAYxkbEhM5LTVt4bMA=";
+    sha256 = "sha256-aJ/MobZ6SNBYRC/EpUxAMLJ3pwK6PC92DV0YL/LF5Ew=";
   };
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     python3.pkgs.cython
+    python3.pkgs.setuptools
   ];
 
   buildInputs = [
     SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib
   ] ++ (with python3.pkgs; [
-    python pygame_sdl2 tkinter future six pefile requests
+    python pygame_sdl2 tkinter future six pefile requests ecdsa
   ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
@@ -40,20 +42,18 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-    ./renpy-system-fribidi.diff
     ./shutup-erofs-errors.patch
   ];
 
   postPatch = ''
-    substituteInPlace module/setup.py \
-      --replace "@fribidi@" "${fribidi}"
-
     cp tutorial/game/tutorial_director.rpy{m,}
 
     cat > renpy/vc_version.py << EOF
-    vc_version = ${vc_version}
+    version = '${version}'
     official = False
     nightly = False
+    # Look at https://renpy.org/latest.html for what to put.
+    version_name = 'Where No One Has Gone Before'
     EOF
   '';
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   installPhase = with python3.pkgs; ''
     runHook preInstall
 
-    ${python.pythonForBuild.interpreter} module/setup.py install --prefix=$out
+    ${python.pythonForBuild.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 
@@ -87,4 +87,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ shadowrz ];
   };
+
+  passthru = { inherit base_version vc_version; };
 }

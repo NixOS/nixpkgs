@@ -2,7 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, flit
+, flit-core
 , pytestCheckHook
 , numpy
 , scipy
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "3.1.0";
 
   disabled = pythonOlder "3.6";
-  format = "flit";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "joblib";
@@ -21,6 +21,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

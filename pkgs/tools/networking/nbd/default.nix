@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nbd";
-  version = "3.24";
+  version = "3.25";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nbd/nbd-${version}.tar.xz";
-    sha256 = "sha256-aHcVbSOnsz917uidL1wskcVCr8PNy2Nt6lqIU5pY0Qw=";
+    url = "https://github.com/NetworkBlockDevice/nbd/releases/download/nbd-${version}/nbd-${version}.tar.xz";
+    hash = "sha256-9cj9D8tXsckmWU0OV/NWQy7ghni+8dQNCI8IMPDL3Qo=";
   };
 
   buildInputs = [ glib gnutls ]

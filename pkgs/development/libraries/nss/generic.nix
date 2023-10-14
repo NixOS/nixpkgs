@@ -16,6 +16,7 @@
   # https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_Tech_Notes/nss_tech_note6
   enableFIPS ? false
 , nixosTests
+, nss_latest
 }:
 
 let
@@ -41,12 +42,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Based on http://patch-tracker.debian.org/patch/series/dl/nss/2:3.15.4-1/85_security_load.patch
-    (if (lib.versionOlder version "3.84") then
-      ./85_security_load_3.77+.patch
-    else
-      ./85_security_load_3.85+.patch
-    )
+    ./85_security_load_3.85+.patch
     ./fix-cross-compilation.patch
+  ] ++ lib.optionals (lib.versionOlder version "3.91") [
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1836925
+    # https://phabricator.services.mozilla.com/D180068
+    ./remove-c25519-support.patch
   ];
 
   patchFlags = [ "-p0" ];
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs nss
 
-    for f in nss/coreconf/config.gypi nss/build.sh nss/coreconf/config.gypi; do
+    for f in nss/coreconf/config.gypi nss/build.sh; do
       substituteInPlace "$f" --replace "/usr/bin/env" "${buildPackages.coreutils}/bin/env"
     done
 
@@ -180,10 +181,10 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  passthru.tests = lib.optionalAttrs (lib.versionOlder version "3.69") {
-    inherit (nixosTests) firefox-esr-91;
-  } // lib.optionalAttrs (lib.versionAtLeast version "3.69") {
-    inherit (nixosTests) firefox firefox-esr-102;
+  passthru.tests = lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
+    inherit (nixosTests) firefox-esr-115;
+  } // lib.optionalAttrs (lib.versionAtLeast version nss_latest.version) {
+    inherit (nixosTests) firefox;
   };
 
   meta = with lib; {

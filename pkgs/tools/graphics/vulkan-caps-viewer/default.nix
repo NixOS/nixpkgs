@@ -5,19 +5,19 @@
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
-, withX11 ? true
+, x11Support ? true
 , qtx11extras
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-caps-viewer";
-  version = "3.29";
+  version = "3.32";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
     rev = version;
-    hash = "sha256-c7jvlwvz85cf8lUlBPyRYvDkSlvkzSW6Jc6wlyKnHBc=";
+    hash = "sha256-SPz8AurANjNwtsPHdZ2lCaC3VEcEAKn93st/7DJ0oyU=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.
     # The result will work with any vulkan-loader version.
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     vulkan-loader
     wayland
-  ] ++ lib.lists.optionals withX11 [ qtx11extras ];
+  ] ++ lib.lists.optionals x11Support [ qtx11extras ];
 
   patchPhase = ''
     substituteInPlace vulkanCapsViewer.pro \

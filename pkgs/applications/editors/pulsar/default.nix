@@ -1,41 +1,76 @@
 { lib
 , stdenv
 , git
-, runtimeShell
 , fetchurl
 , wrapGAppsHook
+, alsa-lib
+, at-spi2-atk
+, cairo
+, cups
+, dbus
+, expat
+, gdk-pixbuf
 , glib
 , gtk3
-, atomEnv
+, mesa
+, nss
+, nspr
 , xorg
+, libdrm
+, libsecret
 , libxkbcommon
-, hunspell
+, pango
+, systemd
 , hunspellDicts
 , useHunspell ? true
 , languages ? [ "en_US" ]
 , withNemoAction ? true
 , makeDesktopItem
 , copyDesktopItems
-, makeWrapper
+, asar
+, python3
 }:
 
 let
-  pname = "Pulsar";
-  version = "1.103.0";
+  pname = "pulsar";
+  version = "1.109.0";
 
   sourcesPath = {
     x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-    x86_64-linux.hash = "sha256-C9La+rMpxyFthNPwPBZfV1goP/F1TiNYYYwmPCSkKdw=";
+    x86_64-linux.hash = "sha256-pIm3mI1YdfapxXgIciSHtI4LeqMw5RdYTnH+eHUQ4Yo=";
     aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-    aarch64-linux.hash = "sha256-uVGxDLqFgm5USZT6i7pLYJZq8jFxZviVXXYTL3RVhpw=";
+    aarch64-linux.hash = "sha256-KIY/qzfl7CU0YwIgQlNHoAMhLfrTbQe7ZZvzdkUVw+M=";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  additionalLibs = lib.makeLibraryPath [
+  newLibpath = lib.makeLibraryPath [
+    alsa-lib
+    at-spi2-atk
+    cairo
+    cups
+    dbus
+    expat
+    gdk-pixbuf
+    glib
+    gtk3
+    libsecret
+    mesa
+    nss
+    nspr
+    libdrm
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXrandr
     xorg.libxshmfence
     libxkbcommon
     xorg.libxkbfile
+    pango
+    stdenv.cc.cc.lib
+    systemd
   ];
-  newLibpath = "${atomEnv.libPath}:${additionalLibs}";
 
   # Hunspell
   hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
@@ -57,6 +92,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapGAppsHook
     copyDesktopItems
+    asar
   ];
 
   buildInputs = [
@@ -110,11 +146,25 @@ stdenv.mkDerivation rec {
     ln -s ${git}/bin/git $dugite/git/bin/git
     rm -f $dugite/git/libexec/git-core/git
     ln -s ${git}/bin/git $dugite/git/libexec/git-core/git
+
+    # We have to patch a prebuilt binary in the asar archive
+    # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself
+
+    rm $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
+    ln -s ${python3.interpreter} $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
   '' + ''
     # Patch the bundled node executables
     find $opt -name "*.node" -exec patchelf --set-rpath "${newLibpath}:$opt" {} \;
     # Also patch the node executable for apm
     patchelf --set-rpath "${newLibpath}:$opt" $opt/resources/app/ppm/bin/node
+
+    # The pre-packaged ASAR bundle comes with prebuild binaries, expecting libstdc++.so.6
+    asarBundle=$TMPDIR/asarbundle
+    asar e $opt/resources/app.asar $asarBundle
+    find $asarBundle -name "*.node" -exec patchelf --set-rpath "${newLibpath}:$opt" --add-needed libstdc++.so.6 {} \;
+    unlink $asarBundle/node_modules/document-register-element/dre # Self referencing symlink, breaking asar rebundling
+    asar p $asarBundle $opt/resources/app.asar
+    rm -rf $asarBundle
 
     # We have patched the original wrapper, but now it needs the "PULSAR_PATH" env var
     mkdir -p $out/bin

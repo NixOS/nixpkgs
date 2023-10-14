@@ -31,14 +31,14 @@ buildPythonPackage rec {
     inherit src version;
     pname = "hgsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
+    vendorHash = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   hgsrht-keys = buildGoModule {
     inherit src version;
     pname = "hgsrht-keys";
     modRoot = "hgsrht-keys";
-    vendorSha256 = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+    vendorHash = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
   };
 
   propagatedBuildInputs = [

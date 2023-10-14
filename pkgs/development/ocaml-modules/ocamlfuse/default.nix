@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "ocamlfuse";
-  version = "2.7.1_cvs7";
+  version = "2.7.1_cvs8";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "ocamlfuse";
     rev = "v${version}";
-    sha256 = "6nmPXZx38hBGlg+gV9nnlRpPfeSAqDj4zBPcjUNvTRo=";
+    hash = "sha256-Cm9mdYzpKnYoNyAJvjJkiDBP/O4n1JiTkhXQO3w7+hA=";
   };
 
   nativeBuildInputs = [ camlidl ];

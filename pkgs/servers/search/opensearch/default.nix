@@ -1,29 +1,30 @@
-{ lib
+{ coreutils
+, fetchurl
+, gnugrep
+, jre_headless
+, lib
+, makeBinaryWrapper
+, nixosTests
 , stdenv
 , stdenvNoCC
-, fetchurl
-, makeWrapper
-, jre_headless
-, util-linux
-, gnugrep
-, coreutils
-, autoPatchelfHook
-, zlib
-, nixosTests
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opensearch";
-  version = "2.6.0";
+  version = "2.10.0";
 
   src = fetchurl {
-    url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${version}/opensearch-${version}-linux-x64.tar.gz";
-    hash = "sha256-qJrgWF8JCR4jmnF239gaiRr4Y7Tin0TyYjzxd1Q4Wko";
+    url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${finalAttrs.version}/opensearch-${finalAttrs.version}-linux-x64.tar.gz";
+    hash = "sha256-oJLxdXHn+fEp2ATWdyFRbfM/QebAWiT7cogxIwLrgfs=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre_headless util-linux ];
-  patches = [./opensearch-home-fix.patch ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
+
+  buildInputs = [
+    jre_headless
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -35,11 +36,12 @@ stdenvNoCC.mkDerivation rec {
       --replace 'bin/opensearch-keystore' "$out/bin/opensearch-keystore"
 
     wrapProgram $out/bin/opensearch \
-      --prefix PATH : "${lib.makeBinPath [ util-linux gnugrep coreutils ]}" \
+      --prefix PATH : "${lib.makeBinPath [ gnugrep coreutils ]}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$out/plugins/opensearch-knn/lib/" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/opensearch-plugin --set JAVA_HOME "${jre_headless}"
+    wrapProgram $out/bin/opensearch-cli --set JAVA_HOME "${jre_headless}"
 
     runHook postInstall
   '';
@@ -50,7 +52,11 @@ stdenvNoCC.mkDerivation rec {
     description = "Open Source, Distributed, RESTful Search Engine";
     homepage = "https://github.com/opensearch-project/OpenSearch";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ shyim ];
+    platforms = lib.platforms.unix;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
   };
-}
+})

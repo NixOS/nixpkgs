@@ -39,11 +39,8 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
 , enableJemalloc ? !stdenv.isDarwin
-  # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
-  # non-existent in older versions
-  # see https://github.com/boostorg/process/issues/55
-, enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-, enableGcs ? (!stdenv.isDarwin) && (lib.versionAtLeast grpc.cxxStandard "17") # google-cloud-cpp is not supported on darwin, needs to support C++17
+, enableS3 ? true
+, enableGcs ? !stdenv.isDarwin
 }:
 
 assert lib.asserts.assertMsg
@@ -55,16 +52,16 @@ let
     name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "ecab1162cbec872e17d949ecc86181670aee045c";
-    hash = "sha256-w6rEuxfLTEO8DyXV44G6JOMeTfYtskFCOj9rHXNmj2Y=";
+    rev = "47f7b56b25683202c1fd957668e13f2abafc0f12";
+    hash = "sha256-ZDznR+yi0hm5O1s9as8zq5nh1QxJ8kXCRwbNQlzXpnI=";
   };
 
   parquet-testing = fetchFromGitHub {
     name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "5b82793ef7196f7b3583e85669ced211cd8b5ff2";
-    hash = "sha256-gcOvk7qFHZgJWE9CpucC8zwayYw47VbC3lmSRu4JQFg=";
+    rev = "b2e7cc755159196e3a068c8594f7acbaecfdaaac";
+    hash = "sha256-IFvGTOkaRSNgZOj8DziRj88yH5JRF+wgSDZ5N0GNvjk=";
   };
 
   aws-sdk-cpp-arrow = aws-sdk-cpp.override {
@@ -81,12 +78,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "11.0.0";
+  version = "13.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-Ldjw6ghIpYeFYo7jpXZ1VI1QnhchOi9dcrDZALQ/VDA=";
+    hash = "sha256-Nd/aGRJip1a+k07viv7o0JdiytJQIdqmJuskniUayeY=";
   };
+
   sourceRoot = "apache-arrow-${version}/cpp";
 
   # versions are all taken from
@@ -122,8 +120,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # patch to fix python-test
-    ./darwin.patch
+    # Protobuf switched to lower case project name.
+    ./cmake-find-protobuf.patch
   ];
 
   nativeBuildInputs = [
@@ -171,6 +169,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
     "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"

@@ -7,16 +7,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nbtscanner";
-  version = "0.0.1";
+  version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "jonkgrimes";
     repo = pname;
     rev = version;
-    sha256 = "06507a8y41v42cmvjpzimyrzdp972w15fjpc6c6750n1wa2wdl6c";
+    hash = "sha256-lnTTutOc829COwfNhBkSK8UpiNnGsm7Da53b+eSBt1Q=";
   };
 
-  cargoSha256 = "0cis54zmr2x0f4z664lmhk9dzx00hvds6jh3x417308sz7ak11gd";
+  cargoHash = "sha256-NffNQXKJ+b1w7Ar2M6UDev/AxruDEf8IGQ+mNdvU6e4=";
+
+  cargoPatches = [
+    ./Cargo.lock.patch
+  ];
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

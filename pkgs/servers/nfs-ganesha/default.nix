@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nfs-ganesha";
-  version = "4.4";
+  version = "5.5.1";
 
   src = fetchFromGitHub {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     rev = "V${version}";
-    sha256 = "sha256-MEPy2TXVTegwCpuaIrMol7ag8anxxdcj11z5eYNkDqQ=";
+    sha256 = "sha256-fbulqSRHPdlpoLH391/axxtjJ7G/9lH9BdqoLKRuIuE=";
   };
 
   preConfigure = "cd src";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_NTIRPC=ON"
     "-DSYSSTATEDIR=/var"
     "-DENABLE_VFS_POSIX_ACL=ON"
+    "-DUSE_ACL_MAPPING=ON"
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
   ];
 
   nativeBuildInputs = [
@@ -40,6 +42,10 @@ stdenv.mkDerivation rec {
     liburcu
     nfs-utils
   ];
+
+  postFixup = ''
+    patchelf --add-rpath $out/lib $out/bin/ganesha.nfsd
+  '';
 
   meta = with lib; {
     description = "NFS server that runs in user space";

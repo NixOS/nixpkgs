@@ -59,7 +59,7 @@ in
       pname = "gephgui";
       inherit version src;
 
-      sourceRoot = "source/gephgui-wry/gephgui";
+      sourceRoot = "${src.name}/gephgui-wry/gephgui";
 
       postPatch = "ln -s ${./package-lock.json} ./package-lock.json";
 
@@ -79,7 +79,7 @@ in
       pname = "gephgui-wry";
       inherit version src;
 
-      sourceRoot = "source/gephgui-wry";
+      sourceRoot = "${src.name}/gephgui-wry";
 
       cargoHash = "sha256-lidlUUfHXKPUlICdaVv/SFlyyWsZ7cYHyTJ3kkMn3L4=";
 

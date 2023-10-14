@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "22.6.4";
+  version = "23.1.6";
 
   outputs = [ "out" "dev" ];
 
@@ -24,14 +24,14 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    sha256 = "sha256-0Il51cWqgJwtsnsltHey5Sp+7RYUpqo4GtTRzrzw09A=";
+    sha256 = "sha256-Z1xBU+4SdwknXpYUS8EwEURNIsg2+R/U0CcW3FW325M=";
   };
 
   patches = [
     # fix platform detection
     (fetchpatch {
-      url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/master/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
-      sha256 = "sha256-f4M0CPtAVf5l2ZwfgTaoPw7sPuAP/Uxhm5JSHEGhKT0=";
+      url = "https://salsa.debian.org/multimedia-team/intel-media-driver-non-free/-/raw/04ffb03f744780a55aba311c612d708b00584bb7/debian/patches/0002-Remove-settings-based-on-ARCH.patch";
+      sha256 = "sha256-o/Pg0S53SYh3O7L+AwxOPl1Bx4TS6iKB8ql8GhhHI/o=";
     })
   ];
 

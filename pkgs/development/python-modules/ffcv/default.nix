@@ -13,14 +13,13 @@
 
 buildPythonPackage rec {
   pname = "ffcv";
-  version = "0.0.3";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "libffcv";
     repo = pname;
-    # See https://github.com/libffcv/ffcv/issues/158.
-    rev = "131d56235eca3f1497bb84eeaec82c3434ef25d8";
-    sha256 = "0f7q2x48lknnf98mqaa35my05qwvdgv0h8l9lpagdw6yhx0a6p2x";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-L2mwGFivq/gtAw+1D6U2jbW6VxYgetHX7OUrjwyybqE=";
   };
 
   # See https://github.com/libffcv/ffcv/issues/159.

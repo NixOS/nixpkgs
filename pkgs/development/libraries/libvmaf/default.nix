@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, nasm }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, nasm, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "libvmaf";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TkMy2tEdG1FPPWfH/wPnVbs5kocqe4Y0jU4yvbiRZ9k=";
   };
 
-  sourceRoot = "source/libvmaf";
+  sourceRoot = "${src.name}/libvmaf";
 
   patches = [
     # Backport fix for non-Linux, non-Darwin platforms.
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ meson ninja nasm ];
+  nativeBuildInputs = [ meson ninja nasm xxd ];
 
   mesonFlags = [ "-Denable_avx512=true" ];
 

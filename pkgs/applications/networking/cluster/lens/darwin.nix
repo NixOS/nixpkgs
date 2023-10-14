@@ -1,17 +1,15 @@
 { lib, stdenv, undmg, fetchurl }:
-
+let
+  common = import ./common.nix { inherit fetchurl; };
+  inherit (stdenv.hostPlatform) system;
+in
 stdenv.mkDerivation rec {
-  pname = "lens";
-  version = "2022.12";
-  build = "${version}.11410-latest";
+  inherit (common) pname version;
+  src = common.sources.${system} or (throw "Source for ${pname} is not available for ${system}");
+
   appName = "Lens";
 
   sourceRoot = "${appName}.app";
-
-  src = fetchurl {
-    url = "https://api.k8slens.dev/binaries/Lens-${build}-arm64.dmg";
-    sha256 = "sha256-PKWJ2CZ/wacbJnrCZdYwYJzbFVhjIGAw60UGhdw11Mc=";
-  };
 
   buildInputs = [ undmg ];
   installPhase = ''
@@ -22,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Kubernetes IDE";
     homepage = "https://k8slens.dev/";
-    license = licenses.mit;
+    license = licenses.lens;
     maintainers = with maintainers; [ dbirks ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }

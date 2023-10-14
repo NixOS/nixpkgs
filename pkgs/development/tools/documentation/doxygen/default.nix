@@ -1,14 +1,25 @@
-{ lib, stdenv, cmake, fetchFromGitHub, python3, flex, bison, qt5, CoreServices, libiconv }:
+{ lib
+, stdenv
+, cmake
+, fetchFromGitHub
+, python3
+, flex
+, bison
+, qt5
+, CoreServices
+, libiconv
+, withSqlite ? true, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.9.6";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-SqboPBqK7gDVTTjGgCUB9oIGBZR55EA7x65a0wumiKw=";
+    sha256 = "sha256-ezeMQk+Vyi9qNsYwbaRRruaIYGY8stFf71W7GonXqco=";
   };
 
   nativeBuildInputs = [
@@ -19,15 +30,22 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libiconv ]
+    ++ lib.optionals withSqlite [ sqlite ]
     ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
     ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
-  cmakeFlags =
-    [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ] ++
-    lib.optional (qt5 != null) "-Dbuild_wizard=YES";
+  cmakeFlags = [ "-DICONV_INCLUDE_DIR=${libiconv}/include" ]
+    ++ lib.optional withSqlite "-Duse_sqlite3=ON"
+    ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   env.NIX_CFLAGS_COMPILE =
     lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
+
+  # put examples in an output so people/tools can test against them
+  outputs = [ "out" "examples" ];
+  postInstall = ''
+    cp -r ../examples $examples
+  '';
 
   meta = {
     license = lib.licenses.gpl2Plus;

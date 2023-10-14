@@ -12,13 +12,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "ipopt";
-  version = "3.14.11";
+  version = "3.14.12";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "Ipopt";
     rev = "releases/${version}";
-    sha256 = "sha256-PzNDiTZkPORFckFJryFuvn/rsfx3wrXJ9Qde88gH5o4=";
+    sha256 = "sha256-cyV3tgmZz5AExxxdGJ12r+PPXn7v2AEhxb9icBxolS8=";
   };
 
   CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];

@@ -254,7 +254,7 @@ in
       preStart = ''
         # Blindly copy the whole project here.
         chmod -R +w .
-        rm -rf ./public/assets/*
+        rm -rf ./public/assets/
         rm -rf ./tmp/*
         rm -rf ./log/*
         cp -r --no-preserve=owner ${cfg.package}/* .

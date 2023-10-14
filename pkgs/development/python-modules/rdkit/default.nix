@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -15,14 +16,15 @@
 , numpy
 , pandas
 , pillow
+, memorymappingHook
 }:
 let
   external = {
     avalon = fetchFromGitHub {
       owner = "rohdebe1";
       repo = "ava-formake";
-      rev = "AvalonToolkit_2.0.2";
-      hash = "sha256-YI39OknHiSyArNGqRKrSVzEJnFc1xJ0W3UcTZrTKeME=";
+      rev = "AvalonToolkit_2.0.4a";
+      hash = "sha256-ZyhrDBBv9XuXe1NY/Djiad86tGIJwCSTrxEMICHgSqk=";
     };
     yaehmop = fetchFromGitHub {
       owner = "greglandrum";
@@ -40,7 +42,7 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2022.09.1";
+  version = "2023.03.3";
   format = "other";
 
   src =
@@ -51,7 +53,7 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
-      hash = "sha256-AaawjCv3/ShByOKU0c37/hjuyfD7NhFC8UngDoG7C0s=";
+      hash = "sha256-5M7nDUWORbepDGaf2G6Cd79Hu0au3DNRc9KuONoCWK0=";
     };
 
   unpackPhase = ''
@@ -59,7 +61,9 @@ buildPythonPackage rec {
     find . -type d -exec chmod +w {} +
 
     mkdir External/AvalonTools/avalon
-    ln -s ${external.avalon}/* External/AvalonTools/avalon
+    # In buildPhase, CMake patches the file in this directory
+    # see https://github.com/rdkit/rdkit/pull/5928
+    cp -r ${external.avalon}/* External/AvalonTools/avalon
 
     mkdir External/YAeHMOP/yaehmop
     ln -s ${external.yaehmop}/* External/YAeHMOP/yaehmop
@@ -80,6 +84,8 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     cairo
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    memorymappingHook
   ];
 
   propagatedBuildInputs = [
@@ -147,8 +153,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
-    maintainers = [ maintainers.rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo natsukium ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
+    changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };
 }

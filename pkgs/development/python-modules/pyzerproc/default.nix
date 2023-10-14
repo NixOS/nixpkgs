@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , pytest-asyncio
 , pytest-mock
+, pythonAtLeast
 , pytestCheckHook
 , pythonOlder
 }:
@@ -36,6 +37,11 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
+    # unittest.mock.InvalidSpecError: Cannot spec a Mock object.
+    "tests/test_light.py"
   ];
 
   pythonImportsCheck = [

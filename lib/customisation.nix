@@ -19,7 +19,7 @@ rec {
          name = "sed-4.2.2-pre";
          src = fetchurl {
            url = ftp://alpha.gnu.org/gnu/sed/sed-4.2.2-pre.tar.bz2;
-           sha256 = "11nq06d131y4wmf3drm0yk502d2xc6n5qy82cg88rb9nqd2lj41k";
+           hash = "sha256-MxBJRcM2rYzQYwJ5XKxhXTQByvSg5jZc5cSHEZoB2IY=";
          };
          patches = [];
        });
@@ -46,12 +46,6 @@ rec {
       //
       (drv.passthru or {})
       //
-      # TODO(@Artturin): remove before release 23.05 and only have __spliced.
-      (lib.optionalAttrs (drv ? crossDrv && drv ? nativeDrv) {
-        crossDrv = overrideDerivation drv.crossDrv f;
-        nativeDrv = overrideDerivation drv.nativeDrv f;
-      })
-      //
       lib.optionalAttrs (drv ? __spliced) {
         __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
       });
@@ -75,8 +69,8 @@ rec {
      "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
      related to its use.
   */
-  makeOverridable = f: origArgs:
-    let
+  makeOverridable = f: lib.setFunctionArgs
+    (origArgs: let
       result = f origArgs;
 
       # Creates a functor with the same arguments as f
@@ -101,7 +95,8 @@ rec {
         lib.setFunctionArgs result (lib.functionArgs result) // {
           override = overrideArgs;
         }
-      else result;
+      else result)
+    (lib.functionArgs f);
 
 
   /* Call the package function in the file `fn` with the required
@@ -275,17 +270,33 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
-          overrideScope = g: lib.warn
-            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
-            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
-          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
+          overrideScope = g: makeScope newScope (lib.fixedPoints.extends g f);
+          # Remove after 24.11 is released.
+          overrideScope' = g: lib.warnIf (lib.isInOldestRelease 2311)
+            "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
+            (makeScope newScope (lib.fixedPoints.extends g f));
           packages = f;
         };
     in self;
 
-  /* Like the above, but aims to support cross compilation. It's still ugly, but
+  /* backward compatibility with old uncurried form; deprecated */
+  makeScopeWithSplicing =
+    splicePackages: newScope: otherSplices: keep: extra: f:
+    makeScopeWithSplicing'
+    { inherit splicePackages newScope; }
+    { inherit otherSplices keep extra f; };
+
+  /* Like makeScope, but aims to support cross compilation. It's still ugly, but
      hopefully it helps a little bit. */
-  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
+  makeScopeWithSplicing' =
+    { splicePackages
+    , newScope
+    }:
+    { otherSplices
+    , keep ? (_self: {})
+    , extra ? (_spliced0: {})
+    , f
+    }:
     let
       spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;
@@ -301,13 +312,11 @@ rec {
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.
-        overrideScope = g: makeScopeWithSplicing
-          splicePackages
-          newScope
-          otherSplices
-          keep
-          extra
-          (lib.fixedPoints.extends g f);
+        overrideScope = g: (makeScopeWithSplicing'
+          { inherit splicePackages newScope; }
+          { inherit otherSplices keep extra;
+            f = lib.fixedPoints.extends g f;
+          });
         packages = f;
       };
     in self;

@@ -6,40 +6,43 @@
 , itstool
 , libxml2
 , gtk3
-, file
 , mate
 , hicolor-icon-theme
 , wrapGAppsHook
 , mateUpdateScript
+# can be defaulted to true once engrampa builds with meson (version > 1.27.0)
+, withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform, file
 }:
 
 stdenv.mkDerivation rec {
   pname = "engrampa";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1qsy0ynhj1v0kyn3g3yf62g31rwxmpglfh9xh0w5lc9j5k1b5kcp";
+    sha256 = "8CJBB6ek6epjCcnniqX6rIAsTPcqSawoOqnnrh6KbEo=";
   };
 
   nativeBuildInputs = [
     pkg-config
     gettext
     itstool
+    libxml2  # for xmllint
     wrapGAppsHook
   ];
 
   buildInputs = [
-    libxml2
     gtk3
-    file #libmagic
     mate.caja
     hicolor-icon-theme
     mate.mate-desktop
+  ] ++ lib.optionals withMagic [
+    file
   ];
 
   configureFlags = [
     "--with-cajadir=$$out/lib/caja/extensions-2.0"
+  ] ++ lib.optionals withMagic [
     "--enable-magic"
   ];
 

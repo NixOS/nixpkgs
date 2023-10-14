@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3Packages
+, fetchPypi
 , wrapGAppsHook
 , gtk3
 , gobject-introspection
@@ -8,15 +9,16 @@
 , poppler_gi
 , withGstreamer ? stdenv.isLinux
 , withVLC ? stdenv.isLinux
- }:
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.7.2";
+  version = "1.8.4";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "LFUzrGHr8jmUqoIcKokC0gNDVmW1EUZlj9eI+GDycvI=";
+  src = fetchPypi {
+    inherit version;
+    pname = "pympress";
+    hash = "sha256-3cnCHGoKUX0gTzIx1khM+br6x9+g9WXh28SLhm99eN4=";
   };
 
   nativeBuildInputs = [

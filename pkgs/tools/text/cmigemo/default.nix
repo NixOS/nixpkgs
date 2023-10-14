@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages
+{ lib, stdenv, fetchFromGitHub
 , iconv, nkf, perl, which
 , skk-dicts
 }:

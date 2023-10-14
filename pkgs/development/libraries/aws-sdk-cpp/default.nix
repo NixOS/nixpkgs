@@ -1,18 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , curl
 , openssl
-, s2n-tls
 , zlib
 , aws-crt-cpp
-, aws-c-cal
-, aws-c-common
-, aws-c-event-stream
-, aws-c-io
-, aws-checksums
 , CoreAudio
 , AudioToolbox
 , # Allow building a limited set of APIs, e.g. ["s3" "ec2"].
@@ -31,13 +24,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
-  version = "1.9.294";
+  version = "1.11.118";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
-    sha256 = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
+    sha256 = "sha256-jqGXh8xLD2gIjV9kSvlldrxA5TxTTXQoC/B66FVprvk=";
   };
 
   patches = [
@@ -45,35 +38,30 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # Append the dev output to path hints in finding Aws.h to avoid
+    # having to pass `AWS_CORE_HEADER_FILE` explicitly to cmake configure
+    # when using find_package(AWSSDK CONFIG)
+    substituteInPlace cmake/AWSSDKConfig.cmake \
+      --replace 'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core' \
+        'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core"
+            "${placeholder "dev"}/include/aws/core'
+
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     substituteInPlace cmake/compiler_settings.cmake \
       --replace '"-Werror"' ' '
 
-    # Missing includes for GCC11
-    sed '5i#include <thread>' -i \
-      aws-cpp-sdk-cloudfront-integration-tests/CloudfrontOperationTest.cpp \
-      aws-cpp-sdk-cognitoidentity-integration-tests/IdentityPoolOperationTest.cpp \
-      aws-cpp-sdk-dynamodb-integration-tests/TableOperationTest.cpp \
-      aws-cpp-sdk-elasticfilesystem-integration-tests/ElasticFileSystemTest.cpp \
-      aws-cpp-sdk-lambda-integration-tests/FunctionTest.cpp \
-      aws-cpp-sdk-mediastore-data-integration-tests/MediaStoreDataTest.cpp \
-      aws-cpp-sdk-queues/source/sqs/SQSQueue.cpp \
-      aws-cpp-sdk-redshift-integration-tests/RedshiftClientTest.cpp \
-      aws-cpp-sdk-s3-crt-integration-tests/BucketAndObjectOperationTest.cpp \
-      aws-cpp-sdk-s3-integration-tests/BucketAndObjectOperationTest.cpp \
-      aws-cpp-sdk-s3control-integration-tests/S3ControlTest.cpp \
-      aws-cpp-sdk-sqs-integration-tests/QueueOperationTest.cpp \
-      aws-cpp-sdk-transfer-tests/TransferTests.cpp
     # Flaky on Hydra
-    rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/aws/client/AwsConfigTest.cpp
     # Includes aws-c-auth private headers, so only works with submodule build
-    rm aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
     # TestRandomURLMultiThreaded fails
-    rm aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
   '' + lib.optionalString stdenv.isi686 ''
     # EPSILON is exceeded
-    rm aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
+    rm tests/aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
   '';
 
   # FIXME: might be nice to put different APIs in different outputs
@@ -109,10 +97,6 @@ stdenv.mkDerivation rec {
     # openssl 3 generates several deprecation warnings
     "-Wno-error=deprecated-declarations"
   ];
-
-  # aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
-  # seem to have a datarace
-  enableParallelChecking = false;
 
   postFixupHooks = [
     # This bodge is necessary so that the file that the generated -config.cmake file

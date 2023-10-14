@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tally";
-  version = "1.0.25";
+  version = "1.0.30";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-NoRA0l00TVk27ZOmYzGHxbWah08zLl1gL2caw8LT3I4=";
+    hash = "sha256-5k4nx4VSYN4jscCwj5NVYnV5/GS0PRCA23xR6STHr88=";
   };
 
-  cargoSha256 = "sha256-K77opkbNZWymmWMxekSkdiCqmmwccxEqhRcPnrzHWVQ=";
+  cargoHash = "sha256-eyGDizffuIPpa797YplD6763/JlVtoMAxybK9KsgmLE=";
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     DiskArbitration
@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dtolnay/cargo-tally";
     changelog = "https://github.com/dtolnay/cargo-tally/releases/tag/${version}";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

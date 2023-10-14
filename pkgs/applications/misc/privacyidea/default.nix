@@ -1,29 +1,43 @@
 { lib, fetchFromGitHub, cacert, openssl, nixosTests
-, python310, fetchpatch
+, python310, fetchPypi, fetchpatch
 }:
 
 let
-  dropDevOutput = { outputs, ... }: {
+  dropDocOutput = { outputs, ... }: {
     outputs = lib.filter (x: x != "doc") outputs;
   };
 
+  # Follow issue below for Python 3.11 support
+  # https://github.com/privacyidea/privacyidea/issues/3593
   python3' = python310.override {
     packageOverrides = self: super: {
+      django = super.django_3;
+
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
-        src = oldAttrs.src.override {
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
         doCheck = false;
       });
+      # version 3.3.0+ does not support SQLAlchemy 1.3
+      factory-boy = super.factory-boy.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-qY0newwEfHXrbkq4UIp/gfsD0sshmG9ieRNUbveipV4=";
+        };
+        postPatch = "";
+      });
       # fails with `no tests ran in 1.75s`
       alembic = super.alembic.overridePythonAttrs (lib.const {
         doCheck = false;
       });
-      flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
+      flask-migrate = super.flask-migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "Flask-Migrate";
           inherit version;
           hash = "sha256-ri8FZxWIdi3YOiHYsYxR/jVehng+JFlJlf+Nc4Df/jg=";
@@ -32,7 +46,7 @@ let
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (old: rec {
         version = "2.5.1";
         format = "setuptools";
-        src = self.fetchPypi {
+        src = fetchPypi {
           pname = "Flask-SQLAlchemy";
           inherit version;
           hash = "sha256:2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912";
@@ -102,6 +116,7 @@ let
           inherit version;
           hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
+        disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
       });
       # Now requires `lingua` as check input that requires a newer `click`,
       # however `click-7` is needed by the older flask we need here. Since it's just
@@ -118,35 +133,40 @@ let
       flask-babel = (super.flask-babel.override {
         sphinxHook = null;
         furo = null;
-      }).overridePythonAttrs (old: (dropDevOutput old) // rec {
+      }).overridePythonAttrs (old: (dropDocOutput old) // rec {
         pname = "Flask-Babel";
         version = "2.0.0";
         format = "setuptools";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit pname;
           inherit version;
           hash = "sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
         };
+        disabledTests = [
+          # AssertionError: assert 'Apr 12, 2010...46:00\u202fPM' == 'Apr 12, 2010, 1:46:00 PM'
+          # Note the `\u202f` (narrow, no-break space) vs space.
+          "test_basics"
+          "test_init_app"
+          "test_custom_locale_selector"
+          "test_refreshing"
+        ];
       });
       psycopg2 = (super.psycopg2.override {
         sphinxHook = null;
         sphinx-better-theme = null;
-      }).overridePythonAttrs dropDevOutput;
-      hypothesis = super.hypothesis.override {
-        enableDocumentation = false;
-      };
+      }).overridePythonAttrs dropDocOutput;
       pyjwt = (super.pyjwt.override {
         sphinxHook = null;
         sphinx-rtd-theme = null;
-      }).overridePythonAttrs (old: (dropDevOutput old) // { format = "setuptools"; });
+      }).overridePythonAttrs (old: (dropDocOutput old) // { format = "setuptools"; });
       beautifulsoup4 = (super.beautifulsoup4.override {
         sphinxHook = null;
-      }).overridePythonAttrs dropDevOutput;
+      }).overridePythonAttrs dropDocOutput;
       pydash = (super.pydash.override {
         sphinx-rtd-theme = null;
       }).overridePythonAttrs (old: rec {
         version = "5.1.0";
-        src = self.fetchPypi {
+        src = fetchPypi {
           inherit (old) pname;
           inherit version;
           hash = "sha256-GysFCsG64EnNB/WSCxT6u+UmOPSF2a2h6xFanuv/aDU=";
@@ -154,12 +174,24 @@ let
         format = "setuptools";
         doCheck = false;
       });
+      pyopenssl = (super.pyopenssl.override {
+        sphinxHook = null;
+        sphinx-rtd-theme = null;
+      }).overridePythonAttrs dropDocOutput;
+      deprecated = (super.deprecated.override {
+        sphinxHook = null;
+      }).overridePythonAttrs dropDocOutput;
+      wrapt = (super.wrapt.override {
+        sphinxHook = null;
+        sphinx-rtd-theme = null;
+      }).overridePythonAttrs dropDocOutput;
     };
   };
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
   version = "3.8.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -169,9 +201,17 @@ python3'.pkgs.buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # https://github.com/privacyidea/privacyidea/pull/3611
+    (fetchpatch {
+      url = "https://github.com/privacyidea/privacyidea/commit/7db6509721726a34e8528437ddbd4210019b11ef.patch";
+      sha256 = "sha256-ZvtauCs1vWyxzGbA0B2+gG8q5JyUO8DF8nm/3/vcYmE=";
+    })
+  ];
+
   propagatedBuildInputs = with python3'.pkgs; [
-    cryptography pyrad pymysql python-dateutil flask-versioned flask_script
-    defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
+    cryptography pyrad pymysql python-dateutil flask-versioned flask-script
+    defusedxml croniter flask-migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
     pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt segno
@@ -218,5 +258,6 @@ python3'.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     homepage = "http://www.privacyidea.org";
     maintainers = with maintainers; [ globin ma27 ];
+    platforms = platforms.linux;
   };
 }

@@ -4,14 +4,14 @@
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
-  version = "21.3";
+  version = "25.1";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "nano-node";
     rev = "V${version}";
-    sha256 = "0f6chl5vrzdr4w8g3nivfxk3qm6m11js401998afnhz0xaysm4pm";
     fetchSubmodules = true;
+    hash = "sha256-YvYEXHC8kxviZLQwINs+pS61wITSfqfrrPmlR+zNRoE=";
   };
 
   cmakeFlags = let
@@ -34,11 +34,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildPhase = ''
-    runHook preBuild
-    make nano_wallet
-    runHook postBuild
-  '';
+  makeFlags = [ "nano_wallet" ];
 
   checkPhase = ''
     runHook preCheck

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , jsonschema
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dtschema";
-  version = "2022.12";
+  version = "2023.04";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "devicetree-org";
     repo = "dt-schema";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-+wF6WdonZrkZEnlq/P6QeT3X7CMinxbapLa7q0t2zUc=";
+    sha256 = "sha256-w9TsRdiDTdExft7rdb2hYcvxP6hxOFZKI3hITiNSwgw=";
   };
 
   patches = [
@@ -54,6 +55,14 @@ buildPythonPackage rec {
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
     license = with licenses; [ bsd2 /* or */ gpl2Only ];
     maintainers = with maintainers; [ sorki ];
+
+    broken = (
+      # Library not loaded: @rpath/libfdt.1.dylib
+      stdenv.isDarwin ||
+
+      # see https://github.com/devicetree-org/dt-schema/issues/108
+      versionAtLeast jsonschema.version "4.18"
+    );
   };
 }
 

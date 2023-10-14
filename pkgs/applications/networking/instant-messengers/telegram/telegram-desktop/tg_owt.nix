@@ -1,21 +1,21 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , pkg-config, cmake, ninja, yasm
-, libjpeg, openssl_1_1, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
+, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, mesa, valgrind, libepoxy, libglvnd
+, mesa, libepoxy, libglvnd, unstableGitUpdater
 }:
 
 stdenv.mkDerivation {
   pname = "tg_owt";
-  version = "unstable-2023-03-14";
+  version = "unstable-2023-08-15";
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
-    rev = "1a18da2ed4d5ce134e984d1586b915738e0da257";
-    sha256 = "18srnl688ng8grfpmgcjpdyr4cw87yjdvyw94b2jjq5jmnq9n3a3";
+    rev = "0532942ac6176a66ef184fb728a4cbb02958fc0b";
+    sha256 = "sha256-FcRXxu0Nc8qHQl8PoA92MeuhpV+vgl658uILEpmDy3A=";
     fetchSubmodules = true;
   };
 
@@ -51,8 +51,10 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     # Required for linking downstream binaries.
-    abseil-cpp openh264 usrsctp libevent libvpx openssl_1_1
+    abseil-cpp openh264 usrsctp libevent libvpx openssl
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     license = licenses.bsd3;

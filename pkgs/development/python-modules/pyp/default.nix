@@ -5,6 +5,7 @@
 , coreutils
 , pythonOlder
 , astunparse
+, flit-core
 , jq
 , bc
 }:
@@ -12,7 +13,7 @@
 buildPythonPackage rec {
   pname = "pyp";
   version = "1.1.0";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -22,6 +23,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-A1Ip41kxH17BakHEWEuymfa24eBEl5FIHAWL+iZFM4I=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
     astunparse

@@ -6,12 +6,13 @@
 , pytestCheckHook
 , pythonOlder
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.2.0";
-  format = "setuptools";
+  version = "6.5.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -20,9 +21,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "evansd";
     repo = pname;
-    rev = version;
-    hash = "sha256-HcWWWMIuU8kfcOnntgXUnHD3pFogq8OEAd3wRtCnXjQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-g1D0tjGsAP3y1fWvODWwNvxnTSZJuTpyZ0Otk83Oq9E=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     brotli
@@ -51,8 +56,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Radically simplified static file serving for WSGI applications";
-    homepage = "https://whitenoise.evans.io/";
+    description = "Library to serve static file for WSGI applications";
+    homepage = "https://whitenoise.readthedocs.io/";
+    changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

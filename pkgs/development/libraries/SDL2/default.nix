@@ -1,7 +1,8 @@
 { lib
 , stdenv
 , config
-, fetchurl
+, fetchFromGitHub
+, nix-update-script
 , pkg-config
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported
@@ -23,7 +24,7 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, drmSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, drmSupport ? false
 , libdrm
 , mesa
 , libxkbcommon
@@ -55,11 +56,13 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.26.4";
+  version = "2.28.3";
 
-  src = fetchurl {
-    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Gg9oZJj7dorZ8/gLOQN6fQBurAk6rTnLTrzIMqiIcjE=";
+  src = fetchFromGitHub {
+    owner = "libsdl-org";
+    repo = "SDL";
+    rev = "release-${version}";
+    hash = "sha256-/kQ2IyvAfmZ+zIUt1WuEIeX0nYPGXDlAQk2qDsQnFFs=";
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -86,13 +89,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals waylandSupport [ wayland wayland-scanner ];
 
-  propagatedBuildInputs = dlopenPropagatedBuildInputs;
-
   dlopenPropagatedBuildInputs = [ ]
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
-    ++ lib.optional openglSupport libGL
+    ++ lib.optional (openglSupport && !stdenv.isDarwin) libGL
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
-    ++ lib.optionals x11Support [ libX11 xorgproto ];
+    ++ lib.optionals x11Support [ libX11 ];
+
+  propagatedBuildInputs = lib.optionals x11Support [ xorgproto ]
+    ++ dlopenPropagatedBuildInputs;
 
   dlopenBuildInputs = lib.optionals alsaSupport [ alsa-lib audiofile ]
     ++ lib.optional dbusSupport dbus
@@ -100,13 +104,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional pipewireSupport pipewire
     ++ lib.optional pulseaudioSupport libpulseaudio
     ++ lib.optional udevSupport udev
-    ++ lib.optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
+    ++ lib.optionals waylandSupport [ wayland libxkbcommon ]
     ++ lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ]
     ++ lib.optionals drmSupport [ libdrm mesa ];
 
   buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
     ++ lib.optional ibusSupport ibus
+    ++ lib.optionals waylandSupport [ wayland-protocols ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
@@ -163,11 +168,15 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { inherit openglSupport; };
+  passthru = {
+    inherit openglSupport;
+    updateScript = nix-update-script { extraArgs = ["--version-regex" "release-(.*)"]; };
+  };
 
   meta = with lib; {
     description = "A cross-platform multimedia library";
     homepage = "http://www.libsdl.org/";
+    changelog = "https://github.com/libsdl-org/SDL/releases/tag/release-${version}";
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];

@@ -19,6 +19,7 @@ mkDerivation rec {
     # The build normally tries to get git sub-modules during build
     # but we already have them checked out
     ./no-submodules.patch
+    ./cpp-filesystem.patch
   ];
 
   nativeBuildInputs = [ pkg-config qmake cmake ];

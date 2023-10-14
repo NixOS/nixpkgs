@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "funcparserlib";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "vlasovskikh";
     repo = pname;
     rev = version;
-    hash = "sha256-moWaOzyF/yhDQCLEp7bc0j8wNv7FM7cvvpCwon3j+gI=";
+    hash = "sha256-LE9ItCaEzEGeahpM3M3sSnDBXEr6uX5ogEkO5x2Jgzc=";
   };
 
   nativeBuildInputs = [

@@ -1,59 +1,52 @@
 { lib
-, aiodns
-, buildPythonApplication
-, cffi
-, fetchFromGitHub
-, mpd2
+, fetchFromGitLab
 , pkg-config
-, potr
-, pyasn1
-, pyasn1-modules
-, pyinotify
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, slixmpp
-, typing-extensions
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "poezio";
   version = "0.13.1";
-  disabled = pythonOlder "3.4";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "lab.louiz.org";
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "041y61pcbdb86s04qwp8s1g6bp84yskc7vdizwpi2hz18y01x5fy";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-3pUegEfhQxEv/7Htw6b2BN1lXtDockyANmi1xW4wPhA=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     aiodns
     cffi
     mpd2
     potr
     pyasn1
     pyasn1-modules
+    pycares
     pyinotify
-    setuptools
     slixmpp
-  ] ++ lib.optionals (pythonOlder "3.7") [
     typing-extensions
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "poezio"
   ];
 
   meta = with lib; {
     description = "Free console XMPP client";
     homepage = "https://poez.io";
+    changelog = "https://lab.louiz.org/poezio/poezio/-/blob/v${version}/CHANGELOG";
     license = licenses.zlib;
-    maintainers = [ maintainers.lsix ];
+    maintainers = with maintainers; [ lsix ];
   };
 }

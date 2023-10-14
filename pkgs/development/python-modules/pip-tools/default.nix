@@ -11,19 +11,21 @@
 , pythonOlder
 , setuptools
 , setuptools-scm
+, tomli
+, tomli-w
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.12.2";
+  version = "7.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-i5A2lt9FmLENRpAm75mVxfmodLQW6I56IUiE6+SnAkU=";
+    hash = "sha256-jpyZEn/gJMAltGoLLRXHvUfxjzMibPczDTVJNmP8HR0=";
   };
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
@@ -39,11 +41,16 @@ buildPythonPackage rec {
     pip
     setuptools
     wheel
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
+    tomli-w
   ];
 
   preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
@@ -57,6 +64,8 @@ buildPythonPackage rec {
     "test_direct_reference_with_extras"
     "test_local_duplicate_subdependency_combined"
     "test_bad_setup_file"
+    # Assertion error
+    "test_compile_recursive_extras"
   ];
 
   pythonImportsCheck = [

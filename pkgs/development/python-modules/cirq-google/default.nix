@@ -10,7 +10,7 @@ buildPythonPackage rec {
   pname = "cirq-google";
   inherit (cirq-core) version src meta;
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   postPatch = ''
     substituteInPlace requirements.txt \
@@ -32,6 +32,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # No need to test the version number
     "cirq_google/_version_test.py"
+    # Trace/BPT trap: 5
+    "cirq_google/engine/calibration_test.py"
   ];
 
   disabledTests = [

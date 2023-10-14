@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dbus-client-gen";
-  version = "0.5";
+  version = "0.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DrpIeB6kMXPP6PfCjyx7Lsi8yyvwSl9k1nnUGtvVGKg=";
+    hash = "sha256-vRXo72aWoreH/VwzdEAOgoGSRzRf7vy8Z/IA+lnLoWw=";
   };
 
   meta = with lib; {

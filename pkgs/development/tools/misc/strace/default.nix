@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "6.2";
+  version = "6.5";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-DH04pElBYmjTAEApoiChWnfCIGoDzIgSDzf0bpSRd+g=";
+    sha256 = "sha256-37BRcCOJ4ZeaFRiStZAa/J6Tu8HHDYTJBq3jIkypGYA=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
     platforms = platforms.linux;
     maintainers = with maintainers; [ globin ma27 qyliss ];
+    mainProgram = "strace";
   };
 }

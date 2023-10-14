@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fastest Fourier Transform in the West library";
     homepage = "http://www.fftw.org/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [ ];
     pkgConfigModules = [
       {
         "single" = "fftw3f";

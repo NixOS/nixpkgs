@@ -2,16 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "worker-build";
-  version = "0.0.15";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
     rev = "v${version}";
-    sha256 = "sha256-EJU6WgoGnhquHSJ1hLVK8eild7jcegeC+VxOeoD9+20=";
+    hash = "sha256-z6m14IbMzgycwnQpA28e4taokDSVpfZOKIRmFIwLjbg=";
   };
 
-  cargoHash = "sha256-6QzZtaqnhZ1V5UU9pppLK+LKn9EdvMJ8YOyxFYt7oos=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "postgres-protocol-0.6.5" = "sha256-xLyaappu7ebtKOoHY49dvjDEcuRg8IOv1bNH9RxSUcM=";
+    };
+  };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
@@ -22,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "This is a tool to be used as a custom build command for a Cloudflare Workers `workers-rs` project.";
-    homepage = "https://github.com/cloudflare/worker-rs";
+    homepage = "https://github.com/cloudflare/workers-rs";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ happysalada ];
   };

@@ -37,5 +37,8 @@ buildPythonPackage rec {
     homepage = "https://dataset.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ xfnw ];
+    # SQLAlchemy >= 2.0.0 is unsupported
+    # https://github.com/pudo/dataset/issues/411
+    broken = true;
   };
 }

@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, testtools
 }:
 
 buildPythonApplication rec {
@@ -30,6 +31,7 @@ buildPythonApplication rec {
     fixtures
     mock
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [ "bashate" ];

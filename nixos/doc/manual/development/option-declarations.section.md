@@ -77,6 +77,7 @@ The option's description is "Whether to enable \<name\>.".
 For example:
 
 ::: {#ex-options-declarations-util-mkEnableOption-magic .example}
+### `mkEnableOption` usage
 ```nix
 lib.mkEnableOption (lib.mdDoc "magic")
 # is like
@@ -89,7 +90,7 @@ lib.mkOption {
 ```
 :::
 
-### `mkPackageOption`, `mkPackageOptionMD` {#sec-option-declarations-util-mkPackageOption}
+### `mkPackageOption` {#sec-option-declarations-util-mkPackageOption}
 
 Usage:
 
@@ -120,14 +121,13 @@ valid attribute path in pkgs (if name is a list).
 
 If you wish to explicitly provide no default, pass `null` as `default`.
 
-During the transition to CommonMark documentation `mkPackageOption` creates an option with a DocBook description attribute, once the transition is completed it will create a CommonMark description instead. `mkPackageOptionMD` always creates an option with a CommonMark description attribute and will be removed some time after the transition is completed.
-
 []{#ex-options-declarations-util-mkPackageOption}
 Examples:
 
 ::: {#ex-options-declarations-util-mkPackageOption-hello .example}
+### Simple `mkPackageOption` usage
 ```nix
-lib.mkPackageOptionMD pkgs "hello" { }
+lib.mkPackageOption pkgs "hello" { }
 # is like
 lib.mkOption {
   type = lib.types.package;
@@ -139,8 +139,9 @@ lib.mkOption {
 :::
 
 ::: {#ex-options-declarations-util-mkPackageOption-ghc .example}
+### `mkPackageOption` with explicit default and example
 ```nix
-lib.mkPackageOptionMD pkgs "GHC" {
+lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
   example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }
@@ -156,6 +157,7 @@ lib.mkOption {
 :::
 
 ::: {#ex-options-declarations-util-mkPackageOption-extraDescription .example}
+### `mkPackageOption` with additional description text
 ```nix
 mkPackageOption pkgs [ "python39Packages" "pytorch" ] {
   extraDescription = "This is an example and doesn't actually do anything.";
@@ -217,7 +219,7 @@ changing the main service module file and the type system automatically
 enforces that there can only be a single display manager enabled.
 
 ::: {#ex-option-declaration-eot-service .example}
-**Example: Extensible type placeholder in the service module**
+### Extensible type placeholder in the service module
 ```nix
 services.xserver.displayManager.enable = mkOption {
   description = "Display manager to use";
@@ -227,7 +229,7 @@ services.xserver.displayManager.enable = mkOption {
 :::
 
 ::: {#ex-option-declaration-eot-backend-gdm .example}
-**Example: Extending `services.xserver.displayManager.enable` in the `gdm` module**
+### Extending `services.xserver.displayManager.enable` in the `gdm` module
 ```nix
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ "gdm" ]);
@@ -236,7 +238,7 @@ services.xserver.displayManager.enable = mkOption {
 :::
 
 ::: {#ex-option-declaration-eot-backend-sddm .example}
-**Example: Extending `services.xserver.displayManager.enable` in the `sddm` module**
+### Extending `services.xserver.displayManager.enable` in the `sddm` module
 ```nix
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ "sddm" ]);

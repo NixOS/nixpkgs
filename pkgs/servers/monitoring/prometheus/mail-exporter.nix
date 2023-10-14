@@ -8,10 +8,10 @@ buildGoModule {
     owner = "cherti";
     repo = "mailexporter";
     rev = "f5a552c736ac40ccdc0110d2e9a71619c1cd6862";
-    sha256 = "0y7sg9qrd7q6g5gi65sjvw6byfmk2ph0a281wjc9cr4pd25xkciz";
+    hash = "sha256-P7LZi2iXZJaY5AEJBeAVszq/DN9SFxNfeQaflnF6+ng=";
   };
 
-  vendorSha256 = "1hwahk8v3qnmyn6bwk9l2zpr0k7p2w7zjzxmjwgjyx429g9rzqs0";
+  vendorHash = "sha256-QOOf00uCdC8fl7V/+Q8X90yQ7xc0Tb6M9dXisdGEisM=";
 
   nativeBuildInputs = [ installShellFiles ];
 

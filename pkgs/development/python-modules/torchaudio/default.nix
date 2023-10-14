@@ -6,19 +6,19 @@
 , ninja
 , pybind11
 , torch
-, cudaSupport ? false
+, cudaSupport ? torch.cudaSupport
 , cudaPackages
 }:
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "v${version}";
-    hash = "sha256-qrDWFY+6eVV9prUzUzb5yzyFYtEvaSyEW0zeKqAg2Vk=";
+    hash = "sha256-9lB4gLXq0nXHT1+DNOlbJQqNndt2I6kVoNwhMO/2qlE=";
   };
 
   postPatch = ''
@@ -27,17 +27,30 @@ buildPythonPackage rec {
       --replace "_fetch_archives(_parse_sources())" "pass"
   '';
 
+  env = {
+    TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
+  };
+
   nativeBuildInputs = [
     cmake
     pkg-config
     ninja
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
+    cudaPackages.cuda_nvcc
   ];
   buildInputs = [
     pybind11
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.cudnn
+    cudaPackages.libcurand.dev
+    cudaPackages.libcurand.lib
+    cudaPackages.cuda_cudart # cuda_runtime.h and libraries
+    cudaPackages.cuda_cccl.dev # <thrust/*>
+    cudaPackages.cuda_nvtx.dev
+    cudaPackages.cuda_nvtx.lib # -llibNVToolsExt
+    cudaPackages.libcublas.dev
+    cudaPackages.libcublas.lib
+    cudaPackages.libcufft.dev
+    cudaPackages.libcufft.lib
   ];
   propagatedBuildInputs = [
     torch

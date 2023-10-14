@@ -5,8 +5,11 @@ import bpycv
 import os
 import glob
 import random
+from pathlib import Path
 
 example_data_dir = os.environ['BPY_EXAMPLE_DATA']
+out_dir = Path(os.environ['out'])
+out_dir.mkdir(parents=True, exist_ok=True)
 
 models = sorted(glob.glob(os.path.join(example_data_dir, "model", "*", "*.obj")))
 cat_id_to_model_path = dict(enumerate(sorted(models), 1))
@@ -19,6 +22,7 @@ bpy.context.scene.render.engine = "CYCLES"
 bpy.context.scene.cycles.samples = 32
 bpy.context.scene.render.resolution_y = 1024
 bpy.context.scene.render.resolution_x = 1024
+bpy.context.view_layer.cycles.denoising_store_passes = False
 
 # A transparency stage for holding rigid body
 stage = bpycv.add_stage(transparency=True)
@@ -69,8 +73,8 @@ for i in range(20):
 # render image, instance annoatation and depth in one line code
 result = bpycv.render_data()
 
-dataset_dir = "./dataset"
-result.save(dataset_dir=dataset_dir, fname="0", save_blend=True)
-print(f'Save to "{dataset_dir}"')
-print(f'Open "{dataset_dir}/vis/" to see visualize result.')
+
+result.save(dataset_dir=str(out_dir.resolve()), fname="0", save_blend=True)
+print(f'Save to "{out_dir}"')
+print(f'Open "{out_dir}/vis/" to see visualize result.')
 

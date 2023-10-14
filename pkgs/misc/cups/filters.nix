@@ -6,12 +6,14 @@
 , dbus
 , dejavu_fonts
 , fetchurl
+, fetchpatch
 , fontconfig
 , gawk
 , ghostscript
 , gnugrep
 , gnused
 , ijs
+, libexif
 , libjpeg
 , liblouis
 , libpng
@@ -33,12 +35,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cups-filters";
-  version = "1.28.15";
+  version = "1.28.17";
 
   src = fetchurl {
-    url = "https://openprinting.org/download/cups-filters/${pname}-${version}.tar.xz";
-    sha256 = "sha256-qQfsdp+7cu+/v5tUCyUKCOM7bjc6inw0P5hA+6TQR4s=";
+    url = "https://github.com/OpenPrinting/cups-filters/releases/download/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-Jwo3UqlgNoqpnUMftdNPQDmyrJQ8V22EBhLR2Bhcm7k=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-24805.patch";
+      url = "https://github.com/OpenPrinting/cups-filters/commit/93e60d3df358c0ae6f3dba79e1c9684657683d89.patch";
+      hash = "sha256-KgWTYFr2uShL040azzE+KaNyBPy7Gs/hCnEgQmmPCys=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -48,6 +58,7 @@ stdenv.mkDerivation rec {
     fontconfig
     ghostscript
     ijs
+    libexif
     libjpeg
     liblouis # braille embosser support
     libpng

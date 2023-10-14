@@ -32,6 +32,9 @@
 , xdotool
 , getconf
 , dbus
+, coreutils
+, util-linux
+, dde-session-ui
 }:
 
 buildGoPackage rec {
@@ -55,16 +58,26 @@ buildGoPackage rec {
       src = ./0004-aviod-use-hardcode-path.patch;
       inherit dbus;
     })
+    (substituteAll {
+      src = ./0005-fix-custom-wallpapers-path.diff;
+      inherit coreutils;
+    })
   ];
 
   postPatch = ''
+    substituteInPlace dock/desktop_file_path.go \
+      --replace "/usr/share" "/run/current-system/sw/share"
+
     substituteInPlace session/eventlog/{app_event.go,login_event.go} accounts/users/users_test.go \
       --replace "/bin/bash" "${runtimeShell}"
 
     substituteInPlace inputdevices/layout_list.go \
       --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
 
-    substituteInPlace appearance/background/{background.go,custom_wallpapers.go} accounts/user.go bin/dde-system-daemon/wallpaper.go \
+    substituteInPlace system/uadp/crypto.go \
+      --replace "/usr/share/uadp" "/var/lib/dde-daemon/uadp"
+
+    substituteInPlace appearance/background/{background.go,custom_wallpapers.go} accounts/user.go \
      --replace "/usr/share/wallpapers" "/run/current-system/sw/share/wallpapers"
 
     substituteInPlace appearance/manager.go timedate/zoneinfo/zone.go \
@@ -130,6 +143,12 @@ buildGoPackage rec {
     runHook preInstall
     make install DESTDIR="$out" PREFIX="/" -C go/src/${goPackagePath}
     runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ util-linux dde-session-ui ]}"
+    )
   '';
 
   postFixup = ''

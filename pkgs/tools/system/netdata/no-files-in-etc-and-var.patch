@@ -1,8 +1,8 @@
 diff --git a/collectors/Makefile.am b/collectors/Makefile.am
-index a0a972e8f..b4a2a5f53 100644
+index 2aec3dd3e..27385ec28 100644
 --- a/collectors/Makefile.am
 +++ b/collectors/Makefile.am
-@@ -30,7 +30,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
+@@ -31,7 +31,7 @@ usercustompluginsconfigdir=$(configdir)/custom-plugins.d
  usergoconfigdir=$(configdir)/go.d
  
  # Explicitly install directories to avoid permission issues due to umask
@@ -38,7 +38,7 @@ index 2d5f92a6b..8b11c7502 100644
  
  dist_noinst_DATA = \
 diff --git a/collectors/python.d.plugin/Makefile.am b/collectors/python.d.plugin/Makefile.am
-index 667f1627c..eb6810057 100644
+index ca49c1c02..1b9bcc446 100644
 --- a/collectors/python.d.plugin/Makefile.am
 +++ b/collectors/python.d.plugin/Makefile.am
 @@ -32,7 +32,7 @@ dist_userpythonconfig_DATA = \
@@ -62,7 +62,7 @@ index c8144c137..f8aaa89b6 100644
 +no-install-exec-local:
  	$(INSTALL) -d $(DESTDIR)$(userstatsdconfigdir)
 diff --git a/health/Makefile.am b/health/Makefile.am
-index d5eb88468..ab246e77a 100644
+index 20e000860..add0137b3 100644
 --- a/health/Makefile.am
 +++ b/health/Makefile.am
 @@ -19,7 +19,7 @@ dist_userhealthconfig_DATA = \
@@ -75,10 +75,10 @@ index d5eb88468..ab246e77a 100644
  
  healthconfigdir=$(libconfigdir)/health.d
 diff --git a/system/Makefile.am b/system/Makefile.am
-index a88ccab65..bda6ee2b6 100644
+index 54e9278c8..e7cc7acea 100644
 --- a/system/Makefile.am
 +++ b/system/Makefile.am
-@@ -19,15 +19,13 @@ include $(top_srcdir)/build/subst.inc
+@@ -21,12 +21,9 @@ include $(top_srcdir)/build/subst.inc
  SUFFIXES = .in
  
  dist_config_SCRIPTS = \
@@ -87,19 +87,24 @@ index a88ccab65..bda6ee2b6 100644
  
  dist_config_DATA = \
 -    .install-type \
+-    netdata-updater.conf \
      $(NULL)
+ 
+ libconfigvnodesdir=$(libconfigdir)/vnodes
+@@ -46,7 +43,7 @@ libsysrunitdir=$(libsysdir)/runit
+ libsyssystemddir=$(libsysdir)/systemd
  
  # Explicitly install directories to avoid permission issues due to umask
 -install-exec-local:
 +no-install-exec-local:
  	$(INSTALL) -d $(DESTDIR)$(configdir)
- 
- nodist_noinst_DATA = \
+ 	$(INSTALL) -d $(DESTDIR)$(libsysdir)
+ 	$(INSTALL) -d $(DESTDIR)$(libsyscrondir)
 diff --git a/web/Makefile.am b/web/Makefile.am
-index ccaccd764..16a2977e5 100644
+index be2c545c3..55f373114 100644
 --- a/web/Makefile.am
 +++ b/web/Makefile.am
-@@ -12,7 +12,7 @@ SUBDIRS = \
+@@ -13,7 +13,7 @@ SUBDIRS = \
  usersslconfigdir=$(configdir)/ssl
  
  # Explicitly install directories to avoid permission issues due to umask

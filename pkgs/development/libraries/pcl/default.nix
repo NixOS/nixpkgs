@@ -6,7 +6,7 @@
 , qhull
 , flann
 , boost
-, vtk_8
+, vtk
 , eigen
 , pkg-config
 , qtbase
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libpng
     libtiff
     qhull
-    vtk_8
+    vtk
   ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [

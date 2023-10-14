@@ -1,7 +1,7 @@
 { lib
 , fetchpatch
 , python3
-, docutils
+, fetchPypi
 , sphinx
 , postfix
 , lynx
@@ -35,12 +35,11 @@ buildPythonPackage rec {
     passlib
     requests
     sqlalchemy
-    zope_component
+    zope-component
     zope_configuration
   ];
 
   checkInputs = [
-    docutils
     sphinx
   ];
 

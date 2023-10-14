@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.1.12";
+  version = "0.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-uSyqAs0JqrsFuMpfuILoIGxLL+HVOGI/euCZziCgEdQ=";
+    hash = "sha256-x6+rFstZM7Uplwa8NeRBTb8FYSD/NGjN/3q5earvN7c=";
   };
 
   nativeBuildInputs = [

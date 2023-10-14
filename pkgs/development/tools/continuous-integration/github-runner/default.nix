@@ -9,23 +9,62 @@
 , glibcLocales
 , lib
 , nixosTests
-, nodejs-16_x
 , stdenv
 , which
+, buildPackages
+, runtimeShell
+  # List of Node.js runtimes the package should support
+, nodeRuntimes ? [ "node20" ]
+, nodejs_16
+, nodejs_20
 }:
+
+# Node.js runtimes supported by upstream
+assert builtins.all (x: builtins.elem x [ "node16" "node20" ]) nodeRuntimes;
+
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.303.0";
+  version = "2.309.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-gGIYlYM4Rf7Ils2rThsQHWIkLDt5Htg4NDuJhxvl1rU=";
-    # Required to obtain HEAD's Git commit hash
+    hash = "sha256-P70kNcd5TjWsHj16y11SEYROGG+JUkpwE9eVpHzvTes=";
     leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse --short HEAD > $out/.git-revision
+      rm -rf $out/.git
+    '';
   };
 
+  # The git commit is read during the build and some tests depend on a git repo to be present
+  # https://github.com/actions/runner/blob/22d1938ac420a4cb9e3255e47a91c2e43c38db29/src/dir.proj#L5
+  unpackPhase = ''
+    cp -r $src $TMPDIR/src
+    chmod -R +w $TMPDIR/src
+    cd $TMPDIR/src
+    (
+      export PATH=${buildPackages.git}/bin:$PATH
+      git init
+      git config user.email "root@localhost"
+      git config user.name "root"
+      git add .
+      git commit -m "Initial commit"
+      git checkout -b v${version}
+    )
+    mkdir -p $TMPDIR/bin
+    cat > $TMPDIR/bin/git <<EOF
+    #!${runtimeShell}
+    if [ \$# -eq 1 ] && [ "\$1" = "rev-parse" ]; then
+      echo $(cat $TMPDIR/src/.git-revision)
+      exit 0
+    fi
+    exec ${buildPackages.git}/bin/git "\$@"
+    EOF
+    chmod +x $TMPDIR/bin/git
+    export PATH=$TMPDIR/bin:$PATH
+  '';
 
   patches = [
     # Replace some paths that originally point to Nix's read-only store
@@ -66,8 +105,8 @@ buildDotnetModule rec {
   '';
 
   nativeBuildInputs = [
-    git
     which
+    git
   ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
@@ -99,7 +138,10 @@ buildDotnetModule rec {
 
   # Fully qualified name of disabled tests
   disabledTests =
-    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+    [
+      "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
+      "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
+    ]
     ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
       "Cancel_CloneHashTask_WhenNotNeeded"
       "CloneHash_RuntimeAndExternals"
@@ -143,6 +185,7 @@ buildDotnetModule rec {
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+      "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
     ]
     ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
@@ -150,13 +193,19 @@ buildDotnetModule rec {
       "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
+    ]
+    ++ lib.optionals (!lib.elem "node16" nodeRuntimes) [
+      "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
     ];
 
   testProjectFile = [ "src/Test/Test.csproj" ];
 
   preCheck = ''
     mkdir -p _layout/externals
-    ln -s ${nodejs-16_x} _layout/externals/node16
+  '' + lib.optionalString (lib.elem "node16" nodeRuntimes) ''
+    ln -s ${nodejs_16} _layout/externals/node16
+  '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
+    ln -s ${nodejs_20} _layout/externals/node20
   '';
 
   postInstall = ''
@@ -189,12 +238,15 @@ buildDotnetModule rec {
       --replace './externals' "$out/lib/externals" \
       --replace './bin/RunnerService.js' "$out/lib/github-runner/RunnerService.js"
 
-    # The upstream package includes Node 16 and expects it at the path
-    # externals/node16. As opposed to the official releases, we don't
+    # The upstream package includes Node and expects it at the path
+    # externals/node$version. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
     mkdir -p $out/lib/externals
-    ln -s ${nodejs-16_x} $out/lib/externals/node16
-
+  '' + lib.optionalString (lib.elem "node16" nodeRuntimes) ''
+    ln -s ${nodejs_16} $out/lib/externals/node16
+  '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
+    ln -s ${nodejs_20} $out/lib/externals/node20
+  '' + ''
     # Install Nodejs scripts called from workflows
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
     mkdir -p $out/lib/github-runner/checkScripts

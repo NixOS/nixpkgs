@@ -1,4 +1,4 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
 with python3Packages;
 
@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # There appears to be a similar problem with metakernel's tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "A Jupyter kernel for Octave.";
     homepage = "https://github.com/Calysto/octave_kernel";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ thomasjm ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ thomasjm ];
+    platforms = lib.platforms.all;
   };
 }

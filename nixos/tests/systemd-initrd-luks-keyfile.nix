@@ -14,6 +14,8 @@ in {
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
+      # Necessary to boot off the encrypted disk because it requires a init script coming from the Nix store
+      mountHostNixStore = true;
       useEFIBoot = true;
     };
     boot.loader.systemd-boot.enable = true;
@@ -27,11 +29,12 @@ in {
     specialisation.boot-luks.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
-          device = "/dev/vdc";
+          device = "/dev/vdb";
           keyFile = "/etc/cryptroot.key";
         };
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
+      virtualisation.rootDevice = "/dev/mapper/cryptroot";
+      virtualisation.fileSystems."/".autoFormat = true;
       boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
     };
   };
@@ -39,7 +42,7 @@ in {
   testScript = ''
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdc")
+    machine.succeed("cryptsetup luksFormat -q --iter-time=1 -d ${keyfile} /dev/vdb")
 
     # Boot from the encrypted disk
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks.conf")

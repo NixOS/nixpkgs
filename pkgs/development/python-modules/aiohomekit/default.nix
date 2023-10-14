@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , aiocoap
+, async-interrupt
 , bleak
 , bleak-retry-connector
 , chacha20poly1305
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "2.6.3";
+  version = "3.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-bVvz5ruc1OpRnSKso3XHAnppnN/4ySfRHodE787eLFw=";
+    hash = "sha256-Rux3fRP1lM42i42K24t27DwAadi+NRJJHDhPAjZXb7s=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiocoap
+    async-interrupt
     bleak
     bleak-retry-connector
     chacha20poly1305

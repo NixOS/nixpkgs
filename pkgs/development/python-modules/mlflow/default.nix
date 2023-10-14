@@ -24,6 +24,7 @@
 , pythonOlder
 , pythonRelaxDepsHook
 , pyarrow
+, pytz
 , pyyaml
 , querystring_parser
 , requests
@@ -37,21 +38,27 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.2.2";
+  version = "2.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PvLC7iDJp63t/zTnVsbtrGLPTZBXZa0OgHS8naoMWAw";
+    hash = "sha256-+ZKujqnHNQI0S69IxOxEeqnvv6iWW8CQho5hYyNPTrA=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/core-requirements.txt \
+      --replace "gunicorn<21" "gunicorn"
+  '';
 
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
   nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRemoveDeps = [ "shap" ];
+  pythonRelaxDeps = [ "pytz" "pyarrow" ];
 
   propagatedBuildInputs = [
     alembic
@@ -74,6 +81,7 @@ buildPythonPackage rec {
     protobuf
     python-dateutil
     pyarrow
+    pytz
     pyyaml
     querystring_parser
     requests
@@ -91,7 +99,7 @@ buildPythonPackage rec {
 
   # no tests in PyPI dist
   # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
+  # also, tests use conda so can't run on NixOS without buildFHSEnv
   doCheck = false;
 
   meta = with lib; {

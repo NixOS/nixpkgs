@@ -131,7 +131,7 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   libopenshot-audio = callPackage ../applications/video/openshot-qt/libopenshot-audio.nix {
-    inherit (pkgs.darwin.apple_sdk.frameworks) AGL Cocoa Foundation;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
   };
 
   libqglviewer = callPackage ../development/libraries/libqglviewer {
@@ -154,7 +154,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
-  mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
+  mlt = pkgs.mlt.override {
+    enableQt = true;
+  };
 
   phonon = callPackage ../development/libraries/phonon { };
 
@@ -192,8 +194,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qoauth = callPackage ../development/libraries/qoauth { };
 
-  qscintilla = callPackage ../development/libraries/qscintilla { };
-
   qt5ct = callPackage ../tools/misc/qt5ct { };
 
   qtdbusextended = callPackage ../development/libraries/qtdbusextended { };
@@ -207,7 +207,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
+    inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreFoundation Security;
   };
 
   qtmpris = callPackage ../development/libraries/qtmpris { };
@@ -219,6 +220,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qtstyleplugin-kvantum = callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
   quazip = callPackage ../development/libraries/quazip { };
+
+  qscintilla = callPackage ../development/libraries/qscintilla { };
 
   qwt = callPackage ../development/libraries/qwt/default.nix { };
 

@@ -14,7 +14,7 @@
 }:
 
 let
-  rev = 3390;
+  rev = 3423;
   jre' = if preferZulu then zulu else jre;
   gtk' = if preferGtk3 then gtk3 else gtk2;
 
@@ -23,11 +23,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "6.0.1";
+  version = "6.1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    sha256 = "1i1z1kdglccg7pyidlfbagdhgs0wqvybl8dwxcpglh2hkvi0dba0";
+    sha256 = "sha256-/JsJFtGalNuOz21eeCPR/LvLueMtQAR7VSKN8SpnPvA=";
   };
 
   postPatch = ''
@@ -57,5 +57,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
+    mainProgram = "davmail";
   };
 }

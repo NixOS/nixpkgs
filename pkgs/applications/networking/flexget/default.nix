@@ -1,25 +1,29 @@
 { lib
 , python3
+, fetchPypi
 , fetchFromGitHub
 }:
 
 let
   python = python3.override {
+    # FlexGet doesn't support transmission-rpc>=5 yet
+    # https://github.com/NixOS/nixpkgs/issues/258504
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
-        version = "1.4.47";
-        src = self.fetchPypi {
-          pname = "SQLAlchemy";
+      transmission-rpc = super.transmission-rpc.overridePythonAttrs (old: rec {
+        version = "4.3.1";
+        src = fetchPypi {
+          pname = "transmission_rpc";
           inherit version;
-          hash = "sha256-lfwC9/wfMZmqpHqKdXQ3E0z2GOnZlMhO/9U/Uww4WG8=";
+          hash = "sha256-Kh2eARIfM6MuXu7RjPPVhvPZ+bs0AXkA4qUCbfu5hHU=";
         };
+        doCheck = false;
       });
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.6.0";
+  version = "3.9.11";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
@@ -27,20 +31,18 @@ python.pkgs.buildPythonApplication rec {
     owner = "Flexget";
     repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VsXiWsvEjRhWckwqHcUPx2B9mwOUmRLLHIM5ALoW9GI=";
+    hash = "sha256-0ONjRIMSfHKvaO05hhurfnS/waNNRZEVq7BodeV00kU=";
   };
 
   postPatch = ''
     # remove dependency constraints but keep environment constraints
     sed 's/[~<>=][^;]*//' -i requirements.txt
-
-    # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
-    # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
-    substituteInPlace requirements.txt --replace "zxcvbn-python" "zxcvbn"
   '';
 
-  # ~400 failures
-  doCheck = false;
+  nativeBuildInputs = with python.pkgs; [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = with python.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
@@ -59,6 +61,7 @@ python.pkgs.buildPythonApplication rec {
     packaging
     psutil
     pynzb
+    pyrsistent
     pyrss2gen
     python-dateutil
     pyyaml
@@ -89,6 +92,9 @@ python.pkgs.buildPythonApplication rec {
     "flexget"
     "flexget.plugins.clients.transmission"
   ];
+
+  # ~400 failures
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://flexget.com/";

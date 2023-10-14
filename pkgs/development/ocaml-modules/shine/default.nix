@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "shine";
   version = "0.2.3";
 
-  duneVersion = "2";
-
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-shine";

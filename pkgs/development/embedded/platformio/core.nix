@@ -3,12 +3,22 @@
 , fetchPypi
 , git
 , spdx-license-list-data
-, version, src
 }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "platformio";
-  inherit version src;
+
+  version = "6.1.6";
+
+  # pypi tarballs don't contain tests - https://github.com/platformio/platformio-core/issues/1964
+  src = fetchFromGitHub {
+    owner = "platformio";
+    repo = "platformio-core";
+    rev = "v${version}";
+    sha256 = "sha256-BEeMfdmAWqFbQUu8YKKrookQVgmhfZBqXnzeb2gfhms=";
+  };
+
+  outputs = [ "out" "udev" ];
 
   patches = [
     ./fix-searchpath.patch
@@ -59,6 +69,13 @@ with python3.pkgs; buildPythonApplication rec {
     jsondiff
     pytestCheckHook
   ];
+
+  # Install udev rules into a separate output so all of platformio-core is not a dependency if
+  # you want to use the udev rules on NixOS but not install platformio in your system packages.
+  postInstall = ''
+    mkdir -p $udev/lib/udev/rules.d
+    cp platformio/assets/system/99-platformio-udev.rules $udev/lib/udev/rules.d/99-platformio-udev.rules
+  '';
 
   disabledTestPaths = [
     "tests/commands/pkg/test_install.py"
@@ -144,6 +161,10 @@ with python3.pkgs; buildPythonApplication rec {
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
   ]);
+
+  passthru = {
+    python = python3;
+  };
 
   meta = with lib; {
     description = "An open source ecosystem for IoT development";

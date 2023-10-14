@@ -12,18 +12,20 @@
 , protobuf
 , pytest-aiohttp
 , pytest-asyncio
+, pytest-httpserver
 , pytest-timeout
 , pytestCheckHook
 , pythonRelaxDepsHook
 , pythonOlder
 , requests
 , srptools
+, stdenv
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.10.3";
+  version = "0.13.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,8 +33,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rZnL18vO8eYn70GzeKSY528iTc0r/seGv0dYDYGHNzw=";
   };
 
   postPatch = ''
@@ -77,12 +79,18 @@ buildPythonPackage rec {
     deepdiff
     pytest-aiohttp
     pytest-asyncio
+    pytest-httpserver
     pytest-timeout
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
     "--asyncio-mode=legacy"
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
+    "test_stream_retransmission"
   ];
 
   disabledTestPaths = [

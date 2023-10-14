@@ -1,4 +1,4 @@
-{ dotnetPackages, lib, xml2, stdenvNoCC }:
+{ lib, python3, stdenvNoCC }:
 
 { name
 , description ? ""
@@ -10,21 +10,19 @@ let
     inherit name;
 
     meta.description = description;
-    nativeBuildInputs = [ dotnetPackages.Nuget xml2 ];
+    nativeBuildInputs = [ python3 ];
 
     buildCommand = ''
-      export HOME=$(mktemp -d)
       mkdir -p $out/{lib,share}
 
-      ${lib.concatMapStringsSep "\n" (dep: ''
-        nuget init "${dep}" "$out/lib"
-      '') deps}
+      # use -L to follow symbolic links. When `projectReferences` is used in
+      # buildDotnetModule, one of the deps will be a symlink farm.
+      find -L ${lib.concatStringsSep " " deps} -type f -name '*.nupkg' -exec \
+        cp --no-clobber '{}' $out/lib ';'
 
       # Generates a list of all licenses' spdx ids, if available.
       # Note that this currently ignores any license provided in plain text (e.g. "LICENSE.txt")
-      find "$out/lib" -name "*.nuspec" -exec sh -c \
-        "NUSPEC=\$(xml2 < {}) && echo "\$NUSPEC" | grep license/@type=expression | tr -s \  '\n' | grep "license=" | cut -d'=' -f2" \
-      \; | sort -u > $out/share/licenses
+      python ${./extract-licenses-from-nupkgs.py} $out/lib > $out/share/licenses
     '';
   } // { # We need data from `$out` for `meta`, so we have to use overrides as to not hit infinite recursion.
     meta.licence = let

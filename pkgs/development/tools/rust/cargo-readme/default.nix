@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     description = "Generate README.md from docstrings";
     homepage = "https://github.com/livioribeiro/cargo-readme";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ baloo ];
+    maintainers = with maintainers; [ baloo matthiasbeyer ];
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch2
 , docbook-xsl-nons
 , docutils
 , gi-docgen
@@ -30,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
-  version = "0.1.0";
+  version = "0.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    hash = "sha256-7H5Ah4zo+wLKd0WoKoOgtIm7HcUSw8PTf/KzBlY75oc=";
+    hash = "sha256-l5rfMx3ElW25A5WVqzfKBp57ebaNC9msqV7mvnwv10s=";
     fetchSubmodules = true;
   };
 

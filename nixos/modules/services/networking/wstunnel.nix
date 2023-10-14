@@ -86,12 +86,12 @@ let
         description = mdDoc "Address and port to listen on. Setting the port to a value below 1024 will also give the process the required `CAP_NET_BIND_SERVICE` capability.";
         type = types.submodule hostPortSubmodule;
         default = {
-          address = "0.0.0.0";
+          host = "0.0.0.0";
           port = if config.enableHTTPS then 443 else 80;
         };
         defaultText = literalExpression ''
           {
-            address = "0.0.0.0";
+            host = "0.0.0.0";
             port = if enableHTTPS then 443 else 80;
           }
         '';
@@ -294,7 +294,7 @@ let
         DynamicUser = true;
         SupplementaryGroups = optional (serverCfg.useACMEHost != null) certConfig.group;
         PrivateTmp = true;
-        AmbientCapabilities = optional (serverCfg.listen.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        AmbientCapabilities = optionals (serverCfg.listen.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
         NoNewPrivileges = true;
         RestrictNamespaces = "uts ipc pid user cgroup";
         ProtectSystem = "strict";
@@ -340,7 +340,7 @@ let
         EnvironmentFile = optional (clientCfg.environmentFile != null) clientCfg.environmentFile;
         DynamicUser = true;
         PrivateTmp = true;
-        AmbientCapabilities = (optional (clientCfg.soMark != null) [ "CAP_NET_ADMIN" ]) ++ (optional ((clientCfg.dynamicToRemote.port or 1024) < 1024 || (any (x: x.local.port < 1024) clientCfg.localToRemote)) [ "CAP_NET_BIND_SERVICE" ]);
+        AmbientCapabilities = (optionals (clientCfg.soMark != null) [ "CAP_NET_ADMIN" ]) ++ (optionals ((clientCfg.dynamicToRemote.port or 1024) < 1024 || (any (x: x.local.port < 1024) clientCfg.localToRemote)) [ "CAP_NET_BIND_SERVICE" ]);
         NoNewPrivileges = true;
         RestrictNamespaces = "uts ipc pid user cgroup";
         ProtectSystem = "strict";

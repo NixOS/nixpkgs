@@ -6,9 +6,13 @@
 , matrix-sdk-crypto-nodejs
 , mkYarnPackage
 , rust
+, cargo
 , rustPlatform
+, rustc
 , napi-rs-cli
+, pkg-config
 , nodejs
+, openssl
 }:
 
 let
@@ -22,7 +26,7 @@ mkYarnPackage rec {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     rev = data.version;
-    sha256 = data.srcHash;
+    hash = data.srcHash;
   };
 
   packageJSON = ./package.json;
@@ -35,17 +39,20 @@ mkYarnPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = data.cargoHash;
+    hash = data.cargoHash;
   };
 
   packageResolutions = {
     "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
   };
 
+  extraBuildInputs = [ openssl ];
+
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    pkg-config
+    cargo
+    rustc
     napi-rs-cli
     makeWrapper
   ];
@@ -72,5 +79,6 @@ mkYarnPackage rec {
     description = "A bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA";
     maintainers = with maintainers; [ chvp ];
     license = licenses.asl20;
+    platforms = platforms.linux;
   };
 }

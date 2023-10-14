@@ -29,10 +29,12 @@ stdenv.mkDerivation rec {
     xorg.libX11.dev
   ];
 
+  configureFlags = [ "LDFLAGS=-lGL" ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "Graphical user inteface for GAMESS-US";
+    description = "Graphical user interface for GAMESS-US";
     homepage = "https://brettbode.github.io/wxmacmolplt/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

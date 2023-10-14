@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "cyclonedx-gomod";
-  version = "1.3.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-jUTSPsnGStP4aPfYS4kWiFiIEDnGkfg1Zm4EX+eD4Wo=";
+    hash = "sha256-JczDfNBYT/Ap2lDucEvuT8NAwuQgmavOUvtznI6Q+Zc=";
   };
 
-  vendorHash = "sha256-ZiIift8On6vpu8IKI/GD3WFaFb2Xd54t8FJJqwR4tsM=";
+  vendorHash = "sha256-5Mn+f+oVwbn2qGaZct5+9f6tOBXfsB/I72yD7fHUrC8=";
 
   # Tests require network access and cyclonedx executable
   doCheck = false;

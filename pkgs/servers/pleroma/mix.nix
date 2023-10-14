@@ -281,19 +281,6 @@ let
       beamDeps = [ ecto ];
     };
 
-    crypt = buildRebar3 rec {
-      name = "crypt";
-      version = "1.0.1";
-
-      src = fetchHex {
-        pkg = "${name}";
-        version = "${version}";
-        sha256 = "10ir7nsa0dkn5jr0w9x2m38jc73aym7llz2pnkwxk9f747izz3cn";
-      };
-
-      beamDeps = [];
-    };
-
     custom_base = buildMix rec {
       name = "custom_base";
       version = "0.2.1";

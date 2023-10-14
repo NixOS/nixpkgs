@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
-  version = "58.0";
+  version = "60.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
-    hash = "sha256-cPSCytjlPCw+rpz4avQS65NAWxash4G1GeozJtR1vW8=";
+    hash = "sha256-VrmBIoARg1ew9jse/hgZngg0PUpWozk8HUdauHjOomo=";
   };
 
   patches = [
@@ -79,9 +79,9 @@ buildPythonPackage rec {
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
-  # Fontconfig error: Cannot load default config file: No such file: (null)
+  # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [
-    "--set FONTCONFIG_FILE ${FONTCONFIG_FILE}"
+    "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}"
   ];
 
   postPatch = ''

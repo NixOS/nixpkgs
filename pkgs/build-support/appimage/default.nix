@@ -6,7 +6,7 @@
 , libarchive
 , pv
 , squashfsTools
-, buildFHSUserEnv
+, buildFHSEnv
 , pkgs
 }:
 
@@ -43,7 +43,7 @@ rec {
     extraPkgs,
     meta ? {},
     ...
-  }: buildFHSUserEnv
+  }: buildFHSEnv
     (defaultFhsEnvArgs // {
       inherit name;
 
@@ -206,6 +206,7 @@ rec {
       libtool.lib # for Synfigstudio
       xorg.libxshmfence # for apple-music-electron
       at-spi2-core
+      pciutils # for FreeCAD
     ];
   };
 }

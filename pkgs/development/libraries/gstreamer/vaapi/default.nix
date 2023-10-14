@@ -7,6 +7,7 @@
 , bzip2
 , libva
 , wayland
+, wayland-protocols
 , libdrm
 , udev
 , xorg
@@ -17,31 +18,33 @@
 , nasm
 , libvpx
 , python3
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "gstreamer-vaapi";
-  version = "1.20.3";
+  version = "1.22.5";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-bumesxar3emtNwApFb2MOGeRj2/cdLfPKsTBrg1pC0U=";
+    hash = "sha256-qaVQJnyVhN8OjHBDTTBHbo/QAYtzPBwe4z3q9CK9sks=";
   };
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    python3
     bzip2
-
-    # documentation
-    # TODO add hotdoc here
+    wayland
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
@@ -50,6 +53,7 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
     libva
     wayland
+    wayland-protocols
     libdrm
     udev
     xorg.libX11
@@ -58,16 +62,18 @@ stdenv.mkDerivation rec {
     xorg.libXrandr
     xorg.libSM
     xorg.libICE
-    libGL
-    libGLU
     nasm
     libvpx
-    python3
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    libGL
+    libGLU
   ];
+
+  strictDeps = true;
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
@@ -79,7 +85,7 @@ stdenv.mkDerivation rec {
     description = "Set of VAAPI GStreamer Plug-ins";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

@@ -176,9 +176,9 @@ stdenv.mkDerivation {
     in noSourceRefs + postInstall;
 
   passthru = {
-    modules = modules;
+    inherit modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sandbox nginx-sso nginx-status-page;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;
@@ -187,8 +187,9 @@ stdenv.mkDerivation {
   meta = if meta != null then meta else with lib; {
     description = "A reverse proxy and lightweight webserver";
     homepage    = "http://nginx.org";
-    license     = licenses.bsd2;
+    license     = [ licenses.bsd2 ]
+      ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
+    maintainers = with maintainers; [ fpletz ajs124 raitobezarius ];
   };
 }

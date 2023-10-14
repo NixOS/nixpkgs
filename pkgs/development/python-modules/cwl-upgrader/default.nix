@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, mypy-extensions
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
@@ -10,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "cwl-upgrader";
-  version = "1.2.4";
+  version = "1.2.9";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-3pKnkU8lks3w+N7w2qST9jr4/CS6YzgnBVLTlgq1gf0=";
+    hash = "sha256-yvgGMGo4QK+PRDzqlOH4rP49fnJUlbYB9B5AnlX+LF8=";
   };
 
   postPatch = ''
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    mypy-extensions
     ruamel-yaml
     schema-salad
   ];

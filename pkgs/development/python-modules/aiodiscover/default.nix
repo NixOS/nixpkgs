@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "1.4.16";
+  version = "1.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-umHw9DFLIsoxBNlUSuSmaRy5O270lP0tLZ8rilw0oWg=";
+    hash = "sha256-rFypv0gCj+Jskk+dlRNJ2ufj2sDud7AuJzj3cl4bB4Y=";
   };
 
   propagatedBuildInputs = [

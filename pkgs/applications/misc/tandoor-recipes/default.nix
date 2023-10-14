@@ -2,6 +2,7 @@
 , nixosTests
 , python3
 , fetchFromGitHub
+, fetchpatch
 }:
 let
   python = python3.override {
@@ -65,7 +66,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-storages
     django-tables2
     django-webpack-loader
-    django_treebeard
+    django-treebeard
     djangorestframework
     drf-writable-nested
     gunicorn
@@ -101,8 +102,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    # Avoid dependency on django debug toolbar
+    # Disable debug logging
     export DEBUG=0
+    # Avoid dependency on django debug toolbar
+    export DEBUG_TOOLBAR=0
 
     # See https://github.com/TandoorRecipes/recipes/issues/2043
     mkdir cookbook/static/themes/maps/

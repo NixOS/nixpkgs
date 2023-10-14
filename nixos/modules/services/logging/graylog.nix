@@ -37,8 +37,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.graylog;
-        defaultText = literalExpression "pkgs.graylog";
+        default = if versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
+        defaultText = literalExpression (if versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_1");
         description = lib.mdDoc "Graylog package to use.";
       };
 

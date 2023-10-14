@@ -15,7 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-V1pBzillWTk9iuHAhFztxYaq4uLL3U3HYvedGk6ffbk=";
   };
 
-  vendorSha256 = "sha256-ngYkTtBEZSyYYnfBHi0VrotwKGvMOiowbrwigJnjsuU=";
+  vendorHash = "sha256-ngYkTtBEZSyYYnfBHi0VrotwKGvMOiowbrwigJnjsuU=";
 
   buildPhase = ''
     runHook preBuild

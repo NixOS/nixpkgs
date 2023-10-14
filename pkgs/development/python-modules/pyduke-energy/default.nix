@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyduke-energy";
-  version = "1.0.5";
+  version = "1.0.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "mjmeli";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-g+s9YaVFOCKaBGR5o9cPk4kcIW4BffFHTtmDNE8f/zE=";
+    hash = "sha256-7KkUpsHg3P2cF0bVl3FzyAQwzeaCmg+vzRHlM/TIcNA=";
   };
 
   propagatedBuildInputs = [

@@ -41,13 +41,15 @@
 
 buildPythonPackage rec {
   pname = "nikola";
-  version = "8.2.3";
+  version = "8.2.4";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Nikola";
     inherit version;
-    hash = "sha256-c8eadkmYWS88nGwi6QwPqHg7FBXlkdazKSrbWDMw/UA=";
+    hash = "sha256-LNVk2zfNwY4CC4qulqfNXwi3mWyFxzWIeMykh6gFOL8=";
   };
 
   propagatedBuildInputs = [
@@ -110,9 +112,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Static website and blog generator";
     homepage = "https://getnikola.com/";
+    changelog = "https://github.com/getnikola/nikola/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
-    # All tests fail
-    broken = stdenv.isDarwin;
   };
 }

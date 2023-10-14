@@ -2,7 +2,7 @@
 , zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
 , makeWrapper, perl, ... }:
 
-{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description }:
+{ name, src ? builtins.getAttr stdenv.hostPlatform.system sources, sources ? null, description, productVersion }:
 
 stdenv.mkDerivation rec {
   inherit name src;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     categories = [ "Development" ];
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper perl ];
   buildInputs = [
     fontconfig freetype glib gsettings-desktop-schemas gtk jdk libX11
     libXrender libXtst libsecret zlib
@@ -38,14 +38,13 @@ stdenv.mkDerivation rec {
     # settings in ~/.eclipse/org.eclipse.platform_<version> rather
     # than ~/.eclipse/org.eclipse.platform_<version>_<number>.
     productId=$(sed 's/id=//; t; d' $out/eclipse/.eclipseproduct)
-    productVersion=$(sed 's/version=//; t; d' $out/eclipse/.eclipseproduct)
 
     makeWrapper $out/eclipse/eclipse $out/bin/eclipse \
       --prefix PATH : ${jdk}/bin \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk libXtst libsecret ] ++ lib.optional (webkitgtk != null) webkitgtk)} \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-      --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
+      --add-flags "-configuration \$HOME/.eclipse/''${productId}_${productVersion}/configuration"
 
     # Create desktop item.
     mkdir -p $out/share/applications
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
     # ensure eclipse.ini does not try to use a justj jvm, as those aren't compatible with nix
-    ${perl}/bin/perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin\n||' $out/eclipse/eclipse.ini
+    perl -i -p0e 's|-vm\nplugins/org.eclipse.justj.*/jre/bin.*\n||' $out/eclipse/eclipse.ini
   ''; # */
 
   meta = {

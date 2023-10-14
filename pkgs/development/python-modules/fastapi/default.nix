@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.92.0";
+  version = "0.95.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-4USWfYvPxR+LzPELRTDg0Jl4K5yBnumYKfXT84FWctg=";
+    hash = "sha256-wD39CqUZOgwpG/NEGz/pXgQsadzUoM/elxfEXthOlHo=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,9 @@ buildPythonPackage rec {
     pytest-asyncio
     sqlalchemy
     trio
-  ] ++ passlib.optional-dependencies.bcrypt;
+  ]
+  ++ passlib.optional-dependencies.bcrypt
+  ++ pydantic.optional-dependencies.email;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from

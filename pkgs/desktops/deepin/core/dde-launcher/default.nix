@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    #fix build with new dtk(https://github.com/linuxdeepin/dde-launcher/pull/369)
+    substituteInPlace src/windowedframe.h \
+      --replace "#include <dregionmonitor.h>" " "
     substituteInPlace src/boxframe/{backgroundmanager.cpp,boxframe.cpp} \
       --replace "/usr/share/backgrounds" "/run/current-system/sw/share/backgrounds"
     substituteInPlace dde-launcher.desktop dde-launcher-wapper src/dbusservices/com.deepin.dde.Launcher.service \

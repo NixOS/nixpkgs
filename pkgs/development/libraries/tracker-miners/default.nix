@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -46,12 +47,21 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.4.3";
+  version = "3.5.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "jk85dkcmQbZI0PjyDeuuGxYpyltWC4YW4RfSnXVvvus=";
+    hash = "sha256-drjVB3EOiX6FPsN/Ju906XqVU3CLYLjEE0lF+bgWU8s=";
   };
+
+  patches = [
+    # Use cc.has_header_symbol to check for BTRFS_IOC_INO_LOOKUP
+    # https://github.com/NixOS/nixpkgs/issues/228639
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/tracker-miners/-/commit/c08fbe0650d4a2ae915a21764f54c02eda9406d5.patch";
+      sha256 = "U81+yfg2sUkKl4tKMeB7pXJRNSeIE+2loT3/bvnhoKM=";
+    })
+  ];
 
   nativeBuildInputs = [
     asciidoc
@@ -116,6 +126,7 @@ stdenv.mkDerivation rec {
     # to be safe due to the general state of the project
     "-Dminer_rss=false"
   ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dbattery_detection=none"
     "-Dnetwork_manager=disabled"
     "-Dsystemd_user_services=false"
   ];

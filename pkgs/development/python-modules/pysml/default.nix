@@ -5,18 +5,21 @@
 , fetchFromGitHub
 , poetry-core
 , pyserial-asyncio
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pysml";
-  version = "0.0.9";
+  version = "0.1.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mtdcr";
     repo = pname;
-    rev = version;
-    hash = "sha256-pUbRttH/ksYcE1qZJAQWhuKk4+40w5xsul0TTqq1g3s=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-m1dh607hFqcd4CXWiMfGDmI5s8A0UkdyPzq/V+5OUto=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +35,9 @@ buildPythonPackage rec {
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "sml" ];
+  pythonImportsCheck = [
+    "sml"
+  ];
 
   meta = with lib; {
     description = "Python library for EDL21 smart meters using Smart Message Language (SML)";

@@ -7,7 +7,9 @@
 , gettext
 , python3
 , desktop-file-utils
+, cargo
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libadwaita
@@ -45,9 +47,9 @@ stdenv.mkDerivation rec {
     gtk4 # for gtk-update-icon-cache
     glib # for glib-compile-schemas
     desktop-file-utils
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
   ];
 
@@ -79,7 +81,7 @@ stdenv.mkDerivation rec {
     description = "Native Spotify client for the GNOME desktop";
     homepage = "https://github.com/xou816/spot";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

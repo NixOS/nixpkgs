@@ -1,8 +1,7 @@
-{ stdenv
-, lib
+{ lib
 , isPyPy
 , pythonOlder
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 
 # build
@@ -14,6 +13,7 @@
 , typing-extensions
 
 # optionals
+, aiomysql
 , aiosqlite
 , asyncmy
 , asyncpg
@@ -40,14 +40,16 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "2.0.6";
+  version = "2.0.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-w0PwtUZJX116I5xwv1CpmkjXMhwWW4Kvr6hIO56+v24=";
+  src = fetchFromGitHub {
+    owner = "sqlalchemy";
+    repo = "sqlalchemy";
+    rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-97q04wQVtlV2b6VJHxvnQ9ep76T5umn1KI3hXh6a8kU=";
   };
 
   nativeBuildInputs =[
@@ -61,7 +63,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = rec {
+  passthru.optional-dependencies = lib.fix (self: {
     asyncio = [
       greenlet
     ];
@@ -100,7 +102,7 @@ buildPythonPackage rec {
     ];
     postgresql_asyncpg = [
       asyncpg
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     postgresql_psycopg2binary = [
       psycopg2
     ];
@@ -110,23 +112,26 @@ buildPythonPackage rec {
     postgresql_psycopg = [
       psycopg
     ];
+    postgresql_psycopgbinary = [
+      psycopg
+    ];
     pymysql = [
       pymysql
     ];
     aiomysql = [
       aiomysql
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     asyncmy = [
       asyncmy
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     aiosqlite = [
       aiosqlite
       typing-extensions
-    ] ++ asyncio;
+    ] ++ self.asyncio;
     sqlcipher = [
       # TODO: sqlcipher3
     ];
-  };
+  });
 
   nativeCheckInputs = [
     pytest-xdist
@@ -137,6 +142,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # typing correctness, not interesting
     "test/ext/mypy"
+    "test/typing"
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];

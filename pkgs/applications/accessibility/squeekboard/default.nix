@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
@@ -14,6 +15,7 @@
 , libxml2
 , libxkbcommon
 , rustPlatform
+, rustc
 , feedbackd
 , wrapGAppsHook
 , fetchpatch
@@ -22,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.21.0";
+  version = "1.22.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Mn0E+R/UzBLHPvarQHlEN4JBpf4VAaXdKdWLsFEyQE4=";
+    hash = "sha256-Rk6LOCZ5bhoo5ORAIIYWENrKUIVypd8bnKjyyBSbUYg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
       cp Cargo.lock.newer Cargo.lock
     '';
     name = "${pname}-${version}";
-    hash = "sha256-F2mef0HvD9WZRx05DEpQ1AO1skMwcchHZzJa74AHmsM=";
+    hash = "sha256-DygWra4R/w8KzkFzIVm4+ePpUpjiYGaDx2NQm6o+tWQ=";
   };
 
   mesonFlags = [
@@ -54,11 +56,10 @@ stdenv.mkDerivation rec {
     glib
     wayland
     wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk3

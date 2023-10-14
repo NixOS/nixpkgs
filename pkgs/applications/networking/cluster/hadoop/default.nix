@@ -92,14 +92,13 @@ in
     pname = "hadoop";
     platformAttrs = rec {
         x86_64-linux = {
-          version = "3.3.4";
-          hash = "sha256-akg9GgsSNJDr2N8/cbZOs58zP3i5XwkK61jkM8vCQW0=";
+          version = "3.3.5";
+          hash = "sha256-RG4FypL6I6YGF6ixeUbe3kcoGvFQQEFhfLfV9i50JSo=";
         };
         x86_64-darwin = x86_64-linux;
         aarch64-linux = {
-          version = "3.3.1";
-          hash = "sha256-v1Om2pk0wsgKBghRD2wgTSHJoKd3jkm1wPKAeDcKlgI=";
-          meta.knownVulnerabilities = [ "CVE-2021-37404" "CVE-2021-33036" ];
+          version = "3.3.5";
+          hash = "sha256-qcKjbE881isauWBxIv+NY0UFbYit704/Re8Kdl6x1LA=";
         };
         aarch64-darwin = aarch64-linux;
     };

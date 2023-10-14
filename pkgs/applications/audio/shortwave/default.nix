@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, cargo
 , dbus
 , desktop-file-utils
 , gdk-pixbuf
@@ -15,6 +16,7 @@
 , openssl
 , pkg-config
 , rustPlatform
+, rustc
 , sqlite
 , wrapGAppsHook4
 , cmake
@@ -47,9 +49,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
     cmake
   ];

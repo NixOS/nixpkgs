@@ -1,11 +1,12 @@
-from pathlib import Path
 import argparse
-import ptpython.repl
 import os
 import time
+from pathlib import Path
 
-from test_driver.logger import rootlog
+import ptpython.repl
+
 from test_driver.driver import Driver
+from test_driver.logger import rootlog
 
 
 class EnvDefault(argparse.Action):
@@ -25,9 +26,7 @@ class EnvDefault(argparse.Action):
                 )
         if required and default:
             required = False
-        super(EnvDefault, self).__init__(
-            default=default, required=required, nargs=nargs, **kwargs
-        )
+        super().__init__(default=default, required=required, nargs=nargs, **kwargs)
 
     def __call__(self, parser, namespace, values, option_string=None):  # type: ignore
         setattr(namespace, self.dest, values)
@@ -106,7 +105,13 @@ def main() -> None:
         args.keep_vm_state,
     ) as driver:
         if args.interactive:
-            ptpython.repl.embed(driver.test_symbols(), {})
+            history_dir = os.getcwd()
+            history_path = os.path.join(history_dir, ".nixos-test-history")
+            ptpython.repl.embed(
+                driver.test_symbols(),
+                {},
+                history_filename=history_path,
+            )
         else:
             tic = time.time()
             driver.run_tests()

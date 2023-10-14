@@ -25,6 +25,7 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+, libpfm
 , libtraceevent
 , openssl
 , systemtap
@@ -63,7 +64,11 @@ stdenv.mkDerivation {
   postPatch = ''
     # Linux scripts
     patchShebangs scripts
-
+    patchShebangs tools/perf/check-headers.sh
+  '' + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
+    # perf-specific scripts
+    patchShebangs tools/perf/pmu-events
+  '' + ''
     cd tools/perf
 
     for x in util/build-id.c util/dso.c; do
@@ -121,6 +126,7 @@ stdenv.mkDerivation {
   ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
+  ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
   ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -144,7 +150,7 @@ stdenv.mkDerivation {
 
   preFixup = ''
     # Pull in 'objdump' into PATH to make annotations work.
-    # The embeded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
+    # The embedded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
     # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
       --prefix PATH : ${lib.makeBinPath [ binutils-unwrapped python3 ]}

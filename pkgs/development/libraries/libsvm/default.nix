@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsvm";
-  version = "3.31";
+  version = "3.32";
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
-    sha256 = "sha256-AKtWH0jfX8kqhCCa2P5Rmery5Rmzwnm6z8k1l4p1zx8=";
+    sha256 = "sha256-hkTMZRjKiLvFDYyOrRc08aubbxcBcEXvmuOHc6plPa0=";
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     description = "A library for support vector machines";
     homepage = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

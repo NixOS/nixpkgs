@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 
 # build-system
 , setuptools
@@ -42,6 +43,15 @@ buildPythonPackage rec {
     fetchSubmodules = true; # for test data
     hash = "sha256-MXzPIcbG8b1JwhEyAZG4DRObGaHq+ipVHMrZCzaxLdE=";
   };
+
+  patches = [
+    # https://github.com/librosa/librosa/pull/1731
+    (fetchpatch {
+      name = "support-scipy-1.11.patch";
+      url = "https://github.com/librosa/librosa/commit/12dee8eabed7df14c5622b52c05393ddfeb11f4b.patch";
+      hash = "sha256-JxTXU0Mc+QYpsafjoGLaIccD7EdCYJvIVianeosYpw4=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools

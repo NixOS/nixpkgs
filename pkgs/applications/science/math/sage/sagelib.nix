@@ -1,76 +1,83 @@
 { sage-src
 , env-locations
-, perl
+, python
 , buildPythonPackage
 , m4
+, perl
+, pkg-config
+, sage-setup
+, gd
+, iml
+, libpng
+, readline
 , arb
 , blas
-, lapack
+, boost
 , brial
 , cliquer
-, cypari2
-, cysignals
-, cython
-, lisp-compiler
 , eclib
 , ecm
+, fflas-ffpack
 , flint
-, gd
+, gap
 , giac
 , givaro
 , glpk
 , gsl
-, iml
-, jinja2
-, libpng
+, lapack
 , lcalc
-, lrcalc
-, gap
+, libbraiding
+, libhomfly
+, libmpc
 , linbox
+, lisp-compiler
+, lrcalc
 , m4ri
 , m4rie
-, memory-allocator
-, libmpc
 , mpfi
+, mpfr
 , ntl
-, numpy
 , pari
-, pkgconfig # the python module, not the pkg-config alias
-, pkg-config
 , planarity
 , ppl
-, primecountpy
-, python
-, ratpoints
-, readline
 , rankwidth
-, symmetrica
-, zn_poly
-, fflas-ffpack
-, boost
+, ratpoints
 , singular
-, pip
-, jupyter-core
-, sage-setup
-, libhomfly
-, libbraiding
-, gmpy2
-, pplpy
 , sqlite
-, jupyter-client
-, ipywidgets
-, mpmath
-, rpy2
+, symmetrica
+, cvxopt
+, cypari2
+, cysignals
+, cython
 , fpylll
-, scipy
-, sympy
-, matplotlib
-, pillow
+, gmpy2
+, importlib-metadata
+, importlib-resources
 , ipykernel
-, networkx
-, ptyprocess
+, ipython
+, ipywidgets
+, jinja2
+, jupyter-client
+, jupyter-core
 , lrcalc-python
-, sphinx # TODO: this is in setup.cfg, should we override it?
+, matplotlib
+, memory-allocator
+, mpmath
+, networkx
+, numpy
+, pexpect
+, pillow
+, pip
+, pkgconfig
+, pplpy
+, primecountpy
+, ptyprocess
+, requests
+, rpy2
+, scipy
+, sphinx
+, sympy
+, typing-extensions
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -87,83 +94,93 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     iml
-    perl
-    jupyter-core
-    pkg-config
-    sage-setup
-    pip # needed to query installed packages
     lisp-compiler
     m4
+    perl
+    pip # needed to query installed packages
+    pkg-config
+    sage-setup
   ];
 
   buildInputs = [
     gd
-    readline
     iml
     libpng
+    readline
   ];
 
   propagatedBuildInputs = [
-    cypari2
-    jinja2
-    numpy
-    pkgconfig
-    boost
+    # native dependencies (TODO: determine which ones need to be propagated)
     arb
+    blas
+    boost
     brial
     cliquer
-    lisp-compiler
     eclib
     ecm
     fflas-ffpack
     flint
+    gap
     giac
     givaro
     glpk
     gsl
+    lapack
     lcalc
-    gap
+    libbraiding
+    libhomfly
     libmpc
     linbox
+    lisp-compiler
     lrcalc
     m4ri
     m4rie
-    memory-allocator
     mpfi
+    mpfr
     ntl
-    blas
-    lapack
     pari
     planarity
     ppl
-    primecountpy
     rankwidth
     ratpoints
     singular
-    symmetrica
-    zn_poly
-    pip
-    cython
-    cysignals
-    libhomfly
-    libbraiding
-    gmpy2
-    pplpy
     sqlite
+    symmetrica
+
+    # from src/sage/setup.cfg and requirements.txt
+    cvxopt
+    cypari2
+    cysignals
+    cython
+    fpylll
+    gmpy2
+    importlib-metadata
+    importlib-resources
+    ipykernel
+    ipython
+    ipywidgets
+    jinja2
+    jupyter-client
+    jupyter-core
+    lrcalc-python
+    matplotlib
+    memory-allocator
     mpmath
+    networkx
+    numpy
+    pexpect
+    pillow
+    pip
+    pkgconfig
+    pplpy
+    primecountpy
+    ptyprocess
+    requests
     rpy2
     scipy
-    sympy
-    matplotlib
-    pillow
-    ipykernel
-    fpylll
-    networkx
-    jupyter-client
-    ipywidgets
-    ptyprocess
-    lrcalc-python
     sphinx
+    sympy
+    typing-extensions
   ];
 
   preBuild = ''

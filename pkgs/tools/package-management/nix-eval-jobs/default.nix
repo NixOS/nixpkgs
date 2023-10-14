@@ -11,12 +11,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "2.14.0";
+  version = "2.17.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fpksS7lbaYwjf7NuPFE44wvyGcT5d+ERBCJmZoKXaWA=";
+    hash = "sha256-5rhsYKYKKOxv9aL2dPcFehdHcO58+ptG4CWaSYR6lfo=";
   };
   buildInputs = [
     boost
@@ -30,6 +30,11 @@ stdenv.mkDerivation rec {
     # nlohmann_json can be only discovered via cmake files
     cmake
   ];
+
+  # Since this package is intimately tied to a specific Nix release, we
+  # propagate the Nix used for building it to make it easier for users
+  # downstream to reference it.
+  passthru = { inherit nix; };
 
   meta = {
     description = "Hydra's builtin hydra-eval-jobs as a standalone";

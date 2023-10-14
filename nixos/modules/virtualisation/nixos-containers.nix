@@ -170,11 +170,11 @@ let
         --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
-        ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
-          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"'' else ""
+        ${optionalString (cfg.additionalCapabilities != null && cfg.additionalCapabilities != [])
+          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"''
         } \
-        ${if cfg.tmpfs != null && cfg.tmpfs != [] then
-          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
+        ${optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
+          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -515,6 +515,10 @@ in
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
                   inherit (config) specialArgs;
+
+                  # The system is inherited from the host above.
+                  # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+                  system = null;
                 }).config;
               };
             };
@@ -796,14 +800,14 @@ in
       # declarative containers
       ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
           containerConfig = cfg // (
-          if cfg.enableTun then
+          optionalAttrs cfg.enableTun
             {
               allowedDevices = cfg.allowedDevices
                 ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               additionalCapabilities = cfg.additionalCapabilities
                 ++ [ "CAP_NET_ADMIN" ];
             }
-          else {});
+          );
         in
           recursiveUpdate unit {
             preStart = preStartScript containerConfig;
@@ -813,7 +817,7 @@ in
             unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i";
             environment.root = if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
           } // (
-          if containerConfig.autoStart then
+          optionalAttrs containerConfig.autoStart
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
@@ -824,7 +828,7 @@ in
               ];
               restartIfChanged = true;
             }
-          else {})
+          )
       )) config.containers)
     ));
 

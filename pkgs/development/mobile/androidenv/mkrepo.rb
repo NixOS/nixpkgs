@@ -177,8 +177,8 @@ def empty? value
   !value || value.empty?
 end
 
-# Fixes up returned hashes by sorting keys.
-# Will also convert archives (e.g. {'linux' => {'sha1' => ...}, 'macosx' => ...} to
+# Fixes up returned hashes by converting archives like
+#  (e.g. {'linux' => {'sha1' => ...}, 'macosx' => ...} to
 # [{'os' => 'linux', 'sha1' => ...}, {'os' => 'macosx', ...}, ...].
 def fixup value
   Hash[value.map do |k, v|
@@ -191,7 +191,35 @@ def fixup value
     else
       [k, v]
     end
-  end.sort {|(k1, v1), (k2, v2)| k1 <=> k2 }]
+  end]
+end
+
+# Today since Unix Epoch, January 1, 1970.
+def today
+  Time.now.utc.to_i / 24 / 60 / 60
+end
+
+# The expiration strategy. Expire if the last available day was before the `oldest_valid_day`.
+def expire_records record, oldest_valid_day
+  if record.is_a?(Hash)
+    if record.has_key?('last-available-day') &&
+      record['last-available-day'] < oldest_valid_day
+      return nil
+    end
+    update = {}
+    # This should only happen in the first run of this scrip after adding the `expire_record` function.
+    if record.has_key?('displayName') &&
+      !record.has_key?('last-available-day')
+      update['last-available-day'] = today
+    end
+    record.each {|key, value|
+      v = expire_records value, oldest_valid_day
+      update[key] = v if v
+    }
+    update
+  else
+    record
+  end
 end
 
 # Normalize the specified license text.
@@ -253,6 +281,7 @@ def parse_package_xml doc
     target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
+    target['last-available-day'] = today
   end
 
   [licenses, packages]
@@ -294,6 +323,7 @@ def parse_image_xml doc
     target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
+    target['last-available-day'] = today
   end
 
   [licenses, images]
@@ -351,19 +381,36 @@ def parse_addon_xml doc
     target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
+    target['last-available-day'] = today
   end
 
   [licenses, addons, extras]
+end
+
+# Make the clean diff by always sorting the result before puting it in the stdout.
+def sort_recursively value
+  if value.is_a?(Hash)
+    Hash[
+      value.map do |k, v|
+        [k, sort_recursively(v)]
+      end.sort_by {|(k, v)| k }
+    ]
+  elsif value.is_a?(Array)
+    value.map do |v| sort_recursively(v) end
+  else
+    value
+  end
 end
 
 def merge_recursively a, b
   a.merge!(b) {|key, a_item, b_item|
     if a_item.is_a?(Hash) && b_item.is_a?(Hash)
       merge_recursively(a_item, b_item)
-    else
-      a[key] = b_item
+    elsif b_item != nil
+      b_item
     end
   }
+  a
 end
 
 def merge dest, src
@@ -376,31 +423,55 @@ opts = Slop.parse do |o|
   o.array '-a', '--addons', 'addon repo XMLs to parse'
 end
 
-result = {
-  licenses: {},
-  packages: {},
-  images: {},
-  addons: {},
-  extras: {}
-}
+result = {}
+result['licenses'] = {}
+result['packages'] = {}
+result['images'] = {}
+result['addons'] = {}
+result['extras'] = {}
 
 opts[:packages].each do |filename|
   licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
-  merge result[:licenses], licenses
-  merge result[:packages], packages
+  merge result['licenses'], licenses
+  merge result['packages'], packages
 end
 
 opts[:images].each do |filename|
   licenses, images = parse_image_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
-  merge result[:licenses], licenses
-  merge result[:images], images
+  merge result['licenses'], licenses
+  merge result['images'], images
 end
 
 opts[:addons].each do |filename|
   licenses, addons, extras = parse_addon_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
-  merge result[:licenses], licenses
-  merge result[:addons], addons
-  merge result[:extras], extras
+  merge result['licenses'], licenses
+  merge result['addons'], addons
+  merge result['extras'], extras
 end
 
-puts JSON.pretty_generate(fixup(result))
+# As we keep the old packages in the repo JSON file, we should have
+# a strategy to remove them at some point!
+# So with this variable we claim it's okay to remove them from the
+# JSON after two years that they are not available.
+two_years_ago = today - 2 * 365
+
+input = {}
+begin
+  input_json = (STDIN.tty?) ? "{}" : $stdin.read
+  if input_json != nil && !input_json.empty?
+    input =  expire_records(JSON.parse(input_json), two_years_ago)
+  end
+rescue JSON::ParserError => e
+  $stderr.write(e.message)
+  return
+end
+
+
+fixup_result = fixup(result)
+
+# Regular installation of Android SDK would keep the previously installed packages even if they are not
+# in the uptodate XML files, so here we try to support this logic by keeping un-available packages,
+# therefore the old packages will work as long as the links are working on the Google servers.
+output = merge input, fixup_result
+
+puts JSON.pretty_generate(sort_recursively(output))

@@ -10,7 +10,7 @@
 , dbus
 , libusb1
 , ncurses
-, pps-tools
+, kppsSupport ? stdenv.isLinux, pps-tools
 , python3Packages
 
 # optional deps for GUI packages
@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsd";
-  version = "3.24";
+  version = "3.25";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-AO4T9hVlUoSHSmYb4TVTq+ZhKObetc1kivm8DLNF/lw=";
+    sha256 = "sha256-s2i2owXj96Y4LSOgy/wdeJIwYLa39Uz3mHpzx7Spr8I=";
   };
 
   # TODO: render & install HTML documentation using asciidoctor
@@ -53,8 +53,9 @@ stdenv.mkDerivation rec {
     dbus
     libusb1
     ncurses
-    pps-tools
     python3Packages.python
+  ] ++ lib.optionals kppsSupport [
+    pps-tools
   ] ++ lib.optionals guiSupport [
     atk
     dbus-glib
@@ -135,7 +136,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
     changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor rasendubi ];
   };
 }

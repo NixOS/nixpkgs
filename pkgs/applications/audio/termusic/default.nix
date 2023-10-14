@@ -1,47 +1,66 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, fetchpatch
+{
+  alsa-lib
+, AppKit
+, CoreAudio
+, CoreGraphics
+, dbus
+, Foundation
+, fetchFromGitHub
+, glib
+, gst_all_1
+, IOKit
+, lib
+, MediaPlayer
+, openssl
 , pkg-config
-, alsa-lib
-, darwin
+, protobuf
+, rustPlatform
+, Security
+, sqlite
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termusic";
-  version = "0.7.9";
+  version = "0.7.11";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-ytAKINcZwLyHWbzShxfxRKx4BepM0G2BYdLgwR48g7w=";
+  src = fetchFromGitHub {
+    owner = "tramhao";
+    repo = "termusic";
+    rev = "v${version}";
+    hash = "sha256-ykOBXM/WF+zasAt+6mgY2aSFCpGaYcqk+YI7YLM3MWs=";
   };
 
-  cargoHash = "sha256-yxFF5Yqj+xTB3FAJUtgcIeAEHR44JA1xONxGFdG0yS0=";
-
-  patches = [
-    (fetchpatch {
-      name = "fix-panic-when-XDG_AUDIO_DIR-not-set.patch";
-      url = "https://github.com/tramhao/termusic/commit/b6006b22901f1f865a2e3acf7490fd3fa520ca5e.patch";
-      hash = "sha256-1ukQ0y5IRdOndsryuqXI9/zyhCDQ5NIeTan4KCynAv0=";
-    })
-  ];
+  cargoHash = "sha256-BrOpU0RFdlRXQIMjfHfs/XYIdBCYKFSA+5by/rGzC8Y=";
 
   nativeBuildInputs = [
     pkg-config
+    protobuf
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    alsa-lib
+  buildInputs = [
+    dbus
+    glib
+    gst_all_1.gstreamer
+    openssl
+    sqlite
   ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AudioUnit
+    AppKit
+    CoreAudio
+    CoreGraphics
+    Foundation
+    IOKit
+    MediaPlayer
+    Security
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Terminal Music Player TUI written in Rust";
     homepage = "https://github.com/tramhao/termusic";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ devhell ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ devhell ];
   };
 }

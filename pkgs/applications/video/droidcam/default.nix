@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "droidcam";
-  version = "1.9.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "aramg";
     repo = "droidcam";
     rev = "v${version}";
-    sha256 = "sha256-SbgvkAy7UTZKzgNPUQ17YwSo50yigiMLpITcenOODGw=";
+    sha256 = "sha256-wTWdIPptbqt1cZgK6IDTZdrhno4Qlf4AujugfQ/xOT0=";
   };
 
   nativeBuildInputs = [

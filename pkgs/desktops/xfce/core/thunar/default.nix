@@ -1,4 +1,5 @@
 { mkXfceDerivation
+, fetchpatch
 , lib
 , docbook_xsl
 , exo
@@ -21,9 +22,18 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.18.4";
+  version = "4.18.7";
 
-  sha256 = "sha256-tdk0sWUzTmYXk+dOPVOpjmODpqmhzQc9jAOCk2+yNKM=";
+  sha256 = "sha256-pxIblhC40X0wdE6+uvmV5ypp4sOZtzn/evcS33PlNpU=";
+
+  patches = [
+    # Fix log spam with new GLib
+    # https://gitlab.xfce.org/xfce/thunar/-/issues/1204
+    (fetchpatch {
+      url = "https://gitlab.xfce.org/xfce/thunar/-/commit/2f06fcdbedbc59d9f90ccd3df07fce417cea391d.patch";
+      sha256 = "sha256-nvYakT4GJkQYmubgZF8GJIA/m7+6ZPbmD0HSgMcCh10=";
+    })
+  ];
 
   nativeBuildInputs = [
     docbook_xsl
@@ -58,6 +68,7 @@ let unwrapped = mkXfceDerivation {
 
   meta = with lib; {
     description = "Xfce file manager";
+    mainProgram = "thunar";
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };

@@ -12,6 +12,7 @@
 , minizip
 , pkg-config
 , libsForQt5
+, wrapGAppsHook
 }:
 
 let
@@ -24,20 +25,26 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = finalAttrs.version;
-    hash = "sha256-oWrgYrN7s5tdGJ/GhA2ZaKDVqZq9411fHSoYnLKWDl8=";
+    hash = "sha256-+AwIYhnqp984Banwb7zmB5yzenExfLLU1oGJSxeTl/M=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapGAppsHook
     wrapQtAppsHook
   ];
+
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   buildInputs = [
     SDL2
@@ -74,5 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
+    mainProgram = "mgba";
   };
 })

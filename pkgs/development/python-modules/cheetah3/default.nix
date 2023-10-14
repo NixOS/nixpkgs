@@ -1,19 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "Cheetah3";
-  version = "3.2.6.post2";
+  pname = "cheetah3";
+  version = "3.3.2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "63157d7a00a273b59676b5be5aa817c75c37efc88478231f1a160f4cfb7f7878";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "CheetahTemplate3";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-okQz1wM3k43okKcZDRgHAnn5ScL0Pe1OtUvDBScEamY=";
   };
 
   doCheck = false; # Circular dependency
 
+  pythonImportsCheck = [
+    "Cheetah"
+  ];
+
   meta = with lib; {
-    homepage = "http://www.cheetahtemplate.org/";
     description = "A template engine and code generation tool";
+    homepage = "http://www.cheetahtemplate.org/";
+    changelog = "https://github.com/CheetahTemplate3/cheetah3/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ pjjw ];
   };

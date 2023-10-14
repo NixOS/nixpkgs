@@ -23,6 +23,9 @@ let
   update = "362";
   build = "ga";
 
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk8-bootstrap.override { gtkSupport = !headless; };
+
   openjdk8 = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
     version = "8u${update}-${build}";
@@ -37,9 +40,9 @@ let
 
     nativeBuildInputs = [ pkg-config lndir unzip ];
     buildInputs = [
-      cpio file which zip perl openjdk8-bootstrap zlib cups freetype alsa-lib
+      cpio file which zip perl zlib cups freetype alsa-lib
       libjpeg giflib libX11 libICE libXext libXrender libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk2 gnome_vfs GConf glib
     ];
@@ -64,7 +67,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk8-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-update-version=${update}"
       "--with-build-number=${build}"
       "--with-milestone=fcs"

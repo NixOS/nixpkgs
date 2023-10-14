@@ -1,14 +1,15 @@
-{ lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
 , netdata-go-plugins
-, bash, curl, jemalloc, libuv, zlib
+, bash, curl, jemalloc, libuv, zlib, libyaml
 , libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
 , withDBengine ? true, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withCloud ? (!stdenv.isDarwin), json_c
+, withCloudUi ? false
 , withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
@@ -17,22 +18,31 @@
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
-  version = "1.38.1";
+  version = "1.42.4";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-y+rjqS95JS1PU+iR8c7spcg1UoYCjpzbpunTAgTJ35U=";
+    hash = if withCloudUi
+      then "sha256-MaU9sOQD+Y03M+yoSWt1GuV+DrBlD7+r/Qm2JJ9s8EU="
+      else "sha256-41QntBt0MoO1hAsDb8LhHgvvNMzt9R1ZdgiPaR7NrPU=";
     fetchSubmodules = true;
+
+    # Remove v2 dashboard distributed under NCUL1. Make sure an empty
+    # Makefile.am exists, as autoreconf will get confused otherwise.
+    postFetch = lib.optionalString (!withCloudUi) ''
+      rm -rf $out/web/gui/v2/*
+      touch $out/web/gui/v2/Makefile.am
+    '';
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
   # bash is only used to rewrite shebangs
-  buildInputs = [ bash curl jemalloc libuv zlib ]
+  buildInputs = [ bash curl jemalloc libuv zlib libyaml ]
     ++ lib.optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ lib.optionals (!stdenv.isDarwin) [ libcap libuuid ]
     ++ lib.optionals withCups [ cups ]
@@ -49,15 +59,16 @@ stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
-    # The current IPC location is unsafe as it writes
-    # a fixed path in /tmp, which is world-writable.
-    # Therefore we put it into `/run/netdata`, which is owned
-    # by netdata only.
-    ./ipc-socket-in-run.patch
 
     # Avoid build-only inputs in closure leaked by configure command:
     #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
     ./skip-CONFIGURE_COMMAND.patch
+
+    # Allow building without non-free v2 dashboard.
+    (fetchpatch {
+      url = "https://github.com/peat-psuwit/netdata/commit/6ccbdd1500db2b205923968688d5f1777430a326.patch";
+      hash = "sha256-jAyk5HlxdjFn5IP6jOKP8/SXOraMQSA6r1krThe+s7g=";
+    })
   ];
 
   # Guard against unused buld-time development inputs in closure. Without
@@ -65,7 +76,7 @@ stdenv.mkDerivation rec {
   # to bootstrap tools:
   #   https://github.com/NixOS/nixpkgs/pull/175719
   # We pick zlib.dev as a simple canary package with pkg-config input.
-  disallowedReferences = if withDebug then [] else [ zlib.dev ];
+  disallowedReferences = lib.optional (!withDebug) zlib.dev;
 
   donStrip = withDebug;
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
@@ -103,11 +114,14 @@ stdenv.mkDerivation rec {
     "--disable-dbengine"
   ] ++ lib.optionals (!withCloud) [
     "--disable-cloud"
+  ] ++ lib.optionals (!withCloudUi) [
+    "--disable-cloud-ui"
   ];
 
   postFixup = ''
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
+    wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
   '';
 
   enableParallelBuild = true;
@@ -121,7 +135,9 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
-    license = licenses.gpl3Plus;
+    changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
+    license = [ licenses.gpl3Plus ]
+      ++ lib.optionals (withCloudUi) [ licenses.ncul1 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ raitobezarius ];
   };

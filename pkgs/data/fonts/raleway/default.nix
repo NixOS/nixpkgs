@@ -1,11 +1,11 @@
 { lib, fetchzip, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raleway";
   version = "4.101";
 
   src = fetchzip {
-    url = "https://github.com/theleagueof/raleway/releases/download/${self.version}/Raleway-${self.version}.tar.xz";
+    url = "https://github.com/theleagueof/raleway/releases/download/${finalAttrs.version}/Raleway-${finalAttrs.version}.tar.xz";
     hash = "sha256-itNHIMoRjiaqYAJoDNetkCquv47VAfel8MAzwsd//Ww=";
   };
 
@@ -35,6 +35,6 @@ stdenvNoCC.mkDerivation (self: {
     '';
     homepage = "https://www.theleagueofmoveabletype.com/raleway";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ minijackson Profpatsch ];
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 })

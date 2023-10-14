@@ -89,6 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/NixOS/nixpkgs/issues/53441
     ./unset-env-vars.patch
 
+    # Use flatpak from PATH to avoid references to `/nix/store` in `/desktop` files.
+    # Applications containing `DBusActivatable` entries should be able to find the flatpak binary.
+    # https://github.com/NixOS/nixpkgs/issues/138956
+    ./binary-path.patch
+
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
@@ -176,13 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
     PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
   '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      # Use flatpak from PATH in exported assets (e.g. desktop files).
-      --set FLATPAK_BINARY flatpak
-    )
-  '';
-
   passthru = {
     icon-validator-patch = substituteAll {
       src = ./fix-icon-validation.patch;
@@ -203,7 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Linux application sandboxing and distribution framework";
     homepage = "https://flatpak.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 })

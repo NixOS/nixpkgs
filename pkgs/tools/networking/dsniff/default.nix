@@ -1,5 +1,5 @@
 { gcc9Stdenv, lib, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl
-, rpcsvc-proto, libtirpc, libnsl
+, rpcsvc-proto, libtirpc, libnsl, libnl
 }:
 
 # We compile with GCC 9 since GCC 10 segfaults on the code
@@ -13,14 +13,14 @@ let
   */
   staticdb = symlinkJoin {
     inherit (db) name;
-    paths = with db.overrideAttrs(old: { dontDisableStatic = true; }); [ out dev ];
+    paths = with db.overrideAttrs { dontDisableStatic = true; }; [ out dev ];
     postBuild = ''
       rm $out/lib/*.so*
     '';
   };
   pcap = symlinkJoin {
     inherit (libpcap) name;
-    paths = [ (libpcap.overrideAttrs(old: { dontDisableStatic = true; })) ];
+    paths = [ (libpcap.overrideAttrs { dontDisableStatic = true; }) ];
     postBuild = ''
       cp -rs $out/include/pcap $out/include/net
       # prevent references to libpcap
@@ -29,15 +29,15 @@ let
   };
   net = symlinkJoin {
     inherit (libnet) name;
-    paths = [ (libnet.overrideAttrs(old: { dontDisableStatic = true; })) ];
+    paths = [ (libnet.overrideAttrs { dontDisableStatic = true; }) ];
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
     '';
   };
-  nids = libnids.overrideAttrs(old: {
+  nids = libnids.overrideAttrs {
     dontDisableStatic = true;
-  });
+  };
   ssl = symlinkJoin {
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];
@@ -59,8 +59,8 @@ in gcc9Stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook rpcsvc-proto ];
-  buildInputs = [ glib pcap libtirpc libnsl ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc";
+  buildInputs = [ glib pcap libtirpc libnsl libnl ];
+  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ltirpc -lnl-3 -lnl-genl-3";
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   postPatch = ''
     for patch in debian/patches/*.patch; do

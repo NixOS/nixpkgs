@@ -69,7 +69,7 @@ in
       #dialout = 27; # unused
       polkituser = 28;
       #utmp = 29; # unused
-      # ddclient = 30; # converted to DynamicUser = true
+      # ddclient = 30; # software removed
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -233,7 +233,7 @@ in
       # nix-serve = 199; # unused, removed 2020-12-12
       #tvheadend = 200; # dynamically allocated as of 2021-09-18
       uwsgi = 201;
-      gitit = 202;
+      # gitit = 202; # unused, module was removed 2023-04-03
       riemanntools = 203;
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
@@ -394,7 +394,7 @@ in
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
-      # ddclient = 30; # converted to DynamicUser = true
+      # ddclient = 30; # software removed
       davfs2 = 31;
       disnix = 33;
       osgi = 34;

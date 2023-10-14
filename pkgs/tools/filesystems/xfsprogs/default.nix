@@ -1,23 +1,24 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+{ lib, stdenv, buildPackages, fetchurl, gettext, pkg-config
 , icu, libuuid, readline, inih, liburcu
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.2.0";
+  version = "6.4.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-1n3LpaKOCQS2CIa25fdSvHycOlxwlhU4VbWtyp24bFE=";
+    hash = "sha256-wxhoQYv79Jo6nEf8cM3/3p2W9P8AUb0EoIgeZlRkgQQ=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
-    autoconf automake libtool gettext pkg-config
+    gettext pkg-config
     libuuid # codegen tool uses libuuid
+    liburcu # required by crc32selftest
   ];
   buildInputs = [ readline icu inih liburcu ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
@@ -33,7 +34,6 @@ stdenv.mkDerivation rec {
       substituteInPlace "$file" \
         --replace '@sbindir@' '/run/current-system/sw/bin'
     done
-    make configure
     patchShebangs ./install-sh
   '';
 

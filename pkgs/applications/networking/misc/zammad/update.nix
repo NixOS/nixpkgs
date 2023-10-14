@@ -3,6 +3,7 @@
 , makeWrapper
 , bundix
 , common-updater-scripts
+, xidel
 , jq
 , nix-prefetch-github
 , yarn
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bundix
     common-updater-scripts
+    xidel
     jq
     nix-prefetch-github
     yarn

@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub, intltool, pkg-config, qmake, wrapQtAppsHook, libqalculate, qtbase, qttools, qtsvg, qtwayland }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qalculate-qt";
-  version = "4.6.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "qalculate-qt";
-    rev = "v${version}";
-    hash = "sha256-/TDzjlB8rW/TorndcLbxY9pc3q7vY3M6eLxBRfnBs9Y=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-hH+orU+5PmPcrhkLKCdsDhVCrD8Mvxp2RPTGSlsUP7Y=";
   };
 
-  nativeBuildInputs = [ qmake intltool pkg-config wrapQtAppsHook ];
-  buildInputs = [ libqalculate qtbase qttools qtsvg ]
+  nativeBuildInputs = [ qmake intltool pkg-config qttools wrapQtAppsHook ];
+  buildInputs = [ libqalculate qtbase qtsvg ]
     ++ lib.optionals stdenv.isLinux [ qtwayland ];
 
   postPatch = ''
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
-}
+})

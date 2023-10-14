@@ -11,7 +11,6 @@
 , iproute2
 , iptables
 , util-linux
-, which
 , wrapGAppsHook
 , xclip
 , runtimeShell
@@ -19,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
-  version = "1.3.4";
+  version = "1.4.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-0GBob9BUwiE5cFGdK8AdwsTjTOdc+AIWqUGN/gFfOqI=";
+    sha256 = "sha256-0AkNzMIumvgnVcLKX72E2+Eg54Y9j7tdIYPsroOTLWA=";
   };
 
   buildInputs = [
@@ -39,6 +38,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    dbus-python
     gbinder-python
     pyclip
     pygobject3
@@ -63,6 +63,7 @@ python3Packages.buildPythonApplication rec {
 
     wrapPythonProgramsIn $out/lib/waydroid/ "${lib.concatStringsSep " " [
       "$out"
+      python3Packages.dbus-python
       python3Packages.gbinder-python
       python3Packages.pygobject3
       python3Packages.pyclip
@@ -70,15 +71,11 @@ python3Packages.buildPythonApplication rec {
       kmod
       lxc
       util-linux
-      which
       xclip
     ]}"
 
     substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
       --replace '"sh"' '"${runtimeShell}"'
-
-    substituteInPlace $out/share/applications/*.desktop \
-      --replace  "/usr" "$out"
   '';
 
   meta = with lib; {

@@ -1,9 +1,9 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , alsa-lib
 , appstream-glib
+, cargo
 , cmake
 , desktop-file-utils
 , glib
@@ -17,6 +17,7 @@
 , poppler
 , python3
 , rustPlatform
+, rustc
 , shared-mime-info
 , wrapGAppsHook4
 , AudioUnit
@@ -24,31 +25,23 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.18";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
-    hash = "sha256-N07Y9kmGvMFS0Kq4i2CltJvNTuqbXausZZGjAQRDmNU=";
+    hash = "sha256-QcgmL6lLi/3QXnlcEsVyTqNUfjSm+R+nhRzRvw8M9Qc=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ink-stroke-modeler-rs-0.1.0" = "sha256-+R3T/9Ty+F6YxxtA0Un6UhFyKbGOvqBKwHt4WSHWhsk=";
-      "librsvg-2.55.92" = "sha256-WVwxjjWR/TloSmyzH8Jo1mTjLHVifBw1Xn965wuoEDs=";
-      "piet-0.6.2" = "sha256-76yeX0yQMC0hh6u2xT/kS/2fjs+GO+nCks2fnOImf0c=";
+      "ink-stroke-modeler-rs-0.1.0" = "sha256-1abfrPehOGc/ye/iFIwYPd6HJX6P8OP2vGBSJfeo+c8=";
+      "librsvg-2.56.2" = "sha256-uCHKDC4nc7J0k9qsmzF6etkWOoNq51Dddd9uQw5DOT0=";
+      "piet-0.6.2" = "sha256-If0qiZkgXeLvsrECItV9/HmhTk1H52xmVO7cUsD9dcU=";
     };
   };
-
-  patches = [
-    # https://github.com/flxzt/rnote/pull/569
-    (fetchpatch {
-      url = "https://github.com/flxzt/rnote/commit/8585b446c08b246f3d55359026415cb3d242d44e.patch";
-      hash = "sha256-ePpTQ/3mzZTNjU9P4vTu9CM0vX8+r8b6njuj7hDgFCg=";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream-glib # For appstream-util
@@ -60,13 +53,17 @@ stdenv.mkDerivation rec {
     python3 # For the postinstall script
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    rustPlatform.rust.rustc
+    cargo
+    rustc
     shared-mime-info # For update-mime-database
     wrapGAppsHook4
   ];
 
   dontUseCmakeConfigure = true;
+
+  mesonFlags = [
+    (lib.mesonBool "cli" true)
+  ];
 
   buildInputs = [
     glib
@@ -85,7 +82,6 @@ stdenv.mkDerivation rec {
     pushd build-aux
     chmod +x cargo_build.py meson_post_install.py
     patchShebangs cargo_build.py meson_post_install.py
-    substituteInPlace meson_post_install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
     popd
   '';
 

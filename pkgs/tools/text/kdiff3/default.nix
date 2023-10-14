@@ -14,11 +14,11 @@
 
 mkDerivation rec {
   pname = "kdiff3";
-  version = "1.10.0";
+  version = "1.10.6";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-s/l+Gz6BF1VKeljVj48PaT/wMKQrvLcwj7RPhZWM1Ss=";
+    hash = "sha256-EzOu+dZjbGs0ZqF/0sXZbpGdTrUh6isjUoJUETau+zE=";
   };
 
   buildInputs = [ boost ];

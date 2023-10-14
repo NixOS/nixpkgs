@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , numpy
-, scikitimage
+, scikit-image
 , lib
 , opencv3
 }:
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    scikitimage
+    scikit-image
     opencv3
   ];
 

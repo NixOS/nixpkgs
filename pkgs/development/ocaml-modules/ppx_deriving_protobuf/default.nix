@@ -6,7 +6,7 @@ buildDunePackage rec {
   pname = "ppx_deriving_protobuf";
   version = "3.0.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-ppx/ppx_deriving_protobuf/releases/download/v${version}/ppx_deriving_protobuf-v${version}.tbz";

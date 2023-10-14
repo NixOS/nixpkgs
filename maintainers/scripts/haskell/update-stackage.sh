@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i bash -p nix curl jq nix-prefetch-github git gnused gnugrep -I nixpkgs=.
+#! nix-shell -i bash -p nix curl jq git gnused gnugrep -I nixpkgs=.
 # shellcheck shell=bash
 
 set -eu -o pipefail
@@ -58,6 +58,7 @@ sed -r \
     -e '/ distribution-nixpkgs /d' \
     -e '/ jailbreak-cabal /d' \
     -e '/ language-nix /d' \
+    -e '/ hackage-db /d' \
     -e '/ cabal-install /d' \
     -e '/ lsp /d' \
     -e '/ lsp-types /d' \
@@ -65,6 +66,7 @@ sed -r \
     -e '/ hie-bios /d' \
     -e '/ ShellCheck /d' \
     -e '/ Agda /d' \
+    -e '/ stack /d' \
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.

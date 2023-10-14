@@ -3,7 +3,6 @@
 , fetchPypi
 , python-dateutil
 , jmespath
-, docutils
 , urllib3
 , pytestCheckHook
 , jsonschema
@@ -11,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "botocore";
-  version = "1.29.79"; # N.B: if you change this, change boto3 and awscli to a matching version
+  version = "1.31.9"; # N.B: if you change this, change boto3 and awscli to a matching version
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-x97UQGK+07kolEz7CeFXjtP+0OTJjeTyM/PCBWqNSR4=";
+    hash = "sha256-vYSdOslfF4E4Xtgx11OgSj7IcKWdZZgXWq7dcdwrr18=";
   };
 
   propagatedBuildInputs = [
     python-dateutil
     jmespath
-    docutils
     urllib3
   ];
 
@@ -29,8 +28,6 @@ buildPythonPackage rec {
     pytestCheckHook
     jsonschema
   ];
-
-  doCheck = true;
 
   disabledTestPaths = [
     # Integration tests require networking

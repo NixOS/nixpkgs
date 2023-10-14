@@ -2,6 +2,8 @@ self: super: {
 
     age = super.callPackage ./ext/age.nix { };
 
+    apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
+
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
@@ -28,6 +30,8 @@ self: super: {
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
 
+    pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
+
     pgvector = super.callPackage ./ext/pgvector.nix { };
 
     plpgsql_check = super.callPackage ./ext/plpgsql_check.nix { };
@@ -45,6 +49,8 @@ self: super: {
     pg_cron = super.callPackage ./ext/pg_cron.nix { };
 
     pg_topn = super.callPackage ./ext/pg_topn.nix { };
+
+    pg_net = super.callPackage ./ext/pg_net.nix { };
 
     pgtap = super.callPackage ./ext/pgtap.nix { };
 
@@ -70,6 +76,8 @@ self: super: {
     pg_relusage = super.callPackage ./ext/pg_relusage.nix { };
 
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
+
+    promscale_extension = super.callPackage ./ext/promscale_extension.nix { };
 
     repmgr = super.callPackage ./ext/repmgr.nix { };
 

@@ -34,16 +34,25 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "man" ];
 
-  postBuild = ''
-    just man
-  '';
-
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "mutagen-0.2.0" = "sha256-AZj+CXhaVPFFxg4Vwuzrlg87fBk+mz5FJFfVWc+PrSo=";
+      "mutagen-0.2.0" = "sha256-FnSeNI9lAcxonRFTu7wnP/M/d5UbMzSZ97w+mUqoEg8=";
     };
   };
+
+  dontUseJustBuild = true;
+  dontUseJustCheck = true;
+  dontUseJustInstall = true;
+
+  postPatch = ''
+    # update Cargo.lock to work with openssl 3
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
+
+  postBuild = ''
+    just man
+  '';
 
   postInstall = ''
     installShellCompletion completions/dog.{bash,fish,zsh}

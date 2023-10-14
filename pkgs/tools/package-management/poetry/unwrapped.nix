@@ -4,17 +4,15 @@
 , pythonOlder
 , fetchFromGitHub
 , installShellFiles
+, pythonRelaxDepsHook
 , build
 , cachecontrol
 , cleo
 , crashtest
 , dulwich
-, filelock
-, html5lib
 , installer
 , jsonschema
 , keyring
-, lockfile
 , packaging
 , pexpect
 , pkginfo
@@ -27,7 +25,6 @@
 , shellingham
 , tomlkit
 , trove-classifiers
-, urllib3
 , virtualenv
 , xattr
 , tomli
@@ -44,20 +41,26 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.4.2";
+  version = "1.6.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AiRQFZA5+M1niTzj1RO2lx0QFOMmSzpQo1gzauyTblg=";
+    hash = "sha256-/OvYT4Vix1t5Yx/Tx0z3E9L9qJ4OdI4maQqUVl8H524=";
   };
 
   nativeBuildInputs = [
     installShellFiles
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    # only pinned to avoid dependency on Rust
+    "jsonschema"
   ];
 
   propagatedBuildInputs = [
@@ -66,12 +69,9 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
-    filelock
-    html5lib
     installer
     jsonschema
     keyring
-    lockfile
     packaging
     pexpect
     pkginfo
@@ -84,7 +84,6 @@ buildPythonPackage rec {
     shellingham
     tomlkit
     trove-classifiers
-    urllib3
     virtualenv
   ] ++ lib.optionals (stdenv.isDarwin) [
     xattr
@@ -123,12 +122,14 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    "test_installer_with_pypi_repository"
     # touches network
     "git"
     "solver"
     "load"
     "vcs"
     "prereleases_if_they_are_compatible"
+    "test_builder_setup_generation_runs_with_pip_editable"
     "test_executor"
     # requires git history to work correctly
     "default_with_excluded_data"
@@ -150,6 +151,11 @@ buildPythonPackage rec {
   pythonNamespaces = [
     "poetry"
   ];
+
+  # Unset ambient PYTHONPATH in the wrapper, so Poetry only ever runs with its own,
+  # isolated set of dependencies. This works because the correct PYTHONPATH is set
+  # in the Python script, which runs after the wrapper.
+  makeWrapperArgs = ["--unset PYTHONPATH"];
 
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";

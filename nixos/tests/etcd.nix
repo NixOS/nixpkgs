@@ -19,7 +19,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
         node.wait_for_unit("etcd.service")
 
     with subtest("should write and read some values to etcd"):
-        node.succeed("etcdctl set /foo/bar 'Hello world'")
+        node.succeed("etcdctl put /foo/bar 'Hello world'")
         node.succeed("etcdctl get /foo/bar | grep 'Hello world'")
   '';
 })

@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
-, pytest-mypy
 , pythonOlder
 , redis
 }:
@@ -25,7 +24,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-mypy
   ];
 
   disabledTests = [
@@ -41,6 +39,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/WoLpH/portalocker";
     license = licenses.psfl;
     maintainers = with maintainers; [ jonringer ];
-    platforms = platforms.unix; # Windows has a dependency on pypiwin32
   };
 }

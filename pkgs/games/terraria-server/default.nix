@@ -1,4 +1,11 @@
-{ stdenv, lib, file, fetchurl, autoPatchelfHook, unzip }:
+{ lib
+, stdenv
+, fetchurl
+
+, autoPatchelfHook
+, unzip
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "terraria-server";
@@ -10,8 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Mk+5s9OlkyTLXZYVT0+8Qcjy2Sb5uy2hcC8CML0biNY=";
   };
 
-  buildInputs = [ file ];
   nativeBuildInputs = [ autoPatchelfHook unzip ];
+  buildInputs = [ stdenv.cc.cc.libgcc zlib ];
 
   installPhase = ''
     runHook preInstall
@@ -29,6 +36,7 @@ stdenv.mkDerivation rec {
     description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ncfavier ];
+    mainProgram = "TerrariaServer";
+    maintainers = with maintainers; [ ncfavier tomasajt ];
   };
 }

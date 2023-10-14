@@ -3,7 +3,7 @@
 with lib;
 
 let
-  inherit (libretro) genesis-plus-gx mgba snes9x;
+  inherit (libretro) fuse genesis-plus-gx mgba nestopia snes9x twenty-fortyeight;
 in
 
 let self = rec {
@@ -62,9 +62,15 @@ let self = rec {
 
   libretro = callPackage ../applications/video/kodi/addons/libretro { };
 
+  libretro-2048 = callPackage ../applications/video/kodi/addons/libretro-2048 { inherit twenty-fortyeight; };
+
+  libretro-fuse = callPackage ../applications/video/kodi/addons/libretro-fuse { inherit fuse; };
+
   libretro-genplus = callPackage ../applications/video/kodi/addons/libretro-genplus { inherit genesis-plus-gx; };
 
   libretro-mgba = callPackage ../applications/video/kodi/addons/libretro-mgba { inherit mgba; };
+
+  libretro-nestopia = callPackage ../applications/video/kodi/addons/libretro-nestopia { inherit nestopia; };
 
   libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
 
@@ -96,9 +102,27 @@ let self = rec {
 
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
+  vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+
+  vfs-rar = callPackage ../applications/video/kodi/addons/vfs-rar { };
+
   vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
 
-  vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+  visualization-fishbmc = callPackage ../applications/video/kodi/addons/visualization-fishbmc { };
+
+  visualization-goom = callPackage ../applications/video/kodi/addons/visualization-goom { };
+
+  visualization-matrix = callPackage ../applications/video/kodi/addons/visualization-matrix { };
+
+  visualization-pictureit = callPackage ../applications/video/kodi/addons/visualization-pictureit { };
+
+  visualization-projectm = callPackage ../applications/video/kodi/addons/visualization-projectm { };
+
+  visualization-shadertoy = callPackage ../applications/video/kodi/addons/visualization-shadertoy { };
+
+  visualization-spectrum = callPackage ../applications/video/kodi/addons/visualization-spectrum { };
+
+  visualization-starburst = callPackage ../applications/video/kodi/addons/visualization-starburst { };
 
   visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
 
@@ -119,6 +143,8 @@ let self = rec {
   future = callPackage ../applications/video/kodi/addons/future { };
 
   idna = callPackage ../applications/video/kodi/addons/idna { };
+
+  infotagger = callPackage ../applications/video/kodi/addons/infotagger { };
 
   inputstream-adaptive = callPackage ../applications/video/kodi/addons/inputstream-adaptive { };
 

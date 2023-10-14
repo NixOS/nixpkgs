@@ -85,7 +85,6 @@ in stdenv.mkDerivation rec {
     "--enable-mesh"
     "--enable-midi"
     "--enable-nfc"
-    "--enable-sap"
     "--enable-sixaxis"
     "--enable-btpclient"
     "--enable-hid2hci"

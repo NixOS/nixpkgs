@@ -1,12 +1,17 @@
 import nixos_render_docs as nrd
 import pytest
+import textwrap
 
 from sample_md import sample1
+
+class Renderer(nrd.html.HTMLRenderer):
+    def _pull_image(self, src: str) -> str:
+        return src
 
 class Converter(nrd.md.Converter[nrd.html.HTMLRenderer]):
     def __init__(self, manpage_urls: dict[str, str], xrefs: dict[str, nrd.manual_structure.XrefTarget]):
         super().__init__()
-        self._renderer = nrd.html.HTMLRenderer(manpage_urls, xrefs)
+        self._renderer = Renderer(manpage_urls, xrefs)
 
 def unpretty(s: str) -> str:
     return "".join(map(str.strip, s.splitlines())).replace('␣', ' ').replace('↵', '\n')
@@ -68,6 +73,78 @@ def test_xrefs() -> None:
     with pytest.raises(nrd.html.UnresolvedXrefError) as exc:
         c._render("[](#baz)")
     assert exc.value.args[0] == 'bad local reference, id #baz not known'
+
+def test_images() -> None:
+    c = Converter({}, {})
+    assert c._render("![*alt text*](foo \"title text\")") == unpretty("""
+      <p>
+       <div class="mediaobject">
+        <img src="foo" alt="*alt text*" title="title text" />
+       </div>
+      </p>
+    """)
+
+def test_tables() -> None:
+    c = Converter({}, {})
+    assert c._render(textwrap.dedent("""
+      | d | l | m | r |
+      |---|:--|:-:|--:|
+      | a | b | c | d |
+    """)) == unpretty("""
+      <div class="informaltable">
+       <table class="informaltable" border="1">
+        <colgroup>
+         <col align="left" />
+         <col align="left" />
+         <col align="center" />
+         <col align="right" />
+        </colgroup>
+        <thead>
+         <tr>
+          <th align="left">d</th>
+          <th align="left">l</th>
+          <th align="center">m</th>
+          <th align="right">r</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr>
+          <td align="left">a</td>
+          <td align="left">b</td>
+          <td align="center">c</td>
+          <td align="right">d</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+    """)
+
+def test_footnotes() -> None:
+    c = Converter({}, {
+        "bar": nrd.manual_structure.XrefTarget("bar", "", None, None, ""),
+        "bar.__back.0": nrd.manual_structure.XrefTarget("bar.__back.0", "", None, None, ""),
+        "bar.__back.1": nrd.manual_structure.XrefTarget("bar.__back.1", "", None, None, ""),
+    })
+    assert c._render(textwrap.dedent("""
+      foo [^bar] baz [^bar]
+
+      [^bar]: note
+    """)) == unpretty("""
+      <p>
+       foo <a href="#bar" class="footnote" id="bar.__back.0"><sup class="footnote">[1]</sup></a>␣
+       baz <a href="#bar" class="footnote" id="bar.__back.1"><sup class="footnote">[1]</sup></a>
+      </p>
+      <div class="footnotes">
+       <br />
+       <hr style="width:100; text-align:left;margin-left: 0" />
+       <div id="bar" class="footnote">
+         <p>
+          note<a href="#bar.__back.0" class="para"><sup class="para">[1]</sup></a>
+          <a href="#bar.__back.1" class="para"><sup class="para">[1]</sup></a>
+         </p>
+        </div>
+       </div>
+    """)
 
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' }, {})

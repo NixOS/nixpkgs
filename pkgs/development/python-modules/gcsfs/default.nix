@@ -12,13 +12,14 @@
 , ujson
 , aiohttp
 , crcmod
+, pytest-timeout
 , pytest-vcr
 , vcrpy
 }:
 
 buildPythonPackage rec {
   pname = "gcsfs";
-  version = "2022.10.0";
+  version = "2023.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fsspec";
     repo = pname;
-    rev = version;
-    hash = "sha256-+S4AziibYWos/hZ1v3883b1Vv3y4xjIDUrQ8c2XJ1MQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-FHS+g0SuYH9OPiE/+p2SHrsWfzBQ82GM6hTph8koh+o=";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-vcr
+    pytest-timeout
     pytestCheckHook
     vcrpy
   ];

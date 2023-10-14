@@ -1,8 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nose
+, nose3
 , pythonOlder
+, pythonRelaxDepsHook
 , semver
 }:
 
@@ -16,16 +17,24 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "reubano";
     repo = "pkutils";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-AK+xX+LPz6IVLZedsqMUm7G28ue0s3pXgIzxS4EHHLE=";
   };
+
+  pythonRelaxDeps = [
+    "semver"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     semver
   ];
 
   nativeCheckInputs = [
-    nose
+    nose3
   ];
 
   checkPhase = ''

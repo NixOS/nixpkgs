@@ -6,10 +6,12 @@ let
   cfg = config.services.prometheus.alertmanager;
   mkConfigFile = pkgs.writeText "alertmanager.yml" (builtins.toJSON cfg.configuration);
 
-  checkedConfig = file: pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
-    ln -s ${file} $out
-    amtool check-config $out
-  '';
+  checkedConfig = file:
+    if cfg.checkConfig then
+      pkgs.runCommand "checked-config" { buildInputs = [ cfg.package ]; } ''
+        ln -s ${file} $out
+        amtool check-config $out
+      '' else file;
 
   alertmanagerYml = let
     yml = if cfg.configText != null then
@@ -67,6 +69,20 @@ in {
           defines the text that is written to alertmanager.yml. If null, the
           contents of alertmanager.yml is generated from the structured config
           options.
+        '';
+      };
+
+      checkConfig = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Check configuration with `amtool check-config`. The call to `amtool` is
+          subject to sandboxing by Nix.
+
+          If you use credentials stored in external files
+          (`environmentFile`, etc),
+          they will not be visible to `amtool`
+          and it will report errors, despite a correct configuration.
         '';
       };
 

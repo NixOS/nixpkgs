@@ -1,8 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, unzip
-, jre
 , jdk
 , ant
 , makeWrapper
@@ -24,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems jdk ant makeWrapper wrapGAppsHook ];
-  buildInputs = [ glib jre ];
+  buildInputs = [ glib jdk ];
 
   buildPhase = ''
     runHook preBuild
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/bin $out/share/java
     cp pattypan.jar $out/share/java/pattypan.jar
-    makeWrapper ${jre}/bin/java $out/bin/pattypan \
+    makeWrapper ${jdk}/bin/java $out/bin/pattypan \
       --add-flags "-cp $out/share/java/pattypan.jar pattypan.Launcher"
     runHook postInstall
   '';

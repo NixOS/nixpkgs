@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "cpupower";
-  inherit (kernel) version src;
+  inherit (kernel) version src patches;
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ pciutils ];

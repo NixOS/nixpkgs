@@ -12,7 +12,7 @@
 , mkDerivation
 , qtgraphicaleffects
 , qtquickcontrols2
-, qttranslations
+, qttools
 }:
 
 # How to update Linphone? (The Qt desktop app)
@@ -33,7 +33,7 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "5.0.8";
+  version = "5.0.16";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +41,7 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    hash = "sha256-e/0yGHtOHMgPhaF5xELodKS9/v/mbnT3ZpE12lXAocU=";
+    hash = "sha256-zS0JyK+HGiHY7tPdl3RK6fJJOUS+fKM1u3npNxDAAYE=";
   };
 
   patches = [
@@ -73,11 +73,11 @@ mkDerivation rec {
     minizip-ng
     qtgraphicaleffects
     qtquickcontrols2
-    qttranslations
   ];
 
   nativeBuildInputs = [
     cmake
+    qttools
   ];
 
   cmakeFlags = [

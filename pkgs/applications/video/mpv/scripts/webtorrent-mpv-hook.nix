@@ -1,4 +1,4 @@
-{ lib , buildNpmPackage , fetchFromGitHub, nodejs }:
+{ lib, buildNpmPackage, fetchFromGitHub, nodejs, python3 }:
 
 buildNpmPackage rec {
   pname = "webtorrent-mpv-hook";
@@ -20,6 +20,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-GpNUJ5ZCgMjSYLqsIE/RwkTSFT3uAhxrHPe7XvGDRHE=";
   makeCacheWritable = true;
+
+  nativeBuildInputs = [
+    python3 # Fixes node-gyp on aarch64-linux
+  ];
 
   postInstall = ''
     mkdir -p $out/share/mpv/scripts/

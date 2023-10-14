@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "django-rq";
-  version = "2.7.0";
+  version = "2.8.1";
   format = "setuptools";
   disabled = isPy27;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "rq";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MUIwgG8GKL+V5GgiC7gZXn5tlSVrmTj/IFiP+hVB7Ks=";
+    hash = "sha256-Rabw6FIoSg9Cj4+tRO3BmBAeo9yr8KwU5xTPFL0JkOs=";
   };
 
   propagatedBuildInputs = [

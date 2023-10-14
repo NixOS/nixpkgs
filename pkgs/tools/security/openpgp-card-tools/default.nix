@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
+, fetchFromGitea
 , pkg-config
 , pcsclite
 , nettle
@@ -12,14 +12,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openpgp-card-tools";
-  version = "0.9.2";
+  version = "0.9.4";
 
-  src = fetchCrate {
-    inherit pname version;
-    sha256 = "sha256-dpXoUJaTrBr4QMehE03BD+704lTNBvfGoAIv9d17A6Q=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "openpgp-card";
+    repo = "openpgp-card-tools";
+    rev = "v${version}";
+    hash = "sha256-ISIABjuh0BC6OUFa5I9Wou+av7Dp4bZH8Aazi6x7cqY=";
   };
 
-  cargoHash = "sha256-qxKLpxYQTb+8NxOeimnR2SlyfPiZPl0gX8JCSqjZyM0=";
+  cargoHash = "sha256-+EEpoI9OQvnJR6bVbEuLn3O7w6BchjBzr+oMGsWdP/k=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ pcsclite nettle ] ++ lib.optionals stdenv.isDarwin [ PCSC ];

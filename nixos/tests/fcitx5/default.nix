@@ -1,7 +1,8 @@
-import ../make-test-python.nix ({ pkgs, ... }:
-# copy_from_host works only for store paths
+import ../make-test-python.nix ({ lib, ... }:
 rec {
   name = "fcitx5";
+  meta.maintainers = with lib.maintainers; [ nevivurn ];
+
   nodes.machine = { pkgs, ... }:
   {
     imports = [
@@ -30,9 +31,48 @@ rec {
     i18n.inputMethod = {
       enabled = "fcitx5";
       fcitx5.addons = [
-        pkgs.fcitx5-m17n
         pkgs.fcitx5-chinese-addons
+        pkgs.fcitx5-hangul
+        pkgs.fcitx5-m17n
+        pkgs.fcitx5-mozc
       ];
+      fcitx5.settings = {
+        globalOptions = {
+          "Hotkey"."EnumerateSkipFirst" = "False";
+          "Hotkey/TriggerKeys"."0" = "Control+space";
+          "Hotkey/EnumerateForwardKeys"."0" = "Alt+Shift_L";
+          "Hotkey/EnumerateBackwardKeys"."0" = "Alt+Shift_R";
+        };
+        inputMethod = {
+          "GroupOrder" = {
+            "0" = "NixOS_test";
+          };
+          "Groups/0" = {
+            "Default Layout" = "us";
+            "DefaultIM" = "wbx";
+            "Name" = "NixOS_test";
+          };
+          "Groups/0/Items/0" = {
+            "Name" = "keyboard-us";
+          };
+          "Groups/0/Items/1" = {
+            "Layout" = "us";
+            "Name" = "wbx";
+          };
+          "Groups/0/Items/2" = {
+            "Layout" = "us";
+            "Name" = "hangul";
+          };
+          "Groups/0/Items/3" = {
+            "Layout" = "us";
+            "Name" = "m17n_sa_harvard-kyoto";
+          };
+          "Groups/0/Items/4" = {
+            "Layout" = "us";
+            "Name" = "mozc";
+          };
+        };
+      };
     };
   };
 
@@ -40,32 +80,20 @@ rec {
     let
       user = nodes.machine.users.users.alice;
       xauth         = "${user.home}/.Xauthority";
-      fcitx_confdir = "${user.home}/.config/fcitx5";
     in
       ''
-            # We need config files before login session
-            # So copy first thing
-
-            # Point and click would be expensive,
-            # So configure using files
-            machine.copy_from_host(
-                "${./profile}",
-                "${fcitx_confdir}/profile",
-            )
-            machine.copy_from_host(
-                "${./config}",
-                "${fcitx_confdir}/config",
-            )
-
             start_all()
 
-            machine.wait_for_file("${xauth}}")
+            machine.wait_for_x()
+            machine.wait_for_file("${xauth}")
             machine.succeed("xauth merge ${xauth}")
-
             machine.sleep(5)
 
-            machine.succeed("su - ${user.name} -c 'alacritty&'")
-            machine.succeed("su - ${user.name} -c 'fcitx5&'")
+            machine.succeed("su - ${user.name} -c 'kill $(pgrep fcitx5)'")
+            machine.sleep(1)
+
+            machine.succeed("su - ${user.name} -c 'alacritty >&2 &'")
+            machine.succeed("su - ${user.name} -c 'fcitx5 >&2 &'")
             machine.sleep(10)
 
             ### Type on terminal
@@ -74,7 +102,6 @@ rec {
 
             ### Start fcitx Unicode input
             machine.send_key("ctrl-alt-shift-u")
-            machine.sleep(5)
             machine.sleep(1)
 
             ### Search for smiling face
@@ -94,9 +121,15 @@ rec {
             machine.sleep(1)
 
             ### Default wubi, enter 一下
-            machine.send_chars("gggh")
+            machine.send_chars("gggh ")
             machine.sleep(1)
-            machine.send_key("\n")
+
+            ### Switch to Hangul
+            machine.send_key("alt-shift")
+            machine.sleep(1)
+
+            ### Enter 한
+            machine.send_chars("gks")
             machine.sleep(1)
 
             ### Switch to Harvard Kyoto
@@ -104,10 +137,15 @@ rec {
             machine.sleep(1)
 
             ### Enter क
-            machine.send_chars("ka ")
+            machine.send_chars("ka")
             machine.sleep(1)
 
+            ### Switch to Mozc
             machine.send_key("alt-shift")
+            machine.sleep(1)
+
+            ### Enter か
+            machine.send_chars("ka\n")
             machine.sleep(1)
 
             ### Turn off Fcitx
@@ -121,7 +159,7 @@ rec {
 
             ### Verify that file contents are as expected
             file_content = machine.succeed("cat ${user.home}/fcitx_test.out")
-            assert file_content == "☺一下क\n"
-            ''
+            assert file_content == "☺一下한कか\n"
+      ''
   ;
 })

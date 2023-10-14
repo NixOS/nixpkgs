@@ -24,6 +24,7 @@
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
+, symlinkJoin
 }:
 
 # The `srcs` parameter can be used to override the kicad source code
@@ -136,6 +137,17 @@ stdenv.mkDerivation rec {
     ++ optionals (withScripting)
     [ python.pkgs.wrapPython ];
 
+  # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
+  # but it's used to find both the templates and the symbol/footprint library tables
+  # https://gitlab.com/kicad/code/kicad/-/issues/14792
+  template_dir = symlinkJoin {
+    name = "KiCad_template_dir";
+    paths = with passthru.libraries; [
+      "${templates}/share/kicad/template"
+      "${footprints}/share/kicad/template"
+      "${symbols}/share/kicad/template"
+    ];
+  };
   # We are emulating wrapGAppsHook, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
@@ -150,9 +162,7 @@ stdenv.mkDerivation rec {
     "--set-default MOZ_DBUS_REMOTE 1"
     "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
     "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD7_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD7_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD7_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+    "--set-default KICAD7_TEMPLATE_DIR ${template_dir}"
   ]
   ++ optionals (with3d)
   [
@@ -219,18 +229,9 @@ stdenv.mkDerivation rec {
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ evils kiwi ];
-    # kicad is cross platform
+    maintainers = with lib.maintainers; [ evils ];
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin;
-
-    hydraPlatforms = if (with3d) then [ ] else platforms;
-    # We can't download the 3d models on Hydra,
-    # they are a ~1 GiB download and they occupy ~5 GiB in store.
-    # as long as the base and libraries (minus 3d) are build,
-    # this wrapper does not need to get built
-    # the kicad-*small "packages" cause this to happen
-
     mainProgram = "kicad";
   };
 }

@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
       (stdenv.hostPlatform.libc == "glibc")
       "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
 
-  buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common ];
-  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config unzip ];
+  buildInputs = [ gettext glib libxml2 gnome-common ];
+  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config unzip gobject-introspection ];
 
   meta = with lib; {
     description = "An interface library to access tags for identifying languages";

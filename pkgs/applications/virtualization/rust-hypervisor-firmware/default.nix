@@ -1,8 +1,9 @@
 { lib
 , fetchFromGitHub
-, makeRustPlatform
 , hostPlatform
 , targetPlatform
+, cargo
+, rustc
 , lld
 }:
 
@@ -24,7 +25,12 @@ let
     };
   };
 
-  inherit (cross) rustPlatform;
+  # inherit (cross) rustPlatform;
+  # ^ breaks because we are doing a no_std embedded build with a custom sysroot,
+  # but the fast_cross rustc wrapper already passes a sysroot argument
+  rustPlatform = cross.makeRustPlatform {
+    inherit rustc cargo;
+  };
 
 in
 
@@ -40,6 +46,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-edi6/Md6KebKM3wHArZe1htUCg0/BqMVZKA4xEH25GI=";
+
+  # lld: error: unknown argument '-Wl,--undefined=AUDITABLE_VERSION_INFO'
+  # https://github.com/cloud-hypervisor/rust-hypervisor-firmware/issues/249
+  auditable = false;
 
   RUSTC_BOOTSTRAP = 1;
 

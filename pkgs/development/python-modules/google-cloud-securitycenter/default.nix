@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.19.1";
+  version = "1.23.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xI9CFp3esSxOsOsO5mVWUkMROpuX2QjzKVhKCBUpDhc=";
+    hash = "sha256-8yBC/+jxKsyQ5pz+VBSgnwqB/XxXCChpjGLAjMDoQow=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-securitycenter";
     changelog = "https://github.com/googleapis/python-securitycenter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

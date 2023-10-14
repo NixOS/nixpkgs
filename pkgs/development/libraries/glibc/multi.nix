@@ -1,4 +1,5 @@
-{ runCommand, glibc, glibc32
+{ lib
+, runCommand, glibc, glibc32
 }:
 
 let
@@ -7,7 +8,15 @@ let
 in
 runCommand "${nameVersion.name}-multi-${nameVersion.version}"
   # out as the first output is an exception exclusive to glibc
-  { outputs = [ "out" "bin" "dev" ]; } # TODO: no static version here (yet)
+  {
+    outputs = [ "out" "bin" "dev" ];  # TODO: no static version here (yet)
+    passthru = {
+      libgcc = lib.lists.filter (x: x!=null) [
+        (glibc64.libgcc or null)
+        (glibc32.libgcc or null)
+      ];
+    };
+  }
   ''
     mkdir -p "$out/lib"
     ln -s '${glibc64.out}'/lib/* "$out/lib"

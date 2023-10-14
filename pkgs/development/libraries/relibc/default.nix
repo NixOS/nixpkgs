@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, buildPackages, makeRustPlatform }:
+{ lib, stdenvNoCC, buildPackages }:
 
 let
   rpath = lib.makeLibraryPath [
@@ -72,6 +72,9 @@ redoxRustPlatform.buildRustPackage rec {
       "redox_syscall-0.2.0" = "sha256-nwbJBrhuc01fPbBgd5ShboNu0Nauqp2UjkA+sm9oCeE=";
     };
   };
+
+  # error: Usage of `RUSTC_WORKSPACE_WRAPPER` requires `-Z unstable-options`
+  auditable = false;
 
   meta = with lib; {
     homepage = "https://gitlab.redox-os.org/redox-os/relibc";

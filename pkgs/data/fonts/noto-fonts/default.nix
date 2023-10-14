@@ -1,6 +1,7 @@
 { stdenv
 , stdenvNoCC
 , lib
+, gitUpdater
 , fetchFromGitHub
 , fetchurl
 , cairo
@@ -24,50 +25,59 @@ let
     Google’s answer to tofu. The name noto is to convey the idea that
     Google’s goal is to see “no more tofu”.  Noto has multiple styles and
     weights, and freely available to all.
-
-    This package also includes the Arimo, Cousine, and Tinos fonts.
   '';
 in
 rec {
   mkNoto =
     { pname
-    , weights
     , variants ? [ ]
     , longDescription ? notoLongDescription
     }:
     stdenvNoCC.mkDerivation rec {
       inherit pname;
-      version = "20201206-phase3";
+      version = "23.8.1";
 
       src = fetchFromGitHub {
-        owner = "googlefonts";
-        repo = "noto-fonts";
-        rev = "v${version}";
-        hash = "sha256-x60RvCRFLoGe0CNvswROnDkIsUFbWH+/laN8q2qkUPk=";
+        owner = "notofonts";
+        repo = "notofonts.github.io";
+        rev = "noto-monthly-release-${version}";
+        hash = "sha256-TYCJzioZcNFV8N5wLr7Fo69g/p5GQF/tbGgYoLUV7Us=";
       };
 
       _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
 
       installPhase = ''
-        # We copy in reverse preference order -- unhinted first, then
-        # hinted -- to get the "best" version of each font while
+        # We check availability in order of variable -> otf -> ttf
+        # unhinted -- the hinted versions use autohint
         # maintaining maximum coverage.
         #
-        # TODO: install OpenType, variable versions?
-        local out_ttf=$out/share/fonts/truetype/noto
+        # We have a mix of otf and ttf fonts
+        local out_font=$out/share/fonts/noto
       '' + (if _variants == [ ] then ''
-        install -m444 -Dt $out_ttf archive/unhinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf archive/hinted/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf unhinted/*/*/*-${weights}.ttf
-        install -m444 -Dt $out_ttf hinted/*/*/*-${weights}.ttf
+        for folder in $(ls -d fonts/*/); do
+          if [[ -d "$folder"unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/variable-ttf/*.ttf
+          elif [[ -d "$folder"unhinted/otf ]]; then
+            install -m444 -Dt $out_font "$folder"unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font "$folder"unhinted/ttf/*.ttf
+          fi
+        done
       '' else ''
         for variant in $_variants; do
-          install -m444 -Dt $out_ttf archive/unhinted/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf archive/hinted/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf unhinted/*/$variant/*-${weights}.ttf
-          install -m444 -Dt $out_ttf hinted/*/$variant/*-${weights}.ttf
+          if [[ -d fonts/"$variant"/unhinted/variable-ttf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/variable-ttf/*.ttf
+          elif [[ -d fonts/"$variant"/unhinted/otf ]]; then
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/otf/*.otf
+          else
+            install -m444 -Dt $out_font fonts/"$variant"/unhinted/ttf/*.ttf
+          fi
         done
       '');
+
+      passthru.updateScript = gitUpdater {
+        rev-prefix = "noto-monthly-release-";
+      };
 
       meta = with lib; {
         description = "Beautiful and free fonts for many languages";
@@ -75,11 +85,11 @@ rec {
         inherit longDescription;
         license = licenses.ofl;
         platforms = platforms.all;
-        maintainers = with maintainers; [ mathnerd314 emily ];
+        maintainers = with maintainers; [ mathnerd314 emily jopejoe1 ];
       };
     };
 
-  mkNotoCJK = { typeface, version, rev, sha256 }:
+  mkNotoCJK = { typeface, version, sha256 }:
     stdenvNoCC.mkDerivation {
       pname = "noto-fonts-cjk-${lib.toLower typeface}";
       inherit version;
@@ -87,7 +97,8 @@ rec {
       src = fetchFromGitHub {
         owner = "googlefonts";
         repo = "noto-cjk";
-        inherit rev sha256;
+        rev = "${typeface}${version}";
+        inherit sha256;
         sparseCheckout = [ "${typeface}/Variable/OTC" ];
       };
 
@@ -120,17 +131,13 @@ rec {
 
   noto-fonts = mkNoto {
     pname = "noto-fonts";
-    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
   };
 
   noto-fonts-lgc-plus = mkNoto {
     pname = "noto-fonts-lgc-plus";
-    weights = "{Regular,Bold,Light,Italic,BoldItalic,LightItalic}";
     variants = [
       "Noto Sans"
       "Noto Serif"
-      "Noto Sans Display"
-      "Noto Serif Display"
       "Noto Sans Mono"
       "Noto Music"
       "Noto Sans Symbols"
@@ -145,26 +152,19 @@ rec {
     '';
   };
 
-  noto-fonts-extra = mkNoto {
-    pname = "noto-fonts-extra";
-    weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
-  };
-
   noto-fonts-cjk-sans = mkNotoCJK {
     typeface = "Sans";
     version = "2.004";
-    rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-PWpcTBnBRK87ZuRI/PsGp2UMQgCCyfkLHwvB1mOl5K0=";
+    sha256 = "sha256-IgalJkiOAVjNxKaPAQWfb5hKeqclliR4qVXCq63FGWY=";
   };
 
   noto-fonts-cjk-serif = mkNotoCJK {
     typeface = "Serif";
-    version = "2.000";
-    rev = "9f7f3c38eab63e1d1fddd8d50937fe4f1eacdb1d";
-    sha256 = "sha256-1w66Ge7DZjbONGhxSz69uFhfsjMsDiDkrGl6NsoB7dY=";
+    version = "2.001";
+    sha256 = "sha256-y1103SS0qkZMhEL5+7kQZ+OBs5tRaqkqOcs4796Fzhg=";
   };
 
-  noto-fonts-emoji =
+  noto-fonts-color-emoji =
     let
       version = "2.038";
       emojiPythonEnv =
@@ -217,7 +217,7 @@ rec {
       '';
 
       meta = with lib; {
-        description = "Color and Black-and-White emoji fonts";
+        description = "Color emoji font";
         homepage = "https://github.com/googlefonts/noto-emoji";
         license = with licenses; [ ofl asl20 ];
         platforms = platforms.all;
@@ -225,17 +225,61 @@ rec {
       };
     };
 
+  noto-fonts-monochrome-emoji =
+    # Metadata fetched from
+    #  https://www.googleapis.com/webfonts/v1/webfonts?key=${GOOGLE_FONTS_TOKEN}&family=Noto+Emoji
+    let metadata = with builtins; head (fromJSON (readFile ./noto-emoji.json)).items;
+        urlHashes = with builtins; fromJSON (readFile ./noto-emoji.hashes.json);
+
+    in
+    stdenvNoCC.mkDerivation {
+      pname = "noto-fonts-monochrome-emoji";
+      version = "${lib.removePrefix "v" metadata.version}.${metadata.lastModified}";
+      preferLocalBuild = true;
+
+      dontUnpack = true;
+      srcs = let
+        weightNames = {
+          "300"   = "Light";
+          regular = "Regular";
+          "500"   = "Medium";
+          "600"   = "SemiBold";
+          "700"   = "Bold";
+        };
+      in lib.mapAttrsToList
+        (variant: url: fetchurl { name = "NotoEmoji-${weightNames.${variant}}.ttf";
+                                  hash = urlHashes.${url};
+                                  inherit url; } )
+        metadata.files;
+
+      installPhase = ''
+        for src in $srcs; do
+          install -D $src $out/share/fonts/noto/$(stripHash $src)
+        done
+      '';
+
+      meta = with lib; {
+        description = "Monochrome emoji font";
+        homepage = "https://fonts.google.com/noto/specimen/Noto+Emoji";
+        license = [ licenses.ofl ];
+        maintainers = [ maintainers.nicoo ];
+
+        platforms = platforms.all;
+        sourceProvenance = [ sourceTypes.binaryBytecode ];
+      };
+    };
+
   noto-fonts-emoji-blob-bin =
     let
       pname = "noto-fonts-emoji-blob-bin";
-      version = "14.0.1";
+      version = "15.0";
     in
     stdenvNoCC.mkDerivation {
       inherit pname version;
 
       src = fetchurl {
         url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
-        hash = "sha256-w9s7uF6E6nomdDmeKB4ATcGB/5A4sTwDvwHT3YGXz8g=";
+        hash = "sha256-3MPWZ1A2ups171dNIiFTJ3C1vZiGy6I8ZF70aUfrePk=";
       };
 
       dontUnpack = true;

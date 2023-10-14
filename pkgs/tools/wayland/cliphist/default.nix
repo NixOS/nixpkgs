@@ -19,5 +19,6 @@ buildGoModule rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
+    mainProgram = "cliphist";
   };
 }

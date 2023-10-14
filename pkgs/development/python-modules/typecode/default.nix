@@ -15,21 +15,15 @@
 
 buildPythonPackage rec {
   pname = "typecode";
-  version = "30.0.0";
+  version = "30.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pRGLU/xzQQqDZMIsrq1Fy7VgGIpFjnHtpmO+yL7t4g8=";
+    hash = "sha256-Glc5QiTVr//euymeNTxGN+FVaOEa6cUxHGyGo9bQrJc=";
   };
-
-  postPatch = ''
-    # PEP440 support was removed in newer setuptools, https://github.com/nexB/typecode/pull/31
-    substituteInPlace setup.cfg \
-      --replace ">=3.6.*" ">=3.6"
-  '';
 
   dontConfigure = true;
 
@@ -53,9 +47,17 @@ buildPythonPackage rec {
 
   disabledTests = [
     "TestFileTypesDataDriven"
+
+    # Many of the failures below are reported in:
+    # https://github.com/nexB/typecode/issues/36
+
     # AssertionError: assert 'application/x-bytecode.python'...
     "test_compiled_python_1"
     "test_package_json"
+
+    # fails due to change in file (libmagic) 5.45
+    "test_doc_postscript_eps"
+    "test_package_debian"
   ];
 
   pythonImportsCheck = [
@@ -67,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/nexB/typecode";
     changelog = "https://github.com/nexB/typecode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

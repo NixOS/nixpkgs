@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, testers
+, go-task
+}:
 
 buildGoModule rec {
   pname = "go-task";
-  version = "3.22.0";
+  version = "3.31.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "task";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SmO59VXuQZISDNJy2d6qhQv1QCxm0WodqPx2qHhCs80=";
+    hash = "sha256-KkswkTgdhDzPLfbAdyhbo9IyYqxG5se0pt9QVTNZclM=";
   };
 
-  vendorHash = "sha256-TsFPpN/X5pO4KALbqsHCa6YxYtaXMVqB5ENaIEfTWRo=";
+  vendorHash = "sha256-ha2vJDh1rduoFU4a1Ta1cNWegAGt2VCq8N1emUYUZ64=";
 
   doCheck = false;
 
@@ -20,7 +26,9 @@ buildGoModule rec {
   subPackages = [ "cmd/task" ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X=github.com/go-task/task/v3/internal/version.version=${version}"
   ];
 
   postInstall = ''
@@ -28,6 +36,12 @@ buildGoModule rec {
 
     installShellCompletion completion/{bash,fish,zsh}/*
   '';
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = go-task;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://taskfile.dev/";

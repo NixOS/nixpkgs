@@ -2,7 +2,7 @@
 
 let
   pname = "erigon";
-  version = "2.42.0";
+  version = "2.50.0";
 in
 buildGoModule {
   inherit pname version;
@@ -11,11 +11,11 @@ buildGoModule {
     owner = "ledgerwatch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-M2u8/WKo1yZu27KjTJhJFqycCxCopJqtVQpIs9inswI=";
+    hash = "sha256-gZ01nmxzXRK8YRwnl5qGkU6dqBYKPUkNZmbClwgsuL0=";
     fetchSubmodules = true;
   };
 
-  vendorSha256 = "sha256-Vyurf4wSN4zSDjcH8FC+OOiviiSjRVF4RId/eqFDd+c=";
+  vendorHash = "sha256-4s5dXTfYlgzYQ2h30F6kxEF626iKYFRoZlNXeFDbn8s=";
   proxyVendor = true;
 
   # Build errors in mdbx when format hardening is enabled:

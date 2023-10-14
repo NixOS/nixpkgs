@@ -13,11 +13,11 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "duckscript_cli";
-  version = "0.8.17";
+  version = "0.9.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-fEAm7HhRGYZpGL9I8h3wX8AnPs00pG/ui7Rm+PaXJpA=";
+    hash = "sha256-jpAZpx8VooYapSLApWWMLTj7c3wqw/S1w1zHN3OGzMs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration libiconv ];
 
-  cargoHash = "sha256-kll2q5HhcpizBDbWipj30F8WEQnjG1fndxCHoXBbik8=";
+  cargoHash = "sha256-n40V75yIuSC1abq4/cYFqj9JqGj/uJ36ZSz8APovE6o=";
 
   meta = with lib; {
     description = "Simple, extendable and embeddable scripting language.";

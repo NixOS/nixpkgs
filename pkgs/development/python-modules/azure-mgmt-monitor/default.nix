@@ -1,31 +1,31 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, msrest
-, msrestazure
 , azure-common
 , azure-mgmt-core
+, buildPythonPackage
+, fetchPypi
+, isodate
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-monitor";
-  version = "6.0.0";
+  version = "6.0.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    hash = "sha256-Uhs+wz3sB5mOt1LGJCqzhMT5YWwwMnpmVi4WvXHBfZY=";
+    hash = "sha256-X/v1AOSZq3kSsbptJs7yZIDZrkEVMgGbt41yViGW4Hs=";
   };
 
   propagatedBuildInputs = [
-    msrest
-    msrestazure
+    isodate
     azure-common
     azure-mgmt-core
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
   pythonNamespaces = [

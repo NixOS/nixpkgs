@@ -1,19 +1,19 @@
 { lib
 , stdenv
-, fetchurl
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
 , rustPlatform
 , pytestCheckHook
 , libiconv
 , numpy
-, pandas
+, protobuf
 , pyarrow
+, Security
 }:
 
 let
   arrow-testing = fetchFromGitHub {
+    name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
     rev = "5bab2f264a23f5af68f69ea93d24ef1e8e77fc88";
@@ -21,26 +21,31 @@ let
   };
 
   parquet-testing = fetchFromGitHub {
+    name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "5b82793ef7196f7b3583e85669ced211cd8b5ff2";
-    hash = "sha256-gcOvk7qFHZgJWE9CpucC8zwayYw47VbC3lmSRu4JQFg=";
+    rev = "e13af117de7c4f0a4d9908ae3827b3ab119868f3";
+    hash = "sha256-rVI9zyk9IRDlKv4u8BeMb0HRdWLfCpqOlYCeUdA7BB8=";
   };
 in
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "0.7.0";
+  version = "25.0.0";
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-XYXZMorPs2Ue7E38DASd4rmxvX0wlx8A6sCpAbYUh4I=";
+  src = fetchFromGitHub {
+    name = "datafusion-source";
+    owner = "apache";
+    repo = "arrow-datafusion-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oC+fp41a9rsdobpvShZ7sDdtYPJQQ7JLg6MFL+4Pksg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
+    name = "datafusion-cargo-deps";
     inherit src pname version;
-    hash = "sha256-6mPdKwsEN09Gf4eNsd/v3EBHVezHmff/KYB2lsXgzcA=";
+    hash = "sha256-0e0ZRgwcS/46mi4c2loAnBA2bsaD+/RiMh7oNg3EvHY=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -48,15 +53,11 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ protobuf ] ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  propagatedBuildInputs = [
-    numpy
-    pandas
-    pyarrow
-  ];
+  propagatedBuildInputs = [ pyarrow ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook numpy ];
   pythonImportsCheck = [ "datafusion" ];
   pytestFlagsArray = [ "--pyargs" pname ];
 
@@ -77,6 +78,7 @@ buildPythonPackage rec {
       that uses Apache Arrow as its in-memory format.
     '';
     homepage = "https://arrow.apache.org/datafusion/";
+    changelog = "https://github.com/apache/arrow-datafusion-python/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ cpcloud ];
   };

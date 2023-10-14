@@ -1,4 +1,4 @@
-{ pname, version, src, openasar, meta, binaryName, desktopName, autoPatchelfHook
+{ pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
 , makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
@@ -6,15 +6,19 @@
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
 , libunity
+, speechd
 , wayland
 , branch
-, common-updater-scripts, withOpenASAR ? false }:
+, withOpenASAR ? false, openasar
+, withVencord ? false, vencord
+, withTTS ? false }:
 
 let
   disableBreakingUpdates = runCommand "disable-breaking-updates.py"
     {
       pythonInterpreter = "${python3.interpreter}";
       configDirName = lib.toLower binaryName;
+      meta.mainProgram = "disable-breaking-updates.py";
     } ''
     mkdir -p $out/bin
     cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
@@ -46,7 +50,7 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  libPath = lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath ([
     libcxx
     systemd
     libpulseaudio
@@ -87,7 +91,7 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libdbusmenu
     wayland
-  ];
+  ] ++ lib.optional withTTS speechd);
 
   installPhase = ''
     runHook preInstall
@@ -102,6 +106,7 @@ stdenv.mkDerivation rec {
     wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
+        ${lib.strings.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
         --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/${binaryName} \
         --run "${lib.getExe disableBreakingUpdates}"
@@ -115,13 +120,18 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
-    ln -s "${desktopItem}/share/applications" $out/share/
+    ln -s "$desktopItem/share/applications" $out/share/
 
     runHook postInstall
   '';
 
   postInstall = lib.strings.optionalString withOpenASAR ''
     cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
+  '' + lib.strings.optionalString withVencord ''
+    mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
+    mkdir $out/opt/${binaryName}/resources/app.asar
+    echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
+    echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
   '';
 
   desktopItem = makeDesktopItem {

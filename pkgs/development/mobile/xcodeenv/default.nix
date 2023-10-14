@@ -1,15 +1,9 @@
-{ stdenv, lib }:
+{ callPackage }:
 
 rec {
-  composeXcodeWrapper = import ./compose-xcodewrapper.nix {
-    inherit stdenv;
-  };
+  composeXcodeWrapper = callPackage ./compose-xcodewrapper.nix { };
 
-  buildApp = import ./build-app.nix {
-    inherit stdenv lib composeXcodeWrapper;
-  };
+  buildApp = callPackage ./build-app.nix { inherit composeXcodeWrapper; };
 
-  simulateApp = import ./simulate-app.nix {
-    inherit stdenv lib composeXcodeWrapper;
-  };
+  simulateApp = callPackage ./simulate-app.nix { inherit composeXcodeWrapper; };
 }

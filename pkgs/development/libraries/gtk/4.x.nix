@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, buildPackages
 , substituteAll
 , fetchurl
 , pkg-config
@@ -7,6 +8,7 @@
 , graphene
 , gi-docgen
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , makeWrapper
@@ -45,9 +47,11 @@
 , wayland-scanner
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
 , AppKit
 , Cocoa
+, libexecinfo
 , broadwaySupport ? true
 }:
 
@@ -63,7 +67,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk4";
-  version = "4.8.3";
+  version = "4.10.4";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -75,8 +79,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    sha256 = "s2L5aNCFtNPZNA1NOMcGN33tnVN05pSitrfmKS48unQ=";
+    sha256 = "dyVABILgaF4oJl4ibGKEf05zz8qem0FqxYOCB/U3eiQ=";
   };
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/218143#issuecomment-1501059486
+    ./patches/4.0-fix-darwin-build.patch
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -93,6 +102,8 @@ stdenv.mkDerivation rec {
     sassc
     gi-docgen
     libxml2 # for xmllint
+  ] ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals waylandSupport [
     wayland-scanner
   ] ++ setupHooks;
@@ -133,6 +144,8 @@ stdenv.mkDerivation rec {
     cups
   ] ++ lib.optionals stdenv.isDarwin [
     Cocoa
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    libexecinfo
   ];
   #TODO: colord?
 
@@ -163,7 +176,7 @@ stdenv.mkDerivation rec {
     "-Dvulkan=enabled"
   ] ++ lib.optionals (!cupsSupport) [
     "-Dprint-cups=disabled"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ] ++ lib.optionals (!x11Support) [
     "-Dx11-backend=false"
@@ -175,9 +188,17 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  env = {
+    NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  } // lib.optionalAttrs stdenv.hostPlatform.isMusl {
+    NIX_LDFLAGS = "-lexecinfo";
+  };
 
   postPatch = ''
+    # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
+    substituteInPlace meson.build \
+      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
+
     files=(
       build-aux/meson/gen-demo-header.py
       demos/gtk-demo/geninclude.py

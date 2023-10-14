@@ -13,8 +13,8 @@
 , libXdmcp
 , libXrandr
 , spirv-headers
-, spirv-tools
 , vulkan-headers
+, vulkan-utility-libraries
 , wayland
 }:
 
@@ -23,7 +23,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vulkan-validation-layers";
-  version = "1.3.239.0";
+  version = "1.3.261";
 
   # If we were to use "dev" here instead of headers, the setupHook would be
   # placed in that output instead of "out".
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ValidationLayers";
-    rev = "sdk-${version}";
-    hash = "sha256-k/A0TaERQAHSM0Fal2IOaRvTz3FV2Go/17P12FSBG1s=";
+    rev = "v${version}";
+    hash = "sha256-4kE3pkyYu6hnbv19fHhON+hI2HU4vLm31tNlp5fhndM=";
   };
 
   nativeBuildInputs = [
@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
     libXrandr
     libffi
     libxcb
-    spirv-tools
     vulkan-headers
+    vulkan-utility-libraries
     wayland
   ];
 
@@ -69,6 +69,8 @@ stdenv.mkDerivation rec {
   # available in Nix sandbox. Fails with VK_ERROR_INCOMPATIBLE_DRIVER.
   doCheck = false;
 
+  separateDebugInfo = true;
+
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.
   preFixup = ''
@@ -84,6 +86,5 @@ stdenv.mkDerivation rec {
     platforms   = platforms.linux;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];
-    broken = (lib.all (pkg: pkg.version != version) [vulkan-headers glslang spirv-tools spirv-headers]);
   };
 }

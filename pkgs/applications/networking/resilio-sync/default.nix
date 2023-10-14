@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libxcrypt, ... }:
+{ lib, stdenv, fetchurl, autoPatchelfHook, libxcrypt-legacy }:
 
 stdenv.mkDerivation rec {
   pname = "resilio-sync";
@@ -24,11 +24,17 @@ stdenv.mkDerivation rec {
   dontStrip = true; # Don't strip, otherwise patching the rpaths breaks
   sourceRoot = ".";
 
+  nativeBuildInputs = [
+    autoPatchelfHook
+  ];
+
+  buildInputs = [
+    stdenv.cc.libc
+    libxcrypt-legacy
+  ];
+
   installPhase = ''
     install -D rslsync "$out/bin/rslsync"
-    patchelf \
-      --interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath ${lib.makeLibraryPath [ stdenv.cc.libc libxcrypt ]} "$out/bin/rslsync"
   '';
 
   meta = with lib; {

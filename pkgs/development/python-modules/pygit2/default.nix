@@ -6,7 +6,7 @@
 , cffi
 , fetchPypi
 , isPyPy
-, libgit2_1_5
+, libgit2_1_6
 , pycparser
 , pytestCheckHook
 , pythonOlder
@@ -14,22 +14,22 @@
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.11.1";
+  version = "1.12.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eT9YP9M2IPCsODdtsPV3aO8pIribRZ51saxEA3frZOw=";
+    hash = "sha256-VuhdDmbelX1ZnR77JAnTmv7v2PAQCb/aB5a0Kktng1g=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH="${libgit2_1_5}/lib"
+    export DYLD_LIBRARY_PATH="${libgit2_1_6}/lib"
   '';
 
   buildInputs = [
-    libgit2_1_5
+    libgit2_1_6
   ];
 
   propagatedBuildInputs = [
@@ -57,14 +57,6 @@ buildPythonPackage rec {
   # Tests require certificates
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
   SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  # setup.py check is broken
-  # https://github.com/libgit2/pygit2/issues/868
-  dontUseSetuptoolsCheck = true;
-
-  # TODO: Test collection is failing
-  # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
-  doCheck = false;
 
   pythonImportsCheck = [
     "pygit2"

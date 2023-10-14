@@ -16,13 +16,14 @@
 , extractcode-libarchive
 , fasteners
 , fetchPypi
+, fetchpatch
 , fingerprints
 , ftfy
-, gemfileparser
+, gemfileparser2
 , html5lib
 , importlib-metadata
 , intbitset
-, jaraco_functools
+, jaraco-functools
 , javaproperties
 , jinja2
 , jsonstreams
@@ -60,13 +61,13 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "31.2.4";
+  version = "31.2.6";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-08C3T4CoQm/6s8ERbq/m1t513zYuzVJoexlRkCvv3UY=";
+    hash = "sha256-VvhgXZpV58DHeY5+7nPbrbTTVuHkawFw5akbm4hPnBY=";
   };
 
   dontConfigure = true;
@@ -89,11 +90,11 @@ buildPythonPackage rec {
     fasteners
     fingerprints
     ftfy
-    gemfileparser
+    gemfileparser2
     html5lib
     importlib-metadata
     intbitset
-    jaraco_functools
+    jaraco-functools
     javaproperties
     jinja2
     jsonstreams
@@ -133,13 +134,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  patches = [
+    (fetchpatch {
+      name = "${pname}-allow-stable-spdx-tools.patch";
+      url = "https://github.com/nexB/scancode-toolkit/commit/d89ab6584d3df6b7eb1d1394559e9d967d6db6ae.patch";
+      includes = [ "src/*" ];
+      hash = "sha256-AU3vJlOxmCy3yvkupVaAVxAKxJI3ymXEk+A5DWSkfOM=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "pdfminer.six >= 20200101" "pdfminer.six" \
       --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
       --replace "pygmars >= 0.7.0" "pygmars" \
       --replace "license_expression >= 21.6.14" "license_expression" \
-      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset"
+      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset" \
+      --replace "spdx_tools == 0.7.0a3" "spdx_tools"
   '';
 
   # Importing scancode needs a writeable home, and preCheck happens in between
@@ -158,7 +169,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
+    changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ asl20 cc-by-40 ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

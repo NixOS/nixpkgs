@@ -1,8 +1,9 @@
 { lib
 , buildPackages, pkgs, targetPackages
-, generateSplicesForMkScope, makeScopeWithSplicing
+, generateSplicesForMkScope, makeScopeWithSplicing'
 , stdenv
 , preLibcCrossHeaders
+, config
 }:
 
 let
@@ -14,7 +15,10 @@ let
                                         (stdenv.targetPlatform.config + "-");
 in
 
-makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
+makeScopeWithSplicing' {
+  otherSplices = generateSplicesForMkScope "darwin";
+  extra = spliced: spliced.apple_sdk.frameworks;
+  f = (self: let
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -100,15 +104,21 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
-  cctools = callPackage ../os-specific/darwin/cctools/port.nix {
-    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
-  };
+  cctools = self.cctools-llvm;
 
   cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
-  # TODO: remove alias.
+  cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
+  cctools-port = callPackage ../os-specific/darwin/cctools/port.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+
+  # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
   DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
@@ -126,19 +136,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
-  postLinkSignHook = pkgs.writeTextFile {
-    name = "post-link-sign-hook";
-    executable = true;
-
-    text = ''
-      if [ "$linkerOutput" != "/dev/null" ]; then
-        CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
-          ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
-      fi
-    '';
-  };
-
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
+
+  postLinkSignHook = callPackage ../os-specific/darwin/signing-utils/post-link-sign-hook.nix { };
 
   autoSignDarwinBinariesHook = pkgs.makeSetupHook {
     name = "auto-sign-darwin-binaries-hook";
@@ -216,8 +216,6 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   # As the name says, this is broken, but I don't want to lose it since it's a direction we want to go in
   # libdispatch-broken = callPackage ../os-specific/darwin/swift-corelibs/libdispatch.nix { };
 
-  darling = callPackage ../os-specific/darwin/darling/default.nix { };
-
   libtapi = callPackage ../os-specific/darwin/libtapi {};
 
   ios-deploy = callPackage ../os-specific/darwin/ios-deploy {};
@@ -225,7 +223,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
   # See doc/builders/special/darwin-builder.section.md
-  builder =
+  linux-builder = lib.makeOverridable ({ modules }:
     let
       toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
 
@@ -233,7 +231,7 @@ impure-cmds // appleSourcePackages // chooseLibs // {
         configuration = {
           imports = [
             ../../nixos/modules/profiles/macos-builder.nix
-          ];
+          ] ++ modules;
 
           virtualisation.host = { inherit pkgs; };
         };
@@ -242,5 +240,9 @@ impure-cmds // appleSourcePackages // chooseLibs // {
       };
 
     in
-      nixos.config.system.build.macos-builder-installer;
-})
+      nixos.config.system.build.macos-builder-installer) { modules = [ ]; };
+
+} // lib.optionalAttrs config.allowAliases {
+  builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
+});
+}

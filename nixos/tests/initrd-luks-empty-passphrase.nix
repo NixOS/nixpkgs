@@ -14,10 +14,18 @@ in {
   name = "initrd-luks-empty-passphrase";
 
   nodes.machine = { pkgs, ... }: {
+    imports = lib.optionals (!systemdStage1) [ ./common/auto-format-root-device.nix ];
+
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
       useEFIBoot = true;
+      # This requires to have access
+      # to a host Nix store as
+      # the new root device is /dev/vdb
+      # an empty 512MiB drive, containing no Nix store.
+      mountHostNixStore = true;
+      fileSystems."/".autoFormat = lib.mkIf systemdStage1 true;
     };
 
     boot.loader.systemd-boot.enable = true;
@@ -30,26 +38,26 @@ in {
     specialisation.boot-luks-wrong-keyfile.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
-          device = "/dev/vdc";
+          device = "/dev/vdb";
           keyFile = "/etc/cryptroot.key";
           tryEmptyPassphrase = true;
           fallbackToPassword = !systemdStage1;
         };
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
+      virtualisation.rootDevice = "/dev/mapper/cryptroot";
       boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
     };
 
     specialisation.boot-luks-missing-keyfile.configuration = {
       boot.initrd.luks.devices = lib.mkVMOverride {
         cryptroot = {
-          device = "/dev/vdc";
+          device = "/dev/vdb";
           keyFile = "/etc/cryptroot.key";
           tryEmptyPassphrase = true;
           fallbackToPassword = !systemdStage1;
         };
       };
-      virtualisation.bootDevice = "/dev/mapper/cryptroot";
+      virtualisation.rootDevice = "/dev/mapper/cryptroot";
     };
   };
 
@@ -76,7 +84,7 @@ in {
 
     # Create encrypted volume
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("echo "" | cryptsetup luksFormat /dev/vdc --batch-mode")
+    machine.succeed("echo "" | cryptsetup luksFormat /dev/vdb --batch-mode")
     machine.succeed("bootctl set-default nixos-generation-1-specialisation-boot-luks-wrong-keyfile.conf")
     machine.succeed("sync")
     machine.crash()

@@ -33,7 +33,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
-    installShellCompletion target/*/release/solo2.{bash,fish,zsh}
+    installShellCompletion target/*/release/solo2.{bash,fish}
+    installShellCompletion --zsh target/*/release/_solo2
   '';
 
   doCheck = true;

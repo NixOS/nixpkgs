@@ -5,13 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.2.0";
+  version = "4.4.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-P3yp6COwyQnVDfZM198ygu+HLdisRw068aZOVSLl7r4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L0WbPZE2alregOvWc+0nuMvsD17ayCw3JtahGhf4B1o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -30,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     orjson
     plotly
     pyppeteer
+    python-dateutil
     pyyaml
     requests
     retrying
@@ -61,7 +63,8 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    maintainers = with maintainers; [ c0bw3b treemo ];
+    changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
+    maintainers = with maintainers; [ c0bw3b fab treemo ];
     license = licenses.gpl2Only;
   };
 }

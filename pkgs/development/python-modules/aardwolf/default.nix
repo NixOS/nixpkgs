@@ -6,6 +6,7 @@
 , asyauth
 , asysocks
 , buildPythonPackage
+, cargo
 , colorama
 , fetchFromGitHub
 , iconv
@@ -14,6 +15,7 @@
 , pyperclip
 , pythonOlder
 , rustPlatform
+, rustc
 , setuptools-rust
 , tqdm
 , unicrypto
@@ -22,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "aardwolf";
-  version = "0.2.7";
+  version = "0.2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -31,14 +33,14 @@ buildPythonPackage rec {
     owner = "skelsec";
     repo = "aardwolf";
     rev = "refs/tags/${version}";
-    hash = "sha256-xz3461QgZ2tySj2cTlKQ5faYQDSECvbk1U6QCbzM86w=";
+    hash = "sha256-4kJsW0uwWfcgVruEdDw3QhbzfPDuLjmK+YvcLrgF4SI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/aardwolf/utils/rlers";
+    sourceRoot = "${src.name}/aardwolf/utils/rlers";
     name = "${pname}-${version}";
-    hash = "sha256-JGXTCCyC20EuUX0pP3xSZG3qFB5jRL7+wW2YRC3EiCc=";
+    hash = "sha256-i7fmdWOseRQGdvdBnlGi+lgWvhC2WFI2FwXU9JywYsc=";
   };
 
   cargoRoot = "aardwolf/utils/rlers";
@@ -46,10 +48,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     setuptools-rust
-  ] ++ (with rustPlatform.rust; [
     cargo
     rustc
-  ]);
+  ];
 
   propagatedBuildInputs = [
     arc4

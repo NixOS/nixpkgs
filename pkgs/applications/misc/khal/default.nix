@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , glibcLocales
 , installShellFiles
 , python3
@@ -9,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khal";
-  version = "0.10.5";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FneJmoAOb7WjSgluCwlspf27IU3MsQZFKryL9OSSsUw=";
+    hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -38,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     icalendar
     lxml
     pkginfo
-    pkgs.vdirsyncer
+    vdirsyncer
     python-dateutil
     pytz
     pyxdg
@@ -53,18 +52,6 @@ python3.pkgs.buildPythonApplication rec {
     packaging
     pytestCheckHook
     vdirsyncer
-  ];
-
-  patches = [
-    # Tests working with latest pytz version, https://github.com/pimutils/khal/pull/1183
-    (fetchpatch {
-      name = "support-later-pytz.patch";
-      url = "https://github.com/pimutils/khal/commit/53eb8a7426d5c09478c78d809c4df4391438e246.patch";
-      sha256 = "sha256-drGtvJlQ3qFUdeukRWCFycPSZGWG/FSRqnbwJzFKITc=";
-      excludes = [
-        "CHANGELOG.rst"
-      ];
-    })
   ];
 
   postInstall = ''

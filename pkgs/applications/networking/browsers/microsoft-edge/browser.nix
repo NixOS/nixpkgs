@@ -46,17 +46,14 @@ let
              then baseName
              else baseName + "-" + channel;
 
-  iconSuffix = if channel == "stable"
-               then ""
-               else "_${channel}";
+  iconSuffix = lib.optionalString (channel != "stable") "_${channel}";
 
-  desktopSuffix = if channel == "stable"
-                  then ""
-                  else "-${channel}";
+  desktopSuffix = lib.optionalString (channel != "stable") "-${channel}";
 in
 
 stdenv.mkDerivation rec {
-  name="${baseName}-${channel}-${version}";
+  pname="${baseName}-${channel}";
+  inherit version;
 
   src = fetchurl {
     url = "https://packages.microsoft.com/repos/edge/pool/main/m/${baseName}-${channel}/${baseName}-${channel}_${version}-${revision}_amd64.deb";
@@ -142,7 +139,7 @@ stdenv.mkDerivation rec {
     cp -R opt usr/bin usr/share $out
 
     ${if channel == "stable"
-      then ""
+      then "ln -sf $out/bin/${longName} $out/bin/${baseName}-${channel}"
       else "ln -sf $out/opt/microsoft/${shortName}/${baseName}-${channel} $out/opt/microsoft/${shortName}/${baseName}"}
 
     ln -sf $out/opt/microsoft/${shortName}/${longName} $out/bin/${longName}
@@ -185,12 +182,14 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.pname}-${gtk3.version}"
   '';
 
+  passthru.updateScript = ./update.py;
+
   meta = with lib; {
     homepage = "https://www.microsoft.com/en-us/edge";
     description = "The web browser from Microsoft";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zanculmarktum kuwii ];
+    maintainers = with maintainers; [ zanculmarktum kuwii rhysmdnz ];
   };
 }

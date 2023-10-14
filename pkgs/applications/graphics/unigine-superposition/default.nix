@@ -22,7 +22,7 @@
 , mkDerivation
 , xkeyboard_config
 , fetchurl
-, buildFHSUserEnv
+, buildFHSEnv
 , openal
 , makeDesktopItem
 }:
@@ -94,9 +94,9 @@ let
 in
 
 # We can patch the "/bin/superposition", but "/bin/launcher" checks it for changes.
-# For that we need use a buildFHSUserEnv.
+# For that we need use a buildFHSEnv.
 
-buildFHSUserEnv {
+buildFHSEnv {
   name = "Superposition";
 
   targetPkgs = pkgs: [

@@ -4,9 +4,9 @@ buildDunePackage rec {
   pname = "visitors";
   version = "20210608";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitLab {
     owner = "fpottier";

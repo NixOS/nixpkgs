@@ -1,14 +1,16 @@
 { lib, stdenv, fetchurl, bash, jre }:
-let
-  mcVersion = "1.19.3";
-  buildNum = "375";
-  jar = fetchurl {
-    url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
-    sha256 = "sha256-NAl4+mCkO6xQQpIx2pd9tYX2N8VQa+2dmFwyBNbDa10=";
-  };
-in stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "papermc";
-  version = "${mcVersion}r${buildNum}";
+  version = "1.20.1.83";
+
+  jar = let
+    mcVersion = lib.versions.pad 3 version;
+    buildNum = builtins.elemAt (lib.versions.splitVersion version) 3;
+  in fetchurl {
+    url = "https://papermc.io/api/v2/projects/paper/versions/${mcVersion}/builds/${buildNum}/downloads/paper-${mcVersion}-${buildNum}.jar";
+    sha256 = "sha256-HQpc3MOXa1wkXqgm9ciQj04FUIyuupnYiu+2RZ/sXE4=";
+  };
 
   preferLocalBuild = true;
 

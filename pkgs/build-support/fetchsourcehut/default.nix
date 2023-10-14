@@ -1,5 +1,6 @@
 { fetchgit, fetchhg, fetchzip, lib }:
 
+lib.makeOverridable (
 { owner
 , repo, rev
 , domain ? "sr.ht"
@@ -14,7 +15,8 @@ with lib;
 assert (lib.assertOneOf "vc" vc [ "hg" "git" ]);
 
 let
-  baseUrl = "https://${vc}.${domain}/${owner}/${repo}";
+  urlFor = resource: "https://${resource}.${domain}/${owner}/${repo}";
+  baseUrl = urlFor vc;
   baseArgs = {
     inherit name;
   } // removeAttrs args [
@@ -41,6 +43,9 @@ let
         postFetch = optionalString (vc == "hg") ''
           rm -f "$out/.hg_archival.txt"
         ''; # impure file; see #12002
+        passthru = {
+          gitRepoUrl = urlFor "git";
+        };
       };
     };
   };
@@ -48,3 +53,4 @@ in cases.${fetcher}.fetch cases.${fetcher}.arguments // {
   inherit rev;
   meta.homepage = "${baseUrl}";
 }
+)

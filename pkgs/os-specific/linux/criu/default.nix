@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, protobuf, protobufc, asciidoc, iptables
-, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, iproute2
-, which, python3, makeWrapper, docbook_xml_dtd_45, perl, nftables, libbsd
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, iproute2, gzip
+, which, python3, makeWrapper, docbook_xml_dtd_45, perl, nftables, libbsd, gnutar
 , buildPackages
 }:
 
@@ -20,6 +20,16 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/checkpoint-restore/criu/commit/1e6e826ffb7ac05f33fa123051c2fc2ddf0f68ea.patch";
       hash = "sha256-LJjk0jQ5v5wqeprvBMpxhjLXn7v+lSPldEGgazGUM44=";
+    })
+
+    # compat fixes for glibc-2.36
+    (fetchpatch {
+      url = "https://github.com/checkpoint-restore/criu/commit/8cd5fccd6cf3d03afb5abe463134d31f54d42258.patch";
+      sha256 = "sha256-b65DdLmyIuZik0dNRuWJKUPcDFA6CKq0bi4Vd26zgS4=";
+    })
+    (fetchpatch {
+      url = "https://github.com/checkpoint-restore/criu/commit/517c0947050e63aac72f63a3bf373d76264723b9.patch";
+      sha256 = "sha256-MPZ6oILVoZ7BQEZFjUlp3RuMC7iKTKXAtrUDFqbN4T8=";
     })
   ];
 
@@ -97,7 +107,8 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/criu \
       --set-default CR_IPTABLES ${iptables}/bin/iptables \
-      --set-default CR_IP_TOOL ${iproute2}/bin/ip
+      --set-default CR_IP_TOOL ${iproute2}/bin/ip \
+      --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
     wrapPythonPrograms
   '';
 

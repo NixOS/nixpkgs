@@ -3,8 +3,9 @@
 , libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
-# than the default LLVM verion's, if LLD is the choice. We use these for
+# than the default LLVM version's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
 , bootBintoolsNoLibc ?
     if stdenv.targetPlatform.linker == "lld"
@@ -15,23 +16,71 @@
     then null
     else pkgs.bintools
 , darwin
+# LLVM release information; specify one of these but not both:
+, gitRelease ? null
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   rev = /* commit SHA */;
+  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+, officialRelease ? { version = "15.0.7"; sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s="; }
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   candidate = /* optional; if specified, should be: "rcN" */
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+# By default, we'll try to fetch a release from `github:llvm/llvm-project`
+# corresponding to the `gitRelease` or `officialRelease` specified.
+#
+# You can provide your own LLVM source by specifying this arg but then it's up
+# to you to make sure that the LLVM repo given matches the release configuration
+# specified.
+, monorepoSrc ? null
 }:
-
+assert let
+  int = a: if a then 1 else 0;
+  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
+in
+  lib.assertMsg
+    (xor
+      (gitRelease != null)
+      (officialRelease != null))
+    ("must specify `gitRelease` or `officialRelease`" +
+      (lib.optionalString (gitRelease != null) " — not both"));
 let
-  release_version = "15.0.0";
-  candidate = ""; # empty or "rcN"
-  dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "a5640968f2f7485b2aa4919f5fa68fd8f23e2d1f"; # When using a Git commit
-  rev-version = "unstable-2022-26-07"; # When using a Git commit
-  version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
-  targetConfig = stdenv.targetPlatform.config;
+  monorepoSrc' = monorepoSrc;
+in let
+  releaseInfo = if gitRelease != null then rec {
+    original = gitRelease;
+    release_version = original.version;
+    version = gitRelease.rev-version;
+  } else rec {
+    original = officialRelease;
+    release_version = original.version;
+    version = if original ? candidate then
+      "${release_version}-${original.candidate}"
+    else
+      release_version;
+  };
 
-  monorepoSrc = fetchFromGitHub {
+  monorepoSrc = if monorepoSrc' != null then
+    monorepoSrc'
+  else let
+    sha256 = releaseInfo.original.sha256;
+    rev = if gitRelease != null then
+      gitRelease.rev
+    else
+      "llvmorg-${releaseInfo.version}";
+  in fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "1sh5xihdfdn2hp7ds3lkaq1bfrl4alj36gl1aidmhlw65p5rdvl7";
+    inherit rev sha256;
   };
+
+  inherit (releaseInfo) release_version version;
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
@@ -106,7 +155,8 @@ let
 
     # pick clang appropriate for package set we are targeting
     clang =
-      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
+      else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
 
@@ -134,11 +184,28 @@ let
       inherit llvm_meta;
     };
 
-    lldb = callPackage ./lldb {
+    lldb = callPackage ../common/lldb.nix {
+      src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/lldb "$out"
+      '') { };
+      patches =
+        let
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
+        in
+        [
+          ./lldb/procfs.patch # FIXME: do we need this?
+          resourceDirPatch
+          ./lldb/gnu-install-dirs.patch
+        ];
       inherit llvm_meta;
-      inherit (darwin) libobjc bootstrap_cmds;
-      inherit (darwin.apple_sdk.libs) xpc;
-      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -148,7 +215,7 @@ let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;
@@ -263,6 +330,19 @@ let
       # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
+        # Note that if we use the regular stdenv here we'll get cycle errors
+        # when attempting to use this compiler in the stdenv.
+        #
+        # The final stdenv pulls `cxx-headers` from the package set where
+        # hostPlatform *is* the target platform which means that `stdenv` at
+        # that point attempts to use this toolchain.
+        #
+        # So, we use `stdenv_` (the stdenv containing `clang` from this package
+        # set, defined below) to sidestep this issue.
+        #
+        # Because we only use `cxx-headers` in `libcxxabi` (which depends on the
+        # clang stdenv _anyways_), this is okay.
+        stdenv = stdenv_;
         headersOnly = true;
       };
 
@@ -296,8 +376,9 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries release_version; } // libraries // tools
+in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)

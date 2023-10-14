@@ -2,11 +2,14 @@
 , pkgs
 , newScope
 , darwin
-, llvmPackages_latest
+, llvmPackages
+, llvmPackages_15
 , overrideCC
 }:
 
 let
+  swiftLlvmPackages = llvmPackages_15;
+
   self = rec {
 
     callPackage = newScope self;
@@ -15,20 +18,34 @@ let
     # Re-export this so we can rely on the minimum Swift SDK elsewhere.
     apple_sdk = pkgs.darwin.apple_sdk_11_0;
 
-    # Our current Clang on Darwin is v11, but we need at least v12. The
-    # following applies the newer Clang with the same libc overrides as
-    # `apple_sdk.stdenv`.
+    # Swift builds its own Clang for internal use. We wrap that clang with a
+    # cc-wrapper derived from the clang configured below. Because cc-wrapper
+    # applies a specific resource-root, the two versions are best matched, or
+    # we'll often run into compilation errors.
     #
-    # If 'latest' becomes an issue, recommend replacing it with v14, which is
-    # currently closest to the official Swift builds.
+    # The following selects the correct Clang version, matching the version
+    # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
     clang = if pkgs.stdenv.isDarwin
       then
-        llvmPackages_latest.clang.override rec {
+        swiftLlvmPackages.clang.override rec {
           libc = apple_sdk.Libsystem;
           bintools = pkgs.bintools.override { inherit libc; };
+          # Ensure that Swift’s internal clang uses the same libc++ and libc++abi as the
+          # default Darwin stdenv. Using the default libc++ avoids issues (such as crashes)
+          # that can happen when a Swift application dynamically links different versions
+          # of libc++ and libc++abi than libraries it links are using.
+          inherit (llvmPackages) libcxx;
+          extraPackages = [
+            llvmPackages.libcxxabi
+            # Use the compiler-rt associated with clang, but use the libc++abi from the stdenv
+            # to avoid linking against two different versions (for the same reasons as above).
+            (swiftLlvmPackages.compiler-rt.override {
+              inherit (llvmPackages) libcxxabi;
+            })
+          ];
         }
       else
-        llvmPackages_latest.clang;
+        swiftLlvmPackages.clang;
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`. These are similar to
@@ -95,6 +112,8 @@ let
     swift-docc = callPackage ./swift-docc {
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
     };
+
+    swift-format = callPackage ./swift-format { };
 
   };
 

@@ -13,7 +13,7 @@
 cd "$(dirname $(readlink -f $0))"
 
 node2nix \
-  --nodejs-16 \
+  --nodejs-18 \
   --strip-optional-dependencies \
   --node-env node-env.nix \
   --input package.json \

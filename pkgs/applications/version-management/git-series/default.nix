@@ -1,8 +1,16 @@
-{ lib, rustPlatform, fetchFromGitHub
-, pkg-config, openssl, zlib, curl, libgit2, libssh2
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, curl
+, libgit2
+, libssh2
+, openssl
+, zlib
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "git-series";
   version = "unstable-2019-10-15";
 
@@ -13,13 +21,32 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1i0m2b7ma6xvkg95k57gaj1wpc1rfvka6h8jr5hglxmqqbz6cb6w";
   };
 
-  cargoSha256 = "1hmx14z3098c98achgii0jkcm4474iw762rmib77amcsxj73zzdh";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl zlib curl libgit2 libssh2 ];
+  nativeBuildInputs = [
+    pkg-config
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+  ];
+
+  buildInputs = [
+    libgit2
+    libssh2
+    openssl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+  ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG = true;
   LIBSSH2_SYS_USE_PKG_CONFIG = true;
+
+  # update Cargo.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   postInstall = ''
     install -D "$src/git-series.1" "$out/man/man1/git-series.1"

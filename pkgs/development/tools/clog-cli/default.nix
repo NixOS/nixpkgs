@@ -1,8 +1,6 @@
 { fetchFromGitHub, rustPlatform, lib }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "clog-cli";
   version = "0.9.3";
 

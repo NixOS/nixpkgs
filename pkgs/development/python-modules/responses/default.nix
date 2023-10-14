@@ -5,8 +5,11 @@
 , pytest-httpserver
 , pytestCheckHook
 , pythonOlder
+, pyyaml
 , requests
-, toml
+, tomli
+, tomli-w
+, types-pyyaml
 , types-toml
 , typing-extensions
 , urllib3
@@ -14,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.22.0";
+  version = "0.23.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,13 +27,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = pname;
-    rev = version;
-    hash = "sha256-VOIpowxPvYmufnj9MM/vMtZQDIOxorAhMCNK0fX/j1U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-VJmcRMn0O+3mDwzkCwxIX7RU3/I9T9p9N8t6USWDZJQ=";
   };
 
   propagatedBuildInputs = [
+    pyyaml
     requests
-    toml
+    types-pyyaml
     types-toml
     urllib3
   ]  ++ lib.optionals (pythonOlder "3.8") [
@@ -42,6 +46,9 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook
+    tomli-w
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   pythonImportsCheck = [
@@ -51,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for mocking out the requests Python library";
     homepage = "https://github.com/getsentry/responses";
+    changelog = "https://github.com/getsentry/responses/blob/${version}/CHANGES";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

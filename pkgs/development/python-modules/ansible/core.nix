@@ -1,16 +1,20 @@
 { lib
-, callPackage
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
+, pythonRelaxDepsHook
 , installShellFiles
 , ansible
 , cryptography
+, importlib-resources
 , jinja2
 , junit-xml
 , lxml
 , ncclient
 , packaging
 , paramiko
+, ansible-pylibssh
+, passlib
 , pexpect
 , psutil
 , pycrypto
@@ -24,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.14.2";
+  version = "2.15.4";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R/DUtBJbWO26ZDWkfzfL5qGNpUWU0Y+BKVi7DLWNTmU=";
+    hash = "sha256-waiq7emF955ZMrohY2OTeffYAlv9myg3jbFkmk71Qe0=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -41,6 +45,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -50,6 +56,7 @@ buildPythonPackage rec {
     cryptography
     jinja2
     packaging
+    passlib
     pyyaml
     resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
@@ -57,13 +64,22 @@ buildPythonPackage rec {
     lxml
     ncclient
     paramiko
+    ansible-pylibssh
     pexpect
     psutil
     pycrypto
     requests
     scp
     xmltodict
-  ] ++ lib.optional windowsSupport pywinrm;
+  ] ++ lib.optionals windowsSupport [
+    pywinrm
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-resources
+  ];
+
+  pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
+    "importlib-resources"
+  ];
 
   postInstall = ''
     installManPage docs/man/man1/*.1

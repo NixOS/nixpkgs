@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dzvip90yf1wg0fhfghn96dwrhg289d06b624px9a2wwy3vp5ryg";
   };
 
-  sourceRoot = "code-0-r${src.rev}/src";
+  sourceRoot = "${src.name}/src";
 
   postPatch = ''
     substituteInPlace Makefile \

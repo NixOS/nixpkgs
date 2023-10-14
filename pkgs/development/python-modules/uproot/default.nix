@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , awkward
 , hatchling
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.0.3";
+  version = "5.0.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5XR92e3rQJbKojfQX+MjaF4SCKvV1xBu7hezaFrtJwc=";
+    hash = "sha256-5RJPRrnPRRj1KXeyCqrGwaurXPx0aT6gso1o7gQ1aNs=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +68,8 @@ buildPythonPackage rec {
     "tests/test_0066-fix-http-fallback-freeze.py"
     "tests/test_0088-read-with-http.py"
     "tests/test_0220-contiguous-byte-ranges-in-http.py"
+    "tests/test_0916-read-from-s3.py"
+    "tests/test_0930-expressions-in-pandas.py"
   ];
 
   pythonImportsCheck = [

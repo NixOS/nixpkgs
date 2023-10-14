@@ -66,6 +66,7 @@ in {
   in {
     server = { pkgs, ... }: {
       networking.firewall.allowedTCPPorts = [ port tlsPort anonPort ];
+      networking.useNetworkd = true;
       services.mosquitto = {
         enable = true;
         settings = {

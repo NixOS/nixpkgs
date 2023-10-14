@@ -16,13 +16,13 @@
 , qtsensors
 , qtwebengine
 , qtwebchannel
+, quarto
 , libuuid
 , hunspellDicts
 , unzip
 , ant
 , jdk
 , gnumake
-, makeWrapper
 , pandoc
 , llvmPackages
 , yaml-cpp
@@ -30,6 +30,7 @@
 , postgresql
 , nodejs
 , mkYarnModules
+, fetchYarnDeps
 , qmake
 , server ? false # build server version
 , sqlite
@@ -39,36 +40,39 @@
 
 let
   pname = "RStudio";
-  version = "2022.07.1+554";
-  RSTUDIO_VERSION_MAJOR  = "2022";
-  RSTUDIO_VERSION_MINOR  = "07";
-  RSTUDIO_VERSION_PATCH  = "1";
-  RSTUDIO_VERSION_SUFFIX = "+554";
+  version =
+  "${RSTUDIO_VERSION_MAJOR}.${RSTUDIO_VERSION_MINOR}.${RSTUDIO_VERSION_PATCH}${RSTUDIO_VERSION_SUFFIX}";
+  RSTUDIO_VERSION_MAJOR  = "2023";
+  RSTUDIO_VERSION_MINOR  = "09";
+  RSTUDIO_VERSION_PATCH  = "0";
+  RSTUDIO_VERSION_SUFFIX = "+463";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     rev = "v${version}";
-    sha256 = "0rmdqxizxqg2vgr3lv066cjmlpjrxjlgi0m97wbh6iyhkfm2rrj1";
+    hash = "sha256-FwNuU2rbE3GEhuwphvZISUMhvSZJ6FjjaZ1oQ9F8NWc=";
   };
 
   mathJaxSrc = fetchurl {
     url = "https://s3.amazonaws.com/rstudio-buildtools/mathjax-27.zip";
-    sha256 = "sha256-xWy6psTOA8H8uusrXqPDEtL7diajYCVHcMvLiPsgQXY=";
+    hash = "sha256-xWy6psTOA8H8uusrXqPDEtL7diajYCVHcMvLiPsgQXY=";
   };
 
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "e287b586e7da03105de3faa8774c63f08984eb3c";
-    sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
+    rev = "5175a927a41acfd9a21d9fdecb705ea3292109f2";
+    hash = "sha256-c1fFcN6KAfxXv8bv4WnIqQKg1wcNP2AywhEmIbyzaBA=";
   };
 
-  panmirrorModules = mkYarnModules {
-    inherit pname version;
-    packageJSON = ./package.json;
-    yarnLock = ./yarn.lock;
-    yarnNix = ./yarndeps.nix;
+  # Ideally, rev should match the rstudio release name.
+  # e.g. release/rstudio-mountain-hydrangea
+  quartoSrc = fetchFromGitHub {
+    owner = "quarto-dev";
+    repo = "quarto";
+    rev = "bb264a572c6331d46abcf087748c021d815c55d7";
+    hash = "sha256-lZnZvioztbBWWa6H177X6rRrrgACx2gMjVFDgNup93g=";
   };
 
   description = "Set of integrated tools for the R language";
@@ -82,7 +86,6 @@ in
       unzip
       ant
       jdk
-      makeWrapper
       pandoc
       nodejs
     ] ++ lib.optionals (!server) [
@@ -98,6 +101,7 @@ in
       yaml-cpp
       soci
       postgresql
+      quarto
     ] ++ (if server then [
       sqlite.dev
       pam
@@ -111,11 +115,10 @@ in
 
     cmakeFlags = [
       "-DRSTUDIO_TARGET=${if server then "Server" else "Desktop"}"
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
-      "-DQUARTO_ENABLED=FALSE"
+      "-DQUARTO_ENABLED=TRUE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
     ] ++ lib.optionals (!server) [
@@ -129,8 +132,7 @@ in
       ./use-system-node.patch
       ./fix-resources-path.patch
       ./pandoc-nix-path.patch
-      ./remove-quarto-from-generator.patch
-      ./do-not-install-pandoc.patch
+      ./use-system-quarto.patch
     ];
 
     postPatch = ''
@@ -140,14 +142,23 @@ in
         --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
 
       substituteInPlace src/gwt/build.xml \
+        --replace '@node@' ${nodejs} \
+        --replace './lib/quarto' ${quartoSrc}
+
+      substituteInPlace src/cpp/conf/rsession-dev.conf \
         --replace '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
         --replace '@libclang@' ${llvmPackages.libclang.lib} \
         --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
 
+      substituteInPlace src/cpp/session/CMakeLists.txt \
+        --replace '@pandoc@' ${pandoc} \
+        --replace '@quarto@' ${quarto}
+
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
-        --replace '@pandoc@' ${pandoc}/bin/pandoc
+        --replace '@pandoc@' ${pandoc}/bin \
+        --replace '@quarto@' ${quarto}
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
@@ -175,8 +186,6 @@ in
 
       cp -r ${rsconnectSrc} dependencies/rsconnect
       ( cd dependencies && ${R}/bin/R CMD build -d --no-build-vignettes rsconnect )
-
-      cp -r "${panmirrorModules}" src/gwt/panmirror/src/editor/node_modules
     '';
 
     postInstall = ''
@@ -200,14 +209,14 @@ in
       rm -r $out/lib/rstudio/{INSTALL,COPYING,NOTICE,README.md,SOURCE,VERSION}
     '';
 
-    meta = with lib; {
+    meta = {
       broken = (stdenv.isLinux && stdenv.isAarch64);
       inherit description;
       homepage = "https://www.rstudio.com/";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [ ciil cfhammill ];
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [ ciil cfhammill ];
       mainProgram = "rstudio" + lib.optionalString server "-server";
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
 
     passthru = {

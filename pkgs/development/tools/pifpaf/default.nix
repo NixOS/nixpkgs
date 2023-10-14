@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -7,7 +8,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "3.1.5";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-lmixfUP+pq0RdyXeY6MmUQOx1sMLHqojOKUK1mivbaU=";
   };
@@ -28,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     requests
+    testtools
   ];
 
   pythonImportsCheck = [ "pifpaf" ];

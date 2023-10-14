@@ -38,5 +38,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/snowflakedb/snowflake-sqlalchemy";
     license = licenses.asl20;
     maintainers = [ ];
+
+    # https://github.com/snowflakedb/snowflake-sqlalchemy/issues/380
+    broken = versionAtLeast sqlalchemy.version "2";
   };
 }

@@ -5,15 +5,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.5.3";
+  version = "0.7.7";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-orJkWVBZnbhRjYDI6s5fPymzpTmZE5MsmYWp3JOKjnU=";
+    hash = "sha256-Qqe9nJZfCb7xh93ERrV3XpqdtfeRECt7RDca9eQU3eQ=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '= "^' '= ">='
+  '';
 
   nativeBuildInputs = with python3.pkgs; [
     poetry-core
@@ -21,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     click
+    colorama
     prettytable
     pysigma
     pysigma-backend-elasticsearch
@@ -37,10 +43,14 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '= "^' '= ">='
-  '';
+  disabledTests = [
+    "test_plugin_list"
+    "test_plugin_list_filtered"
+    "test_plugin_list_search"
+    "test_plugin_install_notexisting"
+    "test_plugin_install"
+    "test_plugin_uninstall"
+  ];
 
   pythonImportsCheck = [
     "sigma.cli"

@@ -15,7 +15,7 @@ let
     name ? mkTestName package,
     useSocketAuth ? true,
     hasMroonga ? true,
-    hasRocksDB ? true
+    hasRocksDB ? pkgs.stdenv.hostPlatform.is64bit
   }: makeTest {
     inherit name;
     meta = with lib.maintainers; {

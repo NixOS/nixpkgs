@@ -2,11 +2,13 @@
 , lib
 , fetchFromGitLab
 , nix-update-script
+, cargo
 , meson
 , ninja
 , gettext
 , python3
 , rustPlatform
+, rustc
 , pkg-config
 , gtksourceview4
 , glib
@@ -49,9 +51,9 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook
     glib
   ];

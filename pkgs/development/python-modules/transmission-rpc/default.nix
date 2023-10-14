@@ -1,19 +1,19 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchPypi
 , poetry-core
-, pydantic
 , pytestCheckHook
 , pythonOlder
+, python-dotenv
 , pytz
 , requests
+, typing-extensions
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "transmission-rpc";
-  version = "4.2.0";
+  version = "7.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Trim21";
     repo = "transmission-rpc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uWJCDnlyukm7nrcENg/UmqrEjBYMZDK09Ym3wvWgGls=";
+    hash = "sha256-wBTx4gy6c6TMtc2m+xibEzCgYJJiMMZ16+pq3H06hgs=";
   };
 
   nativeBuildInputs = [
@@ -30,11 +30,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pydantic
     requests
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    python-dotenv
     pytz
     pytestCheckHook
     yarl

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.35.0";
+  version = "0.36.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "bellows";
     rev = "refs/tags/${version}";
-    hash = "sha256-LxIIaxrDWRdYV3K2Geuz0gdDEzqMzYN1tXvjIkQxQoA=";
+    hash = "sha256-f4AgYpqb4s5F46nGi0FjLQ9YRHetLfaA/jLydiewxOM=";
   };
 
   propagatedBuildInputs = [

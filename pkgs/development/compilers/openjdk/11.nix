@@ -11,8 +11,11 @@
 let
   major = "11";
   minor = "0";
-  update = "18";
-  build = "10";
+  update = "19";
+  build = "7";
+
+  # when building a headless jdk, also bootstrap it with a headless jdk
+  openjdk-bootstrap = openjdk11-bootstrap.override { gtkSupport = !headless; };
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
@@ -22,14 +25,14 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
-      sha256 = "sha256-QGOpMIrWwOtIcUY/CLbTRDvcVTG2xioZu46v+n+IIQ4=";
+      sha256 = "sha256-mp8toB1dWcwOtMqNFd7UwRg8pLJckovqD/LD5p9zUoA=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];
     buildInputs = [
       cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11-bootstrap
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -58,7 +61,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk11-bootstrap.home}"
+      "--with-boot-jdk=${openjdk-bootstrap.home}"
       "--with-version-pre="
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
@@ -155,7 +158,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk11-bootstrap ];
+    disallowedReferences = [ openjdk-bootstrap ];
 
     meta = import ./meta.nix lib version;
 

@@ -13,38 +13,38 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "4.5.8";
+  version = "4.7.1";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-6AitRpyLIq5by9/rXdIC8AChMVKZmR1Eo5GTo+DtGhc=";
+    hash = "sha256-T/KAhKoxZRdbJspL+Fkos6YqVhiUxCtxbCSm+8CX1to=";
   };
 
+  cargoHash = "";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ecolor-0.20.0" = "sha256-tnjFkaCWmCPGw3huQN9VOAeiH+zk3Zk9xYoRKmg2WQg=";
+      "ecolor-0.21.0" = "sha256-m7eHX6flwO21umtx3dnIuVUnNsEs3ZCyOk5Vvp/lVfI=";
       "notify-rust-4.6.0" = "sha256-jhCgisA9f6AI9e9JQUYRtEt47gQnDv5WsdRKFoKvHJs=";
-      "supergfxctl-5.0.2" = "sha256-zp92mWyWUEWUP4kEyHbiUyYTtp2kLv+gxkPzOu77fi8=";
+      "supergfxctl-5.1.2" = "sha256-1XCIltd7o+Bc+UXmeuPAXdPKU86UP0p+Qh0gTZyrbH8=";
     };
   };
 
   postPatch = ''
     files="
-      daemon/src/config.rs
-      daemon/src/ctrl_anime/config.rs
-      daemon-user/src/daemon.rs
-      daemon-user/src/ctrl_anime.rs
-      daemon-user/src/user_config.rs
+      asusd-user/src/config.rs
+      asusd-user/src/daemon.rs
+      asusd/src/ctrl_anime/config.rs
+      rog-aura/src/aura_detection.rs
       rog-control-center/src/main.rs
     "
     for file in $files; do
       substituteInPlace $file --replace /usr/share $out/share
     done
 
-    substituteInPlace daemon/src/ctrl_platform.rs --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
+    substituteInPlace asusd/src/ctrl_platform.rs --replace /usr/bin/chattr ${e2fsprogs}/bin/chattr
 
     substituteInPlace data/asusd.rules --replace systemctl ${systemd}/bin/systemctl
     substituteInPlace data/asusd.service \
@@ -63,23 +63,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = ''
-    install -Dm444 -t $out/share/dbus-1/system.d/ data/asusd.conf
-    install -Dm444 -t $out/share/rog-gui/layouts/ rog-aura/data/layouts/*
-
-    install -Dm444 -t $out/share/applications/ rog-control-center/data/rog-control-center.desktop
-    install -Dm444 -t $out/share/icons/hicolor/512x512/apps/ rog-control-center/data/rog-control-center.png data/icons/asus_notif_*
-    install -Dm444 -t $out/share/icons/hicolor/scalable/status/ data/icons/scalable/*
-
-    install -Dm444 -t $out/share/asusd/anime/asus/rog/ rog-anime/data/anime/asus/rog/Sunset.gif
-    install -Dm444 -t $out/share/asusd/anime/asus/gaming/ rog-anime/data/anime/asus/gaming/Controller.gif
-    install -Dm444 -t $out/share/asusd/anime/custom/ rog-anime/data/anime/custom/*
-
-    install -Dm444 -t $out/share/asusd/data/ data/asusd-ledmodes.toml
-
-    install -Dm444 data/asusd.rules $out/lib/udev/rules.d/99-asusd.rules
-    install -Dm444 -t $out/share/dbus-1/system.d/ data/asusd.conf
-    install -Dm444 -t $out/lib/systemd/system/ data/asusd.service
-    install -Dm444 -t $out/lib/systemd/user/ data/asusd-user.service
+    make prefix=$out install-data
   '';
 
   postFixup = ''

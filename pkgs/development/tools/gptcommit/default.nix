@@ -10,7 +10,7 @@
 
 let
   pname = "gptcommit";
-  version = "0.5.7";
+  version = "0.5.13";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -19,10 +19,10 @@ rustPlatform.buildRustPackage {
     owner = "zurawiki";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ymG0D/geYH0o4fBzggeJH41fwZnO3THUV8ipk5GfwQc=";
+    sha256 = "sha256-O0dqLN2wDXRIVcb9whlzK0BJOm/qhTH+nLpCwSUObng=";
   };
 
-  cargoSha256 = "sha256-OiKuMbczyZ92x2rketRWNdYO2dTsJJo0cioKpxB9aAc=";
+  cargoSha256 = "sha256-JwwQaThefWhJVRJ/a0WfdKJqr/NHgll6D6Y2QaeqWsc=";
 
   nativeBuildInputs = [ pkg-config ];
 

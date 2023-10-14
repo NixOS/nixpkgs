@@ -187,7 +187,7 @@ in {
       serviceConfig = {
         User         = pgmanage;
         Group        = pgmanage;
-        ExecStart    = "${pkgs.pgmanage}/sbin/pgmanage -c ${confFile}" +
+        ExecStart    = "${cfg.package}/sbin/pgmanage -c ${confFile}" +
                        optionalString cfg.localOnly " --local-only=true";
       };
     };

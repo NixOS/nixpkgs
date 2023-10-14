@@ -1,14 +1,12 @@
 { lib
 , fetchpatch
-, python3Packages
+, python3
 , fetchFromGitHub
 , wrapQtAppsHook
 , cups
 }:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "inkcut";
   version = "2.1.5";
 
@@ -48,7 +46,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     enamlx
     twisted
     lxml

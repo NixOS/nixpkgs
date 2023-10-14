@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
-  version = "22.2";
+  version = "23.2";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
-    sha256 = "sha256-7T7UmS650VvYN29vQxemzsaxF5wPFF+yCNCTyXY7nmY=";
+    sha256 = "sha256-r2iw1vINWgqxoW0Zc8Sloa+wN/GUbUQfJ0e2BSP9vxM=";
   };
 
   dontUnpack = true;
@@ -17,12 +17,17 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "gpsprune";
-      exec = "gpsprune";
+      exec = "gpsprune %F";
       icon = "gpsprune";
       desktopName = "GpsPrune";
       genericName = "GPS Data Editor";
       comment = meta.description;
       categories = [ "Education" "Geoscience" ];
+      mimeTypes = [
+        "application/gpx+xml"
+        "application/vnd.google-earth.kml+xml"
+        "application/vnd.google-earth.kmz"
+      ];
     })
   ];
 

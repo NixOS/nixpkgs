@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , fetchpatch
 , appstream-glib
+, cargo
 , dbus
 , desktop-file-utils
 , git
@@ -14,6 +15,7 @@
 , openssl
 , pkg-config
 , rustPlatform
+, rustc
 , sqlite
 , transmission
 , wrapGAppsHook4
@@ -56,11 +58,10 @@ in stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     dbus

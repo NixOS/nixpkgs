@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ykO/Jh1NOSz/IN+uRAg2YDvwCfziT9ybJpfYN6IjnU8=";
   };
 
+  outputs = [ "out" "dev" "doc" ];
+
   nativeCheckInputs = [ perl ];
 
   preCheck = "patchShebangs tests/unit";

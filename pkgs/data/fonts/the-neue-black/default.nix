@@ -1,11 +1,11 @@
 { lib, fetchzip, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation (self: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "the-neue-black";
   version = "1.007";
 
   src = fetchzip {
-    url = "https://github.com/theleagueof/the-neue-black/releases/download/${self.version}/TheNeueBlack-${self.version}.tar.xz";
+    url = "https://github.com/theleagueof/the-neue-black/releases/download/${finalAttrs.version}/TheNeueBlack-${finalAttrs.version}.tar.xz";
     hash = "sha256-AsB6w1000xdl+pOPDXqqzQhru1T/VD0hIJ4gFec7mU4=";
   };
 

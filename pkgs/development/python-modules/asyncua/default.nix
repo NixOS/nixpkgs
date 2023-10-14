@@ -1,9 +1,11 @@
 { lib
+, stdenv
 , aiofiles
 , aiosqlite
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+, pyopenssl
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
@@ -16,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "asyncua";
-  version = "1.0.1";
+  version = "1.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -25,22 +27,29 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6A4z+tiQ2oUlB9t44wlW64j5sjWFMAgqT3Xt0FdJCBs=";
+    hash = "sha256-gAyvo+VJPdS/UpXN/h8LqbIRyx84fifSUsW2GUzLgfo=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
     # https://github.com/FreeOpcUa/opcua-asyncio/issues/1263
     substituteInPlace setup.py \
       --replace ", 'asynctest'" ""
+
+    # Workaround hardcoded paths in test
+    # "test_cli_tools_which_require_sigint"
+    substituteInPlace tests/test_tools.py \
+      --replace "tools/" "$out/bin/"
   '';
 
   propagatedBuildInputs = [
-    aiosqlite
     aiofiles
-    pytz
-    python-dateutil
-    sortedcontainers
+    aiosqlite
     cryptography
+    pyopenssl
+    python-dateutil
+    pytz
+    sortedcontainers
     typing-extensions
   ];
 
@@ -54,9 +63,15 @@ buildPythonPackage rec {
     "asyncua"
   ];
 
-  disabledTests = [
-    # Hard coded path only works from root of src
-    "test_cli_tools_which_require_sigint"
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
+    "test_publish"
+    # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
+    "test_anonymous_rejection"
+    "test_certificate_handling_success"
+    "test_encrypted_private_key_handling_success"
+    "test_encrypted_private_key_handling_success_with_cert_props"
+    "test_encrypted_private_key_handling_failure"
   ];
 
   meta = with lib; {

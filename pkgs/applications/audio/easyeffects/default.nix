@@ -27,8 +27,8 @@
 , pkg-config
 , rnnoise
 , rubberband
-, speex
 , speexdsp
+, soundtouch
 , tbb
 , wrapGAppsHook4
 , zam-plugins
@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.0.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-PI29TJSYa/dARlSHe4mO4ejV+muhGFhwVvhA10jziTA=";
+    hash = "sha256-TuVW2KBJciuFVdduzfFepGOa+UY9+sXRN1gWhfDvXgw=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
-    speex
+    soundtouch
     speexdsp
     tbb
     zita-convolver
@@ -105,7 +105,8 @@ stdenv.mkDerivation rec {
     description = "Audio effects for PipeWire applications.";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+    mainProgram = "easyeffects";
   };
 }

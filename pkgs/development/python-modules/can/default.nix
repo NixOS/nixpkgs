@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "can";
-  version = "4.1.0";
+  version = "4.2.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNy47SapujTF3ReJtIbwUY53IftIH4cXZjkzHrnZMFQ=";
+    hash = "sha256-MyVGjAy13Ne0PkVufB0JDNEZHhVBzeUYWWlH72ib/pI=";
   };
 
   postPatch = ''

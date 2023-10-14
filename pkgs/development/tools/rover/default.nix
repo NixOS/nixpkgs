@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rover";
-  version = "0.11.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ei6EeM0+b3EsMoRo38nHO79onT9Oq/cfbiCZhyDYQrc=";
+    sha256 = "sha256-fVgo5Ds/VK0kBpF+F2FdMvBnQj2IB+B5ToOK8ONdq6c=";
   };
 
-  cargoSha256 = "sha256-+iDU8LPb7P4MNQ8MB5ldbWq4wWRcnbgOmSZ93Z//5O0=";
+  cargoSha256 = "sha256-fNqnpLNENLJEhbqxLFUqyjAf8tEPCLoGSRV91gOY9LI=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

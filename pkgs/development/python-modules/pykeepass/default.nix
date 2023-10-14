@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, buildPythonPackage
 , lxml, pycryptodomex, construct
-, argon2-cffi, python-dateutil, future
+, argon2-cffi, python-dateutil
 , python
 }:
 
 buildPythonPackage rec {
   pname   = "pykeepass";
-  version = "4.0.3";
+  version = "4.0.6";
 
   format = "setuptools";
 
@@ -14,16 +14,12 @@ buildPythonPackage rec {
     owner = "libkeepass";
     repo = "pykeepass";
     rev = "v${version}";
-    hash = "sha256-HyveBBsd1OFWoY3PgqqaKRLBhsxgFv8PRAxEF6r+bf4=";
+    hash = "sha256-832cTVzI/MFdwiw6xWzRG35z3iwqb5Qpf6W6XYBIFWs=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace "==" ">="
-  '';
 
   propagatedBuildInputs = [
     lxml pycryptodomex construct
-    argon2-cffi python-dateutil future
+    argon2-cffi python-dateutil
   ];
 
   propagatedNativeBuildInputs = [ argon2-cffi ];

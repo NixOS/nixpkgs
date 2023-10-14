@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 , version
 , hash
@@ -10,15 +11,9 @@
 , eol ? false
 }:
   let
-    py = python3 // {
-      pkgs = python3.pkgs.overrideScope (self: super: {
-        django = super.django_4;
-      });
-    };
-
-    extraBuildInputs = plugins py.pkgs;
+    extraBuildInputs = plugins python3.pkgs;
   in
-  py.pkgs.buildPythonApplication rec {
+  python3.pkgs.buildPythonApplication rec {
       pname = "netbox";
       inherit version;
 
@@ -33,8 +28,9 @@
 
       patches = extraPatches;
 
-      propagatedBuildInputs = with py.pkgs; [
+      propagatedBuildInputs = with python3.pkgs; [
         bleach
+        boto3
         django_4
         django-cors-headers
         django-debug-toolbar
@@ -49,8 +45,12 @@
         django-taggit
         django-timezone-field
         djangorestframework
+        drf-spectacular
+        drf-spectacular-sidecar
         drf-yasg
+        dulwich
         swagger-spec-validator # from drf-yasg[validation]
+        feedparser
         graphene-django
         jinja2
         markdown
@@ -67,7 +67,7 @@
         jsonschema
       ] ++ extraBuildInputs;
 
-      buildInputs = with py.pkgs; [
+      buildInputs = with python3.pkgs; [
         mkdocs-material
         mkdocs-material-extensions
         mkdocstrings
@@ -75,7 +75,7 @@
       ];
 
       nativeBuildInputs = [
-        py.pkgs.mkdocs
+        python3.pkgs.mkdocs
       ];
 
       postBuild = ''

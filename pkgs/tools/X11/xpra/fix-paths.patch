@@ -31,7 +31,7 @@ index d5c1c8bb10..88c77e8142 100755
 -            log.error("Error: cannot launch ldconfig -p to locate libfakeXinerama:")
 -            log.error(" %s", e)
 -    return find_lib("libfakeXinerama.so.1")
-+    return "@libfakeXinerama@/lib/libfakeXinerama.so.1"
++    return "@libfakeXinerama@/lib/libfakeXinerama.so.1.0"
  
  current_xinerama_config = None
  

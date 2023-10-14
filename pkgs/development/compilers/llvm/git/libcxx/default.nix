@@ -2,7 +2,7 @@
 , monorepoSrc, runCommand
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
-, libcxxabi, libcxxrt
+, libcxxabi, libcxxrt, libunwind
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -17,7 +17,7 @@ let
   basename = "libcxx";
 in
 
-assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
+assert stdenv.isDarwin -> cxxabi.libName == "c++abi";
 
 stdenv.mkDerivation rec {
   pname = basename + lib.optionalString headersOnly "-headers";
@@ -62,36 +62,47 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
+  buildInputs =
+    lib.optionals (!headersOnly) [ cxxabi ]
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [ libunwind ];
 
-  cmakeFlags = [
+
+  cmakeFlags = let
+    # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
+    libcxx_cxx_abi_opt = {
+      "c++abi" = "system-libcxxabi";
+      "cxxrt" = "libcxxrt";
+    }.${cxxabi.libName} or (throw "unknown cxxabi: ${cxxabi.libName} (${cxxabi.pname})");
+  in [
     "-DLLVM_ENABLE_RUNTIMES=libcxx"
-    "-DLIBCXX_CXX_ABI=${lib.optionalString (!headersOnly) "system-"}${cxxabi.pname}"
-  ] ++ lib.optional (!headersOnly && cxxabi.pname == "libcxxabi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
+    "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
+  ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
-    ++ lib.optionals stdenv.hostPlatform.isWasm [
+    ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+      "-DLIBCXX_USE_COMPILER_RT=ON"
+      # (Backport fix from 16, which has LIBCXX_ADDITIONAL_LIBRARIES, but 15
+      # does not appear to)
+      # There's precedent for this in llvm-project/libcxx/cmake/caches.
+      # In a monorepo build you might do the following in the libcxxabi build:
+      #   -DLLVM_ENABLE_PROJECTS=libcxxabi;libunwinder
+      #   -DLIBCXXABI_STATICALLY_LINK_UNWINDER_IN_STATIC_LIBRARY=On
+      # libcxx appears to require unwind and doesn't pull it in via other means.
+      # "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
+      "-DCMAKE_SHARED_LINKER_FLAGS=-lunwind"
+    ] ++ lib.optionals stdenv.hostPlatform.isWasm [
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
+    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
+    # If we're only building the headers we don't actually *need* a functioning
+    # C/C++ compiler:
+    ++ lib.optionals (headersOnly) [
+      "-DCMAKE_C_COMPILER_WORKS=ON"
+      "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    ];
 
   ninjaFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
-
-  preInstall = lib.optionalString (stdenv.isDarwin && !headersOnly) ''
-    for file in lib/*.dylib; do
-      if [ -L "$file" ]; then continue; fi
-
-      baseName=$(basename $(${stdenv.cc.targetPrefix}otool -D $file | tail -n 1))
-      installName="$out/lib/$baseName"
-      abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
-
-      for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
-        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
-      done
-    done
-  '';
 
   passthru = {
     isLLVM = true;

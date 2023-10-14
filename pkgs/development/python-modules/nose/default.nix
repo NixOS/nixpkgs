@@ -26,7 +26,7 @@ buildPythonPackage rec {
       --replace "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
   '';
 
-  preBuild = lib.optionalString (isPy3k && (!isPyPy)) ''
+  preBuild = lib.optionalString (isPy3k) ''
     ${python.pythonForBuild}/bin/2to3 -wn nose functional_tests unit_tests
   '';
 
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = isPyPy; # missing 2to3 conversion utility
     description = "A unittest-based testing framework for python that makes writing and running tests easier";
     homepage = "https://nose.readthedocs.io/";
     license = licenses.lgpl3;

@@ -1,28 +1,28 @@
-{ fetchurl, lib, autoreconfHook, pkg-config, stdenv, fetchpatch, fetchFromGitHub }:
+{ lib, autoreconfHook, pkg-config, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "nss-mdns";
-  version = "v0.15.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "lathiat";
-    repo = pname;
-    rev = version;
+    repo = "nss-mdns";
+    rev = "v${version}";
     hash = "sha256-iRaf9/gu9VkGi1VbGpxvC5q+0M8ivezCz/oAKEg5V1M=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
+
   # Note: Although `nss-mdns' works by talking to `avahi-daemon', it
   # doesn't depend on the Avahi libraries.  Instead, it contains
   # hand-written D-Bus code to talk to the Avahi daemon.
 
-  configureFlags =
-    [ # Try to use the Avahi daemon before resolving on our own.
-      "--enable-avahi"
-
-      # Connect to the daemon at `/var/run/avahi-daemon/socket'.
-      "--localstatedir=/var"
-    ];
+  configureFlags = [
+    # Try to use the Avahi daemon before resolving on our own.
+    "--enable-avahi"
+    # Connect to the daemon at `/var/run/avahi-daemon/socket'.
+    "--localstatedir=/var"
+  ];
 
   meta = {
     description = "The mDNS Name Service Switch (NSS) plug-in";
@@ -33,13 +33,10 @@ stdenv.mkDerivation rec {
       resolution by common Unix/Linux programs in the ad-hoc mDNS
       domain `.local'.
     '';
-
     homepage = "http://0pointer.de/lennart/projects/nss-mdns/";
     license = lib.licenses.lgpl2Plus;
-
     # Supports both the GNU and FreeBSD NSS.
     platforms = lib.platforms.gnu ++ lib.platforms.linux ++ lib.platforms.freebsd;
-
     maintainers = [ ];
   };
 }

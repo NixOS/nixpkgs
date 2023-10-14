@@ -110,6 +110,15 @@ let
     sdl2 = super.sdl2.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL2 ];
     });
+    sdl2-image = super.sdl2-image.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.SDL2_image ];
+    });
+    sdl2-mixer = super.sdl2-mixer.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.SDL2_mixer ];
+    });
+    sdl2-ttf = super.sdl2-ttf.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.SDL2_ttf ];
+    });
     lispbuilder-sdl-cffi = super.lispbuilder-sdl-cffi.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL ];
     });
@@ -203,11 +212,67 @@ let
       patches = [ ./patches/math-no-compile-time-directory.patch ];
       nativeLibs = [ pkgs.fontconfig ];
     });
+    mcclim-fonts = super.mcclim-fonts.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        super.cl-dejavu
+        super.zpb-ttf
+        super.cl-vectors
+        super.cl-paths-ttf
+        super.flexi-streams
+      ];
+      systems = [ "mcclim-fonts" "mcclim-fonts/truetype" ];
+    });
+    mcclim-render = super.mcclim-render.overrideLispAttrs (o: {
+      lispLibs = o.lispLibs ++ [
+        self.mcclim-fonts
+      ];
+    });
+    mcclim-layouts = super.mcclim-layouts.overrideLispAttrs (o: {
+      systems = [ "mcclim-layouts" "mcclim-layouts/tab" ];
+      lispLibs = o.lispLibs ++ [
+        self.mcclim
+      ];
+    });
+    cl-charms = super.cl-charms.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.ncurses ];
+    });
+    libusb-ffi = super.libusb-ffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libusb-compat-0_1 ];
+    });
+    cl-fam = super.cl-fam.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.fam ];
+    });
+    jpeg-turbo = super.jpeg-turbo.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libjpeg_turbo ];
+    });
+    vorbisfile-ffi = super.vorbisfile-ffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libvorbis ];
+    });
+    png = super.png.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libpng ];
+    });
+    zmq = super.zmq.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.czmq ];
+    });
+    consfigurator = super.consfigurator.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.acl pkgs.libcap ];
+    });
+    cl-gss = super.cl-gss.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.libkrb5 ];
+    });
+    magicffi = super.magicffi.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.file ];
+    });
+    keystone = super.keystone.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.keystone ];
+    });
+    capstone = super.capstone.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.capstone ];
+    });
   });
 
   qlpkgs =
-    if builtins.pathExists ./imported.nix
-    then pkgs.callPackage ./imported.nix { inherit build-asdf-system; }
-    else {};
+    lib.optionalAttrs (builtins.pathExists ./imported.nix)
+      (pkgs.callPackage ./imported.nix { inherit build-asdf-system; });
 
-in qlpkgs.overrideScope' overrides
+in qlpkgs.overrideScope overrides

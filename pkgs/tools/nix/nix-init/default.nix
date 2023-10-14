@@ -4,10 +4,9 @@
 , fetchFromGitHub
 , curl
 , installShellFiles
-, makeWrapper
 , pkg-config
 , bzip2
-, libgit2_1_5
+, libgit2_1_6
 , openssl
 , zlib
 , zstd
@@ -19,35 +18,34 @@
 }:
 
 let
-  get-nix-license = import ./get-nix-license.nix {
+  get-nix-license = import ./get_nix_license.nix {
     inherit lib writeText;
   };
 in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-SvoKw0Ep8NGknu+6qd6xW6hfH261kFD6DjZhPXQpzs0=";
+    hash = "sha256-YUstBO+iznr0eJYVJdNQ2BjDhvviRQuojhT9IlTuR0k=";
   };
 
-  cargoHash = "sha256-lm4Y/ZTRMiBp3ECKnHZBvwM8Qso+rilT3BDxzfcnpHQ=";
+  cargoHash = "sha256-OAgEzf+EyrwjNa40BwPwSNZ4lhEH93YxCbPJJ3r7oSQ=";
 
   nativeBuildInputs = [
     curl
     installShellFiles
-    makeWrapper
     pkg-config
   ];
 
   buildInputs = [
     bzip2
     curl
-    libgit2_1_5
+    libgit2_1_6
     openssl
     zlib
     zstd
@@ -66,7 +64,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     mkdir -p data
-    ln -s ${get-nix-license} data/get-nix-license.rs
+    ln -s ${get-nix-license} data/get_nix_license.rs
   '';
 
   preBuild = ''
@@ -76,14 +74,16 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/nix-init \
-      --prefix PATH : ${lib.makeBinPath [ nix nurl ]}
     installManPage artifacts/nix-init.1
     installShellCompletion artifacts/nix-init.{bash,fish} --zsh artifacts/_nix-init
   '';
 
-  GEN_ARTIFACTS = "artifacts";
-  ZSTD_SYS_USE_PKG_CONFIG = true;
+  env = {
+    GEN_ARTIFACTS = "artifacts";
+    NIX = lib.getExe nix;
+    NURL = lib.getExe nurl;
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   meta = with lib; {
     description = "Command line tool to generate Nix packages from URLs";

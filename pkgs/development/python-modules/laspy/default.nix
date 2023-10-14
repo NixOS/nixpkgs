@@ -3,32 +3,45 @@
 , fetchPypi
 , numpy
 , laszip
+, setuptools
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "laspy";
-  version = "2.3.0";
+  version = "2.5.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Wdbp6kjuZkJh+pp9OVczdsRNgn41/Tdt7nGFvewcQ1w=";
+    hash = "sha256-uqPJxswVVjbxYRSREfnPwkPb0U9synKclLNWsxxmjy4=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy
     laszip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "laspy" "laszip" ];
+  pythonImportsCheck = [
+    "laspy"
+    "laszip"
+  ];
 
   meta = with lib; {
     description = "Interface for reading/modifying/creating .LAS LIDAR files";
     homepage = "https://github.com/laspy/laspy";
+    changelog = "https://github.com/laspy/laspy/blob/${version}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ matthewcroughan ];
   };

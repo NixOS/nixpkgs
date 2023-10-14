@@ -11,8 +11,9 @@
 , setuptools
 , six
 , libgpuarray
-, cudaSupport ? false, cudaPackages ? {}
-, cudnnSupport ? false
+, config
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
+, cudnnSupport ? cudaSupport
 }:
 
 let
@@ -100,5 +101,6 @@ in buildPythonPackage rec {
     description = "A Python library for large-scale array computation";
     license = licenses.bsd3;
     maintainers = [ ];
+    broken = true;
   };
 }

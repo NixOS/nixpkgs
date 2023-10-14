@@ -1,26 +1,28 @@
 { clang
 , cmake
+, CoreFoundation
 , fetchFromGitHub
 , fetchurl
 , lib
 , lighthouse
-, llvmPackages
+, nix-update-script
 , nodePackages
 , perl
+, pkg-config
+, postgresql
 , protobuf
 , rustPlatform
 , Security
-, CoreFoundation
+, sqlite
 , stdenv
+, SystemConfiguration
 , testers
 , unzip
-, nix-update-script
-, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lighthouse";
-  version = "3.5.1";
+  version = "4.1.0";
 
   # lighthouse/common/deposit_contract/build.rs
   depositContractSpecVersion = "0.12.1";
@@ -30,15 +32,23 @@ rustPlatform.buildRustPackage rec {
     owner = "sigp";
     repo = "lighthouse";
     rev = "v${version}";
-    hash = "sha256-oF32s1nfzEZbaNUi5sQSrotcyOSinULj/qrRQWdMXHg=";
+    hash = "sha256-QVAFzV9sao8+eegI7bLfm+pPHyvDFhnADS80+nqqgtE=";
   };
+
+  patches = [
+    ./use-system-sqlite.patch
+  ];
+
+  postPatch = ''
+    cp ${./Cargo.lock} Cargo.lock
+  '';
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "amcl-0.3.0" = "sha256-Mj4dXTlGVSleFfuTKgVDQ7S3jANMsdtVE5L90WGxA4U=";
-      "arbitrary-1.2.2" = "sha256-39ZefB5Xok28y8lIdKleILBv4aokY90eMOssxUtU7yA=";
-      "beacon-api-client-0.1.0" = "sha256-vqTC7bKXgliN7qd5LstNM5O6jRnn4aV/paj88Mua+Bc=";
+      "arbitrary-1.3.0" = "sha256-BMxcBfxBRf+Kb0Tz55jtFbwokSeD2GPtB+KV8Wbne0g=";
+      "beacon-api-client-0.1.0" = "sha256-fI8qST6HZrchg7yr/nVtRNrsW3f5ONSX+mGRYW+iiqA=";
       "ethereum-consensus-0.1.1" = "sha256-aBrZ786Me0BWpnncxQc5MT3r+O0yLQhqGKFBiNTdqSA=";
       "libmdbx-0.1.4" = "sha256-NMsR/Wl1JIj+YFPyeMMkrJFfoS07iEAKEQawO89a+/Q=";
       "lmdb-rkv-0.14.0" = "sha256-sxmguwqqcyOlfXOZogVz1OLxfJPo+Q0+UjkROkbbOCk=";
@@ -50,11 +60,19 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "modern" "gnosis" ];
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook cmake perl protobuf ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    cmake
+    perl
+    pkg-config
+    protobuf
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+  buildInputs = [
+    sqlite
+  ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
+    Security
     SystemConfiguration
   ];
 
@@ -79,7 +97,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFeatures = [ ];
 
-  # All of these tests require network access
+  # All of these tests require network access and/or docker
   cargoTestFlags = [
     "--workspace"
     "--exclude beacon_node"
@@ -88,6 +106,7 @@ rustPlatform.buildRustPackage rec {
     "--exclude lighthouse"
     "--exclude lighthouse_network"
     "--exclude slashing_protection"
+    "--exclude watch"
     "--exclude web3signer_tests"
   ];
 
@@ -95,6 +114,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip service::tests::tests::test_dht_persistence"
     "--skip time::test::test_reinsertion_updates_timeout"
+
   ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [
     "--skip subnet_service::tests::sync_committee_service::same_subscription_with_lower_until_epoch"
     "--skip subnet_service::tests::sync_committee_service::subscribe_and_unsubscribe"
@@ -102,6 +122,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     nodePackages.ganache
+    postgresql
   ];
 
   passthru = {

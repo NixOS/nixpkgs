@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-yehjDPnUM/POrXSQahUg0iI/ibzT+pJUhhAXRAuOsi8=";
   };
 
+  outputs = [ "out" "dev" ];
+
+  enableParallelBuilding = true;
+
   configureFlags = lib.optional exampleSupport "--enable-example";
 
   meta = with lib; {
     description = "A high-quality implementation of the AAC codec from Android";
     homepage = "https://sourceforge.net/projects/opencore-amr/";
-    license = licenses.asl20;
+    license = licenses.fraunhofer-fdk;
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.all;
   };

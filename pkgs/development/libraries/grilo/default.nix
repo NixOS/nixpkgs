@@ -1,11 +1,11 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , meson
 , mesonEmulatorHook
 , ninja
 , pkg-config
+, python3
 , gettext
 , vala
 , glib
@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo";
-  version = "0.3.15"; # if you change minor, also change ./setup-hook.sh
+  version = "0.3.16"; # if you change minor, also change ./setup-hook.sh
 
   outputs = [ "out" "dev" "man" "devdoc" ];
   outputBin = "dev";
@@ -32,15 +32,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "81Ks9zZlZpk0JwY2/t5mtS2mgB/iD2OMQEirJnhXey0=";
+    sha256 = "iEWA6MXs4oDfI6pj/1I0t9SJiKQE331r/M0ed7RzvZY=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/grilo/-/commit/b0d75be00b06cb0163dabbedecf9122a55273349.patch";
-      sha256 = "sha256-Hwnc3TLN6n3w/MAFcprHv7nbTcwRfI0cmfDriNLnAvQ=";
-    })
-  ];
 
   mesonFlags = [
     "-Denable-gtk-doc=true"
@@ -50,6 +43,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    python3
     gettext
     gobject-introspection
     vala

@@ -1,4 +1,5 @@
 import nixos_render_docs as nrd
+import pytest
 
 from markdown_it.token import Token
 
@@ -427,18 +428,38 @@ def test_admonitions() -> None:
 
 def test_example() -> None:
     c = Converter({})
-    assert c._parse("::: {.example}") == [
-        Token(type='example_open', tag='div', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
+    assert c._parse("::: {.example}\n# foo") == [
+        Token(type='example_open', tag='div', nesting=1, attrs={}, map=[0, 2], level=0, children=None,
               content='', markup=':::', info=' {.example}', meta={}, block=True, hidden=False),
+        Token(type='example_title_open', tag='h1', nesting=1, attrs={}, map=[1, 2], level=1, children=None,
+              content='', markup='#', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[1, 2], level=2,
+              content='foo', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='foo', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='example_title_close', tag='h1', nesting=-1, attrs={}, map=None, level=1, children=None,
+              content='', markup='#', info='', meta={}, block=True, hidden=False),
         Token(type='example_close', tag='div', nesting=-1, attrs={}, map=None, level=0, children=None,
-              content='', markup=':::', info='', meta={}, block=True, hidden=False)
+              content='', markup='', info='', meta={}, block=True, hidden=False)
     ]
-    assert c._parse("::: {#eid .example}") == [
-        Token(type='example_open', tag='div', nesting=1, attrs={'id': 'eid'}, map=[0, 1], level=0,
+    assert c._parse("::: {#eid .example}\n# foo") == [
+        Token(type='example_open', tag='div', nesting=1, attrs={'id': 'eid'}, map=[0, 2], level=0,
               children=None, content='', markup=':::', info=' {#eid .example}', meta={}, block=True,
               hidden=False),
+        Token(type='example_title_open', tag='h1', nesting=1, attrs={}, map=[1, 2], level=1, children=None,
+              content='', markup='#', info='', meta={}, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, attrs={}, map=[1, 2], level=2,
+              content='foo', markup='', info='', meta={}, block=True, hidden=False,
+              children=[
+                  Token(type='text', tag='', nesting=0, attrs={}, map=None, level=0, children=None,
+                        content='foo', markup='', info='', meta={}, block=False, hidden=False)
+              ]),
+        Token(type='example_title_close', tag='h1', nesting=-1, attrs={}, map=None, level=1, children=None,
+              content='', markup='#', info='', meta={}, block=True, hidden=False),
         Token(type='example_close', tag='div', nesting=-1, attrs={}, map=None, level=0, children=None,
-              content='', markup=':::', info='', meta={}, block=True, hidden=False)
+              content='', markup='', info='', meta={}, block=True, hidden=False)
     ]
     assert c._parse("::: {.example .note}") == [
         Token(type='paragraph_open', tag='p', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
@@ -451,4 +472,57 @@ def test_example() -> None:
               ]),
         Token(type='paragraph_close', tag='p', nesting=-1, attrs={}, map=None, level=0, children=None,
               content='', markup='', info='', meta={}, block=True, hidden=False)
+    ]
+    assert c._parse("::: {.example}\n### foo: `code`\nbar\n:::\nbaz") == [
+        Token(type='example_open', tag='div', nesting=1, map=[0, 3], markup=':::', info=' {.example}',
+              block=True),
+        Token(type='example_title_open', tag='h3', nesting=1, map=[1, 2], level=1, markup='###', block=True),
+        Token(type='inline', tag='', nesting=0, map=[1, 2], level=2, content='foo: `code`', block=True,
+              children=[
+                  Token(type='text', tag='', nesting=0, content='foo: '),
+                  Token(type='code_inline', tag='code', nesting=0, content='code', markup='`')
+              ]),
+        Token(type='example_title_close', tag='h3', nesting=-1, level=1, markup='###', block=True),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[2, 3], level=1, block=True),
+        Token(type='inline', tag='', nesting=0, map=[2, 3], level=2, content='bar', block=True,
+              children=[
+                  Token(type='text', tag='', nesting=0, content='bar')
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, level=1, block=True),
+        Token(type='example_close', tag='div', nesting=-1, markup=':::', block=True),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[4, 5], block=True),
+        Token(type='inline', tag='', nesting=0, map=[4, 5], level=1, content='baz', block=True,
+              children=[
+                  Token(type='text', tag='', nesting=0, content='baz')
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, block=True)
+    ]
+
+    with pytest.raises(RuntimeError) as exc:
+        c._parse("::: {.example}\n### foo\n### bar\n:::")
+    assert exc.value.args[0] == 'unexpected non-title heading in example in line 3'
+
+def test_footnotes() -> None:
+    c = Converter({})
+    assert c._parse("text [^foo]\n\n[^foo]: bar") == [
+        Token(type='paragraph_open', tag='p', nesting=1, map=[0, 1], block=True),
+        Token(type='inline', tag='', nesting=0, map=[0, 1], level=1, content='text [^foo]', block=True,
+              children=[
+                  Token(type='text', tag='', nesting=0, content='text '),
+                  Token(type='footnote_ref', tag='', nesting=0, attrs={'id': 'foo.__back.0'},
+                        meta={'id': 0, 'subId': 0, 'label': 'foo', 'target': 'foo'})
+              ]),
+        Token(type='paragraph_close', tag='p', nesting=-1, block=True),
+        Token(type='footnote_block_open', tag='', nesting=1),
+        Token(type='footnote_open', tag='', nesting=1, attrs={'id': 'foo'}, meta={'id': 0, 'label': 'foo'}),
+        Token(type='paragraph_open', tag='p', nesting=1, map=[2, 3], level=1, block=True, hidden=False),
+        Token(type='inline', tag='', nesting=0, map=[2, 3], level=2, content='bar', block=True,
+              children=[
+                  Token(type='text', tag='', nesting=0, content='bar')
+              ]),
+        Token(type='footnote_anchor', tag='', nesting=0,
+              meta={'id': 0, 'label': 'foo', 'subId': 0, 'target': 'foo.__back.0'}),
+        Token(type='paragraph_close', tag='p', nesting=-1, level=1, block=True),
+        Token(type='footnote_close', tag='', nesting=-1),
+        Token(type='footnote_block_close', tag='', nesting=-1),
     ]

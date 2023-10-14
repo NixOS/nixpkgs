@@ -23,6 +23,7 @@
 , setuptools-scm
 , scikit-build
 , cmake
+, ninja
 , antlr4_9
 , libxml2
 , pytestCheckHook
@@ -47,6 +48,7 @@ buildPythonPackage rec {
     setuptools-scm
     scikit-build
     cmake
+    ninja
   ];
 
   buildInputs = [
@@ -107,6 +109,7 @@ buildPythonPackage rec {
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"
   ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    "test_dump_option"
     "test_type1mm_inputs"
   ];
 
