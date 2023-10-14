@@ -12446,7 +12446,41 @@ with pkgs;
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
+  openmpi-cuda = openmpi.override {
+    cudaSupport = true;
+    rocmSupport = false;
+    ucx = ucx-cuda;
+    ucc = ucc-cuda;
+  };
+
+  # We need to use the 5.0.x branch until it is released
+  openmpi-rocm = (openmpi.overrideAttrs (final: prev: {
+    version = "5.0.0rc13";
+    outputs = [ "out" ]; # no man pages?
+
+    src = fetchFromGitHub {
+      owner = "open-mpi";
+      repo = "ompi";
+      rev = "v${final.version}";
+      hash = "sha256-zjfn2+U2KylMLQ3yekbiWPwm1RaGlwBKHAln/PpStig=";
+      fetchSubmodules = true;
+    };
+
+    nativeBuildInputs = prev.nativeBuildInputs ++ [ libtool automake autoconf git flex ];
+    configureFlags = prev.configureFlags ++ [ "--disable-mpi-cxx" ];
+    postPatch = "patchShebangs .";
+    preConfigure = "./autogen.pl";
+  })).override {
+    cudaSupport = false;
+    rocmSupport = true;
+    ucx = ucx-rocm;
+    ucc = ucc-rocm;
+    pmix = pmix_5;
+  };
+
   mpi = openmpi; # this attribute should used to build MPI applications
+  mpi-cuda = openmpi-cuda; # this attribute should used to build CUDA MPI applications
+  mpi-rocm = openmpi-rocm; # this attribute should used to build ROCm MPI applications
   mpiCheckPhaseHook = callPackage ../build-support/setup-hooks/mpi-check-hook { };
 
   ucc = callPackage ../development/libraries/ucc { };
