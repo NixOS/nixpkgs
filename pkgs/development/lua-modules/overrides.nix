@@ -146,10 +146,6 @@ with prev;
     */
   });
 
-  lpty = prev.lpty.overrideAttrs (oa: {
-    meta.broken = luaOlder "5.1" || luaAtLeast "5.3";
-  });
-
   ldbus = prev.ldbus.overrideAttrs (oa: {
     extraVariables = {
       DBUS_DIR = "${dbus.lib}";
