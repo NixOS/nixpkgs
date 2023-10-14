@@ -6467,8 +6467,8 @@ with self; {
       url = "mirror://cpan/authors/id/S/SC/SCHUBIGER/DateTime-Format-Natural-1.18.tar.gz";
       hash = "sha256-2TRqRhUDVFnYvO4PrD1OuuoDj09DsoT2nt9z9u1XUf4=";
     };
-    buildInputs = [ ModuleUtil TestMockTime ];
-    propagatedBuildInputs = [ Clone DateTime ListMoreUtils ParamsValidate boolean ];
+    buildInputs = [ ModuleUtil TestMockTimeHiRes ];
+    propagatedBuildInputs = [ Clone DateTime DateTimeHiRes DateTimeTimeZone ListMoreUtils ParamsValidate boolean ];
     meta = {
       description = "Parse informal natural language date/time strings";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
