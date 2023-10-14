@@ -19677,7 +19677,7 @@ with self; {
     };
     buildInputs = [ TestDeep ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-    propagatedBuildInputs = [ BKeywords ConfigTiny FileWhich ListMoreUtils ModulePluggable PPIxQuoteLike PPIxRegexp PPIxUtilities PerlTidy PodSpell StringFormat ];
+    propagatedBuildInputs = [ BKeywords ConfigTiny ExceptionClass FileWhich ListSomeUtils ModulePluggable PPI PPIxQuoteLike PPIxRegexp PPIxUtilities PPIxUtils PerlTidy PodSpell Readonly StringFormat ];
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/perlcritic
     '';
