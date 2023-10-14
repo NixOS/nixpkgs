@@ -4159,6 +4159,8 @@ self: super: with self; {
 
   folium = callPackage ../development/python-modules/folium { };
 
+  font-roboto = callPackage ../development/python-modules/font-roboto { };
+
   fontawesomefree = callPackage ../development/python-modules/fontawesomefree { };
 
   fontforge = toPythonModule (pkgs.fontforge.override {
