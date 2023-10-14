@@ -6551,6 +6551,21 @@ with self; {
     };
   };
 
+  DateTimeHiRes = buildPerlPackage {
+    pname = "DateTime-HiRes";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-HiRes-0.04.tar.gz";
+      hash = "sha256-HCMVkzLDD566VLdeZpK+TeqAUiQ+r/MCbJyQuLZLw5U=";
+    };
+    propagatedBuildInputs = [ DateTime ];
+    meta = {
+      homepage = "https://metacpan.org/release/DateTime-HiRes";
+      description = "Create DateTime objects with sub-second current time resolution";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DateTimeLocale = buildPerlPackage {
     pname = "DateTime-Locale";
     version = "1.39";
