@@ -146,8 +146,8 @@ in
           module = "http_upload";
           # these values are to preserve compatibility with this module pre nixos 23.11
           settings = {
-            http_upload_file_size_limit = cfg.uploadHttp.uploadFileSizeLimit or "50 * 1024 * 1024";
-            http_upload_expire_after = cfg.uploadHttp.uploadExpireAfter or "60 * 60 * 24 * 7";
+            http_upload_file_size_limit = cfg.uploadHttp.uploadFileSizeLimit or 50 * 1024 * 1024;
+            http_upload_expire_after = cfg.uploadHttp.uploadExpireAfter or 60 * 60 * 24 * 7;
             http_upload_path = cfg.uploadHttp.httpUploadPath or "/var/lib/prosody";
           } // optionalAttrs (cfg.uploadHttp ? userQuota) {
             http_upload_quota = cfg.uploadHttp.userQuota;
@@ -165,7 +165,7 @@ in
           settings = {
             modules_enabled = optionals (muc.vcard_muc or true) [ "vcard_muc" ];
             name = muc.name or "Prosody Chatrooms";
-            restrict_room_creation = muc.restrictRoomCreation or false;
+            restrict_room_creation = muc.restrictRoomCreation or "local";
             max_history_messages = muc.maxHistoryMessages or 20;
             muc_room_locking = muc.roomLocking or true;
             muc_room_lock_timeout = muc.roomLockTimeout or 300;
@@ -550,7 +550,7 @@ in
     ;
 
     services.prosody.settings = {
-      log = mkDefault { warn = "*syslog"; error = "*syslog"; };
+      log = mkDefault "*syslog";
       data_path = mkForce cfg.dataDir;
       network_backend = "event";
       pidfile = "/run/prosody/prosody.pid";
