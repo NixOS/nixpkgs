@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 
+  postPatch = ''
+    sed -i -e '/^mupdfthird =/d' -e 's/, mupdfthird//g' meson.build
+  '';
+
   passthru.updateScript = gitUpdater {
     url = "https://git.pwmt.org/pwmt/zathura-pdf-mupdf.git";
   };
