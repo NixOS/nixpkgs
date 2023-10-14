@@ -4196,6 +4196,8 @@ self: super: with self; {
 
   glyphslib = callPackage ../development/python-modules/glyphslib { };
 
+  fonts = callPackage ../development/python-modules/fonts { };
+
   foobot-async = callPackage ../development/python-modules/foobot-async { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
