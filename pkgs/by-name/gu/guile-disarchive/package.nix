@@ -19,9 +19,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-Agt7v5HTpaskXuYmMdGDRIolaqCHUpwd/CfbZCe9Ups=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
+    guile
     pkg-config
+  ];
+
+  buildInputs = [
     guile
     zlib
   ];
