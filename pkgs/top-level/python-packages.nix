@@ -10855,6 +10855,8 @@ self: super: with self; {
     inherit (pkgs.darwin) libiconv;
   };
 
+  pyreadline3 = callPackage ../development/python-modules/pyreadline3 { };
+
   pyrealsense2 = toPythonModule (pkgs.librealsense.override {
     enablePython = true;
     pythonPackages = self;
