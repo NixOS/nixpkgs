@@ -289,7 +289,10 @@ let
             lib/ReSharperHost/linux-*/ \
             plugins/dotCommon/DotFiles/linux-*/ \
             plugins/dotTrace/DotFiles/linux-*/
-          ln -s ${dotnet-sdk_7} lib/ReSharperHost/linux-*/dotnet
+
+          for dir in lib/ReSharperHost/linux-*; do
+            ln -s ${dotnet-sdk_7} $dir/dotnet
+          done
         )
       '';
     });
