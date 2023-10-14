@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "shodan";
-  version = "1.30.0";
+  version = "1.30.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yWF8ZsR7h9SAHnCAtsdp7Jox2jmN7+CwR6Z5SSdDZFM=";
+    hash = "sha256-vttujCtEWVksG8F7TUtX2rDLWKRVrVie4mpjBCQs1QU=";
   };
 
   propagatedBuildInputs = [
