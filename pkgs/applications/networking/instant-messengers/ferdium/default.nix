@@ -21,9 +21,7 @@ in mkFranzDerivation rec {
   extraBuildInputs = [ xorg.libxshmfence ];
 
   passthru = {
-    updateScript = nix-update-script {
-      extraArgs = [ "--override-filename" ./default.nix ];
-    };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
