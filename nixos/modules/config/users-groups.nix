@@ -694,13 +694,13 @@ in {
       lingeringUsersFile = builtins.toFile "lingering-users"
         (concatStrings (map (s: "${s}\n")
           (sort (a: b: a < b) lingeringUsers)));  # this sorting is important for `comm` to work correctly
-    in stringAfter [ "users" ] ''
+    in lib.mkIf (lingeringUsers != []) (stringAfter [ "users" ] ''
       if [ -e ${lingerDir} ] ; then
         cd ${lingerDir}
         ls ${lingerDir} | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
         ls ${lingerDir} | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
       fi
-    '';
+    '');
 
     # Warn about user accounts with deprecated password hashing schemes
     system.activationScripts.hashes = {
