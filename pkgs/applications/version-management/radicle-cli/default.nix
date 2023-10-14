@@ -10,33 +10,22 @@
 , openssl
 , libusb1
 , AppKit
-, git
-, openssh
 , testers
 , radicle-cli
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "radicle-cli";
-  version = "0.6.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "radicle-dev";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-LS6zYpMg0LanRL2M8ioGG8Ys07TPT/3hP7geEGehwxg=";
+    repo = "heartwood";
+    rev = "c3e11057ad933aeef27ffe091be2048557cad469";
+    sha256 = "sha256-ZuNtxy5k2TBDjn/aQckRvk5JmK4eUF6bFCzf2PgnFUs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "automerge-0.0.2" = "sha256-MZ1/rca8ZsEUhd3bhd502PHlBbvqAOtnWFEdp7XWmYE=";
-      "automerge-0.1.0" = "sha256-dwbmx3W13oZ1O0Uw3/D5Z0ht1BO1PmVVoWc/tLCm0/4=";
-      "cob-0.1.0" = "sha256-ewPJEx7OSr8X6e5QJ4dh2SbzZ2TDa8G4zBR5euBbABo=";
-      "libusb1-sys-0.6.2" = "sha256-577ld1xqJkHp2bqALNq5IuZivD8y+VO8vNy9Y+hfq6c=";
-      "walletconnect-0.1.0" = "sha256-fdgdhotTYBmWbR4r0OMplOwhYq1C7jkuOdhKASjH+Fs=";
-    };
-  };
+  cargoSha256 = "sha256-duN/6/S93EZaExsPS5eWxpaFvvSKuwxgHeZDocPkZEQ=";
 
   # Otherwise, there are errors due to the `abigen` macro from `ethers`.
   auditable = false;
@@ -65,13 +54,11 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  nativeCheckInputs = [
-    git
-    openssh
-  ];
-  preCheck = ''
-    eval $(ssh-agent)
-  '';
+  # only radicle-cli::commands and radicle-node tests need to be disabled as they require network
+  # however is doesn't seem possible
+  # to pass "-E not ((package(radicle-cli) and binary(commands)) or (package(radicle-node)))"
+  # to cargo nextest as shell quoting keeps breaking the argument being passed.
+  doCheck = false;
 
   passthru.tests = {
     version = testers.testVersion { package = radicle-cli; };
@@ -80,7 +67,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line tooling for Radicle, a decentralized code collaboration network";
     homepage = "https://radicle.xyz";
-    license = lib.licenses.gpl3Plus;
+    license = [ lib.licenses.mit lib.licenses.asl20 ];
     maintainers = with lib.maintainers; [ amesgen ];
     platforms = lib.platforms.unix;
     mainProgram = "rad";
