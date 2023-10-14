@@ -10689,6 +10689,8 @@ self: super: with self; {
 
   pypass = callPackage ../development/python-modules/pypass { };
 
+  pypatchmatch = callPackage ../development/python-modules/pypatchmatch { };
+
   pypblib = callPackage ../development/python-modules/pypblib { };
 
   pypca = callPackage ../development/python-modules/pypca { };
