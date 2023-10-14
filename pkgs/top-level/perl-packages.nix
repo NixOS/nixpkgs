@@ -7234,7 +7234,7 @@ with self; {
       hash = "sha256-GgieUISlJ2j0J0vCGB3LrhTcxXnk2YD89WnGeBsGCSw=";
     };
     buildInputs = [ DBDSQLite TestDeep TestDifferences TestException TestWarn ];
-    propagatedBuildInputs = [ CarpClan ClassUnload DBIxClass DataDump StringToIdentifierEN curry ];
+    propagatedBuildInputs = [ CarpClan ClassUnload DBIxClass DataDump StringCamelCase StringToIdentifierEN curry ];
     meta = {
       description = "Create a DBIx::Class::Schema based on a database";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
