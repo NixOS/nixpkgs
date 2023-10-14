@@ -2680,7 +2680,7 @@ with self; {
       url = "mirror://cpan/authors/id/H/HA/HAARG/Catalyst-Plugin-Session-0.43.tar.gz";
       hash = "sha256-Xn180rlbH8IkS8buuPRPg11gPqB/WjkRCIHbYJKLFMQ=";
     };
-    buildInputs = [ TestDeep TestException TestWWWMechanizePSGI ];
+    buildInputs = [ TestDeep TestException TestNeeds ];
     propagatedBuildInputs = [ CatalystRuntime ObjectSignature ];
     meta = {
       description = "Generic Session plugin - ties together server side storage and client side state required to maintain session data";
