@@ -935,13 +935,13 @@
     "vendorHash": "sha256-sV6JPKzpA1+uoUBmdWpUSk70cl9ofQqr7USbK+4RVDs="
   },
   "postgresql": {
-    "hash": "sha256-8ihu/qnPknrHeZjZ0MNcUL3qjH/gvEsOnZKDI93Hdh4=",
+    "hash": "sha256-r1Im4bhAakBe0PoDTpiQWPfnoFBtMCrAyL7qBa1yTQc=",
     "homepage": "https://registry.terraform.io/providers/cyrilgdn/postgresql",
     "owner": "cyrilgdn",
     "repo": "terraform-provider-postgresql",
-    "rev": "v1.20.0",
+    "rev": "v1.21.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-zsjx61qUV7nB26ghpl3T2AcXVMHblUQ0JNQ0xUnO+6Y="
+    "vendorHash": "sha256-bTgxH5KUFCLDxwY5JIG+rQtDq0uFXOsbuS1FxF3hJeU="
   },
   "powerdns": {
     "hash": "sha256-NtJs2oNJbjUYNFsbrfo2RYhqOlKA15GJt9gi1HuTIw0=",
