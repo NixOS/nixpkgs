@@ -155,6 +155,7 @@ stdenv.mkDerivation rec {
     fi
 
     ${dmd_bin}/rdmd dmd/compiler/src/build.d -j$buildJobs HOST_DMD=${dmd_bin}/dmd $buildFlags
+    make -C dmd/druntime -f posix.mak DMD=${pathToDmd} $buildFlags -j$buildJobs
     echo ${tzdata}/share/zoneinfo/ > TZDatabaseDirFile
     echo ${lib.getLib curl}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > LibcurlPathFile
     make -C phobos -f posix.mak $buildFlags -j$buildJobs DMD=${pathToDmd} DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
@@ -195,7 +196,7 @@ stdenv.mkDerivation rec {
     installManPage dmd/docs/man/man*/*
 
     mkdir -p $out/include/dmd
-    cp -r {druntime/import/*,phobos/{std,etc}} $out/include/dmd/
+    cp -r {dmd/druntime/import/*,phobos/{std,etc}} $out/include/dmd/
 
     mkdir $out/lib
     cp phobos/generated/${osname}/release/${bits}/libphobos2.* $out/lib/
