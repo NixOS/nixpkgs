@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , cargo
 , configobj
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-fEEvOfo8YWhx+xuiqD/KNstlso5/K1XJnGY64tkLIwE=";
   };
+
+  patches = [
+    # Explicitly track which URLs are used for GitLab
+    (fetchpatch {
+      url = "https://github.com/breezy-team/breezy/commit/cc9fdf3774253183f726127c2ee191c24640d898.patch";
+      hash = "sha256-HTDAW3CPEZ1YBe0wnv6ncWEd0QRHwHawfTplbVDiOGc=";
+    })
+  ];
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
