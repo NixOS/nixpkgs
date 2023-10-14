@@ -12449,6 +12449,18 @@ with pkgs;
 
   ucc = callPackage ../development/libraries/ucc { };
 
+  ucc-cuda = ucc.override {
+    enableCuda = true;
+    enableRocm = false;
+    ucx = ucx-cuda;
+  };
+
+  ucc-rocm = ucc.override {
+    enableCuda = false;
+    enableRocm = true;
+    ucx = ucx-rocm;
+  };
+
   ucx = callPackage ../development/libraries/ucx { };
 
   ucx-cuda = ucx.override {
