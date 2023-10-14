@@ -20494,7 +20494,7 @@ with self; {
       url = "mirror://cpan/authors/id/R/RO/ROBN/Prometheus-Tiny-Shared-0.027.tar.gz";
       hash = "sha256-egULqhjKfA0gsoih1L0nJ3E6lFg/Qmskn5XcjUDty9E=";
     };
-    buildInputs = [ DataRandom HTTPMessage Plack TestDifferences TestException ];
+    buildInputs = [ DataRandom HTTPMessage Plack TestDifferences TestException TestWarn ];
     propagatedBuildInputs = [ HashSharedMem JSONXS PrometheusTiny ];
     meta = {
       description = "A tiny Prometheus client with a shared database behind it";
