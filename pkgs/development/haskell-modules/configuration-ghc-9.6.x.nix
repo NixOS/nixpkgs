@@ -74,6 +74,7 @@ self: super: {
   bifunctors = doDistribute self.bifunctors_5_6_1;
   base-compat = doDistribute self.base-compat_0_13_0;
   base-compat-batteries = doDistribute self.base-compat-batteries_0_13_0;
+  fgl = doDistribute self.fgl_5_8_1_1;
 
   # Because we bumped the version of th-abstraction above.^
   aeson = doJailbreak super.aeson;
@@ -165,23 +166,23 @@ self: super: {
       hls-floskell-plugin = null;
     };
 
-  fourmolu = super.fourmolu_0_13_1_0;
+  fourmolu = super.fourmolu_0_14_0_0;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu_0_7_2_0);
   stylish-haskell = super.stylish-haskell_0_14_5_0;
 
   # Newer version of servant required for GHC 9.6
-  servant = self.servant_0_20;
+  servant = self.servant_0_20_1;
   servant-server = self.servant-server_0_20;
   servant-client = self.servant-client_0_20;
   servant-client-core = self.servant-client-core_0_20;
-  # Select versions compatible with servant_0_20
+  # Select versions compatible with servant_0_20_1
   servant-docs = self.servant-docs_0_13;
   servant-swagger = self.servant-swagger_1_2;
   # Jailbreaks for servant <0.20
   servant-lucid = doJailbreak super.servant-lucid;
 
   # Jailbreak strict upper bounds: http-api-data <0.6
-  servant_0_20 = doJailbreak super.servant_0_20;
+  servant_0_20_1 = doJailbreak super.servant_0_20_1;
   servant-server_0_20 = doJailbreak super.servant-server_0_20;
   servant-client_0_20 = doJailbreak super.servant-client_0_20;
   servant-client-core_0_20 = doJailbreak super.servant-client-core_0_20;
@@ -261,7 +262,7 @@ self: super: {
   }) super.ConfigFile;
 
   # The curl executable is required for withApplication tests.
-  warp_3_3_28 = addTestToolDepend pkgs.curl super.warp_3_3_28;
+  warp_3_3_29 = addTestToolDepend pkgs.curl super.warp_3_3_29;
 
   # The NCG backend for aarch64 generates invalid jumps in some situations,
   # the workaround on 9.6 is to revert to the LLVM backend (which is used
