@@ -16467,8 +16467,8 @@ with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2206.tar.gz";
       hash = "sha256-Z5csTivDn72jhRgXevDme7vrVIVi5OxLdZoaelg+UFs=";
     };
-    buildInputs = [ CPANMetaCheck TestCleanNamespaces TestFatal TestRequires ];
-    propagatedBuildInputs = [ ClassLoadXS DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS SubExporter ];
+    buildInputs = [ DistCheckConflicts CPANMetaCheck TestCleanNamespaces TestFatal TestNeeds TestRequires ];
+    propagatedBuildInputs = [ ClassLoadXS DataOptList DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure MROCompat ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS ParamsUtil SubExporter TryTiny ];
     preConfigure = ''
       export LD=$CC
     '';
