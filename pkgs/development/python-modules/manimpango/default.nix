@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "manimpango";
-  version = "0.4.3";
+  version = "0.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ManimCommunity";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FT3X6TmGfwd8kRPtuqy78ZCGeEGGg6IJEeEpB7ZbIsA=";
+    hash = "sha256-M7Wd4s9q+oNioi4JlcQcKSyLRliGgoMzkiXcIznpR5o=";
   };
 
   nativeBuildInputs = [
