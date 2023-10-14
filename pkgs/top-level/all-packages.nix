@@ -25741,6 +25741,8 @@ with pkgs;
 
   zix = callPackage ../development/libraries/audio/zix { };
 
+  zug = callPackage ../development/libraries/zug { };
+
   zz = callPackage ../development/compilers/zz { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
