@@ -1279,11 +1279,11 @@
     "vendorHash": "sha256-MrDY1zx4aXKRGmhTPMLnIVBAJh+szdL6rH0m0amlYS8="
   },
   "vultr": {
-    "hash": "sha256-h9MQv4BTv9y4A6HSDE3dIV7aKwaIWRYy5EyE2T0mpG4=",
+    "hash": "sha256-65QWogqHR5RYUXBYjM50PNQSuVWYGtqtULTGNy1ivag=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.15.1",
+    "rev": "v2.16.3",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
