@@ -4933,8 +4933,6 @@ self: super: with self; {
 
   hg-git = callPackage ../development/python-modules/hg-git { };
 
-  hglib = callPackage ../development/python-modules/hglib { };
-
   hickle = callPackage ../development/python-modules/hickle { };
 
   hid = callPackage ../development/python-modules/hid {
