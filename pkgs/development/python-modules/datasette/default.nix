@@ -43,8 +43,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"pytest-runner"' "" \
-      --replace "click-default-group-wheel>=1.2.2" "click-default-group"
+      --replace '"pytest-runner"' "
   '';
 
   propagatedBuildInputs = [
