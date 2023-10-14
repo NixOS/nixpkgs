@@ -141,6 +141,14 @@ stdenv'.mkDerivation {
     "INSTALL_MOD_PATH=\${out}"
   ];
 
+  preConfigure = ''
+    # The kernel module builds some tests during the configurePhase, this envvar controls their parallelism
+    export TEST_JOBS=$NIX_BUILD_CORES
+    if [ -z "$enableParallelBuilding" ]; then
+      export TEST_JOBS=1
+    fi
+  '';
+
   # Enabling BTF causes zfs to be build with debug symbols.
   # Since zfs compress kernel modules on installation, our strip hooks skip stripping them.
   # Hence we strip modules prior to compression.
