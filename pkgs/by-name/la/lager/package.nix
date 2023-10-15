@@ -1,7 +1,11 @@
-{ callPackage, stdenv, lib
+{ lib
+, stdenv
 , fetchFromGitHub
-, boost, immer, zug
-, pkg-config, cmake
+, cmake
+, pkg-config
+, boost
+, immer
+, zug
 }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.1.0";
   src = fetchFromGitHub {
     owner = "arximboldi";
-    repo = pname;
+    repo = "lager";
     rev = "v${version}";
     hash = "sha256-KTHrVV/186l4klwlcfDwFsKVoOVqWCUPzHnIbWuatbg=";
   };
@@ -22,12 +26,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
   cmakeFlags = [
-    "-Dlager_BUILD_TESTS=OFF"
     "-Dlager_BUILD_EXAMPLES=OFF"
   ];
   meta = with lib; {
     homepage    = "https://github.com/arximboldi/lager";
-    description = "library for functional interactive c++ programs";
+    description = "C++ library for value-oriented design using the unidirectional data-flow architecture — Redux for C++";
     license     = licenses.mit;
     maintainers = with maintainers; [ nek0 ];
   };

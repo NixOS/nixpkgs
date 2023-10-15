@@ -1,6 +1,9 @@
-{ callPackage, stdenv, lib, pkgs,
-  fetchFromGitHub,
-  cmake, boost
+{ lib
+, stdenv
+, pkgs
+, fetchFromGitHub
+, cmake
+, boost
 }:
 
 
@@ -9,16 +12,17 @@ stdenv.mkDerivation rec {
   version = "0.1.0";
   src = fetchFromGitHub {
     owner = "arximboldi";
-    repo = pname;
+    repo = "zug";
     rev = "v${version}";
     hash = "sha256-7xTMDhPIx1I1PiYNanGUsK8pdrWuemMWM7BW+NQs2BQ=";
   };
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
+  ];
+  buildInputs = [
     boost
   ];
   cmakeFlags = [
-    "-Dzug_BUILD_TESTS=OFF"
     "-Dzug_BUILD_EXAMPLES=OFF"
   ];
   meta = with lib; {
