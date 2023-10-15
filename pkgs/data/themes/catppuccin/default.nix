@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "k9s" "kvantum" "lazygit" ];
+  validThemes = [ "bat" "bottom" "btop" "k9s" "kvantum" "lazygit" "plymouth" ];
 in
 { fetchFromGitHub
 , lib
@@ -63,6 +63,14 @@ let
       rev = "0543c28e8af1a935f8c512ad9451facbcc17d8a8";
       hash = "sha256-OVihY5E+elPKag2H4RyWiSv+MdIqHtfGNM3/1u2ik6U=";
     };
+
+    plymouth = fetchFromGitHub {
+      name = "plymouth";
+      owner = "catppuccin";
+      repo = "plymouth";
+      rev = "d4105cf336599653783c34c4a2d6ca8c93f9281c";
+      hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
+    };
   };
 in
 lib.checkListOfEnum "${pname}: variant" validVariants [ variant ]
@@ -112,6 +120,11 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/lazygit/{themes,themes-mergable}
     cp "${sources.lazygit}/themes/${variant}/${variant}-${accent}.yml" "$out/lazygit/themes/"
     cp "${sources.lazygit}/themes-mergable/${variant}/${variant}-${accent}.yml" "$out/lazygit/themes-mergable/"
+
+  '' + lib.optionalString (lib.elem "plymouth" themeList) ''
+    mkdir -p $out/share/plymouth/themes/catppuccin-${variant}
+    cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
+    sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
 
   '' + ''
     runHook postInstall
