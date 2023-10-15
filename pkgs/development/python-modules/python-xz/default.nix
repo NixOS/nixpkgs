@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "python-xz";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OYdGWTtwb6n6xZuMmI6rhgPh/iupGVERwLRSJ6OnfbM=";
+    hash = "sha256-oYjwQ26BFFXxvaYdzp2+bw/BQwM0v/n1r9DmaLs1R3Q=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
