@@ -15289,6 +15289,8 @@ with pkgs;
 
   zsh-system-clipboard = callPackage ../shells/zsh/zsh-system-clipboard { };
 
+  zsh-f-sy-h = callPackage ../shells/zsh/zsh-f-sy-h { };
+
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
   zsh-forgit = callPackage ../shells/zsh/zsh-forgit { };
