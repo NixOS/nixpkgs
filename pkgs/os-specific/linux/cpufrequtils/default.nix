@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "http://ftp.be.debian.org/pub/linux/utils/kernel/cpufreq/cpufrequtils.html";
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
+    mainProgram = "cpufreq-set";
   };
 }
