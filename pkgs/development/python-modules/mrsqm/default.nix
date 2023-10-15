@@ -33,12 +33,15 @@ buildPythonPackage rec {
     numpy
   ];
 
-  doCheck = false; # Package has no tests
+  # Package has no tests
+  doCheck = false;
+
   pythonImportsCheck = [ "mrsqm" ];
 
   meta = with lib; {
     description = "MrSQM (Multiple Representations Sequence Miner) is a time series classifier";
     homepage = "https://pypi.org/project/mrsqm";
+    changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mbalatsko ];
   };
