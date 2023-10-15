@@ -4,17 +4,12 @@
 , brotli
 , brotlicffi
 , importlib-metadata
-#, inflate64
-#, multivolumefile
 , psutil
-#, pybcj
 , pycryptodomex
-#, pyppmd
-#, pyzstd
 , texttable
 , poetry-core
 , setuptools
-,setuptools-scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -48,8 +43,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pure python 7-zip library";
-    homepage = "";
+    homepage = "https://github.com/miurahr/py7zr";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ provenzano ];
   };
 }
