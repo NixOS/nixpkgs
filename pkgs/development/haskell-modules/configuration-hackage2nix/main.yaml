@@ -325,11 +325,12 @@ package-maintainers:
   ncfavier:
     - lambdabot
   nomeata:
+    - cabal-plan-bounds
     - candid
     - leb128-cereal
-    - tasty-expected-failure
     - lhs2tex
     - rec-def
+    - tasty-expected-failure
   peti:
     - cabal2spec
     - funcmp
