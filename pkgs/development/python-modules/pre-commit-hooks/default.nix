@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pre-commit-hooks";
-  version = "4.4.0";
+  version = "4.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-V23pgHQ9GdZ2mukFEMAhkp+dl/CQTGxWHAhF7s1VvHo=";
+    hash = "sha256-EiPGdrpD4e9izRNJCjHRp+gR+ClzFtLjs6P57WXDs7I=";
   };
 
   propagatedBuildInputs = [
