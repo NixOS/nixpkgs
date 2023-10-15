@@ -172,6 +172,17 @@ let
         '';
       };
 
+      ignoreShellProgramCheck = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          By default, nixos will check that programs.SHELL.enable is set to
+          true if the user has a custom shell specified. If that behavior isn't
+          required and there are custom overrides in place to make sure that the
+          shell is functional, set this to true.
+        '';
+      };
+
       subUidRanges = mkOption {
         type = with types; listOf (submodule subordinateUidRange);
         default = [];
@@ -730,7 +741,8 @@ in {
 
     environment.profiles = [
       "$HOME/.nix-profile"
-      "\${XDG_STATE_HOME:-$HOME/.local/state}/nix/profile"
+      "\${XDG_STATE_HOME}/nix/profile"
+      "$HOME/.local/state/nix/profile"
       "/etc/profiles/per-user/$USER"
     ];
 
@@ -852,13 +864,17 @@ in {
             '';
           }
         ] ++ (map (shell: {
-            assertion = (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
+            assertion = !user.ignoreShellProgramCheck -> (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
             message = ''
               users.users.${user.name}.shell is set to ${shell}, but
               programs.${shell}.enable is not true. This will cause the ${shell}
               shell to lack the basic nix directories in its PATH and might make
               logging in as that user impossible. You can fix it with:
               programs.${shell}.enable = true;
+
+              If you know what you're doing and you are fine with the behavior,
+              set users.users.${user.name}.ignoreShellProgramCheck = true;
+              instead.
             '';
           }) [
           "fish"

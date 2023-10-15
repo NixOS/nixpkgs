@@ -364,55 +364,49 @@ in
         '';
       };
 
-      xkb = mkOption {
-        default = { };
-        description = "X keyboard extension (XKB) configuration";
-        type = types.submodule {
-          options = {
-            layout = mkOption {
-              type = types.str;
-              default = "us";
-              description = lib.mdDoc ''
-                Keyboard layout, or multiple keyboard layouts separated by commas.
-              '';
-            };
+      xkb = {
+        layout = mkOption {
+          type = types.str;
+          default = "us";
+          description = lib.mdDoc ''
+            X keyboard layout, or multiple keyboard layouts separated by commas.
+          '';
+        };
 
-            model = mkOption {
-              type = types.str;
-              default = "pc104";
-              example = "presario";
-              description = lib.mdDoc ''
-                Keyboard model.
-              '';
-            };
+        model = mkOption {
+          type = types.str;
+          default = "pc104";
+          example = "presario";
+          description = lib.mdDoc ''
+            X keyboard model.
+          '';
+        };
 
-            options = mkOption {
-              type = types.commas;
-              default = "terminate:ctrl_alt_bksp";
-              example = "grp:caps_toggle,grp_led:scroll";
-              description = lib.mdDoc ''
-                X keyboard options; layout switching goes here.
-              '';
-            };
+        options = mkOption {
+          type = types.commas;
+          default = "terminate:ctrl_alt_bksp";
+          example = "grp:caps_toggle,grp_led:scroll";
+          description = lib.mdDoc ''
+            X keyboard options; layout switching goes here.
+          '';
+        };
 
-            variant = mkOption {
-              type = types.str;
-              default = "";
-              example = "colemak";
-              description = lib.mdDoc ''
-                X keyboard variant.
-              '';
-            };
+        variant = mkOption {
+          type = types.str;
+          default = "";
+          example = "colemak";
+          description = lib.mdDoc ''
+            X keyboard variant.
+          '';
+        };
 
-            dir = mkOption {
-              type = types.path;
-              default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-              defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
-              description = lib.mdDoc ''
-                Path used for -xkbdir xserver parameter.
-              '';
-            };
-          };
+        dir = mkOption {
+          type = types.path;
+          default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+          defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
+          description = lib.mdDoc ''
+            Path used for -xkbdir xserver parameter.
+          '';
         };
       };
 

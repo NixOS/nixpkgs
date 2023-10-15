@@ -61,8 +61,6 @@ let
           MACAddress = i.macAddress;
         } // optionalAttrs (i.mtu != null) {
           MTUBytes = toString i.mtu;
-        } // optionalAttrs (i.wakeOnLan.enable == true) {
-          WakeOnLan = concatStringsSep " " i.wakeOnLan.policy;
         };
       };
     in listToAttrs (map createNetworkLink interfaces);

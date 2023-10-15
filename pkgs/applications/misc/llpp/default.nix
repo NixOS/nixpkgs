@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/system-makedeps.patch?h=llpp&id=0d2913056aaf3dbf7431e57b7b08b55568ba076c";
       hash = "sha256-t9PLXsM8+exCeYqJBe0LSDK0D2rpktmozS8qNcEAcHo=";
     })
+    ./fix-mupdf.patch
   ];
 
   postPatch = ''

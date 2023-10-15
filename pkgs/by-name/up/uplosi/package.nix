@@ -4,16 +4,16 @@
 }:
 buildGo121Module rec {
   pname = "uplosi";
-  version = "0.1.1";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "edgelesssys";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YhB0kx/rbHMHSPC2zWcBY7bD677btSCyPEgWY7yuxC4=";
+    hash = "sha256-9hOeKnjH6r3CPQSe6fQ6PXlVPEJ9NiyXvp5N1krG2XA=";
   };
 
-  vendorHash = "sha256-3WLDmw2rhmjrKJ8QXtARS9p8qFx17iwUnljwoUep2uc=";
+  vendorHash = "sha256-RsjUPLe8omoN+XGyNhHDxzNfZR7VVTkh/f/On1oCRqM=";
 
   CGO_ENABLED = "0";
   ldflags = [ "-s" "-w" "-buildid=" "-X main.version=${version}" ];

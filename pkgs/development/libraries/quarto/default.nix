@@ -13,6 +13,7 @@
 , python3
 , quarto
 , extraPythonPackages ? ps: with ps; []
+, sysctl
 }:
 
 stdenv.mkDerivation (final: {
@@ -60,11 +61,13 @@ stdenv.mkDerivation (final: {
       mv bin/* $out/bin
       mv share/* $out/share
 
-      runHook preInstall
+      runHook postInstall
   '';
 
   passthru.tests = {
-    quarto-check = runCommand "quarto-check" {} ''
+    quarto-check = runCommand "quarto-check" {
+      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+    } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check
       touch $out
@@ -81,7 +84,7 @@ stdenv.mkDerivation (final: {
     changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson mrtarantoga ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
   };
 })

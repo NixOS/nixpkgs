@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "evaluate";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-O3W2m12R94iY3F7xgkIiiIyqI6vqiZPXn4jAqEDjVCw=";
+    hash = "sha256-axcJg0ZalEd4FOySCiFReKL7wmTCtLaw71YqyLHq8fc=";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "1.0.1";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,14 +28,14 @@ buildPythonPackage rec {
     owner = "instagram";
     repo = "libcst";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FgQE8ofRXQs/zHh7AKscXu0deN3IG+Nk/h+a09Co5R8=";
+    hash = "sha256-kFs7edBWz0GRbgbLDmtpUVi5R+6mYXsJSvceOoPW9ck=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-rPB3bAMdvjgsT3jkEDoWatW8LPwgIaFSbFPqiqANtBY=";
+    hash = "sha256-fhaHiz64NH6S61fSXj4gNxxcuB+ECxWSSmG5StiFr1k=";
   };
 
   cargoRoot = "native";
@@ -92,6 +92,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
+    changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 psfl ];
     maintainers = with maintainers; [ ];
   };

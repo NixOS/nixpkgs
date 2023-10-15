@@ -64,6 +64,7 @@ buildGoModule {
     homepage = "https://caddyserver.com";
     description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
     license = licenses.asl20;
+    mainProgram = "caddy";
     maintainers = with maintainers; [ Br1ght0ne emilylange techknowlogick ];
   };
 }
