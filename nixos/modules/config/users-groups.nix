@@ -484,7 +484,7 @@ let
           name uid group description home homeMode createHome isSystemUser
           password hashedPasswordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
-          initialPassword initialHashedPassword expires;
+          initialPassword initialHashedPassword expires linger;
         shell = utils.toShellPath u.shell;
       }) cfg.users;
     groups = attrValues cfg.groups;
@@ -687,12 +687,16 @@ in {
 
     system.activationScripts.users = {
       supportsDryActivation = true;
-      text = ''
+      text = let
+        updateUsersGroups = pkgs.runCommand "update-users-groups" {} ''
+          substitute ${./update-users-groups.pl} $out --subst-var-by systemd ${config.systemd.package}
+          chmod +x $out
+        '';
+      in ''
         install -m 0700 -d /root
         install -m 0755 -d /home
 
-        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl \
-        -w ${./update-users-groups.pl} ${spec}
+        ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl -w ${updateUsersGroups} ${spec}
       '';
     };
 
