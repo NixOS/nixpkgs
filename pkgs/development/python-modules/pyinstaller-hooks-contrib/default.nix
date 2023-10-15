@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Community maintained hooks for PyInstaller";
     homepage = "https://github.com/pyinstaller/pyinstaller-hooks-contrib";
     license = licenses.gpl2;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ provenzano ];
   };
 }
