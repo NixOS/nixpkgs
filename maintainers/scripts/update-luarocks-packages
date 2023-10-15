@@ -103,7 +103,7 @@ class LuaEditor(pluginupdate.Editor):
             header2 = textwrap.dedent(
                 # header2 = inspect.cleandoc(
                 """
-                { self, stdenv, lib, fetchurl, fetchgit, callPackage, ... } @ args:
+				{ stdenv, lib, fetchurl, fetchgit, callPackage, ... }:
                 final: prev:
                 {
             """
