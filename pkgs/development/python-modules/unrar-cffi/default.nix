@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Read RAR file from python -- cffi edition";
     homepage = "https://github.com/davide-romanini/unrar-cffi";
     license = licenses.asl20;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ provenzano ];
   };
 }
