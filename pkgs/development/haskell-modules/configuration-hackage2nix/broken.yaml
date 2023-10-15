@@ -2379,7 +2379,6 @@ broken-packages:
   - hledger-chart # failure in job https://hydra.nixos.org/build/233205387 at 2023-09-02
   - hledger-diff # failure in job https://hydra.nixos.org/build/233199639 at 2023-09-02
   - hledger-flow # failure in job https://hydra.nixos.org/build/233252169 at 2023-09-02
-  - hledger-iadd # failure in job https://hydra.nixos.org/build/233198670 at 2023-09-02
   - hledger-irr # failure in job https://hydra.nixos.org/build/233230276 at 2023-09-02
   - hledger-makeitso # failure in job https://hydra.nixos.org/build/233213046 at 2023-09-02
   - hledger-vty # failure in job https://hydra.nixos.org/build/233191782 at 2023-09-02

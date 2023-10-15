@@ -3,7 +3,7 @@
 , buildPythonPackage
 , socat
 , psutil
-, hglib
+, python-hglib
 , pygit2
 , pyuv
 , i3ipc
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     socat
     psutil
-    hglib
+    python-hglib
     pygit2
     pyuv
   ] ++ lib.optionals (!stdenv.isDarwin) [ i3ipc ];
