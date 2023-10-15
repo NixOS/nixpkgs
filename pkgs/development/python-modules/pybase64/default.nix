@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "1.3.0";
+  version = "1.3.1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1MZHKrAITr1O4AW7mFFym9xk2PYsb65b2wdrICn0iO4=";
+    hash = "sha256-I0CC/dcDnLdQxkTi03/Ck+c0XqOl8nmrrC9PyWLZuZY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
