@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ poelzi ];
     platforms   = platforms.unix;
+    mainProgram = "Kemai";
   };
 }
