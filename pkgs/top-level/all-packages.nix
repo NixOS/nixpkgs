@@ -3615,8 +3615,6 @@ with pkgs;
 
   clairvoyance = callPackage ../tools/security/clairvoyance { };
 
-  cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
-
   cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudhunter = callPackage ../tools/security/cloudhunter { };
@@ -8753,6 +8751,8 @@ with pkgs;
   };
 
   google-cloud-bigtable-tool = callPackage ../tools/misc/google-cloud-bigtable-tool { };
+
+  google-cloud-sql-proxy = callPackage ../tools/misc/google-cloud-sql-proxy { };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
