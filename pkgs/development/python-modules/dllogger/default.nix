@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A logging tool for deep learning";
     homepage = "https://github.com/NVIDIA/dllogger";
+    changelog = "https://github.com/NVIDIA/dllogger/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
   };
