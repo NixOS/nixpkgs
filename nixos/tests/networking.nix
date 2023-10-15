@@ -113,8 +113,8 @@ let
         networking = {
           useNetworkd = networkd;
           useDHCP = false;
-          defaultGateway = "192.168.1.1";
-          defaultGateway6 = "fd00:1234:5678:1::1";
+          defaultGateway = { address = "192.168.1.1"; interface = "enp1s0"; };
+          defaultGateway6 = { address = "fd00:1234:5678:1::1"; interface = "enp1s0"; };
           interfaces.enp1s0.ipv4.addresses = [
             { address = "192.168.1.2"; prefixLength = 24; }
             { address = "192.168.1.3"; prefixLength = 32; }
