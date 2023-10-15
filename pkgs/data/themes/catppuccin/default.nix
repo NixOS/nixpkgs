@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "waybar" ];
+  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "rofi" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -88,6 +88,14 @@ let
       hash = "sha256-itUMo0lA23bJzH0Ndq7L2IaEYoVdNPYxbB/VWkRfRso=";
     };
 
+    rofi = fetchFromGitHub {
+      name = "rofi";
+      owner = "catppuccin";
+      repo = "rofi";
+      rev = "5350da41a11814f950c3354f090b90d4674a95ce";
+      hash = "sha256-DNorfyl3C4RBclF2KDgwvQQwixpTwSRu7fIvihPN8JY=";
+    };
+
     waybar = fetchFromGitHub {
       name = "waybar";
       owner = "catppuccin";
@@ -153,6 +161,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/share/plymouth/themes/catppuccin-${variant}
     cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
     sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+
+  '' + lib.optionalString (lib.elem "rofi" themeList) ''
+    mkdir -p $out/rofi
+    cp ${sources.rofi}/basic/.local/share/rofi/themes/catppuccin-${variant}.rasi $out/rofi/
 
   '' + lib.optionalString (lib.elem "refind" themeList) ''
     mkdir -p $out/refind/assets
