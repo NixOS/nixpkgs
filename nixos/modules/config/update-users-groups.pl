@@ -237,7 +237,7 @@ foreach my $u (@{$spec->{users}}) {
         # When `mutableUsers` is in effect, only apply the specified lingering
         # setting when creating the user account.
         if ($spec->{mutableUsers}) {
-            dry_print("warning: not applying", "warning: would not apply", "lingering setting of mutable user '$name'");
+            dry_print("warning: not applying", "warning: would not apply", "lingering setting of mutable user '$name'") if defined $u->{linger};
             delete $u->{linger};
         }
     } else {
@@ -408,7 +408,7 @@ foreach my $u (values %usersOut) {
         push @subGids, $value;
     }
 
-    push @{$u->{linger} ? \@enableLinger : \@disableLinger}, $name if exists $u->{linger};
+    push @{$u->{linger} ? \@enableLinger : \@disableLinger}, $name if defined $u->{linger};
 }
 
 updateFile("/etc/subuid", join("\n", @subUids) . "\n");
