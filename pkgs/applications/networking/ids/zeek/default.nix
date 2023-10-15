@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     libkqueue
   ] ++ lib.optionals stdenv.isDarwin [
     gettext
+    python3
   ];
 
   postPatch = ''
@@ -79,6 +80,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [
     "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do

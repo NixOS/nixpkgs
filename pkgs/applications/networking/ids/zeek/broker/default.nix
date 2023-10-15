@@ -74,6 +74,8 @@ stdenv.mkDerivation {
     "-DPY_MOD_INSTALL_DIR=${placeholder "py"}/${python3.sitePackages}/"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+
   meta = with lib; {
     description = "Zeek's Messaging Library";
     homepage = "https://github.com/zeek/broker";
