@@ -9703,6 +9703,12 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  lamarios = {
+    matrix = "@lamarios:matrix.org";
+    github = "lamarios";
+    githubId = 1192563;
+    name = "Paul Fauchon";
+  };
   lambda-11235 = {
     email = "taranlynn0@gmail.com";
     github = "lambda-11235";

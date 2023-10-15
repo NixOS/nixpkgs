@@ -41202,6 +41202,8 @@ with pkgs;
 
   auto-cpufreq = callPackage ../tools/system/auto-cpufreq {  };
 
+  auto-epp-go = callPackage ../tools/system/auto-epp-go {  };
+
   thermald = callPackage ../tools/system/thermald { };
 
   therion = callPackage ../applications/misc/therion { };
