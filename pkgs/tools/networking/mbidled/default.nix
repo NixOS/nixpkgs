@@ -6,6 +6,7 @@
 , libev
 , openssl
 }:
+
 stdenv.mkDerivation {
   pname = "mbidled";
   version = "unstable-2022-10-30";
@@ -22,11 +23,13 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [
-    meson ninja
+    meson
+    ninja
   ];
 
   buildInputs = [
-    libev openssl
+    libev
+    openssl
   ];
 
   meta = with lib; {
