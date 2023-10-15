@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , nix-update-script
 , pytestCheckHook
+, pythonOlder
 , setuptools
 , sure
 }:
@@ -10,7 +11,9 @@
 buildPythonPackage rec {
   pname = "py-partiql-parser";
   version = "0.3.8";
-  format = "pyproject";
+  pyproject = true;
+
+  disable = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "getmoto";
