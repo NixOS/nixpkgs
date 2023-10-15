@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "A library for managing settings";
     homepage = "https://github.com/lordwelch/settngs";
     license = licenses.mit;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ provenzano ];
   };
 }
