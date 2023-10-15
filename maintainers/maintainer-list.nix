@@ -14198,7 +14198,7 @@
     name = "Vinicius Provenzano";
     email = "viniciusxp@gmail.com";
     github = "nodupe";
-    githubID = "8133687";
+    githubId = 8133687;
   };
   prrlvr = {
     email = "po@prrlvr.fr";
