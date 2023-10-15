@@ -52,6 +52,10 @@ stdenv.mkDerivation rec {
     sha256 = "O4uhWBpHpun1f2tqoI8PtnVJxgEhqiTjEUDpOUe4NiI=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     appstream
     desktop-file-utils
