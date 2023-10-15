@@ -1,5 +1,6 @@
 { options, config, pkgs, lib, ... }:
 let
+  inherit (lib) isAttrs isBool isList isInt isString;
   inherit (lib) mkChangedOptionModule mkDefault mkEnableOption mkForce mkIf mkMerge mkOption mkRenamedOptionModule;
   inherit (lib) all any attrValues boolToString concatStringsSep filterAttrs genAttrs hasPrefix listToAttrs literalExpression mapAttrsToList mdDoc optionals optionalAttrs optionalString types unique;
 
@@ -146,8 +147,8 @@ in
           module = "http_upload";
           # these values are to preserve compatibility with this module pre nixos 23.11
           settings = {
-            http_upload_file_size_limit = cfg.uploadHttp.uploadFileSizeLimit or 50 * 1024 * 1024;
-            http_upload_expire_after = cfg.uploadHttp.uploadExpireAfter or 60 * 60 * 24 * 7;
+            http_upload_file_size_limit = { __compat = true; value = cfg.uploadHttp.uploadFileSizeLimit or "50 * 1024 * 1024"; };
+            http_upload_expire_after = { __compat = true; value = cfg.uploadHttp.uploadExpireAfter or "60 * 60 * 24 * 7"; };
             http_upload_path = cfg.uploadHttp.httpUploadPath or "/var/lib/prosody";
           } // optionalAttrs (cfg.uploadHttp ? userQuota) {
             http_upload_quota = cfg.uploadHttp.userQuota;
@@ -617,13 +618,14 @@ in
         toFormat = attrs: concatStringsSep "\n" (mapAttrsToList (k: v: ''${k} = ${toStr v}'') (filterAttrs (_: v: v != null) attrs));
 
         toStr = v:
-          if builtins.isString v then
+          if isString v then
             # prosody will directly pass environment variables into its configuration file which have `ENV_` as a prefix
             if hasPrefix "ENV_" v then v else ''"${toString v}"''
-          else if builtins.isBool v then boolToString v
-          else if builtins.isInt v then toString v
-          else if builtins.isList v then ''{ ${concatStringsSep ", " (map (n: toStr n) v)} }''
-          else if builtins.isAttrs v then ''{ ${concatStringsSep ", " (mapAttrsToList (a: b: ''["${a}"] = ${toStr b}'') v)} }''
+          else if isBool v then boolToString v
+          else if isInt v then toString v
+          else if isList v then ''{ ${concatStringsSep ", " (map (n: toStr n) v)} }''
+          else if isAttrs v then
+            if v ? __compat then v.value else ''{ ${concatStringsSep ", " (mapAttrsToList (a: b: ''["${a}"] = ${toStr b}'') v)} }''
           else throw "Invalid Lua value";
 
         componentsToStr = components:
