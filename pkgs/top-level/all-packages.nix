@@ -8752,6 +8752,8 @@ with pkgs;
     with-gce = true;
   };
 
+  google-cloud-bigtable-tool = callPackage ../tools/misc/google-cloud-bigtable-tool { };
+
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
   google-clasp = callPackage ../development/tools/google-clasp { };
