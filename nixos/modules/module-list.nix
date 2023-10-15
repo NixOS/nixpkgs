@@ -415,6 +415,7 @@
   ./services/databases/couchdb.nix
   ./services/databases/dgraph.nix
   ./services/databases/dragonflydb.nix
+  ./services/databases/ferretdb.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
   ./services/databases/hbase-standalone.nix
