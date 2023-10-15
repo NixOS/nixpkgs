@@ -649,6 +649,7 @@ let
           initialPassword
           initialHashedPassword
           expires
+          linger
           ;
         shell = utils.toShellPath u.shell;
       }) (filterAttrs (_: u: u.enable) cfg.users);
@@ -877,17 +878,16 @@ in
         if !config.systemd.sysusers.enable then
           {
             supportsDryActivation = true;
-            text = ''
+            text = let
+              updateUsersGroups = pkgs.runCommand "update-users-groups.pl" {} ''
+                substitute ${./update-users-groups.pl} $out --subst-var-by systemd ${config.systemd.package}
+                chmod +x $out
+              '';
+            in ''
               install -m 0700 -d /root
               install -m 0755 -d /home
 
-              ${
-                pkgs.perl.withPackages (p: [
-                  p.FileSlurp
-                  p.JSON
-                ])
-              }/bin/perl \
-              -w ${./update-users-groups.pl} ${spec}
+              ${pkgs.perl.withPackages (p: [ p.FileSlurp p.JSON ])}/bin/perl -w ${updateUsersGroups} ${spec}
             '';
           }
         else
