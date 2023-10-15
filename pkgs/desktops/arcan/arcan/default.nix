@@ -4,7 +4,6 @@
 , fetchgit
 , SDL2
 , cmake
-, espeak
 , ffmpeg
 , file
 , freetype
@@ -77,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    espeak
     ffmpeg
     file
     freetype
