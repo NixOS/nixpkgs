@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pykka";
-  version = "4.0.0";
+  version = "4.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jodal";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xFEEv4UAKv/H//7OIBSb9juwmuH4xWd6BKBXaX2GwFU=";
+    hash = "sha256-SYgT69/AZX/JDm89PwFqrUL9Ll1iHRKEy78BN4QKz9Y=";
   };
 
   nativeBuildInputs = [

@@ -5,7 +5,6 @@
 , cmake
 , flex
 , bison
-, spicy-parser-generator
 , openssl
 , libkqueue
 , libpcap
@@ -26,18 +25,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "5.2.2";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "sha256-4MJBV8yWpy5LvkyyipOZdDjU6FV7F8INc/zWddRGFcY=";
+    sha256 = "sha256-z8MpoXBDkZXXBw7FOH2Vzdp+trhqyF7HB7ntDp1Xaik=";
   };
 
   strictDeps = true;
 
   patches = [
-    ./avoid-broken-tests.patch
-    ./debug-runtime-undef-fortify-source.patch
     ./fix-installation.patch
   ];
 
@@ -51,7 +48,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     broker
-    spicy-parser-generator
     curl
     gperftools
     libmaxminddb
@@ -64,27 +60,28 @@ stdenv.mkDerivation rec {
     libkqueue
   ] ++ lib.optionals stdenv.isDarwin [
     gettext
+    python3
   ];
 
   postPatch = ''
-    patchShebangs ./auxil/spicy/spicy/scripts
-
-    substituteInPlace auxil/spicy/CMakeLists.txt --replace "hilti-toolchain-tests" ""
-    substituteInPlace auxil/spicy/spicy/hilti/CMakeLists.txt --replace "hilti-toolchain-tests" ""
+    patchShebangs ./ci/collect-repo-info.py
+    patchShebangs ./auxil/spicy/scripts
   '';
 
   cmakeFlags = [
     "-DBroker_ROOT=${broker}"
-    "-DSPICY_ROOT_DIR=${spicy-parser-generator}"
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
     "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
     "-DZEEK_LOG_DIR=/var/log/zeek"
     "-DZEEK_STATE_DIR=/var/lib/zeek"
     "-DZEEK_SPOOL_DIR=/var/spool/zeek"
+    "-DDISABLE_JAVASCRIPT=ON"
   ] ++ lib.optionals stdenv.isLinux [
     "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do

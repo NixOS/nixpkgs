@@ -31,7 +31,8 @@ in buildPythonPackage rec {
   version = "0.58.0rc2";
   pname = "numba";
   format = "setuptools";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12";
+
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "numba";

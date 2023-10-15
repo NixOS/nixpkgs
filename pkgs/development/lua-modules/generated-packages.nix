@@ -942,29 +942,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-lpty = callPackage({ luaOlder, lua, fetchurl, buildLuarocksPackage }:
-buildLuarocksPackage {
-  pname = "lpty";
-  version = "1.2.2-1";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lpty-1.2.2-1.rockspec";
-    sha256 = "04af4mhiqrw3br4qzz7yznw9zy2m50wddwzgvzkvhd99ng71fkzg";
-  }).outPath;
-  src = fetchurl {
-    url    = "http://www.tset.de/downloads/lpty-1.2.2-1.tar.gz";
-    sha256 = "071mvz79wi9vr6hvrnb1rv19lqp1bh2fi742zkpv2sm1r9gy5rav";
-  };
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = {
-    homepage = "http://www.tset.de/lpty/";
-    description = "A simple facility for lua to control other programs via PTYs.";
-    license.fullName = "MIT";
-  };
-}) {};
-
 lrexlib-gnu = callPackage({ buildLuarocksPackage, luaOlder, lua, fetchgit }:
 buildLuarocksPackage {
   pname = "lrexlib-gnu";
