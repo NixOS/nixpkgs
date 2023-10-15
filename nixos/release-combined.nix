@@ -73,8 +73,9 @@ in rec {
         #  So let's depend just on the packages for now.
         #(onFullSupported "nixos.tests.firefox-esr")
         #(onFullSupported "nixos.tests.firefox")
-        (onFullSupported "nixpkgs.firefox-esr")
-        (onFullSupported "nixpkgs.firefox")
+        # Note: only -unwrapped variants have a Hydra job.
+        (onFullSupported "nixpkgs.firefox-esr-unwrapped")
+        (onFullSupported "nixpkgs.firefox-unwrapped")
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
