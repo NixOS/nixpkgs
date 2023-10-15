@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "k9s" "lazygit" ];
+  validThemes = [ "bat" "bottom" "btop" "k9s" "kvantum" "lazygit" ];
 in
 { fetchFromGitHub
 , lib
@@ -48,6 +48,14 @@ let
       hash = "sha256-PtBJRBNbLkj7D2ko7ebpEjbfK9Ywjs7zbE+Y8FQVEfA=";
     };
 
+    kvantum = fetchFromGitHub {
+      name = "kvantum";
+      owner = "catppuccin";
+      repo = "Kvantum";
+      rev = "d1e174c85311de9715aefc1eba4b8efd6b2730fc";
+      sha256 = "sha256-IrHo8pnR3u90bq12m7FEXucUF79+iub3I9vgH5h86Lk=";
+    };
+
     lazygit = fetchFromGitHub {
       name = "lazygit";
       owner = "catppuccin";
@@ -77,6 +85,9 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
+    local capitalizedVariant=$(sed 's/^\(.\)/\U\1/' <<< "${variant}")
+    local capitalizedAccent=$(sed 's/^\(.\)/\U\1/' <<< "${accent}")
+
   '' + lib.optionalString (lib.elem "bat" themeList) ''
     mkdir -p $out/bat
     cp "${sources.bat}/Catppuccin-${variant}.tmTheme" "$out/bat/"
@@ -92,6 +103,10 @@ stdenvNoCC.mkDerivation {
   '' + lib.optionalString (lib.elem "k9s" themeList) ''
     mkdir -p $out/k9s
     cp "${sources.k9s}/dist/${variant}.yml" "$out/k9s/"
+
+  '' + lib.optionalString (lib.elem "kvantum" themeList) ''
+    mkdir -p $out/share/Kvantum
+    cp -r ${sources.kvantum}/src/Catppuccin-"$capitalizedVariant"-"$capitalizedAccent" $out/share/Kvantum
 
   '' + lib.optionalString (lib.elem "lazygit" themeList) ''
     mkdir -p $out/lazygit/{themes,themes-mergable}
