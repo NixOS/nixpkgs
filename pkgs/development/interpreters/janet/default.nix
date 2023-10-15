@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, nix-update-script }:
 
 stdenv.mkDerivation rec {
   pname = "janet";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     $out/bin/janet -e '(+ 1 2 3)'
   '';
+
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "Janet programming language";
