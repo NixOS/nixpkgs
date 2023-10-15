@@ -62,5 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/comictagger/comictagger";
     license = licenses.asl20;
     maintainers =  [ maintainers.provenzano ];
+    platforms = [ "x86_64-linux" ];
   };
+
 }
