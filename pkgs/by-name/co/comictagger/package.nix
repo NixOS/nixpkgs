@@ -43,20 +43,19 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.requests
     python3.pkgs.settngs
     python3.pkgs.setuptools
-    python3.pkgs.setuptools_scm
     python3.pkgs.text2digits
     python3.pkgs.typing-extensions
     python3.pkgs.wordninja
     python3.pkgs.unrar-cffi
     python3.pkgs.xcffib
-
+    qt5.qtwayland
   ];
   nativeBuildInputs = [ git
     qt5.wrapQtAppsHook
                       ];
   buildInputs = [
     qt5.qtbase
-    qt5.qtwayland
+
   ];
   meta = with lib; {
     description = "A multi-platform app for writing metadata to digital comics";
