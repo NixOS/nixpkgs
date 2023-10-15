@@ -10,6 +10,8 @@
 , openssl
 , libusb1
 , AppKit
+, git
+, openssh
 , testers
 , radicle-cli
 }:
@@ -58,7 +60,15 @@ rustPlatform.buildRustPackage {
   # however is doesn't seem possible
   # to pass "-E not ((package(radicle-cli) and binary(commands)) or (package(radicle-node)))"
   # to cargo nextest as shell quoting keeps breaking the argument being passed.
-  doCheck = false;
+  doCheck = true;
+
+  nativeCheckInputs = [
+    git
+    openssh
+  ];
+  preCheck = ''
+    eval $(ssh-agent)
+  '';
 
   passthru.tests = {
     version = testers.testVersion { package = radicle-cli; };
