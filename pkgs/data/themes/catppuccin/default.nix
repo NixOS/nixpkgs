@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" ];
+  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" ];
 in
 { fetchFromGitHub
 , lib
@@ -79,6 +79,14 @@ let
       rev = "d4105cf336599653783c34c4a2d6ca8c93f9281c";
       hash = "sha256-quBSH8hx3gD7y1JNWAKQdTk3CmO4t1kVo4cOGbeWlNE=";
     };
+
+    refind = fetchFromGitHub {
+      name = "refind";
+      owner = "catppuccin";
+      repo = "refind";
+      rev = "ff0b593c19bb9b469ee0ee36068b8d373f0fadc5";
+      hash = "sha256-itUMo0lA23bJzH0Ndq7L2IaEYoVdNPYxbB/VWkRfRso=";
+    };
   };
 in
 lib.checkListOfEnum "${pname}: variant" validVariants [ variant ]
@@ -137,6 +145,11 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/share/plymouth/themes/catppuccin-${variant}
     cp ${sources.plymouth}/themes/catppuccin-${variant}/* $out/share/plymouth/themes/catppuccin-${variant}
     sed -i 's:\(^ImageDir=\)/usr:\1'"$out"':' $out/share/plymouth/themes/catppuccin-${variant}/catppuccin-${variant}.plymouth
+
+  '' + lib.optionalString (lib.elem "refind" themeList) ''
+    mkdir -p $out/refind/assets
+    cp ${sources.refind}/${variant}.conf $out/refind/
+    cp -r ${sources.refind}/assets/${variant} $out/refind/assets/
 
   '' + ''
     runHook postInstall
