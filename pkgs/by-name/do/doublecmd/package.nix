@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hRBF0Xl1SSoW+vbp9c1iCuFBVIzLtueNJaqoFMF8lJ4=";
+    hash = "sha256-RKAIZNty+iXeMfsjDOlOyvngx4XU5CSEi0Wap21lFAI=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libqt5pas
   ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
+  env.NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath finalAttrs.buildInputs}";
 
   postPatch = ''
     patchShebangs build.sh install/linux/install.sh
@@ -63,12 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://doublecmd.sourceforge.io/";
     description = "Two-panel graphical file manager written in Pascal";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "doublecmd";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
 })
 # TODO: deal with other platforms too

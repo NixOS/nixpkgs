@@ -36,17 +36,15 @@ let
     # be careful not to leak secrets in the filesystem or in process listings
     umask 0077
 
-    # get the api key by parsing the config.xml
-    while
-        ! ${pkgs.libxml2}/bin/xmllint \
-            --xpath 'string(configuration/gui/apikey)' \
-            ${cfg.configDir}/config.xml \
-            >"$RUNTIME_DIRECTORY/api_key"
-    do sleep 1; done
-
-    (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-
     curl() {
+        # get the api key by parsing the config.xml
+        while
+            ! ${pkgs.libxml2}/bin/xmllint \
+                --xpath 'string(configuration/gui/apikey)' \
+                ${cfg.configDir}/config.xml \
+                >"$RUNTIME_DIRECTORY/api_key"
+        do sleep 1; done
+        (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
         ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
             --retry 1000 --retry-delay 1 --retry-all-errors \
             "$@"

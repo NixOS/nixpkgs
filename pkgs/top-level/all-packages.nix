@@ -2917,7 +2917,7 @@ with pkgs;
 
   clifm = callPackage ../applications/file-managers/clifm { };
 
-  doublecmd = callPackage  ../applications/file-managers/doublecmd {
+  doublecmd = callPackage ../by-name/do/doublecmd/package.nix {
     inherit (qt5) wrapQtAppsHook;
   };
 
@@ -38673,7 +38673,6 @@ with pkgs;
     gnome42Extensions
     gnome43Extensions
     gnome44Extensions
-    gnome45Extensions
   ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
