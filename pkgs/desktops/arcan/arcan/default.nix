@@ -58,13 +58,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
-  version = "0.6.2.1";
+  version = "0.7-pre";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
-    rev = finalAttrs.version;
-    hash = "sha256-7H3fVSsW5VANLqwhykY+Q53fPjz65utaGksh/OpZnJM=";
+    rev = "f6a8eb6b0b6276a0ec3e162072681f236194ba33";
+    hash = "sha256-k/+mbJZc4lSaOejIQBytjpA9kOPIOaCuFGGoY+8PaFs=";
   };
 
   nativeBuildInputs = [
