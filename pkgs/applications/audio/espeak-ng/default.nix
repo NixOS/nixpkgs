@@ -9,7 +9,7 @@
 , ronn
 , substituteAll
 , buildPackages
-, mbrolaSupport ? true
+, mbrolaSupport ? false # adds almost 700MB to closure size but has better voice quality
 , mbrola
 , pcaudiolibSupport ? true
 , pcaudiolib
