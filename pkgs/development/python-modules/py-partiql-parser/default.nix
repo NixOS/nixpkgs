@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, nix-update-script
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -35,12 +34,8 @@ buildPythonPackage rec {
     "py_partiql_parser"
   ];
 
-  passthru = {
-    updateScript = nix-update-script { };
-  };
-
   meta = with lib; {
-    description = "A tokenizer/parser/executor for the PartiQL-language, in Python";
+    description = "A tokenizer/parser/executor for the PartiQL-language";
     homepage = "https://github.com/getmoto/py-partiql-parser";
     changelog = "https://github.com/getmoto/py-partiql-parser/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
