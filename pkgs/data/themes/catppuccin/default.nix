@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "k9s" "kvantum" "lazygit" "plymouth" ];
+  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" ];
 in
 { fetchFromGitHub
 , lib
@@ -38,6 +38,14 @@ let
       repo = "btop";
       rev = "1.0.0";
       hash = "sha256-J3UezOQMDdxpflGax0rGBF/XMiKqdqZXuX4KMVGTxFk=";
+    };
+
+    hyprland = fetchFromGitHub {
+      name = "hyprland";
+      owner = "catppuccin";
+      repo = "hyprland";
+      rev = "v1.2";
+      hash = "sha256-07B5QmQmsUKYf38oWU3+2C6KO4JvinuTwmW1Pfk8CT8=";
     };
 
     k9s = fetchFromGitHub {
@@ -107,6 +115,10 @@ stdenvNoCC.mkDerivation {
   '' + lib.optionalString (lib.elem "bottom" themeList) ''
     mkdir -p $out/bottom
     cp "${sources.bottom}/themes/${variant}.toml" "$out/bottom/"
+
+  '' + lib.optionalString (lib.elem "hyprland" themeList) ''
+    mkdir -p $out/hyprland
+    cp "${sources.hyprland}/themes/${variant}.conf" "$out/hyprland/"
 
   '' + lib.optionalString (lib.elem "k9s" themeList) ''
     mkdir -p $out/k9s
