@@ -7,7 +7,6 @@
 , rar
 , qt5
 , python3Packages
-
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -52,18 +51,13 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.xcffib
 
   ];
-
   nativeBuildInputs = [ git
     qt5.wrapQtAppsHook
                       ];
-
-  
   buildInputs = [
     qt5.qtbase
     qt5.qtwayland
-
   ];
-
   meta = with lib; {
     description = "A multi-platform app for writing metadata to digital comics";
     homepage = "https://github.com/comictagger/comictagger";

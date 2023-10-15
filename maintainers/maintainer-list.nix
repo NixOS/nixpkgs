@@ -14194,6 +14194,12 @@
     githubId = 4633847;
     name = "Ben Hamlin";
   };
+  provenzano = {
+    name = "Vinicius Provenzano";
+    email = "viniciusxp@gmail.com";
+    github = "nodupe";
+    githubID = "8133687";
+  };
   prrlvr = {
     email = "po@prrlvr.fr";
     github = "prrlvr";
@@ -18408,13 +18414,6 @@
     github = "vinetos";
     githubId = 10145351;
   };
-  provenzano = {
-    name = "Vinicius Provenzano";
-    email = "viniciusxp@gmail.com";
-    github = "nodupe";
-    githubID = "8133687";
-  };
-
   vinnymeller = {
     email = "vinnymeller@proton.me";
     github = "vinnymeller";

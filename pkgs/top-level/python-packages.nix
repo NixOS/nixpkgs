@@ -9063,7 +9063,7 @@ self: super: with self; {
   py65 = callPackage ../development/python-modules/py65 { };
 
   py7zr = callPackage ../development/python-modules/py7zr { };
-  
+
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
@@ -9109,7 +9109,7 @@ self: super: with self; {
   pyinstaller = callPackage ../development/python-modules/pyinstaller {};
 
   pyinstaller-hooks-contrib = callPackage ../development/python-modules/pyinstaller-hooks-contrib {};
-  
+
   pyinstaller-versionfile = callPackage ../development/python-modules/pyinstaller-versionfile { };
 
   pyisy = callPackage ../development/python-modules/pyisy { };
@@ -15120,7 +15120,7 @@ self: super: with self; {
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   unrar-cffi = callPackage ../development/python-modules/unrar-cffi { };
-  
+
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
