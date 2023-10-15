@@ -257,25 +257,41 @@ def scrape_extensions_index() -> List[Dict[str, Any]]:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
-    raw_extensions = scrape_extensions_index()
+    #raw_extensions = scrape_extensions_index()
 
-    logging.info(f"Downloaded {len(raw_extensions)} extensions. Processing …")
+    #logging.info(f"Downloaded {len(raw_extensions)} extensions. Processing …")
     processed_extensions: List[Dict[str, Any]] = []
-    for num, raw_extension in enumerate(raw_extensions):
-        processed_extension = process_extension(raw_extension)
-        if processed_extension:
-            processed_extensions.append(processed_extension)
-            logging.debug(f"Processed {num + 1} / {len(raw_extensions)}")
+    #for num, raw_extension in enumerate(raw_extensions):
+    #    processed_extension = process_extension(raw_extension)
+    #    if processed_extension:
+    #        processed_extensions.append(processed_extension)
+    #        logging.debug(f"Processed {num + 1} / {len(raw_extensions)}")
 
+    with open(updater_dir_path / "extensions.json", "r") as out:
+        processed_extensions = json.load(out)
+
+    # We micro-manage a lot of the serialization process to keep the diffs optimal.
+    # We generally want most of the attributes of an extension on one line,
+    # but then each of its supported versions with metadata on a new line.
     with open(updater_dir_path / "extensions.json", "w") as out:
-        # Manually pretty-print the outer level, but then do one compact line per extension
-        # This allows for the diffs to be manageable (one line of change per extension) despite their quantity
         for index, extension in enumerate(processed_extensions):
+            # Manually pretty-print the outermost array level
             if index == 0:
                 out.write("[ ")
             else:
                 out.write(", ")
-            json.dump(extension, out, ensure_ascii=False)
+            # Dump each extension into a single-line string forst
+            extension = json.dumps(extension, ensure_ascii=False)
+            # Inject line breaks for each supported version
+            for version in supported_versions:
+                # This one only matches the first entry
+                extension = extension.replace(f"{{\"{version}\": {{", f"{{\n    \"{version}\": {{")
+                # All other entries
+                extension = extension.replace(f", \"{version}\": {{", f",\n    \"{version}\": {{")
+            # One last line break around the closing braces
+            extension = extension.replace("}}}", "}\n  }}")
+
+            out.write(extension)
             out.write("\n")
         out.write("]\n")
 
