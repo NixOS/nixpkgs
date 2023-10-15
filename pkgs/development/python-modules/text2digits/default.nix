@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "A small library to convert text numbers to digits in a string";
     homepage = "https://github.com/careless25/text2digits";
     license = licenses.mit;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ provenzano ];
   };
 }
