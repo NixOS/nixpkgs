@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "py-partiql-parser";
-  version = "0.3.7";
+  version = "0.3.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "py-partiql-parser";
     rev = "refs/tags/${version}";
-    hash = "sha256-RObJSvkqD3T8i470po/CayGC/ae8J6rFQROsrQ1EAGs=";
+    hash = "sha256-uIO06RRuUuE9qCEg/tTcn68i7vaFAAeFhxdxW9WAbuw=";
   };
 
   nativeBuildInputs = [
