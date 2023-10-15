@@ -2,13 +2,15 @@
 , buildPythonPackage
 , fetchPypi
 , typing-extensions
-  ,python3Packages
+, python3Packages
+, setuptools-scm
+
 }:
 
 buildPythonPackage rec {
   pname = "settngs";
   version = "0.7.2";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -17,7 +19,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     typing-extensions
-python3Packages.pytest
+    python3Packages.pytest
+    setuptools-scm
   ];
 
 #  pythonImportsCheck = [ "settngs" ];
