@@ -1,5 +1,5 @@
 let
-  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" ];
+  validThemes = [ "bat" "bottom" "btop" "hyprland" "k9s" "kvantum" "lazygit" "plymouth" "refind" "waybar" ];
 in
 { fetchFromGitHub
 , lib
@@ -87,6 +87,14 @@ let
       rev = "ff0b593c19bb9b469ee0ee36068b8d373f0fadc5";
       hash = "sha256-itUMo0lA23bJzH0Ndq7L2IaEYoVdNPYxbB/VWkRfRso=";
     };
+
+    waybar = fetchFromGitHub {
+      name = "waybar";
+      owner = "catppuccin";
+      repo = "waybar";
+      rev = "v1.0";
+      hash = "sha256-vfwfBE3iqIN1cGoItSssR7h0z6tuJAhNarkziGFlNBw=";
+    };
   };
 in
 lib.checkListOfEnum "${pname}: variant" validVariants [ variant ]
@@ -150,6 +158,10 @@ stdenvNoCC.mkDerivation {
     mkdir -p $out/refind/assets
     cp ${sources.refind}/${variant}.conf $out/refind/
     cp -r ${sources.refind}/assets/${variant} $out/refind/assets/
+
+  '' + lib.optionalString (lib.elem "waybar" themeList) ''
+    mkdir -p $out/waybar
+    cp ${sources.waybar}/${variant}.css $out/waybar/
 
   '' + ''
     runHook postInstall
