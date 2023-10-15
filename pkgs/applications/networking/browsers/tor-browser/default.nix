@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , makeDesktopItem
+, copyDesktopItems
 , writeText
 , autoPatchelfHook
 , callPackage
@@ -149,7 +150,7 @@ stdenv.mkDerivation rec {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems ];
   buildInputs = [
     gtk3
     alsa-lib
@@ -160,15 +161,15 @@ stdenv.mkDerivation rec {
   preferLocalBuild = true;
   allowSubstitutes = false;
 
-  desktopItem = makeDesktopItem {
+  desktopItems = [(makeDesktopItem {
     name = "torbrowser";
-    exec = "tor-browser";
-    icon = "torbrowser";
+    exec = "tor-browser %U";
+    icon = "tor-browser";
     desktopName = "Tor Browser";
     genericName = "Web Browser";
     comment = meta.description;
     categories = [ "Network" "WebBrowser" "Security" ];
-  };
+  })];
 
   buildPhase = ''
     runHook preBuild
@@ -435,12 +436,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/doc
     ln -s $TBB_IN_STORE/TorBrowser/Docs $out/share/doc/tor-browser
 
-    # Install .desktop item
-    mkdir -p $out/share/applications
-    cp $desktopItem/share/applications"/"* $out/share/applications
-    sed -i $out/share/applications/torbrowser.desktop \
-        -e "s,Exec=.*,Exec=$out/bin/tor-browser," \
-        -e "s,Icon=.*,Icon=tor-browser,"
+    # Install icons
     for i in 16 32 48 64 128; do
       mkdir -p $out/share/icons/hicolor/''${i}x''${i}/apps/
       ln -s $out/share/tor-browser/browser/chrome/icons/default/default$i.png $out/share/icons/hicolor/''${i}x''${i}/apps/tor-browser.png
