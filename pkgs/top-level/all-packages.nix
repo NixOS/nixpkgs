@@ -7882,7 +7882,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  zeek = callPackage ../applications/networking/ids/zeek { };
+  zeek = darwin.apple_sdk_11_0.callPackage ../applications/networking/ids/zeek { };
 
   zeekscript = callPackage ../tools/security/zeekscript { };
 
