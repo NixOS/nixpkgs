@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "PyInstaller bundles a Python application and all its dependencies into a single package";
     homepage = "https://www.pyinstaller.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ provenzano ];
   };
 }
