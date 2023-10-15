@@ -2527,6 +2527,8 @@ with pkgs;
 
   scmpuff = callPackage ../applications/version-management/scmpuff { };
 
+  silver-platter = python3Packages.callPackage ../applications/version-management/silver-platter { };
+
   stgit = callPackage ../applications/version-management/stgit { };
 
   subgit = callPackage ../applications/version-management/subgit { };
