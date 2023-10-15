@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, nix-update-script, python3Packages, fetchFromGitHub }:
+{ lib
+, buildPythonApplication
+, nix-update-script
+, python3Packages
+, fetchFromGitHub
+, iproute2
+, iptables
+}:
 
 buildPythonApplication rec {
   pname = "vpn-slice";
@@ -11,7 +18,10 @@ buildPythonApplication rec {
     sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ];
+  propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ] ++ [
+    iproute2
+    iptables
+  ];
 
   doCheck = false;
 
