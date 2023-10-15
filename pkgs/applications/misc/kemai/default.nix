@@ -8,6 +8,7 @@
 , qtconnectivity
 , qttools
 , qtlanguageserver
+, qtwayland
 , wrapQtAppsHook
 , libXScrnSaver
 , nix-update-script
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     magic-enum
     spdlog
-  ];
+  ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
   cmakeFlags = [ "-DUSE_CONAN=OFF" ];
   patches = [ ./000-cmake-disable-conan.diff ];
 
