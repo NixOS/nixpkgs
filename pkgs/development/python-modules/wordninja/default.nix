@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Probabilistically split concatenated words using NLP based on English Wikipedia uni-gram frequencies";
     homepage = "https://github.com/keredson/wordninja";
     license = licenses.mit;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ provenzano ];
   };
 }
