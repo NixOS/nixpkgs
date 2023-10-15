@@ -1,4 +1,13 @@
-{ fetchurl, lib, stdenv, SDL, SDL_image, SDL_mixer, SDL_ttf, guile, gettext }:
+{ lib
+, stdenv
+, fetchurl
+, gettext
+, guile
+, SDL
+, SDL_image
+, SDL_mixer
+, SDL_ttf
+}:
 
 stdenv.mkDerivation rec {
   pname = "ballandpaddle";
@@ -6,22 +15,38 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/ballandpaddle/ballandpaddle-${version}.tar.gz";
-    sha256 = "0zgpydad0mj7fbkippw3n9hlda6nac084dq5xfbsks9jn1xd30ny";
+    hash = "sha256-3oLRerAy6amX6wU3ggBT1qhGYbKD3xvnckdW0FTz930=";
   };
 
-  buildInputs = [ SDL SDL_image SDL_mixer SDL_ttf guile gettext ];
+  patches = [
+    ./getenv-decl.patch
+  ];
 
-  patches = [ ./getenv-decl.patch ];
-
-  preConfigure = ''
+  postPatch = ''
     sed -i "Makefile.in" \
         -e "s|desktopdir *=.*$|desktopdir = $out/share/applications|g ;
             s|pixmapsdir *=.*$|pixmapsdir = $out/share/pixmaps|g"
   '';
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gettext
+    SDL
+  ];
+
+  buildInputs = [
+    guile
+    SDL
+    SDL_image
+    SDL_mixer
+    SDL_ttf
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-c++11-narrowing";
+
   meta = {
     description = "GNU Ball and Paddle, an old-fashioned ball and paddle game";
-
     longDescription = ''
       GNU Ball and Paddle is an old-fashioned ball and paddle game
       with a set amount of blocks to destroy on each level, while
@@ -31,15 +56,10 @@ stdenv.mkDerivation rec {
       It now uses GNU Guile for extension and the levels are written
       with Guile.  Follow the example level sets and the documentation.
     '';
-
-    license = lib.licenses.gpl3Plus;
-
     homepage = "https://www.gnu.org/software/ballandpaddle/";
-
-    maintainers = [ ];
-
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.wegank ];
     platforms = lib.platforms.unix;
-
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 }

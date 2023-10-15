@@ -37520,7 +37520,7 @@ with pkgs;
 
   azimuth = callPackage ../games/azimuth { };
 
-  ballAndPaddle = callPackage ../games/ball-and-paddle {
+  ballandpaddle = callPackage ../games/ball-and-paddle {
     guile = guile_1_8;
   };
 
