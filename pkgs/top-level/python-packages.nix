@@ -5214,6 +5214,8 @@ self: super: with self; {
     inherit (pkgs) igraph;
   };
 
+  ihm = callPackage ../development/python-modules/ihm { };
+
   iisignature = callPackage ../development/python-modules/iisignature { };
 
   ijson = callPackage ../development/python-modules/ijson { };
@@ -6893,6 +6895,8 @@ self: super: with self; {
   moddb = callPackage ../development/python-modules/moddb { };
 
   model-bakery = callPackage ../development/python-modules/model-bakery { };
+
+  modelcif = callPackage ../development/python-modules/modelcif { };
 
   modeled = callPackage ../development/python-modules/modeled { };
 
