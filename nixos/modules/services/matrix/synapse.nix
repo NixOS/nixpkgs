@@ -393,12 +393,14 @@ in {
         description = mdDoc ''
           Default configuration for the loggers used by `matrix-synapse` and its workers.
           The defaults are added with the default priority which means that
-          these will be merged with additional declarations. For instance
+          these will be merged with additional declarations. These additional
+          declarations also take precedence over the defaults when declared
+          with at least normal priority. For instance
           the log-level for synapse and its workers can be changed like this:
 
           ```nix
           { lib, ... }: {
-            services.matrix-synapse.log.root.level = lib.mkForce "WARNING";
+            services.matrix-synapse.log.root.level = "WARNING";
           }
           ```
 
@@ -1042,7 +1044,7 @@ in {
     # default them, so they are additive
     services.matrix-synapse.extras = defaultExtras;
 
-    services.matrix-synapse.log = defaultCommonLogConfig;
+    services.matrix-synapse.log = mapAttrsRecursive (const mkDefault) defaultCommonLogConfig;
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";
