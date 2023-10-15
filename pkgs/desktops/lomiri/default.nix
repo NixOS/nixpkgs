@@ -22,6 +22,7 @@ let
 
     #### QML / QML-related
     lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
+    lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
 
     #### Services
     biometryd = callPackage ./services/biometryd { };
