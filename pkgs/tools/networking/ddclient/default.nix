@@ -1,8 +1,8 @@
-{ lib, fetchFromGitHub, perlPackages, autoreconfHook, iproute2, perl }:
+{ lib, fetchFromGitHub, perlPackages, autoreconfHook, iproute2, perl, curl }:
 
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
-  version = "3.10.0";
+  version = "3.11.0_1";
 
   outputs = [ "out" ];
 
@@ -10,7 +10,7 @@ perlPackages.buildPerlPackage rec {
     owner = "ddclient";
     repo = "ddclient";
     rev = "v${version}";
-    sha256 = "sha256-wWUkjXwVNZRJR1rXPn3IkDRi9is9vsRuNC/zq8RpB1E=";
+    sha256 = "sha256-pl1kbzY5nUIvx1QiDdL9TP4vKtQnnv3RWklE4gbxXCw=";
   };
 
   postPatch = ''
@@ -19,7 +19,7 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = with perlPackages; [ IOSocketINET6 IOSocketSSL JSONPP ];
+  buildInputs = [ curl ] ++ (with perlPackages; [ JSONPP ]);
 
   installPhase = ''
     runHook preInstall
