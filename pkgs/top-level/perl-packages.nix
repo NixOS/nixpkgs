@@ -2059,6 +2059,7 @@ with self; {
       url = "mirror://cpan/authors/id/R/RA/RAZ/Cache-Memcached-Fast-0.28.tar.gz";
       hash = "sha256-fEJMJTtl/2LPFXe7QYgCGSoYgF6jH6/Ap65YnkRsidI=";
     };
+    buildInputs = [ Test2Suite ];
     meta = {
       description = "Perl client for memcached, in C language";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
