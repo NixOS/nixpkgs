@@ -23,17 +23,15 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  # current version, 5.0.1, is broken with jsonschema>=4.18
-  # we use unstable version instead of patch due to many changes
-  version = "unstable-2023-08-12";
+  version = "5.1.2";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "altair-viz";
     repo = "altair";
-    rev = "56b3b66daae7160c8d82777d2646131afcc3dab4";
-    hash = "sha256-uVE3Bth1D1mIhaULB4IxEtOzhQd51Pscqyfdys65F6A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-30M+rt5IfD4hvK5CwaW8HfQacDBPjowff/f9o7iido0=";
   };
 
   nativeBuildInputs = [
