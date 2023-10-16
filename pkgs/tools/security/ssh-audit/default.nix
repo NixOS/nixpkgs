@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, nixosTests
 , python3Packages
 }:
 
@@ -18,6 +19,10 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) ssh-audit;
+  };
 
   meta = with lib; {
     description = "Tool for ssh server auditing";
