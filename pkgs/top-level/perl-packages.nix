@@ -10214,7 +10214,7 @@ with self; {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.66.tar.gz";
       hash = "sha256-xqD03kYr8yS1usoXddGZ7DJGo1jBPbm2Ssv82+bl7CE=";
     };
-    buildInputs = [ TestRefcount TestFatal ];
+    buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ Future XSParseKeyword XSParseSublike ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
