@@ -17,9 +17,13 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
+    mkdir -p $out/{bin,lib,share}
     install -Dm644 spotifywm.so $out/lib/
     ln -sf ${spotify}/bin/spotify $out/bin/spotify
+
+    # add symlinks for desktop file and icons
+    ln -sf ${spotify}/share/applications/ $out/share/applications
+    ln -sf ${spotify}/share/icons $out/share/icons
 
     # wrap spotify to use spotifywm.so
     wrapProgram $out/bin/spotify --set LD_PRELOAD "$out/lib/spotifywm.so"
