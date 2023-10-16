@@ -8502,6 +8502,12 @@
     githubId = 6321578;
     name = "John Rinehart";
   };
+  john-rodewald = {
+    email = "jnrodewald99@gmail.com";
+    github = "john-rodewald";
+    githubId = 51028009;
+    name = "John Rodewald";
+  };
   john-shaffer = {
     email = "jdsha@proton.me";
     github = "john-shaffer";
