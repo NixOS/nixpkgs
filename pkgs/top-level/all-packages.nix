@@ -19359,10 +19359,6 @@ with pkgs;
 
   guile-hall = callPackage ../development/tools/guile/guile-hall { };
 
-  guile-lint = callPackage ../development/tools/guile/guile-lint {
-    guile = guile_1_8;
-  };
-
   gwrap = callPackage ../development/tools/guile/g-wrap {
     guile = guile_2_2;
   };
