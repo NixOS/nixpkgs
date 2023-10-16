@@ -2362,9 +2362,10 @@ let
         mktplcRef = {
           name = "direnv";
           publisher = "mkhl";
-          version = "0.14.0";
-          sha256 = "sha256-T+bt6ku+zkqzP1gXNLcpjtFAevDRiSKnZaE7sM4pUOs=";
+          version = "0.15.2";
+          sha256 = "06lp4qgnksklgc6nvx1l9z38y7apbx0a6v886nd15aq9rq8my0ka";
         };
+
         meta = {
           description = "direnv support for Visual Studio Code";
           license = lib.licenses.bsd0;
