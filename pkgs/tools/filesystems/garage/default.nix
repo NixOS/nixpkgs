@@ -104,5 +104,5 @@ rec {
 
   garage_0_9 = garage_0_9_0;
 
-  garage = garage_0_8;
+  garage = garage_0_9;
 }
