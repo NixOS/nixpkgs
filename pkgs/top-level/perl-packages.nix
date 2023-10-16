@@ -5311,6 +5311,7 @@ with self; {
       url = "mirror://cpan/authors/id/T/TI/TIMLEGGE/Crypt-OpenSSL-AES-0.15.tar.gz";
       hash = "sha256-UKgfTFaJ6a0tf251RuxXURPD7vH6fFl+cSE5YMpb6+U=";
     };
+    buildInputs = [ CryptOpenSSLGuess FileWhich pkgs.openssl ];
     env.NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     meta = {
