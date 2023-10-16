@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rapidcheck";
-  version = "unstable-2023-04-16";
+  version = "unstable-2023-08-15";
 
   src = fetchFromGitHub {
     owner = "emil-e";
     repo  = "rapidcheck";
-    rev   = "a5724ea5b0b00147109b0605c377f1e54c353ba2";
-    hash = "sha256-nq2VBDREkAOnvtdYr3m0TYNXx7mv9hbV5HZFVL2uTTg=";
+    rev   = "1c91f40e64d87869250cfb610376c629307bf77d";
+    hash = "sha256-8pBCRM1Tujjp4wLvYA056OQghXF57kewUOQ3DJM/v58=";
   };
 
   nativeBuildInputs = [ cmake ];
