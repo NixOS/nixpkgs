@@ -12945,13 +12945,14 @@ with self; {
     };
   };
 
-  JavaScriptMinifierXS = buildPerlModule {
+  JavaScriptMinifierXS = buildPerlPackage {
     pname = "JavaScript-Minifier-XS";
     version = "0.15";
     src = fetchurl {
       url = "mirror://cpan/authors/id/G/GT/GTERMARS/JavaScript-Minifier-XS-0.15.tar.gz";
       hash = "sha256-XZsDT1jwtv9bZGR708WpzgWypw7e4zn7wxc67nR8wFA=";
     };
+    buildInputs = [ TestDiagINC ];
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
     meta = {
       description = "XS based JavaScript minifier";
