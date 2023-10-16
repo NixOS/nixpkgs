@@ -48,5 +48,6 @@ perlPackages.buildPerlPackage rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor ];
+    mainProgram = "ddclient";
   };
 }
