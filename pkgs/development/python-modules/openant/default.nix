@@ -1,29 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , pyusb
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "openant-unstable";
-  version = "2017-02-11";
+  version = "1.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Tigge";
     repo = "openant";
-    rev = "ed89281e37f65d768641e87356cef38877952397";
-    sha256 = "1g81l9arqdy09ijswn3sp4d6i3z18d44lzyb78bwnvdb14q22k19";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Ook9dwcyWvpaGylVDjBxQ2bnXRUBPYQHo6Wub+ISpwE=";
   };
 
-  # Removes some setup.py hacks intended to install udev rules.
-  # We do the job ourselves in postInstall below.
-  postPatch = ''
-    sed -i -e '/cmdclass=.*/d' setup.py
-  '';
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   postInstall = ''
     install -dm755 "$out/etc/udev/rules.d"
-    install -m644 resources/ant-usb-sticks.rules "$out/etc/udev/rules.d/99-ant-usb-sticks.rules"
+    install -m644 resources/42-ant-usb-sticks.rules "$out/etc/udev/rules.d/99-ant-usb-sticks.rules"
   '';
 
   propagatedBuildInputs = [ pyusb ];
