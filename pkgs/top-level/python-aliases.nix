@@ -211,6 +211,7 @@ mapAliases ({
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  lazy_imports = lazy-imports; # added 2023-10-13
   lektor = throw "lektor has been promoted to a top-level attribute"; # added 2023-08-01
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
