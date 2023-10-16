@@ -15,12 +15,12 @@
 }:
 buildPythonPackage rec {
   pname = "w1thermsensor";
-  version = "2.0.0";
+  version = "2.3.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EcaEr4B8icbwZu2Ty3z8AAgglf74iZ5BLpLnSOZC2cE=";
+    hash = "sha256-n7wK4N1mzZtUxtYu17qyuI4UjJh/59UGD0dvkOgcInA=";
   };
 
   postPatch = ''
