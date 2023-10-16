@@ -17589,6 +17589,20 @@ with self; {
     };
   };
 
+  MockMonkeyPatch = buildPerlModule {
+    pname = "Mock-MonkeyPatch";
+    version = "1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/Mock-MonkeyPatch-1.02.tar.gz";
+      hash = "sha256-xbaUTKVP6DVXN2cwYO1OnvhyNyZXfXluHK5eVr8bAYE=";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+    meta = {
+      description = "Monkey patching with test mocking in mind";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Mouse = buildPerlModule {
     pname = "Mouse";
     version = "2.5.10";
