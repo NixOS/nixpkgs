@@ -174,6 +174,7 @@ mapAliases ({
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
   grappelli_safe = grappelli-safe; # added 2023-10-08
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
+  guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
   hangups = throw "hangups was removed because Google Hangouts has been shut down"; # added 2023-02-13
