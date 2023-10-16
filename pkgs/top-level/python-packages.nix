@@ -14493,6 +14493,8 @@ self: super: with self; {
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
+  trafilatura = callPackage ../development/python-modules/trafilatura { };
+
   trailrunner = callPackage ../development/python-modules/trailrunner {};
 
   trainer = callPackage ../development/python-modules/trainer {};
