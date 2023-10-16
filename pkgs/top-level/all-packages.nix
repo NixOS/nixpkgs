@@ -31377,7 +31377,9 @@ with pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
-  espeak-ng = callPackage ../applications/audio/espeak-ng { };
+  espeak-ng = callPackage ../applications/audio/espeak-ng {
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio;
+  };
   espeak = res.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
