@@ -58,6 +58,7 @@
 , reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
 , noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
+, testers
 } @ inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -232,7 +233,7 @@ let
   '';
 
   execSuffix = stdenv.hostPlatform.extensions.executable;
-in with passthru; stdenv.mkDerivation {
+in with passthru; stdenv.mkDerivation (finalAttrs: {
   pname = "python3";
   inherit src version;
 
@@ -579,6 +580,8 @@ in with passthru; stdenv.mkDerivation {
 
       nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python_docs_theme ];
     };
+
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   enableParallelBuilding = true;
@@ -604,8 +607,9 @@ in with passthru; stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = licenses.psfl;
+    pkgConfigModules = [ "python3" ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
     maintainers = with maintainers; [ fridh ];
     mainProgram = executable;
   };
-}
+})
