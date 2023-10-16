@@ -14458,7 +14458,7 @@ with self; {
       hash = "sha256-wtFEyuAiX4vJ0PX60cPxOdJ89TT85+rHB2T79m/SI0E=";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ JSON ];
+    propagatedBuildInputs = [ Clone JSON ];
     meta = {
       description = "Object Oriented Authentication-Results Headers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
