@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyeclib";
-  version = "unstable-2022-03-11";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "pyeclib";
-    rev = "b50040969a03f7566ffcb468336e875d21486113";
-    hash = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-pa3majZ68+DQGtgGCpZVRshof+w9jvpxreo4dkckLXk=";
   };
 
   postPatch = ''
