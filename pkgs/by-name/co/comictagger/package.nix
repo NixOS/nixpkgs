@@ -6,6 +6,7 @@ python3.pkgs.buildPythonApplication rec {
   #  version = "1.6-alpha.8";
   format = "pyproject";
   version = "1.5.5";
+  dists = "x86_64-linux";
 
   src = fetchgit {
     url = "https://github.com/comictagger/comictagger.git";
