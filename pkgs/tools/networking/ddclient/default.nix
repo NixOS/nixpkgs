@@ -1,5 +1,8 @@
 { lib, fetchFromGitHub, perlPackages, autoreconfHook, iproute2, perl, curl }:
 
+let
+  myPerl = perl.withPackages (ps: [ ps.JSONPP ]);
+in
 perlPackages.buildPerlPackage rec {
   pname = "ddclient";
   version = "3.11.0_1";
@@ -19,13 +22,17 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ curl ] ++ (with perlPackages; [ JSONPP ]);
+  buildInputs = [ curl myPerl ];
+
+  # Prevent ddclient from picking up build time perl which is implicitly added
+  # by buildPerlPackage.
+  configureFlags = [
+    "--with-perl=${lib.getExe myPerl}"
+  ];
 
   installPhase = ''
     runHook preInstall
 
-    # patch sheebang ddclient script which only exists after buildPhase
-    preConfigure
     install -Dm755 ddclient $out/bin/ddclient
     install -Dm644 -t $out/share/doc/ddclient COP* README.* ChangeLog.md
 
