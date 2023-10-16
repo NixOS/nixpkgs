@@ -22506,6 +22506,19 @@ with self; {
     };
   };
 
+  StringBinaryInterpolation = buildPerlPackage {
+    pname = "String-Binary-Interpolation";
+    version = "1.0.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/String-Binary-Interpolation-1.0.0.tar.gz";
+      hash = "sha256-2lXYmCTBrdniqpWP8OpILyaCLkJI7TOo1rT7vXdYivE=";
+    };
+    meta = {
+      description = "Make it easier to interpolate binary bytes into a string";
+      license = with lib.licenses; [ artistic2 gpl2Only ];
+    };
+  };
+
   StringCamelCase = buildPerlPackage {
     pname = "String-CamelCase";
     version = "0.04";
