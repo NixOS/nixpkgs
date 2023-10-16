@@ -58,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Toolkit for plotting and analysis of ab initio solid-state calculation data";
     homepage = "https://github.com/SMTG-UCL/sumo";
+    changelog = "https://github.com/SMTG-Bham/sumo/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
