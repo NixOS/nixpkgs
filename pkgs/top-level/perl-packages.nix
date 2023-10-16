@@ -11075,6 +11075,21 @@ with self; {
     };
   };
 
+  HashOrdered = buildPerlPackage {
+    pname = "Hash-Ordered";
+    version = "0.014";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Hash-Ordered-0.014.tar.gz";
+      hash = "sha256-jcNs15FVrjerij3l/ZEg/7qaMeQJJYwoUp7FJRxZdHs=";
+    };
+    buildInputs = [ TestDeep TestFailWarnings TestFatal ];
+    meta = {
+      homepage = "https://github.com/dagolden/Hash-Ordered";
+      description = "A fast, pure-Perl ordered hash class";
+      license = lib.licenses.asl20;
+    };
+  };
+
   HashSafeKeys = buildPerlPackage {
     pname = "Hash-SafeKeys";
     version = "0.04";
