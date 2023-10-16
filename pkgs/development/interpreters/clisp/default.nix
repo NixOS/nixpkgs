@@ -29,6 +29,7 @@
 , x11Support ? (stdenv.hostPlatform.isx86 && ! stdenv.hostPlatform.isDarwin)
 , dllSupport ? true
 , withModules ? [
+    "asdf"
     "pcre"
     "rawsock"
   ]
@@ -41,6 +42,8 @@ assert x11Support -> (libX11 != null && libXau != null && libXt != null
 
 let
   ffcallAvailable = stdenv.isLinux && (libffcall != null);
+  # Some modules need autoreconf called in their directory.
+  shouldReconfModule = name: name != "asdf";
 in
 
 stdenv.mkDerivation {
@@ -92,7 +95,7 @@ stdenv.mkDerivation {
       cd modules/${x}
       autoreconf -f -i -I "$root/src" -I "$root/src/m4" -I "$root/src/glm4"
     )
-  '') withModules);
+  '') (builtins.filter shouldReconfModule withModules));
 
   configureFlags = [ "builddir" ]
   ++ lib.optional (!dllSupport) "--without-dynamic-modules"

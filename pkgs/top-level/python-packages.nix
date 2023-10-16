@@ -1803,7 +1803,12 @@ self: super: with self; {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
-  catboost = callPackage ../development/python-modules/catboost { };
+  catboost = callPackage ../development/python-modules/catboost {
+    catboost = pkgs.catboost.override {
+      pythonSupport = true;
+      python3Packages = self;
+    };
+  };
 
   catppuccin = callPackage ../development/python-modules/catppuccin { };
 
@@ -1982,6 +1987,8 @@ self: super: with self; {
   cirq-aqt = callPackage ../development/python-modules/cirq-aqt { };
 
   cirq-core = callPackage ../development/python-modules/cirq-core { };
+
+  cirq-ft = callPackage ../development/python-modules/cirq-ft { };
 
   cirq-ionq = callPackage ../development/python-modules/cirq-ionq { };
 
@@ -6006,7 +6013,7 @@ self: super: with self; {
 
   lazy_import = callPackage ../development/python-modules/lazy_import { };
 
-  lazy_imports = callPackage ../development/python-modules/lazy_imports { };
+  lazy-imports = callPackage ../development/python-modules/lazy-imports { };
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 

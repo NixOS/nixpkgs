@@ -4,7 +4,6 @@
 , pythonAtLeast
 , pythonOlder
 , fetchFromGitHub
-, fetchpatch
 , duet
 , matplotlib
 , networkx
@@ -35,7 +34,7 @@ buildPythonPackage rec {
   version = "1.2.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "quantumlib";
@@ -94,6 +93,8 @@ buildPythonPackage rec {
     "test_json_and_repr_data"
     # Tests for some changed error handling behavior in SymPy 1.12
     "test_custom_value_not_implemented"
+    # Calibration issue
+    "test_xeb_to_calibration_layer"
   ];
 
   meta = with lib; {

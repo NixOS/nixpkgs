@@ -274,6 +274,7 @@ in {
   fcitx5 = handleTest ./fcitx5 {};
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
+  ferretdb = handleTest ./ferretdb.nix {};
   firefox = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox; };
   firefox-beta = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-beta; };
   firefox-devedition = handleTest ./firefox.nix { firefoxPackage = pkgs.firefox-devedition; };

@@ -327,7 +327,6 @@ def run_nix_expr(expr, nixpkgs: str):
     :param expr nix expression to fetch current plugins
     :param nixpkgs Path towards a nixpkgs checkout
     '''
-    # local_pkgs = str(Path(__file__).parent.parent.parent)
     with CleanEnvironment(nixpkgs) as nix_path:
         cmd = [
             "nix",
@@ -341,8 +340,8 @@ def run_nix_expr(expr, nixpkgs: str):
             "--nix-path",
             nix_path,
         ]
-        log.debug("Running command %s", " ".join(cmd))
-        out = subprocess.check_output(cmd)
+        log.debug("Running command: %s", " ".join(cmd))
+        out = subprocess.check_output(cmd, timeout=90)
         data = json.loads(out)
         return data
 
@@ -572,7 +571,6 @@ class CleanEnvironment(object):
         self.empty_config = NamedTemporaryFile()
         self.empty_config.write(b"{}")
         self.empty_config.flush()
-        # os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
         return f"localpkgs={self.local_pkgs}"
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
