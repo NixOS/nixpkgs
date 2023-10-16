@@ -2,11 +2,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "opsdroid_get_image_size";
+  pname = "opsdroid-get-image-size";
   version = "0.2.2";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "opsdroid_get_image_size";
+    inherit version;
     sha256 = "124j2xvfxv09q42qfb8nqlcn55y7f09iayrix3yfyrs2qyzav78a";
   };
 
