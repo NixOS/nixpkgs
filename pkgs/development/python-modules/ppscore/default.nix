@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "ppscore";
-  version = "unstable-2021-11-25";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "8080labs";
     repo = pname;
-    rev = "c9268c16b6305c5c38e2fe2fd84f43d97ec1aaca";
-    hash = "sha256-qiogjUgcLFauAMpVf2CKNC27c9xR9q7nY69n8/go1ms=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-gJStsL8fN17kvXO8EH/NHGIBelPknJzYw5WEvHsFooU=";
   };
 
   propagatedBuildInputs = [
