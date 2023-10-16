@@ -15715,7 +15715,7 @@ with self; {
       url = "mirror://cpan/authors/id/I/IS/ISHIGAKI/Module-CPANTS-Analyse-1.02.tar.gz";
       hash = "sha256-nhFzm5zQi6LXWllzfx+yl/RYA/KJBjxcdZv8eP1Rbns=";
     };
-    propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff DataBinary FileFindObject PerlPrereqScannerNotQuiteLite SoftwareLicense ];
+    propagatedBuildInputs = [ ArchiveAnyLite ArrayDiff ClassAccessor DataBinary FileFindObject ModuleFind ParseDistname PerlPrereqScannerNotQuiteLite SoftwareLicense ];
     buildInputs = [ ExtUtilsMakeMakerCPANfile TestFailWarnings ];
     meta = {
       description = "Generate Kwalitee ratings for a distribution";
