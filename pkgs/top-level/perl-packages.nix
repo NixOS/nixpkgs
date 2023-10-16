@@ -6771,6 +6771,21 @@ with self; {
     };
   };
 
+  DevelDeprecationsEnvironmental = buildPerlPackage {
+    pname = "Devel-Deprecations-Environmental";
+    version = "1.101";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-Deprecations-Environmental-1.101.tar.gz";
+      hash = "sha256-S+SC08PcOtHvR0P6s4DOuQG3QVZQeVOoNITfadolpqY=";
+    };
+    propagatedBuildInputs = [ DevelCheckOS DevelHide TestException TestTime ];
+    meta = {
+      description = "A framework for managing deprecations";
+      homepage = "https://github.com/DrHyde/perl-modules-Devel-Deprecations-Environmental";
+      license = with lib.licenses; [ gpl2Only artistic1 ];
+    };
+  };
+
   DevelLeak = buildPerlPackage rec {
     pname = "Devel-Leak";
     version = "0.03";
