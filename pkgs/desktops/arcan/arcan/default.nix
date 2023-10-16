@@ -32,10 +32,12 @@
 , makeWrapper
 , mesa
 , mupdf
+, ninja
 , openal
 , openjpeg
-, pcre
+, pcre2
 , pkg-config
+, ruby
 , sqlite
 , tesseract
 , valgrind
@@ -44,28 +46,54 @@
 , xcbutil
 , xcbutilwm
 , xz
-, buildManPages ? true, ruby
+, buildManPages ? true
 , useBuiltinLua ? true
-, useStaticFreetype ? false
-, useStaticLibuvc ? false
+, useEspeak ? !stdenv.isDarwin
+, useStaticLibuvc ? true
 , useStaticOpenAL ? true
-, useStaticSqlite ? false
+, useStaticSqlite ? true
+, useTracy ? true
 }:
 
 let
-  cmakeFeatureFlag = feature: flag:
-    "-D${feature}=${if flag then "on" else "off"}";
+  allSources = {
+    letoram-arcan-src = fetchFromGitHub {
+      owner = "letoram";
+      repo = "arcan";
+      rev = "85c8564bdbee8468a5716bea64daf1d78937ffbf";
+      hash = "sha256-etmj1vpZTjxbmr4UiLBEK57WFJ1NeEnY5WfBYajX3ls=";
+    };
+    letoram-openal-src = fetchFromGitHub {
+      owner = "letoram";
+      repo = "openal";
+      rev = "81e1b364339b6aa2b183f39fc16c55eb5857e97a";
+      hash = "sha256-X3C3TDZPiOhdZdpApC4h4KeBiWFMxkFsmE3gQ1Rz420=";
+    };
+    libuvc-src = fetchFromGitHub {
+      owner = "libuvc";
+      repo = "libuvc";
+      rev = "68d07a00e11d1944e27b7295ee69673239c00b4b";
+      hash = "sha256-IdV18mnPTDBODpS1BXl4ulkFyf1PU2ZmuVGNOIdQwzE=";
+    };
+    luajit-src = fetchFromGitHub {
+      owner = "LuaJIT";
+      repo = "LuaJIT";
+      rev = "656ecbcf8f669feb94e0d0ec4b4f59190bcd2e48";
+      hash = "sha256-/gGQzHgYuWGqGjgpEl18Rbh3Sx2VP+zLlx4N9/hbYLc=";
+    };
+    tracy-src = fetchFromGitHub {
+      owner = "wolfpld";
+      repo = "tracy";
+      rev = "93537dff336e0796b01262e8271e4d63bf39f195";
+      hash = "sha256-FNB2zTbwk8hMNmhofz9GMts7dvH9phBRVIdgVjRcyQM=";
+    };
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "arcan" + lib.optionalString useStaticOpenAL "-static-openal";
-  version = "0.6.2.1";
+  pname = "arcan";
+  version = "0.6.2.1-unstable-2023-10-14";
 
-  src = fetchFromGitHub {
-    owner = "letoram";
-    repo = "arcan";
-    rev = finalAttrs.version;
-    hash = "sha256-7H3fVSsW5VANLqwhykY+Q53fPjz65utaGksh/OpZnJM=";
-  };
+  src = allSources.letoram-arcan-src;
 
   nativeBuildInputs = [
     cmake
@@ -77,7 +105,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    espeak
     ffmpeg
     file
     freetype
@@ -100,13 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
     libvncserver
     libxcb
     libxkbcommon
-    lua5_1
-    luajit
     mesa
     mupdf.dev
     openal
     openjpeg.dev
-    pcre
+    pcre2
     sqlite
     tesseract
     valgrind
@@ -115,40 +140,29 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutil
     xcbutilwm
     xz
-  ];
-
-  patches = [
-    # Nixpkgs-specific: redirect vendoring
-    ./000-openal.patch
-    ./001-luajit.patch
-    ./002-libuvc.patch
+  ]
+  ++ lib.optionals useEspeak [
+    espeak
   ];
 
   # Emulate external/git/clone.sh
   postUnpack = let
-    inherit (import ./clone-sources.nix { inherit fetchFromGitHub fetchgit; })
-      letoram-openal-src freetype-src libuvc-src luajit-src;
+    inherit (allSources)
+      letoram-openal-src libuvc-src luajit-src tracy-src;
+    prepareSource = flag: source: destination:
+      lib.optionalString flag ''
+        cp -va ${source}/ ${destination}
+        chmod --recursive 744 ${destination}
+      '';
   in
     ''
       pushd $sourceRoot/external/git/
     ''
-    + (lib.optionalString useStaticOpenAL ''
-      cp -a ${letoram-openal-src}/ openal
-      chmod --recursive 744 openal
-    '')
-    + (lib.optionalString useStaticFreetype ''
-      cp -a ${freetype-src}/ freetype
-      chmod --recursive 744 freetype
-    '')
-    + (lib.optionalString useStaticLibuvc ''
-      cp -a ${libuvc-src}/ libuvc
-      chmod --recursive 744 libuvc
-    '')
-    + (lib.optionalString useBuiltinLua ''
-      cp -a ${luajit-src}/ luajit
-      chmod --recursive 744 luajit
-    '') +
-    ''
+    + prepareSource useStaticOpenAL letoram-openal-src "openal"
+    + prepareSource useStaticLibuvc libuvc-src "libuvc"
+    + prepareSource useBuiltinLua luajit-src "luajit"
+    + prepareSource useTracy tracy-src "tracy"
+    + ''
       popd
     '';
 
@@ -156,11 +170,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ./src/platform/posix/paths.c \
       --replace "/usr/bin" "$out/bin" \
       --replace "/usr/share" "$out/share"
-
-    substituteInPlace ./src/CMakeLists.txt --replace "SETUID" "# SETUID"
+    substituteInPlace ./src/CMakeLists.txt \
+      --replace "SETUID" "# SETUID"
   '';
 
-  # INFO: Arcan build scripts require the manpages to be generated before the
+  # INFO: Arcan build scripts require the manpages to be generated *before* the
   # `configure` phase
   preConfigure = lib.optionalString buildManPages ''
     pushd doc
@@ -169,17 +183,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
-    "-DBUILD_PRESET=everything"
     # The upstream project recommends tagging the distribution
-    "-DDISTR_TAG=Nixpkgs"
-    "-DENGINE_BUILDTAG=${finalAttrs.version}"
-    (cmakeFeatureFlag "HYBRID_SDL" true)
-    (cmakeFeatureFlag "BUILTIN_LUA" useBuiltinLua)
-    (cmakeFeatureFlag "DISABLE_JIT" useBuiltinLua)
-    (cmakeFeatureFlag "STATIC_FREETYPE" useStaticFreetype)
-    (cmakeFeatureFlag "STATIC_LIBUVC" useStaticLibuvc)
-    (cmakeFeatureFlag "STATIC_OPENAL" useStaticOpenAL)
-    (cmakeFeatureFlag "STATIC_SQLite3" useStaticSqlite)
+    (lib.cmakeFeature "DISTR_TAG" "Nixpkgs")
+    (lib.cmakeFeature "ENGINE_BUILDTAG" finalAttrs.src.rev)
+    (lib.cmakeFeature "BUILD_PRESET" "everything")
+    (lib.cmakeBool "BUILTIN_LUA" useBuiltinLua)
+    (lib.cmakeBool "DISABLE_JIT" useBuiltinLua)
+    (lib.cmakeBool "STATIC_LIBUVC" useStaticLibuvc)
+    (lib.cmakeBool "STATIC_SQLite3" useStaticSqlite)
+    (lib.cmakeBool "ENABLE_TRACY" useTracy)
     "../src"
   ];
 
@@ -187,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     "format"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://arcan-fe.com/";
     description = "Combined Display Server, Multimedia Framework, Game Engine";
     longDescription = ''
@@ -196,8 +208,8 @@ stdenv.mkDerivation (finalAttrs: {
       e.g. game development, real-time streaming video, monitoring and
       surveillance, up to and including desktop compositors and window managers.
     '';
-    license = with licenses; [ bsd3 gpl2Plus lgpl2Plus ];
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ bsd3 gpl2Plus lgpl2Plus ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
 })
