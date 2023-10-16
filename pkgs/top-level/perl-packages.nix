@@ -14960,7 +14960,7 @@ with self; {
       url = "mirror://cpan/authors/id/F/FE/FELIPE/Math-ProvablePrime-0.51.tar.gz";
       hash = "sha256-D7YWRJ+weorR6KgJxwghthjlPcD/3ayWVnYY3jPEbBE=";
     };
-    buildInputs = [ FileWhich TestClass TestDeep TestException TestNoWarnings ];
+    buildInputs = [ FileWhich TestClass TestDeep TestException TestFailWarnings ];
     propagatedBuildInputs = [ BytesRandomSecureTiny ];
     meta = {
       description = "Generate a provable prime number, in pure Perl";
