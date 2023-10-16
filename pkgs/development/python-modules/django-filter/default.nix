@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pytest-django
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   meta = with lib; {
     description = "Reusable Django application for allowing users to filter querysets dynamically";
