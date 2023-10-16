@@ -17945,7 +17945,7 @@ with self; {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Net-Async-HTTP-Server-0.14.tar.gz";
       hash = "sha256-6nG3kcEtD6X3JubMA/Zuo20bRhNxj2xb84EzvRinsrY=";
     };
-    buildInputs = [ TestIdentity TestMetricsAny TestRefcount TestSimple13 ];
+    buildInputs = [ Test2Suite TestMetricsAny TestRefcount ];
     propagatedBuildInputs = [ HTTPMessage IOAsync MetricsAny ];
     meta = {
       description = "Serve HTTP with IO::Async";
