@@ -3,6 +3,7 @@
 , useMpi ? false
 , mpi
 , openssh
+, igraph
 }:
 
 # MPI version can only be built with LP64 interface.
@@ -46,7 +47,12 @@ stdenv.mkDerivation rec {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
 
-  passthru = { inherit (blas) isILP64; };
+  passthru = {
+    inherit (blas) isILP64;
+    tests = {
+      inherit igraph;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/opencollab/arpack-ng";
