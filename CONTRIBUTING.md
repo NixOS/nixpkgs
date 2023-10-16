@@ -538,7 +538,7 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
   When adding yourself as maintainer, in the same pull request, make a separate
   commit with the message `maintainers: add <handle>`.
   Add the commit before those making changes to the package or module.
-  See [Nixpkgs Maintainers](../maintainers/README.md) for details.
+  See [Nixpkgs Maintainers](./maintainers/README.md) for details.
 
 ### Writing good commit messages
 
