@@ -5048,7 +5048,7 @@ with self; {
       url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/Crypt-PKCS10-2.005.tar.gz";
       hash = "sha256-LdEv0JHCPjp8NKZqw1rDq/kHQCOUtVV0mO3kj8QUU6c=";
     };
-    buildInputs = [ pkgs.unzip ModuleBuildTiny ];
+    buildInputs = [ CryptX ModuleBuildTiny pkgs.unzip ];
     propagatedBuildInputs = [ ConvertASN1 ];
     meta = {
       description = "Parse PKCS #10 certificate requests";
