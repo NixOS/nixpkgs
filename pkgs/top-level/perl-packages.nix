@@ -24367,6 +24367,20 @@ with self; {
     };
   };
 
+  TestFutureIOImpl = buildPerlModule {
+    pname = "Test-Future-IO-Impl";
+    version = "0.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Test-Future-IO-Impl-0.14.tar.gz";
+      hash = "sha256-AH22GdPUljQyXFbvvKDh5Vdt0z95RV8t6llb5u344jU=";
+    };
+    propagatedBuildInputs = [ Test2Suite ];
+    meta = {
+      description = "Acceptance tests for C<Future::IO> implementations";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestHarnessStraps = buildPerlModule {
     pname = "Test-Harness-Straps";
     version = "0.30";
