@@ -285,6 +285,7 @@ mapAliases ({
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   PyLD = pyld; # added 2022-06-22
   pymatgen-lammps = throw "pymatgen-lammps has been removed because it is unmaintained and broken"; # added 2023-06-20
+  pymazda = throw "pymazda has been removed, because the upstream repo has been affected by a DCMA claim."; # added 2023-10-16
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19

@@ -1092,6 +1092,15 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
+  mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
+    inherit (darwin) cctools developer_cmds DarwinTools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    antlr = antlr4_10;
+    boost = boost177; # Configure checks for specific version.
+    icu =  icu69;
+    protobuf = protobuf3_21;
+  };
+
   broadlink-cli = callPackage ../tools/misc/broadlink-cli { };
 
   fetchpatch = callPackage ../build-support/fetchpatch {
@@ -4951,8 +4960,6 @@ with pkgs;
   dabtools = callPackage ../applications/radio/dabtools { };
 
   daemontools = callPackage ../tools/admin/daemontools { };
-
-  dagger = callPackage ../development/tools/continuous-integration/dagger { };
 
   dale = callPackage ../development/compilers/dale { };
 
@@ -17477,6 +17484,7 @@ with pkgs;
   yosys = callPackage ../development/compilers/yosys { };
   yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
   yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
+  yosys-synlig = callPackage ../development/compilers/yosys/plugins/synlig.nix { };
   yosys-symbiflow = callPackage ../development/compilers/yosys/plugins/symbiflow.nix { };
 
   z88dk = callPackage ../development/compilers/z88dk { };
@@ -31385,7 +31393,9 @@ with pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
-  espeak-ng = callPackage ../applications/audio/espeak-ng { };
+  espeak-ng = callPackage ../applications/audio/espeak-ng {
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio;
+  };
   espeak = res.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };

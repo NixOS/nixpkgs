@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.4.31";
+  version = "0.4.33";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-/CUBRRezm84yAqnEVAC89vKIpALnvSkoSKBCmX84S0w=";
+    hash = "sha256-IAi1LS6LqcvMR3dqNcppuyoMNM/hRT1eH+LZbczWW/M=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
