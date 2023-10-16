@@ -53,6 +53,12 @@ let
         runHook postInstall
       '';
 
+      installCheckPhase = previousAttrs.installCheckPhase or ''
+        runHook preCheckInstall
+
+        runHook postCheckInstall
+      '';
+
       composerRepository = phpDrv.mkComposerRepository {
         inherit composer composer-local-repo-plugin;
         inherit (finalAttrs) patches pname src vendorHash version;
