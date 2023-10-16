@@ -8657,10 +8657,6 @@ with pkgs;
 
   gnuclad = callPackage ../applications/graphics/gnuclad { };
 
-  gnufdisk = callPackage ../tools/system/fdisk {
-    guile = guile_1_8;
-  };
-
   gnugrep = callPackage ../tools/text/gnugrep { };
 
   gnulib = callPackage ../development/tools/gnulib { };

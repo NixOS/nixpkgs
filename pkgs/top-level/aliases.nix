@@ -284,7 +284,7 @@ mapAliases ({
   gnome-passwordsafe = gnome-secrets; # added 2022-01-30
   gnome-mpv = throw "'gnome-mpv' has been renamed to/replaced by 'celluloid'"; # Converted to throw 2023-09-10
   gnome_user_docs = throw "'gnome_user_docs' has been renamed to/replaced by 'gnome-user-docs'"; # Converted to throw 2023-09-10
-
+  gnufdisk = throw "'gnufdisk' has been removed, use 'util-linux' instead"; # Added 2023-10-16
   gnuradio-with-packages = gnuradio3_7.override {
     extraPackages = lib.attrVals [
       "osmosdr" "ais" "gsm" "nacl" "rds" "limesdr"
