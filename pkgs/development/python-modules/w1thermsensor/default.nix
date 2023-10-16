@@ -13,6 +13,7 @@
 , pytestCheckHook
 , pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "w1thermsensor";
   version = "2.3.0";
@@ -63,6 +64,7 @@ buildPythonPackage rec {
       devices.
     '';
     homepage = "https://github.com/timofurrer/w1thermsensor";
+    changelog = "https://github.com/timofurrer/w1thermsensor/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ quentin ];
     platforms = platforms.all;
