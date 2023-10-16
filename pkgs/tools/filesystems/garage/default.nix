@@ -93,6 +93,13 @@ rec {
     version = "0.9.0";
     sha256 = "sha256-Bw7ohMAfnbkhl43k8KxYu2OJd5689PqDS0vAcgU09W8=";
     cargoSha256 = "sha256-JqCt/8p24suQMRzEyTE2OkbzZCGUDLuGq32kCq3eZ7o=";
+  }).overrideAttrs (oldAttrs: {
+    patches = oldAttrs.patches or [ ] ++ [
+      (fetchpatch {
+        url = "https://git.deuxfleurs.fr/Deuxfleurs/garage/commit/c7f5dcd953ff1fdfa002a8bccfb43eafcc6fddd4.patch";
+        sha256 = "sha256-q7E6gtPjnj5O/K837LMP6LPEFcgdkifxRFrYzBuqkk0=";
+      })
+    ];
   });
 
   garage_0_9 = garage_0_9_0;
