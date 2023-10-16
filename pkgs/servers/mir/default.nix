@@ -6,8 +6,6 @@
 , cmake
 , pkg-config
 , python3
-, doxygen
-, libxslt
 , boost
 , egl-wayland
 , freetype
@@ -40,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
-  version = "2.14.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IEGeZVNxwzHn5GASCyjNuQsnCzzfQBHdC33MWVMeZws=";
+    hash = "sha256-c1+gxzLEtNCjR/mx76O5QElQ8+AO4WsfcG7Wy1+nC6E=";
   };
 
   postPatch = ''
@@ -73,21 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/platform/graphics/CMakeLists.txt \
       --replace "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
       --replace "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
-
-    # Fix date in generated docs not honouring SOURCE_DATE_EPOCH
-    # Install docs to correct dir
-    substituteInPlace cmake/Doxygen.cmake \
-      --replace '"date"' '"date" "--date=@'"$SOURCE_DATE_EPOCH"'"' \
-      --replace "\''${CMAKE_INSTALL_PREFIX}/share/doc/mir-doc" "\''${CMAKE_INSTALL_DOCDIR}"
   '';
 
   strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    doxygen
     glib # gdbus-codegen
-    libxslt
     lttng-ust # lttng-gen-tp
     pkg-config
     (python3.withPackages (ps: with ps; [
@@ -137,9 +127,8 @@ stdenv.mkDerivation (finalAttrs: {
     wlcs
   ];
 
-  buildFlags = [ "all" "doc" ];
-
   cmakeFlags = [
+    "-DBUILD_DOXYGEN=OFF"
     "-DMIR_PLATFORM='gbm-kms;x11;eglstream-kms;wayland'"
     "-DMIR_ENABLE_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
@@ -160,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_RUNTIME_DIR=/tmp
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
