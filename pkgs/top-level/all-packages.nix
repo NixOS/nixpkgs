@@ -4954,8 +4954,6 @@ with pkgs;
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
-  dagger = callPackage ../development/tools/continuous-integration/dagger { };
-
   dale = callPackage ../development/compilers/dale { };
 
   damon = callPackage ../tools/admin/damon { };
