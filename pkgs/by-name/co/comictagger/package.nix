@@ -1,39 +1,27 @@
-{ lib
-, unrar
-, python3
-, fetchgit
-, poetry
-, git
-, rar
-, qt5
-, python3Packages
-, fetchFromGitHub
-}:
+{ lib, unrar, python3, fetchgit, poetry, git, rar, qt5, python3Packages
+, fetchFromGitHub }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "comictagger";
-#  version = "1.6-alpha.8";
+  #  version = "1.6-alpha.8";
   format = "pyproject";
   version = "1.5.5";
-  
+
   src = fetchgit {
     url = "https://github.com/comictagger/comictagger.git";
     leaveDotGit = "true";
-    
-# commit e5f6a7d1d636eccf68538283aac898f82fed082d (tag: 1.5.5)
-# Author: Timmy Welch <timmy@narnian.us>
-# Date:   Thu Nov 24 10:39:03 2022 -0800
 
+    # commit e5f6a7d1d636eccf68538283aac898f82fed082d (tag: 1.5.5)
+    # Author: Timmy Welch <timmy@narnian.us>
+    # Date:   Thu Nov 24 10:39:03 2022 -0800
     rev = "e5f6a7d1d636eccf68538283aac898f82fed082d";
     sha256 = "sha256-v9sYAonUUgxznQJB3uTI4IHDEhMLwW0FxC1nPcsQU0U=";
-
-# Fix pyinstaller build - 1.6 pre 8
-# Fix exception when PyQt is not installed
-#    rev = "96c5c4aa28cf38afa51ecc3eb2f0a9c65d91b686";
-#     sha256 = "sha256-ZevKw9Izpx+f9PyxvpVSw0BwMHuoEzw6mxaDDWR9C0U=";
-    
+    # Fix pyinstaller build - 1.6 pre 8
+    # Fix exception when PyQt is not installed
+    #    rev = "96c5c4aa28cf38afa51ecc3eb2f0a9c65d91b686";
+    #     sha256 = "sha256-ZevKw9Izpx+f9PyxvpVSw0BwMHuoEzw6mxaDDWR9C0U=";
   };
-  
+
   propagatedBuildInputs = [
 
     python3.pkgs.appdirs
@@ -63,9 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.xcffib
     qt5.qtwayland
   ];
-  nativeBuildInputs = [ git
-    qt5.wrapQtAppsHook
-                      ];
+  nativeBuildInputs = [ git qt5.wrapQtAppsHook ];
   buildInputs = [
     qt5.qtbase
 
@@ -74,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "A multi-platform app for writing metadata to digital comics";
     homepage = "https://github.com/comictagger/comictagger";
     license = licenses.asl20;
-    maintainers =  [ maintainers.provenzano ];
+    maintainers = [ maintainers.provenzano ];
     platforms = [ "x86_64-linux" ];
   };
 
