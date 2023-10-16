@@ -32,7 +32,6 @@ buildGoModule rec {
     homepage = "https://github.com/googleapis/cloud-bigtable-cbt-cli";
     license = licenses.asl20;
     maintainers = with maintainers; [ totoroot ];
-    platforms = platforms.all;
     mainProgram = "cbt";
   };
 }
