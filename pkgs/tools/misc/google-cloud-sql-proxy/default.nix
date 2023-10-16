@@ -35,7 +35,6 @@ buildGoModule rec {
     homepage = "https://github.com/GoogleCloudPlatform/cloud-sql-proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ nicknovitski totoroot ];
-    platforms = platforms.all;
     mainProgram = "cloud-sql-proxy";
   };
 }
