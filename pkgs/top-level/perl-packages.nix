@@ -5636,6 +5636,20 @@ with self; {
     };
   };
 
+  DataCompactReadonly = buildPerlPackage {
+    pname = "Data-CompactReadonly";
+    version = "0.1.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Data-CompactReadonly-0.1.0.tar.gz";
+      hash = "sha256-fVYJCEz1E7p6d4u1lSNHDoNXdn1ZHL1CxYTgPfO+xug=";
+    };
+    propagatedBuildInputs = [ DataIEEE754 DevelStackTrace ScalarType StringBinaryInterpolation TestDifferences TestException ];
+    meta = {
+      description = "A Compact Read Only Database that consumes very little memory";
+      license = with lib.licenses; [ artistic1 gpl2Only ];
+    };
+  };
+
   DataCompare = buildPerlPackage {
     pname = "Data-Compare";
     version = "1.29";
