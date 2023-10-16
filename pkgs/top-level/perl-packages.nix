@@ -883,7 +883,7 @@ with self; {
       url = "mirror://cpan/authors/id/J/JV/JV/App-Music-ChordPro-6.030.tar.gz";
       hash = "sha256-a+5H8U5gmYPkrBUyxxwajPQy9m6sWeDlaeHTfg2cwnc=";
     };
-    buildInputs = [ PodParser ];
+    buildInputs = [ ObjectPad ];
     propagatedBuildInputs = [ AppPackager FileLoadLines FileHomeDir IOString ImageInfo PDFAPI2 StringInterpolateNamed TextLayout ]
       ++ lib.optionals (!stdenv.isDarwin) [ Wx ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
