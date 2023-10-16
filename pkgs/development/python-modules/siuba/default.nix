@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Use dplyr-like syntax with pandas and SQL";
     homepage = "https://siuba.org";
+    changelog = "https://github.com/machow/siuba/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };
