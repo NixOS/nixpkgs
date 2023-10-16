@@ -13,6 +13,7 @@
 , jq
 , moreutils
 , nodePackages
+, nodejs
 }:
 stdenv.mkDerivation rec {
   pname = "vesktop";
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     copyDesktopItems
     nodePackages.pnpm
-    nodePackages.nodejs
+    nodejs
     makeWrapper
   ];
 
@@ -84,7 +85,7 @@ stdenv.mkDerivation rec {
     # using `pnpm exec` here apparently makes it ignore ELECTRON_SKIP_BINARY_DOWNLOAD
     ./node_modules/.bin/electron-builder \
       --dir \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=${electron}/lib/electron \
       -c.electronVersion=${electron.version}
   '';
 
