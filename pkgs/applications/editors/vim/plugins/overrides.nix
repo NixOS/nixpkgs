@@ -999,13 +999,20 @@ self: super: {
         pname = "sg-nvim-rust";
         inherit (old) version src;
 
-        cargoHash = "sha256-HdewCCraJ2jj2KAVnjzND+4O52jqfABonFU6ybWWAWY=";
+        cargoHash = "sha256-wJpJELVgzixzu8T9EHACur3LNm/sqfkkbGn+AkApzW4=";
 
         nativeBuildInputs = [ pkg-config ];
 
         buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
           darwin.apple_sdk.frameworks.Security
+          darwin.apple_sdk.frameworks.SystemConfiguration
         ];
+
+        prePatch = ''
+          rm .cargo/config.toml
+        '';
+
+        env.OPENSSL_NO_VENDOR = true;
 
         cargoBuildFlags = [ "--workspace" ];
 
