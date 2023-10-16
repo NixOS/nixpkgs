@@ -37523,10 +37523,6 @@ with pkgs;
 
   azimuth = callPackage ../games/azimuth { };
 
-  ballAndPaddle = callPackage ../games/ball-and-paddle {
-    guile = guile_1_8;
-  };
-
   banner = callPackage ../games/banner { };
 
   bastet = callPackage ../games/bastet { };
