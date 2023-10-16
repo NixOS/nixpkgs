@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchurl, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg, unzip, zip }:
+{ lib, buildPythonPackage, fetchPypi, fetchurl, callPackage, mock, cairosvg, klein, jinja2, requests, buildbot, buildbot-pkg, unzip, zip }:
 {
   # this is exposed for potential plugins to use and for nix-update
   inherit buildbot-pkg;
@@ -175,5 +175,27 @@
       license = licenses.gpl2;
     };
   };
+
+  gitea = buildPythonPackage rec {
+    pname = "buildbot-gitea";
+    version = "1.7.2";
+
+    src = fetchPypi {
+      inherit pname version;
+      hash = "sha256-zfHq7xmvKKVl+OuEXvsQg2T23gJGbGl3rKeTkc/oFG0=";
+    };
+
+    buildInputs = [ buildbot-pkg ];
+    propgagatedBuildInputs = [ requests ];
+    checkInputs = [ buildbot requests ];
+
+    meta = with lib; {
+      homepage = "https://github.com/lab132/buildbot-gitea";
+      description = "Buildbot Gitea Plugin";
+      maintainers = with maintainers; [ phaer ];
+      license = licenses.mit;
+    };
+  };
+
 
 }
