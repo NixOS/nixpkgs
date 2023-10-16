@@ -4,8 +4,6 @@ buildDunePackage rec {
   pname = "tyxml";
   version = "4.6.0";
 
-  useDune2 = true;
-
   src = fetchurl {
     url = "https://github.com/ocsigen/tyxml/releases/download/${version}/tyxml-${version}.tbz";
     sha256 = "sha256-v+tnPGtOEgpOykxIRIrdR9w/jQLCtA9j/9zMTpHJAt0=";
