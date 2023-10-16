@@ -12,6 +12,7 @@
 , libuuid
 , meson-tools
 , ncurses
+, nixosTests
 , openssl
 , swig
 , which
@@ -40,6 +41,7 @@ let
   , extraPatches ? []
   , extraMakeFlags ? []
   , extraMeta ? {}
+  , passthru ? {}
   , ... } @ args: stdenv.mkDerivation ({
     pname = "uboot-${defconfig}";
 
@@ -126,12 +128,15 @@ let
 
     dontStrip = true;
 
+    inherit passthru;
+
     meta = with lib; {
       homepage = "https://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
+
   } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
@@ -446,6 +451,7 @@ in {
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
     '';
+    passthru.tests = nixosTests.uboot;
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
   };
