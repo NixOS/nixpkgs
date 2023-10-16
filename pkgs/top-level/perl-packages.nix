@@ -14884,8 +14884,8 @@ with self; {
     nativeBuildInputs = [ pkgs.unzip ];
     pariversion = "2.1.7";
     pari_tgz = fetchurl {
-      url = "mirror://cpan/authors/id/I/IL/ILYAZ/modules/Math-Pari-2.030523.tar.gz";
-      hash = "sha256-7WYNoxC5H3ZsW59jSEFe19fC7d3u+Li7OMb+QhEsJU0=";
+      url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/2.1/pari-${pariversion}.tgz";
+      hash = "sha256-kULyza8wg8iWLxpcK7Dp/okV99lJDAMxKsI2HH6hVfo=";
     };
     # Workaround build failure on -fno-common toolchains:
     #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
