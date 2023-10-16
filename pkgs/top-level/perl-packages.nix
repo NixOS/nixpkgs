@@ -20664,7 +20664,8 @@ with self; {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/Perl-PrereqScanner-1.100.tar.gz";
       hash = "sha256-ARgdOKLnr/g40mISJWPFBja6SzZS7l0dT471uj9bGGs=";
     };
-    propagatedBuildInputs = [ GetoptLongDescriptive ListMoreUtils ModulePath Moose PPI StringRewritePrefix namespaceautoclean ];
+    buildInputs = [ TryTiny ];
+    propagatedBuildInputs = [ GetoptLongDescriptive ModulePath Moo ParamsUtil PPI StringRewritePrefix TypeTiny namespaceautoclean ];
     meta = {
       description = "A tool to scan your Perl code for its prerequisites";
       homepage = "https://github.com/rjbs/Perl-PrereqScanner";
