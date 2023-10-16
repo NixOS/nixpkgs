@@ -6089,7 +6089,7 @@ with self; {
       url = "mirror://cpan/authors/id/B/BA/BALDUR/Data-ULID-1.2.1.tar.gz";
       hash = "sha256-SbThGyY0inXfNONGF0UuMZ/XpygasJQgYvFieeqKHSc=";
     };
-    propagatedBuildInputs = [ DateTime EncodeBase32GMP MathRandomSecure ];
+    propagatedBuildInputs = [ CryptX ];
     meta = {
       description = "Universally Unique Lexicographically Sortable Identifier";
       homepage = "https://metacpan.org/release/Data-ULID";
