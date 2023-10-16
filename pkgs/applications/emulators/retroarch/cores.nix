@@ -714,7 +714,7 @@ in
       # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
-    postBuild = "cd /build/source/build/pcsx2";
+    postBuild = "cd $NIX_BUILD_TOP/source/build/pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";
       license = lib.licenses.gpl3Plus;
