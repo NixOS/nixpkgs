@@ -1,1 +1,1 @@
-../../../../someDrv.nix
+{ someDrv }: someDrv
