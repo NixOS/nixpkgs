@@ -1,10 +1,12 @@
 { lib
+, stdenv
 , buildPythonApplication
 , nix-update-script
 , python3Packages
 , fetchFromGitHub
 , iproute2
 , iptables
+, unixtools
 }:
 
 buildPythonApplication rec {
@@ -18,10 +20,13 @@ buildPythonApplication rec {
     sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ] ++ [
-    iproute2
-    iptables
-  ];
+  propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ]
+    ++ lib.optionals stdenv.isLinux [
+      iproute2
+      iptables
+    ] ++ lib.optionals stdenv.isDarwin [
+      unixtools.route
+    ];
 
   doCheck = false;
 
