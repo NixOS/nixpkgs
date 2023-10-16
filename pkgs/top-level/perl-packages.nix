@@ -19483,7 +19483,8 @@ with self; {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/Parser-MGC-0.21.tar.gz";
       hash = "sha256-DmGIpydqn5B1fGIEc98W08mGGRO6viWvIJz0RhWgKk8=";
     };
-    propagatedBuildInputs = [ FileSlurpTiny ];
+    buildInputs = [ TestFatal ];
+    propagatedBuildInputs = [ FeatureCompatTry ];
     meta = {
       description = "Build simple recursive-descent parsers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
