@@ -21674,6 +21674,7 @@ with self; {
       hash = "sha256-Z23A1s/0ZIU4Myxjwy+4itCe2GghPqnmLj8Z+tQbnEA=";
     };
     buildInputs = [ TestRequires TestSharedFork TestTCP ];
+    doCheck = false; # Tests are slow and unstable
     meta = {
       description = "A superdaemon for hot-deploying server programs";
       homepage = "https://github.com/kazuho/p5-Server-Starter";
