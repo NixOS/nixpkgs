@@ -46,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString isMinimalBuild "-minimal"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
-  version = "3.26.4";
+  version = "3.27.7";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MTtogMKRvU/jHAqlHW5iZZKCpSHmlfMNXMDSWrvVwgg=";
+    hash = "sha256-CPcaEGA2vwUfaSdg75VYwFd8Qqw56Wugl+dmK9QVjY4=";
   };
 
   patches = [
@@ -110,12 +110,23 @@ stdenv.mkDerivation (finalAttrs: {
     configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
   '';
 
+  # The configuration script is not autoconf-based, although being similar;
+  # triples and other interesting info are passed via CMAKE_* environment
+  # variables and commandline switches
+  configurePlatforms = [ ];
+
   configureFlags = [
     "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
   ] ++ (if useSharedLibraries
-        then [ "--no-system-jsoncpp" "--system-libs" ]
-        else [ "--no-system-libs" ]) # FIXME: cleanup
+        then [
+          "--no-system-cppdap"
+          "--no-system-jsoncpp"
+          "--system-libs"
+        ]
+        else [
+          "--no-system-libs"
+        ]) # FIXME: cleanup
   ++ lib.optional qt5UI "--qt-gui"
   ++ lib.optionals buildDocs [
     "--sphinx-build=${sphinx}/bin/sphinx-build"
@@ -155,10 +166,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
-
-  # This isn't an autoconf configure script; triples are passed via
-  # CMAKE_SYSTEM_NAME, etc.
-  configurePlatforms = [ ];
 
   doCheck = false; # fails
 
