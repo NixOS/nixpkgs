@@ -5019,7 +5019,7 @@ with self; {
       url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.007.tar.gz";
       hash = "sha256-/k1NHTm9TxODQaJZUFzhE3EnCnZ8nndH90H7dGH9sA8=";
     };
-    propagatedBuildInputs = [ CryptEksblowfish CryptPassphrase ];
+    propagatedBuildInputs = [ CryptBcrypt CryptPassphrase ];
     meta = {
       description = "A bcrypt encoder for Crypt::Passphrase";
       homepage = "https://github.com/Leont/crypt-passphrase-bcrypt";
