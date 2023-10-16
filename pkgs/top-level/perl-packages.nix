@@ -4821,12 +4821,6 @@ with self; {
       url = "mirror://cpan/authors/id/K/KA/KARASIK/Crypt-Curve25519-0.07.tar.gz";
       hash = "sha256-Z6mIcTclIdb34R/dYnyq21wdVAFCag6c9CFnpDxbSx0=";
     };
-    patches = [
-      (fetchpatch {
-        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-perl/Crypt-Curve25519/files/Crypt-Curve25519-0.60.0-fmul-fixedvar.patch?id=cec727ad614986ca1e6b9468eea7f1a5a9183382";
-        hash = "sha256-Dq431QnMuI9V34BKy7SNaQMXD4lykDuo3wab278sAFA=";
-      })
-    ];
     meta = {
       description = "Generate shared secret using elliptic-curve Diffie-Hellman function";
       homepage = "https://metacpan.org/release/Crypt-Curve25519";
