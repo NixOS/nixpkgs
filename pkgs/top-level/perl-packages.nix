@@ -17570,8 +17570,8 @@ with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/MooseX-Types-URI-0.09.tar.gz";
       hash = "sha256-Jxd1Ta25EIbhHSH+oGy6qaEuYBtB0VRDFQ7dfZUI7+g=";
     };
-    buildInputs = [ ModuleBuildTiny TestSimple13 ];
-    propagatedBuildInputs = [ MooseXTypesPathClass URIFromHash ];
+    buildInputs = [ ModuleBuildTiny TestNeeds TestWithoutModule ];
+    propagatedBuildInputs = [ MooseXTypes URI URIFromHash namespaceautoclean ];
     meta = {
       description = "URI related types and coercions for Moose";
       homepage = "https://github.com/moose/MooseX-Types-URI";
