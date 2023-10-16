@@ -1384,6 +1384,21 @@ let
         };
       };
 
+      exiasr.hadolint = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "exiasr";
+          name = "hadolint";
+          version = "1.1.2";
+          sha256 = "sha256-6GO1f8SP4CE8yYl87/tm60FdGHqHsJA4c2B6UKVdpgM=";
+        };
+        meta = {
+          description = "The extension uses the hadolint binary installed in the system. If the binary is not existed in $PATH, the extension will not work as expected.";
+          homepage = "https://github.com/michaellzc/vscode-hadolint#readme";
+          changelog = "https://marketplace.visualstudio.com/items/exiasr.hadolint/changelog";
+          license = lib.licenses.mit;
+        };
+      };
+
       file-icons.file-icons = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/file-icons.file-icons/changelog";
