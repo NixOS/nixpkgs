@@ -93,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ bsd2 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
+    timeout = 14400; # 4 hours
+    maxSilent = 14400; # 4 hours
     broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version;
   };
 })

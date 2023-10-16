@@ -5317,6 +5317,11 @@
     githubId = 1855930;
     name = "Ertugrul Söylemez";
   };
+  esau79p = {
+    github = "EsAu79p";
+    githubId = 21313906;
+    name = "EsAu";
+  };
   esclear = {
     github = "esclear";
     githubId = 7432848;
@@ -18019,6 +18024,12 @@
     githubId = 1983821;
     name = "Eric Wolf";
   };
+  u2x1 = {
+    email = "u2x1@outlook.com";
+    github = "u2x1";
+    githubId = 30677291;
+    name = "u2x1";
+  };
   uakci = {
     name = "uakci";
     email = "uakci@uakci.pl";
@@ -18327,6 +18338,15 @@
     github = "veprbl";
     githubId = 245573;
     name = "Dmitry Kalinkin";
+  };
+  vgskye = {
+    name = "Skye Green";
+    email = "me@skye.vg";
+    github = "vgskye";
+    githubId = 116078858;
+    keys = [{
+      fingerprint = "CDEA 7E04 69E3 0885 A754  4B05 0104 BC05 F41B 77B8";
+    }];
   };
   victormeriqui = {
     name = "Victor Meriqui";

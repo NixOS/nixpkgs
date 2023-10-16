@@ -2527,6 +2527,8 @@ with pkgs;
 
   scmpuff = callPackage ../applications/version-management/scmpuff { };
 
+  silver-platter = python3Packages.callPackage ../applications/version-management/silver-platter { };
+
   stgit = callPackage ../applications/version-management/stgit { };
 
   subgit = callPackage ../applications/version-management/subgit { };
@@ -2917,7 +2919,7 @@ with pkgs;
 
   clifm = callPackage ../applications/file-managers/clifm { };
 
-  doublecmd = callPackage  ../applications/file-managers/doublecmd {
+  doublecmd = callPackage ../by-name/do/doublecmd/package.nix {
     inherit (qt5) wrapQtAppsHook;
   };
 
@@ -7882,7 +7884,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  zeek = callPackage ../applications/networking/ids/zeek { };
+  zeek = darwin.apple_sdk_11_0.callPackage ../applications/networking/ids/zeek { };
 
   zeekscript = callPackage ../tools/security/zeekscript { };
 
@@ -15289,6 +15291,8 @@ with pkgs;
 
   zsh-system-clipboard = callPackage ../shells/zsh/zsh-system-clipboard { };
 
+  zsh-f-sy-h = callPackage ../shells/zsh/zsh-f-sy-h { };
+
   zsh-fast-syntax-highlighting = callPackage ../shells/zsh/zsh-fast-syntax-highlighting { };
 
   zsh-forgit = callPackage ../shells/zsh/zsh-forgit { };
@@ -18961,7 +18965,7 @@ with pkgs;
   dbt = with python3Packages; toPythonApplication dbt-core;
 
   dprint = callPackage ../development/tools/dprint {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Security;
   };
 
   devbox = callPackage ../development/tools/devbox { buildGoModule = buildGo121Module; };
@@ -25852,17 +25856,6 @@ with pkgs;
   buildGoPackage = buildGo120Package;
 
   # requires a newer Apple SDK
-  go_1_18 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.18.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
-  };
-  buildGo118Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_18;
-  };
-  buildGo118Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix{
-    go = buildPackages.go_1_18;
-  };
-
-  # requires a newer Apple SDK
   go_1_19 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.19.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
   };
@@ -30300,6 +30293,8 @@ with pkgs;
 
   activitywatch = callPackage ../applications/office/activitywatch/wrapper.nix { };
 
+  aw-watcher-window-wayland = callPackage ../tools/wayland/aw-watcher-window-wayland {  };
+
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
   adl = callPackage ../applications/video/adl { };
@@ -33675,7 +33670,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
   };
 
-  minicom = callPackage ../tools/misc/minicom { };
+  minicom = callPackage ../tools/misc/minicom {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   minigalaxy = callPackage ../applications/misc/minigalaxy { };
 
@@ -37749,8 +37746,6 @@ with pkgs;
 
   forge-mtg = callPackage ../games/forge-mtg { };
 
-  freecell-solver = callPackage ../games/freecell-solver { };
-
   freeciv = callPackage ../games/freeciv {
     sdl2Client = false;
     gtkClient = true;
@@ -38680,7 +38675,6 @@ with pkgs;
     gnome42Extensions
     gnome43Extensions
     gnome44Extensions
-    gnome45Extensions
   ;
 
   gnome-connections = callPackage ../desktops/gnome/apps/gnome-connections { };
@@ -38827,11 +38821,6 @@ with pkgs;
   antiprism = callPackage ../applications/science/geometry/antiprism { };
 
   gama = callPackage ../applications/science/geometry/gama { };
-
-  drgeo = callPackage ../applications/science/geometry/drgeo {
-    inherit (gnome2) libglade;
-    guile = guile_1_8;
-  };
 
   tetgen = callPackage ../applications/science/geometry/tetgen { }; # AGPL3+
   tetgen_1_4 = callPackage ../applications/science/geometry/tetgen/1.4.nix { }; # MIT
@@ -40196,6 +40185,8 @@ with pkgs;
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
   cups-brother-hl1210w = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1210w { };
+
+  cups-brother-hl2260d = pkgsi686Linux.callPackage ../misc/cups/drivers/hl2260d { };
 
   cups-brother-hl3140cw = pkgsi686Linux.callPackage ../misc/cups/drivers/hl3140cw { };
 

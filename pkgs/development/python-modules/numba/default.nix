@@ -32,7 +32,7 @@ in buildPythonPackage rec {
   version = "unstable-2023-08-11";
   pname = "numba";
   format = "setuptools";
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.12";
 
   src = fetchFromGitHub {
     owner = "numba";

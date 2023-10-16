@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "pytablewriter";
-  version = "1.1.0";
+  version = "1.2.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "thombashi";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-bxqSZUEG3upWoXt1mo8GI9yd8FHAm111mOGSCCMRVYI=";
+    hash = "sha256-b3YzDqNATaT/FFG4/x9EGlYlhXKPvgNB2xnm0bzvLJQ=";
   };
 
   nativeBuildInputs = [
