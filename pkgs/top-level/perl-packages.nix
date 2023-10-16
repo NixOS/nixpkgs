@@ -16345,7 +16345,7 @@ with self; {
       hash = "sha256-Vzmprz/A/BYrOAMt9hCgcANSY7++C+wWrsUvDd3Xtkc=";
     };
     buildInputs = [ ModuleBuildTiny ];
-    propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URIdb ];
+    propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstractPg URIdb URI ];
     meta = {
       description = "A tiny Mojolicious wrapper for SQLite";
       homepage = "https://github.com/Grinnz/Mojo-SQLite";
