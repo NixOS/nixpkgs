@@ -5428,7 +5428,7 @@ with self; {
       hash = "sha256-eJdUj7AeFqIK5JDt3UZX+Br3sZKEFLkvbbQsY10ax+A=";
     };
     nativeCheckInputs = [ pkgs.openssl MathBigIntGMP ];
-    buildInputs = [ CallContext FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
+    buildInputs = [ CallContext ExtUtilsMakeMakerCPANfile FileSlurp FileWhich TestClass TestDeep TestException TestFailWarnings TestNoWarnings ];
     propagatedBuildInputs = [ BytesRandomSecureTiny ClassAccessor ConvertASN1 CryptFormat MathProvablePrime SymbolGet TryTiny ];
     meta = {
       description = "Cryptography in pure Perl";
