@@ -28178,7 +28178,7 @@ with self; {
       url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.20.tar.gz";
       hash = "sha256-Wn0myqMroqQQUZwMJLHYCznvMgdRN224vbef2u/pms0=";
     };
-    buildInputs = [ TestFatal ];
+    buildInputs = [ Test2Suite ];
     perlPreHook = lib.optionalString stdenv.isDarwin "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing sub-like syntax";
