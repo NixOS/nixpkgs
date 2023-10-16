@@ -17,7 +17,9 @@
 buildPythonPackage rec {
   pname = "w1thermsensor";
   version = "2.3.0";
-  format = "pyproject";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -48,7 +50,7 @@ buildPythonPackage rec {
     tomli
   ];
 
-  # Tests for 2.0.0 currently fail on python3.11
+  # Tests for 2.0.0 currently fail on Python 3.11
   # https://github.com/timofurrer/w1thermsensor/issues/116
   doCheck = pythonOlder "3.11";
 
