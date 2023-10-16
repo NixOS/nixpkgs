@@ -180,6 +180,7 @@ mapAliases ({
   dot-http = throw "'dot-http' has been removed: abandoned by upstream. Use hurl instead."; # Added 2023-01-16
   dotty = scala_3; # Added 2023-08-20
   dotnet-netcore = dotnet-runtime; # Added 2021-10-07
+  drgeo = throw "'drgeo' has been removed as it is outdated and unmaintained"; # Added 2023-10-15
   dtv-scan-tables_linuxtv = dtv-scan-tables;  # Added 2023-03-03
   dtv-scan-tables_tvheadend = dtv-scan-tables;  # Added 2023-03-03
   dylibbundler = macdylibbundler; # Added 2021-04-24

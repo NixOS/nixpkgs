@@ -34,7 +34,6 @@ loadkit,,,,,,alerque
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
 lpeglabel,,,,1.6.0,,
-lpty,,,,,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
