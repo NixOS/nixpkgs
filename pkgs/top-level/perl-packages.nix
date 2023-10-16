@@ -3785,7 +3785,7 @@ with self; {
       hash = "sha256-yhpPFnTzsfMmjyekfJiAszgmrenxI34sEUXnAqfIePY=";
     };
     buildInputs = [ PodCoverageTrustPod TestPerlCritic ];
-    propagatedBuildInputs = [ CaptureTiny RefUtil SubExporter TermReadKey YAML ];
+    propagatedBuildInputs = [ CaptureTiny IOInteractive RefUtil TermReadKey YAML ];
     meta = {
       description = "Subroutines for making simple command line scripts";
       homepage = "https://github.com/reyjrar/CLI-Helpers";
