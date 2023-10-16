@@ -25643,7 +25643,7 @@ with self; {
     };
   };
 
-  TestXPath = buildPerlModule {
+  TestXPath = buildPerlPackage {
     pname = "Test-XPath";
     version = "0.20";
     src = fetchurl {
