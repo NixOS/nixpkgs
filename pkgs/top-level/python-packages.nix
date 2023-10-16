@@ -10352,8 +10352,6 @@ self: super: with self; {
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
 
-  pymazda = callPackage ../development/python-modules/pymazda { };
-
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymc = callPackage ../development/python-modules/pymc { };
