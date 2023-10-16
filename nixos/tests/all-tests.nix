@@ -762,6 +762,7 @@ in {
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark {};
   sqlite3-to-mysql = handleTest ./sqlite3-to-mysql.nix {};
   sslh = handleTest ./sslh.nix {};
+  ssh-audit = handleTest ./ssh-audit.nix {};
   sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix {};
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix {};
   stalwart-mail = handleTest ./stalwart-mail.nix {};
