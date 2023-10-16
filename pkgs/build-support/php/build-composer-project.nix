@@ -53,6 +53,7 @@ let
         runHook postInstall
       '';
 
+      doInstallCheck = previousAttrs.doInstallCheck or false;
       installCheckPhase = previousAttrs.installCheckPhase or ''
         runHook preCheckInstall
 
