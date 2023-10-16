@@ -35206,6 +35206,8 @@ with pkgs;
 
   scantailor-advanced = libsForQt5.callPackage ../applications/graphics/scantailor/advanced.nix { };
 
+  scantailor-universal = libsForQt5.callPackage ../applications/graphics/scantailor/universal.nix { };
+
   sc-im = callPackage ../applications/misc/sc-im { };
 
   scite = callPackage ../applications/editors/scite { };
