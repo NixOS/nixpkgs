@@ -4774,6 +4774,19 @@ with self; {
     };
   };
 
+  CryptBcrypt = buildPerlPackage {
+    pname = "Crypt-Bcrypt";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Bcrypt-0.011.tar.gz";
+      hash = "sha256-Z/ymiwUm5zTi2VvGsyutAcMZ5Yer9j5M80Itpmu+o6A=";
+    };
+    meta = {
+      description = "A modern bcrypt implementation";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CryptBlowfish = buildPerlPackage {
     pname = "Crypt-Blowfish";
     version = "2.14";
