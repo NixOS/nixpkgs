@@ -88,8 +88,8 @@ stdenv.mkDerivation rec {
     for n in 16 24 32 48 64 96 128 256; do
       size=$n"x"$n
       install -Dm644 \
-        -t $out/share/icons/hicolor/$size/apps/monero.png \
-        $src/images/appicons/$size.png
+        $src/images/appicons/$size.png \
+        $out/share/icons/hicolor/$size/apps/monero.png
     done;
   '';
 
