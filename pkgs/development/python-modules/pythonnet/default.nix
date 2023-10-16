@@ -16,7 +16,7 @@ let
   src = fetchPypi {
     pname = "pythonnet";
     inherit version;
-    sha256 = "sha256-jUsulxWKAjh1+GR0WKWPOIF/T+Oa9gq91rDYrfHXfnU=";
+    hash = "sha256-jUsulxWKAjh1+GR0WKWPOIF/T+Oa9gq91rDYrfHXfnU=";
   };
 
   # This buildDotnetModule is used only to get nuget sources, the actual
@@ -70,6 +70,7 @@ buildPythonPackage {
   meta = with lib; {
     description = ".NET integration for Python";
     homepage = "https://pythonnet.github.io";
+    changelog = "https://github.com/pythonnet/pythonnet/releases/tag/v${version}";
     license = licenses.mit;
     # <https://github.com/pythonnet/pythonnet/issues/898>
     badPlatforms = [ "aarch64-linux" ];
