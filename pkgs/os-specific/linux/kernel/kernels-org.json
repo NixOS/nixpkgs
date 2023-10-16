@@ -7,10 +7,6 @@
         "version": "6.5.7",
         "hash": "sha256:135v3y2vgc83dca4xi7q52wqi4dkfal74k1y73jwzj85h12fl28d"
     },
-    "6.4": {
-        "version": "6.4.16",
-        "hash": "sha256:0zgj1z97jyx7wf12zrnlcp0mj4cl43ais9qsy6dh1jwylf2fq9ln"
-    },
     "6.1": {
         "version": "6.1.57",
         "hash": "sha256:1ccidrxswblxw9yaa45y6ds16pc7647f6fz36xxxhljivhyzxszr"
