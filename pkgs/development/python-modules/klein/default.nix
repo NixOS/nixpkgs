@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "klein";
-  version = "unstable-2022-06-26";
+  version = "23.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twisted";
     repo = pname;
-    rev = "d8c2b92a3c77aa64c596696fb6f07172ecf94a74";
-    hash = "sha256-RDZqavkteUbARV78OctZtLIrE4RoYDVAanjwE5i/ZeM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2oU1HGBkBXjrpMvsiHgbAJ4M/5650ZjJkwo/Yk4nz3I=";
   };
 
   propagatedBuildInputs = [
