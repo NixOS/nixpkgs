@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pilkit";
-  version = "unstable-2022-02-17";
+  version = "3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "matthewwithanm";
     repo = pname;
-    rev = "09ffa2ad33318ae5fd3464655c14c7f01ffc2097";
-    hash = "sha256-jtnFffKr0yhSv2jBmXzPa6iP2r41MbmGukfmnvgABhk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NmD9PFCkz3lz4AnGoQUpkt35q0zvDVm+kx7lVDFBcHk=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     pillow
   ];
 
