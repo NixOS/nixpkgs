@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2023.10.1";
+  version = "2023.10.3";
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -2485,7 +2485,6 @@
       maxcube-api
     ];
     "mazda" = ps: with ps; [
-      pymazda
     ];
     "meater" = ps: with ps; [
       meater-python
