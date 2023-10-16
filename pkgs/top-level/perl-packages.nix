@@ -15360,8 +15360,6 @@ with self; {
       hash = "sha256-RX3HN07lnLdaBynlHO8vLFK0gYD3Odj9lW6hmIKBXzM=";
     };
 
-    patches = [ ../development/perl-modules/mhonarc.patch ];
-
     outputs = [ "out" "dev" ]; # no "devdoc"
 
     installTargets = [ "install" ];
