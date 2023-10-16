@@ -21677,6 +21677,20 @@ with self; {
     };
   };
 
+  ScalarType = buildPerlPackage {
+    pname = "Scalar-Type";
+    version = "0.3.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Scalar-Type-0.3.2.tar.gz";
+      hash = "sha256-WQyv6gz1RZmSoEiFYsDb1vnfdYtfAH8OQ6uhMLRe7oY=";
+    };
+    propagatedBuildInputs = [ CaptureTiny TestException ];
+    meta = {
+      description = "Figure out what type a scalar is";
+      license = with lib.licenses; [ artistic1 gpl2Only ];
+    };
+  };
+
   SCGI = buildPerlModule {
     pname = "SCGI";
     version = "0.6";
