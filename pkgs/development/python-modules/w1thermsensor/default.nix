@@ -35,9 +35,14 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    aiofiles
     click
   ];
+
+  passthru.optional-dependencies = {
+    async = [
+      aiofiles
+    ];
+  };
 
   # Don't try to load the kernel module in tests.
   env.W1THERMSENSOR_NO_KERNEL_MODULE = 1;
