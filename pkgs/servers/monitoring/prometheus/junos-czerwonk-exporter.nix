@@ -17,6 +17,6 @@ buildGoModule rec {
     description = "Exporter for metrics from devices running JunOS";
     homepage = "https://github.com/czerwonk/junos_exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ netali ];
+    maintainers = teams.wdz.members;
   };
 }

@@ -166,6 +166,7 @@ mapAliases ({
 
   ### D ###
 
+  dagger = throw "'dagger' has been removed from nixpkgs, as the trademark policy of the upstream project is incompatible"; # Added 2023-10-16
   dart_stable = dart; # Added 2020-01-15
   dat = nodePackages.dat;
   deadpixi-sam = deadpixi-sam-unstable;
