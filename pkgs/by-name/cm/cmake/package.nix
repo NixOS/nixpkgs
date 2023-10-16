@@ -4,8 +4,10 @@
 , buildPackages
 , bzip2
 , curlMinimal
+, darwin
 , expat
 , libarchive
+, libsForQt5
 , libuv
 , ncurses
 , openssl
@@ -16,13 +18,11 @@
 , texinfo
 , xz
 , zlib
+, buildDocs ? !(isBootstrap || (uiToolkits == []))
 , isBootstrap ? false
+, uiToolkits ? [] # can contain "ncurses" and/or "qt5"
 , useOpenSSL ? !isBootstrap
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
-, uiToolkits ? [] # can contain "ncurses" and/or "qt5"
-, buildDocs ? !(isBootstrap || (uiToolkits == []))
-, darwin
-, libsForQt5
 }:
 
 let
@@ -129,15 +129,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Unfortunately cmake seems to expect absolute paths for ar, ranlib, and
     # strip. Otherwise they are taken to be relative to the source root of the
     # package being built.
-    "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
-    "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
-    "-DCMAKE_AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
-    "-DCMAKE_RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
-    "-DCMAKE_STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER" "${stdenv.cc.targetPrefix}c++")
+    (lib.cmakeFeature "CMAKE_C_COMPILER" "${stdenv.cc.targetPrefix}cc")
+    (lib.cmakeFeature "CMAKE_AR"
+      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar")
+    (lib.cmakeFeature "CMAKE_RANLIB"
+      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib")
+    (lib.cmakeFeature "CMAKE_STRIP"
+      "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip")
 
-    "-DCMAKE_USE_OPENSSL=${if useOpenSSL then "ON" else "OFF"}"
-    # Avoid depending on frameworks.
-    "-DBUILD_CursesDialog=${if cursesUI then "ON" else "OFF"}"
+    (lib.cmakeBool "CMAKE_USE_OPENSSL" useOpenSSL)
+    (lib.cmakeBool "BUILD_CursesDialog" cursesUI)
   ];
 
   # make install attempts to use the just-built cmake
