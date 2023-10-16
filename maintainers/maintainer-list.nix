@@ -18037,6 +18037,16 @@
     githubId = 1607770;
     name = "Ulrik Strid";
   };
+  unclamped = {
+    name = "Maru";
+    email = "clear6860@tutanota.com";
+    matrix = "@unhidden0174:matrix.org";
+    github = "unclamped";
+    githubId = 104658278;
+    keys = [{
+      fingerprint = "57A2 CC43 3068 CB62 89C1  F1DA 9137 BB2E 77AD DE7E";
+    }];
+  };
   unclechu = {
     name = "Viacheslav Lotsmanov";
     email = "lotsmanov89@gmail.com";
