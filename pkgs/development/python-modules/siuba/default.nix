@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "siuba";
-  version = "0.4.2";
+  version = "0.4.4";
   disabled = pythonOlder "3.7";
 
   format = "setuptools";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "machow";
     repo = "siuba";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q2nkK51bmIO2OcBuWu+u7yB8UmaqiZJXpuxXcytTlUY=";
+    hash = "sha256-rd/yQH3sbZqQAQ1AN44vChe30GMJuIlZj3Ccfv1m3lU=";
   };
 
   propagatedBuildInputs = [
