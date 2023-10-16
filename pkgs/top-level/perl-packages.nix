@@ -5503,7 +5503,7 @@ with self; {
     };
   };
 
-  CSSMinifierXS = buildPerlModule {
+  CSSMinifierXS = buildPerlPackage {
     pname = "CSS-Minifier-XS";
     version = "0.13";
     src = fetchurl {
@@ -5511,6 +5511,7 @@ with self; {
       hash = "sha256-xBnjCM3IKvHCXWuNB7L/JjR6Yit6Y+wghWq+jbQFH4I=";
     };
     perlPreHook = lib.optionalString (stdenv.isi686 || stdenv.isDarwin) "export LD=$CC";
+    buildInputs = [ TestDiagINC ];
     meta = {
       description = "XS based CSS minifier";
       homepage = "https://metacpan.org/release/CSS-Minifier-XS";
