@@ -159,6 +159,7 @@ let
           "geneve"
           "l2tp"
           "macsec"
+          "wlan"
           "vrf"
           "vcan"
           "vxcan"
@@ -466,6 +467,19 @@ let
         ])
         (assertInt "Table")
         (assertMinimum "Table" 0)
+      ];
+
+      sectionWLAN = checkUnitConfig "WLAN" [
+        (assertOnlyFields [
+          "PhysicalDevice"
+          "Type"
+          "WDS"
+        ])
+        # systemd supports strings here too ("phy0") but index is good enough
+        (assertInt "PhysicalDevice")
+        (assertMinimum "PhysicalDevice" 0)
+        (assertValueOneOf "Type" ["ad-hoc" "station" "ap" "ap-vlan" "wds" "monitor" "mesh-point" "p2p-client" "p2p-go" "p2p-device" "ocb" "nan"])
+        (assertValueOneOf "WDS" boolValues)
       ];
 
       sectionBatmanAdvanced = checkUnitConfig "BatmanAdvanced" [
@@ -1776,6 +1790,16 @@ let
         {manpage}`systemd.netdev(5)` for details.
         A detailed explanation about how VRFs work can be found in the
         [kernel docs](https://www.kernel.org/doc/Documentation/networking/vrf.txt).
+      '';
+    };
+
+    wlanConfig = mkOption {
+      default = {};
+      example = { PhysicalDevice = 0; Type = "station"; };
+      type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionWLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the `[WLAN]` section of the unit.
+        See {manpage}`systemd.netdev(5)` for details.
       '';
     };
 
