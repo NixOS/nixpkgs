@@ -7,7 +7,7 @@ let
   meta = with lib; {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ davidak ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     description = "Speech synthesizer based on the concatenation of diphones";
     homepage = "https://github.com/numediart/MBROLA";
   };
