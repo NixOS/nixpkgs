@@ -5542,8 +5542,12 @@ with self; {
       url = "mirror://cpan/authors/id/G/GI/GIRAFFED/Curses-1.44.tar.gz";
       hash = "sha256-ou+4x8iG1pL/xNshNhx2gJoGXliOQ/rQ1n5E751CvTA=";
     };
+    preConfigure = ''
+      substituteInPlace makeConfig \
+        --replace '#! /usr/bin/perl' '#!${perl}/bin/perl'
+    '';
     propagatedBuildInputs = [ pkgs.ncurses ];
-    NIX_CFLAGS_LINK = "-lncurses";
+    NIX_CFLAGS_LINK = "-L${pkgs.ncurses.out}/lib -lncurses";
     meta = {
       description = "Perl bindings to ncurses";
       license = with lib.licenses; [ artistic1 ];
