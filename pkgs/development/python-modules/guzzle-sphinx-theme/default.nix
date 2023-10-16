@@ -1,10 +1,11 @@
 { lib, buildPythonPackage, sphinx, fetchPypi }:
 
 buildPythonPackage rec {
-  pname = "guzzle_sphinx_theme";
+  pname = "guzzle-sphinx-theme";
   version = "0.7.11";
   src = fetchPypi {
-    inherit pname version;
+    pname = "guzzle_sphinx_theme";
+    inherit version;
     sha256 = "1rnkzrrsbnifn3vsb4pfaia3nlvgvw6ndpxp7lzjrh23qcwid34v";
   };
 
