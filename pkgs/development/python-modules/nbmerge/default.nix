@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "nbmerge";
-  version = "unstable-2017-10-23";
+  version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "jbn";
     repo = pname;
-    rev = "fc0ba95e8422340317358ffec4404235defbc06a";
-    sha256 = "1cn550kjadnxc1sx2xy814248fpzrj3lgvrmsbrwmk03vwaa2hmi";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Uqs/SO/AculHCFYcbjW08kLQX5GSU/eAwkN2iy/vhLM=";
   };
 
   propagatedBuildInputs = [ nbformat ];
