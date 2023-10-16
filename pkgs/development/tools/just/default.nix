@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , rustPlatform
 , coreutils
-, bash
 , installShellFiles
 , libiconv
 , mdbook
