@@ -18,9 +18,9 @@
 buildPythonPackage rec {
   pname = "siuba";
   version = "0.4.4";
-  disabled = pythonOlder "3.7";
-
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "machow";
@@ -45,8 +45,9 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
   ];
-  doCheck = false;
+
   # requires running mysql and postgres instances; see docker-compose.yml
+  doCheck = false;
 
   pythonImportsCheck = [
     "siuba"
