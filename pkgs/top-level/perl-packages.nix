@@ -18891,8 +18891,13 @@ with self; {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Number-Phone-4.0000.tar.gz";
       hash = "sha256-H0mX/oMJSrDNgUDwvn/cHz+JGQKareajOYH4fLBIZjQ=";
     };
-    buildInputs = [ DevelHide FileShareDirInstall ParallelForkManager TestDifferences TestPod TestPodCoverage TestWarnings ];
-    propagatedBuildInputs = [ DataDumperConcise DBMDeep DevelCheckOS FileFindRule FileShareDir ];
+    buildInputs = [ DevelHide FileShareDirInstall ParallelForkManager TestDifferences TestWarnings ];
+    propagatedBuildInputs = [ DataDumperConcise DataCompactReadonly DevelCheckOS DevelDeprecationsEnvironmental FileFindRule FileShareDir ];
+    preCheck = ''
+      # Remove slow memory hungry tests
+      rm t/fork.t
+      rm t/uk_slurp.t
+    '';
     meta = {
       description = "Large suite of perl modules for parsing and dealing with phone numbers";
       homepage = "https://github.com/DrHyde/perl-modules-Number-Phone";
