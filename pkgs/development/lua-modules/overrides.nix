@@ -386,10 +386,10 @@ with prev;
     ];
   });
 
-  lua-resty-session =  prev.lua-resty-session.overrideAttrs (oa: {
-    # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
-    meta.broken = true;
-  });
+  # lua-resty-session =  prev.lua-resty-session.overrideAttrs (oa: {
+  #   # lua_pack and lua-ffi-zlib are unpackaged, causing this package to not evaluate
+  #   meta.broken = true;
+  # });
 
   lua-yajl =  prev.lua-yajl.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [

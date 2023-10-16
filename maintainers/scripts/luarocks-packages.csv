@@ -41,6 +41,7 @@ lrexlib-posix,,,,,,
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,
+lua-ffi-zlib,,,,,,
 lua-lsp,,,,,,
 lua-messagepack,,,,,,
 lua-protobuf,,,,,,lockejan
