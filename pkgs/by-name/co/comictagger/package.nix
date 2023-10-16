@@ -7,20 +7,33 @@
 , rar
 , qt5
 , python3Packages
+, fetchFromGitHub
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "comictagger";
-  version = "1.5.5";
+#  version = "1.6-alpha.8";
   format = "pyproject";
-
+  version = "1.5.5";
+  
   src = fetchgit {
     url = "https://github.com/comictagger/comictagger.git";
-    rev = "refs/tags/1.5.5";
-    sha256 = "sha256-w9YwscJffXJMLCiGUVRC92S2gS1yJPFr+0ttIEW02mc=";
     leaveDotGit = "true";
-  };
+    
+# commit e5f6a7d1d636eccf68538283aac898f82fed082d (tag: 1.5.5)
+# Author: Timmy Welch <timmy@narnian.us>
+# Date:   Thu Nov 24 10:39:03 2022 -0800
 
+    rev = "e5f6a7d1d636eccf68538283aac898f82fed082d";
+    sha256 = "sha256-v9sYAonUUgxznQJB3uTI4IHDEhMLwW0FxC1nPcsQU0U=";
+
+# Fix pyinstaller build - 1.6 pre 8
+# Fix exception when PyQt is not installed
+#    rev = "96c5c4aa28cf38afa51ecc3eb2f0a9c65d91b686";
+#     sha256 = "sha256-ZevKw9Izpx+f9PyxvpVSw0BwMHuoEzw6mxaDDWR9C0U=";
+    
+  };
+  
   propagatedBuildInputs = [
 
     python3.pkgs.appdirs
