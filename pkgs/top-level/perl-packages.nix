@@ -6729,6 +6729,7 @@ with self; {
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Devel-CheckOS-1.96.tar.gz";
       hash = "sha256-+GB5BfT1reSI9+9Et8HnyFI/ure5HS3IMLMa6cqBPfU=";
     };
+    buildInputs = [ TestWarnings ];
     propagatedBuildInputs = [ FileFindRule ];
     meta = {
       description = "Check what OS we're running on";
