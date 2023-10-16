@@ -415,6 +415,7 @@
   ./services/databases/couchdb.nix
   ./services/databases/dgraph.nix
   ./services/databases/dragonflydb.nix
+  ./services/databases/ferretdb.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
   ./services/databases/hbase-standalone.nix
@@ -774,6 +775,7 @@
   ./services/monitoring/kapacitor.nix
   ./services/monitoring/karma.nix
   ./services/monitoring/kthxbye.nix
+  ./services/monitoring/librenms.nix
   ./services/monitoring/loki.nix
   ./services/monitoring/longview.nix
   ./services/monitoring/mackerel-agent.nix
@@ -1163,6 +1165,7 @@
   ./services/security/sshguard.nix
   ./services/security/sslmate-agent.nix
   ./services/security/step-ca.nix
+  ./services/security/tang.nix
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix

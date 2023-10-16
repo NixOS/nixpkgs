@@ -2527,6 +2527,8 @@ with pkgs;
 
   scmpuff = callPackage ../applications/version-management/scmpuff { };
 
+  silver-platter = python3Packages.callPackage ../applications/version-management/silver-platter { };
+
   stgit = callPackage ../applications/version-management/stgit { };
 
   subgit = callPackage ../applications/version-management/subgit { };
@@ -3615,8 +3617,6 @@ with pkgs;
   clair = callPackage ../tools/admin/clair { };
 
   clairvoyance = callPackage ../tools/security/clairvoyance { };
-
-  cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
   cloudfox = callPackage ../tools/security/cloudfox { };
 
@@ -5852,6 +5852,8 @@ with pkgs;
   libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
 
   libnvme = callPackage ../os-specific/linux/libnvme { };
+
+  librenms = callPackage ../servers/monitoring/librenms { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
@@ -8752,6 +8754,10 @@ with pkgs;
     python = python3;
     with-gce = true;
   };
+
+  google-cloud-bigtable-tool = callPackage ../tools/misc/google-cloud-bigtable-tool { };
+
+  google-cloud-sql-proxy = callPackage ../tools/misc/google-cloud-sql-proxy { };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
@@ -19361,10 +19367,6 @@ with pkgs;
 
   guile-hall = callPackage ../development/tools/guile/guile-hall { };
 
-  guile-lint = callPackage ../development/tools/guile/guile-lint {
-    guile = guile_1_8;
-  };
-
   gwrap = callPackage ../development/tools/guile/g-wrap {
     guile = guile_2_2;
   };
@@ -20752,6 +20754,12 @@ with pkgs;
   capnproto-rust = callPackage ../development/tools/capnproto-rust { };
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
+
+  catboost = callPackage ../development/libraries/catboost {
+    # catboost requires clang 12+ for build
+    # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
+    inherit (llvmPackages_12) stdenv;
+  };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
@@ -23715,7 +23723,6 @@ with pkgs;
 
   libxkbcommon = libxkbcommon_8;
   libxkbcommon_8 = callPackage ../development/libraries/libxkbcommon { };
-  libxkbcommon_7 = callPackage ../development/libraries/libxkbcommon/libxkbcommon_7.nix { };
 
   libxklavier = callPackage ../development/libraries/libxklavier { };
 
@@ -25114,7 +25121,9 @@ with pkgs;
 
   speechd = callPackage ../development/libraries/speechd { };
 
-  speech-tools = callPackage ../development/libraries/speech-tools { };
+  speech-tools = callPackage ../development/libraries/speech-tools {
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+  };
 
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
@@ -30639,13 +30648,6 @@ with pkgs;
   bitscope = recurseIntoAttrs
     (callPackage ../applications/science/electronics/bitscope/packages.nix { });
 
-  bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
-    inherit (gnome) zenity;
-    libxkbcommon = libxkbcommon_7;
-  };
-  bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
-    inherit bitwig-studio1;
-  };
   bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
     libjpeg = libjpeg8;
@@ -37531,10 +37533,6 @@ with pkgs;
 
   azimuth = callPackage ../games/azimuth { };
 
-  ballAndPaddle = callPackage ../games/ball-and-paddle {
-    guile = guile_1_8;
-  };
-
   banner = callPackage ../games/banner { };
 
   bastet = callPackage ../games/bastet { };
@@ -40200,6 +40198,8 @@ with pkgs;
 
   cups-brother-hl1210w = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1210w { };
 
+  cups-brother-hl2260d = pkgsi686Linux.callPackage ../misc/cups/drivers/hl2260d { };
+
   cups-brother-hl3140cw = pkgsi686Linux.callPackage ../misc/cups/drivers/hl3140cw { };
 
   cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
@@ -41680,8 +41680,6 @@ with pkgs;
   nitrokey-app2 = libsForQt5.callPackage ../tools/security/nitrokey-app2 { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
-
-  simplenote = callPackage ../applications/misc/simplenote { };
 
   hy = with python3Packages; toPythonApplication hy;
 
