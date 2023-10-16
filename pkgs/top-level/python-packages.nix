@@ -8710,6 +8710,8 @@ self: super: with self; {
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };
 
+  pasimple = callPackage ../development/python-modules/pasimple { };
+
   passlib = callPackage ../development/python-modules/passlib { };
 
   paste = callPackage ../development/python-modules/paste { };
