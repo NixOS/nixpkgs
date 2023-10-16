@@ -1575,9 +1575,10 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.89.156";
-          sha256 = "sha256-BJnYd9D3bWrZI8UETnAua8ngVjZJ7EXB1UrZAjVnx1E=";
+          version = "1.126.493";
+          sha256 = "1an7z8z3xz2piw2xz1hdrs6l5rhpyvnjmb650ff2m4k24n01svfy";
         };
+
         meta = {
           description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=GitHub.copilot";
