@@ -25504,6 +25504,7 @@ with self; {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/Test-TrailingSpace-0.0601.tar.gz";
       hash = "sha256-q7jOdEg6Y9c/4e9gO3zgptR8mO3nMZVdc1eE+tHcT8w=";
     };
+    buildInputs = [ FileTreeCreate ];
     propagatedBuildInputs = [ FileFindObjectRule ];
     meta = {
       description = "Test for trailing space in source files";
