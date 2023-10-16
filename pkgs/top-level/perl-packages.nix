@@ -12297,7 +12297,7 @@ with self; {
     };
     preCheck = "rm t/50resolver.t"; # this test fails with "Temporary failure in name resolution" in sandbox
     propagatedBuildInputs = [ Future StructDumb ];
-    buildInputs = [ FutureIO TestFatal TestIdentity TestMetricsAny TestRefcount ];
+    buildInputs = [ TestFatal TestFutureIOImpl TestIdentity TestMetricsAny TestRefcount ];
     meta = {
       description = "Asynchronous event-driven programming";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
