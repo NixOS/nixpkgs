@@ -1,39 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, spotify, xorg, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  lndir,
+  makeBinaryWrapper,
+  spotify,
+}:
 stdenv.mkDerivation {
-  pname = "spotifywm-unstable";
-  version = "2022-10-26";
+  pname = "spotifywm";
+  version = "0-unstable-2022-10-25";
 
   src = fetchFromGitHub {
     owner = "dasJ";
     repo = "spotifywm";
     rev = "8624f539549973c124ed18753881045968881745";
-    sha256 = "sha256-AsXqcoqUXUFxTG+G+31lm45gjP6qGohEnUSUtKypew0=";
+    hash = "sha256-AsXqcoqUXUFxTG+G+31lm45gjP6qGohEnUSUtKypew0=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    lndir
+  ];
 
-  buildInputs = [ xorg.libX11 ];
+  buildInputs = [ libX11 ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib}
-    install -Dm644 spotifywm.so $out/lib/
-    ln -sf ${spotify}/bin/spotify $out/bin/spotify
+    mkdir -p $out
 
-    # wrap spotify to use spotifywm.so
-    wrapProgram $out/bin/spotify --set LD_PRELOAD "$out/lib/spotifywm.so"
-    # backwards compatibility for people who are using the "spotifywm" binary
-    ln -sf $out/bin/spotify $out/bin/spotifywm
+    lndir -silent ${spotify} $out
+
+    install -Dm644 spotifywm.so $out/lib/spotifywm.so
+
+    wrapProgram $out/bin/spotify \
+      --suffix LD_PRELOAD : "$out/lib/spotifywm.so"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/dasJ/spotifywm";
     description = "Wrapper around Spotify that correctly sets class name before opening the window";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ jqueiroz the-argus ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jqueiroz the-argus ];
+    mainProgram = "spotify";
   };
 }
