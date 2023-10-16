@@ -6259,8 +6259,8 @@ with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Date-Extract-0.07.tar.gz";
       hash = "sha256-+geIBK3k7uwd4UcuDguwR65i5MjU1QIHAbnlBXfFuPQ=";
     };
-    buildInputs = [ TestMockTime ];
-    propagatedBuildInputs = [ DateTimeFormatNatural ];
+    buildInputs = [ TestMockTimeHiRes ];
+    propagatedBuildInputs = [ ClassDataInheritable DateTimeFormatNatural ];
     meta = {
       description = "Extract probable dates from strings";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
