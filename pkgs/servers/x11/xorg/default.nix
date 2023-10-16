@@ -3135,11 +3135,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl }: stdenv.mkDerivation {
     pname = "xkeyboard-config";
-    version = "2.39";
+    version = "2.40";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.39.tar.xz";
-      sha256 = "10m6mbjymi7qf30g5yd400kqijdjg7ym9qjzh0bc3c7pxwrzbias";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.40.tar.xz";
+      sha256 = "1qrakn6gyj701mxwbrlhjv4gd73ws51140ns68a1kivxxhdvlgbs";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
