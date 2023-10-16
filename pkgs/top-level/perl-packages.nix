@@ -22798,8 +22798,8 @@ with self; {
       url = "mirror://cpan/authors/id/T/TO/TOBYINK/Sub-HandlesVia-0.050000.tar.gz";
       hash = "sha256-Lfk0k+L56VvleblQtuGf9ST5TIBhOq3AOohhHf91eU8=";
     };
-    propagatedBuildInputs = [ ClassMethodModifiers ClassTiny RoleTiny ScalarListUtils TypeTiny ];
-    buildInputs = [ TestFatal TestRequires ];
+    propagatedBuildInputs = [ ClassMethodModifiers RoleHooks RoleTiny TypeTiny ];
+    buildInputs = [ TestFatal TestRequires TryTiny ];
     meta = {
       description = "Alternative handles_via implementation";
       homepage = "https://metacpan.org/release/Sub-HandlesVia";
