@@ -4055,12 +4055,12 @@ final: prev:
 
   harpoon = buildVimPlugin {
     pname = "harpoon";
-    version = "2023-05-28";
+    version = "2023-10-10";
     src = fetchFromGitHub {
       owner = "ThePrimeagen";
       repo = "harpoon";
-      rev = "21f4c47c6803d64ddb934a5b314dcb1b8e7365dc";
-      sha256 = "03i86ss4n3fayqwsv8d9dxgrs5lq5sc5fgbc2fg1b963r3y6rk68";
+      rev = "c1aebbad9e3d13f20bedb8f2ce8b3a94e39e424a";
+      sha256 = "0wqxg31z7gi7ap8r0057lpadywx3d245ghlljr6mkmp0jz3waad5";
     };
     meta.homepage = "https://github.com/ThePrimeagen/harpoon/";
   };
