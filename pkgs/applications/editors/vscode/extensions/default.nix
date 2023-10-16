@@ -3341,8 +3341,8 @@ let
         mktplcRef = {
           name = "vscode-tailscale";
           publisher = "tailscale";
-          version = "0.4.0";
-          sha256 = "sha256-c/BZHKHs2EKd37148dSxEeP1wBXv75HhDqzegmHPjOs=";
+          version = "0.6.4";
+          sha256 = "1jcq5kdcdyb5yyy0p9cnv56vmclvb6wdwq8xvy1qbkfdqbmy05gm";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/tailscale.vscode-tailscale/changelog";
