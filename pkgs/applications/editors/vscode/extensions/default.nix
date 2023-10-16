@@ -2726,12 +2726,15 @@ let
         };
       };
 
+
       nvarner.typst-lsp = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "typst-lsp";
           publisher = "nvarner";
-          version = "0.5.0";
-          sha256 = "sha256-4bZbjbcd/EjSRBMkzMs1pD00qyQb5W6gePh4xfoU6Ug=";
+          # Please update the corresponding binary (typst-lsp) when updating
+          # this extension.
+          version = "0.10.1";
+          sha256 = "sha256-+LOw9JPpL5eLNxmP4kyPo9S/w8ZxfPGSaY1oR8THmvI=";
         };
 
         nativeBuildInputs = [ jq moreutils ];
