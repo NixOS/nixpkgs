@@ -3618,8 +3618,6 @@ with pkgs;
 
   clairvoyance = callPackage ../tools/security/clairvoyance { };
 
-  cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
-
   cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudhunter = callPackage ../tools/security/cloudhunter { };
@@ -5854,6 +5852,8 @@ with pkgs;
   libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
 
   libnvme = callPackage ../os-specific/linux/libnvme { };
+
+  librenms = callPackage ../servers/monitoring/librenms { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
@@ -8754,6 +8754,10 @@ with pkgs;
     python = python3;
     with-gce = true;
   };
+
+  google-cloud-bigtable-tool = callPackage ../tools/misc/google-cloud-bigtable-tool { };
+
+  google-cloud-sql-proxy = callPackage ../tools/misc/google-cloud-sql-proxy { };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
@@ -19363,10 +19367,6 @@ with pkgs;
 
   guile-hall = callPackage ../development/tools/guile/guile-hall { };
 
-  guile-lint = callPackage ../development/tools/guile/guile-lint {
-    guile = guile_1_8;
-  };
-
   gwrap = callPackage ../development/tools/guile/g-wrap {
     guile = guile_2_2;
   };
@@ -25111,7 +25111,9 @@ with pkgs;
 
   speechd = callPackage ../development/libraries/speechd { };
 
-  speech-tools = callPackage ../development/libraries/speech-tools { };
+  speech-tools = callPackage ../development/libraries/speech-tools {
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+  };
 
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
@@ -41668,8 +41670,6 @@ with pkgs;
   nitrokey-app2 = libsForQt5.callPackage ../tools/security/nitrokey-app2 { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
-
-  simplenote = callPackage ../applications/misc/simplenote { };
 
   hy = with python3Packages; toPythonApplication hy;
 

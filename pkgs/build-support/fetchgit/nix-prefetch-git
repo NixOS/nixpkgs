@@ -257,9 +257,15 @@ make_deterministic_repo(){
     cd "$repo"
     # Remove files that contain timestamps or otherwise have non-deterministic
     # properties.
-    rm -rf .git/logs/ .git/hooks/ .git/index .git/FETCH_HEAD .git/ORIG_HEAD \
-        .git/refs/remotes/origin/HEAD .git/config
-
+    if [ -f .git ]; then
+	local dotgit_content=$(<.git)
+	local dotgit_dir="${dotgit_content#gitdir: }"
+    else
+	local dotgit_dir=".git"
+    fi
+    pushd "$dotgit_dir"
+        rm -rf logs/ hooks/ index FETCH_HEAD ORIG_HEAD refs/remotes/origin/HEAD config
+    popd
     # Remove all remote branches.
     git branch -r | while read -r branch; do
         clean_git branch -rD "$branch"
@@ -277,7 +283,7 @@ make_deterministic_repo(){
     # Do a full repack. Must run single-threaded, or else we lose determinism.
     clean_git config pack.threads 1
     clean_git repack -A -d -f
-    rm -f .git/config
+    rm -f "$dotgit_dir/config"
 
     # Garbage collect unreferenced objects.
     # Note: --keep-largest-pack prevents non-deterministic ordering of packs
@@ -323,7 +329,7 @@ clone_user_rev() {
         find "$dir" -name .git -print0 | xargs -0 rm -rf
     else
         find "$dir" -name .git | while read -r gitdir; do
-            make_deterministic_repo "$(readlink -f "$gitdir/..")"
+            make_deterministic_repo "$(readlink -f "$(dirname "$gitdir")")"
         done
     fi
 }

@@ -433,6 +433,7 @@ in {
   lemmy = handleTest ./lemmy.nix {};
   libinput = handleTest ./libinput.nix {};
   libreddit = handleTest ./libreddit.nix {};
+  librenms = handleTest ./librenms.nix {};
   libresprite = handleTest ./libresprite.nix {};
   libreswan = handleTest ./libreswan.nix {};
   librewolf = handleTest ./firefox.nix { firefoxPackage = pkgs.librewolf; };
@@ -807,6 +808,7 @@ in {
   systemd-userdbd = handleTest ./systemd-userdbd.nix {};
   systemd-homed = handleTest ./systemd-homed.nix {};
   tandoor-recipes = handleTest ./tandoor-recipes.nix {};
+  tang = handleTest ./tang.nix {};
   taskserver = handleTest ./taskserver.nix {};
   tayga = handleTest ./tayga.nix {};
   teeworlds = handleTest ./teeworlds.nix {};

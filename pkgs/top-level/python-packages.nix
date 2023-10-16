@@ -1850,6 +1850,8 @@ self: super: with self; {
 
   comicon = callPackage ../development/python-modules/comicon { };
 
+  command_runner = callPackage ../development/python-modules/command_runner { };
+
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
@@ -3620,7 +3622,7 @@ self: super: with self; {
 
   etuples = callPackage ../development/python-modules/etuples { };
 
-  et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
+  et-xmlfile = callPackage ../development/python-modules/et-xmlfile { };
 
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
@@ -4816,7 +4818,7 @@ self: super: with self; {
   else
     throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
-  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
+  guzzle-sphinx-theme = callPackage ../development/python-modules/guzzle-sphinx-theme { };
 
   gvm-tools = callPackage ../development/python-modules/gvm-tools { };
 
