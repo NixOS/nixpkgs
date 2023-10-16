@@ -26000,7 +26000,7 @@ with self; {
     };
   };
 
-  TextLorem = buildPerlModule {
+  TextLorem = buildPerlPackage {
     pname = "Text-Lorem";
     version = "0.34";
     src = fetchurl {
