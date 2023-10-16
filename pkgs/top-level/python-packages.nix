@@ -5229,6 +5229,8 @@ self: super: with self; {
 
   html5-parser = callPackage ../development/python-modules/html5-parser { };
 
+  htmldate = callPackage ../development/python-modules/htmldate { };
+
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
 
   htmllistparse = callPackage ../development/python-modules/htmllistparse { };
