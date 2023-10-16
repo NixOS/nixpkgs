@@ -28440,7 +28440,7 @@ with self; {
     makeMakerFlags = [ "--prefix-openssl=${pkgs.openssl.dev}" ];
 
     nativeBuildInputs = [ pkgs.pkg-config ];
-    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal pkgs.ldns pkgs.libidn2 pkgs.openssl ];
+    buildInputs = [ DevelChecklib ModuleInstall ModuleInstallXSUtil TestFatal TestDifferences pkgs.ldns pkgs.libidn2 pkgs.openssl ];
     meta = {
       description = "Perl wrapper for the ldns DNS library";
       license = with lib.licenses; [ bsd3 ];
