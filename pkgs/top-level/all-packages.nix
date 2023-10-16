@@ -18932,10 +18932,8 @@ with pkgs;
 
   ctmg = callPackage ../tools/security/ctmg { };
 
-  cmake = callPackage ../development/tools/build-managers/cmake { };
-
   # can't use override - it triggers infinite recursion
-  cmakeMinimal = callPackage ../development/tools/build-managers/cmake {
+  cmakeMinimal = callPackage ../by-name/cm/cmake/package.nix {
     isBootstrap = true;
   };
 
