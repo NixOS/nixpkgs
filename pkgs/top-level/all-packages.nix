@@ -8923,6 +8923,10 @@ with pkgs;
 
   grub2 = callPackage ../tools/misc/grub/default.nix { };
 
+  grub2_coreboot = grub2.override {
+    corebootSupport = true;
+  };
+
   grub2_efi = grub2.override {
     efiSupport = true;
   };
