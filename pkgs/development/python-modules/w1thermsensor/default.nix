@@ -53,11 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
-  ];
-
-  # Tests for 2.0.0 currently fail on Python 3.11
-  # https://github.com/timofurrer/w1thermsensor/issues/116
-  doCheck = pythonOlder "3.11";
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   pythonImportsCheck = [
     "w1thermsensor"
