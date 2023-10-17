@@ -158,7 +158,7 @@ buildGoModule rec {
     description = "Certificate authority and access plane for SSH, Kubernetes, web applications, and databases";
     homepage = "https://goteleport.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy ];
+    maintainers = with maintainers; [ arianvp justinas sigma tomberek freezeboy techknowlogick ];
     platforms = platforms.unix;
     # go-libfido2 is broken on platforms with less than 64-bit because it defines an array
     # which occupies more than 31 bits of address space.
