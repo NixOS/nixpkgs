@@ -144,6 +144,8 @@ in stdenv.mkDerivation (finalAttrs: {
       name = finalAttrs.pname;
       owner = finalAttrs.src.owner;
       repo = finalAttrs.src.repo;
+      page = "tags?per_page=1";
+      filter = ".[0].name | split(\"-\") | .[1]";
     };
 
     impureTests = {
