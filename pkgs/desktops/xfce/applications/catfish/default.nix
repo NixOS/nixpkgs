@@ -52,6 +52,12 @@ python3Packages.buildPythonApplication rec {
     xfconf
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # Explicitly set the prefix dir in "setup.py" because setuptools is
   # not using "$out" as the prefix when installing catfish data. In
   # particular the variable "__catfish_data_directory__" in
