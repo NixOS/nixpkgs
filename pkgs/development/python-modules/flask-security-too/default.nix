@@ -21,6 +21,7 @@
 # extras: mfa
 , cryptography
 , phonenumbers
+, webauthn
 
 # propagates
 , blinker
@@ -31,10 +32,10 @@
 , flask-wtf
 , itsdangerous
 , passlib
+, importlib-resources
 
 # tests
 , argon2-cffi
-, flask-mongoengine
 , mongoengine
 , mongomock
 , peewee
@@ -46,15 +47,15 @@
 
 buildPythonPackage rec {
   pname = "flask-security-too";
-  version = "5.1.2";
-  format = "setuptools";
+  version = "5.3.1";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Flask-Security-Too";
     inherit version;
-    hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
+    hash = "sha256-Ha/gDGEc44Eef+Fobs13UJOIBqHsPFongYXzGViJXTw=";
   };
 
   postPatch = ''
@@ -71,6 +72,7 @@ buildPythonPackage rec {
     flask-wtf
     itsdangerous
     passlib
+    importlib-resources
   ];
 
   passthru.optional-dependencies = {
@@ -92,12 +94,12 @@ buildPythonPackage rec {
     mfa = [
       cryptography
       phonenumbers
+      webauthn
     ];
   };
 
   nativeCheckInputs = [
     argon2-cffi
-    flask-mongoengine
     mongoengine
     mongomock
     peewee
@@ -111,6 +113,10 @@ buildPythonPackage rec {
   ++ passthru.optional-dependencies.fsqla
   ++ passthru.optional-dependencies.mfa;
 
+  disabledTests = [
+    # needs a /etc/resolv.conf present
+    "test_login_email_whatever"
+  ];
 
   pythonImportsCheck = [
     "flask_security"
