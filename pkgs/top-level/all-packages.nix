@@ -17912,6 +17912,12 @@ with pkgs;
     bluezSupport = true;
     x11Support = true;
   };
+  python312Full = python312.override {
+    self = python312Full;
+    pythonAttr = "python312Full";
+    bluezSupport = true;
+    x11Support = true;
+  };
   python313Full = python313.override {
     self = python313Full;
     pythonAttr = "python313Full";
