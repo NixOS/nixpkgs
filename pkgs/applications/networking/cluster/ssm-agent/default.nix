@@ -1,11 +1,10 @@
 { lib
 , writeShellScriptBin
-, buildGoPackage
+, buildGoModule
 , makeWrapper
 , fetchFromGitHub
 , coreutils
 , nettools
-, busybox
 , util-linux
 , stdenv
 , dmidecode
@@ -29,21 +28,28 @@ let
       -r) echo "''${VERSION:-unknown}";;
     esac
   '';
+
+  binaries = {
+    "core" = "amazon-ssm-agent";
+    "agent" = "ssm-agent-worker";
+    "cli-main" = "ssm-cli";
+    "worker" = "ssm-document-worker";
+    "logging" = "ssm-session-logger";
+    "sessionworker" = "ssm-session-worker";
+  };
 in
-buildGoPackage rec {
+buildGoModule rec {
   pname = "amazon-ssm-agent";
   version = "3.2.1630.0";
 
-  goPackagePath = "github.com/aws/${pname}";
-
-  nativeBuildInputs = [ makeWrapper ];
-
   src = fetchFromGitHub {
-    rev = "refs/tags/${version}";
     owner = "aws";
     repo = "amazon-ssm-agent";
+    rev = "refs/tags/${version}";
     hash = "sha256-0tN0rBfz2VZ4UkYLFDGg9218O9vyyRT2Lrppu9TETao=";
   };
+
+  vendorHash = null;
 
   patches = [
     # Some tests use networking, so we skip them.
@@ -53,6 +59,8 @@ buildGoPackage rec {
     # out how to resolve, so hardcoded the constants.
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
   ];
+
+  nativeBuildInputs = [ makeWrapper ];
 
   # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1630.0/makefile#L120-L138
   # The updater is not built because it cannot work on NixOS
@@ -65,10 +73,7 @@ buildGoPackage rec {
     "agent/framework/processor/executer/outofproc/sessionworker"
   ];
 
-  ldflags = [
-    "-s"
-    "-w"
-  ];
+  ldflags = [ "-s" "-w" ];
 
   postPatch = ''
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
@@ -94,43 +99,36 @@ buildGoPackage rec {
   '';
 
   preBuild = ''
-    pushd go/src/${goPackagePath}
-
     # Note: if this step fails, please patch the code to fix it! Please only skip
     # tests if it is not feasible for the test to pass in a sandbox.
     make quick-integtest
 
     make pre-release
     make pre-build
-
-    popd
   '';
 
-  postBuild = ''
-    pushd go/bin
+  installPhase = ''
+    runHook preInstall
 
-    mv core amazon-ssm-agent
-    mv agent ssm-agent-worker
-    mv cli-main ssm-cli
-    mv worker ssm-document-worker
-    mv logging ssm-session-logger
-    mv sessionworker ssm-session-worker
+    declare -A map=(${builtins.concatStringsSep " " (lib.mapAttrsToList (name: value: "[\"${name}\"]=\"${value}\"") binaries)})
 
-    popd
-  '';
+    for key in ''${!map[@]}; do
+      install -D -m 0555 -T "$GOPATH/bin/''${key}" "$out/bin/''${map[''${key}]}"
+    done
 
-  # These templates retain their `.template` extensions on installation. The
-  # amazon-ssm-agent.json.template is required as default configuration when an
-  # amazon-ssm-agent.json isn't present. Here, we retain the template to show
-  # we're using the default configuration.
+    # These templates retain their `.template` extensions on installation. The
+    # amazon-ssm-agent.json.template is required as default configuration when an
+    # amazon-ssm-agent.json isn't present. Here, we retain the template to show
+    # we're using the default configuration.
 
-  # seelog.xml isn't actually required to run, but it does ship as a template
-  # with debian packages, so it's here for reference. Future work in the nixos
-  # module could use this template and substitute a different log level.
-  postInstall = ''
-    mkdir -p $out/etc/amazon/ssm
-    cp go/src/${goPackagePath}/amazon-ssm-agent.json.template $out/etc/amazon/ssm/amazon-ssm-agent.json.template
-    cp go/src/${goPackagePath}/seelog_unix.xml $out/etc/amazon/ssm/seelog.xml.template
+    # seelog.xml isn't actually required to run, but it does ship as a template
+    # with debian packages, so it's here for reference. Future work in the nixos
+    # module could use this template and substitute a different log level.
+
+    install -D -m 0444 -t $out/etc/amazon/ssm amazon-ssm-agent.json.template
+    install -D -m 0444 -T seelog_unix.xml $out/etc/amazon/ssm/seelog.xml.template
+
+    runHook postInstall
   '';
 
   postFixup = ''

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ldeep";
-  version = "1.0.38";
+  version = "1.0.41";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "franc-pentest";
     repo = "ldeep";
     rev = "refs/tags/${version}";
-    hash = "sha256-QoisQL7K4Xg4k7IGymvsMjNfTkjHtkVJpygHtX8lUqs=";
+    hash = "sha256-jiOZAoZx5KK/jpW/Cui1WgPhjyf5gglcgWZbzMw65Lw=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

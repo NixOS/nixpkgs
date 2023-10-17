@@ -41,6 +41,7 @@ let
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
         composer-local-repo-plugin
+        phpDrv
         phpDrv.composerHooks.composerRepositoryHook
       ];
 

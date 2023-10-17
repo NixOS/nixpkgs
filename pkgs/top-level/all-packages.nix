@@ -597,8 +597,6 @@ with pkgs;
 
   dec-decode = callPackage ../development/tools/dec-decode { };
 
-  devour-flake = callPackage ../tools/nix/devour-flake { };
-
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
   documenso = callPackage ../applications/office/documenso { };
@@ -8808,7 +8806,7 @@ with pkgs;
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
   gptcommit = callPackage ../development/tools/gptcommit {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   gptman = callPackage ../tools/system/gptman { };
@@ -17177,7 +17175,7 @@ with pkgs;
   cargo-unused-features = callPackage ../development/tools/rust/cargo-unused-features { };
 
   cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
-  tauri-mobile = callPackage ../development/tools/rust/tauri-mobile { };
+  cargo-mobile2 = callPackage ../development/tools/rust/cargo-mobile2 { };
 
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-vet = callPackage ../development/tools/rust/cargo-vet {

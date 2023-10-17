@@ -10,9 +10,9 @@
 , pytestCheckHook
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "fastembed";
-  version = "unstable-2023-09-07";
+  version = "0.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "fastembed";
-    rev = "9c5d32f271dfe9ae4730694727ff5df480983942";
+    rev = "refs/tags/v${version}";
     hash = "sha256-d7Zb0IL0NOPEPsCHe/ZMNELnSCG4+y8JmGAXnCRUd50=";
   };
 
