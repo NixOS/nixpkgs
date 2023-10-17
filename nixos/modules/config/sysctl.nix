@@ -11,7 +11,7 @@ let
         checkType = x: isBool x || isString x || isInt x || x == null;
       in
         checkType val || (val._type or "" == "override" && checkType val.content);
-    merge = loc: defs: mergeOneOption loc (filterOverrides defs);
+    merge = loc: defs: mergeUniqueOption loc (filterOverrides defs);
   };
 
 in
