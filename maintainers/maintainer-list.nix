@@ -9790,6 +9790,15 @@
     githubId = 887072;
     name = "Alexander Lebedev";
   };
+  lecoqjacob = {
+    name = "Jacob LeCoq";
+    email = "lecoqjacob@gmail.com";
+    githubId = 9278174;
+    github = "lecoqjacob";
+    keys = [{
+      fingerprint = "C505 1E8B 06AC 1776 6875  1B60 93AF DAD0 10B3 CB8D";
+    }];
+  };
   ledif = {
     email = "refuse@gmail.com";
     github = "ledif";
