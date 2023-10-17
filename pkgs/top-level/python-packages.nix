@@ -7023,6 +7023,8 @@ self: super: with self; {
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
+  mtcnn = callPackage ../development/python-modules/mtcnn { };
+
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
 
   mullvad-closest = callPackage ../development/python-modules/mullvad-closest { };
