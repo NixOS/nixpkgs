@@ -993,12 +993,17 @@ rec {
        => false
   */
   isStorePath = x:
-    if isStringLike x then
-      let str = toString x; in
-      substring 0 1 str == "/"
-      && dirOf str == storeDir
+    # Derivations can be assumed to be store paths
+    # When CA is used `toString bash` will give a path like "/1gbwc5nl0k01hg0n8ggqrgyz52babwivwyn01isd7cghw7bhd0kv"
+    if lib.isDerivation x then
+      true
     else
-      false;
+      if isStringLike x then
+        let str = toString x; in
+        substring 0 1 str == "/"
+        && dirOf str == storeDir
+      else
+        false;
 
   /* Parse a string as an int. Does not support parsing of integers with preceding zero due to
   ambiguity between zero-padded and octal numbers. See toIntBase10.
