@@ -1,4 +1,4 @@
-# Botnix OS: the Nix-based Linux distribution for robotic intelligence
+# Botnix OS: the Nix-based Linux distribution for intelligent robotic systems
 
 The Botnix operating system (OS) is the first Linux distribution focused on *intelligent robotic systems*, also known as
 *autonomous systems* or as *embodiment* in the artificial intelligence (AI) community. Botnix is an abbreviation for
