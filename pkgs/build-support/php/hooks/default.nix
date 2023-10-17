@@ -1,5 +1,6 @@
 { lib
 , makeSetupHook
+, diffutils
 , jq
 , moreutils
 , makeBinaryWrapper
@@ -22,7 +23,7 @@
       substitutions = {
         # Specify the stdenv's `diff` by abspath to ensure that the user's build
         # inputs do not cause us to find the wrong `diff`.
-        diff = "${lib.getBin buildPackages.diffutils}/bin/diff";
+        cmp = "${lib.getBin buildPackages.diffutils}/bin/cmp";
       };
     } ./composer-install-hook.sh;
 }
