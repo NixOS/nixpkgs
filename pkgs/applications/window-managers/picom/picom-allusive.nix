@@ -18,7 +18,7 @@ picom.overrideAttrs (oldAttrs: rec {
     installManPage $src/man/picom.1.gz
   '' + (lib.optionalString (oldAttrs ? postInstall) oldAttrs.postInstall);
 
-  meta = {
+  meta = (builtins.removeAttrs oldAttrs.meta [ "longDescription" ]) // {
     description = "A fork of picom featuring improved animations and other features";
     homepage = "https://github.com/allusive-dev/picom-allusive";
     license = with lib.licenses; [ mit mpl20 ];
