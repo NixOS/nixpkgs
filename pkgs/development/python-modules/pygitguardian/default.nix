@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pygitguardian";
-  version = "1.10.0";
+  version = "1.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "GitGuardian";
     repo = "py-gitguardian";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o5Hur51Dh4HWI7f4BpfEi40/inVAJgYF3xXZGPMyF8E=";
+    hash = "sha256-Vr0+y3Zi7DsXzm2COOlMqUVjlZMRJkaVxT8QpSePhuA=";
   };
 
   nativeBuildInputs = [
