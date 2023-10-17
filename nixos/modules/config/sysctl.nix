@@ -1,6 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  ...
+}:
 let
-
   sysctlOption = lib.mkOptionType {
     name = "sysctl option value";
     check =
@@ -9,15 +12,11 @@ let
         checkType = x: lib.isBool x || lib.isString x || lib.isInt x || x == null;
       in
       checkType val || (val._type or "" == "override" && checkType val.content);
-    merge = loc: defs: lib.mergeOneOption loc (lib.filterOverrides defs);
+    merge = loc: defs: mergeUniqueOption loc (filterOverrides defs);
   };
-
 in
-
 {
-
   options = {
-
     boot.kernel.sysctl = lib.mkOption {
       type =
         let
@@ -56,13 +55,10 @@ in
         parameter may be a string, integer, boolean, or null
         (signifying the option will not appear at all).
       '';
-
     };
-
   };
 
   config = {
-
     environment.etc."sysctl.d/60-nixos.conf".text = lib.concatStrings (
       lib.mapAttrsToList (
         n: v: lib.optionalString (v != null) "${n}=${if v == false then "0" else toString v}\n"
