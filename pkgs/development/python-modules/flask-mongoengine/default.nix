@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "flask-mongoengine";
-  version = "1.0.0";
+  version = "unstable-2023-10-17";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,9 +23,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MongoEngine";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-YqEtW02VvEeUsLIHLz6+V6juMtWPEIk2tLoKTUdY6YE=";
+    # no new release since 2020. Mostly a dead project, but still used in current Flask applications.
+    # Newer release needed for compatibility with newer flask
+    rev = "d4526139cb1e2e94111ab7de96bb629d574c1690";
+    hash = "sha256-oMQU9Z8boc0q+0KzIQAZ8qSyxiITDY0M9FCg75S9MEY=";
   };
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = "v1.0.0";
 
   nativeBuildInputs = [
     setuptools
