@@ -857,6 +857,22 @@ let
         };
       };
 
+      cameron.vscode-pytest = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-pytest";
+          publisher = "Cameron";
+          version = "0.1.1";
+          sha256 = "sha256-YU37a0Q+IXusXgwf9doxXLlYiyzkizbPjjdCZFxeDaA=";
+        };
+        meta = {
+          changelog = "https://github.com/cameronmaske/pytest-vscode/blob/master/CHANGELOG.md";
+          description = "A Visual Studio Code extension that adds IntelliSense support for pytest fixtures";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=Cameron.vscode-pytest";
+          license = lib.licenses.unlicense;
+          maintainers = [ lib.maintainers.rhoriguchi ];
+        };
+      };
+
       christian-kohler.npm-intellisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "npm-intellisense";
