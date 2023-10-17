@@ -52,12 +52,6 @@ python3Packages.buildPythonApplication rec {
     xfconf
   ];
 
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-
   # Explicitly set the prefix dir in "setup.py" because setuptools is
   # not using "$out" as the prefix when installing catfish data. In
   # particular the variable "__catfish_data_directory__" in
@@ -69,6 +63,12 @@ python3Packages.buildPythonApplication rec {
 
   # Disable check because there is no test in the source distribution
   doCheck = false;
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = gitUpdater { rev-prefix = "${pname}-"; };
 
