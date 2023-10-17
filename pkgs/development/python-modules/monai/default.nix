@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Project-MONAI";
     repo = "MONAI";
     rev = "refs/tags/${version}";
-    hash = "sha256-wjpHgDNNxPC4b0Yy6zponGZPHV9qGSnbLfccMeick3I=";
+    hash = "sha256-h//igmSV1cPAFifE1woIluSyGwZBRByYMLqeY3oLHnk=";
   };
 
   # Ninja is not detected by setuptools for some reason even though it's present:
