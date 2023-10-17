@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ util-linux lz4 zlib ]
     ++ lib.optionals fuseSupport [ fuse ];
 
-  configureFlags = lib.optionals fuseSupport [ "--enable-fuse" ];
+  configureFlags = [
+    "MAX_BLOCK_SIZE=4096"
+  ] ++ lib.optional fuseSupport "--enable-fuse";
 
   meta = with lib; {
     description = "Userspace utilities for linux-erofs file system";
