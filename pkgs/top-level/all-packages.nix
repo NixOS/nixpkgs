@@ -38306,9 +38306,6 @@ with pkgs;
     isMobile = true;
   };
 
-  sgtpuzzles = throw "sgtpuzzles has been renamed to sgt-puzzles."; # 2023-10-06
-  sgtpuzzles-mobile = throw "sgtpuzzles-mobile has been renamed to sgt-puzzles-mobile."; # 2023-10-06
-
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 
   shticker-book-unwritten = callPackage ../games/shticker-book-unwritten { };
