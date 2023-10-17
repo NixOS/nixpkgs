@@ -14,6 +14,14 @@ let
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
   };
+
+  common_xbootldr = {
+    imports = [ common ];
+
+    virtualisation.useXbootldr = true;
+    boot.loader.efi.efiSysMountPoint = "/efi";
+    boot.loader.systemd-boot.xbootldrMountPoint = "/boot";
+  };
 in
 {
   basic = makeTest {
@@ -26,6 +34,30 @@ in
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
+      machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
+
+      # Ensure we actually booted using systemd-boot
+      # Magic number is the vendor UUID used by systemd-boot.
+      machine.succeed(
+          "test -e /sys/firmware/efi/efivars/LoaderEntrySelected-4a67b082-0a4c-41cf-b6c7-440b29bb8c4f"
+      )
+
+      # "bootctl install" should have created an EFI entry
+      machine.succeed('efibootmgr | grep "Linux Boot Manager"')
+    '';
+  };
+
+  basic_xbootldr = makeTest {
+    name = "systemd-boot-xbootldr";
+    meta.maintainers = with pkgs.lib.maintainers; [ sdht0 ];
+
+    nodes.machine = common_xbootldr;
+
+    testScript = ''
+      machine.start()
+      machine.wait_for_unit("multi-user.target")
+
+      machine.succeed("test -e /efi/EFI/systemd/systemd-bootx64.efi")
       machine.succeed("test -e /boot/loader/entries/nixos-generation-1.conf")
 
       # Ensure we actually booted using systemd-boot
@@ -147,6 +179,23 @@ in
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
+      boot.loader.systemd-boot.memtest86.enable = true;
+      boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
+    };
+
+    testScript = ''
+      machine.fail("test -e /boot/loader/entries/memtest86.conf")
+      machine.succeed("test -e /boot/loader/entries/apple.conf")
+      machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
+    '';
+  };
+
+  entryFilename_xbootldr = makeTest {
+    name = "systemd-boot-entry-filename";
+    meta.maintainers = with pkgs.lib.maintainers; [ sdht0 ];
+
+    nodes.machine = { pkgs, lib, ... }: {
+      imports = [ common_xbootldr ];
       boot.loader.systemd-boot.memtest86.enable = true;
       boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
     };
