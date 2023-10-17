@@ -3,7 +3,7 @@
 , fetchPypi
 , opencv3
 , tensorflow
-, Keras
+, keras
 }:
 
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     opencv3
-    Keras
+    keras
     tensorflow
   ];
 
