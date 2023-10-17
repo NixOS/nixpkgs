@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , attrs
 , buildPythonPackage
 , fetchFromGitHub
@@ -8,18 +7,20 @@
 , incremental
 , python
 , pythonOlder
+, setuptools
 , treq
 , tubes
 , twisted
 , typing-extensions
 , werkzeug
+, wheel
 , zope_interface
 }:
 
 buildPythonPackage rec {
   pname = "klein";
   version = "23.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -29,6 +30,11 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-2oU1HGBkBXjrpMvsiHgbAJ4M/5650ZjJkwo/Yk4nz3I=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -48,7 +54,11 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     ${python.interpreter} -m twisted.trial klein
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [
