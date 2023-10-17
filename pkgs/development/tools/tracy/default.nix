@@ -56,10 +56,12 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
+    make -j $NIX_BUILD_CORES -C capture/build/unix release
+    make -j $NIX_BUILD_CORES -C csvexport/build/unix release
+    make -j $NIX_BUILD_CORES -C import-chrome/build/unix release
+    make -j $NIX_BUILD_CORES -C library/unix release
     make -j $NIX_BUILD_CORES -C profiler/build/unix release LEGACY=1
-    make -j $NIX_BUILD_CORES -C import-chrome/build/unix/ release
-    make -j $NIX_BUILD_CORES -C capture/build/unix/ release
-    make -j $NIX_BUILD_CORES -C update/build/unix/ release
+    make -j $NIX_BUILD_CORES -C update/build/unix release
 
     runHook postBuild
   '';
@@ -67,16 +69,35 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -D ./profiler/build/unix/Tracy-release $out/bin/Tracy
-    install -D ./import-chrome/build/unix/import-chrome-release $out/bin/import-chrome
-    install -D ./capture/build/unix/capture-release $out/bin/capture
-    install -D ./update/build/unix/update-release $out/bin/update
+    install -D -m 0755 capture/build/unix/capture-release $out/bin/capture
+    install -D -m 0755 csvexport/build/unix/csvexport-release $out/bin/tracy-csvexport
+    install -D -m 0755 import-chrome/build/unix/import-chrome-release $out/bin/import-chrome
+    install -D -m 0755 library/unix/libtracy-release.so $out/lib/libtracy.so
+    install -D -m 0755 profiler/build/unix/Tracy-release $out/bin/tracy
+    install -D -m 0755 update/build/unix/update-release $out/bin/update
 
+    mkdir -p $out/include/Tracy/client
+    mkdir -p $out/include/Tracy/common
+    mkdir -p $out/include/Tracy/tracy
+
+    cp -p public/client/*.{h,hpp} $out/include/Tracy/client
+    cp -p public/common/*.{h,hpp} $out/include/Tracy/common
+    cp -p public/tracy/*.{h,hpp} $out/include/Tracy/tracy
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace extra/desktop/tracy.desktop \
+      --replace Exec=/usr/bin/tracy Exec=tracy
+
+    install -D -m 0644 extra/desktop/application-tracy.xml $out/share/mime/packages/application-tracy.xml
+    install -D -m 0644 extra/desktop/tracy.desktop $out/share/applications/tracy.desktop
+    install -D -m 0644 icon/application-tracy.svg $out/share/icons/hicolor/scalable/apps/application-tracy.svg
+    install -D -m 0644 icon/icon.png $out/share/icons/hicolor/256x256/apps/tracy.png
+    install -D -m 0644 icon/icon.svg $out/share/icons/hicolor/scalable/apps/tracy.svg
+  '' + ''
     runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/Tracy
+    install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/tracy
   '';
 
   meta = with lib; {
@@ -84,7 +105,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wolfpld/tracy";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
-    mainProgram = "Tracy";
+    mainProgram = "tracy";
     maintainers = with maintainers; [ mpickering nagisa paveloom ];
   };
 }
