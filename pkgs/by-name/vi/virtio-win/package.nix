@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, libarchive }:
 
 stdenv.mkDerivation rec {
-  pname = "win-virtio";
+  pname = "virtio-win";
   version = "0.1.240-1";
 
   src = fetchurl {
