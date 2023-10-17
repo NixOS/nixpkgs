@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , bintools-unwrapped
+, callPackage
 , coreutils
 , substituteAll
 , unzip
@@ -73,6 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    cosmocc = callPackage ./cosmocc.nix {
+      cosmopolitan = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://justine.lol/cosmopolitan/";
