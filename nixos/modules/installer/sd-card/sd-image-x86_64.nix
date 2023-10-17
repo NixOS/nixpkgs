@@ -1,7 +1,7 @@
 # To build, use:
 # nix-build nixos -I nixos-config=nixos/modules/installer/sd-card/sd-image-x86_64.nix -A config.system.build.sdImage
 
-# This image is primarily used in NixOS tests (boot.nix) to test `boot.loader.generic-extlinux-compatible`.
+# This image is primarily used in NixOS tests (uboot.nix) to test `boot.loader.generic-extlinux-compatible`.
 { config, lib, pkgs, ... }:
 
 {
