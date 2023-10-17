@@ -393,7 +393,7 @@ in
           )
         ) // {
           # Miscellaneous options
-          inherit (cfg) banaction maxretry;
+          inherit (cfg) banaction maxretry bantime;
           ignoreip = ''127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}'';
           backend = "systemd";
           # Actions
