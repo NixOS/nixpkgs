@@ -471,14 +471,25 @@ let
 
       sectionWLAN = checkUnitConfig "WLAN" [
         (assertOnlyFields [
-          "PhysicalDevice"
+          "PhysicalDevice"  # systemd supports both strings ("phy0") and indexes (0) here.
           "Type"
           "WDS"
         ])
-        # systemd supports strings here too ("phy0") but index is good enough
-        (assertInt "PhysicalDevice")
-        (assertMinimum "PhysicalDevice" 0)
-        (assertValueOneOf "Type" ["ad-hoc" "station" "ap" "ap-vlan" "wds" "monitor" "mesh-point" "p2p-client" "p2p-go" "p2p-device" "ocb" "nan"])
+        # See https://github.com/systemd/systemd/blob/main/src/basic/linux/nl80211.h#L3382
+        (assertValueOneOf "Type" [
+          "ad-hoc"
+          "station"
+          "ap"
+          "ap-vlan"
+          "wds"
+          "monitor"
+          "mesh-point"
+          "p2p-client"
+          "p2p-go"
+          "p2p-device"
+          "ocb"
+          "nan"
+        ])
         (assertValueOneOf "WDS" boolValues)
       ];
 
