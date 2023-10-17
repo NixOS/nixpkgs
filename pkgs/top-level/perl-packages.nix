@@ -7305,7 +7305,7 @@ with self; {
     };
   };
 
-  DBIxConnector = buildPerlModule {
+  DBIxConnector = buildPerlPackage {
     pname = "DBIx-Connector";
     version = "0.59";
     src = fetchurl {
