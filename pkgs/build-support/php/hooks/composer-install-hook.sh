@@ -88,7 +88,6 @@ composerInstallBuildHook() {
 
     # Since the composer.json file has been modified in the previous step, the
     # composer.lock file needs to be updated.
-    COMPOSER_DISABLE_NETWORK=1 \
     COMPOSER_ROOT_VERSION="${version}" \
     composer \
       --lock \
@@ -118,10 +117,7 @@ composerInstallInstallHook() {
     # the autoloader.
     # The COMPOSER_ROOT_VERSION environment variable is needed only for
     # vimeo/psalm.
-    COMPOSER_CACHE_DIR=/dev/null \
-    COMPOSER_DISABLE_NETWORK=1 \
     COMPOSER_ROOT_VERSION="${version}" \
-    COMPOSER_MIRROR_PATH_REPOS="1" \
     composer \
       --no-ansi \
       --no-interaction \
