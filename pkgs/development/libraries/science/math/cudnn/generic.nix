@@ -154,6 +154,7 @@ in
       homepage = "https://developer.nvidia.com/cudnn";
       sourceProvenance = with sourceTypes; [binaryNativeCode];
       license = {
+        shortName = "cuDNN EULA";
         fullName = "NVIDIA cuDNN Software License Agreement (EULA)";
         url = "https://docs.nvidia.com/deeplearning/sdk/cudnn-sla/index.html#supplement";
         free = false;

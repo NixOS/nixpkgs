@@ -878,6 +878,7 @@ in mkLicense lset) ({
   };
 
   nvidiaCuda = {
+    shortName = "CUDA EULA";
     fullName = "CUDA Toolkit End User License Agreement (EULA)";
     url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
     free = false;
