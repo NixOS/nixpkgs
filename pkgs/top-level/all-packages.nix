@@ -26420,8 +26420,6 @@ with pkgs;
 
   go-autoconfig = callPackage ../servers/go-autoconfig { };
 
-  go-camo = callPackage ../servers/http/go-camo { };
-
   go-cqhttp = callPackage ../servers/go-cqhttp { };
 
   gofish = callPackage ../servers/gopher/gofish { };
