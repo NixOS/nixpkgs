@@ -4,8 +4,14 @@
 }:
 
 let
-  script = { pname, ...}@args:
-    buildLua (lib.attrsets.recursiveUpdate {
+  camelToKebab = let
+    inherit (lib.strings) match stringAsChars toLower;
+    isUpper = match "[A-Z]";
+  in stringAsChars (c: if isUpper c != null then "-${toLower c}" else c);
+
+  mkScript = name: args:
+    buildLua (lib.attrsets.recursiveUpdate rec {
+      pname = camelToKebab name;
       src = fetchFromGitHub {
         owner = "occivink";
         repo = "mpv-scripts";
@@ -24,17 +30,15 @@ let
     } args);
 
 in
-{
+lib.mapAttrs (name: lib.makeOverridable (mkScript name)) {
 
   # Usage: `pkgs.mpv.override { scripts = [ pkgs.mpvScripts.seekTo ]; }`
-  seekTo = script {
-    pname = "seek-to";
+  seekTo = {
     meta.description = "Mpv script for seeking to a specific position";
     outputHash = "sha256-3RlbtUivmeoR9TZ6rABiZSd5jd2lFv/8p/4irHMLshs=";
   };
 
-  blacklistExtensions = script {
-    pname = "blacklist-extensions";
+  blacklistExtensions = {
     meta.description = "Automatically remove playlist entries based on their extension.";
     outputHash = "sha256-qw9lz8ofmvvh23F9aWLxiU4YofY+YflRETu+nxMhvVE=";
   };
