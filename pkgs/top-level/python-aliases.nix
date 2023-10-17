@@ -128,6 +128,7 @@ mapAliases ({
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   EasyProcess = easyprocess; # added 2023-02-19
   email_validator = email-validator; # added 2022-06-22
+  et_xmlfile = et-xmlfile; # added 2023-10-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
   Fabric = fabric; # addedd 2023-02-19
   face_recognition = face-recognition; # added 2022-10-15
@@ -173,6 +174,7 @@ mapAliases ({
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
   grappelli_safe = grappelli-safe; # added 2023-10-08
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
+  guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
   hangups = throw "hangups was removed because Google Hangouts has been shut down"; # added 2023-02-13
@@ -211,6 +213,7 @@ mapAliases ({
   Keras = keras; # added 2021-11-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
+  lazy_imports = lazy-imports; # added 2023-10-13
   lektor = throw "lektor has been promoted to a top-level attribute"; # added 2023-08-01
   logilab_astng = throw "logilab-astng has not been released since 2013 and is unmaintained"; # added 2022-11-29
   logilab_common = logilab-common; # added 2022-11-21
@@ -282,6 +285,7 @@ mapAliases ({
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   PyLD = pyld; # added 2022-06-22
   pymatgen-lammps = throw "pymatgen-lammps has been removed because it is unmaintained and broken"; # added 2023-06-20
+  pymazda = throw "pymazda has been removed, because the upstream repo has been affected by a DCMA claim."; # added 2023-10-16
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19

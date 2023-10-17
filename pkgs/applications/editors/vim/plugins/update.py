@@ -138,15 +138,19 @@ class VimEditor(pluginupdate.Editor):
             nvim_treesitter_dir = subprocess.check_output(cmd, text=True, timeout=90).strip()
 
             generated = treesitter.update_grammars(nvim_treesitter_dir)
-            open(os.path.join(args.nixpkgs, "generated.nix"), "w").write(generated)
+            treesitter_generated_nix_path = os.path.join(
+                NIXPKGS_NVIMTREESITTER_FOLDER,
+                "generated.nix"
+            )
+            open(os.path.join(args.nixpkgs, treesitter_generated_nix_path), "w").write(generated)
 
             if self.nixpkgs_repo:
                 index = self.nixpkgs_repo.index
                 for diff in index.diff(None):
-                    if diff.a_path == f"{NIXPKGS_NVIMTREESITTER_FOLDER}/generated.nix":
+                    if diff.a_path == treesitter_generated_nix_path:
                         msg = "vimPlugins.nvim-treesitter: update grammars"
                         print(f"committing to nixpkgs: {msg}")
-                        index.add([str(nvim_treesitter_dir.joinpath("generated.nix"))])
+                        index.add([treesitter_generated_nix_path])
                         index.commit(msg)
                         return
                 print("no updates to nvim-treesitter grammars")

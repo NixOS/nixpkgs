@@ -4424,6 +4424,15 @@
     githubId = 14034137;
     name = "Mostly Void";
   };
+  ditsuke = {
+    name = "Tushar";
+    email = "hello@ditsuke.com";
+    github = "ditsuke";
+    githubId = 72784348;
+    keys = [{
+      fingerprint = "8FD2 153F 4889 541A 54F1  E09E 71B6 C31C 8A5A 9D21";
+    }];
+  };
   djacu = {
     email = "daniel.n.baker@gmail.com";
     github = "djacu";
@@ -16420,6 +16429,11 @@
       fingerprint = "75F0 AB7C FE01 D077 AEE6  CAFD 353E 4A18 EE0F AB72";
     }];
   };
+  spacefault = {
+    github = "spacefault";
+    githubId = 74156492;
+    name = "spacefault";
+  };
   spacefrogg = {
     email = "spacefrogg-nixos@meterriblecrew.net";
     github = "spacefrogg";
@@ -18047,6 +18061,16 @@
     github = "ulrikstrid";
     githubId = 1607770;
     name = "Ulrik Strid";
+  };
+  unclamped = {
+    name = "Maru";
+    email = "clear6860@tutanota.com";
+    matrix = "@unhidden0174:matrix.org";
+    github = "unclamped";
+    githubId = 104658278;
+    keys = [{
+      fingerprint = "57A2 CC43 3068 CB62 89C1  F1DA 9137 BB2E 77AD DE7E";
+    }];
   };
   unclechu = {
     name = "Viacheslav Lotsmanov";

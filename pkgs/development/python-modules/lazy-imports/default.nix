@@ -6,7 +6,7 @@
 , packaging
 }:
 let
-  pname = "lazy_imports";
+  pname = "lazy-imports";
   version = "0.3.1";
 in
 buildPythonPackage {

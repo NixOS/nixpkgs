@@ -1,6 +1,7 @@
 { lib
 , buildGo121Module
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildGo121Module rec {
@@ -33,6 +34,8 @@ buildGo121Module rec {
   installCheckPhase = ''
     $out/bin/ferretdb --version | grep ${version}
   '';
+
+  passthru.tests = nixosTests.ferretdb;
 
   meta = with lib; {
     description = "A truly Open Source MongoDB alternative";

@@ -355,8 +355,8 @@ expectFailure 'toSource { root = ./a; fileset = ./.; }' 'lib.fileset.toSource: `
 rm -rf *
 
 # Path coercion only works for paths
-expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a path instead.'
-expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a path instead.
+expectFailure 'toSource { root = ./.; fileset = 10; }' 'lib.fileset.toSource: `fileset` is of type int, but it should be a file set or a path instead.'
+expectFailure 'toSource { root = ./.; fileset = "/some/path"; }' 'lib.fileset.toSource: `fileset` \("/some/path"\) is a string-like value, but it should be a file set or a path instead.
 \s*Paths represented as strings are not supported by `lib.fileset`, use `lib.sources` or derivations instead.'
 
 # Path coercion errors for non-existent paths

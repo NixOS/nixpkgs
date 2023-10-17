@@ -1803,7 +1803,12 @@ self: super: with self; {
 
   catalogue = callPackage ../development/python-modules/catalogue { };
 
-  catboost = callPackage ../development/python-modules/catboost { };
+  catboost = callPackage ../development/python-modules/catboost {
+    catboost = pkgs.catboost.override {
+      pythonSupport = true;
+      python3Packages = self;
+    };
+  };
 
   catppuccin = callPackage ../development/python-modules/catppuccin { };
 
@@ -1844,6 +1849,8 @@ self: super: with self; {
   };
 
   comicon = callPackage ../development/python-modules/comicon { };
+
+  command_runner = callPackage ../development/python-modules/command_runner { };
 
   connect-box = callPackage ../development/python-modules/connect_box { };
 
@@ -3611,7 +3618,7 @@ self: super: with self; {
 
   etuples = callPackage ../development/python-modules/etuples { };
 
-  et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
+  et-xmlfile = callPackage ../development/python-modules/et-xmlfile { };
 
   eufylife-ble-client = callPackage ../development/python-modules/eufylife-ble-client { };
 
@@ -4805,7 +4812,7 @@ self: super: with self; {
   else
     throw "gurobipy not yet supported on ${stdenv.hostPlatform.system}";
 
-  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
+  guzzle-sphinx-theme = callPackage ../development/python-modules/guzzle-sphinx-theme { };
 
   gvm-tools = callPackage ../development/python-modules/gvm-tools { };
 
@@ -6002,7 +6009,7 @@ self: super: with self; {
 
   lazy_import = callPackage ../development/python-modules/lazy_import { };
 
-  lazy_imports = callPackage ../development/python-modules/lazy_imports { };
+  lazy-imports = callPackage ../development/python-modules/lazy-imports { };
 
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 
@@ -10344,8 +10351,6 @@ self: super: with self; {
   pymaven-patch = callPackage ../development/python-modules/pymaven-patch { };
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
-
-  pymazda = callPackage ../development/python-modules/pymazda { };
 
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 

@@ -1092,6 +1092,15 @@ with pkgs;
     protobuf = protobuf3_21;
   };
 
+  mysql-shell-innovation = callPackage ../development/tools/mysql-shell/innovation.nix {
+    inherit (darwin) cctools developer_cmds DarwinTools;
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    antlr = antlr4_10;
+    boost = boost177; # Configure checks for specific version.
+    icu =  icu69;
+    protobuf = protobuf3_21;
+  };
+
   broadlink-cli = callPackage ../tools/misc/broadlink-cli { };
 
   fetchpatch = callPackage ../build-support/fetchpatch {
@@ -3618,8 +3627,6 @@ with pkgs;
 
   clairvoyance = callPackage ../tools/security/clairvoyance { };
 
-  cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
-
   cloudfox = callPackage ../tools/security/cloudfox { };
 
   cloudhunter = callPackage ../tools/security/cloudhunter { };
@@ -4954,8 +4961,6 @@ with pkgs;
 
   daemontools = callPackage ../tools/admin/daemontools { };
 
-  dagger = callPackage ../development/tools/continuous-integration/dagger { };
-
   dale = callPackage ../development/compilers/dale { };
 
   damon = callPackage ../tools/admin/damon { };
@@ -5854,6 +5859,8 @@ with pkgs;
   libnss-mysql = callPackage ../os-specific/linux/libnss-mysql { };
 
   libnvme = callPackage ../os-specific/linux/libnvme { };
+
+  librenms = callPackage ../servers/monitoring/librenms { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
@@ -8754,6 +8761,10 @@ with pkgs;
     python = python3;
     with-gce = true;
   };
+
+  google-cloud-bigtable-tool = callPackage ../tools/misc/google-cloud-bigtable-tool { };
+
+  google-cloud-sql-proxy = callPackage ../tools/misc/google-cloud-sql-proxy { };
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
@@ -17473,6 +17484,7 @@ with pkgs;
   yosys = callPackage ../development/compilers/yosys { };
   yosys-bluespec = callPackage ../development/compilers/yosys/plugins/bluespec.nix { };
   yosys-ghdl = callPackage ../development/compilers/yosys/plugins/ghdl.nix { };
+  yosys-synlig = callPackage ../development/compilers/yosys/plugins/synlig.nix { };
   yosys-symbiflow = callPackage ../development/compilers/yosys/plugins/symbiflow.nix { };
 
   z88dk = callPackage ../development/compilers/z88dk { };
@@ -19363,10 +19375,6 @@ with pkgs;
 
   guile-hall = callPackage ../development/tools/guile/guile-hall { };
 
-  guile-lint = callPackage ../development/tools/guile/guile-lint {
-    guile = guile_1_8;
-  };
-
   gwrap = callPackage ../development/tools/guile/g-wrap {
     guile = guile_2_2;
   };
@@ -20754,6 +20762,12 @@ with pkgs;
   capnproto-rust = callPackage ../development/tools/capnproto-rust { };
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
+
+  catboost = callPackage ../development/libraries/catboost {
+    # catboost requires clang 12+ for build
+    # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
+    inherit (llvmPackages_12) stdenv;
+  };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
 
@@ -23708,7 +23722,6 @@ with pkgs;
 
   libxkbcommon = libxkbcommon_8;
   libxkbcommon_8 = callPackage ../development/libraries/libxkbcommon { };
-  libxkbcommon_7 = callPackage ../development/libraries/libxkbcommon/libxkbcommon_7.nix { };
 
   libxklavier = callPackage ../development/libraries/libxklavier { };
 
@@ -25106,7 +25119,9 @@ with pkgs;
 
   speechd = callPackage ../development/libraries/speechd { };
 
-  speech-tools = callPackage ../development/libraries/speech-tools { };
+  speech-tools = callPackage ../development/libraries/speech-tools {
+    inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
+  };
 
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
@@ -30631,13 +30646,6 @@ with pkgs;
   bitscope = recurseIntoAttrs
     (callPackage ../applications/science/electronics/bitscope/packages.nix { });
 
-  bitwig-studio1 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio1.nix {
-    inherit (gnome) zenity;
-    libxkbcommon = libxkbcommon_7;
-  };
-  bitwig-studio2 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio2.nix {
-    inherit bitwig-studio1;
-  };
   bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
     libjpeg = libjpeg8;
@@ -31369,7 +31377,9 @@ with pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
-  espeak-ng = callPackage ../applications/audio/espeak-ng { };
+  espeak-ng = callPackage ../applications/audio/espeak-ng {
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio;
+  };
   espeak = res.espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
@@ -35196,6 +35206,8 @@ with pkgs;
 
   scantailor-advanced = libsForQt5.callPackage ../applications/graphics/scantailor/advanced.nix { };
 
+  scantailor-universal = libsForQt5.callPackage ../applications/graphics/scantailor/universal.nix { };
+
   sc-im = callPackage ../applications/misc/sc-im { };
 
   scite = callPackage ../applications/editors/scite { };
@@ -37516,10 +37528,6 @@ with pkgs;
   atanks = callPackage ../games/atanks { };
 
   azimuth = callPackage ../games/azimuth { };
-
-  ballAndPaddle = callPackage ../games/ball-and-paddle {
-    guile = guile_1_8;
-  };
 
   banner = callPackage ../games/banner { };
 
@@ -41668,8 +41676,6 @@ with pkgs;
   nitrokey-app2 = libsForQt5.callPackage ../tools/security/nitrokey-app2 { };
 
   fpm2 = callPackage ../tools/security/fpm2 { };
-
-  simplenote = callPackage ../applications/misc/simplenote { };
 
   hy = with python3Packages; toPythonApplication hy;
 
