@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
 , lxml
 , numpy
 , pytestCheckHook
@@ -12,6 +13,7 @@ in
 buildPythonPackage {
   pname = "mung";
   inherit version;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "OMR-Research";
@@ -20,7 +22,9 @@ buildPythonPackage {
     hash = "sha256-NSKaJkJRevTy5gh6/ik8Qe46bOPdznsmXPgh7Xz7vXQ=";
   };
 
-  format = "setuptools";
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     lxml
@@ -30,6 +34,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mung"
   ];
 
   meta = with lib; {
