@@ -27,13 +27,13 @@
 assert installExperimentalTools -> (!stdenv.hostPlatform.isMusl);
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-OjayMhLc3otqQjHsbLN8nm9D9yGOifBcrSLixjnJmvE=";
+    hash = "sha256-8YbDKw4jYEU6l3Nmqu3gsT9VX0lwYF/39hhcwzgTynY=";
   };
 
   strictDeps = true;
@@ -75,9 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     # MUSL: https://github.com/containers/composefs/issues/204
     substituteInPlace tests/Makefile \
       --replace " check-checksums" ""
-  '' + lib.optionalString (stdenv.hostPlatform.isMusl || enableValgrindCheck) ''
-    # seccomp sandbox breaks these tests
-    # MUSL: https://github.com/containers/composefs/issues/206
+  '' + lib.optionalString enableValgrindCheck ''
+    # valgrind is incompatible with seccomp
     substituteInPlace tests/test-checksums.sh \
       --replace "composefs-from-json" "composefs-from-json --no-sandbox"
   '';
