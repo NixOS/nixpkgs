@@ -1697,6 +1697,8 @@ self: super: with self; {
 
   bundlewrap = callPackage ../development/python-modules/bundlewrap { };
 
+  busypie = callPackage ../development/python-modules/busypie { };
+
   bx-py-utils = callPackage ../development/python-modules/bx-py-utils { };
 
   bx-python = callPackage ../development/python-modules/bx-python { };
