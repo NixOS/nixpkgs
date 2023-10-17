@@ -39,7 +39,7 @@ let
   inherit (lib.meta) getExe;
   inherit (lib.strings) optionalString;
 in
-backendStdenv.mkDerivation {
+backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Even though there's no actual buildPhase going on here, the derivations of the
   # redistributables are sensitive to the compiler flags provided to stdenv. The patchelf package
   # is sensitive to the compiler flags provided to stdenv, and we depend on it. As such, we are
@@ -164,7 +164,8 @@ backendStdenv.mkDerivation {
   outputSpecified = true;
 
   meta = {
-    inherit description platforms;
+    inherit platforms;
+    description = "${description}. By downloading and using the packages you accept the terms and conditions of the ${finalAttrs.meta.license.shortName}";
     license = lib.licenses.nvidiaCudaRedist // {
       url = "https://developer.download.nvidia.com/compute/cuda/redist/${releaseAttrs.license_path or "${pname}/LICENSE.txt"}";
     };
@@ -174,4 +175,4 @@ backendStdenv.mkDerivation {
     # causes Nix to prefer that output over the others if outputSpecified isn't set).
     outputsToInstall = [ "out" ];
   };
-}
+})
