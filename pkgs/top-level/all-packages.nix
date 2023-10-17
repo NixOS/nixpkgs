@@ -20923,8 +20923,6 @@ with pkgs;
 
   cosmocc = callPackage ../development/tools/cosmocc { };
 
-  cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
-
   python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
