@@ -1,19 +1,17 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, pkg-config
+
 , capstone
+, darwin
+, dbus
 , freetype
 , glfw
-, dbus
 , hicolor-icon-theme
+, pkg-config
 , tbb
-, darwin
 }:
 
-let
-  disableLTO = stdenv.cc.isClang && stdenv.isDarwin;  # workaround issue #19098
-in
 stdenv.mkDerivation rec {
   pname = "tracy";
   version = "0.9.1";
@@ -52,7 +50,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin "-Wno-format-security"
     ++ lib.optional stdenv.isLinux "-ltbb"
     ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
-    ++ lib.optional disableLTO "-fno-lto");
+    # workaround issue #19098
+    ++ lib.optional (stdenv.cc.isClang && stdenv.isDarwin) "-fno-lto");
 
   buildPhase = ''
     runHook preBuild
@@ -85,6 +84,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wolfpld/tracy";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ mpickering nagisa ];
+    mainProgram = "Tracy";
+    maintainers = with maintainers; [ mpickering nagisa paveloom ];
   };
 }
