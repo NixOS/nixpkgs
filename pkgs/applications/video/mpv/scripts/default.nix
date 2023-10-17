@@ -58,10 +58,6 @@ in
 
 lib.recurseIntoAttrs
   (lib.mapAttrs addTests ({
-    acompressor = callPackage ./acompressor.nix { inherit buildLua; };
-    autocrop = callPackage ./autocrop.nix { };
-    autodeint = callPackage ./autodeint.nix { };
-    autoload = callPackage ./autoload.nix { };
     chapterskip = callPackage ./chapterskip.nix { inherit buildLua; };
     convert = callPackage ./convert.nix { inherit buildLua; };
     cutter = callPackage ./cutter.nix { inherit buildLua; };
@@ -81,6 +77,7 @@ lib.recurseIntoAttrs
     vr-reversal = callPackage ./vr-reversal.nix { };
     webtorrent-mpv-hook = callPackage ./webtorrent-mpv-hook.nix { };
   }
+  // (callPackage ./mpv.nix      { inherit buildLua; })
   // (callPackage ./occivink.nix { inherit buildLua; })))
   // lib.optionalAttrs config.allowAliases {
   youtube-quality = throw "'youtube-quality' is no longer maintained, use 'quality-menu' instead"; # added 2023-07-14
