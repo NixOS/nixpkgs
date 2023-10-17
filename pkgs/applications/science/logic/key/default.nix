@@ -1,5 +1,5 @@
 { lib, stdenv
-, fetchurl
+, fetchFromGitHub
 , jdk
 , gradle
 , git
@@ -15,16 +15,17 @@
 let
   pname = "key";
   version = "2.12.1";
-  src = fetchurl {
-    url = "https://github.com/KeYProject/key/archive/refs/tags/KEY-${version}.tar.gz";
-    sha256 = "sha256-yH64KZITKJuVVh9yVDp4rjS4KQg7ZL0txRZ497MfYq0=";
+  src = fetchFromGitHub {
+    owner = "KeYProject";
+    repo = "key";
+    rev = "KEY-${version}";
+    sha256 = "sha256-DZaoCb7rYAp6kskYc1rJ16sErxlAH0cDPDqBItudMnA=";
   };
-  sourceRoot = "key-KEY-${version}";
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit version src sourceRoot;
+    inherit version src;
     nativeBuildInputs = [ gradle perl git ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
@@ -43,7 +44,7 @@ let
     outputHash = "sha256-DiwqRCrgJtNYGrOABAHbmSyZcRzrFMtAmS+d0DaD6f4=";
   };
 in stdenv.mkDerivation rec {
-  inherit pname version src sourceRoot;
+  inherit pname version src;
 
   nativeBuildInputs = [
     jdk
