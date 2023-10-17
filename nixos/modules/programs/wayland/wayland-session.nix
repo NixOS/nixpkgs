@@ -16,12 +16,5 @@ with lib;
     xwayland.enable = mkDefault xwayland;
   };
 
-  xdg.portal = {
-    enable = mkDefault true;
-
-    extraPortals = [
-      # For screen sharing
-      pkgs.xdg-desktop-portal-wlr
-    ];
-  };
+  xdg.portal.wlr.enable = mkDefault true;
 }

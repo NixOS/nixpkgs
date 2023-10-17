@@ -1,9 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
-}:
-with lib; let
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
   cfg = config.programs.hyprland;
 
   finalPortalPackage = cfg.portalPackage.override {
@@ -46,27 +45,23 @@ in
     enableNvidiaPatches = mkEnableOption (mdDoc "patching wlroots for better Nvidia support");
   };
 
-  config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.finalPackage ];
+  config = mkIf cfg.enable (mkMerge [
+    {
+      environment.systemPackages = [ cfg.finalPackage ];
 
-    fonts.enableDefaultPackages = mkDefault true;
-    hardware.opengl.enable = mkDefault true;
+      services.xserver.displayManager.sessionPackages = [ cfg.finalPackage ];
 
-    programs = {
-      dconf.enable = mkDefault true;
-      xwayland.enable = mkDefault cfg.xwayland.enable;
-    };
+      xdg.portal = {
+        extraPortals = [ finalPortalPackage ];
+        configPackages = mkDefault [ cfg.finalPackage ];
+      };
+    }
 
-    security.polkit.enable = true;
-
-    services.xserver.displayManager.sessionPackages = [ cfg.finalPackage ];
-
-    xdg.portal = {
-      enable = mkDefault true;
-      extraPortals = [ finalPortalPackage ];
-      configPackages = mkDefault [ cfg.finalPackage ];
-    };
-  };
+    (import ./wayland-session.nix {
+      inherit lib pkgs;
+      xwayland = cfg.xwayland.enable;
+    })
+  ]);
 
   imports = with lib; [
     (mkRemovedOptionModule
