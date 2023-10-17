@@ -10,15 +10,15 @@
 }:
 
 let
-  thunderbird-unwrapped = thunderbirdPackages.thunderbird-102;
+  thunderbird-unwrapped = thunderbirdPackages.thunderbird-115;
 
-  version = "102.15.1";
+  version = "115.3.2";
   majVer = lib.versions.major version;
 
   betterbird-patches = fetchFromGitHub {
     owner = "Betterbird";
     repo = "thunderbird-patches";
-    rev = "${version}-bb41";
+    rev = "${version}-bb15";
     postFetch = ''
       echo "Retrieving external patches"
 
@@ -36,7 +36,7 @@ let
       . ./external.sh
       rm external.sh
     '';
-    hash = "sha256-fP763ec4B8LbivzmYHzQ4j39QMxWrymqI8chXfF3KX8=";
+    hash = "sha256-6alAGEid7ipr01I52TB0xrlLroCIc03N2IagGJq8te8=";
   };
 in ((buildMozillaMach {
   pname = "betterbird";
@@ -49,7 +49,7 @@ in ((buildMozillaMach {
   src = fetchurl {
     # https://download.cdn.mozilla.net/pub/thunderbird/releases/
     url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-    hash = "sha256-og1Tu7PAHOqGs02jkHU291BCGuKDy1J+72v4Gsu4oDg=";
+    hash = "sha256-kn35avKqUdMix8VJrKJjSWViMLe/WnnxNasPpM7/cdM=";
   };
 
   extraPostPatch = thunderbird-unwrapped.extraPostPatch or "" + /* bash */ ''
@@ -57,8 +57,6 @@ in ((buildMozillaMach {
     patches=$(mktemp -d)
     for dir in branding bugs external features misc; do
       cp -r ${betterbird-patches}/${majVer}/$dir/*.patch $patches/
-      # files is not in series file and duplicated with external patch
-      [[ $dir == bugs ]] && rm $patches/1820504-optimise-grapheme-m-c.patch
     done
     cp ${betterbird-patches}/${majVer}/series* $patches/
     chmod -R +w $patches

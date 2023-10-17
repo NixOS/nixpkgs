@@ -3,6 +3,7 @@
 , buildPythonPackage
 , certifi
 , charset-normalizer
+, cvss
 , deepl
 , django
 , fetchFromGitHub
@@ -22,13 +23,14 @@
 , sqlparse
 , termcolor
 , toml
+, tomli-w
 , urllib3
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.4";
+  version = "0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -37,7 +39,7 @@ buildPythonPackage rec {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-3FRMdiSKWlEUmggtSDea9w386uwAn/VUzXiD1xRNuxQ=";
+    hash = "sha256-TN4ti860bMegxsCMhSxVQwiTLCB9nl+CJ+xDzJQcRuE=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +50,7 @@ buildPythonPackage rec {
     asgiref
     certifi
     charset-normalizer
+    cvss
     django
     idna
     markdown-it-py
@@ -59,6 +62,7 @@ buildPythonPackage rec {
     sqlparse
     termcolor
     toml
+    tomli-w
     urllib3
     xmltodict
   ];
@@ -66,7 +70,7 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     ghostwriter = [
       gql
-    ];
+    ] ++ gql.optional-dependencies.aiohttp;
     translate = [
       deepl
     ];
@@ -78,6 +82,7 @@ buildPythonPackage rec {
 
   preCheck = ''
     export HOME=$(mktemp -d)
+    export PATH="$PATH:$out/bin";
   '';
 
   pythonImportsCheck = [
@@ -87,6 +92,13 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests want to use pip install dependencies
     "reptor/plugins/importers/GhostWriter/tests/test_ghostwriter.py"
+  ];
+
+  disabledTests = [
+    # Tests need network access
+    "TestDummy"
+    "TestIntegration"
+
   ];
 
   meta = with lib; {

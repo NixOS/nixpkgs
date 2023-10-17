@@ -12,13 +12,10 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
+  auditable = false;
   cargoHash = "sha256-nFKk6T3S86lPxn/JCEid2Xd9c5zQPOMFcKTi6eM89uE=";
-
   cargoBuildFlags = [ "--package" "wasmtime-cli" "--package" "wasmtime-c-api" ];
-  cargoPatches = [
-    # this patch is necessary until cargo-auditable is bumped on the rust platform
-    ./patches/0001-Use-dep-dependency-due-to-cargo-auditable-limitation.patch
-  ];
 
   outputs = [ "out" "dev" ];
 
