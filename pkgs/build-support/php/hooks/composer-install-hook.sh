@@ -49,7 +49,7 @@ composerInstallConfigureHook() {
     fi
 
     echo "Validating consistency between composer.lock and ${composerRepository}/composer.lock"
-    if [[! @diff@ composer.lock "${composerRepository}/composer.lock"]]; then
+    if ! @cmp@ -s "composer.lock" "${composerRepository}/composer.lock"; then
         echo
         echo "ERROR: vendorHash is out of date"
         echo
