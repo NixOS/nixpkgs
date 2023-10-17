@@ -3022,6 +3022,17 @@
     };
     version = "1.28.1";
   };
+  rubocop-rails = {
+    dependencies = ["rubocop", "rack", "activesupport"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "fddf8336cdbd18094c5ac841903d0c3106b42d31d68945679b3009df56c1415d";
+      type = "gem";
+    };
+    version = "2.21.2";
+  };
   rubocop-performance = {
     dependencies = ["rubocop" "rubocop-ast"];
     groups = ["default"];
