@@ -625,6 +625,7 @@
   ./services/matrix/matrix-sliding-sync.nix
   ./services/matrix/synapse.nix
   ./services/misc/airsonic.nix
+  ./services/misc/amazon-ssm-agent.nix
   ./services/misc/ananicy.nix
   ./services/misc/ankisyncd.nix
   ./services/misc/apache-kafka.nix
@@ -741,7 +742,6 @@
   ./services/misc/spice-autorandr.nix
   ./services/misc/spice-vdagentd.nix
   ./services/misc/spice-webdavd.nix
-  ./services/misc/ssm-agent.nix
   ./services/misc/sssd.nix
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix

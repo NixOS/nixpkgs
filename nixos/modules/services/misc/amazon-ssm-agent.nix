@@ -2,7 +2,7 @@
 
 with lib;
 let
-  cfg = config.services.ssm-agent;
+  cfg = config.services.amazon-ssm-agent;
 
   # The SSM agent doesn't pay attention to our /etc/os-release yet, and the lsb-release tool
   # in nixpkgs doesn't seem to work properly on NixOS, so let's just fake the two fields SSM
@@ -16,19 +16,24 @@ let
     esac
   '';
 in {
-  options.services.ssm-agent = {
-    enable = mkEnableOption (lib.mdDoc "AWS SSM agent");
+  imports = [
+    (mkRenamedOptionModule [ "services" "ssm-agent" "enable" ] [ "services" "amazon-ssm-agent" "enable" ])
+    (mkRenamedOptionModule [ "services" "ssm-agent" "package" ] [ "services" "amazon-ssm-agent" "package" ])
+  ];
+
+  options.services.amazon-ssm-agent = {
+    enable = mkEnableOption (lib.mdDoc "Amazon SSM agent");
 
     package = mkOption {
       type = types.path;
-      description = lib.mdDoc "The SSM agent package to use";
-      default = pkgs.ssm-agent.override { overrideEtc = false; };
-      defaultText = literalExpression "pkgs.ssm-agent.override { overrideEtc = false; }";
+      description = lib.mdDoc "The Amazon SSM agent package to use";
+      default = pkgs.amazon-ssm-agent.override { overrideEtc = false; };
+      defaultText = literalExpression "pkgs.amazon-ssm-agent.override { overrideEtc = false; }";
     };
   };
 
   config = mkIf cfg.enable {
-    systemd.services.ssm-agent = {
+    systemd.services.amazon-ssm-agent = {
       inherit (cfg.package.meta) description;
       after    = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
