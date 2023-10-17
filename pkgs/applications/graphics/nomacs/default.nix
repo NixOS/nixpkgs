@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nomacs";
-  version = "3.17.2285";
+  version = "3.17.2287";
 
   src = fetchFromGitHub {
     owner = "nomacs";
     repo = "nomacs";
     rev = version;
-    hash = "sha256-/K7LRPwNy2PG7tIGD0tiKnEOPZ491lxFRlgf4xWYtxs=";
+    hash = "sha256-OwiMB6O4+WuAt87sRbD1Qby3U7igqgCgddiWs3a4j3k=";
   };
 
   setSourceRoot = ''
