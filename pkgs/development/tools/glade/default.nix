@@ -9,6 +9,7 @@
 , gtk3
 , glib
 , gjs
+, enableWebkit2gtk ? stdenv.isLinux
 , webkitgtk_4_1
 , gobject-introspection
 , wrapGAppsHook
@@ -49,13 +50,18 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     gjs
-    webkitgtk_4_1
     libxml2
     python3
     python3.pkgs.pygobject3
     gsettings-desktop-schemas
     gdk-pixbuf
     gnome.adwaita-icon-theme
+  ] ++ lib.optionals enableWebkit2gtk [
+    webkitgtk_4_1
+  ];
+
+  mesonFlags = [
+    (lib.mesonEnable "webkit2gtk" enableWebkit2gtk)
   ];
 
   postPatch = ''
@@ -74,6 +80,6 @@ stdenv.mkDerivation rec {
     description = "User interface designer for GTK applications";
     maintainers = teams.gnome.members;
     license = licenses.lgpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
