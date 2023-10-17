@@ -4,7 +4,7 @@
 , pytestCheckHook
 , pycparser
 , psutil
-, dotnet-sdk
+, dotnet-sdk-sts
 , buildDotnetModule
 , clr-loader
 , setuptools
@@ -38,7 +38,7 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     setuptools
-    dotnet-sdk
+    dotnet-sdk-sts
   ];
 
   propagatedBuildInputs = [
