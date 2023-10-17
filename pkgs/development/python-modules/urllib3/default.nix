@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "2.0.5";
+  version = "2.0.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-E6vzc4LqLOb7dE1NrWeDjuyFfJ9PVwCYkYBeC14SNZQ=";
+    hash = "sha256-sZ4ahdIGtW198dXmg99KdyUlKpZOOZNkjdD7WhwVdWQ=";
   };
 
   nativeBuildInputs = [
