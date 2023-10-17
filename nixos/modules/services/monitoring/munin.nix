@@ -83,14 +83,15 @@ let
   # Copy one Munin plugin into the Nix store with a specific name.
   # This is suitable for use with plugins going directly into /etc/munin/plugins,
   # i.e. munin.extraPlugins.
-  internOnePlugin = name: path:
+  internOnePlugin = { name, path }:
     "cp -a '${path}' '${name}'";
 
   # Copy an entire tree of Munin plugins into a single directory in the Nix
-  # store, with no renaming.
-  # This is suitable for use with munin-node-configure --suggest, i.e.
-  # munin.extraAutoPlugins.
-  internManyPlugins = name: path:
+  # store, with no renaming. The output is suitable for use with
+  # munin-node-configure --suggest, i.e. munin.extraAutoPlugins.
+  # Note that this flattens the input; this is intentional, as
+  # munin-node-configure won't recurse into subdirectories.
+  internManyPlugins = path:
     "find '${path}' -type f -perm /a+x -exec cp -a -t . '{}' '+'";
 
   # Use the appropriate intern-fn to copy the plugins into the store and patch
@@ -99,8 +100,7 @@ let
     pkgs.runCommand name {} ''
       mkdir -p "$out"
       cd "$out"
-      ${lib.concatStringsSep "\n"
-          (lib.attrsets.mapAttrsToList intern-fn paths)}
+      ${lib.concatStringsSep "\n" (map intern-fn paths)}
       chmod -R u+w .
       find . -type f -exec sed -E -i '
         s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
@@ -111,14 +111,11 @@ let
   # you can just refer to them by name rather than needing to include a copy
   # of munin-contrib in your nixos configuration.
   extraPluginDir = internAndFixPlugins "munin-extra-plugins.d"
-    internOnePlugin nodeCfg.extraPlugins;
+    internOnePlugin
+    (lib.attrsets.mapAttrsToList (k: v: { name = k; path = v; }) nodeCfg.extraPlugins);
 
   extraAutoPluginDir = internAndFixPlugins "munin-extra-auto-plugins.d"
-    internManyPlugins
-    (builtins.listToAttrs
-      (map
-        (path: { name = baseNameOf path; value = path; })
-        nodeCfg.extraAutoPlugins));
+    internManyPlugins nodeCfg.extraAutoPlugins;
 
   customStaticDir = pkgs.runCommand "munin-custom-static-data" {} ''
     cp -a "${pkgs.munin}/etc/opt/munin/static" "$out"
