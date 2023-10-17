@@ -4,19 +4,27 @@
 , jax
 , jaxlib
 , lib
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "augmax";
   version = "0.3.1";
-  format = "setuptools";
+  pyproject = true;
+
+  disbaled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "khdlr";
-    repo = pname;
+    repo = "augmax";
     rev = "refs/tags/v${version}";
     hash = "sha256-hDNNoE7KVaH3jrXZA4A8f0UoQJPl6KHA3XwMc3Ccohk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [ einops jax ];
 
@@ -29,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficiently Composable Data Augmentation on the GPU with Jax";
     homepage = "https://github.com/khdlr/augmax";
+    changelog = "https://github.com/khdlr/augmax/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ samuela ];
   };
