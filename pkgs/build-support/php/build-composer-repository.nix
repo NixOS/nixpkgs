@@ -74,6 +74,13 @@ let
         runHook postInstall
       '';
 
+      doInstallCheck = previousAttrs.doInstallCheck or false;
+      installCheckPhase = previousAttrs.installCheckPhase or ''
+        runHook preCheckInstall
+
+        runHook postCheckInstall
+      '';
+
       COMPOSER_CACHE_DIR = "/dev/null";
       COMPOSER_MIRROR_PATH_REPOS = "1";
       COMPOSER_HTACCESS_PROTECT = "0";

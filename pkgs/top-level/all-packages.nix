@@ -559,8 +559,6 @@ with pkgs;
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
 
-  cpu-x = callPackage ../applications/misc/cpu-x { };
-
   crackle = callPackage ../tools/networking/crackle { };
 
   crackql = callPackage ../tools/security/crackql { };
@@ -1845,8 +1843,6 @@ with pkgs;
   fabs = callPackage ../tools/backup/fabs { };
 
   fm = callPackage ../applications/file-managers/fm { };
-
-  fm-tune = callPackage ../applications/radio/fm-tune { };
 
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
@@ -3716,6 +3712,8 @@ with pkgs;
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
   delayarchitect = callPackage ../applications/audio/delayarchitect { };
+
+  dell-command-configure = callPackage ../tools/system/dell-command-configure { };
 
   deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -18877,8 +18875,6 @@ with pkgs;
 
   coder = callPackage ../development/tools/coder { };
 
-  codespelunker = callPackage ../development/tools/codespelunker { };
-
   compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
@@ -26417,8 +26413,6 @@ with pkgs;
   nats-server = callPackage ../servers/nats-server { };
 
   go-autoconfig = callPackage ../servers/go-autoconfig { };
-
-  go-camo = callPackage ../servers/http/go-camo { };
 
   go-cqhttp = callPackage ../servers/go-cqhttp { };
 
