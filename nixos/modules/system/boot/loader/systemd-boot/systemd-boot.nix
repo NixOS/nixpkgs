@@ -49,7 +49,7 @@ let
     '';
   };
 
-  checkedSystemdBootBuilder = pkgs.runCommand "systemd-boot" {
+  checkedSystemdBootBuilder = pkgs.runCommandLocal "systemd-boot" {
     nativeBuildInputs = [ pkgs.mypy ];
   } ''
     install -m755 ${systemdBootBuilder} $out
