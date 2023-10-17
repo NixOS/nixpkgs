@@ -10,6 +10,9 @@
 , werkzeug
 , pytestCheckHook
 , pythonOlder
+, flit-core
+, setuptools
+, blinker
   # used in passthru.tests
 , flask-limiter
 , flask-restful
@@ -19,19 +22,28 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.2.5";
+  version = "2.3.2";
+  format = "pyproject";
 
   src = fetchPypi {
     pname = "Flask";
     inherit version;
-    hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+    hash = "sha256-jC+avUep6N9/DD8JHOlJfQEdw7Me/89MhabitQ9BFO8=";
   };
+
+  disabled = pythonOlder "3.8";
+
+  nativeBuildInputs = [
+    flit-core
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     click
     itsdangerous
     jinja2
     werkzeug
+    blinker
   ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
   nativeCheckInputs = [
