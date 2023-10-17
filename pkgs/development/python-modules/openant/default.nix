@@ -1,14 +1,20 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , setuptools
 , pyusb
+, influxdb-client
+, pyserial
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "openant-unstable";
   version = "1.2.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Tigge";
@@ -28,11 +34,27 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyusb ];
 
+  passthru.optional-dependencies = {
+    serial = [
+      pyserial
+    ];
+    influx = [
+      influxdb-client
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "openant"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/Tigge/openant";
     description = "ANT and ANT-FS Python Library";
     license = licenses.mit;
-    platforms = platforms.unix;
   };
 
 }
