@@ -7612,6 +7612,13 @@
     githubId = 137306;
     name = "Michele Catalano";
   };
+  isabelroses = {
+    email = "isabel@isabelroses.com";
+    matrix = "@isabel@isabelroses.com";
+    github = "isabelroses";
+    githubId = 71222764;
+    name = "Isabel Roses";
+  };
   isaozler = {
     email = "isaozler@gmail.com";
     github = "isaozler";
