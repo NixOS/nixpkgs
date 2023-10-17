@@ -52,12 +52,12 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "A daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
     changelog = "https://github.com/languitar/autosuspend/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = with maintainers; [ bzizou anthonyroussel ];
     mainProgram = "autosuspend";
     platforms = platforms.linux;
   };
