@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.garage;
-  toml = pkgs.formats.toml {};
+  toml = pkgs.formats.toml { };
   configFile = toml.generate "garage.toml" cfg.settings;
 in
 {
@@ -19,8 +19,8 @@ in
     extraEnvironment = mkOption {
       type = types.attrsOf types.str;
       description = lib.mdDoc "Extra environment variables to pass to the Garage server.";
-      default = {};
-      example = { RUST_BACKTRACE="yes"; };
+      default = { };
+      example = { RUST_BACKTRACE = "yes"; };
     };
 
     environmentFile = mkOption {
@@ -30,7 +30,7 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum (["info" "debug" "trace"]);
+      type = types.enum ([ "info" "debug" "trace" ]);
       default = "info";
       example = "debug";
       description = lib.mdDoc "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server> for examples.";
