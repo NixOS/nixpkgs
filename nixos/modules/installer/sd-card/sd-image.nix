@@ -29,6 +29,22 @@ in
   imports = [
     (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ] "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID.")
     (mkRemovedOptionModule [ "sdImage" "bootSize" ] "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required.")
+    (mkRemovedOptionModule [ "sdImage" "populateFirmwareCommands" ] ''
+      Use sdImage.firmwarePartitionContents instead.
+
+      For example, if your sdImage.populateFirmwareCommands were:
+
+        '''
+          cp ''${pkgs.myBootLoader}/u-boot.bin firmware/
+        '''
+
+      You need to convert it to a derivation creating a directory:
+
+        pkgs.runCommand "myFirmware" {} '''
+          mkdir $out
+          cp ''${pkgs.myBootLoader}/u-boot.bin $out/
+        '''
+    '')
     ../../profiles/all-hardware.nix
   ];
 
@@ -106,12 +122,17 @@ in
       '';
     };
 
-    populateFirmwareCommands = mkOption {
-      example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
+    firmwarePartitionContents = mkOption {
+      type = types.nullOr types.path;
+      default = null;
       description = ''
-        Shell commands to populate the ./firmware directory.
-        All files in that directory are copied to the
-        /boot/firmware partition on the SD image.
+        Directory representing /boot/firmware partition on the SD image.
+      '';
+      example = literalExpression ''
+        pkgs.runCommand "myFirmware" {} '''
+          mkdir $out
+          cp ''${pkgs.myBootLoader}/u-boot.bin $out/
+        '''
       '';
     };
 
@@ -227,9 +248,17 @@ in
 
         mkfs.vfat --invariant -i ${config.sdImage.firmwarePartitionID} -n ${config.sdImage.firmwarePartitionName} firmware_part.img
 
-        # Populate the files intended for /boot/firmware
-        mkdir firmware
-        ${config.sdImage.populateFirmwareCommands}
+        ${if (!isNull config.sdImage.firmwarePartitionContents)
+          then
+          ''
+          # Copy the files intended for /boot/firmware
+          test -d ${config.sdImage.firmwarePartitionContents} \
+              || (echo "Output of sdImage.firmwarePartitionContents is not a directory"; exit 1)
+          cp -rv ${config.sdImage.firmwarePartitionContents} firmware
+          ''
+          else
+          "mkdir firmware"
+        }
 
         find firmware -exec touch --date=2000-01-01 {} +
         # Copy the populated /boot/firmware into the SD image
