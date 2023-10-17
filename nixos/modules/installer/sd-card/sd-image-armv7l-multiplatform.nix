@@ -34,7 +34,7 @@
   ];
 
   sdImage = {
-    populateFirmwareCommands =
+    firmwarePartitionContents =
       let
         configTxt = pkgs.writeText "config.txt" ''
           # Prevent the firmware from smashing the framebuffer setup done by the mainline kernel
@@ -52,11 +52,12 @@
           enable_uart=1
         '';
       in
-      ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $NIX_BUILD_TOP/firmware/)
-        cp ${pkgs.ubootRaspberryPi2}/u-boot.bin firmware/u-boot-rpi2.bin
-        cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin firmware/u-boot-rpi3.bin
-        cp ${configTxt} firmware/config.txt
+      pkgs.runCommand "firmwarePartitionContents" { } ''
+        mkdir $out
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $out)
+        cp ${pkgs.ubootRaspberryPi2}/u-boot.bin $out/u-boot-rpi2.bin
+        cp ${pkgs.ubootRaspberryPi3_32bit}/u-boot.bin $out/u-boot-rpi3.bin
+        cp ${configTxt} $out/config.txt
       '';
     populateRootCommands = ''
       mkdir -p ./files/boot

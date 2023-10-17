@@ -20,7 +20,7 @@
   boot.kernelPackages = pkgs.linuxKernel.packages.linux_rpi1;
 
   sdImage = {
-    populateFirmwareCommands =
+    firmwarePartitionContents =
       let
         configTxt = pkgs.writeText "config.txt" ''
           # u-boot refuses to start (gets stuck at rainbow polygon) without this,
@@ -38,11 +38,12 @@
           kernel=u-boot-rpi1.bin
         '';
       in
-      ''
-        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf *.dtb $NIX_BUILD_TOP/firmware/)
-        cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin firmware/u-boot-rpi0.bin
-        cp ${pkgs.ubootRaspberryPi}/u-boot.bin firmware/u-boot-rpi1.bin
-        cp ${configTxt} firmware/config.txt
+      pkgs.runCommand "firmwarePartitionContents" { } ''
+        mkdir $out
+        (cd ${pkgs.raspberrypifw}/share/raspberrypi/boot && cp bootcode.bin fixup*.dat start*.elf $out)
+        cp ${pkgs.ubootRaspberryPiZero}/u-boot.bin $out/u-boot-rpi0.bin
+        cp ${pkgs.ubootRaspberryPi}/u-boot.bin $out/u-boot-rpi1.bin
+        cp ${configTxt} $out/config.txt
       '';
     populateRootCommands = ''
       mkdir -p ./files/boot
