@@ -12478,6 +12478,8 @@ self: super: with self; {
 
   schema = callPackage ../development/python-modules/schema { };
 
+  schemainspect = callPackage ../development/python-modules/schemainspect { };
+
   schema-salad = callPackage ../development/python-modules/schema-salad { };
 
   schemdraw = callPackage ../development/python-modules/schemdraw { };
@@ -13261,6 +13263,8 @@ self: super: with self; {
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
   sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
+
+  sqlbag = callPackage ../development/python-modules/sqlbag { };
 
   sqlglot = callPackage ../development/python-modules/sqlglot { };
 
