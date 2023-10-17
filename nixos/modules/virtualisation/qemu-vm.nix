@@ -208,6 +208,10 @@ let
         idx=$((idx + 1))
       '')}
 
+      ${lib.optionalString (hostPkgs.stdenv.hostPlatform.isDarwin && !config.virtualisation.useNixStoreImage) ''
+        ulimit -n 12288
+      ''}
+
       # Start QEMU.
       exec ${qemu-common.qemuBinary qemu} \
           -name ${config.system.name} \
