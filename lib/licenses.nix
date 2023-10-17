@@ -883,6 +883,14 @@ in mkLicense lset) ({
     free = false;
   };
 
+  nvidiaCudaRedist = {
+    shortName = "CUDA EULA";
+    fullName = "CUDA Toolkit End User License Agreement (EULA)";
+    url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+    free = false;
+    redistributable = true;
+  };
+
   obsidian = {
     fullName = "Obsidian End User Agreement";
     url = "https://obsidian.md/eula";
