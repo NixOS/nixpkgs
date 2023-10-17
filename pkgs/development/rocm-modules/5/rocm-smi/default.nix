@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-smi";
-  version = "5.7.0";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocm_smi_lib";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-swCRO4PBMBJ6fO2bLq/xxFZIYw2IgiFB490wsU8Wm2o=";
+    hash = "sha256-NZR4jBgKVfpkRNQFPmav1yCZF872LkcrPBNNcBVTLDU=";
   };
 
   patches = [ ./cmake.patch ];
