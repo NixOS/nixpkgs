@@ -165,7 +165,9 @@ backendStdenv.mkDerivation {
 
   meta = {
     inherit description platforms;
-    license = lib.licenses.unfree;
+    license = lib.licenses.nvidiaCudaRedist // {
+      url = "https://developer.download.nvidia.com/compute/cuda/redist/${releaseAttrs.license_path or "${pname}/LICENSE.txt"}";
+    };
     maintainers = lib.teams.cuda.members;
     # Force the use of the default, fat output by default (even though `dev` exists, which
     # causes Nix to prefer that output over the others if outputSpecified isn't set).
