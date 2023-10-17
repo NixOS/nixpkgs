@@ -33601,7 +33601,7 @@ with pkgs;
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-17; };
+  mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-20; };
 
   megapixels = callPackage ../applications/graphics/megapixels { };
 
