@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "google-fonts";
-  version = "unstable-2022-11-14";
+  version = "unstable-2023-10-17";
 
   # Adobe Blank is split out in a separate output,
   # because it causes crashes with `libfontconfig`.
@@ -16,8 +16,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "83e116a566eda04a2469a11ee562cef1d7b33e4f";
-    sha256 = "sha256-sSabk+VWkoXj1Nzv9ufgIU/nkfKf4XkZU1SO+j+eSPA=";
+    rev = "89e363dd92c5fe6d8e4d150951f19a4e4aa65587";
+    sha256 = "sha256-M8tl86fRkblVj9DYKffnNwaCNQo1EGfH15YXtQmMlA8=";
   };
 
   postPatch = ''
@@ -29,7 +29,8 @@ stdenvNoCC.mkDerivation {
     rm -rv ofl/cabincondensed \
       ofl/signikanegative \
       ofl/signikanegativesc \
-      axisregistry/tests/data
+      axisregistry/tests/data \
+      ofl/notosansnko_todelist
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
