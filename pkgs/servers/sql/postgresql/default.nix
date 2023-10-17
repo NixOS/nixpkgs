@@ -17,7 +17,7 @@ let
       , version, hash, psqlSchema
 
       # for tests
-      , nixosTests, thisAttr
+      , testers, nixosTests, thisAttr
 
       # JIT
       , jitSupport ? false
@@ -34,10 +34,11 @@ let
     lz4Enabled = atLeast "14";
     zstdEnabled = atLeast "15";
 
-    stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
-  in stdenv'.mkDerivation rec {
     pname = "postgresql";
-    inherit version;
+
+    stdenv' = if jitSupport then llvmPackages.stdenv else stdenv;
+  in stdenv'.mkDerivation (finalAttrs: {
+    inherit pname version;
 
     src = fetchurl {
       url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
@@ -283,6 +284,7 @@ let
 
       tests = {
         postgresql = nixosTests.postgresql-wal-receiver.${thisAttr};
+        pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       } // lib.optionalAttrs jitSupport {
         postgresql-jit = nixosTests.postgresql-jit.${thisAttr};
       };
@@ -295,6 +297,7 @@ let
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
       maintainers = with maintainers; [ thoughtpolice danbst globin marsam ivan ma27 ];
+      pkgConfigModules = [ "libecpg" "libecpg_compat" "libpgtypes" "libpq" ];
       platforms   = platforms.unix;
 
       # JIT support doesn't work with cross-compilation. It is attempted to build LLVM-bytecode
@@ -309,7 +312,7 @@ let
       # a query, postgres would coredump with `Illegal instruction`.
       broken = jitSupport && (stdenv.hostPlatform != stdenv.buildPlatform);
     };
-  };
+  });
 
   postgresqlWithPackages = { postgresql, makeWrapper, buildEnv }: pkgs: f: buildEnv {
     name = "postgresql-and-plugins-${postgresql.version}";

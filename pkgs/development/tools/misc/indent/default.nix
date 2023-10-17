@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # avoid https://savannah.gnu.org/bugs/?64751
+  postPatch = ''
+    sed -E -i '/output\/else-comment-2-br(-ce)?.c/d' regression/TEST
+    sed -E -i 's/else-comment-2-br(-ce)?.c//g' regression/TEST
+  '';
+
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
 
   strictDeps = true;
