@@ -10,6 +10,7 @@
 , wrapQtAppsHook
 , makeDesktopItem
 , copyDesktopItems
+, libvlc
 }:
 
 mkDerivation rec {
@@ -30,11 +31,13 @@ mkDerivation rec {
   patches = [
     ./0001-fix-installation-paths.patch
     ./0002-disable-version-check.patch
+    ./0003-build-with-vlc.patch
   ];
 
   preConfigure = ''
     substituteInPlace AniLibria.pro \
-      --replace "\$\$PREFIX" '${placeholder "out"}'
+      --replace "\$\$PREFIX" '${placeholder "out"}' \
+      --replace '@VLC_PATH@' '${libvlc}/include'
   '';
 
   qtWrapperArgs = [
@@ -58,6 +61,7 @@ mkDerivation rec {
     qtquickcontrols2
     qtwebsockets
     qtmultimedia
+    libvlc
   ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-good
