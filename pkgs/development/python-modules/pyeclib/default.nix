@@ -1,8 +1,17 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, liberasurecode, six }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, liberasurecode
+, setuptools
+, six
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyeclib";
   version = "1.6.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
@@ -20,6 +29,10 @@ buildPythonPackage rec {
       --replace '"Darwin"' '"macOS"'
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   preBuild = let
     ldLibraryPathEnvName = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in ''
@@ -29,13 +42,14 @@ buildPythonPackage rec {
 
   buildInputs = [ liberasurecode ];
 
-  nativeCheckInputs = [ six ];
+  nativeCheckInputs = [ pytestCheckHook six ];
 
   pythonImportsCheck = [ "pyeclib" ];
 
   meta = with lib; {
     description = "This library provides a simple Python interface for implementing erasure codes.";
     homepage = "https://github.com/openstack/pyeclib";
+    changelog = "https://github.com/openstack/pyeclib/blob/${src.rev}/ChangeLog";
     license = licenses.bsd2;
     maintainers = teams.openstack.members;
   };
