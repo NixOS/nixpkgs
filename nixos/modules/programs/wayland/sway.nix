@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -27,13 +27,15 @@ let
   };
 
   defaultSwayPackage = pkgs.sway.override {
+    enableXWayland = cfg.xwayland.enable;
     extraSessionCommands = cfg.extraSessionCommands;
     extraOptions = cfg.extraOptions;
     withBaseWrapper = cfg.wrapperFeatures.base;
     withGtkWrapper = cfg.wrapperFeatures.gtk;
     isNixOS = true;
   };
-in {
+in
+{
   options.programs.sway = {
     enable = mkEnableOption (lib.mdDoc ''
       Sway, the i3-compatible tiling Wayland compositor. You can manually launch
@@ -54,6 +56,8 @@ in {
         module to install Sway.
       '';
     };
+
+    xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
 
     wrapperFeatures = mkOption {
       type = wrapperOptions;
@@ -120,41 +124,49 @@ in {
         for a list of useful software.
       '';
     };
-
   };
 
-  config = mkIf cfg.enable
-    (mkMerge [
-      {
-        assertions = [
-          {
-            assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
-            message = ''
-              The extraSessionCommands for Sway will not be run if
-              wrapperFeatures.base is disabled.
-            '';
-          }
-        ];
-        environment = {
-          systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
-          # Needed for the default wallpaper:
-          pathsToLink = optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
-          etc = {
-            "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
-              # Import the most important environment variables into the D-Bus and systemd
-              # user environments (e.g. required for screen sharing and Pinentry prompts):
-              exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
-            '';
-          } // optionalAttrs (cfg.package != null) {
-            "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
-          };
+  config = mkIf cfg.enable (mkMerge [
+    {
+      assertions = [
+        {
+          assertion = cfg.extraSessionCommands != "" -> cfg.wrapperFeatures.base;
+          message = ''
+            The extraSessionCommands for Sway will not be run if
+            wrapperFeatures.base is disabled.
+          '';
+        }
+      ];
+
+      environment = {
+        systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
+
+        # Needed for the default wallpaper:
+        pathsToLink = optionals (cfg.package != null) [ "/share/backgrounds/sway" ];
+
+        etc = {
+          "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+            # Import the most important environment variables into the D-Bus and systemd
+            # user environments (e.g. required for screen sharing and Pinentry prompts):
+            exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+          '';
+        } // optionalAttrs (cfg.package != null) {
+          "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
         };
-        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
-        xdg.portal.config.sway.default = mkDefault [ "wlr" "gtk" ];
-        # To make a Sway session available if a display manager like SDDM is enabled:
-        services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ]; }
-      (import ./wayland-session.nix { inherit lib pkgs; })
-    ]);
+      };
+
+      # To make a Sway session available if a display manager like SDDM is enabled:
+      services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
+
+      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
+      xdg.portal.config.sway.default = mkDefault [ "wlr" "gtk" ];
+    }
+
+    (import ./wayland-session.nix {
+      inherit lib pkgs;
+      xwayland = cfg.xwayland.enable;
+    })
+  ]);
 
   meta.maintainers = with lib.maintainers; [ primeos colemickens ];
 }

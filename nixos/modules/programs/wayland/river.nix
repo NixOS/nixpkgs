@@ -1,18 +1,19 @@
-{
-  config,
-  pkgs,
-  lib,
-  ...
-}:
-with lib; let
+{ config, lib, pkgs, ... }:
+
+with lib;
+
+let
   cfg = config.programs.river;
-in {
+in
+{
   options.programs.river = {
     enable = mkEnableOption (lib.mdDoc "river, a dynamic tiling Wayland compositor");
 
     package = mkOption {
       type = with types; nullOr package;
-      default = pkgs.river;
+      default = pkgs.river.override {
+        xwaylandSupport = cfg.xwayland.enable;
+      };
       defaultText = literalExpression "pkgs.river";
       description = lib.mdDoc ''
         River package to use.
@@ -20,6 +21,8 @@ in {
         This should be done if you want to use the Home Manager River module to install River.
       '';
     };
+
+    xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
 
     extraPackages = mkOption {
       type = with types; listOf package;
@@ -44,16 +47,19 @@ in {
     };
   };
 
-  config =
-    mkIf cfg.enable (mkMerge [
-      {
-        environment.systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
+  config = mkIf cfg.enable (mkMerge [
+    {
+      environment.systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
 
-        # To make a river session available if a display manager like SDDM is enabled:
-        services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
-      }
-      (import ./wayland-session.nix { inherit lib pkgs; })
-    ]);
+      # To make a river session available if a display manager like SDDM is enabled:
+      services.xserver.displayManager.sessionPackages = optionals (cfg.package != null) [ cfg.package ];
+    }
+
+    (import ./wayland-session.nix {
+      inherit lib pkgs;
+      xwayland = cfg.xwayland.enable;
+    })
+  ]);
 
   meta.maintainers = with lib.maintainers; [ GaetanLepage ];
 }
