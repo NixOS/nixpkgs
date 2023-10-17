@@ -17,13 +17,13 @@
 }:
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.309.0";
+  version = "2.310.2";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-P70kNcd5TjWsHj16y11SEYROGG+JUkpwE9eVpHzvTes=";
+    hash = "sha256-cOHA4VjccIJmCgCxRrBFzBFnh4SGQ3LpcTvtGuogHQU=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
