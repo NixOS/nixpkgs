@@ -205,18 +205,6 @@ in {
        then latest
        else testing;
 
-    linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
-      # Pinned on the last version which Kent's commits can be cleany rebased up.
-      kernel = callPackage ../os-specific/linux/kernel/mainline.nix {
-        branch = "6.4";
-      };
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.dell_xps_regression
-      ];
-    };
-
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
@@ -626,7 +614,6 @@ in {
 
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
-    linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
