@@ -25,10 +25,10 @@
 }:
 
 let
-  defaultVersion = "2023.07.02";
+  defaultVersion = "2023.10";
   defaultSrc = fetchurl {
     url = "https://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    hash = "sha256-a2pIWBwUq7D5W9h8GvTXQJIkBte4AQAqn5Ryf93gIdU=";
+    hash = "sha256-4A5sbwFOBGEBc50I0G8yiBHOvPWuEBNI9AnLvVXOaQA=";
   };
   buildUBoot = lib.makeOverridable ({
     version ? null
@@ -48,7 +48,8 @@ let
     src = if src == null then defaultSrc else src;
 
     patches = [
-      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+      # NixOS and 32-bit specific
+      ./0001-rpi.env-allow-for-bigger-kernels.patch
     ] ++ extraPatches;
 
     postPatch = ''
@@ -60,7 +61,6 @@ let
       ncurses # tools/kwboot
       bc
       bison
-      dtc
       flex
       installShellFiles
       openssl
@@ -85,7 +85,7 @@ let
     enableParallelBuilding = true;
 
     makeFlags = [
-      "DTC=dtc"
+      "DTC=${dtc}/bin/dtc"
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     ] ++ extraMakeFlags;
 
