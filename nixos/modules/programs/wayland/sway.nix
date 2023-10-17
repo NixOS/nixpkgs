@@ -14,23 +14,31 @@ in
       <https://github.com/swaywm/sway/wiki> and
       "man 5 sway" for more information'';
 
-    package = mkOption {
+    package = mkPackageOption pkgs "sway" {
+      nullable = true;
+      extraDescription = ''
+        Set to `null` to not add any Sway package to your path, for example
+        if you want to use the Home Manager Sway module to install Sway.
+      '';
+    };
+
+    finalPackage = mkOption {
       type = with types; nullOr package;
-      default = pkgs.sway.override {
-        enableXWayland = cfg.xwayland.enable;
-        extraSessionCommands = cfg.extraSessionCommands;
-        extraOptions = cfg.extraOptions;
-        withBaseWrapper = cfg.wrapperFeatures.base;
-        withGtkWrapper = cfg.wrapperFeatures.gtk;
-        isNixOS = true;
-      };
-      defaultText = literalExpression "pkgs.sway";
+      default =
+        if cfg.package == null then null
+        else cfg.package.override {
+          enableXWayland = cfg.xwayland.enable;
+          extraSessionCommands = cfg.extraSessionCommands;
+          extraOptions = cfg.extraOptions;
+          withBaseWrapper = cfg.wrapperFeatures.base;
+          withGtkWrapper = cfg.wrapperFeatures.gtk;
+          isNixOS = true;
+        };
+      defaultText = literalMD ''
+        `programs.sway.package` with applied configuration
+      '';
       description = ''
-        Sway package to use. Will override the options
-        'wrapperFeatures', 'extraSessionCommands', and 'extraOptions'.
-        Set to `null` to not add any Sway package to your
-        path. This should be done if you want to use the Home Manager Sway
-        module to install Sway.
+        The Sway package after applying configuration.
       '';
     };
 
@@ -108,10 +116,10 @@ in
       ];
 
       environment = {
-        systemPackages = optional (cfg.package != null) cfg.package ++ cfg.extraPackages;
+        systemPackages = optional (cfg.finalPackage != null) cfg.finalPackage ++ cfg.extraPackages;
 
         # Needed for the default wallpaper:
-        pathsToLink = optional (cfg.package != null) "/share/backgrounds/sway";
+        pathsToLink = optional (cfg.finalPackage != null) "/share/backgrounds/sway";
 
         etc = {
           "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
@@ -119,13 +127,13 @@ in
             # user environments (e.g. required for screen sharing and Pinentry prompts):
             exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
           '';
-        } // optionalAttrs (cfg.package != null) {
-          "sway/config".source = mkOptionDefault "${cfg.package}/etc/sway/config";
+        } // optionalAttrs (cfg.finalPackage != null) {
+          "sway/config".source = mkOptionDefault "${cfg.finalPackage}/etc/sway/config";
         };
       };
 
       # To make a Sway session available if a display manager like SDDM is enabled:
-      services.xserver.displayManager.sessionPackages = optional (cfg.package != null) cfg.package;
+      services.xserver.displayManager.sessionPackages = optional (cfg.finalPackage != null) cfg.finalPackage;
 
       # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050913
       xdg.portal.config.sway.default = mkDefault [ "wlr" "gtk" ];

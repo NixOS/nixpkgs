@@ -17,7 +17,6 @@ in
 
     finalPackage = mkOption {
       type = types.package;
-      readOnly = true;
       default = cfg.package.override {
         enableXWayland = cfg.xwayland.enable;
         enableNvidiaPatches = cfg.enableNvidiaPatches;
@@ -34,7 +33,6 @@ in
 
     finalPortalPackage = mkOption {
       type = types.package;
-      readOnly = true;
       default = cfg.portalPackage.override {
         hyprland = cfg.finalPackage;
       };
