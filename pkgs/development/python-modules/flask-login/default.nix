@@ -2,7 +2,7 @@
 , asgiref
 , blinker
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , flask
 , pytestCheckHook
 , pythonAtLeast
@@ -13,15 +13,18 @@
 
 buildPythonPackage rec {
   pname = "flask-login";
-  version = "0.6.2";
+  version = "unstable-2023-10-17";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    pname = "Flask-Login";
-    inherit version;
-    hash = "sha256-wKe6qf3ESM3T3W8JOd9y7sUXey96vmy4L8k00pyqycM=";
+  src = fetchFromGitHub {
+    owner = "maxcountryman";
+    repo = pname;
+    # no new release since Jul 2022
+    # newer release needed for compatibility with newer flask
+    rev = "2204b4eee7b215977ba5a1bf85e2061f7fa65e20";
+    hash = "sha256-7QVPrD5AF1jb5czOh8FxAE778eyLDVhKIH5Mg77kiR4=";
   };
 
   propagatedBuildInputs = [
