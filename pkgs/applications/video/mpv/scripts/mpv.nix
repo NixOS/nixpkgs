@@ -11,7 +11,7 @@ let mkBuiltin = name: args:
 
     meta = with lib; {
       inherit (mpv-unwrapped.meta) license;
-      homepage = "https://github.com/mpv-player/mpv/blob/master/${scriptPath}";
+      homepage = "https://github.com/mpv-player/mpv/blob/v${version}/${scriptPath}";
     };
   } args);
 
