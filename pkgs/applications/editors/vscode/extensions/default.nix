@@ -3478,6 +3478,22 @@ let
         };
       };
 
+      tsandall.opa = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "opa";
+          publisher = "tsandall";
+          version = "0.12.2";
+          sha256 = "sha256-/eJzDhnQyvC9OBr4M03wLIWPiBeVtvX7ztSnO+YoCZM=";
+        };
+        meta = {
+          changelog = "https://github.com/open-policy-agent/vscode-opa/blob/master/CHANGELOG.md";
+          description = "An extension for VS Code which provides support for OPA";
+          homepage = "https://github.com/open-policy-agent/vscode-opa";
+          license = lib.licenses.asl20;
+          maintainers = [ lib.maintainers.msanft ];
+        };
+      };
+
       tuttieee.emacs-mcx = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "emacs-mcx";
