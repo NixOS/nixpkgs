@@ -4656,6 +4656,22 @@ let
         };
       };
 
+      zainchen.json = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "json";
+          publisher = "ZainChen";
+          version = "2.0.2";
+          sha256 = "sha256-nC3Q8KuCtn/jg1j/NaAxWGvnKe/ykrPm2PUjfsJz8aI=";
+        };
+        meta = {
+          description = "This extension adds json support for Visual Studio Code";
+          changelog = "https://marketplace.visualstudio.com/items/ZainChen.json/changelog";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ZainChen.json";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.rhoriguchi ];
+        };
+      };
+
       zhuangtongfa.material-theme = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "material-theme";
