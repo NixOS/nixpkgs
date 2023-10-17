@@ -5,12 +5,13 @@
 , pillow
 , pytestCheckHook
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pilkit";
   version = "3.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-NmD9PFCkz3lz4AnGoQUpkt35q0zvDVm+kx7lVDFBcHk=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pillow
@@ -44,7 +49,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A collection of utilities and processors for the Python Imaging Library";
     homepage = "https://github.com/matthewwithanm/pilkit/";
-    license = licenses.bsd0;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ domenkozar ];
   };
 }
