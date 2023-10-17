@@ -1846,8 +1846,6 @@ with pkgs;
 
   fm = callPackage ../applications/file-managers/fm { };
 
-  fm-tune = callPackage ../applications/radio/fm-tune { };
-
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
   hblock = callPackage ../tools/networking/hblock { };
