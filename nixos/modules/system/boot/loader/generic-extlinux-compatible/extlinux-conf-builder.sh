@@ -140,7 +140,7 @@ EOF
 
 addEntry $default default >> $tmpFile
 
-if [ "$numGenerations" -gt 0 ]; then
+if [ "$numGenerations" -gt 0 ] && test -d /nix/var/nix/profiles; then
     # Add up to $numGenerations generations of the system profile to the menu,
     # in reverse (most recent to least recent) order.
     for generation in $(
