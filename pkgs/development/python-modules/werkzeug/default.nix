@@ -9,22 +9,28 @@
 , pytest-xprocess
 , pytestCheckHook
 , markupsafe
-# for passthru.tests
-, moto, sentry-sdk
+, setuptools
+  # for passthru.tests
+, moto
+, sentry-sdk
 }:
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.2.3";
-  format = "setuptools";
+  version = "2.3.3";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "Werkzeug";
     inherit version;
-    hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+    hash = "sha256-qYfK8Qku3HUj7bE57bIMcFccSo1e7QLgtUe0c5F00JE=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     markupsafe
