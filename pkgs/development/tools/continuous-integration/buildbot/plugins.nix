@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fetchurl, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg, unzip, zip }:
+{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, fetchurl, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg, prometheus-client, unzip, zip }:
 {
   # this is exposed for potential plugins to use and for nix-update
   inherit buildbot-pkg;
@@ -176,4 +176,27 @@
     };
   };
 
+  prometheus = buildPythonPackage {
+    pname = "buildbot-prometheus";
+    version = "unstable-2022-03-06";
+
+    src = fetchFromGitHub {
+      owner = "claws";
+      repo = "buildbot-prometheus";
+      rev = "0c81a89bbe34628362652fbea416610e215b5d1e";
+      hash = "sha256-bz2Nv2RZ44i1VoPvQ/XjGMfTT6TmW6jhEVwItPk23SM=";
+    };
+
+    propagatedBuildInputs = [ prometheus-client ];
+
+    # tests fail
+    doCheck = false;
+
+    meta = with lib; {
+      homepage = "https://github.com/claws/buildbot-prometheus";
+      description = "Buildbot Prometheus Exporter";
+      maintainers = with maintainers; [ zowoq ];
+      license = licenses.mit;
+    };
+  };
 }
