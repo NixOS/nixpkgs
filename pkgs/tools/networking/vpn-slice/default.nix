@@ -20,13 +20,16 @@ buildPythonApplication rec {
     sha256 = "sha256-T6VULLNRLWO4OcAsuTmhty6H4EhinyxQSg0dfv2DUJs=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ]
-    ++ lib.optionals stdenv.isLinux [
-      iproute2
-      iptables
-    ] ++ lib.optionals stdenv.isDarwin [
-      unixtools.route
-    ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace vpn_slice/mac.py \
+      --replace "'/sbin/route'" "'${unixtools.route}/bin/route'"
+  '' + lib.optionalString stdenv.isLinux ''
+    substituteInPlace vpn_slice/linux.py \
+      --replace "'/sbin/ip'" "'${iproute2}/bin/ip'" \
+      --replace "'/sbin/iptables'" "'${iptables}/bin/iptables'"
+  '';
+
+  propagatedBuildInputs = with python3Packages; [ setproctitle dnspython ];
 
   doCheck = false;
 
