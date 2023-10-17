@@ -54,9 +54,9 @@ let
 
   };
 
-  selectPartitionTableLayout = { useEFIBoot, useDefaultFilesystems }:
+  selectPartitionTableLayout = { useEFIBoot, useDefaultFilesystems, useXbootldr }:
   if useDefaultFilesystems then
-    if useEFIBoot then "efi" else "legacy"
+    if useEFIBoot then (if useXbootldr then "efixbootldr" else "efi") else "legacy"
   else "none";
 
   driveCmdline = idx: { file, driveExtraOpts, deviceExtraOpts, ... }:
@@ -264,6 +264,8 @@ let
   # Use well-defined and persistent filesystem labels to identify block devices.
   rootFilesystemLabel = "nixos";
   espFilesystemLabel = "ESP"; # Hard-coded by make-disk-image.nix
+  xbootldrFilesystemLabel = "BOOT"; # Hard-coded by make-disk-image.nix
+  bootLabel = if cfg.useXbootldr then xbootldrFilesystemLabel else espFilesystemLabel;
   nixStoreFilesystemLabel = "nix-store";
 
   # The root drive is a raw disk which does not necessarily contain a
@@ -282,7 +284,7 @@ let
     format = "qcow2";
     onlyNixStore = false;
     label = rootFilesystemLabel;
-    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
+    partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; inherit (cfg) useXbootldr; };
     # Bootloader should be installed on the system image only if we are booting through bootloaders.
     # Though, if a user is not using our default filesystems, it is possible to not have any ESP
     # or a strange partition table that's incompatible with GRUB configuration.
@@ -392,8 +394,8 @@ in
     virtualisation.bootPartition =
       mkOption {
         type = types.nullOr types.path;
-        default = if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null;
-        defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null'';
+        default = if cfg.useEFIBoot then "/dev/disk/by-label/${bootLabel}" else null;
+        defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${bootLabel}" else null'';
         example = "/dev/disk/by-label/esp";
         description =
           lib.mdDoc ''
@@ -937,6 +939,16 @@ in
           '';
       };
 
+    virtualisation.useXbootldr =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          lib.mdDoc ''
+            Enable the XBOOTLDR partition for placing boot files instead of the ESP.
+          '';
+      };
+
     virtualisation.useSecureBoot =
       mkOption {
         type = types.bool;
@@ -1241,6 +1253,13 @@ in
           noCheck = true; # fsck fails on a r/o filesystem
         };
       }
+      (lib.optionalAttrs cfg.useXbootldr {
+        "/efi" = {
+          device = "/dev/disk/by-label/${espFilesystemLabel}";
+          fsType = "vfat";
+          noCheck = true; # fsck fails on a r/o filesystem
+        };
+      })
     ];
 
     boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
