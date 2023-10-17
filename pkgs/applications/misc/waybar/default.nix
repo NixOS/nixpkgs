@@ -35,6 +35,7 @@
 , sndio
 , spdlog
 , sway
+, systemd
 , udev
 , upower
 , wayland
@@ -72,6 +73,7 @@ let
     hash = "sha256-b/XfqLh8PnW018sGVKRRlFvBpo2Ru1R2lUeTR7pugBo=";
   };
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
   version = "0.9.22";
@@ -114,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsigcxx
     libxkbcommon
     spdlog
+    systemd
     wayland
     wlroots
   ]
@@ -150,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dbusmenu-gtk" = traySupport;
     "gtk-layer-shell" = true;
     "jack" = jackSupport;
+    "libevdev" = evdevSupport;
     "libinput" = inputSupport;
     "libnl" = nlSupport;
     "libudev" = udevSupport;
@@ -159,11 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
     "pulseaudio" = pulseSupport;
     "rfkill" = rfkillSupport;
     "sndio" = sndioSupport;
-    "systemd" = false;
+    "systemd" = true;
     "tests" = runTests;
     "upower_glib" = upowerSupport;
     "wireplumber" = wireplumberSupport;
   }) ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
+
+  PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
 
   preFixup = lib.optionalString withMediaPlayer ''
     cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
