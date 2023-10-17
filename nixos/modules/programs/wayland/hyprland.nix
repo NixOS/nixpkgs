@@ -4,25 +4,16 @@ with lib;
 
 let
   cfg = config.programs.hyprland;
-
-  finalPortalPackage = cfg.portalPackage.override {
-    hyprland = cfg.finalPackage;
-  };
 in
 {
   options.programs.hyprland = {
-    enable = mkEnableOption null // {
-      description = mdDoc ''
-        Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
+    enable = mkEnableOption ''
+      Hyprland, the dynamic tiling Wayland compositor that doesn't sacrifice on its looks.
+      You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
+      A configuration file will be generated in {file}`~/.config/hypr/hyprland.conf`.
+      See <https://wiki.hyprland.org> for more information'';
 
-        You can manually launch Hyprland by executing {command}`Hyprland` on a TTY.
-
-        A configuration file will be generated in {file}`~/.config/hypr/hyprland.conf`.
-        See <https://wiki.hyprland.org> for more information.
-      '';
-    };
-
-    package = mkPackageOptionMD pkgs "hyprland" { };
+    package = mkPackageOption pkgs "hyprland" { };
 
     finalPackage = mkOption {
       type = types.package;
@@ -31,28 +22,44 @@ in
         enableXWayland = cfg.xwayland.enable;
         enableNvidiaPatches = cfg.enableNvidiaPatches;
       };
-      defaultText = literalExpression
-        "`programs.hyprland.package` with applied configuration";
-      description = mdDoc ''
+      defaultText = literalMD ''
+        `programs.hyprland.package` with applied configuration
+      '';
+      description = ''
         The Hyprland package after applying configuration.
       '';
     };
 
-    portalPackage = mkPackageOptionMD pkgs "xdg-desktop-portal-hyprland" { };
+    portalPackage = mkPackageOption pkgs "xdg-desktop-portal-hyprland" { };
 
-    xwayland.enable = mkEnableOption (mdDoc "XWayland") // { default = true; };
+    finalPortalPackage = mkOption {
+      type = types.package;
+      readOnly = true;
+      default = cfg.portalPackage.override {
+        hyprland = cfg.finalPackage;
+      };
+      defaultText = literalMD ''
+        `programs.hyprland.portalPackage` with applied configuration
+      '';
+      description = ''
+        The Hyprland Portal package after applying configuration.
+      '';
+    };
 
-    enableNvidiaPatches = mkEnableOption (mdDoc "patching wlroots for better Nvidia support");
+    xwayland.enable = mkEnableOption "XWayland" // { default = true; };
+
+    enableNvidiaPatches = mkEnableOption "patching wlroots for better Nvidia support";
   };
 
   config = mkIf cfg.enable (mkMerge [
     {
       environment.systemPackages = [ cfg.finalPackage ];
 
+      # To make a Hyprland session available if a display manager like SDDM is enabled:
       services.xserver.displayManager.sessionPackages = [ cfg.finalPackage ];
 
       xdg.portal = {
-        extraPortals = [ finalPortalPackage ];
+        extraPortals = [ cfg.finalPortalPackage ];
         configPackages = mkDefault [ cfg.finalPackage ];
       };
     }
@@ -63,7 +70,7 @@ in
     })
   ]);
 
-  imports = with lib; [
+  imports = [
     (mkRemovedOptionModule
       [ "programs" "hyprland" "xwayland" "hidpi" ]
       "XWayland patches are deprecated. Refer to https://wiki.hyprland.org/Configuring/XWayland"
