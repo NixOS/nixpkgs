@@ -37,11 +37,20 @@ python310Packages.buildPythonPackage rec {
   postPatch = ''
     substituteInPlace auto_cpufreq/core.py --replace '/opt/auto-cpufreq/override.pickle' /var/run/override.pickle
     substituteInPlace scripts/org.auto-cpufreq.pkexec.policy --replace "/opt/auto-cpufreq/venv/bin/auto-cpufreq" $out/bin/auto-cpufreq
+
+    substituteInPlace auto_cpufreq/gui/app.py auto_cpufreq/gui/objects.py --replace "/usr/local/share/auto-cpufreq/images/icon.png" $out/share/pixmaps/auto-cpufreq.png
+    substituteInPlace auto_cpufreq/gui/app.py --replace "/usr/local/share/auto-cpufreq/scripts/style.css" $out/share/auto-cpufreq/scripts/style.css
+
     '';
 
   postInstall = ''
     # copy script manually
     cp ${src}/scripts/cpufreqctl.sh $out/bin/cpufreqctl.auto-cpufreq
+
+    # copy css file
+    mkdir -p $out/share/auto-cpufreq/scripts
+    cp scripts/style.css $out/share/auto-cpufreq/scripts/style.css
+
 
     # systemd service
     mkdir -p $out/lib/systemd/system
