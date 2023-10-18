@@ -1116,6 +1116,8 @@ with pkgs;
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
 
+  fetchFromBittorrent = callPackage ../build-support/fetchbittorrent { };
+
   fetchsvn = if stdenv.buildPlatform != stdenv.hostPlatform
     # hack around splicing being crummy with things that (correctly) don't eval.
     then buildPackages.fetchsvn
@@ -8454,8 +8456,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   })
     garage
-      garage_0_7 garage_0_8
-      garage_0_7_3 garage_0_8_4;
+      garage_0_8 garage_0_9
+      garage_0_8_4 garage_0_9_0;
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
@@ -35945,6 +35947,7 @@ with pkgs;
   };
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
+  transmission_noSystemd = transmission.override { enableSystemd = false; };
 
   # Needs macOS >= 10.14.6
   transmission_4 = darwin.apple_sdk_11_0.callPackage ../applications/networking/p2p/transmission/4.nix {
