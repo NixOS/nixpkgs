@@ -5022,6 +5022,10 @@ self: super: with self; {
 
   hopcroftkarp = callPackage ../development/python-modules/hopcroftkarp { };
 
+  horizon-eda = callPackage ../development/python-modules/horizon-eda {
+    inherit (pkgs) horizon-eda mesa;
+  };
+
   howdoi = callPackage ../development/python-modules/howdoi { };
 
   hpack = callPackage ../development/python-modules/hpack { };
