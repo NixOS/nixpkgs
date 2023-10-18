@@ -14,6 +14,16 @@
 # See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.
 , dynamic ? true
 }:
+
+assert
+  lib.asserts.assertEachOneOf
+    "supportedGhcVersions"
+    supportedGhcVersions
+    (lib.pipe haskell.packages [
+      lib.attrNames
+      (lib.filter (lib.hasPrefix "ghc"))
+      (map (lib.removePrefix "ghc"))
+    ]);
 #
 # The recommended way to override this package is
 #
