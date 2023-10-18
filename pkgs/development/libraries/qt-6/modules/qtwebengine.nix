@@ -166,7 +166,7 @@ qtModule {
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
   ''
   + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace configure.cmake \
+    substituteInPlace configure.cmake src/gn/CMakeLists.txt \
       --replace "AppleClang" "Clang"
     substituteInPlace cmake/Functions.cmake \
       --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
