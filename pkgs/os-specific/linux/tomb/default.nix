@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
     license = licenses.gpl3;
     mainProgram = "tomb";
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg anthonyroussel ];
     platforms = platforms.linux;
   };
 }
