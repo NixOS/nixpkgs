@@ -97,9 +97,15 @@
   # See doc/builders/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
   runNixOSTest =
-    let nixos = import ../../../nixos/lib {
-      inherit lib;
-    };
+    let
+      toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
+      guestPkgs =
+        if (!pkgs.stdenv.hostPlatform.isDarwin)
+          then pkgs
+          else import pkgs.path { system = toGuest pkgs.system; };
+      nixos = import ../../../nixos/lib {
+        inherit lib;
+      };
     in testModule:
         nixos.runTest {
           _file = "pkgs.runNixOSTest implementation";
@@ -107,7 +113,7 @@
             (lib.setDefaultModuleLocation "the argument that was passed to pkgs.runNixOSTest" testModule)
           ];
           hostPkgs = pkgs;
-          node.pkgs = pkgs;
+          node.pkgs = guestPkgs;
         };
 
   # See doc/builders/testers.chapter.md or
