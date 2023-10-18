@@ -21,7 +21,7 @@ in lib.recurseIntoAttrs
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
     sponsorblock = callPackage ./sponsorblock.nix { };
     thumbfast = callPackage ./thumbfast.nix { };
-    thumbnail = callPackage ./thumbnail.nix { };
+    thumbnail = callPackage ./thumbnail.nix { inherit buildLua; };
     uosc = callPackage ./uosc.nix { };
     visualizer = callPackage ./visualizer.nix { };
     vr-reversal = callPackage ./vr-reversal.nix { };
