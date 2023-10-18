@@ -18506,7 +18506,6 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron-bin
     electron_10-bin
     electron_11-bin
     electron_12-bin
@@ -18525,6 +18524,8 @@ with pkgs;
     electron_25-bin
     electron_26-bin
     electron_27-bin;
+
+  electron-bin = electron_27-bin;
 
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
