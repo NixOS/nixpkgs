@@ -28837,8 +28837,8 @@ with pkgs;
     withUserDb = false;
     withUkify = false;
     withBootloader = false;
+    onlyLibs = true;
   };
-
 
   udev =
     if (with stdenv.hostPlatform; isLinux && isStatic) then libudev-zero
