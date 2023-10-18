@@ -1,5 +1,4 @@
-{ callPackage
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
 , cmake
@@ -14,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "WestberryTech";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
-    sha256 = "sha256-DKsDVO00JFhR9hIZksFVJLRwC6PF9LCRpf++QywFO2w=";
+    hash = "sha256-DKsDVO00JFhR9hIZksFVJLRwC6PF9LCRpf++QywFO2w=";
   };
 
   nativeBuildInputs = [ cmake ];
