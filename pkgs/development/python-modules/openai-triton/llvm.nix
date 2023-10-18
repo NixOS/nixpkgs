@@ -1,4 +1,5 @@
-{ lib
+{ config
+, lib
 , stdenv
 , fetchFromGitHub
 , pkg-config
@@ -68,7 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = "${finalAttrs.src.name}/llvm";
 
   cmakeFlags = [
-    "-DLLVM_TARGETS_TO_BUILD=X86;AMDGPU;NVPTX"
+    "-DLLVM_TARGETS_TO_BUILD=${
+      let
+        # Targets can be found in
+        # https://github.com/llvm/llvm-project/tree/f28c006a5895fc0e329fe15fead81e37457cb1d1/clang/lib/Basic/Targets
+        # NOTE: Unsure of how "host" would function, especially given that we might be cross-compiling.
+        llvmTargets = [ "AMDGPU" "NVPTX" ]
+        ++ lib.optionals stdenv.isAarch64 [ "AArch64" ]
+        ++ lib.optionals stdenv.isx86_64 [ "X86" ];
+      in
+      lib.concatStringsSep ";" llvmTargets
+    }"
     "-DLLVM_ENABLE_PROJECTS=llvm;mlir"
     "-DLLVM_INSTALL_UTILS=ON"
   ] ++ lib.optionals (buildDocs || buildMan) [
@@ -107,6 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ ncsa ];
     maintainers = with maintainers; [ SomeoneSerge Madouura ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64; # https://github.com/RadeonOpenCompute/ROCm/issues/1831#issuecomment-1278205344
+    # Consider the derivation broken if we're not building for CUDA or ROCm, or if we're building for aarch64
+    # and ROCm is enabled. See https://github.com/RadeonOpenCompute/ROCm/issues/1831#issuecomment-1278205344.
+    broken = stdenv.isAarch64 && !config.cudaSupport;
   };
 })
