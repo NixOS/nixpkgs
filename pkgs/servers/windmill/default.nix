@@ -158,7 +158,7 @@ rustPlatform.buildRustPackage {
     description = "Open-source developer platform to turn scripts into workflows and UIs";
     homepage = "https://windmill.dev";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya happysalada ];
     mainProgram = "windmill";
     # limited by librusty_v8
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
