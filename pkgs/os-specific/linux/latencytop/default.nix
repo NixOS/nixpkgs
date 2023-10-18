@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, ncurses, glib, pkg-config, gtk2, util-linux }:
+{ lib, stdenv, fetchurl, ncurses, glib, pkg-config, util-linux
+, gtkSupport ? true, gtk2 }:
 
 stdenv.mkDerivation rec {
   pname = "latencytop";
@@ -9,6 +10,8 @@ stdenv.mkDerivation rec {
 
     # Fix #171609
     substituteInPlace fsync.c --replace /bin/mount ${util-linux}/bin/mount
+  '' + lib.optionalString (!gtkSupport) ''
+    sed -i '/HAS_GTK_GUI = 1/d' Makefile
   '';
 
   preInstall = "mkdir -p $out/sbin";
@@ -20,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ncurses glib gtk2 ];
+  buildInputs = [ ncurses glib ] ++ lib.optional gtkSupport gtk2;
 
   meta = {
     homepage = "http://latencytop.org";
