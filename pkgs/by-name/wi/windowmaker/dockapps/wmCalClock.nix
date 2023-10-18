@@ -1,17 +1,23 @@
-{ lib, stdenv, dockapps-sources
-, libX11, libXpm, libXext }:
+{ lib
+, stdenv
+, dockapps-sources
+, libX11
+, libXext
+, libXpm
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wmCalClock";
-  version = "1.25";
 
-  src = dockapps-sources;
+  inherit (dockapps-sources) version src;
 
-  buildInputs = [ libX11 libXpm libXext ];
+  sourceRoot = "${finalAttrs.src.name}/wmCalClock";
 
-  setSourceRoot = ''
-    export sourceRoot=$(echo */${pname}/Src)
-  '';
+  buildInputs = [
+    libX11
+    libXpm
+    libXext
+  ];
 
   preBuild = ''
     makeFlagsArray+=(
@@ -28,11 +34,11 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "A Calendar clock with antialiased text";
     homepage = "https://www.dockapps.net/wmcalclock";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bstrik ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})
