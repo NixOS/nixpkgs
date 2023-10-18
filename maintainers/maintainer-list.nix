@@ -8936,6 +8936,15 @@
     githubId = 386765;
     matrix = "@k900:0upti.me";
   };
+  kachick = {
+    email = "kachick1@gmail.com";
+    github = "kachick";
+    githubId = 1180335;
+    name = "Kenichi Kamiya";
+    keys = [{
+      fingerprint = "9121 5D87 20CA B405 C63F  24D2 EF6E 574D 040A E2A5";
+    }];
+  };
   kaction = {
     name = "Dmitry Bogatov";
     email = "KAction@disroot.org";
