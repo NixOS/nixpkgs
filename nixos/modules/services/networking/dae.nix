@@ -14,7 +14,7 @@ in
   options = {
     services.dae = with lib;{
       enable = mkEnableOption
-        (mdDoc "A Linux high-performance transparent proxy solution based on eBPF");
+        (mdDoc "dae, a Linux high-performance transparent proxy solution based on eBPF");
 
       package = mkPackageOptionMD pkgs "dae" { };
 
@@ -45,7 +45,7 @@ in
       openFirewall = mkOption {
         type = with types; submodule {
           options = {
-            enable = mkEnableOption "enable";
+            enable = mkEnableOption (mdDoc "opening {option}`port` in the firewall");
             port = mkOption {
               type = types.int;
               description = ''
@@ -92,7 +92,7 @@ in
       };
 
       disableTxChecksumIpGeneric =
-        mkEnableOption (mdDoc "See <https://github.com/daeuniverse/dae/issues/43>");
+        mkEnableOption "" // { description = mdDoc "See <https://github.com/daeuniverse/dae/issues/43>"; };
 
     };
   };
