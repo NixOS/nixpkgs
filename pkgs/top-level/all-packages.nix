@@ -28146,8 +28146,6 @@ with pkgs;
   # hardened kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
   linux_hardened = linuxPackages_hardened.kernel;
-  linuxPackages_4_14_hardened = linuxKernel.packages.linux_4_14_hardened;
-  linux_4_14_hardened = linuxPackages_4_14_hardened.kernel;
   linuxPackages_4_19_hardened = linuxKernel.packages.linux_4_19_hardened;
   linux_4_19_hardened = linuxPackages_4_19_hardened.kernel;
   linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
@@ -28160,10 +28158,6 @@ with pkgs;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
   linuxPackages_6_5_hardened = linuxKernel.packages.linux_6_5_hardened;
   linux_6_5_hardened = linuxKernel.kernels.linux_6_5_hardened;
-
-  # Hardkernel (Odroid) kernels.
-  linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
-  linux_hardkernel_latest = linuxPackages_hardkernel_latest.kernel;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
