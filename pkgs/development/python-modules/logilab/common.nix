@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "logilab-common";
-  version = "1.10.0";
+  version = "1.11.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MoXt3tta5OimJUjOkWSMDCmXV0aS8N0W5bcANwAelYY=";
+    hash = "sha256-lWl6654nbOBCec24iJ7GGKEcYy/gYDn9wMil3PPqWkk=";
   };
 
   nativeBuildInputs = [
