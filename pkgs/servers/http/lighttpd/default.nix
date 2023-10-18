@@ -15,17 +15,12 @@
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
-  version = "1.4.71";
+  version = "1.4.72";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
-    sha256 = "sha256-uLaRXaIDlv3DVN8zJNXkQBabLl6nhZ46d1IThBMlr6w=";
+    sha256 = "sha256-98reTWm3VKB0jAFGPDPNi0VsqcwDuwnoWnG8vNVOVew=";
   };
-
-  patches = [
-    # disable tests for des/md5, which we don't support any more
-    ./disable-legacy-crypt-tests.patch
-  ];
 
   postPatch = ''
     patchShebangs tests
