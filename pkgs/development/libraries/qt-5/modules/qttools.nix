@@ -1,8 +1,20 @@
-{ qtModule, stdenv, lib, qtbase, qtdeclarative }:
+{ qtModule
+, stdenv
+, lib
+, qtbase
+, qtdeclarative
+# clang-based c++ parser for qdoc and lupdate
+, withClang ? false
+, llvmPackages
+}:
 
 qtModule {
   pname = "qttools";
   propagatedBuildInputs = [ qtbase qtdeclarative ];
+  buildInputs = lib.optionals withClang [
+    llvmPackages.libclang
+    llvmPackages.libllvm
+  ];
   outputs = [ "out" "dev" "bin" ];
 
   # fixQtBuiltinPaths overwrites a builtin path we should keep
@@ -11,6 +23,12 @@ qtModule {
         -e '/^cmake_linguist_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
     sed -i "src/qtattributionsscanner/qtattributionsscanner.pro" \
         -e '/^cmake_qattributionsscanner_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
+    sed -i "src/qdoc/qdoc.pro" \
+        -e '/^cmake_qdoc_config_version_file.input =/ s|$$\[QT_HOST_DATA.*\]|${lib.getDev qtbase}|'
+  '' + lib.optionalString withClang ''
+    # llvm-config --includedir gives libllvm includedir, looks for libclang header there
+    substituteInPlace src/qdoc/configure.pri \
+      --replace "\''$\''$CLANG_INCLUDEPATH/clang-c" "${lib.getDev llvmPackages.libclang}/include/clang-c"
   '';
 
   devTools = [
