@@ -13,8 +13,13 @@
 # Whether to build hls with the dynamic run-time system.
 # See https://haskell-language-server.readthedocs.io/en/latest/troubleshooting.html#static-binaries for more information.
 , dynamic ? true
+
+# which formatters are supported. An empty list means “all”.
+, supportedFormatters ? [ ]
 }:
 
+# make sure the user only sets GHC versions that actually exist
+assert supportedGhcVersions != [];
 assert
   lib.asserts.assertEachOneOf
     "supportedGhcVersions"
@@ -24,6 +29,47 @@ assert
       (lib.filter (lib.hasPrefix "ghc"))
       (map (lib.removePrefix "ghc"))
     ]);
+
+let
+  # A mapping from formatter name to
+  # - cabal flag to disable
+  # - formatter-specific packages that can be stripped from the build of hls if it is disabled
+  knownFormatters = {
+    ormolu = {
+      cabalFlag = "ormolu";
+      packages = [
+        "hls-ormolu-plugin"
+      ];
+    };
+    fourmolu = {
+      cabalFlag = "fourmolu";
+      packages = [
+        "hls-fourmolu-plugin"
+      ];
+    };
+    floskell = {
+      cabalFlag = "floskell";
+      packages = [
+        "hls-floskell-plugin"
+      ];
+    };
+    stylish-haskell = {
+      cabalFlag = "stylishhaskell";
+      packages = [
+        "hls-stylish-haskell-plugin"
+      ];
+    };
+  };
+
+in
+
+# make sure any formatter that is set is actually supported by us
+assert
+  lib.asserts.assertEachOneOf
+    "supportedFormatters"
+    supportedFormatters
+    (lib.attrNames knownFormatters);
+
 #
 # The recommended way to override this package is
 #
@@ -41,6 +87,34 @@ let
 
   getPackages = version: haskell.packages."ghc${version}";
 
+  # Given the list of `supportedFormatters`, remove every formatter that we know of (knownFormatters)
+  # by disabling the cabal flag and also removing the formatter libraries.
+  removeUnnecessaryFormatters =
+    let
+      # only formatters that were not requested
+      unwanted = lib.pipe knownFormatters [
+        (lib.filterAttrs (fmt: _: ! (lib.elem fmt supportedFormatters)))
+        lib.attrsToList
+      ];
+      # all flags to disable
+      flags = map (fmt: fmt.value.cabalFlag) unwanted;
+      # all dependencies to remove from hls
+      deps = lib.concatMap (fmt: fmt.value.packages) unwanted;
+
+      # remove nulls from a list
+      stripNulls = lib.filter (x: x != null);
+
+      # remove all unwanted dependencies of formatters we don’t want
+      stripDeps = overrideCabal (drv: {
+        libraryHaskellDepends = lib.pipe (drv.libraryHaskellDepends or []) [
+          # the existing list may contain nulls, so let’s strip them first
+          stripNulls
+          (lib.filter (dep: ! (lib.elem dep.pname deps)))
+        ];
+      });
+
+    in drv: lib.pipe drv ([stripDeps] ++ map disableCabalFlag flags);
+
   tunedHls = hsPkgs:
     lib.pipe hsPkgs.haskell-language-server ([
       (haskell.lib.compose.overrideCabal (old: {
@@ -52,6 +126,7 @@ let
         '';
       }))
       ((if dynamic then enableCabalFlag else disableCabalFlag) "dynamic")
+      (if supportedFormatters != [] then removeUnnecessaryFormatters else lib.id)
     ]
     ++ lib.optionals (!dynamic) [
       justStaticExecutables
@@ -69,9 +144,7 @@ let
         }/bin/haskell-language-server $out/bin/${x}")
       (targets version);
 
-in
-assert supportedGhcVersions != []; stdenv.mkDerivation
-{
+in stdenv.mkDerivation {
   pname = "haskell-language-server";
   version = haskellPackages.haskell-language-server.version;
 
