@@ -9,9 +9,9 @@ in
 {
   options = {
     hardware.tuxedo-rs = {
-      enable = mkEnableOption (lib.mdDoc "Rust utilities for interacting with hardware from TUXEDO Computers.");
+      enable = mkEnableOption (lib.mdDoc "Rust utilities for interacting with hardware from TUXEDO Computers");
 
-      tailor-gui.enable = mkEnableOption (lib.mdDoc "Alternative to TUXEDO Control Center, written in Rust.");
+      tailor-gui.enable = mkEnableOption (lib.mdDoc "tailor-gui, an alternative to TUXEDO Control Center, written in Rust");
     };
   };
 
