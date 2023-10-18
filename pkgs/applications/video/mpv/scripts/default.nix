@@ -20,7 +20,7 @@ in lib.recurseIntoAttrs
     quality-menu = callPackage ./quality-menu.nix { inherit buildLua; };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
     sponsorblock = callPackage ./sponsorblock.nix { };
-    thumbfast = callPackage ./thumbfast.nix { };
+    thumbfast = callPackage ./thumbfast.nix { inherit buildLua; };
     thumbnail = callPackage ./thumbnail.nix { inherit buildLua; };
     uosc = callPackage ./uosc.nix { };
     visualizer = callPackage ./visualizer.nix { };

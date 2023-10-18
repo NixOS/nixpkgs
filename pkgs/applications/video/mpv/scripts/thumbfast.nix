@@ -1,7 +1,7 @@
-{ lib, stdenvNoCC, fetchFromGitHub, mpv-unwrapped }:
+{ lib, fetchFromGitHub, buildLua, mpv-unwrapped }:
 
-stdenvNoCC.mkDerivation {
-  name = "mpv-thumbfast";
+buildLua {
+  pname = "mpv-thumbfast";
   version = "unstable-2023-06-04";
 
   src = fetchFromGitHub {
@@ -16,18 +16,7 @@ stdenvNoCC.mkDerivation {
       --replace 'mpv_path = "mpv"' 'mpv_path = "${lib.getExe mpv-unwrapped}"'
   '';
 
-  dontBuild = true;
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/mpv/scripts
-    cp -r thumbfast.lua $out/share/mpv/scripts/thumbfast.lua
-
-    runHook postInstall
-  '';
-
-  passthru.scriptName = "thumbfast.lua";
+  scriptPath = "thumbfast.lua";
 
   meta = {
     description = "High-performance on-the-fly thumbnailer for mpv";
