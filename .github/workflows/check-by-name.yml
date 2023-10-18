@@ -19,11 +19,13 @@ jobs:
     steps:
       - name: Resolving the merge commit
         run: |
-          if result=$(git ls-remote --exit-code ${{ github.event.pull_request.base.repo.clone_url }} refs/pull/${{ github.event.pull_request.number }}/merge); then
+          if result=$(git ls-remote --exit-code ${{ github.event.pull_request.base.repo.clone_url }} refs/pull/${{ github.event.pull_request.number }}/merge 2>&1); then
             mergedSha=$(cut -f1 <<< "$result")
             echo "The PR appears to not have any conflicts, checking the merge commit $mergedSha"
           else
             echo "The PR may have a merge conflict"
+            echo "'git ls-remote' output was:"
+            echo "$result"
             exit 1
           fi
           echo "mergedSha=$mergedSha" >> "$GITHUB_ENV"
