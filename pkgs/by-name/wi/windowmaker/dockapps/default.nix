@@ -15,6 +15,8 @@ lib.makeScope pkgs.newScope (self: {
 
   AlsaMixer-app = self.callPackage ./AlsaMixer-app.nix { };
 
+  cputnik = self.callPackage ./cputnik.nix { };
+
   libdockapp = self.callPackage ./libdockapp.nix { };
 
   wmCalClock = self.callPackage ./wmCalClock.nix { };
