@@ -17,5 +17,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     server.wait_for_unit("lighttpd.service")
     res = server.succeed("curl --fail http://localhost/file.txt")
     assert "hello nixos test" in res, f"bad server response: '{res}'"
+    server.succeed("systemctl reload lighttpd")
   '';
 })
