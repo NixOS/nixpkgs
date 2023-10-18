@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   name = "headphones-toolbox";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchurl {
-    url = "https://github.com/george-norton/headphones-toolbox/releases/download/headphones-toolbox-beta-v5/ploopy-headphones-toolbox_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-47F/bTi7ctIbfRnYVbksYUsHmL+3KYWccNg5dKPGR/U=";
+    url = "https://github.com/ploopyco/headphones-toolbox/releases/download/app-v${finalAttrs.version}/ploopy-headphones-toolbox_${finalAttrs.version}_amd64.deb";
+    hash = "sha256-lWjmpybGcL3sbBng8zCTUtwYhlrQ6cCrKkhiu+g9MsE=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "A UI for configuring Ploopy Headphones";
-    homepage = "https://github.com/george-norton/headphones-toolbox";
+    homepage = "https://github.com/ploopyco/headphones-toolbox/";
     maintainers = with maintainers; [ knarkzel nyanbinary ];
     license = licenses.gpl3Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
