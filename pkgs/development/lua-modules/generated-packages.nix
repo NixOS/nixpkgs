@@ -383,29 +383,6 @@ buildLuarocksPackage {
   };
 }) {};
 
-cyrussasl = callPackage({ buildLuarocksPackage, fetchurl, lua, luaOlder }:
-buildLuarocksPackage {
-  pname = "cyrussasl";
-  version = "1.1.0-3";
-  knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/cyrussasl-1.1.0-3.rockspec";
-    sha256 = "1nqklhi6ny44pg027s6jydgs6q0il99q29rlfs5k42kz72592p91";
-  }).outPath;
-  src = fetchurl {
-    url    = "https://github.com/JorjBauer/lua-cyrussasl";
-    sha256 = "13piq5lw79g5bx2z80ak9k6756bi7c9hh1y963iavmw067ldr1mb";
-  };
-
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = {
-    homepage = "http://github.com/JorjBauer/lua-cyrussasl";
-    description = "Cyrus SASL library for Lua 5.1+";
-    license.fullName = "BSD";
-  };
-}) {};
-
 digestif = callPackage({ buildLuarocksPackage, fetchgit, lpeg, lua, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "digestif";

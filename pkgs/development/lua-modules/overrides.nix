@@ -117,12 +117,6 @@ with prev;
       '';
   });
 
-  cyrussasl = prev.cyrussasl.overrideAttrs (drv: {
-    externalDeps = [
-      { name = "LIBSASL"; dep = cyrus_sasl; }
-    ];
-  });
-
   fennel = prev.fennel.overrideAttrs(oa: {
     nativeBuildInputs = oa.nativeBuildInputs ++ [
       installShellFiles
