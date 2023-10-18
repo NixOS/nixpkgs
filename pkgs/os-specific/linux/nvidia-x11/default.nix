@@ -54,12 +54,12 @@ rec {
   });
 
   beta = selectHighestVersion latest (generic {
-    version = "535.43.02";
-    sha256_64bit = "sha256-4KTdk4kGDmBGyHntMIzWRivUpEpzmra+p7RBsTL8mYM=";
-    sha256_aarch64 = "sha256-0blD8R+xpOVlitWefIbtw1d3KAnmWHBy7hkxGZHBrE4=";
-    openSha256 = "sha256-W1fwbbEEM7Z/S3J0djxGTtVTewbSALqX1G1OSpdajCM=";
-    settingsSha256 = "sha256-j0sSEbtF2fapv4GSthVTkmJga+ycmrGc1OnGpV6jEkc=";
-    persistencedSha256 = "sha256-M0ovNaJo8SZwLW4CQz9accNK79Z5JtTJ9kKwOzicRZ4=";
+    version = "545.23.06";
+    sha256_64bit = "sha256-QTnTKAGfcvKvKHik0BgAemV3PrRqRlM3B9jjZeupCC8=";
+    sha256_aarch64 = "sha256-qkVP6AiXNoRTqgqPvs/AfErEq8BTQw25rtJ6GS06JTM=";
+    openSha256 = "sha256-m7D5LZdhFCZYAIbhrgZ0pN2z19LsU3I3Q7qsKX7Z6mM=";
+    settingsSha256 = "sha256-+X6gDeU8Qlvprb05aB2quM55y0zEcBXtb65e3Rq9gKg=";
+    persistencedSha256 = "sha256-RQJAIwPqOUI5FB3uf0/Y4K/iwFfoLpU1/+BOK/KF5VA=";
   });
 
   # Vulkan developer beta driver

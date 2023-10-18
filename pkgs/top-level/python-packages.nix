@@ -13130,6 +13130,8 @@ self: super: with self; {
 
   sphinx-prompt = callPackage ../development/python-modules/sphinx-prompt { };
 
+  sphinx-sitemap = callPackage ../development/python-modules/sphinx-sitemap { };
+
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
 
   sphinx-tabs = callPackage ../development/python-modules/sphinx-tabs { };
@@ -15542,6 +15544,8 @@ self: super: with self; {
   whodap = callPackage ../development/python-modules/whodap { };
 
   whois = callPackage ../development/python-modules/whois { };
+
+  whois-api = callPackage ../development/python-modules/whois-api { };
 
   whoosh = callPackage ../development/python-modules/whoosh { };
 

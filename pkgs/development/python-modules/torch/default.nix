@@ -111,7 +111,7 @@ let
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are not mutually exclusive" = cudaSupport && rocmSupport;
     "CUDA is not targeting Linux" = cudaSupport && !stdenv.isLinux;
-    "Unsupported CUDA version" = cudaSupport && (cudaPackages.cudaMajorVersion != "11");
+    "Unsupported CUDA version" = cudaSupport && !(builtins.elem cudaPackages.cudaMajorVersion [ "11" "12" ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" = MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
     "Magma cudaPackages does not match cudaPackages" = cudaSupport && (magma.cudaPackages != cudaPackages);
   };
