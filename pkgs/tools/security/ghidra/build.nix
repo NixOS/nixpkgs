@@ -15,13 +15,13 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.3.3";
+  version = "10.4";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-KDSiZ/JwAqX6Obg9UD8ZQut01l/eMXbioJy//GluXn0=";
+    hash = "sha256-g0JM6pm1vkCh9yBB5mfrOiNrImqoyWdQcEe2g+AO6LQ=";
   };
 
   gradle = gradle_7;
@@ -36,24 +36,6 @@ let
   };
 
   # postPatch scripts.
-  # Tells ghidra to use our own protoc binary instead of the prebuilt one.
-  fixProtoc = ''
-    cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
-protobuf {
-  protoc {
-    path = '${protobuf}/bin/protoc'
-  }
-}
-HERE
-    cat >>Ghidra/Debug/Debugger-isf/build.gradle <<HERE
-protobuf {
-  protoc {
-    path = '${protobuf}/bin/protoc'
-  }
-}
-HERE
-  '';
-
   # Adds a gradle step that downloads all the dependencies to the gradle cache.
   addResolveStep = ''
     cat >>build.gradle <<HERE
@@ -85,7 +67,7 @@ HERE
     inherit version src;
 
     patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-    postPatch = fixProtoc + addResolveStep;
+    postPatch = addResolveStep;
 
     nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
@@ -116,13 +98,12 @@ in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
-    gradle unzip makeWrapper icoutils
+    gradle unzip makeWrapper icoutils protobuf
   ] ++ lib.optional stdenv.isDarwin xcbuild;
 
   dontStrip = true;
 
   patches = [ ./0001-Use-protobuf-gradle-plugin.patch ];
-  postPatch = fixProtoc;
 
   buildPhase = ''
     export HOME="$NIX_BUILD_TOP/home"
