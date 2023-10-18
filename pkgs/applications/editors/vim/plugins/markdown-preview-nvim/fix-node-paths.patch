@@ -1,18 +1,18 @@
 diff --git a/autoload/health/mkdp.vim b/autoload/health/mkdp.vim
-index 9eebb56..3a0b069 100644
+index 323b57b..8053ea8 100644
 --- a/autoload/health/mkdp.vim
 +++ b/autoload/health/mkdp.vim
-@@ -9,8 +9,8 @@ function! health#mkdp#check() abort
-     call health#report_info('Pre build: ' . l:mkdp_server_script)
-     call health#report_info('Pre build version: ' . mkdp#util#pre_build_version())
-     call health#report_ok('Using pre build')
+@@ -8,8 +8,8 @@ function! health#mkdp#check() abort
+     lua vim.health.info('Pre build: ' .. vim.api.nvim_eval('l:mkdp_server_script'))
+     lua vim.health.info('Pre build version: ' .. vim.fn['mkdp#util#pre_build_version']())
+     lua vim.health.ok('Using pre build')
 -  elseif executable('node')
--    call health#report_info('Node version: ' . system('node --version'))
+-    lua vim.health.info('Node version: ' .. string.gsub(vim.fn.system('node --version'), '^%s*(.-)%s*$', '%1'))
 +  else
-+    call health#report_info('Node version: ' . system('@node@ --version'))
-     let l:mkdp_server_script = s:mkdp_root_dir . '/app/server.js'
-     call health#report_info('Script: ' . l:mkdp_server_script)
-     call health#report_info('Script exists: ' . filereadable(l:mkdp_server_script))
++    lua vim.health.info('Node version: ' .. string.gsub(vim.fn.system('@node@ --version'), '^%s*(.-)%s*$', '%1'))
+     let l:mkdp_server_script = s:mkdp_root_dir .. '/app/server.js'
+     lua vim.health.info('Script: ' .. vim.api.nvim_eval('l:mkdp_server_script'))
+     lua vim.health.info('Script exists: ' .. vim.fn.filereadable(vim.api.nvim_eval('l:mkdp_server_script')))
 diff --git a/autoload/mkdp/rpc.vim b/autoload/mkdp/rpc.vim
 index b257571..57f04e7 100644
 --- a/autoload/mkdp/rpc.vim
