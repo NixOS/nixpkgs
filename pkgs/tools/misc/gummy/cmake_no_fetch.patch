@@ -1,0 +1,24 @@
+--- a/CMakeLists.txt	2023-10-18 17:14:06.368938573 +0200
++++ b/CMakeLists.txt	2023-10-18 17:16:54.361334970 +0200
+@@ -9,17 +9,16 @@
+ set(SPDLOG_FMT_EXTERNAL ON)
+ 
+ FetchContent_Declare(json
+-    URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
++    SOURCE_DIR @nlohmann_json_src@
+ )
+ FetchContent_Declare(fmt
+-    URL https://github.com/fmtlib/fmt/releases/download/9.1.0/fmt-9.1.0.zip
++	SOURCE_DIR @fmt_src@
+ )
+ FetchContent_Declare(spdlog
+-    URL https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz
++	SOURCE_DIR @spdlog_src@
+ )
+ FetchContent_Declare(cli11
+-    GIT_REPOSITORY https://github.com/CLIUtils/CLI11
+-    GIT_TAG 291c58789c031208f08f4f261a858b5b7083e8e2 #v2.3.2
++	SOURCE_DIR @cli11_src@
+ )
+ FetchContent_MakeAvailable(
+     json
