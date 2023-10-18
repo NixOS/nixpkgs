@@ -60,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Warning on aarch64-linux breaks build due to -Werror
     substituteInPlace CMakeLists.txt \
       --replace '-Werror' ""
+
+    # pkg-config output patching hook expects prefix variable here
+    substituteInPlace data/dbus-cpp.pc.in \
+      --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
   '' + lib.optionalString (!finalAttrs.doCheck) ''
     sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
   '';
