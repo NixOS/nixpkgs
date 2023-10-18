@@ -1,12 +1,12 @@
 { lib
-, stdenvNoCC
+, buildLua
 , fetchFromGitHub
 , curl
 , wl-clipboard
 , xclip
 }:
 
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "mpvacious";
   version = "0.24";
 
@@ -26,23 +26,16 @@ stdenvNoCC.mkDerivation rec {
       --replace "'xclip" "'${xclip}/bin/xclip"
   '';
 
-  dontBuild = true;
-
   installPhase = ''
     runHook preInstall
-    rm -r .github
-    mkdir -p $out/share/mpv/scripts
-    cp -r . $out/share/mpv/scripts/mpvacious
+    make PREFIX=$out/share/mpv install
     runHook postInstall
   '';
-
-  passthru.scriptName = "mpvacious";
 
   meta = with lib; {
     description = "Adds mpv keybindings to create Anki cards from movies and TV shows";
     homepage = "https://github.com/Ajatt-Tools/mpvacious";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = with maintainers; [ kmicklas ];
   };
 }
