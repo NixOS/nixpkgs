@@ -42,6 +42,6 @@ buildPythonApplication rec {
     description =
       "vpnc-script replacement for easy and secure split-tunnel VPN setup";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jdbaldry ];
+    maintainers = with maintainers; [ liketechnik ];
   };
 }
