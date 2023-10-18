@@ -21,6 +21,8 @@ mkDerivation rec {
     hash = "sha256-h1K1Smfy875NoHtgUrOvZZp0IgcQdbyuQhXU9ndM4bA=";
   };
 
+  qmakeFlags = lib.optionals (!x11Support) [ "CONFIG+=NO_X11" ];
+
   nativeBuildInputs = [ qmake ];
 
   buildInputs = [
