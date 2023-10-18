@@ -78,7 +78,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
-    changelog = "https://github.com/softlayer/softlayer-python/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/softlayer/softlayer-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
   };
