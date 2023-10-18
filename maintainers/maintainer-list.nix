@@ -13609,6 +13609,13 @@
     githubId = 13149442;
     name = "Nico Pulido-Mateo";
   };
+  nrabulinski = {
+    email = "1337-nix@nrab.lol";
+    matrix = "@niko:nrab.lol";
+    github = "nrabulinski";
+    githubId = 24574288;
+    name = "Nikodem Rabuliński";
+  };
   nrdxp = {
     email = "tim.deh@pm.me";
     matrix = "@timdeh:matrix.org";
