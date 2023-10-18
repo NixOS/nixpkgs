@@ -46,7 +46,7 @@ buildPythonPackage rec {
     description = "Python implementation of catch22";
     homepage = "https://github.com/DynamicsAndNeuralSystems/pycatch22";
     changelog = "https://github.com/DynamicsAndNeuralSystems/pycatch22/releases/tag/v${version}";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mbalatsko ];
   };
 }
