@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , gtk-engine-murrine
 , jdupes
+, libsForQt5
 }:
 
 stdenv.mkDerivation rec {
@@ -78,6 +79,15 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   nativeBuildInputs = [ jdupes ];
+
+  buildInputs = with libsForQt5; [
+    plasma-framework
+    qtgraphicaleffects
+    plasma-workspace
+    breeze-icons
+  ];
+
+  dontWrapQtApps = true;
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
