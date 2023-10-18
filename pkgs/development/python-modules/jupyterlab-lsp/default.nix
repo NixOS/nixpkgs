@@ -28,8 +28,5 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ ];
-    # No support for Jupyterlab > 4
-    # https://github.com/jupyter-lsp/jupyterlab-lsp/pull/949
-    broken = lib.versionAtLeast jupyterlab.version "4.0";
   };
 }
