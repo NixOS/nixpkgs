@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchFromGitHub, social-auth-core, django, python }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, social-auth-core
+, django
+, python
+}:
 
 buildPythonPackage rec {
   pname = "social-auth-app-django";
@@ -15,7 +21,9 @@ buildPythonPackage rec {
     social-auth-core
   ];
 
-  pythonImportsCheck = [ "social_django" ];
+  pythonImportsCheck = [
+    "social_django"
+  ];
 
   nativeCheckInputs = [
     django
@@ -26,8 +34,9 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    description = "Module for social authentication/registration mechanism";
     homepage = "https://github.com/python-social-auth/social-app-django";
-    description = "Python Social Auth - Application - Django";
+    changelog = "https://github.com/python-social-auth/social-app-django/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ n0emis ];
   };
