@@ -1,6 +1,6 @@
-{ lib, stdenvNoCC
+{ lib, buildLua
 , fetchFromGitHub }:
-stdenvNoCC.mkDerivation rec {
+buildLua rec {
   pname = "simple-mpv-ui";
   version = "2.1.0";
 
@@ -11,12 +11,8 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "1z0y8sdv5mbxznxqh43w5592ym688vkvqg7w26p8cinrhf09pbw8";
   };
 
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/share/mpv/scripts
-    cp -r webui.lua webui-page $out/share/mpv/scripts/
-  '';
-  passthru.scriptName = "webui.lua";
+  scriptPath = "webui.lua";
+  postInstall = "cp -a webui-page $out/share/mpv/scripts/";
 
   meta = with lib; {
     description = "A web based user interface with controls for the mpv mediaplayer";
@@ -30,4 +26,3 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
   };
 }
-
