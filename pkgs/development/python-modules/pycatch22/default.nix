@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pycatch22";
-  version = "0.4.3";
+  version = "0.4.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "DynamicsAndNeuralSystems";
     repo = "pycatch22";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wjMklOzU9I3Y2HdZ+rOTiffoKda+6X9zwDsmB+HXrSY=";
+    hash = "sha256-l41LLo9k075EL8rV48bwa4Yw12XuqNJSDYtd9kyqS3U=";
   };
 
   nativeBuildInputs = [
