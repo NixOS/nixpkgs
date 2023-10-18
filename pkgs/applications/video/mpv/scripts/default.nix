@@ -17,7 +17,7 @@ in lib.recurseIntoAttrs
     mpv-playlistmanager = callPackage ./mpv-playlistmanager.nix { };
     mpv-webm = callPackage ./mpv-webm.nix { };
     mpvacious = callPackage ./mpvacious.nix { };
-    quality-menu = callPackage ./quality-menu.nix { };
+    quality-menu = callPackage ./quality-menu.nix { inherit buildLua; };
     simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
     sponsorblock = callPackage ./sponsorblock.nix { };
     thumbfast = callPackage ./thumbfast.nix { };
