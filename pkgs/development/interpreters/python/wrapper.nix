@@ -58,7 +58,7 @@ let
                   makeWrapper "$path/bin/$prg" "$out/bin/$prg" \
                     --set NIX_PYTHONPREFIX "$out" \
                     --set NIX_PYTHONEXECUTABLE ${pythonExecutable} \
-                    --set NIX_PYTHONPATH ${pythonPath} \
+                    --prefix NIX_PYTHONPATH : ${pythonPath} \
                     ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} \
                     ${lib.concatStringsSep " " makeWrapperArgs}
                 fi
