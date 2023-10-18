@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/wyntau/fzf-zsh";
     description = "wrap fzf to use in oh-my-zsh";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }
