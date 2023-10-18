@@ -41,6 +41,7 @@ let
       nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [
         composer
         composer-local-repo-plugin
+        phpDrv
         phpDrv.composerHooks.composerRepositoryHook
       ];
 
@@ -72,6 +73,13 @@ let
         runHook preInstall
 
         runHook postInstall
+      '';
+
+      doInstallCheck = previousAttrs.doInstallCheck or false;
+      installCheckPhase = previousAttrs.installCheckPhase or ''
+        runHook preCheckInstall
+
+        runHook postCheckInstall
       '';
 
       COMPOSER_CACHE_DIR = "/dev/null";

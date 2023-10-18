@@ -1246,6 +1246,10 @@ self: super: {
       meta.maintainers = with lib.maintainers; [enderger];
     };
 
+  typescript-tools-nvim = super.typescript-tools-nvim.overrideAttrs {
+    dependencies = with self; [ nvim-lspconfig plenary-nvim ];
+  };
+
   unicode-vim =
     let
       unicode-data = fetchurl {

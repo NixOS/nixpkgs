@@ -172,7 +172,7 @@ in {
         ln -sf '${file}' "${local}"
       '') rules}
 
-      if [ ! -f /etc/opensnitch-system-fw.json ]; then
+      if [ ! -f /etc/opensnitchd/system-fw.json ]; then
         cp "${pkgs.opensnitch}/etc/opensnitchd/system-fw.json" "/etc/opensnitchd/system-fw.json"
       fi
     '');

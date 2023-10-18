@@ -559,8 +559,6 @@ with pkgs;
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
 
-  cpu-x = callPackage ../applications/misc/cpu-x { };
-
   crackle = callPackage ../tools/networking/crackle { };
 
   crackql = callPackage ../tools/security/crackql { };
@@ -598,8 +596,6 @@ with pkgs;
   deadnix = callPackage ../development/tools/deadnix { };
 
   dec-decode = callPackage ../development/tools/dec-decode { };
-
-  devour-flake = callPackage ../tools/nix/devour-flake { };
 
   dnf5 = callPackage ../tools/package-management/dnf5 { };
 
@@ -1845,8 +1841,6 @@ with pkgs;
   fabs = callPackage ../tools/backup/fabs { };
 
   fm = callPackage ../applications/file-managers/fm { };
-
-  fm-tune = callPackage ../applications/radio/fm-tune { };
 
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
@@ -3716,6 +3710,8 @@ with pkgs;
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
   delayarchitect = callPackage ../applications/audio/delayarchitect { };
+
+  dell-command-configure = callPackage ../tools/system/dell-command-configure { };
 
   deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -8810,7 +8806,7 @@ with pkgs;
   gpt2tc = callPackage ../tools/text/gpt2tc { };
 
   gptcommit = callPackage ../development/tools/gptcommit {
-    inherit (darwin.apple_sdk.frameworks) Security;
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
   gptman = callPackage ../tools/system/gptman { };
@@ -15554,7 +15550,7 @@ with pkgs;
   avra = callPackage ../development/compilers/avra { };
 
   ballerina = callPackage ../development/compilers/ballerina {
-    openjdk = openjdk11_headless;
+    openjdk = openjdk17_headless;
   };
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
@@ -17179,7 +17175,7 @@ with pkgs;
   cargo-unused-features = callPackage ../development/tools/rust/cargo-unused-features { };
 
   cargo-tauri = callPackage ../development/tools/rust/cargo-tauri { };
-  tauri-mobile = callPackage ../development/tools/rust/tauri-mobile { };
+  cargo-mobile2 = callPackage ../development/tools/rust/cargo-mobile2 { };
 
   cargo-valgrind = callPackage ../development/tools/rust/cargo-valgrind { };
   cargo-vet = callPackage ../development/tools/rust/cargo-vet {
@@ -18877,8 +18873,6 @@ with pkgs;
 
   coder = callPackage ../development/tools/coder { };
 
-  codespelunker = callPackage ../development/tools/codespelunker { };
-
   compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
@@ -20305,6 +20299,8 @@ with pkgs;
   tree-sitter-grammars = recurseIntoAttrs tree-sitter.builtGrammars;
 
   trellis = callPackage ../development/embedded/fpga/trellis { };
+
+  ttags = callPackage ../development/tools/misc/ttags { };
 
   ttyd = callPackage ../servers/ttyd { };
 
@@ -26417,8 +26413,6 @@ with pkgs;
   nats-server = callPackage ../servers/nats-server { };
 
   go-autoconfig = callPackage ../servers/go-autoconfig { };
-
-  go-camo = callPackage ../servers/http/go-camo { };
 
   go-cqhttp = callPackage ../servers/go-cqhttp { };
 
@@ -33607,7 +33601,7 @@ with pkgs;
 
   mediainfo-gui = callPackage ../applications/misc/mediainfo-gui { };
 
-  mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-17; };
+  mediathekview = callPackage ../applications/video/mediathekview { jre = temurin-bin-20; };
 
   megapixels = callPackage ../applications/graphics/megapixels { };
 
@@ -38311,9 +38305,6 @@ with pkgs;
   sgt-puzzles-mobile = callPackage ../games/sgt-puzzles {
     isMobile = true;
   };
-
-  sgtpuzzles = throw "sgtpuzzles has been renamed to sgt-puzzles."; # 2023-10-06
-  sgtpuzzles-mobile = throw "sgtpuzzles-mobile has been renamed to sgt-puzzles-mobile."; # 2023-10-06
 
   shattered-pixel-dungeon = callPackage ../games/shattered-pixel-dungeon { };
 

@@ -1,38 +1,60 @@
-{ fetchurl, lib, stdenv, gettext, libmpcdec, libao }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, gettext
+, libao
+, libmpcdec
+}:
 
-let version = "0.2.4"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpc123";
-  inherit version;
+  version = "0.2.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/mpc123/version%20${version}/${pname}-${version}.tar.gz";
-    sha256 = "0sf4pns0245009z6mbxpx7kqy4kwl69bc95wz9v23wgappsvxgy1";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "debian";
+    repo = "mpc123";
+    rev = "upstream/${finalAttrs.version}";
+    hash = "sha256-+/yxb19CJzyjQmT3O21pEmPR5YudmyCxWwo+W3uOB9Q=";
   };
 
-  patches = [ ./use-gcc.patch ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    gettext
+  ];
+
+  buildInputs = [
+    gettext
+    libao
+    libmpcdec
+  ];
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
   #   ld: /build/cc566Cj9.o:(.bss+0x0): multiple definition of `mpc123_file_reader'; ao.o:(.bss+0x40): first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  buildInputs = [ gettext libmpcdec libao ];
+  # XXX: Should install locales too (though there's only 1 available).
+  installPhase = ''
+    runHook preInstall
 
-  installPhase =
-    # XXX: Should install locales too (though there's only 1 available).
-    '' mkdir -p "$out/bin"
-       cp -v mpc123 "$out/bin"
-    '';
+    mkdir -p "$out/bin"
+    cp -v mpc123 "$out/bin"
+
+    runHook postInstall
+  '';
 
   meta = {
-    homepage = "https://mpc123.sourceforge.net/";
-
     description = "A Musepack (.mpc) audio player";
-
+    homepage = "https://github.com/bucciarati/mpc123";
     license = lib.licenses.gpl2Plus;
-
+    mainProgram = "mpc123";
     maintainers = [ ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
+    platforms = lib.platforms.unix;
   };
-}
+})

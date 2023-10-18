@@ -49,7 +49,7 @@ composerInstallConfigureHook() {
     fi
 
     echo "Validating consistency between composer.lock and ${composerRepository}/composer.lock"
-    if [[! @diff@ composer.lock "${composerRepository}/composer.lock"]]; then
+    if ! @cmp@ -s "composer.lock" "${composerRepository}/composer.lock"; then
         echo
         echo "ERROR: vendorHash is out of date"
         echo
@@ -77,9 +77,9 @@ composerInstallBuildHook() {
     # because the file contains hardcoded nix store paths, we generate it here.
     composer-local-repo-plugin --no-ansi build-local-repo -m "${composerRepository}" .
 
-    # Remove all the repositories of type "composer"
+    # Remove all the repositories of type "composer" and "vcs"
     # from the composer.json file.
-    jq -r -c 'del(try .repositories[] | select(.type == "composer"))' composer.json | sponge composer.json
+    jq -r -c 'del(try .repositories[] | select(.type == "composer" or .type == "vcs"))' composer.json | sponge composer.json
 
     # Configure composer to disable packagist and avoid using the network.
     composer config repo.packagist false
@@ -88,7 +88,6 @@ composerInstallBuildHook() {
 
     # Since the composer.json file has been modified in the previous step, the
     # composer.lock file needs to be updated.
-    COMPOSER_DISABLE_NETWORK=1 \
     COMPOSER_ROOT_VERSION="${version}" \
     composer \
       --lock \
@@ -118,10 +117,7 @@ composerInstallInstallHook() {
     # the autoloader.
     # The COMPOSER_ROOT_VERSION environment variable is needed only for
     # vimeo/psalm.
-    COMPOSER_CACHE_DIR=/dev/null \
-    COMPOSER_DISABLE_NETWORK=1 \
     COMPOSER_ROOT_VERSION="${version}" \
-    COMPOSER_MIRROR_PATH_REPOS="1" \
     composer \
       --no-ansi \
       --no-interaction \

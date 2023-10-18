@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
 let
-  version = "weekly.2023.19";
+  version = "weekly.2023.42";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
@@ -9,12 +9,12 @@ let
   # Required for bootstrap.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "unstable-2023-05-14";
+    version = "unstable-2023-10-17";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "f7c2b5f2a0738d0d236161c9de9f31dd0280ac86";
-      sha256 = "sha256-xU3TvyNgc0o4RCsHtoC6cZTNaue2yuAiolEOvP37TKA=";
+      rev = "bbfdece2ef5cab8a52b03c4df1ca0f803639069b";
+      hash = "sha256-UdifiUDTivqJ94NJB25mF/xXeiEAE55QaIUwWwdAllQ=";
     };
 
     # patch the ptrace reference for darwin
@@ -30,8 +30,8 @@ let
   markdown = fetchFromGitHub {
     owner = "vlang";
     repo = "markdown";
-    rev = "6e970bd0a7459ad7798588f1ace4aa46c5e789a2";
-    hash = "sha256-hFf7c8ZNMU1j7fgmDakuO7tBVr12Wq0dgQddJnkMajE=";
+    rev = "3a173bee57a48dcfc1c0177555e45116befac48e";
+    hash = "sha256-TWiCUMzAzHidtzXEYtUQ7uuksW+EIjE/fZ+s2Mr+uWI=";
   };
   boehmgcStatic = boehmgc.override {
     enableStatic = true;
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "sha256-fHn1z2q3LmSycCOa1ii4DoHvbEW4uJt3Psq3/VuZNVQ=";
+    hash = "sha256-sQ3M6tMufL560lvtWoa5f5MpOT4D8K5uq4kDPHNmUog=";
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
