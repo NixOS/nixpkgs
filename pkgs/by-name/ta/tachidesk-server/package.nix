@@ -3,6 +3,7 @@
 , fetchurl
 , makeWrapper
 , jdk17_headless
+, nixosTests
 }:
 
 let
@@ -33,6 +34,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postBuild
   '';
+
+  passthru.tests = {
+    tachidesk-server = nixosTests.tachidesk-server;
+  };
 
   meta = with lib; {
     description = "A free and open source manga reader server that runs extensions built for Tachiyomi.";
