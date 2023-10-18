@@ -21,12 +21,9 @@ buildGo121Module rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # Build with production code
-  tags = ["prod"];
-  # Include version for `turso --version` reporting
-  preBuild = ''
-    echo "v${version}" > internal/cmd/version.txt
-  '';
+  ldflags = [
+    "-X github.com/tursodatabase/turso-cli/internal/cmd.version=v${version}"
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
