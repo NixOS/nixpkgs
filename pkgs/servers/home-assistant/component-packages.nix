@@ -3149,6 +3149,7 @@
     ];
     "otp" = ps: with ps; [
       pyotp
+      pyqrcode
     ];
     "overkiz" = ps: with ps; [
       pyoverkiz
