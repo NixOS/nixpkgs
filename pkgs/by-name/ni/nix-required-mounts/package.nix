@@ -16,42 +16,32 @@
 , formats
 , lib
 , nix
-, python3
+, python3Packages
+, makeWrapper
 , runCommand
 }:
 
 
 let
-  confPath = (formats.pythonVars { }).generate "config.py" {
-    CONFIG = {
-      inherit allowedPatterns;
-      nixExe = lib.getExe nix;
-    };
+  confPath = (formats.json { }).generate "config.py" {
+    inherit allowedPatterns;
+    nixExe = lib.getExe nix;
   };
   pname = "nix-required-mounts";
 in
 
 runCommand pname
 {
-  inherit confPath;
+  nativeBuildInputs = [
+    makeWrapper
+    python3Packages.wrapPython
+  ];
   meta.mainProgram = pname;
 } ''
   ${lib.getExe buildPackages.python3.pkgs.flake8} ${./main.py}
 
-  cat > main.py << EOF
-  #!${lib.getExe python3}
-
-  $(cat ${./main.py})
-  EOF
-
-  sed -ie '
-    /^entrypoint()$/ {
-      x ;
-      r ${confPath}
-      }' main.py
-
-  echo "entrypoint()" >> main.py
-
   mkdir -p $out/bin
-  install main.py $out/bin/${pname}
+  install ${./main.py} $out/bin/${pname}
+  wrapProgram $out/bin/${pname} --add-flags "--config ${confPath}"
+  wrapPythonPrograms
 ''

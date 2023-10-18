@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import glob
 import json
 import subprocess
@@ -6,16 +8,23 @@ from argparse import ArgumentParser
 from itertools import chain
 from pathlib import Path
 from sys import stderr
-from typing import List
+from typing import Dict, List, TypedDict
 
-CONFIG = {
-    "nixExe": "nix",
-    "allowedPatterns": {},
-}
+
+class Pattern(TypedDict):
+    onFeatures: List[str]
+    paths: List[str]  # List of glob patterns
+
+
+class HookConfig(TypedDict):
+    nixExe: str
+    allowedPatterns: Dict[str, Pattern]
+
 
 parser = ArgumentParser("pre-build-hook")
 parser.add_argument("derivation_path")
 parser.add_argument("sandbox_path", nargs="?")
+parser.add_argument("--config", type=Path)
 parser.add_argument(
     "--issue-command",
     choices=("always", "conditional", "never"),
@@ -39,11 +48,11 @@ def symlink_parents(p: Path) -> List[Path]:
 
 
 def entrypoint():
-    if __name__ != "__main__":
-        return
-
     args = parser.parse_args()
     drv_path = args.derivation_path
+
+    with open(args.config, "r") as f:
+        config = json.load(f)
 
     if not Path(drv_path).exists():
         print(
@@ -55,7 +64,7 @@ def entrypoint():
 
     proc = subprocess.run(
         [
-            CONFIG["nixExe"],
+            config["nixExe"],
             "show-derivation",
             drv_path,
         ],
@@ -78,7 +87,7 @@ def entrypoint():
         return
     [canon_drv_path] = drv.keys()
 
-    allowed_patterns = CONFIG["allowedPatterns"]
+    allowed_patterns = config["allowedPatterns"]
     known_features = set(
         chain.from_iterable(
             pattern["onFeatures"] for pattern in allowed_patterns.values()
@@ -92,7 +101,9 @@ def entrypoint():
 
     features = list(filter(known_features.__contains__, features))
 
-    patterns = list(chain.from_iterable(allowed_patterns[f]["paths"] for f in features))  # noqa: E501
+    patterns = list(
+        chain.from_iterable(allowed_patterns[f]["paths"] for f in features)
+    )  # noqa: E501
 
     roots = sorted(
         set(Path(path) for pattern in patterns for path in glob.glob(pattern))
@@ -115,4 +126,5 @@ def entrypoint():
         print()
 
 
-entrypoint()
+if __name__ == "__main__":
+    entrypoint()
