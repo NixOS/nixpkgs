@@ -2,7 +2,7 @@
 let cfg = config.services.victoriametrics; in
 {
   options.services.victoriametrics = with lib; {
-    enable = mkEnableOption (lib.mdDoc "victoriametrics");
+    enable = mkEnableOption (lib.mdDoc "VictoriaMetrics, a time series database, long-term remote storage for Prometheus");
     package = mkPackageOption pkgs "victoriametrics" { };
     listenAddress = mkOption {
       default = ":8428";

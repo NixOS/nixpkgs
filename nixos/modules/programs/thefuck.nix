@@ -16,7 +16,7 @@ in
   {
     options = {
       programs.thefuck = {
-        enable = mkEnableOption (lib.mdDoc "thefuck");
+        enable = mkEnableOption (lib.mdDoc "thefuck, an app which corrects your previous console command");
 
         alias = mkOption {
           default = "fuck";

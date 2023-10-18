@@ -8,7 +8,7 @@ let
 in
 {
   options.services.goeland = {
-    enable = mkEnableOption (mdDoc "goeland");
+    enable = mkEnableOption (mdDoc "goeland, an alternative to rss2email");
 
     settings = mkOption {
       description = mdDoc ''

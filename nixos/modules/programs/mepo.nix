@@ -5,7 +5,7 @@ let
 in
 {
   options.programs.mepo = {
-    enable = mkEnableOption (mdDoc "Mepo");
+    enable = mkEnableOption (mdDoc "Mepo, a fast, simple and hackable OSM map viewer");
 
     locationBackends = {
       gpsd = mkOption {
