@@ -1,3 +1,4 @@
+fix case-insensitive build
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -34,7 +34,7 @@ docfiles = \
