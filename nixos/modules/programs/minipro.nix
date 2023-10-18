@@ -8,7 +8,7 @@ in
     programs.minipro = {
       enable = lib.mkEnableOption (lib.mdDoc "minipro") // {
         description = lib.mdDoc ''
-          Installs minipro and its udev rules.
+          Whether to enable minipro and its udev rules.
           Users of the `plugdev` group can interact with connected MiniPRO chip programmers.
         '';
       };

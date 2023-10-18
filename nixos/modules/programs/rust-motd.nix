@@ -24,7 +24,7 @@ let
     '';
 in {
   options.programs.rust-motd = {
-    enable = mkEnableOption (lib.mdDoc "rust-motd");
+    enable = mkEnableOption (lib.mdDoc "rust-motd, a Message Of The Day (MOTD) generator");
     enableMotdInSSHD = mkOption {
       default = true;
       type = types.bool;

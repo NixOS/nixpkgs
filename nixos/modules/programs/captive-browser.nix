@@ -49,7 +49,7 @@ in
 
   options = {
     programs.captive-browser = {
-      enable = mkEnableOption (lib.mdDoc "captive browser");
+      enable = mkEnableOption (lib.mdDoc "captive browser, a dedicated Chrome instance to log into captive portals without messing with DNS settings");
 
       package = mkPackageOption pkgs "captive-browser" { };
 

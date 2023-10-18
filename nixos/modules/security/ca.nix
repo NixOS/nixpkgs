@@ -19,7 +19,7 @@ in
 {
 
   options = {
-    security.pki.installCACerts = mkEnableOption "Add CA certificates to system" // {
+    security.pki.installCACerts = mkEnableOption "installing CA certificates to the system" // {
       default = true;
       internal = true;
     };

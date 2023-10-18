@@ -7,7 +7,7 @@ let
 in
   {
     options.services.etesync-dav = {
-      enable = mkEnableOption (lib.mdDoc "etesync-dav");
+      enable = mkEnableOption (lib.mdDoc "etesync-dav, end-to-end encrypted sync for contacts, calendars and tasks");
 
       host = mkOption {
         type = types.str;

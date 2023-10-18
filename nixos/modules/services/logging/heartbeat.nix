@@ -18,7 +18,7 @@ in
 
     services.heartbeat = {
 
-      enable = mkEnableOption (lib.mdDoc "heartbeat");
+      enable = mkEnableOption (lib.mdDoc "heartbeat, uptime monitoring");
 
       package = mkPackageOption pkgs "heartbeat" {
         example = "heartbeat7";

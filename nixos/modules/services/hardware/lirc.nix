@@ -11,7 +11,7 @@ in {
   options = {
     services.lirc = {
 
-      enable = mkEnableOption (lib.mdDoc "LIRC daemon");
+      enable = mkEnableOption (lib.mdDoc "the LIRC daemon, to receive and send infrared signals");
 
       options = mkOption {
         type = types.lines;
