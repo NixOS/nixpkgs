@@ -296,13 +296,33 @@ let
 
   tests-python =
     let
-      p = pkgs.python3Packages.xpybutil.overridePythonAttrs (_: {
-        dontWrapPythonPrograms = true;
-      });
+      python-package-stub = pkgs.python3Packages.callPackage (
+        {
+          buildPythonPackage,
+          emptyDirectory,
+        }:
+        buildPythonPackage {
+          pname = "python-package-stub";
+          version = "0.1.0";
+          pyproject = true;
+          src = emptyDirectory;
+        }
+      ) { };
+      applyOverridePythonAttrs =
+        p:
+        p.overridePythonAttrs (previousAttrs: {
+          overridePythonAttrsFlag = previousAttrs.overridePythonAttrsFlag or 0 + 1;
+        });
     in
     {
       overridePythonAttrs = {
-        expr = !lib.hasInfix "wrapPythonPrograms" p.postFixup;
+        expr = (applyOverridePythonAttrs python-package-stub).overridePythonAttrsFlag == 1;
+        expected = true;
+      };
+      overridePythonAttrs-nested = {
+        expr =
+          (applyOverridePythonAttrs (applyOverridePythonAttrs python-package-stub)).overridePythonAttrsFlag
+          == 2;
         expected = true;
       };
     };
