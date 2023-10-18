@@ -16,6 +16,7 @@
 , CoreFoundation, Security, SystemConfiguration
 , pkgsBuildTarget, pkgsBuildBuild, pkgsBuildHost
 , makeRustPlatform
+, wrapRustc
 , llvmPackages_16, llvm_16
 } @ args:
 
