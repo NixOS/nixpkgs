@@ -9734,7 +9734,7 @@ with pkgs;
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
   kak-lsp = callPackage ../tools/misc/kak-lsp {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
   kakoune-cr = callPackage ../tools/misc/kakoune-cr { crystal = crystal_1_2; };
