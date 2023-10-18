@@ -96,10 +96,11 @@ self: super: {
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
 
-  haskell-language-server = (lib.pipe super.haskell-language-server [
-    dontCheck
-    (disableCabalFlag "stan") # Sorry stan is totally unmaintained and terrible to get to run. It only works on ghc 8.8 or 8.10 anyways …
-  ]).overrideScope (lself: lsuper: {
+  inherit (let
+    hls_overlay = lself: lsuper: {
+      ghc-lib-parser = lself.ghc-lib-parser_9_6_2_20230523;
+      ghc-lib-parser-ex = doDistribute lself.ghc-lib-parser-ex_9_6_0_2;
+      Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
     # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
     # because some packages, like ormolu, need a newer Cabal version.
     # ghc-paths is special because it depends on Cabal for building
@@ -110,7 +111,31 @@ self: super: {
     # otherwise we have different versions of ghc-paths
     # around which have the same abi-hash, which can lead to confusions and conflicts.
     ghc-paths = lsuper.ghc-paths.override { Cabal = null; };
-  });
+  };
+  in lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
+    haskell-language-server = allowInconsistentDependencies (dontCheck super.haskell-language-server);
+    # Tests fail due to the newly-build fourmolu not being in PATH
+    # https://github.com/fourmolu/fourmolu/issues/231
+    fourmolu = dontCheck super.fourmolu_0_14_0_0;
+    ormolu = super.ormolu_0_7_2_0;
+    hlint = super.hlint_3_6_1;
+    stylish-haskell = super.stylish-haskell_0_14_5_0;
+  })
+    haskell-language-server
+  # HLS from 2.3 needs at least formolu 0.14.
+  # This means we need to bump a lot of other tools, too, because they all us ghc-lib-parser
+  # We do this globally to prevent inconsistent formatting or lints between hls and the command line tools.
+    fourmolu
+    ormolu
+    hlint
+    stylish-haskell;
+
+  fourmolu_0_13_1_0 = dontCheck super.fourmolu_0_13_1_0;
+
+  # hasn't bumped upper bounds
+  # test fails: "floskell-test: styles/base.md: openBinaryFile: does not exist (No such file or directory)"
+  # https://github.com/ennocramer/floskell/issues/48
+  floskell = dontCheck (doJailbreak super.floskell);
 
   # 2023-04-03: https://github.com/haskell/haskell-language-server/issues/3546#issuecomment-1494139751
   # There will probably be a new revision soon.
@@ -118,19 +143,6 @@ self: super: {
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
-
-  # Test ldap server test/ldap.js is missing from sdist
-  # https://github.com/supki/ldap-client/issues/18
-  ldap-client-og = dontCheck super.ldap-client-og;
-
-  stylish-haskell =
-    # Too-strict upper bounds, no Hackage revisions
-    doJailbreak
-      # For -fghc-lib see cabal.project in haskell-language-server.
-      (if lib.versionAtLeast super.ghc.version "9.2"
-       then enableCabalFlag "ghc-lib" super.stylish-haskell
-       else super.stylish-haskell
-      );
 
   hiedb =
     lib.pipe
@@ -152,6 +164,10 @@ self: super: {
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
+
+  # Test ldap server test/ldap.js is missing from sdist
+  # https://github.com/supki/ldap-client/issues/18
+  ldap-client-og = dontCheck super.ldap-client-og;
 
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
@@ -1495,11 +1511,6 @@ self: super: {
   rdf4h = dontCheck super.rdf4h;
 
   # hasn't bumped upper bounds
-  # test fails: "floskell-test: styles/base.md: openBinaryFile: does not exist (No such file or directory)"
-  # https://github.com/ennocramer/floskell/issues/48
-  floskell = dontCheck (doJailbreak super.floskell);
-
-  # hasn't bumped upper bounds
   # test fails because of a "Warning: Unused LANGUAGE pragma"
   # https://github.com/ennocramer/monad-dijkstra/issues/4
   monad-dijkstra = dontCheck super.monad-dijkstra;
@@ -2674,11 +2685,6 @@ self: super: {
 
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
-
-  # Tests fail due to the newly-build fourmolu not being in PATH
-  # https://github.com/fourmolu/fourmolu/issues/231
-  fourmolu_0_14_0_0 = dontCheck super.fourmolu_0_14_0_0;
-  fourmolu_0_13_1_0 = dontCheck super.fourmolu_0_13_1_0;
 
   # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
   # https://github.com/vincenthz/hs-gauge/pull/106

@@ -487,8 +487,6 @@ dont-distribute-packages:
  - amby
  - ampersand
  - amqp-streamly
- - amqp-utils_0_6_4_0
- - amqp_0_22_2
  - analyze-client
  - anatomy
  - animate-example
@@ -749,7 +747,6 @@ dont-distribute-packages:
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
- - calamity
  - calc
  - calculator
  - caldims
@@ -1125,7 +1122,6 @@ dont-distribute-packages:
  - discogs-haskell
  - discord-gateway
  - discord-hs
- - discord-register
  - discord-rest
  - distributed-fork
  - distributed-fork-aws-lambda
@@ -2186,9 +2182,7 @@ dont-distribute-packages:
  - htoml-parse
  - htsn-import
  - http-client-auth
- - http-client-restricted_0_1_0
  - http-client-rustls
- - http-client-tls_0_3_6_3
  - http-enumerator
  - http-exchange
  - http-exchange-instantiations
@@ -2815,7 +2809,6 @@ dont-distribute-packages:
  - nero-wai
  - nero-warp
  - nested-routes
- - net-mqtt_0_8_6_0
  - net-spider
  - net-spider-cli
  - net-spider-pangraph
@@ -2829,7 +2822,6 @@ dont-distribute-packages:
  - nettle-openflow
  - network-anonymous-i2p
  - network-anonymous-tor
- - network-conduit-tls_1_4_0
  - network-connection
  - network-enumerator
  - network-hans
@@ -2848,7 +2840,6 @@ dont-distribute-packages:
  - newsletter-mailgun
  - newsynth
  - ngx-export-distribution
- - ngx-export-healthcheck
  - ngx-export-tools-extra
  - nikepub
  - nirum
@@ -3059,7 +3050,6 @@ dont-distribute-packages:
  - point-octree
  - pointless-lenses
  - pointless-rewrite
- - poke
  - poker
  - polh-lexicon
  - polydata
@@ -3343,7 +3333,6 @@ dont-distribute-packages:
  - repo-based-blog
  - repr
  - representable-tries
- - req_3_13_1
  - reserve
  - resin
  - resource-simple
@@ -4191,7 +4180,6 @@ dont-distribute-packages:
  - wumpus-drawing
  - wumpus-microprint
  - wumpus-tree
- - wuss_2_0_1_4
  - wx
  - wxAsteroids
  - wxFruit

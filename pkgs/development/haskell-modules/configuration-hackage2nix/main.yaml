@@ -58,6 +58,9 @@ default-package-overrides:
   # https://github.com/obsidiansystems/dependent-sum-template/issues/5
   - dependent-sum-template < 0.1.2
 
+  # hls-floskell-plugin 2.4 does not yet support floskell 0.11
+  - floskell < 0.11
+
 extra-packages:
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
