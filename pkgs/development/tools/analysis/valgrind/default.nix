@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = lib.optionalString stdenv.isFreeBSD ''
     substituteInPlace configure --replace '`uname -r`' \
-        ${toString stdenv.hostPlatform.parsed.kernel.version}.0
+        ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
   '' + lib.optionalString stdenv.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
