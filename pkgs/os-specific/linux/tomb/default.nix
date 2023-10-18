@@ -13,7 +13,6 @@
 , lsof
 , util-linux
 , e2fsprogs
-, testers
 , nix-update-script
 }:
 
@@ -46,11 +45,16 @@ stdenv.mkDerivation rec {
       --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup e2fsprogs getent gettext gnupg libargon2 lsof pinentry util-linux ]}
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "File encryption on GNU/Linux";
     homepage = "https://www.dyne.org/software/tomb/";
     changelog = "https://github.com/dyne/Tomb/blob/v${version}/ChangeLog.md";
     license = licenses.gpl3;
+    mainProgram = "tomb";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
   };
