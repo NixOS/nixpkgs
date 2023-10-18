@@ -36484,7 +36484,7 @@ with pkgs;
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
-  dockapps = callPackage ../by-name/wi/windowmaker/dockapps { };
+  inherit (windowmaker) dockapps;
 
   wily = callPackage ../applications/editors/wily { };
 
