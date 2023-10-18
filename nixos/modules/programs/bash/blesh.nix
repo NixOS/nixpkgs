@@ -4,7 +4,7 @@ let
   cfg = config.programs.bash.blesh;
 in {
   options = {
-    programs.bash.blesh.enable = mkEnableOption (mdDoc "blesh");
+    programs.bash.blesh.enable = mkEnableOption (mdDoc "blesh, a full-featured line editor written in pure Bash");
   };
 
   config = mkIf cfg.enable {

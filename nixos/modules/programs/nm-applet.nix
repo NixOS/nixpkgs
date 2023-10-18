@@ -6,7 +6,7 @@
   };
 
   options.programs.nm-applet = {
-    enable = lib.mkEnableOption (lib.mdDoc "nm-applet");
+    enable = lib.mkEnableOption (lib.mdDoc "nm-applet, a NetworkManager control applet for GNOME");
 
     indicator = lib.mkOption {
       type = lib.types.bool;

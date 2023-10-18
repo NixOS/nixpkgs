@@ -77,7 +77,7 @@ in {
 
   options.services.mpdscribble = {
 
-    enable = mkEnableOption (lib.mdDoc "mpdscribble");
+    enable = mkEnableOption (lib.mdDoc "mpdscribble, an MPD client which submits info about tracks being played to Last.fm (formerly AudioScrobbler)");
 
     proxy = mkOption {
       default = null;

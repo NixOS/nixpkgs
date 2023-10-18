@@ -9,7 +9,7 @@ in
 {
   options = {
     services.jackett = {
-      enable = mkEnableOption (lib.mdDoc "Jackett");
+      enable = mkEnableOption (lib.mdDoc "Jackett, API support for your favorite torrent trackers");
 
       dataDir = mkOption {
         type = types.str;

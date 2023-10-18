@@ -5,7 +5,7 @@ let
   inherit (lib) mkEnableOption mkIf mkOption mkPackageOption optionalString types;
 in {
   options.programs.iay = {
-    enable = mkEnableOption (lib.mdDoc "iay");
+    enable = mkEnableOption (lib.mdDoc "iay, a minimalistic shell prompt");
     package = mkPackageOption pkgs "iay" {};
 
     minimalPrompt = mkOption {

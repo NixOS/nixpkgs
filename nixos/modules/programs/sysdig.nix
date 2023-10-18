@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.programs.sysdig;
 in {
-  options.programs.sysdig.enable = mkEnableOption (lib.mdDoc "sysdig");
+  options.programs.sysdig.enable = mkEnableOption (lib.mdDoc "sysdig, a tracing tool");
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.sysdig ];

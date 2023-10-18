@@ -10,7 +10,7 @@ in
 
   options = {
     users.mysql = {
-      enable = mkEnableOption (lib.mdDoc "Authentication against a MySQL/MariaDB database");
+      enable = mkEnableOption (lib.mdDoc "authentication against a MySQL/MariaDB database");
       host = mkOption {
         type = types.str;
         example = "localhost";

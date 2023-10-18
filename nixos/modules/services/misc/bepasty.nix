@@ -13,7 +13,7 @@ let
 in
 {
   options.services.bepasty = {
-    enable = mkEnableOption (lib.mdDoc "Bepasty servers");
+    enable = mkEnableOption (lib.mdDoc "bepasty, a binary pastebin server");
 
     servers = mkOption {
       default = {};

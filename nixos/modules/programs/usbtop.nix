@@ -6,7 +6,7 @@ let
   cfg = config.programs.usbtop;
 in {
   options = {
-    programs.usbtop.enable = mkEnableOption (lib.mdDoc "usbtop and required kernel module");
+    programs.usbtop.enable = mkEnableOption (lib.mdDoc "usbtop and required kernel module, to show estimated USB bandwidth");
   };
 
   config = mkIf cfg.enable {

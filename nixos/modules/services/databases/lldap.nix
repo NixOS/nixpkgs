@@ -6,7 +6,7 @@ let
 in
 {
   options.services.lldap = with lib; {
-    enable = mkEnableOption (mdDoc "lldap");
+    enable = mkEnableOption (mdDoc "lldap, a lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication");
 
     package = mkPackageOption pkgs "lldap" { };
 

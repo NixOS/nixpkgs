@@ -24,7 +24,7 @@ in
   meta.maintainers = with maintainers; [ oddlama ];
 
   options.services.esphome = {
-    enable = mkEnableOption (mdDoc "esphome");
+    enable = mkEnableOption (mdDoc "esphome, for making custom firmwares for ESP32/ESP8266");
 
     package = lib.mkPackageOption pkgs "esphome" { };
 

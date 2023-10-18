@@ -56,7 +56,7 @@ in
   # interface
   options = {
     services.redmine = {
-      enable = mkEnableOption (lib.mdDoc "Redmine");
+      enable = mkEnableOption (lib.mdDoc "Redmine, a project management web application");
 
       package = mkPackageOption pkgs "redmine" {
         example = "redmine.override { ruby = pkgs.ruby_3_2; }";

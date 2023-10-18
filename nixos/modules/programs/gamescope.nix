@@ -21,7 +21,7 @@ with lib; let
 in
 {
   options.programs.gamescope = {
-    enable = mkEnableOption (mdDoc "gamescope");
+    enable = mkEnableOption (mdDoc "gamescope, the SteamOS session compositing window manager");
 
     package = mkPackageOption pkgs "gamescope" { };
 

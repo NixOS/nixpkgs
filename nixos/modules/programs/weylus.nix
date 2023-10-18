@@ -7,7 +7,7 @@ let
 in
 {
   options.programs.weylus = with types; {
-    enable = mkEnableOption (lib.mdDoc "weylus");
+    enable = mkEnableOption (lib.mdDoc "weylus, which turns your smart phone into a graphic tablet/touch screen for your computer");
 
     openFirewall = mkOption {
       type = bool;

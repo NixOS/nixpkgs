@@ -367,7 +367,7 @@ in {
     });
   in {
     services.matrix-synapse = {
-      enable = mkEnableOption (lib.mdDoc "matrix.org synapse");
+      enable = mkEnableOption (lib.mdDoc "matrix.org synapse, the reference homeserver");
 
       enableRegistrationScript = mkOption {
         type = types.bool;
