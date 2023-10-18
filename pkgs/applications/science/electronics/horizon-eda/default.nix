@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "A free EDA software to develop printed circuit boards";
     homepage = "https://horizon-eda.org";
     maintainers = with maintainers; [ guserav ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }
