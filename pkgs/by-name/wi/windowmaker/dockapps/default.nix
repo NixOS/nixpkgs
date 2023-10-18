@@ -1,20 +1,25 @@
 { config, lib, pkgs }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: {
 
-  dockapps-sources = pkgs.fetchgit {
-    url = "https://repo.or.cz/dockapps.git";
-    rev = "b2b9d872ee61c9b329e4597c301e4417cbd9c3ea";
-    sha256 = "sha256-BuSnwPIj3gUWMjj++SK+117xm/77u4gXLQzRFttei0w=";
+  dockapps-sources = {
+    pname = "dockapps-sources";
+    version = "2023-10-11"; # Shall correspond to src.rev
+
+    src = pkgs.fetchFromRepoOrCz {
+      repo = "dockapps";
+      rev = "1bbb32008ecb58acaec9ea70e00b4ea1735408fc";
+      hash = "sha256-BLUDe/cIIuh9mCtafbcBSDatUXSRD83FeyYhcbem5FU=";
+    };
   };
 
-  libdockapp = callPackage ./libdockapp.nix { };
+  AlsaMixer-app = self.callPackage ./AlsaMixer-app.nix { };
 
-  AlsaMixer-app = callPackage ./AlsaMixer-app.nix { };
+  libdockapp = self.callPackage ./libdockapp.nix { };
 
-  wmCalClock = callPackage ./wmCalClock.nix { };
+  wmCalClock = self.callPackage ./wmCalClock.nix { };
 
-  wmsm-app = callPackage ./wmsm-app.nix { };
+  wmsm-app = self.callPackage ./wmsm-app.nix { };
 
-  wmsystemtray = callPackage ./wmsystemtray.nix { };
+  wmsystemtray = self.callPackage ./wmsystemtray.nix { };
 })
