@@ -10115,12 +10115,12 @@ with self; {
 
   Future = buildPerlModule {
     pname = "Future";
-    version = "0.48";
+    version = "0.50";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.48.tar.gz";
-      hash = "sha256-D+ixXBQvKjBKMXGKIKEFA6m0TMASw69eN7i34koHUqM=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-0.50.tar.gz";
+      hash = "sha256-wDXj2eaaOvFEszrINN7p5lrTYPKlHbnxWNw0Ls3dX0Q=";
     };
-    buildInputs = [ TestFatal TestIdentity TestRefcount ];
+    buildInputs = [ Test2Suite ];
     meta = {
       description = "Represent an operation awaiting completion";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
