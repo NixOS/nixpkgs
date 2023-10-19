@@ -20,13 +20,13 @@
 
 mkDerivation rec {
   pname = "chiaki4deck";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "streetpea";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-udSGtpBUbxEZU9l+jLmUWJbkaCxKGoPuKAaYVmEEezk=";
+    hash = "sha256-W/t9uYApt8j5UMjtVWhFtq+IHmu9vi6M92I8N4kRtEk=";
     fetchSubmodules = true;
   };
 
