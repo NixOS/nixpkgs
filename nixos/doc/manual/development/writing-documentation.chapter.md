@@ -16,7 +16,7 @@ You can quickly validate your edits with `make`:
 ```ShellSession
 $ cd /path/to/nixpkgs/nixos/doc/manual
 $ nix-shell
-nix-shell$ make
+nix-shell$ devmode
 ```
 
 Once you are done making modifications to the manual, it's important to
