@@ -12986,13 +12986,13 @@ with self; {
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "5.08";
+    version = "5.14";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-5.08.tar.gz";
-      hash = "sha256-QPaWjtcfxv1Ij6Q1Ityhk5NDhUCSth/eZgHwcWZHeFg=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-5.14.tar.gz";
+      hash = "sha256-YISl1AdeQhqTj/su6XuFBPqjXoZtD3tbWBETr17ijhs=";
     };
     buildInputs = [ TestDeep ];
-    propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
+    propagatedBuildInputs = [ Mojolicious YAMLLibYAML ];
     meta = {
       description = "Validate data against a JSON schema";
       homepage = "https://github.com/mojolicious/json-validator";
