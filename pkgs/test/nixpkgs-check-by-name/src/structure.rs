@@ -105,12 +105,15 @@ impl Nixpkgs {
                 }
 
                 let package_name_valid = PACKAGE_NAME_REGEX.is_match(&package_name);
-                if !package_name_valid {
-                    error_writer.write(&format!(
-                        "{}: Invalid package directory name \"{package_name}\", must be ASCII characters consisting of a-z, A-Z, 0-9, \"-\" or \"_\".",
-                        relative_package_dir.display(),
-                    ))?;
-                }
+                let name_check_result = if !package_name_valid {
+                    CheckError::InvalidPackageName {
+                        relative_package_dir: relative_package_dir.clone(),
+                        package_name: package_name.clone(),
+                    }
+                    .into_result()
+                } else {
+                    pass(())
+                };
 
                 let correct_relative_package_dir = Nixpkgs::relative_dir_for_package(&package_name);
                 let shard_check_result = if relative_package_dir != correct_relative_package_dir {
@@ -144,8 +147,14 @@ impl Nixpkgs {
                     pass(())
                 };
 
-                let check_result =
-                    flatten_check_results([shard_check_result, package_nix_check_result], |_| ());
+                let check_result = flatten_check_results(
+                    [
+                        name_check_result,
+                        shard_check_result,
+                        package_nix_check_result,
+                    ],
+                    |_| (),
+                );
 
                 write_check_result(error_writer, check_result)?;
 

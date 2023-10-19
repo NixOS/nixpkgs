@@ -7,6 +7,10 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    InvalidPackageName {
+        relative_package_dir: PathBuf,
+        package_name: String,
+    },
     IncorrectShard {
         relative_package_dir: PathBuf,
         correct_relative_package_dir: PathBuf,
@@ -79,6 +83,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::InvalidPackageName { relative_package_dir, package_name } =>
+                write!(
+                    f,
+                    "{}: Invalid package directory name \"{package_name}\", must be ASCII characters consisting of a-z, A-Z, 0-9, \"-\" or \"_\".",
+                    relative_package_dir.display(),
+                ),
             CheckError::IncorrectShard { relative_package_dir, correct_relative_package_dir } =>
                 write!(
                     f,
