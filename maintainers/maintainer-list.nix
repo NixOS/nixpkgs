@@ -2642,6 +2642,15 @@
     githubId = 37375448;
     name = "Buildit";
   };
+  burniintree = {
+    name = "Lars Mühmel";
+    email = "larsmuehmel@web.de";
+    github = "BurNiinTRee";
+    githubId = 7968493;
+    keys = [{
+      fingerprint = "2BC4 CCAD FA56 133A 551C  F38C 4106 FBAD F456 6EAC";
+    }];
+  };
   bwlang = {
     email = "brad@langhorst.com";
     github = "bwlang";
