@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, nix, openssl, Security }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, aws-c-common
+, nix
+, openssl
+, Security
+}:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-cal";
@@ -7,15 +15,22 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-21utcyQjEJBZlA+BB5gZIVmF1zyTE3FPWDQssDPoVbo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-21utcyQjEJBZlA+BB5gZIVmF1zyTE3FPWDQssDPoVbo=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ aws-c-common openssl ];
+  buildInputs = [
+    aws-c-common
+    openssl
+  ];
 
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -28,6 +43,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "AWS Crypto Abstraction Layer ";
     homepage = "https://github.com/awslabs/aws-c-cal";
+    changelog = "https://github.com/awslabs/aws-c-cal/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej ];
