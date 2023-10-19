@@ -188,7 +188,9 @@ in {
         name = "setuptools-rust-setup-hook";
         propagatedBuildInputs = [ setuptools-rust ];
         substitutions = {
+          pyIncludeDir = "${python}/include/${python.libPrefix}";
           pyLibDir = "${python}/lib/${python.libPrefix}";
+          pyBin = python.interpreter;
           cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
           cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
           targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
