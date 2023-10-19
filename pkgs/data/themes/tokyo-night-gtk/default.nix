@@ -6,13 +6,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "tokyo-night-gtk";
-  version = "2023.01.17";
+  version = "unstable-2023-05-30";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Tokyo-Night-GTK-Theme";
-    rev = "f7ae3421ac0d415ca57fb6224e093e12b8a980bb";
-    sha256 = "sha256-90V55pRfgiaP1huhD+3456ziJ2EU24iNQHt5Ro+g+M0=";
+    rev = "e9790345a6231cd6001f1356d578883fac52233a";
+    hash = "sha256-Q9UnvmX+GpvqSmTwdjU4hsEsYhA887wPqs5pyqbIhmc=";
   };
 
   propagatedUserEnvPkgs = [
