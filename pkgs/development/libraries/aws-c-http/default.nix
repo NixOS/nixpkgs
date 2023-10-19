@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , aws-c-cal
 , aws-c-common
@@ -11,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-http";
-  version = "0.7.11";
+  version = "0.7.13";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
-    rev = "v${version}";
-    sha256 = "sha256-gKuWhXxWHqTS66yANdKLsCZRk7jeDmyYMlme4WXT5Wc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tPdLCFrs00tCBSy69SwXFpEHzusjgcKzYluy5SSdIJ4=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C99 implementation of the HTTP/1.1 and HTTP/2 specifications";
     homepage = "https://github.com/awslabs/aws-c-http";
+    changelog = "https://github.com/awslabs/aws-c-http/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ r-burns ];
