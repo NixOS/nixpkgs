@@ -1,25 +1,41 @@
-{ buildPythonApplication, fetchFromGitHub, nose, openjdk, lib }:
+{ lib
+, fetchFromGitHub
+, openjdk
+, python3
+}:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "html5validator";
-  version = "0.3.3";
+  version = "0.4.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "svenkreiss";
     repo = "html5validator";
-    rev = "v${version}";
-    sha256 = "130acqi0dsy3midg7hwslykzry6crr4ln6ia0f0avyywkz4bplsv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yvclqE4+2R9q/UJU9W95U1/xVJeNj+5eKvT6VQel9k8=";
   };
 
-  propagatedBuildInputs = [ openjdk ];
+  propagatedBuildInputs = [
+    openjdk
+  ] ++ (with python3.pkgs; [
+    pyyaml
+  ]);
 
-  nativeCheckInputs = [ nose ];
-  checkPhase = "PATH=$PATH:$out/bin nosetests";
+  nativeCheckInputs = with python3.pkgs; [
+    hacking
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
 
   meta = with lib; {
-    homepage = "https://github.com/svenkreiss/html5validator";
     description = "Command line tool that tests files for HTML5 validity";
+    homepage = "https://github.com/svenkreiss/html5validator";
+    changelog = "https://github.com/svenkreiss/html5validator/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.phunehehe ];
+    maintainers = with maintainers; [ phunehehe ];
   };
 }
