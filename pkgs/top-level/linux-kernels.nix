@@ -96,18 +96,6 @@ in {
       rpiVersion = 4;
     };
 
-    linux_4_14 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "4.14";
-      kernelPatches =
-        [ kernelPatches.bridge_stp_helper
-          kernelPatches.request_key_helper
-          # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
-          # when adding a new linux version
-          kernelPatches.cpu-cgroup-v2."4.11"
-          kernelPatches.modinst_arg_list_too_long
-        ];
-    };
-
     linux_4_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "4.19";
       kernelPatches =
@@ -211,14 +199,6 @@ in {
       kernelPatches = linux_6_5.kernelPatches;
    };
 
-    linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-        kernelPatches.modinst_arg_list_too_long
-      ];
-    };
-
     # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
     # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
     zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
@@ -255,10 +235,6 @@ in {
 
     linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
 
-    linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 {
-      stdenv = gcc10Stdenv;
-      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
-    };
     linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 {
       stdenv = gcc10Stdenv;
       buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
@@ -274,6 +250,7 @@ in {
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
+    linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
     linux_5_18 = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19 = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0 = throw "linux 6.0 was removed because it has reached its end of life upstream";
@@ -584,7 +561,6 @@ in {
 
   vanillaPackages = {
     # recurse to build modules for the kernels
-    linux_4_14 = recurseIntoAttrs (packagesFor kernels.linux_4_14);
     linux_4_19 = recurseIntoAttrs (packagesFor kernels.linux_4_19);
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
@@ -593,6 +569,7 @@ in {
     linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
+    linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = throw "linux 5.19 was removed because it reached its end of life upstream"; # Added 2022-11-01
     linux_6_0 = throw "linux 6.0 was removed because it reached its end of life upstream"; # Added 2023-01-20
@@ -624,7 +601,6 @@ in {
 
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
-    linux_4_14_hardened = recurseIntoAttrs (packagesFor kernels.linux_4_14_hardened);
     linux_4_19_hardened = recurseIntoAttrs (packagesFor kernels.linux_4_19_hardened);
     linux_5_4_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_4_hardened);
     linux_5_10_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_10_hardened);
@@ -637,8 +613,6 @@ in {
     linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
     linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
     linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
-
-    hardkernel_4_14 = recurseIntoAttrs (packagesFor kernels.linux_hardkernel_4_14);
 
     linux_libre = recurseIntoAttrs (packagesFor kernels.linux_libre);
 
@@ -657,7 +631,6 @@ in {
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;
-    linux_hardkernel_latest = packages.hardkernel_4_14;
   };
 
   manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix {};
