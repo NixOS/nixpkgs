@@ -1,9 +1,6 @@
-diff --git a/meson.build b/meson.build
-index c98e1a7..025d9c8 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -110,8 +110,8 @@ else
-   prefix = get_option('prefix')
+@@ -111,7 +111,7 @@ else
    datadir = join_paths(prefix, get_option('datadir'))
    libexecdir = join_paths(prefix, get_option('libexecdir'))
 -  installed_test_bindir = join_paths(libexecdir, 'installed-tests', meson.project_name())
@@ -13,12 +10,11 @@ index c98e1a7..025d9c8 100644
  endif
  
  gio = dependency('gio-2.0', version : '>= 2.45.8')
-diff --git a/meson_options.txt b/meson_options.txt
-index 54ab698..8a7122a 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -3,3 +3,4 @@ option('introspection', type : 'boolean', value : true, description : 'generate
+@@ -3,4 +3,5 @@ option('introspection', type : 'boolean', value : true, description : 'generate
  option('tests', type : 'boolean', value : true, description : 'enable tests')
  option('stemmer', type : 'boolean', value : false, description : 'enable stemmer support')
  option('cli', type : 'boolean', value : true, description : 'build and install the xb-tool CLI')
+ option('zstd', type : 'boolean', value : true, description : 'enable zstd support')
 +option('installed_test_prefix', type: 'string', value: '', description: 'Prefix for installed tests')
