@@ -7,6 +7,9 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    PackageNixNonExistent {
+        relative_package_dir: PathBuf,
+    },
     PackageNixDir {
         relative_package_dir: PathBuf,
     },
@@ -72,6 +75,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::PackageNixNonExistent { relative_package_dir } =>
+                write!(
+                    f,
+                    "{}: Missing required \"{PACKAGE_NIX_FILENAME}\" file.",
+                    relative_package_dir.display(),
+                ),
             CheckError::PackageNixDir { relative_package_dir } =>
                 write!(
                     f,

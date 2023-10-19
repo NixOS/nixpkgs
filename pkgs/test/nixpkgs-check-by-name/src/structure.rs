@@ -1,4 +1,4 @@
-use crate::check_result::{write_check_result, CheckError};
+use crate::check_result::{pass, write_check_result, CheckError};
 use crate::utils;
 use crate::utils::{ErrorWriter, BASE_SUBPATH, PACKAGE_NIX_FILENAME};
 use lazy_static::lazy_static;
@@ -126,18 +126,21 @@ impl Nixpkgs {
                 }
 
                 let package_nix_path = package_path.join(PACKAGE_NIX_FILENAME);
-                if !package_nix_path.exists() {
-                    error_writer.write(&format!(
-                        "{}: Missing required \"{PACKAGE_NIX_FILENAME}\" file.",
-                        relative_package_dir.display(),
-                    ))?;
-                } else if package_nix_path.is_dir() {
-                    let check_result = CheckError::PackageNixDir {
+                let check_result = if !package_nix_path.exists() {
+                    CheckError::PackageNixNonExistent {
                         relative_package_dir: relative_package_dir.clone(),
                     }
-                    .into_result::<()>();
-                    write_check_result(error_writer, check_result)?;
-                }
+                    .into_result()
+                } else if package_nix_path.is_dir() {
+                    CheckError::PackageNixDir {
+                        relative_package_dir: relative_package_dir.clone(),
+                    }
+                    .into_result()
+                } else {
+                    pass(())
+                };
+
+                write_check_result(error_writer, check_result)?;
 
                 package_names.push(package_name.clone());
             }
