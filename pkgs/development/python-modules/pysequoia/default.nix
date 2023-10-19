@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchFromGitLab
+, fetchPypi
 , pkg-config
 , rustPlatform
 , cargo
@@ -15,20 +15,18 @@
 
 buildPythonPackage rec {
   pname = "pysequoia";
-  version = "0.1.14";
+  version = "0.1.20";
   format = "pyproject";
 
-  src = fetchFromGitLab {
-    owner = "sequoia-pgp";
-    repo = "pysequoia";
-    rev = "v${version}";
-    hash = "sha256-63kUUxZTG33cB/IiD4AiDpLOI6Uew/fETgqhaGc7zp0=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-KavsLp17e4ckX11B0pefiQ1Hma/O9x0VY/uVPiJm4Fs=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-S/j3bGgU46nvVQFs35ih05teVEIJrFN4Ryq4B7rLFDE=";
+    hash = "sha256-7Lw6gR6o2HJ/zyG4b0wz4nmU2AIIAhyK9zaQ6w+/RgE=";
   };
 
   nativeBuildInputs = [
@@ -54,6 +52,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This library provides OpenPGP facilities in Python through the Sequoia PGP library";
+    downloadPage = "https://codeberg.org/wiktor/pysequoia";
     homepage = "https://sequoia-pgp.gitlab.io/pysequoia";
     license = licenses.asl20;
     maintainers = with maintainers; [ doronbehar ];
