@@ -41,7 +41,14 @@ in
 
   options = {
     qt = {
-      enable = lib.mkEnableOption (lib.mdDoc "Qt theming configuration");
+      enable = lib.mkEnableOption "" // {
+        description = lib.mdDoc ''
+          Whether to enable Qt configuration, including theming.
+
+          Enabling this option is necessary for Qt plugins to work in the
+          installed profiles (e.g.: `nix-env -i` or `environment.systemPackages`).
+        '';
+      };
 
       platformTheme = lib.mkOption {
         type = with lib.types; nullOr (enum (lib.attrNames platformPackages));
