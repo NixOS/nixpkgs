@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "letoram";
     repo = "arcan";
     rev = "e8a484e7f6cca019174573885876997d56fb7927";
-    hash = "sha256-k/+mbJZc2lSaOejIQBytjpA9kOPIOaCuFGGoY+8PaFs=";
+    hash = "sha256-NahZwQzPSlwuirpiGBv5RnZjXPp+xDlheBLnnwjn7c8=";
   };
 
   nativeBuildInputs = [
