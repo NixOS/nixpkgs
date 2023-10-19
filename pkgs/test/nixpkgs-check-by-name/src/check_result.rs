@@ -5,6 +5,12 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    PathInterpolation {
+        relative_package_dir: PathBuf,
+        subpath: PathBuf,
+        line: usize,
+        text: String,
+    },
     SearchPath {
         relative_package_dir: PathBuf,
         subpath: PathBuf,
@@ -35,6 +41,14 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::PathInterpolation { relative_package_dir, subpath, line, text } =>
+                write!(
+                    f,
+                    "{}: File {} at line {line} contains the path expression \"{}\", which is not yet supported and may point outside the directory of that package.",
+                    relative_package_dir.display(),
+                    subpath.display(),
+                    text
+                ),
             CheckError::SearchPath { relative_package_dir, subpath, line, text } =>
                 write!(
                     f,

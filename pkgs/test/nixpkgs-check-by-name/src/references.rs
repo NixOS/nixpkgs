@@ -133,18 +133,16 @@ fn check_nix_file<W: io::Write>(
 
         // Filters out ./foo/${bar}/baz
         // TODO: We can just check ./foo
-        if node.children().count() != 0 {
-            context.error_writer.write(&format!(
-                "{}: File {} at line {line} contains the path expression \"{}\", which is not yet supported and may point outside the directory of that package.",
-                context.relative_package_dir.display(),
-                subpath.display(),
-                text
-            ))?;
-            continue;
-        }
-
-        // Filters out search paths like <nixpkgs>
-        let check_result = if text.starts_with('<') {
+        let check_result = if node.children().count() != 0 {
+            CheckError::PathInterpolation {
+                relative_package_dir: context.relative_package_dir.clone(),
+                subpath: subpath.to_path_buf(),
+                line,
+                text,
+            }
+            .into_result()
+        } else if text.starts_with('<') {
+            // Filters out search paths like <nixpkgs>
             CheckError::SearchPath {
                 relative_package_dir: context.relative_package_dir.clone(),
                 subpath: subpath.to_path_buf(),
