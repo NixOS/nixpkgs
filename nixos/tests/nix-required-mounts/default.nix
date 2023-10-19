@@ -14,7 +14,8 @@ in
     system.extraDependencies = [ (pkgs.runCommand "deps" { } "mkdir $out").inputDerivation ];
     nix.nixPath = [ "nixpkgs=${../../..}" ];
     nix.settings.substituters = lib.mkForce [ ];
-    nix.settings.system-features = [ "supported-feature" ]; nix.settings.experimental-features = [ "nix-command" ];
+    nix.settings.system-features = [ "supported-feature" ];
+    nix.settings.experimental-features = [ "nix-command" ];
     programs.nix-required-mounts.enable = true;
     programs.nix-required-mounts.allowedPatterns.supported-feature = {
       onFeatures = [ "supported-feature" ];
@@ -40,5 +41,7 @@ in
     person_do("nix-build ${./ensure-path-not-present.nix} --argstr feature supported-feature")
     person_do("nix-build ${./test-require-feature.nix} --argstr feature supported-feature")
     person_do("nix-build ${./test-require-feature.nix} --argstr feature unsupported-feature", succeed=False)
+    person_do("nix-build ${./test-structured-attrs.nix} --argstr feature supported-feature")
+    person_do("nix-build ${./test-structured-attrs-empty.nix}")
   '';
 }

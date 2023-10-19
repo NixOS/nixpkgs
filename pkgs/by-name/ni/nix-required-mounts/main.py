@@ -47,6 +47,13 @@ def symlink_parents(p: Path) -> List[Path]:
     return out
 
 
+def get_strings(drv_env: dict, name: str) -> List[str]:
+    if "__json" in drv_env:
+        return list(json.loads(drv_env["__json"]).get(name, []))
+    else:
+        return drv_env.get(name, "").split()
+
+
 def entrypoint():
     args = parser.parse_args()
     drv_path = args.derivation_path
@@ -71,7 +78,7 @@ def entrypoint():
         capture_output=True,
     )
     try:
-        drv = json.loads(proc.stdout)
+        parsed_drv = json.loads(proc.stdout)
     except json.JSONDecodeError:
         print(
             "[E] Couldn't parse the output of"
@@ -85,7 +92,7 @@ def entrypoint():
         )
         print("[I] Exiting the nix-required-binds hook", file=stderr)
         return
-    [canon_drv_path] = drv.keys()
+    [canon_drv_path] = parsed_drv.keys()
 
     allowed_patterns = config["allowedPatterns"]
     known_features = set(
@@ -94,11 +101,9 @@ def entrypoint():
         )
     )
 
-    drv_env = drv[canon_drv_path].get("env", {})
-    features = drv_env.get("requiredSystemFeatures", [])
-    if isinstance(features, str):
-        features = features.split()
-
+    parsed_drv = parsed_drv[canon_drv_path]
+    drv_env = parsed_drv.get("env", {})
+    features = get_strings(drv_env, "requiredSystemFeatures")
     features = list(filter(known_features.__contains__, features))
 
     patterns = list(
