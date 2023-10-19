@@ -181,7 +181,18 @@ in {
     # required to update the firmware of disks
     services.udisks2.enable = true;
 
-    systemd.packages = [ cfg.package ];
+    systemd = {
+      packages = [ cfg.package ];
+
+      # fwupd-refresh expects a user that we do not create, so just run with DynamicUser
+      # instead and ensure we take ownership of /var/lib/fwupd
+      services.fwupd-refresh.serviceConfig = {
+        DynamicUser = true;
+        StateDirectory = "fwupd";
+      };
+
+      timers.fwupd-refresh.wantedBy = [ "timers.target" ];
+    };
 
     security.polkit.enable = true;
   };
