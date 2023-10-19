@@ -249,7 +249,7 @@ rec {
               then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
               else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
-            stringCoercibleSet = mergeOneOption;
+            stringCoercibleSet = mergeEqualOption;
             lambda = loc: defs: arg: anything.merge
               (loc ++ [ "<function body>" ])
               (map (def: {
