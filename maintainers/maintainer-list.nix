@@ -17745,6 +17745,10 @@
     githubId = 13155277;
     name = "Tom Houle";
   };
+  tomkoid = {
+    email = "tomaszierl@outlook.com";
+    name = "Tomkoid";
+  };
   tomodachi94 = {
     email = "tomodachi94+nixpkgs@protonmail.com";
     matrix = "@tomodachi94:matrix.org";
