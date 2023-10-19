@@ -3,7 +3,6 @@ use crate::utils;
 use crate::utils::{ErrorWriter, BASE_SUBPATH, PACKAGE_NIX_FILENAME};
 use lazy_static::lazy_static;
 use regex::Regex;
-use std::collections::HashMap;
 use std::io;
 use std::path::{Path, PathBuf};
 
@@ -79,9 +78,28 @@ impl Nixpkgs {
                 ))?;
             }
 
-            let mut unique_package_names = HashMap::new();
+            let entries = utils::read_dir_sorted(&shard_path)?;
 
-            for package_entry in utils::read_dir_sorted(&shard_path)? {
+            let duplicate_check_results = entries
+                .iter()
+                .zip(entries.iter().skip(1))
+                .filter(|(l, r)| {
+                    l.file_name().to_ascii_lowercase() == r.file_name().to_ascii_lowercase()
+                })
+                .map(|(l, r)| {
+                    CheckError::CaseSensitiveDuplicate {
+                        relative_shard_path: relative_shard_path.clone(),
+                        first: l.file_name(),
+                        second: r.file_name(),
+                    }
+                    .into_result::<()>()
+                });
+
+            let duplicate_check_result = flatten_check_results(duplicate_check_results, |_| ());
+
+            write_check_result(error_writer, duplicate_check_result)?;
+
+            for package_entry in entries {
                 let package_path = package_entry.path();
                 let package_name = package_entry.file_name().to_string_lossy().into_owned();
                 let relative_package_dir =
@@ -93,15 +111,6 @@ impl Nixpkgs {
                         relative_package_dir.display(),
                     ))?;
                     continue;
-                }
-
-                if let Some(duplicate_package_name) =
-                    unique_package_names.insert(package_name.to_lowercase(), package_name.clone())
-                {
-                    error_writer.write(&format!(
-                        "{}: Duplicate case-sensitive package directories \"{duplicate_package_name}\" and \"{package_name}\".",
-                        relative_shard_path.display(),
-                    ))?;
                 }
 
                 let package_name_valid = PACKAGE_NAME_REGEX.is_match(&package_name);

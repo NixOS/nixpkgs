@@ -2,11 +2,17 @@ use crate::utils::PACKAGE_NIX_FILENAME;
 use crate::ErrorWriter;
 use itertools::{Either, Itertools};
 use rnix::parser::ParseError;
+use std::ffi::OsString;
 use std::fmt;
 use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    CaseSensitiveDuplicate {
+        relative_shard_path: PathBuf,
+        first: OsString,
+        second: OsString,
+    },
     InvalidPackageName {
         relative_package_dir: PathBuf,
         package_name: String,
@@ -83,6 +89,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::CaseSensitiveDuplicate { relative_shard_path, first, second } =>
+                write!(
+                    f,
+                    "{}: Duplicate case-sensitive package directories {first:?} and {second:?}.",
+                    relative_shard_path.display(),
+                ),
             CheckError::InvalidPackageName { relative_package_dir, package_name } =>
                 write!(
                     f,
