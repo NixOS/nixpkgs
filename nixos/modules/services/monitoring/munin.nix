@@ -96,15 +96,23 @@ let
 
   # Use the appropriate intern-fn to copy the plugins into the store and patch
   # them afterwards in an attempt to get them to run on NixOS.
+  # This is a bit hairy because we can't just fix shebangs; lots of munin plugins
+  # hardcode paths like /sbin/mount rather than trusting $PATH, so we have to
+  # look for and update those throughout the script. At the same time, if the
+  # plugin comes from a package that is already nixified, we don't want to
+  # rewrite paths like /nix/store/foo/sbin/mount.
+  # For now we make the simplifying assumption that no file will contain lines
+  # which mix store paths and FHS paths, and thus run our substitution only on
+  # lines which do not contain store paths.
   internAndFixPlugins = name: intern-fn: paths:
     pkgs.runCommand name {} ''
       mkdir -p "$out"
       cd "$out"
       ${lib.concatStringsSep "\n" (map intern-fn paths)}
       chmod -R u+w .
-      find . -type f -exec sed -E -i '
-        s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
-      ' '{}' '+'
+      ${pkgs.findutils}/bin/find . -type f -exec ${pkgs.gnused}/bin/sed -E -i "
+        \%''${NIX_STORE}/%! s,(/usr)?/s?bin/,/run/current-system/sw/bin/,g
+      " '{}' '+'
     '';
 
   # TODO: write a derivation for munin-contrib, so that for contrib plugins
