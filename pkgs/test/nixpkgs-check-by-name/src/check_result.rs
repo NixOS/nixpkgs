@@ -1,5 +1,6 @@
 use crate::utils::PACKAGE_NIX_FILENAME;
 use crate::ErrorWriter;
+use itertools::concat;
 use itertools::{Either, Itertools};
 use rnix::parser::ParseError;
 use std::ffi::OsString;
@@ -244,6 +245,17 @@ pub fn pass<A>(value: A) -> CheckResult<A> {
 }
 
 pub type CheckResult<A> = anyhow::Result<Either<Vec<CheckError>, A>>;
+
+pub fn sequence_check_results<A>(first: CheckResult<()>, second: CheckResult<A>) -> CheckResult<A> {
+    match (first?, second?) {
+        (Either::Right(_), Either::Right(right_value)) => pass(right_value),
+        (Either::Left(errors), Either::Right(_)) => Ok(Either::Left(errors)),
+        (Either::Right(_), Either::Left(errors)) => Ok(Either::Left(errors)),
+        (Either::Left(errors_l), Either::Left(errors_r)) => {
+            Ok(Either::Left(concat([errors_l, errors_r])))
+        }
+    }
+}
 
 pub fn flatten_check_results<I, O>(
     check_results: impl IntoIterator<Item = CheckResult<I>>,

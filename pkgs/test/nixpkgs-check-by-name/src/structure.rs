@@ -1,4 +1,6 @@
-use crate::check_result::{flatten_check_results, pass, write_check_result, CheckError};
+use crate::check_result::{
+    flatten_check_results, pass, sequence_check_results, write_check_result, CheckError,
+};
 use crate::utils;
 use crate::utils::{ErrorWriter, BASE_SUBPATH, PACKAGE_NIX_FILENAME};
 use lazy_static::lazy_static;
@@ -67,7 +69,7 @@ impl Nixpkgs {
                     // we can't check for any other errors if it's a file, since there's no subdirectories to check
                 } else {
                     let shard_name_valid = SHARD_NAME_REGEX.is_match(&shard_name);
-                    let shard_name_valid_check_result = if !shard_name_valid {
+                    let check_result = if !shard_name_valid {
                         CheckError::InvalidShardName {
                             relative_shard_path: relative_shard_path.clone(),
                             shard_name: shard_name.clone(),
@@ -76,8 +78,6 @@ impl Nixpkgs {
                     } else {
                         pass(())
                     };
-
-                    write_check_result(error_writer, shard_name_valid_check_result)?;
 
                     let entries = utils::read_dir_sorted(&shard_path)?;
 
@@ -96,10 +96,10 @@ impl Nixpkgs {
                             .into_result::<()>()
                         });
 
-                    let duplicate_check_result =
-                        flatten_check_results(duplicate_check_results, |_| ());
-
-                    write_check_result(error_writer, duplicate_check_result)?;
+                    let check_result = sequence_check_results(
+                        check_result,
+                        flatten_check_results(duplicate_check_results, |_| ()),
+                    );
 
                     let check_results = entries.into_iter().map(|package_entry| {
                         let package_path = package_entry.path();
@@ -170,7 +170,10 @@ impl Nixpkgs {
                         }
                     });
 
-                    flatten_check_results(check_results, |x| x)
+                    sequence_check_results(
+                        check_result,
+                        flatten_check_results(check_results, |x| x),
+                    )
                 }
             });
 
