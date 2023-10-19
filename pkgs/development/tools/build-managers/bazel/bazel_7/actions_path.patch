@@ -1,5 +1,11 @@
+commit 595756621dd858cf18033af2c4707d2fe8548350
+Author: Guillaume Maudoux <guillaume.maudoux@tweag.io>
+Date:   Fri Oct 6 15:09:56 2023 +0200
+
+    actions_path.patch
+
 diff --git a/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java b/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java
-index 6fff2af..7e2877e 100644
+index 8284eff943..a820037968 100644
 --- a/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java
 +++ b/src/main/java/com/google/devtools/build/lib/exec/local/PosixLocalEnvProvider.java
 @@ -47,6 +47,16 @@ public final class PosixLocalEnvProvider implements LocalEnvProvider {
@@ -19,11 +25,12 @@ index 6fff2af..7e2877e 100644
      String p = clientEnv.get("TMPDIR");
      if (Strings.isNullOrEmpty(p)) {
        // Do not use `fallbackTmpDir`, use `/tmp` instead. This way if the user didn't export TMPDIR
-index 95642767c6..39d3c62461 100644
+diff --git a/src/main/java/com/google/devtools/build/lib/exec/local/XcodeLocalEnvProvider.java b/src/main/java/com/google/devtools/build/lib/exec/local/XcodeLocalEnvProvider.java
+index 8f230b1b1d..2e4c7d26b7 100644
 --- a/src/main/java/com/google/devtools/build/lib/exec/local/XcodeLocalEnvProvider.java
 +++ b/src/main/java/com/google/devtools/build/lib/exec/local/XcodeLocalEnvProvider.java
-@@ -74,6 +74,16 @@ public final class XcodeLocalEnvProvider implements LocalEnvProvider {
-
+@@ -75,6 +75,16 @@ public final class XcodeLocalEnvProvider implements LocalEnvProvider {
+ 
      ImmutableMap.Builder<String, String> newEnvBuilder = ImmutableMap.builder();
      newEnvBuilder.putAll(Maps.filterKeys(env, k -> !k.equals("TMPDIR")));
 +

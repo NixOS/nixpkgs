@@ -3,6 +3,7 @@
 , bazelTest
 , stdenv
 , darwin
+, extraBazelArgs ? ""
 , lib
 , runLocal
 , runtimeShell
@@ -76,7 +77,8 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
-        --distdir=${distDir} \
+        --repository_cache=${distDir} \
+        ${extraBazelArgs} \
         //python:bin
     '';
   };

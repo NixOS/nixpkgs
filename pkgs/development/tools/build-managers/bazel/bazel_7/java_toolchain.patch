@@ -1,33 +1,27 @@
+commit ef1f5586d3c7fb426af1df6ba650bbad98a5a78a
+Author: Guillaume Maudoux <guillaume.maudoux@tweag.io>
+Date:   Fri Oct 6 15:03:28 2023 +0200
+
+    java_toolchain.patch
+
 diff --git a/tools/jdk/BUILD.tools b/tools/jdk/BUILD.tools
+index a8af76e90c..af2540f838 100644
 --- a/tools/jdk/BUILD.tools
 +++ b/tools/jdk/BUILD.tools
-@@ -3,6 +3,7 @@ load(
-     "DEFAULT_TOOLCHAIN_CONFIGURATION",
-     "PREBUILT_TOOLCHAIN_CONFIGURATION",
-     "VANILLA_TOOLCHAIN_CONFIGURATION",
-+    "NONPREBUILT_TOOLCHAIN_CONFIGURATION",
-     "bootclasspath",
-     "default_java_toolchain",
-     "java_runtime_files",
-@@ -321,6 +322,21 @@ alias(
-     actual = ":toolchain",
+@@ -146,6 +146,16 @@ py_test(
+     ],
  )
  
-+default_java_toolchain(
-+  name = "nonprebuilt_toolchain",
-+  configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
-+  java_runtime = "@local_jdk//:jdk",
-+)
++load("@rules_java//toolchains:default_java_toolchain.bzl", "default_java_toolchain", "NONPREBUILT_TOOLCHAIN_CONFIGURATION")
 +
 +default_java_toolchain(
-+  name = "nonprebuilt_toolchain_java11",
-+  configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
-+  java_runtime = "@local_jdk//:jdk",
-+  source_version = "11",
-+  target_version = "11",
++    name = "nonprebuilt_toolchain_java11",
++    configuration = NONPREBUILT_TOOLCHAIN_CONFIGURATION,
++    java_runtime = "@local_jdk//:jdk",
++    source_version = "11",
++    target_version = "11",
 +)
 +
-+
- RELEASES = (8, 9, 10, 11)
+ #### Aliases to rules_java to keep backward-compatibility (begin) ####
  
- [
+ TARGET_NAMES = [
