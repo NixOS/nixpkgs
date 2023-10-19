@@ -1,6 +1,6 @@
-{ lib, pkgs, python310Packages, fetchFromGitHub, substituteAll }:
+{ lib, pkgs, python3Packages, fetchFromGitHub, substituteAll }:
 
-python310Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
   version = "2.0.0";
 
@@ -15,7 +15,7 @@ python310Packages.buildPythonPackage rec {
 
   buildInputs = with pkgs; [ gtk3 ];
 
-  propagatedBuildInputs = with python310Packages; [ setuptools-git-versioning click distro psutil pygobject3 ];
+  propagatedBuildInputs = with python3Packages; [ setuptools-git-versioning click distro psutil pygobject3 ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
