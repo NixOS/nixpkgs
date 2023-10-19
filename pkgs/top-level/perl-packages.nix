@@ -4963,11 +4963,12 @@ with self; {
 
   CryptPassphrase = buildPerlPackage {
     pname = "Crypt-Passphrase";
-    version = "0.003";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.003.tar.gz";
-      hash = "sha256-aFqgkPgXmobWiWISzPjM/eennM6FcZm7FOInehDSQK0=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.016.tar.gz";
+      hash = "sha256-TOtPi1SsM/PYHJq0euTPoejDbzhJ76ghcDycMH46T8c=";
     };
+    propagatedBuildInputs = [ CryptURandom ];
     meta = {
       description = "A module for managing passwords in a cryptographically agile manner";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
