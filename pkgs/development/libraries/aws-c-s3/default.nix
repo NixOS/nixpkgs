@@ -1,5 +1,5 @@
-{ lib, stdenv
-, fetchFromGitHub
+{ lib
+, stdenv
 , aws-c-auth
 , aws-c-cal
 , aws-c-common
@@ -8,19 +8,20 @@
 , aws-c-io
 , aws-checksums
 , cmake
+, fetchFromGitHub
 , nix
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-s3";
-  version = "0.3.13";
+  version = "0.3.18";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-s3";
-    rev = "v${version}";
-    sha256 = "sha256-SXMDyzQ8hjPx9q9GhE11lYjj3IZY35mvUWELlYQmgGU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-jJSQ8q/oPul3cQxqM/4BV7Xa+rLDdqvO8Ke32kXdAtQ=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C99 library implementation for communicating with the S3 service";
     homepage = "https://github.com/awslabs/aws-c-s3";
+    changelog = "https://github.com/awslabs/aws-c-s3/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ r-burns ];
     mainProgram = "s3";
