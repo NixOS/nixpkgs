@@ -17765,6 +17765,11 @@ with pkgs;
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
 
+  luarocks-packages-updater = callPackage ../development/lua-modules/updater {
+    inherit (python3Packages) buildPythonApplication ;
+  };
+
+
   luau = callPackage ../development/interpreters/luau { };
 
   lune = callPackage ../development/interpreters/lune { };
