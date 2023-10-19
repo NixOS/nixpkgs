@@ -4,6 +4,9 @@ use std::fs;
 use std::io;
 use std::path::Path;
 
+pub const BASE_SUBPATH: &str = "pkgs/by-name";
+pub const PACKAGE_NIX_FILENAME: &str = "package.nix";
+
 /// Deterministic file listing so that tests are reproducible
 pub fn read_dir_sorted(base_dir: &Path) -> anyhow::Result<Vec<fs::DirEntry>> {
     let listing = base_dir

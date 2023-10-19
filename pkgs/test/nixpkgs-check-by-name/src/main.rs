@@ -5,7 +5,7 @@ mod structure;
 mod utils;
 
 use anyhow::Context;
-use check_result::write_check_result;
+use check_result::{flatten_check_results, write_check_result};
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
 use std::io;
@@ -82,18 +82,24 @@ pub fn check_nixpkgs<W: io::Write>(
     // at all. Later used to figure out if the structure was valid or not.
     let mut error_writer = ErrorWriter::new(error_writer);
 
-    if !nixpkgs_path.join(structure::BASE_SUBPATH).exists() {
+    if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
         eprintln!(
             "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
-            structure::BASE_SUBPATH
+            utils::BASE_SUBPATH
         );
     } else {
         let nixpkgs = Nixpkgs::new(&nixpkgs_path, &mut error_writer)?;
 
         if error_writer.empty {
             // Only if we could successfully parse the structure, we do the semantic checks
-            eval::check_values(version, &mut error_writer, &nixpkgs, eval_accessible_paths)?;
-            write_check_result(&mut error_writer, references::check_references(&nixpkgs))?;
+            let check_result = flatten_check_results(
+                [
+                    eval::check_values(version, &nixpkgs, eval_accessible_paths),
+                    references::check_references(&nixpkgs),
+                ],
+                |_| (),
+            );
+            write_check_result(&mut error_writer, check_result)?;
         }
     }
     Ok(error_writer.empty)
@@ -102,7 +108,7 @@ pub fn check_nixpkgs<W: io::Write>(
 #[cfg(test)]
 mod tests {
     use crate::check_nixpkgs;
-    use crate::structure;
+    use crate::utils;
     use crate::Version;
     use anyhow::Context;
     use std::fs;
@@ -147,7 +153,7 @@ mod tests {
             return Ok(());
         }
 
-        let base = path.join(structure::BASE_SUBPATH);
+        let base = path.join(utils::BASE_SUBPATH);
 
         fs::create_dir_all(base.join("fo/foo"))?;
         fs::write(base.join("fo/foo/package.nix"), "{ someDrv }: someDrv")?;

@@ -1,3 +1,4 @@
+use crate::utils::PACKAGE_NIX_FILENAME;
 use crate::ErrorWriter;
 use itertools::{Either, Itertools};
 use rnix::parser::ParseError;
@@ -6,6 +7,9 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    PackageNixDir {
+        relative_package_dir: PathBuf,
+    },
     UndefinedAttr {
         relative_package_file: PathBuf,
         package_name: String,
@@ -68,6 +72,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::PackageNixDir { relative_package_dir } =>
+                write!(
+                    f,
+                    "{}: \"{PACKAGE_NIX_FILENAME}\" must be a file.",
+                    relative_package_dir.display(),
+                ),
             CheckError::UndefinedAttr { relative_package_file, package_name } =>
                 write!(
                     f,

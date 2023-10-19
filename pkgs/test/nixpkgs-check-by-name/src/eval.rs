@@ -1,13 +1,11 @@
-use crate::check_result::{pass, write_check_result, CheckError};
+use crate::check_result::{flatten_check_results, pass, CheckError, CheckResult};
 use crate::structure;
-use crate::utils::ErrorWriter;
 use crate::Version;
 use std::path::Path;
 
 use anyhow::Context;
 use serde::Deserialize;
 use std::collections::HashMap;
-use std::io;
 use std::path::PathBuf;
 use std::process;
 use tempfile::NamedTempFile;
@@ -41,12 +39,11 @@ const EXPR: &str = include_str!("eval.nix");
 /// Check that the Nixpkgs attribute values corresponding to the packages in pkgs/by-name are
 /// of the form `callPackage <package_file> { ... }`.
 /// See the `eval.nix` file for how this is achieved on the Nix side
-pub fn check_values<W: io::Write>(
+pub fn check_values(
     version: Version,
-    error_writer: &mut ErrorWriter<W>,
     nixpkgs: &structure::Nixpkgs,
     eval_accessible_paths: Vec<&Path>,
-) -> anyhow::Result<()> {
+) -> CheckResult<()> {
     // Write the list of packages we need to check into a temporary JSON file.
     // This can then get read by the Nix evaluation.
     let attrs_file = NamedTempFile::new().context("Failed to create a temporary file")?;
@@ -112,11 +109,11 @@ pub fn check_values<W: io::Write>(
             String::from_utf8_lossy(&result.stdout)
         ))?;
 
-    for package_name in &nixpkgs.package_names {
+    let check_results = nixpkgs.package_names.iter().map(|package_name| {
         let relative_package_file = structure::Nixpkgs::relative_file_for_package(package_name);
         let absolute_package_file = nixpkgs.path.join(&relative_package_file);
 
-        let check_result = if let Some(attribute_info) = actual_files.get(package_name) {
+        if let Some(attribute_info) = actual_files.get(package_name) {
             let valid = match &attribute_info.variant {
                 AttributeVariant::AutoCalled => true,
                 AttributeVariant::CallPackage { path, empty_arg } => {
@@ -158,8 +155,7 @@ pub fn check_values<W: io::Write>(
                 package_name: package_name.clone(),
             }
             .into_result()
-        };
-        write_check_result(error_writer, check_result)?;
-    }
-    Ok(())
+        }
+    });
+    flatten_check_results(check_results, |_| ())
 }

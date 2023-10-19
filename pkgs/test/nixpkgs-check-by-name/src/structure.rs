@@ -1,13 +1,11 @@
+use crate::check_result::{write_check_result, CheckError};
 use crate::utils;
-use crate::utils::ErrorWriter;
+use crate::utils::{ErrorWriter, BASE_SUBPATH, PACKAGE_NIX_FILENAME};
 use lazy_static::lazy_static;
 use regex::Regex;
 use std::collections::HashMap;
 use std::io;
 use std::path::{Path, PathBuf};
-
-pub const BASE_SUBPATH: &str = "pkgs/by-name";
-pub const PACKAGE_NIX_FILENAME: &str = "package.nix";
 
 lazy_static! {
     static ref SHARD_NAME_REGEX: Regex = Regex::new(r"^[a-z0-9_-]{1,2}$").unwrap();
@@ -134,10 +132,11 @@ impl Nixpkgs {
                         relative_package_dir.display(),
                     ))?;
                 } else if package_nix_path.is_dir() {
-                    error_writer.write(&format!(
-                        "{}: \"{PACKAGE_NIX_FILENAME}\" must be a file.",
-                        relative_package_dir.display(),
-                    ))?;
+                    let check_result = CheckError::PackageNixDir {
+                        relative_package_dir: relative_package_dir.clone(),
+                    }
+                    .into_result::<()>();
+                    write_check_result(error_writer, check_result)?;
                 }
 
                 package_names.push(package_name.clone());
