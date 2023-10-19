@@ -5,6 +5,10 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches = callPackage ./gyp-patches.nix { } ++ [
+    ./gyp-patches-v22-import-sys.patch
+  ];
 in
 buildNodejs {
   inherit enableNpm;
@@ -16,5 +20,5 @@ buildNodejs {
     ./node-npm-build-npm-package-logic.patch
     ./use-correct-env-in-tests.patch
     ./bin-sh-node-run-v22.patch
-  ];
+  ] ++ gypPatches;
 }
