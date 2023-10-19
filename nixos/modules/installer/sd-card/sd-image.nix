@@ -50,13 +50,15 @@ in
 
   options.sdImage = {
     imageName = mkOption {
-      default = "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
+      type = types.str;
+      defaultText = literalExpression ''"''${config.sdImage.imageBaseName}-''${config.system.nixos.label}-''${pkgs.stdenv.hostPlatform.system}.img"'';
       description = lib.mdDoc ''
         Name of the generated image file.
       '';
     };
 
     imageBaseName = mkOption {
+      type = types.str;
       default = "nixos-sd-image";
       description = lib.mdDoc ''
         Prefix of the name of the generated image file.
@@ -137,6 +139,7 @@ in
     };
 
     populateRootCommands = mkOption {
+      type = types.lines;
       example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = lib.mdDoc ''
         Shell commands to populate the ./files directory.
@@ -147,6 +150,7 @@ in
     };
 
     postBuildCommands = mkOption {
+      type = types.lines;
       example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = lib.mdDoc ''
@@ -189,6 +193,7 @@ in
       };
     };
 
+    sdImage.imageName = lib.mkDefault "${config.sdImage.imageBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.img";
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
