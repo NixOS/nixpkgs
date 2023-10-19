@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.3.12";
+  version = "2.3.13";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AQWNqCq9IEWMKkkG5bw0pkvWtvIMKkBbAotfTRRTMCQ=";
+    sha256 = "sha256-Umkf3CcRRSS+pK3UKeTg+Ru3TW+qHNoQ2F6nUk8jQUU=";
   };
 
   propagatedBuildInputs = [
