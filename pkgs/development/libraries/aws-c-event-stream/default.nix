@@ -1,20 +1,40 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, aws-c-io, aws-checksums, nix, s2n-tls, libexecinfo }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, aws-c-cal
+, aws-c-common
+, aws-c-io
+, aws-checksums
+, nix
+, s2n-tls
+, libexecinfo
+}:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-2MPTr1vSUPuemdlQIalZTp6eGXJl3Xr1eUEnZjikBzg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uKprdBJn9yHDm2HCBOiuanizCtLi/VKrvUUScNv6OPY=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ aws-c-cal aws-c-common aws-c-io aws-checksums s2n-tls ]
-    ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
+  buildInputs = [
+    aws-c-cal
+    aws-c-common
+    aws-c-io
+    aws-checksums
+    s2n-tls
+  ] ++ lib.optional stdenv.hostPlatform.isMusl [
+    libexecinfo
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS:BOOL=ON"
@@ -27,6 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C99 implementation of the vnd.amazon.eventstream content-type";
     homepage = "https://github.com/awslabs/aws-c-event-stream";
+    changelog = "https://github.com/awslabs/aws-c-event-stream/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej eelco ];
