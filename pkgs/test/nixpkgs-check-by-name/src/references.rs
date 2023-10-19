@@ -1,4 +1,6 @@
-use crate::check_result::{pass, write_check_result, CheckError};
+use crate::check_result::{
+    flatten_check_results, pass, write_check_result, CheckError, CheckResult,
+};
 use crate::structure::Nixpkgs;
 use crate::utils;
 use crate::utils::{ErrorWriter, LineIndex};
@@ -81,10 +83,11 @@ fn check_path<W: io::Write>(context: &mut PackageContext<W>, subpath: &Path) -> 
         // Only check Nix files
         if let Some(ext) = path.extension() {
             if ext == OsStr::new("nix") {
-                check_nix_file(context, subpath).context(format!(
+                let check_result = check_nix_file(context, subpath).context(format!(
                     "Error while checking Nix file {}",
                     subpath.display()
-                ))?
+                ));
+                write_check_result(context.error_writer, check_result)?;
             }
         }
     } else {
@@ -99,7 +102,7 @@ fn check_path<W: io::Write>(context: &mut PackageContext<W>, subpath: &Path) -> 
 fn check_nix_file<W: io::Write>(
     context: &mut PackageContext<W>,
     subpath: &Path,
-) -> anyhow::Result<()> {
+) -> CheckResult<()> {
     let path = context.absolute_package_dir.join(subpath);
     let parent_dir = path.parent().context(format!(
         "Could not get parent of path {}",
@@ -111,29 +114,26 @@ fn check_nix_file<W: io::Write>(
 
     let root = Root::parse(&contents);
     if let Some(error) = root.errors().first() {
-        context.error_writer.write(&format!(
-            "{}: File {} could not be parsed by rnix: {}",
-            context.relative_package_dir.display(),
-            subpath.display(),
-            error,
-        ))?;
-        return Ok(());
+        return CheckError::CouldNotParseNix {
+            relative_package_dir: context.relative_package_dir.clone(),
+            subpath: subpath.to_path_buf(),
+            error: error.clone(),
+        }
+        .into_result();
     }
 
     let line_index = LineIndex::new(&contents);
 
-    for node in root.syntax().descendants() {
-        // We're only interested in Path expressions
-        if node.kind() != NODE_PATH {
-            continue;
-        }
-
+    let check_results = root.syntax().descendants().map(|node| {
         let text = node.text().to_string();
         let line = line_index.line(node.text_range().start().into());
 
-        // Filters out ./foo/${bar}/baz
-        // TODO: We can just check ./foo
-        let check_result = if node.children().count() != 0 {
+        if node.kind() != NODE_PATH {
+            // We're only interested in Path expressions
+            pass(())
+        } else if node.children().count() != 0 {
+            // Filters out ./foo/${bar}/baz
+            // TODO: We can just check ./foo
             CheckError::PathInterpolation {
                 relative_package_dir: context.relative_package_dir.clone(),
                 subpath: subpath.to_path_buf(),
@@ -179,10 +179,7 @@ fn check_nix_file<W: io::Write>(
                 }
                 .into_result(),
             }
-        };
-
-        write_check_result(context.error_writer, check_result)?;
-    }
-
-    Ok(())
+        }
+    });
+    flatten_check_results(check_results, |_| ())
 }

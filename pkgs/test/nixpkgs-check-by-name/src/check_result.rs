@@ -1,10 +1,16 @@
 use crate::ErrorWriter;
 use itertools::{Either, Itertools};
+use rnix::parser::ParseError;
 use std::fmt;
 use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    CouldNotParseNix {
+        relative_package_dir: PathBuf,
+        subpath: PathBuf,
+        error: ParseError,
+    },
     PathInterpolation {
         relative_package_dir: PathBuf,
         subpath: PathBuf,
@@ -41,6 +47,14 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::CouldNotParseNix { relative_package_dir, subpath, error } =>
+                write!(
+                    f,
+                    "{}: File {} could not be parsed by rnix: {}",
+                    relative_package_dir.display(),
+                    subpath.display(),
+                    error,
+                ),
             CheckError::PathInterpolation { relative_package_dir, subpath, line, text } =>
                 write!(
                     f,
