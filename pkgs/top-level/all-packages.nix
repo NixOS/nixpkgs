@@ -16672,10 +16672,10 @@ with pkgs;
     # This returns the minimum supported version for the platform. The
     # assumption is that or any later version is good.
     choose = platform:
-      /**/ if platform.isDarwin then 11
+      /**/ if platform.isDarwin then 16
       else if platform.isFreeBSD then 12
       else if platform.isAndroid then 12
-      else if platform.isLinux then 11
+      else if platform.isLinux then 16
       else if platform.isWasm then 12
       else 14;
     # We take the "max of the mins". Why? Since those are lower bounds of the
