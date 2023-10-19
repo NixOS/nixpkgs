@@ -24,6 +24,7 @@
 , xorg
 , pango
 , systemd
+, pciutils
 }:
 
 version: hashes:
@@ -92,6 +93,7 @@ let
     xorg.libXrandr
     xorg.libxkbfile
     pango
+    pciutils
     stdenv.cc.cc.lib
     systemd
   ]
