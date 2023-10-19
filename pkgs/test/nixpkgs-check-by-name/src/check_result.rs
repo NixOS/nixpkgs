@@ -6,6 +6,15 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    OutsideSymlink {
+        relative_package_dir: PathBuf,
+        subpath: PathBuf,
+    },
+    UnresolvableSymlink {
+        relative_package_dir: PathBuf,
+        subpath: PathBuf,
+        io_error: io::Error,
+    },
     CouldNotParseNix {
         relative_package_dir: PathBuf,
         subpath: PathBuf,
@@ -47,6 +56,20 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::OutsideSymlink { relative_package_dir, subpath } =>
+                write!(
+                    f,
+                    "{}: Path {} is a symlink pointing to a path outside the directory of that package.",
+                    relative_package_dir.display(),
+                    subpath.display(),
+                ),
+            CheckError::UnresolvableSymlink { relative_package_dir, subpath, io_error } =>
+                write!(
+                    f,
+                    "{}: Path {} is a symlink which cannot be resolved: {io_error}.",
+                    relative_package_dir.display(),
+                    subpath.display(),
+                ),
             CheckError::CouldNotParseNix { relative_package_dir, subpath, error } =>
                 write!(
                     f,

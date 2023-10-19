@@ -52,26 +52,28 @@ fn check_path<W: io::Write>(context: &mut PackageContext<W>, subpath: &Path) -> 
 
     if path.is_symlink() {
         // Check whether the symlink resolves to outside the package directory
-        match path.canonicalize() {
+        let check_result = match path.canonicalize() {
             Ok(target) => {
                 // No need to handle the case of it being inside the directory, since we scan through the
                 // entire directory recursively anyways
                 if let Err(_prefix_error) = target.strip_prefix(context.absolute_package_dir) {
-                    context.error_writer.write(&format!(
-                        "{}: Path {} is a symlink pointing to a path outside the directory of that package.",
-                        context.relative_package_dir.display(),
-                        subpath.display(),
-                    ))?;
+                    CheckError::OutsideSymlink {
+                        relative_package_dir: context.relative_package_dir.clone(),
+                        subpath: subpath.to_path_buf(),
+                    }
+                    .into_result()
+                } else {
+                    pass(())
                 }
             }
-            Err(e) => {
-                context.error_writer.write(&format!(
-                    "{}: Path {} is a symlink which cannot be resolved: {e}.",
-                    context.relative_package_dir.display(),
-                    subpath.display(),
-                ))?;
+            Err(io_error) => CheckError::UnresolvableSymlink {
+                relative_package_dir: context.relative_package_dir.clone(),
+                subpath: subpath.to_path_buf(),
+                io_error,
             }
-        }
+            .into_result(),
+        };
+        write_check_result(context.error_writer, check_result)?;
     } else if path.is_dir() {
         // Recursively check each entry
         for entry in utils::read_dir_sorted(&path)? {
@@ -81,15 +83,19 @@ fn check_path<W: io::Write>(context: &mut PackageContext<W>, subpath: &Path) -> 
         }
     } else if path.is_file() {
         // Only check Nix files
-        if let Some(ext) = path.extension() {
+        let check_result = if let Some(ext) = path.extension() {
             if ext == OsStr::new("nix") {
-                let check_result = check_nix_file(context, subpath).context(format!(
+                check_nix_file(context, subpath).context(format!(
                     "Error while checking Nix file {}",
                     subpath.display()
-                ));
-                write_check_result(context.error_writer, check_result)?;
+                ))
+            } else {
+                pass(())
             }
-        }
+        } else {
+            pass(())
+        };
+        write_check_result(context.error_writer, check_result)?;
     } else {
         // This should never happen, git doesn't support other file types
         anyhow::bail!("Unsupported file type for path {}", subpath.display());
