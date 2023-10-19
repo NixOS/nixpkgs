@@ -161,6 +161,13 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  doCheck = true;
+
+  # From the INSTALL docs
+  checkPhase = ''
+    (cd tests && sh run-tests.sh)
+  '';
+
   installPhase = ''
     runHook preInstall
 
