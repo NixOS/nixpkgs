@@ -1,6 +1,6 @@
 { lib
+, stdenvNoCC
 , fetchurl
-, mkDerivation
 , appimageTools
 , libsecret
 , makeWrapper
@@ -25,7 +25,7 @@ let
     inherit version pname src;
   };
 in
-mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   inherit name pname version;
 
   src = appimage;

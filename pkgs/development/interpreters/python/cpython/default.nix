@@ -324,7 +324,7 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace "@mime-types@" "${mailcap}"
-  '' + optionalString (x11Support && (tix != null)) ''
+  '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   '';
 
