@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evil-winrm";
-  version = "3.3";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "Hackplayers";
     repo = "evil-winrm";
     rev = "v${version}";
-    sha256 = "sha256-uWhRkq7I/XRWSUpR8lWRhDImE6x0pX9/B3gKhRIhkf8=";
+    sha256 = "sha256-8Lyo7BgypzrHMEcbYlxo/XWwOtBqs2tczYnc3+XEbeA=";
   };
 
   env = bundlerEnv {
