@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Build multiple documentation folders in a single Mkdocs.";
+    description = "Build multiple documentation folders in a single Mkdocs";
     homepage = "https://github.com/backstage/mkdocs-monorepo-plugin";
     license = licenses.asl20;
     maintainers = with maintainers; [ anthr76 ];
