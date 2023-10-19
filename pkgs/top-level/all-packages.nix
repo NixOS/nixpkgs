@@ -22437,9 +22437,7 @@ with pkgs;
 
   libavif = callPackage ../development/libraries/libavif { };
 
-  libayatana-common = callPackage ../development/libraries/libayatana-common {
-    inherit (lomiri) cmake-extras;
-  };
+  libayatana-common = callPackage ../development/libraries/libayatana-common { };
 
   libb2 = callPackage ../development/libraries/libb2 { };
 
