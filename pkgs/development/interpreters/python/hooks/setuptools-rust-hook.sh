@@ -7,7 +7,9 @@ setuptoolsRustSetup() {
         exit 1
     fi
 
-    export PYO3_CROSS_LIB_DIR="@pyLibDir@"
+    export PYO3_CROSS_INCLUDE_DIR="@pyIncludeDir@";
+    export PYO3_CROSS_LIB_DIR="@pyLibDir@";
+    export PYO3_PYTHON="@pyBin@";
     export CARGO_BUILD_TARGET=@cargoBuildTarget@
     # TODO theoretically setting linker should not be required because it is
     # already set in pkgs/build-support/rust/hooks/default.nix but build fails
