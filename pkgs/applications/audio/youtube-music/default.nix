@@ -4,6 +4,7 @@
 , makeWrapper
 , electron_25
 , python3
+, stdenv
 , copyDesktopItems
 , makeDesktopItem
 }:
@@ -22,10 +23,11 @@ let
   electron = electron_25;
 
 in
-buildNpmPackage rec {
+buildNpmPackage {
   inherit pname version src;
 
-  nativeBuildInputs = [ makeWrapper python3 copyDesktopItems ];
+  nativeBuildInputs = [ makeWrapper python3 ]
+    ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
 
   npmDepsHash = "sha256-XGV0mTywYYxpMitojzIILB/Eu/8dfk/aCvUxIkx4SDQ=";
   makeCacheWritable = true;
@@ -34,16 +36,24 @@ buildNpmPackage rec {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   };
 
-  postBuild = ''
+  postBuild = lib.optionalString stdenv.isDarwin ''
+    cp -R ${electron}/Applications/Electron.app Electron.app
+    chmod -R u+w Electron.app
+  '' + ''
     npm exec electron-builder -- \
       --dir \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
       -c.electronVersion=${electron.version}
   '';
 
   installPhase = ''
     runHook preInstall
 
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv pack/mac*/YouTube\ Music.app $out/Applications
+    makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
+  '' + lib.optionalString (!stdenv.isDarwin) ''
     mkdir -p "$out/share/lib/youtube-music"
     cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
 
@@ -52,11 +62,12 @@ buildNpmPackage rec {
       install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
     done
     popd
+  '' + ''
 
     runHook postInstall
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
       --add-flags $out/share/lib/youtube-music/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
@@ -80,8 +91,8 @@ buildNpmPackage rec {
     description = "Electron wrapper around YouTube Music";
     homepage = "https://th-ch.github.io/youtube-music/";
     license = licenses.mit;
-    inherit (electron.meta) platforms;
     maintainers = [ maintainers.aacebedo ];
     mainProgram = "youtube-music";
+    platforms = platforms.all;
   };
 }
