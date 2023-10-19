@@ -8,6 +8,9 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    ShardNonDir {
+        relative_shard_path: PathBuf,
+    },
     InvalidShardName {
         relative_shard_path: PathBuf,
         shard_name: String,
@@ -96,6 +99,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::ShardNonDir { relative_shard_path } =>
+                write!(
+                    f,
+                    "{}: This is a file, but it should be a directory.",
+                    relative_shard_path.display(),
+                ),
             CheckError::InvalidShardName { relative_shard_path, shard_name } =>
                 write!(
                     f,
