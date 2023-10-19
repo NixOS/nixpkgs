@@ -47,7 +47,7 @@
 , useBuiltinLua ? true
 , useStaticFreetype ? false
 , useStaticLibuvc ? false
-, useStaticOpenAL ? true
+, useStaticOpenAL ? false
 , useStaticSqlite ? false
 }:
 
@@ -62,8 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "arcan";
-    rev = "f6a8eb6b0b6276a0ec3e162072681f236194ba33";
-    hash = "sha256-k/+mbJZc4lSaOejIQBytjpA9kOPIOaCuFGGoY+8PaFs=";
+    rev = "e8a484e7f6cca019174573885876997d56fb7927";
+    hash = "sha256-k/+mbJZc2lSaOejIQBytjpA9kOPIOaCuFGGoY+8PaFs=";
   };
 
   nativeBuildInputs = [
@@ -116,10 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Nixpkgs-specific: redirect vendoring
-    ./000-openal.patch
-    ./001-luajit.patch
-    ./002-libuvc.patch
   ];
 
   # Emulate external/git/clone.sh
