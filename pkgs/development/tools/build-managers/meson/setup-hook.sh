@@ -55,6 +55,10 @@ mesonInstallPhase() {
     # shellcheck disable=SC2086
     local flagsArray=($mesonInstallFlags "${mesonInstallFlagsArray[@]}")
 
+    if [[ -n "$mesonInstallTags" ]]; then
+        flagsArray+=("--tags" "${mesonInstallTags// /,}")
+    fi
+
     echoCmd 'install flags' "${flagsArray[@]}"
     meson install --no-rebuild "${flagsArray[@]}"
 
