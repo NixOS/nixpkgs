@@ -21,6 +21,8 @@ lib.makeScope pkgs.newScope (self: {
 
   wmCalClock = self.callPackage ./wmCalClock.nix { };
 
+  wmcube = self.callPackage ./wmcube.nix { };
+
   wmsm-app = self.callPackage ./wmsm-app.nix { };
 
   wmsystemtray = self.callPackage ./wmsystemtray.nix { };
