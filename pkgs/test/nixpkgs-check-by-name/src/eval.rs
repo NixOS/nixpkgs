@@ -137,15 +137,13 @@ pub fn check_values<W: io::Write>(
                 AttributeVariant::Other => false,
             };
 
-            if !valid {
-                error_writer.write(&format!(
-                    "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}` with a non-empty second argument.",
-                    relative_package_file.display()
-                ))?;
-                continue;
-            }
-
-            let check_result = if !attribute_info.is_derivation {
+            let check_result = if !valid {
+                CheckError::WrongCallPackage {
+                    relative_package_file: relative_package_file.clone(),
+                    package_name: package_name.clone(),
+                }
+                .into_result()
+            } else if !attribute_info.is_derivation {
                 CheckError::NonDerivation {
                     relative_package_file: relative_package_file.clone(),
                     package_name: package_name.clone(),

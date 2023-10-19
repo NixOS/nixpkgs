@@ -6,6 +6,10 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    WrongCallPackage {
+        relative_package_file: PathBuf,
+        package_name: String,
+    },
     NonDerivation {
         relative_package_file: PathBuf,
         package_name: String,
@@ -60,6 +64,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::WrongCallPackage { relative_package_file, package_name } =>
+                write!(
+                    f,
+                    "pkgs.{package_name}: This attribute is manually defined (most likely in pkgs/top-level/all-packages.nix), which is only allowed if the definition is of the form `pkgs.callPackage {} {{ ... }}` with a non-empty second argument.",
+                    relative_package_file.display()
+                ),
             CheckError::NonDerivation { relative_package_file, package_name } =>
                 write!(
                     f,
