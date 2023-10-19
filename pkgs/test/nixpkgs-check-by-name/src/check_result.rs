@@ -7,6 +7,10 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    IncorrectShard {
+        relative_package_dir: PathBuf,
+        correct_relative_package_dir: PathBuf,
+    },
     PackageNixNonExistent {
         relative_package_dir: PathBuf,
     },
@@ -75,6 +79,13 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::IncorrectShard { relative_package_dir, correct_relative_package_dir } =>
+                write!(
+                    f,
+                    "{}: Incorrect directory location, should be {} instead.",
+                    relative_package_dir.display(),
+                    correct_relative_package_dir.display(),
+                ),
             CheckError::PackageNixNonExistent { relative_package_dir } =>
                 write!(
                     f,
