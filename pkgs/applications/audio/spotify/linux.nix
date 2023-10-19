@@ -2,7 +2,7 @@
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
-, pname, meta, harfbuzz
+, pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
 , deviceScaleFactor ? null
@@ -14,14 +14,14 @@ let
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.13.661.ga588f749";
+  version = "1.2.22.982.g794acc0a";
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
   # To get general information:
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "68";
+  rev = "70";
 
   deps = [
     alsa-lib
@@ -40,6 +40,8 @@ let
     glib
     gtk3
     harfbuzz
+    libayatana-appindicator
+    libdbusmenu
     libdrm
     libgcrypt
     libnotify
@@ -84,7 +86,7 @@ stdenv.mkDerivation {
   # https://community.spotify.com/t5/Desktop-Linux/Redistribute-Spotify-on-Linux-Distributions/td-p/1695334
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${rev}.snap";
-    hash = "sha512-THGSRx0sGOVEB6bOHWHiy1G0Acq0hUa94tG/v+i5DA+CluI58pqj8gYQ61k/ACLJXTUyM8SA92C8DK1Go18X8w==";
+    hash = "sha512-oxDUZqyMLxCbUBb1A+BBznByQ1rZAJcEIkaSUQ93/k1DX3rTaBHzEXmBtJhmN6L8L3fw1pa9GvE7eDaD8+jeGg==";
   };
 
   nativeBuildInputs = [ wrapGAppsHook makeShellWrapper squashfsTools ];
