@@ -4,7 +4,21 @@ use std::fmt;
 use std::io;
 use std::path::PathBuf;
 
-pub enum CheckError {}
+pub enum CheckError {
+    OutsidePathReference {
+        relative_package_dir: PathBuf,
+        subpath: PathBuf,
+        line: usize,
+        text: String,
+    },
+    UnresolvablePathReference {
+        relative_package_dir: PathBuf,
+        subpath: PathBuf,
+        line: usize,
+        text: String,
+        io_error: io::Error,
+    },
+}
 
 impl CheckError {
     pub fn into_result<A>(self) -> CheckResult<A> {
@@ -14,7 +28,24 @@ impl CheckError {
 
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {}
+        match self {
+            CheckError::OutsidePathReference { relative_package_dir, subpath, line, text } =>
+                write!(
+                    f,
+                    "{}: File {} at line {line} contains the path expression \"{}\" which may point outside the directory of that package.",
+                    relative_package_dir.display(),
+                    subpath.display(),
+                    text,
+                ),
+            CheckError::UnresolvablePathReference { relative_package_dir, subpath, line, text, io_error } =>
+                write!(
+                    f,
+                    "{}: File {} at line {line} contains the path expression \"{}\" which cannot be resolved: {io_error}.",
+                    relative_package_dir.display(),
+                    subpath.display(),
+                    text,
+                ),
+        }
     }
 }
 

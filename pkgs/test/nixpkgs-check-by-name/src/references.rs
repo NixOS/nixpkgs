@@ -1,3 +1,4 @@
+use crate::check_result::{pass, write_check_result, CheckError};
 use crate::structure::Nixpkgs;
 use crate::utils;
 use crate::utils::{ErrorWriter, LineIndex};
@@ -155,29 +156,34 @@ fn check_nix_file<W: io::Write>(
 
         // Resolves the reference of the Nix path
         // turning `../baz` inside `/foo/bar/default.nix` to `/foo/baz`
-        match parent_dir.join(Path::new(&text)).canonicalize() {
+        let check_result = match parent_dir.join(Path::new(&text)).canonicalize() {
             Ok(target) => {
                 // Then checking if it's still in the package directory
                 // No need to handle the case of it being inside the directory, since we scan through the
                 // entire directory recursively anyways
                 if let Err(_prefix_error) = target.strip_prefix(context.absolute_package_dir) {
-                    context.error_writer.write(&format!(
-                        "{}: File {} at line {line} contains the path expression \"{}\" which may point outside the directory of that package.",
-                        context.relative_package_dir.display(),
-                        subpath.display(),
+                    CheckError::OutsidePathReference {
+                        relative_package_dir: context.relative_package_dir.clone(),
+                        subpath: subpath.to_path_buf(),
+                        line,
                         text,
-                    ))?;
+                    }
+                    .into_result()
+                } else {
+                    pass(())
                 }
             }
-            Err(e) => {
-                context.error_writer.write(&format!(
-                    "{}: File {} at line {line} contains the path expression \"{}\" which cannot be resolved: {e}.",
-                    context.relative_package_dir.display(),
-                    subpath.display(),
-                    text,
-                ))?;
+            Err(e) => CheckError::UnresolvablePathReference {
+                relative_package_dir: context.relative_package_dir.clone(),
+                subpath: subpath.to_path_buf(),
+                line,
+                text,
+                io_error: e,
             }
+            .into_result(),
         };
+
+        write_check_result(context.error_writer, check_result)?;
     }
 
     Ok(())
