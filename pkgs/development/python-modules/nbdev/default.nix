@@ -17,11 +17,12 @@ buildPythonPackage rec {
   pname = "nbdev";
   version = "2.3.13";
   format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Umkf3CcRRSS+pK3UKeTg+Ru3TW+qHNoQ2F6nUk8jQUU=";
+    hash = "sha256-Umkf3CcRRSS+pK3UKeTg+Ru3TW+qHNoQ2F6nUk8jQUU=";
   };
 
   propagatedBuildInputs = [
@@ -38,11 +39,15 @@ buildPythonPackage rec {
 
   # no real tests
   doCheck = false;
-  pythonImportsCheck = [ "nbdev" ];
+
+  pythonImportsCheck = [
+    "nbdev"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/fastai/nbdev";
     description = "Create delightful software with Jupyter Notebooks";
+    changelog = "https://github.com/fastai/nbdev/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ rxiao ];
   };
