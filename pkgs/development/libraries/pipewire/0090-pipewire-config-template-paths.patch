@@ -22,15 +22,6 @@ diff --git a/src/daemon/pipewire.conf.in b/src/daemon/pipewire.conf.in
 index 697bf094d..3a7b54ddd 100644
 --- a/src/daemon/pipewire.conf.in
 +++ b/src/daemon/pipewire.conf.in
-@@ -142,7 +142,7 @@ context.modules = [
-             # access.allowed to list an array of paths of allowed
-             # apps.
-             #access.allowed = [
--            #    @session_manager_path@
-+            #    <session_manager_path>
-             #]
- 
-             # An array of rejected paths.
 @@ -294,7 +294,7 @@ context.exec = [
      # but it is better to start it as a systemd service.
      # Run the session manager with -h for options.
