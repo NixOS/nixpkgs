@@ -12,6 +12,7 @@
 , terminaltables
 , tensorflow_2
 , tensorflow-tensorboard_2
+, portpicker
  }:
 
 buildPythonPackage rec {
