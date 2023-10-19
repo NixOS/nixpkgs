@@ -34,7 +34,7 @@ buildPythonPackage {
   inherit version;
   format = "setuptools";
 
-  disable = pythonOlder "3.7";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";

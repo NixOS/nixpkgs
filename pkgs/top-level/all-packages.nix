@@ -9734,7 +9734,7 @@ with pkgs;
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
   kak-lsp = callPackage ../tools/misc/kak-lsp {
-    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
 
   kakoune-cr = callPackage ../tools/misc/kakoune-cr { crystal = crystal_1_2; };
@@ -27532,6 +27532,8 @@ with pkgs;
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
+  xwaylandvideobridge = libsForQt5.callPackage ../tools/wayland/xwaylandvideobridge { };
+
   yaws = callPackage ../servers/http/yaws { };
 
   youtrack = callPackage ../servers/jetbrains/youtrack.nix { };
@@ -36706,7 +36708,6 @@ with pkgs;
   xkbmon = callPackage ../applications/misc/xkbmon { };
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
-  win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
   win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
 
   xfig = callPackage ../applications/graphics/xfig { };
