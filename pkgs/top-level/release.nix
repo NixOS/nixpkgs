@@ -58,11 +58,11 @@ let
       lib-tests = import ../../lib/tests/release.nix { inherit pkgs; };
       pkgs-lib-tests = import ../pkgs-lib/tests { inherit pkgs; };
 
-      darwin-tested = if supportDarwin.x86_64 then pkgs.releaseTools.aggregate
+      darwin-tested = if supportDarwin.x86_64 || supportDarwin.aarch64 then pkgs.releaseTools.aggregate
         { name = "nixpkgs-darwin-${jobs.tarball.version}";
           meta.description = "Release-critical builds for the Nixpkgs darwin channel";
-          constituents =
-            [ jobs.tarball
+          constituents = lib.optionals supportDarwin.x86_64 [
+              jobs.tarball
               jobs.cabal2nix.x86_64-darwin
               jobs.ghc.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -104,6 +104,42 @@ let
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.stdenv.hooks.patch-shebangs.x86_64-darwin
               */
+            ]
+            ++ lib.optionals supportDarwin.aarch64 [
+              jobs.tarball
+              jobs.cabal2nix.aarch64-darwin
+              jobs.ghc.aarch64-darwin
+              jobs.git.aarch64-darwin
+              jobs.go.aarch64-darwin
+              jobs.mariadb.aarch64-darwin
+              jobs.nix.aarch64-darwin
+              jobs.nixpkgs-review.aarch64-darwin
+              jobs.nix-info.aarch64-darwin
+              jobs.nix-info-tested.aarch64-darwin
+              jobs.openssh.aarch64-darwin
+              jobs.openssl.aarch64-darwin
+              jobs.pandoc.aarch64-darwin
+              jobs.postgresql.aarch64-darwin
+              jobs.python3.aarch64-darwin
+              jobs.ruby.aarch64-darwin
+              jobs.rustc.aarch64-darwin
+              # blocking ofBorg CI 2020-02-28
+              # jobs.stack.aarch64-darwin
+              jobs.stdenv.aarch64-darwin
+              jobs.vim.aarch64-darwin
+              jobs.cachix.aarch64-darwin
+              jobs.darwin.linux-builder.aarch64-darwin
+
+              # UI apps
+              # jobs.firefox-unwrapped.aarch64-darwin
+              jobs.qt5.qtmultimedia.aarch64-darwin
+              jobs.inkscape.aarch64-darwin
+              jobs.gimp.aarch64-darwin
+              jobs.emacs.aarch64-darwin
+              jobs.wireshark.aarch64-darwin
+              jobs.transmission-gtk.aarch64-darwin
+
+              /* consider adding tests, as suggested above for x86_64-darwin */
             ];
         } else null;
 
