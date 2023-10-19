@@ -220,23 +220,20 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
-      (cfg.package.override {
+      (cfg.package.override (old: {
         extraPrefs = cfg.autoConfig;
-        extraNativeMessagingHosts = with pkgs; optionals nmh.ff2mpv [
-          ff2mpv
-        ] ++ optionals nmh.euwebid [
-          web-eid-app
-        ] ++ optionals nmh.gsconnect [
-          gnomeExtensions.gsconnect
-        ] ++ optionals nmh.jabref [
-          jabref
-        ] ++ optionals nmh.passff [
-          passff-host
-        ];
+        extraNativeMessagingHosts =
+          old.extraNativeMessagingHosts or []
+          ++ optional nmh.ff2mpv ff2mpv
+          ++ optional nmh.euwebid web-eid-app
+          ++ optional nmh.gsconnect gnomeExtensions.gsconnect
+          ++ optional nmh.jabref jabref
+          ++ optional nmh.passff passff-host;
         cfg = let
           # copy-pasted from the wrapper; TODO: figure out fix
           applicationName = cfg.package.binaryName or (lib.getName cfg.package);
 
+          oldCfg = old.cfg or {};
           nixpkgsConfig = pkgs.config.${applicationName} or {};
           optionConfig = cfg.wrapperConfig;
           nmhConfig = {
@@ -246,8 +243,8 @@ in
             enableUgetIntegrator = nmh.ugetIntegrator;
             enableFXCastBridge = nmh.fxCast;
           };
-        in nixpkgsConfig // optionConfig // nmhConfig;
-      })
+        in oldCfg // nixpkgsConfig // optionConfig // nmhConfig;
+      }))
     ];
 
     environment.etc =
