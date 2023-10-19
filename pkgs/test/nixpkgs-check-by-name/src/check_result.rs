@@ -5,6 +5,12 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    SearchPath {
+        relative_package_dir: PathBuf,
+        subpath: PathBuf,
+        line: usize,
+        text: String,
+    },
     OutsidePathReference {
         relative_package_dir: PathBuf,
         subpath: PathBuf,
@@ -29,6 +35,14 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::SearchPath { relative_package_dir, subpath, line, text } =>
+                write!(
+                    f,
+                    "{}: File {} at line {line} contains the nix search path expression \"{}\" which may point outside the directory of that package.",
+                    relative_package_dir.display(),
+                    subpath.display(),
+                    text
+                ),
             CheckError::OutsidePathReference { relative_package_dir, subpath, line, text } =>
                 write!(
                     f,

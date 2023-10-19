@@ -144,43 +144,43 @@ fn check_nix_file<W: io::Write>(
         }
 
         // Filters out search paths like <nixpkgs>
-        if text.starts_with('<') {
-            context.error_writer.write(&format!(
-                "{}: File {} at line {line} contains the nix search path expression \"{}\" which may point outside the directory of that package.",
-                context.relative_package_dir.display(),
-                subpath.display(),
-                text
-            ))?;
-            continue;
-        }
-
-        // Resolves the reference of the Nix path
-        // turning `../baz` inside `/foo/bar/default.nix` to `/foo/baz`
-        let check_result = match parent_dir.join(Path::new(&text)).canonicalize() {
-            Ok(target) => {
-                // Then checking if it's still in the package directory
-                // No need to handle the case of it being inside the directory, since we scan through the
-                // entire directory recursively anyways
-                if let Err(_prefix_error) = target.strip_prefix(context.absolute_package_dir) {
-                    CheckError::OutsidePathReference {
-                        relative_package_dir: context.relative_package_dir.clone(),
-                        subpath: subpath.to_path_buf(),
-                        line,
-                        text,
-                    }
-                    .into_result()
-                } else {
-                    pass(())
-                }
-            }
-            Err(e) => CheckError::UnresolvablePathReference {
+        let check_result = if text.starts_with('<') {
+            CheckError::SearchPath {
                 relative_package_dir: context.relative_package_dir.clone(),
                 subpath: subpath.to_path_buf(),
                 line,
                 text,
-                io_error: e,
             }
-            .into_result(),
+            .into_result()
+        } else {
+            // Resolves the reference of the Nix path
+            // turning `../baz` inside `/foo/bar/default.nix` to `/foo/baz`
+            match parent_dir.join(Path::new(&text)).canonicalize() {
+                Ok(target) => {
+                    // Then checking if it's still in the package directory
+                    // No need to handle the case of it being inside the directory, since we scan through the
+                    // entire directory recursively anyways
+                    if let Err(_prefix_error) = target.strip_prefix(context.absolute_package_dir) {
+                        CheckError::OutsidePathReference {
+                            relative_package_dir: context.relative_package_dir.clone(),
+                            subpath: subpath.to_path_buf(),
+                            line,
+                            text,
+                        }
+                        .into_result()
+                    } else {
+                        pass(())
+                    }
+                }
+                Err(e) => CheckError::UnresolvablePathReference {
+                    relative_package_dir: context.relative_package_dir.clone(),
+                    subpath: subpath.to_path_buf(),
+                    line,
+                    text,
+                    io_error: e,
+                }
+                .into_result(),
+            }
         };
 
         write_check_result(context.error_writer, check_result)?;
