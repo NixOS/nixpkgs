@@ -1,3 +1,4 @@
+use crate::check_result::{pass, write_check_result, CheckError};
 use crate::structure;
 use crate::utils::ErrorWriter;
 use crate::Version;
@@ -144,12 +145,16 @@ pub fn check_values<W: io::Write>(
                 continue;
             }
 
-            if !attribute_info.is_derivation {
-                error_writer.write(&format!(
-                    "pkgs.{package_name}: This attribute defined by {} is not a derivation",
-                    relative_package_file.display()
-                ))?;
-            }
+            let check_result = if !attribute_info.is_derivation {
+                CheckError::NonDerivation {
+                    relative_package_file: relative_package_file.clone(),
+                    package_name: package_name.clone(),
+                }
+                .into_result()
+            } else {
+                pass(())
+            };
+            write_check_result(error_writer, check_result)?;
         } else {
             error_writer.write(&format!(
                 "pkgs.{package_name}: This attribute is not defined but it should be defined automatically as {}",

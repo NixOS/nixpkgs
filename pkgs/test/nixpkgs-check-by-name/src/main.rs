@@ -5,6 +5,7 @@ mod structure;
 mod utils;
 
 use anyhow::Context;
+use check_result::write_check_result;
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
 use std::io;
@@ -92,7 +93,7 @@ pub fn check_nixpkgs<W: io::Write>(
         if error_writer.empty {
             // Only if we could successfully parse the structure, we do the semantic checks
             eval::check_values(version, &mut error_writer, &nixpkgs, eval_accessible_paths)?;
-            references::check_references(&mut error_writer, &nixpkgs)?;
+            write_check_result(&mut error_writer, references::check_references(&nixpkgs))?;
         }
     }
     Ok(error_writer.empty)

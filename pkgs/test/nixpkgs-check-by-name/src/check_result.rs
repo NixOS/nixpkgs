@@ -6,6 +6,10 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    NonDerivation {
+        relative_package_file: PathBuf,
+        package_name: String,
+    },
     OutsideSymlink {
         relative_package_dir: PathBuf,
         subpath: PathBuf,
@@ -56,6 +60,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::NonDerivation { relative_package_file, package_name } =>
+                write!(
+                    f,
+                    "pkgs.{package_name}: This attribute defined by {} is not a derivation",
+                    relative_package_file.display()
+                ),
             CheckError::OutsideSymlink { relative_package_dir, subpath } =>
                 write!(
                     f,
