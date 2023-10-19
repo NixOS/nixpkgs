@@ -116,7 +116,7 @@ pub fn check_values<W: io::Write>(
         let relative_package_file = structure::Nixpkgs::relative_file_for_package(package_name);
         let absolute_package_file = nixpkgs.path.join(&relative_package_file);
 
-        if let Some(attribute_info) = actual_files.get(package_name) {
+        let check_result = if let Some(attribute_info) = actual_files.get(package_name) {
             let valid = match &attribute_info.variant {
                 AttributeVariant::AutoCalled => true,
                 AttributeVariant::CallPackage { path, empty_arg } => {
@@ -137,7 +137,7 @@ pub fn check_values<W: io::Write>(
                 AttributeVariant::Other => false,
             };
 
-            let check_result = if !valid {
+            if !valid {
                 CheckError::WrongCallPackage {
                     relative_package_file: relative_package_file.clone(),
                     package_name: package_name.clone(),
@@ -151,15 +151,15 @@ pub fn check_values<W: io::Write>(
                 .into_result()
             } else {
                 pass(())
-            };
-            write_check_result(error_writer, check_result)?;
+            }
         } else {
-            error_writer.write(&format!(
-                "pkgs.{package_name}: This attribute is not defined but it should be defined automatically as {}",
-                relative_package_file.display()
-            ))?;
-            continue;
-        }
+            CheckError::UndefinedAttr {
+                relative_package_file: relative_package_file.clone(),
+                package_name: package_name.clone(),
+            }
+            .into_result()
+        };
+        write_check_result(error_writer, check_result)?;
     }
     Ok(())
 }

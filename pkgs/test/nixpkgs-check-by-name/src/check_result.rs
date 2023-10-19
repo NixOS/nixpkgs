@@ -6,6 +6,10 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    UndefinedAttr {
+        relative_package_file: PathBuf,
+        package_name: String,
+    },
     WrongCallPackage {
         relative_package_file: PathBuf,
         package_name: String,
@@ -64,6 +68,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::UndefinedAttr { relative_package_file, package_name } =>
+                write!(
+                    f,
+                    "pkgs.{package_name}: This attribute is not defined but it should be defined automatically as {}",
+                    relative_package_file.display()
+                ),
             CheckError::WrongCallPackage { relative_package_file, package_name } =>
                 write!(
                     f,
