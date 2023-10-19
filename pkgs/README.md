@@ -362,7 +362,7 @@ All versions of a package _must_ be included in `all-packages.nix` to make sure 
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
 * `meta.mainProgram` must be set when appropriate.
-* `meta.maintainers` should be set.
+* `meta.maintainers` must be set for new packages.
 
 See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
 
