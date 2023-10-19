@@ -146,6 +146,7 @@ in
     };
 
     populateRootCommands = mkOption {
+      type = types.lines;
       example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = ''
         Shell commands to populate the ./files directory.
@@ -156,6 +157,7 @@ in
     };
 
     postBuildCommands = mkOption {
+      type = types.lines;
       example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
