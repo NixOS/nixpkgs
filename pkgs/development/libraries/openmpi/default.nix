@@ -1,9 +1,12 @@
 { lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
-, libpsm2, libfabric, pmix, ucx
+, libpsm2, libfabric, pmix, ucx, ucc
 , config
 # Enable CUDA support
 , cudaSupport ? config.cudaSupport, cudatoolkit
+
+# Enable ROCm support
+, rocmSupport ? false, rocmPackages
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -22,6 +25,13 @@ let
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
+  };
+
+  rocmList = with rocmPackages; [ rocm-core rocm-thunk rocm-runtime rocm-device-libs clr ];
+
+  rocm = symlinkJoin {
+    name = "rocm";
+    paths = rocmList;
   };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
@@ -48,6 +58,8 @@ in stdenv.mkDerivation rec {
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
+    ++ lib.optionals rocmSupport rocmList
+    ++ lib.optionals (rocmSupport || cudaSupport) [ ucc ]
     ++ [ libevent hwloc ]
     ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
     ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
@@ -64,12 +76,20 @@ in stdenv.mkDerivation rec {
       "--enable-mpi-cxx"
     ] ++ lib.optional enableSGE "--with-sge"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
-    # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
-    # https://github.com/openucx/ucx
-    # https://www.open-mpi.org/faq/?category=buildcuda
-    ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
-    ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
-    ;
+    ++ lib.optionals cudaSupport [
+      "--with-cuda=${cudatoolkit_joined}"
+      "--enable-dlopen"
+    ] ++ lib.optionals rocmSupport [
+      "--with-rocm=${rocm}"
+    ] ++ lib.optionals (cudaSupport || rocmSupport) [
+      "--with-ucx=${lib.getDev ucx}" "--with-ucx-libdir=${ucx}/lib"
+      "--with-ucc=${lib.getDev ucc}" "--with-ucc-libdir=${ucc}/lib"
+    ] ++ lib.optionals fabricSupport [
+      "--with-psm2=${lib.getDev libpsm2}"
+      "--with-psm2-libdir=${libpsm2}/lib"
+      "--with-libfabric=${lib.getDev libfabric}"
+      "--with-libfabric-libdir=${libfabric}/lib"
+    ];
 
   enableParallelBuilding = true;
 
@@ -78,21 +98,11 @@ in stdenv.mkDerivation rec {
    '';
 
   postFixup = ''
-    # default compilers should be indentical to the
-    # compilers at build time
-
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-      $out/share/openmpi/mpicc-wrapper-data.txt
-
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc:' \
-       $out/share/openmpi/ortecc-wrapper-data.txt
-
-    sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
-       $out/share/openmpi/mpic++-wrapper-data.txt
-  '' + lib.optionalString fortranSupport ''
-
-    sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
-       $out/share/openmpi/mpifort-wrapper-data.txt
+    # Default compilers should be identical to the compilers at build time
+    substituteInPlace $out/share/openmpi/*-wrapper-data.txt \
+      --replace "compiler=gcc" "compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}cc" \
+      --replace "compiler=g++" "compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++" \
+      --replace "compiler=gfortran" "compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran"
   '';
 
   doCheck = true;

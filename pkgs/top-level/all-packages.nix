@@ -12312,7 +12312,11 @@ with pkgs;
 
   pmacct = callPackage ../tools/networking/pmacct { };
 
-  pmix = callPackage ../development/libraries/pmix { };
+  pmix = pmix_3;
+
+  pmix_3 = callPackage ../development/libraries/pmix { };
+
+  pmix_5 = callPackage ../development/libraries/pmix/5.nix { };
 
   polygraph = callPackage ../tools/networking/polygraph { };
 
@@ -12449,16 +12453,72 @@ with pkgs;
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
-  ouch = callPackage ../tools/compression/ouch { };
+  openmpi-cuda = openmpi.override {
+    cudaSupport = true;
+    rocmSupport = false;
+    ucx = ucx-cuda;
+    ucc = ucc-cuda;
+  };
 
-  outils = callPackage ../tools/misc/outils { };
+  # We need to use the 5.0.x branch until it is released
+  openmpi-rocm = (openmpi.overrideAttrs (final: prev: {
+    version = "5.0.0rc13";
+    outputs = [ "out" ]; # no man pages?
+
+    src = fetchFromGitHub {
+      owner = "open-mpi";
+      repo = "ompi";
+      rev = "v${final.version}";
+      hash = "sha256-zjfn2+U2KylMLQ3yekbiWPwm1RaGlwBKHAln/PpStig=";
+      fetchSubmodules = true;
+    };
+
+    nativeBuildInputs = prev.nativeBuildInputs ++ [ libtool automake autoconf git flex ];
+    configureFlags = prev.configureFlags ++ [ "--disable-mpi-cxx" ];
+    postPatch = "patchShebangs .";
+    preConfigure = "./autogen.pl";
+  })).override {
+    cudaSupport = false;
+    rocmSupport = true;
+    ucx = ucx-rocm;
+    ucc = ucc-rocm;
+    pmix = pmix_5;
+  };
 
   mpi = openmpi; # this attribute should used to build MPI applications
+  mpi-cuda = openmpi-cuda; # this attribute should used to build CUDA MPI applications
+  mpi-rocm = openmpi-rocm; # this attribute should used to build ROCm MPI applications
   mpiCheckPhaseHook = callPackage ../build-support/setup-hooks/mpi-check-hook { };
 
   ucc = callPackage ../development/libraries/ucc { };
 
+  ucc-cuda = ucc.override {
+    enableCuda = true;
+    enableRocm = false;
+    ucx = ucx-cuda;
+  };
+
+  ucc-rocm = ucc.override {
+    enableCuda = false;
+    enableRocm = true;
+    ucx = ucx-rocm;
+  };
+
   ucx = callPackage ../development/libraries/ucx { };
+
+  ucx-cuda = ucx.override {
+    enableCuda = true;
+    enableRocm = false;
+  };
+
+  ucx-rocm = ucx.override {
+    enableCuda = false;
+    enableRocm = true;
+  };
+
+  ouch = callPackage ../tools/compression/ouch { };
+
+  outils = callPackage ../tools/misc/outils { };
 
   openmodelica = recurseIntoAttrs (callPackage ../applications/science/misc/openmodelica {});
 
@@ -16590,6 +16650,8 @@ with pkgs;
   knightos-z80e = callPackage ../development/tools/knightos/z80e { };
 
   koka = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../development/compilers/koka { });
+
+  kokkos = callPackage ../by-name/ko/kokkos/package.nix { };
 
   kotlin = callPackage ../development/compilers/kotlin { };
   kotlin-native = callPackage ../development/compilers/kotlin/native.nix { };
