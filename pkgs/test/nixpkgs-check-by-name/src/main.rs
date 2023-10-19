@@ -4,6 +4,7 @@ mod references;
 mod structure;
 mod utils;
 
+use crate::structure::check_structure;
 use anyhow::Context;
 use check_result::{flatten_check_results, write_check_result};
 use clap::{Parser, ValueEnum};
@@ -11,7 +12,6 @@ use colored::Colorize;
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
-use structure::Nixpkgs;
 use utils::ErrorWriter;
 
 /// Program to check the validity of pkgs/by-name
@@ -88,9 +88,9 @@ pub fn check_nixpkgs<W: io::Write>(
             utils::BASE_SUBPATH
         );
     } else {
-        let nixpkgs = Nixpkgs::new(&nixpkgs_path, &mut error_writer)?;
+        let check_result = check_structure(&nixpkgs_path);
 
-        if error_writer.empty {
+        if let Some(nixpkgs) = write_check_result(&mut error_writer, check_result)? {
             // Only if we could successfully parse the structure, we do the semantic checks
             let check_result = flatten_check_results(
                 [
