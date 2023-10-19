@@ -7,16 +7,18 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-common";
-  version = "0.8.23";
+  version = "0.9.4";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-HkRaQnlasayg5Nu2KaEA18360rxAH/tdJ1iqzoi6i2E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EnBmM/2iQKdP3eBsvGh8Z3i11PSqzh4uF0jmpZUz/lk=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -50,6 +52,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "AWS SDK for C common core";
     homepage = "https://github.com/awslabs/aws-c-common";
+    changelog = "https://github.com/awslabs/aws-c-common/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ orivej eelco r-burns ];
