@@ -16,6 +16,13 @@ in
         Size of disk image. Unit is MB.
       '';
     };
+    virtualisation.azureImage.contents = mkOption {
+      type = with types; listOf attrs;
+      default = [ ];
+      description = lib.mdDoc ''
+        Extra contents to add to the image.
+      '';
+    };
   };
   config = {
     system.build.azureImage = import ../../lib/make-disk-image.nix {
@@ -26,7 +33,7 @@ in
       '';
       configFile = ./azure-config-user.nix;
       format = "raw";
-      inherit (cfg) diskSize;
+      inherit (cfg) diskSize contents;
       inherit config lib pkgs;
     };
 

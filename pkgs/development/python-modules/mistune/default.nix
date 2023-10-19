@@ -1,32 +1,38 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "mistune";
-  version = "2.0.4";
+  version = "3.0.2";
+
+  disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9ee0a66053e2267aba772c71e06891fa8f1af6d4b01d5e84e267b4570d4d9808";
+  src = fetchFromGitHub {
+    owner = "lepture";
+    repo = "mistune";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OoTiqJ7hsFP1Yx+7xW3rL+Yc/O2lCMdhBBbaZucyZXM=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "mistune" ];
 
   meta = with lib; {
+    changelog = "https://github.com/lepture/mistune/blob/${src.rev}/docs/changes.rst";
     description = "A sane Markdown parser with useful plugins and renderers";
     homepage = "https://github.com/lepture/mistune";
     license = licenses.bsd3;

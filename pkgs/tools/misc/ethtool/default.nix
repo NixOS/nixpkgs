@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , libmnl
 , pkg-config
 , writeScript
@@ -8,12 +9,22 @@
 
 stdenv.mkDerivation rec {
   pname = "ethtool";
-  version = "6.0";
+  version = "6.1";
 
   src = fetchurl {
     url = "mirror://kernel/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-1URsk95XDOaPOx6mnb+hL8/Wf8GYl/ZV0/GCMeK4GNY=";
+    sha256 = "sha256-xB/Igf+lpAQy0t2CnrRMZKSd7kgucWuqz5Jixk2qj5A=";
   };
+
+  patches = [
+    # Patch that fixes build with musl libc
+    # NOTE remove on next release, since it is applied in upstream
+    (fetchpatch {
+      name = "Fix-build-with-musl-libc.patch";
+      url = "https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/patch/marvell.c?id=41be533331fc3c6b711dbe532405782d3b8be5d1";
+      sha256 = "sha256-CItvt/eeNJkr1sOzaaHZhAnaybDutL9cT2O6XwQll+M=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

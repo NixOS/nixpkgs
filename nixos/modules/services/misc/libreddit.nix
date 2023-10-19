@@ -15,6 +15,13 @@ in
     services.libreddit = {
       enable = mkEnableOption (lib.mdDoc "Private front-end for Reddit");
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.libreddit;
+        defaultText = literalExpression "pkgs.libreddit";
+        description = lib.mdDoc "Libreddit package to use.";
+      };
+
       address = mkOption {
         default = "0.0.0.0";
         example = "127.0.0.1";
@@ -45,7 +52,7 @@ in
         after = [ "network.target" ];
         serviceConfig = {
           DynamicUser = true;
-          ExecStart = "${pkgs.libreddit}/bin/libreddit ${args}";
+          ExecStart = "${cfg.package}/bin/libreddit ${args}";
           AmbientCapabilities = lib.mkIf (cfg.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
           Restart = "on-failure";
           RestartSec = "2s";

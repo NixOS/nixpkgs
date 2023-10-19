@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "symengine";
     repo = "symengine.py";
     rev = "v${version}";
-    sha256 = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
+    hash = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
   };
 
   patches = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
 
-  checkInputs = [ pytest sympy ];
+  nativeCheckInputs = [ pytest sympy ];
 
   setupPyBuildFlags = [
     "--symengine-dir=${symengine}/"
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Python library providing wrappers to SymEngine";
     homepage = "https://github.com/symengine/symengine.py";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

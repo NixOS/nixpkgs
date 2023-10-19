@@ -1,16 +1,18 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "mno16";
   version = "1.0";
-in fetchzip rec {
-  name = "${pname}-${version}";
-  url = "https://github.com/sevmeyer/${pname}/releases/download/${version}/${name}.zip";
-  sha256 = "1x06nl281fcjk6g1p4cgrgxakmwcci6vvasskaygsqlzxd8ig87w";
 
-  postFetch = ''
+  src = fetchzip {
+    url = "https://github.com/sevmeyer/${pname}/releases/download/${version}/${pname}-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-xJQ9V7GlGUTEeYhqYFl/SemS6iqV0eW85YOn/tLgA+M=";
+  };
+
+  installPhase = ''
     mkdir -p $out/share/fonts/truetype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/
+    cp fonts/*.ttf $out/share/fonts/truetype/
   '';
 
   meta = with lib; {

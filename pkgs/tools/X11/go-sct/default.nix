@@ -16,7 +16,7 @@ buildGoModule rec {
     rm -f geoip/geoip_test.go
   '';
 
-  vendorSha256 = "sha256-Rx5/oORink2QtRcD+JqbyFroWYhuYmuYDzZ391R4Jsw=";
+  vendorHash = "sha256-Rx5/oORink2QtRcD+JqbyFroWYhuYmuYDzZ391R4Jsw=";
 
   buildInputs = [ xorg.libX11 xorg.libXrandr wayland.dev ];
 
@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
     homepage = "https://github.com/d4l3k/go-sct";
     license = licenses.mit;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
     mainProgram = "sct";
   };
 }

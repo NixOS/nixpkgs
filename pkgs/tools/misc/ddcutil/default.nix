@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "1.3.2";
+  version = "1.4.2";
 
   src = fetchurl {
-    url = "http://www.ddcutil.com/tarballs/${pname}-${version}.tar.gz";
-    sha256 = "sha256-vZI7OquGjZ0koArdOWKkfFtfRzCvtXm8lGFCUklloEI=";
+    url = "https://www.ddcutil.com/tarballs/ddcutil-${version}.tar.gz";
+    hash = "sha256-wGwTZheRHi5pGf6WB9hGd8m/pLOmnlYYrS5dd+QItAQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
+    changelog = "https://github.com/rockowitz/ddcutil/blob/v${version}/CHANGELOG.md";
   };
 }
 

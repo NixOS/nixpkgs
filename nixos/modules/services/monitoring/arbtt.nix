@@ -7,13 +7,7 @@ let
 in {
   options = {
     services.arbtt = {
-      enable = mkOption {
-        type = types.bool;
-        default = false;
-        description = lib.mdDoc ''
-          Enable the arbtt statistics capture service.
-        '';
-      };
+      enable = mkEnableOption (lib.mdDoc "Arbtt statistics capture service");
 
       package = mkOption {
         type = types.package;

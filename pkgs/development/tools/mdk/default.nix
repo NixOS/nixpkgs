@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "gnu-mdk";
   version = "1.3.0";
   src = fetchurl {
-    url = "mirror://gnu/gnu/mdk/v${version}/mdk-${version}.tar.gz";
+    url = "mirror://gnu/mdk/v${version}/mdk-${version}.tar.gz";
     sha256 = "0bhk3c82kyp8167h71vdpbcr852h5blpnwggcswqqwvvykbms7lb";
   };
   nativeBuildInputs = [ pkg-config intltool ];

@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, gcc11Stdenv
 , fetchFromGitHub
 , cmake
 , nasm
@@ -8,7 +8,7 @@
 , extraCmakeFlags ? [ ]
 }:
 
-stdenv.mkDerivation rec {
+gcc11Stdenv.mkDerivation rec {
   pname = "ipp-crypto";
   version = "2021.3";
 

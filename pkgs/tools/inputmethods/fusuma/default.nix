@@ -1,4 +1,4 @@
-{ lib, bundlerApp, bundlerUpdateScript, makeWrapper, libinput }:
+{ lib, bundlerApp, bundlerUpdateScript, makeWrapper, gnugrep, libinput }:
 
 bundlerApp {
   pname = "fusuma";
@@ -9,7 +9,7 @@ bundlerApp {
 
   postBuild = ''
     wrapProgram "$out/bin/fusuma" \
-      --prefix PATH : ${lib.makeBinPath [ libinput ]}
+      --prefix PATH : ${lib.makeBinPath [ gnugrep libinput ]}
   '';
 
   passthru.updateScript = bundlerUpdateScript "fusuma";

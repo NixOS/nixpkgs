@@ -29,7 +29,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [ pytest mock ];
+  nativeCheckInputs = [ pytest mock ];
   checkPhase = ''
     py.test --disable-pytest-warnings tests
   '';

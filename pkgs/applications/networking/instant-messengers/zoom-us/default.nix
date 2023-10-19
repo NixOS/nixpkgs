@@ -30,6 +30,7 @@
 , libxkbcommon
 , udev
 , zlib
+, libkrb5
   # Runtime
 , coreutils
 , pciutils
@@ -47,23 +48,23 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
-  versions.aarch64-darwin = "5.12.3.11845";
-  versions.x86_64-darwin = "5.12.3.11845";
-  versions.x86_64-linux = "5.12.2.4816";
+  versions.aarch64-darwin = "5.16.2.23409";
+  versions.x86_64-darwin = "5.16.2.23409";
+  versions.x86_64-linux = "5.16.2.8828";
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
-      hash = "sha256-iDLxqG7/cdo60V0mFE3tX/Msi0rRUjoM8X9yq2rlvf0=";
+      hash = "sha256-MUkxEj4G6MCCXcqyFquCrHhnu+sVw5H4HSk+sP5H+gY=";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
-      hash = "sha256-+YOtdoh8S50+GHRLb6TPYCqDtry7SnnNqo7USzkDc7c=";
+      hash = "sha256-niR/WbMq7T1PBCJMK1DdhbFc4eJDgub8LIv3X4i8S5c=";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
-      hash = "sha256-kgjooMqeZurzqIn3ADcgFjlqaC58dQNuIAHLx4M0S9I=";
+      hash = "sha256-eRvgNrMe/NyOnsMJ8L659C3Cl4xZ5Ij1u4qoHehj4y8=";
     };
   };
 
@@ -102,10 +103,13 @@ let
     xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
     xorg.libXfixes
     xorg.libXtst
     udev
     zlib
+    libkrb5
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
@@ -190,6 +194,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ danbst tadfisher doronbehar ];
+    maintainers = with maintainers; [ danbst tadfisher ];
+    mainProgram = "zoom";
   };
 }

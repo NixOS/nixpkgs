@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, makeWrapper
+{ lib, buildPythonApplication, fetchFromGitHub
 , aria
 , libnotify
 , pulseaudio

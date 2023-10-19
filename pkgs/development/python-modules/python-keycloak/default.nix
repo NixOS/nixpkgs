@@ -25,7 +25,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'version = "0.0.0"' 'version = "${version}"'
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace 'requests-toolbelt = "^0.9.1"' 'requests-toolbelt = "*"'
   '';
 
   buildInputs = [
@@ -40,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   # Test fixtures require a running keycloak instance
-  doTest = false;
+  doCheck = false;
 
   pythonImportsCheck = [
     "keycloak"
@@ -50,6 +51,6 @@ buildPythonPackage rec {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

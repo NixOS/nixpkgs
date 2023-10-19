@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "amarna";
-  version = "0.1.3";
+  version = "0.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "amarna";
-    rev = "v${version}";
-    hash = "sha256-cE7OhACLpRmbJWzMsGTidbbw9FOKBbz47LEJwTW6wck=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tyvHWBhanR7YH87MDWdXUsDEzZG6MgnbshezAbxWO+I=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pydot
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

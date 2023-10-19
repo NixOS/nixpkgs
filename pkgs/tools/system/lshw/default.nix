@@ -4,25 +4,28 @@
 , hwdata
 , gtk2
 , pkg-config
+, gettext
 , sqlite # compile GUI
 , withGUI ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "lshw";
+  # FIXME: when switching to a stable release:
   # Fix repology.org by not including the prefixed B, otherwise the `pname` attr
   # gets filled as `lshw-B.XX.XX` in `nix-env --query --available --attr nixpkgs.lshw --meta`
   # See https://github.com/NixOS/nix/pull/4463 for a definitive fix
-  version = "02.19";
+  version = "unstable-2023-03-20";
 
   src = fetchFromGitHub {
     owner = "lyonel";
     repo = pname;
-    rev = "B.${version}";
-    sha256 = "sha256-PzbNGc1pPiPLWWgTeWoNfAo+SsXgi1HcjnXfYXA9S0I=";
+    rev = "b4e067307906ec6f277cce5c8a882f5edd03cbbc";
+    #rev = "B.${version}";
+    sha256 = "sha256-ahdaQeYZEFCVxwAMJPMB9bfo3ndIiqFyM6OghXwtm1A=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gettext ];
 
   buildInputs = [ hwdata ]
     ++ lib.optionals withGUI [ gtk2 sqlite ];

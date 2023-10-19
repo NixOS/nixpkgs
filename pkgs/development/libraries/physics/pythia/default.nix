@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pythia";
-  version = "8.307";
+  version = "8.310";
 
   src = fetchurl {
     url = "https://pythia.org/download/pythia83/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
-    sha256 = "sha256-5bFNRKpZQzMuMt1d2poY/dGgCFxxmOKNhA4EFn+mAT0=";
+    sha256 = "sha256-kMgRq+ej0v/b+bSuq1HPbgpai++04++oBvPVucMR4ic=";
   };
 
   nativeBuildInputs = [ rsync ]

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "phrase-cli";
-  version = "2.5.3";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "phrase";
     repo = "phrase-cli";
     rev = version;
-    sha256 = "sha256-qTZDOiLpStunKE/LW+nrdFdj90jVZRG0jGYRHueG0aY=";
+    sha256 = "sha256-VGuVDlIn0SnE3ZHcYbfQ0lWESf0tEyb6CTk8G8jnRlg=";
   };
 
-  vendorSha256 = "sha256-1TXDGs3ByBX8UQWoiT7hFZpwbwFlDhHHU03zw4+Zml0=";
+  vendorHash = "sha256-YzOPt02zbgT0wglWGEkUiDJhSNQnzazPs5nnNFDI0+g=";
 
   ldflags = [ "-X=github.com/phrase/phrase-cli/cmd.PHRASE_CLIENT_VERSION=${version}" ];
 
@@ -22,6 +22,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
+    changelog = "https://github.com/phrase/phrase-cli/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ juboba ];
   };

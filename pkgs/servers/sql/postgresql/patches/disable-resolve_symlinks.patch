@@ -1,13 +1,11 @@
-diff --git a/src/port/exec.c b/src/port/exec.c
-index c79e8ba..42c4091 100644
---- a/src/port/exec.c
-+++ b/src/port/exec.c
-@@ -216,6 +216,9 @@ find_my_exec(const char *argv0, char *retpath)
+--- a/src/common/exec.c	2014-09-04 20:19:12.236057588 +0200
++++ b/src/common/exec.c	2014-09-04 20:19:50.550251633 +0200
+@@ -218,6 +218,9 @@
  static int
  resolve_symlinks(char *path)
  {
-+    // On NixOS we *want* stuff relative to symlinks.
-+    return 0;
++	// On NixOS we *want* stuff relative to symlinks.
++	return 0;
 +
  #ifdef HAVE_READLINK
  	struct stat buf;

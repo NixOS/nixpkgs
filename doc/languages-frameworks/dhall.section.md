@@ -91,7 +91,7 @@ buildDhallPackage {
 let
   nixpkgs = builtins.fetchTarball {
     url    = "https://github.com/NixOS/nixpkgs/archive/94b2848559b12a8ed1fe433084686b2a81123c99.tar.gz";
-    sha256 = "1pbl4c2dsaz2lximgd31m96jwbps6apn3anx8cvvhk1gl9rkg107";
+    hash = "sha256-B4Q3c6IvTLg3Q92qYa8y+i4uTaphtFdjp+Ir3QQjdN0=";
   };
 
   dhallOverlay = self: super: {
@@ -295,7 +295,7 @@ terms of `buildDhallPackage` that accepts the following arguments:
 * `document`: Set to `true` to generate documentation for the package
 
 Additionally, `buildDhallGitHubPackage` accepts the same arguments as
-`fetchFromGitHub`, such as `sha256` or `fetchSubmodules`.
+`fetchFromGitHub`, such as `hash` or `fetchSubmodules`.
 
 ## `dhall-to-nixpkgs` {#ssec-dhall-dhall-to-nixpkgs}
 
@@ -303,20 +303,17 @@ You can use the `dhall-to-nixpkgs` command-line utility to automate
 packaging Dhall code.  For example:
 
 ```ShellSession
-$ nix-env --install --attr haskellPackages.dhall-nixpkgs
-
-$ nix-env --install --attr nix-prefetch-git  # Used by dhall-to-nixpkgs
-
-$ dhall-to-nixpkgs github https://github.com/Gabriel439/dhall-semver.git
+$ nix-shell -p haskellPackages.dhall-nixpkgs nix-prefetch-git
+[nix-shell]$ dhall-to-nixpkgs github https://github.com/Gabriella439/dhall-semver.git
 { buildDhallGitHubPackage, Prelude }:
   buildDhallGitHubPackage {
     name = "dhall-semver";
     githubBase = "github.com";
-    owner = "Gabriel439";
+    owner = "Gabriella439";
     repo = "dhall-semver";
     rev = "2d44ae605302ce5dc6c657a1216887fbb96392a4";
     fetchSubmodules = false;
-    sha256 = "0y8shvp8srzbjjpmnsvz9c12ciihnx1szs0yzyi9ashmrjvd0jcz";
+    hash = "sha256-n0nQtswVapWi/x7or0O3MEYmAkt/a1uvlOtnje6GGnk=";
     directory = "";
     file = "package.dhall";
     source = false;
@@ -324,6 +321,10 @@ $ dhall-to-nixpkgs github https://github.com/Gabriel439/dhall-semver.git
     dependencies = [ (Prelude.overridePackage { file = "package.dhall"; }) ];
     }
 ```
+
+:::{.note}
+`nix-prefetch-git` has to be in `$PATH` for `dhall-to-nixpkgs` to work.
+:::
 
 The utility takes care of automatically detecting remote imports and converting
 them to package dependencies.  You can also use the utility on local

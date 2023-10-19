@@ -90,6 +90,9 @@ with lib;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/xray -config ${settingsFile}";
+        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
+        NoNewPrivileges = true;
       };
     };
   };

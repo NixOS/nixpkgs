@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitLab
 , wrapGAppsHook
-, makeWrapper
 , pkg-config
 , meson
 , ninja

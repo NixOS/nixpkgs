@@ -4,7 +4,7 @@ While X11 (see [](#sec-x11)) is still the primary display technology
 on NixOS, Wayland support is steadily improving. Where X11 separates the
 X Server and the window manager, on Wayland those are combined: a
 Wayland Compositor is like an X11 window manager, but also embeds the
-Wayland \'Server\' functionality. This means it is sufficient to install
+Wayland 'Server' functionality. This means it is sufficient to install
 a Wayland Compositor such as sway without separately enabling a Wayland
 server:
 

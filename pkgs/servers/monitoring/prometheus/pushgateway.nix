@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "pushgateway";
-  version = "1.4.3";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "pushgateway";
     rev = "v${version}";
-    sha256 = "sha256-fSp173/ubeXw44IHVnuyYAYnTCrHcsq7GRwPlH05kJY=";
+    sha256 = "sha256-IwSzxpIBXIsOllAd0faP+uzpYZ8HcWJQBOgYZj9SZHM=";
   };
 
-  vendorSha256 = "sha256-abl2L8+QY2khLnsjXWWnzs9ewbFWctiJgHE29BRR2gU=";
+  vendorHash = "sha256-xpbGavt0gzOVZMHVdPtZ+rRVbovJ4xaqaAmYVipLzSs=";
 
   ldflags = [
     "-s"
@@ -32,6 +32,5 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/pushgateway";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
-    platforms = platforms.unix;
   };
 }

@@ -1,15 +1,14 @@
 { lib, stdenv, fetchurl, libGLU, libXmu, libXi, libXext
 , AGL, OpenGL
+, testers
 }:
 
-with lib;
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "glew";
   version = "1.10.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/glew/glew-${version}.tgz";
+    url = "mirror://sourceforge/glew/${finalAttrs.pname}-${finalAttrs.version}.tgz";
     sha256 = "01zki46dr5khzlyywr3cg615bcal32dazfazkf360s1znqh17i4r";
   };
 
@@ -20,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
-    ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
@@ -43,11 +42,14 @@ stdenv.mkDerivation rec {
     "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
   ];
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "An OpenGL extension loading library for C(++)";
-    homepage = "http://glew.sourceforge.net/";
+    homepage = "https://glew.sourceforge.net/";
     license = licenses.free; # different files under different licenses
       #["BSD" "GLX" "SGI-B" "GPL2"]
+    pkgConfigModules = [ "glew" ];
     platforms = platforms.mesaPlatforms;
   };
-}
+})

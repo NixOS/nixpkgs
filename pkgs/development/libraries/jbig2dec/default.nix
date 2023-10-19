@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
   doCheck = true;
 
   meta = {

@@ -17,6 +17,8 @@ let
         type = with types; nullOr str;
         description = lib.mdDoc ''
           wg-quick .conf file, describing the interface.
+          Using this option can be a useful means of configuring WireGuard if
+          one has an existing .conf file.
           This overrides any other configuration interface configuration options.
           See wg-quick manpage for more details.
         '';
@@ -273,7 +275,11 @@ let
         after = [ "network.target" "network-online.target" ];
         wantedBy = optional values.autostart "multi-user.target";
         environment.DEVICE = name;
-        path = [ pkgs.kmod pkgs.wireguard-tools config.networking.resolvconf.package ];
+        path = [
+          pkgs.wireguard-tools
+          config.networking.firewall.package   # iptables or nftables
+          config.networking.resolvconf.package # openresolv or systemd
+        ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -281,7 +287,7 @@ let
         };
 
         script = ''
-          ${optionalString (!config.boot.isContainer) "modprobe wireguard"}
+          ${optionalString (!config.boot.isContainer) "${pkgs.kmod}/bin/modprobe wireguard"}
           ${optionalString (values.configFile != null) ''
             cp ${values.configFile} ${configPath}
           ''}

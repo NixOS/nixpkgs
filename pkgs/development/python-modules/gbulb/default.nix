@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "gbulb";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "beeware";
     repo = "gbulb";
-    rev = "v${version}";
-    sha256 = "sha256-QNpZf1zfe6r6MtmYMWSrXPsXm5iX36oMx4GnXiTYPaQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AdZSvxix0cpoFQSrslGl+hB/s6Nh0EsWMQmXZAJVJOg=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     gtk3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     gobject-introspection
   ];

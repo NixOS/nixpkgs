@@ -11,8 +11,7 @@
 
       lib = import ./lib;
 
-      forAllSystems = f: lib.genAttrs lib.systems.flakeExposed (system: f system);
-
+      forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
     {
       lib = lib.extend (final: prev: {
@@ -57,7 +56,20 @@
       legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
       nixosModules = {
-        notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
+        notDetected = ./nixos/modules/installer/scan/not-detected.nix;
+
+        /*
+          Make the `nixpkgs.*` configuration read-only. Guarantees that `pkgs`
+          is the way you initialize it.
+
+          Example:
+
+              {
+                imports = [ nixpkgs.nixosModules.readOnlyPkgs ];
+                nixpkgs.pkgs = nixpkgs.legacyPackages.x86_64-linux;
+              }
+        */
+        readOnlyPkgs = ./nixos/modules/misc/nixpkgs/read-only.nix;
       };
     };
 }

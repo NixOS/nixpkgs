@@ -6,16 +6,18 @@
 
 buildPythonPackage rec {
   pname = "mdutils";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "didix21";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-regIrMWbGmW574dfojxZFJoivpaqOpN1I6YsqLEp8BM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xF6z63CjL/qSBQsm/fSTQhwpg9yJU4qrY06cjn1PbCk=";
   };
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "mdutils" ];
 
   meta = with lib; {
     description = "Set of basic tools that can help to create Markdown files";

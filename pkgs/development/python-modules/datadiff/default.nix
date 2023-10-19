@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "datadiff";
-  version = "2.0.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VASUQKiW3lJH7i57eqVCX5OayDLDftshAfjTA26Jyqg=";
+    hash = "sha256-fOcN/uqMM/HYjbRrDv/ukFzDa023Ofa7BwqC3omB0ws=";
   };
 
   # Tests are not part of the PyPI releases

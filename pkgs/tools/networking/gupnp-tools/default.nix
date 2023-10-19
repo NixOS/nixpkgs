@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "XqdgfuNlZCxVWSf+3FteH+COdPBh0MPrCL2QG16yAII=";
+    sha256 = "U8+TEj85fo+PC46eQ2TIanUCpTNPTAvi4FSoJEeL1bo=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,10 @@ stdenv.mkDerivation rec {
     gtksourceview4
   ];
 
+  # new libxml2 version
+  # TODO: can be dropped on next update
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -53,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/GUPnP";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

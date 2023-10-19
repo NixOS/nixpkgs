@@ -2,8 +2,8 @@
 
 grafanaPlugin rec {
   pname = "grafana-worldmap-panel";
-  version = "0.3.3";
-  zipHash = "sha256-3n1p3SvcBQMmnbnHimLBP7hauVV1IS3SMwttUWTNvb8=";
+  version = "1.0.6";
+  zipHash = "sha256-/lgsdBEL9HdJX1X1Qy0THBlYdUUI8SRtgF1Wig1Ktpk=";
   meta = with lib; {
     description = "World Map panel for Grafana";
     license = licenses.mit;

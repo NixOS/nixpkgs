@@ -26,7 +26,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gobject-introspection
     pango
     gtksourceview3
   ];

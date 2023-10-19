@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elfx86exts";
-  version = "0.5.0";
+  version = "unstable-2023-04-20";
 
   src = fetchFromGitHub {
     owner = "pkgw";
     repo = pname;
-    rev = "${pname}@${version}";
-    sha256 = "sha256-SDBs5/jEvoKEVKCHQLz2z+CZSSmESP7LoIITRN4qJWA=";
+    rev = "26bf98cf1fc773196e594c48bfe808d7151076f6";
+    hash = "sha256-xNmaKGbMN92CPIQQRbdmeePk5Wt9XcIsB/2vbk5NJzg=";
   };
 
-  cargoSha256 = "sha256-fYtFRdH6U8uWshdD1Pb1baE8slo6qajx10tDK3Ukknw=";
+  cargoHash = "sha256-NH7QK8a+ndhZGlLa3gWlnQdBQil1pi2AAi5TtFgkVf0=";
 
   meta = with lib; {
     description = "Decode x86 binaries and print out which instruction set extensions they use.";

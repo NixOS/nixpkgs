@@ -15,7 +15,7 @@ This allows using Nix to build images which can be run on many recent Linux dist
 The primary tool for interacting with Portable Services is `portablectl`,
 and they are managed by the `systemd-portabled` system service.
 
-:::{.note}
+::: {.note}
 Portable services are supported starting with systemd 239 (released on 2018-06-22).
 :::
 
@@ -37,7 +37,7 @@ dependencies of the two derivations in the `units` list.
 `units` must be a list of derivations, and their names must be prefixed with the service name (`"demo"` in this case).
 Otherwise `systemd-portabled` will ignore them.
 
-:::{.Note}
+::: {.note}
 The `.raw` file extension of the image is required by the portable services specification.
 :::
 
@@ -76,6 +76,6 @@ portablectl attach demo_1.0.raw
 systemctl enable --now demo.socket
 systemctl enable --now demo.service
 ```
-:::{.Note}
+::: {.note}
 See the [man page](https://www.freedesktop.org/software/systemd/man/portablectl.html) of `portablectl` for more info on its usage.
 :::

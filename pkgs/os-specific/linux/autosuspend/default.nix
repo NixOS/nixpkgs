@@ -5,13 +5,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "autosuspend";
-  version = "4.2.0";
+  version = "6.0.0";
+
+  disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "languitar";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-aIWqE422xfAzAyF+4hARYOcomZHraTrtxtw2YfAxJ1M=";
+    hash = "sha256-gS8NNks4GaIGl7cEqWSP53I4/tIV4LypkmZ5vNOjspY=";
   };
 
   postPatch = ''
@@ -25,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     dbus-python
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     python-dbusmock
     pytest-httpserver
@@ -50,11 +52,13 @@ python3.pkgs.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "A daemon to automatically suspend and wake up a system";
     homepage = "https://autosuspend.readthedocs.io";
+    changelog = "https://github.com/languitar/autosuspend/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.bzizou ];
+    maintainers = with maintainers; [ bzizou anthonyroussel ];
+    mainProgram = "autosuspend";
     platforms = platforms.linux;
   };
 }

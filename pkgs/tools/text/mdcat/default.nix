@@ -6,28 +6,29 @@
 , asciidoctor
 , openssl
 , Security
+, SystemConfiguration
 , ansi2html
 , installShellFiles
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdcat";
-  version = "0.29.0";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
-    owner = "lunaryorn";
+    owner = "swsnr";
     repo = "mdcat";
     rev = "mdcat-${version}";
-    sha256 = "sha256-Fh2OVb4d6WHuoJM503jaN9lan/JCrxMXZjCVpvuYbRQ=";
+    hash = "sha256-QGGZv+wk0w01eL6vAsRRUw+CuTdI949sGOM8ot4dGIc=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
-  cargoSha256 = "sha256-ZwJX+kXpj6nARFDx/+LsHWLzMUGBYJvM0DA0+WZukpI=";
+  cargoHash = "sha256-VH9MmASMiD62rxDZSKmrW7N+qp0Fpm7Pcyhxpkpl/oM=";
 
-  checkInputs = [ ansi2html ];
+  nativeCheckInputs = [ ansi2html ];
   # Skip tests that use the network and that include files.
   checkFlags = [
     "--skip magic::tests::detect_mimetype_of_larger_than_magic_param_bytes_max_length"
@@ -42,15 +43,19 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-    installShellCompletion \
-      --bash $releaseDir/build/mdcat-*/out/completions/mdcat.bash \
-      --fish $releaseDir/build/mdcat-*/out/completions/mdcat.fish \
-      --zsh $releaseDir/build/mdcat-*/out/completions/_mdcat
+    ln -sr $out/bin/{mdcat,mdless}
+
+    for bin in mdcat mdless; do
+      installShellCompletion \
+        --bash $releaseDir/build/mdcat-*/out/completions/$bin.bash \
+        --fish $releaseDir/build/mdcat-*/out/completions/$bin.fish \
+        --zsh $releaseDir/build/mdcat-*/out/completions/_$bin
+    done
   '';
 
   meta = with lib; {
     description = "cat for markdown";
-    homepage = "https://github.com/lunaryorn/mdcat";
+    homepage = "https://github.com/swsnr/mdcat";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

@@ -12,14 +12,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cdogs";
-  version = "1.3.1";
+  pname = "cdogs-sdl";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    repo = "cdogs-sdl";
+    repo = pname;
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-fKqipk1kiPC6HrkNzxHK2aYe5WDZ3hEbPCwsqK5uQ2s=";
+    sha256 = "sha256-XSq0TK3ZuLOa8JJnp/Qxt16Ru3p35tq5FOo4+tv+c60=";
   };
 
   postPatch = ''
@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCDOGS_DATA_DIR=${placeholder "out"}/"
     "-DCMAKE_C_FLAGS=-Wno-error=array-bounds"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
   ];
 
   nativeBuildInputs = [
@@ -44,6 +49,9 @@ stdenv.mkDerivation rec {
     gtk3-x11
     protobuf
   ];
+
+  # inlining failed in call to 'tinydir_open': --param max-inline-insns-single limit reached
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
     homepage = "https://cxong.github.io/cdogs-sdl";

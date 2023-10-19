@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tonelib-jam";
-  version = "4.7.5";
+  version = "4.7.8";
 
   src = fetchurl {
-    url = "https://www.tonelib.net/download/220214/ToneLib-Jam-amd64.deb";
-    sha256 = "sha256-alkdoEhN58o9IGZ8sB39ctTpouMSmvgn6tbrKFneKPI=";
+    url = "https://tonelib.net/download/221222/ToneLib-Jam-amd64.deb";
+    sha256 = "sha256-c6At2lRPngQPpE7O+VY/Hsfw+QfIb3COIuHfbqqIEuM=";
   };
 
   nativeBuildInputs = [

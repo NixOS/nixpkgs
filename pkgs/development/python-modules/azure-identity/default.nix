@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "azure-identity";
-  version = "1.11.0";
+  version = "1.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-w/yACvWLhX5/rw4xA3bl7xD12tUJCRTMQv+m19I7Zyk=";
+    hash = "sha256-ckQXmfjFyJv+IQJpZeJmZyp8XQUMLGURnviZ3VNi4rE=";
   };
 
   propagatedBuildInputs = [

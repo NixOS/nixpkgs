@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "kumina";
     repo = "openvpn_exporter";
     rev = "v${version}";
-    sha256 = "14m4n5918zimdnyf0yg2948jb1hp1bdf27k07j07x3yrx357i05l";
+    hash = "sha256-tIB4yujZj36APGAe4doKF4YlEUnieeC8bTV+FFKxpJI=";
   };
 
-  vendorSha256 = "1jgw0nnibydhcd83kp6jqkf41mhwldp8wdhqk0yjw18v9m0p7g5s";
+  vendorHash = "sha256-urxzQU0bBS49mBg2jm6jHNZA3MTS3DlQY7D5Fa0F/Mk=";
 
   meta = with lib; {
     inherit (src.meta) homepage;

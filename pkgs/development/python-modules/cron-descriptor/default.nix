@@ -2,24 +2,29 @@
 , python
 , buildPythonPackage
 , fetchFromGitHub
+, mock
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cron_descriptor";
-  version = "1.2.30";
+  version = "1.2.35";
 
   src = fetchFromGitHub {
     owner = "Salamek";
     repo = "cron-descriptor";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Qei9f0HlIu5sautMEASvxdUqZyXKvHDWJgd3oST1gJo=";
+    hash = "sha256-m+h91cddmEPHCeUWWNpTvb89mFwm8ty8tTnw3YDjCFo=";
   };
 
   # remove tests_require, as we don't do linting anyways
   postPatch = ''
     sed -i "/'pep8\|flake8\|pep8-naming',/d" setup.py
   '';
+
+  checkInputs = [
+    mock
+  ];
 
   checkPhase = ''
     ${python.interpreter} setup.py test

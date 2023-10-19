@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "python-glanceclient";
-  version = "4.1.0";
+  version = "4.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fknYBKZzCA6sThugNQT5+p+/hqv8vW6M2LMMpbT+7rY=";
+    hash = "sha256-ejZuH/Zr23bmJ+7PfNQFO9lPNfo83GkNKa/0fpduBTI=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pyopenssl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     stestr
     testscenarios
     ddt

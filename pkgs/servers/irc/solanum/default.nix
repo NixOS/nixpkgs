@@ -57,6 +57,11 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
+  # Missing install depends:
+  #   ...-binutils-2.40/bin/ld: cannot find ./.libs/libircd.so: No such file or directory
+  #   collect2: error: ld returned 1 exit status
+  #   make[4]: *** [Makefile:634: solanum] Error 1
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "An IRCd for unified networks";

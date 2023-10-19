@@ -3,26 +3,29 @@
 , aiohttp
 , aresponses
 , backoff
+, certifi
 , fetchFromGitHub
+, fetchpatch
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "pyiqvia";
-  version = "2022.10.0";
+  version = "2023.10.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
+    repo = "pyiqvia";
     rev = "refs/tags/${version}";
-    hash = "sha256-4xoK/SwpcsjIpGUertWoSlRsKIpgpV1XmuIzDJcZMZg=";
+    hash = "sha256-8eTa2h+1QOL0T13+lg2OzvaQv6CYYKkviQb4J5KPsvM=";
   };
 
   nativeBuildInputs = [
@@ -32,9 +35,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     aiohttp
     backoff
+    certifi
+    yarl
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio
@@ -58,6 +65,7 @@ buildPythonPackage rec {
       https://flustar.com and more).
     '';
     homepage = "https://github.com/bachya/pyiqvia";
+    changelog = "https://github.com/bachya/pyiqvia/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

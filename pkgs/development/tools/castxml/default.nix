@@ -2,25 +2,28 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, libclang
 , libffi
 , libxml2
-, llvm
-, sphinx
 , zlib
 , withManual ? true
 , withHTML ? true
+, llvmPackages
+, python3
 }:
 
-stdenv.mkDerivation rec {
-  pname = "CastXML";
-  version = "0.4.6";
+let
+  inherit (llvmPackages) libclang llvm;
+  inherit (python3.pkgs) sphinx;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "castxml";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-EXi5dPhzxqHLNH1Ty8iz81uJxRX1+pFtwWSwbXeolL0=";
+    owner = "CastXML";
+    repo = "CastXML";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x27koa0q+rDqPmfHMf7v7KTx3bfDgqS/FkPAX5auqaw=";
   };
 
   nativeBuildInputs = [
@@ -65,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

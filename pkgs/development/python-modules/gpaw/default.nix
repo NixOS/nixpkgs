@@ -13,6 +13,8 @@
 , ase
 , numpy
 , scipy
+, pyyaml
+, inetutils
 }:
 
 assert lib.asserts.assertMsg (!blas.isILP64)
@@ -81,11 +83,14 @@ in buildPythonPackage rec {
     hash = "sha256-Kgf8yuGua7mcGP+jVVmbE8JCsbrfzewRTRt3ihq9YX4=";
   };
 
-  nativeBuildInputs = [ which ];
+  # `inetutils` is required because importing `gpaw`, as part of
+  # pythonImportsCheck, tries to execute its binary, which in turn tries to
+  # execute `rsh` as a side-effect.
+  nativeBuildInputs = [ which inetutils ];
 
   buildInputs = [ blas scalapack libxc libvdwxc ];
 
-  propagatedBuildInputs = [ ase scipy numpy mpi ];
+  propagatedBuildInputs = [ ase scipy numpy mpi pyyaml ];
 
   patches = [ ./SetupPath.patch ];
 
@@ -109,7 +114,7 @@ in buildPythonPackage rec {
   '';
 
   doCheck = false; # Requires MPI runtime to work in the sandbox
-  pythonImportsCheckHook = [ "gpaw" ];
+  pythonImportsCheck = [ "gpaw" ];
 
   passthru = { inherit mpi; };
 

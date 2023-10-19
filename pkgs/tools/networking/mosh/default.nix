@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, zlib, protobuf, ncurses, pkg-config
-, makeWrapper, perl, openssl, autoreconfHook, openssh, bash-completion
+, makeWrapper, perl, openssl, autoreconfHook, openssh, bash-completion, fetchpatch
 , withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +24,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./ssh_path.patch
     ./mosh-client_path.patch
-    ./utempter_path.patch
     # Fix build with bash-completion 2.10
     ./bash_completion_datadir.patch
+
+    # Fixes build with protobuf3 23.x
+    (fetchpatch {
+      url = "https://github.com/mobile-shell/mosh/commit/eee1a8cf413051c2a9104e8158e699028ff56b26.patch";
+      hash = "sha256-CouLHWSsyfcgK3k7CvTK3FP/xjdb1pfsSXYYQj3NmCQ=";
+    })
   ];
 
   postPatch = ''
@@ -42,8 +47,6 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
-
   meta = with lib; {
     homepage = "https://mosh.org/";
     description = "Mobile shell (ssh replacement)";
@@ -56,7 +59,7 @@ stdenv.mkDerivation rec {
       especially over Wi-Fi, cellular, and long-distance links.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ viric SuperSandro2000 ];
+    maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
   };
 }

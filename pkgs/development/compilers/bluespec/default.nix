@@ -28,18 +28,18 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "bluespec";
-  version = "2022.01";
+  version = "2023.01";
 
   src = fetchFromGitHub {
     owner = "B-Lang-org";
     repo = "bsc";
     rev = version;
-    sha256 = "sha256-ivTua3MLa8akma3MGkhsqwSdwswYX916kywKdlj7TqY=";
+    sha256 = "sha256-kFHQtRaQmZiHo+IQ+mwbW23i3kbdAh/XH0OE7P/ibd0=";
   };
 
   yices-src = fetchurl {
     url = "https://github.com/B-Lang-org/bsc/releases/download/${version}/yices-src-for-bsc-${version}.tar.gz";
-    sha256 = "sha256-ey5yIIVFZyG4EnYGqbIJqmxK1rZ70FWM0Jz+2hIoGXE=";
+    sha256 = "sha256-pyEdCJvmgwOYPMZEtw7aro76tSn/Y/2GcKTyARmIh4E=";
   };
 
   enableParallelBuilding = true;
@@ -50,8 +50,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./libstp_stub_makefile.patch ];
 
   postUnpack = ''
-    mkdir -p $sourceRoot/src/vendor/yices/v2.6/yices2
-    tar -C $sourceRoot/src/vendor/yices/v2.6/yices2 -xf ${yices-src}
+    tar -C $sourceRoot/ -xf ${yices-src}
     chmod -R +rwX $sourceRoot/src/vendor/yices/v2.6/yices2
   '';
 
@@ -94,7 +93,7 @@ in stdenv.mkDerivation rec {
 
   makeFlags = [
     "release"
-    "NO_DEPS_CHECKS=1" # skip the subrepo check (this deriviation uses yices.src instead of the subrepo)
+    "NO_DEPS_CHECKS=1" # skip the subrepo check (this deriviation uses yices-src instead of the subrepo)
     "NOGIT=1" # https://github.com/B-Lang-org/bsc/issues/12
     "LDCONFIG=ldconfig" # https://github.com/B-Lang-org/bsc/pull/43
     "STP_STUB=1"
@@ -102,7 +101,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gmp-static
     verilog
   ];

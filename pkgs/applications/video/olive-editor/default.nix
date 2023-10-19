@@ -1,30 +1,65 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, which, qmake, wrapQtAppsHook
-, qtmultimedia, frei0r, opencolorio_1, ffmpeg-full, CoreFoundation }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, which
+, frei0r
+, opencolorio
+, ffmpeg_4
+, CoreFoundation
+, cmake
+, wrapQtAppsHook
+, openimageio
+, openexr_3
+, portaudio
+, imath
+, qtwayland
+, qtmultimedia
+, qttools
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "olive-editor";
-  version = "0.1.2";
+  version = "unstable-2023-06-12";
 
   src = fetchFromGitHub {
+    fetchSubmodules = true;
     owner = "olive-editor";
     repo = "olive";
-    rev = version;
-    sha256 = "151g6jwhipgbq4llwib92sq23p1s9hm6avr7j4qq3bvykzrm8z1a";
+    rev = "2036fffffd0e24b7458e724b9084ae99c9507c64";
+    sha256 = "sha256-qee9/WTvTy5jWLowvZJOwAjrqznRhJR+u9dYsnCN/Qs=";
   };
+
+  cmakeFlags = [
+    "-DBUILD_QT6=1"
+  ];
+
+  # https://github.com/olive-editor/olive/issues/2200
+  patchPhase = ''
+    runHook prePatch
+    substituteInPlace ./app/node/project/serializer/serializer230220.cpp \
+      --replace 'QStringRef' 'QStringView'
+    runHook postPatch
+  '';
 
   nativeBuildInputs = [
     pkg-config
     which
-    qmake
+    cmake
     wrapQtAppsHook
   ];
 
   buildInputs = [
-    ffmpeg-full
+    ffmpeg_4
     frei0r
-    opencolorio_1
+    opencolorio
+    openimageio
+    imath
+    openexr_3
+    portaudio
+    qtwayland
     qtmultimedia
+    qttools
   ] ++ lib.optional stdenv.isDarwin CoreFoundation;
 
   meta = with lib; {
@@ -34,5 +69,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.balsoft ];
     platforms = platforms.unix;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

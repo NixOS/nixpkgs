@@ -253,7 +253,7 @@ in python3.pkgs.buildPythonApplication rec {
     installManPage doc/asciidoc.1 doc/a2x.1 doc/testasciidoc.1
   '';
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest
     pytest-mock
   ];

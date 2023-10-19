@@ -5,13 +5,13 @@ with pkgs;
 rec {
 
   sourceTarball = args: import ./source-tarball.nix (
-    { inherit stdenv autoconf automake libtool;
+    { inherit lib stdenv autoconf automake libtool;
     } // args);
 
   makeSourceTarball = sourceTarball; # compatibility
 
   binaryTarball = args: import ./binary-tarball.nix (
-    { inherit stdenv;
+    { inherit lib stdenv;
     } // args);
 
   mvnBuild = args: import ./maven-build.nix (
@@ -38,7 +38,7 @@ rec {
     } // args);
 
   rpmBuild = args: import ./rpm-build.nix (
-    { inherit vmTools;
+    { inherit lib vmTools;
     } // args);
 
   debBuild = args: import ./debian-build.nix (

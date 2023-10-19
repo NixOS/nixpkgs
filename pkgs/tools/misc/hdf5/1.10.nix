@@ -9,7 +9,7 @@
 , jdk
 }:
 
-let inherit (lib) optional optionals; in
+let inherit (lib) optional; in
 
 stdenv.mkDerivation rec {
   version = "1.10.9";
@@ -51,5 +51,11 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
+    knownVulnerabilities = [
+      "CVE-2020-10809"
+      "CVE-2020-10810"
+      "CVE-2020-10811"
+      "CVE-2020-10812"
+    ];
   };
 }

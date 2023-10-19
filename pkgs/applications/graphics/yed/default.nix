@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yEd";
-  version = "3.22";
+  version = "3.23.2";
 
   src = fetchzip {
     url = "https://www.yworks.com/resources/yed/demo/${pname}-${version}.zip";
-    sha256 = "sha256-GHYdvWie2k9YarS9DaA4bExswV3UQ26O8+7K/6yvtac=";
+    sha256 = "sha256-u83OmIzq9VygKbfa886mj6BIa/9ET1btry2nR/wxeyI=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip wrapGAppsHook ];

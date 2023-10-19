@@ -13,11 +13,14 @@
 , pythonOlder
 , sniffio
 , socksio
+# for passthru.tests
+, httpx
+, httpx-socks
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.15.0";
+  version = "0.17.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,14 +28,9 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    hash = "sha256-FF3Yzac9nkVcA5bHVOz2ymvOelSfJ0K6oU8UWpBDcmo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qAoORhzBbjXxgtzTqbAxWBxrohzfwDWm5mxxrgeXt48=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "h11>=0.11,<0.13" "h11>=0.11,<0.14"
-  '';
 
   propagatedBuildInputs = [
     anyio
@@ -50,7 +48,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pproxy
     pytest-asyncio
     pytest-httpbin
@@ -63,11 +61,24 @@ buildPythonPackage rec {
     "httpcore"
   ];
 
+  preCheck = ''
+    # remove upstreams pytest flags which cause:
+    # httpcore.ConnectError: TLS/SSL connection has been closed (EOF) (_ssl.c:997)
+    rm setup.cfg
+  '';
+
   pytestFlagsArray = [
     "--asyncio-mode=strict"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit httpx httpx-socks;
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/encode/httpcore/releases/tag/${version}";
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;

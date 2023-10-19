@@ -1,13 +1,17 @@
-from colorama import Style, Fore
-from contextlib import contextmanager
-from typing import Any, Dict, Iterator
-from queue import Queue, Empty
-from xml.sax.saxutils import XMLGenerator
+# mypy: disable-error-code="no-untyped-call"
+# drop the above line when mypy is upgraded to include
+# https://github.com/python/typeshed/commit/49b717ca52bf0781a538b04c0d76a5513f7119b8
 import codecs
 import os
 import sys
 import time
 import unicodedata
+from contextlib import contextmanager
+from queue import Empty, Queue
+from typing import Any, Dict, Iterator
+from xml.sax.saxutils import XMLGenerator
+
+from colorama import Fore, Style
 
 
 class Logger:
@@ -36,7 +40,7 @@ class Logger:
 
     def maybe_prefix(self, message: str, attributes: Dict[str, str]) -> str:
         if "machine" in attributes:
-            return "{}: {}".format(attributes["machine"], message)
+            return f"{attributes['machine']}: {message}"
         return message
 
     def log_line(self, message: str, attributes: Dict[str, str]) -> None:
@@ -62,9 +66,7 @@ class Logger:
     def log_serial(self, message: str, machine: str) -> None:
         self.enqueue({"msg": message, "machine": machine, "type": "serial"})
         if self._print_serial_logs:
-            self._eprint(
-                Style.DIM + "{} # {}".format(machine, message) + Style.RESET_ALL
-            )
+            self._eprint(Style.DIM + f"{machine} # {message}" + Style.RESET_ALL)
 
     def enqueue(self, item: Dict[str, str]) -> None:
         self.queue.put(item)
@@ -97,7 +99,7 @@ class Logger:
         yield
         self.drain_log_queue()
         toc = time.time()
-        self.log("(finished: {}, in {:.2f} seconds)".format(message, toc - tic))
+        self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
         self.xml.endElement("nest")
 

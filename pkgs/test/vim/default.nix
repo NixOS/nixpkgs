@@ -1,9 +1,9 @@
-{ vimUtils, vim_configurable, writeText, vimPlugins
+{ vimUtils, vim-full, writeText, vimPlugins
 , lib, fetchFromGitHub
 , pkgs
 }:
 let
-  inherit (vimUtils) buildVimPluginFrom2Nix;
+  inherit (vimUtils) buildVimPlugin;
 
   packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
@@ -14,12 +14,12 @@ in
   ### vim tests
   ##################
 
-  test_vim_with_vim_nix_using_plug = vim_configurable.customize {
+  test_vim_with_vim_nix_using_plug = vim-full.customize {
     name = "vim-with-vim-addon-nix-using-plug";
     vimrcConfig.plug.plugins = with vimPlugins; [ vim-nix ];
   };
 
-  test_vim_with_vim_nix = vim_configurable.customize {
+  test_vim_with_vim_nix = vim-full.customize {
     name = "vim-with-vim-addon-nix";
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };

@@ -110,7 +110,6 @@ in {
     in
     {
       preStart = ''
-        cp ${conf} /var/rss2email/conf.cfg
         if [ ! -f /var/rss2email/db.json ]; then
           echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
         fi
@@ -118,7 +117,7 @@ in {
       path = [ pkgs.system-sendmail ];
       serviceConfig = {
         ExecStart =
-          "${pkgs.rss2email}/bin/r2e -c /var/rss2email/conf.cfg -d /var/rss2email/db.json run";
+          "${pkgs.rss2email}/bin/r2e -c ${conf} -d /var/rss2email/db.json run";
         User = "rss2email";
       };
     };

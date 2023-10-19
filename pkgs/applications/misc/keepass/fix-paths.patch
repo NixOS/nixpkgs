@@ -43,54 +43,53 @@ diff --git a/KeePass/Util/AppLocator.cs b/KeePass/Util/AppLocator.cs
 index af02803..8a32c9d 100644
 --- a/KeePass/Util/AppLocator.cs
 +++ b/KeePass/Util/AppLocator.cs
-@@ -429,7 +429,7 @@ namespace KeePass.Util
+@@ -468,7 +468,7 @@ namespace KeePass.Util
  			if(NativeLib.GetPlatformID() == PlatformID.MacOSX)
- 				strArgPrefix = string.Empty; // FR 3535696
+ 				strOpt = string.Empty; // FR 3535696
  
--			string str = NativeLib.RunConsoleApp("whereis", strArgPrefix + strApp);
-+			string str = NativeLib.RunConsoleApp("@whereis@", strArgPrefix + strApp);
- 			if(str == null) return null;
+-			string str = NativeLib.RunConsoleApp("whereis", strOpt + strApp);
++			string str = NativeLib.RunConsoleApp("@whereis@", strOpt + strApp);
+ 			if(string.IsNullOrEmpty(str)) return null;
  
- 			str = str.Trim();
+ 			int iSep = str.IndexOf(':');
 diff --git a/KeePass/Util/ClipboardUtil.Unix.cs b/KeePass/Util/ClipboardUtil.Unix.cs
-index ab49ee2..7f6c50f 100644
 --- a/KeePass/Util/ClipboardUtil.Unix.cs
 +++ b/KeePass/Util/ClipboardUtil.Unix.cs
-@@ -62,7 +62,7 @@ namespace KeePass.Util
- 			//	"-out -selection clipboard");
- 			// if(str != null) return str;
+@@ -65,7 +65,7 @@
+ 				//	"-out -selection clipboard");
+ 				// if(str != null) return str;
  
--			string str = NativeLib.RunConsoleApp("xsel",
-+			string str = NativeLib.RunConsoleApp("@xsel@",
- 				"--output --clipboard", null, XSelFlags);
- 			if(str != null) return str;
- 
-@@ -83,10 +83,10 @@ namespace KeePass.Util
- 			if(string.IsNullOrEmpty(str))
- 			{
- 				// xsel with an empty input can hang, thus use --clear
--				if(NativeLib.RunConsoleApp("xsel", "--clear --primary",
-+				if(NativeLib.RunConsoleApp("@xsel@", "--clear --primary",
- 					null, XSelFlags) != null)
+-				string str = NativeLib.RunConsoleApp("xsel",
++				string str = NativeLib.RunConsoleApp("@xsel@",
+ 					"--output --clipboard", null, XSelFlags);
+ 				if(str != null) return str;
+ 			}
+@@ -93,10 +93,10 @@
+ 				if(string.IsNullOrEmpty(str))
  				{
--					NativeLib.RunConsoleApp("xsel", "--clear --clipboard",
-+					NativeLib.RunConsoleApp("@xsel@", "--clear --clipboard",
- 						null, XSelFlags);
+ 					// xsel with an empty input can hang, thus use --clear
+-					if(NativeLib.RunConsoleApp("xsel", "--clear --primary",
++					if(NativeLib.RunConsoleApp("@xsel@", "--clear --primary",
+ 						null, XSelFlags) != null)
+ 					{
+-						NativeLib.RunConsoleApp("xsel", "--clear --clipboard",
++						NativeLib.RunConsoleApp("@xsel@", "--clear --clipboard",
+ 							null, XSelFlags);
+ 						return;
+ 					}
+@@ -107,10 +107,10 @@
+ 				}
+ 
+ 				// xsel does not support --primary and --clipboard together
+-				if(NativeLib.RunConsoleApp("xsel", "--input --primary",
++				if(NativeLib.RunConsoleApp("@xsel@", "--input --primary",
+ 					str, XSelFlags) != null)
+ 				{
+-					NativeLib.RunConsoleApp("xsel", "--input --clipboard",
++					NativeLib.RunConsoleApp("@xsel@", "--input --clipboard",
+ 						str, XSelFlags);
  					return;
  				}
-@@ -97,10 +97,10 @@ namespace KeePass.Util
- 			}
- 
- 			// xsel does not support --primary and --clipboard together
--			if(NativeLib.RunConsoleApp("xsel", "--input --primary",
-+			if(NativeLib.RunConsoleApp("@xsel@", "--input --primary",
- 				str, XSelFlags) != null)
- 			{
--				NativeLib.RunConsoleApp("xsel", "--input --clipboard",
-+				NativeLib.RunConsoleApp("@xsel@", "--input --clipboard",
- 					str, XSelFlags);
- 				return;
- 			}
 diff --git a/KeePassLib/Native/ClipboardU.cs b/KeePassLib/Native/ClipboardU.cs
 index 291c51d..3c76380 100644
 --- a/KeePassLib/Native/ClipboardU.cs
@@ -108,14 +107,14 @@ diff --git a/KeePassLib/Native/NativeLib.cs b/KeePassLib/Native/NativeLib.cs
 index 2d227a3..243f4ee 100644
 --- a/KeePassLib/Native/NativeLib.cs
 +++ b/KeePassLib/Native/NativeLib.cs
-@@ -145,7 +145,7 @@ namespace KeePassLib.Native
- 			// Mono returns PlatformID.Unix on Mac OS X, workaround this
- 			if(m_platID.Value == PlatformID.Unix)
+@@ -143,7 +143,7 @@ namespace KeePassLib.Native
+ 			// Mono returns PlatformID.Unix on MacOS, workaround this
+ 			if(g_platID.Value == PlatformID.Unix)
  			{
 -				if((RunConsoleApp("uname", null) ?? string.Empty).Trim().Equals(
 +				if((RunConsoleApp("@uname@", null) ?? string.Empty).Trim().Equals(
  					"Darwin", StrUtil.CaseIgnoreCmp))
- 					m_platID = PlatformID.MacOSX;
+ 					g_platID = PlatformID.MacOSX;
  			}
 diff --git a/KeePassLib/Utility/MonoWorkarounds.cs b/KeePassLib/Utility/MonoWorkarounds.cs
 index e20bb3a..4fd875b 100644
@@ -130,7 +129,7 @@ index e20bb3a..4fd875b 100644
  
  		private static Dictionary<uint, bool> g_dForceReq = new Dictionary<uint, bool>();
  		private static Thread g_thFixClip = null;
-@@ -335,7 +335,7 @@ namespace KeePassLib.Utility
+@@ -356,7 +356,7 @@ namespace KeePassLib.Utility
  				// }
  				// else { Debug.Assert(false); }
  

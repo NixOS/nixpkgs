@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , flake8
 , flaky
+, importlib-metadata
 , jedi
 , matplotlib
 , mccabe
@@ -20,45 +21,53 @@
 , pytestCheckHook
 , python-lsp-jsonrpc
 , pythonOlder
+, pythonRelaxDepsHook
 , rope
 , setuptools
 , setuptools-scm
+, toml
 , ujson
 , websockets
 , whatthepatch
+, wheel
 , yapf
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.6.0";
+  version = "1.8.2";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-1LV8FcwQqUg+FIkrorBYlxMl4F1PkrrOWjD5M0JSp3Q=";
+    hash = "sha256-jD/8Xy/o9U/qtjz5FABg5krMIvbnrT+MlK0OvXFTJkI=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp --cov test" "" \
-      --replace "autopep8>=1.6.0,<1.7.0" "autopep8" \
-      --replace "flake8>=5.0.0,<5.1.0" "flake8" \
-      --replace "mccabe>=0.7.0,<0.8.0" "mccabe" \
-      --replace "pycodestyle>=2.9.0,<2.10.0" "pycodestyle" \
-      --replace "pyflakes>=2.5.0,<2.6.0" "pyflakes"
+      --replace "--cov pylsp --cov test" ""
   '';
 
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  pythonRelaxDeps = [
+    "autopep8"
+    "flake8"
+    "mccabe"
+    "pycodestyle"
+    "pydocstyle"
+    "pyflakes"
+  ];
+
   nativeBuildInputs = [
-    setuptools
+    pythonRelaxDepsHook
     setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -66,7 +75,10 @@ buildPythonPackage rec {
     jedi
     pluggy
     python-lsp-jsonrpc
+    setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
   ];
 
   passthru.optional-dependencies = {
@@ -79,6 +91,7 @@ buildPythonPackage rec {
       pyflakes
       pylint
       rope
+      toml
       whatthepatch
       yapf
     ];
@@ -115,7 +128,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     matplotlib
     numpy
@@ -128,10 +141,12 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Don't run lint tests
+    "test_pydocstyle"
     # https://github.com/python-lsp/python-lsp-server/issues/243
     "test_numpy_completions"
     "test_workspace_loads_pycodestyle_config"
-  ] ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # pyqt5 is broken on aarch64-darwin
     "test_pyqt_completion"
   ];
@@ -142,12 +157,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "pylsp"
+    "pylsp.python_lsp"
   ];
 
   meta = with lib; {
     description = "Python implementation of the Language Server Protocol";
     homepage = "https://github.com/python-lsp/python-lsp-server";
+    changelog = "https://github.com/python-lsp/python-lsp-server/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "pylsp";
   };
 }

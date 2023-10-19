@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, libfaketime, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "siji-${version}";
+  pname = "siji";
   version = "2016-05-13";
 
   src = fetchFromGitHub {

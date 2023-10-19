@@ -14,7 +14,7 @@ buildPythonPackage rec {
     ./mapping-import.patch
   ];
 
-  checkInputs = [ nose psutil mock ];
+  nativeCheckInputs = [ nose psutil mock ];
 
   checkPhase = ''
     # https://github.com/NixOS/nixpkgs/pull/46186#issuecomment-419450064
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/SethMichaelLarson/selectors2";
     description = "Back-ported, durable, and portable selectors";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

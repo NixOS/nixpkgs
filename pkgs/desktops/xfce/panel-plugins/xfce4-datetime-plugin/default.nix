@@ -9,10 +9,10 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-datetime-plugin";
-  version = "0.8.2";
+  version = "0.8.3";
 
   rev-prefix = "xfce4-datetime-plugin-";
-  sha256 = "sha256-ov4Wh9Pj01u0NrjDn5p+qXlD2LY3gEUC1e/jPjkn4xQ=";
+  sha256 = "sha256-dpN5ZN7VjgO1GQ6v8NXuBKACyIwIosaiVGtmLEb6auI=";
 
   nativeBuildInputs = [
     gettext

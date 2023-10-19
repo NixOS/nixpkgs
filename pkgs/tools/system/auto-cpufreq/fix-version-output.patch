@@ -1,37 +1,33 @@
+diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
+index 99397a9..f3ef28f 100755
 --- a/auto_cpufreq/core.py
 +++ b/auto_cpufreq/core.py
-@@ -68,32 +68,8 @@ dist_name = distro.id()
+@@ -144,26 +144,10 @@ except PermissionError:
  
  # display running version of auto-cpufreq
  def app_version():
--
--    print("auto-cpufreq version:")
--
++    print("auto-cpufreq version: @version@")
++    print("Git commit: v@version@")
+ 
+-    print("auto-cpufreq version: ", end="")
+ 
 -    # snap package
 -    if os.getenv("PKG_MARKER") == "SNAP":
--        print(getoutput("echo Snap: $SNAP_VERSION"))
+-        print(getoutput("echo \(Snap\) $SNAP_VERSION"))
 -    # aur package
 -    elif dist_name in ["arch", "manjaro", "garuda"]:
 -        aur_pkg_check = call("pacman -Qs auto-cpufreq > /dev/null", shell=True)
 -        if aur_pkg_check == 1:
--            print(
--                "Git commit:",
--                check_output(["git", "describe", "--always"]).strip().decode(),
--            )
+-            print(get_formatted_version())
 -        else:
 -            print(getoutput("pacman -Qi auto-cpufreq | grep Version"))
 -    else:
 -        # source code (auto-cpufreq-installer)
 -        try:
--            print(
--                "Git commit:",
--                check_output(["git", "describe", "--always"]).strip().decode(),
--            )
+-            print(get_formatted_version())
 -        except Exception as e:
 -            print(repr(e))
 -            pass
-+    print("auto-cpufreq version: @version@")
-+    print("Git commit: v@version@")
- 
- 
- def app_res_use():
+ def verify_update():
+     # Specify the repository and package name
+     # IT IS IMPORTANT TO  THAT IF THE REPOSITORY STRUCTURE IS CHANGED, THE FOLLOWING FUNCTION NEEDS TO BE UPDATED ACCORDINGLY

@@ -1,27 +1,39 @@
-{ buildPythonPackage, lib, fetchPypi
-, pytestCheckHook, filelock, mock, pep8
-, cython, setuptools-scm
-, six, pyshp, shapely, geos, numpy
-, gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
-, proj, flufl_lock
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, fetchpatch
+, cython
+, setuptools-scm
+, geos
+, proj
+, matplotlib
+, numpy
+, pyproj
+, pyshp
+, shapely
+, owslib
+, pillow
+, gdal
+, scipy
+, fontconfig
+, pytest-mpl
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.21.0";
+  version = "0.22.0";
+
+  disabled = pythonOlder "3.8";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "Cartopy";
-    sha256 = "sha256-zh06KKEy6UyJrDN2mlD4H2VjSrK9QFVjF+Fb1srRzkI=";
+    hash = "sha256-swD5ASCTHUPxHvh8Bk6h2s7BtZpJQKp26/gs8JVIu0k=";
   };
-
-  postPatch = ''
-    # https://github.com/SciTools/cartopy/issues/1880
-    substituteInPlace lib/cartopy/tests/test_crs.py \
-      --replace "test_osgb(" "dont_test_osgb(" \
-      --replace "test_epsg(" "dont_test_epsg("
-  '';
 
   nativeBuildInputs = [
     cython
@@ -31,27 +43,41 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
-    geos proj
+    geos
+    proj
   ];
 
   propagatedBuildInputs = [
-    # required
-    six pyshp shapely numpy
-
-    # optional
-    gdal pillow matplotlib pyepsg pykdtree scipy fiona owslib
+    matplotlib
+    numpy
+    pyproj
+    pyshp
+    shapely
   ];
 
-  checkInputs = [ pytestCheckHook filelock mock pep8 flufl_lock ];
+  passthru.optional-dependencies = {
+    ows = [ owslib pillow ];
+    plotting = [ gdal pillow scipy ];
+  };
+
+  nativeCheckInputs = [
+    pytest-mpl
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  preCheck = ''
+    export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
+    export HOME=$TMPDIR
+  '';
 
   pytestFlagsArray = [
-    "--pyargs" "cartopy"
-    "-m" "'not network and not natural_earth'"
+    "--pyargs"
+    "cartopy"
+    "-m"
+    "'not network and not natural_earth'"
   ];
 
   disabledTests = [
-    "test_nightshade_image"
-    "background_img"
     "test_gridliner_labels_bbox_style"
   ];
 

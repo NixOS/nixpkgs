@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   patches = [ ./va_args.patch ];
 
   # Work around gcc5 switch to gnu11
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   # Fix detection of stdint.h
   postPatch = ''

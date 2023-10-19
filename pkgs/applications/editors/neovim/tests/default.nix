@@ -1,5 +1,5 @@
 # run tests by building `neovim.tests`
-{ vimUtils, vim_configurable, writeText, neovim, vimPlugins
+{ vimUtils, writeText, neovim, vimPlugins
 , lib, fetchFromGitHub, neovimUtils, wrapNeovimUnstable
 , neovim-unwrapped
 , fetchFromGitLab
@@ -8,8 +8,6 @@
 }:
 let
   inherit (neovimUtils) makeNeovimConfig;
-
-  packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
 
   plugins = with vimPlugins; [
     {
@@ -47,13 +45,6 @@ let
 
   nvimAutoDisableWrap = makeNeovimConfig { };
 
-  nvimConfDontWrap = makeNeovimConfig {
-    inherit plugins;
-    customRC = ''
-      " just a comment
-    '';
-  };
-
   wrapNeovim2 = suffix: config:
     wrapNeovimUnstable neovim-unwrapped (config // {
       extraName = suffix;
@@ -67,12 +58,12 @@ let
   };
 
   # this plugin checks that it's ftplugin/vim.tex is loaded before $VIMRUNTIME/ftplugin/vim.tex
-  # the answer is store in `plugin_was_loaded_too_late` in the cwd
+  # $VIMRUNTIME/ftplugin/vim.tex sources $VIMRUNTIME/ftplugin/initex.vim which sets b:did_ftplugin
+  # we save b:did_ftplugin's value in a `plugin_was_loaded_too_late` file
   texFtplugin = (pkgs.runCommandLocal "tex-ftplugin" {} ''
     mkdir -p $out/ftplugin
-    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' > $out/ftplugin/tex.vim
+    echo 'call system("echo ". exists("b:did_ftplugin") . " > plugin_was_loaded_too_late")' >> $out/ftplugin/tex.vim
     echo ':q!' >> $out/ftplugin/tex.vim
-    echo '\documentclass{article}' > $out/main.tex
   '') // { pname = "test-ftplugin"; };
 
   # neovim-drv must be a wrapped neovim
@@ -150,10 +141,12 @@ rec {
   # files from $VIMRUNTIME
   run_nvim_with_ftplugin = runTest nvim_with_ftplugin ''
     export HOME=$TMPDIR
-    ${nvim_with_ftplugin}/bin/nvim ${texFtplugin}/main.tex
-    result="$(cat plugin_was_loaded_too_late)"
-    echo $result
-    [ "$result" = 0 ]
+    echo '\documentclass{article}' > main.tex
+
+    ${nvim_with_ftplugin}/bin/nvim main.tex -c "set ft?" -c quit
+    ls -l $TMPDIR
+    # if the file exists, then our plugin has been loaded instead of neovim's
+    [ ! -f plugin_was_loaded_too_late ]
   '';
 
 
@@ -166,6 +159,28 @@ rec {
     '';
   });
 
+  # check that the vim-doc hook correctly generates the tag
+  # for neovim packages from luaPackages
+  # we know for a fact gitsigns-nvim has a doc folder and comes from luaPackages
+  checkForTagsLuaPackages = vimPlugins.gitsigns-nvim.overrideAttrs(oldAttrs: {
+    doInstallCheck = true;
+    installCheckPhase = ''
+      [ -f $out/doc/tags ]
+    '';
+  });
+
+  nvim_with_gitsigns_plugin = neovim.override {
+    extraName = "-with-gitsigns-plugin";
+    configure.packages.plugins = {
+      start = [
+        vimPlugins.gitsigns-nvim
+      ];
+    };
+  };
+  checkHelpLuaPackages = runTest nvim_with_gitsigns_plugin ''
+    export HOME=$TMPDIR
+    ${nvim_with_gitsigns_plugin}/bin/nvim -i NONE -c 'help gitsigns' +quitall! -e
+  '';
 
   # nixpkgs should detect that no wrapping is necessary
   nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
@@ -247,13 +262,12 @@ rec {
       packadd dashboard-nvim-unique-for-tests-please-dont-use-opt
 
       " Try to run Dashboard again, and throw if it fails
-      try
-        Dashboard
-        echo "Dashboard found"
-      catch /^Vim\%((\a\+)\)\=:E492/
+      let res = exists(':Dashboard')
+      if res == 0
         echo "Dashboard not found, throwing error"
         cquit 1
-      endtry
+      endif
+      cquit 0
     '';
   };
 

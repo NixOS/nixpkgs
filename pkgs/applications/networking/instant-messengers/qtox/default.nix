@@ -12,7 +12,6 @@
 , qtbase
 , qtsvg
 , qttools
-, qttranslations
 , ffmpeg
 , filter-audio
 , libexif
@@ -44,7 +43,6 @@ mkDerivation rec {
     libXScrnSaver
     qtbase
     qtsvg
-    qttranslations
     ffmpeg
     filter-audio
     libexif

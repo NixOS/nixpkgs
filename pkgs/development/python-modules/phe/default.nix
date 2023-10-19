@@ -13,7 +13,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mS+3CR0kJ/DZczlG+PNQrN1NHQEgV/Kq02S6eflwM5w=";
+    hash = "sha256-mS+3CR0kJ/DZczlG+PNQrN1NHQEgV/Kq02S6eflwM5w=";
   };
 
   buildInputs = [ click gmpy2 numpy ];

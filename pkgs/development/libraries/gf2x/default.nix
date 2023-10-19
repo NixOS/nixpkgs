@@ -1,20 +1,23 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitLab
 , autoreconfHook
+, buildPackages
 , optimize ? false # impure hardware optimizations
 }:
 stdenv.mkDerivation rec {
   pname = "gf2x";
   version = "1.3.0";
 
-  # upstream has plans to move to gitlab:
-  # https://github.com/NixOS/nixpkgs/pull/45299#issuecomment-564477936
-  src = fetchgit {
-    url = "https://scm.gforge.inria.fr/anonscm/git/gf2x/gf2x.git";
-    rev = "gf2x-${version}";
+  src = fetchFromGitLab {
+    domain = "gitlab.inria.fr";
+    owner = "gf2x";
+    repo = pname;
+    rev = "${pname}-${version}";
     sha256 = "04g5jg0i4vz46b4w2dvbmahwzi3k6b8g515mfw7im1inc78s14id";
   };
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [
     autoreconfHook

@@ -1,18 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip rec {
+stdenvNoCC.mkDerivation rec {
   pname = "freefont-ttf";
   version = "20120503";
 
-  url = "mirror://gnu/freefont/freefont-ttf-${version}.zip";
+  src = fetchzip {
+    url = "mirror://gnu/freefont/freefont-ttf-${version}.zip";
+    hash = "sha256-K3kVHGcDTxQ7N7XqSdwRObriVkBoBYPKHbyYrYvm7VU=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    mv $out/*.ttf $out/share/fonts/truetype
-    find $out -maxdepth 1 ! -type d -exec rm {} +
-  '';
+    mv *.ttf $out/share/fonts/truetype
 
-  sha256 = "sha256-bdMZg/mHYc0N6HiR8uNl0CjeOwBou+OYj3LPkyEUHUA=";
+    runHook postInstall
+  '';
 
   meta = {
     description = "GNU Free UCS Outline Fonts";
@@ -24,6 +28,6 @@ fetchzip rec {
     homepage = "https://www.gnu.org/software/freefont/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

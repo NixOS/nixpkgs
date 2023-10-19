@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "py-sr25519-bindings";
-  version = "0.1.5";
+  version = "unstable-2023-03-15";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,17 +19,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "polkascan";
     repo = "py-sr25519-bindings";
-    rev = "a97398b386c10ebe0a1f6c45dea466add0d407ce";
-    sha256 = "sha256-RJfwWeD82J5QqY+qq2bC3vlqT75jUwhTXuIsza4qUzk=";
+    rev = "9127501235bf291d7f14f00ec373d0a5000a32cb";
+    hash = "sha256-mxNmiFvMbV9WQhGNIQXxTkOcJHYs0vyOPM6Nd5367RE=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-7fDlEYWOiRVpG3q0n3ZSS1dfNCOh0/4pX/PbcDBvoMI=";
   };
-
-  postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
@@ -38,7 +36,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     py-bip39-bindings
   ];

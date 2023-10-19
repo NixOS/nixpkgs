@@ -7,6 +7,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+    wheel
   ];
 
   propagatedBuildInputs = [
@@ -33,13 +35,14 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
   postPatch = ''
     # Upstream uses versioningit to set the version
+    sed -i "/versioningit >=/d" pyproject.toml
     sed -i '/^name =.*/a version = "${version}"' pyproject.toml
     sed -i "/dynamic =/d" pyproject.toml
   '';

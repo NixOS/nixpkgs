@@ -21,7 +21,7 @@ buildPythonPackage rec {
     matplotlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     scipy
   ];
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Great data sets for Topological Data Analysis";
     homepage = "https://tadasets.scikit-tda.org";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

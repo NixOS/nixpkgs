@@ -1,14 +1,14 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, fdk_aac }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, fetchpatch, fdk_aac }:
 
 stdenv.mkDerivation rec {
   pname = "fdkaac";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "nu774";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7a8JlQtMGuMWgU/HePd31/EvtBNc2tBMz8V8NQivuNo=";
+    sha256 = "sha256-GYvI9T5Bv2OcK0hMAQE7/tE6ajDyqkaak66b3Hc0Fls=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

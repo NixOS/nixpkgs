@@ -1,22 +1,34 @@
-{ stdenv, fetchFromGitHub, lib, libpcap, yascreen }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, libpcap
+, yascreen
+}:
 
 stdenv.mkDerivation rec {
   pname = "bpfmon";
-  version = "2.50";
+  version = "2.52";
 
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "bpfmon";
-    rev = "v${version}";
-    sha256 = "sha256-x4EuGZBtg45bD9q1B/6KwjDRXXeRsdFmRllREsech+E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-W7OnrC+FCxMd4YbYiybjIvO0LT7Hr1/0Y3BQwItaTBs=";
   };
 
-  buildInputs = [ libpcap yascreen ];
-  makeFlags = [ "PREFIX=$(out)" ];
+  buildInputs = [
+    libpcap
+    yascreen
+  ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
 
   meta = with lib; {
     description = "BPF based visual packet rate monitor";
     homepage = "https://github.com/bbonev/bpfmon";
+    changelog = "https://github.com/bbonev/bpfmon/releases/tag/v${version}";
     maintainers = with maintainers; [ arezvov ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

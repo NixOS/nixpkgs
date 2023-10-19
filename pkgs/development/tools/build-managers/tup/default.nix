@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, pcre }:
+{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre }:
 
 let
   fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
@@ -15,13 +15,24 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse pcre ];
+  buildInputs = [ fuse pcre sqlite ];
 
   patches = [ ./fusermount-setuid.patch ];
 
   configurePhase = ''
     substituteInPlace  src/tup/link.sh --replace '`git describe' '`echo ${version}'
-    substituteInPlace Tuprules.tup --replace 'pcre-config' 'pkg-config libpcre'
+
+    for f in Tupfile Tuprules.tup src/tup/server/Tupfile build.sh; do
+      substituteInPlace "$f" \
+        --replace "pkg-config"  "${stdenv.cc.targetPrefix}pkg-config" \
+        --replace "pcre-config" "${stdenv.cc.targetPrefix}pkg-config libpcre"
+    done
+
+    cat << EOF > tup.config
+    CONFIG_CC=${stdenv.cc.targetPrefix}cc
+    CONFIG_AR=${stdenv.cc.targetPrefix}ar
+    CONFIG_TUP_USE_SYSTEM_SQLITE=y
+    EOF
   '';
 
   # Regular tup builds require fusermount to have suid, which nix cannot
@@ -55,7 +66,7 @@ in stdenv.mkDerivation rec {
       algorithms to avoid doing unnecessary work. This means you can stay focused on
       your project rather than on your build system.
     '';
-    homepage = "http://gittup.org/tup/";
+    homepage = "https://gittup.org/tup/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.unix;

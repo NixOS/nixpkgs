@@ -28,8 +28,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   };
 
   testScript = ''
-    import re
-
     with subtest("PowerDNS database exists"):
         server.wait_for_unit("mysql")
         server.succeed("echo 'SHOW DATABASES;' | sudo -u pdns mysql -u pdns >&2")
@@ -46,11 +44,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     with subtest("Adding an example zone works"):
         # Extract configuration file needed by pdnsutil
-        unit = server.succeed("systemctl cat pdns")
-        match = re.search("(--config-dir=[^ ]+)", unit)
-        assert(match is not None)
-        conf = match.group(1)
-        pdnsutil = "sudo -u pdns pdnsutil " + conf
+        pdnsutil = "sudo -u pdns pdnsutil "
         server.succeed(f"{pdnsutil} create-zone example.com ns1.example.com")
         server.succeed(f"{pdnsutil} add-record  example.com ns1 A 192.168.1.2")
 

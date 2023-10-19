@@ -4,36 +4,38 @@
 , buildPythonPackage
 , fetchPypi
 , git
-, mock
 , pep517
 , pytestCheckHook
-, toml
+, tomli
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.48";
+  version = "0.49";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O1dfHa3nvrMHjvS/M6lFGYNEV8coHbxyaxXFRmtVxlc=";
+    hash = "sha256-ZKZARFVCzyJpGWV8e3jQLZwcpbHCXX5m4OH/MlBg9BY=";
   };
 
   propagatedBuildInputs = [
     build
     pep517
-    toml
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  nativeCheckInputs = [
+    git
+    pytestCheckHook
   ];
 
   checkInputs = [
     breezy
-    git
-    mock
-    pytestCheckHook
   ];
 
   disabledTests = [
@@ -48,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Check MANIFEST.in in a Python source package for completeness";
     homepage = "https://github.com/mgedmin/check-manifest";
+    changelog = "https://github.com/mgedmin/check-manifest/blob/${version}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo ];
   };

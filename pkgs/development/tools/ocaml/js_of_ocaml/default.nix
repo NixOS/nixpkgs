@@ -5,7 +5,7 @@
 buildDunePackage {
   pname = "js_of_ocaml";
 
-  inherit (js_of_ocaml-compiler) version src useDune2;
+  inherit (js_of_ocaml-compiler) version src;
 
   buildInputs = [ ppxlib ];
 

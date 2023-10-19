@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
   buildInputs = [ bzip2 ncurses util-linux zlib ];
 
-  checkInputs = [ check ];
+  nativeCheckInputs = [ check ];
   doCheck = true;
 
   enableParallelBuilding = true;

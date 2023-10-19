@@ -2,17 +2,16 @@
 
 buildGoModule rec {
   pname = "spruce";
-  version = "unstable-2022-02-10";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "geofffranks";
     repo = pname;
-    rev = "473931f33fceae90b3f5cfb7616c296343a9559b";
-    sha256 = "sha256-TFyWkoAKmj3KH2pqhVKMtP6QKTtu0s7H5gNP+fotUzg=";
+    rev = "v${version}";
+    hash = "sha256-7BZl3GPEuXdZptbkChlmdUkxfIkA3B3IdPFO46zejQ4=";
   };
 
-  deleteVendor = true;
-  vendorSha256 = "sha256-VeC5c/BgcxK3Qawb2QOhqtfTIgbQbrQj546zX6yPD+s=";
+  vendorHash = null;
 
   meta = with lib; {
     description = "A BOSH template merge tool";

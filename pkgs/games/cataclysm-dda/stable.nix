@@ -18,25 +18,18 @@ let
   };
 
   self = common.overrideAttrs (common: rec {
-    version = "0.F-3";
+    version = "0.G";
 
     src = fetchFromGitHub {
       owner = "CleverRaven";
       repo = "Cataclysm-DDA";
       rev = version;
-      sha256 = "sha256-2su1uQaWl9WG41207dRvOTdVKcQsEz/y0uTi9JX52uI=";
+      sha256 = "sha256-Hda0dVVHNeZ8MV5CaCbSpdOCG2iqQEEmXdh16vwIBXk=";
     };
 
     patches = [
       # Unconditionally look for translation files in $out/share/locale
-      ./locale-path-stable.patch
-
-      # Fixes compiler errors when compiling against SDL2_ttf >= 1.20.0, https://github.com/CleverRaven/Cataclysm-DDA/pull/59083
-      # Remove with next version update.
-      (fetchpatch {
-        url = "https://github.com/CleverRaven/Cataclysm-DDA/commit/625fadf3d493c1712d9ade2b849ff6a79765c7a7.patch";
-        hash = "sha256-c0NXkd6jSGSruKrwuYUmLbgiL97YQDkUm313fnMJ7GA=";
-      })
+      ./locale-path.patch
     ];
 
     makeFlags = common.makeFlags ++ [
@@ -44,9 +37,15 @@ let
       "VERSION=${version}"
     ];
 
+    env.NIX_CFLAGS_COMPILE = toString [
+      # Needed with GCC 12
+      "-Wno-error=array-bounds"
+    ];
+
     meta = common.meta // {
       maintainers = with lib.maintainers;
         common.meta.maintainers ++ [ skeidel ];
+      changelog = "https://github.com/CleverRaven/Cataclysm-DDA/blob/${version}/data/changelog.txt";
     };
   });
 in

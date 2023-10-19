@@ -25,9 +25,13 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = with python3.pkgs; [
-    pytest-runner
-    pytest
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # uses unsupported crypt method
+    "test_htpasswd_crypt"
   ];
 
   meta = with lib; {
@@ -41,6 +45,6 @@ python3.pkgs.buildPythonApplication rec {
       on mobile phones or computers.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ edwtjo pSub aneeshusa infinisil ];
+    maintainers = with maintainers; [ edwtjo pSub infinisil ];
   };
 }

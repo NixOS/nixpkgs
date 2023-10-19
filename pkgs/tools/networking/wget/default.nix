@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wget";
-  version = "1.21.3";
+  version = "1.21.4";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${pname}-${version}.tar.lz";
-    sha256 = "sha256-29L7XkcUnUdS0Oqg2saMxJzyDUbfT44yb/yPGLKvTqU=";
+    hash = "sha256-NoNhml9Q7cvMsXIKeQBvo3v5uaJVqMW0gEi8PHqHS9k=";
   };
 
   patches = [
@@ -47,14 +47,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";
+    homepage = "https://www.gnu.org/software/wget/";
+    license = licenses.gpl3Plus;
     longDescription =
       '' GNU Wget is a free software package for retrieving files using HTTP,
          HTTPS and FTP, the most widely-used Internet protocols.  It is a
          non-interactive commandline tool, so it may easily be called from
          scripts, cron jobs, terminals without X-Windows support, etc.
       '';
-    license = licenses.gpl3Plus;
-    homepage = "https://www.gnu.org/software/wget/";
+    mainProgram = "wget";
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
   };

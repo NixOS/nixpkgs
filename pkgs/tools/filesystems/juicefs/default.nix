@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "juicefs";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "juicedata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JxN8p/935k+mWkGNSKrI7jCTxcGs5TcUXcmkDjwnzZg=";
+    sha256 = "sha256-UtERYOjAKOTK+A1qPdD1PajOkf/t5vqWRBvEuxkZmdg=";
   };
 
-  vendorSha256 = "sha256-rYyzy6UQQu8q+ei4GAEEq+JPhAAUvHcRpIzNts150OA=";
+  vendorHash = "sha256-BpqxCCuWyUgzPyh7sq3/HyQ29qm/PWD7mQFh1nkkAkA=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -24,6 +24,10 @@ buildGoModule rec {
   # we dont need the libjfs binary
   postFixup = ''
     rm $out/bin/libjfs
+  '';
+
+  postInstall = ''
+    ln -s $out/bin/juicefs $out/bin/mount.juicefs
   '';
 
   meta = with lib; {

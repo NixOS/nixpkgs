@@ -27,10 +27,6 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  # hook for gobject-introspection doesn't like strictDeps
-  # https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
   buildInputs = [ docutils gsettings-desktop-schemas gtk3 ];
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [ xrandr pygobject3 ];

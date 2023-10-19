@@ -1,0 +1,55 @@
+diff --git a/v4l2loopback.c b/v4l2loopback.c
+index 2ab1f76..2514f09 100644
+--- a/v4l2loopback.c
++++ b/v4l2loopback.c
+@@ -92,17 +92,6 @@ MODULE_LICENSE("GPL");
+ 		}                                                      \
+ 	} while (0)
+ 
+-/* TODO: Make sure that function is never interrupted. */
+-static inline int mod_inc(int *number, int mod)
+-{
+-	int result;
+-	result = (*number + 1) % mod;
+-	if (unlikely(result < 0))
+-		result += mod;
+-	*number = result;
+-	return result;
+-}
+-
+ static inline void v4l2l_get_timestamp(struct v4l2_buffer *b)
+ {
+ 	/* ktime_get_ts is considered deprecated, so use ktime_get_ts64 if possible */
+@@ -1424,8 +1413,9 @@ static int vidioc_reqbufs(struct file *file, void *fh,
+ 			i = dev->write_position;
+ 			list_for_each_entry(pos, &dev->outbufs_list,
+ 					    list_head) {
+-				dev->bufpos2index[mod_inc(&i, b->count)] =
++				dev->bufpos2index[i % b->count] =
+ 					pos->buffer.index;
++				++i;
+ 			}
+ 		}
+ 
+@@ -1489,9 +1479,10 @@ static void buffer_written(struct v4l2_loopback_device *dev,
+ 	del_timer_sync(&dev->timeout_timer);
+ 	spin_lock_bh(&dev->lock);
+ 
+-	dev->bufpos2index[mod_inc(&dev->write_position, dev->used_buffers)] =
++	dev->bufpos2index[dev->write_position % dev->used_buffers] =
+ 		buf->buffer.index;
+ 	list_move_tail(&buf->list_head, &dev->outbufs_list);
++	++dev->write_position;
+ 	dev->reread_count = 0;
+ 
+ 	check_timers(dev);
+@@ -1586,7 +1577,8 @@ static int get_capture_buffer(struct file *file)
+ 		if (dev->write_position >
+ 		    opener->read_position + dev->used_buffers)
+ 			opener->read_position = dev->write_position - 1;
+-		pos = mod_inc(&opener->read_position, dev->used_buffers);
++		pos = opener->read_position % dev->used_buffers;
++		++opener->read_position;
+ 	}
+ 	timeout_happened = dev->timeout_happened;
+ 	dev->timeout_happened = 0;

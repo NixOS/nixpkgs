@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
-  version = "3.2";
+  version = "3.9";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.hypervisor";
-    rev = version;
-    hash = "sha256-yc9QfzvWX8jsRVZYglZZuMfxsYUoPr5gf407DABjQcU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-AcDlyLKrRyt1mhh7nb9Oln/cjVKw8s1g78J8sgE2p2g=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -55,6 +55,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Dissect module implementing parsers for various hypervisor disk, backup and configuration files";
     homepage = "https://github.com/fox-it/dissect.hypervisor";
+    changelog = "https://github.com/fox-it/dissect.hypervisor/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
   };

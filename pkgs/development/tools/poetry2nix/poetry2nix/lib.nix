@@ -161,6 +161,7 @@ let
         outputHashAlgo = "sha256";
         outputHash = hash;
         NETRC = netrc_file;
+        passthru.isWheel = lib.strings.hasSuffix "whl" file;
       } ''
       python ${./fetch_from_legacy.py} ${url} ${pname} ${file}
       mv ${file} $out

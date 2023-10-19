@@ -2,7 +2,7 @@
 libpng, uthash , which, xnee, xorg, python3Packages }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.1";
+  version = "1.7.1";
 
   pname = "alttab";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "sagb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g56207IGNDnBIqZmbpcgOLcfAGKwBE0DYu2Dq0bLS8o=";
+    sha256 = "sha256-1+hk0OeSriXPyefv3wOgeiW781PL4VP5Luvt+RS5jmg=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     coreutils
     procps
     python3Packages.xvfbwrapper
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     description = "X11 window switcher designed for minimalistic window managers or standalone X11 session";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.sgraf ];
+    maintainers = [ ];
   };
 }

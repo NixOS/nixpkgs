@@ -7,6 +7,8 @@
 , ffmpeg
 , glib
 , libGLU
+, libICE
+, libX11
 , mesa
 , perl
 , pkg-config
@@ -14,7 +16,6 @@
 , python3
 , wrapGAppsHook
 , wxGTK32
-, xlibsWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -44,15 +45,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg
     glib
-    libGLU
-    mesa
     proj
     wxGTK32
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xlibsWrapper
+    # TODO: libGLU doesn't build for macOS because of Mesa issues
+    # (#233265); is it required for anything?
+    libGLU
+    mesa
+    libICE
+    libX11
   ];
 
   postPatch = ''

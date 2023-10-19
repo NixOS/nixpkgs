@@ -13,7 +13,7 @@
 , glfw
 , libGLU
 , curl
-, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , enablePython ? false, pythonPackages ? null
 , enableGUI ? false,
 }:
@@ -52,6 +52,12 @@ stdenv.mkDerivation rec {
     ./py_pybind11_no_external_download.patch
   ];
 
+  postPatch = ''
+    # https://github.com/IntelRealSense/librealsense/issues/11092
+    # insert a "#include <iostream" at beginning of file
+    sed '1i\#include <iostream>' -i wrappers/python/pyrs_device.cpp
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja
@@ -72,7 +78,10 @@ stdenv.mkDerivation rec {
   # script does not do this, and it's questionable if intel knows it should be
   # done
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
-  postInstall = lib.optionalString enablePython  ''
+  postInstall = ''
+    substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
+    --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+  '' + lib.optionalString enablePython  ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 

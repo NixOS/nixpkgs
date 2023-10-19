@@ -1,26 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, kmod, looking-glass-client }:
+{ lib, stdenv, kernel, looking-glass-client }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kvmfr";
   version = looking-glass-client.version;
 
   src = looking-glass-client.src;
-  sourceRoot = "source/module";
+  sourceRoot = "${looking-glass-client.src.name}/module";
+  patches = lib.optional (kernel.kernelAtLeast "6.4") [
+    ./linux-6-4-compat.patch
+  ];
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  patches = lib.optional (kernel.kernelAtLeast "5.16") (fetchpatch {
-    name = "kvmfr-5.16.patch";
-    url = "https://github.com/gnif/LookingGlass/commit/a9b5302a517e19d7a2da114acf71ef1e69cfb497.patch";
-    sha256 = "017nxlk2f7kyjp6llwa74dbczdb1jk8v791qld81dxhzkm9dyqqx";
-    stripLen = 1;
-  })
-  ++ lib.optional (kernel.kernelAtLeast "5.18") (fetchpatch {
-    name = "kvmfr-5.18.patch";
-    url = "https://github.com/gnif/LookingGlass/commit/c7029f95042fe902843cb6acbfc75889e93dc210.patch";
-    sha256 = "sha256-6DpL17XWj8BKpiBdKdCPC51MWKLIo6PixQ9UaygT2Zg=";
-    stripLen = 1;
-  });
 
   makeFlags = [
     "KVER=${kernel.modDirVersion}"

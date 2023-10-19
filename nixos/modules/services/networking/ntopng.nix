@@ -20,7 +20,7 @@ let
     ''
     else
     pkgs.writeText "ntopng.conf" ''
-      ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
+      ${concatStringsSep "\n" (map (e: "--interface=${e}") cfg.interfaces)}
       --http-port=${toString cfg.httpPort}
       --redis=${cfg.redis.address}
       --data-dir=/var/lib/ntopng
@@ -86,7 +86,7 @@ in
 
       redis.createInstance = mkOption {
         type = types.nullOr types.str;
-        default = if versionAtLeast config.system.stateVersion "22.05" then "ntopng" else "";
+        default = optionalString (versionAtLeast config.system.stateVersion "22.05") "ntopng";
         description = lib.mdDoc ''
           Local Redis instance name. Set to `null` to disable
           local Redis instance. Defaults to `""` for

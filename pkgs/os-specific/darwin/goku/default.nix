@@ -2,22 +2,32 @@
 , stdenv
 , fetchurl
 , unzip
+, joker
 }:
 
 stdenv.mkDerivation rec {
   pname = "goku";
-  version = "0.5.2";
+  version = "0.6.0";
 
-  src = fetchurl {
-    url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.zip";
-    sha256 = "506eccdabedc68c112778b13ded65099327267c2e3fd488916e3a340bc312954";
-  };
+  src = if stdenv.isAarch64 then
+    fetchurl {
+      url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku-arm.zip";
+      hash = "sha256-TIoda2kDckK1FBLAmKudsDs3LXO4J0KWiAD2JlFb4rk=";
+    }
+    else fetchurl {
+      url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.zip";
+      hash = "sha256-8HdIwtpzR6O2WCbMYIJ6PHcM27Xmb+4Tc5Fmjl0dABQ=";
+    };
 
   nativeBuildInputs = [
     unzip
   ];
 
-  sourceRoot = ".";
+  buildInputs = [
+    joker
+  ];
+
+  sourceRoot = if stdenv.isAarch64 then "goku" else ".";
 
   installPhase = ''
     chmod +x goku

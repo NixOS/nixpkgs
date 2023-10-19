@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "1qhjpg0722871dm5m7mmldf6c7mx58fbdvk1ix5i3s9py82448gf";
   };
 
-  checkInputs = [ nose coverage ];
+  nativeCheckInputs = [ nose coverage ];
 
   meta = with lib; {
     homepage = "https://github.com/metagriffin/globre";

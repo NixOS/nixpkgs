@@ -26,7 +26,7 @@ in buildPythonPackage rec {
     owner = "online-judge-tools";
     repo = "api-client";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-P0pIjd/YS155dSDpY/ekMp8HnJcM35waV7aoTQiEWHo=";
+    hash = "sha256-P0pIjd/YS155dSDpY/ekMp8HnJcM35waV7aoTQiEWHo=";
   };
 
   patches = [ ./fix-paths.patch ];

@@ -1,5 +1,43 @@
 #!/usr/bin/env nix-shell
 #! nix-shell -I nixpkgs=../../../.. -i bash -p nix curl jq nix-update
+# shellcheck shell=bash
+cd "$(dirname "$0")"
+
+usage () {
+  cat <<EOF
+# Snipe-IT Updater
+
+A small script to update Snipe-IT to the latest release
+
+Usage: $(basename "$0") [options]
+
+ -h, --help      Display this message and quit
+ -c, --commit    Create a commit after updating
+ -n, --no-build  Just update, don't build the package
+
+This script needs composer2nix in your PATH.
+https://github.com/svanderburg/composer2nix
+EOF
+}
+
+# Parse command line arguments
+while [ $# -ge 1 ]; do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -c|--commit)
+      COMMIT_CHANGES=true
+      ;;
+    -d|--dont-build)
+      DONT_BUILD=true
+      ;;
+    *)
+      ;;
+  esac
+  shift
+done
 
 # check if composer2nix is installed
 if ! command -v composer2nix &> /dev/null; then
@@ -44,7 +82,18 @@ sed -e '7s/stdenv writeTextFile/stdenv lib writeTextFile/' \
 echo "" >> composition.nix
 echo "" >> php-packages.nix
 
-cd ../../../..
-nix-build -A snipe-it
+if [ -z ${DONT_BUILD+x} ]; then
+  (
+    cd ../../../..
+    nix-build -A snipe-it
+  )
+fi
+
+if [ -n "$COMMIT_CHANGES" ]; then
+  git add .
+  git commit -m "snipe-it: $CURRENT_VERSION -> $TARGET_VERSION
+
+https://github.com/snipe/snipe-it/releases/tag/v$TARGET_VERSION"
+fi
 
 exit $?

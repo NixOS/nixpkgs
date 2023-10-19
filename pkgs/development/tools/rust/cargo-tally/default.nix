@@ -1,26 +1,27 @@
-{ lib, rustPlatform, fetchCrate, stdenv, DiskArbitration, Foundation, IOKit }:
+{ lib, rustPlatform, fetchCrate, stdenv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tally";
-  version = "1.0.17";
+  version = "1.0.31";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-vtVE7BITzYP9vhSj7HfDm0Mar2bRPmeW1/mE977vvrA=";
+    hash = "sha256-2V2JXSlFzYoSidByWGFTGwNHM9c5Go1cdHLp0b7N+hI=";
   };
 
-  cargoSha256 = "sha256-VHlnRk5EXZjf+EW/clDOFA+ohh9SqJiRvq1xQcP0Wrk=";
+  cargoHash = "sha256-mcYAqzfZO0M/UQTeYp4eCD7VVIWhtHi7VxBZtrr/aCk=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     DiskArbitration
     Foundation
     IOKit
-  ];
+  ]);
 
   meta = with lib; {
     description = "Graph the number of crates that depend on your crate over time";
     homepage = "https://github.com/dtolnay/cargo-tally";
+    changelog = "https://github.com/dtolnay/cargo-tally/releases/tag/${version}";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

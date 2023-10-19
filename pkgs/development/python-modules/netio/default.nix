@@ -1,33 +1,35 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, poetry-core
+, pyopenssl
 , pythonOlder
 , requests
-, pyopenssl
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "netio";
-  version = "1.0.6";
-  format = "setuptools";
+  version = "1.0.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "Netio";
-    inherit version;
-    hash = "sha256-G1NSCchoRjgX2K9URNXsxpp9jxrQo0RgZ00tzWdexGU=";
+  src = fetchFromGitHub {
+    owner = "netioproducts";
+    repo = "PyNetio";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-s/X2WGhQXYsbo+ZPpkVSF/vclaThYYNHu0UY0yCnfPA=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     requests
     pyopenssl
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "import py2exe" ""
-  '';
 
   pythonImportsCheck = [
     "Netio"
@@ -39,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for interacting with NETIO devices";
     homepage = "https://github.com/netioproducts/PyNetio";
+    changelog = "https://github.com/netioproducts/PyNetio/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

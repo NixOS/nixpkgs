@@ -1,27 +1,45 @@
-{ gcc11Stdenv, lib, fetchFromGitHub, wrapQtAppsHook, cmake, pkg-config, git
-, qtbase, qtquickcontrols, qtmultimedia, openal, glew, vulkan-headers, vulkan-loader, libpng
-, ffmpeg, libevdev, libusb1, zlib, curl, wolfssl, python3, pugixml, faudio, flatbuffers
-, sdl2Support ? true, SDL2
-, pulseaudioSupport ? true, libpulseaudio
-, waylandSupport ? true, wayland
-, alsaSupport ? true, alsa-lib
+{ lib
+, stdenv
+, fetchFromGitHub
+, wrapQtAppsHook
+, cmake
+, pkg-config
+, git
+, qtbase
+, qtquickcontrols
+, qtmultimedia
+, openal
+, glew
+, vulkan-headers
+, vulkan-loader
+, libpng
+, libSM
+, ffmpeg
+, libevdev
+, libusb1
+, zlib
+, curl
+, wolfssl
+, python3
+, pugixml
+, flatbuffers
+, llvm_16
+, cubeb
+, faudioSupport ? true
+, faudio
+, SDL2
+, waylandSupport ? true
+, wayland
 }:
 
 let
   # Keep these separate so the update script can regex them
-  rpcs3GitVersion = "14358-a00f9e421";
-  rpcs3Version = "0.0.25-14358-a00f9e421";
-  rpcs3Revision = "a00f9e42115527aa9654870f194cf2c64329f2ef";
-  rpcs3Sha256 = "0avajihbs02nbfqs4kzgckl0v2z4z8h8fgcjs5m4zxvkgj5701nv";
-
-  ittapi = fetchFromGitHub {
-    owner = "intel";
-    repo = "ittapi";
-    rev = "v3.18.12";
-    sha256 = "0c3g30rj1y8fbd2q4kwlpg1jdy02z4w5ryhj3yr9051pdnf4kndz";
-  };
+  rpcs3GitVersion = "15409-fd6829f75";
+  rpcs3Version = "0.0.28-15409-fd6829f75";
+  rpcs3Revision = "fd6829f7576da07e3bb90de8821834d3ce44610c";
+  rpcs3Hash = "sha256-I/CYDE7te8xxKjTyH1Mb45uemya5Sfjb96MQWlkFAbk=";
 in
-gcc11Stdenv.mkDerivation {
+stdenv.mkDerivation {
   pname = "rpcs3";
   version = rpcs3Version;
 
@@ -30,10 +48,8 @@ gcc11Stdenv.mkDerivation {
     repo = "rpcs3";
     rev = rpcs3Revision;
     fetchSubmodules = true;
-    sha256 = rpcs3Sha256;
+    hash = rpcs3Hash;
   };
-
-  patches = [ ./0001-llvm-ExecutionEngine-IntelJITEvents-only-use-ITTAPI_.patch ];
 
   passthru.updateScript = ./update.sh;
 
@@ -56,18 +72,20 @@ gcc11Stdenv.mkDerivation {
     "-DUSE_SYSTEM_FAUDIO=ON"
     "-DUSE_SYSTEM_PUGIXML=ON"
     "-DUSE_SYSTEM_FLATBUFFERS=ON"
+    "-DUSE_SYSTEM_SDL=ON"
+    "-DWITH_LLVM=ON"
+    "-DBUILD_LLVM=OFF"
     "-DUSE_NATIVE_INSTRUCTIONS=OFF"
-    "-DITTAPI_SOURCE_DIR=${ittapi}"
+    "-DUSE_FAUDIO=${if faudioSupport then "ON" else "OFF"}"
   ];
 
   nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
 
   buildInputs = [
     qtbase qtquickcontrols qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl wolfssl python3 pugixml faudio flatbuffers
-  ] ++ lib.optional sdl2Support SDL2
-    ++ lib.optional pulseaudioSupport libpulseaudio
-    ++ lib.optional alsaSupport alsa-lib
+    libevdev zlib libusb1 curl wolfssl python3 pugixml flatbuffers llvm_16 libSM
+  ] ++ cubeb.passthru.backendLibs
+    ++ lib.optionals faudioSupport [ faudio SDL2 ]
     ++ lib.optional waylandSupport wayland;
 
   postInstall = ''
@@ -82,6 +100,7 @@ gcc11Stdenv.mkDerivation {
     homepage = "https://rpcs3.net/";
     maintainers = with maintainers; [ abbradar neonfuz ilian zane ];
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    mainProgram = "rpcs3";
   };
 }

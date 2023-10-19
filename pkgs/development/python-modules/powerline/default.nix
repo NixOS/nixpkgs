@@ -3,7 +3,7 @@
 , buildPythonPackage
 , socat
 , psutil
-, hglib
+, python-hglib
 , pygit2
 , pyuv
 , i3ipc
@@ -20,13 +20,13 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-UIx9/IZg6Wv596wHzQb0CO6zwmQXUaFEPKBojo2LXmA=";
+    hash = "sha256-UIx9/IZg6Wv596wHzQb0CO6zwmQXUaFEPKBojo2LXmA=";
   };
 
   propagatedBuildInputs = [
     socat
     psutil
-    hglib
+    python-hglib
     pygit2
     pyuv
   ] ++ lib.optionals (!stdenv.isDarwin) [ i3ipc ];

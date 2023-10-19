@@ -12,5 +12,5 @@ let
     (getEvaluating (nixpkgs { config.allowBroken = true; }).haskellPackages);
 in
 ''
-  ${lib.concatMapStringsSep "\n" (x: "  - ${x}") brokenDeps}
+  ${lib.concatMapStringsSep "\n" (x: " - ${x}") brokenDeps}
 ''

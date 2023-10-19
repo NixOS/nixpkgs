@@ -1,0 +1,112 @@
+diff --git a/Makefile.in b/Makefile.in
+index 8f33aa2ff4..39928382da 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -4358,7 +4358,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
+ 	monodll_msw_utils.o \
+ 	monodll_utilsexc.o \
+ 	monodll_fswatcher.o \
+-	monodll_msw_secretstore.o
++	monodll_msw_secretstore.o \
+ 	monodll_msw_uilocale.o
+ @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS)
+ @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
+@@ -5284,7 +5284,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
+ 	monodll_uuid.o \
+ 	monodll_msw_evtloop.o \
+ 	monodll_access.o \
+-	monodll_dark_mode.o
++	monodll_dark_mode.o \
+ 	monodll_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS = \
+@@ -6196,7 +6196,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
+ 	monodll_uuid.o \
+ 	monodll_msw_evtloop.o \
+ 	monodll_access.o \
+-	monodll_dark_mode.o
++	monodll_dark_mode.o \
+ 	monodll_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
+@@ -6371,7 +6371,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
+ 	monolib_msw_utils.o \
+ 	monolib_utilsexc.o \
+ 	monolib_fswatcher.o \
+-	monolib_msw_secretstore.o
++	monolib_msw_secretstore.o \
+ 	monolib_msw_uilocale.o
+ @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1)
+ @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
+@@ -7297,7 +7297,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
+ 	monolib_uuid.o \
+ 	monolib_msw_evtloop.o \
+ 	monolib_access.o \
+-	monolib_dark_mode.o
++	monolib_dark_mode.o \
+ 	monolib_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_2 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_2 = \
+@@ -8209,7 +8209,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
+ 	monolib_uuid.o \
+ 	monolib_msw_evtloop.o \
+ 	monolib_access.o \
+-	monolib_dark_mode.o
++	monolib_dark_mode.o \
+ 	monolib_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_3 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
+@@ -8436,7 +8436,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
+ 	basedll_msw_utils.o \
+ 	basedll_utilsexc.o \
+ 	basedll_fswatcher.o \
+-	basedll_msw_secretstore.o
++	basedll_msw_secretstore.o \
+ 	basedll_msw_uilocale.o
+ @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2)
+ @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
+@@ -8523,7 +8523,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
+ 	baselib_msw_utils.o \
+ 	baselib_utilsexc.o \
+ 	baselib_fswatcher.o \
+-	baselib_msw_secretstore.o
++	baselib_msw_secretstore.o \
+ 	baselib_msw_uilocale.o
+ @COND_PLATFORM_WIN32_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3)
+ @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
+@@ -9464,7 +9464,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
+ 	coredll_uuid.o \
+ 	coredll_msw_evtloop.o \
+ 	coredll_access.o \
+-	coredll_dark_mode.o
++	coredll_dark_mode.o \
+ 	coredll_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_4 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_4 = \
+@@ -10376,7 +10376,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
+ 	coredll_uuid.o \
+ 	coredll_msw_evtloop.o \
+ 	coredll_access.o \
+-	coredll_dark_mode.o
++	coredll_dark_mode.o \
+ 	coredll_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_5 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
+@@ -11204,7 +11204,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
+ 	corelib_uuid.o \
+ 	corelib_msw_evtloop.o \
+ 	corelib_access.o \
+-	corelib_dark_mode.o
++	corelib_dark_mode.o \
+ 	corelib_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_6 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_6 = \
+@@ -12116,7 +12116,7 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
+ 	corelib_uuid.o \
+ 	corelib_msw_evtloop.o \
+ 	corelib_access.o \
+-	corelib_dark_mode.o
++	corelib_dark_mode.o \
+ 	corelib_msw_bmpbndl.o
+ @COND_TOOLKIT_MSW@__LOWLEVEL_SRC_OBJECTS_7 = $(COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7)
+ @COND_TOOLKIT_OSX_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \

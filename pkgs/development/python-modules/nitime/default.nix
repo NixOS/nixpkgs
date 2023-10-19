@@ -1,9 +1,13 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
 , pytestCheckHook
 , cython
+, setuptools
+, setuptools-scm
+, wheel
 , numpy
 , scipy
 , matplotlib
@@ -13,22 +17,42 @@
 
 buildPythonPackage rec {
   pname = "nitime";
-  version = "0.9";
-  disabled = isPy27;
+  version = "0.10.1";
+  disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bn2QrbsfqUJim84vH5tt5T6h3YsGAlgu9GCMiNQ0OHQ=";
+    hash = "sha256-NnoVrSt6MTTcNup1e+/1v5JoHCYcycuQH4rHLzXJt+Y=";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  buildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
+  # Upstream wants to build against the oldest version of numpy possible, but
+  # we only want to build against the most recent version.
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "numpy==" "numpy>="
+  '';
 
-  disabledTests = [
-    # https://github.com/nipy/nitime/issues/197
-    "test_FilterAnalyzer"
+  nativeBuildInputs = [
+    cython
+    setuptools
+    setuptools-scm
+    wheel
   ];
+
+  propagatedBuildInputs = [
+    numpy
+    scipy
+    matplotlib
+    networkx
+    nibabel
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  doCheck = !stdenv.isDarwin;  # tests hang indefinitely
+
+  pythonImportsCheck = [ "nitime" ];
 
   meta = with lib; {
     homepage = "https://nipy.org/nitime";

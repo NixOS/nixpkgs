@@ -2,7 +2,6 @@
 
 let
   cfg = config.services.joycond;
-  kernelPackages = config.boot.kernelPackages;
 in
 
 with lib;
@@ -14,7 +13,7 @@ with lib;
     package = mkOption {
       type = types.package;
       default = pkgs.joycond;
-      defaultText = "pkgs.joycond";
+      defaultText = lib.literalExpression "pkgs.joycond";
       description = lib.mdDoc ''
         The joycond package to use.
       '';
@@ -23,8 +22,6 @@ with lib;
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
-
-    boot.extraModulePackages = optional (versionOlder kernelPackages.kernel.version "5.16") kernelPackages.hid-nintendo;
 
     services.udev.packages = [ cfg.package ];
 

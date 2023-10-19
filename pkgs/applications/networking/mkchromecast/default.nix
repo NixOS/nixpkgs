@@ -12,6 +12,8 @@
 , youtube-dl
 , opusTools
 , gst_all_1
+, enableSonos ? true
+, qtwayland
 }:
 let packages = [
   vorbis-tools
@@ -26,26 +28,27 @@ let packages = [
 ] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
 
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
-  version = "2020-10-17";
+  version = "2022-10-31";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "muammar";
     repo = "mkchromecast";
-    rev = "eb9da74d887acd70ed179e6e4c0cbed4ff83de04";
-    sha256 = "1l565n3rmyghc4vzh80gazvdks1i97j1h94x33pkmxxlf9a9rncj";
+    rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
+    sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    PyChromecast
+  buildInputs = lib.optional stdenv.isLinux qtwayland;
+  propagatedBuildInputs = with python3Packages; ([
+    pychromecast
     psutil
     mutagen
     flask
     netifaces
     requests
     pyqt5
-  ];
+  ] ++ lib.optionals enableSonos [ soco ]);
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -80,5 +83,6 @@ python3Packages.buildPythonApplication rec {
     description = "Cast macOS and Linux Audio/Video to your Google Cast and Sonos Devices";
     license = licenses.mit;
     maintainers = with maintainers; [ shou ];
+    mainProgram = "mkchromecast";
   };
 }

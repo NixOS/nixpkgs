@@ -192,7 +192,7 @@ in {
     # orangefs daemon will run as user
     users.users.orangefs = {
       isSystemUser = true;
-      group = "orangfs";
+      group = "orangefs";
     };
     users.groups.orangefs = {};
 
@@ -209,7 +209,7 @@ in {
       after = [ "network-online.target" ];
 
       serviceConfig = {
-        # Run as "simple" in forground mode.
+        # Run as "simple" in foreground mode.
         # This is more reliable
         ExecStart = ''
           ${pkgs.orangefs}/bin/pvfs2-server -d \

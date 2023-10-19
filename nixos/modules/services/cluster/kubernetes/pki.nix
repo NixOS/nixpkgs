@@ -270,7 +270,7 @@ in
           '';
         })]);
 
-      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (!isNull cfg.etcClusterAdminKubeconfig)
+      environment.etc.${cfg.etcClusterAdminKubeconfig}.source = mkIf (cfg.etcClusterAdminKubeconfig != null)
         clusterAdminKubeconfig;
 
       environment.systemPackages = mkIf (top.kubelet.enable || top.proxy.enable) [
@@ -323,7 +323,7 @@ in
           systemctl restart flannel
         ''}
 
-        echo "Node joined succesfully"
+        echo "Node joined successfully"
       '')];
 
       # isolate etcd on loopback at the master node

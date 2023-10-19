@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "INFURA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0j5mj9gwwvgx7r1svlg14dpcqlj8mhwlf7sampkkih6bv92qfzcd";
+    hash = "sha256-jX2HRdrLwDjnrUofRzmsSFLMbiPh0a1DPv1tzl+StUg=";
   };
 
-  vendorSha256 = "1d12jcd8crxcgp5m8ga691wivim4cg8cbz4pzgxp0jhzg9jplpbv";
+  vendorHash = "sha256-e116ZXofSnD7+5f8xdBjpMYdeUhGPVTLfaxnhhqTIrQ=";
 
   meta = with lib; {
     description = "Benchmark multiple API endpoints against each other";

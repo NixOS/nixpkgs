@@ -12,7 +12,6 @@ buildNimPackage rec {
   };
   buildInputs = [ rocksdb snappy spryvm stew tempfile ui ];
   patches = [ ./nil.patch ./python.patch ];
-  doCheck = true;
   meta = with lib;
     src.meta // {
       description =

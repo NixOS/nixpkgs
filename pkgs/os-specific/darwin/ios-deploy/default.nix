@@ -1,35 +1,62 @@
-{ lib, stdenvNoCC, rsync, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, darwin
+, testers
+}:
 
-# Note this is impure, using system XCode to build ios-deploy. We
-# should have a special flag for users to enable this.
-
-let version = "1.11.0";
-in stdenvNoCC.mkDerivation {
+let
+  privateFrameworks = "/Library/Apple/System/Library/PrivateFrameworks";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "ios-deploy";
-  inherit version;
+  version = "1.12.2";
+
   src = fetchFromGitHub {
     owner = "ios-control";
     repo = "ios-deploy";
-    rev = version;
-    sha256 = "0hqwikdrcnslx4kkw9b0n7n443gzn2gbrw15pp2fnkcw5s0698sc";
+    rev = finalAttrs.version;
+    hash = "sha256-TVGC+f+1ow3b93CK3PhIL70le5SZxxb2ug5OkIg8XCA=";
   };
-  nativeBuildInputs = [ rsync ];
+
+  buildInputs = [
+    darwin.apple_sdk.frameworks.Foundation
+  ];
+
   buildPhase = ''
-    LD=$CC
-    tmp=$(mktemp -d)
-    ln -s /usr/bin/xcodebuild $tmp
-    export PATH="$PATH:$tmp"
-    xcodebuild -configuration Release SYMROOT=build OBJROOT=$tmp
+    runHook preBuild
+
+    awk '{ print "\""$0"\\n\""}' src/scripts/lldb.py >> src/ios-deploy/lldb.py.h
+    clang src/ios-deploy/ios-deploy.m \
+      -framework Foundation \
+      -F${privateFrameworks} -framework MobileDevice \
+      -o ios-deploy
+
+    runHook postBuild
   '';
-  checkPhase = ''
-    xcodebuild test -scheme ios-deploy-tests -configuration Release SYMROOT=build
-  '';
+
   installPhase = ''
-    install -D build/Release/ios-deploy $out/bin/ios-deploy
+    runHook preInstall
+
+    install -Dm755 ios-deploy $out/bin/ios-deploy
+
+    runHook postInstall
   '';
-  meta = {
-    platforms = lib.platforms.darwin;
-    description = "Install and debug iOS apps from the command line. Designed to work on un-jailbroken devices";
-    license = lib.licenses.gpl3;
+
+  __impureHostDeps = [
+    privateFrameworks
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
   };
-}
+
+  meta = {
+    description = "Install and debug iPhone apps from the command line, without using Xcode";
+    homepage = "https://github.com/ios-control/ios-deploy";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "ios-deploy";
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.darwin;
+  };
+})

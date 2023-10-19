@@ -16,39 +16,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.18.2";
+  version = "0.9.19";
   pname = "pdf2djvu";
 
   src = fetchFromGitHub {
     owner = "jwilk";
     repo = "pdf2djvu";
     rev = version;
-    sha256 = "s6n7nDO15DZSJ1EOPoNvjdFv/QtOoGiUa2b/k3kzWe8=";
+    sha256 = "sha256-j4mYdmLZ56qTA1KbWBjBvyTyLaeuIITKYsALRIO7lj0=";
   };
-
-  patches = [
-    # Fix build with Poppler 22.03.
-    (fetchpatch {
-      url = "https://github.com/jwilk/pdf2djvu/commit/e170ad557d5f13daeeac047dfaa79347bbe5062f.patch";
-      sha256 = "OPK2UWVs+E2uOEaxPtLWmVL28yCxaeJKscY9ziAbS7E=";
-    })
-    (fetchpatch {
-      url = "https://github.com/jwilk/pdf2djvu/commit/956fedc7e0831126b9006efedad5519c14201c52.patch";
-      sha256 = "JF1xvvL2WyMu6GjdrPLlRC6eC6vGLbVurQcNy3AOOXA=";
-    })
-    (fetchpatch {
-      url = "https://github.com/jwilk/pdf2djvu/commit/dca43e8182174bc04e107eaefcafcfdfdf9bcd61.patch";
-      sha256 = "0JcfDaVZpuv6VfUJ2HuxRqgntZ/t8AzU0RG/E83BWGY=";
-    })
-    (fetchpatch {
-      url = "https://github.com/jwilk/pdf2djvu/commit/81b635e014ebd0240a8719cc39b6a1b759cc6a98.patch";
-      sha256 = "LBmT4eflLd23X7gg7IbqGe3PfTGldEGFLEKImV4nbB0=";
-      postFetch = ''
-        # The file was renamed after the release.
-        sed -i "s/main.cc/pdf2djvu.cc/g" "$out"
-      '';
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
@@ -77,7 +53,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Required by Poppler
+  # Required by Poppler on darwin
   # https://github.com/jwilk/pdf2djvu/commit/373e065faf2f0d868a3700788d20a96e9528bb12
   CXXFLAGS = "-std=c++17";
 

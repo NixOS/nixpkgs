@@ -1,0 +1,24 @@
+diff --git a/tools/cpp/src/cpp-build/generate_geocoding_data.cc b/tools/cpp/src/cpp-build/generate_geocoding_data.cc
+index 205947e831..1e628e2cd2 100644
+--- a/tools/cpp/src/cpp-build/generate_geocoding_data.cc
++++ b/tools/cpp/src/cpp-build/generate_geocoding_data.cc
+@@ -97,7 +97,8 @@ class DirEntry {
+   DirEntryKinds kind_;
+ };
+ 
+-// Lists directory entries in path. "." and ".." are excluded. Returns true on
++// Lists directory entries in path. "." and ".." are excluded. Entries are
++// returned in a consistent order to ensure reproducibility. Returns true on
+ // success.
+ bool ListDirectory(const string& path, vector<DirEntry>* entries) {
+   entries->clear();
+@@ -135,6 +136,9 @@ bool ListDirectory(const string& path, vector<DirEntry>* entries) {
+     }
+     entries->push_back(DirEntry(entry->d_name, kind));
+   }
++  std::sort(
++      entries->begin(), entries->end(),
++      [](const DirEntry& a, const DirEntry& b) { return a.name() < b.name(); });
+ }
+ 
+ // Returns true if s ends with suffix.

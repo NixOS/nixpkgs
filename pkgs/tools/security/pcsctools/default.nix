@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
+, autoreconfHook
 , makeWrapper
 , pkg-config
 , systemd
@@ -13,11 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pcsc-tools";
-  version = "1.6.0";
+  version = "1.6.2";
 
-  src = fetchurl {
-    url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ZRyN10vLM9tMFpNc5dgN0apusgup1cS5YxoJgybvi58=";
+  src = fetchFromGitHub {
+    owner = "LudovicRousseau";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-c7md8m1llvz0EQqA0qY4aGb3guGFoj+8uS4hUTzie5o=";
   };
 
   postPatch = ''
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ dbus perlPackages.perl pcsclite ]
     ++ lib.optional stdenv.isLinux systemd;
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
 
   postInstall = ''
     wrapProgram $out/bin/scriptor \
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools used to test a PC/SC driver, card or reader";
-    homepage = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/";
+    homepage = "https://pcsc-tools.apdu.fr/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;

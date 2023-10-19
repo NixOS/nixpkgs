@@ -24,7 +24,18 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg ];
 
-  NIX_CFLAGS_LINK = lib.optional stdenv.isDarwin "-ljpeg";
+  patches = [
+    ./link-library-against-libjpeg.patch
+  ];
+
+  postPatch = ''
+    mkdir -p $out/lib/pkgconfig
+    cp ${./yuv.pc} $out/lib/pkgconfig/libyuv.pc
+
+    substituteInPlace $out/lib/pkgconfig/libyuv.pc \
+      --replace "@PREFIX@" "$out" \
+      --replace "@VERSION@" "$version"
+  '';
 
   meta = with lib; {
     homepage = "https://chromium.googlesource.com/libyuv/libyuv";

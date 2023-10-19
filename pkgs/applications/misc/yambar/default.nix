@@ -2,15 +2,19 @@
 , stdenv
 , fetchFromGitea
 , alsa-lib
+, bison
 , fcft
+, flex
 , json_c
 , libmpdclient
 , libxcb
 , libyaml
 , meson
 , ninja
+, pipewire
 , pixman
 , pkg-config
+, pulseaudio
 , scdoc
 , tllist
 , udev
@@ -25,27 +29,29 @@
 , x11Support ? true
 }:
 
-let
-  # Courtesy of sternenseemann and FRidh
-  mesonFeatureFlag = feature: flag:
-    "-D${feature}=${if flag then "enabled" else "disabled"}";
-in
-stdenv.mkDerivation rec {
+assert (x11Support || waylandSupport);
+stdenv.mkDerivation (finalAttrs: {
   pname = "yambar";
-  version = "1.8.0";
+  version = "1.10.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "yambar";
-    rev = version;
-    hash = "sha256-zXhIXT3JrVSllnYheDU2KK3NE2VYa+xuKufIXjdMFjU=";
+    rev = finalAttrs.version;
+    hash = "sha256-+bNTEPGV5xaVXhsejyK+FCcJ9J06KS6x7/qo6P2DnZI=";
   };
 
+  outputs = [ "out" "man" ];
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
-    pkg-config
+    bison
+    flex
     meson
     ninja
+    pkg-config
     scdoc
     wayland-scanner
   ];
@@ -56,7 +62,9 @@ stdenv.mkDerivation rec {
     json_c
     libmpdclient
     libyaml
+    pipewire
     pixman
+    pulseaudio
     tllist
     udev
   ] ++ lib.optionals (waylandSupport) [
@@ -69,16 +77,17 @@ stdenv.mkDerivation rec {
     xcbutilwm
   ];
 
+  strictDeps = true;
+
   mesonBuildType = "release";
 
   mesonFlags = [
-    (mesonFeatureFlag "backend-x11" x11Support)
-    (mesonFeatureFlag "backend-wayland" waylandSupport)
+    (lib.mesonEnable "backend-x11" x11Support)
+    (lib.mesonEnable "backend-wayland" waylandSupport)
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/dnkl/yambar";
-    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${version}";
     description = "Modular status panel for X11 and Wayland";
     longDescription = ''
       yambar is a lightweight and configurable status panel (bar, for short) for
@@ -105,8 +114,9 @@ stdenv.mkDerivation rec {
       To summarize: a bar displays information provided by modules, using
       particles and decorations. How is configured by you.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

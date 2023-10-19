@@ -5,21 +5,21 @@
 }:
 
 let
-  version = "2.4.0";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influx-cli";
     rev = "v${version}";
-    sha256 = "sha256-l27BAHQtMA4kE7VEZLdOPFnSXtyWUOrcUFitaWqwvTw=";
+    sha256 = "sha256-hRv7f2NeURsgLQ1zNgAhZvTjS0ei4+5lqokIu0iN+aI=";
   };
 
 in buildGoModule {
   pname = "influx-cli";
   version = version;
-  src = src;
+  inherit src;
 
-  vendorSha256 = "sha256-GnVLr9mWehgw8vs4RiOrFHVlPpPT/LP6XvCq94aJxJQ=";
+  vendorHash = "sha256-QNhL5RPkNLTXoQ0NqcZuKec3ZBc3CDTc/XTWvjy55wk=";
   subPackages = [ "cmd/influx" ];
 
   ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
@@ -29,5 +29,6 @@ in buildGoModule {
     license = licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with maintainers; [ abbradar danderson ];
+    mainProgram = "influx";
   };
 }

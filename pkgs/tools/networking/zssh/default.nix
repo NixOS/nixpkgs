@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "SSH and Telnet client with ZMODEM file transfer capability";
-    homepage = "http://zssh.sourceforge.net/";
+    homepage = "https://zssh.sourceforge.net/";
     license = lib.licenses.gpl2;
     maintainers = [ ]; # required by deepin-terminal
     platforms = lib.platforms.linux;

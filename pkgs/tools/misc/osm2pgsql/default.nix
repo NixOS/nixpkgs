@@ -7,25 +7,28 @@
 , bzip2
 , zlib
 , boost
+, cimg
 , postgresql
+, python3
 , withLuaJIT ? false
 , lua
 , luajit
 , libosmium
+, nlohmann_json
+, potrace
 , protozero
-, rapidjson
 , testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.7.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    owner = "openstreetmap";
+    owner = "osm2pgsql-dev";
     repo = "osm2pgsql";
     rev = finalAttrs.version;
-    hash = "sha256-+//cAoN8m66SboEYP5Dhtm0q0+oyvEr5o584e4JQ9xM=";
+    hash = "sha256-RzJpaOEpgKm2IN6CK2Z67CUG0WU2ELvCpGhdQehjGKU=";
   };
 
   postPatch = ''
@@ -35,16 +38,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ expat fmt proj bzip2 zlib boost postgresql libosmium protozero rapidjson ]
-    ++ lib.optional withLuaJIT luajit
+  buildInputs = [
+    boost
+    bzip2
+    cimg
+    expat
+    fmt
+    libosmium
+    nlohmann_json
+    postgresql
+    potrace
+    proj
+    protozero
+    (python3.withPackages (p: with p; [ psycopg2 pyosmium ]))
+    zlib
+  ] ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     "-DEXTERNAL_LIBOSMIUM=ON"
     "-DEXTERNAL_PROTOZERO=ON"
-    "-DEXTERNAL_RAPIDJSON=ON"
     "-DEXTERNAL_FMT=ON"
   ] ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
+
+  installFlags = [ "install-gen" ];
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;

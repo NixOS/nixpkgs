@@ -1,6 +1,29 @@
-{ lib, stdenvNoCC, dtc }:
+{ lib, stdenv, stdenvNoCC, dtc }:
 
 with lib; {
+  # Compile single Device Tree overlay source
+  # file (.dts) into its compiled variant (.dtb)
+  compileDTS = ({
+    name,
+    dtsFile,
+    includePaths ? [],
+    extraPreprocessorFlags ? []
+  }: stdenv.mkDerivation {
+    inherit name;
+
+    nativeBuildInputs = [ dtc ];
+
+    buildCommand =
+      let
+        includeFlagsStr = lib.concatMapStringsSep " " (includePath: "-I${includePath}") includePaths;
+        extraPreprocessorFlagsStr = lib.concatStringsSep " " extraPreprocessorFlags;
+      in
+      ''
+        $CC -E -nostdinc ${includeFlagsStr} -undef -D__DTS__ -x assembler-with-cpp ${extraPreprocessorFlagsStr} ${dtsFile} | \
+        dtc -I dts -O dtb -@ -o $out
+      '';
+  });
+
   applyOverlays = (base: overlays': stdenvNoCC.mkDerivation {
     name = "device-tree-overlays";
     nativeBuildInputs = [ dtc ];
@@ -22,21 +45,19 @@ with lib; {
 
         # skip incompatible and non-matching overlays
         if [[ ! "$dtbCompat" =~ "$overlayCompat" ]]; then
-          echo -n "Skipping overlay ${o.name}: incompatible with $(basename "$dtb")"
-          continue
-        fi
-        ${optionalString (o.filter != null) ''
-        if [[ "''${dtb//${o.filter}/}" ==  "$dtb" ]]; then
-          echo -n "Skipping overlay ${o.name}: filter does not match $(basename "$dtb")"
-          continue
-        fi
+          echo "Skipping overlay ${o.name}: incompatible with $(basename "$dtb")"
+        elif ${if (o.filter == null) then "false" else ''
+          [[ "''${dtb//${o.filter}/}" ==  "$dtb" ]]
         ''}
-
-        echo -n "Applying overlay ${o.name} to $(basename "$dtb")... "
-        mv "$dtb"{,.in}
-        fdtoverlay -o "$dtb" -i "$dtb.in" "${o.dtboFile}"
-        echo "ok"
-        rm "$dtb.in"
+        then
+          echo "Skipping overlay ${o.name}: filter does not match $(basename "$dtb")"
+        else
+          echo -n "Applying overlay ${o.name} to $(basename "$dtb")... "
+          mv "$dtb"{,.in}
+          fdtoverlay -o "$dtb" -i "$dtb.in" "${o.dtboFile}"
+          echo "ok"
+          rm "$dtb.in"
+        fi
         '')}
 
       done

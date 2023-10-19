@@ -40,7 +40,7 @@ in {
       port = mkOption {
         description = lib.mdDoc "Ripple data api port";
         default = 5993;
-        type = types.int;
+        type = types.port;
       };
 
       importMode = mkOption {
@@ -77,7 +77,7 @@ in {
         port = mkOption {
           description = lib.mdDoc "Ripple data api redis port.";
           default = 5984;
-          type = types.int;
+          type = types.port;
         };
       };
 
@@ -91,7 +91,7 @@ in {
         port = mkOption {
           description = lib.mdDoc "Ripple data api couchdb port.";
           default = 5984;
-          type = types.int;
+          type = types.port;
         };
 
         db = mkOption {

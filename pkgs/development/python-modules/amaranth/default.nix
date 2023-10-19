@@ -2,8 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, setuptools
-, setuptools-scm
+, pdm-backend
 , pyvcd
 , jinja2
 , importlib-resources
@@ -19,49 +18,36 @@
 
 buildPythonPackage rec {
   pname = "amaranth";
-  version = "0.3";
-  # python setup.py --version
-  realVersion = "0.3";
-  disabled = pythonOlder "3.6";
+  format = "pyproject";
+  # python -m setuptools_scm
+  version = "0.4.dev197+g${lib.substring 0 7 src.rev}";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
-    rev = "39a83f4d995d16364cc9b99da646ff8db6394166";
-    sha256 = "P9AG3t30eGeeCN5+t7mjhRoOWIGZVzWQji9eYXphjA0=";
+    rev = "11d5bb19eb34463918c07dc5e2e0eac7dbf822b0";
+    sha256 = "sha256-Ji5oYfF2hKSunAdAQTniv8Ajj6NE/bvW5cvadrGKa+U=";
   };
-
-  SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}";
 
   nativeBuildInputs = [
     git
-    setuptools-scm
+    pdm-backend
   ];
 
   propagatedBuildInputs = [
     jinja2
     pyvcd
-    setuptools
   ] ++
     lib.optional (pythonOlder "3.9") importlib-resources ++
     lib.optional (pythonOlder "3.8") importlib-metadata;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     symbiyosys
     yices
     yosys
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "Jinja2~=2.11" "Jinja2>=2.11" \
-      --replace "pyvcd~=0.2.2" "pyvcd"
-
-    # jinja2.contextfunction was removed in jinja2 v3.1
-    substituteInPlace amaranth/build/plat.py \
-      --replace "@jinja2.contextfunction" "@jinja2.pass_context"
-  '';
 
   pythonImportsCheck = [ "amaranth" ];
 

@@ -22,7 +22,7 @@ let
   };
 
   fontsForXServer =
-    config.fonts.fonts ++
+    config.fonts.packages ++
     # We don't want these fonts in fonts.conf, because then modern,
     # fontconfig-based applications will get horrible bitmapped
     # Helvetica fonts.  It's better to get a substitution (like Nimbus
@@ -121,7 +121,7 @@ let
           fi
         done
 
-        for i in $(find ${toString cfg.modules} -type d); do
+        for i in $(find ${toString cfg.modules} -type d | sort); do
           if test $(echo $i/*.so* | wc -w) -ne 0; then
             echo "  ModulePath \"$i\"" >> $out
           fi
@@ -138,6 +138,26 @@ let
     concatMapStringsSep "\n" (line: prefix + line) (splitString "\n" str);
 
   indent = prefixStringLines "  ";
+
+  # A scalable variant of the X11 "core" cursor
+  #
+  # If not running a fancy desktop environment, the cursor is likely set to
+  # the default `cursor.pcf` bitmap font. This is 17px wide, so it's very
+  # small and almost invisible on 4K displays.
+  fontcursormisc_hidpi = pkgs.xorg.fontxfree86type1.overrideAttrs (old:
+    let
+      # The scaling constant is 230/96: the scalable `left_ptr` glyph at
+      # about 23 points is rendered as 17px, on a 96dpi display.
+      # Note: the XLFD font size is in decipoints.
+      size = 2.39583 * cfg.dpi;
+      sizeString = builtins.head (builtins.split "\\." (toString size));
+    in
+    {
+      postInstall = ''
+        alias='cursor -xfree86-cursor-medium-r-normal--0-${sizeString}-0-0-p-0-adobe-fontspecific'
+        echo "$alias" > $out/lib/X11/fonts/Type1/fonts.alias
+      '';
+    });
 in
 
 {
@@ -155,6 +175,31 @@ in
         "Use services.xserver.fontPath instead of useXFS")
       (mkRemovedOptionModule [ "services" "xserver" "useGlamor" ]
         "Option services.xserver.useGlamor was removed because it is unnecessary. Drivers that uses Glamor will use it automatically.")
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "layout" ];
+        to = [ "services" "xserver" "xkb" "layout" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbModel" ];
+        to = [ "services" "xserver" "xkb" "model" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbOptions" ];
+        to = [ "services" "xserver" "xkb" "options" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbVariant" ];
+        to = [ "services" "xserver" "xkb" "variant" ];
+      })
+      (lib.mkRenamedOptionModuleWith {
+        sinceRelease = 2311;
+        from = [ "services" "xserver" "xkbDir" ];
+        to = [ "services" "xserver" "xkb" "dir" ];
+      })
     ];
 
 
@@ -256,7 +301,7 @@ in
 
       videoDrivers = mkOption {
         type = types.listOf types.str;
-        default = [ "amdgpu" "radeon" "nouveau" "modesetting" "fbdev" ];
+        default = [ "modesetting" "fbdev" ];
         example = [
           "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
           "amdgpu-pro"
@@ -319,48 +364,50 @@ in
         '';
       };
 
-      layout = mkOption {
-        type = types.str;
-        default = "us";
-        description = lib.mdDoc ''
-          Keyboard layout, or multiple keyboard layouts separated by commas.
-        '';
-      };
+      xkb = {
+        layout = mkOption {
+          type = types.str;
+          default = "us";
+          description = lib.mdDoc ''
+            X keyboard layout, or multiple keyboard layouts separated by commas.
+          '';
+        };
 
-      xkbModel = mkOption {
-        type = types.str;
-        default = "pc104";
-        example = "presario";
-        description = lib.mdDoc ''
-          Keyboard model.
-        '';
-      };
+        model = mkOption {
+          type = types.str;
+          default = "pc104";
+          example = "presario";
+          description = lib.mdDoc ''
+            X keyboard model.
+          '';
+        };
 
-      xkbOptions = mkOption {
-        type = types.commas;
-        default = "terminate:ctrl_alt_bksp";
-        example = "grp:caps_toggle,grp_led:scroll";
-        description = lib.mdDoc ''
-          X keyboard options; layout switching goes here.
-        '';
-      };
+        options = mkOption {
+          type = types.commas;
+          default = "terminate:ctrl_alt_bksp";
+          example = "grp:caps_toggle,grp_led:scroll";
+          description = lib.mdDoc ''
+            X keyboard options; layout switching goes here.
+          '';
+        };
 
-      xkbVariant = mkOption {
-        type = types.str;
-        default = "";
-        example = "colemak";
-        description = lib.mdDoc ''
-          X keyboard variant.
-        '';
-      };
+        variant = mkOption {
+          type = types.str;
+          default = "";
+          example = "colemak";
+          description = lib.mdDoc ''
+            X keyboard variant.
+          '';
+        };
 
-      xkbDir = mkOption {
-        type = types.path;
-        default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
-        defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
-        description = lib.mdDoc ''
-          Path used for -xkbdir xserver parameter.
-        '';
+        dir = mkOption {
+          type = types.path;
+          default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
+          defaultText = literalExpression ''"''${pkgs.xkeyboard_config}/etc/X11/xkb"'';
+          description = lib.mdDoc ''
+            Path used for -xkbdir xserver parameter.
+          '';
+        };
       };
 
       config = mkOption {
@@ -576,6 +623,15 @@ in
           Whether to terminate X upon server reset.
         '';
       };
+
+      upscaleDefaultCursor = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Upscale the default X cursor to be more visible on high-density displays.
+          Requires `config.services.xserver.dpi` to be set.
+        '';
+      };
     };
 
   };
@@ -592,7 +648,8 @@ in
                     || dmConf.sddm.enable
                     || dmConf.xpra.enable
                     || dmConf.sx.enable
-                    || dmConf.startx.enable);
+                    || dmConf.startx.enable
+                    || config.services.greetd.enable);
       in mkIf (default) (mkDefault true);
 
     # so that the service won't be enabled when only startx is used
@@ -626,6 +683,10 @@ in
                 + "${toString (length primaryHeads)} heads set to primary: "
                 + concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
+      {
+        assertion = cfg.upscaleDefaultCursor -> cfg.dpi != null;
+        message = "Specify `config.services.xserver.dpi` to upscale the default cursor.";
+      }
     ];
 
     environment.etc =
@@ -633,7 +694,7 @@ in
         {
           "X11/xorg.conf".source = "${configFile}";
           # -xkbdir command line option does not seems to be passed to xkbcomp.
-          "X11/xkb".source = "${cfg.xkbDir}";
+          "X11/xkb".source = "${cfg.xkb.dir}";
         })
       # localectl looks into 00-keyboard.conf
       //{
@@ -641,10 +702,10 @@ in
             Section "InputClass"
               Identifier "Keyboard catchall"
               MatchIsKeyboard "on"
-              Option "XkbModel" "${cfg.xkbModel}"
-              Option "XkbLayout" "${cfg.layout}"
-              Option "XkbOptions" "${cfg.xkbOptions}"
-              Option "XkbVariant" "${cfg.xkbVariant}"
+              Option "XkbModel" "${cfg.xkb.model}"
+              Option "XkbLayout" "${cfg.xkb.layout}"
+              Option "XkbOptions" "${cfg.xkb.options}"
+              Option "XkbVariant" "${cfg.xkb.variant}"
             EndSection
           '';
         }
@@ -691,7 +752,7 @@ in
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
     systemd.services.display-manager =
-      { description = "X11 Server";
+      { description = "Display Manager";
 
         after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
 
@@ -725,7 +786,7 @@ in
 
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
-        "-xkbdir" "${cfg.xkbDir}"
+        "-xkbdir" "${cfg.xkb.dir}"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
@@ -742,15 +803,15 @@ in
         xorg.xf86inputevdev.out
       ];
 
-    system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
-      inherit (cfg) xkbModel layout xkbVariant xkbOptions;
+    system.checks = singleton (pkgs.runCommand "xkb-validated" {
+      inherit (cfg.xkb) model layout variant options;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
     } ''
       ${optionalString (config.environment.sessionVariables ? XKB_CONFIG_ROOT)
         "export XKB_CONFIG_ROOT=${config.environment.sessionVariables.XKB_CONFIG_ROOT}"
       }
-      xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
+      xkbvalidate "$model" "$layout" "$variant" "$options"
       touch "$out"
     '');
 
@@ -849,7 +910,11 @@ in
         ${cfg.extraConfig}
       '';
 
-    fonts.enableDefaultFonts = mkDefault true;
+    fonts.enableDefaultPackages = mkDefault true;
+    fonts.packages = [
+      (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
+      pkgs.xorg.fontmiscmisc
+    ];
 
   };
 

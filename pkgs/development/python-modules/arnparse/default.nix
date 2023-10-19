@@ -13,10 +13,10 @@ buildPythonPackage rec {
     owner = "PokaInc";
     repo = "arnparse";
     rev = version;
-    sha256 = "sha256-2+wxzYoS/KJXjYM6lZguxbr2Oxobo0eFNnzWZHLi0WM=";
+    hash = "sha256-2+wxzYoS/KJXjYM6lZguxbr2Oxobo0eFNnzWZHLi0WM=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

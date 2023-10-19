@@ -1,33 +1,36 @@
-{ stdenv,
-  lib,
-  fetchzip,
-  autoPatchelfHook,
-  makeWrapper,
-  copyDesktopItems,
-  makeDesktopItem,
-  gtk3,
-  openssl,
-  xdg-user-dirs
+{ stdenv
+, lib
+, fetchzip
+, autoPatchelfHook
+, makeWrapper
+, copyDesktopItems
+, makeDesktopItem
+, gtk3
+, xdg-user-dirs
+, keybinder3
+, libnotify
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
-  version = "0.0.4";
+  version = "0.3.5";
 
   src = fetchzip {
-    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-linux-x86.tar.gz";
-    sha256 = "sha256-ke3cuRi+ZlBSWawg66cGrV928dOBp0EniNakitmgUso=";
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy-${version}-linux-x86_64.tar.gz";
+    hash = "sha256-NKoRsT8UQ1IHS95KATHNzbAYWCi6zwwmRZvR+U7MVhk=";
+    stripRoot = false;
   };
 
   nativeBuildInputs = [
-      autoPatchelfHook
-      makeWrapper
-      copyDesktopItems
+    autoPatchelfHook
+    makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
-      gtk3
-      openssl
+    gtk3
+    keybinder3
+    libnotify
   ];
 
   dontBuild = true;
@@ -35,6 +38,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
+    cd AppFlowy/
 
     mkdir -p $out/opt/
     mkdir -p $out/bin/
@@ -45,15 +50,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = let
-    binPath = lib.makeBinPath [
-      xdg-user-dirs
-    ];
-  in ''
+  preFixup = ''
     # Add missing libraries to appflowy using the ones it comes with
-    makeWrapper $out/opt/app_flowy $out/bin/appflowy \
-          --set LD_LIBRARY_PATH "$out/opt/lib/" \
-          --prefix PATH : "${binPath}"
+    makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
+      --set LD_LIBRARY_PATH "$out/opt/lib/" \
+      --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
   '';
 
   desktopItems = [

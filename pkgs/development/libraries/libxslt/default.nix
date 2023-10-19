@@ -11,20 +11,20 @@
 , libxcrypt
 , libgcrypt
 , cryptoSupport ? false
-, pythonSupport ? true
+, pythonSupport ? libxml2.pythonSupport
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.37";
+  version = "1.1.38";
 
   outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Oksn3IAnzNYUZyWVAzbx7FIJKPMg8UTrX6eZCuYSOrQ=";
+    sha256 = "HzJFBCWBmgmsr/Krelp/ii7HlW5QXXvutF6EPQ4eyrE=";
   };
 
   strictDeps = true;

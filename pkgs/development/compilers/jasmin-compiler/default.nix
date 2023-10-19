@@ -2,32 +2,39 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2022.09.0";
+  version = "2023.06.1";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    sha256 = "sha256-QiOnDhh1VI5c6AZ4/uwLdGBkP76HxN4cfnPJD4R2hlA=";
+    hash = "sha256-3+eIR8wkBlcUQVDsugHo/rHNHbE2vpE9gutp55kRY4Y=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
 
-  nativeBuildInputs = with ocamlPackages; [ ocaml findlib ocamlbuild menhir camlidl ];
+  nativeBuildInputs = with ocamlPackages; [ ocaml findlib dune_3 menhir camlidl cmdliner ];
 
   buildInputs = [
     mpfr
     ppl
   ] ++ (with ocamlPackages; [
     apron
+    yojson
+  ]);
+
+  propagatedBuildInputs = with ocamlPackages; [
     batteries
     menhirLib
-    yojson
     zarith
-  ]);
+  ];
+
+  outputs = [ "bin" "lib" "out" ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/bin
-    cp jasminc.native $out/bin/jasminc
+    dune build @install
+    dune install --prefix=$bin --libdir=$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib
+    mkdir -p $lib/lib/jasmin/easycrypt
+    cp ../eclib/*.ec $lib/lib/jasmin/easycrypt
     runHook postInstall
   '';
 

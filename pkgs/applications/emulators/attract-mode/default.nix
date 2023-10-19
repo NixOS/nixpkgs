@@ -1,4 +1,4 @@
-{ expat, fetchFromGitHub, ffmpeg, fontconfig, freetype, libarchive, libjpeg
+{ expat, fetchFromGitHub, ffmpeg_4, fontconfig, freetype, libarchive, libjpeg
 , libGLU, libGL, openal, pkg-config, sfml, lib, stdenv, zlib
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    expat ffmpeg fontconfig freetype libarchive libjpeg libGLU libGL openal sfml zlib
+    expat ffmpeg_4 fontconfig freetype libarchive libjpeg libGLU libGL openal sfml zlib
   ];
 
   meta = with lib; {

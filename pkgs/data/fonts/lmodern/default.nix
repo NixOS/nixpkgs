@@ -1,26 +1,27 @@
-{ fetchzip }:
+{ lib, stdenvNoCC, fetchurl }:
 
-fetchzip {
-  name = "lmodern-2.005";
+stdenvNoCC.mkDerivation rec {
+  pname = "lmodern";
+  version = "2.005";
 
-  url = "mirror://debian/pool/main/l/lmodern/lmodern_2.005.orig.tar.gz";
+  src = fetchurl {
+    url = "mirror://debian/pool/main/l/${pname}/${pname}_${version}.orig.tar.gz";
+    hash = "sha256-xlUuZt6rjW0pX4t6PKWAHkkv3PisGCj7ZwatZPAUNxk=";
+  };
 
-  postFetch = ''
-    tar xzvf $downloadedFile
+  installPhase = ''
+    runHook preInstall
 
     mkdir -p $out/texmf-dist/
     mkdir -p $out/share/fonts/
 
-    cp -r lmodern-2.005/* $out/texmf-dist/
-    cp -r lmodern-2.005/fonts/{opentype,type1} $out/share/fonts/
+    cp -r * $out/texmf-dist/
+    cp -r fonts/{opentype,type1} $out/share/fonts/
 
-    ln -s -r $out/texmf* $out/share/
+    runHook postInstall
   '';
-
-  sha256 = "sha256-ySdKUt8o5FqmpdnYSzbGJ1f9t8VmKYXqPt53e1/E/FA=";
 
   meta = {
     description = "Latin Modern font";
   };
 }
-

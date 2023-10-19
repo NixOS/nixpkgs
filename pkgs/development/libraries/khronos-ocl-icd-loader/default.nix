@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ opencl-headers ];
 
   meta = with lib; {
-    description = "Offical Khronos OpenCL ICD Loader";
+    description = "Official Khronos OpenCL ICD Loader";
     homepage = "https://github.com/KhronosGroup/OpenCL-ICD-Loader";
     license = licenses.asl20;
     platforms = platforms.linux;

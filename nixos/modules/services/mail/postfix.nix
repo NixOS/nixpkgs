@@ -234,12 +234,12 @@ let
 
   headerChecks = concatStringsSep "\n" (map (x: "${x.pattern} ${x.action}") cfg.headerChecks) + cfg.extraHeaderChecks;
 
-  aliases = let seperator = if cfg.aliasMapType == "hash" then ":" else ""; in
+  aliases = let separator = optionalString (cfg.aliasMapType == "hash") ":"; in
     optionalString (cfg.postmasterAlias != "") ''
-      postmaster${seperator} ${cfg.postmasterAlias}
+      postmaster${separator} ${cfg.postmasterAlias}
     ''
     + optionalString (cfg.rootAlias != "") ''
-      root${seperator} ${cfg.rootAlias}
+      root${separator} ${cfg.rootAlias}
     ''
     + cfg.extraAliases
   ;
@@ -809,7 +809,7 @@ in
       // optionalAttrs (cfg.relayHost != "") { relayhost = if cfg.lookupMX
                                                            then "${cfg.relayHost}:${toString cfg.relayPort}"
                                                            else "[${cfg.relayHost}]:${toString cfg.relayPort}"; }
-      // optionalAttrs config.networking.enableIPv6 { inet_protocols = mkDefault "all"; }
+      // optionalAttrs (!config.networking.enableIPv6) { inet_protocols = mkDefault "ipv4"; }
       // optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
       // optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
       // optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }

@@ -1,24 +1,36 @@
 { lib
 , undmg
+, makeWrapper
 , fetchurl
 , stdenvNoCC
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "utm";
-  version = "4.0.8";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "https://github.com/utmapp/UTM/releases/download/v${version}/UTM.dmg";
-    sha256 = "sha256-a6GQyiW8pqw6fN3WVuTVUfnsl/qPtmzDxUvWNElli5k=";
+    hash = "sha256-U1HB8uP8OzHX8LzBE8u7YSDI4vlY9vlMRE+JI+x9rvk=";
   };
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ undmg makeWrapper ];
 
   sourceRoot = ".";
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     cp -r *.app $out/Applications
+
+    mkdir -p $out/bin
+    for bin in $out/Applications/UTM.app/Contents/MacOS/*; do
+      # Symlinking `UTM` doesn't work; seems to look for files in the wrong
+      # place
+      makeWrapper $bin "$out/bin/$(basename $bin)"
+    done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -47,9 +59,9 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://mac.getutm.app/";
     changelog = "https://github.com/utmapp/${pname}/releases/tag/v${version}";
     mainProgram = "UTM";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ rrbutani ];
+    maintainers = with maintainers; [ rrbutani wegank ];
   };
 }

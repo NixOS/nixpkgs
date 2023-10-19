@@ -27,15 +27,9 @@ let
     { NIXOS_FAKE_MMC_BLOCK_MINORS = freeform "64"; } # will trigger an error but the message is not great:
   ];
 
-  yesWinsOverNoConfig = mkMerge [
-    # default for "NIXOS_TEST_BOOLEAN" is no
-    { "NIXOS_TEST_BOOLEAN"  = yes; } # yes wins over no by default
-    { "NIXOS_TEST_BOOLEAN"  = no; }
-  ];
-
-  optionalNoWins = mkMerge [
-    { NIXOS_FAKE_USB_DEBUG = option yes;}
-    { NIXOS_FAKE_USB_DEBUG = yes;}
+  mkDefaultWorksConfig = mkMerge [
+    { "NIXOS_TEST_BOOLEAN"  = yes; }
+    { "NIXOS_TEST_BOOLEAN"  = lib.mkDefault no; }
   ];
 
   allOptionalRemainOptional = mkMerge [
@@ -57,7 +51,7 @@ runTests {
   };
 
   testYesWinsOverNo = {
-    expr = (getConfig yesWinsOverNoConfig)."NIXOS_TEST_BOOLEAN".tristate;
+    expr = (getConfig mkDefaultWorksConfig)."NIXOS_TEST_BOOLEAN".tristate;
     expected = "y";
   };
 

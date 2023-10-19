@@ -31,7 +31,7 @@ buildPythonPackage rec {
     "libarchive"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     mock
     pytestCheckHook

@@ -10,6 +10,8 @@ buildDunePackage rec {
     sha256 = "sha256-IoUH4awMOa1pm/t8E5io87R0TZsAxJjGWaXhXjn/w+Y=";
   };
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [
     zarith
   ];

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromSourcehut
+, wrapGAppsHook
 , pkg-config
 , cmake
 , meson
@@ -8,6 +9,7 @@
 , gtk3
 , gtk-layer-shell
 , json_c
+, librsvg
 , scdoc
 }:
 
@@ -27,6 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     cmake
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -34,6 +37,7 @@ stdenv.mkDerivation rec {
     gtk-layer-shell
     json_c
     scdoc
+    librsvg
   ];
 
   mesonFlags = [
@@ -41,7 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   # G_APPLICATION_FLAGS_NONE is deprecated in GLib 2.73.3+.
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   meta = with lib; {
     description = "GTK based greeter for greetd, to be run under cage or similar";
@@ -49,5 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.linux;
+    mainProgram = "gtkgreet";
   };
 }

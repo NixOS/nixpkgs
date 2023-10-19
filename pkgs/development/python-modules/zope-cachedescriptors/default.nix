@@ -7,21 +7,21 @@
 
 buildPythonPackage rec {
   pname = "zope-cachedescriptors";
-  version = "4.4";
+  version = "5.0";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "zope.cachedescriptors";
     inherit version;
-    sha256 = "sha256-1FxIdIb334HymS8aAJEmJL93JZ2DxdmKp2tnhxbj0Ro=";
+    hash = "sha256-MVe+hm/Jck0Heotb9sP8IcOKQUerZk5yRiLf5fr/BIo=";
   };
 
   propagatedBuildInputs = [
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

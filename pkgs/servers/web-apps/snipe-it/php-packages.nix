@@ -15,10 +15,10 @@ let
     "arietimmerman/laravel-scim-server" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "arietimmerman-laravel-scim-server-d0e3d7c0b5da2ec76283b8a2fa2e672a91596509";
+        name = "arietimmerman-laravel-scim-server-dda6dfb60d70fb6cca4b8d4ce1c5f4c19deaab2d";
         src = fetchurl {
-          url = "https://api.github.com/repos/grokability/laravel-scim-server/zipball/d0e3d7c0b5da2ec76283b8a2fa2e672a91596509";
-          sha256 = "0xznsbdph32q1nx5ibl90gfqa7j0bj0ikcvz8hfpxxk967k1ayfj";
+          url = "https://api.github.com/repos/grokability/laravel-scim-server/zipball/dda6dfb60d70fb6cca4b8d4ce1c5f4c19deaab2d";
+          sha256 = "0b08j7xfrbvp6ckv413sfpqq8v4qk59y9wcwch5kc19fb8y3dgiq";
         };
       };
     };
@@ -245,10 +245,10 @@ let
     "dompdf/dompdf" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "dompdf-dompdf-79573d8b8a141ec8a17312515de8740eed014fa9";
+        name = "dompdf-dompdf-e8d2d5e37e8b0b30f0732a011295ab80680d7e85";
         src = fetchurl {
-          url = "https://api.github.com/repos/dompdf/dompdf/zipball/79573d8b8a141ec8a17312515de8740eed014fa9";
-          sha256 = "0glv4fhzk674jgk1v9rkhb4859x5h1aspr63qdn7ajls27c582l5";
+          url = "https://api.github.com/repos/dompdf/dompdf/zipball/e8d2d5e37e8b0b30f0732a011295ab80680d7e85";
+          sha256 = "0a2qk57c3qwg7j8gp1hwyd8y8dwm5pb8lg1npb49sijig8kyjlv3";
         };
       };
     };
@@ -415,10 +415,10 @@ let
     "guzzlehttp/psr7" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "guzzlehttp-psr7-13388f00956b1503577598873fffb5ae994b5737";
+        name = "guzzlehttp-psr7-0454e12ef0cd597ccd2adb036f7bda4e7fface66";
         src = fetchurl {
-          url = "https://api.github.com/repos/guzzle/psr7/zipball/13388f00956b1503577598873fffb5ae994b5737";
-          sha256 = "05vc1q903nxfg11y9mcnlg253lm5d81jjg6wv76hjiwx8m47lbac";
+          url = "https://api.github.com/repos/guzzle/psr7/zipball/0454e12ef0cd597ccd2adb036f7bda4e7fface66";
+          sha256 = "1vlrryjzwjigf2q1nichnrxl43r75cw3yjf17d3dy7ixhvlpnlv6";
         };
       };
     };
@@ -489,6 +489,16 @@ let
         src = fetchurl {
           url = "https://api.github.com/repos/laravel/slack-notification-channel/zipball/060617a31562c88656c95c5971a36989122d4b53";
           sha256 = "1b2hw28aqb805ac5w7knm9myrgyh40aqw9njyzmvsr2jrphjwgr4";
+        };
+      };
+    };
+    "laravel/socialite" = {
+      targetDir = "";
+      src = composerEnv.buildZipPackage {
+        name = "laravel-socialite-a14a177f2cc71d8add71e2b19e00800e83bdda09";
+        src = fetchurl {
+          url = "https://api.github.com/repos/laravel/socialite/zipball/a14a177f2cc71d8add71e2b19e00800e83bdda09";
+          sha256 = "1fxlywrr2pansda2p9k475i20il2b5sz93w9b0kr7lihf242rz1z";
         };
       };
     };
@@ -622,6 +632,16 @@ let
         };
       };
     };
+    "league/oauth1-client" = {
+      targetDir = "";
+      src = composerEnv.buildZipPackage {
+        name = "league-oauth1-client-d6365b901b5c287dd41f143033315e2f777e1167";
+        src = fetchurl {
+          url = "https://api.github.com/repos/thephpleague/oauth1-client/zipball/d6365b901b5c287dd41f143033315e2f777e1167";
+          sha256 = "0hkh8l7884g8ssja1biwfb59x0jj951lwk6kmiacjqvyvzs07qmx";
+        };
+      };
+    };
     "league/oauth2-server" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
@@ -705,10 +725,10 @@ let
     "masterminds/html5" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "masterminds-html5-f640ac1bdddff06ea333a920c95bbad8872429ab";
+        name = "masterminds-html5-897eb517a343a2281f11bc5556d6548db7d93947";
         src = fetchurl {
-          url = "https://api.github.com/repos/Masterminds/html5-php/zipball/f640ac1bdddff06ea333a920c95bbad8872429ab";
-          sha256 = "1v9sn44z710wha5jrzy0alx1ayj3d0fcin1xpx6c6fdhlksbqc6z";
+          url = "https://api.github.com/repos/Masterminds/html5-php/zipball/897eb517a343a2281f11bc5556d6548db7d93947";
+          sha256 = "12fmcgsrmh0f0llnpcvk33mrs4067nw246ci5619rr79ijy3yc0k";
         };
       };
     };
@@ -825,10 +845,10 @@ let
     "nyholm/psr7" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "nyholm-psr7-f734364e38a876a23be4d906a2a089e1315be18a";
+        name = "nyholm-psr7-e874c8c4286a1e010fb4f385f3a55ac56a05cc93";
         src = fetchurl {
-          url = "https://api.github.com/repos/Nyholm/psr7/zipball/f734364e38a876a23be4d906a2a089e1315be18a";
-          sha256 = "0w8i5l1qg8dkc1zsyz1gpwn2awgkhlm295l1b8smmzabqdc65dcx";
+          url = "https://api.github.com/repos/Nyholm/psr7/zipball/e874c8c4286a1e010fb4f385f3a55ac56a05cc93";
+          sha256 = "0abjvcrg19km5p6bcjfmfhrravsb60hap71zzznpwmf83bq16l8r";
         };
       };
     };
@@ -838,7 +858,7 @@ let
         name = "onelogin-php-saml-a7328b11887660ad248ea10952dd67a5aa73ba3b";
         src = fetchurl {
           url = "https://api.github.com/repos/onelogin/php-saml/zipball/a7328b11887660ad248ea10952dd67a5aa73ba3b";
-          sha256 = "0ycj3n22k5i3h8p7gn0xff6a7smjypazl2k5qvyzg86fjr7s3vfv";
+          sha256 = "1df8mxmdh14y2scw80yhh1l90lvdnxq1pjlli3is1cakc0cdw90z";
         };
       };
     };
@@ -872,13 +892,13 @@ let
         };
       };
     };
-    "patchwork/utf8" = {
+    "paragonie/sodium_compat" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "patchwork-utf8-e1fa4d4a57896d074c9a8d01742b688d5db4e9d5";
+        name = "paragonie-sodium_compat-cb15e403ecbe6a6cc515f855c310eb6b1872a933";
         src = fetchurl {
-          url = "https://api.github.com/repos/tchwork/utf8/zipball/e1fa4d4a57896d074c9a8d01742b688d5db4e9d5";
-          sha256 = "0rarkg8v23y58bc4n6j39wdi6is0p1rgqxnixqlgavcm35xjgnw0";
+          url = "https://api.github.com/repos/paragonie/sodium_compat/zipball/cb15e403ecbe6a6cc515f855c310eb6b1872a933";
+          sha256 = "01jxl868i8bkx5szgp2fp6mi438ani80bqkdcc7rnn9z22lrsm78";
         };
       };
     };
@@ -895,10 +915,10 @@ let
     "phenx/php-svg-lib" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
-        name = "phenx-php-svg-lib-4498b5df7b08e8469f0f8279651ea5de9626ed02";
+        name = "phenx-php-svg-lib-76876c6cf3080bcb6f249d7d59705108166a6685";
         src = fetchurl {
-          url = "https://api.github.com/repos/dompdf/php-svg-lib/zipball/4498b5df7b08e8469f0f8279651ea5de9626ed02";
-          sha256 = "01w65haq96sfyjl8ahm9nb95wasgl66ymv5lycx1cbagy653xdin";
+          url = "https://api.github.com/repos/dompdf/php-svg-lib/zipball/76876c6cf3080bcb6f249d7d59705108166a6685";
+          sha256 = "0bjynrs81das9f9jwd5jgsxx9gjv2m6c0mkvlgx4w1f4pgbvwsf5";
         };
       };
     };
@@ -1559,6 +1579,16 @@ let
         src = fetchurl {
           url = "https://api.github.com/repos/tecnickcom/tc-lib-color/zipball/f9e45c59496418227184626ad31e83470153c11f";
           sha256 = "04g9fkk4ifc8sj27jz3nj6rnqgfyls6b2p1ll59wm9d99rngyq72";
+        };
+      };
+    };
+    "tecnickcom/tcpdf" = {
+      targetDir = "";
+      src = composerEnv.buildZipPackage {
+        name = "tecnickcom-tcpdf-e3cffc9bcbc76e89e167e9eb0bbda0cab7518459";
+        src = fetchurl {
+          url = "https://api.github.com/repos/tecnickcom/TCPDF/zipball/e3cffc9bcbc76e89e167e9eb0bbda0cab7518459";
+          sha256 = "17769rpyfq6z8lw5bj7icvkz7003d6kbj1hiji5cixrkahvc57fy";
         };
       };
     };

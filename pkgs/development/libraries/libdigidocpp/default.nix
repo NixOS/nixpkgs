@@ -2,12 +2,12 @@
 , xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
-  version = "3.14.10";
+  version = "3.16.0";
   pname = "libdigidocpp";
 
   src = fetchurl {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-     hash = "sha256-n/+R4ho1Qcft3YSKE12oxZjbFHAsUDwoLFNuk5GXf5c=";
+     hash = "sha256-XgObeVQJ2X7hNIelGK55RTtkKvU6D+RkLMc24/PZCzY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config xxd ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Library for creating DigiDoc signature files";
-    homepage = "http://www.id.ee/";
+    homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

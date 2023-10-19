@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyfecvpn";
-  version = "20210116.0";
+  version = "20230206.0";
 
   src = fetchFromGitHub {
     owner = "wangyu-";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ng5AZJfrnNXSSbhJKBc+giNp2yOWta0EozWHB7lFUmw=";
+    sha256 = "sha256-g4dduREH64TDK3Y2PKc5RZiISW4h2ALRh8vQK7jvCZU=";
     fetchSubmodules = true;
   };
 

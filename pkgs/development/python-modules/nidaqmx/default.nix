@@ -35,7 +35,7 @@ buildPythonPackage rec {
     enum34
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pykka
   ];

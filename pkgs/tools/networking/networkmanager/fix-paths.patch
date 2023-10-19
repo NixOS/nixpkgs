@@ -24,13 +24,13 @@ index e23b3a5282..c7246a3b61 100644
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
 diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
-index c51da9ac82..ad67a301ef 100644
+index 3565c04d59..52c58fec24 100644
 --- a/src/core/devices/nm-device.c
 +++ b/src/core/devices/nm-device.c
-@@ -13879,14 +13879,14 @@ nm_device_start_ip_check(NMDevice *self)
+@@ -14005,14 +14005,14 @@ nm_device_start_ip_check(NMDevice *self)
              gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET);
              if (gw) {
-                 _nm_utils_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
+                 nm_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
 -                ping_binary = nm_utils_find_helper("ping", "/usr/bin/ping", NULL);
 +                ping_binary = "@iputils@/bin/ping";
                  log_domain  = LOGD_IP4;
@@ -38,17 +38,17 @@ index c51da9ac82..ad67a301ef 100644
          } else if (priv->ip_data_6.state == NM_DEVICE_IP_STATE_READY) {
              gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET6);
              if (gw) {
-                 _nm_utils_inet6_ntop(&NMP_OBJECT_CAST_IP6_ROUTE(gw)->gateway, buf);
+                 nm_inet6_ntop(&NMP_OBJECT_CAST_IP6_ROUTE(gw)->gateway, buf);
 -                ping_binary = nm_utils_find_helper("ping6", "/usr/bin/ping6", NULL);
 +                ping_binary = "@iputils@/bin/ping";
                  log_domain  = LOGD_IP6;
              }
          }
 diff --git a/src/libnm-client-impl/meson.build b/src/libnm-client-impl/meson.build
-index 46464a6328..d943d4351a 100644
+index 143126c51a..a7143443ec 100644
 --- a/src/libnm-client-impl/meson.build
 +++ b/src/libnm-client-impl/meson.build
-@@ -171,7 +171,6 @@ if enable_introspection
+@@ -172,7 +172,6 @@ if enable_introspection
        input: libnm_core_settings_sources,
        output: 'nm-propery-infos-' + info + '.xml',
        command: [
@@ -56,7 +56,7 @@ index 46464a6328..d943d4351a 100644
          join_paths(meson.source_root(), 'tools', 'generate-docs-nm-property-infos.py'),
          info,
          '@OUTPUT@',
-@@ -228,7 +227,6 @@ if enable_introspection
+@@ -229,7 +228,6 @@ if enable_introspection
        'env',
        'GI_TYPELIB_PATH=' + gi_typelib_path,
        'LD_LIBRARY_PATH=' + ld_library_path,
@@ -78,7 +78,7 @@ index bebc53a851..93710455d5 100644
      g_ptr_array_add(argv, (char *) arg1);
  
 diff --git a/src/libnmc-base/nm-vpn-helpers.c b/src/libnmc-base/nm-vpn-helpers.c
-index 7ad5bee509..2641dbf637 100644
+index 476fbe518e..2641dbf637 100644
 --- a/src/libnmc-base/nm-vpn-helpers.c
 +++ b/src/libnmc-base/nm-vpn-helpers.c
 @@ -198,25 +198,8 @@ nm_vpn_openconnect_authenticate_helper(const char *host,
@@ -86,13 +86,13 @@ index 7ad5bee509..2641dbf637 100644
      const char *const   *iter;
      const char          *path;
 -    const char *const    DEFAULT_PATHS[] = {
--           "/sbin/",
--           "/usr/sbin/",
--           "/usr/local/sbin/",
--           "/bin/",
--           "/usr/bin/",
--           "/usr/local/bin/",
--           NULL,
+-        "/sbin/",
+-        "/usr/sbin/",
+-        "/usr/local/sbin/",
+-        "/bin/",
+-        "/usr/bin/",
+-        "/usr/local/bin/",
+-        NULL,
 -    };
  
 -    path = nm_utils_file_search_in_paths("openconnect",
@@ -109,7 +109,7 @@ index 7ad5bee509..2641dbf637 100644
      if (!g_spawn_sync(NULL,
                        (char **) NM_MAKE_STRV(path, "--authenticate", host),
 diff --git a/src/libnmc-setting/meson.build b/src/libnmc-setting/meson.build
-index 49314cad2e..6d52624699 100644
+index cf8a21fc80..61b992a50e 100644
 --- a/src/libnmc-setting/meson.build
 +++ b/src/libnmc-setting/meson.build
 @@ -7,7 +7,6 @@ if enable_docs
@@ -121,7 +121,7 @@ index 49314cad2e..6d52624699 100644
        '@OUTPUT@',
        nm_property_infos_xml['nmcli'],
 diff --git a/src/tests/client/meson.build b/src/tests/client/meson.build
-index b2e455bbbd..a12ebf212a 100644
+index 6dc0f2a2c8..0a32977a59 100644
 --- a/src/tests/client/meson.build
 +++ b/src/tests/client/meson.build
 @@ -6,7 +6,6 @@ test(
@@ -129,6 +129,6 @@ index b2e455bbbd..a12ebf212a 100644
      build_root,
      source_root,
 -    python.path(),
+     '--',
    ],
-   timeout: 120,
- )
+   env: [

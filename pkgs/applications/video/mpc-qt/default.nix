@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "mpc-qt";
-  version = "22.02";
+  version = "23.02";
 
   src = fetchFromGitHub {
     owner = "mpc-qt";
     repo = "mpc-qt";
     rev = "v${version}";
-    sha256 = "sha256-DRbNDrWnaTT4A0dRFAv9MX/MDwV/rXIw+R8fQJmVN+g=";
+    sha256 = "sha256-b8efsdWWpwoaiX+oQhHK15KxD6JpvPhESTxCR2kS7Mk=";
   };
 
   nativeBuildInputs = [ pkg-config qmake qttools ];

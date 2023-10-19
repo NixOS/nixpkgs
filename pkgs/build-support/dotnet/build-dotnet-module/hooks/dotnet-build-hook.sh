@@ -20,21 +20,31 @@ dotnetBuildHook() {
         dotnetBuildFlags+=("-p:SelfContained=false")
     fi
 
+    if [ "${useAppHost-}" ]; then
+        dotnetBuildFlags+=("-p:UseAppHost=true")
+    fi
+
     if [ "${version-}" ]; then
         local -r versionFlag="-p:Version=${version-}"
     fi
 
     dotnetBuild() {
         local -r project="${1-}"
+
+        runtimeIdFlags=()
+        if [[ "$project" == *.csproj ]] || [ "${selfContainedBuild-}" ]; then
+            runtimeIdFlags+=("--runtime @runtimeId@")
+        fi
+
         env dotnet build ${project-} \
             -maxcpucount:$maxCpuFlag \
             -p:BuildInParallel=$parallelBuildFlag \
             -p:ContinuousIntegrationBuild=true \
             -p:Deterministic=true \
-            -p:UseAppHost=true \
             --configuration "@buildType@" \
             --no-restore \
             ${versionFlag-} \
+            ${runtimeIdFlags[@]} \
             ${dotnetBuildFlags[@]}  \
             ${dotnetFlags[@]}
     }

@@ -50,7 +50,7 @@ networking.wireless.networks = {
   echelon = {
     pskRaw = "dca6d6ed41f4ab5a984c9f55f6f66d4efdc720ebf66959810f4329bb391c5435";
   };
-}
+};
 ```
 
 or you can use it to directly generate the `wpa_supplicant.conf`:

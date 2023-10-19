@@ -1,0 +1,18 @@
+diff --git a/hydrus/core/HydrusConstants.py b/hydrus/core/HydrusConstants.py
+index 809338ef..9125928f 100644
+--- a/hydrus/core/HydrusConstants.py
++++ b/hydrus/core/HydrusConstants.py
+@@ -59,12 +59,7 @@ elif PLATFORM_HAIKU:
+ RUNNING_FROM_SOURCE = sys.argv[0].endswith( '.py' ) or sys.argv[0].endswith( '.pyw' )
+ RUNNING_FROM_MACOS_APP = os.path.exists( os.path.join( BASE_DIR, 'running_from_app' ) )
+ 
+-if RUNNING_FROM_SOURCE:
+-    NICE_RUNNING_AS_STRING = 'from source'
+-elif RUNNING_FROM_FROZEN_BUILD:
+-    NICE_RUNNING_AS_STRING = 'from frozen build'
+-elif RUNNING_FROM_MACOS_APP:
+-    NICE_RUNNING_AS_STRING = 'from App'
++NICE_RUNNING_AS_STRING = "from nixpkgs (source)"
+ 
+ BIN_DIR = os.path.join( BASE_DIR, 'bin' )
+ HELP_DIR = os.path.join( BASE_DIR, 'help' )

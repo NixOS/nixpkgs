@@ -3,7 +3,7 @@
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.20.0";
+  version = "3.22.1";
   owner = "erlang";
   deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "1mh5cd3cpnvfv2cwm5bs64ldd2d7iqvikn47v9bpfd76nck3h8nh";
+      sha256 = "bSsDNuwG3LLvBS7P/Ft0rpM/atwy36JonwP0fPRsEis=";
     };
 
     buildInputs = [ erlang ];
@@ -94,7 +94,11 @@ let
       fi
     '';
   };
-  rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ] }:
+
+  # Alias rebar3 so we can use it as default parameter below
+  _rebar3 = rebar3;
+
+  rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ], rebar3 ? _rebar3 }:
     let
       pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
       globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = [ "-fgnu89-inline" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fgnu89-inline" ];
 
   buildPhase = "./cc";
   installPhase = ''

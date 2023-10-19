@@ -126,17 +126,34 @@ in
           ];
         };
 
+        exclude = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = lib.mdDoc ''
+            Patterns to exclude when backing up. See
+            https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files for
+            details on syntax.
+          '';
+          example = [
+            "/var/cache"
+            "/home/*/.cache"
+            ".git"
+          ];
+        };
+
         timerConfig = mkOption {
           type = types.attrsOf unitOption;
           default = {
             OnCalendar = "daily";
+            Persistent = true;
           };
           description = lib.mdDoc ''
-            When to run the backup. See man systemd.timer for details.
+            When to run the backup. See {manpage}`systemd.timer(5)` for details.
           '';
           example = {
             OnCalendar = "00:05";
             RandomizedDelaySec = "5h";
+            Persistent = true;
           };
         };
 
@@ -243,12 +260,23 @@ in
             Restic package to use.
           '';
         };
+
+        createWrapper = lib.mkOption {
+          type = lib.types.bool;
+          default = true;
+          description = ''
+            Whether to generate and add a script to the system path, that has the same environment variables set
+            as the systemd service. This can be used to e.g. mount snapshots or perform other opterations, without
+            having to manually specify most options.
+          '';
+        };
       };
     }));
     default = { };
     example = {
       localbackup = {
         paths = [ "/home" ];
+        exclude = [ "/home/*/.cache" ];
         repository = "/mnt/backup-hdd";
         passwordFile = "/etc/nixos/secrets/restic-password";
         initialize = true;
@@ -270,20 +298,25 @@ in
 
   config = {
     warnings = mapAttrsToList (n: v: "services.restic.backups.${n}.s3CredentialsFile is deprecated, please use services.restic.backups.${n}.environmentFile instead.") (filterAttrs (n: v: v.s3CredentialsFile != null) config.services.restic.backups);
+    assertions = mapAttrsToList (n: v: {
+      assertion = (v.repository == null) != (v.repositoryFile == null);
+      message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
+    }) config.services.restic.backups;
     systemd.services =
       mapAttrs'
         (name: backup:
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
+            excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             backupPaths =
               if (backup.dynamicFilesFrom == null)
-              then if (backup.paths != null) then concatStringsSep " " backup.paths else ""
+              then optionalString (backup.paths != null) (concatStringsSep " " backup.paths)
               else "--files-from ${filesFromTmpFile}";
             pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
-              (resticCmd + " forget --prune --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.pruneOpts))
-              (resticCmd + " check --cache-dir=%C/restic-backups-${name} " + (concatStringsSep " " backup.checkOpts))
+              (resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts))
+              (resticCmd + " check " + (concatStringsSep " " backup.checkOpts))
             ];
             # Helper functions for rclone remotes
             rcloneRemoteName = builtins.elemAt (splitString ":" backup.repository) 1;
@@ -293,6 +326,8 @@ in
           in
           nameValuePair "restic-backups-${name}" ({
             environment = {
+              # not %C, because that wouldn't work in the wrapper script
+              RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
               RESTIC_PASSWORD_FILE = backup.passwordFile;
               RESTIC_REPOSITORY = backup.repository;
               RESTIC_REPOSITORY_FILE = backup.repositoryFile;
@@ -307,16 +342,19 @@ in
                 nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               )
               backup.rcloneConfig);
-            path = [ pkgs.openssh ];
+            path = [ config.programs.ssh.package ];
             restartIfChanged = false;
+            wants = [ "network-online.target" ];
+            after = [ "network-online.target" ];
             serviceConfig = {
               Type = "oneshot";
-              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup --cache-dir=%C/restic-backups-${name} ${concatStringsSep " " backup.extraBackupArgs} ${backupPaths}" ])
+              ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} ${backupPaths}" ])
                 ++ pruneCmd;
               User = backup.user;
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";
               CacheDirectoryMode = "0700";
+              PrivateTmp = true;
             } // optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };
@@ -351,5 +389,22 @@ in
           timerConfig = backup.timerConfig;
         })
         config.services.restic.backups;
+
+    # generate wrapper scripts, as described in the createWrapper option
+    environment.systemPackages = lib.mapAttrsToList (name: backup: let
+      extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+      resticCmd = "${backup.package}/bin/restic${extraOptions}";
+    in pkgs.writeShellScriptBin "restic-${name}" ''
+      set -a  # automatically export variables
+      ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
+      # set same environment variables as the systemd service
+      ${lib.pipe config.systemd.services."restic-backups-${name}".environment [
+        (lib.filterAttrs (_: v: v != null))
+        (lib.mapAttrsToList (n: v: "${n}=${v}"))
+        (lib.concatStringsSep "\n")
+      ]}
+
+      exec ${resticCmd} $@
+    '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }

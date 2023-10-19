@@ -31,8 +31,6 @@ let
     "tree-sitter-scala"
     "tree-sitter-ocaml"
     "tree-sitter-julia"
-    "tree-sitter-agda"
-    "tree-sitter-fluent"
     "tree-sitter-html"
     "tree-sitter-haskell"
     "tree-sitter-regex"
@@ -73,6 +71,10 @@ let
     "tree-sitter-graph"
     # abandoned
     "tree-sitter-swift"
+    # abandoned
+    "tree-sitter-agda"
+    # abandoned
+    "tree-sitter-fluent"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
@@ -124,6 +126,10 @@ let
       orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-proto" = {
+      orga = "mitchellh";
+      repo = "tree-sitter-proto";
+    };
     "tree-sitter-rego" = {
       orga = "FallenAngel97";
       repo = "tree-sitter-rego";
@@ -137,8 +143,13 @@ let
       repo = "tree-sitter-svelte";
     };
     "tree-sitter-sql" = {
-      orga = "m-novikov";
+      orga = "derekstride";
       repo = "tree-sitter-sql";
+      branch = "gh-pages";
+    };
+    "tree-sitter-typst" = {
+      orga = "uben0";
+      repo = "tree-sitter-typst";
     };
     "tree-sitter-vim" = {
       orga = "vigoux";
@@ -356,6 +367,22 @@ let
       orga = "sourcegraph";
       repo = "tree-sitter-jsonnet";
     };
+    "tree-sitter-solidity" = {
+      orga = "JoranHonig";
+      repo = "tree-sitter-solidity";
+    };
+    "tree-sitter-nu" = {
+      orga = "LhKipp";
+      repo = "tree-sitter-nu";
+    };
+    "tree-sitter-cue" = {
+      orga = "eonpatapon";
+      repo = "tree-sitter-cue";
+    };
+    "tree-sitter-wing" = {
+      orga = "winglang";
+      repo = "wing";
+    };
   };
 
   allGrammars =
@@ -373,26 +400,15 @@ let
           knownTreeSitterOrgGrammarRepos);
 
     in
-    mergeAttrsUnique otherGrammars treeSitterOrgaGrammars;
-
-  # TODO: move to lib
-  mergeAttrsUnique = left: right:
-    let intersect = lib.intersectLists (lib.attrNames left) (lib.attrNames right); in
-    assert
-    lib.assertMsg (intersect == [ ])
-      (lib.concatStringsSep "\n" [
-        "mergeAttrsUnique: keys in attrset overlapping:"
-        "left: ${lib.generators.toPretty {} (lib.getAttrs intersect left)}"
-        "right: ${lib.generators.toPretty {} (lib.getAttrs intersect right)}"
-      ]);
-    left // right;
+    lib.attrsets.unionOfDisjoint otherGrammars treeSitterOrgaGrammars;
 
 
 
   jsonFile = name: val: (formats.json { }).generate name val;
 
   # implementation of the updater
-  updateImpl = passArgs "updateImpl-with-args" {
+  updateImpl = passArgs "updateImpl-with-args"
+    {
       binaries = {
         curl = "${curl}/bin/curl";
         nix-prefetch-git = "${nix-prefetch-git}/bin/nix-prefetch-git";
@@ -403,9 +419,10 @@ let
         ignoredTreeSitterOrgRepos
         ;
     }
-    (writers.writePython3 "updateImpl" {
-        flakeIgnore = ["E501"];
-    } ./update_impl.py);
+    (writers.writePython3 "updateImpl"
+      {
+        flakeIgnore = [ "E501" ];
+      } ./update_impl.py);
 
   # Pass the given arguments to the command, in the ARGS environment variable.
   # The arguments are just a json object that should be available in the script.
@@ -418,7 +435,7 @@ let
     lib.concatMapStringsSep "\n" f
       (lib.mapAttrsToList (k: v: { name = k; } // v) attrs);
 
-  jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON {});
+  jsonNewlines = lib.concatMapStringsSep "\n" (lib.generators.toJSON { });
 
   # Run the given script for each of the attr list.
   # The attrs are passed to the script as a json value.
@@ -432,34 +449,34 @@ let
   outputDir = "${toString ./.}/grammars";
 
   update-all-grammars = writeShellScript "update-all-grammars.sh" ''
-    set -euo pipefail
-   ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
-    echo "writing files to ${outputDir}" 1>&2
-    mkdir -p "${outputDir}"
-    ${forEachParallel
-        "repos-to-fetch"
-        (writeShellScript "fetch-repo" ''
-            ${updateImpl} fetch-repo "$1"
-        '')
-        (lib.mapAttrsToList
-          (nixRepoAttrName: attrs: attrs // {
-            inherit
-              nixRepoAttrName
-              outputDir;
-          })
-          allGrammars)
-    }
-    ${updateImpl} print-all-grammars-nix-file "$(< ${
-        jsonFile "all-grammars.json" {
-          allGrammars =
-            (lib.mapAttrsToList
-              (nixRepoAttrName: attrs: attrs // {
-                inherit nixRepoAttrName;
-              })
-              allGrammars);
-          inherit outputDir;
-        }
-    })"
+     set -euo pipefail
+    ${updateImpl} fetch-and-check-tree-sitter-repos '{}'
+     echo "writing files to ${outputDir}" 1>&2
+     mkdir -p "${outputDir}"
+     ${forEachParallel
+         "repos-to-fetch"
+         (writeShellScript "fetch-repo" ''
+             ${updateImpl} fetch-repo "$1"
+         '')
+         (lib.mapAttrsToList
+           (nixRepoAttrName: attrs: attrs // {
+             inherit
+               nixRepoAttrName
+               outputDir;
+           })
+           allGrammars)
+     }
+     ${updateImpl} print-all-grammars-nix-file "$(< ${
+         jsonFile "all-grammars.json" {
+           allGrammars =
+             (lib.mapAttrsToList
+               (nixRepoAttrName: attrs: attrs // {
+                 inherit nixRepoAttrName;
+               })
+               allGrammars);
+           inherit outputDir;
+         }
+     })"
   '';
 
 

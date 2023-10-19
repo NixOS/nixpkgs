@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1jk6khwgdv3nmagdgp5ivz3156pl0ljhf7b6i4b52w1h5ywsg9ah";
   };
 
-  nativeBuildInputs = [ gobject-introspection python3Packages.distutils_extra intltool wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection python3Packages.distutils-extra intltool wrapGAppsHook ];
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -39,9 +39,6 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [ pygobject3 pyxdg pycairo dbus-python xlib ];
-
-  # workaround https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   patches = [
     # Fix paths

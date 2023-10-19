@@ -4,11 +4,13 @@
 
 buildDunePackage rec {
   pname = "alcotest";
-  version = "1.6.0";
+  version = "1.7.0";
+
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-${version}.tbz";
-    sha256 = "sha256-/QD5ZoOVh0/zsdfvVm0U78Avp900Ej6yXVk1W+lLIyk=";
+    hash = "sha256-gSus2zS0XoiZXgfXMGvasvckee8ZlmN/HV0fQWZ5At8=";
   };
 
   nativeBuildInputs = [ ocaml-syntax-shims ];

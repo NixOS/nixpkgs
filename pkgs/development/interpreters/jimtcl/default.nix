@@ -5,32 +5,42 @@
 , asciidoc
 , pkg-config
 , inetutils
+, tcl
 
 , sqlite
 , readline
 , SDL
 , SDL_gfx
+, openssl
+
+, SDLSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "jimtcl";
-  version = "0.81";
+  version = "0.82";
 
   src = fetchFromGitHub {
     owner = "msteveb";
     repo = "jimtcl";
     rev = version;
-    sha256 = "sha256-OpM9y7fQ+18qxl3/5wUCrNA9qiCdA0vTHqLYSw2lvJs=";
+    sha256 = "sha256-CDjjrxpoTbLESAbCiCjQ8+E/oJP87gDv9SedQOzH3QY=";
   };
 
   nativeBuildInputs = [
     pkg-config
     asciidoc
+    tcl
   ];
 
   buildInputs = [
-    sqlite readline SDL SDL_gfx
-  ];
+    sqlite
+    readline
+    openssl
+  ] ++ (lib.optionals SDLSupport [
+    SDL
+    SDL_gfx
+  ]);
 
   configureFlags = [
     "--shared"
@@ -39,11 +49,10 @@ stdenv.mkDerivation rec {
     "--with-ext=binary"
     "--with-ext=sqlite3"
     "--with-ext=readline"
-    "--with-ext=sdl"
     "--with-ext=json"
     "--enable-utf8"
     "--ipv6"
-  ];
+  ] ++ (lib.optional SDLSupport "--with-ext=sdl");
 
   enableParallelBuilding = true;
 
@@ -51,14 +60,15 @@ stdenv.mkDerivation rec {
   preCheck = ''
     # test exec2-3.2 fails depending on platform or sandboxing (?)
     rm tests/exec2.test
+    # requires internet access
+    rm tests/ssl.test
+    # test fails due to timing in some environments
+    # https://github.com/msteveb/jimtcl/issues/282
+    rm tests/timer.test
   '';
 
   # test posix-1.6 needs the "hostname" command
-  checkInputs = [ inetutils ];
-
-  postInstall = ''
-    ln -sr $out/lib/libjim.so.${version} $out/lib/libjim.so
-  '';
+  nativeCheckInputs = [ inetutils ];
 
   meta = {
     description = "An open source small-footprint implementation of the Tcl programming language";

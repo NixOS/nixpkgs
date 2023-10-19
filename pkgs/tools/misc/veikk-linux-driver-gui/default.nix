@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, gnumake, qmake }:
+{ lib, mkDerivation, fetchFromGitHub, qmake }:
 
 mkDerivation rec {
   pname = "veikk-linux-driver-gui";

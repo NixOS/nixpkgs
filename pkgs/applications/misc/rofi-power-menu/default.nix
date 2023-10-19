@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-power-menu";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "jluttine";
     repo = "rofi-power-menu";
     rev = version;
-    sha256 = "sha256-Bkc87BXSnAR517wCkyOAfoACYx/5xprDGJQhLWGUNns=";
+    sha256 = "sha256-VPCfmCTr6ADNT7MW4jiqLI/lvTjlAu1QrCAugiD0toU=";
   };
 
   installPhase = ''
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jluttine/rofi-power-menu";
     maintainers = with maintainers; [ ikervagyok ];
     platforms = platforms.linux;
+    mainProgram = "rofi-power-menu";
   };
 }

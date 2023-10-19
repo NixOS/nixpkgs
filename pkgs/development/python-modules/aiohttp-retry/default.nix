@@ -25,7 +25,9 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
   ];

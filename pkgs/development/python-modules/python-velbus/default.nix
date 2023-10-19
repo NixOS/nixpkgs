@@ -1,18 +1,20 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pyserial
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-velbus";
-  version = "2.1.4";
+  version = "2.1.12";
+  format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "thomasdelaet";
-    repo = pname;
-    rev = version;
-    sha256 = "1z0a7fc9xfrcpwi9xiimxsgbzbp2iwyi1rij6vqd5z47mzi49fv9";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-X0jg1qd4rWbaRZqgMBJKOZD50sFq3Eyhw9RU6cEjORo=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +24,9 @@ buildPythonPackage rec {
   # Project has not tests
   doCheck = false;
 
-  pythonImportsCheck = [ "velbus" ];
+  pythonImportsCheck = [
+    "velbus"
+  ];
 
   meta = with lib; {
     description = "Python library to control the Velbus home automation system";

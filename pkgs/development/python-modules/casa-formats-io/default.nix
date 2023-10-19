@@ -4,7 +4,9 @@
 , astropy
 , dask
 , numpy
+, oldest-supported-numpy
 , setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -14,10 +16,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-8iZ+wcSfh5ACTb3/iQAf2qQpwZ6wExWwcdJoLmCEjB0=";
+    hash = "sha256-8iZ+wcSfh5ACTb3/iQAf2qQpwZ6wExWwcdJoLmCEjB0=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
+  ];
 
   propagatedBuildInputs = [ astropy dask numpy ];
 

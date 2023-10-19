@@ -2,7 +2,7 @@
 
 The Nix Packages collection (Nixpkgs) is a set of thousands of packages for the
 [Nix package manager](https://nixos.org/nix/), released under a
-[permissive MIT/X11 license](https://github.com/NixOS/nixpkgs/blob/master/COPYING).
+[permissive MIT license](https://github.com/NixOS/nixpkgs/blob/master/COPYING).
 Packages are available for several platforms, and can be used with the Nix
 package manager on most GNU/Linux distributions as well as [NixOS](https://nixos.org/nixos).
 
@@ -24,8 +24,8 @@ Packages, including the Nix packages collection, are distributed through
 [channels](https://nixos.org/nix/manual/#sec-channels). The collection is
 distributed for users of Nix on non-NixOS distributions through the channel
 `nixpkgs`. Users of NixOS generally use one of the `nixos-*` channels, e.g.
-`nixos-19.09`, which includes all packages and modules for the stable NixOS
-19.09. Stable NixOS releases are generally only given
+`nixos-22.11`, which includes all packages and modules for the stable NixOS
+22.11. Stable NixOS releases are generally only given
 security updates. More up to date packages and modules are available via the
 `nixos-unstable` channel.
 
@@ -43,4 +43,4 @@ The binaries are made available via a [binary cache](https://cache.nixos.org).
 
 The current Nix expressions of the channels are available in the
 [`nixpkgs`](https://github.com/NixOS/nixpkgs) repository in branches
-that correspond to the channel names (e.g. `nixos-19.09-small`).
+that correspond to the channel names (e.g. `nixos-22.11-small`).

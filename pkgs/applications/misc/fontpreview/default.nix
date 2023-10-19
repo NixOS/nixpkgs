@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.erictapen ];
+    mainProgram = "fontpreview";
   };
 }

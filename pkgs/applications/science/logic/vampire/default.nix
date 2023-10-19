@@ -28,13 +28,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/vprover/vampire/pull/55.patch";
       sha256 = "1pwfpwpl23bqsgkmmvw6bnniyvp5j9v8l3z9s9pllfabnfcrcz9l";
     })
-    # https://github.com/vprover/vampire/pull/56
-    (fetchpatch {
-      name = "fenv.patch";
-      url = "https://github.com/vprover/vampire/pull/56.patch";
-      sha256 = "0xl3jcyqmk146mg3qj5hdd0pbja6wbq3250zmfhbxqrjh40mm40g";
-    })
   ];
+
+  postPatch = ''
+    patch -p1 -i ${../avy/minisat-fenv.patch} -d Minisat || true
+  '';
 
   enableParallelBuilding = true;
 
@@ -47,7 +45,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://vprover.github.io/";
     description = "The Vampire Theorem Prover";
     platforms = platforms.unix;

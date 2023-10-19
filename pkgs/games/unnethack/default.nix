@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  enableParallelBuilding = true;
+  # Fails the build occasionally due to missing buid depends:
+  #   ./../sys/unix/unixmain.c:9:10: fatal error: date.h: No such file or directory
+  # TODO: remove once upstream issue is fixed:
+  #   https://github.com/UnNetHack/UnNetHack/issues/56
+  enableParallelBuilding = false;
 
   postInstall = ''
     cp -r /tmp/unnethack $out/share/unnethack/profile

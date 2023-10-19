@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "fcitx5-qt";
-  version = "5.0.15";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yQFYol4rEXmQBJWoc96yWJkJc3RVP6U964tdJdkGelU=";
+    sha256 = "sha256-IkaaLFMyPVaL5taRN4e+QxMEsNhhXlA1fWBn/6PeGnI=";
   };
 
   preConfigure = ''
@@ -31,7 +31,7 @@ mkDerivation rec {
 
   cmakeFlags = [
     # adding qt6 to buildInputs would result in error: detected mismatched Qt dependencies
-    "-DCMAKE_PREFIX_PATH=${qt6.qtbase.dev}"
+    "-DCMAKE_PREFIX_PATH=${qt6.qtbase}"
     "-DENABLE_QT4=0"
     "-DENABLE_QT6=1"
   ];

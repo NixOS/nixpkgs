@@ -1,47 +1,49 @@
 { lib
-, fetchpatch
 , buildPythonPackage
 , fetchPypi
+, openssl
+, parameterized
+, pytestCheckHook
 , pythonOlder
 , swig2
-, openssl
-, typing
 }:
 
-
 buildPythonPackage rec {
-  version = "0.36.0";
-  pname = "M2Crypto";
+  pname = "m2crypto";
+  version = "0.39.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hadbdckmjzfb8qzbkafypin6sakfx35j2qx0fsivh757s7c2hhm";
+    pname = "M2Crypto";
+    inherit version;
+    hash = "sha256-JMD0cTWLixmtTIqp2hLoaAMLZcH9syedAG32DJUBM4o=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/void-linux/void-packages/raw/7946d12eb3d815e5ecd4578f1a6133d948694370/srcpkgs/python-M2Crypto/patches/libressl.patch";
-      sha256 = "0z5qnkndg6ma5f5qqrid5m95i9kybsr000v3fdy1ab562kf65a27";
-    })
+  nativeBuildInputs = [
+    swig2
+    openssl
   ];
-  patchFlags = [ "-p0" ];
 
-  nativeBuildInputs = [ swig2 ];
-  buildInputs = [ swig2 openssl ];
+  buildInputs = [
+    openssl
+    parameterized
+  ];
 
-  propagatedBuildInputs = lib.optional (pythonOlder "3.5") typing;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  preConfigure = ''
-    substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${openssl.dev}'"
-  '';
-
-  doCheck = false; # another test that depends on the network.
+  pythonImportsCheck = [
+    "M2Crypto"
+  ];
 
   meta = with lib; {
     description = "A Python crypto and SSL toolkit";
     homepage = "https://gitlab.com/m2crypto/m2crypto";
+    changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };
-
 }

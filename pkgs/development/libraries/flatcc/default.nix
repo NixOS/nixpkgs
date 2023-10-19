@@ -18,10 +18,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DFLATCC_INSTALL=on"
-    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=misleading-indentation"
     "-Wno-error=stringop-overflow"
   ];

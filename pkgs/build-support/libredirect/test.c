@@ -45,6 +45,17 @@ void test_subprocess(void) {
     assert(system(SUBTEST) == 0);
 }
 
+void test_stat_with_null_path(void) {
+    // This checks whether the compiler optimizes away the null pointer check
+    // on the path passed to stat(). If that's the case, the following code
+    // should segfault.
+    struct stat buf;
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnonnull"
+    stat(NULL, &buf);
+#pragma GCC diagnostic pop
+}
+
 void assert_mktemp_path(
     const char * orig_prefix,
     const char * orig_suffix,
@@ -63,6 +74,12 @@ int main(int argc, char *argv[])
     FILE *testfp;
     int testfd;
     struct stat testsb;
+#ifndef __APPLE__
+    struct stat64 testsb64;
+#endif
+#if defined(__linux__) && defined(STATX_TYPE)
+    struct statx testsbx;
+#endif
     char buf[PATH_MAX];
 
     testfp = fopen(TESTPATH, "r");
@@ -76,6 +93,20 @@ int main(int argc, char *argv[])
     assert(access(TESTPATH, X_OK) == 0);
 
     assert(stat(TESTPATH, &testsb) != -1);
+#ifndef __APPLE__
+    assert(stat64(TESTPATH, &testsb64) != -1);
+#endif
+    assert(fstatat(123, TESTPATH, &testsb, 0) != -1);
+#ifndef __APPLE__
+    assert(fstatat64(123, TESTPATH, &testsb64, 0) != -1);
+#endif
+#if defined(__linux__) && defined(STATX_TYPE)
+    assert(statx(123, TESTPATH, 0, STATX_ALL, &testsbx) != -1);
+#endif
+
+    assert(getcwd(buf, PATH_MAX) != NULL);
+    assert(chdir(TESTDIR) == 0);
+    assert(chdir(buf) == 0);
 
     assert(mkdir(TESTDIR "/dir-mkdir", 0777) == 0);
     assert(unlink(TESTDIR "/dir-mkdir") == -1); // it's a directory!
@@ -127,6 +158,7 @@ int main(int argc, char *argv[])
 
     test_spawn();
     test_system();
+    test_stat_with_null_path();
 
     // Only run subprocess if no arguments are given
     // as the subprocess will be called without argument

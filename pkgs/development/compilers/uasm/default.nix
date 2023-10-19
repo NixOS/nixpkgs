@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "uasm";
-  version = "2.55";
+  version = "2.56.2";
 
   src = fetchFromGitHub {
     owner = "Terraspace";
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     # the given path has multiple possibilities: #<Git::Ref:0x00007f618689c378>, #<Git::Ref:0x00007f618689c1e8>
     # Probably because upstream has both a tag and a branch with the same name
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-CIbHPKJa60SyJeFgF1Tux7RfJZBChhUVXR7HGa+gCtQ=";
+    hash = "sha256-QiRBscY6zefeLDDVhS/+j9yIJ+5QhgkDQh1CLl/CslM=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = [
     (fetchpatch {
       name = "fix-v2_55-compilation-on-macos.patch";
       url = "https://github.com/Terraspace/UASM/commit/b50c430cc3083c7f32e288a9f64fe1cafb03091d.patch";

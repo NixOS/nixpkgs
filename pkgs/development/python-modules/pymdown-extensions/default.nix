@@ -6,6 +6,12 @@
 , markdown
 , pyyaml
 , pygments
+
+# for passthru.tests
+, mkdocstrings
+, mkdocs-material
+, mkdocs-mermaid2-plugin
+, hydrus
 }:
 
 let
@@ -38,26 +44,30 @@ let
 in
 buildPythonPackage rec {
   pname = "pymdown-extensions";
-  version = "9.5";
+  version = "10.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facelessuser";
     repo = "pymdown-extensions";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-bgvoY+8bbGoG1A93A+Uan1UDpQmEUu/TJu3FOkXechQ=";
+    hash = "sha256-KqDEmWAWXdDpQPsP9Vrced+Ozz9IZiD8rCG57hPR7Xs=";
   };
 
   nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [ markdown pygments ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
 
   pythonImportsCheck = map (ext: "pymdownx.${ext}") extensions;
+
+  passthru.tests = {
+    inherit mkdocstrings mkdocs-material mkdocs-mermaid2-plugin hydrus;
+  };
 
   meta = with lib; {
     description = "Extensions for Python Markdown";

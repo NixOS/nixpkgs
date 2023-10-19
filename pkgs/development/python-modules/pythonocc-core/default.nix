@@ -1,4 +1,7 @@
-{ lib, stdenv, python, fetchFromGitHub
+{ lib
+, stdenv
+, python
+, fetchFromGitHub
 , cmake
 , Cocoa
 , fontconfig
@@ -11,7 +14,6 @@
 , libXmu
 , opencascade-occt
 , rapidjson
-, smesh
 , swig4
 }:
 
@@ -22,8 +24,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "tpaviot";
     repo = "pythonocc-core";
-    rev = version;
-    sha256 = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-45pqPQ07KYlpFwJSAYVHbzuqDQTbAvPpxReal52DCzU=";
   };
 
   postPatch = ''
@@ -34,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake swig4 ];
   buildInputs = [
-    python opencascade-occt smesh
+    python opencascade-occt
     freetype libGL libGLU libX11 libXext libXmu libXi
     fontconfig rapidjson
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
@@ -42,15 +44,18 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-Wno-dev"
     "-DPYTHONOCC_INSTALL_DIRECTORY=${placeholder "out"}/${python.sitePackages}/OCC"
-
-    "-DSMESH_INCLUDE_PATH=${smesh}/include/smesh"
-    "-DSMESH_LIB_PATH=${smesh}/lib"
-    "-DPYTHONOCC_WRAP_SMESH=TRUE"
   ];
+
+  passthru = {
+    # `python3Packages.pythonocc-core` must be updated in tandem with
+    # `opencascade-occt`, and including it in the bulk updates often breaks it.
+    skipBulkUpdate = true;
+  };
 
   meta = with lib; {
     description = "Python wrapper for the OpenCASCADE 3D modeling kernel";
     homepage = "https://github.com/tpaviot/pythonocc-core";
+    changelog = "https://github.com/tpaviot/pythonocc-core/releases/tag/${version}";
     license = licenses.lgpl3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ gebner ];

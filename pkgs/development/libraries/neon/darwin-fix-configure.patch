@@ -2,9 +2,9 @@ diff -Nuar neon-0.29.6/configure neon-0.29.6-darwin-fix-configure/configure
 --- neon-0.29.6/configure	2011-05-03 14:25:31.000000000 +0200
 +++ neon-0.29.6-darwin-fix-configure/configure	2012-06-06 23:32:21.000000000 +0200
 @@ -4184,7 +4184,7 @@
- $as_echo "$ne_cv_os_uname" >&6; }
+ case x"$ne_cv_os_uname" in #(
+   x"Darwin") :
  
- if test "$ne_cv_os_uname" = "Darwin"; then
 -  CPPFLAGS="$CPPFLAGS -no-cpp-precomp"
 +  CPPFLAGS="$CPPFLAGS"
    LDFLAGS="$LDFLAGS -flat_namespace"

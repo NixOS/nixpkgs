@@ -27,13 +27,13 @@ stdenv.mkDerivation rec {
   '';
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+  env.NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   configureScript = "sh autogen.sh";
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
+  nativeBuildInputs = [ pkg-config autoconf automake gobject-introspection ];
   buildInputs = [ gtk-doc lvm2 libxslt.bin
-    libtool readline gobject-introspection json-glib libuuid
+    libtool readline json-glib libuuid
   ];
 
   meta = with lib; {

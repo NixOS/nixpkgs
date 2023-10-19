@@ -1,26 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, graphicsmagick, libjpeg
-, ffmpeg, zlib, libexif, openslide }:
+{ cmake
+, fetchFromGitHub
+, ffmpeg
+, graphicsmagick
+, lib
+, libdeflate
+, libexif
+, libjpeg
+, libsixel
+, openslide
+, pkg-config
+, stb
+, qoi
+, stdenv
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timg";
-  version = "1.4.4";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
-    rev = "v${version}";
-    sha256 = "1gdwg15fywya6k6pajkx86kv2d8k85pmisnq53b02br5i01y4k41";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-e2Uy1jvS0+gdhto4Sgz6YlqEqXJ7KGUAA6iuixfvvJg=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/hzeller/timg/commit/e9667ea2c811aa9eb399b631aef9bba0d3711834.patch";
-      sha256 = "sha256-xvbOcnKqX52wYZlzm4Be9dz8Rq+n3s2kKPFr0Y0igAU=";
-      name = "CVE-2022-43151.patch";
-    })
+  buildInputs = [
+    ffmpeg
+    graphicsmagick
+    libdeflate
+    libexif
+    libjpeg
+    libsixel
+    openslide
+    qoi.dev
+    stb
   ];
-
-  buildInputs = [ graphicsmagick ffmpeg libexif libjpeg openslide zlib ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -29,13 +44,15 @@ stdenv.mkDerivation rec {
     "-DWITH_VIDEO_DECODING=On"
     "-DWITH_VIDEO_DEVICE=On"
     "-DWITH_OPENSLIDE_SUPPORT=On"
+    "-DWITH_LIBSIXEL=On"
   ];
 
-  meta = with lib; {
-    homepage = "https://timg.sh/";
+  meta = {
     description = "A terminal image and video viewer";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ hzeller ];
+    homepage = "https://timg.sh/";
+    license = lib.licenses.gpl2Only;
+    mainProgram = "timg";
+    maintainers = with lib.maintainers; [ hzeller ];
+    platforms = lib.platforms.unix;
   };
-}
+})

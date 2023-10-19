@@ -14,22 +14,22 @@
 
 buildPythonPackage rec {
   pname = "coconut";
-  version = "1.6.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
-    rev = "v${version}";
-    sha256 = "/397YGV6QWWmKfqr5hSvqRoPOu7Hx1Pak6rVPR3etzw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-u1tcIu0U1VZrUx2hVdtRDv1N4jVf176kQSw47/7lOXY=";
   };
 
   propagatedBuildInputs = [ cpyparsing ipykernel mypy pygments prompt-toolkit watchdog ];
 
-  checkInputs = [ pexpect pytestCheckHook tkinter ];
+  nativeCheckInputs = [ pexpect pytestCheckHook tkinter ];
 
   # Currently most tests have performance issues
   pytestFlagsArray = [
-    "tests/constants_test.py"
+    "coconut/tests/constants_test.py"
   ];
 
   pythonImportsCheck = [ "coconut" ];

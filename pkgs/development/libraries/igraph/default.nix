@@ -17,7 +17,6 @@
 , plfit
 , python3
 , sourceHighlight
-, suitesparse
 , xmlto
 }:
 
@@ -25,24 +24,23 @@ assert (blas.isILP64 == lapack.isILP64 &&
         blas.isILP64 == arpack.isILP64 &&
         !blas.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
-  version = "0.9.10";
+  version = "0.10.7";
 
   src = fetchFromGitHub {
     owner = "igraph";
-    repo = pname;
-    rev = version;
-    hash = "sha256-prDadHsNhDRkNp1i0niKIYxE0g85Zs0ngvUy6uK8evk=";
+    repo = finalAttrs.pname;
+    rev = finalAttrs.version;
+    hash = "sha256-1ge5V9G2jmIWQE5TW7+6cXCV9viFkhcnjpYrLQVLrgg=";
   };
 
   postPatch = ''
-    echo "${version}" > IGRAPH_VERSION
-  '' + lib.optionalString stdenv.isAarch64 ''
-    # https://github.com/igraph/igraph/issues/1694
-    substituteInPlace tests/CMakeLists.txt \
-      --replace "igraph_scg_grouping3" "" \
-      --replace "igraph_scg_semiprojectors2" ""
+    echo "${finalAttrs.version}" > IGRAPH_VERSION
+  ''
+  # https://github.com/igraph/igraph/issues/2340
+  + lib.optionalString stdenv.isDarwin ''
+    sed -i "/safelocale/d" tests/CMakeLists.txt
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -68,7 +66,6 @@ stdenv.mkDerivation rec {
     lapack
     libxml2
     plfit
-    suitesparse
   ] ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
   ];
@@ -78,7 +75,6 @@ stdenv.mkDerivation rec {
     "-DIGRAPH_USE_INTERNAL_LAPACK=OFF"
     "-DIGRAPH_USE_INTERNAL_ARPACK=OFF"
     "-DIGRAPH_USE_INTERNAL_GLPK=OFF"
-    "-DIGRAPH_USE_INTERNAL_CXSPARSE=OFF"
     "-DIGRAPH_USE_INTERNAL_GMP=OFF"
     "-DIGRAPH_USE_INTERNAL_PLFIT=OFF"
     "-DIGRAPH_GLPK_SUPPORT=ON"
@@ -100,12 +96,16 @@ stdenv.mkDerivation rec {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
+  passthru.tests = {
+    python = python3.pkgs.igraph;
+  };
+
   meta = with lib; {
-    description = "The network analysis package";
+    description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
-    changelog = "https://github.com/igraph/igraph/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };
-}
+})

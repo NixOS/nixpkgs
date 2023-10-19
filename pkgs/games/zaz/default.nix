@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix SDL include problems
-  NIX_CFLAGS_COMPILE="-I${lib.getDev SDL}/include/SDL -I${SDL_image}/include/SDL";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev SDL}/include/SDL -I${SDL_image}/include/SDL";
   # Fix linking errors
   makeFlags = [
     "ZAZ_LIBS+=-lSDL"
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
-    homepage = "http://zaz.sourceforge.net/";
+    homepage = "https://zaz.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

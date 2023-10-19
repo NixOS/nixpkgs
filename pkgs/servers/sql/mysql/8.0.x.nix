@@ -1,20 +1,23 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
 , boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd, libfido2
-, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
+, numactl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
 }:
 
-let
-self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.0.31";
+  version = "8.0.34";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Z7uMunWyjpXH95SFY/AfuEUo/LsaNduoOdTORP4Bm6o=";
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+
+  patches = [
+    ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+  ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''
@@ -59,10 +62,10 @@ self = stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    client = self;
-    connector-c = self;
-    server = self;
-    mysqlVersion = "8.0";
+    client = finalAttrs.finalPackage;
+    connector-c = finalAttrs.finalPackage;
+    server = finalAttrs.finalPackage;
+    mysqlVersion = lib.versions.majorMinor finalAttrs.version;
     tests = nixosTests.mysql.mysql80;
   };
 
@@ -73,4 +76,4 @@ self = stdenv.mkDerivation rec {
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
   };
-}; in self
+})

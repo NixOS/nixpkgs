@@ -4,16 +4,17 @@
 , buildPythonPackage
 , chardet
 , django
-, django_contrib_comments
+, django-contrib-comments
 , fetchPypi
 , filebrowser_safe
 , future
-, grappelli_safe
+, grappelli-safe
 , isPyPy
 , pep8
 , pillow
 , pyflakes
 , pythonOlder
+, pytz
 , requests
 , requests-oauthlib
 , tzlocal
@@ -42,11 +43,12 @@ buildPythonPackage rec {
     bleach
     chardet
     django
-    django_contrib_comments
+    django-contrib-comments
     filebrowser_safe
     future
-    grappelli_safe
+    grappelli-safe
     pillow
+    pytz
     requests
     requests-oauthlib
     tzlocal
@@ -55,7 +57,7 @@ buildPythonPackage rec {
   # Tests Fail Due to Syntax Warning, Fixed for v3.1.11+
   doCheck = false;
 
-  # sed calls will be unecessary in v3.1.11+
+  # sed calls will be unnecessary in v3.1.11+
   preConfigure = ''
     sed -i 's/==/>=/' setup.py
   '';

@@ -4,9 +4,25 @@ Nixpkgs provides a couple of functions that help with building derivations. The 
 
 ## `runCommand` {#trivial-builder-runCommand}
 
-This takes three arguments, `name`, `env`, and `buildCommand`. `name` is just the name that Nix will append to the store path in the same way that `stdenv.mkDerivation` uses its `name` attribute. `env` is an attribute set specifying environment variables that will be set for this derivation. These attributes are then passed to the wrapped `stdenv.mkDerivation`. `buildCommand` specifies the commands that will be run to create this derivation. Note that you will need to create `$out` for Nix to register the command as successful.
+`runCommand :: String -> AttrSet -> String -> Derivation`
 
-An example of using `runCommand` is provided below.
+`runCommand name drvAttrs buildCommand` returns a derivation that is built by running the specified shell commands.
+
+`name :: String`
+:   The name that Nix will append to the store path in the same way that `stdenv.mkDerivation` uses its `name` attribute.
+
+`drvAttr :: AttrSet`
+:   Attributes to pass to the underlying call to [`stdenv.mkDerivation`](#chap-stdenv).
+
+`buildCommand :: String`
+:   Shell commands to run in the derivation builder.
+
+    ::: {.note}
+    You have to create a file or directory `$out` for Nix to be able to run the builder successfully.
+    :::
+
+::: {.example #ex-runcommand-simple}
+# Invocation of `runCommand`
 
 ```nix
 (import <nixpkgs> {}).runCommand "my-example" {} ''
@@ -28,6 +44,7 @@ An example of using `runCommand` is provided below.
   date
 ''
 ```
+:::
 
 ## `runCommandCC` {#trivial-builder-runCommandCC}
 

@@ -41,10 +41,10 @@ gnuradio.pkgs.mkDerivation rec {
     cmake
     pkg-config
     gnuradio.unwrapped.python
-    gnuradio.unwrapped.python.pkgs.Mako
+    gnuradio.unwrapped.python.pkgs.mako
     gnuradio.unwrapped.python.pkgs.six
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 
@@ -60,13 +60,10 @@ gnuradio.pkgs.mkDerivation rec {
     pugixml
     protobuf
     gnuradio.unwrapped.boost
+    gnuradio.unwrapped.logLib
   ] ++ lib.optionals (gnuradio.hasFeature "gr-uhd") [
     gnuradio.unwrapped.uhd
-  ] ++ (if (lib.versionAtLeast gnuradio.unwrapped.versionAttr.major "3.10") then [
-    gnuradio.unwrapped.spdlog
-  ] else [
-    gnuradio.unwrapped.log4cpp
-  ]) ++ lib.optionals (enableRawUdp) [
+  ] ++ lib.optionals (enableRawUdp) [
     libpcap
   ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
     thrift

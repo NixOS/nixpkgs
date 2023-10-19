@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # Work around the "unpacker appears to have produced no directories"
-  setSourceRoot = "sourceRoot=`pwd`";
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall

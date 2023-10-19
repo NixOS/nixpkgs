@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       ANSI Common Lisp standard.
     '';
     license = licenses.publicDomain;
-    maintainers = [ ];
+    maintainers = lib.teams.lisp.members;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 })

@@ -2,20 +2,24 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xlsx2csv";
-  version = "0.8.0";
+  version = "0.8.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LCaOUJt3ZspKJPLzYwLpGHBcXq0vzeP0vV8cphUvfiw=";
+    hash = "sha256-fs1tK8JCby5DL0/awSIR4ZdtPLtl+QM+Htpl7dogReM=";
   };
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
+    wheel
   ];
 
   meta = with lib; {

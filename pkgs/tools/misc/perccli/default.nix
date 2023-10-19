@@ -1,37 +1,57 @@
 { lib
 , stdenvNoCC
-, fetchurl
+, fetchzip
 , rpmextract
 }:
+
 stdenvNoCC.mkDerivation rec {
   pname = "perccli";
-  version = "7.1910.00";
 
-  src = fetchurl {
-    url = "https://dl.dell.com/FOLDER07815522M/1/PERCCLI_${version}_A12_Linux.tar.gz";
-    sha256 = "sha256-Gt/kr5schR/IzFmnhXO57gjZpOJ9NSnPX/Sj7zo8Qjk=";
+  # On a new release, update version, URL, hash, and meta.homepage
+  version = "7.2313.00";
+
+  src = fetchzip {
+    # On pkg update: manually adjust the version in the URL because of the different format.
+    url = "https://dl.dell.com/FOLDER09770976M/1/PERCCLI_7.2313.0_A14_Linux.tar.gz";
+    hash = "sha256-IhclHVkdihRx5CzyO2dlOEhCon+0/HB3Fkue7MWsWnw=";
+
     # Dell seems to block "uncommon" user-agents, such as Nixpkgs's custom one.
-    # Sending no user-agent at all seems to be fine though.
-    curlOptsList = [ "--user-agent" "" ];
+    # 403 otherwise
+    curlOptsList = [ "--user-agent" "Mozilla/5.0" ];
   };
 
   nativeBuildInputs = [ rpmextract ];
 
-  buildCommand = ''
-    tar xf $src
-    rpmextract PERCCLI_*_Linux/perccli-*.noarch.rpm
-    install -D ./opt/MegaRAID/perccli/perccli64 $out/bin/perccli64
-    ln -s perccli64 $out/bin/perccli
-
-    # Not needed because the binary is statically linked
-    #eval fixupPhase
+  unpackPhase = ''
+    rpmextract $src/perccli-00${version}00.0000-1.noarch.rpm
   '';
+
+  dontPatch = true;
+  dontConfigure = true;
+  dontBuild = true;
+
+  installPhase = let
+    inherit (stdenvNoCC.hostPlatform) system;
+    platforms = {
+      x86_64-linux = ''
+        install -D ./opt/MegaRAID/perccli/perccli64 $out/bin/perccli64
+        ln -s perccli64 $out/bin/perccli
+      '';
+    };
+  in platforms.${system} or (throw "unsupported system: ${system}");
+
+  # Not needed because the binary is statically linked
+  dontFixup = true;
 
   meta = with lib; {
     description = "Perccli Support for PERC RAID controllers";
+
+    # Must be updated with every release
+    homepage = "https://www.dell.com/support/home/en-us/drivers/driversdetails?driverid=tdghn";
+
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ panicgh ];
-    platforms = with platforms; intersectLists x86_64 linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

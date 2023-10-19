@@ -17,7 +17,7 @@ mkDerivation (args // {
   patches = (args.patches or []) ++ (patches.${pname} or []);
 
   nativeBuildInputs = (args.nativeBuildInputs or []) ++ [ perl self.qmake ];
-  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or []);
+  propagatedBuildInputs = (args.qtInputs or []) ++ (args.propagatedBuildInputs or []);
 
   outputs = args.outputs or [ "out" "dev" ];
   setOutputFlags = args.setOutputFlags or false;
@@ -70,7 +70,7 @@ mkDerivation (args // {
   meta = {
     homepage = "https://www.qt.io";
     description = "A cross-platform application framework for C++";
-    license = with licenses; [ fdl13 gpl2 lgpl21 lgpl3 ];
+    license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ qknight ttuegel periklis bkchr ];
     platforms = platforms.unix;
   } // (args.meta or {});

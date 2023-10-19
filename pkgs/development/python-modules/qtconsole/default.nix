@@ -2,8 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , ipykernel
-, jupyter_core
+, jupyter-core
 , jupyter-client
+, ipython-genutils
 , pygments
 , pyqt5
 , pytestCheckHook
@@ -15,19 +16,20 @@
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "5.4.0";
+  version = "5.4.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V3SOov0mMgoLd626IBMc+7E4GMfJbYP6/LEQ/1X1izU=";
+    hash = "sha256-t/+1PXTyPO4p9M21Xdb6vI7DEtlPPEa6OOHd5FhpPfs=";
   };
 
   propagatedBuildInputs = [
     ipykernel
-    jupyter_core
+    ipython-genutils
+    jupyter-core
     jupyter-client
     pygments
     pyqt5
@@ -36,7 +38,7 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

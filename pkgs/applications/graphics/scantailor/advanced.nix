@@ -4,13 +4,13 @@
 
 mkDerivation rec {
   pname = "scantailor-advanced";
-  version = "1.0.18";
+  version = "1.0.19";
 
   src = fetchFromGitHub {
     owner = "vigri";
     repo = "scantailor-advanced";
     rev = "v${version}";
-    sha256 = "sha256-4/QSjgHvRgIduS/AXbT7osRTdOdgR7On3CbjRnGbwHU=";
+    sha256 = "sha256-mvoCoYdRTgXW5t8yd9Y9TOl7D3RDVwcjUv2YDUWrtRI=";
   };
 
   nativeBuildInputs = [ cmake qttools ];

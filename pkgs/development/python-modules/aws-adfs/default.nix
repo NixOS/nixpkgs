@@ -61,7 +61,7 @@ buildPythonPackage rec {
       --replace 'botocore = ">=1.12.6"' 'botocore = "*"'
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     toml
   ];

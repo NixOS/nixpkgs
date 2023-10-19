@@ -1,13 +1,14 @@
 { coq, mkCoqDerivation, mathcomp, mathcomp-bigenough,
   lib, version ? null }:
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
 
   namePrefix = [ "coq" "mathcomp" ];
   pname = "real-closed";
   owner = "math-comp";
   inherit version;
   release = {
+    "1.1.4".sha256 = "sha256-8Hs6XfowbpeRD8RhMRf4ZJe2xf8kE0e8m7bPUzR/IM4=";
     "1.1.3".sha256 = "1vwmmnzy8i4f203i2s60dn9i0kr27lsmwlqlyyzdpsghvbr8h5b7";
     "1.1.2".sha256 = "0907x4nf7nnvn764q3x9lx41g74rilvq5cki5ziwgpsdgb98pppn";
     "1.1.1".sha256 = "0ksjscrgq1i79vys4zrmgvzy2y4ylxa8wdsf4kih63apw6v5ws6b";
@@ -17,7 +18,8 @@ with lib; mkCoqDerivation {
     "1.0.1".sha256 = "0j81gkjbza5vg89v4n9z598mfdbql416963rj4b8fzm7dp2r4rxg";
   };
 
-  defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
+  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ]  [
+      { cases = [ (isGe "8.13")  (isGe "1.13.0") ]; out = "1.1.4"; }
       { cases = [ (isGe "8.13")  (isGe "1.12.0") ]; out = "1.1.3"; }
       { cases = [ (isGe "8.10")  (isGe "1.12.0") ]; out = "1.1.2"; }
       { cases = [ (isGe "8.7")   "1.11.0" ]; out = "1.1.1"; }
@@ -37,6 +39,6 @@ with lib; mkCoqDerivation {
 
   meta = {
     description = "Mathematical Components Library on real closed fields";
-    license = licenses.cecill-c;
+    license = lib.licenses.cecill-c;
   };
 }

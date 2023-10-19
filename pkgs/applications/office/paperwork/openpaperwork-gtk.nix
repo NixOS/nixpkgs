@@ -17,7 +17,7 @@ buildPythonPackage rec {
   pname = "openpaperwork-gtk";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
 
-  sourceRoot = "source/openpaperwork-gtk";
+  sourceRoot = "${src.name}/openpaperwork-gtk";
 
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;

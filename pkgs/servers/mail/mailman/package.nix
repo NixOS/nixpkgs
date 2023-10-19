@@ -1,16 +1,22 @@
-{ lib, fetchpatch, python3, postfix, lynx
+{ lib
+, fetchpatch
+, python3
+, fetchPypi
+, sphinx
+, postfix
+, lynx
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman";
-  version = "3.3.5";
+  version = "3.3.8";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12mgxs1ndhdjjkydx48b95na9k9h0disfqgrr6wxx7vda6dqvcwz";
+    hash = "sha256-g6wH7lXqK0yJ8AxO1HFxMvBicBJ9NGWlPePFyxl9Qc4=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,8 +35,12 @@ buildPythonPackage rec {
     passlib
     requests
     sqlalchemy
-    zope_component
+    zope-component
     zope_configuration
+  ];
+
+  checkInputs = [
+    sphinx
   ];
 
   patches = [
@@ -64,13 +74,10 @@ buildPythonPackage rec {
   # 'runner' scripts.
   dontWrapPythonPrograms = true;
 
-  # requires flufl.testing, which the upstream has archived
-  doCheck = false;
-
   meta = {
     homepage = "https://www.gnu.org/software/mailman/";
     description = "Free software for managing electronic mail discussion and newsletter lists";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ qyliss ma27 ];
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

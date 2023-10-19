@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
+, makeFontsConf
 , nix-update-script
 , autoreconfHook
 , pkg-config
@@ -17,35 +17,28 @@
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.3.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Cu5mZzsqAO4X4Y8QAn851zIFPVPwxj5pB+jvA62L108=";
+    sha256 = "sha256-KCp/8UjVl8e3+4s1FD4GvHP7AUAS+eIB7RWhmgm5GIA=";
   };
-
-  patches = [
-    # Fixes test failure on x86_64-darwin
-    # Drop when fix for https://github.com/libsidplayfp/libsidplayfp/issues/39 in a release (>2.3.1)
-    (fetchpatch {
-      url = "https://github.com/libsidplayfp/libsidplayfp/commit/337020a91caa0113de4f4374e0dc770e4056d2c7.patch";
-      sha256 = "0sd7bqic8k945f05d8sk9mshf5d90ykd7f5p6m0n6v3jjhpwmqlq";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
     ++ lib.optionals docSupport [ doxygen graphviz ];
 
   buildInputs = [ libgcrypt libexsid ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkInputs = [ unittest-cpp ];
 
@@ -64,15 +57,20 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional doCheck "--enable-tests";
 
+  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
+
+  preBuild = ''
+    # Reduce noise from fontconfig during doc building
+    export XDG_CACHE_HOME=$TMPDIR
+  '';
+
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
     mv docs/html $doc/share/doc/libsidplayfp/
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -1,30 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, boost169, eigen
-, freeimage, freetype, libGLU, libGL, SDL2, alsa-lib, libarchive
-, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, curl, boost, eigen
+, freeimage, freetype, libGLU, libGL, rapidjson, SDL2, alsa-lib
+, vlc }:
 
 stdenv.mkDerivation {
   pname = "emulationstation";
-  version = "2.0.1a";
+  version = "2.11.2";
 
   src = fetchFromGitHub {
-    owner = "Aloshi";
+    fetchSubmodules = true;
+    owner = "RetroPie";
     repo = "EmulationStation";
-    rev = "646bede3d9ec0acf0ae378415edac136774a66c5";
-    sha256 = "0cm0sq2wri2l9cvab1l0g02za59q7klj0h3p028vr96n6njj4w9v";
+    rev = "cda7de687924c4c1ab83d6b0ceb88aa734fe6cfe";
+    hash = "sha256-J5h/578FVe4DXJx/AvpRnCIUpqBeFtmvFhUDYH5SErQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Aloshi/EmulationStation/commit/49ccd8fc7a7b1dfd974fc57eb13317c42842f22c.patch";
-      sha256 = "1v5d81l7bav0k5z4vybrc3rjcysph6lkm5pcfr6m42wlz7jmjw0p";
-    })
-  ];
-
   nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ alsa-lib boost169 curl eigen freeimage freetype libarchive libGLU libGL SDL2 ];
+  buildInputs = [ alsa-lib boost curl eigen freeimage freetype libGLU libGL rapidjson SDL2 vlc ];
 
   installPhase = ''
     install -D ../emulationstation $out/bin/emulationstation
+    cp -r ../resources/ $out/bin/resources/
   '';
 
   meta = {
@@ -33,5 +28,6 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.edwtjo ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+    mainProgram = "emulationstation";
   };
 }

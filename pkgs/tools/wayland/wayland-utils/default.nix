@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wayland-utils";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/wayland-utils/-/releases/${version}/downloads/wayland-utils-${version}.tar.xz";
-    sha256 = "sha256-nmhYYwJbT+reNtU7vI4xtD4mSYvnQ96oTHqEkSlZQQo=";
+    sha256 = "sha256-2SeMIlVFhogYAlQHUbzEJWkmK/gM2aybD9Ev9L0JqeQ=";
   };
 
   strictDeps = true;
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit; # Expat version
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    mainProgram = "wayland-info";
   };
 }

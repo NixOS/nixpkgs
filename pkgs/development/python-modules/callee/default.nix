@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   doCheck = false; # missing dependency
 
-  checkInputs = [
+  nativeCheckInputs = [
     # taipan missing, unmaintained, not python3.10 compatible
     pytestCheckHook
   ];

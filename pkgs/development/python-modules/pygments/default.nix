@@ -1,8 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, docutils
-, lxml
+
+# build-system
+, setuptools
+
+# tests
 , pytestCheckHook
 , wcag-contrast-ratio
 }:
@@ -10,22 +13,23 @@
 let pygments = buildPythonPackage
   rec {
     pname = "pygments";
-    version = "2.13.0";
+    version = "2.15.1";
+    format = "pyproject";
 
     src = fetchPypi {
       pname = "Pygments";
       inherit version;
-      sha256 = "sha256-VqhQiulfmOK5vfk6a+WuP32K+Fi0PgLFov8INya+QME=";
+      hash = "sha256-is5NPB3UgYlLIAX1YOrQ+fGe5k/pgzZr4aIeFx0Sd1w=";
     };
 
-    propagatedBuildInputs = [
-      docutils
+    nativeBuildInputs = [
+      setuptools
     ];
 
     # circular dependencies if enabled by default
     doCheck = false;
-    checkInputs = [
-      lxml
+
+    nativeCheckInputs = [
       pytestCheckHook
       wcag-contrast-ratio
     ];
@@ -35,17 +39,21 @@ let pygments = buildPythonPackage
       "tests/examplefiles/bash/ltmain.sh"
     ];
 
-    pythonImportsCheck = [ "pygments" ];
+    pythonImportsCheck = [
+      "pygments"
+    ];
 
     passthru.tests = {
       check = pygments.overridePythonAttrs (_: { doCheck = true; });
     };
 
     meta = with lib; {
+      changelog = "https://github.com/pygments/pygments/releases/tag/${version}";
       homepage = "https://pygments.org/";
       description = "A generic syntax highlighter";
+      mainProgram = "pygmentize";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ SuperSandro2000 ];
+      maintainers = with maintainers; [ ];
     };
   };
 in pygments

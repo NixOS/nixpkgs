@@ -2,16 +2,16 @@
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9fHKuDWuwbjXjL9CmJxUWWoomkqDP93J8MX1XKwbwsE=";
+    hash = "sha256-HQgewi2kq0/DGY6URd2tbewiYcQ5J4MRUdk+OUImEKo=";
   };
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ pytest pyyaml ];
+  nativeCheckInputs = [ pytest pyyaml ];
 
   # pytestCheckHook doesn't work
   # ImportError: cannot import name '_spglib' from partially initialized module 'spglib'

@@ -1,31 +1,39 @@
-{stdenv, lib, fetchurl, dub, ncurses, ldc, zlib, removeReferencesTo }:
+{ lib
+, stdenv
+, fetchurl
+, dub
+, ncurses
+, ldc
+, zlib
+, removeReferencesTo
+}:
 
 let
-    _d_ae_ver              = "0.0.3184";
-    _d_btrfs_ver           = "0.0.12";
-    _d_ncurses_ver         = "0.0.149";
+    _d_ae_ver              = "0.0.3236";
+    _d_btrfs_ver           = "0.0.18";
+    _d_ncurses_ver         = "1.0.0";
     _d_emsi_containers_ver = "0.9.0";
 in
 stdenv.mkDerivation rec {
     pname = "btdu";
-    version = "0.4.1";
+    version = "0.5.1";
 
     srcs = [
       (fetchurl {
         url = "https://github.com/CyberShadow/${pname}/archive/v${version}.tar.gz";
-        sha256 = "265c63ee82067f6b5dc44b47c9ec58be5e13c654f31035c60a7e375ffa4082c9";
+        sha256 = "566269f365811f6db53280fc5476a7fcf34791396ee4e090c150af4280b35ba5";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/ae/archive/v${_d_ae_ver}.tar.gz";
-        sha256 = "74c17146ecde7ec4ba159eae4f88c74a5ef40cc200eabf97a0648f5abb5fde5e";
+        sha256 = "5ea3f0d9d2d13012ce6a1ee1b52d9fdff9dfb1d5cc7ee5d1b04cab1947ed4d36";
       })
       (fetchurl {
         url = "https://github.com/CyberShadow/d-btrfs/archive/v${_d_btrfs_ver}.tar.gz";
-        sha256 = "cf2b1fa3e94a0aa239d465adbac239514838835283521d632f571948aa517f92";
+        sha256 = "32af4891d93c7898b0596eefb8297b88d3ed5c14c84a5951943b7b54c7599dbd";
       })
       (fetchurl {
         url = "https://github.com/D-Programming-Deimos/ncurses/archive/v${_d_ncurses_ver}.tar.gz";
-        sha256 = "2c8497f5dd93f9d3a05ca7ed57c4fcaee1e988fd25a24de106917ddf72f34646";
+        sha256 = "b5db677b75ebef7a1365ca4ef768f7344a2bc8d07ec223a2ada162f185d0d9c6";
       })
       (fetchurl {
         url = "https://github.com/dlang-community/containers/archive/v${_d_emsi_containers_ver}.tar.gz";
@@ -76,6 +84,7 @@ stdenv.mkDerivation rec {
     meta = with lib; {
       description = "Sampling disk usage profiler for btrfs";
       homepage = "https://github.com/CyberShadow/btdu";
+      changelog = "https://github.com/CyberShadow/btdu/releases/tag/v${version}";
       license = licenses.gpl2Only;
       platforms = platforms.linux;
       maintainers = with maintainers; [ atila ];

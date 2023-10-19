@@ -1,32 +1,30 @@
 { stdenv
-, fetchzip
-, fetchurl
 , fetchFromGitHub
 , lib
-, gradle
+, gradle_7
 , perl
 , makeWrapper
-, openjdk11
+, openjdk17
 , unzip
 , makeDesktopItem
-, autoPatchelfHook
 , icoutils
 , xcbuild
-, protobuf3_17
-, libredirect
+, protobuf
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.1.2";
+  version = "10.3.3";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    sha256 = "sha256-gnSIXje0hUpAculNXAyiS7Twc5XWitMgYp7svyZQxzE=";
+    hash = "sha256-KDSiZ/JwAqX6Obg9UD8ZQut01l/eMXbioJy//GluXn0=";
   };
+
+  gradle = gradle_7;
 
   desktopItem = makeDesktopItem {
     name = "ghidra";
@@ -43,7 +41,14 @@ let
     cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
 protobuf {
   protoc {
-    path = '${protobuf3_17}/bin/protoc'
+    path = '${protobuf}/bin/protoc'
+  }
+}
+HERE
+    cat >>Ghidra/Debug/Debugger-isf/build.gradle <<HERE
+protobuf {
+  protoc {
+    path = '${protobuf}/bin/protoc'
   }
 }
 HERE
@@ -90,10 +95,10 @@ HERE
       export GRADLE_USER_HOME="$HOME/.gradle"
 
       # First, fetch the static dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk11} -I gradle/support/fetchDependencies.gradle init
+      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} -I gradle/support/fetchDependencies.gradle init
 
       # Then, fetch the maven dependencies.
-      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk11} resolveDependencies
+      gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} resolveDependencies
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
@@ -104,10 +109,10 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-UHV7Z2HaVTOCY5U0zjUtkchJicrXMBfYBHvL8AA7NTg=";
+    outputHash = "sha256-HveS3f8XHpJqefc4djYmnYfd01H2OBFK5PLNOsHAqlc=";
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -128,7 +133,7 @@ in stdenv.mkDerivation rec {
 
     sed -i "s#mavenLocal()#mavenLocal(); maven { url '${deps}/maven' }#g" build.gradle
 
-    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk11} buildGhidra
+    gradle --offline --no-daemon --info -Dorg.gradle.java.home=${openjdk17} buildGhidra
   '';
 
   installPhase = ''
@@ -156,19 +161,20 @@ in stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     ln -s "${pkg_path}/ghidraRun" "$out/bin/ghidra"
     wrapProgram "${pkg_path}/support/launch.sh" \
-      --prefix PATH : ${lib.makeBinPath [ openjdk11 ]}
+      --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
   '';
 
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps
     ];
     license = licenses.asl20;
     maintainers = with maintainers; [ roblabla ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 
 }

@@ -1,12 +1,28 @@
-{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
-, ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
-, ldns, libedit, yasm, which, libsndfile, libtiff, libxcrypt
-
+{ fetchFromGitHub
+, fetchpatch
+, stdenv
+, lib
+, pkg-config
+, autoreconfHook
+, ncurses
+, gnutls
+, readline
+, openssl
+, perl
+, sqlite
+, libjpeg
+, speex
+, pcre
+, libuuid
+, ldns
+, libedit
+, yasm
+, which
+, libsndfile
+, libtiff
+, libxcrypt
 , callPackage
-
 , SystemConfiguration
-
 , modules ? null
 , nixosTests
 }:
@@ -88,12 +104,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.8";
+  version = "1.10.10";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-66kwEN42LjTh/oEdFeOyXP2fU88tjR1K5ZWQJkKcDLQ=";
+    sha256 = "sha256-3Mm/hbMwnlwbtiOFlODtKItVyj34O3beZDlV8YoJmts=";
   };
 
   postPatch = ''
@@ -110,6 +126,20 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  ## TODO Validate with the next upstream release
+  patches = [
+    (fetchpatch {
+       name = "CVE-2023-44488.patch";
+       url = "https://github.com/signalwire/freeswitch/commit/f1fb05214e4f427dcf922f531431ab649cf0622b.patch";
+       hash = "sha256-6GMebE6O2EBx60NE2LSRVljaiLm9T4zTrkIpwGvaB08=";
+     })
+    (fetchpatch {
+       name = "CVE-2023-5217.patch";
+       url = "https://github.com/signalwire/freeswitch/commit/6f9e72c585265d8def8a613b36cd4f524c201980.patch";
+       hash = "sha256-l64mBpyq/TzRM78n73kbuD0UNsk5zIH5QNJlMKdPfr4=";
+     })
+  ];
+
   strictDeps = true;
   nativeBuildInputs = [ pkg-config autoreconfHook perl which yasm ];
   buildInputs = [
@@ -123,7 +153,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   # Using c++14 because of build error
   # gsm_at.h:94:32: error: ISO C++17 does not allow dynamic exception specifications
@@ -151,7 +181,8 @@ stdenv.mkDerivation rec {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
     homepage = "https://freeswitch.org/";
     license = lib.licenses.mpl11;
-    maintainers = with lib.maintainers; [ misuzu ];
+    maintainers = with lib.maintainers; [ ];
     platforms = with lib.platforms; unix;
+    broken = stdenv.isDarwin;
   };
 }

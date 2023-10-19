@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, coq, version ? null }:
 
-with lib; mkCoqDerivation rec {
+mkCoqDerivation rec {
   pname = "coq-ext-lib";
   owner = "coq-ext-lib";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.11" "8.16"; out = "0.11.7"; }
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = range "8.11" "8.18"; out = "0.11.8"; }
     { case = range "8.8" "8.16"; out = "0.11.6"; }
     { case = range "8.8" "8.14"; out = "0.11.4"; }
     { case = range "8.8" "8.13"; out = "0.11.3"; }
@@ -13,6 +13,7 @@ with lib; mkCoqDerivation rec {
     { case = "8.6";              out = "0.9.5"; }
     { case = "8.5";              out = "0.9.4"; }
   ] null;
+  release."0.11.8".sha256 = "sha256-uUBKJb7XjRnyb7rCisZrDcaDdsp1Bv1lXDIU3Ce8e5k=";
   release."0.11.7".sha256 = "sha256-HkxUny0mxDDT4VouBBh8btwxGZgsb459kBufTLLnuEY=";
   release."0.11.6".sha256 = "0w6iyrdszz7zc8kaybhy3mwjain2d2f83q79xfd5di0hgdayh7q7";
   release."0.11.4".sha256 = "0yp8mhrhkc498nblvhq1x4j6i9aiidkjza4wzvrkp9p8rgx5g5y3";
@@ -30,6 +31,6 @@ with lib; mkCoqDerivation rec {
 
   meta = {
     description = "A collection of theories and plugins that may be useful in other Coq developments";
-    maintainers = with maintainers; [ jwiegley ptival ];
+    maintainers = with lib.maintainers; [ jwiegley ptival ];
   };
 }

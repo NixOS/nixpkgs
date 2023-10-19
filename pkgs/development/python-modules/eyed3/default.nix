@@ -1,13 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
 , python
 , isPyPy
 , six
 , filetype
 , deprecation
-, dataclasses
 }:
 
 buildPythonPackage rec {
@@ -17,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-k7GOk5M3akURT5QJ18yhGftvT5o31LaXtQCvSLTFzw8=";
+    hash = "sha256-k7GOk5M3akURT5QJ18yhGftvT5o31LaXtQCvSLTFzw8=";
   };
 
   # requires special test data:
@@ -25,8 +23,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    six filetype deprecation
-  ] ++ lib.optional (pythonOlder "3.7") dataclasses;
+    deprecation
+    filetype
+    six
+  ];
 
   postInstall = ''
     for prog in "$out/bin/"*; do

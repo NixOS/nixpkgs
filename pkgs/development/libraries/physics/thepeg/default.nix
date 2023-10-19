@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, boost, fastjet, gsl, hepmc2, lhapdf, rivet, zlib }:
+{ lib, stdenv, fetchurl, autoreconfHook, boost, fastjet, gsl, hepmc2, lhapdf, rivet, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "thepeg";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "https://www.hepforge.org/archive/thepeg/ThePEG-${version}.tar.bz2";
     hash = "sha256-8hRzGXp2H8MpF7CKjSTSv6+T/1fzRB/WBdqZrJ3l1Qs=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ boost fastjet gsl hepmc2 lhapdf rivet zlib ];
 

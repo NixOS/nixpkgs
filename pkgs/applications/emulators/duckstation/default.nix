@@ -4,58 +4,81 @@
 , SDL2
 , cmake
 , copyDesktopItems
-, makeDesktopItem
+, cubeb
 , curl
 , extra-cmake-modules
-, libevdev
-, libpulseaudio
 , libXrandr
-, mesa # for libgbm
+, libbacktrace
+, makeDesktopItem
 , ninja
 , pkg-config
 , qtbase
+, qtsvg
 , qttools
+, qtwayland
+, substituteAll
 , vulkan-loader
-#, wayland # Wayland doesn't work correctly this version
+, wayland
 , wrapQtAppsHook
+, enableWayland ? true
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "duckstation";
-  version = "unstable-2022-07-08";
+  version = "unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "stenzek";
-    repo = pname;
-    rev = "82965f741e81e4d2f7e1b2abdc011e1f266bfe7f";
-    sha256 = "sha256-D8Ps/EQRcHLsps/KEUs56koeioOdE/GPA0QJSrbSdYs=";
+    repo = "duckstation";
+    rev = "d5608bf12df7a7e03750cb94a08a3d7999034ae2";
+    hash = "sha256-ktfZgacjkN6GQb1vLmyTZMr8QmmH12qAvFSIBTjgRSs=";
   };
+
+  patches = [
+    # Tests are not built by default
+    ./001-fix-test-inclusion.diff
+    # Patching yet another script that fills data based on git commands...
+    (substituteAll {
+      src = ./002-hardcode-vars.diff;
+      gitHash = finalAttrs.src.rev;
+      gitBranch = "master";
+      gitTag = "0.1-5889-gd5608bf1";
+      gitDate = "2023-09-30T23:20:09+10:00";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
     copyDesktopItems
     ninja
     pkg-config
     qttools
     wrapQtAppsHook
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
   ];
 
   buildInputs = [
     SDL2
     curl
-    libevdev
-    libpulseaudio
     libXrandr
-    mesa
+    libbacktrace
     qtbase
+    qtsvg
     vulkan-loader
-    #wayland
-  ];
+  ]
+  ++ lib.optionals enableWayland [
+    qtwayland
+    wayland
+  ]
+  ++ cubeb.passthru.backendLibs;
+
+  strictDeps = true;
 
   cmakeFlags = [
-    "-DUSE_DRMKMS=ON"
-    #"-DUSE_WAYLAND=ON"
+    (lib.cmakeBool "BUILD_TESTS" true)
+    (lib.cmakeBool "ENABLE_WAYLAND" enableWayland)
   ];
 
   desktopItems = [
@@ -72,6 +95,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    bin/common-tests
+    runHook postCheck
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -80,29 +110,21 @@ stdenv.mkDerivation rec {
     cp -r bin $out/share/duckstation
     ln -s $out/share/duckstation/duckstation-qt $out/bin/
 
-    install -Dm644 ../extras/icons/icon-256px.png $out/share/pixmaps/duckstation.png
+    install -Dm644 bin/resources/images/duck.png $out/share/pixmaps/duckstation.png
 
     runHook postInstall
   '';
 
-  doCheck = true;
-  checkPhase = ''
-    runHook preCheck
-    bin/common-tests
-    runHook postCheck
-  '';
-
-  # Libpulseaudio fixes https://github.com/NixOS/nixpkgs/issues/171173
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM xcb"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio vulkan-loader ]}"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ vulkan-loader ] ++ cubeb.passthru.backendLibs)}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stenzek/duckstation";
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ guibou AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    mainProgram = "duckstation-qt";
+    maintainers = with lib.maintainers; [ guibou AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

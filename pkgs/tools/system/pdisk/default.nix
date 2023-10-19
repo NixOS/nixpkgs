@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchzip
+, fetchFromGitHub
 , fetchpatch
 , installShellFiles
 , libbsd
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
   pname = "pdisk";
   version = "0.9";
 
-  src = fetchzip {
-    url = "https://opensource.apple.com/tarballs/pdisk/pdisk-${lib.versions.minor version}.tar.gz";
-    sha256 = "sha256-+gBgnk/1juEHE0nXaz7laUaH7sxrX5SzsLGr0PHsdHs=";
+  src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = pname;
+    rev = "${pname}-${lib.versions.minor version}";
+    hash = "sha256-+gBgnk/1juEHE0nXaz7laUaH7sxrX5SzsLGr0PHsdHs=";
   };
 
   patches = [
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     })
     # Replace removed sys_nerr and sys_errlist with strerror
     (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=&id=d0c930ea8bcac008bbd0ade1811133a625caea54";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=d0c930ea8bcac008bbd0ade1811133a625caea54";
       sha256 = "sha256-HGJIS+vTn6456KtaETutIgTPPBm2C9OHf1anG8yaJPo=";
     })
   ];
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
     IOKit
   ];
 
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   enableParallelBuilding = true;
 

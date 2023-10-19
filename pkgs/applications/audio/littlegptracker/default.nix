@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
     ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ] ++
-    lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
+  env.NIX_CFLAGS_COMPILE = toString ([ "-fpermissive" ] ++
+    lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing");
 
   NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";
 
@@ -63,8 +63,8 @@ stdenv.mkDerivation rec {
       channels. Additionally, the program can drive MIDI instruments (with the
       gp32 and gp2x a custom MIDI interface is required).
     '';
-    homepage = "http://www.littlegptracker.com/";
-    downloadPage = "http://www.littlegptracker.com/download.php";
+    homepage = "https://www.littlegptracker.com/";
+    downloadPage = "https://www.littlegptracker.com/download.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

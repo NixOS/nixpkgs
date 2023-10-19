@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "jtaimisto";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wAzBlCczsLfHboGYIsyN7dGwz52CMw+L3XQ0njfLVR0=";
+    hash = "sha256-wAzBlCczsLfHboGYIsyN7dGwz52CMw+L3XQ0njfLVR0=";
   };
 
-  vendorSha256 = "189qs6vmx63vwsjmc4qgf1y8xjsi7x6l1f5c3kd8j8jnagl26z4h";
+  vendorHash = "sha256-kHwj6FNWIonaHKy4QE0/UcuOfHAPE1al5nuYXrfROKE=";
 
   ldflags = [
     "-w"

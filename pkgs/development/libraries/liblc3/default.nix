@@ -7,7 +7,7 @@
 
 let
   name = "liblc3";
-  version = "1.0.1";
+  version = "1.0.4";
 in
 stdenv.mkDerivation {
   pname = name;
@@ -17,8 +17,10 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "liblc3";
     rev = "v${version}";
-    sha256 = "sha256-W0pCfFmM+6N6+HdGdQ/GBNHjBspkwtlxZC2m2noKGx0=";
+    sha256 = "sha256-nQJgF/cWoCx5TkX4xOaLB9SzvhVXPY29bLh7UwPMWEE=";
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     meson

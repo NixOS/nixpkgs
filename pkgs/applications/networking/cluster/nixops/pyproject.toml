@@ -13,8 +13,15 @@ nixops-encrypted-links = {git = "https://github.com/nix-community/nixops-encrypt
 nixops-gcp = {git = "https://github.com/nix-community/nixops-gce.git"}
 nixops-hercules-ci = {git = "https://github.com/hercules-ci/nixops-hercules-ci.git"}
 nixops-hetzner = {git = "https://github.com/NixOS/nixops-hetzner"}
+nixops-hetznercloud = {git = "https://github.com/lukebfox/nixops-hetznercloud.git"}
 nixopsvbox = {git = "https://github.com/nix-community/nixops-vbox.git"}
 nixops-virtd = {git = "https://github.com/nix-community/nixops-libvirtd.git"}
+
+# poetry lock would download an excessive number of wheels looking for a compatible version, so
+# we pin a feasible range here. This does not represent a real constraint on the version and
+# would be ok to remove/update/ignore in future upgrades. Note that a botocore wheel is about 50MB.
+boto3 = "^1.26"
+botocore = "^1.29"
 
 [build-system]
 requires = ["poetry>=0.12"]

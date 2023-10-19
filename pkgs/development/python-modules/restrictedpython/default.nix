@@ -3,22 +3,30 @@
 , fetchPypi
 , pytest-mock
 , pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "5.2";
+  version = "6.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "RestrictedPython";
     inherit version;
-    sha256 = "sha256-Y02h9sXBIqJi9DOwg+49F6mgOfjxs3eFl++0dGHNNhs=";
+    hash = "sha256-23Prfjs5ZQ8NIdEMyN2pwOKYbmIclLDF3jL7De46CK8=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_compile__compile_restricted_exec__5"
   ];
 
   pythonImportsCheck = [
@@ -28,6 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Restricted execution environment for Python to run untrusted code";
     homepage = "https://github.com/zopefoundation/RestrictedPython";
+    changelog = "https://github.com/zopefoundation/RestrictedPython/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
     maintainers = with maintainers; [ juaningan ];
   };

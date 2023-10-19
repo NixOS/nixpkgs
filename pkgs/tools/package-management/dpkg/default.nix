@@ -1,23 +1,38 @@
-{ lib, stdenv, fetchurl, perl, zlib, bzip2, xz, zstd
-, makeWrapper, coreutils, autoreconfHook, pkg-config
+{ lib
+, stdenv
+, fetchgit
+, perl
+, gnutar
+, zlib
+, bzip2
+, xz
+, zstd
+, libmd
+, makeWrapper
+, coreutils
+, autoreconfHook
+, pkg-config
+, diffutils
+, glibc ? !stdenv.isDarwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
-  version = "1.21.1ubuntu2.1";
+  version = "1.22.0";
 
-  src = fetchurl {
-    url = "mirror://ubuntu/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "sha256-YvVQbQn2MhOIOE43VO0H1QsKIYCsjNAFzKMoFeSrqZk=";
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/dpkg";
+    rev = "applied/${version}";
+    hash = "sha256-q+kP0PuQyGKuKahA1/TwtJG380a/sNR433xZhxvGO9M=";
   };
 
   configureFlags = [
     "--disable-dselect"
+    "--disable-start-stop-daemon"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
-    (lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
-    (lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
-  ];
+    "TAR=${gnutar}/bin/tar"
+  ] ++ lib.optional stdenv.isDarwin "--disable-linker-optimisations";
 
   enableParallelBuilding = true;
 
@@ -35,7 +50,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
 
     # Dpkg commands sometimes calls out to shell commands
@@ -50,10 +65,13 @@ stdenv.mkDerivation rec {
        --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
        --replace '"rm"' \"${coreutils}/bin/rm\" \
        --replace '"cat"' \"${coreutils}/bin/cat\" \
-       --replace '"diff"' \"${coreutils}/bin/diff\"
+       --replace '"diff"' \"${diffutils}/bin/diff\"
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    substituteInPlace src/main/help.c \
+       --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
 
-  buildInputs = [ perl zlib bzip2 xz zstd ];
+  buildInputs = [ perl zlib bzip2 xz zstd libmd ];
   nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
 
   postInstall =
@@ -68,6 +86,8 @@ stdenv.mkDerivation rec {
       mkdir -p $out/etc/dpkg
       cp -r scripts/t/origins $out/etc/dpkg
     '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "The Debian package manager";

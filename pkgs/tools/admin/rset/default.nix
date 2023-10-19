@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/eradman/rset/raw/${version}/NEWS";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

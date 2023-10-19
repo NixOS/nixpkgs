@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, cargo
 , hypothesis
 , libiconv
 , pytestCheckHook
@@ -9,6 +10,7 @@
 , pythonOlder
 , pyyaml
 , rustPlatform
+, rustc
 , setuptools-rust
 , setuptools-scm
 , typing-extensions
@@ -17,31 +19,31 @@
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.4.7";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "instagram";
-    repo = pname;
+    repo = "libcst";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-YrGajxs8t8PU4XRkFlhwtxoa9pzpKPXq8ZvN/uqftlE=";
+    hash = "sha256-kFs7edBWz0GRbgbLDmtpUVi5R+6mYXsJSvceOoPW9ck=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    sourceRoot = "source/${cargoRoot}";
+    sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-V/WHZVvh8HtD8IUNk3V4e8/E2A8DebqY5i/lS1X6x3o=";
+    hash = "sha256-fhaHiz64NH6S61fSXj4gNxxcuB+ECxWSSmG5StiFr1k=";
   };
 
   cargoRoot = "native";
 
   postPatch = ''
-    # test try to format files, which isn't necessary when consuming releases
-    sed -i libcst/codegen/generate.py \
-      -e '/ufmt/c\        pass'
+    # avoid infinite recursion by not formatting the release files
+    substituteInPlace libcst/codegen/generate.py \
+      --replace '"ufmt"' '"true"'
   '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -50,7 +52,9 @@ buildPythonPackage rec {
     setuptools-rust
     setuptools-scm
     rustPlatform.cargoSetupHook
-  ] ++ (with rustPlatform; [ rust.cargo rust.rustc ]);
+    cargo
+    rustc
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
@@ -60,14 +64,18 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];
 
   preCheck = ''
+    # otherwise import libcst.native fails
+    cp build/lib.*/libcst/native.* libcst/
+
     ${python.interpreter} -m libcst.codegen.generate visitors
     ${python.interpreter} -m libcst.codegen.generate return_types
+
     # Can't run all tests due to circular dependency on hypothesmith -> libcst
     rm -r {libcst/tests,libcst/codegen/tests,libcst/m*/tests}
   '';
@@ -84,7 +92,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
+    changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 psfl ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

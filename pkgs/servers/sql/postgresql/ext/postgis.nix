@@ -11,22 +11,23 @@
 , file
 , protobufc
 , libiconv
+, pcre2
 , nixosTests
 }:
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.3.1";
+  version = "3.4.0";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "sha256-kb6ACnLXSMWjpKANgqwd5CAj4p2mHs5uv5x3/iKPyxo=";
+    sha256 = "sha256-rum2CmyITTVBZLMJbEZX8yRFQYZgf4WdHOBdiZeYr50=";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
+  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc pcre2.dev ]
                 ++ lib.optional stdenv.isDarwin libiconv;
-  nativeBuildInputs = [ perl pkg-config ];
+  nativeBuildInputs = [ perl pkg-config ] ++ lib.optional postgresql.jitSupport postgresql.llvm;
   dontDisableStatic = true;
 
   # postgis config directory assumes /include /lib from the same root for json-c library
@@ -34,9 +35,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i 's@/usr/bin/file@${file}/bin/file@' configure
-    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    configureFlags="--datadir=$out/share/postgresql --datarootdir=$out/share/postgresql --bindir=$out/bin --docdir=$doc/share/doc/${pname} --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev} --disable-extension-upgrades-install"
 
-    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin"
+    makeFlags="PERL=${perl}/bin/perl datadir=$out/share/postgresql pkglibdir=$out/lib bindir=$out/bin docdir=$doc/share/doc/${pname}"
   '';
   postConfigure = ''
     sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
@@ -75,5 +76,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
     inherit (postgresql.meta) platforms;
+    broken = versionOlder postgresql.version "12";
   };
 }

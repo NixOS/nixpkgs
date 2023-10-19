@@ -1,5 +1,5 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules,
   modemmanager, qtbase
 }:
@@ -9,4 +9,5 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ modemmanager qtbase ];
   outputs = [ "out" "dev" ];
+  meta.platforms = lib.platforms.linux;
 }

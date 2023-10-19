@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "netplan";
-  version = "0.105";
+  version = "0.106.1";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
     rev = version;
-    hash = "sha256-77vUZU9JG9Dz/5n4DpcAUS77UqfIILXhZHgBogIb400=";
+    hash = "sha256-wQ4gd9+9YU92WGRMjSiF/zLCGxhaSl8s22pH1jr+Mm0=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     systemd
     glib
     libyaml
-    (python3.withPackages (p: with p; [ pyyaml netifaces ]))
+    (python3.withPackages (p: with p; [ pyyaml netifaces dbus-python rich ]))
     libuuid
     bash-completion
   ];

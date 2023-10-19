@@ -225,20 +225,22 @@ in {
       irrespective of the value of this option (even when set to no).
     '';
 
-    childless = mkEnumParam [ "allow" "force" "never" ] "allow" ''
-      Use childless IKE_SA initiation (RFC 6023) for IKEv2.  Acceptable values
-      are `allow` (the default), `force` and
-      `never`. If set to `allow`, responders
+    childless = mkEnumParam [ "allow" "prefer" "force" "never" ] "allow" ''
+      Use childless IKE_SA initiation (_allow_, _prefer_, _force_ or _never_).
+
+      Use childless IKE_SA initiation (RFC 6023) for IKEv2, with the first
+      CHILD_SA created with a separate CREATE_CHILD_SA exchange (e.g. to use an
+      independent DH exchange for all CHILD_SAs).  Acceptable values are `allow`
+      (the default), `prefer`, `force` and `never`. If set to `allow`, responders
       will accept childless IKE_SAs (as indicated via notify in the IKE_SA_INIT
-      response) while initiators continue to create regular IKE_SAs with the
-      first CHILD_SA created during IKE_AUTH, unless the IKE_SA is initiated
-      explicitly without any children (which will fail if the responder does not
-      support or has disabled this extension).  If set to
-      `force`, only childless initiation is accepted and the
-      first CHILD_SA is created with a separate CREATE_CHILD_SA exchange
-      (e.g. to use an independent DH exchange for all CHILD_SAs). Finally,
-      setting the option to `never` disables support for
-      childless IKE_SAs as responder.
+      response) while initiators continue to create regular IKE_SAs with the first
+      CHILD_SA created during IKE_AUTH, unless the IKE_SA is initiated explicitly
+      without any children (which will fail if the responder does not support or
+      has disabled this extension). The effect of `prefer` is the same as `allow`
+      on responders, but as initiator a childless IKE_SA is initiated if the
+      responder supports it. If set to `force`, only childless initiation is
+      accepted in either role.  Finally, setting the option to `never` disables
+      support for childless IKE_SAs as responder.
     '';
 
     send_certreq = mkYesNoParam yes ''
@@ -357,11 +359,22 @@ in {
     if_id_in = mkStrParam "0" ''
       XFRM interface ID set on inbound policies/SA, can be overridden by child
       config, see there for details.
+
+      The special value `%unique` allocates a unique interface ID per IKE_SA,
+      which is inherited by all its CHILD_SAs (unless overridden there), beyond
+      that the value `%unique-dir` assigns a different unique interface ID for
+      each direction (in/out).
+
     '';
 
     if_id_out = mkStrParam "0" ''
       XFRM interface ID set on outbound policies/SA, can be overridden by child
       config, see there for details.
+
+      The special value `%unique` allocates a unique interface ID per IKE_SA,
+      which is inherited by all its CHILD_SAs (unless overridden there), beyond
+      that the value `%unique-dir` assigns a different unique interface ID for
+      each direction (in/out).
     '';
 
     mediation = mkYesNoParam no ''
@@ -985,12 +998,14 @@ in {
         protection.
       '';
 
-      hw_offload = mkEnumParam ["yes" "no" "auto"] "no" ''
+      hw_offload = mkEnumParam ["yes" "no" "auto" "crypto" "packet"] "no" ''
         Enable hardware offload for this CHILD_SA, if supported by the IPsec
-        implementation. The value `yes` enforces offloading
-        and the installation will fail if it's not supported by either kernel or
-        device. The value `auto` enables offloading, if it's
-        supported, but the installation does not fail otherwise.
+        implementation. The values `crypto` or `packet` enforce crypto or full
+        packet offloading and the installation will fail if the selected mode is not
+        supported by either kernel or device. On Linux, `packet` also offloads
+        policies, including trap policies. The value `auto` enables full packet
+        or crypto offloading, if either is supported, but the installation does not
+        fail otherwise.
       '';
 
       copy_df = mkYesNoParam yes ''

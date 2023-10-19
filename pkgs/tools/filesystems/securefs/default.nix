@@ -1,28 +1,21 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , cmake
-, fuse }:
+, fuse
+}:
 
 stdenv.mkDerivation rec {
   pname = "securefs";
-  version = "0.11.1";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
-    sha256 = "1sxfgqgy63ml7vg7zj3glvra4wj2qmfv9jzmpm1jqy8hq7qlqlsx";
-    rev = version;
-    repo = "securefs";
     owner = "netheril96";
+    repo = "securefs";
+    rev = version;
     fetchSubmodules = true;
+    hash = "sha256-7xjGuN7jcLgfGkaBoSj+WsBpM806PPGzeBs7DnI+fwc=";
   };
-
-  patches = [
-    # Make it build with macFUSE
-    # Backported from https://github.com/netheril96/securefs/pull/114
-    ./add-macfuse-support.patch
-  ];
-
-  postPatch = ''
-    sed -i -e '/TEST_SOURCES/d' CMakeLists.txt
-  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ fuse ];

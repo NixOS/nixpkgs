@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-zEMG2zscGDlRxtLn/lUTEjZBPabcwzMcj/kMcy3yOs8=";
+    hash = "sha256-zEMG2zscGDlRxtLn/lUTEjZBPabcwzMcj/kMcy3yOs8=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = false; # Segfaults...
 

@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "crypto++";
-  version = "8.6.0";
+  version = "8.8.0";
   underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
     repo = "cryptopp";
     rev = "CRYPTOPP_${underscoredVersion}";
-    hash = "sha256-a3TYaK34WvKEXN7LKAfGwQ3ZL6a3k/zMZyyVfnkQqO4=";
+    hash = "sha256-hg7g56bIYaXxB28nAmSQ7EP9NEwd1Psf/2GUtbC27oU=";
   };
 
   outputs = [ "out" "dev" ];
@@ -49,11 +49,6 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];
-  # TODO: remove postInstall hook with v8.7 -> https://github.com/weidai11/cryptopp/commit/230c558a
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    ln -sr $out/lib/libcryptopp.so.${version} $out/lib/libcryptopp.so.${lib.versions.majorMinor version}
-    ln -sr $out/lib/libcryptopp.so.${version} $out/lib/libcryptopp.so.${lib.versions.major version}
-  '';
 
   meta = with lib; {
     description = "A free C++ class library of cryptographic schemes";

@@ -40,10 +40,16 @@ stdenv.mkDerivation rec {
       revert = true;
       sha256 = "0fzjdv49dx5lzvqhkvk50lkccagwx8h0bfha4a0k6l4qh36f9j7c";
     })
+    ./monotone-1.1-gcc-14.patch
   ];
 
   postPatch = ''
     sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc
+  '' + lib.optionalString (lib.versionAtLeast boost.version "1.73") ''
+    find . -type f -exec sed -i \
+      -e 's/ E(/ internal_E(/g' \
+      -e 's/{E(/{internal_E(/g' \
+      {} +
   '';
 
   CXXFLAGS=" --std=c++11 ";

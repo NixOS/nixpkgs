@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, libevent, glew, glfw }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pixelnuke";
   version = "unstable-2019-05-19";
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "03dp0p00chy00njl4w02ahxqiwqpjsrvwg8j4yi4dgckkc3gbh40";
   };
 
-  sourceRoot = "source/pixelnuke";
+  sourceRoot = "${finalAttrs.src.name}/pixelnuke";
 
   buildInputs = [ libevent glew glfw ];
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ mrVanDalo ];
   };
-}
+})

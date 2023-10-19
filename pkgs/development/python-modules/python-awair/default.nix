@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ahayworth";
     repo = "python_awair";
     rev = version;
-    sha256 = "sha256-zdZyA6adM4bfEYupdZl7CzMjwyfRkQBrntNh0MusynE=";
+    hash = "sha256-zdZyA6adM4bfEYupdZl7CzMjwyfRkQBrntNh0MusynE=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook
     vcrpy

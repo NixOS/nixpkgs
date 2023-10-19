@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nodejs yarn yarn2nix jq rsync common-updater-scripts moreutils
+#! nix-shell -i bash -p nodejs yarn prefetch-yarn-deps jq rsync common-updater-scripts moreutils
 
 set -exuo pipefail
 
@@ -40,10 +40,14 @@ yarn install --ignore-scripts
 
 cp package.json "$expr_dir"
 cp yarn.lock "$expr_dir/yarn.lock"
-yarn2nix > "$expr_dir/yarn.nix"
 
 cd "$expr_dir/../../../.."
 update-source-version meshcentral "$version" "$hash" "$tarball"
+
+new_yarn_hash=$(prefetch-yarn-deps "$expr_dir/yarn.lock")
+new_yarn_hash=$(nix-hash --type sha256 --to-sri "$new_yarn_hash")
+old_yarn_hash=$(nix-instantiate --eval -A meshcentral.offlineCache.outputHash | tr -d '"')
+sed -i "$expr_dir/default.nix" -re "s|\"$old_yarn_hash\"|\"$new_yarn_hash\"|"
 
 # Only clean up if everything worked
 cd /

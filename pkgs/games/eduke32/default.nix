@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
-, alsa-lib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
-, SDL2, SDL2_mixer
-, AGL, Cocoa, GLUT, OpenGL
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, nasm
+, makeDesktopItem
+, alsa-lib
+, flac
+, gtk2
+, libvorbis
+, libvpx
+, libGLU
+, libGL
+, SDL2
+, SDL2_mixer
+, AGL
+, Cocoa
+, GLUT
+, OpenGL
 }:
 
 let
@@ -18,13 +34,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "eduke32";
-  version = "20210910";
-  rev = "9603";
-  revExtra = "6c289cce4";
+  version = "20230926";
+  rev = "10459";
+  revExtra = "8feaf6c25";
 
   src = fetchurl {
     url = "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
-    sha256 = "sha256-/NQMsmT9z2N3KWBrP8hlGngQKJUgSP+vrNoFqJscRCk=";
+    hash = "sha256-GQOpDQm2FeaOMyYu9L5zhrM6XFvZAHMAwn1tSK7RCB8=";
   };
 
   buildInputs = [
@@ -48,7 +64,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = ''
+    substituteInPlace source/imgui/src/imgui_impl_sdl2.cpp \
+      --replace '#include <SDL.h>' '#include <SDL2/SDL.h>' \
+      --replace '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
+      --replace '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace source/build/src/glbuild.cpp \
       --replace libGLU.so ${libGLU}/lib/libGLU.so
 

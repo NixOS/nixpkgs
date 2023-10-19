@@ -1,33 +1,34 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, fetchpatch }:
 
-let
-  # csvs-to-sqlite is currently not compatible with Click 8. See the following
-  # https://github.com/simonw/csvs-to-sqlite/issues/80
-  #
-  # Workaround the issue by providing click 7 explicitly.
-  python = python3.override {
-    packageOverrides = self: super: {
-      # Use click 7
-      click = super.click.overridePythonAttrs (old: rec {
-        version = "7.1.2";
-        src = old.src.override {
-          inherit version;
-          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
-        };
-      });
-    };
-  };
-in with python.pkgs; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   pname = "csvs-to-sqlite";
-  version = "1.2";
-  disabled = !isPy3k;
+  version = "1.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
     rev = version;
-    sha256 = "0p99cg76d3s7jxvigh5ad04dzhmr6g62qzzh4i6h7x9aiyvdhvk4";
+    hash = "sha256-wV6htULG3lg2IhG2bXmc/9vjcK8/+WA7jm3iJu4ZoOE=";
   };
+
+  patches = [
+    # https://github.com/simonw/csvs-to-sqlite/pull/92
+    (fetchpatch {
+      name = "pandas2-compatibility-1.patch";
+      url = "https://github.com/simonw/csvs-to-sqlite/commit/fcd5b9c7485bc7b95bf2ed9507f18a60728e0bcb.patch";
+      hash = "sha256-ZmaNWxsqeNw5H5gAih66DLMmzmePD4no1B5mTf8aFvI=";
+    })
+    (fetchpatch {
+      name = "pandas2-compatibility-2.patch";
+      url = "https://github.com/simonw/csvs-to-sqlite/commit/3d190aa44e8d3a66a9a3ca5dc11c6fe46da024df.patch";
+      hash = "sha256-uYUH0Mhn6LIf+AHcn6WuCo5zFuSNWOZBM+AoqkmMnSI=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     click
@@ -37,8 +38,18 @@ in with python.pkgs; buildPythonApplication rec {
     six
   ];
 
-  checkInputs = [
+  pythonRelaxDeps = [
+    "click"
+  ];
+
+  nativeCheckInputs = [
+    cogapp
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Test needs to be adjusted for click >= 8.
+    "test_if_cog_needs_to_be_run"
   ];
 
   meta = with lib; {
@@ -47,5 +58,4 @@ in with python.pkgs; buildPythonApplication rec {
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };
-
 }

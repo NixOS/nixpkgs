@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "ffuf";
-  version = "1.5.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-dqABifXA104NCPdrWhB79cZQloJrqwJ45rlh+M/lRrs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TfPglATKQ3RIGODcIpSRL6FjbLyCjDzbi70jTLKYlLk=";
   };
 
-  vendorSha256 = "sha256-szT08rIozAuliOmge5RFX4NeVrJ2pCVyfotrHuvc0UU=";
+  vendorHash = "sha256-nqv45e1W7MA8ElsJ7b4XWs26OicJ7IXmh93+wkueZg4=";
 
   meta = with lib; {
     description = "Fast web fuzzer written in Go";
@@ -24,6 +24,7 @@ buildGoModule rec {
       or web servers.
     '';
     homepage = "https://github.com/ffuf/ffuf";
+    changelog = "https://github.com/ffuf/ffuf/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

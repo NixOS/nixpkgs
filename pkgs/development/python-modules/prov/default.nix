@@ -24,7 +24,7 @@ buildPythonPackage rec {
     rdflib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pydot
   ];
 

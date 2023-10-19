@@ -30,7 +30,7 @@ with python3.pkgs; buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     neovim
     pytestCheckHook
   ];

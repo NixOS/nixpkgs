@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 
-  # tests are super flaky unfortunately, and regularily break.
+  # tests are super flaky unfortunately, and regularly break.
   # let's disable them for now.
   doCheck = false;
-  checkInputs = [
+  nativeCheckInputs = [
     # perl is assumed by perldoc completion
     perl
     # ps assumed to exist by gdb, killall, pgrep, pidof,

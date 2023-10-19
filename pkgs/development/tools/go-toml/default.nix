@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "go-toml";
-  version = "2.0.5";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "pelletier";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9m0g8hfJ+gazYHq2TzSN/0d2o789QBhbIpGxdXhNBGk=";
+    sha256 = "sha256-BEkshlB1Zze4sVo5YDwpj6ENHFLHL4IFmOIYgrWz+gQ=";
   };
 
-  vendorSha256 = "sha256-yDPCfJtYty4aaoDrn3UWFcs1jHJHMJqzc5f06AWQmRc=";
+  vendorHash = "sha256-XOcCsb3zUChiYLTfOCbRQF71E2khzSt/ApFI8NAS13U=";
 
   excludedPackages = [ "cmd/gotoml-test-decoder" "cmd/tomltestgen" ];
 
@@ -20,6 +20,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Go library for the TOML language";
     homepage = "https://github.com/pelletier/go-toml";
+    changelog = "https://github.com/pelletier/go-toml/releases/tag/v${version}";
     maintainers = [ maintainers.marsam ];
     license = licenses.mit;
   };

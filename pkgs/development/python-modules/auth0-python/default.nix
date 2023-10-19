@@ -3,7 +3,7 @@
 , aioresponses
 , buildPythonPackage
 , callee
-, fetchPypi
+, fetchFromGitHub
 , mock
 , pyjwt
 , pytestCheckHook
@@ -13,23 +13,24 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
-  version = "3.24.0";
+  version = "4.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-iNe86UcjQud/LyX9iwYIGbNVcADjpD4mGM16D+UhLHE=";
+  src = fetchFromGitHub {
+    owner = "auth0";
+    repo = "auth0-python";
+    rev = "refs/tags/${version}";
+    hash = "sha256-RBkAuZQx7mBxVCpo5PoBiEge8+yTmp0XpcnxCkOsM6U=";
   };
 
   propagatedBuildInputs = [
     requests
     pyjwt
-  ]
-  ++ pyjwt.optional-dependencies.crypto;
+  ] ++ pyjwt.optional-dependencies.crypto;
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     aioresponses
     callee
@@ -51,7 +52,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Auth0 Python SDK";
     homepage = "https://github.com/auth0/auth0-python";
+    changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

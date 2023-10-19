@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1460d5lc780p3q38l3wc9jfr2a7zlyrcra0li65aynj738cam9yl";
   };
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   buildInputs = [ ncurses libiconv ];
 
   preBuild = ''
@@ -16,12 +18,22 @@ stdenv.mkDerivation rec {
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
-  '';
+  ''
+  # upstream builds shared library unconditionally. Also, it has no
+  # support for cross-compilation.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    sed -i 's/all:.*/all: libstfl.a stfl.pc/' Makefile
+    sed -i 's/\tar /\t${stdenv.cc.targetPrefix}ar /' Makefile
+    sed -i 's/\tranlib /\t${stdenv.cc.targetPrefix}ranlib /' Makefile
+    sed -i '/install -m 644 libstfl.so./d' Makefile
+    sed -i '/ln -fs libstfl.so./d' Makefile
+  '' ;
 
   installPhase = ''
     DESTDIR=$out prefix=\"\" make install
-
-    # some programs rely on libstfl.so.0 to be present, so link it
+  ''
+  # some programs rely on libstfl.so.0 to be present, so link it
+  + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
   '';
 

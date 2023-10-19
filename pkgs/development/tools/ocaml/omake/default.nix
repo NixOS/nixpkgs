@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, ocaml, ncurses }:
+{ lib, stdenv, fetchurl, ocaml }:
 
 stdenv.mkDerivation rec {
 
   pname = "omake";
-  version = "0.10.3";
+  version = "0.10.6";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/${pname}-${version}.tar.gz";
-    sha256 = "07bdg1h5i7qnlv9xq81ad5hfypl10hxm771h4rjyl5cn8plhfcgz";
+    hash = "sha256-AuSZEnybyk8HaDZ7mbwDqjFXMXVQ7TDRuRU/aRY8/yE=";
   };
 
-  buildInputs = [ ocaml ncurses ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml ];
 
   meta = {
     description = "A build system designed for scalability and portability";

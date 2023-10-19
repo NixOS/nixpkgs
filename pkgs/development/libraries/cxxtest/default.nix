@@ -11,9 +11,9 @@ python3Packages.buildPythonApplication rec {
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };
 
-  sourceRoot = "source/python";
+  sourceRoot = "${src.name}/python";
 
-  checkInputs = [ python3Packages.ply ];
+  nativeCheckInputs = [ python3Packages.ply ];
 
   preCheck = ''
     cd ../

@@ -1,8 +1,6 @@
 { lib
 , astropy
-, astropy-helpers
 , buildPythonPackage
-, cython
 , fetchpatch
 , fetchPypi
 , matplotlib
@@ -14,8 +12,11 @@
 , pytestCheckHook
 , pythonOlder
 , reproject
-, scikitimage
+, scikit-image
+, setuptools
+, setuptools-scm
 , shapely
+, wheel
 }:
 
 buildPythonPackage rec {
@@ -32,23 +33,24 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    astropy-helpers
+    setuptools
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
     astropy
-    cython
     matplotlib
     numpy
     pillow
     pyavm
     pyregion
     reproject
-    scikitimage
+    scikit-image
     shapely
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-astropy
     pytestCheckHook
   ];

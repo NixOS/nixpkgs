@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "faketty";
-  version = "1.0.10";
+  version = "1.0.13";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-Jljq22xbXakwKdf5TXBXzuKuKJOBjf6lzCy8aHrVC3U=";
+    hash = "sha256-jV5b6mB81Nz0Q+Toj5DTQq2QcM+EoQ7jRYV/OXgtemA=";
   };
 
-  cargoSha256 = "sha256-K0hNnqw178b7noHW76DMR0BoYhkrQpPQeHaH6Azt3Xo=";
+  cargoHash = "sha256-9t1Km/ZXzxyO72CaWM81fWGcFkri7F+wMAVom0GV/YM=";
 
   postPatch = ''
     patchShebangs tests/test.sh
@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A wrapper to execute a command in a pty, even if redirecting the output";
     homepage = "https://github.com/dtolnay/faketty";
+    changelog = "https://github.com/dtolnay/faketty/releases/tag/${version}";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ figsoda ];
   };

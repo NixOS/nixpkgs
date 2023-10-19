@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "ClusterShell";
-  version = "1.8.4";
+  version = "1.9.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff6fba688a06e5e577315d899f0dab3f4fe479cef99d444a4e651af577b7d081";
+    hash = "sha256-rsF/HG4GNBC+N49b+sDO2AyUI1G44wJNBUwQNPzShD0=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bc
     hostname
     nose
@@ -98,7 +98,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
     description = "Scalable Python framework for cluster administration";
     homepage = "https://cea-hpc.github.io/clustershell";
     license = licenses.lgpl21;

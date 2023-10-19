@@ -38,7 +38,7 @@ builder rec {
     buildPackages.stdenv.cc
   ]
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile;
+    pkgsBuildBuild.guile_2_2;
   nativeBuildInputs = [
     makeWrapper
     pkg-config
@@ -123,6 +123,12 @@ builder rec {
   doInstallCheck = doCheck;
 
   setupHook = ./setup-hook-2.2.sh;
+
+  passthru = rec {
+    effectiveVersion = lib.versions.majorMinor version;
+    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+    siteDir = "share/guile/site/${effectiveVersion}";
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile/";

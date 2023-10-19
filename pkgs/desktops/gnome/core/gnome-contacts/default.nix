@@ -13,6 +13,7 @@
 , libportal-gtk4
 , gnome-desktop
 , gnome-online-accounts
+, qrencode
 , wrapGAppsHook4
 , folks
 , libxml2
@@ -26,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-contacts";
-  version = "43.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-contacts/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "VbYd9+k/Cr4f+kZeGOPF3k9JqQ8mjqnRHtyGrwbQceE=";
+    sha256 = "fdEWO8HwavY4La5AFcQ0Q+4sEpKBKPyZ/USSktDee+0=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libxml2
     gnome-online-accounts
+    qrencode
   ];
 
   doCheck = true;

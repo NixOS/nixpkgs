@@ -12,7 +12,7 @@ let
     pname = "rnnoise-nu";
     version = "unstable-07-10-2019";
     src = speech-denoiser-src;
-    sourceRoot = "source/rnnoise";
+    sourceRoot = "${speech-denoiser-src.name}/rnnoise";
     nativeBuildInputs = [ autoreconfHook ];
     configureFlags = [ "--disable-examples" "--disable-doc" "--disable-shared" "--enable-static" ];
     installTargets = [ "install-rnnoise-nu" ];

@@ -1,93 +1,138 @@
 { buildGoModule
+, cargo
 , cmake
 , fetchFromGitHub
 , go
 , lib
+, libcap
+, libgcrypt
+, libgpg-error
+, libsecret
 , pkg-config
 , polkit
 , python3
 , qt5compat
 , qtbase
-, qtcharts
 , qtnetworkauth
+, qtsvg
 , qttools
 , qtwebsockets
 , rustPlatform
+, rustc
 , stdenv
-, which
 , wireguard-tools
 , wrapQtAppsHook
 }:
 
 let
   pname = "mozillavpn";
-  version = "2.9.0";
+  version = "2.16.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-arz8hTgQfPFSZesSddcnZoyLfoLQsQT8LIsl+3ZfA0M=";
+    hash = "sha256-UMWBn3DoEU1fG7qh6F0GOhOqod+grPwp15wSSdP0eCo=";
   };
+  patches = [ ];
 
-  netfilter-go-modules = (buildGoModule {
-    inherit pname version src;
-    vendorSha256 = "KFYMim5U8WlJHValvIBQgEN+17SDv0JVbH03IiyfDc0=";
+  netfilterGoModules = (buildGoModule {
+    inherit pname version src patches;
     modRoot = "linux/netfilter";
-  }).go-modules;
+    vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
+  }).goModules;
 
-  cargoRoot = "extension/bridge";
+  extensionBridgeDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    name = "${pname}-${version}-extension-bridge";
+    preBuild = "cd extension/bridge";
+    hash = "sha256-1wYTRc+NehiHwAd/2CmsJNv/TV6wH5wXwNiUdjzEUIk=";
+  };
+  signatureDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    name = "${pname}-${version}-signature";
+    preBuild = "cd signature";
+    hash = "sha256-oaKkQWMYkAy1c2biVt+GyjHBeYb2XkuRvFrWQJJIdPw=";
+  };
+  qtgleanDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    name = "${pname}-${version}-qtglean";
+    preBuild = "cd qtglean";
+    hash = "sha256-cqfiOBS8xFC2BbYp6BJWK6NHIU0tILSgu4eo3Ik4YqY=";
+  };
 
 in
 stdenv.mkDerivation {
-  inherit pname version src cargoRoot;
+  inherit pname version src patches;
 
   buildInputs = [
-    polkit
+    libcap
+    libgcrypt
+    libgpg-error
+    libsecret
     qt5compat
     qtbase
-    qtcharts
     qtnetworkauth
+    qtsvg
     qtwebsockets
   ];
   nativeBuildInputs = [
+    cargo
     cmake
     go
     pkg-config
     python3
     python3.pkgs.glean-parser
-    python3.pkgs.lxml
     python3.pkgs.pyyaml
     python3.pkgs.setuptools
+    qttools
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.cargo
-    which
+    rustc
     wrapQtAppsHook
   ];
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    preBuild = "cd ${cargoRoot}";
-    hash = "sha256-lJfDLyoVDSFiZyWcBTI085MorWHPcNW4i7ua1+Ip3rA=";
-  };
+  postUnpack = ''
+    pushd source/extension/bridge
+    cargoDeps='${extensionBridgeDeps}' cargoSetupPostUnpackHook
+    extensionBridgeDepsCopy="$cargoDepsCopy"
+    popd
+
+    pushd source/signature
+    cargoDeps='${signatureDeps}' cargoSetupPostUnpackHook
+    signatureDepsCopy="$cargoDepsCopy"
+    popd
+
+    pushd source/qtglean
+    cargoDeps='${qtgleanDeps}' cargoSetupPostUnpackHook
+    qtgleanDepsCopy="$cargoDepsCopy"
+    popd
+  '';
+  dontCargoSetupPostUnpack = true;
 
   postPatch = ''
-    for file in linux/*.service linux/extra/*.desktop src/platforms/linux/daemon/*.service; do
-      substituteInPlace "$file" --replace /usr/bin/mozillavpn "$out/bin/mozillavpn"
-    done
-
-    substituteInPlace scripts/addon/build.py \
-      --replace 'qtbinpath = args.qtpath' 'qtbinpath = "${qttools.dev}/bin"' \
-      --replace 'rcc = os.path.join(qtbinpath, rcc_bin)' 'rcc = "${qtbase.dev}/libexec/rcc"'
-
-    substituteInPlace src/cmake/linux.cmake \
+    substituteInPlace src/apps/vpn/cmake/linux.cmake \
+      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
+      --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
       --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
-    substituteInPlace src/connectionbenchmark/benchmarktaskdownload.cpp \
-      --replace 'QT_VERSION >= 0x060400' 'false'
+    substituteInPlace extension/CMakeLists.txt \
+      --replace '/etc' "$out/etc"
 
-    ln -s '${netfilter-go-modules}' linux/netfilter/vendor
+    ln -s '${netfilterGoModules}' linux/netfilter/vendor
+
+    pushd extension/bridge
+    cargoDepsCopy="$extensionBridgeDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    pushd signature
+    cargoDepsCopy="$signatureDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    pushd qtglean
+    cargoDepsCopy="$qtgleanDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    cargoSetupPostPatchHook() { true; }
   '';
 
   cmakeFlags = [
@@ -95,6 +140,7 @@ stdenv.mkDerivation {
     "-DQT_LUPDATE_EXECUTABLE=${qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qttools.dev}/bin/lrelease"
   ];
+  dontFixCmake = true;
 
   qtWrapperArgs =
     [ "--prefix" "PATH" ":" (lib.makeBinPath [ wireguard-tools ]) ];

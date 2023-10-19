@@ -1,28 +1,51 @@
-{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unrar, ffmpeg, nixosTests }:
+{ stdenv, lib, fetchurl, makeWrapper, unzip, python3, unar, ffmpeg, nixosTests }:
 
+let
+  runtimeProgDeps = [
+    ffmpeg
+    unar
+  ];
+in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.1.2";
+  version = "1.3.1";
 
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    sha256 = "sha256-cTSRfnMYAyoOoTy0wx8sxqyS92zP6GZu8aH5hRRTxU4=";
+    sha256 = "sha256-AhUMrvnZoo0XMfJ6F9Bi4mC0hk5T3EkQPX/s4tHWcic=";
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
+  buildInputs = [
+    (python3.withPackages (ps: [
+      ps.lxml
+      ps.numpy
+      ps.gevent
+      ps.gevent-websocket
+      ps.pillow
+      ps.setuptools
+    ]))
+  ] ++ runtimeProgDeps;
+
   installPhase = ''
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}
-    makeWrapper "${
-      (python3.withPackages
-        (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ])).interpreter
-    }" \
-      $out/bin/bazarr \
-      --add-flags "$out/share/${pname}-${version}/bazarr.py" \
-      --suffix PATH : ${lib.makeBinPath [ unrar ffmpeg ]}
+    runHook preInstall
+
+    mkdir -p "$out"/{bin,share/${pname}}
+    cp -r * "$out/share/${pname}"
+
+    # Add missing shebang and execute perms so that patchShebangs can do its
+    # thing.
+    sed -i "1i #!/usr/bin/env python3" "$out/share/${pname}/bazarr.py"
+    chmod +x "$out/share/${pname}/bazarr.py"
+
+    makeWrapper "$out/share/${pname}/bazarr.py" \
+        "$out/bin/bazarr" \
+        --suffix PATH : ${lib.makeBinPath runtimeProgDeps}
+
+    runHook postInstall
   '';
 
   passthru.tests = {

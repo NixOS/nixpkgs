@@ -166,6 +166,19 @@ index 86f53d4fc..0b052856f 100644
          argv[1] = NULL;
  
          envp = g_get_environ ();
+diff --git a/panels/user-accounts/user-utils.c b/panels/user-accounts/user-utils.c
+index 83d4cd091..e8784c722 100644
+--- a/panels/user-accounts/user-utils.c
++++ b/panels/user-accounts/user-utils.c
+@@ -486,7 +486,7 @@ is_valid_username_async (const gchar *username,
+          * future, so it would be nice to have some official way for this
+          * instead of relying on the current "--login" implementation.
+          */
+-        argv[0] = "/usr/sbin/usermod";
++        argv[0] = "@shadow@/bin/usermod";
+         argv[1] = "--login";
+         argv[2] = data->username;
+         argv[3] = "--";
 diff --git a/tests/datetime/test-endianess.c b/tests/datetime/test-endianess.c
 index 9cb92007a..84d2f0fa3 100644
 --- a/tests/datetime/test-endianess.c

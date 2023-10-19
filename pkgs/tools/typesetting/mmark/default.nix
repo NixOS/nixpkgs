@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "mmark";
-  version = "2.2.30";
+  version = "2.2.32";
 
   src = fetchFromGitHub {
     owner = "mmarkdown";
     repo = "mmark";
-    rev = "v${version}";
-    sha256 = "sha256-14SGA3a72i+HYptTEpxf4YiLXZzZ1R/t1agvm3ie4g8=";
+    # The tag has an outdated version number and fails the versio ntest
+    # The pinned revision includes one extra commit that fixes the issue
+    # rev = "v${version}";
+    rev = "158e9cca0280c58e205cb69b02bf33d7d826915e";
+    hash = "sha256-OzmqtmAAsG3ncrTl2o9rhK75i1WIpDnph0YrY38SlU0=";
   };
 
-  vendorSha256 = "sha256-GjR9cOGLB6URHQi+qcyNbP7rm0+y4wypvgUxgJzIgGQ=";
+  vendorHash = "sha256-GjR9cOGLB6URHQi+qcyNbP7rm0+y4wypvgUxgJzIgGQ=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -24,6 +27,5 @@ buildGoModule rec {
     homepage = "https://github.com/mmarkdown/mmark";
     license = with lib.licenses; bsd2;
     maintainers = with lib.maintainers; [ yrashk ];
-    platforms = lib.platforms.unix;
   };
 }

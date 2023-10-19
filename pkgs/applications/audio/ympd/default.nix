@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   #   ld: CMakeFiles/ympd.dir/src/mpd_client.c.o:(.bss+0x0): multiple definition of `mpd';
   #     CMakeFiles/ympd.dir/src/ympd.c.o:(.bss+0x20): first defined here
   # Should be fixed by pending https://github.com/notandy/ympd/pull/191 (does not apply as is).
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libmpdclient openssl ];

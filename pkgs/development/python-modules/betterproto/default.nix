@@ -5,7 +5,6 @@
 , poetry-core
 , grpclib
 , python-dateutil
-, dataclasses
 , black
 , jinja2
 , isort
@@ -21,13 +20,13 @@ buildPythonPackage rec {
   pname = "betterproto";
   version = "2.0.0b5";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
     rev = "v${version}";
-    sha256 = "sha256-XyXdpo3Yo4aO1favMWC7i9utz4fNDbKbsnYXJW0b7Gc=";
+    hash = "sha256-XyXdpo3Yo4aO1favMWC7i9utz4fNDbKbsnYXJW0b7Gc=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -35,8 +34,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     grpclib
     python-dateutil
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   passthru.optional-dependencies.compiler = [
@@ -47,7 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "betterproto" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-mock
@@ -56,7 +53,7 @@ buildPythonPackage rec {
   ] ++ passthru.optional-dependencies.compiler;
 
   # The tests require the generation of code before execution. This requires
-  # the protoc-gen-python_betterproto script from the packge to be on PATH.
+  # the protoc-gen-python_betterproto script from the package to be on PATH.
   preCheck = ''
     export PATH=$PATH:$out/bin
     ${python.interpreter} -m tests.generate

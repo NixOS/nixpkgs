@@ -1,26 +1,38 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, regex
-, pytest-runner, pytestCheckHook, pytest-mypy
+{ lib
+, buildPythonPackage
+, colorama
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, regex
 }:
 
 buildPythonPackage rec {
   pname = "tatsu";
   version = "5.8.3";
-  # upstream only supports 3.10+
+  format = "setuptools";
+
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "neogeny";
     repo = "TatSu";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-cKEMRbH/xNtYM0lmNVazv3i0Q1tmVrVPrB6F2s02Sro=";
+    hash = "sha256-cKEMRbH/xNtYM0lmNVazv3i0Q1tmVrVPrB6F2s02Sro=";
   };
 
-  nativeBuildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ colorama regex ];
-  checkInputs = [ pytestCheckHook pytest-mypy ];
+  propagatedBuildInputs = [
+    colorama
+    regex
+  ];
 
-  pythonImportsCheck = [ "tatsu" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "tatsu"
+  ];
 
   meta = with lib; {
     description = "Generates Python parsers from grammars in a variation of EBNF";
@@ -30,8 +42,8 @@ buildPythonPackage rec {
       Python.
     '';
     homepage = "https://tatsu.readthedocs.io/";
+    changelog = "https://github.com/neogeny/TatSu/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];
   };
-
 }

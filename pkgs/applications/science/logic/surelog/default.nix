@@ -5,35 +5,55 @@
 , python3
 , pkg-config
 , libuuid
-, openjdk11
+, openjdk
 , gperftools
+, gtest
+, uhdm
+, antlr4
+, capnproto
+, nlohmann_json
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "surelog";
-  version = "1.40";
+  version = "1.76";
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5nhJilFIJJDCnJUEUgyPNtWSQUgWcvM6LDFgFatAl/k=";
-    fetchSubmodules = true;
+    repo = finalAttrs.pname;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Vg9NZrgzFRVIsEbZQe8DItDhFOVG1XZoQWBrLzVNwLU=";
+    fetchSubmodules = false;  # we use all dependencies from nix
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    openjdk11
+    openjdk
     (python3.withPackages (p: with p; [
       psutil
       orderedmultidict
     ]))
+    gtest
+    antlr4
   ];
 
   buildInputs = [
     libuuid
     gperftools
+    uhdm
+    capnproto
+    antlr4.runtime.cpp
+    nlohmann_json
+  ];
+
+  cmakeFlags = [
+    "-DSURELOG_USE_HOST_CAPNP=On"
+    "-DSURELOG_USE_HOST_UHDM=On"
+    "-DSURELOG_USE_HOST_GTEST=On"
+    "-DSURELOG_USE_HOST_ANTLR=On"
+    "-DSURELOG_USE_HOST_JSON=On"
+    "-DANTLR_JAR_LOCATION=${antlr4.jarLocation}"
   ];
 
   doCheck = true;
@@ -44,16 +64,12 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  postInstall = ''
-    mv $out/lib/surelog/* $out/lib/
-    mv $out/lib/pkg $out/lib/surelog/
-  '';
-
   meta = {
     description = "SystemVerilog 2017 Pre-processor, Parser, Elaborator, UHDM Compiler";
     homepage = "https://github.com/chipsalliance/Surelog";
     license = lib.licenses.asl20;
+    mainProgram = "surelog";
     maintainers = with lib.maintainers; [ matthuszagh ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
-}
+})

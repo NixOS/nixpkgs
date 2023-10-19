@@ -32,17 +32,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.1";
+  version = "9.3";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    sha256 = "sha256-YaH0ENeLp+fzelpPUObRMgrKMzdUhKMlXt3xejhYBCM=";
+    hash = "sha256-rbz8/omSNbceh2jc8HzVMlILf1T5qAZIQ/jRmakEu6o=";
   };
-
-  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
-    ./disable-seek-hole.patch
-  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
@@ -149,10 +144,10 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
-  NIX_CFLAGS_COMPILE = []
+  env.NIX_CFLAGS_COMPILE = toString ([]
     # Work around a bogus warning in conjunction with musl.
     ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
-    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0";
+    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0");
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.

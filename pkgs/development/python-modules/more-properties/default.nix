@@ -31,7 +31,7 @@ buildPythonPackage rec {
       --replace dataclasses ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

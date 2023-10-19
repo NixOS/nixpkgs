@@ -5,24 +5,18 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nordzy-cursor-theme";
-  version = "0.1.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Nordzy-cursors";
     rev = "v${version}";
-    sha256 = "XabfKFyeII7Xl+ozzpPnc4xFH4B7GzCTLq4M1QPSZPw=";
+    sha256 = "sha256-q9PEEyxejRQ8UCwbqsfOCL7M70pLCOLyCx8gEFmZkWA=";
   };
 
   installPhase = ''
     mkdir -p $out/share/icons
-
-    cp -r nordzy-dark/ $out/share/icons/Nordzy-cursors
-    mv $out/share/icons/Nordzy-cursors/index.theme $out/share/icons/Nordzy-cursors/cursor.theme
-    mv $out/share/icons/Nordzy-cursors/Nordzy-cursors $out/share/icons/Nordzy-cursors/cursors
-    cp -r nordzy-white/ $out/share/icons/Nordzy-white-cursors
-    mv $out/share/icons/Nordzy-white-cursors/index.theme $out/share/icons/Nordzy-white-cursors/cursor.theme
-    mv $out/share/icons/Nordzy-white-cursors/Nordzy-white-cursors $out/share/icons/Nordzy-white-cursors/cursors
+    cp -r Nordzy-cursors{,-white,-lefthand} $out/share/icons
   '';
 
   meta = with lib; {

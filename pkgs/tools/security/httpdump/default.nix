@@ -6,19 +6,20 @@
 
 buildGoModule rec {
   pname = "httpdump";
-  version = "20210126-${lib.strings.substring 0 7 rev}";
-  rev = "d2e0deadca5f9ec2544cb252da3c450966d1860e";
+  version = "unstable-2023-05-07";
 
   src = fetchFromGitHub {
     owner = "hsiafan";
     repo = pname;
-    inherit rev;
-    sha256 = "0yh8kxy1k23lln09b614limwk9y59r7cn5qhbnzc06ga4mxfczv2";
+    rev = "e971e00e0136d5c770c4fdddb1c2095327d419d8";
+    hash = "sha256-3BzvIaZKBr/HHplJe5hM7u8kigmMHxCvkiVXFZopUCQ=";
   };
 
-  vendorSha256 = "0lb1p63lzn1ngj54bar9add7w0azvgcq3azhv9c5glk3ykv9c3iy";
+  vendorHash = "sha256-NKCAzx1+BkqZGeAORl7gCA7f9PSsyKxP2eggZyBB2l8=";
 
   propagatedBuildInputs = [ libpcap ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Parse and display HTTP traffic from network device or pcap file";

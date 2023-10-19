@@ -1,8 +1,7 @@
-{ rustPlatform
+{ lib
+, rustPlatform
 , cloud-utils
 , fetchFromGitHub
-, lib
-, llvmPackages
 , pkg-config
 , util-linux
 , zfs

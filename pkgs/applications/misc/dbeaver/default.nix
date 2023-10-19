@@ -8,7 +8,7 @@
 , freetype
 , glib
 , gtk3
-, jdk
+, jdk17
 , libX11
 , libXrender
 , libXtst
@@ -16,29 +16,30 @@
 , maven
 , webkitgtk
 , glib-networking
-, javaPackages
 }:
 
-(javaPackages.mavenfod.override {
-  inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
-}) rec {
+let
+  mavenJdk17 = maven.override {
+    jdk = jdk17;
+  };
+in
+mavenJdk17.buildMavenPackage rec {
   pname = "dbeaver";
-  version = "22.2.2"; # When updating also update mvnSha256
+  version = "22.2.2"; # When updating also update mvnHash
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
-    sha256 = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
+    hash = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
   };
 
-  mvnSha256 = "uu7UNRIuAx2GOh4+YxxoGRcV5QO8C72q32e0ynJdgFo=";
+  mvnHash = "sha256-ERZYDsPxp1YXteSmunFIgTGZUYqjZJhqrNytLnIUNBQ=";
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
-    maven
   ];
 
   buildInputs = [
@@ -46,7 +47,7 @@
     freetype
     glib
     gtk3
-    jdk
+    jdk17
     libX11
     libXrender
     libXtst
@@ -76,7 +77,7 @@
         aarch64-darwin = "aarch64";
         aarch64-linux = "aarch64";
         x86_64-darwin = "x86_64";
-        x86_64-linux  = "x86_64";
+        x86_64-linux = "x86_64";
       };
 
       systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw "dbeaver not supported on ${stdenv.hostPlatform.system}");
@@ -92,8 +93,8 @@
       ln -s $out/Applications/DBeaver.app/Contents/MacOS/dbeaver $out/bin/dbeaver
 
       wrapProgram $out/Applications/DBeaver.app/Contents/MacOS/dbeaver \
-        --prefix JAVA_HOME : ${jdk.home} \
-        --prefix PATH : ${jdk}/bin
+        --prefix JAVA_HOME : ${jdk17.home} \
+        --prefix PATH : ${jdk17}/bin
 
       runHook postInstall
     '' else ''
@@ -107,7 +108,7 @@
       patchelf --set-interpreter $interpreter $out/dbeaver/dbeaver
 
       makeWrapper $out/dbeaver/dbeaver $out/bin/dbeaver \
-        --prefix PATH : ${jdk}/bin \
+        --prefix PATH : ${jdk17}/bin \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ glib gtk3 libXtst webkitgtk glib-networking ])} \
         --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
@@ -129,10 +130,11 @@
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # dependencies from maven
+      binaryBytecode # dependencies from maven
     ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
+    mainProgram = "dbeaver";
   };
 }

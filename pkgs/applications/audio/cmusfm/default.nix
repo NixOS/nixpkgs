@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cmusfm";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1px2is80jdxchg8cpn5cizg6jvcbzyxl0qzs3bn0k3d10qjvdww5";
+    sha256 = "sha256-CA585ZpkxMMLgzv81QB2kKMFg5R5CwKS9xAYrU+pAxs=";
   };
 
   configureFlags = lib.optional libnotifySupport "--enable-libnotify"

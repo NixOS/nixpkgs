@@ -16,6 +16,7 @@
 , miniupnpc
 , dht
 , libnatpmp
+, libiconv
   # Build options
 , enableGTK3 ? false
 , gtk3
@@ -24,24 +25,21 @@
 , enableQt ? false
 , qt5
 , nixosTests
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , enableDaemon ? true
 , enableCli ? true
 , installLib ? false
 , apparmorRulesFromClosure
 }:
 
-let
-  version = "3.00";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  inherit version;
+  version = "3.00";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
@@ -49,8 +47,8 @@ in stdenv.mkDerivation {
   patches = [
     # fix build with openssl 3.0
     (fetchurl {
-      url = "https://salsa.debian.org/debian/transmission/-/raw/debian/3.00-2.1/debian/patches/openssl3-compat.patch";
-      hash = "sha256-v+SDTW/lCtc8B3TuhQB1pmjW/QRAGLtYncaImNNwpes=";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-p2p/transmission/files/transmission-3.00-openssl-3.patch";
+      hash = "sha256-peVrkGck8AfbC9uYNfv1CIu1alIewpca7A6kRXjVlVs=";
     })
   ];
 
@@ -93,7 +91,7 @@ in stdenv.mkDerivation {
   ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ;
+  ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postInstall = ''
     mkdir $apparmor
@@ -128,6 +126,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A fast, easy and free BitTorrent client";
+    mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
       on top of a cross-platform back-end.
@@ -141,8 +140,8 @@ in stdenv.mkDerivation {
     '';
     homepage = "http://www.transmissionbt.com/";
     license = lib.licenses.gpl2Plus; # parts are under MIT
-    maintainers = with lib.maintainers; [ astsmtl vcunat wizeman ];
+    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
 
-}
+})

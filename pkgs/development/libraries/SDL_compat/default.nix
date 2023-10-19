@@ -6,6 +6,7 @@
 , SDL2
 , libiconv
 , Cocoa
+, autoSignDarwinBinariesHook
 , libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported
 , libGL
@@ -18,16 +19,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "SDL_compat";
-  version = "1.2.60";
+  version = "1.2.68";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + version;
-    hash = "sha256-8b9rFI4iRpBJqeJ2KRJ9vRyv9gYwa9jRWCuXRfA3x50=";
+    hash = "sha256-f2dl3L7/qoYNl4sjik1npcW/W09zsEumiV9jHuKnUmM=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
 
   propagatedBuildInputs = [ SDL2 ]
     ++ optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]

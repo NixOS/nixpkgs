@@ -17,7 +17,7 @@ buildGoModule rec {
     sha256 = "sha256-fobaMkYLLK5qclogtClGdOjgTbmuse/72T3APNssYa4=";
   };
 
-  vendorSha256 = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";
+  vendorHash = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";
 
   passthru.tests.version = testers.testVersion {
     package = mynewt-newtmgr;
@@ -33,5 +33,7 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ bezmuth ];
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

@@ -41,8 +41,8 @@ in
     version = "0.15.1";
     sha256 = "1lwgjhgr5yw0d17kbqwlaj5pkn70wvaqqjpa1i0n459nx5cf5pqj";
   };
-  modules20 = common {
-    version = "0.20.0";
-    sha256 = "sha256-3eH3qCa24rWqYXsTTDmm/9LjBMxcxUuozuRzZ3e8cUo=";
+  modules23 = common {
+    version = "0.23.0";
+    sha256 = "sha256-Dd1pLMmRC59iRRpReDeQJ8Sv00ojb8InvaMrb+iRv4I=";
   };
 }

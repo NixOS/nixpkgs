@@ -1,27 +1,43 @@
-{ lib, stdenv, fetchurl, pkg-config, libcap, readline, texinfo, nss, nspr
-, libseccomp, pps-tools, gnutls }:
+{ lib, stdenv, fetchurl, pkg-config
+, gnutls, libedit, nspr, nss, readline, texinfo
+, libcap, libseccomp, pps-tools
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
   pname = "chrony";
-  version = "4.3";
+  version = "4.4";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
-    sha256 = "sha256-nQ2oiahl8ImlohYQ/7ZxPjyUOM4wOmO0nC+26v9biAQ=";
+    hash = "sha256-6vsH5tr5KxQiAPR4hW3+1u/J6i0Ubu3tXtywm5MScIg=";
   };
+
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ gnutls libedit nspr nss readline texinfo ]
+    ++ lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
+
+  configureFlags = [
+    "--enable-ntp-signd"
+    "--sbindir=$(out)/bin"
+    "--chronyrundir=/run/chrony"
+  ] ++ lib.optional stdenv.isLinux "--enable-scfilter";
+
+  patches = [
+    # Cleanup the installation script
+    ./makefile.patch
+  ];
 
   postPatch = ''
     patchShebangs test
   '';
 
-  buildInputs = [ readline texinfo nss nspr gnutls ]
-    ++ lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
-  nativeBuildInputs = [ pkg-config ];
-
   hardeningEnable = [ "pie" ];
 
-  configureFlags = [ "--chronyvardir=$(out)/var/lib/chrony" "--enable-ntp-signd" ]
-    ++ lib.optional stdenv.isLinux "--enable-scfilter";
+  passthru.tests = { inherit (nixosTests) chrony chrony-ptp; };
 
   meta = with lib; {
     description = "Sets your computer's clock from time servers on the Net";

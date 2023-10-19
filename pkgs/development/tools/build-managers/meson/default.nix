@@ -1,20 +1,30 @@
 { lib
+, stdenv
+, fetchFromGitHub
 , fetchpatch
 , installShellFiles
 , ninja
 , pkg-config
 , python3
+, zlib
+, coreutils
 , substituteAll
-, withDarwinFrameworksGtkDocPatch ? false
+, Foundation
+, OpenGL
+, AppKit
+, Cocoa
+, libxcrypt
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "0.63.1";
+  version = "1.2.0";
 
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "Bv4TKXIT1v8BIcXVqrJaVu+Tj/7FdBTtYIb9onLLZek=";
+  src = fetchFromGitHub {
+    owner = "mesonbuild";
+    repo = "meson";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bJAmkE+sL9DqKpcjZdBf4/z9lz+m/o0Z87hlAwbVbTY=";
   };
 
   patches = [
@@ -53,14 +63,8 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
 
-    # Prevent Meson from passing -O0 in buildtype=plain.
-    # Nixpkgs enables fortifications which do not work without optimizations.
-    # https://github.com/mesonbuild/meson/pull/10593
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/f9bfeb2add70973113ab4a98454a5c5d7e3a26ae.patch";
-      revert = true;
-      sha256 = "VKXUwdS+zMp1y+5GrV2inESUpUUp+OL3aI4wOXHxOeo=";
-    })
+    # Nixpkgs cctools does not have bitcode support.
+    ./disable-bitcode.patch
 
     # Fix passing multiple --define-variable arguments to pkg-config.
     # https://github.com/mesonbuild/meson/pull/10670
@@ -75,13 +79,27 @@ python3.pkgs.buildPythonApplication rec {
 
   setupHook = ./setup-hook.sh;
 
-  # Meson included tests since 0.45, however they fail in Nixpkgs because they
-  # require a typical building environment (including C compiler and stuff).
-  # Just for the sake of documentation, the next lines are maintained here.
-  doCheck = false;
-  checkInputs = [ ninja pkg-config ];
+  nativeCheckInputs = [ ninja pkg-config ];
+  checkInputs = [ zlib ]
+    ++ lib.optionals stdenv.isDarwin [ Foundation OpenGL AppKit Cocoa ];
   checkPhase = ''
-    python ./run_project_tests.py
+    runHook preCheck
+
+    patchShebangs 'test cases'
+    substituteInPlace 'test cases/native/8 external program shebang parsing/script.int.in' \
+      --replace /usr/bin/env ${coreutils}/bin/env
+    # requires git, creating cyclic dependency
+    rm -r 'test cases/common/66 vcstag'
+    # requires glib, creating cyclic dependency
+    rm -r 'test cases/linuxlike/6 subdir include order'
+    rm -r 'test cases/linuxlike/9 compiler checks with dependencies'
+    # requires static zlib, see #66461
+    rm -r 'test cases/linuxlike/14 static dynamic linkage'
+    # Nixpkgs cctools does not have bitcode support.
+    rm -r 'test cases/osx/7 bitcode'
+    HOME="$TMPDIR" python ./run_project_tests.py
+
+    runHook postCheck
   '';
 
   postFixup = ''
@@ -94,7 +112,14 @@ python3.pkgs.buildPythonApplication rec {
 
     # Do not propagate Python
     rm $out/nix-support/propagated-build-inputs
+
+    substituteInPlace "$out/share/bash-completion/completions/meson" \
+      --replace "python3 -c " "${python3.interpreter} -c "
   '';
+
+  buildInputs = lib.optionals (python3.pythonOlder "3.9") [
+    libxcrypt
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -116,7 +141,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    maintainers = with maintainers; [ mbe AndersonTorres ];
     inherit (python3.meta) platforms;
   };
 }

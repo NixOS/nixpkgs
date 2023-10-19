@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "freenect";
-  version = "0.6.4";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "OpenKinect";
     repo = "libfreenect";
     rev = "v${version}";
-    sha256 = "sha256-G9Pa3EOUrHyfx+FyZZLsKTSk7MBpHtpJm7m/uSAoKTo=";
+    sha256 = "sha256-Lb5mrl9jiI1Z9UOAlP+bBPNoKNxm5VSrFZRvifEfhoU=";
   };
 
   buildInputs = [ libusb1 freeglut libGLU libGL libXi libXmu ]

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "autoconf-archive";
-  version = "2022.02.11";
+  version = "2023.02.20";
 
   src = fetchurl {
     url = "mirror://gnu/autoconf-archive/autoconf-archive-${version}.tar.xz";
-    sha256 = "sha256-eKYbYR4u61WongOY4M44e8r1f+LdU8b+QnEw93etHow=";
+    hash = "sha256-cdQEhHmuKPH1eUYZw9ct+cAd9JscYo74X943WW3DGjM=";
   };
 
   strictDeps = true;

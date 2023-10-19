@@ -28,9 +28,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else "Release"}"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   meta = with lib; {
     homepage = "https://community.kde.org/Phonon";

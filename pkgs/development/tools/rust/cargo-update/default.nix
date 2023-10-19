@@ -1,33 +1,48 @@
-{ lib, stdenv
+{ lib
 , rustPlatform
 , fetchCrate
 , cmake
-, pkg-config
 , installShellFiles
+, pkg-config
 , ronn
+, stdenv
 , curl
-, libgit2
+, libgit2_1_5
 , libssh2
 , openssl
-, Security
 , zlib
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "11.0.0";
+  version = "13.1.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-bqDbMQXzOlNQBVufEwBeH9XOjS3gpacowzHVTwu8XhA=";
+    sha256 = "sha256-2j35R7QTn7Z3yqzOU+VWAoZfYodecDt45Plx/D7+GyU=";
   };
 
-  cargoSha256 = "sha256-oHp4olxnTeVXxhhWqWPBZXRfYZRtzuPfP3rENJAJQMo=";
+  cargoHash = "sha256-OEv9LOep4YNWY7oixY5zD9QgxqSYTrcf5oSXpxvnKIs=";
 
-  nativeBuildInputs = [ cmake installShellFiles pkg-config ronn ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+    pkg-config
+    ronn
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+  ];
 
-  buildInputs = [ libgit2 libssh2 openssl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ curl Security ];
+  buildInputs = [
+    libgit2_1_5
+    libssh2
+    openssl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   postBuild = ''
     # Man pages contain non-ASCII, so explicitly set encoding to UTF-8.
@@ -43,7 +58,8 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cargo subcommand for checking and applying updates to installed executables";
     homepage = "https://github.com/nabijaczleweli/cargo-update";
+    changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor ];
+    maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor matthiasbeyer ];
   };
 }

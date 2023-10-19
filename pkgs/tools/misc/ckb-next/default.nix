@@ -50,6 +50,7 @@ mkDerivation rec {
     homepage = "https://github.com/ckb-next/ckb-next";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    mainProgram = "ckb-next";
     maintainers = with maintainers; [ ];
   };
 }

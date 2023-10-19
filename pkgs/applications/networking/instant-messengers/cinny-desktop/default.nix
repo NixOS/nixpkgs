@@ -1,45 +1,74 @@
-{ stdenv
-, lib
-, dpkg
-, fetchurl
-, autoPatchelfHook
-, glib-networking
-, openssl
-, webkitgtk
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, cinny
+, copyDesktopItems
 , wrapGAppsHook
+, pkg-config
+, openssl
+, dbus
+, glib
+, glib-networking
+, webkitgtk
+, makeDesktopItem
 }:
 
-stdenv.mkDerivation rec {
-  name = "cinny-desktop";
-  version = "2.2.2";
+rustPlatform.buildRustPackage rec {
+  pname = "cinny-desktop";
+  version = "2.2.6";
 
-  src = fetchurl {
-    url = "https://github.com/cinnyapp/cinny-desktop/releases/download/v${version}/Cinny_desktop-x86_64.deb";
-    sha256 = "sha256-TdKxVvhz6DTJ9ZST/OBc37DcH9lpoKrY5yP8skTO9eQ=";
+  src = fetchFromGitHub {
+    owner = "cinnyapp";
+    repo = "cinny-desktop";
+    rev = "v${version}";
+    hash = "sha256-RW6LeItIAHJk1e7qMa1MLIGb3jHvJ/KM8E9l1qR48w8=";
   };
 
+  sourceRoot = "${src.name}/src-tauri";
+
+  cargoHash = "sha256-Iab/icQ9hFVh/o6egZVPa2zeKgO5WxzkluhRckcayvw=";
+
+  postPatch = ''
+    substituteInPlace tauri.conf.json \
+      --replace '"distDir": "../cinny/dist",' '"distDir": "${cinny}",'
+  '';
+
+  postInstall = ''
+    install -DT icons/128x128@2x.png $out/share/icons/hicolor/256x256@2/apps/cinny.png
+    install -DT icons/128x128.png $out/share/icons/hicolor/128x128/apps/cinny.png
+    install -DT icons/32x32.png $out/share/icons/hicolor/32x32/apps/cinny.png
+  '';
+
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
+    copyDesktopItems
+    wrapGAppsHook
+    pkg-config
   ];
 
   buildInputs = [
-    glib-networking
     openssl
+    dbus
+    glib
+    glib-networking
     webkitgtk
-    wrapGAppsHook
   ];
 
-  unpackCmd = "dpkg-deb -x $curSrc source";
-
-  installPhase = "mv usr $out";
+  desktopItems = [
+    (makeDesktopItem {
+      name = "cinny";
+      exec = "cinny";
+      icon = "cinny";
+      desktopName = "Cinny";
+      comment = meta.description;
+      categories = [ "Network" "InstantMessaging" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Yet another matrix client for desktop";
     homepage = "https://github.com/cinnyapp/cinny-desktop";
     maintainers = [ maintainers.aveltras ];
-    license = licenses.mit;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.agpl3Only;
     platforms = platforms.linux;
     mainProgram = "cinny";
   };

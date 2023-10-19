@@ -10,7 +10,7 @@
     owner = "UAVCAN";
     repo = pname;
     rev = version;
-    sha256 = "0fmbmdnnh679zkllv5m6pkrasg7m9vjwabqnmz5m7flrgdh6h4qa";
+    hash = "sha256-ChNoYHuZulPLrxYvxeVO9Tyt8rymlk3p/OkYaG2rqzo=";
   };
 
   propagatedBuildInputs = [

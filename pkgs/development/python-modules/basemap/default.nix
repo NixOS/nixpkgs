@@ -11,33 +11,31 @@
 , pyproj
 , pyshp
 , python
+, pythonRelaxDepsHook
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.3.4";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-F/6xPmdXSJAuASyFaKOP+6Jz8U2JRZdqErEH7PFkr/w=";
+    hash = "sha256-QH/pC1WIa0XQaDbAhYwKbCeCyxUprJbNyRfguiLjlHI=";
   };
 
-  sourceRoot = "source/packages/basemap";
-
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "numpy >= 1.21, < 1.23" "numpy >= 1.21, < 1.24" \
-      --replace "pyshp >= 1.2, < 2.2" "pyshp >= 1.2, < 2.4"
-  '';
+  sourceRoot = "${src.name}/packages/basemap";
 
   nativeBuildInputs = [
     cython
     geos
+    pythonRelaxDepsHook
     setuptools
   ];
+
+  pythonRelaxDeps = true;
 
   propagatedBuildInputs = [
     basemap-data

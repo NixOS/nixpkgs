@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -16,22 +15,21 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2022.10.0";
+  version = "2023.10.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-Oppi4J0TuLbqwVn1Hpa4xcU9c/I+YDP3E0VXwiP8a/w=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Q7jb0tJsbVM2vEqKgjXOWJN2OwR9qLchU/4ShOUGPT4=";
   };
 
   postPatch = ''
-    # https://github.com/bachya/aioambient/pull/97
     substituteInPlace pyproject.toml \
-      --replace 'websockets = ">=8.1,<10.0"' 'websockets = ">=8.1,<11.0"'
+      --replace 'websockets = ">=11.0.1"' 'websockets = "*"'
   '';
 
   nativeBuildInputs = [
@@ -45,9 +43,10 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
@@ -65,6 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for the Ambient Weather API";
     homepage = "https://github.com/bachya/aioambient";
+    changelog = "https://github.com/bachya/aioambient/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

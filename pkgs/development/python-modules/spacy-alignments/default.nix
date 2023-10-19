@@ -1,10 +1,12 @@
 { lib
 , stdenv
+, cargo
 , fetchPypi
 , fetchpatch
 , buildPythonPackage
 , isPy3k
 , rustPlatform
+, rustc
 , setuptools-rust
 , libiconv
 }:
@@ -17,22 +19,21 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1HApl/RZ0w5Tf2OPu1QBUa36uIqilp+dDbPjujn0e9s=";
+    hash = "sha256-1HApl/RZ0w5Tf2OPu1QBUa36uIqilp+dDbPjujn0e9s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "sha256-oFSruBnoodv6/0/OrmJ/2SVoWm3u3FGtzVJ9xgp0+Cg=";
+    hash = "sha256-oFSruBnoodv6/0/OrmJ/2SVoWm3u3FGtzVJ9xgp0+Cg=";
   };
 
   nativeBuildInputs = [
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

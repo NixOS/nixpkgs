@@ -5,15 +5,16 @@
 , SDL2_image
 , SDL2_mixer
 , SDL2_ttf
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "lpairs2";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
-    hash = "sha256-swe/cB9RqxHSNSShiryJ8XfwZk2X6qIDxFURbwNOd58=";
+    hash = "sha256-gw1BNkcztyTuoXRdx5+TBZNJEJNrLCfEUCQ1JzROogA=";
   };
 
   buildInputs = [
@@ -22,6 +23,12 @@ stdenv.mkDerivation rec {
     SDL2_mixer
     SDL2_ttf
   ];
+
+  passthru.updateScript = directoryListingUpdater {
+    inherit pname version;
+    url = "https://lgames.sourceforge.io/LPairs/";
+    extraRegex = "(?!.*-win(32|64)).*";
+  };
 
   meta = with lib; {
     broken = stdenv.isDarwin;

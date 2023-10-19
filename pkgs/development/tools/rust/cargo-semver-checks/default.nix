@@ -1,42 +1,60 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
+, cmake
+, zlib
 , stdenv
-, Security
+, darwin
+, git
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.12.0";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
-    repo = "cargo-semver-check";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gB8W/u/Yb/rMMB+654N3Mj4QbTMWGK6cgQKM0lld/10=";
+    hash = "sha256-K6csc/jJ0iDegK9ZSOy1aNb0GSxSXHMSOVUtFEYUBhc=";
   };
 
-  cargoSha256 = "sha256-ML4cTNtCvaLFkt1QdA34QvAGhrFTO90xw7fsUD2weqQ=";
+  cargoHash = "sha256-9tWzJ64UlMHQ61SRbEXACNDA+4hTPjQTBzSjEO+0rik=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
-    Security
+  buildInputs = [
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
+
+  nativeCheckInputs = [
+    git
   ];
 
   checkFlags = [
     # requires nightly version of cargo-rustdoc
-    "--skip=adapter::tests"
-    "--skip=query::tests"
+    "--skip=both_passing_manifest_path_and_directory_works"
+    "--skip=verify_binary_contains_lints"
+
+    # requires internet access
+    "--skip=detects_target_dependencies"
   ];
+
+  preCheck = ''
+    patchShebangs scripts/regenerate_test_rustdocs.sh
+    git init
+    scripts/regenerate_test_rustdocs.sh
+  '';
 
   meta = with lib; {
     description = "A tool to scan your Rust crate for semver violations";
-    homepage = "https://github.com/obi1kenobi/cargo-semver-check";
-    license = licenses.asl20;
+    homepage = "https://github.com/obi1kenobi/cargo-semver-checks";
+    changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${version}";
+    license = with licenses; [ mit /* or */ asl20 ];
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

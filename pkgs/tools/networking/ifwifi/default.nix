@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, darwin, networkmanager, iw, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, networkmanager, iw, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ifwifi";
-  version = "1.0.3";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "araujobsd";
     repo = "ifwifi";
-    rev = "${version}";
-    sha256 = "sha256-RYxBlqG8yV7ZhqTkWbzrGI/ZJRF55JN+kUlqFj/Bs7s=";
+    rev = version;
+    sha256 = "sha256-DPMCwyKqGJrav0wASBky9bS1bvJ3xaGsDzsk1bKaH1U=";
   };
 
-  cargoSha256 = "sha256-ys4tXP46pTXj9LSVISBRX+9xj7ijJddS86YzHHzK+jQ=";
+  cargoHash = "sha256-TL7ZsRbpRdYymJHuoCUCqe/U3Vacb9mtKFh85IOl+PA=";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optional stdenv.isDarwin Security;

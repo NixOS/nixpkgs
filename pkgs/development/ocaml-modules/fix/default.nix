@@ -8,7 +8,7 @@ buildDunePackage rec {
     domain = "gitlab.inria.fr";
     owner = "fpottier";
     repo = "fix";
-    rev = "${version}";
+    rev = version;
     sha256 = "sha256-suWkZDLnXEO/4QCGmNuyLFOV0LJsFOMD13gxOcgu6JQ=";
   };
 

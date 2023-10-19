@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "system76-keyboard-configurator";
-  version = "1.2.0";
+  version = "1.3.9";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "keyboard-configurator";
     rev = "v${version}";
-    sha256 = "sha256-N7faWyM2KExnKr6foO6KIxkFD/pGzw9RJDnADwK/fYU=";
+    sha256 = "sha256-06qiJ3NZZSvDBH7r6K1qnz0q4ngB45wBoaG6eTFiRtk=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  cargoSha256 = "sha256-h5kqm3ZyqzJhTjBcuOvaHkwPvF1xerN2eEDFwZAah6g=";
+  cargoHash = "sha256-tcyLoXOrC+lrFVRzxWfWpvHpfA6tbEBXFj9mSeTLcbc=";
 
   meta = with lib; {
     description = "Keyboard configuration application for System76 keyboards and laptops";

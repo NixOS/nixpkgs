@@ -22,9 +22,9 @@ with lib;
     };
 
     virtualRouterId = mkOption {
-      type = types.int;
+      type = types.ints.between 1 255;
       description = lib.mdDoc ''
-        Arbitrary unique number 0..255. Used to differentiate multiple instances
+        Arbitrary unique number 1..255. Used to differentiate multiple instances
         of vrrpd running on the same NIC (and hence same socket).
       '';
     };

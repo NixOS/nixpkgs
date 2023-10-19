@@ -20,7 +20,7 @@
 , cddbSupport ? true, libcddb ? null
 , cdioSupport ? true, libcdio ? null, libcdio-paranoia ? null
 , cueSupport ? true, libcue ? null
-, discidSupport ? (!stdenv.isDarwin), libdiscid ? null
+, discidSupport ? false, libdiscid ? null
 , ffmpegSupport ? true, ffmpeg ? null
 , flacSupport ? true, flac ? null
 , madSupport ? true, libmad ? null
@@ -38,8 +38,6 @@
 # not in nixpkgs
 #, vtxSupport ? true, libayemu ? null
 }:
-
-with lib;
 
 assert samplerateSupport -> jackSupport;
 
@@ -90,14 +88,6 @@ let
 
     #(mkFlag vtxSupport    "CONFIG_VTX=y"     libayemu)
   ];
-
-  clangGCC = runCommand "clang-gcc" {} ''
-    #! ${stdenv.shell}
-    mkdir -p $out/bin
-    ln -s ${stdenv.cc}/bin/clang $out/bin/gcc
-    ln -s ${stdenv.cc}/bin/clang++ $out/bin/g++
-  '';
-
 in
 
 stdenv.mkDerivation rec {
@@ -113,16 +103,17 @@ stdenv.mkDerivation rec {
 
   patches = [ ./option-debugging.patch ];
 
-  configurePhase = "./configure " + concatStringsSep " " ([
-    "prefix=$out"
-    "CONFIG_WAV=y"
-  ] ++ concatMap (a: a.flags) opts);
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
-    ++ lib.optional stdenv.cc.isClang clangGCC
     ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit VideoToolbox ]
-    ++ flatten (concatMap (a: a.deps) opts);
+    ++ lib.flatten (lib.concatMap (a: a.deps) opts);
+
+  prefixKey = "prefix=";
+
+  configureFlags = [
+    "CONFIG_WAV=y"
+    "HOSTCC=${stdenv.cc.targetPrefix}cc"
+  ] ++ lib.concatMap (a: a.flags) opts;
 
   makeFlags = [ "LD=$(CC)" ];
 

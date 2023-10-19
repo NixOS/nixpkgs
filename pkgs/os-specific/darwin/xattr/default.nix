@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchzip
+, fetchFromGitHub
 , buildPythonPackage
 , python
 , ed
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   pname = "xattr";
   version = "61.60.1";
 
-  src = fetchzip rec {
-    url = "https://opensource.apple.com/tarballs/python_modules/python_modules-${version}.tar.gz";
-    sha256 = "19kydl7w4vpdi7zmfd5z9vjkq24jfk2cv4j0pppw69j06czhdwwi";
+  src = fetchFromGitHub {
+    owner = "apple-oss-distributions";
+    repo = "python_modules";
+    rev = "python_modules-${version}";
+    hash = "sha256-kfMGPzNAJsPvvUCSzcR0kgg85U6/NFf/ie1uwg9tfqY=";
   };
 
   sourceRoot = "${src.name}/Modules/xattr-0.6.4";
@@ -61,7 +63,10 @@ buildPythonPackage rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix" "PYTHONPATH" ":" "${placeholder "python"}/${python.sitePackages}"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${placeholder "python"}/${python.sitePackages}"
   ];
 
   meta = with lib; {

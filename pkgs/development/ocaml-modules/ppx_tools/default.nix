@@ -34,6 +34,8 @@ let param =
   "4.12" = v6_6;
   "4.13" = v6_6;
   "4.14" = v6_6;
+  "5.0" = v6_6;
+  "5.1" = v6_6;
 }.${ocaml.meta.branch};
 in
 
@@ -56,8 +58,7 @@ then
   buildDunePackage {
     inherit pname src meta;
     inherit (param) version buildInputs nativeBuildInputs;
-
-    strictDeps = true;
+    duneVersion = "3";
   }
 else
   stdenv.mkDerivation {

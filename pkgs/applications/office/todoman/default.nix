@@ -9,14 +9,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "4.1.0";
-  format = "setuptools";
+  version = "4.3.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MItFZ+4Q7UKeIWHl8KFiWOLNgFcfb0h1YWjPd+g48Wg=";
+    hash = "sha256-dxyI9ypZZBouTUF72wzvi7j+CeoQ9JNSiXrVeV7ForY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -41,21 +41,17 @@ python3.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     flake8
     flake8-import-order
     freezegun
     hypothesis
     pytestCheckHook
     glibcLocales
+    pytest-cov
   ];
 
   LC_ALL = "en_US.UTF-8";
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov=todoman --cov-report=term-missing" ""
-  '';
 
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
@@ -73,8 +69,6 @@ python3.pkgs.buildPythonApplication rec {
     "test_sorting_null_values"
     "test_xdg_existant"
     # Tests are sensitive to performance
-    "test_sorting_fields"
-  ] ++ lib.optionals stdenv.isDarwin [
     "test_sorting_fields"
   ];
 
@@ -98,6 +92,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars antonmosich ];
+    mainProgram = "todo";
   };
 }

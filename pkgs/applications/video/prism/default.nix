@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "prism";
@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "muesli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0q7q7aj3fm45bnx6hgl9c1ll8na16x6p7qapr0c4a6dhxwd7n511";
+    hash = "sha256-IRR7Gu+wGUUYyFfhc003QVlEaWCJPmi6XYVUN6Q6+GA=";
   };
 
-  vendorSha256 = "1mkd1s9zgzy9agy2rjjk8wfdga7nzv9cmwgiarfi4xrqzj4mbaxq";
+  vendorHash = "sha256-uKtVifw4dxJdVvHxytL+9qjXHEdTyiz8U8n/95MObdY=";
 
   meta = with lib; {
     description = "An RTMP stream recaster/splitter";

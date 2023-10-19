@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: cexp.o:(.bss+0x40): multiple definition of `obstck'; cccp.o:(.bss+0x0): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure=''
     configureFlagsArray=(
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
       construction with extensive libraries implementing common tasks, yet handling
       arbitrary special cases. Output is the C subset of C++.
     '';
-    homepage = "http://eli-project.sourceforge.net/";
+    homepage = "https://eli-project.sourceforge.net/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ timokau ];
     platforms = lib.platforms.linux;

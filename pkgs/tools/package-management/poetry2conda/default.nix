@@ -1,5 +1,6 @@
 { lib
 , fetchFromGitHub
+, fetchpatch
 , python3
 }:
 
@@ -16,14 +17,22 @@ with python3.pkgs; buildPythonApplication rec {
     sha256 = "sha256-UqNoEGgStvqtxhYwExk7wO4SvATaM2kGaFbB5ViJa7U=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  patches = [
+    (fetchpatch {
+      name = "use-poetry-core.patch";
+      url = "https://github.com/dojeda/poetry2conda/commit/b127090498c89fbd8bbcbac45d03178a1e1c4219.patch";
+      hash = "sha256-J26NhVPG1vD/QNXi5irtGW05CYsIYvZNQIi8YvHwCLc=";
+    })
+  ];
+
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     poetry-semver
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     pyyaml

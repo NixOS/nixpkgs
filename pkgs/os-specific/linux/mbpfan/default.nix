@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mbpfan";
-  version = "2.3.0";
+  version = "2.4.0";
   src = fetchFromGitHub {
     owner = "dgraziotin";
     repo = "mbpfan";
     rev = "v${version}";
-    sha256 = "sha256-jIYg9b0c/7mMRS5WF+mOH6t9SCWEP32lsdbCgpWpg24=";
+    sha256 = "sha256-F9IWUcILOuLn5K4zRSU5jn+1Wk1xy0CONSI6JTXU2pA=";
   };
   installPhase = ''
     mkdir -p $out/bin $out/etc
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dgraziotin/mbpfan";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

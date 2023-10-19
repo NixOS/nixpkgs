@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gource";
-  version = "0.53";
+  version = "0.54";
 
   src = fetchurl {
     url = "https://github.com/acaudwell/Gource/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-PV9kwcaBL2RMMgy8mphY35e8YDb8Hl9gPKRrFbjdcjc=";
+    hash = "sha256-HcvO32XSz01p/gtjPlTCApJsCLgpvK0Lc+r54pzW+uU=";
   };
 
   postPatch = ''

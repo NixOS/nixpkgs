@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, libpcap }:
+{ lib, stdenv, fetchurl, libpcap }:
 
 stdenv.mkDerivation rec {
   pname = "cdpr";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cisco Discovery Protocol Reporter";
-    homepage = "http://cdpr.sourceforge.net/";
+    homepage = "https://cdpr.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.sgo ];

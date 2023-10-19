@@ -25,13 +25,11 @@ python3.pkgs.buildPythonApplication rec {
     ./configdir.patch
   ];
 
-  nativeBuildInputs = [ intltool pandoc wrapGAppsHook ];
-
-  buildInputs = [ gobject-introspection ];
+  nativeBuildInputs = [ intltool pandoc wrapGAppsHook gobject-introspection ];
 
   propagatedBuildInputs = [
      gtk3
-     (python3.withPackages (ps: with ps; [ distutils_extra pypdf2 pygobject3 ]))
+     (python3.withPackages (ps: with ps; [ distutils-extra pypdf2 pygobject3 ]))
   ];
 
   meta = {

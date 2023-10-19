@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = bpp-core.meta // {
+    homepage = "https://github.com/BioPP/bpp-seq";
     changelog = "https://github.com/BioPP/bpp-seq/blob/master/ChangeLog";
   };
 }

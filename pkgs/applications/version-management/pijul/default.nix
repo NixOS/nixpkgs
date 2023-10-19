@@ -1,11 +1,11 @@
 { lib, stdenv
 , fetchCrate
 , rustPlatform
+, installShellFiles
 , pkg-config
 , libsodium
 , openssl
 , xxHash
-, zstd
 , darwin
 , gitImportSupport ? true
 , libgit2 ? null
@@ -13,24 +13,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "1.0.0-beta.2";
+  version = "1.0.0-beta.6";
 
   src = fetchCrate {
     inherit version pname;
-    sha256 = "sha256-78nzCOR+AZuiAA1OpKKW4kfdUnlN8+qVaO3dknMck58=";
+    hash = "sha256-1cIb4QsDYlOCGrQrLgEwIjjHZ3WwD2o0o0bF+OOqEtI=";
   };
 
-  cargoSha256 = "sha256-IhjN0HjIIuP+P8yfZ3NmZpVZBAuetOr4OVZoI8Qfspo=";
+  cargoHash = "sha256-mRi0NUETTdYE/oM+Jo7gW/zNby8dPAKl6XhzP0Qzsf0=";
 
   doCheck = false;
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl libsodium xxHash zstd ]
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs = [ openssl libsodium xxHash ]
     ++ (lib.optionals gitImportSupport [ libgit2 ])
     ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreServices Security SystemConfiguration
     ]));
 
   buildFeatures = lib.optional gitImportSupport "git";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd pijul \
+      --bash <($out/bin/pijul completion bash) \
+      --fish <($out/bin/pijul completion fish) \
+      --zsh <($out/bin/pijul completion zsh)
+  '';
 
   meta = with lib; {
     description = "A distributed version control system";

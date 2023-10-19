@@ -1,26 +1,73 @@
-{ lib, stdenv, fetchurl
-, fixedPoint ? false, withCustomModes ? true }:
+{ lib
+, stdenv
+, fetchpatch
+, fetchurl
+, meson
+, python3
+, ninja
+, fixedPoint ? false
+, withCustomModes ? true
+, withIntrinsics ? stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isx86
+, withAsm ? false
+
+# tests
+, ffmpeg-headless
+}:
 
 stdenv.mkDerivation rec {
   pname = "libopus";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchurl {
-    url = "mirror://mozilla/opus/opus-${version}.tar.gz";
-    sha256 = "17gz8kxs4i7icsc1gj713gadiapyklynlwqlf0ai98dj4lg8xdb5";
+    url = "https://downloads.xiph.org/releases/opus/opus-${version}.tar.gz";
+    sha256 = "sha256-ybMrQlO+WuY9H/Fu6ga5S18PKVG3oCrO71jjo85JxR8=";
   };
+
+  patches = [
+    ./fix-pkg-config-paths.patch
+    # Some tests time out easily on slower machines
+    ./test-timeout.patch
+    # Fix meson build for arm64. Remove with next release
+    # https://gitlab.xiph.org/xiph/opus/-/merge_requests/59
+    (fetchpatch {
+      url = "https://gitlab.xiph.org/xiph/opus/-/commit/20c032d27c59d65b19b8ffbb2608e5282fe817eb.patch";
+      hash = "sha256-2pX+0ay5PTyHL2plameBX2L1Q4aTx7V7RGiTdhNIuE4=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs meson/
+  '';
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = lib.optional fixedPoint "--enable-fixed-point"
-                ++ lib.optional withCustomModes "--enable-custom-modes";
+  nativeBuildInputs = [
+    meson
+    python3
+    ninja
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "fixed-point" fixedPoint)
+    (lib.mesonBool "custom-modes" withCustomModes)
+    (lib.mesonEnable "intrinsics" withIntrinsics)
+    (lib.mesonEnable "rtcd" (withIntrinsics || withAsm))
+    (lib.mesonEnable "asm" withAsm)
+    (lib.mesonEnable "docs" false)
+  ];
 
   doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
+  passthru.tests = {
+    inherit ffmpeg-headless;
+  };
+
   meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
-    license = lib.licenses.bsd3;
-    homepage = "https://www.opus-codec.org/";
+    homepage = "https://opus-codec.org/";
+    changelog = "https://gitlab.xiph.org/xiph/opus/-/releases/v${version}";
+    license = licenses.bsd3;
     platforms = platforms.all;
+    maintainers = [ ];
   };
 }

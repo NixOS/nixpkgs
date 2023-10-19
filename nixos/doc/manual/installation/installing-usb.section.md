@@ -56,12 +56,12 @@ select the image, select the USB flash drive and click "Write".
   sudo dd if=<path-to-image> of=/dev/rdiskX bs=4m
   ```
 
-  After `dd` completes, a GUI dialog \"The disk
-  you inserted was not readable by this computer\" will pop up, which can
+  After `dd` completes, a GUI dialog "The disk
+  you inserted was not readable by this computer" will pop up, which can
   be ignored.
 
   ::: {.note}
-  Using the \'raw\' `rdiskX` device instead of `diskX` with dd completes in
+  Using the 'raw' `rdiskX` device instead of `diskX` with dd completes in
   minutes instead of hours.
   :::
 

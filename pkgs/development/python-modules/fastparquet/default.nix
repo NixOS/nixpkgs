@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, numba
+, cython
+, oldest-supported-numpy
+, setuptools
+, setuptools-scm
 , numpy
 , pandas
 , cramjam
@@ -11,12 +14,14 @@
 , python-lzo
 , pytestCheckHook
 , pythonOlder
+, packaging
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.8.1";
-  format = "setuptools";
+  version = "2023.7.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -24,16 +29,35 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-rWrbHHcJMahaUV8+YuKkZUhdboNFUK9btjvdg74lCxc=";
+    hash = "sha256-pJ0zK0upEV7TyuNMIcozugkwBlYpK/Dg6BdB0kBpn9k=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    cython
+    oldest-supported-numpy
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"pytest-runner"' ""
+
+    sed -i \
+      -e "/pytest-runner/d" \
+      -e '/"git", "status"/d' setup.py
+  '';
 
   propagatedBuildInputs = [
     cramjam
     fsspec
-    numba
     numpy
     pandas
     thrift
+    packaging
   ];
 
   passthru.optional-dependencies = {
@@ -42,16 +66,9 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," "" \
-      --replace "oldest-supported-numpy" "numpy"
-  '';
-
 
   # Workaround https://github.com/NixOS/nixpkgs/issues/123561
   preCheck = ''

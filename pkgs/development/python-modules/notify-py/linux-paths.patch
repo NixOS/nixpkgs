@@ -1,54 +1,22 @@
 diff --git a/notifypy/os_notifiers/linux.py b/notifypy/os_notifiers/linux.py
-index ee89216..5201574 100644
+index 5882481..e26eaaf 100644
 --- a/notifypy/os_notifiers/linux.py
 +++ b/notifypy/os_notifiers/linux.py
-@@ -53,30 +53,12 @@ class LinuxNotifierLibNotify(BaseNotifier):
-     @staticmethod
-     def _find_installed_aplay():
-         """Function to find the path for notify-send"""
--        try:
--            run_which_for_aplay = subprocess.check_output(["which", "aplay"])
--            return run_which_for_aplay.decode("utf-8")
--        except subprocess.CalledProcessError:
--            logger.exception("Unable to find aplay.")
--            return False
--        except Exception:
--            logger.exception("Unhandled exception for finding aplay.")
--            return False
-+        return "@aplay@"
+@@ -10,7 +10,7 @@ try:
+     from jeepney.io.blocking import open_dbus_connection
+     from shutil import which
  
-     @staticmethod
-     def _find_installed_notify_send():
-         """Function to find the path for notify-send"""
--        try:
--            run_which_for_notify_send = subprocess.check_output(
--                ["which", "notify-send"]
--            )
--            return run_which_for_notify_send.decode("utf-8")
--        except subprocess.CalledProcessError:
--            logger.exception("Unable to find notify-send.")
--            return False
--        except Exception:
--            logger.exception("Unhandled exception for finding notify-send.")
--            return False
-+        return "@notifysend@"
+-    NOTIFY = which('notify-send') # alternatively: from ctypes.util import find_library 
++    NOTIFY = '@notifysend@' # alternatively: from ctypes.util import find_library 
  
-     def send_notification(
-         self,
-@@ -159,15 +141,7 @@ class LinuxNotifier(BaseNotifier):
-     @staticmethod
-     def _find_installed_aplay():
-         """Function to find the path for notify-send"""
--        try:
--            run_which_for_aplay = subprocess.check_output(["which", "aplay"])
--            return run_which_for_aplay.decode("utf-8")
--        except subprocess.CalledProcessError:
--            logger.exception("Unable to find aplay.")
--            return False
--        except Exception:
--            logger.exception("Unhandled exception for finding aplay.")
--            return False
-+        return "@aplay@"
+     if NOTIFY:
+         logger.info("libnotify found, using it for notifications")
+@@ -22,7 +22,7 @@ try:
+         else:
+             raise ImportError
  
-     def send_notification(
-         self,
+-    APLAY = which('aplay')
++    APLAY = '@aplay@'
+ 
+     if APLAY == None:
+         logger.debug("aplay binary not installed.. audio will not work!")

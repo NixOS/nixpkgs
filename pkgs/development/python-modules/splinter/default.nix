@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
+, urllib3
 , selenium
 , cssselect
 , django
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.18.1";
+  version = "0.19.0";
 
   disabled = isPy27;
 
@@ -23,25 +24,28 @@ buildPythonPackage rec {
     owner = "cobrateam";
     repo = "splinter";
     rev = "refs/tags/${version}";
-    hash = "sha256-5d39e9omc223ugBfVMIsMZh8+NPVxc6q7p2gwZ0fF0o=";
+    hash = "sha256-K10zrQOM/khVcf+OT4s5UCY8zE2+nWtaAkRLy9/feU0=";
   };
 
   propagatedBuildInputs = [
-    selenium
+    urllib3
   ];
 
-  checkInputs = [
-    cssselect
-    django
-    flask
-    lxml
+  passthru.optional-dependencies = {
+    "zope.testbrowser" = [ zope-testbrowser lxml cssselect ];
+    django = [ django lxml cssselect ];
+    flask = [ flask lxml cssselect ];
+    selenium = [ selenium ];
+  };
+
+  nativeCheckInputs = [
     pytestCheckHook
-    zope-testbrowser
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
   disabledTests = [
     # driver is present and fails with a different error during loading
     "test_browser_local_driver_not_present"
+    "test_browser_log_missing_drivers"
     "test_local_driver_not_present"
   ];
 
@@ -49,6 +53,7 @@ buildPythonPackage rec {
     "samples"
     # We run neither Chromium nor Firefox nor ...
     "tests/test_async_finder.py"
+    "tests/test_element_is_visible.py"
     "tests/test_html_snapshot.py"
     "tests/test_iframes.py"
     "tests/test_mouse_interaction.py"

@@ -5,20 +5,16 @@
 
 stdenv.mkDerivation rec {
   pname = "muparserx";
-  version = "4.0.11";
+  version = "4.0.12";
 
   src = fetchFromGitHub {
     owner = "beltoforion";
     repo = "muparserx";
     rev = "v${version}";
-    sha256 = "sha256-BWzHlz1mQYsvWa53EtO05Rb4rRHJBSRguJTHLtgqpPw=";
+    sha256 = "sha256-rekPXmncNdVX6LvPQP1M2Pzs3pyiCCcLPLnPFiyWJ4s=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
 
   doCheck = true;
   checkPhase = ''
@@ -38,7 +34,5 @@ stdenv.mkDerivation rec {
     homepage = "https://beltoforion.de/en/muparserx/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ drewrisinger ];
-    # selftest fails
-    broken = stdenv.isDarwin;
   };
 }

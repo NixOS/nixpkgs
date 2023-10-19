@@ -4,28 +4,30 @@
 , fetchFromGitHub
 , fetchpatch
 , pytestCheckHook
+, pythonAtLeast
 , pythonOlder
 , six
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.0.4";
+  version = "6.0.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  # No support for Python 3.11, https://github.com/rocky/python-xdis/issues/98
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
-    rev = version;
-    hash = "sha256-CRZG898xCwukq+9YVkyXMP8HcuJ9GtvDhy96kxvRFks=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3mL0EuPHF/dithovrYvMjweYGwGhrN75N9MRfLjNC34=";
   };
 
   postPatch = ''
     # Our Python release is not in the test matrix
     substituteInPlace xdis/magics.py \
-      --replace "3.10.4" "3.10.5 3.10.6"
+      --replace "3.10.4" "3.10.5 3.10.6 3.10.7 3.10.8 3.10.10 3.10.11 3.10.12 3.10.13 3.10.14"
   '';
 
   propagatedBuildInputs = [
@@ -33,7 +35,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -60,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
+    changelog = "https://github.com/rocky/python-xdis/releases/tag/${version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ onny ];
   };

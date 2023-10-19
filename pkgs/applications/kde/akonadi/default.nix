@@ -1,6 +1,6 @@
 {
   mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, shared-mime-info, qtbase, accounts-qt,
+  extra-cmake-modules, shared-mime-info, accounts-qt,
   boost, kaccounts-integration, kcompletion, kconfigwidgets, kcrash, kdbusaddons,
   kdesignerplugin, ki18n, kiconthemes, kio, kitemmodels, kwindowsystem, mariadb,
   postgresql, qttools, signond, xz,
@@ -17,7 +17,6 @@ mkDerivation {
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = kdepimTeam;
-    broken = lib.versionOlder qtbase.version "5.13";
   };
   patches = [
     ./0001-akonadi-paths.patch
@@ -45,10 +44,8 @@ mkDerivation {
 
   cmakeFlags = lib.optional (defaultDriver != "MYSQL") "-DDATABASE_BACKEND=${defaultDriver}";
 
-  # compatibility symlinks for kmymoney, can probably be removed in next kde bump
   postInstall = ''
-    ln -s $dev/include/KF5/AkonadiCore/Akonadi/Collection $dev/include/KF5/AkonadiCore/Collection
-    ln -s $dev/include/KF5/AkonadiCore/Akonadi/ItemFetchScope $dev/include/KF5/AkonadiCore/ItemFetchScope
-    ln -s $dev/include/KF5/AkonadiCore/Akonadi/RecursiveItemFetchJob $dev/include/KF5/AkonadiCore/RecursiveItemFetchJob
+    # added as an include directory by cmake files and fails to compile if it's missing
+    mkdir -p "$dev/include/KF5"
   '';
 }

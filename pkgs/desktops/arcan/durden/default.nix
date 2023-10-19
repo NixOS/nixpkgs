@@ -3,15 +3,15 @@
 , fetchFromGitHub
 }:
 
-stdenvNoCC.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "durden";
-  version = "unstable-2022-10-16";
+  version = "unstable-2023-08-11";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "durden";
-    rev = "728a9f09ac8b306ab2619b4e2ec4f48decf1b7a8";
-    hash = "sha256-ckOKdrz232Q6hAyFC2mAyZQLNuuR8JbVhbLy32qFn1o=";
+    rev = "728d7fc3292cc162b1cea505c8a71512b2e84925";
+    hash = "sha256-UL36JeppnoFDdzdsJMsWKJL58ioz9eOaNEZp/7DGV9w=";
   };
 
   dontConfigure = true;

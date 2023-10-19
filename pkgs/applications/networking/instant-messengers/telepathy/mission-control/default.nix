@@ -6,6 +6,8 @@
 , python3
 , libxslt
 , makeWrapper
+, autoreconfHook
+, gtk-doc
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,9 @@ stdenv.mkDerivation rec {
     pkg-config
     libxslt
     makeWrapper
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    autoreconfHook
+    gtk-doc
   ];
 
   propagatedBuildInputs = [

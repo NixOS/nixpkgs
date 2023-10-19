@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    ./hdf5-1.12.patch
+    ./hdf5-1.14.patch
   ];
 
   nativeBuildInputs = [ cmake ];

@@ -1,15 +1,15 @@
 { stdenvNoCC, lib, fetchFromGitHub, makeWrapper
-, python3, binutils-unwrapped, findutils, kmod, pciutils, libraspberrypi
+, python3, binutils-unwrapped, findutils, gawk, kmod, pciutils, libraspberrypi
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "raspberrypi-eeprom";
-  version = "2022.04.26-138a1";
+  version = "2023.01.11-138c0";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
     rev = "v${version}";
-    hash = "sha256-/Y+EaAxJQofDRE67HY8AVqAdOPdFI01/EhYCAT5qlSM=";
+    hash = "sha256-z3VyqdSkvxAgVmtMI/Is9qYrOeDXlyVLwHSSC2+AxcA=";
   };
 
   buildInputs = [ python3 ];
@@ -40,6 +40,7 @@ stdenvNoCC.mkDerivation rec {
         --prefix PATH : "${lib.makeBinPath ([
           binutils-unwrapped
           findutils
+          gawk
           kmod
           pciutils
           (placeholder "out")

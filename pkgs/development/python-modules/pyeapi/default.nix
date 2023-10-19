@@ -31,7 +31,7 @@ buildPythonPackage rec {
     netaddr
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];
@@ -41,12 +41,12 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "fix-collection-usage.patch";
       url = "https://github.com/arista-eosplus/pyeapi/commit/81754f57eb095703cc474f527a0915360af76f68.patch";
-      sha256 = "sha256-ZNBTPRNmXCFVJeRAJxzIHmCOXZiGwU6t4ekSupU3BX8=";
+      hash = "sha256-ZNBTPRNmXCFVJeRAJxzIHmCOXZiGwU6t4ekSupU3BX8=";
     })
     (fetchpatch {
       name = "fix-collection-usage-2.patch";
       url = "https://github.com/arista-eosplus/pyeapi/commit/cc9c584e4a3167e3c1624cccb6bc0d9c9bcdbc1c.patch";
-      sha256 = "sha256-EY0i1Skm1llEQAAzvrb2yelhhLBkqKAFJB5ObAIxAYo=";
+      hash = "sha256-EY0i1Skm1llEQAAzvrb2yelhhLBkqKAFJB5ObAIxAYo=";
       excludes = [
         ".github/workflows/ci.yml"
       ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "fix-collection-usage-3.patch";
       url = "https://github.com/arista-eosplus/pyeapi/commit/dc35ab076687ea71665ae9524480b05a4e893909.patch";
-      sha256 = "sha256-xPaYULCPTxiQGB9Im/qLet+XebW9wq+TAfrxcgQxcoE=";
+      hash = "sha256-xPaYULCPTxiQGB9Im/qLet+XebW9wq+TAfrxcgQxcoE=";
     })
   ];
 

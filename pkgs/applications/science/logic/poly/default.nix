@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libpoly";
-  version = "0.1.11";
+  version = "0.1.13";
 
   src = fetchFromGitHub {
     owner = "SRI-CSL";
     repo = "libpoly";
     # they've pushed to the release branch, use explicit tag
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-vrYB6RQYShipZ0c0j1KcSTJR1h0rQKAAeJvODMar1GM=";
+    sha256 = "sha256-7aFz+6XJOVEA/Fmi0ywd6rZdTW8sHq8MoHqXR0Hc2o4=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -14,8 +14,8 @@ let
     nonchars = filter (x : !(elem x.value chars))
                (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
   in
-    if length nonchars == 0 then ""
-    else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
+    lib.optionalString (nonchars != [ ])
+      (substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str);
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
   connectionText = concatStrings (mapAttrsToList (n: v:
@@ -106,7 +106,7 @@ in
         type = types.bool;
         default = true;
         description = lib.mdDoc ''
-          Whether to disable send and accept redirects for all nework interfaces.
+          Whether to disable send and accept redirects for all network interfaces.
           See the Libreswan [
           FAQ](https://libreswan.org/wiki/FAQ#Why_is_it_recommended_to_disable_send_redirects_in_.2Fproc.2Fsys.2Fnet_.3F) page for why this is recommended.
         '';

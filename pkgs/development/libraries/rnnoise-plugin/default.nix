@@ -49,8 +49,6 @@ stdenv.mkDerivation rec {
       simd
     ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
-
   meta = with lib; {
     description = "A real-time noise suppression plugin for voice based on Xiph's RNNoise";
     homepage = "https://github.com/werman/noise-suppression-for-voice";

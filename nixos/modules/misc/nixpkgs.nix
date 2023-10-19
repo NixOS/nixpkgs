@@ -23,12 +23,12 @@ let
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "packageOverrides" ] { } rhs) pkgs;
     } //
     optionalAttrs (lhs ? perlPackageOverrides) {
       perlPackageOverrides = pkgs:
         optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
+        optCall (attrByPath [ "perlPackageOverrides" ] { } rhs) pkgs;
     };
 
   configType = mkOptionType {
@@ -49,16 +49,11 @@ let
     merge = lib.mergeOneOption;
   };
 
-  pkgsType = mkOptionType {
-    name = "nixpkgs";
+  pkgsType = types.pkgs // {
+    # This type is only used by itself, so let's elaborate the description a bit
+    # for the purpose of documentation.
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
-    check = builtins.isAttrs;
   };
-
-  # Whether `pkgs` was constructed by this module - not if nixpkgs.pkgs or
-  # _module.args.pkgs is set. However, determining whether _module.args.pkgs
-  # is defined elsewhere does not seem feasible.
-  constructedByMe = !opt.pkgs.isDefined;
 
   hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
@@ -67,11 +62,6 @@ let
   # Context for messages
   hostPlatformLine = optionalString hasHostPlatform "${showOptionWithDefLocs opt.hostPlatform}";
   buildPlatformLine = optionalString hasBuildPlatform "${showOptionWithDefLocs opt.buildPlatform}";
-  platformLines = optionalString hasPlatform ''
-    Your system configuration configures nixpkgs with platform parameters:
-    ${hostPlatformLine
-    }${buildPlatformLine
-    }'';
 
   legacyOptionsDefined =
     optional (opt.localSystem.highestPrio < (mkDefault {}).priority) opt.system
@@ -186,16 +176,12 @@ in
         '';
       type = types.listOf overlayType;
       description = lib.mdDoc ''
-        List of overlays to use with the Nix Packages collection.
-        (For details, see the Nixpkgs documentation.)  It allows
-        you to override packages globally. Each function in the list
-        takes as an argument the *original* Nixpkgs.
-        The first argument should be used for finding dependencies, and
-        the second should be used for overriding recipes.
+        List of overlays to apply to Nixpkgs.
+        This option allows modifying the Nixpkgs package set accessed through the `pkgs` module argument.
 
-        If `nixpkgs.pkgs` is set, overlays specified here
-        will be applied after the overlays that were already present
-        in `nixpkgs.pkgs`.
+        For details, see the [Overlays chapter in the Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#chap-overlays).
+
+        If the {option}`nixpkgs.pkgs` option is set, overlays specified using `nixpkgs.overlays` will be applied after the overlays that were already included in `nixpkgs.pkgs`.
       '';
     };
 
@@ -307,7 +293,7 @@ in
           ''
         else
           throw ''
-            Neither ${opt.hostPlatform} nor or the legacy option ${opt.system} has been set.
+            Neither ${opt.hostPlatform} nor the legacy option ${opt.system} has been set.
             You can set ${opt.hostPlatform} in hardware-configuration.nix by re-running
             a recent version of nixos-generate-config.
             The option ${opt.system} is still fully supported for NixOS 22.05 interoperability,
@@ -342,10 +328,28 @@ in
 
   config = {
     _module.args = {
-      pkgs = finalPkgs.__splicedPackages;
+      pkgs =
+        # We explicitly set the default override priority, so that we do not need
+        # to evaluate finalPkgs in case an override is placed on `_module.args.pkgs`.
+        # After all, to determine a definition priority, we need to evaluate `._type`,
+        # which is somewhat costly for Nixpkgs. With an explicit priority, we only
+        # evaluate the wrapper to find out that the priority is lower, and then we
+        # don't need to evaluate `finalPkgs`.
+        lib.mkOverride lib.modules.defaultOverridePriority
+          finalPkgs.__splicedPackages;
     };
 
-    assertions = [
+    assertions = let
+      # Whether `pkgs` was constructed by this module. This is false when any of
+      # nixpkgs.pkgs or _module.args.pkgs is set.
+      constructedByMe =
+        # We set it with default priority and it can not be merged, so if the
+        # pkgs module argument has that priority, it's from us.
+        (lib.modules.mergeAttrDefinitionsWithPrio options._module.args).pkgs.highestPrio
+          == lib.modules.defaultOverridePriority
+        # Although, if nixpkgs.pkgs is set, we did forward it, but we did not construct it.
+          && !opt.pkgs.isDefined;
+    in [
       (
         let
           nixosExpectedSystem =
@@ -373,6 +377,16 @@ in
           ${concatMapStrings showOptionWithDefLocs legacyOptionsDefined}
           For a future proof system configuration, we recommend to remove
           the legacy definitions.
+        '';
+      }
+      {
+        assertion = opt.pkgs.isDefined -> cfg.config == {};
+        message = ''
+          Your system configures nixpkgs with an externally created instance.
+          `nixpkgs.config` options should be passed when creating the instance instead.
+
+          Current value:
+          ${lib.generators.toPretty { multiline = true; } opt.config}
         '';
       }
     ];

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "coincurve";
-  version = "17.0.0";
+  version = "18.0.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "coincurve";
-    rev = "v${version}";
-    sha256 = "sha256-7H4/TDxteuMTrj1PdfpA5rc7CegJAOjqn1PteImfGiQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Z5g6ten8wNICoFu7+aZc6r8ET+RDmFeb93ONjsTzcbw=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     rm tests/test_bench.py
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -67,6 +67,6 @@ buildPythonPackage rec {
     description = "Cross-platform bindings for libsecp256k1";
     homepage = "https://github.com/ofek/coincurve";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,22 +1,23 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib
+, rustPlatform
+, fetchCrate
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-all-features";
-  version = "1.6.0";
+  version = "1.10.0";
 
-  src = fetchFromGitHub {
-    owner = "frewsxcv";
-    repo = pname;
-    rev = version;
-    sha256 = "1pdr34ygc0qmh0dyrw1qcrh1vgg9jv9lm6ypl3fgjzz7npdj1dw4";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-/w3Xd7PXUNtqzRYmUqJtth+GDuXSnsk1NiYCTYsHuAQ=";
   };
 
-  cargoSha256 = "sha256-BsRJo55gYT8OkDUBepWq48sW7QPt5OZkm8RR9f7HqZY=";
+  cargoHash = "sha256-d69jj2FGptjndJG1tq3Fb/8F3kuFXN5otsYGhXYhhZg=";
 
   meta = with lib; {
     description = "A Cargo subcommand to build and test all feature flag combinations";
     homepage = "https://github.com/frewsxcv/cargo-all-features";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = with maintainers; [ figsoda matthiasbeyer ];
   };
 }

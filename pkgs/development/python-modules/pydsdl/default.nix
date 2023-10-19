@@ -1,15 +1,21 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
  buildPythonPackage rec {
   pname = "pydsdl";
-  version = "1.12.1";
-  disabled = pythonOlder "3.5"; # only python>=3.5 is supported
+  version = "1.18.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "UAVCAN";
+    owner = "OpenCyphal";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-5AwwqduIvLSZk6WcI59frwRKwjniQXfNWWVsy6V6I1E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sn7KoJmJbr7Y+N9PAXyhJnts/hW+Gi06nrHj5VIDZMU=";
   };
 
   # allow for writable directory for darwin
@@ -17,7 +23,7 @@
     export HOME=$TMPDIR
   '';
 
-  # repo doesn't contain tests
+  # Module doesn't contain tests
   doCheck = false;
 
   pythonImportsCheck = [
@@ -25,12 +31,17 @@
   ];
 
   meta = with lib; {
-    description = "A UAVCAN DSDL compiler frontend implemented in Python";
+    description = "Library to process Cyphal DSDL";
     longDescription = ''
-      It supports all DSDL features defined in the UAVCAN specification.
+      PyDSDL is a Cyphal DSDL compiler front-end implemented in Python. It accepts
+      a DSDL namespace at the input and produces a well-annotated abstract syntax
+      tree (AST) at the output, evaluating all constant expressions in the process.
+      All DSDL features defined in the Cyphal Specification are supported. The
+      library should, in theory, work on any platform and with any Python
+      implementation.
     '';
-    homepage = "https://uavcan.org";
-    maintainers = with maintainers; [ wucke13 ];
+    homepage = "https://pydsdl.readthedocs.io/";
     license = licenses.mit;
+    maintainers = with maintainers; [ wucke13 ];
   };
 }

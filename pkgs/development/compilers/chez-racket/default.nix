@@ -1,16 +1,23 @@
 { stdenv, buildPackages, callPackage }:
 
 let
-  chezSystemMap = {
-    # See `/workarea` of source code for list of systems
-    "aarch64-darwin" = "tarm64osx";
-    "aarch64-linux" = "tarm64le";
-    "armv7l-linux" = "tarm32le";
-    "x86_64-darwin" = "ta6osx";
-    "x86_64-linux" = "ta6le";
-  };
+  chezArch =
+    /**/ if stdenv.hostPlatform.isAarch then "arm${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    else if stdenv.hostPlatform.isx86_32 then "i3"
+    else if stdenv.hostPlatform.isx86_64 then "a6"
+    else if stdenv.hostPlatform.isPower then "ppc${toString stdenv.hostPlatform.parsed.cpu.bits}"
+    else throw "Add ${stdenv.hostPlatform.parsed.cpu.arch} to chezArch to enable building chez-racket";
+
+  chezOs =
+    /**/ if stdenv.hostPlatform.isDarwin then "osx"
+    else if stdenv.hostPlatform.isFreeBSD then "fb"
+    else if stdenv.hostPlatform.isLinux then "le"
+    else if stdenv.hostPlatform.isNetBSD then "nb"
+    else if stdenv.hostPlatform.isOpenBSD then "ob"
+    else throw "Add ${stdenv.hostPlatform.uname.system} to chezOs to enable building chez-racket";
+
   inherit (stdenv.hostPlatform) system;
-  chezSystem = chezSystemMap.${system} or (throw "Add ${system} to chezSystemMap to enable building chez-racket");
+  chezSystem = "t${chezArch}${chezOs}";
   # Chez Scheme uses an ad-hoc `configure`, hence we don't use the usual
   # stdenv abstractions.
   forBoot = {

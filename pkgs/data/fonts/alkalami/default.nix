@@ -1,19 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip rec {
+stdenvNoCC.mkDerivation rec {
   pname = "alkalami";
-  version = "2.000";
+  version = "3.000";
 
-  url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${version}.zip";
+  src = fetchzip {
+    url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${version}.zip";
+    hash = "sha256-ra664VbUKc8XpULCWhLMVnc1mW4pqZvbvwuBvRQRhcY=";
+  };
 
-  postFetch = ''
-    rm -rf $out/web $out/manifest.json
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/{doc/${pname},fonts/truetype}
-    mv $out/*.ttf $out/share/fonts/truetype/
-    mv $out/*.txt $out/documentation $out/share/doc/${pname}/
-  '';
+    mv *.ttf $out/share/fonts/truetype/
+    mv *.txt documentation $out/share/doc/${pname}/
 
-  sha256 = "sha256-GjX3YOItLKSMlRjUbBgGp2D7QS/pOJQYuQJzW+iqBNo=";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://software.sil.org/alkalami/";

@@ -4,6 +4,7 @@
 , daphne
 , django
 , fetchFromGitHub
+, async-timeout
 , pytest-asyncio
 , pytest-django
 , pytestCheckHook
@@ -35,15 +36,12 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
+    async-timeout
     pytest-asyncio
     pytest-django
     pytestCheckHook
   ] ++ passthru.optional-dependencies.daphne;
-
-  pytestFlagsArray = [
-    "--asyncio-mode=legacy"
-  ];
 
   pythonImportsCheck = [
     "channels"

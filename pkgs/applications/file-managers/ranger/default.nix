@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m, ranger, testers
 , imagePreviewSupport ? true
 , neoVimSupport ? true
 , improvedEncodingDetection ? true
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
   propagatedBuildInputs = [
     less
     file
@@ -49,11 +49,16 @@ python3Packages.buildPythonApplication rec {
       --replace "set preview_images false" "set preview_images true"
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = ranger;
+  };
+
   meta =  with lib; {
     description = "File manager with minimalistic curses interface";
     homepage = "https://ranger.github.io/";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ toonn magnetophon ];
+    mainProgram = "ranger";
   };
 }

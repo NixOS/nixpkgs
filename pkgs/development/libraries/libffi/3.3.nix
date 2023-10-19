@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
     "--disable-exec-static-tramp"
   ];
 
+  # with fortify3, tests fail for some reason
+  hardeningDisable = [ "fortify3" ];
+
   preCheck = ''
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
 
   meta = with lib; {
     description = "A foreign function call interface library";
@@ -60,5 +63,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ armeenm ];
     platforms = platforms.all;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

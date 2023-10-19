@@ -6,6 +6,7 @@
 , cython
 , fetchPypi
 , numpy
+, oldest-supported-numpy
 , pytest-astropy
 , pytestCheckHook
 , pythonOlder
@@ -15,19 +16,26 @@
 
 buildPythonPackage rec {
   pname = "reproject";
-  version = "0.9";
-  format = "setuptools";
+  version = "0.10.0";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zhjI4MjlCV9zR0nNcss+C36CZXY/imGsalfKMGacfi0=";
+    hash = "sha256-OKxPPKcVVrEVUGR8Zaphn7ur9HOuqQKa9gnMo2RQQME=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "cython==" "cython>="
+  '';
 
   nativeBuildInputs = [
     astropy-extension-helpers
     cython
+    numpy
+    oldest-supported-numpy
     setuptools-scm
   ];
 
@@ -38,7 +46,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-astropy
     pytestCheckHook
   ];
@@ -47,6 +55,8 @@ buildPythonPackage rec {
     "build/lib*"
     # Avoid failure due to user warning: Distutils was imported before Setuptools
     "-p no:warnings"
+    # Uses network
+    "--ignore build/lib*/reproject/interpolation/"
   ];
 
   pythonImportsCheck = [

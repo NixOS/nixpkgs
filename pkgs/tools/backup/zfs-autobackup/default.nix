@@ -1,32 +1,30 @@
-{ lib, python3Packages }:
+{ lib, python3Packages, fetchPypi }:
 
-let
-  pythonPackages = python3Packages;
+python3Packages.buildPythonApplication rec {
+  pname = "zfs-autobackup";
+  version = "3.1.3";
 
-in
-pythonPackages.buildPythonApplication rec {
-  pname = "zfs_autobackup";
-  version = "3.1";
-
-  src = pythonPackages.fetchPypi {
-    inherit pname version;
-    sha256 = "42c22001717b3d7cfdae6297fedc11b2dd1eb2a4bd25b6bb1c9232dd3b70ad67";
+  src = fetchPypi {
+    inherit version;
+    pname = "zfs_autobackup";
+    sha256 = "sha256-ckikq8Am81O0wkL4ozRBFTCa15PrmkD54A2qEY6kA5c=";
   };
 
-  # argparse is part of the standardlib
-  prePatch = ''
-    substituteInPlace setup.py --replace "argparse" ""
-  '';
+  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
-  propagatedBuildInputs = with pythonPackages; [ colorama ];
+  propagatedBuildInputs = with python3Packages; [ colorama ];
+
+  pythonRemoveDeps = [ "argparse" ];
 
   # tests need zfs filesystem
   doCheck = false;
-  pythonImportsCheck = [ "colorama" "argparse" ];
+
+  pythonImportsCheck = [ "zfs_autobackup" ];
 
   meta = with lib; {
-    homepage = "https://github.com/psy0rz/zfs_autobackup";
     description = "ZFS backup, replicationand snapshot tool";
+    homepage = "https://github.com/psy0rz/zfs_autobackup";
+    changelog = "https://github.com/psy0rz/zfs_autobackup/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
   };

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "klaus";
-  version = "2.0.1";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    sha256 = "sha256-a0MbKjDqPSMakjmGS5gfaDaPegQpK4QA+ZdG7skd9QU=";
+    hash = "sha256-VAwIdmwdo/Rim2sVlR605Wo5/zkNOMiGkh40qLrENmU=";
   };
 
   prePatch = ''
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     flask pygments dulwich httpauth humanize
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest requests python-ctags3
   ] ++ lib.optional (!isPy3k) mock;
 

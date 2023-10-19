@@ -7,7 +7,8 @@
 
 buildDunePackage {
   pname = "ocsipersist-pgsql";
-  inherit (ocsipersist-lib) version src useDune2;
+  inherit (ocsipersist-lib) version src;
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     lwt_log

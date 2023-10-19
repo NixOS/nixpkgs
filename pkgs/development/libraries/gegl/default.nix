@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch2
 , pkg-config
 , vala
 , gobject-introspection
@@ -10,6 +11,7 @@
 , glib
 , babl
 , libpng
+, llvmPackages
 , cairo
 , libjpeg
 , librsvg
@@ -36,15 +38,24 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.38";
+  version = "0.4.46";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-5KM8hDClBC+6hDm1lTSOcYcPDZX7+IX/VT+QIMG+11A=";
+    url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor version}/gegl-${version}.tar.xz";
+    hash = "sha256-0LOySBvId0xfPQpIdhGRAWbRju+COoWfuR54Grex6JI=";
   };
+
+  patches = [
+    # https://gitlab.gnome.org/GNOME/gegl/-/merge_requests/136
+    # Fix missing libm dependency.
+    (fetchpatch2 {
+      url = "https://gitlab.gnome.org/GNOME/gegl/-/commit/ee970f10f4fe442cbf8a4f5cb94049deab33e786.patch";
+      hash = "sha256-0LLKH+Gg+1H83kN7hJGK2u+oLrw7Hxed7R4tTwT3C5s=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -77,7 +88,11 @@ stdenv.mkDerivation rec {
     luajit
     openexr
     suitesparse
-  ] ++ lib.optional stdenv.isDarwin OpenCL;
+  ] ++ lib.optionals stdenv.isDarwin [
+    OpenCL
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   # for gegl-4.0.pc
   propagatedBuildInputs = [
@@ -98,10 +113,6 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
   ];
-
-  # TODO: Fix missing math symbols in gegl seamless clone.
-  # It only appears when we use packaged poly2tri-c instead of vendored one.
-  NIX_CFLAGS_COMPILE = "-lm";
 
   postPatch = ''
     chmod +x tests/opencl/opencl_test.sh

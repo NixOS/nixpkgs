@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "02qinla281fc6pmg5xzsrmqnf9js76f2qcbf98zq7m2dkn70as4w";
   };
 
-  sourceRoot = "source/builtins/extractcode_7z-linux";
+  sourceRoot = "${src.name}/builtins/extractcode_7z-linux";
 
   propagatedBuildInputs = [
     plugincode
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
     rm 7z 7z.so
     ln -s ${p7zip}/bin/7z 7z
-    ln -s ${p7zip}/lib/p7zip/7z.so 7z.so
+    ln -s ${lib.getLib p7zip}/lib/p7zip/7z.so 7z.so
 
     popd
   '';
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     description = "A ScanCode Toolkit plugin to provide pre-built binary libraries and utilities and their locations";
     homepage = "https://github.com/nexB/scancode-plugins/tree/main/builtins/extractcode_7z-linux";
     license = with licenses; [ asl20 lgpl21 ];
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

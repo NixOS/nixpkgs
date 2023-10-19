@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "boltztrap2";
-  version = "22.6.1";
+  version = "22.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "BoltzTraP2";
     inherit version;
-    hash = "sha256-zEKRsNg5P+KKQCeB49TiiSXRmusvr1zwssHhppZdkfA=";
+    hash = "sha256-gzjWAMUJcF5AyDS1Qx7opVbYewaqGgmFMDGWCh/2Wz4=";
   };
 
   dontUseCmakeConfigure = true;
@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Band-structure interpolator and transport coefficient calculator";
     homepage = "http://www.boltztrap.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

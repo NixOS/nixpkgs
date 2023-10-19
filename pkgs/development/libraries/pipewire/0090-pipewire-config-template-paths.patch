@@ -1,8 +1,8 @@
 diff --git a/src/daemon/minimal.conf.in b/src/daemon/minimal.conf.in
-index 6464839a0..05546201f 100644
+index 9c885a38f..c474eb45d 100644
 --- a/src/daemon/minimal.conf.in
 +++ b/src/daemon/minimal.conf.in
-@@ -110,7 +110,7 @@ context.modules = [
+@@ -111,7 +111,7 @@ context.modules = [
              # access.allowed to list an array of paths of allowed
              # apps.
              #access.allowed = [
@@ -11,7 +11,7 @@ index 6464839a0..05546201f 100644
              #]
  
              # An array of rejected paths.
-@@ -298,5 +298,5 @@ context.exec = [
+@@ -359,5 +359,5 @@ context.exec = [
      # It can be interesting to start another daemon here that listens
      # on another address with the -a option (eg. -a tcp:4713).
      #
@@ -19,10 +19,10 @@ index 6464839a0..05546201f 100644
 +    #@pulse_comment@{ path = "<pipewire_path>" args = "-c pipewire-pulse.conf" }
  ]
 diff --git a/src/daemon/pipewire.conf.in b/src/daemon/pipewire.conf.in
-index a948a1b9b..4ece43c6f 100644
+index 697bf094d..3a7b54ddd 100644
 --- a/src/daemon/pipewire.conf.in
 +++ b/src/daemon/pipewire.conf.in
-@@ -132,7 +132,7 @@ context.modules = [
+@@ -142,7 +142,7 @@ context.modules = [
              # access.allowed to list an array of paths of allowed
              # apps.
              #access.allowed = [
@@ -31,18 +31,20 @@ index a948a1b9b..4ece43c6f 100644
              #]
  
              # An array of rejected paths.
-@@ -246,12 +246,12 @@ context.exec = [
+@@ -294,7 +294,7 @@ context.exec = [
      # but it is better to start it as a systemd service.
      # Run the session manager with -h for options.
      #
--    @sm_comment@{ path = "@session_manager_path@" args = "@session_manager_args@" }
-+    @sm_comment@{ path = "<session_manager_path>" args = "@session_manager_args@" }
+-    @sm_comment@{ path = "@session_manager_path@" args = "@session_manager_args@"
++    @sm_comment@{ path = "<session_manager_path>" args = "@session_manager_args@"
+     @sm_comment@  condition = [ { exec.session-manager = null } { exec.session-manager = true } ] }
      #
      # You can optionally start the pulseaudio-server here as well
-     # but it is better to start it as a systemd service.
+@@ -302,6 +302,6 @@ context.exec = [
      # It can be interesting to start another daemon here that listens
      # on another address with the -a option (eg. -a tcp:4713).
      #
--    @pulse_comment@{ path = "@pipewire_path@" args = "-c pipewire-pulse.conf" }
-+    @pulse_comment@{ path = "<pipewire_path>" args = "-c pipewire-pulse.conf" }
+-    @pulse_comment@{ path = "@pipewire_path@" args = "-c pipewire-pulse.conf"
++    @pulse_comment@{ path = "<pipewire_path>" args = "-c pipewire-pulse.conf"
+     @pulse_comment@  condition = [ { exec.pipewire-pulse = null } { exec.pipewire-pulse = true } ] }
  ]

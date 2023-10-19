@@ -3,13 +3,13 @@
 buildKodiBinaryAddon rec {
   pname = "visualization-waveform";
   namespace = "visualization.waveform";
-  version = "19.0.2";
+  version = "20.2.1";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = namespace;
     rev = "${version}-${rel}";
-    hash = "sha256-IQLW4CDNtt/ptE679hnoXbharq61Ru9S2m7QbJLtNSI=";
+    hash = "sha256-e1SIpMmfnS92X4f114MKch4o9Ke80aIzw6OQPrEb8d0=";
   };
 
   extraBuildInputs = [ pkg-config libGL ];

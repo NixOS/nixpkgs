@@ -49,6 +49,14 @@ stdenv.mkDerivation rec {
     sed -i"" \
       -e '/TSUNIT_TEST(testHomeDirectory);/ d' \
       src/utest/utestSysUtils.cpp
+
+    sed -i"" \
+      -e '/TSUNIT_TEST(testIPv4Address);/ d' \
+      -e '/TSUNIT_TEST(testIPv4AddressConstructors);/ d' \
+      -e '/TSUNIT_TEST(testIPv4SocketAddressConstructors);/ d' \
+      -e '/TSUNIT_TEST(testTCPSocket);/ d' \
+      -e '/TSUNIT_TEST(testUDPSocket);/ d' \
+      src/utest/utestNetworking.cpp
   '';
 
   enableParallelBuilding = true;
@@ -79,5 +87,7 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     maintainers = with maintainers; [ siriobalmelli ];
     platforms   = platforms.all;
+    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin;
   };
 }

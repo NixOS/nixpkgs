@@ -44,7 +44,7 @@ environment.systemPackages =
       name = "hello-2.8";
       src = fetchurl {
         url = "mirror://gnu/hello/${name}.tar.gz";
-        sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+        hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
       };
     };
   in
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   name = "hello-2.8";
   src = fetchurl {
     url = "mirror://gnu/hello/${name}.tar.gz";
-    sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
+    hash = "sha256-5rd/gffPfa761Kn1tl3myunD8TuM+66oy1O7XqVGDXM=";
   };
 }
 ```
@@ -94,6 +94,6 @@ environment.systemPackages = [ pkgs.appimage-run ];
 Then instead of running the AppImage "as-is", run `appimage-run foo.appimage`.
 
 To make other pre-built executables work on NixOS, you need to package them
-with Nix and special helpers like `autoPatchelfHook` or `buildFHSUserEnv`. See
+with Nix and special helpers like `autoPatchelfHook` or `buildFHSEnv`. See
 the [Nixpkgs manual](https://nixos.org/nixpkgs/manual) for details. This
 is complex and often doing a source build is easier.

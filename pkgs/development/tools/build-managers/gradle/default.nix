@@ -119,6 +119,7 @@ rec {
         ];
         license = licenses.asl20;
         maintainers = with maintainers; [ lorenzleutgeb liff ];
+        mainProgram = "gradle";
       };
     };
 
@@ -126,33 +127,24 @@ rec {
   # and respect the compatibility matrix at
   # https://docs.gradle.org/current/userguide/compatibility.html
 
+  gradle_8 = gen {
+    version = "8.4";
+    nativeVersion = "0.22-milestone-25";
+    sha256 = "1bkjxw7i0lm17pdyyvka4xpl6z0cdj0izagphync6839i2pg66iy";
+    defaultJava = jdk17;
+  };
+
   gradle_7 = gen {
-    version = "7.5";
-    nativeVersion = "0.22-milestone-23";
-    sha256 = "1hjifd98dif0qy6vkqp56v9z7id5cf2bfkdd71ld8nsqqlig51yb";
+    version = "7.6.3";
+    nativeVersion = "0.22-milestone-25";
+    sha256 = "1b6gk0yiyvf86vigd05mz7ryqs8yrpswk9bmpwrnqcp45r3jw33l";
     defaultJava = jdk17;
   };
 
   gradle_6 = gen {
-    version = "6.9.2";
+    version = "6.9.4";
     nativeVersion = "0.22-milestone-20";
-    sha256 = "13qyk3f6namw27ynh6nxljxpk9r3l12vxl3f0qpglprdf3c6ydcb";
+    sha256 = "16iqh4bn7ndch51h2lgkdqyyhnd91fdfjx55fa3z3scdacl0491y";
     defaultJava = jdk11;
-  };
-
-  # NOTE: No GitHub Release for the following versions. `update.sh` will not work.
-
-  gradle_5 = gen {
-    version = "5.6.4";
-    nativeVersion = "0.18";
-    sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
-    defaultJava = jdk11;
-  };
-
-  gradle_4 = gen {
-    version = "4.10.3";
-    nativeVersion = "0.14";
-    sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-    defaultJava = jdk8;
   };
 }

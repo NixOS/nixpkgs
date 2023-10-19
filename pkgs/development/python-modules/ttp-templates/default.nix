@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.3.1";
+  version = "0.3.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "dmulyalin";
     repo = "ttp_templates";
     rev = "refs/tags/${version}";
-    hash = "sha256-35Ej76E9qy5EY41Jt2GDCldyXq7IkdqKxVFrBOJh9nE=";
+    hash = "sha256-NlTTydGdjn+hwAKYEyINg/9k/EdnLq2gU9cnujpZQLM=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Template Text Parser Templates collections";
     homepage = "https://github.com/dmulyalin/ttp_templates";
+    changelog = "https://github.com/dmulyalin/ttp_templates/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

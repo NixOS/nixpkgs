@@ -14,10 +14,10 @@ buildPythonPackage rec {
     owner = "chrisjsewell";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Q7wWoggJN2w2a2umQHx5TsVcugqpovBEtOKruNMZQ8A=";
+    hash = "sha256-Q7wWoggJN2w2a2umQHx5TsVcugqpovBEtOKruNMZQ8A=";
   };
 
-  format = "flit";
+  format = "pyproject";
 
   nativeBuildInputs = [ flit-core ];
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_param_files" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

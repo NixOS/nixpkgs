@@ -15,6 +15,8 @@
 , pkg-config
 , protobuf
 , python3
+, systemd
+, enableSystemdResolved ? false
 , tinyxml-2
 , wrapGAppsHook
 }:
@@ -23,20 +25,20 @@ let
   openvpn3-core = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3";
-    rev = "c4fa5a69c5d2e4ba4a86e79da8de0fc95f95edc3";
-    sha256 = "sha256-VhQkx35JKNqXKgg4i+/aJYIg3iXPGlC57wDrjDpvTyE=";
+    rev = "7590cb109349809b948e8edaeecabdbfe24e4b17";
+    hash = "sha256-S9D/FQa7HYj0FJnyb5dCrtgTH9Nf2nvtyp/VHiebq7I=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "openvpn3";
   # also update openvpn3-core
-  version = "18_beta";
+  version = "20";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     rev = "v${version}";
-    sha256 = "sha256-4TKRnHjEm6QRE2artAa0t1VC+0XPgz3VpCfQS8tnrFQ=";
+    hash = "sha256-Weyb+rcx04mpDdcL7Qt4O+PvPf5MLPAP/Uy+8qoNXbQ=";
   };
 
   postPatch = ''
@@ -80,6 +82,8 @@ stdenv.mkDerivation rec {
     openssl
     protobuf
     tinyxml-2
+  ] ++ lib.optionals enableSystemdResolved [
+    systemd
   ];
 
   # runtime deps
@@ -101,6 +105,10 @@ stdenv.mkDerivation rec {
     "--enable-addons-aws"
     "--disable-selinux-build"
     "--disable-build-test-progs"
+  ] ++ lib.optionals enableSystemdResolved [
+    # This defaults to --resolv-conf /etc/resolv.conf. See
+    # https://github.com/OpenVPN/openvpn3-linux/blob/v20/configure.ac#L434
+    "DEFAULT_DNS_RESOLVER=--systemd-resolved"
   ];
 
   NIX_LDFLAGS = "-lpthread";

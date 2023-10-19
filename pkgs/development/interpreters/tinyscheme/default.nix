@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
       TinyScheme is a lightweight Scheme interpreter that implements as large a
       subset of R5RS as was possible without getting very large and complicated.
     '';
-    homepage = "http://tinyscheme.sourceforge.net/";
-    changelog = "http://tinyscheme.sourceforge.net/CHANGES";
+    homepage = "https://tinyscheme.sourceforge.net/";
+    changelog = "https://tinyscheme.sourceforge.net/CHANGES";
     license = licenses.bsdOriginal;
     mainProgram = pname;
     maintainers = [ maintainers.ebzzry ];

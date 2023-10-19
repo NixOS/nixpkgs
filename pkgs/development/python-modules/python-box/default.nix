@@ -1,11 +1,14 @@
 { lib
 , buildPythonPackage
+, cython_3
 , fetchFromGitHub
 , msgpack
+, poetry-core
 , pytestCheckHook
 , pythonOlder
 , pyyaml
 , ruamel-yaml
+, setuptools
 , toml
 , tomli
 , tomli-w
@@ -13,17 +16,22 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "6.1.0";
+  version = "7.1.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
     rev = "refs/tags/${version}";
-    hash = "sha256-42VDZ4aASFFWhRY3ApBQ4dq76eD1flZtxUM9hpA9iiI=";
+    hash = "sha256-oxT2y3um6BZ3bwYa+LWBoTgU+9b+V7XtQdCdECU3Gu0=";
   };
+
+  nativeBuildInputs = [
+    cython_3
+    setuptools
+  ];
 
   passthru.optional-dependencies = {
     all = [
@@ -53,7 +61,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.all;
 
@@ -64,6 +72,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python dictionaries with advanced dot notation access";
     homepage = "https://github.com/cdgriffith/Box";
+    changelog = "https://github.com/cdgriffith/Box/blob/${version}/CHANGES.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

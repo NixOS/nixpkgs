@@ -9,15 +9,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "coldsnap";
-  version = "0.4.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+JQjJ4F++S3eLnrqV1v4leepOvZBf8Vp575rnlDx2Cg=";
+    hash = "sha256-zXLt16ffqbExU23uRI7U99nUwpSKTIf039dDq+k2KAA=";
   };
-  cargoHash = "sha256-mAnoe9rK4+OpCzD7tzV+FQz+fFr8NapzsXtON3lS/tk";
+  cargoHash = "sha256-RRyAzD9eiscZ9kB5tFh5vUnGk6XYYKy0/TAjcaygmG4=";
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [ pkg-config ];
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/awslabs/coldsnap";
     description = "A command line interface for Amazon EBS snapshots";
     changelog = "https://github.com/awslabs/coldsnap/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.apsl20;
+    license = licenses.asl20;
     maintainers = teams.determinatesystems.members;
   };
 }

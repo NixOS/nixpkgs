@@ -2,25 +2,26 @@
 , stdenv
 , fetchFromSourcehut
 , binutils-unwrapped
-, harec
+, harePackages
 , makeWrapper
 , qbe
 , scdoc
 , substituteAll
 }:
 
+let
+  inherit (harePackages) harec;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "unstable-2022-07-30";
+  version = "unstable-2023-04-23";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
-    rev = "296925c91d79362d6b8ac94e0336a38e9af0f1c9";
-    hash = "sha256-LeIUnpTMZ6vxgAy/LPm9/IMit41RgezdVESIv+gQFHc=";
+    rev = "464ec7a660b12ab1ef8e4dcc9d00604cec996c6e";
+    hash = "sha256-5/ObckDxosqUkFfDVhGA/0kwjFzDUxu420nkfa97vqM=";
   };
-
-  patches = [ ./disable-failing-test-cases.patch ];
 
   nativeBuildInputs = [
     binutils-unwrapped
@@ -86,12 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://harelang.org/";
     description =
       "A systems programming language designed to be simple, stable, and robust";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (harec.meta) platforms badPlatforms;
   };
 })

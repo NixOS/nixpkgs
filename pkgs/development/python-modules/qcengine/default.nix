@@ -8,18 +8,19 @@
 , pythonOlder
 , pyyaml
 , qcelemental
+, msgpack
 }:
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.24.1";
+  version = "0.28.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KUOGbGQd1ffXNkQiW8yeUxValCOAfd8nBv9nnk9giVU=";
+    hash = "sha256-ebZayF5VGHXjBFO3k2KegCNqAFygB3BXKvdvr8mF/Ss=";
   };
 
   propagatedBuildInputs = [
@@ -28,9 +29,10 @@ buildPythonPackage rec {
     pydantic
     pyyaml
     qcelemental
+    msgpack
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

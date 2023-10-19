@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "-DJARO_WINKLER_BUILD_TESTING=ON"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch2_3
   ];
 

@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ortp";
-  version = "5.1.55";
+  version = "5.2.109";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "sha256-FsPbpKkC1qhsZ4QBRzyV64H+lo/802qlaggDGCgbPlw=";
+    hash = "sha256-EgUPICdKi8c/E6uonZB4DKyOZ3Od4JM5/bR2U6cq9ew=";
   };
 
   # Do not build static libraries
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=stringop-truncation";
 
   buildInputs = [ bctoolbox ];
   nativeBuildInputs = [ cmake ];

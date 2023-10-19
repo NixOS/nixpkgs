@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "s3-credentials";
-  version = "0.14";
+  version = "0.15";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,24 +22,29 @@ buildPythonPackage rec {
     owner = "simonw";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-vKOcOSt9vscj5ixrHZGL6PRun/x38JLbni75nw2YAbg=";
+    hash = "sha256-YSsm5SMfDRqJ53XnBjMgaWWHjA6IXnmEBvxme4uiOPw=";
   };
 
   propagatedBuildInputs = [
+    boto3
     click
     click-default-group
-    boto3
   ];
 
-  checkInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [
     hypothesis
-    pytest-mock
     moto
+    pytest-mock
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "s3_credentials"
+  ];
+
+  disabledTests = [
+    # AssertionError: assert 'directory/th...ory/...
+    "test_put_objects"
   ];
 
   meta = with lib; {

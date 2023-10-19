@@ -3,13 +3,13 @@
 buildKodiBinaryAddon rec {
   pname = "inputstream-ffmpegdirect";
   namespace = "inputstream.ffmpegdirect";
-  version = "19.0.3";
+  version = "20.5.0";
 
   src = fetchFromGitHub {
     owner = "xbmc";
     repo = "inputstream.ffmpegdirect";
     rev = "${version}-${rel}";
-    sha256 = "sha256-G1+WhF0iEOhgQPXPv0LjpLSvDk3JpkryaGJYuG+5P40=";
+    sha256 = "sha256-2Xa5q+o/AYDwG+JYeXTUfMTJk/kln16J8KRcXILNE6c=";
   };
 
   extraBuildInputs = [ bzip2 zlib kodi.ffmpeg ];

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libharu";
-  version = "2.4.0";
+  version = "2.4.4";
 
   src = fetchFromGitHub {
     owner = "libharu";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-85o9pb2zJVYbM0SHxCNgJuDkcsHuFuwFe6B6xivoUUg=";
+    hash = "sha256-tw/E79Cg/8kIei6NUu1W+mP0sUDCm8KTB7ZjzxsqpeM=";
   };
 
   nativeBuildInputs = [ cmake ];

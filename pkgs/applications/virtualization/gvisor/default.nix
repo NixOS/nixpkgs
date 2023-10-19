@@ -22,7 +22,7 @@ buildGoModule rec {
     sha256 = "sha256-rADQsJ+AnBVlfQURGJl1xR6Ad5NyRWSrBSpOFMRld+o=";
   };
 
-  vendorSha256 = "sha256-iGLWxx/Kn1QaJTNOZcc+mwoF3ecEDOkaqmA0DH4pdgU=";
+  vendorHash = "sha256-iGLWxx/Kn1QaJTNOZcc+mwoF3ecEDOkaqmA0DH4pdgU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -33,7 +33,7 @@ buildGoModule rec {
   subPackages = [ "runsc" "shim" ];
 
   postInstall = ''
-    # Needed for the 'runsc do' subcomand
+    # Needed for the 'runsc do' subcommand
     wrapProgram $out/bin/runsc \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables procps ]}
     mv $out/bin/shim $out/bin/containerd-shim-runsc-v1

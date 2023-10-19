@@ -1,11 +1,16 @@
 { lib
 , stdenv
 , fetchurl
+, musl-fts
 }:
 
 stdenv.mkDerivation {
   pname = "rcshist";
   version = "1.04";
+
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "LIBS=-lfts";
+
+  buildInputs = lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   src = fetchurl {
     url = "https://web.archive.org/web/20220508220019/https://invisible-island.net/datafiles/release/rcshist.tar.gz";

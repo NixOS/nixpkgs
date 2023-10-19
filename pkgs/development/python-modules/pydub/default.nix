@@ -27,7 +27,7 @@ buildPythonPackage rec {
     "pydub.playback"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     ffmpeg-full
   ];
 

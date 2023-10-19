@@ -159,6 +159,15 @@ in
             '';
           };
         };
+        options.relay_api.database = {
+          connection_string = lib.mkOption {
+            type = lib.types.str;
+            default = "file:relayapi.db";
+            description = lib.mdDoc ''
+              Database for the Relay Server.
+            '';
+          };
+        };
         options.media_api = {
           database = {
             connection_string = lib.mkOption {
@@ -288,13 +297,13 @@ in
         LimitNOFILE = 65535;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         LoadCredential = cfg.loadCredential;
-        ExecStartPre = ''
+        ExecStartPre = [''
           ${pkgs.envsubst}/bin/envsubst \
             -i ${configurationYaml} \
             -o /run/dendrite/dendrite.yaml
-        '';
+        ''];
         ExecStart = lib.strings.concatStringsSep " " ([
-          "${pkgs.dendrite}/bin/dendrite-monolith-server"
+          "${pkgs.dendrite}/bin/dendrite"
           "--config /run/dendrite/dendrite.yaml"
         ] ++ lib.optionals (cfg.httpPort != null) [
           "--http-bind-address :${builtins.toString cfg.httpPort}"

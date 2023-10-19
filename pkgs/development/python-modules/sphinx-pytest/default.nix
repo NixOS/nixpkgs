@@ -15,10 +15,10 @@ buildPythonPackage rec {
     owner = "chrisjsewell";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vRHPq6BAuhn5QvHG2BGen9v6ezA3RgFVtustsNxU+n8=";
+    hash = "sha256-vRHPq6BAuhn5QvHG2BGen9v6ezA3RgFVtustsNxU+n8=";
   };
 
-  format = "flit";
+  format = "pyproject";
 
   nativeBuildInputs = [ flit-core ];
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_pytest" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

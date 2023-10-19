@@ -30,13 +30,13 @@
 
 mkDerivation rec {
   pname = "coretoppings";
-  version = "4.3.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Yq57dY1zIuQN2Gj9haxJMomafL32B+/9v3lWlY9fvcc=";
+    hash = "sha256-IYUkPGgFGI6889IyromMBobIoqSZtALVsSswQ7O1Bp0=";
   };
 
   patches = [

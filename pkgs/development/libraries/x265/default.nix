@@ -17,7 +17,7 @@
 , custatsSupport ? false # Internal profiling of encoder work
 , debugSupport ? false # Run-time sanity checks (debugging)
 , ppaSupport ? false # PPA profiling instrumentation
-, unittestsSupport ? (stdenv.is64bit && !(stdenv.isDarwin && stdenv.isAarch64)) # Unit tests - only testing x64 assembly
+, unittestsSupport ? stdenv.isx86_64 # Unit tests - only testing x64 assembly
 , vtuneSupport ? false # Vtune profiling instrumentation
 , werrorSupport ? false # Warnings as errors
 }:
@@ -34,7 +34,8 @@ let
     (mkFlag ppaSupport "ENABLE_PPA")
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
-  ];
+    # Potentially riscv cross could be fixed by providing the correct CMAKE_SYSTEM_PROCESSOR flag
+  ] ++ lib.optional (isCross && stdenv.hostPlatform.isRiscV) "-DENABLE_ASSEMBLY=OFF";
 
   cmakeStaticLibFlags = [
     "-DHIGH_BIT_DEPTH=ON"

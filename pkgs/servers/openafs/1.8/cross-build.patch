@@ -144,7 +144,7 @@ diff -Nur --unidirectional-new-file openafs-1.8.2/src/comerr/Makefile.in openafs
 @@ -38,11 +38,14 @@
  compile_et:	compile_et.o error_table.o
  	$(Q)case $(SYS_NAME) in \
- 	*_linux* | *_umlinux* | *_darwin* ) \
+ 	*_linux* | *_umlinux* | *_darwin* | rs_aix72 | rs_aix73 ) \
 -	$(LT_LDRULE_static_NOQ) compile_et.o error_table.o -L${TOP_LIBDIR} -lopr $(buildtool_roken) $(MT_LIBS);; \
 +	$(LT_LDRULE_static_NOQ) compile_et.o error_table.o -L${TOP_LIBDIR} -lopr_build $(buildtool_roken) $(MT_LIBS);; \
  	* ) \

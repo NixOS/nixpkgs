@@ -1,22 +1,50 @@
-{ lib, fetchCrate, rustPlatform, openssl, pkg-config, stdenv, CoreServices }:
+{ lib
+, stdenv
+, fetchCrate
+, rustPlatform
+, pkg-config
+, cacert
+, openssl
+, darwin
+, testers
+, dioxus-cli
+}:
+
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.1.4";
+  version = "0.4.1";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-SnmDOMxc+39LX6kOzma2zA6T91UGCnvr7WWhX+wXnLo=";
+    hash = "sha256-h2l6SHty06nLNbdlnSzH7I4XY53yyxNbx663cHYmPG0=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  cargoHash = "sha256-3pFkEC1GAJmTqXAymX4WRIq7EEtY17u1TCg+OhqL3bA=";
 
-  cargoSha256 = "sha256-Mf/WtOO/vFuhg90DoPDwOZ6XKj423foHZ8vHugXakb0=";
+  nativeBuildInputs = [ pkg-config cacert ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
+
+  OPENSSL_NO_VENDOR = 1;
+
+  checkFlags = [
+    # requires network access
+    "--skip=server::web::proxy::test::add_proxy"
+    "--skip=server::web::proxy::test::add_proxy_trailing_slash"
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = dioxus-cli;
+    command = "${meta.mainProgram} --version";
+    inherit version;
+  };
 
   meta = with lib; {
-    description = "CLI tool for developing, testing, and publishing Dioxus apps";
     homepage = "https://dioxuslabs.com";
+    description = "CLI tool for developing, testing, and publishing Dioxus apps";
     license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ xanderio ];
+    maintainers = with maintainers; [ xanderio cathalmullan ];
+    mainProgram = "dx";
   };
 }

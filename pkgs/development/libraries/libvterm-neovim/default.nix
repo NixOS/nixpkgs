@@ -8,17 +8,20 @@
 stdenv.mkDerivation rec {
   pname = "libvterm-neovim";
   # Releases are not tagged, look at commit history to find latest release
-  version = "0.3";
+  version = "0.3.2";
 
   src = fetchurl {
     url = "https://www.leonerd.org.uk/code/libvterm/libvterm-${version}.tar.gz";
-    sha256 = "sha256-YesNZijFK98CkA39RGiqhqGnElIourimcyiYGIdIM1g=";
+    sha256 = "sha256-ketQiAafTm7atp4UxCEvbaAZLmVpWVbcBIAWoNq4vPY=";
   };
 
   nativeBuildInputs = [ perl libtool ];
 
-  makeFlags = [ "PREFIX=$(out)" ]
-    ++ lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LIBTOOL=${libtool}/bin/libtool"
+    "PREFIX=$(out)"
+  ];
 
   enableParallelBuilding = true;
 

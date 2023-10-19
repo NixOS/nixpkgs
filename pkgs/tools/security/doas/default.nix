@@ -34,8 +34,13 @@ stdenv.mkDerivation rec {
     ./0001-add-NixOS-specific-dirs-to-safe-PATH.patch
   ];
 
+  # ./configure script does not understand `--disable-shared`
+  dontAddStaticConfigureFlags = true;
+
   postPatch = ''
     sed -i '/\(chown\|chmod\)/d' GNUmakefile
+  '' + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
+    sed -i 's/-lpam/-lpam -laudit/' configure
   '';
 
   nativeBuildInputs = [ bison ];
@@ -48,6 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Duncaen/OpenDoas";
     license = licenses.isc;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h cstrahan ];
+    maintainers = with maintainers; [ cole-h ];
   };
 }

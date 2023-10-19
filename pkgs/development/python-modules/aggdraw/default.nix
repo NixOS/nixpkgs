@@ -1,6 +1,10 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, packaging
+, setuptools
+, pkgconfig
+, freetype
 , pytest
 , python
 , pillow
@@ -9,16 +13,27 @@
 
 buildPythonPackage rec {
   pname = "aggdraw";
-  version = "1.3.15";
+  version = "1.3.16";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-w3HlnsHYB0R+HZOXtzygC2RST3gllPI7SYtwSCVXhTU=";
+    hash = "sha256-2yajhuRyQ7BqghbSgPClW3inpw4TW2DhgQbomcRFx94=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    packaging
+    setuptools
+    pkgconfig
+  ];
+
+  buildInputs = [
+    freetype
+  ];
+
+  nativeCheckInputs = [
     numpy
     pillow
     pytest

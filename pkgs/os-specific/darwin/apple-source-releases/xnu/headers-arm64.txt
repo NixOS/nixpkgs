@@ -637,6 +637,7 @@ libkern/os/reason_private.h
 libkern/os/refcnt.h
 libkern/os/refcnt_internal.h
 libkern/os/trace.h
+libproc.h
 mach/arm/_structs.h
 mach/arm/asm.h
 mach/arm/boolean.h
@@ -1270,6 +1271,7 @@ servers/ls_defs.h
 servers/netname.h
 servers/netname_defs.h
 servers/nm_defs.h
+spawn.h
 sys/_endian.h
 sys/_posix_availability.h
 sys/_select.h

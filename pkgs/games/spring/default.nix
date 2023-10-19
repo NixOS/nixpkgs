@@ -1,64 +1,92 @@
-{ lib, stdenv, fetchFromGitHub, cmake, xz, boost, libdevil, zlib, p7zip
-, openal, libvorbis, glew, freetype, xorg, SDL2, libGLU, libGL
-, asciidoc, docbook_xsl, docbook_xsl_ns, curl, makeWrapper
-, jdk ? null, python ? null, systemd, libunwind, which, minizip
+{ lib
+, stdenv
+, asciidoc
+, boost
+, cmake
+, curl
+, docbook_xsl
+, docbook_xsl_ns
+, fetchurl
+, freetype
+, glew
+, jdk
+, libdevil
+, libGL
+, libGLU
+, libunwind
+, libvorbis
+, makeWrapper
+, minizip
+, openal
+, p7zip
+, python3
+, SDL2
+, xorg
+, xz
+, zlib
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
 
 stdenv.mkDerivation rec {
   pname = "spring";
-  version = "105.0.1-${buildId}-g${shortRev}";
-  # usually the latest in https://github.com/spring/spring/commits/maintenance
-  rev = "8581792eac65e07cbed182ccb1e90424ce3bd8fc";
-  shortRev = builtins.substring 0 7 rev;
-  buildId = "1486";
+  version = "106.0";
 
-  # taken from https://github.com/spring/spring/commits/maintenance
-  src = fetchFromGitHub {
-    owner = "spring";
-    repo = pname;
-    inherit rev;
-    sha256 = "05lvd8grqmv7vl8rrx02rhl0qhmm58dyi6s78b64j3fkia4sfj1r";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://springrts.com/dl/buildbot/default/master/${version}/source/spring_${version}_src.tar.gz";
+    sha256 = "sha256-mSA4ioIv68NMEB72lYnwDb1QOuWr1VHwu4+grAoHlV0=";
   };
 
-  # The cmake included module correcly finds nix's glew, however
-  # it has to be the bundled FindGLEW for headless or dedicated builds
-  prePatch = ''
+  postPatch = ''
+    patchShebangs .
+
     substituteInPlace ./rts/build/cmake/FindAsciiDoc.cmake \
       --replace "PATHS /usr /usr/share /usr/local /usr/local/share" "PATHS ${docbook_xsl}"\
       --replace "xsl/docbook/manpages" "share/xml/docbook-xsl/manpages"
-    substituteInPlace ./rts/Rendering/GL/myGL.cpp \
-      --replace "static constexpr const GLubyte* qcriProcName" "static const GLubyte* qcriProcName"
-    patchShebangs .
-    rm rts/build/cmake/FindGLEW.cmake
 
-    echo "${version} maintenance" > VERSION
+    # The cmake included module correcly finds nix's glew, however
+    # it has to be the bundled FindGLEW for headless or dedicated builds
+    rm rts/build/cmake/FindGLEW.cmake
   '';
 
-  cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
-                "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
-                "-DPREFER_STATIC_LIBS:BOOL=OFF"];
+  cmakeFlags = [
+    "-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"
+    "-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=ON"
+    "-DPREFER_STATIC_LIBS:BOOL=OFF"
+  ];
 
   nativeBuildInputs = [ cmake makeWrapper docbook_xsl docbook_xsl_ns asciidoc ];
-  buildInputs = [ xz boost libdevil zlib p7zip openal libvorbis freetype SDL2
-    xorg.libX11 xorg.libXcursor libGLU libGL glew curl
-    systemd libunwind which minizip ]
-    ++ lib.optional withAI jdk
-    ++ lib.optional withAI python;
-
-  NIX_CFLAGS_COMPILE = "-fpermissive"; # GL header minor incompatibility
+  buildInputs = [
+    boost
+    curl
+    freetype
+    glew
+    libdevil
+    libGL
+    libGLU
+    libunwind
+    libvorbis
+    minizip
+    openal
+    p7zip
+    SDL2
+    xorg.libX11
+    xorg.libXcursor
+    xz
+    zlib
+  ]
+  ++ lib.optionals withAI [ python3 jdk ];
 
   postInstall = ''
     wrapProgram "$out/bin/spring" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc systemd ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';
 
   meta = with lib; {
     homepage = "https://springrts.com/";
     description = "A powerful real-time strategy (RTS) game engine";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight domenkozar sorki ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 }

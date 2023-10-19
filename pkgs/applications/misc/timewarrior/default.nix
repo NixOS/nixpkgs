@@ -1,20 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, asciidoctor }:
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoctor, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
-  version = "1.4.3";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "timewarrior";
     rev = "v${version}";
-    sha256 = "00ydikzmxym5jhv6w1ii12a6zw5ighddbzxsw03xg8yabzzfnvzw";
+    sha256 = "sha256-0obIMnPBvMO30o+qXqwtINNRobBR6cFO65B/xjVt+2w=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake asciidoctor ];
+  nativeBuildInputs = [ cmake asciidoctor installShellFiles ];
 
   dontUseCmakeBuildDir = true;
+
+  postInstall = ''
+    installShellCompletion --cmd timew \
+      --bash completion/timew-completion.bash
+  '';
 
   meta = with lib; {
     description = "A command-line time tracker";

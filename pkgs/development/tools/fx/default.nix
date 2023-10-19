@@ -2,21 +2,22 @@
 
 buildGoModule rec {
   pname = "fx";
-  version = "24.0.0";
+  version = "30.2.0";
 
   src = fetchFromGitHub {
     owner = "antonmedv";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Sg+mluDOGpkEUl+3BoItuPnMqs8F6o+D5xIqF0w0EIU=";
+    hash = "sha256-1U3XaqRJpwC41R8hiF7vQ32DOTGGxhaU1ZWiXzys8/M=";
   };
 
-  vendorSha256 = "sha256-4hx1AZQQ4xHBTzBK0OmrTUGMK4Rfu36cmopVV4SOjCQ=";
+  vendorHash = "sha256-6wVcdzTYnB0Bd/YLPcbryKxCXu5genzQQ96znbn2ahw=";
 
   meta = with lib; {
     description = "Terminal JSON viewer";
     homepage = "https://github.com/antonmedv/fx";
+    changelog = "https://github.com/antonmedv/fx/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

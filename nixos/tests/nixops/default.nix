@@ -14,11 +14,12 @@ let
     # inherit testsForPackage;
   };
 
-  testsForPackage = lib.makeOverridable (args: lib.recurseIntoAttrs {
+  testsForPackage = args: lib.recurseIntoAttrs {
     legacyNetwork = testLegacyNetwork args;
-  });
+    passthru.override = args': testsForPackage (args // args');
+  };
 
-  testLegacyNetwork = { nixopsPkg }: pkgs.nixosTest ({
+  testLegacyNetwork = { nixopsPkg, ... }: pkgs.nixosTest ({
     name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
@@ -30,12 +31,10 @@ let
         virtualisation.additionalPaths = [
           pkgs.hello
           pkgs.figlet
-
-          # This includes build dependencies all the way down. Not efficient,
-          # but we do need build deps to an *arbitrary* depth, which is hard to
-          # determine.
-          (allDrvOutputs nodes.server.config.system.build.toplevel)
         ];
+
+        # TODO: make this efficient, https://github.com/NixOS/nixpkgs/issues/180529
+        system.includeBuildDependencies = true;
       };
       server = { lib, ... }: {
         imports = [ ./legacy/base-configuration.nix ];
@@ -54,7 +53,7 @@ let
           chmod 0400 ~/.ssh/id_ed25519
         '';
         serverNetworkJSON = pkgs.writeText "server-network.json"
-          (builtins.toJSON nodes.server.config.system.build.networkConfig);
+          (builtins.toJSON nodes.server.system.build.networkConfig);
       in
       ''
         import shlex

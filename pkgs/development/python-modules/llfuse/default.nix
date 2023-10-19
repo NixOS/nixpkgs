@@ -3,33 +3,33 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, contextlib2
-, cython
+, cython_3
 , fuse
 , pkg-config
 , pytestCheckHook
 , python
+, setuptools
 , which
 }:
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.4.2";
+  version = "1.5.0";
 
-  disabled = pythonOlder "3.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
-    rev = "release-${version}";
-    hash = "sha256-TnZnv439fLvg0WM96yx0dPSSz8Mrae6GDC9LiLFrgQ8=";
+    rev = "refs/tags/release-${version}";
+    hash = "sha256-6/iW5eHmX6ODVPLFkOo3bN9yW8ixqy2MHwQ2r9FA0iI=";
   };
 
-  nativeBuildInputs = [ cython pkg-config ];
+  nativeBuildInputs = [ cython_3 pkg-config setuptools ];
 
   buildInputs = [ fuse ];
-
-  propagatedBuildInputs = [ contextlib2 ];
 
   preConfigure = ''
     substituteInPlace setup.py \
@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ pytestCheckHook which ];
+  nativeCheckInputs = [ pytestCheckHook which ];
 
   disabledTests = [
     "test_listdir" # accesses /usr/bin
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
     homepage = "https://github.com/python-llfuse/python-llfuse";
+    changelog = "https://github.com/python-llfuse/python-llfuse/raw/release-${version}/Changes.rst";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ bjornfor dotlambda ];

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "heatzypy";
-  version = "2.1.1";
+  version = "2.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,15 +18,21 @@ buildPythonPackage rec {
     owner = "Cyr-ius";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-4/v0xodpJzVi6/ciW5icqDFGCtBFKtGoMB92CknH9xw=";
+    hash = "sha256-Z60apquRzhkPbxgGKgDswtW9GUXGt9MbdAsh3Yh31b0=";
   };
+
+  postPatch = ''
+    # https://github.com/Cyr-ius/heatzypy/issues/7
+    substituteInPlace setup.py \
+      --replace 'version="replace_by_workflow"' 'version="${version}"'
+  '';
 
   propagatedBuildInputs = [
     aiohttp
     requests
   ];
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
 
   pythonImportsCheck = [

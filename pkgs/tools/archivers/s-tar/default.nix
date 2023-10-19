@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       The way star acts may be modified by additional options.
       Note that unpacking tar archives may be a security risk because star may overwrite existing files.
     '';
-    homepage = "http://cdrtools.sourceforge.net/private/star.html";
+    homepage = "https://cdrtools.sourceforge.net/private/star.html";
     license = lib.licenses.cddl;
     maintainers = [ lib.maintainers.wucke13 ];
     platforms = [ "x86_64-linux" ];

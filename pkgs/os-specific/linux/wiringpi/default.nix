@@ -15,10 +15,10 @@ let
     rev = version;
     sha256 = "sha256-VxAaPhaPXd9xYt663Ju6SLblqiSLizauhhuFqCqbO5M=";
   }
-  }: stdenv.mkDerivation rec {
+  }: stdenv.mkDerivation (finalAttrs: {
     pname = "wiringpi-${subprj}";
     inherit version src;
-    sourceRoot = "source/${subprj}";
+    sourceRoot = "${src.name}/${subprj}";
     inherit buildInputs;
     # Remove (meant for other OSs) lines from Makefiles
     preInstall = ''
@@ -31,7 +31,7 @@ let
       # On NixOS we don't need to run ldconfig during build:
       "LDCONFIG=echo"
     ];
-  };
+  });
   passthru = {
     inherit mkSubProject;
     wiringPi = mkSubProject {

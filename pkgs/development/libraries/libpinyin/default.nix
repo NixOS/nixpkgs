@@ -16,24 +16,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpinyin";
-  version = "2.6.2";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "libpinyin";
     rev = version;
-    sha256 = "sha256-hafetjKWqImg3Jr1tSXjY0RwbBQ7LccXqx0OdtKCy/c=";
+    hash = "sha256-3+CBbjCaY0Ubyphf0uCfYvF2rtc9fF1eEAM1doonjHg=";
   };
 
   postUnpack = ''
     tar -xzf ${modelData} -C $sourceRoot/data
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
     glib
     db
-    pkg-config
   ];
 
   meta = with lib; {

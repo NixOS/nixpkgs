@@ -3,15 +3,15 @@
 , fetchFromGitHub
 }:
 
-stdenvNoCC.mkDerivation (finalPackages: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cat9";
-  version = "unstable-2018-09-13";
+  version = "unstable-2023-06-25";
 
   src = fetchFromGitHub {
     owner = "letoram";
-    repo = finalPackages.pname;
-    rev = "754d9d2900d647a0fa264720528117471a32f295";
-    hash = "sha256-UmbynVOJYvHz+deA99lj/BBFOauZzwSNs+qR28pASPY=";
+    repo = "cat9";
+    rev = "4d8a0c539a5c756acada96fd80e7eb3b9554ac05";
+    hash = "sha256-T3RPuldKTzHm0EdfdMOtHv9kcr9oE9YQgdzv/jjPPnc=";
   };
 
   dontConfigure = true;
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalPackages: {
   meta = with lib; {
     homepage = "https://github.com/letoram/cat9";
     description = "A User shell for LASH";
-    license = licenses.bsd3;
+    license = licenses.unlicense;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;
   };

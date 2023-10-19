@@ -3,7 +3,7 @@
 , libjpeg, jxrlib, pkg-config
 , fixDarwinDylibNames, autoSignDarwinBinariesHook }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeimage";
   version = "unstable-2021-11-01";
 
@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     rev = "1900";
     sha256 = "rWoNlU/BWKZBPzRb1HqU6T0sT7aK6dpqKPe88+o/4sA=";
   };
-  sourceRoot = "svn-r1900/FreeImage/trunk";
+
+  sourceRoot = "${finalAttrs.src.name}/FreeImage/trunk";
 
   # Ensure that the bundled libraries are not used at all
   prePatch = ''
@@ -74,4 +75,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [viric l-as];
     platforms = with lib.platforms; unix;
   };
-}
+})

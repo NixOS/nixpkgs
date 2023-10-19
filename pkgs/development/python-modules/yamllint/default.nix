@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, setuptools
 , pathspec
 , pytestCheckHook
 , pythonOlder
@@ -10,20 +11,28 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
-  version = "1.28.0";
-  disabled = pythonOlder "3.5";
+  version = "1.32.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-nj2N3RbQWDIUxf3/6AbJNECGch8QdDX2i62ZDlqIgms=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "adrienverge";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DtIQ/gUBFQBm0OOJC2c/ONn2ZKsMAzdwMx7FbUo+uIU=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     pyyaml
     pathspec
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -42,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A linter for YAML files";
     homepage = "https://github.com/adrienverge/yamllint";
+    changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jonringer mikefaille ];
   };

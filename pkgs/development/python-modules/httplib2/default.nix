@@ -10,26 +10,31 @@
 , pytest-randomly
 , pytest-timeout
 , pytestCheckHook
+, pythonAtLeast
 , six
 }:
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.20.4";
+  version = "0.21.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eLvxmG9PUX+2RB3M6oG442Wmh6c5GI/aKP/Z8Z5Ixq8=";
+    hash = "sha256-1Pl+l28J7crfO2UY/9/D019IzOHWOwjR+UvVEHICTqU=";
   };
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
 
   propagatedBuildInputs = [
     pyparsing
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography
     mock
     pytest-forked
@@ -39,12 +44,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Don't run tests for Python 2.7
-  doCheck = !isPy27;
+  __darwinAllowLocalNetworking = true;
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
+  # Don't run tests for older Pythons
+  doCheck = pythonAtLeast "3.9";
 
   disabledTests = [
     # ValueError: Unable to load PEM file.

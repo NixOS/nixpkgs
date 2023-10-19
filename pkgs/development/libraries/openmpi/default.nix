@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx
-
+, config
 # Enable CUDA support
-, cudaSupport ? false, cudatoolkit ? null
+, cudaSupport ? config.cudaSupport, cudatoolkit
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -18,8 +18,6 @@
 , fortranSupport ? true
 }:
 
-assert !cudaSupport || cudatoolkit != null;
-
 let
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -27,11 +25,11 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
-  version = "4.1.4";
+  version = "4.1.5";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "03ckngrff1cl0l81vfvrfhp99rbgk7s0633kr1l468yibwbjx4cj";
+    sha256 = "sha256-pkCYa8JXOJ3TeYhv2uYmTIz6VryYtxzjrj372M5h2+M=";
   };
 
   postPatch = ''
@@ -44,6 +42,8 @@ in stdenv.mkDerivation rec {
     sed -i "s/OPAL_CONFIGURE_DATE=.*/OPAL_CONFIGURE_DATE=\"$ts\"/" configure
     find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
+
+  outputs = [ "out" "man" ];
 
   buildInputs = [ zlib ]
     ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
@@ -58,8 +58,8 @@ in stdenv.mkDerivation rec {
   configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
     ++ lib.optionals stdenv.isLinux  [
-      "--with-libnl=${libnl.dev}"
-      "--with-pmix=${pmix}"
+      "--with-libnl=${lib.getDev libnl}"
+      "--with-pmix=${lib.getDev pmix}"
       "--with-pmix-libdir=${pmix}/lib"
       "--enable-mpi-cxx"
     ] ++ lib.optional enableSGE "--with-sge"
@@ -68,13 +68,13 @@ in stdenv.mkDerivation rec {
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
-    ++ lib.optionals fabricSupport [ "--with-psm2=${libpsm2}" "--with-libfabric=${libfabric}" ]
+    ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
     ;
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    rm -f $out/lib/*.la
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
    '';
 
   postFixup = ''

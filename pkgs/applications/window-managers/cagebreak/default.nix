@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-YaLGRlvppTUCSHFlt3sEfHgN3pYHuc5oGt3dt0DDw3I=";
+    hash = "sha256-pU1QHYOqnkb3L4iSKbZY9Vo60Z6EaX9mp2Nw48NSPic=";
   };
 
   nativeBuildInputs = [
@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
+    changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;

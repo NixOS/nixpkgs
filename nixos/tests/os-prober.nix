@@ -1,14 +1,14 @@
 import ./make-test-python.nix ({pkgs, lib, ...}:
 let
   # A filesystem image with a (presumably) bootable debian
-  debianImage = pkgs.vmTools.diskImageFuns.debian9i386 {
+  debianImage = pkgs.vmTools.diskImageFuns.debian11i386 {
     # os-prober cannot detect systems installed on disks without a partition table
     # so we create the disk ourselves
     createRootFS = with pkgs; ''
       ${parted}/bin/parted --script /dev/vda mklabel msdos
       ${parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
       mkdir /mnt
-      ${e2fsprogs}/bin/mkfs.ext4 /dev/vda1
+      ${e2fsprogs}/bin/mkfs.ext4 -O '^metadata_csum_seed' /dev/vda1
       ${util-linux}/bin/mount -t ext4 /dev/vda1 /mnt
 
       if test -e /mnt/.debug; then
@@ -76,6 +76,7 @@ in {
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
         [
+          bintools
           brotli
           brotli.dev
           brotli.lib
@@ -83,6 +84,8 @@ in {
           docbook5
           docbook_xsl_ns
           grub2
+          kbd
+          kbd.dev
           kmod.dev
           libarchive
           libarchive.dev

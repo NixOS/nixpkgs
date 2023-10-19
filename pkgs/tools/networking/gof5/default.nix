@@ -14,7 +14,7 @@ buildGoModule rec {
     sha256 = "10qh7rj8s540ghjdvymly53vny3n0qd0z0ixy24n026jjhgjvnpl";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   # The tests are broken and apparently you need to uncomment some lines in the
   # code in order for it to work.

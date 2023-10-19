@@ -1,0 +1,13 @@
+diff --git a/beets/art.py b/beets/art.py
+index 13d5dfbd..ac1d2fd8 100644
+--- a/beets/art.py
++++ b/beets/art.py
+@@ -132,7 +132,7 @@ def check_art_similarity(log, item, imagepath, compare_threshold):
+             convert_cmd = ['convert', syspath(imagepath, prefix=False),
+                            syspath(art, prefix=False),
+                            '-colorspace', 'gray', 'MIFF:-']
+-            compare_cmd = ['compare', '-metric', 'PHASH', '-', 'null:']
++            compare_cmd = ['compare', '-define', 'phash:colorspaces=sRGB,HCLp', '-metric', 'PHASH', '-', 'null:']
+             log.debug('comparing images with pipeline {} | {}',
+                       convert_cmd, compare_cmd)
+             convert_proc = subprocess.Popen(

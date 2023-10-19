@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, libxslt, getopt, gettext, dysnomia, libintl, libiconv }:
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, libxslt, getopt, dysnomia, libintl, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "disnix";

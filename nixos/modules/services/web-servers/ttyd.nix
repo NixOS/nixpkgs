@@ -78,11 +78,12 @@ in
       clientOptions = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = literalExpression ''{
-          fontSize = "16";
-          fontFamily = "Fira Code";
-
-        }'';
+        example = literalExpression ''
+          {
+            fontSize = "16";
+            fontFamily = "Fira Code";
+          }
+        '';
         description = lib.mdDoc ''
           Attribute set of client options for xtermjs.
           <https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/>
@@ -163,7 +164,7 @@ in
     assertions =
       [ { assertion = cfg.enableSSL
             -> cfg.certFile != null && cfg.keyFile != null && cfg.caFile != null;
-          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specefied."; }
+          message = "SSL is enabled for ttyd, but no certFile, keyFile or caFile has been specified."; }
         { assertion = ! (cfg.interface != null && cfg.socket != null);
           message = "Cannot set both interface and socket for ttyd."; }
         { assertion = (cfg.username != null) == (cfg.passwordFile != null);

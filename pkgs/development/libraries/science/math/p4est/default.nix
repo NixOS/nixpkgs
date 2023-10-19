@@ -9,7 +9,7 @@
 
 let
   inherit (p4est-sc) debugEnable mpiSupport;
-  dbg = if debugEnable then "-dbg" else "";
+  dbg = lib.optionalString debugEnable "-dbg";
   withMetis = p4est-withMetis;
 in
 stdenv.mkDerivation {
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     ++ lib.optional withMetis "--with-metis"
   ;
 
-  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding preCheck doCheck;
+  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding doCheck;
 
   meta = {
     branch = "prev3-develop";

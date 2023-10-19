@@ -2,14 +2,14 @@
   coreutils, zip, unzip, p7zip, unar, gnutar, bzip2, gzip, lhasa, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4.19";
+  version = "0.5.4.21";
   pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
     rev = version;
-    sha256 = "sha256-YCfjOGbjjv4ntNDK3E49hYCVYDhMsRBJ7zsHt8hqQ7Y=";
+    sha256 = "sha256-pYrF9fyEbay+iboL9EuoTETTI3RTcgv3yeVtAWvAe1Q=";
   };
 
   nativeBuildInputs = [ intltool pkg-config makeWrapper wrapGAppsHook ];

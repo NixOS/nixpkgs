@@ -142,5 +142,5 @@ in
 
     };
 
-    meta.doc = ./oh-my-zsh.xml;
+    meta.doc = ./oh-my-zsh.md;
   }

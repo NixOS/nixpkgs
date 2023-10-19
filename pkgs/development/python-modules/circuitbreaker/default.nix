@@ -17,10 +17,10 @@ buildPythonPackage rec {
     owner = "fabfuel";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-l0ASt9CQmgJmWpRrghElbff/gaNOmxNh+Wj0C0p4jE0=";
+    hash = "sha256-l0ASt9CQmgJmWpRrghElbff/gaNOmxNh+Wj0C0p4jE0=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pytestCheckHook
   ];

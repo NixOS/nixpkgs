@@ -19,6 +19,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gnome
+, useWrappedDaemon ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     p11-kit
   ];
 
-  checkInputs = [ dbus python3 ];
+  nativeCheckInputs = [ dbus python3 ];
 
   configureFlags = [
     "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
@@ -73,12 +74,12 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     export HOME=$(mktemp -d)
     dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       make check
   '';
 
   # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
-  postFixup = ''
+  postFixup = lib.optionalString useWrappedDaemon ''
     files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
 
     for file in ''${files[*]}; do

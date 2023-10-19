@@ -10,6 +10,7 @@ const path = require('path')
 const lockfile = require('./yarnpkg-lockfile.js')
 const { promisify } = require('util')
 const url = require('url')
+const { urlToName } = require('./common.js')
 
 const execFile = promisify(child_process.execFile)
 
@@ -19,23 +20,16 @@ const exec = async (...args) => {
 	return res
 }
 
-// This has to match the logic in pkgs/development/tools/yarn2nix-moretea/yarn2nix/lib/urlToName.js
-// so that fixup_yarn_lock produces the same paths
-const urlToName = url => {
-	const isCodeloadGitTarballUrl = url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')
-
-	if (url.startsWith('git+') || isCodeloadGitTarballUrl) {
-		return path.basename(url)
-	} else {
-		return url
-			.replace(/https:\/\/(.)*(.com)\//g, '') // prevents having long directory names
-			.replace(/[@/%:-]/g, '_') // replace @ and : and - and % characters with underscore
-	}
-}
-
 const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 	return new Promise((resolve, reject) => {
-		https.get(url, (res) => {
+		const get = (url, redirects = 0) => https.get(url, (res) => {
+			if(redirects > 10) {
+				reject('Too many redirects!');
+				return;
+			}
+			if(res.statusCode === 301 || res.statusCode === 302) {
+				return get(res.headers.location, redirects + 1)
+			}
 			const file = fs.createWriteStream(fileName)
 			const hash = crypto.createHash(hashType)
 			res.pipe(file)
@@ -43,11 +37,14 @@ const downloadFileHttps = (fileName, url, expectedHash, hashType = 'sha1') => {
 			res.on('end', () => {
 				file.close()
 				const h = hash.read()
-				if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h}`))
+				if (expectedHash === undefined){
+					console.log(`Warning: lockfile url ${url} doesn't end in "#<hash>" to validate against. Downloaded file had hash ${h}.`);
+				} else if (h != expectedHash) return reject(new Error(`hash mismatch, expected ${expectedHash}, got ${h}`))
 				resolve()
 			})
                         res.on('error', e => reject(e))
 		})
+		get(url)
 	})
 }
 
@@ -91,12 +88,21 @@ const isGitUrl = pattern => {
 }
 
 const downloadPkg = (pkg, verbose) => {
+	const [ name, spec ] = pkg.key.split('@', 2);
+	if (spec.startsWith('file:')) {
+		console.info(`ignoring relative file:path dependency "${spec}"`)
+		return
+	}
+
 	const [ url, hash ] = pkg.resolved.split('#')
 	if (verbose) console.log('downloading ' + url)
 	const fileName = urlToName(url)
 	if (url.startsWith('https://codeload.github.com/') && url.includes('/tar.gz/')) {
 		const s = url.split('/')
-		downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[6])
+		return downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[s.length-1])
+	} else if (url.startsWith('https://github.com/') && url.endsWith('.tar.gz')) {
+		const s = url.split('/')
+		return downloadGit(fileName, `https://github.com/${s[3]}/${s[4]}.git`, s[s.length-1].replace(/.tar.gz$/, ''))
 	} else if (isGitUrl(url)) {
 		return downloadGit(fileName, url.replace(/^git\+/, ''), hash)
 	} else if (url.startsWith('https://')) {

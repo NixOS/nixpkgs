@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   #   ld: CMakeFiles/t4k_common.dir/t4k_throttle.c.o:(.bss+0x0): multiple definition of
   #     `wrapped_lines'; CMakeFiles/t4k_common.dir/t4k_audio.c.o:(.bss+0x0): first defined here
   # TODO: revisit https://github.com/tux4kids/t4kcommon/pull/10 when merged.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf libpng librsvg libxml2 ];

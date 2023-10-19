@@ -1,28 +1,37 @@
-{ lib, python3Packages }:
+{ lib
+, stdenv
+, python3
+, fetchFromGitHub
+}:
 
-with python3Packages;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "iredis";
-  version = "1.12.1";
+  version = "1.13.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-nLwu47wV5QqgtiyiN9bbKzjlZdgd6Qt5KjBlipwRW1Q=";
+  src = fetchFromGitHub {
+    owner = "laixintao";
+    repo = "iredis";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dGOB7emhuP+V0pHlSdS1L1OC4jO3jtf5RFOy0UFYiuY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "click>=7.0,<8.0" "click" \
-      --replace "wcwidth==0.1.9" "wcwidth" \
-      --replace "redis>=3.4.0,<4.0.0" "redis"
-  '';
+  pythonRelaxDeps = [
+    "configobj"
+    "wcwidth"
+    "click"
+    "packaging"
+  ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     pygments
     click
     configobj
-    importlib-resources
     mistune
     packaging
     pendulum
@@ -31,7 +40,7 @@ buildPythonApplication rec {
     wcwidth
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pexpect
   ];
@@ -43,13 +52,16 @@ buildPythonApplication rec {
     "--deselect=tests/unittests/test_render_functions.py::test_render_time"
     # Only execute unittests, because cli tests require a running Redis
     "tests/unittests/"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Flaky test
+    "--deselect=tests/unittests/test_utils.py::test_timer"
   ];
 
   pythonImportsCheck = [ "iredis" ];
 
   meta = with lib; {
     description = "A Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
-    changelog = "https://github.com/laixintao/iredis/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/laixintao/iredis/raw/${src.rev}/CHANGELOG.md";
     homepage = "https://iredis.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ marsam ];

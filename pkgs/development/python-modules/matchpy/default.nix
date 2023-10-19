@@ -37,7 +37,7 @@ buildPythonPackage rec {
     multiset
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "A library for pattern matching on symbolic expressions";
     homepage = "https://github.com/HPAC/matchpy";
     license = licenses.mit;
-    maintainers = with maintainers; [ costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

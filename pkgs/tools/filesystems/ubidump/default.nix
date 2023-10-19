@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, makeWrapper }:
+{ lib, fetchFromGitHub, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
 

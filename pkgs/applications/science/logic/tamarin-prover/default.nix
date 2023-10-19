@@ -1,15 +1,15 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib
+{ haskellPackages, mkDerivation, fetchFromGitHub, fetchpatch, lib, stdenv
 # the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz
+, makeWrapper, which, maude, graphviz, glibcLocales
 }:
 
 let
-  version = "1.6.1";
+  version = "1.8.0";
   src = fetchFromGitHub {
     owner  = "tamarin-prover";
     repo   = "tamarin-prover";
     rev    = version;
-    sha256 = "sha256:0cz1v7k4d0im749ag632nc34n91b51b0pq4z05rzw1p59a5lza92";
+    sha256 = "sha256-ujnaUdbjqajmkphOS4Fs4QBCRGX4JZkQ2p1X2jripww=";
   };
 
   # tamarin has its own dependencies, but they're kept inside the repo,
@@ -51,6 +51,7 @@ let
     doHaddock = false; # broken
     libraryHaskellDepends = (with haskellPackages; [
       aeson aeson-pretty parallel uniplate
+      regex-pcre-builtin regex-posix split
     ]) ++ [ tamarin-prover-utils tamarin-prover-term ];
   });
 
@@ -62,10 +63,37 @@ let
     ]) ++ [ tamarin-prover-theory ];
   });
 
+  tamarin-prover-accountability = mkDerivation (common "tamarin-prover-accountability" (src + "/lib/accountability") // {
+    postPatch = "cp --remove-destination ${src}/LICENSE .";
+    doHaddock = false; # broken
+    libraryHaskellDepends = (with haskellPackages; [
+      raw-strings-qq
+    ]) ++ [
+      tamarin-prover-utils
+      tamarin-prover-term
+      tamarin-prover-theory
+    ];
+  });
+
+  tamarin-prover-export = mkDerivation (common "tamarin-prover-export" (src + "/lib/export") // {
+    postPatch = "cp --remove-destination ${src}/LICENSE .";
+    doHaddock = false; # broken
+    libraryHaskellDepends = (with haskellPackages; [
+      HStringTemplate
+    ]) ++ [
+      tamarin-prover-utils
+      tamarin-prover-term
+      tamarin-prover-theory
+      tamarin-prover-sapic
+    ];
+  });
+
 in
 mkDerivation (common "tamarin-prover" src // {
   isLibrary = false;
   isExecutable = true;
+
+  patches = [ ];
 
   # strip out unneeded deps manually
   doHaddock = false;
@@ -76,10 +104,15 @@ mkDerivation (common "tamarin-prover" src // {
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
+  '' + lib.optionalString stdenv.isLinux ''
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+  '' + ''
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}
     # so that the package can be used as a vim plugin to install syntax coloration
     install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim
     install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/tamarin-prover $out/share/nvim/site
     # Emacs SPTHY major mode
     install -Dt $out/share/emacs/site-lisp etc/spthy-mode.el
   '';
@@ -92,6 +125,8 @@ mkDerivation (common "tamarin-prover" src // {
     resourcet shakespeare threads wai warp yesod-core yesod-static
   ]) ++ [ tamarin-prover-utils
           tamarin-prover-sapic
+          tamarin-prover-accountability
+          tamarin-prover-export
           tamarin-prover-term
           tamarin-prover-theory
         ];
