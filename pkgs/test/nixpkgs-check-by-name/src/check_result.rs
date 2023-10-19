@@ -8,6 +8,10 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    InvalidShardName {
+        relative_shard_path: PathBuf,
+        shard_name: String,
+    },
     PackageNonDir {
         relative_package_dir: PathBuf,
     },
@@ -92,6 +96,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::InvalidShardName { relative_shard_path, shard_name } =>
+                write!(
+                    f,
+                    "{}: Invalid directory name \"{shard_name}\", must be at most 2 ASCII characters consisting of a-z, 0-9, \"-\" or \"_\".",
+                    relative_shard_path.display()
+                ),
             CheckError::PackageNonDir { relative_package_dir } =>
                 write!(
                     f,

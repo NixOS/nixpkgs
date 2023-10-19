@@ -71,12 +71,17 @@ impl Nixpkgs {
             }
 
             let shard_name_valid = SHARD_NAME_REGEX.is_match(&shard_name);
-            if !shard_name_valid {
-                error_writer.write(&format!(
-                    "{}: Invalid directory name \"{shard_name}\", must be at most 2 ASCII characters consisting of a-z, 0-9, \"-\" or \"_\".",
-                    relative_shard_path.display()
-                ))?;
-            }
+            let shard_name_valid_check_result = if !shard_name_valid {
+                CheckError::InvalidShardName {
+                    relative_shard_path: relative_shard_path.clone(),
+                    shard_name: shard_name.clone(),
+                }
+                .into_result()
+            } else {
+                pass(())
+            };
+
+            write_check_result(error_writer, shard_name_valid_check_result)?;
 
             let entries = utils::read_dir_sorted(&shard_path)?;
 
@@ -99,13 +104,13 @@ impl Nixpkgs {
 
             write_check_result(error_writer, duplicate_check_result)?;
 
-            for package_entry in entries {
+            let check_results = entries.into_iter().map(|package_entry| {
                 let package_path = package_entry.path();
                 let package_name = package_entry.file_name().to_string_lossy().into_owned();
                 let relative_package_dir =
                     PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}/{package_name}"));
 
-                let check_result = if !package_path.is_dir() {
+                if !package_path.is_dir() {
                     CheckError::PackageNonDir {
                         relative_package_dir: relative_package_dir.clone(),
                     }
@@ -156,21 +161,21 @@ impl Nixpkgs {
                         pass(())
                     };
 
-                    let check_result = flatten_check_results(
+                    flatten_check_results(
                         [
                             name_check_result,
                             shard_check_result,
                             package_nix_check_result,
                         ],
-                        |_| (),
-                    );
+                        |_| package_name.clone(),
+                    )
+                }
+            });
 
-                    package_names.push(package_name.clone());
+            let check_result = flatten_check_results(check_results, |x| x);
 
-                    check_result
-                };
-
-                write_check_result(error_writer, check_result)?;
+            if let Some(shard_package_names) = write_check_result(error_writer, check_result)? {
+                package_names.extend(shard_package_names)
             }
         }
 
