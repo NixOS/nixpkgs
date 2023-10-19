@@ -16,6 +16,10 @@ let
     buildPackages = buildPackages // { stdenv = ensureCompatibleCC buildPackages; };
     python = python311;
   };
+
+  gypPatches = callPackage ./gyp-patches.nix { } ++ [
+    ./gyp-patches-pre-v22-import-sys.patch
+  ];
 in
 buildNodejs {
   inherit enableNpm;
@@ -33,5 +37,5 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/534c122de166cb6464b489f3e6a9a544ceb1c913.patch";
       hash = "sha256-4q4LFsq4yU1xRwNsM1sJoNVphJCnxaVe2IyL6AeHJ/I=";
     })
-  ];
+  ] ++ gypPatches;
 }
