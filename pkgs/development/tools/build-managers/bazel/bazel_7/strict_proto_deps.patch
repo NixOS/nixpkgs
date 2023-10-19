@@ -1,10 +1,16 @@
+commit c5cbdf1fcfb96299aaef7fb9909c2cc30b126568
+Author: Guillaume Maudoux <guillaume.maudoux@tweag.io>
+Date:   Fri Oct 6 15:06:00 2023 +0200
+
+    strict_proto_deps.patch
+
 diff --git a/src/main/starlark/builtins_bzl/common/java/proto/java_proto_library.bzl b/src/main/starlark/builtins_bzl/common/java/proto/java_proto_library.bzl
-index 63f68167e4..f106e64c9b 100644
+index e2118aabea..6a33f03472 100644
 --- a/src/main/starlark/builtins_bzl/common/java/proto/java_proto_library.bzl
 +++ b/src/main/starlark/builtins_bzl/common/java/proto/java_proto_library.bzl
-@@ -114,6 +114,7 @@ def java_compile_for_protos(ctx, output_jar_suffix, source_jar = None, deps = []
+@@ -117,6 +117,7 @@ def java_compile_for_protos(ctx, output_jar_suffix, source_jar = None, deps = []
+             deps = deps,
              exports = exports,
-             output = output_jar,
              output_source_jar = source_jar,
 +            strict_deps = ctx.fragments.proto.strict_proto_deps(),
              injecting_rule_kind = injecting_rule_kind,
