@@ -1,27 +1,23 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "kail";
-  version = "0.8.0";
+  version = "0.16.1";
 
-  goPackagePath = "github.com/boz/kail";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   src = fetchFromGitHub {
     owner = "boz";
     repo = "kail";
     rev = "v${version}";
-    sha256 = "0ibk7j40pj6f2086qcnwp998wld61d2gvrv7yiy6hlkalhww2pq7";
+    sha256 = "sha256-x9m0NoZjCf/lBWcSGFbjlJIukL6KIYt56Q1hADS8N9I=";
   };
 
-  # regenerate deps.nix using following steps:
-  #
-  # go get -u github.com/boz/kail
-  # cd $GOPATH/src/github.com/boz/kail
-  # git checkout <version>
-  # dep init
-  # dep2nix
-  deleteVendor = true;
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-W+/vIq7qC+6apk+1GOWvmcwyyjFRkndq8X5m/lRYOu4=";
 
   meta = with lib; {
     description = "Kubernetes log viewer";

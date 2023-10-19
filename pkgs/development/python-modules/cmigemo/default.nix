@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, six, cmigemo, pytestCheckHook }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, six, cmigemo, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "cmigemo";
@@ -21,13 +21,14 @@ buildPythonPackage rec {
     sed -i 's~dict_path_base = "/usr/share/cmigemo"~dict_path_base = "/${cmigemo}/share/migemo"~g' test/test_cmigemo.py
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "test/" ];
 
   pythonImportsCheck = [ "cmigemo" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/mooz/python-cmigemo";
     description = "A pure python binding for C/Migemo";
     license = licenses.mit;

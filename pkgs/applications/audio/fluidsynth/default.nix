@@ -1,42 +1,40 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, cmake
-, alsaLib, glib, libjack2, libsndfile, libpulseaudio
-, AudioUnit, CoreAudio, CoreMIDI, CoreServices
-, version ? "2"
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPackages, pkg-config, cmake
+, alsa-lib, glib, libjack2, libsndfile, libpulseaudio
+, AppKit, AudioUnit, CoreAudio, CoreMIDI, CoreServices
 }:
 
-let
-  versionMap = {
-    "1" = {
-      fluidsynthVersion = "1.1.11";
-      sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
-    };
-    "2" = {
-      fluidsynthVersion = "2.0.6";
-      sha256 = "0nas9pp9r8rnziznxm65x2yzf1ryg98zr3946g0br3s38sjf8l3a";
-    };
-  };
-in
-
-with versionMap.${version};
-
-stdenv.mkDerivation  {
-  name = "fluidsynth-${fluidsynthVersion}";
-  version = fluidsynthVersion;
+stdenv.mkDerivation rec {
+  pname = "fluidsynth";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
-    rev = "v${fluidsynthVersion}";
-    inherit sha256;
+    rev = "v${version}";
+    sha256 = "sha256-RqhlpvMbRSwdcY2uuFAdJnihN3aObcLVMuvCZ294dgo=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  patches = [
+    # Fixes bad CMAKE_INSTALL_PREFIX + CMAKE_INSTALL_LIBDIR concatenation for Darwin install name dir
+    # Remove when PR merged & in release
+    (fetchpatch {
+      name = "0001-Fix-incorrect-way-of-turning-CMAKE_INSTALL_LIBDIR-absolute.patch";
+      url = "https://github.com/FluidSynth/fluidsynth/pull/1261/commits/03cd38dd909fc24aa39553d869afbb4024416de8.patch";
+      hash = "sha256-nV+MbFttnbNBO4zWnPLpnnEuoiESkV9BGFlUS9tQQfk=";
+    })
+  ];
 
-  buildInputs = [ glib libsndfile libpulseaudio libjack2 ]
-    ++ lib.optionals stdenv.isLinux [ alsaLib ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
+  outputs = [ "out" "dev" "man" ];
 
-  cmakeFlags = [ "-Denable-framework=off" ];
+  nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
+
+  buildInputs = [ glib libsndfile libjack2 ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
+    ++ lib.optionals stdenv.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
+
+  cmakeFlags = [
+    "-Denable-framework=off"
+  ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";

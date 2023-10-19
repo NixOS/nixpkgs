@@ -1,4 +1,4 @@
-{ lib, stdenv, llvm_meta, fetch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, fetch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
@@ -30,7 +30,6 @@ let
       "-DCMAKE_CXX_FLAGS=-std=c++11"
       "-DCLANGD_BUILD_XPC=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
-      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -46,7 +45,7 @@ let
     ];
 
     patches = [
-      ./purity.patch
+      ../../common/clang/5-8-purity.patch
       ./xpc.patch
       # Backport for -static-pie, which the latter touches, and which is nice in
       # its own right.
@@ -59,15 +58,16 @@ let
       # make clang -xhip use $PATH to find executables
       ./HIP-use-PATH-8.patch
       ./gnu-install-dirs.patch
+      (substituteAll {
+        src = ../../clang-6-10-LLVMgold-path.patch;
+        libllvmLibdir = "${libllvm.lib}/lib";
+      })
     ];
 
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
              -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
              lib/Driver/ToolChains/*.cpp
-
-      # Patch for standalone doc building
-      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -77,12 +77,7 @@ let
 
     outputs = [ "out" "lib" "dev" "python" ];
 
-    # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
-      if [ -e ${libllvm.lib}/lib/LLVMgold.so ]; then
-        ln -sv ${libllvm.lib}/lib/LLVMgold.so $lib/lib
-      fi
-
       ln -sv $out/bin/clang $out/bin/cpp
 
       # Move libclang to 'lib' output
@@ -90,21 +85,24 @@ let
       substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
 
-      mkdir -p $python/bin $python/share/clang/
+      mkdir -p $python/bin $python/share/{clang,scan-view}
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+      mv $out/share/scan-view/*.py $python/share/scan-view
       rm $out/bin/c-index-test
+      patchShebangs $python/bin
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin
     '';
 
     passthru = {
-      isClang = true;
       inherit libllvm;
+      isClang = true;
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {
@@ -121,6 +119,7 @@ let
         of tools that can be built using the Clang frontend as a library to
         parse C/C++ code.
       '';
+      mainProgram = "clang";
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";

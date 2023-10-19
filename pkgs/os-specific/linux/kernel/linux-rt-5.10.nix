@@ -6,28 +6,27 @@
 , ... } @ args:
 
 let
-  version = "5.10.35-rt39"; # updated by ./update-rt.sh
+  version = "5.10.197-rt96"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in buildLinux (args // {
   inherit version;
 
   # modDirVersion needs a patch number, change X.Y-rtZ to X.Y.0-rtZ.
-  modDirVersion = if (builtins.match "[^.]*[.][^.]*-.*" version) == null then version
-    else lib.replaceStrings ["-"] [".0-"] version;
+  modDirVersion = lib.versions.pad 3 version;
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${kversion}.tar.xz";
-    sha256 = "1zcqsjzqgcvlhkjwhzs6sxgbhzkfg898pbisivjqfymp8nfs2dxc";
+    sha256 = "1awkm7lln5gf6kld9z5h4mg39bd778jsdswwlwb7iv7bn03lafhq";
   };
 
   kernelPatches = let rt-patch = {
     name = "rt";
     patch = fetchurl {
       url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-      sha256 = "03gq9y111k4js4cc87yc9y7hyg1wxwbc1bjyjdvb4nrx2wqka79y";
+      sha256 = "0pd1yhr154zl5jfmchzdfv27cbnn8h23x7am0dmqwr1ylwg4bvbi";
     };
-  }; in [ rt-patch ] ++ lib.remove rt-patch kernelPatches;
+  }; in [ rt-patch ] ++ kernelPatches;
 
   structuredExtraConfig = with lib.kernel; {
     PREEMPT_RT = yes;

@@ -2,16 +2,16 @@
 
 buildDunePackage rec {
   pname = "duration";
-  version = "0.1.3";
+  version = "0.2.1";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/hannesm/duration/releases/download/${version}/duration-${version}.tbz";
-    sha256 = "0m9r0ayhpl98g9vdxrbjdcllns274jilic5v8xj1x7dphw21p95h";
+    url = "https://github.com/hannesm/duration/releases/download/v${version}/duration-${version}.tbz";
+    hash = "sha256-xzjB84z7mYIMEhzT3fgZ3ksiKPDVDqy9HMPOmefHHis=";
   };
 
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
   checkInputs = [ alcotest ];
 
   meta = {

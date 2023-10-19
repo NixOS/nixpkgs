@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   pyenv = python3.withPackages (pythonPackages: with pythonPackages; [
-    ConfigArgParse
+    configargparse
   ]);
 
   postConfigure = ''
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ smakarov ];
     platforms = platforms.linux;
+    mainProgram = "xbacklight";
   };
 }

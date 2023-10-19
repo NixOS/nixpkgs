@@ -1,25 +1,43 @@
-{ lib, stdenv, cmake, python3, fetchFromGitHub, fetchpatch, emscripten }:
+{ lib, stdenv, cmake, python3, fetchFromGitHub, emscripten,
+  gtest, lit, nodejs, filecheck
+}:
 
 stdenv.mkDerivation rec {
   pname = "binaryen";
-  version = "96";
+  version = "114";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
-    sha256 = "1mqpb6yy87aifpbcy0lczi3bp6kddrwi6d0g6lrhjrdxx2kvbdag";
+    hash = "sha256-bzHNIQy0AN8mIFGG+638p/MBSqlkWuaOzKGSsMDAPH4=";
   };
 
-  patches = [
-    # Adds --minimize-wasm-changes option required by emscripten 2.0.1
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/WebAssembly/binaryen/pull/3044.patch";
-      sha256 = "1hdbc9h9zhh2d3bl4sqv6v9psfmny715612bwpjdln0ibdvc129s";
-    })
-  ];
-
   nativeBuildInputs = [ cmake python3 ];
+
+  preConfigure = ''
+    if [ $doCheck -eq 1 ]; then
+      sed -i '/googletest/d' third_party/CMakeLists.txt
+    else
+      cmakeFlagsArray=($cmakeFlagsArray -DBUILD_TESTS=0)
+    fi
+  '';
+
+  nativeCheckInputs = [ gtest lit nodejs filecheck ];
+  checkPhase = ''
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib python3 ../check.py $tests
+  '';
+
+  tests = [
+    "version" "wasm-opt" "wasm-dis"
+    "crash" "dylink" "ctor-eval"
+    "wasm-metadce" "wasm-reduce" "spec"
+    "lld" "wasm2js" "validator"
+    "example" "unit"
+    # "binaryenjs" "binaryenjs_wasm" # not building this
+    "lit" "gtest"
+  ];
+  doCheck = stdenv.isLinux;
 
   meta = with lib; {
     homepage = "https://github.com/WebAssembly/binaryen";

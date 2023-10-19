@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.mpdscribble;
   mpdCfg = config.services.mpd;
+  mpdOpt = options.services.mpd;
 
   endpointUrls = {
     "last.fm" = "http://post.audioscrobbler.com";
@@ -76,12 +77,12 @@ in {
 
   options.services.mpdscribble = {
 
-    enable = mkEnableOption "mpdscribble";
+    enable = mkEnableOption (lib.mdDoc "mpdscribble");
 
     proxy = mkOption {
       default = null;
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         HTTP proxy URL.
       '';
     };
@@ -89,7 +90,7 @@ in {
     verbose = mkOption {
       default = 1;
       type = types.int;
-      description = ''
+      description = lib.mdDoc ''
         Log level for the mpdscribble daemon.
       '';
     };
@@ -98,7 +99,7 @@ in {
       default = 600;
       example = 60;
       type = types.int;
-      description = ''
+      description = lib.mdDoc ''
         How often should mpdscribble save the journal file? [seconds]
       '';
     };
@@ -108,8 +109,13 @@ in {
         mpdCfg.network.listenAddress
       else
         "localhost");
+      defaultText = literalExpression ''
+        if config.${mpdOpt.network.listenAddress} != "any"
+        then config.${mpdOpt.network.listenAddress}
+        else "localhost"
+      '';
       type = types.str;
-      description = ''
+      description = lib.mdDoc ''
         Host for the mpdscribble daemon to search for a mpd daemon on.
       '';
     };
@@ -122,18 +128,23 @@ in {
           mpdCfg.credentials).passwordFile
       else
         null;
+      defaultText = literalMD ''
+        The first password file with read access configured for MPD when using a local instance,
+        otherwise `null`.
+      '';
       type = types.nullOr types.str;
-      description = ''
+      description = lib.mdDoc ''
         File containing the password for the mpd daemon.
-        If there is a local mpd configured using <option>services.mpd.credentials</option>
+        If there is a local mpd configured using {option}`services.mpd.credentials`
         the default is automatically set to a matching passwordFile of the local mpd.
       '';
     };
 
     port = mkOption {
       default = mpdCfg.network.port;
+      defaultText = literalExpression "config.${mpdOpt.network.port}";
       type = types.port;
-      description = ''
+      description = lib.mdDoc ''
         Port for the mpdscribble daemon to search for a mpd daemon on.
       '';
     };
@@ -146,18 +157,18 @@ in {
               type = types.str;
               default = endpointUrls.${name} or "";
               description =
-                "The url endpoint where the scrobble API is listening.";
+                lib.mdDoc "The url endpoint where the scrobble API is listening.";
             };
             username = mkOption {
               type = types.str;
-              description = ''
+              description = lib.mdDoc ''
                 Username for the scrobble service.
               '';
             };
             passwordFile = mkOption {
               type = types.nullOr types.str;
               description =
-                "File containing the password, either as MD5SUM or cleartext.";
+                lib.mdDoc "File containing the password, either as MD5SUM or cleartext.";
             };
           };
         };
@@ -169,7 +180,7 @@ in {
           passwordFile = "/run/secrets/lastfm_password";
         };
       };
-      description = ''
+      description = lib.mdDoc ''
         Endpoints to scrobble to.
         If the endpoint is one of "${
           concatStringsSep "\", \"" (attrNames endpointUrls)

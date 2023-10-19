@@ -1,72 +1,93 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute2, iptables, ebtables, iptables-nftables-compat, libcap
-, dqlite, raft-canonical, sqlite-replication, udev
-, writeShellScriptBin, apparmor-profiles, apparmor-parser
-, criu
-, bash
+{ lib
+, hwdata
+, pkg-config
+, lxc
+, buildGoModule
+, fetchurl
+, acl
+, libcap
+, dqlite
+, raft-canonical
+, sqlite
+, udev
 , installShellFiles
-, nftablesSupport ? false
+, nixosTests
+, gitUpdater
+, callPackage
 }:
 
-let
-  networkPkgs = if nftablesSupport then
-    [ iptables-nftables-compat ]
-  else
-    [ iptables ebtables ];
-
-in
-buildGoPackage rec {
-  pname = "lxd";
-  version = "4.14";
-
-  goPackagePath = "github.com/lxc/lxd";
+buildGoModule rec {
+  pname = "lxd-unwrapped";
+  version = "5.18";
 
   src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "1x9gv70j333w254jgg1n0kvxpwv6vww0v0i862pglq48xhdaa7hy";
+    url = "https://github.com/canonical/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz";
+    hash = "sha256-4F4q+jnypE4I2/5D65UT3NRpdJertSRni8JvHkpTFVI=";
   };
+
+  vendorHash = null;
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
 
-  preBuild = ''
-    # unpack vendor
-    pushd go/src/github.com/lxc/lxd
-    rm _dist/src/github.com/lxc/lxd
-    cp -r _dist/src/* ../../..
-    popd
+  excludedPackages = [ "test" "lxd/db/generate" "lxd-agent" "lxd-migrate" ];
 
-    makeFlagsArray+=("-tags libsqlite3")
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs = [
+    lxc
+    acl
+    libcap
+    dqlite.dev
+    raft-canonical.dev
+    sqlite
+    udev.dev
+  ];
+
+  ldflags = [ "-s" "-w" ];
+  tags = [ "libsqlite3" ];
+
+  preBuild = ''
+    # required for go-dqlite. See: https://github.com/canonical/lxd/pull/8939
+    export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
   '';
+
+  # build static binaries: https://github.com/canonical/lxd/blob/6fd175c45e65cd475d198db69d6528e489733e19/Makefile#L43-L51
+  postBuild = ''
+    make lxd-agent lxd-migrate
+  '';
+
+  preCheck =
+    let skippedTests = [
+      "TestValidateConfig"
+      "TestConvertNetworkConfig"
+      "TestConvertStorageConfig"
+      "TestSnapshotCommon"
+      "TestContainerTestSuite"
+    ]; in
+    ''
+      # Disable tests requiring local operations
+      buildFlagsArray+=("-run" "[^(${builtins.concatStringsSep "|" skippedTests})]")
+    '';
 
   postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
-
-    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
-      networkPkgs
-      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu ]
-      ++ [ (writeShellScriptBin "apparmor_parser" ''
-             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-           '') ]
-      )
-    }
-
-    installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
+    installShellCompletion --bash --name lxd ./scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
-  buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
-                  sqlite-replication udev.dev ];
+  passthru.tests.lxd = nixosTests.lxd;
+  passthru.ui = callPackage ./ui.nix { };
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/canonical/lxd.git";
+    rev-prefix = "lxd-";
+  };
 
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
-    homepage = "https://linuxcontainers.org/lxd/";
+    homepage = "https://ubuntu.com/lxd";
+    changelog = "https://github.com/canonical/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 ];
+    maintainers = with maintainers; [ marsam adamcstephens ];
     platforms = platforms.linux;
   };
 }

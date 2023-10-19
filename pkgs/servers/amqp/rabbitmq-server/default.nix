@@ -1,51 +1,72 @@
-{ lib, stdenv, fetchurl, erlang, elixir, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
-, procps, coreutils, gnused, systemd, glibcLocales
-, AppKit, Carbon, Cocoa
+{ lib
+, stdenv
+, fetchurl
+, erlang
+, elixir
+, python3
+, libxml2
+, libxslt
+, xmlto
+, docbook_xml_dtd_45
+, docbook_xsl
+, zip
+, unzip
+, rsync
+, getconf
+, socat
+, procps
+, coreutils
+, gnused
+, systemd
+, glibcLocales
+, AppKit
+, Carbon
+, Cocoa
 , nixosTests
 }:
 
+let
+  runtimePath = lib.makeBinPath ([
+    erlang
+    getconf # for getting memory limits
+    socat
+    procps
+    gnused
+    coreutils # used by helper scripts
+  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
+in
+
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
-
-  version = "3.8.9";
+  version = "3.12.6";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0b252l9r45h8r5gibdqcn6hhbm8g6rfzhm1k9d39pwhs5x77cjqv";
+    hash = "sha256-QBDgRpYlOaROIbgmpOHW2wzULgXrIW1IxJ14jvy/YR4=";
   };
 
-  nativeBuildInputs = [ unzip ];
-  buildInputs =
-    [ erlang elixir python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip rsync glibcLocales ]
+  nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
+
+  buildInputs = [ erlang elixir libxml2 libxslt glibcLocales ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
   outputs = [ "out" "man" "doc" ];
 
-  installFlags = [ "PREFIX=$(out)" "RMQ_ERLAPP_DIR=$(out)" ];
+  installFlags = [
+    "PREFIX=${placeholder "out"}"
+    "RMQ_ERLAPP_DIR=${placeholder "out"}"
+  ];
+
   installTargets = [ "install" "install-man" ];
 
   preBuild = ''
     export LANG=C.UTF-8 # fix elixir locale warning
   '';
 
-  runtimePath = lib.makeBinPath ([
-    erlang
-    getconf # for getting memory limits
-    socat procps
-    gnused coreutils # used by helper scripts
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]); # for systemd unit activation check
   postInstall = ''
     # rabbitmq-env calls to sed/coreutils, so provide everything early
     sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'
-
-    # rabbitmq-server script uses `dirname` to get hold of a
-    # rabbitmq-env, so let's provide this file directly. After that
-    # point everything is OK - the PATH above will kick in
-    substituteInPlace $out/sbin/rabbitmq-server \
-      --replace '`dirname $0`/rabbitmq-env' \
-                "$out/sbin/rabbitmq-env"
 
     # We know exactly where rabbitmq is gonna be, so we patch that into the env-script.
     # By doing it early we make sure that auto-detection for this will
@@ -60,15 +81,16 @@ stdenv.mkDerivation rec {
     rm $out/INSTALL
   '';
 
-  meta = {
-    homepage = "https://www.rabbitmq.com/";
-    description = "An implementation of the AMQP messaging protocol";
-    license = lib.licenses.mpl20;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ Profpatsch ];
-  };
-
   passthru.tests = {
     vm-test = nixosTests.rabbitmq;
+  };
+
+  meta = with lib; {
+    homepage = "https://www.rabbitmq.com/";
+    description = "An implementation of the AMQP messaging protocol";
+    changelog = "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v${version}";
+    license = licenses.mpl20;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ turion ];
   };
 }

@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, libusb-compat-0_1 }:
 stdenv.mkDerivation {
-  name = "sixpair-2007-04-18";
+  pname = "sixpair";
+  version = "unstable-2007-04-18";
 
   src = fetchurl {
     url = "http://www.pabr.org/sixlinux/sixpair.c";

@@ -1,43 +1,13 @@
-{ lib, stdenv, fetchurl, config, wrapGAppsHook
-, alsaLib
-, atk
-, cairo
+{ lib, stdenv, fetchurl, config, wrapGAppsHook, autoPatchelfHook
+, alsa-lib
 , curl
-, cups
 , dbus-glib
-, dbus
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gtk2
 , gtk3
-, libkrb5
-, libX11
-, libXScrnSaver
-, libxcb
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrender
-, libXt
-, libcanberra
-, libnotify
-, gnome
-, libGLU, libGL
-, nspr
-, nss
-, pango
-, pipewire
+, libXtst
+, libva
 , pciutils
-, libheimdal
-, libpulseaudio
-, systemd
+, pipewire
+, adwaita-icon-theme
 , channel
 , generated
 , writeScript
@@ -47,15 +17,17 @@
 , gnused
 , gnugrep
 , gnupg
-, ffmpeg
 , runtimeShell
-, mesa # firefox wants gbm for drm+dmabuf
-, systemLocale ? config.i18n.defaultLocale or "en-US"
+, systemLocale ? config.i18n.defaultLocale or "en_US"
+, patchelfUnstable  # have to use patchelfUnstable to support --no-clobber-old-sections
+, makeWrapper
 }:
 
 let
 
   inherit (generated) version sources;
+
+  binaryName = if channel == "release" then "firefox" else "firefox-${channel}";
 
   mozillaPlatforms = {
     i686-linux = "linux-i686";
@@ -72,137 +44,98 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  };
+  } // config.firefox.policies or {};
 
-  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
+  policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
   defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  mozLocale =
+    if systemLocale == "ca_ES@valencia"
+    then "ca-valencia"
+    else lib.replaceStrings ["_"] ["-"] systemLocale;
 
-  name = "firefox-${channel}-bin-unwrapped-${version}";
+  source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
 
+  pname = "firefox-${channel}-bin-unwrapped";
+
+  # FIXME: workaround for not being able to pass flags to patchelf
+  # Remove after https://github.com/NixOS/nixpkgs/pull/256525
+  wrappedPatchelf = stdenv.mkDerivation {
+    pname = "patchelf-wrapped";
+    inherit (patchelfUnstable) version;
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    buildCommand = ''
+      mkdir -p $out/bin
+      makeWrapper ${patchelfUnstable}/bin/patchelf $out/bin/patchelf --append-flags "--no-clobber-old-sections"
+    '';
+  };
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  inherit pname version;
 
   src = fetchurl { inherit (source) url sha256; };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
-  libPath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsaLib
-      atk
-      cairo
-      curl
-      cups
-      dbus-glib
-      dbus
-      fontconfig
-      freetype
-      gdk-pixbuf
-      glib
-      glibc
-      gtk2
-      gtk3
-      libkrb5
-      mesa
-      libX11
-      libXScrnSaver
-      libXcomposite
-      libXcursor
-      libxcb
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXinerama
-      libXrender
-      libXt
-      libcanberra
-      libnotify
-      libGLU libGL
-      nspr
-      nss
-      pango
-      pipewire
-      pciutils
-      libheimdal
-      libpulseaudio
-      systemd
-      ffmpeg
-    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
-
-  inherit gtk3;
-
-  buildInputs = [ wrapGAppsHook gtk3 gnome.adwaita-icon-theme ];
-
-  # "strip" after "patchelf" may break binaries.
-  # See: https://github.com/NixOS/patchelf/issues/10
-  dontStrip = true;
-  dontPatchELF = true;
-
-  patchPhase = ''
-    # Don't download updates from Mozilla directly
-    echo 'pref("app.update.auto", "false");' >> defaults/pref/channel-prefs.js
-  '';
+  nativeBuildInputs = [ wrapGAppsHook autoPatchelfHook wrappedPatchelf ];
+  buildInputs = [
+    gtk3
+    adwaita-icon-theme
+    alsa-lib
+    dbus-glib
+    libXtst
+  ];
+  runtimeDependencies = [
+    curl
+    libva.out
+    pciutils
+  ];
+  appendRunpaths = [
+    "${pipewire.lib}/lib"
+  ];
 
   installPhase =
     ''
-      mkdir -p "$prefix/usr/lib/firefox-bin-${version}"
-      cp -r * "$prefix/usr/lib/firefox-bin-${version}"
+      mkdir -p "$prefix/lib/firefox-bin-${version}"
+      cp -r * "$prefix/lib/firefox-bin-${version}"
 
       mkdir -p "$out/bin"
-      ln -s "$prefix/usr/lib/firefox-bin-${version}/firefox" "$out/bin/"
-
-      for executable in \
-        firefox firefox-bin plugin-container \
-        updater crashreporter webapprt-stub
-      do
-        if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
-          patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-            "$out/usr/lib/firefox-bin-${version}/$executable"
-        fi
-      done
-
-      find . -executable -type f -exec \
-        patchelf --set-rpath "$libPath" \
-          "$out/usr/lib/firefox-bin-${version}/{}" \;
-
-      # wrapFirefox expects "$out/lib" instead of "$out/usr/lib"
-      ln -s "$out/usr/lib" "$out/lib"
-
-      gappsWrapperArgs+=(--argv0 "$out/bin/.firefox-wrapped")
+      ln -s "$prefix/lib/firefox-bin-${version}/firefox" "$out/bin/${binaryName}"
 
       # See: https://github.com/mozilla/policy-templates/blob/master/README.md
       mkdir -p "$out/lib/firefox-bin-${version}/distribution";
       ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
     '';
 
-  passthru.execdir = "/bin";
-  passthru.ffmpegSupport = true;
-  passthru.gssSupport = true;
-  # update with:
-  # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
-  passthru.updateScript = import ./update.nix {
-    inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
-    baseUrl =
-      if channel == "devedition"
-        then "http://archive.mozilla.org/pub/devedition/releases/"
-        else "http://archive.mozilla.org/pub/firefox/releases/";
-  };
-  meta = with lib; {
-    description = "Mozilla Firefox, free web browser (binary package)";
-    homepage = "http://www.mozilla.org/firefox/";
-    license = {
-      free = false;
-      url = "http://www.mozilla.org/en-US/foundation/trademarks/policy/";
+  passthru = {
+    inherit binaryName;
+    libName = "firefox-bin-${version}";
+    ffmpegSupport = true;
+    gssSupport = true;
+    gtk3 = gtk3;
+
+    # update with:
+    # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
+    updateScript = import ./update.nix {
+      inherit pname channel lib writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+      baseUrl =
+        if channel == "devedition"
+          then "https://archive.mozilla.org/pub/devedition/releases/"
+          else "https://archive.mozilla.org/pub/firefox/releases/";
     };
+  };
+
+  meta = with lib; {
+    changelog = "https://www.mozilla.org/en-US/firefox/${version}/releasenotes/";
+    description = "Mozilla Firefox, free web browser (binary package)";
+    homepage = "https://www.mozilla.org/firefox/";
+    license = licenses.mpl20;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
+    hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];
+    mainProgram = binaryName;
   };
 }

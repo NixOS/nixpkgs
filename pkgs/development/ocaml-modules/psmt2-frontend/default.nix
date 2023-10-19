@@ -1,21 +1,19 @@
 { lib, fetchFromGitHub, buildDunePackage, menhir }:
 
 buildDunePackage rec {
-  version = "0.3.1";
+  version = "0.4.0";
   pname = "psmt2-frontend";
 
   src = fetchFromGitHub {
     owner = "ACoquereau";
     repo = pname;
     rev = version;
-    sha256 = "038jrfsq09nhnzpjiishg4adk09w3aw1bpczgbj66lqqilkd6gci";
+    hash = "sha256-cYY9x7QZjH7pdJyHMqfMXgHZ3/zJLp/6ntY6OSIo6Vs=";
   };
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.03";
 
-  minimumOCamlVersion = "4.03";
-
-  buildInputs = [ menhir ];
+  nativeBuildInputs = [ menhir ];
 
   meta = {
     description = "A simple parser and type-checker for polomorphic extension of the SMT-LIB 2 language";

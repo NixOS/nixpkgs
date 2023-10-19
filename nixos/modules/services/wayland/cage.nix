@@ -5,12 +5,12 @@ with lib;
 let
   cfg = config.services.cage;
 in {
-  options.services.cage.enable = mkEnableOption "cage kiosk service";
+  options.services.cage.enable = mkEnableOption (lib.mdDoc "cage kiosk service");
 
   options.services.cage.user = mkOption {
     type = types.str;
     default = "demo";
-    description = ''
+    description = lib.mdDoc ''
       User to log-in as.
     '';
   };
@@ -18,15 +18,25 @@ in {
   options.services.cage.extraArguments = mkOption {
     type = types.listOf types.str;
     default = [];
-    defaultText = "[]";
-    description = "Additional command line arguments to pass to Cage.";
+    defaultText = literalExpression "[]";
+    description = lib.mdDoc "Additional command line arguments to pass to Cage.";
     example = ["-d"];
+  };
+
+  options.services.cage.environment = mkOption {
+    type = types.attrsOf types.str;
+    default = {};
+    example = {
+      WLR_LIBINPUT_NO_DEVICES = "1";
+    };
+    description = lib.mdDoc "Additional environment variables to pass to Cage.";
   };
 
   options.services.cage.program = mkOption {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
-    description = ''
+    defaultText = literalExpression ''"''${pkgs.xterm}/bin/xterm"'';
+    description = lib.mdDoc ''
       Program to run in cage.
     '';
   };
@@ -73,17 +83,22 @@ in {
         TTYVTDisallocate = "yes";
         # Fail to start if not controlling the virtual terminal.
         StandardInput = "tty-fail";
+        StandardOutput = "journal";
+        StandardError = "journal";
         # Set up a full (custom) user session for the user, required by Cage.
         PAMName = "cage";
       };
+      environment = cfg.environment;
     };
+
+    security.polkit.enable = true;
 
     security.pam.services.cage.text = ''
       auth    required pam_unix.so nullok
       account required pam_unix.so
       session required pam_unix.so
-      session required pam_env.so conffile=${config.system.build.pamEnvironment} readenv=0
-      session required ${pkgs.systemd}/lib/security/pam_systemd.so
+      session required pam_env.so conffile=/etc/pam/environment readenv=0
+      session required ${config.systemd.package}/lib/security/pam_systemd.so
     '';
 
     hardware.opengl.enable = mkDefault true;

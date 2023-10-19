@@ -6,7 +6,8 @@
 , kauth
 , libdrm
 , hwdata
-, mesa-demos
+, glxinfo
+, polkit
 , procps
 , util-linux
 , vulkan-tools
@@ -16,19 +17,23 @@
 , qtsvg
 , qttools
 , qtxmlpatterns
+, quazip
 , wrapQtAppsHook
 } :
 
 stdenv.mkDerivation rec{
   pname = "corectrl";
-  version = "1.1.3";
+  version = "1.3.5";
 
   src = fetchFromGitLab {
     owner = "corectrl";
     repo = "corectrl";
     rev = "v${version}";
-    sha256 = "sha256-xRyc7FYzG8MnhQ8DjIUHYLeUZCZQdi4j1v1fG7F0+G8=";
+    sha256 = "sha256-HETD2+acxJf30iC6UwRXD/onFYo3ki4RwAAVs4NbSAw=";
   };
+  patches = [
+    ./polkit-dir.patch
+  ];
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -39,7 +44,8 @@ stdenv.mkDerivation rec{
     karchive
     kauth
     libdrm
-    mesa-demos
+    glxinfo
+    polkit
     procps
     util-linux
     vulkan-tools
@@ -49,11 +55,16 @@ stdenv.mkDerivation rec{
     qtsvg
     qttools
     qtxmlpatterns
+    quazip
   ];
 
-  cmakeFlags = [ "-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids" ];
+  cmakeFlags = [
+    "-DWITH_PCI_IDS_PATH=${hwdata}/share/hwdata/pci.ids"
+    "-DINSTALL_DBUS_FILES_IN_PREFIX=true"
+    "-DPOLKIT_POLICY_INSTALL_DIR=${placeholder "out"}/share/polkit-1/actions"
+  ];
 
-  runtimeDeps = [ hwdata mesa-demos vulkan-tools ];
+  runtimeDeps = [ hwdata glxinfo vulkan-tools util-linux procps ];
   binPath = lib.makeBinPath runtimeDeps;
 
   dontWrapQtApps = true;

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , filelock
 , idna
 , pytest-mock
@@ -9,20 +9,30 @@
 , requests
 , requests-file
 , responses
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
-  pname   = "tldextract";
-  version = "3.1.0";
-  disabled = pythonOlder "3.6";
+  pname = "tldextract";
+  version = "5.0.1";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cfae9bc8bda37c3e8c7c8639711ad20e95dc85b207a256b60b0b23d7ff5540ea";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "john-kurkowski";
+    repo = "tldextract";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+JZnSIjG1avQ14NxbYF5on2ukJtTWTq+hVIqYCvPjsQ=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     filelock
@@ -31,17 +41,15 @@ buildPythonPackage rec {
     requests-file
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     responses
   ];
 
-  postPatch = ''
-    substituteInPlace pytest.ini --replace " --pylint" ""
-  '';
-
-  pythonImportsCheck = [ "tldextract" ];
+  pythonImportsCheck = [
+    "tldextract"
+  ];
 
   meta = with lib; {
     description = "Python module to accurately separate the TLD from the domain of an URL";
@@ -50,6 +58,7 @@ buildPythonPackage rec {
       from the registered domain and subdomains of a URL.
     '';
     homepage = "https://github.com/john-kurkowski/tldextract";
+    changelog = "https://github.com/john-kurkowski/tldextract/blob/${version}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

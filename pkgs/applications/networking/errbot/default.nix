@@ -1,54 +1,34 @@
 { lib
-, ansi
-, buildPythonApplication
-, colorlog
-, daemonize
-, deepmerge
-, dulwich
 , fetchFromGitHub
-, flask
-, glibcLocales
-, hypchat
-, irc
-, jinja2
-, markdown
-, mock
-, pyasn1
-, pyasn1-modules
-, pygments
-, pygments-markdown-lexer
-, pyopenssl
-, pytestCheckHook
-, requests
-, slackclient
-, sleekxmpp
-, telegram
-, webtest
+, python3
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "errbot";
-  version = "6.1.7";
+  version = "6.1.9";
+
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "errbotio";
     repo = "errbot";
     rev = version;
-    sha256 = "02h44qd3d91zy657hyqsw3gskgxg31848pw6zpb8dhd1x84z5y77";
+    hash = "sha256-BmHChLWWnrtg0p4WH8bANwpo+p4RTwjYbXfyPnz6mp8=";
   };
 
-  LC_ALL = "en_US.utf8";
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+  ];
 
-  buildInputs = [ glibcLocales ];
+  pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     ansi
     colorlog
     daemonize
     deepmerge
     dulwich
     flask
-    hypchat
     irc
     jinja2
     markdown
@@ -58,32 +38,33 @@ buildPythonApplication rec {
     pygments-markdown-lexer
     pyopenssl
     requests
-    slackclient
-    sleekxmpp
-    telegram
+    slixmpp
+    python-telegram-bot
     webtest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     mock
     pytestCheckHook
   ];
 
-  # Slack backend test has an import issue
+  # errbot-backend-slackv3 has not been packaged
   pytestFlagsArray = [ "--ignore=tests/backend_tests/slack_test.py" ];
 
   disabledTests = [
-    "backup"
-    "broken_plugin"
-    "plugin_cycle"
+    # require networking
+    "test_backup"
+    "test_broken_plugin"
+    "test_plugin_cycle"
   ];
 
   pythonImportsCheck = [ "errbot" ];
 
   meta = with lib; {
+    changelog = "https://github.com/errbotio/errbot/blob/${version}/CHANGES.rst";
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = "http://errbot.io/";
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ globin ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     # flaky on darwin, "RuntimeError: can't start new thread"

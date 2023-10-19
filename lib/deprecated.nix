@@ -77,11 +77,11 @@ rec {
   # Output : are reqs satisfied? It's asserted.
   checkReqs = attrSet: argList: condList:
   (
-    fold lib.and true
+    foldr lib.and true
       (map (x: let name = (head x); in
 
         ((checkFlag attrSet name) ->
-        (fold lib.and true
+        (foldr lib.and true
         (map (y: let val=(getValue attrSet argList y); in
                 (val!=null) && (val!=false))
         (tail x))))) condList));
@@ -157,7 +157,36 @@ rec {
                                 }
                       );
 
-  closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
+  closePropagationSlow = list: (uniqList {inputList = (innerClosePropagation [] list);});
+
+  # This is an optimisation of lib.closePropagation which avoids the O(n^2) behavior
+  # Using a list of derivations, it generates the full closure of the propagatedXXXBuildInputs
+  # The ordering / sorting / comparison is done based on the `outPath`
+  # attribute of each derivation.
+  # On some benchmarks, it performs up to 15 times faster than lib.closePropagation.
+  # See https://github.com/NixOS/nixpkgs/pull/194391 for details.
+  closePropagationFast = list:
+    builtins.map (x: x.val) (builtins.genericClosure {
+      startSet = builtins.map (x: {
+        key = x.outPath;
+        val = x;
+      }) (builtins.filter (x: x != null) list);
+      operator = item:
+        if !builtins.isAttrs item.val then
+          [ ]
+        else
+          builtins.concatMap (x:
+            if x != null then [{
+              key = x.outPath;
+              val = x;
+            }] else
+              [ ]) ((item.val.propagatedBuildInputs or [ ])
+                ++ (item.val.propagatedNativeBuildInputs or [ ]));
+    });
+
+  closePropagation = if builtins ? genericClosure
+    then closePropagationFast
+    else closePropagationSlow;
 
   # calls a function (f attr value ) for each record item. returns a list
   mapAttrsFlatten = f: r: map (attr: f attr r.${attr}) (attrNames r);
@@ -177,7 +206,7 @@ rec {
   # merge attributes with custom function handling the case that the attribute
   # exists in both sets
   mergeAttrsWithFunc = f: set1: set2:
-    fold (n: set: if set ? ${n}
+    foldr (n: set: if set ? ${n}
                         then setAttr set n (f set.${n} set2.${n})
                         else set )
            (set2 // set1) (attrNames set2);
@@ -196,7 +225,7 @@ rec {
   mergeAttrsNoOverride = { mergeLists ? ["buildInputs" "propagatedBuildInputs"],
                            overrideSnd ? [ "buildPhase" ]
                          }: attrs1: attrs2:
-    fold (n: set:
+    foldr (n: set:
         setAttr set n ( if set ? ${n}
             then # merge
               if elem n mergeLists # attribute contains list, merge them by concatenating
@@ -224,7 +253,7 @@ rec {
           mergeAttrBy2 = { mergeAttrBy = lib.mergeAttrs; }
                       // (maybeAttr "mergeAttrBy" {} x)
                       // (maybeAttr "mergeAttrBy" {} y); in
-    fold lib.mergeAttrs {} [
+    foldr lib.mergeAttrs {} [
       x y
       (mapAttrs ( a: v: # merge special names using given functions
           if x ? ${a}

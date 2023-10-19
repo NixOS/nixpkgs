@@ -22,13 +22,13 @@ else
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-${pname}-${version}";
   inherit pname;
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0w3x2wfd04qr6mci4cp1gfqw33yysp8gamgkpgbgwslr0skryiq5";
+    sha256 = "sha256:1mbyjzwcs64n7i3xkkyaxgl3r46drbl0gkqf3fqgm2kh3q03638l";
   };
 
   postUnpack = ''
@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     ./no-opam.patch
     ./configurable-binding.patch
   ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     ocaml
@@ -55,15 +57,6 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  preBuild = ''
-    # perform substitutions, so opam isn't needed
-    for flags in flags/cflags.tmp flags/libs.tmp; do
-      substitute "$flags.in" "$flags" \
-        --replace "%{prefix}%" "$out" \
-        --replace "%{ocaml-freestanding:lib}%" "$out/lib"
-    done
-  '';
-
   installPhase = ''
     runHook preInstall
     ./install.sh "$out"
@@ -71,6 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true; # Not compatible with solo5 ≥ 0.7
     description = "Freestanding OCaml runtime";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];

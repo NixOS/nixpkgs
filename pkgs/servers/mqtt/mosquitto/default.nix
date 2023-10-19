@@ -8,22 +8,43 @@
 , cjson
 , libuuid
 , libuv
-, libwebsockets_3_1
+, libwebsockets
 , openssl
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
+, fetchpatch
 }:
 
+let
+  # Mosquitto needs external poll enabled in libwebsockets.
+  libwebsockets' = (libwebsockets.override {
+    withExternalPoll = true;
+  }).overrideAttrs (old: {
+    # Avoid bug in firefox preventing websockets being created over http/2 connections
+    # https://github.com/eclipse/mosquitto/issues/1211#issuecomment-958137569
+    cmakeFlags = old.cmakeFlags ++ [ "-DLWS_WITH_HTTP2=OFF" ];
+  });
+
+in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.10";
+  version = "2.0.17";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "144vw7b9ja4lci4mplbxs048x9aixd9c3s7rg6wc1k31w099rb12";
+    sha256 = "sha256-hOnZ6oHLvunZL6MrCmR5GkROQNww34QQ3m4gYDaSpb4=";
   };
+
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
+      name = "revert-cmake-shared-to-module.patch"; # See https://github.com/eclipse/mosquitto/issues/2277
+      url = "https://github.com/eclipse/mosquitto/commit/e21eaeca37196439b3e89bb8fd2eb1903ef94845.patch";
+      sha256 = "14syi2c1rks8sl2aw09my276w45yq1iasvzkqcrqwy4drdqrf069";
+      revert = true;
+    })
+  ];
 
   postPatch = ''
     for f in html manpage ; do
@@ -37,6 +58,8 @@ stdenv.mkDerivation rec {
     popd
   '';
 
+  outputs = [ "out" "dev" "lib" ];
+
   nativeBuildInputs = [ cmake docbook_xsl libxslt ];
 
   buildInputs = [
@@ -44,7 +67,7 @@ stdenv.mkDerivation rec {
     cjson
     libuuid
     libuv
-    libwebsockets_3_1
+    libwebsockets'
     openssl
   ] ++ lib.optional withSystemd systemd;
 

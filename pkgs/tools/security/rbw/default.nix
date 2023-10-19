@@ -1,76 +1,72 @@
 { lib
 , stdenv
 , rustPlatform
-, fetchCrate
+, fetchzip
 , openssl
 , pkg-config
-, makeWrapper
 , installShellFiles
-, Security
-, libiconv
+, darwin
 
-# rbw-fzf
-, withFzf ? false, fzf, perl
+  # rbw-fzf
+, withFzf ? false
+, fzf
+, perl
 
-# rbw-rofi
-, withRofi ? false, rofi, xclip
+  # rbw-rofi
+, withRofi ? false
+, rofi
+, xclip
 
-# pass-import
-, withPass ? false, pass
+  # pass-import
+, withPass ? false
+, pass
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.2.0";
+  version = "1.8.3";
 
-  src = fetchCrate {
-    inherit version;
-    crateName = pname;
-    sha256 = "14cnqc5cf6qm2g9ypv2pbqbvymawyrqn3fc778labgqg24khqcyq";
+  src = fetchzip {
+    url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
+    sha256 = "sha256-dC/x+ihH1POIFN/8pbk967wATXKU4YVBGI0QCo8d+SY=";
   };
 
-  cargoSha256 = "0izn5bcvk1rx69sjwyfc49nmvw7k0jysqb0bpdpwdliaa06ggl86";
+  cargoHash = "sha256-nI1Pf7gREbAk+JVF3Gn2j8OqprexCQ5fVvECtq2aBPM=";
 
   nativeBuildInputs = [
-    pkg-config
-    makeWrapper
     installShellFiles
+  ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.AppKit
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
-
-  postPatch = lib.optionalString withFzf ''
-    patchShebangs bin/rbw-fzf
-    substituteInPlace bin/rbw-fzf \
-        --replace fzf ${fzf}/bin/fzf \
-        --replace perl ${perl}/bin/perl
-  '' + lib.optionalString withRofi ''
-    patchShebangs bin/rbw-rofi
-    substituteInPlace bin/rbw-rofi \
-        --replace rofi ${rofi}/bin/rofi \
-        --replace xclip ${xclip}/bin/xclip
-  '' + lib.optionalString withRofi ''
-    patchShebangs bin/pass-import
-    substituteInPlace bin/pass-import \
-        --replace pass ${pass}/bin/pass
-  '';
-
-  preConfigure = ''
+  preConfigure = lib.optionalString stdenv.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
-    export OPENSSL_LIB_DIR="${openssl.out}/lib"
+    export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 
   postInstall = ''
-    for shell in bash zsh fish; do
-      $out/bin/rbw gen-completions $shell > rbw.$shell
-      installShellCompletion rbw.$shell
-    done
+    install -Dm755 -t $out/bin bin/git-credential-rbw
+    installShellCompletion --cmd rbw \
+      --bash <($out/bin/rbw gen-completions bash) \
+      --fish <($out/bin/rbw gen-completions fish) \
+      --zsh <($out/bin/rbw gen-completions zsh)
   '' + lib.optionalString withFzf ''
-    cp bin/rbw-fzf $out/bin
+    install -Dm755 -t $out/bin bin/rbw-fzf
+    substituteInPlace $out/bin/rbw-fzf \
+      --replace fzf ${fzf}/bin/fzf \
+      --replace perl ${perl}/bin/perl
   '' + lib.optionalString withRofi ''
-    cp bin/rbw-rofi $out/bin
+    install -Dm755 -t $out/bin bin/rbw-rofi
+    substituteInPlace $out/bin/rbw-rofi \
+      --replace rofi ${rofi}/bin/rofi \
+      --replace xclip ${xclip}/bin/xclip
   '' + lib.optionalString withPass ''
-    cp bin/pass-import $out/bin
+    install -Dm755 -t $out/bin bin/pass-import
+    substituteInPlace $out/bin/pass-import \
+      --replace pass ${pass}/bin/pass
   '';
 
   meta = with lib; {

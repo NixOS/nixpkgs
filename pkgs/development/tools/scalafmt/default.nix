@@ -1,37 +1,39 @@
-{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jre, coursier, makeWrapper, setJavaClassPath }:
 
 let
   baseName = "scalafmt";
-  version = "2.6.4";
+  version = "3.7.9";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch org.scalameta:scalafmt-cli_2.12:${version} > deps
+      ${coursier}/bin/cs fetch org.scalameta:scalafmt-cli_2.13:${version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "1h19rsxsn2piifillv29nwks2k9l391jwygjbfy8pc0ha8yi63mw";
+    outputHash = "sha256-r4vv62H0AryjZb+34fVHvqvndipOYyf6XpQC9u8Dxso=";
   };
 in
 stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+  pname = baseName;
+  inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jdk deps ];
+  nativeBuildInputs = [ makeWrapper setJavaClassPath ];
+  buildInputs = [ deps ];
 
-  doCheck = true;
-
-  phases = [ "installPhase" "checkPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     makeWrapper ${jre}/bin/java $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH org.scalafmt.cli.Cli"
+
+    runHook postInstall
   '';
 
-  checkPhase = ''
+  installCheckPhase = ''
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
@@ -40,5 +42,6 @@ stdenv.mkDerivation {
     homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;
     maintainers = [ maintainers.markus1189 ];
+    mainProgram = "scalafmt";
   };
 }

@@ -15,7 +15,7 @@ let
     icon = "${placeholder "out"}/share/lyrebird/icon.png";
     desktopName = "Lyrebird";
     genericName = "Voice Changer";
-    categories = "AudioVideo;Audio;";
+    categories = [ "AudioVideo" "Audio" ];
   };
 in
 python3Packages.buildPythonApplication rec {
@@ -34,15 +34,15 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
-  buildInputs = [ gtk3 gobject-introspection sox ];
+  buildInputs = [ gtk3 sox ];
 
   dontWrapGApps = true;
   makeWrapperArgs = [
     "--prefix 'PATH' ':' '${lib.makeBinPath [ sox pulseaudio ]}'"
     "--prefix 'PYTHONPATH' ':' '${placeholder "out"}/share/lyrebird'"
-    "--run 'cd ${placeholder "out"}/share/lyrebird'"
+    "--chdir '${placeholder "out"}/share/lyrebird'"
     ''"''${gappsWrapperArgs[@]}"''
   ];
 

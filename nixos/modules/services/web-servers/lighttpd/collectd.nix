@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.lighttpd.collectd;
+  opt = options.services.lighttpd.collectd;
 
   collectionConf = pkgs.writeText "collection.conf" ''
     datadir: "${config.services.collectd.dataDir}"
@@ -24,12 +25,15 @@ in
 
   options.services.lighttpd.collectd = {
 
-    enable = mkEnableOption "collectd subservice accessible at http://yourserver/collectd";
+    enable = mkEnableOption (lib.mdDoc "collectd subservice accessible at http://yourserver/collectd");
 
     collectionCgi = mkOption {
       type = types.path;
       default = defaultCollectionCgi;
-      description = ''
+      defaultText = literalMD ''
+        `config.${options.services.collectd.package}` configured for lighttpd
+      '';
+      description = lib.mdDoc ''
         Path to collection.cgi script from (collectd sources)/contrib/collection.cgi
         This option allows to use a customized version
       '';

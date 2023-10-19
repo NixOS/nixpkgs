@@ -1,68 +1,77 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, autoreconfHook
+, fetchpatch
+, cmake
+, pkg-config
 , fltk
-, jansson
+, fmt
 , rtmidi
 , libsamplerate
+, libmpg123
 , libsndfile
 , jack2
-, alsaLib
+, alsa-lib
 , libpulseaudio
 , libXpm
-, libXinerama
-, libXcursor
-, catch2
+, libXrandr
+, flac
+, libogg
+, libvorbis
+, libopus
 , nlohmann_json
 }:
 
 stdenv.mkDerivation rec {
   pname = "giada";
-  version = "0.16.4";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0qyx0bvivlvly0vj5nnnbiks22xh13sqlw4mfgplq2lbbpgisigp";
+    rev = version;
+    sha256 = "sha256-q3Lu3UaEKfS7F59G6rPx+5cKcsaXk+xcdtJRIXPwVIs=";
+    fetchSubmodules = true;
   };
 
-  configureFlags = [
-    "--target=linux"
-    "--enable-system-catch"
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-w"
+    "-Wno-error"
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_BINDIR=bin"
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    cmake
+    pkg-config
   ];
 
   buildInputs = [
+    rtmidi
     fltk
+    fmt
+    libmpg123
     libsndfile
     libsamplerate
-    jansson
-    rtmidi
-    libXpm
-    jack2
-    alsaLib
-    libpulseaudio
-    libXinerama
-    libXcursor
-    catch2
     nlohmann_json
+    alsa-lib
+    libXpm
+    libpulseaudio
+    jack2
+    flac
+    libogg
+    libvorbis
+    libopus
+    libXrandr
   ];
-
-  postPatch = ''
-    sed -i 's:"deps/json/single_include/nlohmann/json\.hpp":<nlohmann/json.hpp>:' \
-        src/core/{conf,init,midiMapConf,patch}.cpp
-  '';
 
   meta = with lib; {
     description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     homepage = "https://giadamusic.com/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ kashw2 ];
     platforms = platforms.all;
-    broken = stdenv.hostPlatform.isAarch64; # produces build failure on aarch64-linux
   };
 }

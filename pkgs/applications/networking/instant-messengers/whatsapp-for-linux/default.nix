@@ -1,31 +1,71 @@
-{ fetchFromGitHub, lib, stdenv, gnome, cmake, pkg-config,
-  libappindicator-gtk3, gst_all_1, pcre }:
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, glib-networking
+, gst_all_1
+, gtkmm3
+, libayatana-appindicator
+, libcanberra
+, libepoxy
+, libpsl
+, libdatrie
+, libdeflate
+, libselinux
+, libsepol
+, libsysprof-capture
+, libthai
+, libxkbcommon
+, sqlite
+, pcre
+, pcre2
+, pkg-config
+, webkitgtk
+, wrapGAppsHook
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "whatsapp-for-linux";
-  version = "1.1.5";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1gzahls4givd2kbjdwx6yb3jv7a3r1krw40qihiz7hkamkrpaiaz";
+    sha256 = "sha256-DU9tvIvDfOtBydR68yeRMFYdMjiBrOobCDXIZMmm7pQ=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gnome.gtkmm
-    gnome.webkitgtk
-    libappindicator-gtk3
+    glib-networking
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
+    gtkmm3
+    libayatana-appindicator
+    libcanberra
+    libdatrie
+    libdeflate
+    libepoxy
+    libpsl
+    libselinux
+    libsepol
+    libsysprof-capture
+    libthai
+    libxkbcommon
     pcre
+    pcre2
+    sqlite
+    webkitgtk
+    xorg.libXdmcp
+    xorg.libXtst
   ];
 
   meta = with lib; {

@@ -1,27 +1,42 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, darwin
+, fontconfig
+, harfbuzz
+, openssl
+, pkg-config
+, makeBinaryWrapper
+, icu
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.4.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "tectonic@${version}";
-    sha256 = "sha256-XQ3KRM12X80JPFMnQs//8ZJEv+AV1sr3BH0Nw/PH0HQ=";
+    fetchSubmodules = true;
+    sha256 = "sha256-Cd8YzjU5mCA5DmgLBjg8eVRc87chVVIXinJuf8cNw3o=";
   };
 
-  cargoSha256 = "sha256-930tFAKMCmTFS9faIWLSVtWN/gAA9UAUMuRo61XISYA=";
+  cargoHash = "sha256-1WjZbmZFPB1+QYpjqq5Y+fDkMZNmWJYIxmMFWg7Tiac=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
 
-  buildInputs = [ fontconfig harfbuzz openssl ]
+  buildInputs = [ icu fontconfig harfbuzz openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
   postInstall = lib.optionalString stdenv.isLinux ''
+    substituteInPlace dist/appimage/tectonic.desktop \
+      --replace Exec=tectonic Exec=$out/bin/tectonic
     install -D dist/appimage/tectonic.desktop -t $out/share/applications/
     install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+
+    ln -s $out/bin/tectonic $out/bin/nextonic
   '';
 
   doCheck = true;
@@ -31,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://tectonic-typesetting.github.io/";
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.lluchs maintainers.doronbehar ];
+    mainProgram = "tectonic";
+    maintainers = with maintainers; [ lluchs doronbehar ];
   };
 }

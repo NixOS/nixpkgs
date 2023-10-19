@@ -1,19 +1,18 @@
-{ lib, fetchurl, yojson, csexp, result, buildDunePackage }:
+{ lib, fetchurl, yojson, csexp, findlib, buildDunePackage, merlin-lib, merlin, result }:
 
 buildDunePackage rec {
   pname = "dot-merlin-reader";
-  version = "4.1";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.06";
+  inherit (merlin) version src;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml/merlin/releases/download/v${version}/dot-merlin-reader-v${version}.tbz";
-    sha256 = "14a36d6fb8646a5df4530420a7861722f1a4ee04753717947305e3676031e7cd";
-  };
+  minimalOCamlVersion = "4.06";
 
-  buildInputs = [ yojson csexp result ];
+  buildInputs = [ findlib ]
+  ++ (if lib.versionAtLeast version "4.7-414"
+  then [ merlin-lib ]
+  else [ yojson csexp result ]);
 
   meta = with lib; {
     description = "Reads config files for merlin";

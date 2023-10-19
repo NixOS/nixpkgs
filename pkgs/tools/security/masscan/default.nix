@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
 , makeWrapper
 , libpcap
@@ -17,25 +18,45 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  patches = [
+    # Patches the missing "--resume" functionality
+    (fetchpatch {
+      name = "resume.patch";
+      url = "https://github.com/robertdavidgraham/masscan/commit/90791550bbdfac8905917a109ed74024161f14b3.patch";
+      sha256 = "sha256-A7Fk3MBNxaad69MrUYg7fdMG77wba5iESDTIRigYslw=";
+    })
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=${stdenv.cc.targetPrefix}cc" ];
-
-  preInstall = ''
-    mkdir -p $out/bin
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Fix broken install command
+    substituteInPlace Makefile --replace "-pm755" "-pDm755"
   '';
 
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "GITVER=${version}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
+  enableParallelBuilding = true;
+
   postInstall = ''
-    installManPage doc/masscan.8
+    installManPage doc/masscan.?
 
-    mkdir -p $out/share/{doc,licenses}/masscan
-    mkdir -p $out/etc/masscan
+    install -Dm444 -t $out/etc/masscan            data/exclude.conf
+    install -Dm444 -t $out/share/doc/masscan      doc/*.{html,js,md}
+    install -Dm444 -t $out/share/licenses/masscan LICENSE
 
-    cp data/exclude.conf $out/etc/masscan
-    cp -t $out/share/doc/masscan doc/algorithm.js doc/howto-afl.md doc/bot.html
-    cp LICENSE $out/share/licenses/masscan/LICENSE
+    wrapProgram $out/bin/masscan \
+      --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
+  '';
 
-    wrapProgram $out/bin/masscan --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/masscan --selftest
   '';
 
   meta = with lib; {

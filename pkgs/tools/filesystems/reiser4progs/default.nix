@@ -1,13 +1,12 @@
 {lib, stdenv, fetchurl, libaal}:
 
-let version = "2.0.4"; in
 stdenv.mkDerivation rec {
   pname = "reiser4progs";
-  inherit version;
+  version = "2.0.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/reiser4/reiser4-utils/${pname}-${version}.tar.gz";
-    sha256 = "sha256-WmIkISnRp5BngSfPEKY95HVEt5TBtPKu+RMBwlLsnuA=";
+    sha256 = "sha256-DBR2C5h6ue4aqHmDG50jCLXe13DSWAYwfibrzTM+7Sw=";
   };
 
   buildInputs = [libaal];
@@ -20,6 +19,12 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace Makefile --replace ./run-ldconfig true
+  '';
+
+  # this required for wipefreespace
+  postInstall = ''
+    mkdir -p $out/lib
+    cp ./libmisc/.libs/libmisc.a $out/lib/libreiser4misc.a.la
   '';
 
   meta = with lib; {

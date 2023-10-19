@@ -1,23 +1,33 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub, substituteAll }:
 
 python3Packages.buildPythonPackage rec {
   pname = "auto-cpufreq";
-  version = "1.6.1";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "AdnanHodzic";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oz3C1150CPfT0kkx1x7VIX/Rm06dkjyxeDPFCRJaWNc=";
+    sha256 = "sha256-D/5pwE2V+yXj92ECOUcl/dajMDbvVdz9YNJrl2Pzvts=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ click distro psutil ];
+  propagatedBuildInputs = with python3Packages; [ setuptools-git-versioning click distro psutil ];
 
   doCheck = false;
   pythonImportsCheck = [ "auto_cpufreq" ];
 
-  # patch to prevent script copying and to disable install
-  patches = [ ./prevent-install-and-copy.patch ];
+  patches = [
+    # hardcodes version output
+    (substituteAll {
+      src = ./fix-version-output.patch;
+      inherit version;
+    })
+
+    # patch to prevent script copying and to disable install
+    ./prevent-install-and-copy.patch
+    # patch to prevent update
+    ./prevent-update.patch
+  ];
 
   postInstall = ''
     # copy script manually
@@ -26,10 +36,10 @@ python3Packages.buildPythonPackage rec {
     # systemd service
     mkdir -p $out/lib/systemd/system
     cp ${src}/scripts/auto-cpufreq.service $out/lib/systemd/system
-    substituteInPlace $out/lib/systemd/system/auto-cpufreq.service --replace "/usr/local" $out
   '';
 
   meta = with lib; {
+    mainProgram = "${pname}";
     homepage = "https://github.com/AdnanHodzic/auto-cpufreq";
     description = "Automatic CPU speed & power optimizer for Linux";
     license = licenses.lgpl3Plus;

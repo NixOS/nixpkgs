@@ -1,8 +1,17 @@
-{ lib, python37, fetchFromGitHub }:
+{ lib, python38, fetchPypi, fetchFromGitHub }:
 let
-  python = python37.override {
+  python = python38.override {
     self = python;
     packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.24";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
+        };
+        doCheck = false;
+      });
       tornado = super.tornado_4;
     };
   };
@@ -10,18 +19,18 @@ let
 in
 with python.pkgs; buildPythonApplication rec {
   pname = "grab-site";
-  version = "2.2.0";
+  version = "2.2.7";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "ArchiveTeam";
     repo = "grab-site";
-    sha256 = "1jxcv9dral6h7vfpfqkp1yif6plj0vspzakymkj8hfl75nh0wpv8";
+    sha256 = "sha256-tf8GyFjya3+TVc2VjlY6ztfjCJgof6tg4an18pz+Ig8=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-3.0.7"' '"wpull"'
+      --replace '"wpull @ https://github.com/ArchiveTeam/ludios_wpull/tarball/master#egg=wpull-${ludios_wpull.version}"' '"wpull"'
   '';
 
   propagatedBuildInputs = [
@@ -32,7 +41,7 @@ with python.pkgs; buildPythonApplication rec {
     autobahn
     fb-re2
     websockets
-    cchardet
+    faust-cchardet
   ];
 
   checkPhase = ''

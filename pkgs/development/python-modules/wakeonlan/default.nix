@@ -8,31 +8,35 @@
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "2.0.1";
+  version = "3.0.0";
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "remcohaszing";
     repo = "pywakeonlan";
-    rev = version;
-    sha256 = "sha256-WgoL8ntfEaHcvVbJjdewe0wE31Lq7WBj8Bppeq1uJx8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7BDE7TmTT8rSaG0rEn5QwH+izGWA2PeQzxpGiv7+3fo=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test_wakeonlan.py" ];
+  pytestFlagsArray = [
+    "test_wakeonlan.py"
+  ];
 
-  pythonImportsCheck = [ "wakeonlan" ];
+  pythonImportsCheck = [
+    "wakeonlan"
+  ];
 
   meta = with lib; {
-    description = "A small python module for wake on lan";
+    description = "Python module for wake on lan";
     homepage = "https://github.com/remcohaszing/pywakeonlan";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];

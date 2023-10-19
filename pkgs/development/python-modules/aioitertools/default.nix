@@ -1,35 +1,51 @@
 { lib
-
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , pythonOlder
+
+# native
+, flit-core
+
+# propagates
 , typing-extensions
-, coverage
-, python
-, toml
+
+# tests
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "aioitertools";
-  version = "0.7.1";
-  disabled = pythonOlder "3.7";
+  version = "0.11.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18ql6k2j1839jf2rmmmm29v6fb7mr59l75z8nlf0sadmydy6r9al";
+    hash = "sha256-QsaLjdOmnCv38iM7999LtYtVe8pSUqwC7VGHu8Z9aDE=";
   };
 
-  propagatedBuildInputs = [ typing-extensions ];
-  checkInputs = [ coverage toml ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m coverage run -m aioitertools.tests
-  '';
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "aioitertools"
+  ];
 
   meta = with lib; {
-    description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables.";
+    description = "Implementation of itertools, builtins, and more for AsyncIO and mixed-type iterables";
+    homepage = "https://aioitertools.omnilib.dev/";
     license = licenses.mit;
-    homepage = "https://pypi.org/project/aioitertools/";
     maintainers = with maintainers; [ teh ];
   };
 }

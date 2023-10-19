@@ -2,6 +2,7 @@
 , stdenv
 , buildDunePackage
 , fetchFromGitHub
+, fetchpatch
 , cmdliner
 , ctypes
 , dune-configurator
@@ -12,23 +13,29 @@
 , ppx_sexp_conv
 , sexplib
 , stdio
-, pytorch
+, torch
 }:
 
 buildDunePackage rec {
   pname = "torch";
-  version = "0.12";
+  version = "0.17";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "LaurentMazare";
-    repo   = "ocaml-${pname}";
-    rev    = version;
-    sha256 = "0nl6hd2rivhgkc3sdkdmrk3j0ij3xjx1clhqm8m5iznir4g77g91";
+    repo = "ocaml-${pname}";
+    rev = version;
+    hash = "sha256-z/9NUBjeFWE63Z/e8OyzDiy8hrn6qzjaiBH8G9MPeos=";
   };
+
+  patches = [
+    # Pytorch 2.0 support. Drop when it reaches a release
+    (fetchpatch {
+      url = "https://github.com/LaurentMazare/ocaml-torch/commit/ef7ef30cafecb09e45ec1ed8ce4bedae5947cfa5.patch";
+      hash = "sha256-smdwKy40iIISp/25L2J4az6KmqFS1soeChBElUyhl5A=";
+    })
+  ];
 
   buildInputs = [ dune-configurator ];
 
@@ -37,19 +44,18 @@ buildDunePackage rec {
     ctypes
     npy
     ocaml-compiler-libs
-    pytorch
-    pytorch.dev
     ppx_custom_printf
     ppx_expect
     ppx_sexp_conv
     sexplib
     stdio
+    torch
+    torch.dev
   ];
 
-  preBuild = "export LIBTORCH=${pytorch.dev}/";
+  preBuild = "export LIBTORCH=${torch.dev}/";
 
   doCheck = !stdenv.isAarch64;
-  checkPhase = "dune runtest";
 
   meta = with lib; {
     inherit (src.meta) homepage;

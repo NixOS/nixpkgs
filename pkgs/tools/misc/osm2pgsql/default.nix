@@ -2,45 +2,76 @@
 , fetchFromGitHub
 , cmake
 , expat
+, fmt
 , proj
 , bzip2
 , zlib
 , boost
+, cimg
 , postgresql
+, python3
 , withLuaJIT ? false
 , lua
 , luajit
 , libosmium
+, nlohmann_json
+, potrace
 , protozero
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osm2pgsql";
-  version = "1.4.2";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    owner = "openstreetmap";
-    repo = pname;
-    rev = version;
-    sha256 = "141blh6lwbgn8hh45xaa0yiwygdc444h9zahx5xrzx5pck9zb5ps";
+    owner = "osm2pgsql-dev";
+    repo = "osm2pgsql";
+    rev = finalAttrs.version;
+    hash = "sha256-RzJpaOEpgKm2IN6CK2Z67CUG0WU2ELvCpGhdQehjGKU=";
   };
+
+  postPatch = ''
+    # Remove bundled libraries
+    rm -r contrib
+  '';
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ expat proj bzip2 zlib boost postgresql libosmium protozero ]
-    ++ lib.optional withLuaJIT luajit
+  buildInputs = [
+    boost
+    bzip2
+    cimg
+    expat
+    fmt
+    libosmium
+    nlohmann_json
+    postgresql
+    potrace
+    proj
+    protozero
+    (python3.withPackages (p: with p; [ psycopg2 pyosmium ]))
+    zlib
+  ] ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
-  cmakeFlags = [ "-DEXTERNAL_LIBOSMIUM=ON" "-DEXTERNAL_PROTOZERO=ON" ]
-    ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
+  cmakeFlags = [
+    "-DEXTERNAL_LIBOSMIUM=ON"
+    "-DEXTERNAL_PROTOZERO=ON"
+    "-DEXTERNAL_FMT=ON"
+  ] ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 
-  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
+  installFlags = [ "install-gen" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+  };
 
   meta = with lib; {
     description = "OpenStreetMap data to PostgreSQL converter";
     homepage = "https://osm2pgsql.org";
-    license = licenses.gpl2;
-    platforms = with platforms; linux ++ darwin;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ jglukasik das-g ];
   };
-}
+})

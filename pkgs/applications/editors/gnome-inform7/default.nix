@@ -22,12 +22,12 @@ let
       pkg-config
       docbook2x
       docbook-xsl-nons
+      wrapGAppsHook
+      gobject-introspection
     ];
     buildInputs = [
       gtk3
-      gobject-introspection
       vala gtk-doc
-      wrapGAppsHook
     ];
   });
 
@@ -50,10 +50,10 @@ let
       python3
       glib
       wrapGAppsHook
+      gobject-introspection
     ];
     buildInputs = [
       gtk3
-      gobject-introspection
       vala
       gtk-doc
       gst_all_1.gstreamer

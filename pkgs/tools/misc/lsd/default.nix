@@ -1,37 +1,52 @@
 { lib
-, nixosTests
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
+, darwin
+, pandoc
+, testers
+, lsd
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.20.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
-    owner = "Peltoche";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-r/Rllu+tgKqz+vkxA8BSN+3V0lUUd6dEATfickQp4+s=";
+    owner = "lsd-rs";
+    repo = "lsd";
+    rev = "v${version}";
+    hash = "sha256-syT+1LNdigUWkfJ/wkbY/kny2uW6qfpl7KmW1FjZKR8=";
   };
 
-  cargoSha256 = "sha256-O8P29eYlHgmmAADZ/DgTBmj0ZOa+4u/Oee+TMF+/4Ro=";
+  cargoHash = "sha256-viLr76Bq9OkPMp+BoprQusMDgx59nbevVi4uxjZ+eZg=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pandoc ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
   postInstall = ''
-    installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
+    pandoc --standalone --to man doc/lsd.md -o lsd.1
+    installManPage lsd.1
+
+    installShellCompletion --cmd lsd \
+      --bash $releaseDir/build/lsd-*/out/lsd.bash \
+      --fish $releaseDir/build/lsd-*/out/lsd.fish \
+      --zsh $releaseDir/build/lsd-*/out/_lsd
   '';
 
   # Found argument '--test-threads' which wasn't expected, or isn't valid in this context
   doCheck = false;
 
-  passthru.tests = { inherit (nixosTests) lsd; };
+  passthru.tests.version = testers.testVersion {
+    package = lsd;
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/Peltoche/lsd";
+    homepage = "https://github.com/lsd-rs/lsd";
     description = "The next gen ls command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne marsam zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [ marsam zowoq SuperSandro2000 ];
   };
 }

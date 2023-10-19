@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
-, libmicrohttpd
+, libmicrohttpd, darwin
 }:
 
 with lib;
@@ -19,7 +19,9 @@ stdenv.mkDerivation {
     mkdir m4
   '';
 
-  buildInputs = [ autoreconfHook pkg-config glib expat libmicrohttpd ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  buildInputs = [ glib expat libmicrohttpd ] ++
+    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = {
     description = "Stubbed XMPP Server";

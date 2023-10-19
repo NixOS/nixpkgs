@@ -1,30 +1,32 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
-, fetchpatch
-, appstream-glib
-, clutter
 , gjs
 , glib
 , gobject-introspection
 , gtk3
+, gtk4
+, gcr_4
+, libadwaita
 , meson
 , mutter
 , ninja
 , pango
 , pkg-config
 , vala
+, desktop-file-utils
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.40.2";
+  version = "44.1";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-DUikcnkDBRkCwPLrl8lkNr+SeNpc3bPwPTWRn91nOo4=";
+    sha256 = "sha256-c/q8VTzFOz8nzidPB3qnYw9+AkdKfTdUD4AcxyHKrqo=";
   };
 
   patches = [
@@ -38,25 +40,27 @@ stdenv.mkDerivation rec {
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
-    substituteInPlace src/libgpaste/settings/gpaste-settings.c \
+    substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
       --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
   nativeBuildInputs = [
-    appstream-glib
     gobject-introspection
     meson
     ninja
     pkg-config
     vala
+    desktop-file-utils
     wrapGAppsHook
   ];
 
   buildInputs = [
-    clutter # required by mutter-clutter
     gjs
     glib
     gtk3
+    gtk4
+    gcr_4
+    libadwaita
     mutter
     pango
   ];
@@ -66,10 +70,6 @@ stdenv.mkDerivation rec {
     "-Ddbus-services-dir=${placeholder "out"}/share/dbus-1/services"
     "-Dsystemd-user-unit-dir=${placeholder "out"}/etc/systemd/user"
   ];
-
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";

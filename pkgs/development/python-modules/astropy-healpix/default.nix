@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -12,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
-  version = "0.6";
+  version = "1.0.0";
 
   src = fetchPypi {
     inherit version;
     pname = lib.replaceStrings ["-"] ["_"] pname;
-    sha256 = "409a6621c383641456c074f0f0350a24a4a58e910eaeef14e9bbce3e00ad6690";
+    hash = "sha256-9ILvYqEOaGMD84xm8I3xe53e5a2CIZwjVx7oDXar7qM=";
   };
 
   nativeBuildInputs = [
@@ -30,11 +31,13 @@ buildPythonPackage rec {
     astropy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-doctestplus
     hypothesis
   ];
+
+  disabledTests = lib.optional (!stdenv.hostPlatform.isDarwin) "test_interpolate_bilinear_skycoord";
 
   # tests must be run in the build directory
   preCheck = ''

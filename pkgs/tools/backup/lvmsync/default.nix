@@ -4,9 +4,9 @@ stdenv.mkDerivation rec {
   pname = "lvmsync";
   version = (import ./gemset.nix).${pname}.version;
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   installPhase = let
     env = bundlerEnv {

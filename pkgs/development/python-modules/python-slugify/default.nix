@@ -1,25 +1,53 @@
-{ lib, fetchPypi, buildPythonPackage, python, text-unidecode }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, text-unidecode
+, unidecode
+}:
 
 buildPythonPackage rec {
-    pname = "python-slugify";
-    version = "4.0.1";
+  pname = "python-slugify";
+  version = "8.0.1";
+  format = "setuptools";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270";
-    };
+  disabled = pythonOlder "3.7";
 
-    propagatedBuildInputs = [ text-unidecode ];
+  src = fetchFromGitHub {
+    owner = "un33k";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MJac63XjgWdUQdyyEm8O7gAGVszmHxZzRF4frJtR0BU=";
+  };
 
-    checkPhase = ''
-      ${python.interpreter} test.py
-    '';
+  propagatedBuildInputs = [
+    text-unidecode
+  ];
 
-    meta = with lib; {
-      homepage = "https://github.com/un33k/python-slugify";
-      description = "A Python Slugify application that handles Unicode";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ vrthra ];
-    };
+  passthru.optional-dependencies = {
+    unidecode = [
+      unidecode
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "test.py"
+  ];
+
+  pythonImportsCheck = [
+    "slugify"
+  ];
+
+  meta = with lib; {
+    description = "Python Slugify application that handles Unicode";
+    homepage = "https://github.com/un33k/python-slugify";
+    changelog = "https://github.com/un33k/python-slugify/blob/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ vrthra ];
+  };
 }

@@ -1,21 +1,26 @@
 { lib, stdenv
-, fetchurl
+, fetchurl, unzip
 , hdf5
+, bzip2
+, libzip
+, zstd
+, szipSupport ? false
+, szip
+, libxml2
 , m4
 , curl # for DAP
 , removeReferencesTo
 }:
 
 let
-  mpiSupport = hdf5.mpiSupport;
-  mpi = hdf5.mpi;
+  inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
-  pname = "netcdf";
-  version = "4.7.4";
+  pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
+  version = "4.9.2";
 
   src = fetchurl {
-    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${pname}-c-${version}.tar.gz";
-    sha256 = "1a2fpp15a2rl1m50gcvvzd9y6bavl6vjf9zzf63sz5gdmq06yiqf";
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    hash = "sha256-zxG6u725lj8J9VB54LAZ9tA3H1L44SZKW6jp/asabEg=";
   };
 
   postPatch = ''
@@ -25,14 +30,26 @@ in stdenv.mkDerivation rec {
     for a in ncdap_test/Makefile.am ncdap_test/Makefile.in; do
       substituteInPlace $a --replace testurl.sh " "
     done
+
+    # Prevent building the tests from prepending `#!/bin/bash` and wiping out the patched shenbangs.
+    substituteInPlace nczarr_test/Makefile.in \
+      --replace '#!/bin/bash' '${stdenv.shell}'
   '';
 
   nativeBuildInputs = [ m4 removeReferencesTo ];
-  buildInputs = [ hdf5 curl mpi ];
+
+  buildInputs = [
+    curl
+    hdf5
+    libxml2
+    mpi
+    bzip2
+    libzip
+    zstd
+  ] ++ lib.optional szipSupport szip;
 
   passthru = {
-    mpiSupport = mpiSupport;
-    inherit mpi;
+    inherit mpiSupport mpi;
   };
 
   configureFlags = [
@@ -40,8 +57,11 @@ in stdenv.mkDerivation rec {
       "--enable-dap"
       "--enable-shared"
       "--disable-dap-remote-tests"
+      "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
   ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  enableParallelBuilding = true;
 
   disallowedReferences = [ stdenv.cc ];
 
@@ -50,13 +70,17 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = !mpiSupport;
+  nativeCheckInputs = [ unzip ];
+
+  preCheck = ''
+    export HOME=$TEMP
+  '';
 
   meta = {
-      description = "Libraries for the Unidata network Common Data Format";
-      platforms = lib.platforms.unix;
-      homepage = "https://www.unidata.ucar.edu/software/netcdf/";
-      license = {
-        url = "https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html";
-      };
+    description = "Libraries for the Unidata network Common Data Format";
+    platforms = lib.platforms.unix;
+    homepage = "https://www.unidata.ucar.edu/software/netcdf/";
+    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${version}/RELEASE_NOTES.html";
+    license = lib.licenses.bsd3;
   };
 }

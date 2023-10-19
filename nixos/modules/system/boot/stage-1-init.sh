@@ -14,6 +14,8 @@ extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
+# hardcoded in util-linux's mount helper search path `/run/wrappers/bin:/run/current-system/sw/bin:/sbin`
+ln -s @extraUtils@/bin /sbin
 
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
@@ -71,7 +73,7 @@ trap 'fail' 0
 
 # Print a greeting.
 info
-info "[1;32m<<< NixOS Stage 1 >>>[0m"
+info "[1;32m<<< @distroName@ Stage 1 >>>[0m"
 info
 
 # Make several required directories.
@@ -81,30 +83,57 @@ ln -s /proc/mounts /etc/mtab # to shut up mke2fs
 touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 
-# Function for waiting a device to appear.
+# Function for waiting for device(s) to appear.
 waitDevice() {
     local device="$1"
+    # Split device string using ':' as a delimiter as bcachefs
+    # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
+    local IFS=':'
 
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
     # alas...  So just wait for a few seconds for the device to
     # appear.
-    if test ! -e $device; then
-        echo -n "waiting for device $device to appear..."
-        try=20
-        while [ $try -gt 0 ]; do
-            sleep 1
-            # also re-try lvm activation now that new block devices might have appeared
-            lvm vgchange -ay
-            # and tell udev to create nodes for the new LVs
-            udevadm trigger --action=add
-            if test -e $device; then break; fi
-            echo -n "."
-            try=$((try - 1))
+    for dev in $device; do
+        if test ! -e $dev; then
+            echo -n "waiting for device $dev to appear..."
+            try=20
+            while [ $try -gt 0 ]; do
+                sleep 1
+                # also re-try lvm activation now that new block devices might have appeared
+                lvm vgchange -ay
+                # and tell udev to create nodes for the new LVs
+                udevadm trigger --action=add
+                if test -e $dev; then break; fi
+                echo -n "."
+                try=$((try - 1))
+            done
+            echo
+            [ $try -ne 0 ]
+        fi
+    done
+}
+
+# Create the mount point if required.
+makeMountPoint() {
+    local device="$1"
+    local mountPoint="$2"
+    local options="$3"
+
+    local IFS=,
+
+    # If we're bind mounting a file, the mount point should also be a file.
+    if ! [ -d "$device" ]; then
+        for opt in $options; do
+            if [ "$opt" = bind ] || [ "$opt" = rbind ]; then
+                mkdir -p "$(dirname "/mnt-root$mountPoint")"
+                touch "/mnt-root$mountPoint"
+                return
+            fi
         done
-        echo
-        [ $try -ne 0 ]
     fi
+
+    mkdir -m 0755 -p "/mnt-root$mountPoint"
 }
 
 # Mount special file systems.
@@ -118,6 +147,18 @@ specialMount() {
   mount -n -t "$fsType" -o "$options" "$device" "$mountPoint"
 }
 source @earlyMountScript@
+
+# Copy initrd secrets from /.initrd-secrets to their actual destinations
+if [ -d "/.initrd-secrets" ]; then
+    #
+    # Secrets are named by their full destination pathname and stored
+    # under /.initrd-secrets/
+    #
+    for secret in $(cd "/.initrd-secrets"; find . -type f); do
+        mkdir -p $(dirname "/$secret")
+        cp "/.initrd-secrets/$secret" "$secret"
+    done
+fi
 
 # Log the script output to /dev/kmsg or /run/log/stage-1-init.log.
 mkdir -p /tmp
@@ -251,15 +292,6 @@ if test -n "$debug1devices"; then fail; fi
 @postDeviceCommands@
 
 
-# Return true if the machine is on AC power, or if we can't determine
-# whether it's on AC power.
-onACPower() {
-    ! test -d "/proc/acpi/battery" ||
-    ! ls /proc/acpi/battery/BAT[0-9]* > /dev/null 2>&1 ||
-    ! cat /proc/acpi/battery/BAT*/state | grep "^charging state" | grep -q "discharg"
-}
-
-
 # Check the specified file system, if appropriate.
 checkFS() {
     local device="$1"
@@ -274,11 +306,17 @@ checkFS() {
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
 
+    # Skip fsck for apfs as the fsck utility does not support repairing the filesystem (no -a option)
+    if [ "$fsType" = apfs ]; then return 0; fi
+
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
 
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
+
+    # Skip fsck.erofs because it is still experimental.
+    if [ "$fsType" = erofs ]; then return 0; fi
 
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
@@ -304,20 +342,9 @@ checkFS() {
         return 0
     fi
 
-    # Don't run `fsck' if the machine is on battery power.  !!! Is
-    # this a good idea?
-    if ! onACPower; then
-        echo "on battery power, so no \`fsck' will be performed on \`$device'"
-        return 0
-    fi
-
     echo "checking $device..."
 
-    fsckFlags=
-    if test "$fsType" != "btrfs"; then
-        fsckFlags="-V -a"
-    fi
-    fsck $fsckFlags "$device"
+    fsck -V -a "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then
@@ -339,6 +366,14 @@ checkFS() {
     return 0
 }
 
+escapeFstab() {
+    local original="$1"
+
+    # Replace space
+    local escaped="${original// /\\040}"
+    # Replace tab
+    echo "${escaped//$'\t'/\\011}"
+}
 
 # Function for mounting a file system.
 mountFS() {
@@ -361,22 +396,6 @@ mountFS() {
 
     checkFS "$device" "$fsType"
 
-    # Optionally resize the filesystem.
-    case $options in
-        *x-nixos.autoresize*)
-            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
-                modprobe "$fsType"
-                echo "resizing $device..."
-                e2fsck -fp "$device"
-                resize2fs "$device"
-            elif [ "$fsType" = f2fs ]; then
-                echo "resizing $device..."
-                fsck.f2fs -fp "$device"
-                resize.f2fs "$device"
-            fi
-            ;;
-    esac
-
     # Create backing directories for overlayfs
     if [ "$fsType" = overlay ]; then
         for i in upper work; do
@@ -387,7 +406,7 @@ mountFS() {
 
     info "mounting $device on $mountPoint..."
 
-    mkdir -p "/mnt-root$mountPoint"
+    makeMountPoint "$device" "$mountPoint" "$optionsPrefixed"
 
     # For ZFS and CIFS mounts, retry a few times before giving up.
     # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
@@ -400,6 +419,11 @@ mountFS() {
         n=$((n + 1))
     done
 
+    # For bind mounts, busybox has a tendency to ignore options, which can be a
+    # security issue (e.g. "nosuid"). Remounting the partition seems to fix the
+    # issue.
+    mount "/mnt-root$mountPoint" -o "remount,$optionsPrefixed"
+
     [ "$mountPoint" == "/" ] &&
         [ -f "/mnt-root/etc/NIXOS_LUSTRATE" ] &&
         lustrateRoot "/mnt-root"
@@ -411,7 +435,7 @@ lustrateRoot () {
     local root="$1"
 
     echo
-    echo -e "\e[1;33m<<< NixOS is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
+    echo -e "\e[1;33m<<< @distroName@ is now lustrating the root filesystem (cruft goes to /old-root) >>>\e[0m"
     echo
 
     mkdir -m 0755 -p "$root/old-root.tmp"
@@ -427,7 +451,7 @@ lustrateRoot () {
         mv -v "$d" "$root/old-root.tmp"
     done
 
-    # Use .tmp to make sure subsequent invokations don't clash
+    # Use .tmp to make sure subsequent invocations don't clash
     mv -v "$root/old-root.tmp" "$root/old-root"
 
     mkdir -m 0755 -p "$root/etc"
@@ -542,7 +566,7 @@ while read -u 3 mountPoint; do
     # If copytoram is enabled: skip mounting the ISO and copy its content to a tmpfs.
     if [ -n "$copytoram" ] && [ "$device" = /dev/root ] && [ "$mountPoint" = /iso ]; then
       fsType=$(blkid -o value -s TYPE "$device")
-      fsSize=$(blockdev --getsize64 "$device")
+      fsSize=$(blockdev --getsize64 "$device" || stat -Lc '%s' "$device")
 
       mkdir -p /tmp-iso
       mount -t "$fsType" /dev/root /tmp-iso
@@ -552,6 +576,9 @@ while read -u 3 mountPoint; do
 
       umount /tmp-iso
       rmdir /tmp-iso
+      if [ -n "$isoPath" ] && [ $fsType = "iso9660" ] && mountpoint -q /findiso; then
+       umount /findiso
+      fi
       continue
     fi
 
@@ -563,7 +590,7 @@ while read -u 3 mountPoint; do
         continue
     fi
 
-    mountFS "$device" "$mountPoint" "$options" "$fsType"
+    mountFS "$device" "$(escapeFstab "$mountPoint")" "$(escapeFstab "$options")" "$fsType"
 done
 
 exec 3>&-

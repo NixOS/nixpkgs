@@ -1,36 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, gdk-pixbuf, glib, ibus, libnotify
-, librime, brise }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gdk-pixbuf
+, glib
+, ibus
+, libnotify
+, librime
+, pkg-config
+, rime-data
+, symlinkJoin
+, rimeDataPkgs ? [ rime-data ]
+}:
 
 stdenv.mkDerivation rec {
   pname = "ibus-rime";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "ibus-rime";
     rev = version;
-    sha256 = "0zbajz7i18vrqwdyclzywvsjg6qzaih64jhi3pkxp7mbw8jc5vhy";
+    sha256 = "0gdxg6ia0i31jn3cvh1nrsjga1j31hf8a2zfgg8rzn25chrfr319";
   };
 
-  buildInputs = [ gdk-pixbuf glib ibus libnotify librime brise ];
+  buildInputs = [ gdk-pixbuf glib ibus libnotify librime ];
   nativeBuildInputs = [ cmake pkg-config ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
-  dontUseCmakeConfigure = true;
+  cmakeFlags = [ "-DRIME_DATA_DIR=${placeholder "out"}/share/rime-data" ];
 
-  prePatch = ''
-    substituteInPlace Makefile \
-       --replace 'cmake' 'cmake -DRIME_DATA_DIR=${brise}/share/rime-data'
+  rimeDataDrv = symlinkJoin {
+    name = "ibus-rime-data";
+    paths = rimeDataPkgs;
+  };
 
-    substituteInPlace rime_config.h \
-       --replace '/usr' $out
-
-    substituteInPlace rime_config.h \
-       --replace 'IBUS_RIME_SHARED_DATA_DIR IBUS_RIME_INSTALL_PREFIX' \
-                 'IBUS_RIME_SHARED_DATA_DIR "${brise}"'
-
-    substituteInPlace rime.xml \
-       --replace '/usr' $out
+  postInstall = ''
+    cp -r "${rimeDataDrv}/share/rime-data/." $out/share/rime-data/
   '';
 
   meta = with lib; {
@@ -39,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://rime.im/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pengmeiyu ];
+    maintainers = with maintainers; [ pmy ];
   };
 }

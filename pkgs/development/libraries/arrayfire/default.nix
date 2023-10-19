@@ -1,18 +1,40 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkg-config
-, opencl-clhpp, ocl-icd, fftw, fftwFloat
-, blas, lapack, boost, mesa, libGLU, libGL
-, freeimage, python3, clfft, clblas
-, doxygen, buildDocs ? false
-, cudaSupport ? false, cudatoolkit
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, opencl-clhpp
+, ocl-icd
+, fftw
+, fftwFloat
+, blas
+, lapack
+, boost
+, mesa
+, libGLU
+, libGL
+, freeimage
+, python3
+, clfft
+, clblas
+, doxygen
+, buildDocs ? false
+, config
+, cudaSupport ? config.cudaSupport
+, cudatoolkit
+, darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "arrayfire";
-  version = "3.6.4";
+  version = "3.7.3";
 
-  src = fetchurl {
-    url = "http://arrayfire.com/arrayfire_source/arrayfire-full-${version}.tar.bz2";
-    sha256 = "1fin7a9rliyqic3z83agkpb8zlq663q6gdxsnm156cs8s7f7rc9h";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0gcbg6b6gs38xhks5pp0vkcqs89zl7rh9982jqlzsd0h724qddw0";
+    fetchSubmodules = true;
   };
 
   cmakeFlags = [
@@ -45,14 +67,26 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [
-    opencl-clhpp fftw fftwFloat
-    blas lapack
-    libGLU libGL
-    mesa freeimage
-    boost.out boost.dev
-  ] ++ (lib.optional stdenv.isLinux ocl-icd)
-    ++ (lib.optional cudaSupport cudatoolkit)
-    ++ (lib.optional buildDocs doxygen);
+    opencl-clhpp
+    fftw
+    fftwFloat
+    blas
+    lapack
+    libGLU
+    libGL
+    mesa
+    freeimage
+    boost.out
+    boost.dev
+  ] ++ lib.optionals stdenv.isLinux [
+    ocl-icd
+  ] ++ lib.optionals cudaSupport [
+    cudatoolkit
+  ] ++ lib.optionals buildDocs [
+    doxygen
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.Accelerate
+  ];
 
   meta = with lib; {
     description = "A general-purpose library for parallel and massively-parallel computations";

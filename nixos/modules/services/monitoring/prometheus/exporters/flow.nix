@@ -9,20 +9,20 @@ in {
   extraOpts = {
     brokers = mkOption {
       type = types.listOf types.str;
-      example = literalExample ''[ "kafka.example.org:19092" ]'';
-      description = "List of Kafka brokers to connect to.";
+      example = literalExpression ''[ "kafka.example.org:19092" ]'';
+      description = lib.mdDoc "List of Kafka brokers to connect to.";
     };
 
     asn = mkOption {
       type = types.ints.positive;
       example = 65542;
-      description = "The ASN being monitored.";
+      description = lib.mdDoc "The ASN being monitored.";
     };
 
     partitions = mkOption {
       type = types.listOf types.int;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         The number of the partitions to consume, none means all.
       '';
     };
@@ -30,7 +30,7 @@ in {
     topic = mkOption {
       type = types.str;
       example = "pmacct.acct";
-      description = "The Kafka topic to consume from.";
+      description = lib.mdDoc "The Kafka topic to consume from.";
     };
   };
 

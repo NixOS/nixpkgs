@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/timelapse-deflicker --set PERL5LIB $PERL5LIB
   '';
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = with perlPackages; [
-    makeWrapper perl
-    PerlMagick TermProgressBar ImageExifTool
+    perl
+    ImageMagick TermProgressBar ImageExifTool
     FileType ClassMethodMaker
   ];
 

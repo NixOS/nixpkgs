@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages
 , x11Support ? !stdenv.isDarwin
 , xclip ? null
 , pbcopy ? null
@@ -12,14 +12,24 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "tremc";
-  version = "0.9.2";
+  version = "0.9.3";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "tremc";
     repo = pname;
     rev = version;
-    sha256 = "1fqspp2ckafplahgba54xmx0sjidx1pdzyjaqjhz0ivh98dkx2n5";
+    hash = "sha256-219rntmetmj1JFG+4NyYMFTWmrHKJL7fnLoMIvnTP4Y=";
   };
+
+  patches = [
+    # Remove when tremc > 0.9.3 is released
+    (fetchpatch {
+      url = "https://github.com/tremc/tremc/commit/a8aaf9a6728a9ef3d8f13b3603456b0086122891.patch";
+      hash = "sha256-+HYdWTbcpvZqjshdHLZ+Svmr6U/aKFc3sy0aka6rn/A=";
+      name = "support-transmission-4.patch";
+    })
+  ];
 
   buildInputs = with python3Packages; [
     python
@@ -30,11 +40,12 @@ python3Packages.buildPythonApplication rec {
     ipy
     pyperclip
   ] ++
-  lib.optional useGeoIP GeoIP;
+  lib.optional useGeoIP geoip;
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontBuild = true;
+  doCheck = false;
 
-  makeWrapperArgs = ["--prefix PATH : ${wrapperPath}"];
+  makeWrapperArgs = ["--prefix PATH : ${lib.escapeShellArg wrapperPath}"];
 
   installPhase = ''
     make DESTDIR=$out install
@@ -45,5 +56,6 @@ python3Packages.buildPythonApplication rec {
     description = "Curses interface for transmission";
     homepage = "https://github.com/tremc/tremc";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kashw2 ];
   };
 }

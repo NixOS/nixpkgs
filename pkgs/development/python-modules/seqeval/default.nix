@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , numpy
 , scikit-learn
-, perl
 , pytestCheckHook
 }:
 
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     scikit-learn
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

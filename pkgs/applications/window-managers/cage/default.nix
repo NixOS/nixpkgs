@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, wayland, scdoc, makeWrapper
-, wlroots, wayland-protocols, pixman, libxkbcommon
+, meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
+, wlroots, wayland, wayland-protocols, pixman, libxkbcommon, xcbutilwm
 , systemd, libGL, libX11, mesa
 , xwayland ? null
 , nixosTests
@@ -8,19 +8,23 @@
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "Hjdskes";
     repo = "cage";
     rev = "v${version}";
-    sha256 = "0ixl45g0m8b75gvbjm3gf5qg0yplspgs0xpm2619wn5sygc47sb1";
+    hash = "sha256-Suq14YRw/MReDRvO/TQqjpZvpzAEDnHUyVbQj0BPT4c=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc makeWrapper ];
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner scdoc makeWrapper ];
 
   buildInputs = [
-    wlroots wayland wayland-protocols pixman libxkbcommon
+    wlroots wayland wayland-protocols pixman libxkbcommon xcbutilwm
     mesa # for libEGL headers
     systemd libGL libX11
   ];
@@ -40,5 +44,6 @@ stdenv.mkDerivation rec {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+    mainProgram = "cage";
   };
 }

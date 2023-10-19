@@ -1,49 +1,51 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, protobuf, ncurses, pkg-config
-, makeWrapper, perlPackages, openssl, autoreconfHook, openssh, bash-completion
-, withUtempter ? stdenv.isLinux, libutempter }:
+{ lib, stdenv, fetchFromGitHub, zlib, protobuf, ncurses, pkg-config
+, makeWrapper, perl, openssl, autoreconfHook, openssh, bash-completion, fetchpatch
+, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter }:
 
 stdenv.mkDerivation rec {
   pname = "mosh";
-  version = "1.3.2";
+  version = "1.4.0";
 
-  src = fetchurl {
-    url = "https://mosh.org/mosh-${version}.tar.gz";
-    sha256 = "05hjhlp6lk8yjcy59zywpf0r6s0h0b9zxq0lw66dh9x8vxrhaq6s";
+  src = fetchFromGitHub {
+    owner = "mobile-shell";
+    repo = pname;
+    rev = "mosh-${version}";
+    hash = "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
-  buildInputs = [ protobuf ncurses zlib openssl bash-completion ]
-    ++ (with perlPackages; [ perl IOTty ])
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf perl ];
+  buildInputs = [ protobuf ncurses zlib openssl bash-completion perl ]
     ++ lib.optional withUtempter libutempter;
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 
   patches = [
     ./ssh_path.patch
     ./mosh-client_path.patch
-    ./utempter_path.patch
-    # Fix w/c++17, ::bind vs std::bind
-    (fetchpatch {
-      url = "https://github.com/mobile-shell/mosh/commit/e5f8a826ef9ff5da4cfce3bb8151f9526ec19db0.patch";
-      sha256 = "15518rb0r5w1zn4s6981bf1sz6ins6gpn2saizfzhmr13hw4gmhm";
-    })
     # Fix build with bash-completion 2.10
     ./bash_completion_datadir.patch
+
+    # Fixes build with protobuf3 23.x
+    (fetchpatch {
+      url = "https://github.com/mobile-shell/mosh/commit/eee1a8cf413051c2a9104e8158e699028ff56b26.patch";
+      hash = "sha256-CouLHWSsyfcgK3k7CvTK3FP/xjdb1pfsSXYYQj3NmCQ=";
+    })
   ];
+
   postPatch = ''
     substituteInPlace scripts/mosh.pl \
-        --subst-var-by ssh "${openssh}/bin/ssh"
-    substituteInPlace scripts/mosh.pl \
-        --subst-var-by mosh-client "$out/bin/mosh-client"
+      --subst-var-by ssh "${openssh}/bin/ssh" \
+      --subst-var-by mosh-client "$out/bin/mosh-client"
   '';
 
-  configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
+  configureFlags = [ "--enable-completion" ]
+    ++ lib.optional withUtempter "--with-utempter";
 
   postInstall = ''
       wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
-
-  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = with lib; {
     homepage = "https://mosh.org/";

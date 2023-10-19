@@ -1,46 +1,58 @@
 { lib
-, python2
+, python3
 , fetchFromGitHub
 }:
-python2.pkgs.buildPythonPackage rec {
+
+python3.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "1.7.0";
+  version = "2.3.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
-    owner = "fireeye";
+    owner = "mandiant";
     repo = "flare-floss";
-    rev = "v${version}";
-    sha256 = "GMOA1+qM2A/Qw33kOTIINEvjsfqjWQWBXHNemh3IK8w=";
+    rev = "refs/tags/v${version}";
+    fetchSubmodules = true; # for tests
+    hash = "sha256-tOLnve5XBc3TtSgucPIddBHD0YJhsRpRduXsKrtJ/eQ=";
   };
 
-  propagatedBuildInputs = with python2.pkgs; [
-    pyyaml
-    simplejson
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "==" ">="
+
+    substituteInPlace floss/main.py \
+      --replace 'sigs_path = os.path.join(get_default_root(), "sigs")' 'sigs_path = "'"$out"'/share/flare-floss/sigs"'
+  '';
+
+  propagatedBuildInputs = with python3.pkgs; [
+    halo
+    networkx
+    pefile
+    pydantic
+    rich
     tabulate
-    vivisect
-    plugnplay
+    tqdm
     viv-utils
-    enum34
+    vivisect
+  ] ++ viv-utils.optional-dependencies.flirt;
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-sugar
+    pytestCheckHook
+    pyyaml
   ];
 
-  checkInputs = [
-    python2.pkgs.pytestCheckHook
-  ];
-
-  disabledTests = [
-    # test data is in a submodule
-    "test_main"
-  ];
-
-  pythonImportsCheck = [
-    "floss"
-    "floss.plugins"
-  ];
+  postInstall = ''
+    mkdir -p $out/share/flare-floss/
+    cp -r floss/sigs $out/share/flare-floss/
+  '';
 
   meta = with lib; {
     description = "Automatically extract obfuscated strings from malware";
-    homepage = "https://github.com/fireeye/flare-floss";
+    homepage = "https://github.com/mandiant/flare-floss";
+    changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    mainProgram = "floss";
+    maintainers = with maintainers; [ fab ];
   };
 }

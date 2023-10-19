@@ -5,15 +5,16 @@
   kcompletion, kconfig, kcoreaddons, kdbusaddons,
   kfilemetadata, ki18n, kiconthemes, kinit, kio, knewstuff, knotifications,
   kparts, ktexteditor, kwindowsystem, phonon, solid,
-  wayland, qtbase, qtwayland
+  kuserfeedback, wayland, qtwayland, qtx11extras, qtimageformats
 }:
 
 mkDerivation {
   pname = "dolphin";
   meta = {
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    homepage = "https://apps.kde.org/dolphin/";
+    description = "KDE file manager";
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = [ lib.maintainers.ttuegel ];
-    broken = lib.versionOlder qtbase.version "5.14";
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedUserEnvPkgs = [ baloo ];
@@ -22,11 +23,10 @@ mkDerivation {
     kcoreaddons kdbusaddons kfilemetadata ki18n kiconthemes
     kinit kio knewstuff knotifications kparts ktexteditor kwindowsystem
     phonon solid
+    kuserfeedback
     wayland qtwayland
+    qtx11extras
+    qtimageformats
   ];
   outputs = [ "out" "dev" ];
-  # We need the RPATH for linking, because the `libkdeinit5_dolphin.so` links
-  # private against its dependencies and without the correct RPATH, these
-  # dependencies are not found.
-  cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
 }

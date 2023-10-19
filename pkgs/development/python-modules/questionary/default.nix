@@ -1,38 +1,55 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
-, poetry
-, prompt_toolkit
-, pytest-cov
+, poetry-core
+, prompt-toolkit
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "1.9.0";
+  version = "unstable-2022-07-27";
   format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "tmbo";
     repo = pname;
-    rev = version;
-    sha256 = "1x748bz7l2r48031dj6vr6jvvac28pv6vx1bina4lz60h1qac1kf";
+    rev = "848b040c5b7086ffe75bd92c656e15e94d905146";
+    hash = "sha256-W0d1Uoy5JdN3BFfeyk1GG0HBzmgKoBApaGad0UykZaY=";
   };
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [ prompt_toolkit ];
+  propagatedBuildInputs = [
+    prompt-toolkit
+  ];
 
-  checkInputs = [
-    pytest-cov
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "questionary" ];
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    ulimit -n 1024
+  '';
+
+  disabledTests = [
+    # RuntimeError: no running event loop
+    "test_blank_line_fix"
+  ];
+
+  pythonImportsCheck = [
+    "questionary"
+  ];
 
   meta = with lib; {
     description = "Python library to build command line user prompts";
-    homepage = "https://github.com/bachya/regenmaschine";
+    homepage = "https://github.com/tmbo/questionary";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

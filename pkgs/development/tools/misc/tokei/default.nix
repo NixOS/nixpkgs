@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # enable all output formats
-  cargoBuildFlags = [ "--features" "all" ];
+  buildFeatures = [ "all" ];
 
   meta = with lib; {
     description = "A program that allows you to count your code, quickly";
@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/XAMPPRocky/tokei";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner lilyball ];
+    mainProgram = "tokei";
   };
 }

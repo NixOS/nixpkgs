@@ -1,15 +1,23 @@
-{ stdenv, lib, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, buildPackages }:
 
 stdenv.mkDerivation rec {
   pname = "oksh";
-  version = "6.8.1";
+  version = "7.3";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0lny550qfanysc4pqs0mxxx8zyz6plv9ll8y05gz0xmq9vx5384r";
+    sha256 = "sha256-uGiPbkIeKH9zu+xKJJLCYFnyejWLdq7bE59yub3f3KM=";
   };
+
+  strictDeps = true;
+
+  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace configure --replace "./conftest" "echo"
+  '';
+
+  configureFlags = [ "--no-strip" ];
 
   meta = with lib; {
     description = "Portable OpenBSD ksh, based on the Public Domain Korn Shell (pdksh)";

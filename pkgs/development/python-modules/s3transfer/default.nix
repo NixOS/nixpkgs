@@ -1,51 +1,45 @@
 { lib
-, fetchPypi
-, pythonOlder
-, buildPythonPackage
-, docutils
-, mock
-, nose
-, coverage
-, wheel
-, unittest2
 , botocore
-, futures ? null
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "s3transfer";
-  version = "0.3.6";
+  version = "0.6.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c5dadf598762899d8cfaecf68eba649cd25b0ce93b6c954b156aaa3eed160547";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "boto";
+    repo = pname;
+    rev = version;
+    hash = "sha256-cL4IOfWLRUJC5zCzmN/qRf0N/IV/MDHF/j2JDX5hlUE=";
   };
 
-  propagatedBuildInputs =
-    [ botocore
-    ] ++ lib.optional (pythonOlder "3") futures;
+  propagatedBuildInputs = [ botocore ];
 
-  buildInputs = [
-    docutils
-    mock
-    nose
-    coverage
-    wheel
-    unittest2
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pushd s3transfer/tests
-    nosetests -v unit/ functional/
-    popd
-  '';
+  disabledTestPaths = [
+    # Requires network access
+    "tests/integration"
+  ] ++
+  # There was a change in python 3.8 that defaults multiprocessing to spawn instead of fork on macOS
+  # See https://bugs.python.org/issue33725 and https://github.com/python/cpython/pull/13603.
+  # I suspect the underlying issue here is that upstream tests aren't compatible with spawn multiprocessing, and pass on linux where the default is still fork
+  lib.optionals stdenv.isDarwin [ "tests/unit/test_compat.py" ];
 
-  # version on pypi has no tests/ dir
-  doCheck = false;
+  pythonImportsCheck = [ "s3transfer" ];
 
   meta = with lib; {
+    description = "Library for managing Amazon S3 transfers";
     homepage = "https://github.com/boto/s3transfer";
     license = licenses.asl20;
-    description = "A library for managing Amazon S3 transfers";
+    maintainers = with maintainers; [ nickcao ];
   };
 }

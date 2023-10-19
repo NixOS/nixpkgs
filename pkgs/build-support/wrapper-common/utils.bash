@@ -13,21 +13,27 @@ accumulateRoles() {
     fi
 }
 
-mangleVarList() {
+mangleVarListGeneric() {
+    local sep="$1"
+    shift
     local var="$1"
     shift
     local -a role_suffixes=("$@")
 
     local outputVar="${var}_@suffixSalt@"
-    declare -gx ${outputVar}+=''
+    declare -gx "$outputVar"+=''
     # For each role we serve, we accumulate the input parameters into our own
     # cc-wrapper-derivation-specific environment variables.
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
-            export ${outputVar}+="${!outputVar:+ }${!inputVar}"
+            export "${outputVar}+=${!outputVar:+$sep}${!inputVar}"
         fi
     done
+}
+
+mangleVarList() {
+    mangleVarListGeneric " " "$@"
 }
 
 mangleVarBool() {
@@ -36,7 +42,7 @@ mangleVarBool() {
     local -a role_suffixes=("$@")
 
     local outputVar="${var}_@suffixSalt@"
-    declare -gxi ${outputVar}+=0
+    declare -gxi "${outputVar}+=0"
     for suffix in "${role_suffixes[@]}"; do
         local inputVar="${var}${suffix}"
         if [ -v "$inputVar" ]; then
@@ -78,10 +84,15 @@ mangleVarSingle() {
     done
 }
 
-skip () {
+skip() {
     if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2
     fi
+}
+
+reject() {
+    echo "impure path \`$1' used in link" >&2
+    exit 1
 }
 
 
@@ -98,13 +109,13 @@ badPath() {
     # directory (including the build directory).
     test \
         "$p" != "/dev/null" -a \
-        "${p#${NIX_STORE}}"     = "$p" -a \
-        "${p#${NIX_BUILD_TOP}}" = "$p" -a \
-        "${p#/tmp}"             = "$p" -a \
-        "${p#${TMP:-/tmp}}"     = "$p" -a \
-        "${p#${TMPDIR:-/tmp}}"  = "$p" -a \
-        "${p#${TEMP:-/tmp}}"    = "$p" -a \
-        "${p#${TEMPDIR:-/tmp}}" = "$p"
+        "${p#"${NIX_STORE}"}"     = "$p" -a \
+        "${p#"${NIX_BUILD_TOP}"}" = "$p" -a \
+        "${p#/tmp}"               = "$p" -a \
+        "${p#"${TMP:-/tmp}"}"     = "$p" -a \
+        "${p#"${TMPDIR:-/tmp}"}"  = "$p" -a \
+        "${p#"${TEMP:-/tmp}"}"    = "$p" -a \
+        "${p#"${TEMPDIR:-/tmp}"}" = "$p"
 }
 
 expandResponseParams() {
@@ -122,4 +133,39 @@ expandResponseParams() {
             fi
         fi
     done
+}
+
+checkLinkType() {
+    local arg
+    type="dynamic"
+    for arg in "$@"; do
+        if [[ "$arg" = -static ]]; then
+            type="static"
+        elif [[ "$arg" = -static-pie ]]; then
+            type="static-pie"
+        fi
+    done
+    echo "$type"
+}
+
+# When building static-pie executables we cannot have rpath
+# set. At least glibc requires rpath to be empty
+filterRpathFlags() {
+    local linkType=$1 ret i
+    shift
+
+    if [[ "$linkType" == "static-pie" ]]; then
+        while [[ "$#" -gt 0 ]]; do
+            i="$1"; shift 1
+            if [[ "$i" == -rpath ]]; then
+                # also skip its argument
+                shift
+            else
+                ret+=("$i")
+            fi
+        done
+    else
+        ret=("$@")
+    fi
+    echo "${ret[@]}"
 }

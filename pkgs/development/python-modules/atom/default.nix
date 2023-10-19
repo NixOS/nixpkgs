@@ -1,24 +1,53 @@
-{ lib, buildPythonPackage, fetchPypi, future, cppy }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, setuptools-scm
+, future
+, cppy
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "atom";
-  version = "0.6.0";
+  version = "0.10.3";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "df65a654744ccdc4843ce09c38612fd8f702c84be501b1d955c3ac0b9ad28dc5";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "nucleic";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-NXjvRVYcWU9p7b8y2ICOzYe6TeMh1S70Edy/JvTG7a4=";
   };
 
-  buildInputs = [ cppy ];
-  propagatedBuildInputs = [ future ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # Tests not released to pypi
-  doCheck = true;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    cppy
+  ];
+
+  preCheck = ''
+    rm -rf atom
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "atom.api"
+  ];
 
   meta = with lib; {
     description = "Memory efficient Python objects";
-    maintainers = [ maintainers.bhipple ];
     homepage = "https://github.com/nucleic/atom";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

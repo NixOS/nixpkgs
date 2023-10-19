@@ -1,25 +1,28 @@
 { lib, stdenv, fetchFromGitHub
+, installShellFiles
 , boost, zlib, openssl
-, upnpSupport ? true, miniupnpc ? null
+, upnpSupport ? true, miniupnpc
 , aesniSupport ? stdenv.hostPlatform.aesSupport
 , avxSupport   ? stdenv.hostPlatform.avxSupport
 }:
 
-assert upnpSupport -> miniupnpc != null;
-
 stdenv.mkDerivation rec {
   pname = "i2pd";
-  version = "2.38.0";
+  version = "2.49.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "sha256-8wy6Zdnw0JgnHFLa1U3qlzjpDIqi2gykbkkV7lh+Zag=";
+    sha256 = "sha256-y2+V+p/EZS90cwNl/gavclJ1TyJa/CdNnjKLMuwe7q0=";
   };
 
-  buildInputs = with lib; [ boost zlib openssl ]
-    ++ optional upnpSupport miniupnpc;
+  buildInputs = [ boost zlib openssl ]
+    ++ lib.optional upnpSupport miniupnpc;
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   makeFlags =
     let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
@@ -32,6 +35,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D i2pd $out/bin/i2pd
+    install --mode=444 -D 'contrib/i2pd.service' "$out/etc/systemd/system/i2pd.service"
+    installManPage 'debian/i2pd.1'
   '';
 
   meta = with lib; {

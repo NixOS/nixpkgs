@@ -1,36 +1,72 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl, hwloc
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libuv
+, libmicrohttpd
+, openssl
+, hwloc
 , donateLevel ? 0
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
+in
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "6.6.1";
+  version = "6.20.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    sha256 = "03phq1c6fylvkg5x7l0bskspr9jdfx61jy67yx2lxhymqgpbf64z";
+    hash = "sha256-csJfmjKm/uAlINhijeqUsDVTemchlzWqJg/YHtmNlAk=";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ libuv libmicrohttpd openssl hwloc ];
+  patches = [
+    ./donate-level.patch
+  ];
 
   postPatch = ''
-    substituteInPlace src/donate.h \
-      --replace "kDefaultDonateLevel = 5;" "kDefaultDonateLevel = ${toString donateLevel};" \
-      --replace "kMinimumDonateLevel = 1;" "kMinimumDonateLevel = ${toString donateLevel};"
+    substituteAllInPlace src/donate.h
+    substituteInPlace cmake/OpenSSL.cmake \
+      --replace "set(OPENSSL_USE_STATIC_LIBS TRUE)" "set(OPENSSL_USE_STATIC_LIBS FALSE)"
   '';
 
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  buildInputs = [
+    libuv
+    libmicrohttpd
+    openssl
+    hwloc
+  ] ++ lib.optionals stdenv.isDarwin [
+    Carbon
+    CoreServices
+    OpenCL
+  ];
+
+  inherit donateLevel;
+
   installPhase = ''
+    runHook preInstall
+
     install -vD xmrig $out/bin/xmrig
+
+    runHook postInstall
   '';
+
+  # https://github.com/NixOS/nixpkgs/issues/245534
+  hardeningDisable = [ "fortify" ];
 
   meta = with lib; {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ fpletz kim0 ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ kim0 ];
   };
 }

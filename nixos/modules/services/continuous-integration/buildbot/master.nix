@@ -1,18 +1,21 @@
-# NixOS module for Buildbot continous integration server.
+# NixOS module for Buildbot continuous integration server.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.buildbot-master;
+  opt = options.services.buildbot-master;
 
-  python = cfg.package.pythonModule;
+  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  python = package.pythonModule;
 
-  escapeStr = s: escape ["'"] s;
+  escapeStr = escape [ "'" ];
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
+    ${cfg.extraImports}
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
@@ -26,6 +29,7 @@ let
      schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
      builders      = [ ${concatStringsSep "," cfg.builders} ],
      services      = [ ${concatStringsSep "," cfg.reporters} ],
+     configurators = [ ${concatStringsSep "," cfg.configurators} ],
     )
     for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
@@ -60,45 +64,62 @@ in {
 
       factorySteps = mkOption {
         type = types.listOf types.str;
-        description = "Factory Steps";
+        description = lib.mdDoc "Factory Steps";
         default = [];
         example = [
-          "steps.Git(repourl='git://github.com/buildbot/pyflakes.git', mode='incremental')"
+          "steps.Git(repourl='https://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
         ];
       };
 
       changeSource = mkOption {
         type = types.listOf types.str;
-        description = "List of Change Sources.";
+        description = lib.mdDoc "List of Change Sources.";
         default = [];
         example = [
-          "changes.GitPoller('git://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+          "changes.GitPoller('https://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+        ];
+      };
+
+      configurators = mkOption {
+        type = types.listOf types.str;
+        description = lib.mdDoc "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
+        default = [];
+        example = [
+          "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
         ];
       };
 
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable the Buildbot continuous integration server.";
+        description = lib.mdDoc "Whether to enable the Buildbot continuous integration server.";
       };
 
       extraConfig = mkOption {
         type = types.str;
-        description = "Extra configuration to append to master.cfg";
+        description = lib.mdDoc "Extra configuration to append to master.cfg";
         default = "c['buildbotNetUsageData'] = None";
+      };
+
+      extraImports = mkOption {
+        type = types.str;
+        description = lib.mdDoc "Extra python imports to prepend to master.cfg";
+        default = "";
+        example = "from buildbot.process.project import Project";
       };
 
       masterCfg = mkOption {
         type = types.path;
-        description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
+        description = lib.mdDoc "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
+        defaultText = literalMD ''generated configuration file'';
         example = "/etc/nixos/buildbot/master.cfg";
       };
 
       schedulers = mkOption {
         type = types.listOf types.str;
-        description = "List of Schedulers.";
+        description = lib.mdDoc "List of Schedulers.";
         default = [
           "schedulers.SingleBranchScheduler(name='all', change_filter=util.ChangeFilter(branch='master'), treeStableTimer=None, builderNames=['runtests'])"
           "schedulers.ForceScheduler(name='force',builderNames=['runtests'])"
@@ -107,7 +128,7 @@ in {
 
       builders = mkOption {
         type = types.listOf types.str;
-        description = "List of Builders.";
+        description = lib.mdDoc "List of Builders.";
         default = [
           "util.BuilderConfig(name='runtests',workernames=['example-worker'],factory=factory)"
         ];
@@ -115,51 +136,52 @@ in {
 
       workers = mkOption {
         type = types.listOf types.str;
-        description = "List of Workers.";
+        description = lib.mdDoc "List of Workers.";
         default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
       reporters = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = "List of reporter objects used to present build status to various users.";
+        description = lib.mdDoc "List of reporter objects used to present build status to various users.";
       };
 
       user = mkOption {
         default = "buildbot";
         type = types.str;
-        description = "User the buildbot server should execute under.";
+        description = lib.mdDoc "User the buildbot server should execute under.";
       };
 
       group = mkOption {
         default = "buildbot";
         type = types.str;
-        description = "Primary group of buildbot user.";
+        description = lib.mdDoc "Primary group of buildbot user.";
       };
 
       extraGroups = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "List of extra groups that the buildbot user should be a part of.";
+        description = lib.mdDoc "List of extra groups that the buildbot user should be a part of.";
       };
 
       home = mkOption {
         default = "/home/buildbot";
         type = types.path;
-        description = "Buildbot home directory.";
+        description = lib.mdDoc "Buildbot home directory.";
       };
 
       buildbotDir = mkOption {
         default = "${cfg.home}/master";
+        defaultText = literalExpression ''"''${config.${opt.home}}/master"'';
         type = types.path;
-        description = "Specifies the Buildbot directory.";
+        description = lib.mdDoc "Specifies the Buildbot directory.";
       };
 
       pbPort = mkOption {
         default = 9989;
         type = types.either types.str types.int;
         example = "'tcp:9990:interface=127.0.0.1'";
-        description = ''
+        description = lib.mdDoc ''
           The buildmaster will listen on a TCP port of your choosing
           for connections from workers.
           It can also use this port for connections from remote Change Sources,
@@ -167,67 +189,67 @@ in {
           This port should be visible to the outside world, and you’ll need to tell
           your worker admins about your choice.
           If put in (single) quotes, this can also be used as a connection string,
-          as defined in the <link xlink:href="https://twistedmatrix.com/documents/current/core/howto/endpoints.html">ConnectionStrings guide</link>.
+          as defined in the [ConnectionStrings guide](https://twistedmatrix.com/documents/current/core/howto/endpoints.html).
         '';
       };
 
       listenAddress = mkOption {
         default = "0.0.0.0";
         type = types.str;
-        description = "Specifies the bind address on which the buildbot HTTP interface listens.";
+        description = lib.mdDoc "Specifies the bind address on which the buildbot HTTP interface listens.";
       };
 
       buildbotUrl = mkOption {
         default = "http://localhost:8010/";
         type = types.str;
-        description = "Specifies the Buildbot URL.";
+        description = lib.mdDoc "Specifies the Buildbot URL.";
       };
 
       title = mkOption {
         default = "Buildbot";
         type = types.str;
-        description = "Specifies the Buildbot Title.";
+        description = lib.mdDoc "Specifies the Buildbot Title.";
       };
 
       titleUrl = mkOption {
         default = "Buildbot";
         type = types.str;
-        description = "Specifies the Buildbot TitleURL.";
+        description = lib.mdDoc "Specifies the Buildbot TitleURL.";
       };
 
       dbUrl = mkOption {
         default = "sqlite:///state.sqlite";
         type = types.str;
-        description = "Specifies the database connection string.";
+        description = lib.mdDoc "Specifies the database connection string.";
       };
 
       port = mkOption {
         default = 8010;
-        type = types.int;
-        description = "Specifies port number on which the buildbot HTTP interface listens.";
+        type = types.port;
+        description = lib.mdDoc "Specifies port number on which the buildbot HTTP interface listens.";
       };
 
       package = mkOption {
         type = types.package;
-        default = pkgs.python3Packages.buildbot-full;
-        defaultText = "pkgs.python3Packages.buildbot-full";
-        description = "Package to use for buildbot.";
-        example = literalExample "pkgs.python3Packages.buildbot";
+        default = pkgs.buildbot-full;
+        defaultText = literalExpression "pkgs.buildbot-full";
+        description = lib.mdDoc "Package to use for buildbot.";
+        example = literalExpression "pkgs.buildbot";
       };
 
       packages = mkOption {
         default = [ pkgs.git ];
-        example = literalExample "[ pkgs.git ]";
+        defaultText = literalExpression "[ pkgs.git ]";
         type = types.listOf types.package;
-        description = "Packages to add to PATH for the buildbot process.";
+        description = lib.mdDoc "Packages to add to PATH for the buildbot process.";
       };
 
       pythonPackages = mkOption {
         type = types.functionTo (types.listOf types.package);
         default = pythonPackages: with pythonPackages; [ ];
-        defaultText = "pythonPackages: with pythonPackages; [ ]";
-        description = "Packages to add the to the PYTHONPATH of the buildbot process.";
-        example = literalExample "pythonPackages: with pythonPackages; [ requests ]";
+        defaultText = literalExpression "pythonPackages: with pythonPackages; [ ]";
+        description = lib.mdDoc "Packages to add the to the PYTHONPATH of the buildbot process.";
+        example = literalExpression "pythonPackages: with pythonPackages; [ requests ]";
       };
     };
   };
@@ -242,9 +264,7 @@ in {
         description = "Buildbot User.";
         isNormalUser = true;
         createHome = true;
-        home = cfg.home;
-        group = cfg.group;
-        extraGroups = cfg.extraGroups;
+        inherit (cfg) home group extraGroups;
         useDefaultShell = true;
       };
     };
@@ -254,7 +274,7 @@ in {
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
-      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ cfg.package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}"
@@ -270,7 +290,13 @@ in {
         Group = cfg.group;
         WorkingDirectory = cfg.home;
         # NOTE: call twistd directly with stdout logging for systemd
-        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${tacFile}";
+        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${cfg.buildbotDir}/buildbot.tac";
+        # To reload on upgrade, set the following in your configuration:
+        # systemd.services.buildbot-master.reloadIfChanged = true;
+        ExecReload = [
+          "${pkgs.coreutils}/bin/ln -sf ${tacFile} ${cfg.buildbotDir}/buildbot.tac"
+          "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
+        ];
       };
     };
   };

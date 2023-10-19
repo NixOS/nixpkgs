@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , requests-cache
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "tvdb_api";
-  version = "3.0.2";
+  version = "3.2.0-beta";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6a0135815cb680da38d78121d4d659d8e54a25f4db2816cd86d62916b92f23b2";
+  src = fetchFromGitHub {
+    owner = "dbr";
+    repo = "tvdb_api";
+    rev = "ce0382181a9e08a5113bfee0fed2c78f8b1e613f";
+    hash = "sha256-poUuwySr6+8U9PIHhqFaR7nXzh8kSaW7mZkuKTUJKj8=";
   };
 
   propagatedBuildInputs = [ requests-cache ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   # requires network access
   doCheck = false;
@@ -27,5 +29,4 @@ buildPythonPackage rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ peterhoeg ];
   };
-
 }

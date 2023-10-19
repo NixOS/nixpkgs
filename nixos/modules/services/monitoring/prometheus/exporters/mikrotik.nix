@@ -11,24 +11,24 @@ in
     configFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Path to a mikrotik exporter configuration file. Mutually exclusive with
-        <option>configuration</option> option.
+        {option}`configuration` option.
       '';
-      example = literalExample "./mikrotik.yml";
+      example = literalExpression "./mikrotik.yml";
     };
 
     configuration = mkOption {
       type = types.nullOr types.attrs;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         Mikrotik exporter configuration as nix attribute set. Mutually exclusive with
-        <option>configFile</option> option.
+        {option}`configFile` option.
 
-        See <link xlink:href="https://github.com/nshttpd/mikrotik-exporter/blob/master/README.md"/>
+        See <https://github.com/nshttpd/mikrotik-exporter/blob/master/README.md>
         for the description of the configuration file format.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         {
           devices = [
             {

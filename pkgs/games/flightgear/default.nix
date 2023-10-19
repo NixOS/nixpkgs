@@ -2,11 +2,11 @@
 , freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qtbase, qtdeclarative, glew
+, makeDesktopItem, qtbase, qtdeclarative, glew, curl
 }:
 
 let
-  version = "2020.3.8";
+  version = "2020.3.18";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
@@ -14,10 +14,10 @@ let
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
-      sha256 = "sha256-/KFumHRkmRvsU/L1i11jG/KbqobnOEP7l4lyPMKHycA=";
+      sha256 = "sha256-U8lsHrw40Xo6a3jZw6GiPnOALvvg9PdecVAdkZewUjg=";
     };
 
-    phases = [ "installPhase" ];
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p "$out/share/FlightGear"
@@ -27,12 +27,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "flightgear";
-   # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
+  # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
   inherit version data;
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "XXDqhZ9nR+FwQ3LauZe8iGxOjlyDXDrEtj61BQGVDYc=";
+    sha256 = "sha256-OajjGj/Bgqg8H/6PjXkwJHwbSQqtzbQ1b3Xwk3aI3jc=";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     comment = "FlightGear Flight Simulator";
     desktopName = "FlightGear";
     genericName = "Flight simulator";
-    categories = "Game;Simulation";
+    categories = [ "Game" "Simulation" ];
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
-    glew qtdeclarative
+    glew qtdeclarative curl
   ];
 
   postInstall = ''

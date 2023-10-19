@@ -1,13 +1,13 @@
 { fetchFromGitHub, lib, buildPythonPackage, pythonOlder
-, afdko, appdirs, attrs, black, booleanoperations, brotlipy, click
+, afdko, appdirs, attrs, booleanoperations, brotlipy, click
 , defcon, fontmath, fontparts, fontpens, fonttools, lxml
 , mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
 , toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
-, pillow, six, bash, setuptools_scm }:
+, pillow, six, bash, setuptools-scm }:
 
 buildPythonPackage rec {
   pname = "nototools";
-  version = "0.2.13";
+  version = "0.2.17";
 
   disabled = pythonOlder "3.6";
 
@@ -15,20 +15,19 @@ buildPythonPackage rec {
     owner = "googlefonts";
     repo = "nototools";
     rev = "v${version}";
-    sha256 = "0ggp65xgkf9y7jamncm65lkm84wapsa47abf133pcb702875v8jz";
+    sha256 = "0jxydivqzggirc31jv7b4mrsjkg646zmra5m4h0pk4amgy65rvyp";
   };
 
   postPatch = ''
     sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
   '';
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     afdko
     appdirs
     attrs
-    black
     booleanoperations
     brotlipy
     click
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     zopfli
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pillow
     six
     bash
@@ -70,9 +69,10 @@ buildPythonPackage rec {
     cp -r third_party $out
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Noto fonts support tools and scripts plus web site generation";
-    license = lib.licenses.asl20;
     homepage = "https://github.com/googlefonts/nototools";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

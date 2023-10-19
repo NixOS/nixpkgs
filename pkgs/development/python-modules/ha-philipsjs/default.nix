@@ -12,14 +12,16 @@
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
-  version = "2.7.4";
+  version = "3.1.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "danielperna84";
     repo = pname;
-    rev = version;
-    sha256 = "08fjdb1q02dwxq8s15ddd00gps64xplblkn8dx5yivldskiy8i1n";
+    rev = "refs/tags/${version}";
+    hash = "sha256-r8uqToxkJg9j89UUZpxsPXutWPefAYDW95zFBKU9Al4=";
   };
 
   propagatedBuildInputs = [
@@ -27,18 +29,21 @@ buildPythonPackage rec {
     httpx
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-aiohttp
     pytest-mock
     pytestCheckHook
     respx
   ];
 
-  pythonImportsCheck = [ "haphilipsjs" ];
+  pythonImportsCheck = [
+    "haphilipsjs"
+  ];
 
   meta = with lib; {
     description = "Python library to interact with Philips TVs with jointSPACE API";
     homepage = "https://github.com/danielperna84/ha-philipsjs";
+    changelog = "https://github.com/danielperna84/ha-philipsjs/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

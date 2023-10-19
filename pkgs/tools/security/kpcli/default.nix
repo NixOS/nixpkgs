@@ -1,18 +1,18 @@
 { lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "3.6";
+  version = "4.0";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    sha256 = "1srd6vrqgjlf906zdyxp4bg6gihkxn62cpzyfv0zzpsqsj13iwh1";
+    sha256 = "sha256-UYnX2tad3Jg00kdX5WHStI6u2pyts+SZlgj/jv4o/TU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
 
-  phases = [ "installPhase" "fixupPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/{bin,share}

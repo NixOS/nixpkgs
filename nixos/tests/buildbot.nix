@@ -1,11 +1,6 @@
 # Test ensures buildbot master comes up correctly and workers can connect
 
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
-
-import ./make-test-python.nix {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "buildbot";
 
   nodes = {
@@ -23,7 +18,7 @@ import ./make-test-python.nix {
         ];
       };
       networking.firewall.allowedTCPPorts = [ 8010 8011 9989 ];
-      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-full ];
+      environment.systemPackages = with pkgs; [ git buildbot-full ];
     };
 
     bbworker = { pkgs, ... }: {
@@ -31,7 +26,7 @@ import ./make-test-python.nix {
         enable = true;
         masterUrl = "bbmaster:9989";
       };
-      environment.systemPackages = with pkgs; [ git python3Packages.buildbot-worker ];
+      environment.systemPackages = with pkgs; [ git buildbot-worker ];
     };
 
     gitrepo = { pkgs, ... }: {
@@ -110,4 +105,4 @@ import ./make-test-python.nix {
   '';
 
   meta.maintainers = with pkgs.lib.maintainers; [ ];
-} {}
+})

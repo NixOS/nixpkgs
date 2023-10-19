@@ -1,41 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, boost, libevdevplus, libuinputplus, iodash, cxxopts}:
+{ lib, stdenv, fetchFromGitHub, cmake, scdoc, util-linux, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "ydotool";
-  version = "unstable-2021-01-20";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "ReimuNotMoe";
     repo = "ydotool";
-    rev = "b1d041f52f7bac364d6539b1251d29c3b77c0f37";
-    sha256 = "1gzdbx6fv0dbcyia3yyzhv93az2gf90aszb9kcj5cnxywfpv9w9g";
+    rev = "v${version}";
+    hash = "sha256-MtanR+cxz6FsbNBngqLE+ITKPZFHmWGsD1mBDk0OVng=";
   };
 
-  # upstream decided to use a cpp package manager called cpm.
-  # we need to disable that because it wants networking, furthermore,
-  # it does some system folder creating which also needs to be disabled.
-  # Both changes are to respect the sandbox.
-  patches = [ ./fixup-cmakelists.patch ];
-
-
-  # cxxopts is a header only library.
-  # See pull request: https://github.com/ReimuNotMoe/ydotool/pull/105
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace \
-      "PUBLIC cxxopts" \
-      "PUBLIC"
+    substituteInPlace Daemon/ydotoold.c \
+      --replace "/usr/bin/xinput" "${xorg.xinput}/bin/xinput"
+    substituteInPlace Daemon/ydotool.service.in \
+      --replace "/usr/bin/kill" "${util-linux}/bin/kill"
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    boost libevdevplus libuinputplus iodash cxxopts
-  ];
+  strictDeps = true;
+  nativeBuildInputs = [ cmake scdoc ];
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ReimuNotMoe/ydotool";
     description = "Generic Linux command-line automation tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ willibutz ];
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ willibutz kraem ];
     platforms = with platforms; linux;
   };
 }

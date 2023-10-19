@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "optiminterp";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "05nzj2jmrczbnsr64w2a7kww19s6yialdqnsbg797v11ii7aiylc";
+    sha256 = "sha256-ubh/iOZlWTOYsTA6hJfPOituNBKTn2LbBnx+tmmSEug=";
   };
 
   nativeBuildInputs = [

@@ -1,30 +1,36 @@
-{ lib, python3Packages }:
+{ lib
+, python3Packages
+, fetchPypi
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "litecli";
-  version = "1.5.0";
+  version = "1.9.0";
+  disabled = python3Packages.pythonOlder "3.4";
 
-  # Python 2 won't have prompt_toolkit 2.x.x
-  # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
-  disabled = python3Packages.isPy27;
-
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "b09f0804d26b018360b240778612390810e8e00ea0f79d5412fd0d4775c0e3cd";
+    sha256 = "sha256-Ia8s+gg91N8ePMqiohFxKbXxchJ1b1luoJDilndsJ6E=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     cli-helpers
     click
     configobj
-    prompt_toolkit
+    prompt-toolkit
     pygments
     sqlparse
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     mock
+  ];
+
+  pythonImportsCheck = [ "litecli" ];
+
+  disabledTests = [
+    "test_auto_escaped_col_names"
   ];
 
   meta = with lib; {

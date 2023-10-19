@@ -1,27 +1,59 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, cmake, libtool, pkg-config
-, zlib, openssl, libevent, ncurses, ruby, msgpack, libssh }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, cmake
+, libtool
+, pkg-config
+, zlib
+, openssl
+, libevent
+, ncurses
+, ruby
+, msgpack-c
+, libssh
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tmate";
-  version = "2.4.0";
+  version = "unstable-2022-08-07";
 
   src = fetchFromGitHub {
     owner  = "tmate-io";
     repo   = "tmate";
-    rev    = version;
-    sha256 = "0x5c31yq7ansmiy20a0qf59wagba9v3pq97mlkxrqxn4n1gcc6vi";
+    rev    = "ac919516f4f1b10ec928e20b3a5034d18f609d68";
+    sha256 = "sha256-t96gfmAMcsjkGf8pvbEx2fNx4Sj3W6oYoQswB3Dklb8=";
   };
 
-  dontUseCmakeConfigure = true;
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace 'msgpack >= 1.1.0' 'msgpack-c >= 1.1.0'
+  '';
 
-  buildInputs = [ libtool zlib openssl libevent ncurses ruby msgpack libssh ];
-  nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    cmake
+    pkg-config
+  ];
+
+  buildInputs = [
+    libtool
+    zlib
+    openssl
+    libevent
+    ncurses
+    ruby
+    msgpack-c
+    libssh
+  ];
+
+  dontUseCmakeConfigure = true;
 
   meta = with lib; {
     homepage    = "https://tmate.io/";
     description = "Instant Terminal Sharing";
     license     = licenses.mit;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ck3d ];
   };
 }

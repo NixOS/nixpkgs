@@ -1,12 +1,18 @@
-{ mkXfceDerivation, docbook_xsl, exo, gtk3, libburn, libisofs, libxfce4ui, libxslt }:
+{ lib, mkXfceDerivation, docbook_xsl, exo, gtk3, libburn, libisofs, libxfce4ui, libxslt }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfburn";
-  version = "0.6.2";
+  version = "0.7.0";
+  odd-unstable = false;
 
-  sha256 = "02axhsbbsvd31jb0xs1d2qxr614qb29pajv0sm2p1n1c2cv2fjh1";
+  sha256 = "sha256-/CuV2tqja5fa2H2mmU9BP6tZHoCZZML5d2LL/CG3rno=";
 
   nativeBuildInputs = [ libxslt docbook_xsl ];
   buildInputs = [ exo gtk3 libburn libisofs libxfce4ui ];
+
+  meta = with lib; {
+    description = "Disc burner and project creator for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+  };
 }

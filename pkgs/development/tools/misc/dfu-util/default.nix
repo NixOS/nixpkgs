@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dfu-util";
-  version = "0.10";
+  version = "0.11";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ];
 
   src = fetchurl {
-    url = "http://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
-    sha256 = "0hlvc47ccf5hry13saqhc1j5cdq5jyjv4i05kj0mdh3rzj6wagd0";
+    url = "https://dfu-util.sourceforge.net/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-tLU7ohqC7349TEffKVKt9fpJT0mbawtXxYxdBK6P8Z4=";
   };
 
   meta = with lib; {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       phones. With dfu-util you are able to download firmware to your device or
       upload firmware from it.
     '';
-    homepage = "http://dfu-util.sourceforge.net";
+    homepage = "https://dfu-util.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.fpletz ];

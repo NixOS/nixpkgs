@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # this is needed, because xteddy expects images to reside
     # in the current working directory
-    wrapProgram $out/bin/xteddy --run "cd $out/share/images/"
+    wrapProgram $out/bin/xteddy --chdir "$out/share/images/"
   '';
 
   meta = with lib; {

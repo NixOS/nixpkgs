@@ -1,29 +1,27 @@
 { lib, buildDunePackage, fetchurl
-, ppx_sexp_conv, ppx_cstruct
-, mirage-crypto, mirage-crypto-rng, mirage-crypto-pk
-, x509, cstruct, cstruct-unix, cstruct-sexp, sexplib
-, rresult, mtime, logs, fmt, cmdliner, base64, hacl_x25519
+, ppx_sexp_conv
+, mirage-crypto, mirage-crypto-ec, mirage-crypto-rng, mirage-crypto-pk
+, x509, cstruct, cstruct-unix, cstruct-sexp, sexplib, eqaf
+, rresult, mtime, logs, fmt, cmdliner, base64
 , zarith
 }:
 
 buildDunePackage rec {
   pname = "awa";
-  version = "0.0.3";
+  version = "0.3.0";
 
-  minimumOCamlVersion = "4.07";
-  useDune2 = true;
+  minimalOCamlVersion = "4.10";
 
   src = fetchurl {
-    url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-v${version}.tbz";
-    sha256 = "5a7927363ffe672cccf12d5425386e84f6f553a17ffec2b01ae5dc28180c831a";
+    url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
+    hash = "sha256-BtbReSnnAN+u1Vy63afO1yheoDqsIRU2rig0y1QDtuw=";
   };
 
-  nativeBuildInputs = [ ppx_sexp_conv ppx_cstruct ];
-
   propagatedBuildInputs = [
-    mirage-crypto mirage-crypto-rng mirage-crypto-pk x509
-    cstruct cstruct-sexp sexplib rresult mtime
-    logs base64 hacl_x25519 zarith
+    mirage-crypto mirage-crypto-ec mirage-crypto-rng mirage-crypto-pk x509
+    cstruct cstruct-sexp sexplib mtime
+    logs base64 zarith
+    ppx_sexp_conv eqaf
   ];
 
   doCheck = true;
@@ -31,8 +29,9 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "SSH implementation in OCaml";
-    license = licenses.isc;
     homepage = "https://github.com/mirage/awa-ssh";
+    changelog = "https://github.com/mirage/awa-ssh/raw/v${version}/CHANGES.md";
+    license = licenses.isc;
     maintainers = [ maintainers.sternenseemann ];
   };
 }

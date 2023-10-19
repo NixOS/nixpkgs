@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ofono";
-  version = "1.32";
+  version = "2.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/network/ofono/ofono.git";
+    url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
     rev = version;
-    sha256 = "sha256-bJ7Qgau5soPiptrhcMZ8rWxfprRCTeR7OjQ5HZQ9hbc=";
+    sha256 = "sha256-GxQfh/ps5oM9G6B1EVgnjo8LqHD1hMqdnju1PCQq3kA=";
   };
 
   patches = [
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-systemdunitdir=${placeholder "out"}/lib/systemd/system"
     "--enable-external-ell"
+    "--sysconfdir=/etc"
   ];
 
-  postInstall = ''
-    rm -r $out/etc/ofono
-    ln -s /etc/ofono $out/etc/ofono
-  '';
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
 
   enableParallelBuilding = true;
   enableParallelChecking = false;
@@ -58,9 +58,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Infrastructure for building mobile telephony (GSM/UMTS) applications";
-    homepage = "https://01.org/ofono";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    homepage = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
+    changelog = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/plain/ChangeLog?h=${version}";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

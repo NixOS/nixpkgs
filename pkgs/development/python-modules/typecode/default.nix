@@ -3,21 +3,26 @@
 , buildPythonPackage
 , setuptools-scm
 , attrs
-, pdfminer
+, pdfminer-six
 , commoncode
 , plugincode
 , binaryornot
 , typecode-libmagic
 , pytestCheckHook
 , pytest-xdist
+, pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "typecode";
-  version = "21.2.24";
+  version = "30.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "eaac8aee0b9c6142ad44671252ba00748202d218347d1c0451ce6cd76561e01b";
+    hash = "sha256-Glc5QiTVr//euymeNTxGN+FVaOEa6cUxHGyGo9bQrJc=";
   };
 
   dontConfigure = true;
@@ -28,16 +33,31 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    pdfminer
+    pdfminer-six
     commoncode
     plugincode
     binaryornot
     typecode-libmagic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+
+  disabledTests = [
+    "TestFileTypesDataDriven"
+
+    # Many of the failures below are reported in:
+    # https://github.com/nexB/typecode/issues/36
+
+    # AssertionError: assert 'application/x-bytecode.python'...
+    "test_compiled_python_1"
+    "test_package_json"
+
+    # fails due to change in file (libmagic) 5.45
+    "test_doc_postscript_eps"
+    "test_package_debian"
   ];
 
   pythonImportsCheck = [
@@ -47,7 +67,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Comprehensive filetype and mimetype detection using libmagic and Pygments";
     homepage = "https://github.com/nexB/typecode";
+    changelog = "https://github.com/nexB/typecode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = with maintainers; [ ];
   };
 }

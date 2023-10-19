@@ -1,24 +1,25 @@
-{ lib, fetchurl, buildDunePackage, result }:
+{ lib, fetchurl, buildDunePackage, liquidsoap }:
 
 buildDunePackage rec {
   pname = "csexp";
-  version = "1.4.0";
-
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02.3";
+  version = "1.5.2";
 
   src = fetchurl {
     url = "https://github.com/ocaml-dune/csexp/releases/download/${version}/csexp-${version}.tbz";
-    sha256 = "sha256-jj1vyofxAqEm3ui3KioNFG8QQ5xHIY38FJ1Rvz7fNk4=";
+    hash = "sha256-GhTdBLtDeaQZkCSFUGKMd5E6nAfzw1wTcLaWDml3h/8=";
   };
 
-  propagatedBuildInputs = [ result ];
+  minimalOCamlVersion = "4.03";
+
+  passthru.tests = {
+    inherit liquidsoap;
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/ocaml-dune/csexp";
     description = "Minimal support for Canonical S-expressions";
+    homepage = "https://github.com/ocaml-dune/csexp";
+    changelog = "https://github.com/ocaml-dune/csexp/raw/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

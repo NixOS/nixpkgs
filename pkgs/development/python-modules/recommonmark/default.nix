@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
-, CommonMark
+, commonmark
 , docutils
 , sphinx
 , isPy3k
@@ -10,18 +10,17 @@
 
 buildPythonPackage rec {
   pname = "recommonmark";
-  version = "0.6.0";
+  version = "0.7.1";
 
-  # PyPI tarball is missing some test files: https://github.com/rtfd/recommonmark/pull/128
   src = fetchFromGitHub {
     owner = "rtfd";
     repo = pname;
     rev = version;
-    sha256 = "0m6qk17irka448vcz5b39yck1qsq90k98dmkx80mni0w00yq9ggd";
+    sha256 = "0kwm4smxbgq0c0ybkxfvlgrfb3gq9amdw94141jyykk9mmz38379";
   };
 
-  checkInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ CommonMark docutils sphinx ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [ commonmark docutils sphinx ];
 
   dontUseSetuptoolsCheck = true;
 

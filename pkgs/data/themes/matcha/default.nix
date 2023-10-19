@@ -1,33 +1,72 @@
-{ lib, stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gdk-pixbuf
+, gtk-engine-murrine
+, jdupes
+, librsvg
+, gitUpdater
+, colorVariants ? [] # default: all
+, themeVariants ? [] # default: blue
+}:
 
-stdenv.mkDerivation rec {
+let
   pname = "matcha-gtk-theme";
-  version = "2021-05-20";
+
+in
+lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: theme variants" [ "aliz" "azul" "sea" "pueril" "all" ] themeVariants
+
+stdenvNoCC.mkDerivation rec {
+  inherit pname;
+  version = "2023-04-03";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "0jx55dn9j0395ws7507mj8px4yq4jlmms6xr9jlhp0qxnr4y1smd";
+    sha256 = "mr9X7p/H8H2QKZxAQC9j/8OLK4D3EnWLxriFlh16diE=";
   };
 
-  buildInputs = [ gdk-pixbuf librsvg ];
+  nativeBuildInputs = [
+    jdupes
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+  buildInputs = [
+    gdk-pixbuf
+    librsvg
+  ];
+
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+  ];
+
+  postPatch = ''
+    patchShebangs install.sh
+  '';
 
   installPhase = ''
     runHook preInstall
-    patchShebangs .
+
     mkdir -p $out/share/themes
-    name= ./install.sh -d $out/share/themes
-    install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
+
+    name= ./install.sh \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      --dest $out/share/themes
+
     mkdir -p $out/share/doc/${pname}
     cp -a src/extra/firefox $out/share/doc/${pname}
+
+    jdupes --quiet --link-soft --recurse $out/share
+
     runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
-    description = "A stylish flat design theme for GTK based desktop environments";
+    description = "A stylish flat Design theme for GTK based desktop environments";
     homepage = "https://vinceliuice.github.io/theme-matcha";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

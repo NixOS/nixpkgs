@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , substituteAll
 , meson
@@ -8,23 +9,23 @@
 , glib
 , gettext
 , makeWrapper
-, python3
 , gnutls
 , p11-kit
 , libproxy
 , gnome
 , gsettings-desktop-schemas
+, bash
 }:
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.68.1";
+  version = "2.76.1";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0c1vylxly8k7g454g02spi44ybjidlwg461vp713zxd94k8qnpfh";
+    sha256 = "XGmKmZTd5R79+xAmpWaYoiHWJQ6J3FDrzd2nuBSApCs=";
   };
 
   patches = [
@@ -36,10 +37,7 @@ stdenv.mkDerivation rec {
     ./installed-tests-path.patch
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
+  strictDeps = true;
 
   nativeBuildInputs = [
     meson
@@ -47,7 +45,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     makeWrapper
-    python3 # for install_script
+    glib # for gio-querymodules
   ];
 
   buildInputs = [
@@ -56,6 +54,7 @@ stdenv.mkDerivation rec {
     p11-kit
     libproxy
     gsettings-desktop-schemas
+    bash # installed-tests shebangs
   ];
 
   doCheck = false; # tests need to access the certificates (among other things)

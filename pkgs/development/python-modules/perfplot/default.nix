@@ -1,53 +1,58 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, dufte
+, flit-core
 , matplotlib
+, matplotx
 , numpy
-, pipdate
-, tqdm
 , rich
-, pytest
-, isPy27
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "perfplot";
-  version = "0.8.10";
-  disabled = isPy27;
+  version = "0.10.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nschloe";
-    repo = "perfplot";
-    rev = "v${version}";
-    sha256 = "17xx33fk95fpkd8h2whblpwfls9vyqbv7anq34kpigjy8zxfi2qk";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bu6eYQukhLE8sLkS3PbqTgXOqJFXJYXTcXAhmjaq48g=";
   };
-  format = "pyproject";
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
-    dufte
     matplotlib
+    matplotx
     numpy
-    pipdate
     rich
-    tqdm
   ];
 
-  checkInputs = [
-    pytest
+  # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.
+  # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
+  env.MPLBACKEND = lib.optionalString stdenv.isDarwin "Agg";
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    export HOME=$TMPDIR
-    mkdir -p $HOME/.matplotlib
-    echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-    pytest test/perfplot_test.py
-  '';
+  pythonImportsCheck = [
+    "perfplot"
+  ];
 
   meta = with lib; {
     description = "Performance plots for Python code snippets";
     homepage = "https://github.com/nschloe/perfplot";
+    changelog = "https://github.com/nschloe/perfplot/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,60 +1,182 @@
-{ buildPythonPackage
-, lib
+{ lib
+, buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
-, cookiecutter
+# propagated build inputs
 , filelock
-, importlib-metadata
+, huggingface-hub
+, numpy
+, protobuf
+, packaging
+, pyyaml
 , regex
 , requests
-, numpy
-, packaging
-, protobuf
-, sacremoses
 , tokenizers
+, safetensors
 , tqdm
+# optional dependencies
+, scikit-learn
+, tensorflow
+, onnxconverter-common
+, tf2onnx
+, torch
+, accelerate
+, faiss
+, datasets
+, jax
+, jaxlib
+, flax
+, optax
+, ftfy
+, onnxruntime
+, onnxruntime-tools
+, cookiecutter
+, sagemaker
+, fairscale
+, optuna
+, ray
+, pydantic
+, uvicorn
+, fastapi
+, starlette
+, librosa
+, phonemizer
+, torchaudio
+, pillow
+, timm
+, torchvision
+, av
+, sentencepiece
 }:
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.4.2";
+  version = "4.34.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-kl1Z2FBo+yqVXUqLaUtet6IycmdcAtfydNTI4MNNrkc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-hDZU/3bQ1k4uL3kDEW3+pB4g8jhC8ospRqE55jIqrP0=";
   };
 
-  nativeBuildInputs = [ packaging ];
-
   propagatedBuildInputs = [
-    cookiecutter
     filelock
+    huggingface-hub
     numpy
-    protobuf
+    packaging
+    pyyaml
     regex
     requests
-    sacremoses
     tokenizers
+    safetensors
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ];
+
+  passthru.optional-dependencies =
+  let
+    audio = [
+      librosa
+      # pyctcdecode
+      phonemizer
+      # kenlm
+    ];
+    vision = [ pillow ];
+  in
+    {
+    ja = [
+      # fugashi
+      # ipadic
+      # rhoknp
+      # sudachidict_core
+      # sudachipy
+      # unidic
+      # unidic_lite
+    ];
+    sklearn = [
+      scikit-learn
+    ];
+    tf = [
+      tensorflow
+      onnxconverter-common
+      tf2onnx
+      # tensorflow-text
+      # keras-nlp
+    ];
+    torch = [
+      torch
+      accelerate
+    ];
+    retrieval = [ faiss datasets ];
+    flax = [ jax jaxlib flax optax ];
+    tokenizers = [
+      tokenizers
+    ];
+    ftfy = [ ftfy ];
+    onnxruntime = [
+      onnxruntime
+      onnxruntime-tools
+    ];
+    onnx = [
+      onnxconverter-common
+      tf2onnx
+      onnxruntime
+      onnxruntime-tools
+    ];
+    modelcreation = [
+      cookiecutter
+    ];
+    sagemaker = [
+      sagemaker
+    ];
+    deepspeed = [
+      # deepspeed
+      accelerate
+    ];
+    fairscale = [ fairscale ];
+    optuna = [ optuna ];
+    ray = [ ray ] ++ ray.optional-dependencies.tune-deps;
+    # sigopt = [ sigopt ];
+    # integrations = ray ++ optuna ++ sigopt;
+    serving = [
+      pydantic
+      uvicorn
+      fastapi
+      starlette
+    ];
+    audio = audio;
+    speech = [ torchaudio ] ++ audio;
+    torch-speech = [ torchaudio ] ++ audio;
+    tf-speech = audio;
+    flax-speech = audio;
+    timm = [ timm ];
+    torch-vision = [ torchvision ] ++ vision;
+    # natten = [ natten ];
+    # codecarbon = [ codecarbon ];
+    video = [
+      # decord
+      av
+    ];
+    sentencepiece = [ sentencepiece protobuf ];
+  };
+
 
   # Many tests require internet access.
   doCheck = false;
 
-  postPatch = ''
-    sed -ri 's/tokenizers[=>]=[^"]+/tokenizers/g' setup.py src/transformers/dependency_versions_table.py
-  '';
-
-  pythonImportsCheck = [ "transformers" ];
+  pythonImportsCheck = [
+    "transformers"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
-    description = "State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch";
+    description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ danieldk pashashocky ];
+    maintainers = with maintainers; [ pashashocky happysalada ];
   };
 }

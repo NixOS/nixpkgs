@@ -4,20 +4,27 @@
 , fetchFromGitHub
 , progressbar
 , pythonOlder
+, setuptools
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "angrop";
-  version = "9.0.7491";
+  version = "9.2.8";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UWqHNgJ8vUbLK3n9tvwOgHyOyTXsqRJKaAPWQfqi3lo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zmWdGbFzwLDP7MUqEprZcIgA7lAdCrafWYohAehJyh0=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     angr
@@ -25,17 +32,13 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  postPatch = ''
-    # https://github.com/angr/angrop/issues/35
-    substituteInPlace setup.py \
-      --replace "packages=['angrop']," "packages=find_packages()," \
-      --replace "from distutils.core import setup" "from setuptools import find_packages, setup"
-  '';
-
   # Tests have additional requirements, e.g., angr binaries
   # cle is executing the tests with the angr binaries already and is a requirement of angr
   doCheck = false;
-  pythonImportsCheck = [ "angrop" ];
+
+  pythonImportsCheck = [
+    "angrop"
+  ];
 
   meta = with lib; {
     description = "ROP gadget finder and chain builder";

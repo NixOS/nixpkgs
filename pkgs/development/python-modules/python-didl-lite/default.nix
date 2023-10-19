@@ -8,21 +8,21 @@
 
 buildPythonPackage rec {
   pname = "python-didl-lite";
-  version = "1.2.6";
+  version = "1.3.2";
   disabled = pythonOlder "3.5.3";
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = pname;
     rev = version;
-    sha256 = "sha256-1rr26dnV5As15HeFLWEDBDYPiRDHkGfYOYFhSJi7iyU=";
+    hash = "sha256-laKmWGDEzlBVJCUSKxekjPEXVlAz4MIzM7dNJfta/ek=";
   };
 
   propagatedBuildInputs = [
     defusedxml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

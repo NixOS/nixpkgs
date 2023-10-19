@@ -548,6 +548,10 @@ let
       };
     };
     brotliCrates = (callPackage ./brotli-crates.nix {});
+    rcgenCrates = callPackage ./rcgen-crates.nix {
+      # Suppress deprecation warning
+      buildRustCrate = null;
+    };
     tests = lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases;
   in tests // rec {
 
@@ -572,7 +576,7 @@ let
       expectedFiles = [
         "./bin/test_binary1"
       ] ++ lib.optionals stdenv.isDarwin [
-        # On Darwin, the debug symbols are in a seperate directory.
+        # On Darwin, the debug symbols are in a separate directory.
         "./bin/test_binary1.dSYM/Contents/Info.plist"
         "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
       ];
@@ -645,12 +649,22 @@ let
     } ''
       test -e ${pkg}/bin/brotli-decompressor && touch $out
     '';
+
+    rcgenTest = let
+      pkg = rcgenCrates.rootCrate.build;
+    in runCommand "run-rcgen-test-cmd" {
+      nativeBuildInputs = [ pkg ];
+    } (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+      ${pkg}/bin/rcgen && touch $out
+    '' else ''
+      test -x '${pkg}/bin/rcgen' && touch $out
+    '');
   };
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
-      maintainers = [ lib.maintainers.andir ];
+      maintainers = [ ];
     };
     constituents = builtins.attrValues tests;
   };

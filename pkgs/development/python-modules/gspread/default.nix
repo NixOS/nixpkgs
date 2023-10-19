@@ -1,29 +1,53 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
+, fetchFromGitHub
+, flit-core
 , google-auth
 , google-auth-oauthlib
+, pytest-vcr
+, pytestCheckHook
+, pythonOlder
+, requests
 }:
 
 buildPythonPackage rec {
-  version = "3.7.0";
   pname = "gspread";
+  version = "5.11.3";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4bda4ab8c5edb9e41cf4ae40d4d5fb30447522b4e43608e05c01351ab1b96912";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "burnash";
+    repo = "gspread";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-O6uhT8zfCGiGr0v8pEMZ4uLuDAdFpiTie7EC3rphZQI=";
   };
 
-  propagatedBuildInputs = [ requests google-auth google-auth-oauthlib ];
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = [
+    google-auth
+    google-auth-oauthlib
+    requests
+  ];
+
+  nativeCheckInputs = [
+    pytest-vcr
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "gspread"
+  ];
 
   meta = with lib; {
     description = "Google Spreadsheets client library";
     homepage = "https://github.com/burnash/gspread";
+    changelog = "https://github.com/burnash/gspread/blob/v${version}/HISTORY.rst";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
-  # No tests included
-  doCheck = false;
-
 }

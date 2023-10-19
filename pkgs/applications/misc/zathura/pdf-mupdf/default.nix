@@ -1,5 +1,4 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchpatch
-, cairo
+{ stdenv, lib, meson, ninja, fetchurl, cairo
 , girara
 , gtk-mac-integration
 , gumbo
@@ -9,15 +8,19 @@
 , openjpeg
 , pkg-config
 , zathura_core
+, tesseract
+, leptonica
+, mujs
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.6";
+  version = "0.4.1";
   pname = "zathura-pdf-mupdf";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
-    sha256 = "1r3v37k9fl2rxipvacgxr36llywvy7n20a25h3ajlyk70697sa66";
+    hash = "sha256-+YKgHWUj+iVmk4EYTAamJe2/15YcvbBxHcz9ucQCrC8=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -31,16 +34,16 @@ stdenv.mkDerivation rec {
     mupdf
     openjpeg
     zathura_core
+    tesseract
+    leptonica
+    mujs
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
-  mesonFlags = [
-    "-Dlink-external=true"
-  ];
-
-  # avoid: undefined symbol: gumbo_destroy_output
-  NIX_LDFLAGS = [ "-lgumbo" ];
-
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.pwmt.org/pwmt/zathura-pdf-mupdf.git";
+  };
 
   meta = with lib; {
     homepage = "https://pwmt.org/projects/zathura-pdf-mupdf/";
@@ -51,6 +54,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.zlib;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

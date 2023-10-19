@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "bifunctors";
+  pname = "bifunctors";
   version = "2017-02-07";
 
   src = fetchFromGitHub {

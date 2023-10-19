@@ -1,22 +1,18 @@
-{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl
-, openssl, gmp, zlib, fetchFromGitHub, rustPlatform, libiconv }:
-
-let
-  libPath = lib.makeLibraryPath [ gmp ];
-in
+{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl, runtimeShell
+, openssl, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "1.0.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "sha256-nK4wvxK5Ne1+4kaMts6pIr5FvXBgXJsGdn68gGEZUdk=";
+    sha256 = "sha256-VrCEwAoWKhb1qfJUv3OreTzuKEVQADwZpEQIVEhjwHA=";
   };
 
-  cargoSha256 = "sha256-ptSbpq1ePNWmdBGfKtqFGfkdimDjU0YEo4F8VPtQMt4=";
+  cargoHash = "sha256-SMKFSu5C5mc3U266hEa6RB3GH5te3jIrUZAzj3YNa2E=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -24,33 +20,35 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ curl zlib openssl ]
     ++ lib.optional stdenv.isDarwin libiconv;
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  buildFeatures = [ "no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
     # Run patchelf on the downloaded binaries.
-    # This necessary because Lean 4 now dynamically links to GMP.
+    # This is necessary because Lean 4 is now dynamically linked.
     (runCommand "0001-dynamically-patchelf-binaries.patch" {
         CC = stdenv.cc;
+        cc = "${stdenv.cc}/bin/cc";
+        ar = "${stdenv.cc}/bin/ar";
         patchelf = patchelf;
-        libPath = "$ORIGIN/../lib:${libPath}";
+        shell = runtimeShell;
       } ''
      export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
      substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
        --subst-var patchelf \
        --subst-var dynamicLinker \
-       --subst-var libPath
+       --subst-var cc \
+       --subst-var ar \
+       --subst-var shell
     '')
   ];
 
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker leanc leanmake; do
+    for link in lean leanpkg leanchecker leanc leanmake lake; do
       ln -s elan $link
     done
     popd
-
-    wrapProgram $out/bin/elan --prefix "LD_LIBRARY_PATH" : "${libPath}"
 
     # tries to create .elan
     export HOME=$(mktemp -d)
@@ -63,7 +61,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
+    changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
+    mainProgram = "elan";
   };
 }

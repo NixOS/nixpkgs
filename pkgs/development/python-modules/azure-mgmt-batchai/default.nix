@@ -2,10 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , msrestazure
-, python
-, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -21,8 +20,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
-  ];
+ ];
 
   pythonNamespaces = [ "azure.mgmt" ];
 

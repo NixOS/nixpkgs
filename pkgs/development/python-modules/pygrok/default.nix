@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ regex ];
 
-  checkInputs =  [ pytest ];
+  nativeCheckInputs =  [ pytest ];
   checkPhase = ''
     pytest
   '';
@@ -23,6 +23,6 @@ buildPythonPackage rec {
     description = "A python implementation of jordansissel's grok regular expression library";
     homepage = "https://github.com/garyelephant/pygrok";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

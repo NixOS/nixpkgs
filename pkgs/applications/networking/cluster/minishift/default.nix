@@ -34,12 +34,11 @@ in buildGoPackage rec {
       --replace '"runtime"' ""
   '';
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X ${goPackagePath}/pkg/version.minishiftVersion=${version}
-      -X ${goPackagePath}/pkg/version.centOsIsoVersion=${centOsIsoVersion}
-      -X ${goPackagePath}/pkg/version.openshiftVersion=${openshiftVersion}
-  '';
+  ldflags = [
+    "-X ${goPackagePath}/pkg/version.minishiftVersion=${version}"
+    "-X ${goPackagePath}/pkg/version.centOsIsoVersion=${centOsIsoVersion}"
+    "-X ${goPackagePath}/pkg/version.openshiftVersion=${openshiftVersion}"
+  ];
 
   preBuild = ''
     (cd go/src/github.com/minishift/minishift
@@ -60,7 +59,7 @@ in buildGoPackage rec {
       or develop with it, day-to-day, on your local host.
     '';
     homepage = "https://github.com/minishift/minishift";
-    maintainers = with maintainers; [ fpletz vdemeester ];
+    maintainers = with maintainers; [ vdemeester ];
     platforms = platforms.linux;
     license = licenses.asl20;
   };

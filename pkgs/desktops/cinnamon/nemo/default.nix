@@ -5,13 +5,14 @@
 , meson
 , ninja
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 , wrapGAppsHook
 , libxml2
 , gtk3
-, libnotify
+, gvfs
 , cinnamon-desktop
-, xapps
+, xapp
 , libexif
 , exempi
 , intltool
@@ -22,29 +23,32 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
-  version = "5.0.0";
-
-  # TODO: add plugins support (see https://github.com/NixOS/nixpkgs/issues/78327)
+  version = "5.8.5";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "07n9p93iyrzb7636qqwknq8dd3im1y6wb9jfvif96mbvvdwsnfyz";
+    sha256 = "sha256-Nl/T+8mmQdCTHo3qAUd+ATflSDXiGCQfGb1gXzvLuAc=";
   };
+
+  patches = [
+    # Load extensions from NEMO_EXTENSION_DIR environment variable
+    # https://github.com/NixOS/nixpkgs/issues/78327
+    ./load-extensions-from-env.patch
+  ];
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [
     glib
     gtk3
-    libnotify
     cinnamon-desktop
     libxml2
-    xapps
+    xapp
     libexif
     exempi
-    gobject-introspection
+    gvfs
     libgsf
   ];
 
@@ -55,14 +59,23 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     shared-mime-info
+    gobject-introspection
   ];
 
   mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
     # use locales from cinnamon-translations
     "--localedir=${cinnamon-translations}/share/locale"
   ];
+
+  preFixup = ''
+    # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${xapp}/share"
+    )
+  '';
+
+  # Taken from libnemo-extension.pc.
+  passthru.extensiondir = "lib/nemo/extensions-3.0";
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/nemo";
@@ -70,5 +83,7 @@ stdenv.mkDerivation rec {
     license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
+    mainProgram = "nemo";
   };
 }
+

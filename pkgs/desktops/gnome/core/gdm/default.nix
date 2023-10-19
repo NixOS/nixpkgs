@@ -1,15 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchpatch
 , substituteAll
 , meson
 , ninja
-, python3
 , rsync
 , pkg-config
 , glib
 , itstool
-, libxml2
 , xorg
 , accountsservice
 , libX11
@@ -19,16 +18,18 @@
 , gtk3
 , libcanberra-gtk3
 , pam
+, libgudev
 , libselinux
 , keyutils
 , audit
 , gobject-introspection
 , plymouth
-, librsvg
 , coreutils
+, xorgserver
 , xwayland
 , dbus
 , nixos-icons
+, runCommand
 }:
 
 let
@@ -40,21 +41,21 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gdm";
-  version = "40.0";
+  version = "44.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "XtdLc506Iy/7HkoTK8+WW9/pVdmVtSh3NYh3WwLylQ4=";
+    url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    sha256 = "aCZrOr59KPxGnQBnqsnF2rsMp5UswffCOKBJUfPcWw0=";
   };
 
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
-    "-Dinitial-vt=${passthru.initialVT}"
+    "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
     "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
@@ -69,19 +70,19 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     rsync
+    gobject-introspection
   ];
 
   buildInputs = [
     accountsservice
     audit
     glib
-    gobject-introspection
     gtk3
     keyutils
     libX11
     libcanberra-gtk3
+    libgudev
     libselinux
     pam
     plymouth
@@ -102,7 +103,7 @@ stdenv.mkDerivation rec {
     # Change hardcoded paths to nix store paths.
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit coreutils plymouth xwayland dbus;
+      inherit coreutils plymouth xorgserver xwayland dbus;
     })
 
     # The following patches implement certain environment variables in GDM which are set by
@@ -123,8 +124,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs build-aux/meson_post_install.py
-
     # Upstream checks some common paths to find an `X` binary. We already know it.
     echo #!/bin/sh > build-aux/find-x-server.sh
     echo "echo ${lib.getBin xorg.xorgserver}/bin/X" >> build-aux/find-x-server.sh
@@ -132,20 +131,21 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    install -D ${override} ${DESTDIR}/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
+    install -D ${override} $DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
   '';
 
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
     # We use rsync to merge the directories.
-    rsync --archive "${DESTDIR}/etc" "$out"
-    rm --recursive "${DESTDIR}/etc"
-    for o in $outputs; do
-        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
-        rm --recursive "${DESTDIR}/''${!o}"
+    rsync --archive "$DESTDIR/etc" "$out"
+    rm --recursive "$DESTDIR/etc"
+    for o in $(getAllOutputNames); do
+        if [[ "$o" = "debug" ]]; then continue; fi
+        rsync --archive "$DESTDIR/''${!o}" "$(dirname "''${!o}")"
+        rm --recursive "$DESTDIR/''${!o}"
     done
     # Ensure the DESTDIR is removed.
-    rmdir "${DESTDIR}/nix/store" "${DESTDIR}/nix" "${DESTDIR}"
+    rmdir "$DESTDIR/nix/store" "$DESTDIR/nix" "$DESTDIR"
 
     # We are setting DESTDIR so the post-install script does not compile the schemas.
     glib-compile-schemas "$out/share/glib-2.0/schemas"
@@ -159,6 +159,8 @@ stdenv.mkDerivation rec {
   # location using DESTDIR and then move it to proper one in postInstall.
   DESTDIR = "${placeholder "out"}/dest";
 
+  separateDebugInfo = true;
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gdm";
@@ -168,6 +170,18 @@ stdenv.mkDerivation rec {
     # Used in GDM NixOS module
     # Don't remove.
     initialVT = "7";
+    dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
+    dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
+
+    tests = {
+      profile = runCommand "gdm-profile-test" { } ''
+        if test "${finalAttrs.passthru.dconfProfile}" != "$(cat ${finalAttrs.finalPackage}/share/dconf/profile/gdm)"; then
+          echo "GDM dconf profile changed, please update gdm.nix"
+          exit 1
+        fi
+        touch $out
+      '';
+    };
   };
 
   meta = with lib; {
@@ -177,4 +191,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
-}
+})

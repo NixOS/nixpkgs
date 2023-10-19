@@ -17,12 +17,14 @@ with pkgs.lib;
           ln -s ${pkgs.writeText "sshPublicKey" sshPublicKey} $out/1.0/meta-data/public-keys/0/openssh-key
         '';
       };
+      indentLines = str: concatLines (map (s: "  " + s) (splitString "\n" str));
     in makeTest {
       name = "ec2-" + name;
       nodes = {};
       testScript = ''
         import os
         import subprocess
+        import tempfile
 
         image_dir = os.path.join(
             os.environ.get("TMPDIR", tempfile.gettempdir()), "tmp", "vm-state-machine"
@@ -35,6 +37,8 @@ with pkgs.lib;
                 "create",
                 "-f",
                 "qcow2",
+                "-F",
+                "qcow2",
                 "-o",
                 "backing_file=${image}",
                 disk_image,
@@ -45,7 +49,7 @@ with pkgs.lib;
         # Note: we use net=169.0.0.0/8 rather than
         # net=169.254.0.0/16 to prevent dhcpcd from getting horribly
         # confused. (It would get a DHCP lease in the 169.254.*
-        # range, which it would then configure and prompty delete
+        # range, which it would then configure and promptly delete
         # again when it deletes link-local addresses.) Ideally we'd
         # turn off the DHCP server, but qemu does not have an option
         # to do that.
@@ -58,7 +62,11 @@ with pkgs.lib;
         )
 
         machine = create_machine({"startCommand": start_command})
-      '' + script;
+        try:
+      '' + indentLines script + ''
+        finally:
+          machine.shutdown()
+      '';
 
       inherit meta;
     };

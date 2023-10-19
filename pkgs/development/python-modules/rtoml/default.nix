@@ -1,46 +1,59 @@
 { lib
 , buildPythonPackage
+, cargo
 , fetchFromGitHub
-, pythonOlder
-, setuptools-rust
-, rustPlatform
+, libiconv
 , pytestCheckHook
+, pythonOlder
+, rustPlatform
+, rustc
+, setuptools-rust
 }:
 
 buildPythonPackage rec {
   pname = "rtoml";
-  version = "0.6.1";
+  version = "0.8";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "samuelcolvin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07bf30if1wmbqjp5n4ib43n6frx8ybyxc9fndxncq7aylkrhd7hy";
+    hash = "sha256-tvX4KcQGw0khBjEXVFmkhsVyAkdr2Bgm6IfD1yGZ37c=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1q082sdac5vm4l3b45rfjp4vppp9y9qhagdjqqfdz8gdhm1k8yyy";
+    hash = "sha256-KcF3Z71S7ZNZicViqwpClfT736nYYbKcKWylOP+S3HI=";
   };
 
   nativeBuildInputs = with rustPlatform; [
     setuptools-rust
-    rust.rustc
-    rust.cargo
-    cargoSetupHook
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
   ];
 
-  pythonImportsCheck = [ "rtoml" ];
+  buildInputs = [
+    libiconv
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [
+    "rtoml"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   preCheck = ''
     cd tests
   '';
 
   meta = with lib; {
-    description = "Rust based TOML library for python";
+    description = "Rust based TOML library for Python";
     homepage = "https://github.com/samuelcolvin/rtoml";
     license = licenses.mit;
     maintainers = with maintainers; [ evils ];

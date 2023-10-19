@@ -1,26 +1,39 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , azure-common
 , azure-core
+, azure-mgmt-core
 , msrest
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-synapse-artifacts";
-  version = "0.7.0";
+  version = "0.17.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "2a538d617dc5d2d167716226d0a24e416324efb35ef22b223e0d9fb6b9889a72";
+    hash = "sha256-58k8F/aUBBNJwGBiPZojkSzEXZ3Kd6uEwr0cZbFaM9k=";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-core
+    azure-mgmt-core
     msrest
   ];
 
-  pythonImportsCheck = [ "azure.synapse.artifacts" ];
+  # zero tests run
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "azure.synapse.artifacts"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure Synapse Artifacts Client Library for Python";

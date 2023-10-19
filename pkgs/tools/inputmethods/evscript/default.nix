@@ -1,20 +1,26 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitea }:
 
 rustPlatform.buildRustPackage rec {
   pname = "evscript";
-  version = "git-${builtins.substring 0 7 src.rev}";
+  version = "unstable-2022-11-20";
 
-  src = fetchFromGitHub {
-    owner = "myfreeweb";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "valpackett";
     repo = pname;
-    rev = "47f86f0d15add2af785ea1ff47f24d130026d1b4";
-    sha256 = "1xm8297k0d8d0aq7fxgmibr4qva4d02cb6gnnlzq77jcmnknxv14";
+    rev = "ba997c9723a91717c683f08e9957d0ecea3da6cd";
+    sha256 = "sha256-wuTPcBUuPK1D4VO8BXexx9AdiPM+X0TkJ3G7b7ofER8=";
   };
 
-  cargoSha256 = "1z0xxbjnhhzn1fnc3zhvy727l88qyyfqdayj5yvf3nh23m7sr87l";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "evdev-0.10.1" = "sha256-iIzKhlA+7qg+nNwP82OIpoXVUEYU31iSEt1KJA3EewQ=";
+    };
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/myfreeweb/${pname}";
+    homepage = "https://codeberg.org/valpackett/evscript";
     description = "A tiny sandboxed Dyon scripting environment for evdev input devices";
     license = licenses.unlicense;
     maintainers = with maintainers; [ milesbreslin ];

@@ -1,22 +1,24 @@
-{ mkYarnPackage, fetchFromGitHub, electron, makeWrapper, makeDesktopItem, lib }:
+{ stdenv, buildNpmPackage, fetchFromGitHub, electron, makeWrapper, python3, makeDesktopItem, nix-update-script, lib }:
 
-mkYarnPackage rec {
+buildNpmPackage rec {
   pname = "vieb";
-  version = "5.0.0";
+  version = "10.3.0";
 
   src = fetchFromGitHub {
-    owner = "jelmerro";
+    owner = "Jelmerro";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0fbH2tmrgbu/XQg1piK9f56cow+R/Qe6bYMdbeV/mus=";
+    hash = "sha256-eopsDwgyWshZOppkODGKT8UGnj4vvc7ssEzVAhZeDTA=";
   };
 
-  packageJSON = ./package.json;
-  yarnLock = ./yarn.lock;
-  yarnNix = ./yarn.nix;
-  yarnFlags = [ "--production" "--offline" ];
+  postPatch = ''
+    sed -i '/"electron"/d' package.json
+  '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  npmDepsHash = "sha256-9tnLlKzOy8ze4m2beS/pI34IiEa5TdNNr+Rmm2TFgfk=";
+  dontNpmBuild = true;
+
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isAarch64 python3;
 
   desktopItem = makeDesktopItem {
     name = "vieb";
@@ -24,8 +26,8 @@ mkYarnPackage rec {
     icon = "vieb";
     desktopName = "Web Browser";
     genericName = "Web Browser";
-    categories = "Network;WebBrowser;";
-    mimeType = lib.concatStringsSep ";" [
+    categories = [ "Network" "WebBrowser" ];
+    mimeTypes = [
       "text/html"
       "application/xhtml+xml"
       "x-scheme-handler/http"
@@ -36,22 +38,26 @@ mkYarnPackage rec {
   postInstall = ''
     install -Dm0644 {${desktopItem},$out}/share/applications/vieb.desktop
 
-    pushd $out/libexec/vieb/node_modules/vieb/app/img/icons
+    pushd $out/lib/node_modules/vieb/app/img/icons
     for file in *.png; do
       install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/vieb.png
     done
     popd
 
     makeWrapper ${electron}/bin/electron $out/bin/vieb \
-      --add-flags $out/libexec/vieb/node_modules/vieb/app
+      --add-flags $out/lib/node_modules/vieb/app \
+      --set npm_package_version ${version}
   '';
 
   distPhase = ":"; # disable useless $out/tarballs directory
 
+  passthru.updateScript = nix-update-script {};
+
   meta = with lib; {
     homepage = "https://vieb.dev/";
+    changelog = "https://github.com/Jelmerro/Vieb/releases/tag/${version}";
     description = "Vim Inspired Electron Browser";
-    maintainers = with maintainers; [ gebner fortuneteller2k ];
+    maintainers = with maintainers; [ gebner fortuneteller2k tejing ];
     platforms = platforms.unix;
     license = licenses.gpl3Plus;
   };

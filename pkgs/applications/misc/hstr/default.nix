@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hstr";
-  version = "2.3";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner  = "dvorka";
     repo   = "hstr";
     rev    = version;
-    sha256 = "1chmfdi1dwg3sarzd01nqa82g65q7wdr6hrnj96l75vikwsg986y";
+    hash   = "sha256-OuLy1aiEwUJDGy3+UXYF1Vx1nNXic46WIZEM1xrIPfA=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

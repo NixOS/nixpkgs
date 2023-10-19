@@ -1,29 +1,54 @@
-{ buildPythonApplication, fetchurl, lib
-, dateutil, argcomplete, argh, psycopg2, boto3
+{ lib
+, fetchFromGitHub
+, stdenv
+, python3Packages
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "barman";
-  version = "2.12";
+  version = "3.7.0";
 
-  outputs = [ "out" "man" ];
-  src = fetchurl {
-    url = "mirror://sourceforge/pgbarman/${version}/barman-${version}.tar.gz";
-    sha256 = "Ts8I6tlP2GRp90OIIKXy+cRWWvUO3Sm86zq2dtVP5YE=";
+  src = fetchFromGitHub {
+    owner = "EnterpriseDB";
+    repo = pname;
+    rev = "refs/tags/release/${version}";
+    hash = "sha256-5mecCg5c+fu6WUgmNEL4BR+JCild02YAuYgLwO1MGnI=";
   };
 
-  propagatedBuildInputs = [ dateutil argh psycopg2 boto3 argcomplete ];
+  patches = [
+    ./unwrap-subprocess.patch
+  ];
 
-  # Tests are not present in tarball
-  checkPhase = ''
-    $out/bin/barman --help > /dev/null
-  '';
+  nativeCheckInputs = with python3Packages; [
+    mock
+    python-snappy
+    google-cloud-storage
+    pytestCheckHook
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    argcomplete
+    azure-identity
+    azure-storage-blob
+    boto3
+    psycopg2
+    python-dateutil
+  ];
+
+  disabledTests = [
+    # Assertion error
+    "test_help_output"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # FsOperationFailed
+    "test_get_file_mode"
+  ];
 
   meta = with lib; {
-    homepage = "https://www.2ndquadrant.com/en/resources/barman/";
-    description = "Backup and Disaster Recovery Manager for PostgreSQL";
+    homepage = "https://www.pgbarman.org/";
+    description = "Backup and Recovery Manager for PostgreSQL";
+    changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
     maintainers = with maintainers; [ freezeboy ];
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };
 }

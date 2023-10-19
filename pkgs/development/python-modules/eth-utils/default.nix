@@ -1,21 +1,44 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pytestCheckHook, eth-hash, eth-typing,
-  cytoolz, hypothesis }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, eth-hash
+, eth-typing
+, cytoolz
+, hypothesis
+, isPyPy
+, pytestCheckHook
+, pythonOlder
+, toolz
+}:
 
 buildPythonPackage rec {
   pname = "eth-utils";
-  version = "1.10.0";
+  version = "2.1.1";
+  disabled = pythonOlder "3.6";
 
-  # Tests are missing from the PyPI source tarball so let's use GitHub
-  # https://github.com/ethereum/eth-utils/issues/130
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-sq3H4HmUFUipqVYleZxWLG1gBsQEoNwcZAXiKckacek=";
+    hash = "sha256-Ogp4o99smw5qVwDec6zd/xVqqKMyNk41iBfRNzrwuvE=";
   };
 
-  checkInputs = [ pytestCheckHook hypothesis ];
-  propagatedBuildInputs = [ eth-hash eth-typing cytoolz ];
+  propagatedBuildInputs = [
+    eth-hash
+    eth-typing
+  ] ++ lib.optional (!isPyPy) cytoolz
+  ++ lib.optional isPyPy toolz;
+
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ] ++ eth-hash.optional-dependencies.pycryptodome;
+
+  # Removing a poorly written test case from test suite.
+  # TODO work with the upstream
+  disabledTestPaths = [
+    "tests/functional-utils/test_type_inference.py"
+  ];
 
   pythonImportsCheck = [ "eth_utils" ];
 
@@ -23,6 +46,6 @@ buildPythonPackage rec {
     description = "Common utility functions for codebases which interact with ethereum";
     homepage = "https://github.com/ethereum/eth-utils";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

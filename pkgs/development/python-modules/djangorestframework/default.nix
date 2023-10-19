@@ -1,21 +1,46 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, coreapi
+, django
+, django-guardian
+, pythonOlder
+, pytest-django
+, pytestCheckHook
+, pytz
+, pyyaml
+, uritemplate
+}:
 
 buildPythonPackage rec {
-  version = "3.12.2";
   pname = "djangorestframework";
-  disabled = isPy27;
+  version = "3.14.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     rev = version;
-    sha256 = "y/dw6qIOc6NaNpBWJXDwHX9aFodgKv9rGKWQKS6STlk=";
+    hash = "sha256-Fnj0n3NS3SetOlwSmGkLE979vNJnYE6i6xwVBslpNz4=";
   };
 
-  # Test settings are missing
-  doCheck = false;
+  propagatedBuildInputs = [
+    django
+    pytz
+  ];
 
-  propagatedBuildInputs = [ django ];
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+
+    # optional tests
+    coreapi
+    django-guardian
+    pyyaml
+    uritemplate
+  ];
+
+  pythonImportsCheck = [ "rest_framework" ];
 
   meta = with lib; {
     description = "Web APIs for Django, made easy";

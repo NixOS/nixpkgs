@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "hezarfen";
+  pname = "hezarfen";
   version = "2018-02-03";
 
   src = fetchFromGitHub {

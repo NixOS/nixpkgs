@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "toxic";
-  version = "0.10.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner  = "Tox";
     repo   = "toxic";
     rev    = "v${version}";
-    sha256 = "sha256-EElDi/VEYgYPpoDNatxcKQC1pnCU8kOcj0bAFojD9fU=";
+    sha256 = "sha256-BabRY9iu5ccEXo5POrWkWaIWAeQU4MVlMK8I+Iju6aQ=";
   };
 
   makeFlags = [ "PREFIX=$(out)"];
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkg-config libconfig ];
 
-  meta = with lib; {
+  meta = with lib; src.meta // {
     description = "Reference CLI for Tox";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
   };
 }

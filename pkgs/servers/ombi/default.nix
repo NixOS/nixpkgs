@@ -10,14 +10,14 @@ let
     "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-9m5vWobkibqOHsuIJmvEHuwsuJogvQQe8h0dvFj62tw=";
-    arm64-linux_hash = "sha256-OBm4j5Ez04XLjp4DHyOrwSOSGanuuI8g2y2wZaotH8M=";
-    x64-osx_hash = "sha256-UPf6Yl0nbhmiWq9oGyi7sRhlahB6zHL7nTj7GRlKoII=";
+    x64-linux_hash = "sha256-4343S9fxNmoZhbfq/ZAfI2wF7ZwIw7IyyyZUsga48Zo=";
+    arm64-linux_hash = "sha256-XnR/uT73luKSpYr6ieZyu0mjOy23XGs5UVDke0IU9PQ=";
+    x64-osx_hash = "sha256-4EoMZm++T4K2zwPw8G4J44RV/HcssAdzmKjQFqBXbwY=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "ombi";
-  version = "4.0.1345";
+  version = "4.43.5";
 
   sourceRoot = ".";
 
@@ -26,7 +26,8 @@ in stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ]
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ stdenv.cc.cc zlib krb5 ];
@@ -37,7 +38,7 @@ in stdenv.mkDerivation rec {
 
     makeWrapper $out/share/${pname}-${version}/Ombi $out/bin/Ombi \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl icu ]} \
-      --run "cd $out/share/${pname}-${version}"
+      --chdir "$out/share/${pname}-${version}"
   '';
 
   passthru = {
@@ -48,6 +49,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Self-hosted web application that automatically gives your shared Plex or Emby users the ability to request content by themselves";
     homepage = "https://ombi.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ woky ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];

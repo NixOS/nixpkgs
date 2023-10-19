@@ -1,14 +1,13 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "graylog";
-  meta.maintainers = with lib.maintainers; [ ma27 ];
+  meta.maintainers = with lib.maintainers; [ ];
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
     virtualisation.diskSize = 4096;
 
     services.mongodb.enable = true;
     services.elasticsearch.enable = true;
-    services.elasticsearch.package = pkgs.elasticsearch-oss;
     services.elasticsearch.extraConf = ''
       network.publish_host: 127.0.0.1
       network.bind_host: 127.0.0.1

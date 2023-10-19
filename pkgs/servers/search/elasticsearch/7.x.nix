@@ -1,10 +1,12 @@
 { elk7Version
-, enableUnfree ? true
-, lib, stdenv
+, lib
+, stdenv
 , fetchurl
 , makeWrapper
 , jre_headless
-, util-linux, gnugrep, coreutils
+, util-linux
+, gnugrep
+, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -14,24 +16,21 @@ let
   info = splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
   plat = elemAt info 1;
-  shas =
-    if enableUnfree
-    then {
-      x86_64-linux  = "1s27bzx5y8vcd95qrw6av3fhyxb45219x9ahwaxa2cygmbpighrp";
-      x86_64-darwin = "1ia3byir3i5qaarmcaysrg3dhnxjmxnf0m0kzyf61g9aiy87gb7q";
-    }
-    else {
-      x86_64-linux  = "005i7d7ag10qkn7bkx7md50iihvcvc84hay2j94wvsm7yghhbmi3";
-      x86_64-darwin = "01f81720rbzdqc0g1xymhz2lflldfbnb0rh7mpki99pss28vj9sh";
+  hashes =
+    {
+      x86_64-linux   = "sha512-eiAT5Dx/w56GoxpzPMdMWH7yu6DAE/lc6HT5i0iKT48Ob7JUoe7dXAsOIQrtmgGV9zWPqWU8iQ4jRBP/kxkIBw==";
+      x86_64-darwin  = "sha512-5vSefA9Z4mCz49Q+Vzdck1KXbE9REYAF46kSf0G1n5XlHqFYzTGOmUEObZhGTqH4RDLJBdEqhLj2iyzjWQX5RA==";
+      aarch64-linux  = "sha512-8nkPSbecOBJGu/h0MZGUUq+Tqk/YqmvJwfkDHn7V2cZJ9bq4Z8KKfRYC4ihdP0pfePgJrAV0SwKtZ9aGELtnfQ==";
+      aarch64-darwin = "sha512-dbZrYGULuC3FF/SllPpAgW077Lkr87NJ8+gyTMayl8i8rOvAjnZhiR/U7eA6CZ/qVsFQkpGATdAzRXF8NlZBcg==";
     };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
+  pname = "elasticsearch";
   version = elk7Version;
-  name = "elasticsearch-${optionalString (!enableUnfree) "oss-"}${version}";
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
+    url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}-${plat}-${arch}.tar.gz";
+    hash = hashes.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -46,15 +45,21 @@ stdenv.mkDerivation (rec {
       "ES_CLASSPATH=\"\$ES_CLASSPATH:$out/\$additional_classpath_directory/*\""
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ jre_headless util-linux ]
-             ++ optional enableUnfree zlib;
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+
+  buildInputs = [ jre_headless util-linux zlib ];
+
+  runtimeDependencies = [ zlib ];
 
   installPhase = ''
     mkdir -p $out
     cp -R bin config lib modules plugins $out
 
     chmod +x $out/bin/*
+
+    substituteInPlace $out/bin/elasticsearch \
+      --replace 'bin/elasticsearch-keystore' "$out/bin/elasticsearch-keystore"
 
     wrapProgram $out/bin/elasticsearch \
       --prefix PATH : "${makeBinPath [ util-linux coreutils gnugrep ]}" \
@@ -63,22 +68,16 @@ stdenv.mkDerivation (rec {
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"
   '';
 
-  passthru = { inherit enableUnfree; };
+  passthru = { enableUnfree = true; };
 
   meta = {
     description = "Open Source, Distributed, RESTful Search Engine";
-    license = if enableUnfree then licenses.elastic else licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
+    license = licenses.elastic20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ apeschar basvandijk ];
   };
-} // optionalAttrs enableUnfree {
-  dontPatchELF = true;
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-  runtimeDependencies = [ zlib ];
-  postFixup = ''
-    for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
-      echo "patching $exe..."
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"
-    done
-  '';
-})
+}

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hashi-ui";
+  pname = "hashi-ui";
   version = "1.3.8";
 
   src = fetchurl {
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     description = "A modern user interface for hashicorp Consul & Nomad";
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ numkem ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
   };
 }

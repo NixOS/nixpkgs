@@ -1,19 +1,26 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "subfinder";
-  version = "2.3.0";
-
-  goPackagePath = "github.com/projectdiscovery/subfinder";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vjxi2h4njakyqkfzwwaacy37kqx66j2y3k5l752z9va73gv7xv1";
+    hash = "sha256-X1Ow11ECwu2a/VzimrKGRJKCnZWL8KJ5Gii+pjP5b9E=";
   };
 
-  goDeps = ./deps.nix;
+  vendorHash = "sha256-T1xrJ44xB95+ZhQPCYlcbH1gIQm7ETtTnQLl/+TRxVA=";
+
+  modRoot = "./v2";
+
+  subPackages = [
+    "cmd/subfinder/"
+  ];
 
   meta = with lib; {
     description = "Subdomain discovery tool";
@@ -24,6 +31,6 @@ buildGoPackage rec {
     '';
     homepage = "https://github.com/projectdiscovery/subfinder";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz Br1ght0ne ];
+    maintainers = with maintainers; [ fpletz Br1ght0ne Misaka13514 ];
   };
 }

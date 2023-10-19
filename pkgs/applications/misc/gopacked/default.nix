@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "tulir";
     repo = "gopacked";
     rev = "v${version}";
-    sha256 = "03qr8rlnipziy16nbcpf631jh42gsyv2frdnh8yzsh8lm0p8p4ry";
+    hash = "sha256-PpOLLqgUQf09grZlJ7bXTxAowzDusmVN8PHfaGlGGQ8=";
   };
 
-  vendorSha256 = "0fklr3lxh8g7gda65wf2wdkqv15869h7m1bwbzbiv8pasrf5b352";
+  vendorHash = "sha256-ooxVXNbqoh3XX3yFemAyqISNZ+PC8WJUe+ch2OnIdDo=";
 
   doCheck = false;
 
@@ -19,7 +19,6 @@ buildGoModule rec {
     description = "A simple text-based Minecraft modpack manager";
     license = licenses.agpl3;
     homepage = src.meta.homepage;
-    maintainers = with maintainers; [ foxit64 ];
+    maintainers = with maintainers; [ ];
   };
-
 }

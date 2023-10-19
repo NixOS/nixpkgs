@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "shfmt";
-  version = "3.3.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "mvdan";
     repo = "sh";
     rev = "v${version}";
-    sha256 = "sha256-pD1nkbBw5NBCyuhn2DYop2AR+1T8p6/zTa6FeWiya7Q=";
+    sha256 = "sha256-5/WGYsmZAFFdONpViRaqjL/KXyOu618A8S/SqcgZoEU=";
   };
 
-  vendorSha256 = "sha256-euJYStN21xFYosouWYXpHN3MWCKR4NT8z6OSonM0HW8=";
+  vendorHash = "sha256-V/6wiC0oanytzMGW/lP+t+uz6cMgXRuviDEj7ErQh5k=";
 
   subPackages = [ "cmd/shfmt" ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 
@@ -33,5 +33,6 @@ buildGoModule rec {
     '';
     license = licenses.bsd3;
     maintainers = with maintainers; [ zowoq SuperSandro2000 ];
+    mainProgram = "shfmt";
   };
 }

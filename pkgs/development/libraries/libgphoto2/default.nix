@@ -1,33 +1,47 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gettext
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, autoreconfHook
+, pkg-config
+, gettext
 , libusb1
 , libtool
 , libexif
+, libgphoto2
 , libjpeg
+, curl
+, libxml2
+, gd
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgphoto2";
-  version = "2.5.27";
+  version = "2.5.31";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
     rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
-    sha256 = "sha256-c7fBl6GBLAU+RL5WFC4PL+n/nEHZUfqIJ9qq1+qNNCg=";
+    sha256 = "sha256-UmyDKEaPP9VJqi8f+y6JZcTlQomhMTN+/C//ODYx6/w=";
   };
 
-  patches = [];
+  depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
     gettext
     libtool
+    pkg-config
   ];
 
   buildInputs = [
     libjpeg
+    libtool # for libltdl
     libusb1
+    curl
+    libxml2
+    gd
   ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
@@ -35,10 +49,23 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  postInstall = ''
-    mkdir -p $out/lib/udev/rules.d
-    $out/lib/libgphoto2/print-camera-list udev-rules version 175 group camera >$out/lib/udev/rules.d/40-gphoto2.rules
-  '';
+  postInstall =
+    let
+      executablePrefix =
+        if stdenv.buildPlatform == stdenv.hostPlatform then
+          "$out"
+        else
+          buildPackages.libgphoto2;
+    in
+    ''
+      mkdir -p $out/lib/udev/{rules.d,hwdb.d}
+      ${executablePrefix}/lib/libgphoto2/print-camera-list \
+          udev-rules version 201 group camera \
+          >$out/lib/udev/rules.d/40-libgphoto2.rules
+      ${executablePrefix}/lib/libgphoto2/print-camera-list \
+          hwdb version 201 group camera \
+          >$out/lib/udev/hwdb.d/20-gphoto.hwdb
+    '';
 
   meta = {
     homepage = "http://www.gphoto.org/proj/libgphoto2/";

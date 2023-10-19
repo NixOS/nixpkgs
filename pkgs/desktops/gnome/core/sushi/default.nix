@@ -8,8 +8,8 @@
 , gnome
 , gtksourceview4
 , gjs
-, webkitgtk
-, libmusicbrainz5
+, libsoup_3
+, webkitgtk_4_1
 , icu
 , wrapGAppsHook
 , gst_all_1
@@ -18,16 +18,16 @@
 , gtk3
 , harfbuzz
 , ninja
-, epoxy
+, libepoxy
 }:
 
 stdenv.mkDerivation rec {
   pname = "sushi";
-  version = "3.38.0";
+  version = "44.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vlqqk916dymv4asbyvalp1m096a5hh99nx23i4xavzvgygh4h2h";
+    url = "mirror://gnome/sources/sushi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "bAAv4K6hkCe6RIta7JTVzXU8l1L5lu4DMVJChzjqQ+k=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +49,14 @@ stdenv.mkDerivation rec {
     gtksourceview4
     gdk-pixbuf
     librsvg
-    libmusicbrainz5
-    webkitgtk
-    epoxy
+    libsoup_3
+    webkitgtk_4_1
+    libepoxy
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
   ];
 
   # See https://github.com/NixOS/nixpkgs/issues/31168

@@ -1,39 +1,57 @@
-{ lib, fetchurl, fetchFromGitHub, buildPythonPackage, isPy3k,
-isodate, lxml, xmlsec, freezegun }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, freezegun
+, isodate
+, lxml
+, pythonOlder
+, xmlsec
+}:
 
 buildPythonPackage rec {
   pname = "python3-saml";
-  version = "1.10.1";
-  disabled = !isPy3k;
+  version = "1.15.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "onelogin";
     repo = "python3-saml";
-    rev = "v${version}";
-    sha256 = "1yk02xq90bm7p6k091av6gapb5h2ccxzgrbm03sj2x8h0wff9s8k";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xPPR2z3h8RpoAROpKpu9ZoDxGq5Stm9wQVt4Stj/6fg=";
   };
 
   patches = [
-    # Remove the dependency on defusedxml
-    #
-    # This patch is already merged upstream and does not introduce any
-    # functionality changes.
-    (fetchurl {
-      url = "https://github.com/onelogin/python3-saml/commit/4b6c4b1f2ed3f6eab70ff4391e595b808ace168c.patch";
-      sha256 = "11gqn7ib2hmlx5wp4xhi375v5ajapwmj4lpw0y44bh5ww8cypvqy";
+    (fetchpatch {
+      name = "test-expired.patch";
+      url = "https://github.com/SAML-Toolkits/python3-saml/commit/bd65578e5a21494c89320094c61c1c77250bea33.diff";
+      hash = "sha256-9Trew6R5JDjtc0NRGoklqMVDEI4IEqFOdK3ezyBU6gI=";
     })
+    # skip tests with expired test data
+    # upstream issue: https://github.com/SAML-Toolkits/python3-saml/issues/373
+    ./skip-broken-tests.patch
   ];
 
   propagatedBuildInputs = [
-    isodate lxml xmlsec
+    isodate
+    lxml
+    xmlsec
   ];
 
-  checkInputs = [ freezegun ];
-  pythonImportsCheck = [ "onelogin.saml2" ];
+  nativeCheckInputs = [
+    freezegun
+  ];
+
+  pythonImportsCheck = [
+    "onelogin.saml2"
+  ];
 
   meta = with lib; {
-    description = "OneLogin's SAML Python Toolkit for Python 3";
+    description = "OneLogin's SAML Python Toolkit";
     homepage = "https://github.com/onelogin/python3-saml";
+    changelog = "https://github.com/SAML-Toolkits/python3-saml/blob/v${version}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
   };

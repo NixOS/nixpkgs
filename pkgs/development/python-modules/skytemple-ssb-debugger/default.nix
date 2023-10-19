@@ -1,20 +1,31 @@
-{ lib, buildPythonPackage, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3
-, wrapGAppsHook, nest-asyncio, pycairo, py-desmume, pygtkspellcheck, setuptools
-, skytemple-files, skytemple-icons
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, gtksourceview4
+, wrapGAppsHook
+, nest-asyncio
+, pycairo
+, py-desmume
+, pygtkspellcheck
+, setuptools
+, skytemple-files
+, skytemple-icons
 }:
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.2.4";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "0jmsli3wg386y0lxwddpwp1xqxsn2bsy4d1f7dyh0jjz8lqiz03i";
+    hash = "sha256-/LBz0PCQI3QOAmOZk6Jynqi/+NN0w8gbY/S3YckRZ68=";
   };
 
-  buildInputs = [ gobject-introspection gtk3 gtksourceview3 ];
+  buildInputs = [ gtk3 gtksourceview4 ];
   nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
   propagatedBuildInputs = [
     nest-asyncio

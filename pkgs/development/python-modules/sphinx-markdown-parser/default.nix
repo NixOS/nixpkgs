@@ -1,9 +1,10 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , sphinx
 , markdown
-, CommonMark
+, commonmark
 , recommonmark
 , pydash
 , pyyaml
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     sha256 = "0i0hhapmdmh83yx61lxi2h4bsmhnzddamz95844g2ghm132kw5mv";
   };
 
-  propagatedBuildInputs = [ sphinx markdown CommonMark pydash pyyaml unify yapf recommonmark ];
+  propagatedBuildInputs = [ sphinx markdown commonmark pydash pyyaml unify yapf recommonmark ];
 
   # Avoids running broken tests in test_markdown.py
   checkPhase = ''
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinx_markdown_parser" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Write markdown inside of docutils & sphinx projects";
     homepage = "https://github.com/clayrisser/sphinx-markdown-parser";
     license = licenses.mit;

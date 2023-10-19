@@ -2,16 +2,19 @@
 
 buildGoModule rec {
   pname = "galene";
-  version = "0.3.4";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
     rev = "galene-${version}";
-    sha256 = "sha256-yb+gEex4WEvIAEMuSTkw25rsBTL9tlfhf9qQtISWUd0=";
+    hash = "sha256-9jFloYrAQXmhmRoJxGp1UUxzFEkzB32iohStbb39suU=";
   };
 
-  vendorSha256 = "sha256-Vm7tTTQJyZZVbORl5ziy4GJ34kHh5dh0ojX/ZuTpshA=";
+  vendorHash = "sha256-+itNqxEy0S2g5UGpUIthJE2ILQzToISref/8F4zTmYg=";
+
+  ldflags = [ "-s" "-w" ];
+  preCheck = "export TZ=UTC";
 
   outputs = [ "out" "static" ];
 
@@ -23,8 +26,9 @@ buildGoModule rec {
   meta = with lib; {
     description = "Videoconferencing server that is easy to deploy, written in Go";
     homepage = "https://github.com/jech/galene";
+    changelog = "https://github.com/jech/galene/raw/galene-${version}/CHANGES";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rgrunbla ];
+    maintainers = with maintainers; [ rgrunbla erdnaxe ];
   };
 }

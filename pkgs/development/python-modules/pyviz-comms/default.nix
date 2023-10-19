@@ -7,17 +7,19 @@
 
 buildPythonPackage rec {
   pname = "pyviz_comms";
-  version = "0.7.6";
+  version = "2.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zZZJqeqd/LmzTXj5pk4YcKqLa5TeVG4smca7U9ZKtdE=";
+    hash = "sha256-omFFuM5D0tk0s8aCbXe5E84QXFKOsuSUyJCz41Jd3zM=";
   };
 
   propagatedBuildInputs = [ param ];
 
   # there are not tests with the package
   doCheck = false;
+
+  pythonImportsCheck = [ "pyviz_comms" ];
 
   passthru.tests = {
     inherit panel;
@@ -27,6 +29,6 @@ buildPythonPackage rec {
     description = "Launch jobs, organize the output, and dissect the results";
     homepage = "https://pyviz.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

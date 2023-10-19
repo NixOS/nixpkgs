@@ -2,32 +2,28 @@
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
-, requests
-, pyglet
-, scipy
-, pillow
 , cloudpickle
+, gym-notices
+, importlib-metadata
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "gym";
-  version = "0.18.1";
+  version = "0.26.2";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = version;
-    sha256 = "0mv4af2y9d1y97bsda94f21nis2jm1zkzv7c806vmvzh5s4r8nfn";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uJgm8l1SxIRC5PV6BIH/ht/1ucGT5UaUhkFMdusejgA=";
   };
 
   propagatedBuildInputs = [
     cloudpickle
     numpy
-    pillow
-    pyglet
-    requests
-    scipy
-  ];
+    gym-notices
+  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   # The test needs MuJoCo that is not free library.
   doCheck = false;

@@ -1,42 +1,40 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "20.2.1";
+  version = "23.0.0";
+  format = "setuptools";
 
-  # No tests in PyPi Tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = version;
-    sha256 = "0vw0h0z81gfxgjfijqiza92ic0siv9xy65mklgj5d0dzr1k9waw8";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NqlCu0W/BQkLiaLYs9DB1RrEya6KGPfNtpAzKXxoRD0=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mahmoud/boltons/commit/754afddf141ea26956c88c7e13fe5e7ca7942654.patch";
-      sha256 = "14kcq8pl4pmgcnlnmj1sh1yrksgym0kn0kgz2648g192svqkbpz8";
-    })
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  checkInputs = [ pytestCheckHook ];
-  disabledTests = [
-    # This test is broken without this PR, which has not yet been merged
-    # https://github.com/mahmoud/boltons/pull/283
-    "test_frozendict_ior"
+  # Tests bind to localhost
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "boltons"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mahmoud/boltons";
-    description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
+    description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
-      Boltons is a set of over 220 BSD-licensed, pure-Python utilities
-      in the same spirit as — and yet conspicuously missing from — the
+      Boltons is a set of over 200 BSD-licensed, pure-Python utilities
+      in the same spirit as - and yet conspicuously missing from - the
       standard library, including:
 
       - Atomic file saving, bolted on with fileutils
@@ -49,6 +47,8 @@ buildPythonPackage rec {
       - A full-featured TracebackInfo type, for representing stack
       traces, in tbutils
     '';
+    homepage = "https://github.com/mahmoud/boltons";
+    changelog = "https://github.com/mahmoud/boltons/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ twey ];
   };

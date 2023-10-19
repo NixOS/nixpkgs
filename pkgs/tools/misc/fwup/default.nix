@@ -21,16 +21,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fwup";
-  version = "1.8.3";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "sha256-ayfcnIZ7MuBsCy1giwmY2D2C6AukwS+fevmXqGa4c1w=";
+    sha256 = "sha256-s2TlxksxGYvRqDwRA7eLlXAyT5uPK2DiL8ma1nNVz5Q=";
   };
-
-  patches = [ ./fix-testrunner-darwin.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -44,25 +42,25 @@ stdenv.mkDerivation rec {
     libsodium
     xz
     zlib
-  ]
-    ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     DiskArbitration
   ];
 
   propagatedBuildInputs = [
     coreutils
-    dosfstools
-    mtools
     unzip
     zip
+  ] ++ lib.optionals doCheck [
+    mtools
+    dosfstools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     which
     xdelta
   ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";

@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, guile, gtk2, flex, gawk, perl }:
+{ lib, stdenv, fetchurl, groff, pkg-config, python2, guile, gtk2, flex, gawk, perl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "geda";
-  version = "1.8.2-20130925";
+  version = "1.10.2";
 
   src = fetchurl {
-    url = "http://ftp.geda-project.org/geda-gaf/stable/v1.8/1.8.2/geda-gaf-1.8.2.tar.gz";
-    sha256 = "08dpa506xk4gjbbi8vnxcb640wq4ihlgmhzlssl52nhvxwx7gx5v";
+    url = "http://ftp.geda-project.org/geda-gaf/stable/v${lib.versions.majorMinor version}/${version}/geda-gaf-${version}.tar.gz";
+    hash = "sha256-6GKrJBUoU4+jvuJzkmH1aAERArYMXjmi8DWGY8BCyKQ=";
   };
 
   configureFlags = [
     "--disable-update-xdg-database"
+    "--without-libfam"
   ];
-  nativeBuildInputs = [ pkg-config ];
+
+  nativeBuildInputs = [ groff pkg-config python2 ];
   buildInputs = [ guile gtk2 flex gawk perl ];
 
   meta = with lib; {

@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "jiq";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "fiatjaf";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-EPhnfgmn0AufuxwcwRrEEQk+RD97akFJSzngkTl4LmY=";
+    rev = "v${version}";
+    sha256 = "sha256-txhttYngN+dofA3Yp3gZUZPRRZWGug9ysXq1Q0RP7ig=";
   };
 
-  vendorSha256 = "sha256-ZUmOhPGy+24AuxdeRVF0Vnu8zDGFrHoUlYiDdfIV5lc=";
+  vendorHash = "sha256-ZUmOhPGy+24AuxdeRVF0Vnu8zDGFrHoUlYiDdfIV5lc=";
 
   nativeBuildInputs = [ makeWrapper ];
 
-  checkInputs = [ jq ];
+  nativeCheckInputs = [ jq ];
 
   postInstall = ''
     wrapProgram $out/bin/jiq \
@@ -26,6 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/fiatjaf/jiq";
     license = licenses.mit;
     description = "jid on jq - interactive JSON query tool using jq expressions";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

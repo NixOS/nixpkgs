@@ -1,8 +1,8 @@
 # ARM-SPECIFIC OVERRIDES FOR THE HASKELL PACKAGE SET IN NIXPKGS
 #
-# This extension is applied to all haskell package sets in nixpkgs
-# if `stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64`
-# to apply arm specific workarounds or fixes.
+# This extension is applied to all haskell package sets in nixpkgs if
+# `stdenv.hostPlatform.isAarch` to apply arm specific workarounds or
+# fixes.
 #
 # The file is split into three parts:
 #
@@ -36,6 +36,12 @@ self: super: {
 
   # Similar to https://ghc.haskell.org/trac/ghc/ticket/13062
   happy = dontCheck super.happy;
+  happy_1_19_12 = doDistribute (dontCheck super.happy_1_19_12);
+
+  # add arm specific library
+  wiringPi = overrideCabal ({librarySystemDepends ? [], ...}: {
+    librarySystemDepends = librarySystemDepends ++ [pkgs.wiringpi];
+  }) super.wiringPi;
 
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
   # AARCH64-SPECIFIC OVERRIDES
@@ -43,55 +49,79 @@ self: super: {
   # Doctests fail on aarch64 due to a GHCi linking bug
   # https://gitlab.haskell.org/ghc/ghc/-/issues/15275#note_295437
   # TODO: figure out if needed on aarch32 as well
-  language-nix = dontCheck super.language-nix;
-  trifecta = dontCheck super.trifecta;
-  ad = dontCheck super.ad;
-  vinyl = dontCheck super.vinyl;
   BNFC = dontCheck super.BNFC;
   C-structs = dontCheck super.C-structs;
+  Chart-tests = dontCheck super.Chart-tests;
+  Jikka = dontCheck super.Jikka;
   accelerate = dontCheck super.accelerate;
-  focuslist = dontCheck super.focuslist;
-  flight-kml = dontCheck super.flight-kml;
-  exact-real = dontCheck super.exact-real;
+  ad = dontCheck super.ad;
   autoapply = dontCheck super.autoapply;
-  hint = dontCheck super.hint;
-  hgeometry = dontCheck super.hgeometry;
-  headroom = dontCheck super.headroom;
+  construct = dontCheck super.construct;
+  exact-real = dontCheck super.exact-real;
+  flight-kml = dontCheck super.flight-kml;
+  focuslist = dontCheck super.focuslist;
+  grammatical-parsers = dontCheck super.grammatical-parsers;
+  greskell = dontCheck super.greskell;
+  groupBy = dontCheck super.groupBy;
   haskell-time-range = dontCheck super.haskell-time-range;
+  headroom = dontCheck super.headroom;
+  hgeometry = dontCheck super.hgeometry;
+  hhp = dontCheck super.hhp;
+  hls-splice-plugin = dontCheck super.hls-splice-plugin;
   hsakamai = dontCheck super.hsakamai;
   hsemail-ns = dontCheck super.hsemail-ns;
-  openapi3 = dontCheck super.openapi3;
-  strict-writer = dontCheck super.strict-writer;
-  xml-html-qq = dontCheck super.xml-html-qq;
-  static = dontCheck super.static;
-  hhp = dontCheck super.hhp;
-  groupBy = dontCheck super.groupBy;
-  greskell = dontCheck super.greskell;
   html-validator-cli = dontCheck super.html-validator-cli;
   hw-fingertree-strict = dontCheck super.hw-fingertree-strict;
-  hw-prim = dontCheck super.hw-prim;
   hw-packed-vector = dontCheck super.hw-packed-vector;
+  hw-prim = dontCheck super.hw-prim;
   hw-xml = dontCheck super.hw-xml;
+  language-nix = dontCheck super.language-nix;
   lens-regex = dontCheck super.lens-regex;
   meep = dontCheck super.meep;
+  openapi3 = dontCheck super.openapi3;
+  orbits = dontCheck super.orbits;
   ranged-list = dontCheck super.ranged-list;
   rank2classes = dontCheck super.rank2classes;
   schedule = dontCheck super.schedule;
+  static = dontCheck super.static;
+  strict-writer = dontCheck super.strict-writer;
+  termonad = dontCheck super.termonad;
+  trifecta = dontCheck super.trifecta;
   twiml = dontCheck super.twiml;
   twitter-conduit = dontCheck super.twitter-conduit;
   validationt = dontCheck super.validationt;
   vgrep = dontCheck super.vgrep;
+  vinyl = dontCheck super.vinyl;
   vulkan-utils = dontCheck super.vulkan-utils;
+  xml-html-qq = dontCheck super.xml-html-qq;
   yaml-combinators = dontCheck super.yaml-combinators;
   yesod-paginator = dontCheck super.yesod-paginator;
-  grammatical-parsers = dontCheck super.grammatical-parsers;
-  construct = dontCheck super.construct;
-  orbits = dontCheck super.orbits;
+  hls-pragmas-plugin = dontCheck super.hls-pragmas-plugin;
+  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  hls-module-name-plugin = dontCheck super.hls-module-name-plugin;
+  hls-brittany-plugin = dontCheck super.hls-brittany-plugin;
+  hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
+  hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
 
   # https://github.com/ekmett/half/issues/35
   half = dontCheck super.half;
 
+  # We disable profiling on aarch64, so tests naturally fail
+  ghc-prof = dontCheck super.ghc-prof;
+
+  # Similar RTS issue in test suite:
+  # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
+  # These still fail sporadically on ghc 9.2
+  hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
+  hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
+  hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
+  hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
+  # KAT/ECB/D2 test segfaults on armv7l
+  # https://github.com/haskell-crypto/cryptonite/issues/367
+  cryptonite = dontCheck super.cryptonite;
 }

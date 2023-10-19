@@ -8,13 +8,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "setools";
-  version = "4.3.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "SELinuxProject";
     repo = pname;
-    rev = version;
-    sha256 = "0vr20bi8w147z5lclqz1l0j1b34137zg2r04pkafkgqqk7qbyjk6";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-4T5FIdnKi35JSm+IoYA2gIBBRV0nN0YLEw9xvDqNcgo=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -22,7 +22,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ enum34 libselinux networkx ]
     ++ optionals withGraphics [ pyqt5 ];
 
-  checkInputs = [ tox checkpolicy ];
+  nativeCheckInputs = [ tox checkpolicy ];
   preCheck = ''
     export CHECKPOLICY=${checkpolicy}/bin/checkpolicy
   '';

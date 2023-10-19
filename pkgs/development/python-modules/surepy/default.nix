@@ -2,9 +2,10 @@
 , aiodns
 , aiohttp
 , async-timeout
+, attrs
 , brotlipy
 , buildPythonPackage
-, cchardet
+, faust-cchardet
 , click
 , colorama
 , fetchFromGitHub
@@ -17,27 +18,38 @@
 
 buildPythonPackage rec {
   pname = "surepy";
-  version = "0.6.0";
+  version = "0.8.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "benleb";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XoYiZPBc9SybyKocui1HqSA+YPiPpbupJWMCfmQT5RU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/fgNznsucjHPO44lK4tk5tDJHKjCJEbPtOO7YHmDcRQ=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'aiohttp = {extras = ["speedups"], version = "^3.7.4"}' 'aiohttp = {extras = ["speedups"], version = ">=3.7.4"}' \
+      --replace 'async-timeout = "^3.0.1"' 'async-timeout = ">=3.0.1"' \
+      --replace 'rich = "^10.1.0"' 'rich = ">=10.1.0"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiodns
     aiohttp
     async-timeout
+    attrs
     brotlipy
-    cchardet
     click
     colorama
+    faust-cchardet
     halo
     requests
     rich
@@ -45,7 +57,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "surepy" ];
+
+  pythonImportsCheck = [
+    "surepy"
+  ];
 
   meta = with lib; {
     description = "Python library to interact with the Sure Petcare API";

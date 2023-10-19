@@ -1,17 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, glib, gobject-introspection, python3, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, gobject-introspection
+, python3
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mate-menus";
-  version = "1.24.1";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "17zc9fn14jykhn30z8iwlw0qwk32ivj6gxgww3xrqvqk0da5yaas";
+    sha256 = "RY1ZmuW2UMfSF0D5/pVMSoOL5F7WKrQOIOMG+vXdHYw=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext gobject-introspection ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    gobject-introspection
+  ];
 
-  buildInputs = [ glib python3 ];
+  buildInputs = [
+    glib
+    python3
+  ];
 
   makeFlags = [
     "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/"
@@ -20,13 +36,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Menu system for MATE";
     homepage = "https://github.com/mate-desktop/mate-menus";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

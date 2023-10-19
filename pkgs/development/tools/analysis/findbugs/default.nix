@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "findbugs-3.0.1";
+  pname = "findbugs";
+  version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/findbugs/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "06b46fz4nid7qvm36r66zw01fr87y4jyz21ixw27b8hkqah0s3p8";
   };
 
@@ -36,9 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A static analysis tool to find bugs in Java programs automatically";
-    homepage = "http://findbugs.sourceforge.net/";
+    homepage = "https://findbugs.sourceforge.net/";
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl3;
   };
 }

@@ -7,24 +7,48 @@
 # (e.g., KDE, Gnome or a plain xterm), and optionally the *window
 # manager* (e.g. kwin or twm).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
 
   cfg = config.services.xserver;
+  opt = options.services.xserver;
   xorg = pkgs.xorg;
 
   fontconfig = config.fonts.fontconfig;
   xresourcesXft = pkgs.writeText "Xresources-Xft" ''
-    ${optionalString (fontconfig.dpi != 0) ''Xft.dpi: ${toString fontconfig.dpi}''}
     Xft.antialias: ${if fontconfig.antialias then "1" else "0"}
     Xft.rgba: ${fontconfig.subpixel.rgba}
     Xft.lcdfilter: lcd${fontconfig.subpixel.lcdfilter}
     Xft.hinting: ${if fontconfig.hinting.enable then "1" else "0"}
     Xft.autohint: ${if fontconfig.hinting.autohint then "1" else "0"}
-    Xft.hintstyle: hintslight
+    Xft.hintstyle: ${fontconfig.hinting.style}
+  '';
+
+  # FIXME: this is an ugly hack.
+  # Some sessions (read: most WMs) don't activate systemd's `graphical-session.target`.
+  # Other sessions (read: most non-WMs) expect `graphical-session.target` to be reached
+  # when the entire session is actually ready. We used to just unconditionally force
+  # `graphical-session.target` to be activated in the session wrapper so things like
+  # xdg-autostart-generator work on sessions that are wrong, but this broke sessions
+  # that do things right. So, preserve this behavior (with some extra steps) by matching
+  # on XDG_CURRENT_DESKTOP and deliberately ignoring sessions we know can do the right thing.
+  fakeSession = action: ''
+      session_is_systemd_aware=$(
+        IFS=:
+        for i in $XDG_CURRENT_DESKTOP; do
+          case $i in
+            KDE|GNOME|X-NIXOS-SYSTEMD-AWARE) echo "1"; exit; ;;
+            *) ;;
+          esac
+        done
+      )
+
+      if [ -z "$session_is_systemd_aware" ]; then
+        /run/current-system/systemd/bin/systemctl --user ${action} nixos-fake-graphical-session.target
+      fi
   '';
 
   # file provided by services.xserver.displayManager.sessionData.wrapper
@@ -35,6 +59,10 @@ let
       # Shared environment setup for graphical sessions.
 
       . /etc/profile
+      if test -f ~/.profile; then
+          source ~/.profile
+      fi
+
       cd "$HOME"
 
       # Allow the user to execute commands at the beginning of the X session.
@@ -86,8 +114,7 @@ let
 
       ${cfg.displayManager.sessionCommands}
 
-      # Start systemd user services for graphical sessions
-      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+      ${fakeSession "start"}
 
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
@@ -123,10 +150,10 @@ let
         done
 
         if test -d ${pkg}/share/xsessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
+          ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
         fi
         if test -d ${pkg}/share/wayland-sessions; then
-          ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
+          ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
         fi
       '') cfg.displayManager.sessionPackages}
     '';
@@ -148,25 +175,26 @@ in
       xauthBin = mkOption {
         internal = true;
         default = "${xorg.xauth}/bin/xauth";
-        description = "Path to the <command>xauth</command> program used by display managers.";
+        defaultText = literalExpression ''"''${pkgs.xorg.xauth}/bin/xauth"'';
+        description = lib.mdDoc "Path to the {command}`xauth` program used by display managers.";
       };
 
       xserverBin = mkOption {
         type = types.path;
-        description = "Path to the X server used by display managers.";
+        description = lib.mdDoc "Path to the X server used by display managers.";
       };
 
       xserverArgs = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "-ac" "-logverbose" "-verbose" "-nolisten tcp" ];
-        description = "List of arguments for the X server.";
+        description = lib.mdDoc "List of arguments for the X server.";
       };
 
       setupCommands = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell commands executed just after the X server has started.
 
           This option is only effective for display managers for which this feature
@@ -181,7 +209,7 @@ in
           ''
             xmessage "Hello World!" &
           '';
-        description = ''
+        description = lib.mdDoc ''
           Shell commands executed just before the window or desktop manager is
           started. These commands are not currently sourced for Wayland sessions.
         '';
@@ -190,7 +218,7 @@ in
       hiddenUsers = mkOption {
         type = types.listOf types.str;
         default = [ "nobody" ];
-        description = ''
+        description = lib.mdDoc ''
           A list of users which will not be shown in the display manager.
         '';
       };
@@ -211,14 +239,15 @@ in
            '';
         });
         default = [];
-        description = ''
+        description = lib.mdDoc ''
           A list of packages containing x11 or wayland session files to be passed to the display manager.
         '';
       };
 
       session = mkOption {
         default = [];
-        example = literalExample
+        type = types.listOf types.attrs;
+        example = literalExpression
           ''
             [ { manage = "desktop";
                 name = "xterm";
@@ -229,15 +258,15 @@ in
               }
             ]
           '';
-        description = ''
+        description = lib.mdDoc ''
           List of sessions supported with the command used to start each
           session.  Each session script can set the
-          <varname>waitPID</varname> shell variable to make this script
+          {var}`waitPID` shell variable to make this script
           wait until the end of the user session.  Each script is used
           to define either a window manager or a desktop manager.  These
           can be differentiated by setting the attribute
-          <varname>manage</varname> either to <literal>"window"</literal>
-          or <literal>"desktop"</literal>.
+          {var}`manage` either to `"window"`
+          or `"desktop"`.
 
           The list of desktop manager and window manager should appear
           inside the display manager with the desktop manager name
@@ -246,7 +275,7 @@ in
       };
 
       sessionData = mkOption {
-        description = "Data exported for display managers’ convenience";
+        description = lib.mdDoc "Data exported for display managers’ convenience";
         internal = true;
         default = {};
         apply = val: {
@@ -279,9 +308,12 @@ in
             defaultSessionFromLegacyOptions
           else
             null;
+        defaultText = literalMD ''
+          Taken from display manager settings or window manager settings, if either is set.
+        '';
         example = "gnome";
-        description = ''
-          Graphical session to pre-select in the session chooser (only effective for GDM and LightDM).
+        description = lib.mdDoc ''
+          Graphical session to pre-select in the session chooser (only effective for GDM, LightDM and SDDM).
 
           On GDM, LightDM and SDDM, it will also be used as a session for auto-login.
         '';
@@ -290,7 +322,7 @@ in
       importedVariables = mkOption {
         type = types.listOf (types.strMatching "[a-zA-Z_][a-zA-Z0-9_]*");
         visible = false;
-        description = ''
+        description = lib.mdDoc ''
           Environment variables to import into the systemd user environment.
         '';
       };
@@ -301,36 +333,34 @@ in
           type = types.lines;
           default = "";
           example = "rm -f /var/log/my-display-manager.log";
-          description = "Script executed before the display manager is started.";
+          description = lib.mdDoc "Script executed before the display manager is started.";
         };
 
         execCmd = mkOption {
           type = types.str;
-          example = literalExample ''
-            "''${pkgs.lightdm}/bin/lightdm"
-          '';
-          description = "Command to start the display manager.";
+          example = literalExpression ''"''${pkgs.lightdm}/bin/lightdm"'';
+          description = lib.mdDoc "Command to start the display manager.";
         };
 
         environment = mkOption {
           type = types.attrsOf types.unspecified;
           default = {};
-          description = "Additional environment variables needed by the display manager.";
+          description = lib.mdDoc "Additional environment variables needed by the display manager.";
         };
 
         logToFile = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Whether the display manager redirects the output of the
-            session script to <filename>~/.xsession-errors</filename>.
+            session script to {file}`~/.xsession-errors`.
           '';
         };
 
         logToJournal = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether the display manager redirects the output of the
             session script to the systemd journal.
           '';
@@ -340,28 +370,29 @@ in
 
       # Configuration for automatic login. Common for all DM.
       autoLogin = mkOption {
-        type = types.submodule {
+        type = types.submodule ({ config, options, ... }: {
           options = {
             enable = mkOption {
               type = types.bool;
-              default = cfg.displayManager.autoLogin.user != null;
-              description = ''
-                Automatically log in as <option>autoLogin.user</option>.
+              default = config.user != null;
+              defaultText = literalExpression "config.${options.user} != null";
+              description = lib.mdDoc ''
+                Automatically log in as {option}`autoLogin.user`.
               '';
             };
 
             user = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = ''
+              description = lib.mdDoc ''
                 User to be used for the automatic login.
               '';
             };
           };
-        };
+        });
 
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Auto login configuration attrset.
         '';
       };
@@ -409,10 +440,10 @@ in
       "XDG_SESSION_ID"
     ];
 
-    systemd.user.targets.graphical-session = {
+    systemd.user.targets.nixos-fake-graphical-session = {
       unitConfig = {
-        RefuseManualStart = false;
-        StopWhenUnneeded = false;
+        Description = "Fake graphical-session target for non-systemd-aware sessions";
+        BindsTo = "graphical-session.target";
       };
     };
 
@@ -443,7 +474,7 @@ in
 
           test -n "$waitPID" && wait "$waitPID"
 
-          /run/current-system/systemd/bin/systemctl --user stop graphical-session.target
+          ${fakeSession "stop"}
 
           exit 0
         '';

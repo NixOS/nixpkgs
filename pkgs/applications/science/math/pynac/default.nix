@@ -1,6 +1,6 @@
 { lib, stdenv
-, fetchFromGitHub
 , fetchpatch
+, fetchFromGitHub
 , autoreconfHook
 , pkg-config
 , flint
@@ -11,54 +11,23 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.27";
+  version = "0.7.29";
   pname = "pynac";
 
   src = fetchFromGitHub {
     owner = "pynac";
     repo = "pynac";
     rev = "pynac-${version}";
-    sha256 = "sha256-1HHCIeaNE2UsJNX92UlDGLJS8I4nC/8FnwX7Y4F9HpU=";
+    sha256 = "sha256-ocR7emXtKs+Xe2f6dh4xEDAacgiolY8mtlLnWnNBS8A=";
   };
 
   patches = [
-    # the five patches below are included with sage 9.3. since pynac
-    # is a self-described "Sage Math support library", we include them
-    # here.
-
-    # https://trac.sagemath.org/ticket/30688
+    # the patch below is included in sage 9.4 and should be included
+    # in a future pynac release. see https://trac.sagemath.org/ticket/28357
     (fetchpatch {
-      name = "power_inf_loop.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/power_inf_loop.patch?h=9.3";
-      sha256 = "sha256-VYeaJl8u2wl7FQ/6xnpZv1KpdNYEmJoPhuMrBADyTRs=";
-    })
-
-    # https://trac.sagemath.org/ticket/31479
-    (fetchpatch {
-      name = "disable_poly_mul_expand.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/disable_poly_mul_expand.patch?h=9.3";
-      sha256 = "sha256-gRjoltU9Tzj7fjNyE25fY+iyDxERzSTOMigzxFpUqPo=";
-    })
-
-    # https://trac.sagemath.org/ticket/31530
-    (fetchpatch {
-      name = "too_much_sub.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/too_much_sub.patch?h=9.3";
-      sha256 = "sha256-lw7xSQ/l+rzPu+ghWF4omYF0mKksGGPuuHJTktvbdis=";
-    })
-
-    # https://trac.sagemath.org/ticket/31554
-    (fetchpatch {
-      name = "handle_factor.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/handle_factor.patch?h=9.3";
-      sha256 = "sha256-U1lb5qwBqZZgklfDMhBX4K5u8bz5x42O4w7hyNy2YVw=";
-    })
-
-    # https://trac.sagemath.org/ticket/31645
-    (fetchpatch {
-      name = "seriesbug.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/seriesbug.patch?h=9.3";
-      sha256 = "sha256-b3//oirN7JHDYqrvE+tDYcnKpSYQJ08yBzcNlII2Dts=";
+      name = "realpartloop.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/realpartloop.patch?h=9.4.beta5";
+      sha256 = "sha256-1nj0xtlFN5fZKEiRLD+tiW/ZtxMQre1ziEGA0OVUGE4=";
     })
   ];
 
@@ -84,7 +53,7 @@ stdenv.mkDerivation rec {
       of the full GiNaC, and it is *only* meant to be used as a Python library.
     '';
     homepage    = "http://pynac.org";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = teams.sage.members;
     platforms   = platforms.unix;
   };

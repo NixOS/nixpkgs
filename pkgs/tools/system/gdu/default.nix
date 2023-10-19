@@ -3,25 +3,28 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+, testers
+, gdu
 }:
 
 buildGoModule rec {
   pname = "gdu";
-  version = "5.0.1";
+  version = "5.25.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-78eQinKR4w7K8MFd4uyj5IPkUs0Mz5XeO7JUG/1cKLw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TtfTIG0XlEDXVjIZ6Vpy/Z5StXcxyaEocwoe7M75YDw=";
   };
 
-  vendorSha256 = "sha256-9upXhTvQJ9oFfomgqja3SiifiZpl8RUQ85HwL9bDPlQ=";
+  vendorHash = "sha256-DkH1H2XvVlDMFuFSbCmhPMC709upPvXhpzlEgNq5zoA=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-s"
     "-w"
     "-X github.com/dundee/gdu/v${lib.versions.major version}/build.Version=${version}"
@@ -35,7 +38,11 @@ buildGoModule rec {
     installManPage gdu.1
   '';
 
-  doCheck = !(stdenv.isAarch64 || stdenv.isDarwin);
+  doCheck = !stdenv.isDarwin;
+
+  passthru.tests.version = testers.testVersion {
+    package = gdu;
+  };
 
   meta = with lib; {
     description = "Disk usage analyzer with console interface";
@@ -45,8 +52,8 @@ buildGoModule rec {
       the performance gain is not so huge.
     '';
     homepage = "https://github.com/dundee/gdu";
+    changelog = "https://github.com/dundee/gdu/releases/tag/v${version}";
     license = with licenses; [ mit ];
-    maintainers = [ maintainers.fab ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ fab zowoq ];
   };
 }

@@ -1,41 +1,52 @@
-{ lib, stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, wrapGAppsHook
+, makeWrapper
+, wxGTK
+, Cocoa
+, unstableGitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "1.0.1";
+  version = "unstable-2023-09-15";
 
   src = fetchFromGitHub {
-    owner  = "aardappel";
-    repo   = "treesheets";
-    rev    = "v${version}";
-    sha256 = "0krsj7i5yr76imf83krz2lmlmpbsvpwqg2d4r0jwxiydjfyj4qr4";
+    owner = "aardappel";
+    repo = "treesheets";
+    rev = "8e1ebe5a55f6a725ba6fe342b4b7604438d9d406";
+    sha256 = "zz2erN/ap6vT56khqbpANu1eV/C9eQ6SBWEV4GNbmEY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ wxGTK ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapGAppsHook
+    makeWrapper
+  ];
 
-  preConfigure = "cd src";
+  buildInputs = [
+    wxGTK
+  ] ++ lib.optionals stdenv.isDarwin [
+    Cocoa
+  ];
 
-  postInstall = ''
-    mkdir "$out/share" -p
-    cp -av ../TS "$out/share/libexec"
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
-    mkdir "$out/bin" -p
-    makeWrapper "$out/share/libexec/treesheets" "$out/bin/treesheets"
-
-    mkdir "$out/share/doc" -p
-
-    for f in readme.html docs examples
-    do
-      mv -v "$out/share/libexec/$f" "$out/share/doc"
-      ln -sv "$out/share/doc/$f" "$out/share/libexec/$f"
-    done
-
-    mkdir "$out/share/applications" -p
-    mv -v "$out/share/libexec/treesheets.desktop" "$out/share/applications"
-    substituteInPlace "$out/share/applications/treesheets.desktop" \
-      --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    shopt -s extglob
+    mkdir -p $out/{share/treesheets,bin}
+    mv $out/!(share) $out/share/treesheets
+    makeWrapper $out/{share/treesheets,bin}/treesheets \
+      --chdir $out/share/treesheets
   '';
+
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = with lib; {
     description = "Free Form Data Organizer";
@@ -49,9 +60,9 @@ stdenv.mkDerivation rec {
       planning, requirements gathering, presentation of information, etc.
     '';
 
-    homepage    = "http://strlen.com/treesheets/";
+    homepage = "https://strlen.com/treesheets/";
     maintainers = with maintainers; [ obadz avery ];
-    platforms   = platforms.linux;
-    license     = licenses.zlib;
+    platforms = platforms.unix;
+    license = licenses.zlib;
   };
 }

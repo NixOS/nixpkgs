@@ -1,21 +1,21 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg, freetype, libGLU
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, ffmpeg_4, freetype, libGLU
 , libjack2, liblo, libX11, libXv, pkg-config, portmidi, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";
-  version = "0.8.10";
+  version = "0.8.13";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "xjadeo";
     rev = "v${version}";
-    sha256 = "0dma4cjgbrpy16x63zvfr0xss4lryl0zw7nvixvhq2f6z8day1ds";
+    sha256 = "sha256-CSq11hFNmo41VXOndBoPxRc9NNUUBtzfWx14DCUFieQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
-    ffmpeg
+    ffmpeg_4
     libjack2
     libX11
     xorg.libXext
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       soundtrack composition, video monitoring or any task that requires to
       synchronizing movie frames with external events.
     '';
-    homepage = "http://xjadeo.sourceforge.net";
+    homepage = "https://xjadeo.sourceforge.net";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mitchmindtree ];

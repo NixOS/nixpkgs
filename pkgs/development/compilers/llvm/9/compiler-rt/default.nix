@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi
+, doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+}:
 
 let
 
@@ -14,10 +16,10 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "0xwh79g3zggdabxgnd0bphry75asm1qz7mv3hcqihqwqr6aspgy2";
 
-  nativeBuildInputs = [ cmake python3 llvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -29,14 +31,13 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals ((useLLVM || bareMetal) && !haveLibc) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ lib.optionals (useLLVM && !haveLibc) [
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
   ] ++ lib.optionals (useLLVM) [
     "-DCOMPILER_RT_BUILD_BUILTINS=ON"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
@@ -55,10 +56,14 @@ stdenv.mkDerivation {
   patches = [
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
-    ./codesign.patch # Revert compiler-rt commit that makes codesign mandatory
+    ../../common/compiler-rt/7-12-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
     ./gnu-install-dirs.patch
-  ]# ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+    ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
+    # Fix build on armv6l
+    ../../common/compiler-rt/armv6-mcr-dmb.patch
+    ../../common/compiler-rt/armv6-sync-ops-no-thumb.patch
+    ../../common/compiler-rt/armv6-no-ldrexd-strexd.patch
+  ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -80,6 +85,10 @@ stdenv.mkDerivation {
       --replace "#include <assert.h>" ""
   '';
 
+  preConfigure = lib.optionalString (useLLVM && !haveLibc) ''
+    cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
+  '';
+
   # Hack around weird upsream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
     ln -s "$out/lib"/*/* "$out/lib"
@@ -88,6 +97,8 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
+  '' + lib.optionalString doFakeLibgcc ''
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/libgcc.a
   '';
 
   meta = llvm_meta // {
@@ -104,5 +115,6 @@ stdenv.mkDerivation {
     # "All of the code in the compiler-rt project is dual licensed under the MIT
     # license and the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

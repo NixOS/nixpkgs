@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dz48rd66priqhxx7byndqhbmlwxi1nfw8ik25k0z5k7k754brgy";
   };
 
+  strictDeps = true;
   dontBuild = true;
 
   installPhase = ''
@@ -21,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/MichaelAquilina/zsh-you-should-use";
     license = licenses.gpl3;
     description = "ZSH plugin that reminds you to use existing aliases for commands you just typed";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

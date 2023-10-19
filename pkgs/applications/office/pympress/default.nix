@@ -1,38 +1,42 @@
 { lib
+, stdenv
 , python3Packages
+, fetchPypi
 , wrapGAppsHook
 , gtk3
 , gobject-introspection
 , libcanberra-gtk3
 , poppler_gi
- }:
+, withGstreamer ? stdenv.isLinux
+, withVLC ? stdenv.isLinux
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
-  version = "1.5.1";
+  version = "1.8.4";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "173d9scf2z29qg279jf33zcl7sgc3wp662fgpm943bn9667q18wf";
+  src = fetchPypi {
+    inherit version;
+    pname = "pympress";
+    hash = "sha256-3cnCHGoKUX0gTzIx1khM+br6x9+g9WXh28SLhm99eN4=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
-    gobject-introspection
-    libcanberra-gtk3
     poppler_gi
-  ];
+  ] ++ lib.optional withGstreamer libcanberra-gtk3;
 
   propagatedBuildInputs = with python3Packages; [
     pycairo
     pygobject3
-    python-vlc
+    setuptools
     watchdog
-  ];
+  ] ++ lib.optional withVLC python-vlc;
 
   doCheck = false; # there are no tests
 

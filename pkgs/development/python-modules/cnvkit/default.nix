@@ -16,27 +16,32 @@
 , pomegranate
 , pyfaidx
 , python
+, pythonOlder
 , R
 }:
 
 buildPythonPackage rec {
-  pname = "CNVkit";
-  version = "0.9.7";
+  pname = "cnvkit";
+  version = "0.9.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "etal";
     repo = "cnvkit";
-    rev = "v${version}";
-    sha256 = "022zplgqil5l76vri647cyjx427vnbg5r2gw6lw712d2janvdjm7";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-mCQXo3abwC06x/g51UBshqUk3dpqEVNUvx+cJ/EdYGQ=";
   };
 
-  patches = [
-    # Fix: AttributeError: module 'pandas.io.common' has no attribute 'EmptyDataError'
-    (fetchpatch {
-      url = "https://github.com/etal/cnvkit/commit/392adfffedfa0415e635b72c5027835b0a8d7ab5.patch";
-      sha256 = "0s0gwyy0hybmhc3jij2v9l44b6lkcmclii8bkwsazzj2kc24m2rh";
-    })
-  ];
+  postPatch = ''
+    # see https://github.com/etal/cnvkit/issues/589
+    substituteInPlace setup.py \
+      --replace 'joblib < 1.0' 'joblib'
+    # see https://github.com/etal/cnvkit/issues/680
+    substituteInPlace test/test_io.py \
+      --replace 'test_read_vcf' 'dont_test_read_vcf'
+  '';
 
   propagatedBuildInputs = [
     biopython
@@ -54,7 +59,7 @@ buildPythonPackage rec {
     rPackages.DNAcopy
   ];
 
-  checkInputs = [ R ];
+  nativeCheckInputs = [ R ];
 
   checkPhase = ''
     pushd test/
@@ -63,11 +68,17 @@ buildPythonPackage rec {
     ${python.interpreter} test_cnvlib.py
     ${python.interpreter} test_commands.py
     ${python.interpreter} test_r.py
+    popd # test/
   '';
+
+  pythonImportsCheck = [
+    "cnvlib"
+  ];
 
   meta = with lib; {
     homepage = "https://cnvkit.readthedocs.io";
     description = "A Python library and command-line software toolkit to infer and visualize copy number from high-throughput DNA sequencing data";
+    changelog = "https://github.com/etal/cnvkit/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.jbedo ];
   };

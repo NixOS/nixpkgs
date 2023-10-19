@@ -22,10 +22,9 @@ let
   '';
   simple = name: enableIPv6: makeTest {
     name = "rspamd-${name}";
-    machine = {
+    nodes.machine = {
       services.rspamd.enable = true;
       networking.enableIPv6 = enableIPv6;
-      virtualisation.memorySize = 1024;
     };
     testScript = ''
       start_all()
@@ -53,7 +52,7 @@ in
   ipv4only = simple "ipv4only" false;
   deprecated = makeTest {
     name = "rspamd-deprecated";
-    machine = {
+    nodes.machine = {
       services.rspamd = {
         enable = true;
         workers.normal.bindSockets = [{
@@ -69,7 +68,6 @@ in
           group = "rspamd";
         }];
       };
-      virtualisation.memorySize = 1024;
     };
 
     testScript = ''
@@ -93,7 +91,7 @@ in
 
   bindports = makeTest {
     name = "rspamd-bindports";
-    machine = {
+    nodes.machine = {
       services.rspamd = {
         enable = true;
         workers.normal.bindSockets = [{
@@ -118,7 +116,6 @@ in
           '';
         };
       };
-      virtualisation.memorySize = 1024;
     };
 
     testScript = ''
@@ -155,7 +152,7 @@ in
   };
   customLuaRules = makeTest {
     name = "rspamd-custom-lua-rules";
-    machine = {
+    nodes.machine = {
       environment.etc."tests/no-muh.eml".text = ''
         From: Sheep1<bah@example.com>
         To: Sheep2<mah@example.com>
@@ -224,7 +221,6 @@ in
           rspamd_logger.infox(rspamd_config, 'Work dammit!!!')
         '';
       };
-      virtualisation.memorySize = 1024;
     };
     testScript = ''
       ${initMachine}
@@ -260,7 +256,7 @@ in
   };
   postfixIntegration = makeTest {
     name = "rspamd-postfix-integration";
-    machine = {
+    nodes.machine = {
       environment.systemPackages = with pkgs; [ msmtp ];
       environment.etc."tests/gtube.eml".text = ''
         From: Sheep1<bah@example.com>
@@ -291,7 +287,6 @@ in
         postfix.enable = true;
         workers.rspamd_proxy.type = "rspamd_proxy";
       };
-      virtualisation.memorySize = 1024;
     };
     testScript = ''
       ${initMachine}

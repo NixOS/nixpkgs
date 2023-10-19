@@ -30,12 +30,12 @@ in {
   meta.maintainers = with maintainers; [ costrouc ];
 
   options.services.jupyterhub = {
-    enable = mkEnableOption "Jupyterhub development server";
+    enable = mkEnableOption (lib.mdDoc "Jupyterhub development server");
 
     authentication = mkOption {
       type = types.str;
       default = "jupyterhub.auth.PAMAuthenticator";
-      description = ''
+      description = lib.mdDoc ''
         Jupyterhub authentication to use
 
         There are many authenticators available including: oauth, pam,
@@ -46,7 +46,7 @@ in {
     spawner = mkOption {
       type = types.str;
       default = "systemdspawner.SystemdSpawner";
-      description = ''
+      description = lib.mdDoc ''
         Jupyterhub spawner to use
 
         There are many spawners available including: local process,
@@ -57,7 +57,7 @@ in {
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Extra contents appended to the jupyterhub configuration
 
         Jupyterhub configuration is a normal python file using
@@ -66,19 +66,25 @@ in {
         defaults for configuration but you can override anything since
         this is a python file.
       '';
-      example = literalExample ''
-         c.SystemdSpawner.mem_limit = '8G'
-         c.SystemdSpawner.cpu_limit = 2.0
+      example = ''
+        c.SystemdSpawner.mem_limit = '8G'
+        c.SystemdSpawner.cpu_limit = 2.0
       '';
     };
 
     jupyterhubEnv = mkOption {
       type = types.package;
-      default = (pkgs.python3.withPackages (p: with p; [
+      default = pkgs.python3.withPackages (p: with p; [
         jupyterhub
         jupyterhub-systemdspawner
-      ]));
-      description = ''
+      ]);
+      defaultText = literalExpression ''
+        pkgs.python3.withPackages (p: with p; [
+          jupyterhub
+          jupyterhub-systemdspawner
+        ])
+      '';
+      description = lib.mdDoc ''
         Python environment to run jupyterhub
 
         Customizing will affect the packages available in the hub and
@@ -90,11 +96,17 @@ in {
 
     jupyterlabEnv = mkOption {
       type = types.package;
-      default = (pkgs.python3.withPackages (p: with p; [
+      default = pkgs.python3.withPackages (p: with p; [
         jupyterhub
         jupyterlab
-      ]));
-      description = ''
+      ]);
+      defaultText = literalExpression ''
+        pkgs.python3.withPackages (p: with p; [
+          jupyterhub
+          jupyterlab
+        ])
+      '';
+      description = lib.mdDoc ''
         Python environment to run jupyterlab
 
         Customizing will affect the packages available in the
@@ -107,11 +119,11 @@ in {
 
     kernels = mkOption {
       type = types.nullOr (types.attrsOf(types.submodule (import ../jupyter/kernel-options.nix {
-        inherit lib;
+        inherit lib pkgs;
       })));
 
       default = null;
-      example = literalExample ''
+      example = literalExpression ''
         {
           python3 = let
             env = (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
@@ -134,7 +146,7 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Declarative kernel config
 
         Kernels can be declared in any language that supports and has
@@ -147,7 +159,7 @@ in {
     port = mkOption {
       type = types.port;
       default = 8000;
-      description = ''
+      description = lib.mdDoc ''
         Port number Jupyterhub will be listening on
       '';
     };
@@ -155,7 +167,7 @@ in {
     host = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Bind IP JupyterHub will be listening on
       '';
     };
@@ -163,7 +175,7 @@ in {
     stateDirectory = mkOption {
       type = types.str;
       default = "jupyterhub";
-      description = ''
+      description = lib.mdDoc ''
         Directory for jupyterhub state (token + database)
       '';
     };

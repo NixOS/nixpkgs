@@ -15,11 +15,12 @@
 
 buildPythonPackage rec {
   pname = "launchpadlib";
-  version = "1.10.13";
+  version = "1.11.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5804d68ec93247194449d17d187e949086da0a4d044f12155fad269ef8515435";
+    hash = "sha256-AYmMk3R3sMZKdTOK2wl3Ao1zRqigGesCPPaP7ZmFAUY=";
   };
 
   propagatedBuildInputs = [
@@ -33,13 +34,21 @@ buildPythonPackage rec {
     wadllib
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export HOME=$TMPDIR
   '';
 
   doCheck = isPy3k;
+
+  pythonImportsCheck = [
+    "launchpadlib"
+    "launchpadlib.apps"
+    "launchpadlib.credentials"
+  ];
 
   meta = with lib; {
     description = "Script Launchpad through its web services interfaces. Officially supported";

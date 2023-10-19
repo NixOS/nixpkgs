@@ -1,21 +1,36 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
 
-let
-  version = "2.13";
-  name = "cpio-${version}";
-in stdenv.mkDerivation {
-  inherit name;
+# for passthru.tests
+, git
+, libguestfs
+, nixosTests
+, rpm
+}:
+
+stdenv.mkDerivation rec {
+  pname = "cpio";
+  version = "2.14";
 
   src = fetchurl {
-    url = "mirror://gnu/cpio/${name}.tar.bz2";
-    sha256 = "0vbgnhkawdllgnkdn6zn1f56fczwk0518krakz2qbwhxmv2vvdga";
+    url = "mirror://gnu/cpio/cpio-${version}.tar.bz2";
+    sha256 = "/NwV1g9yZ6b8fvzWudt7bIlmxPL7u5ZMJNQTNv0/LBI=";
   };
 
-  preConfigure = if stdenv.isCygwin then ''
+  separateDebugInfo = true;
+
+  preConfigure = lib.optionalString stdenv.isCygwin ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit libguestfs rpm;
+    git = git.tests.withInstallCheck;
+    initrd = nixosTests.systemd-initrd-simple;
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/cpio/";

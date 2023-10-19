@@ -13,43 +13,39 @@
 
 buildGoModule rec {
   pname = "gomuks";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g0aa6h6bm00mdgkb38wm66rcrhqfvs2xj9rl04bwprsa05q5lca";
+    sha256 = "sha256-gLyjqmGZudj8PmsYUGXHOjetZzi6u5CFI7Y50y2XAzk=";
   };
 
-  vendorSha256 = "14ya5advpv4q5il235h5dxy8c2ap2yzrvqs0sjqgw0v1vm6vpwdx";
+  vendorHash = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
 
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ olm ];
 
-  # Upstream issue: https://github.com/tulir/gomuks/issues/260
-  patches = lib.optional stdenv.isLinux (substituteAll {
-    src = ./hardcoded_path.patch;
-    soundTheme = sound-theme-freedesktop;
-  });
-
   postInstall = ''
     cp -r ${
       makeDesktopItem {
         name = "net.maunium.gomuks.desktop";
         exec = "@out@/bin/gomuks";
-        terminal = "true";
+        terminal = true;
         desktopName = "Gomuks";
         genericName = "Matrix client";
-        categories = "Network;Chat";
+        categories = [ "Network" "Chat" ];
         comment = meta.description;
       }
     }/* $out/
     substituteAllInPlace $out/share/applications/*
     wrapProgram $out/bin/gomuks \
-      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}"
+      --prefix PATH : "${lib.makeBinPath (lib.optionals stdenv.isLinux [ libnotify pulseaudio ])}" \
+      --set-default GOMUKS_SOUND_NORMAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/message-new-instant.oga" \
+      --set-default GOMUKS_SOUND_CRITICAL "${sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga"
   '';
 
   meta = with lib; {
@@ -57,6 +53,5 @@ buildGoModule rec {
     description = "A terminal based Matrix client written in Go";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chvp emily ];
-    platforms = platforms.unix;
   };
 }

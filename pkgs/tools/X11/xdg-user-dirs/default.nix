@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, libxslt, docbook_xsl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "xdg-user-dirs-0.17";
+  pname = "xdg-user-dirs";
+  version = "0.18";
 
   src = fetchurl {
-    url = "https://user-dirs.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "13216b8rfkzak5k6bvpx6jvqv3cnbgpijnjwj8a8d3kq4cl0a1ra";
+    url = "https://user-dirs.freedesktop.org/releases/xdg-user-dirs-${version}.tar.gz";
+    sha256 = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libxslt docbook_xsl ];
+  nativeBuildInputs = [ makeWrapper libxslt docbook_xsl ];
 
   preFixup = ''
     # fallback values need to be last

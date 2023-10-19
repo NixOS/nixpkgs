@@ -27,7 +27,7 @@ with lib;
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable GNOME Keyring daemon, a service designed to
           take care of the user's security credentials,
           such as user names and passwords.
@@ -52,8 +52,10 @@ with lib;
     security.pam.services.login.enableGnomeKeyring = true;
 
     security.wrappers.gnome-keyring-daemon = {
-      source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
+      owner = "root";
+      group = "root";
       capabilities = "cap_ipc_lock=ep";
+      source = "${pkgs.gnome.gnome-keyring}/bin/gnome-keyring-daemon";
     };
 
   };

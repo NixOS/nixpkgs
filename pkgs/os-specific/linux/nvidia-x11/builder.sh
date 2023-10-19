@@ -1,8 +1,9 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 unpackManually() {
     skip=$(sed 's/^skip=//; t; d' $src)
-    tail -n +$skip $src | xz -d | tar xvf -
+    tail -n +$skip $src | bsdtar xvf -
     sourceRoot=.
 }
 
@@ -17,10 +18,8 @@ buildPhase() {
         # Create the module.
         echo "Building linux driver against kernel: $kernel";
         cd kernel
-        sysSrc=$(echo $kernel/lib/modules/$kernelVersion/source)
-        sysOut=$(echo $kernel/lib/modules/$kernelVersion/build)
         unset src # used by the nv makefile
-        make IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=$sysSrc SYSOUT=$sysOut module -j$NIX_BUILD_CORES
+        make $makeFlags -j $NIX_BUILD_CORES module
 
         cd ..
     fi
@@ -46,11 +45,17 @@ installPhase() {
     fi
 
     # Install systemd power management executables
+    if [ -e systemd/nvidia-sleep.sh ]; then
+        mv systemd/nvidia-sleep.sh ./
+    fi
     if [ -e nvidia-sleep.sh ]; then
         sed -E 's#(PATH=).*#\1"$PATH"#' nvidia-sleep.sh > nvidia-sleep.sh.fixed
         install -Dm755 nvidia-sleep.sh.fixed $out/bin/nvidia-sleep.sh
     fi
 
+    if [ -e systemd/system-sleep/nvidia ]; then
+        mv systemd/system-sleep/nvidia ./
+    fi
     if [ -e nvidia ]; then
         sed -E "s#/usr(/bin/nvidia-sleep.sh)#$out\\1#" nvidia > nvidia.fixed
         install -Dm755 nvidia.fixed $out/lib/systemd/system-sleep/nvidia
@@ -59,6 +64,7 @@ installPhase() {
     for i in $lib32 $out; do
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
         rm -f $i/lib/libnvidia-gtk* # built from source
+        rm -f $i/lib/libnvidia-wayland-client* # built from source
         if [ "$useGLVND" = "1" ]; then
             # Pre-built libglvnd
             rm $i/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
@@ -85,10 +91,11 @@ installPhase() {
                 sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
             fi
 
-            if [ "$system" = "i686-linux" ]; then
+            # nvidia currently only supports x86_64 and i686
+            if [ "$i" == "$lib32" ]; then
                 install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.i686.json
             else
-                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.json
+                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.x86_64.json
             fi
         fi
 
@@ -102,11 +109,29 @@ installPhase() {
             sed -E "s#(libEGL_nvidia)#$i/lib/\\1#" 10_nvidia.json > 10_nvidia.json.fixed
             sed -E "s#(libnvidia-egl-wayland)#$i/lib/\\1#" 10_nvidia_wayland.json > 10_nvidia_wayland.json.fixed
 
-            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/nvidia.json
-            install -Dm644 10_nvidia_wayland.json.fixed $i/share/glvnd/egl_vendor.d/nvidia_wayland.json
+            install -Dm644 10_nvidia.json.fixed $i/share/glvnd/egl_vendor.d/10_nvidia.json
+            install -Dm644 10_nvidia_wayland.json.fixed $i/share/egl/egl_external_platform.d/10_nvidia_wayland.json
+
+            if [[ -f "15_nvidia_gbm.json" ]]; then
+              sed -E "s#(libnvidia-egl-gbm)#$i/lib/\\1#" 15_nvidia_gbm.json > 15_nvidia_gbm.json.fixed
+              install -Dm644 15_nvidia_gbm.json.fixed $i/share/egl/egl_external_platform.d/15_nvidia_gbm.json
+
+              mkdir -p $i/lib/gbm
+              ln -s $i/lib/libnvidia-allocator.so $i/lib/gbm/nvidia-drm_gbm.so
+            fi
         fi
 
+        # Install libraries needed by Proton to support DLSS
+        if [ -e nvngx.dll ] && [ -e _nvngx.dll ]; then
+            install -Dm644 -t $i/lib/nvidia/wine/ nvngx.dll _nvngx.dll
+        fi
     done
+
+
+    # OptiX tries loading `$ORIGIN/nvoptix.bin` first
+    if [ -e nvoptix.bin ]; then
+        install -Dm444 -t $out/lib/ nvoptix.bin
+    fi
 
     if [ -n "$bin" ]; then
         # Install the X drivers.
@@ -132,6 +157,11 @@ installPhase() {
             cp nvidia-application-profiles-*-rc $bin/share/nvidia/nvidia-application-profiles-rc
             cp nvidia-application-profiles-*-key-documentation $bin/share/nvidia/nvidia-application-profiles-key-documentation
         fi
+    fi
+
+    if [ -n "$firmware" ]; then
+        # Install the GSP firmware
+        install -Dm644 -t $firmware/lib/firmware/nvidia/$version firmware/gsp*.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.
@@ -167,9 +197,12 @@ installPhase() {
         mkdir -p $bin/share/man/man1
         cp -p *.1.gz $bin/share/man/man1
         rm -f $bin/share/man/man1/{nvidia-xconfig,nvidia-settings,nvidia-persistenced}.1.gz
+        if [ -e "nvidia-dbus.conf" ]; then
+            install -Dm644 nvidia-dbus.conf $bin/share/dbus-1/system.d/nvidia-dbus.conf
+        fi
 
         # Install the programs.
-        for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump; do
+        for i in nvidia-cuda-mps-control nvidia-cuda-mps-server nvidia-smi nvidia-debugdump nvidia-powerd; do
             if [ -e "$i" ]; then
                 install -Dm755 $i $bin/bin/$i
                 # unmodified binary backup for mounting in containers

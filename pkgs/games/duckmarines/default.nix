@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
-let
+stdenv.mkDerivation rec {
   pname = "duckmarines";
   version = "1.0c";
 
@@ -16,13 +16,8 @@ let
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
-
-in
-
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0c.love";
@@ -32,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase =
   ''

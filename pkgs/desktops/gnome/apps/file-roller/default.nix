@@ -1,34 +1,63 @@
-{ lib, stdenv, fetchurl, glib, gtk3, meson, ninja, pkg-config, gnome, gettext, itstool, libxml2, libarchive
-, file, json-glib, python3, wrapGAppsHook, desktop-file-utils, libnotify, nautilus, glibcLocales
-, unzip, cpio }:
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, desktop-file-utils
+, gettext
+, glibcLocales
+, itstool
+, libxml2
+, meson
+, ninja
+, pkg-config
+, python3
+, wrapGAppsHook
+, cpio
+, glib
+, gnome
+, gtk3
+, libhandy
+, json-glib
+, libarchive
+, libportal-gtk3
+, nautilus
+}:
 
 stdenv.mkDerivation rec {
   pname = "file-roller";
-  version = "3.40.0";
+  version = "43.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "039w1dcpa5ypmv6sm634alk9vbcdkyvy595vkh5gn032jsiqca2a";
+    url = "mirror://gnome/sources/file-roller/${lib.versions.major version}/file-roller-${version}.tar.xz";
+    sha256 = "KYcp/b252oEywLvGCQdRfWVoWwVhiuBRZzNeZIT1c6E=";
   };
 
-  LANG = "en_US.UTF-8"; # postinstall.py
+  nativeBuildInputs = [
+    desktop-file-utils
+    gettext
+    glibcLocales
+    itstool
+    libxml2
+    meson
+    ninja
+    pkg-config
+    python3
+    wrapGAppsHook
+  ];
 
-  nativeBuildInputs = [ meson ninja gettext itstool pkg-config libxml2 python3 wrapGAppsHook glibcLocales desktop-file-utils ];
-
-  buildInputs = [ glib gtk3 json-glib libarchive file gnome.adwaita-icon-theme libnotify nautilus cpio ];
-
-  PKG_CONFIG_LIBNAUTILUS_EXTENSION_EXTENSIONDIR = "${placeholder "out"}/lib/nautilus/extensions-3.0";
+  buildInputs = [
+    cpio
+    glib
+    gtk3
+    libhandy
+    json-glib
+    libarchive
+    libportal-gtk3
+    nautilus
+  ];
 
   postPatch = ''
-    chmod +x postinstall.py # patchShebangs requires executable file
-    patchShebangs postinstall.py
     patchShebangs data/set-mime-type-entry.py
-  '';
-
-  postFixup = ''
-    # Workaround because of https://gitlab.gnome.org/GNOME/file-roller/issues/40
-    wrapProgram "$out/bin/file-roller" \
-      --prefix PATH : ${lib.makeBinPath [ unzip ]}
   '';
 
   passthru = {
@@ -43,6 +72,7 @@ stdenv.mkDerivation rec {
     description = "Archive manager for the GNOME desktop environment";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
+    mainProgram = "file-roller";
   };
 }

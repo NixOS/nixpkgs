@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ ... }:
 {
   name = "snapper";
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     boot.initrd.postDeviceCommands = ''
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux /dev/vdb
     '';
@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ ... }:
         fsType = "btrfs";
       };
     };
-    services.snapper.configs.home.subvolume = "/home";
+    services.snapper.configs.home.SUBVOLUME = "/home";
     services.snapper.filters = "/nix";
   };
 

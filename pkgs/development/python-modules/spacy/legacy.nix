@@ -1,25 +1,28 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "spacy-legacy";
-  version = "3.0.5";
+  version = "3.0.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Uy94rjFllSj622RTzd6UJaQmIniCw4gpeq/X57QcIpA=";
+    hash = "sha256-s31uDJtuHXyhz1vHFSq2SkxGcfWcha2vej/LhwNXp3Q=";
   };
 
-  # checkInputs = [ pytestCheckHook spacy ];
+  # nativeCheckInputs = [ pytestCheckHook spacy ];
   doCheck = false;
-  pythonImportsCheck = [ "spacy_legacy" ];
+
+  pythonImportsCheck = [
+    "spacy_legacy"
+  ];
 
   meta = with lib; {
-    description = "A Path interface for local and cloud bucket storage";
-    homepage = "https://github.com/justindujardin/pathy";
+    description = "Legacy registered functions for spaCy backwards compatibility";
+    homepage = "https://github.com/explosion/spacy-legacy";
+    changelog = "https://github.com/explosion/spacy-legacy/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ melling ];
   };

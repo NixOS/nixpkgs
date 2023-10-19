@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
 
-  nativeBuildInputs = [ fixDarwinDylibNames ];
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   patches = [
     # TODO: remove when https://github.com/P-H-C/phc-winner-argon2/pull/277 is merged + released
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     "ARGON2_VERSION=${version}"
     "LIBRARY_REL=lib"
     "PKGCONFIG_REL=lib"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "LIBRARIES=$(LIB_ST)"
   ];
 
   meta = with lib; {
@@ -41,6 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.argon2.com/";
     license = with licenses; [ asl20 cc0 ];
     maintainers = with maintainers; [ taeer olynch ];
-    platforms = platforms.linux ++ platforms.darwin;
+    mainProgram = "argon2";
+    platforms = platforms.all;
   };
 }

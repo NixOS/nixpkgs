@@ -13,17 +13,19 @@
 , gupnp-igd
 , gst_all_1
 , gnutls
+, graphviz
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnice";
-  version = "0.1.18";
+  version = "0.1.21";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "https://libnice.freedesktop.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1x3kj9b3dy9m2h6j96wgywfamas1j8k2ca43k5v82kmml9dx5asy";
+    hash = "sha256-cuc6Ks8g9ZCT4h1WAWBuQFhzUD6zXzRvpiHeI+mbOzk=";
   };
 
   patches = [
@@ -47,6 +49,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
+    graphviz
   ];
 
   buildInputs = [
@@ -61,7 +64,8 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=enabled" # Disabled by default as of libnice-0.1.15
+    "-Dgtk_doc=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
   ];
 
@@ -79,7 +83,7 @@ stdenv.mkDerivation rec {
       It provides a GLib-based library, libnice and a Glib-free library,
       libstun as well as GStreamer elements.'';
     homepage = "https://libnice.freedesktop.org/";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = with licenses; [ lgpl21 mpl11 ];
   };
 }

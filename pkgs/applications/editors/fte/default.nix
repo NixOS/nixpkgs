@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, unzip, perl, libX11, libXpm, gpm, ncurses, slang }:
 
 stdenv.mkDerivation rec {
-  name = "fte-0.50.02";
+  pname = "fte";
+  version = "0.50.02";
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [ perl libX11 libXpm gpm ncurses slang ];
@@ -22,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free text editor for developers";
-    homepage = "http://fte.sourceforge.net/";
+    homepage = "https://fte.sourceforge.net/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

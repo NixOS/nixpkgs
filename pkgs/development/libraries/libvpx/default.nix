@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, perl, yasm
+{ lib, stdenv, fetchFromGitHub, fetchpatch, perl, yasm
 , vp8DecoderSupport ? true # VP8 decoder
 , vp8EncoderSupport ? true # VP8 encoder
 , vp9DecoderSupport ? true # VP9 decoder
@@ -41,6 +41,25 @@
 let
   inherit (stdenv) is64bit isMips isDarwin isCygwin;
   inherit (lib) enableFeature optional optionals;
+
+  # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
+  # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
+  # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
+  darwinVersion =
+    /**/ if stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
+    else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
+    else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
+    else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
+    else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
+    else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
+    else "8";
+
+  kernel =
+    # Build system doesn't understand BSD, so pretend to be Linux.
+    /**/ if stdenv.isBSD then "linux"
+    else if stdenv.isDarwin then "darwin${darwinVersion}"
+    else stdenv.hostPlatform.parsed.kernel.name;
+
 in
 
 assert vp8DecoderSupport || vp8EncoderSupport || vp9DecoderSupport || vp9EncoderSupport;
@@ -56,16 +75,42 @@ assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
   pname = "libvpx";
-  version = "1.10.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "webmproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EZP33U10fchyqy7Jr26vHgUUfWR6xtG3fcMWUII0m9w=";
+    sha256 = "sha256-IH+ZWbBUlU5fbciYe+dNGnTFFCte2BXxAlLcvmzdAeY=";
   };
 
-  postPatch = "patchShebangs .";
+  patches = [
+    (fetchpatch {
+      # https://www.openwall.com/lists/oss-security/2023/09/28/5
+      name = "CVE-2023-5217.patch";
+      url = "https://github.com/webmproject/libvpx/commit/3fbd1dca6a4d2dad332a2110d646e4ffef36d590.patch";
+      hash = "sha256-1hHUd/dNGm8dmdYYN60j1aOgC2pdIIq7vqJZ7mTXfps=";
+      includes = [
+        "vp8/encoder/onyx_if.c"
+      ];
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs --build \
+      build/make/*.sh \
+      build/make/*.pl \
+      build/make/*.pm \
+      test/*.sh \
+      configure
+
+    # When cross-compiling (for aarch64-multiplatform), the compiler errors out on these flags.
+    # Since they're 'just' warnings, it's fine to just remove them.
+    substituteInPlace configure \
+      --replace "check_add_cflags -Wparentheses-equality" "" \
+      --replace "check_add_cflags -Wunreachable-code-loop-increment" "" \
+      --replace "check_cflags -Wshorten-64-to-32 && add_cflags_only -Wshorten-64-to-32" ""
+  '';
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
@@ -130,27 +175,9 @@ stdenv.mkDerivation rec {
     (enableFeature (experimentalSpatialSvcSupport ||
                     experimentalFpMbStatsSupport ||
                     experimentalEmulateHardwareSupport) "experimental")
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    #"--extra-cflags="
-    #"--extra-cxxflags="
-    #"--prefix="
-    #"--libc="
-    #"--libdir="
-    "--enable-external-build"
-    # libvpx darwin targets include darwin version (ie. ARCH-darwinXX-gcc, XX being the darwin version)
-    # See all_platforms: https://github.com/webmproject/libvpx/blob/master/configure
-    # Darwin versions: 10.4=8, 10.5=9, 10.6=10, 10.7=11, 10.8=12, 10.9=13, 10.10=14
-    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${stdenv.hostPlatform.parsed.kernel.name}${
-            if stdenv.hostPlatform.isDarwin then
-              if      stdenv.hostPlatform.osxMinVersion == "10.10" then "14"
-              else if stdenv.hostPlatform.osxMinVersion == "10.9"  then "13"
-              else if stdenv.hostPlatform.osxMinVersion == "10.8"  then "12"
-              else if stdenv.hostPlatform.osxMinVersion == "10.7"  then "11"
-              else if stdenv.hostPlatform.osxMinVersion == "10.6"  then "10"
-              else if stdenv.hostPlatform.osxMinVersion == "10.5"  then "9"
-              else "8"
-            else ""}-gcc"
-    (if stdenv.hostPlatform.isCygwin then "--enable-static-msvcrt" else "")
+  ] ++ optionals (stdenv.isBSD || stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--force-target=${stdenv.hostPlatform.parsed.cpu.name}-${kernel}-gcc"
+    (lib.optionalString stdenv.hostPlatform.isCygwin "--enable-static-msvcrt")
   ] # Experimental features
     ++ optional experimentalSpatialSvcSupport "--enable-spatial-svc"
     ++ optional experimentalFpMbStatsSupport "--enable-fp-mb-stats"
@@ -172,6 +199,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "WebM VP8/VP9 codec SDK";
     homepage    = "https://www.webmproject.org/";
+    changelog   = "https://github.com/webmproject/libvpx/raw/v${version}/CHANGELOG";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

@@ -1,33 +1,26 @@
 # generic builder for Emacs packages
 
-{ lib, stdenv, emacs, texinfo, writeText, ... }:
-
-with lib;
+{ lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
 { pname
-, version ? null
-
+, version
 , buildInputs ? []
 , packageRequires ? []
-
 , meta ? {}
-
 , ...
 }@args:
 
 let
-
   defaultMeta = {
     broken = false;
     platforms = emacs.meta.platforms;
-  } // optionalAttrs ((args.src.meta.homepage or "") != "") {
+  } // lib.optionalAttrs ((args.src.meta.homepage or "") != "") {
     homepage = args.src.meta.homepage;
   };
-
 in
 
-stdenv.mkDerivation ({
-  name = "emacs-${pname}${optionalString (version != null) "-${version}"}";
+stdenv.mkDerivation (finalAttrs: ({
+  name = "emacs-${pname}-${finalAttrs.version}";
 
   unpackCmd = ''
     case "$curSrc" in
@@ -68,9 +61,11 @@ stdenv.mkDerivation ({
   meta = defaultMeta // meta;
 }
 
-// lib.optionalAttrs (emacs.nativeComp or false) {
+// lib.optionalAttrs (emacs.withNativeCompilation or false) {
 
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
+
+  nativeBuildInputs = [ gcc ];
 
   addEmacsNativeLoadPath = true;
 
@@ -83,11 +78,9 @@ stdenv.mkDerivation ({
     addEmacsVars "$out"
 
     find $out/share/emacs -type f -name '*.el' -print0 \
-      | xargs -0 -n 1 -I {} -P $NIX_BUILD_CORES sh -c \
-          "emacs --batch -f batch-native-compile {} || true"
+      | xargs -0 -I {} -n 1 -P $NIX_BUILD_CORES sh -c \
+          "emacs --batch --eval '(setq large-file-warning-threshold nil)' -f batch-native-compile {} || true"
   '';
 }
 
-// removeAttrs args [ "buildInputs" "packageRequires"
-                      "meta"
-                    ])
+// removeAttrs args [ "buildInputs" "packageRequires" "meta" ]))

@@ -1,31 +1,45 @@
 { lib
-, python
 , buildPythonPackage
 , fetchPypi
+, freezegun
+, pytestCheckHook
 , python-utils
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.53.1";
+  version = "4.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef72be284e7f2b61ac0894b44165926f13f5d995b2bf3cd8a8dedc6224b255a7";
+    hash = "sha256-E5OSL8tkWYlErUV1afvrSzrBie9Qta25zvMoTofjlM4=";
   };
 
-  propagatedBuildInputs = [ python-utils ];
+  postPatch = ''
+    sed -i "/-cov/d" pytest.ini
+  '';
 
-  # depends on unmaintained pytest-pep8
-  # https://github.com/WoLpH/python-progressbar/issues/241
-  doCheck = false;
+  propagatedBuildInputs = [
+    python-utils
+  ];
 
-  pythonImportsCheck = [ "progressbar" ];
+  nativeCheckInputs = [
+    freezegun
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "progressbar"
+  ];
 
   meta = with lib; {
-    homepage = "https://progressbar-2.readthedocs.io/en/latest/";
-    description = "Text progressbar library for python";
+    description = "Text progressbar library";
+    homepage = "https://progressbar-2.readthedocs.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman turion ];
+    maintainers = with maintainers; [ ashgillman ];
   };
 }

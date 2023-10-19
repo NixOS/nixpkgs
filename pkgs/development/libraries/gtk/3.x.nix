@@ -2,13 +2,13 @@
 , stdenv
 , substituteAll
 , fetchurl
-, fetchpatch
 , pkg-config
 , gettext
 , docbook-xsl-nons
 , docbook_xml_dtd_43
 , gtk-doc
 , meson
+, mesonEmulatorHook
 , ninja
 , python3
 , makeWrapper
@@ -22,17 +22,19 @@
 , atk
 , at-spi2-atk
 , gobject-introspection
+, buildPackages
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , fribidi
 , xorg
-, epoxy
-, json-glib
+, libepoxy
 , libxkbcommon
 , libxml2
 , gmp
 , gnome
 , gsettings-desktop-schemas
 , sassc
-, trackerSupport ? stdenv.isLinux
+, trackerSupport ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
@@ -41,11 +43,13 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
 , cups
 , AppKit
 , Cocoa
+, QuartzCore
 , broadwaySupport ? true
+, wayland-scanner
+, testers
 }:
 
 let
@@ -58,11 +62,11 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
-  version = "3.24.27";
+  version = "3.24.38";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
+  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
 
   setupHooks = [
@@ -70,19 +74,16 @@ stdenv.mkDerivation rec {
     gtkCleanImmodulesCache
   ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "09ksflq5j257bf5zn8q2nnf2flicg9qqgfy7za79z7rkf1shc77p";
+    sha256 = "sha256-zhHezwGLJb3YUFVEpPhyQoVOyIvgVNmt5fOiBETdjuc=";
   };
 
   patches = [
     ./patches/3.0-immodules.cache.patch
-
-    (fetchpatch {
-      name = "Xft-setting-fallback-compute-DPI-properly.patch";
-      url = "https://bug757142.bugzilla-attachments.gnome.org/attachment.cgi?id=344123";
-      sha256 = "0g6fhqcv8spfy3mfmxpyji93k8d4p4q4fz1v9a1c1cgcwkz41d7p";
-    })
+    ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
   ] ++ lib.optionals stdenv.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
@@ -91,27 +92,34 @@ stdenv.mkDerivation rec {
     ./patches/3.0-darwin-x11.patch
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [
     gettext
-    gobject-introspection
     makeWrapper
     meson
     ninja
     pkg-config
     python3
     sassc
-  ] ++ setupHooks ++ lib.optionals withGtkDoc [
+    gdk-pixbuf
+  ] ++ finalAttrs.setupHooks ++ lib.optionals withIntrospection [
+    gobject-introspection
     docbook_xml_dtd_43
     docbook-xsl-nons
     gtk-doc
     # For xmllint
     libxml2
+  ] ++ lib.optionals ((withIntrospection || compileSchemas) && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ];
 
   buildInputs = [
     libxkbcommon
-    epoxy
-    json-glib
+    (libepoxy.override { inherit x11Support; })
     isocodes
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -133,6 +141,8 @@ stdenv.mkDerivation rec {
     libSM
     libXcomposite
     libXcursor
+    libXdamage
+    libXfixes
     libXi
     libXrandr
     libXrender
@@ -140,6 +150,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # explicitly propagated, always needed
     Cocoa
+    QuartzCore
   ] ++ lib.optionals waylandSupport [
     libGL
     wayland
@@ -151,10 +162,13 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
+    "-Dgtk_doc=${lib.boolToString withIntrospection}"
     "-Dtests=false"
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
+    "-Dx11_backend=${lib.boolToString x11Support}"
+    "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
+    "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
 
   doCheck = false; # needs X11
@@ -163,9 +177,17 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
+  env.NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
+    # See https://github.com/NixOS/nixpkgs/issues/132259
+    substituteInPlace meson.build \
+      --replace "x11_enabled = false" ""
+
+    # this conditional gates the installation of share/gsettings-schemas/.../glib-2.0/schemas/gschemas.compiled.
+    substituteInPlace meson.build \
+      --replace 'if not meson.is_cross_build()' 'if ${lib.boolToString compileSchemas}'
+
     files=(
       build-aux/meson/post-install.py
       demos/gtk-demo/geninclude.py
@@ -193,6 +215,8 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+  '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    GTK_PATH="''${out:?}/lib/gtk-3.0/3.0.0/immodules/" ''${dev:?}/bin/gtk-query-immodules-3.0 > "''${out:?}/lib/gtk-3.0/3.0.0/immodules.cache"
   '';
 
   # Wrap demos
@@ -201,15 +225,20 @@ stdenv.mkDerivation rec {
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    # a comment created a cycle between outputs
+    sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gtk+";
       attrPath = "gtk3";
+      freeze = true;
     };
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
   meta = with lib; {
@@ -227,7 +256,14 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gtk.org/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
+    pkgConfigModules = [
+      "gdk-3.0"
+      "gtk+-3.0"
+    ] ++ lib.optionals x11Support [
+      "gdk-x11-3.0"
+      "gtk+-x11-3.0"
+    ];
     platforms = platforms.all;
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${version}/NEWS";
   };
-}
+})

@@ -1,32 +1,73 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake
-, qtbase, qtscript, qtwebkit, libXfixes, libXtst, qtx11extras, git
-, webkitSupport ? true
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, ninja
+, extra-cmake-modules
+, qtbase
+, qtsvg
+, qttools
+, qtdeclarative
+, libXfixes
+, libXtst
+, qtwayland
+, wayland
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "CopyQ";
-  version = "3.13.0";
+  version = "7.1.0";
 
-  src  = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    sha256 = "0qssyavx0dkgsyj2myqg8n7sih8niy960nyb1yknsbjm37iqraah";
+    hash = "sha256-aAmpFKIIFZLPWUaOcf4V1d/wVQ7xRcnXFsqFjROsabg=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  patches = [
+    # itemfakevim: fix build with qt 6.6.0
+    # https://github.com/hluk/CopyQ/pull/2508
+    (fetchpatch2 {
+      url = "https://github.com/hluk/CopyQ/commit/a20bfff0d78296b334ff8cabb047ab5d842b7311.patch";
+      hash = "sha256-F/6cQ8+O1Ttd4EFFxQas5ES6U+qxWdmYqUWRQLsVMa4=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
-    git qtbase qtscript libXfixes libXtst qtx11extras
-  ] ++ lib.optional webkitSupport qtwebkit;
+    qtbase
+    qtsvg
+    qttools
+    qtdeclarative
+    libXfixes
+    libXtst
+    qtwayland
+    wayland
+  ];
+
+  postPatch = ''
+    substituteInPlace shared/com.github.hluk.copyq.desktop.in \
+      --replace copyq "$out/bin/copyq"
+  '';
+
+  cmakeFlags = [ "-DWITH_QT6=ON" ];
 
   meta = with lib; {
-    homepage    = "https://hluk.github.io/CopyQ";
+    homepage = "https://hluk.github.io/CopyQ";
     description = "Clipboard Manager with Advanced Features";
-    license     = licenses.gpl3;
-    maintainers = [ maintainers.willtim ];
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ artturin ];
     # NOTE: CopyQ supports windows and osx, but I cannot test these.
-    # OSX build requires QT5.
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
+    mainProgram = "copyq";
   };
 }

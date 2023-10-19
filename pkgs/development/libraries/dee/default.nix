@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "${src}/debian/patches/gtkdocize.patch"
     "${src}/debian/patches/strict-prototype.patch"
     "${src}/debian/patches/vapi-skip-properties.patch"
+    ./0001-Fix-build-with-Vala-0.54.patch
 
     # Fixes glib 2.62 deprecations
     (fetchpatch {
@@ -54,6 +55,10 @@ stdenv.mkDerivation rec {
     "--disable-gtk-doc"
     "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
+
+  # Compilation fails after a change in glib where
+  # g_string_free now returns a value
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
 
   enableParallelBuilding = true;
 

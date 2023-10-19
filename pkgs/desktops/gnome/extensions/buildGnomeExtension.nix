@@ -32,13 +32,23 @@ let
       # without making a new release. We simply substitute the possibly changed fields
       # with their content from when we last updated, and thus get a deterministic output
       # hash.
-      extraPostFetch = ''
+      postFetch = ''
         echo "${metadata}" | base64 --decode > $out/metadata.json
       '';
     };
-    buildCommand = ''
+    nativeBuildInputs = with pkgs; [ buildPackages.glib ];
+    buildPhase = ''
+      runHook preBuild
+      if [ -d schemas ]; then
+        glib-compile-schemas --strict schemas
+      fi
+      runHook postBuild
+    '';
+    installPhase = ''
+      runHook preInstall
       mkdir -p $out/share/gnome-shell/extensions/
-      cp -r -T $src $out/share/gnome-shell/extensions/${uuid}
+      cp -r -T . $out/share/gnome-shell/extensions/${uuid}
+      runHook postInstall
     '';
     meta = {
       description = builtins.head (lib.splitString "\n" description);

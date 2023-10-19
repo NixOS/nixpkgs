@@ -1,13 +1,12 @@
 { lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
 , libXext , freetype, libXrender, fontconfig, libXft, libXinerama
 , libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl }:
+, curl, writeShellScript, common-updater-scripts }:
 
 let
-
-  data = builtins.fromJSON (builtins.readFile ./revision.json);
-
-  inherit (data) version url sha256;
+  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.13-269829b4/Hubstaff-1.6.13-269829b4.sh";
+  version = "1.6.13-269829b4";
+  sha256 = "0i05d8kivm09hqsc1z6vn7w0bbc3l9dawssqpqsm7kqdyaq0l304";
 
   rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
@@ -56,9 +55,22 @@ stdenv.mkDerivation {
     ln -s $opt/data/resources $opt/x86_64/resources
   '';
 
+  passthru.updateScript = writeShellScript "hubstaff-updater" ''
+    set -eu -o pipefail
+
+    installation_script_url=$(curl --fail --head --location --silent --output /dev/null --write-out %{url_effective} https://app.hubstaff.com/download/linux)
+
+    version=$(echo "$installation_script_url" | sed -r 's/^https:\/\/hubstaff\-production\.s3\.amazonaws\.com\/downloads\/HubstaffClient\/Builds\/Release\/([^\/]+)\/Hubstaff.+$/\1/')
+
+    sha256=$(nix-prefetch-url "$installation_script_url")
+
+    ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "$sha256" "$installation_script_url"
+  '';
+
   meta = with lib; {
     description = "Time tracking software";
     homepage = "https://hubstaff.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus srghma ];

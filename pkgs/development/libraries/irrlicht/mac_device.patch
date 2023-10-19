@@ -18,3 +18,21 @@
  			[NSBundle loadNibNamed:@"MainMenu" owner:[NSApp delegate]];
  			[NSApp finishLaunching];
  		}
+@@ -642,7 +642,7 @@
+ 						NSOpenGLPFASamples, (NSOpenGLPixelFormatAttribute)CreationParams.AntiAlias,
+ 						NSOpenGLPFAStencilSize, (NSOpenGLPixelFormatAttribute)(CreationParams.Stencilbuffer?1:0),
+ 						NSOpenGLPFADoubleBuffer,
+-						(NSOpenGLPixelFormatAttribute)nil
++						(NSOpenGLPixelFormatAttribute)0
+ 					};
+ 
+ 					if (CreationParams.AntiAlias<2)
+@@ -668,7 +668,7 @@
+ 						{
+ 							// Third try without Doublebuffer
+ 							os::Printer::log("No doublebuffering available.", ELL_WARNING);
+-							windowattribs[14]=(NSOpenGLPixelFormatAttribute)nil;
++							windowattribs[14]=(NSOpenGLPixelFormatAttribute)0;
+ 						}
+ 
+ 						format = [[NSOpenGLPixelFormat alloc] initWithAttributes:windowattribs];

@@ -2,38 +2,42 @@
 , makeWrapper
 , fetchFromGitHub
 , nixosTests
-, gradle_6
+, gradle
 , perl
 , jre
 , libpulseaudio
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 let
   pname = "shattered-pixel-dungeon";
-  version = "0.9.2b";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
-    # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
-    # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
-    rev = "eba806ef561921b86637cf26818e095556edec0d";
-    sha256 = "05m4sfchccr437pxjvgzjk6nd9r3n4c4p3q8lxcc5pj6qrppk49j";
+    rev = "v${version}";
+    hash = "sha256-WbRvsHxTYYlhJavYVGMGK25fXEfSfnIztJ6KuCgBjF8=";
   };
+
+  patches = [
+    ./disable-beryx.patch
+  ];
 
   postPatch = ''
     # disable gradle plugins with native code and their targets
     perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
-    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar)/ ... /^}/" build.gradle
-    # Remove unbuildable android stuff
-    rm android/build.gradle
+    perl -i.bak2 -pe "s#(.*)#// \1# if /^(buildscript|task portable|task nsis|task proguard|task tgz|task\(afterEclipseImport\)|launch4j|macAppBundle|buildRpm|buildDeb|shadowJar|robovm)/ ... /^}/" build.gradle
+    # Remove unbuildable Android/iOS stuff
+    rm android/build.gradle ios/build.gradle
   '';
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit version src postPatch;
-    nativeBuildInputs = [ gradle_6 perl ];
+    inherit version src patches postPatch;
+    nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
@@ -46,31 +50,56 @@ let
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
     '';
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "0ih10c6c85vhrqgilqmkzqjx3dc8cscvs9wkh90zgdj10qv0iba3";
+    outputHash = "sha256-i4k5tdo07E1NJwywroaGvRjZ+/xrDp6ra+GTYwTB7uk=";
+  };
+
+  desktopItem = makeDesktopItem {
+    name = "shattered-pixel-dungeon";
+    desktopName = "Shattered Pixel Dungeon";
+    comment = "An open-source traditional roguelike dungeon crawler";
+    icon = "shattered-pixel-dungeon";
+    exec = "shattered-pixel-dungeon";
+    terminal = false;
+    categories = [ "Game" "AdventureGame" ];
+    keywords = [ "roguelike" "dungeon" "crawler" ];
   };
 
 in stdenv.mkDerivation rec {
-  inherit pname version src postPatch;
+  inherit pname version src patches postPatch;
 
-  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
+  nativeBuildInputs = [ gradle perl makeWrapper copyDesktopItems ];
+
+  desktopItems = [ desktopItem ];
 
   buildPhase = ''
+    runHook preBuild
+
     export GRADLE_USER_HOME=$(mktemp -d)
     # https://github.com/gradle/gradle/issues/4426
     ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
     # point to offline repo
     sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
     gradle --offline --no-daemon desktop:release
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
     mkdir $out/bin
     makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
+
+    for s in 16 32 48 64 128 256; do
+      install -Dm644 desktop/src/main/assets/icons/icon_$s.png \
+        $out/share/icons/hicolor/''${s}x$s/apps/shattered-pixel-dungeon.png
+    done
+
+    runHook postInstall
   '';
 
   passthru.tests = {
@@ -81,6 +110,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://shatteredpixel.com/";
     downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

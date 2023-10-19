@@ -3,19 +3,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.9.16.1";
+  version = "2.9.20";
   pname = "snort";
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "https://snort.org/downloads/archive/snort/${pname}-${version}.tar.gz";
-    sha256 = "13lzvjli6kbsnkd7lf0rm71l2mnz38pxk76ia9yrjb6clfhlbb73";
+    sha256 = "sha256-KUAOE/U7GDHguLEOwSJKHLqm3BUzpTIqIN2Au4S0mBw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pkg-config luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs = [ luajit openssl libpcap pcre libdnet daq zlib flex bison libtirpc ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
 
   enableParallelBuilding = true;
 

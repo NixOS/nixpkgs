@@ -1,23 +1,30 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, python3 }:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "unstable-2021-05-29";
+  version = "1.14.5";
 
   src = fetchFromGitHub {
     owner = "hifi";
-    repo = "heisenbridge";
-    rev = "980755226b0cb46ad9c7f40e0e940f354212a8b7";
-    sha256 = "sha256-jO1Dqtv3IbV4FLI3C82pxssgrCf43hAEcPLYszX2GNI=";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-OmAmgHM+EmJ3mUY4lPBxIv2rAq8j2QEeTUMux7ZBfRE=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    aiohttp
+  postPatch = ''
+    echo "${version}" > heisenbridge/version.txt
+  '';
+
+  propagatedBuildInputs = with python3.pkgs; [
     irc
-    pyyaml
+    ruamel-yaml
+    mautrix
+    python-socks
   ];
 
-  checkInputs = [ python3Packages.pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "A bouncer-style Matrix-IRC bridge.";

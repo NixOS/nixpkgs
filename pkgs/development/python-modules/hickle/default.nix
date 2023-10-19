@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , pythonOlder
 , h5py
@@ -7,46 +8,59 @@
 , astropy
 , scipy
 , pandas
-, codecov
-, pytest
-, pytestcov
-, pytestrunner
-, coveralls
-, twine
-, check-manifest
-, lib
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname   = "hickle";
-  version = "4.0.4";
+  pname = "hickle";
+  version = "5.0.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d35030a76fe1c7fa6480088cde932689960ed354a2539ffaf5f3c90c578c06f";
+    hash = "sha256-2+7OF/a89jK/zLhbk/Q2A+zsKnfRbq3YMKGycEWsLEQ=";
   };
 
   postPatch = ''
-    substituteInPlace requirements_test.txt \
-      --replace 'astropy<3.1;' 'astropy;' --replace 'astropy<3.0;' 'astropy;'
+    substituteInPlace tox.ini \
+      --replace "--cov=./hickle" ""
   '';
 
-  propagatedBuildInputs = [ h5py numpy dill ];
-
-  doCheck = false; # incompatible with latest astropy
-  checkInputs = [
-    pytest pytestcov pytestrunner coveralls scipy pandas astropy twine check-manifest codecov
+  propagatedBuildInputs = [
+    dill
+    h5py
+    numpy
   ];
 
-  pythonImportsCheck = [ "hickle" ];
+  nativeCheckInputs = [
+    astropy
+    pandas
+    pytestCheckHook
+    scipy
+  ];
 
-  meta = {
-    # incompatible with h5py>=3.0, see https://github.com/telegraphic/hickle/issues/143
-    broken = true;
+  pythonImportsCheck = [
+    "hickle"
+  ];
+
+  disabledTests = [
+    # broken in 5.0.2 with recent NumPy
+    # see https://github.com/telegraphic/hickle/issues/174
+    "test_scalar_compression"
+    # broken in 5.0.2 with Python 3.11
+    # see https://github.com/telegraphic/hickle/issues/169
+    "test_H5NodeFilterProxy"
+    # broken in 5.0.2
+    "test_slash_dict_keys"
+  ];
+
+  meta = with lib; {
     description = "Serialize Python data to HDF5";
     homepage = "https://github.com/telegraphic/hickle";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bcdarwin ];
   };
 }

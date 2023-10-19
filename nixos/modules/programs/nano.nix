@@ -2,21 +2,23 @@
 
 let
   cfg = config.programs.nano;
-  LF = "\n";
 in
 
 {
-  ###### interface
-
   options = {
     programs.nano = {
+      enable = lib.mkEnableOption (lib.mdDoc "nano") // {
+        default = true;
+      };
+
+      package = lib.mkPackageOptionMD pkgs "nano" { };
 
       nanorc = lib.mkOption {
         type = lib.types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           The system-wide nano configuration.
-          See <citerefentry><refentrytitle>nanorc</refentrytitle><manvolnum>5</manvolnum></citerefentry>.
+          See {manpage}`nanorc(5)`.
         '';
         example = ''
           set nowrap
@@ -24,19 +26,23 @@ in
           set tabsize 2
         '';
       };
+
       syntaxHighlight = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether to enable syntax highlight for various languages.";
+        description = lib.mdDoc "Whether to enable syntax highlight for various languages.";
       };
     };
   };
 
-  ###### implementation
-
-  config = lib.mkIf (cfg.nanorc != "" || cfg.syntaxHighlight) {
-    environment.etc.nanorc.text = lib.concatStrings [ cfg.nanorc
-      (lib.optionalString cfg.syntaxHighlight ''${LF}include "${pkgs.nano}/share/nano/*.nanorc"'') ];
+  config = lib.mkIf cfg.enable {
+    environment = {
+      etc.nanorc.text = (lib.optionalString cfg.syntaxHighlight ''
+        # load syntax highlighting files
+        include "${cfg.package}/share/nano/*.nanorc"
+        include "${cfg.package}/share/nano/extra/*.nanorc"
+      '') + cfg.nanorc;
+      systemPackages = [ cfg.package ];
+    };
   };
-
 }

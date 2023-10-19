@@ -1,40 +1,47 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
 , autoconf-archive
-, pkg-config
+, autoreconfHook
 , makeWrapper
+, pkg-config
+, substituteAll
 , curl
 , gtk3
 , libassuan
 , libbsd
 , libproxy
 , libxml2
+, nssTools
 , openssl
 , p11-kit
 , pcsclite
-, nssTools
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
-  version = "5.0.21";
+  version = "5.1.11";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    sha256 = "1sz7996q6gd6vbdxqgyx1jwjznpki1k9zbgaj1j1a51y6w0g0kdh";
-    repo = "eid-mw";
     owner = "Fedict";
+    repo = "eid-mw";
+    rev = "v${version}";
+    hash = "sha256-70UjfkH+rx1Q+2XEuAByoDsP5ZelyuGXaHdkjTe/sCY=";
   };
+
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+    substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
+  '';
+
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
   buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+
   preConfigure = ''
     mkdir openssl
-    ln -s ${openssl.out}/lib openssl
+    ln -s ${lib.getLib openssl}/lib openssl
     ln -s ${openssl.bin}/bin openssl
     ln -s ${openssl.dev}/include openssl
     export SSL_PREFIX=$(realpath openssl)
@@ -43,10 +50,6 @@ stdenv.mkDerivation rec {
   '';
   # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
-
-  postPatch = ''
-    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
-  '';
 
   postInstall =
     let
@@ -71,8 +74,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Belgian electronic identity card (eID) middleware";
-    homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
-    license = licenses.lgpl3;
+    homepage = "https://eid.belgium.be/en";
+    license = licenses.lgpl3Only;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.
       Also requires a running pcscd service and compatible card reader.

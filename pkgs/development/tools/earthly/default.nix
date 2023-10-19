@@ -1,21 +1,42 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv }:
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.5.14";
+  version = "0.7.19";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    sha256 = "sha256-XB3zfbcuEgkqQ7DGnyUJj3K+qUH2DNv3n1/0mlocqfM=";
+    hash = "sha256-Qs2Ik559KOhkwTSaEoYLqy4m9y/mRp7XThArKOkH3uI=";
   };
 
-  vendorSha256 = "sha256-q3dDV0eop2NxXHFrlppWsZrO2Hz1q5xhs1DnB6PvG9g=";
+  vendorHash = "sha256-h3/FmhcXwRvDoOwJ643ze3GrV13tIhnnIMynQgf5emg=";
+  subPackages = [ "cmd/earthly" "cmd/debugger" ];
+
+  CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=v${version}"
+    "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
+    "-X main.GitSha=v${version}"
+    "-X main.DefaultInstallationName=earthly"
+  ] ++ lib.optionals stdenv.isLinux [
+    "-extldflags '-static'"
+  ];
+
+  tags = [
+    "dfrunmount"
+    "dfrunnetwork"
+    "dfrunsecurity"
+    "dfsecrets"
+    "dfssh"
+  ];
 
   postInstall = ''
     mv $out/bin/debugger $out/bin/earthly-debugger
-    mv $out/bin/shellrepeater $out/bin/earthly-shellrepeater
   '';
 
   meta = with lib; {
@@ -23,6 +44,6 @@ buildGoModule rec {
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ mdsp ];
+    maintainers = with maintainers; [ zoedsoupe konradmalik ];
   };
 }

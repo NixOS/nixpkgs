@@ -7,22 +7,23 @@ let
 in
 {
   options.programs.xss-lock = {
-    enable = mkEnableOption "xss-lock";
+    enable = mkEnableOption (lib.mdDoc "xss-lock");
 
     lockerCommand = mkOption {
       default = "${pkgs.i3lock}/bin/i3lock";
-      example = literalExample "\${pkgs.i3lock-fancy}/bin/i3lock-fancy";
+      defaultText = literalExpression ''"''${pkgs.i3lock}/bin/i3lock"'';
+      example = literalExpression ''"''${pkgs.i3lock-fancy}/bin/i3lock-fancy"'';
       type = types.separatedString " ";
-      description = "Locker to be used with xsslock";
+      description = lib.mdDoc "Locker to be used with xsslock";
     };
 
     extraOptions = mkOption {
       default = [ ];
       example = [ "--ignore-sleep" ];
       type = types.listOf types.str;
-      description = ''
+      description = lib.mdDoc ''
         Additional command-line arguments to pass to
-        <command>xss-lock</command>.
+        {command}`xss-lock`.
       '';
     };
   };

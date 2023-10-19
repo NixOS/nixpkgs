@@ -1,17 +1,24 @@
 {lib, stdenv, fetchurl, zlib, ocaml, findlib}:
 
 let
-  param =
-    if lib.versionAtLeast ocaml.version "4.02"
-    then {
-      version = "1.10";
-      url = "https://github.com/xavierleroy/camlzip/archive/rel110.tar.gz";
-      sha256 = "X0YcczaQ3lFeJEiTIgjSSZ1zi32KFMtmZsP0FFpyfbI=";
+  common = {
       patches = [];
       postPatchInit = ''
         cp META-zip META-camlzip
         echo 'directory="../zip"' >> META-camlzip
       '';
+  };
+  param =
+    if lib.versionAtLeast ocaml.version "4.07"
+    then common // {
+      version = "1.11";
+      url = "https://github.com/xavierleroy/camlzip/archive/rel111.tar.gz";
+      sha256 = "sha256-/7vF3j4cE9wOWScjdtIy0u3pGzJ1UQY9R/3bdPHV7Tc=";
+    } else if lib.versionAtLeast ocaml.version "4.02"
+    then common // {
+      version = "1.10";
+      url = "https://github.com/xavierleroy/camlzip/archive/rel110.tar.gz";
+      sha256 = "X0YcczaQ3lFeJEiTIgjSSZ1zi32KFMtmZsP0FFpyfbI=";
     } else {
       version = "1.05";
       download_id = "1037";
@@ -25,7 +32,7 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "camlzip";
+  pname = "ocaml${ocaml.version}-camlzip";
   version = param.version;
 
   src = fetchurl {
@@ -33,9 +40,11 @@ stdenv.mkDerivation {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
 
   propagatedBuildInputs = [zlib];
+
+  strictDeps = true;
 
   inherit (param) patches;
 
@@ -62,7 +71,7 @@ stdenv.mkDerivation {
       for reading from and writing to compressed files in these formats.
     '';
     license = "LGPL+linking exceptions";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [ maggesi ];
   };
 }

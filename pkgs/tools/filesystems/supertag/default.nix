@@ -1,5 +1,5 @@
 { lib, rustPlatform, fetchFromGitHub
-, clang, llvmPackages, pkg-config
+, pkg-config
 , dbus, fuse, sqlite
 }:
 
@@ -14,11 +14,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0jzm7pn38hlr96n0z8gqfsfdbw48y0nnbsgjdq7hpgwmcgvgqdam";
   };
 
-  cargoSha256 = "093vrpp4in8854hb0h1lxrp8v6i9vfja0l69dnnp7z15qkpbir4f";
+  # lexical-core is outdated and incompatible with newer versions of rust
+  # patches Cargo.lock to include a more up-to-date version of lexical-core
+  cargoPatches = [ ./cargo-lock-update-lexical-core.patch ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  cargoSha256 = "sha256-W5Emkbe1jI9Z+irMckD/3gJO47rACa9E5k5dqAFC1yQ=";
 
-  nativeBuildInputs = [ clang pkg-config ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
   buildInputs = [ dbus fuse sqlite ];
 
   # The test are requiring extended permissions.

@@ -1,30 +1,43 @@
 { lib
 , fetchPypi
 , buildPythonPackage
+, setuptools-scm
 , astropy
-, pytestCheckHook
-, pytest-doctestplus
+, numpy
+, matplotlib
 , scipy
+, six
+, pytestCheckHook
+, pytest-astropy
 }:
 
 buildPythonPackage rec {
   pname = "radio_beam";
-  version = "0.3.3";
+  version = "0.3.4";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "radio-beam";
-    sha256 = "e34902d91713ccab9f450b9d3e82317e292cf46a30bd42f9ad3c9a0519fcddcd";
+    sha256 = "e032257f1501303873f251c00c74b1188180785c79677fb4443098d517852309";
   };
 
-  propagatedBuildInputs = [ astropy ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-doctestplus scipy ];
+  propagatedBuildInputs = [
+    astropy
+    numpy
+    scipy
+    six
+  ];
 
-  # Tests must be run in the build directory
-  preCheck = ''
-    cd build/lib
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    matplotlib
+    pytest-astropy
+  ];
 
   meta = {
     description = "Tools for Beam IO and Manipulation";

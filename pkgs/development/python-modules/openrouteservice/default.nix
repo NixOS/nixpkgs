@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests, responses, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, responses, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "openrouteservice";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "1d5qbygb81fhpwfdm1a118r3xv45xz9n9avfkgxkvw1n8y6ywz2q";
   };
 
-  checkInputs = [ pytestCheckHook responses ];
+  nativeCheckInputs = [ pytestCheckHook responses ];
 
   disabledTests = [
     # touches network

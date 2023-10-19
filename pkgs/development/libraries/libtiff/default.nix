@@ -1,53 +1,88 @@
-{ lib, stdenv
-, fetchurl
+{ lib
+, stdenv
+, fetchFromGitLab
+, nix-update-script
 
+, autoreconfHook
 , pkg-config
-, cmake
+, sphinx
 
 , libdeflate
 , libjpeg
 , xz
 , zlib
+
+  # for passthru.tests
+, libgeotiff
+, python3Packages
+, imagemagick
+, graphicsmagick
+, gdal
+, openimageio
+, freeimage
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.2.0";
+  version = "4.5.1";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1jrkjv0xya9radddn8idxvs2gqzp3l2b1s8knlizmn7ad3jq817b";
+  src = fetchFromGitLab {
+    owner = "libtiff";
+    repo = "libtiff";
+    rev = "v${version}";
+    hash = "sha256-qQEthy6YhNAQmdDMyoCIvK8f3Tx25MgqhJZW74CB93E=";
   };
 
-  cmakeFlags = if stdenv.isDarwin then [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-  ] else null;
+  patches = [
+    # FreeImage needs this patch
+    ./headers.patch
+    # libc++abi 11 has an `#include <version>`, this picks up files name
+    # `version` in the project's include paths
+    ./rename-version.patch
+  ];
 
-  # FreeImage needs this patch
-  patches = [ ./headers.patch ];
+  postPatch = ''
+    mv VERSION VERSION.txt
+  '';
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
   postFixup = ''
-    moveToOutput include/tif_dir.h $dev_private
     moveToOutput include/tif_config.h $dev_private
+    moveToOutput include/tif_dir.h $dev_private
+    moveToOutput include/tif_hash_set.h $dev_private
     moveToOutput include/tiffiop.h $dev_private
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  # If you want to change to a different build system, please make
+  # sure cross-compilation works first!
+  nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
-
-  buildInputs = [ libdeflate ]; # TODO: move all propagatedBuildInputs to buildInputs.
+  # TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs = [
+    libdeflate
+    libjpeg
+    xz
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
-  doInstallCheck = true;
-  installCheckTarget = "test";
+  doCheck = true;
+
+  passthru = {
+    tests = {
+      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit (python3Packages) pillow imread;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Library and utilities for working with the TIFF image file format";
-    homepage = "http://download.osgeo.org/libtiff";
+    homepage = "https://libtiff.gitlab.io/libtiff";
+    changelog = "https://libtiff.gitlab.io/libtiff/v${version}.html";
+    maintainers = with maintainers; [ qyliss ];
     license = licenses.libtiff;
     platforms = platforms.unix;
   };

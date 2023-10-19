@@ -7,20 +7,20 @@
 
 buildPythonPackage rec {
   pname = "nad-receiver";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "joopert";
     repo = "nad_receiver";
     rev = version;
-    sha256 = "1mylrrvxczhplscayf4hvj56vaqkh7mv32fn9pcvla83y39kg8rw";
+    hash = "sha256-jRMk/yMA48ei+g/33+mMYwfwixaKTMYcU/z/VOoJbvY=";
   };
 
   propagatedBuildInputs = [
     pyserial
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

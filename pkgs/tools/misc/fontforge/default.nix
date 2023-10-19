@@ -1,36 +1,27 @@
-{ stdenv, fetchpatch, fetchFromGitHub, lib
-, cmake, perl, uthash, pkg-config, gettext
+{ stdenv, fetchFromGitHub, lib
+, cmake, uthash, pkg-config
 , python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
-, readline, woff2, zeromq, libuninameslist
+, readline, woff2, zeromq
 , withSpiro ? false, libspiro
 , withGTK ? false, gtk3
 , withGUI ? withGTK
 , withPython ? true
 , withExtras ? true
-, Carbon ? null, Cocoa ? null
+, Carbon, Cocoa
 }:
 
 assert withGTK -> withGUI;
 
 stdenv.mkDerivation rec {
   pname = "fontforge";
-  version = "20201107";
+  version = "20230101";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Rl/5lbXaPgIndANaD0IakaDus6T53FjiBb45FIuGrvc=";
+    sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
   };
-
-  patches = [
-    # Allow installing contrib files (e.g. extras and tools).
-    # Taken from https://salsa.debian.org/fonts-team/fontforge/-/blob/master/debian/patches/0001-add-extra-cmake-install-rules.patch
-    (fetchpatch {
-      url = "https://salsa.debian.org/fonts-team/fontforge/raw/76bffe6ccf8ab20a0c81476a80a87ad245e2fd1c/debian/patches/0001-add-extra-cmake-install-rules.patch";
-      sha256 = "u3D9od2xLECNEHhZ+8dkuv9818tPkdP6y/Tvd9CADJg=";
-    })
-  ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
   postPatch = ''
@@ -42,14 +33,14 @@ stdenv.mkDerivation rec {
   '';
 
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [
-    readline uthash woff2 zeromq libuninameslist
+    readline uthash woff2 zeromq
     python freetype zlib glib giflib libpng libjpeg libtiff libxml2
   ]
-    ++ lib.optionals withSpiro [libspiro]
+    ++ lib.optionals withSpiro [ libspiro ]
     ++ lib.optionals withGUI [ gtk3 cairo pango ]
     ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
@@ -59,7 +50,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
     ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
-  # work-around: git isn't really used, but configuration fails without it
   preConfigure = ''
     # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
     export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
@@ -71,11 +61,11 @@ stdenv.mkDerivation rec {
       rm -r "$out/share/fontforge/python"
     '';
 
-  meta = {
+  meta = with lib; {
     description = "A font editor";
-    homepage = "http://fontforge.github.io";
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.erictapen ];
+    homepage = "https://fontforge.github.io";
+    platforms = platforms.all;
+    license = licenses.bsd3;
+    maintainers = [ maintainers.erictapen ];
   };
 }

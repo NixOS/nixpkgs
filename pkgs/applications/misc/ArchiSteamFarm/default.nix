@@ -1,42 +1,82 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, dotnetCorePackages, jq }:
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, libkrb5
+, zlib
+, openssl
+, callPackage
+}:
 
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "ArchiSteamFarm";
-  version = "4.3.1.0";
+  # nixpkgs-update: no auto update
+  version = "5.4.9.3";
 
-  src = fetchurl {
-    url = "https://github.com/JustArchiNET/ArchiSteamFarm/releases/download/${version}/ASF-generic.zip";
-    sha256 = "1q28byshh4wkfsfdb0sfdqq9a5da9k7i4nagsfpk0fzyajvzd4lx";
+  src = fetchFromGitHub {
+    owner = "JustArchiNET";
+    repo = "ArchiSteamFarm";
+    rev = version;
+    hash = "sha256-Yp8hnMIeV+ZHY6yISJdFd1yAQipQsU5vcXgxFDvkGnA=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper jq ];
+  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
 
-  sourceRoot = ".";
+  nugetDeps = ./deps.nix;
 
-  installPhase = ''
-    dist=$out/opt/asf
-    mkdir -p $dist
-    cp -r * $dist
+  projectFile = "ArchiSteamFarm.sln";
+  executables = [ "ArchiSteamFarm" ];
+  dotnetFlags = [
+    "-p:PublishSingleFile=true"
+    "-p:PublishTrimmed=true"
+  ];
+  dotnetInstallFlags = [
+    "--framework=net7.0"
+  ];
+  selfContainedBuild = true;
 
-    jq "del(.runtimeOptions.framework.version)" ArchiSteamFarm.runtimeconfig.json > $dist/ArchiSteamFarm.runtimeconfig.json
+  runtimeDeps = [ libkrb5 zlib openssl ];
 
-    makeWrapper ${dotnetCorePackages.aspnetcore_3_1}/bin/dotnet $out/bin/ArchiSteamFarm \
-      --add-flags $dist/ArchiSteamFarm.dll \
-      --add-flags "--path ~/.config/asf" \
-      --run "mkdir -p ~/.config/asf" \
-      --run "cd ~/.config/asf" \
-      --run "[ -d config ] || cp --no-preserve=mode -r $dist/config ." \
-      --run "[ -d logs ] || cp --no-preserve=mode -r $dist/logs ." \
-      --run "[ -d plugins ] || cp --no-preserve=mode -r $dist/plugins ." \
-      --run "ln -sf $dist/www ."
+  doCheck = true;
+
+  preBuild = ''
+    export projectFile=(ArchiSteamFarm)
   '';
+
+  preInstall = ''
+    # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
+    makeWrapperArgs+=(
+      --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
+      --set "ASF_PATH" "~/.config/archisteamfarm"
+    )
+  '';
+
+  postInstall = ''
+    buildPlugin() {
+      echo "Publishing plugin $1"
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/archisteamfarm/plugins/$1 --configuration Release \
+        -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore \
+        --framework=net7.0
+     }
+
+     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
+     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+  '';
+
+  passthru = {
+    # nix-shell maintainers/scripts/update.nix --argstr package ArchiSteamFarm
+    updateScript = ./update.sh;
+    ui = callPackage ./web-ui { };
+  };
 
   meta = with lib; {
     description = "Application with primary purpose of idling Steam cards from multiple accounts simultaneously";
     homepage = "https://github.com/JustArchiNET/ArchiSteamFarm";
     license = licenses.asl20;
-    platforms = dotnetCorePackages.aspnetcore_3_1.meta.platforms;
-    maintainers = with maintainers; [ ];
-    hydraPlatforms = [];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ SuperSandro2000 lom ];
   };
 }

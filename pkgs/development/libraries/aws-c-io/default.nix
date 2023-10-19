@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, s2n-tls, Security }:
+{ lib, stdenv, fetchFromGitHub, cmake, aws-c-cal, aws-c-common, nix, s2n-tls, Security }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
-  version = "0.9.1";
+  version = "0.13.29";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0lx72p9xmmnjkz4zkfb1lz0ibw0jsy52qpydhvn56bq85nv44rwx";
+    sha256 = "sha256-ZeogbjgpbqdCioLeb34CRol1Fa5BJOloAxxgE50yfQs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "AWS SDK for C module for IO and TLS";

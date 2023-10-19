@@ -1,82 +1,93 @@
 { lib
-, buildGoPackage
+, stdenv
+, buildGoModule
 , fetchurl
 , makeWrapper
 , git
 , bash
+, coreutils
+, gitea
 , gzip
 , openssh
 , pam
 , sqliteSupport ? true
 , pamSupport ? true
+, runCommand
+, brotli
+, xorg
 , nixosTests
 }:
 
-with lib;
-
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gitea";
-  version = "1.14.2";
+  version = "1.20.5";
 
   # not fetching directly from the git repo, because that lacks several vendor files for the web UI
   src = fetchurl {
-    url = "https://github.com/go-gitea/gitea/releases/download/v${version}/gitea-src-${version}.tar.gz";
-    sha256 = "sha256-0EvKk0/ro1YAqvc5yCt8vn2LkRoIbXrFTwcQtomoWsM=";
+    url = "https://dl.gitea.com/gitea/${version}/gitea-src-${version}.tar.gz";
+    hash = "sha256-cH/AHsFXOdvfSfj9AZUd3l/RlYE06o1ByZu0vvGQuXw=";
   };
 
-  unpackPhase = ''
-    mkdir source/
-    tar xvf $src -C source/
-  '';
-
-  sourceRoot = "source";
+  vendorHash = null;
 
   patches = [
     ./static-root-path.patch
   ];
 
   postPatch = ''
-    patchShebangs .
-    substituteInPlace modules/setting/setting.go --subst-var data
+    substituteInPlace modules/setting/server.go --subst-var data
   '';
+
+  subPackages = [ "." ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = optional pamSupport pam;
+  buildInputs = lib.optional pamSupport pam;
 
-  preBuild =
-    let
-      tags = optional pamSupport "pam"
-        ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
-      tagsString = concatStringsSep " " tags;
-    in
-    ''
-      export buildFlagsArray=(
-        -tags="${tagsString}"
-        -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
-      )
-    '';
+  tags = lib.optional pamSupport "pam"
+    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X 'main.Tags=${lib.concatStringsSep " " tags}'"
+  ];
 
   outputs = [ "out" "data" ];
 
   postInstall = ''
     mkdir $data
-    cp -R ./go/src/${goPackagePath}/{public,templates,options} $data
+    cp -R ./{public,templates,options} $data
     mkdir -p $out
-    cp -R ./go/src/${goPackagePath}/options/locale $out/locale
+    cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${lib.makeBinPath [ bash coreutils git gzip openssh ]}
   '';
 
-  goPackagePath = "code.gitea.io/gitea";
+  passthru = {
+    data-compressed = runCommand "gitea-data-compressed" {
+      nativeBuildInputs = [ brotli xorg.lndir ];
+    } ''
+      mkdir $out
+      lndir ${gitea.data}/ $out/
 
-  passthru.tests.gitea = nixosTests.gitea;
+      # Create static gzip and brotli files
+      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
+        -exec gzip --best --keep --force {} ';' \
+        -exec brotli --best --keep --no-copy-stat {} ';'
+    '';
 
-  meta = {
+    tests = nixosTests.gitea;
+  };
+
+  meta = with lib; {
     description = "Git with a cup of tea";
     homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ disassembler kolaente ma27 ];
+    maintainers = with maintainers; [ disassembler kolaente ma27 techknowlogick ];
+    broken = stdenv.isDarwin;
+    mainProgram = "gitea";
   };
 }

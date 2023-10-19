@@ -2,22 +2,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "peep";
-  version = "0.1.4";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "ryochack";
     repo = "peep";
     rev = "v${version}";
-    sha256 = "0c0fphnhq9vg9jjnkl35k56jbcnyz2ballsnkbm2xrh8vbyvk1av";
+    hash = "sha256-6Y7ZI0kIPE7uMMOkXgm75JMEec090xZPBJFJr9DaswA=";
   };
 
-  cargoPatches = [ ./0001-Add-Cargo.lock-by-running-cargo-vendor.patch ];
-  cargoSha256 = "12jqhvf8kdi17c442hl8sfpgxhni07x59khjwyyn54bnwc5h3zf9";
+  cargoHash = "sha256-CDWa03H8vWfhx2dwZU5rAV3fSwAGqCIPcvl+lTG4npE=";
 
   meta = with lib; {
     description = "The CLI text viewer tool that works like less command on small pane within the terminal window";
-    license = licenses.mit;
     homepage = "https://github.com/ryochack/peep";
-    maintainers = with maintainers; [ ma27 ];
+    changelog = "https://github.com/ryochack/peep/releases/tag/${src.rev}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ figsoda ];
   };
 }

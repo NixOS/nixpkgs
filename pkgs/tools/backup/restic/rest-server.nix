@@ -2,25 +2,21 @@
 
 buildGoModule rec {
   pname = "restic-rest-server";
-  version = "0.10.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "rest-server";
     rev = "v${version}";
-    sha256 = "1msa6mah76zfif5wp0129jjk2jlq5ff38p9p6d241mw45i1xjfy7";
+    hash = "sha256-0zmUI7LUKVXUdPsNxY7RQxbsAraY0GrTMAS3kORIU6I=";
   };
 
-  vendorSha256 = "04w63sx7p0fm9xq0m7xab808az7lgw7i3p8basndszky8kgvxhmg";
-
-  preCheck = ''
-    substituteInPlace handlers_test.go --replace "TestJoin" "SkipTestJoin"
-  '';
+  vendorHash = "sha256-tD5ffIYULMBqu99l1xCL0RnLB9zNpwNPs1qVFqezUc8=";
 
   meta = with lib; {
-    inherit (src.meta) homepage;
+    changelog = "https://github.com/restic/rest-server/blob/${src.rev}/CHANGELOG.md";
     description = "A high performance HTTP server that implements restic's REST backend API";
-    platforms = platforms.unix;
+    homepage = "https://github.com/restic/rest-server";
     license = licenses.bsd2;
     maintainers = with maintainers; [ dotlambda ];
   };

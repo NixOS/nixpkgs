@@ -1,27 +1,53 @@
-{ lib, stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, util-linux
-, gnugrep, gnutar, gnused, gzip, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, dpkg
+, gawk
+, perl
+, wget
+, binutils
+, bzip2
+, coreutils
+, util-linux
+, gnugrep
+, gnupg1
+, gnutar
+, gnused
+, gzip
+, xz
+, makeWrapper
+, nix-update-script
+, testers
+, debootstrap
+}:
+
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
 let binPath = lib.makeBinPath [
+    binutils
+    bzip2
     coreutils
     dpkg
     gawk
     gnugrep
+    gnupg1
     gnused
     gnutar
     gzip
     perl
     wget
+    xz
   ];
 in stdenv.mkDerivation rec {
   pname = "debootstrap";
-  version = "1.0.124";
+  version = "1.0.131";
 
-  src = fetchurl {
-    # git clone git://git.debian.org/d-i/debootstrap.git
-    # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.gz";
-    sha256 = "sha256-dwDphksp8WaybFQVPtjCdbRvS5pgRou2B+AZpkwWzY8=";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-rwNcrS2GzVs0JYxeHcpLMG9FDwSpthNmZIemn95hC6g=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -57,7 +83,15 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = debootstrap;
+    };
+  };
+
   meta = with lib; {
+    changelog = "https://salsa.debian.org/installer-team/debootstrap/-/blob/${version}/debian/changelog";
     description = "Tool to create a Debian system in a chroot";
     homepage = "https://wiki.debian.org/Debootstrap";
     license = licenses.mit;

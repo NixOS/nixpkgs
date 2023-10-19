@@ -24,6 +24,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   testScript = ''
     node0.wait_for_unit("freeswitch.service")
     # Wait for SIP port to be open
-    node0.wait_for_open_port("5060")
+    node0.wait_for_open_port(5060)
   '';
 })

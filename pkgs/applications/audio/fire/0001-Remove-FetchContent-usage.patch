@@ -1,0 +1,62 @@
+From fbf2ddd872db6a3640bc7d693356b99be9dd70f5 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <christoph.neidahl@gmail.com>
+Date: Thu, 18 Aug 2022 20:12:07 +0200
+Subject: [PATCH] Remove FetchContent usage
+
+---
+ CMakeLists.txt | 27 +++++----------------------
+ 1 file changed, 5 insertions(+), 22 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 84c66a7..5234903 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -30,20 +30,9 @@ project(Fire VERSION 0.9.9)
+ # or
+ # add_subdirectory(JUCE)                    # If you've put JUCE in a subdirectory called JUCE
+ 
+-include(FetchContent)
+-FetchContent_Declare(
+-        JUCE
+-        GIT_REPOSITORY https://github.com/juce-framework/JUCE.git
+-        GIT_TAG 7.0.1
+-)
+-FetchContent_MakeAvailable(JUCE)
+-
+-FetchContent_Declare(
+-        readerwriterqueue
+-        GIT_REPOSITORY https://github.com/cameron314/readerwriterqueue
+-        GIT_TAG v1.0.6
+-)
+-FetchContent_MakeAvailable(readerwriterqueue)
++add_subdirectory(JUCE EXCLUDE_FROM_ALL)
++
++add_subdirectory(readerwriterqueue EXCLUDE_FROM_ALL)
+ 
+ # If you are building a VST2 or AAX plugin, CMake needs to be told where to find these SDKs on your
+ # system. This setup should be done before calling `juce_add_plugin`.
+@@ -172,13 +161,7 @@ set(TestFiles
+         test/CatchMain.cpp
+         test/PluginTest.cpp)
+ 
+-# Download the tagged version of Catch2
+-Include(FetchContent)
+-FetchContent_Declare(
+-        Catch2
+-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+-        GIT_TAG v2.13.7)
+-FetchContent_MakeAvailable(Catch2)
++add_subdirectory(Catch2 EXCLUDE_FROM_ALL)
+ 
+ # Setup the test executable, again C++ 20 please
+ add_executable(Tests ${TestFiles})
+@@ -199,4 +182,4 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/test PREFIX "" FILES ${TestFiles})
+ # We have to manually provide the source directory here for now
+ # https://github.com/catchorg/Catch2/issues/2026
+ include(${Catch2_SOURCE_DIR}/contrib/Catch.cmake)
+-catch_discover_tests(Tests)
+\ No newline at end of file
++catch_discover_tests(Tests)
+-- 
+2.36.0
+

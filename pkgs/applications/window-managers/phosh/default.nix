@@ -1,17 +1,23 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, gitUpdater
 , meson
 , ninja
 , pkg-config
 , python3
 , wrapGAppsHook
+, libadwaita
 , libhandy
 , libxkbcommon
+, libgudev
+, callaudiod
 , pulseaudio
+, evince
 , glib
-, gtk3
+, gtk4
 , gnome
+, gnome-desktop
 , gcr
 , pam
 , systemd
@@ -24,50 +30,26 @@
 , networkmanager
 , polkit
 , libsecret
-, writeText
+, evolution-data-server
+, nixosTests
 }:
 
-let
-  gvc = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libgnome-volume-control";
-    rev = "ae1a34aafce7026b8c0f65a43c9192d756fe1057";
-    sha256 = "0a4qh5pgyjki904qf7qmvqz2ksxb0p8xhgl2aixfbhixn0pw6saw";
-  };
-
-  executable = writeText "phosh" ''
-    PHOC_INI=@out@/share/phosh/phoc.ini
-    GNOME_SESSION_ARGS="--disable-acceleration-check --session=phosh --debug"
-
-    if [ -f /etc/phosh/phoc.ini ]; then
-      PHOC_INI=/etc/phosh/phoc.ini
-    elif  [ -f /etc/phosh/rootston.ini ]; then
-      # honor old configs
-      PHOC_INI=/etc/phosh/rootston.ini
-    fi
-
-    # Run gnome-session through a login shell so it picks
-    # variables from /etc/profile.d (XDG_*)
-    [ -n "$WLR_BACKENDS" ] || WLR_BACKENDS=drm,libinput
-    export WLR_BACKENDS
-    exec "${phoc}/bin/phoc" -C "$PHOC_INI" \
-      -E "bash -lc 'XDG_DATA_DIRS=$XDG_DATA_DIRS:\$XDG_DATA_DIRS ${gnome.gnome-session}/bin/gnome-session $GNOME_SESSION_ARGS'"
-  '';
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "phosh";
-  version = "0.10.2";
+  version = "0.32.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07i8wpzl7311dcf9s57s96qh1v672c75wv6cllrxx7fsmpf8fhx4";
+    fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
+    sha256 = "sha256-4LsB/7zKRkoxNQQVxwrSSIqGP7KQ0WHBnSVY+ClWTxo=";
   };
 
   nativeBuildInputs = [
+    libadwaita
     meson
     ninja
     pkg-config
@@ -76,19 +58,23 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    evince
     phoc
     libhandy
     libsecret
     libxkbcommon
+    libgudev
+    callaudiod
+    evolution-data-server
     pulseaudio
     glib
     gcr
     networkmanager
     polkit
     gnome.gnome-control-center
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-session
-    gtk3
+    gtk4
     pam
     systemd
     upower
@@ -96,7 +82,7 @@ in stdenv.mkDerivation rec {
     feedbackd
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
     xvfb-run
   ];
@@ -104,55 +90,53 @@ in stdenv.mkDerivation rec {
   # Temporarily disabled - Test is broken (SIGABRT)
   doCheck = false;
 
-  postUnpack = ''
-    rmdir $sourceRoot/subprojects/gvc
-    ln -s ${gvc} $sourceRoot/subprojects/gvc
-  '';
-
-  postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
-  '';
+  mesonFlags = [
+    "-Dsystemd=true"
+    "-Dcompositor=${phoc}/bin/phoc"
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
+  ];
 
   checkPhase = ''
     runHook preCheck
     export NO_AT_BRIDGE=1
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --print-errorlogs
     runHook postCheck
-  '';
-
-  # Replace the launcher script with ours
-  postInstall = ''
-    substituteAll ${executable} $out/bin/phosh
   '';
 
   # Depends on GSettings schemas in gnome-shell
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gnome.gnome-shell}/share/gsettings-schemas/${gnome.gnome-shell.name}"
+      --set GNOME_SESSION "${gnome.gnome-session}/bin/gnome-session"
     )
   '';
 
   postFixup = ''
     mkdir -p $out/share/wayland-sessions
     ln -s $out/share/applications/sm.puri.Phosh.desktop $out/share/wayland-sessions/
-    # The OSK0.desktop points to a dummy stub that's not needed
-    rm $out/share/applications/sm.puri.OSK0.desktop
   '';
 
   passthru = {
     providedSessions = [
-     "sm.puri.Phosh"
+      "sm.puri.Phosh"
     ];
+
+    tests.phosh = nixosTests.phosh;
+
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = with lib; {
     description = "A pure Wayland shell prototype for GNOME on mobile devices";
-    homepage = "https://source.puri.sm/Librem5/phosh";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phosh";
+    changelog = "https://gitlab.gnome.org/World/Phosh/phosh/-/blob/v${version}/debian/changelog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ archseer jtojnar masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffglue";
-  version = "0.12.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2LyCiW1MrAahpbzyxot0INPMzo0Vl/JToMZTinCQdgs=";
+    sha256 = "sha256-8SkwdPaKHf0ZE/MeM4yOe2CpQvZzIHf5d06iM7KPAT8=";
   };
 
-  cargoSha256 = "sha256-AGwiyC7Zf8KHQIHfHByL06sdbS4vEXUyj1wGw7Q1N9I=";
+  cargoSha256 = "sha256-UGvFLW48sakNuV3eXBpCxaHOrveQPXkynOayMK6qs4g=";
 
   nativeBuildInputs = [ pkg-config ];
 

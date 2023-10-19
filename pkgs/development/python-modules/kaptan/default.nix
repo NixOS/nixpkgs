@@ -7,20 +7,22 @@
 
 buildPythonPackage rec {
   pname = "kaptan";
-  version = "0.5.12";
+  version = "0.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1abd1f56731422fce5af1acc28801677a51e56f5d3c3e8636db761ed143c3dd2";
+    sha256 = "sha256-EBMwpE/e3oiFhvMBC9FFwOxIpIBrxWQp+lSHpndAIfg=";
   };
 
   postPatch = ''
     sed -i "s/==.*//g" requirements/test.txt
+
+    substituteInPlace requirements/base.txt --replace 'PyYAML>=3.13,<6' 'PyYAML>=3.13'
   '';
 
   propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "Configuration manager for python applications";

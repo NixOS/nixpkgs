@@ -1,48 +1,84 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , click
 , cloudpickle
 , dask
+, fetchFromGitHub
+, jinja2
+, locket
 , msgpack
+, packaging
 , psutil
-, six
+, pythonOlder
+, pyyaml
+, setuptools
+, setuptools-scm
 , sortedcontainers
 , tblib
 , toolz
 , tornado
+, urllib3
+, versioneer
+, wheel
 , zict
-, pyyaml
-, mpi4py
-, bokeh
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2021.3.0";
-  disabled = pythonOlder "3.6";
+  version = "2023.8.1";
+  format = "pyproject";
 
-  # get full repository need conftest.py to run tests
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-Qn/n4Ee7rXQTxl1X5W+k1rHPkh/SBqPSyquUv5FTw9s=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "dask";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-HJyqDi5MqxEjAWWv8ZqNGAzeFn5rZGPwiDz5KaCm6Xk=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "versioneer[toml]==" "versioneer[toml]>=" \
+      --replace 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    versioneer
+  ] ++ versioneer.optional-dependencies.toml;
+
   propagatedBuildInputs = [
-      click cloudpickle dask msgpack psutil six
-      sortedcontainers tblib toolz tornado zict pyyaml mpi4py bokeh
+    click
+    cloudpickle
+    dask
+    jinja2
+    locket
+    msgpack
+    packaging
+    psutil
+    pyyaml
+    sortedcontainers
+    tblib
+    toolz
+    tornado
+    urllib3
+    zict
   ];
 
-  # when tested random tests would fail and not repeatably
+  # When tested random tests would fail and not repeatably
   doCheck = false;
-  pythonImportsCheck = [ "distributed" ];
+
+  pythonImportsCheck = [
+    "distributed"
+  ];
 
   meta = with lib; {
-    description = "Distributed computation in Python.";
-    homepage = "https://distributed.readthedocs.io/en/latest/";
+    description = "Distributed computation in Python";
+    homepage = "https://distributed.readthedocs.io/";
+    changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
-    platforms = platforms.x86; # fails on aarch64
-    maintainers = with maintainers; [ teh costrouc ];
+    maintainers = with maintainers; [ teh ];
   };
 }

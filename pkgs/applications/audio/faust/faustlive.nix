@@ -1,34 +1,33 @@
 { lib, stdenv, fetchFromGitHub
-, llvm, qt48Full, qrencode, libmicrohttpd_0_9_70, libjack2, alsaLib, faust, curl
-, bc, coreutils, which, libsndfile, pkg-config
+, llvm_10, qt5, qrencode, libmicrohttpd, libjack2, alsa-lib, faust, curl
+, bc, coreutils, which, libsndfile, flac, libogg, libvorbis, libopus, pkg-config, libxcb, cmake, gnutls, libtasn1, p11-kit
 }:
 
 stdenv.mkDerivation rec {
   pname = "faustlive";
-  version = "unstable-dev-2020-08-03";
+  version = "2.5.13";
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faustlive";
-    rev = "c16565dc1b616ac0aad7c303c1997fa9e57177ab";
-    sha256 = "1ys661lp1xwz21vy12kwkg248jvjq1z9w433knkh0ldyy2igvmd5";
+    rev = version;
+    sha256 = "sha256-Tgb9UYj8mI4JsxA/PaTokm2NzQ14P8cOdKK8KCcnSIQ=";
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ pkg-config qt5.wrapQtAppsHook cmake ];
+
   buildInputs = [
-    llvm qt48Full qrencode libmicrohttpd_0_9_70 libjack2 alsaLib faust curl
-    bc coreutils which libsndfile pkg-config
+    llvm_10 qt5.qtbase qrencode libmicrohttpd libjack2 alsa-lib faust curl
+    bc coreutils which libsndfile flac libogg libvorbis libopus libxcb gnutls libtasn1 p11-kit
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  postPatch = "cd Build";
-
-  installPhase = ''
-    install -d "$out/bin"
-    install -d "$out/share/applications"
-    install FaustLive/FaustLive "$out/bin"
-    install rsrc/FaustLive.desktop "$out/share/applications"
+  postInstall = ''
+    wrapProgram $out/bin/FaustLive --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libmicrohttpd libsndfile faust llvm_10 ]}"
   '';
+
+  postPatch = "cd Build";
 
   meta = with lib; {
     description = "A standalone just-in-time Faust compiler";
@@ -39,5 +38,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://faust.grame.fr/";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ magnetophon ];
   };
 }

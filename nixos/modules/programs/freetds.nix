@@ -17,7 +17,7 @@ in
     environment.freetds = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { MYDATABASE = '''
             host = 10.0.2.100
             port = 1433
@@ -26,7 +26,7 @@ in
         }
       '';
       description =
-        ''
+        lib.mdDoc ''
         Configure freetds database entries. Each attribute denotes
         a section within freetds.conf, and the value (a string) is the config
         content for that section. When at least one entry is configured

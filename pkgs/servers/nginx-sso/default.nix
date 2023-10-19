@@ -1,18 +1,21 @@
-{ buildGoPackage, fetchFromGitHub, lib, nixosTests }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "nginx-sso";
-  version = "0.25.0";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/Luzifer/nginx-sso";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "Luzifer";
     repo = "nginx-sso";
-    sha256 = "0z5h92rpr1rcfk11ggsb9w4ipg93fcb9byll7vl4c0mfcqkpm2dr";
+    rev = "v${version}";
+    hash = "sha256-Lpaqcxw1q609rYuEd1zrAKXE0GDEi72wl2eoFezvrV8=";
   };
+
+  vendorHash = "sha256-XReXxugMfR2l2LMTvXpSJa7Z9BX7LytwYdYNijPtciE=";
 
   postInstall = ''
     mkdir -p $out/share
@@ -28,6 +31,6 @@ buildGoPackage rec {
     homepage = "https://github.com/Luzifer/nginx-sso";
     license = licenses.asl20;
     maintainers = with maintainers; [ delroth ];
-    platforms = platforms.unix;
+    mainProgram = "nginx-sso";
   };
 }

@@ -1,25 +1,43 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , fonttools
-, pytest, pytestrunner
+, setuptools-scm
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "fontMath";
-  version = "0.6.0";
+  pname = "fontmath";
+  version = "0.9.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "09xdqdjyjlx5k9ymi36d7hkgvn55zzjzd65l2yqidkfazlmh14ss";
+    pname = "fontMath";
+    inherit version;
+    hash = "sha256-alOHy3/rEFlY2y9c7tyHhRPMNb83FeJiCQ8FV74MGxw=";
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ fonttools ];
-  checkInputs = [ pytest pytestrunner ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    fonttools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "A collection of objects that implement fast font, glyph, etc. math";
     homepage = "https://github.com/robotools/fontMath/";
+    changelog = "https://github.com/robotools/fontMath/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }

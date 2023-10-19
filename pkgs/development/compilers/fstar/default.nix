@@ -1,48 +1,84 @@
-{ lib, stdenv, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles }:
+{ lib, stdenv, writeScript, fetchFromGitHub, z3, ocamlPackages, makeWrapper, installShellFiles, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
   pname = "fstar";
-  version = "0.9.6.0";
+  version = "2023.04.25";
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
-    sha256 = "0wix7l229afkn6c6sk4nwkfq0nznsiqdkds4ixi2yyf72immwmmb";
+    hash = "sha256-LF8eXi/es337QJ2fs5u9pLqegJkh1kDLjK8p4CcSGGc=";
   };
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    z3
+    makeWrapper
+    installShellFiles
+    removeReferencesTo
+  ] ++ (with ocamlPackages; [
+    ocaml
+    dune_3
+    findlib
+    ocamlbuild
+    menhir
+  ]);
 
   buildInputs = with ocamlPackages; [
-    z3 ocaml findlib batteries menhir stdint
-    zarith camlp4 yojson pprint
-    ulex ocaml-migrate-parsetree process ppx_deriving ppx_deriving_yojson ocamlbuild
+    batteries
+    zarith
+    stdint
+    yojson
+    fileutils
+    menhirLib
+    pprint
+    sedlex
+    ppxlib
+    ppx_deriving
+    ppx_deriving_yojson
+    process
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  preBuild = ''
-    patchShebangs src/tools
-    patchShebangs bin
+  enableParallelBuilding = true;
+
+  postPatch = ''
+    patchShebangs ulib/install-ulib.sh
   '';
-  buildFlags = [ "-C" "src/ocaml-output" ];
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/fstarlib
   '';
-  installFlags = [ "-C" "src/ocaml-output" ];
   postInstall = ''
+    # Remove build artifacts
+    find $out -name _build -type d | xargs -I{} rm -rf "{}"
+    remove-references-to -t '${ocamlPackages.ocaml}' $out/bin/fstar.exe
+
     wrapProgram $out/bin/fstar.exe --prefix PATH ":" "${z3}/bin"
     installShellCompletion --bash .completion/bash/fstar.exe.bash
     installShellCompletion --fish .completion/fish/fstar.exe.fish
     installShellCompletion --zsh --name _fstar.exe .completion/zsh/__fstar.exe
   '';
 
+  passthru.updateScript = writeScript "update-fstar" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p git gnugrep common-updater-scripts
+      set -eu -o pipefail
+
+      version="$(git ls-remote --tags git@github.com:FStarLang/FStar.git | grep -Po 'v\K\d{4}\.\d{2}\.\d{2}' | sort | tail -n1)"
+      update-source-version fstar "$version"
+  '';
+
   meta = with lib; {
     description = "ML-like functional programming language aimed at program verification";
     homepage = "https://www.fstar-lang.org";
+    changelog = "https://github.com/FStarLang/FStar/raw/v${version}/CHANGES.md";
     license = licenses.asl20;
+    maintainers = with maintainers; [ gebner pnmadelaine ];
+    mainProgram = "fstar.exe";
     platforms = with platforms; darwin ++ linux;
-    maintainers = with maintainers; [ gebner ];
   };
 }

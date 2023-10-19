@@ -9,25 +9,24 @@
 , gobject-introspection
 , wrapGAppsHook
 , glib
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mate-tweak";
-  version = "21.04.3";
+  version = "22.10.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
     repo = pname;
     rev = version;
-    sha256 = "0vpzy7awhb1xfsdjsrchy5b9dygj4ixdcvgx5v5w8hllmi4yxpc1";
+    sha256 = "emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook
     intltool
-    python3Packages.distutils_extra
+    python3Packages.distutils-extra
     gobject-introspection
   ];
 
@@ -74,11 +73,7 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    attrPath = "mate.${pname}";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Tweak tool for the MATE Desktop";
@@ -86,6 +81,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/ubuntu-mate/mate-tweak/releases/tag/${version}";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = teams.mate.members ++ (with maintainers; [ luc65r ]);
   };
 }

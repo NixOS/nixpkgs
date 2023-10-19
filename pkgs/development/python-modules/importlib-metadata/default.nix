@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools
 , setuptools-scm
 , typing-extensions
 , toml
@@ -10,16 +11,21 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "3.7.3";
-  disabled = pythonOlder "3.6";
+  version = "6.8.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "742add720a20d0467df2f444ae41704000f50e1234f46174b51f9c6031a1bd71";
+    hash = "sha256-26zniS2MDErBrQlmYiMvgx1OZPTEVFvVMBaj6dRlR0M=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools # otherwise cross build fails
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     toml
@@ -30,12 +36,15 @@ buildPythonPackage rec {
 
   # Cyclic dependencies due to pyflakefs
   doCheck = false;
-  pythonImportsCheck = [ "importlib_metadata" ];
+
+  pythonImportsCheck = [
+    "importlib_metadata"
+  ];
 
   meta = with lib; {
     description = "Read metadata from Python packages";
     homepage = "https://importlib-metadata.readthedocs.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab AndersonTorres ];
   };
 }

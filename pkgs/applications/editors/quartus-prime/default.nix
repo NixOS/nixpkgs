@@ -1,113 +1,28 @@
-{ buildFHSUserEnv, makeDesktopItem, writeScript, stdenv, lib, requireFile, unstick,
-  supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ] }:
+{ lib, buildFHSEnv, callPackage, makeDesktopItem, writeScript, runtimeShell
+, runCommand, quartus-prime-lite
+, supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
+, unwrapped ? callPackage ./quartus.nix { inherit supportedDevices; }
+}:
 
 let
-  deviceIds = {
-    "Arria II" = "arria_lite";
-    "Cyclone V" = "cyclonev";
-    "Cyclone IV" = "cyclone";
-    "Cyclone 10 LP" = "cyclone10lp";
-    "MAX II/V" = "max";
-    "MAX 10 FPGA" = "max10";
-  };
-
-  supportedDeviceIds =
-    assert lib.assertMsg (lib.all (name: lib.hasAttr name deviceIds) supportedDevices)
-      "Supported devices are: ${lib.concatStringsSep ", " (lib.attrNames deviceIds)}";
-    lib.listToAttrs (map (name: {
-      inherit name;
-      value = deviceIds.${name};
-    }) supportedDevices);
-
-  unsupportedDeviceIds = lib.filterAttrs (name: value:
-    !(lib.hasAttr name supportedDeviceIds)
-  ) deviceIds;
-
-  quartus = stdenv.mkDerivation rec {
-    version = "20.1.0.711";
-    pname = "quartus-prime-lite-unwrapped";
-
-    src = let
-      require = {name, sha256}: requireFile {
-        inherit name sha256;
-        url = "${meta.homepage}/${lib.versions.majorMinor version}/?edition=lite&platform=linux";
-      };
-
-      hashes = {
-        "arria_lite" = "09g2knq23h3vj0s5y7hsdnqbbkr3pnv53dzpqcw2lq9mb5zfs9r0";
-        "cyclonev" = "05hrpysasyfb7xhxg68spdffxyvxcx0iagibd5jz643b7n6aalpa";
-        "cyclone" = "1x3rnwsvzrb5kwdz35sbcabxmcvj8xxpnjlpcjwfc69ybiyr6sgz";
-        "cyclone10lp" = "1x6d4hm697mjgzaxixrw5va8anr6ihhx96x2524r6axpwqf6wcja";
-        "max" = "060b7v0xh86kkjyiix7akfkzhx2kl1b3q117kp7xibnz6yrzwmy3";
-        "max10" = "05840l9pmqa4i1b3ajfaxkqz1hppls556vbq16a42acz2qs2g578";
-      };
-
-      devicePackages = map (id: {
-        name = "${id}-${version}.qdz";
-        sha256 = lib.getAttr id hashes;
-      }) (lib.attrValues supportedDeviceIds);
-    in map require ([{
-      name = "QuartusLiteSetup-${version}-linux.run";
-      sha256 = "07ssrv8p8kacal6xd80n4h7l5xz13aw1m1gfqqaxig0ivsj971z5";
-    } {
-      name = "ModelSimSetup-${version}-linux.run";
-      sha256 = "0smxasrmr1c8k6hy378knskpjmz4cgpgb35v5jclns0kx68y3c42";
-    }] ++ devicePackages);
-
-    nativeBuildInputs = [ unstick ];
-
-    buildCommand = let
-      installers = lib.sublist 0 2 src;
-      components = lib.sublist 2 ((lib.length src) - 2) src;
-      copyInstaller = installer: ''
-        # `$(cat $NIX_CC/nix-support/dynamic-linker) $src[0]` often segfaults, so cp + patchelf
-        cp ${installer} $TEMP/${installer.name}
-        chmod u+w,+x $TEMP/${installer.name}
-        patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $TEMP/${installer.name}
-      '';
-      copyComponent = component: "cp ${component} $TEMP/${component.name}";
-      # leaves enabled: quartus, modelsim_ase, devinfo
-      disabledComponents = [
-        "quartus_help"
-        "quartus_update"
-        # not modelsim_ase
-        "modelsim_ae"
-      ] ++ (lib.attrValues unsupportedDeviceIds);
-    in ''
-      ${lib.concatMapStringsSep "\n" copyInstaller installers}
-      ${lib.concatMapStringsSep "\n" copyComponent components}
-
-      unstick $TEMP/${(builtins.head installers).name} \
-        --disable-components ${lib.concatStringsSep "," disabledComponents} \
-        --mode unattended --installdir $out --accept_eula 1
-
-      rm -r $out/uninstall $out/logs
-    '';
-
-    meta = {
-      homepage = "https://fpgasoftware.intel.com";
-      description = "FPGA design and simulation software";
-      license = lib.licenses.unfree;
-      platforms = lib.platforms.linux;
-      hydraPlatforms = [ ]; # requireFile srcs cannot be fetched by hydra, ignore
-      maintainers = with lib.maintainers; [ kwohlfahrt ];
-    };
-  };
-
   desktopItem = makeDesktopItem {
     name = "quartus-prime-lite";
     exec = "quartus";
     icon = "quartus";
     desktopName = "Quartus";
     genericName = "Quartus Prime";
-    categories = "Development;";
+    categories = [ "Development" ];
   };
-
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-in buildFHSUserEnv rec {
+in buildFHSEnv rec {
   name = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
+    (runCommand "ld-lsb-compat" {} ''
+      mkdir -p "$out/lib"
+      ln -sr "${glibc}/lib/ld-linux-x86-64.so.2" "$out/lib/ld-lsb-x86-64.so.3"
+      ln -sr "${pkgsi686Linux.glibc}/lib/ld-linux.so.2" "$out/lib/ld-lsb.so.3"
+    '')
     # quartus requirements
     glib
     xorg.libICE
@@ -117,6 +32,10 @@ in buildFHSUserEnv rec {
     xorg.libXtst
     xorg.libXi
   ];
+
+  # Also support 32-bit executables.
+  multiArch = true;
+
   multiPkgs = pkgs: with pkgs; let
     # This seems ugly - can we override `libpng = libpng12` for all `pkgs`?
     freetype = pkgs.freetype.override { libpng = libpng12; };
@@ -134,45 +53,71 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXext
     xorg.libXrender
+    libudev0-shim
+    libxcrypt-legacy
   ];
 
-  passthru = {
-    unwrapped = quartus;
-  };
-
-  extraInstallCommands = let
-    quartusExecutables = (map (c: "quartus/bin/quartus_${c}") [
-      "asm" "cdb" "cpf" "drc" "eda" "fit" "jbcc" "jli" "map" "pgm" "pow"
-      "sh" "si" "sim" "sta" "stp" "tan"
-    ]) ++ [ "quartus/bin/quartus" ];
-
-    qsysExecutables = map (c: "quartus/sopc_builder/bin/qsys-${c}") [
-      "generate" "edit" "script"
-    ];
-    # Should we install all executables ?
-    modelsimExecutables = map (c: "modelsim_ase/bin/${c}") [
-      "vsim" "vlog" "vlib"
-    ];
-  in ''
+  extraInstallCommands = ''
     mkdir -p $out/share/applications $out/share/icons/128x128
     ln -s ${desktopItem}/share/applications/* $out/share/applications
-    ln -s ${quartus}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
+    ln -s ${unwrapped}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
 
-    mkdir -p $out/quartus/bin $out/quartus/sopc_builder/bin $out/modelsim_ase/bin
-    WRAPPER=$out/bin/${name}
-    EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
-    for executable in $EXECUTABLES; do
-        echo "#!${stdenv.shell}" >> $out/$executable
-        echo "$WRAPPER ${quartus}/$executable \$@" >> $out/$executable
+    progs_to_wrap=(
+      "${unwrapped}"/quartus/bin/*
+      "${unwrapped}"/quartus/sopc_builder/bin/qsys-{generate,edit,script}
+      # Should we install all executables?
+      "${unwrapped}"/modelsim_ase/bin/{vsim,vlog,vlib,vcom,vdel,vmap}
+      "${unwrapped}"/modelsim_ase/linuxaloem/lmutil
+    )
+
+    wrapper=$out/bin/${name}
+    progs_wrapped=()
+    for prog in ''${progs_to_wrap[@]}; do
+        relname="''${prog#"${unwrapped}/"}"
+        wrapped="$out/$relname"
+        progs_wrapped+=("$wrapped")
+        mkdir -p "$(dirname "$wrapped")"
+        echo "#!${runtimeShell}" >> "$wrapped"
+        case "$relname" in
+            modelsim_ase/*)
+                echo "export NIXPKGS_IS_MODELSIM_WRAPPER=1" >> "$wrapped"
+                ;;
+        esac
+        echo "$wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
     cd $out
-    chmod +x $EXECUTABLES
+    chmod +x ''${progs_wrapped[@]}
     # link into $out/bin so executables become available on $PATH
-    ln --symbolic --relative --target-directory ./bin $EXECUTABLES
+    ln --symbolic --relative --target-directory ./bin ''${progs_wrapped[@]}
   '';
 
-  runScript = writeScript "${name}-wrapper" ''
-    exec $@
+  profile = ''
+    # LD_PRELOAD fixes issues in the licensing system that cause memory corruption and crashes when
+    # starting most operations in many containerized environments, including WSL2, Docker, and LXC
+    # (a similiar fix involving LD_PRELOADing tcmalloc did not solve the issue in my situation)
+    # we use the name so that quartus can load the 64 bit verson and modelsim can load the 32 bit version
+    # https://community.intel.com/t5/Intel-FPGA-Software-Installation/Running-Quartus-Prime-Standard-on-WSL-crashes-in-libudev-so/m-p/1189032
+    #
+    # But, as can be seen in the above resource, LD_PRELOADing libudev breaks
+    # compiling encrypted device libraries in ModelSim (with error
+    # `(vlog-2163) Macro `<protected> is undefined.`), so only use LD_PRELOAD
+    # for non-ModelSim wrappers.
+    if [ "$NIXPKGS_IS_MODELSIM_WRAPPER" != 1 ]; then
+        export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}libudev.so.0
+    fi
   '';
+
+  # Run the wrappers directly, instead of going via bash.
+  runScript = "";
+
+  passthru = {
+    inherit unwrapped;
+    tests = {
+      modelsimEncryptedModel = runCommand "quartus-prime-lite-test-modelsim-encrypted-model" {} ''
+        "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/modelsim_ase/altera/verilog/src/arriav_atoms_ncrypt.v"
+        touch "$out"
+      '';
+    };
+  };
 }

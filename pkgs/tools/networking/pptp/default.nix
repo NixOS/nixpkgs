@@ -13,22 +13,30 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'install -o root' 'install'
   '';
 
-  preConfigure = ''
-    makeFlagsArray=( IP=${iproute2}/bin/ip PPPD=${ppp}/sbin/pppd \
-                     BINDIR=$out/sbin MANDIR=$out/share/man/man8 \
-                     PPPDIR=$out/etc/ppp )
-  '';
+  makeFlags = [
+    "CC:=$(CC)"
+    "IP=${iproute2}/bin/ip"
+    "PPPD=${ppp}/bin/pppd"
+    "BINDIR=${placeholder "out"}/sbin"
+    "MANDIR=${placeholder "out"}/share/man/man8"
+    "PPPDIR=${placeholder "out"}/etc/ppp"
+  ];
 
-  buildInputs = [ perl ];
+  strictDeps = true;
 
-  postFixup = ''
-    patchShebangs $out
-  '';
+  nativeBuildInputs = [
+    perl # pod2man
+  ];
+
+  buildInputs = [
+    perl # in shebang of pptpsetup
+  ];
 
   meta = with lib; {
     description = "PPTP client for Linux";
-    homepage = "http://pptpclient.sourceforge.net/";
+    homepage = "https://pptpclient.sourceforge.net/";
     license = licenses.gpl2;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ nickcao ];
   };
 }

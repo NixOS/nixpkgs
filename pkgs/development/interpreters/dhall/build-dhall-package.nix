@@ -37,12 +37,18 @@
   #
   # If `null`, then no documentation is generated.
 , documentationRoot ? null
+
+  # Base URL prepended to paths copied to the clipboard
+  #
+  # This is used in conjunction with `documentationRoot`, and is unused if
+  # `documentationRoot` is `null`.
+, baseImportUrl ? null
 }:
 
 let
   # HTTP support is disabled in order to force that HTTP dependencies are built
   # using Nix instead of using Dhall's support for HTTP imports.
-  dhallNoHTTP = haskell.lib.appendConfigureFlag dhall "-f-with-http";
+  dhallNoHTTP = haskell.lib.compose.appendConfigureFlag "-f-with-http" dhall;
 
   file = writeText "${name}.dhall" code;
 
@@ -85,6 +91,12 @@ in
     ${lib.optionalString (documentationRoot != null) ''
     mkdir -p $out/${dataDhall}
 
-    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --input '${documentationRoot}' --package-name '${name}' --output-link $out/docs
+    XDG_DATA_HOME=$out/${data} ${dhall-docs}/bin/dhall-docs --output-link $out/docs ${lib.cli.toGNUCommandLineShell { } {
+      base-import-url = baseImportUrl;
+
+      input = documentationRoot;
+
+      package-name = name;
+    }}
     ''}
   ''

@@ -1,23 +1,23 @@
-{ fetchurl, lib, stdenv, libiconv }:
+{ fetchurl, lib, stdenv, libiconv
+, testers
+}:
 
-stdenv.mkDerivation rec {
-  name = "libidn-1.36";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "libidn";
+  version = "1.41";
 
   src = fetchurl {
-    url = "mirror://gnu/libidn/${name}.tar.gz";
-    sha256 = "0f20n634whpmdwr81c2r0vxxjwchgkvhsr1i8s2bm0ad6h473dhl";
+    url = "mirror://gnu/libidn/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-iE1wY2S4Gr3Re+6Whtj/KudDHFoUZRBHxorfizH9iUU=";
   };
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
-
-  # broken with gcc-7
-  #doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isMusl;
 
   hardeningDisable = [ "format" ];
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  doCheck = false; # fails
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {
     homepage = "https://www.gnu.org/software/libidn/";
@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
       included.
     '';
 
-    repositories.git = "git://git.savannah.gnu.org/libidn.git";
     license = lib.licenses.lgpl2Plus;
+    pkgConfigModules = [ "libidn" ];
     platforms = lib.platforms.all;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ lsix ];
   };
-}
+})

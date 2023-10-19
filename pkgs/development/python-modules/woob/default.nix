@@ -1,82 +1,85 @@
 { lib
+, babel
 , buildPythonPackage
-, fetchPypi
-, isPy27
-, Babel
-, colorama
-, cssselect
-, dateutil
-, feedparser
-, gdata
+, fetchFromGitLab
+, fetchpatch
 , gnupg
-, google-api-python-client
 , html2text
 , libyaml
 , lxml
-, mechanize
 , nose
-, pdfminer
+, packaging
 , pillow
 , prettytable
-, pyqt5
+, pycountry
+, python-dateutil
+, pythonOlder
 , pyyaml
 , requests
-, simplejson
+, rich
 , termcolor
+, testers
 , unidecode
+, woob
 }:
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.0";
-  disabled = isPy27;
+  version = "3.6";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09hpxy5zhn2b8li0xjf3zd7s46lawb0315p5mdcsci3bj3s4v1j7";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitLab {
+    owner = "woob";
+    repo = pname;
+    rev = version;
+    hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
   };
 
-  patches = [
-    # Disable doctests that require networking:
-    ./no-test-requiring-network.patch
+  nativeBuildInputs = [
+    packaging
   ];
 
-  checkInputs = [ nose ];
-
-  nativeBuildInputs = [ pyqt5 ];
-
   propagatedBuildInputs = [
-    Babel
-    colorama
-    cssselect
-    dateutil
-    feedparser
-    gdata
+    babel
+    python-dateutil
     gnupg
-    google-api-python-client
     html2text
     libyaml
     lxml
-    mechanize
-    pdfminer
+    packaging
     pillow
     prettytable
-    pyqt5
+    pycountry
     pyyaml
     requests
-    simplejson
+    rich
     termcolor
     unidecode
+  ];
+
+  nativeCheckInputs = [
+    nose
   ];
 
   checkPhase = ''
     nosetests
   '';
 
+  pythonImportsCheck = [
+    "woob"
+  ];
+
+  passthru.tests.version = testers.testVersion {
+    package = woob;
+    version = "v${version}";
+  };
+
   meta = with lib; {
+    description = "Collection of applications and APIs to interact with websites";
     homepage = "https://woob.tech";
-    description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
     license = licenses.lgpl3Plus;
-    maintainers = [ maintainers.DamienCassou ];
- };
+    maintainers = with maintainers; [ DamienCassou ];
+  };
 }

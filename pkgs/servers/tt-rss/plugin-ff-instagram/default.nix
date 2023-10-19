@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "tt-rss-plugin-ff-instagram";
-  version = "git-2019-01-10"; # No release, see https://github.com/wltb/ff_instagram/issues/6
+  version = "unstable-2019-01-10"; # No release, see https://github.com/wltb/ff_instagram/issues/6
 
   src = fetchFromGitHub {
     owner = "wltb";

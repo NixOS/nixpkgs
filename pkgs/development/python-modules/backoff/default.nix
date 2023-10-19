@@ -1,21 +1,37 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, poetry, pytest-asyncio, }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pytest-asyncio
+, responses
+}:
 
 buildPythonPackage rec {
   pname = "backoff";
-  version = "1.10.0";
+  version = "2.2.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "litl";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1jj0l6pjx747d2yyvnzd3qbm4qr73sq6cc56dhvd8wqfbp5279x0";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-g8bYGJ6Kw6y3BUnuoP1IAye5CL0geH5l7pTb3xxq7jI=";
   };
 
-  format = "pyproject";
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  nativeBuildInputs = [ poetry ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    responses
+  ];
 
-  checkInputs = [ pytestCheckHook pytest-asyncio ];
+  pythonImportsCheck = [
+    "backoff"
+  ];
 
   meta = with lib; {
     description = "Function decoration for backoff and retry";

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi
-, chameleon, colander, iso8601, peppercorn, translationstring, zope_deprecation
+, chameleon, colander, iso8601, peppercorn, translationstring, zope-deprecation
 , nose, coverage, beautifulsoup4, flaky, pyramid, pytestCheckHook }:
 
 buildPythonPackage rec {
@@ -17,10 +17,10 @@ buildPythonPackage rec {
     iso8601
     peppercorn
     translationstring
-    zope_deprecation
+    zope-deprecation
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     coverage
     beautifulsoup4

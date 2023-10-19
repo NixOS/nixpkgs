@@ -1,7 +1,6 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
-, runtimeShell
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.
@@ -9,59 +8,41 @@
 # This is done because multiple derivations rely on these sources and they should
 # all get the same sources with the same patches applied.
 
-let
-  # Fetch a diff between `base` and `rev` on sage's git server.
-  # Used to fetch trac tickets by setting the `base` to the last release and the
-  # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, ...}@args: (
-    fetchpatch ({
-      inherit name sha256;
-      url = "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}";
-      # We don't care about sage's own build system (which builds all its dependencies).
-      # Exclude build system changes to avoid conflicts.
-      excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" ])
-  );
-in
 stdenv.mkDerivation rec {
-  version = "9.3";
+  version = "10.0";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-l9DX8jcDdKA7GJ6xU+nBsmlZxrcZ9ZUAJju621ooBEo=";
+    sha256 = "sha256-zN/Lo/GBCjYGemuaYpgG3laufN8te3wPjXMQ+Me9zgY=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # Make sure py2/py3 tests are only run when their expected context (all "sage"
-    # tests) are also run. That is necessary to test dochtml individually. See
-    # https://trac.sagemath.org/ticket/26110 for an upstream discussion.
-    # TODO: Determine if it is still necessary.
-    ./patches/Only-test-py2-py3-optional-tests-when-all-of-sage-is.patch
-
-    # Fixes a potential race condition which can lead to transient doctest failures.
-    ./patches/fix-ecl-race.patch
-
-    # Not necessary since library location is set explicitly
-    # https://trac.sagemath.org/ticket/27660#ticket
-    ./patches/do-not-test-find-library.patch
-
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
     ./patches/sphinx-docbuild-subprocesses.patch
+
+    # After updating smypow to (https://github.com/sagemath/sage/issues/3360)
+    # we can now set the cache dir to be within the .sage directory. This is
+    # not strictly necessary, but keeps us from littering in the user's HOME.
+    ./patches/sympow-cache.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
   # == "causes (transient) doctest failures / somebody complained".
   bugfixPatches = [
-    # To help debug the transient error in
-    # https://trac.sagemath.org/ticket/23087 when it next occurs.
-    ./patches/configurationpy-error-verbose.patch
+    # Sage uses mixed integer programs (MIPs) to find edge disjoint
+    # spanning trees. For some reason, aarch64 glpk takes much longer
+    # than x86_64 glpk to solve such MIPs. Since the MIP formulation
+    # has "numerous problems" and will be replaced by a polynomial
+    # algorithm soon, disable this test for now.
+    # https://github.com/sagemath/sage/issues/34575
+    ./patches/disable-slow-glpk-test.patch
   ];
 
   # Patches needed because of package updates. We could just pin the versions of
@@ -71,44 +52,70 @@ stdenv.mkDerivation rec {
   # should come from or be proposed to upstream. This list will probably never
   # be empty since dependencies update all the time.
   packageUpgradePatches = [
-    # After updating smypow to (https://trac.sagemath.org/ticket/3360) we can
-    # now set the cache dir to be withing the .sage directory. This is not
-    # strictly necessary, but keeps us from littering in the user's HOME.
-    ./patches/sympow-cache.patch
-
-    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
-    ./patches/ignore-cmp-deprecation.patch
-
-    # sphinx 3.5 pretty-prints code slightly differently than sphinx
-    # 3.1--3.3. a similar patch is available at the sphinx 4 ticket
-    # (https://trac.sagemath.org/ticket/31696), but sphinx 3.5 uses
-    # <code> tags while sphinx 4 uses <span> tags so we cannot just
-    # import the patch from trac.
-    ./patches/sphinx-3.5-code-output.patch
-
-    # remove use of matplotlib function deprecated in 3.4
-    # https://trac.sagemath.org/ticket/31827
-    (fetchSageDiff {
-      base = "9.3";
-      name = "remove-matplotlib-deprecated-function.patch";
-      rev = "32b2bcaefddc4fa3d2aee6fa690ce1466cbb5948";
-      sha256 = "sha256-SXcUGBMOoE9HpuBzgKC3P6cUmM5MiktXbe/7dVdrfWo=";
+    # https://github.com/sagemath/sage/pull/35584, landed in 10.1.beta1
+    (fetchpatch {
+      name = "networkx-3.1-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/be0aab74fd7e399e146988ef27260d2837baebae.diff";
+      sha256 = "sha256-xBGrylNaiF7CpfmX9/4lTioP2LSYKoRCkKlKSGZuv9U=";
     })
 
-    # https://trac.sagemath.org/ticket/30801. this patch has
-    # positive_review but has not been merged upstream yet, so we
-    # don't use fetchSageDiff because it returns a file that contains
-    # each commit as a separate patch instead of a single diff, and
-    # some commits from the pari update branch are already in 9.3.rc5
-    # (auto-resolvable merge conflicts).
+    # https://github.com/sagemath/sage/pull/35612, landed in 10.1.beta1
     (fetchpatch {
-      name = "pari-2.13.1.patch";
-      url = "https://github.com/sagemath/sagetrac-mirror/compare/d6c5cd9be78cc448ee4c54bac93385b1244a234c...10a4531721d2700fd717e2b3a1364508ffd971c3.diff";
-      sha256 = "sha256-zMjRMEReoiTvmt+vvV0Ij1jtyLSLwSXBEVXqgvmq1D4=";
+      name = "linbox-1.7-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/35cbd2f2a2c4c355455d39b1424f05ea0aa4349b.diff";
+      sha256 = "sha256-/TpvIQZUqmbUuz6wvp3ni9oRir5LBA2FKDJcmnHI1r4=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35619, landed in 10.1.beta1
+    (fetchpatch {
+      name = "maxima-5.46.0-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/4ddf9328e7598284d4bc03cd2ed890f0be6b6399.diff";
+      sha256 = "sha256-f6YaZiLSj+E0LJMsMZHDt6vecWffSAuUHYVkegBEhno=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35635, landed in 10.1.beta1
+    (fetchpatch {
+      name = "sympy-1.12-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/1a73b3bbbfa0f4a297e05d49305070e1ed5ae598.diff";
+      sha256 = "sha256-k8Oam+EiRcfXC7qCdLacCx+7vpUAw2K1wsjKcQbeGb4=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35826, landed in 10.1.beta5
+    (fetchpatch {
+      name = "numpy-1.25.0-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/ecfe06b8f1fe729b07e885f0de55244467e5c137.diff";
+      sha256 = "sha256-G0xhl+LyNdDYPzRqSHK3fHaepcIzpuwmqRiussraDf0=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35826#issuecomment-1658569891
+    ./patches/numpy-1.25-deprecation.patch
+
+    # https://github.com/sagemath/sage/pull/35842, landed in 10.1.beta5
+    (fetchpatch {
+      name = "scipy-1.11-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/90ece168c3c61508baa36659b0027b7dd8b43add.diff";
+      sha256 = "sha256-Y5TmuJcUJR+veb2AuSVODGs+xkVV+pTM8fWTm4q+NDs=";
+    })
+
+    # https://github.com/sagemath/sage/pull/35825, landed in 10.1.beta6
+    (fetchpatch {
+      name = "singular-4.3.2p2-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/1a1b49f814cdf4c4c8d0ac8930610f3fef6af5b0.diff";
+      sha256 = "sha256-GqMgoi0tsP7zcCcPumhdsbvhPB6fgw1ufx6gHlc6iSc=";
+    })
+
+    # https://github.com/sagemath/sage/pull/36006, positively reviewed
+    (fetchpatch {
+      name = "gmp-6.3-upgrade.patch";
+      url = "https://github.com/sagemath/sage/commit/d88bc3815c0901bfdeaa3e4a31107c084199f614.diff";
+      sha256 = "sha256-dXaEwk2wXxmx02sCw4Vu9mF0ZrydhFD4LRwNAiQsPgM=";
     })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
+
+  # do not create .orig backup files if patch applies with fuzz
+  patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
 
   postPatch = ''
     # Make sure sage can at least be imported without setting any environment
@@ -116,19 +123,6 @@ stdenv.mkDerivation rec {
     sed -i \
       "s|var(\"SAGE_ROOT\".*|var(\"SAGE_ROOT\", \"$out\")|" \
       src/sage/env.py
-
-    # src/doc/en/reference/spkg/conf.py expects index.rst in its directory,
-    # a list of external packages in the sage distribution (build/pkgs)
-    # generated by the bootstrap script (which we don't run).  this is not
-    # relevant for other distributions, so remove it.
-    rm src/doc/en/reference/spkg/conf.py
-    sed -i "/spkg/d" src/doc/en/reference/index.rst
-
-    # the bootstrap script also generates installation instructions for
-    # arch, debian, fedora, cygwin and homebrew using data from build/pkgs.
-    # we don't run the bootstrap script, so disable including the generated
-    # files. docbuilding fails otherwise.
-    sed -i "/literalinclude/d" src/doc/en/installation/source.rst
   '';
 
   buildPhase = "# do nothing";

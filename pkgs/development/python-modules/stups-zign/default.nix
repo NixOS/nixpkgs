@@ -5,7 +5,7 @@
 , stups-tokens
 , stups-cli-support
 , pytest
-, pytestcov
+, pytest-cov
 , isPy3k
 }:
 
@@ -38,9 +38,9 @@ buildPythonPackage rec {
     export HOME=$TEMPDIR
   ";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
-    pytestcov
+    pytest-cov
   ];
 
   meta = with lib; {

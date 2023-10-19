@@ -1,34 +1,67 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
 , boto3
-, enum34
+, buildPythonPackage
+, fetchFromGitHub
 , jsonschema
-, six
+, parameterized
+, pydantic
+, pytest-env
+, pytest-rerunfailures
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.35.0";
+  version = "1.74.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5cf7faab3566843f3b44ef1a42a9c106ffb50809da4002faab818076dcc7bff8";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "serverless-application-model";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uOfBR0bvLVyBcfSAkSqOx4KjmSYbfktpJlxKjipfj50=";
   };
 
-  # Tests are not included in the PyPI package
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
+  '';
 
   propagatedBuildInputs = [
     boto3
     jsonschema
-    six
-  ] ++ lib.optionals (pythonOlder "3.4") [ enum34 ];
+    pydantic
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    parameterized
+    pytest-env
+    pytest-rerunfailures
+    pytest-xdist
+    pytestCheckHook
+    pyyaml
+  ];
+
+  pythonImportsCheck = [
+    "samtranslator"
+  ];
+
+  preCheck = ''
+    sed -i '2ienv =\n\tAWS_DEFAULT_REGION=us-east-1' pytest.ini
+  '';
 
   meta = with lib; {
-    homepage = "https://github.com/awslabs/serverless-application-model";
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
+    homepage = "https://github.com/awslabs/serverless-application-model";
+    changelog = "https://github.com/aws/serverless-application-model/releases/tag/v${version}";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

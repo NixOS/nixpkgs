@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
-  version = "0.0.28";
+  version = "0.0.33";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit version;
     pname = "spacy_pkuseg";
-    hash = "sha256-mmA/baY9ohvrM41ak5L+G8CUrSQeZCrzmMAoND4X/NI=";
+    hash = "sha256-8TFWrE4ERg8aw17f0DbplwTbutGa0KObBsNA+AKinmI=";
   };
 
   # Does not seem to have actual tests, but unittest discover
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Toolkit for multi-domain Chinese word segmentation (spaCy fork)";
     homepage = "https://github.com/explosion/spacy-pkuseg";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

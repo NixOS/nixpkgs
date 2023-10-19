@@ -1,14 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, automoc4
-, chromaprint
+{
+  chromaprint
 , cmake
 , docbook_xml_dtd_45
 , docbook_xsl
+, fetchurl
 , ffmpeg
 , flac
 , id3lib
+, lib
 , libogg
 , libvorbis
 , libxslt
@@ -21,18 +20,19 @@
 , qtquickcontrols
 , qttools
 , readline
+, stdenv
 , taglib
 , wrapQtAppsHook
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kid3";
-  version = "3.8.6";
+  version = "3.9.4";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-R4gAWlCw8RezhYbw1XDo+wdp797IbLoM3wqHwr+ul6k=";
+    url = "https://download.kde.org/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
+    hash = "sha256-xBCWDpYiXeChxIiMPqHG3CyiRau2kUdDJtzcPtvWpSA=";
   };
 
   nativeBuildInputs = [
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
     python3
     wrapQtAppsHook
   ];
+
   buildInputs = [
-    automoc4
     chromaprint
     ffmpeg
     flac
@@ -70,9 +70,10 @@ stdenv.mkDerivation rec {
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
   '';
 
-  meta = with lib; {
-    homepage = "https://kid3.kde.org/";
+  meta = {
     description = "A simple and powerful audio tag editor";
+    homepage = "https://kid3.kde.org/";
+    license = lib.licenses.lgpl2Plus;
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC, MP4/AAC,
       MP2, Opus, Speex, TrueAudio, WavPack, WMA, WAV and AIFF files (e.g. full
@@ -102,8 +103,7 @@ stdenv.mkDerivation rec {
       - Edit synchronized lyrics and event timing codes, import and export
         LRC files.
     '';
-    license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

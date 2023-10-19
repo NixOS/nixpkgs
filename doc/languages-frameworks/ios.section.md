@@ -20,8 +20,8 @@ Hydra.
 
 The Xcode build environment implements a number of features.
 
-Deploying a proxy component wrapper exposing Xcode
---------------------------------------------------
+## Deploying a proxy component wrapper exposing Xcode {#deploying-a-proxy-component-wrapper-exposing-xcode}
+
 The first use case is deploying a Nix package that provides symlinks to the Xcode
 installation on the host system. This package can be used as a build input to
 any build function implemented in the Nix expression language that requires
@@ -55,8 +55,8 @@ lrwxr-xr-x  1 sander  staff  61  1 jan  1970 xcodebuild -> /Applications/Xcode.a
 lrwxr-xr-x  1 sander  staff  14  1 jan  1970 xcrun -> /usr/bin/xcrun
 ```
 
-Building an iOS application
----------------------------
+## Building an iOS application {#building-an-ios-application}
+
 We can build an iOS app executable for the simulator, or an IPA/xcarchive file
 for release purposes, e.g. ad-hoc, enterprise or store installations, by
 executing the `xcodeenv.buildApp {}` function:
@@ -99,11 +99,12 @@ xcodeenv.buildApp {
 ```
 
 The above function takes a variety of parameters:
+
 * The `name` and `src` parameters are mandatory and specify the name of the app
   and the location where the source code resides
 * `sdkVersion` specifies which version of the iOS SDK to use.
 
-It also possile to adjust the `xcodebuild` parameters. This is only needed in
+It also possible to adjust the `xcodebuild` parameters. This is only needed in
 rare circumstances. In most cases the default values should suffice:
 
 * Specifies which `xcodebuild` target to build. By default it takes the target
@@ -129,7 +130,7 @@ In addition, you need to set the following parameters:
   store certificates.
 * `generateIPA` specifies that we want to produce an IPA file (this is probably
   what you want)
-* `generateXCArchive` specifies thet we want to produce an xcarchive file.
+* `generateXCArchive` specifies that we want to produce an xcarchive file.
 
 When building IPA files on Hydra and when it is desired to allow iOS devices to
 install IPAs by browsing to the Hydra build products page, you can enable the
@@ -151,8 +152,8 @@ the `xcodeenv.composeXcodeWrapper {}` function takes. For example, the
 `xcodeBaseDir` parameter can be overridden to refer to a different Xcode
 version.
 
-Spawning simulator instances
-----------------------------
+## Spawning simulator instances {#spawning-simulator-instances}
+
 In addition to building iOS apps, we can also automatically spawn simulator
 instances:
 
@@ -213,8 +214,8 @@ xcode.simulateApp {
 By providing the result of an `xcode.buildApp {}` function and configuring the
 app bundle id, the app gets deployed automatically and started.
 
-Troubleshooting
----------------
+## Troubleshooting {#troubleshooting}
+
 In some rare cases, it may happen that after a failure, changes are not picked
 up. Most likely, this is caused by a derived data cache that Xcode maintains.
 To wipe it you can run:

@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{ lib, stdenv, fetchFromGitHub, python3Packages, pciutils }:
 
 stdenv.mkDerivation rec {
   pname = "throttled";
-  version = "0.8";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qw124gdgjqij3xhgg8j1mdsg6j0xg340as5qf8hd3gwc38sqi9x";
+    sha256 = "sha256-0MsPp6y4r/uZB2SplKV+SAiJoxIs2jgOQmQoQQ2ZKwI=";
   };
 
   nativeBuildInputs = [ python3Packages.wrapPython ];
@@ -20,12 +20,16 @@ stdenv.mkDerivation rec {
   ];
 
   # The upstream unit both assumes the install location, and tries to run in a virtualenv
-  postPatch = ''sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/lenovo_fix.py|' -i systemd/lenovo_fix.service'';
+  postPatch = ''
+    sed -e 's|ExecStart=.*|ExecStart=${placeholder "out"}/bin/throttled.py|' -i systemd/throttled.service
+
+    substituteInPlace throttled.py --replace "'setpci'" "'${pciutils}/bin/setpci'"
+  '';
 
   installPhase = ''
     runHook preInstall
-    install -D -m755 -t $out/bin lenovo_fix.py
-    install -D -t $out/bin lenovo_fix.py mmio.py
+    install -D -m755 -t $out/bin throttled.py
+    install -D -t $out/bin throttled.py mmio.py
     install -D -m644 -t $out/etc etc/*
     install -D -m644 -t $out/lib/systemd/system systemd/*
     runHook postInstall

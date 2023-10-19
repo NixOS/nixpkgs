@@ -1,24 +1,30 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, cppo }:
+{ lib, buildDunePackage, fetchFromGitHub, ocaml, cppo }:
 
-let version = "1.0"; in
+buildDunePackage rec {
+  version = "1.2";
+  pname = "ocplib-endian";
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-ocplib-endian-${version}";
-
-  src = fetchzip {
-    url = "https://github.com/OCamlPro/ocplib-endian/archive/${version}.tar.gz";
-    sha256 = "0s1ld3kavz892b8awyxyg1mr98h2g61gy9ci5v6yb49bsii6wicw";
+  src = fetchFromGitHub {
+    owner = "OCamlPro";
+    repo = "ocplib-endian";
+    rev = version;
+    sha256 = "sha256-THTlhOfXAPaqTt1qBkht+D67bw6M175QLvXoUMgjks4=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cppo ];
+  postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "5.0") ''
+    substituteInPlace src/dune \
+      --replace "(libraries bytes)" "" \
+      --replace "libraries ocplib_endian bigarray bytes" "libraries ocplib_endian"
+  '';
 
-  createFindlibDestdir = true;
+  minimalOCamlVersion = "4.03";
 
-  meta = {
+  nativeBuildInputs = [ cppo ];
+
+  meta = with lib; {
     description = "Optimised functions to read and write int16/32/64";
     homepage = "https://github.com/OCamlPro/ocplib-endian";
-    license = lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = with lib.maintainers; [ vbgl ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ vbgl ];
   };
 }

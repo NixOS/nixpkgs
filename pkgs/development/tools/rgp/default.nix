@@ -12,22 +12,22 @@
 , libX11
 , libxcb
 , libXi
-, ncurses5
+, ncurses
 , qtbase
 , qtdeclarative
 , zlib
 }:
 
 let
-  buildNum = "2021-03-31-696";
+  buildNum = "2023-05-22-1083";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rgp";
-  version = "1.10";
+  version = "1.15.1";
 
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
-    sha256 = "1GUV75KpYbeq7KkE86QqTfGnf/t3VEgviaAsbg/LWJI=";
+    hash = "sha256-WSSiNiiIVw1wwt9vxgyirBDe+SPzH87LU1GlSdUhZB8=";
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
@@ -42,15 +42,10 @@ stdenv.mkDerivation rec {
     libX11
     libxcb
     libXi
-    ncurses5
+    ncurses
     qtbase
     qtdeclarative
     zlib
-  ];
-
-  runtimeDependencies = [
-    "${placeholder "out"}/opt/rgp"
-    "${placeholder "out"}/opt/rgp/qt"
   ];
 
   dontWrapQtApps = true;
@@ -62,7 +57,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/opt/rgp/scripts/*
     patchShebangs $out/opt/rgp/scripts
 
-    for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler rga rtda; do
+    for prog in RadeonDeveloperPanel RadeonDeveloperService RadeonDeveloperServiceCLI RadeonGPUAnalyzer RadeonGPUProfiler RadeonMemoryVisualizer RadeonRaytracingAnalyzer rga rtda; do
       # makeWrapper is needed so that executables are started from the opt
       # directory, where qt.conf and other tools are
       makeWrapper \
@@ -74,6 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A tool from AMD that allows for deep inspection of GPU workloads";
     homepage = "https://gpuopen.com/rgp/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Flakebi ];

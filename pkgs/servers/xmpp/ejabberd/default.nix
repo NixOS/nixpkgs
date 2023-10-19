@@ -1,64 +1,53 @@
 { stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
-, flock
+, flock, autoreconfHook
+, nixosTests
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
-, withRiak ? false
-, withElixir ? false, elixir
-, withIconv ? true
 , withTools ? false
 , withRedis ? false
 }:
 
 let
-  fakegit = writeScriptBin "git" ''
-    #! ${stdenv.shell} -e
-    if [ "$1" = "describe" ]; then
-      [ -r .rev ] && cat .rev || true
-    fi
-  '';
-
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils util-linux procps ];
-
 in stdenv.mkDerivation rec {
-  version = "20.12";
   pname = "ejabberd";
+  version = "23.01";
 
-  src = fetchurl {
-    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/${pname}-${version}.tgz";
-    sha256 = "sha256-nZxdYXRyv4UejPLHNT/p6CrvW22Koo7rZSi96KRjqFQ=";
-  };
-
-  nativeBuildInputs = [ fakegit makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
   buildInputs = [ erlang openssl expat libyaml gd ]
     ++ lib.optional withSqlite sqlite
     ++ lib.optional withPam pam
     ++ lib.optional withZlib zlib
-    ++ lib.optional withElixir elixir
-    ;
+  ;
 
-  # Apparently needed for Elixir
-  LANG = "en_US.UTF-8";
+  src = fetchurl {
+    url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
+    sha256 = "sha256-K4P+A2u/Hbina4b3GP8T3wmPoQxiv88GuB4KZOb2+cA=";
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) ejabberd;
+  };
 
   deps = stdenv.mkDerivation {
     pname = "ejabberd-deps";
-    inherit version;
 
-    inherit src;
+    inherit src version;
 
     configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
 
-    nativeBuildInputs = [ git erlang openssl expat libyaml sqlite pam zlib elixir ];
+    nativeBuildInputs = [
+      git erlang openssl expat libyaml sqlite pam zlib autoreconfHook
+    ];
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     makeFlags = [ "deps" ];
-
-    phases = [ "unpackPhase" "configurePhase" "buildPhase" "installPhase" ];
 
     installPhase = ''
       for i in deps/*; do
@@ -74,30 +63,32 @@ in stdenv.mkDerivation rec {
       cp -r deps $out
     '';
 
-    outputHashMode = "recursive";
+    dontPatchELF = true;
+    dontStrip = true;
+    # avoid /nix/store references in the source
+    dontPatchShebangs = true;
+
     outputHashAlgo = "sha256";
-    outputHash = "sha256-0/hBgA+9rsDOBcvbROSpc5Xnw4JkYpuLCl2V+lJnieY=";
+    outputHashMode = "recursive";
+    outputHash = "sha256-Lj4YSPOiiJQ6uN4cAR+1s/eVSfoIsuvWR7gGkVYrOfc=";
   };
 
-  configureFlags =
-    [ (lib.enableFeature withMysql "mysql")
-      (lib.enableFeature withPgsql "pgsql")
-      (lib.enableFeature withSqlite "sqlite")
-      (lib.enableFeature withPam "pam")
-      (lib.enableFeature withZlib "zlib")
-      (lib.enableFeature withRiak "riak")
-      (lib.enableFeature withElixir "elixir")
-      (lib.enableFeature withIconv "iconv")
-      (lib.enableFeature withTools "tools")
-      (lib.enableFeature withRedis "redis")
-    ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
+  configureFlags = [
+    (lib.enableFeature withMysql "mysql")
+    (lib.enableFeature withPgsql "pgsql")
+    (lib.enableFeature withSqlite "sqlite")
+    (lib.enableFeature withPam "pam")
+    (lib.enableFeature withZlib "zlib")
+    (lib.enableFeature withTools "tools")
+    (lib.enableFeature withRedis "redis")
+  ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  postPatch = ''
     cp -r $deps deps
     chmod -R +w deps
-    patchShebangs deps
+    patchShebangs .
   '';
 
   postInstall = ''
@@ -108,6 +99,7 @@ in stdenv.mkDerivation rec {
       -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
       $out/sbin/ejabberdctl
     wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
+    rm $out/bin/{mix,iex,elixir}
   '';
 
   meta = with lib; {
@@ -116,6 +108,5 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sander abbradar ];
-    broken = withElixir;
   };
 }

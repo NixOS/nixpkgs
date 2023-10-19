@@ -1,70 +1,86 @@
 { lib
 , attrs
 , buildPythonPackage
-, defusedxml
-, fetchPypi
+, fetchFromGitHub
 , hypothesis
-, isPy3k
+, pythonOlder
+, jbig2dec
+, deprecation
 , lxml
+, mupdf
+, packaging
 , pillow
 , psutil
 , pybind11
-, pytest-cov
-, pytest-helpers-namespace
-, pytest-timeout
 , pytest-xdist
 , pytestCheckHook
 , python-dateutil
 , python-xmp-toolkit
 , qpdf
 , setuptools
-, setuptools-scm
-, setuptools-scm-git-archive
+, substituteAll
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "2.11.1";
-  disabled = ! isPy3k;
+  version = "8.3.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0vs7qa3s4scfhyldfw99hhxpna6rj49rsbr2k0j6b4qx1bw8h141";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "pikepdf";
+    repo = "pikepdf";
+    rev = "v${version}";
+    # The content of .git_archival.txt is substituted upon tarball creation,
+    # which creates indeterminism if master no longer points to the tag.
+    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
+    postFetch = ''
+      rm "$out/.git_archival.txt"
+    '';
+    hash = "sha256-d76s4iJFwhzWSySXTS53PQQuWfWIboIRecEyjzobsME=";
   };
 
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      jbig2dec = "${lib.getBin jbig2dec}/bin/jbig2dec";
+      mudraw = "${lib.getBin mupdf}/bin/mudraw";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
+  '';
+
   buildInputs = [
-    pybind11
     qpdf
   ];
 
   nativeBuildInputs = [
-    setuptools-scm-git-archive
-    setuptools-scm
+    pybind11
+    setuptools
+    wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     attrs
     hypothesis
-    pytest-helpers-namespace
-    pytest-timeout
     pytest-xdist
     psutil
-    pytest-cov
     pytestCheckHook
     python-dateutil
     python-xmp-toolkit
   ];
 
   propagatedBuildInputs = [
-    defusedxml
+    deprecation
     lxml
+    packaging
     pillow
-    setuptools
   ];
-
-  preBuild = ''
-    HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [ "pikepdf" ];
 
@@ -72,7 +88,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
-    maintainers = [ maintainers.kiwi ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
+    maintainers = with maintainers; [ kiwi dotlambda ];
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

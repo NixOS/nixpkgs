@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microcode-intel";
-  version = "20210216";
+  version = "20230808";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "Intel-Linux-Processor-Microcode-Data-Files";
     rev = "microcode-${version}";
-    sha256 = "17wrfp7h7xbvncgm1fp103zkyz9n1f820jy6yca1aq208264hjkv";
+    hash = "sha256-xyb4FUV7vG2YSuN4H6eBaf8c4At70NZiUuepbgg2HNg=";
   };
 
   nativeBuildInputs = [ iucode-tool libarchive ];
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out kernel/x86/microcode
     iucode_tool -w kernel/x86/microcode/GenuineIntel.bin intel-ucode/
-    echo kernel/x86/microcode/GenuineIntel.bin | bsdcpio -o -H newc -R 0:0 > $out/intel-ucode.img
+    touch -d @$SOURCE_DATE_EPOCH kernel/x86/microcode/GenuineIntel.bin
+    echo kernel/x86/microcode/GenuineIntel.bin | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @- > $out/intel-ucode.img
 
     runHook postInstall
   '';
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Microcode for Intel processors";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ andir ];
+    maintainers = with maintainers; [ ];
   };
 }

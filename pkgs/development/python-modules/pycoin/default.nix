@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pycoin";
-  version = "0.90.20201031";
+  version = "0.92.20230326";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "65c19204cb7aece4aae30c44b5e08beecb9c118370a9f9994d6cddaee17c351d";
+    hash = "sha256-DYXwATRHw1ay9swLuQOtB+5LcoBe4TtAKWzQgxESwN8=";
   };
 
   propagatedBuildInputs = [ setuptools ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     substituteInPlace ./pycoin/cmds/tx.py --replace '"gpg"' '"${gnupg}/bin/gpg"'
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   dontUseSetuptoolsCheck = true;
 

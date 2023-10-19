@@ -1,55 +1,117 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, upx ? null }:
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
-assert stdenv.hostPlatform.isUnix -> upx != null;
+let
+  version = "weekly.2023.42";
+  ptraceSubstitution = ''
+    #include <sys/types.h>
+    #include <sys/ptrace.h>
+  '';
+  # Required for bootstrap.
+  vc = stdenv.mkDerivation {
+    pname = "v.c";
+    version = "unstable-2023-10-17";
+    src = fetchFromGitHub {
+      owner = "vlang";
+      repo = "vc";
+      rev = "bbfdece2ef5cab8a52b03c4df1ca0f803639069b";
+      hash = "sha256-UdifiUDTivqJ94NJB25mF/xXeiEAE55QaIUwWwdAllQ=";
+    };
 
-stdenv.mkDerivation rec {
+    # patch the ptrace reference for darwin
+    installPhase = lib.optionalString stdenv.isDarwin ''
+      substituteInPlace v.c \
+        --replace "#include <sys/ptrace.h>" "${ptraceSubstitution}"
+    '' + ''
+      mkdir -p $out
+      cp v.c $out/
+    '';
+  };
+  # Required for vdoc.
+  markdown = fetchFromGitHub {
+    owner = "vlang";
+    repo = "markdown";
+    rev = "3a173bee57a48dcfc1c0177555e45116befac48e";
+    hash = "sha256-TWiCUMzAzHidtzXEYtUQ7uuksW+EIjE/fZ+s2Mr+uWI=";
+  };
+  boehmgcStatic = boehmgc.override {
+    enableStatic = true;
+  };
+in
+stdenv.mkDerivation {
   pname = "vlang";
-  version = "0.1.21";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "0npd7a7nhd6r9mr99naib9scqk30209hz18nxif27284ckjbl4fk";
+    hash = "sha256-sQ3M6tMufL560lvtWoa5f5MpOT4D8K5uq4kDPHNmUog=";
   };
 
-  # V compiler source translated to C for bootstrap.
-  # Use matching v.c release commit for now, 0.1.21 release is not available.
-  vc = fetchFromGitHub {
-    owner = "vlang";
-    repo = "vc";
-    rev = "950a90b6acaebad1c6ddec5486fc54307e38a9cd";
-    sha256 = "1dh5l2m207rip1xj677hvbp067inw28n70ddz5wxzfpmaim63c0l";
-  };
-
-  enableParallelBuilding = true;
   propagatedBuildInputs = [ glfw freetype openssl ]
     ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
-  buildPhase = ''
-    runHook preBuild
-    cc -std=gnu11 $CFLAGS -w -o v $vc/v.c -lm $LDFLAGS
-    ./v -prod -cflags `$CFLAGS` -o v compiler
-    # Exclude thirdparty/vschannel as it is windows-specific.
-    find thirdparty -path thirdparty/vschannel -prune -o -type f -name "*.c" -execdir cc -std=gnu11 $CFLAGS -w -c {} $LDFLAGS ';'
-    runHook postBuild
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [
+    binaryen
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optionals stdenv.isLinux [
+    xorg.libX11
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xorgproto
+  ];
+
+  makeFlags = [
+    "local=1"
+  ];
+
+  env.VC = vc;
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+    mkdir -p ./thirdparty/tcc/lib
+    cp -r ${boehmgcStatic}/lib/* ./thirdparty/tcc/lib
+  '';
+
+  # vcreate_test.v requires git, so we must remove it when building the tools.
+  preInstall = ''
+    mv cmd/tools/vcreate/vcreate_test.v $HOME/vcreate_test.v
   '';
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/{bin,lib,share}
     cp -r examples $out/share
-    cp -r {vlib,thirdparty} $out/lib
+    cp -r {cmd,vlib,thirdparty} $out/lib
     cp v $out/lib
     ln -s $out/lib/v $out/bin/v
+    wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+
+    mkdir -p $HOME/.vmodules;
+    ln -sf ${markdown} $HOME/.vmodules/markdown
+    $out/lib/v -v build-tools
+    $out/lib/v -v $out/lib/cmd/tools/vdoc
+    $out/lib/v -v $out/lib/cmd/tools/vast
+    $out/lib/v -v $out/lib/cmd/tools/vvet
+
     runHook postInstall
+  '';
+
+  # Return vcreate_test.v and vtest.v, so the user can use it.
+  postInstall = ''
+    cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
   '';
 
   meta = with lib; {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
+    mainProgram = "v";
     platforms = platforms.all;
   };
 }

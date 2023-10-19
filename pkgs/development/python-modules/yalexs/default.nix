@@ -3,10 +3,11 @@
 , aiohttp
 , aioresponses
 , aiounittest
-, asynctest
 , buildPythonPackage
+, ciso8601
 , fetchFromGitHub
 , pubnub
+, pyjwt
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -16,42 +17,49 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.1.11";
-  disabled = pythonOlder "3.6";
+  version = "1.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fVUYrzIcW4jbxdhS/Bh8eu+aJPFOqj0LXjoQKw+FZdg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7LFKqC8IHzXKKU5Pw6Qud9jqJFc0lSEJFn636T6CsfQ=";
   };
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
+    ciso8601
     pubnub
+    pyjwt
     python-dateutil
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     aiounittest
-    asynctest
     pytestCheckHook
     requests-mock
   ];
 
   postPatch = ''
     # Not used requirement
-    substituteInPlace setup.py --replace '"vol",' ""
+    substituteInPlace setup.py \
+      --replace '"vol",' ""
   '';
 
-  pythonImportsCheck = [ "yalexs" ];
+  pythonImportsCheck = [
+    "yalexs"
+  ];
 
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
+    changelog = "https://github.com/bdraco/yalexs/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

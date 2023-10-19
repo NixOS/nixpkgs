@@ -7,17 +7,18 @@
 , substituteAll
 , xorg
 , wrapGAppsHook
+, gitUpdater
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "fbmenugen";
-  version = "0.85";
+  version = "0.87";
 
   src = fetchFromGitHub {
     owner = "trizen";
     repo = pname;
     rev = version;
-    sha256 = "1pmms3wzkm8h41a8zrkpn6gq9m9yy5wr5rrzmb84lbacprqq6q7q";
+    sha256 = "A0yhoK/cPp3JlNZacgLaDhaU838PpFna7luQKNDvyOg=";
   };
 
   patches = [
@@ -65,10 +66,12 @@ perlPackages.buildPerlPackage rec {
     wrapProgram "$out/bin/${pname}" --prefix PERL5LIB : "$PERL5LIB"
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
     homepage = "https://github.com/trizen/fbmenugen";
     description = "Simple menu generator for the Fluxbox Window Manager";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];
   };

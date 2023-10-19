@@ -1,8 +1,10 @@
-{ lib, buildPythonPackage, isPy27, fetchPypi
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
 , aiohttp
 , azure-common
 , azure-core
-, azure-nspkg
 , cryptography
 , msrest
 , pytestCheckHook
@@ -10,13 +12,15 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-keys";
-  version = "4.3.1";
-  disabled = isPy27;
+  version = "4.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "fbf67bca913ebf68b9075ee9d2e2b899dc3c7892cc40abfe1b08220a382f6ed9";
+    hash = "sha256-bAuy94MgKjSj5ex0hm5iEuWRrHEk8DuWadGwm2giS8Q=";
   };
 
   propagatedBuildInputs = [
@@ -26,11 +30,17 @@ buildPythonPackage rec {
     cryptography
   ];
 
-  pythonNamespaces = [ "azure.keyvault" ];
+  nativeCheckInputs = [
+    aiohttp
+    pytestCheckHook
+  ];
+
+  pythonNamespaces = [
+    "azure.keyvault"
+  ];
 
   # requires relative paths to utilities in the mono-repo
   doCheck = false;
-  checkInputs = [ aiohttp pytestCheckHook ];
 
   pythonImportsCheck = [
     "azure"

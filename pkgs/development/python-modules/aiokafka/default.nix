@@ -1,23 +1,30 @@
 { lib
+, async-timeout
 , buildPythonPackage
-, fetchFromGitHub
-, isPy27
-, kafka-python
 , cython
+, fetchFromGitHub
+, gssapi
+, kafka-python
+, lz4
+, packaging
+, python-snappy
+, pythonOlder
 , zlib
+, zstandard
 }:
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.7.0";
+  version = "0.8.1";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
-    repo = "aiokafka";
-    rev = "v${version}";
-    sha256 = "16pcgv38syqy6sj3w7zx95zgynpd642n3i95dpiw0ivhpqrxxhrf";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-O5cDP0PWFrxNSdwWqUUkErUKf1Tt9agKJqWIjd4jGqk=";
   };
 
   nativeBuildInputs = [
@@ -29,21 +36,38 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    async-timeout
     kafka-python
+    packaging
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-       --replace "kafka-python==1.4.6" "kafka-python"
-  '';
+  passthru.optional-dependencies = {
+    snappy = [
+      python-snappy
+    ];
+    lz4 = [
+      lz4
+    ];
+    zstd = [
+      zstandard
+    ];
+    gssapi = [
+      gssapi
+    ];
+  };
 
-  # checks require running kafka server
+  # Checks require running Kafka server
   doCheck = false;
+
+  pythonImportsCheck = [
+    "aiokafka"
+  ];
 
   meta = with lib; {
     description = "Kafka integration with asyncio";
     homepage = "https://aiokafka.readthedocs.org";
+    changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

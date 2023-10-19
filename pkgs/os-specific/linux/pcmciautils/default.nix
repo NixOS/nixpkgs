@@ -7,10 +7,11 @@
 
 # FIXME: should add an option to choose between hotplug and udev.
 stdenv.mkDerivation rec {
-  name = "pcmciautils-018";
+  pname = "pcmciautils";
+  version = "018";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/${name}.tar.gz";
+    url = "https://kernel.org/pub/linux/utils/kernel/pcmcia/pcmciautils-${version}.tar.gz";
     sha256 = "0sfm3w2n73kl5w7gb1m6q8gy5k4rgwvzz79n6yhs9w3sag3ix8sk";
   };
 
@@ -26,8 +27,8 @@ stdenv.mkDerivation rec {
       s,/etc/pcmcia,$out&,;
     " src/{startup.c,pcmcia-check-broken-cis.c} # fix-color */
   ''
-  + (if firmware == [] then ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'' else "")
-  + (if configOpts == null then "" else "ln -sf ${configOpts} ./config/config.opts")
+  + (lib.optionalString (firmware == []) ''sed -i "s,STARTUP = true,STARTUP = false," Makefile'')
+  + (lib.optionalString (configOpts != null) "ln -sf ${configOpts} ./config/config.opts")
   ;
 
   makeFlags = [ "LEX=flex" ];

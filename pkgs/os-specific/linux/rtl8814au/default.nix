@@ -2,25 +2,25 @@
 
 stdenv.mkDerivation {
   pname = "rtl8814au";
-  version = "${kernel.version}-unstable-2021-05-18";
+  version = "${kernel.version}-unstable-2023-03-21";
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8814au";
-    rev = "388786c864f9b1437fc4d934b1eccf6d7f1e1355";
-    sha256 = "sha256-2EnheODPFWTGN/fz45LWRSOGeV6pTENEUrehahj+PJ4=";
+    rev = "6f80699e68fd2a9f2bba3f1a56ca06d1b7992bd8";
+    hash = "sha256-7dv+8vNI1OLLA4SdZQPL87pTS9HR6mGijzWo9WL7vc0=";
   };
 
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE="-Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -28,6 +28,8 @@ stdenv.mkDerivation {
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Realtek 8814AU USB WiFi driver";

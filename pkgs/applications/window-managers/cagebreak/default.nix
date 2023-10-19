@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , cairo
 , fontconfig
+, libevdev
+, libinput
 , libxkbcommon
 , makeWrapper
 , mesa
@@ -22,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cagebreak";
-  version = "1.7.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "project-repo";
     repo = pname;
     rev = version;
-    hash = "sha256-1IztedN5/I/4TDKHLJ26fSrDsvJ5QAr+cbzS2PQITDE=";
+    hash = "sha256-pU1QHYOqnkb3L4iSKbZY9Vo60Z6EaX9mp2Nw48NSPic=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     fontconfig
+    libevdev
+    libinput
     libxkbcommon
     mesa # for libEGL headers
     pango
@@ -59,18 +63,17 @@ stdenv.mkDerivation rec {
     "-Dxwayland=${lib.boolToString withXwayland}"
   ];
 
-  # TODO: investigate why is this happening
   postPatch = ''
+    # TODO: investigate why is this happening
     sed -i -e 's|<drm_fourcc.h>|<libdrm/drm_fourcc.h>|' *.c
-  '';
 
-  postInstall = ''
-    install -d $out/share/cagebreak/
-    install -m644 $src/examples/config $out/share/cagebreak/
+    # Patch cagebreak to read its default configuration from $out/share/cagebreak
+    sed -i "s|/etc/xdg/cagebreak|$out/share/cagebreak|" meson.build cagebreak.c
   '';
 
   postFixup = lib.optionalString withXwayland ''
-    wrapProgram $out/bin/cagebreak --prefix PATH : "${xwayland}/bin"
+    wrapProgram $out/bin/cagebreak \
+      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
   meta = with lib; {
@@ -79,6 +82,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ berbiche ];
     platforms = platforms.linux;
+    changelog = "https://github.com/project-repo/cagebreak/blob/${version}/Changelog.md";
   };
 
   passthru.tests.basic = nixosTests.cagebreak;

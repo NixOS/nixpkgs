@@ -1,14 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, bison, flex, postgresql }:
+{ lib, stdenv, bison, fetchFromGitHub, flex, perl, postgresql }:
 
+let
+  hashes = {
+    "15" = "sha256-1vmwoflbU3++PFDcsLt9gyLkuzMRGNCD7vWl7/6Q+SE=";
+    "14" = "sha256-w93Q499sZRk4q85A9yqKQjGUd9Pl8UL8K1D3W7mHRTU=";
+    "13" = "sha256-Sot7FR0oW7kWA680pNCMCmlflu4RfJTSWZn9mrXrpzw=";
+    "12" = "sha256-XezcXoHHLCD1/2OHmKhxome2pdjOsYAfZlpvOoU3aS4=";
+    "11" = "sha256-ZkNAIMO69BxF3knQ+jcUBVuDgcoZXZccF5O+acpZ81M=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "age";
-  version = "0.2.0";
+  version = "1.4.0-rc0";
 
   src = fetchFromGitHub {
-    owner = "bitnine-oss";
-    repo = "AgensGraph-Extension";
-    rev = "v${version}";
-    sha256 = "0way59lj30727jlz2qz6rnw4fsxcd5028xcwgrwk7jxcaqi5fa17";
+    owner = "apache";
+    repo = "age";
+    rev = "PG${lib.versions.major postgresql.version}/v${builtins.replaceStrings ["."] ["_"] version}";
+    hash = hashes.${lib.versions.major postgresql.version} or (throw "Source for Age is not available for ${postgresql.version}");
   };
 
   buildInputs = [ postgresql ];
@@ -16,6 +25,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "BISON=${bison}/bin/bison"
     "FLEX=${flex}/bin/flex"
+    "PERL=${perl}/bin/perl"
   ];
 
   installPhase = ''
@@ -54,12 +64,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = !builtins.elem (versions.major postgresql.version) (builtins.attrNames hashes);
     description = "A graph database extension for PostgreSQL";
-    homepage = "https://github.com/bitnine-oss/AgensGraph-Extension";
-    changelog = "https://github.com/bitnine-oss/AgensGraph-Extension/releases/tag/v${version}";
-    maintainers = with maintainers; [ danieldk ];
+    homepage = "https://age.apache.org/";
+    changelog = "https://github.com/apache/age/raw/v${src.rev}/RELEASE";
+    maintainers = with maintainers; [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
-    broken = versionOlder postgresql.version "11.0";
   };
 }

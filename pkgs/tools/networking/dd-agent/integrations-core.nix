@@ -41,22 +41,17 @@ let
   src = pkgs.fetchFromGitHub {
     owner = "DataDog";
     repo = "integrations-core";
-    rev = "7e9bebbb5b79ac30c16814ecefdc8f5c63cb4ea4";
-    sha256 = "0yi7dlbd0rkzzl8cag713r86f40vl87aqrj97ral58csnnj7vfzb";
+    rev = version;
+    sha256 = "sha256-CIzuJ97KwsG1k65Y+8IUSka/3JX1pmQKN3hPHzZnGhQ=";
   };
-  version = "git-2018-09-18";
+  version = "7.38.0";
 
   # Build helper to build a single datadog integration package.
   buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
     inherit src version;
     name = "datadog-integration-${pname}-${version}";
 
-    postPatch = ''
-      # jailbreak install_requires
-      sed -i 's/==.*//' requirements.in
-      cp requirements.in requirements.txt
-    '';
-    sourceRoot = "source/${args.sourceRoot or pname}";
+    sourceRoot = "${src.name}/${args.sourceRoot or pname}";
     doCheck = false;
   });
 
@@ -64,8 +59,37 @@ let
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
+
+    # Make setuptools build the 'base' and 'checks' modules.
+    postPatch = ''
+      substituteInPlace setup.py \
+        --replace "from setuptools import setup" "from setuptools import find_packages, setup" \
+        --replace "packages=['datadog_checks']" "packages=find_packages()"
+    '';
+
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus_client uuid simplejson uptime
+      binary
+      cachetools
+      cryptography
+      immutables
+      jellyfish
+      prometheus-client
+      protobuf
+      pydantic
+      python-dateutil
+      pyyaml
+      requests
+      requests-toolbelt
+      requests-unixsocket
+      simplejson
+      uptime
+      wrapt
+    ];
+
+    pythonImportsCheck = [
+      "datadog_checks.base"
+      "datadog_checks.base.checks"
+      "datadog_checks.checks"
     ];
   };
 
@@ -75,7 +99,8 @@ let
     mongo    = (ps: [ ps.pymongo ]);
     network  = (ps: [ ps.psutil ]);
     nginx    = (ps: []);
-    postgres = (ps: with ps; [ pg8000_1_12 psycopg2 ]);
+    postgres = (ps: with ps; [ pg8000 psycopg2 semver ]);
+    process  = (ps: [ ps.psutil]);
   };
 
   # All integrations (default + extra):

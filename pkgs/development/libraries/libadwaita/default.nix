@@ -1,67 +1,119 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, docbook-xsl-nons
-, gtk-doc
+, gi-docgen
 , meson
 , ninja
 , pkg-config
 , sassc
 , vala
 , gobject-introspection
+, fribidi
+, glib
 , gtk4
+, gnome
+, gsettings-desktop-schemas
 , xvfb-run
+, AppKit
+, Foundation
 }:
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "unstable-2021-05-01";
+  version = "1.3.5";
 
   outputs = [ "out" "dev" "devdoc" ];
-  outputBin = "dev";
+  outputBin = "devdoc"; # demo app
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libadwaita";
-    rev = "8d66b987a19979d9d7b85dacc6bad5ce0c8743fe";
-    sha256 = "0i3wav6jsyi4w4i2r1rad769m5y5s9djj4zqb7dfyh0bad24ba3q";
+    rev = version;
+    hash = "sha256-lxNIysW2uth4Hp6NHjo0vWHupITb9qWkkdG8YEDLrUE=";
   };
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
-    docbook-xsl-nons
-    gtk-doc
+    gi-docgen
     meson
     ninja
     pkg-config
     sassc
     vala
+    gobject-introspection
   ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
+  ] ++ lib.optionals (!doCheck) [
+    "-Dtests=false"
   ];
 
   buildInputs = [
-    gobject-introspection
+    fribidi
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    Foundation
+  ];
+
+  propagatedBuildInputs = [
     gtk4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    gnome.adwaita-icon-theme
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     xvfb-run
   ];
 
-  doCheck = true;
+  # Tests had to be disabled on Darwin because test-button-content fails
+  #
+  # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
+  # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    xvfb-run meson test
+    runHook preCheck
+
+    testEnvironment=(
+      # Disable portal since we cannot run it in tests.
+      ADW_DISABLE_PORTAL=1
+
+      # AdwSettings needs to be initialized from “org.gnome.desktop.interface” GSettings schema when portal is not used for color scheme.
+      # It will not actually be used since the “color-scheme” key will only have been introduced in GNOME 42, falling back to detecting theme name.
+      # See adw_settings_constructed function in https://gitlab.gnome.org/GNOME/libadwaita/commit/60ec69f0a5d49cad8a6d79e4ecefd06dc6e3db12
+      "XDG_DATA_DIRS=${glib.getSchemaDataDirPath gsettings-desktop-schemas}"
+
+      # Tests need a cache directory
+      "HOME=$TMPDIR"
+    )
+    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.isDarwin) "xvfb-run"} \
+      meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  };
+
   meta = with lib; {
+    changelog = "https://gitlab.gnome.org/GNOME/libadwaita/-/blob/${src.rev}/NEWS";
     description = "Library to help with developing UI for mobile devices using GTK/GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libadwaita";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    maintainers = teams.gnome.members ++ (with maintainers; [ dotlambda ]);
+    platforms = platforms.unix;
   };
 }

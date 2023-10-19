@@ -5,18 +5,18 @@
 , qtbase
 , qtsvg
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "libqtxdg";
-  version = "3.7.1";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1x806hdics3d49ys0a2vkln9znidj82qscjnpcqxclxn26xqzd91";
+    sha256 = "b3XR0Tn/roiCjNGb3EMf4ilECNaUjGYi11ykVBppBuc=";
   };
 
   nativeBuildInputs = [
@@ -37,13 +37,13 @@ mkDerivation rec {
     )
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/libqtxdg";
     description = "Qt implementation of freedesktop.org xdg specs";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

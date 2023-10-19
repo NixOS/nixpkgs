@@ -1,13 +1,16 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "plausible";
   meta = with lib.maintainers; {
-    maintainers = [ ma27 ];
+    maintainers = [ ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     virtualisation.memorySize = 4096;
     services.plausible = {
       enable = true;
+      releaseCookiePath = "${pkgs.runCommand "cookie" { } ''
+        ${pkgs.openssl}/bin/openssl rand -base64 64 >"$out"
+      ''}";
       adminUser = {
         email = "admin@example.org";
         passwordFile = "${pkgs.writeText "pwd" "foobar"}";
@@ -26,6 +29,8 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_open_port(8000)
 
     machine.succeed("curl -f localhost:8000 >&2")
+
+    machine.succeed("curl -f localhost:8000/js/script.js >&2")
 
     csrf_token = machine.succeed(
         "curl -c /tmp/cookies localhost:8000/login | grep '_csrf_token' | sed -E 's,.*value=\"(.*)\".*,\\1,g'"

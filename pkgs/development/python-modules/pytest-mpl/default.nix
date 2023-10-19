@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools-scm
 , pytest
+, jinja2
 , matplotlib
 , nose
 , pillow
@@ -10,31 +12,44 @@
 
 buildPythonPackage rec {
   pname = "pytest-mpl";
-  version = "0.12";
+  version = "0.16.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4a223909e5148c99bd18891848c7871457729322c752c9c470bd8dd6bdf9f940";
+    hash = "sha256-LVcWgRJOj/X04rnA0EfTfQSZ1rbY8vSaG1DN2ZMQRGk=";
   };
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   buildInputs = [
     pytest
   ];
 
+  SETUPTOOLS_SCM_PRETEND_VERSION=version;
+
   propagatedBuildInputs = [
+    jinja2
     matplotlib
     nose
     pillow
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  # Broken since b6e98f18950c2b5dbdc725c1181df2ad1be19fee
+
   disabledTests = [
+    # Broken since b6e98f18950c2b5dbdc725c1181df2ad1be19fee
     "test_hash_fails"
     "test_hash_missing"
+  ];
+
+  disabledTestPaths = [
+    # Following are broken since at least a1548780dbc79d76360580691dc1bb4af4e837f6
+    "tests/subtests/test_subtest.py"
   ];
 
   preCheck = ''
@@ -48,6 +63,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to help with testing figures output from Matplotlib";
     homepage = "https://github.com/matplotlib/pytest-mpl";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

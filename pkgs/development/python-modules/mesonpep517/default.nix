@@ -3,33 +3,37 @@
 , fetchPypi
 , meson
 , ninja
-, intreehooks
-, pytoml
-, pythonOlder
+, setuptools
+, toml
+, wheel
 }:
 
 # TODO: offer meson as a Python package so we have dist-info folder.
 
 buildPythonPackage rec {
   pname = "mesonpep517";
-  version = "0.1.9999994";
+  version = "0.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5bcca61024164c4a51d29e6921ea1f756d54197c8f052e4c66a2b8399aa9349";
+    hash = "sha256-Fyo7JfLqHJqbahEjVDt/0xJxOfVLqLn3xNJ4lSB7KIw=";
   };
 
-  nativeBuildInputs = [ intreehooks  ];
+  # Applies the following merge request, which doesn't apply cleanly:
+  # https://gitlab.com/thiblahute/mesonpep517/-/merge_requests/25
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'backend-path = "."' 'backend-path = ["."]'
+  '';
 
-  propagatedBuildInputs = [ pytoml ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
-  # postPatch = ''
-  #   # Meson tries to detect ninja as well, so we should patch meson as well.
-  #   substituteInPlace mesonpep517/buildapi.py \
-  #     --replace "'meson'" "'${meson}/bin/meson'" \
-  #     --replace "'ninja'" "'${ninja}/bin/ninja'"
-  # '';
+  propagatedBuildInputs = [ toml ];
 
   propagatedNativeBuildInputs = [ meson ninja ];
 

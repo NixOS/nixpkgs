@@ -2,8 +2,9 @@
 
 buildDunePackage {
   pname = "caqti-lwt";
-  useDune2 = true;
   inherit (caqti) version src;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [ caqti logs lwt ];
 

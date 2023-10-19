@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kore";
-  version = "4.0.1";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "jorisvink";
     repo = pname;
     rev = version;
-    sha256 = "0186lih30zps2d4600ikafbgsml269jzpcszdggzzkdw8p628qw9";
+    sha256 = "sha256-p0M2P02xwww5EnT28VnEtj5b+/jkPW3YkJMuK79vp4k=";
   };
 
   buildInputs = [ openssl curl postgresql yajl ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   # added to fix build w/gcc7 and clang5
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=pointer-compare"
     + lib.optionalString stdenv.cc.isClang " -Wno-error=unknown-warning-option";
 
   enableParallelBuilding = true;

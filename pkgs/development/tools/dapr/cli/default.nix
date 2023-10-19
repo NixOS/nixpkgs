@@ -1,29 +1,48 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
 
 buildGoModule rec {
-  pname = "dapr";
-  version = "1.1.0";
-
-  vendorSha256 = "0fng5a1pvpbwil79xapdalzgkgc9dwsdxs6bznjfwnkyd1vvw6fm";
+  pname = "dapr-cli";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
-    sha256 = "0x2mvlzlmcik6ys6xp722px9l4lj9ssyxb06bzxd7yj7m1wwcwp9";
-
     owner = "dapr";
     repo = "cli";
     rev = "v${version}";
+    sha256 = "sha256-G2n6VGP3ncuZ9siXojr4gx0VacIkKSt4OSQo3ZOecr0=";
   };
 
-  doCheck = false;
+  vendorHash = "sha256-/sdW1cDFpOMkXN4RXJQB1PpDbyNmTEOo9OrK5A7cRGQ=";
+
+  proxyVendor = true;
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  subPackages = [ "." ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  ldflags = [
+    "-X main.version=${version}"
+    "-X main.apiVersion=1.0"
+    "-X github.com/dapr/cli/pkg/standalone.gitcommit=${src.rev}"
+    "-X github.com/dapr/cli/pkg/standalone.gitversion=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/cli $out/bin/dapr
+
+    installShellCompletion --cmd dapr \
+      --bash <($out/bin/dapr completion bash) \
+      --zsh <($out/bin/dapr completion zsh)
   '';
 
   meta = with lib; {
-    homepage = "https://dapr.io";
     description = "A CLI for managing Dapr, the distributed application runtime";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucperkins ];
+    homepage = "https://dapr.io";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ joshvanl lucperkins ];
+    mainProgram = "dapr";
   };
 }

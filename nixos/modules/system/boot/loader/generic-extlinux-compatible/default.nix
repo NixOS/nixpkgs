@@ -20,13 +20,28 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Whether to generate an extlinux-compatible configuration file
-          under <literal>/boot/extlinux.conf</literal>.  For instance,
+          under `/boot/extlinux.conf`.  For instance,
           U-Boot's generic distro boot support uses this file format.
 
-          See <link xlink:href="http://git.denx.de/?p=u-boot.git;a=blob;f=doc/README.distro;hb=refs/heads/master">U-boot's documentation</link>
+          See [U-boot's documentation](http://git.denx.de/?p=u-boot.git;a=blob;f=doc/README.distro;hb=refs/heads/master)
           for more information.
+        '';
+      };
+
+      useGenerationDeviceTree = mkOption {
+        default = true;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Whether to generate Device Tree-related directives in the
+          extlinux configuration.
+
+          When enabled, the bootloader will attempt to load the device
+          tree binaries from the generation's kernel.
+
+          Note that this affects all generations, regardless of the
+          setting value used in their configurations.
         '';
       };
 
@@ -34,7 +49,7 @@ in
         default = 20;
         example = 10;
         type = types.int;
-        description = ''
+        description = lib.mdDoc ''
           Maximum number of configurations in the boot menu.
         '';
       };
@@ -42,9 +57,9 @@ in
       populateCmd = mkOption {
         type = types.str;
         readOnly = true;
-        description = ''
+        description = lib.mdDoc ''
           Contains the builder command used to populate an image,
-          honoring all options except the <literal>-c &lt;path-to-default-configuration&gt;</literal>
+          honoring all options except the `-c <path-to-default-configuration>`
           argument.
           Useful to have for sdImage.populateRootCommands
         '';
@@ -54,7 +69,9 @@ in
   };
 
   config = let
-    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}" + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}";
+    builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
+      + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
+      + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
   in
     mkIf cfg.enable {
       system.build.installBootLoader = "${builder} ${builderArgs} -c";

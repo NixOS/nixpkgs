@@ -1,109 +1,78 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
-, pantheon
-, pkg-config
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
+, pkg-config
 , python3
-, libgee
-, clutter-gtk
-, json-glib
-, libgda
-, libgpod
-, libnotify
-, libpeas
-, libsoup
-, zeitgeist
-, gst_all_1
-, taglib
-, libdbusmenu
-, libsignon-glib
-, libaccounts-glib
+, vala
+, wrapGAppsHook4
+, elementary-gtk-theme
 , elementary-icon-theme
-, wrapGAppsHook
+, glib
+, granite7
+, gst_all_1
+, gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "5.0.5";
-
-  repoName = "music";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "music";
     rev = version;
-    sha256 = "sha256-3GZoBCu9rF+BnNk9APBzKWO1JYg1XYWwrEvwcjWvYDE=";
-  };
-
-  patches = [
-    # Fix build with latest Vala.
-    (fetchpatch {
-      url = "https://github.com/elementary/music/commit/9ed3bbb3a0d68e289a772b4603f58e52a4973316.patch";
-      sha256 = "fFO97SQzTc2fYFJFGfFPSUCdkCgZxfX1fjDQ7GH4BUs=";
-    })
-  ];
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-L+E5gDtIgVkfmOIhzS7x8vtyMJYqx/UQpYMChrt2Tgo=";
   };
 
   nativeBuildInputs = [
-    desktop-file-utils
     meson
     ninja
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
-  buildInputs = with gst_all_1; [
-    clutter-gtk
+  buildInputs = [
     elementary-icon-theme
-    granite
+    glib
+    granite7
+    gtk4
+  ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    json-glib
-    libaccounts-glib
-    libdbusmenu
-    libgda
-    libgee
-    libgpod
-    libnotify
-    libpeas
-    libsignon-glib
-    libsoup
-    taglib
-    zeitgeist
-  ];
-
-  mesonFlags = [
-    "-Dplugins=lastfm,audioplayer,cdrom,ipod"
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # The GTK theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "${elementary-gtk-theme}/share"
+      # The icon theme is hardcoded.
+      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
+    )
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Music player and library designed for elementary OS";
     homepage = "https://github.com/elementary/music";
-    license = licenses.lgpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.music";
   };
 }

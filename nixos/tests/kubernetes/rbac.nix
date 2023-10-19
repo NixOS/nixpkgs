@@ -1,4 +1,4 @@
-{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+{ system ? builtins.currentSystem, pkgs ? import ../../.. { inherit system; } }:
 with import ./base.nix { inherit system; };
 let
 
@@ -76,7 +76,7 @@ let
     }];
   });
 
-  kubectl = pkgs.runCommand "copy-kubectl" { buildInputs = [ pkgs.kubernetes ]; } ''
+  copyKubectl = pkgs.runCommand "copy-kubectl" { } ''
     mkdir -p $out/bin
     cp ${pkgs.kubernetes}/bin/kubectl $out/bin/kubectl
   '';
@@ -84,7 +84,11 @@ let
   kubectlImage = pkgs.dockerTools.buildImage {
     name = "kubectl";
     tag = "latest";
-    contents = [ kubectl pkgs.busybox kubectlPod2 ];
+    copyToRoot = pkgs.buildEnv {
+      name = "image-root";
+      pathsToLink = [ "/bin" ];
+      paths = [ copyKubectl pkgs.busybox kubectlPod2 ];
+    };
     config.Entrypoint = ["/bin/sh"];
   };
 
@@ -115,9 +119,9 @@ let
 
       machine1.wait_until_succeeds("kubectl get pod kubectl | grep Running")
 
-      machine1.wait_until_succeeds("kubectl exec -ti kubectl -- kubectl get pods")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl")
+      machine1.wait_until_succeeds("kubectl exec kubectl -- kubectl get pods")
+      machine1.fail("kubectl exec kubectl -- kubectl create -f /kubectl-pod-2.json")
+      machine1.fail("kubectl exec kubectl -- kubectl delete pods -l name=kubectl")
     '';
   };
 
@@ -152,9 +156,9 @@ let
 
       machine1.wait_until_succeeds("kubectl get pod kubectl | grep Running")
 
-      machine1.wait_until_succeeds("kubectl exec -ti kubectl -- kubectl get pods")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json")
-      machine1.fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl")
+      machine1.wait_until_succeeds("kubectl exec kubectl -- kubectl get pods")
+      machine1.fail("kubectl exec kubectl -- kubectl create -f /kubectl-pod-2.json")
+      machine1.fail("kubectl exec kubectl -- kubectl delete pods -l name=kubectl")
     '';
   };
 

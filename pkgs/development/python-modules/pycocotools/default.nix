@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pycocotools";
-  version = "2.0.2";
+  version = "2.0.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06hz0iz4kqxhqby4j7bah8l41kg68bb118jawp172i4vg497lw94";
+    hash = "sha256-2ot4FRlu6/Ctq/Z/zEWRJsvGSYu8arH9FEw3FGXYaHk=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Official APIs for the MS-COCO dataset";
     homepage = "https://github.com/cocodataset/cocoapi/tree/master/PythonAPI";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa piegames ];
+    maintainers = with maintainers; [ piegames ];
   };
 }

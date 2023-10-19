@@ -1,19 +1,20 @@
-{ lib, stdenv, fetchurl, libXi, libXrandr, libXxf86vm, libGL, libGLU, xlibsWrapper, cmake }:
+{ lib, stdenv, fetchurl, libICE, libXext, libXi, libXrandr, libXxf86vm, libGL, libGLU, cmake
+, testers
+}:
 
-let version = "3.2.1";
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeglut";
-  inherit version;
+  version = "3.4.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/freeglut/freeglut-${version}.tar.gz";
-    sha256 = "0s6sk49q8ijgbsrrryb7dzqx2fa744jhx1wck5cz5jia2010w06l";
+    url = "mirror://sourceforge/freeglut/freeglut-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-PAvLkV2bGAqX7a69ARt6HeVFg6g4ZE3NQrsOoMbz6uw=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libXi libXrandr libXxf86vm libGL libGLU xlibsWrapper ];
+  buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGL libGLU ];
 
   cmakeFlags = lib.optionals stdenv.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGL}/include"
@@ -22,6 +23,8 @@ in stdenv.mkDerivation {
                  "-DFREEGLUT_BUILD_DEMOS:BOOL=OFF"
                  "-DFREEGLUT_BUILD_STATIC:BOOL=OFF"
                ];
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     description = "Create and manage windows containing OpenGL contexts";
@@ -33,9 +36,10 @@ in stdenv.mkDerivation {
       intended to be a full replacement for GLUT, and has only a few
       differences.
     '';
-    homepage = "http://freeglut.sourceforge.net/";
+    homepage = "https://freeglut.sourceforge.net/";
     license = licenses.mit;
+    pkgConfigModules = [ "glut" ];
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];
   };
-}
+})

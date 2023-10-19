@@ -1,28 +1,28 @@
 { lib, stdenv
 , fetchurl
 , pkg-config
-, gtk3
-, gtkspell3
-, isocodes
-, goocanvas2
+, wrapGAppsHook
 , intltool
 , itstool
 , libxml2
+, gobject-introspection
+, gtk3
+, goocanvas2
+, gtkspell3
+, isocodes
 , gnome
 , python3
-, gobject-introspection
-, wrapGAppsHook
 , tesseract4
 , extraOcrEngines ? [] # other supported engines are: ocrad gocr cuneiform
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ocrfeeder";
-  version = "0.8.3";
+  version = "0.8.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12f5gnq92ffnd5zaj04df7jrnsdz1zn4zcgpbf5p9qnd21i2y529";
+    url = "mirror://gnome/sources/${finalAttrs.pname}/${lib.versions.majorMinor finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-sD0qWUndguJzTw0uy0FIqupFf4OX6dTFvcd+Mz+8Su0=";
   };
 
   nativeBuildInputs = [
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     libxml2
+    gobject-introspection
   ];
 
   buildInputs = [
     gtk3
-    gobject-introspection
     goocanvas2
     gtkspell3
     isocodes
@@ -48,19 +48,19 @@ stdenv.mkDerivation rec {
       pygobject3
     ]))
   ];
-
-  # https://gitlab.gnome.org/GNOME/ocrfeeder/-/issues/22
-  postConfigure = ''
-    substituteInPlace src/ocrfeeder/util/constants.py \
-      --replace /usr/share/xml/iso-codes ${isocodes}/share/xml/iso-codes
-  '';
+  patches = [
+    # Compiles, but doesn't launch without this, see:
+    # https://gitlab.gnome.org/GNOME/ocrfeeder/-/issues/83
+    ./fix-launch.diff
+  ];
 
   enginesPath = lib.makeBinPath ([
     tesseract4
   ] ++ extraOcrEngines);
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${enginesPath}")
+    gappsWrapperArgs+=(--prefix PATH : "${finalAttrs.enginesPath}")
+    gappsWrapperArgs+=(--set ISO_CODES_DIR "${isocodes}/share/xml/iso-codes")
   '';
 
   meta = with lib; {
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
-}
+})

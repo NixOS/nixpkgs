@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "watson-ruby";
   version = (import ./gemset.nix).watson-ruby.version;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = let
     env = bundlerEnv {
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://goosecode.com/watson/";
     license     = with licenses; mit;
     maintainers = with maintainers; [ robertodr nicknovitski ];
+    mainProgram = "watson";
     platforms   = platforms.unix;
   };
 }

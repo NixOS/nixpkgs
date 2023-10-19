@@ -1,9 +1,10 @@
 { lib
 , buildPythonPackage
+, pythonAtLeast
 , fetchPypi
 , pycosat
 , requests
-, ruamel_yaml
+, ruamel-yaml
 , isPy3k
 , enum34
 }:
@@ -15,12 +16,15 @@ buildPythonPackage rec {
   pname = "conda";
   version = "4.3.16";
 
+  # this is a very outdated version of conda that isn't compatible with python 3.10+
+  disabled = pythonAtLeast "3.10";
+
   src = fetchPypi {
     inherit pname version;
     sha256 = "a91ef821343dea3ba9670f3d10b36c1ace4f4c36d70c175d8fc8886e94285953";
   };
 
-  propagatedBuildInputs = [ pycosat requests ruamel_yaml ] ++ lib.optional (!isPy3k) enum34;
+  propagatedBuildInputs = [ pycosat requests ruamel-yaml ] ++ lib.optional (!isPy3k) enum34;
 
   # No tests
   doCheck = false;
@@ -30,5 +34,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/conda/conda";
     license = lib.licenses.bsd3;
   };
-
 }

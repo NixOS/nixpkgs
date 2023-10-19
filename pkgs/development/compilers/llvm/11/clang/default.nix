@@ -1,7 +1,8 @@
-{ lib, stdenv, llvm_meta, fetch, fetchpatch, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
+{ lib, stdenv, llvm_meta, fetch, fetchpatch, substituteAll, cmake, libxml2, libllvm, version, clang-tools-extra_src, python3
 , buildLlvmTools
 , fixDarwinDylibNames
 , enableManpages ? false
+, enablePolly ? false
 }:
 
 let
@@ -27,9 +28,8 @@ let
     buildInputs = [ libxml2 libllvm ];
 
     cmakeFlags = [
-      "-DCMAKE_CXX_FLAGS=-std=c++14"
       "-DCLANGD_BUILD_XPC=OFF"
-      "-DLLVM_CONFIG_PATH=${libllvm.dev}/bin/llvm-config${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "-native"}"
+      "-DLLVM_ENABLE_RTTI=ON"
     ] ++ lib.optionals enableManpages [
       "-DCLANG_INCLUDE_DOCS=ON"
       "-DLLVM_ENABLE_SPHINX=ON"
@@ -39,23 +39,19 @@ let
     ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
       "-DCLANG_TABLEGEN=${buildLlvmTools.libclang.dev}/bin/clang-tblgen"
+    ] ++ lib.optionals enablePolly [
+      "-DWITH_POLLY=ON"
+      "-DLINK_POLLY_INTO_TOOLS=ON"
     ];
+
 
     patches = [
       ./purity.patch
       # https://reviews.llvm.org/D51899
       ./gnu-install-dirs.patch
-      # Revert: [Driver] Default to -fno-common for all targets
-      # https://reviews.llvm.org/D75056
-      #
-      # Maintains compatibility with packages that haven't been fixed yet, and
-      # matches gcc10's configuration in nixpkgs.
-      (fetchpatch {
-        revert = true;
-        url = "https://github.com/llvm/llvm-project/commit/0a9fc9233e172601e26381810d093e02ef410f65.diff";
-        stripLen = 1;
-        excludes = [ "docs/*" "test/*" ];
-        sha256 = "0gxgmi0qbm89mq911dahallhi8m6wa9vpklklqmxafx4rplrr8ph";
+      (substituteAll {
+        src = ../../clang-11-12-LLVMgold-path.patch;
+        libllvmLibdir = "${libllvm.lib}/lib";
       })
     ];
 
@@ -63,9 +59,6 @@ let
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
              -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
              lib/Driver/ToolChains/*.cpp
-
-      # Patch for standalone doc building
-      sed -i '1s,^,find_package(Sphinx REQUIRED)\n,' docs/CMakeLists.txt
     '' + lib.optionalString stdenv.hostPlatform.isMusl ''
       sed -i -e 's/lgcc_s/lgcc_eh/' lib/Driver/ToolChains/*.cpp
     '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -75,12 +68,7 @@ let
 
     outputs = [ "out" "lib" "dev" "python" ];
 
-    # Clang expects to find LLVMgold in its own prefix
     postInstall = ''
-      if [ -e ${libllvm.lib}/lib/LLVMgold.so ]; then
-        ln -sv ${libllvm.lib}/lib/LLVMgold.so $lib/lib
-      fi
-
       ln -sv $out/bin/clang $out/bin/cpp
 
       # Move libclang to 'lib' output
@@ -90,21 +78,24 @@ let
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
-      mkdir -p $python/bin $python/share/clang/
+      mkdir -p $python/bin $python/share/{clang,scan-view}
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+      mv $out/share/scan-view/*.py $python/share/scan-view
       rm $out/bin/c-index-test
+      patchShebangs $python/bin
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin
     '';
 
     passthru = {
-      isClang = true;
       inherit libllvm;
+      isClang = true;
+      hardeningUnsupportedFlags = [ "fortify3" ];
     };
 
     meta = llvm_meta // {
@@ -121,6 +112,7 @@ let
         of tools that can be built using the Clang frontend as a library to
         parse C/C++ code.
       '';
+      mainProgram = "clang";
     };
   } // lib.optionalAttrs enableManpages {
     pname = "clang-manpages";

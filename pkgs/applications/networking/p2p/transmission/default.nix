@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchurl
 , cmake
 , pkg-config
 , openssl
@@ -10,6 +11,12 @@
 , systemd
 , zlib
 , pcre
+, libb64
+, libutp
+, miniupnpc
+, dht
+, libnatpmp
+, libiconv
   # Build options
 , enableGTK3 ? false
 , gtk3
@@ -18,27 +25,32 @@
 , enableQt ? false
 , qt5
 , nixosTests
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , enableDaemon ? true
 , enableCli ? true
 , installLib ? false
 , apparmorRulesFromClosure
 }:
 
-let
-  version = "3.00";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "transmission";
-  inherit version;
+  version = "3.00";
 
   src = fetchFromGitHub {
     owner = "transmission";
     repo = "transmission";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "0ccg0km54f700x9p0jsnncnwvfnxfnxf7kcm7pcx1cj0vw78924z";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix build with openssl 3.0
+    (fetchurl {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-p2p/transmission/files/transmission-3.00-openssl-3.patch";
+      hash = "sha256-peVrkGck8AfbC9uYNfv1CIu1alIewpca7A6kRXjVlVs=";
+    })
+  ];
 
   outputs = [ "out" "apparmor" ];
 
@@ -69,14 +81,17 @@ in stdenv.mkDerivation {
     libevent
     zlib
     pcre
+    libb64
+    libutp
+    miniupnpc
+    dht
+    libnatpmp
   ]
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
   ++ lib.optionals enableSystemd [ systemd ]
   ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ;
-
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework CoreFoundation";
+  ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postInstall = ''
     mkdir $apparmor
@@ -87,7 +102,7 @@ in stdenv.mkDerivation {
       include <abstractions/nameservice>
       include <abstractions/ssl_certs>
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
-        curl libevent openssl pcre zlib
+        curl libevent openssl pcre zlib libnatpmp miniupnpc
       ] ++ lib.optionals enableSystemd [ systemd ]
         ++ lib.optionals stdenv.isLinux [ inotify-tools ]
       )}"
@@ -96,7 +111,8 @@ in stdenv.mkDerivation {
       r @{PROC}/@{pid}/environ,
       r @{PROC}/@{pid}/mounts,
       rwk /tmp/tr_session_id_*,
-      r /run/systemd/resolve/stub-resolv.conf,
+
+      r $out/share/transmission/web/**,
 
       include <local/bin.transmission-daemon>
     }
@@ -104,11 +120,13 @@ in stdenv.mkDerivation {
   '';
 
   passthru.tests = {
+    apparmor = nixosTests.transmission; # starts the service with apparmor enabled
     smoke-test = nixosTests.bittorrent;
   };
 
   meta = {
     description = "A fast, easy and free BitTorrent client";
+    mainProgram = if enableQt then "transmission-qt" else if enableGTK3 then "transmission-gtk" else "transmission-cli";
     longDescription = ''
       Transmission is a BitTorrent client which features a simple interface
       on top of a cross-platform back-end.
@@ -121,9 +139,9 @@ in stdenv.mkDerivation {
         * Full encryption, DHT, and PEX support
     '';
     homepage = "http://www.transmissionbt.com/";
-    license = lib.licenses.gpl2; # parts are under MIT
-    maintainers = with lib.maintainers; [ astsmtl vcunat wizeman ];
+    license = lib.licenses.gpl2Plus; # parts are under MIT
+    maintainers = with lib.maintainers; [ astsmtl ];
     platforms = lib.platforms.unix;
   };
 
-}
+})

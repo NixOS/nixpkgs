@@ -1,33 +1,45 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake, qtbase, qttools
-, seafile-shared, jansson, libsearpc
-, withShibboleth ? true, qtwebengine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, cmake
+, qtbase
+, qttools
+, libuuid
+, seafile-shared
+, jansson
+, libsearpc
+, withShibboleth ? true
+, qtwebengine
+, wrapQtAppsHook
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "seafile-client";
-  version = "8.0.1";
+  version = "9.0.3";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile-client";
-    rev = "b4b944921c7efef13a93d693c45c997943899dec";
-    sha256 = "2vV+6ZXjVg81JVLfWeD0UK+RdmpBxBU2Ozx790WFSyw=";
+    rev = "v${version}";
+    sha256 = "sha256-zoo34mhNZTEwxjSy8XgmZfEjkujmWj34OtDJQSCb/zk=";
   };
 
-  patches = [
-    # Fix compilation failure with "error: template with C linkage", fixes #122505
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_build_with_glib2.diff?h=seafile-client&id=7be253aaa2bdb6771721f45aa08bc875c8001c5a";
-      name = "fix_build_with_glib2.diff";
-      sha256 = "0hl7rcqfr8k62c1pr133bp3j63b905izaaggmgvr1af4jibal05v";
-    })
+  nativeBuildInputs = [
+    libuuid
+    pkg-config
+    cmake
+    wrapQtAppsHook
+    qttools
   ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ qtbase qttools seafile-shared jansson libsearpc ]
-    ++ lib.optional withShibboleth qtwebengine;
+  buildInputs = [
+    seafile-shared
+    jansson
+    libsearpc
+  ] ++ lib.optional withShibboleth qtwebengine;
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
-    ++ lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
+  cmakeFlags = lib.optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
   qtWrapperArgs = [
     "--suffix PATH : ${lib.makeBinPath [ seafile-shared ]}"
@@ -38,6 +50,6 @@ mkDerivation rec {
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ eduardosm ];
+    maintainers = with maintainers; [ schmittlauch greizgh ];
   };
 }

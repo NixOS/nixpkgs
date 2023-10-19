@@ -7,7 +7,7 @@ let
 in
 {
   options = {
-    programs.bash.enableCompletion = mkEnableOption "Bash completion for all interactive bash shells" // {
+    programs.bash.enableCompletion = mkEnableOption (lib.mdDoc "Bash completion for all interactive bash shells") // {
       default = true;
     };
   };
@@ -26,7 +26,7 @@ in
         shopt -s nullglob
         for p in $NIX_PROFILES; do
           for m in "$p/etc/bash_completion.d/"*; do
-            . $m
+            . "$m"
           done
         done
         eval "$nullglobStatus"

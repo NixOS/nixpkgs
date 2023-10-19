@@ -2,46 +2,55 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+, certifi
 , fetchFromGitHub
 , poetry-core
-, pylint
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
+, pythonOlder
+, yarl
 }:
 
 buildPythonPackage rec {
   pname = "pytile";
-  version = "5.2.1";
-  disabled = pythonAtLeast "3.9";
+  version = "2023.10.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bachya";
-    repo = pname;
-    rev = version;
-    sha256 = "0d63xga4gjlfl9fzv3i4j605rrx2qgbzam6cl609ny96s8q8h1px";
+    repo = "pytile";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L1Ovpxn7Y+reK8YcVBPwoRjKxcyByrPGz5i/csGzKfE=";
   };
 
-  format = "pyproject";
-
-  nativeBuildInputs = [ poetry-core ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
-    pylint
+    certifi
+    yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
-  pythonImportsCheck = [ "pytile" ];
+  disabledTestPaths = [
+    # Ignore the examples as they are prefixed with test_
+    "examples/"
+  ];
+
+  pythonImportsCheck = [
+    "pytile"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -52,6 +61,7 @@ buildPythonPackage rec {
       Bluetooth trackers (including last location and more).
     '';
     homepage = "https://github.com/bachya/pytile";
+    changelog = "https://github.com/bachya/pytile/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "cppzmq";
-  version = "4.7.1";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
     rev = "v${version}";
-    sha256 = "00lb3pv923nbpaf7ric2cv6lbpspknj0pxj6yj5jyah7r3zw692m";
+    sha256 = "sha256-HTdaV1cLbwGYuikS9EAVvAOdLmCoWlvVXlpYsUwY5IA=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zeromq ];
+  propagatedBuildInputs = [ zeromq ];
 
   cmakeFlags = [
     # Tests try to download googletest at compile time; there is no option

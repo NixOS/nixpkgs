@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "pistol";
-  version = "0.2.1";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "doronbehar";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NUHk48P3kUx+e9BR9k9K/VaHnbZ6Do6RRf1S0974sO8=";
+    sha256 = "sha256-7nALrB+QubEnryVsGPpFMJ003SP2lheYTkWXF5w/V8I=";
   };
 
-  vendorSha256 = "sha256-n98cjXsgg2w3shbZPnk3g7mBbzV5Tc3jd9ZtiRk1KUM=";
+  vendorHash = "sha256-9Ydps8UA1f0fwG5SHRE4F61OyRJiITw/4SyoMEbsRgM=";
 
   doCheck = false;
 
@@ -30,12 +30,12 @@ buildGoModule rec {
     installShellFiles
     asciidoctor
   ];
-  postBuild = ''
+  postInstall = ''
     asciidoctor -b manpage -d manpage README.adoc
     installManPage pistol.1
   '';
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   meta = with lib; {
     description = "General purpose file previewer designed for Ranger, Lf to make scope.sh redundant";

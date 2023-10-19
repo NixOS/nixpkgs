@@ -11,7 +11,9 @@ stdenv.mkDerivation {
     sha256 = "1r76zvln3bwycxlmqday0sqzv5j260y7mdh66as2aqny6jzd5ld7";
   };
 
-  buildInputs = [ mpi gfortran ];
+  nativeBuildInputs = [ gfortran ];
+
+  buildInputs = [ mpi ];
 
   configurePhase = ''
     cd source

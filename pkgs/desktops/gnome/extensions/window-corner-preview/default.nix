@@ -13,18 +13,22 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  uuid = "window-corner-preview@fabiomereu.it";
+  passthru = {
+    extensionUuid = "window-corner-preview@fabiomereu.it";
+    extensionPortalSlug = "window-corner-preview";
+  };
+
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/gnome-shell/extensions
-    cp -r ${uuid} $out/share/gnome-shell/extensions
+    cp -r "window-corner-preview@fabiomereu.it" $out/share/gnome-shell/extensions
     runHook postInstall
   '';
 
   meta = with lib; {
     description = "GNOME Shell extension showing a video preview on the corner of the screen";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     homepage = "https://github.com/medenagan/window-corner-preview";
     broken = lib.versionAtLeast gnome.gnome-shell.version "3.32"; # Doesn't support 3.34
   };

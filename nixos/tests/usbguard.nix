@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ tnias ];
   };
 
-  machine =
+  nodes.machine =
     { ... }:
     {
       services.usbguard = {
@@ -22,7 +22,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     # create a blank disk image for our fake USB stick
-    with open(machine.state_dir + "/usbstick.img", "wb") as stick:
+    with open(machine.state_dir / "usbstick.img", "wb") as stick:
         stick.write(b"\x00" * (1024 * 1024))
 
     # wait for machine to have started and the usbguard service to be up

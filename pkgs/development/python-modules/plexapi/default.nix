@@ -3,35 +3,41 @@
 , fetchFromGitHub
 , requests
 , tqdm
-, websocket_client
-, isPy27
+, websocket-client
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "PlexAPI";
-  version = "4.5.2";
-  disabled = isPy27;
+  pname = "plexapi";
+  version = "4.15.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
-    rev = version;
-    sha256 = "sha256-9rdpisEuLUO7oO7+7SQb4fXqRG30rf4R7bSFY+QpMhM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NBV4jrLfU5vqQljQh28tJxgaNSo/ilph8xsjdVKCOJg=";
   };
 
   propagatedBuildInputs = [
     requests
     tqdm
-    websocket_client
+    websocket-client
   ];
 
   # Tests require a running Plex instance
   doCheck = false;
-  pythonImportsCheck = [ "plexapi" ];
+
+  pythonImportsCheck = [
+    "plexapi"
+  ];
 
   meta = with lib; {
     description = "Python bindings for the Plex API";
     homepage = "https://github.com/pkkid/python-plexapi";
+    changelog = "https://github.com/pkkid/python-plexapi/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ colemickens ];
   };

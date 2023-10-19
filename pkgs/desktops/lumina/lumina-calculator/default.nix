@@ -11,7 +11,7 @@ mkDerivation rec {
     sha256 = "1238d1m0mjkwkdpgq165a4ql9aql0aji5f41rzdzny6m7ws9nm2y";
   };
 
-  sourceRoot = "source/src-qt5";
+  sourceRoot = "${src.name}/src-qt5";
 
   nativeBuildInputs = [ qmake qttools ];
 
@@ -27,6 +27,6 @@ mkDerivation rec {
     homepage = "https://github.com/lumina-desktop/lumina-calculator";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.lumina.members;
   };
 }

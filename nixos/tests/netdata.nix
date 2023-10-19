@@ -3,14 +3,14 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "netdata";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ cransom ];
+    maintainers = [ cransom raitobezarius ];
   };
 
   nodes = {
     netdata =
       { pkgs, ... }:
         {
-          environment.systemPackages = with pkgs; [ curl jq ];
+          environment.systemPackages = with pkgs; [ curl jq netdata ];
           services.netdata.enable = true;
         };
     };
@@ -34,5 +34,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     filter = '[.data[range(10)][.labels | indices("root")[0]]] | add | . > 0'
     cmd = f"curl -s {url} | jq -e '{filter}'"
     netdata.wait_until_succeeds(cmd)
+
+    # check if the control socket is available
+    netdata.succeed("sudo netdatacli ping")
   '';
 })

@@ -1,21 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools_scm, toml }:
+{ lib
+, buildPythonPackage
+, fetchpatch
+, fetchPypi
+, pytestCheckHook
+, setuptools
+, setuptools-scm
+, wheel
+}:
 
 buildPythonPackage rec {
   pname = "ansi2html";
-  version = "1.6.0";
-
-  disabled = !isPy3k;
+  version = "1.8.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f124ea7efcf3f24f1f9398e527e688c9ae6eab26b0b84e1299ef7f94d92c596";
+    hash = "sha256-OLgqKYSCofomE/D5yb6z23Ko+DLurFjrLke/Ms039tU=";
   };
 
-  nativeBuildInputs = [ setuptools_scm toml ];
-  propagatedBuildInputs = [ six setuptools ];
+  patches = [
+    (fetchpatch {
+      name = "update-build-requirements.patch";
+      url = "https://github.com/pycontribs/ansi2html/commit/be9c47dd39e500b2e34e95efde90d0a3b44daaee.patch";
+      hash = "sha256-nvOclsgysg+4sK694ppls0BLfq5MCJJQW3V/Ru30D/k=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   preCheck = "export PATH=$PATH:$out/bin";
-  checkInputs = [ mock pytestCheckHook ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ansi2html" ];
 

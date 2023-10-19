@@ -11,8 +11,16 @@ The function `buildGoModule` builds Go programs managed with Go modules. It buil
 
 In the following is an example expression using `buildGoModule`, the following arguments are of special significance to the function:
 
-- `vendorSha256`: is the hash of the output of the intermediate fetcher derivation. `vendorSha256` can also take `null` as an input. When `null` is used as a value, rather than fetching the dependencies and vendoring them, we use the vendoring included within the source repo. If you'd like to not have to update this field on dependency changes, run `go mod vendor` in your source repo and set `vendorSha256 = null;`
-- `runVend`: runs the vend command to generate the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build.
+- `vendorHash`: is the hash of the output of the intermediate fetcher derivation.
+
+  `vendorHash` can also be set to `null`.
+  In that case, rather than fetching the dependencies and vendoring them, the dependencies vendored in the source repo will be used.
+
+  To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`
+
+  To obtain the actual hash, set `vendorHash = lib.fakeSha256;` and run the build ([more details here](#sec-source-hashes)).
+- `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform-dependent `vendorHash` checksums.
+- `modPostBuild`: Shell commands to run after the build of the goModules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash` (or `vendorSha256`). Note that if you change this attribute, you need to update `vendorHash` (or `vendorSha256`) attribute.
 
 ```nix
 pet = buildGoModule rec {
@@ -23,19 +31,16 @@ pet = buildGoModule rec {
     owner = "knqyf263";
     repo = "pet";
     rev = "v${version}";
-    sha256 = "0m2fzpqxk7hrbxsgqplkg7h2p7gv6s1miymv3gvw0cz039skag0s";
+    hash = "sha256-Gjw1dRrgM8D3G7v6WIM2+50r4HmTXvx0Xxme2fH9TlQ=";
   };
 
-  vendorSha256 = "1879j77k96684wi554rkjxydrj8g3hpp0kvxz03sd8dmwr3lh83j";
-
-  runVend = true;
+  vendorHash = "sha256-ciBIR+a1oaYH+H1PcC8cD8ncfJczk1IiJ8iYNM+R6aA=";
 
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";
     homepage = "https://github.com/knqyf263/pet";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }
 ```
@@ -44,7 +49,7 @@ pet = buildGoModule rec {
 
 The function `buildGoPackage` builds legacy Go programs, not supporting Go modules.
 
-### Example for `buildGoPackage`
+### Example for `buildGoPackage` {#example-for-buildgopackage}
 
 In the following is an example expression using buildGoPackage, the following arguments are of special significance to the function:
 
@@ -62,7 +67,7 @@ deis = buildGoPackage rec {
     owner = "deis";
     repo = "deis";
     rev = "v${version}";
-    sha256 = "1qv9lxqx7m18029lj8cw3k7jngvxs4iciwrypdy0gd2nnghc68sw";
+    hash = "sha256-XCPD4LNWtAd8uz7zyCLRfT8rzxycIUmTACjU03GnaeM=";
   };
 
   goDeps = ./deps.nix;
@@ -79,11 +84,11 @@ The `goDeps` attribute can be imported from a separate `nix` file that defines w
     goPackagePath = "gopkg.in/yaml.v2";
     fetch = {
       # `fetch type` that needs to be used to get package source.
-      # If `git` is used there should be `url`, `rev` and `sha256` defined next to it.
+      # If `git` is used there should be `url`, `rev` and `hash` defined next to it.
       type = "git";
       url = "https://gopkg.in/yaml.v2";
       rev = "a83829b6f1293c91addabc89d0571c246397bbf4";
-      sha256 = "1m4dsmk90sbi17571h6pld44zxz7jc4lrnl4f27dpd1l8g5xvjhh";
+      hash = "sha256-EMrdy0M0tNuOcITaTAmT5/dPSKPXwHDKCXFpkGbVjdQ=";
     };
   }
   {
@@ -92,7 +97,7 @@ The `goDeps` attribute can be imported from a separate `nix` file that defines w
       type = "git";
       url = "https://github.com/docopt/docopt-go";
       rev = "784ddc588536785e7299f7272f39101f7faccc3f";
-      sha256 = "0wwz48jl9fvl1iknvn9dqr4gfy1qs03gxaikrxxp9gry6773v3sj";
+      hash = "sha256-Uo89zjE+v3R7zzOq/gbQOHj3SMYt2W1nDHS7RCUin3M=";
     };
   }
 ]
@@ -110,25 +115,42 @@ done
 
 ## Attributes used by the builders {#ssec-go-common-attributes}
 
-Both `buildGoModule` and `buildGoPackage` can be tweaked to behave slightly differently, if the following attributes are used:
+Many attributes [controlling the build phase](#variables-controlling-the-build-phase) are respected by both `buildGoModule` and `buildGoPackage`. Note that `buildGoModule` reads the following attributes also when building the `vendor/` goModules fixed output derivation as well:
 
-### `buildFlagsArray` and `buildFlags`: {#ex-goBuildFlags-noarray}
+- [`sourceRoot`](#var-stdenv-sourceRoot)
+- [`prePatch`](#var-stdenv-prePatch)
+- [`patches`](#var-stdenv-patches)
+- [`patchFlags`](#var-stdenv-patchFlags)
+- [`postPatch`](#var-stdenv-postPatch)
+- [`preBuild`](#var-stdenv-preBuild)
 
-These attributes set build flags supported by `go build`. We recommend using `buildFlagsArray`. The most common use case of these attributes is to make the resulting executable aware of its own version. For example:
+In addition to the above attributes, and the many more variables respected also by `stdenv.mkDerivation`, both `buildGoModule` and `buildGoPackage` respect Go-specific attributes that tweak them to behave slightly differently:
+
+### `ldflags` {#var-go-ldflags}
+
+Arguments to pass to the Go linker tool via the `-ldflags` argument of `go build`. The most common use case for this argument is to make the resulting executable aware of its own version. For example:
 
 ```nix
-  buildFlagsArray = [
-    # Note: single quotes are not needed.
-    "-ldflags=-X main.Version=${version} -X main.Commit=${version}"
+  ldflags = [
+    "-s" "-w"
+    "-X main.Version=${version}"
+    "-X main.Commit=${version}"
+  ];
+```
+
+### `tags` {#var-go-tags}
+
+Arguments to pass to the Go via the `-tags` argument of `go build`. For example:
+
+```nix
+  tags = [
+    "production"
+    "sqlite"
   ];
 ```
 
 ```nix
-  buildFlagsArray = ''
-    -ldflags=
-    -X main.Version=${version}
-    -X main.Commit=${version}
-  '';
+  tags = [ "production" ] ++ lib.optionals withSqlite [ "sqlite" ];
 ```
 
 ### `deleteVendor` {#var-go-deleteVendor}
@@ -137,4 +159,8 @@ Removes the pre-existing vendor directory. This should only be used if the depen
 
 ### `subPackages` {#var-go-subPackages}
 
-Limits the builder from building child packages that have not been listed. If <varname>subPackages</varname> is not specified, all child packages will be built.
+Specified as a string or list of strings. Limits the builder from building child packages that have not been listed. If `subPackages` is not specified, all child packages will be built.
+
+### `excludedPackages` {#var-go-excludedPackages}
+
+Specified as a string or list of strings. Causes the builder to skip building child packages that match any of the provided values. If `excludedPackages` is not specified, all child packages will be built.

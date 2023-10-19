@@ -1,26 +1,29 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-let
+stdenvNoCC.mkDerivation rec {
   pname = "parastoo-fonts";
-  version = "1.0.0-alpha5";
-in fetchFromGitHub {
-  name = "${pname}-${version}";
+  version = "2.0.1";
 
-  owner = "rastikerdar";
-  repo = "parastoo-font";
-  rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "rastikerdar";
+    repo = "parastoo-font";
+    rev = "v${version}";
+    hash = "sha256-E94B9R2h227D49dscCBsprmb7w0GrQ+2tWOWRf8FH30=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
+  installPhase = ''
+    runHook preInstall
+
     find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/parastoo-fonts {} \;
+
+    runHook postInstall
   '';
-  sha256 = "10jbii6rskcy4akjl5yfcqv4mfwk3nqnx36l6sbxks43va9l04f4";
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/parastoo-font";
     description = "A Persian (Farsi) Font - فونت ( قلم ) فارسی پرستو";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

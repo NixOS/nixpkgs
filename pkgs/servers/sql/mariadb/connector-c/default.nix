@@ -1,21 +1,21 @@
 { lib, stdenv, fetchurl, cmake
-, curl, openssl, zlib
+, curl, openssl, zlib, zstd
 , libiconv
-, version, sha256, ...
+, version, hash, ...
 }:
 
 with lib;
 
-stdenv.mkDerivation {
+let
+  isVer33 = versionAtLeast version "3.3";
+
+in stdenv.mkDerivation {
   pname = "mariadb-connector-c";
   inherit version;
 
   src = fetchurl {
-    urls = [
-      "https://downloads.mariadb.org/f/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz"
-      "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz"
-    ];
-    inherit sha256;
+    url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
+    inherit hash;
   };
 
   outputs = [ "out" "dev" ];
@@ -29,8 +29,18 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace mariadb_config/mariadb_config.c.in \
-      --replace '-I%s/@INSTALL_INCLUDEDIR@' "-I$dev/include" \
-      --replace '-L%s/@INSTALL_LIBDIR@' "-L$out/lib/mariadb"
+      --replace '#define INCLUDE "-I%s/@INSTALL_INCLUDEDIR@ -I%s/@INSTALL_INCLUDEDIR@/mysql"' "#define INCLUDE \"-I$dev/include -I$dev/include/mysql\"" \
+      --replace '#define LIBS    "-L%s/@INSTALL_LIBDIR@/ -lmariadb"' "#define LIBS    \"-L$out/lib/mariadb -lmariadb\"" \
+      --replace '#define PKG_LIBDIR "%s/@INSTALL_LIBDIR@"' "#define PKG_LIBDIR \"$out/lib/mariadb\"" \
+      --replace '#define PLUGIN_DIR "%s/@INSTALL_PLUGINDIR@"' "#define PLUGIN_DIR \"$out/lib/mariadb/plugin\"" \
+      --replace '#define PKG_PLUGINDIR "%s/@INSTALL_PLUGINDIR@"' "#define PKG_PLUGINDIR \"$out/lib/mariadb/plugin\""
+  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # Disables all dynamic plugins
+    substituteInPlace cmake/plugins.cmake \
+      --replace 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "DYNAMIC")' 'if(''${CC_PLUGIN_DEFAULT} STREQUAL "INVALID")'
+    # Force building static libraries
+    substituteInPlace libmariadb/CMakeLists.txt \
+      --replace 'libmariadb SHARED' 'libmariadb STATIC'
   '';
 
   # The cmake setup-hook uses $out/lib by default, this is not the case here.
@@ -39,7 +49,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ curl openssl zlib ];
+  propagatedBuildInputs = [ curl openssl zlib ] ++ optional isVer33 zstd;
   buildInputs = [ libiconv ];
 
   postInstall = ''
@@ -52,6 +62,7 @@ stdenv.mkDerivation {
     ln -sv mariadb $dev/include/mysql
     ln -sv mariadb_version.h $dev/include/mariadb/mysql_version.h
     ln -sv libmariadb.pc $dev/lib/pkgconfig/mysqlclient.pc
+    install -Dm644 include/ma_config.h $dev/include/mariadb/my_config.h
   '';
 
   meta = {

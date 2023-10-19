@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celestia";
-  version = "1.6.2.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "CelestiaProject";
     repo = "Celestia";
     rev = version;
-    sha256 = "1s9fgxh6i3x1sy75y5wcidi2mjrf5xj71dd4n6rg0hkps441sgsp";
+    sha256 = "sha256-iBlrP9Yr/l3tzR1PpRf8C87WfrL6mZDwDtWyd2yJ7Dc=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     description = "Real-time 3D simulation of space";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
+    maintainers = with maintainers; [ hjones2199 ];
     platforms = platforms.linux;
   };
 }

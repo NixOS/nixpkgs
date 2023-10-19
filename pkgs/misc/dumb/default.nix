@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE='Release'"
     "-DBUILD_EXAMPLES='OFF'"
   ];
 
@@ -23,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kode54/dumb";
     description = "Module/tracker based music format parser and player library";
     license = licenses.free;  # Derivative of GPL
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.all;
   };
 }

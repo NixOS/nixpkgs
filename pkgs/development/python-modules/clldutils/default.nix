@@ -1,28 +1,33 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, isPy27
 , attrs
+, buildPythonPackage
 , colorlog
 , csvw
-, dateutil
-, tabulate
+, fetchFromGitHub
+, git
+, isPy27
+, lxml
+, markdown
+, markupsafe
 , mock
 , postgresql
-, pytestCheckHook
+, pylatexenc
 , pytest-mock
+, pytestCheckHook
+, python-dateutil
+, tabulate
 }:
 
 buildPythonPackage rec {
   pname = "clldutils";
-  version = "3.8.0";
+  version = "3.19.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "clld";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18sjcqzprf96s7bkn5zm3lh83hxfxj56nycxyldrwz7ndgkgxxx2";
+    hash = "sha256-dva0lbbTxvETDPkACxpI3PPzWh5gz87Fv6W3lTjNv3Q=";
   };
 
   patchPhase = ''
@@ -30,24 +35,35 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    dateutil
-    tabulate
-    colorlog
     attrs
+    colorlog
     csvw
+    lxml
+    markdown
+    markupsafe
+    pylatexenc
+    python-dateutil
+    tabulate
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     postgresql
-    pytestCheckHook
     pytest-mock
+    pytestCheckHook
+    git
+  ];
+
+  disabledTests = [
+    # uses pytest.approx which is not supported in a boolean context in pytest7
+    "test_to_dec"
+    "test_roundtrip"
   ];
 
   meta = with lib; {
-    description = "CSV on the Web";
-    homepage = "https://github.com/cldf/csvw";
+    description = "Utilities for clld apps without the overhead of requiring pyramid, rdflib et al";
+    homepage = "https://github.com/clld/clldutils";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ melling ];
   };
 }

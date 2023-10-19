@@ -1,28 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi,
-  django, jinja2, pytz, tox
- }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, django
+, jinja2
+, python
+}:
 
 buildPythonPackage rec {
   pname = "django-jinja";
-  version = "2.7.0";
+  version = "2.11.0";
+
+  disabled = pythonOlder "3.8";
+
+  format = "setuptools";
+
+  src = fetchFromGitHub {
+    owner = "niwinz";
+    repo = "django-jinja";
+    rev = "refs/tags/${version}";
+    hash = "sha256-0gkv9xinHux8TRiNBLl/JgcimXU3CzysxzGR2jn7OZ4=";
+  };
+
+  propagatedBuildInputs = [
+    django
+    jinja2
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} testing/runtests.py
+
+    runHook postCheck
+  '';
 
   meta = {
     description = "Simple and nonobstructive jinja2 integration with Django";
     homepage = "https://github.com/niwinz/django-jinja";
+    changelog = "https://github.com/niwinz/django-jinja/blob/${src.rev}/CHANGES.adoc";
     license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d56ecddaa6d3caf508509aae5a979ebd8a3427477c34fcbcac14bf8389a21a12";
-  };
-
-  buildInputs = [ django pytz tox ];
-  propagatedBuildInputs = [ django jinja2 ];
-
-  # python installed: The directory '/homeless-shelter/.cache/pip/http' or its parent directory is not owned by the current user and the cache has been disabled. Please check the permissions and owner of that directory. If executing pip with sudo, you may want sudo's -H flag.,appdirs==1.4.3,Django==1.11.1,django-jinja==2.2.2,Jinja2==2.9.6,MarkupSafe==1.0,packaging==16.8,pyparsing==2.2.0,pytz==2017.2,six==1.10.0
-  doCheck = false;
-  checkPhase = ''
-    tox
-  '';
 }

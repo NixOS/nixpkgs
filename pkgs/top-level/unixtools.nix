@@ -19,8 +19,9 @@ let
       provider = providers.${stdenv.hostPlatform.parsed.kernel.name} or providers.linux;
       bin = "${getBin provider}/bin/${cmd}";
       manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
-    in runCommand "${cmd}-${version}" {
+    in runCommand "${cmd}-${provider.name}" {
       meta = {
+        mainProgram = cmd;
         priority = 10;
         platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
       };
@@ -43,7 +44,7 @@ let
 
   # more is unavailable in darwin
   # so we just use less
-  more_compat = runCommand "more-${version}" {} ''
+  more_compat = runCommand "more-${pkgs.less.name}" {} ''
     mkdir -p $out/bin
     ln -s ${pkgs.less}/bin/less $out/bin/more
   '';
@@ -60,7 +61,7 @@ let
     };
     column = {
       linux = pkgs.util-linux;
-      darwin = pkgs.netbsd.column;
+      darwin = pkgs.darwin.text_cmds;
     };
     eject = {
       linux = pkgs.util-linux;
@@ -71,7 +72,7 @@ let
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };
@@ -105,7 +106,7 @@ let
     };
     locale = {
       linux = pkgs.glibc;
-      darwin = pkgs.netbsd.locale;
+      darwin = pkgs.darwin.adv_cmds;
     };
     logger = {
       linux = pkgs.util-linux;

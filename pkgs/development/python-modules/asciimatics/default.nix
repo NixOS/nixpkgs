@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pyfiglet
 , pillow
 , wcwidth
@@ -12,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "asciimatics";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4120461a3fb345638dee4fe0f8a3d3f9b6d2d2e003f95c5f914523f94463158d";
+    hash = "sha256-FtIM5CIQtDTrBbpGns24KTrH7TwM4N1PcOMNctdgIic=";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     future
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     nose
   ];

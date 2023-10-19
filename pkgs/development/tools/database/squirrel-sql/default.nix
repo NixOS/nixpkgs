@@ -4,15 +4,13 @@
 , jre
 , drivers ? []
 }:
-let
-  version = "4.1.0";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "squirrel-sql";
-  inherit version;
+  version = "4.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/squirrel-sql/1-stable/${version}-plainzip/squirrelsql-${version}-standard.zip";
-    sha256 = "0ni7cva0acrin5bkcfkiiv28sf58dzz7xsbl3y4536hmph0g68k6";
+    sha256 = "sha256-MMRn83yAi9saUI3/QHggj4s2t0uzZ1oJf9+CIqf4dGc=";
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
@@ -65,14 +63,15 @@ in stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "SQuirreL SQL";
     genericName = "SQL Client";
-    categories = "Development;";
+    categories = [ "Development" ];
     icon = "squirrel-sql";
   };
 
   meta = with lib; {
     description = "Universal SQL Client";
     homepage = "http://squirrel-sql.sourceforge.net/";
-    license = licenses.lgpl21;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ khumba ];
   };

@@ -1,18 +1,41 @@
-{ lib, stdenv, fetchurl, pkg-config, cmake, zlib, openssl, libsodium }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, cmake
+, zlib
+, openssl
+, libsodium
+
+# for passthru.tests
+, ffmpeg
+, sshping
+, wireshark
+}:
 
 stdenv.mkDerivation rec {
   pname = "libssh";
-  version = "0.8.9";
+  version = "0.10.5";
 
   src = fetchurl {
-    url = "https://www.libssh.org/files/0.8/${pname}-${version}.tar.xz";
-    sha256 = "09b8w9m5qiap8wbvz4613nglsynpk8hn0q9b929ny2y4l2fy2nc5";
+    url = "https://www.libssh.org/files/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-tg4v9/Nnue7itWNNOmMwPd/t4OahjfyojESodw5+QjQ=";
   };
+
+  # Do not split 'dev' output until lib/cmake/libssh/libssh-config.cmake
+  # is fixed to point INTERFACE_INCLUDE_DIRECTORIES to .dev output.
+  # Otherwise it breaks `plasma5Packages.kio-extras`:
+  #   https://hydra.nixos.org/build/221540008/nixlog/3/tail
+  #outputs = [ "out" "dev" ];
 
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
+
+  # Don’t build examples, which are not installed and require additional dependencies not
+  # included in `buildInputs` such as libX11.
+  cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
 
   # single output, otherwise cmake and .pc files point to the wrong directory
   # outputs = [ "out" "dev" ];
@@ -20,6 +43,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl libsodium ];
 
   nativeBuildInputs = [ cmake pkg-config ];
+
+  passthru.tests = {
+    inherit ffmpeg sshping wireshark;
+  };
 
   meta = with lib; {
     description = "SSH client library";

@@ -1,44 +1,53 @@
-{ lib, stdenv, buildPackages, autoreconfHook, fetchurl, libedit }:
+{ lib
+, stdenv
+, buildPackages
+, pkg-config
+, fetchurl
+, libedit
+, runCommand
+, dash
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dash";
-  version = "0.5.11.2";
+  version = "0.5.12";
 
   src = fetchurl {
-    url = "http://gondor.apana.org.au/~herbert/dash/files/${pname}-${version}.tar.gz";
-    sha256 = "0pvdpm1cgfbc25ramn4305a0158yq031q1ain4dc972rnxl7vyq0";
+    url = "http://gondor.apana.org.au/~herbert/dash/files/dash-${finalAttrs.version}.tar.gz";
+    hash = "sha256-akdKxG6LCzKRbExg32lMggWNMpfYs4W3RQgDDKSo8oo=";
   };
 
-  hardeningDisable = [ "format" ];
+  strictDeps = true;
 
-  patches = [
-    (fetchurl {
-      # Dash executes code when noexec ("-n") is specified
-      # https://www.openwall.com/lists/oss-security/2020/11/11/3
-      url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=29d6f2148f10213de4e904d515e792d2cf8c968e";
-      sha256 = "08q90bx36ixwlcj331dh7420qyj8i0qh1cc1gljrhd83fhl9w0y5";
-    })
-  ] ++ lib.optionals stdenv.isDarwin [
-      # Temporary fix until a proper one is accepted upstream
-    ./0001-fix-dirent64-et-al-on-darwin.patch
-  ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isStatic [ pkg-config ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
   buildInputs = [ libedit ];
 
   configureFlags = [ "--with-libedit" ];
+  preConfigure = lib.optional stdenv.hostPlatform.isStatic ''
+    export LIBS="$(''${PKG_CONFIG:-pkg-config} --libs --static libedit)"
+  '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    shellPath = "/bin/dash";
+    tests = {
+      "execute-simple-command" = runCommand "dash-execute-simple-command" { } ''
+        mkdir $out
+        ${lib.getExe dash} -c 'echo "Hello World!" > $out/success'
+        [ -s $out/success ]
+        grep -q "Hello World" $out/success
+      '';
+    };
+  };
 
   meta = with lib; {
     homepage = "http://gondor.apana.org.au/~herbert/dash/";
     description = "A POSIX-compliant implementation of /bin/sh that aims to be as small as possible";
     platforms = platforms.unix;
     license = with licenses; [ bsd3 gpl2 ];
+    mainProgram = "dash";
   };
-
-  passthru = {
-    shellPath = "/bin/dash";
-  };
-}
+})

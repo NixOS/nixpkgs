@@ -66,6 +66,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Interactive theorem prover based on Higher-Order Logic";
     longDescription = ''
       HOL4 is the latest version of the HOL interactive proof
@@ -81,7 +82,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://hol.sourceforge.net/";
     license = licenses.bsd3;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ mudri ];
   };
 }

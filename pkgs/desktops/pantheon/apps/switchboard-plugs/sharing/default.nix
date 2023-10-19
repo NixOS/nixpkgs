@@ -1,8 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, fetchpatch
-, pantheon
 , meson
 , ninja
 , pkg-config
@@ -15,19 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "2.1.4";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/M60w14zfAUXspabvTUWlOPRrHvKtCYUio82b034k6s=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-izo30JjPkZtR6A/bfvZNmIE4Hq5hofWmxdUwBJYoSm8=";
   };
 
   nativeBuildInputs = [
@@ -44,11 +37,15 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Switchboard Sharing Plug";
     homepage = "https://github.com/elementary/switchboard-plug-sharing";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

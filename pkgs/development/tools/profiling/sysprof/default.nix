@@ -4,30 +4,32 @@
 , fetchurl
 , gettext
 , glib
-, gtk3
+, gtk4
 , json-glib
 , itstool
-, libdazzle
+, libadwaita
+, libunwind
 , libxml2
-, meson, ninja
+, meson
+, ninja
 , pango
 , pkg-config
 , polkit
 , shared-mime-info
 , systemd
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.40.1";
+  version = "3.48.0";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0dvlzjwi3a4g37cpyhqpf41f5hypf0gim1jw9wqlv30flbb00l62";
+    sha256 = "B9kIGmbPL7UnU/SP8rha2nXGD/G8GvG9FNiutieXIWg=";
   };
 
   nativeBuildInputs = [
@@ -39,22 +41,24 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     shared-mime-info
-    wrapGAppsHook
-    gnome.adwaita-icon-theme
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     glib
-    gtk3
+    gtk4
     json-glib
     pango
     polkit
     systemd
-    libdazzle
+    libadwaita
+    libunwind
   ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"
+    # In a separate libsysprof-capture package
+    "-Dinstall-static=false"
   ];
 
   passthru = {

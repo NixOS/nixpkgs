@@ -37,7 +37,6 @@ let
 
   generateHost = { pkgs, cephConfig, networkConfig, ... }: {
     virtualisation = {
-      memorySize = 1024;
       emptyDiskImages = [ 20480 ];
       vlans = [ 1 ];
     };
@@ -49,7 +48,7 @@ let
       sudo
       ceph
       xfsprogs
-      netcat-openbsd
+      libressl.nc
     ];
 
     boot.kernelModules = [ "xfs" ];

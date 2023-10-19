@@ -1,20 +1,25 @@
-{ lib, fetchzip, buildDunePackage, ocaml }:
+{ lib, fetchFromGitHub, buildDunePackage
+, stdlib-shims
+}:
 
 buildDunePackage rec {
   pname = "integers";
-  version = "0.4.0";
+  version = "0.7.0";
 
-  useDune2 = lib.versionAtLeast ocaml.version "4.08";
-
-  src = fetchzip {
-    url = "https://github.com/ocamllabs/ocaml-integers/archive/${version}.tar.gz";
-    sha256 = "0yp3ab0ph7mp5741g7333x4nx8djjvxzpnv3zvsndyzcycspn9dd";
+  src = fetchFromGitHub {
+    owner = "ocamllabs";
+    repo = "ocaml-integers";
+    rev = version;
+    sha256 = "sha256-zuUgP1jOiVT0q6GisGpkqx7nybWbARgnAcU8NYqvCzA=";
   };
+
+  propagatedBuildInputs = [ stdlib-shims ];
 
   meta = {
     description = "Various signed and unsigned integer types for OCaml";
     license = lib.licenses.mit;
     homepage = "https://github.com/ocamllabs/ocaml-integers";
+    changelog = "https://github.com/ocamllabs/ocaml-integers/raw/${version}/CHANGES.md";
     maintainers = [ lib.maintainers.vbgl ];
   };
 }

@@ -1,18 +1,24 @@
-{ lib, buildDunePackage, fetchurl, ocaml
-, fmt, bigstringaf, angstrom, alcotest }:
+{ lib
+, buildDunePackage
+, fetchurl
+, fmt
+, bigstringaf
+, angstrom
+, alcotest
+}:
 
 buildDunePackage rec {
   pname = "encore";
   version = "0.8";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/encore/releases/download/v${version}/encore-v${version}.tbz";
     sha256 = "a406bc9863b04bb424692045939d6c170a2bb65a98521ae5608d25b0559344f6";
   };
 
-  useDune2 = true;
+  duneVersion = "3";
 
   propagatedBuildInputs = [ angstrom fmt bigstringaf ];
   checkInputs = [ alcotest ];

@@ -4,7 +4,6 @@
 with lib;
 
 let
-  json = pkgs.formats.json {};
   cfg = config.services.pipewire;
   enable32BitAlsaPlugins = cfg.alsa.support32Bit
                            && pkgs.stdenv.isx86_64
@@ -18,42 +17,19 @@ let
     mkdir -p "$out/lib"
     ln -s "${cfg.package.jack}/lib" "$out/lib/pipewire"
   '';
-
-  # Use upstream config files passed through spa-json-dump as the base
-  # Patched here as necessary for them to work with this module
-  defaults = {
-    client = builtins.fromJSON (builtins.readFile ./client.conf.json);
-    client-rt = builtins.fromJSON (builtins.readFile ./client-rt.conf.json);
-    jack = builtins.fromJSON (builtins.readFile ./jack.conf.json);
-    # Remove session manager invocation from the upstream generated file, it points to the wrong path
-    pipewire = builtins.fromJSON (builtins.readFile ./pipewire.conf.json);
-    pipewire-pulse = builtins.fromJSON (builtins.readFile ./pipewire-pulse.conf.json);
-  };
-
-  configs = {
-    client = recursiveUpdate defaults.client cfg.config.client;
-    client-rt = recursiveUpdate defaults.client-rt cfg.config.client-rt;
-    jack = recursiveUpdate defaults.jack cfg.config.jack;
-    pipewire = recursiveUpdate defaults.pipewire cfg.config.pipewire;
-    pipewire-pulse = recursiveUpdate defaults.pipewire-pulse cfg.config.pipewire-pulse;
-  };
 in {
-
-  meta = {
-    maintainers = teams.freedesktop.members;
-  };
+  meta.maintainers = teams.freedesktop.members ++ [ lib.maintainers.k900 ];
 
   ###### interface
   options = {
     services.pipewire = {
-      enable = mkEnableOption "pipewire service";
+      enable = mkEnableOption (lib.mdDoc "pipewire service");
 
       package = mkOption {
         type = types.package;
         default = pkgs.pipewire;
-        defaultText = "pkgs.pipewire";
-        example = literalExample "pkgs.pipewire";
-        description = ''
+        defaultText = literalExpression "pkgs.pipewire";
+        description = lib.mdDoc ''
           The pipewire derivation to use.
         '';
       };
@@ -61,84 +37,78 @@ in {
       socketActivation = mkOption {
         default = true;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Automatically run pipewire when connections are made to the pipewire socket.
         '';
       };
 
-      config = {
-        client = mkOption {
-          type = json.type;
-          default = {};
-          description = ''
-            Configuration for pipewire clients. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client.conf.in
-          '';
-        };
-
-        client-rt = mkOption {
-          type = json.type;
-          default = {};
-          description = ''
-            Configuration for realtime pipewire clients. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/client-rt.conf.in
-          '';
-        };
-
-        jack = mkOption {
-          type = json.type;
-          default = {};
-          description = ''
-            Configuration for the pipewire daemon's jack module. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/jack.conf.in
-          '';
-        };
-
-        pipewire = mkOption {
-          type = json.type;
-          default = {};
-          description = ''
-            Configuration for the pipewire daemon. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire.conf.in
-          '';
-        };
-
-        pipewire-pulse = mkOption {
-          type = json.type;
-          default = {};
-          description = ''
-            Configuration for the pipewire-pulse daemon. For details see
-            https://gitlab.freedesktop.org/pipewire/pipewire/-/blob/${cfg.package.version}/src/daemon/pipewire-pulse.conf.in
-          '';
+      audio = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          # this is for backwards compatibility
+          default = cfg.alsa.enable || cfg.jack.enable || cfg.pulse.enable;
+          defaultText = lib.literalExpression "config.services.pipewire.alsa.enable || config.services.pipewire.jack.enable || config.services.pipewire.pulse.enable";
+          description = lib.mdDoc "Whether to use PipeWire as the primary sound server";
         };
       };
 
       alsa = {
-        enable = mkEnableOption "ALSA support";
-        support32Bit = mkEnableOption "32-bit ALSA support on 64-bit systems";
+        enable = mkEnableOption (lib.mdDoc "ALSA support");
+        support32Bit = mkEnableOption (lib.mdDoc "32-bit ALSA support on 64-bit systems");
       };
 
       jack = {
-        enable = mkEnableOption "JACK audio emulation";
+        enable = mkEnableOption (lib.mdDoc "JACK audio emulation");
       };
 
       pulse = {
-        enable = mkEnableOption "PulseAudio server emulation";
+        enable = mkEnableOption (lib.mdDoc "PulseAudio server emulation");
+      };
+
+      systemWide = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          If true, a system-wide PipeWire service and socket is enabled
+          allowing all users in the "pipewire" group to use it simultaneously.
+          If false, then user units are used instead, restricting access to
+          only one user.
+
+          Enabling system-wide PipeWire is however not recommended and disabled
+          by default according to
+          https://github.com/PipeWire/pipewire/blob/master/NEWS
+        '';
       };
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule ["services" "pipewire" "config"] ''
+      Overriding default Pipewire configuration through NixOS options never worked correctly and is no longer supported.
+      Please create drop-in files in /etc/pipewire/pipewire.conf.d/ to make the desired setting changes instead.
+    '')
+
+    (lib.mkRemovedOptionModule ["services" "pipewire" "media-session"] ''
+      pipewire-media-session is no longer supported upstream and has been removed.
+      Please switch to `services.pipewire.wireplumber` instead.
+    '')
+  ];
 
   ###### implementation
   config = mkIf cfg.enable {
     assertions = [
       {
-        assertion = cfg.pulse.enable -> !config.hardware.pulseaudio.enable;
-        message = "PipeWire based PulseAudio server emulation replaces PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
+        assertion = cfg.audio.enable -> !config.hardware.pulseaudio.enable;
+        message = "Using PipeWire as the sound server conflicts with PulseAudio. This option requires `hardware.pulseaudio.enable` to be set to false";
       }
       {
         assertion = cfg.jack.enable -> !config.services.jack.jackd.enable;
         message = "PipeWire based JACK emulation doesn't use the JACK service. This option requires `services.jack.jackd.enable` to be set to false";
+      }
+      {
+        # JACK intentionally not checked, as PW-on-JACK setups are a thing that some people may want
+        assertion = (cfg.alsa.enable || cfg.pulse.enable) -> cfg.audio.enable;
+        message = "Using PipeWire's ALSA/PulseAudio compatibility layers requires running PipeWire as the sound server. Set `services.pipewire.audio.enable` to true.";
       }
     ];
 
@@ -150,9 +120,20 @@ in {
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
+    systemd.services.pipewire.bindsTo = [ "dbus.service" ];
+    systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
+
+    # Enable either system or user units.  Note that for pipewire-pulse there
+    # are only user units, which work in both cases.
+    systemd.sockets.pipewire.enable = cfg.systemWide;
+    systemd.services.pipewire.enable = cfg.systemWide;
+    systemd.user.sockets.pipewire.enable = !cfg.systemWide;
+    systemd.user.services.pipewire.enable = !cfg.systemWide;
+
+    systemd.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
-    systemd.user.services.pipewire.bindsTo = [ "dbus.service" ];
+
     services.udev.packages = [ cfg.package ];
 
     # If any paths are updated here they must also be updated in the package test.
@@ -177,26 +158,23 @@ in {
       source = "${cfg.package}/share/alsa/alsa.conf.d/99-pipewire-default.conf";
     };
 
-    environment.etc."pipewire/client.conf" = {
-      source = json.generate "client.conf" configs.client;
-    };
-    environment.etc."pipewire/client-rt.conf" = {
-      source = json.generate "client-rt.conf" configs.client-rt;
-    };
-    environment.etc."pipewire/jack.conf" = {
-      source = json.generate "jack.conf" configs.jack;
-    };
-    environment.etc."pipewire/pipewire.conf" = {
-      source = json.generate "pipewire.conf" configs.pipewire;
-    };
-    environment.etc."pipewire/pipewire-pulse.conf" = {
-      source = json.generate "pipewire-pulse.conf" configs.pipewire-pulse;
-    };
-
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional cfg.jack.enable "/run/current-system/sw/lib/pipewire";
+      lib.mkIf cfg.jack.enable [ "${cfg.package.jack}/lib" ];
 
-    # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
-    systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
+    users = lib.mkIf cfg.systemWide {
+      users.pipewire = {
+        uid = config.ids.uids.pipewire;
+        group = "pipewire";
+        extraGroups = [
+          "audio"
+          "video"
+        ] ++ lib.optional config.security.rtkit.enable "rtkit";
+        description = "Pipewire system service user";
+        isSystemUser = true;
+        home = "/var/lib/pipewire";
+        createHome = true;
+      };
+      groups.pipewire.gid = config.ids.gids.pipewire;
+    };
   };
 }

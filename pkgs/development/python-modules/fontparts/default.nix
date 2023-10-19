@@ -1,20 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, python
+{ lib, buildPythonPackage, fetchPypi, python, pythonOlder
 , fonttools, lxml, fs, unicodedata2
 , defcon, fontpens, fontmath, booleanoperations
-, pytest, setuptools_scm
+, pytest, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "fontParts";
-  version = "0.9.10";
+  version = "0.11.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hwjnqbkcfkhigx581w4532vddsx5wiy73gx46kjisp0hlir9628";
+    hash = "sha256-He3BAIWxwDIM80ixmYjyAHlwDK9bBe/qS8P4+TVEkEg=";
     extension = "zip";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     booleanoperations
@@ -32,12 +34,12 @@ buildPythonPackage rec {
     ${python.interpreter} Lib/fontParts/fontshell/test.py
     runHook postCheck
   '';
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "An API for interacting with the parts of fonts during the font development process.";
     homepage = "https://github.com/robotools/fontParts";
-    changelog = "https://github.com/robotools/fontParts/releases/tag/v${version}";
+    changelog = "https://github.com/robotools/fontParts/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

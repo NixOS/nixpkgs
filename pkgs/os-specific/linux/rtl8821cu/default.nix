@@ -2,24 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821cu";
-  version = "${kernel.version}-unstable-2021-05-19";
+  version = "${kernel.version}-unstable-2023-09-10";
 
   src = fetchFromGitHub {
     owner = "morrownr";
-    repo = "8821cu";
-    rev = "2430c354c9b15fa6193a263c99ce57211d50c66f";
-    sha256 = "sha256-PkrpwebZYh/hBukqDQf6pxfbkVyA+CpYtte5pmzgLtw=";
+    repo = "8821cu-20210916";
+    rev = "f6d4598290c5e9c8e545130e8a31d130f6d135f4";
+    hash = "sha256-jpMf8K9diJ3mbEkP9Cp+VwairK+pwiEGU/AtUIouCqM=";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -27,6 +26,8 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Realtek rtl8821cu driver";

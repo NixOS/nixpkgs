@@ -17,34 +17,21 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.41";
+  version = "1.47";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0hi7jbcs1l9kxzhiqcs2iivsb048642mwaimgqyh1hy3bas7ic34";
+    sha256 = "sha256-njxnCWa5bsx0bCjCxBlUHjvLeH0ac5MPXl9eG8u7m9s=";
   };
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
-    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h
-    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabi.h
-  '' + lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl) ''
-    ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
-  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
-  ''
-  # This file was accidentally excluded from the sdist until
-  # 013720333c6ec1d38791689bc49ba039d98e16b3, post release.
-  # TODO make unconditional next mass rebuild
-  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    cp ${fetchurl {
-      url = "https://raw.githubusercontent.com/gpg/libgpg-error/50e62b36ea01ed25d12c443088b85d4f41a2b3e1/src/gen-lock-obj.sh";
-      sha256 = "10cslipa6npalj869asaamj0w941dhmx0yjafpyyh69ypsg2m2c3";
-    }} ./src/gen-lock-obj.sh
-    chmod +x ./src/gen-lock-obj.sh
   '';
+
+  configureFlags = [
+    # See https://dev.gnupg.org/T6257#164567
+    "--enable-install-gpg-error-config"
+  ];
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # deps want just the lib, most likely
@@ -55,13 +42,21 @@ in stdenv.mkDerivation (rec {
   nativeBuildInputs = [ gettext ];
 
   postConfigure =
-    lib.optionalString stdenv.isSunOS
     # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
     # `config.status' run:
     #   ./config.status[1401]: shift: (null): bad number
     # (See <https://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
     # Thus, re-run it with Bash.
-      "${stdenv.shell} config.status";
+    lib.optionalString stdenv.isSunOS ''
+      ${stdenv.shell} config.status
+    ''
+    # ./configure errorneous decides to use weak symbols on pkgsStatic,
+    # which, together with other defines results in locking functions in
+    # src/posix-lock.c to be no-op, causing tests/t-lock.c to fail.
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      sed '/USE_POSIX_THREADS_WEAK/ d' config.h
+      echo '#undef USE_POSIX_THREADS_WEAK' >> config.h
+    '';
 
   doCheck = true; # not cross
 

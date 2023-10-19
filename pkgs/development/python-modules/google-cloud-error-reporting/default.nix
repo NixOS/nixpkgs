@@ -1,48 +1,59 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
+, google-api-core
 , google-cloud-logging
 , google-cloud-testutils
-, libcst
 , mock
 , proto-plus
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-error-reporting";
-  version = "1.1.2";
+  version = "1.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NT/+2mtIaEMyXnmM1fWX4kEV9pb1+aNas2lNobUPR14=";
+    hash = "sha256-S+7x6gIxJDfV7Xe6DOBVbJNMREYlRFLyGo8BEpIdIow=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'google-cloud-logging>=1.14.0, <2.1' 'google-cloud-logging>=1.14.0'
-  '';
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-logging
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  propagatedBuildInputs = [ google-cloud-logging libcst proto-plus ];
-
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  nativeCheckInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
-    # require credentials
+    # Tests require credentials
     "test_report_error_event"
     "test_report_exception"
   ];
 
-  # prevent google directory from shadowing google imports
   preCheck = ''
+    # prevent google directory from shadowing google imports
     rm -r google
   '';
 
   meta = with lib; {
     description = "Stackdriver Error Reporting API client library";
     homepage = "https://github.com/googleapis/python-error-reporting";
+    changelog = "https://github.com/googleapis/python-error-reporting/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

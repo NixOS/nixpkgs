@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "pylutron";
-  version = "0.2.7";
+  version = "0.2.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-wwVTDpoRT/TIJhoRap0T01a8gmYt+vfKc+ATRs6phB4=";
+    hash = "sha256-DKwjBQXC7O/8bFxq5shJJxRV3HYgBeS7tJXg4m3vQMY=";
   };
 
   # Project has no tests

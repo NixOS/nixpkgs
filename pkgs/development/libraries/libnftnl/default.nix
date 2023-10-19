@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, pkg-config, libmnl }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.9";
+  version = "1.2.6";
   pname = "libnftnl";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.bz2";
-    sha256 = "16jbp4fs5dz2yf4c3bl1sb48x9x9wi1chv39zwmfgya1k9pimcp9";
+    url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
+    hash = "sha256-zurqLNkhR9oZ8To1p/GkvCdn/4l+g45LR5z1S1nHd/Q=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A userspace library providing a low-level netlink API to the in-kernel nf_tables subsystem";
-    homepage = "http://netfilter.org/projects/libnftnl";
+    homepage = "https://netfilter.org/projects/libnftnl/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz ajs124 ];
   };
 }

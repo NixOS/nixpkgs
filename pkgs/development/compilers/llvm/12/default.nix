@@ -3,8 +3,9 @@
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
-# than the default LLVM verion's, if LLD is the choice. We use these for
+# than the default LLVM version's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
 , bootBintoolsNoLibc ?
     if stdenv.targetPlatform.linker == "lld"
@@ -18,7 +19,7 @@
 }:
 
 let
-  release_version = "12.0.0";
+  release_version = "12.0.1";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   version = "${release_version}${dash-candidate}"; # differentiating these (variables) is important for RCs
@@ -29,12 +30,22 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "0p3dzr0qa7mar83y66xa5m5apynf6ia0lsdsq6axwnm64ysy0hdd";
+  clang-tools-extra_src = fetch "clang-tools-extra" "1r9a4fdz9ci58b5z2inwvm4z4cdp6scrivnaw05dggkxz7yrwrb5";
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = lib.platforms.all;
+    maintainers = lib.teams.llvm.members;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.riscv ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
@@ -66,14 +77,14 @@ let
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
-    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputUnspecified = true; };
+    # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm;
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+    clang-unwrapped = tools.libclang;
 
     # disabled until recommonmark supports sphinx 3
     #Llvm-manpages = lowPrio (tools.libllvm.override {
@@ -92,7 +103,12 @@ let
     #   python3 = pkgs.python3;  # don't use python-boot
     # });
 
-    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
+    # pick clang appropriate for package set we are targeting
+    clang =
+      /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
+      else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
+      else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
@@ -108,7 +124,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -119,11 +135,24 @@ let
       inherit (libraries) libunwind;
     };
 
-    lldb = callPackage ./lldb {
+    lldb = callPackage ../common/lldb.nix {
+      src = fetch "lldb" "0g3pj1m3chafavpr35r9fynm85y2hdyla6klj0h28khxs2613i78";
+      patches =
+        let
+          resourceDirPatch = callPackage
+            ({ substituteAll, libclang }: substituteAll
+              {
+                src = ./lldb/resource-dir.patch;
+                clangLibDir = "${libclang.lib}/lib";
+              })
+            { };
+        in
+        [
+          ./lldb/procfs.patch
+          resourceDirPatch
+          ./lldb/gnu-install-dirs.patch
+        ];
       inherit llvm_meta;
-      inherit (darwin) libobjc bootstrap_cmds;
-      inherit (darwin.apple_sdk.libs) xpc;
-      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -133,7 +162,7 @@ let
     # doesn’t support like LLVM. Probably we should move to some other
     # file.
 
-    bintools-unwrapped = callPackage ./bintools {};
+    bintools-unwrapped = callPackage ../common/bintools.nix { };
 
     bintoolsNoLibc = wrapBintoolsWith {
       bintools = tools.bintools-unwrapped;
@@ -149,7 +178,7 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -263,8 +292,9 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries; } // libraries // tools
+in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)

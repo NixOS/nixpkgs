@@ -1,23 +1,26 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , pkg-config
 , intltool
-, gtk3
 , wrapGAppsHook
-, alsaLib
-, libjack2
+, gtk3
+, alsa-lib
 , libpulseaudio
 , fftw
+, fftwFloat
+, json_c
+, libjack2
 , jackSupport ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "lingot";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "03x0qqb9iarjapvii3ja522vkxrqv1hwix6b1r53is48p5xwgf3i";
+    sha256 = "sha256-xPl+SWo2ZscHhtE25vLMxeijgT6wjNo1ys1+sNFvTVY=";
   };
 
   nativeBuildInputs = [
@@ -28,9 +31,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    alsaLib
+    alsa-lib
     libpulseaudio
     fftw
+    fftwFloat
+    json_c
   ] ++ lib.optional jackSupport libjack2;
 
   configureFlags = lib.optional (!jackSupport) "--disable-jack";

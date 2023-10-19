@@ -1,43 +1,53 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , oauthlib
+, poetry-core
 , pytestCheckHook
+, pythonOlder
 , pytz
 , requests
 , requests-mock
-, requests_oauthlib
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.7.0";
-  disabled = !isPy3k;
+  version = "0.7.4";
+  pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    sha256 = "1qnx9q9rzxhh0pygl3f9bg21b5zv7csv9h1w4zngdvsphbs0yiwg";
+    hash = "sha256-hto3MwlC6ADjKkcB/4l/uFyw+0CgvLZM0sp3FF62XUA=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     oauthlib
     pytz
     requests
-    requests_oauthlib
+    requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];
 
-  pythonImportsCheck = [ "ring_doorbell" ];
+  pythonImportsCheck = [
+    "ring_doorbell"
+  ];
 
   meta = with lib; {
+    description = "Python library to communicate with Ring Door Bell";
     homepage = "https://github.com/tchellomello/python-ring-doorbell";
-    description = "A Python library to communicate with Ring Door Bell (https://ring.com/)";
+    changelog = "https://github.com/tchellomello/python-ring-doorbell/releases/tag/${version}";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ graham33 ];
   };

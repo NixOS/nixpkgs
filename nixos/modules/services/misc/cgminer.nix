@@ -11,7 +11,7 @@ let
     mapAttrsToList (n: v: ''"${n}": "${(concatStringsSep "," (map convType v))}"'')
       (foldAttrs (n: a: [n] ++ a) [] cfg.hardware);
   mergedConfig = with builtins;
-    mapAttrsToList (n: v: ''"${n}":  ${if isBool v then "" else ''"''}${convType v}${if isBool v then "" else ''"''}'')
+    mapAttrsToList (n: v: ''"${n}":  ${if isBool v then convType v else ''"${convType v}"''}'')
       cfg.config;
 
   cgminerConfig = pkgs.writeText "cgminer.conf" ''
@@ -31,25 +31,25 @@ in
 
     services.cgminer = {
 
-      enable = mkEnableOption "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin";
+      enable = mkEnableOption (lib.mdDoc "cgminer, an ASIC/FPGA/GPU miner for bitcoin and litecoin");
 
       package = mkOption {
         default = pkgs.cgminer;
-        defaultText = "pkgs.cgminer";
-        description = "Which cgminer derivation to use.";
+        defaultText = literalExpression "pkgs.cgminer";
+        description = lib.mdDoc "Which cgminer derivation to use.";
         type = types.package;
       };
 
       user = mkOption {
         type = types.str;
         default = "cgminer";
-        description = "User account under which cgminer runs";
+        description = lib.mdDoc "User account under which cgminer runs";
       };
 
       pools = mkOption {
         default = [];  # Run benchmark
         type = types.listOf (types.attrsOf types.str);
-        description = "List of pools where to mine";
+        description = lib.mdDoc "List of pools where to mine";
         example = [{
           url = "http://p2pool.org:9332";
           username = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
@@ -60,7 +60,7 @@ in
       hardware = mkOption {
         default = []; # Run without options
         type = types.listOf (types.attrsOf (types.either types.str types.int));
-        description= "List of config options for every GPU";
+        description= lib.mdDoc "List of config options for every GPU";
         example = [
         {
           intensity = 9;
@@ -86,8 +86,8 @@ in
 
       config = mkOption {
         default = {};
-        type = (types.either types.bool types.int);
-        description = "Additional config";
+        type = types.attrsOf (types.either types.bool types.int);
+        description = lib.mdDoc "Additional config";
         example = {
           auto-fan = true;
           auto-gpu = true;
@@ -110,9 +110,13 @@ in
 
     users.users = optionalAttrs (cfg.user == "cgminer") {
       cgminer = {
-        uid = config.ids.uids.cgminer;
+        isSystemUser = true;
+        group = "cgminer";
         description = "Cgminer user";
       };
+    };
+    users.groups = optionalAttrs (cfg.user == "cgminer") {
+      cgminer = {};
     };
 
     environment.systemPackages = [ cfg.package ];

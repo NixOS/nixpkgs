@@ -4,43 +4,55 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  pname = "theHarvester";
-  version = "3.2.3";
+  pname = "theharvester";
+  version = "4.4.4";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = pname;
-    rev = version;
-    sha256 = "02jhk34znpvq522pqr3x4c0rljw37x62znwycijf1zx81dpbn4rm";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L0WbPZE2alregOvWc+0nuMvsD17ayCw3JtahGhf4B1o=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
+    aiofiles
     aiohttp
     aiomultiprocess
     aiosqlite
     beautifulsoup4
     censys
     certifi
-    dns
-    gevent
-    grequests
+    dnspython
+    fastapi
     lxml
     netaddr
+    orjson
     plotly
     pyppeteer
+    python-dateutil
     pyyaml
     requests
     retrying
     shodan
-    texttable
+    slowapi
+    starlette
+    uvicorn
     uvloop
   ];
 
-  checkInputs = [ python3.pkgs.pytest ];
+  nativeCheckInputs = with  python3.pkgs; [
+    pytest
+    pytest-asyncio
+  ];
 
-  checkPhase = "runHook preCheck ; pytest tests/test_myparser.py ; runHook postCheck";
   # We don't run other tests (discovery modules) because they require network access
+  checkPhase = ''
+    runHook preCheck
+    pytest tests/test_myparser.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Gather E-mails, subdomains and names from different public sources";
@@ -51,7 +63,8 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    maintainers = with maintainers; [ c0bw3b treemo ];
+    changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
+    maintainers = with maintainers; [ c0bw3b fab treemo ];
     license = licenses.gpl2Only;
   };
 }

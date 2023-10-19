@@ -1,84 +1,139 @@
 { lib
-, buildPythonPackage
-, fetchPypi
 , appdirs
+, bokeh
+, buildPythonPackage
 , dask
-, holoviews
+, entrypoints
+, fetchFromGitHub
+, fsspec
 , hvplot
+, intake-parquet
 , jinja2
 , msgpack
 , msgpack-numpy
-, numpy
 , pandas
 , panel
 , pyarrow
 , pytestCheckHook
-, pythonOlder
 , python-snappy
+, pythonOlder
+, pyyaml
 , requests
-, ruamel_yaml
-, six
+, stdenv
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "intake";
-  version = "0.6.2";
-  disabled = pythonOlder "3.6";
+  version = "0.7.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "b0cab1d185a703acb38eecb9cff3edd5cc7004fe18a36d5e42a8f7fffc9cca1c";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "intake";
+    repo = "intake";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LK4abwPViEFJZ10bbRofF2aw2Mj0dliKwX6dFy93RVQ=";
   };
 
   propagatedBuildInputs = [
     appdirs
     dask
-    holoviews
-    hvplot
-    jinja2
-    msgpack-numpy
+    entrypoints
+    fsspec
     msgpack
-    numpy
+    jinja2
     pandas
-    panel
-    python-snappy
-    requests
-    ruamel_yaml
-    six
-    tornado
+    pyyaml
   ];
 
-  checkInputs = [ pyarrow pytestCheckHook ];
+  nativeCheckInputs = [
+    intake-parquet
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  passthru.optional-dependencies = {
+    server = [
+      msgpack
+      python-snappy
+      tornado
+    ];
+    dataframe = [
+      msgpack-numpy
+      pyarrow
+    ];
+    plot = [
+      hvplot
+      bokeh
+      panel
+    ];
+    remote = [
+      requests
+    ];
+  };
 
   postPatch = ''
-    # Is in setup_requires but not used in setup.py...
-    substituteInPlace setup.py --replace "'pytest-runner'" ""
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
   '';
 
-  # test_discover requires driver_with_entrypoints-0.1.dist-info, which is not included in tarball
-  # test_filtered_compressed_cache requires calvert_uk_filter.tar.gz, which is not included in tarball
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
-    HOME=$TMPDIR
-    PATH=$out/bin:$PATH
+    export HOME=$(mktemp -d);
+    export PATH="$PATH:$out/bin";
   '';
 
   disabledTests = [
-    # disable tests which touch network
+    # Disable tests which touch network
+    "http"
+    "test_address_flag"
+    "test_dir"
     "test_discover"
     "test_filtered_compressed_cache"
+    "test_flatten_flag"
     "test_get_dir"
-    "test_remote_cat"
-    "http"
-
-    # broken test
+    "test_pagination"
+    "test_port_flag"
+    "test_read_part_compressed"
+    "test_read_partition"
     "test_read_pattern"
+    "test_remote_arr"
+    "test_remote_cat"
+    "test_remote_env"
+    # ValueError
+    "test_mlist_parameter"
+    # ImportError
+    "test_dataframe"
+    "test_ndarray"
+    "test_python"
+    # Timing-based, flaky on darwin and possibly others
+    "test_idle_timer"
+    # arrow-cpp-13 related
+    "test_read"
+    "test_pickle"
+    "test_read_dask"
+    "test_read_list"
+    "test_read_list_with_glob"
+    "test_to_dask"
+    "test_columns"
+    "test_df_transform"
+    "test_pipeline_apply"
+  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+    # Flaky with older low-res mtime on darwin < 10.13 (#143987)
+    "test_second_load_timestamp"
+  ];
+
+  pythonImportsCheck = [
+    "intake"
   ];
 
   meta = with lib; {
     description = "Data load and catalog system";
     homepage = "https://github.com/ContinuumIO/intake";
+    changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd2;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

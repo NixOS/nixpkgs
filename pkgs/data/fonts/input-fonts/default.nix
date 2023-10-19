@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       sha256 = "BESZ4Bjgm2hvQ7oPpMvYSlE8EqvQjqHZtXWIovqyIzA=";
       stripRoot = false;
 
-      extraPostFetch = ''
+      postFetch = ''
         # Reset the timestamp to release date for determinism.
         PATH=${lib.makeBinPath [ python3.pkgs.fonttools ]}:$PATH
         for ttf_file in $out/Input_Fonts/*/*/*.ttf; do

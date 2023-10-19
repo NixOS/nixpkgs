@@ -1,39 +1,59 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , pythonOlder
-, boto
+, fetchFromGitHub
+, azure-common
+, azure-core
+, azure-storage-blob
 , boto3
-, bz2file
-, mock
-, moto
+, google-cloud-storage
 , requests
-, responses
+, moto
+, paramiko
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "smart-open";
-  version = "4.2.0";
-  disabled = pythonOlder "3.5";
+  version = "6.4.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    pname = "smart_open";
-    inherit version;
-    sha256 = "d9f5a0f173ccb9bbae528db5a3804f57145815774f77ef755b9b0f3b4b2a9dcb";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "RaRe-Technologies";
+    repo = "smart_open";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fciNaVw603FAcgrSrND+LEycJffmnFQij2ZpatYZ/e4=";
   };
 
-  # moto>=1.0.0 is backwards-incompatible and some tests fail with it,
-  # so disable tests for now
-  doCheck = false;
+  propagatedBuildInputs = [
+    azure-common
+    azure-core
+    azure-storage-blob
+    boto3
+    google-cloud-storage
+    requests
+  ];
 
-  checkInputs = [ mock moto responses ];
+  nativeCheckInputs = [
+    moto
+    paramiko
+    pytestCheckHook
+  ];
 
-  # upstream code requires both boto and boto3
-  propagatedBuildInputs = [ boto boto3 bz2file requests ];
+  pytestFlagsArray = [
+    "smart_open"
+  ];
 
-  meta = {
-    license = lib.licenses.mit;
+  pythonImportsCheck = [
+    "smart_open"
+  ];
+
+  meta = with lib; {
     description = "Library for efficient streaming of very large file";
-    maintainers = with lib.maintainers; [ jyp ];
+    homepage = "https://github.com/RaRe-Technologies/smart_open";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jyp ];
   };
 }

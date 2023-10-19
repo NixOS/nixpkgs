@@ -5,18 +5,20 @@
 , msrestazure
 , azure-common
 , azure-mgmt-core
-, azure-mgmt-nspkg
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicebus";
-  version = "6.0.0";
+  version = "8.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "f6c64ed97d22d0c03c4ca5fc7594bd0f3d4147659c10110160009b93f541298e";
+    hash = "sha256-i+kgjxQdmnifaNuNIZdU/3gGn9j5OQ6fdkS7laO+nsI=";
   };
 
   propagatedBuildInputs = [
@@ -24,11 +26,9 @@ buildPythonPackage rec {
     msrestazure
     azure-common
     azure-mgmt-core
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
   meta = with lib; {

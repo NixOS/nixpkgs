@@ -1,53 +1,61 @@
-{ lib, stdenv
-, go
-, fetchurl
-, redo-apenwarr
+{ cfgPath ? "/etc/nncp.hjson"
 , curl
-, perl
+, fetchurl
+, lib
 , genericUpdater
+, go
+, perl
+, stdenv
 , writeShellScript
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nncp";
-  version = "6.4.0";
+  version = "8.9.0";
+  outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
-    url = "http://www.nncpgo.org/download/${pname}-${version}.tar.xz";
-    sha256 = "16xrwhr7avss238k83ih1njl0gfca57ghg360ba9ixlssrb1239x";
+    url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
+    hash = "sha256-JZ+svDNU7cwW58ZOJ4qszbR/+j7Cr+oLNig/RqqCS10=";
   };
 
-  nativeBuildInputs = [ go redo-apenwarr ];
+  nativeBuildInputs = [
+    go
+  ];
+
+  # Build parameters
+  CFGPATH = cfgPath;
+  SENDMAIL = "sendmail";
+
+  preConfigure = "export GOCACHE=$NIX_BUILD_TOP/gocache";
 
   buildPhase = ''
     runHook preBuild
-    export GOCACHE=$PWD/.cache
-    export CFGPATH=/etc/nncp.hjson
-    export SENDMAIL=sendmail # default value for generated config file
-    redo ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
+    ./bin/build
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    export PREFIX=$out
-    rm -f INSTALL # work around case insensitivity
-    redo install
+    PREFIX=$out ./install
     runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
   passthru.updateScript = genericUpdater {
-    inherit pname version;
     versionLister = writeShellScript "nncp-versionLister" ''
-      echo "# Versions for $1:" >> "$2"
-      ${curl}/bin/curl -s http://www.nncpgo.org/Tarballs.html | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
+      ${curl}/bin/curl -s ${finalAttrs.meta.downloadPage} | ${perl}/bin/perl -lne 'print $1 if /Release.*>([0-9.]+)</'
     '';
   };
 
-  meta = with lib; {
+  meta = {
+    broken = stdenv.isDarwin;
+    changelog = "http://www.nncpgo.org/News.html";
     description = "Secure UUCP-like store-and-forward exchanging";
+    downloadPage = "http://www.nncpgo.org/Tarballs.html";
+    homepage = "http://www.nncpgo.org/";
+    license = lib.licenses.gpl3Only;
     longDescription = ''
       This utilities are intended to help build up small size (dozens of
       nodes) ad-hoc friend-to-friend (F2F) statically routed darknet
@@ -63,9 +71,7 @@ stdenv.mkDerivation rec {
       support. But online TCP daemon with full-duplex resumable data
       transmission exists.
     '';
-    homepage = "http://www.nncpgo.org/";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = [ maintainers.woffs ];
+    maintainers = with lib.maintainers; [ ehmry woffs ];
+    platforms = lib.platforms.all;
   };
-}
+})

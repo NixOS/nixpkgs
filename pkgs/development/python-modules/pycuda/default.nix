@@ -2,7 +2,7 @@
 , addOpenGLRunpath
 , fetchPypi
 , fetchFromGitHub
-, Mako
+, mako
 , boost
 , numpy
 , pytools
@@ -10,7 +10,7 @@
 , decorator
 , appdirs
 , six
-, cudatoolkit
+, cudaPackages
 , python
 , mkDerivation
 , lib
@@ -19,18 +19,20 @@ let
   compyte = import ./compyte.nix {
     inherit mkDerivation fetchFromGitHub;
   };
+
+  inherit (cudaPackages) cudatoolkit;
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2020.1";
+  version = "2022.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "effa3b99b55af67f3afba9b0d1b64b4a0add4dd6a33bdd6786df1aa4cc8761a5";
+    hash = "sha256-zZLnJGu0WsNFKVWhEHFBEmdM3ztKni9P8lpBWcaE5rs=";
   };
 
   preConfigure = with lib.versions; ''
-    ${python.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
+    ${python.pythonForBuild.interpreter} configure.py --boost-inc-dir=${boost.dev}/include \
                           --boost-lib-dir=${boost}/lib \
                           --no-use-shipped-boost \
                           --boost-python-libname=boost_python${major python.version}${minor python.version} \
@@ -69,7 +71,7 @@ buildPythonPackage rec {
     cudatoolkit
     compyte
     python
-    Mako
+    mako
   ];
 
   meta = with lib; {

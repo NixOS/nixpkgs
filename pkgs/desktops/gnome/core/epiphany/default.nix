@@ -1,103 +1,96 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , meson
 , ninja
 , gettext
 , fetchurl
 , pkg-config
-, gtk3
+, gtk4
 , glib
 , icu
-, wrapGAppsHook
+, wrapGAppsHook4
 , gnome
-, libportal
+, libportal-gtk4
 , libxml2
-, libxslt
 , itstool
-, webkitgtk
-, libsoup
+, webkitgtk_6_0
+, libsoup_3
 , glib-networking
 , libsecret
 , gnome-desktop
-, libnotify
 , libarchive
 , p11-kit
 , sqlite
-, gcr
+, gcr_4
 , isocodes
 , desktop-file-utils
-, python3
 , nettle
 , gdk-pixbuf
 , gst_all_1
 , json-glib
-, libdazzle
-, libhandy
+, libadwaita
 , buildPackages
+, withPantheon ? false
+, pantheon
 }:
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "40.1";
+  version = "44.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "1l0sb1xg16g4wg3z99xb0w2kbyczbn7q4mphs3w4lxq22xml4sk9";
+    sha256 = "UzXdVzWB22HhJthU3BauUZZXpbh5B4mkfSXkPhfNOkM=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     itstool
-    libxslt
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
     buildPackages.glib
-    buildPackages.gtk3
+    buildPackages.gtk4
   ];
 
   buildInputs = [
-    gcr
+    gcr_4
     gdk-pixbuf
     glib
     glib-networking
     gnome-desktop
-    gnome.adwaita-icon-theme
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-ugly
     gst_all_1.gstreamer
-    gtk3
+    gtk4
     icu
     isocodes
     json-glib
-    libdazzle
-    libhandy
-    libportal
-    libnotify
+    libadwaita
+    libportal-gtk4
     libarchive
     libsecret
-    libsoup
+    libsoup_3
     libxml2
     nettle
     p11-kit
     sqlite
-    webkitgtk
+    webkitgtk_6_0
+  ] ++ lib.optionals withPantheon [
+    pantheon.granite7
   ];
 
   # Tests need an X display
   mesonFlags = [
     "-Dunit_tests=disabled"
+  ] ++ lib.optionals withPantheon [
+    "-Dgranite=enabled"
   ];
-
-  postPatch = ''
-    chmod +x post_install.py # patchShebangs requires executable file
-    patchShebangs post_install.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -108,7 +101,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Epiphany";
     description = "WebKit based web browser for GNOME";
-    maintainers = teams.gnome.members;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, darwin
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
+# Darwin inputs
+, AudioToolbox, AudioUnit
 # Inputs
 , curl, libmms, libnfs, liburing, samba
 # Archive support
@@ -9,9 +11,9 @@
 # Filters
 , libsamplerate
 # Outputs
-, alsaLib, libjack2, libpulseaudio, libshout
+, alsa-lib, libjack2, libpulseaudio, libshout, pipewire
 # Misc
-, icu, sqlite, avahi, dbus, pcre, libgcrypt, expat
+, icu, sqlite, avahi, dbus, pcre2, libgcrypt, expat
 # Services
 , yajl
 # Client support
@@ -61,14 +63,14 @@ let
     # Filter plugins
     libsamplerate = [ libsamplerate ];
     # Output plugins
-    alsa          = [ alsaLib ];
+    alsa          = [ alsa-lib ];
     jack          = [ libjack2 ];
+    pipewire      = [ pipewire ];
     pulse         = [ libpulseaudio ];
     shout         = [ libshout ];
     # Commercial services
     qobuz         = [ curl libgcrypt yajl ];
     soundcloud    = [ curl yajl ];
-    tidal         = [ curl yajl ];
     # Client support
     libmpdclient  = [ libmpdclient ];
     # Tag support
@@ -77,7 +79,7 @@ let
     dbus          = [ dbus ];
     expat         = [ expat ];
     icu           = [ icu ];
-    pcre          = [ pcre ];
+    pcre          = [ pcre2 ];
     sqlite        = [ sqlite ];
     syslog        = [ ];
     systemd       = [ systemd ];
@@ -94,8 +96,8 @@ let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
-      platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smbclient" ]
-                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "io_uring" "systemd" "syslog" ];
+      platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "smbclient" ]
+                  ++ lib.optionals (!stdenv.isLinux) [ "alsa" "pipewire" "io_uring" "systemd" "syslog" ];
 
       knownFeatures = builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
       platformFeatures = lib.subtractLists platformMask knownFeatures;
@@ -114,18 +116,19 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.22.6";
+      version = "0.23.14";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "sha256-Xu+MxMxR5u++R3lZHe6UQ+mEmRnWbN6173ZX39KS1A8=";
+        sha256 = "sha256-S71PXj+XTGsp5aJXH+82D7tdemfA6cnLBWT/fDmb8oA=";
       };
 
       buildInputs = [
         glib
         boost
+        fmt
         # According to the configurePhase of meson, gtest is considered a
         # runtime dependency. Quoting:
         #
@@ -133,7 +136,7 @@ let
         gtest
       ]
         ++ concatAttrVals features_ featureDependencies
-        ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
+        ++ lib.optionals stdenv.isDarwin [ AudioToolbox AudioUnit ];
 
       nativeBuildInputs = [
         meson
@@ -142,10 +145,18 @@ let
       ]
         ++ concatAttrVals features_ nativeFeatureDependencies;
 
+      depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+      postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
+        substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
+          --replace kAudioObjectPropertyElement{Main,Master} \
+          --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+      '';
+
       # Otherwise, the meson log says:
       #
       #    Program zip found: NO
-      checkInputs = [ zip ];
+      nativeCheckInputs = [ zip ];
 
       doCheck = true;
 
@@ -153,6 +164,10 @@ let
 
       outputs = [ "out" "doc" ]
         ++ lib.optional (builtins.elem "documentation" features_) "man";
+
+      CXXFLAGS = lib.optionals stdenv.isDarwin [
+        "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
+      ];
 
       mesonFlags = [
         "-Dtest=true"
@@ -172,7 +187,7 @@ let
         description = "A flexible, powerful daemon for playing music";
         homepage    = "https://www.musicpd.org/";
         license     = licenses.gpl2Only;
-        maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
+        maintainers = with maintainers; [ astsmtl ehmry tobim ];
         platforms   = platforms.unix;
 
         longDescription = ''
@@ -186,17 +201,17 @@ in
 {
   mpd = run { };
   mpd-small = run { features = [
-    "webdav" "curl" "mms" "bzip2" "zzip"
+    "webdav" "curl" "mms" "bzip2" "zzip" "nfs"
     "audiofile" "faad" "flac" "gme"
     "mpg123" "opus" "vorbis" "vorbisenc"
     "lame" "libsamplerate" "shout"
     "libmpdclient" "id3tag" "expat" "pcre"
     "yajl" "sqlite"
-    "soundcloud" "qobuz" "tidal"
+    "soundcloud" "qobuz"
   ] ++ lib.optionals stdenv.isLinux [
     "alsa" "systemd" "syslog" "io_uring"
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    "mad" "jack" "nfs"
+    "mad" "jack"
   ]; };
   mpdWithFeatures = run;
 }

@@ -10,15 +10,15 @@
     type = lib.types.bool;
     default = true;
     internal = true;
-    description = ''
+    description = lib.mdDoc ''
       Whether to enable the resolver that automatically discovers zone in the
       test network.
 
-      This option is <literal>true</literal> by default, because the module
+      This option is `true` by default, because the module
       defining this option needs to be explicitly imported.
 
       The reason this option exists is for the
-      <filename>nixos/tests/common/acme/server</filename> module, which
+      {file}`nixos/tests/common/acme/server` module, which
       needs that option to disable the resolver once the user has set its own
       resolver.
     '';
@@ -63,7 +63,7 @@
             matched = builtins.match "[ \t]+(${reHost})(.*)" str;
             continue = lib.singleton (lib.head matched)
                     ++ matchAliases (lib.last matched);
-          in if matched == null then [] else continue;
+          in lib.optional (matched != null) continue;
 
           matchLine = str: let
             result = builtins.match "[ \t]*(${reIp})[ \t]+(${reHost})(.*)" str;

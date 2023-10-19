@@ -11,7 +11,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "04dzfdzjwcwwaw9min322g30q0saxpq5kqzld4f22fmk820ki6gp";
   };
 
-  cargoSha256 = "133h6mkz9aylhligy16pfjzsl94xxj0rk2zjm08dhg0inj84z3yv";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "clap-3.0.0-beta.1" = "sha256-tErZmEiAF1v39AtgRUHoEmoYqXPWRDXBEkWUbH+fPyY=";
+      "clap_derive-0.3.0" = "sha256-VijH+XB4WeKYUsJH9h/ID8EGZ89R3oauYO8Yg331dPU=";
+    };
+  };
   doCheck = false;
 
   meta = with lib; {

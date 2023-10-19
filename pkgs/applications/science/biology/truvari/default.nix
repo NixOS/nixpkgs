@@ -1,42 +1,81 @@
 { lib
 , fetchFromGitHub
 , python3Packages
+, runtimeShell
+, bcftools
+, htslib
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  ssshtest = fetchFromGitHub {
+    owner = "ryanlayer";
+    repo = "ssshtest";
+    rev = "d21f7f928a167fca6e2eb31616673444d15e6fd0";
+    hash = "sha256-zecZHEnfhDtT44VMbHLHOhRtNsIMWeaBASupVXtmrks=";
+  };
+in python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "2.0.2";
+  version = "4.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "spiralgenetics";
+    owner = "ACEnglish";
     repo = "truvari";
     rev = "v${version}";
-    sha256 = "0lp1wnldjv92k4ncga1h0icb0dpjsrx427vggg40x04a7kp9lwx0";
+    hash = "sha256-HFVAv1TTL/nMjr62tQKhMdwh25P/y4nBGzSbxoJxMmo=";
   };
 
+  postPatch = ''
+    substituteInPlace truvari/utils.py \
+      --replace "/bin/bash" "${runtimeShell}"
+    patchShebangs repo_utils/test_files
+  '';
+
+  nativeBuildInputs = [
+    python3Packages.setuptools
+  ];
+
   propagatedBuildInputs = with python3Packages; [
-    pyvcf
-    python-Levenshtein
-    progressbar2
+    pywfa
+    rich
+    edlib
     pysam
-    pyfaidx
     intervaltree
-    pytabix
-    acebinf
-    bwapy
     joblib
+    numpy
+    pytabix
+    bwapy
     pandas
   ];
 
-  # no tests
-  doCheck = false;
+  makeWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ bcftools htslib ])
+  ];
+
   pythonImportsCheck = [ "truvari" ];
+
+  nativeCheckInputs = [
+    bcftools
+    htslib
+  ] ++ (with python3Packages; [
+    coverage
+  ]);
+
+  checkPhase = ''
+    runHook preCheck
+
+    ln -s ${ssshtest}/ssshtest .
+    bash repo_utils/truvari_ssshtests.sh
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Structural variant comparison tool for VCFs";
-    homepage = "https://github.com/spiralgenetics/truvari";
+    homepage = "https://github.com/ACEnglish/truvari";
+    changelog = "https://github.com/ACEnglish/truvari/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [ natsukium scalavision ];
     longDescription = ''
       Truvari is a benchmarking tool for comparison sets of SVs.
       It can calculate the recall, precision, and f-measure of a

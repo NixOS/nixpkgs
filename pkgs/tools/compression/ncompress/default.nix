@@ -1,20 +1,27 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "ncompress";
   version = "5.0";
 
-  builder = ./builder.sh;
-
-  src = fetchurl {
-    url = "mirror://sourceforge/project/ncompress/${pname}-${version}.tar.gz";
-    sha256 = "004r086c11sw9vg2j3srgxpz98w8pycjl33bk3pgqnd0s92igrn4";
+  src = fetchFromGitHub {
+    owner = "vapier";
+    repo = "ncompress";
+    rev = "v${version}";
+    sha256 = "sha256-Yhs3C5/kR7Ve56E84usYJprxIMAIwXVahLi1N9TIfj0=";
   };
 
-  meta = {
+  makeFlags = [ "PREFIX=$(out)" ];
+  installTargets = "install_core";
+
+  postInstall = ''
+    mv $out/bin/uncompress $out/bin/uncompress-ncompress
+  '';
+
+  meta = with lib; {
     homepage = "http://ncompress.sourceforge.net/";
-    license = lib.licenses.publicDomain;
+    license = licenses.publicDomain;
     description = "A fast, simple LZW file compressor";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

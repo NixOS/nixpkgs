@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  src = fetch pname "1zakyxk5bwnh7jarckcd4rbmzi58jgn2dbah5j5cwcyfyfbx9drc";
+  src = fetch pname "0qg3fgc7wj34hdkqn21y03zcmsdd01szhhm1hfki63iifrm3y2v9";
 
   patches = [
     ./gnu-install-dirs.patch
@@ -34,11 +34,14 @@ stdenv.mkDerivation rec {
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
   ];
 
+  # Musl's default stack size is too small for lld to be able to link Firefox.
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";
+
   outputs = [ "out" "lib" "dev" ];
 
   meta = llvm_meta // {
     homepage = "https://lld.llvm.org/";
-    description = "The LLVM linker";
+    description = "The LLVM linker (unwrapped)";
     longDescription = ''
       LLD is a linker from the LLVM project that is a drop-in replacement for
       system linkers and runs much faster than them. It also provides features

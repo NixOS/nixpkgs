@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
-, libarchive, db, pcre, libedit, libossp_uuid, libXpm
+, libarchive, db, pcre2, libedit, libossp_uuid, libxcrypt,libXpm
 , libSM, libXt, freetype, pkg-config, fontconfig
 , cmake, libyaml, Security
 , libjpeg, libX11, libXext, libXft, libXinerama
@@ -34,7 +34,7 @@
 }:
 
 let
-  version = "8.3.9";
+  version = "9.1.10";
   packInstall = swiplPath: pack:
     ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
     '';
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl-devel";
     rev = "V${version}";
-    sha256 = "0ixb8pc5s7q8q0njs8is1clpvik6jhhdcwnys7m9rpwdzgi10sjz";
+    sha256 = "sha256-hr9cI0Ww6RfZs99iM1hFVw4sOYZFZWr8Vzv6dognCTQ=";
     fetchSubmodules = true;
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ gmp readline openssl
-    libarchive libyaml db pcre libedit libossp_uuid
+    libarchive libyaml db pcre2 libedit libossp_uuid libxcrypt
     zlib ]
   ++ lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
   ++ extraLibraries
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     homepage = "https://www.swi-prolog.org";
     description = "A Prolog compiler and interpreter";
     license = lib.licenses.bsd2;
-
+    mainProgram = "swipl";
     platforms = lib.platforms.linux ++ lib.optionals (!withGui) lib.platforms.darwin;
     maintainers = [ lib.maintainers.meditans ];
   };

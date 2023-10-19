@@ -2,26 +2,25 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, pytest
+, pytestCheckHook
 , decorator
 , setuptools
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "2.5";
+  version = "3.0";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7978955423fbc9639c10498878be59caf99b44dc304c2286162fd24b458c1602";
+    hash = "sha256-mpmSNFNTYYrpgznCtj2CAcOBwpRPOKKrSctFpMZn5BI=";
   };
 
   propagatedBuildInputs = [ decorator setuptools ];
-  checkInputs = [ nose pytest];
-  checkPhase = ''
-    pytest
-  '';
+  nativeCheckInputs = [ nose pytestCheckHook ];
 
   meta = {
     homepage = "https://networkx.github.io/";

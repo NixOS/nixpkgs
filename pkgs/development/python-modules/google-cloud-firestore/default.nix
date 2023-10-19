@@ -1,37 +1,43 @@
 { lib
+, aiounittest
 , buildPythonPackage
 , fetchPypi
-, aiounittest
 , google-api-core
-, google-cloud-testutils
 , google-cloud-core
+, google-cloud-testutils
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-firestore";
-  version = "2.1.0";
+  version = "2.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kG68fG9EqwvE72nzc89MXwEQ/YYEM9tYH6zK2iTCFJo=";
+    hash = "sha256-Pu3JsiONj9tsJkXaRV3nuo3wqaHSU4FZMqw6mMXuyc0=";
   };
 
   propagatedBuildInputs = [
     google-api-core
     google-cloud-core
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiounittest
     google-cloud-testutils
     mock
-    pytestCheckHook
     pytest-asyncio
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -39,10 +45,12 @@ buildPythonPackage rec {
     rm -r google
   '';
 
-  pytestFlagsArray = [
-    # tests are broken
-    "--ignore=tests/system/test_system.py"
-    "--ignore=tests/system/test_system_async.py"
+  disabledTestPaths = [
+    # Tests are broken
+    "tests/system/test_system.py"
+    "tests/system/test_system_async.py"
+    # requires credentials
+    "tests/unit/v1/test_bulk_writer.py"
   ];
 
   disabledTests = [
@@ -58,7 +66,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Firestore API client library";
     homepage = "https://github.com/googleapis/python-firestore";
+    changelog = "https://github.com/googleapis/python-firestore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

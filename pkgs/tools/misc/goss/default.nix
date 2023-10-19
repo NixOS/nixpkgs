@@ -1,26 +1,49 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ buildGoModule
+, fetchFromGitHub
+, goss
+, nix-update-script
+, lib
+, testers
+}:
 
 buildGoModule rec {
   pname = "goss";
-  version = "0.3.16";
+
+  # Don't forget to update dgoss to the same version.
+  version = "0.4.2";
 
   src = fetchFromGitHub {
-    owner = "aelsabbahy";
+    owner = "goss-org";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1m5w5vwmc9knvaihk61848rlq7qgdyylzpcwi64z84rkw8qdnj6p";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
   };
 
-  vendorSha256 = "1lyqjkwj8hybj5swyrv6357hs8sxmf4wim0c8yhfb9mv7fsxhrv7";
+  vendorHash = "sha256-n+k7f9e2iqf4KrcDkzX0CWk+Bq2WE3dyUEid4PTP1FA=";
 
   CGO_ENABLED = 0;
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-s -w -X main.version=v${version}")
-  '';
+  ldflags = [
+    "-s" "-w" "-X main.version=v${version}"
+  ];
+
+  checkFlags = [
+    # Prometheus tests are skipped upstream
+    # See https://github.com/goss-org/goss/blob/master/ci/go-test.sh
+    "-skip" "^TestPrometheus"
+  ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      command = "goss --version";
+      package = goss;
+      version = "v${version}";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/aelsabbahy/goss/";
-    changelog = "https://github.com/aelsabbahy/goss/releases/tag/v${version}";
+    homepage = "https://github.com/goss-org/goss/";
+    changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
     description = "Quick and easy server validation";
     longDescription = ''
       Goss is a YAML based serverspec alternative tool for validating a server’s configuration.
@@ -28,7 +51,7 @@ buildGoModule rec {
       Once the test suite is written they can be executed, waited-on, or served as a health endpoint.
     '';
     license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hyzual jk ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ hyzual jk anthonyroussel ];
   };
 }

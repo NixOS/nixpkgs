@@ -1,22 +1,23 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
-, pkg-config, cmake, gnumake, yasm, python3Packages
-, libgcrypt, libgpgerror, libunistring
+, fetchpatch
+, pkg-config, cmake, yasm, python3Packages
+, libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
 , openssl, gperf, tinyxml2, taglib, libssh, swig, jre_headless
 , gtest, ncurses, spdlog
 , libxml2, systemd
-, alsaLib, libGLU, libGL, fontconfig, freetype, ftgl
+, alsa-lib, libGLU, libGL, fontconfig, freetype, ftgl
 , libjpeg, libpng, libtiff
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
-, lzo, libcdio, libmodplug, libass, libbluray
+, lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
-, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1
-, libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
+, libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
 , lirc
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
@@ -34,29 +35,33 @@
 , buildPackages
 }:
 
-assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
+assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is available
 assert gbmSupport || waylandSupport || x11Support;
 
 let
-  kodiReleaseDate = "20210508";
-  kodiVersion = "19.1";
-  rel = "Matrix";
+  kodiReleaseDate = "20230629";
+  kodiVersion = "20.2";
+  rel = "Nexus";
 
   kodi_src = fetchFromGitHub {
-    owner  = "xbmc";
-    repo   = "xbmc";
-    rev    = "${kodiVersion}-${rel}";
-    sha256 = "0jh67vw3983lnfgqzqfislawwbpq0vxxk1ljsg7mar06mlwfxb7h";
+    owner = "xbmc";
+    repo = "xbmc";
+    rev = "${kodiVersion}-${rel}";
+    hash = "sha256-nNdBjqY9gkpv3g/hcyjWPENHFwOlxrKs2cT4IvRPuXs=";
   };
 
+  # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
+
+  # kodi 20.0 moved to ffmpeg 5, *but* there is a bug making the compilation fail which will
+  # only been fixed in kodi 21, so stick to ffmpeg 4 for now
   ffmpeg = stdenv.mkDerivation rec {
     pname = "kodi-ffmpeg";
-    version = "4.3.1";
+    version = "4.4.1";
     src = fetchFromGitHub {
       owner   = "xbmc";
       repo    = "FFmpeg";
-      rev     = "${version}-${rel}-Beta1";
-      sha256  = "1c5rwlxn6xj501iw7masdv2p6wb9rkmd299lmlkx97sw1kvxvg2w";
+      rev     = "${version}-${rel}-Alpha1";
+      sha256  = "sha256-EQHmmWnDw+/udKYq7Nrf00nL7I5XWUtmzdauDryfTII=";
     };
     preConfigure = ''
       cp ${kodi_src}/tools/depends/target/ffmpeg/{CMakeLists.txt,*.cmake} .
@@ -69,7 +74,7 @@ let
       "-DOS=${stdenv.hostPlatform.parsed.kernel.name}"
       "-DPKG_CONFIG_EXECUTABLE=pkg-config"
     ];
-    buildInputs = [ libidn libtasn1 p11-kit zlib libva ]
+    buildInputs = [ libidn2 libtasn1 p11-kit zlib libva ]
       ++ lib.optional vdpauSupport libvdpau;
     nativeBuildInputs = [ cmake nasm pkg-config gnutls ];
   };
@@ -79,22 +84,22 @@ let
   libdvdcss = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdcss";
-    rev = "1.4.2-${rel}-Beta-5";
-    sha256 = "0j41ydzx0imaix069s3z07xqw9q95k7llh06fc27dcn6f7b8ydyl";
+    rev = "1.4.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-CJMGH50mNAkovccNcol5ArF3zUnZKfbVB9EXyQgu5k4=";
   };
 
   libdvdnav = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdnav";
-    rev = "6.0.0-${rel}-Alpha-3";
-    sha256 = "0qwlf4lgahxqxk1r2pzl866mi03pbp7l1fc0rk522sc0ak2s9jhb";
+    rev = "6.1.1-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-m8SCjOokVbwJ7eVfYKHap1pQjVbI+BXaoxhGZQIg0+k=";
   };
 
   libdvdread = fetchFromGitHub {
     owner = "xbmc";
     repo = "libdvdread";
-    rev = "6.0.0-${rel}-Alpha-3";
-    sha256 = "1xxn01mhkdnp10cqdr357wx77vyzfb5glqpqyg8m0skyi75aii59";
+    rev = "6.1.3-Next-Nexus-Alpha2-2";
+    sha256 = "sha256-AphBQhXud+a6wm52zjzC5biz53NnqWdgpL2QDt2ZuXc=";
   };
 
   kodi_platforms = lib.optional gbmSupport "gbm"
@@ -106,30 +111,38 @@ in stdenv.mkDerivation {
     version = kodiVersion;
 
     src = kodi_src;
-
+    patches = [
+      # Fix compatiblity with fmt 10.0 (from spdlog).
+      # Remove with the next release: https://github.com/xbmc/xbmc/pull/23453
+      (fetchpatch {
+        name = "Fix fmt10 compat";
+        url = "https://github.com/xbmc/xbmc/pull/23453.patch";
+        hash = "sha256-zMUparbQ8gfgeXj8W3MDmPi5OgLNz/zGCJINU7H6Rx0=";
+      })
+    ];
     buildInputs = [
-      gnutls libidn libtasn1 nasm p11-kit
+      gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python
       boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva libdrm
       openssl gperf tinyxml2 taglib libssh
       gtest ncurses spdlog
-      alsaLib libGL libGLU fontconfig freetype ftgl
+      alsa-lib libGL libGLU fontconfig freetype ftgl
       libjpeg libpng libtiff
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
-      lzo libcdio libmodplug libass libbluray
+      lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo
       libcec libcec_platform dcadec libuuid
-      libgcrypt libgpgerror libunistring
+      libxcrypt libgcrypt libgpg-error libunistring
       libcrossguid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
-      ffmpeg flatbuffers fmt fstrcmp rapidjson
+      ffmpeg flatbuffers fstrcmp rapidjson
       lirc
       mesa # for libEGL
     ]
-    ++ lib.optional x11Support [
+    ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
       libXinerama libXrandr.dev libXtst libXfixes
     ]
@@ -149,7 +162,7 @@ in stdenv.mkDerivation {
       # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
       libxkbcommon.dev
     ]
-    ++ lib.optional gbmSupport [
+    ++ lib.optionals gbmSupport [
       libxkbcommon.dev
       mesa.dev
       libinput.dev
@@ -160,7 +173,7 @@ in stdenv.mkDerivation {
       doxygen
       makeWrapper
       which
-      pkg-config gnumake
+      pkg-config
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
       jre_headless yasm gettext python3Packages.python flatbuffers
 
@@ -180,12 +193,19 @@ in stdenv.mkDerivation {
       "-DGIT_VERSION=${kodiReleaseDate}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
+      "-DENABLE_INTERNAL_RapidJSON=OFF"
       "-DENABLE_OPTICAL=ON"
       "-DLIRC_DEVICE=/run/lirc/lircd"
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
-    ] ++ lib.optional waylandSupport [
+      # When wrapped KODI_HOME will likely contain symlinks to static assets
+      # that Kodi's built in webserver will cautiously refuse to serve up
+      # (because their realpaths are outside of KODI_HOME and the other
+      # whitelisted directories). This adds the entire nix store to the Kodi
+      # webserver whitelist to avoid this problem.
+      "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
+    ] ++ lib.optionals waylandSupport [
       "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
     ];
 
@@ -198,10 +218,10 @@ in stdenv.mkDerivation {
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       # Need these tools on the build system when cross compiling,
       # hacky, but have found no other way.
-      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make -C tools/depends/native/JsonSchemaBuilder
+      CXX=$CXX_FOR_BUILD LD=ld make -C tools/depends/native/JsonSchemaBuilder
       cmakeFlags+=" -DWITH_JSONSCHEMABUILDER=$PWD/tools/depends/native/JsonSchemaBuilder/bin"
 
-      CXX=${stdenv.cc.targetPrefix}c++ LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
+      CXX=$CXX_FOR_BUILD LD=ld make EXTRA_CONFIGURE= -C tools/depends/native/TexturePacker
       cmakeFlags+=" -DWITH_TEXTUREPACKER=$PWD/tools/depends/native/TexturePacker/bin"
     '';
 
@@ -211,7 +231,8 @@ in stdenv.mkDerivation {
     '';
 
     postInstall = ''
-      for p in $(ls $out/bin/) ; do
+      # TODO: figure out which binaries should be wrapped this way and which shouldn't
+      for p in $(ls --ignore=kodi-send $out/bin/) ; do
         wrapProgram $out/bin/$p \
           --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
@@ -220,6 +241,9 @@ in stdenv.mkDerivation {
                  ++ lib.optional nfsSupport libnfs
                  ++ lib.optional rtmpSupport rtmpdump)}"
       done
+
+      wrapProgram $out/bin/kodi-send \
+        --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
 
       substituteInPlace $out/share/xsessions/kodi.desktop \
         --replace kodi-standalone $out/bin/kodi-standalone

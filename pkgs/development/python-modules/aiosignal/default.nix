@@ -9,35 +9,41 @@
 
 buildPythonPackage rec {
   pname = "aiosignal";
-  version = "1.1.1";
-  disabled = pythonOlder "3.6";
+  version = "1.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0a9md2dy83qwg2an57nqrzp9nb7krq27y9zz0f7qxcrv0xd42djy";
+    hash = "sha256-vx3Fe28r+0it1UFwyDSD9NNyeIN4tywTyr4pVp49WuU=";
   };
 
   propagatedBuildInputs = [
     frozenlist
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
   postPatch = ''
-    substituteInPlace pytest.ini \
+    substituteInPlace setup.cfg \
+      --replace "filterwarnings = error" "" \
       --replace "--cov=aiosignal" ""
   '';
 
-  pythonImportsCheck = [ "aiosignal" ];
+  pythonImportsCheck = [
+    "aiosignal"
+  ];
 
   meta = with lib; {
     description = "Python list of registered asynchronous callbacks";
     homepage = "https://github.com/aio-libs/aiosignal";
+    changelog = "https://github.com/aio-libs/aiosignal/blob/v${version}/CHANGES.rst";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

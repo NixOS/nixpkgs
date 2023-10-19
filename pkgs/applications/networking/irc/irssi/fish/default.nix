@@ -1,32 +1,28 @@
-{ lib, stdenv, fetchurl, irssi, gmp, automake, autoconf, libtool, openssl, glib, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, glib, openssl, irssi }:
 
 stdenv.mkDerivation rec {
-  name = "fish-irssi-20130413-e98156bebd";
+  pname = "fish-irssi";
+  version = "unstable-2021-04-16";
 
-  src = fetchurl {
-    url = "https://github.com/falsovsky/FiSH-irssi/tarball/e98156bebd";
-    name = "${name}.tar.gz";
-    sha256 = "1ndr51qrg66h1mfzacwzl1vd6lj39pdc4p4z5iihrj4r2f6gk11a";
+  src = fetchFromGitHub {
+    owner = "falsovsky";
+    repo = "FiSH-irssi";
+    rev = "fcc484f09ce6941ba2e499605270593ddd13b81a";
+    hash = "sha256-KIPnz17a0CFfoPO2dZz90j+wG/dR4pv5d0iZMRf7Vkc=";
   };
 
-  preConfigure = ''
-    tar xf ${irssi.src}
-    configureFlags="$configureFlags --with-irssi-source=`pwd`/${irssi.name}"
+  patches = [ ./irssi-include-dir.patch ];
 
-    ./regen.sh
-  '';
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  installPhase = ''
-    mkdir -p $out/lib/irssi/modules
-    cp src/.libs/libfish.so $out/lib/irssi/modules
-  '';
+  buildInputs = [ glib openssl ];
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gmp automake autoconf libtool openssl glib ];
+  cmakeFlags = [ "-DIRSSI_INCLUDE_PATH:PATH=${irssi}/include" ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/falsovsky/FiSH-irssi";
-    license = lib.licenses.unfree; # I can't find any mention of license
-    maintainers = with lib.maintainers; [viric];
+    license = licenses.mit;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.unix;
   };
 }

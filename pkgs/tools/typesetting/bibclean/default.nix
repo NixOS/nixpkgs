@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bibclean";
-  version = "3.04";
+  version = "3.07";
 
   src = fetchurl {
     url = "http://ftp.math.utah.edu/pub/bibclean/bibclean-${version}.tar.xz";
-    sha256 = "0n5jb6w86y91q5lkcc9sb1kh4c2bk3q2va24gfr0n6v1jzyqp9jg";
+    sha256 = "sha256-kZM2eC6ePCBOYPVkhf0fjdZ562IvyP0fSDNZXuEBkaY=";
   };
 
   postPatch = ''

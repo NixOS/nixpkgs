@@ -1,23 +1,76 @@
-{ stdenv, lib, fetchzip, pkg-config, meson, ninja, wayland, pixman, cairo, librsvg, wayland-protocols, wlroots, libxkbcommon, scdoc, git, tllist, fcft}:
+{ stdenv
+, lib
+, fetchFromGitea
+, pkg-config
+, meson
+, ninja
+, wayland-scanner
+, wayland
+, pixman
+, wayland-protocols
+, libxkbcommon
+, scdoc
+, tllist
+, fcft
+, enableCairo ? true
+, svgSupport ? true
+, pngSupport ? true
+# Optional dependencies
+, cairo
+, libpng
+}:
+
+assert svgSupport -> enableCairo;
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
-  version = "1.5.4";
+  version = "1.9.2";
 
-  src = fetchzip {
-    url = "https://codeberg.org/dnkl/fuzzel/archive/${version}.tar.gz";
-    sha256 = "sha256-Zg9KrRf2ntg2FU6lhllt/Fd63KJak6zB7hu4ujj/9AI=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = pname;
+    rev = version;
+    hash = "sha256-X1P/ghX97KCQcrNk44Cy2IAGuZ8DDwHBWzh1AHLDvd4=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc git ];
-  buildInputs = [ wayland pixman cairo librsvg wayland-protocols  wlroots libxkbcommon tllist fcft ];
+  depsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    wayland-scanner
+    meson
+    ninja
+    scdoc
+  ];
+
+  buildInputs = [
+    wayland
+    pixman
+    wayland-protocols
+    libxkbcommon
+    tllist
+    fcft
+  ] ++ lib.optional enableCairo cairo
+    ++ lib.optional pngSupport libpng;
+
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    "-Denable-cairo=${if enableCairo then "enabled" else "disabled"}"
+    "-Dpng-backend=${if pngSupport then "libpng" else "none"}"
+    "-Dsvg-backend=${if svgSupport then "nanosvg" else "none"}"
+  ];
 
   meta = with lib; {
+    changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fionera ];
+    license = with licenses; [ mit zlib ];
+    mainProgram = "fuzzel";
+    maintainers = with maintainers; [ fionera polykernel rodrgz ];
     platforms = with platforms; linux;
-    changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
   };
 }

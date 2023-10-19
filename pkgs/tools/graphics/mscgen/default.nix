@@ -11,12 +11,9 @@
 , zlib
 }:
 
-let
-  version = "0.20";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mscgen";
-  inherit version;
+  version = "0.20";
 
   src = fetchurl {
     url = "http://www.mcternan.me.uk/mscgen/software/mscgen-src-${version}.tar.gz";
@@ -52,6 +49,5 @@ stdenv.mkDerivation {
     '';
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.peti ];
   };
 }

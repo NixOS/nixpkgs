@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj, libpng, openjpeg }:
+{ lib, stdenv, fetchFromGitHub, wrapQtAppsHook, cmake, bzip2, qtbase, qttools, libnova, proj_7, libpng, openjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.6.1";
+  version = "unstable-2022-05-16";
   pname = "xygrib";
 
   src = fetchFromGitHub {
     owner = "opengribs";
     repo = "XyGrib";
-    rev = "v${version}";
-    sha256 = "0xzsm8pr0zjk3f8j880fg5n82jyxn8xf1330qmmq1fqv7rsrg9ia";
+    rev = "88c425ca2d7f4ba5d7ab75bfa25e177bee02d310";
+    sha256 = "sha256-qMMeRYIQqJpVRE3YjbXIiXHwS/CHs9l2QihszwQIr/A=";
   };
 
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
-  buildInputs = [ bzip2 qtbase libnova proj openjpeg libpng ];
+  buildInputs = [ bzip2 qtbase libnova proj_7 openjpeg libpng ];
   cmakeFlags = [ "-DOPENJPEG_INCLUDE_DIR=${openjpeg.dev}/include/openjpeg-${lib.versions.majorMinor openjpeg.version}" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ j03 SuperSandro2000 ];
+    maintainers = with maintainers; [ j03 ];
   };
 }

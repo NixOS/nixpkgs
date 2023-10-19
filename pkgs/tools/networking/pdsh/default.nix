@@ -1,15 +1,23 @@
-{ lib, stdenv, fetchurl, perl, readline, rsh, ssh, slurm, slurmSupport ? false }:
+{ lib, stdenv, fetchurl, autoreconfHook, perl, readline, rsh, ssh, slurm, slurmSupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "pdsh-2.34";
+  pname = "pdsh";
+  version = "2.34";
 
   src = fetchurl {
-    url = "https://github.com/chaos/pdsh/releases/download/${name}/${name}.tar.gz";
+    url = "https://github.com/chaos/pdsh/releases/download/pdsh-${version}/pdsh-${version}.tar.gz";
     sha256 = "1s91hmhrz7rfb6h3l5k97s393rcm1ww3svp8dx5z8vkkc933wyxl";
   };
 
   buildInputs = [ perl readline ssh ]
     ++ (lib.optional slurmSupport slurm);
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # Do not use git to derive a version.
+  postPatch = ''
+    sed -i 's/m4_esyscmd(\[git describe.*/[${version}])/' configure.ac
+  '';
 
   preConfigure = ''
     configureFlagsArray=(
@@ -42,6 +50,5 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.peti ];
   };
 }

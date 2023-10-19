@@ -1,17 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
-, isPy3k
 , docutils
 , requests
-, requests_download
-, zipfile36
-, pythonOlder
-, pytest
+, pytestCheckHook
 , testpath
 , responses
 , flit-core
+, tomli-w
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -21,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.2.0";
+  version = "3.9.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
-    sha256 = "sha256-zN+/oAyXBo6Ho7n/xhOQ2mjtPGKA1anCvl3sVf7t+Do=";
+    hash = "sha256-yl2+PcKr7xRW4oIBWl+gzh/nKhSNu5GH9fWKRGgaNHU=";
   };
 
   nativeBuildInputs = [
@@ -38,24 +34,27 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     docutils
     requests
-    requests_download
     flit-core
-  ] ++ lib.optionals (pythonOlder "3.6") [
-    zipfile36
+    tomli-w
   ];
 
-  checkInputs = [ pytest testpath responses ];
+  nativeCheckInputs = [ pytestCheckHook testpath responses ];
 
-  # Disable test that needs some ini file.
-  # Disable test that wants hg
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest -k "not test_invalid_classifier and not test_build_sdist"
-  '';
+  disabledTests = [
+    # needs some ini file.
+    "test_invalid_classifier"
+    # calls pip directly. disabled for PEP 668
+    "test_install_data_dir"
+    "test_install_module_pep621"
+    "test_symlink_data_dir"
+    "test_symlink_module_pep621"
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
     description = "A simple packaging tool for simple packages";
-    homepage = "https://github.com/takluyver/flit";
+    homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
-    maintainers = [ maintainers.fridh ];
+    maintainers = with maintainers; [ fridh ];
   };
 }

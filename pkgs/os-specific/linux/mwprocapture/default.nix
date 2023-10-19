@@ -1,31 +1,28 @@
-{ lib, stdenv, fetchurl, kernel, alsaLib }:
+{ lib, stdenv, fetchurl, kernel, alsa-lib }:
 
 with lib;
 
-# The Magewell Pro Capture drivers are not supported for kernels older than 3.2
-assert versionAtLeast kernel.version "3.2.0";
-
 let
   bits =
-  if stdenv.is64bit then "64"
-  else "32";
+    if stdenv.is64bit then "64"
+    else "32";
 
-  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.glibc alsaLib ];
+  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
 
 in
 stdenv.mkDerivation rec {
-  name = "mwprocapture-1.2.${version}-${kernel.version}";
-  version = "4177";
+  pname = "mwprocapture";
+  subVersion = "4373";
+  version = "1.3.0.${subVersion}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://www.magewell.com/files/drivers/ProCaptureForLinux_${version}.tar.gz";
-    sha256 = "1nf51w9yixpvr767k49sfdb9n9rv5qc72f5yki1mkghbmabw7vys";
+    url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
+    sha256 = "sha256-/6q+6CTlgkHOgq1PF8dSPfl/xm/UFczr/AGkac2mXZ8=";
   };
 
-  nativeBuildInputs = [ kernel.moduleBuildDependencies ];
+  nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  preConfigure =
-  ''
+  preConfigure = ''
     cd ./src
     export INSTALL_MOD_PATH="$out"
   '';
@@ -35,6 +32,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-fallthrough";
 
   postInstall = ''
     cd ../
@@ -58,10 +57,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.magewell.com/";
+    homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ MP2E ];
+    maintainers = with maintainers; [ flexiondotorg MP2E ];
     platforms = platforms.linux;
   };
 }

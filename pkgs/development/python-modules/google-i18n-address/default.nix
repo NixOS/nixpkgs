@@ -1,23 +1,47 @@
-{ buildPythonPackage, fetchPypi, pythonAtLeast, lib, requests, pytestCheckHook, mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, hatchling
+, requests
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "google-i18n-address";
-  version = "2.4.0";
-  disabled = pythonAtLeast "3.9";
+  version = "3.1.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8454a58f254a29988b8d1ca9ab663fd28a1f392a3d29b844d8824807db6333d7";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "mirumee";
+    repo = "google-i18n-address";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dW/1wwnFDjYpym1ZaSZ7mOLpkHxsvuAHC8zBRekxWaw=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  propagatedBuildInputs = [
+    requests
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "i18naddress"
+  ];
 
   meta = with lib; {
     description = "Google's i18n address data packaged for Python";
     homepage = "https://github.com/mirumee/google-i18n-address";
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/mirumee/google-i18n-address/releases/tag/${version}";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

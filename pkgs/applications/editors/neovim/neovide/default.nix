@@ -1,82 +1,71 @@
-{ rustPlatform
-, runCommand
-, lib
+{ lib
+, rustPlatform
+, clangStdenv
 , fetchFromGitHub
+, linkFarm
 , fetchgit
+, runCommand
+, gn
+, ninja
 , makeWrapper
 , pkg-config
-, python2
-, expat
-, openssl
+, python3
+, removeReferencesTo
+, xcbuild
 , SDL2
-, vulkan-loader
 , fontconfig
-, ninja
-, gn
-, llvmPackages
-, makeFontsConf
+, xorg
+, stdenv
+, darwin
+, libglvnd
+, libxkbcommon
+, enableWayland ? stdenv.isLinux
+, wayland
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
-  version = "20210515";
+  version = "0.11.2";
 
-  src =
-    let
-      repo = fetchFromGitHub {
-        owner = "Kethku";
-        repo = "neovide";
-        rev = "0b976c3d28bbd24e6c83a2efc077aa96dde1e9eb";
-        sha256 = "sha256-asaOxcAenKdy/yJvch3HFfgnrBnQagL02UpWYnz7sa8=";
-      };
-    in
-    runCommand "source" { } ''
-      cp -R ${repo} $out
-      chmod -R +w $out
-      # Reasons for patching Cargo.toml:
-      # - I got neovide built with latest compatible skia-save version 0.35.1
-      #   and I did not try to get it with 0.32.1 working. Changing the skia
-      #   version is time consuming, because of manual dependecy tracking and
-      #   long compilation runs.
-      sed -i $out/Cargo.toml \
-        -e '/skia-safe/s;0.32.1;0.35.1;'
-      cp ${./Cargo.lock} $out/Cargo.lock
-    '';
+  src = fetchFromGitHub {
+    owner = "neovide";
+    repo = "neovide";
+    rev = version;
+    sha256 = "sha256-JCSFG7W4I1uXsVM7J059tHYq/DB16AZfGjsG0UvfctE=";
+  };
 
-  cargoSha256 = "sha256-XMPRM3BAfCleS0LXQv03A3lQhlUhAP8/9PdVbAUnfG0=";
+  cargoSha256 = "sha256-rH4jjbd0C1MKu3RE0bLvLo4iqyUXr0DvCudvFs1F+AA=";
 
-  SKIA_OFFLINE_SOURCE_DIR =
+  SKIA_SOURCE_DIR =
     let
       repo = fetchFromGitHub {
         owner = "rust-skia";
         repo = "skia";
-        # see rust-skia/Cargo.toml#package.metadata skia
-        rev = "m86-0.35.0";
-        sha256 = "sha256-uTSgtiEkbE9e08zYOkRZyiHkwOLr/FbBYkr2d+NZ8J0=";
+        # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+        rev = "m113-0.61.8";
+        sha256 = "sha256-xGfkc1JLBGQW4WcblFyluZ2paEuisCVPNDU4Rfkv3BE=";
       };
       # The externals for skia are taken from skia/DEPS
-      externals = lib.mapAttrs (n: v: fetchgit v) (lib.importJSON ./skia-externals.json);
+      externals = linkFarm "skia-externals" (lib.mapAttrsToList
+        (name: value: { inherit name; path = fetchgit value; })
+        (lib.importJSON ./skia-externals.json));
     in
-    runCommand "source" { } (''
+    runCommand "source" { } ''
       cp -R ${repo} $out
       chmod -R +w $out
+      ln -s ${externals} $out/third_party/externals
+    ''
+  ;
 
-      mkdir -p $out/third_party/externals
-      cd $out/third_party/externals
-    '' + (builtins.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "cp -ra ${value} ${name}") externals)));
-
-  SKIA_OFFLINE_NINJA_COMMAND = "${ninja}/bin/ninja";
-  SKIA_OFFLINE_GN_COMMAND = "${gn}/bin/gn";
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-
-  # test needs a valid fontconfig file
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  SKIA_GN_COMMAND = "${gn}/bin/gn";
+  SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
   nativeBuildInputs = [
-    pkg-config
     makeWrapper
-    python2 # skia-bindings
-    llvmPackages.clang # skia
-  ];
+    pkg-config
+    python3 # skia
+    removeReferencesTo
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
 
   # All tests passes but at the end cargo prints for unknown reason:
   #   error: test failed, to rerun pass '--bin neovide'
@@ -85,16 +74,30 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   buildInputs = [
-    expat
-    openssl
     SDL2
     fontconfig
+    rustPlatform.bindgenHook
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.AppKit
   ];
 
-  postFixup = ''
-    wrapProgram $out/bin/neovide \
-      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
-  '';
+  postFixup = let
+    libPath = lib.makeLibraryPath ([
+      libglvnd
+      libxkbcommon
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXrandr
+      xorg.libXi
+    ] ++ lib.optionals enableWayland [ wayland ]);
+  in ''
+      # library skia embeds the path to its sources
+      remove-references-to -t "$SKIA_SOURCE_DIR" \
+        $out/bin/neovide
+
+      wrapProgram $out/bin/neovide \
+        --prefix LD_LIBRARY_PATH : ${libPath}
+    '';
 
   postInstall = ''
     for n in 16x16 32x32 48x48 256x256; do
@@ -105,11 +108,13 @@ rustPlatform.buildRustPackage rec {
     install -m444 -Dt $out/share/applications assets/neovide.desktop
   '';
 
+  disallowedReferences = [ SKIA_SOURCE_DIR ];
+
   meta = with lib; {
     description = "This is a simple graphical user interface for Neovim.";
-    homepage = "https://github.com/Kethku/neovide";
+    homepage = "https://github.com/neovide/neovide";
+    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ ck3d multisn8 ];
   };
 }

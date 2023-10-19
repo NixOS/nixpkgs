@@ -1,25 +1,40 @@
 { spellChecking ? true
-, lib, stdenv, fetchurl, pkg-config, gtk3, gtkspell3 ? null
-, gmime2, gettext, intltool, itstool, libxml2, libnotify, gnutls
-, makeWrapper, gnupg
-, gnomeSupport ? true, libsecret, gcr
+, lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, pkg-config
+, gtk3
+, gtkspell3
+, gmime3
+, gettext
+, intltool
+, itstool
+, libxml2
+, libnotify
+, gnutls
+, makeWrapper
+, gnupg
+, gnomeSupport ? true
+, libsecret
+, gcr
 }:
 
-assert spellChecking -> gtkspell3 != null;
-
-let version = "0.146"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pan";
-  inherit version;
+  version = "0.154";
 
-  src = fetchurl {
-    url = "http://pan.rebelbase.com/download/releases/${version}/source/pan-${version}.tar.bz2";
-    sha256 = "17agd27sn4a7nahvkpg0w39kv74njgdrrygs74bbvpaj8rk2hb55";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-o+JFUraSoQ0HDmldHvTX+X7rl2L4n4lJmI4UFZrsfkQ=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext intltool itstool libxml2 makeWrapper ];
-  buildInputs = [ gtk3 gmime2 libnotify gnutls ]
+  nativeBuildInputs = [ autoreconfHook pkg-config gettext intltool itstool libxml2 makeWrapper ];
+
+  buildInputs = [ gtk3 gmime3 libnotify gnutls ]
     ++ lib.optional spellChecking gtkspell3
     ++ lib.optionals gnomeSupport [ libsecret gcr ];
 
@@ -29,7 +44,7 @@ stdenv.mkDerivation {
     "--with-gnutls"
     "--enable-libnotify"
   ] ++ lib.optional spellChecking "--with-gtkspell"
-    ++ lib.optional gnomeSupport "--enable-gkr";
+  ++ lib.optional gnomeSupport "--enable-gkr";
 
   postInstall = ''
     wrapProgram $out/bin/pan --suffix PATH : ${gnupg}/bin
@@ -42,6 +57,6 @@ stdenv.mkDerivation {
     homepage = "http://pan.rebelbase.com/";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;
-    license = with licenses; [ gpl2 fdl11 ];
+    license = with licenses; [ gpl2Only fdl11Only ];
   };
 }

@@ -1,9 +1,9 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , zlib, bzip2, lzo, lz4, zstd, xz
-, libgcrypt, e2fsprogs, util-linux, libgpgerror }:
+, libgcrypt, e2fsprogs, util-linux, libgpg-error }:
 
 let
-  version = "0.8.6";
+  version = "0.8.7";
 
 in stdenv.mkDerivation {
   pname = "fsarchiver";
@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     owner = "fdupoux";
     repo = "fsarchiver";
     rev = version;
-    sha256 = "sha256-7AfCI4abcUijobEl6FO+5A/FRwxPkNko44u85WbTwuc=";
+    sha256 = "sha256-1ZIqFgB05gV1L7P/AIL4qfYT4cNMp75QElEM64BXyO8=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     zlib bzip2 xz lzo lz4 zstd xz
-    libgcrypt e2fsprogs util-linux libgpgerror
+    libgcrypt e2fsprogs util-linux libgpg-error
   ];
 
   meta = with lib; {
@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://www.fsarchiver.org/";
     license = licenses.lgpl2;
-    maintainers = [ maintainers.etu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

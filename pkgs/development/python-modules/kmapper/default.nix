@@ -8,20 +8,20 @@
 , pytestCheckHook
 , networkx
 , matplotlib
-, python-igraph
+, igraph
 , plotly
 , ipywidgets
 }:
 
 buildPythonPackage rec {
   pname = "kmapper";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "kepler-mapper";
     rev = "v${version}";
-    sha256 = "0djm27si2bn18khrbb7rwhflc5ma6g9smhikhk5i1apwn5avm6l4";
+    sha256 = "1jqqrn7ig9kylcc8xbslxmchzghr9jgffaab3g3y3nyghk8azlgj";
   };
 
   propagatedBuildInputs = [
@@ -31,11 +31,11 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     networkx
     matplotlib
-    python-igraph
+    igraph
     plotly
     ipywidgets
   ];
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
     homepage = "https://kepler-mapper.scikit-tda.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
+    broken = true;
   };
 }

@@ -1,9 +1,8 @@
 { stdenv
-, gcc8Stdenv
 , boost
 , cmake
-, cudatoolkit
-, cudnn
+, config
+, cudaPackages
 , eigen
 , fetchFromGitHub
 , gperftools
@@ -16,31 +15,26 @@
 , openssl
 , writeShellScriptBin
 , enableAVX2 ? stdenv.hostPlatform.avx2Support
+, backend ? if config.cudaSupport then "cuda" else "opencl"
 , enableBigBoards ? false
-, enableCuda ? false
 , enableContrib ? false
-, enableGPU ? true
 , enableTcmalloc ? true
 }:
 
-assert !enableGPU -> (
-  !enableCuda);
+assert lib.assertOneOf "backend" backend [ "opencl" "cuda" "tensorrt" "eigen" ];
 
-let
-  env = if enableCuda
-    then gcc8Stdenv
-    else stdenv;
-
-in env.mkDerivation rec {
+# N.b. older versions of cuda toolkit (e.g. 10) do not support newer versions
+# of gcc.  If you need to use cuda10, please override stdenv with gcc8Stdenv
+stdenv.mkDerivation rec {
   pname = "katago";
-  version = "1.8.2";
-  githash = "b846bddd88fbc5353e4a93fa514f6cbf45358362";
+  version = "1.13.1";
+  githash = "3539a3d410b12f79658bb7a2cdaf1ecb6c95e6c1";
 
   src = fetchFromGitHub {
     owner = "lightvector";
     repo = "katago";
     rev = "v${version}";
-    sha256 = "sha256-kL+y2rsEiC5GGDlWrbzxlJvLxHDCuvVT6CDOlUtXpDk=";
+    sha256 = "sha256-A2ZvFcklYQoxfqYrLrazksrJkfdELnn90aAbkm7pJg0=";
   };
 
   fakegit = writeShellScriptBin "git" "echo ${githash}";
@@ -53,12 +47,17 @@ in env.mkDerivation rec {
   buildInputs = [
     libzip
     boost
-  ] ++ lib.optionals (!enableGPU) [
+  ] ++ lib.optionals (backend == "eigen") [
     eigen
-  ] ++ lib.optionals (enableGPU && enableCuda) [
-    cudnn
+  ] ++ lib.optionals (backend == "cuda") [
+    cudaPackages.cudnn
+    cudaPackages.cudatoolkit
     mesa.drivers
-  ] ++ lib.optionals (enableGPU && !enableCuda) [
+  ] ++ lib.optionals (backend == "tensorrt") [
+      cudaPackages.cudatoolkit
+      cudaPackages.tensorrt
+      mesa.drivers
+  ] ++ lib.optionals (backend == "opencl") [
     opencl-headers
     ocl-icd
   ] ++ lib.optionals enableContrib [
@@ -69,13 +68,15 @@ in env.mkDerivation rec {
 
   cmakeFlags = [
     "-DNO_GIT_REVISION=ON"
-  ] ++ lib.optionals (!enableGPU) [
-    "-DUSE_BACKEND=EIGEN"
   ] ++ lib.optionals enableAVX2 [
     "-DUSE_AVX2=ON"
-  ] ++ lib.optionals (enableGPU && enableCuda) [
+  ] ++ lib.optionals (backend == "eigen") [
+    "-DUSE_BACKEND=EIGEN"
+  ] ++ lib.optionals (backend == "cuda") [
     "-DUSE_BACKEND=CUDA"
-  ] ++ lib.optionals (enableGPU && !enableCuda) [
+  ] ++ lib.optionals (backend == "tensorrt") [
+    "-DUSE_BACKEND=TENSORRT"
+  ] ++ lib.optionals (backend == "opencl") [
     "-DUSE_BACKEND=OPENCL"
   ] ++ lib.optionals enableContrib [
     "-DBUILD_DISTRIBUTED=1"
@@ -89,15 +90,15 @@ in env.mkDerivation rec {
 
   preConfigure = ''
     cd cpp/
-  '' + lib.optionalString enableCuda ''
-    export CUDA_PATH="${cudatoolkit}"
+  '' + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
+    export CUDA_PATH="${cudaPackages.cudatoolkit}"
     export EXTRA_LDFLAGS="-L/run/opengl-driver/lib"
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin; cp katago $out/bin;
-  '' + lib.optionalString enableCuda ''
+  '' + lib.optionalString (backend == "cuda" || backend == "tensorrt") ''
     wrapProgram $out/bin/katago \
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib"
   '' + ''

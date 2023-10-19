@@ -1,5 +1,7 @@
 { stdenv
+, nodejs
 , tree-sitter
+, lib
 }:
 
 # Build a parser grammar and put the resulting shared object in `$out/parser`
@@ -7,47 +9,53 @@
 {
   # language name
   language
-  # version of tree-sitter
 , version
-  # source for the language grammar
-, source
+, src
 , location ? null
-}:
+, generate ? false
+, ...
+}@args:
 
-stdenv.mkDerivation {
-
+stdenv.mkDerivation ({
   pname = "${language}-grammar";
-  inherit version;
 
-  src =
-    if location == null
-    then
-      source
-    else
-      "${source}/${location}"
-  ;
+  inherit src version;
 
-  buildInputs = [ tree-sitter ];
+  nativeBuildInputs = lib.optionals generate [ nodejs tree-sitter ];
 
-  dontUnpack = true;
-  configurePhase = ":";
+  CFLAGS = [ "-Isrc" "-O2" ];
+  CXXFLAGS = [ "-Isrc" "-O2" ];
+
+  stripDebugList = [ "parser" ];
+
+  configurePhase = lib.optionalString (location != null) ''
+    cd ${location}
+  '' + lib.optionalString generate ''
+    tree-sitter generate
+  '';
+
+  # When both scanner.{c,cc} exist, we should not link both since they may be the same but in
+  # different languages. Just randomly prefer C++ if that happens.
   buildPhase = ''
     runHook preBuild
-    scanner_cc="$src/src/scanner.cc"
-    if [ ! -f "$scanner_cc" ]; then
-      scanner_cc=""
+    if [[ -e src/scanner.cc ]]; then
+      $CXX -fPIC -c src/scanner.cc -o scanner.o $CXXFLAGS
+    elif [[ -e src/scanner.c ]]; then
+      $CC -fPIC -c src/scanner.c -o scanner.o $CFLAGS
     fi
-    scanner_c="$src/src/scanner.c"
-    if [ ! -f "$scanner_c" ]; then
-      scanner_c=""
-    fi
-    $CC -I$src/src/ -shared -o parser -Os $src/src/parser.c $scanner_cc $scanner_c -lstdc++
+    $CC -fPIC -c src/parser.c -o parser.o $CFLAGS
+    rm -rf parser
+    $CXX -shared -o parser *.o
     runHook postBuild
   '';
+
   installPhase = ''
     runHook preInstall
     mkdir $out
     mv parser $out/
+    if [[ -d queries ]]; then
+      cp -r queries $out
+    fi
     runHook postInstall
   '';
-}
+} // removeAttrs args [ "language" "location" "generate" ])

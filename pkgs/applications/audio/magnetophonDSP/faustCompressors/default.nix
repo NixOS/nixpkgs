@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "faustCompressors-v${version}";
+  pname = "faustCompressors";
   version = "1.2";
 
   src = fetchFromGitHub {
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ faust2jaqt faust2lv2 ];
+
+  dontWrapQtApps = true;
 
   buildPhase = ''
     echo "hack out autoComp.dsp due to https://github.com/grame-cncm/faust/407/issues "
@@ -33,8 +35,7 @@ stdenv.mkDerivation rec {
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
     rm newlib.sh
-    for f in $(find . -executable -type f);
-    do
+    for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
   '';

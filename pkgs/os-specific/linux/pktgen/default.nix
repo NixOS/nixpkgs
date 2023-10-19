@@ -1,18 +1,39 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config
-, dpdk, libbsd, libpcap, lua5_3, numactl, util-linux
-, gtk2, which, withGtk ? false
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, dpdk
+, libbsd
+, libpcap
+, lua5_3
+, numactl
+, util-linux
+, gtk2
+, which
+, withGtk ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "21.05.0";
+  version = "22.07.1";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "sha256-7lLDtbd14olEHO+1BuI6KTEUNRM/zAyRXau/OZbYbGA=";
+    sha256 = "sha256-wBLGwVdn3ymUTVv7J/kbQYz4WNIgV246PHg51+FStUo=";
   };
+
+  patches = [
+    (fetchpatch {
+      # Ealier DPDK deprecated some macros, which were finally removed in >= 22.11
+      url = "https://github.com/pktgen/Pktgen-DPDK/commit/089ef94ac04629f7380f5e618443bcacb2cef5ab.patch";
+      sha256 = "sha256-ITU/dIfu7QPpdIVYuCuDhDG9rVF+n8i1YYn9bFmQUME=";
+    })
+  ];
 
   nativeBuildInputs = [ meson ninja pkg-config ];
 
@@ -25,7 +46,12 @@ stdenv.mkDerivation rec {
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";
 
-  NIX_CFLAGS_COMPILE = "-msse3";
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=address"
+    "-Wno-error=use-after-free"
+  ];
+
   # requires symbols from this file
   NIX_LDFLAGS = "-lrte_net_bond";
 
@@ -43,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "Traffic generator powered by DPDK";
     homepage = "http://dpdk.org/";
     license = licenses.bsdOriginal;
-    platforms =  [ "x86_64-linux" ];
+    platforms =  platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

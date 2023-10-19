@@ -17,10 +17,9 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable USB login for all login systems that support it.  For
-          more information, visit <link
-          xlink:href="https://github.com/aluzzardi/pam_usb/wiki/Getting-Started#setting-up-devices-and-users" />.
+          more information, visit <https://github.com/aluzzardi/pam_usb/wiki/Getting-Started#setting-up-devices-and-users>.
         '';
       };
 
@@ -32,8 +31,18 @@ in
 
     # Make sure pmount and pumount are setuid wrapped.
     security.wrappers = {
-      pmount.source = "${pkgs.pmount.out}/bin/pmount";
-      pumount.source = "${pkgs.pmount.out}/bin/pumount";
+      pmount =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.pmount.out}/bin/pmount";
+        };
+      pumount =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.pmount.out}/bin/pumount";
+        };
     };
 
     environment.systemPackages = [ pkgs.pmount ];

@@ -1,14 +1,19 @@
-{ lib, pkg-config, fetchPypi, buildPythonPackage
+{ lib
+, pkg-config
+, fetchPypi
+, buildPythonPackage
 , buildPackages
-, zstd, pytest }:
+, zstd
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.4.8.1";
+  version = "1.5.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b62b21eb850abd6b8c0046bfc1c5c773c873eeb94f1904ef1ff304e98b62b80e";
+    hash = "sha256-HvmAq/Dh4HKwKNLXbvlbR2YyZRyWIlzzC2Gcbu9iVnI=";
   };
 
   postPatch = ''
@@ -31,7 +36,7 @@ buildPythonPackage rec {
   VERSION = zstd.version;
   PKG_VERSION = version;
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';

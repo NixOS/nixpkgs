@@ -4,12 +4,15 @@
 , headersOnly ? true
 }:
 
-appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
+appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
+  let arch = if stdenv.isx86_64 then "x86_64" else "arm64";
+  in
+  {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
 
-  patches = [ ./python3.patch ];
+  patches = lib.optionals stdenv.isx86_64 [ ./python3.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -31,7 +34,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
       --replace "-Werror " ""
 
     substituteInPlace SETUP/kextsymboltool/Makefile \
-      --replace "-lstdc++" "-lc++"
+      --replace "-lstdc++" "-lc++ -lc++abi"
 
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace "/usr/include" "/include" \
@@ -41,9 +44,16 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
       --replace " -o 0" "" \
       --replace '$SRC/$mig' '-I$DSTROOT/include $SRC/$mig' \
       --replace '$SRC/servers/netname.defs' '-I$DSTROOT/include $SRC/servers/netname.defs' \
-      --replace '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR'
+      --replace '$BUILT_PRODUCTS_DIR/mig_hdr' '$BUILT_PRODUCTS_DIR' \
+      --replace 'MACHINE_ARCH=armv7' 'MACHINE_ARCH=arm64' # this might break the comments saying 32-bit is required
 
     patchShebangs .
+  '' + lib.optionalString stdenv.isAarch64 ''
+    # iig is closed-sourced, we don't have it
+    # create an empty file to the header instead
+    # this line becomes: echo "" > $@; echo --header ...
+    substituteInPlace iokit/DriverKit/Makefile \
+      --replace '--def $<' '> $@; echo'
   '';
 
   PLATFORM = "MacOSX";
@@ -53,6 +63,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
   MIG = "mig";
   MIGCOM = "migcom";
   STRIP = "${stdenv.cc.bintools.targetPrefix or ""}strip";
+  RANLIB = "${stdenv.cc.bintools.targetPrefix or ""}ranlib";
   NM = "${stdenv.cc.bintools.targetPrefix or ""}nm";
   UNIFDEF = "unifdef";
   DSYMUTIL = "dsymutil";
@@ -62,18 +73,22 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
   HOST_BISON = "bison";
   HOST_GM4 = "m4";
   MIGCC = "cc";
-  ARCHS = "x86_64";
+  ARCHS = arch;
+  ARCH_CONFIGS = arch;
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  preBuild = ''
+  preBuild = let macosVersion =
+    "10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11" +
+    lib.optionalString stdenv.isAarch64 " 10.12 10.13 10.14 10.15 11.0";
+   in ''
     # This is a bit of a hack...
     mkdir -p sdk/usr/local/libexec
 
     cat > sdk/usr/local/libexec/availability.pl <<EOF
       #!$SHELL
       if [ "\$1" == "--macosx" ]; then
-        echo 10.0 10.1 10.2 10.3 10.4 10.5 10.6 10.7 10.8 10.9 10.10 10.11
+        echo ${macosVersion}
       elif [ "\$1" == "--ios" ]; then
         echo 2.0 2.1 2.2 3.0 3.1 3.2 4.0 4.1 4.2 4.3 5.0 5.1 6.0 6.1 7.0 8.0 9.0
       fi
@@ -101,6 +116,9 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
     cp EXTERNAL_HEADERS/AssertMacros.h $out/include
     cp EXTERNAL_HEADERS/Availability*.h $out/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/
     cp -r EXTERNAL_HEADERS/corecrypto $out/include
+
+    # These headers are needed by Libsystem.
+    cp libsyscall/wrappers/{spawn/spawn.h,libproc/libproc.h} $out/include
 
     # Build the mach headers we crave
     export SRCROOT=$PWD/libsyscall
@@ -132,7 +150,7 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
     mv $out/Library/Frameworks/IOKit.framework $out/Library/PrivateFrameworks
   '';
 
-  appleHeaders = builtins.readFile ./headers.txt;
+  appleHeaders = builtins.readFile (./. + "/headers-${arch}.txt");
 } // lib.optionalAttrs headersOnly {
   HOST_CODESIGN = "echo";
   HOST_CODESIGN_ALLOCATE = "echo";
@@ -142,4 +160,5 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) ({
   CTFMERGE = "echo";
   CTFINSERT = "echo";
   NMEDIT = "echo";
+  IIG = "echo";
 })

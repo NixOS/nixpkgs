@@ -1,24 +1,27 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, autoreconfHook
-, libgsf
+, cmake
 , pkg-config
-, openssl
+, python3
 , curl
+, openssl
 }:
 
 stdenv.mkDerivation rec {
   pname = "osslsigncode";
-  version = "2.1";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "mtrojnar";
     repo = pname;
     rev = version;
-    sha256 = "0iwxdzqan2bswz62pmwjcyh01vs6ifpdcannw3s192gqzac1lgg3";
+    sha256 = "sha256-TW4/alnAW3vifAKf02RlnpOq1uW7nc+Sjs0g1BfplLk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook libgsf pkg-config openssl curl ];
+  nativeBuildInputs = [ cmake pkg-config python3 ];
+
+  buildInputs = [ curl openssl ];
 
   meta = with lib; {
     homepage = "https://github.com/mtrojnar/osslsigncode";

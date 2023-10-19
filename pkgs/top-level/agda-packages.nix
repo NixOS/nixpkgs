@@ -1,9 +1,9 @@
-{ pkgs, lib, callPackage, newScope, Agda }:
+{ pkgs, lib, newScope, Agda }:
 
 let
   mkAgdaPackages = Agda: lib.makeScope newScope (mkAgdaPackages' Agda);
   mkAgdaPackages' = Agda: self: let
-    callPackage = self.callPackage;
+    inherit (self) callPackage;
     inherit (callPackage ../build-support/agda {
       inherit Agda self;
       inherit (pkgs.haskellPackages) ghcWithPackages;
@@ -13,7 +13,7 @@ let
 
     lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
 
-    agda = withPackages [] // { inherit withPackages; };
+    agda = withPackages [];
 
     standard-library = callPackage ../development/libraries/agda/standard-library {
       inherit (pkgs.haskellPackages) ghcWithPackages;
@@ -31,5 +31,9 @@ let
       ../development/libraries/agda/functional-linear-algebra { };
 
     generic = callPackage ../development/libraries/agda/generic { };
+
+    agdarsec = callPackage ../development/libraries/agda/agdarsec { };
+
+    _1lab = callPackage ../development/libraries/agda/1lab { };
   };
 in mkAgdaPackages Agda

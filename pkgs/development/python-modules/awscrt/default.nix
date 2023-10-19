@@ -1,31 +1,59 @@
-{ lib, buildPythonPackage, fetchPypi, cmake, perl, stdenv, gcc10, darwin }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, cmake
+, perl
+, stdenv
+, gcc10
+, CoreFoundation
+, Security
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "awscrt";
-  version = "0.11.13";
+  version = "0.19.3";
+  format = "setuptools";
 
-  buildInputs = lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreFoundation Security ]);
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-UMIzuGZBff/7szG3CuO3oHZOfY4WcYqW9mUAGFBWLvA=";
+  };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    Security
+  ];
 
   # Required to suppress -Werror
   # https://github.com/NixOS/nixpkgs/issues/39687
-  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+  hardeningDisable = lib.optionals stdenv.cc.isClang [
+    "strictoverflow"
+  ];
 
-  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isAarch64 ([ gcc10 perl ]);
+  # gcc <10 is not supported, LLVM on darwin is just fine
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isAarch64) [
+    gcc10
+    perl
+  ];
 
   dontUseCmakeConfigure = true;
+
+  pythonImportsCheck = [
+    "awscrt"
+  ];
 
   # Unable to import test module
   # https://github.com/awslabs/aws-crt-python/issues/281
   doCheck = false;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-G/bf2AzWp8AHL4of0zfX3jIYyTtmTLBIC2ZKiMi19c0=";
-  };
-
   meta = with lib; {
     homepage = "https://github.com/awslabs/aws-crt-python";
+    changelog = "https://github.com/awslabs/aws-crt-python/releases/tag/v${version}";
     description = "Python bindings for the AWS Common Runtime";
     license = licenses.asl20;
     maintainers = with maintainers; [ davegallant ];

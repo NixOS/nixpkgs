@@ -1,11 +1,10 @@
-{ lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
-, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
-, buildPackages, pruneLibtoolFiles, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch, openssl, openldap, libkrb5, db, gettext
+, pam, libxcrypt, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
+, buildPackages, pruneLibtoolFiles, nixosTests }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
-  version = "2.1.27";
+  version = "2.1.28";
 
   src = fetchurl {
     urls =
@@ -13,8 +12,18 @@ stdenv.mkDerivation rec {
         "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
         "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
       ];
-    sha256 = "1m85zcpgfdhm43cavpdkhb1s2zq1b31472hq1w1gs3xh94anp1i6";
+    sha256 = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
   };
+
+  patches = [
+    # Fix cross-compilation
+    ./cyrus-sasl-ac-try-run-fix.patch
+    # make compatible with openssl3. can probably be dropped with any release after 2.1.28
+    (fetchpatch {
+      url = "https://github.com/cyrusimap/cyrus-sasl/compare/cb549ef71c5bb646fe583697ebdcaba93267a237...c2bd3afbca57f176d8c650670ce371444bb7fcc0.patch";
+      hash = "sha256-bYeIkvle1Ms7Lnoob4eLd4RbPFHtPkKRZvfHNCBJY/s=";
+    })
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
@@ -22,19 +31,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    [ openssl db gettext libkrb5 ]
+    [ openssl db gettext libkrb5 libxcrypt ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isLinux pam;
-
-  patches = [
-    ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    ./cyrus-sasl-ac-try-run-fix.patch
-    (fetchpatch {
-      name = "CVE-2019-19906.patch";
-      url = "https://sources.debian.org/data/main/c/cyrus-sasl2/2.1.27+dfsg-1+deb10u1/debian/patches/0021-CVE-2019-19906.patch";
-      sha256 = "1n4c5wg7l9j8rlbvx8i605j5d39xmj5wm618k8acxl4fmglcmfls";
-    })
-  ];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -44,9 +43,13 @@ stdenv.mkDerivation rec {
     "--enable-shared"
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
 
-  installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+  installFlags = lib.optionals stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
-  meta = {
+  passthru.tests = {
+    inherit (nixosTests) parsedmarc postfix;
+  };
+
+  meta = with lib; {
     homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;

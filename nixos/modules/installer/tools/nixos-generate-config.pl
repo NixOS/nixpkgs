@@ -51,7 +51,9 @@ for (my $n = 0; $n < scalar @ARGV; $n++) {
         $n++;
         $rootDir = $ARGV[$n];
         die "$0: ‘--root’ requires an argument\n" unless defined $rootDir;
+        die "$0: no need to specify `/` with `--root`, it is the default\n" if $rootDir eq "/";
         $rootDir =~ s/\/*$//; # remove trailing slashes
+        $rootDir = File::Spec->rel2abs($rootDir); # resolve absolute path
     }
     elsif ($arg eq "--force") {
         $force = 1;
@@ -82,6 +84,10 @@ sub debug {
 }
 
 
+# nixpkgs.system
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@hostPlatformSystem@\";";
+
+
 my $cpuinfo = read_file "/proc/cpuinfo";
 
 
@@ -90,6 +96,11 @@ sub hasCPUFeature {
     return $cpuinfo =~ /^flags\s*:.* $feature( |$)/m;
 }
 
+
+sub cpuManufacturer {
+    my $id = shift;
+    return $cpuinfo =~ /^vendor_id\s*:.* $id$/m;
+}
 
 
 # Determine CPU governor to use
@@ -184,7 +195,7 @@ sub pciCheck {
     }
 
     # In case this is a virtio scsi device, we need to explicitly make this available.
-    if ($vendor eq "0x1af4" && $device eq "0x1004") {
+    if ($vendor eq "0x1af4" && ($device eq "0x1004" || $device eq "0x1048") ) {
         push @initrdAvailableKernelModules, "virtio_scsi";
     }
 
@@ -271,7 +282,7 @@ if (`lsblk -o TYPE` =~ "lvm") {
     push @initrdKernelModules, "dm-snapshot";
 }
 
-my $virt = `systemd-detect-virt`;
+my $virt = `@detectvirt@`;
 chomp $virt;
 
 
@@ -281,6 +292,12 @@ if ($virt eq "oracle") {
     push @attrs, "virtualisation.virtualbox.guest.enable = true;"
 }
 
+# Check if we're a Parallels guest. If so, enable the guest additions.
+# It is blocked by https://github.com/systemd/systemd/pull/23859
+if ($virt eq "parallels") {
+    push @attrs, "hardware.parallels.enable = true;";
+    push @attrs, "nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [ \"prl-tools\" ];";
+}
 
 # Likewise for QEMU.
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
@@ -299,11 +316,15 @@ if ($virt eq "systemd-nspawn") {
 }
 
 
-# Provide firmware for devices that are not detected by this script,
-# unless we're in a VM/container.
-push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")"
-    if $virt eq "none";
+# Check if we're on bare metal, not in a VM/container.
+if ($virt eq "none") {
+    # Provide firmware for devices that are not detected by this script.
+    push @imports, "(modulesPath + \"/installer/scan/not-detected.nix\")";
 
+    # Update the microcode.
+    push @attrs, "hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "AuthenticAMD";
+    push @attrs, "hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;" if cpuManufacturer "GenuineIntel";
+}
 
 # For a device name like /dev/sda1, find a more stable path like
 # /dev/disk/by-uuid/X or /dev/disk/by-label/Y.
@@ -314,7 +335,7 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
-    foreach my $dev2 (glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+    foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }
@@ -360,6 +381,7 @@ sub in {
 
 my $fileSystems;
 my %fsByDev;
+my $useSwraid = 0;
 foreach my $fs (read_file("/proc/self/mountinfo")) {
     chomp $fs;
     my @fields = split / /, $fs;
@@ -390,7 +412,7 @@ foreach my $fs (read_file("/proc/self/mountinfo")) {
     # Maybe this is a bind-mount of a filesystem we saw earlier?
     if (defined $fsByDev{$fields[2]}) {
         # Make sure this isn't a btrfs subvolume.
-        my $msg = `btrfs subvol show $rootDir$mountPoint`;
+        my $msg = `@btrfs@ subvol show $rootDir$mountPoint`;
         if ($? != 0 || $msg =~ /ERROR:/s) {
             my $path = $fields[3]; $path = "" if $path eq "/";
             my $base = $fsByDev{$fields[2]};
@@ -428,7 +450,7 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @info) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        my ($status, @info) = runCommand("@btrfs@ subvol show $rootDir$mountPoint");
         if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
@@ -446,20 +468,37 @@ EOF
         }
     }
 
+    # is this a stratis fs?
+    my $stableDevPath = findStableDevPath $device;
+    my $stratisPool;
+    if ($stableDevPath =~ qr#/dev/stratis/(.*)/.*#) {
+        my $poolName = $1;
+        my ($header, @lines) = split "\n", qx/stratis pool list/;
+        my $uuidIndex = index $header, 'UUID';
+        my ($line) = grep /^$poolName /, @lines;
+        $stratisPool = substr $line, $uuidIndex - 32, 36;
+    }
+
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
-    # boot.tmpOnTmpfs option in configuration.nix (managed declaratively).
+    # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
 
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
-    { device = \"${\(findStableDevPath $device)}\";
+    { device = \"$stableDevPath\";
       fsType = \"$fsType\";
 EOF
 
     if (scalar @extraOptions > 0) {
         $fileSystems .= <<EOF;
       options = \[ ${\join " ", map { "\"" . $_ . "\"" } uniq(@extraOptions)} \];
+EOF
+    }
+
+    if ($stratisPool) {
+        $fileSystems .= <<EOF;
+      stratis.poolUuid = "$stratisPool";
 EOF
     }
 
@@ -472,8 +511,8 @@ EOF
     # boot.initrd.luks.devices entry.
     if (-e $device) {
         my $deviceName = basename(abs_path($device));
-        if (-e "/sys/class/block/$deviceName"
-            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
+        my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
+        if ($dmUuid =~ /^CRYPT-LUKS/)
         {
             my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
             if (scalar @slaves == 1) {
@@ -489,22 +528,13 @@ EOF
                 }
             }
         }
+        if (-e "/sys/class/block/$deviceName/md/uuid") {
+            $useSwraid = 1;
+        }
     }
 }
-
-# For lack of a better way to determine it, guess whether we should use a
-# bigger font for the console from the display mode on the first
-# framebuffer. A way based on the physical size/actual DPI reported by
-# the monitor would be nice, but I don't know how to do this without X :)
-my $fb_modes_file = "/sys/class/graphics/fb0/modes";
-if (-f $fb_modes_file && -r $fb_modes_file) {
-    my $modes = read_file($fb_modes_file);
-    $modes =~ m/([0-9]+)x([0-9]+)/;
-    my $console_width = $1, my $console_height = $2;
-    if ($console_width > 1920) {
-        push @attrs, "# high-resolution display";
-        push @attrs, 'hardware.video.hidpi.enable = lib.mkDefault true;';
-    }
+if ($useSwraid) {
+    push @attrs, "boot.swraid.enable = true;\n\n";
 }
 
 
@@ -550,6 +580,8 @@ if (!$noFilesystems) {
     $fsAndSwap .= "swapDevices =" . multiLineList("    ", @swapDevices) . ";\n";
 }
 
+my $networkingDhcpConfig = generateNetworkingDhcpConfig();
+
 my $hwConfig = <<EOF;
 # Do not modify this file!  It was generated by ‘nixos-generate-config’
 # and may be overwritten by future invocations.  Please make changes
@@ -564,21 +596,24 @@ my $hwConfig = <<EOF;
   boot.kernelModules = [$kernelModules ];
   boot.extraModulePackages = [$modulePackages ];
 $fsAndSwap
+$networkingDhcpConfig
 ${\join "", (map { "  $_\n" } (uniq @attrs))}}
 EOF
 
 sub generateNetworkingDhcpConfig {
+    # FIXME disable networking.useDHCP by default when switching to networkd.
     my $config = <<EOF;
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
 EOF
 
     foreach my $path (glob "/sys/class/net/*") {
         my $dev = basename($path);
         if ($dev ne "lo") {
-            $config .= "  networking.interfaces.$dev.useDHCP = true;\n";
+            $config .= "  # networking.interfaces.$dev.useDHCP = lib.mkDefault true;\n";
         }
     }
 
@@ -605,7 +640,12 @@ EOF
 if ($showHardwareConfig) {
     print STDOUT $hwConfig;
 } else {
-    $outDir = "$rootDir$outDir";
+    if ($outDir eq "/etc/nixos") {
+        $outDir = "$rootDir$outDir";
+    } else {
+        $outDir = File::Spec->rel2abs($outDir);
+        $outDir =~ s/\/*$//; # remove trailing slashes
+    }
 
     my $fn = "$outDir/hardware-configuration.nix";
     print STDERR "writing $fn...\n";
@@ -635,7 +675,6 @@ EOF
             $bootLoaderConfig = <<EOF;
   # Use the GRUB 2 boot loader.
   boot.loader.grub.enable = true;
-  boot.loader.grub.version = 2;
   # boot.loader.grub.efiSupport = true;
   # boot.loader.grub.efiInstallAsRemovable = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";

@@ -1,20 +1,17 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
-import ./make-test-python.nix ({ pkgs, ...} : rec {
-  name = "misc";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
-  };
-
+import ./make-test-python.nix ({ lib, pkgs, ...} : let
   foo = pkgs.writeText "foo" "Hello World";
+in {
+  name = "misc";
+  meta.maintainers = with lib.maintainers; [ eelco ];
 
-  machine =
+  nodes.machine =
     { lib, ... }:
-    with lib;
-    { swapDevices = mkOverride 0
+    { swapDevices = lib.mkOverride 0
         [ { device = "/root/swapfile"; size = 128; } ];
-      environment.variables.EDITOR = mkOverride 0 "emacs";
-      documentation.nixos.enable = mkOverride 0 true;
+      environment.variables.EDITOR = lib.mkOverride 0 "emacs";
+      documentation.nixos.enable = lib.mkOverride 0 true;
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
@@ -32,7 +29,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
           options = [ "bind" "rw" "noauto" ];
         };
       };
-      systemd.automounts = singleton
+      systemd.automounts = lib.singleton
         { wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };
@@ -50,17 +47,18 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
 
 
       def get_path_info(path):
-          result = machine.succeed(f"nix path-info --json {path}")
+          result = machine.succeed(f"nix --option experimental-features nix-command path-info --json {path}")
           parsed = json.loads(result)
           return parsed
 
 
       with subtest("nix-db"):
           info = get_path_info("${foo}")
+          print(info)
 
           if (
               info[0]["narHash"]
-              != "sha256:0afw0d9j1hvwiz066z93jiddc33nxg6i6qyp26vnqyglpyfivlq5"
+              != "sha256-BdMdnb/0eWy3EddjE83rdgzWWpQjfWPAj3zDIFMD3Ck="
           ):
               raise Exception("narHash not set")
 

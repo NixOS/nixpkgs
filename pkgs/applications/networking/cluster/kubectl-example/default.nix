@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubectl-example";
-  version = "1.0.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "seredot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "18vp53cda93qjssxygwqp55yc80a93781839gf3138awngf731yq";
+    hash = "sha256-YvB4l+7GLSyYWX2Fbk4gT2WLaQpNxeV0aHY3Pg+9LCM=";
   };
 
-  vendorSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+  vendorHash = null;
 
   meta = with lib; {
     description = "kubectl plugin for retrieving resource example YAMLs";

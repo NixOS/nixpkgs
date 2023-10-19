@@ -1,15 +1,41 @@
-{ stdenv, lib, fetchzip, autoPatchelfHook, xorg, gtk2, gnome2, gtk3, nss, alsaLib, udev, unzip, wrapGAppsHook, mesa }:
+{ alsa-lib
+, autoPatchelfHook
+, callPackage
+, fetchzip
+, gtk2
+, gtk3
+, lib
+, mesa
+, nss
+, stdenv
+, udev
+, unzip
+, wrapGAppsHook
+, xorg
+}:
 
-stdenv.mkDerivation rec {
+let
+  availableBinaries = {
+    x86_64-linux = {
+      platform = "linux-x64";
+      checksum = "sha256-9o0nprGcJhudS1LNm+T7Vf0Dwd1RBauYKI+w1FBQ3ZM=";
+    };
+    aarch64-linux = {
+      platform = "linux-arm64";
+      checksum = "sha256-aW3cUZqAdiOLzOC9BQM/bTkDVyw24Dx9nBSXgbiKe4c=";
+    };
+  };
+  inherit (stdenv.hostPlatform) system;
+  binary = availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
+  inherit (binary) platform checksum;
+in stdenv.mkDerivation rec {
   pname = "cypress";
-  version = "7.4.0";
+  version = "13.2.0";
 
   src = fetchzip {
-    url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "1xhjmn6cwpdph12k4gbl2f1v72bp689779l5i16i90i01m31kwjp";
+    url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
+    sha256 = checksum;
   };
-
-  passthru.updateScript = ./update.sh;
 
   # don't remove runtime deps
   dontPatchELF = true;
@@ -17,9 +43,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook unzip ];
 
   buildInputs = with xorg; [
-    libXScrnSaver libXdamage libXtst libxshmfence
+    libXScrnSaver
+    libXdamage
+    libXtst
+    libxshmfence
   ] ++ [
-    nss gtk2 alsaLib gnome2.GConf gtk3
+    nss
+    gtk2
+    alsa-lib
+    gtk3
     mesa # for libgbm
   ];
 
@@ -41,11 +73,26 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    updateScript = ./update.sh;
+
+    tests = {
+      # We used to have a test here, but was removed because
+      #  - it broke, and ofborg didn't fail https://github.com/NixOS/ofborg/issues/629
+      #  - it had a large footprint in the repo; prefer RFC 92 or an ugly FOD fetcher?
+      #  - the author switched away from cypress.
+      # To provide a test once more, you may find useful information in
+      # https://github.com/NixOS/nixpkgs/pull/223903
+    };
+  };
+
   meta = with lib; {
     description = "Fast, easy and reliable testing for anything that runs in a browser";
     homepage = "https://www.cypress.io";
+    mainProgram = "Cypress";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
-    platforms = ["x86_64-linux"];
-    maintainers = with maintainers; [ tweber mmahut ];
+    platforms = lib.attrNames availableBinaries;
+    maintainers = with maintainers; [ tweber mmahut Crafter ];
   };
 }

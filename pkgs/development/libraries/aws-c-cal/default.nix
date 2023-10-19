@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, openssl, Security }:
+{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, nix, openssl, Security }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-cal";
-  version = "0.4.5";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04acra1mnzw9q7jycs5966akfbgnx96hkrq90nq0dhw8pvarlyv6";
+    sha256 = "sha256-qsYQViMto5j6piCg6gBjzFfPJlLkJt4949o217QsV6Q=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,8 +19,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
+
+  passthru.tests = {
+    inherit nix;
+  };
 
   meta = with lib; {
     description = "AWS Crypto Abstraction Layer ";

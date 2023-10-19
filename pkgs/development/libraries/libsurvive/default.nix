@@ -3,32 +3,43 @@
 , cmake
 , pkg-config
 , freeglut
-, liblapack
+, lapack
 , libusb1
-, openblas
+, blas
 , zlib
+, eigen
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsurvive";
-  version = "0.3";
+  version = "1.01";
 
   src = fetchFromGitHub {
     owner = "cntools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m21fnq8pfw2pcvqfgjws531zmalda423q9i65v4qzm8sdb54hl4";
+    # Fixes 'Unknown CMake command "cnkalman_generate_code"'
+    fetchSubmodules = true;
+    sha256 = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     freeglut
-    liblapack
+    lapack
     libusb1
-    openblas
+    blas
     zlib
+    eigen
   ];
+
+  # https://github.com/cntools/libsurvive/issues/272
+  postPatch = ''
+    substituteInPlace survive.pc.in \
+      libs/cnkalman/cnkalman.pc.in libs/cnkalman/libs/cnmatrix/cnmatrix.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
 
   meta = with lib; {
     description = "Open Source Lighthouse Tracking System";

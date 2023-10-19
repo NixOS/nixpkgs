@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, libfaketime, fonttosfnt, mkfontscale }:
+{ lib, stdenv, fetchFromGitHub, libfaketime, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "siji-${version}";
+  pname = "siji";
   version = "2016-05-13";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1408g4nxwdd682vjqpmgv0cp0bfnzzzwls62cjs9zrds16xa9dpf";
   };
 
-  nativeBuildInputs = [ libfaketime fonttosfnt mkfontscale ];
+  nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
 
   buildPhase = ''
     # compress pcf fonts

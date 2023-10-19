@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "helm-secrets";
-  version = "3.7.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "jkroepke";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-AM+TLeSrXjn10DiQzXSqSwTqsc7CjTdnf6TWetden7g=";
+    hash = "sha256-UB69cGsELQ2CFXVsPV0MDNOYRTYgfA2NXHKbsaZl9NQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   # NOTE: helm-secrets is comprised of shell scripts.
   dontBuild = true;
 
-  # NOTE: Remove the install and upgrade hooks.
+  # NOTE: Fix version string
   postPatch = ''
-    sed -i '/^hooks:/,+2 d' plugin.yaml
+    sed -i 's/^version:.*/version: "${version}"/' plugin.yaml
   '';
 
   installPhase = ''
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A Helm plugin that helps manage secrets";
-    inherit (src.meta) homepage;
-    license = licenses.apsl20;
+    homepage = "https://github.com/jkroepke/helm-secrets";
+    license = licenses.asl20;
     maintainers = with maintainers; [ yurrriq ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }

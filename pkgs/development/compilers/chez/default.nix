@@ -1,26 +1,23 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchurl
 , coreutils, cctools
 , ncurses, libiconv, libX11, libuuid
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
-  version = "9.5.4";
+  version = "9.6.4";
 
-  src = fetchFromGitHub {
-    owner  = "cisco";
-    repo   = "ChezScheme";
-    rev    = "refs/tags/v${version}";
-    sha256 = "065dir19cqpn0d1bk9w49wnwzn6qfrgvcqw8da2fdhkafhfcb1bj";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/cisco/ChezScheme/releases/download/v${finalAttrs.version}/csv${finalAttrs.version}.tar.gz";
+    hash = "sha256-9YJ2gvolnEeXX/4Hh4X7Vh5KXFT3ZDMe9mwyEyhDaF0=";
   };
 
-  nativeBuildInputs = [ coreutils ] ++ lib.optional stdenv.isDarwin cctools;
+  nativeBuildInputs = lib.optional stdenv.isDarwin cctools;
   buildInputs = [ ncurses libiconv libX11 libuuid ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
   /*
   ** We patch out a very annoying 'feature' in ./configure, which
@@ -62,7 +59,7 @@ stdenv.mkDerivation rec {
   ** Clean up some of the examples from the build output.
   */
   postInstall = ''
-    rm -rf $out/lib/csv${version}/examples
+    rm -rf $out/lib/csv${finalAttrs.version}/examples
   '';
 
   setupHook = ./setup-hook.sh;
@@ -73,6 +70,6 @@ stdenv.mkDerivation rec {
     license      = lib.licenses.asl20;
     maintainers  = with lib.maintainers; [ thoughtpolice ];
     platforms    = lib.platforms.unix;
-    badPlatforms = [ "aarch64-linux" ];
+    badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
   };
-}
+})

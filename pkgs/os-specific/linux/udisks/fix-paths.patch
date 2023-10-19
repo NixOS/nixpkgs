@@ -1,98 +1,36 @@
---- a/Makefile.am
-+++ b/Makefile.am
-@@ -1,6 +1,6 @@
- ## Process this file with automake to produce Makefile.in
- 
--SHELL = /bin/bash
-+SHELL = @bash@
- .SHELLFLAGS = -o pipefail -c
- 
- PYTHON ?= python3
+diff --git a/data/80-udisks2.rules b/data/80-udisks2.rules
+index ca802cce..bfd1c29e 100644
 --- a/data/80-udisks2.rules
 +++ b/data/80-udisks2.rules
-@@ -17,9 +17,9 @@
+@@ -17,9 +17,9 @@ ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="?*", GOTO="udisks_probe_end"
  #
  # TODO: file bug against mdadm(8) to have --export-prefix option that can be used with e.g. UDISKS_MD_MEMBER
  #
 -SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="raid", ENV{ID_FS_TYPE}=="linux_raid_member", ENV{UDISKS_MD_MEMBER_LEVEL}=="", IMPORT{program}="/bin/sh -c '/sbin/mdadm --examine --export $tempnode | /bin/sed s/^MD_/UDISKS_MD_MEMBER_/g'"
 +SUBSYSTEM=="block", ENV{ID_FS_USAGE}=="raid", ENV{ID_FS_TYPE}=="linux_raid_member", ENV{UDISKS_MD_MEMBER_LEVEL}=="", IMPORT{program}="@sh@ -c '@mdadm@ --examine --export $tempnode | @sed@ s/^MD_/UDISKS_MD_MEMBER_/g'"
- 
+
 -SUBSYSTEM=="block", KERNEL=="md*", ENV{DEVTYPE}!="partition", IMPORT{program}="/bin/sh -c '/sbin/mdadm --detail --export $tempnode | /bin/sed s/^MD_/UDISKS_MD_/g'"
 +SUBSYSTEM=="block", KERNEL=="md*", ENV{DEVTYPE}!="partition", IMPORT{program}="@sh@ -c '@mdadm@ --detail --export $tempnode | @sed@ s/^MD_/UDISKS_MD_/g'"
- 
+
  LABEL="udisks_probe_end"
- 
---- a/modules/zram/udiskslinuxmanagerzram.c
-+++ b/modules/zram/udiskslinuxmanagerzram.c
-@@ -250,7 +250,7 @@
- 
-       g_snprintf (tmp, 255, "zram%" G_GUINT64_FORMAT, i);
-       filename = g_build_filename (PACKAGE_ZRAMCONF_DIR, tmp, NULL);
--      contents = g_strdup_printf ("#!/bin/bash\n\n"
-+      contents = g_strdup_printf ("#!@bash@\n\n"
-                                   "ZRAM_NUM_STR=%" G_GUINT64_FORMAT "\n"
-                                   "ZRAM_DEV_SIZE=%" G_GUINT64_FORMAT "\n"
-                                   "SWAP=n\n",
---- a/src/tests/install-udisks/runtest.sh
-+++ b/src/tests/install-udisks/runtest.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!@bash@
- # vim: dict+=/usr/share/beakerlib/dictionary.vim cpt=.,w,b,u,t,i,k
- # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- #
---- a/src/tests/integration-test
-+++ b/src/tests/integration-test
-@@ -414,7 +414,7 @@
-                 f.write('KERNEL=="sr*", ENV{DISK_EJECT_REQUEST}!="?*", '
-                         'ATTRS{model}=="scsi_debug*", '
-                         'ENV{ID_CDROM_MEDIA}=="?*", '
--                        'IMPORT{program}="/sbin/blkid -o udev -p -u noraid $tempnode"\n')
-+                        'IMPORT{program}="@blkid@ -o udev -p -u noraid $tempnode"\n')
-             # reload udev
-             subprocess.call('sync; pkill --signal HUP udevd || '
-                             'pkill --signal HUP systemd-udevd',
-@@ -1079,7 +1079,7 @@
-         self.assertFalse(os.access(f, os.X_OK))
- 
-         f = os.path.join(mount_point, 'simple.exe')
--        shutil.copy('/bin/bash', f)
-+        shutil.copy('@bash@', f)
-         self.assertTrue(os.access(f, os.R_OK))
-         self.assertTrue(os.access(f, os.W_OK))
-         self.assertTrue(os.access(f, os.X_OK))
-@@ -1092,7 +1092,7 @@
-         self.assertFalse(os.access(f, os.X_OK))
- 
-         f = os.path.join(mount_point, 'subdir', 'subdir.exe')
--        shutil.copy('/bin/bash', f)
-+        shutil.copy('@bash@', f)
-         self.assertTrue(os.access(f, os.R_OK))
-         self.assertTrue(os.access(f, os.W_OK))
-         self.assertTrue(os.access(f, os.X_OK))
---- a/src/tests/storadectl/runtest.sh
-+++ b/src/tests/storadectl/runtest.sh
-@@ -1,4 +1,4 @@
--#!/bin/bash
-+#!@bash@
- # vim: dict+=/usr/share/beakerlib/dictionary.vim cpt=.,w,b,u,t,i,k
- # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- #
+
+diff --git a/src/tests/test.c b/src/tests/test.c
+index 3ddbdf2c..a87f960a 100644
 --- a/src/tests/test.c
 +++ b/src/tests/test.c
-@@ -71,7 +71,7 @@
+@@ -71,7 +71,7 @@ test_spawned_job_successful (void)
  {
    UDisksSpawnedJob *job;
- 
+
 -  job = udisks_spawned_job_new ("/bin/true", NULL, getuid (), geteuid (), NULL, NULL);
 +  job = udisks_spawned_job_new ("@true@", NULL, getuid (), geteuid (), NULL, NULL);
    udisks_spawned_job_start (job);
    _g_assert_signal_received (job, "completed", G_CALLBACK (on_completed_expect_success), NULL);
    g_object_unref (job);
-@@ -84,10 +84,10 @@
+@@ -84,10 +84,10 @@ test_spawned_job_failure (void)
  {
    UDisksSpawnedJob *job;
- 
+
 -  job = udisks_spawned_job_new ("/bin/false", NULL, getuid (), geteuid (), NULL, NULL);
 +  job = udisks_spawned_job_new ("@false@", NULL, getuid (), geteuid (), NULL, NULL);
    udisks_spawned_job_start (job);
@@ -101,9 +39,9 @@
 +                             (gpointer) "Command-line `@false@' exited with non-zero exit status 1: ");
    g_object_unref (job);
  }
- 
-@@ -119,7 +119,7 @@
- 
+
+@@ -119,7 +119,7 @@ test_spawned_job_cancelled_at_start (void)
+
    cancellable = g_cancellable_new ();
    g_cancellable_cancel (cancellable);
 -  job = udisks_spawned_job_new ("/bin/true", NULL, getuid (), geteuid (), NULL, cancellable);
@@ -111,19 +49,19 @@
    udisks_spawned_job_start (job);
    _g_assert_signal_received (job, "completed", G_CALLBACK (on_completed_expect_failure),
                               (gpointer) "Operation was cancelled (g-io-error-quark, 19)");
-@@ -145,7 +145,7 @@
+@@ -144,7 +144,7 @@ test_spawned_job_cancelled_midway (void)
    GCancellable *cancellable;
- 
+
    cancellable = g_cancellable_new ();
 -  job = udisks_spawned_job_new ("/bin/sleep 0.5", NULL, getuid (), geteuid (), NULL, cancellable);
 +  job = udisks_spawned_job_new ("@sleep@ 0.5", NULL, getuid (), geteuid (), NULL, cancellable);
    udisks_spawned_job_start (job);
    g_timeout_add (10, on_timeout, cancellable); /* 10 msec */
-   g_main_loop_run (loop);
-@@ -199,7 +199,7 @@
+   _g_assert_signal_received (job, "completed", G_CALLBACK (on_completed_expect_failure),
+@@ -197,7 +197,7 @@ test_spawned_job_premature_termination (void)
  {
    UDisksSpawnedJob *job;
- 
+
 -  job = udisks_spawned_job_new ("/bin/sleep 1000", NULL, getuid (), geteuid (), NULL, NULL /* GCancellable */);
 +  job = udisks_spawned_job_new ("@sleep@ 1000", NULL, getuid (), geteuid (), NULL, NULL /* GCancellable */);
    udisks_spawned_job_start (job);

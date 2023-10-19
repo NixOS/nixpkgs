@@ -1,12 +1,10 @@
-{ lib, mkDerivation, fetchFromGitHub, SDL2
-, qtbase, qtcharts, qtlocation, qtserialport, qtsvg, qtquickcontrols2
-, qtgraphicaleffects, qtspeech, qtx11extras, qmake, qttools
-, gst_all_1, wayland, pkg-config
-}:
+{ lib, stdenv, fetchFromGitHub, SDL2, qtbase, qtcharts, qtlocation, qtserialport
+, qtsvg, qtquickcontrols2, qtgraphicaleffects, qtspeech, qtx11extras, qmake
+, qttools, gst_all_1, wayland, pkg-config, wrapQtAppsHook }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.1.3";
+  version = "4.2.8";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -14,12 +12,16 @@ mkDerivation rec {
   ];
 
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad wayland
+    gstreamer
+    gst-plugins-base
+    (gst-plugins-good.override { qt5Support = true; })
+    gst-plugins-bad
+    gst-libav
+    wayland
   ];
 
-  enableParallelBuilding = true;
   buildInputs = [ SDL2 ] ++ gstInputs ++ qtInputs;
-  nativeBuildInputs = [ pkg-config qmake qttools ];
+  nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''
     mkdir build
@@ -30,6 +32,8 @@ mkDerivation rec {
     "CONFIG+=StableBuild"
     # Default install tries to copy Qt files into package
     "CONFIG+=QGC_DISABLE_BUILD_SETUP"
+    # Tries to download x86_64-only prebuilt binaries
+    "DEFINES+=DISABLE_AIRMAP"
     "../qgroundcontrol.pro"
   ];
 
@@ -63,15 +67,16 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fbf564vzckvy1dc8f6yd8vpnzwzsgynva13bl2ks06768rrq9fb";
+    sha256 = "sha256-EmGtVy/cHiZ2SqOOKmt9vCUQbyT5Sl8XnkRlhn9BdvA=";
     fetchSubmodules = true;
   };
 
   meta = with lib; {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
-    homepage = "http://qgroundcontrol.org/";
+    homepage = "http://qgroundcontrol.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lopsided98 ];
+    mainProgram = "QGroundControl";
   };
 }

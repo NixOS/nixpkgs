@@ -1,35 +1,40 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, pantheon
+, substituteAll
 , meson
 , ninja
 , pkg-config
 , vala
 , libgee
+, libxml2
 , granite
 , gtk3
 , switchboard
-, elementary-settings-daemon
+, gnome-settings-daemon
 , glib
+, gala # needed for gestures support
+, touchegg
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.4.2";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-WJ/GRhZsSwC31HEIjHHWBy9/Skqbwor0tNVTedue3kk=";
+    sha256 = "sha256-iXkNdUMHa0IF2FLn34/6G4w3m53GRZun8yzc8dxAg20=";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      touchegg = touchegg;
+    })
+  ];
 
   nativeBuildInputs = [
     meson
@@ -39,19 +44,26 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gala
     glib
     granite
     gtk3
     libgee
-    elementary-settings-daemon
+    libxml2
+    gnome-settings-daemon
     switchboard
+    touchegg
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Switchboard Mouse & Touchpad Plug";
     homepage = "https://github.com/elementary/switchboard-plug-mouse-touchpad";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

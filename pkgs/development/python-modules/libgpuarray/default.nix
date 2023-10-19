@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, addOpenGLRunpath
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -7,13 +8,12 @@
 , numpy
 , six
 , nose
-, Mako
-, cudaSupport ? false, cudatoolkit , nvidia_x11
+, mako
+, config
+, cudaSupport ? config.cudaSupport
+, cudaPackages ? { }
 , openclSupport ? true, ocl-icd, clblas
 }:
-
-assert cudaSupport -> nvidia_x11 != null
-                   && cudatoolkit != null;
 
 buildPythonPackage rec {
   pname = "libgpuarray";
@@ -32,8 +32,7 @@ buildPythonPackage rec {
   configurePhase = "cmakeConfigurePhase";
 
   libraryPath = lib.makeLibraryPath (
-    []
-    ++ lib.optionals cudaSupport [ cudatoolkit.lib cudatoolkit.out nvidia_x11 ]
+    lib.optionals cudaSupport (with cudaPackages; [ cudatoolkit.lib cudatoolkit.out ])
     ++ lib.optionals openclSupport ([ clblas ] ++ lib.optional (!stdenv.isDarwin) ocl-icd)
   );
 
@@ -55,15 +54,22 @@ buildPythonPackage rec {
     }
 
     fixRunPath $out/lib/libgpuarray.so
+  '' + lib.optionalString cudaSupport ''
+    addOpenGLRunpath $out/lib/libgpuarray.so
   '';
 
   propagatedBuildInputs = [
     numpy
     six
-    Mako
+    mako
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ] ++ lib.optionals cudaSupport [
+    addOpenGLRunpath
+  ];
+
 
   buildInputs = [
     cython

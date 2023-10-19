@@ -1,20 +1,25 @@
-{ lib, buildPythonPackage, fetchurl, isPy27
+{ lib, buildPythonPackage, fetchurl, isPy27, renpy
 , cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {
   pname = "pygame_sdl2";
   version = "2.1.0";
-  renpy_version = "7.2.0";
+  renpy_version = renpy.base_version;
   name = "${pname}-${version}-${renpy_version}";
 
   src = fetchurl {
     url = "https://www.renpy.org/dl/${renpy_version}/pygame_sdl2-${version}-for-renpy-${renpy_version}.tar.gz";
-    sha256 = "1amgsb6mm8ssf7vdcs5dr8rlxrgyhh29m4i573z1cw61ynd7vgcw";
+    hash = "sha256-u9DIFKd+uyphH3ETMJWYqt7YFyeIgBWoXUO3rC+RWjc=";
   };
 
   # force rebuild of headers needed for install
   prePatch = ''
     rm -rf gen gen3
+  '';
+
+  # Remove build tag which produces invaild version
+  postPatch = ''
+    sed -i '2d' setup.cfg
   '';
 
   nativeBuildInputs = [

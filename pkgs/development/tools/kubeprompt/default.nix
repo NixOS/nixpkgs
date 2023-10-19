@@ -2,23 +2,22 @@
 
 buildGoModule rec {
   pname = "kubeprompt";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "jlesquembre";
     repo = pname;
     rev = version;
-    sha256 = "1a0xi31bd7n2zrx2z4srhvixlbj028h63dlrjzqxgmgn2w6akbz2";
+    hash = "sha256-is6Rz0tw/g4HyGJMTHj+r390HZAytVhfGVRzZ5wKZkU=";
   };
 
-  preBuild = ''
-    export buildFlagsArray+=(
-      "-ldflags=
-        -w -s
-        -X github.com/jlesquembre/kubeprompt/pkg/version.Version=${version}")
-  '';
+  vendorHash = "sha256-UUMulGnqfIshN2WIejZgwrWWlywj5TpnAQ4A5/d0NCE=";
 
-  vendorSha256 = "089lfkvyf00f05kkmr935jbrddf2c0v7m2356whqnz7ad6a2whsi";
+  ldflags = [
+    "-w"
+    "-s"
+    "-X github.com/jlesquembre/kubeprompt/pkg/version.Version=${version}"
+  ];
 
   doCheck = false;
 

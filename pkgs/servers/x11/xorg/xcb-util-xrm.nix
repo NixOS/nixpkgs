@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "118cj1ybw86pgw0l5whn9vbg5n5b0ijcpx295mwahzi004vz671h";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [ pkg-config m4 ];
   doCheck = true;
-  buildInputs = [ libxcb xcbutil ];
-  checkInputs = [ libX11 ];
+  buildInputs = [ libxcb xcbutil libX11 ];
 
   meta = with lib; {
     description = "XCB utility functions for the X resource manager";

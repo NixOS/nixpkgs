@@ -1,23 +1,43 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , isPy3k
 , pytest
 , unicodecsv
+, rustPlatform
+, libiconv
 }:
 
 buildPythonPackage rec {
   pname = "jellyfish";
-  version = "0.8.2";
+  version = "1.0.0";
 
   disabled = !isPy3k;
 
+  format = "pyproject";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02q3d9b933hf8lyvg7w7lgmhij8bjs748vjmsfxhabai04a796d4";
+    hash = "sha256-iBquNnGZm7B85QwnaW8pyn6ELz4SOswNtlJcmZmIG9Q=";
   };
 
-  checkInputs = [ pytest unicodecsv ];
+  nativeBuildInputs = with rustPlatform; [
+    maturinBuildHook
+    cargoSetupHook
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}-rust-dependencies";
+    hash = "sha256-Grk+n4VCPjirafcRWWI51jHw/IFUYkBtbXY739j0MFI=";
+  };
+
+  nativeCheckInputs = [ pytest unicodecsv ];
 
   meta = {
     homepage = "https://github.com/sunlightlabs/jellyfish";

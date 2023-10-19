@@ -1,39 +1,54 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, awscli, unzip }:
-let
-  ver = "1.2.7.0";
-  source = if stdenv.isDarwin then {
-    url =
-      "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/mac/sessionmanager-bundle.zip";
-    sha256 = "sha256-HP+opNjS53zR9eUxpNUHGD9rZN1z7lDc6+nONR8fa/s=";
-  } else {
-    url =
-      "https://s3.amazonaws.com/session-manager-downloads/plugin/${ver}/ubuntu_64bit/session-manager-plugin.deb";
-    sha256 = "sha256-EZ9ncj1YYlod1RLfXOpZFijnKjLYWYVBb+C6yd42l34=";
-  };
-  platformBuildInput = if stdenv.isDarwin then [ unzip ] else [ dpkg ];
-  unpackCmd = if stdenv.isDarwin then "unzip $src" else "dpkg-deb -x $src .";
-  archivePath = if stdenv.isDarwin then "sessionmanager-bundle" else "usr/local/sessionmanagerplugin";
-in
-stdenv.mkDerivation rec {
+{ lib
+, fetchFromGitHub
+, buildGoPackage
+}:
+
+buildGoPackage rec {
   pname = "ssm-session-manager-plugin";
-  version = ver;
+  version = "1.2.497.0";
 
-  src = fetchurl source;
+  goPackagePath = "github.com/aws/session-manager-plugin";
 
-  nativeBuildInputs = [ autoPatchelfHook ] ++ platformBuildInput;
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "session-manager-plugin";
+    rev = version;
+    hash = "sha256-DX+Jm7u0gNX3o0QYIbE6Vzsmqys+09lQGHpIuqBEwMI=";
+  };
 
-  buildInputs = [ awscli ];
+  postPatch = ''
+    mv vendor{,-old}
+    mv vendor-old/src vendor
+    rm -r vendor-old
+  '';
 
-  unpackPhase = unpackCmd;
+  preBuild = ''
+    pushd go/src/${lib.escapeShellArg goPackagePath}
+    echo -n ${lib.escapeShellArg version} > VERSION
+    go run src/version/versiongenerator/version-gen.go
+    popd
+  '';
 
-  installPhase = "install -m755 -D ${archivePath}/bin/session-manager-plugin $out/bin/session-manager-plugin";
+  doCheck = true;
+  checkFlags = [ "-skip=TestSetSessionHandlers" ];
+
+  preCheck = ''
+    if ! [[ $(go/bin/sessionmanagerplugin-main --version) = ${lib.escapeShellArg version} ]]; then
+      echo 'wrong version'
+      exit 1
+    fi
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm555 go/bin/sessionmanagerplugin-main "$out/bin/session-manager-plugin"
+    runHook postInstall
+  '';
 
   meta = with lib; {
-    homepage =
-      "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
+    homepage = "https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html";
     description = "Amazon SSM Session Manager Plugin";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ mbaillie ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ amarshall mbaillie ];
   };
 }

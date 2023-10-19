@@ -3,14 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
-  rev = "e5a5442acf36f047a75b397d7349e6fe6835ef24";
-  version = "2021-04-26";
+  rev = "7b70bbfc1cbe04172b5299ac092050d78d615a5a";
+  version = "2023-09-18";
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
-    sha256 = "0g7wyh0lhhdch7d6p118lwywy1lcdr1z631q891qhv624jnb1477";
+    sha256 = "Uu1eyshAWkc9VgxPHa6V0+o4At/hDS/OuIJluHlxZjE=";
   };
 
   dontBuild = true;
@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/paulp/sbt-extras";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nequissimus puffnfresh ];
+    mainProgram = "sbt";
     platforms = lib.platforms.unix;
   };
 }

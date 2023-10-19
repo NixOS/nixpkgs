@@ -1,11 +1,14 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitLab
 , nix-update-script
+, cargo
 , meson
 , ninja
 , gettext
 , python3
 , rustPlatform
+, rustc
 , pkg-config
 , gtksourceview4
 , glib
@@ -23,20 +26,23 @@
 
 stdenv.mkDerivation rec {
   pname = "fractal";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "DSNVd9YvI7Dd3s3+M0+wE594tmL1yPNMnD1W9wLhSuw=";
+    hash = "sha256-/vPadtyiYDX0PdneMxc0oSWb5OYnikevqajl3WgZiGA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-xim5sOzeXJjRXbTOg2Gk/LHU0LioiyMK5nSr1LwMPjc=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "either-1.5.99" = "sha256-Lmv9OPZKEb7tmkN+7Mua2nx0xmZwm3d1W623UKUlPeg=";
+      "gettext-rs-0.4.2" = "sha256-wyZ1bf0oFcQo8gEi2GEalRUoKMoJYHysu79qcfjd4Ng=";
+      "sourceview4-0.2.0" = "sha256-RuCg05/qjkPri1QUd5acsGVqJtGvM5OO8/R+Nibxoa4=";
+    };
   };
 
   nativeBuildInputs = [
@@ -45,9 +51,9 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook
     glib
   ];
@@ -78,10 +84,12 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
+  preConfigure = ''
+    export GETTEXT_DIR="${gettext}"
+  '';
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -89,5 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/GNOME/fractal";
     license = licenses.gpl3;
     maintainers = teams.gnome.members ++ (with maintainers; [ dtzWill ]);
+    platforms = platforms.unix;
   };
 }

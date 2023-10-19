@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , autoreconfHook
 , gettext
@@ -11,17 +12,21 @@
 , glib
 , gtk3
 , python3
+, lua
+, opencc
+, libsoup
+, json-glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-libpinyin";
-  version = "1.12.0";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "ibus-libpinyin";
     rev = version;
-    sha256 = "sha256-fEEiwRoGGFAki1DMQvGuzjz2NAjhExyH11l8KTwjjsI=";
+    hash = "sha256-6M4tgIpMQul3R8xI29vyPIWX0n6YItZhdVA8vT9FIRw=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +34,11 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     wrapGAppsHook
+  ];
+
+  configureFlags = [
+    "--enable-cloud-input-mode"
+    "--enable-opencc"
   ];
 
   buildInputs = [
@@ -42,13 +52,17 @@ stdenv.mkDerivation rec {
     ]))
     gtk3
     db
+    lua
+    opencc
+    libsoup
+    json-glib
   ];
 
   meta = with lib; {
     isIbusEngine = true;
     description = "IBus interface to the libpinyin input method";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ linsui ericsagnes ];
     platforms = platforms.linux;
   };
 }

@@ -1,15 +1,20 @@
-{ lib, buildPythonPackage, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, pytestCheckHook }:
 
 buildPythonPackage rec {
-  version = "2.0.1";
+  version = "2.3.post0";
   pname = "crc32c";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ICRAR";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0vyac7pchh083h5qdjwhhacfq77frkrq1bjzsn51qv1vwcdrpnrf";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lPEojWeAhfWpGR+k+Tuo4n68iZOk7lUDxjWXj5vN4I0=";
   };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Python software implementation and hardware API of CRC32C checksum algorithm";

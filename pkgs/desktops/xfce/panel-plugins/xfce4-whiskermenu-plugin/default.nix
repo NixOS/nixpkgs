@@ -1,28 +1,47 @@
-{ mkXfceDerivation, gettext, gtk3, glib, cmake, exo, garcon, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
+{ mkXfceDerivation
+, lib
+, cmake
+, accountsservice
+, exo
+, garcon
+, gettext
+, glib
+, gtk-layer-shell
+, gtk3
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, xfconf
+}:
 
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-whiskermenu-plugin";
-  version = "2.5.3";
+  version = "2.8.0";
   rev-prefix = "v";
   odd-unstable = false;
-  sha256 = "15kcph35pji3l1y81snrmpqzhhpdc9h4nk6cjsjyla51a1s2y3hz";
+  sha256 = "sha256-5ojcIOVIa9WKL2e6iZwRgrAINSM8750zciCwpn9vzJU=";
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ gettext exo garcon gtk3 glib libxfce4ui libxfce4util xfce4-panel xfconf ];
+  buildInputs = [
+    accountsservice
+    exo
+    garcon
+    gettext
+    glib
+    gtk-layer-shell
+    gtk3
+    libxfce4ui
+    libxfce4util
+    xfce4-panel
+    xfconf
+  ];
 
-  postPatch = ''
-    substituteInPlace panel-plugin/xfce4-popup-whiskermenu.in \
-      --replace gettext ${gettext}/bin/gettext
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/bin/xfce4-popup-whiskermenu \
-      --replace $out/bin/xfce4-panel ${xfce4-panel.out}/bin/xfce4-panel
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Alternate application launcher for Xfce";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

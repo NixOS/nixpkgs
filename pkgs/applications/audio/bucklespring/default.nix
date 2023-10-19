@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bucklespring";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "zevv";
     repo = pname;
-    rev = version;
-    sha256 = "114dib4npb7r1z2zd1fwsx71xbf9r6psxqd7n7590cwz1w3r51mz";
+    rev = "v${version}";
+    sha256 = "0prhqibivxzmz90k79zpwx3c97h8wa61rk5ihi9a5651mnc46mna";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];

@@ -11,19 +11,20 @@
 , at-spi2-core
 , dbus
 , gettext
-, libwnck3
+, libwnck
 , adwaita-icon-theme
+, librsvg
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "accerciser";
-  version = "3.38.0";
+  version = "3.40.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fd9vv2abd2if2qj4nlfy7mpd7rc4sx18zhmxd5ijlnfhkpggbp5";
+    sha256 = "U3VF1kgTwtKxSne2TiQBABXpl3z1+zz4qmXbzgHqNiU=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +41,8 @@ python3.pkgs.buildPythonApplication rec {
     adwaita-icon-theme
     at-spi2-core
     gtk3
-    libwnck3
+    libwnck
+    librsvg
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -51,10 +53,6 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     xlib
   ];
-
-  # Strict deps breaks accerciser
-  # and https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   passthru = {
     updateScript = gnome.updateScript {

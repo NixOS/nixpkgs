@@ -10,13 +10,13 @@
 , wrapGAppsHook
 , python3
 , glib
-, gssdp
-, gupnp
+, gssdp_1_6
+, gupnp_1_6
 , gupnp-av
 , gupnp-dlna
 , gst_all_1
 , libgee
-, libsoup
+, libsoup_3
 , gtk3
 , libmediaart
 , sqlite
@@ -28,15 +28,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
-  version = "0.40.1";
+  version = "0.42.4";
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QkDXd1mcjNCeZ9pEzLOV0KbceEedgJzWIZgixbVooy0=";
+    sha256 = "YxDfqi0zK2YRm5sCD61qS9J9m8Yfr3gMpcoLYoEzA/c=";
   };
+
+  patches = [
+    ./add-option-for-installation-sysconfdir.patch
+  ];
 
   nativeBuildInputs = [
     meson
@@ -52,12 +56,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    gssdp
-    gupnp
+    gssdp_1_6
+    gupnp_1_6
     gupnp-av
     gupnp-dlna
     libgee
-    libsoup
+    libsoup_3
     gtk3
     libmediaart
     sqlite
@@ -78,15 +82,9 @@ stdenv.mkDerivation rec {
     "-Dapi-docs=false"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
-    # Build all plug-ins except for tracker 2
-    "-Dplugins=external,gst-launch,lms,media-export,mpris,playbin,ruih,tracker3"
   ];
 
   doCheck = true;
-
-  patches = [
-    ./add-option-for-installation-sysconfdir.patch
-  ];
 
   postPatch = ''
     patchShebangs data/xml/process-xml.py

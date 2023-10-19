@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "noaa-apt";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "martinber";
     repo = "noaa-apt";
     rev = "v${version}";
-    sha256 = "0fmbg6lw7lmm402hzddpzgi7y9mc6kic14x8rif7fampk20mv3ms";
+    sha256 = "sha256-wmjglF2+BFmlTfvqt90nbCxuldN8AEFXj7y9tgTvA2Y=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,12 @@ rustPlatform.buildRustPackage rec {
     pango
   ];
 
-  cargoSha256 = "167q9w45lh05l27cdssg8sfz3qfskfaxayzjy6q1cj50jrn0gq13";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "satellite-0.1.0" = "sha256-R5Tz4MpRnAEnMmkx/LhWPmwRIKpnCLIB4VxApMTBn78=";
+    };
+  };
 
   preBuild = ''
     # Used by macro pointing to resource location at compile time.
@@ -50,15 +55,15 @@ rustPlatform.buildRustPackage rec {
 
     # Desktop icon.
     install -Dm644 -t $out/share/applications $src/debian/ar.com.mbernardi.noaa-apt.desktop
-    install -Dm644 -t $out/share/icons/hicolor/48x48/apps $src/debian/noaa-apt.png
-    install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/debian/noaa-apt.svg
+    install -Dm644 -t $out/share/icons/hicolor/48x48/apps $src/debian/ar.com.mbernardi.noaa-apt.png
+    install -Dm644 -t $out/share/icons/hicolor/scalable/apps $src/debian/ar.com.mbernardi.noaa-apt.svg
   '';
 
   meta = with lib; {
     description = "NOAA APT image decoder";
     homepage = "https://noaa-apt.mbernardi.com.ar/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [ trepetti tmarkus ];
     platforms = platforms.all;
     changelog = "https://github.com/martinber/noaa-apt/releases/tag/v${version}";
   };

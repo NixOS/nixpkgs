@@ -35,9 +35,9 @@ let
     '';
 
   babelfishTranslate = path: name:
-    pkgs.runCommand "${name}.fish" {
+    pkgs.runCommandLocal "${name}.fish" {
       nativeBuildInputs = [ pkgs.babelfish ];
-    } "${pkgs.babelfish}/bin/babelfish < ${path} > $out;";
+    } "babelfish < ${path} > $out;";
 
 in
 
@@ -49,7 +49,7 @@ in
 
       enable = mkOption {
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to configure fish as an interactive shell.
         '';
         type = types.bool;
@@ -58,16 +58,16 @@ in
       useBabelfish = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          If enabled, the configured environment will be translated to native fish using <link xlink:href="https://github.com/bouk/babelfish">babelfish</link>.
-          Otherwise, <link xlink:href="https://github.com/oh-my-fish/plugin-foreign-env">foreign-env</link> will be used.
+        description = lib.mdDoc ''
+          If enabled, the configured environment will be translated to native fish using [babelfish](https://github.com/bouk/babelfish).
+          Otherwise, [foreign-env](https://github.com/oh-my-fish/plugin-foreign-env) will be used.
         '';
       };
 
       vendor.config.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether fish should source configuration snippets provided by other packages.
         '';
       };
@@ -75,7 +75,7 @@ in
       vendor.completions.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether fish should use completion files provided by other packages.
         '';
       };
@@ -83,7 +83,7 @@ in
       vendor.functions.enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = lib.mdDoc ''
           Whether fish should autoload fish functions provided by other packages.
         '';
       };
@@ -94,7 +94,7 @@ in
           gco = "git checkout";
           npu = "nix-prefetch-url";
         };
-        description = ''
+        description = lib.mdDoc ''
           Set of fish abbreviations.
         '';
         type = with types; attrsOf str;
@@ -102,16 +102,16 @@ in
 
       shellAliases = mkOption {
         default = {};
-        description = ''
-          Set of aliases for fish shell, which overrides <option>environment.shellAliases</option>.
-          See <option>environment.shellAliases</option> for an option format description.
+        description = lib.mdDoc ''
+          Set of aliases for fish shell, which overrides {option}`environment.shellAliases`.
+          See {option}`environment.shellAliases` for an option format description.
         '';
         type = with types; attrsOf (nullOr (either str path));
       };
 
       shellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during fish shell initialisation.
         '';
         type = types.lines;
@@ -119,7 +119,7 @@ in
 
       loginShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during fish login shell initialisation.
         '';
         type = types.lines;
@@ -127,7 +127,7 @@ in
 
       interactiveShellInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code called during interactive fish shell initialisation.
         '';
         type = types.lines;
@@ -135,7 +135,7 @@ in
 
       promptInit = mkOption {
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Shell script code used to initialise fish prompt.
         '';
         type = types.lines;
@@ -258,20 +258,17 @@ in
             preferLocalBuild = true;
             allowSubstitutes = false;
           };
-          generateCompletions = package: pkgs.runCommand
-            "${package.name}_fish-completions"
-            (
-              {
-                inherit package;
-                preferLocalBuild = true;
-                allowSubstitutes = false;
-              }
-              // optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; }
-            )
+          generateCompletions = package: pkgs.runCommandLocal
+            ( with lib.strings; let
+                storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
+                pathName = substring storeLength (stringLength package - storeLength) package;
+              in (package.name or pathName) + "_fish-completions")
+            ( { inherit package; } //
+              optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; })
             ''
               mkdir -p $out
               if [ -d $package/share/man ]; then
-                find $package/share/man -type f | xargs ${pkgs.python3.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
+                find $package/share/man -type f | xargs ${pkgs.python3.pythonForBuild.interpreter} ${patchedGenerator}/create_manpage_completions.py --directory $out >/dev/null
               fi
             '';
         in
@@ -303,7 +300,7 @@ in
     programs.fish.interactiveShellInit = ''
       # add completions generated by NixOS to $fish_complete_path
       begin
-        # joins with null byte to acommodate all characters in paths, then respectively gets all paths before (exclusive) / after (inclusive) the first one including "generated_completions",
+        # joins with null byte to accommodate all characters in paths, then respectively gets all paths before (exclusive) / after (inclusive) the first one including "generated_completions",
         # splits by null byte, and then removes all empty lines produced by using 'string'
         set -l prev (string join0 $fish_complete_path | string match --regex "^.*?(?=\x00[^\x00]*generated_completions.*)" | string split0 | string match -er ".")
         set -l post (string join0 $fish_complete_path | string match --regex "[^\x00]*generated_completions.*" | string split0 | string match -er ".")

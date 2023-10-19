@@ -7,7 +7,7 @@ let
 in
 {
   options = {
-    services.xserver.windowManager.cwm.enable = mkEnableOption "cwm";
+    services.xserver.windowManager.cwm.enable = mkEnableOption (lib.mdDoc "cwm");
   };
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton

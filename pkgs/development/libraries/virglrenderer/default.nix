@@ -1,17 +1,19 @@
 { lib, stdenv, fetchurl, cmake, meson, ninja, pkg-config, python3
-, libGLU, epoxy, libX11, libdrm, mesa
+, libGLU, libepoxy, libX11, libdrm, mesa
 }:
 
 stdenv.mkDerivation rec {
   pname = "virglrenderer";
-  version = "0.8.2";
+  version = "0.10.4";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/virglrenderer-${version}/virglrenderer-virglrenderer-${version}.tar.bz2";
-    sha256 = "07vfzg99wq92yg2phza9jc0zvps34yy9gc8v4hibqchdl77fmspx";
+    sha256 = "sha256-qqvnko2sN4bdm9+F0PVjDW5FsiL5k3UAfjPSTqG+73c=";
   };
 
-  buildInputs = [ libGLU epoxy libX11 libdrm mesa ];
+  separateDebugInfo = true;
+
+  buildInputs = [ libGLU libepoxy libX11 libdrm mesa ];
 
   nativeBuildInputs = [ cmake meson ninja pkg-config python3 ];
 

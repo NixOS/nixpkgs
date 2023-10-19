@@ -1,23 +1,47 @@
-{ lib, fetchPypi, buildPythonPackage, nose }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, zeep
+}:
 
 buildPythonPackage rec {
-  version = "1.16";
   pname = "python-stdnum";
+  version = "1.19";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4248d898042a801fc4eff96fbfe4bf63a43324854efe3b5534718c1c195c6f43";
+    hash = "sha256-Ez7IL1Y5DqdMGQVp6Y8vsUuGmAix1UeFcI8i0P6tiz8=";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=stdnum --cov-report=term-missing:skip-covered --cov-report=html" ""
   '';
 
-  meta = {
-    homepage = "https://arthurdejong.org/python-stdnum/";
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  passthru.optional-dependencies = {
+    SOAP = [
+      zeep
+    ];
+  };
+
+  pythonImportsCheck = [
+    "stdnum"
+  ];
+
+  meta = with lib; {
     description = "Python module to handle standardized numbers and codes";
-    maintainers = with lib.maintainers; [ johbo ];
-    license = lib.licenses.lgpl2Plus;
+    homepage = "https://arthurdejong.org/python-stdnum/";
+    changelog = "https://github.com/arthurdejong/python-stdnum/blob/${version}/ChangeLog";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ johbo ];
   };
 }

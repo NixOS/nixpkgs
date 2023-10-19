@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub,
+{ lib, stdenv, fetchFromGitHub, fetchgit,
   fetchHex, erlang, makeWrapper,
   writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
 
 let
-  version = "3.16.1";
+  version = "3.22.1";
   owner = "erlang";
-  deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchHex; };
+  deps = import ./rebar-deps.nix { inherit fetchFromGitHub fetchgit fetchHex; };
   rebar3 = stdenv.mkDerivation rec {
     pname = "rebar3";
     inherit version erlang;
@@ -16,7 +16,7 @@ let
       inherit owner;
       repo = pname;
       rev = version;
-      sha256 = "0dhwlx7zykf9y3znk2k8fxrq5j43jy3c3gd76k74q34p1xbajgzr";
+      sha256 = "bSsDNuwG3LLvBS7P/Ft0rpM/atwy36JonwP0fPRsEis=";
     };
 
     buildInputs = [ erlang ];
@@ -38,6 +38,12 @@ let
     buildPhase = ''
       HOME=. escript bootstrap
     '';
+
+    checkPhase = ''
+      HOME=. escript ./rebar3 ct
+    '';
+
+    doCheck = true;
 
     installPhase = ''
       mkdir -p $out/bin
@@ -75,20 +81,24 @@ let
           (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
         ]
       }
-      latest=$(list-git-tags https://github.com/${owner}/${pname}.git | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
+      latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
       if [ "$latest" != "${version}" ]; then
         nixpkgs="$(git rev-parse --show-toplevel)"
         nix_path="$nixpkgs/pkgs/development/tools/build-managers/rebar3"
         update-source-version rebar3 "$latest" --version-key=version --print-changes --file="$nix_path/default.nix"
         tmpdir=$(mktemp -d)
         cp -R $(nix-build $nixpkgs --no-out-link -A rebar3.src)/* "$tmpdir"
-        (cd "$tmpdir" && rebar3 nix lock -o "$nix_path/rebar-deps.nix")
+        (cd "$tmpdir" && rebar3 as test nix lock -o "$nix_path/rebar-deps.nix")
       else
         echo "rebar3 is already up-to-date"
       fi
     '';
   };
-  rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ] }:
+
+  # Alias rebar3 so we can use it as default parameter below
+  _rebar3 = rebar3;
+
+  rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ], rebar3 ? _rebar3 }:
     let
       pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
       globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);
@@ -101,6 +111,9 @@ let
         # instruct rebar3 to always load a certain plugin. It is necessary since
         # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
         patches = [ ./skip-plugins.patch ./global-plugins.patch ];
+
+        # our patches cause the tests to fail
+        doCheck = false;
       }));
     in stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
@@ -118,9 +131,11 @@ let
           {ok, _} = zip:extract(Archive, [{cwd, "'$out/lib'"}]),
           init:stop(0)
         '
+        cp ${./rebar_ignore_deps.erl} rebar_ignore_deps.erl
+        erlc -o $out/lib/rebar/ebin rebar_ignore_deps.erl
         mkdir -p $out/bin
         makeWrapper ${erlang}/bin/erl $out/bin/rebar3 \
-          --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames}" \
+          --set REBAR_GLOBAL_PLUGINS "${toString globalPluginNames} rebar_ignore_deps" \
           --suffix-each ERL_LIBS ":" "$out/lib ${toString pluginLibDirs}" \
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
       '';

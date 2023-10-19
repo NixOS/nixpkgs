@@ -1,15 +1,15 @@
 { stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
 , libpthreadstubs, libpciaccess
-, withValgrind ? valgrind-light.meta.available, valgrind-light
+, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.105";
+  version = "2.4.115";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0iiamypwdfiz250ki120nh598r48yyacmnndb4mkximdgi5h478x";
+    sha256 = "sha256-VUz7/gVCvds5G04+Bb+7/D4oK5Vb1WIY0hwGFkgfZes=";
   };
 
   outputs = [ "out" "dev" "bin" ];
@@ -18,15 +18,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpthreadstubs libpciaccess ]
     ++ lib.optional withValgrind valgrind-light;
 
-  patches = [ ./cross-build-nm-path.patch ];
-
   mesonFlags = [
-    "-Dnm-path=${stdenv.cc.targetPrefix}nm"
     "-Dinstall-test-programs=true"
-    "-Domap=true"
-  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
-    "-Dtegra=true"
-    "-Detnaviv=true"
+    "-Dcairo-tests=disabled"
+    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "valgrind" withValgrind)
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
+    "-Dtegra=enabled"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Detnaviv=disabled"
   ];
 
   meta = with lib; {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       the Mesa drivers, the X drivers, libva and similar projects.
     '';
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = lib.subtractLists platforms.darwin platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

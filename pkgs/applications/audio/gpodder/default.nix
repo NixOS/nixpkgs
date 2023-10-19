@@ -1,18 +1,27 @@
-{ lib, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome, gtk3, wrapGAppsHook
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, glibcLocales
+, gnome
 , gobject-introspection
+, gtk3
+, intltool
+, python3
+, python3Packages
+, wrapGAppsHook
+, xdg-utils
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.17";
+  version = "3.11.3";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0wrk8d4q6ricbcjzlhk10vrk1qg9hi323kgyyd0c8nmh7a82h8pd";
+    sha256 = "p8BgpvMK1kP4VnRfmcvSMbXmWs5DmWBZ6te7L9b+UJQ=";
   };
 
   patches = [
@@ -27,16 +36,20 @@ python3Packages.buildPythonApplication rec {
     intltool
     wrapGAppsHook
     glibcLocales
+    gobject-introspection
   ];
 
   buildInputs = [
     python3
-    gobject-introspection
+    gtk3
     gnome.adwaita-icon-theme
   ];
 
-  checkInputs = with python3Packages; [
-    coverage minimock
+  nativeCheckInputs = with python3Packages; [
+    minimock
+    pytest
+    pytest-httpserver
+    pytest-cov
   ];
 
   doCheck = true;
@@ -45,11 +58,12 @@ python3Packages.buildPythonApplication rec {
     feedparser
     dbus-python
     mygpoclient
+    requests
     pygobject3
     eyeD3
     podcastparser
     html5lib
-    gtk3
+    mutagen
   ];
 
   makeFlags = [
@@ -64,8 +78,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   installCheckPhase = ''
-    LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
+
+  makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
+
+  passthru.updateScript = gitUpdater {};
 
   meta = with lib; {
     description = "A podcatcher written in python";

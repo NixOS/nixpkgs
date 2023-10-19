@@ -1,61 +1,72 @@
 { type
 , version
-, sha512
+, srcs
+, packages ? null
 }:
 
-assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
-{ lib, stdenv
+assert builtins.elem type [ "aspnetcore" "runtime" "sdk" ];
+assert if type == "sdk" then packages != null else true;
+
+{ lib
+, stdenv
 , fetchurl
+, writeText
+, autoPatchelfHook
+, makeWrapper
 , libunwind
-, openssl
 , icu
 , libuuid
 , zlib
+, libkrb5
 , curl
+, lttng-ust_2_12
+, testers
+, runCommand
+, writeShellScript
+, mkNugetDeps
 }:
 
 let
-  pname = if type == "aspnetcore" then
-    "aspnetcore-runtime"
-  else if type == "netcore" then
-    "dotnet-runtime"
-  else
-    "dotnet-sdk";
-  platform = if stdenv.isDarwin then "osx" else "linux";
-  suffix = {
-    x86_64-linux = "x64";
-    aarch64-linux = "arm64";
-    x86_64-darwin = "x64";
-  }."${stdenv.hostPlatform.system}" or (throw
-    "Unsupported system: ${stdenv.hostPlatform.system}");
-  urls = {
-    aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-    netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-    sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}-${suffix}.tar.gz";
-  };
+  pname =
+    if type == "aspnetcore" then
+      "aspnetcore-runtime"
+    else if type == "runtime" then
+      "dotnet-runtime"
+    else
+      "dotnet-sdk";
+
   descriptions = {
-    aspnetcore = "ASP .NET Core runtime ${version}";
-    netcore = ".NET Core runtime ${version}";
+    aspnetcore = "ASP.NET Core Runtime ${version}";
+    runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
-in stdenv.mkDerivation rec {
+
+  packageDeps = if type == "sdk" then mkNugetDeps {
+    name = "${pname}-${version}-deps";
+    nugetDeps = packages;
+  } else null;
+
+in
+stdenv.mkDerivation (finalAttrs: rec {
   inherit pname version;
 
-  rpath = lib.makeLibraryPath [
-    curl
-    icu
-    libunwind
-    libuuid
-    openssl
+  # Some of these dependencies are `dlopen()`ed.
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+
+  buildInputs = [
     stdenv.cc.cc
     zlib
-  ];
+    icu
+    libkrb5
+    curl
+  ] ++ lib.optional stdenv.isLinux lttng-ust_2_12;
 
-  src = fetchurl {
-    url = builtins.getAttr type urls;
-    sha512 = sha512."${stdenv.hostPlatform.system}" or (throw
-      "Missing hash for host system: ${stdenv.hostPlatform.system}");
-  };
+  src = fetchurl (
+    srcs."${stdenv.hostPlatform.system}" or (throw
+      "Missing source (url and hash) for host system: ${stdenv.hostPlatform.system}")
+  );
 
   sourceRoot = ".";
 
@@ -64,17 +75,17 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     cp -r ./ $out
-    ln -s $out/dotnet $out/bin/dotnet
-    runHook postInstall
-  '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
-    patchelf --set-rpath "${rpath}" $out/dotnet
-    find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
-    find $out -type f -name "apphost" -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
+    mkdir -p $out/share/doc/$pname/$version
+    mv $out/LICENSE.txt $out/share/doc/$pname/$version/
+    mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+
+    ln -s $out/dotnet $out/bin/dotnet
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
@@ -82,11 +93,75 @@ in stdenv.mkDerivation rec {
     $out/bin/dotnet --info
   '';
 
-  meta = with lib; {
-    homepage = "https://dotnet.github.io/";
-    description = builtins.getAttr type descriptions;
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ kuznero ];
-    license = licenses.mit;
+  # Tell autoPatchelf about runtime dependencies.
+  # (postFixup phase is run before autoPatchelfHook.)
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf \
+      --add-needed libicui18n.so \
+      --add-needed libicuuc.so \
+      $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+    patchelf \
+      --add-needed libgssapi_krb5.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+    patchelf \
+      --add-needed libssl.so \
+      $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
+      $out/packs/Microsoft.NETCore.App.Host.linux-x64/*/runtimes/linux-x64/native/singlefilehost
+  '';
+
+  setupHook = writeText "dotnet-setup-hook" ''
+    if [ ! -w "$HOME" ]; then
+      export HOME=$(mktemp -d) # Dotnet expects a writable home directory for its configuration files
+    fi
+
+    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 # Dont try to expand NuGetFallbackFolder to disk
+    export DOTNET_NOLOGO=1 # Disables the welcome message
+    export DOTNET_CLI_TELEMETRY_OPTOUT=1
+  '';
+
+  passthru = {
+    inherit icu;
+    packages = packageDeps;
+
+    updateScript =
+      if type == "sdk" then
+      let
+        majorVersion =
+          with lib;
+          concatStringsSep "." (take 2 (splitVersion version));
+      in
+      writeShellScript "update-dotnet-${majorVersion}" ''
+        pushd pkgs/development/compilers/dotnet
+        exec ${./update.sh} "${majorVersion}"
+      '' else null;
+
+    tests = {
+      version = testers.testVersion {
+        package = finalAttrs.finalPackage;
+      };
+
+      smoke-test = runCommand "dotnet-sdk-smoke-test" {
+        nativeBuildInputs = [ finalAttrs.finalPackage ];
+      } ''
+        HOME=$(pwd)/fake-home
+        dotnet new console
+        dotnet build
+        output="$(dotnet run)"
+        # yes, older SDKs omit the comma
+        [[ "$output" =~ Hello,?\ World! ]] && touch "$out"
+      '';
+    };
   };
-}
+
+  meta = with lib; {
+    description = builtins.getAttr type descriptions;
+    homepage = "https://dotnet.github.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ kuznero mdarocha ];
+    mainProgram = "dotnet";
+    platforms = attrNames srcs;
+  };
+})

@@ -18,7 +18,7 @@ let
   # compression type and filename extension.
   compressorName = fullCommand: builtins.elemAt (builtins.match "([^ ]*/)?([^ ]+).*" fullCommand) 1;
 in
-{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost
+{ stdenvNoCC, perl, libarchive, ubootTools, lib, pkgsBuildHost
 # Name of the derivation (not of the resulting file!)
 , name ? "initrd"
 
@@ -78,11 +78,11 @@ let
 in stdenvNoCC.mkDerivation rec {
   inherit name makeUInitrd extension uInitrdArch prepend;
 
-  ${if makeUInitrd then "uinitrdCompression" else null} = uInitrdCompression;
+  ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
   builder = ./make-initrd.sh;
 
-  nativeBuildInputs = [ perl cpio ]
+  nativeBuildInputs = [ perl libarchive ]
     ++ lib.optional makeUInitrd ubootTools;
 
   compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";

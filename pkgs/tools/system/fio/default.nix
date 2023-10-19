@@ -4,19 +4,23 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.26";
+  version = "3.35";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "sha256-/Si0McndJ6Xp3ifDr+BStv89LmZyAgof95QkHGT8MGQ=";
+    sha256 = "sha256-8LMpgayxBebHb0MXYmjlqqtndSiL42/yEQpgamxt9kI=";
   };
 
   buildInputs = [ python3 zlib ]
     ++ lib.optional (!stdenv.isDarwin) libaio;
 
-  nativeBuildInputs = [ makeWrapper ];
+  # ./configure does not support autoconf-style --build=/--host=.
+  # We use $CC instead.
+  configurePlatforms = [ ];
+
+  nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython ];
 
   strictDeps = true;
 
@@ -29,9 +33,14 @@ stdenv.mkDerivation rec {
     substituteInPlace tools/plot/fio2gnuplot --replace /usr/share/fio $out/share/fio
   '';
 
-  postInstall = lib.optionalString withGnuplot ''
-    wrapProgram $out/bin/fio2gnuplot \
-      --prefix PATH : ${lib.makeBinPath [ gnuplot ]}
+  pythonPath = [ python3.pkgs.six ];
+
+  makeWrapperArgs = lib.optionals withGnuplot [
+    "--prefix PATH : ${lib.makeBinPath [ gnuplot ]}"
+  ];
+
+  postInstall = ''
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
   '';
 
   meta = with lib; {

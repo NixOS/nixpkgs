@@ -1,21 +1,45 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, graphql-core
-, pytest-asyncio
-, pytestCheckHook
+
 , pythonOlder
+
+# build
+, poetry-core
+
+# runtime
+, graphql-core
 , typing-extensions
+
+# tests
+, pytest-asyncio
+, pytest-describe
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "graphql-relay";
-  version = "3.1.0";
+  version = "3.2.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cNWn7lmV6nwqmjflEidmOxpGTx9A6Y/d6VC+VBXf4LQ=";
+    hash = "sha256-H/HFEpg1bkgaC+AJzN/ySYMs5T8wVZwTOPIqDg0XJQw=";
   };
+
+  # This project doesn't seem to actually need setuptools. To find out why it
+  # specifies it, follow up in:
+  #
+  #   https://github.com/graphql-python/graphql-relay-py/issues/49
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace ', "setuptools>=59,<70"' ""
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     graphql-core
@@ -23,8 +47,9 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
+    pytest-describe
     pytestCheckHook
   ];
 
@@ -34,6 +59,6 @@ buildPythonPackage rec {
     description = "A library to help construct a graphql-py server supporting react-relay";
     homepage = "https://github.com/graphql-python/graphql-relay-py/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,19 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
 
-stdenv.mkDerivation rec {
-  version = "1.0.8";
+, callPackage
+
+  # for passthru.tests
+, imagemagick
+, libheif
+, imlib2Full
+, gst_all_1
+}:
+
+stdenv.mkDerivation (finalAttrs: rec {
+  version = "1.0.12";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
-    rev = "v${version}";
-    sha256 = "1dzflqbk248lz5ws0ni5acmf32b3rmnq5gsfaz7691qqjxkl1zml";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pl1r3n4T4FcJ4My/wCE54R2fmTdrlJOvgb2U0MZf1BI=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit imagemagick libheif imlib2Full;
+    inherit (gst_all_1) gst-plugins-bad;
+
+    test-corpus-decode = callPackage ./test-corpus-decode.nix {
+      libde265 = finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     homepage = "https://github.com/strukturag/libde265";
@@ -22,5 +44,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ gebner ];
   };
-
-}
+})

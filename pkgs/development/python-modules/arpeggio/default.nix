@@ -1,34 +1,27 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, glibcLocales
-, pytestrunner
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "Arpeggio";
-  version = "1.10.1";
+  pname = "arpeggio";
+  version = "2.0.2";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "920d12cc762edb2eb56daae64a14c93e43dc181b481c88fc79314c0df6ee639e";
+    pname = "Arpeggio";
+    inherit version;
+    hash = "sha256-x5CysG4ibS3UaOT7+1t/UGzsZkFgMf3hRBzx3ioLpwA=";
   };
 
-  # Shall not be needed for next release
-  LC_ALL = "en_US.UTF-8";
-  buildInputs = [ glibcLocales ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeBuildInputs = [ pytestrunner ];
+  pythonImportsCheck = [ "arpeggio" ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  disabledTests = [ "test_examples" "test_issue_22" ];
-
-  dontUseSetuptoolsCheck = true;
-
-  meta = {
-    description = "Packrat parser interpreter";
-    license = lib.licenses.mit;
+  meta = with lib; {
+    description = "Recursive descent parser with memoization based on PEG grammars (aka Packrat parser)";
+    homepage = "https://github.com/textX/Arpeggio";
+    license = licenses.mit;
+    maintainers = with maintainers; [ nickcao ];
   };
 }

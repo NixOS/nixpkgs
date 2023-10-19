@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     (
       cd unittest
-      LD_LIBRARY_PATH="$(cd ../src; pwd)" TZ=PST8PDT ./unittestcpp ../../unittest/data
+      TZ=PST8PDT ./unittestcpp ../../unittest/data
     )
   '';
 
@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     description = "A simple and asynchronous API to work with e-mail protocols IMAP, POP and SMTP";
     homepage    = "http://libmailcore.com";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

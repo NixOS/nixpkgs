@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, alsaLib, bluez, glib, sbc, dbus
+, alsa-lib, bluez, glib, sbc, dbus
 
 # optional, but useful utils
 , readline, libbsd, ncurses
@@ -9,26 +9,24 @@
 # TODO: aptxSupport
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";
-  version = "3.0.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
     rev = "v${version}";
-    sha256 = "1jlsgxyqfhncfhx1sy3ry0dp6p95kd4agh7g2b7g51h0c4cv74h8";
+    sha256 = "sha256-oGaYiSkOhqfjUl+mHTs3gqFcxli3cgkRtT6tbjy3ht0=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
-    alsaLib bluez glib sbc dbus
+    alsa-lib bluez glib sbc dbus
     readline libbsd ncurses
   ]
-  ++ optional aacSupport fdk_aac;
+  ++ lib.optional aacSupport fdk_aac;
 
   configureFlags = [
     "--with-alsaplugindir=${placeholder "out"}/lib/alsa-lib"
@@ -36,9 +34,9 @@ stdenv.mkDerivation rec {
     "--enable-rfcomm"
     "--enable-hcitop"
   ]
-  ++ optional aacSupport "--enable-aac";
+  ++ lib.optional aacSupport "--enable-aac";
 
-  meta = {
+  meta = with lib; {
     description = "Bluez 5 Bluetooth Audio ALSA Backend";
     longDescription = ''
       Bluez-ALSA (BlueALSA) is an ALSA backend for Bluez 5 audio interface.
@@ -62,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.oxij maintainers.lheckemann ];
+    maintainers = [ maintainers.oxij ];
   };
 
 }

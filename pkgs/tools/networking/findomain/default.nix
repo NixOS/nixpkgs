@@ -1,37 +1,58 @@
-{ stdenv
-, lib
-, fetchFromGitHub
+{ lib
 , rustPlatform
+, fetchFromGitHub
 , installShellFiles
-, perl
-, libiconv
-, Security
+, pkg-config
+, openssl
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "4.3.0";
+  version = "9.0.2";
 
   src = fetchFromGitHub {
-    owner = "Edu4rdSHL";
+    owner = "findomain";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-UC70XmhAVf2a2QO9bkIRE5vEsWyIA0DudZfKraNffGY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-CFnjZHTga70+b7XUdxGC/ycqY2snkLvFKPApTRlN11s=";
   };
 
-  cargoSha256 = "sha256-Cdfh3smX6UjiG29L9hG22bOQQIjaNrv+okl153mIiso=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "fhc-0.7.1" = "sha256-gSAwpuVL+5vLkHTsh60qyza7IoxgUWBQcWl2N7md51s=";
+      "headless_chrome-0.9.0" = "sha256-0BMm0tmCbUL1BSdD6rJLG735FYJsmkSrPQBs2zWx414=";
+      "rusolver-0.9.1" = "sha256-84qe/A+FN8Q+r8tk0waOq+sBgnDpG9bwoQI+K5pE4Wc=";
+      "trust-dns-proto-0.20.4" = "sha256-+oAjyyTXbKir8e5kn8CUmQy5qmzQ47ryvBBdZtzj1TY=";
+    };
+  };
 
-  nativeBuildInputs = [ installShellFiles perl ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   postInstall = ''
-    installManPage ${pname}.1
+    installManPage findomain.1
   '';
 
   meta = with lib; {
     description = "The fastest and cross-platform subdomain enumerator";
-    homepage = "https://github.com/Edu4rdSHL/findomain";
+    homepage = "https://github.com/Findomain/Findomain";
+    changelog = "https://github.com/Findomain/Findomain/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne figsoda ];
   };
 }

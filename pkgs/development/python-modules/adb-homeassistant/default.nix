@@ -26,7 +26,7 @@ buildPythonPackage {
     pycryptodome
   ];
 
-  checkInputs = [ pytest mock ];
+  nativeCheckInputs = [ pytest mock ];
   checkPhase = ''
     py.test test
   '';

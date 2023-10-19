@@ -1,9 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
+, pythonOlder
 , packaging
-, pytest
 , cython
 , numpy
 , scipy
@@ -14,18 +13,23 @@
 
 buildPythonPackage rec {
   pname = "dipy";
-  version = "1.3.0";
+  version = "1.7.0";
+  format = "setuptools";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner  = "dipy";
-    repo   = pname;
-    rev    = version;
-    sha256 = "0555abx0fwqmk6dc3im7r45d9j7r9xh6gm9mbwfwvlf7laf8h098";
+    owner = "dipy";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-sfqCK2r9Io1gDDHL9s9R37J0h9KcOQML3B2zJx2+QuA=";
   };
 
-  nativeBuildInputs = [ cython packaging ];
+  nativeBuildInputs = [
+    cython
+    packaging
+  ];
+
   propagatedBuildInputs = [
     numpy
     scipy
@@ -33,8 +37,6 @@ buildPythonPackage rec {
     nibabel
     tqdm
   ];
-
-  checkInputs = [ pytest ];
 
   # disable tests for now due to:
   #   - some tests require data download (see dipy/dipy/issues/2092);
@@ -64,6 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://dipy.org/";
     description = "Diffusion imaging toolkit for Python";
+    changelog = "https://github.com/dipy/dipy/blob/${version}/Changelog";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bcdarwin ];
   };

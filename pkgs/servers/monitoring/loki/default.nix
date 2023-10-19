@@ -8,25 +8,27 @@
 }:
 
 buildGoModule rec {
-  version = "2.2.1";
+  version = "2.9.2";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "sha256-ujZD5GIgMewvEQW3Wnt0eHdMIFs77PkkEecgCDw9290=";
+    rev = "v${version}";
+    hash = "sha256-CYF0cse8NyHEnSZPRI9LNI09vr7kWPXHNibiEbW484E=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   subPackages = [
     # TODO split every executable into its own package
     "cmd/loki"
     "cmd/loki-canary"
-    "cmd/promtail"
+    "clients/cmd/promtail"
     "cmd/logcli"
   ];
+
+  tags = ["promtail_journal_enabled"];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
@@ -38,18 +40,21 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) loki; };
 
-  buildFlagsArray = let t = "github.com/grafana/loki/pkg/build"; in
-    ''
-      -ldflags=-s -w -X ${t}.Version=${version} -X ${t}.BuildUser=nix@nixpkgs -X ${t}.BuildDate=unknown -X ${t}.Branch=unknown -X ${t}.Revision=unknown
-    '';
-
-  doCheck = true;
+  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+    "-s"
+    "-w"
+    "-X ${t}.Version=${version}"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.Revision=unknown"
+  ];
 
   meta = with lib; {
     description = "Like Prometheus, but for logs";
-    license = licenses.asl20;
+    license = with licenses; [ agpl3Only asl20 ];
     homepage = "https://grafana.com/oss/loki/";
-    maintainers = with maintainers; [ willibutz globin mmahut ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/grafana/loki/releases/tag/v${version}";
+    maintainers = with maintainers; [ willibutz globin mmahut emilylange ajs124 ];
   };
 }

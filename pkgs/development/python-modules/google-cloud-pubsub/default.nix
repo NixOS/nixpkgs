@@ -1,42 +1,72 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
 , google-api-core
 , google-cloud-testutils
-, grpc_google_iam_v1
+, grpc-google-iam-v1
+, grpcio
+, grpcio-status
 , libcst
-, mock
 , proto-plus
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.4.1";
+  version = "2.18.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5gyqZ+JthC/Qja8ZCX79r4K+evuZY5jPZ73cA6hrgSA=";
+    hash = "sha256-Muth/UwdxshC9ZTWnZr6gFROOzJ6pkChZOtvsCAery0=";
   };
 
-  propagatedBuildInputs = [ grpc_google_iam_v1 google-api-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    grpc-google-iam-v1
+    grpcio
+    grpcio-status
+    libcst
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
+
+  nativeCheckInputs = [
+    google-cloud-testutils
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   preCheck = ''
     # prevent google directory from shadowing google imports
     rm -r google
-    # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
-    rm -r tests/unit/pubsub_v1
   '';
 
-  pythonImportsCheck = [ "google.cloud.pubsub" ];
+  disabledTestPaths = [
+    # Tests in pubsub_v1 attempt to contact pubsub.googleapis.com
+    "tests/unit/pubsub_v1"
+  ];
+
+  pythonImportsCheck = [
+    "google.cloud.pubsub"
+  ];
 
   meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";
-    homepage = "https://pypi.org/project/google-cloud-pubsub";
+    homepage = "https://github.com/googleapis/python-pubsub";
+    changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

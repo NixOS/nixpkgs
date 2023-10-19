@@ -1,57 +1,86 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, isPy3k
+, fetchFromGitHub
+, cython
 , certifi
-, cmake
-, enum34
-, openssl
-, six
 , CFNetwork
+, cmake
 , CoreFoundation
+, libcxxabi
+, openssl
 , Security
+, pytestCheckHook
+, pytest-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "uamqp";
-  version = "1.4.0";
+  version = "1.6.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-XzfiLzRK1/DCmnxPW/H+KqnBuCbpYPawS2JnTQq+Vbw=";
+  src = fetchFromGitHub {
+    owner = "Azure";
+    repo = "azure-uamqp-python";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-OjZTroaBuUB/dakl5gAYigJkim9EFiCwUEBo7z35vhQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/Azure/azure-c-shared-utility/commit/52ab2095649b5951e6af77f68954209473296983.patch";
-      sha256 = "06pxhdpkv94pv3lhj1vy0wlsqsdznz485bvg3zafj67r55g40lhd";
-      stripLen = "2";
-      extraPrefix = "src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/";
-    })
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ./darwin-azure-c-shared-utility-corefoundation.patch
+  ];
+
+  postPatch = lib.optionalString (stdenv.isDarwin && !stdenv.isx86_64) ''
+    # force darwin aarch64 to use openssl instead of applessl, removing
+    # some quirks upstream thinks they need to use openssl on macos
+    sed -i \
+      -e '/^use_openssl =/cuse_openssl = True' \
+      -e 's/\bazssl\b/ssl/' \
+      -e 's/\bazcrypto\b/crypto/' \
+      setup.py
+    sed -i \
+      -e '/#define EVP_PKEY_id/d' \
+      src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/adapters/x509_openssl.c
+    sed -z -i \
+      -e 's/OpenSSL 3\nif(LINUX)/OpenSSL 3\nif(1)/' \
+      src/vendor/azure-uamqp-c/deps/azure-c-shared-utility/CMakeLists.txt
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    cython
   ];
 
   buildInputs = [
     openssl
-    certifi
-    six
-  ] ++ lib.optionals (!isPy3k) [
-    enum34
   ] ++ lib.optionals stdenv.isDarwin [
     CoreFoundation
     CFNetwork
     Security
   ];
 
-  dontUseCmakeConfigure = true;
-
-  nativeBuildInputs = [
-    cmake
+  propagatedBuildInputs = [
+    certifi
   ];
 
-  # has no tests
-  doCheck = false;
+  LDFLAGS = lib.optionals stdenv.isDarwin [
+    "-L${lib.getLib libcxxabi}/lib"
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  preCheck = ''
+    # remove src module, so tests use the installed module instead
+    rm -r uamqp
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  pythonImportsCheck = [
+    "uamqp"
+  ];
 
   meta = with lib; {
     description = "An AMQP 1.0 client library for Python";

@@ -36,8 +36,8 @@ in
       type = types.bool;
       default = true;
       description =
-        ''
-          Whether to enable the <command>sudo</command> command, which
+        lib.mdDoc ''
+          Whether to enable the {command}`sudo` command, which
           allows non-root users to execute commands as root.
         '';
     };
@@ -45,8 +45,8 @@ in
     security.sudo.package = mkOption {
       type = types.package;
       default = pkgs.sudo;
-      defaultText = "pkgs.sudo";
-      description = ''
+      defaultText = literalExpression "pkgs.sudo";
+      description = lib.mdDoc ''
         Which package to use for `sudo`.
       '';
     };
@@ -55,19 +55,19 @@ in
       type = types.bool;
       default = true;
       description =
-        ''
-          Whether users of the <code>wheel</code> group must
-          provide a password to run commands as super user via <command>sudo</command>.
+        lib.mdDoc ''
+          Whether users of the `wheel` group must
+          provide a password to run commands as super user via {command}`sudo`.
         '';
       };
 
     security.sudo.execWheelOnly = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Only allow members of the <code>wheel</code> group to execute sudo by
+      description = lib.mdDoc ''
+        Only allow members of the `wheel` group to execute sudo by
         setting the executable's permissions accordingly.
-        This prevents users that are not members of <code>wheel</code> from
+        This prevents users that are not members of `wheel` from
         exploiting vulnerabilities in sudo such as CVE-2021-3156.
       '';
     };
@@ -77,21 +77,21 @@ in
       # Note: if syntax errors are detected in this file, the NixOS
       # configuration will fail to build.
       description =
-        ''
+        lib.mdDoc ''
           This string contains the contents of the
-          <filename>sudoers</filename> file.
+          {file}`sudoers` file.
         '';
     };
 
     security.sudo.extraRules = mkOption {
-      description = ''
-        Define specific rules to be in the <filename>sudoers</filename> file.
+      description = lib.mdDoc ''
+        Define specific rules to be in the {file}`sudoers` file.
         More specific rules should come after more general ones in order to
         yield the expected behavior. You can use mkBefore/mkAfter to ensure
         this is the case when configuration options are merged.
       '';
       default = [];
-      example = literalExample ''
+      example = literalExpression ''
         [
           # Allow execution of any command by all users in group sudo,
           # requiring a password.
@@ -114,7 +114,7 @@ in
         options = {
           users = mkOption {
             type = with types; listOf (either str int);
-            description = ''
+            description = lib.mdDoc ''
               The usernames / UIDs this rule should apply for.
             '';
             default = [];
@@ -122,7 +122,7 @@ in
 
           groups = mkOption {
             type = with types; listOf (either str int);
-            description = ''
+            description = lib.mdDoc ''
               The groups / GIDs this rule should apply for.
             '';
             default = [];
@@ -131,7 +131,7 @@ in
           host = mkOption {
             type = types.str;
             default = "ALL";
-            description = ''
+            description = lib.mdDoc ''
               For what host this rule should apply.
             '';
           };
@@ -139,17 +139,17 @@ in
           runAs = mkOption {
             type = with types; str;
             default = "ALL:ALL";
-            description = ''
+            description = lib.mdDoc ''
               Under which user/group the specified command is allowed to run.
 
-              A user can be specified using just the username: <code>"foo"</code>.
-              It is also possible to specify a user/group combination using <code>"foo:bar"</code>
-              or to only allow running as a specific group with <code>":bar"</code>.
+              A user can be specified using just the username: `"foo"`.
+              It is also possible to specify a user/group combination using `"foo:bar"`
+              or to only allow running as a specific group with `":bar"`.
             '';
           };
 
           commands = mkOption {
-            description = ''
+            description = lib.mdDoc ''
               The commands for which the rule should apply.
             '';
             type = with types; listOf (either str (submodule {
@@ -157,17 +157,17 @@ in
               options = {
                 command = mkOption {
                   type = with types; str;
-                  description = ''
+                  description = lib.mdDoc ''
                     A command being either just a path to a binary to allow any arguments,
-                    the full command with arguments pre-set or with <code>""</code> used as the argument,
+                    the full command with arguments pre-set or with `""` used as the argument,
                     not allowing arguments to the command at all.
                   '';
                 };
 
                 options = mkOption {
                   type = with types; listOf (enum [ "NOPASSWD" "PASSWD" "NOEXEC" "EXEC" "SETENV" "NOSETENV" "LOG_INPUT" "NOLOG_INPUT" "LOG_OUTPUT" "NOLOG_OUTPUT" ]);
-                  description = ''
-                    Options for running the command. Refer to the <a href="https://www.sudo.ws/man/1.7.10/sudoers.man.html">sudo manual</a>.
+                  description = lib.mdDoc ''
+                    Options for running the command. Refer to the [sudo manual](https://www.sudo.ws/man/1.7.10/sudoers.man.html).
                   '';
                   default = [];
                 };
@@ -182,8 +182,8 @@ in
     security.sudo.extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = ''
-        Extra configuration text appended to <filename>sudoers</filename>.
+      description = lib.mdDoc ''
+        Extra configuration text appended to {file}`sudoers`.
       '';
     };
   };
@@ -192,6 +192,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = cfg.package.pname != "sudo-rs";
+        message = "The NixOS `sudo` module does not work with `sudo-rs` yet."; }
+    ];
 
     # We `mkOrder 600` so that the default rule shows up first, but there is
     # still enough room for a user to `mkBefore` it.
@@ -216,10 +220,10 @@ in
         ${concatStringsSep "\n" (
           lists.flatten (
             map (
-              rule: if (length rule.commands != 0) then [
+              rule: optionals (length rule.commands != 0) [
                 (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
                 (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
-              ] else []
+              ]
             ) cfg.extraRules
           )
         )}
@@ -245,7 +249,7 @@ in
 
     environment.systemPackages = [ sudo ];
 
-    security.pam.services.sudo = { sshAgentAuth = true; };
+    security.pam.services.sudo = { sshAgentAuth = true; usshAuth = true; };
 
     environment.etc.sudoers =
       { source =

@@ -1,50 +1,152 @@
-{ buildPythonApplication
+{ stdenv
 , lib
+, buildPythonApplication
 , fetchFromGitHub
-, dateutil
-, pyyaml
-, openpyxl
-, xlrd
-, h5py
+# python requirements
+, beautifulsoup4
+, boto3
+, faker
 , fonttools
+, h5py
+, importlib-metadata
 , lxml
+, matplotlib
+, numpy
+, odfpy
+, openpyxl
 , pandas
+, pdfminer-six
+, praw
+, psutil
+, psycopg2
+, pyarrow
 , pyshp
+, pypng
+, python-dateutil
+, pyyaml
+, requests
+, seaborn
 , setuptools
-, withPcap ? true, dpkt ? null, dnslib ? null
+, sh
+, tabulate
+, urllib3
+, vobject
+, wcwidth
+, xlrd
+, xlwt
+, zstandard
+, zulip
+# other
+, git
+, withPcap ? true, dpkt, dnslib
+, withXclip ? stdenv.isLinux, xclip
+, testers
+, visidata
 }:
 buildPythonApplication rec {
   pname = "visidata";
-  version = "2.4";
+  version = "2.11";
 
   src = fetchFromGitHub {
     owner = "saulpw";
     repo = "visidata";
     rev = "v${version}";
-    sha256 = "0mvf2603d9b0s6rh7sl7mg4ipbh0nk05xgh1078mwvx31qjsmq1i";
+    hash = "sha256-G/9paJFJsRfIxMJ2hbuVS7pxCfSUCK69DNV2DHi60qA=";
   };
 
   propagatedBuildInputs = [
-    dateutil
-    pyyaml
+    # from visidata/requirements.txt
+    # packages not (yet) present in nixpkgs are commented
+    python-dateutil
+    pandas
+    requests
+    lxml
     openpyxl
     xlrd
+    xlwt
     h5py
-    fonttools
-    lxml
-    pandas
+    psycopg2
+    boto3
     pyshp
-    setuptools
-  ] ++ lib.optionals withPcap [ dpkt dnslib ];
+    #mapbox-vector-tile
+    pypng
+    fonttools
+    #sas7bdat
+    #xport
+    #savReaderWriter
+    pyyaml
+    #namestand
+    #datapackage
+    pdfminer-six
+    #tabula
+    vobject
+    tabulate
+    wcwidth
+    zstandard
+    odfpy
+    urllib3
+    pyarrow
+    seaborn
+    matplotlib
+    sh
+    psutil
+    numpy
 
-  doCheck = false;
+    #requests_cache
+    beautifulsoup4
+
+    faker
+    praw
+    zulip
+    #pyairtable
+
+    setuptools
+    importlib-metadata
+  ] ++ lib.optionals withPcap [ dpkt dnslib ]
+  ++ lib.optional withXclip xclip;
+
+  nativeCheckInputs = [
+    git
+  ];
+
+  # check phase uses the output bin, which is not possible when cross-compiling
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+
+  checkPhase = ''
+    runHook preCheck
+    # disable some tests which require access to the network
+    rm -f tests/load-http.vd            # http
+    rm -f tests/graph-cursor-nosave.vd  # http
+    rm -f tests/messenger-nosave.vd     # dns
+
+    # tests use git to compare outputs to references
+    git init -b "test-reference"
+    git config user.name "nobody"
+    git config user.email "no@where"
+    git add .
+    git commit -m "test reference"
+
+    substituteInPlace dev/test.sh --replace "bin/vd" "$out/bin/vd"
+    bash dev/test.sh
+    runHook postCheck
+  '';
+  postInstall = ''
+    python dev/zsh-completion.py
+    install -Dm644 _visidata -t $out/share/zsh/site-functions
+  '';
+
+  pythonImportsCheck = ["visidata"];
+
+  passthru.tests.version = testers.testVersion {
+    package = visidata;
+    version = "v${version}";
+  };
 
   meta = {
-    inherit version;
     description = "Interactive terminal multitool for tabular data";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.raskin ];
-    homepage = "http://visidata.org/";
+    maintainers = with lib.maintainers; [ raskin markus1189 ];
+    homepage = "https://visidata.org/";
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }

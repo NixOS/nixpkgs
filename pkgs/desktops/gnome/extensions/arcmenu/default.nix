@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-arcmenu";
-  version = "10";
+  version = "44";
 
   src = fetchFromGitLab {
     owner = "arcmenu";
     repo = "ArcMenu";
-    rev = "v${version}";
-    sha256 = "04kn3gnjz1wakp0pyiwm0alf0pwsralhis36miif9i6l5iv6a394";
+    rev = "v44.1";
+    sha256 = "sha256-+aPBRxjL5lgdm96SbRZnp+9o9nl2N8Rb3dehMAv883c=";
   };
 
   patches = [
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];
 
-  uuid = "arcmenu@arcmenu.com";
+  passthru = {
+    extensionUuid = "arcmenu@arcmenu.com";
+    extensionPortalSlug = "arcmenu";
+  };
 
   meta = with lib; {
     description = "Application menu for GNOME Shell, designed to provide a more traditional user experience and workflow";

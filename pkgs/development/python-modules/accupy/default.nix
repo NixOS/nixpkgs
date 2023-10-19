@@ -1,6 +1,7 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pythonOlder
 , mpmath
 , numpy
@@ -11,17 +12,19 @@
 , pytestCheckHook
 , matplotlib
 , dufte
-, isPy27
+, perfplot
 }:
 
 buildPythonPackage rec {
   pname = "accupy";
-  version = "0.3.4";
-  disabled = isPy27;
+  version = "0.3.6";
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "36506aca53154528997ac22aee6292c83da0f4850bb375c149512b5284bd4948";
+  src = fetchFromGitHub {
+    owner = "nschloe";
+    repo = pname;
+    rev = version;
+    sha256 = "0sxkwpp2xy2jgakhdxr4nh1cspqv8l89kz6s832h05pbpyc0n767";
   };
 
   nativeBuildInputs = [
@@ -38,7 +41,8 @@ buildPythonPackage rec {
     pyfma
   ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
-  checkInputs = [
+  nativeCheckInputs = [
+    perfplot
     pytestCheckHook
     matplotlib
     dufte
@@ -52,6 +56,10 @@ buildPythonPackage rec {
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
+
+  # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.
+  # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
+  env.MPLBACKEND = lib.optionalString stdenv.isDarwin "Agg";
 
   # performance tests aren't useful to us and disabling them allows us to
   # decouple ourselves from an unnecessary build dep
@@ -67,6 +75,6 @@ buildPythonPackage rec {
     description = "Accurate sums and dot products for Python";
     homepage = "https://github.com/nschloe/accupy";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

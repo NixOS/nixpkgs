@@ -9,9 +9,9 @@ let
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
     ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
-    ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
     ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
     ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
+    ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
   '';
 
   plugins = [
@@ -19,8 +19,17 @@ let
     "${wrappedPlugins}/libexec/netdata/plugins.d"
   ] ++ cfg.extraPluginPaths;
 
+  configDirectory = pkgs.runCommand "netdata-config-d" { } ''
+    mkdir $out
+    ${concatStringsSep "\n" (mapAttrsToList (path: file: ''
+        mkdir -p "$out/$(dirname ${path})"
+        ln -s "${file}" "$out/${path}"
+      '') cfg.configDir)}
+  '';
+
   localConfig = {
     global = {
+      "config directory" = "/etc/netdata/conf.d";
       "plugins directory" = concatStringsSep " " plugins;
     };
     web = {
@@ -40,30 +49,30 @@ let
 in {
   options = {
     services.netdata = {
-      enable = mkEnableOption "netdata";
+      enable = mkEnableOption (lib.mdDoc "netdata");
 
       package = mkOption {
         type = types.package;
         default = pkgs.netdata;
-        defaultText = "pkgs.netdata";
-        description = "Netdata package to use.";
+        defaultText = literalExpression "pkgs.netdata";
+        description = lib.mdDoc "Netdata package to use.";
       };
 
       user = mkOption {
         type = types.str;
         default = "netdata";
-        description = "User account under which netdata runs.";
+        description = lib.mdDoc "User account under which netdata runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "netdata";
-        description = "Group under which netdata runs.";
+        description = lib.mdDoc "Group under which netdata runs.";
       };
 
       configText = mkOption {
         type = types.nullOr types.lines;
-        description = "Verbatim netdata.conf, cannot be combined with config.";
+        description = lib.mdDoc "Verbatim netdata.conf, cannot be combined with config.";
         default = null;
         example = ''
           [global]
@@ -77,22 +86,22 @@ in {
         enable = mkOption {
           type = types.bool;
           default = true;
-          description = ''
+          description = lib.mdDoc ''
             Whether to enable python-based plugins
           '';
         };
         extraPackages = mkOption {
           type = types.functionTo (types.listOf types.package);
           default = ps: [];
-          defaultText = "ps: []";
-          example = literalExample ''
+          defaultText = literalExpression "ps: []";
+          example = literalExpression ''
             ps: [
               ps.psycopg2
               ps.docker
               ps.dnspython
             ]
           '';
-          description = ''
+          description = lib.mdDoc ''
             Extra python packages available at runtime
             to enable additional python plugins.
           '';
@@ -102,17 +111,17 @@ in {
       extraPluginPaths = mkOption {
         type = types.listOf types.path;
         default = [ ];
-        example = literalExample ''
+        example = literalExpression ''
           [ "/path/to/plugins.d" ]
         '';
-        description = ''
+        description = lib.mdDoc ''
           Extra paths to add to the netdata global "plugins directory"
           option.  Useful for when you want to include your own
           collection scripts.
-          </para><para>
+
           Details about writing a custom netdata plugin are available at:
-          <link xlink:href="https://docs.netdata.cloud/collectors/plugins.d/"/>
-          </para><para>
+          <https://docs.netdata.cloud/collectors/plugins.d/>
+
           Cannot be combined with configText.
         '';
       };
@@ -120,8 +129,8 @@ in {
       config = mkOption {
         type = types.attrsOf types.attrs;
         default = {};
-        description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
-        example = literalExample ''
+        description = lib.mdDoc "netdata.conf configuration as nix attributes. cannot be combined with configText.";
+        example = literalExpression ''
           global = {
             "debug log" = "syslog";
             "access log" = "syslog";
@@ -130,14 +139,57 @@ in {
         '';
       };
 
+      configDir = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = lib.mdDoc ''
+          Complete netdata config directory except netdata.conf.
+          The default configuration is merged with changes
+          defined in this option.
+          Each top-level attribute denotes a path in the configuration
+          directory as in environment.etc.
+          Its value is the absolute path and must be readable by netdata.
+          Cannot be combined with configText.
+        '';
+        example = literalExpression ''
+          "health_alarm_notify.conf" = pkgs.writeText "health_alarm_notify.conf" '''
+            sendmail="/path/to/sendmail"
+          ''';
+          "health.d" = "/run/secrets/netdata/health.d";
+        '';
+      };
+
+      claimTokenFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        description = lib.mdDoc ''
+          If set, automatically registers the agent using the given claim token
+          file.
+        '';
+      };
+
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable reporting of anonymous usage statistics to Netdata Inc. via either
           Google Analytics (in versions prior to 1.29.4), or Netdata Inc.'s
           self-hosted PostHog (in versions 1.29.4 and later).
-          See: <link xlink:href="https://learn.netdata.cloud/docs/agent/anonymous-statistics"/>
+          See: <https://learn.netdata.cloud/docs/agent/anonymous-statistics>
+        '';
+      };
+
+      deadlineBeforeStopSec = mkOption {
+        type = types.int;
+        default = 120;
+        description = lib.mdDoc ''
+          In order to detect when netdata is misbehaving, we run a concurrent task pinging netdata (wait-for-netdata-up)
+          in the systemd unit.
+
+          If after a while, this task does not succeed, we stop the unit and mark it as failed.
+
+          You can control this deadline in seconds with this option, it's useful to bump it
+          if you have (1) a lot of data (2) doing upgrades (3) have low IOPS/throughput.
         '';
       };
     };
@@ -150,22 +202,34 @@ in {
         }
       ];
 
+    environment.etc."netdata/netdata.conf".source = configFile;
+    environment.etc."netdata/conf.d".source = configDirectory;
+
     systemd.services.netdata = {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ curl gawk iproute2 which ])
+      path = (with pkgs; [ curl gawk iproute2 which procps bash ])
         ++ lib.optional cfg.python.enable (pkgs.python3.withPackages cfg.python.extraPackages)
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
+        NETDATA_PIPENAME = "/run/netdata/ipc";
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
       };
+      restartTriggers = [
+        config.environment.etc."netdata/netdata.conf".source
+        config.environment.etc."netdata/conf.d".source
+      ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
-        TimeoutStopSec = 60;
+        ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
+          while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
+        '';
+
+        TimeoutStopSec = cfg.deadlineBeforeStopSec;
         Restart = "on-failure";
         # User and group
         User = cfg.user;
@@ -206,49 +270,70 @@ in {
         PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
-      };
+      } // (lib.optionalAttrs (cfg.claimTokenFile != null) {
+        LoadCredential = [
+          "netdata_claim_token:${cfg.claimTokenFile}"
+        ];
+
+        ExecStartPre = pkgs.writeShellScript "netdata-claim" ''
+          set -euo pipefail
+
+          if [[ -f /var/lib/netdata/cloud.d/claimed_id ]]; then
+            # Already registered
+            exit
+          fi
+
+          exec ${cfg.package}/bin/netdata-claim.sh \
+            -token="$(< "$CREDENTIALS_DIRECTORY/netdata_claim_token")" \
+            -url=https://app.netdata.cloud \
+            -daemon-not-running
+        '';
+      });
     };
 
     systemd.enableCgroupAccounting = true;
 
-    security.wrappers."apps.plugin" = {
-      source = "${cfg.package}/libexec/netdata/plugins.d/apps.plugin.org";
-      capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
-      owner = cfg.user;
-      group = cfg.group;
-      permissions = "u+rx,g+x,o-rwx";
-    };
+    security.wrappers = {
+      "apps.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/apps.plugin.org";
+        capabilities = "cap_dac_read_search,cap_sys_ptrace+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
 
-    security.wrappers."cgroup-network" = {
-      source = "${cfg.package}/libexec/netdata/plugins.d/cgroup-network.org";
-      capabilities = "cap_setuid+ep";
-      owner = cfg.user;
-      group = cfg.group;
-      permissions = "u+rx,g+x,o-rwx";
-    };
+      "cgroup-network" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/cgroup-network.org";
+        capabilities = "cap_setuid+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
 
-    security.wrappers."freeipmi.plugin" = {
-      source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
-      capabilities = "cap_dac_override,cap_fowner+ep";
-      owner = cfg.user;
-      group = cfg.group;
-      permissions = "u+rx,g+x,o-rwx";
-    };
+      "perf.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/perf.plugin.org";
+        capabilities = "cap_sys_admin+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
 
-    security.wrappers."perf.plugin" = {
-      source = "${cfg.package}/libexec/netdata/plugins.d/perf.plugin.org";
-      capabilities = "cap_sys_admin+ep";
-      owner = cfg.user;
-      group = cfg.group;
-      permissions = "u+rx,g+x,o-rwx";
-    };
+      "slabinfo.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
+        capabilities = "cap_dac_override+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
 
-    security.wrappers."slabinfo.plugin" = {
-      source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
-      capabilities = "cap_dac_override+ep";
-      owner = cfg.user;
-      group = cfg.group;
-      permissions = "u+rx,g+x,o-rwx";
+    } // optionalAttrs (cfg.package.withIpmi) {
+      "freeipmi.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
+        capabilities = "cap_dac_override,cap_fowner+ep";
+        owner = cfg.user;
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
     };
 
     security.pam.loginLimits = [
@@ -258,6 +343,7 @@ in {
 
     users.users = optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
+        group = defaultUser;
         isSystemUser = true;
       };
     };

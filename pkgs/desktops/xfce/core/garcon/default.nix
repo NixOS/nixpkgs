@@ -3,16 +3,17 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "garcon";
-  version = "4.16.1";
+  version = "4.18.1";
 
-  sha256 = "134nm1754i12axl4si60fdwkbk2v6z108nrj9c0lb5in1zmqwa9a";
+  sha256 = "sha256-0EcmI+C8B7oQl/cpbFeLjof1fnUi09nZAA5uJ0l15V4=";
 
   nativeBuildInputs = [ gobject-introspection ];
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util ];
 
-  meta = {
+  meta = with lib; {
     description = "Xfce menu support library";
-    license = with lib.licenses; [ lgpl2Only fdl11Only ];
+    license = with licenses; [ lgpl2Only fdl11Only ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

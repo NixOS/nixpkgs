@@ -1,39 +1,43 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, genericUpdater
-, common-updater-scripts
+, nix-update-script
 , makeWrapper
 , openssh
+, libxcrypt
+, testers
+, shellhub-agent
 }:
 
 buildGoModule rec {
   pname = "shellhub-agent";
-  version = "0.7.0";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "shellhub-io";
     repo = "shellhub";
     rev = "v${version}";
-    sha256 = "07gfi0l9l19cy7304v18knbfhs7zqhfglw0jjhcmxa79dg6wzdia";
+    hash = "sha256-+2YYTnQDU9AkCjWvUEsddgu8GVJk0VUCMkEeWhW/u0w=";
   };
 
   modRoot = "./agent";
 
-  vendorSha256 = "0rcb384yxk1dsip15qh32rkd07i2zzr1k53wcfpnrgi6jpixvsvi";
+  vendorHash = "sha256-lZ7W7YpigcVaLO9HoS5V379nyKHemRh9Z2NjlZbJcPg=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.AgentVersion=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.AgentVersion=v${version}" ];
 
   passthru = {
-    updateScript = genericUpdater {
-      inherit pname version;
-      versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
+    updateScript = nix-update-script { };
+
+    tests.version = testers.testVersion {
+      package = shellhub-agent;
+      command = "agent --version";
+      version = "v${version}";
     };
   };
 
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ libxcrypt ];
 
   postInstall = ''
     wrapProgram $out/bin/agent --prefix PATH : ${lib.makeBinPath [ openssh ]}

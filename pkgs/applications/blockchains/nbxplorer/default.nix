@@ -1,54 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, linkFarmFromDrvs, makeWrapper,
-  dotnetPackages, dotnetCorePackages
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
 }:
 
-let
-  deps = import ./deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-      inherit sha256;
-    };
-  };
-  dotnetSdk = dotnetCorePackages.sdk_3_1;
-in
-
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "nbxplorer";
-  version = "2.1.51";
+  version = "2.3.66";
 
   src = fetchFromGitHub {
     owner = "dgarage";
     repo = "NBXplorer";
     rev = "v${version}";
-    sha256 = "sha256-tvuuoDZCSDFa8gAVyH+EP1DLtdPfbkr+w5lSxZkzZXg=";
+    sha256 = "sha256-DcSY2hnzJexsrRw4k57uOBfDkveEvXccN8GDUR/QmKw=";
   };
 
-  nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget makeWrapper ];
+  projectFile = "NBXplorer/NBXplorer.csproj";
+  nugetDeps = ./deps.nix;
 
-  buildPhase = ''
-    export HOME=$TMP/home
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
-    nuget sources Add -Name tmpsrc -Source $TMP/nuget
-    nuget init ${linkFarmFromDrvs "deps" deps} $TMP/nuget
-
-    dotnet restore --source $TMP/nuget NBXplorer/NBXplorer.csproj
-    dotnet publish --no-restore --output $out/share/$pname -c Release NBXplorer/NBXplorer.csproj
+  # macOS has a case-insensitive filesystem, so these two can be the same file
+  postFixup = ''
+    mv $out/bin/{NBXplorer,nbxplorer} || :
   '';
-
-  installPhase = ''
-    makeWrapper $out/share/$pname/NBXplorer $out/bin/$pname \
-      --set DOTNET_ROOT "${dotnetSdk}"
-  '';
-
-  dontStrip = true;
 
   meta = with lib; {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
-    maintainers = with maintainers; [ kcalvinalvin earvstedt ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

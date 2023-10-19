@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
    ];
 
    preInstall = ''
-      substituteInPlace unipicker --replace "/etc/unipickerrc" "$out/etc/unipickerrc"
-      substituteInPlace unipickerrc --replace "/usr/local" "$out"
+      substituteInPlace unipicker \
+        --replace "/etc/unipickerrc" "$out/etc/unipickerrc" \
+        --replace "fzf" "${fzf}/bin/fzf"
+      substituteInPlace unipickerrc \
+        --replace "/usr/local" "$out" \
+        --replace "fzf" "${fzf}/bin/fzf"
    '';
 
    makeFlags = [
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "A CLI utility for searching unicode characters by description and optionally copying them to clipboard";
     homepage = "https://github.com/jeremija/unipicker";
     license = licenses.mit;
-    maintainers = with maintainers; [ kiyengar ];
-    platforms = with platforms; unix;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.unix;
    };
 }

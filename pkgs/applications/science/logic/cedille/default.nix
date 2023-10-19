@@ -4,7 +4,6 @@
 , alex
 , happy
 , Agda
-, buildPlatform
 , buildPackages
 , ghcWithPackages
 }:
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
 
   LANG = "en_US.UTF-8";
   LOCALE_ARCHIVE =
-    lib.optionalString (buildPlatform.libc == "glibc")
+    lib.optionalString (stdenv.buildPlatform.libc == "glibc")
       "${buildPackages.glibcLocales}/lib/locale/locale-archive";
 
   postPatch = ''
@@ -52,5 +51,10 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ marsam mpickering ];
     platforms = platforms.unix;
+
+    # Broken due to Agda update.  See
+    # https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881107449.
+    broken = true;
+    hydraPlatforms = platforms.none;
   };
 }

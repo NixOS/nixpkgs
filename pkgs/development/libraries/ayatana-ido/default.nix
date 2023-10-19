@@ -1,20 +1,20 @@
 { lib, stdenv, fetchFromGitHub
-, pkg-config, autoreconfHook
-, gtk3, gobject-introspection, gtk-doc, vala
+, pkg-config, cmake
+, gtk3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ayatana-ido";
-  version = "0.8.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = pname;
     rev = version;
-    sha256 = "sha256-nJ4F2faK0XZPj9GzUk3Ueap5h6rALFXISHqFQ30RuoU=";
+    sha256 = "sha256-uecUyqSL02SRdlLbWIy0luHACTFoyMXQ6rOIYuisZsw=";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook gtk-doc vala gobject-introspection ];
+  nativeBuildInputs = [ pkg-config cmake ];
 
   buildInputs = [ gtk3 ];
 

@@ -41,24 +41,24 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
-        Whether to enable a user service for the Emacs daemon. Use <literal>emacsclient</literal> to connect to the
-        daemon. If <literal>true</literal>, <varname>services.emacs.install</varname> is
-        considered <literal>true</literal>, whatever its value.
+      description = lib.mdDoc ''
+        Whether to enable a user service for the Emacs daemon. Use `emacsclient` to connect to the
+        daemon. If `true`, {var}`services.emacs.install` is
+        considered `true`, whatever its value.
       '';
     };
 
     install = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Whether to install a user service for the Emacs daemon. Once
         the service is started, use emacsclient to connect to the
         daemon.
 
         The service must be manually started for each user with
         "systemctl --user start emacs" or globally through
-        <varname>services.emacs.enable</varname>.
+        {var}`services.emacs.enable`.
       '';
     };
 
@@ -66,8 +66,8 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.emacs;
-      defaultText = "pkgs.emacs";
-      description = ''
+      defaultText = literalExpression "pkgs.emacs";
+      description = lib.mdDoc ''
         emacs derivation to use.
       '';
     };
@@ -75,9 +75,18 @@ in
     defaultEditor = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         When enabled, configures emacsclient to be the default editor
         using the EDITOR environment variable.
+      '';
+    };
+
+    startWithGraphical = mkOption {
+      type = types.bool;
+      default = config.services.xserver.enable;
+      defaultText = literalExpression "config.services.xserver.enable";
+      description = lib.mdDoc ''
+        Start emacs with the graphical session instead of any session. Without this, emacs clients will not be able to create frames in the graphical session.
       '';
     };
   };
@@ -92,12 +101,18 @@ in
         ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
         Restart = "always";
       };
-    } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
+
+      unitConfig = optionalAttrs cfg.startWithGraphical {
+        After = "graphical-session.target";
+      };
+    } // optionalAttrs cfg.enable {
+      wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
+    };
 
     environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
 
-    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
+    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
   };
 
-  meta.doc = ./emacs.xml;
+  meta.doc = ./emacs.md;
 }

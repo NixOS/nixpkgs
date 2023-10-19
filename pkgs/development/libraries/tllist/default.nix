@@ -1,26 +1,31 @@
 { stdenv
 , lib
-, fetchgit
+, fetchFromGitea
 , meson
 , ninja
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tllist";
-  version = "1.0.5";
+  version = "1.1.0";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/tllist.git";
-    rev = version;
-    sha256 = "wJEW7haQBtCR2rffKOFyqH3aq0eBr6H8T6gnBs2bNRg=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "tllist";
+    rev = finalAttrs.version;
+    hash = "sha256-4WW0jGavdFO3LX9wtMPzz3Z1APCPgUQOktpmwAM0SQw=";
   };
 
   nativeBuildInputs = [ meson ninja ];
+
+  mesonBuildType = "release";
 
   doCheck = true;
 
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/tllist";
+    changelog = "https://codeberg.org/dnkl/tllist/releases/tag/${version}";
     description = "C header file only implementation of a typed linked list";
     longDescription = ''
       Most C implementations of linked list are untyped. That is, their data
@@ -33,9 +38,8 @@ stdenv.mkDerivation rec {
       primitive data types are supported as well as aggregated ones such as
       structs, enums and unions.
     '';
-
     license = licenses.mit;
     maintainers = with maintainers; [ fionera AndersonTorres ];
     platforms = platforms.all;
   };
-}
+})

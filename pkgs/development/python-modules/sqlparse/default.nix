@@ -1,29 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, flit-core
 , installShellFiles
 , pytestCheckHook
 , isPy3k
+
+# for passthru.tests
+, django
+, django_4
+, django-silk
+, pgadmin4
 }:
 
 buildPythonPackage rec {
   pname = "sqlparse";
-  version = "0.4.1";
+  version = "0.4.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f91fd2e829c44362cbcfab3e9ae12e22badaa8a29ad5ff599f9ec109f0454e8";
+    hash = "sha256-1EYYPoS4NJ+jBh8P5/BsqUumW0JpRv/r5uPoKVMyQgw=";
   };
 
-  nativeBuildInputs = [ installShellFiles ];
+  format = "pyproject";
 
-  checkInputs = [ pytestCheckHook ];
+  nativeBuildInputs = [ flit-core installShellFiles ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   postInstall = ''
     installManPage docs/sqlformat.1
   '';
+
+  passthru.tests = {
+    inherit django django_4 django-silk pgadmin4;
+  };
 
   meta = with lib; {
     description = "Non-validating SQL parser for Python";

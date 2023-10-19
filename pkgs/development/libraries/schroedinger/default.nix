@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, orc, pkg-config, fetchpatch, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "schroedinger-1.0.11";
+stdenv.mkDerivation rec {
+  pname = "schroedinger";
+  version = "1.0.11";
 
   src = fetchurl {
-    url = "https://download.videolan.org/contrib/schroedinger-1.0.11.tar.gz";
+    url = "https://download.videolan.org/contrib/${pname}-${version}.tar.gz";
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
@@ -26,7 +27,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "An implementation of the Dirac video codec in ANSI C";
     homepage = "https://sourceforge.net/projects/schrodinger/";
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = [ ];
     license = [ licenses.mpl11 licenses.lgpl2 licenses.mit ];
     platforms = platforms.unix;
   };

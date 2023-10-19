@@ -4,13 +4,13 @@ let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.13.5";
+  version = "3.13.7";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "sha256-2tSX/ET2lZsi0mVB3KnbnBXMSTRsneGUA8w6mZ6TmlY="
-      else "sha256-RdxG4nGXTTSY+P5oZu4uP5l7gKcU9C6uIILyNldSK50=";
+      then "sha256-d1pXMamAmAHkyPkGbNm8ViobNoVTE5wSSfKgdA1QBB4="
+      else "sha256-aMEDOnvBeKfzG8lDFhU8I5DYgG53IsCDBMV2MUyJi2g=";
   };
 
   buildInputs = [ stdenv.cc.cc postgresql.lib ];
@@ -58,6 +58,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn gerschtli ];

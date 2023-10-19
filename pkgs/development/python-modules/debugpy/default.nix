@@ -1,38 +1,38 @@
 { lib
 , stdenv
 , buildPythonPackage
+, pythonOlder
+, pythonAtLeast
 , fetchFromGitHub
 , substituteAll
+, fetchpatch
 , gdb
+, django
 , flask
+, gevent
 , psutil
 , pytest-timeout
-, pytest_xdist
+, pytest-xdist
 , pytestCheckHook
 , requests
-, isPy27
-, django
-, gevent
+, llvmPackages
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.3.0";
+  version = "1.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
-    owner = "Microsoft";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-YGzc9mMIzPTmUgIXuZROLdYKjUm69x9SR+JtYRVpn24=";
+    owner = "microsoft";
+    repo = "debugpy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FW1RDmj4sDBS0q08C82ErUd16ofxJxgVaxfykn/wVBA=";
   };
 
   patches = [
-    # Hard code GDB path (used to attach to process)
-    (substituteAll {
-      src = ./hardcode-gdb.patch;
-      inherit gdb;
-    })
-
     # Use nixpkgs version instead of versioneer
     (substituteAll {
       src = ./hardcode-version.patch;
@@ -48,6 +48,18 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+  ] ++ lib.optionals stdenv.isLinux [
+    # Hard code GDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-gdb.patch;
+      inherit gdb;
+    })
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Hard code LLDB path (used to attach to process)
+    (substituteAll {
+      src = ./hardcode-lldb.patch;
+      inherit (llvmPackages) lldb;
+    })
   ];
 
   # Remove pre-compiled "attach" libraries and recompile for host platform
@@ -57,44 +69,66 @@ buildPythonPackage rec {
     cd src/debugpy/_vendored/pydevd/pydevd_attach_to_process
     rm *.so *.dylib *.dll *.exe *.pdb
     ${stdenv.cc}/bin/c++ linux_and_mac/attach.cpp -Ilinux_and_mac -fPIC -nostartfiles ${{
-      "x86_64-linux"  = "-shared -m64 -o attach_linux_amd64.so";
-      "i686-linux"    = "-shared -m32 -o attach_linux_x86.so";
-      "x86_64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch x86_64 -o attach_x86_64.dylib";
-      "i686-darwin"   = "-std=c++11 -lc -D_REENTRANT -dynamiclib -arch i386 -o attach_x86.dylib";
-    }.${stdenv.hostPlatform.system}}
+      "x86_64-linux"   = "-shared -o attach_linux_amd64.so";
+      "i686-linux"     = "-shared -o attach_linux_x86.so";
+      "aarch64-linux"  = "-shared -o attach_linux_arm64.so";
+      "x86_64-darwin"  = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_x86_64.dylib";
+      "i686-darwin"    = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_x86.dylib";
+      "aarch64-darwin" = "-std=c++11 -lc -D_REENTRANT -dynamiclib -o attach_arm64.dylib";
+    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")}
   )'';
 
-  checkInputs = [
+  nativeCheckInputs = [
+    django
     flask
+    gevent
     psutil
     pytest-timeout
-    pytest_xdist
+    pytest-xdist
     pytestCheckHook
     requests
-  ] ++ lib.optionals (!isPy27) [
-    django
-    gevent
   ];
+
+  preCheck = ''
+    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
+    export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
+  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
+  '';
+
+  postCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    unset no_proxy
+  '';
 
   # Override default arguments in pytest.ini
-  pytestFlagsArray = [ "--timeout=0" "-n=$NIX_BUILD_CORES" ];
-
-  disabledTests = lib.optionals isPy27 [
-    # django 1.11 is the last version to support Python 2.7
-    # and is no longer built in nixpkgs
-    "django"
-
-    # gevent fails to import zope.interface with Python 2.7
-    "gevent"
+  pytestFlagsArray = [
+    "--timeout=0"
   ];
 
-  pythonImportsCheck = [ "debugpy" ];
+  # Fixes hanging tests on Darwin
+  __darwinAllowLocalNetworking = true;
+
+  disabledTests = [
+    # https://github.com/microsoft/debugpy/issues/1241
+    "test_flask_breakpoint_multiproc"
+
+    # DeprecationWarning: pkg_resources is deprecated as an API
+    # Supposedly fixed in https://github.com/microsoft/debugpy/pull/1374,
+    # but still fails for a nix build
+    "test_gevent"
+  ];
+
+  pythonImportsCheck = [
+    "debugpy"
+  ];
 
   meta = with lib; {
     description = "An implementation of the Debug Adapter Protocol for Python";
     homepage = "https://github.com/microsoft/debugpy";
+    changelog = "https://github.com/microsoft/debugpy/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "i686-darwin" "aarch64-darwin" ];
   };
 }

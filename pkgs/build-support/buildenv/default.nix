@@ -1,6 +1,5 @@
 # buildEnv creates a tree of symlinks to the specified paths.  This is
-# a fork of the buildEnv in the Nix distribution.  Most changes should
-# eventually be merged back into the Nix distribution.
+# a fork of the hardcoded buildEnv in the Nix distribution.
 
 { buildPackages, runCommand, lib, substituteAll }:
 
@@ -62,7 +61,7 @@ runCommand name
         # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
         # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
         # aren't expected to have multiple outputs.
-        (if drv.outputUnspecified or false
+        (if (! drv ? outputSpecified || ! drv.outputSpecified)
             && drv.meta.outputsToInstall or null != null
           then map (outName: drv.${outName}) drv.meta.outputsToInstall
           else [ drv ])

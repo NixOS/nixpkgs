@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, curl, hdf5, netcdf
+{ lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes, python3
 , # build, install and link to a CDI library [default=no]
   enable_cdi_lib ? false
 , # build a completely statically linked CDO binary
@@ -9,22 +9,24 @@
 
 stdenv.mkDerivation rec {
   pname = "cdo";
-  version = "1.9.7.1";
+  version = "2.2.2";
 
   # Dependencies
-  buildInputs = [ curl netcdf hdf5 ];
+  buildInputs = [ curl netcdf hdf5 python3 ];
 
   src = fetchurl {
-    url = "https://code.mpimet.mpg.de/attachments/download/20124/${pname}-${version}.tar.gz";
-    sha256 = "0b4n8dwxfsdbz4jflsx0b75hwapdf1rp14p48dfr7ksv0qp9aw9p";
+    url = "https://code.mpimet.mpg.de/attachments/download/28882/${pname}-${version}.tar.gz";
+    sha256 = "sha256-QZx3MVJEAZr0GilsBQZvR0zMv5Tev6rp4hBtpRvHyTc=";
   };
 
- # Configure phase
  configureFlags = [
-   "--with-netcdf=${netcdf}" "--with-hdf5=${hdf5}"]
-   ++ lib.optional (enable_cdi_lib) "--enable-cdi-lib"
-   ++ lib.optional (enable_all_static) "--enable-all-static"
-   ++ lib.optional (enable_cxx) "--enable-cxx";
+    "--with-netcdf=${netcdf}"
+    "--with-hdf5=${hdf5}"
+    "--with-eccodes=${eccodes}"
+  ]
+   ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
+   ++ lib.optional enable_all_static "--enable-all-static"
+   ++ lib.optional enable_cxx "--enable-cxx";
 
   meta = with lib; {
     description = "Collection of command line Operators to manipulate and analyse Climate and NWP model Data";
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
       There are more than 600 operators available.
     '';
     homepage = "https://code.mpimet.mpg.de/projects/cdo/";
-    license = licenses.gpl2;
+    license = licenses.bsd3;
     maintainers = [ maintainers.ltavard ];
     platforms = with platforms; linux ++ darwin;
   };

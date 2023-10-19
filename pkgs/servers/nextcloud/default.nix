@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenvNoCC, fetchurl, nixosTests
+, nextcloud27Packages
+, nextcloud26Packages
+}:
 
 let
   generic = {
-    version, sha256,
-    eol ? false, extraVulnerabilities ? []
-  }: stdenv.mkDerivation rec {
+    version, hash
+  , eol ? false, extraVulnerabilities ? []
+  , packages
+  }: stdenvNoCC.mkDerivation rec {
     pname = "nextcloud";
     inherit version;
 
     src = fetchurl {
       url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-      inherit sha256;
+      inherit hash;
     };
 
-    passthru.tests = nixosTests.nextcloud;
+    passthru = {
+      tests = nixosTests.nextcloud;
+      inherit packages;
+    };
 
     installPhase = ''
       runHook preInstall
@@ -23,9 +30,10 @@ let
     '';
 
     meta = with lib; {
+      changelog = "https://nextcloud.com/changelog/#${lib.replaceStrings [ "." ] [ "-" ] version}";
       description = "Sharing solution for files, calendars, contacts and more";
       homepage = "https://nextcloud.com";
-      maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
+      maintainers = with maintainers; [ schneefux bachp globin ma27 ];
       license = licenses.agpl3Plus;
       platforms = with platforms; unix;
       knownVulnerabilities = extraVulnerabilities
@@ -33,36 +41,30 @@ let
     };
   };
 in {
-  nextcloud18 = throw ''
-    Nextcloud v18 has been removed from `nixpkgs` as the support for it was dropped
-    by upstream in 2021-01. Please upgrade to at least Nextcloud v19 by
-    declaring
+  nextcloud25 = throw ''
+    Nextcloud v25 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2023-10. Please upgrade to at least Nextcloud v26 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud19;
+        services.nextcloud.package = pkgs.nextcloud26;
 
     in your NixOS config.
 
-    [1] https://docs.nextcloud.com/server/18/admin_manual/release_schedule.html
+    WARNING: if you were on Nextcloud 24 you have to upgrade to Nextcloud 25
+    first on 23.05 because Nextcloud doesn't support upgrades across multiple major versions!
   '';
 
-  # FIXME(@Ma27) remove on 21.05
-  nextcloud19 = generic {
-    version = "19.0.6";
-    sha256 = "sha256-pqqIayE0OyTailtd2zeYi+G1APjv/YHqyO8jCpq7KJg=";
-    extraVulnerabilities = [
-      "Nextcloud 19 is still supported, but CVE-2020-8259 & CVE-2020-8152 are unfixed! Please note that both CVEs only affect the file encryption module which is turned off by default. Alternatively, `pkgs.nextcloud20` can be used."
-    ];
+  nextcloud26 = generic {
+    version = "26.0.7";
+    hash = "sha256-vtJEqLlNE7YWqSdAUhZwwdZ9Q8SAR3I/sTGAv/bUjpI=";
+    packages = nextcloud26Packages;
   };
 
-  nextcloud20 = generic {
-    version = "20.0.7";
-    sha256 = "sha256-jO2Ct3K/CvZ9W+EyPkD5d0KbwKK8yGQJXvx4dnUAtys=";
+  nextcloud27 = generic {
+    version = "27.1.2";
+    hash = "sha256-B0KyR6ruC3BE2wBi8KkUqnczjHp9j+faCRcUfXZolyE=";
+    packages = nextcloud27Packages;
   };
 
-  nextcloud21 = generic {
-    version = "21.0.2";
-    sha256 = "5e5b38109a3485db5fd2d248f24478eabe6c0790ec10b030acbbee207d5511fe";
-  };
-  # tip: get she sha with:
+  # tip: get the sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }

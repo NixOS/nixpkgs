@@ -1,44 +1,57 @@
-{ buildPythonPackage
-, fetchPypi
-, isPy27
+{ lib
 , aiohttp
-, pytest
+, async-timeout
+, buildPythonPackage
+, fetchFromGitHub
 , pytest-aiohttp
-, pygments
-, lib
+, pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "0.2.2";
-  format = "flit";
-  disabled = isPy27;
+  version = "1.1.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "01a0msjh4w58fd7jplmblh0hwgpzwjs5xkgqz3d0p5yv3cykwjwf";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "aio-libs";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FHdEVt/XXmuTrPAETyod3fHJIK1wg957/+QMAhZG1xk=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=aiojobs/ --cov=tests/" ""
+  '';
+
   nativeBuildInputs = [
-    pygments
+    setuptools
   ];
 
   propagatedBuildInputs = [
     aiohttp
+    async-timeout
   ];
 
-  checkInputs = [
-    pytest
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    pytestCheckHook
     pytest-aiohttp
   ];
 
-  checkPhase = ''
-    pytest tests
-  '';
+  pythonImportsCheck = [
+    "aiojobs"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/aio-libs/aiojobs";
     description = "Jobs scheduler for managing background task (asyncio)";
+    homepage = "https://github.com/aio-libs/aiojobs";
+    changelog = "https://github.com/aio-libs/aiojobs/blob/v${version}/CHANGES.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai ];
   };

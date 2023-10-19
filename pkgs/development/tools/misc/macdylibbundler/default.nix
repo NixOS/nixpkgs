@@ -1,14 +1,14 @@
 { lib, stdenv, makeWrapper, fetchFromGitHub, cctools }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "macdylibbundler";
-  version = "20180825";
+  version = "1.0.4";
 
   src = fetchFromGitHub {
     owner = "auriamg";
     repo = "macdylibbundler";
-    rev = "ce13cb585ead5237813b85e68fe530f085fc0a9e";
-    sha256 = "149p3dcnap4hs3nhq5rfvr3m70rrb5hbr5xkj1h0gsfp0d7gvxnj";
+    rev = version;
+    sha256 = "0j4ij48jf5izgymzxxaakf6vc50w9q0761yir6nfj1n6qlnrlidf";
   };
 
   nativeBuildInputs = [ makeWrapper ];

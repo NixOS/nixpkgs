@@ -1,4 +1,4 @@
-{ stdenv, lib, buildFHSUserEnv, writeScript, makeDesktopItem }:
+{ stdenv, lib, buildFHSEnv, writeScript, makeDesktopItem }:
 
 let platforms = [ "i686-linux" "x86_64-linux" ]; in
 
@@ -24,13 +24,18 @@ let
     comment = "Sync your files across computers and to the web";
     desktopName = "Dropbox";
     genericName = "File Synchronizer";
-    categories = "Network;FileTransfer;";
-    startupNotify = "false";
+    categories = [ "Network" "FileTransfer" ];
+    startupNotify = false;
+    icon = "dropbox";
   };
 in
 
-buildFHSUserEnv {
+buildFHSEnv {
   name = "dropbox";
+
+  # dropbox-cli (i.e. nautilus-dropbox) needs the PID to confirm dropbox is running.
+  # Dropbox's internal limit-to-one-instance check also relies on the PID.
+  unsharePid = false;
 
   targetPkgs = pkgs: with pkgs; with xorg; [
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
@@ -81,5 +86,6 @@ buildFHSUserEnv {
     license     = licenses.unfree;
     maintainers = with maintainers; [ ttuegel ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
+    mainProgram = "dropbox";
   };
 }

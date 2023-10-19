@@ -7,7 +7,7 @@
 , astunparse
 , typing-extensions
 , pytestCheckHook
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     }
   )];
 
-  checkInputs = [ pytestCheckHook pytestcov ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
   propagatedBuildInputs = [ matchpy numpy astunparse typing-extensions ];
 
   # Tests must be run from outside the source directory
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
     license = licenses.bsd0;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

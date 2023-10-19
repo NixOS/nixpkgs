@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , python
 , llvm
@@ -12,17 +12,23 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.36.0";
+  # The main dependency of llvmlite is numba, which we currently package an
+  # untagged version of it (for numpy>1.25 support). That numba version
+  # requires at least this version of llvmlite (also not yet officially
+  # released, but at least tagged).
+  version = "0.41.0dev0";
 
   disabled = isPyPy || !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "765128fdf5f149ed0b889ffbe2b05eb1717f8e20a5c87fa2b4018fbcce0fcfc9";
+  src = fetchFromGitHub {
+    owner = "numba";
+    repo = "llvmlite";
+    rev = "v${version}";
+    hash = "sha256-fsH+rqouweNENU+YlWr7m0bC0YdreQLNp1n2rwrOiFw=";
   };
 
   nativeBuildInputs = [ llvm ];
-  propagatedBuildInputs = [ ] ++ lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = lib.optional (pythonOlder "3.4") enum34;
 
   # Disable static linking
   # https://github.com/numba/llvmlite/issues/93
@@ -31,10 +37,12 @@ buildPythonPackage rec {
 
     substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
   '';
+
   # Set directory containing llvm-config binary
   preConfigure = ''
     export LLVM_CONFIG=${llvm.dev}/bin/llvm-config
   '';
+
   checkPhase = ''
     ${python.executable} runtests.py
   '';

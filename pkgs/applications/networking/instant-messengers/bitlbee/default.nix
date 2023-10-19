@@ -1,22 +1,22 @@
-{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python2
+{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python3
 , enableLibPurple ? false, pidgin ? null
 , enablePam ? false, pam ? null
 }:
 
-with lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.6";
+  pname = "bitlbee";
+  version = "3.6";
 
   src = fetchurl {
-    url = "mirror://bitlbee/src/${name}.tar.gz";
+    url = "mirror://bitlbee/src/bitlbee-${version}.tar.gz";
     sha256 = "0zhhcbcr59sx9h4maf8zamzv2waya7sbsl7w74gbyilvy93dw5cz";
   };
 
-  nativeBuildInputs = [ pkg-config ] ++ optional doCheck check;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional doCheck check;
 
-  buildInputs = [ gnutls libotr python2 ]
-    ++ optional enableLibPurple pidgin
-    ++ optional enablePam pam;
+  buildInputs = [ gnutls libotr python3 ]
+    ++ lib.optional enableLibPurple pidgin
+    ++ lib.optional enablePam pam;
 
   propagatedBuildInputs = [ glib ];
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     "--otr=1"
     "--ssl=gnutls"
     "--pidfile=/var/lib/bitlbee/bitlbee.pid"
-  ] ++ optional enableLibPurple "--purple=1"
-    ++ optional enablePam "--pam=1";
+  ] ++ lib.optional enableLibPurple "--purple=1"
+    ++ lib.optional enablePam "--pam=1";
 
   patches = [
     # This should be dropped once the issue is fixed upstream.
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "IRC instant messaging gateway";
 
     longDescription = ''
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitlbee.org/";
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ lassulus pSub ];
     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

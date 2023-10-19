@@ -1,25 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, kernel
+, bc
+}:
 
 stdenv.mkDerivation rec {
-  pname = "rtl8821ce-${kernel.version}";
-  version = "unstable-2021-03-21";
+  pname = "rtl8821ce";
+  version = "${kernel.version}-unstable-2023-05-04";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "897e7c4c15dd5a0a569745dc223d969a26ff5bfc";
-    sha256 = "0935dzz0njxh78wfd17yqah1dxn6b3kaszvzclwwrwwhwcrdp80j";
+    rev = "a478095a45d8aa957b45be4f9173c414efcacc6f";
+    hash = "sha256-xqVxylKhL7vbC7m5Av6ven5i7OBkS2RHxrKzLOVBlgE=";
   };
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace '$(shell uname -r)' "${kernel.modDirVersion}" \
       --replace /sbin/depmod \# \
       --replace '$(MODDESTDIR)' "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
@@ -28,12 +32,14 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Realtek rtl8821ce driver";
     homepage = "https://github.com/tomaspinho/rtl8821ce";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
-    maintainers = with maintainers; [ hhm ];
+    maintainers = with maintainers; [ hhm ivar ];
+    broken = stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 }

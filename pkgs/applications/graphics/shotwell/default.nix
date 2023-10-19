@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -6,11 +7,11 @@
 , libexif
 , libgphoto2
 , libwebp
-, libsoup
+, libsoup_3
 , libxml2
 , vala
 , sqlite
-, webkitgtk
+, webkitgtk_4_1
 , pkg-config
 , gnome
 , gst_all_1
@@ -30,22 +31,20 @@
 , wrapGAppsHook
 , gobject-introspection
 , itstool
-, libgdata
-, libchamplain
 , libsecret
+, libportal-gtk3
 , gsettings-desktop-schemas
-, python3
 }:
 
 # for dependencies see https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling
 
 stdenv.mkDerivation rec {
   pname = "shotwell";
-  version = "0.31.3";
+  version = "0.32.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1wkahbnnfxmi1jc5zmm3h761nrnkdks8lk0rj38bfkwg90h6zqwd";
+    sha256 = "sha256-pd5T6HMhbfj1mWyWgnvtlj1sY1TgReF5bf0ybGGIwmM=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +55,6 @@ stdenv.mkDerivation rec {
     itstool
     gettext
     desktop-file-utils
-    python3
     wrapGAppsHook
     gobject-introspection
   ];
@@ -66,12 +64,14 @@ stdenv.mkDerivation rec {
     libexif
     libgphoto2
     libwebp
-    libsoup
+    libsoup_3
     libxml2
     sqlite
-    webkitgtk
+    webkitgtk_4_1
     gst_all_1.gstreamer
+    gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libgee
     libgudev
     gexiv2
@@ -85,20 +85,14 @@ stdenv.mkDerivation rec {
     librest
     gcr
     gnome.adwaita-icon-theme
-    libgdata
-    libchamplain
     libsecret
+    libportal-gtk3
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py # patchShebangs requires executable file
-    patchShebangs build-aux/meson/postinstall.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
-      versionPolicy = "none";
+      versionPolicy = "odd-unstable";
     };
   };
 

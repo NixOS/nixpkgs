@@ -1,64 +1,83 @@
-{ fetchFromGitHub, lib, python3Packages }:
+{ lib, python3Packages, fetchPypi, installShellFiles }:
 
-let
-  python3Packages2 = python3Packages.override {
-    overrides = self: super: {
-      arrow = self.callPackage ../../python-modules/arrow/2.nix { };
-    };
-  };
-in
-let
-  python3Packages = python3Packages2; # two separate let … in to avoid infinite recursion
-in
 python3Packages.buildPythonApplication rec {
   pname = "backblaze-b2";
-  version = "2.4.0";
+  version = "3.9.0";
+  format = "setuptools";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit version;
     pname = "b2";
-    sha256 = "sha256-nNQDdSjUolj3PjWRn1fPBAEtPlgeent2PxzHqwH1Z6s=";
+    hash = "sha256-Z9LQapWl0zblcAyMOfKhn5/O1H6+tmgiPQfAB241jqU=";
   };
 
   postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace 'phx-class-registry==4.0.5' 'phx-class-registry'
+    substituteInPlace requirements.txt \
+      --replace 'tabulate==0.8.10' 'tabulate'
     substituteInPlace setup.py \
       --replace 'setuptools_scm<6.0' 'setuptools_scm'
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+    python3Packages.setuptools-scm
+  ];
+
   propagatedBuildInputs = with python3Packages; [
+    argcomplete
+    arrow
     b2sdk
-    class-registry
     phx-class-registry
     setuptools
     docutils
     rst2ansi
+    tabulate
+    tqdm
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools-scm
+  nativeCheckInputs = with python3Packages; [
+    backoff
+    more-itertools
+    pexpect
+    pytestCheckHook
   ];
 
-  checkInputs = with python3Packages; [ pytestCheckHook ];
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   disabledTests = [
+    # require network
     "test_files_headers"
     "test_integration"
+
+    # fixed by https://github.com/Backblaze/B2_Command_Line_Tool/pull/915
+    "TestRmConsoleTool"
+  ];
+
+  disabledTestPaths = [
+    # requires network
+    "test/integration/test_b2_command_line.py"
+
+    # it's hard to make it work on nix
+    "test/integration/test_autocomplete.py"
   ];
 
   postInstall = ''
     mv "$out/bin/b2" "$out/bin/backblaze-b2"
 
-    sed 's/b2/backblaze-b2/' -i contrib/bash_completion/b2
-
-    mkdir -p "$out/share/bash-completion/completions"
-    cp contrib/bash_completion/b2 "$out/share/bash-completion/completions/backblaze-b2"
+    installShellCompletion --cmd backblaze-b2 \
+      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2) \
+      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete backblaze-b2)
   '';
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
+    changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka kevincox ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ hrdinka kevincox tomhoule ];
   };
 }

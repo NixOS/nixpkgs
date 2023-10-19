@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonApplication
 , fetchPypi
 , fixtures
@@ -8,28 +8,30 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+, testtools
 }:
 
 buildPythonApplication rec {
   pname = "bashate";
-  version = "2.0.0";
+  version = "2.1.1";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05qsaaqfpvr6h4g19prbkpznwb9a4dwzyzivdzh9x80cgkq0r6gb";
+    sha256 = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     pbr
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     fixtures
     mock
     pytestCheckHook
+    testtools
   ];
 
   pythonImportsCheck = [ "bashate" ];

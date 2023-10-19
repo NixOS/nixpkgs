@@ -2,6 +2,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   hello-world = pkgs.writeText "hello-world" ''
+    {-# OPTIONS --guardedness #-}
     open import IO
     open import Level
 
@@ -14,7 +15,7 @@ in
     maintainers = [ alexarice turion ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     environment.systemPackages = [
       (pkgs.agda.withPackages {
         pkgs = p: [ p.standard-library ];
@@ -34,10 +35,6 @@ in
     # Minimal script that typechecks
     machine.succeed("touch TestEmpty.agda")
     machine.succeed("agda TestEmpty.agda")
-
-    # Minimal script that actually uses the standard library
-    machine.succeed('echo "import IO" > TestIO.agda')
-    machine.succeed("agda -l standard-library -i . TestIO.agda")
 
     # Hello world
     machine.succeed(

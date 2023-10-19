@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, coreutils, pkg-config, glib, jsoncpp }:
 
 stdenv.mkDerivation rec {
-  name = "libevdevc";
+  pname = "libevdevc";
   version = "2.0.1";
   src = fetchFromGitHub {
     owner = "hugegreenbug";
@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
+
+  # causes redefinition of _FORTIFY_SOURCE
+  hardeningDisable = [ "fortify3" ];
 
   meta = with lib; {
     description = "ChromiumOS libevdev. Renamed to avoid conflicts with the standard libevdev found in Linux distros";

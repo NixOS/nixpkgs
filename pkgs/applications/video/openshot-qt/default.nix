@@ -1,46 +1,71 @@
-{ lib, stdenv, mkDerivationWith, fetchFromGitHub, fetchpatch
-, doxygen, python3Packages, libopenshot
-, wrapGAppsHook, gtk3
-, qtsvg }:
+{ lib
+, stdenv
+, mkDerivationWith
+, fetchFromGitHub
+, fetchpatch
+, doxygen
+, gtk3
+, libopenshot
+, python3
+, qtbase
+, qtsvg
+, wrapGAppsHook
+}:
 
-mkDerivationWith python3Packages.buildPythonApplication rec {
+mkDerivationWith python3.pkgs.buildPythonApplication rec {
   pname = "openshot-qt";
-  version = "2.5.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "0qc5i0ay6j2wab1whl41sjb71cj02pg6y79drf7asrprq8b2rmfq";
+    hash = "sha256-h4R2txi038m6tzdKYiXIB8CiqWt2MFFRNerp1CFP5as=";
   };
 
-  nativeBuildInputs = [ doxygen wrapGAppsHook ];
+  nativeBuildInputs = [
+    doxygen
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [
+    gtk3
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5_with_qtwebkit requests sip_4 httplib2 pyzmq ];
-
-  dontWrapGApps = true;
-  dontWrapQtApps = true;
+  propagatedBuildInputs = with python3.pkgs; [
+    httplib2
+    libopenshot
+    pyqtwebengine
+    pyzmq
+    requests
+    sip_4
+  ];
 
   preConfigure = ''
     # tries to create caching directories during install
     export HOME=$(mktemp -d)
   '';
 
+  doCheck = false;
+
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
   postFixup = ''
     wrapProgram $out/bin/openshot-qt \
   ''
   # Fix toolbar icons on Darwin
   + lib.optionalString stdenv.isDarwin ''
-      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
-  ''
-  + ''
-      "''${gappsWrapperArgs[@]}" \
-      "''${qtWrapperArgs[@]}"
+    --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
+  '' + ''
+    "''${gappsWrapperArgs[@]}" \
+    "''${qtWrapperArgs[@]}"
   '';
 
-  doCheck = false;
+  passthru = {
+    inherit libopenshot;
+    inherit (libopenshot) libopenshot-audio;
+  };
 
   meta = with lib; {
     homepage = "http://openshot.org/";

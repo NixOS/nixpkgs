@@ -5,6 +5,7 @@
 , libGL
 , zlib
 , wxGTK
+, gtk3
 , libX11
 , gettext
 , glew
@@ -19,7 +20,7 @@
 , pcre
 , libpthreadstubs
 , libXdmcp
-, lndir
+, unixODBC
 
 , util-linux
 , libselinux
@@ -27,15 +28,16 @@
 , libthai
 , libdatrie
 , libxkbcommon
-, epoxy
+, libepoxy
 , dbus
 , at-spi2-core
 , libXtst
+, pcre2
+, libdeflate
 
-, swig
+, swig4
 , python
 , wxPython
-, opencascade
 , opencascade-occt
 , libngspice
 , valgrind
@@ -44,26 +46,19 @@
 , baseName
 , kicadSrc
 , kicadVersion
-, i18n
-, withOCE
-, withOCC
 , withNgspice
 , withScripting
+, withI18n
 , debug
 , sanitizeAddress
 , sanitizeThreads
-, withI18n
 }:
 
-assert lib.asserts.assertMsg (!(withOCE && stdenv.isAarch64)) "OCE fails a test on Aarch64";
-assert lib.asserts.assertMsg (!(withOCC && withOCE))
-  "Only one of OCC and OCE may be enabled";
-assert lib.assertMsg (!(stable && (sanitizeAddress || sanitizeThreads)))
-  "Only kicad-unstable(-small) supports address/thread sanitation";
 assert lib.assertMsg (!(sanitizeAddress && sanitizeThreads))
   "'sanitizeAddress' and 'sanitizeThreads' are mutually exclusive, use one.";
+
 let
-  inherit (lib) optional optionals;
+  inherit (lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
   pname = "kicad-base";
@@ -71,37 +66,44 @@ stdenv.mkDerivation rec {
 
   src = kicadSrc;
 
+  patches = [
+    # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
+    ./writable.patch
+  ];
+
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
-  postPatch = ''
-    substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" "${builtins.substring 0 10 src.rev}" \
+  postPatch = lib.optionalString (!stable) ''
+    substituteInPlace cmake/KiCadVersion.cmake \
+      --replace "unknown" "${builtins.substring 0 10 src.rev}"
+
+    substituteInPlace cmake/CreateGitVersionHeader.cmake \
+      --replace "0000000000000000000000000000000000000000" "${src.rev}"
   '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
-  cmakeFlags = optionals (withScripting) [
-    "-DKICAD_SCRIPTING=ON"
-    "-DKICAD_SCRIPTING_MODULES=ON"
-    "-DKICAD_SCRIPTING_PYTHON3=ON"
-    "-DKICAD_SCRIPTING_WXPYTHON_PHOENIX=ON"
-  ]
-  ++ optional (!withScripting)
-    "-DKICAD_SCRIPTING=OFF"
-  ++ optional (withNgspice) "-DKICAD_SPICE=ON"
-  ++ optional (!withOCE) "-DKICAD_USE_OCE=OFF"
-  ++ optional (!withOCC) "-DKICAD_USE_OCC=OFF"
-  ++ optionals (withOCE) [
-    "-DKICAD_USE_OCE=ON"
-    "-DOCE_DIR=${opencascade}"
-  ]
-  ++ optionals (withOCC) [
-    "-DKICAD_USE_OCC=ON"
+  cmakeFlags = [
+    "-DKICAD_USE_EGL=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
   ]
+  ++ optionals (stable) [
+    # https://gitlab.com/kicad/code/kicad/-/issues/12491
+    # should be resolved in the next release
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
+  ]
+  ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
+  ++ optionals (!withScripting) [
+    "-DKICAD_SCRIPTING_WXPYTHON=OFF"
+  ]
+  ++ optionals (withI18n) [
+    "-DKICAD_BUILD_I18N=ON"
+  ]
+  ++ optionals (!doInstallCheck) [
+    "-DKICAD_BUILD_QA_TESTS=OFF"
+  ]
   ++ optionals (debug) [
-    "-DCMAKE_BUILD_TYPE=Debug"
     "-DKICAD_STDLIB_DEBUG=ON"
     "-DKICAD_USE_VALGRIND=ON"
   ]
@@ -112,12 +114,13 @@ stdenv.mkDerivation rec {
     "-DKICAD_SANITIZE_THREADS=ON"
   ];
 
+  cmakeBuildType = if debug then "Debug" else "Release";
+
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
     pkg-config
-    lndir
   ]
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
@@ -128,10 +131,11 @@ stdenv.mkDerivation rec {
     libthai
     libdatrie
     libxkbcommon
-    epoxy
-    dbus.daemon
+    libepoxy
+    dbus
     at-spi2-core
     libXtst
+    pcre2
   ];
 
   buildInputs = [
@@ -140,7 +144,7 @@ stdenv.mkDerivation rec {
     zlib
     libX11
     wxGTK
-    wxGTK.gtk
+    gtk3
     pcre
     libXdmcp
     gettext
@@ -151,33 +155,42 @@ stdenv.mkDerivation rec {
     curl
     openssl
     boost
+    swig4
+    python
+    unixODBC
+    libdeflate
+    opencascade-occt
   ]
-  ++ optionals (withScripting) [ swig python wxPython ]
+  ++ optional (withScripting) wxPython
   ++ optional (withNgspice) libngspice
-  ++ optional (withOCE) opencascade
-  ++ optional (withOCC) opencascade-occt
-  ++ optional (debug) valgrind
-  ;
+  ++ optional (debug) valgrind;
+
+  # some ngspice tests attempt to write to $HOME/.cache/
+  # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
+  # but failing tests still attempt to create $HOME
+  # and the newer CLI tests seem to also use $HOME...
+  HOME = "$TMP";
 
   # debug builds fail all but the python test
-  # 5.1.x fails the eeschema test
-  doInstallCheck = !debug && !stable;
+  doInstallCheck = !(debug);
   installCheckTarget = "test";
 
-  dontStrip = debug;
+  pythonForTests = python.withPackages(ps: with ps; [
+    numpy
+    pytest
+    cairosvg
+    pytest-image-diff
+  ]);
+  nativeInstallCheckInputs = optional (!stable) pythonForTests;
 
-  postInstall = optional (withI18n) ''
-    mkdir -p $out/share
-    lndir ${i18n}/share $out/share
-  '';
+  dontStrip = debug;
 
   meta = {
     description = "Just the built source without the libraries";
     longDescription = ''
-      Just the build products, optionally with the i18n linked in
-      the libraries are passed via an env var in the wrapper, default.nix
+      Just the build products, the libraries are passed via an env var in the wrapper, default.nix
     '';
-    homepage = "https://www.kicad-pcb.org/";
+    homepage = "https://www.kicad.org/";
     license = lib.licenses.agpl3;
     platforms = lib.platforms.all;
   };

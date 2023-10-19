@@ -10,19 +10,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ser2net";
-  version = "4.3.3";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "cminyard";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p8iQifCf/IXXPdbjB3pgcw8FgkqRLShHSSeTzJ83Ecg=";
+    hash = "sha256-AmTJfjLpnPHtPMKP9djKTZozNPkojPqRJ3eoypY53bA=";
   };
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -31,8 +29,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Serial to network connection server";
-    homepage = "https://sourceforge.net/projects/ser2net/";
-    license = licenses.gpl2;
+    homepage = "https://github.com/cminyard/ser2net";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ emantor ];
     platforms = with platforms; linux;
   };

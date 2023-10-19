@@ -16,7 +16,6 @@ let
     ''
     [settings]
     RunMode = Daemon
-    User = bitlbee
     ConfigDir = ${cfg.configDir}
     DaemonInterface = ${cfg.interface}
     DaemonPort = ${toString cfg.portNumber}
@@ -50,7 +49,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to run the BitlBee IRC to other chat network gateway.
           Running it allows you to access the MSN, Jabber, Yahoo! and ICQ chat
           networks via an IRC client.
@@ -60,17 +59,17 @@ in
       interface = mkOption {
         type = types.str;
         default = "127.0.0.1";
-        description = ''
-          The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
-          only clients on the local host can connect to it; if `0.0.0.0', clients
+        description = lib.mdDoc ''
+          The interface the BitlBee daemon will be listening to.  If `127.0.0.1`,
+          only clients on the local host can connect to it; if `0.0.0.0`, clients
           can access it from any network interface.
         '';
       };
 
       portNumber = mkOption {
         default = 6667;
-        type = types.int;
-        description = ''
+        type = types.port;
+        description = lib.mdDoc ''
           Number of the port BitlBee will be listening to.
         '';
       };
@@ -78,7 +77,7 @@ in
       authBackend = mkOption {
         default = "storage";
         type = types.enum [ "storage" "pam" ];
-        description = ''
+        description = lib.mdDoc ''
           How users are authenticated
             storage -- save passwords internally
             pam -- Linux PAM authentication
@@ -88,7 +87,7 @@ in
       authMode = mkOption {
         default = "Open";
         type = types.enum [ "Open" "Closed" "Registered" ];
-        description = ''
+        description = lib.mdDoc ''
           The following authentication modes are available:
             Open -- Accept connections from anyone, use NickServ for user authentication.
             Closed -- Require authorization (using the PASS command during login) before allowing the user to connect at all.
@@ -99,7 +98,7 @@ in
       hostName = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Normally, BitlBee gets a hostname using getsockname(). If you have a nicer
           alias for your BitlBee daemon, you can set it here and BitlBee will identify
           itself with that name instead.
@@ -109,8 +108,8 @@ in
       plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.bitlbee-facebook ]";
-        description = ''
+        example = literalExpression "[ pkgs.bitlbee-facebook ]";
+        description = lib.mdDoc ''
           The list of bitlbee plugins to install.
         '';
       };
@@ -118,8 +117,8 @@ in
       libpurple_plugins = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = literalExample "[ pkgs.purple-matrix ]";
-        description = ''
+        example = literalExpression "[ pkgs.purple-matrix ]";
+        description = lib.mdDoc ''
           The list of libpurple plugins to install.
         '';
       };
@@ -127,7 +126,7 @@ in
       configDir = mkOption {
         default = "/var/lib/bitlbee";
         type = types.path;
-        description = ''
+        description = lib.mdDoc ''
           Specify an alternative directory to store all the per-user configuration
           files.
         '';
@@ -136,7 +135,7 @@ in
       protocols = mkOption {
         default = "";
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           This option allows to remove the support of protocol, even if compiled
           in. If nothing is given, there are no restrictions.
         '';
@@ -145,7 +144,7 @@ in
       extraSettings = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Will be inserted in the Settings section of the config file.
         '';
       };
@@ -153,7 +152,7 @@ in
       extraDefaults = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Will be inserted in the Default section of the config file.
         '';
       };
@@ -166,24 +165,18 @@ in
 
   config =  mkMerge [
     (mkIf config.services.bitlbee.enable {
-      users.users.bitlbee = {
-        uid = bitlbeeUid;
-        description = "BitlBee user";
-        home = "/var/lib/bitlbee";
-        createHome = true;
-      };
-
-      users.groups.bitlbee = {
-        gid = config.ids.gids.bitlbee;
-      };
-
       systemd.services.bitlbee = {
         environment.PURPLE_PLUGIN_PATH = purple_plugin_path;
         description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.User = "bitlbee";
-        serviceConfig.ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
+
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "bitlbee";
+          ReadWritePaths = [ cfg.configDir ];
+          ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
+        };
       };
 
       environment.systemPackages = [ bitlbeePkg ];

@@ -5,16 +5,22 @@
 
 buildGoModule rec {
   pname = "htmltest";
-  version = "0.14.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "wjdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z2j54ywim1nl10vidcnbwhywyzanj4qd93ai533808wrm3ghwb6";
+    sha256 = "sha256-8tkk476kGEfHo3XGu3/0r6fhX1c4vkYiUACpw0uEu2g=";
   };
 
-  vendorSha256 = "0zx3ii9crick647kslzwg4d39li6jds938f9j9dp287rhrlzjfbm";
+  vendorHash = "sha256-dTn5aYb5IHFbksmhkXSTJtI0Gnn8Uz0PMZPFzFKMo38=";
+
+  ldflags = [
+    "-w"
+    "-s"
+    "-X main.version=${version}"
+  ];
 
   # tests require network access
   doCheck = false;

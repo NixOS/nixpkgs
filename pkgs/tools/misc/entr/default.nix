@@ -1,25 +1,24 @@
-{ lib, stdenv, fetchurl, coreutils, ncurses }:
+{ lib, stdenv, fetchurl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "entr";
-  version = "4.9";
+  version = "5.4";
 
   src = fetchurl {
     url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
-    sha256 = "sha256-4lak0vvkb2EyRggzukR+ZdfzW6nQsmXnxBUDl8xEBaI=";
+    hash = "sha256-SR3e0sw/Hc2NJvSWpMezqZa5HHqyCIPKN1A3o5giH54=";
   };
 
   postPatch = ''
-    substituteInPlace Makefile.bsd --replace /bin/echo echo
     substituteInPlace entr.c --replace /bin/cat ${coreutils}/bin/cat
-    substituteInPlace entr.c --replace /usr/bin/clear ${ncurses.out}/bin/clear
     substituteInPlace entr.1 --replace /bin/cat cat
-    substituteInPlace entr.1 --replace /usr/bin/clear clear
   '';
   dontAddPrefix = true;
   doCheck = true;
   checkTarget = "test";
   installFlags = [ "PREFIX=$(out)" ];
+
+  TARGET_OS = stdenv.hostPlatform.uname.system;
 
   meta = with lib; {
     homepage = "https://eradman.com/entrproject/";

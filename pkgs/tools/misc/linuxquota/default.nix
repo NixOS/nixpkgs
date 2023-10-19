@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, e2fsprogs, openldap, pkg-config }:
 
 stdenv.mkDerivation rec {
-  version = "4.05";
+  version = "4.09";
   pname = "quota";
 
   src = fetchurl {
     url = "mirror://sourceforge/linuxquota/quota-${version}.tar.gz";
-    sha256 = "1fbsrxhhf1ls7i025db7p66yzjr0bqa2c63cni217v8l21fmnfzg";
+    sha256 = "sha256-nNrKFUvJKvwxF/Dl9bMgjdX4RYOvHPBhw5uqCiuxQvk=";
   };
 
   outputs = [ "out" "dev" "doc" "man" ];

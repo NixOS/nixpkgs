@@ -2,18 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fuse-overlayfs";
-  version = "1.5.0";
+  version = "1.13";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/gdmrQhYsE4a/1sxtJ5IfVUWjh08wTVrOr4V7Fkn1i0=";
+    hash = "sha256-ngpC1KtUsIJOfpJ9dSqZn9XhKkJSpp2/6RBz/RlZ+A0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ fuse3 ];
+
+  enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
 

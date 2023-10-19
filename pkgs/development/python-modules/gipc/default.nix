@@ -1,19 +1,34 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , gevent
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "1.1.1";
+  version = "1.4.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f9a9d557e65e17bab8d7ff727ee3f1935e25bd52b01e63c23c7b3b52415728a5";
+  src = fetchFromGitHub {
+    owner = "jgehrcke";
+    repo = "gipc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-T5TqLanODyzJGyjDZz+75bbz3THxoobYnfJFQxAB76E=";
   };
 
-  propagatedBuildInputs = [ gevent ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "gevent>=1.5,<=21.12.0" "gevent>=1.5"
+  '';
+
+  propagatedBuildInputs = [
+    gevent
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "gevent-cooperative child processes and IPC";
@@ -27,8 +42,6 @@ buildPythonPackage rec {
     '';
     homepage = "http://gehrcke.de/gipc";
     license = licenses.mit;
-    # gipc only has support for older versions of gevent
-    broken = versionOlder "1.6" gevent.version;
   };
 
 }

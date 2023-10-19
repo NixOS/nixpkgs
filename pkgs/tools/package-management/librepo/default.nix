@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.13.0";
+  version = "1.15.1";
   pname = "librepo";
 
   outputs = [ "out" "dev" "py" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "rpm-software-management";
     repo = "librepo";
     rev = version;
-    sha256 = "sha256-gK1pkcZAJVXx0cYGs8PA4iPSMOwgJZI9Hqrrs1ZITDo=";
+    sha256 = "sha256-XVjVu+UTIDbrKHmfJ2zZBLp/h0cLCZFxv/XZ0Iy8VPI=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     description = "Library providing C and Python (libcURL like) API for downloading linux repository metadata and packages";
     homepage = "https://rpm-software-management.github.io/librepo/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];
   };
 }

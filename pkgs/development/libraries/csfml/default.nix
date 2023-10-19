@@ -1,17 +1,13 @@
 { lib, stdenv, fetchFromGitHub, cmake, sfml }:
 
-let
-  version = "2.5";
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "csfml";
-  inherit version;
+  version = "2.5.2";
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";
     rev   = version;
-    sha256 = "071magxif5nrdddzk2z34czqmz1dfws4d7dqynb2zpn7cwhwxcpm";
+    sha256 = "sha256-A5C/4SnxUX7mW1wkPWJWX3dwMhrJ79DkBuZ7UYzTOqE=";
   };
   nativeBuildInputs = [ cmake ];
   buildInputs = [ sfml ];

@@ -1,13 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, unittest2
 , colander
 , sqlalchemy
 }:
 
 buildPythonPackage rec {
-  pname = "ColanderAlchemy";
+  pname = "colanderclchemy";
   version = "0.3.4";
 
   src = fetchPypi {

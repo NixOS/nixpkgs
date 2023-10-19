@@ -1,58 +1,27 @@
-{ lib, stdenv, fetchurl, tcl, tk, libX11, zlib, makeWrapper, makeDesktopItem }:
+{ lib, fetchurl, tcl, tk, libX11, zlib, makeWrapper, which, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "scid-vs-pc";
-  version = "4.21";
+  version = "4.24";
 
   src = fetchurl {
     url = "mirror://sourceforge/scidvspc/scid_vs_pc-${version}.tgz";
-    sha256 = "1lsm5s2hlhqbmwm6f38jlg2kc4j6lwp86lg6z3w6nc3jibzgvsay";
+    hash = "sha256-x4Ljn1vaXrue16kUofWAH2sDNYC8h3NvzFjffRo0EhA=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ tcl tk libX11 zlib ];
-
-  prePatch = ''
-    sed -i -e '/^ *set headerPath *{/a ${tcl}/include ${tk}/include' \
-           -e '/^ *set libraryPath *{/a ${tcl}/lib ${tk}/lib' \
-           -e '/^ *set x11Path *{/a ${libX11}/lib/' \
-           configure
-
-    sed -i -e '/^ *set scidShareDir/s|\[file.*|"'"$out/share"'"|' \
-      tcl/config.tcl
+  postPatch = ''
+    substituteInPlace configure Makefile.conf \
+      --replace "~/.fonts" "$out/share/fonts/truetype/Scid" \
+      --replace "which fc-cache" "false"
   '';
 
-  # configureFlags = [
-  #   "BINDIR=$(out)/bin"
-  #   "SHAREDIR=$(out)/share"
-  #   "FONTDIR=$(out)/fonts"
-  # ];
+  nativeBuildInputs = [ makeWrapper which ];
+  buildInputs = [ tk libX11 zlib ];
 
-  preConfigure = ''configureFlags="
-    BINDIR=$out/bin
-    SHAREDIR=$out/share
-    FONTDIR=$out/fonts"
-  '';
-
-  patches = [
-    ./0001-put-fonts-in-out.patch
+  configureFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "SHAREDIR=${placeholder "out"}/share"
   ];
-
-  hardeningDisable = [ "format" ];
-
-  dontPatchShebangs = true;
-
-  postFixup = ''
-    sed -i -e '1c#!'"$out"'/bin/tcscid' "$out/bin/scidpgn"
-    sed -i -e '1c#!${tk}/bin/wish' "$out/bin/sc_remote"
-    sed -i -e '1c#!'"$out"'/bin/tkscid' "$out/bin/scid"
-
-    for cmd in $out/bin/* ; do
-      wrapProgram "$cmd" \
-        --set TCLLIBPATH "${tcl}/${tcl.libdir}" \
-        --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
-    done
-  '';
 
   postInstall = ''
     mkdir -p $out/share/applications
@@ -68,15 +37,14 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     icon = "scid";
     exec = "scid";
-    categories = "Game;BoardGame;";
+    categories = [ "Game" "BoardGame" ];
   };
 
   meta = with lib; {
     description = "Chess database with play and training functionality";
-    homepage = "http://scidvspc.sourceforge.net/";
+    homepage = "https://scidvspc.sourceforge.net/";
     license = lib.licenses.gpl2;
     maintainers = [ maintainers.paraseba ];
     platforms = lib.platforms.linux;
   };
 }
-

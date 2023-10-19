@@ -1,23 +1,23 @@
 { lib, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
-, qtbase, qtmultimedia, qttranslations, SDL, gtest
+, qtbase, qtmultimedia, qttools, SDL, gtest
 , dfu-util, avrdude
 }:
 
 mkDerivation rec {
   pname = "opentx";
-  version = "2.3.11";
+  version = "2.3.15";
 
   src = fetchFromGitHub {
     owner = "opentx";
     repo = "opentx";
     rev = "release/${version}";
-    sha256 = "sha256-0B41TkTs4sNGYzpMGbsgCLT2ThkP6foeuwLUIzKKGkU=";
+    sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
-  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
 
-  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
+  buildInputs = [ qtbase qtmultimedia SDL ];
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -27,10 +27,12 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
-    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
+
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   meta = with lib; {
@@ -41,7 +43,7 @@ mkDerivation rec {
       running radio simulators.
     '';
     homepage = "https://www.open-tx.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ elitak lopsided98 ];
   };

@@ -1,31 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, nixosTests, python3, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper, nixosTests, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "wsdd";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "christgau";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0444xh1r5wd0zfch1hg1f9s4cw68srrm87hqx16qvlgx6jmz5j0p";
+    hash = "sha256-xfZVGi3OxuRI+Zh6L3Ru4J4j5BB1EAN3fllRCVA/c5o=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  outputs = [ "out" "man" ];
+
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   buildInputs = [ python3 ];
 
   patches = [
-    (fetchpatch {
-      # https://github.com/christgau/wsdd/issues/72
-      name = "fix_send_messages_using_correct_socket.patch";
-      url = "https://github.com/christgau/wsdd/commit/1ed74fe73a9fe2e2720859e2822116d65e4ffa5b.patch";
-      sha256 = "1n9bqvh20nhnvnc5pxvzf9kk8nky6rmbmfryg65lfmr1hmg676zg";
-    })
+    # Increase timeout to socket urlopen
+    # See https://github.com/christgau/wsdd/issues/80#issuecomment-76848906
+    ./increase_timeout.patch
   ];
 
   installPhase = ''
-    install -Dm0755 src/wsdd.py $out/bin/wsdd
+    install -Dm0555 src/wsdd.py $out/bin/wsdd
+    installManPage man/wsdd.8
     wrapProgram $out/bin/wsdd --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 

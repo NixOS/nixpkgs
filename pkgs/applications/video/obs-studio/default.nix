@@ -1,17 +1,17 @@
-{ config, lib, stdenv
-, mkDerivation
+{ config
+, lib
+, stdenv
 , fetchFromGitHub
 , addOpenGLRunpath
 , cmake
 , fdk_aac
-, ffmpeg
+, ffmpeg_4
 , jansson
 , libjack2
 , libxkbcommon
 , libpthreadstubs
 , libXdmcp
 , qtbase
-, qtx11extras
 , qtsvg
 , speex
 , libv4l
@@ -19,46 +19,72 @@
 , curl
 , wayland
 , xorg
-, makeWrapper
 , pkg-config
 , libvlc
+, libGL
 , mbedtls
-
+, wrapGAppsHook
 , scriptingSupport ? true
 , luajit
-, swig
+, swig4
 , python3
-
 , alsaSupport ? stdenv.isLinux
-, alsaLib
+, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 , libcef
+, pciutils
 , pipewireSupport ? stdenv.isLinux
 , pipewire
+, libdrm
+, libajantv2
+, librist
+, libva
+, srt
+, qtwayland
+, wrapQtAppsHook
+, nlohmann_json
+, websocketpp
+, asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
 }:
 
 let
   inherit (lib) optional optionals;
 
-in mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "obs-studio";
-  version = "26.1.2";
+  version = "29.1.3";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "1plr5a7k5scxlibhbknhhk19ipk8las14dzs7v64zx7rhpj00009";
+    sha256 = "sha256-D0DPueMtopwz5rLgM8QcPT7DgTKcJKQHnst69EY9V6Q=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ addOpenGLRunpath cmake pkg-config ];
+  patches = [
+    # Lets obs-browser build against CEF 90.1.0+
+    ./Enable-file-access-and-universal-access-for-file-URL.patch
+    ./fix-nix-plugin-path.patch
+  ];
+
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    cmake
+    pkg-config
+    wrapGAppsHook
+    wrapQtAppsHook
+  ]
+  ++ optional scriptingSupport swig4;
 
   buildInputs = [
     curl
     fdk_aac
-    ffmpeg
+    ffmpeg_4
     jansson
     libcef
     libjack2
@@ -67,19 +93,26 @@ in mkDerivation rec {
     libpthreadstubs
     libXdmcp
     qtbase
-    qtx11extras
     qtsvg
     speex
     wayland
     x264
     libvlc
-    makeWrapper
     mbedtls
+    pciutils
+    libajantv2
+    librist
+    libva
+    srt
+    qtwayland
+    nlohmann_json
+    websocketpp
+    asio
   ]
-  ++ optionals scriptingSupport [ luajit swig python3 ]
-  ++ optional alsaSupport alsaLib
+  ++ optionals scriptingSupport [ luajit python3 ]
+  ++ optional alsaSupport alsa-lib
   ++ optional pulseaudioSupport libpulseaudio
-  ++ optional pipewireSupport pipewire;
+  ++ optionals pipewireSupport [ pipewire libdrm ];
 
   # Copied from the obs-linuxbrowser
   postUnpack = ''
@@ -93,26 +126,34 @@ in mkDerivation rec {
     cp -r ${libcef}/include cef/
   '';
 
-  # obs attempts to dlopen libobs-opengl, it fails unless we make sure
-  # DL_OPENGL is an explicit path. Not sure if there's a better way
-  # to handle this.
   cmakeFlags = [
-    "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\""
     "-DOBS_VERSION_OVERRIDE=${version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
     # Add support for browser source
     "-DBUILD_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
+    "-DENABLE_JACK=ON"
   ];
 
-  postInstall = ''
-      wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${libvlc}/lib"
+  dontWrapGApps = true;
+  preFixup = let
+    wrapperLibraries = [
+      xorg.libX11
+      libvlc
+      libGL
+    ] ++ optionals decklinkSupport [
+      blackmagic-desktop-video
+    ];
+  in ''
+    qtWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
+      ''${gappsWrapperArgs[@]}
+    )
   '';
 
   postFixup = lib.optionalString stdenv.isLinux ''
-      addOpenGLRunpath $out/lib/lib*.so
-      addOpenGLRunpath $out/lib/obs-plugins/*.so
+    addOpenGLRunpath $out/lib/lib*.so
+    addOpenGLRunpath $out/lib/obs-plugins/*.so
   '';
 
   meta = with lib; {
@@ -123,8 +164,9 @@ in mkDerivation rec {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ jb55 MP2E ];
-    license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    maintainers = with maintainers; [ jb55 MP2E V materus ];
+    license = licenses.gpl2Plus;
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    mainProgram = "obs";
   };
 }

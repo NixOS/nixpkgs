@@ -1,26 +1,32 @@
 { stdenv, lib, config, fetchFromGitHub, cmake, pkg-config
-, alsaSupport ? stdenv.isLinux, alsaLib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, jackSupport ? false, libjack2, soxr
+, pcapSupport ? false, libpcap
 }:
 
 stdenv.mkDerivation rec {
   pname = "scream";
-  version = "3.6";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "duncanthrax";
     repo = pname;
     rev = version;
-    sha256 = "01k2zhfb781gfj3apmcjqbm5m05m6pvnh7fb5k81zwvqibai000v";
+    sha256 = "sha256-lP5mdNhZjkEVjgQUEsisPy+KXUqsE6xj6dFWcgD+VGM=";
   };
 
   buildInputs = lib.optional pulseSupport libpulseaudio
-    ++ lib.optional alsaSupport alsaLib;
+    ++ lib.optionals jackSupport [ libjack2 soxr ]
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional pcapSupport libpcap;
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
     "-DPULSEAUDIO_ENABLE=${if pulseSupport then "ON" else "OFF"}"
     "-DALSA_ENABLE=${if alsaSupport then "ON" else "OFF"}"
+    "-DJACK_ENABLE=${if jackSupport then "ON" else "OFF"}"
+    "-DPCAP_ENABLE=${if pcapSupport then "ON" else "OFF"}"
   ];
 
   cmakeDir = "../Receivers/unix";
@@ -38,6 +44,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/duncanthrax/scream";
     license = licenses.mspl;
     platforms = platforms.linux;
+    mainProgram = "scream";
     maintainers = with maintainers; [ arcnmx ];
   };
 }

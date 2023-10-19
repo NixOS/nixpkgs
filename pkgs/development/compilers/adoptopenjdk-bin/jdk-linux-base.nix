@@ -7,7 +7,7 @@
 , makeWrapper
 , setJavaClassPath
 # minimum dependencies
-, alsaLib
+, alsa-lib
 , fontconfig
 , freetype
 , libffi
@@ -33,9 +33,9 @@ let
 in
 
 let result = stdenv.mkDerivation rec {
-  name = if sourcePerArch.packageType == "jdk"
-    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${version}"
-    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${version}";
+  pname = if sourcePerArch.packageType == "jdk"
+    then "adoptopenjdk-${sourcePerArch.vmType}-bin"
+    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin";
 
   version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 
@@ -44,7 +44,7 @@ let result = stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib # libasound.so wanted by lib/libjsound.so
+    alsa-lib # libasound.so wanted by lib/libjsound.so
     fontconfig
     freetype
     stdenv.cc.cc.lib # libstdc++.so.6
@@ -65,6 +65,9 @@ let result = stdenv.mkDerivation rec {
     cd ..
 
     mv $sourceRoot $out
+
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/include/linux/*_md.h $out/include/
 
     rm -rf $out/demo
 
@@ -109,6 +112,7 @@ let result = stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.gpl2Classpath;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = lib.mapAttrsToList (arch: _: arch + "-linux") sourcePerArch; # some inherit jre.meta.platforms
     maintainers = with lib.maintainers; [ taku0 ];

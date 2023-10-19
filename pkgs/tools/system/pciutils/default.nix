@@ -2,21 +2,24 @@
 , hwdata
 , static ? stdenv.hostPlatform.isStatic
 , IOKit
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  name = "pciutils-3.7.0"; # with release-date database
+  pname = "pciutils";
+  version = "3.10.0"; # with release-date database
 
   src = fetchurl {
-    url = "mirror://kernel/software/utils/pciutils/${name}.tar.xz";
-    sha256 = "1ss0rnfsx8gvqjxaji4mvbhf9xyih4cadmgadbwwv8mnx1xvjh4x";
+    url = "mirror://kernel/software/utils/pciutils/pciutils-${version}.tar.xz";
+    sha256 = "sha256-I4ouJxZnMOU6F/4Hv60ingf6ObYYEX5ZRLbX7an7sOk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib kmod which ] ++
-    lib.optional stdenv.hostPlatform.isDarwin IOKit;
+  buildInputs = [ which zlib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
-  preConfigure = if stdenv.cc.isGNU then null else ''
+  preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
   '';
 
@@ -41,8 +44,14 @@ stdenv.mkDerivation rec {
     cp --reflink=auto ${hwdata}/share/hwdata/pci.ids $out/share/pci.ids
   '';
 
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://github.com/pciutils/pciutils.git";
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
-    homepage = "http://mj.ucw.cz/pciutils.html";
+    homepage = "https://mj.ucw.cz/sw/pciutils/";
     description = "A collection of programs for inspecting and manipulating configuration of PCI devices";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

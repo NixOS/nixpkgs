@@ -1,6 +1,7 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
 , gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
-, nvidia_cg_toolkit, zlib, openssl, portaudio
+, libGL, nvidia_cg_toolkit, zlib, openssl, libuuid
+, alsa-lib, udev, libjack2, freetype, libva, libvdpau
 }:
 let
   fullPath = lib.makeLibraryPath [
@@ -11,29 +12,36 @@ let
     libjpeg_original
     glib
     pango
+    libGL
     libGLU
     nvidia_cg_toolkit
     zlib
     openssl
-    portaudio
+    libuuid
+    alsa-lib
+    libjack2
+    udev
+    freetype
+    libva
+    libvdpau
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "14.0.0";
+    version = "2023.1";
+    rev = "141770";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "http://downloads.lwks.com/v14/lwks-14.0.0-amd64.deb";
-          sha256 = "66eb9f9678d979db76199f1c99a71df0ddc017bb47dfda976b508849ab305033";
+          url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
+          sha256 = "sha256-QRbghrZQbprl2wUBKNMJVBeW0Ek6nWvo4006jyPYIBg=";
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ dpkg ];
 
-    phases = [ "unpackPhase" "installPhase" ];
     unpackPhase = "dpkg-deb -x ${src} ./";
 
     installPhase = ''
@@ -69,7 +77,7 @@ let
   };
 
 # Lightworks expects some files in /usr/share/lightworks
-in buildFHSUserEnv {
+in buildFHSEnv {
   name = lightworks.name;
 
   targetPkgs = pkgs: [
@@ -81,8 +89,9 @@ in buildFHSUserEnv {
   meta = {
     description = "Professional Non-Linear Video Editor";
     homepage = "https://www.lwks.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.antonxy ];
+    maintainers = with lib.maintainers; [ antonxy vojta001 kashw2 ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,7 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
-, fetchpatch
 , python3
 , meson
 , ninja
@@ -21,25 +20,15 @@
 
 stdenv.mkDerivation rec {
   pname = "nasc";
-  version = "0.7.5";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "parnold-x";
     repo = pname;
     rev = version;
-    sha256 = "kSRc5RLkI6SBJirUYw6swZi8IJhaL3y74b2Zw8kh2XA=";
+    sha256 = "02b9a59a9fzsb6nn3ycwwbcbv04qfzm6x7csq2addpzx5wak6dd8";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix compilation with gcc10
-    (fetchpatch {
-      url = "https://github.com/parnold-x/libqalculate/commit/4fa8f2cceada128ef19f82407226b2c230b780d5.patch";
-      extraPrefix = "subprojects/libqalculate/";
-      stripLen = "1";
-      sha256 = "0kbff623zl0s6yx5avx068f2apwzxzvihjahja4qhlkqkhhzj9dm";
-    })
-  ];
 
   nativeBuildInputs = [
     glib # post_install.py
@@ -58,7 +47,6 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview
     libgee
-    pantheon.elementary-icon-theme
     pantheon.granite
     webkitgtk
     # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
@@ -72,12 +60,12 @@ stdenv.mkDerivation rec {
     substituteInPlace subprojects/libqalculate/libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
+    substituteInPlace subprojects/libqalculate/libqalculate/meson.build \
+      --replace "link_with: 'libqalculate_lib_static'" "link_with: libqalculate_lib_static"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
@@ -90,8 +78,9 @@ stdenv.mkDerivation rec {
       the equations it’s used in.
     '';
     homepage = "https://github.com/parnold-x/nasc";
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    mainProgram = "com.github.parnold_x.nasc";
   };
 }

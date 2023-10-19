@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, pantheon, breeze-icons, gnome-icon-theme, hicolor-icon-theme, papirus-folders, color ? null }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "papirus-icon-theme";
-  version = "20210601";
+  version = "20230901";
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AX51udzIv/DO0n8ba2Gm6Leikep6x4tgUuRUdPX/Cds=";
+    hash = "sha256-FcTNZgCdPlYjpheA3PfZBR3apOkDi4+RafQtXdqchGI=";
   };
 
-  nativeBuildInputs = [ gtk3 ];
+  nativeBuildInputs = [ gtk3 papirus-folders ];
 
   propagatedBuildInputs = [
     pantheon.elementary-icon-theme
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
     mv {,e}Papirus* $out/share/icons
 
     for theme in $out/share/icons/*; do
-      gtk-update-icon-cache $theme
+      ${lib.optionalString (color != null) "${papirus-folders}/bin/papirus-folders -t $theme -o -C ${color}"}
+      gtk-update-icon-cache --force $theme
     done
+
     runHook postInstall
   '';
 

@@ -4,28 +4,34 @@
 , glib
 , meson
 , ninja
+, nixosTests
 , pkg-config
 , gettext
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages
 , gobject-introspection
+, gi-docgen
+, libxslt
 , fixDarwinDylibNames
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.6.2";
+  version = "1.6.6";
 
-  outputs = [ "out" "dev" ]
+  outputs = [ "out" "dev" "installedTests" ]
     ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "092g2dyy1hhl0ix9kp33wcab0pg1qicnsv0cj5ms9g9qs336cgd3";
+    sha256 = "luyYvnqR9t3jNjZyDj2i/27LuQ52zKpJSX8xpoVaSQ4=";
   };
+
+  patches = [
+    # Add option for changing installation path of installed tests.
+    ./meson-add-installed-tests-prefix-option.patch
+  ];
 
   strictDeps = true;
 
@@ -39,28 +45,51 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     glib
-    docbook-xsl-nons
-    docbook_xml_dtd_43
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
+    libxslt
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
-    gtk-doc
+    gi-docgen
   ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags = lib.optionals (!withIntrospection) [
-    "-Dintrospection=disabled"
-    # doc gen uses introspection, doesn't work properly
-    "-Dgtk_doc=disabled"
+  mesonFlags = [
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "gtk_doc" withIntrospection)
   ];
+
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace doc/meson.build \
+      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
 
   doCheck = true;
 
+  postFixup = ''
+    # Move developer documentation to devdoc output.
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    if [[ -d "$out/share/doc" ]]; then
+        find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
+          | while IFS= read -r -d ''' file; do
+            moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
+        done
+    fi
+  '';
+
   passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.json-glib;
+    };
+
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";

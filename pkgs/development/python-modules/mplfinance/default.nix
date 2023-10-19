@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-pATiprTELt8GrEkeKjILPfpdNDVoex5t+Mc+6Gg7cPY=";
+    hash = "sha256-pATiprTELt8GrEkeKjILPfpdNDVoex5t+Mc+6Gg7cPY=";
   };
 
   propagatedBuildInputs = [ matplotlib pandas ];

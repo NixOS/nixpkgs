@@ -1,29 +1,32 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
 , pkg-config
 , gettext
-, alsaLib
+, alsa-lib
 , acpid
 , bc
 , ddcutil
 , efl
+, libexif
 , pam
 , xkeyboard_config
 , udisks2
-
+, waylandSupport ? false, wayland-protocols, xwayland
 , bluetoothSupport ? true, bluez5
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, directoryListingUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "enlightenment";
-  version = "0.24.2";
+  version = "0.25.4";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1wfz0rwwsx7c1mkswn4hc9xw1i6bsdirhxiycf7ha2vcipqy465y";
+    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-VttdIGuCG5qIMdJucT5BCscLIlWm9D/N98Ae794jt6I=";
   };
 
   nativeBuildInputs = [
@@ -34,17 +37,19 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     acpid # for systems with ACPI for lid events, AC/Battery plug in/out etc
     bc # for the Everything module calculator mode
     ddcutil # specifically libddcutil.so.2 for backlight control
     efl
+    libexif
     pam
     xkeyboard_config
     udisks2 # for removable storage mounting/unmounting
   ]
   ++ lib.optional bluetoothSupport bluez5 # for bluetooth configuration and control
   ++ lib.optional pulseSupport libpulseaudio # for proper audio device control and redirection
+  ++ lib.optionals waylandSupport [ wayland-protocols xwayland ]
   ;
 
   patches = [
@@ -62,15 +67,17 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-D systemdunitdir=lib/systemd/user"
-  ];
+  ] ++ lib.optional waylandSupport "-Dwl=true";
 
   passthru.providedSessions = [ "enlightenment" ];
+
+  passthru.updateScript = directoryListingUpdater { };
 
   meta = with lib; {
     description = "The Compositing Window Manager and Desktop Shell";
     homepage = "https://www.enlightenment.org";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

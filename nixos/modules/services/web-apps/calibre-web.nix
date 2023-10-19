@@ -8,13 +8,15 @@ in
 {
   options = {
     services.calibre-web = {
-      enable = mkEnableOption "Calibre-Web";
+      enable = mkEnableOption (lib.mdDoc "Calibre-Web");
+
+      package = lib.mkPackageOption pkgs "calibre-web" { };
 
       listen = {
         ip = mkOption {
           type = types.str;
           default = "::1";
-          description = ''
+          description = lib.mdDoc ''
             IP address that Calibre-Web should listen on.
           '';
         };
@@ -22,7 +24,7 @@ in
         port = mkOption {
           type = types.port;
           default = 8083;
-          description = ''
+          description = lib.mdDoc ''
             Listen port for Calibre-Web.
           '';
         };
@@ -31,27 +33,27 @@ in
       dataDir = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = ''
-          The directory below <filename>/var/lib</filename> where Calibre-Web stores its data.
+        description = lib.mdDoc ''
+          The directory below {file}`/var/lib` where Calibre-Web stores its data.
         '';
       };
 
       user = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = "User account under which Calibre-Web runs.";
+        description = lib.mdDoc "User account under which Calibre-Web runs.";
       };
 
       group = mkOption {
         type = types.str;
         default = "calibre-web";
-        description = "Group account under which Calibre-Web runs.";
+        description = lib.mdDoc "Group account under which Calibre-Web runs.";
       };
 
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the server.
         '';
       };
@@ -60,7 +62,7 @@ in
         calibreLibrary = mkOption {
           type = types.nullOr types.path;
           default = null;
-          description = ''
+          description = lib.mdDoc ''
             Path to Calibre library.
           '';
         };
@@ -68,15 +70,17 @@ in
         enableBookConversion = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Configure path to the Calibre's ebook-convert in the DB.
           '';
         };
 
+        enableKepubify = mkEnableOption (lib.mdDoc "kebup conversion support");
+
         enableBookUploading = mkOption {
           type = types.bool;
           default = false;
-          description = ''
+          description = lib.mdDoc ''
             Allow books to be uploaded via Calibre-Web UI.
           '';
         };
@@ -85,7 +89,7 @@ in
           enable = mkOption {
             type = types.bool;
             default = false;
-            description = ''
+            description = lib.mdDoc ''
               Enable authorization using auth proxy.
             '';
           };
@@ -93,7 +97,7 @@ in
           header = mkOption {
             type = types.str;
             default = "";
-            description = ''
+            description = lib.mdDoc ''
               Auth proxy header name.
             '';
           };
@@ -106,7 +110,7 @@ in
     systemd.services.calibre-web = let
       appDb = "/var/lib/${cfg.dataDir}/app.db";
       gdriveDb = "/var/lib/${cfg.dataDir}/gdrive.db";
-      calibreWebCmd = "${pkgs.calibre-web}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
+      calibreWebCmd = "${cfg.package}/bin/calibre-web -p ${appDb} -g ${gdriveDb}";
 
       settings = concatStringsSep ", " (
         [
@@ -117,6 +121,7 @@ in
         ]
         ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
         ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
+        ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
       );
     in
       {
@@ -136,7 +141,7 @@ in
 
               ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
             '' + optionalString (cfg.options.calibreLibrary != null) ''
-              test -f ${cfg.options.calibreLibrary}/metadata.db || { echo "Invalid Calibre library"; exit 1; }
+              test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
             ''
           );
 

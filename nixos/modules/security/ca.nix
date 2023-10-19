@@ -8,36 +8,38 @@ let
 
   cacertPackage = pkgs.cacert.override {
     blacklist = cfg.caCertificateBlacklist;
+    extraCertificateFiles = cfg.certificateFiles;
+    extraCertificateStrings = cfg.certificates;
   };
-
-  caCertificates = pkgs.runCommand "ca-certificates.crt" {
-    files = cfg.certificateFiles ++ [ (builtins.toFile "extra.crt" (concatStringsSep "\n" cfg.certificates)) ];
-    preferLocalBuild = true;
-  } "awk 1 $files > $out";  # awk ensures a newline between each pair of consecutive files
+  caBundle = "${cacertPackage}/etc/ssl/certs/ca-bundle.crt";
 
 in
 
 {
 
   options = {
+    security.pki.installCACerts = mkEnableOption "Add CA certificates to system" // {
+      default = true;
+      internal = true;
+    };
 
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
       default = [];
-      example = literalExample "[ \"\${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt\" ]";
-      description = ''
+      example = literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
+      description = lib.mdDoc ''
         A list of files containing trusted root certificates in PEM
         format. These are concatenated to form
-        <filename>/etc/ssl/certs/ca-certificates.crt</filename>, which is
+        {file}`/etc/ssl/certs/ca-certificates.crt`, which is
         used by many programs that use OpenSSL, such as
-        <command>curl</command> and <command>git</command>.
+        {command}`curl` and {command}`git`.
       '';
     };
 
     security.pki.certificates = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = literalExample ''
+      example = literalExpression ''
         [ '''
             NixOS.org
             =========
@@ -49,7 +51,7 @@ in
           '''
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         A list of trusted root certificates in PEM format.
       '';
     };
@@ -62,28 +64,29 @@ in
         "CA WoSign ECC Root"
         "Certification Authority of WoSign G2"
       ];
-      description = ''
+      description = lib.mdDoc ''
         A list of blacklisted CA certificate names that won't be imported from
         the Mozilla Trust Store into
-        <filename>/etc/ssl/certs/ca-certificates.crt</filename>. Use the
+        {file}`/etc/ssl/certs/ca-certificates.crt`. Use the
         names from that file.
       '';
     };
 
   };
 
-  config = {
-
-    security.pki.certificateFiles = [ "${cacertPackage}/etc/ssl/certs/ca-bundle.crt" ];
+  config = mkIf cfg.installCACerts {
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
-    environment.etc."ssl/certs/ca-certificates.crt".source = caCertificates;
+    environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;
 
     # Old NixOS compatibility.
-    environment.etc."ssl/certs/ca-bundle.crt".source = caCertificates;
+    environment.etc."ssl/certs/ca-bundle.crt".source = caBundle;
 
     # CentOS/Fedora compatibility.
-    environment.etc."pki/tls/certs/ca-bundle.crt".source = caCertificates;
+    environment.etc."pki/tls/certs/ca-bundle.crt".source = caBundle;
+
+    # P11-Kit trust source.
+    environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
 
   };
 

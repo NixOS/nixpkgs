@@ -1,61 +1,89 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , removeReferencesTo
-, cpp ? false
-, gfortran ? null
-, zlib ? null
-, szip ? null
+, cppSupport ? false
+, fortranSupport ? false
+, fortran
+, zlibSupport ? true
+, zlib
+, szipSupport ? false
+, szip
 , mpiSupport ? false
 , mpi
 , enableShared ? !stdenv.hostPlatform.isStatic
 , javaSupport ? false
 , jdk
 , usev110Api ? false
+, threadsafe ? false
+, python3
 }:
 
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
-assert !cpp || !mpiSupport;
+assert !cppSupport || !mpiSupport;
 
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.12.0";
-  pname = "hdf5";
+  version = "1.14.2";
+  pname = "hdf5"
+    + lib.optionalString cppSupport "-cpp"
+    + lib.optionalString fortranSupport "-fortran"
+    + lib.optionalString mpiSupport "-mpi"
+    + lib.optionalString threadsafe "-threadsafe";
+
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/${pname}-${version}/src/${pname}-${version}.tar.bz2";
-    sha256 = "0qazfslkqbmzg495jafpvqp0khws3jkxa0z7rph9qvhacil6544p";
+    url = let
+        majorMinor = lib.versions.majorMinor version;
+        majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
+      in "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
+    sha256 = "sha256-6jxeJX7zIq9ed/weUurTrWvzu0rAZIDdF+45ANeiTPs=";
   };
 
   passthru = {
-    inherit mpiSupport;
-    inherit mpi;
+    inherit
+      cppSupport
+      fortranSupport
+      fortran
+      zlibSupport
+      zlib
+      szipSupport
+      szip
+      mpiSupport
+      mpi
+      ;
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [ removeReferencesTo ]
+    ++ optional fortranSupport fortran;
 
-  buildInputs = []
-    ++ optional (gfortran != null) gfortran
-    ++ optional (szip != null) szip
+  buildInputs = optional fortranSupport fortran
+    ++ optional szipSupport szip
     ++ optional javaSupport jdk;
 
-  propagatedBuildInputs = []
-    ++ optional (zlib != null) zlib
+  propagatedBuildInputs = optional zlibSupport zlib
     ++ optional mpiSupport mpi;
 
-  configureFlags = []
-    ++ optional cpp "--enable-cxx"
-    ++ optional (gfortran != null) "--enable-fortran"
-    ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals mpiSupport ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
+  configureFlags = optional cppSupport "--enable-cxx"
+    ++ optional fortranSupport "--enable-fortran"
+    ++ optional szipSupport "--with-szlib=${szip}"
+    ++ optionals mpiSupport [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
     ++ optional enableShared "--enable-shared"
     ++ optional javaSupport "--enable-java"
-    ++ optional usev110Api "--with-default-api-version=v110";
+    ++ optional usev110Api "--with-default-api-version=v110"
+    # hdf5 hl (High Level) library is not considered stable with thread safety and should be disabled.
+    ++ optionals threadsafe [ "--enable-threadsafe" "--disable-hl" ];
 
   patches = [
-    ./bin-mv.patch
+    # Avoid non-determinism in autoconf build system:
+    # - build time
+    # - build user
+    # - uname -a (kernel version)
+    # Can be dropped once/if we switch to cmake.
+    ./hdf5-more-determinism.patch
   ];
 
   postInstall = ''
@@ -66,7 +94,13 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  passthru.tests = {
+    inherit (python3.pkgs) h5py;
+  };
+
+  meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
       HDF5 supports an unlimited variety of datatypes, and is designed for flexible and efficient
@@ -74,8 +108,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    license = licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = [ maintainers.markuskowa ];
     homepage = "https://www.hdfgroup.org/HDF5/";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
   };
 }

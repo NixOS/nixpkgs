@@ -6,12 +6,13 @@ let
     Please find this *really* important attachment.
 
     Yours truly,
-    John
+    Bob
   '';
 in writeScriptBin "send-message" ''
 #!${(python3.withPackages (ps: [ ps.slixmpp ])).interpreter}
 import logging
 import sys
+import signal
 from types import MethodType
 
 from slixmpp import ClientXMPP
@@ -51,11 +52,8 @@ class CthonTest(ClientXMPP):
         log.info('Message sent')
 
         # Test http upload (XEP_0363)
-        def timeout_callback(arg):
-            log.error("ERROR: Cannot upload file. XEP_0363 seems broken")
-            sys.exit(1)
         try:
-            url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10, timeout_callback=timeout_callback)
+            url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10)
         except:
             log.error("ERROR: Cannot run upload command. XEP_0363 seems broken")
             sys.exit(1)
@@ -67,8 +65,13 @@ class CthonTest(ClientXMPP):
         log.info('MUC join success!')
         log.info('XMPP SCRIPT TEST SUCCESS')
 
+def timeout_handler(signalnum, stackframe):
+    print('ERROR: xmpp-sendmessage timed out')
+    sys.exit(1)
 
 if __name__ == '__main__':
+    signal.signal(signal.SIGALRM, timeout_handler)
+    signal.alarm(120)
     logging.basicConfig(level=logging.DEBUG,
                         format='%(levelname)-8s %(message)s')
 
@@ -79,7 +82,7 @@ if __name__ == '__main__':
     ct.register_plugin('xep_0363')
     # MUC
     ct.register_plugin('xep_0045')
-    ct.connect(("server", 5222))
+    ct.connect(("${connectTo}", 5222))
     ct.process(forever=False)
 
     if not ct.test_succeeded:

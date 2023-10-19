@@ -1,54 +1,78 @@
 { lib
+, beartype
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
-, six
+, click
+, fetchFromGitHub
+, license-expression
+, ply
+, pytestCheckHook
+, pythonOlder
 , pyyaml
 , rdflib
-, ply
+, semantic-version
+, setuptools
+, setuptools-scm
+, uritools
 , xmltodict
-, pytestCheckHook
-, pythonAtLeast
 }:
+
 buildPythonPackage rec {
   pname = "spdx-tools";
-  version = "0.6.1";
+  version = "0.8.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "9a1aaae051771e865705dd2fd374c3f73d0ad595c1056548466997551cbd7a81";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "spdx";
+    repo = "tools-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-KB+tfuz0ZnoQcMX3H+IZXjcmPZ4x2ecl8ofz1/3r0/8=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.9") [
-    # https://github.com/spdx/tools-python/pull/159
-    # fixes tests on Python 3.9
-    (fetchpatch {
-      name = "drop-encoding-argument.patch";
-      url = "https://github.com/spdx/tools-python/commit/6c8b9a852f8a787122c0e2492126ee8aa52acff0.patch";
-      sha256 = "RhvLhexsQRjqYqJg10SAM53RsOW+R93G+mns8C9g5E8=";
-    })
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
-    six
+    beartype
+    click
+    license-expression
+    ply
     pyyaml
     rdflib
-    ply
+    semantic-version
+    uritools
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [
-    "spdx"
+    "spdx_tools.spdx"
+  ];
+
+  disabledTestPaths = [
+    # Test depends on the currently not packaged pyshacl module
+    "tests/spdx3/validation/json_ld/test_shacl_validation.py"
+  ];
+
+  disabledTests = [
+    # Missing files
+    "test_spdx2_convert_to_spdx3"
+    "test_json_writer"
   ];
 
   meta = with lib; {
     description = "SPDX parser and tools";
     homepage = "https://github.com/spdx/tools-python";
+    changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = with maintainers; [ fab ];
   };
 }

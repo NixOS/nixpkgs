@@ -4,30 +4,26 @@
 , enaml
 , pyqtgraph
 , pythonocc-core
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "enamlx";
-  version = "0.4.3";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "frmdstryr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1rlrx3cw6h1zl9svnqbzwdfy8469qa1y7w6576lbhdwpfhpipscy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LHqOZ1uLWFbUeQAGKoMH9GljhRq1K4RTVWzgV/pt3g8=";
   };
-
-  patches = [
-    # Minimally modified version of https://github.com/frmdstryr/enamlx/commit/16df11227b8cee724624541d274e481802ea67e3
-    # (without the change to setup.py), already on master and expected in the first post-0.4.3 release
-    ./replace-unicode-with-str.patch
-  ];
 
   propagatedBuildInputs = [
     enaml
     # Until https://github.com/inkcut/inkcut/issues/105 perhaps
     pyqtgraph
     pythonocc-core
+    typing-extensions
   ];
 
   # qt_occ_viewer test requires enaml.qt.QtOpenGL which got dropped somewhere

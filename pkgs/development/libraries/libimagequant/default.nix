@@ -1,21 +1,44 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, rust, rustPlatform, cargo-c, python3 }:
 
-stdenv.mkDerivation rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+in
+rustPlatform.buildRustPackage rec {
   pname = "libimagequant";
-  version = "2.14.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yWtwBTAs6dlrZz3Bd/4DUb488IJsahPKwjluukTlv/o=";
+    hash = "sha256-a5TztgNFRV9BVERpHI33ZEYwfOR46F9FzmbquzwGq3k=";
   };
 
-  preConfigure = ''
-    patchShebangs ./configure
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  configureFlags = lib.optionals stdenv.isAarch64 [ "--disable-sse" ];
+  nativeBuildInputs = [ cargo-c ];
+
+  postBuild = ''
+    pushd imagequant-sys
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    popd
+  '';
+
+  postInstall = ''
+    pushd imagequant-sys
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
+    popd
+  '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) pillow;
+  };
 
   meta = with lib; {
     homepage = "https://pngquant.org/lib/";

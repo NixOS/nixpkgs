@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libstrophe";
-  version = "0.10.1";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = pname;
     rev = version;
-    sha256 = "11d341avsfr0z4lq15cy5dkmff6qpy91wkgzdpfdy31l27pa1g79";
+    sha256 = "EDgdKJ7wqUoThy0t1r39p2lbn64uvTDoIqNCzhpWnZ8=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

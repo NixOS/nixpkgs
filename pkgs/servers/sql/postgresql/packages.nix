@@ -1,8 +1,10 @@
 self: super: {
 
-    age = super.callPackage ./ext/age.nix {
-      bison = self.bison_3_5;
-    };
+    age = super.callPackage ./ext/age.nix { };
+
+    apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
+
+    jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
 
@@ -14,13 +16,21 @@ self: super: {
 
     pg_ed25519 = super.callPackage ./ext/pg_ed25519.nix { };
 
+    pg_hint_plan = super.callPackage ./ext/pg_hint_plan.nix { };
+
+    pg_ivm = super.callPackage ./ext/pg_ivm.nix { };
+
     pg_rational = super.callPackage ./ext/pg_rational.nix { };
 
     pg_repack = super.callPackage ./ext/pg_repack.nix { };
 
     pg_similarity = super.callPackage ./ext/pg_similarity.nix { };
 
+    pgaudit = super.callPackage ./ext/pgaudit.nix { };
+
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
+
+    pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
 
     pgvector = super.callPackage ./ext/pgvector.nix { };
 
@@ -28,11 +38,7 @@ self: super: {
 
     plr = super.callPackage ./ext/plr.nix { };
 
-    plv8 = super.callPackage ./ext/plv8.nix {
-        v8 = super.callPackage ../../../development/libraries/v8/plv8_6_x.nix {
-            python = self.python2;
-        };
-    };
+    plv8 = super.callPackage ./ext/plv8 { };
 
     pgjwt = super.callPackage ./ext/pgjwt.nix { };
 
@@ -44,6 +50,8 @@ self: super: {
 
     pg_topn = super.callPackage ./ext/pg_topn.nix { };
 
+    pg_net = super.callPackage ./ext/pg_net.nix { };
+
     pgtap = super.callPackage ./ext/pgtap.nix { };
 
     pipelinedb = super.callPackage ./ext/pipelinedb.nix { };
@@ -53,6 +61,9 @@ self: super: {
     temporal_tables = super.callPackage ./ext/temporal_tables.nix { };
 
     timescaledb = super.callPackage ./ext/timescaledb.nix { };
+    timescaledb-apache = super.callPackage ./ext/timescaledb.nix { enableUnfree = false; };
+
+    timescaledb_toolkit = super.callPackage ./ext/timescaledb_toolkit.nix { };
 
     tsearch_extras = super.callPackage ./ext/tsearch_extras.nix { };
 
@@ -62,7 +73,15 @@ self: super: {
 
     pg_partman = super.callPackage ./ext/pg_partman.nix { };
 
+    pg_relusage = super.callPackage ./ext/pg_relusage.nix { };
+
     pg_safeupdate = super.callPackage ./ext/pg_safeupdate.nix { };
 
+    promscale_extension = super.callPackage ./ext/promscale_extension.nix { };
+
     repmgr = super.callPackage ./ext/repmgr.nix { };
+
+    rum = super.callPackage ./ext/rum.nix { };
+
+    wal2json = super.callPackage ./ext/wal2json.nix { };
 }

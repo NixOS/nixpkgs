@@ -1,10 +1,12 @@
 { lib
 , stdenv
+, callPackage
 , fetchurl
 , cmake
 , flex
 , bison
 , openssl
+, libkqueue
 , libpcap
 , zlib
 , file
@@ -16,30 +18,70 @@
 , gettext
 , coreutils
 , ncurses
-, caf
 }:
 
+let
+  broker = callPackage ./broker { };
+in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "4.0.1";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
-    sha256 = "0ficl4i012gfv4mdbdclgvi6gyq338gw9gb6k58k1drw8c7qk6k5";
+    sha256 = "sha256-z8MpoXBDkZXXBw7FOH2Vzdp+trhqyF7HB7ntDp1Xaik=";
   };
 
-  nativeBuildInputs = [ cmake flex bison file ];
-  buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python3 swig ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ gettext ];
+  strictDeps = true;
 
-  outputs = [ "out" "lib" "py" ];
+  patches = [
+    ./fix-installation.patch
+  ];
+
+  nativeBuildInputs = [
+    bison
+    cmake
+    file
+    flex
+    python3
+  ];
+
+  buildInputs = [
+    broker
+    curl
+    gperftools
+    libmaxminddb
+    libpcap
+    ncurses
+    openssl
+    swig
+    zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    libkqueue
+  ] ++ lib.optionals stdenv.isDarwin [
+    gettext
+    python3
+  ];
+
+  postPatch = ''
+    patchShebangs ./ci/collect-repo-info.py
+    patchShebangs ./auxil/spicy/scripts
+  '';
 
   cmakeFlags = [
-    "-DCAF_ROOT=${caf}"
-    "-DZEEK_PYTHON_DIR=${placeholder "py"}/lib/${python3.libPrefix}/site-packages"
+    "-DBroker_ROOT=${broker}"
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
+    "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
+    "-DZEEK_LOG_DIR=/var/log/zeek"
+    "-DZEEK_STATE_DIR=/var/lib/zeek"
+    "-DZEEK_SPOOL_DIR=/var/spool/zeek"
+    "-DDISABLE_JAVASCRIPT=ON"
+  ] ++ lib.optionals stdenv.isLinux [
+    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
 
   postInstall = ''
     for file in $out/share/zeek/base/frameworks/notice/actions/pp-alarms.zeek $out/share/zeek/base/frameworks/notice/main.zeek; do
@@ -53,8 +95,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = {
+    inherit broker;
+  };
+
   meta = with lib; {
-    description = "Powerful network analysis framework much different from a typical IDS";
+    description = "Network analysis framework much different from a typical IDS";
     homepage = "https://www.zeek.org";
     changelog = "https://github.com/zeek/zeek/blob/v${version}/CHANGES";
     license = licenses.bsd3;

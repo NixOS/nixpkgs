@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, tcl, tk, libX11, makeWrapper }:
 
-stdenv.mkDerivation {
-  name = "chessdb-3.6.19-beta-1";
+stdenv.mkDerivation rec {
+  pname = "chessdb";
+  version = "3.6.19-beta-1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/chessdb/ChessDB-3.6.19-beta-1.tar.gz";
+    url = "mirror://sourceforge/chessdb/ChessDB-${version}.tar.gz";
     sha256 = "0brc3wln3bxp979iqj2w1zxpfd0pch8zzazhdmwf7acww4hrsz62";
   };
 
@@ -19,12 +20,8 @@ stdenv.mkDerivation {
     "MANDIR=$(out)/man"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/chessdb --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
-  '';
-
   meta = {
-    homepage = "http://chessdb.sourceforge.net/";
+    homepage = "https://chessdb.sourceforge.net/";
     description = "A free chess database";
     platforms = lib.platforms.linux;
   };

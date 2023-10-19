@@ -4,11 +4,9 @@
 , wrapQtAppsHook
 , qtmultimedia
 , qttools
-, qtscript
 , qtdeclarative
+, qtnetworkauth
 , qtbase
-, autogen
-, automake
 , makeWrapper
 , catch2
 , nodejs
@@ -17,30 +15,32 @@
 , rsync
 , typescript
 }:
+
 stdenv.mkDerivation rec {
   pname = "imgbrd-grabber";
+  version = "7.10.0";
 
-  version = "7.3.2";
   src = fetchFromGitHub {
     owner = "Bionus";
     repo = "imgbrd-grabber";
     rev = "v${version}";
-    sha256 = "053rwvcr88fcba0447a6r115cgnqsm9rl066z8d5jacqnhdij58k";
+    sha256 = "sha256-AT6pN2do0LlH6xAXKcFQv+oderD88/EiG1JnCw6kOOg=";
     fetchSubmodules = true;
   };
 
   buildInputs = [
     openssl
-    makeWrapper
     libpulseaudio
     typescript
   ];
 
   nativeBuildInputs = [
+    makeWrapper
     qtmultimedia
     qtbase
     qtdeclarative
     qttools
+    qtnetworkauth
     nodejs
     cmake
     wrapQtAppsHook
@@ -69,6 +69,10 @@ stdenv.mkDerivation rec {
     ln -sf ${catch2.src} tests/src/vendor/catch
   '';
 
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
+
   postInstall = ''
     # move the binaries to the share/Grabber folder so
     # some relative links can be resolved (e.g. settings.ini)
@@ -83,7 +87,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/Grabber/Grabber-cli $out/bin/Grabber-cli
   '';
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   meta = with lib; {
     description = "Very customizable imageboard/booru downloader with powerful filenaming features";

@@ -1,4 +1,6 @@
-import ../make-test-python.nix ({ pkgs, ...}: let
+args@{ pkgs, nextcloudVersion ? 22, ... }:
+
+(import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "hunter2";
   adminuser = "custom-admin-username";
 in {
@@ -11,49 +13,39 @@ in {
     # The only thing the client needs to do is download a file.
     client = { ... }: {};
 
-    nextcloud = { config, pkgs, ... }: {
+    nextcloud = { config, pkgs, lib, ... }: {
       networking.firewall.allowedTCPPorts = [ 80 ];
 
       services.nextcloud = {
         enable = true;
         hostName = "nextcloud";
+        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         caching = {
           apcu = false;
           redis = true;
           memcached = false;
         };
+        database.createLocally = true;
         config = {
           dbtype = "pgsql";
-          dbname = "nextcloud";
-          dbuser = "nextcloud";
-          dbhost = "/run/postgresql";
           inherit adminuser;
           adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
             ${adminpass}
           '');
+          trustedProxies = [ "::1" ];
+        };
+        notify_push = {
+          enable = true;
+          logLevel = "debug";
+        };
+        extraAppsEnable = true;
+        extraApps = {
+          inherit (pkgs."nextcloud${lib.versions.major config.services.nextcloud.package.version}Packages".apps) notify_push;
         };
       };
 
-      services.redis = {
-        enable = true;
-      };
-
-      systemd.services.nextcloud-setup= {
-        requires = ["postgresql.service"];
-        after = [
-          "postgresql.service"
-        ];
-      };
-
-      services.postgresql = {
-        enable = true;
-        ensureDatabases = [ "nextcloud" ];
-        ensureUsers = [
-          { name = "nextcloud";
-            ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-          }
-        ];
-      };
+      services.redis.servers."nextcloud".enable = true;
+      services.redis.servers."nextcloud".port = 6379;
     };
   };
 
@@ -68,7 +60,7 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -92,8 +84,13 @@ in {
         "${withRcloneEnv} ${copySharedFile}"
     )
     client.wait_for_unit("multi-user.target")
+    client.execute("${pkgs.nextcloud-notify_push.passthru.test_client}/bin/test_client http://nextcloud ${adminuser} ${adminpass} >&2 &")
     client.succeed(
         "${withRcloneEnv} ${diffSharedFile}"
     )
+    nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${adminuser}\"")
+
+    # redis cache should not be empty
+    nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
   '';
-})
+})) args

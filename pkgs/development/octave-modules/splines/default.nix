@@ -5,11 +5,11 @@
 
 buildOctavePackage rec {
   pname = "splines";
-  version = "1.3.3";
+  version = "1.3.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "16wisph8axc5xci0h51zj0y0x2wj6c9zybi2sjpb9v8z9dagjjqa";
+    sha256 = "sha256-r4hod3l8OpyKNs59lGE8EFn3n6tIg0KeezKjsB4D16Y=";
   };
 
   meta = with lib; {

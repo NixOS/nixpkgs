@@ -1,26 +1,70 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
-
-buildGoModule rec {
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+, caddy
+, testers
+, installShellFiles
+}:
+let
+  version = "2.7.5";
+  dist = fetchFromGitHub {
+    owner = "caddyserver";
+    repo = "dist";
+    rev = "v${version}";
+    hash = "sha256-aZ7hdAZJH1PvrX9GQLzLquzzZG3LZSKOvt7sWQhTiR8=";
+  };
+in
+buildGoModule {
   pname = "caddy";
-  version = "2.4.1";
-
-  subPackages = [ "cmd/caddy" ];
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "caddyserver";
-    repo = pname;
+    repo = "caddy";
     rev = "v${version}";
-    sha256 = "sha256-Wc7eNw5FZWoUT6IP84NhROC59bf4/RCw/gOWLuYI2dc=";
+    hash = "sha256-0IZZ7mkEzZI2Y8ed//m0tbBQZ0YcCXA0/b10ntNIXUk=";
   };
 
-  vendorSha256 = "sha256-ZOrhR03m+cs+mTQio3qEIf+1B0IP0i2+x+vcml5AMco=";
+  vendorHash = "sha256-YNcQtjPGQ0XMSog+sWlH4lG/QdbdI0Lyh/fUGqQUFaY=";
 
-  passthru.tests = { inherit (nixosTests) caddy; };
+  subPackages = [ "cmd/caddy" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
+
+    substituteInPlace $out/lib/systemd/system/caddy.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy-api.service --replace "/usr/bin/caddy" "$out/bin/caddy"
+
+    $out/bin/caddy manpage --directory manpages
+    installManPage manpages/*
+
+    installShellCompletion --cmd caddy \
+      --bash <($out/bin/caddy completion bash) \
+      --fish <($out/bin/caddy completion fish) \
+      --zsh <($out/bin/caddy completion zsh)
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) caddy;
+    version = testers.testVersion {
+      command = "${caddy}/bin/caddy version";
+      package = caddy;
+    };
+  };
 
   meta = with lib; {
     homepage = "https://caddyserver.com";
-    description = "Fast, cross-platform HTTP/2 web server with automatic HTTPS";
+    description = "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    mainProgram = "caddy";
+    maintainers = with maintainers; [ Br1ght0ne emilylange techknowlogick ];
   };
 }

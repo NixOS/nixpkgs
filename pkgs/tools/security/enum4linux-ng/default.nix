@@ -9,13 +9,13 @@
 
 buildPythonApplication rec {
   pname = "enum4linux-ng";
-  version = "1.0.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "cddmp";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0dhg8cwbdn0vlnchhscx31ay4mgj5p6rf73wzgs8nvqg0shsawmy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qO34sVK8eunALPCzLoCqWkO78tG4iEavij8jClCRi88=";
   };
 
   propagatedBuildInputs = [
@@ -35,6 +35,7 @@ buildPythonApplication rec {
       enumerating information from Windows and Samba systems.
     '';
     homepage = "https://github.com/cddmp/enum4linux-ng";
+    changelog = "https://github.com/cddmp/enum4linux-ng/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

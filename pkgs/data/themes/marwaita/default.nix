@@ -5,17 +5,18 @@
 , gtk-engine-murrine
 , gtk_engines
 , librsvg
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "marwaita";
-  version = "9.2.2";
+  version = "17";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    sha256 = "0fbcncsldn2v6x6jla187mp6sjm529ij8rf85wcxpahc45vwb9pg";
+    sha256 = "sha256-9yPgcWtk8w2AyOav1sfQFuH8wnX37ho836NgUnQbFRE=";
   };
 
   buildInputs = [
@@ -37,10 +38,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
     description = "GTK theme supporting Budgie, Pantheon, Mate, Xfce4 and GNOME desktops";
     homepage = "https://www.pling.com/p/1239855/";
-    license = licenses.cc0;
+    license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
   };

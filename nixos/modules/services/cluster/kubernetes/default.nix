@@ -1,32 +1,35 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.kubernetes;
+  opt = options.services.kubernetes;
 
-  defaultContainerdConfigFile = pkgs.writeText "containerd.toml" ''
-    version = 2
-    root = "/var/lib/containerd"
-    state = "/run/containerd"
-    oom_score = 0
+  defaultContainerdSettings = {
+    version = 2;
+    root = "/var/lib/containerd";
+    state = "/run/containerd";
+    oom_score = 0;
 
-    [grpc]
-      address = "/run/containerd/containerd.sock"
+    grpc = {
+      address = "/run/containerd/containerd.sock";
+    };
 
-    [plugins."io.containerd.grpc.v1.cri"]
-      sandbox_image = "pause:latest"
+    plugins."io.containerd.grpc.v1.cri" = {
+      sandbox_image = "pause:latest";
 
-    [plugins."io.containerd.grpc.v1.cri".cni]
-      bin_dir = "/opt/cni/bin"
-      max_conf_num = 0
+      cni = {
+        bin_dir = "/opt/cni/bin";
+        max_conf_num = 0;
+      };
 
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
-      runtime_type = "io.containerd.runc.v2"
-
-    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes."io.containerd.runc.v2".options]
-      SystemdCgroup = true
-  '';
+      containerd.runtimes.runc = {
+        runtime_type = "io.containerd.runc.v2";
+        options.SystemdCgroup = true;
+      };
+    };
+  };
 
   mkKubeConfig = name: conf: pkgs.writeText "${name}-kubeconfig" (builtins.toJSON {
     apiVersion = "v1";
@@ -74,24 +77,25 @@ let
 
   mkKubeConfigOptions = prefix: {
     server = mkOption {
-      description = "${prefix} kube-apiserver server address.";
+      description = lib.mdDoc "${prefix} kube-apiserver server address.";
       type = types.str;
     };
 
     caFile = mkOption {
-      description = "${prefix} certificate authority file used to connect to kube-apiserver.";
+      description = lib.mdDoc "${prefix} certificate authority file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = cfg.caFile;
+      defaultText = literalExpression "config.${opt.caFile}";
     };
 
     certFile = mkOption {
-      description = "${prefix} client certificate file used to connect to kube-apiserver.";
+      description = lib.mdDoc "${prefix} client certificate file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = null;
     };
 
     keyFile = mkOption {
-      description = "${prefix} client key file used to connect to kube-apiserver.";
+      description = lib.mdDoc "${prefix} client key file used to connect to kube-apiserver.";
       type = types.nullOr types.path;
       default = null;
     };
@@ -99,6 +103,7 @@ let
 in {
 
   imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "addons" "dashboard" ] "Removed due to it being an outdated version")
     (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
   ];
 
@@ -106,7 +111,7 @@ in {
 
   options.services.kubernetes = {
     roles = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Kubernetes role that this machine should take.
 
         Master role will enable etcd, apiserver, scheduler, controller manager
@@ -118,16 +123,16 @@ in {
     };
 
     package = mkOption {
-      description = "Kubernetes package to use.";
+      description = lib.mdDoc "Kubernetes package to use.";
       type = types.package;
       default = pkgs.kubernetes;
-      defaultText = "pkgs.kubernetes";
+      defaultText = literalExpression "pkgs.kubernetes";
     };
 
     kubeconfig = mkKubeConfigOptions "Default kubeconfig";
 
     apiserverAddress = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Clusterwide accessible address for the kubernetes apiserver,
         including protocol and optional port.
       '';
@@ -136,49 +141,49 @@ in {
     };
 
     caFile = mkOption {
-      description = "Default kubernetes certificate authority";
+      description = lib.mdDoc "Default kubernetes certificate authority";
       type = types.nullOr types.path;
       default = null;
     };
 
     dataDir = mkOption {
-      description = "Kubernetes root directory for managing kubelet files.";
+      description = lib.mdDoc "Kubernetes root directory for managing kubelet files.";
       default = "/var/lib/kubernetes";
       type = types.path;
     };
 
     easyCerts = mkOption {
-      description = "Automatically setup x509 certificates and keys for the entire cluster.";
+      description = lib.mdDoc "Automatically setup x509 certificates and keys for the entire cluster.";
       default = false;
       type = types.bool;
     };
 
     featureGates = mkOption {
-      description = "List set of feature gates.";
+      description = lib.mdDoc "List set of feature gates.";
       default = [];
       type = types.listOf types.str;
     };
 
     masterAddress = mkOption {
-      description = "Clusterwide available network address or hostname for the kubernetes master server.";
+      description = lib.mdDoc "Clusterwide available network address or hostname for the kubernetes master server.";
       example = "master.example.com";
       type = types.str;
     };
 
     path = mkOption {
-      description = "Packages added to the services' PATH environment variable. Both the bin and sbin subdirectories of each package are added.";
+      description = lib.mdDoc "Packages added to the services' PATH environment variable. Both the bin and sbin subdirectories of each package are added.";
       type = types.listOf types.package;
       default = [];
     };
 
     clusterCidr = mkOption {
-      description = "Kubernetes controller manager and proxy CIDR Range for Pods in cluster.";
+      description = lib.mdDoc "Kubernetes controller manager and proxy CIDR Range for Pods in cluster.";
       default = "10.1.0.0/16";
       type = types.nullOr types.str;
     };
 
     lib = mkOption {
-      description = "Common functions for the kubernetes modules.";
+      description = lib.mdDoc "Common functions for the kubernetes modules.";
       default = {
         inherit mkCert;
         inherit mkKubeConfig;
@@ -188,9 +193,12 @@ in {
     };
 
     secretsPath = mkOption {
-      description = "Default location for kubernetes secrets. Not a store location.";
+      description = lib.mdDoc "Default location for kubernetes secrets. Not a store location.";
       type = types.path;
       default = cfg.dataDir + "/secrets";
+      defaultText = literalExpression ''
+        config.${opt.dataDir} + "/secrets"
+      '';
     };
   };
 
@@ -248,7 +256,7 @@ in {
     (mkIf cfg.kubelet.enable {
       virtualisation.containerd = {
         enable = mkDefault true;
-        configFile = mkDefault defaultContainerdConfigFile;
+        settings = mapAttrsRecursive (name: mkDefault) defaultContainerdSettings;
       };
     })
 
@@ -302,4 +310,6 @@ in {
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
     })
   ];
+
+  meta.buildDocsInSandbox = false;
 }

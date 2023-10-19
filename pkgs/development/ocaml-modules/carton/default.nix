@@ -1,21 +1,29 @@
 { lib, buildDunePackage, fetchurl
-, ke, duff, decompress, cstruct, optint, bigstringaf, stdlib-shims
-, bigarray-compat, checkseum, logs, psq, fmt
-, result, rresult, fpath, base64, bos, digestif, mmap, alcotest
+, ke, duff, decompress, cstruct, optint, bigstringaf
+, checkseum, logs, psq, fmt
+, result, rresult, fpath, base64, bos, digestif, alcotest
 , crowbar, alcotest-lwt, lwt, findlib, mirage-flow, cmdliner, hxd
+, getconf, substituteAll
 }:
 
 buildDunePackage rec {
   pname = "carton";
-  version = "0.4.1";
+  version = "0.6.0";
 
-  useDune2 = true;
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/${pname}-${pname}-v${version}.tbz";
-    sha256 = "d16aad5560d9ab1e3b4d93d2e8fdea638c216ff47338fb630a8aefd22b452665";
+    url = "https://github.com/mirage/ocaml-git/releases/download/${pname}-v${version}/git-${pname}-v${version}.tbz";
+    hash = "sha256-NAm4Xq7L0Dgynr8cKZQ356M4GR6D19LbCRxvnSlIf1U=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./carton-find-getconf.patch;
+      getconf = "${getconf}";
+    })
+  ];
 
   # remove changelogs for mimic and the git* packages
   postPatch = ''
@@ -25,7 +33,6 @@ buildDunePackage rec {
   buildInputs = [
     cmdliner
     digestif
-    mmap
     result
     rresult
     fpath
@@ -39,8 +46,6 @@ buildDunePackage rec {
     cstruct
     optint
     bigstringaf
-    stdlib-shims
-    bigarray-compat
     checkseum
     logs
     psq
@@ -48,13 +53,15 @@ buildDunePackage rec {
   ];
 
   doCheck = true;
+  nativeBuildInputs = [
+    findlib
+  ];
   checkInputs = [
     base64
     alcotest
     alcotest-lwt
     crowbar
     lwt
-    findlib
     mirage-flow
   ];
 

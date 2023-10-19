@@ -16,11 +16,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     homepage = "https://www.nongnu.org/autocutsel/";
     description = "Tracks changes in the server's cutbuffer and CLIPBOARD selection";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; all;
-    updateWalker = true;
   };
 }

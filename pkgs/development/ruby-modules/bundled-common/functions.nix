@@ -76,10 +76,12 @@ in rec {
           bundledByPath = true;
           name = gemName;
           version = version;
-          outPath = path;
+          outPath = "${path}";
           outputs = [ "out" ];
           out = res;
           outputName = "out";
+          suffix = version;
+          gemType = "path";
         };
     in res;
 

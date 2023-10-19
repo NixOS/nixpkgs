@@ -16,7 +16,7 @@ in
 
     services.safeeyes = {
 
-      enable = mkEnableOption "the safeeyes OSGi service";
+      enable = mkEnableOption (lib.mdDoc "the safeeyes OSGi service");
 
     };
 
@@ -25,6 +25,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    environment.systemPackages = [ pkgs.safeeyes ];
 
     systemd.user.services.safeeyes = {
       description = "Safeeyes";

@@ -7,15 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libunistring";
-  version = "0.9.10";
+  version = "1.1";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${pname}-${version}.tar.gz";
-    sha256 = "02v17za10mxnj095x4pvm80jxyqwk93kailfc2j8xa1r6crmnbm8";
+    sha256 = "sha256-oiUr7uyDCsREufaNazitiD2xmRnbNbUiIs+CfDhb22o=";
   };
 
   outputs = [ "out" "dev" "info" "doc" ];
 
+  strictDeps = true;
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
 
   configureFlags = [
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
         ./unistdio/test-u16-vasnprintf3.sh: line 16: ./test-u16-vasnprintf1: No such file or directory
         FAIL unistdio/test-u16-vasnprintf3.sh (exit status: 1)
   */
-  enableParallelBuilding = false;
+  enableParallelChecking = false;
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://www.gnu.org/software/libunistring/";

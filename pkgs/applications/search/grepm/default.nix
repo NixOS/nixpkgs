@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0ppprhfw06779hz1b10qvq62gsw73shccsav982dyi6xmqb6jqji";
   };
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   buildInputs = [ perlPackages.grepmail mutt ];
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Wrapper for grepmail utilizing mutt";
-    homepage = "http://www.barsnick.net/sw/grepm.html";
+    homepage = "https://www.barsnick.net/sw/grepm.html";
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

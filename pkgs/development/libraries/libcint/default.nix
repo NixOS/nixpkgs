@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcint";
-  version = "4.4.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
-    hash = "sha256-nsIyosn8dBf217UmjXSKLTM2RhIQHCSvPlrvlqo5KLc=";
+    hash = "sha256-U+ZlD/I7RHtdYNbFhAmeU4qREe45dYJDIAC3Bup2tr0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,12 +24,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_TEST=1"
     "-DQUICK_TEST=1"
     "-DCMAKE_INSTALL_PREFIX=" # ends up double-adding /nix/store/... prefix, this avoids issue
+    "-DWITH_RANGE_COULOMB:STRING=1"
+    "-DWITH_FORTRAN:STRING=1"
+    "-DMIN_EXPCUTOFF:STRING=20"
   ];
 
   strictDeps = true;
 
   doCheck = true;
-  checkInputs = [ python3.pkgs.numpy ];
+  nativeCheckInputs = [ python3.pkgs.numpy ];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";

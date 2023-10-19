@@ -1,5 +1,4 @@
-{ atomEnv
-, autoPatchelfHook
+{ autoPatchelfHook
 , dpkg
 , fetchurl
 , makeDesktopItem
@@ -11,6 +10,11 @@
 , cpio
 , xar
 , libdbusmenu
+, alsa-lib
+, mesa
+, nss
+, nspr
+, systemd
 }:
 
 let
@@ -21,14 +25,20 @@ let
 
   pname = "wire-desktop";
 
-  version = {
-    x86_64-darwin = "3.25.4095";
-    x86_64-linux = "3.25.2940";
+  version = let
+    x86_64-darwin = "3.32.4589";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
+    x86_64-linux = "3.32.3079";
   }.${system} or throwSystem;
 
-  sha256 = {
-    x86_64-darwin = "01gbmbxs3w7lwsy5wjpr7fgqkb20rj5fv1r3dsmjkfwy45pd835j";
-    x86_64-linux = "1vb2fy8hijjp0193d32d8hw7h00w6wympf3zc96skk8hz3ks6xz8";
+  hash = let
+    x86_64-darwin = "sha256-PDAZCnkgzlausdtwycK+PHfp+zmL33VnX6RzCsgBTZ4=";
+  in {
+    inherit x86_64-darwin;
+    aarch64-darwin = x86_64-darwin;
+    x86_64-linux = "sha256-+4aRis141ctI50BtBwipoVtPoMGRs82ENqZ+y2ZlL58=";
   }.${system} or throwSystem;
 
   meta = with lib; {
@@ -46,38 +56,36 @@ let
     '';
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
       kiwi
       toonn
     ];
-    platforms = [
-      "x86_64-darwin"
+    platforms = platforms.darwin ++ [
       "x86_64-linux"
     ];
+    hydraPlatforms = [];
   };
 
   linux = stdenv.mkDerivation rec {
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://wire-app.wire.com/linux/debian/pool/main/"
-      + "Wire-${version}_amd64.deb";
-      inherit sha256;
+      url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
+      inherit hash;
     };
 
     desktopItem = makeDesktopItem {
-      categories = "Network;InstantMessaging;Chat;VideoConference";
+      categories = [ "Network" "InstantMessaging" "Chat" "VideoConference" ];
       comment = "Secure messenger for everyone";
       desktopName = "Wire";
       exec = "wire-desktop %U";
       genericName = "Secure messenger";
       icon = "wire-desktop";
       name = "wire-desktop";
-      extraEntries = ''
-        StartupWMClass=Wire
-      '';
+      startupWMClass = "Wire";
     };
 
     dontBuild = true;
@@ -85,6 +93,7 @@ let
     dontPatchELF = true;
     dontWrapGApps = true;
 
+    # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
     nativeBuildInputs = [
       autoPatchelfHook
       dpkg
@@ -92,7 +101,13 @@ let
       wrapGAppsHook
     ];
 
-    buildInputs = atomEnv.packages;
+    buildInputs = [
+      alsa-lib
+      mesa
+      nss
+      nspr
+      systemd
+    ];
 
     unpackPhase = ''
       runHook preUnpack
@@ -132,9 +147,8 @@ let
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://github.com/wireapp/wire-desktop/releases/download/"
-          + "macos%2F${version}/Wire.pkg";
-      inherit sha256;
+      url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${version}/Wire.pkg";
+      inherit hash;
     };
 
     buildInputs = [

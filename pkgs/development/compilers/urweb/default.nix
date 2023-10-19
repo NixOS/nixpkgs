@@ -27,11 +27,16 @@ stdenv.mkDerivation rec {
 
     export CC="${gcc}/bin/gcc";
     export CCARGS="-I$out/include \
-                   -L${openssl.out}/lib \
+                   -L${lib.getLib openssl}/lib \
                    -L${libmysqlclient}/lib \
                    -L${postgresql.lib}/lib \
                    -L${sqlite.out}/lib";
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=use-after-free"
+  ];
 
   # Be sure to keep the statically linked libraries
   dontDisableStatic = true;

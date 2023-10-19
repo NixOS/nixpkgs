@@ -1,47 +1,60 @@
-{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake
-, qtbase, qtquickcontrols, qtquickcontrols2, qtkeychain, qtmultimedia, qttools
-, libquotient, libsecret
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, wrapQtAppsHook
+, qtbase
+, qtquickcontrols2
+, qtkeychain
+, qtmultimedia
+, qttools
+, libquotient
+, libsecret
+, olm
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "quaternion";
-  version = "0.0.9.5-beta2";
+  version = "0.0.96-beta4";
 
   src = fetchFromGitHub {
-    owner = "QMatrixClient";
+    owner = "quotient-im";
     repo = "Quaternion";
-    rev = version;
-    sha256 = "sha256-K4SMB5kL0YO2OIeNUu4hWqU4E4n4vZDRRsJVYmCZqvM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yItl31Ze48lRIIey+FlRLMVAkg4mHu8G1sFOceHvTJw=";
   };
 
   buildInputs = [
-    qtbase
-    qtmultimedia
-    qtquickcontrols
-    qtquickcontrols2
-    qtkeychain
     libquotient
     libsecret
+    olm
+    qtbase
+    qtkeychain
+    qtmultimedia
+    qtquickcontrols2
   ];
 
-  nativeBuildInputs = [ cmake qttools ];
+  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
 
-  postInstall = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv $out/bin/quaternion.app $out/Applications
-    rmdir $out/bin || :
-  '' else ''
-    substituteInPlace $out/share/applications/com.github.quaternion.desktop \
-      --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-  '';
+  cmakeFlags = [
+    "-DBUILD_WITH_QT6=OFF"
+  ];
+
+  postInstall =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      mv $out/bin/quaternion.app $out/Applications
+      rmdir $out/bin || :
+    '' else ''
+      substituteInPlace $out/share/applications/com.github.quaternion.desktop \
+        --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+    '';
 
   meta = with lib; {
-    description =
-      "Cross-platform desktop IM client for the Matrix protocol";
-    homepage = "https://matrix.org/docs/projects/client/quaternion.html";
+    description = "Cross-platform desktop IM client for the Matrix protocol";
+    homepage = "https://matrix.org/ecosystem/clients/quaternion/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (qtbase.meta) platforms;
-    inherit version;
+    inherit (qtquickcontrols2.meta) platforms;
   };
 }

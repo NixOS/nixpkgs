@@ -10,18 +10,18 @@
 , liblxqt
 , libqtxdg
 , qtx11extras
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-notificationd";
-  version = "0.17.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1r2cmxcjkm9lvb2ilq2winyqndnamsd9x2ynmfiqidby2pcr9i3a";
+    sha256 = "zfoTc+O8eYpUc13vzHUuk71q+MATNGEGtiYhQmFldtw=";
   };
 
   nativeBuildInputs = [
@@ -39,13 +39,13 @@ mkDerivation rec {
     qtx11extras
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-notificationd";
     description = "The LXQt notification daemon";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

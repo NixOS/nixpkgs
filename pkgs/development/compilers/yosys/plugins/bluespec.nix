@@ -4,13 +4,14 @@
 
 stdenv.mkDerivation {
   pname = "yosys-bluespec";
-  version = "2021.01.17";
+  version = "2021.09.08";
+  plugin = "bluespec";
 
   src = fetchFromGitHub {
     owner  = "thoughtpolice";
     repo   = "yosys-bluespec";
-    rev    = "3cfa22c2810b840f406610efe3d7657477c1b0ed";
-    sha256 = "1r48128yisw5lpziaj3hq88acghwi94pvm4735xajx8dl79jkcng";
+    rev    = "f6f4127a4e96e18080fd5362b6769fa3e24c76b1";
+    sha256 = "sha256-3cNFP/k4JsgLyUQHWU10Htl2Rh0staAcA3R4piD6hDE=";
   };
 
   buildInputs = [ yosys readline zlib bluespec ];

@@ -1,35 +1,59 @@
 { lib
+, appdirs
+, beautifulsoup4
 , buildPythonPackage
-, fetchPypi
+, cryptography
+, fetchFromGitHub
+, frozendict
+, html5lib
 , multitasking
 , numpy
 , pandas
+, peewee
+, pythonOlder
 , requests
+, lxml
 }:
 
 buildPythonPackage rec {
   pname = "yfinance";
-  version = "0.1.56";
+  version = "0.2.31";
+  format = "setuptools";
 
-  # GitHub source releases aren't tagged
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a6d4c7b939fdd48d983556501f5b387e20aaef86afc8e6ba6f91a49a7e22d2dd";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "ranaroussi";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-GXnMzIjRx5c3O7J0bPjcdDvEIqTGMe002wYx28FLI6U=";
   };
 
   propagatedBuildInputs = [
+    appdirs
+    beautifulsoup4
+    cryptography
+    frozendict
+    html5lib
+    lxml
     multitasking
     numpy
     pandas
+    peewee
     requests
   ];
 
-  doCheck = false;  # Tests require internet access
-  pythonImportsCheck = [ "yfinance" ];
+  # Tests require internet access
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "yfinance"
+  ];
 
   meta = with lib; {
-    description = "Yahoo! Finance market data downloader (+faster Pandas Datareader)";
-    homepage = "https://aroussi.com/post/python-yahoo-finance";
+    description = "Module to doiwnload Yahoo! Finance market data";
+    homepage = "https://github.com/ranaroussi/yfinance";
+    changelog = "https://github.com/ranaroussi/yfinance/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };

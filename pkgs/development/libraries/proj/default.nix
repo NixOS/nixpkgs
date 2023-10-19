@@ -1,53 +1,74 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
+, buildPackages
+, callPackage
 , sqlite
 , libtiff
 , curl
 , gtest
+, nlohmann_json
+, python3
+, cacert
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
-  version = "7.2.1";
+  version = "9.3.0";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "0mymvfvs8xggl4axvlj7kc1ksd9g94kaz6w1vdv0x2y5mqk93gx9";
+    hash = "sha256-M1KUXzht4qIjPfHxvzPr7XUnisMwtbegKp18XQjNYHg=";
   };
 
-  postPatch = lib.optionalString (version == "7.2.1") ''
-    substituteInPlace CMakeLists.txt \
-      --replace "MAJOR 7 MINOR 2 PATCH 0" "MAJOR 7 MINOR 2 PATCH 1"
-  '';
+  patches = [
+    # https://github.com/OSGeo/PROJ/pull/3252
+    ./only-add-curl-for-static-builds.patch
+  ];
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ sqlite libtiff curl ];
+  buildInputs = [ sqlite libtiff curl nlohmann_json ];
 
-  checkInputs = [ gtest ];
+  nativeCheckInputs = [ cacert gtest ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
+    "-DRUN_NETWORK_DEPENDENT_TESTS=OFF"
+    "-DNLOHMANN_JSON_ORIGIN=external"
+    "-DEXE_SQLITE3=${buildPackages.sqlite}/bin/sqlite3"
   ];
 
-  doCheck = stdenv.is64bit;
+  preCheck =
+    let
+      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    in
+      ''
+        export HOME=$TMPDIR
+        export TMP=$TMPDIR
+        export ${libPathEnvVar}=$PWD/lib
+      '';
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  doCheck = true;
+
+  passthru.tests = {
+    python = python3.pkgs.pyproj;
+    proj = callPackage ./tests.nix { proj = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
+    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/NEWS";
     description = "Cartographic Projections Library";
-    homepage = "https://proj4.org";
+    homepage = "https://proj.org/";
     license = licenses.mit;
+    maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ vbgl dotlambda ];
   };
-}
+})

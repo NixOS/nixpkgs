@@ -1,15 +1,36 @@
-{ lib, stdenv, fetchurl, meson, ninja, gettext, appstream-glib, gnome }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, python3
+, gettext
+, appstream-glib
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "cantarell-fonts";
-  version = "0.301";
+  version = "0.303.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "3d35db0ac03f9e6b0d5a53577591b714238985f4cfc31a0aa17f26cd74675e83";
+    sha256 = "+UY6BlnGPlfjgf3XU88ZKSJTlcW0kTWYlCR2GDBTBBE=";
   };
 
-  nativeBuildInputs = [ meson ninja gettext appstream-glib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    python3
+    python3.pkgs.psautohint
+    python3.pkgs.cffsubr
+    python3.pkgs.statmake
+    python3.pkgs.ufo2ft
+    python3.pkgs.setuptools
+    python3.pkgs.ufoLib2
+    gettext
+    appstream-glib
+  ];
 
   # ad-hoc fix for https://github.com/NixOS/nixpkgs/issues/50855
   # until we fix gettext's envHook
@@ -19,7 +40,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "1sczskw2kv3qy39i9mzw2lkl94a90bjgv5ln9acy5kh4gb2zmy7z";
+  outputHash = "XeqHVdTQ7PTzxkjwfzS/BTR7+k/M69sfUKdRXGOTmZE=";
 
   passthru = {
     updateScript = gnome.updateScript {

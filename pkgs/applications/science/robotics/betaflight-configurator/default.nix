@@ -13,17 +13,23 @@ let
 in
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "10.7.0";
+  version = "10.9.0";
   src = fetchurl {
-    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64.zip";
-    sha256 = "07r60n9422g5sm7x5b62p044cp961l51vx0s8ig2hy24s74hkam1";
+    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64-portable.zip";
+    sha256 = "sha256-9FzMyBIR2u1zXHtTWJABM6RF1+OyjYdEPlRwtig9blI=";
   };
+
+  # remove large unneeded files
+  postUnpack = ''
+    find -name "lib*.so" -delete
+  '';
 
   nativeBuildInputs = [ wrapGAppsHook unzip ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin \
              $out/opt/${pname}
 
@@ -32,6 +38,7 @@ stdenv.mkDerivation rec {
     cp -r ${desktopItem}/share/applications $out/share/
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/${pname}
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -42,6 +49,7 @@ stdenv.mkDerivation rec {
       quadcopters, hexacopters, octocopters and fixed-wing aircraft.
     '';
     homepage    = "https://github.com/betaflight/betaflight/wiki";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.gpl3;
     maintainers = with maintainers; [ wucke13 ];
     platforms   = platforms.linux;

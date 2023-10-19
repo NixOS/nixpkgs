@@ -10,12 +10,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ungoogled-chromium-${version}";
+  pname = "ungoogled-chromium";
 
   version = rev;
 
   src = fetchFromGitHub {
-    owner = "Eloston";
+    owner = "ungoogled-software";
     repo = "ungoogled-chromium";
     inherit rev sha256;
   };

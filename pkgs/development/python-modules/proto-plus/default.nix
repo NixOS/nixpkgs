@@ -10,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "proto-plus";
-  version = "1.18.1";
+  version = "1.22.2";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfc45474c7eda0fe3c4b9eca2542124f2a0ff5543242bec61e8d08bce0f5bd48";
+    hash = "sha256-DozaPVpjTZiVt1xXPJNSwWSGy3XesOB4tf2jTbQkMWU=";
   };
 
   propagatedBuildInputs = [ protobuf ];
 
-  checkInputs = [ pytestCheckHook pytz googleapis-common-protos ];
+  nativeCheckInputs = [ pytestCheckHook pytz googleapis-common-protos ];
 
   pythonImportsCheck = [ "proto" ];
 
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Beautiful, idiomatic protocol buffers in Python";
     homepage = "https://github.com/googleapis/proto-plus-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ruuda SuperSandro2000 ];
+    maintainers = with maintainers; [ ruuda ];
   };
 }

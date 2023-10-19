@@ -1,17 +1,33 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "pgweb";
-  version = "0.11.7";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1df3vixxca80i040apbim80nqni94q882ykn3cglyccyl0iz59ix";
+    hash = "sha256-0wwDye7Iku9+brYoVqlCpnm+A3xsr8tL2dyWaBVvres=";
   };
 
-  goPackagePath = "github.com/sosedoff/pgweb";
+  postPatch = ''
+    # Disable tests require network access.
+    rm -f pkg/client/{client,dump}_test.go
+  '';
+
+  vendorHash = "sha256-Jpvf6cST3kBvYzCQLoJ1fijUC/hP1ouptd2bQZ1J/Lo=";
+
+  ldflags = [ "-s" "-w" ];
+
+  checkFlags =
+    let
+      skippedTests = [
+        # There is a `/tmp/foo` file on the test machine causing the test case to fail on macOS
+        "TestParseOptions"
+      ];
+    in
+    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
   meta = with lib; {
     description = "A web-based database browser for PostgreSQL";
@@ -21,6 +37,6 @@ buildGoPackage rec {
     '';
     homepage = "https://sosedoff.github.io/pgweb/";
     license = licenses.mit;
-    maintainers = with maintainers; [ zupo ];
+    maintainers = with maintainers; [ zupo luisnquin ];
   };
 }

@@ -1,7 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
+, makeFontsConf
+, nix-update-script
 , autoreconfHook
 , pkg-config
 , perl
@@ -16,39 +17,28 @@
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
-  version = "2.1.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0487gap2b0ypikyra74lk1qwqwr0vncldamk5xb1db2x97v504fd";
+    sha256 = "sha256-KCp/8UjVl8e3+4s1FD4GvHP7AUAS+eIB7RWhmgm5GIA=";
   };
-
-  # https://github.com/libsidplayfp/libsidplayfp/issues/13
-  # Remove on next version bump
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/libsidplayfp/libsidplayfp/commit/84f5498f5653261ed84328e1b5676c31e3ba9e6e.patch";
-      sha256 = "1vysbl4fkdzm11k40msng2ag6i6mb6z9jsw32vyj9calcfha5957";
-    })
-    (fetchpatch {
-      url = "https://github.com/libsidplayfp/libsidplayfp/commit/c1a1b732cc2e791d910522d58f47c6d094493c6d.patch";
-      sha256 = "1d3sgdly0q9dysgkx5afxbwfas6p0m8n3lw1hmj4n6wm3j9sdz4g";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
     ++ lib.optionals docSupport [ doxygen graphviz ];
 
   buildInputs = [ libgcrypt libexsid ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkInputs = [ unittest-cpp ];
 
@@ -67,10 +57,21 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional doCheck "--enable-tests";
 
+  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
+
+  preBuild = ''
+    # Reduce noise from fontconfig during doc building
+    export XDG_CACHE_HOME=$TMPDIR
+  '';
+
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
     mv docs/html $doc/share/doc/libsidplayfp/
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A library to play Commodore 64 music derived from libsidplay2";

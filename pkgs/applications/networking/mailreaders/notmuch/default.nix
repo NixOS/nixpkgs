@@ -1,29 +1,26 @@
-{ fetchurl, fetchgit, lib, stdenv
+{ fetchurl, lib, stdenv, makeWrapper
 , pkg-config, gnupg
-, xapian, gmime, talloc, zlib
+, xapian, gmime3, sfsexp, talloc, zlib
 , doxygen, perl, texinfo
+, notmuch
 , pythonPackages
 , emacs
 , ruby
-, which, dtach, openssl, bash, gdb, man
+, testers
+, gitUpdater
+, which, dtach, openssl, bash, gdb, man, git
 , withEmacs ? true
+, withRuby ? true
+, withSfsexp ? true # also installs notmuch-git, which requires sexp-support
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  version = "0.31.4";
   pname = "notmuch";
+  version = "0.38";
 
-  passthru = {
-    pythonSourceRoot = "${src.name}/bindings/python";
-    inherit version;
-  };
-
-  src = fetchgit {
-    url = "https://git.notmuchmail.org/git/notmuch";
-    sha256 = "sha256-M+LEf257OcDlHOCYYxzEVQpop+i2gzO/QJPdajz/CRM=";
-    rev = version;
+  src = fetchurl {
+    url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
+    sha256 = "sha256-oXkBrb5D9IGmv1PBWiogJovI3HrVzPaFoNF8FFbbr24=";
   };
 
   nativeBuildInputs = [
@@ -31,23 +28,29 @@ stdenv.mkDerivation rec {
     doxygen                   # (optional) api docs
     pythonPackages.sphinx     # (optional) documentation -> doc/INSTALL
     texinfo                   # (optional) documentation -> doc/INSTALL
-  ] ++ optional withEmacs [ emacs ];
+    pythonPackages.cffi
+  ] ++ lib.optional withEmacs emacs
+    ++ lib.optional withRuby ruby
+    ++ lib.optional withSfsexp makeWrapper;
 
   buildInputs = [
     gnupg                     # undefined dependencies
-    xapian gmime talloc zlib  # dependencies described in INSTALL
+    xapian gmime3 talloc zlib  # dependencies described in INSTALL
     perl
     pythonPackages.python
-    ruby
-  ];
+  ] ++ lib.optional withRuby ruby
+    ++ lib.optional withSfsexp sfsexp;
 
   postPatch = ''
-    patchShebangs configure
-    patchShebangs test/
+    patchShebangs configure test/
 
     substituteInPlace lib/Makefile.local \
       --replace '-install_name $(libdir)' "-install_name $out/lib"
-  '' + optionalString withEmacs ''
+
+    # do not override CFLAGS of the Makefile created by mkmf
+    substituteInPlace bindings/Makefile.local \
+      --replace 'CFLAGS="$(CFLAGS) -pipe -fno-plt -fPIC"' ""
+  '' + lib.optionalString withEmacs ''
     substituteInPlace emacs/notmuch-emacs-mua \
       --replace 'EMACS:-emacs' 'EMACS:-${emacs}/bin/emacs' \
       --replace 'EMACSCLIENT:-emacsclient' 'EMACSCLIENT:-${emacs}/bin/emacsclient'
@@ -57,9 +60,9 @@ stdenv.mkDerivation rec {
     "--zshcompletiondir=${placeholder "out"}/share/zsh/site-functions"
     "--bashcompletiondir=${placeholder "out"}/share/bash-completion/completions"
     "--infodir=${placeholder "info"}/share/info"
-  ] ++ optional (!withEmacs) "--without-emacs"
-    ++ optional (withEmacs) "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
-    ++ optional (isNull ruby) "--without-ruby";
+  ] ++ lib.optional (!withEmacs) "--without-emacs"
+    ++ lib.optional withEmacs "--emacslispdir=${placeholder "emacs"}/share/emacs/site-lisp"
+    ++ lib.optional (!withRuby) "--without-ruby";
 
   # Notmuch doesn't use autoconf and consequently doesn't tag --bindir and
   # friends
@@ -67,8 +70,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [ "V=1" ];
 
+  postConfigure = ''
+    mkdir ${placeholder "bindingconfig"}
+    cp bindings/python-cffi/_notmuch_config.py ${placeholder "bindingconfig"}/
+  '';
 
-  outputs = [ "out" "man" "info" ] ++ lib.optional withEmacs "emacs";
+  outputs = [ "out" "man" "info" "bindingconfig" ]
+    ++ lib.optional withEmacs "emacs"
+    ++ lib.optional withRuby "ruby";
+
+  # if notmuch is built with s-expression support, the testsuite (T-850.sh) only
+  # passes if notmuch-git can be executed, so we need to patch its shebang.
+  postBuild = lib.optionalString withSfsexp ''
+    patchShebangs notmuch-git
+  '';
 
   preCheck = let
     test-database = fetchurl {
@@ -78,32 +93,57 @@ stdenv.mkDerivation rec {
   in ''
     mkdir -p test/test-databases
     ln -s ${test-database} test/test-databases/database-v1.tar.xz
+  ''
+  # Issues since gnupg: 2.4.0 -> 2.4.1
+  + ''
+    rm test/{T350-crypto,T357-index-decryption}.sh
   '';
-  doCheck = !stdenv.hostPlatform.isDarwin && (versionAtLeast gmime.version "3.0.3");
-  checkTarget = "test";
-  checkInputs = [
-    which dtach openssl bash
-    gdb man emacs
-  ];
 
-  # Expects there to always be a thread with ID
-  # thread:0000000000000009, but notmuch new is non-deterministic so
-  # this isn't always the case.  Upstream bug report:
-  # https://nmbug.notmuchmail.org/nmweb/show/871reno6g7.fsf%40alyssa.is
-  NOTMUCH_SKIP_TESTS = "lib-thread";
+  doCheck = !stdenv.hostPlatform.isDarwin && (lib.versionAtLeast gmime3.version "3.0.3");
+  checkTarget = "test";
+  nativeCheckInputs = [
+    which dtach openssl bash
+    gdb man
+  ]
+  # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
+  # built without sexp-support
+  ++ lib.optional withEmacs emacs
+  ++ lib.optional withSfsexp git;
 
   installTargets = [ "install" "install-man" "install-info" ];
 
   postInstall = lib.optionalString withEmacs ''
     moveToOutput bin/notmuch-emacs-mua $emacs
+  '' + lib.optionalString withRuby ''
+    make -C bindings/ruby install \
+      vendordir=$ruby/lib/ruby \
+      SHELL=$SHELL \
+      $makeFlags "''${makeFlagsArray[@]}" \
+      $installFlags "''${installFlagsArray[@]}"
+  ''
+  # notmuch-git (https://notmuchmail.org/doc/latest/man1/notmuch-git.html) does not work without
+  # sexp-support, so there is no point in installing if we're building without it.
+  + lib.optionalString withSfsexp ''
+    cp notmuch-git $out/bin/notmuch-git
+    wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
   '';
 
-  dontGzipMan = true; # already compressed
+  passthru = {
+    pythonSourceRoot = "notmuch-${version}/bindings/python";
+    tests.version = testers.testVersion { package = notmuch; };
+    inherit version;
 
-  meta = {
+    updateScript = gitUpdater {
+      url = "https://git.notmuchmail.org/git/notmuch";
+      ignoredVersions = "_rc.*";
+    };
+  };
+
+  meta = with lib; {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
-    license     = licenses.gpl3;
+    changelog   = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
+    license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;
   };

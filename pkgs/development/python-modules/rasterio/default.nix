@@ -1,29 +1,110 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy3k
-, cython, setuptools
-, numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
-, pytest, pytestcov, packaging, hypothesis, boto3, mock
+{ lib
+, stdenv
+, affine
+, attrs
+, boto3
+, buildPythonPackage
+, click
+, click-plugins
+, cligj
+, certifi
+, cython
+, fetchFromGitHub
+, gdal
+, hypothesis
+, matplotlib
+, ipython
+, numpy
+, oldest-supported-numpy
+, packaging
+, pytest-randomly
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, shapely
+, snuggs
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.1.5";
+  version = "1.3.8";
+  format = "pyproject";
 
-  # Pypi doesn't ship the tests, so we fetch directly from GitHub
+  disabled = pythonOlder "3.8";
+
   src = fetchFromGitHub {
-    owner = "mapbox";
+    owner = "rasterio";
     repo = "rasterio";
-    rev = version;
-    sha256 = "168b6hmx026jsvhnq6s5k0qfhzda02mmx1alax6wqk16mk63mqcz";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8kPzUvTZ/jRDXlYMAZkG1xdLAQuzxnvHXBzwWizMOTo=";
   };
 
-  checkInputs = [ boto3 pytest pytestcov packaging hypothesis ] ++ lib.optional (!isPy3k) mock;
-  nativeBuildInputs = [ cython gdal ];
-  propagatedBuildInputs = [ gdal numpy attrs affine cligj click-plugins snuggs setuptools ];
+  nativeBuildInputs = [
+    cython
+    gdal
+    numpy
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    affine
+    attrs
+    click
+    click-plugins
+    cligj
+    certifi
+    numpy
+    snuggs
+    setuptools
+  ];
+
+  passthru.optional-dependencies = {
+    ipython = [
+      ipython
+    ];
+    plot = [
+      matplotlib
+    ];
+    s3 = [
+      boto3
+    ];
+  };
+
+  nativeCheckInputs = [
+    boto3
+    hypothesis
+    packaging
+    pytest-randomly
+    pytestCheckHook
+    shapely
+  ];
+
+  doCheck = true;
+
+  preCheck = ''
+    rm -r rasterio # prevent importing local rasterio
+  '';
+
+  pytestFlagsArray = [
+    "-m 'not network'"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_reproject_error_propagation"
+  ];
+
+  pythonImportsCheck = [
+    "rasterio"
+  ];
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
+    homepage = "https://rasterio.readthedocs.io/";
+    changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
     license = licenses.bsd3;
-    homepage = "https://rasterio.readthedocs.io/en/latest/";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = teams.geospatial.members;
   };
 }

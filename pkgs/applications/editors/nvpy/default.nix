@@ -1,20 +1,24 @@
-{ pkgs, fetchurl, python2Packages }:
+{ pkgs, fetchFromGitHub, python3Packages }:
 
 let
-  pythonPackages = python2Packages;
+  pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
-  version = "0.9.7";
+  version = "2.2.0";
   pname = "nvpy";
 
-  src = fetchurl {
-    url = "https://github.com/cpbotha/nvpy/archive/v${version}.tar.gz";
-    sha256 = "1rd3vlaqkg16iz6qcw6rkbq0jmyvc0843wa3brnvn1nz0kla243f";
+  src = fetchFromGitHub {
+    owner = "cpbotha";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-eWvD1k0wbzo0G46/LEOlHl1wLvc4JHLL1fg6wuCHiQY=";
   };
+
 
   propagatedBuildInputs = with pythonPackages; [
     markdown
-    tkinter
     docutils
+    simplenote
+    tkinter
   ];
 
   # No tests

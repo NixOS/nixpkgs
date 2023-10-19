@@ -26,49 +26,49 @@ in {
 
   options.services.apache-kafka = {
     enable = mkOption {
-      description = "Whether to enable Apache Kafka.";
+      description = lib.mdDoc "Whether to enable Apache Kafka.";
       default = false;
       type = types.bool;
     };
 
     brokerId = mkOption {
-      description = "Broker ID.";
+      description = lib.mdDoc "Broker ID.";
       default = -1;
       type = types.int;
     };
 
     port = mkOption {
-      description = "Port number the broker should listen on.";
+      description = lib.mdDoc "Port number the broker should listen on.";
       default = 9092;
-      type = types.int;
+      type = types.port;
     };
 
     hostname = mkOption {
-      description = "Hostname the broker should bind to.";
+      description = lib.mdDoc "Hostname the broker should bind to.";
       default = "localhost";
       type = types.str;
     };
 
     logDirs = mkOption {
-      description = "Log file directories";
+      description = lib.mdDoc "Log file directories";
       default = [ "/tmp/kafka-logs" ];
       type = types.listOf types.path;
     };
 
     zookeeper = mkOption {
-      description = "Zookeeper connection string";
+      description = lib.mdDoc "Zookeeper connection string";
       default = "localhost:2181";
       type = types.str;
     };
 
     extraProperties = mkOption {
-      description = "Extra properties for server.properties.";
+      description = lib.mdDoc "Extra properties for server.properties.";
       type = types.nullOr types.lines;
       default = null;
     };
 
     serverProperties = mkOption {
-      description = ''
+      description = lib.mdDoc ''
         Complete server.properties content. Other server.properties config
         options will be ignored if this option is used.
       '';
@@ -77,7 +77,7 @@ in {
     };
 
     log4jProperties = mkOption {
-      description = "Kafka log4j property configuration.";
+      description = lib.mdDoc "Kafka log4j property configuration.";
       default = ''
         log4j.rootLogger=INFO, stdout
 
@@ -89,7 +89,7 @@ in {
     };
 
     jvmOptions = mkOption {
-      description = "Extra command line options for the JVM running Kafka.";
+      description = lib.mdDoc "Extra command line options for the JVM running Kafka.";
       default = [];
       type = types.listOf types.str;
       example = [
@@ -100,16 +100,16 @@ in {
     };
 
     package = mkOption {
-      description = "The kafka package to use";
+      description = lib.mdDoc "The kafka package to use";
       default = pkgs.apacheKafka;
-      defaultText = "pkgs.apacheKafka";
+      defaultText = literalExpression "pkgs.apacheKafka";
       type = types.package;
     };
 
     jre = mkOption {
-      description = "The JRE with which to run Kafka";
+      description = lib.mdDoc "The JRE with which to run Kafka";
       default = cfg.package.passthru.jre;
-      defaultText = "pkgs.apacheKafka.passthru.jre";
+      defaultText = literalExpression "pkgs.apacheKafka.passthru.jre";
       type = types.package;
     };
 
@@ -120,10 +120,12 @@ in {
     environment.systemPackages = [cfg.package];
 
     users.users.apache-kafka = {
-      uid = config.ids.uids.apache-kafka;
+      isSystemUser = true;
+      group = "apache-kafka";
       description = "Apache Kafka daemon user";
       home = head cfg.logDirs;
     };
+    users.groups.apache-kafka = {};
 
     systemd.tmpfiles.rules = map (logDir: "d '${logDir}' 0700 apache-kafka - - -") cfg.logDirs;
 

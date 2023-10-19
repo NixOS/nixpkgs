@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  postPatch = ''
+    sed -i -e '/add_subdirectory(tests)/d' lib/CMakeLists.txt
+  '';
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
 

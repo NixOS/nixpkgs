@@ -1,21 +1,38 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, copyPkgconfigItems, makePkgconfigItem }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "stb";
-  version = "20180211";
+  version = "unstable-2023-01-29";
 
   src = fetchFromGitHub {
     owner = "nothings";
     repo = "stb";
-    rev = "e6afb9cbae4064da8c3e69af3ff5c4629579c1d2";
-    sha256 = "079nsn9bnb8c0vfq26g5l53q6gzx19a5x9q2nb55mpcljxsgxnmf";
+    rev = "5736b15f7ea0ffb08dd38af21067c314d6a3aae9";
+    hash = "sha256-s2ASdlT3bBNrqvwfhhN6skjbmyEnUgvNOrvhgUSRj98=";
   };
+
+  nativeBuildInputs = [ copyPkgconfigItems ];
+
+  pkgconfigItems = [
+    (makePkgconfigItem rec {
+      name = "stb";
+      version = "1";
+      cflags = [ "-I${variables.includedir}/stb" ];
+      variables = rec {
+        prefix = "${placeholder "out"}";
+        includedir = "${prefix}/include";
+      };
+      inherit (meta) description;
+    })
+  ];
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/include/stb
     cp *.h $out/include/stb/
+    runHook postInstall
   '';
 
   meta = with lib; {

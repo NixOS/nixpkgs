@@ -13,7 +13,7 @@ in
     maintainers = [ berbiche ];
   };
 
-  machine = { config, ... }:
+  nodes.machine = { config, ... }:
   let
     alice = config.users.users.alice;
   in {
@@ -33,9 +33,9 @@ in
 
     hardware.opengl.enable = true;
     programs.xwayland.enable = true;
+    security.polkit.enable = true;
     environment.systemPackages = [ pkgs.cagebreak pkgs.wayland-utils ];
 
-    virtualisation.memorySize = 1024;
     # Need to switch to a different GPU driver than the default one (-vga std) so that Cagebreak can launch:
     virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };

@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, makeWrapper
-, ncurses, python3, perl, textual-window-manager
+, python3, perl, textual-window-manager
 , gettext, vim, bc, screen }:
 
 let
@@ -7,7 +7,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = "5.133";
-  name = "byobu-" + version;
+  pname = "byobu";
 
   src = fetchurl {
     url = "https://launchpad.net/byobu/trunk/${version}/+download/byobu_${version}.orig.tar.gz";
@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl gettext ];
+  strictdeps = true;
+  nativeBuildInputs = [ makeWrapper gettext ];
+  buildInputs = [ perl ]; # perl is needed for `lib/byobu/include/*` scripts
   propagatedBuildInputs = [ textual-window-manager screen ];
 
   postPatch = ''

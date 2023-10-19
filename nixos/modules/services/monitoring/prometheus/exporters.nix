@@ -1,7 +1,7 @@
 { config, pkgs, lib, options, ... }:
 
 let
-  inherit (lib) concatStrings foldl foldl' genAttrs literalExample maintainers
+  inherit (lib) concatStrings foldl foldl' genAttrs literalExpression maintainers
                 mapAttrsToList mkDefault mkEnableOption mkIf mkMerge mkOption
                 optional types mkOptionDefault flip attrNames;
 
@@ -27,13 +27,22 @@ let
     "bird"
     "bitcoin"
     "blackbox"
+    "buildkite-agent"
     "collectd"
+    "dmarc"
     "dnsmasq"
     "domain"
     "dovecot"
+    "fastly"
     "fritzbox"
+    "graphite"
+    "idrac"
+    "imap-mailstat"
+    "influxdb"
+    "ipmi"
     "json"
     "jitsi"
+    "junos-czerwonk"
     "kea"
     "keylight"
     "knot"
@@ -42,88 +51,102 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+    "mysqld"
     "nextcloud"
     "nginx"
     "nginxlog"
     "node"
+    "nut"
     "openldap"
     "openvpn"
+    "pgbouncer"
+    "php-fpm"
     "pihole"
     "postfix"
     "postgres"
+    "process"
+    "pve"
     "py-air-control"
     "redis"
     "rspamd"
     "rtl_433"
+    "sabnzbd"
+    "scaphandre"
+    "script"
+    "shelly"
     "snmp"
+    "smartctl"
     "smokeping"
     "sql"
+    "statsd"
     "surfboard"
     "systemd"
     "tor"
     "unbound"
     "unifi"
-    "unifi-poller"
+    "unpoller"
+    "v2ray"
     "varnish"
     "wireguard"
     "flow"
+    "zfs"
   ] (name:
     import (./. + "/exporters/${name}.nix") { inherit config lib pkgs options; }
   );
 
   mkExporterOpts = ({ name, port }: {
-    enable = mkEnableOption "the prometheus ${name} exporter";
+    enable = mkEnableOption (lib.mdDoc "the prometheus ${name} exporter");
     port = mkOption {
       type = types.port;
       default = port;
-      description = ''
+      description = lib.mdDoc ''
         Port to listen on.
       '';
     };
     listenAddress = mkOption {
       type = types.str;
       default = "0.0.0.0";
-      description = ''
+      description = lib.mdDoc ''
         Address to listen on.
       '';
     };
     extraFlags = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = ''
+      description = lib.mdDoc ''
         Extra commandline options to pass to the ${name} exporter.
       '';
     };
     openFirewall = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Open port in firewall for incoming connections.
       '';
     };
     firewallFilter = mkOption {
       type = types.nullOr types.str;
       default = null;
-      example = literalExample ''
+      example = literalExpression ''
         "-i eth0 -p tcp -m tcp --dport ${toString port}"
       '';
-      description = ''
+      description = lib.mdDoc ''
         Specify a filter for iptables to use when
-        <option>services.prometheus.exporters.${name}.openFirewall</option>
-        is true. It is used as `ip46tables -I nixos-fw <option>firewallFilter</option> -j nixos-fw-accept`.
+        {option}`services.prometheus.exporters.${name}.openFirewall`
+        is true. It is used as `ip46tables -I nixos-fw firewallFilter -j nixos-fw-accept`.
       '';
     };
     user = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = ''
+      description = lib.mdDoc ''
         User name under which the ${name} exporter shall be run.
       '';
     };
     group = mkOption {
       type = types.str;
       default = "${name}-exporter";
-      description = ''
+      description = lib.mdDoc ''
         Group under which the ${name} exporter shall be run.
       '';
     };
@@ -178,8 +201,30 @@ let
         serviceConfig.PrivateTmp = mkDefault true;
         serviceConfig.WorkingDirectory = mkDefault /tmp;
         serviceConfig.DynamicUser = mkDefault enableDynamicUser;
-        serviceConfig.User = conf.user;
+        serviceConfig.User = mkDefault conf.user;
         serviceConfig.Group = conf.group;
+        # Hardening
+        serviceConfig.CapabilityBoundingSet = mkDefault [ "" ];
+        serviceConfig.DeviceAllow = [ "" ];
+        serviceConfig.LockPersonality = true;
+        serviceConfig.MemoryDenyWriteExecute = true;
+        serviceConfig.NoNewPrivileges = true;
+        serviceConfig.PrivateDevices = mkDefault true;
+        serviceConfig.ProtectClock = mkDefault true;
+        serviceConfig.ProtectControlGroups = true;
+        serviceConfig.ProtectHome = true;
+        serviceConfig.ProtectHostname = true;
+        serviceConfig.ProtectKernelLogs = true;
+        serviceConfig.ProtectKernelModules = true;
+        serviceConfig.ProtectKernelTunables = true;
+        serviceConfig.ProtectSystem = mkDefault "strict";
+        serviceConfig.RemoveIPC = true;
+        serviceConfig.RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        serviceConfig.RestrictNamespaces = true;
+        serviceConfig.RestrictRealtime = true;
+        serviceConfig.RestrictSUIDSGID = true;
+        serviceConfig.SystemCallArchitectures = "native";
+        serviceConfig.UMask = "0077";
       } serviceOpts ]);
   };
 in
@@ -196,10 +241,14 @@ in
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
       options = (mkSubModules);
+      imports = [
+        ../../../misc/assertions.nix
+        (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
+      ];
     };
-    description = "Prometheus exporter configuration";
+    description = lib.mdDoc "Prometheus exporter configuration";
     default = {};
-    example = literalExample ''
+    example = literalExpression ''
       {
         node = {
           enable = true;
@@ -212,6 +261,22 @@ in
 
   config = mkMerge ([{
     assertions = [ {
+      assertion = cfg.ipmi.enable -> (cfg.ipmi.configFile != null) -> (
+        !(lib.hasPrefix "/tmp/" cfg.ipmi.configFile)
+      );
+      message = ''
+        Config file specified in `services.prometheus.exporters.ipmi.configFile' must
+          not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
+      assertion = cfg.ipmi.enable -> (cfg.ipmi.webConfigFile != null) -> (
+        !(lib.hasPrefix "/tmp/" cfg.ipmi.webConfigFile)
+      );
+      message = ''
+        Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
+          not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
       assertion = cfg.snmp.enable -> (
         (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
       );
@@ -236,6 +301,39 @@ in
           or 'services.prometheus.exporters.mail.configFile'.
       '';
     } {
+      assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
+      message = ''
+        The exporter is configured to run as 'services.mysql.user', but
+          'services.mysql.enable' is set to false.
+      '';
+    } {
+      assertion = cfg.nextcloud.enable -> (
+        (cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null)
+      );
+      message = ''
+        Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
+          'services.prometheus.exporters.nextcloud.tokenFile'
+      '';
+    } {
+      assertion =  cfg.pgbouncer.enable -> (
+        (cfg.pgbouncer.connectionStringFile != null || cfg.pgbouncer.connectionString != "")
+      );
+        message = ''
+          PgBouncer exporter needs either connectionStringFile or connectionString configured"
+        '';
+    } {
+      assertion = cfg.pgbouncer.enable -> (
+        config.services.pgbouncer.ignoreStartupParameters != null && builtins.match ".*extra_float_digits.*" config.services.pgbouncer.ignoreStartupParameters != null
+        );
+        message = ''
+          Prometheus PgBouncer exporter requires including `extra_float_digits` in services.pgbouncer.ignoreStartupParameters
+
+          Example:
+          services.pgbouncer.ignoreStartupParameters = extra_float_digits;
+
+          See https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+        '';
+    } {
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -243,13 +341,54 @@ in
         Please specify either 'services.prometheus.exporters.sql.configuration' or
           'services.prometheus.exporters.sql.configFile'
       '';
-    } ] ++ (flip map (attrNames cfg) (exporter: {
+    } {
+      assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
+      message = ''
+        Scaphandre only support x86_64 architectures.
+      '';
+    } {
+      assertion = cfg.scaphandre.enable -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
+      message = ''
+        Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
+      '';
+    } {
+      assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
+      message = ''
+        Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
+      '';
+    } {
+      assertion = cfg.idrac.enable -> (
+        (cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null)
+      );
+      message = ''
+        Please ensure you have either `services.prometheus.exporters.idrac.configuration'
+          or `services.prometheus.exporters.idrac.configurationPath' set!
+      '';
+    } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
         The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
         `openFirewall' is set to `true'!
       '';
-    }));
+    })) ++ config.services.prometheus.exporters.assertions;
+    warnings = [
+      (mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
+          Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
+          `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
+          Consider using `services.prometheus.exporters.idrac.configuration` instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && cfg.pgbouncer.connectionString != "") ''
+          config.services.prometheus.exporters.pgbouncer.connectionString is insecure. Use connectionStringFile instead.
+        ''
+      )
+      (mkIf
+        (cfg.pgbouncer.enable && config.services.pgbouncer.authType != "any") ''
+          Admin user (with password or passwordless) MUST exist in the services.pgbouncer.authFile if authType other than any is used.
+        ''
+      )
+    ] ++ config.services.prometheus.exporters.warnings;
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;
@@ -267,7 +406,7 @@ in
   );
 
   meta = {
-    doc = ./exporters.xml;
+    doc = ./exporters.md;
     maintainers = [ maintainers.willibutz ];
   };
 }

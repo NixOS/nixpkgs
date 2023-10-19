@@ -1,22 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, curl, libzip, pkg-config, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "tldr";
-  version = "1.3.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "tldr-pages";
-    repo = "tldr-cpp-client";
+    repo = "tldr-c-client";
     rev = "v${version}";
-    sha256 = "10ylpiqc06p0qpma72vwksd7hd107s0vlx9c6s9rz4vc3i274lb6";
+    sha256 = "sha256-9pBMo+t/44tuT/CisS0w60KaKXjPfNTMr2v6Ftjaf1k=";
   };
 
   buildInputs = [ curl libzip ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config installShellFiles ];
 
   makeFlags = ["CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" "CFLAGS="];
 
   installFlags = [ "PREFIX=$(out)" ];
+
+  postInstall = ''
+    installShellCompletion --cmd tldr autocomplete/complete.{bash,fish,zsh}
+  '';
 
   meta = with lib; {
     description = "Simplified and community-driven man pages";
@@ -24,9 +28,10 @@ stdenv.mkDerivation rec {
       tldr pages gives common use cases for commands, so you don't need to hunt
       through a man page for the correct flags.
     '';
-    homepage = "http://tldr-pages.github.io";
+    homepage = "https://tldr.sh";
+    changelog = "https://github.com/tldr-pages/tldr-c-client/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ taeer carlosdagos ];
+    maintainers = with maintainers; [ taeer carlosdagos kbdharun];
     platforms = platforms.all;
   };
 }

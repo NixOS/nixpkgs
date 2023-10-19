@@ -1,97 +1,192 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos
-, xlibsWrapper, sqlite, gsl, qwt, fcgi, python3Packages, libspatialindex
-, libspatialite, postgresql, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
-, protobuf, qtbase, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport
-, qtxmlpatterns, withGrass ? true, grass, withWebKit ? true, qtwebkit }:
-with lib;
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, mkDerivation
+, substituteAll
+, wrapGAppsHook
+, wrapQtAppsHook
+
+, withGrass ? true
+, withWebKit ? false
+
+, bison
+, cmake
+, exiv2
+, fcgi
+, flex
+, geos
+, grass
+, gsl
+, hdf5
+, libspatialindex
+, libspatialite
+, libzip
+, netcdf
+, ninja
+, openssl
+, pdal
+, postgresql
+, proj
+, protobuf
+, python3
+, qca-qt5
+, qscintilla
+, qt3d
+, qtbase
+, qtkeychain
+, qtlocation
+, qtmultimedia
+, qtsensors
+, qtserialport
+, qtwebkit
+, qtxmlpatterns
+, qwt
+, sqlite
+, txt2tags
+, zstd
+}:
+
 let
-  pythonBuildInputs = with python3Packages; [
-    qscintilla-qt5
+  py = python3.override {
+    packageOverrides = self: super: {
+      pyqt5 = super.pyqt5.override {
+        withLocation = true;
+      };
+    };
+  };
+
+  pythonBuildInputs = with py.pkgs; [
+    chardet
     gdal
     jinja2
     numpy
-    psycopg2
-    chardet
-    dateutil
-    pyyaml
-    pytz
-    requests
-    urllib3
-    pygments
-    pyqt5
-    sip_4
     owslib
+    psycopg2
+    pygments
+    pyqt-builder
+    pyqt5
+    python-dateutil
+    pytz
+    pyyaml
+    qscintilla-qt5
+    requests
+    setuptools
+    sip
     six
+    urllib3
   ];
 in mkDerivation rec {
-  version = "3.16.7";
-  pname = "qgis";
-  name = "${pname}-unwrapped-${version}";
+  version = "3.32.3";
+  pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "0yvb2w83dplh0my72xljglq9a4a7qkfliwslav26lw4yqxr8mr0p";
+    hash = "sha256-ge5ne22sDLKbrJk2vYQxpu3iRXSoOk9924c/RdtD3Nc=";
   };
 
   passthru = {
     inherit pythonBuildInputs;
-    inherit python3Packages;
+    inherit py;
   };
 
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+    wrapQtAppsHook
+
+    cmake
+    flex
+    bison
+    ninja
+  ];
+
   buildInputs = [
-    openssl
-    proj
-    geos
-    xlibsWrapper
-    sqlite
-    gsl
-    qwt
     exiv2
-    protobuf
     fcgi
+    geos
+    gsl
+    hdf5
     libspatialindex
     libspatialite
-    postgresql
-    txt2tags
     libzip
-    hdf5
     netcdf
-    qtbase
-    qtsensors
+    openssl
+    pdal
+    postgresql
+    proj
+    protobuf
     qca-qt5
-    qtkeychain
     qscintilla
+    qt3d
+    qtbase
+    qtkeychain
+    qtlocation
+    qtmultimedia
+    qtsensors
     qtserialport
     qtxmlpatterns
+    qwt
+    sqlite
+    txt2tags
+    zstd
   ] ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
-  nativeBuildInputs = [ cmake flex bison ninja ];
+  patches = [
+    (substituteAll {
+      src = ./set-pyqt-package-dirs.patch;
+      pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
+      qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
+    })
+    (fetchpatch {
+      name = "exiv2-0.28.patch";
+      url = "https://github.com/qgis/QGIS/commit/32f5418fc4f7bb2ee986dee1824ff2989c113a94.patch";
+      hash = "sha256-zWyf+kLro4ZyUJLX/nDjY0nLneTaI1DxHvRsvwoWq14=";
+    })
+  ];
 
-  # Force this pyqt_sip_dir variable to point to the sip dir in PyQt5
-  #
-  # TODO: Correct PyQt5 to provide the expected directory and fix
-  # build to use PYQT5_SIP_DIR consistently.
-  postPatch = ''
-    substituteInPlace cmake/FindPyQt5.py \
-      --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/share/sip/PyQt5"'
+  # Add path to Qt platform plugins
+  # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
+  preBuild = ''
+    export QT_QPA_PLATFORM_PLUGIN_PATH=${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms
   '';
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
-    "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5"
+    "-DWITH_3D=True"
+    "-DWITH_PDAL=TRUE"
+    "-DENABLE_TESTS=False"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
+    ++ lib.optional withGrass (let
+        gmajor = lib.versions.major grass.version;
+        gminor = lib.versions.minor grass.version;
+      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+    );
 
-  meta = {
+  qtWrapperArgs = [
+    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms"
+  ];
+
+  dontWrapGApps = true; # wrapper params passed below
+
+  postFixup = lib.optionalString withGrass ''
+    # GRASS has to be availble on the command line even though we baked in
+    # the path at build time using GRASS_PREFIX.
+    # Using wrapGAppsHook also prevents file dialogs from crashing the program
+    # on non-NixOS.
+    wrapProgram $out/bin/qgis \
+      "''${gappsWrapperArgs[@]}" \
+      --prefix PATH : ${lib.makeBinPath [ grass ]}
+  '';
+
+  meta = with lib; {
     description = "A Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
-    license = lib.licenses.gpl2Plus;
-    platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ lsix sikmir ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];
+    platforms = with platforms; linux;
   };
 }

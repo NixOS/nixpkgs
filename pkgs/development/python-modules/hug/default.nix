@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ falcon requests ];
 
-  checkInputs = [ mock marshmallow pytestCheckHook numpy ];
+  nativeCheckInputs = [ mock marshmallow pytestCheckHook numpy ];
 
   postPatch = ''
     substituteInPlace setup.py --replace '"pytest-runner"' ""
@@ -47,6 +47,7 @@ buildPythonPackage rec {
     description = "A Python framework that makes developing APIs as simple as possible, but no simpler";
     homepage = "https://github.com/hugapi/hug";
     license = licenses.mit;
+    # Missing support for later falcon releases
+    broken = true;
   };
-
 }

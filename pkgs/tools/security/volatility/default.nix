@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, pythonPackages }:
+{ lib, fetchFromGitHub, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "volatility";
   version = "2.6.1";
 
@@ -13,12 +13,13 @@ pythonPackages.buildPythonApplication rec {
 
   doCheck = false;
 
-  propagatedBuildInputs = [ pythonPackages.pycrypto pythonPackages.distorm3 ];
+  propagatedBuildInputs = with python2Packages; [ pycrypto distorm3 pillow ];
 
   meta = with lib; {
     homepage = "https://www.volatilityfoundation.org/";
     description = "Advanced memory forensics framework";
     maintainers = with maintainers; [ bosu ];
-    license = lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
+    broken = true;
   };
 }

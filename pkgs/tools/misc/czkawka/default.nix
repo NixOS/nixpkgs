@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -7,24 +8,32 @@
 , pango
 , gdk-pixbuf
 , atk
-, gtk3
+, gtk4
+, Foundation
+, wrapGAppsHook4
+, gobject-introspection
+, xvfb-run
+, testers
+, czkawka
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "3.1.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
-    repo = pname;
+    repo = "czkawka";
     rev = version;
-    sha256 = "sha256-LtGgpfToQUNKM1hmMPW7UrS/n7iyI+dz2vbSo+GOcRg=";
+    hash = "sha256-uKmiBNwuu3Eduf0v3p2VYYNf6mgxJTBUsYs+tKZQZys=";
   };
 
-  cargoSha256 = "sha256-ZbyoCo1n4GRBkb5SClby5V51rLN1PnvCHD30TiJU2gY=";
+  cargoHash = "sha256-iBO99kpITVl7ySlXPkEg2YecS1lonVx9CbKt9WI180s=";
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook4
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -33,13 +42,34 @@ rustPlatform.buildRustPackage rec {
     pango
     gdk-pixbuf
     atk
-    gtk3
+    gtk4
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Foundation
   ];
 
+  nativeCheckInputs = [
+    xvfb-run
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run cargo test
+    runHook postCheck
+  '';
+
+  doCheck = stdenv.hostPlatform.isLinux
+          && (stdenv.hostPlatform == stdenv.buildPlatform);
+
+  passthru.tests.version = testers.testVersion {
+    package = czkawka;
+    command = "czkawka_cli --version";
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/qarmin/czkawka/raw/${version}/Changelog.md";
     description = "A simple, fast and easy to use app to remove unnecessary files from your computer";
     homepage = "https://github.com/qarmin/czkawka";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ yanganto ];
+    maintainers = with maintainers; [ yanganto _0x4A6F ];
   };
 }

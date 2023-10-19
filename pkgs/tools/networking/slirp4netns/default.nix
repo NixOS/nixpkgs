@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "slirp4netns";
-  version = "1.1.10";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "rootless-containers";
     repo = "slirp4netns";
     rev = "v${version}";
-    sha256 = "sha256-Qk5a8h9IkLwYRmPL8pFlyVsQ/xMZ2/wkq8zZ7yfrLEQ=";
+    sha256 = "sha256-TQi2Ok58VbKl3iaMygBL16NZukvVkSSmyVpGT2A1IJQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libcap libseccomp libslirp ];
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   passthru.tests = { inherit (nixosTests) podman; };
 

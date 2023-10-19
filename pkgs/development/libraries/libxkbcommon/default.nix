@@ -16,25 +16,26 @@
 , withWaylandTools ? stdenv.isLinux
 , wayland
 , wayland-protocols
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.3.0";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0ysynzzgzd9jdrh1321r4bgw8wd5zljrlyn5y1a31g39xacf02bv";
+    sha256 = "sha256-Vg8RxLu8oQ9JXz7306aqTKYrT4+wtS59RZ0Yom5G4Bc=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config bison doxygen ]
-    ++ lib.optional withWaylandTools wayland;
+    ++ lib.optional withWaylandTools wayland-scanner;
   buildInputs = [ xkeyboard_config libxcb libxml2 ]
     ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
-  checkInputs = [ python3 ];
+  nativeCheckInputs = [ python3 ];
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
@@ -60,6 +61,12 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ttuegel ];
+    mainProgram = "xkbcli";
     platforms = with platforms; unix;
+    pkgConfigModules = [
+      "xkbcommon"
+      "xkbcommon-x11"
+      "xkbregistry"
+    ];
   };
 }

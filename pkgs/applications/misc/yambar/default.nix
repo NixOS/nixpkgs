@@ -1,57 +1,92 @@
-{ stdenv
-, lib
-, fetchgit
-, pkg-config
-, meson
-, ninja
-, scdoc
-, alsaLib
+{ lib
+, stdenv
+, fetchFromGitea
+, alsa-lib
+, bison
 , fcft
+, flex
 , json_c
 , libmpdclient
 , libxcb
 , libyaml
+, meson
+, ninja
+, pipewire
 , pixman
+, pkg-config
+, pulseaudio
+, scdoc
 , tllist
 , udev
 , wayland
 , wayland-protocols
+, wayland-scanner
 , xcbutil
 , xcbutilcursor
 , xcbutilerrors
 , xcbutilwm
+, waylandSupport ? true
+, x11Support ? true
 }:
 
-stdenv.mkDerivation rec {
+assert (x11Support || waylandSupport);
+stdenv.mkDerivation (finalAttrs: {
   pname = "yambar";
-  version = "1.6.1";
+  version = "1.10.0";
 
-  src = fetchgit {
-    url = "https://codeberg.org/dnkl/yambar.git";
-    rev = version;
-    sha256 = "p47tFsEWsYNe6IVV65xGG211u6Vm2biRf4pmUDylBOQ=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "dnkl";
+    repo = "yambar";
+    rev = finalAttrs.version;
+    hash = "sha256-+bNTEPGV5xaVXhsejyK+FCcJ9J06KS6x7/qo6P2DnZI=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja scdoc ];
+  outputs = [ "out" "man" ];
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    bison
+    flex
+    meson
+    ninja
+    pkg-config
+    scdoc
+    wayland-scanner
+  ];
+
   buildInputs = [
-    alsaLib
+    alsa-lib
     fcft
     json_c
     libmpdclient
-    libxcb
     libyaml
+    pipewire
     pixman
+    pulseaudio
     tllist
     udev
+  ] ++ lib.optionals (waylandSupport) [
     wayland
     wayland-protocols
+  ] ++ lib.optionals (x11Support) [
     xcbutil
     xcbutilcursor
     xcbutilerrors
     xcbutilwm
   ];
 
-  meta = with lib; {
+  strictDeps = true;
+
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    (lib.mesonEnable "backend-x11" x11Support)
+    (lib.mesonEnable "backend-wayland" waylandSupport)
+  ];
+
+  meta = {
     homepage = "https://codeberg.org/dnkl/yambar";
     description = "Modular status panel for X11 and Wayland";
     longDescription = ''
@@ -59,9 +94,9 @@ stdenv.mkDerivation rec {
       X11 and Wayland, that goes to great lengths to be both CPU and battery
       efficient - polling is only done when absolutely necessary.
 
-      It has a number of modules that provide information in the form of
-      tags. For example, the clock module has a date tag that contains the
-      current date.
+      It has a number of modules that provide information in the form of tags.
+      For example, the clock module has a date tag that contains the current
+      date.
 
       The modules do not know how to present the information though. This is
       instead done by particles. And the user, you, decides which particles (and
@@ -79,8 +114,9 @@ stdenv.mkDerivation rec {
       To summarize: a bar displays information provided by modules, using
       particles and decorations. How is configured by you.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

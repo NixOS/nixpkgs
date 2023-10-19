@@ -1,10 +1,13 @@
-{ llvmPackages
+{ stdenv
+, llvmPackages
 , lib
 , fetchFromGitHub
 , cmake
+, libffi
 , libpng
 , libjpeg
 , mesa
+, libGL
 , eigen
 , openblas
 , blas
@@ -13,30 +16,26 @@
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
-llvmPackages.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "halide";
-  version = "10.0.0";
+  version = "15.0.1";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     rev = "v${version}";
-    sha256 = "0il71rppjp76m7zd420siidvhs76sqiq26h60ywk812sj9mmgxj6";
+    sha256 = "sha256-mnZ6QMqDr48bH2W+andGZj2EhajXKApjuW6B50xtzx0=";
   };
 
-  # clang fails to compile intermediate code because
-  # of unused "--gcc-toolchain" option
-  postPatch = ''
-    sed -i "s/-Werror//" src/CMakeLists.txt
-  '';
+  cmakeFlags = [
+    "-DWARNINGS_AS_ERRORS=OFF"
+    "-DWITH_PYTHON_BINDINGS=OFF"
+    "-DTARGET_WEBASSEMBLY=OFF"
+    # Disable performance tests since they may fail on busy machines
+    "-DWITH_TEST_PERFORMANCE=OFF"
+  ];
 
-  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" ];
-
-  # To handle the lack of 'local' RPATH; required, as they call one of
-  # their built binaries requiring their libs, in the build process.
-  preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/src''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
-  '';
+  doCheck = true;
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
@@ -46,11 +45,14 @@ llvmPackages.stdenv.mkDerivation rec {
     llvmPackages.lld
     llvmPackages.openmp
     llvmPackages.libclang
+    libffi
     libpng
     libjpeg
-    mesa
     eigen
     openblas
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    mesa
+    libGL
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -60,6 +62,6 @@ llvmPackages.stdenv.mkDerivation rec {
     homepage = "https://halide-lang.org";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.ck3d ];
+    maintainers = with maintainers; [ ck3d atila twesterhout ];
   };
 }

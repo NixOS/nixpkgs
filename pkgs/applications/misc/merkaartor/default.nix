@@ -1,74 +1,72 @@
-{ mkDerivation
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
 , fetchpatch
-, qmake
+, cmake
+, pkg-config
 , qttools
-, qttranslations
+, wrapQtAppsHook
 , gdal
 , proj
 , qtsvg
-, qtwebkit
+, qtwebengine
 , withGeoimage ? true, exiv2
 , withGpsdlib ? (!stdenv.isDarwin), gpsd
 , withLibproxy ? false, libproxy
 , withZbar ? false, zbar
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "merkaartor";
-  version = "0.18.4";
+  version = "0.19.0";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "merkaartor";
     rev = version;
-    sha256 = "vwO4/a7YF9KbpxcFGTFCdG6SfwEyhISlEtcA+rMebUA=";
+    hash = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
   };
 
   patches = [
-    # Fix build with Qt 5.15 (missing QPainterPath include)
     (fetchpatch {
-      url = "https://github.com/openstreetmap/merkaartor/commit/e72553a7ea2c7ba0634cc3afcd27a9f7cfef089c.patch";
-      sha256 = "NAisplnS3xHSlRpX+fH15NpbaD+uM57OCsTYGKlIR7U=";
+      name = "exiv2-0.28.patch";
+      url = "https://github.com/openstreetmap/merkaartor/commit/1e20d2ccd743ea5f8c2358e4ae36fead8b9390fd.patch";
+      hash = "sha256-aHjJLKYvqz7V0QwUIg0SbentBe+DaCJusVqy4xRBVWo=";
     })
-    # Added a condition to use the new timespec_t on gpsd APIs >= 9
+    # https://github.com/openstreetmap/merkaartor/pull/290
     (fetchpatch {
-      url = "https://github.com/openstreetmap/merkaartor/commit/13b358fa7899bb34e277b32a4c0d92833050f2c6.patch";
-      sha256 = "129fpjm7illz7ngx3shps5ivrxwf14apw55842xhskwwb0rf5szb";
+      url = "https://github.com/openstreetmap/merkaartor/commit/7dede77370d89e8e7586f6ed5af225f9b5bde6cf.patch";
+      hash = "sha256-3oDRPysVNvA50t/b9xOcVQgac3U1lDPrencanl4c6Zk=";
     })
   ];
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
 
-  buildInputs = [ gdal proj qtsvg qtwebkit ]
+  buildInputs = [ gdal proj qtsvg qtwebengine ]
     ++ lib.optional withGeoimage exiv2
     ++ lib.optional withGpsdlib gpsd
     ++ lib.optional withLibproxy libproxy
     ++ lib.optional withZbar zbar;
 
-  preConfigure = ''
-    lrelease src/src.pro
-  '';
-
-  qmakeFlags = [ "TRANSDIR_SYSTEM=${qttranslations}/translations" ]
-    ++ lib.optional withGeoimage "GEOIMAGE=1"
-    ++ lib.optional withGpsdlib "GPSDLIB=1"
-    ++ lib.optional withLibproxy "LIBPROXY=1"
-    ++ lib.optional withZbar "ZBAR=1";
+  cmakeFlags = [
+    (lib.cmakeBool "GEOIMAGE" withGeoimage)
+    (lib.cmakeBool "GPSD" withGpsdlib)
+    (lib.cmakeBool "LIBPROXY" withLibproxy)
+    (lib.cmakeBool "WEBENGINE" true)
+    (lib.cmakeBool "ZBAR" withZbar)
+  ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/Applications
-    mv binaries/bin/merkaartor.app $out/Applications
-    mv binaries/bin/plugins $out/Applications/merkaartor.app/Contents
-    wrapQtApp $out/Applications/merkaartor.app/Contents/MacOS/merkaartor
+    mkdir -p $out/{Applications,bin}
+    mv $out/merkaartor.app $out/Applications
+    makeWrapper $out/{Applications/merkaartor.app/Contents/MacOS,bin}/merkaartor
   '';
 
   meta = with lib; {
     description = "OpenStreetMap editor";
     homepage = "http://merkaartor.be/";
     license = licenses.gpl2Plus;
+    mainProgram = "merkaartor";
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
   };

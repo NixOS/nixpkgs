@@ -3,21 +3,27 @@
 , fetchPypi
 , lib
 , pytestCheckHook
-, pytestrunner
 }:
 
 buildPythonPackage rec {
   pname = "reflink";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ySU1gtskQTv9cDq/wbKkneePMbSQcjnyhumhkpoebjo=";
+    hash = "sha256-iCN17nMZJ1rl9qahKHQGNl2sHpZDuRrRDlGH0/hCU70=";
   };
 
-  propagatedBuildInputs = [ cffi pytestrunner ];
+  propagatedBuildInputs = [ cffi ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedNativeBuildInputs = [ cffi ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+  '';
 
   # FIXME: These do not work, and I have been unable to figure out why.
   doCheck = false;

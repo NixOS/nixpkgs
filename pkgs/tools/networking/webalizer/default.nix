@@ -1,12 +1,19 @@
 { lib, stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
 
-stdenv.mkDerivation {
-  name = "webalizer-2.23-05";
+stdenv.mkDerivation rec {
+  pname = "webalizer";
+  version = "2.23.08";
 
   src = fetchurl {
-    url = "ftp://ftp.mrunix.net/pub/webalizer/webalizer-2.23-05-src.tar.bz2";
-    sha256 = "0nl88y57a7gawfragj3viiigfkh5sgivfb4n0k89wzcjw278pj5g";
+    url = "https://ftp.debian.org/debian/pool/main/w/webalizer/webalizer_${version}.orig.tar.gz";
+    sha256 = "sha256-7a3bWqQcxKCBoVAOP6lmFdS0G8Eghrzt+ZOAGM557Y0=";
   };
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: dns_resolv.o:(.bss+0x20): multiple definition of `system_info'; webalizer.o:(.bss+0x76e0): first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
+  installFlags = [ "MANDIR=\${out}/share/man/man1" ];
 
   preConfigure =
     ''
@@ -14,7 +21,7 @@ stdenv.mkDerivation {
         --replace "--static" ""
     '';
 
-  buildInputs = [zlib libpng gd geoip db];
+  buildInputs = [ zlib libpng gd geoip db ];
 
   configureFlags = [
     "--enable-dns"
@@ -24,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Web server log file analysis program";
-    homepage = "http://www.webalizer.org";
+    homepage = "https://webalizer.net/";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

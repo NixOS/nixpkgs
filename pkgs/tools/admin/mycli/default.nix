@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 , glibcLocales
 }:
 
@@ -7,11 +8,11 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.24.1";
+  version = "1.27.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dI2Yvj2llI9TlMFbs35ijYeFuGqoTovZyRh+ILhNMmY=";
+    sha256 = "sha256-px21vZwafQAG9PL/AVSM51Y30/UMo6fne5ULW0av980=";
   };
 
   propagatedBuildInputs = [
@@ -20,29 +21,37 @@ buildPythonApplication rec {
     configobj
     importlib-resources
     paramiko
-    prompt_toolkit
+    prompt-toolkit
     pyaes
     pycrypto
     pygments
     pymysql
     pyperclip
+    sqlglot
     sqlparse
   ];
 
-  checkInputs = [ pytest mock glibcLocales ];
+  nativeCheckInputs = [ pytestCheckHook glibcLocales ];
 
-  checkPhase = ''
+  preCheck = ''
     export HOME=.
     export LC_ALL="en_US.UTF-8"
-
-    py.test \
-      --ignore=mycli/packages/paramiko_stub/__init__.py
   '';
+
+  disabledTestPaths = [
+    "mycli/packages/paramiko_stub/__init__.py"
+  ];
+
+  disabledTests = [
+    # Note: test_auto_escaped_col_names is currently failing due to a bug upstream.
+    # TODO: re-enable this test once there is a fix upstream. See
+    # https://github.com/dbcli/mycli/issues/1103 for details.
+    "test_auto_escaped_col_names"
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "sqlparse>=0.3.0,<0.4.0" "sqlparse" \
-      --replace "importlib_resources >= 5.0.0" "importlib_resources"
+      --replace "cryptography == 36.0.2" "cryptography"
   '';
 
   meta = with lib; {

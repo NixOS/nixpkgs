@@ -6,9 +6,6 @@
 #
 # * Add correct `name`/`version` field to `package.json`, otherwise `yarn2nix` fails to
 #   find required dependencies.
-# * Keep `tailwindcss` on version 2.0.1-compat (on `yarn` it will be upgraded due to the `^`).
-#   This is needed to make sure the entire build still works with `postcss-7` (needed
-#   by plausible).
 # * Adjust `file:`-dependencies a bit for the structure inside a Nix build.
 # * Update hashes for the tarball & the fixed-output drv with all `mix`-dependencies.
 # * Generate `yarn.lock` & `yarn.nix` in a temporary directory.
@@ -29,26 +26,25 @@ fi
 SRC="https://raw.githubusercontent.com/plausible/analytics/${latest}"
 
 package_json="$(curl -qf "$SRC/assets/package.json")"
-export fixed_tailwind_version="$(jq '.dependencies.tailwindcss' -r <<< "$package_json" | sed -e 's,^^,,g')"
 
 echo "$package_json" \
-  | jq '. + {"name":"plausible","version": $ENV.latest} | .dependencies.tailwindcss = $ENV.fixed_tailwind_version' \
+  | jq '. + {"name":"plausible","version": $ENV.latest}' \
   | sed -e 's,../deps/,../../tmp/deps/,g' \
   > $dir/package.json
 
 tarball_meta="$(nix-prefetch-github plausible analytics --rev "$latest")"
-tarball_hash="$(nix to-base32 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
+tarball_hash="$(jq -r '.hash' <<< "$tarball_meta")"
 tarball_path="$(nix-build -E 'with import ./. {}; { p }: fetchFromGitHub (builtins.fromJSON p)' --argstr p "$tarball_meta")"
-fake_hash="$(nix-instantiate --eval -A lib.fakeSha256 | xargs echo)"
+fake_hash="$(nix-instantiate --eval -A lib.fakeHash | xargs echo)"
 
 sed -i "$dir/default.nix" \
   -e 's,version = ".*",version = "'"$nix_version"'",' \
-  -e '/^  src = fetchFromGitHub/,+4{;s/sha256 = "\(.*\)"/sha256 = "'"$tarball_hash"'"/}' \
-  -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$fake_hash"'"/}'
+  -e '/^  src = fetchFromGitHub/,+4{;s#hash = "\(.*\)"#hash = "'"$tarball_hash"'"#}' \
+  -e '/^  mixFodDeps =/,+3{;s#hash = "\(.*\)"#hash = "'"$fake_hash"'"#}'
 
-mix_hash="$(nix to-base32 $(nix-build -A plausible.mixFodDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true))"
+mix_hash="$(nix-build -A plausible.mixFodDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
 
-sed -i "$dir/default.nix" -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$mix_hash"'"/}'
+sed -i "$dir/default.nix" -e '/^  mixFodDeps =/,+3{;s#hash = "\(.*\)"#hash = "'"$mix_hash"'"#}'
 
 tmp_setup_dir="$(mktemp -d)"
 trap "rm -rf $tmp_setup_dir" EXIT
@@ -58,7 +54,6 @@ cp -r "$(nix-build -A plausible.mixFodDeps)" "$tmp_setup_dir/deps"
 chmod -R u+rwx "$tmp_setup_dir"
 
 pushd $tmp_setup_dir/assets
-jq < package.json '.dependencies.tailwindcss = "'"$fixed_tailwind_version"'"' | sponge package.json
 yarn
 yarn2nix > "$dir/yarn.nix"
 cp yarn.lock "$dir/yarn.lock"

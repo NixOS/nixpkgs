@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gdk-pixbuf-xlib";
-  version = "2020-06-11-unstable";
+  version = "2.40.2";
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     domain = "gitlab.gnome.org";
     owner = "Archive";
     repo = "gdk-pixbuf-xlib";
-    rev = "3116b8ae55501cf48d16970aa2b50a5530e15223";
-    sha256 = "15wisf2xld3cr7lprnic8fvwpcmww4rydwc1bn2zilyi52vzl2zd";
+    rev = version;
+    hash = "sha256-b4EUaYzg2NlBMU90dGQivOvkv9KKSzES/ymPqzrelu8=";
   };
 
   nativeBuildInputs = [

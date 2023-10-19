@@ -1,47 +1,35 @@
-{ fetchFromGitHub, lib, which, ocamlPackages }:
+{ fetchurl, fetchpatch, lib, ocamlPackages }:
 
 let
   pname = "alt-ergo";
-  version = "2.4.0";
+  version = "2.5.1";
 
-  src = fetchFromGitHub {
-    owner = "OCamlPro";
-    repo = pname;
-    rev = version;
-    sha256 = "1jm1yrvsg8iyfp9bb728zdx2i7yb6z7minjrfs27k5ncjqkjm65g";
+  src = fetchurl {
+    url = "https://github.com/OCamlPro/alt-ergo/releases/download/v${version}/alt-ergo-${version}.tbz";
+    hash = "sha256-nPjWmg5FepObhquioYxhVPq6UdOHtCo2Hs5V0yndYB0=";
   };
-
-  useDune2 = true;
-
-  nativeBuildInputs = [ which ];
-
 in
 
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
-  inherit version src useDune2 nativeBuildInputs;
-  configureFlags = pname;
-  buildInputs = with ocamlPackages; [ dune-configurator ];
-  propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
+  inherit version src;
+  buildInputs = with ocamlPackages; [ ppx_blob ];
+  propagatedBuildInputs = with ocamlPackages; [ camlzip dolmen_loop dune-build-info fmt ocplib-simplex seq stdlib-shims zarith ];
 }; in
 
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
-  inherit version src useDune2 nativeBuildInputs;
-  configureFlags = pname;
-  buildInputs = with ocamlPackages; [ menhir ];
-  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
+  inherit version src;
+  nativeBuildInputs = [ ocamlPackages.menhir ];
+  propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ psmt2-frontend ]);
 }; in
 
 ocamlPackages.buildDunePackage {
 
-  inherit pname version src useDune2 nativeBuildInputs;
+  inherit pname version src;
 
-  configureFlags = pname;
-
-  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [
-    cmdliner menhir ])
-  ;
+  nativeBuildInputs = [ ocamlPackages.menhir ];
+  buildInputs = [ alt-ergo-parsers ] ++ (with ocamlPackages; [ cmdliner dune-site ]);
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

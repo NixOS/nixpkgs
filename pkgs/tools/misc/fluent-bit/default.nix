@@ -1,35 +1,59 @@
-{ lib, stdenv, fetchFromGitHub, cmake, flex, bison }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, flex
+, bison
+, systemd
+, postgresql
+, openssl
+, libyaml
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
-  version = "1.7.5";
+  version = "2.1.10";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
-    rev = "v${version}";
-    sha256 = "sha256-n7X6VlNZVsL+Tn9t3L4mTblVjPTKgTMmcRdkDGPXI8U=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-6uq5eOHx0P2S3WsN0PooNlGQS2ty7DdPsCEgoQsLmRM=";
   };
 
   nativeBuildInputs = [ cmake flex bison ];
 
-  patches = lib.optionals stdenv.isDarwin [ ./fix-luajit-darwin.patch ];
+  buildInputs = [ openssl libyaml postgresql ]
+    ++ lib.optionals stdenv.isLinux [ systemd ];
 
-  # _FORTIFY_SOURCE requires compiling with optimization (-O)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-O";
+  cmakeFlags = [
+    "-DFLB_RELEASE=ON"
+    "-DFLB_METRICS=ON"
+    "-DFLB_HTTP_SERVER=ON"
+    "-DFLB_OUT_PGSQL=ON"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    # Used by the embedded luajit, but is not predefined on older mac SDKs.
+    lib.optionals stdenv.isDarwin [ "-DTARGET_OS_IPHONE=0" ]
+    # Assumes GNU version of strerror_r, and the posix version has an
+    # incompatible return type.
+    ++ lib.optionals (!stdenv.hostPlatform.isGnu) [ "-Wno-int-conversion" ]
+  );
+
+  outputs = [ "out" "dev" ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \
       --replace /lib/systemd $out/lib/systemd
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${finalAttrs.version}";
     description = "Log forwarder and processor, part of Fluentd ecosystem";
     homepage = "https://fluentbit.io";
-    maintainers = with maintainers; [
-      samrose
-    ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.samrose lib.maintainers.fpletz ];
+    platforms = lib.platforms.unix;
   };
-}
+})

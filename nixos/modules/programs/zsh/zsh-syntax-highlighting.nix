@@ -15,7 +15,7 @@ in
 
   options = {
     programs.zsh.syntaxHighlighting = {
-      enable = mkEnableOption "zsh-syntax-highlighting";
+      enable = mkEnableOption (lib.mdDoc "zsh-syntax-highlighting");
 
       highlighters = mkOption {
         default = [ "main" ];
@@ -26,11 +26,12 @@ in
           "brackets"
           "pattern"
           "cursor"
+          "regexp"
           "root"
           "line"
         ]));
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies the highlighters to be used by zsh-syntax-highlighting.
 
           The following defined options can be found here:
@@ -42,13 +43,13 @@ in
         default = {};
         type = types.attrsOf types.str;
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             "rm -rf *" = "fg=white,bold,bg=red";
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies custom patterns to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:
@@ -59,13 +60,13 @@ in
         default = {};
         type = types.attrsOf types.str;
 
-        example = literalExample ''
+        example = literalExpression ''
           {
             "alias" = "fg=magenta,bold";
           }
         '';
 
-        description = ''
+        description = lib.mdDoc ''
           Specifies custom styles to be highlighted by zsh-syntax-highlighting.
 
           Please refer to the docs for more information about the usage:

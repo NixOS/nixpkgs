@@ -1,24 +1,43 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "urlscan";
-  version = "0.9.5";
+  version = "1.0.1";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = pname;
-    rev = version;
-    sha256 = "16g7dzvjcfhaz52wbmcapamy55l7vfhgizqy3m8dv9gkmy8vap89";
+    rev = "refs/tags/${version}";
+    hash = "sha256-OzcoOIgEiadWrsUPIxBJTuZQYjScJBYKyqCu1or6fz8=";
   };
 
-  propagatedBuildInputs = [ python3Packages.urwid ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  doCheck = false; # No tests available
+  nativeBuildInputs = with python3.pkgs; [
+    hatchling
+    hatch-vcs
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    urwid
+  ];
+
+  # No tests available
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "urlscan"
+  ];
 
   meta = with lib; {
     description = "Mutt and terminal url selector (similar to urlview)";
     homepage = "https://github.com/firecat53/urlscan";
-    license = licenses.gpl2;
+    changelog = "https://github.com/firecat53/urlscan/releases/tag/${version}";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dpaetzel jfrankenau ];
   };
 }

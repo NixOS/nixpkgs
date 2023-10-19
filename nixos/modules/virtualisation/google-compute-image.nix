@@ -21,7 +21,7 @@ in
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 1536;
-      description = ''
+      description = lib.mdDoc ''
         Size of disk image. Unit is MB.
       '';
     };
@@ -29,11 +29,19 @@ in
     virtualisation.googleComputeImage.configFile = mkOption {
       type = with types; nullOr str;
       default = null;
-      description = ''
+      description = lib.mdDoc ''
         A path to a configuration file which will be placed at `/etc/nixos/configuration.nix`
         and be used when switching to a new configuration.
         If set to `null`, a default configuration is used, where the only import is
         `<nixpkgs/nixos/modules/virtualisation/google-compute-image.nix>`.
+      '';
+    };
+
+    virtualisation.googleComputeImage.compressionLevel = mkOption {
+      type = types.int;
+      default = 6;
+      description = lib.mdDoc ''
+        GZIP compression level of the resulting disk image (1-9).
       '';
     };
   };
@@ -47,7 +55,8 @@ in
         PATH=$PATH:${with pkgs; lib.makeBinPath [ gnutar gzip ]}
         pushd $out
         mv $diskImage disk.raw
-        tar -Szcf nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz disk.raw
+        tar -Sc disk.raw | gzip -${toString cfg.compressionLevel} > \
+          nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw.tar.gz
         rm $out/disk.raw
         popd
       '';

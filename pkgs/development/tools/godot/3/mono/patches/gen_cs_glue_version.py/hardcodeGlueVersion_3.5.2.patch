@@ -1,0 +1,22 @@
+diff --git a/modules/mono/build_scripts/gen_cs_glue_version.py b/modules/mono/build_scripts/gen_cs_glue_version.py
+index 98bbb4d9be..5189f2551b 100644
+--- a/modules/mono/build_scripts/gen_cs_glue_version.py
++++ b/modules/mono/build_scripts/gen_cs_glue_version.py
+@@ -1,16 +1,5 @@
+ def generate_header(solution_dir, version_header_dst):
+-    import os
+-
+-    latest_mtime = 0
+-    for root, dirs, files in os.walk(solution_dir, topdown=True):
+-        dirs[:] = [d for d in dirs if d not in ["Generated"]]  # Ignored generated files
+-        files = [f for f in files if f.endswith(".cs")]
+-        for file in files:
+-            filepath = os.path.join(root, file)
+-            mtime = os.path.getmtime(filepath)
+-            latest_mtime = mtime if mtime > latest_mtime else latest_mtime
+-
+-    glue_version = int(latest_mtime)  # The latest modified time will do for now
++    glue_version = 1678112021
+ 
+     with open(version_header_dst, "w") as version_header:
+         version_header.write("/* THIS FILE IS GENERATED DO NOT EDIT */\n")

@@ -1,8 +1,8 @@
 diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 --- a/cmake/modules/SetUpMacOS.cmake
 +++ b/cmake/modules/SetUpMacOS.cmake
-@@ -8,17 +8,10 @@ set(ROOT_ARCHITECTURE macosx)
- set(ROOT_PLATFORM macosx)
+@@ -28,17 +28,10 @@ if(CMAKE_VERSION VERSION_LESS 3.14.4)
+ endif()
  
  if (CMAKE_SYSTEM_NAME MATCHES Darwin)
 -  EXECUTE_PROCESS(COMMAND sw_vers "-productVersion"
@@ -19,16 +19,15 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
      #TODO: check haveconfig and rpath -> set rpath true
      #TODO: check Thread, define link command
      #TODO: more stuff check configure script
-@@ -37,23 +30,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+@@ -57,22 +50,7 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+        SET(CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS "${CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS} -m64")
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m64")
         SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m64")
-        SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m64")
 -    else()
--       MESSAGE(STATUS "Found a 32bit system")
 -       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32")
 -       SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
 -       SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -m32")
--    endif()
+     endif()
 -  endif()
 -
 -  if(MACOSX_VERSION VERSION_GREATER 10.6)
@@ -40,11 +39,10 @@ diff a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 -  if(MACOSX_VERSION VERSION_GREATER 10.8)
 -    set(MACOSX_GLU_DEPRECATED ON)
 -  endif()
-+     endif()
  
    if (CMAKE_COMPILER_IS_GNUCXX)
-      message(STATUS "Found GNU compiler collection")
-@@ -115,7 +92,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe -W -Wshadow -Wall -Woverloaded-virtual -fsigned-char -fno-common")
+@@ -130,7 +108,6 @@ if (CMAKE_SYSTEM_NAME MATCHES Darwin)
    endif()
  
    #---Set Linker flags----------------------------------------------------------------------

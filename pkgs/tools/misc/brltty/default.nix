@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, python3, bluez
 , tcl, acl, kmod, coreutils, shadow, util-linux, udev
-, alsaSupport ? stdenv.isLinux, alsaLib
-, systemdSupport ? stdenv.isLinux, systemd
+, alsaSupport ? stdenv.isLinux, alsa-lib
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config python3.pkgs.cython tcl ];
   buildInputs = [ bluez ]
-    ++ lib.optional alsaSupport alsaLib
+    ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional systemdSupport systemd;
 
   meta = {

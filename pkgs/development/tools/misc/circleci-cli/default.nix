@@ -1,29 +1,30 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.15149";
+  version = "0.1.29041";
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-pmLDCNgCQv4fetl/q6ZokH1qF6pSqsR0DUWbzGeEtaw=";
+    sha256 = "sha256-MEprN5I9ZWz4xTVdl4qZQHfbLbp4Khh63m37ZBq8pgA=";
   };
 
-  vendorSha256 = "sha256-j7VP/QKKMdmWQ60BYpChG4syDlll7CY4rb4wfb4+Z1s=";
+  vendorHash = "sha256-EcQ5/zp041P4qi8nenrWuVItV3mFI3EHHRhKm/tqpfA=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version} -X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev} -X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
-
-  preBuild = ''
-    substituteInPlace data/data.go \
-      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${placeholder "out"}/share/circleci-cli")'
-  '';
+  ldflags = [ "-s" "-w" "-X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" "-X github.com/CircleCI-Public/circleci-cli/version.Commit=${src.rev}" "-X github.com/CircleCI-Public/circleci-cli/version.packageManager=nix" ];
 
   postInstall = ''
-    install -Dm644 -t $out/share/circleci-cli _data/data.yml
+    mv $out/bin/circleci-cli $out/bin/circleci
+
+    installShellCompletion --cmd circleci \
+      --bash <(HOME=$TMPDIR $out/bin/circleci completion bash --skip-update-check) \
+      --zsh <(HOME=$TMPDIR $out/bin/circleci completion zsh --skip-update-check)
   '';
 
   meta = with lib; {
@@ -33,6 +34,7 @@ buildGoModule rec {
       run jobs as if they were running on the hosted CirleCI application.
     '';
     maintainers = with maintainers; [ synthetica ];
+    mainProgram = "circleci";
     license = licenses.mit;
     homepage = "https://circleci.com/";
   };

@@ -2,44 +2,61 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, backports_ssl_match_hostname
-, mock
+, pythonOlder
+, packaging
 , paramiko
 , pytestCheckHook
 , requests
-, six
-, websocket_client
+, setuptools-scm
+, urllib3
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "docker";
-  version = "4.4.4";
+  version = "6.0.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3393c878f575d3a9ca3b94471a3c89a6d960b35feb92f033c0de36cc9d934db";
+    hash = "sha256-iWxCguXHr1xF6LaDsLDDOTKXT+blD8aQagqDYWqz2pc=";
   };
 
-  nativeBuildInputs = lib.optional isPy27 mock;
-
-  propagatedBuildInputs = [
-    paramiko
-    requests
-    six
-    websocket_client
-  ] ++ lib.optional isPy27 backports_ssl_match_hostname;
-
-  checkInputs = [
-    pytestCheckHook
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  propagatedBuildInputs = [
+    packaging
+    requests
+    urllib3
+    websocket-client
+  ];
+
+  passthru.optional-dependencies.ssh = [
+    paramiko
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pytestFlagsArray = [
+    "tests/unit"
+  ];
 
   # Deselect socket tests on Darwin because it hits the path length limit for a Unix domain socket
-  disabledTests = lib.optionals stdenv.isDarwin [ "api_test" "stream_response" "socket_file" ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "api_test" "stream_response" "socket_file"
+  ];
 
   dontUseSetuptoolsCheck = true;
+
+  pythonImportsCheck = [
+    "docker"
+  ];
 
   meta = with lib; {
     description = "An API client for docker written in Python";

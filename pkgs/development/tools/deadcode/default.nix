@@ -11,7 +11,7 @@ buildGoPackage rec {
   rev = "210d2dc333e90c7e3eedf4f2242507a8e83ed4ab";
 
   goPackagePath = "github.com/tsenart/deadcode";
-  excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";
+  excludedPackages = "cmd/fillswitch/test-fixtures";
 
   src = fetchFromGitHub {
     inherit rev;

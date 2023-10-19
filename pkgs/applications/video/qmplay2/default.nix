@@ -1,51 +1,61 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pkg-config
+, alsa-lib
 , cmake
-, alsaLib
 , ffmpeg
+, fribidi
+, game-music-emu
+, libXdmcp
+, libXv
 , libass
 , libcddb
 , libcdio
-, libgme
 , libpulseaudio
 , libsidplayfp
 , libva
-, libXv
-, taglib
+, libxcb
+, pkg-config
 , qtbase
 , qttools
+, taglib
 , vulkan-headers
 , vulkan-tools
 , wrapQtAppsHook
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
-  version = "20.12.16";
-in stdenv.mkDerivation {
-  inherit pname version;
+  version = "23.08.22";
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
-    rev = version;
-    sha256 = "sha256-+XXlQI9MyENioYmzqbbZYQ6kaMATBjPrPaErR2Vqhus=";
+    rev = finalAttrs.version;
     fetchSubmodules = true;
+    hash = "sha256-Ug7WAqZ+BxspQUXweL/OnVBGCsU60DOWNexbi0GpDo0=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
+
   buildInputs = [
-    alsaLib
+    alsa-lib
     ffmpeg
+    fribidi
+    game-music-emu
+    libXdmcp
+    libXv
     libass
     libcddb
     libcdio
-    libgme
     libpulseaudio
     libsidplayfp
     libva
-    libXv
+    libxcb
     qtbase
     qttools
     taglib
@@ -58,7 +68,7 @@ in stdenv.mkDerivation {
     ln -s $out/bin/QMPlay2 $out/bin/qmplay2
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zaps166/QMPlay2/";
     description = "Qt-based Multimedia player";
     longDescription = ''
@@ -67,8 +77,9 @@ in stdenv.mkDerivation {
       files, Rayman 2 music and chiptunes. It contains YouTube and MyFreeMP3
       browser.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

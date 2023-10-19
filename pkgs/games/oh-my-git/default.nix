@@ -1,13 +1,14 @@
 { lib
+, autoPatchelfHook
 , copyDesktopItems
 , fetchFromGitHub
 , makeDesktopItem
 , stdenv
-, alsaLib
+, alsa-lib
 , gcc-unwrapped
 , git
-, godot-export-templates
-, godot-headless
+, godot3-export-templates
+, godot3-headless
 , libGLU
 , libX11
 , libXcursor
@@ -19,27 +20,30 @@
 , libXrender
 , libglvnd
 , libpulseaudio
+, perl
 , zlib
+, udev # for libudev
 }:
 
 stdenv.mkDerivation rec {
   pname = "oh-my-git";
-  version = "0.6.4";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "git-learning-game";
     repo = "oh-my-git";
     rev = version;
-    sha256 = "sha256-GQLHyBUXF+yqEZ/LYutAn6TBCXFX8ViOaERQEm2J6CY=";
+    sha256 = "sha256-XqxliMVU55D5JSt7Yo5btvZnnTlagSukyhXv6Akgklo=";
   };
 
   nativeBuildInputs = [
+    autoPatchelfHook
     copyDesktopItems
-    godot-headless
+    godot3-headless
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     gcc-unwrapped.lib
     git
     libGLU
@@ -53,7 +57,9 @@ stdenv.mkDerivation rec {
     libXrender
     libglvnd
     libpulseaudio
+    perl
     zlib
+    udev
   ];
 
   desktopItems = [
@@ -64,9 +70,16 @@ stdenv.mkDerivation rec {
       desktopName = "oh-my-git";
       comment = "An interactive Git learning game!";
       genericName = "An interactive Git learning game!";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
+
+  # patch shebangs so that e.g. the fake-editor script works:
+  # error: /usr/bin/env 'perl': No such file or directory
+  # error: There was a problem with the editor
+  postPatch = ''
+    patchShebangs scripts
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -78,10 +91,10 @@ stdenv.mkDerivation rec {
     # expects the template-file at .../templates/3.2.3.stable/linux_x11_64_release
     # with 3.2.3 being the version of godot.
     mkdir -p $HOME/.local/share/godot
-    ln -s ${godot-export-templates}/share/godot/templates $HOME/.local/share/godot
+    ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
 
     mkdir -p $out/share/oh-my-git
-    godot-headless --export "Linux" $out/share/oh-my-git/oh-my-git
+    godot3-headless --export "Linux" $out/share/oh-my-git/oh-my-git
 
     runHook postBuild
   '';
@@ -104,6 +117,12 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  runtimeDependencies = map lib.getLib [
+    alsa-lib
+    libpulseaudio
+    udev
+  ];
 
   meta = with lib; {
     homepage = "https://ohmygit.org/";

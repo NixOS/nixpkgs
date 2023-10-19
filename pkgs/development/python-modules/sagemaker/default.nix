@@ -1,52 +1,83 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, pythonOlder
+, fetchFromGitHub
+, pythonRelaxDepsHook
 , attrs
 , boto3
+, cloudpickle
 , google-pasta
-, importlib-metadata
 , numpy
 , protobuf
-, protobuf3-to-dict
 , smdebug-rulesconfig
+, importlib-metadata
+, packaging
 , pandas
 , pathos
-, packaging
+, schema
+, pyyaml
+, jsonschema
+, platformdirs
+, tblib
+, urllib3
+, docker
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.38.0";
+  version = "2.192.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-7cIGr49fKI0zQmX4/9v/gW5yB4kfeQJ3H/Vvgl9CKuY=";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "sagemaker-python-sdk";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+1wb7O+fHhRE8aKlgAB/NRgx2J+LBkR7xuqfWnVYSKc=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "attrs"
+    "boto3"
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    boto3
+    cloudpickle
+    google-pasta
+    numpy
+    protobuf
+    smdebug-rulesconfig
+    importlib-metadata
+    packaging
+    pandas
+    pathos
+    schema
+    pyyaml
+    jsonschema
+    platformdirs
+    tblib
+  ];
+
+  doCheck = false; # many test dependencies are not available in nixpkgs
 
   pythonImportsCheck = [
     "sagemaker"
     "sagemaker.lineage.visualizer"
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    boto3
-    google-pasta
-    importlib-metadata
-    numpy
-    packaging
-    pathos
-    protobuf
-    protobuf3-to-dict
-    smdebug-rulesconfig
-    pandas
-  ];
-
-  doCheck = false;
-
-  postFixup = ''
-    [ "$($out/bin/sagemaker-upgrade-v2 --help 2>&1 | grep -cim1 'pandas failed to import')" -eq "0" ]
-  '';
+  passthru.optional-dependencies = {
+    local = [ urllib3 docker pyyaml ];
+    scipy = [ scipy ];
+    # feature-processor = [ pyspark sagemaker-feature-store-pyspark ]; # not available in nixpkgs
+  };
 
   meta = with lib; {
     description = "Library for training and deploying machine learning models on Amazon SageMaker";

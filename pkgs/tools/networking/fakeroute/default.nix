@@ -1,20 +1,21 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "fakeroute";
   version = "0.3";
 
   src = fetchurl {
-    url = "https://moxie.org/software/fakeroute/${pname}-${version}.tar.gz";
-    sha256 = "1sp342rxgm1gz4mvi5vvz1knz7kn9px9s39ii3jdjp4ks7lr5c8f";
+    url = "https://maxwell.ydns.eu/git/rnhmjoj/fakeroute/releases/download/v${version}/fakeroute-${version}.tar.gz";
+    hash = "sha256-DoXGJm8vOlAD6ZuvVAt6bkgfahc8WgyYIXCrgqzfiWg=";
   };
+
+  passthru.tests.fakeroute = nixosTests.fakeroute;
 
   meta = with lib; {
     description = ''
-      Makes your machine appear to be anywhere on the internet
-      to any host running a (UDP) unix traceroute
+      Make your machine appears to be anywhere on the internet in a traceroute
     '';
-    homepage = "https://moxie.org/software/fakeroute/";
+    homepage = "https://maxwell.ydns.eu/git/rnhmjoj/fakeroute";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

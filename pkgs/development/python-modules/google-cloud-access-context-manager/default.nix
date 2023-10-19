@@ -1,15 +1,27 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, google-api-core }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, google-api-core
+, pythonOlder
+, protobuf
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.1.2";
+  version = "0.1.16";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qy7wv1xn7g3x5z0vvv0pwmxhin4hw2m9fs9iklnghy00vg37v0b";
+    hash = "sha256-+L5Rre6LHpSlc+yzdQpMLSvURLHd412apDes5zwzdgc=";
   };
 
-  propagatedBuildInputs = [ google-api-core ];
+  propagatedBuildInputs = [
+    google-api-core
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
   # No tests in repo
   doCheck = false;
@@ -19,9 +31,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Protobufs for Google Access Context Manager.";
+    description = "Protobufs for Google Access Context Manager";
     homepage = "https://github.com/googleapis/python-access-context-manager";
+    changelog = "https://github.com/googleapis/python-access-context-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+    maintainers = with maintainers; [ austinbutler ];
   };
 }

@@ -1,5 +1,11 @@
-{ lib, mkDerivation, fetchFromGitHub
-, kcoreaddons, kwindowsystem, plasma-framework, systemsettings }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, kcoreaddons
+, kwindowsystem
+, plasma-framework
+, systemsettings
+}:
 
 mkDerivation rec {
   pname = "dynamic_workspaces";
@@ -13,7 +19,10 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    kcoreaddons kwindowsystem plasma-framework systemsettings
+    kcoreaddons
+    kwindowsystem
+    plasma-framework
+    systemsettings
   ];
 
   dontBuild = true;
@@ -32,7 +41,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "KWin script that automatically adds/removes virtual desktops";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ samuelgrf ];
+    maintainers = with maintainers; [ ];
     inherit (src.meta) homepage;
     inherit (kwindowsystem.meta) platforms;
   };

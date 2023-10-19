@@ -2,12 +2,9 @@
 
 assert guileSupport -> ( pkg-config != null && guile != null );
 
-let
-  version = "4.2.1";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "gnumake";
-  inherit version;
+  version = "4.2.1";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.bz2";
@@ -23,6 +20,7 @@ stdenv.mkDerivation {
     ./pselect.patch
     # Fix support for glibc 2.27's glob, inspired by http://www.linuxfromscratch.org/lfs/view/8.2/chapter05/make.html
     ./glibc-2.27-glob.patch
+    ./glibc-2.33-glob.patch
   ];
 
   nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];
@@ -42,10 +40,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" "info" ];
 
   meta = with lib; {
-    homepage = "https://www.gnu.org/software/make/";
     description = "A tool to control the generation of non-source files from sources";
-    license = licenses.gpl3Plus;
-
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.
@@ -56,8 +51,11 @@ stdenv.mkDerivation {
       should write a makefile for it, so that it is possible to use Make
       to build and install the program.
     '';
+    homepage = "https://www.gnu.org/software/make/";
 
-    platforms = platforms.all;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.vrthra ];
+    mainProgram = "make";
+    platforms = platforms.all;
   };
 }

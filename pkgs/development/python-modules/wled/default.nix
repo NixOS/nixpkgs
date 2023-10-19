@@ -1,46 +1,65 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , aiohttp
+, awesomeversion
 , backoff
-, packaging
+, buildPythonPackage
+, cachetools
+, fetchFromGitHub
+, poetry-core
 , yarl
 , aresponses
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "wled";
-  version = "0.4.4";
-  disabled = pythonOlder "3.7";
+  version = "0.16.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-wled";
-    rev = "v${version}";
-    sha256 = "1adh23v4c9kia3ddqdq0brksd5rhgh4ff7l5hil8klx4dmkrjfz3";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-esINtvctvgl8AqNwCDVnGU+3j/UzEHqY8H1Rws1kQfs=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
+    awesomeversion
     backoff
-    packaging
+    cachetools
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "wled" ];
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "0.0.0" "${version}" \
+      --replace "--cov" ""
+  '';
+
+  pythonImportsCheck = [
+    "wled"
+  ];
 
   meta = with lib; {
     description = "Asynchronous Python client for WLED";
     homepage = "https://github.com/frenck/python-wled";
+    changelog = "https://github.com/frenck/python-wled/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

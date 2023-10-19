@@ -71,9 +71,9 @@ let
     if ! keyValid; then
       echo "certificate soon to become invalid; backing up old cert"
       mkdir -p oldkeys
-      mv -v ${cfg.providerName}.key oldkeys/${cfg.providerName}-$(date +%F-%T).key
-      mv -v ${cfg.providerName}.crt oldkeys/${cfg.providerName}-$(date +%F-%T).crt
-      systemctl restart dnscrypt-wrapper
+      mv -v "${cfg.providerName}.key" "oldkeys/${cfg.providerName}-$(date +%F-%T).key"
+      mv -v "${cfg.providerName}.crt" "oldkeys/${cfg.providerName}-$(date +%F-%T).crt"
+      kill "$(pidof -s dnscrypt-wrapper)"
     fi
   '';
 
@@ -124,20 +124,20 @@ in {
   ###### interface
 
   options.services.dnscrypt-wrapper = {
-    enable = mkEnableOption "DNSCrypt wrapper";
+    enable = mkEnableOption (lib.mdDoc "DNSCrypt wrapper");
 
     address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The DNSCrypt wrapper will bind to this IP address.
       '';
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 5353;
-      description = ''
+      description = lib.mdDoc ''
         The DNSCrypt wrapper will listen for DNS queries on this port.
       '';
     };
@@ -145,10 +145,11 @@ in {
     providerName = mkOption {
       type = types.str;
       default = "2.dnscrypt-cert.${config.networking.hostName}";
+      defaultText = literalExpression ''"2.dnscrypt-cert.''${config.networking.hostName}"'';
       example = "2.dnscrypt-cert.myresolver";
-      description = ''
+      description = lib.mdDoc ''
         The name that will be given to this DNSCrypt resolver.
-        Note: the resolver name must start with <literal>2.dnscrypt-cert.</literal>.
+        Note: the resolver name must start with `2.dnscrypt-cert.`.
       '';
     };
 
@@ -156,7 +157,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/etc/secrets/public.key";
-      description = ''
+      description = lib.mdDoc ''
         The filepath to the provider public key. If not given a new
         provider key pair will be generated on the first run.
       '';
@@ -166,7 +167,7 @@ in {
       type = types.nullOr types.path;
       default = null;
       example = "/etc/secrets/secret.key";
-      description = ''
+      description = lib.mdDoc ''
         The filepath to the provider secret key. If not given a new
         provider key pair will be generated on the first run.
       '';
@@ -175,15 +176,15 @@ in {
     upstream.address = mkOption {
       type = types.str;
       default = "127.0.0.1";
-      description = ''
+      description = lib.mdDoc ''
         The IP address of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
 
     upstream.port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 53;
-      description = ''
+      description = lib.mdDoc ''
         The port of the upstream DNS server DNSCrypt will "wrap".
       '';
     };
@@ -191,7 +192,7 @@ in {
     keys.expiration = mkOption {
       type = types.int;
       default = 30;
-      description = ''
+      description = lib.mdDoc ''
         The duration (in days) of the time-limited secret key.
         This will be automatically rotated before expiration.
       '';
@@ -200,7 +201,7 @@ in {
     keys.checkInterval = mkOption {
       type = types.int;
       default = 1440;
-      description = ''
+      description = lib.mdDoc ''
         The time interval (in minutes) between key expiration checks.
       '';
     };
@@ -217,19 +218,9 @@ in {
       home = "${dataDir}";
       createHome = true;
       isSystemUser = true;
+      group = "dnscrypt-wrapper";
     };
     users.groups.dnscrypt-wrapper = { };
-
-    security.polkit.extraConfig = ''
-      // Allow dnscrypt-wrapper user to restart dnscrypt-wrapper.service
-      polkit.addRule(function(action, subject) {
-          if (action.id == "org.freedesktop.systemd1.manage-units" &&
-              action.lookup("unit") == "dnscrypt-wrapper.service" &&
-              subject.user == "dnscrypt-wrapper") {
-              return polkit.Result.YES;
-          }
-        });
-    '';
 
     systemd.services.dnscrypt-wrapper = {
       description = "dnscrypt-wrapper daemon";
@@ -240,7 +231,7 @@ in {
       serviceConfig = {
         User = "dnscrypt-wrapper";
         WorkingDirectory = dataDir;
-        Restart   = "on-failure";
+        Restart   = "always";
         ExecStart = "${pkgs.dnscrypt-wrapper}/bin/dnscrypt-wrapper ${toString daemonArgs}";
       };
 
@@ -253,7 +244,7 @@ in {
       requires = [ "dnscrypt-wrapper.service" ];
       description = "Rotates DNSCrypt wrapper keys if soon to expire";
 
-      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk ];
+      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk procps ];
       script = rotateKeys;
       serviceConfig.User = "dnscrypt-wrapper";
     };

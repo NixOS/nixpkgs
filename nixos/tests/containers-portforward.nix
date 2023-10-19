@@ -11,11 +11,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ aristid aszlig eelco kampfschlaefer ianwookim ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
 
       containers.webserver =
         { privateNetwork = true;
@@ -29,7 +28,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             };
         };
 
-      virtualisation.pathsInNixDB = [ pkgs.stdenv ];
+      virtualisation.additionalPaths = [ pkgs.stdenv ];
     };
 
   testScript =

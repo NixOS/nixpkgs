@@ -1,29 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, python2, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python3, makeWrapper, libarchive }:
 
 let
-  pythonEnv = python2.withPackages(ps: with ps; [ cheetah ]);
+  pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 lxml ]);
 in stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "0.23.16";
+  version = "3.30.0";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    sha256 = "sha256-Kx3vTbwYfILxn7n4upyVZo0V6S2lTStlezku9bfwGVw=";
+    hash = "sha256-Y9FXaDODeuMaXeqmfBCd96JgwrqDe5k6RCtGKvTOMKw=";
   };
+
+  patches = [
+    ./patches/override-python-version-check.patch
+  ];
 
   dontBuild = true;
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pythonEnv ];
+  buildInputs = [ pythonEnv libarchive ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -R {autoProcessTV,gui,lib,sickbeard,sickgear.py,SickBeard.py} $out/
+    mkdir -p $out/bin $out/opt/sickgear
+    cp -R {autoProcessTV,gui,lib,sickgear,sickgear.py} $out/opt/sickgear/
 
-    makeWrapper $out/SickBeard.py $out/bin/sickgear
+    makeWrapper $out/opt/sickgear/sickgear.py $out/bin/sickgear \
+      --suffix PATH : ${lib.makeBinPath [ libarchive ]}
   '';
 
   meta = with lib; {

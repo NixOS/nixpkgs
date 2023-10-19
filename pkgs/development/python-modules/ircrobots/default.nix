@@ -3,24 +3,24 @@
 , fetchFromGitHub
 , pythonOlder
 , anyio
+, asyncio-rlock
 , asyncio-throttle
-, dataclasses
 , ircstates
-, async_stagger
+, async-stagger
 , async-timeout
 , python
 }:
 
 buildPythonPackage rec {
   pname = "ircrobots";
-  version = "0.3.8";
-  disabled = pythonOlder "3.6";
+  version = "0.6.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jesopo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06q86dqllxvi3nssfplmjk9yxaybighwh87lrxfpfhl8yy4z68jz";
+    hash = "sha256-mIh3tERwHtGH9eA0AT8Lcnwp1Wn9lQhKkUjuZcOXO/c=";
   };
 
   postPatch = ''
@@ -30,12 +30,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     anyio
+    asyncio-rlock
     asyncio-throttle
     ircstates
-    async_stagger
+    async-stagger
     async-timeout
-  ] ++ lib.optionals (pythonOlder "3.7") [
-    dataclasses
   ];
 
   checkPhase = ''

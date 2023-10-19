@@ -1,60 +1,67 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fmt }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, fmt
+, catch2_3
+, staticBuild ? stdenv.hostPlatform.isStatic
 
-let
-  generic = { version, sha256 }:
-    stdenv.mkDerivation {
-      pname = "spdlog";
-      inherit version;
+# tests
+, bear, tiledb
+}:
 
-      src = fetchFromGitHub {
-        owner  = "gabime";
-        repo   = "spdlog";
-        rev    = "v${version}";
-        inherit sha256;
-      };
+stdenv.mkDerivation rec {
+  pname = "spdlog";
+  version = "1.12.0";
 
-      nativeBuildInputs = [ cmake ];
-      # spdlog <1.3 uses a bundled version of fmt
-      propagatedBuildInputs = lib.optional (lib.versionAtLeast version "1.3") fmt;
-
-      cmakeFlags = [
-        "-DSPDLOG_BUILD_SHARED=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
-        "-DSPDLOG_BUILD_STATIC=${if stdenv.hostPlatform.isStatic then "ON" else "OFF"}"
-        "-DSPDLOG_BUILD_EXAMPLE=OFF"
-        "-DSPDLOG_BUILD_BENCH=OFF"
-        "-DSPDLOG_BUILD_TESTS=ON"
-        "-DSPDLOG_FMT_EXTERNAL=ON"
-      ];
-
-      outputs = [ "out" "doc" ]
-        # spdlog <1.4 is header only, no need to split libraries and headers
-        ++ lib.optional (lib.versionAtLeast version "1.4") "dev";
-
-      postInstall = ''
-        mkdir -p $out/share/doc/spdlog
-        cp -rv ../example $out/share/doc/spdlog
-      '';
-
-      doCheck = true;
-      preCheck = "export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH";
-
-      meta = with lib; {
-        description    = "Very fast, header only, C++ logging library";
-        homepage       = "https://github.com/gabime/spdlog";
-        license        = licenses.mit;
-        maintainers    = with maintainers; [ obadz ];
-        platforms      = platforms.all;
-      };
-    };
-in
-{
-  spdlog_1 = generic {
-    version = "1.8.5";
-    sha256 = "sha256-D29jvDZQhPscaOHlrzGN1s7/mXlcsovjbqYpXd7OM50=";
+  src = fetchFromGitHub {
+    owner = "gabime";
+    repo  = "spdlog";
+    rev   = "v${version}";
+    hash  = "sha256-cxTaOuLXHRU8xMz9gluYz0a93O0ez2xOxbloyc1m1ns=";
   };
 
-  spdlog_0 = generic {
-    version = "0.17.0";
-    sha256 = "112kfh4fbpm5cvrmgbgz4d8s802db91mhyjpg7cwhlywffnzkwr9";
+  patches = [
+    # Fix a broken test, remove with the next release.
+    (fetchpatch {
+      url = "https://github.com/gabime/spdlog/commit/2ee8bac78e6525a8ad9a9196e65d502ce390d83a.patch";
+      hash = "sha256-L79yOkm3VY01jmxNctfneTLmOA5DEQeNNGC8LbpJiOc=";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake ];
+  # Required to build tests, even if they aren't executed
+  buildInputs = [ catch2_3 ];
+  propagatedBuildInputs = [ fmt ];
+
+  cmakeFlags = [
+    "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
+    "-DSPDLOG_BUILD_STATIC=${if staticBuild then "ON" else "OFF"}"
+    "-DSPDLOG_BUILD_EXAMPLE=OFF"
+    "-DSPDLOG_BUILD_BENCH=OFF"
+    "-DSPDLOG_BUILD_TESTS=ON"
+    "-DSPDLOG_FMT_EXTERNAL=ON"
+  ];
+
+  outputs = [ "out" "doc" "dev" ] ;
+
+  postInstall = ''
+    mkdir -p $out/share/doc/spdlog
+    cp -rv ../example $out/share/doc/spdlog
+  '';
+
+  doCheck = true;
+
+  passthru.tests = {
+    inherit bear tiledb;
+  };
+
+  meta = with lib; {
+    description    = "Very fast, header only, C++ logging library";
+    homepage       = "https://github.com/gabime/spdlog";
+    license        = licenses.mit;
+    maintainers    = with maintainers; [ obadz ];
+    platforms      = platforms.all;
   };
 }

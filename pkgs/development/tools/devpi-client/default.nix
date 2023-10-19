@@ -1,61 +1,82 @@
 { lib
-, buildPythonApplication
-, fetchPypi
-# buildInputs
-, glibcLocales
-, pkginfo
-, check-manifest
-# propagatedBuildInputs
-, py
-, devpi-common
-, pluggy
-, setuptools
-# CheckInputs
-, pytest
-, pytest-flake8
-, webtest
-, mock
 , devpi-server
-, tox
-, sphinx
-, wheel
 , git
-, mercurial
+, glibcLocales
+, python3
+, fetchPypi
 }:
 
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "5.2.1";
+  version = "7.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "74ff365efeaa7b78c9eb7f6d7bd349ccd6252a6cdf879bcb4137ee5ff0fb127a";
+    hash = "sha256-AI/GNubb7+nwz/vM6v/JoUtWup6rBJieKXtFQzrdPkE=";
   };
 
-  buildInputs = [ glibcLocales ];
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--flake8" ""
+  '';
 
-  propagatedBuildInputs = [ py devpi-common pluggy setuptools check-manifest pkginfo ];
-
-  checkInputs = [
-    pytest pytest-flake8 webtest mock
-    devpi-server tox
-    sphinx wheel git mercurial
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    setuptools-changelog-shortener
+    wheel
   ];
 
-  # --fast skips tests which try to start a devpi-server improperly
-  checkPhase = ''
-    HOME=$TMPDIR py.test --fast
+  buildInputs = [
+    glibcLocales
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    build
+    check-manifest
+    devpi-common
+    iniconfig
+    pkginfo
+    pluggy
+    platformdirs
+  ];
+
+  nativeCheckInputs = [
+    devpi-server
+    git
+  ] ++ (with python3.pkgs; [
+    mercurial
+    mock
+    pypitoken
+    pytestCheckHook
+    sphinx
+    virtualenv
+    webtest
+    wheel
+  ]);
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
+
+  pytestFlagsArray = [
+    # --fast skips tests which try to start a devpi-server improperly
+    "--fast"
+  ];
 
   LC_ALL = "en_US.UTF-8";
 
   __darwinAllowLocalNetworking = true;
 
+  pythonImportsCheck = [
+    "devpi"
+  ];
+
   meta = with lib; {
-    homepage = "http://doc.devpi.net";
     description = "Client for devpi, a pypi index server and packaging meta tool";
+    homepage = "http://doc.devpi.net";
+    changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];
   };
-
 }

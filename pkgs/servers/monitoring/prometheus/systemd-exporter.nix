@@ -2,24 +2,33 @@
 
 buildGoModule rec {
   pname = "systemd_exporter";
-  version = "0.4.0";
+  version = "0.5.0";
 
-  vendorSha256 = "sha256-bYoB0r+d0j3esi/kK2a7/Duup9cf4M3WJjiBNs2+bj8=";
+  vendorHash = "sha256-XkwBhj2M1poirPkWzS71NbRTshc8dTKwaHoDfFxpykU=";
 
   src = fetchFromGitHub {
-    owner = "povilasv";
+    owner = "prometheus-community";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JDfRHczFnTP9sxA7polUE9qzJhSPIiAU58GBNDYkX4c=";
+    sha256 = "sha256-q6rnD8JCtB1zTkUfZt6f2Uyo91uFi3HYI7WFlZdzpBM=";
   };
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/prometheus/common/version.Version=${version}"
+    "-X github.com/prometheus/common/version.Revision=unknown"
+    "-X github.com/prometheus/common/version.Branch=unknown"
+    "-X github.com/prometheus/common/version.BuildUser=nix@nixpkgs"
+    "-X github.com/prometheus/common/version.BuildDate=unknown"
+  ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) systemd; };
 
   meta = with lib; {
     description = "Exporter for systemd unit metrics";
-    homepage = "https://github.com/povilasv/systemd_exporter";
+    homepage = "https://github.com/prometheus-community/systemd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ chkno ];
-    platforms = platforms.unix;
   };
 }

@@ -1,21 +1,24 @@
 { lib, stdenv, fetchFromGitHub,
-  xlibsWrapper, libev, libXi, libXfixes,
+  libev, libX11, libXext, libXi, libXfixes,
   pkg-config, asciidoc, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   pname = "unclutter-xfixes";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "Airblader";
     repo = "unclutter-xfixes";
     rev = "v${version}";
-    sha256 = "148m4wx8v57s3l2wb69y9imb00y8ca2li27hsxibwnl1wrkb7z4b";
+    sha256 = "sha256-suKmaoJq0PBHZc7NzBQ60JGwJkAtWmvzPtTHWOPJEdc=";
   };
 
   nativeBuildInputs = [ pkg-config asciidoc libxslt docbook_xsl ];
-  buildInputs = [ xlibsWrapper libev libXi libXfixes ];
+  buildInputs = [ libev libX11 libXext libXi libXfixes ];
 
+  prePatch = ''
+    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+  '';
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installFlags = [ "PREFIX=$(out)" ];
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Rewrite of unclutter using the X11 Xfixes extension";
     platforms = platforms.unix;
     license = lib.licenses.mit;
-    inherit version;
     maintainers = [ maintainers.globin ];
+    mainProgram = "unclutter";
   };
 }

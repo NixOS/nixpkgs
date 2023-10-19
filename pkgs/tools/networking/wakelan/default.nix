@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "wakelan-1.1";
+  pname = "wakelan";
+  version = "1.1";
 
   src = fetchurl {
-    url = "mirror://metalab/system/network/misc/${name}.tar.gz";
-    sha256 = "0vydqpf44146ir6k87gmqaq6xy66xhc1gkr3nsd7jj3nhy7ypx9x";
+    url = "mirror://ibiblioPubLinux/system/network/misc/${pname}-${version}.tar.gz";
+    hash = "sha256-PfXrj4d2SHmatiPPFxjsxvhusML1HTRNjoYEQtzFzW8=";
   };
 
   preInstall = ''
@@ -14,15 +15,12 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Send a wake-on-lan packet";
-
-    longDescription =
-      '' WakeLan sends a properly formatted UDP packet across the
-         network which will cause a wake-on-lan enabled computer to
-         power on.
-      '';
-
+    longDescription = ''
+      WakeLan sends a properly formatted UDP packet across the
+      network which will cause a wake-on-lan enabled computer to
+      power on.
+   '';
     license = lib.licenses.gpl2Plus;
-
     maintainers = [ lib.maintainers.viric ];
     platforms = lib.platforms.unix;
   };

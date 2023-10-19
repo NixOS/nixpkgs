@@ -1,16 +1,17 @@
-{ lib, stdenv, fetchurl, alsaLib, libX11, libXi, libXtst, xorgproto }:
+{ lib, stdenv, fetchFromGitHub, alsa-lib, libX11, libXi, libXtst, xorgproto }:
 
 stdenv.mkDerivation rec {
-  name = "mid2key-r1";
+  pname = "mid2key";
+  version = "1";
 
-  src = fetchurl {
-    url = "http://mid2key.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0j2vsjvdgx51nd1qmaa18mcy0yw9pwrhbv2mdwnf913bwsk4y904";
+  src = fetchFromGitHub {
+    owner = "dnschneid";
+    repo = "mid2key";
+    rev = "r${version}";
+    sha256 = "Zo0mqdBJ1JKD9ZCA8te3f5opyYslFncYcx9iuXq2B9g=";
   };
 
-  unpackPhase = "tar xvzf $src";
-
-  buildInputs = [ alsaLib libX11 libXi libXtst xorgproto ];
+  buildInputs = [ alsa-lib libX11 libXi libXtst xorgproto ];
 
   buildPhase = "make";
 

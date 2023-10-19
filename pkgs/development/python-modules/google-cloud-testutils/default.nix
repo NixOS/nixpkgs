@@ -1,25 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, click, google-auth, six }:
+{ lib
+, buildPythonPackage
+, click
+, fetchPypi
+, google-auth
+, packaging
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "google-cloud-testutils";
-  version = "0.2.0";
+  version = "1.3.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a23be7cc23bccb1ae6debb74a47dc5b51858b6322fcf034ca92fe7a4acb896f3";
+    hash = "sha256-bRjvNNmvsBy0sR4C0DoC/n7A9ez6AfXUJrXZiHKkz0g=";
   };
 
-  propagatedBuildInputs = [ click google-auth six ];
+  propagatedBuildInputs = [
+    click
+    google-auth
+    packaging
+  ];
 
   # does not contain tests
   doCheck = false;
 
-  pythonImportsCheck = [ "test_utils" ];
+  pythonImportsCheck = [
+    "test_utils"
+  ];
 
   meta = with lib; {
     description = "System test utilities for google-cloud-python";
     homepage = "https://github.com/googleapis/python-test-utils";
+    changelog  ="https://github.com/googleapis/python-test-utils/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

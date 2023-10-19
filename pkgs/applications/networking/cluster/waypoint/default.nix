@@ -2,17 +2,16 @@
 
 buildGoModule rec {
   pname = "waypoint";
-  version = "0.3.2";
+  version = "0.11.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-57DHImPYVFK+MXWGeArvc5fwHmqa3zodLytfDoAxglo=";
+    sha256 = "sha256-Zn11mVQV8lN62BVYfhXauKets7/mIqA0r+mG2TkRyPk=";
   };
 
-  deleteVendor = true;
-  vendorSha256 = "sha256-HxrY35SqfUbT6VCCXkLUjAsxgtMzpOeoicAGLwD2OyA=";
+  vendorHash = "sha256-z0qe8zSQ9PopGeyvMDhRpU+3jUgHoh+8jTsYGLPk3i4=";
 
   nativeBuildInputs = [ go-bindata installShellFiles ];
 
@@ -30,6 +29,9 @@ buildGoModule rec {
 
     local INSTALL="$out/bin/waypoint"
     install -D waypoint $out/bin/waypoint
+
+    # waypoint's completion install command alters your <something>rc files
+    # below is the equivalent of what it injects
 
     # Write to a file as it doesn't like EOF within <()
     cat > waypoint.fish <<EOF
@@ -74,7 +76,6 @@ buildGoModule rec {
       through a consistent and repeatable workflow.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ winpat jk ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ winpat jk techknowlogick ];
   };
 }

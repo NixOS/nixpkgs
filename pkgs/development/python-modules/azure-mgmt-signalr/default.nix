@@ -4,24 +4,28 @@
 , msrest
 , msrestazure
 , azure-common
-, azure-mgmt-nspkg
+, azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-signalr";
-  version = "0.4.0";
+  version = "1.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "6503ddda9d6f4b634dfeb8eb4bcd14ede5e0900585f6c83bf9010cf82215c126";
+    hash = "sha256-jbFhVoJbObpvcVJr2VoUzY5CmSblJ6OK7Q3l17SARfg=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
   # has no tests

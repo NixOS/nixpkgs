@@ -1,12 +1,13 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , ncurses5
-, python27
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcc-arm-embedded";
-  version = "9-2020-q2-update";
+  version = "9.3.1";
+  release = "9-2020-q2-update";
   subdir = "9-2020q2";
 
   suffix = {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
+    url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${release}-${suffix}.tar.bz2";
     sha256 = {
       aarch64-linux = "1b5q2y710hy7lddj8vj3zl54gfl74j30kx3hk3i81zrcbv16ah8z";
       x86_64-darwin = "1ils9z16wrvglh72m428y5irmd36biq79yj86756whib8izbifdv";
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
     find $out -type f | while read f; do
       patchelf "$f" > /dev/null 2>&1 || continue
       patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f" || true
-      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 python27 ]} "$f" || true
+      patchelf --set-rpath ${lib.makeLibraryPath [ "$out" stdenv.cc.cc ncurses5 ]} "$f" || true
     done
   '';
 
@@ -49,5 +50,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd2 gpl2 gpl3 lgpl21 lgpl3 mit ];
     maintainers = with maintainers; [ prusnak ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

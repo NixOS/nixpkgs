@@ -23,7 +23,7 @@ let
   # checking, only whitelist licenses used by notable
   # libcs in nixpkgs (musl and glibc).
   compatible = lib: drv:
-    lib.any (lic: lic == drv.meta.license) [
+    lib.any (lic: lic == (drv.meta.license or {})) [
       lib.licenses.mit        # musl
       lib.licenses.lgpl2Plus  # glibc
     ];
@@ -50,6 +50,7 @@ let
     "mysql"
     "pgsql"
     "regex_pcre"
+    "regex_pcre2"
     "regex_re2"
     "regex_tre"
     "sqlite3"
@@ -69,6 +70,7 @@ in
 , postgresql
 , libmysqlclient
 , pcre
+, pcre2
 , tre
 , re2
 , sqlite
@@ -97,6 +99,7 @@ let
     mysql           = [ libmysqlclient ];
     pgsql           = [ postgresql ];
     regex_pcre      = [ pcre ];
+    regex_pcre2     = [ pcre2 ];
     regex_re2       = [ re2 ];
     regex_tre       = [ tre ];
     sqlite3         = [ sqlite ];
@@ -142,13 +145,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "3.10.0";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1817gmxk4v7k5398d2fb6qkwadg0fd980gqmr80wdnppx450ikn7";
+    sha256 = "sha256-UpDjxF4zRrtiY4Z1tRML1uWQdklfgCeLsJtxCKfHOdw=";
   };
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];

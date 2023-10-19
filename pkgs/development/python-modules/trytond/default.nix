@@ -1,47 +1,46 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pythonOlder
-, mock
+, defusedxml
 , lxml
 , relatorio
 , genshi
-, dateutil
+, python-dateutil
 , polib
 , python-sql
 , werkzeug
 , wrapt
 , passlib
-, bcrypt
 , pydot
-, python-Levenshtein
-, simplejson
+, levenshtein
 , html2text
-, psycopg2
+, weasyprint
+, gevent
+, pillow
 , withPostgresql ? true
+, psycopg2
+, unittestCheckHook
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "trytond";
-  version = "5.8.5";
-  disabled = pythonOlder "3.5";
+  version = "6.8.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "62753cebdae2d9e2d6bf8a5dde840ef77540414c4df76c8ed202c0c0d0bedb02";
+    hash = "sha256-jZTc9Cc5XC1KScpniVtbBPdfwo3LodVNOo/zQSDBWY4=";
   };
 
-  # Tells the tests which database to use
-  DB_NAME = ":memory:";
-
-  buildInputs = [
-    mock
-  ];
   propagatedBuildInputs = [
+    defusedxml
     lxml
     relatorio
     genshi
-    dateutil
+    python-dateutil
     polib
     python-sql
     werkzeug
@@ -49,17 +48,26 @@ buildPythonApplication rec {
     passlib
 
     # extra dependencies
-    bcrypt
     pydot
-    python-Levenshtein
-    simplejson
+    levenshtein
     html2text
-  ] ++ lib.optional withPostgresql psycopg2;
+    weasyprint
+    gevent
+    pillow
+  ] ++ relatorio.optional-dependencies.fodt
+  ++ passlib.optional-dependencies.bcrypt
+  ++ passlib.optional-dependencies.argon2
+  ++ lib.optional withPostgresql psycopg2;
 
-  # If unset, trytond will try to mkdir /homeless-shelter
+  nativeCheckInputs = [ unittestCheckHook ];
+
   preCheck = ''
     export HOME=$(mktemp -d)
+    export TRYTOND_DATABASE_URI="sqlite://"
+    export DB_NAME=":memory:";
   '';
+
+  unittestFlagsArray = [ "-s" "trytond.tests" ];
 
   meta = with lib; {
     description = "The server of the Tryton application platform";
@@ -72,6 +80,7 @@ buildPythonApplication rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
+    changelog = "https://hg.tryton.org/trytond/file/${version}/CHANGELOG";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ udono johbo ];
   };

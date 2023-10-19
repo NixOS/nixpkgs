@@ -1,24 +1,28 @@
-{ lib, rustPlatform, fetchFromGitHub, libiconv, stdenv }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-insta";
-  version = "1.7.1";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
-    rev = version;
-    sha256 = "1qzzkhailxjqwp3rmdcpp112wn3x0gfi788vwj77pfdyclhpj0a7";
+    rev = "refs/tags/${version}";
+    hash = "sha256-s6d0q4K2UTG+BWzvH5KOAllzYAkEapEuDoiI9KQW31I=";
   };
 
-  sourceRoot = "source/cargo-insta";
-  cargoSha256 = "01fj2j7ibrk5dyrfkmc610lh1p6f6bgzbgivq3dsd64vslhqmabw";
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  sourceRoot = "${src.name}/cargo-insta";
+
+  cargoHash = "sha256-ZQUzoKE3OGaY22VYiku7GqjGN9jUNx09a0EcgCRzzcM=";
 
   meta = with lib; {
     description = "A Cargo subcommand for snapshot testing";
     homepage = "https://github.com/mitsuhiko/insta";
+    changelog = "https://github.com/mitsuhiko/insta/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with lib.maintainers; [ oxalica ];
+    maintainers = with maintainers; [ figsoda oxalica matthiasbeyer ];
   };
 }

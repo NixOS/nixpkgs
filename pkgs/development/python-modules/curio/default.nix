@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , isPy3k
 , pytestCheckHook
 , sphinx
@@ -10,45 +9,40 @@
 
 buildPythonPackage rec {
   pname = "curio";
-  version = "1.4";
+  version = "1.6";
+  format = "setuptools";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57edce81c837f3c2cf42fbb346dee26e537d1659e6605269fb13bd179e068744";
+    hash = "sha256-VipYbbICFrp9K+gmPeuesHnlYEj5uJBtEdX0WqgcUkc=";
   };
 
-  patches = [
-    # Fix the flaky test due to slow moving time on Apple Silicon chips.
-    # Remove when https://github.com/dabeaz/curio/pull/339 is in the next release.
-    (fetchpatch {
-      url = "https://github.com/dabeaz/curio/commit/132376724bbfaa0a52d3d63d0791aa4ac1eb6f5f.patch";
-      sha256 = "sha256-AxO0xRcR9l9/NKEJFwyZIoYcyZxpqOhpdNaeaYokVb4=";
-    })
-    # Same as above
-    (fetchpatch {
-      url = "https://github.com/dabeaz/curio/commit/8ac2f12a2cdacbc750b01fc7459cee8879bc1ee3.patch";
-      sha256 = "sha256-2Si3fuDLrI09QuzJd1TrE0QY02G9e9m+1eHFTB/MrWU=";
-    })
+  nativeCheckInputs = [
+    pytestCheckHook
+    sphinx
   ];
-
-  disabled = !isPy3k;
-
-  checkInputs = [ pytestCheckHook sphinx ];
 
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-     "test_aside_basic" # times out
-     "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
-     "test_ssl_outgoing" # touches network
-   ] ++ lib.optionals (stdenv.isDarwin) [
-     "test_unix_echo" # socket bind error on hydra when built with other packages
-     "test_unix_ssl_server" # socket bind error on hydra when built with other packages
-   ];
+    "test_aside_basic" # times out
+    "test_write_timeout" # flaky, does not always time out
+    "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
+    "test_ssl_outgoing" # touches network
+    "test_unix_echo" # socket bind error on hydra when built with other packages
+    "test_unix_ssl_server" # socket bind error on hydra when built with other packages
+  ] ++ lib.optionals stdenv.isDarwin [
+    # connects to python.org:1, expects an OsError, hangs in the darwin sandbox
+    "test_create_bad_connection"
+  ];
+
+  pythonImportsCheck = [ "curio" ];
 
   meta = with lib; {
+    description = "Library for performing concurrent I/O with coroutines in Python";
     homepage = "https://github.com/dabeaz/curio";
-    description = "Library for performing concurrent I/O with coroutines in Python 3";
+    changelog = "https://github.com/dabeaz/curio/raw/${version}/CHANGES";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

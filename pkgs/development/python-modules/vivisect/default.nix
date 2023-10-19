@@ -1,22 +1,41 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, cxxfilt
 , fetchPypi
+, msgpack
 , pyasn1
 , pyasn1-modules
-, cxxfilt
-, msgpack
 , pycparser
+, pyqt5
+, pythonRelaxDepsHook
+, pyqtwebengine
+, pythonOlder
+, withGui ? false
+, wrapQtAppsHook
 }:
+
 buildPythonPackage rec {
   pname = "vivisect";
-  version = "0.1.0";
-  disabled = isPy3k;
+  version = "1.1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ed5e8c24684841d30dc7b41f2bee87c0198816a453417ae2e130b7845ccb2629";
+    hash = "sha256-URRBEZelw4s43zqtb/GrLxIksvrqHbqQWntT9jVonhU=";
   };
+
+  pythonRelaxDeps = [
+    "cxxfilt"
+    "pyasn1"
+    "pyasn1-modules"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = [
     pyasn1
@@ -24,10 +43,15 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
+  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
+
+  passthru.optional-dependencies.gui = [
+    pyqt5
+    pyqtwebengine
   ];
 
-  preBuild = ''
-    sed "s@==.*'@'@" -i setup.py
+  postFixup = ''
+    wrapQtApp $out/bin/vivbin
   '';
 
   # requires another repo for test files
@@ -38,9 +62,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Pure python disassembler, debugger, emulator, and static analysis framework";
+    description = "Python disassembler, debugger, emulator, and static analysis framework";
     homepage = "https://github.com/vivisect/vivisect";
+    changelog = "https://github.com/vivisect/vivisect/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

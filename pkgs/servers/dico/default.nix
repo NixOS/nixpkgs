@@ -1,5 +1,5 @@
 { fetchurl, lib, stdenv, libtool, gettext, zlib, readline, gsasl
-, guile, python2, pcre, libffi, groff }:
+, guile, python3, pcre, libffi, groff, libxcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "dico";
@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  nativeBuildInputs = [ groff ];
+
   buildInputs =
-    [ libtool gettext zlib readline gsasl guile python2 pcre libffi groff ];
+    [ libtool gettext zlib readline gsasl guile python3 pcre libffi libxcrypt ];
+
+  strictDeps = true;
 
   doCheck = true;
 
@@ -22,7 +26,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://www.gnu.org/software/dico/";
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
 
     longDescription = ''
       GNU Dico is a flexible modular implementation of DICT server

@@ -10,13 +10,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cicero-tui";
-  version = "0.2.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "eyeplum";
     repo = "cicero-tui";
     rev = "v${version}";
-    sha256 = "sha256-FwjD+BdRc8y/g5MQLmBB/qkUj33cywbH2wjTp0y0s8A=";
+    sha256 = "sha256-2raSkIycXCdT/TSlaQviI6Eql7DONgRVsPP2B2YuW8U=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,12 @@ rustPlatform.buildRustPackage rec {
     freetype
   ];
 
-  cargoSha256 = "sha256-JygEE7K8swbFvJ2aDXs+INhfoLuhy+LY7T8AUr4lgJY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "unic-0.9.0" = "sha256-ZE4C+rrtmHdqTmenP5c7QGNTW/n7pi8nh7lqLhHgi3w=";
+    };
+  };
 
   meta = with lib; {
     description = "Unicode tool with a terminal user interface";

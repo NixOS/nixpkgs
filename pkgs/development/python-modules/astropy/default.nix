@@ -1,56 +1,91 @@
 { lib
 , fetchPypi
-, setuptools_scm
+, fetchpatch
 , buildPythonPackage
-, isPy3k
+, pythonOlder
+
+# build time
+, astropy-extension-helpers
 , cython
 , jinja2
-, numpy
-, pytest
+, oldest-supported-numpy
+, setuptools-scm
+, wheel
+# testing
+, pytestCheckHook
+, pytest-xdist
 , pytest-astropy
-, astropy-helpers
-, astropy-extension-helpers
+, python
+
+# runtime
+, numpy
+, packaging
 , pyerfa
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "4.2";
+  version = "5.3.4";
   format = "pyproject";
 
-  disabled = !isPy3k; # according to setup.py
+  disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2c194f8a429b8399de64a413a06881ea49f0525cabaa2d78fc132b9e970adc6a";
+    hash = "sha256-1JD34vqsLMwBySRCAtYpFUJZr4qXkQTO2J3ErOTm8dg=";
   };
-
-  nativeBuildInputs = [ setuptools_scm astropy-helpers astropy-extension-helpers cython jinja2 ];
-  propagatedBuildInputs = [ numpy pyerfa ];
-  checkInputs = [ pytest pytest-astropy ];
-
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
+  # Relax cython dependency to allow this to build, upstream only doesn't
+  # support cython 3 as of writing. See:
+  # https://github.com/astropy/astropy/issues/15315
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'cython==' 'cython>='
   '';
 
-  # Tests must be run from the build directory.  astropy/samp tests
-  # require a network connection, so we ignore them. For some reason
-  # pytest --ignore does not work, so we delete the tests instead.
-  checkPhase = ''
-    cd build/lib.*
-    rm -f astropy/samp/tests/*
-    pytest
+  nativeBuildInputs = [
+    astropy-extension-helpers
+    cython
+    jinja2
+    oldest-supported-numpy
+    setuptools-scm
+    wheel
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    packaging
+    pyerfa
+    pyyaml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+    pytest-astropy
+  ];
+
+  # Not running it inside the build directory. See:
+  # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
+  preCheck = ''
+    cd "$out"
+    export HOME="$(mktemp -d)"
+    export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
   '';
+  pythonImportsCheck = [
+    "astropy"
+  ];
+  disabledTests = [
+    # May fail due to parallelism, see:
+    # https://github.com/astropy/astropy/issues/15441
+    "TestUnifiedOutputRegistry"
+  ];
 
-  # 368 failed, 10889 passed, 978 skipped, 69 xfailed in 196.24s
-  # doCheck = false;
-  doCheck = false;
-
-  meta = with lib; {
+  meta = {
     description = "Astronomy/Astrophysics library for Python";
     homepage = "https://www.astropy.org";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.kentjames ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ kentjames doronbehar ];
   };
 }

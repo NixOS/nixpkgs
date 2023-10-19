@@ -1,8 +1,14 @@
-{ lib, stdenv, cmake, ninja, fetchFromGitHub, fetchpatch }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, ninja
+, static ? stdenv.hostPlatform.isStatic,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
-  version = "1.10.0";
+  version = "1.12.1";
 
   outputs = [ "out" "dev" ];
 
@@ -10,27 +16,31 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "googletest";
     rev = "release-${version}";
-    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
+    hash = "sha256-W+OxRTVtemt2esw4P7IyGWXOonUN5ZuscjvzqkYvZbM=";
   };
 
   patches = [
     ./fix-cmake-config-includedir.patch
-    (fetchpatch {
-      name = "fix-pkgconfig-paths.patch";
-      url = "https://github.com/google/googletest/commit/5126ff48d9ac54828d1947d1423a5ef2a8efee3b.patch";
-      sha256 = "sha256-TBvECU/9nuvwjsCjWJP2b6DNy+FYnHIFZeuVW7g++JE=";
-    })
   ];
 
   nativeBuildInputs = [ cmake ninja ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+  ] ++ lib.optionals (
+    (stdenv.cc.isGNU && (lib.versionOlder stdenv.cc.version "11.0"))
+    || (stdenv.cc.isClang && (lib.versionOlder stdenv.cc.version "16.0"))
+  ) [
+    # Enable C++17 support
+    # https://github.com/google/googletest/issues/3081
+    "-DCMAKE_CXX_STANDARD=17"
+  ];
 
   meta = with lib; {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ zoomulator ivan-tkatchev ];
+    maintainers = with maintainers; [ ivan-tkatchev ];
   };
 }

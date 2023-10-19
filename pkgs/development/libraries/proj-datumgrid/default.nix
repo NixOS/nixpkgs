@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "proj-datumgrid";
+  pname = "proj-datumgrid";
   version = "world-1.0";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "132wp77fszx33wann0fjkmi1isxvsb0v9iw0gd9sxapa9h6hf3am";
   };
 
-  sourceRoot = "source/scripts";
+  sourceRoot = "${src.name}/scripts";
 
   buildPhase = ''
     $CC nad2bin.c -o nad2bin
@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     description = "Repository for proj datum grids";
     homepage = "https://proj4.org";
     license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ ];
+    mainProgram = "nad2bin";
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

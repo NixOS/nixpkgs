@@ -2,25 +2,24 @@
 , lib
 , fetchurl
 , instrument-control
-, arduino
+, arduino-core-unwrapped
 }:
 
 buildOctavePackage rec {
   pname = "arduino";
-  version = "0.6.0";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0fnfk206n31s7diijaylmqhxnr88z6l3l3vsxq4z8gcp9ylm9nkj";
+    sha256 = "sha256-p9SDTXkIwnrkNXeVhzAHks7EL4NdwBokrH2j9hqAJqQ=";
   };
 
   requiredOctavePackages = [
     instrument-control
   ];
 
-  # Might be able to use pkgs.arduino-core
   propagatedBuildInputs = [
-    arduino
+    arduino-core-unwrapped
   ];
 
   meta = with lib; {

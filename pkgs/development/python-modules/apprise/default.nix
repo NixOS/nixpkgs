@@ -1,39 +1,79 @@
-{ lib, buildPythonPackage, fetchPypi, installShellFiles
-, Babel, requests, requests_oauthlib, six, click, markdown, pyyaml, cryptography
-, pytestrunner, coverage, flake8, mock, pytestCheckHook, pytestcov, tox, gntp, sleekxmpp
+{ lib
+, babel
+, buildPythonPackage
+, click
+, cryptography
+, fetchPypi
+, gntp
+, installShellFiles
+, markdown
+, paho-mqtt
+, pytest-mock
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, requests
+, requests-oauthlib
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "0.9.3";
+  version = "1.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-yKzpyJHUIkVYVwrL6oCPMd+QSVML2czWmQHCemXWAMQ=";
+    hash = "sha256-Pu+rHF15eLDmXFCR0c2+kgaGXcPLXRnKXPvdt26Kr/4=";
   };
 
-  nativeBuildInputs = [ Babel installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   propagatedBuildInputs = [
-    cryptography requests requests_oauthlib six click markdown pyyaml
+    click
+    cryptography
+    markdown
+    pyyaml
+    requests
+    requests-oauthlib
   ];
 
-  checkInputs = [
-    pytestrunner coverage flake8 mock pytestCheckHook pytestcov tox gntp sleekxmpp
+  nativeCheckInputs = [
+    babel
+    gntp
+    paho-mqtt
+    pytest-mock
+    pytest-xdist
+    pytestCheckHook
   ];
 
-  disabledTests = [ "test_apprise_cli_nux_env"  ];
+  disabledTests = [
+    "test_apprise_cli_nux_env"
+    "test_plugin_mqtt_general"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: module 'apprise.plugins' has no attribute 'NotifyBulkSMS'
+    "test/test_plugin_bulksms.py"
+  ];
 
   postInstall = ''
     installManPage packaging/man/apprise.1
   '';
 
-  pythonImportsCheck = [ "apprise" ];
+  pythonImportsCheck = [
+    "apprise"
+  ];
 
   meta = with lib; {
+    description = "Push Notifications that work with just about every platform";
     homepage = "https://github.com/caronc/apprise";
-    description = "Push Notifications that work with just about every platform!";
-    license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ marsam ];
   };
 }

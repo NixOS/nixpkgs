@@ -4,9 +4,11 @@
 , extra-cmake-modules
 , fcitx5
 , gobject-introspection
+, glib
 , gtk2
 , gtk3
 , gtk4
+, fmt
 , pcre
 , libuuid
 , libselinux
@@ -15,7 +17,7 @@
 , libdatrie
 , libXdmcp
 , libxkbcommon
-, epoxy
+, libepoxy
 , dbus
 , at-spi2-core
 , libXtst
@@ -24,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.0.3";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = "fcitx5-gtk";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-+BzXbZyzC3fvLqysufblk0zK9fAg5jslVdm/v3jz4B4=";
+    sha256 = "sha256-xVBmFFUnlWqviht/KGFTHCd3xCln/6hyBG72tIHqopc=";
   };
 
   cmakeFlags = [
@@ -39,9 +41,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (! withGTK2) "-DENABLE_GTK2_IM_MODULE=off";
 
   buildInputs = [
+    glib
     gtk3
     gtk4
-    gobject-introspection
+    fmt
     fcitx5
     pcre
     libuuid
@@ -51,7 +54,7 @@ stdenv.mkDerivation rec {
     libdatrie
     libXdmcp
     libxkbcommon
-    epoxy
+    libepoxy
     dbus
     at-spi2-core
     libXtst
@@ -60,6 +63,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    gobject-introspection
   ];
 
   meta = with lib; {

@@ -6,18 +6,18 @@
 , xfce4-panel
 , libxfce4ui
 , xfconf
-, xfce
+, gitUpdater
 }:
 
 let
   category = "panel-plugins";
 in stdenv.mkDerivation rec {
   pname  = "xfce4-notes-plugin";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "E/kJyUi2Oflt5kz3k+t0yxd5WJIB05M+/yFO6PNasIg=";
+    sha256 = "sha256-LuRAYELt01KpHhZsg7YNEyIO8E3OP6a54OsTY21jaSk=";
   };
 
   nativeBuildInputs = [
@@ -31,10 +31,9 @@ in stdenv.mkDerivation rec {
     xfconf
   ];
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.xfce.org/panel-plugins/${pname}";
+    rev-prefix = "${pname}-";
   };
 
   meta = with lib; {
@@ -42,6 +41,6 @@ in stdenv.mkDerivation rec {
     description = "Sticky notes plugin for Xfce panel";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

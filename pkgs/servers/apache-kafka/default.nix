@@ -1,28 +1,51 @@
-{ lib, stdenv, fetchurl, jdk8_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
+{ lib, stdenv, fetchurl, jdk17_headless, jdk11_headless, makeWrapper, bash, coreutils, gnugrep, gnused, ps,
   majorVersion ? "1.0" }:
 
 let
-  jre8 = jdk8_headless;
-  jre11 = jdk11_headless;
   versionMap = {
-    "2.4" = {
-      kafkaVersion = "2.4.1";
-      scalaVersion = "2.12";
-      sha256 = "0ahsprmpjz026mhbr79187wfdrxcg352iipyfqfrx68q878wnxr1";
-      jre = jre8;
-    };
-    "2.5" = {
-      kafkaVersion = "2.5.1";
-      scalaVersion = "2.12";
-      sha256 = "1wn4iszrm2rvsfyyr515zx79k5m86davjkcwcwpxcgc4k3q0z7lv";
-      jre = jre8;
-    };
-    "2.6" = {
-      kafkaVersion = "2.6.1";
+    "3.5" = {
+      kafkaVersion = "3.5.0";
       scalaVersion = "2.13";
-      sha256 = "1a2kd4r6f8z7qf886nnq9f350sblzzdi230j2hll7x156888573y";
-      jre = jre11;
+      sha256 = "sha256-KjpGjgab5XDxbWEqgZbC96kge36shlvpNNIM4SUusvg=";
+      jre = jdk17_headless;
     };
+    "3.4" = {
+      kafkaVersion = "3.4.1";
+      scalaVersion = "2.13";
+      sha256 = "sha256-p28XpSuPLNMd4RVx/zZqcUggtuTgKJOwFZ0J2w7a+Zg=";
+      jre = jdk17_headless;
+    };
+    "3.3" = {
+      kafkaVersion = "3.3.2";
+      scalaVersion = "2.13";
+      sha256 = "sha256-Gv5XrpXnEajH8fSbcfIfURz+QPcqTrJ1oe3SGXYLNRc=";
+      jre = jdk17_headless;
+    };
+    "3.2" = {
+      kafkaVersion = "3.2.3";
+      scalaVersion = "2.13";
+      sha256 = "sha256-tvkbwBP83M1zl31J4g6uu4/LEhqJoIA9Eam48fyT24A=";
+      jre = jdk17_headless;
+    };
+    "3.1" = {
+      kafkaVersion = "3.1.2";
+      scalaVersion = "2.13";
+      sha256 = "sha256-SO1bTQkG3YQSv657QjwBeBCWbDlDqS3E5eUp7ciojnI=";
+      jre = jdk17_headless;
+    };
+    "3.0" = {
+      kafkaVersion = "3.0.2";
+      scalaVersion = "2.13";
+      sha256 = "sha256-G8b6STGlwow+iDqMCeZkF3HTKd94TKccmyfZ7AT/7yE=";
+      jre = jdk17_headless;
+    };
+    "2.8" = {
+      kafkaVersion = "2.8.2";
+      scalaVersion = "2.13";
+      sha256 = "sha256-inZXZJSs8ivtEqF6E/ApoyUHn8vg38wUG3KhowP8mfQ=";
+      jre = jdk11_headless;
+    };
+
   };
 in
 
@@ -64,12 +87,16 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin\/*
   '';
 
+  passthru = {
+    inherit jre; # Used by the NixOS module to select the supported jre
+  };
+
   meta = with lib; {
-    homepage = "http://kafka.apache.org";
+    homepage = "https://kafka.apache.org";
     description = "A high-throughput distributed messaging system";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = [ maintainers.ragge ];
     platforms = platforms.unix;
   };
-  passthru = { inherit jre; };
 }

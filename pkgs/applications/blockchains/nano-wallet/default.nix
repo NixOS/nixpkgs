@@ -1,22 +1,22 @@
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, wrapQtAppsHook, boost, libGL
-, qtbase, python }:
+, qtbase, python3 }:
 
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
-  version = "21.3";
+  version = "25.1";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "nano-node";
     rev = "V${version}";
-    sha256 = "0f6chl5vrzdr4w8g3nivfxk3qm6m11js401998afnhz0xaysm4pm";
     fetchSubmodules = true;
+    hash = "sha256-YvYEXHC8kxviZLQwINs+pS61wITSfqfrrPmlR+zNRoE=";
   };
 
   cmakeFlags = let
     options = {
-      PYTHON_EXECUTABLE = "${python}/bin/python";
+      PYTHON_EXECUTABLE = "${python3.interpreter}";
       NANO_SHARED_BOOST = "ON";
       BOOST_ROOT = boost;
       RAIBLOCKS_GUI = "ON";
@@ -32,11 +32,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
   buildInputs = [ boost libGL qtbase ];
 
-  buildPhase = ''
-    runHook preBuild
-    make nano_wallet
-    runHook postBuild
-  '';
+  strictDeps = true;
+
+  makeFlags = [ "nano_wallet" ];
 
   checkPhase = ''
     runHook preCheck
@@ -45,7 +43,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "Wallet for Nano cryptocurrency";
     homepage = "https://nano.org/en/wallet/";
     license = lib.licenses.bsd2;

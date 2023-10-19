@@ -1,34 +1,61 @@
-{ lib, stdenv
-, fetchurl
-, SDL
-, SDL_mixer
+{ lib
+, stdenv
+, fetchFromGitLab
+
+, pkg-config
+, gettext
+, povray
+, imagemagick
+, gimp
+
+, SDL2
+, SDL2_mixer
+, SDL2_image
+, libpng
 , zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "toppler";
-  version = "1.1.6";
+  version = "1.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0ifccissd8sh78kpwh7dafx4ah7hkhqz6nf4z2hdnalw702jkg3x";
+  src = fetchFromGitLab {
+    owner = "roever";
+    repo = "toppler";
+    rev = "v${version}";
+    sha256 = "sha256-ecEaELu52Nmov/BD9VzcUw6wyWeHJcsKQkEzTnaW330=";
   };
 
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    povray
+    imagemagick
+    gimp
+  ];
+
   buildInputs = [
-    SDL
-    SDL_mixer
+    SDL2
+    SDL2_mixer
+    SDL2_image
+    libpng
     zlib
   ];
 
-  # The conftest hangs on Hydra runners, because they are not logged in.
-  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+  # GIMP needs a writable home
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  makeFlags = [ "PREFIX=$(out)" ];
+
+  hardeningDisable = [ "format" ];
 
   meta = with lib; {
     description = "Jump and run game, reimplementation of Tower Toppler/Nebulus";
-    homepage = "http://toppler.sourceforge.net/";
-    license = licenses.gpl2;
+    homepage = "https://gitlab.com/roever/toppler";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
   };
 }
-

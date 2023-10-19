@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, openobex, bluez, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "obexftp-0.24.2";
+  pname = "obexftp";
+  version = "0.24.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openobex/${name}-Source.tar.gz";
+    url = "mirror://sourceforge/openobex/obexftp-${version}-Source.tar.gz";
     sha256 = "18w9r78z78ri5qc8fjym4nk1jfbrkyr789sq7rxrkshf1a7b83yl";
   };
 
@@ -13,6 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ bluez ];
 
   propagatedBuildInputs = [ openobex ];
+
+  # https://sourceforge.net/p/openobex/bugs/66/
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
 
   # There's no such thing like "bluetooth" library; possibly they meant "bluez" but it links correctly without this.
   postFixup = ''

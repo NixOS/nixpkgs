@@ -1,26 +1,42 @@
-{ lib, appimageTools, fetchurl, gtk3, gsettings-desktop-schemas }:
+{ lib, appimageTools, fetchurl }:
 
 let
   pname = "chrysalis";
-  version = "0.8.4";
-in appimageTools.wrapType2 rec {
+  version = "0.13.2";
   name = "${pname}-${version}-binary";
-
   src = fetchurl {
-    url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
-    sha256 = "b41f3e23dac855b1588cff141e3d317f96baff929a0543c79fccee0c6f095bc7";
+    url =
+      "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}-x64.AppImage";
+    hash =
+      "sha512-WuItdQ/hDxbZZ3zulHI74NUkuYfesV/31rA1gPakCFgX2hpPrmKzwUez2vqt4N5qrGyphrR0bcelUatGZhOn5A==";
   };
+  appimageContents = appimageTools.extract { inherit name src; };
+in appimageTools.wrapType2 rec {
+  inherit name pname src;
 
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
+  multiArch = false;
+  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [ p.glib ];
+
+  # Also expose the udev rules here, so it can be used as:
+  #   services.udev.packages = [ pkgs.chrysalis ];
+  # to allow non-root modifications to the keyboards.
+
+  extraInstallCommands = ''
+    mv $out/bin/{${name},${pname}}
+
+    install -m 444 \
+      -D ${appimageContents}/usr/lib/chrysalis/resources/static/udev/60-kaleidoscope.rules \
+      -t $out/lib/udev/rules.d
+
+    install -m 444 \
+        -D ${appimageContents}/Chrysalis.desktop \
+        -t $out/share/applications
+    substituteInPlace \
+        $out/share/applications/Chrysalis.desktop \
+        --replace 'Exec=Chrysalis' 'Exec=${pname}'
+
+    cp -r ${appimageContents}/usr/share/icons $out/share
   '';
-
-  multiPkgs = null;
-  extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
-    p.glib
-  ];
-
-  extraInstallCommands = "mv $out/bin/${name} $out/bin/${pname}";
 
   meta = with lib; {
     description = "A graphical configurator for Kaleidoscope-powered keyboards";
@@ -28,5 +44,6 @@ in appimageTools.wrapType2 rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ aw ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = pname;
   };
 }

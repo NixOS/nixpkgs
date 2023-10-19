@@ -7,11 +7,11 @@ let
   inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "gnumeric";
-  version = "1.12.49";
+  version = "1.12.55";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "kcBy7JXDLgCxVv/oAVyTsyuO3zaPkEFDYZPPoy6E7Vc=";
+    sha256 = "xpoJzRkLYirMpHa7w9TAPWjXzPWbumG/A2zmCIX5+2U=";
   };
 
   configureFlags = [ "--disable-component" ];
@@ -38,6 +38,7 @@ in stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     homepage = "http://projects.gnome.org/gnumeric/";
     platforms = platforms.unix;
+    broken = with stdenv; isDarwin && isAarch64;
     maintainers = [ maintainers.vcunat ];
   };
 }

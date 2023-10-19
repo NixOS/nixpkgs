@@ -1,39 +1,78 @@
-{ lib, fetchFromGitHub, python3Packages, nginx }:
+{ lib, fetchFromGitHub, buildPythonApplication
+, pythonOlder
+, aiohttp
+, appdirs
+, beautifulsoup4
+, defusedxml
+, devpi-common
+, execnet
+, itsdangerous
+, nginx
+, packaging
+, passlib
+, platformdirs
+, pluggy
+, py
+, pyramid
+, pytestCheckHook
+, repoze_lru
+, setuptools
+, strictyaml
+, waitress
+, webtest
+}:
 
-python3Packages.buildPythonApplication rec {
+
+buildPythonApplication rec {
   pname = "devpi-server";
-  version = "6.0.0.dev0";
+  version = "6.9.2";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
-    rev = "68ee291ef29a93f6d921d4927aec8d13919b4a4c";
-    sha256 = "1ivd5dy9f2gq07w8n2gywa0n0d9wv8644l53ni9fz7i69jf8q2fm";
+    rev = "server-${version}";
+    hash = "sha256-HnxWLxOK+6B8O/7lpNjuSUQ0Z7NOmV2n01WFyjow6oU=";
   };
-  sourceRoot = "source/server";
 
-  propagatedBuildInputs = with python3Packages; [
-    py
-    appdirs
-    devpi-common
-    defusedxml
-    execnet
-    itsdangerous
-    repoze_lru
-    passlib
-    pluggy
-    pyramid
-    strictyaml
-    waitress
+  sourceRoot = "${src.name}/server";
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace "--flake8" ""
+  '';
+
+  nativeBuildInputs = [
+    setuptools
   ];
 
-  checkInputs = with python3Packages; [
+  propagatedBuildInputs = [
+    aiohttp
+    appdirs
+    defusedxml
+    devpi-common
+    execnet
+    itsdangerous
+    packaging
+    passlib
+    platformdirs
+    pluggy
+    pyramid
+    repoze_lru
+    setuptools
+    strictyaml
+    waitress
+  ] ++ passlib.optional-dependencies.argon2;
+
+  nativeCheckInputs = [
     beautifulsoup4
     nginx
+    py
     pytestCheckHook
-    pytest-flake8
     webtest
-  ] ++ lib.optionals isPy27 [ mock ];
+  ];
 
   # root_passwd_hash tries to write to store
   # TestMirrorIndexThings tries to write to /var through ngnix
@@ -53,13 +92,21 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "root_passwd_hash_option"
     "TestMirrorIndexThings"
+    "test_auth_mirror_url_no_hash"
+    "test_auth_mirror_url_with_hash"
+    "test_auth_mirror_url_hidden_in_logs"
   ];
 
   __darwinAllowLocalNetworking = true;
 
+  pythonImportsCheck = [
+    "devpi_server"
+  ];
+
   meta = with lib;{
     homepage = "http://doc.devpi.net";
     description = "Github-style pypi index server and packaging meta tool";
+    changelog = "https://github.com/devpi/devpi/blob/${src.rev}/server/CHANGELOG";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };

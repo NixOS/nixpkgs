@@ -1,36 +1,22 @@
-{ lib, fetchurl, buildDunePackage, dune-configurator, pkg-config
-, bigarray-compat, optint
+{ lib, fetchurl, buildDunePackage, ocaml, dune-configurator
+, optint
 , fmt, rresult, bos, fpath, astring, alcotest
-, withFreestanding ? false
-, ocaml-freestanding
 }:
 
 buildDunePackage rec {
-  version = "0.3.1";
+  version = "0.5.2";
   pname = "checkseum";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-v${version}.tbz";
-    sha256 = "b9e4d054e17618b1faed8c0eb15afe0614b2f093e58b59a180bda4500a5d2da1";
+    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
+    hash = "sha256-nl5P1EBctKi03wCHdUMlGDPgimSZ70LMuNulgt8Nr8g=";
   };
 
-  patches = [
-    ./makefile-no-opam.patch
-  ];
-
-  nativeBuildInputs = [
-    dune-configurator
-    pkg-config
-  ];
+  buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [
-    bigarray-compat
     optint
-  ] ++ lib.optionals withFreestanding [
-    ocaml-freestanding
   ];
 
   checkInputs = [
@@ -42,12 +28,13 @@ buildDunePackage rec {
     rresult
   ];
 
-  doCheck = true;
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
-    homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
+    homepage = "https://github.com/mirage/checkseum";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "checkseum.checkseum";
   };
 }

@@ -1,19 +1,43 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wrapGAppsHook, python3
-, gettext, gnome, glib, gtk3, libgnome-games-support, gdk-pixbuf }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook
+, python3
+, gettext
+, gnome
+, glib
+, gtk3
+, libgnome-games-support
+, gdk-pixbuf
+}:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "atomix";
-  version = "3.34.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "44.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0h909a4mccf160hi0aimyicqhq2b0gk1dmqp7qwf87qghfrw6m00";
+    url = "mirror://gnome/sources/atomix/${lib.versions.major finalAttrs.version}/atomix-${finalAttrs.version}.tar.xz";
+    sha256 = "yISTF2iNh9pzTJBjA1YxBSAH8qh5m2xsyRUmWIC1X7Q=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext wrapGAppsHook python3 ];
-  buildInputs = [ glib gtk3 gdk-pixbuf libgnome-games-support gnome.adwaita-icon-theme ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    wrapGAppsHook
+    python3
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    gdk-pixbuf
+    libgnome-games-support
+  ];
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -22,8 +46,8 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "atomix";
+      attrPath = "gnome.atomix";
     };
   };
 
@@ -32,6 +56,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Atomix";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
-}
+})

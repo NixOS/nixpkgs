@@ -10,12 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-cases";
-  version = "3.4.6";
+  version = "3.6.14";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17w4s6622i97q81g15zamqm536ib00grgdfk2f4kk9bw2k7sdlq6";
+    hash = "sha256-dFXmylelRMG/3YtWrOCMHBzkxlcqiquPG9NR3CWhC2s=";
   };
 
   nativeBuildInputs = [
@@ -32,19 +34,23 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "pytest-runner" ""
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" ""
   '';
 
   # Tests have dependencies (pytest-harvest, pytest-steps) which
   # are not available in Nixpkgs. Most of the packages (decopatch,
-  # makefun, pytest-*) have circular dependecies.
+  # makefun, pytest-*) have circular dependencies.
   doCheck = false;
 
-  pythonImportsCheck = [ "pytest_cases" ];
+  pythonImportsCheck = [
+    "pytest_cases"
+  ];
 
   meta = with lib; {
     description = "Separate test code from test cases in pytest";
     homepage = "https://github.com/smarie/python-pytest-cases";
+    changelog = "https://github.com/smarie/python-pytest-cases/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

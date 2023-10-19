@@ -1,24 +1,30 @@
 { lib
-, fetchPypi
-, buildPythonPackage
-, setuptools-scm
-, click
-, requests
+, stdenv
 , attrs
-, intbitset
-, saneyaml
-, text-unidecode
 , beautifulsoup4
-, pytestCheckHook
+, buildPythonPackage
+, click
+, fetchPypi
 , pytest-xdist
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, requests
+, saneyaml
+, setuptools-scm
+, text-unidecode
 }:
+
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "21.1.21";
+  version = "31.0.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e2daa34fac2d91307b23d9df5f01a6168fdffb12bf5d161bd6776bade29b479";
+    hash = "sha256-ura55/m/iesqN6kSYmdHB1sbthSHXaFWiQ76wVmyl0E=";
   };
 
   dontConfigure = true;
@@ -28,18 +34,36 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    attrs
+    beautifulsoup4
     click
     requests
-    attrs
-    intbitset
     saneyaml
     text-unidecode
-    beautifulsoup4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+  ];
+
+  disabledTests = [
+    # chinese character translates different into latin
+    "test_safe_path_posix_style_chinese_char"
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character
+    "test_os_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
+    "test_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # expected result is tailored towards the quirks of upstream's
+    # CI environment on darwin
+    "test_searchable_paths"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/nexB/commoncode/issues/36
+    "src/commoncode/fetch.py"
   ];
 
   pythonImportsCheck = [
@@ -49,7 +73,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
+    changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = with maintainers; [ ];
   };
 }

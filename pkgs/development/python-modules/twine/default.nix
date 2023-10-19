@@ -1,43 +1,48 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , importlib-metadata
 , keyring
 , pkginfo
-, pyblake2
 , readme_renderer
 , requests
-, requests_toolbelt
-, setuptools_scm
-, tqdm
-, colorama
+, requests-toolbelt
+, rich
 , rfc3986
+, setuptools-scm
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "3.4.1";
-  disabled = pythonOlder "3.6";
+  version = "4.0.2";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a56c985264b991dc8a8f4234eb80c5af87fa8080d0c224ad8f2cd05a2c22e83b";
+    hash = "sha256-nhAu9f3VogZh64j61GM4gGw70yzx23KWA/42l7G8g8g=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
+
   propagatedBuildInputs = [
     importlib-metadata
     keyring
     pkginfo
-    pyblake2
     readme_renderer
     requests
-    requests_toolbelt
-    tqdm
-    colorama
+    requests-toolbelt
     rfc3986
+    rich
+    urllib3
   ];
 
   # Requires network
   doCheck = false;
+
+  pythonImportsCheck = [ "twine" ];
 
   meta = {
     description = "Collection of utilities for interacting with PyPI";

@@ -1,27 +1,46 @@
 { lib
+, asttokens
 , buildPythonPackage
 , fetchFromGitHub
-, asttokens
+, littleutils
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+, rich
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "executing";
-  version = "0.5.4";
+  version = "1.2.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hqx94h6l2wg9sljiaajfay2nr62sqa819w3bxrz8cdki1abdygv";
+    hash = "sha256-3M3uSJ5xQ5Ciy8Lz21u9zjju/7SBSFHobCqSiJ6AP8M=";
   };
 
-  preBuild = ''
-    export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # Tests appear to run fine (Ran 22 tests in 4.076s) with setuptoolsCheckPhase
-  # but crash with pytestCheckHook
-  checkInputs = [ asttokens ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  nativeCheckInputs = [
+    asttokens
+    littleutils
+    pytestCheckHook
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    rich
+  ];
+
+  pythonImportsCheck = [
+    "executing"
+  ];
 
   meta = with lib; {
     description = "Get information about what a frame is currently doing, particularly the AST node being executed";

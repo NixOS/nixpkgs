@@ -1,10 +1,10 @@
-{ lib, python3Packages, bash }:
+{ lib, python3Packages, fetchPypi, bash }:
 
 python3Packages.buildPythonApplication rec {
   pname = "simp_le-client";
   version = "0.17.0";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0m1jynar4calaffp2zdxr5yy9vnhw2qf2hsfxwzfwf8fqb5h7bjb";
   };
@@ -20,9 +20,9 @@ python3Packages.buildPythonApplication rec {
     $out/bin/simp_le --test
   '';
 
-  propagatedBuildInputs = with python3Packages; [ acme setuptools_scm josepy idna ];
+  propagatedBuildInputs = with python3Packages; [ acme setuptools-scm josepy idna ];
 
-  checkInputs = with python3Packages; [ mock ];
+  nativeCheckInputs = with python3Packages; [ mock ];
 
   meta = with lib; {
     homepage = "https://github.com/zenhack/simp_le";

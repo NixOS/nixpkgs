@@ -2,39 +2,52 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-doctestplus
 , pytestCheckHook
-, setuptools_scm
+, pythonOlder
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-filter-subpackage";
-  version = "0.1.1";
+  version = "0.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1s4s2kd31yc65rfvl4xhy8xx806xhy59kc7668h6b6wq88xgrn5p";
+    hash = "sha256-H66jZxeAPlJFiNbBCdJtINOzRCLo1qloEnWJd9ygF4I=";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     pytest-doctestplus
-    pytestcov
+    pytest-cov
+  ];
+
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   # missing some files
-  disabledTests = [ "with_rst" ];
+  disabledTests = [
+    "with_rst"
+  ];
 
   meta = with lib; {
     description = "Meta-package containing dependencies for testing";
-    homepage = "https://astropy.org";
+    homepage = "https://github.com/astropy/pytest-filter-subpackage";
+    changelog = "https://github.com/astropy/pytest-filter-subpackage/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

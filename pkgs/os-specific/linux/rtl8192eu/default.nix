@@ -6,20 +6,20 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   pname = "rtl8192eu";
-  version = "${kernel.version}-4.4.1.20210403";
+  version = "${kernel.version}-4.4.1.20230613";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "ab35c7e9672f37d75b7559758c99f6d027607687";
-    sha256 = "sha256-sTIaye4oWNYEnNuXlrTLobaFKXzBLsfJXdJuc10EdJI=";
+    rev = "f2fc8af7ab58d2123eed1aa4428e713cdfc27976";
+    sha256 = "sha256-OgsxBcXoIP8h9Z0bLsG91/s/+r89Tdn2dPOt4p3sx8k=";
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies ++ [ bc ];
 
-  makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = kernel.makeFlags ++ [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 

@@ -6,6 +6,7 @@
 , setuptools-scm
 , importlib-metadata
 , dbus-python
+, jaraco-classes
 , jeepney
 , secretstorage
 , pytestCheckHook
@@ -13,12 +14,13 @@
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "23.0.1";
-  disabled = pythonOlder "3.6";
+  version = "24.2.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "045703609dd3fccfcdb27da201684278823b72af515aedec1a8515719a038cb8";
+    hash = "sha256-ygdGoZ7EISGfTXE/hI+il6ZhqKjBUEhn5Vv7XgkJFQk=";
   };
 
   nativeBuildInputs = [
@@ -26,12 +28,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    # this should be optional, however, it has a different API
-    importlib-metadata # see https://github.com/jaraco/keyring/issues/503#issuecomment-798973205
-
-    dbus-python
+    jaraco-classes
+  ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    importlib-metadata
   ];
 
   pythonImportsCheck = [
@@ -39,24 +41,20 @@ buildPythonPackage rec {
     "keyring.backend"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  # Keychain communications isn't possible in our build environment
-  # keyring.errors.KeyringError: Can't get password from keychain: (-25307, 'Unknown Error')
-  disabledTests = lib.optionals (stdenv.isDarwin) [
-    "test_multiprocess_get"
-    "test_multiprocess_get_after_native_get"
   ];
 
   disabledTestPaths = [
     "tests/backends/test_macOS.py"
-  ];
+  ]
+  # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
+  ++ lib.optional stdenv.isDarwin "tests/test_multiprocess.py";
 
   meta = with lib; {
     description = "Store and access your passwords safely";
     homepage    = "https://github.com/jaraco/keyring";
+    changelog   = "https://github.com/jaraco/keyring/blob/v${version}/NEWS.rst";
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;

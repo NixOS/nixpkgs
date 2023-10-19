@@ -16,20 +16,20 @@
 
 buildPythonPackage rec {
   pname = "lazr.restfulclient";
-  version = "0.14.3";
+  version = "0.14.5";
 
   disabled = isPy27; # namespace is broken for python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9f28bbb7c00374159376bd4ce36b4dacde7c6b86a0af625aa5e3ae214651a690";
+    hash = "sha256-B1FxfH502xmH6adzNXB9TX2XzwSxrQiYuCLxIzPWiHw=";
   };
 
   propagatedBuildInputs = [ distro httplib2 oauthlib setuptools six wadllib ];
 
   # E   ModuleNotFoundError: No module named 'lazr.uri'
   doCheck = false;
-  checkInputs = [ fixtures lazr-uri pytestCheckHook wsgi-intercept ];
+  nativeCheckInputs = [ fixtures lazr-uri pytestCheckHook wsgi-intercept ];
 
   pythonImportsCheck = [ "lazr.restfulclient" ];
 

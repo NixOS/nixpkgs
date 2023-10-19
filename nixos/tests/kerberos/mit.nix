@@ -1,6 +1,6 @@
 import ../make-test-python.nix ({pkgs, ...}: {
   name = "kerberos_server-mit";
-  machine = { config, libs, pkgs, ...}:
+  nodes.machine = { config, libs, pkgs, ...}:
   { services.kerberos_server =
     { enable = true;
       realms = {
@@ -9,7 +9,7 @@ import ../make-test-python.nix ({pkgs, ...}: {
     };
     krb5 = {
       enable = true;
-      kerberos = pkgs.krb5Full;
+      kerberos = pkgs.krb5;
       libdefaults = {
         default_realm = "FOO.BAR";
       };

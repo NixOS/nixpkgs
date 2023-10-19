@@ -2,35 +2,43 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, setuptools-scm
 , importlib-metadata
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "backports.entry-points-selectable";
-  version = "1.0.4";
+  pname = "backports-entry-points-selectable";
+  version = "1.2.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
+    pname = "backports.entry_points_selectable";
     inherit version;
-    # pypi project name and tarball name differ
-    pname = builtins.replaceStrings [ "-" ] [ "_" ] pname;
-    sha256 = "4acda84d96855beece3bf9aad9a1030aceb5f744b8ce9af7d5ee6dd672cdd3bd";
+    hash = "sha256-Rwb1kXllfKfB0yWlQ+4TcPj0YzH0MrysYvqyQv3wr6U=";
   };
 
-  format = "pyproject";
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  # no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "backports.entry_points_selectable" ];
+
+  pythonNamespaces = [ "backports" ];
 
   meta = with lib; {
+    changelog = "https://github.com/jaraco/backports.entry_points_selectable/blob/v${version}/CHANGES.rst";
     description = "Compatibility shim providing selectable entry points for older implementations";
-    license = licenses.mit;
-    maintainers = [ maintainers.sternenseemann ];
     homepage = "https://github.com/jaraco/backports.entry_points_selectable";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

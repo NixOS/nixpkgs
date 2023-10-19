@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Brother MFC-L2720DW lpr driver";
     homepage = "http://www.brother.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ lib.maintainers.xeji ];

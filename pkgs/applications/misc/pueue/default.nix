@@ -1,23 +1,43 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, SystemConfiguration, libiconv }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, Libsystem
+, SystemConfiguration
+, installShellFiles
+, libiconv
+, rustPlatform
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "0.12.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
-    repo = pname;
+    repo = "pueue";
     rev = "v${version}";
-    sha256 = "sha256-wcOF34GzlB6YKISkjDgYgsaN1NmWBMIntfT23A6byx8=";
+    hash = "sha256-Fk31k0JIe1KJW7UviA8yikjfwlcdRD92wehNbuEoH2w=";
   };
 
-  cargoSha256 = "sha256-aW1VliL7QQm9gMeM6N+SroHlgqI3F7MX0EzcuEzcJnQ=";
+  cargoHash = "sha256-eVJuebau0Y9oelniCzvOk9riMMZ9cS7E/G6KinbQa6k=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optionals stdenv.isDarwin [
+    rustPlatform.bindgenHook
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Libsystem
+    SystemConfiguration
+    libiconv
+  ];
 
-  checkFlags = [ "--skip=test_single_huge_payload" "--skip=test_create_unix_socket" ];
+  checkFlags = [
+    "--test client_tests"
+    "--skip=test_single_huge_payload"
+    "--skip=test_create_unix_socket"
+  ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -27,10 +47,21 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A daemon for managing long running shell commands";
     homepage = "https://github.com/Nukesor/pueue";
+    description = "A daemon for managing long running shell commands";
+    longDescription = ''
+      Pueue is a command-line task management tool for sequential and parallel
+      execution of long-running tasks.
+
+      Simply put, it's a tool that processes a queue of shell commands. On top
+      of that, there are a lot of convenient features and abstractions.
+
+      Since Pueue is not bound to any terminal, you can control your tasks from
+      any terminal on the same machine. The queue will be continuously
+      processed, even if you no longer have any active ssh sessions.
+    '';
     changelog = "https://github.com/Nukesor/pueue/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam ];
   };
 }

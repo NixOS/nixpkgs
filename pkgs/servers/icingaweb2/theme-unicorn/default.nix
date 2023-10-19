@@ -5,13 +5,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "icingaweb2-theme-unicorn";
+  pname = "icingaweb2-theme-unicorn";
   version = "1.0.2";
 
   srcs = [
     (fetchFromGitHub {
       owner = "Mikesch-mp";
-      repo = name;
+      repo = pname;
       rev = "v${version}";
       sha256 = "1qmcajdf0g70vp2avqa50lfrfigq22k91kggbgn5ablwyg9dki05";
     })

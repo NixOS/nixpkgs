@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -13,16 +14,15 @@
 , gettext
 , itstool
 , desktop-file-utils
-, adwaita-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hitori";
-  version = "3.38.2";
+  version = "44.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/hitori/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "wmQ1cwN/ansW6SCK7e6GkQJvCBq6qhYJQu21LwkCnKw=";
+    url = "mirror://gnome/sources/hitori/${lib.versions.major finalAttrs.version}/hitori-${finalAttrs.version}.tar.xz";
+    sha256 = "QicL1PlSXRgNMVG9ckUzXcXPJIqYTgL2j/kw2nmeWDs=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     cairo
-    adwaita-icon-theme
   ];
 
   postPatch = ''
@@ -51,8 +50,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "gnome.${pname}";
+      packageName = "hitori";
+      attrPath = "gnome.hitori";
     };
   };
 
@@ -60,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Hitori";
     description = "GTK application to generate and let you play games of Hitori";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
   };
-}
+})

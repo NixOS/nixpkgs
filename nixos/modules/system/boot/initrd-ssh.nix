@@ -5,6 +5,10 @@ with lib;
 let
 
   cfg = config.boot.initrd.network.ssh;
+  shell = if cfg.shell == null then "/bin/ash" else cfg.shell;
+  inherit (config.programs.ssh) package;
+
+  enabled = let initrd = config.boot.initrd; in (initrd.network.enable || initrd.systemd.network.enable) && cfg.enable;
 
 in
 
@@ -14,28 +18,29 @@ in
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Start SSH service during initrd boot. It can be used to debug failing
         boot on a remote server, enter pasphrase for an encrypted partition etc.
         Service is killed when stage-1 boot is finished.
 
         The sshd configuration is largely inherited from
-        <option>services.openssh</option>.
+        {option}`services.openssh`.
       '';
     };
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 22;
-      description = ''
+      description = lib.mdDoc ''
         Port on which SSH initrd service should listen.
       '';
     };
 
     shell = mkOption {
-      type = types.str;
-      default = "/bin/ash";
-      description = ''
+      type = types.nullOr types.str;
+      default = null;
+      defaultText = ''"/bin/ash"'';
+      description = lib.mdDoc ''
         Login shell of the remote user. Can be used to limit actions user can do.
       '';
     };
@@ -47,39 +52,46 @@ in
         "/etc/secrets/initrd/ssh_host_rsa_key"
         "/etc/secrets/initrd/ssh_host_ed25519_key"
       ];
-      description = ''
+      description = lib.mdDoc ''
         Specify SSH host keys to import into the initrd.
 
         To generate keys, use
-        <citerefentry><refentrytitle>ssh-keygen</refentrytitle><manvolnum>1</manvolnum></citerefentry>:
+        {manpage}`ssh-keygen(1)`
+        as root:
 
-        <screen>
-        <prompt># </prompt>ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
-        <prompt># </prompt>ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
-        </screen>
+        ```
+        ssh-keygen -t rsa -N "" -f /etc/secrets/initrd/ssh_host_rsa_key
+        ssh-keygen -t ed25519 -N "" -f /etc/secrets/initrd/ssh_host_ed25519_key
+        ```
 
-        <warning>
-          <para>
-            Unless your bootloader supports initrd secrets, these keys
-            are stored insecurely in the global Nix store. Do NOT use
-            your regular SSH host private keys for this purpose or
-            you'll expose them to regular users!
-          </para>
-          <para>
-            Additionally, even if your initrd supports secrets, if
-            you're using initrd SSH to unlock an encrypted disk then
-            using your regular host keys exposes the private keys on
-            your unencrypted boot partition.
-          </para>
-        </warning>
+        ::: {.warning}
+        Unless your bootloader supports initrd secrets, these keys
+        are stored insecurely in the global Nix store. Do NOT use
+        your regular SSH host private keys for this purpose or
+        you'll expose them to regular users!
+
+        Additionally, even if your initrd supports secrets, if
+        you're using initrd SSH to unlock an encrypted disk then
+        using your regular host keys exposes the private keys on
+        your unencrypted boot partition.
+        :::
+      '';
+    };
+
+    ignoreEmptyHostKeys = mkOption {
+      type = types.bool;
+      default = false;
+      description = lib.mdDoc ''
+        Allow leaving {option}`config.boot.initrd.network.ssh` empty,
+        to deploy ssh host keys out of band.
       '';
     };
 
     authorizedKeys = mkOption {
       type = types.listOf types.str;
       default = config.users.users.root.openssh.authorizedKeys.keys;
-      defaultText = "config.users.users.root.openssh.authorizedKeys.keys";
-      description = ''
+      defaultText = literalExpression "config.users.users.root.openssh.authorizedKeys.keys";
+      description = lib.mdDoc ''
         Authorized keys for the root user on initrd.
       '';
     };
@@ -87,7 +99,7 @@ in
     extraConfig = mkOption {
       type = types.lines;
       default = "";
-      description = "Verbatim contents of <filename>sshd_config</filename>.";
+      description = lib.mdDoc "Verbatim contents of {file}`sshd_config`.";
     };
   };
 
@@ -112,22 +124,24 @@ in
     sshdCfg = config.services.openssh;
 
     sshdConfig = ''
+      UsePAM no
       Port ${toString cfg.port}
 
       PasswordAuthentication no
+      AuthorizedKeysFile %h/.ssh/authorized_keys %h/.ssh/authorized_keys2 /etc/ssh/authorized_keys.d/%u
       ChallengeResponseAuthentication no
 
       ${flip concatMapStrings cfg.hostKeys (path: ''
         HostKey ${initrdKeyPath path}
       '')}
 
-      KexAlgorithms ${concatStringsSep "," sshdCfg.kexAlgorithms}
-      Ciphers ${concatStringsSep "," sshdCfg.ciphers}
-      MACs ${concatStringsSep "," sshdCfg.macs}
+      KexAlgorithms ${concatStringsSep "," sshdCfg.settings.KexAlgorithms}
+      Ciphers ${concatStringsSep "," sshdCfg.settings.Ciphers}
+      MACs ${concatStringsSep "," sshdCfg.settings.Macs}
 
-      LogLevel ${sshdCfg.logLevel}
+      LogLevel ${sshdCfg.settings.LogLevel}
 
-      ${if sshdCfg.useDns then ''
+      ${if sshdCfg.settings.UseDns then ''
         UseDNS yes
       '' else ''
         UseDNS no
@@ -135,7 +149,7 @@ in
 
       ${cfg.extraConfig}
     '';
-  in mkIf (config.boot.initrd.network.enable && cfg.enable) {
+  in mkIf enabled {
     assertions = [
       {
         assertion = cfg.authorizedKeys != [];
@@ -143,21 +157,26 @@ in
       }
 
       {
-        assertion = cfg.hostKeys != [];
+        assertion = (cfg.hostKeys != []) || cfg.ignoreEmptyHostKeys;
         message = ''
           You must now pre-generate the host keys for initrd SSH.
           See the boot.initrd.network.ssh.hostKeys documentation
           for instructions.
         '';
       }
+
+      {
+        assertion = config.boot.initrd.systemd.enable -> cfg.shell == null;
+        message = "systemd stage 1 does not support boot.initrd.network.ssh.shell";
+      }
     ];
 
-    boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.openssh}/bin/sshd
+    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+      copy_bin_and_libs ${package}/bin/sshd
       cp -pv ${pkgs.glibc.out}/lib/libnss_files.so.* $out/lib
     '';
 
-    boot.initrd.extraUtilsCommandsTest = ''
+    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
       # sshd requires a host key to check config, so we pass in the test's
       tmpkey="$(mktemp initrd-ssh-testkey.XXXXXXXXXX)"
       cp "${../../../tests/initrd-network-ssh/ssh_host_ed25519_key}" "$tmpkey"
@@ -169,9 +188,9 @@ in
       rm "$tmpkey"
     '';
 
-    boot.initrd.network.postCommands = ''
-      echo '${cfg.shell}' > /etc/shells
-      echo 'root:x:0:0:root:/root:${cfg.shell}' > /etc/passwd
+    boot.initrd.network.postCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+      echo '${shell}' > /etc/shells
+      echo 'root:x:0:0:root:/root:${shell}' > /etc/passwd
       echo 'sshd:x:1:1:sshd:/var/empty:/bin/nologin' >> /etc/passwd
       echo 'passwd: files' > /etc/nsswitch.conf
 
@@ -197,7 +216,7 @@ in
       /bin/sshd -e
     '';
 
-    boot.initrd.postMountCommands = ''
+    boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       # Stop sshd cleanly before stage 2.
       #
       # If you want to keep it around to debug post-mount SSH issues,
@@ -210,6 +229,38 @@ in
 
     boot.initrd.secrets = listToAttrs
       (map (path: nameValuePair (initrdKeyPath path) path) cfg.hostKeys);
+
+    # Systemd initrd stuff
+    boot.initrd.systemd = mkIf config.boot.initrd.systemd.enable {
+      users.sshd = { uid = 1; group = "sshd"; };
+      groups.sshd = { gid = 1; };
+
+      contents."/etc/ssh/authorized_keys.d/root".text =
+        concatStringsSep "\n" config.boot.initrd.network.ssh.authorizedKeys;
+      contents."/etc/ssh/sshd_config".text = sshdConfig;
+      storePaths = ["${package}/bin/sshd"];
+
+      services.sshd = {
+        description = "SSH Daemon";
+        wantedBy = ["initrd.target"];
+        after = ["network.target" "initrd-nixos-copy-secrets.service"];
+
+        # Keys from Nix store are world-readable, which sshd doesn't
+        # like. If this were a real nix store and not the initrd, we
+        # neither would nor could do this
+        preStart = flip concatMapStrings cfg.hostKeys (path: ''
+          /bin/chmod 0600 "${initrdKeyPath path}"
+        '');
+        unitConfig.DefaultDependencies = false;
+        serviceConfig = {
+          ExecStart = "${package}/bin/sshd -D -f /etc/ssh/sshd_config";
+          Type = "simple";
+          KillMode = "process";
+          Restart = "on-failure";
+        };
+      };
+    };
+
   };
 
 }

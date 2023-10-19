@@ -1,55 +1,35 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, alsaLib, asio, avahi, boost170, flac, libogg, libvorbis, soxr
+, alsa-lib, asio, avahi, boost179, flac, libogg, libvorbis, soxr
+, IOKit, AudioToolbox
+, aixlog, popl
+, pulseaudioSupport ? false, libpulseaudio
 , nixosTests }:
 
-let
-
-  dependency = { name, version, sha256 }:
-  stdenv.mkDerivation {
-    name = "${name}-${version}";
-
-    src = fetchFromGitHub {
-      owner = "badaix";
-      repo  = name;
-      rev   = "v${version}";
-      inherit sha256;
-    };
-
-    nativeBuildInputs = [ cmake ];
-  };
-
-  aixlog = dependency {
-    name    = "aixlog";
-    version = "1.5.0";
-    sha256  = "09mnkrans9zmwfxsiwgkm0rba66c11kg5zby9x3rjic34gnmw6ay";
-  };
-
-  popl = dependency {
-    name    = "popl";
-    version = "1.2.0";
-    sha256  = "1z6z7fwffs3d9h56mc2m24d5gp4fc5bi8836zyfb276s6fjyfcai";
-  };
-
-in
+assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.24.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "13yz8alplnqwkcns3mcli01qbyy6l3h62xx0v71ygcrz371l4g9g";
+    sha256 = "sha256-dlK1xQQqst4VQjioC7MZzqXwMC+JfqtvnD5lrOqGhYI=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config boost170.dev ];
+  nativeBuildInputs = [ cmake pkg-config ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    alsaLib asio avahi flac libogg libvorbis
+    boost179
+    asio avahi flac libogg libvorbis
     aixlog popl soxr
-  ];
+  ] ++ lib.optional pulseaudioSupport libpulseaudio
+  ++ lib.optional stdenv.isLinux alsa-lib
+  ++ lib.optionals stdenv.isDarwin [ IOKit AudioToolbox ];
+
+  TARGET=lib.optionalString stdenv.isDarwin "MACOS";
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...
@@ -64,6 +44,7 @@ stdenv.mkDerivation rec {
     description = "Synchronous multi-room audio player";
     homepage = "https://github.com/badaix/snapcast";
     maintainers = with maintainers; [ fpletz ];
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Plus;
   };
 }

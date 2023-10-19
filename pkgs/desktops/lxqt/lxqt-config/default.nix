@@ -1,8 +1,10 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
+, glib
 , lxqt-build-tools
 , qtbase
 , qtx11extras
@@ -12,19 +14,20 @@
 , libkscreen
 , liblxqt
 , libqtxdg
+, xkeyboard_config
 , xorg
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-config";
-  version = "0.17.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0b9jihmsqgdfdsisz15j3p53fgf1w30s8irj9zjh52fsj58p924p";
+    sha256 = "Gm/Y/5i7Abob9eRdLZHpRma2+Mdh2LBZUGKM4mMZMFk=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +37,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    glib.bin
     qtbase
     qtx11extras
     qttools
@@ -52,17 +56,23 @@ mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i "/\''${XORG_LIBINPUT_INCLUDE_DIRS}/a ${xorg.xf86inputlibinput.dev}/include/xorg" lxqt-config-input/CMakeLists.txt
+    substituteInPlace lxqt-config-appearance/configothertoolkits.cpp \
+      --replace 'QStringLiteral("gsettings' \
+                'QStringLiteral("${glib.bin}/bin/gsettings'
+
+    substituteInPlace lxqt-config-input/keyboardlayoutconfig.h \
+      --replace '/usr/share/X11/xkb/rules/base.lst' \
+                '${xkeyboard_config}/share/X11/xkb/rules/base.lst'
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-config";
     description = "Tools to configure LXQt and the underlying operating system";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 
 }

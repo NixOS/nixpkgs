@@ -1,17 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "0.039";
+stdenvNoCC.mkDerivation rec {
+  pname = "JuliaMono-ttf";
+  version = "0.051";
 
-in
-fetchzip {
-  name = "JuliaMono-ttf-${version}";
-  url = "https://github.com/cormullion/juliamono/releases/download/v${version}/JuliaMono-ttf.tar.gz";
-  sha256 = "sha256-M9T78xnSN1hcHLXkut09eD2IFrgCRTG9fAPqMv4MXWY=";
+  src = fetchzip {
+    url = "https://github.com/cormullion/juliamono/releases/download/v${version}/${pname}.tar.gz";
+    stripRoot = false;
+    hash = "sha256-JdoCblRW9Vih7zQyvTb/VXhZJJDNV0sPDfTQ+wRKotE=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/truetype
-    tar xf $downloadedFile -C $out/share/fonts/truetype
+    mv *.ttf $out/share/fonts/truetype
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -25,7 +30,7 @@ fetchzip {
     '';
     maintainers = with maintainers; [ suhr ];
     platforms = with platforms; all;
-    homepage = "https://cormullion.github.io/pages/2020-07-26-JuliaMono/";
+    homepage = "https://juliamono.netlify.app/";
     license = licenses.ofl;
   };
 }

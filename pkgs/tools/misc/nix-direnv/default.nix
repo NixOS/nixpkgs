@@ -1,21 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, gnugrep, nixUnstable }:
-
-stdenv.mkDerivation rec {
+{ lib
+, stdenv
+, fetchFromGitHub
+, gnugrep
+, nix
+}:
+stdenv.mkDerivation (finalAttrs:{
   pname = "nix-direnv";
-  version = "1.2.6";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-direnv";
-    rev = version;
-    sha256 = "sha256-0dCIHgoyNgpxbrPDv26oLdU+npcIgpCQdpX4HzS0vN0=";
+    rev = finalAttrs.version;
+    hash = "sha256-h49uz+/YDRwbusiVx6I3HP9P3UZROIOlwjlYYqRjesE=";
   };
 
   # Substitute instead of wrapping because the resulting file is
   # getting sourced, not executed:
   postPatch = ''
-    sed -i "1a NIX_BIN_PREFIX=${nixUnstable}/bin/" direnvrc
-    substituteInPlace direnvrc --replace "grep" "${gnugrep}/bin/grep"
+    sed -i "1a NIX_BIN_PREFIX=${nix}/bin/" direnvrc
+    substituteInPlace direnvrc --replace "grep" "${lib.getExe gnugrep}"
   '';
 
   installPhase = ''
@@ -24,11 +28,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A fast, persistent use_nix implementation for direnv";
     homepage    = "https://github.com/nix-community/nix-direnv";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ mic92 ];
+    license     = lib.licenses.mit;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mic92 bbenne10 ];
   };
-}
+})

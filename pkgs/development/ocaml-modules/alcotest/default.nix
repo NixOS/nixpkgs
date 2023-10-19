@@ -1,19 +1,21 @@
 { lib, buildDunePackage, fetchurl
-, astring, cmdliner, fmt, uuidm, re, stdlib-shims, uutf
+, astring, cmdliner, fmt, re, stdlib-shims, uutf, ocaml-syntax-shims
 }:
 
 buildDunePackage rec {
   pname = "alcotest";
-  version = "1.2.3";
+  version = "1.7.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-mirage-${version}.tbz";
-    sha256 = "1bmjcivbmd4vib15v4chycgd1gl8js9dk94vzxkdg06zxqd4hp08";
+    url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-${version}.tbz";
+    hash = "sha256-gSus2zS0XoiZXgfXMGvasvckee8ZlmN/HV0fQWZ5At8=";
   };
 
-  propagatedBuildInputs = [ astring cmdliner fmt uuidm re stdlib-shims uutf ];
+  nativeBuildInputs = [ ocaml-syntax-shims ];
+
+  propagatedBuildInputs = [ astring cmdliner fmt re stdlib-shims uutf ];
 
   doCheck = true;
 

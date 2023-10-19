@@ -1,33 +1,53 @@
-{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
-, readline, zlib, bzip2, autoconf, automake, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pcre2
+, sqlite
+, ncurses
+, readline
+, zlib
+, bzip2
+, autoconf
+, automake
+, curl
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
-
-  name = "lnav-${meta.version}";
+  pname = "lnav";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
-    rev = "v${meta.version}";
-    sha256 = "1frdrr3yjlk2fns3ny0qbr30rpswhwlvv3kyhdl3l6a0q5cqaqsg";
-    inherit name;
+    rev = "v${version}";
+    sha256 = "sha256-OuxxcXpdpSxrDdiUqRbEaXvCZBAcWvE4YwaMtLKSqCM=";
   };
 
-  buildInputs = [
+  patches = [ ./0001-Forcefully-disable-docs-build.patch ];
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace "SUBDIRS = tools src test" "SUBDIRS = tools src"
+  '';
+
+  enableParallelBuilding = true;
+
+  strictDeps = true;
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
     autoconf
     automake
     zlib
+    curl.dev
+  ];
+  buildInputs = [
     bzip2
     ncurses
-    pcre-cpp
+    pcre2
     readline
     sqlite
     curl
   ];
-
-  postPatch = ''
-    sed -ie '/DUMP_INTERNALS/d' src/Makefile.am
-  '';
 
   preConfigure = ''
     ./autogen.sh
@@ -47,8 +67,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.9.0";
-    maintainers = with maintainers; [ dochang ma27 ];
+    maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
   };
 

@@ -1,56 +1,70 @@
-{ lib, fetchurl, python3Packages
-, mercurial, qt5
-}@args:
-let
-  tortoisehgSrc = fetchurl rec {
-    meta.name = "tortoisehg-${meta.version}";
-    meta.version = "5.6";
-    url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${meta.version}.tar.gz";
-    sha256 = "031bafj88wggpvw0lgvl0djhlbhs9nls9vzwvni8yn0m0bgzc9gr";
+{ lib
+, fetchurl
+, python3Packages
+, mercurial
+, qt5
+}:
+
+python3Packages.buildPythonApplication rec {
+  pname = "tortoisehg";
+  version = "6.2.2";
+
+  src = fetchurl {
+    url = "https://www.mercurial-scm.org/release/tortoisehg/targz/tortoisehg-${version}.tar.gz";
+    sha256 = "sha256-Xbvg/FcuX/AL2reWsaM2oaFyLby3+HDCfYtRyswE7DA=";
   };
 
-  tortoiseMercurial = (mercurial.override {
-    rustSupport = false;
-    re2Support = lib.versionAtLeast tortoisehgSrc.meta.version "5.8";
-  }).overridePythonAttrs (old: rec {
-    inherit (tortoisehgSrc.meta) version;
-    src = fetchurl {
-      url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "1hk2y30zzdnlv8f71kabvh0xi9c7qhp28ksh20vpd0r712sv79yz";
-    };
-    patches = [];
-  });
+  nativeBuildInputs = [
+    qt5.wrapQtAppsHook
+  ];
+  propagatedBuildInputs = with python3Packages; [
+    mercurial
+    # The one from python3Packages
+    qscintilla-qt5
+    iniparse
+  ];
+  buildInputs = [
+    # Makes wrapQtAppsHook add these qt libraries to the wrapper search paths
+    qt5.qtwayland
+  ];
 
-in python3Packages.buildPythonApplication {
-    inherit (tortoisehgSrc.meta) name version;
-    src = tortoisehgSrc;
+  # In order to spare double wrapping, we use:
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  '';
+  # Convenient alias
+  postInstall = ''
+    ln -s $out/bin/thg $out/bin/tortoisehg
+  '';
 
-    propagatedBuildInputs = with python3Packages; [
-      tortoiseMercurial qscintilla-qt5 iniparse
-    ];
-    nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  # In python3Packages.buildPythonApplication doCheck is always true, and we
+  # override it to not run the default unittests
+  checkPhase = ''
+    runHook preCheck
 
-    doCheck = false; # tests fail with "thg: cannot connect to X server"
-    postInstall = ''
-      mkdir -p $out/share/doc/tortoisehg
-      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
-      # convenient alias
-      ln -s $out/bin/thg $out/bin/tortoisehg
-      wrapQtApp $out/bin/thg
-    '';
+    $out/bin/thg version | grep -q "${version}"
+    # Detect breakage of thg in case of out-of-sync mercurial update. In that
+    # case any thg subcommand just opens up an gui dialog with a description of
+    # version mismatch.
+    echo "thg smoke test"
+    $out/bin/thg -h > help.txt &
+    sleep 1s
+    grep -q "list of commands" help.txt
 
-    checkPhase = ''
-      echo "test: thg version"
-      $out/bin/thg version
-    '';
+    runHook postCheck
+  '';
 
-    passthru.mercurial = tortoiseMercurial;
+  passthru = {
+    # If at some point we'll override this argument, it might be useful to have
+    # access to it here.
+    inherit mercurial;
+  };
 
-    meta = {
-      description = "Qt based graphical tool for working with Mercurial";
-      homepage = "https://tortoisehg.bitbucket.io/";
-      license = lib.licenses.gpl2;
-      platforms = lib.platforms.linux;
-      maintainers = with lib.maintainers; [ danbst ];
-    };
+  meta = {
+    description = "Qt based graphical tool for working with Mercurial";
+    homepage = "https://tortoisehg.bitbucket.io/";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ danbst gbtb ];
+  };
 }

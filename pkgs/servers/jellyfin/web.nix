@@ -1,65 +1,24 @@
 { lib
 , fetchFromGitHub
-, pkgs
 , stdenv
-, nodejs
+, buildNpmPackage
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = "jellyfin-web";
-  version = "10.7.5";
-  # TODO: on the next major release remove src.postFetch
-  # and use the lock file in web-update.sh:
-  # https://github.com/jellyfin/jellyfin-web/commit/6efef9680d55a93f4333ef8bfb65a8a650c99a49
+  version = "10.8.11";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-web";
     rev = "v${version}";
-    sha256 = "5y6hWEDxY5WbOUdjujmuMV3bQVvYU2J9oIANBVN5XOc=";
-    postFetch = ''
-      mkdir -p $out
-      cd $out
-      tar -xzf $downloadedFile --strip-components=1
-
-      # replace unsupported dependency url
-      # https://github.com/svanderburg/node2nix/issues/163
-      substituteInPlace package.json \
-        --replace \
-          "https://github.com/jellyfin/JavascriptSubtitlesOctopus#4.0.0-jf-smarttv" \
-          "https://github.com/jellyfin/JavascriptSubtitlesOctopus/archive/refs/tags/4.0.0-jf-smarttv.tar.gz"
-    '';
+    hash = "sha256-Gl8eaC/AXBD956tAepwWVG3lSvL4rBCcgmkHeT/mrzM=";
   };
 
-  nativeBuildInputs = [
-    nodejs
-  ];
+  npmDepsHash = "sha256-HoRteA6KFCFxDdwGtDKrvwWCMYNfYQWlit52RAN1eAU=";
 
-  buildPhase =
-    let
-      nodeDependencies = ((import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      }).nodeDependencies.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
-
-        # dont run the prepare script:
-        # Error: Cannot find module '/nix/store/...-node-dependencies-jellyfin-web-.../jellyfin-web/scripts/prepare.js
-        # npm run build:production runs the same command
-        dontNpmInstall = true;
-      }));
-    in
-    ''
-      runHook preBuild
-
-      ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-      export PATH="${nodeDependencies}/bin:$PATH"
-
-      npm run build:production
-
-      runHook postBuild
-    '';
+  npmBuildScript = [ "build:production" ];
 
   installPhase = ''
     runHook preInstall
@@ -70,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./web-update.sh;
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "Web Client for Jellyfin";

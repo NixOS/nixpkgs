@@ -1,30 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, isPy3k
-, nose, mock, blinker, pytest
-, flask, six, pytz, aniso8601, pycrypto
+{ lib
+, aniso8601
+, blinker
+, buildPythonPackage
+, fetchPypi
+, flask
+, mock
+, nose
+, pytestCheckHook
+, pythonOlder
+, pytz
+, six
+, werkzeug
 }:
 
 buildPythonPackage rec {
-  pname = "Flask-RESTful";
-  version = "0.3.8";
+  pname = "flask-restful";
+  version = "0.3.10";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "05b9lzx5yc3wgml2bcq50lq35h66m8zpj6dc9advcb5z3acsbaay";
+    pname = "Flask-RESTful";
+    inherit version;
+    hash = "sha256-/kry7wAn34+bT3l6uiDFVmgBtq3plaxjtYir8aWc7Dc=";
   };
 
-  propagatedBuildInputs = [ flask six pytz aniso8601 pycrypto ];
+  # conditional so that overrides are easier for web applications
+  patches = lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [
+    ./werkzeug-2.1.0-compat.patch
+  ];
 
-  checkInputs = [ pytest nose mock blinker ];
+  propagatedBuildInputs = [
+    aniso8601
+    flask
+    pytz
+    six
+  ];
 
-  # test_reqparse.py: werkzeug move Multidict location (only imported in tests)
-  # handle_non_api_error isn't updated for addition encoding argument
-  checkPhase = ''
-    pytest --ignore=tests/test_reqparse.py -k 'not handle_non_api_error'
-  '';
+  nativeCheckInputs = [
+    blinker
+    mock
+    nose
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Broke in flask 2.2 upgrade
+    "test_exception_header_forwarded"
+  ];
+
+  pythonImportsCheck = [
+    "flask_restful"
+  ];
 
   meta = with lib; {
-    homepage = "https://flask-restful.readthedocs.io/";
-    description = "REST API building blocks for Flask";
+    description = "Framework for creating REST APIs";
+    homepage = "https://flask-restful.readthedocs.io";
+    longDescription = ''
+      Flask-RESTful provides the building blocks for creating a great
+      REST API.
+    '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

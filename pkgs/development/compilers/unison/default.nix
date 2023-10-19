@@ -1,23 +1,27 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook
-, ncurses5, zlib, gmp
-, makeWrapper
+{ lib
+, autoPatchelfHook
+, fetchurl
+, gmp
 , less
+, makeWrapper
+, ncurses6
+, stdenv
+, zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  milestone_id = "M1m";
-  version = "1.0.${milestone_id}-alpha";
+  version = "M5g";
 
-  src = if (stdenv.isDarwin) then
+  src = if stdenv.isDarwin then
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-osx.tar.gz";
-      sha256 = "06pxvp753j8pr0pn02l7cswmmas5pk1vlkw83yd04h3f2rx1s61v";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
+      hash = "sha256-4E/8CfWmD+IVeXBqcTE74k2HZtk9dt/4G9GqBjVhtWo=";
     }
   else
     fetchurl {
-      url = "https://github.com/unisonweb/unison/releases/download/release/${milestone_id}/unison-linux64.tar.gz";
-      sha256 = "1qspvfq805d34kz031pf9sqw8kzz7h637kc8lnbjlgvwixxkxc7c";
+      url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux.tar.gz";
+      hash = "sha256-Gl447CSuLgEPPHzgxPTIC8QXGgk/1moNqFU+Phv6e/U=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -25,20 +29,26 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontConfigure = true;
 
-  nativeBuildInputs = [ makeWrapper ] ++ (lib.optional (!stdenv.isDarwin) autoPatchelfHook);
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses5 zlib gmp ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ ncurses6 zlib gmp ];
 
   installPhase = ''
     mkdir -p $out/bin
     mv ucm $out/bin
-    wrapProgram $out/bin/ucm --prefix PATH ":" "${lib.makeBinPath [ less ]}";
+    mv ui $out/ui
+    wrapProgram $out/bin/ucm \
+      --prefix PATH ":" "${lib.makeBinPath [ less ]}" \
+      --set UCM_WEB_UI "$out/ui"
   '';
 
   meta = with lib; {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
     license = with licenses; [ mit bsd3 ];
+    mainProgram = "ucm";
     maintainers = [ maintainers.virusdave ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
-}
+})

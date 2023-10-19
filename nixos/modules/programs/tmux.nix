@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  inherit (lib) mkOption mkIf types;
+  inherit (lib) mkOption mkIf types optionalString;
 
   cfg = config.programs.tmux;
 
@@ -17,17 +17,17 @@ let
     set  -g base-index      ${toString cfg.baseIndex}
     setw -g pane-base-index ${toString cfg.baseIndex}
 
-    ${if cfg.newSession then "new-session" else ""}
+    ${optionalString cfg.newSession "new-session"}
 
-    ${if cfg.reverseSplit then ''
+    ${optionalString cfg.reverseSplit ''
     bind v split-window -h
     bind s split-window -v
-    '' else ""}
+    ''}
 
     set -g status-keys ${cfg.keyMode}
     set -g mode-keys   ${cfg.keyMode}
 
-    ${if cfg.keyMode == "vi" && cfg.customPaneNavigationAndResize then ''
+    ${optionalString (cfg.keyMode == "vi" && cfg.customPaneNavigationAndResize) ''
     bind h select-pane -L
     bind j select-pane -D
     bind k select-pane -U
@@ -37,20 +37,28 @@ let
     bind -r J resize-pane -D ${toString cfg.resizeAmount}
     bind -r K resize-pane -U ${toString cfg.resizeAmount}
     bind -r L resize-pane -R ${toString cfg.resizeAmount}
-    '' else ""}
+    ''}
 
-    ${if (cfg.shortcut != defaultShortcut) then ''
+    ${optionalString (cfg.shortcut != defaultShortcut) ''
     # rebind main key: C-${cfg.shortcut}
     unbind C-${defaultShortcut}
     set -g prefix C-${cfg.shortcut}
     bind ${cfg.shortcut} send-prefix
     bind C-${cfg.shortcut} last-window
-    '' else ""}
+    ''}
 
     setw -g aggressive-resize ${boolToStr cfg.aggressiveResize}
     setw -g clock-mode-style  ${if cfg.clock24 then "24" else "12"}
     set  -s escape-time       ${toString cfg.escapeTime}
     set  -g history-limit     ${toString cfg.historyLimit}
+
+    ${cfg.extraConfigBeforePlugins}
+
+    ${lib.optionalString (cfg.plugins != []) ''
+    # Run plugins
+    ${lib.concatMapStringsSep "\n" (x: "run-shell ${x.rtp}") cfg.plugins}
+
+    ''}
 
     ${cfg.extraConfig}
   '';
@@ -64,14 +72,14 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whenever to configure <command>tmux</command> system-wide.";
+        description = lib.mdDoc "Whenever to configure {command}`tmux` system-wide.";
         relatedPackages = [ "tmux" ];
       };
 
       aggressiveResize = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Resize the window to the size of the smallest session for which it is the current window.
         '';
       };
@@ -80,32 +88,40 @@ in {
         default = 0;
         example = 1;
         type = types.int;
-        description = "Base index for windows and panes.";
+        description = lib.mdDoc "Base index for windows and panes.";
       };
 
       clock24 = mkOption {
         default = false;
         type = types.bool;
-        description = "Use 24 hour clock.";
+        description = lib.mdDoc "Use 24 hour clock.";
       };
 
       customPaneNavigationAndResize = mkOption {
         default = false;
         type = types.bool;
-        description = "Override the hjkl and HJKL bindings for pane navigation and resizing in VI mode.";
+        description = lib.mdDoc "Override the hjkl and HJKL bindings for pane navigation and resizing in VI mode.";
       };
 
       escapeTime = mkOption {
         default = 500;
         example = 0;
         type = types.int;
-        description = "Time in milliseconds for which tmux waits after an escape is input.";
+        description = lib.mdDoc "Time in milliseconds for which tmux waits after an escape is input.";
+      };
+
+      extraConfigBeforePlugins = mkOption {
+        default = "";
+        description = lib.mdDoc ''
+          Additional contents of /etc/tmux.conf, to be run before sourcing plugins.
+        '';
+        type = types.lines;
       };
 
       extraConfig = mkOption {
         default = "";
-        description = ''
-          Additional contents of /etc/tmux.conf
+        description = lib.mdDoc ''
+          Additional contents of /etc/tmux.conf, to be run after sourcing plugins.
         '';
         type = types.lines;
       };
@@ -114,56 +130,76 @@ in {
         default = 2000;
         example = 5000;
         type = types.int;
-        description = "Maximum number of lines held in window history.";
+        description = lib.mdDoc "Maximum number of lines held in window history.";
       };
 
       keyMode = mkOption {
         default = defaultKeyMode;
         example = "vi";
         type = types.enum [ "emacs" "vi" ];
-        description = "VI or Emacs style shortcuts.";
+        description = lib.mdDoc "VI or Emacs style shortcuts.";
       };
 
       newSession = mkOption {
         default = false;
         type = types.bool;
-        description = "Automatically spawn a session if trying to attach and none are running.";
+        description = lib.mdDoc "Automatically spawn a session if trying to attach and none are running.";
       };
 
       reverseSplit = mkOption {
         default = false;
         type = types.bool;
-        description = "Reverse the window split shortcuts.";
+        description = lib.mdDoc "Reverse the window split shortcuts.";
       };
 
       resizeAmount = mkOption {
         default = defaultResize;
         example = 10;
         type = types.int;
-        description = "Number of lines/columns when resizing.";
+        description = lib.mdDoc "Number of lines/columns when resizing.";
       };
 
       shortcut = mkOption {
         default = defaultShortcut;
         example = "a";
         type = types.str;
-        description = "Ctrl following by this key is used as the main shortcut.";
+        description = lib.mdDoc "Ctrl following by this key is used as the main shortcut.";
       };
 
       terminal = mkOption {
         default = defaultTerminal;
         example = "screen-256color";
         type = types.str;
-        description = "Set the $TERM variable.";
+        description = lib.mdDoc ''
+          Set the $TERM variable. Use tmux-direct if italics or 24bit true color
+          support is needed.
+        '';
       };
 
       secureSocket = mkOption {
         default = true;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Store tmux socket under /run, which is more secure than /tmp, but as a
           downside it doesn't survive user logout.
         '';
+      };
+
+      plugins = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        description = lib.mdDoc "List of plugins to install.";
+        example = lib.literalExpression "[ pkgs.tmuxPlugins.nord ]";
+      };
+
+      withUtempter = mkOption {
+        description = lib.mdDoc ''
+          Whether to enable libutempter for tmux.
+          This is required so that tmux can write to /var/run/utmp (which can be queried with `who` to display currently connected user sessions).
+          Note, this will add a guid wrapper for the group utmp!
+        '';
+        default = true;
+        type = types.bool;
       };
     };
   };
@@ -174,10 +210,19 @@ in {
     environment = {
       etc."tmux.conf".text = tmuxConf;
 
-      systemPackages = [ pkgs.tmux ];
+      systemPackages = [ pkgs.tmux ] ++ cfg.plugins;
 
       variables = {
         TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';
+      };
+    };
+    security.wrappers = mkIf cfg.withUtempter {
+      utempter = {
+        source = "${pkgs.libutempter}/lib/utempter/utempter";
+        owner = "root";
+        group = "utmp";
+        setuid = false;
+        setgid = true;
       };
     };
   };

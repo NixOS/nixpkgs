@@ -8,26 +8,26 @@ let
 in
 {
   options.services.greetd = {
-    enable = mkEnableOption "greetd";
+    enable = mkEnableOption (lib.mdDoc "greetd");
 
     package = mkOption {
       type = types.package;
       default = pkgs.greetd.greetd;
-      defaultText = "pkgs.greetd.greetd";
-      description = "The greetd package that should be used.";
+      defaultText = literalExpression "pkgs.greetd.greetd";
+      description = lib.mdDoc "The greetd package that should be used.";
     };
 
     settings = mkOption {
       type = settingsFormat.type;
-      example = literalExample ''
+      example = literalExpression ''
         {
           default_session = {
             command = "''${pkgs.greetd.greetd}/bin/agreety --cmd sway";
           };
         }
       '';
-      description = ''
-        greetd configuration (<link xlink:href="https://man.sr.ht/~kennylevinsen/greetd/">documentation</link>)
+      description = lib.mdDoc ''
+        greetd configuration ([documentation](https://man.sr.ht/~kennylevinsen/greetd/))
         as a Nix attribute set.
       '';
     };
@@ -35,7 +35,7 @@ in
     vt = mkOption  {
       type = types.int;
       default = 1;
-      description = ''
+      description = lib.mdDoc ''
         The virtual console (tty) that greetd should use. This option also disables getty on that tty.
       '';
     };
@@ -43,9 +43,9 @@ in
     restart = mkOption {
       type = types.bool;
       default = !(cfg.settings ? initial_session);
-      defaultText = "!(config.services.greetd.settings ? initial_session)";
-      description = ''
-        Wether to restart greetd when it terminates (e.g. on failure).
+      defaultText = literalExpression "!(config.services.greetd.settings ? initial_session)";
+      description = lib.mdDoc ''
+        Whether to restart greetd when it terminates (e.g. on failure).
         This is usually desirable so a user can always log in, but should be disabled when using 'settings.initial_session' (autologin),
         because every greetd restart will trigger the autologin again.
       '';
@@ -54,7 +54,7 @@ in
   config = mkIf cfg.enable {
 
     services.greetd.settings.terminal.vt = mkDefault cfg.vt;
-    services.greetd.settings.default_session = mkDefault "greeter";
+    services.greetd.settings.default_session.user = mkDefault "greeter";
 
     security.pam.services.greetd = {
       allowNullPassword = true;
@@ -89,6 +89,8 @@ in
         SendSIGHUP = true;
         TimeoutStopSec = "30s";
         KeyringMode = "shared";
+
+        Type = "idle";
       };
 
       # Don't kill a user session when using nixos-rebuild
@@ -99,7 +101,12 @@ in
 
     systemd.defaultUnit = "graphical.target";
 
-    users.users.greeter.isSystemUser = true;
+    users.users.greeter = {
+      isSystemUser = true;
+      group = "greeter";
+    };
+
+    users.groups.greeter = {};
   };
 
   meta.maintainers = with maintainers; [ queezle ];

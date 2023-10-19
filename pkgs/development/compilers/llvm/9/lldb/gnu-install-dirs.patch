@@ -63,3 +63,43 @@ index b5316540fdf3..3c3c882d503f 100644
  install(TARGETS lldbIntelFeatures
 -  LIBRARY DESTINATION lib${LLVM_LIBDIR_SUFFIX})
 +  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX})
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cdf22c4..d56fc6a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -146,7 +146,7 @@ if (NOT LLDB_DISABLE_PYTHON)
+                --cfgBldDir=${lldb_scripts_dir}
+                --prefix=${CMAKE_BINARY_DIR}
+                --cmakeBuildConfiguration=${CMAKE_CFG_INTDIR}
+-               --lldbLibDir=lib${LLVM_LIBDIR_SUFFIX}
++               --lldbLibDir=${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}
+                ${use_python_wrapper_from_src_dir}
+                ${use_six_py_from_system}
+         VERBATIM
+diff --git a/cmake/modules/LLDBStandalone.cmake b/cmake/modules/LLDBStandalone.cmake
+index b726797..1f057ac 100644
+--- a/cmake/modules/LLDBStandalone.cmake
++++ b/cmake/modules/LLDBStandalone.cmake
+@@ -95,7 +95,7 @@ include_directories(
+   "${CLANG_INCLUDE_DIRS}")
+
+ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX})
++set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_INSTALL_LIBDIR}/lib${LLVM_LIBDIR_SUFFIX})
+ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib${LLVM_LIBDIR_SUFFIX})
+
+ set(LLDB_BUILT_STANDALONE 1)
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 7de7973..b70aecc 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -50,7 +50,8 @@ if(NOT LLDB_BUILD_FRAMEWORK)
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+   execute_process(
+     COMMAND ${PYTHON_EXECUTABLE}
+-        -c "import distutils.sysconfig; print(distutils.sysconfig.get_python_lib(True, False, ''))"
++        -c "import distutils.sysconfig, sys; print(distutils.sysconfig.get_python_lib(True, False, sys.argv[1]))"
++        ${CMAKE_INSTALL_LIBDIR}/../
+     OUTPUT_VARIABLE SWIG_INSTALL_DIR
+     OUTPUT_STRIP_TRAILING_WHITESPACE)
+

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchpatch
 , fetchurl
 , fixDarwinDylibNames
@@ -7,13 +8,14 @@
 , uselibtirpc ? stdenv.isLinux
 , libtirpc
 , zlib
-, szip ? null
+, szipSupport ? false
+, szip
 , javaSupport ? false
 , jdk
+, fortranSupport ? false
+, gfortran
+, netcdfSupport ? false
 }:
-let
-  javabase = "${jdk}/jre/lib/${jdk.architecture}";
-in
 stdenv.mkDerivation rec {
   pname = "hdf";
   version = "4.2.15";
@@ -44,20 +46,21 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
       sha256 = "112svcsilk16ybbsi8ywnxfl2p1v44zh3rfn4ijnl8z08vfqrvvs";
     })
+    ./darwin-aarch64.patch
   ];
 
   nativeBuildInputs = [
     cmake
   ] ++ lib.optionals stdenv.isDarwin [
     fixDarwinDylibNames
-  ];
+  ] ++ lib.optional fortranSupport gfortran;
 
   buildInputs = [
     libjpeg
-    szip
     zlib
   ]
   ++ lib.optional javaSupport jdk
+  ++ lib.optional szipSupport szip
   ++ lib.optional uselibtirpc libtirpc;
 
   preConfigure = lib.optionalString uselibtirpc ''
@@ -65,7 +68,7 @@ stdenv.mkDerivation rec {
     substituteInPlace config/cmake/FindXDR.cmake \
       --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
                 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
-  '' + lib.optionalString (szip != null) ''
+  '' + lib.optionalString szipSupport ''
     export SZIP_INSTALL=${szip}
   '';
 
@@ -75,27 +78,24 @@ stdenv.mkDerivation rec {
     "-DHDF4_BUILD_UTILS=ON"
     "-DHDF4_BUILD_WITH_INSTALL_NAME=OFF"
     "-DHDF4_ENABLE_JPEG_LIB_SUPPORT=ON"
-    "-DHDF4_ENABLE_NETCDF=OFF"
+    "-DHDF4_ENABLE_NETCDF=${if netcdfSupport then "ON" else "OFF"}"
     "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
-    "-DHDF4_BUILD_FORTRAN=OFF"
     "-DJPEG_DIR=${libjpeg}"
   ] ++ lib.optionals javaSupport [
     "-DHDF4_BUILD_JAVA=ON"
     "-DJAVA_HOME=${jdk}"
-    "-DJAVA_AWT_LIBRARY=${javabase}/libawt.so"
-    "-DJAVA_JVM_LIBRARY=${javabase}/server/libjvm.so"
-  ] ++ lib.optionals (szip != null) [
+  ] ++ lib.optionals szipSupport [
     "-DHDF4_ENABLE_SZIP_ENCODING=ON"
     "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
-  ];
+  ] ++ (if fortranSupport
+  then [
+    "-DHDF4_BUILD_FORTRAN=ON"
+    "-DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch"
+  ]
+  else [ "-DHDF4_BUILD_FORTRAN=OFF" ]
+  );
 
   doCheck = true;
-
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)/bin
-  '' + lib.optionalString (stdenv.isDarwin) ''
-    export DYLD_LIBRARY_PATH=$(pwd)/bin
-  '';
 
   excludedTests = lib.optionals stdenv.isDarwin [
     "MFHDF_TEST-hdftest"
@@ -104,19 +104,32 @@ stdenv.mkDerivation rec {
     "NC_TEST-nctest"
   ];
 
-  checkPhase = let excludedTestsRegex = if (excludedTests != [])
-    then "(" + (lib.concatStringsSep "|" excludedTests) + ")"
-    else ""; in ''
-    runHook preCheck
-    ctest -E "${excludedTestsRegex}" --output-on-failure
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
+    in
+    ''
+      runHook preCheck
+      ctest -E "${excludedTestsRegex}" --output-on-failure
+      runHook postCheck
+    '';
 
   outputs = [ "bin" "dev" "out" ];
 
   postInstall = ''
     moveToOutput bin "$bin"
   '';
+
+  passthru = {
+    inherit
+      uselibtirpc
+      libtirpc
+      szipSupport
+      szip
+      javaSupport
+      jdk
+      ;
+  };
 
   meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";

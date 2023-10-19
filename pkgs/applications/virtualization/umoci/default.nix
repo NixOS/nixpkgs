@@ -17,18 +17,16 @@ buildGoModule rec {
     sha256 = "0in8kyi4jprvbm3zsl3risbjj8b0ma62yl3rq8rcvcgypx0mn7d4";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles ];
 
   postInstall = ''
-    substituteInPlace Makefile --replace \
-      '$(shell which bash)' '${lib.getBin bash}/bin/bash'
-    make docs
+    make docs SHELL="$SHELL"
     installManPage doc/man/*.[1-9]
   '';
 
@@ -37,6 +35,5 @@ buildGoModule rec {
     homepage = "https://umo.ci";
     license = licenses.asl20;
     maintainers = with maintainers; [ zokrezyl ];
-    platforms = platforms.unix;
   };
 }

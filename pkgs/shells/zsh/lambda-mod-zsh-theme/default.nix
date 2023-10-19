@@ -11,6 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0fvxnvgbcvwii7ghvpj5l43frllq71wwjvfg7cqfmic727z001dh";
   };
 
+  strictDeps = true;
   installPhase = ''
     install -Dm0644 lambda-mod.zsh-theme $out/share/zsh/themes/lambda-mod.zsh-theme
   '';
@@ -20,6 +21,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/halfo/lambda-mod-zsh-theme/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,9 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
-, pythonNamespacesHook
 , msrestazure
 , azure-common
 , azure-mgmt-datalake-nspkg
@@ -17,7 +14,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "sha256-GrmVK97M+iojevPLVTuLmfQRLxvrHtr9DRHymJvLYHE=";
+    hash = "sha256-GrmVK97M+iojevPLVTuLmfQRLxvrHtr9DRHymJvLYHE=";
   };
 
   propagatedBuildInputs = [

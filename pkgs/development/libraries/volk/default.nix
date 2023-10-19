@@ -3,40 +3,47 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake
-, cppunit
 , python3
 , enableModTool ? true
 , removeReferencesTo
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "volk";
-  version = "2.4.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "fuHJ+p5VN4ThdbQFbzB08VCuy/Zo7m/I1Gs5EQGPeNY=";
+    repo = "volk";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-kI4IuO6TLplo5lLAGIPWQWtePcjIEWB9XaJDA6WlqSg=";
     fetchSubmodules = true;
   };
-
   patches = [
-    # Fixes a failing test: https://github.com/gnuradio/volk/pull/434
+    # Remove a failing test
     (fetchpatch {
-      url = "https://github.com/gnuradio/volk/pull/434/commits/bce8531b6f1a3c5abe946ed6674b283d54258281.patch";
-      sha256 = "OLW9uF6iL47z63kjvYqwsWtkINav8Xhs+Htqg6Kr4uI=";
+      url = "https://github.com/gnuradio/volk/commit/fe2e4a73480bf2ac2e566052ea682817dddaf61f.patch";
+      hash = "sha256-Vko/Plk7u6UAr32lieU+T9G34Dkg9EW3Noi/NArpRL4=";
     })
   ];
-  cmakeFlags = lib.optionals (!enableModTool) [ "-DENABLE_MODTOOL=OFF" ];
-  postInstall = ''
+
+  cmakeFlags = lib.optionals (!enableModTool) [
+    "-DENABLE_MODTOOL=OFF"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    "-DVOLK_CPU_FEATURES=OFF"
+    # offset 17912 in1: -0.0366274 in2: -0.0366173 tolerance was: 1e-05
+    # volk_32f_log2_32f: fail on arch neon
+    "-DCMAKE_CTEST_ARGUMENTS=--exclude-regex;qa_volk_32f_log2_32f"
+  ];
+
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
     ${removeReferencesTo}/bin/remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libvolk.so)
   '';
 
   nativeBuildInputs = [
     cmake
     python3
-    python3.pkgs.Mako
+    python3.pkgs.mako
   ];
 
   doCheck = true;
@@ -48,4 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;
   };
-}
+})

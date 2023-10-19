@@ -1,24 +1,41 @@
-{ lib, buildPackages, fetchFromGitHub, fetchpatch, perl, buildLinux, ... } @ args:
+{ lib
+, stdenv
+, fetchpatch
+, kernel
+, commitDate ? "2023-06-28"
+# bcachefs-tools stores the expected-revision in:
+#   https://evilpiepirate.org/git/bcachefs-tools.git/tree/.bcachefs_revision
+# but this does not means that it'll be the latest-compatible revision
+, currentCommit ? "84f132d5696138bb038d2dc8f1162d2fab5ac832"
+, diffHash ? "sha256-RaBWBU7rXjJFb1euFAFBHWCBQAG7npaCodjp/vMYpyw="
+, kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
+, argsOverride ? {}
+, ...
+} @ args:
 
-buildLinux (args // {
-  version = "5.9.0-2020.11.20";
-  modDirVersion = "5.9.0";
-
-  src = fetchFromGitHub {
-    owner = "koverstreet";
-    repo = "bcachefs";
-    # commit does not exist on any branch on the target repository
-    rev = "6a505b63ed3003faf5000f19fd08bbd477d93fbc";
-    sha256 = "1rf34gzv9npafp1c3i6lymk3b0gnqp4rb0wl33pw6yrpgnsry3cc";
-  };
-
-  extraConfig = "BCACHEFS_FS m";
+# NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
+(kernel.override ( args // {
+  version = "${kernel.version}-bcachefs-unstable-${commitDate}";
 
   extraMeta = {
     branch = "master";
-    hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
-    maintainers = with lib.maintainers; [ davidak chiiruno ];
-    platforms = [ "x86_64-linux" ];
+    broken = stdenv.isAarch64;
+    maintainers = with lib.maintainers; [ davidak Madouura pedrohlc raitobezarius ];
   };
 
-} // (args.argsOverride or {}))
+  structuredExtraConfig = with lib.kernel; {
+    BCACHEFS_FS = module;
+    BCACHEFS_QUOTA = option yes;
+    BCACHEFS_POSIX_ACL = option yes;
+  };
+
+  kernelPatches = [ {
+      name = "bcachefs-${currentCommit}";
+
+      patch = fetchpatch {
+        name = "bcachefs-${currentCommit}.diff";
+        url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${currentCommit}&id2=v${lib.versions.majorMinor kernel.version}";
+        sha256 = diffHash;
+      };
+    } ] ++ kernelPatches;
+}))

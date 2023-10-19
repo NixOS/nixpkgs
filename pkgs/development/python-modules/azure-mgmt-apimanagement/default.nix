@@ -6,13 +6,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "4.0.0";
   pname = "azure-mgmt-apimanagement";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54fade87af54904c8ac9785efccebc537c58a3c1f8726e929e473698f06ebbfc";
+    sha256 = "sha256-AiTjLJ28g80xnrRFLfPUevJgeaxLpuGmvkd3+FskNiw=";
     extension = "zip";
   };
 

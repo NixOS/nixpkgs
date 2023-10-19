@@ -2,12 +2,12 @@
 
 let
   dconf2nix =
-    haskell.lib.justStaticExecutables
-      (haskell.lib.overrideCabal haskellPackages.dconf2nix (oldAttrs: {
+    haskell.lib.compose.justStaticExecutables
+      (haskell.lib.compose.overrideCabal (oldAttrs: {
         maintainers = (oldAttrs.maintainers or []) ++ [
           lib.maintainers.gvolpe
         ];
-      }));
+      }) haskellPackages.dconf2nix);
 in
 
 dconf2nix.overrideAttrs (oldAttrs: {

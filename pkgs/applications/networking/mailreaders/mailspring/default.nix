@@ -2,36 +2,41 @@
 , lib
 , fetchurl
 , autoPatchelfHook
-, alsaLib
+, alsa-lib
 , coreutils
 , db
 , dpkg
 , glib
 , gtk3
+, wrapGAppsHook
 , libkrb5
 , libsecret
 , nss
 , openssl
 , udev
 , xorg
+, mesa
+, libdrm
+, libappindicator
 }:
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
-  version = "1.9.1";
+  version = "1.11.0";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
-    sha256 = "mfpwDYRpFULD9Th8tI5yqb5RYWZJHarbWYpfKS3Q6mE=";
+    hash = "sha256-aAqkltVxIlGwRVGM+1QkrVgfnitl+D3Xb0qi0o8ow+Q=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     db
     glib
     gtk3
@@ -42,12 +47,16 @@ stdenv.mkDerivation rec {
     xorg.libXdamage
     xorg.libXScrnSaver
     xorg.libXtst
+    xorg.libxshmfence
+    mesa
+    libdrm
   ];
 
   runtimeDependencies = [
     coreutils
     openssl
     (lib.getLib udev)
+    libappindicator
   ];
 
   unpackPhase = ''
@@ -68,7 +77,7 @@ stdenv.mkDerivation rec {
       --replace dirname ${coreutils}/bin/dirname
 
     ln -s $out/share/mailspring/mailspring $out/bin/mailspring
-    ln -s ${openssl.out}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
+    ln -s ${lib.getLib openssl}/lib/libcrypto.so $out/lib/libcrypto.so.1.0.0
 
     runHook postInstall
   '';
@@ -84,10 +93,12 @@ stdenv.mkDerivation rec {
       Mailspring is an open-source mail client forked from Nylas Mail and built with Electron.
       Mailspring's sync engine runs locally, but its source is not open.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ toschmidt doronbehar ];
+    maintainers = with maintainers; [ toschmidt ];
     homepage = "https://getmailspring.com";
     downloadPage = "https://github.com/Foundry376/Mailspring";
-    platforms = platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [ "CVE-2023-4863" ];
   };
 }

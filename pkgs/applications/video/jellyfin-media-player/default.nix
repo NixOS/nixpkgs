@@ -22,27 +22,24 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
+, jellyfin-web
+, withDbus ? stdenv.isLinux, dbus
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.6.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-u19WJupSqIzA8W0QG9mue8Ticy+HxBAniuKIUFl7ONs=";
-  };
-
-  jmpDist = fetchzip {
-    url = "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.3/dist.zip";
-    sha256 = "sha256-P7WEYbVvpaVLwMgqC2e8QtMOaJclg0bX78J1fdGzcCU=";
+    sha256 = "sha256-97/9UYXOsg8v7QoRqo5rh0UGhjjS85K9OvUwtlG249c=";
   };
 
   patches = [
-    # the webclient-files are not copied in the regular build script. Copy them just like the linux build
-    ./fix-osx-resources.patch
+    # fix the location of the jellyfin-web path
+    ./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
   ];
@@ -75,15 +72,15 @@ mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DQTROOT=${qtbase}"
     "-GNinja"
+  ] ++ lib.optionals (!withDbus) [
+    "-DLINUX_X11POWER=ON"
   ];
 
-  preBuild = ''
-    # copy the webclient-files to the expected "dist" directory
-    mkdir -p dist
-    cp -a ${jmpDist}/* dist
+  preConfigure = ''
+    # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)
+    ln -s ${jellyfin-web}/share/jellyfin-web .
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
@@ -94,9 +91,6 @@ mkDerivation rec {
     mv $out/Resources/* "$out/Applications/Jellyfin Media Player.app/Contents/Resources/"
     rmdir $out/Resources
 
-    # fix 'Could not find the Qt platform plugin "cocoa" in ""' error
-    wrapQtApp "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player"
-
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
   '';
 
@@ -104,8 +98,8 @@ mkDerivation rec {
     homepage = "https://github.com/jellyfin/jellyfin-media-player";
     description = "Jellyfin Desktop Client based on Plex Media Player";
     license = with licenses; [ gpl2Only mit ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ jojosch ];
+    platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ jojosch kranzes ];
     mainProgram = "jellyfinmediaplayer";
   };
 }

@@ -1,5 +1,6 @@
-{ name
+{ pname
 , channel
+, lib
 , writeScript
 , xidel
 , coreutils
@@ -17,7 +18,7 @@ let
   isBeta =
     channel != "release";
 
-in writeScript "update-${name}" ''
+in writeScript "update-${pname}" ''
   #!${runtimeShell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
@@ -26,7 +27,7 @@ in writeScript "update-${name}" ''
   HOME=`mktemp -d`
   export GNUPGHOME=`mktemp -d`
 
-  gpg --import ${./mozilla.asc}
+  gpg --receive-keys ADD7079479700DCADFDD5337E36D3B13F3D93274
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -46,7 +47,7 @@ in writeScript "update-${name}" ''
            grep "^[0-9]" | \
            sort --version-sort | \
            grep -v "funnelcake" | \
-           grep -e "${if isBeta then "b" else ""}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${if isBeta then "" else "grep -v \"b\" |"} \
+           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)$" | ${lib.optionalString (!isBeta) "grep -v \"b\" |"} \
            tail -1`
 
   curl --silent -o $HOME/shasums "$url$version/SHA256SUMS"

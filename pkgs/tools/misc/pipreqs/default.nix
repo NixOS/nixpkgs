@@ -1,14 +1,14 @@
-{ lib, python3 }:
+{ lib, python3, fetchPypi }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "pipreqs";
-  version = "0.4.10";
+  version = "0.4.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fdr3mbxjpmrxr7yfc1sn9kbpcyb0qwafimhhrrqvf989dj1sdcy";
+    hash = "sha256-oX8WeIC2khvjdTPOTIHdxuIrRlwQeq1VfbQ7Gt1WqZs=";
   };
 
   propagatedBuildInputs = [ yarg docopt ];

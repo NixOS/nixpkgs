@@ -1,26 +1,34 @@
-{ atomEnv
-, autoPatchelfHook
-, dpkg
+{ autoPatchelfHook
+, squashfsTools
+, alsa-lib
 , fetchurl
 , makeDesktopItem
 , makeWrapper
 , stdenv
 , lib
+, libsecret
+, mesa
 , udev
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "7.1.0";
+  version = "8.1.2";
 
   src = fetchurl {
-    url = "https://deb.termius.com/pool/main/t/termius-app/termius-app_${version}_amd64.deb";
-    sha256 = "801579b931ca0ad5340085df8863042336e2b609dd1cd6771260c873f3d2bb73";
+    # find the latest version with
+    # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.version'
+    # and the url with
+    # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
+    # and the sha512 with
+    # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_167.snap";
+    hash = "sha512-M/cyLfSnoCFJcdGXlA5/kH/MuyRpYcfBoyp6y6KSsTyh8Goq6niGZAQcCdIjNX8KVUvmcTWISsx8so4W5BrkCw==";
   };
 
   desktopItem = makeDesktopItem {
-    categories = "Network;";
+    categories = [ "Network" ];
     comment = "The SSH client that works on Desktop and Mobile";
     desktopName = "Termius";
     exec = "termius-app";
@@ -34,34 +42,46 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontWrapGApps = true;
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper wrapGAppsHook ];
+  # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
+  nativeBuildInputs = [ autoPatchelfHook squashfsTools makeWrapper wrapGAppsHook ];
 
-  buildInputs = atomEnv.packages;
+  buildInputs = [
+    alsa-lib
+    libsecret
+    mesa
+  ];
 
-  unpackPhase = "dpkg-deb -x $src .";
+  unpackPhase = ''
+    runHook preUnpack
+    unsquashfs "$src"
+    runHook postUnpack
+  '';
 
   installPhase = ''
-    mkdir -p "$out/bin"
-    cp -R "opt" "$out"
-    cp -R "usr/share" "$out/share"
-    chmod -R g-w "$out"
-    # Desktop file
-    mkdir -p "$out/share/applications"
+    runHook preInstall
+    cd squashfs-root
+    mkdir -p $out/opt/termius
+    cp -r ./ $out/opt/termius
+
+    mkdir -p "$out/share/applications" "$out/share/pixmaps/termius-app.png"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
+    cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
+
+    runHook postInstall
   '';
 
   runtimeDependencies = [ (lib.getLib udev) ];
 
   postFixup = ''
-    makeWrapper $out/opt/Termius/termius-app $out/bin/termius-app \
+    makeWrapper $out/opt/termius/termius-app $out/bin/termius-app \
       "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with lib; {
-    broken = true;
     description = "A cross-platform SSH client with cloud data sync and more";
     homepage = "https://termius.com/";
     downloadPage = "https://termius.com/linux/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ Br1ght0ne th0rgal ];
     platforms = [ "x86_64-linux" ];

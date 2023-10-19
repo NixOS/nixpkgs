@@ -12,7 +12,6 @@
 , gtk3
 , glib
 , wrapGAppsHook
-, python3
 , libnotify
 , itstool
 , gnome
@@ -21,17 +20,18 @@
 , libcanberra-gtk3
 , libxslt
 , docbook-xsl-nons
+, desktop-file-utils
 , libpwquality
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-disk-utility";
-  version = "40.1";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-disk-utility/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-KkuZrBHKIzlLKMVYS56WKE6MWk2mXPBiB95U9Csf8UE=";
+    sha256 = "sha256-AgMQl4ls2zfYcXpYI/k+NyPU385/3EACyd/LFrfno+8=";
   };
 
   nativeBuildInputs = [
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     itstool
     libxslt
     docbook-xsl-nons
+    desktop-file-utils
     wrapGAppsHook
-    python3
     libxml2
   ];
 
@@ -63,11 +63,6 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
   ];
 
-  postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-disk-utility";
@@ -81,5 +76,6 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+    mainProgram = "gnome-disks";
   };
 }

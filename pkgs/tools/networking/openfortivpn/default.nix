@@ -1,20 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config
-, openssl, ppp
-, systemd ? null }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, openssl
+, ppp
+, systemd
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, withPpp ? stdenv.isLinux
+}:
 
-let
-  withSystemd = stdenv.isLinux && !(systemd == null);
-
-in
 stdenv.mkDerivation rec {
   pname = "openfortivpn";
-  version = "1.16.0";
+  version = "1.20.5";
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-wijP9VGKXlxCAU3xN6+cv9+NGwBS55ql8WsZZ592b/k=";
+    hash = "sha256-jbgxhCQWDw1ZUOAeLhOG+b6JYgvpr5TnNDIO/4k+e7k=";
   };
 
   # we cannot write the config file to /etc and as we don't need the file, so drop it
@@ -26,15 +30,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
-    openssl ppp
+    openssl
   ]
-  ++ lib.optional withSystemd systemd;
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withPpp ppp;
 
   configureFlags = [
     "--sysconfdir=/etc"
-    "--with-pppd=${ppp}/bin/pppd"
   ]
-  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system";
+  ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd";
 
   enableParallelBuilding = true;
 

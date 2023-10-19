@@ -56,16 +56,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
     description = "The always-incognito web browser";
     homepage = "https://github.com/cassidyjames/ephemeral";
-    maintainers = with maintainers; [ xiorcale ] ++ pantheon.maintainers;
+    maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;
     license = licenses.gpl3;
+    mainProgram = "com.github.cassidyjames.ephemeral";
   };
 }

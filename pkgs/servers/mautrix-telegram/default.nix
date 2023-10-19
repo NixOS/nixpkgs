@@ -1,75 +1,82 @@
-{ lib, python3, mautrix-telegram, fetchFromGitHub }:
-
-with python3.pkgs;
+{ lib
+, python3
+, fetchPypi
+, fetchFromGitHub
+, withE2BE ? true
+}:
 
 let
-  # officially supported database drivers
-  dbDrivers = [
-    psycopg2
-    # sqlite driver is already shipped with python by default
-  ];
-
-in buildPythonPackage rec {
+  python = python3.override {
+    packageOverrides = self: super: {
+      tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
+        version = "1.30.0a2";
+        pname = "tulir-telethon";
+        src = fetchPypi {
+          inherit pname version;
+          hash = "sha256-PkdxOdl1HM9SEC/CMOetahDzVJDg+zPP7s9NCsVdQsA=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in
+python.pkgs.buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.9.0";
-  disabled = pythonOlder "3.7";
+  version = "0.14.2";
+  disabled = python.pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = "tulir";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1543ljjl3jg3ayid7ifi4bamqh4gq85pmlbs3m8i7phjbbm7g9dn";
+    owner = "mautrix";
+    repo = "telegram";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-8wLLm2L6R4sfIHyqGvwFESTqS7FZhpkExqaQsdFRMa0=";
   };
 
-  patches = [ ./0001-Re-add-entrypoint.patch ./0002-Don-t-depend-on-pytest-runner.patch ];
-  postPatch = ''
-    sed -i -e '/alembic>/d' requirements.txt
-  '';
+  format = "setuptools";
 
-  propagatedBuildInputs = [
-    Mako
+  patches = [ ./0001-Re-add-entrypoint.patch ];
+
+  propagatedBuildInputs = with python.pkgs; ([
+    ruamel-yaml
+    python-magic
+    commonmark
     aiohttp
+    yarl
     mautrix
-    sqlalchemy
-    CommonMark
-    ruamel_yaml
-    python_magic
-    telethon
-    telethon-session-sqlalchemy
-    pillow
-    lxml
+    tulir-telethon
+    asyncpg
+    mako
     setuptools
-  ] ++ dbDrivers;
+    # speedups
+    cryptg
+    aiodns
+    brotli
+    # qr_login
+    pillow
+    qrcode
+    # formattednumbers
+    phonenumbers
+    # metrics
+    prometheus-client
+    # sqlite
+    aiosqlite
+    # proxy support
+    pysocks
+  ] ++ lib.optionals withE2BE [
+    # e2be
+    python-olm
+    pycryptodome
+    unpaddedbase64
+  ]);
 
-  # `alembic` (a database migration tool) is only needed for the initial setup,
-  # and not needed during the actual runtime. However `alembic` requires `mautrix-telegram`
-  # in its environment to create a database schema from all models.
-  #
-  # Hence we need to patch away `alembic` from `mautrix-telegram` and create an `alembic`
-  # which has `mautrix-telegram` in its environment.
-  passthru.alembic = alembic.overrideAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ dbDrivers ++ [
-      mautrix-telegram
-    ];
-  });
-
-  # Tests are broken and throw the following for every test:
-  #   TypeError: 'Mock' object is not subscriptable
-  #
-  # The tests were touched the last time in 2019 and upstream CI doesn't even build
-  # those, so it's safe to assume that this part of the software is abandoned.
+  # has no tests
   doCheck = false;
-  checkInputs = [
-    pytest
-    pytest-mock
-    pytest-asyncio
-  ];
 
   meta = with lib; {
-    homepage = "https://github.com/tulir/mautrix-telegram";
+    homepage = "https://github.com/mautrix/telegram";
     description = "A Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nyanloutre ma27 ];
+    maintainers = with maintainers; [ nyanloutre ma27 nickcao ];
   };
 }

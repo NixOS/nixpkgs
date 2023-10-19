@@ -15,13 +15,14 @@
 
 buildPythonPackage rec {
   pname = "gtts";
-  version = "2.2.2";
+  version = "2.3.2";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pndurette";
     repo = "gTTS";
-    rev = "v${version}";
-    sha256 = "052l7gk1v0zckraavyba1bc2cqvmrbffwxxjsklgnslbdcg5h514";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Z5dM/PzIA8qtw0RepTKmHpqBwYMRwNLhWuEC0aBGL3U=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     twine
   ];
 
-  checkInputs = [ pytest mock testfixtures ];
+  nativeCheckInputs = [ pytest mock testfixtures ];
 
   # majority of tests just try to call out to Google's Translate API endpoint
   doCheck = false;

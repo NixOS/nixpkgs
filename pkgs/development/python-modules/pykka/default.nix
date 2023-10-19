@@ -1,21 +1,49 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, pytest-mock }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pytest-mock
+, typing-extensions
+}:
 
 buildPythonPackage rec {
-  pname = "Pykka";
-  version = "2.0.3";
+  pname = "pykka";
+  version = "4.0.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "4b9d2363365b3455a0204bf163f09bd351d24b938c618c79d975a9510e128e95";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "jodal";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SYgT69/AZX/JDm89PwFqrUL9Ll1iHRKEy78BN4QKz9Y=";
   };
 
-  checkInputs = [ pytestCheckHook pytest-mock ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+  ];
+
+  pythonImportsCheck = [
+    "pykka"
+  ];
 
   meta = with lib; {
     homepage = "https://www.pykka.org/";
     description = "A Python implementation of the actor model";
-    changelog = "https://github.com/jodal/pykka/blob/v${version}/docs/changes.rst";
-    maintainers = [ maintainers.marsam ];
+    changelog = "https://github.com/jodal/pykka/releases/tag/v${version}";
+    maintainers = with maintainers; [ marsam ];
     license = licenses.asl20;
   };
 }

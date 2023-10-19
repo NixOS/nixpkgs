@@ -4,7 +4,7 @@
 , qmake
 , qtbase
 , qtmultimedia
-, qttranslations
+, qttools
 }:
 
 mkDerivation {
@@ -41,8 +41,6 @@ mkDerivation {
   postPatch = ''
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtmultimedia qttranslations ];
-  enableParallelBuilding = true;
-
+  nativeBuildInputs = [ qmake qttools ];
+  buildInputs = [ qtbase qtmultimedia ];
 }

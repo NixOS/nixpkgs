@@ -4,19 +4,17 @@
 , fetchPypi
 , substituteAll
 , portmidi
-, pygame
 , python-rtmidi
-, rtmidi-python
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "mido";
-  version = "1.2.9";
+  version = "1.2.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k3sgkxc7j49bapib3b5jnircb1yhyyd8mi0mbfd78zgix9db9y4";
+    sha256 = "17b38a8e4594497b850ec6e78b848eac3661706bfc49d484a36d91335a373499";
   };
 
   patches = [
@@ -27,12 +25,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    pygame
     python-rtmidi
-    rtmidi-python
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

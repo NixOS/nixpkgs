@@ -2,15 +2,15 @@
 , acme
 , boto3
 , certbot
-, isPy3k
-, pytest
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  inherit (certbot) src version;
-
   pname = "certbot-dns-route53";
+
+  inherit (certbot) src version;
+  disabled = pythonOlder "3.6";
 
   propagatedBuildInputs = [
     acme
@@ -18,16 +18,18 @@ buildPythonPackage rec {
     certbot
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
-  disabled = !isPy3k;
+  pytestFlagsArray = [
+    "-o cache_dir=$(mktemp -d)"
 
-  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+    # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
+    "-W 'ignore:pkg_resources is deprecated as an API:DeprecationWarning'"
+  ];
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/certbot-dns-route53";
 
   meta = certbot.meta // {
     description = "Route53 DNS Authenticator plugin for Certbot";

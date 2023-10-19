@@ -9,7 +9,7 @@ let
     listToValue = concatMapStringsSep ", " (generators.mkValueStringDefault { });
   };
 
-  pkg = if isNull cfg.package then
+  pkg = if cfg.package == null then
     pkgs.radicale
   else
     cfg.package;
@@ -25,37 +25,37 @@ let
 
 in {
   options.services.radicale = {
-    enable = mkEnableOption "Radicale CalDAV and CardDAV server";
+    enable = mkEnableOption (lib.mdDoc "Radicale CalDAV and CardDAV server");
 
     package = mkOption {
-      description = "Radicale package to use.";
+      description = lib.mdDoc "Radicale package to use.";
       # Default cannot be pkgs.radicale because non-null values suppress
       # warnings about incompatible configuration and storage formats.
       type = with types; nullOr package // { inherit (package) description; };
       default = null;
-      defaultText = "pkgs.radicale";
+      defaultText = literalExpression "pkgs.radicale";
     };
 
     config = mkOption {
       type = types.str;
       default = "";
-      description = ''
+      description = lib.mdDoc ''
         Radicale configuration, this will set the service
         configuration file.
-        This option is mutually exclusive with <option>settings</option>.
-        This option is deprecated.  Use <option>settings</option> instead.
+        This option is mutually exclusive with {option}`settings`.
+        This option is deprecated.  Use {option}`settings` instead.
       '';
     };
 
     settings = mkOption {
       type = format.type;
       default = { };
-      description = ''
+      description = lib.mdDoc ''
         Configuration for Radicale. See
-        <link xlink:href="https://radicale.org/3.0.html#documentation/configuration" />.
-        This option is mutually exclusive with <option>config</option>.
+        <https://radicale.org/3.0.html#documentation/configuration>.
+        This option is mutually exclusive with {option}`config`.
       '';
-      example = literalExample ''
+      example = literalExpression ''
         server = {
           hosts = [ "0.0.0.0:5232" "[::]:5232" ];
         };
@@ -72,15 +72,15 @@ in {
 
     rights = mkOption {
       type = format.type;
-      description = ''
+      description = lib.mdDoc ''
         Configuration for Radicale's rights file. See
-        <link xlink:href="https://radicale.org/3.0.html#documentation/authentication-and-rights" />.
-        This option only works in conjunction with <option>settings</option>.
-        Setting this will also set <option>settings.rights.type</option> and
-        <option>settings.rights.file</option> to approriate values.
+        <https://radicale.org/3.0.html#documentation/authentication-and-rights>.
+        This option only works in conjunction with {option}`settings`.
+        Setting this will also set {option}`settings.rights.type` and
+        {option}`settings.rights.file` to appropriate values.
       '';
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         root = {
           user = ".+";
           collection = "";
@@ -102,7 +102,7 @@ in {
     extraArgs = mkOption {
       type = types.listOf types.str;
       default = [];
-      description = "Extra arguments passed to the Radicale daemon.";
+      description = lib.mdDoc "Extra arguments passed to the Radicale daemon.";
     };
   };
 
@@ -117,13 +117,13 @@ in {
       }
     ];
 
-    warnings = optional (isNull cfg.package && versionOlder config.system.stateVersion "17.09") ''
+    warnings = optional (cfg.package == null && versionOlder config.system.stateVersion "17.09") ''
       The configuration and storage formats of your existing Radicale
       installation might be incompatible with the newest version.
       For upgrade instructions see
       https://radicale.org/2.1.html#documentation/migration-from-1xx-to-2xx.
       Set services.radicale.package to suppress this warning.
-    '' ++ optional (isNull cfg.package && versionOlder config.system.stateVersion "20.09") ''
+    '' ++ optional (cfg.package == null && versionOlder config.system.stateVersion "20.09") ''
       The configuration format of your existing Radicale installation might be
       incompatible with the newest version.  For upgrade instructions see
       https://github.com/Kozea/Radicale/blob/3.0.6/NEWS.md#upgrade-checklist.
@@ -140,9 +140,12 @@ in {
 
     environment.systemPackages = [ pkg ];
 
-    users.users.radicale.uid = config.ids.uids.radicale;
+    users.users.radicale = {
+      isSystemUser = true;
+      group = "radicale";
+    };
 
-    users.groups.radicale.gid = config.ids.gids.radicale;
+    users.groups.radicale = {};
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";
@@ -161,7 +164,7 @@ in {
         StateDirectoryMode = "0750";
         # Hardening
         CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "/dev/stdin" ];
+        DeviceAllow = [ "/dev/stdin" "/dev/urandom" ];
         DevicePolicy = "strict";
         IPAddressAllow = mkIf bindLocalhost "localhost";
         IPAddressDeny = mkIf bindLocalhost "any";
@@ -192,9 +195,10 @@ in {
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
         UMask = "0027";
+        WorkingDirectory = "/var/lib/radicale";
       };
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ aneeshusa infinisil dotlambda ];
+  meta.maintainers = with lib.maintainers; [ infinisil dotlambda ];
 }

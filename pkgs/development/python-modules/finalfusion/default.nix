@@ -30,12 +30,16 @@ buildPythonPackage rec {
     toml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
   postPatch = ''
     patchShebangs tests/integration
+
+    # `np.float` was a deprecated alias of the builtin `float`
+    substituteInPlace tests/test_storage.py \
+      --replace 'dtype=np.float)' 'dtype=float)'
   '';
 
   checkPhase = ''
@@ -49,7 +53,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for using finalfusion, word2vec, and fastText word embeddings";
     homepage = "https://github.com/finalfusion/finalfusion-python/";
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
     license = licenses.blueOak100;
   };

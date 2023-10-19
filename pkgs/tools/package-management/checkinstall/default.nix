@@ -1,12 +1,11 @@
-{lib, stdenv, fetchurl, gettext}:
+{lib, stdenv, fetchurl, gettext }:
 
-assert stdenv.isLinux && stdenv ? glibc;
-
-stdenv.mkDerivation {
-  name = "checkinstall-1.6.2";
+stdenv.mkDerivation rec {
+  pname = "checkinstall";
+  version = "1.6.2";
 
   src = fetchurl {
-    url = "http://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-1.6.2.tar.gz";
+    url = "https://www.asic-linux.com.mx/~izto/checkinstall/files/source/checkinstall-${version}.tar.gz";
     sha256 = "1x4kslyvfd6lm6zd1ylbq2pjxrafb77ydfjaqi16sa5qywn1jqfw";
   };
 
@@ -35,6 +34,11 @@ stdenv.mkDerivation {
 
     # Fix BuildRoot handling in RPM builds.
     ./set-buildroot.patch
+
+    (fetchurl {
+      url = "https://salsa.debian.org/debian/checkinstall/-/raw/7175ae9de0e45f42fdd7f185ab9a12043d5efeeb/debian/patches/0016-Define-_STAT_VER-_MKNOD_VER-locally-dropped-in-glibc.patch";
+      hash = "sha256-InodEfvVMuN708yjXPrVXb+q8aUcyFhCLx35PHls0Eo=";
+    })
   ]
 
   ++ lib.optional (stdenv.hostPlatform.system == "x86_64-linux")
@@ -53,7 +57,7 @@ stdenv.mkDerivation {
     substituteInPlace checkinstallrc-dist --replace /usr/local $out
 
     substituteInPlace installwatch/create-localdecls \
-      --replace /usr/include/unistd.h ${stdenv.glibc.dev}/include/unistd.h
+      --replace /usr/include/unistd.h ${stdenv.cc.libc.dev}/include/unistd.h
   '';
 
   postInstall =

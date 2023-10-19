@@ -9,22 +9,22 @@ in
 {
   options = {
     services.xserver.windowManager.bspwm = {
-      enable = mkEnableOption "bspwm";
+      enable = mkEnableOption (lib.mdDoc "bspwm");
 
       package = mkOption {
         type        = types.package;
         default     = pkgs.bspwm;
-        defaultText = "pkgs.bspwm";
-        example     = "pkgs.bspwm-unstable";
-        description = ''
+        defaultText = literalExpression "pkgs.bspwm";
+        example     = literalExpression "pkgs.bspwm-unstable";
+        description = lib.mdDoc ''
           bspwm package to use.
         '';
       };
       configFile = mkOption {
         type        = with types; nullOr path;
-        example     = "${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc";
+        example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc"'';
         default     = null;
-        description = ''
+        description = lib.mdDoc ''
           Path to the bspwm configuration file.
           If null, $HOME/.config/bspwm/bspwmrc will be used.
         '';
@@ -34,17 +34,17 @@ in
         package = mkOption {
           type        = types.package;
           default     = pkgs.sxhkd;
-          defaultText = "pkgs.sxhkd";
-          example     = "pkgs.sxhkd-unstable";
-          description = ''
+          defaultText = literalExpression "pkgs.sxhkd";
+          example     = literalExpression "pkgs.sxhkd-unstable";
+          description = lib.mdDoc ''
             sxhkd package to use.
           '';
         };
         configFile = mkOption {
           type        = with types; nullOr path;
-          example     = "${pkgs.bspwm}/share/doc/bspwm/examples/sxhkdrc";
+          example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/sxhkdrc"'';
           default     = null;
-          description = ''
+          description = lib.mdDoc ''
             Path to the sxhkd configuration file.
             If null, $HOME/.config/sxhkd/sxhkdrc will be used.
           '';

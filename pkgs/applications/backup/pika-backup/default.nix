@@ -3,36 +3,38 @@
 , fetchFromGitLab
 , rustPlatform
 , substituteAll
+, cargo
 , desktop-file-utils
+, git
+, itstool
 , meson
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, rustc
+, wrapGAppsHook4
 , borgbackup
-, dbus
-, gdk-pixbuf
-, glib
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
+, libsecret
 }:
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.3.2";
+  version = "0.6.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     rev = "v${version}";
-    sha256 = "sha256-dKVyvB4s1MZHri0dFJDBUXQKsi2KgP30ZhsJ486M+og=";
+    hash = "sha256-RTeRlfRmA/fXBcdzP41mbs88ArKlbU49AA0lnW3xRlg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "1vsh8vqgmfady82d7wfxkknmrp7mq7nizpif2zwg3kqbl964mp3y";
+    hash = "sha256-2B0N/Yq9A4LqKh8EKWmzNzTelwGE3Y9FL9IAqAgFSV8=";
   };
 
   patches = [
@@ -48,30 +50,30 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
+    git
+    itstool
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    wrapGAppsHook4
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
-    dbus
-    gdk-pixbuf
-    glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
+    libsecret
   ];
 
   meta = with lib; {
     description = "Simple backups based on borg";
-    homepage = "https://wiki.gnome.org/Apps/PikaBackup";
+    homepage = "https://apps.gnome.org/app/org.gnome.World.PikaBackup";
     changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

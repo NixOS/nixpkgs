@@ -1,31 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper }:
 
 buildGoModule rec {
   pname = "skaffold";
-  version = "1.20.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "080zhksznwsyi0w1ban90vgh8y1q2703h3h4fvkwg695prd9ij66";
+    hash = "sha256-szoeGv8U8M4Wai1GFUkgE8Rn+URRrlkZvzMBxCcqvGI=";
   };
 
-  vendorSha256 = "1jvrk5jhjzg0dq0zg7p4hvjwda2289cmwh0ldz3269y8g3l113x8";
+  vendorHash = null;
 
   subPackages = ["cmd/skaffold"];
 
-  buildFlagsArray = let t = "github.com/GoogleContainerTools/skaffold/pkg/skaffold"; in  ''
-    -ldflags=
-      -s -w
-      -X ${t}/version.version=v${version}
-      -X ${t}/version.gitCommit=${src.rev}
-      -X ${t}/version.buildDate=unknown
+  ldflags = let t = "github.com/GoogleContainerTools/skaffold/v2/pkg/skaffold"; in [
+    "-s" "-w"
+    "-X ${t}/version.version=v${version}"
+    "-X ${t}/version.gitCommit=${src.rev}"
+    "-X ${t}/version.buildDate=unknown"
+  ];
+
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/skaffold version | grep ${version} > /dev/null
   '';
 
-  nativeBuildInputs = [ installShellFiles ];
-
   postInstall = ''
+    wrapProgram $out/bin/skaffold --set SKAFFOLD_UPDATE_CHECK false
+
     installShellCompletion --cmd skaffold \
       --bash <($out/bin/skaffold completion bash) \
       --zsh <($out/bin/skaffold completion zsh)
@@ -42,6 +48,6 @@ buildGoModule rec {
       It also provides building blocks and describe customizations for a CI/CD pipeline.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
+    maintainers = with maintainers; [ vdemeester bryanasdev000];
   };
 }

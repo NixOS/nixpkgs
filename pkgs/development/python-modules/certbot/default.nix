@@ -1,27 +1,45 @@
 { lib
 , buildPythonPackage
-, python, runCommand
+, python
+, runCommand
 , fetchFromGitHub
-, ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
-, dialog, gnureadline
-, pytest_xdist, pytestCheckHook, dateutil
+, configargparse
+, acme
+, configobj
+, cryptography
+, distro
+, josepy
+, parsedatetime
+, pyRFC3339
+, pyopenssl
+, pytz
+, requests
+, six
+, zope-component
+, zope_interface
+, setuptools
+, dialog
+, gnureadline
+, pytest-xdist
+, pytestCheckHook
+, python-dateutil
 }:
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "1.15.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Z5ZIA0ib+N7La6Z0Taf6DovCF6fXnEDppPQt6Vgwl0c=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CbYamk1+NvcyS6w7pOjpD5lqWHCk+VJqF9R3xYxzpQk=";
   };
 
-  sourceRoot = "source/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   propagatedBuildInputs = [
-    ConfigArgParse
+    configargparse
     acme
     configobj
     cryptography
@@ -33,22 +51,24 @@ buildPythonPackage rec {
     pytz
     requests
     six
-    zope_component
+    zope-component
     zope_interface
+    setuptools # for pkg_resources
   ];
 
   buildInputs = [ dialog gnureadline ];
 
-  checkInputs = [
-    dateutil
+  nativeCheckInputs = [
+    python-dateutil
     pytestCheckHook
-    pytest_xdist
+    pytest-xdist
   ];
 
   pytestFlagsArray = [
     "-o cache_dir=$(mktemp -d)"
     # See https://github.com/certbot/certbot/issues/8746
     "-W ignore::ResourceWarning"
+    "-W ignore::DeprecationWarning"
   ];
 
   doCheck = true;
@@ -58,15 +78,17 @@ buildPythonPackage rec {
   # certbot.withPlugins has a similar calling convention as python*.withPackages
   # it gets invoked with a lambda, and invokes that lambda with the python package set matching certbot's:
   # certbot.withPlugins (cp: [ cp.certbot-dns-foo ])
-  passthru.withPlugins = f: let
-    pythonEnv = python.withPackages f;
+  passthru.withPlugins = f:
+    let
+      pythonEnv = python.withPackages f;
 
-  in runCommand "certbot-with-plugins" {
-  } ''
-    mkdir -p $out/bin
-    cd $out/bin
-    ln -s ${pythonEnv}/bin/certbot
-  '';
+    in
+    runCommand "certbot-with-plugins"
+      { } ''
+      mkdir -p $out/bin
+      cd $out/bin
+      ln -s ${pythonEnv}/bin/certbot
+    '';
 
   meta = with lib; {
     homepage = src.meta.homepage;

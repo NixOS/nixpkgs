@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 # Remove gcc and python references
 , removeReferencesTo
@@ -15,15 +16,15 @@
 , python
 , codec2
 , gsm
+, thrift
 , fftwFloat
-, alsaLib
+, alsa-lib
 , libjack2
 , CoreAudio
 , uhd
 , SDL
 , gsl
 , cppzmq
-, zeromq
 # Needed only if qt-gui is disabled, from some reason
 , icu
 # GUI related
@@ -39,17 +40,11 @@
 # If one wishes to use a different src or name for a very custom build
 , overrideSrc ? {}
 , pname ? "gnuradio"
-, versionAttr ? {
-  major = "3.8";
-  minor = "3";
-  patch = "0";
-}
-# We use our build of volk and not the one bundled with the release
-, fetchSubmodules ? false
+, version ? "3.8.5.0"
 }:
 
 let
-  sourceSha256 = "0lwbj3slhc8bjjvfw7yz45if21hajydgy2vsjvj2barzmhfb37fd";
+  sourceSha256 = "sha256-p4VFjTE0GXmdA7QGhWSUzO/WxJ+8Dq3JEnOABtQtJUU=";
   featuresInfo = {
     # Needed always
     basic = {
@@ -65,9 +60,9 @@ let
       ]
         # when gr-qtgui is disabled, icu needs to be included, otherwise
         # building with boost 1.7x fails
-        ++ lib.optionals (!(hasFeature "gr-qtgui" features)) [ icu ];
+        ++ lib.optionals (!(hasFeature "gr-qtgui")) [ icu ];
       pythonNative = with python.pkgs; [
-        Mako
+        mako
         six
       ];
     };
@@ -101,18 +96,24 @@ let
       cmakeEnableFlag = "GNURADIO_RUNTIME";
     };
     gr-ctrlport = {
-      # Thrift support is not really working well, and even the patch they
-      # recommend applying on 0.9.2 won't apply. See:
-      # https://github.com/gnuradio/gnuradio/blob/v3.8.2.0/gnuradio-runtime/lib/controlport/thrift/README
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
         swig
+      ];
+      runtime = [
+        thrift
+      ];
+      pythonRuntime = with python.pkgs; [
+        python.pkgs.thrift
+        # For gr-perf-monitorx
+        matplotlib
+        networkx
       ];
     };
     gnuradio-companion = {
       pythonRuntime = with python.pkgs; [
         pyyaml
-        Mako
+        mako
         numpy
         pygobject3
       ];
@@ -149,7 +150,7 @@ let
     };
     gr-audio = {
       runtime = []
-        ++ lib.optionals stdenv.isLinux [ alsaLib libjack2 ]
+        ++ lib.optionals stdenv.isLinux [ alsa-lib libjack2 ]
         ++ lib.optionals stdenv.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
@@ -171,9 +172,14 @@ let
     };
     gr-utils = {
       cmakeEnableFlag = "GR_UTILS";
+      pythonRuntime = with python.pkgs; [
+        # For gr_plot
+        matplotlib
+      ];
     };
     gr-modtool = {
       pythonRuntime = with python.pkgs; [
+        setuptools
         click
         click-plugins
       ];
@@ -192,8 +198,13 @@ let
       runtime = [ gsl ];
     };
     gr-zeromq = {
-      runtime = [ cppzmq zeromq ];
+      runtime = [ cppzmq ];
       cmakeEnableFlag = "GR_ZEROMQ";
+      pythonRuntime = [
+        # Will compile without this, but it is required by tests, and by some
+        # gr blocks.
+        python.pkgs.pyzmq
+      ];
     };
   };
   shared = (import ./shared.nix {
@@ -204,57 +215,77 @@ let
       removeReferencesTo
       featuresInfo
       features
-      versionAttr
+      version
       sourceSha256
       overrideSrc
       fetchFromGitHub
-      fetchSubmodules
     ;
     qt = qt5;
     gtk = gtk3;
   });
-  inherit (shared) hasFeature; # function
+  inherit (shared.passthru) hasFeature; # function
 in
 
-stdenv.mkDerivation rec {
-  inherit pname;
-  inherit (shared)
-    version
-    src
-    nativeBuildInputs
-    buildInputs
-    disallowedReferences
-    stripDebugList
-    doCheck
-    dontWrapPythonPrograms
-    dontWrapQtApps
-    meta
-  ;
+stdenv.mkDerivation (finalAttrs: (shared // {
+  inherit pname version;
+  # Will still evaluate correctly if not used here. It only helps nix-update
+  # find the right file in which version is defined.
+  inherit (shared) src;
+  # Remove failing tests
+  preConfigure = (shared.preConfigure or "") + ''
+    # https://github.com/gnuradio/gnuradio/issues/3801
+    rm gr-blocks/python/blocks/qa_cpp_py_binding.py
+    rm gr-blocks/python/blocks/qa_cpp_py_binding_set.py
+    rm gr-blocks/python/blocks/qa_ctrlport_probes.py
+    # Tests that fail due to numpy deprecations upstream hasn't accomodated to yet.
+    rm gr-fec/python/fec/qa_polar_decoder_sc.py
+    rm gr-fec/python/fec/qa_polar_decoder_sc_list.py
+    rm gr-fec/python/fec/qa_polar_decoder_sc_systematic.py
+    rm gr-fec/python/fec/qa_polar_encoder.py
+    rm gr-fec/python/fec/qa_polar_encoder_systematic.py
+    rm gr-filter/python/filter/qa_freq_xlating_fft_filter.py
+  '';
+  patches = [
+    # Not accepted upstream, see https://github.com/gnuradio/gnuradio/pull/5227
+    ./modtool-newmod-permissions.3_8.patch
+    # Fix compilation with boost 177
+    (fetchpatch {
+      url = "https://github.com/gnuradio/gnuradio/commit/2c767bb260a25b415e8c9c4b3ea37280b2127cec.patch";
+      sha256 = "sha256-l4dSzkXb5s3vcCeuKMMwiKfv83hFI9Yg+EMEX+sl+Uo=";
+    })
+  ];
   passthru = shared.passthru // {
-    # Deps that are potentially overriden and are used inside GR plugins - the same version must
-    inherit boost volk;
-  } // lib.optionalAttrs (hasFeature "gr-uhd" features) {
+    # Deps that are potentially overridden and are used inside GR plugins - the same version must
+    inherit
+      boost
+      volk
+    ;
+    # Used by many gnuradio modules, the same attribute is present in
+    # gnuradio3.10 where there it's spdlog.
+    logLib = log4cpp;
+  } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
-  } // lib.optionalAttrs (hasFeature "gr-qtgui" features) {
+  } // lib.optionalAttrs (hasFeature "gr-qtgui") {
     inherit (libsForQt5) qwt;
   };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are not
     # detected properly. The issue is reported upstream:
     # https://github.com/gnuradio/gnuradio/issues/4278
+    # The above issue was fixed for GR3.9 without a backporting patch.
     #
     # NOTE: qradiolink needs libcodec2 to be detected in
     # order to build, see https://github.com/qradiolink/qradiolink/issues/67
-    ++ lib.optionals (hasFeature "gr-vocoder" features) [
+    ++ lib.optionals (hasFeature "gr-vocoder") [
       "-DLIBCODEC2_FOUND=TRUE"
-      "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2.so"
+      "-DLIBCODEC2_LIBRARIES=${codec2}/lib/libcodec2${stdenv.hostPlatform.extensions.sharedLibrary}"
       "-DLIBCODEC2_INCLUDE_DIRS=${codec2}/include"
       "-DLIBCODEC2_HAS_FREEDV_API=ON"
       "-DLIBGSM_FOUND=TRUE"
-      "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm.so"
+      "-DLIBGSM_LIBRARIES=${gsm}/lib/libgsm${stdenv.hostPlatform.extensions.sharedLibrary}"
       "-DLIBGSM_INCLUDE_DIRS=${gsm}/include/gsm"
     ]
-    ++ lib.optionals (hasFeature "volk" features && volk != null) [
+    ++ lib.optionals (hasFeature "volk" && volk != null) [
       "-DENABLE_INTERNAL_VOLK=OFF"
     ]
   ;
@@ -262,8 +293,8 @@ stdenv.mkDerivation rec {
   postInstall = shared.postInstall
     # This is the only python reference worth removing, if needed (3.7 doesn't
     # set that reference).
-    + lib.optionalString (!hasFeature "python-support" features) ''
+    + lib.optionalString (!hasFeature "python-support") ''
       ${removeReferencesTo}/bin/remove-references-to -t ${python} $out/lib/cmake/gnuradio/GnuradioConfig.cmake
     ''
   ;
-}
+}))

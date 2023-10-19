@@ -1,29 +1,15 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.virtualisation.containers;
 
-  inherit (lib) mkOption types;
+  inherit (lib) literalExpression mkOption types;
 
   toml = pkgs.formats.toml { };
 in
 {
   meta = {
-    maintainers = [] ++ lib.teams.podman.members;
+    maintainers = [ ] ++ lib.teams.podman.members;
   };
-
-
-  imports = [
-    (
-      lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "users" ]
-      "All users with `isNormalUser = true` set now get appropriate subuid/subgid mappings."
-    )
-    (
-      lib.mkRemovedOptionModule
-      [ "virtualisation" "containers" "containersConf" "extraConfig" ]
-      "Use virtualisation.containers.containersConf.settings instead."
-    )
-  ];
 
   options.virtualisation.containers = {
 
@@ -31,7 +17,7 @@ in
       mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           This option enables the common /etc/containers configuration module.
         '';
       };
@@ -39,62 +25,74 @@ in
     ociSeccompBpfHook.enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable the OCI seccomp BPF hook";
+      description = lib.mdDoc "Enable the OCI seccomp BPF hook";
     };
 
     containersConf.settings = mkOption {
       type = toml.type;
       default = { };
-      description = "containers.conf configuration";
+      description = lib.mdDoc "containers.conf configuration";
     };
 
     containersConf.cniPlugins = mkOption {
       type = types.listOf types.package;
-      defaultText = ''
+      defaultText = literalExpression ''
         [
           pkgs.cni-plugins
         ]
       '';
-      example = lib.literalExample ''
+      example = literalExpression ''
         [
           pkgs.cniPlugins.dnsname
         ]
       '';
-      description = ''
+      description = lib.mdDoc ''
         CNI plugins to install on the system.
       '';
+    };
+
+    storage.settings = mkOption {
+      type = toml.type;
+      default = {
+        storage = {
+          driver = "overlay";
+          graphroot = "/var/lib/containers/storage";
+          runroot = "/run/containers/storage";
+        };
+      };
+      description = lib.mdDoc "storage.conf configuration";
     };
 
     registries = {
       search = mkOption {
         type = types.listOf types.str;
         default = [ "docker.io" "quay.io" ];
-        description = ''
+        description = lib.mdDoc ''
           List of repositories to search.
         '';
       };
 
       insecure = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           List of insecure repositories.
         '';
       };
 
       block = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
-        description = ''
+        description = lib.mdDoc ''
           List of blocked repositories.
         '';
       };
     };
 
     policy = mkOption {
-      default = {};
+      default = { };
       type = types.attrs;
-      example = lib.literalExample ''
+      example = literalExpression ''
         {
           default = [ { type = "insecureAcceptAnything"; } ];
           transports = {
@@ -104,10 +102,10 @@ in
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Signature verification policy file.
         If this option is empty the default policy file from
-        <literal>skopeo</literal> will be used.
+        `skopeo` will be used.
       '';
     };
 
@@ -129,13 +127,16 @@ in
     environment.etc."containers/containers.conf".source =
       toml.generate "containers.conf" cfg.containersConf.settings;
 
+    environment.etc."containers/storage.conf".source =
+      toml.generate "storage.conf" cfg.storage.settings;
+
     environment.etc."containers/registries.conf".source = toml.generate "registries.conf" {
       registries = lib.mapAttrs (n: v: { registries = v; }) cfg.registries;
     };
 
     environment.etc."containers/policy.json".source =
-      if cfg.policy != {} then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-      else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
+      if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
+      else "${pkgs.skopeo.policy}/default-policy.json";
   };
 
 }

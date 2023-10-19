@@ -1,21 +1,19 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libytnef";
-  version = "1.9.3";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "Yeraze";
     repo = "ytnef";
     rev = "v${version}";
-    sha256 = "07h48s5qf08503pp9kafqbwipdqghiif22ghki7z8j67gyp04l6l";
+    hash = "sha256-kQb45Da0T7wWi1IivA8Whk+ECL2nyFf7Gc0gK1HKj2c=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Yeraze's TNEF Stream Reader - for winmail.dat files";
     license = licenses.gpl2Plus;

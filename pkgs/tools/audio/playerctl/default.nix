@@ -1,20 +1,45 @@
-{ lib, stdenv, meson, ninja, fetchFromGitHub, glib, pkg-config, gtk-doc, docbook_xsl, gobject-introspection }:
+{ lib
+, stdenv
+, buildPackages
+, docbook_xsl
+, fetchFromGitHub
+, glib
+, gobject-introspection
+, gtk-doc
+, meson
+, mesonEmulatorHook
+, ninja
+, pkg-config
+, withDocs ? stdenv.hostPlatform.emulatorAvailable buildPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "playerctl";
-  version = "2.3.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "acrisci";
     repo = "playerctl";
     rev = "v${version}";
-    sha256 = "00z5c6amlxd3q42l7x8i0ngl627dxglgg5vikbbhjp9ms34xbxdn";
+    sha256 = "sha256-OiGKUnsKX0ihDRceZoNkcZcEAnz17h2j2QUOSVcxQEY=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config gtk-doc docbook_xsl gobject-introspection ];
+  nativeBuildInputs = [
+    docbook_xsl
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+  ] ++ lib.optionals (withDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
   buildInputs = [ glib ];
 
-  mesonFlags = [ "-Dbash-completions=true" ];
+  mesonFlags = [
+    "-Dbash-completions=true"
+    (lib.mesonBool "gtk-doc" withDocs)
+  ];
 
   meta = with lib; {
     description = "Command-line utility and library for controlling media players that implement MPRIS";
@@ -23,5 +48,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ puffnfresh ];
     broken = stdenv.hostPlatform.isDarwin;
+    mainProgram = "playerctl";
   };
 }

@@ -6,16 +6,20 @@
 # I'm only interested in making pstoedit convert to svg
 
 stdenv.mkDerivation rec {
-  name = "plotutils-2.6";
+  pname = "plotutils";
+  version = "2.6";
 
   src = fetchurl {
-    url = "mirror://gnu/plotutils/${name}.tar.gz";
+    url = "mirror://gnu/plotutils/plotutils-${version}.tar.gz";
     sha256 = "1arkyizn5wbgvbh53aziv3s6lmd3wm9lqzkhxb3hijlp1y124hjg";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libpng ];
-  patches = map fetchurl (import ./debian-patches.nix);
+  patches = map fetchurl (import ./debian-patches.nix)
+    # `pic2plot/gram.cc` uses the register storage class specifier, which is not supported in C++17.
+    # This prevents clang 16 from building plotutils because it defaults to C++17.
+    ++ [ ./c++17-register-usage-fix.patch ];
 
   preBuild = ''
     # Fix parallel building.

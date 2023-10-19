@@ -1,15 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, unrar }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, unrar }:
 
 buildPythonPackage rec {
   pname = "unrardll";
-  version = "0.1.4";
+  version = "0.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4149c0729cf96a0bae80360e7d94dc40af1088c8da7f6eb8d10e09b8632e92ad";
+    sha256 = "sha256-4QZ/4nu03iBO+PNpLyPZPF07QpL3iyksb8fcT3V0n3Y=";
   };
 
   buildInputs = [ unrar ];
+
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin "-headerpad_max_install_names";
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libunrar.so ${unrar}/lib/libunrar.so $out/lib/python*/site-packages/unrardll/unrar.*-darwin.so
+    install_name_tool -change libunrar.so ${unrar}/lib/libunrar.so build/lib.*/unrardll/unrar.*-darwin.so
+  '';
 
   pythonImportsCheck = [ "unrardll" ];
 

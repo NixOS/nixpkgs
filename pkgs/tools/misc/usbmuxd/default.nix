@@ -1,23 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libusb1, libimobiledevice }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libimobiledevice
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "1.1.1";
+  version = "1.1.1+date=2023-05-05";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = version;
-    sha256 = "0a2xgrb4b3ndam448z74wh1267nmrz1wcbpx4xz86pwbdc93snab";
+    rev = "01c94c77f59404924f1c46d99c4e5e0c7817281b";
+    hash = "sha256-WqbobkzlJ9g5fb9S2QPi3qdpCLx3pxtNlT7qDI63Zp4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedBuildInputs = [ libimobiledevice libusb1 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --with-udevrulesdir=$out/lib/udev/rules.d"
-    configureFlags="$configureFlags --with-systemdsystemunitdir=$out/lib/systemd/system"
+  propagatedBuildInputs = [
+    libimobiledevice
+    libusb1
+  ];
+
+  preAutoreconf = ''
+    export RELEASE_VERSION=${version}
   '';
+
+  configureFlags = [
+    "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/usbmuxd";
@@ -32,7 +50,7 @@ stdenv.mkDerivation rec {
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ infinisil ];
   };
 }

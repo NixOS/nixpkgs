@@ -1,25 +1,37 @@
 { lib
 , buildPythonPackage
-, isPy3k
+, cryptography
+, defusedxml
 , fetchFromGitHub
+, importlib-resources
+, poetry-core
+, pyasn1
+, pymongo
+, pyopenssl
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, requests
+, responses
+, setuptools
 , substituteAll
+, xmlschema
 , xmlsec
-, cryptography, defusedxml, pyopenssl, dateutil, pytz, requests, six
-, mock, pyasn1, pymongo, pytest, responses, xmlschema, importlib-resources
 }:
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "6.5.1";
+  version = "7.4.2";
+  format = "pyproject";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.9";
 
-  # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1gh74csjk6af23agyigk4id79s4li1xnkmbpp73aqyvlly2kd0b7";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f8qd1Mfy32CYH9/PshfMMBviDg7OhOPlwz69bPjlYbg=";
   };
 
   patches = [
@@ -30,36 +42,51 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # fix failing tests on systems with 32bit time_t
+    # Fix failing tests on systems with 32bit time_t
     sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
   '';
 
-  propagatedBuildInputs = [
-    cryptography
-    dateutil
-    defusedxml
-    importlib-resources
-    pyopenssl
-    pytz
-    requests
-    six
-    xmlschema
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  checkInputs = [ mock pyasn1 pymongo pytest responses ];
+  propagatedBuildInputs = [
+    cryptography
+    defusedxml
+    pyopenssl
+    python-dateutil
+    pytz
+    requests
+    setuptools
+    xmlschema
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
-  # Disabled tests try to access the network
-  checkPhase = ''
-    py.test -k "not test_load_extern_incommon \
-            and not test_load_remote_encoding \
-            and not test_load_external \
-            and not test_conf_syslog"
-  '';
+  nativeCheckInputs = [
+    pyasn1
+    pymongo
+    pytestCheckHook
+    responses
+  ];
+
+  disabledTests = [
+    # Disabled tests try to access the network
+    "test_load_extern_incommon"
+    "test_load_remote_encoding"
+    "test_load_external"
+    "test_conf_syslog"
+  ];
+
+  pythonImportsCheck = [
+    "saml2"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/rohe/pysaml2";
     description = "Python implementation of SAML Version 2 Standard";
+    homepage = "https://github.com/IdentityPython/pysaml2";
+    changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }

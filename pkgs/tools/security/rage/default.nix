@@ -1,25 +1,30 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles
-, Foundation, Security, libiconv }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, Foundation
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.6.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1vag448zpjyplcjpf1ir81l8ip3yxm9vkrxffqr78zslb4k6hw2w";
+    hash = "sha256-hFuuwmwe0ti4Y8mSJyNqUIhZjFC6qtv6W5cwtNjPUFQ=";
   };
 
-  cargoSha256 = "06jfhq9vnkq5g5bw1zl2sxsih63yajcyk9zaizhzkdsbhydr4955";
+  cargoHash = "sha256-1gtLWU6uiWzUfYy9y3pb2vcnUC3H+Mf9rglmqNd989M=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Foundation
-    Security
-    libiconv
   ];
 
   # cargo test has an x86-only dependency
@@ -41,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/str4d/rage/raw/v${version}/rage/CHANGELOG.md";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ marsam ryantm ];
+    mainProgram = "rage";
   };
 }

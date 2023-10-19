@@ -3,17 +3,30 @@
 , file
 , legacySupport ? false
 , static ? stdenv.hostPlatform.isStatic
+# these need to be ran on the host, thus disable when cross-compiling
+, buildContrib ? stdenv.hostPlatform == stdenv.buildPlatform
+, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
+, nix-update-script
+
+# for passthru.tests
+, libarchive
+, rocksdb
+, arrow-cpp
+, libzip
+, curl
+, python3Packages
+, haskellPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "zstd";
-  version = "1.4.9";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "zstd";
     rev = "v${version}";
-    sha256 = "18alxnym54gswsmsr5ra82q4k1q5fyzsyx0jykb2sk2nkpvx7334";
+    sha256 = "sha256-tHHHIsQU7vJySrVhJuMKUSq11MzkmC+Pcsj00uFJdnQ=";
   };
 
   nativeBuildInputs = [ cmake ]
@@ -36,10 +49,13 @@ stdenv.mkDerivation rec {
       tests/playTests.sh
   '';
 
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
+
   cmakeFlags = lib.attrsets.mapAttrsToList
     (name: value: "-DZSTD_${name}:BOOL=${if value then "ON" else "OFF"}") {
       BUILD_SHARED = !static;
       BUILD_STATIC = static;
+      BUILD_CONTRIB = buildContrib;
       PROGRAMS_LINK_SHARED = !static;
       LEGACY_SUPPORT = legacySupport;
       BUILD_TESTS = doCheck;
@@ -51,8 +67,8 @@ stdenv.mkDerivation rec {
     mkdir -p build_ && cd $_
   '';
 
-  checkInputs = [ file ];
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  nativeCheckInputs = [ file ];
+  inherit doCheck;
   checkPhase = ''
     runHook preCheck
     # Patch shebangs for playTests
@@ -62,17 +78,36 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
+    mkdir -p $bin/bin
     substituteInPlace ../programs/zstdgrep \
       --replace ":-grep" ":-${gnugrep}/bin/grep" \
       --replace ":-zstdcat" ":-$bin/bin/zstdcat"
 
     substituteInPlace ../programs/zstdless \
       --replace "zstdcat" "$bin/bin/zstdcat"
-  '';
+  '' + lib.optionalString buildContrib (
+    ''
+      cp contrib/pzstd/pzstd $bin/bin/pzstd
+    '' + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change @rpath/libzstd.1.dylib $out/lib/libzstd.1.dylib $bin/bin/pzstd
+    ''
+  );
 
   outputs = [ "bin" "dev" ]
     ++ lib.optional stdenv.hostPlatform.isUnix "man"
     ++ [ "out" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit libarchive rocksdb arrow-cpp;
+      libzip = libzip.override { withZstd = true; };
+      curl = curl.override { zstdSupport = true; };
+      python-zstd = python3Packages.zstd;
+      haskell-zstd = haskellPackages.zstd;
+      haskell-hs-zstd = haskellPackages.hs-zstd;
+    };
+  };
 
   meta = with lib; {
     description = "Zstandard real-time compression algorithm";

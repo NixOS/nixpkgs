@@ -1,52 +1,99 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
+, cargo
 , hypothesis
-, dataclasses
-, hypothesmith
+, libiconv
 , pytestCheckHook
+, python
+, pythonOlder
 , pyyaml
+, rustPlatform
+, rustc
+, setuptools-rust
+, setuptools-scm
 , typing-extensions
 , typing-inspect
-, black
-, isort
 }:
 
 buildPythonPackage rec {
   pname = "libcst";
-  version = "0.3.18";
+  version = "1.1.0";
+  format = "pyproject";
 
-  # Some files for tests missing from PyPi
-  # https://github.com/Instagram/LibCST/issues/331
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "instagram";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-19yGaKBLpGASSPv/aSX0kx9lh2JxKExHJDKKtuBbuqI=";
+    repo = "libcst";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kFs7edBWz0GRbgbLDmtpUVi5R+6mYXsJSvceOoPW9ck=";
   };
 
-  disabled = pythonOlder "3.6";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "${src.name}/${cargoRoot}";
+    name = "${pname}-${version}";
+    hash = "sha256-fhaHiz64NH6S61fSXj4gNxxcuB+ECxWSSmG5StiFr1k=";
+  };
 
-  propagatedBuildInputs = [ hypothesis typing-extensions typing-inspect pyyaml ]
-    ++ lib.optional (pythonOlder "3.7") dataclasses;
+  cargoRoot = "native";
 
-  checkInputs = [ black hypothesmith isort pytestCheckHook ];
-
-  # can't run tests due to circular dependency on hypothesmith -> licst
-  doCheck = false;
-
-  preCheck = ''
-    python -m libcst.codegen.generate visitors
-    python -m libcst.codegen.generate return_types
+  postPatch = ''
+    # avoid infinite recursion by not formatting the release files
+    substituteInPlace libcst/codegen/generate.py \
+      --replace '"ufmt"' '"true"'
   '';
 
-  pythonImportsCheck = [ "libcst" ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-rust
+    setuptools-scm
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+
+  propagatedBuildInputs = [
+    typing-extensions
+    typing-inspect
+    pyyaml
+  ];
+
+  nativeCheckInputs = [
+    hypothesis
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # otherwise import libcst.native fails
+    cp build/lib.*/libcst/native.* libcst/
+
+    ${python.interpreter} -m libcst.codegen.generate visitors
+    ${python.interpreter} -m libcst.codegen.generate return_types
+
+    # Can't run all tests due to circular dependency on hypothesmith -> libcst
+    rm -r {libcst/tests,libcst/codegen/tests,libcst/m*/tests}
+  '';
+
+  disabledTests = [
+    # No files are generated
+    "test_codemod_formatter_error_input"
+  ];
+
+  pythonImportsCheck = [
+    "libcst"
+  ];
 
   meta = with lib; {
-    description = "A Concrete Syntax Tree (CST) parser and serializer library for Python.";
+    description = "Concrete Syntax Tree (CST) parser and serializer library for Python";
     homepage = "https://github.com/Instagram/libcst";
+    changelog = "https://github.com/Instagram/LibCST/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 psfl ];
-    maintainers = with maintainers; [ ruuda SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

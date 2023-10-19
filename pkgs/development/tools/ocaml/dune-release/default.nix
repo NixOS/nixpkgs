@@ -1,8 +1,8 @@
-{ lib, buildDunePackage, fetchurl, makeWrapper
-, curly, fmt, bos, cmdliner, re, rresult, logs
-, odoc, opam-format, opam-core, opam-state, yojson
+{ lib, buildDunePackage, fetchurl, makeWrapper, fetchpatch
+, curly, fmt, bos, cmdliner, re, rresult, logs, fpath
+, odoc, opam-format, opam-core, opam-state, yojson, astring
 , opam, git, findlib, mercurial, bzip2, gnutar, coreutils
-, alcotest, mdx
+, alcotest
 }:
 
 # don't include dune as runtime dep, so user can
@@ -10,38 +10,36 @@
 let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
 in buildDunePackage rec {
   pname = "dune-release";
-  version = "1.4.0";
+  version = "2.0.0";
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.06";
+  minimalOCamlVersion = "4.06";
 
   src = fetchurl {
     url = "https://github.com/ocamllabs/${pname}/releases/download/${version}/${pname}-${version}.tbz";
-    sha256 = "1frinv1rsrm30q6jclicsswpshkdwwdgxx7sp6q9w4c2p211n1ln";
+    hash = "sha256-u8TgaoeDaDLenu3s1Km/Kh85WHMtvUy7C7Q+OY588Ss=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
-                  rresult logs odoc bos yojson ];
-  checkInputs = [ alcotest mdx ] ++ runtimeInputs;
+                  rresult logs odoc bos yojson astring fpath ];
+  nativeCheckInputs = [ odoc ];
+  checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
-
-  useDune2 = true;
 
   postPatch = ''
     # remove check for curl in PATH, since curly is patched
     # to have a fixed path to the binary in nix store
     sed -i '/must_exist (Cmd\.v "curl"/d' lib/github.ml
+  '';
 
-    # fix problems with git invocations in tests
-    for f in tests/bin/{delegate_info,errors,tag,no_doc,x-commit-hash}/run.t; do
-      # set bogus user info in git so git commit doesn't fail
-      sed -i '/git init/ a \    $ git config user.name test; git config user.email "pseudo@pseudo.invalid"' "$f"
-      # surpress hint to set default branch name
-      substituteInPlace "$f" --replace "git init" "git init -b main"
-    done
+  preCheck = ''
+    export HOME=$TMPDIR
+    git config --global user.email "nix-builder@nixos.org"
+    git config --global user.name "Nix Builder"
 
-    # ignore weird yes error message
-    sed -i 's/yes |/yes 2>\/dev\/null |/' tests/bin/no_doc/run.t
+    # it fails when it tries to reference "./make_check_deterministic.exe"
+    rm -r tests/bin/check
   '';
 
   # tool specific env vars have been deprecated, use PATH
@@ -53,6 +51,7 @@ in buildDunePackage rec {
   meta = with lib; {
     description = "Release dune packages in opam";
     homepage = "https://github.com/ocamllabs/dune-release";
+    changelog = "https://github.com/tarides/dune-release/blob/${version}/CHANGES.md";
     license = licenses.isc;
     maintainers = with maintainers; [ sternenseemann ];
   };

@@ -11,18 +11,18 @@
 , liblxqt
 , libqtxdg
 , sudo
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "0.17.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "10s8k83mkqiakh18mh1l7idjp95cy49rg8dh14cy159dk8mchcd0";
+    sha256 = "S+NWoF1l0HPOwceWwhfmGo7Xrm+6GeoMpJbGpK16rZs=";
   };
 
   nativeBuildInputs = [
@@ -41,13 +41,13 @@ mkDerivation rec {
     sudo
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-sudo";
     description = "GUI frontend for sudo/su";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

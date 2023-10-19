@@ -1,120 +1,81 @@
-{ lib, stdenv
-, python27Packages
+{ lib
+, callPackage
 , fetchFromGitHub
-, makeWrapper
-, # re2c deps
-  autoreconfHook
-, # py-yajl deps
-  git
-, # oil deps
-  readline
-, cmark
-, file
-, glibcLocales
-, oilPatches ? [ ]
+, python27
+, fetchPypi
+, ...
 }:
 
 /*
-Notes on specific dependencies:
-- if/when python2.7 is removed from nixpkgs, this may need to figure
+  Notes on specific dependencies:
+  - if/when python2.7 is removed from nixpkgs, this may need to figure
   out how to build oil's vendored python2
-- I'm not sure if glibcLocales is worth the addition here. It's to fix
+  - I'm not sure if glibcLocales is worth the addition here. It's to fix
   a libc test oil runs. My oil fork just disabled the libc tests, but
   I haven't quite decided if that's the right long-term call, so I
   didn't add a patch for it here yet.
 */
 
 rec {
-  # had to add this as well; 1.3 causes a break here; sticking
-  # to oil's official 1.0.3 dep for now.
-  re2c = stdenv.mkDerivation rec {
-    pname = "re2c";
-    version = "1.0.3";
-    sourceRoot = "${src.name}/re2c";
-    src = fetchFromGitHub {
-      owner = "skvadrik";
-      repo = "re2c";
-      rev = version;
-      sha256 = "0grx7nl9fwcn880v5ssjljhcb9c5p2a6xpwil7zxpmv0rwnr3yqi";
-    };
-    nativeBuildInputs = [ autoreconfHook ];
-    preCheck = ''
-      patchShebangs run_tests.sh
-    '';
+  # binlore = callPackage ./binlore.nix { };
+  oil = callPackage ./oildev.nix {
+    inherit python27;
+    inherit six;
+    inherit typing;
   };
+  configargparse = python27.pkgs.buildPythonPackage rec {
+    pname = "configargparse";
+    version = "1.5.3";
 
-  py-yajl = python27Packages.buildPythonPackage rec {
-    pname = "oil-pyyajl-unstable";
-    version = "2019-12-05";
     src = fetchFromGitHub {
-      owner = "oilshell";
-      repo = "py-yajl";
-      rev = "eb561e9aea6e88095d66abcc3990f2ee1f5339df";
-      sha256 = "17hcgb7r7cy8r1pwbdh8di0nvykdswlqj73c85k6z8m0filj3hbh";
-      fetchSubmodules = true;
+      owner = "bw2";
+      repo = "ConfigArgParse";
+      rev = "v${version}";
+      sha256 = "1dsai4bilkp2biy9swfdx2z0k4akw4lpvx12flmk00r80hzgbglz";
     };
-    # just for submodule IIRC
-    nativeBuildInputs = [ git ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "configargparse" ];
+
+    meta = with lib; {
+      description = "A drop-in replacement for argparse";
+      homepage = "https://github.com/bw2/ConfigArgParse";
+      license = licenses.mit;
+    };
   };
+  six = python27.pkgs.buildPythonPackage rec {
+    pname = "six";
+    version = "1.16.0";
 
-  # resholve's primary dependency is this developer build of the oil shell.
-  oildev = python27Packages.buildPythonPackage rec {
-    pname = "oildev-unstable";
-    version = "2021-02-26";
-
-    src = fetchFromGitHub {
-      owner = "oilshell";
-      repo = "oil";
-      rev = "11c6bd3ca0e126862c7a1f938c8510779837affa";
-      hash = "sha256-UTQywtx+Dn1/qx5uocqgGn7oFYW4R5DbuiRNF8t/BzY=";
-
-      /*
-      It's not critical to drop most of these; the primary target is
-      the vendored fork of Python-2.7.13, which is ~ 55M and over 3200
-      files, dozens of which get interpreter script patches in fixup.
-      */
-      extraPostFetch = ''
-        rm -rf Python-2.7.13 benchmarks metrics py-yajl rfc gold web testdata services demo devtools cpp
-      '';
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926";
     };
 
-    # TODO: not sure why I'm having to set this for nix-build...
-    #       can anyone tell if I'm doing something wrong?
-    SOURCE_DATE_EPOCH = 315532800;
-
-    # These aren't, strictly speaking, nix/nixpkgs specific, but I've
-    # had hell upstreaming them. Pulling from resholve source and
-    # passing in from resholve.nix
-    patches = oilPatches;
-
-    buildInputs = [ readline cmark py-yajl ];
-
-    nativeBuildInputs = [ re2c file makeWrapper ];
-
-    propagatedBuildInputs = with python27Packages; [ six typing ];
-
-    doCheck = true;
-
-    preBuild = ''
-      build/dev.sh all
-    '';
-
-    postPatch = ''
-      patchShebangs asdl build core doctools frontend native oil_lang
-    '';
-
-    _NIX_SHELL_LIBCMARK = "${cmark}/lib/libcmark${stdenv.hostPlatform.extensions.sharedLibrary}";
-
-    # See earlier note on glibcLocales
-    LOCALE_ARCHIVE = lib.optionalString (stdenv.buildPlatform.libc == "glibc") "${glibcLocales}/lib/locale/locale-archive";
+    doCheck = false;
 
     meta = {
-      description = "A new unix shell";
-      homepage = "https://www.oilshell.org/";
-      license = with lib.licenses; [
-        psfl # Includes a portion of the python interpreter and standard library
-        asl20 # Licence for Oil itself
-      ];
+      description = "A Python 2 and 3 compatibility library";
+      homepage = "https://pypi.python.org/pypi/six/";
+      license = lib.licenses.mit;
+    };
+  };
+  typing = python27.pkgs.buildPythonPackage rec {
+    pname = "typing";
+    version = "3.10.0.0";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "13b4ad211f54ddbf93e5901a9967b1e07720c1d1b78d596ac6a439641aa1b130";
+    };
+
+    doCheck = false;
+
+    meta = with lib; {
+      description = "Backport of typing module to Python versions older than 3.5";
+      homepage = "https://docs.python.org/3/library/typing.html";
+      license = licenses.psfl;
     };
   };
 }

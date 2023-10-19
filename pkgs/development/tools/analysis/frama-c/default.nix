@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, makeWrapper, writeText
-, autoconf, ncurses, graphviz, doxygen
+{ lib, stdenv, fetchurl, fetchpatch, makeWrapper, writeText
+, graphviz, doxygen
 , ocamlPackages, ltl2ba, coq, why3
 , gdk-pixbuf, wrapGAppsHook
 }:
@@ -8,14 +8,26 @@ let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
     apron.dev
+    bigarray-compat
     biniou
     camlzip
     easy-format
-    menhir
+    menhirLib
     mlgmpidl
     num
     ocamlgraph
+    ppx_deriving
+    ppx_deriving_yojson
+    ppx_import
+    stdlib-shims
     why3
+    re
+    result
+    seq
+    sexplib
+    sexplib0
+    parsexp
+    base
     yojson
     zarith
   ];
@@ -24,28 +36,38 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "22.0";
-  slang   = "Titanium";
+  version = "27.1";
+  slang   = "Cobalt";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "1mq1fijka95ydrla486yr4w6wdl9l7vmp512s1q00b0p6lmfwmkh";
+    url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    hash = "sha256-WxNXShaliXHCeQm+6Urn83sX2JeFK0DHaKPU4uCeOdI=";
   };
 
-  preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
+  postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
-  nativeBuildInputs = [ autoconf wrapGAppsHook ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhir camlzip
-    lablgtk coq graphviz zarith apron why3 mlgmpidl doxygen
+    dune-site dune-configurator
+    ltl2ba ocamlgraph yojson menhirLib camlzip
+    lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+    ppx_deriving ppx_import ppx_deriving_yaml ppx_deriving_yojson
     gdk-pixbuf
   ];
 
-  enableParallelBuilding = true;
+  buildPhase = ''
+    runHook preBuild
+    dune build -j$NIX_BUILD_CORES --release @install
+    runHook postBuild
+  '';
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   preFixup = ''
-     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
+     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath}:$out/lib/)
   '';
 
   # Allow loading of external Frama-C plugins

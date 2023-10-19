@@ -1,16 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, desktop-file-utils, gtk2, libpng, exiv2, lcms
+{ lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, desktop-file-utils, gtk2, libpng, exiv2, lcms
 , intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl}:
 
 stdenv.mkDerivation rec {
   pname = "viewnior";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "hellosiyan";
     repo = "Viewnior";
     rev = "${pname}-${version}";
-    sha256 = "0y4hk3vq8psba5k615w18qj0kbdfp5w0lm98nv5apy6hmcpwfyig";
+    hash = "sha256-LTahMmcAqgqviUxR624kTozJGTniAAGWKo1ZqXjoG5M=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "viewnior-1.8-change-exiv2-AutoPtr-to-unique_ptr.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/viewnior/files/viewnior-1.8-change-exiv2-AutoPtr-to-unique_ptr.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
+      hash = "sha256-O3/d7qMiOsYJmz7ekoLM6oaHcuYjEbAfPFuDUWSybfE=";
+    })
+    (fetchpatch {
+      name = "viewnior-1.8-add-support-for-exiv-0.28.0-errors.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/viewnior/files/viewnior-1.8-add-support-for-exiv-0.28.0-errors.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
+      hash = "sha256-Zjc4CIlelAkbyvX2F1yo/qJjUajtAgF4+FoHWFEIPWY=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

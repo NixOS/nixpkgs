@@ -4,7 +4,7 @@
 , pythonOlder
 , pybind11
 , pytestCheckHook
-, dateutil
+, python-dateutil
 , doxygen
 , python
 , pelican
@@ -13,22 +13,22 @@
 
 buildPythonPackage rec {
   pname = "pytomlpp";
-  version = "0.3.5";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
     owner = "bobfang1992";
     repo = pname;
-    rev = version;
+    rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "1h06a2r0f5q4mml485113mn7a7585zmhqsk2p1apcybyydllcqda";
+    hash = "sha256-QJeXvj1M3Vq5ctmx7RhczONsPRXAecv3WhJgKWtNK+M=";
   };
 
   buildInputs = [ pybind11 ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
 
-    dateutil
+    python-dateutil
     doxygen
     python
     pelican
@@ -37,6 +37,14 @@ buildPythonPackage rec {
 
   # pelican requires > 2.7
   doCheck = !pythonOlder "3.6";
+
+  disabledTests = [
+    # incompatible with pytest7
+    # https://github.com/bobfang1992/pytomlpp/issues/66
+    "test_loads_valid_toml_files"
+    "test_round_trip_for_valid_toml_files"
+    "test_decode_encode_binary"
+  ];
 
   preCheck = ''
     cd tests

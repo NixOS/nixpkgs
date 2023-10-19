@@ -1,30 +1,79 @@
-{ lib, buildPythonPackage, fetchPypi
-, setuptools, setuptools_scm, django, dateutil, whoosh, pysolr
-, coverage, mock, nose, geopy, requests }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+
+# build dependencies
+, setuptools
+, setuptools-scm
+
+# dependencies
+, django
+
+# tests
+, elasticsearch
+, geopy
+, nose
+, pysolr
+, python-dateutil
+, requests
+, whoosh
+}:
 
 buildPythonPackage rec {
   pname = "django-haystack";
-  version = "3.0";
+  version = "3.2.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d490f920afa85471dd1fa5000bc8eff4b704daacbe09aee1a64e75cbc426f3be";
+    hash = "sha256-l+MZeu/CJf5AW28XYAolNL+CfLTWdDEwwgvBoG9yk6Q=";
   };
 
-  checkInputs = [ pysolr whoosh dateutil geopy coverage nose mock coverage requests ];
-  propagatedBuildInputs = [ django setuptools ];
-  nativeBuildInputs = [ setuptools_scm ];
-
   postPatch = ''
-    sed -i 's/geopy==/geopy>=/' setup.py
+    substituteInPlace setup.py \
+      --replace "geopy==" "geopy>="
   '';
 
-  # ImportError: cannot import name django.contrib.gis.geos.prototypes
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
+
+  buildInputs = [
+    django
+  ];
+
+  passthru.optional-dependencies = {
+    elasticsearch = [
+      elasticsearch
+    ];
+  };
+
+  doCheck = lib.versionOlder django.version "4";
+
+  nativeCheckInputs = [
+    geopy
+    nose
+    pysolr
+    python-dateutil
+    requests
+    whoosh
+  ]
+  ++ passthru.optional-dependencies.elasticsearch;
+
+  checkPhase = ''
+    runHook preCheck
+    python test_haystack/run_tests.py
+    runHook postCheck
+  '';
 
   meta = with lib; {
-    description = "Modular search for Django";
+    description = "Pluggable search for Django";
     homepage = "http://haystacksearch.org/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

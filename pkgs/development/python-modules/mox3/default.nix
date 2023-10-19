@@ -2,20 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, python
+, pythonAtLeast
 , subunit
 , testrepository
 , testtools
 , six
 , pbr
 , fixtures
-, isPy36
 }:
 
 buildPythonPackage rec {
   pname = "mox3";
   version = "1.1.0";
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;

@@ -1,7 +1,10 @@
-{ buildPythonApplication, lib, fetchFromGitHub
+{ buildPythonApplication
+, lib
+, fetchFromGitHub
 
-# build inputs
+  # build inputs
 , atk
+, file
 , gdk-pixbuf
 , glib-networking
 , gnome-desktop
@@ -13,19 +16,26 @@
 , webkitgtk
 , wrapGAppsHook
 
-# python dependencies
+  # check inputs
+, xvfb-run
+, nose2
+, flake8
+
+  # python dependencies
+, certifi
 , dbus-python
 , distro
 , evdev
 , lxml
 , pillow
 , pygobject3
+, pypresence
 , pyyaml
 , requests
-, keyring
-, python_magic
+, protobuf
+, moddb
 
-# commands that lutris needs
+  # commands that lutris needs
 , xrandr
 , pciutils
 , psmisc
@@ -36,15 +46,15 @@
 , p7zip
 , xgamma
 , libstrangle
-, wine
 , fluidsynth
 , xorgserver
 , xorg
+, util-linux
 }:
 
 let
   # See lutris/util/linux.py
-  binPath = lib.makeBinPath [
+  requiredTools = [
     xrandr
     pciutils
     psmisc
@@ -55,76 +65,88 @@ let
     p7zip
     xgamma
     libstrangle
-    wine
     fluidsynth
     xorgserver
     xorg.setxkbmap
     xorg.xkbcomp
+    # bypass mount suid wrapper which does not work in fhsenv
+    util-linux
   ];
+in
+buildPythonApplication rec {
+  pname = "lutris-unwrapped";
+  version = "0.5.13";
 
-  gstDeps = with gst_all_1; [
+  src = fetchFromGitHub {
+    owner = "lutris";
+    repo = "lutris";
+    rev = "v${version}";
+    hash = "sha256-ectrfbIkPhIqfhkavDpBCNdLPnGQhCnfFYwTf2IxB50=";
+  };
+
+  nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    glib-networking
+    gnome-desktop
+    gtk3
+    libnotify
+    pango
+    webkitgtk
+  ] ++ (with gst_all_1; [
     gst-libav
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-  ];
+  ]);
 
-in buildPythonApplication rec {
-  pname = "lutris-original";
-  version = "0.5.8.3";
-
-  src = fetchFromGitHub {
-    owner = "lutris";
-    repo = "lutris";
-    rev = "v${version}";
-    sha256 = "sha256-NnWIP9oEndk/hDo5Z33pkmZ61pxT/ScmZ4YpS2ajK/8=";
-  };
-
-  nativeBuildInputs = [ wrapGAppsHook ];
-  buildInputs = [
-    atk
-    gdk-pixbuf
-    glib-networking
-    gnome-desktop
-    gobject-introspection
-    gtk3
-    libnotify
-    pango
-    webkitgtk
-  ] ++ gstDeps;
-
+  # See `install_requires` in https://github.com/lutris/lutris/blob/master/setup.py
   propagatedBuildInputs = [
-    evdev
-    distro
-    lxml
-    pyyaml
-    pygobject3
-    requests
-    pillow
+    certifi
     dbus-python
-    keyring
-    python_magic
+    distro
+    evdev
+    lxml
+    pillow
+    pygobject3
+    pypresence
+    pyyaml
+    requests
+    protobuf
+    moddb
   ];
+
+  postPatch = ''
+    substituteInPlace lutris/util/magic.py \
+      --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
+  '';
+
+  nativeCheckInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
+  checkPhase = ''
+    runHook preCheck
+
+    export HOME=$PWD
+    xvfb-run -s '-screen 0 800x600x24' make test
+
+    runHook postCheck
+  '';
 
   # avoid double wrapping
   dontWrapGApps = true;
   makeWrapperArgs = [
-    "--prefix PATH : ${binPath}"
+    "--prefix PATH : ${lib.makeBinPath requiredTools}"
     "\${gappsWrapperArgs[@]}"
   ];
-  # needed for glib-schemas to work correctly (will crash on dialogues otherwise)
-  # see https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
-
-  preCheck = "export HOME=$PWD";
 
   meta = with lib; {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
+    mainProgram = "lutris";
   };
 }

@@ -50,19 +50,22 @@ while (@ARGV) {
     }
 }
 
+my $bucket;
 
-# S3 setup.
-my $aws_access_key_id = $ENV{'AWS_ACCESS_KEY_ID'} or die "AWS_ACCESS_KEY_ID not set\n";
-my $aws_secret_access_key = $ENV{'AWS_SECRET_ACCESS_KEY'} or die "AWS_SECRET_ACCESS_KEY not set\n";
+if (not defined $ENV{DEBUG}) {
+    # S3 setup.
+    my $aws_access_key_id = $ENV{'AWS_ACCESS_KEY_ID'} or die "AWS_ACCESS_KEY_ID not set\n";
+    my $aws_secret_access_key = $ENV{'AWS_SECRET_ACCESS_KEY'} or die "AWS_SECRET_ACCESS_KEY not set\n";
 
-my $s3 = Net::Amazon::S3->new(
-    { aws_access_key_id     => $aws_access_key_id,
-      aws_secret_access_key => $aws_secret_access_key,
-      retry                 => 1,
-      host                  => "s3-eu-west-1.amazonaws.com",
-    });
+    my $s3 = Net::Amazon::S3->new(
+        { aws_access_key_id     => $aws_access_key_id,
+          aws_secret_access_key => $aws_secret_access_key,
+          retry                 => 1,
+          host                  => "s3-eu-west-1.amazonaws.com",
+        });
 
-my $bucket = $s3->bucket("nixpkgs-tarballs") or die;
+    $bucket = $s3->bucket("nixpkgs-tarballs") or die;
+}
 
 my $doWrite = 0;
 my $cacheFile = ($ENV{"HOME"} or die "\$HOME is not set") . "/.cache/nix/copy-tarballs";
@@ -159,63 +162,86 @@ elsif (defined $expr) {
     # Check every fetchurl call discovered by find-tarballs.nix.
     my $mirrored = 0;
     my $have = 0;
-    foreach my $fetch (sort { $a->{url} cmp $b->{url} } @{$fetches}) {
-        my $url = $fetch->{url};
+    foreach my $fetch (sort { $a->{urls}->[0] cmp $b->{urls}->[0] } @{$fetches}) {
+        my $urls = $fetch->{urls};
         my $algo = $fetch->{type};
         my $hash = $fetch->{hash};
         my $name = $fetch->{name};
+        my $isPatch = $fetch->{isPatch};
 
-        if (defined $ENV{DEBUG}) {
-            print "$url $algo $hash\n";
+        if ($isPatch) {
+            print STDERR "skipping $urls->[0] (support for patches is missing)\n";
             next;
         }
 
-        if ($url !~ /^http:/ && $url !~ /^https:/ && $url !~ /^ftp:/ && $url !~ /^mirror:/) {
-            print STDERR "skipping $url (unsupported scheme)\n";
-            next;
+        if ($hash =~ /^([a-z0-9]+)-([A-Za-z0-9+\/=]+)$/) {
+            $algo = $1;
+            $hash = `nix hash to-base16 $hash` or die;
+            chomp $hash;
         }
 
-        next if defined $exclude && $url =~ /$exclude/;
+        next unless $algo =~ /^[a-z0-9]+$/;
 
-        if (alreadyMirrored($algo, $hash)) {
-            $have++;
-            next;
+        # Convert non-SRI base-64 to base-16.
+        if ($hash =~ /^[A-Za-z0-9+\/=]+$/) {
+            $hash = `nix hash to-base16 --type '$algo' $hash` or die;
+            chomp $hash;
         }
 
         my $storePath = makeFixedOutputPath(0, $algo, $hash, $name);
 
-        print STDERR "mirroring $url ($storePath)...\n";
+        for my $url (@$urls) {
+            if (defined $ENV{DEBUG}) {
+                print "$url $algo $hash\n";
+                next;
+            }
 
-        if ($dryRun) {
+            if ($url !~ /^http:/ && $url !~ /^https:/ && $url !~ /^ftp:/ && $url !~ /^mirror:/) {
+                print STDERR "skipping $url (unsupported scheme)\n";
+                next;
+            }
+
+            next if defined $exclude && $url =~ /$exclude/;
+
+            if (alreadyMirrored($algo, $hash)) {
+                $have++;
+                last;
+            }
+
+            print STDERR "mirroring $url ($storePath, $algo, $hash)...\n";
+
+            if ($dryRun) {
+                $mirrored++;
+                last;
+            }
+
+            # Substitute the output.
+            if (!isValidPath($storePath)) {
+                system("nix-store", "-r", $storePath);
+            }
+
+            # Otherwise download the file using nix-prefetch-url.
+            if (!isValidPath($storePath)) {
+                $ENV{QUIET} = 1;
+                $ENV{PRINT_PATH} = 1;
+                my $fh;
+                my $pid = open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
+                waitpid($pid, 0) or die;
+                if ($? != 0) {
+                    print STDERR "failed to fetch $url: $?\n";
+                    next;
+                }
+                <$fh>; my $storePath2 = <$fh>; chomp $storePath2;
+                if ($storePath ne $storePath2) {
+                    warn "strange: $storePath != $storePath2\n";
+                    next;
+                }
+            }
+
+            uploadFile($storePath, $url);
             $mirrored++;
-            next;
+            last;
         }
-
-        # Substitute the output.
-        if (!isValidPath($storePath)) {
-            system("nix-store", "-r", $storePath);
-        }
-
-        # Otherwise download the file using nix-prefetch-url.
-        if (!isValidPath($storePath)) {
-            $ENV{QUIET} = 1;
-            $ENV{PRINT_PATH} = 1;
-            my $fh;
-            my $pid = open($fh, "-|", "nix-prefetch-url", "--type", $algo, $url, $hash) or die;
-            waitpid($pid, 0) or die;
-            if ($? != 0) {
-                print STDERR "failed to fetch $url: $?\n";
-                next;
-            }
-            <$fh>; my $storePath2 = <$fh>; chomp $storePath2;
-            if ($storePath ne $storePath2) {
-                warn "strange: $storePath != $storePath2\n";
-                next;
-            }
-        }
-
-        uploadFile($storePath, $url);
-        $mirrored++;
     }
 
     print STDERR "mirrored $mirrored files, already have $have files\n";

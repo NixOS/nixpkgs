@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, grim, gawk, swaylock
-, imagemagick, getopt, fontconfig, makeWrapper
+{ lib, stdenv, fetchFromGitHub, coreutils, grim, gawk, jq, swaylock
+, imagemagick, getopt, fontconfig, wmctrl, makeWrapper, bash
 }:
 
 let
@@ -7,20 +7,22 @@ let
     coreutils
     grim
     gawk
+    jq
     swaylock
     imagemagick
     getopt
     fontconfig
+    wmctrl
   ];
 in stdenv.mkDerivation rec {
   pname = "swaylock-fancy-unstable";
-  version = "2020-02-22";
+  version = "2021-10-11";
 
   src = fetchFromGitHub {
     owner = "Big-B";
     repo = "swaylock-fancy";
-    rev = "5cf977b12f372740aa7b7e5a607d583f93f1e028";
-    sha256 = "0laqwzi6069sgz91i69438ns0g2nq4zkqickavrf80h4g3gcs8vm";
+    rev = "265fbfb438392339bf676b0a9dbe294abe2a699e";
+    sha256 = "NjxeJyWYXBb1P8sXKgb2EWjF+cNodTE83r1YwRYoBjM=";
   };
 
   postPatch = ''
@@ -28,7 +30,9 @@ in stdenv.mkDerivation rec {
       --replace "/usr/share" "$out/share"
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -42,6 +46,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/Big-B/swaylock-fancy";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

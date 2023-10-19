@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     dpkg-deb -x $src $out
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com/";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.fuzzy-id ];
+    maintainers = [ ];
   };
 }

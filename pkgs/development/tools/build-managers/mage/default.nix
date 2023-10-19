@@ -2,21 +2,20 @@
 
 buildGoModule rec {
   pname = "mage";
-  version = "1.11.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "magefile";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ghOk44VcQUAAYm9NCLsgYdky1KEpwOeChBNrgUKjnC8=";
+    sha256 = "sha256-aZPv3+F4VMiThjR0nFP+mKQLI9zKj2jaOawClROnT34=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
-  buildFlagsArray = [
-    "-ldflags="
+  ldflags = [
     "-X github.com/magefile/mage/mage.commitHash=v${version}"
     "-X github.com/magefile/mage/mage.gitTag=v${version}"
     "-X github.com/magefile/mage/mage.timestamp=1970-01-01T00:00:00Z"

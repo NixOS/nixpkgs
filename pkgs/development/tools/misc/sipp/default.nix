@@ -1,29 +1,32 @@
-{lib, stdenv, fetchurl, ncurses, libpcap }:
+{ lib, stdenv, fetchurl, ncurses, libpcap, cmake, openssl, git, lksctp-tools }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.0";
-
+  version = "3.6.1";
   pname = "sipp";
 
   src = fetchurl {
     url = "https://github.com/SIPp/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1fx1iy2n0m2kr91n1ii30frbscq375k3lqihdgvrqxn0zq8pnzp4";
+    sha256 = "sha256-alYOg6/5gvMx3byt+zvVMMWJbNW3V91utoITPMhg7LE=";
   };
 
   postPatch = ''
-    sed -i "s@pcap/\(.*\).pcap@$out/share/pcap/\1.pcap@g" src/scenario.cpp
+    cp version.h src/version.h
   '';
 
-  configureFlags = [
-    "--with-pcap"
+  cmakeFlags = [
+    "-DUSE_GSL=1"
+    "-DUSE_PCAP=1"
+    "-DUSE_SSL=1"
+    "-DUSE_SCTP=${if stdenv.isLinux then "1" else "0"}"
+
+    # file RPATH_CHANGE could not write new RPATH
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
+  enableParallelBuilding = true;
 
-  postInstall = ''
-    mkdir -pv $out/share/pcap
-    cp pcap/* $out/share/pcap
-  '';
-
-  buildInputs = [ncurses libpcap];
+  nativeBuildInputs = [ cmake git ];
+  buildInputs = [ ncurses libpcap openssl ]
+    ++ lib.optional (stdenv.isLinux) lksctp-tools;
 
   meta = with lib; {
     homepage = "http://sipp.sf.net";
@@ -32,4 +35,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

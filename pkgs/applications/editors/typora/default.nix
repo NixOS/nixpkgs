@@ -1,72 +1,104 @@
 { stdenv
-, lib
 , fetchurl
-, makeWrapper
-, electron_9
 , dpkg
-, gtk3
+, lib
 , glib
-, gsettings-desktop-schemas
-, wrapGAppsHook
-, withPandoc ? false
-, pandoc
+, nss
+, nspr
+, at-spi2-atk
+, cups
+, dbus
+, libdrm
+, gtk3
+, pango
+, cairo
+, xorg
+, libxkbcommon
+, mesa
+, expat
+, alsa-lib
+, buildFHSEnv
 }:
 
 let
-  electron = electron_9;
-in
-stdenv.mkDerivation rec {
   pname = "typora";
-  version = "0.9.98";
-
+  version = "1.7.5";
   src = fetchurl {
-    url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-    sha256 = "sha256-JiqjxT8ZGttrcJrcQmBoGPnRuuYWZ9u2083RxZoLMus=";
+    url = "https://download.typora.io/linux/typora_${version}_amd64.deb";
+    hash = "sha256-4Q+fx1kNu98+nxnI/7hLhE6zOdNsaAiAnW6xVd+hZOI=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    makeWrapper
-    wrapGAppsHook
-  ];
+  typoraBase = stdenv.mkDerivation {
+    inherit pname version src;
 
-  buildInputs = [
-    glib
-    gsettings-desktop-schemas
-    gtk3
-  ];
+    nativeBuildInputs = [ dpkg ];
 
-  # The deb contains setuid permission on `chrome-sandbox`, which will actually not get installed.
-  unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
+    dontConfigure = true;
+    dontBuild = true;
 
-  dontWrapGApps = true;
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin $out/share
+      mv usr/share $out
+      ln -s $out/share/typora/Typora $out/bin/Typora
+      runHook postInstall
+    '';
+  };
+
+  typoraFHS = buildFHSEnv {
+    name = "typora-fhs";
+    targetPkgs = pkgs: (with pkgs; [
+      typoraBase
+      udev
+      alsa-lib
+      glib
+      nss
+      nspr
+      atk
+      cups
+      dbus
+      gtk3
+      libdrm
+      pango
+      cairo
+      mesa
+      expat
+      libxkbcommon
+    ]) ++ (with pkgs.xorg; [
+      libX11
+      libXcursor
+      libXrandr
+      libXcomposite
+      libXdamage
+      libXext
+      libXfixes
+      libxcb
+    ]);
+    runScript = ''
+      Typora $*
+    '';
+  };
+
+in stdenv.mkDerivation {
+  inherit pname version;
+
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/bin $out/share
-    {
-      cd usr
-      mv share/typora/resources/app $out/share/typora
-      mv share/{applications,icons,doc} $out/share/
-    }
-
+    mkdir -p $out/bin
+    ln -s ${typoraFHS}/bin/typora-fhs $out/bin/typora
+    ln -s ${typoraBase}/share/ $out
     runHook postInstall
   '';
 
-  postFixup = ''
-    makeWrapper ${electron}/bin/electron $out/bin/typora \
-      --add-flags $out/share/typora \
-      "''${gappsWrapperArgs[@]}" \
-      ${lib.optionalString withPandoc ''--prefix PATH : "${lib.makeBinPath [ pandoc ]}"''} \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
-  '';
-
   meta = with lib; {
-    description = "A minimal Markdown reading & writing app";
-    homepage = "https://typora.io";
+    description = "A markdown editor, a markdown reader";
+    homepage = "https://typora.io/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jensbin ];
-    platforms = [ "x86_64-linux"];
+    maintainers = with maintainers; [ npulidomateo ];
+    platforms = [ "x86_64-linux" ];
   };
 }

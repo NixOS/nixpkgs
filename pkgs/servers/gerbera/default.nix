@@ -1,10 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
+, nixosTests
   # required
-, fmt
 , libiconv
 , libupnp
 , libuuid
@@ -65,14 +66,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.8.1";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-bJIT/qQOKTy2l0wsumlGNvaGqzb2mK0hHKG0S6mEG3o=";
+    sha256 = "sha256-j5J0u0zIjHY2kP5P8IzN2h+QQSCwsel/iTspad6V48s=";
   };
+
+  patches = [
+    # Can be removed on the next bump, see:
+    # https://github.com/gerbera/gerbera/pull/2840.
+    (fetchpatch {
+      name = "gerbera-fmt10.patch";
+      url = "https://github.com/gerbera/gerbera/commit/37957aac0aea776e6f843af2358916f81056a405.patch";
+      hash = "sha256-U7dyFGEbelVZeHYX/4fLOC0k+9pUKZ8qP/LIVXWCMcU=";
+    })
+  ];
 
   postPatch = lib.optionalString enableMysql ''
     substituteInPlace cmake/FindMySQL.cmake \
@@ -88,7 +99,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    fmt
     libiconv
     libupnp'
     libuuid
@@ -97,6 +107,8 @@ stdenv.mkDerivation rec {
     sqlite
     zlib
   ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
+
+  passthru.tests = { inherit (nixosTests) mediatomb; };
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";

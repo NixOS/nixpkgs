@@ -6,7 +6,6 @@
 , harfbuzz
 , libintl
 , libthai
-, gobject-introspection
 , darwin
 , fribidi
 , gnome
@@ -16,26 +15,35 @@
 , meson
 , ninja
 , glib
+, python3
 , x11Support? !stdenv.isDarwin, libXft
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, buildPackages, gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.48.4";
+  version = "1.50.14";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [ "bin" "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0ym3cvajy2asapj8xbhfpy05rak79afrhi32hiss0w900vxi72a1";
+    sha256 = "HWfyBb/DGMJ6Kc/ftoKFaN9WZ5XfDLUdIYnN5/LVgeg=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson ninja
     glib # for glib-mkenum
     pkg-config
-    gobject-introspection
+    python3
+  ] ++ lib.optionals withIntrospection [
     gi-docgen
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -58,9 +66,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
-  ] ++ lib.optionals (!x11Support) [
-    "-Dxft=disabled" # only works with x11
+    (lib.mesonBool "gtk_doc" withIntrospection)
+    (lib.mesonEnable "introspection" withIntrospection)
+    (lib.mesonEnable "xft" x11Support)
   ];
 
   # Fontconfig error: Cannot load default config file
@@ -68,20 +76,30 @@ stdenv.mkDerivation rec {
     fontDirectories = [ freefont_ttf ];
   };
 
+  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
+  # it should be a build-time dep for build
+  # TODO: send upstream
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "dependency('gi-docgen', ver" "dependency('gi-docgen', native:true, ver"
+
+    substituteInPlace docs/meson.build \
+      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+  '';
+
   doCheck = false; # test-font: FAIL
 
-  postInstall = ''
-    # So that devhelp can find this.
-    # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
-    mkdir -p "$devdoc/share/devhelp"
-    mv "$out/share/doc/pango/reference" "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc/pango"
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "odd-unstable";
+      # 1.90 is alpha for API 2.
+      freeze = "1.90.0";
     };
   };
 
@@ -100,6 +118,15 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
+
+    pkgConfigModules = [
+      "pango"
+      "pangocairo"
+      "pangofc"
+      "pangoft2"
+      "pangoot"
+      "pangoxft"
+    ];
   };
 }

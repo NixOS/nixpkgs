@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aml";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mxmzlhiv88hm4sf8kyawyrml8qy1xis019hdyb5skl9g95z9yyf";
+    sha256 = "sha256-BX+MRqvnwwLPhz22m0gfJ2EkW31KQEi/YTgOCMcQk2Q=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];

@@ -1,44 +1,74 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, gflags, perl }:
+{ stdenv, lib, fetchFromGitHub, cmake, gflags, gtest, perl }:
 
 stdenv.mkDerivation rec {
   pname = "glog";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "1xd3maiipfbxmhc9rrblc5x52nxvkwxp14npg31y5njqvkvzax9b";
+    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
-    # TODO: Remove at next release that includes this commit.
-    (fetchpatch {
-      name = "glog-Fix-symbolize_unittest-for-musl-builds.patch";
-      url = "https://github.com/google/glog/commit/834dd780bf1fe0704b8ed0350ca355a55f711a9f.patch";
-      sha256 = "0k4lanxg85anyvjsj3mh93bcgds8gizpiamcy2zvs3yyfjl40awn";
-    })
-  ];
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # A path clash on case-insensitive file systems blocks creation of the build directory.
-    # The file in question is specific to bazel and does not influence the build result.
-    rm BUILD
-  '';
 
   nativeBuildInputs = [ cmake ];
 
+  buildInputs = [ gtest ];
+
   propagatedBuildInputs = [ gflags ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    # glog's custom FindUnwind.cmake module detects LLVM's unwind in case
+    # stdenv.cc is clang. But the module doesn't get installed, causing
+    # consumers of the CMake config file to fail at the configuration step.
+    # Explicitly disabling unwind support sidesteps the issue.
+    "-DWITH_UNWIND=OFF"
+  ];
 
-  checkInputs = [ perl ];
-  doCheck = false; # fails with "Mangled symbols (28 out of 380) found in demangle.dm"
+  doCheck = true;
+
+  # There are some non-thread safe tests that can fail
+  enableParallelChecking = false;
+  nativeCheckInputs = [ perl ];
+
+  env.GTEST_FILTER =
+    let
+      filteredTests = lib.optionals stdenv.hostPlatform.isMusl [
+        "Symbolize.SymbolizeStackConsumption"
+        "Symbolize.SymbolizeWithDemanglingStackConsumption"
+      ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+        "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
+      ] ++ lib.optionals stdenv.cc.isClang [
+        # Clang optimizes an expected allocation away.
+        # See https://github.com/google/glog/issues/937
+        "DeathNoAllocNewHook.logging"
+      ] ++ lib.optionals stdenv.isDarwin [
+        "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
+      ];
+    in
+    "-${builtins.concatStringsSep ":" filteredTests}";
+
+  checkPhase =
+    let
+      excludedTests = lib.optionals stdenv.isDarwin [
+        "mock-log"
+      ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+        "logging"   # works around segfaults on aarch64-darwin for now
+      ];
+      excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
+    in
+    ''
+      runHook preCheck
+      ctest -E "${excludedTestsRegex}" --output-on-failure
+      runHook postCheck
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";
     license = licenses.bsd3;
     description = "Library for application-level logging";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ nh2 r-burns ];
   };
 }

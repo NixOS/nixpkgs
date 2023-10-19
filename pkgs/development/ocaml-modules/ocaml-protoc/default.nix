@@ -1,30 +1,19 @@
 { lib, fetchFromGitHub, buildDunePackage
+, pbrt
 , stdlib-shims
 }:
 
 buildDunePackage rec {
   pname = "ocaml-protoc";
-  version = "2.0.2";
 
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.02";
-
-  src = fetchFromGitHub {
-    owner = "mransan";
-    repo = "ocaml-protoc";
-    rev = version;
-    sha256 = "1vlnjqqpypmjhlyrxfzla79y4ilmc9ggz311giy6vmh4cyzl29h3";
-  };
+  inherit (pbrt) version src;
 
   buildInputs = [ stdlib-shims ];
+  propagatedBuildInputs = [ pbrt ];
 
   doCheck = true;
 
-  meta = with lib; {
-    homepage = "https://github.com/mransan/ocaml-protoc";
+  meta = pbrt.meta // {
     description = "A Protobuf Compiler for OCaml";
-    license = licenses.mit;
-    maintainers = [ maintainers.vyorkin ];
   };
 }

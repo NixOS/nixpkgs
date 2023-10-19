@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyfecvpn";
-  version = "20180820.0";
+  version = "20230206.0";
 
   src = fetchFromGitHub {
     owner = "wangyu-";
     repo = pname;
     rev = version;
-    sha256 = "1mbb9kzvy24na375dz0rlf5k93gan1vahamc9wzkn34mcx8i97cs";
+    sha256 = "sha256-g4dduREH64TDK3Y2PKc5RZiISW4h2ALRh8vQK7jvCZU=";
     fetchSubmodules = true;
   };
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "A VPN Designed for Lossy Links, with Build-in Forward Error Correction(FEC) Support";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

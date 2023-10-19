@@ -1,27 +1,27 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, libX11
 , libXi
+, libXrandr
 , libXt
 , libXtst
 }:
 
 buildGoModule rec {
   pname = "remote-touchpad";
-  version = "1.0.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "unrud";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0zmbn4s3yhcgmijc96vja7zj2sh6q0nkybhqy0fwz6sqzk8hq02x";
+    sha256 = "sha256-EfZ8h65jFVdy/U7I2YDoIMHgnnYpUcrOYUAMCPOmK6U=";
   };
 
-  buildInputs = [ libX11 libXi libXt libXtst ];
-  buildFlags = [ "-tags" "portal,x11" ];
+  buildInputs = [ libXi libXrandr libXt libXtst ];
+  tags = [ "portal,x11" ];
 
-  vendorSha256 = "0q1qk5g7kqpcci5fgamvxa8989jglv69kwg5rvkphbnx1bzlivrl";
+  vendorHash = "sha256-UX366UWROeorwYV4l1A3R03J10Gm7EajM+wEczIJEJM=";
 
   meta = with lib; {
     description = "Control mouse and keyboard from the webbrowser of a smartphone.";

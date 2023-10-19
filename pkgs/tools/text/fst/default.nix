@@ -1,28 +1,21 @@
 { lib
-, stdenv
-, fetchFromGitHub
 , rustPlatform
+, fetchCrate
+, stdenv
 , libiconv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fst";
-  version = "0.4.5";
+  version = "0.4.3";
 
-  src = fetchFromGitHub {
-    owner = "BurntSushi";
-    repo = pname;
-    rev = version;
-    sha256 = "01qdj7zzgwb1zqcznfmnks3dnl6hnf8ib0sm0sgimsbcvajmhab3";
+  src = fetchCrate {
+    inherit version;
+    crateName = "fst-bin";
+    sha256 = "sha256-x2rvLMOhatMWU2u5GAdpYy2uuwZLi3apoE6aaTF+M1g=";
   };
 
-  cargoPatches = [
-    # Add Cargo.lock lockfile, which upstream does not include
-    ./0001-cargo-lockfile.patch
-  ];
-
-  cargoBuildFlags = [ "--workspace" ];
-  cargoSha256 = "0440p0hb3nlq9wwk3zac9dldanslrddvqn4gib0vl7aikxkcvh4l";
+  cargoHash = "sha256-yTbEaw+BbjVks3j7/b75kGoUjVftLaVYvYIdI/bbfdk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 

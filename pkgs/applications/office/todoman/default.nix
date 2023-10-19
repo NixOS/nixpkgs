@@ -1,34 +1,37 @@
 { lib
-, python3
+, stdenv
+, fetchFromGitHub
 , glibcLocales
 , installShellFiles
 , jq
+, python3
 }:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
-in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
-  version = "3.9.0";
+  version = "4.3.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e7e5cab13ecce0562b1f13f46ab8cbc079caed4b462f2371929f8a4abff2bcbe";
+  src = fetchFromGitHub {
+    owner = "pimutils";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dxyI9ypZZBouTUF72wzvi7j+CeoQ9JNSiXrVeV7ForY=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     installShellFiles
+  ] ++ (with python3.pkgs; [
     setuptools-scm
-  ];
+  ]);
+
   propagatedBuildInputs = with python3.pkgs; [
     atomicwrites
     click
     click-log
     click-repl
-    configobj
     humanize
     icalendar
     parsedatetime
@@ -38,15 +41,14 @@ buildPythonApplication rec {
     urwid
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     flake8
     flake8-import-order
     freezegun
     hypothesis
-    pytest
-    pytestrunner
-    pytestcov
+    pytestCheckHook
     glibcLocales
+    pytest-cov
   ];
 
   LC_ALL = "en_US.UTF-8";
@@ -57,30 +59,40 @@ buildPythonApplication rec {
     installShellCompletion --zsh contrib/completion/zsh/_todo
   '';
 
-  preCheck = ''
-    # Remove one failing test that only checks whether the command line works
-    rm tests/test_main.py
-    rm tests/test_cli.py
-  '';
+  disabledTests = [
+    # Testing of the CLI part and output
+    "test_color_due_dates"
+    "test_color_flag"
+    "test_default_command"
+    "test_main"
+    "test_missing_cache_dir"
+    "test_sorting_null_values"
+    "test_xdg_existant"
+    # Tests are sensitive to performance
+    "test_sorting_fields"
+  ];
+
+  pythonImportsCheck = [
+    "todoman"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
-      Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos
-      are stored into icalendar files, which means you can sync them via CalDAV
+      Todoman is a simple, standards-based, cli todo (aka task) manager. Todos
+      are stored into iCalendar files, which means you can sync them via CalDAV
       using, for example, vdirsyncer.
 
       Todos are read from individual ics files from the configured directory.
-      This matches the vdir specification.  There’s support for the most common TODO
+      This matches the vdir specification. There is support for the most common TODO
       features for now (summary, description, location, due date and priority) for
-      now.  Runs on any Unix-like OS. It’s been tested on GNU/Linux, BSD and macOS.
+      now.
       Unsupported fields may not be shown but are never deleted or altered.
-
-      Todoman is part of the pimutils project
     '';
+    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ leenaars antonmosich ];
+    mainProgram = "todo";
   };
 }

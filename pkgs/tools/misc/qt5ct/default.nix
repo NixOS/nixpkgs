@@ -4,11 +4,11 @@ let inherit (lib) getDev; in
 
 mkDerivation rec {
   pname = "qt5ct";
-  version = "1.1";
+  version = "1.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "1lnx4wqk87lbr6lqc64w5g5ppjjv75kq2r0q0bz9gfpryzdw8xxg";
+    sha256 = "sha256-I7dAVEFepBJDKHcu+ab5UIOpuGVp4SgDSj/3XfrYCOk=";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -18,9 +18,8 @@ mkDerivation rec {
   qmakeFlags = [
     "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
     "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    "LIBDIR=${placeholder "out"}/lib"
   ];
-
-  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Qt5 Configuration Tool";

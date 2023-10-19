@@ -17,7 +17,7 @@ buildGoPackage rec {
     export CGO_CFLAGS=-I$(pwd)/go/src/${goPackagePath}/vendor/github.com/jceel/lib9p
     export CGO_LDFLAGS=$(pwd)/go/src/${goPackagePath}/vendor/build/lib9p/lib9p.a
   '';
-  buildFlags = "--tags lib9p";
+  tags = [ "lib9p" ];
 
   src = fetchFromGitHub {
     rev    = "v${version}";
@@ -35,5 +35,7 @@ buildGoPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ periklis ];
     platforms = platforms.darwin;
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

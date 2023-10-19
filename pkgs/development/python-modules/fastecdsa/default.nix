@@ -3,25 +3,33 @@
 , fetchPypi
 , gmp
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fastecdsa";
-  version = "2.1.5";
+  version = "2.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0772f7fe243e8a82d33e95c542ea6cc0ef7f3cfcced7440d6defa71a35addfa";
+    hash = "sha256-8ZjORPaUbKuwKYip9J0U78QQ26XiEemDIbqdhzeyP/g=";
   };
 
-  buildInputs = [ gmp ];
+  buildInputs = [
+    gmp
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # skip tests which require being online to download test vectors
-  pytestFlags = [
-     "--ignore=fastecdsa/tests/test_wycheproof_vectors.py"
-     "--ignore=fastecdsa/tests/test_rfc6979_ecdsa.py"
+  disabledTestPaths = [
+    # skip tests which require being online to download test vectors
+    "fastecdsa/tests/test_wycheproof_vectors.py"
+    "fastecdsa/tests/test_rfc6979_ecdsa.py"
   ];
 
   # skip tests for now, they fail with
@@ -29,11 +37,14 @@ buildPythonPackage rec {
   # but the installed package works just fine
   doCheck = false;
 
-  pythonImportsCheck = [ "fastecdsa" ];
+  pythonImportsCheck = [
+    "fastecdsa"
+  ];
 
   meta = with lib; {
     description = "Fast elliptic curve digital signatures";
     homepage = "https://github.com/AntonKueltz/fastecdsa";
+    changelog = "https://github.com/AntonKueltz/fastecdsa/blob/v${version}/CHANGELOG.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [ prusnak ];
   };

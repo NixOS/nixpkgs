@@ -1,46 +1,61 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
 , msgpack
-, pytestCheckHook
 , numpy
+, pandas
 , pydantic
 , pymongo
-, ruamel_yaml
+, pytestCheckHook
+, pythonOlder
+, ruamel-yaml
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2021.3.3";
-  disabled = pythonOlder "3.5"; # uses type annotations
+  version = "2023.4.10";
+  format = "setuptools";
 
-  # No tests in Pypi
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1nbv0ys0fv70rgzskkk8gsfr9dsmm7ykim5wv36li840zsj83b1l";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9of56ErJ03hU+KqxUjR4IiyU4XLJoothSwODlzSWv9Y=";
   };
 
-  propagatedBuildInputs = [
-    ruamel_yaml
-    tqdm
-    msgpack
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-    numpy
-    pydantic
-    pymongo
-  ];
-
-  preCheck = ''
+  postPatch = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
+
+  propagatedBuildInputs = [
+    msgpack
+    ruamel-yaml
+    tqdm
+  ];
+
+  nativeCheckInputs = [
+    numpy
+    pandas
+    pydantic
+    pymongo
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "monty"
+  ];
+
+  disabledTests = [
+    # Test file was removed and re-added after 2022.9.9
+    "test_reverse_readfile_gz"
+    "test_Path_objects"
+    "test_zopen"
+    "test_zpath"
+  ];
 
   meta = with lib; {
     description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
@@ -50,6 +65,7 @@ buildPythonPackage rec {
       patterns such as singleton and cached_class, and many more.
     ";
     homepage = "https://github.com/materialsvirtuallab/monty";
+    changelog = "https://github.com/materialsvirtuallab/monty/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "guppy3";
-  version = "3.1.0";
+  version = "3.1.3";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "zhuyifei1999";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yjsn8najbic4f50nj6jzhzrhj1bw6918w0gihdkzhqynwgqi64m";
+    hash = "sha256-i3WqXlNnNhBVw9rdnxnzQISFkZHBpc/gqG+rxOWPiyc=";
   };
 
   propagatedBuildInputs = [ tkinter ];

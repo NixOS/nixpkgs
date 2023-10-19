@@ -1,17 +1,40 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, autoreconfHook, cmake, wrapQtAppsHook, pkg-config, qmake
-, curl, grantlee, libgit2, libusb-compat-0_1, libssh2, libxml2, libxslt, libzip, zlib
-, qtbase, qtconnectivity, qtlocation, qtsvg, qttools, qtwebkit, libXcomposite
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, writeShellScriptBin
+, cmake
+, wrapQtAppsHook
+, pkg-config
+, qmake
+, curl
+, grantlee
+, hidapi
+, libgit2
+, libssh2
+, libusb1
+, libxml2
+, libxslt
+, libzip
+, zlib
+, qtbase
+, qtconnectivity
+, qtlocation
+, qtsvg
+, qttools
+, qtwebengine
+, libXcomposite
 , bluez
 }:
 
 let
-  version = "4.9.10";
+  version = "5.0.10";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
     rev = "v${version}";
-    sha256 = "12ndhjplz3cwndwzhfc959dc0i6rm2qf3v2d8n9kba8nj63iblfs";
+    hash = "sha256-KzUBhFGvocaS1VrVT2stvKrj3uVxYka+dyYZUfkIoNs=";
     fetchSubmodules = true;
   });
 
@@ -20,16 +43,17 @@ let
     inherit version;
 
     src = subsurfaceSrc;
-    sourceRoot = "source/libdivecomputer";
 
-    nativeBuildInputs = [ autoreconfHook ];
+    sourceRoot = "${subsurfaceSrc.name}/libdivecomputer";
 
-    buildInputs = [ zlib ];
+    nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+    buildInputs = [ zlib libusb1 bluez hidapi ];
 
     enableParallelBuilding = true;
 
     meta = with lib; {
-      homepage = "http://www.libdivecomputer.org";
+      homepage = "https://www.libdivecomputer.org";
       description = "A cross-platform and open source library for communication with dive computers from various manufacturers";
       maintainers = with maintainers; [ mguentner ];
       license = licenses.lgpl21;
@@ -39,14 +63,13 @@ let
 
   googlemaps = stdenv.mkDerivation rec {
     pname = "googlemaps";
-
-    version = "2018-06-02";
+    version = "0.0.0.2";
 
     src = fetchFromGitHub {
       owner = "vladest";
       repo = "googlemaps";
-      rev = "54a357f9590d9cf011bf1713589f66bad65e00eb";
-      sha256 = "159kslp6rj0qznzxijppwvv8jnswlfgf2pw4x8ladi8vp6bzxnzi";
+      rev = "v.${version}";
+      hash = "sha256-PfSLFQeCeVNcCVDCZehxyNLQGT6gff5jNxMW8lAaP8c=";
     };
 
     nativeBuildInputs = [ qmake ];
@@ -64,8 +87,6 @@ let
       mv lib $out/
     '';
 
-    enableParallelBuilding = true;
-
     meta = with lib; {
       inherit (src.meta) homepage;
       description = "QtLocation plugin for Google maps tile API";
@@ -75,17 +96,37 @@ let
     };
   };
 
-in stdenv.mkDerivation {
+  get-version = writeShellScriptBin "get-version" ''
+    echo -n ${version}
+  '';
+
+in
+stdenv.mkDerivation {
   pname = "subsurface";
   inherit version;
 
   src = subsurfaceSrc;
 
+  postPatch = ''
+    install -m555 -t scripts ${lib.getExe get-version}
+  '';
+
   buildInputs = [
-    libdc googlemaps
-    curl grantlee libgit2 libssh2 libusb-compat-0_1 libxml2 libxslt libzip
-    qtbase qtconnectivity qtsvg qttools qtwebkit
     bluez
+    curl
+    googlemaps
+    grantlee
+    libdc
+    libgit2
+    libssh2
+    libxml2
+    libxslt
+    libzip
+    qtbase
+    qtconnectivity
+    qtsvg
+    qttools
+    qtwebengine
   ];
 
   nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];

@@ -1,25 +1,24 @@
-{ python2Packages, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
-with python2Packages;
-
-buildPythonApplication rec {
+buildGoModule rec {
   pname = "cloudmonkey";
-  version = "5.3.3";
+  version = "6.3.0";
 
-  propagatedBuildInputs = [ argcomplete pygments ];
-
-  doCheck = false; # upstream has no tests defined
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "064yk3lwl272nyn20xxrh0qxzh3r1rl9015qqf2i4snqdzwd5cf7";
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "cloudstack-cloudmonkey";
+    rev = version;
+    sha256 = "sha256-FoouZ2udtZ68W5p32Svr8yAn0oBdWMupn1LEzqY04Oc=";
   };
+
+  vendorHash = null;
 
   meta = with lib; {
     description = "CLI for Apache CloudStack";
-    homepage = "https://cwiki.apache.org/confluence/display/CLOUDSTACK/CloudStack+cloudmonkey+CLI";
+    homepage = "https://github.com/apache/cloudstack-cloudmonkey";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.womfoo ];
+    mainProgram = "cloudstack-cloudmonkey";
   };
 
 }

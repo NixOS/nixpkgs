@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libmowgli";
   version = "2.1.3";
 
-  src = fetchurl {
-    url = "https://github.com/atheme/libmowgli-2/archive/v${version}.tar.gz";
-    sha256 = "0xx4vndmwz40pxa5gikl8z8cskpdl9a30i2i5fjncqzlp4pspymp";
+  src = fetchFromGitHub {
+    owner = "atheme";
+    repo = "libmowgli-2";
+    rev = "v${version}";
+    sha256 = "sha256-jlw6ixMoIdIjmQ86N+KN+Gez218sw894POkcCYnT0s0=";
   };
 
   meta = with lib; {

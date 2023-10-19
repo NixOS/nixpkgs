@@ -1,4 +1,6 @@
-{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, llvm, libcxxabi }:
+{ lib, stdenv, llvm_meta, version, fetch, cmake, python3, libllvm, libcxxabi
+, doFakeLibgcc ? stdenv.hostPlatform.isFreeBSD
+}:
 
 let
 
@@ -13,10 +15,10 @@ stdenv.mkDerivation {
   inherit version;
   src = fetch "compiler-rt" "1fcr3jn24yr8lh36nc0c4ikli4744i2q9m1ik67p1jymwwaixkgl";
 
-  nativeBuildInputs = [ cmake python3 llvm.dev ];
+  nativeBuildInputs = [ cmake python3 libllvm.dev ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
@@ -28,6 +30,7 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
+  ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
   ] ++ lib.optionals (useLLVM || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
@@ -55,8 +58,8 @@ stdenv.mkDerivation {
     # https://github.com/llvm/llvm-project/commit/947f9692440836dcb8d88b74b69dd379d85974ce
     ../../common/compiler-rt/glibc.patch
     ./gnu-install-dirs.patch
-  ] ++ lib.optional stdenv.hostPlatform.isMusl ./sanitizers-nongnu.patch
-    ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
+    ../../common/compiler-rt/libsanitizer-no-cyclades-9.patch
+  ] ++ lib.optional stdenv.hostPlatform.isAarch32 ./armv7l.patch;
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -86,6 +89,8 @@ stdenv.mkDerivation {
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/linux/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/linux/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/linux/crtendS.o
+  '' + lib.optionalString doFakeLibgcc ''
+    ln -s $out/lib/freebsd/libclang_rt.builtins-*.a $out/lib/freebsd/libgcc.a
   '';
 
   meta = llvm_meta // {
@@ -102,5 +107,6 @@ stdenv.mkDerivation {
     # "All of the code in the compiler-rt project is dual licensed under the MIT
     # license and the UIUC License (a BSD-like license)":
     license = with lib.licenses; [ mit ncsa ];
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

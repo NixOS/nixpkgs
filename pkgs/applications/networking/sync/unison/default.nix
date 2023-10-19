@@ -1,50 +1,75 @@
-{lib, stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses, gnugrep
-, enableX11 ? true}:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ocamlPackages
+, ncurses
+, copyDesktopItems
+, makeDesktopItem
+, wrapGAppsHook
+, gsettings-desktop-schemas
+, zlib
+, enableX11 ? true
+, Cocoa
+}:
 
-let inherit (ocamlPackages) ocaml lablgtk; in
-
-stdenv.mkDerivation (rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "unison";
-  version = "2.51.3";
+  version = "2.53.2";
+
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
-    rev = "v${version}";
-    sha256 = "sha256-42hmdMwOYSWGiDCmhuqtpCWtvtyD2l+kA/bhHD/Qh5Y=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-H+70NZZP0cUsxetFcsjWEx2kENsgMdo/41wBwwaX6zg=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml ncurses ];
+  strictDeps = true;
 
-  preBuild = (if enableX11 then ''
-    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" src/Makefile.OCaml
-  '' else "") + ''
-  echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
+  nativeBuildInputs = [ ocamlPackages.ocaml ]
+    ++ lib.optionals enableX11 [ copyDesktopItems wrapGAppsHook ];
+  buildInputs = [ ncurses zlib ]
+    ++ lib.optionals enableX11 [ gsettings-desktop-schemas ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  preBuild = lib.optionalString enableX11 ''
+    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.lablgtk3}"/lib/ocaml/*/site-lib/lablgtk3)|" src/Makefile.OCaml
+    sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${ocamlPackages.cairo2}"/lib/ocaml/*/site-lib/cairo2)|" src/Makefile.OCaml
+  '' + ''
+    echo -e '\ninstall:\n\tcp $(FSMONITOR)$(EXEC_EXT) $(INSTALLDIR)' >> src/fsmonitor/linux/Makefile
   '';
 
   makeFlags = [
     "INSTALLDIR=$(out)/bin/"
-    "UISTYLE=${if enableX11 then "gtk2" else "text"}"
-  ] ++ lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
+    "UISTYLE=${if enableX11 then "gtk3" else "text"}"
+  ] ++ lib.optional (!ocamlPackages.ocaml.nativeCompilers) "NATIVE=false";
 
-  preInstall = "mkdir -p $out/bin";
+  preInstall = ''
+    mkdir -p $out/bin
+  '';
 
-  postInstall = if enableX11 then ''
-    for i in $(cd $out/bin && ls); do
-      wrapProgram $out/bin/$i \
-        --run "[ -n \"\$DISPLAY\" ] && (${xset}/bin/xset q | ${gnugrep}/bin/grep -q \"${fontschumachermisc}\" || ${xset}/bin/xset +fp \"${fontschumachermisc}/lib/X11/fonts/misc\")"
-    done
-  '' else "";
+  postInstall = lib.optionalString enableX11 ''
+    install -D $src/icons/U.svg $out/share/icons/hicolor/scalable/apps/unison.svg
+  '';
 
-  dontStrip = !ocaml.nativeCompilers;
+  dontStrip = !ocamlPackages.ocaml.nativeCompilers;
 
-  meta = {
+  desktopItems = lib.optional enableX11 (makeDesktopItem {
+    name = finalAttrs.pname;
+    desktopName = "Unison";
+    comment = "Bidirectional file synchronizer";
+    genericName = "File synchronization tool";
+    exec = "unison";
+    icon = "unison";
+    categories = [ "Utility" "FileTools" "GTK" ];
+    startupNotify = true;
+    startupWMClass = "Unison";
+  });
+
+  meta = with lib; {
     homepage = "https://www.cis.upenn.edu/~bcpierce/unison/";
     description = "Bidirectional file synchronizer";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [viric];
-    platforms = with lib.platforms; unix;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ viric ];
+    platforms = platforms.unix;
   };
-
 })

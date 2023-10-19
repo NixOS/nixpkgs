@@ -1,21 +1,34 @@
 { lib
-, isPy3k
 , fetchPypi
-, buildPythonPackage }:
+, buildPythonPackage
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "mistletoe";
-  version = "0.7.2";
-  disabled = !isPy3k;
+  version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18z6hqfnfjqnrcgfgl5pkj9ggf9yx0yyy94azcn1qf7hqn6g3l14";
+    hash = "sha256-sfia+weaGxpULp7ywI3UUKB6K9k1wDyrIsMorXyk2Og=";
   };
 
+  pythonImportsCheck = [
+    "mistletoe"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   meta = with lib; {
-    description = "A fast, extensible Markdown parser in pure Python.";
+    description = "Fast and extensible Markdown parser";
     homepage = "https://github.com/miyuchina/mistletoe";
+    changelog = "https://github.com/miyuchina/mistletoe/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ eadwu ];
   };

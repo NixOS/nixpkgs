@@ -30,12 +30,12 @@ in
       idmapd.settings = mkOption {
         type = format.type;
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           libnfsidmap configuration. Refer to
-          <link xlink:href="https://linux.die.net/man/5/idmapd.conf"/>
+          <https://linux.die.net/man/5/idmapd.conf>
           for details.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             Translation = {
               GSS-Methods = "static,nsswitch";
@@ -49,7 +49,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Extra nfs-utils configuration.
         '';
       };

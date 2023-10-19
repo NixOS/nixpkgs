@@ -1,16 +1,22 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, libxcrypt }:
 
-let
+stdenv.mkDerivation rec {
   pname = "bftpd";
-
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "5.7";
+  version = "6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}/${name}/${name}.tar.gz";
-    sha256 = "sha256-pUPOYqgJKntQZRRodcyYeFNLCdxKhT8sK1bi3jl6b0s=";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-lyHQYU4aXQ/muAyaigStqO/ULL393SOelagFmuKDqm8=";
   };
+
+  # utmp.h is deprecated on aarch64-darwin
+  postPatch = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) ''
+    for file in login.*; do
+      substituteInPlace $file --replace "#ifdef HAVE_UTMP_H" "#if 0"
+    done
+  '';
+
+  buildInputs = [ libxcrypt ];
 
   preConfigure = ''
     sed -re 's/-[og] 0//g' -i Makefile*
@@ -25,7 +31,6 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    inherit version;
     description = "A minimal ftp server";
     downloadPage = "http://bftpd.sf.net/download.html";
     homepage = "http://bftpd.sf.net/";

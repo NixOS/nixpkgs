@@ -12,15 +12,15 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "1.14";
+  version = "2.8";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
-    sha256 = "sha256-uGe4TO1/bs8k2z3wOJqaZgT6u6yX/7wx4HMSS2hN4XE=";
+    sha256 = "sha256-i+2R8smgLXooApj0Z5e03FybhYgw1X/kIsJkrDzW8y4=";
   };
 
-  outputs = [ "out" "man" ]
+  outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  checkInputs = [ openssl ];
+  nativeCheckInputs = [ openssl ];
 
   # wrapPython wraps the scripts in $test. They pull in gobject-introspection,
   # which doesn't cross-compile.
@@ -59,15 +59,16 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     mkdir -p iwd/ell
     ln -s ${ell.src}/ell/useful.h iwd/ell/useful.h
+    ln -s ${ell.src}/ell/asn1-private.h iwd/ell/asn1-private.h
     patchShebangs .
   '';
 
   doCheck = true;
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -a doc $out/share/
-    cp -a README AUTHORS TODO $out/share/doc/
+    mkdir -p $doc/share/doc
+    cp -a doc $doc/share/doc/iwd
+    cp -a README AUTHORS TODO $doc/share/doc/iwd
   '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p $test/bin
     cp -a test/* $test/bin/
@@ -91,6 +92,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz ];
+    maintainers = with maintainers; [ dtzWill fpletz amaxine ];
   };
 }

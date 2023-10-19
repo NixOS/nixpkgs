@@ -1,23 +1,21 @@
-{ lib, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "1.6";
-in fetchFromGitHub {
-  name = "work-sans-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "work-sans";
+  version = "2.010";
 
-  owner = "weiweihuanghuang";
-  repo = "Work-Sans";
-  rev = "v${version}";
+  src = fetchzip {
+    url = "https://github.com/weiweihuanghuang/Work-Sans/archive/refs/tags/v${version}.zip";
+    hash = "sha256-cedcx3CpcPZk3jxxIs5Bz78dxZNtOemvXnUBO6zl2dw=";
+  };
 
-  postFetch = ''
-    tar xf $downloadedFile --strip=1
-    install -m444 -Dt $out/share/fonts/opentype/ fonts/desktop/*.otf
-    install -m444 -Dt $out/share/fonts/truetype/ fonts/webfonts/ttf/*.ttf
-    install -m444 -Dt $out/share/fonts/woff/     fonts/webfonts/woff/*.woff
-    install -m444 -Dt $out/share/fonts/woff2/    fonts/webfonts/woff2/*.woff2
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 fonts/variable/*.ttf fonts/static/TTF/*.ttf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "01kjidk6zv80rqxapcdwhd9wxzrjfc6lj4gkf6dwa4sskw5x3b8a";
 
   meta = with lib; {
     description = "A grotesque sans";

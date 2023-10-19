@@ -1,30 +1,39 @@
-{ lib, pkg-config, rustPlatform, fetchFromGitHub, openssl }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, curl
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tarpaulin";
-  version = "0.17.0";
+  version = "0.27.1";
 
   src = fetchFromGitHub {
     owner = "xd009642";
     repo = "tarpaulin";
     rev = version;
-    sha256 = "1z104cd3wg718x1d89znppx4h6f0c6icgmpcllyrd0d19lb71a2b";
+    hash = "sha256-Mr1thOGqpLcMUBbmD6YzU9WlyOvlPHSqyiU/wtb4edo=";
   };
+
+  cargoHash = "sha256-UrDyAS/SIrXWsYucmjj6URjqjjWB40wxLF0rXHmB2Tw=";
 
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ curl Security ];
 
-  cargoSha256 = "1hpi9aifn3g19yqkb58lphyw8cbsqllhg5dzbqx15hcfvrb7ip4k";
-  #checkFlags = [ "--test-threads" "1" ];
   doCheck = false;
 
   meta = with lib; {
     description = "A code coverage tool for Rust projects";
     homepage = "https://github.com/xd009642/tarpaulin";
+    changelog = "https://github.com/xd009642/tarpaulin/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ hugoreeves ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ figsoda hugoreeves ];
   };
 }

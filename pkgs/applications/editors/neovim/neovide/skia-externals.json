@@ -1,37 +1,37 @@
 {
   "expat": {
     "url": "https://chromium.googlesource.com/external/github.com/libexpat/libexpat.git",
-    "rev": "e976867fb57a0cd87e3b0fe05d59e0ed63c6febb",
-    "sha256": "sha256-akSh/Vo7s7m/7qePamGA7oiHEHT3D6JhCFMc27CgDFI="
+    "rev": "441f98d02deafd9b090aea568282b28f66a50e36",
+    "sha256": "sha256-FXTDGAK03jc2wvazhRKqtsFRKZUYS/9HLpZNp4JfZJI="
   },
   "libjpeg-turbo": {
     "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
-    "rev": "64fc43d52351ed52143208ce6a656c03db56462b",
-    "sha256": "sha256-rk22wE83hxKbtZLhGwUIF4J816jHvWovgICdrKZi2Ig="
+    "rev": "22f1a22c99e9dde8cd3c72ead333f425c5a7aa77",
+    "sha256": "sha256-5MaYvyrhADFGKBxcS3kbKcn9tj0FNXAN/rAXXYW6ljs="
   },
   "icu": {
     "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
-    "rev": "dbd3825b31041d782c5b504c59dcfb5ac7dda08c",
-    "sha256": "sha256-voMH+TdNx3dBHeH5Oky5OYmmLGJ2u+WrMrmAkjXJRTE="
+    "rev": "a0718d4f121727e30b8d52c7a189ebf5ab52421f",
+    "sha256": "sha256-BI3f/gf9GNDvSfXWeRHKBvznSz4mjXY8rM24kK7QvOM="
   },
   "zlib": {
     "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
-    "rev": "eaf99a4e2009b0e5759e6070ad1760ac1dd75461",
-    "sha256": "sha256-B4PgeSVBU/MSkPkXTu9jPIa37dNJPm2HpmiVf6XuOGE="
+    "rev": "c876c8f87101c5a75f6014b0f832499afeb65b73",
+    "sha256": "sha256-mwozVo8ymyrYN4tw+/ZnSI+xogSTZQ6PUBba/jQqRkE="
   },
   "harfbuzz": {
     "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
-    "rev": "3a74ee528255cc027d84b204a87b5c25e47bff79",
-    "sha256": "sha256-/4UdoUj0bxj6+EfNE8ofjtWOn2VkseEfvdFah5rwwBM="
+    "rev": "09a266236147497bd8149240062c31c16fbc81e3",
+    "sha256": "sha256-NLydUJI15zRBFFDc7VRDXjgc0AwS3l6GMt2usMWOSG4="
+  },
+  "wuffs": {
+    "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
+    "rev": "a0041ac0310b3156b963e2f2bea09245f25ec073",
+    "sha256": "sha256-obRMrrKY3rPdFwQNa5IplpuKqiodHvRC8jbIOjp7R2w="
   },
   "libpng": {
     "url": "https://skia.googlesource.com/third_party/libpng.git",
     "rev": "386707c6d19b974ca2e3db7f5c61873813c6fe44",
     "sha256": "sha256-67kf5MBsnBBi0bOfX/RKL52xpaCWm/ampltAI+EeQ+c="
-  },
-  "libgifcodec": {
-    "url": "https://skia.googlesource.com/libgifcodec",
-    "rev": "d06d2a6d42baf6c0c91cacc28df2542a911d05fe",
-    "sha256": "sha256-ke1X5iyj2ah2NqGVdFv8GuoRAzXg1aCeTdZwUM8wvCI="
   }
 }

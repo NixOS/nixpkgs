@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , imagemagickBig
 , pkg-config
+, withXorg ? true
 , libX11
 , libv4l
 , qtbase
@@ -15,13 +16,22 @@
 , autoreconfHook
 , dbus
 , enableVideo ? stdenv.isLinux
-, enableDbus ? stdenv.isLinux
+  # The implementation is buggy and produces an error like
+  # Name Error (Connection ":1.4380" is not allowed to own the service "org.linuxtv.Zbar" due to security policies in the configuration file)
+  # for every scanned code.
+  # see https://github.com/mchehab/zbar/issues/104
+, enableDbus ? false
 , libintl
+, libiconv
+, Foundation
+, bash
+, python3
+, argp-standalone
 }:
 
 stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.23.90";
+  version = "0.23.92";
 
   outputs = [ "out" "lib" "dev" "doc" "man" ];
 
@@ -29,7 +39,7 @@ stdenv.mkDerivation rec {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
+    sha256 = "sha256-VhVrngAX7pXZp+szqv95R6RGAJojp3svdbaRKigGb0w=";
   };
 
   nativeBuildInputs = [
@@ -37,16 +47,22 @@ stdenv.mkDerivation rec {
     xmlto
     autoreconfHook
     docbook_xsl
-    wrapQtAppsHook
+  ] ++ lib.optionals enableVideo [
     wrapGAppsHook
+    wrapQtAppsHook
+    qtbase
   ];
 
   buildInputs = [
     imagemagickBig
-    libX11
     libintl
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Foundation
   ] ++ lib.optionals enableDbus [
     dbus
+  ] ++ lib.optionals withXorg [
+    libX11
   ] ++ lib.optionals enableVideo [
     libv4l
     gtk3
@@ -54,8 +70,24 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
+  nativeCheckInputs = [
+    bash
+    python3
+  ];
+
+  checkInputs = lib.optionals stdenv.isDarwin [
+    argp-standalone
+  ];
+
+  # Note: postConfigure instead of postPatch in order to include some
+  # autoconf-generated files. The template files for the autogen'd scripts are
+  # not chmod +x, so patchShebangs misses them.
+  postConfigure = ''
+    patchShebangs test
+  '';
+
   # Disable assertions which include -dev QtBase file paths.
-  NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
+  env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
   configureFlags = [
     "--without-python"
@@ -71,6 +103,12 @@ stdenv.mkDerivation rec {
     "--without-qt"
   ]);
 
+  doCheck = true;
+
+  preCheck = lib.optionalString stdenv.isDarwin ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -largp"
+  '';
+
   dontWrapQtApps = true;
   dontWrapGApps = true;
 
@@ -78,6 +116,8 @@ stdenv.mkDerivation rec {
     wrapGApp "$out/bin/zbarcam-gtk"
     wrapQtApp "$out/bin/zbarcam-qt"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Bar code reader";
@@ -92,5 +132,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.lgpl21;
     homepage = "https://github.com/mchehab/zbar";
+    mainProgram = "zbarimg";
   };
 }

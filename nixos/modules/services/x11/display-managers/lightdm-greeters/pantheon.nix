@@ -10,8 +10,8 @@ let
 
 in
 {
-  meta = {
-    maintainers = with maintainers; [ ];
+  meta = with lib; {
+    maintainers = with maintainers; [ ] ++ teams.pantheon.members;
   };
 
   options = {
@@ -21,7 +21,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to enable elementary-greeter as the lightdm greeter.
         '';
       };

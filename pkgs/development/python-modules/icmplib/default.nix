@@ -4,24 +4,22 @@
 , pbr
 , pythonOlder
 , requests
-, six
 }:
 
 buildPythonPackage rec {
   pname = "icmplib";
-  version = "2.1.1";
-  disabled = pythonOlder "3.6";
+  version = "3.0.4";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ValentinBELYN";
     repo = pname;
     rev = "v${version}";
-    sha256 = "06xx9854yzxa7x1mjfzbhhw5rfzgjnw269j5k0rshyqh3qvw1nwv";
+    hash = "sha256-PnBcGiUvftz/KYg9Qd2GaIcF3OW4lYH301uI5/M5CBI=";
   };
 
   propagatedBuildInputs = [
     pbr
-    six
     requests
   ];
 

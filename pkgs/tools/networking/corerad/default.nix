@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "corerad";
-  version = "0.3.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "0ky4zfmxzgxidsizfj2lwm5z3zl666khw9cgsxfgbzn3cjgr33c3";
+    sha256 = "sha256-cBP4jJhnIx+UwcbuQ3xbpImkLX4jSnsyvwfOEs31On4=";
   };
 
-  vendorSha256 = "0ddni8hl8fv0m9kinwfnhcj3k51fk8h61yksv7ws6agdx0bl1rwh";
-
-  doCheck = false;
+  vendorHash = "sha256-RkwfHjWu40AW+7zLc+sY5p2nyy3YPHk5sjt6foC103k=";
 
   # Since the tarball pulled from GitHub doesn't contain git tag information,
   # we fetch the expected tag's timestamp from a file in the root of the
@@ -36,5 +34,6 @@ buildGoModule rec {
     description = "Extensible and observable IPv6 NDP RA daemon";
     license = licenses.asl20;
     maintainers = with maintainers; [ mdlayher ];
+    platforms = platforms.linux;
   };
 }

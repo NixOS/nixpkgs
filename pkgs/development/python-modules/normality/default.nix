@@ -4,28 +4,28 @@
 , text-unidecode
 , chardet
 , banal
-, PyICU
+, pyicu
 , pytestCheckHook
 }:
 buildPythonPackage rec {
   pname = "normality";
-  version = "2.1.3";
+  version = "2.2.5";
 
   src = fetchFromGitHub {
     owner = "pudo";
     repo = "normality";
     rev = version;
-    sha256 = "WvpMs02vBGnCSPkxo6r6g4Di2fKkUr2SsBflTBxlhkU=";
+    sha256 = "n8Ycm5DeFItmMJTolazZKGIyN7CTg2ajDCwi/UqzVe8=";
   };
 
   propagatedBuildInputs = [
     text-unidecode
     chardet
     banal
-    PyICU
+    pyicu
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Micro-library to normalize text strings";
     homepage = "https://github.com/pudo/normality";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

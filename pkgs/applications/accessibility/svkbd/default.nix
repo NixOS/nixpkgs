@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "svkbd";
-  version = "0.3";
+  version = "0.4.1";
 
   src = fetchurl {
     url = "https://dl.suckless.org/tools/svkbd-${version}.tar.gz";
-    sha256 = "108khx665d7dlzs04iy4g1nw3fyqpy6kd0afrwiapaibgv4xhfsk";
+    sha256 = "sha256-+8Jh/D4dgULhRXtC1tZQg6AK4POh9czyRyrMi0auD1o=";
   };
 
   inherit patches;

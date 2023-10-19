@@ -5,17 +5,17 @@
 , dpkg
 , qt5
 , libjack2
-, alsaLib
+, alsa-lib
 , bzip2
 , libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "ocenaudio";
-  version = "3.10.6";
+  version = "3.13.1";
 
   src = fetchurl {
     url = "https://www.ocenaudio.com/downloads/index.php/ocenaudio_debian9_64.deb?version=${version}";
-    sha256 = "0fgvm1xw2kgrqj3w6slpfxbb3pw9k8i0dz16q9d5d8gyyvr2mh8g";
+    sha256 = "sha256-h5t5DpZD9zmmyGRueXBG5Pn+vZstm5yCUr6Mx3eyvsc=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libjack2
     libpulseaudio
     bzip2
-    alsaLib
+    alsa-lib
   ];
 
   buildInputs = [ dpkg ];
@@ -41,14 +41,15 @@ stdenv.mkDerivation rec {
     rm -rf $out/opt
 
     # Create symlink bzip2 library
-    ln -s ${bzip2.out}/lib/libbz2.so.1 $out/libbz2.so.1.0
+    ln -s ${bzip2.out}/lib/libbz2.so.1 $out/lib/libbz2.so.1.0
   '';
 
   meta = with lib; {
     description = "Cross-platform, easy to use, fast and functional audio editor";
     homepage = "https://www.ocenaudio.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ onny ];
   };
 }

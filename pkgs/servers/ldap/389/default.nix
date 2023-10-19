@@ -1,57 +1,132 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, doxygen, perl, pam, nspr, nss, openldap
-, db, cyrus_sasl, svrcore, icu, net-snmp, libkrb5, pcre, perlPackages, libevent, openssl, python3
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, cargo
+, libtool
+, pkg-config
+, cracklib
+, lmdb
+, json_c
+, linux-pam
+, libevent
+, libxcrypt
+, nspr
+, nss
+, openldap
+, withOpenldap ? true
+, db
+, withBdb ? true
+, cyrus_sasl
+, icu
+, net-snmp
+, withNetSnmp ? true
+, krb5
+, pcre2
+, python3
+, rustPlatform
+, rustc
+, openssl
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+, zlib
+, rsync
+, withCockpit ? true
+, withAsan ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
-  version = "1.3.9.1";
+  version = "2.4.3";
 
-  src = fetchurl {
-    url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "141iv1phgk1lw74sfjj3v7wy6qs0q56lvclwv2p0hqn1wg8ic4q6";
+  src = fetchFromGitHub {
+    owner = "389ds";
+    repo = pname;
+    rev = "${pname}-${version}";
+    hash = "sha256-bUjL1fjzyrq9jjpB/xbRCAISiPBwrlXbbDqT0aLOVOc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
-  buildInputs = [
-    perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net-snmp libkrb5 pcre libevent openssl python3
-  ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    sourceRoot = "${src.name}/src";
+    name = "${pname}-${version}";
+    hash = "sha256-FlrHaz1whwzDvm3MA+wEaQpq7h2X9ZDnQc3f73vLZ58=";
+  };
 
-  patches = [
-    (fetchpatch {
-      name = "389-ds-nss.patch";
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/nss.patch?h=389-ds-base&id=b80ed52cc65ff9b1d72f8ebc54dbd462b12f6be9";
-      sha256 = "07z7jl9z4gzhk3k6qyfn558xl76js8041llyr5n99h20ckkbwagk";
-    })
-  ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    python3
+    cargo
+    rustc
+  ]
+  ++ lib.optional withCockpit rsync;
+
+  buildInputs = [
+    cracklib
+    lmdb
+    json_c
+    linux-pam
+    libevent
+    libxcrypt
+    nspr
+    nss
+    cyrus_sasl
+    icu
+    krb5
+    pcre2
+    openssl
+    zlib
+  ]
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional withOpenldap openldap
+  ++ lib.optional withBdb db
+  ++ lib.optional withNetSnmp net-snmp;
+
   postPatch = ''
-    substituteInPlace Makefile.am \
-      --replace 's,@perlpath\@,$(perldir),g' 's,@perlpath\@,$(perldir) $(PERLPATH),g'
+    patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
   '';
 
   preConfigure = ''
-    # Create perl paths for library imports in perl scripts
-    PERLPATH=""
-    for P in $(echo $PERL5LIB | sed 's/:/ /g'); do
-      PERLPATH="$PERLPATH $(echo $P/*/*)"
-    done
-    export PERLPATH
+    ./autogen.sh --prefix="$out"
+  '';
+
+  preBuild = ''
+    mkdir -p ./vendor
+    tar -xzf ${cargoDeps} -C ./vendor --strip-components=1
   '';
 
   configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
+    "--enable-rust-offline"
+    "--enable-autobind"
+  ]
+  ++ lib.optionals withSystemd [
+    "--with-systemd"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ] ++ lib.optionals withOpenldap [
     "--with-openldap"
-    "--with-db"
-    "--with-db-inc=${db.dev}/include"
-    "--with-db-lib=${db.out}/lib"
-    "--with-sasl=${cyrus_sasl.dev}"
-    "--with-netsnmp=yes"
+  ] ++ lib.optionals withBdb [
+    "--with-db-inc=${lib.getDev db}/include"
+    "--with-db-lib=${lib.getLib db}/lib"
+  ] ++ lib.optionals withNetSnmp [
     "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
     "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
+  ] ++ lib.optionals (!withCockpit) [
+    "--disable-cockpit"
+  ] ++ lib.optionals withAsan [
+    "--enable-asan"
+    "--enable-debug"
   ];
 
   enableParallelBuilding = true;
+  # Disable parallel builds as those lack some dependencies:
+  #   ld: cannot find -lslapd: No such file or directory
+  # https://hydra.nixos.org/log/h38bj77gav0r6jbi4bgzy1lfjq22k2wy-389-ds-base-2.3.1.drv
+  enableParallelInstalling = false;
+
+  doCheck = true;
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
@@ -65,5 +140,6 @@ stdenv.mkDerivation rec {
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+    maintainers = [ maintainers.ners ];
   };
 }

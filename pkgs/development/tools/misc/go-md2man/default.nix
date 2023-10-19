@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "go-md2man";
-  version = "2.0.0";
+  version = "2.0.3";
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "cpuguy83";
     repo = "go-md2man";
-    sha256 = "0r1f7v475dxxgzqci1mxfliwadcrk86ippflx9n411325l4g3ghv";
+    sha256 = "sha256-bgAuN+pF9JekCQ/Eg4ph3WDv3RP8MB/10GDp1JMp9Kg=";
   };
 
   meta = with lib; {
@@ -18,6 +18,5 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/cpuguy83/go-md2man";
     maintainers = with maintainers; [offline];
-    platforms = platforms.unix;
   };
 }

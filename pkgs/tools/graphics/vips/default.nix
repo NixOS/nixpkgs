@@ -1,86 +1,116 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , pkg-config
 , glib
 , libxml2
 , expat
-, fftw
-, orc
-, lcms
-, imagemagick
-, openexr
-, libtiff
-, libjpeg
-, libgsf
-, libexif
-, libheif
-, librsvg
 , ApplicationServices
 , Foundation
-, python27
-, libpng
+, python3
 , fetchFromGitHub
-, fetchpatch
-, autoreconfHook
+, meson
+, ninja
 , gtk-doc
+, docbook-xsl-nons
 , gobject-introspection
-,
+  # Optional dependencies
+, libjpeg
+, libexif
+, librsvg
+, poppler
+, libgsf
+, libtiff
+, fftw
+, lcms2
+, libspng
+, libimagequant
+, imagemagick
+, pango
+, orc
+, matio
+, cfitsio
+, libwebp
+, openexr
+, openjpeg
+, libjxl
+, openslide
+, libheif
+, cgif
 }:
 
 stdenv.mkDerivation rec {
   pname = "vips";
-  version = "8.10.6";
+  version = "8.14.5";
 
-  outputs = [ "bin" "out" "man" "dev" ];
+  outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
-    sha256 = "sha256-hdpkBC76PnPTN+rnNchLVk1CrhcClTtbaWyUcyUtuAk=";
+    hash = "sha256-fG3DTP+3pO7sbqR/H9egJHU3cLKPU4Jad6qxcQ9evNw=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
-    extraPostFetch = ''
+    postFetch = ''
       rm -r $out/test/test-suite/images/
     '';
   };
 
   nativeBuildInputs = [
     pkg-config
-    autoreconfHook
-    gtk-doc
+    meson
+    ninja
+    docbook-xsl-nons
     gobject-introspection
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gtk-doc
   ];
 
   buildInputs = [
     glib
     libxml2
-    fftw
-    orc
-    lcms
-    imagemagick
-    openexr
-    libtiff
-    libjpeg
-    libgsf
-    libexif
-    libheif
-    libpng
-    librsvg
-    python27
-    libpng
     expat
-  ] ++ lib.optionals stdenv.isDarwin [ApplicationServices Foundation];
+    (python3.withPackages (p: [ p.pycairo ]))
+    # Optional dependencies
+    libjpeg
+    libexif
+    librsvg
+    poppler
+    libgsf
+    libtiff
+    fftw
+    lcms2
+    libspng
+    libimagequant
+    imagemagick
+    pango
+    orc
+    matio
+    cfitsio
+    libwebp
+    openexr
+    openjpeg
+    libjxl
+    openslide
+    libheif
+    cgif
+  ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
   propagatedBuildInputs = [
     glib
   ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
+  mesonFlags = [
+    "-Dpdfium=disabled"
+    "-Dnifti=disabled"
+  ]
+  ++ lib.optional (!stdenv.isDarwin) "-Dgtk_doc=true"
+  ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
+  ;
 
   meta = with lib; {
+    changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";
     homepage = "https://libvips.github.io/libvips/";
     description = "Image processing system for large images";
     license = licenses.lgpl2Plus;

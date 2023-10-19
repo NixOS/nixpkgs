@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, dateutil
+, python-dateutil
 , fetchPypi
 , isPy3k
 , mock
@@ -13,14 +13,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cuMRdmfu32aVG7LZP0KWpWuUsHioqVkFoFJhH7PxuXM=";
+    hash = "sha256-cuMRdmfu32aVG7LZP0KWpWuUsHioqVkFoFJhH7PxuXM=";
   };
 
   propagatedBuildInputs = [
-    dateutil
+    python-dateutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.optional (!isPy3k) mock;
 

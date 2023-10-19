@@ -11,7 +11,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Whether to add bandwhich to the global environment and configure a
           setcap wrapper for it.
         '';
@@ -22,8 +22,10 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ bandwhich ];
     security.wrappers.bandwhich = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_sys_ptrace,cap_dac_read_search,cap_net_raw,cap_net_admin+ep";
       source = "${pkgs.bandwhich}/bin/bandwhich";
-      capabilities = "cap_net_raw,cap_net_admin+ep";
     };
   };
 }

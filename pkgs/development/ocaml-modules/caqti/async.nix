@@ -2,8 +2,9 @@
 
 buildDunePackage {
   pname = "caqti-async";
-  useDune2 = true;
   inherit (caqti) version src;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [ async_kernel async_unix caqti core_kernel ];
 

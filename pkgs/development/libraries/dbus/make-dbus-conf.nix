@@ -1,4 +1,8 @@
-{ runCommand, writeText, libxslt, dbus
+{ runCommand
+, writeText
+, libxslt
+, dbus
+, findXMLCatalogs
 , serviceDirectories ? []
 , suidHelper ? "/var/setuid-wrappers/dbus-daemon-launch-helper"
 , apparmor ? "disabled" # one of enabled, disabled, required
@@ -14,19 +18,15 @@ runCommand "dbus-1"
     inherit serviceDirectories suidHelper apparmor;
     preferLocalBuild = true;
     allowSubstitutes = false;
-    XML_CATALOG_FILES = writeText "dbus-catalog.xml" ''
-      <?xml version="1.0"?>
-      <!DOCTYPE catalog PUBLIC
-        "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
-        "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 
-      <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-        <rewriteSystem
-          systemIdStartString="http://www.freedesktop.org/standards/dbus/1.0/"
-          rewritePrefix="file://${dbus}/share/xml/dbus-1/"/>
-      </catalog>
-    '';
-    nativeBuildInputs = [ libxslt.bin ];
+    nativeBuildInputs = [
+      libxslt.bin
+      findXMLCatalogs
+    ];
+
+    buildInputs = [
+      dbus.out
+    ];
   }
   ''
     mkdir -p $out
@@ -42,4 +42,8 @@ runCommand "dbus-1"
       --stringparam apparmor "$apparmor" \
       ${./make-session-conf.xsl} ${dbus}/share/dbus-1/session.conf \
       > $out/session.conf
+
+    # check if files are empty or only contain space characters
+    grep -q '[^[:space:]]' "$out/system.conf" || (echo "\"$out/system.conf\" was generated incorrectly and is empty, try building again." && exit 1)
+    grep -q '[^[:space:]]' "$out/session.conf" || (echo "\"$out/session.conf\" was generated incorrectly and is empty, try building again." && exit 1)
   ''

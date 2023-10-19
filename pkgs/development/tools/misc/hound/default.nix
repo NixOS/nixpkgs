@@ -4,20 +4,22 @@
 , makeWrapper
 , mercurial
 , git
+, openssh
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "hound";
-  version = "0.4.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "hound-search";
     repo = "hound";
     rev = "v${version}";
-    sha256 = "0p5w54fr5xz19ff8k5xkyq3iqhjki8wc0hj2x1pnmk6hzrz6hf65";
+    sha256 = "sha256-Qdk57zLjTXLdDEmB6K+sZAym5s0BekJJa/CpYeOBOcY=";
   };
 
-  vendorSha256 = "0x1nhhhvqmz3qssd2d44zaxbahj8lh9r4m5jxdvzqk6m3ly7y0b6";
+  vendorHash = "sha256-0psvz4bnhGuwwSAXvQp0ju0GebxoUyY2Rjp/D43KF78=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -25,14 +27,15 @@ buildGoModule rec {
   doCheck = false;
 
   postInstall = ''
-    wrapProgram $out/bin/houndd --prefix PATH : ${lib.makeBinPath [ mercurial git ]}
+    wrapProgram $out/bin/houndd --prefix PATH : ${lib.makeBinPath [ mercurial git openssh ]}
   '';
 
+  passthru.tests = { inherit (nixosTests) hound; };
+
   meta = with lib; {
-    inherit (src.meta) homepage;
     description = "Lightning fast code searching made easy";
+    homepage = "https://github.com/hound-search/hound";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc SuperSandro2000 ];
-    platforms = platforms.unix;
   };
 }

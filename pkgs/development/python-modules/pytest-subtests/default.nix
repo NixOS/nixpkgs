@@ -3,27 +3,37 @@
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.4.0";
-  disabled = pythonOlder "3.5";
+  version = "0.11.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jZ4sHR3OEfe30snQkgLr/HdXt/8MrJtyrTKO3+fuA3s=";
+    hash = "sha256-UYZciEV1RfUftyARlC8KPGkB7p4ky/ttG53BNIuvvjc=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pytest_subtests" ];
+  pythonImportsCheck = [
+    "pytest_subtests"
+  ];
 
   meta = with lib; {
-    description = "pytest plugin for unittest subTest() support and subtests fixture";
+    description = "Pytest plugin for unittest subTest() support and subtests fixture";
     homepage = "https://github.com/pytest-dev/pytest-subtests";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

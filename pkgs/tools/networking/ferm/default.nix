@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, ebtables, ipset, iptables, nixosTests }:
+{ lib, stdenv, fetchurl, makeWrapper, perl, iptables, nixosTests }:
 
 let
   inherit (lib.versions) majorMinor;
 in stdenv.mkDerivation rec {
-  version = "2.6";
+  version = "2.7";
   pname = "ferm";
 
   src = fetchurl {
     url = "http://ferm.foo-projects.org/download/${majorMinor version}/ferm-${version}.tar.xz";
-    sha256 = "sha256-aJVBRl58Bzy9YEyc0Y8RPDHAtBuxJhRyalmxfkQFiIU=";
+    sha256 = "sha256-wA2RDVOU5pZ1YI617g9QTVz9pB6ZCi2akbqsbfk+P5I=";
   };
 
   # perl is used at build time to gather the ferm version.
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     rm -r $out/lib/systemd
     for i in "$out/sbin/"*; do
-      wrapProgram "$i" --prefix PATH : "${lib.makeBinPath [ iptables ipset ebtables ]}"
+      wrapProgram "$i" --prefix PATH : "${lib.makeBinPath [ iptables ]}"
     done
   '';
 

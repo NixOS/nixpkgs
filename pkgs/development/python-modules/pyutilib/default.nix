@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "pyutilib";
-  version = "5.7.2";
+  version = "6.0.0";
 
   src = fetchPypi {
     pname = "PyUtilib";
     inherit version;
-    sha256 = "0bdb5hlj6kyb9m3xnpxzasfv5psnxfj21qx6md8ym8zkcqyq1qs5";
+    hash = "sha256-08FPjtkCioMbK/Ubird3brqH5mz8WKBrmcNZqqZA8EA=";
   };
 
   propagatedBuildInputs = [
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "PyUtilib: A collection of Python utilities";
     homepage = "https://github.com/PyUtilib/pyutilib";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

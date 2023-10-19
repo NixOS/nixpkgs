@@ -7,12 +7,13 @@
 , vala
 , gettext
 , itstool
-, python3
 , appstream-glib
 , desktop-file-utils
 , wrapGAppsHook
 , glib
 , gtk3
+, libhandy
+, libsecret
 , libxml2
 , gtk-vnc
 , gtk-frdp
@@ -21,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-connections";
-  version = "40.0.1";
+  version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-vpvLoHzz+vWs4M5UzSL4YJtNx3ZuJe5f2cGAw5WbTRE=";
+    hash = "sha256-E2otkksHfVzEEAyEWCbUcURCMKFsjawnMhE2gBcaYms=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +36,6 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
-    python3
     appstream-glib
     desktop-file-utils
     glib # glib-compile-resources
@@ -46,14 +46,11 @@ stdenv.mkDerivation rec {
     glib
     gtk-vnc
     gtk3
+    libhandy
+    libsecret
     libxml2
     gtk-frdp
   ];
-
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

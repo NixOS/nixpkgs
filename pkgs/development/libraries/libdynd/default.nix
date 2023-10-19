@@ -1,9 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
-let version = "0.7.2"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libdynd";
-  inherit version;
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "libdynd";
@@ -16,14 +15,17 @@ stdenv.mkDerivation {
     "-DDYND_BUILD_BENCHMARKS=OFF"
   ];
 
-  # added to fix build with gcc7+
-  NIX_CFLAGS_COMPILE = builtins.toString [
+  env.NIX_CFLAGS_COMPILE = builtins.toString [
+    # added to fix build with gcc7+
     "-Wno-error=implicit-fallthrough"
     "-Wno-error=nonnull"
     "-Wno-error=tautological-compare"
     "-Wno-error=class-memaccess"
     "-Wno-error=parentheses"
     "-Wno-error=deprecated-copy"
+    # Needed with GCC 12
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=maybe-uninitialized"
   ];
 
   nativeBuildInputs = [ cmake ];

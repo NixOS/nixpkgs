@@ -2,26 +2,25 @@
 
 buildGoModule rec {
   pname = "kopia";
-  version = "0.8.4";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Or6RL6yT/X3rVIySqt5lWbXbI25f8HNLBpY3cOhMC0g=";
+    hash = "sha256-ELnop8/f7/4E5FnWwGrPJt3n9YhSG1jei1tAt3zr1KI=";
   };
 
-  vendorSha256 = "sha256-1FK5IIvm2iyzGqj8IPL3/qvxFj0dC37aycQQ5MO0mBI=";
+  vendorHash = "sha256-8NTAnkIJkFKyjQL7KBoCqtSBog9Hz1vPBo81u8YcA1A=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  buildFlagsArray = ''
-    -ldflags=
-       -X github.com/kopia/kopia/repo.BuildVersion=${version}
-       -X github.com/kopia/kopia/repo.BuildInfo=${src.rev}
-  '';
+  ldflags = [
+    "-X github.com/kopia/kopia/repo.BuildVersion=${version}"
+    "-X github.com/kopia/kopia/repo.BuildInfo=${src.rev}"
+  ];
 
   meta = with lib; {
     homepage = "https://kopia.io";

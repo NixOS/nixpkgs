@@ -1,56 +1,56 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 , btrfs-progs
 , go-md2man
 , installShellFiles
 , util-linux
 , nixosTests
+, kubernetes
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "containerd";
-  version = "1.5.1";
+  version = "1.7.7";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "sha256-jVyg+fyMuDnV/TM0Z2t+Cr17a6XBv11aWijhsqMnA5s=";
+    hash = "sha256-5Tw7xltrsp+yGrdJ0O4MoFUvIaEiCQpMip5X1kfV/iM=";
   };
 
-  goPackagePath = "github.com/containerd/containerd";
-  outputs = [ "out" "man" ];
+  vendorHash = null;
 
   nativeBuildInputs = [ go-md2man installShellFiles util-linux ];
 
   buildInputs = [ btrfs-progs ];
 
-  buildFlags = [ "VERSION=v${version}" "REVISION=${src.rev}" ];
-
-  BUILDTAGS = [ ]
-    ++ lib.optional (btrfs-progs == null) "no_btrfs";
+  BUILDTAGS = lib.optionals (btrfs-progs == null) [ "no_btrfs" ];
 
   buildPhase = ''
-    cd go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
-    make binaries man $buildFlags
+    make binaries "VERSION=v${version}" "REVISION=${src.rev}"
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     install -Dm555 bin/* -t $out/bin
-    installManPage man/*.[1-9]
     installShellCompletion --bash contrib/autocomplete/ctr
     installShellCompletion --zsh --name _ctr contrib/autocomplete/zsh_autocomplete
+    runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) docker; };
+  passthru.tests = { inherit (nixosTests) docker; } // kubernetes.tests;
 
   meta = with lib; {
+    changelog = "https://github.com/containerd/containerd/releases/tag/${src.rev}";
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester endocrimes ];
     platforms = platforms.linux;
   };
 }

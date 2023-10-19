@@ -1,48 +1,68 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch
-, execnet
-, glob2
-, Mako
-, mock
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, mako
 , parse
 , parse-type
-, py
+, poetry-core
 , pytest
 , pytestCheckHook
-, six
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pytest-bdd";
-  version = "4.0.2";
+  version = "6.1.1";
+  format = "pyproject";
 
-  # tests are not included in pypi tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = pname;
-    rev = version;
-    sha256 = "0pxx4c8lm68rw0jshbr09fnadg8zz8j73q0qi49yw9s7yw86bg5l";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+76jIgfDQPdIoesTr1+QUu8wmOnrdf4KT+TJr9F2Hqk=";
   };
 
   patches = [
-    # Fixed compatibility with pytest > 6.1
     (fetchpatch {
-      url = "https://github.com/pytest-dev/pytest-bdd/commit/e1dc0cad9a1c1ba563ccfbc24f9993d83ac59293.patch";
-      sha256 = "1p3gavh6nir2a8crd5wdf0prfrg0hmgar9slvn8a21ils3k5pm5y";
+      name = "remove-setuptools.patch";
+      url = "https://github.com/pytest-dev/pytest-bdd/commit/5d8eda3a30b47d3bd27849884a851adafca765cb.patch";
+      hash = "sha256-G2WHaRKlQ9HINufh8wl7+ly7HfDGobMLzzlbwDwd+o8=";
     })
   ];
 
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
-  propagatedBuildInputs = [ glob2 Mako parse parse-type py six ];
+  propagatedBuildInputs = [
+    mako
+    parse
+    parse-type
+    typing-extensions
+  ];
 
-  checkInputs = [ pytestCheckHook execnet mock ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   preCheck = ''
     export PATH=$PATH:$out/bin
   '';
 
+  pythonImportsCheck = [
+    "pytest_bdd"
+  ];
+
   meta = with lib; {
-    description = "BDD library for the py.test runner";
+    description = "BDD library for the pytest";
     homepage = "https://github.com/pytest-dev/pytest-bdd";
     license = licenses.mit;
     maintainers = with maintainers; [ jm2dev ];

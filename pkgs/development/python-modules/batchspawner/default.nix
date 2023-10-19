@@ -2,34 +2,41 @@
 , buildPythonPackage
 , fetchFromGitHub
 , jupyterhub
-, isPy27
+, packaging
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "batchspawner";
-  version = "1.0.1";
-  disabled = isPy27;
+  version = "1.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "batchspawner";
-    rev = "v${version}";
-    sha256 = "0vqf3qc2yp52441s6xwgixgl37976qqgpd9sshbgh924j314v1yv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-oyS47q+gsO7JmRsbVJXglZsSRfits5rS/nrHW5E7EV0=";
   };
 
   propagatedBuildInputs = [
     jupyterhub
+    packaging
   ];
 
-  # tests require a job scheduler e.g. slurm, pbs, etc.
+  # Tests require a job scheduler e.g. slurm, pbs, etc.
   doCheck = false;
 
-  pythonImportsCheck = [ "batchspawner" ];
+  pythonImportsCheck = [
+    "batchspawner"
+  ];
 
   meta = with lib; {
     description = "A spawner for Jupyterhub to spawn notebooks using batch resource managers";
-    homepage = "https://jupyter.org";
+    homepage = "https://github.com/jupyterhub/batchspawner";
+    changelog = "https://github.com/jupyterhub/batchspawner/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,12 +1,13 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.zabbixProxy;
+  opt = options.services.zabbixProxy;
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
   inherit (lib) mkAfter mkDefault mkEnableOption mkIf mkMerge mkOption;
-  inherit (lib) attrValues concatMapStringsSep getName literalExample optional optionalAttrs optionalString types;
+  inherit (lib) attrValues concatMapStringsSep getName literalExpression optional optionalAttrs optionalString types;
   inherit (lib.generators) toKeyValue;
 
   user = "zabbix";
@@ -37,11 +38,11 @@ in
   options = {
 
     services.zabbixProxy = {
-      enable = mkEnableOption "the Zabbix Proxy";
+      enable = mkEnableOption (lib.mdDoc "the Zabbix Proxy");
 
       server = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           The IP address or hostname of the Zabbix server to connect to.
           '';
         };
@@ -52,25 +53,25 @@ in
           if cfg.database.type == "mysql" then pkgs.zabbix.proxy-mysql
           else if cfg.database.type == "pgsql" then pkgs.zabbix.proxy-pgsql
           else pkgs.zabbix.proxy-sqlite;
-        defaultText = "pkgs.zabbix.proxy-pgsql";
-        description = "The Zabbix package to use.";
+        defaultText = literalExpression "pkgs.zabbix.proxy-pgsql";
+        description = lib.mdDoc "The Zabbix package to use.";
       };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [ nettools nmap traceroute ];
-        defaultText = "[ nettools nmap traceroute ]";
-        description = ''
-          Packages to be added to the Zabbix <envar>PATH</envar>.
+        defaultText = literalExpression "[ nettools nmap traceroute ]";
+        description = lib.mdDoc ''
+          Packages to be added to the Zabbix {env}`PATH`.
           Typically used to add executables for scripts, but can be anything.
         '';
       };
 
       modules = mkOption {
         type = types.attrsOf types.package;
-        description = "A set of modules to load.";
+        description = lib.mdDoc "A set of modules to load.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";
@@ -91,41 +92,46 @@ in
           type = types.enum [ "mysql" "pgsql" "sqlite" ];
           example = "mysql";
           default = "pgsql";
-          description = "Database engine to use.";
+          description = lib.mdDoc "Database engine to use.";
         };
 
         host = mkOption {
           type = types.str;
           default = "localhost";
-          description = "Database host address.";
+          description = lib.mdDoc "Database host address.";
         };
 
         port = mkOption {
-          type = types.int;
+          type = types.port;
           default = if cfg.database.type == "mysql" then mysql.port else pgsql.port;
-          description = "Database host port.";
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql"
+            then config.${options.services.mysql.port}
+            else config.${options.services.postgresql.port}
+          '';
+          description = lib.mdDoc "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = if cfg.database.type == "sqlite" then "${stateDir}/zabbix.db" else "zabbix";
-          defaultText = "zabbix";
-          description = "Database name.";
+          defaultText = literalExpression "zabbix";
+          description = lib.mdDoc "Database name.";
         };
 
         user = mkOption {
           type = types.str;
           default = "zabbix";
-          description = "Database user.";
+          description = lib.mdDoc "Database user.";
         };
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
           default = null;
           example = "/run/keys/zabbix-dbpassword";
-          description = ''
+          description = lib.mdDoc ''
             A file containing the password corresponding to
-            <option>database.user</option>.
+            {option}`database.user`.
           '';
         };
 
@@ -133,13 +139,13 @@ in
           type = types.nullOr types.path;
           default = null;
           example = "/run/postgresql";
-          description = "Path to the unix socket file to use for authentication.";
+          description = lib.mdDoc "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = true;
-          description = "Whether to create a local database automatically.";
+          description = lib.mdDoc "Whether to create a local database automatically.";
         };
       };
 
@@ -147,7 +153,7 @@ in
         ip = mkOption {
           type = types.str;
           default = "0.0.0.0";
-          description = ''
+          description = lib.mdDoc ''
             List of comma delimited IP addresses that the trapper should listen on.
             Trapper will listen on all network interfaces if this parameter is missing.
           '';
@@ -156,7 +162,7 @@ in
         port = mkOption {
           type = types.port;
           default = 10051;
-          description = ''
+          description = lib.mdDoc ''
             Listen port for trapper.
           '';
         };
@@ -165,7 +171,7 @@ in
       openFirewall = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Open ports in the firewall for the Zabbix Proxy.
         '';
       };
@@ -173,9 +179,9 @@ in
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int str (listOf str) ]);
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           Zabbix Proxy configuration. Refer to
-          <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy"/>
+          <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy>
           for details on supported values.
         '';
         example = {
@@ -262,7 +268,12 @@ in
     };
 
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
 
     systemd.services.zabbix-proxy = {

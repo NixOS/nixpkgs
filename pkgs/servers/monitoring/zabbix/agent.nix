@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, libiconv, openssl, pcre }:
 
-import ./versions.nix ({ version, sha256 }:
+import ./versions.nix ({ version, sha256, ... }:
   stdenv.mkDerivation {
     pname = "zabbix-agent";
     inherit version;
@@ -19,9 +19,14 @@ import ./versions.nix ({ version, sha256 }:
 
     configureFlags = [
       "--enable-agent"
+      "--enable-ipv6"
       "--with-iconv"
       "--with-libpcre"
       "--with-openssl=${openssl.dev}"
+    ];
+    makeFlags = [
+      "AR:=$(AR)"
+      "RANLIB:=$(RANLIB)"
     ];
 
     postInstall = ''

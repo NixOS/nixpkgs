@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchurl
+{ lib
+, stdenv
+, fetchurl
 , glib
 , gtk3
 , libffcall
@@ -8,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-server";
-  version = "2.4.5";
+  version = "2.4.6";
 
   src = fetchurl {
     url = "https://www.gtk-server.org/stable/gtk-server-${version}.tar.gz";
-    sha256 = "0vlx5ibvc7hyc8yipjgvrx1azvmh42i9fv1khg3dvn09nrdkrc7f";
+    sha256 = "sha256-sFL3y068oXDKgkEUcNnGVsNSPBdI1NzpsqdYJfmOQoA=";
   };
 
   preConfigure = ''
@@ -25,10 +27,10 @@ stdenv.mkDerivation rec {
   configureOptions = [ "--with-gtk3" ];
 
   meta = with lib; {
-    description = "gtk-server for interpreted GUI programming";
     homepage = "http://www.gtk-server.org/";
+    description = "gtk-server for interpreted GUI programming";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.tohl ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

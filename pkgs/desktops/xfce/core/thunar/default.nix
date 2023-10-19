@@ -1,4 +1,5 @@
 { mkXfceDerivation
+, fetchpatch
 , lib
 , docbook_xsl
 , exo
@@ -10,6 +11,7 @@
 , libxfce4ui
 , libxfce4util
 , libxslt
+, pcre
 , xfconf
 , gobject-introspection
 , makeWrapper
@@ -20,9 +22,18 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
-  version = "4.16.8";
+  version = "4.18.7";
 
-  sha256 = "1r7qkd6l0mgf97m1xnnizm7fkvl4a52r3hsds5z68y6myvb78p18";
+  sha256 = "sha256-pxIblhC40X0wdE6+uvmV5ypp4sOZtzn/evcS33PlNpU=";
+
+  patches = [
+    # Fix log spam with new GLib
+    # https://gitlab.xfce.org/xfce/thunar/-/issues/1204
+    (fetchpatch {
+      url = "https://gitlab.xfce.org/xfce/thunar/-/commit/2f06fcdbedbc59d9f90ccd3df07fce417cea391d.patch";
+      sha256 = "sha256-nvYakT4GJkQYmubgZF8GJIA/m7+6ZPbmD0HSgMcCh10=";
+    })
+  ];
 
   nativeBuildInputs = [
     docbook_xsl
@@ -39,12 +50,11 @@ let unwrapped = mkXfceDerivation {
     libnotify
     libxfce4ui
     libxfce4util
+    pcre
     xfconf
   ];
 
-  patches = [
-    ./thunarx_plugins_directory.patch
-  ];
+  configureFlags = [ "--with-custom-thunarx-dirs-enabled" ];
 
   # the desktop file … is in an insecure location»
   # which pops up when invoking desktop files that are
@@ -56,8 +66,10 @@ let unwrapped = mkXfceDerivation {
     sed -i -e 's|thunar_dialogs_show_insecure_program (parent, _(".*"), file, exec)|1|' thunar/thunar-file.c
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Xfce file manager";
+    mainProgram = "thunar";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };
 

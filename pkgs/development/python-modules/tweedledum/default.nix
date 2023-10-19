@@ -1,32 +1,38 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
 , ninja
 , scikit-build
+  # Check Inputs
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "tweedledum";
-  version = "1.0.0";
+  version = "1.1.1";
   format = "pyproject";
 
   src = fetchFromGitHub{
     owner = "boschmitt";
     repo = "tweedledum";
     rev = "v${version}";
-    hash = "sha256-59lJzdw9HLJ9ADxp/a3KW4v5aU/dYm27NSYoz9D49i4=";
+    hash = "sha256-wgrY5ajaMYxznyNvlD0ul1PFr3W8oV9I/OVsStlZEBM=";
   };
+
+  postPatch = ''
+    sed -i '/\[project\]/a version = "${version}"' pyproject.toml
+    sed -i '/\[project\]/a name = "tweedledum"' pyproject.toml
+  '';
 
   nativeBuildInputs = [ cmake ninja scikit-build ];
   dontUseCmakeConfigure = true;
 
   pythonImportsCheck = [ "tweedledum" ];
 
-  # TODO: use pytest, but had issues with finding the correct directories
-  checkPhase = ''
-    python -m unittest discover -s ./python/test -t .
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+  pytestFlagsArray = [ "python/test" ];
 
   meta = with lib; {
     description = "A library for synthesizing and manipulating quantum circuits";

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-table-other";
-  version = "5.0.3";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = "fcitx5-table-other";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-jJTFAOrBeRBoUn0mqqkX0z1zQnDOh7otMHDPmjuZbWw=";
+    sha256 = "sha256-ymHAKaPmQckxM/XHoDOVSzEWpyQGb7zVG21CDwNfyjg=";
   };
 
   nativeBuildInputs = [

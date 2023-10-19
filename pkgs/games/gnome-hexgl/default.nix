@@ -5,7 +5,7 @@
 , pkg-config
 , gthree
 , gsound
-, epoxy
+, libepoxy
 , gtk3
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gthree
     gsound
-    epoxy
+    libepoxy
     gtk3
   ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Gthree port of HexGL";
     homepage = "https://github.com/alexlarsson/gnome-hexgl";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

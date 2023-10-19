@@ -1,38 +1,75 @@
-{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
-, alsaLib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
-, SDL2, SDL2_mixer }:
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, pkg-config
+, nasm
+, makeDesktopItem
+, alsa-lib
+, flac
+, gtk2
+, libvorbis
+, libvpx
+, libGLU
+, libGL
+, SDL2
+, SDL2_mixer
+, AGL
+, Cocoa
+, GLUT
+, OpenGL
+}:
 
 let
-  version = "20200907";
-  rev = "9257";
-  revExtra = "93f62bbad";
-
   desktopItem = makeDesktopItem {
     name = "eduke32";
     exec = "@out@/bin/${wrapper}";
     comment = "Duke Nukem 3D port";
     desktopName = "Enhanced Duke Nukem 3D";
     genericName = "Duke Nukem 3D port";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   wrapper = "eduke32-wrapper";
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "eduke32";
-  inherit version;
+  version = "20230926";
+  rev = "10459";
+  revExtra = "8feaf6c25";
 
   src = fetchurl {
-    url = "http://dukeworld.duke4.net/eduke32/synthesis/latest/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
-    sha256 = "972630059be61ef9564a241b84ef2ee4f69fc85c19ee36ce46052ff2f1ce3bf9";
+    url = "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
+    hash = "sha256-GQOpDQm2FeaOMyYu9L5zhrM6XFvZAHMAwn1tSK7RCB8=";
   };
 
-  buildInputs = [ alsaLib flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
+  buildInputs = [
+    flac
+    libvorbis
+    libvpx
+    SDL2
+    SDL2_mixer
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    gtk2
+    libGL
+    libGLU
+  ] ++ lib.optionals stdenv.isDarwin [
+    AGL
+    Cocoa
+    GLUT
+    OpenGL
+  ];
 
   nativeBuildInputs = [ makeWrapper pkg-config ]
     ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''
+    substituteInPlace source/imgui/src/imgui_impl_sdl2.cpp \
+      --replace '#include <SDL.h>' '#include <SDL2/SDL.h>' \
+      --replace '#include <SDL_syswm.h>' '#include <SDL2/SDL_syswm.h>' \
+      --replace '#include <SDL_vulkan.h>' '#include <SDL2/SDL_vulkan.h>'
+  '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace source/build/src/glbuild.cpp \
       --replace libGLU.so ${libGLU}/lib/libGLU.so
 
@@ -42,10 +79,11 @@ in stdenv.mkDerivation {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
-
   makeFlags = [
     "SDLCONFIG=${SDL2}/bin/sdl2-config"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # broken, see: https://github.com/NixOS/nixpkgs/issues/19098
+    "LTO=0"
   ];
 
   enableParallelBuilding = true;
@@ -54,7 +92,7 @@ in stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm755 -t $out/bin eduke32 mapster32
-
+  '' + lib.optionalString stdenv.isLinux ''
     makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
       --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
       --add-flags '-g "$EDUKE32_DATA_DIR/DUKE3D.GRP"'
@@ -62,7 +100,16 @@ in stdenv.mkDerivation {
     cp -rv ${desktopItem}/share $out
     substituteInPlace $out/share/applications/eduke32.desktop \
       --subst-var out
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/EDuke32.app/Contents/MacOS
+    mkdir -p $out/Applications/Mapster32.app/Contents/MacOS
 
+    cp -r platform/Apple/bundles/EDuke32.app/* $out/Applications/EDuke32.app/
+    cp -r platform/Apple/bundles/Mapster32.app/* $out/Applications/Mapster32.app/
+
+    ln -sf $out/bin/eduke32 $out/Applications/EDuke32.app/Contents/MacOS/eduke32
+    ln -sf $out/bin/mapster32 $out/Applications/Mapster32.app/Contents/MacOS/mapster32
+  '' + ''
     runHook postInstall
   '';
 
@@ -70,8 +117,7 @@ in stdenv.mkDerivation {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
     homepage = "http://eduke32.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sander ];
-    # Darwin is untested (supported by upstream)
+    maintainers = with maintainers; [ mikroskeem sander ];
     platforms = platforms.all;
   };
 }

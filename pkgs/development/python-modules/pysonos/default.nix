@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pysonos";
-  version = "0.0.50";
+  version = "0.0.54";
 
   disabled = !isPy3k;
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "amelchio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iyFdT+RH2dtMtD+jSLFuAVE1DIQn6k9ONLOXNFhpuHs=";
+    hash = "sha256-gBOknYHL5nQWFVhCbLN0Ah+1fovcNY4P2myryZnUadk=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     mock
     requests-mock

@@ -1,29 +1,65 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, apacheHttpd, apr, cairo, iniparser, mapnik }:
+{ fetchFromGitHub
+, lib
+, stdenv
+, cmake
+, pkg-config
+, apacheHttpd
+, apr
+, aprutil
+, boost
+, cairo
+, curl
+, glib
+, gtk2
+, harfbuzz
+, icu
+, iniparser
+, libmemcached
+, mapnik
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_tile";
-  version = "unstable-2017-01-08";
+  version = "0.6.1+unstable=2023-03-09";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "mod_tile";
-    rev = "e25bfdba1c1f2103c69529f1a30b22a14ce311f1";
-    sha256 = "12c96avka1dfb9wxqmjd57j30w9h8yx4y4w34kyq6xnf6lwnkcxp";
+    rev = "f521540df1003bb000d7367a59ad612161eab0f0";
+    sha256 = "sha256-jIqeplAQt4W97PNKm6ZDGPDUc/PEiLM5yEdPeI+H03A=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ apacheHttpd apr cairo iniparser mapnik ];
-
-  configureFlags = [
-    "--with-apxs=${apacheHttpd.dev}/bin/apxs"
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
-  installPhase = ''
-    mkdir -p $out/modules
-    make install-mod_tile DESTDIR=$out
-    mv $out${apacheHttpd}/* $out
-    rm -rf $out/nix
+  buildInputs = [
+    apacheHttpd
+    apr
+    aprutil
+    boost
+    cairo
+    curl
+    glib
+    harfbuzz
+    icu
+    iniparser
+    libmemcached
+    mapnik
+  ];
+
+  # the install script wants to install mod_tile.so into apache's modules dir
+  # also mapnik pkg-config config is missing this patch: https://github.com/mapnik/mapnik/commit/692c2faa0ef168a8c908d262c2bbfe51a74a8336.patch
+  postPatch = ''
+    sed -i "s|\''${HTTPD_MODULES_DIR}|$out/modules|" CMakeLists.txt
+    sed -i -e "s|@MAPNIK_FONTS_DIR@|$(mapnik-config --fonts)|" -e "s|@MAPNIK_PLUGINS_DIR@|$(mapnik-config --input-plugins)|" tests/renderd.conf.in
   '';
+
+  enableParallelBuilding = true;
+
+  cmakeFlags = [ "-DENABLE_TESTS=1" ];
+  doCheck = true;
 
   meta = with lib; {
     homepage = "https://github.com/openstreetmap/mod_tile";

@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchFromGitHub,
-  bzip2, nix, perl, makeWrapper,
+{ lib
+, stdenv
+, fetchFromGitHub
+, bzip2
+, nix
+, perl
+, makeWrapper
+, nixosTests
 }:
-
-with lib;
 
 let
   rev = "e4675e38ab54942e351c7686e40fabec822120b9";
@@ -10,7 +14,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nix-serve-0.2-${substring 0 7 rev}";
+  pname = "nix-serve";
+  version = "0.2-${lib.substring 0 7 rev}";
 
   src = fetchFromGitHub {
     owner = "edolstra";
@@ -26,11 +31,16 @@ stdenv.mkDerivation {
     install -Dm0755 nix-serve.psgi $out/libexec/nix-serve/nix-serve.psgi
 
     makeWrapper ${perl.withPackages(p: [ p.DBDSQLite p.Plack p.Starman nix.perl-bindings ])}/bin/starman $out/bin/nix-serve \
-                --prefix PATH : "${makeBinPath [ bzip2 nix ]}" \
+                --prefix PATH : "${lib.makeBinPath [ bzip2 nix ]}" \
                 --add-flags $out/libexec/nix-serve/nix-serve.psgi
   '';
 
-  meta = {
+  passthru.tests = {
+    nix-serve = nixosTests.nix-serve;
+    nix-serve-ssh = nixosTests.nix-serve-ssh;
+  };
+
+  meta = with lib; {
     homepage = "https://github.com/edolstra/nix-serve";
     description = "A utility for sharing a Nix store as a binary cache";
     maintainers = [ maintainers.eelco ];

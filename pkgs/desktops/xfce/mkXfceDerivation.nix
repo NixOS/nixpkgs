@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook, gitUpdater }:
 
 { category
 , pname
@@ -41,13 +41,12 @@ let
 
     pos = builtins.unsafeGetAttrPos "pname" args;
 
-    passthru.updateScript = xfce.updateScript {
-      inherit pname version attrPath rev-prefix odd-unstable patchlevel-unstable;
-      versionLister = xfce.gitLister src.meta.homepage;
+    passthru.updateScript = gitUpdater {
+      inherit rev-prefix odd-unstable patchlevel-unstable;
     };
 
     meta = with lib; {
-      homepage = "https://gitlab.xfce.org/${category}/${pname}/about";
+      homepage = "https://gitlab.xfce.org/${category}/${pname}";
       license = licenses.gpl2Plus; # some libraries are under LGPLv2+
       platforms = platforms.linux;
     };
@@ -57,3 +56,4 @@ let
 in
 
 stdenv.mkDerivation (recursiveUpdate template publicArgs // concatAttrLists [ template args ])
+# TODO [ AndersonTorres ]: verify if it allows using hash attribute as an option to sha256

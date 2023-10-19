@@ -4,51 +4,68 @@
 , rustPlatform
 , openssl
 , zlib
+, zstd
 , pkg-config
 , python3
 , xorg
-, libiconv
+, Libsystem
 , AppKit
 , Security
 , nghttp2
 , libgit2
-, withStableFeatures ? true
+, doCheck ? true
+, withDefaultFeatures ? true
+, additionalFeatures ? (p: p)
+, testers
+, nushell
+, nix-update-script
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  version = "0.85.0";
+in
+
+rustPlatform.buildRustPackage {
   pname = "nushell";
-  version = "0.31.0";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "nushell";
+    repo = "nushell";
     rev = version;
-    sha256 = "1dpbc6m0pxizkh4r02nw1i1fx9v43llylqnd28naqkklwc15pb2w";
+    hash = "sha256-/c3JTgIT+T41D0S7irQ0jq2MDzmx3os4pYpVr10cL3E=";
   };
 
-  cargoSha256 = "1znqac3s48ah9a7zpqdgw0lvvhklryj2j7mym65myzjbn1g264rm";
+  cargoHash = "sha256-lBipwX72j0Af3PCat18s9NIjJiKZFZTcU9Utwt+eQzI=";
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
+    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ python3 ]
+    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ zlib libiconv Security ]
-    ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
+  buildInputs = [ openssl zstd ]
+    ++ lib.optionals stdenv.isDarwin [ zlib Libsystem Security ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.isLinux) [ xorg.libX11 ]
+    ++ lib.optionals (withDefaultFeatures && stdenv.isDarwin) [ AppKit nghttp2 libgit2 ];
 
-  cargoBuildFlags = lib.optional withStableFeatures "--features stable";
+  buildNoDefaultFeatures = !withDefaultFeatures;
+  buildFeatures = additionalFeatures [ ];
 
-  # TODO investigate why tests are broken on darwin
-  # failures show that tests try to write to paths
-  # outside of TMPDIR
-  doCheck = ! stdenv.isDarwin;
+  inherit doCheck;
 
   checkPhase = ''
     runHook preCheck
     echo "Running cargo test"
-    HOME=$TMPDIR cargo test
+    HOME=$(mktemp -d) cargo test
     runHook postCheck
   '';
+
+  passthru = {
+    shellPath = "/bin/nu";
+    tests.version = testers.testVersion {
+      package = nushell;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "A modern shell written in Rust";
@@ -56,9 +73,5 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne johntitor marsam ];
     mainProgram = "nu";
-  };
-
-  passthru = {
-    shellPath = "/bin/nu";
   };
 }

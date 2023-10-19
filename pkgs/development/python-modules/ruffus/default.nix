@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , hostname
 , pytest
-, python
 , lib, stdenv
 }:
 
@@ -20,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ gevent ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hostname
     pytest
   ];

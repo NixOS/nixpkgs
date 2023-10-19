@@ -1,41 +1,51 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
 , attrs
 , botocore
+, buildPythonPackage
 , click
-, enum-compat
+, fetchFromGitHub
 , hypothesis
 , inquirer
 , jmespath
 , mock
 , mypy-extensions
 , pip
-, pytest
+, pytestCheckHook
+, pythonOlder
 , pyyaml
+, requests
 , setuptools
 , six
-, typing ? null
+, typing-extensions
 , watchdog
+, websocket-client
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.22.3";
+  version = "1.28.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5a84a73c4a8d8b22bb64e06ff99060d7f222097db4237e58749dcad5165f082d";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-m3pSD4fahBW6Yt/w07Co4fTZD7k6as5cPwoK5QSry6M=";
   };
 
-  checkInputs = [ watchdog pytest hypothesis mock ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "inquirer>=2.7.0,<3.0.0" "inquirer" \
+      --replace "pip>=9,<23.1" "pip" \
+  '';
+
   propagatedBuildInputs = [
     attrs
     botocore
     click
-    enum-compat
     inquirer
     jmespath
     mypy-extensions
@@ -43,28 +53,58 @@ buildPythonPackage rec {
     pyyaml
     setuptools
     six
+    typing-extensions
     wheel
-  ] ++ lib.optionals (pythonOlder "3.5") [
-    typing
+    watchdog
   ];
 
-  # conftest.py not included with pypi release
-  doCheck = false;
+  nativeCheckInputs = [
+    hypothesis
+    mock
+    pytestCheckHook
+    requests
+    websocket-client
+  ];
 
-  postPatch = ''
-    sed -i setup.py -e "/pip>=/c\'pip',"
-    substituteInPlace setup.py \
-      --replace 'typing==3.6.4' 'typing'
-  '';
+  disabledTestPaths = [
+    # Don't check the templates and the sample app
+    "chalice/templates"
+    "docs/source/samples/todo-app/code/tests/test_db.py"
+    # Requires credentials
+    "tests/aws/test_features.py"
+    # Requires network access
+    "tests/aws/test_websockets.py"
+    "tests/integration/test_package.py"
+  ];
 
-  checkPhase = ''
-    pytest tests
-  '';
+  disabledTests = [
+    # Requires network access
+    "test_update_domain_name_failed"
+    "test_can_reload_server"
+    # Content for the tests is missing
+    "test_can_import_env_vars"
+    "test_stack_trace_printed_on_error"
+    # Don't build
+    "test_can_generate_pipeline_for_all"
+    "test_build_wheel"
+    # https://github.com/aws/chalice/issues/1850
+    "test_resolve_endpoint"
+    "test_endpoint_from_arn"
+    # Tests require dist
+    "test_setup_tar_gz_hyphens_in_name"
+    "test_both_tar_gz"
+    "test_both_tar_bz2"
+  ];
+
+  pythonImportsCheck = [
+    "chalice"
+  ];
 
   meta = with lib; {
     description = "Python Serverless Microframework for AWS";
     homepage = "https://github.com/aws/chalice";
+    changelog = "https://github.com/aws/chalice/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

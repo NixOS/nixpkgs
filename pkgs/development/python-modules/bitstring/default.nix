@@ -1,13 +1,32 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, setuptools
+, unittestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "bitstring";
-  version = "3.1.7";
+  version = "4.0.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0jl6192dwrlm5ybkbh7ywmyaymrc3cmz9y07nm7qdli9n9rfpwzx";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "scott-griffiths";
+    repo = pname;
+    rev = "bitstring-${version}";
+    hash = "sha256-LghfDjf/Z1dEU0gjH1cqMb04ChnW+aGDjmN+RAhMWW8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "bitstring" ];
 
   meta = with lib; {
     description = "Module for binary data manipulation";

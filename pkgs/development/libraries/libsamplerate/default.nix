@@ -4,10 +4,11 @@ let
   inherit (lib) optionals optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "libsamplerate-0.1.9";
+  pname = "libsamplerate";
+  version = "0.1.9";
 
   src = fetchurl {
-    url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
+    url = "http://www.mega-nerd.com/SRC/${pname}-${version}.tar.gz";
     sha256 = "1ha46i0nbibq0pl0pjwcqiyny4hj8lp1bnl4dpxm64zjw9lb2zha";
   };
 

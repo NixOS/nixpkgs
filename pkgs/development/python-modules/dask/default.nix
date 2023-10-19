@@ -1,92 +1,159 @@
 { lib
 , stdenv
-, bokeh
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
-, fsspec
-, pytestCheckHook
-, pytest-rerunfailures
-, pythonOlder
+
+# build-system
+, setuptools
+, wheel
+
+# dependencies
+, click
 , cloudpickle
-, numpy
-, toolz
-, dill
-, pandas
+, fsspec
+, importlib-metadata
+, packaging
 , partd
-, pytest-xdist
-, withExtraComplete ? false
+, pyyaml
+, toolz
+
+# optional-dependencies
+, numpy
+, pyarrow
+, lz4
+, pandas
 , distributed
+, bokeh
+, jinja2
+
+# tests
+, arrow-cpp
+, hypothesis
+, pytest-asyncio
+, pytest-rerunfailures
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2021.03.0";
-  disabled = pythonOlder "3.5";
+  version = "2023.8.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask";
-    repo = pname;
-    rev = version;
-    sha256 = "LACv7lWpQULQknNGX/9vH9ckLsypbqKDGnsNBgKT1eI=";
+    repo = "dask";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ZKjfxTJCu3EUOKz16+VP8+cPqQliFNc7AU1FPC1gOXw=";
   };
 
-  propagatedBuildInputs = [
-    bokeh
-    cloudpickle
-    dill
-    fsspec
-    numpy
-    pandas
-    partd
-    toolz
-  ] ++ lib.optionals withExtraComplete [
-    distributed
+  nativeBuildInputs = [
+    setuptools
+    wheel
   ];
 
-  doCheck = true;
+  propagatedBuildInputs = [
+    click
+    cloudpickle
+    fsspec
+    packaging
+    partd
+    pyyaml
+    importlib-metadata
+    toolz
+  ];
 
-  checkInputs = [
+  passthru.optional-dependencies = lib.fix (self: {
+    array = [
+      numpy
+    ];
+    complete = [
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
+    dataframe = [
+      numpy
+      pandas
+    ];
+    distributed = [
+      distributed
+    ];
+    diagnostics = [
+      bokeh
+      jinja2
+    ];
+  });
+
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
     pytest-xdist
+    # from panda[test]
+    hypothesis
+    pytest-asyncio
+  ] ++ lib.optionals (!arrow-cpp.meta.broken) [ # support is sparse on aarch64
+    pyarrow
   ];
 
   dontUseSetuptoolsCheck = true;
 
-  patches = [
-    # dask dataframe cannot be imported in sandboxed builds
-    # See https://github.com/dask/dask/pull/7601
-    (fetchpatch {
-      url = "https://github.com/dask/dask/commit/9ce5b0d258cecb3ef38fd844135ad1f7ac3cea5f.patch";
-      sha256 = "sha256-1EVRYwAdTSEEH9jp+UOnrijzezZN3iYR6q6ieYJM3kY=";
-      name = "fix-dask-dataframe-imports-in-sandbox.patch";
-    })
-  ];
-
   postPatch = ''
-    # versioneer hack to set version of github package
+    # versioneer hack to set version of GitHub package
     echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
     substituteInPlace setup.py \
+      --replace "import versioneer" "" \
       --replace "version=versioneer.get_version()," "version='${version}'," \
       --replace "cmdclass=versioneer.get_cmdclass()," ""
+
+    substituteInPlace pyproject.toml \
+      --replace ', "versioneer[toml]==0.28"' "" \
+      --replace " --durations=10" "" \
+      --replace " --cov-config=pyproject.toml" "" \
+      --replace "\"-v" "\" "
   '';
 
   pytestFlagsArray = [
-    "-n $NIX_BUILD_CORES"
+    # Rerun failed tests up to three times
+    "--reruns 3"
+    # Don't run tests that require network access
     "-m 'not network'"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
-    # this test requires features of python3Packages.psutil that are
+    # Test requires features of python3Packages.psutil that are
     # blocked in sandboxed-builds
     "test_auto_blocksize_csv"
+    # AttributeError: 'str' object has no attribute 'decode'
+    "test_read_dir_nometa"
+  ] ++ [
+    # https://github.com/dask/dask/issues/10347#issuecomment-1589683941
+    "test_concat_categorical"
+    # AttributeError: 'ArrowStringArray' object has no attribute 'tobytes'. Did you mean: 'nbytes'?
+    "test_dot"
+    "test_dot_nan"
+    "test_merge_column_with_nulls"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "dask.dataframe" "dask" "dask.array" ];
+  pythonImportsCheck = [
+    "dask"
+    "dask.array"
+    "dask.bag"
+    "dask.bytes"
+    "dask.dataframe"
+    "dask.dataframe.io"
+    "dask.dataframe.tseries"
+    "dask.diagnostics"
+  ];
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";

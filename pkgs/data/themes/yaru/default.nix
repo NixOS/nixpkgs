@@ -1,21 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, meson, sassc, pkg-config, glib, ninja,
-  python3, gtk3, gnome, gtk-engine-murrine, humanity-icon-theme, hicolor-icon-theme }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, sassc
+, pkg-config
+, glib
+, ninja
+, python3
+, gtk3
+, gnome
+, gtk-engine-murrine
+, humanity-icon-theme
+, hicolor-icon-theme
+}:
 
 stdenv.mkDerivation rec {
   pname = "yaru";
-  version = "21.04.1";
+  version = "23.10.0";
 
   src = fetchFromGitHub {
     owner = "ubuntu";
     repo = "yaru";
     rev = version;
-    sha256 = "0z6k8q9b5xjx6xwirqbsqq5jjxw79ar2d61r7cgipqmbjdsjfgjz";
+    hash = "sha256-+Szk77QeoM4PwusxKflTh83h16qz6Es6UwDXpbydJUE=";
   };
 
   nativeBuildInputs = [ meson sassc pkg-config glib ninja python3 ];
   buildInputs = [ gtk3 gnome.gnome-themes-extra ];
   propagatedBuildInputs = [ humanity-icon-theme hicolor-icon-theme ];
-
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontDropIconThemeCache = true;
@@ -27,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ubuntu/yaru";
     license = with licenses; [ cc-by-sa-40 gpl3Plus lgpl21Only lgpl3Only ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.jD91mZM2 ];
+    maintainers = with maintainers; [ fortuneteller2k amaxine ];
   };
 }

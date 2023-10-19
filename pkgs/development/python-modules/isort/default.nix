@@ -1,29 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , colorama
 , hypothesis
 , poetry-core
+, setuptools
 , pylama
 , pytestCheckHook
 }:
 
-let
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "isort";
-  version = "5.6.4";
+  version = "5.12.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "isort";
-    rev = version;
-    sha256 = "1m7jpqssnbsn1ydrw1dn7nrcrggqcvj9v6mk5ampxmvk94xd2r2q";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8ija4xWWZuYkElXLdziV7ulN8dubIsChcZQ5dx9hfO0=";
   };
 
   nativeBuildInputs = [
     poetry-core
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     colorama
     hypothesis
     pylama
@@ -46,12 +49,14 @@ in buildPythonPackage rec {
   '';
 
   pytestFlagsArray = [
+    "--ignore=tests/benchmark/" # requires pytest-benchmark
     "--ignore=tests/integration/" # pulls in 10 other packages
     "--ignore=tests/unit/profiles/test_black.py" # causes infinite recursion to include black
   ];
 
   disabledTests = [
     "test_run" # doesn't like paths in /build
+    "test_fuzz_show_unified_diff" # flakey
     "test_pyi_formatting_issue_942"
     "test_requirements_finder"
     "test_pipfile_finder"
@@ -63,6 +68,7 @@ in buildPythonPackage rec {
     # plugin not available
     "test_isort_literals_issue_1358"
     "test_isort_supports_formatting_plugins_issue_1353"
+    "test_sort_configurable_sort_issue_1732"
     "test_value_assignment_list"
     # profiles not available
     "test_isort_supports_shared_profiles_issue_970"
@@ -73,5 +79,6 @@ in buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];
+    mainProgram = "isort";
   };
 }

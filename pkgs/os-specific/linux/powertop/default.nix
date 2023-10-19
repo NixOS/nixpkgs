@@ -1,38 +1,57 @@
-{ lib, stdenv, fetchurl, fetchpatch, gettext, libnl, ncurses, pciutils, pkg-config, zlib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gettext
+, libnl
+, ncurses
+, pciutils
+, pkg-config
+, zlib
+, autoreconfHook
+, autoconf-archive
+, nix-update-script
+, testers
+, powertop
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "powertop";
-  version = "2.13";
+  version = "2.15";
 
-  src = fetchurl {
-    url = "https://01.org/sites/default/files/downloads/${pname}-${version}.tar.gz";
-    sha256 = "0y1ixw8v17fdb1ima0zshrd0rh4zxdh10r93nrrvq6d4lhn9jpx6";
+  src = fetchFromGitHub {
+    owner = "fenrus75";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
   };
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config autoreconfHook autoconf-archive ];
   buildInputs = [ gettext libnl ncurses pciutils zlib ];
-
-  patches = lib.optional stdenv.hostPlatform.isMusl (
-    fetchpatch {
-      name = "strerror_r.patch";
-      url = "https://git.alpinelinux.org/aports/plain/main/powertop/strerror_r.patch?id=3b9214d436f1611f297b01f72469d66bfe729d6e";
-      sha256 = "1kzddhcrb0n2iah4lhgxwwy4mkhq09ch25jjngyq6pdj6pmfkpfw";
-    }
-  );
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace "/sbin/modprobe" "modprobe"
-    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "xset"
+    substituteInPlace src/calibrate/calibrate.cpp --replace "/usr/bin/xset" "${lib.getExe xorg.xset}"
     substituteInPlace src/tuning/bluetooth.cpp --replace "/usr/bin/hcitool" "hcitool"
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = powertop;
+      command = "powertop --version";
+      inherit version;
+    };
+  };
+
   meta = with lib; {
+    inherit (src.meta) homepage;
+    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
     description = "Analyze power consumption on Intel-based laptops";
-    homepage = "https://01.org/powertop";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ fpletz ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ fpletz anthonyroussel ];
     platforms = platforms.linux;
   };
 }

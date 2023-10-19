@@ -1,24 +1,34 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, cmake
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, rustPlatform
+, CoreServices
+, cmake
 , libiconv
 , useMimalloc ? false
 , doCheck ? true
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2021-05-31";
-  cargoSha256 = "sha256-atfpcP3esMQQ2lOFTKksQH1nV78KAic51XZi+R++vHg=";
+  version = "2023-10-02";
+  cargoSha256 = "sha256-KCjdsvHWVr3vsyv+KhxwXTI3WJbAggb9HLyN/1ioek8=";
 
   src = fetchFromGitHub {
-    owner = "rust-analyzer";
+    owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-v2zS9qnvNrImQ3UqU80YagwLJKkVxwvwMMISimFbMOI=";
+    sha256 = "sha256-2K3Aq4gjPZBDnkAMJaMA4ElE+BNbmrqtSBWtt9kPGaM=";
   };
 
-  buildAndTestSubdir = "crates/rust-analyzer";
+  cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
+  cargoTestFlags = [ "--package" "rust-analyzer" "--package" "proc-macro-srv-cli" ];
 
-  cargoBuildFlags = lib.optional useMimalloc "--features=mimalloc";
+  # Code format check requires more dependencies but don't really matter for packaging.
+  # So just ignore it.
+  checkFlags = [ "--skip=tidy::check_code_formatting" ];
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
@@ -27,7 +37,9 @@ rustPlatform.buildRustPackage rec {
     libiconv
   ];
 
-  RUST_ANALYZER_REV = version;
+  buildFeatures = lib.optional useMimalloc "mimalloc";
+
+  CFG_RELEASE = version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
@@ -43,12 +55,17 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = nix-update-script { };
+    # FIXME: Pass overrided `rust-analyzer` once `buildRustPackage` also implements #119942
+    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
+  };
 
   meta = with lib; {
-    description = "An experimental modular compiler frontend for the Rust language";
-    homepage = "https://github.com/rust-analyzer/rust-analyzer";
+    description = "A modular compiler frontend for the Rust language";
+    homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
+    mainProgram = "rust-analyzer";
   };
 }

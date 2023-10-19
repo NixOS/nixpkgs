@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-dd=$(nix-build --no-out-link -A dd-agent ../../../..)
-echo '# Generated using update-dd-agent-default, please re-run after updating dd-agent. DO NOT EDIT MANUALLY.' > dd-agent-defaults.nix
-echo '[' >> dd-agent-defaults.nix
-echo '  "auto_conf"' >> dd-agent-defaults.nix
-for f in $(find $dd/agent/conf.d-system -maxdepth 1 -type f | grep -v '\.example' | sort); do
-  echo "  \"$(basename $f)\"" >> dd-agent-defaults.nix
-done
-echo ']' >> dd-agent-defaults.nix

@@ -12,7 +12,7 @@ let
     pname = "rnnoise-nu";
     version = "unstable-07-10-2019";
     src = speech-denoiser-src;
-    sourceRoot = "source/rnnoise";
+    sourceRoot = "${speech-denoiser-src.name}/rnnoise";
     nativeBuildInputs = [ autoreconfHook ];
     configureFlags = [ "--disable-examples" "--disable-doc" "--disable-shared" "--enable-static" ];
     installTargets = [ "install-rnnoise-nu" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation  {
   nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ lv2 rnnoise-nu ];
 
-  mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");
+  mesonFlags = [ "--prefix=${placeholder "out"}/lib/lv2" ];
 
   postPatch = ''
     substituteInPlace meson.build \
@@ -35,6 +35,7 @@ stdenv.mkDerivation  {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Speech denoise lv2 plugin based on RNNoise library";
     homepage = "https://github.com/lucianodato/speech-denoiser";
     license = licenses.lgpl3;

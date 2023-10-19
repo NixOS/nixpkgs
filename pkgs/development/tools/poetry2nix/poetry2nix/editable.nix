@@ -6,7 +6,7 @@
 , editablePackageSources
 }:
 let
-  name = poetryLib.moduleName pyProject.tool.poetry.name;
+  name = poetryLib.normalizePackageName pyProject.tool.poetry.name;
 
   # Just enough standard PKG-INFO fields for an editable installation
   pkgInfoFields = {
@@ -27,7 +27,7 @@ let
     (lib.generators.toINI { } pyProject.tool.poetry.plugins);
 
   # A python package that contains simple .egg-info and .pth files for an editable installation
-  editablePackage = python.pkgs.toPythonModule (pkgs.runCommandNoCC "${name}-editable"
+  editablePackage = python.pkgs.toPythonModule (pkgs.runCommand "${name}-editable"
     { } ''
         mkdir -p "$out/${python.sitePackages}"
         cd "$out/${python.sitePackages}"

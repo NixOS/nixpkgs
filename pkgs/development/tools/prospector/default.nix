@@ -1,55 +1,42 @@
 { lib
-, pkgs
-, python
+, fetchFromGitHub
+, python3
 }:
 
 let
-  py = python.override {
-    packageOverrides = self: super: {
-      pep8-naming = super.pep8-naming.overridePythonAttrs(oldAttrs: rec {
-        version = "0.4.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0nhf8p37y008shd4f21bkj5pizv8q0l8cpagyyb8gr059d6gvvaf";
-        };
-      });
-    };
-  };
-  setoptconf = py.pkgs.callPackage ./setoptconf.nix { };
+  setoptconf-tmp = python3.pkgs.callPackage ./setoptconf.nix { };
 in
 
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "prospector";
-  version = "1.2.0";
-  disabled = isPy27;
+  version = "1.9.0";
+  format = "pyproject";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = version;
-    sha256 = "07kb37zrrsriqzcmli0ghx7qb1iwkzh83qsiikl9jy50faby2sjg";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-94JGKX91d2kul+KMYohga9KCOj6RN/YKpD8e4nWSOOM=";
   };
 
-  checkInputs = [
-    pytest
+  pythonRelaxDeps = [
+    "pyflakes"
+    "pep8-naming"
+    "flake8"
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ];
 
-  patchPhase = ''
-    substituteInPlace setup.py \
-      --replace 'pycodestyle<=2.4.0' 'pycodestyle<=2.5.0'
-  '';
-
-  propagatedBuildInputs = [
-    astroid
-    django
+  propagatedBuildInputs = with python3.pkgs; [
+    bandit
     dodgy
+    flake8
+    gitpython
     mccabe
+    mypy
     pep8-naming
     pycodestyle
     pydocstyle
@@ -58,17 +45,35 @@ buildPythonApplication rec {
     pylint-celery
     pylint-django
     pylint-flask
+    pylint-plugin-utils
+    pyroma
     pyyaml
     requirements-detector
-    setoptconf
+    setoptconf-tmp
+    setuptools
+    toml
+    vulture
   ];
+
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "prospector"
+  ];
+
+  disabledTestPaths = [
+    # distutils.errors.DistutilsArgError: no commands supplied
+    "tests/tools/pyroma/test_pyroma_tool.py"
+  ];
+
 
   meta = with lib; {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    changelog = "https://github.com/PyCQA/prospector/blob/v${version}/CHANGELOG.rst";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

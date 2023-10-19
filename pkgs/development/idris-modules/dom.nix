@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "dom";
+  pname = "dom";
   version = "2017-04-22";
 
   idrisDeps = [ idrisscript html xhr ];

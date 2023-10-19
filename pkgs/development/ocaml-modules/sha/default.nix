@@ -1,28 +1,27 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, ounit
-}:
+{ lib, fetchurl, buildDunePackage, ocaml, stdlib-shims, ounit2 }:
 
 buildDunePackage rec {
   pname = "sha";
-  version = "1.13";
-
-  useDune2 = true;
+  version = "1.15.4";
 
   src = fetchurl {
-    url = "https://github.com/djs55/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "00z2s4fsv9i1h09rj5dy3nd9hhcn79b75sn2ljj5wihlf4y4g304";
+    url = "https://github.com/djs55/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-beWxITmxmZzp30zHiloxiGwqVHydRIvyhT+LU7zx8bE=";
   };
 
-  doCheck = true;
-  checkInputs = [ ounit ];
+  propagatedBuildInputs = [
+    stdlib-shims
+  ];
+
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
+  checkInputs = [
+    ounit2
+  ];
 
   meta = with lib; {
     description = "Binding for SHA interface code in OCaml";
-    maintainers = [ maintainers.arthurteisseire ];
-    homepage = "https://github.com/djs55/ocaml-${pname}";
+    homepage = "https://github.com/djs55/ocaml-sha/";
     license = licenses.isc;
+    maintainers = with maintainers; [ arthurteisseire ];
   };
-
 }

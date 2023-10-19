@@ -4,19 +4,17 @@
 , isPy3k
 , libGL
 , libX11
-, pytestCheckHook
-, psutil
 }:
 
 buildPythonPackage rec {
   pname = "glcontext";
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = pname;
-    rev = version;
-    sha256 = "16kwrfjijn9bnb48rk17wapmhxq6g9s59zczh65imyncb9k82wkc";
+    rev = "refs/tags/${version}";
+    hash = "sha256-TGkVDZbxxvOOal+rLHeCNUoyOzvg9wQsAMan8LDn938=";
   };
 
   disabled = !isPy3k;

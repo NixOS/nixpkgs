@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+}:
 
 stdenv.mkDerivation rec {
   pname = "libunarr";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/selmf/unarr/releases/download/v${version}/unarr-${version}.tar.xz";
-    sha256 = "1db500k6w90qn6qb4j3zcczailmmv81q9lv4bwq516hbncg5p4sl";
+    hash = "sha256-5wCnhjoj+GTmaeDTCrUnm1Wt9SsWAbQcPSYM//FNeOA=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "-flto" "" \
+      --replace "AppleClang" "Clang"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/selmf/unarr";
     description = "A lightweight decompression library with support for rar, tar and zip archives";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
   };
 }

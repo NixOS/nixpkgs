@@ -1,58 +1,84 @@
-{ mkDerivation
-, stdenv
+{ stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, qmake
+, gitUpdater
 , pkg-config
-, qttools
+, qmake
+, qt5compat ? null
 , qtbase
+, qttools
+, qtwayland
 , rtaudio
 , rtmidi
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambootracker";
-  version = "0.4.6";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
-    owner = "rerrahkr";
+    owner = "BambooTracker";
     repo = "BambooTracker";
-    rev = "v${version}";
-    sha256 = "0iddqfw951dw9xpl4w7310sl4z544507ppb12i8g4fzvlxfw2ifc";
+    rev = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-rMYs2jixzoMGem9lxAjDMbFOMrnK8BLFjZIagdZk/Ok=";
   };
 
-  # TODO Remove when updating past 0.4.6
-  # Fixes build failure on darwin
-  patches = [
-    (fetchpatch {
-      name = "bambootracker-Add_braces_in_initialization_of_std-array.patch";
-      url = "https://github.com/rerrahkr/BambooTracker/commit/0fc96c60c7ae6c2504ee696bb7dec979ac19717d.patch";
-      sha256 = "1z28af46mqrgnyrr4i8883gp3wablkk8rijnj0jvpq01s4m2sfjn";
-    })
+  postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
+    # Work around lrelease finding in qmake being broken by using pre-Qt5.12 code path
+    # https://github.com/NixOS/nixpkgs/issues/214765
+    substituteInPlace BambooTracker/lang/lang.pri \
+      --replace 'equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 12)' 'if(true)'
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+    wrapQtAppsHook
   ];
 
-  nativeBuildInputs = [ qmake qttools pkg-config ];
+  buildInputs = [
+    qtbase
+    rtmidi
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
+    qt5compat
+  ] ++ rtaudio.buildInputs;
 
-  buildInputs = [ qtbase rtaudio rtmidi ];
-
-  qmakeFlags = [ "CONFIG+=system_rtaudio" "CONFIG+=system_rtmidi" ];
+  qmakeFlags = [
+    # we don't have RtAudio 6 yet: https://github.com/NixOS/nixpkgs/pull/245075
+    # "CONFIG+=system_rtaudio"
+    "CONFIG+=system_rtmidi"
+  ];
 
   postConfigure = "make qmake_all";
 
-  # installs app bundle on darwin, re-extract the binary
-  # wrapQtAppsHook fails to wrap mach-o binaries, manually call wrapper (https://github.com/NixOS/nixpkgs/issues/102044)
+  # Wrapping the inside of the app bundles, avoiding double-wrapping
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mv $out/bin/BambooTracker{.app/Contents/MacOS/BambooTracker,}
-    rm -r $out/bin/BambooTracker.app
-    wrapQtApp $out/bin/BambooTracker
+    mkdir -p $out/Applications
+    mv $out/{bin,Applications}/BambooTracker.app
+    ln -s $out/{Applications/BambooTracker.app/Contents/MacOS,bin}/BambooTracker
+    wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
-    homepage = "https://rerrahkr.github.io/BambooTracker";
-    license = licenses.gpl2Only;
+    homepage = "https://bambootracker.github.io/BambooTracker/";
+    license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
   };
-}
+})

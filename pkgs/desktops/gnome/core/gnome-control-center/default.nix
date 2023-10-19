@@ -1,15 +1,11 @@
 { fetchurl
-, fetchpatch
 , lib
 , stdenv
 , substituteAll
 , accountsservice
 , adwaita-icon-theme
-, cheese
-, clutter
-, clutter-gtk
 , colord
-, colord-gtk
+, colord-gtk4
 , cups
 , docbook-xsl-nons
 , fontconfig
@@ -17,6 +13,7 @@
 , gettext
 , glib
 , glib-networking
+, gcr
 , glibc
 , gnome-bluetooth
 , gnome-color-manager
@@ -24,23 +21,20 @@
 , gnome-online-accounts
 , gnome-settings-daemon
 , gnome
-, grilo
-, grilo-plugins
 , gsettings-desktop-schemas
 , gsound
-, gtk3
+, gtk4
 , ibus
-, libcanberra-gtk3
 , libgnomekbd
 , libgtop
 , libgudev
-, libhandy
+, libadwaita
 , libkrb5
 , libpulseaudio
 , libpwquality
 , librsvg
+, webp-pixbuf-loader
 , libsecret
-, libsoup
 , libwacom
 , libxml2
 , libxslt
@@ -49,12 +43,13 @@
 , mutter
 , networkmanager
 , networkmanagerapplet
-, libnma
+, libnma-gtk4
 , ninja
 , pkg-config
 , polkit
 , python3
 , samba
+, shadow
 , shared-mime-info
 , sound-theme-freedesktop
 , tracker
@@ -62,7 +57,7 @@
 , tzdata
 , udisks2
 , upower
-, epoxy
+, libepoxy
 , gnome-user-share
 , gnome-remote-desktop
 , wrapGAppsHook
@@ -70,27 +65,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "40.0";
+  version = "44.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-zMmlc2UXOFEJrlpZkGwlgkTdh5t1A61ZhM9BZVyzAvE=";
+    sha256 = "sha256-BmplBS/D7ProYAJehfeX5qsrh6WMT4q5xm7CBxioDHo=";
   };
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      gnome_desktop = gnome-desktop;
-      inherit glibc libgnomekbd tzdata;
+      inherit glibc libgnomekbd tzdata shadow;
       inherit cups networkmanagerapplet;
-    })
-
-    # Fix startup assertion in power panel.
-    # https://gitlab.gnome.org/GNOME/gnome-control-center/merge_requests/974
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-control-center/commit/9acaa10567c94048657c69538e5d7813f82c4224.patch";
-      sha256 = "59GeTPcG2UiVTL4VTS/TP0p0QkAQpm3VgvuAiw64wUU=";
     })
   ];
 
@@ -109,39 +96,33 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     adwaita-icon-theme
-    cheese
-    clutter
-    clutter-gtk
     colord
-    colord-gtk
-    epoxy
+    colord-gtk4
+    libepoxy
     fontconfig
     gdk-pixbuf
     glib
     glib-networking
+    gcr
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
     gnome-remote-desktop # optional, sharing panel
     gnome-settings-daemon
     gnome-user-share # optional, sharing panel
-    grilo
-    grilo-plugins # for setting wallpaper from Flickr
     gsettings-desktop-schemas
     gsound
-    gtk3
+    gtk4
     ibus
-    libcanberra-gtk3
     libgtop
     libgudev
-    libhandy
+    libadwaita
     libkrb5
-    libnma
+    libnma-gtk4
     libpulseaudio
     libpwquality
     librsvg
     libsecret
-    libsoup
     libwacom
     libxml2
     modemmanager
@@ -155,9 +136,20 @@ stdenv.mkDerivation rec {
     upower
   ];
 
-  postPatch = ''
-    chmod +x build-aux/meson/meson_post_install.py # patchShebangs requires executable file
-    patchShebangs build-aux/meson/meson_post_install.py
+  preConfigure = ''
+    # For ITS rules
+    addToSearchPath "XDG_DATA_DIRS" "${polkit.out}/share"
+  '';
+
+  postInstall = ''
+    # Pull in WebP support for gnome-backgrounds.
+    # In postInstall to run before gappsWrapperArgsHook.
+    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+      extraLoaders = [
+        librsvg
+        webp-pixbuf-loader
+      ];
+    }}"
   '';
 
   preFixup = ''
@@ -173,6 +165,8 @@ stdenv.mkDerivation rec {
       substituteInPlace $i --replace "Exec=gnome-control-center" "Exec=$out/bin/gnome-control-center"
     done
   '';
+
+  separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {

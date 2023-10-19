@@ -6,7 +6,7 @@
 , libfm-qt
 , libqtxdg
 , lxqt-build-tools
-, lxqtUpdateScript
+, gitUpdater
 , qtbase
 , qtsvg
 , qttools
@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "lxqt-qtplugin";
-  version = "0.17.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "168ii015j57hkccdh27h2fdh8yzs8nzy8nw20wnx6fbcg5401666";
+    sha256 = "/phBrpSru/4m+mcAkn4C6hKm5H2BAXNkbTgU2HmoyBg=";
   };
 
   nativeBuildInputs = [
@@ -44,13 +44,13 @@ mkDerivation rec {
       --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
   '';
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-qtplugin";
     description = "LXQt Qt platform integration plugin";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

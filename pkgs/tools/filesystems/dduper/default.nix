@@ -1,15 +1,15 @@
 { lib, stdenv, fetchpatch, fetchFromGitHub, btrfs-progs, python3 }:
 
 let
-  btrfsProgsPatched = btrfs-progs.overrideAttrs (oldAttrs: {
+  btrfsProgsPatched = btrfs-progs.overrideAttrs {
     patches = [
       (fetchpatch {
         name = "0001-Print-csum-for-a-given-file-on-stdout.patch";
-        url = "https://raw.githubusercontent.com/Lakshmipathi/dduper/8fab08e0f1901bf54411d25f1767b48c978074cb/patch/btrfs-progs-v5.9/0001-Print-csum-for-a-given-file-on-stdout.patch";
-        sha256 = "1li9lslrap70ibad8sij3bgpxn5lqs0j10l60bmy3c36y866q3g1";
+        url = "https://raw.githubusercontent.com/Lakshmipathi/dduper/ecc2664c380616ec75cfc1e600b5514cdff5c687/patch/btrfs-progs-v6.1/0001-Print-csum-for-a-given-file-on-stdout.patch";
+        sha256 = "sha256-M4LT7G6gwBfSXf6EL4pxNoQJMyUTOA+ojxEJqw2yss4=";
       })
     ];
-  });
+  };
   py3 = python3.withPackages (ps: with ps; [
     prettytable
     numpy

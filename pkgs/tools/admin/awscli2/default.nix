@@ -1,54 +1,57 @@
-{ lib, python3, groff, less, fetchFromGitHub }:
+{ lib
+, python3
+, groff
+, less
+, fetchFromGitHub
+, nix-update-script
+, testers
+, awscli2
+}:
+
 let
-  py = python3.override {
-    packageOverrides = self: super: {
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.0dev112";
-        src = fetchFromGitHub {
-          owner = "boto";
-          repo = "botocore";
-          rev = "221c0aa5dbad42f096e00fed45d2e2071561b1da";
-          sha256 = "sha256-uJCP3bUK/xACQVG4kMBDIIP+zPjre+uWbqWEC/gBTD4=";
+  py = python3 // {
+    pkgs = python3.pkgs.overrideScope (final: prev: {
+      ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
+        src = prev.src.override {
+          version = "0.17.21";
+          hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
-      prompt_toolkit = super.prompt_toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.10";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1nr990i4b04rnlw1ghd0xmgvvvhih698mb6lb6jylr76cs7zcnpi";
-        };
-      });
-      s3transfer = super.s3transfer.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "sha256-ywIvSxZVHt67sxo3fT8JYA262nNj2MXbeXbn9Hcy4bI=";
-        };
-      });
-    };
+    });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.2.4"; # N.B: if you change this, change botocore to a matching version too
+  version = "2.13.25"; # N.B: if you change this, check if overrides are still up-to-date
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
-    rev = version;
-    sha256 = "sha256-MctW31X012DXY16qS6AP6nLiaAt/cuA8iMwGm0oXi6M=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8Euc2yOWv0TRz4SgjRAMdTogGQNE4J/XtadPNe5kKKI=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5"
-    substituteInPlace setup.py --replace "cryptography>=3.3.2,<3.4.0" "cryptography>=3.3.2"
-    substituteInPlace setup.py --replace "docutils>=0.10,<0.16" "docutils>=0.10"
-    substituteInPlace setup.py --replace "ruamel.yaml>=0.15.0,<0.16.0" "ruamel.yaml>=0.15.0"
-    substituteInPlace setup.py --replace "wcwidth<0.2.0" "wcwidth"
+    substituteInPlace pyproject.toml \
+      --replace 'cryptography>=3.3.2,<40.0.2' 'cryptography>=3.3.2' \
+      --replace 'flit_core>=3.7.1,<3.8.1' 'flit_core>=3.7.1' \
+      --replace 'awscrt>=0.16.4,<=0.16.16' 'awscrt>=0.16.4'
+
+    substituteInPlace requirements-base.txt \
+      --replace "wheel==0.38.4" "wheel>=0.38.4" \
+      --replace "flit_core==3.8.0" "flit_core>=3.8.0"
+
+    # Upstream needs pip to build and install dependencies and validates this
+    # with a configure script, but we don't as we provide all of the packages
+    # through PYTHONPATH
+    sed -i '/pip>=/d' requirements/bootstrap.txt
   '';
 
-  checkInputs = [ jsonschema mock nose ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     awscrt
@@ -59,24 +62,20 @@ with py.pkgs; buildPythonApplication rec {
     distro
     docutils
     groff
+    jmespath
     less
-    prompt_toolkit
+    prompt-toolkit
+    python-dateutil
     pyyaml
-    rsa
-    ruamel_yaml
-    s3transfer
-    six
-    wcwidth
+    ruamel-yaml
+    urllib3
   ];
 
-  checkPhase = ''
-    export PATH=$PATH:$out/bin
-
-    # https://github.com/NixOS/nixpkgs/issues/16144#issuecomment-225422439
-    export HOME=$TMP
-
-    AWS_TEST_COMMAND=$out/bin/aws python scripts/ci/run-tests
-  '';
+  nativeCheckInputs = [
+    jsonschema
+    mock
+    pytestCheckHook
+  ];
 
   postInstall = ''
     mkdir -p $out/${python3.sitePackages}/awscli/data
@@ -91,13 +90,47 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
-  passthru.python = py; # for aws_shell
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$(mktemp -d)
+  '';
+
+  pytestFlagsArray = [
+    "-Wignore::DeprecationWarning"
+  ];
+
+  disabledTestPaths = [
+    # Integration tests require networking
+    "tests/integration"
+
+    # Disable slow tests (only run unit tests)
+    "tests/backends"
+    "tests/functional"
+  ];
+
+  pythonImportsCheck = [
+    "awscli"
+  ];
+
+  passthru = {
+    python = py; # for aws_shell
+    updateScript = nix-update-script {
+      # Excludes 1.x versions from the Github tags list
+      extraArgs = [ "--version-regex" "^(2\.(.*))" ];
+    };
+    tests.version = testers.testVersion {
+      package = awscli2;
+      command = "aws --version";
+      inherit version;
+    };
+  };
 
   meta = with lib; {
+    description = "Unified tool to manage your AWS services";
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
-    description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant ];
+    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
+    mainProgram = "aws";
   };
 }

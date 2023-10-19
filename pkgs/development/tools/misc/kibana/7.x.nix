@@ -1,38 +1,35 @@
 { elk7Version
 , enableUnfree ? true
-, lib, stdenv
+, lib
+, stdenv
 , makeWrapper
 , fetchurl
-, nodejs-10_x
+, nodejs_16
 , coreutils
 , which
 }:
 
-with lib;
 let
-  nodejs = nodejs-10_x;
+  nodejs = nodejs_16;
   inherit (builtins) elemAt;
-  info = splitString "-" stdenv.hostPlatform.system;
+  info = lib.splitString "-" stdenv.hostPlatform.system;
   arch = elemAt info 0;
   plat = elemAt info 1;
-  shas =
-    if enableUnfree
-    then {
-      x86_64-linux  = "1wq4fc2fifkg1qz7nxdfb4yi2biay8cgdz7kl5k0p37sxn0sbkja";
-      x86_64-darwin = "06346kj7bv49py49pmmnmh8m24322m88v1af19909pj9cxgd0p6v";
-    }
-    else {
-      x86_64-linux  = "0ygpmcm6wdcnvw8azwqc5257lyic7yw31rqvm2pw3afhpha62lpj";
-      x86_64-darwin = "0xy81g0bhxp47p29kkkh5llfzqkzqzr5dk50ap2hy0hjw33ld6g1";
+  hashes =
+    {
+      x86_64-linux  = "sha512-09XokG5krjxGnk34DhxpLOGRLjb2jd82uZtwGfrzSuuqMpBhkEptK2oySGxuGdHF8uowwlR5p5YO2TvBwMsWkQ==";
+      x86_64-darwin = "sha512-cqRJnvu730Jfkr6vwbHUFuZube1g522cmvnDwTzhGGK6VN/7+9XL3vavqtUPDVdTLTUk+DrNiIQK7MaJH3SHMg==";
+      aarch64-linux = "sha512-zhtYThz5j4+w5gI1JWSnHv709Tk23eegVsrtYmdaYhZiTw2yvCTYI5uNAfBjBr8XPdp6CKF4e6Bh2wHKDYg1mg==";
+      aarch64-darwin = "sha512-cqRJnvu730Jfkr6vwbHUFuZube1g522cmvnDwTzhGGK6VN/7+9XL3vavqtUPDVdTLTUk+DrNiIQK7MaJH3SHMg==";
     };
 
 in stdenv.mkDerivation rec {
-  name = "kibana-${optionalString (!enableUnfree) "oss-"}${version}";
+  pname = "kibana";
   version = elk7Version;
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
+    url = "https://artifacts.elastic.co/downloads/kibana/${pname}-${version}-${plat}-${arch}.tar.gz";
+    hash = hashes.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [
@@ -53,10 +50,10 @@ in stdenv.mkDerivation rec {
     sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Visualize logs and time-stamped data";
     homepage = "http://www.elasticsearch.org/overview/kibana";
-    license = if enableUnfree then licenses.elastic else licenses.asl20;
+    license = licenses.elastic20;
     maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;
   };

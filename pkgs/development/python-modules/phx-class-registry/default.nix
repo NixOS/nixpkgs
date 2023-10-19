@@ -1,28 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  pname = "phx-class-registry";
-  version = "3.0.5";
+  pname = "class-registry";
+  version = "4.0.6";
+  disabled = pythonOlder "3.5";
 
-  disabled = isPy27;
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "14iap8db2ldmnlf5kvxs52aps31rl98kpa5nq8wdm30a86n6457i";
+  src = fetchFromGitHub {
+    owner = "todofixthis";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-kSEHgzBgnAq5rMv2HbmGl+9CUzsmzUzPQWr+5q8mcsA=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  disabledTests = [
-    "test_branding"
-    "test_happy_path"
-    "test_len"
+  pythonImportsCheck = [
+    "class_registry"
   ];
 
   meta = with lib; {
-    description = "Registry pattern for Python classes, with setuptools entry points integration";
-    homepage = "https://github.com/todofixthis/class-registry";
+    description = "Factory and registry pattern for Python classes";
+    homepage = "https://class-registry.readthedocs.io/en/latest/";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ kevincox ];
   };
 }

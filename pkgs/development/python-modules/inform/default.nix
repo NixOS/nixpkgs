@@ -1,31 +1,45 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, flit-core
 , arrow
 , six
 , hypothesis
-, pytest
-, pytestrunner
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "inform";
-  version = "1.23";
+  version = "1.28";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "inform";
-    rev = "v${version}";
-    sha256 = "02zlprvidkz51aypss4knhv7dbr0sbpz3caqjzf9am2n1jx2viyy";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RA8/or3HTS/rQmG4A/Eg5j24YElaTEpnHa1yksARVMQ=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ arrow six ];
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  checkInputs = [ pytest hypothesis ];
-  checkPhase = ''
-    patchShebangs test.doctests.py test.inform.py
-    ./test.doctests.py && ./test.inform.py && pytest
-  '';
+  propagatedBuildInputs = [
+    arrow
+    six
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
+
+  disabledTests = [
+    "test_prostrate"
+  ];
 
   meta = with lib; {
     description = "Print and logging utilities";
@@ -35,6 +49,7 @@ buildPythonPackage rec {
       allow you to simply and cleanly print different types of messages.
     '';
     homepage = "https://inform.readthedocs.io";
+    changelog = "https://github.com/KenKundert/inform/blob/v${version}/doc/releases.rst";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jeremyschlatter ];
   };

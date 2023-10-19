@@ -3,18 +3,18 @@
 stdenvNoCC.mkDerivation rec {
   # NOTE: this should be updated with linux_rpi
   pname = "raspberrypi-firmware";
-  version = "1.20210303";
+  version = "1.20230405";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    sha256 = "0pgiw93hq4gfph5dnwbi8w59g0f7yhmagwzam971k529mh5yl86m";
+    hash = "sha256-UtUd1MbsrDFxd/1C3eOAMDKPZMx+kSMFYOJP+Kc6IU8=";
   };
 
   installPhase = ''
-    mkdir -p $out/share/raspberrypi/boot
-    cp -R boot/* $out/share/raspberrypi/boot
+    mkdir -p $out/share/raspberrypi/
+    mv boot "$out/share/raspberrypi/"
   '';
 
   dontConfigure = true;
@@ -26,5 +26,8 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/raspberrypi/firmware";
     license = licenses.unfreeRedistributableFirmware; # See https://github.com/raspberrypi/firmware/blob/master/boot/LICENCE.broadcom
     maintainers = with maintainers; [ dezgeg ];
+    # Hash mismatch on source, mystery.
+    # Maybe due to https://github.com/NixOS/nix/issues/847
+    broken = stdenvNoCC.isDarwin;
   };
 }

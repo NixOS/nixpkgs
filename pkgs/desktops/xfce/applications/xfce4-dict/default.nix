@@ -1,11 +1,19 @@
-{ mkXfceDerivation, automakeAddFlags, gtk3, libxfce4ui, libxfce4util, xfce4-panel }:
+{ lib
+, mkXfceDerivation
+, automakeAddFlags
+, glib
+, gtk3
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+}:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-dict";
-  version = "0.8.4";
+  version = "0.8.5";
 
-  sha256 = "0gm5gwqxhnv3qz9ggf8dj1sq5s72xcliidkyip9l91msx03hfjah";
+  sha256 = "sha256-sU9V2cQUFG5571c7xrVSDCxanAbbnCUg2YLZ2uzoPJ0=";
 
   patches = [ ./configure-gio.patch ];
 
@@ -15,9 +23,16 @@ mkXfceDerivation {
     automakeAddFlags lib/Makefile.am libdict_la_CFLAGS GIO_CFLAGS
   '';
 
-  buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel ];
+  buildInputs = [
+    glib
+    gtk3
+    libxfce4ui
+    libxfce4util
+    xfce4-panel
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "A Dictionary Client for the Xfce desktop environment";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

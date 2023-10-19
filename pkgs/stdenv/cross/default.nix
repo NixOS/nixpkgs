@@ -9,7 +9,7 @@ let
     crossSystem = localSystem;
     crossOverlays = [];
 
-    # Ignore custom stdenvs when cross compiling for compatability
+    # Ignore custom stdenvs when cross compiling for compatibility
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 
@@ -35,12 +35,16 @@ in lib.init bootStages ++ [
   })
 
   # Run Packages
-  (buildPackages: {
+  (buildPackages: let
+    adaptStdenv =
+      if crossSystem.isStatic
+      then buildPackages.stdenvAdapters.makeStatic
+      else lib.id;
+  in {
     inherit config;
-    overlays = overlays ++ crossOverlays
-      ++ (if (with crossSystem; isWasm || isRedox) then [(import ../../top-level/static.nix)] else []);
+    overlays = overlays ++ crossOverlays;
     selfBuild = false;
-    stdenv = buildPackages.stdenv.override (old: rec {
+    stdenv = adaptStdenv (buildPackages.stdenv.override (old: rec {
       buildPlatform = localSystem;
       hostPlatform = crossSystem;
       targetPlatform = crossSystem;
@@ -66,9 +70,9 @@ in lib.init bootStages ++ [
              # when there is a C compiler and everything should be fine.
              then throw "no C compiler provided for this platform"
            else if crossSystem.isDarwin
-             then buildPackages.llvmPackages.clang
+             then buildPackages.llvmPackages.libcxxClang
            else if crossSystem.useLLVM or false
-             then buildPackages.llvmPackages.clangUseLLVM
+             then buildPackages.llvmPackages.clang
            else buildPackages.gcc;
 
       extraNativeBuildInputs = old.extraNativeBuildInputs
@@ -79,11 +83,8 @@ in lib.init bootStages ++ [
              (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
                in f hostPlatform && !(f buildPlatform) )
              buildPackages.updateAutotoolsGnuConfigScriptsHook
-           # without proper `file` command, libtool sometimes fails
-           # to recognize 64-bit DLLs
-        ++ lib.optional (hostPlatform.config == "x86_64-w64-mingw32") buildPackages.file
         ;
-    });
+    }));
   })
 
 ]

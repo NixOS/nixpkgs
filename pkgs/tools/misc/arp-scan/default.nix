@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "arp-scan";
-  version = "1.9.7";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "royhills";
     repo = "arp-scan";
     rev = version;
-    sha256 = "1mf7a4f9vzvnkiavc87aqyciswggsb4fpy7j05jxnvjyyxv3l7gp";
+    sha256 = "sha256-zSihemqGaQ5z6XjA/dALoSJOuAkxF5/nnV6xE+GY7KI=";
   };
 
   perlModules = with perlPackages; [
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perlPackages.perl libpcap ];
 
   postInstall = ''
-    for name in get-{oui,iab}; do
-      wrapProgram "$out/bin/$name" --set PERL5LIB "${perlPackages.makeFullPerlPath perlModules}"
+    for binary in get-{oui,iab}; do
+      wrapProgram "$out/bin/$binary" --set PERL5LIB "${perlPackages.makeFullPerlPath perlModules}"
     done;
   '';
 
@@ -33,9 +33,10 @@ stdenv.mkDerivation rec {
       Arp-scan is a command-line tool that uses the ARP protocol to discover
       and fingerprint IP hosts on the local network.
     '';
-    homepage = "http://www.nta-monitor.com/wiki/index.php/Arp-scan_Documentation";
+    homepage = "https://github.com/royhills/arp-scan/wiki/arp-scan-User-Guide";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor mikoim r-burns ];
+    mainProgram = "arp-scan";
   };
 }

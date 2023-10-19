@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "clickhouse-driver";
-  version = "0.2.0";
+  version = "0.2.5";
 
   # pypi source doesn't contain tests
   src = fetchFromGitHub {
     owner = "mymarilyn";
     repo = "clickhouse-driver";
-    rev = "96b7ba448c63ca2670cc9aa70d4a0e08826fb650";
-    sha256 = "sha256-HFKUxJOlBCVlu7Ia8heGpwX6+HdKuwSy92s3v+GKGwE=";
+    rev = version;
+    hash = "sha256-o5v37jPKmvUW4GFVD742nHSdO0g0z2FA4FkacbaRfNA=";
   };
 
   propagatedBuildInputs = [
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     lz4
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     mock
     nose
@@ -56,8 +56,6 @@ buildPythonPackage rec {
 
   # some test in test_buffered_reader.py doesn't seem to return
   disabledTestPaths = [ "tests/test_buffered_reader.py" ];
-
-  pytestFlagsArray = [ "-n" "$NIX_BUILD_CORES" ];
 
   # most tests require `clickhouse`
   # TODO: enable tests after `clickhouse` unbroken

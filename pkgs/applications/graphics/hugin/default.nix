@@ -1,37 +1,91 @@
-{ lib, stdenv, cmake, fetchurl, gnumake, makeWrapper, pkg-config, fetchpatch
-, autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
-, glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
-, libXmu, libGLU, libGL, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
+{ lib
+, stdenv
+, cmake
+, fetchurl
+, fetchpatch
+, gnumake
+, makeWrapper
+, pkg-config
+, autopanosiftc
+, boost
+, cairo
+, enblend-enfuse
+, exiv2
+, fftw
+, flann
+, gettext
+, glew-egl
+, ilmbase
+, lcms2
+, lensfun
+, libjpeg
+, libpng
+, libtiff
+, libX11
+, libXi
+, libXmu
+, libGLU
+, libGL
+, openexr
+, panotools
+, perlPackages
+, sqlite
+, vigra
+, wrapGAppsHook
+, wxGTK
+, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2019.0.0";
+  pname = "hugin";
+  version = "2022.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hugin/${name}.tar.bz2";
-    sha256 = "1l925qslp98gg7yzmgps10h6dq0nb60wbfk345anlxsv0g2ifizr";
+    url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
+    hash = "sha256-l8hWKgupp0PguVWkPf3gSLHGDNnl8u4rad4agWRuBac=";
   };
 
   patches = [
-    # Fixes build with exiv2 0.27.1
     (fetchpatch {
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/hugin-exiv2-0.27.1.patch?h=packages/hugin";
-      sha256 = "1yxvlpvrhyrfd2w6kwx1w3mncsvlzdhp0w7xchy8q6kc2kd5nf7r";
+      name = "hugin-2022.0.0-exiv2-0.28.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-gfx/hugin/files/hugin-2022.0.0-exiv2-0.28.patch?id=d18335caa756f5e5c1478d5fe3ba17f011a78c80";
+      hash = "sha256-Y+79bFb926GW5oLOL0e5y7kLhqU/vZcry+kLL4H2fUE=";
     })
   ];
 
   buildInputs = [
-    boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg
-    libpng libtiff libX11 libXi libXmu libGLU libGL openexr panotools sqlite vigra
-    wxGTK zlib
+    boost
+    cairo
+    exiv2
+    fftw
+    flann
+    gettext
+    glew-egl
+    ilmbase
+    lcms2
+    lensfun
+    libjpeg
+    libpng
+    libtiff
+    libX11
+    libXi
+    libXmu
+    libGLU
+    libGL
+    openexr
+    panotools
+    sqlite
+    vigra
+    wxGTK
+    zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook ];
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   postInstall = ''
     for p in $out/bin/*; do

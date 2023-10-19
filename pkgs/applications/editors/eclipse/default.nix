@@ -6,28 +6,33 @@
 , callPackage
 }:
 
-assert stdenv ? glibc;
-
-# https://download.eclipse.org/eclipse/downloads/ is the main place to
-# find the downloads needed for new versions
+# use ./update.sh to help with updating for each quarterly release
 #
-# to test:
-# $ for e in cpp modeling platform sdk java jee committers rcp; do nix build -f default.nix pkgs.eclipses.eclipse-${e} -o eclipse-${e}; done
+# then, to test:
+# for e in cpp modeling platform sdk java jee committers rcp; do for s in pkgs pkgsCross.aarch64-multiplatform; do echo; echo $s $e; nix build -f default.nix ${s}.eclipses.eclipse-${e} -o eclipse-${s}-${e}; done; done
 
 let
   platform_major = "4";
-  platform_minor = "19";
-  year = "2021";
-  month = "03";
-  timestamp = "${year}${month}031800";
+  platform_minor = "29";
+  year = "2023";
+  month = "09"; #release month
+  buildmonth = "09"; #sometimes differs from release month
+  timestamp = "${year}${buildmonth}031000";
   gtk = gtk3;
+  arch = if stdenv.hostPlatform.isx86_64 then
+    "x86_64"
+  else if stdenv.hostPlatform.isAarch64 then
+    "aarch64"
+  else throw "don't know what platform suffix for ${stdenv.hostPlatform.system} will be";
 in rec {
 
-  buildEclipse = callPackage ./build-eclipse.nix {
+  # work around https://bugs.eclipse.org/bugs/show_bug.cgi?id=476075#c3
+  buildEclipseUnversioned = callPackage ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
             jdk glib gtk libXtst gsettings-desktop-schemas webkitgtk
             makeWrapper;
   };
+  buildEclipse = eclipseData: buildEclipseUnversioned (eclipseData // { productVersion = "${platform_major}.${platform_minor}"; });
 
   ### Eclipse CPP
 
@@ -36,8 +41,11 @@ in rec {
     description = "Eclipse IDE for C/C++ Developers";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3j0lmll0glcr9p0hf49jiaq9xr8hadsy0y58wbbkdpldj3rclxr056dkswmiw2bkypfiwrjygbli5qxyp6mz380562hc2kjwijqq476";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-r9ZDt1D7Wt0Gp2JvW4Qwkw0Rj8F4IhUiNpVgm8FDdbY=";
+          aarch64 = "sha256-fyIvDY9jQfLwwNL4iaLb80X2eWaYqkLqtMd09yOQGo4=";
+        }.${arch};
       };
   };
 
@@ -48,8 +56,11 @@ in rec {
     description = "Eclipse Modeling Tools";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "0iqz9a3ixcbmaci6lnspdnzwd2h1fcygi54hmsl89pq3d1k5scyhcl123ixi24csi782w847bn0lq00n0zwras9akmnhsflra4mw5pz";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-eO+fnoN0jZCURwmy6M0Okb9U4R3z8u1gzfm2mGp+Chc=";
+          aarch64 = "sha256-gN0wu7QOyVslvWum9SIkptADtQoX47UPentEupJBnQ8=";
+        }.${arch};
       };
   };
 
@@ -60,23 +71,30 @@ in rec {
     description = "Eclipse Platform ${year}-${month}";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "03v1ly7j9d9qnl3d9rl5a9kp483dz8i8v3cfnh55ksm9fk8iy2fzg6wq178ggnx2z5x9k88a4wk6n647yilh2hgc2l7926imkh2j1ly";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-+0yzlB89v8KrhDfo5oqT0NKY/3hPk+Pkp2yGQ0silEg=";
+          aarch64 = "sha256-CvzDldzcmLzL7z9ZRxHQblmvkzza4wQYeDIZf6V6uXk=";
+        }.${arch};
       };
   };
 
   ### Eclipse Scala SDK
 
   eclipse-scala-sdk =
-    buildEclipse.override { jdk = jdk8; gtk = gtk2; } {
+    (buildEclipseUnversioned.override { jdk = jdk8; gtk = gtk2; } {
       name = "eclipse-scala-sdk-4.7.0";
       description = "Eclipse IDE for Scala Developers";
+      productVersion = "4.7";
       src =
         fetchurl {
           url = "https://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-linux.gtk.x86_64.tar.gz";
           sha256  = "1n5w2a7mh9ajv6fxcas1gpgwb04pdxbr9v5dzr67gsz5bhahq4ya";
         };
-  };
+  }).overrideAttrs(oa: {
+    # Only download for x86_64
+    meta.platforms = [ "x86_64-linux" ];
+  });
 
   ### Eclipse SDK
 
@@ -85,8 +103,11 @@ in rec {
     description = "Eclipse ${year}-${month} Classic";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "37m91my121pch12bwpwk5svfqkm7vl07wjx4fkhpy947v5kjf36hm6x0i45swdg7f0hk72y2qz5ka15ki5jv890qy5psj6z7ax9sys7";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-Qp9yKSNWVPH8SX1D4PMfSv3XqiKAQCVXWFcSyQaMFmA=";
+          aarch64 = "sha256-cp8/BiewoNt4txhHmpiBTSXZ2sXXPu6zxuAYi24DF9I=";
+        }.${arch};
       };
   };
 
@@ -97,8 +118,11 @@ in rec {
     description = "Eclipse IDE for Java Developers";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3qrnj6krhrqc9rfwlim3v7kshwfhsi050pszw6xdfbj56mzr9whr7l76isbpxd5j0zipgfw3qrzrx379pdp899d35fv284ilvllzl4k";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-TX8LbbBxRGWJ7lmf3tfK+Eux54dSapCsP7OmLfDw4Do=";
+          aarch64 = "sha256-AltrVmCuSTAoRgVsw98oNiR1HPpbYovz3UNGRXQgiVs=";
+        }.${arch};
       };
   };
 
@@ -109,8 +133,11 @@ in rec {
     description = "Eclipse IDE for Enterprise Java and Web Developers";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-jee-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "04k4x9imabxddqlrgajn33ak8i58wcap40ll09xz23d1sxn9a8prh01s06ymgwg6ldg939srphvbz4112p8p0b1hl7m25a02qll91zv";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-jee-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-kMEeY27Q97+5/pbl3of93p43dMXE1NQmuESCsK5sK3g=";
+          aarch64 = "sha256-sf+l/BjJ1VAyrc94oJUKYEInG7wEivbYEhpEXLi4C+w=";
+        }.${arch};
       };
   };
 
@@ -121,8 +148,11 @@ in rec {
     description = "Eclipse IDE for Eclipse Committers and Eclipse Platform Plugin Developers";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "2yksl3w7yr1a3h4zdpa9zf394r5c185zqxhigdv858ldg46kmr9h0l2c7shbgb16kkybcnrk4x44dhjvh60x8xw6ma05klp4lp9v5va";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-K9+Up4nDXZCBKxzj2LX7F9ioPocHnxPdpHMQuc5oehs=";
+          aarch64 = "sha256-ibB3D+0UuX2c+Cbr0L5r8Rh6BfpmOyXNnSk13m2Q7Zk=";
+        }.${arch};
       };
   };
 
@@ -133,8 +163,11 @@ in rec {
     description = "Eclipse IDE for RCP and RAP Developers";
     src =
       fetchurl {
-        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "3fhrhwbyqcys56c93s1vl9rbvn269nn5y3cb9f3n1qwgw6i97mim2zy98jl3r8cksf97jwsmqmsqclsgz9v799wcckv81dj1l628382";
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-${arch}.tar.gz";
+        hash = {
+          x86_64 = "sha256-J+8UbkDiG9F+mDBZwr4HVGJWqeSBGMsl3EIRtA7+fK0=";
+          aarch64 = "sha256-+oYY37fBjEi2GJCZVaCsUyWwAhsPPD6nAstUDGmywwo=";
+        }.${arch};
       };
   };
 

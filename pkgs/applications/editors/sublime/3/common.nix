@@ -101,14 +101,14 @@ in let
         "''${gappsWrapperArgs[@]}"
 
       # Without this, plugin_host crashes, even though it has the rpath
-      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
+      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${lib.getLib openssl}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
 in stdenv.mkDerivation (rec {
   inherit pname;
   version = buildVersion;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   ${primaryBinary} = binaryPackage;
 
@@ -130,7 +130,8 @@ in stdenv.mkDerivation (rec {
   meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
-    maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
+    maintainers = with maintainers; [ wmertens demin-dmitriy zimbatm ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

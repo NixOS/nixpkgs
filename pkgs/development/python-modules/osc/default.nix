@@ -1,26 +1,32 @@
-{ lib, buildPythonPackage, fetchFromGitHub, bashInteractive, urlgrabber
-, m2crypto, rpm, chardet
+{ stdenv
+, bashInteractive
+, buildPythonPackage
+, cryptography
+, diffstat
+, fetchFromGitHub
+, lib
+, rpm
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "0.170.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    sha256 = "10dj9kscz59qm8rw5084gf0m8ail2rl7r8rg66ij92x88wvi9mbz";
+    sha256 = "sha256-pywSXGM3IX3cTr1uJIP7pNGIYE/skMIoJeoaMU75zwc=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
-  checkInputs = [ rpm ];
-  propagatedBuildInputs = [ urlgrabber m2crypto chardet ];
+  nativeCheckInputs = [ rpm diffstat ];
+  propagatedBuildInputs = [ urllib3 cryptography ];
 
   postInstall = ''
-    ln -s $out/bin/osc-wrapper.py $out/bin/osc
-    install -D -m444 osc.fish $out/etc/fish/completions/osc.fish
-    install -D -m555 dist/osc.complete $out/share/bash-completion/helpers/osc-helper
+    install -D -m444 contrib/osc.fish $out/etc/fish/completions/osc.fish
+    install -D -m555 contrib/osc.complete $out/share/bash-completion/helpers/osc-helper
     mkdir -p $out/share/bash-completion/completions
     cat >>$out/share/bash-completion/completions/osc <<EOF
     test -z "\$BASH_VERSION" && return
@@ -30,7 +36,10 @@ buildPythonPackage rec {
     EOF
   '';
 
+  preCheck = "HOME=$TOP/tmp";
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/openSUSE/osc";
     description = "opensuse-commander with svn like handling";
     maintainers = [ maintainers.peti ];

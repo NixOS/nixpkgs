@@ -1,6 +1,7 @@
 { lib
 , pkg-config
 , fetchurl
+, fetchpatch
 , meson
 , ninja
 , glib
@@ -8,7 +9,7 @@
 , python3
 , wrapGAppsHook
 , gnome
-, libwnck3
+, libwnck
 , gobject-introspection
 , gettext
 , itstool
@@ -25,6 +26,17 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "hzPOS5qaVOwYWx2Fv02p2dEQUogqiAdg/2D5d5stHMs=";
   };
 
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:15:0: ERROR: Function does not take positional arguments.
+    # data/meson.build:27:0: ERROR: Function does not take positional arguments.
+    # Patch taken from https://gitlab.gnome.org/GNOME/d-feet/-/merge_requests/32
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/d-feet/-/commit/05465d486afdba116dbc22fc22c1e6573aea4f22.patch";
+      sha256 = "sFI3nd0YE/deGws/YcTpzC/em9QNgicyb4j7cTfOdhY=";
+    })
+  ];
+
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -40,7 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gnome.adwaita-icon-theme
     gtk3
-    libwnck3
+    libwnck
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -50,10 +62,6 @@ python3.pkgs.buildPythonApplication rec {
   mesonFlags = [
     "-Dtests=false" # needs dbus
   ];
-
-  # Temporary fix
-  # See https://github.com/NixOS/nixpkgs/issues/56943
-  strictDeps = false;
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -77,6 +85,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://wiki.gnome.org/Apps/DFeet";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ktosiek ];
+    maintainers = teams.gnome.members;
   };
 }

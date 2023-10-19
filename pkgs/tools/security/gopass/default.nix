@@ -13,24 +13,22 @@
 
 buildGoModule rec {
   pname = "gopass";
-  version = "1.12.6";
+  version = "1.15.8";
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "gopasspw";
-    repo = pname;
+    repo = "gopass";
     rev = "v${version}";
-    sha256 = "17y9indpgqqx261bqvckfqq1q2zciahssaalaa5c5hb6bnw5ls52";
+    hash = "sha256-l8Ce0ioMnSlet+PMrQCMvyH3IvmQaE1MQSJR9myyLB8=";
   };
 
-  vendorSha256 = "106rn0bkvzf2fw21f6wpiya88ysj8sfc2zkkm47iqr23d2202i4b";
+  vendorHash = "sha256-xyQTlbTPAC2iG8XQ4oEHBXjfXauwuBhaTbsew23nlVw=";
 
   subPackages = [ "." ];
 
-  doCheck = false;
-
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.commit=${src.rev}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" ];
 
   wrapperPath = lib.makeBinPath (
     [
@@ -42,9 +40,10 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage gopass.1
-    installShellCompletion --zsh --name _gopass zsh.completion
-    installShellCompletion --bash --name gopass.bash bash.completion
-    installShellCompletion --fish --name gopass.fish fish.completion
+    installShellCompletion --cmd gopass \
+      --zsh zsh.completion \
+      --bash bash.completion \
+      --fish fish.completion
   '' + lib.optionalString passAlias ''
     ln -s $out/bin/gopass $out/bin/pass
   '';
@@ -54,12 +53,15 @@ buildGoModule rec {
       --prefix PATH : "${wrapperPath}" \
       --set GOPASS_NO_REMINDER true
   '';
+  passthru = {
+    inherit wrapperPath;
+  };
 
   meta = with lib; {
     description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go";
     homepage = "https://www.gopass.pw/";
     license = licenses.mit;
-    maintainers = with maintainers; [ andir rvolosatovs ];
+    maintainers = with maintainers; [ rvolosatovs sikmir ];
     changelog = "https://github.com/gopasspw/gopass/blob/v${version}/CHANGELOG.md";
 
     longDescription = ''
@@ -71,5 +73,6 @@ buildGoModule rec {
       users. We go by the UNIX philosophy and try to do one thing and do it
       well, providing a stellar user experience and a sane, simple interface.
     '';
+    mainProgram = "gopass";
   };
 }

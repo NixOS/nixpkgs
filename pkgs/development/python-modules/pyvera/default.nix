@@ -12,21 +12,21 @@
 
 buildPythonPackage rec {
   pname = "pyvera";
-  version = "0.3.13";
+  version = "0.3.15";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pavoni";
     repo = pname;
     rev = version;
-    sha256 = "0vh82bwgbq93jrwi9q4da534paknpak8hxi4wwlxh3qcvnpy1njv";
+    hash = "sha256-1+xIqOogRUt+blX7AZSKIiU8lpR4AzKIIW/smCSft94=";
   };
 
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout
     pytest-cov

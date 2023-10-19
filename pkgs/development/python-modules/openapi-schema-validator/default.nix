@@ -1,31 +1,56 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, isodate
+, fetchFromGitHub
+, pythonOlder
+
+# build-system
+, poetry-core
+
+# propagates
 , jsonschema
-, pytest-flake8
-, pytestcov
+, jsonschema-specifications
 , rfc3339-validator
-, six
-, strict-rfc3339
+
+# tests
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "openapi-schema-validator";
-  version = "0.1.5";
+  version = "0.6.0";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a4b2712020284cee880b4c55faa513fbc2f8f07f365deda6098f8ab943c9f0df";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "p1c2u";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-859v6KqIRfUq4d/KbkvGnGqlxz6BXTl+tKQHPhtkTH0=";
   };
 
-  propagatedBuildInputs = [ isodate jsonschema six strict-rfc3339 rfc3339-validator ];
+  postPatch = ''
+    sed -i "/--cov/d" pyproject.toml
+  '';
 
-  checkInputs = [ pytestCheckHook pytestcov pytest-flake8 ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    jsonschema
+    jsonschema-specifications
+    rfc3339-validator
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   pythonImportsCheck = [ "openapi_schema_validator" ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-openapi/openapi-schema-validator/releases/tag/${version}";
     description = "Validates OpenAPI schema against the OpenAPI Schema Specification v3.0";
     homepage = "https://github.com/p1c2u/openapi-schema-validator";
     license = licenses.bsd3;

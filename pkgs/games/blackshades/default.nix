@@ -1,34 +1,43 @@
-{lib, stdenv, fetchsvn, SDL, libGLU, libGL, openal, libvorbis, freealut, SDL_image}:
+{ lib
+, stdenv
+, fetchFromSourcehut
+, glfw
+, libGL
+, libGLU
+, libsndfile
+, openal
+, zig_0_11
+}:
 
-stdenv.mkDerivation {
-  name = "blackshades-svn-110";
-  src = fetchsvn {
-    url = "svn://svn.icculus.org/blackshades/trunk";
-    rev = "110";
-    sha256 = "0kbrh1dympk8scjxr6av24qs2bffz44l8qmw2m5gyqf4g3rxf6ra";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "blackshades";
+  version = "2.5.1";
+
+  src = fetchFromSourcehut {
+    owner = "~cnx";
+    repo = "blackshades";
+    rev = finalAttrs.version;
+    fetchSubmodules = true;
+    hash = "sha256-qdpXpuXHr9w2XMfgOVveWv3JoqdJHVB8TCqZdyaw/DM=";
   };
 
-  NIX_LDFLAGS = "-lSDL_image";
+  nativeBuildInputs = [ zig_0_11.hook ];
 
-  buildInputs = [ SDL SDL_image libGLU libGL openal libvorbis freealut ];
-
-  patchPhase = ''
-    sed -i -e s,Data/,$out/opt/$name/Data/,g \
-      -e s,Data:,$out/opt/$name/Data/,g \
-      Source/*.cpp
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/opt/$name
-    cp objs/blackshades $out/bin
-    cp -R Data IF* Readme $out/opt/$name/
-  '';
+  buildInputs = [
+    glfw
+    libGLU
+    libGL
+    libsndfile
+    openal
+  ];
 
   meta = {
-    homepage = "http://icculus.org/blackshades/";
-    description = "Protect the VIP";
-    license = lib.licenses.free;
-    maintainers = with lib.maintainers; [viric];
-    platforms = with lib.platforms; linux;
+    homepage = "https://sr.ht/~cnx/blackshades";
+    description = "A psychic bodyguard FPS";
+    changelog = "https://git.sr.ht/~cnx/blackshades/refs/${finalAttrs.version}";
+    mainProgram = "blackshades";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ McSinyx viric ];
+    platforms = lib.platforms.linux;
   };
-}
+})

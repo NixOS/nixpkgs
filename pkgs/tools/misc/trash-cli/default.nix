@@ -1,32 +1,67 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{ lib, fetchFromGitHub, installShellFiles, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
-  version = "0.21.5.22";
+  version = "0.23.9.23";
 
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
     rev = version;
-    sha256 = "0c1q13fyh9gi9gbxc55n772xlgjjr1ysnlxl41vifdcd4q8fhil8";
+    hash = "sha256-EbW7P9fl7CDA6etOba7qcOtcxB2GkCd+zoi+NW0ZP9c=";
   };
 
-  propagatedBuildInputs = [ python3Packages.psutil ];
+  propagatedBuildInputs = with python3Packages; [ psutil six ];
 
-  checkInputs = with python3Packages; [
+  nativeBuildInputs = with python3Packages; [
+    installShellFiles
+    shtab
+  ];
+
+  nativeCheckInputs = with python3Packages; [
     mock
     pytestCheckHook
   ];
 
-  # Skip `test_user_specified` since its result depends on the mount path.
-  disabledTests = [ "test_user_specified" ];
+  postPatch = ''
+    sed -i '/typing/d' setup.cfg
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Create a home directory with a test file.
+    HOME="$(mktemp -d)"
+    touch "$HOME/deleteme"
+
+    # Verify that trash list is initially empty.
+    [[ $($out/bin/trash-list) == "" ]]
+
+    # Trash a test file and verify that it shows up in the list.
+    $out/bin/trash "$HOME/deleteme"
+    [[ $($out/bin/trash-list) == *" $HOME/deleteme" ]]
+
+    # Empty the trash and verify that it is empty.
+    $out/bin/trash-empty
+    [[ $($out/bin/trash-list) == "" ]]
+
+    runHook postInstallCheck
+  '';
+  postInstall = ''
+    for bin in trash-empty trash-list trash-restore trash-put trash; do
+      installShellCompletion --cmd "$bin" \
+        --bash <("$out/bin/$bin" --print-completion bash) \
+        --zsh  <("$out/bin/$bin" --print-completion zsh)
+    done
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/andreafrancia/trash-cli";
-    description = "Command line tool for the desktop trash can";
+    description = "Command line interface to the freedesktop.org trashcan";
     maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     mainProgram = "trash";
   };
 }

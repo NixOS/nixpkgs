@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   pname = "radeontop";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchFromGitHub {
-    sha256 = "sha256-tnIxM0+RfOIt714fEUWRP/4rEPHaOuCZFit9/RPdxis=";
+    sha256 = "0kwqddidr45s1blp0h8r8h1dd1p50l516yb6mb4s6zsc827xzgg3";
     rev = "v${version}";
     repo = "radeontop";
     owner = "clbr";
@@ -19,12 +19,13 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     substituteInPlace getver.sh --replace ver=unknown ver=${version}
+    substituteInPlace Makefile --replace pkg-config "$PKG_CONFIG"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/sbin/radeontop \
+    wrapProgram $out/bin/radeontop \
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 

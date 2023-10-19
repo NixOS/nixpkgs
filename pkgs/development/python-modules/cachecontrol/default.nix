@@ -1,34 +1,74 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, requests
+, cherrypy
+, fetchFromGitHub
+, flit-core
+, filelock
+, mock
 , msgpack
-, pytest
+, pytestCheckHook
+, pythonOlder
+, redis
+, requests
 }:
 
 buildPythonPackage rec {
-  version = "0.12.6";
-  pname = "CacheControl";
+  pname = "cachecontrol";
+  version = "0.13.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "be9aa45477a134aee56c8fac518627e1154df063e85f67d4f83ce0ccc23688e8";
+  disabled = pythonOlder "3.6";
+
+  __darwinAllowLocalNetworking = true;
+
+  src = fetchFromGitHub {
+    owner = "ionrock";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4N+vk65WxOrT+IJRn+lEnbs5vlWQh9ievVHWWe3BKJ0=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ requests msgpack ];
-
-  # tests not included with pypi release
-  doCheck = false;
-
-  checkPhase = ''
-    pytest tests
+  postPatch = ''
+    # https://github.com/ionrock/cachecontrol/issues/297
+    substituteInPlace tests/test_etag.py --replace \
+      "requests.adapters.HTTPResponse.from_httplib" \
+      "urllib3.response.HTTPResponse.from_httplib"
   '';
 
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  propagatedBuildInputs = [
+    msgpack
+    requests
+  ];
+
+  passthru.optional-dependencies = {
+    filecache = [
+      filelock
+    ];
+    redis = [
+      redis
+    ];
+  };
+
+  nativeCheckInputs = [
+    cherrypy
+    mock
+    pytestCheckHook
+    requests
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [
+    "cachecontrol"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/ionrock/cachecontrol";
     description = "Httplib2 caching for requests";
+    homepage = "https://github.com/ionrock/cachecontrol";
+    changelog = "https://github.com/psf/cachecontrol/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

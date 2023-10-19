@@ -5,11 +5,11 @@
 , pkg-config
 , portaudio
 , SDL2
-, ffmpeg
+, ffmpeg_4
 , udev
 , libusb1
 , libv4l
-, alsaLib
+, alsa-lib
 , gsl
 , libpng
 , sfml
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
-    alsaLib
-    ffmpeg
+    alsa-lib
+    ffmpeg_4
     libusb1
     libv4l
     portaudio
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A simple interface for devices supported by the linux UVC driver";
-    homepage = "http://guvcview.sourceforge.net";
+    homepage = "https://guvcview.sourceforge.net";
     maintainers = [ maintainers.coconnor ];
     license = licenses.gpl3;
     platforms = platforms.linux;

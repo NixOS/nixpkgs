@@ -2,21 +2,25 @@
 
 stdenv.mkDerivation rec {
   pname = "herwig";
-  version = "7.2.2";
+  version = "7.2.3";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/herwig/Herwig-${version}.tar.bz2";
-    sha256 = "10y3fb33zsinr0z3hzap9rsbcqhy1yjqnv4b4vz21g7mdlw6pq2k";
+    hash = "sha256-VZmJk3mwGwnjMaJCbXjTm39uwSbbJUPp00Cu/mqlD4Q=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake libtool gfortran ];
 
-  buildInputs = [ boost fastjet gfortran gsl thepeg zlib ]
+  buildInputs = [ boost fastjet gsl thepeg zlib ]
     # There is a bug that requires for default PDF's to be present during the build
     ++ (with lhapdf.pdf_sets; [ CT14lo CT14nlo ]);
 
   postPatch = ''
     patchShebangs ./
+
+    # Fix failing "make install" being unable to find HwEvtGenInterface.so
+    substituteInPlace src/defaults/decayers.in.in \
+      --replace "read EvtGenDecayer.in" ""
   '';
 
   configureFlags = [

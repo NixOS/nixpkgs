@@ -6,11 +6,11 @@ let
   srcs = {
     x86_64-linux = fetchurl {
       url = "http://udig.refractions.net/files/downloads/udig-${version}.linux.gtk.x86_64.zip";
-      sha256 = "03hj1mdd6sq0gbpa838wkccibp3l2hvnwxxf5dyc0jk3mmd94fwa";
+      hash = "sha256-ijuSWq1jSsB8K653bjcUdNwVGZscDaTuegBr01oNEg4=";
     };
     x86_64-darwin = fetchurl {
       url = "http://udig.refractions.net/files/downloads/udig-${version}.macosx.cocoa.x86_64.zip";
-      sha256 = "16rcyp1zy3lr1hwjhzh6vwcgck52w66dm1qsc52gppy1f4i3f692";
+      hash = "sha256-Ihk3InHB3/tEYRqH2ozhokz2GN8Gfig5DJkO/8P1LJs=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system};
@@ -18,6 +18,7 @@ let
   meta = with lib; {
     description = "User-friendly Desktop Internet GIS";
     homepage = "http://udig.refractions.net/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [ epl10 bsd3 ];
     maintainers = with maintainers; [ sikmir ];
     platforms = builtins.attrNames srcs;

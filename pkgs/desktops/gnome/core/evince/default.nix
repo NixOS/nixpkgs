@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , meson
 , ninja
@@ -6,6 +7,7 @@
 , gettext
 , libxml2
 , appstream
+, desktop-file-utils
 , glib
 , gtk3
 , pango
@@ -30,46 +32,40 @@
 , gsettings-desktop-schemas
 , gnome-desktop
 , dbus
-, python3
 , texlive
-, t1lib
 , gst_all_1
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, gi-docgen
 , supportMultimedia ? true # PDF multimedia
 , libgxps
 , supportXPS ? true # Open XML Paper Specification via libgxps
+, withLibsecret ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "evince";
-  version = "40.1";
+  version = "44.3";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0bfg7prmjk3z8irx1nfkkqph3igg3cy4pwd7pcxjxbshqdin6rks";
+    sha256 = "O4uhWBpHpun1f2tqoI8PtnVJxgEhqiTjEUDpOUe4NiI=";
   };
 
-  postPatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-  '';
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     appstream
-    docbook-xsl-nons
-    docbook_xml_dtd_43
+    desktop-file-utils
     gettext
     gobject-introspection
-    gtk-doc
+    gi-docgen
     itstool
     meson
     ninja
     pkg-config
-    python3
     wrapGAppsHook
     yelp-tools
   ];
@@ -89,26 +85,42 @@ stdenv.mkDerivation rec {
     libarchive
     libhandy
     librsvg
-    libsecret
     libspectre
     libxml2
     pango
     poppler
-    t1lib
     texlive.bin.core # kpathsea for DVI support
-  ] ++ lib.optional supportXPS libgxps
-    ++ lib.optionals supportMultimedia (with gst_all_1; [
-      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
+  ] ++ lib.optionals withLibsecret [
+    libsecret
+  ] ++ lib.optionals supportXPS [
+    libgxps
+  ] ++ lib.optionals supportMultimedia (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
   mesonFlags = [
     "-Dnautilus=false"
     "-Dps=enabled"
+  ] ++ lib.optionals (!withLibsecret) [
+    "-Dkeyring=disabled"
+  ] ++ lib.optionals (!supportMultimedia) [
+    "-Dmultimedia=disabled"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
@@ -128,8 +140,8 @@ stdenv.mkDerivation rec {
       on the GNOME Desktop with a single simple application.
     '';
 
-    license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.gnome.members;
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

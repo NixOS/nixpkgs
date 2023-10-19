@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
+, itstool
 , meson
 , ninja
 , pkg-config
@@ -7,23 +9,24 @@
 , gtk3
 , gtksourceview
 , gtkspell3
-, webkitgtk
+, webkitgtk_4_1
 , pandoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "marker";
-  version = "2020.04.04";
+  version = "2023.05.02";
 
   src = fetchFromGitHub {
     owner = "fabiocolacio";
     repo = "Marker";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "1iy7izyprf050bix8am1krqivgyxnhx3jm775v8f80cgbqxy7m5r";
+    sha256 = "sha256-HhDhigQ6Aqo8R57Yrf1i69sM0feABB9El5R5OpzOyB0=";
   };
 
   nativeBuildInputs = [
+    itstool
     meson
     ninja
     pkg-config
@@ -34,14 +37,18 @@ stdenv.mkDerivation rec {
     gtk3
     gtksourceview
     gtkspell3
-    webkitgtk
+    webkitgtk_4_1
     pandoc
   ];
 
+  postPatch = ''
+    meson rewrite kwargs set project / version '${version}'
+  '';
+
   meta = with lib; {
     homepage = "https://fabiocolacio.github.io/Marker/";
-    description = "Markdown editor for the Linux desktop";
-    maintainers = with maintainers; [ trepetti ];
+    description = "Markdown editor for the Linux desktop made with GTK3";
+    maintainers = with maintainers; [ trepetti aleksana ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     changelog = "https://github.com/fabiocolacio/Marker/releases/tag/${version}";

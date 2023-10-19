@@ -1,21 +1,34 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
 
 buildGoModule rec {
   pname = "pet";
-  version = "0.3.6";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "knqyf263";
     repo = "pet";
     rev = "v${version}";
-    sha256 = "1na3az7vicjq1rxd3ybid47yrblsdazgli0dchkbwh8zchwhqj33";
+    sha256 = "sha256-+ng4+wrJW/fl1DJMbycLymFgiviTwjlxNApE2Q8PesQ=";
   };
 
-  vendorSha256 = "0pnd89iqdj3f719xf4iy5r04n51d0rrrf0qb2zjirpw7vh7g82i9";
+  vendorHash = "sha256-JOP7hcCOwVZ0hb2UXHHdxpKxpZqs6a8AjOFbrs711ps=";
+
+  ldflags = [
+    "-s" "-w" "-X=github.com/knqyf263/pet/cmd.version=${version}"
+  ];
 
   doCheck = false;
 
   subPackages = [ "." ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd pet \
+      --zsh ./misc/completions/zsh/_pet
+  '';
 
   meta = with lib; {
     description = "Simple command-line snippet manager, written in Go";

@@ -1,16 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "0.53.1";
-in fetchzip {
-  name = "sudo-font-${version}";
-  url = "https://github.com/jenskutilek/sudo-font/raw/v${version}/dist/sudo.zip";
-  sha256 = "1jil43j9ngz4422m76x67bafvxz75rncqqi57xd7fdxgcff7i8dp";
+stdenvNoCC.mkDerivation rec {
+  pname = "sudo-font";
+  version = "0.74";
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype/
+  src = fetchzip {
+    url = "https://github.com/jenskutilek/sudo-font/releases/download/v${version}/sudo.zip";
+    hash = "sha256-WPoqWhCKk2gZ/cdIjvmiNZ95xZ9sqnGzZuw4OEHxtrI=";
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf -t $out/share/fonts/truetype/
+
+    runHook postInstall
   '';
+
   meta = with lib; {
     description = "Font for programmers and command line users";
     homepage = "https://www.kutilek.de/sudo-font/";

@@ -1,37 +1,69 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, pkg-config, openssl, oniguruma, CoreServices }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, rustPlatform
+, cmake
+, pkg-config
+, openssl
+, oniguruma
+, CoreServices
+, installShellFiles
+, libsass
+, zola
+, testers
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.13.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "getzola";
-    repo = pname;
+    repo = "zola";
     rev = "v${version}";
-    sha256 = "sha256-yTvFQWmNxoB+CNZLHGmzJq7mKuOUxUqV4g8PWlOlRbM=";
+    hash = "sha256-br7VpxkVMZ/TgwMaFbnVMOw9RemNjur/UYnloMoDzHs=";
   };
 
-  cargoSha256 = "sha256:19vijhcs1i02jhz68acil7psv3pcn0jzi1i4y2l05i4m3ayxivjf";
+  cargoHash = "sha256-AAub8UwAvX3zNX+SM/T9biyNxFTgfqUQG/MUGfwWuno=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl oniguruma ]
-    ++ lib.optional stdenv.isDarwin CoreServices;
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-40274.patch";
+      url = "https://github.com/getzola/zola/commit/fe1967fb0fe063b1cee1ad48820870ab2ecc0e5b.patch";
+      hash = "sha256-B/SVGhVX5hAbvMhBYO+mU5+xdZXU2JyS4uKmOj+aZuI=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    openssl
+    oniguruma
+    libsass
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
   postInstall = ''
-    install -D -m 444 completions/zola.bash \
-      -t $out/share/bash-completion/completions
-    install -D -m 444 completions/_zola \
-      -t $out/share/zsh/site-functions
-    install -D -m 444 completions/zola.fish \
-      -t $out/share/fish/vendor_completions.d
+    installShellCompletion --cmd zola \
+      --bash <($out/bin/zola completion bash) \
+      --fish <($out/bin/zola completion fish) \
+      --zsh <($out/bin/zola completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion { package = zola; };
 
   meta = with lib; {
     description = "A fast static site generator with everything built-in";
     homepage = "https://www.getzola.org/";
+    changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dywedir _0x4A6F ];
+    maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
   };
 }

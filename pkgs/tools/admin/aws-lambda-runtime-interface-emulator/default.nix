@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "aws-lambda-runtime-interface-emulator";
-  version = "1.0";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lambda-runtime-interface-emulator";
     rev = "v${version}";
-    sha256 = "sha256-vbVygZzLlJlxaRF/LIqSJP0gZGyu1wSSdeVjILl/OJE=";
+    sha256 = "sha256-4uUyrPLDmmPv2Z6M3czwKe8BXe5BWJbfgf5FC/74pog=";
   };
 
-  vendorSha256 = "sha256-WcvYPGgkrK7Zs5IplAoUTay5ys9LrDJHpRN3ywEdWRM=";
+  vendorHash = "sha256-0b4yjyPnE7xPmW5N1Zu/tH50gHj46TnHkycNFDzIjy8=";
 
   # disabled because I lack the skill
   doCheck = false;

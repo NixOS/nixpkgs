@@ -1,25 +1,54 @@
-{ lib, buildPythonPackage, fetchPypi, docutils, aiobotocore, fsspec }:
+{ lib
+, stdenv
+, aiobotocore
+, aiohttp
+, buildPythonPackage
+, docutils
+, fetchPypi
+, fsspec
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "0.5.2";
+  version = "2023.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "87e5210415db17b9de18c77bcfc4a301570cc9030ee112b77dc47ab82426bae1";
+    hash = "sha256-ZMzOrTKoFkIt2a4daTxdY1TZn2SuJsVjiPHY4ceFgyE=";
   };
 
-  buildInputs = [ docutils ];
-  propagatedBuildInputs = [ aiobotocore fsspec ];
+  postPatch = ''
+    sed -i 's/fsspec==.*/fsspec/' requirements.txt
+  '';
+
+  buildInputs = [
+    docutils
+  ];
+
+  propagatedBuildInputs = [
+    aiobotocore
+    aiohttp
+    fsspec
+  ];
 
   # Depends on `moto` which has a long dependency chain with exact
   # version requirements that can't be made to work with current
   # pythonPackages.
   doCheck = false;
 
+  pythonImportsCheck = [
+    "s3fs"
+  ];
+
   meta = with lib; {
-    description = "S3FS builds on boto3 to provide a convenient Python filesystem interface for S3.";
-    homepage = "https://github.com/dask/s3fs/";
+    broken = stdenv.isDarwin;
+    description = "A Pythonic file interface for S3";
+    homepage = "https://github.com/fsspec/s3fs";
+    changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

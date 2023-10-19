@@ -1,13 +1,14 @@
 { fetchFromGitHub, kernel, lib, stdenv }:
 
 stdenv.mkDerivation {
-  name = "mba6x_bl-2016-12-08";
+  pname = "mba6x_bl";
+  version = "unstable-2017-12-30";
 
   src = fetchFromGitHub {
     owner = "patjak";
     repo = "mba6x_bl";
-    rev = "b96aafd30c18200b4ad1f6eb995bc19200f60c47";
-    sha256 = "10payvfxahazdxisch4wm29fhl8y07ki72q4c78sl4rn73sj6yjq";
+    rev = "639719f516b664051929c2c0c1140ea4bf30ce81";
+    sha256 = "sha256-QwxBpNa5FitKO+2ne54IIcRgwVYeNSQWI4f2hPPB8ls=";
   };
 
   enableParallelBuilding = true;
@@ -15,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib }:
+{ lib, stdenv, fetchurl, gfortran, hoppet, lhapdf, root5, zlib, Cocoa }:
 
 stdenv.mkDerivation rec {
   pname = "applgrid";
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1yw9wrk3vjv84kd3j4s1scfhinirknwk6xq0hvj7x2srx3h93q9p";
   };
 
+  nativeBuildInputs = [ gfortran ];
+
   # For some reason zlib was only needed after bump to gfortran8
-  buildInputs = [ gfortran hoppet lhapdf root5 zlib ];
+  buildInputs = [ hoppet lhapdf root5 zlib ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
   patches = [
     ./bad_code.patch
@@ -19,10 +21,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/Makefile.in \
       --replace "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
-  '' + (if stdenv.isDarwin then ''
+  '' + (lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile.in \
       --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
-  '' else "");
+  '');
 
   enableParallelBuilding = false; # broken
 

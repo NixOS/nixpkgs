@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless }:
+{ lib, stdenv, fetchurl, makeWrapper, jre_headless, gnused }:
 
 stdenv.mkDerivation rec {
   pname = "ktlint";
-  version = "0.40.0";
+  version = "1.0.1";
 
   src = fetchurl {
-    url = "https://github.com/shyiko/ktlint/releases/download/${version}/ktlint";
-    sha256 = "17n1xdalz38h9p4ylcpkbbqp22b1np5l8y5l3r58kaf9k8p6cfa7";
+    url = "https://github.com/pinterest/ktlint/releases/download/${version}/ktlint";
+    sha256 = "15bvk6sv6fjvfq2a5yyxh3kvpkyws0pxdqbygkkrxxsl8bnr3409";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/ktlint --prefix PATH : "${jre_headless}/bin"
+    wrapProgram $out/bin/ktlint --prefix PATH : "${lib.makeBinPath [ jre_headless gnused ]}"
   '';
 
   meta = with lib; {
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     homepage = "https://ktlint.github.io/";
     license = licenses.mit;
     platforms = jre_headless.meta.platforms;
-    maintainers = with maintainers; [ tadfisher ];
+    changelog = "https://github.com/pinterest/ktlint/blob/master/CHANGELOG.md";
+    maintainers = with maintainers; [ tadfisher SubhrajyotiSen ];
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

@@ -22,12 +22,11 @@ rec {
   };
 
   ppc64 = {
-    config = "powerpc64-unknown-linux-gnu";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    config = "powerpc64-unknown-linux-gnuabielfv2";
   };
   ppc64-musl = {
     config = "powerpc64-unknown-linux-musl";
-    gcc = { abi = "elfv2"; }; # for gcc configuration
+    gcc = { abi = "elfv2"; };
   };
 
   sheevaplug = {
@@ -37,6 +36,10 @@ rec {
   raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
   } // platforms.raspberrypi;
+
+  bluefield2 = {
+    config = "aarch64-unknown-linux-gnu";
+  } // platforms.bluefield2;
 
   remarkable1 = {
     config = "armv7l-unknown-linux-gnueabihf";
@@ -57,29 +60,27 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rustc.config = "armv7-linux-androideabi";
-    sdkVer = "29";
-    ndkVer = "21";
+    sdkVer = "28";
+    ndkVer = "24";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rustc.config = "aarch64-linux-android";
-    sdkVer = "29";
-    ndkVer = "21";
+    sdkVer = "28";
+    ndkVer = "24";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
     sdkVer = "30";
-    ndkVer = "21";
+    ndkVer = "24";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
   };
-
-  scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
 
   pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
@@ -92,6 +93,18 @@ rec {
   fuloongminipc = {
     config = "mipsel-unknown-linux-gnu";
   } // platforms.fuloong2f_n32;
+
+  # can execute on 32bit chip
+  mips-linux-gnu           = { config = "mips-unknown-linux-gnu";           } // platforms.gcc_mips32r2_o32;
+  mipsel-linux-gnu         = { config = "mipsel-unknown-linux-gnu";         } // platforms.gcc_mips32r2_o32;
+
+  # require 64bit chip (for more registers, 64-bit floating point, 64-bit "long long") but use 32bit pointers
+  mips64-linux-gnuabin32   = { config = "mips64-unknown-linux-gnuabin32";   } // platforms.gcc_mips64r2_n32;
+  mips64el-linux-gnuabin32 = { config = "mips64el-unknown-linux-gnuabin32"; } // platforms.gcc_mips64r2_n32;
+
+  # 64bit pointers
+  mips64-linux-gnuabi64    = { config = "mips64-unknown-linux-gnuabi64";    } // platforms.gcc_mips64r2_64;
+  mips64el-linux-gnuabi64  = { config = "mips64el-unknown-linux-gnuabi64";  } // platforms.gcc_mips64r2_64;
 
   muslpi = raspberryPi // {
     config = "armv6l-unknown-linux-musleabihf";
@@ -120,8 +133,27 @@ rec {
     libc = "newlib";
   };
 
+  mips64-embedded = {
+    config = "mips64-none-elf";
+    libc = "newlib";
+  };
+
+  mips-embedded = {
+    config = "mips-none-elf";
+    libc = "newlib";
+  };
+
+  loongarch64-linux = {
+    config = "loongarch64-unknown-linux-gnu";
+  };
+
   mmix = {
     config = "mmix-unknown-mmixware";
+    libc = "newlib";
+  };
+
+  rx-embedded = {
+    config = "rx-none-elf";
     libc = "newlib";
   };
 
@@ -144,6 +176,18 @@ rec {
     libc = "newlib";
   };
 
+  m68k = {
+    config = "m68k-unknown-linux-gnu";
+  };
+
+  s390 = {
+    config = "s390-unknown-linux-gnu";
+  };
+
+  s390x = {
+    config = "s390x-unknown-linux-gnu";
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";
@@ -162,6 +206,7 @@ rec {
   aarch64-embedded = {
     config = "aarch64-none-elf";
     libc = "newlib";
+    rustc.config = "aarch64-unknown-none";
   };
 
   aarch64be-embedded = {
@@ -246,6 +291,12 @@ rec {
     platform = {};
   };
 
+  x86_64-darwin = {
+    config = "x86_64-apple-darwin";
+    xcodePlatform = "MacOSX";
+    platform = {};
+  };
+
   #
   # Windows
   #
@@ -263,18 +314,25 @@ rec {
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
+  ucrt64 = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
+  };
+
   # BSDs
 
-  amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;
+  x86_64-freebsd = {
+    config = "x86_64-unknown-freebsd13";
+    useLLVM = true;
+  };
 
   x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
   };
 
+  # this is broken and never worked fully
   x86_64-netbsd-llvm = {
     config = "x86_64-unknown-netbsd";
-    libc = "nblibc";
     useLLVM = true;
   };
 
@@ -289,6 +347,9 @@ rec {
 
   # Ghcjs
   ghcjs = {
-    config = "js-unknown-ghcjs";
+    # This triple is special to GHC/Cabal/GHCJS and not recognized by autotools
+    # See: https://gitlab.haskell.org/ghc/ghc/-/commit/6636b670233522f01d002c9b97827d00289dbf5c
+    # https://github.com/ghcjs/ghcjs/issues/53
+    config = "javascript-unknown-ghcjs";
   };
 }

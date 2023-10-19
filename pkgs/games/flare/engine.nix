@@ -2,14 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "flare-engine";
-  version = "1.11";
+  version = "1.14";
 
   src = fetchFromGitHub {
     owner = "flareteam";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1j6raymz128miq517h9drks4gj79dajw3lsr0msqxz0z3zm6cc4n";
+    hash = "sha256-DIzfTqwZJ8NAPB/TWzvPjepHb7hIbIr+Kk+doXJmpLc=";
   };
+
+  patches = [ ./desktop.patch ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf ]
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free/Libre Action Roleplaying Engine";
     homepage = "https://github.com/flareteam/flare-engine";
-    maintainers = [ maintainers.aanderse ];
+    maintainers = with maintainers; [ aanderse McSinyx ];
     license = [ licenses.gpl3 ];
     platforms = platforms.unix;
   };

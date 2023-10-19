@@ -3,11 +3,12 @@
 , autoreconfHook, usbutils }:
 
 stdenv.mkDerivation rec {
-  name = "aircrack-ng-1.6";
+  pname = "aircrack-ng";
+  version = "1.7";
 
   src = fetchurl {
-    url = "https://download.aircrack-ng.org/${name}.tar.gz";
-    sha256 = "0ix2k64qg7x3w0bzdsbk1m50kcpq1ws59g3zkwiafvpwdr4gs2sg";
+    url = "https://download.aircrack-ng.org/aircrack-ng-${version}.tar.gz";
+    sha256 = "1hsq1gwmafka4bahs6rc8p98yi542h9a502h64bjlygpr3ih99q5";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];

@@ -7,12 +7,12 @@
 , gettext
 , gperf
 , sqlite
-, librest
 , libarchive
-, libsoup
+, libdmapsharing
+, libsoup_3
 , gnome
 , libxml2
-, lua5_3
+, lua5_4
 , liboauth
 , libgdata
 , libmediaart
@@ -31,11 +31,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grilo-plugins";
-  version = "0.3.13";
+  version = "0.3.16";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "HEMF1nNkqTBUODbMGYLzDpRpc7j/avPv4x2HcJq1IPg=";
+    sha256 = "/m9Nvlhsa4uiQGOU4gLyLQCdZCqW6zpU8y9qIdCEzcs=";
   };
 
   patches = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # * chromaprint (gst-plugins-bad)
     (substituteAll {
       src = ./chromaprint-gst-plugins.patch;
-      load_plugins = lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
+      load_plugins = lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${lib.getLib plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
         gstreamer
         gst-plugins-base
         gst-plugins-bad
@@ -65,15 +65,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     grilo
     libxml2
-    libgdata
-    lua5_3
+    # libgdata
+    lua5_4
     liboauth
     sqlite
     gnome-online-accounts
     totem-pl-parser
-    librest
     libarchive
-    libsoup
+    libdmapsharing
+    libsoup_3
     gmime
     gom
     json-glib
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/Grilo";
     description = "A collection of plugins for the Grilo framework";
     maintainers = teams.gnome.members;
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
+    license = licenses.lgpl21Plus;
+    platforms = platforms.unix;
   };
 }

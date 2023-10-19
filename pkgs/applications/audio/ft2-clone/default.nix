@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , nixosTests
-, alsaLib
+, alsa-lib
 , SDL2
 , libiconv
 , CoreAudio
@@ -13,23 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
-  version = "1.47";
+  version = "1.72.1";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
-    sha256 = "sha256-KLHJROOtRPtGHBYEMByY7LG6FY4vES6WndCiz7okan8=";
+    hash = "sha256-dGoldr0JvXri4XfSn/DKeJw/wsBaj+AKoKWdbEgo8lg=";
   };
-
-  # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
-  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.isLinux alsaLib
+    ++ lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [
          libiconv
          CoreAudio
@@ -37,13 +32,6 @@ stdenv.mkDerivation rec {
          CoreServices
          Cocoa
        ];
-
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
-    "-framework CoreAudio"
-    "-framework CoreMIDI"
-    "-framework CoreServices"
-    "-framework Cocoa"
-  ];
 
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;
@@ -59,4 +47,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.littleEndian;
   };
 }
-

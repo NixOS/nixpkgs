@@ -1,8 +1,24 @@
-{ stdenv, config, lib, fetchFromGitHub, cmake, libusb1, ninja, pkg-config, gcc
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, enablePython ? false, pythonPackages ? null }:
+{ stdenv
+, config
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, libusb1
+, ninja
+, pkg-config
+, gcc
+, mesa
+, gtk3
+, glfw
+, libGLU
+, curl
+, cudaSupport ? config.cudaSupport, cudaPackages ? { }
+, enablePython ? false, pythonPackages ? null
+, enableGUI ? false,
+}:
 
-assert cudaSupport -> cudatoolkit != null;
+assert cudaSupport -> (cudaPackages?cudatoolkit && cudaPackages.cudatoolkit != null);
 assert enablePython -> pythonPackages != null;
 
 stdenv.mkDerivation rec {
@@ -21,13 +37,26 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     gcc.cc.lib
-  ] ++ lib.optional cudaSupport cudatoolkit
-    ++ lib.optionals enablePython (with pythonPackages; [python pybind11 ]);
+  ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+    ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
+    ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];
 
-  patches = lib.optionals enablePython [
+  patches = [
+    # fix build on aarch64-darwin
+    # https://github.com/IntelRealSense/librealsense/pull/9253
+    (fetchpatch {
+      url = "https://github.com/IntelRealSense/librealsense/commit/beb4c44debc8336de991c983274cad841eb5c323.patch";
+      sha256 = "05mxsd2pz3xrvywdqyxkwdvxx8hjfxzcgl51897avz4v2j89pyq8";
+    })
     ./py_sitepackage_dir.patch
     ./py_pybind11_no_external_download.patch
   ];
+
+  postPatch = ''
+    # https://github.com/IntelRealSense/librealsense/issues/11092
+    # insert a "#include <iostream" at beginning of file
+    sed '1i\#include <iostream>' -i wrappers/python/pyrs_device.cpp
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -37,8 +66,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_EXAMPLES=ON"
-    "-DBUILD_GRAPHICAL_EXAMPLES=OFF"
-    "-DBUILD_GLSL_EXTENSIONS=OFF"
+    "-DBUILD_GRAPHICAL_EXAMPLES=${lib.boolToString enableGUI}"
+    "-DBUILD_GLSL_EXTENSIONS=${lib.boolToString enableGUI}"
+    "-DCHECK_FOR_UPDATES=OFF" # activated by BUILD_GRAPHICAL_EXAMPLES, will make it download and compile libcurl
   ] ++ lib.optionals enablePython [
     "-DBUILD_PYTHON_BINDINGS:bool=true"
     "-DXXNIX_PYTHON_SITEPACKAGES=${placeholder "out"}/${pythonPackages.python.sitePackages}"
@@ -48,7 +78,10 @@ stdenv.mkDerivation rec {
   # script does not do this, and it's questionable if intel knows it should be
   # done
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
-  postInstall = lib.optionalString enablePython  ''
+  postInstall = ''
+    substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
+    --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+  '' + lib.optionalString enablePython  ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 
@@ -56,7 +89,7 @@ stdenv.mkDerivation rec {
     description = "A cross-platform library for Intel® RealSense™ depth cameras (D400 series and the SR300)";
     homepage = "https://github.com/IntelRealSense/librealsense";
     license = licenses.asl20;
-    maintainers = with maintainers; [ brian-dawn ];
-    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ brian-dawn pbsds ];
+    platforms = platforms.unix;
   };
 }

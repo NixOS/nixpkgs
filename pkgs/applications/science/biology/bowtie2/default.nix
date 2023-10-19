@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, cmake, tbb, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, tbb, zlib, python3, perl }:
 
 stdenv.mkDerivation rec {
   pname = "bowtie2";
-  version = "2.4.4";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "BenLangmead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2B6w6c/qztyBb1jNA0zg+udQm41ouT1DyB6Ygpi5nC8=";
+    sha256 = "sha256-Bem4SHY/74suZPDbw/rwKMLBn3bRq5ooHbBoVnKuYk0=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ tbb zlib ];
+  buildInputs = [ tbb zlib python3 perl ];
 
   meta = with lib; {
     description = "An ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";

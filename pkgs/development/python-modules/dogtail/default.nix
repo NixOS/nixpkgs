@@ -19,6 +19,8 @@ buildPythonPackage {
   pname = "dogtail";
   version = "0.9.11";
 
+  outputs = [ "out" "dev" ];
+
   # https://gitlab.com/dogtail/dogtail/issues/1
   # src = fetchPypi {
   #   inherit pname version;
@@ -35,7 +37,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [ gobject-introspection dbus xvfb-run wrapGAppsHook ]; # for setup hooks
   propagatedBuildInputs = [ at-spi2-core gtk3 pygobject3 pyatspi pycairo ];
-  strictDeps = false; # issue 56943
 
   checkPhase = ''
     runHook preCheck
@@ -43,9 +44,15 @@ buildPythonPackage {
     # export NO_AT_BRIDGE=1
     gsettings set org.gnome.desktop.interface toolkit-accessibility true
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       ${python.interpreter} nix_run_setup test
     runHook postCheck
+  '';
+
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   # TODO: Tests require accessibility
@@ -55,6 +62,6 @@ buildPythonPackage {
     description = "GUI test tool and automation framework that uses Accessibility technologies to communicate with desktop applications";
     homepage = "https://gitlab.com/dogtail/dogtail";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ jtojnar ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

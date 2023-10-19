@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-webbrowser-${version}";
+  pname = "ocaml${ocaml.version}-webbrowser";
   version = "0.6.1";
   src = fetchurl {
     url = "https://erratique.ch/software/webbrowser/releases/webbrowser-${version}.tbz";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [];
+  buildInputs = [ topkg ];
   propagatedBuildInputs = [ astring bos cmdliner rresult ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 
@@ -21,6 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/webbrowser";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "browse";
     inherit (ocaml.meta) platforms;
   };
 }

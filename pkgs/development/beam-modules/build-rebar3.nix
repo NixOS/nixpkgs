@@ -1,18 +1,20 @@
 { stdenv, writeText, erlang, rebar3WithPlugins, openssl, libyaml, lib }:
 
-{ name, version
+{ name
+, version
 , src
 , setupHook ? null
-, buildInputs ? [], beamDeps ? [], buildPlugins ? []
+, buildInputs ? [ ]
+, beamDeps ? [ ]
+, buildPlugins ? [ ]
 , postPatch ? ""
 , installPhase ? null
 , buildPhase ? null
 , configurePhase ? null
-, meta ? {}
+, meta ? { }
 , enableDebugInfo ? false
-, ... }@attrs:
-
-with lib;
+, ...
+}@attrs:
 
 let
   debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";
@@ -22,11 +24,11 @@ let
   };
 
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
-  customPhases = filterAttrs
+  customPhases = lib.filterAttrs
     (_: v: v != null)
     { inherit setupHook configurePhase buildPhase installPhase; };
 
@@ -36,13 +38,17 @@ let
     inherit version;
 
     buildInputs = buildInputs ++ [ erlang rebar3 openssl libyaml ];
-    propagatedBuildInputs = unique beamDeps;
+    propagatedBuildInputs = lib.unique beamDeps;
 
-    dontStrip = true;
     inherit src;
 
+    # stripping does not have any effect on beam files
+    # it is however needed for dependencies with NIFs
+    # false is the default but we keep this for readability
+    dontStrip = false;
+
     setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     postPatch = ''
@@ -77,4 +83,4 @@ let
     };
   } // customPhases);
 in
-  fix pkg
+lib.fix pkg

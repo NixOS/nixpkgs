@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, apacheHttpd, perl }:
+{ stdenv, fetchurl, apacheHttpd, perl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "mod_perl";
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchurl {
     url = "mirror://apache/perl/${pname}-${version}.tar.gz";
-    sha256 = "0x3gq4nz96y202cymgrf56n8spm7bffkd1p74dh9q3zrrlc9wana";
+    sha256 = "sha256-9bghtZsP3JZw5G7Q/PMtiRHyUSYYmotowWUvkiHu4mk=";
   };
 
   buildInputs = [ apacheHttpd perl ];
@@ -23,4 +23,6 @@ stdenv.mkDerivation rec {
     mv $out${perl}/* $out
     rm $out/nix -rf
   '';
+
+  passthru.tests = nixosTests.mod_perl;
 }

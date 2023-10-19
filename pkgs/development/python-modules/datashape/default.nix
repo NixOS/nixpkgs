@@ -5,7 +5,7 @@
 , mock
 , numpy
 , multipledispatch
-, dateutil
+, python-dateutil
 }:
 
 let
@@ -28,8 +28,8 @@ in buildPythonPackage rec {
     sha256 = "0rhlj2kjj1vx5m73wnc5518rd6cs1zsbgpsvzk893n516k69shcf";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ numpy multipledispatch dateutil ];
+  nativeCheckInputs = [ pytest mock ];
+  propagatedBuildInputs = [ numpy multipledispatch python-dateutil ];
 
   # Disable several tests
   # https://github.com/blaze/datashape/issues/232

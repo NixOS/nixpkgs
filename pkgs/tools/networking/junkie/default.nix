@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libpcap, guile, openssl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libpcap, guile_2_2, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "junkie";
@@ -10,11 +10,26 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0kfdjgch667gfb3qpiadd2dj3fxc7r19nr620gffb1ahca02wq31";
   };
-  buildInputs = [ libpcap guile openssl ];
-  nativeBuildInputs = [ pkg-config ];
+
+  patches = [
+    # Pull upstream patch for -fno-common toolchains:
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/rixed/junkie/commit/52209c5b0c9a09981739ede9701cd73e82a88ea5.patch";
+      sha256 = "1qg01jinqn5wr2mz77rzaidnrli35di0k7lnx6kfm7dh7v8kxbrr";
+    })
+  ];
+
+  # IP_DONTFRAG is defined on macOS from Big Sur
+  postPatch = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+    sed -i '10i#undef IP_DONTFRAG' include/junkie/proto/ip.h
+  '';
+
+  buildInputs = [ libpcap guile_2_2 openssl ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   configureFlags = [
-    "GUILELIBDIR=\${out}/share/guile/site"
-    "GUILECACHEDIR=\${out}/lib/guile/ccache"
+    "GUILELIBDIR=\${out}/${guile_2_2.siteDir}"
+    "GUILECACHEDIR=\${out}/${guile_2_2.siteCcacheDir}"
   ];
 
   meta = {

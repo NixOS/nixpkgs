@@ -2,41 +2,46 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fpyutils
+, pyfakefs
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "md-toc";
-  version = "7.2.0";
-  disabled = pythonOlder "3.5";
+  version = "8.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "frnmst";
     repo = pname;
     rev = version;
-    sha256 = "1v74iddfk5d6170frg89vzrkz9xrycl1f50g59imc7x7g50i6c2x";
+    hash = "sha256-7Udmon/5E741+v2vBHHL7h31r91RR33hN1WhL3FiDQc=";
   };
 
   propagatedBuildInputs = [
     fpyutils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    pyfakefs
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "fpyutils>=1.2,<1.3" "fpyutils>=1.2"
-  '';
+  pytestFlagsArray = [
+    "md_toc/tests/*.py"
+  ];
 
-  pytestFlagsArray = [ "md_toc/tests/*.py" ];
-
-  pythonImportsCheck = [ "md_toc" ];
+  pythonImportsCheck = [
+    "md_toc"
+  ];
 
   meta = with lib; {
     description = "Table of contents generator for Markdown";
     homepage = "https://docs.franco.net.eu.org/md-toc/";
+    changelog = "https://blog.franco.net.eu.org/software/CHANGELOG-md-toc.html";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

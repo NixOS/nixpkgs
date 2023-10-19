@@ -1,26 +1,23 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, pkg-config, glib, mpv-unwrapped }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, mpv-unwrapped }:
 
 stdenv.mkDerivation rec {
   pname = "mpv-mpris";
-  version = "0.5";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "hoyon";
     repo = "mpv-mpris";
     rev = version;
-    sha256 = "07p6li5z38pkfd40029ag2jqx917vyl3ng5p2i4v5a0af14slcnk";
+    sha256 = "sha256-7kPpCfiWe58V4fBOsEVvGoGeNIlMUAyD1fqS5/8k/e4=";
   };
-  patches = [
-    # Enables to "make SCRIPTS_DIR=... install" https://github.com/hoyon/mpv-mpris/pull/38
-    (fetchpatch {
-      url = "https://github.com/hoyon/mpv-mpris/commit/f1482350868bf20e4575f923943ec998469b255e.patch";
-      sha256 = "1lqy867wpmj6hv3zgi6g679a7x3dv5skpw24hwd05b28galnyd4l";
-    })
-  ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glib mpv-unwrapped ];
+
+  postPatch = ''
+    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+  '';
 
   installFlags = [ "SCRIPTS_DIR=$(out)/share/mpv/scripts" ];
 
@@ -35,5 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];
+    changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
   };
 }

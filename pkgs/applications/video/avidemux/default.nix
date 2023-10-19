@@ -2,7 +2,7 @@
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
 , makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
-, alsaLib
+, alsa-lib
 , withX265 ? true, x265
 , withX264 ? true, x264
 , withXvid ? true, xvidcore
@@ -25,11 +25,11 @@ assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
   pname = "avidemux";
-  version = "2.7.8";
+  version = "2.8.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "sha256-YopAT1If8oEnYHAK4+KqeOWBaw/z+2/QWsPnUkjZdAE=";
+    sha256 = "sha256-d9m9yoaDzlfBkradIHz6t8+Sp3Wc4PY/o3tcjkKtPaI=";
   };
 
   patches = [
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs =
-    [ yasm cmake pkg-config ]
+    [ yasm cmake pkg-config makeWrapper ]
     ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsaLib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore
@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional withVPX libvpx;
 
   buildCommand = let
-    qtVersion = "5.${lib.versions.minor qtbase.version}";
     wrapWith = makeWrapper: filename:
       "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
     wrapQtApp = wrapWith "wrapQtApp";
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
     cd "$sourceRoot"
     patchPhase
 
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libXext}/lib"
     ${stdenv.shell} bootStrap.bash \
       --with-core \
       ${if withQT then "--with-qt" else "--without-qt"} \
@@ -91,7 +89,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ abbradar ma27 ];
+    maintainers = with maintainers; [ abbradar ];
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;

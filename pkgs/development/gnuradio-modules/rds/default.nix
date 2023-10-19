@@ -6,8 +6,9 @@
 , pkg-config
 , swig
 , python
-, log4cpp
+, logLib
 , mpir
+, thrift
 , boost
 , gmp
 , icu
@@ -35,11 +36,14 @@ in mkDerivation {
   disabledForGRafter = "3.9";
 
   buildInputs = [
-    log4cpp
+    logLib
     mpir
     boost
     gmp
     icu
+  ] ++ lib.optionals (gnuradio.hasFeature "gr-ctrlport") [
+    thrift
+    python.pkgs.thrift
   ];
 
   nativeBuildInputs = [

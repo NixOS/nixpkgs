@@ -1,30 +1,40 @@
-{ lib, stdenv, fetchurl, guileSupport ? false, pkg-config ? null , guile ? null }:
-
-assert guileSupport -> ( pkg-config != null && guile != null );
+{ lib
+, stdenv
+, fetchurl
+, guileSupport ? false, guile
+# avoid guile depend on bootstrap to prevent dependency cycles
+, inBootstrap ? false
+, pkg-config
+, gnumake
+}:
 
 let
-  version = "4.3";
+  guileEnabled = guileSupport && !inBootstrap;
 in
-stdenv.mkDerivation {
+
+stdenv.mkDerivation rec {
   pname = "gnumake";
-  inherit version;
+  version = "4.4.1";
 
   src = fetchurl {
     url = "mirror://gnu/make/make-${version}.tar.gz";
-    sha256 = "06cfqzpqsvdnsxbysl5p2fgdgxgl9y4p7scpnrfa8z2zgkjdspz0";
+    sha256 = "sha256-3Rb7HWe/q3mnL16DkHNcSePo5wtJRaFasfgd23hlj7M=";
   };
 
+  # to update apply these patches with `git am *.patch` to https://git.savannah.gnu.org/git/make.git
   patches = [
+    # Replaces /bin/sh with sh, see patch file for reasoning
+    ./0001-No-impure-bin-sh.patch
     # Purity: don't look for library dependencies (of the form `-lfoo') in /lib
     # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
     # included Makefiles, don't look in /usr/include and friends.
-    ./impure-dirs.patch
+    ./0002-remove-impure-dirs.patch
   ];
 
-  nativeBuildInputs = lib.optionals guileSupport [ pkg-config ];
-  buildInputs = lib.optionals guileSupport [ guile ];
+  nativeBuildInputs = lib.optionals guileEnabled [ pkg-config ];
+  buildInputs = lib.optionals guileEnabled [ guile ];
 
-  configureFlags = lib.optional guileSupport "--with-guile"
+  configureFlags = lib.optional guileEnabled "--with-guile"
 
     # Make uses this test to decide whether it should keep track of
     # subseconds. Apple made this possible with APFS and macOS 10.13.
@@ -36,12 +46,15 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
   outputs = [ "out" "man" "info" ];
+  separateDebugInfo = true;
+
+  passthru.tests = {
+    # make sure that the override doesn't break bootstrapping
+    gnumakeWithGuile = gnumake.override { guileSupport = true; };
+  };
 
   meta = with lib; {
-    homepage = "https://www.gnu.org/software/make/";
     description = "A tool to control the generation of non-source files from sources";
-    license = licenses.gpl3Plus;
-
     longDescription = ''
       Make is a tool which controls the generation of executables and
       other non-source files of a program from the program's source files.
@@ -52,8 +65,11 @@ stdenv.mkDerivation {
       should write a makefile for it, so that it is possible to use Make
       to build and install the program.
     '';
+    homepage = "https://www.gnu.org/software/make/";
 
-    platforms = platforms.all;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.vrthra ];
+    mainProgram = "make";
+    platforms = platforms.all;
   };
 }

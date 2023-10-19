@@ -1,19 +1,32 @@
-{ lib, python3 }:
+{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "flashfocus";
-  version = "2.2.2";
+  version = "2.4.1";
 
-  src = python3.pkgs.fetchPypi {
+  format = "pyproject";
+
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1z20d596rnc7cs0rrd221gjn14dmbr11djv94y9p4v7rr788sswv";
+    sha256 = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pytestrunner
+  postPatch = ''
+    substituteInPlace bin/nc_flash_window \
+      --replace "nc" "${lib.getExe netcat-openbsd}"
+  '';
+
+  nativeBuildInputs = with python3Packages; [
+    pythonRelaxDepsHook
+    setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "pyyaml"
+    "xcffib"
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
     i3ipc
     xcffib
     click
@@ -27,6 +40,8 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   pythonImportsCheck = [ "flashfocus" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/fennerm/flashfocus";

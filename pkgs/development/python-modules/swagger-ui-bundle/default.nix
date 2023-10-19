@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
-  version = "0.0.6";
+  version = "0.0.9";
 
   src = fetchPypi {
     pname = "swagger_ui_bundle";
     inherit version;
-    sha256 = "1lqxz7q9l2iwf7w11nhw5lnglsh1lgcvq8ydvhabkcc76il3ndy5";
+    sha256 = "b462aa1460261796ab78fd4663961a7f6f347ce01760f1303bbbdf630f11f516";
   };
 
   # patch away unused test requirements since package contains no tests

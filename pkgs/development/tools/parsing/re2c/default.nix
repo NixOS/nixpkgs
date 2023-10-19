@@ -1,24 +1,45 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, nix-update-script
+, python3
+
+# for passthru.tests
+, ninja
+, php
+, spamassassin
+}:
 
 stdenv.mkDerivation rec {
   pname = "re2c";
-  version = "2.1.1";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner  = "skvadrik";
     repo   = "re2c";
     rev    = version;
-    sha256 = "06nvk5sf4vrc2bvpj4vi2xwy3ggv548sn530drz5fi67nhzgga26";
+    sha256 = "sha256-7zZdLby7HdNoURgdkg+xnlp6VDCACcyGCTtjM43OLd4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [
+    autoreconfHook
+    python3
+  ];
 
   doCheck = true;
   enableParallelBuilding = true;
 
   preCheck = ''
-    patchShebangs run_tests.sh
+    patchShebangs run_tests.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit ninja php spamassassin;
+    };
+  };
 
   meta = with lib; {
     description = "Tool for writing very fast and very flexible scanners";

@@ -1,44 +1,79 @@
-{ lib, fetchFromGitHub, python3Packages }:
-
-python3Packages.buildPythonApplication rec {
+{ lib
+, fetchFromGitHub
+, python3
+, ffmpeg
+}:
+python3.pkgs.buildPythonApplication rec {
   pname = "gphotos-sync";
-  version = "2.14.2";
+  version = "3.1.2";
+  format = "pyproject";
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   src = fetchFromGitHub {
     owner = "gilesknap";
     repo = "gphotos-sync";
     rev = version;
-    sha256 = "0cfmbrdy6w18hb623rjn0a4hnn3n63jw2jlmgn4a2k1sjqhpx3bf";
+    hash = "sha256-lLw450Rk7tIENFTZWHoinkhv3VtctDv18NKxhox+NgI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  patches = [
+    ./skip-network-tests.patch
+  ];
+
+  # Consider fixing this upstream by following up on:
+  # https://github.com/gilesknap/gphotos-sync/issues/441
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "setuptools<57" "setuptools" \
+      --replace "wheel==0.33.1" "wheel"
+  '';
+
+  nativeBuildInputs = with python3.pkgs; [
+    pythonRelaxDepsHook
+    setuptools
+    wheel
+  ];
+
+  pythonRelaxDeps = [
+    "psutil"
+    "exif"
+    "pyyaml"
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
     appdirs
     attrs
     exif
+    google-auth-oauthlib
     psutil
     pyyaml
-    requests_oauthlib
+    psutil
+    requests-oauthlib
+    types-pyyaml
+    types-requests
   ];
-  checkInputs = with python3Packages; [
-    pytestCheckHook
+
+  buildInputs = [
+    ffmpeg
+  ];
+
+  nativeCheckInputs = with python3.pkgs; [
     mock
+    pytestCheckHook
+    setuptools-scm
   ];
-  checkPhase = ''
+
+  preCheck = ''
     export HOME=$(mktemp -d)
-
-    # patch to skip all tests that do network access
-    cat >>test/test_setup.py <<EOF
-    import pytest, requests
-    requests.Session.__init__ = lambda *args, **kwargs: pytest.skip("no network access")
-    EOF
-
-    pytestCheckPhase
+    substituteInPlace setup.cfg \
+      --replace "--cov=gphotos_sync --cov-report term --cov-report xml:cov.xml" ""
   '';
 
   meta = with lib; {
     description = "Google Photos and Albums backup with Google Photos Library API";
-    homepage    = "https://github.com/gilesknap/gphotos-sync";
-    license     = licenses.mit;
+    homepage = "https://github.com/gilesknap/gphotos-sync";
+    license = licenses.asl20;
     maintainers = with maintainers; [ dnr ];
   };
 }

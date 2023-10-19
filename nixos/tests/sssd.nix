@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   meta = with pkgs.lib.maintainers; {
     maintainers = [ bbigras ];
   };
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     services.sssd.enable = true;
   };
 
@@ -13,5 +13,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       start_all()
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("sssd.service")
+      machine.succeed("sssctl config-check")
     '';
 })

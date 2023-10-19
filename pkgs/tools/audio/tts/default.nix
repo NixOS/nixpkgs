@@ -1,87 +1,119 @@
 { lib
-, python3Packages
-, fetchFromGitHub
 , python3
-, fetchpatch
+, fetchFromGitHub
+, espeak-ng
+, tts
 }:
 
-# USAGE:
-# $ tts-server --list_models
-# # pick your favorite vocoder/tts model
-# $ tts-server --model_name tts_models/en/ljspeech/glow-tts --vocoder_name vocoder_models/universal/libri-tts/fullband-melgan
-#
-# If you upgrade from an old version you may have to delete old models from ~/.local/share/tts
-# Also note that your tts version might not support all available models so check:
-#   https://github.com/coqui-ai/TTS/releases/tag/v0.0.14
-#
-# For now, for deployment check the systemd unit in the pull request:
-#   https://github.com/NixOS/nixpkgs/pull/103851#issue-521121136
-
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      torch = super.torch-bin;
+      torchvision = super.torchvision-bin;
+      tensorflow = super.tensorflow-bin;
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.0.14";
+  version = "0.17.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
-    rev = "v${version}";
-    sha256 = "0cl0ri90mx0y19fmqww73lp5nv6qkpc45rm4157i7p6q6llajdhp";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yZHdPqvYmlq/ZKeinez4MmO9+jCIl9JAD0t/tc/Uz8c=";
   };
 
-  postPatch = ''
-    sed -i -e 's!librosa==[^"]*!librosa!' requirements.txt
-    sed -i -e 's!unidecode==[^"]*!unidecode!' requirements.txt
-    sed -i -e 's!numba==[^"]*!numba!' requirements.txt
-    sed -i -e 's!numpy==[^"]*!numpy!' requirements.txt
-    sed -i -e 's!umap-learn==[^"]*!umap-learn!' requirements.txt
+  postPatch = let
+    relaxedConstraints = [
+      "bnunicodenormalizer"
+      "cython"
+      "gruut"
+      "inflect"
+      "librosa"
+      "mecab-python3"
+      "numba"
+      "numpy"
+      "unidic-lite"
+      "trainer"
+    ];
+  in ''
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's/${package}\s*[<>=]+.+/${package}/g' \''
+      ) relaxedConstraints)}
+    requirements.txt
+
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's/${package}\s*[<>=]+[^"]+/${package}/g' \''
+      ) relaxedConstraints)}
+    pyproject.toml
+    # only used for notebooks and visualization
+    sed -r -i -e '/umap-learn/d' requirements.txt
   '';
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = with python.pkgs; [
     cython
+    packaging
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
+    anyascii
+    bangla
+    bnnumerizer
+    bnunicodenormalizer
     coqpit
+    einops
+    encodec
     flask
+    fsspec
+    g2pkk
     gdown
+    gruut
     inflect
+    jamo
     jieba
+    k-diffusion
     librosa
     matplotlib
+    mecab-python3
+    nltk
     numba
+    packaging
     pandas
     pypinyin
     pysbd
-    pytorch
     scipy
     soundfile
-    tensorboardx
+    tensorflow
+    torch-bin
+    torchaudio-bin
     tqdm
-    umap-learn
-    unidecode
+    trainer
+    transformers
+    unidic-lite
+    webrtcvad
   ];
 
   postInstall = ''
-    cp -r TTS/server/templates/ $out/${python3.sitePackages}/TTS/server
+    cp -r TTS/server/templates/ $out/${python.sitePackages}/TTS/server
     # cython modules are not installed for some reasons
     (
-      cd TTS/tts/layers/glow_tts/monotonic_align
-      ${python3Packages.python.interpreter} setup.py install --prefix=$out
+      cd TTS/tts/utils/monotonic_align
+      ${python.pythonForBuild.interpreter} setup.py install --prefix=$out
     )
   '';
 
-  checkInputs = with python3Packages; [
-    pytest-sugar
-    pytestCheckHook
-  ];
+  # tests get stuck when run in nixpkgs-review, tested in passthru
+  doCheck = false;
+  passthru.tests.pytest = tts.overridePythonAttrs (_: { doCheck = true; });
 
-  disabledTests = [
-    # RuntimeError: fft: ATen not compiled with MKL support
-    "test_torch_stft"
-    "test_stft_loss"
-    "test_multiscale_stft_loss"
-    # Requires network acccess to download models
-    "test_synthesize"
+  nativeCheckInputs = with python.pkgs; [
+    espeak-ng
+    pytestCheckHook
   ];
 
   preCheck = ''
@@ -94,29 +126,73 @@ python3Packages.buildPythonApplication rec {
 
     for file in $(grep -rl 'python TTS/bin' tests); do
       substituteInPlace "$file" \
-        --replace "python TTS/bin" "${python3.interpreter} $out/lib/${python3.libPrefix}/site-packages/TTS/bin"
+        --replace "python TTS/bin" "${python.interpreter} $out/lib/${python.libPrefix}/site-packages/TTS/bin"
     done
   '';
 
+  disabledTests = [
+    # Requires network acccess to download models
+    "test_korean_text_to_phonemes"
+    "test_models_offset_0_step_3"
+    "test_models_offset_1_step_3"
+    "test_models_offset_2_step_3"
+    "test_run_all_models"
+    "test_synthesize"
+    "test_voice_cloning"
+    "test_voice_conversion"
+    "test_multi_speaker_multi_lingual_model"
+    "test_single_speaker_model"
+    # Mismatch between phonemes
+    "test_text_to_ids_phonemes_with_eos_bos_and_blank"
+    # Takes too long
+    "test_parametrized_wavernn_dataset"
+  ];
+
   disabledTestPaths = [
-    # requires tensorflow
-    "tests/test_tacotron2_tf_model.py"
-    "tests/vocoder_tests/test_vocoder_tf_pqmf.py"
-    "tests/vocoder_tests/test_vocoder_tf_melgan_generator.py"
-    # RuntimeError: fft: ATen not compiled with MKL support
+    # phonemes mismatch between espeak-ng and gruuts phonemizer
+    "tests/text_tests/test_phonemizer.py"
+    # no training, it takes too long
+    "tests/aux_tests/test_speaker_encoder_train.py"
+    "tests/tts_tests/test_align_tts_train.py"
+    "tests/tts_tests/test_fast_pitch_speaker_emb_train.py"
+    "tests/tts_tests/test_fast_pitch_train.py"
+    "tests/tts_tests/test_fastspeech_2_speaker_emb_train.py"
+    "tests/tts_tests/test_fastspeech_2_train.py"
+    "tests/tts_tests/test_glow_tts_d-vectors_train.py"
+    "tests/tts_tests/test_glow_tts_speaker_emb_train.py"
+    "tests/tts_tests/test_glow_tts_train.py"
+    "tests/tts_tests/test_neuralhmm_tts_train.py"
+    "tests/tts_tests/test_overflow_train.py"
+    "tests/tts_tests/test_speedy_speech_train.py"
+    "tests/tts_tests/test_tacotron2_d-vectors_train.py"
+    "tests/tts_tests/test_tacotron2_speaker_emb_train.py"
+    "tests/tts_tests/test_tacotron2_train.py"
+    "tests/tts_tests/test_tacotron_train.py"
+    "tests/tts_tests/test_vits_d-vectors_train.py"
+    "tests/tts_tests/test_vits_multilingual_speaker_emb_train.py"
+    "tests/tts_tests/test_vits_multilingual_train-d_vectors.py"
+    "tests/tts_tests/test_vits_speaker_emb_train.py"
+    "tests/tts_tests/test_vits_train.py"
+    "tests/vocoder_tests/test_wavegrad_train.py"
+    "tests/vocoder_tests/test_parallel_wavegan_train.py"
     "tests/vocoder_tests/test_fullband_melgan_train.py"
     "tests/vocoder_tests/test_hifigan_train.py"
-    "tests/vocoder_tests/test_melgan_train.py"
     "tests/vocoder_tests/test_multiband_melgan_train.py"
-    "tests/vocoder_tests/test_parallel_wavegan_train.py"
-
+    "tests/vocoder_tests/test_melgan_train.py"
+    "tests/vocoder_tests/test_wavernn_train.py"
+    # only a feed forward test, but still takes too long
+    "tests/tts_tests/test_overflow.py"
   ];
+
+  passthru = {
+    inherit python;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/coqui-ai/TTS";
     changelog = "https://github.com/coqui-ai/TTS/releases/tag/v${version}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ hexa mic92 ];
+    maintainers = teams.tts.members;
   };
 }

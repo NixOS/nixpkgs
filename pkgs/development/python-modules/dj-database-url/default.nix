@@ -1,20 +1,38 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "0.5.0";
+  version = "2.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163";
+    hash = "sha256-8gQs7+EIblOcnaOfrVrX9hFzv3lmXmm/fk3lX6iLE18=";
   };
+
+  propagatedBuildInputs = [
+    django
+  ];
 
   # Tests access a DB via network
   doCheck = false;
 
+  pythonImportsCheck = [
+    "dj_database_url"
+  ];
+
   meta = with lib; {
     description = "Use Database URLs in your Django Application";
-    homepage = "https://github.com/kennethreitz/dj-database-url";
+    homepage = "https://github.com/jazzband/dj-database-url";
+    changelog = "https://github.com/jazzband/dj-database-url/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
 }

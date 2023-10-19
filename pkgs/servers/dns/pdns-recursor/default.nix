@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pdns-recursor";
-  version = "4.5.1";
+  version = "4.9.1";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "0yaf25jg3gfsi9c9rnxz1ywy3b563plv33aibxrq79iqwk8a289p";
+    sha256 = "sha256-Ch7cE+jyvWYfOeMWOH2UHiLeagO4p6L8Zi/fi5Quor4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-reproducible"
     "--enable-systemd"
+    "sysconfdir=/etc/pdns-recursor"
   ];
+
+  installFlags = [ "sysconfdir=$(out)/etc/pdns-recursor" ];
 
   enableParallelBuilding = true;
 
@@ -36,7 +39,7 @@ stdenv.mkDerivation rec {
     badPlatforms = [
       "i686-linux"  # a 64-bit time_t is needed
     ];
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

@@ -1,43 +1,43 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , substituteAll
-, six
-, krb5Full
 , findutils
-, which
+, krb5
+, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "k5test";
-  version = "0.9.2";
+  version = "0.10.3";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lqp3jgfngyhaxjgj3n230hn90wsylwilh120yjf62h7b1s02mh8";
+    hash = "sha256-nJ3uvK1joxXoGDPUXp/RK/IBZmQ7iry5/29NaxhMVx8=";
   };
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit findutils krb5Full;
+      inherit findutils krb5;
       # krb5-config is in dev output
-      krb5FullDev = krb5Full.dev;
-      which = "${which}/bin/which";
+      krb5Dev = krb5.dev;
     })
-  ];
-
-  propagatedBuildInputs = [
-    six
   ];
 
   # No tests
   doCheck = false;
 
+  pythonImportsCheck = [ "k5test" ];
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

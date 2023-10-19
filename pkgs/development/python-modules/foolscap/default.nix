@@ -2,39 +2,56 @@
 , buildPythonPackage
 , fetchPypi
 , mock
-, twisted
 , pyopenssl
+, pytestCheckHook
+, pythonOlder
 , service-identity
+, six
+, twisted
+, txi2p-tahoe
+, txtorcon
 }:
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "20.4.0";
+  version = "23.3.0";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rbw9makjmawkcxnkkngybj3n14s0dnzn9gkqqq2krcm514kmlb9";
+    hash = "sha256-Vu7oXC1brsgBwr2q59TAgx8j1AFRbi5mjRNIWZTbkUU=";
   };
 
-  propagatedBuildInputs = [ mock twisted pyopenssl service-identity ];
+  propagatedBuildInputs = [
+    six
+    twisted
+    pyopenssl
+  ] ++ twisted.optional-dependencies.tls;
 
-  checkPhase = ''
-    # Either uncomment this, or remove this custom check phase entirely, if
-    # you wish to do battle with the foolscap tests. ~ C.
-    # trial foolscap
-  '';
+  passthru.optional-dependencies = {
+    i2p = [ txi2p-tahoe ];
+    tor = [ txtorcon ];
+  };
+
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+
+  pythonImportsCheck = [ "foolscap" ];
 
   meta = with lib; {
-    homepage = "http://foolscap.lothar.com/";
-    description = "Foolscap, an RPC protocol for Python that follows the distributed object-capability model";
+    description = "RPC protocol for Python that follows the distributed object-capability model";
     longDescription = ''
-      "Foolscap" is the name for the next-generation RPC protocol,
-      intended to replace Perspective Broker (part of Twisted).
-      Foolscap is a protocol to implement a distributed
-      object-capabilities model in Python.
+      "Foolscap" is the name for the next-generation RPC protocol, intended to
+      replace Perspective Broker (part of Twisted). Foolscap is a protocol to
+      implement a distributed object-capabilities model in Python.
     '';
-    # See http://foolscap.lothar.com/trac/browser/LICENSE.
+    homepage = "https://github.com/warner/foolscap";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

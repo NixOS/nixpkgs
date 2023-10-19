@@ -1,23 +1,36 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, six }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "cfgv";
-  version = "3.2.0";
-  disabled = isPy27;
+  version = "3.4.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "cf22deb93d4bcf92f345a5c3cd39d3d41d6340adc60c78bbbd6588c384fda6a1";
+  disabled = pythonOlder "3.8";
+
+  src = fetchFromGitHub {
+    owner = "asottile";
+    repo = "cfgv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P02j53dltwdrlUBG89AI+P2GkXYKTVrQNF15rZt58jw=";
   };
 
-  propagatedBuildInputs = [ six ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  # Tests not included in PyPI tarball
-  doCheck = false;
+  pythonImportsCheck = [
+    "cfgv"
+  ];
 
   meta = with lib; {
     description = "Validate configuration and produce human readable error messages";
     homepage = "https://github.com/asottile/cfgv";
     license = licenses.mit;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

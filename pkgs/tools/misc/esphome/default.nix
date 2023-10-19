@@ -1,20 +1,29 @@
 { lib
+, callPackage
 , python3
 , fetchFromGitHub
 , platformio
-, esptool
+, esptool_3
 , git
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      esphome-dashboard = self.callPackage ./dashboard.nix {};
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.18.0";
+  version = "2023.9.3";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1vz3d59wfqssfv1kvd4minlxibr0id06xfyg8956w9s3b22jc5vq";
+    rev = "refs/tags/${version}";
+    hash = "sha256-SyXEiGh1/s9EJ0UPYC8R04JUYkCPhCtNUcGvVCycKGM=";
   };
 
   postPatch = ''
@@ -23,12 +32,6 @@ python3.pkgs.buildPythonApplication rec {
 
     # drop coverage testing
     sed -i '/--cov/d' pytest.ini
-
-    # migrate use of hypothesis internals to be compatible with hypothesis>=5.32.1
-    # https://github.com/esphome/issues/issues/2021
-    substituteInPlace tests/unit_tests/strategies.py --replace \
-      "@st.defines_strategy_with_reusable_values" \
-      "@st.defines_strategy(force_reusable_values=True)"
   '';
 
   # Remove esptool and platformio from requirements
@@ -40,17 +43,23 @@ python3.pkgs.buildPythonApplication rec {
   # They have validation functions like:
   # - validate_cryptography_installed
   # - validate_pillow_installed
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python.pkgs; [
+    aioesphomeapi
     click
     colorama
     cryptography
-    ifaddr
+    esphome-dashboard
+    kconfiglib
     paho-mqtt
     pillow
+    platformio
     protobuf
+    pyparsing
     pyserial
     pyyaml
+    requests
     tornado
+    tzdata
     tzlocal
     voluptuous
   ];
@@ -59,29 +68,42 @@ python3.pkgs.buildPythonApplication rec {
     # platformio is used in esphomeyaml/platformio_api.py
     # esptool is used in esphomeyaml/__main__.py
     # git is used in esphomeyaml/writer.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git ]}"
+    "--prefix PATH : ${lib.makeBinPath [ platformio esptool_3 git ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     hypothesis
     mock
+    pytest-asyncio
     pytest-mock
-    pytest-sugar
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires hypothesis 5.49, we have 6.x
+    # ImportError: cannot import name 'ip_addresses' from 'hypothesis.provisional'
+    "tests/unit_tests/test_core.py"
+    "tests/unit_tests/test_helpers.py"
   ];
 
   postCheck = ''
     $out/bin/esphome --help > /dev/null
   '';
 
+  passthru = {
+    dashboard = python.pkgs.esphome-dashboard;
+    updateScript = callPackage ./update.nix {};
+  };
+
   meta = with lib; {
+    changelog = "https://github.com/esphome/esphome/releases/tag/${version}";
     description = "Make creating custom firmwares for ESP32/ESP8266 super easy";
     homepage = "https://esphome.io/";
     license = with licenses; [
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [ globin elseym hexa ];
+    maintainers = with maintainers; [ globin hexa ];
   };
 }

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_hll";
-  version = "2.15.1";
+  version = "2.18";
 
   buildInputs = [ postgresql ];
 
@@ -10,16 +10,14 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "postgresql-hll";
     rev    = "refs/tags/v${version}";
-    sha256 = "17lg05rw7299fvfhdzvznr692c21s5qar1wzzvgwfv7afv6xzr3y";
+    hash   = "sha256-Latdxph1Ura8yKEokEjalJ+/GY+pAKOT3GXjuLprj6c=";
   };
 
   installPhase = ''
-    mkdir -p $out/{lib,share/postgresql/extension}
-
-    cp *.so      $out/lib
-    cp *.sql     $out/share/postgresql/extension
-    cp *.control $out/share/postgresql/extension
-  '';
+    install -D -t $out/lib hll${postgresql.dlSuffix}
+    install -D -t $out/share/postgresql/extension *.sql
+    install -D -t $out/share/postgresql/extension *.control
+ '';
 
   meta = with lib; {
     description = "HyperLogLog for PostgreSQL";

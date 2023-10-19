@@ -1,20 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, dnspython
+}:
 
 buildPythonPackage rec {
   pname = "pymongo";
-  version = "3.11.3";
+  version = "4.3.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "db5098587f58fbf8582d9bda2462762b367207246d3e19623782fb449c3c5fcc";
+    hash = "sha256-NOlf+wpov/vDtDfy0fJfyRb+899c3u0JktpfQvrpuAc=";
   };
+
+  propagatedBuildInputs = [
+    dnspython
+  ];
 
   # Tests call a running mongodb instance
   doCheck = false;
 
+  pythonImportsCheck = [ "pymongo" ];
+
   meta = with lib; {
+    description = "Python driver for MongoDB";
     homepage = "https://github.com/mongodb/mongo-python-driver";
     license = licenses.asl20;
-    description = "Python driver for MongoDB";
+    maintainers = with maintainers; [ ];
   };
 }

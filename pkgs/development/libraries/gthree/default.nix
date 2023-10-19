@@ -11,7 +11,7 @@
 , glib
 , gtk3
 , graphene
-, epoxy
+, libepoxy
 , json-glib
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    epoxy
+    libepoxy
     json-glib
   ];
 
@@ -67,7 +67,8 @@ stdenv.mkDerivation rec {
     description = "GObject/GTK port of three.js";
     homepage = "https://github.com/alexlarsson/gthree";
     license = licenses.mit;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gthree.x86_64-darwin
   };
 }

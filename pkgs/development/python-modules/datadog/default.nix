@@ -1,38 +1,42 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonOlder
-, decorator
-, requests
-, typing ? null
-, configparser
 , click
+, fetchPypi
 , freezegun
+, hatchling
 , mock
-, pytestCheckHook
 , pytest-vcr
+, pytestCheckHook
 , python-dateutil
+, pythonAtLeast
+, pythonOlder
+, requests
 , vcrpy
 }:
 
 buildPythonPackage rec {
   pname = "datadog";
-  version = "0.40.1";
+  version = "0.47.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "438c1dde5462e68c5c792b7b4a1d87a0ddd970af3db31b3cf15980eed0c44311";
+    hash = "sha256-R747LD1wmn9bcJ6xJu1P5sx5d9YY/lwVjdicKp99mRY=";
   };
 
-  postPatch = ''
-    find . -name '*.pyc' -exec rm {} \;
-  '';
+  nativeBuildInputs = [
+    hatchling
+  ];
 
-  propagatedBuildInputs = [ decorator requests ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (pythonOlder "3.0") configparser;
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     click
     freezegun
     mock
@@ -48,13 +52,20 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_default_settings_set"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/DataDog/datadogpy/issues/746
+    "TestDogshell"
   ];
 
-  pythonImportsCheck = [ "datadog" ];
+  pythonImportsCheck = [
+    "datadog"
+  ];
 
   meta = with lib; {
     description = "The Datadog Python library";
-    license = licenses.bsd3;
     homepage = "https://github.com/DataDog/datadogpy";
+    changelog = "https://github.com/DataDog/datadogpy/blob/v${version}/CHANGELOG.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

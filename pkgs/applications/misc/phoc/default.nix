@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchurl
 , fetchpatch
 , meson
 , ninja
@@ -9,41 +9,37 @@
 , wrapGAppsHook
 , libinput
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
 , libdrm
 , libxkbcommon
 , wlroots
+, xorg
+, nixosTests
 }:
 
 let
   phocWlroots = wlroots.overrideAttrs (old: {
     patches = (old.patches or []) ++ [
-      # Temporary fix. Upstream report: https://source.puri.sm/Librem5/phosh/-/issues/422
+      # Revert "layer-shell: error on 0 dimension without anchors"
+      # https://source.puri.sm/Librem5/phosh/-/issues/422
       (fetchpatch {
         name = "0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/78fde4aaf1a74eb13a3f083cb6dfb29f578c3265/community/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
-        sha256 = "1zjn7mwdj21z0jsc2mz90cnrzk97yqkiq58qqgpjav4h4dgpfb38";
-      })
-      # To fix missing header `EGL/eglmesaext.h` dropped upstream
-      (fetchpatch {
-        name = "0002-stop-including-eglmesaext-h.patch";
-        url = "https://github.com/swaywm/wlroots/commit/e18599b05e0f0cbeba11adbd489e801285470eab.patch";
-        sha256 = "17ax4dyk0584yhs3lq8ija5bkainjf7psx9c9r50cr4jm9c0i37l";
+        url = "https://gitlab.gnome.org/World/Phosh/phoc/-/raw/acb17171267ae0934f122af294d628ad68b09f88/subprojects/packagefiles/wlroots/0001-Revert-layer-shell-error-on-0-dimension-without-anch.patch";
+        hash = "sha256-uNJaYwkZImkzNUEqyLCggbXAoIRX5h2eJaGbSHj1B+o=";
       })
     ];
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
-  version = "0.7.0";
+  version = "0.31.0";
 
-  src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0afiyr2slg38ksrqn19zygsmjy9k5bpwv6n7zjas3s5djr6hch45";
+  src = fetchurl {
+    # This tarball includes the meson wrapped subproject 'gmobile'.
+    url = "https://storage.puri.sm/releases/phoc/phoc-${version}.tar.xz";
+    hash = "sha256-P7Bs9JMv6KNKo4d2ID0/Ba4+Nel6DMn8o4I7EDvY4vY=";
   };
 
   nativeBuildInputs = [
@@ -60,11 +56,12 @@ in stdenv.mkDerivation rec {
     libinput
     glib
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     # For keybindings settings schemas
     gnome.mutter
     wayland
     phocWlroots
+    xorg.xcbutilwm
   ];
 
   mesonFlags = ["-Dembed-wlroots=disabled"];
@@ -74,11 +71,13 @@ in stdenv.mkDerivation rec {
     patchShebangs build-aux/post_install.py
   '';
 
+  passthru.tests.phosh = nixosTests.phosh;
+
   meta = with lib; {
     description = "Wayland compositor for mobile phones like the Librem 5";
-    homepage = "https://source.puri.sm/Librem5/phoc";
+    homepage = "https://gitlab.gnome.org/World/Phosh/phoc";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ archseer masipcat zhaofengli ];
+    maintainers = with maintainers; [ masipcat tomfitzhenry zhaofengli ];
     platforms = platforms.linux;
   };
 }

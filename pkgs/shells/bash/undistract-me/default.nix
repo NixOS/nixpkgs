@@ -43,6 +43,8 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+
   # Patch in dependencies. Can't use makeWrapper because the bash
   # functions will be sourced and invoked in a different environment
   # for each command invocation.

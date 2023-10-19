@@ -2,7 +2,7 @@
 , mkDerivation
 , extra-cmake-modules
 , kdoctools
-, libkdegames, kconfig, kio, ktextwidgets
+, libkdegames, kio, ktextwidgets
 }:
 
 mkDerivation {
@@ -10,6 +10,8 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ libkdegames kio ktextwidgets ];
   meta = {
+    homepage = "https://apps.kde.org/kolf/";
+    description = "Miniature golf";
     license = with lib.licenses; [ gpl2 ];
     maintainers = with lib.maintainers; [ peterhoeg ];
   };

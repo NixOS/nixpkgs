@@ -1,18 +1,20 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, bash, coreutils }:
-
+{ lib, stdenv, fetchurl, jdk11_headless, makeWrapper, nixosTests, bash, coreutils }:
+let
+  # Latest supported LTS JDK for Zookeeper 3.6:
+  # https://zookeeper.apache.org/doc/r3.6.3/zookeeperAdmin.html#sc_requiredSoftware
+  jre = jdk11_headless;
+in
 stdenv.mkDerivation rec {
   pname = "zookeeper";
-  version = "3.6.3";
+  version = "3.7.1";
 
   src = fetchurl {
     url = "mirror://apache/zookeeper/${pname}-${version}/apache-${pname}-${version}-bin.tar.gz";
-    sha512 = "3f7b1b7d9cf5647d52ad0076c922e108fa956e986b5624667c493cf6d8ff09d3ca88f623c79a799fe49c72e868cb3c9d0f77cb69608de74a183b2cbad10bc827";
+    hash = "sha512-kQNiilB0X6GiibymZv2kqcCOwXxVzxPmaIfnunbpPbrmCh8f/WwQeYvjoWBpNE7LwAzrspvwPZzXCWzNCY7QEQ==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
-
-  phases = ["unpackPhase" "installPhase"];
 
   installPhase = ''
     runHook preInstall
@@ -35,11 +37,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru = {
+    tests = {
+      nixos = nixosTests.zookeeper;
+    };
+    inherit jre;
+  };
+
   meta = with lib; {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nathan-gs cstrahan pradeepchhetri ztzg ];
+    maintainers = with maintainers; [ nathan-gs pradeepchhetri ztzg ];
     platforms = platforms.unix;
   };
 }

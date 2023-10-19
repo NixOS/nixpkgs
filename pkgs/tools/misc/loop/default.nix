@@ -18,5 +18,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/Miserlou/Loop";
     maintainers = with maintainers; [ koral ];
     license = licenses.mit;
+    mainProgram = "loop";
   };
 }

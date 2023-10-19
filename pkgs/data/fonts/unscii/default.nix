@@ -2,20 +2,37 @@
 , fontforge, SDL, SDL_image, mkfontscale
 }:
 
+let
+  perlenv = perl.withPackages (p: with p; [
+    TextCharWidth
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "unscii";
-  version = "1.1";
+  version = "2.1";
 
   src = fetchurl {
-    url = "http://pelulamu.net/${pname}/${pname}-${version}-src.tar.gz";
-    sha256 = "0qcxcnqz2nlwfzlrn115kkp3n8dd7593h762vxs6vfqm13i39lq1";
+    url = "http://viznut.fi/${pname}/${pname}-${version}-src.tar.gz";
+    sha256 = "0msvqrq7x36p76a2n5bzkadh95z954ayqa08wxd017g4jpa1a4jd";
   };
 
   nativeBuildInputs =
-    [ (perl.withPackages (p: [ p.TextCharWidth ]))
+    [ perlenv
       bdftopcf fontforge SDL SDL_image
       mkfontscale
     ];
+
+  # Fixes shebang -> wrapper problem on Darwin
+  postPatch = ''
+    for perltool in *.pl; do
+      substituteInPlace Makefile \
+        --replace "./$perltool" "${perlenv}/bin/perl ./$perltool"
+    done
+  '';
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preConfigure = ''
     patchShebangs .
@@ -44,12 +61,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "extra" ];
 
   meta = {
-    inherit version;
     description = "Bitmapped character-art-friendly Unicode fonts";
     # Basically GPL2+ with font exception — because of the Unifont-augmented
     # version. The reduced version is public domain.
     license = "http://unifoundry.com/LICENSE.txt";
     maintainers = [ lib.maintainers.raskin ];
-    homepage = "http://pelulamu.net/unscii/";
+    homepage = "http://viznut.fi/unscii/";
   };
 }

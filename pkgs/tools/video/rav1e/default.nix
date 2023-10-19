@@ -1,41 +1,76 @@
-{ stdenv, rustPlatform, fetchurl, fetchFromGitHub, lib, nasm, cargo-c, libiconv }:
+{ lib
+, rust
+, stdenv
+, rustPlatform
+, fetchCrate
+, pkg-config
+, cargo-c
+, libgit2
+, nasm
+, zlib
+, libiconv
+, Security
+, buildPackages
+}:
 
-rustPlatform.buildRustPackage rec {
+let
+  rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+
+  # TODO: if another package starts using cargo-c (seems likely),
+  # factor this out into a makeCargoChook expression in
+  # pkgs/build-support/rust/hooks/default.nix
+  ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+  cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
+  ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+  cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+  rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
+  rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
+  setEnvVars = ''
+    env \
+      "CC_${rustBuildPlatform}"="${ccForBuild}" \
+      "CXX_${rustBuildPlatform}"="${cxxForBuild}" \
+      "CC_${rustTargetPlatform}"="${ccForHost}" \
+      "CXX_${rustTargetPlatform}"="${cxxForHost}" \
+  '';
+
+in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.4.1";
+  version = "0.6.6";
 
-  src = stdenv.mkDerivation rec {
-    name = "${pname}-${version}-source";
-
-    src = fetchFromGitHub {
-      owner = "xiph";
-      repo = "rav1e";
-      rev = "v${version}";
-      sha256 = "0jnq5a3fv6fzzbmprzfxidlcwwgblkwwm0135cfw741wjv7f7h6r";
-    };
-
-    cargoLock = fetchurl {
-      url = "https://github.com/xiph/rav1e/releases/download/v${version}/Cargo.lock";
-      sha256 = "14fi9wam9rs5206rvcd2f3sjpzq41pnfml14w74wn2ws3gpi46zn";
-    };
-
-    installPhase = ''
-      mkdir -p $out
-      cp -r ./* $out/
-      cp ${cargoLock} $out/Cargo.lock
-    '';
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-urYMT1sJUMBj1L/2Hi+hcYbWbi0ScSls0pm9gLj9H3o=";
   };
 
-  cargoSha256 = "0miq6iiywwbxm6k0alnqg6bnd14pwc8vl9d8fgg6c0vjlfy5zhlb";
-  nativeBuildInputs = [ nasm cargo-c ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  cargoHash = "sha256-qQfEpynhlIEKU1Ptq/jM1Wdtn+BVCZT1lmou2S1GL4I=";
 
-  postBuild = ''
-    cargo cbuild --release --frozen --prefix=${placeholder "out"}
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [ cargo-c libgit2 nasm ];
+
+  buildInputs = [
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
+
+  # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
+  # and linking it with cctools ld64.
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    substituteInPlace build.rs --replace 'cmd.arg("-x")' 'cmd.arg("-S")'
+  '';
+
+  checkType = "debug";
+
+  postBuild =  ''
+    ${setEnvVars} \
+    cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
-    cargo cinstall --release --frozen --prefix=${placeholder "out"}
+    ${setEnvVars} \
+    cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   meta = with lib; {

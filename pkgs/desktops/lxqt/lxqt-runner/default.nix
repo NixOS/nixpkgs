@@ -15,18 +15,18 @@
 , menu-cache
 , muparser
 , pcre
-, lxqtUpdateScript
+, gitUpdater
 }:
 
 mkDerivation rec {
   pname = "lxqt-runner";
-  version = "0.17.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "167gzn6aqk7akzbmrnm7nmcpkl0nphr8axbfgwnw552dnk6v8gn0";
+    sha256 = "iC0XTdgB1+hwMfc/45JiEfAhwadbFOgTTJj9Kvxx+l4=";
   };
 
   nativeBuildInputs = [
@@ -49,13 +49,13 @@ mkDerivation rec {
     pcre
   ];
 
-  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/lxqt/lxqt-runner";
     description = "Tool used to launch programs quickly by typing their names";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

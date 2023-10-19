@@ -1,32 +1,41 @@
-{ lib, buildDunePackage, fetchFromGitHub, alcotest, cppo
-, ocaml-migrate-parsetree, ppx_tools_versioned, reason, yojson }:
+{ lib, buildDunePackage, fetchFromGitHub, alcotest, reason
+, result
+, ppxlib
+, yojson }:
 
 buildDunePackage rec {
   pname = "graphql_ppx";
-  version = "1.0.1";
+  version = "1.2.2";
 
-  minimumOCamlVersion = "4.06";
+  duneVersion = "3";
+
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "reasonml-community";
     repo = "graphql-ppx";
     rev = "v${version}";
-    sha256 = "0lvmv1sb0ca9mja6di1dbmsgjqgj3w9var4amv1iz9nhwjjx4cpi";
+    sha256 = "sha256-+WJhA2ixZHiSZBoX14dnQKk7JfVAIME4JooNSnhRp44=";
   };
 
-  propagatedBuildInputs =
-    [ cppo ocaml-migrate-parsetree ppx_tools_versioned reason yojson ];
+  nativeBuildInputs = [ reason ];
 
-  checkInputs = lib.optional doCheck alcotest;
+  buildInputs = [ ppxlib reason ];
 
-  doCheck = false;
+  propagatedBuildInputs = [
+    reason
+    result
+    yojson
+  ];
 
-  useDune2 = true;
+  checkInputs = [ alcotest ];
+
+  doCheck = true;
 
   meta = {
     homepage = "https://github.com/reasonml-community/graphql_ppx";
     description = "GraphQL PPX rewriter for Bucklescript/ReasonML";
-    license = lib.licenses.bsd3;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Zimmi48 jtcoolen ];
   };
 }

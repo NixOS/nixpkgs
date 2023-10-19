@@ -1,21 +1,27 @@
-{ lib
+{ stdenv
+, lib
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, cargo
+, rustPlatform
+, rustc
   # Python requirements
-, cython
 , dill
-, fastjsonschema
-, jsonschema
 , numpy
 , networkx
 , ply
 , psutil
 , python-constraint
 , python-dateutil
-, retworkx
+, rustworkx
 , scipy
+, scikit-quant ? null
+, setuptools-rust
+, stevedore
+, symengine
 , sympy
+, tweedledum
 , withVisualization ? false
   # Python visualization requirements, optional
 , ipywidgets
@@ -28,9 +34,6 @@
   # Crosstalk-adaptive layout pass
 , withCrosstalkPass ? false
 , z3
-  # Classical function -> Quantum Circuit compiler
-, withClassicalFunctionCompiler ? true
-, tweedledum
   # test requirements
 , ddt
 , hypothesis
@@ -51,43 +54,49 @@ let
     seaborn
   ];
   crosstalkPackages = [ z3 ];
-  classicalCompilerPackages = [ tweedledum ];
 in
 
 buildPythonPackage rec {
   pname = "qiskit-terra";
-  version = "0.17.0";
+  version = "0.21.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "Qiskit";
+    owner = "qiskit";
     repo = pname;
     rev = version;
-    hash = "sha256-LbNbaHAWAVG5YLc9juuwcOlrREBW6OjEl7VPtACfl3I=";
+    hash = "sha256-imktzBpgP+lq6FsVWIUK82+t76gKTgt53kPfKOnsseQ=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [ setuptools-rust rustc cargo rustPlatform.cargoSetupHook ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-SXC0UqWjWqLlZvKCRBylSX73r4Vale130KzS0zM8gjQ=";
+  };
 
   propagatedBuildInputs = [
     dill
-    fastjsonschema
-    jsonschema
     numpy
     networkx
     ply
     psutil
     python-constraint
     python-dateutil
-    retworkx
+    rustworkx
     scipy
+    scikit-quant
+    stevedore
+    symengine
     sympy
+    tweedledum
   ] ++ lib.optionals withVisualization visualizationPackages
-  ++ lib.optionals withCrosstalkPass crosstalkPackages
-  ++ lib.optionals withClassicalFunctionCompiler classicalCompilerPackages;
+  ++ lib.optionals withCrosstalkPass crosstalkPackages;
 
   # *** Tests ***
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     ddt
     hypothesis
@@ -97,20 +106,32 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "qiskit"
-    "qiskit.transpiler.passes.routing.cython.stochastic_swap.swap_trial"
+    "qiskit.pulse"
   ];
 
   disabledTestPaths = [
     "test/randomized/test_transpiler_equivalence.py" # collection requires qiskit-aer, which would cause circular dependency
-  ] ++ lib.optionals (!withClassicalFunctionCompiler) [
-    "test/python/classical_function_compiler/"
+    # These tests are nondeterministic and can randomly fail.
+    # We ignore them here for deterministic building.
+    "test/randomized/"
+    # These tests consistently fail on GitHub Actions build
+    "test/python/quantum_info/operators/test_random.py"
   ];
+  pytestFlagsArray = [ "--durations=10" ];
   disabledTests = [
+    "TestUnitarySynthesisPlugin" # use unittest mocks for transpiler.run(), seems incompatible somehow w/ pytest infrastructure
+    # matplotlib tests seems to fail non-deterministically
+    "TestMatplotlibDrawer"
+    "TestGraphMatplotlibDrawer"
+    "test_copy" # assertNotIn doesn't seem to work as expected w/ pytest vs unittest
+
     # Flaky tests
-    "test_cx_equivalence"
-    "test_pulse_limits"
-  ] ++ lib.optionals (!withClassicalFunctionCompiler) [
-    "TestPhaseOracle"
+    "test_pulse_limits" # Fails on GitHub Actions, probably due to minor floating point arithmetic error.
+    "test_cx_equivalence"  # Fails due to flaky test
+    "test_two_qubit_synthesis_not_pulse_optimal" # test of random circuit, seems to randomly fail depending on seed
+    "test_qv_natural" # fails due to sign error. Not sure why
+  ] ++ lib.optionals (lib.versionAtLeast matplotlib.version "3.4.0") [
+    "test_plot_circuit_layout"
   ]
   # Disabling slow tests for build constraints
   ++ [
@@ -140,6 +161,19 @@ buildPythonPackage rec {
     "test_qaoa_qc_mixer_4"
     "test_abelian_grouper_random_2"
     "test_pauli_two_design"
+    "test_shor_factoring"
+    "test_sample_counts_memory_ghz"
+    "test_two_qubit_weyl_decomposition_ab0"
+    "test_sample_counts_memory_superposition"
+    "test_piecewise_polynomial_function"
+    "test_piecewise_chebyshev_mutability"
+    "test_bit_conditional_no_cregbundle"
+    "test_gradient_wrapper2"
+    "test_two_qubit_weyl_decomposition_abmb"
+    "test_two_qubit_weyl_decomposition_abb"
+    "test_vqe_qasm"
+    "test_dag_from_networkx"
+    "test_defaults_to_dict_46"
   ];
 
   # Moves tests to $PACKAGEDIR/test. They can't be run from /build because of finding
@@ -149,19 +183,19 @@ buildPythonPackage rec {
     echo "Moving Qiskit test files to package directory"
     cp -r $TMP/$sourceRoot/test $PACKAGEDIR
     cp -r $TMP/$sourceRoot/examples $PACKAGEDIR
-    cp -r $TMP/$sourceRoot/qiskit/schemas/examples $PACKAGEDIR/qiskit/schemas/
 
     # run pytest from Nix's $out path
     pushd $PACKAGEDIR
   '';
   postCheck = ''
-    rm -rf test
-    rm -rf examples
+    rm -r test
+    rm -r examples
     popd
   '';
 
 
   meta = with lib; {
+    broken = true; # tests segfault python
     description = "Provides the foundations for Qiskit.";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.

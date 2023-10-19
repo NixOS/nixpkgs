@@ -15,22 +15,15 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
-  version = "1.0.1";
+  version = "1.2.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
-    rev = "v${version}";
-    sha256 = "1fbrmh6qa3dm3q3zdxaa0fls94wardbcvnjgwxk686wpjgs1xrs4";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OY6wT0xi7f6Bn8VOL9+6kyv5cENYbrGGTWWKc6o36cw=";
   };
-
-  postPatch = ''
-    # https://github.com/alandtse/auth_capture_proxy/issues/14
-    substituteInPlace pyproject.toml --replace \
-      "poetry.masonry.api" \
-      "poetry.core.masonry.api"
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -46,12 +39,13 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
     description = "A proxy to capture authentication information from a webpage";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
     license = licenses.asl20;

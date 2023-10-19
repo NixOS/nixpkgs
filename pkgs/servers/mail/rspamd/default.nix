@@ -1,6 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, cmake, perl
-, glib, luajit, openssl, pcre, pkg-config, sqlite, ragel, icu
-, hyperscan, jemalloc, blas, lapack, lua, libsodium
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch2
+, cmake
+, perl
+, glib
+, luajit
+, openssl
+, pcre
+, pkg-config
+, sqlite
+, ragel
+, icu
+, hyperscan
+, jemalloc
+, blas
+, lapack
+, lua
+, libsodium
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
 , withLuaJIT ? stdenv.isx86_64
@@ -11,13 +28,13 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "2.7";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "sha256-LMLRDnKfGpApVsIvPNY2nxl+H5+qeVvwvwr3wdyyhjs=";
+    hash = "sha256-emxvSqtpTcv0LZjzhMncvnApRLXFDeyFVmkoeSVp6f4=";
   };
 
   hardeningEnable = [ "pie" ];
@@ -29,6 +46,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
+    # pcre2 jit seems to cause crashes: https://github.com/NixOS/nixpkgs/pull/181908
+    "-DENABLE_PCRE2=OFF"
     "-DDEBIAN_BUILD=ON"
     "-DRUNDIR=/run/rspamd"
     "-DDBDIR=/var/lib/rspamd"
@@ -44,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://rspamd.com";
     license = licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [ avnik fpletz globin ];
+    maintainers = with maintainers; [ avnik fpletz globin lewo ];
     platforms = with platforms; linux;
   };
 }

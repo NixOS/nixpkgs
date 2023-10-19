@@ -2,14 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "zimg";
-  version = "3.0.1";
+  version = "3.0.5";
 
   src = fetchFromGitHub {
     owner  = "sekrit-twc";
     repo   = "zimg";
     rev    = "release-${version}";
-    sha256 = "1mpns443ifbkbaxsw6yy8z01l7815259pxzd7s006npr0dxnc8ng";
+    sha256 = "sha256-DCSqHCnOyIvKtIAfprb8tgtzLn67Ix6BWyeIliu0HO4=";
   };
+
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Scaling, colorspace conversion and dithering library";
     homepage    = "https://github.com/sekrit-twc/zimg";
     license     = licenses.wtfpl;
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms   = with platforms; unix ++ windows;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

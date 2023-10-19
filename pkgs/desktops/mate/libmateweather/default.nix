@@ -1,17 +1,39 @@
-{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, libsoup, tzdata, mateUpdateScript }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, gettext
+, glib
+, libxml2
+, gtk3
+, libsoup
+, tzdata
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.24.1";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "02d7c59pami1fzxg73mp6risa9hvsdpgs68f62wkg09nrppzsk4v";
+    sha256 = "wgCZD0uOnU0OLG99MaWHY3TD0qNsa4y1kEQAQ6hg7zo=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext ];
+  strictDeps = true;
 
-  buildInputs = [ gtk3 libsoup tzdata ];
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+    glib # glib-compile-schemas
+    libxml2 # xmllint
+  ];
+
+  buildInputs = [
+    gtk3
+    libsoup
+    tzdata
+  ];
 
   configureFlags = [
     "--with-zoneinfo-dir=${tzdata}/share/zoneinfo"
@@ -22,13 +44,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = mateUpdateScript { inherit pname version; };
+  passthru.updateScript = mateUpdateScript { inherit pname; };
 
   meta = with lib; {
     description = "Library to access weather information from online services for MATE";
     homepage = "https://github.com/mate-desktop/libmateweather";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

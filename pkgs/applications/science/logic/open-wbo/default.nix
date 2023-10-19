@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, zlib, gmp }:
 
 stdenv.mkDerivation {
-  name = "open-wbo-2.0";
+  pname = "open-wbo";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "sat-group";
@@ -18,6 +19,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "State-of-the-art MaxSAT and Pseudo-Boolean solver";
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;

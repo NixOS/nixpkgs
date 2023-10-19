@@ -36,11 +36,6 @@ addMakeFlags() {
   export MKUNPRIVED=yes
   export EXTERNAL_TOOLCHAIN=yes
 
-  export INSTALL_FILE="install -U -c"
-  export INSTALL_DIR="xinstall -U -d"
-  export INSTALL_LINK="install -U -l h"
-  export INSTALL_SYMLINK="install -U -l s"
-
   makeFlags="MACHINE=$MACHINE $makeFlags"
   makeFlags="MACHINE_ARCH=$MACHINE_ARCH $makeFlags"
   makeFlags="AR=$AR $makeFlags"
@@ -53,6 +48,7 @@ addMakeFlags() {
   makeFlags="BINDIR=${!outputBin}/bin $makeFlags"
   makeFlags="LIBDIR=${!outputLib}/lib $makeFlags"
   makeFlags="SHLIBDIR=${!outputLib}/lib $makeFlags"
+  makeFlags="SHAREDIR=${!outputLib}/share $makeFlags"
   makeFlags="MANDIR=${!outputMan}/share/man $makeFlags"
   makeFlags="INFODIR=${!outputInfo}/share/info $makeFlags"
   makeFlags="DOCDIR=${!outputDoc}/share/doc $makeFlags"
@@ -63,22 +59,16 @@ addMakeFlags() {
 }
 
 setBSDSourceDir() {
-  # merge together all extra paths
-  # there should be a better way to do this
   sourceRoot=$PWD/$sourceRoot
   export BSDSRCDIR=$sourceRoot
   export _SRC_TOP_=$BSDSRCDIR
-  chmod -R u+w $sourceRoot
-  for path in $extraPaths; do
-    cd $path
-    find . -type d -exec mkdir -p $sourceRoot/\{} \;
-    find . -type f -exec cp -pr \{} $sourceRoot/\{} \;
-    chmod -R u+w $sourceRoot
-  done
-
   cd $sourceRoot
-  if [ -d "$BSD_PATH" ]
-    then sourceRoot=$sourceRoot/$BSD_PATH
+}
+
+cdBSDPath() {
+  if [ -d "$COMPONENT_PATH" ]
+    then sourceRoot=$sourceRoot/$COMPONENT_PATH
+    cd $COMPONENT_PATH
   fi
 }
 
@@ -88,7 +78,7 @@ includesPhase() {
 
     local flagsArray=(
          $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
-         DESTDIR=${!outputInclude} includes
+         includes
     )
 
     echoCmd 'includes flags' "${flagsArray[@]}"
@@ -104,6 +94,9 @@ moveUsrDir() {
   if [ -d $prefix ]; then
     # Remove lingering /usr references
     if [ -d $prefix/usr ]; then
+      # Didn't try using rsync yet because per
+      # https://unix.stackexchange.com/questions/127712/merging-folders-with-mv,
+      # it's not neessarily better.
       pushd $prefix/usr
       find . -type d -exec mkdir -p $out/\{} \;
       find . \( -type f -o -type l \) -exec mv \{} $out/\{} \;
@@ -115,6 +108,7 @@ moveUsrDir() {
 }
 
 postUnpackHooks+=(setBSDSourceDir)
+postPatchHooks+=(cdBSDPath)
 preConfigureHooks+=(addMakeFlags)
 preInstallHooks+=(includesPhase)
 fixupOutputHooks+=(moveUsrDir)

@@ -5,36 +5,31 @@
 , cargo
 , sphinx
 , Security
+, libiconv
 , prefix ? "uutils-"
 , buildMulticallBinary ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "uutils-coreutils";
-  version = "0.0.6";
+  version = "0.0.20";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     rev = version;
-    sha256 = "sha256-dnswE/DU2jCfxWW10Ctjw8woktwWZqyd3E9IuKkle1M=";
+    sha256 = "sha256-Xr+RcWvAHyMMaHhcd3ArGeRZzpL76v7fXiHUSSxgj10=";
   };
-
-  postPatch = ''
-    # can be removed after https://github.com/uutils/coreutils/pull/1815 is included
-    substituteInPlace GNUmakefile \
-      --replace uutils coreutils
-  '';
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-92BHPSVIPZLn399AcaJJjRq2WkxzDm8knKN3FIdAxAA=";
+    hash = "sha256-3hUEDE+Yup/+u/ACyAWXYTLerOqB/jtOzECdI540Ag0=";
   };
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   makeFlags = [
     "CARGO=${cargo}/bin/cargo"
@@ -54,7 +49,7 @@ stdenv.mkDerivation rec {
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
     homepage = "https://github.com/uutils/coreutils";
-    maintainers = with maintainers; [ siraben SuperSandro2000 ];
+    maintainers = with maintainers; [ siraben ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

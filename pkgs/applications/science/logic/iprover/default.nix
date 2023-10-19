@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lik8p7ayhjwpkln1iwf0ri84ramhch74j5nj6z7ph6wfi92pgg8";
   };
 
-  buildInputs = [ ocaml eprover zlib ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml eprover ];
+  buildInputs = [ zlib ];
 
   preConfigure = "patchShebangs .";
 

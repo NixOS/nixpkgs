@@ -5,7 +5,7 @@
 , cinnamon
 , gnome
 , gobject-introspection
-, intltool
+, libnotify
 , pavucontrol
 , python3Packages
 , util-linux
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "blueberry";
-  version = "1.4.2";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-YwJQryIK92/Tc1s49jM3pCs7dmO3l+RbbFBtuXvhYbQ=";
+    sha256 = "sha256-MyIjcTyKn1aC2th6fCOw4cIqrRKatk2s4QD5R9cm83A=";
   };
 
   nativeBuildInputs = [
@@ -31,8 +31,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez-tools
-    cinnamon.xapps
-    gnome.gnome-bluetooth
+    cinnamon.xapp
+    gnome.gnome-bluetooth_1_0
+    libnotify
     python3Packages.python
     util-linux
   ];
@@ -91,6 +92,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/blueberry";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = with maintainers; [ bobby285271 romildo ];
   };
 }

@@ -1,9 +1,9 @@
 { lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx
-
+, config
 # Enable CUDA support
-, cudaSupport ? false, cudatoolkit ? null
+, cudaSupport ? config.cudaSupport, cudatoolkit
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
@@ -13,24 +13,23 @@
 
 # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
 , fabricSupport ? stdenv.isLinux && stdenv.isx86_64
+
+# Enable Fortran support
+, fortranSupport ? true
 }:
 
-assert !cudaSupport || cudatoolkit != null;
-
 let
-  version = "4.1.1";
-
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
 in stdenv.mkDerivation rec {
   pname = "openmpi";
-  inherit version;
+  version = "4.1.5";
 
   src = with lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "1nkwq123vvmggcay48snm9qqmrh0bdzpln0l1jnp26niidvplkz2";
+    sha256 = "sha256-pkCYa8JXOJ3TeYhv2uYmTIz6VryYtxzjrj372M5h2+M=";
   };
 
   postPatch = ''
@@ -44,19 +43,23 @@ in stdenv.mkDerivation rec {
     find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
 
-  buildInputs = with stdenv; [ gfortran zlib ]
-    ++ lib.optionals isLinux [ libnl numactl pmix ucx ]
+  outputs = [ "out" "man" ];
+
+  buildInputs = [ zlib ]
+    ++ lib.optionals stdenv.isLinux [ libnl numactl pmix ucx ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
-    ++ lib.optional (isLinux || isFreeBSD) rdma-core
-    ++ lib.optional fabricSupport [ libpsm2 libfabric ];
+    ++ lib.optional (stdenv.isLinux || stdenv.isFreeBSD) rdma-core
+    ++ lib.optionals fabricSupport [ libpsm2 libfabric ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl ]
+    ++ lib.optionals fortranSupport [ gfortran ];
 
-  configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
-    ++ lib.optionals isLinux  [
-      "--with-libnl=${libnl.dev}"
-      "--with-pmix=${pmix}"
+  configureFlags = lib.optional (!cudaSupport) "--disable-mca-dso"
+    ++ lib.optional (!fortranSupport) "--disable-mpi-fortran"
+    ++ lib.optionals stdenv.isLinux  [
+      "--with-libnl=${lib.getDev libnl}"
+      "--with-pmix=${lib.getDev pmix}"
       "--with-pmix-libdir=${pmix}/lib"
       "--enable-mpi-cxx"
     ] ++ lib.optional enableSGE "--with-sge"
@@ -65,13 +68,13 @@ in stdenv.mkDerivation rec {
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
-    ++ lib.optionals fabricSupport [ "--with-psm2=${libpsm2}" "--with-libfabric=${libfabric}" ]
+    ++ lib.optionals fabricSupport [ "--with-psm2=${lib.getDev libpsm2}" "--with-libfabric=${lib.getDev libfabric}" ]
     ;
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    rm -f $out/lib/*.la
+    find $out/lib/ -name "*.la" -exec rm -f \{} \;
    '';
 
   postFixup = ''
@@ -86,6 +89,7 @@ in stdenv.mkDerivation rec {
 
     sed -i 's:compiler=.*:compiler=${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}c++:' \
        $out/share/openmpi/mpic++-wrapper-data.txt
+  '' + lib.optionalString fortranSupport ''
 
     sed -i 's:compiler=.*:compiler=${gfortran}/bin/${gfortran.targetPrefix}gfortran:'  \
        $out/share/openmpi/mpifort-wrapper-data.txt

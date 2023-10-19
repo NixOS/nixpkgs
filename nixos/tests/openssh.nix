@@ -52,6 +52,36 @@ in {
         };
       };
 
+    server_match_rule =
+      { ... }:
+
+      {
+        services.openssh = {
+          enable = true; listenAddresses = [ { addr = "127.0.0.1"; port = 22; } { addr = "[::]"; port = 22; } ];
+          extraConfig = ''
+            # Combined test for two (predictable) Match criterias
+            Match LocalAddress 127.0.0.1 LocalPort 22
+              PermitRootLogin yes
+
+            # Separate tests for Match criterias
+            Match User root
+              PermitRootLogin yes
+            Match Group root
+              PermitRootLogin yes
+            Match Host nohost.example
+              PermitRootLogin yes
+            Match LocalAddress 127.0.0.1
+              PermitRootLogin yes
+            Match LocalPort 22
+              PermitRootLogin yes
+            Match RDomain nohost.example
+              PermitRootLogin yes
+            Match Address 127.0.0.1
+              PermitRootLogin yes
+          '';
+        };
+      };
+
     client =
       { ... }: { };
 
@@ -80,17 +110,21 @@ in {
 
         client.wait_for_unit("network.target")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2"
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2",
+            timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024"
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'ulimit -l' | grep 1024",
+            timeout=30
         )
 
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'echo hello world' >&2"
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'echo hello world' >&2",
+            timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'ulimit -l' | grep 1024"
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server_lazy 'ulimit -l' | grep 1024",
+            timeout=30
         )
 
     with subtest("configured-authkey"):
@@ -99,14 +133,19 @@ in {
         )
         client.succeed("chmod 600 privkey.snakeoil")
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server true"
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server true",
+            timeout=30
         )
         client.succeed(
-            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server_lazy true"
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server_lazy true",
+            timeout=30
         )
 
     with subtest("localhost-only"):
         server_localhost_only.succeed("ss -nlt | grep '127.0.0.1:22'")
         server_localhost_only_lazy.succeed("ss -nlt | grep '127.0.0.1:22'")
+
+    with subtest("match-rules"):
+        server_match_rule.succeed("ss -nlt | grep '127.0.0.1:22'")
   '';
 })

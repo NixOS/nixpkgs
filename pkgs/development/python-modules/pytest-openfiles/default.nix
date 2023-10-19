@@ -5,7 +5,7 @@
 , pytest
 , pytestCheckHook
 , psutil
-, setuptools_scm
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "179c2911d8aee3441fee051aba08e0d9b4dab61b829ae4811906d5c49a3b0a58";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ pytest ];
 
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pytest plugin for detecting inadvertent open file handles";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

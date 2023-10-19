@@ -1,11 +1,14 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , zlib
 , dbus
 , networkmanager
-, spidermonkey_68
+, enableJavaScript ? stdenv.isDarwin || lib.meta.availableOn stdenv.hostPlatform duktape
+, duktape
 , pcre
 , gsettings-desktop-schemas
 , glib
@@ -18,14 +21,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libproxy";
-  version = "0.4.17";
+  version = "0.4.18";
 
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
     rev = version;
-    sha256 = "0v8q4ln0pd5231kidpi8wpwh0chcjwcmawcki53czlpdrc09z96r";
+    hash = "sha256-pqj1LwRdOK2CUu3hYIsogQIXxWzShDuKEbDTbtWkgnQ=";
   };
+
+  patches = lib.optionals stdenv.isDarwin [
+    # https://github.com/libproxy/libproxy/pull/189
+    (fetchpatch {
+      url = "https://github.com/libproxy/libproxy/commit/4331b9db427ce2c25ff5eeb597bec4bc35ed1a0b.patch";
+      sha256 = "sha256-uTh3rYVvEke1iWVHsT3Zj2H1F+gyLrffcmyt0JEKaCA=";
+    })
+  ];
 
   outputs = [ "out" "dev" "py3" ];
 
@@ -39,22 +50,21 @@ stdenv.mkDerivation rec {
     pcre
     python3
     zlib
+  ] ++ lib.optionals enableJavaScript [
+    (if stdenv.hostPlatform.isDarwin then JavaScriptCore else duktape)
   ] ++ (if stdenv.hostPlatform.isDarwin then [
     SystemConfiguration
     CoreFoundation
-    JavaScriptCore
   ] else [
     glib
-    spidermonkey_68
     dbus
     networkmanager
   ]);
 
   cmakeFlags = [
-    "-DWITH_MOZJS=ON"
     "-DWITH_PYTHON2=OFF"
     "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
-  ];
+  ] ++ lib.optional (enableJavaScript && !stdenv.hostPlatform.isDarwin) "-DWITH_MOZJS=ON";
 
   postFixup = lib.optionalString stdenv.isLinux ''
     # config_gnome3 uses the helper to find GNOME proxy settings

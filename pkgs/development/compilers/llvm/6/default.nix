@@ -2,6 +2,7 @@
 , libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetLlvm
 }:
 
 let
@@ -18,8 +19,17 @@ let
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = lib.platforms.all;
+    maintainers = lib.teams.llvm.members;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
@@ -39,21 +49,21 @@ let
     };
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
-    # we need to reintroduce `outputUnspecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputUnspecified = true; };
+    # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
+    llvm = tools.libllvm;
 
     libllvm-polly = callPackage ./llvm {
       inherit llvm_meta;
       enablePolly = true;
     };
 
-    llvm-polly = tools.libllvm-polly.lib // { outputUnspecified = true; };
+    llvm-polly = tools.libllvm-polly.lib // { outputSpecified = false; };
 
     libclang = callPackage ./clang {
       inherit clang-tools-extra_src llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputUnspecified = true; };
+    clang-unwrapped = tools.libclang;
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
@@ -66,7 +76,12 @@ let
       python3 = pkgs.python3;  # don't use python-boot
     });
 
-    clang = if stdenv.cc.isGNU then tools.libstdcxxClang else tools.libcxxClang;
+    # pick clang appropriate for package set we are targeting
+    clang =
+      /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
+      else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
+      else tools.libcxxClang;
 
     libstdcxxClang = wrapCCWith rec {
       cc = tools.clang-unwrapped;
@@ -82,7 +97,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -118,8 +133,9 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
+  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
-in { inherit tools libraries; } // libraries // tools
+in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)

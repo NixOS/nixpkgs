@@ -1,29 +1,41 @@
-{ lib, buildPythonPackage, python, fetchPypi, isPy3k, glibcLocales }:
+{ lib
+, buildPythonPackage
+, unittestCheckHook
+, fetchPypi
+, pythonOlder
+, glibcLocales
+}:
 
 buildPythonPackage rec {
   pname = "pystache";
-  version = "0.5.4";
+  version = "0.6.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f7bbc265fb957b4d6c7c042b336563179444ab313fb93a719759111eabd3b85a";
+    hash = "sha256-nyONWgbxiEPg1JHY5OKS3AP+1qVMsKXDS+N6P6qXMXQ=";
   };
 
   LC_ALL = "en_US.UTF-8";
 
-  buildInputs = [ glibcLocales ];
+  buildInputs = [
+    glibcLocales
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
 
-  # SyntaxError Python 3
-  # https://github.com/defunkt/pystache/issues/181
-  doCheck = !isPy3k;
+  pythonImportsCheck = [
+    "pystache"
+  ];
 
   meta = with lib; {
     description = "A framework-agnostic, logic-free templating system inspired by ctemplate and et";
     homepage = "https://github.com/defunkt/pystache";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

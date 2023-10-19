@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.10";
 
   src = fetchurl {
-    url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-smJDWlJB6Jv6UcPKvVEzdTlS96e3uT8y4Iy52W9YDWk=";
   };
 
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     "HAVE_SERIAL_TOOLS=1"
     "HAVE_HOSTNAME_TOOLS=1"
     "HAVE_HOSTNAME_SYMLINKS=1"
+    "HAVE_MII=1"
   ];
 
   meta = {

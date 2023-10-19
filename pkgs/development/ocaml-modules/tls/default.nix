@@ -1,28 +1,43 @@
-{ lib, fetchurl, buildDunePackage, ppx_sexp_conv, ppx_cstruct, cstruct
-, cstruct-sexp, sexplib, mirage-crypto, mirage-crypto-pk, mirage-crypto-rng
-, x509, domain-name, fmt, cstruct-unix, ounit2, ocaml_lwt, ptime, rresult
-, mirage-crypto-ec, hkdf, logs, alcotest }:
+{ lib, fetchurl, buildDunePackage
+, cstruct, domain-name, fmt, logs, hkdf, mirage-crypto, mirage-crypto-ec, mirage-crypto-pk, mirage-crypto-rng, lwt, ptime, x509
+, ipaddr
+, alcotest, cstruct-unix, ounit2, randomconv
+}:
 
 buildDunePackage rec {
-  minimumOCamlVersion = "4.08";
-
-  version = "0.13.1";
   pname = "tls";
+  version = "0.17.1";
 
   src = fetchurl {
-    url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-v${version}.tbz";
-    sha256 = "ca95fa59a82f7d38b0b495fc0cd1ff54e7728492a292895d0067c1ba9de81b7b";
+    url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-${version}.tbz";
+    hash = "sha256-gBDStt4UjaIoaSgYHSM71yD6YPoVez1CULyg3QCMXT8=";
   };
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+
+  propagatedBuildInputs = [
+    cstruct
+    domain-name
+    fmt
+    logs
+    hkdf
+    mirage-crypto
+    mirage-crypto-ec
+    mirage-crypto-pk
+    mirage-crypto-rng
+    lwt
+    ptime
+    x509
+    ipaddr
+  ];
 
   doCheck = true;
-  checkInputs = [ cstruct-unix ounit2 alcotest ];
-
-  propagatedBuildInputs = [ ppx_sexp_conv ppx_cstruct cstruct cstruct-sexp
-                            sexplib mirage-crypto mirage-crypto-pk mirage-crypto-rng
-                            x509 domain-name fmt ocaml_lwt ptime mirage-crypto-ec
-                            hkdf logs rresult ];
+  checkInputs = [
+    alcotest
+    cstruct-unix
+    ounit2
+    randomconv
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/mirleft/ocaml-tls";

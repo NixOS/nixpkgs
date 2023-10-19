@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xfce4-i3-workspaces-plugin";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "denesb";
     repo = "xfce4-i3-workspaces-plugin";
     rev = version;
-    sha256 = "sha256-+tjxMr0UbE3BLdxBwNr2mZqKSQOOtw69FmN4rk4loyA=";
+    sha256 = "sha256-Ss3uUmNvBqiu7hUaSy98+YYrWs64LFGbV4DMAV+xkvA=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Workspace switcher plugin for xfce4-panel which can be used for the i3 window manager";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = [ maintainers.berbiche ];
+    maintainers = with maintainers; [ berbiche ] ++ teams.xfce.members;
   };
 }

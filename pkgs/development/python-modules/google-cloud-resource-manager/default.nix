@@ -1,36 +1,56 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, google-cloud-core
 , google-api-core
-, mock
+, google-cloud-core
+, grpc-google-iam-v1
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-resource-manager";
-  version = "0.30.3";
+  version = "1.10.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1la643vkf6fm2gapz57cm92xzvmhzgpzv3bb6112yz1cizrvnxrm";
+    hash = "sha256-RWsl3do9TNJ0iKcnNrvDrwTXE64v42VcAbZqM50o1nk=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    grpc-google-iam-v1
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ mock pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   # prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
   '';
 
-  pythonImportsCheck = [ "google.cloud.resource_manager" ];
+  pythonImportsCheck = [
+    "google.cloud.resourcemanager"
+    "google.cloud.resourcemanager_v3"
+  ];
 
   meta = with lib; {
     description = "Google Cloud Resource Manager API client library";
     homepage = "https://github.com/googleapis/python-resource-manager";
+    changelog = "https://github.com/googleapis/python-resource-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

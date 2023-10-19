@@ -1,5 +1,5 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, substituteAll
-, qmake, qttools, qttranslations
+{ stdenv, mkDerivation, lib, fetchFromGitHub
+, qmake, qttools
 }:
 
 mkDerivation rec {
@@ -13,12 +13,6 @@ mkDerivation rec {
     sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
   };
 
-  patches = (substituteAll {
-    # See https://github.com/NixOS/nixpkgs/issues/86054
-    src = ./fix-qttranslations-path.patch;
-    inherit qttranslations;
-  });
-
   nativeBuildInputs = [ qmake qttools ];
 
   preConfigure = ''
@@ -28,7 +22,6 @@ mkDerivation rec {
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     mv GPXLab/GPXLab.app $out/Applications
-    wrapQtApp $out/Applications/GPXLab.app/Contents/MacOS/GPXLab
   '';
 
   meta = with lib; {

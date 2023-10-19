@@ -1,18 +1,17 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, isPy27 }:
 
 buildPythonPackage rec {
   pname = "unicodedata2";
-  version = "13.0.0-2";
+  version = "15.0.0";
 
-  src = fetchFromGitHub {
-    owner  = "mikekap";
-    repo   = pname;
-    rev    = version;
-    sha256 = "0p9brbiwyg98q52y0gfyps52xv57fwqfpq0mn18p1xc1imip3h2b";
+  disabled = isPy27;
+
+  src = fetchPypi {
+    inherit version pname;
+    sha256 = "0bcgls7m2zndpd8whgznnd5908jbsa50si2bh88wsn0agcznhv7d";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest tests";
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Backport and updates for the unicodedata module";

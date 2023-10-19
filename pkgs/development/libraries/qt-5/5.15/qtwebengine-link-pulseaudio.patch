@@ -1,0 +1,8 @@
+--- a/src/core/config/common.pri
++++ b/src/core/config/common.pri
+@@ -47,3 +47,5 @@
+
+ !qtConfig(webengine-nodejs10): gn_args += use_rollup=false
+ gn_args += enable_ipc_logging=false
++
++gn_args += link_pulseaudio=true

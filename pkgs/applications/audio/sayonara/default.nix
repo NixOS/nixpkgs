@@ -22,13 +22,13 @@ let
 in
 mkDerivation rec {
   pname = "sayonara";
-  version = "1.6.0-beta7";
+  version = "1.7.0-stable3";
 
   src = fetchFromGitLab {
     owner = "luciocarreras";
     repo = "sayonara-player";
     rev = version;
-    sha256 = "14svszfldx32vn937rszd21rgl31vb5kzs0hnrg41ygx0br61rvd";
+    sha256 = "sha256-tJ/8tGNkmTwWRCpPy/h85SP/6QDAgcaKWJdM5MSAXJw=";
   };
 
   nativeBuildInputs = [ cmake ninja pkg-config qttools ];
@@ -56,16 +56,14 @@ mkDerivation rec {
   ];
 
   # gstreamer cannot otherwise be found
-  NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.NIX_CFLAGS_COMPILE = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

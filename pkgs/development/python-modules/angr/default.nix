@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , ailment
 , archinfo
 , buildPythonPackage
@@ -10,9 +11,10 @@
 , cppheaderparser
 , dpkt
 , fetchFromGitHub
-, GitPython
-, itanium_demangler
+, gitpython
+, itanium-demangler
 , mulpyplexer
+, nampa
 , networkx
 , progressbar2
 , protobuf
@@ -20,36 +22,26 @@
 , pycparser
 , pythonOlder
 , pyvex
-, sqlalchemy
+, rich
 , rpyc
 , sortedcontainers
+, sqlalchemy
+, sympy
 , unicorn
 }:
 
-let
-  # Only the pinned release in setup.py works properly
-  unicorn' = unicorn.overridePythonAttrs (old: rec {
-      pname = "unicorn";
-      version = "1.0.2-rc4";
-      src =  fetchFromGitHub {
-        owner = "unicorn-engine";
-        repo = pname;
-        rev = version;
-        sha256 = "17nyccgk7hpc4hab24yn57f1xnmr7kq4px98zbp2bkwcrxny8gwy";
-    };
-  });
-in
-
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.0.7491";
-  disabled = pythonOlder "3.6";
+  version = "9.2.73";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-d0EWPko3jWCexFNCWbofD6CjDIpjKb5mha2tRgtzL4M=";
+    owner = "angr";
+    repo = "angr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WwgcKZWKM6x36AuynVHaDJgDt4B2b3K1ZaX9efxiDKc=";
   };
 
   propagatedBuildInputs = [
@@ -62,28 +54,40 @@ buildPythonPackage rec {
     cle
     cppheaderparser
     dpkt
-    GitPython
-    itanium_demangler
+    gitpython
+    itanium-demangler
     mulpyplexer
+    nampa
     networkx
     progressbar2
     protobuf
     psutil
-    sqlalchemy
     pycparser
     pyvex
-    sqlalchemy
+    rich
     rpyc
     sortedcontainers
-    unicorn'
+    sqlalchemy
+    sympy
+    unicorn
+  ];
+
+  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+    "--plat-name"
+    "linux"
   ];
 
   # Tests have additional requirements, e.g., pypcode and angr binaries
   # cle is executing the tests with the angr binaries
   doCheck = false;
 
-  # See http://angr.io/api-doc/
-  pythonImportsCheck = [ "angr" "claripy" "cle" "pyvex" "archinfo" ];
+  pythonImportsCheck = [
+    "angr"
+    "claripy"
+    "cle"
+    "pyvex"
+    "archinfo"
+  ];
 
   meta = with lib; {
     description = "Powerful and user-friendly binary analysis platform";

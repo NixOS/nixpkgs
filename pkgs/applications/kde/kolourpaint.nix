@@ -17,6 +17,8 @@ mkDerivation {
     kguiaddons kio ktextwidgets kwidgetsaddons kxmlgui libkexiv2
   ];
   meta = {
+    homepage = "https://apps.kde.org/kolourpaint/";
+    description = "Paint program";
     maintainers = [ lib.maintainers.fridh ];
     license = with lib.licenses; [ gpl2 ];
   };

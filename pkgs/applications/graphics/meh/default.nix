@@ -1,18 +1,17 @@
 { lib, stdenv, fetchFromGitHub, libX11, libXext, libjpeg, libpng, giflib }:
 
 stdenv.mkDerivation {
-  name = "meh-unstable-2015-04-11";
+  pname = "meh";
+  version = "unstable-2018-10-22";
 
   src = fetchFromGitHub {
     owner = "jhawthorn";
     repo = "meh";
-    rev = "4ab1c75f97cb70543db388b3ed99bcfb7e94c758";
-    sha256 = "1j1n3m9hjhz4faryai97jq7cr6a322cqrd878gpkm9nrikap3bkk";
+    rev = "69f653a1f16d11b12e5b600e808a740898f3223e";
+    sha256 = "sha256-srSwoaajW4H4+kmE7NQAqVz9d/1q2XQ5ayQaOcGwzI0=";
   };
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   outputs = [ "out" "man" ];
 

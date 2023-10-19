@@ -3,7 +3,7 @@
 }:
 
 mkDerivation {
-  name = "syntax-highlighting";
+  pname = "syntax-highlighting";
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [ qttools ];
   propagatedBuildInputs = [ qtbase ];

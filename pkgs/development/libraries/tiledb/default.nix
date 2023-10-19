@@ -6,44 +6,45 @@
 , lz4
 , bzip2
 , zstd
-, spdlog_0
+, spdlog
 , tbb
 , openssl
 , boost
 , libpqxx
 , clang-tools
 , catch2
-, python
+, python3
 , gtest
 , doxygen
 , fixDarwinDylibNames
+, useAVX2 ? stdenv.hostPlatform.avx2Support
 }:
 
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "2.2.4";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    sha256 = "sha256-xzzWB20vhnneiqJqZAeSUjZouqhPPg2bGaot1IQDMEo=";
+    hash = "sha256-HKMVwrPnk9/mukH3mJ2LEAvA9LBF4PcgBZjbbLhO9qU=";
   };
 
   # (bundled) blosc headers have a warning on some archs that it will be using
   # unaccelerated routines.
   cmakeFlags = [
     "-DTILEDB_WERROR=0"
-  ];
+  ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
     clang-tools
     cmake
-    python
+    python3
     doxygen
   ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
   ];
 
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     lz4
     bzip2
     zstd
-    spdlog_0
+    spdlog
     tbb
     openssl
     boost
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
     ln -sf ${catch2}/include/catch2 build/externals/src/ep_catch/single_include
   '';
 
-  doCheck = false; # 9 failing tests due to what seems an overflow
+  doCheck = true;
 
   installTargets = [ "install-tiledb" "doc" ];
 

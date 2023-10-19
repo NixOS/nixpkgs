@@ -7,13 +7,13 @@ let
 in {
   options = {
     programs.flexoptix-app = {
-      enable = mkEnableOption "FLEXOPTIX app + udev rules";
+      enable = mkEnableOption (lib.mdDoc "FLEXOPTIX app + udev rules");
 
       package = mkOption {
-        description = "FLEXOPTIX app package to use";
+        description = lib.mdDoc "FLEXOPTIX app package to use";
         type = types.package;
         default = pkgs.flexoptix-app;
-        defaultText = "\${pkgs.flexoptix-app}";
+        defaultText = literalExpression "pkgs.flexoptix-app";
       };
     };
   };

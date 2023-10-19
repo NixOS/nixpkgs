@@ -31,7 +31,7 @@ let
         name = "postgresql-wal-receiver-${postgresqlPackage}";
         meta.maintainers = with lib.maintainers; [ pacien ];
 
-        machine = { ... }: {
+        nodes.machine = { ... }: {
           services.postgresql = {
             package = pkg;
             enable = true;
@@ -116,4 +116,4 @@ let
     };
 
 # Maps the generic function over all attributes of PostgreSQL packages
-in builtins.listToAttrs (map makePostgresqlWalReceiverTest (builtins.attrNames (import ../../pkgs/servers/sql/postgresql { })))
+in builtins.listToAttrs (map makePostgresqlWalReceiverTest (builtins.attrNames (import ../../pkgs/servers/sql/postgresql pkgs)))

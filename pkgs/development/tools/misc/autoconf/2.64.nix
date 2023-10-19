@@ -1,14 +1,17 @@
 { lib, stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.64";
+  pname = "autoconf";
+  version = "2.64";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf/${name}.tar.xz";
+    url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
     sha256 = "0j3jdjpf5ly39dlp0bg70h72nzqr059k0x8iqxvaxf106chpgn9j";
   };
 
-  buildInputs = [ m4 perl ];
+  strictDeps = true;
+  nativeBuildInputs = [ m4 perl ];
+  buildInputs = [ m4 ];
 
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
@@ -24,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Make the Autotest test suite run in parallel.
-  preCheck =''
+  preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
   '';
 

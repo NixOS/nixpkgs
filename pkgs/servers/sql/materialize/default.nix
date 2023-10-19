@@ -40,21 +40,40 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.7.1";
-  rev = "f4bd159fa73d37d44f8ed3f1db13c0c2ff85566f";
+  version = "0.17.0";
+  MZ_DEV_BUILD_SHA = "9f8cf75b461d288335cb6a7a73aaa670bab4a466";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = pname;
-    inherit rev;
-    hash = "sha256-8nonB/KRv4qOGvJhh0v3UwlBzAXfzb3afeCm/7/E0AU=";
+    rev = "v${version}";
+    hash = "sha256-wKYU5S77VoOX7UA9/d21Puz9NYs/om08eNM69/m3Orc=";
   };
 
-  cargoSha256 = "sha256-5slgICqLZFqxPymgHvq98BtcD70hfJMr36pvAoQKEJ4=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "criterion-0.3.5" = "sha256-gXhwLw99kC08zxHdY6l5LF5EVzAAFasI4GLnopLwhEU=";
+      "differential-dataflow-0.12.0" = "sha256-sDy4502XqCuXqRtwLWuaHSgfX7v9NNochhfpI6n8DrM=";
+      "headers-0.3.5" = "sha256-ipxMfuPgoeH2uR4Im/XBdnxT00+LGzTgW7Ed2armYOU=";
+      "mzcloud-1.0.0" = "sha256-Nt9YCG+DFCCOMbKaNhOD78WF/z3qB5ymUIp6Wep2A9A=";
+      "parquet-format-async-temp-0.2.0" = "sha256-UUQv/90egmwQK0CZCztinEskvWcZ40rKWbJoWYz2oLQ=";
+      "postgres-0.19.1" = "sha256-zH7PF4p7wJCSYpuydTL3HPcOjPU9SlTy6IJREOe2l7U=";
+      "postgres_array-0.11.0" = "sha256-M1nMsQfxK0ay4JxoPqm2cl4Cp8mVZlVUAfWDhhv9nA4=";
+      "prometheus-0.10.0" = "sha256-NTnKt1RGiZ8AxsU8UzhLhpfEi24Pos5kR9g22Mmt444=";
+      "protobuf-3.0.0-alpha.2" = "sha256-8gBGQqAtKJelcBCxnDESanlblBLQ1Th7khHxUkDw7To=";
+      "pubnub-core-0.1.0" = "sha256-YuGEFaStfrhb0ygjVFm2a2eJla9ABc5ifXKuvJxUvgk=";
+      "rdkafka-0.28.0" = "sha256-u2gBTzu+IvXTDvcZGzPaVpSVOgAKhTth7GLwob4urDs=";
+      "timely-0.12.0" = "sha256-PHaDRNm7MezXJWhILWJHTeiCWO3iLUp94Z0V2dreCMk=";
+    };
+  };
 
   nativeBuildInputs = [ cmake perl pkg-config ]
     # Provides the mig command used by the krb5-src build script
     ++ lib.optional stdenv.isDarwin bootstrap_cmds;
+
+  # Needed to get openssl-sys to use pkg-config.
+  OPENSSL_NO_VENDOR = 1;
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ libiconv DiskArbitration Foundation ];
@@ -64,7 +83,11 @@ rustPlatform.buildRustPackage rec {
     "--exact"
     "--skip test_client"
     "--skip test_client_errors"
+    "--skip test_client_all_subjects"
+    "--skip test_client_subject_and_references"
     "--skip test_no_block"
+    "--skip test_safe_mode"
+    "--skip test_tls"
   ];
 
   postPatch = ''
@@ -74,8 +97,7 @@ rustPlatform.buildRustPackage rec {
       --replace _Materialize root
   '';
 
-  MZ_DEV_BUILD_SHA = rev;
-  cargoBuildFlags = [ "--package materialized" ];
+  cargoBuildFlags = [ "--bin materialized" ];
 
   postInstall = ''
     install --mode=444 -D ./misc/dist/materialized.service $out/etc/systemd/system/materialized.service
@@ -85,7 +107,7 @@ rustPlatform.buildRustPackage rec {
     homepage    = "https://materialize.com";
     description = "A streaming SQL materialized view engine for real-time applications";
     license     = licenses.bsl11;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms   = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = [ maintainers.petrosagg ];
   };
 }

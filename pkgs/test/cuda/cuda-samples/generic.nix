@@ -1,15 +1,17 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, addOpenGLRunpath
-, sha256, cudatoolkit
+{ lib
+, cudaPackages
+, fetchFromGitHub
+, fetchpatch
+, addOpenGLRunpath
+, cudatoolkit
+, pkg-config
+, sha256
+, glfw3
+, freeimage
 }:
-
-let
+cudaPackages.backendStdenv.mkDerivation rec {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
-in
-
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -18,9 +20,17 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ pkg-config addOpenGLRunpath ];
+  nativeBuildInputs = [ pkg-config addOpenGLRunpath glfw3 freeimage ];
 
   buildInputs = [ cudatoolkit ];
+
+  # See https://github.com/NVIDIA/cuda-samples/issues/75.
+  patches = lib.optionals (version == "11.3") [
+    (fetchpatch {
+      url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
+      sha256 = "sha256-0XxdmNK9MPpHwv8+qECJTvXGlFxc+fIbta4ynYprfpU=";
+    })
+  ];
 
   enableParallelBuilding = true;
 
@@ -31,7 +41,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin bin/${stdenv.hostPlatform.parsed.cpu.name}/${stdenv.hostPlatform.parsed.kernel.name}/release/*
+    install -Dm755 -t $out/bin bin/${cudaPackages.backendStdenv.hostPlatform.parsed.cpu.name}/${cudaPackages.backendStdenv.hostPlatform.parsed.kernel.name}/release/*
 
     runHook postInstall
   '';

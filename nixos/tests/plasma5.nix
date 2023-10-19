@@ -6,30 +6,30 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ ttuegel ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
 
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
-    services.xserver.displayManager.defaultSession = "plasma5";
+    services.xserver.displayManager.defaultSession = "plasma";
     services.xserver.desktopManager.plasma5.enable = true;
+    environment.plasma5.excludePackages = [ pkgs.plasma5Packages.elisa ];
     services.xserver.displayManager.autoLogin = {
       enable = true;
       user = "alice";
     };
     hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
-    virtualisation.memorySize = 1024;
   };
 
   testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
+    user = nodes.machine.users.users.alice;
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''
     with subtest("Wait for login"):
         start_all()
-        machine.wait_for_file("${user.home}/.Xauthority")
-        machine.succeed("xauth merge ${user.home}/.Xauthority")
+        machine.wait_for_file("/tmp/xauth_*")
+        machine.succeed("xauth merge /tmp/xauth_*")
 
     with subtest("Check plasmashell started"):
         machine.wait_until_succeeds("pgrep plasmashell")
@@ -41,16 +41,21 @@ import ./make-test-python.nix ({ pkgs, ...} :
     with subtest("Check that logging in has given the user ownership of devices"):
         machine.succeed("getfacl -p /dev/snd/timer | grep -q ${user.name}")
 
+    with subtest("Ensure Elisa is not installed"):
+        machine.fail("which elisa")
+
+    machine.succeed("su - ${user.name} -c 'xauth merge /tmp/xauth_*'")
+
     with subtest("Run Dolphin"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin >&2 &'")
         machine.wait_for_window(" Dolphin")
 
     with subtest("Run Konsole"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 konsole &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 konsole >&2 &'")
         machine.wait_for_window("Konsole")
 
     with subtest("Run systemsettings"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 systemsettings5 &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 systemsettings5 >&2 &'")
         machine.wait_for_window("Settings")
 
     with subtest("Wait to get a screenshot"):

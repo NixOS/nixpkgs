@@ -1,10 +1,17 @@
-{ lib, fetchFromGitLab, buildPythonPackage, pillow, setuptools_scm,
-setuptools-scm-git-archive , tesseract, cuneiform, isPy3k, substituteAll,
-pytest, tox }:
+{ lib
+, fetchFromGitLab
+, buildPythonPackage
+, pillow
+, tesseract
+, cuneiform
+, isPy3k
+, substituteAll
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyocr";
-  version = "0.7.2";
+  version = "0.8.3";
   disabled = !isPy3k;
 
   # Don't fetch from PYPI because it doesn't contain tests.
@@ -14,23 +21,30 @@ buildPythonPackage rec {
     owner = "OpenPaperwork";
     repo = "pyocr";
     rev = version;
-    sha256 = "09ab86bmizpv94w3mdvdqkjyyvk1vafw3jqhkiw5xx7p180xn3il";
+    hash = "sha256-gIn50H9liQcTb7SzoWnBwm5LTvkr+R+5OPvITls1B/w=";
   };
 
-  patches = [ (substituteAll {
-    src = ./paths.patch;
-    inherit cuneiform tesseract;
-  })
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      inherit cuneiform tesseract;
+    })
   ];
 
-  buildInputs = [ setuptools_scm setuptools-scm-git-archive ];
-  propagatedBuildInputs = [ pillow ];
-  checkInputs = [ pytest tox ];
-  checkPhase = "pytest";
+  # see the logic in setup.py
+  ENABLE_SETUPTOOLS_SCM = "0";
+  preConfigure = ''
+    echo 'version = "${version}"' > src/pyocr/_version.py
+  '';
 
-  meta = {
+  propagatedBuildInputs = [ pillow ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "A Python wrapper for Tesseract and Cuneiform";
-    license = lib.licenses.gpl3Plus;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ symphorien ];
   };
 }

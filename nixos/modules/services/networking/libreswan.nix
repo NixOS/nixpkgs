@@ -14,8 +14,8 @@ let
     nonchars = filter (x : !(elem x.value chars))
                (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
   in
-    if length nonchars == 0 then ""
-    else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
+    lib.optionalString (nonchars != [ ])
+      (substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str);
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
   connectionText = concatStrings (mapAttrsToList (n: v:
@@ -47,7 +47,7 @@ in
 
     services.libreswan = {
 
-      enable = mkEnableOption "Libreswan IPsec service";
+      enable = mkEnableOption (lib.mdDoc "Libreswan IPsec service");
 
       configSetup = mkOption {
         type = types.lines;
@@ -60,13 +60,13 @@ in
             protostack=netkey
             virtual_private=%v4:10.0.0.0/8,%v4:192.168.0.0/16,%v4:172.16.0.0/12,%v4:25.0.0.0/8,%v4:100.64.0.0/10,%v6:fd00::/8,%v6:fe80::/10
         '';
-        description = "Options to go in the 'config setup' section of the Libreswan IPsec configuration";
+        description = lib.mdDoc "Options to go in the 'config setup' section of the Libreswan IPsec configuration";
       };
 
       connections = mkOption {
         type = types.attrsOf types.lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           { myconnection = '''
               auto=add
               left=%defaultroute
@@ -79,13 +79,13 @@ in
             ''';
           }
         '';
-        description = "A set of connections to define for the Libreswan IPsec service";
+        description = lib.mdDoc "A set of connections to define for the Libreswan IPsec service";
       };
 
       policies = mkOption {
         type = types.attrsOf types.lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           { private-or-clear = '''
               # Attempt opportunistic IPsec for the entire Internet
               0.0.0.0/0
@@ -93,22 +93,22 @@ in
             ''';
           }
         '';
-        description = ''
+        description = lib.mdDoc ''
           A set of policies to apply to the IPsec connections.
 
-          <note><para>
-            The policy name must match the one of connection it needs to apply to.
-          </para></note>
+          ::: {.note}
+          The policy name must match the one of connection it needs to apply to.
+          :::
         '';
       };
 
       disableRedirects = mkOption {
         type = types.bool;
         default = true;
-        description = ''
-          Whether to disable send and accept redirects for all nework interfaces.
-          See the Libreswan <link xlink:href="https://libreswan.org/wiki/FAQ#Why_is_it_recommended_to_disable_send_redirects_in_.2Fproc.2Fsys.2Fnet_.3F">
-          FAQ</link> page for why this is recommended.
+        description = lib.mdDoc ''
+          Whether to disable send and accept redirects for all network interfaces.
+          See the Libreswan [
+          FAQ](https://libreswan.org/wiki/FAQ#Why_is_it_recommended_to_disable_send_redirects_in_.2Fproc.2Fsys.2Fnet_.3F) page for why this is recommended.
         '';
       };
 

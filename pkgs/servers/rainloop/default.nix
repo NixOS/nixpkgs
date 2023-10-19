@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, pkgs, dataPath ? "/var/lib/rainloop" }: let
+{ lib, stdenv, fetchurl, unzip, writeText, dos2unix, dataPath ? "/var/lib/rainloop" }: let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
       pname = "rainloop${lib.optionalString (edition != "") "-${edition}"}";
-      version = "1.14.0";
+      version = "1.16.0";
 
-      nativeBuildInputs = [ unzip ];
+      nativeBuildInputs = [ unzip dos2unix ];
 
       unpackPhase = ''
         mkdir rainloop
@@ -16,7 +16,19 @@
         sha256 = sha256;
       };
 
-      includeScript = pkgs.writeText "include.php" ''
+      prePatch = ''
+        dos2unix ./rainloop/rainloop/v/1.16.0/app/libraries/MailSo/Base/HtmlUtils.php
+      '';
+
+      patches = [
+        ./fix-cve-2022-29360.patch
+      ];
+
+      postPatch = ''
+        unix2dos ./rainloop/rainloop/v/1.16.0/app/libraries/MailSo/Base/HtmlUtils.php
+      '';
+
+      includeScript = writeText "include.php" ''
         <?php
 
         /**
@@ -50,10 +62,10 @@
 in {
   rainloop-community = common {
     edition = "community";
-    sha256 = "0a8qafm4khwj8cnaiaxvjb9073w6fr63vk1b89nks4hmfv10jn6y";
+    sha256 = "sha256-25ScQ2OwSKAuqg8GomqDhpebhzQZjCk57h6MxUNiymc=";
   };
   rainloop-standard = common {
     edition = "";
-    sha256 = "0961g4mci080f7y98zx9r4qw620l4z3na1ivvlyhhr1v4dywqvch";
+    sha256 = "sha256-aYCwqFqhJEeakn4R0MUDGcSp+M47JbbCrbYaML8aeSs=";
   };
 }

@@ -1,27 +1,27 @@
-{ lib, stdenvNoCC, fetchFromGitHub, youtube-dl }:
+{ lib, stdenvNoCC, fetchFromGitHub, yt-dlp }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mpv-playlistmanager";
-  version = "unstable-2021-03-09";
+  version = "unstable-2023-08-09";
 
   src = fetchFromGitHub {
     owner = "jonniek";
     repo = "mpv-playlistmanager";
-    rev = "c15a0334cf6d4581882fa31ddb1e6e7f2d937a3e";
-    sha256 = "uxcvgcSGS61UU8MmuD6qMRqpIa53iasH/vkg1xY7MVc=";
+    rev = "e479cbc7e83a07c5444f335cfda13793681bcbd8";
+    sha256 = "sha256-Nh4g8uSkHWPjwl5wyqWtM+DW9fkEbmCcOsZa4eAF6Cs=";
   };
 
   postPatch = ''
     substituteInPlace playlistmanager.lua \
-    --replace "'youtube-dl'" "'${youtube-dl}/bin/youtube-dl'" \
+      --replace 'youtube_dl_executable = "youtube-dl",' \
+      'youtube_dl_executable = "${lib.getBin yt-dlp}/bin/yt-dlp"',
   '';
 
   dontBuild = true;
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/mpv/scripts
-    cp playlistmanager.lua $out/share/mpv/scripts
+    install -D -t $out/share/mpv/scripts playlistmanager.lua
     runHook postInstall
   '';
 

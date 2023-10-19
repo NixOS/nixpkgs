@@ -5,7 +5,7 @@ index cab5b1c..e89f8a6 100644
 @@ -192,7 +192,7 @@ class FirewallClient:
  
          self.auto_nets = []
-         python_path = os.path.dirname(os.path.dirname(__file__))
+
 -        argvbase = ([sys.executable, sys.argv[0]] +
 +        argvbase = ([sys.argv[0]] +
                      ['-v'] * (helpers.verbose or 0) +

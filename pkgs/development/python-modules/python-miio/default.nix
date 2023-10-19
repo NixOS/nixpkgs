@@ -1,70 +1,82 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, poetry
-, click
-, cryptography
-, construct
-, zeroconf
-, attrs
-, pytz
-, appdirs
-, tqdm
-, netifaces
 , android-backup
-, importlib-metadata
+, appdirs
+, attrs
+, buildPythonPackage
+, click
+, construct
 , croniter
+, cryptography
 , defusedxml
-, pytestCheckHook
+, fetchPypi
+, fetchpatch
+, importlib-metadata
+, micloud
+, netifaces
+, poetry-core
+, pytest-asyncio
 , pytest-mock
+, pytestCheckHook
+, pythonOlder
+, pytz
 , pyyaml
+, tqdm
+, zeroconf
 }:
 
 
 buildPythonPackage rec {
   pname = "python-miio";
-  version = "0.5.6";
-  disabled = pythonOlder "3.6";
+  version = "0.5.12";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tmGt50xBDV++/pqyXsuxHdrwv+XbkjvtrzsYBzQh7zE=";
+    hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'croniter = "^0"' 'croniter = "*"' \
-      --replace 'defusedxml = "^0.6"' 'defusedxml = "*"'
-  '';
-
   nativeBuildInputs = [
-    poetry
+    poetry-core
+  ];
+
+  patches = [
+    (fetchpatch {
+      # Fix pytest 7.2 compat
+      url = "https://github.com/rytilahti/python-miio/commit/67d9d771d04d51f5bd97f361ca1c15ae4a18c274.patch";
+      hash = "sha256-Os9vCSKyieCqHs63oX6gcLrtv1N7hbX5WvEurelEp8w=";
+    })
   ];
 
   propagatedBuildInputs = [
-    click
-    cryptography
-    construct
-    zeroconf
-    attrs
-    pytz
-    appdirs
-    tqdm
-    netifaces
     android-backup
+    appdirs
+    attrs
+    click
+    construct
     croniter
+    cryptography
     defusedxml
-  ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
-
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
+    micloud
+    netifaces
+    pytz
     pyyaml
+    tqdm
+    zeroconf
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
-  pythonImportsCheck = [ "miio" ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "miio"
+  ];
 
   meta = with lib; {
     description = "Python library for interfacing with Xiaomi smart appliances";
@@ -73,4 +85,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ flyfloh ];
   };
 }
-

@@ -1,12 +1,22 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl, pcre, mesa }:
+{ lib
+, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, python3
+, efl
+, nixosTests
+, directoryListingUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
-  version = "1.9.0";
+  version = "1.13.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0v74858yvrrfy0l2pq7yn6izvqhpkb9gw2jpd3a3khjwv8kw6frz";
+    url = "https://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "FqN/7Ne71j7J3j7GwK8zHO531t/ag4obFXPW8phHTaU=";
   };
 
   nativeBuildInputs = [
@@ -18,23 +28,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     efl
-    pcre
-    mesa
-  ];
-
-  mesonFlags = [
-    "-D edje-cc=${efl}/bin/edje_cc"
   ];
 
   postPatch = ''
     patchShebangs data/colorschemes/*.py
   '';
 
-  meta = {
+  passthru.tests.test = nixosTests.terminal-emulators.terminology;
+
+  passthru.updateScript = directoryListingUpdater { };
+
+  meta = with lib; {
     description = "Powerful terminal emulator based on EFL";
     homepage = "https://www.enlightenment.org/about-terminology";
-    license = lib.licenses.bsd2;
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    license = licenses.bsd2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

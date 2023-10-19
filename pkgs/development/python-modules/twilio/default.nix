@@ -1,46 +1,74 @@
 { lib
+, aiohttp
+, aiohttp-retry
+, aiounittest
 , buildPythonPackage
+, cryptography
+, django
 , fetchFromGitHub
 , mock
-, nose
+, multidict
+, pyngrok
 , pyjwt
-, pysocks
+, pytestCheckHook
+, pythonOlder
 , pytz
 , requests
-, six
 }:
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "6.56.0";
+  version = "8.9.1";
+  format = "setuptools";
 
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
-    rev = version;
-    sha256 = "sha256-vVJuuPxVyOqnplPYrjCjIm5IyIFZvsCMoDLrrHpHK+4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-F+0nYZIvZVH0QuEkuiV2lwA62r6T/amWFWg7rfBqddU=";
   };
 
   propagatedBuildInputs = [
+    aiohttp
+    aiohttp-retry
     pyjwt
-    pysocks
+    pyngrok
     pytz
     requests
-    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    aiounittest
+    cryptography
+    django
     mock
-    nose
+    multidict
+    pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "twilio" ];
+  disabledTests = [
+    # Tests require network access
+    "test_set_default_user_agent"
+    "test_set_user_agent_extensions"
+  ];
+
+  disabledTestPaths = [
+    # Tests require API token
+    "tests/cluster/test_webhook.py"
+    "tests/cluster/test_cluster.py"
+  ];
+
+  pythonImportsCheck = [
+    "twilio"
+  ];
 
   meta = with lib; {
     description = "Twilio API client and TwiML generator";
     homepage = "https://github.com/twilio/twilio-python/";
+    changelog = "https://github.com/twilio/twilio-python/blob/${version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

@@ -17,11 +17,20 @@
 , target ? null
 # Select whether DYNAMIC_ARCH is enabled or not.
 , dynamicArch ? null
+# enable AVX512 optimized kernels.
+# These kernels have been a source of trouble in the past.
+# Use with caution.
+, enableAVX512 ? false
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
-}:
 
-with lib;
+# for passthru.tests
+, ceres-solver
+, giac
+, octave
+, opencv
+, python3
+}:
 
 let blas64_ = blas64; in
 
@@ -71,6 +80,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = false;
       MACOSX_DEPLOYMENT_TARGET = "10.7";
     };
@@ -79,6 +89,7 @@ let
       BINARY = 64;
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = setDynamicArch true;
+      NO_AVX512 = !enableAVX512;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
 
@@ -87,6 +98,20 @@ let
       TARGET = setTarget "POWER5";
       DYNAMIC_ARCH = setDynamicArch true;
       USE_OPENMP = !stdenv.hostPlatform.isMusl;
+    };
+
+    riscv64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "RISCV64_GENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
+    };
+
+    loongarch64-linux = {
+      BINARY = 64;
+      TARGET = setTarget "LOONGSONGENERIC";
+      DYNAMIC_ARCH = setDynamicArch false;
+      USE_OPENMP = true;
     };
   };
 in
@@ -101,7 +126,7 @@ let
   blas64 =
     if blas64_ != null
       then blas64_
-      else hasPrefix "x86_64" stdenv.hostPlatform.system;
+      else lib.hasPrefix "x86_64" stdenv.hostPlatform.system;
   # Convert flag values to format OpenBLAS's build expects.
   # `toString` is almost what we need other than bools,
   # which we need to map {true -> 1, false -> 0}
@@ -109,14 +134,14 @@ let
   mkMakeFlagValue = val:
     if !builtins.isBool val then toString val
     else if val then "1" else "0";
-  mkMakeFlagsFromConfig = mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
+  mkMakeFlagsFromConfig = lib.mapAttrsToList (var: val: "${var}=${mkMakeFlagValue val}");
 
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
 stdenv.mkDerivation rec {
   pname = "openblas";
-  version = "0.3.13";
+  version = "0.3.21";
 
   outputs = [ "out" "dev" ];
 
@@ -124,18 +149,22 @@ stdenv.mkDerivation rec {
     owner = "xianyi";
     repo = "OpenBLAS";
     rev = "v${version}";
-    sha256 = "14jxh0v3jfbw4mfjx4mcz4dd51lyq7pqvh9k8dg94539ypzjr2lj";
+    sha256 = "sha256-F6cXPqQai4kA5zrsa8E0Q7dD9zZHlwZ+B16EOGNXoXs=";
   };
 
-  # apply https://github.com/xianyi/OpenBLAS/pull/3060 to fix a crash on arm
-  # remove this when updating to 0.3.14 or newer
-  patches = [
+  patches = lib.optionals stdenv.hostPlatform.isLoongArch64 [
+    # https://github.com/xianyi/OpenBLAS/pull/3626
     (fetchpatch {
-      name = "label-get_cpu_ftr-as-volatile.patch";
-      url = "https://github.com/xianyi/OpenBLAS/commit/6fe0f1fab9d6a7f46d71d37ebb210fbf56924fbc.diff";
-      sha256 = "06gwh73k4sas1ap2fi3jvpifbjkys2vhmnbj4mzrsvj279ljsfdk";
+      name = "openblas-0.3.21-fix-loong.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-libs/openblas/files/openblas-0.3.21-fix-loong.patch?id=37ee4c70278eb41181f69e175575b0152b941655";
+      hash = "sha256-iWy11l3wEvzNV08LbhOjnSPj1SjPH8RMnb3ORz7V+gc";
     })
   ];
+
+  postPatch = ''
+    # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
+    substituteInPlace Makefile.arm64 --replace "+sve2+bf16" ""
+  '';
 
   inherit blas64;
 
@@ -164,10 +193,13 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
+  enableParallelBuilding = true;
+
   makeFlags = mkMakeFlagsFromConfig (config // {
     FC = "${stdenv.cc.targetPrefix}gfortran";
     CC = "${stdenv.cc.targetPrefix}${if stdenv.cc.isClang then "clang" else "cc"}";
     PREFIX = placeholder "out";
+    OPENBLAS_INCLUDE_DIR = "${placeholder "dev"}/include";
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
@@ -181,6 +213,10 @@ stdenv.mkDerivation rec {
     NO_BINARY_MODE = if stdenv.isx86_64
         then toString (stdenv.hostPlatform != stdenv.buildPlatform)
         else stdenv.hostPlatform != stdenv.buildPlatform;
+    # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)
+    # and uses the main make invocation's job count, falling back to 1 if no parallelism is used.
+    # https://github.com/xianyi/OpenBLAS/blob/v0.3.20/getarch.c#L1781-L1792
+    MAKE_NB_JOBS = 0;
   } // (lib.optionalAttrs singleThreaded {
     # As described on https://github.com/xianyi/OpenBLAS/wiki/Faq/4bded95e8dc8aadc70ce65267d1093ca7bdefc4c#multi-threaded
     USE_THREAD = false;
@@ -199,28 +235,39 @@ stdenv.mkDerivation rec {
 Name: $alias
 Version: ${version}
 Description: $alias provided by the OpenBLAS package.
-Cflags: -I$out/include
+Cflags: -I$dev/include
 Libs: -L$out/lib -lopenblas
 EOF
     done
 
     # Setup symlinks for blas / lapack
+  '' + lib.optionalString enableShared ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/libcblas${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapack${shlibExt}.3
     ln -s $out/lib/libopenblas${shlibExt} $out/lib/liblapacke${shlibExt}.3
+  '' + lib.optionalString enableStatic ''
+    ln -s $out/lib/libopenblas.a $out/lib/libblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/libcblas.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapack.a
+    ln -s $out/lib/libopenblas.a $out/lib/liblapacke.a
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) numpy scipy;
+    inherit ceres-solver giac octave opencv;
+  };
 
   meta = with lib; {
     description = "Basic Linear Algebra Subprograms";
     license = licenses.bsd3;
     homepage = "https://github.com/xianyi/OpenBLAS";
-    platforms = platforms.unix;
+    platforms = attrNames configs;
     maintainers = with maintainers; [ ttuegel ];
   };
 }

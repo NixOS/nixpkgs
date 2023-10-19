@@ -12,21 +12,29 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "cdogs";
-  version = "0.12.0";
+  pname = "cdogs-sdl";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    repo = "cdogs-sdl";
+    repo = pname;
     owner = "cxong";
     rev = version;
-    sha256 = "sha256-qbMR7otsC+uz+9mwgFaD2Z5fC6rj8ueYG3KwpPiqL98=";
+    sha256 = "sha256-XSq0TK3ZuLOa8JJnp/Qxt16Ru3p35tq5FOo4+tv+c60=";
   };
 
   postPatch = ''
     patchShebangs src/proto/nanopb/generator/*
   '';
 
-  cmakeFlags = [ "-DCDOGS_DATA_DIR=${placeholder "out"}/" ];
+  cmakeFlags = [
+    "-DCDOGS_DATA_DIR=${placeholder "out"}/"
+    "-DCMAKE_C_FLAGS=-Wno-error=array-bounds"
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=stringop-overflow"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -42,11 +50,15 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
+  # inlining failed in call to 'tinydir_open': --param max-inline-insns-single limit reached
+  hardeningDisable = [ "fortify3" ];
+
   meta = with lib; {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ nixinator ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/cdogs-sdl.x86_64-darwin
   };
 }

@@ -1,24 +1,40 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "tfsec";
-  version = "0.39.16";
+  version = "1.28.4";
 
   src = fetchFromGitHub {
-    owner = "tfsec";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-5We3Nk/AU5dj37vG4pvqzvNztK01PAPadQV/CgHZe8w=";
+    owner = "aquasecurity";
+    repo = "tfsec";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WMmRCjKBtPT45it6iUQh5D7TBc8glt+dppksBvDhTN4=";
   };
 
-  goPackagePath = "github.com/tfsec/tfsec";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=github.com/aquasecurity/tfsec/version.Version=v${version}"
+    ## not sure if this is needed (https://github.com/aquasecurity/tfsec/blob/master/.goreleaser.yml#L6)
+    # "-extldflags '-fno-PIC -static'"
+  ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/version.Version=${version}" ];
+  vendorHash = "sha256-7OTMJhW1Q1z/TOFa4oRCEIPF0cN8gZLdaQglqszXHdw=";
+
+  subPackages = [
+    "cmd/tfsec"
+    "cmd/tfsec-docs"
+    "cmd/tfsec-checkgen"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/tfsec/tfsec";
-    description = "Static analysis powered security scanner for your terraform code";
+    description = "Static analysis powered security scanner for terraform code";
+    homepage = "https://github.com/aquasecurity/tfsec";
+    changelog = "https://github.com/aquasecurity/tfsec/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ fab marsam peterromfeldhk ];
   };
 }

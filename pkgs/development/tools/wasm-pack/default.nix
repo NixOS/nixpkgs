@@ -1,37 +1,24 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, libressl
-, curl
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-pack";
-  version = "0.9.1";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
-    rev = "v${version}";
-    sha256 = "1rqyfg6ajxxyfx87ar25nf5ck9hd0p12qgv98dicniqag8l4rvsr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-L4mCgUPG4cgTUpCoaIUOTONBOggXn5vMyPKj48B3MMk=";
   };
 
-  cargoPatches = [
-    ./update-deps.patch
-  ];
+  cargoHash = "sha256-mqQRQXaUW6mreE7UUEA0zhhaaGGKLRUngH9QLxcaIdY=";
 
-  cargoSha256 = "130gqvzpyr055xkqcy1r0y7l5k2dcv7n9zgr4ja7dm7iayzbwwi1";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [
-    # LibreSSL works around segfault issues caused by OpenSSL being unable to
-    # gracefully exit while doing work.
-    # See: https://github.com/rustwasm/wasm-pack/issues/650
-    libressl
-  ] ++ lib.optionals stdenv.isDarwin [ curl Security ];
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # Most tests rely on external resources and build artifacts.
   # Disabling check here to work with build sandboxing.

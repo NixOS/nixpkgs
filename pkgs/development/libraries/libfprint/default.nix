@@ -10,6 +10,8 @@
 , nss
 , gobject-introspection
 , coreutils
+, cairo
+, libgudev
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
@@ -17,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
-  version = "1.90.7";
+  version = "1.94.6";
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -25,8 +27,17 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g/yczzCZEzUKV2uFl1MAPL1H/R2QJSwxgppI2ftt9QI=";
+    hash = "sha256-lDnAXWukBZSo8X6UEVR2nOMeVUi/ahnJgx2cP+vykZ8=";
   };
+
+  postPatch = ''
+    patchShebangs \
+      tests/test-runner.sh \
+      tests/unittest_inspector.py \
+      tests/virtual-image.py \
+      tests/umockdev-test.py \
+      tests/test-generated-hwdb.sh
+  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -43,25 +54,33 @@ stdenv.mkDerivation rec {
     pixman
     glib
     nss
-  ];
-
-  checkInputs = [
-    python3
+    cairo
+    libgudev
   ];
 
   mesonFlags = [
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
     # Include virtual drivers for fprintd tests
     "-Ddrivers=all"
+    "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
   ];
 
-  doCheck = true;
+  nativeInstallCheckInputs = [
+    (python3.withPackages (p: with p; [ pygobject3 ]))
+  ];
 
-  postPatch = ''
-    patchShebangs \
-      tests/test-runner.sh \
-      tests/unittest_inspector.py \
-      tests/virtual-image.py
+  # We need to run tests _after_ install so all the paths that get loaded are in
+  # the right place.
+  doCheck = false;
+
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ninjaCheckPhase
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -3,16 +3,16 @@
  }:
 
 let
-  release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-uctodata.json);
+  release = lib.importJSON ./release-info/LanguageMachines-uctodata.json;
 in
 
 stdenv.mkDerivation {
-  name = "uctodata-${release.version}";
+  pname = "uctodata";
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "uctodata-${release.version}.tar.gz"; };
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf libtool autoconf-archive ];
+  nativeBuildInputs = [ pkg-config automake autoconf ];
+  buildInputs = [ libtool autoconf-archive ];
   preConfigure = "sh bootstrap.sh";
 
   meta = with lib; {

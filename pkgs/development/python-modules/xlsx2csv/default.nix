@@ -1,16 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, setuptools
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "xlsx2csv";
-  version = "0.7.7";
+  version = "0.8.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09vigknmz15izirfddkmb3a39h1rp2jmc00bnrff12i757n7jjl4";
+    hash = "sha256-fs1tK8JCby5DL0/awSIR4ZdtPLtl+QM+Htpl7dogReM=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    setuptools-scm
+    wheel
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/dilshod/xlsx2csv";

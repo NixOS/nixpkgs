@@ -1,100 +1,51 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, makeWrapper
-, Nuget
-, dotnetCorePackages
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildDotnetModule,
+  dotnetCorePackages,
+  autoPatchelfHook,
+  zlib,
+  openssl,
 }:
-
-let
-  deps = import ./deps.nix { inherit fetchurl; };
-
-  dotnet-sdk = dotnetCorePackages.sdk_3_1;
-  dotnet-aspnetcore = dotnetCorePackages.aspnetcore_3_1;
-
-  nugetSource = stdenv.mkDerivation {
-    pname = "${pname}-nuget-deps";
-    inherit version;
-
-    dontUnpack = true;
-    dontInstall = true;
-
-    nativeBuildInputs = [ Nuget ];
-
-    buildPhase = ''
-      export HOME=$(mktemp -d)
-      mkdir -p $out/lib
-
-      nuget sources Disable -Name "nuget.org"
-      for package in ${toString deps}; do
-        nuget add $package -Source $out/lib
-      done
-    '';
-  };
-
-  pname = "WasabiBackend";
-  version = "1.1.12";
-
-  projectName = "WalletWasabi.Backend";
-  projectConfiguration = "Release";
-  projectRuntime = "linux-x64";
-in
-
-stdenv.mkDerivation rec {
-  inherit pname version;
+buildDotnetModule rec {
+  pname = "wasabibackend";
+  version = "2.0.2.1";
 
   src = fetchFromGitHub {
     owner = "zkSNACKs";
     repo = "WalletWasabi";
-    rev = "v${version}";
-    sha256 = "001k43z2jxvs03csyzndlzlk034aclzc4n8ddrqxykgrq508xk1d";
+    rev = "refs/tags/v${version}";
+    hash = "sha512-JuCl3SyejzwUd2n8Fy7EdxUuO4bIcGb8yMWZQOhZzsY4fvg9prFOnVZEquxahD0a41MLKHRNA1R2N3NMapcc0A==";
   };
 
-  buildInputs = [
-    Nuget
-    dotnet-sdk
-    makeWrapper
-  ];
+  projectFile = "WalletWasabi.Backend/WalletWasabi.Backend.csproj";
+  nugetDeps = ./deps.nix;
 
-  buildPhase = ''
-    export HOME=$(mktemp -d)
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-    export DOTNET_ROOT="${dotnet-sdk}/bin"
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+  dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
 
-    nuget sources Disable -Name "nuget.org"
+  nativeBuildInputs = [autoPatchelfHook];
+  buildInputs = [stdenv.cc.cc.lib zlib];
 
-    dotnet restore \
-      --source ${nugetSource}/lib \
-      --runtime ${projectRuntime} \
-      ${projectName}
+  runtimeDeps = [openssl zlib];
 
-    dotnet publish \
-      --no-restore \
-      --runtime ${projectRuntime} \
-      --configuration ${projectConfiguration} \
-      ${projectName}
+  preConfigure = ''
+    makeWrapperArgs+=(
+      --chdir "$out/lib/${pname}"
+    )
   '';
 
-  installPhase = ''
-    mkdir -p $out
-    cp -r ${projectName}/bin/${projectConfiguration}/netcoreapp3.1/${projectRuntime}/publish $out/lib
-    mkdir -p $out/bin
-    makeWrapper $out/lib/WalletWasabi.Backend $out/bin/${pname} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl zlib ]} \
-      --run "cd $out/lib"
+  postFixup = ''
+    mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
-
-  # If we don't disable stripping the executable fails to start with segfault
-  dontStrip = true;
 
   meta = with lib; {
     description = "Backend for the Wasabi Wallet";
     homepage = "https://wasabiwallet.io/";
+    sourceProvenance = with sourceTypes; [binaryNativeCode];
     license = licenses.mit;
-    maintainers = with maintainers; [ mmahut ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [mmahut];
+    platforms = ["x86_64-linux"];
   };
 }

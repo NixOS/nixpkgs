@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "GameNetworkingSockets";
-  version = "1.2.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zghyc4liml8gzxflyh5gp6zi11ny6ng5hv9wyqvp32rfx221gc6";
+    sha256 = "12741wmpvy7mcvqqmjg4a7ph75rwliwgclhk4imjijqf2qkvsphd";
   };
 
   nativeBuildInputs = [ cmake ninja go ];
@@ -18,11 +18,10 @@ stdenv.mkDerivation rec {
   # tmp home for go
   preBuild = "export HOME=\"$TMPDIR\"";
 
-  buildInputs = [ protobuf openssl ];
+  buildInputs = [ protobuf ];
+  propagatedBuildInputs = [ openssl ];
 
   meta = with lib; {
-    # build failure is resolved on master, remove at next release
-    broken = stdenv.isDarwin;
     description = "GameNetworkingSockets is a basic transport layer for games";
     license = licenses.bsd3;
     platforms = platforms.unix;

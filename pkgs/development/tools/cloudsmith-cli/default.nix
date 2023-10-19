@@ -1,17 +1,17 @@
-{ python3
-, lib
+{ lib
+, python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloudsmith-cli";
-  version = "0.26.0";
-
+  version = "0.35.2";
   format = "wheel";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     pname = "cloudsmith_cli";
     inherit format version;
-    sha256 = "c2W5+z+X4oRZxlNhB6for4mN4NeBX9MtEtmXhU5sz4A=";
+    hash = "sha256-+M4CPveS9dltMI291Atm84T/cf4dPOO3wPvPI15E73Y=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     colorama
     future
     requests
-    requests_toolbelt
+    requests-toolbelt
     semver
     simplejson
     six
@@ -33,11 +33,16 @@ python3.pkgs.buildPythonApplication rec {
   # Wheels have no tests
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "cloudsmith_cli"
+  ];
+
+  meta = with lib; {
     homepage = "https://help.cloudsmith.io/docs/cli/";
     description = "Cloudsmith Command Line Interface";
-    maintainers = with lib.maintainers; [ jtojnar ];
-    license = lib.licenses.asl20;
-    platforms = with lib.platforms; unix;
+    changelog = "https://github.com/cloudsmith-io/cloudsmith-cli/blob/v${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ ];
+    license = licenses.asl20;
+    platforms = with platforms; unix;
   };
 }

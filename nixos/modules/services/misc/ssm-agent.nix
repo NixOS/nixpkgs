@@ -17,13 +17,13 @@ let
   '';
 in {
   options.services.ssm-agent = {
-    enable = mkEnableOption "AWS SSM agent";
+    enable = mkEnableOption (lib.mdDoc "AWS SSM agent");
 
     package = mkOption {
       type = types.path;
-      description = "The SSM agent package to use";
+      description = lib.mdDoc "The SSM agent package to use";
       default = pkgs.ssm-agent.override { overrideEtc = false; };
-      defaultText = "pkgs.ssm-agent.override { overrideEtc = false; }";
+      defaultText = literalExpression "pkgs.ssm-agent.override { overrideEtc = false; }";
     };
   };
 

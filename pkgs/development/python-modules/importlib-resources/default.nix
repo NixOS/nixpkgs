@@ -1,34 +1,43 @@
 { lib
+, isPy27
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
 , importlib-metadata
 , typing ? null
-, singledispatch ? null
 , pythonOlder
-, python
+, unittestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "importlib-resources";
-  version = "5.1.2";
+  version = "5.12.0";
+  format = "pyproject";
+  disabled = isPy27;
 
   src = fetchPypi {
     pname = "importlib_resources";
     inherit version;
-    sha256 = "642586fc4740bd1cad7690f836b3321309402b20b332529f25617ff18e8e1370";
+    hash = "sha256-S+glib9cHXmZrt8qRRWdEMs8pPGbInH4eSvI5tp7IvY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
     importlib-metadata
-  ] ++ lib.optional (pythonOlder "3.4") singledispatch
-    ++ lib.optional (pythonOlder "3.5") typing
-  ;
+  ] ++ lib.optionals (pythonOlder "3.5") [
+    typing
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  nativeCheckInputs = [
+    unittestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "importlib_resources"
+  ];
 
   meta = with lib; {
     description = "Read resources from Python packages";

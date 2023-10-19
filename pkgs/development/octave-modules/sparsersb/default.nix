@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "sparsersb";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "0nl7qppa1cm51188hqhbfswlih9hmy1yz7v0f5i07z0g0kbd62xw";
+    sha256 = "0jyy2m7wylzyjqj9n6mjizhj0ccq8xnxm2g6pdlrmncxq1401khd";
   };
 
   propagatedBuildInputs = [
@@ -22,5 +22,7 @@ buildOctavePackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
     description = "Interface to the librsb package implementing the RSB sparse matrix format for fast shared-memory sparse matrix computations";
+    # Broken since octave>8.x
+    broken = true;
   };
 }

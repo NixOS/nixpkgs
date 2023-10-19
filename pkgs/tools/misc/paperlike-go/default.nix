@@ -11,12 +11,12 @@ buildGoModule {
     owner = "leoluk";
     repo = "paperlike-go";
     rev = "bd658d88ea9a3b21e1b301b96253abab7cf56d79";
-    sha256 = "1h0n2n5w5pn3r08qf6hbmiib5m71br27y66ki9ajnaa890377qaj";
+    hash = "sha256-UuFzBkhIKStVitMYf0Re4dSyYqwLGocRyMPewosVFsA=";
   };
 
-  subPackages = [ "cmd/paperlike-cli" ];
+  vendorHash = "sha256-OfTeJd3VS/WoUpyPY7XfQZWLrvS+vqPPgeL2Hd0HtgI=";
 
-  vendorSha256 = "00mn0zfivxp2h77s7gmyyjp8p5a1vysn73wwaalgajymvljxxx1r";
+  subPackages = [ "cmd/paperlike-cli" ];
 
   meta = {
     description = "paperlike-go is a Linux Go library and CLI utility to control a Dasung Paperlike display via I2C DDC.";

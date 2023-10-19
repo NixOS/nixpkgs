@@ -9,38 +9,15 @@ ninjaBuildPhase() {
     fi
 
     local flagsArray=(
-        -j$buildCores -l$NIX_BUILD_CORES
+        -j$buildCores
         $ninjaFlags "${ninjaFlagsArray[@]}"
     )
 
     echoCmd 'build flags' "${flagsArray[@]}"
-    ninja "${flagsArray[@]}"
+    TERM=dumb ninja "${flagsArray[@]}"
 
     runHook postBuild
 }
-
-if [ -z "${dontUseNinjaBuild-}" -a -z "${buildPhase-}" ]; then
-    buildPhase=ninjaBuildPhase
-fi
-
-ninjaInstallPhase() {
-    runHook preInstall
-
-    # shellcheck disable=SC2086
-    local flagsArray=(
-        $ninjaFlags "${ninjaFlagsArray[@]}"
-        ${installTargets:-install}
-    )
-
-    echoCmd 'install flags' "${flagsArray[@]}"
-    ninja "${flagsArray[@]}"
-
-    runHook postInstall
-}
-
-if [ -z "${dontUseNinjaInstall-}" -a -z "${installPhase-}" ]; then
-    installPhase=ninjaInstallPhase
-fi
 
 ninjaCheckPhase() {
     runHook preCheck
@@ -61,18 +38,49 @@ ninjaCheckPhase() {
         fi
 
         local flagsArray=(
-            -j$buildCores -l$NIX_BUILD_CORES
+            -j$buildCores
             $ninjaFlags "${ninjaFlagsArray[@]}"
             $checkTarget
         )
 
         echoCmd 'check flags' "${flagsArray[@]}"
-        ninja "${flagsArray[@]}"
+        TERM=dumb ninja "${flagsArray[@]}"
     fi
 
     runHook postCheck
 }
 
+ninjaInstallPhase() {
+    runHook preInstall
+
+    local buildCores=1
+
+    # Parallel building is enabled by default.
+    if [ "${enableParallelInstalling-1}" ]; then
+        buildCores="$NIX_BUILD_CORES"
+    fi
+
+    # shellcheck disable=SC2086
+    local flagsArray=(
+        -j$buildCores
+        $ninjaFlags "${ninjaFlagsArray[@]}"
+        ${installTargets:-install}
+    )
+
+    echoCmd 'install flags' "${flagsArray[@]}"
+    TERM=dumb ninja "${flagsArray[@]}"
+
+    runHook postInstall
+}
+
+if [ -z "${dontUseNinjaBuild-}" -a -z "${buildPhase-}" ]; then
+    buildPhase=ninjaBuildPhase
+fi
+
 if [ -z "${dontUseNinjaCheck-}" -a -z "${checkPhase-}" ]; then
     checkPhase=ninjaCheckPhase
+fi
+
+if [ -z "${dontUseNinjaInstall-}" -a -z "${installPhase-}" ]; then
+    installPhase=ninjaInstallPhase
 fi

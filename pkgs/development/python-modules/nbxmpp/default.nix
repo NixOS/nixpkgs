@@ -1,26 +1,59 @@
-{ lib, buildPythonPackage, pythonOlder, fetchFromGitLab
-, gobject-introspection, idna, libsoup, precis-i18n, pygobject3, pyopenssl
+{ lib
+, buildPythonPackage
+, fetchFromGitLab
+, gobject-introspection
+, idna
+, libsoup_3
+, packaging
+, precis-i18n
+, pygobject3
+, pyopenssl
+, pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "nbxmpp";
-  version = "2.0.2";
+  version = "4.3.2";
+  format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
-  # Tests aren't included in PyPI tarball.
   src = fetchFromGitLab {
     domain = "dev.gajim.org";
     owner = "gajim";
     repo = "python-nbxmpp";
-    rev = "nbxmpp-${version}";
-    sha256 = "0z27mxgfk7hvpx0xdrd8g9441rywv74yk7s83zjnc2mc7xvpwhf4";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vSLWaGYST1nut+0KAzURRKsr6XRtmYYTrkJiQEK3wa4=";
   };
 
-  buildInputs = [ precis-i18n ];
-  propagatedBuildInputs = [ gobject-introspection idna libsoup pygobject3 pyopenssl ];
+  nativeBuildInputs = [
+    # required for pythonImportsCheck otherwise libsoup cannot be found
+    gobject-introspection
+    setuptools
+  ];
 
-  pythonImportsCheck = [ "nbxmpp" ];
+  buildInputs = [
+    precis-i18n
+  ];
+
+  propagatedBuildInputs = [
+    gobject-introspection
+    idna
+    libsoup_3
+    packaging
+    pygobject3
+    pyopenssl
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "nbxmpp"
+  ];
 
   meta = with lib; {
     homepage = "https://dev.gajim.org/gajim/python-nbxmpp";

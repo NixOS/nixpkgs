@@ -1,37 +1,30 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, git
-, ruamel_yaml
-, jsonschema
-, rfc3987
-, setuptools
-, setuptools_scm
+, python3
 }:
 
-buildPythonPackage rec {
-  pname = "dtschema";
-  version = "2021.2.1";
+let python = python3.override {
+  packageOverrides = self: super: {
+    # see https://github.com/devicetree-org/dt-schema/issues/108
+    jsonschema = super.jsonschema.overridePythonAttrs (old: rec {
+      version = "4.17.3";
+      disabled = self.pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d9f88f069068dc5dc7e895785d7172d260cbbc34cab3b52704b20e89b80c6de8";
+      src = old.src.override {
+        inherit version;
+        hash = "sha256-D4ZEN6uLYHa6ZwdFPvj5imoNUSqA6T+KvbZ29zfstg0=";
+      };
+
+      propagatedBuildInputs = with self; ([
+        attrs
+        pyrsistent
+      ] ++ lib.optionals (pythonOlder "3.8") [
+        importlib-metadata
+        typing-extensions
+      ] ++ lib.optionals (pythonOlder "3.9") [
+        importlib-resources
+        pkgutil-resolve-name
+      ]);
+    });
   };
-
-  nativeBuildInputs = [ setuptools_scm git ];
-  propagatedBuildInputs = [
-    setuptools
-    ruamel_yaml
-    jsonschema
-    rfc3987
-  ];
-
-  meta = with lib; {
-    description = "Tooling for devicetree validation using YAML and jsonschema";
-    homepage = "https://github.com/devicetree-org/dt-schema/";
-    # all files have SPDX tags
-    license = with licenses; [ bsd2 gpl2 ];
-    maintainers = with maintainers; [ sorki ];
-  };
-}
+}; in python.pkgs.toPythonApplication python.pkgs.dtschema
 

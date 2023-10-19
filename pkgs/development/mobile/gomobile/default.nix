@@ -1,31 +1,29 @@
 { stdenv, lib, fetchgit, buildGoModule, zlib, makeWrapper, xcodeenv, androidenv
 , xcodeWrapperArgs ? { }
 , xcodeWrapper ? xcodeenv.composeXcodeWrapper xcodeWrapperArgs
+, withAndroidPkgs ? true
 , androidPkgs ? androidenv.composeAndroidPackages {
     includeNDK = true;
-    ndkVersion = "21.3.6528147"; # WARNING: 22.0.7026061 is broken.
+    ndkVersion = "22.1.7171670";
   } }:
 
 buildGoModule {
   pname = "gomobile";
-  version = "unstable-2020-06-22";
+  version = "unstable-2022-05-18";
 
-  vendorSha256 = "1n1338vqkc1n8cy94501n7jn3qbr28q9d9zxnq2b4rxsqjfc9l94";
+  vendorHash = "sha256-AmOy3X+d2OD7ZLbFuy+SptdlgWbZJaXYEgO79M64ufE=";
 
   src = fetchgit {
-    # WARNING: Next commit removes support for ARM 32 bit builds for iOS
-    rev = "33b80540585f2b31e503da24d6b2a02de3c53ff5";
+    rev = "8578da9835fd365e78a6e63048c103b27a53a82c";
     name = "gomobile";
     url = "https://go.googlesource.com/mobile";
-    sha256 = "0c9map2vrv34wmaycsv71k4day3b0z5p16yzxmlp8amvqb38zwlm";
+    sha256 = "sha256-AOR/p+DW83f2+BOxm2rFXBCrotcIyunK3UzQ/dnauWY=";
   };
 
   subPackages = [ "bind" "cmd/gobind" "cmd/gomobile" ];
 
   # Fails with: go: cannot find GOROOT directory
   doCheck = false;
-
-  patches = [ ./resolve-nix-android-sdk.patch ];
 
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optionals stdenv.isDarwin [ xcodeWrapper ];
@@ -34,8 +32,7 @@ buildGoModule {
   postPatch = ''
     substituteInPlace cmd/gomobile/env.go --replace \
       'tmpdir, err = ioutil.TempDir("", "gomobile-work-")' \
-      'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "gomobile-work")' \
-      --replace '"io/ioutil"' ""
+      'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "gomobile-work")'
     substituteInPlace cmd/gomobile/init.go --replace \
       'tmpdir, err = ioutil.TempDir(gomobilepath, "work-")' \
       'tmpdir = filepath.Join(os.Getenv("NIX_BUILD_TOP"), "work")'
@@ -45,11 +42,18 @@ buildGoModule {
   postInstall = ''
     mkdir -p $out/src/golang.org/x
     ln -s $src $out/src/golang.org/x/mobile
-    wrapProgram $out/bin/gomobile \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}" \
-      --prefix PATH : "${androidPkgs.androidsdk}/bin" \
-      --set ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
-      --set GOPATH $out
+  '';
+
+  postFixup = ''
+    for bin in $(ls $out/bin); do
+      wrapProgram $out/bin/$bin \
+        --suffix GOPATH : $out \
+  '' + lib.optionalString withAndroidPkgs ''
+        --prefix PATH : "${androidPkgs.androidsdk}/bin" \
+        --set-default ANDROID_HOME "${androidPkgs.androidsdk}/libexec/android-sdk" \
+  '' + ''
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ zlib ]}"
+    done
   '';
 
   meta = with lib; {

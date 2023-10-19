@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses, hexdump }:
 
 stdenv.mkDerivation rec {
   pname = "translate-shell";
-  version = "0.9.6.12";
+  version = "0.9.7.1";
 
   src = fetchFromGitHub {
     owner = "soimort";
     repo = "translate-shell";
     rev = "v${version}";
-    sha256 = "075vqnha21rhr1b61dim7dqlfwm1yffyzcaa83s36rpk9r5sddzx";
+    sha256 = "sha256-ILXE8cSrivYqMruE+xtNIInLdwdRfMX5dneY9Nn12Uk=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
         rlwrap
         groff
         fribidi
+        hexdump
       ]}
   '';
 
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     description = "Command-line translator using Google Translate, Bing Translator, Yandex.Translate, and Apertium";
     license = licenses.unlicense;
     maintainers = with maintainers; [ ebzzry infinisil ];
+    mainProgram = "trans";
     platforms = platforms.unix;
   };
 }

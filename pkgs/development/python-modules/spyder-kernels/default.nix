@@ -1,25 +1,52 @@
-{ lib, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
-  jupyter_client, pyzmq }:
+{ lib
+, buildPythonPackage
+, cloudpickle
+, fetchPypi
+, ipykernel
+, ipython
+, jupyter-client
+, packaging
+, pythonOlder
+, pyxdg
+, pyzmq
+, wurlitzer
+}:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "1.10.2";
+  version = "2.4.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a507397f5ff0426cff50f1b67996b191bdc8148583aa565f5dffd3d0111c0262";
+    hash = "sha256-NjuwoOFZTLaRY3RkGS9PGZaQlUaSUiQrQ8CSvzBaJd0=";
   };
 
   propagatedBuildInputs = [
     cloudpickle
     ipykernel
-    wurlitzer
-    jupyter_client
+    ipython
+    jupyter-client
+    packaging
+    pyxdg
     pyzmq
+    wurlitzer
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "ipykernel>=6.16.1,<7" "ipykernel" \
+      --replace "ipython>=7.31.1,<8" "ipython"
+  '';
 
   # No tests
   doCheck = false;
+
+  pythonImportsCheck = [
+    "spyder_kernels"
+  ];
 
   meta = with lib; {
     description = "Jupyter kernels for Spyder's console";

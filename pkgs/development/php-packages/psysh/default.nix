@@ -1,30 +1,24 @@
-{ mkDerivation, fetchurl, makeWrapper, lib, php }:
-let
+{ fetchFromGitHub, lib, php }:
+
+php.buildComposerProject (finalAttrs: {
   pname = "psysh";
-  version = "0.10.8";
-in
-mkDerivation {
-  inherit pname version;
+  version = "0.11.21";
 
-  src = fetchurl {
-    url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-    sha256 = "sha256-6opSBKR5eI5HlaJy4A94JrxYfUtCCNVlyntmLZbWfOE=";
+  src = fetchFromGitHub {
+    owner = "bobthecow";
+    repo = "psysh";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YuBn4mrgOzGeMGfGcyZySAISmQdv3WRGn91PRozyxdI=";
   };
 
-  phases = [ "installPhase" ];
-  nativeBuildInputs = [ makeWrapper ];
+  composerLock = ./composer.lock;
+  vendorHash = "sha256-FZFeO7UiVssxTf0JX6wdjrAE+jucYnfQJA1eOng39lQ=";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    tar -xzf $src -C $out/bin
-    chmod +x $out/bin/psysh
-    wrapProgram $out/bin/psysh --prefix PATH : "${lib.makeBinPath [ php ]}"
-  '';
-
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/bobthecow/psysh/releases/tag/v${finalAttrs.version}";
     description = "PsySH is a runtime developer console, interactive debugger and REPL for PHP.";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://psysh.org/";
-    maintainers = with maintainers; [ caugner ] ++ teams.php.members;
+    maintainers = lib.teams.php.members;
   };
-}
+})

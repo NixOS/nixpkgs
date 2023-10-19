@@ -1,6 +1,6 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
+, autoreconfHook
 , neon
 , procps
 , substituteAll
@@ -9,17 +9,23 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "davfs2-1.6.0";
+  pname = "davfs2";
+  version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://savannah/davfs2/${name}.tar.gz";
-    sha256 = "sha256-LmtnVoW9kXdyvmDwmZrgmMgPef8g3BMej+xFR8u2O1A=";
+    url = "mirror://savannah/davfs2/davfs2-${version}.tar.gz";
+    sha256 = "sha256-JR23Wic4DMoTMLG5cXAMXl3MDJDlpHYiKF8BQO3+Oi8=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   buildInputs = [ neon zlib ];
 
   patches = [
     ./fix-sysconfdir.patch
+    ./disable-suid.patch
     (substituteAll {
       src = ./0001-umount_davfs-substitute-ps-command.patch;
       ps = "${procps}/bin/ps";
@@ -31,11 +37,6 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
-
-  makeFlags = [
-    "sbindir=$(out)/sbin"
-    "ssbindir=$(out)/sbin"
-  ];
 
   meta = {
     homepage = "https://savannah.nongnu.org/projects/davfs2";
@@ -51,5 +52,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

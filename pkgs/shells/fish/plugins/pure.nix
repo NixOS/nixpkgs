@@ -1,21 +1,21 @@
-{ lib, buildFishPlugin, fetchFromGitHub, git, fishtape }:
+{ lib, buildFishPlugin, fetchFromGitHub, git, fishtape_3 }:
 
 buildFishPlugin rec {
   pname = "pure";
-  version = "3.4.2";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
-    owner = "rafaelrinaldi";
+    owner = "pure-fish";
     repo = "pure";
     rev = "v${version}";
-    sha256 = "134sz3f98gb6z2vgd5kkm6dd8pka5gijk843c32s616w35y07sga";
+    hash = "sha256-O8rC2uCuM3xUQPRap7XqyyAvO77hP+sqNM4mEQ7pZkw=";
   };
 
-  checkInputs = [ git ];
-  checkPlugins = [ fishtape ];
+  nativeCheckInputs = [ git ];
+  checkPlugins = [ fishtape_3 ];
   checkPhase = ''
-    # https://github.com/rafaelrinaldi/pure/issues/264
-    rm tests/_pure_string_width.test.fish
+    rm tests/pure_tools_installer.test.fish
+    rm tests/_pure_uninstall.test.fish
 
     fishtape tests/*.test.fish
   '';

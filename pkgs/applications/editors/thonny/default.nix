@@ -1,17 +1,28 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.3.6";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0ga0pqvq3nglr4jgh8ajv0bv8c7q09h1jh6q6r5cwqa49fawkr02";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vVDTizU+WDWJ75Ln93TAFYn7PJq5qc3hxVJiNGtK24g=";
   };
+
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [ (makeDesktopItem {
+    name = "Thonny";
+    exec = "thonny";
+    icon = "thonny";
+    desktopName = "Thonny";
+    comment     = "Python IDE for beginners";
+    categories  = [ "Development" "IDE" ];
+  }) ];
 
   propagatedBuildInputs = with python3.pkgs; [
     jedi
@@ -34,6 +45,10 @@ buildPythonApplication rec {
        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3.pkgs.jedi})
   '';
 
+  postInstall = ''
+    install -Dm644 ./packaging/icons/thonny-48x48.png $out/share/icons/hicolor/48x48/apps/thonny.png
+  '';
+
   # Tests need a DISPLAY
   doCheck = false;
 
@@ -48,6 +63,6 @@ buildPythonApplication rec {
     homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

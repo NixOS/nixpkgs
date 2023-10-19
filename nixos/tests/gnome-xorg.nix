@@ -1,10 +1,10 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome-xorg";
-  meta = with lib; {
-    maintainers = teams.gnome.members;
+  meta = {
+    maintainers = lib.teams.gnome.members;
   };
 
-  machine = { nodes, ... }: let
+  nodes.machine = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
   in
 
@@ -25,7 +25,21 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.desktopManager.gnome.debug = true;
       services.xserver.displayManager.defaultSession = "gnome-xorg";
 
-      virtualisation.memorySize = 1024;
+      systemd.user.services = {
+        "org.gnome.Shell@x11" = {
+          serviceConfig = {
+            ExecStart = [
+              # Clear the list before overriding it.
+              ""
+              # Eval API is now internal so Shell needs to run in unsafe mode.
+              # TODO: improve test driver so that it supports openqa-like manipulation
+              # that would allow us to drop this mess.
+              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+            ];
+          };
+        };
+      };
+
     };
 
   testScript = { nodes, ... }: let
@@ -46,10 +60,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     # False when startup is done
     startingUp = su "${gdbus} ${eval} Main.layoutManager._startingUp";
 
-    # Start gnome-terminal
-    gnomeTerminalCommand = su "gnome-terminal";
+    # Start Console
+    launchConsole = su "${bus} gapplication launch org.gnome.Console";
 
-    # Hopefully gnome-terminal's wm class
+    # Hopefully Console's wm class
     wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
   in ''
       with subtest("Login to GNOME Xorg with GDM"):
@@ -67,13 +81,17 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
               "${startingUp} | grep -q 'true,..false'"
           )
 
-      with subtest("Open Gnome Terminal"):
+      with subtest("Open Console"):
+          # Close the Activities view so that Shell can correctly track the focused window.
+          machine.send_key("esc")
+
           machine.succeed(
-              "${gnomeTerminalCommand}"
+              "${launchConsole}"
           )
-          # correct output should be (true, '"Gnome-terminal"')
+          # correct output should be (true, '"kgx"')
+          # For some reason, this deviates from Wayland.
           machine.wait_until_succeeds(
-              "${wmClass} | grep -q  'true,...Gnome-terminal'"
+              "${wmClass} | grep -q  'true,...kgx'"
           )
           machine.sleep(20)
           machine.screenshot("screen")

@@ -3,12 +3,17 @@
 buildPecl {
   pname = "yaml";
 
-  version = "2.2.1";
-  sha256 = "sha256-4XrQTnUuJf0Jm93S350m3+8YPI0AxBebydei4cl9eBk=";
+  version = "2.2.3";
+  sha256 = "sha256-WTfrlyLd9tZGJnmc+gJFmP8kUuoVeZLk5nMxolP5AjY=";
 
-  configureFlags = [ "--with-yaml=${libyaml}" ];
+  configureFlags = [ "--with-yaml=${libyaml.dev}" ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config libyaml ];
 
-  meta.maintainers = lib.teams.php.members;
+  meta = {
+    description = "YAML-1.1 parser and emitter";
+    license = lib.licenses.mit;
+    homepage = "https://github.com/php/pecl-file_formats-yaml";
+    maintainers = lib.teams.php.members;
+  };
 }

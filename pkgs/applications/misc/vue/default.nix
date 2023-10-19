@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yfzr80pw632lkayg4qfmwzrqk02y30yz8br7isyhmgkswyp5rnx";
   };
 
-  phases = "installPhase";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p "$out"/{share/vue,bin}
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     description = "Visual Understanding Environment - mind mapping software";
     maintainers = with lib.maintainers; [ raskin ];
     platforms = with lib.platforms; linux;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.free; # Apache License fork, actually
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "open-isns";
-  version = "0.101";
+  version = "0.102";
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-isns";
     rev = "v${version}";
-    sha256 = "1g7kp1j2f8afsach6sbl4k05ybz1yz2s8yg073bv4gnv48gyxb2p";
+    sha256 = "sha256-Vz6VqqvEr0f8AdN9NcVnruapswmoOgvAXxXSfrM3yRA=";
   };
 
   propagatedBuildInputs = [ openssl ];

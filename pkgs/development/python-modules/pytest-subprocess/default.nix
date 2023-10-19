@@ -6,33 +6,35 @@
 , pytestCheckHook
 , docutils
 , pygments
+, pytest-rerunfailures
+, pytest-asyncio
+, anyio
 }:
 
 buildPythonPackage rec {
   pname = "pytest-subprocess";
-  version = "1.1.0";
+  version = "1.5.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "aklajnert";
     repo = "pytest-subprocess";
-    rev = version;
-    sha256 = "sha256-r6WNDdvZAHMG1kPtLJlCwvhbVG1gC1NEvRfta+Chxnk=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-u9d9RhbikOyknMWs18j2efYJb9YdHsQrp31LfcbudoA=";
   };
 
   buildInputs = [
     pytest
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     docutils
     pygments
-  ];
-
-  disabledTests = [
-    "test_multiple_wait" # https://github.com/aklajnert/pytest-subprocess/issues/36
+    pytest-rerunfailures
+    pytest-asyncio
+    anyio
   ];
 
   meta = with lib; {

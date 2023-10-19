@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation rec {
 
-  version = "0.23";
+  version = "0.24";
   pname = "charliecloud";
 
   src = fetchFromGitHub {
     owner = "hpc";
     repo = "charliecloud";
     rev = "v${version}";
-    sha256 = "sha256-JQNidKqJROFVm+O1exTDon1fwU91zONqgKJIpe9gspY=";
+    sha256 = "sha256-kdaVlwE3vdCxsmJTOUwx8J+9UcBuXbKDwS2MHX2ZPPM=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
   buildInputs = [
     docker
-    (python3.withPackages (ps: [ ps.lark-parser ps.requests ]))
+    (python3.withPackages (ps: [ ps.lark ps.requests ]))
   ];
 
   configureFlags = let
-    pythonEnv = python3.withPackages (ps: [ ps.lark-parser ps.requests ]);
+    pythonEnv = python3.withPackages (ps: [ ps.lark ps.requests ]);
   in [
     "--with-python=${pythonEnv}/bin/python3"
   ];

@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper
+, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader, moltenvk
+}:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.05.2";
+  version = "1.22.3";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "sha256-h4TpeOwCK3Ynd+XZKo7wHncWS1OI6+b9SReD5xMK9zk=";
+    sha256 = "sha256-+8DU1QT3Lgqf1AIReVnXQ2Lq6R6eBb8VjdkJfAn/Rtc=";
   };
 
-  sourceRoot = "source/Quake";
+  sourceRoot = "${src.name}/Quake";
 
   nativeBuildInputs = [
     makeWrapper
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     libvorbis
     libmad
     vulkan-loader
-  ];
+  ] ++ lib.optional stdenv.isDarwin moltenvk;
 
   buildFlags = [ "DO_USERDIRS=1" ];
 
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
 
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ ylh ];
   };
 }

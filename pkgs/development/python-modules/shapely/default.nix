@@ -1,75 +1,71 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
-, substituteAll
 , pythonOlder
-, geos
-, pytestCheckHook
+, fetchPypi
 , cython
+, geos
+, oldest-supported-numpy
+, setuptools
+, wheel
 , numpy
-, fetchpatch
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "Shapely";
-  version = "1.7.1";
-  disabled = pythonOlder "3.5";
+  pname = "shapely";
+  version = "2.0.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0adiz4jwmwxk7k1awqifb1a9bj5x4nx4gglb5dz9liam21674h8n";
+    hash = "sha256-Zqaxo+cuzpf8hVNqKBR2+bd5TeLmRsqKRRfi48FEaJM=";
   };
 
   nativeBuildInputs = [
-    geos # for geos-config
     cython
+    geos # for geos-config
+    oldest-supported-numpy
+    setuptools
+    wheel
+  ];
+
+  buildInputs = [
+    geos
   ];
 
   propagatedBuildInputs = [
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  # Environment variable used in shapely/_buildcfg.py
-  GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
-
-  patches = [
-    # Fix with geos 3.9. This patch will be part of the next release after 1.7.1
-    (fetchpatch {
-      url = "https://github.com/Toblerity/Shapely/commit/77879a954d24d1596f986d16ba3eff5e13861164.patch";
-      sha256 = "1w7ngjqbpf9vnvrfg4nyv34kckim9a60gvx20h6skc79xwihd4m5";
-      excludes = [
-        "tests/test_create_inconsistent_dimensionality.py"
-        "appveyor.yml"
-        ".travis.yml"
-      ];
-    })
-    # Patch to search form GOES .so/.dylib files in a Nix-aware way
-    (substituteAll {
-      src = ./library-paths.patch;
-      libgeos_c = GEOS_LIBRARY_PATH;
-      libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
-    })
- ];
 
   preCheck = ''
     rm -r shapely # prevent import of local shapely
   '';
 
-  disabledTests = [
-    "test_collection"
+  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # FIXME(lf-): these logging tests are broken, which is definitely our
+    # fault. I've tried figuring out the cause and failed.
+    #
+    # It is apparently some sandbox or no-sandbox related thing on macOS only
+    # though.
+    "test_error_handler_exception"
+    "test_error_handler"
+    "test_info_handler"
   ];
 
   pythonImportsCheck = [ "shapely" ];
 
   meta = with lib; {
-    description = "Geometric objects, predicates, and operations";
-    homepage = "https://pypi.python.org/pypi/Shapely/";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ knedlsepp ];
+    changelog = "https://github.com/shapely/shapely/blob/${version}/CHANGES.txt";
+    description = "Manipulation and analysis of geometric objects";
+    homepage = "https://github.com/shapely/shapely";
+    license = licenses.bsd3;
+    maintainers = teams.geospatial.members;
   };
 }

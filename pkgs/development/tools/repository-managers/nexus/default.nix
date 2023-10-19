@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nexus";
-  version = "3.30.0-01";
+  version = "3.52.0-01";
 
   src = fetchurl {
-    url = "https://sonatype-download.global.ssl.fastly.net/nexus/3/nexus-${version}-unix.tar.gz";
-    sha256 = "sha256-axhuw1FNut+JqS1WCxyQmP08qh0tXn9UAvz2Gj1kGPs=";
+    url = "https://download.sonatype.com/nexus/3/nexus-${version}-unix.tar.gz";
+    hash = "sha256-+Hdmuy7WBtUIjEBZyLgE3a3+L/lANHiy1VRBJ2s686U=";
   };
 
   preferLocalBuild = true;
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace bin/nexus.vmoptions \
+      --replace ../sonatype-work /var/lib/sonatype-work \
       --replace etc/karaf $out/etc/karaf \
       --replace =. =$out
   '';
@@ -40,7 +41,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Repository manager for binary software components";
-    homepage = "http://www.sonatype.org/nexus";
+    homepage = "https://www.sonatype.com/products/sonatype-nexus-oss";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl10;
     platforms = platforms.all;
     maintainers = with maintainers; [ aespinosa ironpinguin zaninime ];

@@ -1,17 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi, pytestCheckHook, bracex }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, hatchling
+, pytestCheckHook
+, bracex
+}:
 
 buildPythonPackage rec {
   pname = "wcmatch";
-  version = "8.1.2";
+  version = "8.5";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efda751de15201b395b6d6e64e6ae3b6b03dc502a64c3c908aa5cad14c27eee5";
+    hash = "sha256-hsF1ctD3XL87yxoY878vnnKzmpwIybSnTpkeGIKo77M=";
   };
+
+  nativeBuildInputs = [
+    hatchling
+  ];
 
   propagatedBuildInputs = [ bracex ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -27,6 +38,6 @@ buildPythonPackage rec {
     description = "Wilcard File Name matching library";
     homepage = "https://github.com/facelessuser/wcmatch";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

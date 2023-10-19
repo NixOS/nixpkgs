@@ -6,9 +6,10 @@ To update the list of packages from MELPA,
 
 1. Run `./update-melpa`
 2. Check for evaluation errors:
+     # "../../../../../" points to the default.nix from root of Nixpkgs tree
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
-3. Run `git commit -m "melpa-packages: $(date -Idate)" recipes-archive-melpa.json`
+3. Run `git commit -m "melpa-packages $(date -Idate)" recipes-archive-melpa.json`
 
 ## Update from overlay
 
@@ -70,7 +71,84 @@ let
         )
       );
 
-      overrides = {
+      overrides = lib.optionalAttrs (variant == "stable") {
+
+        # upstream issue: missing file header
+        abridge-diff =
+          if super.abridge-diff.version == "0.1"
+          then markBroken super.abridge-diff
+          else super.abridge-diff;
+
+        # upstream issue: missing file header
+        bufshow = markBroken super.bufshow;
+
+        # upstream issue: missing file header
+        speech-tagger = markBroken super.speech-tagger;
+
+        # upstream issue: missing file header
+        textmate = markBroken super.textmate;
+
+        # upstream issue: missing file header
+        window-numbering = markBroken super.window-numbering;
+
+        # upstream issue: missing file header
+        voca-builder = markBroken super.voca-builder;
+
+        # upstream issue: missing file header
+        initsplit = markBroken super.initsplit;
+
+        # upstream issue: missing file header
+        jsfmt = markBroken super.jsfmt;
+
+        # upstream issue: missing file header
+        maxframe = markBroken super.maxframe;
+
+        # upstream issue: missing file header
+        connection = markBroken super.connection;
+
+        # upstream issue: missing file header
+        dictionary = markBroken super.dictionary;
+
+        # upstream issue: missing file header
+        fold-dwim =
+          if super.fold-dwim.version == "1.2"
+          then markBroken super.fold-dwim
+          else super.fold-dwim;
+
+        # upstream issue: missing file header
+        gl-conf-mode =
+          if super.gl-conf-mode.version == "0.3"
+          then markBroken super.gl-conf-mode
+          else super.gl-conf-mode;
+
+        # upstream issue: missing file header
+        ligo-mode =
+          if super.ligo-mode.version == "0.3"
+          then markBroken super.ligo-mode
+          else null; # auto-updater is failing; use manual one
+
+        # upstream issue: missing file header
+        link = markBroken super.link;
+
+        # upstream issue: missing file header
+        org-dp =
+          if super.org-dp.version == "1"
+          then markBroken super.org-dp
+          else super.org-dp;
+
+        # upstream issue: missing file header
+        revbufs =
+          if super.revbufs.version == "1.2"
+          then markBroken super.revbufs
+          else super.revbufs;
+
+        # upstream issue: missing file header
+        elmine = markBroken super.elmine;
+
+        # upstream issue: missing file header
+        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
+
+      } // {
         # Expects bash to be at /bin/bash
         ac-rtags = fix-rtags super.ac-rtags;
 
@@ -99,6 +177,23 @@ let
 
         dune = dontConfigure super.dune;
 
+        emacsql = super.emacsql.overrideAttrs (old: {
+          buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            cd source/sqlite
+            make
+            cd -
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            install -m=755 -D source/sqlite/emacsql-sqlite \
+              $out/share/emacs/site-lisp/elpa/emacsql-${old.version}/sqlite/emacsql-sqlite
+          '';
+
+          stripDebugList = [ "share" ];
+        });
+
         emacsql-sqlite = super.emacsql-sqlite.overrideAttrs (old: {
           buildInputs = old.buildInputs ++ [ pkgs.sqlite ];
 
@@ -108,12 +203,19 @@ let
             cd -
           '';
 
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             install -m=755 -D source/sqlite/emacsql-sqlite \
               $out/share/emacs/site-lisp/elpa/emacsql-sqlite-${old.version}/sqlite/emacsql-sqlite
           '';
 
           stripDebugList = [ "share" ];
+        });
+
+        epkg = super.epkg.overrideAttrs (old: {
+          postPatch = ''
+            substituteInPlace lisp/epkg.el \
+              --replace '(call-process "sqlite3"' '(call-process "${pkgs.sqlite}/bin/sqlite3"'
+          '';
         });
 
         erlang = super.erlang.overrideAttrs (attrs: {
@@ -139,6 +241,12 @@ let
         flycheck-rtags = fix-rtags super.flycheck-rtags;
 
         pdf-tools = super.pdf-tools.overrideAttrs (old: {
+          # Temporary work around for:
+          #   - https://github.com/vedang/pdf-tools/issues/102
+          #   - https://github.com/vedang/pdf-tools/issues/103
+          #   - https://github.com/vedang/pdf-tools/issues/109
+          CXXFLAGS = "-std=c++17";
+
           nativeBuildInputs = [
             pkgs.autoconf
             pkgs.automake
@@ -175,7 +283,7 @@ let
 
         irony = super.irony.overrideAttrs (old: {
           cmakeFlags = old.cmakeFlags or [ ] ++ [ "-DCMAKE_INSTALL_BINDIR=bin" ];
-          NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
+          env.NIX_CFLAGS_COMPILE = "-UCLANG_RESOURCE_DIR";
           preConfigure = ''
             cd server
           '';
@@ -193,9 +301,10 @@ let
             rm -rf $out/share/emacs/site-lisp/elpa/*/server
           '';
           dontUseCmakeBuildDir = true;
-          doCheck = true;
+          doCheck = pkgs.stdenv.isLinux;
           packageRequires = [ self.emacs ];
-          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm pkgs.llvmPackages.libclang ];
+          buildInputs = [ pkgs.llvmPackages.libclang self.emacs ];
+          nativeBuildInputs = [ pkgs.cmake pkgs.llvmPackages.llvm ];
         });
 
         # tries to write a log file to $HOME
@@ -204,6 +313,57 @@ let
         });
 
         ivy-rtags = fix-rtags super.ivy-rtags;
+
+        jinx = super.jinx.overrideAttrs (old: let
+          libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
+        in {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.pkg-config
+          ];
+
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.enchant2 ];
+
+          postBuild = ''
+            pushd working/jinx
+            NIX_CFLAGS_COMPILE="$($PKG_CONFIG --cflags enchant-2) $NIX_CFLAGS_COMPILE"
+            $CC -shared -o jinx-mod${libExt} jinx-mod.c -lenchant-2
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$(echo $out/share/emacs/site-lisp/elpa/jinx-*)
+            install -m444 --target-directory=$outd jinx-mod${libExt}
+            rm $outd/jinx-mod.c $outd/emacs-module.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
+
+        sqlite3 = super.sqlite3.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.sqlite ];
+
+          postBuild = ''
+            pushd working/sqlite3
+            make
+            popd
+          '';
+
+          postInstall = (old.postInstall or "") + "\n" + ''
+            pushd source
+            outd=$out/share/emacs/site-lisp/elpa/sqlite3-*
+            install -m444 -t $outd sqlite3-api.so
+            rm $outd/*.c $outd/*.h
+            popd
+          '';
+
+          meta = old.meta // {
+            maintainers = [ lib.maintainers.DamienCassou ];
+          };
+        });
 
         libgit = super.libgit.overrideAttrs(attrs: {
           nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [ pkgs.cmake ];
@@ -217,7 +377,7 @@ let
             make
             popd
           '';
-          postInstall = ''
+          postInstall = (attrs.postInstall or "") + "\n" + ''
             outd=$(echo $out/share/emacs/site-lisp/elpa/libgit-**)
             mkdir $outd/build
             install -m444 -t $outd/build ./source/src/libegit2.so
@@ -301,6 +461,8 @@ let
 
         orgit-forge = buildWithGit super.orgit-forge;
 
+        ox-rss = buildWithGit super.ox-rss;
+
         # upstream issue: missing file header
         mhc = super.mhc.override {
           inherit (self.melpaPackages) calfw;
@@ -312,9 +474,28 @@ let
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
+        pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace pikchr-mode.el \
+              --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+          '';
+        });
+
         rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
         rtags-xref = dontConfigure super.rtags;
+
+        rime = super.rime.overrideAttrs (old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
+          preBuild = (old.preBuild or "") + ''
+            make lib
+            mkdir -p /build/rime-lib
+            cp *.so /build/rime-lib
+          '';
+          postInstall = (old.postInstall or "") + ''
+            install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* /build/rime-lib/*.so
+          '';
+        });
 
         shm = super.shm.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ pkgs.haskellPackages.structured-haskell-mode ];
@@ -325,20 +506,13 @@ let
           buildInputs = old.buildInputs ++ [ pkgs.tdlib ];
           nativeBuildInputs = [ pkgs.pkg-config ];
 
-          patches = [
-            (pkgs.fetchpatch {
-              name = "telega-server-bin-store-prefer.patch";
-              url = "https://github.com/zevlg/telega.el/commit/72550f984ca869309d197203ef7de99182d71729.patch";
-              sha256 = "18xvz53bygksak6h5f8cz79y83p2va15i8qz7n4s3g9gsklmkj2p";
-            })
-          ];
-
           postPatch = ''
             substituteInPlace telega-customize.el \
               --replace 'defcustom telega-server-command "telega-server"' \
                         "defcustom telega-server-command \"$out/bin/telega-server\""
 
-            substituteInPlace telega-sticker.el --replace '"dwebp"' '"${pkgs.libwebp}/bin/dwebp"'
+            substituteInPlace telega-sticker.el --replace '"dwebp' '"${pkgs.libwebp}/bin/dwebp'
+            substituteInPlace telega-sticker.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
 
             substituteInPlace telega-vvnote.el --replace '"ffmpeg' '"${pkgs.ffmpeg}/bin/ffmpeg'
           '';
@@ -349,9 +523,16 @@ let
             cd -
           '';
 
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             mkdir -p $out/bin
             install -m755 -Dt $out/bin ./source/server/telega-server
+          '';
+        });
+
+        tokei = super.tokei.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace tokei.el \
+              --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
           '';
         });
 
@@ -359,6 +540,13 @@ let
           # searches for Git at build time
           nativeBuildInputs =
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
+        });
+
+        typst-mode = super.typst-mode.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace typst-mode.el \
+              --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+          '';
         });
 
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
@@ -379,7 +567,7 @@ let
             pkgs.libtool
             (pkgs.zeromq.override { enableDrafts = true; })
           ];
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             mv $EZMQ_LIBDIR/emacs-zmq.* $out/share/emacs/site-lisp/elpa/zmq-*
             rm -r $out/share/emacs/site-lisp/elpa/zmq-*/src
             rm $out/share/emacs/site-lisp/elpa/zmq-*/Makefile
@@ -400,31 +588,7 @@ let
         rect-plus = super."rect+";
 
         # upstream issue: missing file header
-        bufshow = markBroken super.bufshow;
-
-        # upstream issue: missing file header
-        connection = markBroken super.connection;
-
-        # upstream issue: missing file header
-        dictionary = markBroken super.dictionary;
-
-        # upstream issue: missing file header
-        elmine = markBroken super.elmine;
-
-        # upstream issue: missing file header
-        ido-complete-space-or-hyphen = markBroken super.ido-complete-space-or-hyphen;
-
-        # upstream issue: missing file header
-        initsplit = markBroken super.initsplit;
-
-        # upstream issue: missing file header
         instapaper = markBroken super.instapaper;
-
-        # upstream issue: missing file header
-        jsfmt = markBroken super.jsfmt;
-
-        # upstream issue: missing file header
-        maxframe = markBroken super.maxframe;
 
         # upstream issue: doesn't build
         magit-stgit = markBroken super.magit-stgit;
@@ -442,22 +606,7 @@ let
         qiita = markBroken super.qiita;
 
         # upstream issue: missing file header
-        speech-tagger = markBroken super.speech-tagger;
-
-        # upstream issue: missing file header
         sql-presto = markBroken super.sql-presto;
-
-        # upstream issue: missing file header
-        textmate = markBroken super.textmate;
-
-        # upstream issue: missing file header
-        link = markBroken super.link;
-
-        # upstream issue: missing file header
-        voca-builder = markBroken super.voca-builder;
-
-        # upstream issue: missing file header
-        window-numbering = markBroken super.window-numbering;
 
         editorconfig = super.editorconfig.overrideAttrs (attrs: {
           propagatedUserEnvPkgs = [ pkgs.editorconfig-core-c ];
@@ -466,6 +615,16 @@ let
         # missing dependencies
         evil-search-highlight-persist = super.evil-search-highlight-persist.overrideAttrs (attrs: {
           packageRequires = with self; [ evil highlight ];
+        });
+
+        hamlet-mode = super.hamlet-mode.overrideAttrs (attrs: {
+          patches = [
+            # Fix build; maintainer email fails to parse
+            (pkgs.fetchpatch {
+              url = "https://github.com/lightquake/hamlet-mode/commit/253495d1330d6ec88d97fac136c78f57c650aae0.patch";
+              sha256 = "dSxS5yuXzCW96CUyvJWwjkhf1FMGBfiKKoBxeDVdz9Y=";
+            })
+          ];
         });
 
         helm-rtags = fix-rtags super.helm-rtags;
@@ -495,7 +654,7 @@ let
           ];
           # we need the proper out directory to exist, so we do this in the
           # postInstall instead of postBuild
-          postInstall = ''
+          postInstall = (old.postInstall or "") + "\n" + ''
             pushd source/build >/dev/null
             make
             install -m444 -t $out/share/emacs/site-lisp/elpa/vterm-** ../*.so
@@ -515,26 +674,23 @@ let
               '';
           });
         });
+
+        wordnut = super.wordnut.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace wordnut.el \
+              --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+          '';
+        });
+
+        mozc = super.mozc.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace src/unix/emacs/mozc.el \
+              --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+          '';
+        });
       };
 
-      # Deprecated legacy aliases for backwards compat
-      aliases = lib.listToAttrs (lib.attrValues (lib.mapAttrs (n: v: { name = v; value = builtins.trace "Melpa attribute '${v}' is a legacy alias that will be removed in 21.05, use '${n}' instead" melpaPackages.${n}; }) (lib.filterAttrs (n: v: lib.hasAttr n melpaPackages) {
-        "auto-complete-clang-async" = "emacsClangCompleteAsync";
-        "vterm" = "emacs-libvterm";
-        "0xc" = "_0xc";
-        "2048-game" = "_2048-game";
-        "4clojure" = "_4clojure";
-        "@" = "at";
-        "term+" = "term-plus";
-        "term+key-intercept" = "term-plus-key-intercept";
-        "term+mux" = "term-plus-mux";
-        "xml+" = "xml-plus";
-      })));
-
-      melpaPackages = lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super;
-
-    in
-    melpaPackages // aliases);
+    in lib.mapAttrs (n: v: if lib.hasAttr n overrides then overrides.${n} else v) super);
 
 in
 generateMelpa { }

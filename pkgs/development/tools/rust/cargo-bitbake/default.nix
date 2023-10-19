@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bitbake";
-  version = "0.3.15";
+  version = "0.3.16";
 
   src = fetchFromGitHub {
     owner = "meta-rust";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ffjkwaqvmyz374azrv6gna19z2fcg82is2k2n2gm50isbxw2aa5";
+    sha256 = "sha256-+ovC4nZwHzf9hjfv2LcnTztM2m++tpC3mUSS/I0l6Ck=";
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 
-  cargoSha256 = "0mm6059wjh5p8923dwz55dpwi55gq2bcmpx7kn40pq5ppkiqjiw9";
+  cargoSha256 = "sha256-LYdQ0FLfCopY8kPTCmiW0Qyx6sHA4nlb+hK9hXezGLg=";
 
   meta = with lib; {
     description = "Cargo extension that can generate BitBake recipes utilizing the classes from meta-rust";

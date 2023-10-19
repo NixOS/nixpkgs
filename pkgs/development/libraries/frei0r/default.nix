@@ -1,16 +1,34 @@
-{ lib, stdenv, fetchurl, autoconf, cairo, opencv, pkg-config }:
+{ lib
+, config
+, stdenv
+, fetchurl
+, cairo
+, cmake
+, opencv
+, pcre
+, pkg-config
+, cudaSupport ? config.cudaSupport
+, cudaPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "frei0r-plugins";
-  version = "1.6.1";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "https://files.dyne.org/frei0r/releases/${pname}-${version}.tar.gz";
-    sha256 = "0pji26fpd0dqrx1akyhqi6729s394irl73dacnyxk58ijqq4dhp0";
+    hash = "sha256-RaKGVcrwVyJ7RCuADKOJnpNJBRXIHiEtIZ/fSnYT9cQ=";
   };
 
-  nativeBuildInputs = [ autoconf pkg-config ];
-  buildInputs = [ cairo opencv ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [
+    cairo
+    opencv
+    pcre
+  ] ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvcc
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/lib/frei0r-1/*.so* ; do
@@ -21,9 +39,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://frei0r.dyne.org";
     description = "Minimalist, cross-platform, shared video plugins";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux ++ platforms.darwin;
-
   };
 }

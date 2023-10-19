@@ -4,8 +4,8 @@
 
 # python deps
 , python, buildPythonPackage
-, alembic, beautifulsoup4, chardet, lxml, Mako, pyenchant
-, pyqt5_with_qtwebkit, pyxdg, sip_4, sqlalchemy, sqlalchemy_migrate
+, alembic, beautifulsoup4, chardet, lxml, mako, pyenchant
+, pyqt5_with_qtwebkit, pyxdg, sip_4, sqlalchemy, sqlalchemy-migrate
 }:
 
 buildPythonPackage rec {
@@ -30,20 +30,20 @@ buildPythonPackage rec {
   #
   # See also https://discourse.nixos.org/t/qt-plugin-path-unset-in-test-phase/
 
-  #checkInputs = [ mock nose ];
+  #nativeCheckInputs = [ mock nose ];
   nativeBuildInputs = [ qt5.qttools ];
   propagatedBuildInputs = [
     alembic
     beautifulsoup4
     chardet
     lxml
-    Mako
+    mako
     pyenchant
     pyqt5_with_qtwebkit
     pyxdg
     sip_4
     sqlalchemy
-    sqlalchemy_migrate
+    sqlalchemy-migrate
   ];
 
   prePatch = ''

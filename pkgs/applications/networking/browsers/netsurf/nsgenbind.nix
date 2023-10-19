@@ -1,30 +1,36 @@
-{ lib, stdenv, fetchurl
-, flex, bison
+{ lib
+, stdenv
+, fetchurl
+, bison
+, flex
 , buildsystem
 }:
 
-stdenv.mkDerivation rec {
-  pname = "netsurf-${libname}";
-  libname = "nsgenbind";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "netsurf-nsgenbind";
   version = "0.8";
 
   src = fetchurl {
-    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
-    sha256 = "sha256-TY1TrQAK2nEncjZeanPrj8XOl1hK+chlrFsmohh/HLM=";
+    url = "http://download.netsurf-browser.org/libs/releases/nsgenbind-${finalAttrs.version}-src.tar.gz";
+    hash = "sha256-TY1TrQAK2nEncjZeanPrj8XOl1hK+chlrFsmohh/HLM=";
   };
 
-  buildInputs = [ flex bison buildsystem ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
+
+  buildInputs = [ buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.netsurf-browser.org/";
     description = "Generator for JavaScript bindings for netsurf browser";
-    license = licenses.mit;
-    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    inherit (buildsystem.meta) maintainers platforms;
   };
-}
+})

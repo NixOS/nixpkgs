@@ -1,56 +1,21 @@
-{ alsaLib, at-spi2-atk, at-spi2-core, atk, autoPatchelfHook, cairo, cups
-, dbus, electron_9, expat, fetchurl, gdk-pixbuf, glib, gtk3, lib
-, libappindicator-gtk3, libdbusmenu-gtk3, libuuid, makeWrapper
-, nspr, nss, pango, squashfsTools, stdenv, systemd, xorg
+{ autoPatchelfHook
+, electron
+, fetchurl
+, lib
+, makeWrapper
+, squashfsTools
+, stdenv
 }:
-
-let
-  # Currently only works with electron 9
-  electron = electron_9;
-in
 
 stdenv.mkDerivation rec {
   pname = "authy";
-  version = "1.8.3";
-  rev = "5";
-
-  buildInputs = [
-    alsaLib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    libappindicator-gtk3
-    libdbusmenu-gtk3
-    libuuid
-    nspr
-    nss
-    pango
-    stdenv.cc.cc
-    systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-  ];
+  # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/authy?channel=stable' | jq '.download_url,.version'
+  version = "2.4.1";
+  rev = "21";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "1yfvkmy34mc1dan9am11yka88jv7a4dslsszy4kcc8vap4cjmgpn";
+    hash = "sha256-a5z6Lwdgody88f7has/f2AMg9m9fGWsJSexZM6KUGOY=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];
@@ -72,25 +37,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/
+    mkdir -p $out/bin $out/share/applications $out/share/pixmaps/apps
 
-    cp -r ./* $out/
-    rm -R ./*
-
-    # The snap package has the `ffmpeg.so` file which is copied over with other .so files
-    mv $out/*.so $out/lib/
+    # Copy only what is needed
+    cp -r resources* $out/
+    cp -r locales* $out/
+    cp meta/gui/authy.desktop $out/share/applications/
+    cp meta/gui/icon.png $out/share/pixmaps/authy.png
 
     # Replace icon name in Desktop file
-    sed -i 's|''${SNAP}/meta/gui/icon.png|authy|g' "$out/meta/gui/authy.desktop"
-
-    # Move the desktop file, icon, binary to their appropriate locations
-    mkdir -p $out/bin $out/share/applications $out/share/pixmaps/apps
-    cp $out/meta/gui/authy.desktop $out/share/applications/
-    cp $out/meta/gui/icon.png $out/share/pixmaps/authy.png
-    cp $out/${pname} $out/bin/${pname}
-
-    # Cleanup
-    rm -r $out/{data-dir,gnome-platform,meta,scripts,usr,*.sh,*.so}
+    sed -i 's|''${SNAP}/meta/gui/icon.png|authy|g' "$out/share/applications/authy.desktop"
 
     runHook postInstall
   '';
@@ -103,8 +59,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.authy.com";
     description = "Twilio Authy two factor authentication desktop application";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ iammrinal0 ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "authy";
   };
 }

@@ -3,6 +3,6 @@
 let
   mecab-base = import ./base.nix { inherit fetchurl; };
 in
-stdenv.mkDerivation (mecab-base // {
-    name = "mecab-nodic-${mecab-base.version}";
-})
+stdenv.mkDerivation (finalAttrs: ((mecab-base finalAttrs) // {
+  pname = "mecab-nodic";
+}))

@@ -299,9 +299,9 @@ with self;
   };
 
   core = janePackage {
-    version = "0.11.2";
+    version = "0.11.3";
     pname = "core";
-    hash = "0vpsvd75lxb09il2rnzyib9mlr51v1hzqdc9fdxgx353pb5agh8a";
+    hash = "0pzl8n09z4f3i7z2wq4cjxfqrr8mj6xcdp7rbg0nxap2zdhjgvrq";
     propagatedBuildInputs = [ core_kernel spawn ];
     meta.description = "Jane Street's standard library overlay";
   };
@@ -411,18 +411,6 @@ with self;
     hash = "1jb01ygfnhabsy72xlcg11vp7rr37sg555sm0k3yxl4r5az3y2ay";
     propagatedBuildInputs = [ core_extended async ];
     meta.description = "Shell helpers for Async";
-  };
-
-  async_ssl = janePackage {
-    pname = "async_ssl";
-    hash = "1p83fzfla4rb820irdrz3f2hp8kq5zrhw47rqmfv6qydlca1bq64";
-    propagatedBuildInputs = [ async ctypes openssl ];
-    meta = {
-      description = "Async wrappers for SSL";
-      # ctypes no longer works with dune 1
-      # dune 2 no longer supports jbuild
-      broken = true;
-    };
   };
 
   sexp_pretty = janePackage {

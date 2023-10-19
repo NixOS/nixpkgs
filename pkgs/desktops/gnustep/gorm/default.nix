@@ -1,13 +1,11 @@
-{ fetchurl, base, back, gsmakeDerivation, gui }:
-let
-  version = "1.2.26";
-in
-gsmakeDerivation {
-  name = "gorm-${version}";
+{ fetchzip, base, back, gsmakeDerivation, gui }:
+gsmakeDerivation rec {
+  pname = "gorm";
+  version = "1.3.1";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/dev-apps/gorm-${version}.tar.gz";
-    sha256 = "063f8rlz8py931hfrh95jxvr68bzs33bvckfigzbagp73n892jnw";
+    sha256 = "sha256-W+NgbvLjt1PpDiauhzWFaU1/CUhmDACQz+GoyRUyWB8=";
   };
   buildInputs = [ base back gui ];
 

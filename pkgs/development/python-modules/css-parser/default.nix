@@ -1,17 +1,25 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "css-parser";
-  version = "1.0.6";
+  version = "1.0.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ed448a8a5622edb1d30d616bbc4bd3d30f11be922343d7a92d7e418e324af2e";
+    hash = "sha256-GW24Is7yJ0WvaljRgM+CBpSc7Vi0j18+6Y8d4WJ0lbs=";
   };
 
   # Test suite not included in tarball yet
   # See https://github.com/ebook-utils/css-parser/pull/2
   doCheck = false;
+
+  pythonImportsCheck = [
+    "css_parser"
+  ];
 
   meta = with lib; {
     description = "A CSS Cascading Style Sheets library for Python";

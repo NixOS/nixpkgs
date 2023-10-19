@@ -1,30 +1,42 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, setuptools
+, pytestCheckHook
 , pytz
-, unittest2
-, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "ciso8601";
-  version = "2.1.3";
+  version = "2.3.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "closeio";
     repo = "ciso8601";
-    rev = "v${version}";
-    sha256 = "0g1aiyc1ayh0rnibyy416m5mmck38ksgdm3jsy0z3rxgmgb24951";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qTpt91Wf3L6Jl7FU8sn9PvGMRd/cjhQ1mQvUaQeLFQU=";
   };
 
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
     pytz
-  ] ++ lib.optional (isPy27) unittest2;
+  ];
+
+  pytestFlagsArray = [
+    "tests/tests.py"
+  ];
+
+  pythonImportsCheck = [ "ciso8601" ];
 
   meta = with lib; {
     description = "Fast ISO8601 date time parser for Python written in C";
     homepage = "https://github.com/closeio/ciso8601";
     license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

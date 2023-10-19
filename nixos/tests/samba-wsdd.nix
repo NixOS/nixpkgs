@@ -8,25 +8,23 @@ import ./make-test-python.nix ({ pkgs, ... }:
     client_wsdd = { pkgs, ... }: {
       services.samba-wsdd = {
         enable = true;
+        openFirewall = true;
         interface = "eth1";
         workgroup = "WORKGROUP";
         hostname = "CLIENT-WSDD";
         discovery = true;
         extraOptions = [ "--no-host" ];
       };
-      networking.firewall.allowedTCPPorts = [ 5357 ];
-      networking.firewall.allowedUDPPorts = [ 3702 ];
     };
 
     server_wsdd = { ... }: {
       services.samba-wsdd = {
         enable = true;
+        openFirewall = true;
         interface = "eth1";
         workgroup = "WORKGROUP";
         hostname = "SERVER-WSDD";
       };
-      networking.firewall.allowedTCPPorts = [ 5357 ];
-      networking.firewall.allowedUDPPorts = [ 3702 ];
     };
   };
 
@@ -38,7 +36,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     server_wsdd.wait_for_unit("samba-wsdd")
 
     client_wsdd.wait_until_succeeds(
-        "echo list | ${pkgs.libressl.nc}/bin/nc -U /run/wsdd/wsdd.sock | grep -i SERVER-WSDD"
+        "echo list | ${pkgs.libressl.nc}/bin/nc -N -U /run/wsdd/wsdd.sock | grep -i SERVER-WSDD"
     )
   '';
 })

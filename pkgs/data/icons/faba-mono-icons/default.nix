@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme, faba-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub, autoreconfHook, gtk3, moka-icon-theme, faba-icon-theme, gnome-icon-theme, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "faba-mono-icons";
   version = "2016-04-30";
 

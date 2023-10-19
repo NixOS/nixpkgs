@@ -1,27 +1,31 @@
-{ fetchFromGitHub, lib
-, wrapGAppsHook, intltool
-, python3Packages, gtk3, poppler_gi
+{ fetchFromGitHub
+, lib
+, wrapGAppsHook
+, python3Packages
+, gtk3
+, poppler_gi
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "pdfarranger";
-  version = "1.7.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "1c2mafnz8pv32wzkc2wx4q8y2x7xffpn6ag12dj7ga5n772fb6s3";
+    rev = "refs/tags/${version}";
+    hash = "sha256-tNLy3HeHh8nBtmfJS5XhKX+KhIBnuUV2C8LwQl3mQLU=";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool
+    wrapGAppsHook
   ] ++ (with python3Packages; [
-    setuptools distutils_extra
+    setuptools
   ]);
 
   buildInputs = [
-    gtk3 poppler_gi
+    gtk3
+    poppler_gi
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -29,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     pikepdf
     img2pdf
     setuptools
-    dateutil
+    python-dateutil
   ];
 
   # incompatible with wrapGAppsHook
@@ -47,5 +51,6 @@ python3Packages.buildPythonApplication rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ symphorien ];
     license = licenses.gpl3Plus;
+    changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
   };
 }

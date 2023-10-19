@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mill";
-  version = "0.9.6";
+  version = "0.11.5";
 
   src = fetchurl {
-    url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}";
-    sha256 = "sha256-cAhcTmSPkV5z5ryuCNrpxy9/1iWvvminiVYul9c/DwM=";
+    url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
+    hash = "sha256-sCJMCy4TLRQV3zI28Aydv5a8OV8OHOjLbwhfyIlxOeY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
+
+  # this is mostly downloading a pre-built artifact
+  preferLocal = true;
 
   installPhase = ''
     runHook preInstall
@@ -25,8 +28,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+  # The default release is a script which will do an impure download
+  # just ensure that the application can run without network
+  installCheckPhase = ''
+    $out/bin/mill --help > /dev/null
+  '';
+
   meta = with lib; {
-    homepage = "https://www.lihaoyi.com/mill";
+    homepage = "https://com-lihaoyi.github.io/mill/";
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
     longDescription = ''
@@ -36,7 +46,7 @@ stdenv.mkDerivation rec {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
-    maintainers = with maintainers; [ scalavision ];
+    maintainers = with maintainers; [ scalavision zenithal ];
     platforms = lib.platforms.all;
   };
 }

@@ -4,6 +4,7 @@
 , version
 , src
 , buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
 , beamDeps ? [ ]
 , propagatedBuildInputs ? [ ]
 , postPatch ? ""
@@ -11,10 +12,12 @@
 , meta ? { }
 , enableDebugInfo ? false
 , mixEnv ? "prod"
+# A config directory that is considered for all the dependencies of an app, typically in $src/config/
+# This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
+, appConfigPath ? null
 , ...
 }@attrs:
 
-with lib;
 let
   shell = drv: stdenv.mkDerivation {
     name = "interactive-shell-${drv.name}";
@@ -23,28 +26,40 @@ let
 
   pkg = self: stdenv.mkDerivation (attrs // {
     name = "${name}-${version}";
-    inherit version;
-    inherit src;
+    inherit version src;
 
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
-
-    # stripping does not have any effect on beam files
-    dontStrip = true;
+    LC_ALL = "C.UTF-8";
 
     # add to ERL_LIBS so other modules can find at runtime.
     # http://erlang.org/doc/man/code.html#code-path
-    # Mix also searches the code path when compiling with the --no-deps-check
-    # flag, which is why there is no complicated booterstrapper like the one
-    # used by buildRebar3.
+    # Mix also searches the code path when compiling with the --no-deps-check flag
     setupHook = attrs.setupHook or
       writeText "setupHook.sh" ''
       addToSearchPath ERL_LIBS "$1/lib/erlang/lib"
     '';
 
-    buildInputs = buildInputs ++ [ elixir hex ];
+    buildInputs = buildInputs ++ [ ];
+    nativeBuildInputs = nativeBuildInputs ++ [ elixir hex ];
     propagatedBuildInputs = propagatedBuildInputs ++ beamDeps;
+
+    configurePhase = attrs.configurePhase or ''
+      runHook preConfigure
+
+      ${./mix-configure-hook.sh}
+      ${lib.optionalString (!isNull appConfigPath)
+      # Due to https://hexdocs.pm/elixir/main/Config.html the config directory
+      # of a library seems to be not considered, as config is always
+      # application specific. So we can safely delete it.
+      ''
+        rm -rf config
+        cp -r ${appConfigPath} config
+      ''}
+
+      runHook postConfigure
+    '';
 
     buildPhase = attrs.buildPhase or ''
       runHook preBuild
@@ -72,8 +87,18 @@ let
         fi
       done
 
+      # Copy the source so it can be used by dependent packages. For example,
+      # phoenix applications need the source of phoenix and phoenix_html to
+      # build javascript and css assets.
+      mkdir -p $out/src
+      cp -r $src/* "$out/src"
+
       runHook postInstall
     '';
+
+    # stripping does not have any effect on beam files
+    # it is however needed for dependencies with NIFs like bcrypt for example
+    dontStrip = false;
 
     passthru = {
       packageName = name;
@@ -82,4 +107,5 @@ let
     };
   });
 in
-fix pkg
+lib.fix pkg
+

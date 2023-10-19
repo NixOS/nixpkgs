@@ -14,45 +14,58 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "14.0.0";
-  disabled = pythonOlder "3.6";
+  version = "16.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zfcl3dq9ladqg7fnpx6kgxf1ckjzlc8v3j6wa8w6iwglm40ax4r";
+    hash = "sha256-7JkV4idZ/euYGGPTg6I+pw2nNOuttmGJMlz3NvJO9Rw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=oauthenticator" ""
+  '';
 
   propagatedBuildInputs = [
     jupyterhub
   ];
 
-  checkInputs = [
-    google-api-python-client
-    google-auth-oauthlib
-    mwoauth
-    pyjwt
+  passthru.optional-dependencies = {
+    azuread = [
+      pyjwt
+    ];
+    googlegroups = [
+      google-api-python-client
+      google-auth-oauthlib
+    ];
+    mediawiki = [
+      mwoauth
+    ];
+  };
+
+  nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
     requests-mock
-  ];
-
-  postPatch = ''
-  # The constraint was removed. No longer needed for > 14.0.0
-  # https://github.com/jupyterhub/oauthenticator/pull/431
-    substituteInPlace test-requirements.txt --replace "pyjwt>=1.7,<2.0" "pyjwt"
-  '';
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   disabledTests = [
-    # Test are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
+    # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
     "test_azuread"
     "test_mediawiki"
   ];
 
-  pythonImportsCheck = [ "oauthenticator" ];
+  pythonImportsCheck = [
+    "oauthenticator"
+  ];
 
   meta = with lib; {
-    description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";
+    description = "Authenticate JupyterHub users with common OAuth providers";
     homepage =  "https://github.com/jupyterhub/oauthenticator";
+    changelog = "https://github.com/jupyterhub/oauthenticator/blob/${version}/docs/source/reference/changelog.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie ];
   };

@@ -2,30 +2,44 @@
 , buildPythonPackage
 , fetchPypi
 , google-api-core
-, libcst
 , mock
 , proto-plus
-, pytestCheckHook
+, protobuf
 , pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.2.1";
+  version = "2.21.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-AviYDI68Z11M/rqHgQTQugYNemPTA5nW4aVQTiwMYxI=";
+    hash = "sha256-Zhw5u7bysha6VqzjsIcmDpd43Rmt6e+jcAre6SWACa0=";
   };
 
-  propagatedBuildInputs = [ libcst google-api-core proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    proto-plus
+    protobuf
+    setuptools
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ mock pytestCheckHook pytest-asyncio ];
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  pytestFlagsArray = [
-    # requrire credentials
-    "--ignore=tests/system/gapic/v1/test_system_speech_v1.py"
-    "--ignore=tests/system/gapic/v1p1beta1/test_system_speech_v1p1beta1.py"
+  disabledTestPaths = [
+    # Requrire credentials
+    "tests/system/gapic/v1/test_system_speech_v1.py"
+    "tests/system/gapic/v1p1beta1/test_system_speech_v1p1beta1.py"
   ];
 
   pythonImportsCheck = [
@@ -37,7 +51,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Speech API client library";
     homepage = "https://github.com/googleapis/python-speech";
+    changelog = "https://github.com/googleapis/python-speech/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

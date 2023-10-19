@@ -5,7 +5,8 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
 ## User's guide {#sec-language-texlive-user-guide}
 
 - For basic usage just pull `texlive.combined.scheme-basic` for an environment with basic LaTeX support.
-- It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this:
+
+- It typically won't work to use separately installed packages together. Instead, you can build a custom set of packages like this. Most CTAN packages should be available:
 
   ```nix
   texlive.combine {
@@ -14,13 +15,14 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
   ```
 
 - There are all the schemes, collections and a few thousand packages, as defined upstream (perhaps with tiny differences).
+
 - By default you only get executables and files needed during runtime, and a little documentation for the core packages. To change that, you need to add `pkgFilter` function to `combine`.
 
   ```nix
   texlive.combine {
     # inherit (texlive) whatever-you-want;
     pkgFilter = pkg:
-      pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "cm-super";
+      pkg.tlType == "run" || pkg.tlType == "bin" || pkg.hasManpages || pkg.pname == "cm-super";
     # elem tlType [ "run" "bin" "doc" "source" ]
     # there are also other attributes: version, name
   }
@@ -38,26 +40,33 @@ Since release 15.09 there is a new TeX Live packaging that lives entirely under 
 
 ## Custom packages {#sec-language-texlive-custom-packages}
 
+You may find that you need to use an external TeX package. A derivation for such package has to provide the contents of the "texmf" directory in its output and provide the appropriate `tlType` attribute (one of `"run"`, `"bin"`, `"doc"`, `"source"`). Dependencies on other TeX packages can be listed in the attribute `tlDeps`.
 
-You may find that you need to use an external TeX package. A derivation for such package has to provide contents of the "texmf" directory in its output and provide the `tlType` attribute. Here is a (very verbose) example:
+Such derivation must then be listed in the attribute `pkgs` of an attribute set passed to `texlive.combine`, for instance by passing `extraPkgs = { pkgs = [ custom_package ]; };`. Within Nixpkgs, `pkgs` should be part of the derivation itself, allowing users to call `texlive.combine { inherit (texlive) scheme-small; inherit some_tex_package; }`.
+
+Here is a (very verbose) example where the attribute `pkgs` is attached to the derivation itself, which requires creating a fixed point. See also the packages `auctex`, `eukleides`, `mftrace` for more examples.
 
 ```nix
 with import <nixpkgs> {};
 
 let
-  foiltex_run = stdenvNoCC.mkDerivation {
+  foiltex = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "latex-foiltex";
     version = "2.1.4b";
-    passthru.tlType = "run";
+    passthru = {
+      pkgs = [ finalAttrs.finalPackage ];
+      tlDeps = with texlive; [ latex ];
+      tlType = "run";
+    };
 
     srcs = [
       (fetchurl {
         url = "http://mirrors.ctan.org/macros/latex/contrib/foiltex/foiltex.dtx";
-        sha256 = "07frz0krpz7kkcwlayrwrj2a2pixmv0icbngyw92srp9fp23cqpz";
+        hash = "sha256-/2I2xHXpZi0S988uFsGuPV6hhMw8e0U5m/P8myf42R0=";
       })
       (fetchurl {
         url = "http://mirrors.ctan.org/macros/latex/contrib/foiltex/foiltex.ins";
-        sha256 = "09wkyidxk3n3zvqxfs61wlypmbhi1pxmjdi1kns9n2ky8ykbff99";
+        hash = "sha256-KTm3pkd+Cpu0nSE2WfsNEa56PeXBaNfx/sOO2Vv0kyc=";
       })
     ];
 
@@ -100,8 +109,7 @@ let
       maintainers = with maintainers; [ veprbl ];
       platforms = platforms.all;
     };
-  };
-  foiltex = { pkgs = [ foiltex_run ]; };
+  });
 
   latex_with_foiltex = texlive.combine {
     inherit (texlive) scheme-small;

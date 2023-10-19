@@ -11,14 +11,14 @@ lvm2        # lvs
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.78";
+  version = "1.81";
   pname = "os-prober";
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = pname;
     rev = version;
-    sha256 = "sha256-mfv1b40n/opXdyj6IXWVf/32sWlS+/DbXIRwE1zX4KM=";
+    sha256 = "sha256-3FXfGadIcmKp4qn6ZDcOSQHYsUNP2ObL1cJesNle+8A=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

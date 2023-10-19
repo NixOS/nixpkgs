@@ -1,56 +1,48 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, pytest, pysha3, pycrypto
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonAtLeast
+, pythonOlder
+, pytest
+, safe-pysha3
 , pycryptodome
-, eth-utils
 }:
 
 buildPythonPackage rec {
   pname = "eth-hash";
-  version = "0.3.1";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "aee46d9c43b98ac6d4ddf957cf75d4d0a5174ee814cc6b53dd6134dcedb459bf";
-  };
-
-  checkInputs = [ pytest ];
-
-  propagatedBuildInputs = [
-    pysha3
-    pycrypto
-    pycryptodome
-  ];
-
-  pipInstallFlags = [
-    # Circular dependency on eth-utils
-    "--no-dependencies"
-  ];
-
-  # setuptools-markdown uses pypandoc which is broken at the moment
-  preConfigure = ''
-    substituteInPlace setup.py --replace \'setuptools-markdown\' ""
-  '';
-
-  # Run tests separately because we don't want to run tests on tests/backends/
-  # but only on its selected subdirectories. Also, the directories under
-  # tests/backends/ must be run separately because they have identically named
-  # test files so pytest would raise errors because of that.
-  #
-  # Also, tests in tests/core/test_import.py are broken so just ignore them:
-  # https://github.com/ethereum/eth-hash/issues/25
-  # There is a pull request to fix the tests:
-  # https://github.com/ethereum/eth-hash/pull/26
-  checkPhase = ''
-    pytest tests/backends/pycryptodome/
-    pytest tests/backends/pysha3/
-    # pytest tests/core/
-  '';
-
+  version = "0.5.2";
   disabled = pythonOlder "3.5";
 
-  meta = {
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "eth-hash";
+    rev = "v${version}";
+    hash = "sha256-6UN+kvLjjAtkmLgUaovjZC/6n3FZtXCwyXZH7ijQObU=";
+  };
+
+  nativeCheckInputs = [
+    pytest
+  ] ++ passthru.optional-dependencies.pycryptodome
+  # eth-hash can use either safe-pysha3 or pycryptodome;
+  # safe-pysha3 requires Python 3.9+ while pycryptodome does not.
+  # https://github.com/ethereum/eth-hash/issues/46#issuecomment-1314029211
+  ++ lib.optional (pythonAtLeast "3.9") passthru.optional-dependencies.pysha3;
+
+  checkPhase = ''
+    pytest tests/backends/pycryptodome/
+  '' + lib.optionalString (pythonAtLeast "3.9") ''
+    pytest tests/backends/pysha3/
+  '';
+
+  passthru.optional-dependencies = {
+    pycryptodome = [ pycryptodome ];
+    pysha3 = [ safe-pysha3 ];
+  };
+
+  meta = with lib; {
     description = "The Ethereum hashing function keccak256";
     homepage = "https://github.com/ethereum/eth-hash";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

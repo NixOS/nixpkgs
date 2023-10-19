@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, fetchpatch, pkg-config, meson, ninja
+{ lib, stdenv, fetchFromGitLab, fetchpatch, pkg-config, meson, ninja, cmake
 , git, criterion, gtk3, libconfig, gnuplot, opencv, json-glib
 , fftwFloat, cfitsio, gsl, exiv2, librtprocess, wcslib, ffmpeg
 , libraw, libtiff, libpng, libjpeg, libheif, ffms, wrapGAppsHook
@@ -6,25 +6,25 @@
 
 stdenv.mkDerivation rec {
   pname = "siril";
-  version = "0.99.8.1";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "free-astro";
-    repo = pname;
+    repo = "siril";
     rev = version;
-    sha256 = "0h3slgpj6zdc0rwmyr9zb0vgf53283hpwb7h26skdswmggsk90i5";
+    hash = "sha256-lCoFQ7z6cZbyNPEm5s40DNdvTwFonHK3KCd8RniqQWs=";
   };
 
   patches = [
-    # Backport fix for broken build on glib-2.68
     (fetchpatch {
-      url = "https://gitlab.com/free-astro/siril/-/commit/d319fceca5b00f156e1c5e3512d3ac1f41beb16a.diff";
-      sha256 = "00lq9wq8z48ly3hmkgzfqbdjaxr0hzyl2qwbj45bdnxfwqragh5m";
+      name = "siril-1.2-exiv2-0.28.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sci-astronomy/siril/files/siril-1.2-exiv2-0.28.patch?id=002882203ad6a2b08ce035a18b95844a9f4b85d0";
+      hash = "sha256-R1yslW6hzvJHKo0/IqBxkCuqcX6VrdRSz68gpAExxVE=";
     })
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config git criterion wrapGAppsHook
+    meson ninja cmake pkg-config git criterion wrapGAppsHook
   ];
 
   buildInputs = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
 
   # Necessary because project uses default build dir for flatpaks/snaps
   dontUseMesonConfigure = true;
+  dontUseCmakeConfigure = true;
 
   configureScript = ''
     ${meson}/bin/meson --buildtype release nixbld .
@@ -47,7 +48,8 @@ stdenv.mkDerivation rec {
     homepage = "https://www.siril.org/";
     description = "Astrophotographic image processing tool";
     license = licenses.gpl3Plus;
+    changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
     maintainers = with maintainers; [ hjones2199 ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }

@@ -1,56 +1,62 @@
 { lib
-, python3
-, fetchFromGitHub
-, rtmpdump
+, python3Packages
+, fetchPypi
 , ffmpeg
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "2.1.1";
+  version = "6.2.1";
+  format = "pyproject";
 
-  src = fetchFromGitHub {
-    owner = "streamlink";
-    repo = "streamlink";
-    rev = version;
-    sha256 = "14vqh4pck3q766qln7c57n9bz8zrlgfqrpkdn8x0ac9zhlhfn1zm";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-64Jmkva7L0oaik1UcCTQlUricL2us+O5CEc6pVsgnRI=";
   };
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     mock
     requests-mock
     freezegun
+    pytest-asyncio
+    pytest-trio
   ];
 
-  propagatedBuildInputs = (with python3.pkgs; [
-    pycryptodome
-    requests
-    iso-639
-    iso3166
-    websocket_client
+  nativeBuildInputs = with python3Packages; [
+    versioningit
+  ];
+
+  propagatedBuildInputs = (with python3Packages; [
+    certifi
     isodate
+    lxml
+    pycountry
+    pycryptodome
+    pysocks
+    requests
+    trio
+    trio-websocket
+    typing-extensions
+    urllib3
+    websocket-client
   ]) ++ [
-    rtmpdump
     ffmpeg
   ];
 
-  disabledTests = [
-    "test_plugin_not_in_removed_list"
-  ];
-
   meta = with lib; {
-    homepage = "https://github.com/streamlink/streamlink";
+    changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     description = "CLI for extracting streams from various websites to video player of your choosing";
+    homepage = "https://streamlink.github.io/";
     longDescription = ''
-      Streamlink is a CLI utility that pipes flash videos from online
+      Streamlink is a CLI utility that pipes videos from online
       streaming services to a variety of video players such as VLC, or
       alternatively, a browser.
 
       Streamlink is a fork of the livestreamer project.
     '';
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ dezgeg zraexy ];
+    mainProgram = "streamlink";
+    maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

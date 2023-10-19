@@ -11,9 +11,14 @@ let
 
     meta.maintainers = [ lib.maintainers.lheckemann ];
 
-    machine = { ... }: {
+    nodes.machine = { ... }: {
       virtualisation.useBootLoader = true;
-      boot.initrd.secrets."/test" = secretInStore;
+      boot.initrd.secrets = {
+        "/test" = secretInStore;
+
+        # This should *not* need to be copied in postMountCommands
+        "/run/keys/test" = secretInStore;
+      };
       boot.initrd.postMountCommands = ''
         cp /test /mnt-root/secret-from-initramfs
       '';
@@ -26,7 +31,8 @@ let
       start_all()
       machine.wait_for_unit("multi-user.target")
       machine.succeed(
-          "cmp ${secretInStore} /secret-from-initramfs"
+          "cmp ${secretInStore} /secret-from-initramfs",
+          "cmp ${secretInStore} /run/keys/test",
       )
     '';
   };

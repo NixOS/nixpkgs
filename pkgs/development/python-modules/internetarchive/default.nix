@@ -1,53 +1,68 @@
-{ buildPythonPackage
-, fetchPypi
-, pytest
-, six
-, tqdm
-, pyyaml
+{ lib
+, buildPythonPackage
 , docopt
+, fetchFromGitHub
+, pytestCheckHook
 , requests
 , jsonpatch
-, args
 , schema
 , responses
-, backports_csv
-, isPy3k
-, lib
-, glibcLocales
 , setuptools
+, tqdm
+, urllib3
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "2.0.3";
+  version = "3.5.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "2ce0ab89fea37e5b2311bc7d163955e84f73f6beeac3942e17e9d51ad7cc9ffa";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+
+  # no tests data included in PyPI tarball
+  src = fetchFromGitHub {
+    owner = "jjjake";
+    repo = "internetarchive";
+    rev = "v${version}";
+    hash = "sha256-apBzx1qMHEA0wiWh82sS7I+AaiMEoAchhPsrtAgujbQ=";
   };
 
   propagatedBuildInputs = [
-    six
     tqdm
-    pyyaml
     docopt
     requests
     jsonpatch
-    args
     schema
-    setuptools
-  ] ++ lib.optionals (!isPy3k) [ backports_csv ];
+    setuptools # needs pkg_resources at runtime
+    urllib3
+  ];
 
-  checkInputs = [ pytest responses glibcLocales ];
+  nativeCheckInputs = [
+    responses
+    pytestCheckHook
+  ];
 
-  # tests depend on network
-  doCheck = false;
+  disabledTests = [
+    # Tests require network access
+    "test_get_item_with_kwargs"
+    "test_upload"
+    "test_upload_metadata"
+    "test_upload_queue_derive"
+    "test_upload_validate_identifie"
+    "test_upload_validate_identifier"
+  ];
 
-  checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest tests
-  '';
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/cli/test_ia.py"
+    "tests/cli/test_ia_download.py"
+  ];
 
-  pythonImportsCheck = [ "internetarchive" ];
+  pythonImportsCheck = [
+    "internetarchive"
+  ];
 
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";
@@ -55,5 +70,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "ia";
   };
 }

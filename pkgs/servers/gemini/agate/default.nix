@@ -1,26 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
+{ lib, stdenv, nixosTests, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.0.3";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
-    repo = pname;
+    repo = "agate";
     rev = "v${version}";
-    sha256 = "sha256-0sh9OuX52kvhTt681uZesOUttrxH8ZMxn6mTILQDQuU=";
+    hash = "sha256-gU4Q45Sb+LOmcv0j9R8yw996NUpCOnxdwT6lyvNp2pg=";
   };
-
-  cargoSha256 = "sha256-JBmSa2sc/eor0bCcIMhGGLmcJN+wCloP0Ao9DBybQbc=";
+  cargoHash = "sha256-6jF4ayzBN4sSk81u3iX0CxMPAsL6D+wpXRYGjgntMUE=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
-
-  checkFlags = [
-    # Username and Password use the same ports and causes collision
-    # https://github.com/mbrubeck/agate/issues/50
-    "--skip username"
-    "--skip password"
-  ];
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -30,9 +22,11 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
+  passthru.tests = { inherit (nixosTests) agate; };
+
   meta = with lib; {
-    homepage = "https://proxy.vulpes.one/gemini/qwertqwefsday.eu/agate.gmi";
-    changelog = "https://proxy.vulpes.one/gemini/qwertqwefsday.eu/agate.gmi";
+    homepage = "https://github.com/mbrubeck/agate";
+    changelog = "https://github.com/mbrubeck/agate/blob/master/CHANGELOG.md";
     description = "Very simple server for the Gemini hypertext protocol";
     longDescription = ''
       Agate is a server for the Gemini network protocol, built with the Rust

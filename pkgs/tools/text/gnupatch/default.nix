@@ -3,10 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "patch-2.7.6";
+  pname = "patch";
+  version = "2.7.6";
 
   src = fetchurl {
-    url = "mirror://gnu/patch/${name}.tar.xz";
+    url = "mirror://gnu/patch/patch-${version}.tar.xz";
     sha256 = "1zfqy4rdcy279vwn2z1kbv19dcfw25d2aqy9nzvdkq5bjzd0nqdc";
   };
 
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.hostPlatform.libc != "musl"; # not cross;
-  checkInputs = [ed];
+  nativeCheckInputs = [ed];
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";

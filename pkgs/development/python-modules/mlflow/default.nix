@@ -1,72 +1,112 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
 , alembic
+, buildPythonPackage
 , click
 , cloudpickle
-, requests
-, six
-, flask
-, numpy
-, pandas
-, python-dateutil
-, protobuf
-, GitPython
-, pyyaml
-, querystring_parser
-, simplejson
-, docker
 , databricks-cli
+, docker
 , entrypoints
-, sqlparse
-, sqlalchemy
+, fetchpatch
+, fetchPypi
+, flask
+, gitpython
 , gorilla
 , gunicorn
-, pytest
+, importlib-metadata
+, markdown
+, matplotlib
+, numpy
+, packaging
+, pandas
+, prometheus-flask-exporter
+, protobuf
+, python-dateutil
+, pythonOlder
+, pythonRelaxDepsHook
+, pyarrow
+, pytz
+, pyyaml
+, querystring_parser
+, requests
+, scikit-learn
+, scipy
+, shap
+, simplejson
+, sqlalchemy
+, sqlparse
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "1.14.1";
-  disabled = isPy27;
+  version = "2.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e3abff0831564d9a4b5d5a15e5ee76b0f5b4580b362c24a58ee821634c8fb1a3";
+    hash = "sha256-+ZKujqnHNQI0S69IxOxEeqnvv6iWW8CQho5hYyNPTrA=";
   };
 
-  # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
-  # also, tests use conda so can't run on NixOS without buildFHSUserEnv
-  doCheck = false;
+  postPatch = ''
+    substituteInPlace requirements/core-requirements.txt \
+      --replace "gunicorn<21" "gunicorn"
+  '';
+
+  # Remove currently broken dependency `shap`, a model explainability package.
+  # This seems quite unprincipled especially with tests not being enabled,
+  # but not mlflow has a 'skinny' install option which does not require `shap`.
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRemoveDeps = [ "shap" ];
+  pythonRelaxDeps = [ "pytz" "pyarrow" ];
 
   propagatedBuildInputs = [
     alembic
     click
     cloudpickle
-    requests
-    six
-    flask
-    numpy
-    pandas
-    python-dateutil
-    protobuf
-    GitPython
-    pyyaml
-    querystring_parser
-    simplejson
-    docker
     databricks-cli
+    docker
     entrypoints
-    sqlparse
-    sqlalchemy
+    flask
+    gitpython
     gorilla
     gunicorn
+    importlib-metadata
+    markdown
+    matplotlib
+    numpy
+    packaging
+    pandas
+    prometheus-flask-exporter
+    protobuf
+    python-dateutil
+    pyarrow
+    pytz
+    pyyaml
+    querystring_parser
+    requests
+    scikit-learn
+    scipy
+    #shap
+    simplejson
+    sqlalchemy
+    sqlparse
   ];
 
+  pythonImportsCheck = [
+    "mlflow"
+  ];
+
+  # no tests in PyPI dist
+  # run into https://stackoverflow.com/questions/51203641/attributeerror-module-alembic-context-has-no-attribute-config
+  # also, tests use conda so can't run on NixOS without buildFHSEnv
+  doCheck = false;
+
   meta = with lib; {
-    homepage = "https://github.com/mlflow/mlflow";
     description = "Open source platform for the machine learning lifecycle";
+    homepage = "https://github.com/mlflow/mlflow";
+    changelog = "https://github.com/mlflow/mlflow/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ tbenst ];
-    # missing prometheus-flask-exporter, not packaged in nixpkgs
-    broken = true; # 2020-08-15
   };
 }

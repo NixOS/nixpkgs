@@ -1,32 +1,62 @@
-{ lib, stdenv, fetchzip, netcdf, netcdfcxx4, gsl, udunits, antlr, which, curl, flex, coreutils }:
+{ antlr2
+, coreutils
+, curl
+, fetchFromGitHub
+, flex
+, gsl
+, lib
+, libtool
+, netcdf
+, netcdfcxx4
+, stdenv
+, udunits
+, which
+}:
 
-stdenv.mkDerivation rec {
-  version = "4.9.8";
+stdenv.mkDerivation (finalAttrs: {
   pname = "nco";
+  version = "5.1.8";
 
-  nativeBuildInputs = [ flex which antlr ];
-  buildInputs = [ netcdf netcdfcxx4 gsl udunits curl coreutils ];
-
-  src = fetchzip {
-    url = "https://github.com/nco/nco/archive/${version}.tar.gz";
-    sha256 = "sha256-fOdmM0I/UGhxacofEBfw9UmOOrMDUXs59ca8uvkQKqw=";
+  src = fetchFromGitHub {
+    owner = "nco";
+    repo = "nco";
+    rev = finalAttrs.version;
+    hash = "sha256-ASZyvcP9XVFPf7nTsBx5E+D/7fWzUslPZrmhhNY5DzQ=";
   };
 
-  prePatch = ''
+  nativeBuildInputs = [
+    antlr2
+    flex
+    which
+  ];
+
+  buildInputs = [
+    coreutils
+    curl
+    gsl
+    netcdf
+    netcdfcxx4
+    udunits
+  ];
+
+  postPatch = ''
     substituteInPlace src/nco/nco_fl_utl.c \
       --replace "/bin/cp" "${coreutils}/bin/cp"
+
     substituteInPlace src/nco/nco_fl_utl.c \
       --replace "/bin/mv" "${coreutils}/bin/mv"
   '';
 
-  parallelBuild = true;
+  makeFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${libtool}/bin/libtool" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "NetCDF Operator toolkit";
-    longDescription = "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
-    homepage = "http://nco.sourceforge.net/";
+    homepage = "https://nco.sourceforge.net/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.bzizou ];
-    platforms = lib.platforms.linux;
+    longDescription = "The NCO (netCDF Operator) toolkit manipulates and analyzes data stored in netCDF-accessible formats, including DAP, HDF4, and HDF5";
+    maintainers = with lib.maintainers; [ bzizou ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -1,50 +1,55 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
 , aiofiles
 , aiohttp
-, async_generator
+, async-generator
+, buildPythonPackage
+, fetchFromGitHub
 , pypubsub
 , pyserial
 , pyserial-asyncio
-, pyyaml
 , pytestCheckHook
 , pythonOlder
-, pytest-cov
-, pytest-asyncio
-, pytest-timeout
+, setuptools
+, voluptuous
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
-  version = "1.0.11";
-  disabled = pythonOlder "3.6";
+  version = "1.5.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-dT01nKXDjkFSIf2BmrIcC8a9n00hlyd59oPwXn1CBaw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-H2rgPA0GW6neFIHZVZxmAP50HJUPCWDZcJ90QxLGXJ8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
   propagatedBuildInputs = [
     aiofiles
     aiohttp
-    async_generator
     pypubsub
     pyserial
     pyserial-asyncio
-    pyyaml
+    voluptuous
   ];
 
-  checkInputs = [
-    pytest-asyncio
-    pytest-cov
-    pytest-timeout
+  nativeCheckInputs = [
+    async-generator
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyinsteon" ];
+  pythonImportsCheck = [
+    "pyinsteon"
+  ];
 
   meta = with lib; {
     description = "Python library to support Insteon home automation projects";
@@ -54,6 +59,7 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
+    changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

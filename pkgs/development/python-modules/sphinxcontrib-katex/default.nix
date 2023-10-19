@@ -1,27 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, sphinx }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, sphinx
+}:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
-  version = "0.7.1";
+  version = "0.9.7";
+  format = "setuptools";
 
-  # pkgutil namespaces are broken in nixpkgs (because they can't scan multiple
-  # directories). But python2 is EOL, so not supporting it should be ok.
-  disabled = pythonOlder "3";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa80aba8af9d78f70a0a255815d44e33e8aca8e806ca6101e0eb18b2b7243246";
+    hash = "sha256-OmdUsc/JDhQeP3Pgg16vyCYtpfr+ekxnT6cI+rec69c=";
   };
 
-  propagatedBuildInputs = [ sphinx ];
+  propagatedBuildInputs = [
+    sphinx
+  ];
 
   # There are no unit tests
   doCheck = false;
-  pythonImportsCheck = [ "sphinxcontrib.katex" ];
+
+  pythonImportsCheck = [
+    "sphinxcontrib.katex"
+  ];
 
   meta = with lib; {
     description = "Sphinx extension using KaTeX to render math in HTML";
     homepage = "https://github.com/hagenw/sphinxcontrib-katex";
+    changelog = "https://github.com/hagenw/sphinxcontrib-katex/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
   };

@@ -1,9 +1,6 @@
-{ lib, stdenv, fetchurl, cabextract, bt-fw-converter }:
+{ lib, stdenvNoCC, fetchurl, cabextract, bt-fw-converter }:
 
-# Kernels between 4.2 and 4.7 will not work with
-# this packages as they expect the firmware to be named "BCM.hcd"
-# see: https://github.com/NixOS/nixpkgs/pull/25478#issuecomment-299034865
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "broadcom-bt-firmware";
   version = "12.0.1.1012";
 
@@ -38,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Firmware for Broadcom WIDCOMM® Bluetooth devices";
-    homepage = "http://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth";
+    homepage = "https://www.catalog.update.microsoft.com/Search.aspx?q=Broadcom+bluetooth";
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ zraexy ];

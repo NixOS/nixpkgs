@@ -1,29 +1,48 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, rednose
-, six
+, nose
 , mock
+, six
 , isPyPy
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "sure";
-  version = "1.4.11";
+  version = "2.0.1";
+  format = "setuptools";
+
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3c8d5271fb18e2c69e2613af1ad400d8df090f1456081635bd3171847303cdaa";
+    sha256 = "sha256-yPxvq8Dn9phO6ruUJUDkVkblvvC7mf5Z4C2mNOTUuco=";
   };
 
-  buildInputs = [ rednose ];
-  propagatedBuildInputs = [ six mock ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "rednose = 1" ""
+  '';
+
+  propagatedBuildInputs = [
+    mock
+    six
+  ];
+
+  nativeCheckInputs = [
+    nose
+  ];
+
+  pythonImportsCheck = [
+    "sure"
+  ];
 
   meta = with lib; {
     description = "Utility belt for automated testing";
-    homepage = "https://sure.readthedocs.io/en/latest/";
+    homepage = "https://sure.readthedocs.io/";
+    changelog = "https://github.com/gabrielfalcao/sure/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ];
   };
-
 }

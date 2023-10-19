@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "bi";
+  pname = "bi";
   version = "2018-06-25";
 
   ipkgName = "Bi";

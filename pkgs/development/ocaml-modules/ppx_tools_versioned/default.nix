@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "ppx_tools_versioned";
   version = "5.4.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
@@ -19,6 +19,6 @@ buildDunePackage rec {
     homepage = "https://github.com/let-def/ppx_tools_versioned";
     description = "Tools for authors of syntactic tools (such as ppx rewriters)";
     license = licenses.gpl2;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }

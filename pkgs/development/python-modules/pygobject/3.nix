@@ -7,17 +7,17 @@
 , gobject-introspection
 , pycairo
 , cairo
-, which
 , ncurses
 , meson
 , ninja
 , isPy3k
 , gnome
+, python
 }:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.40.1";
+  version = "3.44.1";
 
   outputs = [ "out" "dev" ];
 
@@ -27,8 +27,12 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0d80g5kgf2i9cginyhalvb7ibfk9g30yilqzmcsw6h6byj8xbih0";
+    sha256 = "PGgF0TIb6QzDLmSCFaViQw4NPW7c2o9MXnqdr/ytVxA=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -38,8 +42,8 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+    # # .so files link to this
     glib
-    gobject-introspection
   ] ++ lib.optionals stdenv.isDarwin [
     ncurses
   ];
@@ -47,6 +51,13 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pycairo
     cairo
+  ];
+
+  mesonFlags = [
+    # This is only used for figuring out what version of Python is in
+    # use, and related stuff like figuring out what the install prefix
+    # should be, but it does need to be able to execute Python code.
+    "-Dpython=${python.pythonForBuild.interpreter}"
   ];
 
   passthru = {

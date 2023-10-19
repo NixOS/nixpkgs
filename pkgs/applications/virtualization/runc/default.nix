@@ -1,12 +1,11 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 , go-md2man
 , installShellFiles
 , pkg-config
 , which
 , libapparmor
-, apparmor-parser
 , libseccomp
 , libselinux
 , makeWrapper
@@ -14,18 +13,18 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "runc";
-  version = "1.0.0-rc95";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "sha256-q4sXcvJO9gyo7m0vlaMrwh7ZZHYa58FJy3GatWndS6M=";
+    hash = "sha256-9vNzKoG+0Ze4+dhluNM6QtsUjV8/bpkuvEF8ASBfBRo=";
   };
 
-  goPackagePath = "github.com/opencontainers/runc";
+  vendorHash = null;
   outputs = [ "out" "man" ];
 
   nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
@@ -36,7 +35,6 @@ buildGoPackage rec {
 
   buildPhase = ''
     runHook preBuild
-    cd go/src/${goPackagePath}
     patchShebangs .
     make ${toString makeFlags} runc man
     runHook postBuild

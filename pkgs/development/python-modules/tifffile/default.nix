@@ -1,53 +1,68 @@
 { lib
-, fetchPypi
 , buildPythonPackage
-, isPy27
-, isPy3k
+, dask
+, fetchPypi
+, fsspec
+, lxml
 , numpy
-, imagecodecs-lite
-, enum34 ? null
-, futures ? null
-, pathlib ? null
-, pytest
+, pytestCheckHook
+, pythonOlder
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2021.3.17";
+  version = "2023.7.18";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b72c92ecd2273e52686c0f8792d1d1c4da4109b241dd1723dfe56ef4d1ad612";
+    hash = "sha256-WlpiSy96t/N+nsQXSuLfGAW5ZY+JAT+bS1VQZy9l8qE=";
   };
-
-  patches = lib.optional isPy27 ./python2-regex-compat.patch;
-
-  # Missing dependencies: imagecodecs, czifile, cmapfile, oiffile, lfdfiles
-  # and test data missing from PyPI tarball
-  doCheck = false;
-
-  checkInputs = [
-    pytest
-  ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   propagatedBuildInputs = [
     numpy
-  ] ++ lib.optionals isPy3k [
-    imagecodecs-lite
-  ] ++ lib.optionals isPy27 [
-    futures
-    enum34
-    pathlib
   ];
 
+  nativeCheckInputs = [
+    dask
+    fsspec
+    lxml
+    pytestCheckHook
+    zarr
+  ];
+
+  disabledTests = [
+    # Test require network access
+    "test_class_omexml"
+    "test_write_ome"
+    # Test file is missing
+    "test_write_predictor"
+    "test_issue_imagej_hyperstack_arg"
+    "test_issue_description_overwrite"
+    # AssertionError
+    "test_write_bigtiff"
+    "test_write_imagej_raw"
+    # https://github.com/cgohlke/tifffile/issues/142
+    "test_func_bitorder_decode"
+    # Test file is missing
+    "test_issue_invalid_predictor"
+  ];
+
+  pythonImportsCheck = [
+    "tifffile"
+  ];
+
+  # flaky, often killed due to OOM or timeout
+  env.SKIP_LARGE = "1";
+
   meta = with lib; {
-    description = "Read and write image data from and to TIFF files.";
-    homepage = "https://www.lfd.uci.edu/~gohlke/";
-    maintainers = [ maintainers.lebastr ];
+    description = "Read and write image data from and to TIFF files";
+    homepage = "https://github.com/cgohlke/tifffile/";
+    changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ lebastr ];
   };
 }

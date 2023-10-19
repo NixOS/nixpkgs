@@ -1,105 +1,110 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-, makeWrapper
-, which
+, gitMinimal
+, cacert
+, yarn
+, makeBinaryWrapper
 , nodejs
-, mkYarnPackage
-, python2
+, python3
 , nixosTests
-, buildGoModule
 }:
 
 let
-  # we need a different version than the one already available in nixpkgs
-  esbuild-hedgedoc = buildGoModule rec {
-    pname = "esbuild";
-    version = "0.11.20";
-
-    src = fetchFromGitHub {
-      owner = "evanw";
-      repo = "esbuild";
-      rev = "v${version}";
-      sha256 = "009f2mfgzkzgxjh3034mzdkcvm5vz17sgy1cs604f0425i22z8qm";
-    };
-
-    vendorSha256 = "1n5538yik72x94vzfq31qaqrkpxds5xys1wlibw2gn2am0z5c06q";
-  };
-in
-
-mkYarnPackage rec {
-  name = "hedgedoc";
-  version = "1.8.2";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
-    owner  = "hedgedoc";
-    repo   = "hedgedoc";
-    rev    = version;
-    sha256 = "1h2wyhap264iqm2jh0i05w0hb2j86jsq1plyl7k3an90w7wngyg1";
+    owner = "hedgedoc";
+    repo = "hedgedoc";
+    rev = version;
+    hash = "sha256-6eKTgEZ+YLoSmPQWBS95fJ+ioIxeTVlT+moqslByPPw=";
   };
 
-  nativeBuildInputs = [ which makeWrapper ];
-  extraBuildInputs = [ python2 esbuild-hedgedoc ];
+  # we cannot use fetchYarnDeps because that doesn't support yarn 2/berry lockfiles
+  offlineCache = stdenv.mkDerivation {
+    name = "hedgedoc-${version}-offline-cache";
+    inherit src;
 
-  yarnNix = ./yarn.nix;
-  yarnLock = ./yarn.lock;
-  packageJSON = ./package.json;
+    nativeBuildInputs = [
+      cacert # needed for git
+      gitMinimal # needed to download git dependencies
+      nodejs # needed for npm to download git dependencies
+      yarn
+    ];
 
-  postConfigure = ''
-    rm deps/HedgeDoc/node_modules
-    cp -R "$node_modules" deps/HedgeDoc
-    chmod -R u+w deps/HedgeDoc
-  '';
+    buildPhase = ''
+      export HOME=$(mktemp -d)
+      yarn config set enableTelemetry 0
+      yarn config set cacheFolder $out
+      yarn config set --json supportedArchitectures.os '[ "linux" ]'
+      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
+      yarn
+    '';
+
+    outputHashMode = "recursive";
+    outputHash = "sha256-Ga+tl4oZlum43tdfez1oWGMHZAfyePGl47S+9NRRvW8=";
+  };
+
+in stdenv.mkDerivation {
+  pname = "hedgedoc";
+  inherit version src;
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    yarn
+    python3 # needed for sqlite node-gyp
+  ];
+
+  dontConfigure = true;
 
   buildPhase = ''
     runHook preBuild
 
-    cd deps/HedgeDoc
+    export HOME=$(mktemp -d)
+    yarn config set enableTelemetry 0
+    yarn config set cacheFolder ${offlineCache}
 
-    pushd node_modules/sqlite3
+    # This will fail but create the sqlite3 files we can patch
+    yarn --immutable-cache || :
+
+    # Ensure we don't download any node things
+    sed -i 's:--fallback-to-build:--build-from-source --nodedir=${nodejs}/include/node:g' node_modules/sqlite3/package.json
     export CPPFLAGS="-I${nodejs}/include/node"
-    npm run install --build-from-source --nodedir=${nodejs}/include/node
-    popd
 
-    pushd node_modules/esbuild
-    rm bin/esbuild
-    ln -s ${lib.getBin esbuild-hedgedoc}/bin/esbuild bin/
-    popd
-
-    npm run build
+    # Perform the actual install
+    yarn --immutable-cache
+    yarn run build
 
     patchShebangs bin/*
 
     runHook postBuild
   '';
 
-  dontInstall = true;
-
-  distPhase = ''
-    runHook preDist
+  installPhase = ''
+    runHook preInstall
 
     mkdir -p $out
     cp -R {app.js,bin,lib,locales,node_modules,package.json,public} $out
 
-    cat > $out/bin/hedgedoc <<EOF
-      #!${stdenv.shell}/bin/sh
-      ${nodejs}/bin/node $out/app.js
-    EOF
-    chmod +x $out/bin/hedgedoc
-    wrapProgram $out/bin/hedgedoc \
+    makeWrapper ${nodejs}/bin/node $out/bin/hedgedoc \
+      --add-flags $out/app.js \
+      --set NODE_ENV production \
       --set NODE_PATH "$out/lib/node_modules"
 
-    runHook postDist
+    runHook postInstall
   '';
 
-  passthru.tests = { inherit (nixosTests) hedgedoc; };
+  passthru = {
+    inherit offlineCache;
+    tests = { inherit (nixosTests) hedgedoc; };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Realtime collaborative markdown notes on all platforms";
-    license = licenses.agpl3;
+    license = lib.licenses.agpl3;
     homepage = "https://hedgedoc.org";
-    maintainers = with maintainers; [ willibutz ma27 globin ];
-    platforms = platforms.linux;
+    mainProgram = "hedgedoc";
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    platforms = lib.platforms.linux;
   };
 }

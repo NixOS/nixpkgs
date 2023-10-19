@@ -19,7 +19,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = lib.mdDoc ''
           Enable htpdate daemon.
         '';
       };
@@ -27,7 +27,7 @@ in
       extraOptions = mkOption {
         type = types.str;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Additional command line arguments to pass to htpdate.
         '';
       };
@@ -35,7 +35,7 @@ in
       servers = mkOption {
         type = types.listOf types.str;
         default = [ "www.google.com" ];
-        description = ''
+        description = lib.mdDoc ''
           HTTP servers to use for time synchronization.
         '';
       };
@@ -44,7 +44,7 @@ in
         type = types.str;
         default = "";
         example = "127.0.0.1:8118";
-        description = ''
+        description = lib.mdDoc ''
           HTTP proxy used for requests.
         '';
       };

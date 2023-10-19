@@ -23,13 +23,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "INSTALLBASE=$(out)/share/gnome-shell/extensions" ];
 
-  uuid = "no-title-bar@jonaspoehler.de";
+  passthru = {
+    extensionUuid = "no-title-bar@jonaspoehler.de";
+  };
 
   meta = with lib; {
     description = "Integrates maximized windows with the top panel";
     homepage = "https://github.com/poehlerj/no-title-bar";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ jonafato svsdep maxeaubrey ];
+    maintainers = with maintainers; [ jonafato svsdep amaxine ];
     platforms = platforms.linux;
   };
 }

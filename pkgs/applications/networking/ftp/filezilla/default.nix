@@ -11,31 +11,27 @@
 , pugixml
 , sqlite
 , tinyxml
-, wxGTK30-gtk3
+, wrapGAppsHook
+, wxGTK32
+, gtk3
 , xdg-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.53.1";
+  version = "3.63.1";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "sha256-ZWh08ursVGcscvQepeoUnFAZfFDeXWdIu0HXIr/D93k=";
+    hash = "sha256-TgtcD3n0+LykuiHnE7qXuG1bRcRyPeZ7nBDSO/QXo38=";
   };
-
-  # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
-  postPatch = ''
-    sed -i src/interface/Mainfrm.h \
-      -e '/^#define/a #include <list>'
-  '';
 
   configureFlags = [
     "--disable-manualupdatecheck"
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
 
   buildInputs = [
     dbus
@@ -47,8 +43,8 @@ stdenv.mkDerivation rec {
     pugixml
     sqlite
     tinyxml
-    wxGTK30-gtk3
-    wxGTK30-gtk3.gtk
+    wxGTK32
+    gtk3
     xdg-utils
   ];
 

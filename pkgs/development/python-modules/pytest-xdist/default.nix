@@ -1,32 +1,54 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, setuptools_scm
+, pythonOlder
+, setuptools-scm
 , pytestCheckHook
 , filelock
 , execnet
 , pytest
-, pytest-forked
 , psutil
+, setproctitle
 }:
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "2.2.1";
-  disabled = isPy27;
+  version = "3.3.1";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "718887296892f92683f6a51f25a3ae584993b06f7076ce1e1fd482e59a8220a2";
+    hash = "sha256-1e4FIOsbe8ylCmClGKt6dweZKBLFeBmPi0T9+seOjJM=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   buildInputs = [
     pytest
   ];
-  checkInputs = [ pytestCheckHook filelock ];
-  propagatedBuildInputs = [ execnet pytest-forked psutil ];
+
+  propagatedBuildInputs = [
+    execnet
+  ];
+
+  nativeCheckInputs = [
+    filelock
+    pytestCheckHook
+  ];
+
+  passthru.optional-dependencies = {
+    psutil = [ psutil ];
+    setproctitle = [ setproctitle ];
+  };
+
+  pytestFlagsArray = [
+    # pytest can already use xdist at this point
+    "--numprocesses=$NIX_BUILD_CORES"
+  ];
 
   # access file system
   disabledTests = [
@@ -36,10 +58,15 @@ buildPythonPackage rec {
     "test_rsync_report"
     "test_init_rsync_roots"
     "test_rsyncignore"
+    # flakey
+    "test_internal_errors_propagate_to_controller"
   ];
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
-    description = "py.test xdist plugin for distributed testing and loop-on-failing modes";
+    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/v${version}/CHANGELOG.rst";
+    description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

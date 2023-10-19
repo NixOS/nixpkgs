@@ -10,23 +10,31 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 buildGoModule {
   pname = "boringssl";
-  version = "2021-04-18";
+  version = "unstable-2023-09-27";
 
   src = fetchgit {
-    url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "468cde90ca58421d63f4dfeaebcf8bb3fccb4127";
-    sha256 = "0gaqcbvp6r5fq265mckmg0i0rjab0bhxkxcvfxp3ar5dm7q88w39";
+    url = "https://boringssl.googlesource.com/boringssl";
+    rev = "d24a38200fef19150eef00cad35b138936c08767";
+    hash = "sha256-FBQ7y4N2rCM/Cyd6LBnDUXpSa2O3osUXukECTBjZL6s=";
   };
 
   nativeBuildInputs = [ cmake ninja perl ];
 
-  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorHash = "sha256-EJPcx07WuvHPAgiS1ASU6WHlHkxjUOO72if4TkmrqwY=";
+  proxyVendor = true;
 
   # hack to get both go and cmake configure phase
   # (if we use postConfigure then cmake will loop runHook postConfigure)
   preBuild = ''
     cmakeConfigurePhase
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    export GOARCH=$(go env GOHOSTARCH)
   '';
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12 but breaks on darwin (with clang)
+    "-Wno-error=stringop-overflow"
+  ]);
 
   buildPhase = ''
     ninjaBuildPhase
@@ -36,7 +44,7 @@ buildGoModule {
   cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
-    mkdir -p $bin/bin $out/include $out/lib
+    mkdir -p $bin/bin $dev $out/lib
 
     mv tool/bssl $bin/bin
 
@@ -44,10 +52,10 @@ buildGoModule {
     mv crypto/libcrypto.a     $out/lib
     mv decrepit/libdecrepit.a $out/lib
 
-    mv ../include/openssl $out/include
+    mv ../include $dev
   '';
 
-  outputs = [ "out" "bin" ];
+  outputs = [ "out" "bin" "dev" ];
 
   meta = with lib; {
     description = "Free TLS/SSL implementation";

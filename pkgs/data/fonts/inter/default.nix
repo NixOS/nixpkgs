@@ -1,18 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  version = "3.18";
-in fetchzip {
-  name = "inter-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "inter";
+  version = "3.19";
 
-  url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+  src = fetchzip {
+    url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-${version}.zip";
+    stripRoot = false;
+    hash = "sha256-6kUQUTFtxiJEU6sYC6HzMwm1H4wvaKIoxoY3F6GJJa8=";
+  };
 
-  postFetch = ''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-  '';
+    cp */*.otf $out/share/fonts/opentype
 
-  sha256 = "sha256-+wbN1vSS8v1Z1VIfDNeY9DB8Kr6v7UnFg37EPPAD7wI=";
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://rsms.me/inter/";
@@ -22,4 +27,3 @@ in fetchzip {
     maintainers = with maintainers; [ demize dtzWill ];
   };
 }
-

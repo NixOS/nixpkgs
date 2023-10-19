@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, curl, libmrss, podofo, libiconv }:
 
-stdenv.mkDerivation {
-  name = "offrss-1.3";
+stdenv.mkDerivation rec {
+  pname = "offrss";
+  version = "1.3";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -11,6 +12,11 @@ stdenv.mkDerivation {
   buildInputs = [ curl libmrss ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
     ++ lib.optional (!stdenv.isLinux) libiconv;
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: serve_pdf.o:offrss.h:75: multiple definition of `cgi_url_path';
+  #     offrss.o:offrss.h:75: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   configurePhase = ''
     substituteInPlace Makefile \
@@ -22,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-1.3.tar.gz";
+    url = "http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-${version}.tar.gz";
     sha256 = "1akw1x84jj2m9z60cvlvmz21qwlaywmw18pl7lgp3bj5nw6250p6";
   };
 

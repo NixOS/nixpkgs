@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "kcgi";
   version = "0.10.8";
-  underscoreVersion = lib.replaceChars ["."] ["_"] version;
+  underscoreVersion = lib.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "kristapsdz";
@@ -23,10 +23,12 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://kristaps.bsd.lv/kcgi";
     description = "Minimal CGI and FastCGI library for C/C++";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = [ maintainers.leenaars ];
+    mainProgram = "kfcgi";
   };
 }

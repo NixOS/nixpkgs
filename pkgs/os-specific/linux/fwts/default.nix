@@ -1,23 +1,25 @@
-{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, glib, libtool, pcre
-, json_c, flex, bison, dtc, pciutils, dmidecode, iasl, libbsd }:
+{ lib, stdenv, fetchzip, autoreconfHook, pkg-config, gnumake42, glib, pcre
+, json_c, flex, bison, dtc, pciutils, dmidecode, acpica-tools, libbsd }:
 
 stdenv.mkDerivation rec {
   pname = "fwts";
-  version = "20.11.00";
+  version = "23.07.00";
 
   src = fetchzip {
-    url = "http://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
-    sha256 = "0s8iz6c9qhyndcsjscs3qail2mzfywpbiys1x232igm5kl089vvr";
+    url = "https://fwts.ubuntu.com/release/${pname}-V${version}.tar.gz";
+    sha256 = "sha256-Fo5qdb0eT8taYfPAf5LQu0toNXcoVjNoDgeeAlUfbs4=";
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config libtool ];
-  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode iasl libbsd ];
+  # fails with make 4.4
+  nativeBuildInputs = [ autoreconfHook pkg-config gnumake42 ];
+  buildInputs = [ glib pcre json_c flex bison dtc pciutils dmidecode acpica-tools libbsd ];
 
   postPatch = ''
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci"
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode"
-    substituteInPlace src/lib/include/fwts_binpaths.h --replace "/usr/bin/iasl"       "${iasl}/bin/iasl"
+    substituteInPlace src/lib/include/fwts_binpaths.h \
+      --replace "/usr/bin/lspci"      "${pciutils}/bin/lspci" \
+      --replace "/usr/sbin/dmidecode" "${dmidecode}/bin/dmidecode" \
+      --replace "/usr/bin/iasl"       "${acpica-tools}/bin/iasl"
   '';
 
   enableParallelBuilding = true;

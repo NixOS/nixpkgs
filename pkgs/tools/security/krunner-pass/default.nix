@@ -1,9 +1,17 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, extra-cmake-modules
-, kauth, krunner
-, pass, pass-otp ? null }:
+{ mkDerivation
+, lib
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, extra-cmake-modules
+, kauth
+, krunner
+, pass
+}:
 
 mkDerivation rec {
   pname = "krunner-pass";
+  # when upgrading the version, check if cmakeFlags is still needed
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -13,9 +21,10 @@ mkDerivation rec {
     sha256 = "032fs2174ls545kjixbhzyd65wgxkw4s5vg8b20irc5c9ak3pxm0";
   };
 
-  buildInputs  = [
-    kauth krunner
-    pass pass-otp
+  buildInputs = [
+    kauth
+    krunner
+    (pass.withExtensions (p: with p; [ pass-otp ]))
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
@@ -31,6 +40,13 @@ mkDerivation rec {
 
   CXXFLAGS = [
     ''-DNIXPKGS_PASS=\"${lib.getBin pass}/bin/pass\"''
+  ];
+
+  cmakeFlags = [
+    # there are *lots* of pointless warnings in v1.3.0
+    "-Wno-dev"
+    # required for kf5auth to work correctly
+    "-DCMAKE_POLICY_DEFAULT_CMP0012=NEW"
   ];
 
   meta = with lib; {

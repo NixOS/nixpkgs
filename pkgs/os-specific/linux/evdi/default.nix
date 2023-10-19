@@ -1,21 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, libdrm }:
+{ lib, stdenv, fetchFromGitHub, kernel, libdrm, python3 }:
 
+let
+  python3WithLibs = python3.withPackages (ps: with ps; [
+    pybind11
+  ]);
+in
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "unstable-20210401";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "b0b3d131b26df62664ca33775679eea7b70c47b1";
-    sha256 = "09apbvdc78bbqzja9z3b1wrwmqkv3k7cn3lll5gsskxjnqbhxk9y";
+    rev = "v${version}";
+    hash = "sha256-em3Y56saB7K3Wr31Y0boc38xGb57gdveN0Cstgy8y20=";
   };
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  buildInputs = [ kernel libdrm ];
+  buildInputs = [ kernel libdrm python3WithLibs ];
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KVER=${kernel.modDirVersion}"
     "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
@@ -27,12 +34,15 @@ stdenv.mkDerivation rec {
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
+    changelog = "https://github.com/DisplayLink/evdi/releases/tag/v${version}";
     description = "Extensible Virtual Display Interface";
-    maintainers = with maintainers; [ eyjhb ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    license = with licenses; [ lgpl21 gpl2 ];
+    license = with licenses; [ lgpl21Only gpl2Only ];
     homepage = "https://www.displaylink.com/";
-    broken = versionOlder kernel.version "4.19" || stdenv.isAarch64;
+    broken = kernel.kernelOlder "4.19" || stdenv.isAarch64;
   };
 }

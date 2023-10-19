@@ -24,8 +24,6 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools ];
 
-  enableParallelBuilding = true;
-
   patches = [
     # Fix path to pass-otp plugin `/usr/lib/password-store/extensions/otp.bash` being hardcoded.
     # TODO: Remove when https://github.com/IJHack/QtPass/pull/499 is merged and available.
@@ -35,6 +33,9 @@ mkDerivation rec {
       sha256 = "0ljlvqxvarrz2a4j71i66aflrxi84zirb6cg9kvygnvhvm1zbc7d";
     })
   ];
+
+  # HACK `propagatedSandboxProfile` does not appear to actually propagate the sandbox profile from `qt5.qtbase`
+  sandboxProfile = toString qtbase.__propagatedSandboxProfile;
 
   qmakeFlags = [
     # setup hook only sets QMAKE_LRELEASE, set QMAKE_LUPDATE too:

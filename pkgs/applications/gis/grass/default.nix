@@ -1,24 +1,85 @@
-{ lib, stdenv, fetchFromGitHub, flex, bison, pkg-config, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg_3, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
+{ lib
+, stdenv
+, callPackage
+, fetchFromGitHub
+, makeWrapper
+, wrapGAppsHook
+
+, bison
+, blas
+, cairo
+, ffmpeg
+, fftw
+, flex
+, gdal
+, geos
+, libiconv
+, libmysqlclient
+, libpng
+, libtiff
+, libxml2
+, netcdf
+, pdal
+, pkg-config
+, postgresql
+, proj
+, proj-datumgrid
+, python3Packages
+, readline
+, sqlite
+, wxGTK32
+, zlib
+, zstd
 }:
 
-stdenv.mkDerivation rec {
-  name = "grass";
-  version = "7.6.1";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "grass";
+  version = "8.3.0";
 
-  src = with lib; fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
-    rev = "${name}_${replaceStrings ["."] ["_"] version}";
-    sha256 = "1amjk9rz7vw5ha7nyl5j2bfwj5if9w62nlwx5qbp1x7spldimlll";
+    rev = finalAttrs.version;
+    hash = "sha256-YHQtvp/AYMWme46yIc4lE/izjqVePnPxn3GY5RRfPq4=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
-  readline ffmpeg_3 makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid ]
-    ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook
+
+    bison
+    flex
+    gdal # for `gdal-config`
+    geos # for `geos-config`
+    libmysqlclient # for `mysql_config`
+    netcdf # for `nc-config`
+    pkg-config
+  ] ++ (with python3Packages; [ python-dateutil numpy wxPython_4_2 ]);
+
+  buildInputs = [
+    blas
+    cairo
+    ffmpeg
+    fftw
+    gdal
+    geos
+    libmysqlclient
+    libpng
+    libtiff
+    libxml2
+    netcdf
+    pdal
+    postgresql
+    proj
+    proj-datumgrid
+    readline
+    sqlite
+    wxGTK32
+    zlib
+    zstd
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+
+  strictDeps = true;
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
@@ -30,22 +91,30 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-proj-share=${proj}/share/proj"
-    "--with-proj-includes=${proj.dev}/include"
-    "--with-proj-lib=${proj}/lib"
-    "--without-opengl"
-    "--with-readline"
-    "--with-wxwidgets"
-    "--with-netcdf"
+    "--with-blas"
+    "--with-fftw"
     "--with-geos"
-    "--with-postgres"
-    "--with-postgres-libs=${postgresql.lib}/lib/"
-    # it complains about missing libmysqld but doesn't really seem to need it
+    # It complains about missing libmysqld but doesn't really seem to need it
     "--with-mysql"
     "--with-mysql-includes=${lib.getDev libmysqlclient}/include/mysql"
     "--with-mysql-libs=${libmysqlclient}/lib/mysql"
-    "--with-blas"
-    "--with-liblas=${libLAS}/bin/liblas-config"
+    "--with-netcdf"
+    "--with-postgres"
+    "--with-postgres-libs=${postgresql.lib}/lib/"
+    "--with-proj-includes=${proj.dev}/include"
+    "--with-proj-libs=${proj}/lib"
+    "--with-proj-share=${proj}/share/proj"
+    "--with-pthread"
+    "--with-readline"
+    "--with-wxwidgets"
+    "--with-zstd"
+    "--without-opengl"
+  ] ++ lib.optionals stdenv.isLinux [
+    "--with-pdal"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "--without-cairo"
+    "--without-freetype"
+    "--without-x"
   ];
 
   # Otherwise a very confusing "Can't load GDAL library" error
@@ -54,43 +123,17 @@ stdenv.mkDerivation rec {
   /* Ensures that the python script run at build time are actually executable;
    * otherwise, patchShebangs ignores them.  */
   postConfigure = ''
-    chmod +x scripts/d.out.file/d.out.file.py \
-      scripts/d.to.rast/d.to.rast.py \
-      scripts/d.what.rast/d.what.rast.py \
-      scripts/d.what.vect/d.what.vect.py \
-      scripts/g.extension/g.extension.py \
-      scripts/g.extension.all/g.extension.all.py \
-      scripts/r.drain/r.drain.py \
-      scripts/r.pack/r.pack.py \
-      scripts/r.tileset/r.tileset.py \
-      scripts/r.unpack/r.unpack.py \
-      scripts/v.clip/v.clip.py \
-      scripts/v.rast.stats/v.rast.stats.py \
-      scripts/v.to.lines/v.to.lines.py \
-      scripts/v.what.strds/v.what.strds.py \
-      scripts/v.unpack/v.unpack.py \
-      scripts/wxpyimgview/*.py \
-      gui/wxpython/animation/g.gui.animation.py \
-      gui/wxpython/datacatalog/g.gui.datacatalog.py \
-      gui/wxpython/rlisetup/g.gui.rlisetup.py \
-      gui/wxpython/vdigit/g.gui.vdigit.py \
-      temporal/t.rast.accumulate/t.rast.accumulate.py \
-      temporal/t.rast.accdetect/t.rast.accdetect.py \
-      temporal/t.rast.algebra/t.rast.algebra.py \
-      temporal/t.rast3d.algebra/t.rast3d.algebra.py \
-      temporal/t.vect.algebra/t.vect.algebra.py \
-      temporal/t.select/t.select.py
-    for d in gui lib scripts temporal tools; do
-      patchShebangs $d
+    for f in $(find . -name '*.py'); do
+      chmod +x $f
     done
+
+    patchShebangs */
   '';
 
-  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
-
   postInstall = ''
-    wrapProgram $out/bin/grass76 \
+    wrapProgram $out/bin/grass \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${python2Packages.python}/bin/${python2Packages.python.executable} \
+    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include
@@ -98,11 +141,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = "https://grass.osgeo.org/";
-    description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [mpickering];
+  passthru.tests = {
+    grass = callPackage ./tests.nix { grass = finalAttrs.finalPackage; };
   };
-}
+
+  meta = with lib; {
+    description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
+    homepage = "https://grass.osgeo.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; teams.geospatial.members ++ [ mpickering ];
+    platforms = platforms.all;
+  };
+})

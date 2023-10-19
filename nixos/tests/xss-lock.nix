@@ -1,10 +1,6 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
-
-with lib;
-
-{
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "xss-lock";
-  meta.maintainers = with pkgs.lib.maintainers; [ ma27 ];
+  meta.maintainers = [ ];
 
   nodes = {
     simple = {

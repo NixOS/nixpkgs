@@ -5,14 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libglvnd";
-  version = "1.3.3";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "0gjk6m3gkdm12bmih2jflp0v5s1ibkixk7mrzrk0cj884m3hy1z6";
+    sha256 = "sha256-p/vLxagN9nCYw1JpUmZetgctQbrp3Wo33OVFrtvmnjQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
@@ -27,13 +27,16 @@ stdenv.mkDerivation rec {
       --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
 
     "-Wno-error=array-bounds"
-  ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-error"
+    "-Wno-int-conversion"
+  ]);
 
   configureFlags  = []
     # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
@@ -63,8 +66,9 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
+    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
     license = with licenses; [ mit bsd1 bsd3 gpl3Only asl20 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];
   };
 }

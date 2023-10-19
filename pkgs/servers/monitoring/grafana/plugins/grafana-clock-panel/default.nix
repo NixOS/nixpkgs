@@ -2,11 +2,11 @@
 
 grafanaPlugin rec {
   pname = "grafana-clock-panel";
-  version = "1.1.1";
-  zipHash = "sha256-SvZyg7r+XG6i7jqYwxpPn6ZzJc7qmtfPtyphYppURDk=";
+  version = "2.1.3";
+  zipHash = "sha256-ZedeV/SQsBu55jAxFyyXQefir4hEl1/TQDmaTJN9bag=";
   meta = with lib; {
     description = "Clock panel for Grafana";
-    license = licenses.asl20;
+    license = licenses.mit;
     maintainers = with maintainers; [ lukegb ];
     platforms = platforms.unix;
   };

@@ -1,46 +1,22 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
+, eglexternalplatform
 , pkg-config
 , meson
 , ninja
-, libX11
-, mesa
+, wayland-scanner
 , libGL
+, libX11
+, libdrm
 , wayland
+, wayland-protocols
 }:
 
-let
-  eglexternalplatform = stdenv.mkDerivation {
-    pname = "eglexternalplatform";
-    version = "1.1";
-
-    src = fetchFromGitHub {
-      owner = "Nvidia";
-      repo = "eglexternalplatform";
-      rev = "7c8f8e2218e46b1a4aa9538520919747f1184d86";
-      sha256 = "0lr5s2xa1zn220ghmbsiwgmx77l156wk54c7hybia0xpr9yr2nhb";
-    };
-
-    installPhase = ''
-      mkdir -p "$out/include/"
-      cp interface/eglexternalplatform.h "$out/include/"
-      cp interface/eglexternalplatformversion.h "$out/include/"
-
-      substituteInPlace eglexternalplatform.pc \
-        --replace "/usr/include/EGL" "$out/include"
-      mkdir -p "$out/share/pkgconfig"
-      cp eglexternalplatform.pc "$out/share/pkgconfig/"
-    '';
-
-    meta = with lib; {
-      license = licenses.mit;
-    };
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "egl-wayland";
-  version = "1.1.6";
+  version = "1.1.12";
 
   outputs = [ "out" "dev" ];
 
@@ -48,29 +24,37 @@ in stdenv.mkDerivation rec {
     owner = "Nvidia";
     repo = pname;
     rev = version;
-    sha256 = "1n9lg8hpjgxlf7dpddkjhbslsfd0symla2wk6jjmnl9n9jv2gmzk";
+    hash = "sha256-KxlUuoj2HJhkqkIX+Pic/0+36g/N3qfAAlnvYO2Y6uQ=";
   };
+
+  postPatch = ''
+    # Declares an includedir but doesn't install any headers
+    # CMake's `pkg_check_modules(NAME wayland-eglstream IMPORTED_TARGET)` considers this an error
+    sed -i -e '/includedir/d' wayland-eglstream.pc.in
+  '';
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [
-    eglexternalplatform
-    libX11
-    mesa
     libGL
+    libX11
+    libdrm
     wayland
+    wayland-protocols
   ];
 
-  postFixup = ''
-    # Doubled prefix in pc file after postbuild hook replaces includedir prefix variable with dev output path
-    substituteInPlace $dev/lib/pkgconfig/wayland-eglstream.pc \
-      --replace "=$dev/$dev" "=$dev" \
-      --replace "Requires:" "Requires.private:"
-  '';
+  propagatedBuildInputs = [
+    eglexternalplatform
+  ];
 
   meta = with lib; {
     description = "The EGLStream-based Wayland external platform";

@@ -1,63 +1,67 @@
 { lib
-, python3
+, stdenv
 , fetchFromGitHub
 , appstream-glib
+, cargo
+, dbus
 , desktop-file-utils
-, gettext
 , glib
+, glib-networking
 , gobject-introspection
 , gst_all_1
 , gtk4
 , libadwaita
-, librsvg
+, libpulseaudio
+, libsoup_3
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, rustPlatform
+, rustc
+, wrapGAppsHook4
 }:
 
-python3.pkgs.buildPythonApplication rec {
+stdenv.mkDerivation rec {
   pname = "mousai";
-  version = "0.4.1";
-
-  format = "other";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    sha256 = "sha256-AfR5n1dIm9X5OoPiikQEhHBFQq0rmQH4h7cCJ2yXoXI=";
+    hash = "sha256-4olJGpS5QfPyt6/ZmigoojP7kGjx6LExW3LKrL4nxTE=";
   };
 
-  postPatch = ''
-    patchShebangs build-aux/meson
-  '';
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-SeKcguCB+f2ocKKf7Moc74O2sGK2EXgEEkTiN82dSps=";
+  };
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    gettext
-    glib
-    gtk4
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
   ];
 
   buildInputs = [
-    gobject-introspection
+    dbus
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    glib
+    glib-networking
     gtk4
     libadwaita
-    librsvg
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    pygobject3
-    requests
+    libpulseaudio
+    libsoup_3
   ];
 
   meta = with lib; {
@@ -65,5 +69,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SeaDve/Mousai";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
+    platforms = platforms.linux;
   };
 }

@@ -1,4 +1,5 @@
 { lib
+, awesomeversion
 , buildPythonPackage
 , click
 , crcmod
@@ -17,34 +18,44 @@
 
 buildPythonPackage rec {
   pname = "pymysensors";
-  version = "0.21.0";
-  disabled = pythonOlder "3.6";
+  version = "0.24.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "theolind";
     repo = pname;
     rev = version;
-    sha256 = "1k75gwvyzslyjr3cdx8b74fb302k2i7bda4q92rb75rhgp4gch55";
+    hash = "sha256-3t9YrSJf02kc5CuTqPBc/qNJV7yy7Vke4WqhtuOaAYo=";
   };
 
   propagatedBuildInputs = [
+    awesomeversion
     click
     crcmod
     getmac
     intelhex
-    paho-mqtt
     pyserial
     pyserial-asyncio
     voluptuous
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    mqtt-client = [
+      paho-mqtt
+    ];
+  };
+
+  nativeCheckInputs = [
     pytest-sugar
     pytest-timeout
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "mysensors" ];
+  pythonImportsCheck = [
+    "mysensors"
+  ];
 
   meta = with lib; {
     description = "Python API for talking to a MySensors gateway";

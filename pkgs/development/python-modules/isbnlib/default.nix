@@ -3,18 +3,22 @@
 , fetchPypi
 , nose
 , coverage
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "isbnlib";
-  version = "3.10.8";
+  version = "3.10.14";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6kBu8uFDiKs5ZJXw9gTS08lstaJWuWvAVW3Ycc19x7Q=";
+    hash = "sha256-lvkIZMd7AfVfoR5b/Kn9kJUB2YQvO8cQ1Oq4UZXZBTk=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     coverage
   ];
@@ -33,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Extract, clean, transform, hyphenate and metadata for ISBNs";
     homepage = "https://github.com/xlcnd/isbnlib";
+    changelog = "https://github.com/xlcnd/isbnlib/blob/v${version}/CHANGES.txt";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
   };

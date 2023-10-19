@@ -1,24 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, writeText, vulkan-headers, jq }:
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, writeText, vulkan-headers, jq, libX11, libXrandr, libxcb, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
-  version = "2020-11-20";
+  version = "1.3.261";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
-    rev = "7474cb8e1f70e9f4a8bf382708a7f15465453af5";
-    sha256 = "1lxkgcnv32wqk4hlckv13xy84g38jzgc4qxp9vsbkrgz87hkdvwj";
+    rev = "v${version}";
+    hash = "sha256-MeW7mmbjgqEvXEnAYzTNu4omC4fqq1fplIVjDpV2LcA=";
   };
 
-  nativeBuildInputs = [ cmake jq ];
+  nativeBuildInputs = [ cmake pkg-config jq ];
 
-  buildInputs = [ vulkan-headers ];
+  buildInputs = [ vulkan-headers libX11 libXrandr libxcb wayland ];
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
-    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
+    addToSearchPath XDG_DATA_DIRS @out@/share
   '';
+
+  # Tests are not for gpu-less and headless environments
+  cmakeFlags = [
+    "-DBUILD_TESTS=false"
+  ];
 
   # Include absolute paths to layer libraries in their associated
   # layer definition json files.

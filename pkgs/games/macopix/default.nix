@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, pkg-config, gtk, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "macopix-1.7.4";
+  pname = "macopix";
+  version = "1.7.4";
 
   src = fetchurl {
-    url = "http://rosegray.sakura.ne.jp/macopix/${name}.tar.bz2";
+    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${version}.tar.bz2";
     sha256 = "0sgnr0wrw3hglcnsyvipll7icfv69ssmyw584zfhk1rgramlkzyb";
   };
 
@@ -17,6 +18,11 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: dnd.o:src/main.h:136: multiple definition of
+  #     `MENU_EXT'; main.o:src/main.h:136: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   NIX_LDFLAGS = "-lX11";
 

@@ -10,7 +10,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Enable acpilight.
           This will allow brightness control via xbacklight from users in the video group
         '';

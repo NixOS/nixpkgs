@@ -12,23 +12,21 @@
 # server, and the FHS userenv and corresponding NixOS module should
 # automatically pick up the changes.
 stdenv.mkDerivation rec {
-  version = "1.23.1.4602-280ab6053";
+  version = "1.32.6.7557-1cf77d501";
   pname = "plexmediaserver";
 
   # Fetch the source
   src = if stdenv.hostPlatform.system == "aarch64-linux" then fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_arm64.deb";
-    sha256 = "0q0drm9x7c1c14ja21pzy4cl03am37gp78s6djbpk4sgxwvvyhic";
+    sha256 = "0ym2s425084l5lzpw9j1aqw2nc6f4l5vzizvpj1gicf4yp2dyk91";
   } else fetchurl {
     url = "https://downloads.plex.tv/plex-media-server-new/${version}/debian/plexmediaserver_${version}_amd64.deb";
-    sha256 = "0hz6572yj9wfq4sri76cjyzz4xmfvf8jlzvxqhsk4r05d8kbxrli";
+    sha256 = "1jqgglyzlfzq5saa21338vn2v3x25vl24x1w17j5wq30ca7nmzdr";
   };
 
   outputs = [ "out" "basedb" ];
 
   nativeBuildInputs = [ dpkg ];
-
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" "distPhase" ];
 
   unpackPhase = ''
     dpkg-deb -R $src .
@@ -81,6 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://plex.tv/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [
@@ -89,6 +88,8 @@ stdenv.mkDerivation rec {
       lnl7
       pjones
       thoughtpolice
+      amaxine
+      MayNiklas
     ];
     description = "Media library streaming server";
     longDescription = ''

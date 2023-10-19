@@ -1,55 +1,68 @@
-{ python3Packages, fetchurl, lib,
-  yubikey-personalization, libu2f-host, libusb1 }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3Packages
+, installShellFiles
+, procps
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "4.0.1";
+  version = "5.2.1";
+  format = "pyproject";
 
-  srcs = fetchurl {
-    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    hash = "sha256-OxbKo5vwOBabU6/2hO4RMWiifo4IVIxz+DlcwP9xO/E=";
+  src = fetchFromGitHub {
+    owner = "Yubico";
+    repo = "yubikey-manager";
+    rev = version;
+    hash = "sha256-CUe/oB/+Hq9evnLwl8r0k5ObhI3vDt7oX79+20yMfjY=";
   };
 
-  propagatedBuildInputs =
-    with python3Packages; [
-      click
-      cryptography
-      pyscard
-      pyusb
-      pyopenssl
-      six
-      fido2
-    ] ++ [
-      libu2f-host
-      libusb1
-      yubikey-personalization
-    ];
+  postPatch = ''
+    substituteInPlace "ykman/pcsc/__init__.py" \
+      --replace 'pkill' '${if stdenv.isLinux then "${procps}" else "/usr"}/bin/pkill'
+  '';
 
-  makeWrapperArgs = [
-    "--prefix" "LD_LIBRARY_PATH" ":"
-    (lib.makeLibraryPath [ libu2f-host libusb1 yubikey-personalization ])
+  nativeBuildInputs = with python3Packages; [
+    poetry-core
+    pythonRelaxDepsHook
+    installShellFiles
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    cryptography
+    pyscard
+    fido2
+    click
+    keyring
+  ];
+
+  pythonRelaxDeps = [
+    "keyring"
   ];
 
   postInstall = ''
-    mkdir -p "$out/man/man1"
-    cp man/ykman.1 "$out/man/man1"
+    installManPage man/ykman.1
 
-    mkdir -p $out/share/bash-completion/completions
-    _YKMAN_COMPLETE=source $out/bin/ykman > $out/share/bash-completion/completions/ykman || :
-    mkdir -p $out/share/zsh/site-functions/
-    _YKMAN_COMPLETE=source_zsh "$out/bin/ykman" > "$out/share/zsh/site-functions/_ykman" || :
-    substituteInPlace "$out/share/zsh/site-functions/_ykman" \
-      --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
+    installShellCompletion --cmd ykman \
+      --bash <(_YKMAN_COMPLETE=bash_source "$out/bin/ykman") \
+      --zsh  <(_YKMAN_COMPLETE=zsh_source  "$out/bin/ykman") \
+      --fish <(_YKMAN_COMPLETE=fish_source "$out/bin/ykman") \
   '';
 
-  checkInputs = with python3Packages; [ pytestCheckHook makefun ];
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    makefun
+  ];
 
   meta = with lib; {
     homepage = "https://developers.yubico.com/yubikey-manager";
+    changelog = "https://github.com/Yubico/yubikey-manager/releases/tag/${version}";
     description = "Command line tool for configuring any YubiKey over all USB transports";
 
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ benley mic92 ];
+    maintainers = with maintainers; [ benley lassulus pinpox nickcao ];
+    mainProgram = "ykman";
   };
 }

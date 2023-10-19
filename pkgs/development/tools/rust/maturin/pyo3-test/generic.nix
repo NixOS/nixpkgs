@@ -24,13 +24,13 @@ python.pkgs.buildPythonPackage rec {
     hash = "sha256-NOMrrfo8WjlPhtGxWUOPJS/UDDdbLQRCXR++Zd6JmIA=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src patches;
-    name = "${pname}-${version}";
-    hash = "sha256-u3L9nXHKILznyZTgxdvZyOCQZFZhuADrtI7zXYQzrbE=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
   };
 
-  patches = [ ./Cargo.lock.patch ];
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   inherit buildAndTestSubdir format nativeBuildInputs preConfigure;
 
@@ -40,6 +40,6 @@ python.pkgs.buildPythonPackage rec {
     description = "PyO3 word count example";
     homepage = "https://github.com/PyO3/pyo3";
     license = licenses.asl20;
-    maintainers = [ maintainers.danieldk ];
+    maintainers = [ ];
   };
 }

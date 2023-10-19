@@ -1,5 +1,5 @@
-{ stdenv, buildPythonApplication, fetchFromGitHub, isPyPy, lib
-, future, psutil, setuptools
+{ stdenv, buildPythonApplication, fetchFromGitHub, fetchpatch, isPyPy, lib
+, defusedxml, future, ujson, packaging, psutil, setuptools
 # Optional dependencies:
 , bottle, pysnmp
 , hddtemp
@@ -9,18 +9,15 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.1.7";
+  version = "3.4.0.3";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    rev = "v${version}";
-    sha256 = "sha256-82ZD32dqRYGbGM/uyaJ5VqVZbhDZthiEcTihkV43JOU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-TakQqyHKuiFdBL73JQzflNUMYmBINyY0flqitqoIpmg=";
   };
-
-  # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):
-  patches = lib.optional (doCheck && stdenv.isLinux) ./skip-failing-tests.patch;
 
   # On Darwin this package segfaults due to mismatch of pure and impure
   # CoreFoundation. This issues was solved for binaries but for interpreted
@@ -31,14 +28,17 @@ buildPythonApplication rec {
   ];
 
   doCheck = true;
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
   '';
 
   propagatedBuildInputs = [
     bottle
+    defusedxml
     future
+    ujson
     netifaces
+    packaging
     psutil
     pysnmp
     setuptools
@@ -48,7 +48,7 @@ buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
-    changelog = "https://github.com/nicolargo/glances/releases/tag/v${version}";
+    changelog = "https://github.com/nicolargo/glances/blob/v${version}/NEWS.rst";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ jonringer primeos koral ];
   };

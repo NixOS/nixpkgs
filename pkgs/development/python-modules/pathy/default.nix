@@ -1,38 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytestCheckHook
-, typer
-, dataclasses
-, smart-open
-, pytest
-, mock
+, fetchpatch
 , google-cloud-storage
+, mock
+, pytestCheckHook
+, pythonOlder
+, smart-open
+, typer
 }:
 
 buildPythonPackage rec {
   pname = "pathy";
-  version = "0.5.2";
+  version = "0.10.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-nb8my/5rkc7thuHnXZHe1Hg8j+sLBlYyJcLHWrrKZ5M=";
+    hash = "sha256-ecVyq3/thNxGg3NG7a5YVlmS0Ed6eJzUaRpB2Oq5kX0=";
   };
 
-  propagatedBuildInputs = [ smart-open typer google-cloud-storage ];
+  propagatedBuildInputs = [
+    google-cloud-storage
+    smart-open
+    typer
+  ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "smart-open>=2.2.0,<4.0.0" "smart-open>=2.2.0"
-  '';
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytestCheckHook mock ];
+  disabledTestPaths = [
+    # Exclude tests that require provider credentials
+    "pathy/_tests/test_clients.py"
+    "pathy/_tests/test_gcs.py"
+    "pathy/_tests/test_s3.py"
+  ];
 
-  # Exclude tests that require provider credentials
-  pytestFlagsArray = [
-    "--ignore=pathy/_tests/test_clients.py"
-    "--ignore=pathy/_tests/test_gcs.py"
-    "--ignore=pathy/_tests/test_s3.py"
+  pythonImportsCheck = [
+    "pathy"
   ];
 
   meta = with lib; {

@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "190s4r2n3jsivl4j2m288j3rqmgjj6gl308hi9mzwyhcfn17q8br";
   };
 
+  # Avoid requesting an unreasonable intrinsic
+  patches = lib.optional stdenv.cc.isClang ./vc_0_7_clang_fix.patch;
+
   nativeBuildInputs = [ cmake ];
 
   postPatch = ''
@@ -24,5 +27,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
+    # never built on aarch64-darwin since first introduction in nixpkgs
+    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
   };
 }

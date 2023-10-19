@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "arrow";
-  version = "1.0.3";
+  version = "1.2.3";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "399c9c8ae732270e1aa58ead835a79a40d7be8aa109c579898eb41029b5a231d";
+    hash = "sha256-OTSzDKG58pI3bZ2xWxlEYIjRLsWGKbw/DaKP1V+2M6E=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ python-dateutil ]
     ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     pytz
@@ -40,6 +40,8 @@ buildPythonPackage rec {
   disabledTests = [
     "test_parse_tz_name_zzz"
   ];
+
+  pythonImportsCheck = [ "arrow" ];
 
   meta = with lib; {
     description = "Python library for date manipulation";

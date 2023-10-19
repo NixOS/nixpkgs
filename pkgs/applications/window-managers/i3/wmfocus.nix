@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wmfocus";
-  version = "1.1.5";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09xffklpz62h6yiksxdlv3a9s1z0wr3ax9syl399avwdmq3c0y49";
+    sha256 = "sha256-zXqPZORwi7X1wBTecPg9nOCvRHWNTtloCpgbPwtFhzo=";
   };
 
-  cargoSha256 = "0fmz3q3yadymbqnkdhjd2z2g4zgf3z81ccixwywndd9zb7p47zdr";
+  cargoHash = "sha256-4eoV/viI7Q7I7mIqcHVAyPf/y2RWaWX0B+mLZWMEbcI=";
 
   nativeBuildInputs = [ python3 pkg-config ];
   buildInputs = [ cairo libxkbcommon xorg.xcbutilkeysyms ];
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   # For now, this is the only available featureset. This is also why the file is
   # in the i3 folder, even though it might be useful for more than just i3
   # users.
-  cargoBuildFlags = [ "--features i3" ];
+  buildFeatures = [ "i3" ];
 
   meta = with lib; {
     description = "Visually focus windows by label";

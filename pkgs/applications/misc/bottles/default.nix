@@ -1,78 +1,114 @@
-{ lib, fetchFromGitHub
-, meson, ninja, pkg-config, wrapGAppsHook
-, desktop-file-utils, gsettings-desktop-schemas, libnotify, libhandy
-, python3Packages, gettext
-, appstream-glib, gdk-pixbuf, glib, gobject-introspection, gspell, gtk3
-, steam-run-native
+{ lib
+, fetchFromGitHub
+, gitUpdater
+, python3Packages
+, blueprint-compiler
+, meson
+, ninja
+, pkg-config
+, wrapGAppsHook4
+, appstream-glib
+, desktop-file-utils
+, librsvg
+, gtk4
+, gtksourceview5
+, libadwaita
+, cabextract
+, p7zip
+, xdpyinfo
+, imagemagick
+, lsb-release
+, pciutils
+, procps
+, gamescope
+, mangohud
+, vkbasalt-cli
+, vmtouch
 }:
 
 python3Packages.buildPythonApplication rec {
-  pname = "bottles";
-  version = "3.1.6";
+  pname = "bottles-unwrapped";
+  version = "51.9";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
-    repo = pname;
+    repo = "bottles";
     rev = version;
-    sha256 = "1izks01010akjf83xvi70dr4yzgk6yr84kd0slzz22yq204pdh5m";
+    sha256 = "sha256-iZUszwVcbVn6Xsqou6crSp9gJBRmm5vEqxS87h/s3PQ=";
   };
 
-  postPatch = ''
-    chmod +x build-aux/meson/postinstall.py
-    patchShebangs build-aux/meson/postinstall.py
-  '';
+  patches = [
+    ./vulkan_icd.patch
+  ];
 
+  # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
-    wrapGAppsHook
-    gettext
+    wrapGAppsHook4
+    gtk4 # gtk4-update-icon-cache
     appstream-glib
     desktop-file-utils
   ];
 
   buildInputs = [
-    gdk-pixbuf
-    glib
-    gobject-introspection
-    gsettings-desktop-schemas
-    gspell
-    gtk3
-    libhandy
-    libnotify
+    librsvg
+    gtk4
+    gtksourceview5
+    libadwaita
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    pycairo
+    pathvalidate
+    pycurl
+    pyyaml
+    requests
     pygobject3
-    lxml
-    dbus-python
-    gst-python
-    liblarch
-  ] ++ [ steam-run-native ];
+    patool
+    markdown
+    fvs
+    pefile
+    urllib3
+    chardet
+    certifi
+    idna
+    orjson
+    icoextract
+  ] ++ [
+    cabextract
+    p7zip
+    xdpyinfo
+    imagemagick
+    vkbasalt-cli
+
+    gamescope
+    mangohud
+    vmtouch
+
+    # Undocumented (subprocess.Popen())
+    lsb-release
+    pciutils
+    procps
+  ];
 
   format = "other";
-  strictDeps = false; # broken with gobject-introspection setup hook, see https://github.com/NixOS/nixpkgs/issues/56943
   dontWrapGApps = true; # prevent double wrapping
-
-  preConfigure = ''
-    substituteInPlace build-aux/meson/postinstall.py \
-      --replace "'update-desktop-database'" "'${desktop-file-utils}/bin/update-desktop-database'"
-    substituteInPlace src/runner.py \
-      --replace " {runner}" " ${steam-run-native}/bin/steam-run {runner}" \
-      --replace " {dxvk_setup}" " ${steam-run-native}/bin/steam-run {dxvk_setup}"
-  '';
 
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  passthru.updateScript = gitUpdater { };
+
   meta = with lib; {
     description = "An easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
+    downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bloomvdomino shamilton ];
+    maintainers = with maintainers; [ psydvl shamilton ];
     platforms = platforms.linux;
+    mainProgram = "bottles";
   };
 }

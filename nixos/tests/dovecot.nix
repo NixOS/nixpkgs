@@ -1,7 +1,7 @@
 import ./make-test-python.nix {
   name = "dovecot";
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ common/user-account.nix ];
     services.postfix.enable = true;
     services.dovecot2 = {

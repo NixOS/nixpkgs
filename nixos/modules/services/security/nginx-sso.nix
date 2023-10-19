@@ -8,13 +8,13 @@ let
   configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
 in {
   options.services.nginx.sso = {
-    enable = mkEnableOption "nginx-sso service";
+    enable = mkEnableOption (lib.mdDoc "nginx-sso service");
 
     package = mkOption {
       type = types.package;
       default = pkgs.nginx-sso;
-      defaultText = "pkgs.nginx-sso";
-      description = ''
+      defaultText = literalExpression "pkgs.nginx-sso";
+      description = lib.mdDoc ''
         The nginx-sso package that should be used.
       '';
     };
@@ -22,7 +22,7 @@ in {
     configuration = mkOption {
       type = types.attrsOf types.unspecified;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };
 
@@ -40,9 +40,9 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         nginx-sso configuration
-        (<link xlink:href="https://github.com/Luzifer/nginx-sso/wiki/Main-Configuration">documentation</link>)
+        ([documentation](https://github.com/Luzifer/nginx-sso/wiki/Main-Configuration))
         as a Nix attribute set.
       '';
     };

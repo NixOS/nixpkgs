@@ -1,23 +1,23 @@
-{ mkDerivation, stdenv, lib, pkg-config, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl, wrapQtAppsHook }:
+{ stdenv, lib, cmake, pkg-config, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qtimageformats, qttools, boost, openssl, wrapQtAppsHook, libsecret }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "chatterino2";
-  version = "2.3.0";
+  version = "2.4.6";
   src = fetchFromGitHub {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x12zcrbkxn2nn0hqkj1amrxv4q032id282cajzsx7by970r1shd";
+    sha256 = "sha256-CQviw5Fw6v5EwjCldAQoJfAIZMWKBfBzUIQZEgW34k0=";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg qtmultimedia boost openssl ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  buildInputs = [ qtbase qtsvg qtmultimedia qtimageformats qttools boost openssl libsecret ];
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
-  '';
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp "$out/Applications/chatterino.app/Contents/MacOS/chatterino"
+  '' + ''
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    cp $src/resources/icon.png $out/share/icons/hicolor/256x256/apps/chatterino.png
   '';
   meta = with lib; {
     description = "A chat client for Twitch chat";

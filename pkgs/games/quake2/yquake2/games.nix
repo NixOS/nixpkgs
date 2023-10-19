@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub }:
 
 let
   games = {
@@ -28,7 +28,7 @@ let
     inherit (data) id version description sha256;
     inherit title;
 
-    name = "yquake2-${title}-${version}";
+    pname = "yquake2-${title}";
 
     src = fetchFromGitHub {
       inherit sha256;
@@ -37,11 +37,9 @@ let
       rev = "${lib.toUpper id}_${builtins.replaceStrings ["."] ["_"] version}";
     };
 
-    nativeBuildInputs = [ cmake ];
-
     installPhase = ''
       mkdir -p $out/lib/yquake2/${id}
-      cp Release/* $out/lib/yquake2/${id}
+      cp release/* $out/lib/yquake2/${id}
     '';
 
     meta = with lib; {

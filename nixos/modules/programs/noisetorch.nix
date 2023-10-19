@@ -3,14 +3,16 @@
 with lib;
 
 let cfg = config.programs.noisetorch;
-in {
+in
+{
   options.programs.noisetorch = {
-    enable = mkEnableOption "noisetorch + setcap wrapper";
+    enable = mkEnableOption (lib.mdDoc "noisetorch + setcap wrapper");
 
     package = mkOption {
       type = types.package;
       default = pkgs.noisetorch;
-      description = ''
+      defaultText = literalExpression "pkgs.noisetorch";
+      description = lib.mdDoc ''
         The noisetorch package to use.
       '';
     };
@@ -18,8 +20,11 @@ in {
 
   config = mkIf cfg.enable {
     security.wrappers.noisetorch = {
-      source = "${cfg.package}/bin/noisetorch";
+      owner = "root";
+      group = "root";
       capabilities = "cap_sys_resource=+ep";
+      source = "${cfg.package}/bin/noisetorch";
     };
+    environment.systemPackages = [ cfg.package ];
   };
 }

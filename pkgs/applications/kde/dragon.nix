@@ -10,7 +10,8 @@
 mkDerivation {
   pname = "dragon";
   meta = {
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    homepage = "https://apps.kde.org/dragonplayer/";
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     description = "A simple media player for KDE";
     maintainers = [ lib.maintainers.jonathanreeve ];
   };

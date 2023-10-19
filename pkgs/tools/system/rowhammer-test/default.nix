@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "rowhammer-test-20150811";
+  pname = "rowhammer-test";
+  version = "unstable-2015-08-11";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "rowhammer-test";
-    rev = "c1d2bd9f629281402c10bb10e52bc1f1faf59cc4"; # 2015-08-11
+    rev = "c1d2bd9f629281402c10bb10e52bc1f1faf59cc4";
     sha256 = "1fbfcnm5gjish47wdvikcsgzlb5vnlfqlzzm6mwiw2j5qkq0914i";
   };
 
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-Wno-error=format";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-Wno-error=format";
 
   buildPhase = "sh -e make.sh";
 

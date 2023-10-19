@@ -1,27 +1,27 @@
 { mkDerivation, lib, fetchFromGitLab, cmake, extra-cmake-modules
 , ki18n
 , kitemmodels
-, oathToolkit
+, oath-toolkit
 , qgpgme
 , plasma-framework
 , qt5 }:
 
 mkDerivation rec {
   pname = "plasma-pass";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "plasma";
     repo = "plasma-pass";
+    sha256 = "sha256-lCNskOXkSIcMPcMnTWE37sDCXfmtP0FhyMzxeF6L0iU=";
     rev = "v${version}";
-    sha256 = "1w2mzxyrh17x7da62b6sg1n85vnh1q77wlrfxwfb1pk77y59rlf1";
   };
 
   buildInputs  = [
     ki18n
     kitemmodels
-    oathToolkit
+    oath-toolkit
     qgpgme
     plasma-framework
     qt5.qtbase

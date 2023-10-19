@@ -1,39 +1,61 @@
 { lib
-, isPy3k
 , buildPythonPackage
+, cython
+, fetchpatch
 , fetchPypi
-, pytestrunner
-, setuptools_scm
-, isort
+, gmpy2
 , mpmath
-, strategies
+, numpy
+, pythonOlder
+, scipy
+, setuptools-scm
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "diofant";
-  version = "0.10.0";
+  version = "0.14.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit version;
     pname = "Diofant";
-    sha256 = "0qjg0mmz2cqxryr610mppx3virf1gslzrsk24304502588z53v8w";
+    hash = "sha256-c886y37xR+4TxZw9+3tb7nkTGxWcS+Ag/ruUUdpf7S4=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "remove-pip-from-build-dependencies.patch";
+      url = "https://github.com/diofant/diofant/commit/117e441808faa7c785ccb81bf211772d60ebdec3.patch";
+      hash = "sha256-MYk1Ku4F3hAv7+jJQLWhXd8qyKRX+QYuBzPfYWT0VbU=";
+    })
+  ];
+
   nativeBuildInputs = [
-    isort
-    pytestrunner
-    setuptools_scm
+    setuptools-scm
+    wheel
   ];
 
   propagatedBuildInputs = [
     mpmath
-    strategies
   ];
+
+  passthru.optional-dependencies = {
+    exports = [
+      cython
+      numpy
+      scipy
+    ];
+    gmpy = [
+      gmpy2
+    ];
+  };
 
   # tests take ~1h
   doCheck = false;
 
-  disabled = !isPy3k;
+  pythonImportsCheck = [ "diofant" ];
 
   meta = with lib; {
     description = "A Python CAS library";

@@ -1,16 +1,16 @@
 { lib, mkDerivation, fetchurl, makeFontsConf, appimageTools
 , qtbase, qtsvg, qtmultimedia, qtwebsockets, qtimageformats
 , autoPatchelfHook, desktop-file-utils, imagemagick
-, twemoji-color-font, xorg, libsodium, libopus, libGL, alsaLib }:
+, twemoji-color-font, xorg, libsodium, libopus, libGL, alsa-lib }:
 
 mkDerivation rec {
   pname = "ripcord";
-  version = "0.4.28";
+  version = "0.4.29";
 
   src = let
     appimage = fetchurl {
       url = "https://cancel.fm/dl/Ripcord-${version}-x86_64.AppImage";
-      sha256 = "0bczqp4kny7jlp06f4bh1xg0x17g8980dj6pk4waqc7qk88i6sfv";
+      sha256 = "sha256-4yDLPEBDsPKWtLwdpmSyl3b5XCwLAr2/EVtNRrFmmJk=";
       name = "${pname}-${version}.AppImage";
     };
   in appimageTools.extract {
@@ -19,7 +19,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoPatchelfHook desktop-file-utils imagemagick ];
-  buildInputs = [ libsodium libopus libGL alsaLib ]
+  buildInputs = [ libsodium libopus libGL alsa-lib ]
     ++ [ qtbase qtsvg qtmultimedia qtwebsockets qtimageformats ]
     ++ (with xorg; [ libX11 libXScrnSaver libXcursor xkeyboardconfig ]);
 
@@ -48,7 +48,7 @@ mkDerivation rec {
     install -Dm755 ${src}/Ripcord $out/Ripcord
     patchelf --replace-needed libsodium.so.18 libsodium.so $out/Ripcord
     makeQtWrapper $out/Ripcord $out/bin/ripcord \
-      --run "cd $out" \
+      --chdir "$out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
       --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
@@ -60,6 +60,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ infinisil ];

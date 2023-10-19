@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, ncurses, libpcap, automake, nixosTests }:
 
-stdenv.mkDerivation {
-  name = "iftop-1.0pre4";
+stdenv.mkDerivation rec {
+  pname = "iftop";
+  version = "1.0pre4";
 
   src = fetchurl {
-    url = "http://ex-parrot.com/pdw/iftop/download/iftop-1.0pre4.tar.gz";
+    url = "http://ex-parrot.com/pdw/iftop/download/iftop-${version}.tar.gz";
     sha256 = "15sgkdyijb7vbxpxjavh5qm5nvyii3fqcg9mzvw7fx8s6zmfwczp";
   };
 
@@ -17,6 +18,12 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ncurses libpcap];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: tui.o:/build/iftop-1.0pre4/ui_common.h:41: multiple definition of `service_hash';
+  #     iftop.o:/build/iftop-1.0pre4/ui_common.h:41: first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   passthru.tests = { inherit (nixosTests) iftop; };
 

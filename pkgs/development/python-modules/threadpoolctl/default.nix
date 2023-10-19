@@ -1,29 +1,55 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
-, flit
+, flit-core
 , pytestCheckHook
-, pytestcov
 , numpy
 , scipy
 }:
 
 buildPythonPackage rec {
   pname = "threadpoolctl";
-  version = "2.1.0";
+  version = "3.1.0";
 
-  disabled = isPy27;
-  format = "flit";
+  disabled = pythonOlder "3.6";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "joblib";
     repo = pname;
     rev = version;
-    sha256 = "0sl6mp3b2gb0dvqkhnkmrp2g3r5c7clyyyxzq44xih6sw1pgx9df";
+    hash = "sha256-/qt7cgFbvpc1BLZC7a4S0RToqSggKXAqF1Xr6xOqzw8=";
   };
 
-  checkInputs = [ pytestCheckHook pytestcov numpy scipy ];
+  nativeBuildInputs = [
+    flit-core
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+  ];
+
+  disabledTests = [
+    # accepts a limited set of cpu models based on project
+    # developers' hardware
+    "test_architecture"
+    # https://github.com/joblib/threadpoolctl/issues/128
+    "test_command_line_command_flag"
+    "test_command_line_import_flag"
+    "test_controller_info_actualized"
+    "test_set_threadpool_limits_by_api"
+    "test_set_threadpool_limits_no_limit"
+    "test_threadpool_limits_by_prefix"
+    "test_threadpool_limits_function_with_side_effect"
+    "test_threadpool_limits_manual_restore"
+  ];
+
+  pythonImportsCheck = [
+    "threadpoolctl"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/joblib/threadpoolctl";

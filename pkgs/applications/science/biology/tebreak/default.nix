@@ -1,7 +1,7 @@
-{ lib, fetchFromGitHub, last, exonerate, minia, python3Packages, bwa
-, samtools, findutils, python }:
+{ lib, fetchFromGitHub, last, exonerate, minia, python3, bwa
+, samtools }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "tebreak";
   version = "1.1";
 
@@ -12,8 +12,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "13mgh775d8hkl340923lfwwm4r5ps70girn8d6wgfxzwzxylz8iz";
   };
 
-  nativeBuildInputs = [ findutils python3Packages.cython ];
-  propagatedBuildInputs = with python3Packages; [
+  nativeBuildInputs = [ python3.pkgs.cython ];
+  propagatedBuildInputs = with python3.pkgs; [
     pysam
     scipy
     bx-python
@@ -35,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   checkPhase = ''
     $out/bin/tebreak -b test/data/example.ins.bam  -r test/data/Homo_sapiens_chr4_50000000-60000000_assembly19.fasta -p 4 --pickle test/example.pickle --detail_out test/example.tebreak.detail.out -i lib/teref.human.fa
     pushd test
-    ${python.interpreter} checktest.py
+    ${python3.interpreter} checktest.py
   '';
 
   meta = with lib; {

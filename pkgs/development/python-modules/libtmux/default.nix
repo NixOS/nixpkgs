@@ -1,26 +1,69 @@
-{ lib, fetchPypi, buildPythonPackage, pytest }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, poetry-core
+, pytest-rerunfailures
+, pytestCheckHook
+, procps
+, tmux
+, ncurses
+}:
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.8.5";
+  version = "0.23.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1d35b9f8451944d31c5ed22ed9e6c8e18034adcc75718fcc5b27fbd9621543e1";
+  src = fetchFromGitHub {
+    owner = "tmux-python";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-W1gBhukBooPo8uej6i8i3UxLuDeBBeSX5xU50SyjjlA=";
   };
 
-  checkInputs = [ pytest ];
   postPatch = ''
-    sed -i 's/==.*$//' requirements/test.txt
+    sed -i '/addopts/d' setup.cfg
   '';
 
-  # No tests in archive
-  doCheck = false;
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  nativeCheckInputs = [
+    procps
+    tmux
+    ncurses
+    pytest-rerunfailures
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # Fail with: 'no server running on /tmp/tmux-1000/libtmux_test8sorutj1'.
+    "test_new_session_width_height"
+    # Assertion error
+    "test_capture_pane_start"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # tests/test_pane.py:113: AssertionError
+    "test_capture_pane_start"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    "tests/test_test.py"
+    "tests/legacy_api/test_test.py"
+  ];
+
+  pythonImportsCheck = [
+    "libtmux"
+  ];
 
   meta = with lib; {
-    description = "Scripting library for tmux";
-    homepage = "https://libtmux.readthedocs.io/";
-    license = licenses.bsd3;
+    description = "Typed scripting library / ORM / API wrapper for tmux";
+    homepage = "https://libtmux.git-pull.com/";
+    changelog = "https://github.com/tmux-python/libtmux/raw/v${version}/CHANGES";
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }

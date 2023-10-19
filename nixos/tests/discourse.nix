@@ -4,7 +4,7 @@
 #  3. replying to that message via email.
 
 import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+  { pkgs, lib, package ? pkgs.discourse, ... }:
   let
     certs = import ./common/acme/server/snakeoil-certs.nix;
     clientDomain = "client.fake.domain";
@@ -28,6 +28,9 @@ import ./make-test-python.nix (
       { nodes, ... }:
       {
         virtualisation.memorySize = 2048;
+        virtualisation.cores = 4;
+        virtualisation.useNixStoreImage = true;
+        virtualisation.writableStore = false;
 
         imports = [ common/user-account.nix ];
 
@@ -37,7 +40,7 @@ import ./make-test-python.nix (
 
         networking.extraHosts = ''
           127.0.0.1 ${discourseDomain}
-          ${nodes.client.config.networking.primaryIPAddress} ${clientDomain}
+          ${nodes.client.networking.primaryIPAddress} ${clientDomain}
         '';
 
         services.postfix = {
@@ -55,7 +58,7 @@ import ./make-test-python.nix (
 
         services.discourse = {
           enable = true;
-          inherit admin;
+          inherit admin package;
           hostname = discourseDomain;
           sslCertificate = "${certs.${discourseDomain}.cert}";
           sslCertificateKey = "${certs.${discourseDomain}.key}";
@@ -87,7 +90,7 @@ import ./make-test-python.nix (
 
         networking.extraHosts = ''
           127.0.0.1 ${clientDomain}
-          ${nodes.discourse.config.networking.primaryIPAddress} ${discourseDomain}
+          ${nodes.discourse.networking.primaryIPAddress} ${discourseDomain}
         '';
 
         services.dovecot2 = {
@@ -163,7 +166,7 @@ import ./make-test-python.nix (
         request = builtins.toJSON {
           title = "Private message";
           raw = "This is a test message.";
-          target_usernames = admin.username;
+          target_recipients = admin.username;
           archetype = "private_message";
         };
       in ''
@@ -175,8 +178,8 @@ import ./make-test-python.nix (
         discourse.wait_until_succeeds("curl -sS -f https://${discourseDomain}")
         discourse.succeed(
             "curl -sS -f https://${discourseDomain}/session/csrf -c cookie -b cookie -H 'Accept: application/json' | jq -r '\"X-CSRF-Token: \" + .csrf' > csrf_token",
-            "curl -sS -f https://${discourseDomain}/session -c cookie -b cookie -H @csrf_token -H 'Accept: application/json' -d 'login=${nodes.discourse.config.services.discourse.admin.username}' -d \"password=${adminPassword}\" | jq -e '.user.username == \"${nodes.discourse.config.services.discourse.admin.username}\"'",
-            "curl -sS -f https://${discourseDomain}/login -v -H 'Accept: application/json' -c cookie -b cookie 2>&1 | grep ${nodes.discourse.config.services.discourse.admin.username}",
+            "curl -sS -f https://${discourseDomain}/session -c cookie -b cookie -H @csrf_token -H 'Accept: application/json' -d 'login=${nodes.discourse.services.discourse.admin.username}' -d \"password=${adminPassword}\" | jq -e '.user.username == \"${nodes.discourse.services.discourse.admin.username}\"'",
+            "curl -sS -f https://${discourseDomain}/login -v -H 'Accept: application/json' -c cookie -b cookie 2>&1 | grep ${nodes.discourse.services.discourse.admin.username}",
         )
 
         client.wait_for_unit("postfix.service")

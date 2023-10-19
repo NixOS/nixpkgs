@@ -1,19 +1,22 @@
 { mkDerivation, lib, fetchbzr, python3, rtmpdump }:
 
 let
-  pythonEnv = python3.withPackages (ps: with ps; [ pyqt5_with_qtmultimedia ]);
+  pythonEnv = python3.withPackages (ps: with ps; [ m3u8 pyqt5_with_qtmultimedia ]);
 in mkDerivation {
-  name = "qarte-4.6.0";
+  pname = "qarte";
+  version = "5.5.0";
+
   src = fetchbzr {
-    url = "http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-4";
-    rev = "22";
-    sha256 = "0v4zpj8w67ydvnmanxbl8pwvn0cfv70c0mlw36a1r4n0rvgxffcn";
+    url = "http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-5";
+    rev = "88";
+    sha256 = "sha256-+Ixe4bWKubH/XBESwmP2NWS8bH0jq611c3MZn7W87Jw=";
   };
 
   buildInputs = [ pythonEnv ];
 
   installPhase = ''
     runHook preInstall
+
     mkdir -p $out/bin
     mv qarte $out/bin/
     substituteInPlace $out/bin/qarte \
@@ -24,6 +27,7 @@ in mkDerivation {
 
     mkdir -p $out/share/qarte
     mv * $out/share/qarte/
+
     runHook postInstall
   '';
 
@@ -32,11 +36,11 @@ in mkDerivation {
       --prefix PATH : ${rtmpdump}/bin
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://launchpad.net/qarte";
     description = "A recorder for Arte TV Guide and Arte Concert";
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ vbgl ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ vbgl ];
+    platforms = platforms.linux;
   };
 }

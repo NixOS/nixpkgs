@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.19";
+  version = "3.7.20";
   pname = "afflib";
 
   src = fetchFromGitHub {
     owner = "sshock";
     repo = "AFFLIBv3";
     rev = "v${version}";
-    sha256 = "1qs843yi33yqbp0scqirn753lxzg762rz6xy2h3f8f77fijqj2qb";
+    sha256 = "sha256-xkqBfTftzn+rgeuoaKfHP7vQmy4VZuaCq8VFlfZTUE4=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsdOriginal;
     maintainers = [ lib.maintainers.raskin ];
-    inherit version;
     downloadPage = "https://github.com/sshock/AFFLIBv3/tags";
   };
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-fuzz";
-  version = "0.10.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "rust-fuzz";
     repo = "cargo-fuzz";
     rev = version;
-    sha256 = "sha256-txlHXboQi3Z8AMIJJBZsBrCA7xggF0zGDpKqcD8UxMo=";
+    sha256 = "sha256-qbeNQM3ODkstXQTbrCv8bbkwYDBU/HB+L1k66vY4494=";
   };
 
-  cargoSha256 = "sha256-eEfry6Q2YiIkNEHu6C8p17pUTF43eS1/iTP2oATZ/F8=";
+  cargoSha256 = "sha256-1CTwVHOG8DOObfaGK1eGn9HDM755hf7NlqheBTJcCig=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     description = "Command line helpers for fuzzing";
     homepage = "https://github.com/rust-fuzz/cargo-fuzz";
     license = with licenses; [ mit asl20 ];
-    maintainers = [ maintainers.ekleog ];
+    maintainers = with maintainers; [ ekleog matthiasbeyer ];
   };
 }

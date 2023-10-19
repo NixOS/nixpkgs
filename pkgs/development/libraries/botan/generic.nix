@@ -1,18 +1,22 @@
-{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, openssl, boost
+{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
 , sourceExtension ? "tar.xz"
 , extraConfigureFlags ? ""
+, extraPatches ? [ ]
+, badPlatforms ? [ ]
 , postPatch ? null
 , knownVulnerabilities ? [ ]
-, CoreServices
-, Security
+, CoreServices ? null
+, Security ? null
 , ...
 }:
 
 stdenv.mkDerivation rec {
   pname = "botan";
   version = "${baseVersion}.${revision}";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     name = "Botan-${version}.${sourceExtension}";
@@ -22,13 +26,17 @@ stdenv.mkDerivation rec {
     ];
     inherit sha256;
   };
+  patches = extraPatches;
   inherit postPatch;
 
-  buildInputs = [ python3 bzip2 zlib gmp openssl boost ]
+  nativeBuildInputs = [ python3 ];
+  buildInputs = [ bzip2 zlib gmp boost ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   configurePhase = ''
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${if openssl != null then "--with-openssl" else ""} ${extraConfigureFlags}${if stdenv.cc.isClang then " --cc=clang" else "" }
+    runHook preConfigure
+    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"} ${lib.optionalString stdenv.hostPlatform.isAarch64 " --cpu=aarch64"}
+    runHook postConfigure
   '';
 
   enableParallelBuilding = true;
@@ -44,12 +52,14 @@ stdenv.mkDerivation rec {
     ln -s botan-*.pc botan.pc || true
   '';
 
+  doCheck = true;
+
   meta = with lib; {
-    inherit version;
     description = "Cryptographic algorithms library";
-    maintainers = with maintainers; [ raskin ];
+    maintainers = with maintainers; [ raskin thillux ];
     platforms = platforms.unix;
     license = licenses.bsd2;
+    inherit badPlatforms;
     inherit knownVulnerabilities;
   };
   passthru.updateInfo.downloadPage = "http://files.randombit.net/botan/";

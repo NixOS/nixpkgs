@@ -1,14 +1,19 @@
-version: {
-  x86_64-darwin-cpu = {
-    url = "https://download.pytorch.org/libtorch/cpu/libtorch-macos-${version}.zip";
-    hash = "sha256-FYgnd5zlycjCYnP5bZcjpMdGYXrRERwhFFBYo/SJgzs=";
-  };
-  x86_64-linux-cpu = {
-    url = "https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-${version}%2Bcpu.zip";
-    hash = "sha256-xneCcVrY25Whgbs/kPbwdS1Lc0e6RxsDRpA5lHTZigc=";
-  };
-  x86_64-linux-cuda = {
-    url = "https://download.pytorch.org/libtorch/cu111/libtorch-cxx11-abi-shared-with-deps-${version}%2Bcu111.zip";
-    hash = "sha256-VW+TW00nD49GBztCyxHE4dTyy81aN/kfYE3hKQOIm50=";
+version : builtins.getAttr version {
+  "2.0.0" = {
+    x86_64-darwin-cpu = {
+      name = "libtorch-macos-2.0.0.zip";
+      url = "https://download.pytorch.org/libtorch/cpu/libtorch-macos-2.0.0.zip";
+      hash = "sha256-u6y5IeYoiOC0yQ/k6JCChDs9lXWccLxUorgR8L62lkM=";
+    };
+    x86_64-linux-cpu = {
+      name = "libtorch-cxx11-abi-shared-with-deps-2.0.0-cpu.zip";
+      url = "https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcpu.zip";
+      hash = "sha256-BoZQ2MC1CDVVGfX3SHC3mEpLGWO8XK7AcLcHJXDsXuc=";
+    };
+    x86_64-linux-cuda = {
+      name = "libtorch-cxx11-abi-shared-with-deps-2.0.0-cu118.zip";
+      url = "https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.0.0%2Bcu118.zip";
+      hash = "sha256-Dpw9kQdA1NI9EOT7JBKwQP4wZT6lizcnKKTQ8WVJCZc=";
+    };
   };
 }

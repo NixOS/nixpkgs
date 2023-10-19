@@ -19,14 +19,15 @@
 stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
-  name = "netpbm-10.92.0";
+  pname = "netpbm";
+  version = "11.4.2";
 
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "3972";
-    sha256 = "09fpy4n4f867j23pr3b719wpvp8hjrr4drxp0r1csw74p8j6vfy3";
+    rev = "4709";
+    sha256 = "HT1cw6y5cOTMrBolfXwhKtMQYBPCPPO+Flv3aWeOK0A=";
   };
 
   nativeBuildInputs = [
@@ -117,7 +118,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = {
-    homepage = "http://netpbm.sourceforge.net/";
+    homepage = "https://netpbm.sourceforge.net/";
     description = "Toolkit for manipulation of graphic images";
     license = lib.licenses.free; # http://netpbm.svn.code.sourceforge.net/p/netpbm/code/trunk/doc/copyright_summary
     platforms = with lib.platforms; linux ++ darwin;

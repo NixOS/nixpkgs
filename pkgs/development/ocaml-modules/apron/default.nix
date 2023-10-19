@@ -1,23 +1,29 @@
-{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl }:
+{ stdenv, lib, fetchFromGitHub, perl, gmp, mpfr, ppl, ocaml, findlib, camlidl, mlgmpidl
+, flint, pplite
+}:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-apron-${version}";
-  version = "0.9.13";
+  pname = "ocaml${ocaml.version}-apron";
+  version = "0.9.14";
   src = fetchFromGitHub {
     owner = "antoinemine";
     repo = "apron";
     rev = "v${version}";
-    sha256 = "14ymjahqdxj26da8wik9d5dzlxn81b3z1iggdl7rn2nn06jy7lvy";
+    hash = "sha256-e8bSf0FPB6E3MFHHoSrE0x/6nrUStO+gOKxJ4LDHBi0=";
   };
 
-  buildInputs = [ perl gmp mpfr ppl ocaml findlib camlidl ];
+  nativeBuildInputs = [ ocaml findlib perl ];
+  buildInputs = [ gmp mpfr ppl camlidl flint pplite ];
   propagatedBuildInputs = [ mlgmpidl ];
 
-  outputs = [ "out" "bin" "dev" ];
+  # TODO: Doesn't produce the library correctly if true
+  strictDeps = false;
+
+  outputs = [ "out" "dev" ];
 
   configurePhase = ''
     runHook preConfigure
-    ./configure -prefix $out
+    ./configure -prefix $out ${lib.optionalString stdenv.isDarwin "-no-strip"}
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
     runHook postConfigure
   '';
@@ -25,8 +31,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $dev/lib
     mv $out/lib/ocaml $dev/lib/
-    mkdir -p $bin
-    mv $out/bin $bin/
   '';
 
   meta = {

@@ -1,8 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , nix-update-script
-, fetchpatch
-, pantheon
 , pkg-config
 , meson
 , ninja
@@ -10,65 +9,56 @@
 , vala
 , desktop-file-utils
 , gtk3
-, libxml2
 , granite
+, libhandy
 , libnotify
 , vte
 , libgee
-, elementary-icon-theme
-, appstream
 , pcre2
 , wrapGAppsHook
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.2";
-
-  repoName = "terminal";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "terminal";
     rev = version;
-    sha256 = "sha256-giVmL0zYEVYJ40ZBQ9dDb4hOx4HaYRt7tUTOu37lMYU=";
-  };
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-k+xowr9HmOUgNkn25uj+oV7AtG9EZfgFDop0Z+H7b3Q=";
   };
 
   nativeBuildInputs = [
-    appstream
     desktop-file-utils
-    libxml2
     meson
     ninja
     pkg-config
     python3
     vala
     wrapGAppsHook
+    xvfb-run
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
+    libhandy
     libnotify
     pcre2
     vte
   ];
 
-  # See https://github.com/elementary/terminal/commit/914d4b0e2d0a137f12276d748ae07072b95eff80
-  mesonFlags = [ "-Dubuntu-bionic-patched-vte=false" ];
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Terminal emulator designed for elementary OS";
@@ -77,8 +67,9 @@ stdenv.mkDerivation rec {
       smart copy/paste, and little to no configuration.
     '';
     homepage = "https://github.com/elementary/terminal";
-    license = licenses.lgpl3;
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.terminal";
   };
 }

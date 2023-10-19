@@ -1,29 +1,30 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, six
-, pytest
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "Protego";
-  version = "0.1.16";
+  pname = "protego";
+  version = "0.3.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "a682771bc7b51b2ff41466460896c1a5a653f9a1e71639ef365a72e66d8734b4";
+    inherit version;
+    pname = "Protego";
+    hash = "sha256-BCKL/95Ma8ujHPZSm6LP1uG3CAj9wdLLQwG+ayjWxWg=";
   };
-  propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    pytest tests
-  '';
+  pythonImportsCheck = [ "protego" ];
 
   meta = with lib; {
     description = "A pure-Python robots.txt parser with support for modern conventions";
     homepage = "https://github.com/scrapy/protego";
+    changelog = "https://github.com/scrapy/protego/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
     maintainers = [ maintainers.marsam ];
   };

@@ -1,17 +1,30 @@
 { lib, stdenv, fetchurl, readline
 , compat ? false
 , callPackage
-, packageOverrides ? (self: super: {})
-, sourceVersion
+, makeWrapper
+, self
+, packageOverrides ? (final: prev: {})
+, pkgsBuildBuild
+, pkgsBuildHost
+, pkgsBuildTarget
+, pkgsHostHost
+, pkgsTargetTarget
+, version
 , hash
+, passthruFun
 , patches ? []
 , postConfigure ? null
 , postBuild ? null
-}:
+, staticOnly ? stdenv.hostPlatform.isStatic
+, luaAttr ? "lua${lib.versions.major version}_${lib.versions.minor version}"
+} @ inputs:
 let
-luaPackages = callPackage ../../lua-modules {lua=self; overrides=packageOverrides;};
+  luaPackages = self.pkgs;
 
-plat = if stdenv.isLinux then "linux"
+  luaversion = lib.versions.majorMinor version;
+
+plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
+       else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
        else if stdenv.isDarwin then "macosx"
        else if stdenv.hostPlatform.isMinGW then "mingw"
        else if stdenv.isFreeBSD then "freebsd"
@@ -20,31 +33,46 @@ plat = if stdenv.isLinux then "linux"
        else if stdenv.hostPlatform.isUnix then "posix"
        else "generic";
 
-self = stdenv.mkDerivation rec {
+compatFlags = if (lib.versionOlder self.luaversion "5.3") then " -DLUA_COMPAT_ALL"
+              else if (lib.versionOlder self.luaversion "5.4") then " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
+              else " -DLUA_COMPAT_5_3";
+in
+
+stdenv.mkDerivation rec {
   pname = "lua";
-  luaversion = with sourceVersion; "${major}.${minor}";
-  version = "${luaversion}.${sourceVersion.patch}";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.lua.org/ftp/${pname}-${version}.tar.gz";
     sha256 = hash;
   };
 
-  LuaPathSearchPaths    = luaPackages.getLuaPathList luaversion;
-  LuaCPathSearchPaths   = luaPackages.getLuaCPathList luaversion;
+  LuaPathSearchPaths    = luaPackages.luaLib.luaPathList;
+  LuaCPathSearchPaths   = luaPackages.luaLib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ readline ];
 
   inherit patches;
 
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  # we can't pass flags to the lua makefile because for portability, everything is hardcoded
+  postPatch = ''
+    {
+      echo -e '
+        #undef  LUA_PATH_DEFAULT
+        #define LUA_PATH_DEFAULT "./share/lua/${luaversion}/?.lua;./?.lua;./?/init.lua"
+        #undef  LUA_CPATH_DEFAULT
+        #define LUA_CPATH_DEFAULT "./lib/lua/${luaversion}/?.so;./?.so;./lib/lua/${luaversion}/loadall.so"
+      '
+    } >> src/luaconf.h
+  '' + lib.optionalString (!stdenv.isDarwin && !staticOnly) ''
     # Add a target for a shared library to the Makefile.
     sed -e '1s/^/LUA_SO = liblua.so/' \
         -e 's/ALL_T *= */&$(LUA_SO) /' \
         -i src/Makefile
     cat ${./lua-dso.make} >> src/Makefile
-  '';
+  '' ;
 
   # see configurePhase for additional flags (with space)
   makeFlags = [
@@ -56,17 +84,22 @@ self = stdenv.mkDerivation rec {
     "PLAT=${plat}"
     "CC=${stdenv.cc.targetPrefix}cc"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+    # Lua links with readline wich depends on ncurses. For some reason when
+    # building pkgsStatic.lua it fails because symbols from ncurses are not
+    # found. Adding ncurses here fixes the problem.
+    "MYLIBS=-lncurses"
   ];
 
   configurePhase = ''
     runHook preConfigure
 
-    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat " -DLUA_COMPAT_ALL"} $(${
+    makeFlagsArray+=(CFLAGS='-O2 -fPIC${lib.optionalString compat compatFlags} $(${
       if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
     installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib" else "liblua.a liblua.so liblua.so.${luaversion} liblua.so.${version}"}" )
+      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib"
+                else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${version}" )}" )
 
     runHook postConfigure
   '';
@@ -101,18 +134,23 @@ self = stdenv.mkDerivation rec {
     ln -s "$out/lib/pkgconfig/lua.pc" "$out/lib/pkgconfig/lua${lib.replaceStrings [ "." ] [ "" ] luaversion}.pc"
   '';
 
-  passthru = rec {
-    buildEnv = callPackage ./wrapper.nix {
-      lua = self;
-      inherit (luaPackages) requiredLuaModules;
-    };
-    withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
-    pkgs = luaPackages;
-    interpreter = "${self}/bin/lua";
+  # copied from python
+  passthru = let
+    # When we override the interpreter we also need to override the spliced versions of the interpreter
+    inputs' = lib.filterAttrs (n: v: ! lib.isDerivation v && n != "passthruFun") inputs;
+    override = attr: let lua = attr.override (inputs' // { self = lua; }); in lua;
+  in passthruFun rec {
+    inherit self luaversion packageOverrides luaAttr;
+    executable = "lua";
+    luaOnBuildForBuild = override pkgsBuildBuild.${luaAttr};
+    luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
+    luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
+    luaOnHostForHost = override pkgsHostHost.${luaAttr};
+    luaOnTargetForTarget = lib.optionalAttrs (lib.hasAttr luaAttr pkgsTargetTarget) (override pkgsTargetTarget.${luaAttr});
   };
 
   meta = {
-    homepage = "http://www.lua.org";
+    homepage = "https://www.lua.org";
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data
@@ -125,5 +163,4 @@ self = stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-};
-in self
+}

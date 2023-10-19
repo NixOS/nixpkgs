@@ -1,10 +1,7 @@
-#! /usr/bin/env perl
+#!/usr/bin/env nix-shell
+#!nix-shell --pure --keep NIX_PATH -i perl -p cacert nix perl
 
-# Usage:
-#
-# manually update tarballs.list
-# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
-
+# Usage: manually update tarballs.list then run: ./generate-expr-from-tarballs.pl tarballs.list
 
 use strict;
 use warnings;
@@ -17,15 +14,17 @@ use File::Temp;
 my %pkgURLs;
 my %pkgHashes;
 my %pkgNames;
+my %pkgVersions;
 my %pkgRequires;
 my %pkgNativeRequires;
 
+my %pcProvides;
 my %pcMap;
 
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext" );
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext", "meson", "ninja", "wrapWithXFileSearchPathHook" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -36,6 +35,7 @@ $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
 $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "mesa";
+$pcMap{"hwdata"} = "hwdata";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -59,7 +59,7 @@ while (<>) {
       $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
       die unless defined $1;
       $pkg = $1;
-      $pkg =~ s/-//g;
+      $pkg =~ s/(-|[a-f0-9]{40})//g; # Remove hyphen-minus and SHA-1
       #next unless $pkg eq "xcbutil";
     }
 
@@ -73,8 +73,12 @@ while (<>) {
         next;
     }
 
+    # Split by first occurrence of hyphen followed by only numbers, ends line, another hyphen follows, or SHA-1
+    my ($name, $version) = split(/-(?=[.0-9]+(?:$|-)|[a-f0-9]{40})/, $pkgName, 2);
+
     $pkgURLs{$pkg} = $tarball;
-    $pkgNames{$pkg} = $pkgName;
+    $pkgNames{$pkg} = $name;
+    $pkgVersions{$pkg} = $version;
 
     my $cachePath = catdir($downloadCache, basename($tarball));
     my $hash;
@@ -109,6 +113,7 @@ while (<>) {
         my $pc = $pcFile;
         $pc =~ s/.*\///;
         $pc =~ s/.pc.in//;
+        push @{$pcProvides{$pkg}}, $pc;
         print "PROVIDES $pc\n";
         die "collision with $pcMap{$pc}" if defined $pcMap{$pc};
         $pcMap{$pc} = $pkg;
@@ -152,7 +157,7 @@ while (<>) {
         push @nativeRequires, "bdftopcf";
     }
 
-    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
+    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/ || $file =~ /XORG_FONT_REQUIRED_PROG\(MKFONTSCALE/) {
         push @nativeRequires, "mkfontscale";
     }
 
@@ -188,7 +193,19 @@ while (<>) {
     }
 
     if ($isFont) {
+        push @requires, "fontutil";
         push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
+        push @{$extraAttrs{$pkg}}, "postPatch = ''substituteInPlace configure --replace 'MAPFILES_PATH=`pkg-config' 'MAPFILES_PATH=`\$PKG_CONFIG' '';";
+    }
+
+    # libpciaccess requires pci.ids{,.gz} at runtime
+    if ($pkg eq "libpciaccess") {
+        push @requires, "hwdata";
+        push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-pciids-path=\${hwdata}/share/hwdata\" ];";
+    }
+
+    if (@@ = glob("$tmpDir/*/app-defaults/")) {
+        push @nativeRequires, "wrapWithXFileSearchPathHook";
     }
 
     sub process {
@@ -227,6 +244,7 @@ while (<>) {
 
     push @nativeRequires, "gettext" if $file =~ /USE_GETTEXT/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
+    push @nativeRequires, "meson", "ninja" if $pkg =~ /libxcvt/;
     push @nativeRequires, "m4" if $pkg =~ /xcbutil/;
     push @requires, "gperf", "xorgproto" if $pkg =~ /xcbutil/;
 
@@ -246,9 +264,9 @@ open OUT, ">default.nix";
 print OUT "";
 print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
-{ lib, newScope, pixman }:
+{ lib, pixman }:
 
-lib.makeScope newScope (self: with self; {
+self: with self; {
 
   inherit pixman;
 
@@ -290,33 +308,57 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     my $nativeBuildInputsStr = join "", map { $_ . " " } @nativeBuildInputs;
     my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
 
+    sub uniq {
+        my %seen;
+        my @res = ();
+        foreach my $s (@_) {
+            if (!defined $seen{$s}) {
+                $seen{$s} = 1;
+                push @res, $s;
+            }
+        }
+        return @res;
+    }
+
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
     unshift @arguments, "stdenv", "pkg-config", "fetchurl";
-    my $argumentsStr = join ", ", @arguments;
+    my $argumentsStr = join ", ", uniq @arguments;
 
     my $extraAttrsStr = "";
     if (defined $extraAttrs{$pkg}) {
       $extraAttrsStr = join "", map { "\n    " . $_ } @{$extraAttrs{$pkg}};
     }
 
+    my $pcProvidesStr = "";
+    if (defined $pcProvides{$pkg}) {
+      $pcProvidesStr = join "", map { "\"" . $_ . "\" " } @{$pcProvides{$pkg}};
+    }
+
     print OUT <<EOF
-  $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
-    name = "$pkgNames{$pkg}";
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
+  $pkg = callPackage ({ $argumentsStr, testers }: stdenv.mkDerivation (finalAttrs: {
+    pname = "$pkgNames{$pkg}";
+    version = "$pkgVersions{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
       url = "$pkgURLs{$pkg}";
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
+    strictDeps = true;
     nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
-    meta.platforms = lib.platforms.unix;
-  }) {};
+    passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    meta = {
+      pkgConfigModules = [ $pcProvidesStr];
+      platforms = lib.platforms.unix;
+    };
+  })) {};
 
 EOF
 }
 
-print OUT "})\n";
+print OUT "}\n";
 
 close OUT;

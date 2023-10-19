@@ -1,41 +1,53 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
 , gnome
+, gnome-desktop
 , glib
 , gtk3
 , wayland
 , wayland-protocols
+, libbsd
 , libxml2
 , libxkbcommon
 , rustPlatform
+, rustc
 , feedbackd
 , wrapGAppsHook
+, fetchpatch
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "squeekboard";
-  version = "1.13.0";
+  version = "1.22.0";
 
   src = fetchFromGitLab {
-    domain = "source.puri.sm";
-    owner = "Librem5";
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "Phosh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0xyd6ickbaqvrr8a7ak6j1ziqjk05jlnganjrdv43p74nnjyqr8y";
+    hash = "sha256-Rk6LOCZ5bhoo5ORAIIYWENrKUIVypd8bnKjyyBSbUYg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     cargoUpdateHook = ''
-      cat Cargo.toml.in Cargo.deps > Cargo.toml
+      cat Cargo.toml.in Cargo.deps.newer > Cargo.toml
+      cp Cargo.lock.newer Cargo.lock
     '';
     name = "${pname}-${version}";
-    sha256 = "096skk7vmr93axcf0qj7kyr8hm1faj0nkmd349g8mnzwd68a9npz";
+    hash = "sha256-DygWra4R/w8KzkFzIVm4+ePpUpjiYGaDx2NQm6o+tWQ=";
   };
+
+  mesonFlags = [
+    "-Dnewer=true"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -44,27 +56,29 @@ stdenv.mkDerivation rec {
     glib
     wayland
     wrapGAppsHook
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     gtk3
-    gnome.gnome-desktop
+    gnome-desktop
     wayland
     wayland-protocols
+    libbsd
     libxml2
     libxkbcommon
     feedbackd
   ];
 
+  passthru.tests.phosh = nixosTests.phosh;
+
   meta = with lib; {
     description = "A virtual keyboard supporting Wayland";
     homepage = "https://source.puri.sm/Librem5/squeekboard";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ artturin ];
+    maintainers = with maintainers; [ artturin tomfitzhenry ];
     platforms = platforms.linux;
   };
 }

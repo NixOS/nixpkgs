@@ -15,7 +15,7 @@
 , pango
 , cairo
 , expat
-, alsaLib
+, alsa-lib
 , cups
 , dbus
 , atk
@@ -38,20 +38,20 @@ let
     icon = "minecraft-launcher";
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   envLibPath = lib.makeLibraryPath [
     curl
     libpulseaudio
     systemd
-    alsaLib # needed for narrator
+    alsa-lib # needed for narrator
     flite # needed for narrator
     libXxf86vm # needed only for versions <1.13
   ];
 
   libPath = lib.makeLibraryPath ([
-    alsaLib
+    alsa-lib
     atk
     cairo
     cups
@@ -100,8 +100,7 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
-  buildInputs = [ gobject-introspection ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems gobject-introspection ];
 
   sourceRoot = ".";
 
@@ -139,7 +138,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --set JAVA_HOME ${lib.getBin jre} \
-      --run "cd /tmp" \
+      --chdir /tmp \
       "''${gappsWrapperArgs[@]}"
   '';
 
@@ -149,6 +148,7 @@ stdenv.mkDerivation rec {
     description = "Official launcher for Minecraft, a sandbox-building game";
     homepage = "https://minecraft.net";
     maintainers = with maintainers; [ cpages ryantm infinisil ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

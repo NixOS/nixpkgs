@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo, readline, texLive }:
+{ lib, stdenv, fetchurl, bison, flex, makeWrapper, texinfo4, getopt, readline, texlive }:
 
-lib.fix (eukleides: stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "eukleides";
   version = "1.5.4";
 
@@ -9,12 +9,16 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
     sha256 = "0s8cyh75hdj89v6kpm3z24i48yzpkr8qf0cwxbs9ijxj1i38ki0q";
   };
 
-  # use $CC instead of hardcoded gcc
-  patches = [ ./use-CC.patch ];
+  patches = [
+    # use $CC instead of hardcoded gcc
+    ./use-CC.patch
+    # allow PostScript transparency in epstopdf call
+    ./gs-allowpstransparency.patch
+  ];
 
-  nativeBuildInputs = [ bison flex texinfo makeWrapper ];
+  nativeBuildInputs = [ bison flex texinfo4 makeWrapper ];
 
-  buildInputs = [ readline texLive ];
+  buildInputs = [ getopt readline ];
 
   preConfigure = ''
     substituteInPlace Makefile \
@@ -28,25 +32,29 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
       --replace '$(SHARE_DIR)/texmf' "$tex"
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: eukleides_build/triangle.o:(.bss+0x28): multiple definition of `A';
+  #     eukleides_build/quadrilateral.o:(.bss+0x18): first defined here
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
+
   preInstall = ''
     mkdir -p $out/bin
   '';
 
   postInstall = ''
     wrapProgram $out/bin/euktoeps \
-      --set-default TEXINPUTS : \
-      --prefix TEXINPUTS : "$tex/tex/latex/eukleides" \
-      --prefix PATH : "${texLive}/bin"
-    wrapProgram $out/bin/euktopdf \
-      --set-default TEXINPUTS : \
-      --prefix TEXINPUTS : "$tex/tex/latex/eukleides" \
-      --prefix PATH : "${texLive}/bin"
+      --prefix PATH : ${lib.makeBinPath [ getopt ]}
   '';
 
   outputs = [ "out" "doc" "tex" ];
 
-  passthru.tlType = "run";
-  passthru.pkgs = [ eukleides.tex ];
+  passthru = {
+    tlType = "run";
+    # packages needed by euktoeps, euktopdf and eukleides.sty
+    tlDeps = with texlive; [ collection-pstricks epstopdf iftex moreverb ];
+    pkgs = [ finalAttrs.finalPackage.tex ];
+  };
 
   meta = {
     description = "Geometry Drawing Language";
@@ -63,6 +71,5 @@ lib.fix (eukleides: stdenv.mkDerivation rec {
     '';
 
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.peti ];
   };
 })

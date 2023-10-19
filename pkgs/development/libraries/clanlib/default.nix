@@ -9,8 +9,7 @@
 , file
 , freetype
 , fontconfig
-, xlibsWrapper
-, alsaLib
+, alsa-lib
 , libXrender
 }:
 
@@ -35,8 +34,7 @@ stdenv.mkDerivation rec {
     xorg.xorgproto
     freetype
     fontconfig
-    xlibsWrapper
-    alsaLib
+    alsa-lib
     libXrender
   ];
 

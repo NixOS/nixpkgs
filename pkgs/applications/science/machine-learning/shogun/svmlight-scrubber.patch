@@ -1,0 +1,76 @@
+From: Sebastián Mancilla <smancill@smancill.dev>
+Subject: Update SVMlight scrubber script
+
+This requires previously fixing a few wrong preprocessor directives that
+are supposed to fence code using SVMlight.
+
+- The script was too eager and removing *.light files in SVMlight format
+  that are used by other tests. The code reading those files doesn't use
+  any SVMlight code so it should be fine to keep it and run the tests.
+
+- The Python test *domainadaptationsvm.py was not removed because of
+  wrong globbing.
+
+- Remove a couple of examples using SVMlight that were missed.
+
+- The script is actually modifying (and breaking) itself because the
+  grep for the USE_SVMLIGHT macro is too eager again and matches itself
+  (and the version stored in upstream's Debian package control tarball
+  is broken because of it). Just fix it by grepping for preprocessor
+  directives only.
+
+- No need to fix the Transfer_includes.i file in the script with a final
+  %} when its preprocessor directives have been fixed.
+
+- The Swig files were moved to a new directory at some point but the
+  script was not updated accordingly.
+---
+ scripts/light-scrubber.sh | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
+
+diff a/scripts/light-scrubber.sh b/scripts/light-scrubber.sh
+--- a/scripts/light-scrubber.sh
++++ b/scripts/light-scrubber.sh
+@@ -26,14 +26,16 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ #
+-rm -rf	examples/*/*/{*light*,*_domainadaptationsvm_*}				\
++rm -rf	examples/*/*/{*light*.*,*domainadaptationsvm*}				\
+ 	examples/undocumented/matlab_and_octave/tests/*light*			\
++	examples/undocumented/python/serialization_string_kernels.py		\
++	examples/undocumented/python/mkl_binclass.py				\
+ 	src/shogun/classifier/svm/SVMLight.*					\
+ 	src/shogun/classifier/svm/SVMLightOneClass.*				\
+ 	src/shogun/regression/svr/SVRLight.*					\
+ 	doc/md/LICENSE_SVMlight*
+ 
+-for _file in `grep -rl USE_SVMLIGHT .`
++grep -rl '^#ifdef USE_SVMLIGHT' . | while read -r _file
+ do
+   sed -i.orig -e								\
+ 	'/\#ifdef USE_SVMLIGHT/,/\#endif \/\/USE_SVMLIGHT/c \\' ${_file} &&	\
+@@ -41,7 +43,7 @@ do
+   rm -rf ${_file}.orig
+ done
+ 
+-for _file in `find . -depth -name 'CMakeLists.txt'`
++find . -depth -name 'CMakeLists.txt' | while read -r _file
+ do
+   sed -i.orig -e 's!.*_sv[mr]light_.*!!g' ${_file} &&				\
+   touch -r ${_file}.orig ${_file} &&						\
+@@ -56,13 +58,7 @@ do
+   rm -rf ${_file}.orig
+ done
+ 
+-_file="src/interfaces/modular/Transfer_includes.i" &&				\
+-cp -a ${_file} ${_file}.orig &&							\
+-echo '%}' >> ${_file} &&							\
+-touch -r ${_file}.orig ${_file} &&						\
+-rm -rf ${_file}.orig
+-
+-_file="src/interfaces/modular/Machine.i" &&					\
++_file="src/interfaces/swig/Machine.i" &&					\
+ sed -i.orig -e '/.*CSVRLight.*/d' ${_file} &&					\
+ touch -r ${_file}.orig ${_file} &&						\
+ rm -rf ${_file}.orig

@@ -1,7 +1,8 @@
 { fetchurl, lib, stdenv, ncurses }:
 
 stdenv.mkDerivation {
-  name = "readline-6.3p08";
+  pname = "readline";
+  version = "6.3p08";
 
   src = fetchurl {
     url = "mirror://gnu/readline/readline-6.3.tar.gz";
@@ -10,7 +11,8 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "man" "doc" "info" ];
 
-  propagatedBuildInputs = [ncurses];
+  strictDeps = true;
+  propagatedBuildInputs = [ ncurses ];
 
   patchFlags = [ "-p0" ];
 

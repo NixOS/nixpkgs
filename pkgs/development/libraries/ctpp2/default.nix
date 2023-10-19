@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
     sed -ie 's/<stdlib.h>/<stdlib.h>\n#include <unistd.h>/' src/CTPP2FileSourceLoader.cpp
   '';
 
+  cmakeFlags = [
+    # RPATH of binary /nix/store/.../bin/ctpp2json contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ];
+
   doCheck = false; # fails
 
   meta = with lib; {

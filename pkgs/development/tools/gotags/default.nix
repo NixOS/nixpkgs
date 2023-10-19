@@ -1,15 +1,32 @@
-{ lib, buildGoPackage, fetchgit }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "gotags";
-  version = "20150803-${lib.strings.substring 0 7 rev}";
-  rev = "be986a34e20634775ac73e11a5b55916085c48e7";
+  version = "1.4.1";
 
-  goPackagePath = "github.com/jstemmer/gotags";
+  src = fetchFromGitHub {
+    owner = "jstemmer";
+    repo = pname;
+    rev = "4c0c4330071a994fbdfdff68f412d768fbcca313";
+    hash = "sha256-cHTgt+zW6S6NDWBE6NxSXNPdn84CLD8WmqBe+uXN8sA=";
+  };
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/jstemmer/gotags";
-    sha256 = "071wyq90b06xlb3bb0l4qjz1gf4nnci4bcngiddfcxf2l41w1vja";
+  vendorHash = null;
+
+  patches = [
+    # Add Go Modules support
+    (fetchpatch {
+      url = "https://github.com/jstemmer/gotags/commit/9146999bce9a88e15b5f123d1aa1613926dd9a9c.patch";
+      hash = "sha256-6v/Ws15y50S6iCI1c0kEw5WHSg+1WqVT4mwdQKoi5G8=";
+    })
+  ];
+
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
+    description = "ctags-compatible tag generator for Go";
+    homepage = "https://github.com/jstemmer/gotags";
+    license = licenses.mit;
+    maintainers = with maintainers; [ urandom ];
   };
 }

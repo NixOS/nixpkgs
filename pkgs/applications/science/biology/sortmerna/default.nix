@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, fetchpatch, zlib }:
+{ lib, stdenv, cmake, rocksdb, rapidjson, pkg-config, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sortmerna";
@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib rocksdb rapidjson ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DPORTABLE=off"
     "-DRAPIDJSON_HOME=${rapidjson}"
     "-DROCKSDB_HOME=${rocksdb}"

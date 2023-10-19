@@ -1,0 +1,69 @@
+diff --git a/nss/lib/freebl/Makefile b/nss/lib/freebl/Makefile
+index 74e8e65..aa9dd95 100644
+--- nss/lib/freebl/Makefile
++++ nss/lib/freebl/Makefile
+@@ -568,7 +568,6 @@ ifneq ($(shell $(CC) -? 2>&1 >/dev/null </dev/null | sed -e 's/:.*//;1q'),lcc)
+             HAVE_INT128_SUPPORT = 1
+             DEFINES += -DHAVE_INT128_SUPPORT
+     else ifeq (1,$(CC_IS_GCC))
+-        SUPPORTS_VALE_CURVE25519 = 1
+         ifneq (,$(filter 4.6 4.7 4.8 4.9,$(word 1,$(GCC_VERSION)).$(word 2,$(GCC_VERSION))))
+             HAVE_INT128_SUPPORT = 1
+             DEFINES += -DHAVE_INT128_SUPPORT
+@@ -593,11 +592,6 @@ ifndef HAVE_INT128_SUPPORT
+     DEFINES += -DKRML_VERIFIED_UINT128
+ endif
+ 
+-ifdef SUPPORTS_VALE_CURVE25519
+-    VERIFIED_SRCS += Hacl_Curve25519_64.c
+-    DEFINES += -DHACL_CAN_COMPILE_INLINE_ASM
+-endif
+-
+ ifndef NSS_DISABLE_CHACHAPOLY
+     ifeq ($(CPU_ARCH),x86_64)
+         ifndef NSS_DISABLE_AVX2
+diff --git a/nss/lib/freebl/freebl.gyp b/nss/lib/freebl/freebl.gyp
+index 65f9a80..23940ef 100644
+--- nss/lib/freebl/freebl.gyp
++++ nss/lib/freebl/freebl.gyp
+@@ -866,12 +866,6 @@
+           }],
+         ],
+       }],
+-      [ 'supports_vale_curve25519==1', {
+-        'defines': [
+-          # The Makefile does version-tests on GCC, but we're not doing that here.
+-          'HACL_CAN_COMPILE_INLINE_ASM',
+-        ],
+-      }],
+       [ 'OS=="linux" or OS=="android"', {
+         'conditions': [
+           [ 'target_arch=="x64"', {
+@@ -934,11 +928,6 @@
+   'variables': {
+     'module': 'nss',
+     'conditions': [
+-      [ 'target_arch=="x64" and cc_is_gcc==1', {
+-        'supports_vale_curve25519%': 1,
+-      }, {
+-        'supports_vale_curve25519%': 0,
+-      }],
+       [ 'target_arch=="x64" or target_arch=="arm64" or target_arch=="aarch64"', {
+         'have_int128_support%': 1,
+       }, {
+diff --git a/nss/lib/freebl/freebl_base.gypi b/nss/lib/freebl/freebl_base.gypi
+index d198c44..34b6b3c 100644
+--- nss/lib/freebl/freebl_base.gypi
++++ nss/lib/freebl/freebl_base.gypi
+@@ -151,11 +151,6 @@
+         'ecl/curve25519_32.c',
+       ],
+     }],
+-    ['supports_vale_curve25519==1', {
+-      'sources': [
+-        'verified/Hacl_Curve25519_64.c',
+-      ],
+-    }],
+     ['(target_arch!="ppc64" and target_arch!="ppc64le") or disable_altivec==1', {
+       'sources': [
+         # Gyp does not support per-file cflags, so working around like this.

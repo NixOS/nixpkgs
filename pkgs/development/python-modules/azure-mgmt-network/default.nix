@@ -1,38 +1,43 @@
 { lib
+, azure-common
+, azure-mgmt-core
 , buildPythonPackage
 , fetchPypi
-, azure-common
-, azure-mgmt-common
-, azure-mgmt-core
-, msrest
-, msrestazure
-, isPy3k
+, isodate
+, pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  version = "19.0.0";
   pname = "azure-mgmt-network";
-  disabled = !isPy3k;
+  version = "25.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "5e39a26ae81fa58c13c02029700f8c7b22c3fd832a294c543e3156a91b9459e8";
+    hash = "sha256-+Tn3W/E54D0sRXpPB6XrrbWv/dcKpUvpoK9EuOUhMvw=";
   };
 
   propagatedBuildInputs = [
     azure-common
     azure-mgmt-core
-    msrest
-    msrestazure
+    isodate
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
   ];
 
-  # has no tests
+  # Module has no tests
   doCheck = false;
 
-  pythonNamespaces = [ "azure.mgmt" ];
+  pythonNamespaces = [
+    "azure.mgmt"
+  ];
 
-  pythonImportsCheck = [ "azure.mgmt.network" ];
+  pythonImportsCheck = [
+    "azure.mgmt.network"
+  ];
 
   meta = with lib; {
     description = "Microsoft Azure SDK for Python";

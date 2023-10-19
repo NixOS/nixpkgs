@@ -12,8 +12,15 @@ in
       type = with types; either (enum [ "auto" ]) int;
       default = "auto";
       example = 2048;
-      description = ''
+      description = lib.mdDoc ''
         Size of disk image. Unit is MB.
+      '';
+    };
+    virtualisation.azureImage.contents = mkOption {
+      type = with types; listOf attrs;
+      default = [ ];
+      description = lib.mdDoc ''
+        Extra contents to add to the image.
       '';
     };
   };
@@ -26,7 +33,7 @@ in
       '';
       configFile = ./azure-config-user.nix;
       format = "raw";
-      inherit (cfg) diskSize;
+      inherit (cfg) diskSize contents;
       inherit config lib pkgs;
     };
 

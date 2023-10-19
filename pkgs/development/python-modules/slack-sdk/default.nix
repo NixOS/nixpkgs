@@ -1,34 +1,35 @@
-{ lib
+{ stdenv
+, lib
 , aiodns
 , aiohttp
 , boto3
 , buildPythonPackage
 , codecov
-, databases
 , fetchFromGitHub
 , flake8
 , flask-sockets
-, isPy3k
+, moto
+, pythonOlder
 , psutil
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
-, pytestrunner
 , sqlalchemy
-, websocket_client
+, websocket-client
 , websockets
 }:
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.5.0";
-  disabled = !isPy3k;
+  version = "3.23.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
-    rev = "v${version}";
-    sha256 = "sha256-5ZBaF/6p/eOWjAmo+IlF9zCb9xBr2bP6suPZblRogUg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OsPwLOnmN3kvPmbM6lOaiTWwWvy7b9pgn1X536dCkWk=";
   };
 
   propagatedBuildInputs = [
@@ -36,38 +37,45 @@ buildPythonPackage rec {
     aiohttp
     boto3
     sqlalchemy
-    websocket_client
+    websocket-client
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     codecov
-    databases
     flake8
     flask-sockets
+    moto
     psutil
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
-    pytestrunner
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  # Exclude tests that requires network features
-  pytestFlagsArray = [ "--ignore=integration_tests" ];
-  disabledTests = [
-    "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
-    "test_org_installation"
+  disabledTestPaths = [
+    # Exclude tests that requires network features
+    "integration_tests"
   ];
 
-  pythonImportsCheck = [ "slack_sdk" ];
+  disabledTests = [
+    # Requires network features
+    "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
+    "test_org_installation"
+    "test_interactions"
+    "test_issue_690_oauth_access"
+  ];
+
+  pythonImportsCheck = [
+    "slack_sdk"
+  ];
 
   meta = with lib; {
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
+    changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

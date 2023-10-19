@@ -1,59 +1,63 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
-, scipy
-, six
-, pandas
-, pyyaml
+, looseversion
 , matplotlib
-, pytest
+, numba
+, numpy
+, pandas
+, pytestCheckHook
+, pythonOlder
+, pyyaml
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.4.2";
+  version = "0.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "16mc22z3104fvygky4gy3gvifjijm42db48v2z1y0fmyf6whi9p6";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NG1TOppqRbIZHLxJjlaXD4icYlAUkSxtmmC/fsS/pXo=";
   };
 
   propagatedBuildInputs = [
+    looseversion
+    matplotlib
+    numba
     numpy
-    scipy
-    six
     pandas
     pyyaml
-    matplotlib
+    scipy
   ];
 
-  checkInputs = [
-    pytest
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    ${lib.optionalString (stdenv.isDarwin) ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-    ''}
-
-    pytest trackpy --ignore trackpy/tests/test_motion.py \
-                   --ignore trackpy/tests/test_feature_saving.py \
-                   --ignore trackpy/tests/test_feature.py \
-                   --ignore trackpy/tests/test_plots.py \
-                   --ignore trackpy/tests/test_legacy_linking.py
   '';
+
+  pythonImportsCheck = [
+    "trackpy"
+  ];
 
   meta = with lib; {
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
+    changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
-    broken = true; # not compatible with latest pandas
+    maintainers = with maintainers; [ ];
+    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

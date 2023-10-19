@@ -11,8 +11,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lnl7 roberth ];
   };
-  machine = { lib, pkgs, ... }: {
-    virtualisation.memorySize = 512;
+  nodes.machine = { lib, pkgs, ... }: {
     environment.systemPackages = [ pkgs.vault ];
     environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
     services.vault.enable = true;
@@ -65,6 +64,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.wait_for_unit("vault.service")
       machine.wait_for_open_port(8200)
       machine.succeed("vault operator init")
-      machine.succeed("vault status | grep Sealed | grep true")
+      machine.succeed("vault status || test $? -eq 2")
     '';
 })

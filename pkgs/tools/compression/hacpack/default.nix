@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
     mv config.mk.template config.mk
   '';
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  enableParallelBuilding = true;
+
   installPhase = ''
     mkdir -p $out/bin
     cp ./hacpack $out/bin

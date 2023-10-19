@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -8,7 +10,6 @@
 , appstream-glib
 , pkg-config
 , txt2man
-, gzip
 , vala
 , wrapGAppsHook
 , gsettings-desktop-schemas
@@ -16,7 +17,7 @@
 , glib
 , cairo
 , keybinder3
-, ffmpeg
+, ffmpeg-full
 , python3
 , libxml2
 , gst_all_1
@@ -35,11 +36,19 @@ stdenv.mkDerivation rec {
     sha256 = "1xwlfizga6hvjqq127py8vabaphsny928ar7mwqj9cyqfl6fx41x";
   };
 
+  patches = [
+    # Fix compatibility with GNOME Shell ≥ 40.
+    # https://github.com/phw/peek/pull/910
+    (fetchpatch {
+      url = "https://github.com/phw/peek/commit/008d15316ab5428363c512b263ca8138cb8f52ba.patch";
+      sha256 = "xxJ+r5uRk93MEzWTFla88ewZsnUl3+YKTenzDygtKP0=";
+    })
+  ];
+
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
     gettext
-    gzip
     meson
     ninja
     libxml2
@@ -66,13 +75,11 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg gifski ]})
+    gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ which ffmpeg-full gifski ]})
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
 

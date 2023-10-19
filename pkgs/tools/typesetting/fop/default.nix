@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fop";
-  version = "2.6";
+  version = "2.8";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/fop/source/${pname}-${version}-src.tar.gz";
-    sha256 = "145qph3c0m4bmb342qxq1hwsg594lndmfs9ga1v7pk53s34sckq8";
+    sha256 = "sha256-b7Av17wu6Ar/npKOiwYqzlvBFSIuXTpqTacM1sxtBvc=";
   };
 
   buildInputs = [ ant jdk ];
@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xmlgraphics.apache.org/fop/";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];
   };

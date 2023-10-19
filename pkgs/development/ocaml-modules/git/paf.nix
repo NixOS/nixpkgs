@@ -3,33 +3,36 @@
 , mimic
 , paf
 , ca-certs-nss
-, cohttp
-, cohttp-lwt
 , fmt
 , ipaddr
 , logs
 , lwt
 , mirage-clock
-, mirage-stack
 , mirage-time
 , result
 , rresult
 , tls
 , uri
+, bigstringaf
+, domain-name
+, httpaf
+, mirage-flow
+, tls-mirage
 }:
 
 buildDunePackage {
   pname = "git-paf";
 
-  inherit (git) version src minimumOCamlVersion useDune2;
+  inherit (git) version src;
+
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [
     git
     mimic
     paf
     ca-certs-nss
-    cohttp
-    cohttp-lwt
     fmt
     lwt
     result
@@ -37,10 +40,14 @@ buildDunePackage {
     ipaddr
     logs
     mirage-clock
-    mirage-stack
     mirage-time
     tls
     uri
+    bigstringaf
+    domain-name
+    httpaf
+    mirage-flow
+    tls-mirage
   ];
 
   meta = git.meta // {

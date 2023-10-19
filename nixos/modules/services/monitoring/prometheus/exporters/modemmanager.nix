@@ -11,7 +11,7 @@ in
     refreshRate = mkOption {
       type = types.str;
       default = "5s";
-      description = ''
+      description = lib.mdDoc ''
         How frequently ModemManager will refresh the extended signal quality
         information for each modem. The duration should be specified in seconds
         ("5s"), minutes ("1m"), or hours ("1h").
@@ -28,6 +28,10 @@ in
           -rate ${cfg.refreshRate} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
+      RestrictAddressFamilies = [
+        # Need AF_UNIX to collect data
+        "AF_UNIX"
+      ];
     };
   };
 }

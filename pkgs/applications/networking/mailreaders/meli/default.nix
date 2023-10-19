@@ -1,58 +1,79 @@
-{ lib
+{ stdenv
+, lib
 , fetchgit
 , rustPlatform
+
+# native build inputs
 , pkg-config
+, installShellFiles
+, makeWrapper
+, mandoc
+, rustfmt
+, file
+
+# build inputs
 , openssl
 , dbus
 , sqlite
-, file
-, gzip
-, makeWrapper
-, notmuch
-  # Build with support for notmuch backend
-, withNotmuch ? true
+
+# runtime deps
+, gnum4
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "alpha-0.6.2";
+  version = "0.8.2";
 
   src = fetchgit {
     url = "https://git.meli.delivery/meli/meli.git";
-    rev = version;
-    sha256 = "0ycyksrrp4llwklzx3ipac8hmpfxa1pa7dqsm82wic0f6p5d1dp6";
+    rev = "v${version}";
+    hash = "sha256-iEHTFofga/HV/1jSAqTsqV55zC22tqI7UW7m4PZgz0M=";
   };
 
-  cargoSha256 = "sha256:0lxwhb2c16w5z7rqzch0ij8n8hxb5xcin31w9i28mzv1xm7sg8ks";
+  cargoHash = "sha256-ijlivyBezLECBSaWBYVy9tVcSO8U+yGDQyU4dIATR6k=";
 
-  cargoBuildFlags = lib.optional withNotmuch "--features=notmuch";
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    makeWrapper
+    mandoc
+    (rustfmt.override { asNightly = true; })
+  ];
 
-  nativeBuildInputs = [ pkg-config gzip makeWrapper ];
+  buildInputs = [
+    openssl
+    dbus
+    sqlite
+  ];
 
-  buildInputs = [ openssl dbus sqlite ] ++ lib.optional withNotmuch notmuch;
-
-  checkInputs = [ file ];
+  nativeCheckInputs = [
+    file
+  ];
 
   postInstall = ''
-    mkdir -p $out/share/man/man1
-    gzip < docs/meli.1 > $out/share/man/man1/meli.1.gz
-    mkdir -p $out/share/man/man5
-    gzip < docs/meli.conf.5 > $out/share/man/man5/meli.conf.5.gz
-    gzip < docs/meli-themes.5 > $out/share/man/man5/meli-themes.5.gz
-  '' + lib.optionalString withNotmuch ''
-    # Fixes this runtime error when meli is started with notmuch configured:
-    # $ meli
-    # libnotmuch5 was not found in your system. Make sure it is installed and
-    # in the library paths.
-    # notmuch is not a valid mail backend
-    wrapProgram $out/bin/meli --set LD_LIBRARY_PATH ${notmuch}/lib
+    installManPage meli/docs/*.{1,5,7}
+
+    wrapProgram $out/bin/meli \
+      --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
   '';
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkFlags = [
+    "--skip=conf::test_config_parse"        # panicking due to sandbox
+    "--skip=smtp::test::test_smtp"          # requiring network
+    "--skip=utils::xdg::query_default_app"  # doesn't build
+    "--skip=utils::xdg::query_mime_info"    # doesn't build
+  ];
+
   meta = with lib; {
-    description = "Experimental terminal mail client aiming for configurability and extensibility with sane defaults";
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    description = "Terminal e-mail client and e-mail client library";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ _0x4A6F matthiasbeyer erictapen ];
+    maintainers = with maintainers; [ _0x4A6F matthiasbeyer ];
     platforms = platforms.linux;
   };
 }

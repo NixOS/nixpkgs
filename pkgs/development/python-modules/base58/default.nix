@@ -2,25 +2,30 @@
 , buildPythonPackage
 , fetchPypi
 , pyhamcrest
-, pytest-benchmark
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "base58";
-  version = "2.1.0";
+  version = "2.1.1";
+  format = "setuptools";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-FxpUe0o8YeGuOAciSm967HXjZMQ5XnViZJ1zNXaAAaI=";
+    sha256 = "c5d0cb3f5b6e81e8e35da5754388ddcc6d0d14b6c6a132cb93d69ed580a7278c";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pyhamcrest
-    pytest-benchmark
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # avoid dependency on pytest-benchmark
+    "test_decode_random"
+    "test_encode_random"
   ];
 
   pythonImportsCheck = [ "base58" ];

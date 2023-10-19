@@ -1,7 +1,7 @@
 # builder for Emacs packages built for packages.el
 # using MELPA package-build.el
 
-{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText }:
+{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
 with lib;
 
@@ -28,18 +28,31 @@ let
 
 in
 
-import ./generic.nix { inherit lib stdenv emacs texinfo writeText; } ({
+import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
 
   ename =
     if ename == null
     then pname
     else ename;
 
-  packageBuild = fetchFromGitHub {
-    owner = "melpa";
-    repo = "package-build";
-    rev = "0a22c3fbbf661822ec1791739953b937a12fa623";
-    sha256 = "0dpy5p34il600sc8ic5jdgb3glya9si3lrvhxab0swks8fdydjgs";
+  packageBuild = stdenv.mkDerivation {
+    name = "package-build";
+    src = fetchFromGitHub {
+      owner = "melpa";
+      repo = "package-build";
+      rev = "c3c535e93d9dc92acd21ebc4b15016b5c3b90e7d";
+      sha256 = "17z0wbqdd6fspbj43yq8biff6wfggk74xgnaf1xx6ynsp1i74is5";
+    };
+
+    patches = [ ./package-build-dont-use-mtime.patch ];
+
+    dontConfigure = true;
+    dontBuild = true;
+
+    installPhase = "
+      mkdir -p $out
+      cp -r * $out
+    ";
   };
 
   elpa2nix = ./elpa2nix.el;
@@ -70,7 +83,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo writeText; } ({
         -L "$NIX_BUILD_TOP/package-build" \
         -l "$melpa2nix" \
         -f melpa2nix-build-package \
-        $ename $version
+        $ename $version $commit
 
     runHook postBuild
     '';

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "actor-framework";
-  version = "0.18.3";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "actor-framework";
     repo = "actor-framework";
     rev = version;
-    sha256 = "sha256-9oQVsfh2mUVr64PjNXYD1wRBNJ8dCLO9eI5WnZ1SSww=";
+    hash = "sha256-Qi3nyUSwrYBy8lCP+R6/u/WtnZJcgSwb07pZVScAzcU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,18 +19,17 @@ stdenv.mkDerivation rec {
     "-DCAF_ENABLE_EXAMPLES:BOOL=OFF"
   ];
 
-  doCheck = true;
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+
+  doCheck = !stdenv.isDarwin;
   checkTarget = "test";
-  preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/libcaf_core:$PWD/libcaf_io
-    export DYLD_LIBRARY_PATH=$PWD/libcaf_core:$PWD/libcaf_io
-  '';
 
   meta = with lib; {
     description = "An open source implementation of the actor model in C++";
     homepage = "http://actor-framework.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    changelog = "https://github.com/actor-framework/actor-framework/raw/${version}/CHANGELOG.md";
     maintainers = with maintainers; [ bobakker tobim ];
   };
 }

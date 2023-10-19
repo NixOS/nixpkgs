@@ -6,11 +6,11 @@
 }:
 buildPythonPackage rec {
   pname = "cxxfilt";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef6810e76d16c95c11b96371e2d8eefd1d270ec03f9bcd07590e8dcc2c69e92b";
+    sha256 = "7df6464ba5e8efbf0d8974c0b2c78b32546676f06059a83515dbdfa559b34214";
   };
 
   postPatch = let
@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Demangling C++ symbols in Python / interface to abi::__cxa_demangle ";
     homepage = "https://github.com/afq984/python-cxxfilt";
     license = licenses.bsd2;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

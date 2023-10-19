@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pq";
-  version = "1.9.0";
+  version = "1.9.1";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c664ee3a9a25efcb583e3d1d797588fb7c2fb5096220689eec78a7946b01b5ff";
+    sha256 = "sha256-1krw77ij69EbLg5mKmQmxeHpn38uRG9EOboGmRk+StY=";
   };
 
   # tests require running postgresql cluster
@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "PQ is a transactional queue for PostgreSQL";
     homepage = "https://github.com/malthe/pq/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

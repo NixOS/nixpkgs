@@ -1,11 +1,11 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
-, ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
+, ruby_3_0, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper, pkg-config
 }:
 
 let
-  data = (builtins.fromJSON (builtins.readFile ./data.json));
+  data = lib.importJSON ./data.json;
 
   version = data.version;
   src = fetchFromGitLab {
@@ -17,16 +17,13 @@ let
 
   rubyEnv = bundlerEnv rec {
     name = "gitlab-env-${version}";
-    inherit ruby;
+    ruby = ruby_3_0;
     gemdir = ./rubyEnv;
     gemset =
-      let x = import (gemdir + "/gemset.nix");
+      let x = import (gemdir + "/gemset.nix") src;
       in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ./fix-grpc-ar.patch ];
-          dontBuild = false;
+        gpgme = x.gpgme // {
+          nativeBuildInputs = [ pkg-config ];
         };
         # the openssl needs the openssl include files
         openssl = x.openssl // {
@@ -43,19 +40,32 @@ let
     # N.B. omniauth_oauth2_generic and apollo_upload_server both provide a
     # `console` executable.
     ignoreCollisions = true;
-  };
 
-  yarnOfflineCache = (callPackage ./yarnPkgs.nix {}).offline_cache;
+    extraConfigPaths = [ "${src}/vendor" "${src}/gems" ];
+  };
 
   assets = stdenv.mkDerivation {
     pname = "gitlab-assets";
     inherit version src;
 
-    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git ];
+    yarnOfflineCache = fetchYarnDeps {
+      yarnLock = src + "/yarn.lock";
+      sha256 = data.yarn_hash;
+    };
 
-    # Since version 12.6.0, the rake tasks need the location of git,
-    # so we have to apply the location patches here too.
-    patches = [ ./remove-hardcoded-locations.patch ];
+    nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
+
+    patches = [
+      # Since version 12.6.0, the rake tasks need the location of git,
+      # so we have to apply the location patches here too.
+      ./remove-hardcoded-locations.patch
+
+      # Gitlab edited the default database config since [1] and the
+      # installer now complains about valid keywords only being "main", "ci" and "embedded".
+      #
+      # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
+      ./Remove-unsupported-database-names.patch
+    ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
@@ -68,26 +78,22 @@ let
       rm lib/tasks/yarn.rake
 
       # The rake tasks won't run without a basic configuration in place
-      mv config/database.yml.env config/database.yml
+      mv config/database.yml.postgresql config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
 
       # Yarn and bundler wants a real home directory to write cache, config, etc to
       export HOME=$NIX_BUILD_TOP/fake_home
 
       # Make yarn install packages from our offline cache, not the registry
-      yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
 
       # Fixup "resolved"-entries in yarn.lock to match our offline cache
       ${fixup_yarn_lock}/bin/fixup_yarn_lock yarn.lock
 
-      # fixup_yarn_lock currently doesn't correctly fix the dagre-d3
-      # url, so we have to do it manually
-      ${replace}/bin/replace-literal -f -e '"https://codeload.github.com/dagrejs/dagre-d3/tar.gz/e1a00e5cb518f5d2304a35647e024f31d178e55b"' \
-                                           '"https___codeload.github.com_dagrejs_dagre_d3_tar.gz_e1a00e5cb518f5d2304a35647e024f31d178e55b"' yarn.lock
-
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
 
       patchShebangs node_modules/
+      patchShebangs scripts/frontend/
 
       runHook postConfigure
     '';
@@ -97,7 +103,7 @@ let
 
       bundle exec rake gettext:po_to_json RAILS_ENV=production NODE_ENV=production
       bundle exec rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
-      bundle exec rake gitlab:assets:compile_webpack_if_needed RAILS_ENV=production NODE_ENV=production
+      bundle exec rake gitlab:assets:compile RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
       bundle exec rake gitlab:assets:check_page_bundle_mixins_css_for_sideeffects RAILS_ENV=production NODE_ENV=production
 
@@ -118,6 +124,7 @@ stdenv.mkDerivation {
 
   inherit src;
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
   ];
@@ -131,6 +138,7 @@ stdenv.mkDerivation {
     ${lib.optionalString (!gitlabEnterprise) ''
       # Remove all proprietary components
       rm -rf ee
+      sed -i 's/-ee//' ./VERSION
     ''}
 
     # For reasons I don't understand "bundle exec" ignores the
@@ -149,6 +157,7 @@ stdenv.mkDerivation {
     # path, not their relative state directory path. This gets rid of
     # warnings and means we don't have to link back to lib from the
     # state directory.
+    ${replace}/bin/replace-literal -f -r -e '../../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e '../lib' "$out/share/gitlab/lib" config
     ${replace}/bin/replace-literal -f -r -e "require_relative 'application'" "require_relative '$out/share/gitlab/config/application'" config
   '';
@@ -172,6 +181,9 @@ stdenv.mkDerivation {
     # rake tasks to mitigate CVE-2017-0882
     # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
     cp ${./reset_token.rake} $out/share/gitlab/lib/tasks/reset_token.rake
+
+    # manually patch the shebang line in generate-loose-foreign-key
+    wrapProgram $out/share/gitlab/scripts/decomposition/generate-loose-foreign-key --set ENABLE_SPRING 0 --add-flags 'runner -e test'
   '';
 
   passthru = {
@@ -181,6 +193,7 @@ stdenv.mkDerivation {
     GITLAB_PAGES_VERSION = data.passthru.GITLAB_PAGES_VERSION;
     GITLAB_SHELL_VERSION = data.passthru.GITLAB_SHELL_VERSION;
     GITLAB_WORKHORSE_VERSION = data.passthru.GITLAB_WORKHORSE_VERSION;
+    gitlabEnv.FOSS_ONLY = lib.boolToString (!gitlabEnterprise);
     tests = {
       nixos-test-passes = nixosTests.gitlab;
     };
@@ -189,7 +202,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "http://www.gitlab.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz globin krav talyz ];
+    maintainers = teams.gitlab.members;
   } // (if gitlabEnterprise then
     {
       license = licenses.unfreeRedistributable; # https://gitlab.com/gitlab-org/gitlab-ee/raw/master/LICENSE

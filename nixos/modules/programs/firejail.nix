@@ -8,18 +8,21 @@ let
   wrappedBins = pkgs.runCommand "firejail-wrapped-binaries"
     { preferLocalBuild = true;
       allowSubstitutes = false;
+      # take precedence over non-firejailed versions
+      meta.priority = -1;
     }
     ''
       mkdir -p $out/bin
+      mkdir -p $out/share/applications
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList (command: value:
       let
         opts = if builtins.isAttrs value
         then value
-        else { executable = value; profile = null; extraArgs = []; };
+        else { executable = value; desktop = null; profile = null; extraArgs = []; };
         args = lib.escapeShellArgs (
-          (optional (opts.profile != null) "--profile=${toString opts.profile}")
-          ++ opts.extraArgs
-          );
+          opts.extraArgs
+          ++ (optional (opts.profile != null) "--profile=${toString opts.profile}")
+        );
       in
       ''
         cat <<_EOF >$out/bin/${command}
@@ -27,37 +30,48 @@ let
         exec /run/wrappers/bin/firejail ${args} -- ${toString opts.executable} "\$@"
         _EOF
         chmod 0755 $out/bin/${command}
+
+        ${lib.optionalString (opts.desktop != null) ''
+          substitute ${opts.desktop} $out/share/applications/$(basename ${opts.desktop}) \
+            --replace ${opts.executable} $out/bin/${command}
+        ''}
       '') cfg.wrappedBinaries)}
     '';
 
 in {
   options.programs.firejail = {
-    enable = mkEnableOption "firejail";
+    enable = mkEnableOption (lib.mdDoc "firejail");
 
     wrappedBinaries = mkOption {
       type = types.attrsOf (types.either types.path (types.submodule {
         options = {
           executable = mkOption {
             type = types.path;
-            description = "Executable to run sandboxed";
-            example = literalExample "''${lib.getBin pkgs.firefox}/bin/firefox";
+            description = lib.mdDoc "Executable to run sandboxed";
+            example = literalExpression ''"''${lib.getBin pkgs.firefox}/bin/firefox"'';
+          };
+          desktop = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = lib.mkDoc ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
+            example = literalExpression ''"''${pkgs.firefox}/share/applications/firefox.desktop"'';
           };
           profile = mkOption {
             type = types.nullOr types.path;
             default = null;
-            description = "Profile to use";
-            example = literalExample "''${pkgs.firejail}/etc/firejail/firefox.profile";
+            description = lib.mdDoc "Profile to use";
+            example = literalExpression ''"''${pkgs.firejail}/etc/firejail/firefox.profile"'';
           };
           extraArgs = mkOption {
             type = types.listOf types.str;
             default = [];
-            description = "Extra arguments to pass to firejail";
+            description = lib.mdDoc "Extra arguments to pass to firejail";
             example = [ "--private=~/.firejail_home" ];
           };
         };
       }));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           firefox = {
             executable = "''${lib.getBin pkgs.firefox}/bin/firefox";
@@ -69,19 +83,19 @@ in {
           };
         }
       '';
-      description = ''
+      description = lib.mdDoc ''
         Wrap the binaries in firejail and place them in the global path.
-        </para>
-        <para>
-        You will get file collisions if you put the actual application binary in
-        the global environment and applications started via .desktop files are
-        not wrapped if they specify the absolute path to the binary.
       '';
     };
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
+    security.wrappers.firejail =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${lib.getBin pkgs.firejail}/bin/firejail";
+      };
 
     environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
   };

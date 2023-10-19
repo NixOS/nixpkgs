@@ -1,7 +1,8 @@
 { lib, mkDerivation, fetchFromGitHub, qtbase, qtx11extras, qmake, pkg-config, boost }:
 
 mkDerivation {
-  name = "twmn-git-2018-10-01";
+  pname = "twmn";
+  version = "unstable-2018-10-01";
 
   src = fetchFromGitHub {
     owner = "sboli";

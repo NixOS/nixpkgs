@@ -13,30 +13,32 @@
 , freetype
 , fontconfig
 , gtk3
-, gnome2
 , dbus
 , nss
 , nspr
-, alsaLib
+, alsa-lib
 , cups
 , expat
 , udev
 , libnotify
 , xdg-utils
 , mesa
+, libappindicator-gtk3
 }:
 
 # Helper function for building a derivation for Franz and forks.
 
-{ pname, name, version, src, meta }:
-stdenv.mkDerivation rec {
+{ pname, name, version, src, meta, extraBuildInputs ? [], ... } @ args:
+let
+  cleanedArgs = builtins.removeAttrs args [ "pname" "name" "version" "src" "meta" "extraBuildInputs" ];
+in stdenv.mkDerivation (rec {
   inherit pname version src meta;
 
   # Don't remove runtime deps.
   dontPatchELF = true;
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapGAppsHook dpkg ];
-  buildInputs = (with xorg; [
+  buildInputs = extraBuildInputs ++ (with xorg; [
     libXi
     libXcursor
     libXdamage
@@ -59,15 +61,14 @@ stdenv.mkDerivation rec {
     freetype
     fontconfig
     dbus
-    gnome2.GConf
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     stdenv.cc.cc
   ];
-  runtimeDependencies = [ stdenv.cc.cc.lib (lib.getLib udev) libnotify ];
+  runtimeDependencies = [ stdenv.cc.cc.lib (lib.getLib udev) libnotify libappindicator-gtk3 ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
@@ -85,9 +86,10 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
+    # make xdg-open overrideable at runtime
     wrapProgram $out/opt/${name}/${pname} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}" \
-      --prefix PATH : ${xdg-utils}/bin \
+      --suffix PATH : ${xdg-utils}/bin \
       "''${gappsWrapperArgs[@]}"
   '';
-}
+} // cleanedArgs)

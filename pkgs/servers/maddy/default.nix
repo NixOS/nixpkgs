@@ -1,26 +1,54 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, pam, coreutils, installShellFiles, scdoc, nixosTests }:
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.4.4";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
-    sha256 = "sha256-IhVEb6tjfbWqhQdw1UYxy4I8my2L+eSOCd/BEz0qis0=";
+    sha256 = "sha256-EMw07yTFP0aBSuGDWivB8amuxWLFHhYV6J9faTEW5z4=";
   };
 
-  vendorSha256 = "sha256-FrKWlZ3pQB+oo+rfHA8AgGRAr7YRUcb064bZGTDSKkk=";
+  vendorHash = "sha256-LyfkETZPkhJKN8CEivNp7Se4IBpzyAtmCM1xil4n2po=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X github.com/foxcpp/maddy.Version=${version}" ];
+  tags = [ "libpam" ];
 
-  subPackages = [ "cmd/maddy" "cmd/maddyctl" ];
+  ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
+
+  subPackages = [ "cmd/maddy" ];
+
+  buildInputs = [ pam ];
+
+  nativeBuildInputs = [ installShellFiles scdoc ];
+
+  postInstall = ''
+    for f in docs/man/*.scd; do
+      local page="docs/man/$(basename "$f" .scd)"
+      scdoc < "$f" > "$page"
+      installManPage "$page"
+    done
+
+    ln -s "$out/bin/maddy" "$out/bin/maddyctl"
+
+    mkdir -p $out/lib/systemd/system
+
+    substitute dist/systemd/maddy.service $out/lib/systemd/system/maddy.service \
+      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace "/bin/kill" "${coreutils}/bin/kill"
+
+    substitute dist/systemd/maddy@.service $out/lib/systemd/system/maddy@.service \
+      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace "/bin/kill" "${coreutils}/bin/kill"
+  '';
+
+  passthru.tests.nixos = nixosTests.maddy;
 
   meta = with lib; {
     description = "Composable all-in-one mail server";
-    homepage = "https://foxcpp.dev/maddy";
+    homepage = "https://maddy.email";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lxea ];
+    maintainers = with maintainers; [ nickcao ];
   };
 }

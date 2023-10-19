@@ -4,7 +4,7 @@ buildDunePackage rec {
   pname = "dispatch";
   version = "0.5.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "inhabitedtype";
@@ -17,7 +17,7 @@ buildDunePackage rec {
 
   checkInputs = [ alcotest ];
 
-  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     inherit (src.meta) homepage;

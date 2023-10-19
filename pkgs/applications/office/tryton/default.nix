@@ -1,5 +1,6 @@
 { lib
 , python3Packages
+, fetchPypi
 , pkg-config
 , librsvg
 , gobject-introspection
@@ -24,7 +25,7 @@ python3Packages.buildPythonApplication rec {
 
   disabled = !python3Packages.isPy3k;
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
   };
@@ -36,7 +37,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil
+    python-dateutil
     pygobject3
     goocalendar
     pycairo

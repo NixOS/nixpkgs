@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "bazel-gazelle";
-  version = "0.21.1";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12ffrildgx4lah7bdnhr7i8z5jp05lll6gmmpzshmzz8dsgf39y4";
+    hash = "sha256-WmDtMOEs7cOb/juWTHjkc8/92f2OL0vurMMM15IE3YI=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   doCheck = false;
 
@@ -29,5 +29,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "gazelle";
   };
 }

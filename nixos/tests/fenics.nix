@@ -38,13 +38,12 @@ in
         gcc
         (python3.withPackages (ps: with ps; [ fenics ]))
       ];
-      virtualisation.memorySize = 512;
     };
   };
   testScript =
     { nodes, ... }:
     ''
       start_all()
-      node1.succeed("${fenicsScript}")
+      fenicsnode.succeed("${fenicsScript}")
     '';
 })

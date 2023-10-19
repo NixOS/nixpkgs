@@ -1,17 +1,20 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, nix-update-script
-, python3, git, gnupg, less
+, python3, git, gnupg, less, openssh
 }:
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "2.15.3";
+  version = "2.37";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "sha256-3FSkWpHda1jVhy/633B+ippWcbKd83IlQcJYS9Qx5wQ=";
+    hash = "sha256-6OAubRkNXIm1HaiDq4jzBPUhgbwQowSZXSqAzAe7Rv0=";
   };
+
+  # Fix 'NameError: name 'ssl' is not defined'
+  patches = [ ./import-ssl-module.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ python3 ];
@@ -34,13 +37,11 @@ stdenv.mkDerivation rec {
   # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${lib.makeBinPath [ git gnupg less ]}"
+      "${lib.makeBinPath [ git gnupg less openssh ]}"
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "gitRepo";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

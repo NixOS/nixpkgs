@@ -1,23 +1,31 @@
-{ lib, fetchurl, pythonPackages, mopidy }:
+{ lib, fetchFromGitHub, pythonPackages, mopidy }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";
-  version = "4.0.1";
+  version = "unstable-2023-04-21";
 
-  src = fetchurl {
-    url = "https://github.com/mopidy/mopidy-spotify/archive/v${version}.tar.gz";
-    sha256 = "1ac8r8050i5r3ag1hlblbcyskqjqz7wgamndbzsmw52qi6hxk44f";
+  src = fetchFromGitHub {
+    owner = "mopidy";
+    repo = "mopidy-spotify";
+    rev = "984151ac96c5f9c35892055bff20cc11f46092d5";
+    hash = "sha256-4e9Aj0AOFR4/FK54gr1ZyPt0nYZDMrMetV4FPtBxapU=";
   };
 
-  propagatedBuildInputs = [ mopidy pythonPackages.pyspotify ];
+  propagatedBuildInputs = [
+    mopidy
+    pythonPackages.responses
+  ];
 
-  doCheck = false;
+  nativeBuildInputs = [
+    pythonPackages.pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "mopidy_spotify" ];
 
   meta = with lib; {
-    homepage = "https://www.mopidy.com/";
+    homepage = "https://github.com/mopidy/mopidy-spotify";
     description = "Mopidy extension for playing music from Spotify";
     license = licenses.asl20;
-    maintainers = [];
-    hydraPlatforms = [];
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

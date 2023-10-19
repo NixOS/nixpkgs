@@ -1,16 +1,32 @@
-{ mkXfceDerivation, gtk3, libxfce4ui, libxfce4util, xfce4-panel, xfconf }:
+{ lib
+, mkXfceDerivation
+, glib
+, gtk3
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, xfconf
+}:
 
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-battery-plugin";
-  version = "1.1.3";
-  rev-prefix = "";
+  version = "1.1.5";
+  rev-prefix = "xfce4-battery-plugin-";
   odd-unstable = false;
-  sha256 = "0ligdiasrfc3170kd7sif2ml6lvlpp11lbxz3xdvklqkv7p3323y";
+  sha256 = "sha256-X5EGDZaPZdTxiLXyeLwnMx97P6wPy+H09hi9+OFYyY0=";
 
-  buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
+  buildInputs = [
+    glib
+    gtk3
+    libxfce4ui
+    libxfce4util
+    xfce4-panel
+    xfconf
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Battery plugin for Xfce panel";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

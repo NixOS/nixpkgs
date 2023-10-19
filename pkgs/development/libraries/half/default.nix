@@ -1,12 +1,12 @@
 { lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "half";
 
   src = fetchzip {
     url = "mirror://sourceforge/half/${version}/half-${version}.zip";
-    sha256 = "04v4rhs1ffd4c9zcnk4yjhq0gdqy020518wb7n8ryk1ckrdd7hbm";
+    sha256 = "sha256-ZdGgBMZylFgkvs/XVBnvgBY2EYSHRLY3S4YwXjshpOY=";
     stripRoot = false;
   };
 
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "C++ library for half precision floating point arithmetics";
     platforms = platforms.all;
     license = licenses.mit;
-    maintainers = [ maintainers.volth ];
+    maintainers = [ ];
   };
 }

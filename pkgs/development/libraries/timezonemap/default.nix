@@ -1,6 +1,8 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , autoreconfHook
 , fetchbzr
+, fetchpatch
 , pkg-config
 , gtk3
 , glib
@@ -12,13 +14,22 @@
 
 stdenv.mkDerivation rec {
   pname = "timezonemap";
-  version = "0.4.5";
+  version = "0.4.5.1";
 
   src = fetchbzr {
     url = "lp:timezonemap";
     rev = "58";
-    sha256 = "1qdp5f9zd8c02bf0mq4w15rlhz2g51phml5qg9asdyfd1715f8n0";
+    sha256 = "sha256-wCJXwgnN+aZVerjQCm8oT3xIcwmc4ArcEoCh9pMrt+E=";
   };
+
+  patches = [
+    # Fix crashes when running in GLib 2.76
+    # https://bugs.launchpad.net/ubuntu/+source/libtimezonemap/+bug/2012116
+    (fetchpatch {
+      url = "https://git.launchpad.net/ubuntu/+source/libtimezonemap/plain/debian/patches/timezone-map-Never-try-to-access-to-free-d-or-null-values.patch?id=88f72f724e63df061204f6818c9a1e7d8c003e29";
+      sha256 = "sha256-M5eR0uaqpJOeW2Ya1Al+3ZciXukzHpnjJTMVvdO0dPE=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

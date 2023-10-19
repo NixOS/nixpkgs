@@ -1,31 +1,39 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dua";
-  version = "2.12.1";
-
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  version = "2.20.1";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "dua-cli";
     rev = "v${version}";
-    sha256 = "sha256-ZJCixDh2+H+G+lVgxw9H61Xy4hMg+3MbhI+e7sU4GQU=";
+    hash = "sha256-yBPzf0ZpL49CupdtxjEo9QiOC5vwTcqdfAC2Q6WcNhE=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
-    extraPostFetch = ''
+    postFetch = ''
       rm -r $out/tests/fixtures
     '';
   };
 
-  cargoSha256 = "sha256-rwgvyfjCBPe20xN6gNXBexjN/BwNhZjT1RtabKhCkJs=";
+  cargoHash = "sha256-jgPOC8xtxYyKhYzsJezefwgopVL+1MED+Wf5h6bCYBg=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Foundation
+  ];
 
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool to conveniently learn about the disk usage of directories, fast!";
+    description = "A tool to conveniently learn about the disk usage of directories";
     homepage = "https://github.com/Byron/dua-cli";
+    changelog = "https://github.com/Byron/dua-cli/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ killercup ];
+    maintainers = with maintainers; [ figsoda killercup ];
   };
 }

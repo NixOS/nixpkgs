@@ -1,29 +1,26 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , blas
 , lapack
 , numpy
 , scipy
-, scs
   # check inputs
-, nose
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  inherit (scs) pname version;
+  pname = "scs";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
-    rev = "f02abdc0e2e0a5851464e30f6766ccdbb19d73f0"; # need to choose commit manually, untagged
-    sha256 = "174b5s7cwgrn1m55jlrszdl403zhpzc4yl9acs6kjv9slmg1mmjr";
+    rev = version;
+    hash = "sha256-/5yGvZy3luGQkbYcsb/6TZLYou91lpA3UKONviMVpuM=";
+    fetchSubmodules = true;
   };
-
-  preConfigure = ''
-    rm -r scs
-    ln -s ${scs.src} scs
-  '';
 
   buildInputs = [
     lapack
@@ -35,11 +32,14 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ nose ];
-  checkPhase = ''
-    nosetests
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "scs" ];
+  disabledTests = lib.lists.optional (stdenv.system == "x86_64-linux") [
+    # `test/test_scs_rand.py` hang on "x86_64-linux" (https://github.com/NixOS/nixpkgs/pull/244532#pullrequestreview-1598095858)
+    "test_feasible"
+    "test_infeasibl"
+    "test_unbounded"
+  ];
 
   meta = with lib; {
     description = "Python interface for SCS: Splitting Conic Solver";
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/cvxgrp/scs"; # upstream C package
     downloadPage = "https://github.com/bodono/scs-python";
-    license = licenses.gpl3;
+    license = licenses.mit;
     maintainers = with maintainers; [ drewrisinger ];
   };
 }

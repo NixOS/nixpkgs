@@ -1,21 +1,40 @@
-{ lib, fetchPypi, buildPythonPackage,
-  wrapt, pytest, tox }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, wrapt
+, pytestCheckHook
+, sphinxHook
+}:
 
 buildPythonPackage rec {
-  pname = "Deprecated";
-  version = "1.2.12";
+  pname = "deprecated";
+  version = "1.2.13";
+  outputs = [ "out" "doc" ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6d2de2de7931a968874481ef30208fd4e08da39177d61d3d4ebdf4366e7dbca1";
+  src = fetchFromGitHub {
+    owner = "tantale";
+    repo = "deprecated";
+    rev = "v${version}";
+    hash = "sha256-rCDUY/TVmJqhrxDah62lEhqpr05JNZSyiFNTlHvSnmw=";
   };
 
-  propagatedBuildInputs = [ wrapt ];
-  checkInputs = [ pytest ];
+  nativeBuildInputs = [
+    sphinxHook
+  ];
+
+  propagatedBuildInputs = [
+    wrapt
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [ "deprecated" ];
+
   meta = with lib; {
     homepage = "https://github.com/tantale/deprecated";
     description = "Python @deprecated decorator to deprecate old python classes, functions or methods";
-    platforms = platforms.all;
     license = licenses.mit;
     maintainers = with maintainers; [ tilpner ];
   };

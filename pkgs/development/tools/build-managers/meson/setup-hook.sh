@@ -20,12 +20,17 @@ mesonConfigurePhase() {
 
     echo "meson flags: $mesonFlags ${mesonFlagsArray[@]}"
 
-    meson build $mesonFlags "${mesonFlagsArray[@]}"
+    meson setup build $mesonFlags "${mesonFlagsArray[@]}"
     cd build
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
         echo "meson: enabled parallel building"
+    fi
+
+    if ! [[ -v enableParallelInstalling ]]; then
+        enableParallelInstalling=1
+        echo "meson: enabled parallel installing"
     fi
 
     runHook postConfigure

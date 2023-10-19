@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [libX11 libXt libXaw libXpm libXext];
   nativeBuildInputs = [imake];
 
-  NIX_CFLAGS_COMPILE=" -isystem ${libXpm.dev}/include/X11 ";
+  env.NIX_CFLAGS_COMPILE = " -isystem ${libXpm.dev}/include/X11 ";
 
   preConfigure = ''
     sed -e "s@/usr/@$out/share/@g" -i src/Imakefile
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "A generic Sokoban game for X11";
     license = lib.licenses.gpl2Plus;
     maintainers = [lib.maintainers.raskin];

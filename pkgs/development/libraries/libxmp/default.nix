@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libxmp-4.4.1";
+  pname = "libxmp";
+  version = "4.6.0";
 
   meta = with lib; {
     description = "Extended module player library";
-    homepage    = "http://xmp.sourceforge.net/";
+    homepage    = "https://xmp.sourceforge.net/";
     longDescription = ''
       Libxmp is a library that renders module files to PCM data. It supports
       over 90 mainstream and obscure module formats including Protracker (MOD),
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/xmp/libxmp/${name}.tar.gz";
-    sha256 = "1kycz4jsyvmf7ny9227b497wc7y5ligydi6fvvldmkf8hk63ad9m";
+    url = "mirror://sourceforge/xmp/libxmp/${pname}-${version}.tar.gz";
+    sha256 = "sha256-LTxF/lI7UJB+ieYPmjt/TMmquD7J27p3Q+r/vNyzXqY=";
   };
 }

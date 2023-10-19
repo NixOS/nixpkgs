@@ -2,44 +2,46 @@
 , stdenv
 , rustPlatform
 , fetchFromGitLab
+, cargo
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, rustc
+, wrapGAppsHook4
 , gdk-pixbuf
 , glib
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
+, libxml2
 , openssl
 , sqlite
 , webkitgtk
 , glib-networking
 , librsvg
 , gst_all_1
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "1.4.1";
+  version = "2.3.1";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
-    rev = version;
-    hash = "sha256-pskmvztKOwutXRHVnW5u68/0DAuV9Gb+Ovp2JbXiMYo=";
+    rev = "refs/tags/v.${finalAttrs.version}";
+    sha256 = "sha256-JUAlDc2mp8M0vjiWcDoyBw/sKCmd4J8e9wEwZoiW0AE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-qq8cZplt5YWUwsXUShMDhQm3RGH2kCEBk64x6bOa50E=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "javascriptcore6-0.1.0" = "sha256-7w8CDY13dCRlFc77XxJ2/xZqlKSjqM0eiOvILOrJ4ic=";
+      "news-flash-2.3.0-alpha.0" = "sha256-phoZmTY1YVZIIktqLMnal9H5SMgNWwx7m+7AMtDcFJM=";
+      "newsblur_api-0.2.0" = "sha256-6vnFeJbdFeIau2rpUk9o72DD2ZCqicljmQjFVhY71NI=";
+      "article_scraper-2.0.0-alpha.0" = "sha256-HPEKZc7O7pbgcwR2l0kD/5442W1hzrfMadc0amrjxwI=";
+    };
   };
-
-  # https://github.com/CasualX/obfstr/blob/v0.2.4/build.rs#L5
-  # obfstr 0.2.4 fails to set RUSTC_BOOTSTRAP in its build script because cargo
-  # build scripts are forbidden from setting RUSTC_BOOTSTRAP since rustc 1.52.0
-  # https://github.com/rust-lang/rust/blob/1.52.0/RELEASES.md#compatibility-notes
-  RUSTC_BOOTSTRAP = 1;
 
   patches = [
     # Post install tries to generate an icon cache & update the
@@ -51,29 +53,29 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs build-aux/cargo.sh
   '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
 
     # Provides setup hook to fix "Unrecognized image file format"
     gdk-pixbuf
 
     # Provides glib-compile-resources to compile gresources
     glib
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
+    libxml2
     openssl
     sqlite
     webkitgtk
@@ -91,10 +93,16 @@ stdenv.mkDerivation rec {
     gst-plugins-bad
   ]);
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v.";
+  };
+
   meta = with lib; {
     description = "A modern feed reader designed for the GNOME desktop";
     homepage = "https://gitlab.com/news-flash/news_flash_gtk";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    maintainers = with maintainers; [ kira-bruneau stunkymonkey ];
+    platforms = platforms.unix;
+    mainProgram = "com.gitlab.newsflash";
   };
-}
+})

@@ -1,31 +1,53 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+, IOKit
+}:
 
 buildGoModule rec {
   pname = "gotop";
-  version = "4.1.1";
+  version = "4.2.0";
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "xxxserxxx";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3t6I4ah9gUmPlIBRL86BdgiUaMNiKNEeoUSRMASz1Yc=";
+    hash = "sha256-W7a3QnSIR95N88RqU2sr6oEDSqOXVfAwacPvS219+1Y=";
   };
 
-  runVend = true;
-  vendorSha256 = "sha256-GcIaUIuTiSY1aKxRtclfl7hMNaZZx4uoVG7ahjF/4Hs=";
+  proxyVendor = true;
+  vendorHash = "sha256-KLeVSrPDS1lKsKFemRmgxT6Pxack3X3B/btSCOUSUFY=";
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.Version=v${version}" ];
+  ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
+
+  # prevent `error: 'TARGET_OS_MAC' is not defined`
+  env.CGO_CFLAGS = "-Wno-undef-prefix";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
+  postInstall = ''
+    $out/bin/gotop --create-manpage > gotop.1
+    installManPage gotop.1
+  '';
+
   meta = with lib; {
     description = "A terminal based graphical activity monitor inspired by gtop and vtop";
     homepage = "https://github.com/xxxserxxx/gotop";
-    changelog = "https://github.com/xxxserxxx/gotop/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/xxxserxxx/gotop/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.unix;
   };
 }

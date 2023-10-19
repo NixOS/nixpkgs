@@ -6,17 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libhdhomerun";
-  version = "20210224";
+  version = "20220303";
 
   src = fetchurl {
     url = "https://download.silicondust.com/hdhomerun/libhdhomerun_${version}.tgz";
-    sha256 = "sha256:1y1kwv34qg8nayfkbrxkw8163l46krsfqx8yvkcsc97ilsd3i5mr";
+    sha256 = "sha256-HlT/78LUiTkRUB2jHmYrnQY+bBiv4stcZlMyUnelSpc=";
   };
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "gcc" "cc"
-    substituteInPlace Makefile --replace "-arch i386" ""
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile \
+      --replace "-arch x86_64" "-arch ${stdenv.hostPlatform.darwinArch}"
   '';
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,include/hdhomerun}

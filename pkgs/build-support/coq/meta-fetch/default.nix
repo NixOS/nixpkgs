@@ -8,13 +8,13 @@ let
         fmt = if args?sha256 then "zip" else "tarball";
         pr  = match "^#(.*)$" rev;
         url = switch-if [
-          { cond = isNull pr && !isNull (match "^github.*" domain);
+          { cond = pr == null && (match "^github.*" domain) != null;
             out = "https://${domain}/${owner}/${repo}/archive/${rev}.${ext}"; }
-          { cond = !isNull pr && !isNull (match "^github.*" domain);
+          { cond = pr != null && (match "^github.*" domain) != null;
             out = "https://api.${domain}/repos/${owner}/${repo}/${fmt}/pull/${head pr}/head"; }
-          { cond = isNull pr && !isNull (match "^gitlab.*" domain);
+          { cond = pr == null && (match "^gitlab.*" domain) != null;
             out = "https://${domain}/${owner}/${repo}/-/archive/${rev}/${repo}-${rev}.${ext}"; }
-          { cond = !isNull (match "(www.)?mpi-sws.org" domain);
+          { cond = (match "(www.)?mpi-sws.org" domain) != null;
             out = "https://www.mpi-sws.org/~${owner}/${repo}/download/${repo}-${rev}.${ext}";}
         ] (throw "meta-fetch: no fetcher found for domain ${domain} on ${rev}");
         fetch = x: if args?sha256 then fetchzip (x // { inherit sha256; }) else fetchTarball x;
@@ -59,10 +59,9 @@ switch arg [
         (optionalAttrs has-owner { owner = head splitted; }));
     }; }
   { case = isAttrs;
-    out = let
-    { version = arg.version or "dev";
-      src = (arg.fetcher or fetcher) (location // (arg.location or {}));
-    }; }
+    out = {
+      version = arg.version or "dev";
+      src = (arg.fetcher or fetcher) (location // (arg.location or {})); }; }
   { case = isPath;
     out = {
       version = "dev" ;

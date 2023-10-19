@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pynput";
-  version = "1.7.3";
+  version = "1.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e50b1a0ab86847e87e58f6d1993688b9a44f9f4c88d4712315ea8eb552ef828";
+    sha256 = "3a5726546da54116b687785d38b1db56997ce1d28e53e8d22fc656d8b92e533c";
   };
 
   nativeBuildInputs = [ sphinx ];
@@ -19,6 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A library to control and monitor input devices";
     homepage = "https://github.com/moses-palmer/pynput";
     license = licenses.lgpl3;

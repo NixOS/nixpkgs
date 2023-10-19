@@ -1,42 +1,77 @@
-{ clang
-, fetchFromGitHub
+{ fetchFromGitHub
 , lib
-, llvmPackages
 , protobuf
+, rocksdb
 , rustPlatform
+, rustc-wasm32
+, stdenv
+, Security
+, SystemConfiguration
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "0.9.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
-    repo = "polkadot";
-    rev = "v${version}";
-    sha256 = "sha256-BxBrgcAJm6KM6ha494xlwiLYOSAr71gDFgqlH5RPqMM=";
+    repo = "polkadot-sdk";
+    rev = "polkadot-v${version}";
+    hash = "sha256-B9egLeXZ6xGJ5g5+A9KXYGdesN5Gkrr2qQJe/7hwB5I=";
+
+    # the build process of polkadot requires a .git folder in order to determine
+    # the git commit hash that is being built and add it to the version string.
+    # since having a .git folder introduces reproducibility issues to the nix
+    # build, we check the git commit hash after fetching the source and save it
+    # into a .git_commit file, and then delete the .git folder. we can then use
+    # this file to populate an environment variable with the commit hash, which
+    # is picked up by polkadot's build process.
+    leaveDotGit = true;
+    postFetch = ''
+      ( cd $out; git rev-parse --short HEAD > .git_commit )
+      rm -rf $out/.git
+    '';
   };
 
-  cargoSha256 = "131fkdazcspblzblmd9nhkymwn7qh6lhaqvi1jqnsq4951l9f4ms";
+  preBuild = ''
+    export SUBSTRATE_CLI_GIT_COMMIT_HASH=$(< .git_commit)
+    rm .git_commit
+  '';
 
-  nativeBuildInputs = [ clang ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "ark-secret-scalar-0.0.2" = "sha256-Nbf77KSsAjDKiFIP5kgzl23fRB+68x1EirNuZlS7jeM=";
+      "common-0.1.0" = "sha256-3OKBPpk0exdlV0N9rJRVIncSrkwdI8bkYL2QNsJl+sY=";
+      "fflonk-0.1.0" = "sha256-MNvlePHQdY8DiOq6w7Hc1pgn7G58GDTeghCKHJdUy7E=";
+      "sub-tokens-0.1.0" = "sha256-GvhgZhOIX39zF+TbQWtTCgahDec4lQjH+NqamLFLUxM=";
+    };
+  };
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
-  PROTOC = "${protobuf}/bin/protoc";
+  cargoBuildFlags = [ "-p" "polkadot" ];
 
-  # NOTE: We don't build the WASM runtimes since this would require a more
-  # complicated rust environment setup and this is only needed for developer
-  # environments. The resulting binary is useful for end-users of live networks
-  # since those just use the WASM blob from the network chainspec.
-  SKIP_WASM_BUILD = 1;
-
-  # We can't run the test suite since we didn't compile the WASM runtimes.
+  # NOTE: tests currently fail to compile due to an issue with cargo-auditable
+  # and resolution of features flags, potentially related to this:
+  # https://github.com/rust-secure-code/cargo-auditable/issues/66
   doCheck = false;
+
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    rustc-wasm32
+    rustc-wasm32.llvmPackages.lld
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+
+  # NOTE: we need to force lld otherwise rust-lld is not found for wasm32 target
+  CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+  PROTOC = "${protobuf}/bin/protoc";
+  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   meta = with lib; {
     description = "Polkadot Node Implementation";
     homepage = "https://polkadot.network";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ akru andresilva asymmetric FlorianFranzen RaghavSood ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -1,28 +1,42 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, isPy3k
-, pbr, six, futures ? null, monotonic ? null, typing ? null, setuptools_scm
-, pytest, sphinx, tornado, typeguard
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pbr
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, tornado
+, typeguard
 }:
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "7.0.0";
+  version = "8.2.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bd16ef5d3b985647fe28dfa6f695d343aa26479a04e8792b9d3c8f49e361ae1";
+    hash = "sha256-Q68DeCK9ACkCWHfzstl8xNe7DCmRAAo9WdcVF8XJaeA=";
   };
 
-  nativeBuildInputs = [ pbr setuptools_scm ];
-  propagatedBuildInputs = [ six ]
-    ++ lib.optionals isPy27 [ futures monotonic typing ];
+  nativeBuildInputs = [
+    pbr
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytest sphinx tornado ]
-    ++ lib.optionals isPy3k [ typeguard ];
-  checkPhase = if isPy27 then ''
-    pytest --ignore='tenacity/tests/test_asyncio.py'
-  '' else ''
-    pytest
-  '';
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+    tornado
+    typeguard
+  ];
+
+  pythonImportsCheck = [
+    "tenacity"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jd/tenacity";

@@ -1,26 +1,50 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, python
-, pkgs
-, pillow
-, twitter
-, pyfiglet
-, requests
 , arrow
-, dateutil
-, pysocks
+, buildPythonPackage
+, fetchFromGitHub
+, freetype
+, glibcLocales
+, libjpeg
+, pillow
 , pocket
+, pyfiglet
+, pysocks
+, python
+, python-dateutil
+, requests
+, twitter
+, zlib
 }:
 
 buildPythonPackage rec {
   pname = "rainbowstream";
-  version = "1.5.2";
+  version = "1.5.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "527d39778c55d88300fe2017913341bfa1b1f0ffdc1fe5eab57a82bf4cd2edb3";
+  src = fetchFromGitHub {
+    owner = "orakaro";
+    repo = pname;
+    # Request for tagging, https://github.com/orakaro/rainbowstream/issues/314
+    rev = "96141fac10675e0775d703f65a59c4477a48c57e";
+    sha256 = "0j0qcc428lk9b3l0cr2j418gd6wd5k4160ham2zn2mmdmxn5bldg";
   };
+
+  buildInputs = [
+    freetype
+    glibcLocales
+    libjpeg
+    zlib
+  ];
+
+  propagatedBuildInputs = [
+    arrow
+    pillow
+    pocket
+    pyfiglet
+    pysocks
+    python-dateutil
+    requests
+    twitter
+  ];
 
   patches = [ ./image.patch ];
 
@@ -31,7 +55,7 @@ buildPythonPackage rec {
     sed -i 's/requests.*"/requests"/' setup.py
   '';
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     mkdir -p $out/lib
@@ -42,13 +66,15 @@ buildPythonPackage rec {
     done
   '';
 
-  buildInputs =  [ pkgs.libjpeg pkgs.freetype pkgs.zlib pkgs.glibcLocales pillow twitter pyfiglet requests arrow dateutil pysocks pocket ];
+  # Project has no tests
+  doCheck = false;
+
+  pythonImportsCheck = [ "rainbowstream" ];
 
   meta = with lib; {
     description = "Streaming command-line twitter client";
-    homepage    = "http://www.rainbowstream.org/";
-    license     = licenses.mit;
+    homepage = "https://github.com/orakaro/rainbowstream";
+    license = licenses.mit;
     maintainers = with maintainers; [ thoughtpolice ];
   };
-
 }

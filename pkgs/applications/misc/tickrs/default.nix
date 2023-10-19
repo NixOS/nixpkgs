@@ -1,25 +1,45 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, perl, Security }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, zlib
+, stdenv
+, darwin
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
-  version = "0.14.4";
+  version = "0.14.9";
 
   src = fetchFromGitHub {
     owner = "tarkah";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-OOsBo+NCfn++2XyfQVoeEPcbSv645Ng7g9s4W7X2xg4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cN5GtU3bmsdJvfjVdWvWAshiU3Ged7L9pc8wid8GQwA=";
   };
 
-  cargoSha256 = "sha256-HAkJKqoz4vrY4mGFSz6sylV6DdrjWvPfwb4BiLWEyKY=";
+  cargoHash = "sha256-ngDA085V3+2oBH13Fs+pJez2W2/i1pEKoWdqJ4/3Q0I=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [
+    openssl
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   meta = with lib; {
     description = "Realtime ticker data in your terminal";
     homepage = "https://github.com/tarkah/tickrs";
+    changelog = "https://github.com/tarkah/tickrs/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ mredaelli ];
   };

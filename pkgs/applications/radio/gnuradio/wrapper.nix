@@ -28,50 +28,64 @@
 , extraPackages ? []
 # For Adding additional python packaages
 , extraPythonPackages ? []
+, soapysdr # For it's passthru.searchPath
+# soapysdr plugins we add by default. Ideally, we should have a
+# soapysdrPackages = soapysdr.pkgs attribute set, but until now this wasn't
+# crucial.
+, soapyairspy
+, soapyaudio
+, soapybladerf
+, soapyhackrf
+, soapyremote
+, soapyrtlsdr
+, soapyuhd
+# For adding / changing soapysdr packages, like soapsdr-with-plugins does
+, extraSoapySdrPackages ? [
+  soapyairspy
+  soapyaudio
+  soapybladerf
+  soapyhackrf
+  soapyremote
+  soapyrtlsdr
+  soapyuhd
+]
 # Allow to add whatever you want to the wrapper
 , extraMakeWrapperArgs ? []
 }:
 
 let
+  # We don't check if `python-support` feature is on, as it's unlikely someone
+  # may wish to wrap GR without python support.
   pythonPkgs = extraPythonPackages
+    ++ [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
     # Add the extraPackages as python modules as well
     ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (lib.mapAttrsToList (
       feat: info: (
-        if unwrapped.hasFeature feat unwrapped.features then
-          (if builtins.hasAttr "pythonRuntime" info then info.pythonRuntime else [])
-        else
-          []
+        lib.optionals ((unwrapped.hasFeature feat) && (builtins.hasAttr "pythonRuntime" info)) info.pythonRuntime
       )
-      ) unwrapped.featuresInfo)
-    ++ lib.optionals
-      (unwrapped.hasFeature "python-support" unwrapped.features)
-      (
-        # Add unwrapped itself as a python module
-        [ (unwrapped.python.pkgs.toPythonModule unwrapped) ]
-        # Add all extraPackages as python modules
-        ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
-      )
+    ) unwrapped.featuresInfo)
   ;
   pythonEnv = unwrapped.python.withPackages(ps: pythonPkgs);
 
-  name = (lib.appendToName "wrapped" unwrapped).name;
+  pname = unwrapped.pname + "-wrapped";
+  inherit (unwrapped) version;
   makeWrapperArgs = builtins.concatStringsSep " " ([
   ]
     # Emulating wrapGAppsHook & wrapQtAppsHook working together
     ++ lib.optionals (
-      (unwrapped.hasFeature "gnuradio-companion" unwrapped.features)
-      || (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
+      (unwrapped.hasFeature "gnuradio-companion")
+      || (unwrapped.hasFeature "gr-qtgui")
       ) [
       "--prefix" "XDG_DATA_DIRS" ":" "$out/share"
-      "--prefix" "XDG_DATA_DIRS" ":" "$out/share/gsettings-schemas/${name}"
+      "--prefix" "XDG_DATA_DIRS" ":" "$out/share/gsettings-schemas/${pname}"
       "--prefix" "XDG_DATA_DIRS" ":" "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       "--prefix" "XDG_DATA_DIRS" ":" "${hicolor-icon-theme}/share"
       # Needs to run `gsettings` on startup, see:
       # https://www.mail-archive.com/debian-bugs-dist@lists.debian.org/msg1764890.html
       "--prefix" "PATH" ":" "${lib.getBin glib}/bin"
     ]
-    ++ lib.optionals (unwrapped.hasFeature "gnuradio-companion" unwrapped.features) [
+    ++ lib.optionals (unwrapped.hasFeature "gnuradio-companion") [
       "--set" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.moduleDir}.cache"
       "--prefix" "GIO_EXTRA_MODULES" ":" "${lib.getLib dconf}/lib/gio/modules"
       "--prefix" "XDG_DATA_DIRS" ":" "${unwrapped.gtk}/share"
@@ -94,7 +108,11 @@ let
     ++ lib.optionals (extraPackages != []) [
       "--prefix" "GRC_BLOCKS_PATH" ":" "${lib.makeSearchPath "share/gnuradio/grc/blocks" extraPackages}"
     ]
-    ++ lib.optionals (unwrapped.hasFeature "gr-qtgui" unwrapped.features)
+    ++ lib.optionals (extraSoapySdrPackages != []) [
+      "--prefix" "SOAPY_SDR_PLUGIN_PATH" ":" "${lib.makeSearchPath
+      soapysdr.passthru.searchPath extraSoapySdrPackages}"
+    ]
+    ++ lib.optionals (unwrapped.hasFeature "gr-qtgui")
       # 3.7 builds with qt4
       (if lib.versionAtLeast unwrapped.versionAttr.major "3.8" then
         [
@@ -102,19 +120,21 @@ let
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtPluginPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
           "--prefix" "QML2_IMPORT_PATH" ":"
           "${
             lib.makeSearchPath
             unwrapped.qt.qtbase.qtQmlPrefix
-            (builtins.map lib.getBin [
+            (builtins.map lib.getBin ([
               unwrapped.qt.qtbase
+            ] ++ lib.optionals stdenv.isLinux [
               unwrapped.qt.qtwayland
-            ])
+            ]))
           }"
         ]
       else
@@ -140,9 +160,9 @@ let
   };
   self = if doWrap then
     stdenv.mkDerivation {
-      inherit name passthru;
+      inherit pname version passthru;
+      nativeBuildInputs = [ makeWrapper ];
       buildInputs = [
-        makeWrapper
         xorg.lndir
       ];
       buildCommand = ''

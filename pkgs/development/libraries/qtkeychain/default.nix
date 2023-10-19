@@ -1,40 +1,59 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, qt4 ? null
-, withQt5 ? false, qtbase ? null, qttools ? null
-, darwin ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, qtbase
+, qttools
+, CoreFoundation
+, Security
 , libsecret
 }:
 
-assert withQt5 -> qtbase != null;
-assert withQt5 -> qttools != null;
-assert stdenv.isDarwin -> darwin != null;
-
 stdenv.mkDerivation rec {
-  name = "qtkeychain-${if withQt5 then "qt5" else "qt4"}-${version}";
-  version = "0.9.1";            # verify after nix-build with `grep -R "set(PACKAGE_VERSION " result/`
+  pname = "qtkeychain";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "frankosterfeld";
     repo = "qtkeychain";
-    rev = "v${version}";
-    sha256 = "0h4wgngn2yl35hapbjs24amkjfbzsvnna4ixfhn87snjnq5lmjbc"; # v0.9.1
+    rev = version;
+    sha256 = "sha256-LclYOuIYn+jYCvg69uHFlV3VcZ2KWdr8lFyCSBIB7Kw=";
   };
 
   dontWrapQtApps = true;
 
-  patches = (if withQt5 then [] else [ ./0001-Fixes-build-with-Qt4.patch ]) ++ (if stdenv.isDarwin then [ ./0002-Fix-install-name-Darwin.patch ] else []);
+  # HACK `propagatedSandboxProfile` does not appear to actually propagate the sandbox profile from `qtbase`
+  sandboxProfile = toString qtbase.__propagatedSandboxProfile or null;
 
-  cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
+  cmakeFlags = [
+    "-DBUILD_WITH_QT6=${if lib.versions.major qtbase.version == "6" then "ON" else "OFF"}"
+    "-DQT_TRANSLATIONS_DIR=share/qt/translations"
+  ];
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optionals (!stdenv.isDarwin) [ pkg-config ] # for finding libsecret
   ;
 
   buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreFoundation Security
-    ])
-  ;
+    ++ [ qtbase qttools ]
+    ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    Security
+  ];
+
+  doInstallCheck = true;
+
+  # we previously had a note in here saying to run this check manually, so we might as
+  # well do it automatically. It seems like a perfectly valid sanity check, but I
+  # have no idea *why* we might need it
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    grep --quiet -R 'set(PACKAGE_VERSION "${version}"' .
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     description = "Platform-independent Qt API for storing passwords securely";

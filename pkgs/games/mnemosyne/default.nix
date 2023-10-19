@@ -1,5 +1,7 @@
-{ fetchurl
+{ lib
+, stdenv
 , python
+, fetchurl
 , anki
 }:
 
@@ -29,18 +31,16 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   prePatch = ''
-    substituteInPlace setup.py --replace /usr $out
-    find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
+    substituteInPlace setup.py \
+      --replace '("", ["/usr/local/bin/mplayer"])' ""
   '';
 
-  # No tests/ directrory in tarball
+  # No tests/ directory in tarball
   doCheck = false;
 
   postInstall = ''
     mkdir -p $out/share/applications
-    mv $out/${python.sitePackages}/$out/share/locale $out/share
     mv mnemosyne.desktop $out/share/applications
-    rm -r $out/${python.sitePackages}/nix
   '';
 
   dontWrapQtApps = true;

@@ -7,12 +7,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dist.opendnssec.org/source/${pname}-${version}.tar.gz";
-    hash = "sha256:1wkmyi6n3z2pak1cj5yk6v6bv9w0m24skycya48iikab0mrr8931";
+    hash = "sha256-YSSUcwVLzRgRUZ75qYmogKe9zDbTF8nCVFf8YU30dfI=";
   };
 
   configureFlags = [
     "--with-crypto-backend=botan"
-    "--with-botan=${botan2}"
+    "--with-botan=${lib.getDev botan2}"
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
     ];

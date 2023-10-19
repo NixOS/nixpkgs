@@ -1,15 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
-, asciidoc, libxslt, docbook_xsl
-, pam, yubikey-personalization, libyubikey, libykclient }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, asciidoc
+, libxslt
+, docbook_xsl
+, pam
+, yubikey-personalization
+, libyubikey
+, libykclient
+}:
 
 stdenv.mkDerivation rec {
   pname = "yubico-pam";
-  version = "unstable-2019-07-01";
+  version = "2.27";
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = pname;
-    rev = "b5bd00db81e0e0e0ecced65c684080bb56ddc35b";
-    sha256 = "10dq8dqi3jldllj6p8r9hldx9sank9n82c44w8akxrs1vli6nj3m";
+    rev = version;
+    sha256 = "0hb773zlf11xz4bwmsqv2mq5d4aq2g0crdr5cp9xwc4ivi5gd4kg";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config asciidoc libxslt docbook_xsl ];

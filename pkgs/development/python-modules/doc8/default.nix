@@ -1,39 +1,70 @@
 { lib
 , buildPythonPackage
+, chardet
+, docutils
+, fetchpatch
 , fetchPypi
 , pbr
-, docutils
-, six
-, chardet
-, stevedore
-, restructuredtext_lint
 , pygments
+, pytestCheckHook
+, pythonOlder
+, restructuredtext_lint
+, setuptools-scm
+, stevedore
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "doc8";
-  version = "0.8.1";
+  version = "1.1.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4d1df12598807cf08ffa9a1d5ef42d229ee0de42519da01b768ff27211082c12";
+    hash = "sha256-2XqT6PWi78RxOggEZX3trYN0XMpM0diN6Rhvd/l3YAQ=";
   };
 
-  buildInputs = [ pbr ];
+  patches = [
+    # https://github.com/PyCQA/doc8/pull/146
+    (fetchpatch {
+      name = "remove-setuptools-scm-git-archive.patch";
+      url = "https://github.com/PyCQA/doc8/commit/06416e95041db92e4295b13ab596351618f6b32e.patch";
+      hash = "sha256-IIE3cDNOx+6RLjidGrokyazaX7MOVbMKUb7yQIM5sI0=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    setuptools-scm
+    wheel
+  ];
+
+  buildInputs = [
+    pbr
+  ];
+
   propagatedBuildInputs = [
     docutils
-    six
     chardet
     stevedore
     restructuredtext_lint
     pygments
   ];
 
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
+  pythonImportsCheck = [
+    "doc8"
+  ];
+
+  meta = with lib; {
     description = "Style checker for Sphinx (or other) RST documentation";
-    homepage = "https://launchpad.net/doc8";
-    license = lib.licenses.asl20;
+    homepage = "https://github.com/pycqa/doc8";
+    changelog = "https://github.com/PyCQA/doc8/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ onny ];
   };
 }

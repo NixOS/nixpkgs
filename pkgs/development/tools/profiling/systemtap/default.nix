@@ -1,13 +1,13 @@
 { lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, python2Packages
+, cpio, elfutils, kernel, gnumake, python3
 }:
 
 let
   ## fetchgit info
   url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "0mmpiq7bsrwhp7z07a1pwka4q6d2fbmdx5wp83nxj31rvdxhqwnw";
-  version = "4.1";
+  sha256 = "sha256-UiUMoqdfkk6mzaPGctpQW3dvOWKhNBNuScJ5BpCykVg=";
+  version = "4.8";
 
   inherit (kernel) stdenv;
 
@@ -16,34 +16,22 @@ let
     pname = "systemtap";
     inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
+    nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
+    buildInputs = [ elfutils gettext ];
     enableParallelBuilding = true;
+    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ]; # Needed with GCC 12
   };
 
-  ## a kernel build dir as expected by systemtap
-  kernelBuildDir = runCommand "kbuild-${kernel.version}-merged" { } ''
-    mkdir -p $out
-    for f in \
-        ${kernel}/System.map \
-        ${kernel.dev}/vmlinux \
-        ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/{*,.*}
-    do
-      ln -s $(readlink -f $f) $out
-    done
-  '';
-
-  pypkgs = with python2Packages; makePythonPath [ pyparsing ];
+  pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
 in runCommand "systemtap-${kernel.version}-${version}" {
-  inherit stapBuild kernelBuildDir;
+  inherit stapBuild;
   nativeBuildInputs = [ makeWrapper ];
   meta = {
     homepage = "https://sourceware.org/systemtap/";
-    repositories.git = url;
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    platforms = lib.systems.inspect.patterns.isGnu;
   };
 } ''
   mkdir -p $out/bin
@@ -52,7 +40,7 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   done
   rm $out/bin/stap $out/bin/dtrace
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
-    --add-flags "-r $kernelBuildDir" \
+    --add-flags "-r ${kernel.dev}" \
     --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
   makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
     --prefix PYTHONPATH : ${pypkgs}

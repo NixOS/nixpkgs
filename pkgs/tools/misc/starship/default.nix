@@ -2,46 +2,60 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, openssl
 , installShellFiles
-, libiconv
+, cmake
+, git
+, nixosTests
 , Security
+, Foundation
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.54.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-8vrLvP8NevVpmqxqJHsySGXRTDX45c8FrfB7W7fdQvg=";
+    hash = "sha256-CrD65nHE40n83HO+4QM1sLHvdFaqTvOb96hPBgXKuwk=";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles cmake ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security Foundation Cocoa ];
+
+  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
 
   postInstall = ''
-    for shell in bash fish zsh; do
-      STARSHIP_CACHE=$TMPDIR $out/bin/starship completions $shell > starship.$shell
-      installShellCompletion starship.$shell
-    done
+    installShellCompletion --cmd starship \
+      --bash <($out/bin/starship completions bash) \
+      --fish <($out/bin/starship completions fish) \
+      --zsh <($out/bin/starship completions zsh)
+
+    presetdir=$out/share/starship/presets/
+    mkdir -p $presetdir
+    cp docs/.vuepress/public/presets/toml/*.toml $presetdir
   '';
 
-  cargoSha256 = "sha256-lIZsYhyef9LsGME01Kb5TGamGpLyZiPrdIb+jUqvbOg=";
+  cargoHash = "sha256-ZHHrpepKZnSGufyEAjNDozaIKAt2GFRt+hU2ej7LceA=";
+
+  nativeCheckInputs = [ git ];
 
   preCheck = ''
     HOME=$TMPDIR
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) starship;
+  };
+
   meta = with lib; {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras davidtwco Br1ght0ne Frostman marsam ];
+    maintainers = with maintainers; [ bbigras danth davidtwco Br1ght0ne Frostman marsam ];
+    mainProgram = "starship";
   };
 }

@@ -1,5 +1,5 @@
 { lib, stdenv,
-  fetchzip,
+  fetchFromGitHub,
   makeWrapper,
   cmake,
   python3,
@@ -17,29 +17,17 @@
   cereal
 }:
 
-let
-  version = "2020.2";
-  minizip = "f5282643091dc1b33546bb8d8b3c23d78fdba231";
-
-  domoticz-src = fetchzip {
-    url = "https://github.com/domoticz/domoticz/archive/${version}.tar.gz";
-    sha256 = "1b4pkw9qp7f5r995vm4xdnpbwi9vxjyzbnk63bmy1xkvbhshm0g3";
-  };
-
-  minizip-src = fetchzip {
-    url = "https://github.com/domoticz/minizip/archive/${minizip}.tar.gz";
-    sha256 = "1vddrzm4pwl14bms91fs3mbqqjhcxrmpx9a68b6nfbs20xmpnsny";
-  };
-in
 stdenv.mkDerivation rec {
-  name = "domoticz";
-  inherit version;
+  pname = "domoticz";
+  version = "2023.2";
 
-  src = domoticz-src;
-
-  postUnpack = ''
-    cp -r ${minizip-src}/* $sourceRoot/extern/minizip
-  '';
+  src = fetchFromGitHub {
+    owner = "domoticz";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-DxY9rBeRc20wmt4pDdBS16vyoOjCzczuxhOdUX/Lxao=";
+    fetchSubmodules = true;
+  };
 
   buildInputs = [
     openssl
@@ -63,7 +51,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DUSE_BUILTIN_MQTT=false"
     "-DUSE_BUILTIN_LUA=false"
     "-DUSE_BUILTIN_SQLITE=false"
@@ -95,7 +82,9 @@ stdenv.mkDerivation rec {
     '';
     maintainers = with maintainers; [ edcragg ];
     homepage = "https://www.domoticz.com/";
+    changelog = "https://github.com/domoticz/domoticz/blob/${version}/History.txt";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/domoticz.x86_64-darwin
   };
 }

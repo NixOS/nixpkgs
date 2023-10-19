@@ -1,25 +1,34 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "2.2.2";
   pname = "elementpath";
-  disabled = isPy27; # uses incompatible class syntax
+  version = "4.1.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
-    rev = "v${version}";
-    sha256 = "sha256-n4zIn2WmFHaVaah2J0mz7Q6G4Ptb8Ms0dwQYbh0Ofcs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5K2xcnTo3/A6/pCxQn5qZqni7C64p/yNAWWJlhQeKe4=";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this
   doCheck = false;
 
-  pythonImportsCheck = [ "elementpath" ];
+  pythonImportsCheck = [
+    "elementpath"
+  ];
 
   meta = with lib; {
     description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml";
     homepage = "https://github.com/sissaschool/elementpath";
+    changelog = "https://github.com/sissaschool/elementpath/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

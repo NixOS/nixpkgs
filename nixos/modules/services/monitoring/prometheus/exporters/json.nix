@@ -10,7 +10,7 @@ in
   extraOpts = {
     configFile = mkOption {
       type = types.path;
-      description = ''
+      description = lib.mdDoc ''
         Path to configuration file.
       '';
     };

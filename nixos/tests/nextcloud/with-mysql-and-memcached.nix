@@ -1,4 +1,6 @@
-import ../make-test-python.nix ({ pkgs, ...}: let
+args@{ pkgs, nextcloudVersion ? 22, ... }:
+
+(import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "hunter2";
   adminuser = "root";
 in {
@@ -18,40 +20,18 @@ in {
         enable = true;
         hostName = "nextcloud";
         https = true;
+        package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
         caching = {
           apcu = true;
           redis = false;
           memcached = true;
         };
+        database.createLocally = true;
         config = {
           dbtype = "mysql";
-          dbname = "nextcloud";
-          dbuser = "nextcloud";
-          dbhost = "127.0.0.1";
-          dbport = 3306;
-          dbpass = "hunter2";
           # Don't inherit adminuser since "root" is supposed to be the default
-          inherit adminpass;
+          adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
         };
-      };
-
-      services.mysql = {
-        enable = true;
-        bind = "127.0.0.1";
-        package = pkgs.mariadb;
-        initialScript = pkgs.writeText "mysql-init" ''
-          CREATE USER 'nextcloud'@'localhost' IDENTIFIED BY 'hunter2';
-          CREATE DATABASE IF NOT EXISTS nextcloud;
-          GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER,
-            CREATE TEMPORARY TABLES ON nextcloud.* TO 'nextcloud'@'localhost'
-            IDENTIFIED BY 'hunter2';
-          FLUSH privileges;
-        '';
-      };
-
-      systemd.services.nextcloud-setup= {
-        requires = ["mysql.service"];
-        after = ["mysql.service"];
       };
 
       services.memcached.enable = true;
@@ -69,7 +49,7 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
-      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -96,4 +76,4 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
   '';
-})
+})) args

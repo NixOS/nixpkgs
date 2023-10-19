@@ -2,28 +2,40 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
-, alsaLib
-, python
-, SDL
+, alsa-lib
+, python3
+, SDL2
+, libXext
+, Cocoa
 }:
 
 stdenv.mkDerivation rec {
   pname = "schismtracker";
-  version = "20210525";
+  version = "20230906";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "06ybkbqry7f7lmzgwb9s7ipafshl5gdj98lcjsjkcbnywj8r9b3h";
+    sha256 = "sha256-eW1sqfcAR3lutSyQKj7j1elkFTa8jfZqgrJYYAzMlzo=";
   };
 
   configureFlags = [ "--enable-dependency-tracking" ]
     ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  nativeBuildInputs = [ autoreconfHook python ];
+  nativeBuildInputs = [ autoreconfHook python3 ];
 
-  buildInputs = [ SDL ] ++ lib.optional stdenv.isLinux alsaLib;
+  buildInputs = [ SDL2 ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib libXext ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  enableParallelBuilding = true;
+
+  # Our Darwin SDL2 doesn't have a SDL2main to link against
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace configure.ac \
+      --replace '-lSDL2main' '-lSDL2'
+  '';
 
   meta = with lib; {
     description = "Music tracker application, free reimplementation of Impulse Tracker";

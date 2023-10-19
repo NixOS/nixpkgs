@@ -3,24 +3,32 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , poetry-core
 , pytest-asyncio
-, pytest-cov
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aiorecollect";
-  version = "1.0.4";
+  version = "2023.09.0";
   format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-A4qk7eo4maCRP4UmtWrRCPvG6YrLVSOiOcfN8pEj5Po=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-45LgfCA8037GqP4WfEjE4hj2YdKUGu2hGrQ/f0r1PAI=";
   };
+
+  postPatch = ''
+    # this is not used directly by the project
+    sed -i '/certifi =/d' pyproject.toml
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -30,17 +38,23 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     aresponses
     freezegun
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
-  disabledTestPaths = [ "examples/" ];
+  disabledTestPaths = [
+    # Ignore the examples directory as the files are prefixed with test_.
+    "examples/"
+  ];
 
-  pythonImportsCheck = [ "aiorecollect" ];
+  pythonImportsCheck = [
+    "aiorecollect"
+  ];
 
   meta = with lib; {
     description = "Python library for the Recollect Waste API";
@@ -51,6 +65,7 @@ buildPythonPackage rec {
       and more.
     '';
     homepage = "https://github.com/bachya/aiorecollect";
+    changelog = "https://github.com/bachya/aiorecollect/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -1,22 +1,16 @@
-{ lib, stdenv, fetchurl, makeWrapper, writeText }:
+{ lib, stdenvNoCC, fetchurl, nixosTests }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";
-  version = "1.35.2";
+  version = "1.40.1";
 
-  src = with lib; fetchurl {
-    url = "https://releases.wikimedia.org/mediawiki/${versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "07cch4j2lcncfjv71351c1fxh200p83g2ijb3c9x8rv6nzcmiymz";
+  src = fetchurl {
+    url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
+    hash = "sha256-4F1BneQMatAxRaygfgjPmV0coWZ9l3k7tzlw4sEbCgQ=";
   };
 
-  prePatch = ''
+  postPatch = ''
     sed -i 's|$vars = Installer::getExistingLocalSettings();|$vars = null;|' includes/installer/CliInstaller.php
-  '';
-
-  phpConfig = writeText "LocalSettings.php" ''
-  <?php
-    return require(getenv('MEDIAWIKI_CONFIG'));
-  ?>
   '';
 
   installPhase = ''
@@ -24,16 +18,22 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/share/mediawiki
     cp -r * $out/share/mediawiki
-    cp ${phpConfig} $out/share/mediawiki/LocalSettings.php
+    echo "<?php
+      return require(getenv('MEDIAWIKI_CONFIG'));
+    ?>" > $out/share/mediawiki/LocalSettings.php
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests.mediawiki) mysql postgresql;
+  };
 
   meta = with lib; {
     description = "The collaborative editing software that runs Wikipedia";
     license = licenses.gpl2Plus;
     homepage = "https://www.mediawiki.org/";
     platforms = platforms.all;
-    maintainers = [ maintainers.redvers ];
+    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
   };
 }

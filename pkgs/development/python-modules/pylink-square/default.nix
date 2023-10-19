@@ -1,50 +1,54 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
+, fetchPypi
 , mock
 , psutil
+, pytestCheckHook
+, pythonOlder
 , six
-, future
 }:
 
-let
-  mock' = mock.overridePythonAttrs (old: rec {
-    version = "2.0.0";
-    src = fetchPypi {
-      inherit (old) pname;
-      inherit version;
-      sha256 = "1flbpksir5sqrvq2z0dp8sl4bzbadg21sj4d42w3klpdfvgvcn5i";
-    };
-  });
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pylink-square";
-  version = "0.8.1";
+  version = "1.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "square";
     repo = "pylink";
-    rev = "v${version}";
-    sha256 = "1q5sm1017pcqcgwhsliiiv1wh609lrjdlc8f5ihlschk1d0qidpd";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rcM7gvUUfXN5pL9uIihzmOCXA7NKjiMt2GaQaGJxD9M=";
   };
 
-  buildInputs = [ mock' ];
-  propagatedBuildInputs = [ psutil six future ];
+  propagatedBuildInputs = [
+    psutil
+    six
+  ];
 
-  preCheck = ''
-    # For an unknown reason, `pylink --version` output is different
-    # inside the nix build environment across different python versions
-    substituteInPlace tests/unit/test_main.py --replace \
-      "expected = 'pylink %s' % pylink.__version__" \
-      "return"
-  '';
+  nativeCheckInputs = [
+    mock
+    pytestCheckHook
+  ];
 
-  pythonImportsCheck = [ "pylink" ];
+  pythonImportsCheck = [
+    "pylink"
+  ];
+
+  disabledTests = [
+    # AttributeError: 'called_once_with' is not a valid assertion
+    "test_cp15_register_write_success"
+    "test_jlink_restarted"
+    "test_set_log_file_success"
+  ];
 
   meta = with lib; {
     description = "Python interface for the SEGGER J-Link";
-    homepage = "https://github.com/Square/pylink";
-    maintainers = with maintainers; [ dump_stack ];
+    homepage = "https://github.com/square/pylink";
+    changelog = "https://github.com/square/pylink/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+    maintainers = with maintainers; [ dump_stack ];
   };
 }

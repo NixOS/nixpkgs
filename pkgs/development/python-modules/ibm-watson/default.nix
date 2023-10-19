@@ -1,53 +1,54 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, responses
-, pytestCheckHook
-, python-dotenv
-, pytest-rerunfailures
-, tox
-, requests
-, python-dateutil
-, websocket_client
 , ibm-cloud-sdk-core
+, pytest-rerunfailures
+, pytestCheckHook
+, python-dateutil
+, python-dotenv
+, pythonOlder
+, requests
+, responses
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "5.1.0";
+  version = "7.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
-    rev = "v${version}";
-    sha256 = "sha256:16llw7kybwndgf2ryrg5698v4j3rhrdx52lf3kdzhxdi0q3kmwdn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f/nf9WFiUNDQBkFNMV16EznCw0TN9L4fDIPQ/j4B1Sc=";
   };
 
-  checkInputs = [
-    responses
+  propagatedBuildInputs = [
+    ibm-cloud-sdk-core
+    python-dateutil
+    requests
+    websocket-client
+  ];
+
+  nativeCheckInputs = [
+    pytest-rerunfailures
     pytestCheckHook
     python-dotenv
-    pytest-rerunfailures
-    tox
+    responses
   ];
 
-  propagatedBuildInputs = [
-    requests
-    python-dateutil
-    websocket_client
-    ibm-cloud-sdk-core
+  pythonImportsCheck = [
+    "ibm_watson"
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace websocket-client==0.48.0 websocket-client>=0.48.0 \
-      --replace ibm_cloud_sdk_core==3.3.6 ibm_cloud_sdk_core>=3.3.6
-  '';
 
   meta = with lib; {
     description = "Client library to use the IBM Watson Services";
     homepage = "https://github.com/watson-developer-cloud/python-sdk";
+    changelog = "https://github.com/watson-developer-cloud/python-sdk/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [ globin ];
   };
 }

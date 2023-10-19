@@ -2,27 +2,26 @@
 
 buildGoModule rec {
   pname = "bunnyfetch";
-  version = "unstable-2021-05-24";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
-    owner = "Mewyuna";
-    repo = pname;
-    rev = "7bcc45fb590b37f410e60af893e679eb0729ecb1";
-    sha256 = "1lgqrwmxdxd1d99rr0akydfwcsbcmz75fkbq9zrl842rksnp5q3r";
+    owner = "Rosettea";
+    repo = "bunnyfetch";
+    rev = "v${version}";
+    sha256 = "sha256-6MnjCXc9/8twdf8PHKsVJY1yWYwUf5R01vtQFJbyy7M=";
   };
 
-  vendorSha256 = "1vv69y0x06kn99lw995sbkb7vgd0yb18flkr2ml8ss7q2yvz37vi";
+  vendorHash = "sha256-w+O1dU8t7uNvdlFnYhCdJCDixpWWZAnj9GrtsCbu9SM=";
 
   # No upstream tests
   doCheck = false;
 
-  subPackages = [ "." ];
-
   meta = with lib; {
     description = "Tiny system info fetch utility";
-    homepage = "https://github.com/Mewyuna/bunnyfetch";
+    homepage = "https://github.com/Rosettea/bunnyfetch";
     license = licenses.mit;
     maintainers = with maintainers; [ devins2518 ];
     platforms = platforms.linux;
+    mainProgram = "bunnyfetch";
   };
 }

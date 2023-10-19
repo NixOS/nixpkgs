@@ -1,0 +1,22 @@
+diff -Naur old/lib/crypto/client.cpp c5pf6ygk9v9rdwwr3dyd24wghflp0vmx-source/lib/crypto/client.cpp
+--- old/lib/crypto/client.cpp	2021-10-22 19:31:52.159836190 +0300
++++ c5pf6ygk9v9rdwwr3dyd24wghflp0vmx-source/lib/crypto/client.cpp	2021-10-22 19:30:42.882010441 +0300
+@@ -37,15 +37,15 @@
+ 
+ };
+ 
+-OlmErrorCode
++mtx::crypto::OlmErrorCode
+ olm_exception::ec_from_string(std::string_view error)
+ {
+         for (size_t i = 0; i < olmErrorStrings.size(); i++) {
+                 if (olmErrorStrings[i] == error)
+-                        return static_cast<OlmErrorCode>(i);
++			return static_cast<mtx::crypto::OlmErrorCode>(i);
+         }
+ 
+-        return OlmErrorCode::UNKNOWN_ERROR;
++        return mtx::crypto::OlmErrorCode::UNKNOWN_ERROR;
+ }
+ 
+ void

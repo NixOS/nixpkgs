@@ -1,21 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , click
 , click-default-group
 , incremental
 , jinja2
+, mock
 , pytestCheckHook
 , toml
 , twisted
+, setuptools
 , git # shells out to git
 }:
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "19.2.0";
+  version = "22.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15l1gb0hhi9pf3mhhb9vpc93w6w3hrih2ljmzbkgfb3dwqd1l9a8";
+    hash = "sha256-nEnX519kaprqAq6QTAvBY5yP0UoBKS0rEjuNMHVkA00=";
   };
 
   propagatedBuildInputs = [
@@ -24,17 +32,29 @@ buildPythonPackage rec {
     incremental
     jinja2
     toml
+    setuptools
   ];
 
-  # zope.interface collision
-  doCheck = !isPy27;
-  checkInputs = [ git twisted pytestCheckHook ];
-  pythonImportsCheck = [ "towncrier" ];
+  preCheck = ''
+    export PATH=$out/bin:$PATH
+  '';
+
+  nativeCheckInputs = [
+    git
+    mock
+    twisted
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "towncrier"
+  ];
 
   meta = with lib; {
     description = "Utility to produce useful, summarised news files";
     homepage = "https://github.com/twisted/towncrier/";
+    changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ ];
   };
 }

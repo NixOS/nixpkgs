@@ -9,34 +9,37 @@
 , xmlsec
 , pkgconfig
 , setuptools-scm
-, toml
 , lxml
 , hypothesis
 }:
 
 buildPythonPackage rec {
   pname = "xmlsec";
-  version = "1.3.9";
+  version = "1.3.13";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c4k42zv3plm6v65p7z6l5rxyf50h40d02nhc16vq7cjrfvdf4rx";
+    hash = "sha256-kW9deOgEH2zZORq7plnajJSk/vcZbRJtQK8f9Bfyz4Y=";
   };
 
-  # https://github.com/mehcode/python-xmlsec/issues/84#issuecomment-632930116
-  patches = [
-    ./reset-lxml-in-tests.patch
-  ];
-
-  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm toml ];
+  nativeBuildInputs = [ pkg-config pkgconfig setuptools-scm ];
 
   buildInputs = [ xmlsec libxslt libxml2 libtool ];
 
   propagatedBuildInputs = [ lxml ];
 
-  # Full git clone required for test_doc_examples
-  checkInputs = [ pytestCheckHook hypothesis ];
-  disabledTestPaths = [ "tests/test_doc_examples.py" ];
+  nativeCheckInputs = [ pytestCheckHook hypothesis ];
+
+  disabledTestPaths = [
+    # Full git clone required for test_doc_examples
+    "tests/test_doc_examples.py"
+    # test_reinitialize_module segfaults python
+    # https://github.com/mehcode/python-xmlsec/issues/203
+    "tests/test_xmlsec.py"
+  ];
+
+  pythonImportsCheck = [ "xmlsec" ];
 
   meta = with lib; {
     description = "Python bindings for the XML Security Library";

@@ -1,23 +1,35 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, ipaddr, macaddr, logs, lwt, duration
-, mirage-time, mirage-protocols, mirage-profile
-, alcotest, ethernet, fmt, mirage-vnetif, mirage-random
-, mirage-random-test, mirage-clock-unix, mirage-time-unix
+{ lib
+, stdenv
+, buildDunePackage
+, fetchurl
+, cstruct
+, duration
+, ethernet
+, ipaddr
+, logs
+, lwt
+, macaddr
+, mirage-time
+, alcotest
+, mirage-clock-unix
+, mirage-flow
+, mirage-random
+, mirage-random-test
+, mirage-time-unix
+, mirage-vnetif
 , bisect_ppx
 }:
 
 buildDunePackage rec {
   pname = "arp";
-  version = "2.3.1";
-
-  minimumOCamlVersion = "4.06";
-
-  useDune2 = true;
+  version = "3.1.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "1nzm3fbkvz702g8f60fs49736lpffwchy64i1l1raxm9b4lmdk3p";
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    hash = "sha256-g/aEhpufQcyS/vCtKk0Z1sYaYNRmQFaZ9rTp9F4nq54=";
   };
+
+  minimalOCamlVersion = "4.08";
 
   nativeBuildInputs = [
     bisect_ppx
@@ -25,33 +37,31 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     cstruct
-    ipaddr
-    macaddr
-    logs
-    mirage-time
-    mirage-protocols
-    lwt
     duration
-    mirage-profile
+    ethernet
+    ipaddr
+    logs
+    lwt
+    macaddr
+    mirage-time
   ];
 
-  doCheck = true;
+  ## NOTE: As of 18 april 2023 and ARP version 3.0.0, tests fail on Darwin.
+  doCheck = ! stdenv.isDarwin;
   checkInputs = [
     alcotest
-    mirage-profile
+    mirage-clock-unix
+    mirage-flow
     mirage-random
     mirage-random-test
-    mirage-vnetif
-    mirage-clock-unix
-    mirage-random
     mirage-time-unix
-    ethernet
+    mirage-vnetif
   ];
 
   meta = with lib; {
     description = "Address Resolution Protocol purely in OCaml";
-    license = licenses.isc;
     homepage = "https://github.com/mirage/arp";
-    maintainers = [ maintainers.sternenseemann ];
+    license = licenses.isc;
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }

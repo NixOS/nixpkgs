@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, texinfo, texlive, perl, ghostscript }:
+{ lib, stdenv, fetchFromGitHub, ncurses, texinfo6, texlive, perl, ghostscript }:
 
 stdenv.mkDerivation rec {
   pname = "ne";
-  version = "3.3.0";
+  version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "vigna";
     repo = pname;
     rev = version;
-    sha256 = "01aglnsfljlvx0wvyvpjfn4y88jf450a06qnj9a8lgdqv1hdkq1a";
+    sha256 = "sha256-mRMACfWcUW6/R43riRGNce4Ac5IRo4YEML8H0oGSH5o=";
   };
 
   postPatch = ''
@@ -16,14 +16,14 @@ stdenv.mkDerivation rec {
     substituteInPlace src/makefile --replace "-lcurses" "-lncurses"
   '';
 
-  nativeBuildInputs = [ texlive.combined.scheme-medium texinfo perl ghostscript ];
+  nativeBuildInputs = [ texlive.combined.scheme-medium texinfo6 perl ghostscript ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     description = "The nice editor";
-    homepage = "http://ne.di.unimi.it/";
+    homepage = "https://ne.di.unimi.it/";
     longDescription = ''
       ne is a free (GPL'd) text editor based on the POSIX standard that runs
       (we hope) on almost any UN*X machine.  ne is easy to use for the beginner,
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ geri1701 ];
   };
 }

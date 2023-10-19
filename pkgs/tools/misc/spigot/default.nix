@@ -1,36 +1,42 @@
 { lib
 , stdenv
-, buildPackages
-, fetchgit
-, autoreconfHook
+, fetchurl
+, cmake
 , gmp
-, ncurses
 , halibut
+, ncurses
 , perl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spigot";
-  version = "20200901";
-  src = fetchgit {
-    url = "https://git.tartarus.org/simon/spigot.git";
-    rev = "9910e5bdc203bae6b7bbe1ed4a93f13755c1cae";
-    sha256 = "1az6v9gk0g2k197lr288nmr9jv20bvgc508vn9ic3v7mav7hf5bf";
+  version = "20220606.eb585f8";
+
+  src = fetchurl {
+    url = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/spigot-${finalAttrs.version}.tar.gz";
+    hash = "sha256-JyNNZo/HUPWv5rYtlNYp8Hl0C7i3yxEyKm+77ysN7Ao=";
   };
 
-  nativeBuildInputs = [ autoreconfHook halibut perl ];
+  nativeBuildInputs = [
+    cmake
+    halibut
+    perl
+  ];
 
-  configureFlags = [ "--with-gmp" ];
+  buildInputs = [
+    gmp
+    ncurses
+  ];
 
-  buildInputs = [ gmp ncurses ];
+  outputs = [ "out" "man" ];
 
   strictDeps = true;
 
-  meta = with lib; {
-    description = "A command-line exact real calculator";
+  meta = {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/spigot/";
+    description = "A command-line exact real calculator";
     license = lib.licenses.mit;
-    platforms = lib.platforms.all;
-    maintainers = with maintainers; [ mcbeth ];
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})

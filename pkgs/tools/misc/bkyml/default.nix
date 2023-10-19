@@ -1,5 +1,6 @@
 { lib
 , python3
+, fetchPypi
 }:
 
 with python3.pkgs;
@@ -32,7 +33,7 @@ buildPythonApplication rec {
   pythonImportsCheck = [ "bkyml" ];
 
   propagatedBuildInputs = [
-    ruamel_yaml
+    ruamel-yaml
     setuptools
   ];
 

@@ -5,14 +5,18 @@
 with lib;
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "4.0.8";
+  version = "4.0.12";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
     rev = "lxcfs-${version}";
-    sha256 = "sha256-8Tack2gM3AU3coGXs5hEbAaBCo5ss1sGUFFEjZDn5Lg=";
+    sha256 = "sha256-+wp29GD+toXGfQbPGYbDJ7/P+FY1uQY4uK3OQxTE9GM=";
   };
+
+  postPatch = ''
+    sed -i -e '1i #include <sys/pidfd.h>' src/bindings.c
+  '';
 
   nativeBuildInputs = [ pkg-config help2man autoreconfHook makeWrapper ];
   buildInputs = [ fuse ];
@@ -46,6 +50,6 @@ stdenv.mkDerivation rec {
     changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 fpletz ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

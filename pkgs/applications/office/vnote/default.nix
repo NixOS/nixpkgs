@@ -1,27 +1,42 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtwebengine }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtbase
+, qtwebengine
+, qtx11extras
+, wrapQtAppsHook
+}:
 
-let
-  description = "A note-taking application that knows programmers and Markdown better";
-in mkDerivation rec {
-  version = "2.10";
+stdenv.mkDerivation (finalAttrs: {
   pname = "vnote";
+  version = "3.17.0";
 
   src = fetchFromGitHub {
-    owner = "tamlok";
+    owner = "vnotex";
     repo = "vnote";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    rev = "v${version}";
-    sha256 = "EeeVGnKI0irLO1zJQxlVlIUhqG987JIgxNvKpUgLxUQ=";
+    hash = "sha256-NUVu6tKXrrwAoT4BgxX05mmGSC9yx20lwvXzd4y19Zs=";
   };
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtwebengine ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  meta = with lib; {
-    inherit description;
-    homepage = "https://tamlok.github.io/vnote";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.kuznero ];
+  buildInputs = [
+    qtbase
+    qtwebengine
+    qtx11extras
+  ];
+
+  meta = {
+    homepage = "https://vnotex.github.io/vnote";
+    description = "A pleasant note-taking platform";
+    changelog = "https://github.com/vnotex/vnote/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.linux;
   };
-}
+})

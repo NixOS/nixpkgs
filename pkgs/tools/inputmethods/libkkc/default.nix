@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl
-, vala, gobject-introspection, intltool, python2Packages, glib
+{ lib, stdenv, fetchurl, fetchpatch
+, vala, gobject-introspection, intltool, python3, glib
 , pkg-config
 , libgee, json-glib, marisa, libkkc-data
 }:
@@ -13,9 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "89b07b042dae5726d306aaa1296d1695cb75c4516f4b4879bc3781fe52f62aef";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "build-python3.patch";
+      url = "https://github.com/ueno/libkkc/commit/ba1c1bd3eb86d887fc3689c3142732658071b5f7.patch";
+      hash = "sha256-4IVpcJJFrxmxJGNiRHteleAa6trOwbvMHRTE/qyjOPY=";
+    })
+  ];
+
   nativeBuildInputs = [
     vala gobject-introspection
-    python2Packages.python python2Packages.marisa
+    python3 python3.pkgs.marisa
     intltool glib pkg-config
   ];
 

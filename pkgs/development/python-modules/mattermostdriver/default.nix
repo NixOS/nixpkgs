@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "mattermostdriver";
-  version = "7.3.0";
+  version = "7.3.2";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "17jqcpa1xd9n7bf4d5l7wmscls34kymv27gi17pyyfjxbwk5gsga";
+    sha256 = "2e4d7b4a17d3013e279c6f993746ea18cd60b45d8fa3be24f47bc2de22b9b3b4";
   };
 
   propagatedBuildInputs = [ websockets requests ];
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "A Python Mattermost Driver";
     homepage = "https://github.com/Vaelor/python-mattermost-driver";
     license = licenses.mit;
-    maintainers = with maintainers; [ globin lheckemann ];
+    maintainers = with maintainers; [ globin ];
   };
 }

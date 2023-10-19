@@ -1,210 +1,123 @@
-{ pkgs }:
-
-with pkgs;
+{ __splicedPackages
+, callPackage
+, config
+, darwin
+, db
+, lib
+, libffiBoot
+, makeScopeWithSplicing'
+, pythonPackagesExtensions
+, stdenv
+}@args:
 
 (let
 
   # Common passthru for all Python interpreters.
-  passthruFun =
-    { implementation
-    , libPrefix
-    , executable
-    , sourceVersion
-    , pythonVersion
-    , packageOverrides
-    , sitePackages
-    , hasDistutilsCxxPatch
-    , pythonOnBuildForBuild
-    , pythonOnBuildForHost
-    , pythonOnBuildForTarget
-    , pythonOnHostForHost
-    , pythonOnTargetForTarget
-    , self # is pythonOnHostForTarget
-    }: let
-      pythonPackages = callPackage
-        ({ pkgs, stdenv, python, overrides }: let
-          pythonPackagesFun = import ../../../top-level/python-packages.nix {
-            inherit stdenv pkgs lib;
-            python = self;
-          };
-          otherSplices = {
-            selfBuildBuild = pythonOnBuildForBuild.pkgs;
-            selfBuildHost = pythonOnBuildForHost.pkgs;
-            selfBuildTarget = pythonOnBuildForTarget.pkgs;
-            selfHostHost = pythonOnHostForHost.pkgs;
-            selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
-          };
-          keep = self: {
-            # TODO maybe only define these here so nothing is needed to be kept in sync.
-            inherit (self)
-              isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder
-              python bootstrapped-pip buildPythonPackage buildPythonApplication
-              fetchPypi
-              hasPythonModule requiredPythonModules makePythonPath disabledIf
-              toPythonModule toPythonApplication
-              buildSetupcfg
-
-              condaInstallHook
-              condaUnpackHook
-              eggUnpackHook
-              eggBuildHook
-              eggInstallHook
-              flitBuildHook
-              pipBuildHook
-              pipInstallHook
-              pytestCheckHook
-              pythonCatchConflictsHook
-              pythonImportsCheckHook
-              pythonNamespacesHook
-              pythonRecompileBytecodeHook
-              pythonRemoveBinBytecodeHook
-              pythonRemoveTestsDirHook
-              setuptoolsBuildHook
-              setuptoolsCheckHook
-              venvShellHook
-              wheelUnpackHook
-
-              wrapPython
-
-              pythonPackages
-
-              recursivePthLoader
-            ;
-          };
-          extra = _: {};
-          optionalExtensions = cond: as: if cond then as else [];
-          python2Extension = import ../../../top-level/python2-packages.nix;
-          extensions = lib.composeManyExtensions ((optionalExtensions (!self.isPy3k) [python2Extension]) ++ [ overrides ]);
-          aliases = self: super: lib.optionalAttrs (config.allowAliases or true) (import ../../../top-level/python-aliases.nix lib self super);
-        in lib.makeScopeWithSplicing
-          pkgs.splicePackages
-          pkgs.newScope
-          otherSplices
-          keep
-          extra
-          (lib.extends (lib.composeExtensions aliases extensions) pythonPackagesFun))
-        {
-          overrides = packageOverrides;
-        };
-    in rec {
-        isPy27 = pythonVersion == "2.7";
-        isPy35 = pythonVersion == "3.5";
-        isPy36 = pythonVersion == "3.6";
-        isPy37 = pythonVersion == "3.7";
-        isPy38 = pythonVersion == "3.8";
-        isPy39 = pythonVersion == "3.9";
-        isPy310 = pythonVersion == "3.10";
-        isPy2 = lib.strings.substring 0 1 pythonVersion == "2";
-        isPy3 = lib.strings.substring 0 1 pythonVersion == "3";
-        isPy3k = isPy3;
-        isPyPy = lib.hasInfix "pypy" interpreter;
-
-        buildEnv = callPackage ./wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
-        withPackages = import ./with-packages.nix { inherit buildEnv pythonPackages;};
-        pkgs = pythonPackages;
-        interpreter = "${self}/bin/${executable}";
-        inherit executable implementation libPrefix pythonVersion sitePackages;
-        inherit sourceVersion;
-        pythonAtLeast = lib.versionAtLeast pythonVersion;
-        pythonOlder = lib.versionOlder pythonVersion;
-        inherit hasDistutilsCxxPatch;
-        # TODO: rename to pythonOnBuild
-        # Not done immediately because its likely used outside Nixpkgs.
-        pythonForBuild = pythonOnBuildForHost.override { inherit packageOverrides; self = pythonForBuild; };
-
-        tests = callPackage ./tests.nix {
-          python = self;
-        };
-  };
+  passthruFun = import ./passthrufun.nix args;
 
   sources = {
-    "python38" = {
+    python310 = {
       sourceVersion = {
         major = "3";
-        minor = "8";
-        patch = "9";
+        minor = "10";
+        patch = "12";
         suffix = "";
       };
-      sha256 = "XjkfPsRdopVEGcqwvq79i+OIlepc4zV3w+wUlAxLlXI=";
+      hash = "sha256-r7dL8ZEw56R9EDEsj154TyTgUnmB6raOIFRs+4ZYMLg=";
+    };
+
+    python311 = {
+      sourceVersion = {
+        major = "3";
+        minor = "11";
+        patch = "4";
+        suffix = "";
+      };
+      hash = "sha256-Lw5AnfKrV6qfxMvd+5dq9E5OVb9vYZ7ua8XCKXJkp/Y=";
     };
   };
 
 in {
 
   python27 = callPackage ./cpython/2.7 {
-    self = python27;
+    self = __splicedPackages.python27;
     sourceVersion = {
       major = "2";
       minor = "7";
       patch = "18";
-      suffix = "";
+      suffix = ".7"; # ActiveState's Python 2 extended support
     };
-    sha256 = "0hzgxl94hnflis0d6m4szjx0b52gah7wpmcg5g00q7am6xwhwb5n";
+    hash = "sha256-zcjAoSq6491ePiDySBCKrLIyYoO/5fdH6aBTNg/NH8s=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python36 = callPackage ./cpython {
-    self = python36;
+  python38 = callPackage ./cpython {
+    self = __splicedPackages.python38;
     sourceVersion = {
       major = "3";
-      minor = "6";
-      patch = "13";
+      minor = "8";
+      patch = "18";
       suffix = "";
     };
-    sha256 = "pHpDpTq7QihqLBGWU0P/VnEbnmTo0RvyxnAaT7jOGg8=";
+    hash = "sha256-P/txzTSaMmunsvrcfn34a6V33ZxJF+UqhAGtvadAXj8=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
-
-  python37 = callPackage ./cpython {
-    self = python37;
-    sourceVersion = {
-      major = "3";
-      minor = "7";
-      patch = "10";
-      suffix = "";
-    };
-    sha256 = "+NgudXLIbsnVXIYnquUEAST9IgOvQAw4PIIbmAMG7ms=";
-    inherit (darwin) configd;
-    inherit passthruFun;
-  };
-
-  python38 = callPackage ./cpython ({
-    self = python38;
-    inherit (darwin) configd;
-    inherit passthruFun;
-  } // sources.python38);
 
   python39 = callPackage ./cpython {
-    self = python39;
+    self = __splicedPackages.python39;
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "4";
+      patch = "18";
       suffix = "";
     };
-    sha256 = "Sw5mRKdvjfhkriSsUApRu/aL0Jj2oXPifTthzcqaoTQ=";
+    hash = "sha256-AVl9sBMsHPezMe/2iuCbWiNaPDyqnJRMKcrH0cTEwAo=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
-  python310 = callPackage ./cpython {
-    self = python310;
+  python310 = callPackage ./cpython ({
+    self = __splicedPackages.python310;
+    inherit (darwin) configd;
+    inherit passthruFun;
+  } // sources.python310);
+
+  python311 = callPackage ./cpython ({
+    self = __splicedPackages.python311;
+    inherit (darwin) configd;
+    inherit passthruFun;
+  } // sources.python311);
+
+  python312 = callPackage ./cpython {
+    self = __splicedPackages.python312;
     sourceVersion = {
       major = "3";
-      minor = "10";
+      minor = "12";
       patch = "0";
-      suffix = "a5";
+      suffix = "";
     };
-    sha256 = "BBjlfnA24hnx5rYwOyHnEfZM/Q/dsIlNjxnzev/8XU0=";
+    hash = "sha256-eVw09E30Wg6blxDIxxwVxnGHFSTNQSyhTe8hLozLFV0=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
 
+  python313 = callPackage ./cpython {
+    self = __splicedPackages.python313;
+    sourceVersion = {
+      major = "3";
+      minor = "13";
+      patch = "0";
+      suffix = "a1";
+    };
+    hash = "sha256-8Cgb8izABBQ2HBT8kZcYPn6y6rtylla2lEIiT7tj7ss=";
+    inherit (darwin) configd;
+    inherit passthruFun;
+  };
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (callPackage ./cpython ({
-    self = python3Minimal;
+    self = __splicedPackages.python3Minimal;
     inherit passthruFun;
     pythonAttr = "python3Minimal";
     # strip down that python version as much as possible
@@ -215,6 +128,7 @@ in {
     sqlite = null;
     configd = null;
     tzdata = null;
+    libffi = libffiBoot; # without test suite
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
@@ -223,75 +137,93 @@ in {
     stripBytecode = true;
     includeSiteCustomize = false;
     enableOptimizations = false;
+    enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python38)).overrideAttrs(old: {
+  } // sources.python310)).overrideAttrs(old: {
+    # TODO(@Artturin): Add this to the main cpython expr
+    strictDeps = true;
     pname = "python3-minimal";
-    meta = old.meta // {
-      maintainers = [];
-    };
   });
 
   pypy27 = callPackage ./pypy {
-    self = pypy27;
+    self = __splicedPackages.pypy27;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "12";
     };
-    sha256 = "0di3dr5ry4r0hwxh4fbqjhyl5im948wdby0bhijzsxx83c2qhd7n";
+
+    hash = "sha256-3WHYjaJ0ws4s7HdmfUo9+aZSvMUOJvkJkdTdCvZrzPQ=";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
-    python = python27;
+    python = __splicedPackages.pythonInterpreters.pypy27_prebuilt;
     inherit passthruFun;
     inherit (darwin) libunwind;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pypy36 = callPackage ./pypy {
-    self = pypy36;
+  pypy39 = callPackage ./pypy {
+    self = __splicedPackages.pypy39;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "12";
     };
-    sha256 = "1bq5i2mqgjjfc4rhxgxm6ihwa76vn2qapd7l59ri7xp01p522gd2";
-    pythonVersion = "3.6";
+
+    hash = "sha256-56IEbH5sJfw4aru1Ey6Sp8wkkeOTVpmpRstdy7NCwqo=";
+    pythonVersion = "3.9";
     db = db.override { dbmSupport = !stdenv.isDarwin; };
-    python = python27;
+    python = __splicedPackages.pypy27;
     inherit passthruFun;
     inherit (darwin) libunwind;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy310 = __splicedPackages.pypy39.override {
+    self = __splicedPackages.pythonInterpreters.pypy310;
+    pythonVersion = "3.10";
+    hash = "sha256-huTk6sw2BGxhgvQwGHllN/4zpg4dKizGuOf5Gl3LPkI=";
+  };
+
+  pypy27_prebuilt = callPackage ./pypy/prebuilt_2_7.nix {
     # Not included at top-level
-    self = pythonInterpreters.pypy27_prebuilt;
+    self = __splicedPackages.pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "12";
     };
-    sha256 = "1cfpdyvbvzwc0ynjr7248jhwgcpl7073wlp7w3g2v4fnrh1bc4pl"; # linux64
+
+    hash = {
+      aarch64-linux = "sha256-4E3LYoantHJOw/DlDTzBuoWDMB3RZYwG1/N1meQgHFk=";
+      x86_64-linux = "sha256-GmGiV0t5Rm9gYBDymZormVvZbNCF+Rp46909XCxA6B0=";
+      aarch64-darwin = "sha256-a3R6oHauhZfklgPF3sTKWTWhoKEy10BKVZvpaiYNm/c=";
+      x86_64-darwin = "sha256-bon/3RVTfOT/zjFFtl7lfC6clSiSvZW5NAEtLwCfUDs=";
+    }.${stdenv.system};
     pythonVersion = "2.7";
     inherit passthruFun;
   };
 
-  pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
+  pypy39_prebuilt = callPackage ./pypy/prebuilt.nix {
     # Not included at top-level
-    self = pythonInterpreters.pypy36_prebuilt;
+    self = __splicedPackages.pythonInterpreters.pypy38_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "3";
+      patch = "12";
     };
-    sha256 = "02lys9bjky9bqg6ggv8djirbd3zzcsq7755v4yvwm0k4a7fmzf2g"; # linux64
-    pythonVersion = "3.6";
+    hash = {
+      aarch64-linux = "sha256-6TJ/ue2vKtkZNdW4Vj7F/yQZO92xdcGsqvdywCWvGCQ=";
+      x86_64-linux = "sha256-hMiblm+rK1j0UaSC7jDKf+wzUENb0LlhRhXGHcbaI5A=";
+      aarch64-darwin = "sha256-DooaNGi5eQxzSsaY9bAMwD/BaJnMxs6HZGX6wLg5gOM=";
+      x86_64-darwin = "sha256-ZPAI/6BwxAfl70bIJWsuAU3nGW6l2Fg4WGElTnlZ9Os=";
+    }.${stdenv.system};
+    pythonVersion = "3.9";
     inherit passthruFun;
   };
 
-  graalpython37 = callPackage ./graalpython/default.nix {
-    self = pythonInterpreters.graalpython37;
-    inherit passthruFun;
+  rustpython = darwin.apple_sdk_11_0.callPackage ./rustpython/default.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
   };
 
 })

@@ -41,12 +41,12 @@ in
 
     services.prayer = {
 
-      enable = mkEnableOption "the prayer webmail http server";
+      enable = mkEnableOption (lib.mdDoc "the prayer webmail http server");
 
       port = mkOption {
         default = 2080;
         type = types.port;
-        description = ''
+        description = lib.mdDoc ''
           Port the prayer http server is listening to.
         '';
       };
@@ -54,7 +54,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "" ;
-        description = ''
+        description = lib.mdDoc ''
           Extra configuration. Contents will be added verbatim to the configuration file.
         '';
       };
@@ -82,7 +82,7 @@ in
       serviceConfig.Type = "forking";
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
-        chown ${prayerUser}.${prayerGroup} ${stateDir}
+        chown ${prayerUser}:${prayerGroup} ${stateDir}
       '';
       script = "${prayer}/sbin/prayer --config-file=${prayerCfg}";
     };

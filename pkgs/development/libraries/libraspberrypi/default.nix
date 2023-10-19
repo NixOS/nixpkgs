@@ -7,26 +7,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libraspberrypi";
-  version = "unstable-2021-03-17";
+  version = "unstable-2022-06-16";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "userland";
-    rev = "3fd8527eefd8790b4e8393458efc5f94eb21a615";
-    sha256 = "099qxh4bjzwd431ffpdhzx0gzlrkdyf66wplgkwg2rrfrc9zlv5a";
+    rev = "54fd97ae4066a10b6b02089bc769ceed328737e0";
+    hash = "sha512-f7tBgIykcIdkwcFjBKk5ooD/5Bsyrd/0OFr7LNCwWFYeE4DH3XA7UR7YjArkwqUVCVBByr82EOaacw0g1blOkw==";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/raspberrypi/userland/pull/670
-      url = "https://github.com/raspberrypi/userland/pull/670/commits/37cb44f314ab1209fe2a0a2449ef78893b1e5f62.patch";
-      sha256 = "1fbrbkpc4cc010ji8z4ll63g17n6jl67kdy62m74bhlxn72gg9rw";
-    })
-  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
   cmakeFlags = [
-    (if (stdenv.hostPlatform.isAarch64) then "-DARM64=ON" else "-DARM64=OFF")
+    # -DARM64=ON disables all targets that only build on 32-bit ARM; this allows
+    # the package to build on aarch64 and other architectures
+    "-DARM64=${if stdenv.hostPlatform.isAarch32 then "OFF" else "ON"}"
     "-DVMCS_INSTALL_PREFIX=${placeholder "out"}"
   ];
 

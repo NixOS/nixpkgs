@@ -25,11 +25,11 @@
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "40.0";
+  version = "44.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-E4EbsqhhnmOkP8Lva3E1ny1cQITG1cizqtYXJLIHUa8=";
+    sha256 = "sha256-Obhw/Ub0R/dH6uzC3yYEnvdzGFCZ8OE8Z1ZWJk3ZjpU=";
   };
 
   nativeBuildInputs = [
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     libxml2
     gobject-introspection # For setup hook
+    vala
   ];
 
   buildInputs = [
@@ -49,14 +50,12 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     colord
     glib
-    gnome.adwaita-icon-theme
     gusb
     gtk3
     libhandy
     libwebp
     packagekit
     sane-backends
-    vala
   ];
 
   postPatch = ''

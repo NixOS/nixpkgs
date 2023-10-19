@@ -1,21 +1,22 @@
 { fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
-, darwin
+, darwin, libunistring
 }:
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.3h";
+  version = "4.4b";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "0fw08096sf8ma2cncipnidnysxii0h0pc7kcqkjhkhdchknp8vig";
+    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
-  buildInputs = lib.optional stdenv.isDarwin
+  buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
-  ;
+    libunistring
+  ];
 
   propagatedBuildInputs = [ gmp ];
 
@@ -44,8 +45,14 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
-  # Hack to avoid TMPDIR in RPATHs.
-  preFixup = ''rm -rf "$(pwd)" '';
+  # remove forbidden references to $TMPDIR
+  preFixup = lib.optionalString stdenv.isLinux ''
+    for f in "$out"/bin/*; do
+      if isELF "$f"; then
+        patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
+      fi
+    done
+  '';
 
   meta = {
     description = "Efficient Scheme compiler";
@@ -53,6 +60,7 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
+    broken      = stdenv.isDarwin && stdenv.isAarch64; # segfault during build
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

@@ -1,43 +1,53 @@
 { lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
-, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
+, enableMemoryProfiling ? false
 # R as of writing does not support outputting both .so and .a files; it outputs:
 #     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
 , static ? false
+, testers
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.0.4";
+  version = "4.3.1";
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "0bl098xcv8v316kqnf43v6gb4kcsv31ydqfm1f7qr824jzb2fgsj";
+    sha256 = "sha256-jdC/JPECPG9hjDsxc4PSkbSklPQNc7mDrCL/6pnkupk=";
   };
+
+  outputs = [ "out" "tex" ];
 
   dontUseImakeConfigure = true;
 
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
-    pkg-config bison imake which blas lapack curl tcl tk jdk
+    bison imake which blas lapack curl tcl tk jdk tzdata
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
-    ./fix-failing-test.patch
   ];
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  # Test of the examples for package 'tcltk' fails in Darwin sandbox. See:
+  # https://github.com/NixOS/nixpkgs/issues/146131
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure \
       --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
       --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
       --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
+    substituteInPlace tests/Examples/Makefile.in \
+      --replace "test-Examples: test-Examples-Base" "test-Examples:" # do not test the examples
   '';
 
   dontDisableStatic = static;
@@ -56,6 +66,7 @@ stdenv.mkDerivation rec {
       --with-libtiff
       --with-ICU
       ${lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
+      ${lib.optionalString enableMemoryProfiling "--enable-memory-profiling"}
       ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
       AR=$(type -p ar)
       AWK=$(type -p gawk)
@@ -64,6 +75,7 @@ stdenv.mkDerivation rec {
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
       JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
+      r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
   '' + lib.optionalString stdenv.isDarwin ''
       --disable-R-framework
@@ -79,17 +91,32 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
+  # move tex files to $tex for use with texlive.combine
+  # add link in $out since ${R_SHARE_DIR}/texmf is hardcoded in several places
+  postInstall = ''
+    mv -T "$out/lib/R/share/texmf" "$tex"
+    ln -s "$tex" "$out/lib/R/share/texmf"
+  '';
+
   # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
   # but Nix cannot detect it as a run-time dependency because the installed file
   # is compiled and compressed, which hides the store path.
   postFixup = "echo ${which} > $out/nix-support/undetected-runtime-dependencies";
 
   doCheck = true;
-  preCheck = "export TZ=CET; bin/Rscript -e 'sessionInfo()'";
+  preCheck = "export HOME=$TMPDIR; export TZ=CET; bin/Rscript -e 'sessionInfo()'";
 
   enableParallelBuilding = true;
 
   setupHook = ./setup-hook.sh;
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  # make tex output available to texlive.combine
+  passthru.pkgs = [ finalAttrs.finalPackage.tex ];
+  passthru.tlType = "run";
+  # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
+  passthru.tlDeps = with texlive; [ amsfonts amsmath fancyvrb graphics hyperref iftex jknapltx latex lm tools upquote url ];
 
   meta = with lib; {
     homepage = "http://www.r-project.org/";
@@ -115,9 +142,9 @@ stdenv.mkDerivation rec {
       user-defined recursive functions and input and output facilities.
     '';
 
+    pkgConfigModules = [ "libR" ];
     platforms = platforms.all;
-    hydraPlatforms = platforms.linux;
 
-    maintainers = with maintainers; [ peti ] ++ teams.sage.members;
+    maintainers = with maintainers; [ jbedo ] ++ teams.sage.members;
   };
-}
+})

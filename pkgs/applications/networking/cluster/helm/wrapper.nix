@@ -10,8 +10,6 @@ let
   let
 
   initialMakeWrapperArgs = [
-      "${helm}/bin/helm" "${placeholder "out"}/bin/helm"
-      "--argv0" "$0" "--set" "HELM_PLUGINS" "${pluginsDir}"
   ];
 
   pluginsDir = symlinkJoin {
@@ -25,15 +23,18 @@ in
     # Remove the symlinks created by symlinkJoin which we need to perform
     # extra actions upon
     postBuild = ''
-      rm $out/bin/helm
-      makeWrapper ${lib.escapeShellArgs initialMakeWrapperArgs}  ${extraMakeWrapperArgs}
+      wrapProgram "$out/bin/helm" \
+        "--set" "HELM_PLUGINS" "${pluginsDir}" ${extraMakeWrapperArgs}
     '';
     paths = [ helm pluginsDir ];
 
     preferLocalBuild = true;
 
     nativeBuildInputs = [ makeWrapper ];
-    passthru = { unwrapped = helm; };
+    passthru = {
+      inherit pluginsDir;
+      unwrapped = helm;
+    };
 
     meta = helm.meta // {
       # To prevent builds on hydra

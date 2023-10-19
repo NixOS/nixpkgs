@@ -4,11 +4,14 @@
   "elm-doc-preview",
   "@elm-tooling/elm-language-server",
   "elm-live",
+  "elm-spa",
   "elm-test",
   "elm-upgrade",
   "elm-verify-examples",
   "elm-xref",
   "create-elm-app",
   "elm-optimize-level-2",
-  "elm-review"
+  "elm-pages",
+  "elm-review",
+  "elm-git-install"
 ]

@@ -1,6 +1,6 @@
-{ mkDerivation , extra-cmake-modules }:
+{ mkDerivation, extra-cmake-modules }:
 
 mkDerivation {
-  name = "plasma-workspace-wallpapers";
+  pname = "plasma-workspace-wallpapers";
   nativeBuildInputs = [ extra-cmake-modules ];
 }

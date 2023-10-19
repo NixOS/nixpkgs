@@ -1,58 +1,83 @@
-{ lib, buildPythonPackage, fetchPypi
+{ stdenv
+, lib
+, buildPythonPackage
 , confluent-kafka
 , distributed
+, fetchpatch
+, fetchPypi
 , flaky
 , graphviz
 , networkx
-, pytest
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 , requests
 , six
 , toolz
 , tornado
 , zict
-, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "streamz";
-  version = "0.6.2";
+  version = "0.6.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04446ece273c041506b1642bd3d8380367a8372196be4d6d6d03faafadc590b2";
+    hash = "sha256-VXfWkEwuxInBQVQJV3IQXgGVRkiBmYfUZCBMbjyWNPM=";
   };
 
   propagatedBuildInputs = [
     networkx
-    tornado
-    toolz
-    zict
     six
+    toolz
+    tornado
+    zict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     confluent-kafka
     distributed
     flaky
     graphviz
-    pytest
+    pytest-asyncio
+    pytestCheckHook
     requests
   ];
 
-  disabled = pythonOlder "3.6";
+  pythonImportsCheck = [
+    "streamz"
+  ];
 
-  # Disable test_tcp_async because fails on sandbox build
-  # disable kafka tests
-  checkPhase = ''
-    pytest --deselect=streamz/tests/test_sources.py::test_tcp_async \
-      --deselect=streamz/tests/test_sources.py::test_tcp \
-      --ignore=streamz/tests/test_kafka.py
-  '';
+  disabledTests = [
+    # Error with distutils version: fixture 'cleanup' not found
+    "test_separate_thread_without_time"
+    "test_await_syntax"
+    "test_partition_then_scatter_sync"
+    "test_sync"
+    "test_sync_2"
+    # Test fail in the sandbox
+    "test_tcp_async"
+    "test_tcp"
+    "test_partition_timeout"
+    # Tests are flaky
+    "test_from_iterable"
+    "test_buffer"
+  ];
+
+  disabledTestPaths = [
+    # Disable kafka tests
+    "streamz/tests/test_kafka.py"
+  ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Pipelines to manage continuous streams of data";
     homepage = "https://github.com/python-streamz/streamz";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

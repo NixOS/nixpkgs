@@ -1,28 +1,76 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, setuptools, funcparserlib, pillow, webcolors, reportlab, docutils
+{ lib
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, fetchpatch
+, funcparserlib
+, nose
+, pillow
+, ephem
+, pythonOlder
+, pytestCheckHook
+, reportlab
+, setuptools
+, webcolors
+, python
 }:
 
 buildPythonPackage rec {
   pname = "blockdiag";
-  version = "2.0.1";
+  version = "3.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "blockdiag";
     repo = "blockdiag";
     rev = version;
-    sha256 = "1cvcl66kf4wdh2n4fdk37zk59lp58wd2fhf84n7pbn0lilyksk5x";
+    hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
-  propagatedBuildInputs = [ setuptools funcparserlib pillow webcolors reportlab docutils ];
+  patches = [
+    # https://github.com/blockdiag/blockdiag/pull/179
+    (fetchpatch {
+      name = "pillow-10-compatibility.patch";
+      url = "https://github.com/blockdiag/blockdiag/commit/20d780cad84e7b010066cb55f848477957870165.patch";
+      hash = "sha256-t1zWFzAsLL2EUa0nD4Eui4Y5AhAZLRmp/yC9QpzzeUA=";
+    })
+  ];
 
-  # require network and fail
-  doCheck = false;
+  propagatedBuildInputs = [
+    setuptools
+    funcparserlib
+    pillow
+    webcolors
+    reportlab
+    docutils
+  ];
+
+  nativeCheckInputs = [
+    ephem
+    nose
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "src/blockdiag/tests/"
+  ];
+
+  disabledTests = [
+    # Test require network access
+    "test_app_cleans_up_images"
+  ];
+
+  pythonImportsCheck = [
+    "blockdiag"
+  ];
 
   meta = with lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

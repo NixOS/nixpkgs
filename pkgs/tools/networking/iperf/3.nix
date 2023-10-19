@@ -1,15 +1,15 @@
-{ lib, stdenv, fetchurl, openssl, fetchpatch }:
+{ lib, stdenv, fetchurl, openssl, fetchpatch, lksctp-tools }:
 
 stdenv.mkDerivation rec {
   pname = "iperf";
-  version = "3.9";
+  version = "3.15";
 
   src = fetchurl {
     url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
-    sha256 = "0f601avdmzpwsa3lbi0ppjhkrdipm5wifhhxy5czf99370k3mdi4";
+    hash = "sha256-vbd8EfcrzpAhSIMVlXf6JEEgE+YrIIPPX1Q5HXmx2P8=";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ lksctp-tools ];
   configureFlags = [
     "--with-openssl=${openssl.dev}"
   ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://software.es.net/iperf/";
+    homepage = "https://software.es.net/iperf/";
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
     license = licenses.bsd3;

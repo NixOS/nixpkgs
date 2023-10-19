@@ -1,34 +1,56 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, matplotlib, numpy, pytest, seaborn }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, matplotlib
+, numpy
+, pytestCheckHook
+, pythonOlder
+, seaborn
+}:
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "3.1";
+  version = "4.0";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
-    owner  = "sepandhaghighi";
-    repo   = pname;
-    rev    = "v${version}";
-    sha256 = "1aspd3vkjasb4wxs9czwjw42fmd4027wsmm4vlj09yp7sl57gary";
+    owner = "sepandhaghighi";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GyH06G7bArFBTzV/Sx/KmoJvcoed0sswW7qGqsSULHo=";
   };
 
-  # remove a trivial dependency on the author's `art` Python ASCII art library
+  propagatedBuildInputs = [
+    matplotlib
+    numpy
+    seaborn
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
   postPatch = ''
+    # Remove a trivial dependency on the author's `art` Python ASCII art library
     rm pycm/__main__.py
-    substituteInPlace setup.py --replace '=get_requires()' '=[]'
+    # Also depends on python3Packages.notebook
+    rm Otherfiles/notebook_check.py
+    substituteInPlace setup.py \
+      --replace '=get_requires()' '=[]'
   '';
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ matplotlib numpy seaborn ];
+  # https://github.com/sepandhaghighi/pycm/issues/488
+  pytestFlagsArray = [ "Test" ];
 
-  checkPhase = ''
-    pytest Test/
-  '';
+  pythonImportsCheck = [
+    "pycm"
+  ];
 
   meta = with lib; {
     description = "Multiclass confusion matrix library";
-    homepage = "https://pycm.ir";
+    homepage = "https://pycm.io";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
   };

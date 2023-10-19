@@ -1,30 +1,48 @@
 { lib
+, authlib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
+, pkce
+, pytestCheckHook
 , pythonOlder
-, requests_oauthlib
 , simplejson
 }:
 
 buildPythonPackage rec {
   pname = "pyvicare";
-  version = "0.2.5";
+  version = "2.28.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "PyViCare";
-    inherit version;
-    sha256 = "16wqqjs238ad6znlz2gjadqj8891226bd02a1106xyz6vbbk2gdk";
+  src = fetchFromGitHub {
+    owner = "somm15";
+    repo = "PyViCare";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6tyFSKD8Igai9A5wn7vRJdTryy+lv2MkxaskNpCwqV8=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version_config=True," 'version="${version}",' \
+      --replace "'setuptools-git-versioning<1.8.0'" ""
+  '';
+
   propagatedBuildInputs = [
-    requests_oauthlib
+    authlib
+    pkce
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
     simplejson
   ];
 
-  # The published tarball on PyPI is incomplete and there are GitHub releases
-  doCheck = false;
-  pythonImportsCheck = [ "PyViCare" ];
+  pythonImportsCheck = [
+    "PyViCare"
+  ];
 
   meta = with lib; {
     description = "Python Library to access Viessmann ViCare API";

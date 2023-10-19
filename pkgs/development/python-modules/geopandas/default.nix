@@ -1,51 +1,68 @@
-{ lib, stdenv, buildPythonPackage, fetchFromGitHub, isPy27
-, pandas, shapely, fiona, descartes, pyproj
-, pytestCheckHook, Rtree, fetchpatch }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, fiona
+, packaging
+, pandas
+, pyproj
+, pytestCheckHook
+, pythonOlder
+, rtree
+, shapely
+}:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.8.1";
-  disabled = isPy27;
+  version = "0.14.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    rev = "v${version}";
-    sha256 = "0618p0s0biisxk2s0h43hkc3bs1nwjk84rxbfyd6brfvs9yx4vq7";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-lhQXYSY2JrY3+GgMnfTJugnOD/g3VjG0tgw+cEgpIP8=";
   };
 
-  patches = [
-    # Fix for test test_numerical_operations: https://github.com/geopandas/geopandas/issues/1541
-    (fetchpatch {
-      url = "https://github.com/geopandas/geopandas/pull/1544/commits/6ce868a33a2f483b071089d51e178030fa4414d0.patch";
-      sha256 = "1sjgxrqgbhz5krx51hrv230ywszcdl6z8q3bj6830kfad8n8b5dq";
-    })
-    # Fix GeoJSON for Fiona>=1.8.16 (Sep. 7, 2020).
-    # https://github.com/geopandas/geopandas/issues/1606
-    # Will be included in next upstream release after 0.8.1
-    (fetchpatch {
-      url = "https://github.com/geopandas/geopandas/commit/72427d3d8c128039bfce1d54a76c0b652887b276.patch";
-      sha256 = "1726mrpddgmba0ngff73a5bsb6ywpsg63a2pdd2grp9339bgvi4a";
-    })
+  propagatedBuildInputs = [
+    fiona
+    packaging
+    pandas
+    pyproj
+    shapely
   ];
 
-  propagatedBuildInputs = [
-    pandas
-    shapely
-    fiona
-    descartes
-    pyproj
+  nativeCheckInputs = [
+    pytestCheckHook
+    rtree
   ];
 
   doCheck = !stdenv.isDarwin;
-  checkInputs = [ pytestCheckHook Rtree ];
-  disabledTests = [ "web" ];
-  pytestFlagsArray = [ "geopandas" ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  disabledTests = [
+    # Requires network access
+    "test_read_file_url"
+  ];
+
+  pytestFlagsArray = [
+    "geopandas"
+  ];
+
+  pythonImportsCheck = [
+    "geopandas"
+  ];
 
   meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
+    changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = teams.geospatial.members;
   };
 }

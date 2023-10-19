@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -6,34 +7,31 @@
 , python3
 , pkg-config
 , gnome
-, gtk3
+, glib
+, gtk4
 , gobject-introspection
 , gdk-pixbuf
-, librsvg
+, librest_1_0
 , libgweather
 , geoclue2
-, wrapGAppsHook
-, folks
-, libchamplain
-, gfbgraph
-, libsoup
+, wrapGAppsHook4
+, desktop-file-utils
+, libshumate
+, libsecret
+, libsoup_3
 , gsettings-desktop-schemas
-, webkitgtk
 , gjs
-, libgee
-, libhandy
-, geocode-glib
-, evolution-data-server
-, gnome-online-accounts
+, libadwaita
+, geocode-glib_2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-maps";
-  version = "40.1";
+  version = "44.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-mAXUwFs6NpV0bTdisoFr/+bZ19VuF7y7nZ1B3C0CYxo=";
+    hash = "sha256-3admgmWnCVKWDElRnPv7+jV2gyb8W4CyYX8U/7LJuHM=";
   };
 
   doCheck = true;
@@ -43,42 +41,37 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
-    wrapGAppsHook
+    wrapGAppsHook4
+    gobject-introspection
+    # For post install script
+    desktop-file-utils
+    glib
+    gtk4
   ];
 
   buildInputs = [
-    evolution-data-server
-    folks
     gdk-pixbuf
+    glib
     geoclue2
-    geocode-glib
-    gfbgraph
+    geocode-glib_2
     gjs
-    gnome-online-accounts
-    gnome.adwaita-icon-theme
-    gobject-introspection
     gsettings-desktop-schemas
-    gtk3
-    libchamplain
-    libgee
+    gtk4
+    libshumate
     libgweather
-    libhandy
-    librsvg
-    libsoup
-    webkitgtk
+    libadwaita
+    librest_1_0
+    libsecret
+    libsoup_3
   ];
 
   postPatch = ''
-    chmod +x meson_post_install.py # patchShebangs requires executable file
-    patchShebangs meson_post_install.py
-
     # The .service file isn't wrapped with the correct environment
     # so misses GIR files when started. By re-pointing from the gjs
     # entry point to the wrapped binary we get back to a wrapped
     # binary.
     substituteInPlace "data/org.gnome.Maps.service.in" \
-        --replace "Exec=@pkgdatadir@/org.gnome.Maps" \
+        --replace "Exec=@pkgdatadir@/@app-id@" \
                   "Exec=$out/bin/gnome-maps"
   '';
 
@@ -99,6 +92,6 @@ stdenv.mkDerivation rec {
     description = "A map application for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

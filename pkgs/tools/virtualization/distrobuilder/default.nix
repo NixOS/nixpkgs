@@ -1,31 +1,67 @@
-{ lib, pkg-config, buildGoPackage, fetchFromGitHub
-, makeWrapper, coreutils, gnupg, gnutar, squashfsTools, debootstrap
+{ lib
+, pkg-config
+, buildGoModule
+, fetchFromGitHub
+, makeWrapper
+, coreutils
+, gnupg
+, gnutar
+, squashfsTools
+, debootstrap
+, fetchpatch
 }:
 
-let binPath = lib.makeBinPath [
-  coreutils gnupg gnutar squashfsTools debootstrap
-];
+let
+  bins = [
+    coreutils
+    gnupg
+    gnutar
+    squashfsTools
+    debootstrap
+  ];
 in
-buildGoPackage rec {
+buildGoModule rec {
   pname = "distrobuilder";
-  version = "2019_10_07";
-  rev = "d686c88c21838f5505c3ec14711b2413604d7f5c";
+  version = "2.1";
 
-  goPackagePath = "github.com/lxc/distrobuilder";
+  vendorHash = "sha256-yRMsf8KfpNmVUX4Rn4ZPLUPFZCT/g78MKAfgbFDPVkE=";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "lxc";
     repo = "distrobuilder";
-    sha256 = "0k59czgasy4d58bkrin6hvgmh7y3nf177lwd0y4g47af27bgnyc4";
+    rev = "distrobuilder-${version}";
+    sha256 = "sha256-t3ECLtb0tvIzTWgjmVQDFza+kcm3abTZZMSGYjvw1qQ=";
+    fetchSubmodules = false;
   };
 
-  goDeps = ./deps.nix;
+  buildInputs = bins;
+
+  patches = [
+    # go.mod update: needed to to include a newer lxd which contains
+    # https://github.com/canonical/lxd/commit/d83f061a21f509d42b7a334b97403d2a019a7b52
+    # which is needed to fix the build w/glibc-2.36.
+    (fetchpatch {
+      url = "https://github.com/lxc/distrobuilder/commit/5346bcc77dd7f141a36a8da851f016d0b929835e.patch";
+      sha256 = "sha256-H6cSbY0v/FThx72AvoAvUCs2VCYN/PQ0W4H82mQQ3SI=";
+    })
+    # Fixup to keep it building after go.mod update.
+    (fetchpatch {
+      url = "https://github.com/lxc/distrobuilder/commit/2c8cbfbf603e7446efce9f30812812336ccf4f2c.patch";
+      sha256 = "sha256-qqofghcHGosR2qycGb02c8rwErFyRRhsRKdQfyah8Ds=";
+    })
+  ];
+
+  # tests require a local keyserver (mkg20001/nixpkgs branch distrobuilder-with-tests) but gpg is currently broken in tests
+  doCheck = false;
+
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ] ++ bins;
 
   postInstall = ''
-    wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${binPath}
+    wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
   '';
-  nativeBuildInputs = [ pkg-config makeWrapper ];
 
   meta = with lib; {
     description = "System container image builder for LXC and LXD";
@@ -35,4 +71,3 @@ buildGoPackage rec {
     platforms = platforms.linux;
   };
 }
-

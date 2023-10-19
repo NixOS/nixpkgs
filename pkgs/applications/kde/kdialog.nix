@@ -8,7 +8,9 @@ mkDerivation {
   pname = "kdialog";
 
   meta = {
-    license = with lib.licenses; [ gpl2 fdl12 ];
+    homepage = "https://apps.kde.org/kdialog/";
+    description = "Display dialog boxes from shell scripts";
+    license = with lib.licenses; [ gpl2Plus fdl12Plus ];
     maintainers = with lib.maintainers; [ peterhoeg ];
   };
 

@@ -1,58 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, linkFarmFromDrvs, makeWrapper,
-  dotnetPackages, dotnetCorePackages
-}:
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, altcoinSupport ? false }:
 
-let
-  deps = import ./deps.nix {
-    fetchNuGet = { name, version, sha256 }: fetchurl {
-      name = "nuget-${name}-${version}.nupkg";
-      url = "https://www.nuget.org/api/v2/package/${name}/${version}";
-      inherit sha256;
-    };
-  };
-  dotnetSdk = dotnetCorePackages.sdk_3_1;
-in
-
-stdenv.mkDerivation rec {
+buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "1.1.1";
+  version = "1.11.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cCm4CZdVtjO2nj69CgRCrcwO0lAbiQVD6KocOj4CSdY=";
+    sha256 = "sha256-PORzTbvB9HriilaBCsC6R323RFvsI55WgSojJJ6uoIs=";
   };
 
-  nativeBuildInputs = [ dotnetSdk dotnetPackages.Nuget makeWrapper ];
+  projectFile = "BTCPayServer/BTCPayServer.csproj";
+  nugetDeps = ./deps.nix;
 
-  buildPhase = ''
-    export HOME=$TMP/home
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+  dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
-    nuget sources Add -Name tmpsrc -Source $TMP/nuget
-    nuget init ${linkFarmFromDrvs "deps" deps} $TMP/nuget
+  buildType = if altcoinSupport then "Altcoins-Release" else "Release";
 
-    dotnet restore --source $TMP/nuget BTCPayServer/BTCPayServer.csproj
-    dotnet publish --no-restore --output $out/share/$pname -c Release BTCPayServer/BTCPayServer.csproj
+  # macOS has a case-insensitive filesystem, so these two can be the same file
+  postFixup = ''
+    mv $out/bin/{BTCPayServer,btcpayserver} || :
   '';
-
-  # btcpayserver requires the publish directory as its working dir
-  # https://github.com/btcpayserver/btcpayserver/issues/1894
-  installPhase = ''
-    makeWrapper $out/share/$pname/BTCPayServer $out/bin/$pname \
-      --set DOTNET_ROOT "${dotnetSdk}" \
-      --run "cd $out/share/$pname"
-  '';
-
-  dontStrip = true;
 
   meta = with lib; {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
-    maintainers = with maintainers; [ kcalvinalvin earvstedt ];
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

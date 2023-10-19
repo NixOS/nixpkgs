@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kemoticons";
+  pname = "kemoticons";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ karchive kcoreaddons ];
   propagatedBuildInputs = [ kservice qtbase ];

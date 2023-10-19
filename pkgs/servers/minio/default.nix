@@ -15,26 +15,28 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2021-05-16T05-32-34Z";
+  version = "2023-09-20T22-49-55Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    sha256 = "sha256-+zanqJMYNg/1c20cMm+bqVsW8VquucxEK5NiFAqOmS0=";
+    sha256 = "sha256-JX+bxFAxTmOjpY6HAVVhdZftFx9HlniX+3zKY7Qui9w=";
   };
 
-  vendorSha256 = "sha256-5aDD68nugFyWsySLEj7LXAdtFXFKWnqfz+5zF5wC2qw=";
+  vendorHash = "sha256-fcaMYm7Tw5zqtHhPzmUS/5E7AYI8P2fuxT2sDQwNttc=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  preBuild = let t = "github.com/minio/minio/cmd"; in
-    ''
-      export CGO_ENABLED=0
-      buildFlagsArray+=("-tags" "kqueue" "-ldflags" "-s -w -X ${t}.Version=${versionToTimestamp version} -X ${t}.ReleaseTag=RELEASE.${version} -X ${t}.CommitID=${src.rev}")
-    '';
+  CGO_ENABLED = 0;
+
+  tags = [ "kqueue" ];
+
+  ldflags = let t = "github.com/minio/minio/cmd"; in [
+    "-s" "-w" "-X ${t}.Version=${versionToTimestamp version}" "-X ${t}.ReleaseTag=RELEASE.${version}" "-X ${t}.CommitID=${src.rev}"
+  ];
 
   passthru.tests.minio = nixosTests.minio;
 
@@ -43,7 +45,6 @@ buildGoModule rec {
     description = "An S3-compatible object storage server";
     changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
-    platforms = platforms.unix;
     license = licenses.agpl3Plus;
   };
 }

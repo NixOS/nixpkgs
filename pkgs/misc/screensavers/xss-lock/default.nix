@@ -2,7 +2,8 @@
 , libXau, libXdmcp, xcbutil }:
 
 stdenv.mkDerivation {
-  name = "xss-lock-git-2018-05-31";
+  pname = "xss-lock";
+  version = "unstable-2018-05-31";
 
   src = fetchFromGitHub {
     owner = "xdbob";
@@ -17,6 +18,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Use external locker (such as i3lock) as X screen saver";
     license = licenses.mit;
+    mainProgram = "xss-lock";
     maintainers = with maintainers; [ malyn offline ];
     platforms = platforms.linux;
   };

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "dcw-gmt";
-  version = "1.1.4";
+  version = "2.1.2";
   src = fetchurl {
     url = "ftp://ftp.soest.hawaii.edu/gmt/dcw-gmt-${version}.tar.gz";
-    sha256 = "8d47402abcd7f54a0f711365cd022e4eaea7da324edac83611ca035ea443aad3";
+    sha256 = "sha256-S7hA0HXIuj4UrrQc8XwkI2v/eHVmMU+f91irmXd0XZk=";
   };
 
   installPhase = ''

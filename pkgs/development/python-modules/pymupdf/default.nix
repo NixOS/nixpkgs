@@ -1,28 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, mupdf, swig }:
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, swig
+, xcbuild
+, mupdf
+, freetype
+, harfbuzz
+, openjpeg
+, jbig2dec
+, libjpeg_turbo
+, gumbo
+, memstreamHook
+}:
+
 buildPythonPackage rec {
   pname = "pymupdf";
-  version = "1.18.0";
+  version = "1.22.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyMuPDF";
     inherit version;
-    sha256 = "64ce58f92d9edd2631e447175fa13b4024ac3b6dce6e718e0b003c41de6f7952";
+    hash = "sha256-XsjVEGdSKXUp0NaNRs/EzpmRSqvZm+hD8VmaGELWP+k=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace setup.py \
         --replace '/usr/include/mupdf' ${mupdf.dev}/include/mupdf
-    '';
-  nativeBuildInputs = [ swig ];
-  buildInputs = [ mupdf ];
+  '';
+  nativeBuildInputs = [
+    swig
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
+  ];
+
+  buildInputs = [
+    mupdf
+    freetype
+    harfbuzz
+    openjpeg
+    jbig2dec
+    libjpeg_turbo
+    gumbo
+  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
+    memstreamHook
+  ];
 
   doCheck = false;
 
+  pythonImportsCheck = [
+    "fitz"
+  ];
+
   meta = with lib; {
-    description = "Python bindings for MuPDF's rendering library.";
+    description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
+    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ teto ];
-    license =  licenses.agpl3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

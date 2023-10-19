@@ -1,64 +1,63 @@
-{ lib, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub, withServer ? false }:
 
+let
+  serverRequire = with python3.pkgs; [
+    requests
+    flask
+    flask-admin
+    flask-api
+    flask-bootstrap
+    flask-paginate
+    flask-wtf
+    arrow
+    werkzeug
+    click
+    vcrpy
+    toml
+  ];
+in
 with python3.pkgs; buildPythonApplication rec {
-  version = "4.5";
+  version = "4.8";
   pname = "buku";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "buku";
     rev = "v${version}";
-    sha256 = "1lcq5fk8d5j2kfhn9m5l2hk46v7nj4vfa22m1psz35c9zpw4px8q";
+    sha256 = "sha256-kPVlfTYUusf5CZnKB53WZcCHo3MEnA2bLUHTRPGPn+8=";
   };
 
-  checkInputs = [
-    pytestcov
+  nativeCheckInputs = [
     hypothesis
     pytest
-    pylint
-    flake8
+    pytest-recording
     pyyaml
     mypy-extensions
+    click
+    pylint
+    flake8
+    pytest-cov
+    pyyaml
   ];
 
   propagatedBuildInputs = [
     cryptography
     beautifulsoup4
-    requests
+    certifi
     urllib3
-    flask
-    flask-admin
-    flask-api
-    flask-bootstrap
-    flask-paginate
-    flask-reverse-proxy-fix
-    flask_wtf
-    arrow
-    werkzeug
-    click
     html5lib
-    vcrpy
-    toml
-  ];
-
-  postPatch = ''
-    # Jailbreak problematic dependencies
-    sed -i \
-      -e "s,'PyYAML.*','PyYAML',g" \
-      setup.py
-  '';
+  ] ++ lib.optionals withServer serverRequire;
 
   preCheck = ''
-    # Fixes two tests for wrong encoding
-    export PYTHONIOENCODING=utf-8
-
     # Disables a test which requires internet
     substituteInPlace tests/test_bukuDb.py \
       --replace "@pytest.mark.slowtest" "@unittest.skip('skipping')" \
-      --replace "self.assertEqual(shorturl, 'http://tny.im/yt')" "" \
-      --replace "self.assertEqual(url, 'https://www.google.com')" ""
+      --replace "self.assertEqual(shorturl, \"http://tny.im/yt\")" "" \
+      --replace "self.assertEqual(url, \"https://www.google.com\")" ""
     substituteInPlace setup.py \
       --replace mypy-extensions==0.4.1 mypy-extensions>=0.4.1
+  '' + lib.optionalString (!withServer) ''
+    rm tests/test_{server,views}.py
   '';
 
   postInstall = ''
@@ -68,6 +67,8 @@ with python3.pkgs; buildPythonApplication rec {
     cp auto-completion/zsh/* $out/share/zsh/site-functions
     cp auto-completion/bash/* $out/share/bash-completion/completions
     cp auto-completion/fish/* $out/share/fish/vendor_completions.d
+  '' + lib.optionalString (!withServer) ''
+    rm $out/bin/bukuserver
   '';
 
   meta = with lib; {
@@ -78,4 +79,3 @@ with python3.pkgs; buildPythonApplication rec {
     maintainers = with maintainers; [ matthiasbeyer infinisil ];
   };
 }
-

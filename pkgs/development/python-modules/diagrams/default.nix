@@ -2,7 +2,6 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, black
 , jinja2
 , poetry-core
 , round
@@ -10,40 +9,66 @@
 , inkscape
 , imagemagick
 , pytestCheckHook
+, typed-ast
 }:
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.19.1";
+  version = "0.23.3";
   format = "pyproject";
-  disabled = pythonOlder "3.6";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mingrammer";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0qvk0cp3026n5jmwp9z7m70b6pws0h6a7slxr23glg18baxr44d4";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-4b+jmR56y2VV0XxD6FCmNpDB0UKH9+FqcTQuU2jRCXo=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'graphviz = ">=0.13.2,<0.20.0"' 'graphviz = "*"'
+  '';
 
   preConfigure = ''
     patchShebangs autogen.sh
     ./autogen.sh
   '';
 
-  patches = [ ./build_poetry.patch ];
-
-  checkInputs = [ pytestCheckHook ];
+  patches = [
+    # The build-system section is missing
+    ./build_poetry.patch
+    ./remove-black-requirement.patch
+  ];
 
   # Despite living in 'tool.poetry.dependencies',
   # these are only used at build time to process the image resource files
-  nativeBuildInputs = [ black inkscape imagemagick jinja2 poetry-core round ];
+  nativeBuildInputs = [
+    inkscape imagemagick
+    jinja2
+    poetry-core
+    round
+  ];
 
-  propagatedBuildInputs = [ graphviz ];
+  propagatedBuildInputs = [
+    graphviz
+    typed-ast
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "diagrams"
+  ];
 
   meta = with lib; {
     description = "Diagram as Code";
-    homepage    = "https://diagrams.mingrammer.com/";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ addict3d ];
+    homepage = "https://diagrams.mingrammer.com/";
+    changelog = "https://github.com/mingrammer/diagrams/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ addict3d ];
   };
 }

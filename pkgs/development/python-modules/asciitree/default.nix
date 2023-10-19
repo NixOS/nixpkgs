@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "071wlpyi8pa262sj9xdy0zbj163z84dasxad363z3sfndqxw78h1";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
   ];
 
@@ -27,6 +27,6 @@ buildPythonPackage rec {
     description = "Draws ASCII trees";
     homepage = "https://github.com/mbr/asciitree";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

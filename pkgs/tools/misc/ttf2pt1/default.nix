@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, perl, freetype }:
 
-stdenv.mkDerivation {
-  name = "ttf2pt1-3.4.4";
+stdenv.mkDerivation rec {
+  pname = "ttf2pt1";
+  version = "3.4.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ttf2pt1/ttf2pt1-3.4.4.tgz";
+    url = "mirror://sourceforge/ttf2pt1/ttf2pt1-${version}.tgz";
     sha256 = "1l718n4k4widx49xz7qrj4mybzb8q67kp2jw7f47604ips4654mf";
   };
 
@@ -25,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "True Type to Postscript Type 3 converter, fpdf";
-    homepage = "http://ttf2pt1.sourceforge.net/index.html";
+    homepage = "https://ttf2pt1.sourceforge.net/index.html";
     license = "ttf2pt1";
     platforms = lib.platforms.linux;
   };

@@ -1,23 +1,26 @@
-{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig
+{ lib, stdenv, fetchurl, fetchzip, cmake, pkg-config
+, SDL2, libpng, zlib, xz, freetype, fontconfig
+, nlohmann_json, curl, icu, harfbuzz, expat, glib, pcre2
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
-, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
-, writeScriptBin, makeWrapper, runtimeShell
-}:
+, withFluidSynth ? true, audioDriver ? "alsa"
+, fluidsynth, soundfont-fluid, libsndfile
+, flac, libogg, libvorbis, libopus, libmpg123, pulseaudio, alsa-lib, libjack2
+, procps, writeScriptBin, makeWrapper, runtimeShell }:
 
 let
   opengfx = fetchzip {
-    url = "https://cdn.openttd.org/opengfx-releases/0.6.1/opengfx-0.6.1-all.zip";
-    sha256 = "sha256-DeeIlLcmPeMZ0ju9DwXUInnQp2rWu60besDVto4+lDQ=";
+    url = "https://cdn.openttd.org/opengfx-releases/7.1/opengfx-7.1-all.zip";
+    sha256 = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
   };
 
   opensfx = fetchzip {
-    url = "https://cdn.openttd.org/opensfx-releases/1.0.1/opensfx-1.0.1-all.zip";
-    sha256 = "sha256-U1PIKbMZHRJ0Z9Cp2RqqCMhD1xRyudoNHAYIZyotxVk=";
+    url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
+    sha256 = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
   };
 
   openmsx = fetchzip {
-    url = "https://cdn.openttd.org/openmsx-releases/0.4.0/openmsx-0.4.0-all.zip";
-    sha256 = "sha256-Ok6W+iqi4SP7cD4HUQERrAysvVibnN7Q4/tkugffDgQ=";
+    url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
+    sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
 
   playmidi = writeScriptBin "playmidi" ''
@@ -29,16 +32,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
-  version = "1.11.2";
+  version = "13.4";
 
   src = fetchurl {
     url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
-    sha256 = "sha256-D7qTWiqBX0/ozW3C4q4z9ydpU4cxIo+EimOzpulILm0=";
+    hash = "sha256-Kh3roBv+WOIYiHn0UMP6TzgZJxq0m/NI3WZUXwQNFG8=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
-    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  buildInputs = [
+    SDL2 libpng xz zlib freetype fontconfig
+    nlohmann_json curl icu harfbuzz expat glib pcre2
+  ] ++ lib.optionals withFluidSynth [
+    fluidsynth soundfont-fluid libsndfile
+    flac libogg libvorbis libopus libmpg123 pulseaudio alsa-lib libjack2
+  ];
 
   prefixKey = "--prefix-dir=";
 
@@ -83,6 +91,7 @@ stdenv.mkDerivation rec {
         - observe as spectators
     '';
     homepage = "https://www.openttd.org/";
+    changelog = "https://cdn.openttd.org/openttd-releases/${version}/changelog.txt";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jcumming fpletz ];

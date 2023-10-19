@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
-, lsb-release, freetype, fontconfig, polkit, polkit_gnome
+, lsb-release, freetype, fontconfig, polkit, polkit_gnome, pciutils
 , pulseaudio }:
 
 let
@@ -8,31 +8,29 @@ let
 
   desktopItem = makeDesktopItem {
     name = "AnyDesk";
-    exec = "@out@/bin/anydesk";
+    exec = "@out@/bin/anydesk %u";
     icon = "anydesk";
     desktopName = "AnyDesk";
     genericName = description;
-    categories = "Network;";
-    startupNotify = "false";
+    categories = [ "Network" ];
+    startupNotify = false;
   };
 
 in stdenv.mkDerivation rec {
   pname = "anydesk";
-  version = "6.1.1";
+  version = "6.3.0";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/${pname}-${version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/${pname}-${version}-amd64.tar.gz"
     ];
-    sha256 = "1ai58fsivb8al1279bayl800qavy0kfj40rjhf87g902ap3p4bhh";
+    hash = "sha256-seMzfTXOGa+TljgpmIsgFOis+79r0bWt+4vH3Nb+5FI=";
   };
 
   passthru = {
     updateScript = genericUpdater {
-      inherit pname version;
       versionLister = writeShellScript "anydesk-versionLister" ''
-        echo "# Versions for $1:" >> "$2"
         curl -s https://anydesk.com/en/downloads/linux \
           | grep "https://[a-z0-9._/-]*-amd64.tar.gz" -o \
           | uniq \
@@ -76,7 +74,7 @@ in stdenv.mkDerivation rec {
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${lib.makeBinPath [ lsb-release ]}
+      --prefix PATH : ${lib.makeBinPath [ lsb-release pciutils ]}
 
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
@@ -85,8 +83,9 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     inherit description;
     homepage = "https://www.anydesk.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ shyim ];
+    maintainers = with maintainers; [ shyim cheriimoya ];
   };
 }

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , enum-compat
 , requests
-, websocket_client
+, websocket-client
 , zeroconf
 , pytestCheckHook
 }:
@@ -22,11 +22,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     enum-compat
-    websocket_client
+    websocket-client
     zeroconf
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

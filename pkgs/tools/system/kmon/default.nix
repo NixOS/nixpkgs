@@ -1,31 +1,34 @@
-{ lib, fetchFromGitHub, rustPlatform, python3, libxcb }:
+{ lib, rustPlatform, fetchFromGitHub, installShellFiles, libxcb }:
 
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
-  version = "1.5.3";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2cP3kZnjlMmN3nWRPh1M+hk+dyssGNpJjlluDsm702g=";
+    sha256 = "sha256-lB6vJqb6/Qwj3odCJzyQ0+xEl5V/ZPj9cAJGNfiYAOY=";
   };
 
-  cargoSha256 = "sha256-xxYfaGhAtLESpy4gdE3IjE29W+DGnI1ed020mxjT3TI=";
+  cargoSha256 = "sha256-Ff5vGc90VxmyKQSsjUfoI1NL95DmD1SJx3eC1SP6rt4=";
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ libxcb ];
 
   postInstall = ''
-    install -D man/kmon.8 -t $out/share/man/man8/
+    installManPage $releaseDir/../man/kmon.8
+    installShellCompletion $releaseDir/../completions/kmon.{bash,fish} \
+      --zsh $releaseDir/../completions/_kmon
   '';
 
   meta = with lib; {
     description = "Linux Kernel Manager and Activity Monitor";
     homepage = "https://github.com/orhun/kmon";
-    license = with licenses; [ gpl3 ];
+    changelog = "https://github.com/orhun/kmon/blob/v${version}/CHANGELOG.md";
+    license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [ figsoda misuzu ];
   };
 }

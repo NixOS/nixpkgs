@@ -1,48 +1,39 @@
 { lib
 , stdenv
+, cargo
 , fetchPypi
 , fetchpatch
 , buildPythonPackage
 , isPy3k
 , rustPlatform
+, rustc
 , setuptools-rust
 , libiconv
 }:
 
 buildPythonPackage rec {
   pname = "spacy-alignments";
-  version = "0.8.3";
+  version = "0.8.4";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zrqBjaIjtF6bJMbmw7Zo+BeApN6sxxfLkrzsDjdvC78=";
+    hash = "sha256-1HApl/RZ0w5Tf2OPu1QBUa36uIqilp+dDbPjujn0e9s=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit patches src;
+    inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-YRyG2yflEXKklNqXiDD9oK3J1lq4o704+Eeu2hyY3xI=";
+    hash = "sha256-oFSruBnoodv6/0/OrmJ/2SVoWm3u3FGtzVJ9xgp0+Cg=";
   };
-
-  patches = [
-    # Add Cargo.lock, from upstream PR:
-    # https://github.com/explosion/spacy-alignments/pull/3
-    (fetchpatch {
-      url = "https://github.com/explosion/spacy-alignments/commit/7b0ba13ff0d245bfbbe344a36fb7bbd311dd4906.diff";
-      sha256 = "sha256-jx97SSC+3z+ByInNs8Uq58H50eCo4fDCwEi6VKxRs2k=";
-      excludes = [ ".gitignore" ];
-    })
-  ];
 
   nativeBuildInputs = [
     setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
 
@@ -55,6 +46,6 @@ buildPythonPackage rec {
     description = "Align tokenizations for spaCy and transformers";
     homepage = "https://github.com/explosion/spacy-alignments";
     license = licenses.mit;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
   };
 }

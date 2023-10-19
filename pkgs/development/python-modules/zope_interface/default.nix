@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zope.interface";
-  version = "5.3.0";
+  version = "5.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b18a855f8504743e0a2d8b75d008c7720d44e4c76687e13f959e35d9a13eb397";
+    hash = "sha256-v+4fP/YhQ4GUmeNI9bin86oCWfmspeDdrnOR0Fnc5nE=";
   };
 
   propagatedBuildInputs = [ zope_event ];

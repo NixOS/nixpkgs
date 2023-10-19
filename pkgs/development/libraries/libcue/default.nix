@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, bison, flex }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, bison, flex }:
 
 stdenv.mkDerivation rec {
   pname = "libcue";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1iqw4n01rv2jyk9lksagyxj8ml0kcfwk67n79zy1r6zv1xfp5ywm";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2023-43641.patch";
+      url = "https://github.com/lipnitsk/libcue/commit/fdf72c8bded8d24cfa0608b8e97f2eed210a920e.patch";
+      hash = "sha256-NjnSMUfman/SwLFWDIhtz2jCOLfpXGGGjO3QwRGURNg=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake bison flex ];
 
   doCheck = false; # fails all the tests (ctest)
@@ -22,9 +30,9 @@ stdenv.mkDerivation rec {
       a file pointer. For handling of the parsed data a convenient API is
       available.
     '';
-    homepage = "https://sourceforge.net/projects/libcue/";
-    license = licenses.gpl2;
+    homepage = "https://github.com/lipnitsk/libcue";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ astsmtl ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

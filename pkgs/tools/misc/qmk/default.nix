@@ -1,41 +1,75 @@
 { lib
 , python3
-, fetchpatch
+, fetchPypi
+, pkgsCross
+, avrdude
+, dfu-programmer
+, dfu-util
+, wb32-dfu-updater
+, gcc-arm-embedded
+, gnumake
+, teensy-loader-cli
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "qmk";
-  version = "0.0.45";
+  version = "1.1.2";
+  format = "pyproject";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "43f297f36b21d68c34c5efa0ce1449dddb2e28753f80939cadf761ee7a2a0901";
+    hash = "sha256-+HH4jxoMoxujGgCdcWQX5GvFOKT4347eaoAckHbCKZg=";
   };
 
-  patches = [
-    # https://github.com/qmk/qmk_cli/pull/48
-    (fetchpatch {
-      name = "remove-unused-install-requires.patch";
-      url = "https://github.com/qmk/qmk_cli/commit/75b6ada1feccfa5a9bc2bb07a4cc749ef40d02dd.patch";
-      sha256 = "0lwi1dz35p07vha5gwq2jxm5q49vm99ix4jyhd6g6ypqbq1qiwc8";
-    })
-  ];
-
   nativeBuildInputs = with python3.pkgs; [
-    setuptools-scm
+    setuptools
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    dotty-dict
+    hid
+    hjson
+    jsonschema
     milc
+    pygments
+    pyserial
+    pyusb
+    pillow
+  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
+    avrdude
+    dfu-programmer
+    dfu-util
+    wb32-dfu-updater
+    teensy-loader-cli
+    gcc-arm-embedded
+    gnumake
+    pkgsCross.avr.buildPackages.binutils
+    pkgsCross.avr.buildPackages.binutils.bintools
+    pkgsCross.avr.buildPackages.gcc8
+    pkgsCross.avr.libcCross
   ];
 
   # no tests implemented
   doCheck = false;
 
   meta = with lib; {
-    description = "A program to help users work with QMK Firmware";
     homepage = "https://github.com/qmk/qmk_cli";
+    description = "A program to help users work with QMK Firmware";
+    longDescription = ''
+      qmk_cli is a companion tool to QMK firmware. With it, you can:
+
+      - Interact with your qmk_firmware tree from any location
+      - Use qmk clone to pull down anyone's qmk_firmware fork
+      - Setup and work with your build environment:
+        - qmk setup
+        - qmk doctor
+        - qmk compile
+        - qmk console
+        - qmk flash
+        - qmk lint
+      - ... and many more!
+    '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ];
+    maintainers = with maintainers; [ bhipple babariviere ekleog ];
   };
 }

@@ -1,18 +1,18 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, util-linux, json_c, nixosTests
+, lvm2, pam, util-linux, json_c, nixosTests
 , ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.9.0";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1gx3ichbkdqlzl7w187vc3xpmr9prmnp7as0h6ympgigradj5c7g";
+    sha256 = "sha256-tKxjzJ69wr48QQEgYLp7G6aOqxs9CCUiTHV1kaRCiHM=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python util-linux json_c ncurses
+    lvm2 pam util-linux json_c ncurses
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*
@@ -62,7 +62,8 @@ stdenv.mkDerivation rec {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
     license = licenses.gpl2Only;
+    mainProgram = "snapper";
+    maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tstrobel markuskowa ];
   };
 }

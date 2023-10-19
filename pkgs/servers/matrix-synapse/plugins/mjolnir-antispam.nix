@@ -1,19 +1,19 @@
-{ lib, buildPythonPackage, fetchFromGitHub, matrix-synapse }:
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, matrix-synapse-unwrapped }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-mjolnir-antispam";
-  version = "0.1.17";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
-    rev = "v${version}";
-    sha256 = "sha256-uBI5AllXWgl3eL60WZ/j11Tt7QpY7CKcmFQOU74/Qjs=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-/vnojWLpu/fktqPUhAdL1QTESxDwFrBVYAkyF79Fj9w=";
   };
 
-  sourceRoot = "./source/synapse_antispam";
+  sourceRoot = "${src.name}/synapse_antispam";
 
-  propagatedBuildInputs = [ matrix-synapse ];
+  buildInputs = [ matrix-synapse-unwrapped ];
 
   doCheck = false; # no tests
   pythonImportsCheck = [ "mjolnir" ];
@@ -25,8 +25,9 @@ buildPythonPackage rec {
       Mjolnir's Synapse module is a way to interpret ban lists and apply
       them to your entire homeserver.
     '';
-    homepage = "https://github.com/matrix-org/mjolnir#synapse-module";
+    homepage = "https://github.com/matrix-org/mjolnir/blob/main/docs/synapse_module.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];
+    broken = stdenv.isDarwin;
   };
 }

@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Bitcoin P2P Network Library";
-    homepage = "https://libbitcoin.org/";
+    homepage = "https://libbitcoin.info/";
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ asymmetric ];
 

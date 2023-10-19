@@ -2,21 +2,22 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc-tools";
-  version = "1.10.0";
+  version = "1.12.4";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-node";
-    rev = "3a094f01711942f79abd8a536c45a91b574d626f"; # version 1.10.0 was not tagged
-    sha256 = "1a7l91kxc3g7mqfqvhc3nb7zy0n21ifs5ck0qqg09qh3f44q04xm";
+    rev = "grpc-tools@${version}";
+    hash = "sha256-708lBIGW5+vvSTrZHl/kc+ck7JKNXElrghIGDrMSyx8=";
     fetchSubmodules = true;
   };
 
-  sourceRoot = "source/packages/grpc-tools";
+  sourceRoot = "${src.name}/packages/grpc-tools";
 
   nativeBuildInputs = [ cmake ];
 
@@ -24,6 +25,11 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin grpc_node_plugin
     install -Dm755 -t $out/bin deps/protobuf/protoc
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/grpc/grpc-node.git";
+    rev-prefix = "grpc-tools@";
+  };
 
   meta = with lib; {
     description = "Distribution of protoc and the gRPC Node protoc plugin for ease of installation with npm";

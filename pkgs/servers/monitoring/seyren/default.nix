@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fixij04n8hgmaj8kw8i6vclwyd6n94x0n6ify73ynm6dfv8g37x";
   };
 
-  phases = ["installPhase"];
+  dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An alerting dashboard for Graphite";
     homepage = "https://github.com/scobal/seyren";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = [ maintainers.offline ];
     platforms = platforms.all;

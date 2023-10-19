@@ -1,31 +1,34 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, pkg-config, nixosTests, Security }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, nixosTests
+}:
 
-rustPlatform.buildRustPackage rec {
-  pname = "unbound-telemetry";
-  version = "unstable-2021-03-17";
+let
+  version = "0.4.4";
+in
+buildGoModule {
+  pname = "unbound_exporter";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = "svartalf";
-    repo = pname;
-    rev = "7f1b6d4e9e4b6a3216a78c23df745bcf8fc84021";
-    sha256 = "xCelL6WGaTRhDJkkUdpdwj1zcKKAU2dyUv3mHeI4oAw=";
+    owner = "letsencrypt";
+    repo = "unbound_exporter";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-0eo56z5b+hzKCY5OKg/9F7rjLyoSKPJoHLoXeMjCuFU=";
   };
 
-  cargoSha256 = "sha256-P3nAtYOuwNSLMP7q1L5zKTsZ6rJA/qL1mhVHzP3szi4=";
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+  vendorHash = "sha256-4aWuf9UTPQseEwDJfWIcQW4uGMffRnWlHhiu0yMz4vk=";
 
   passthru.tests = {
     inherit (nixosTests.prometheus-exporters) unbound;
   };
 
   meta = with lib; {
+    changelog = "https://github.com/letsencrypt/unbound_exporter/releases/tag/v${version}";
     description = "Prometheus exporter for Unbound DNS resolver";
-    homepage = "https://github.com/svartalf/unbound-telemetry";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    homepage = "https://github.com/letsencrypt/unbound_exporter/tree/main";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ hexa ];
   };
 }

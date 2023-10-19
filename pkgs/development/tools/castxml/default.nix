@@ -2,25 +2,28 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, libclang
 , libffi
 , libxml2
-, llvm
-, sphinx
 , zlib
 , withManual ? true
 , withHTML ? true
+, llvmPackages
+, python3
 }:
 
-stdenv.mkDerivation rec {
-  pname = "CastXML";
-  version = "0.4.3";
+let
+  inherit (llvmPackages) libclang llvm;
+  inherit (python3.pkgs) sphinx;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "castxml";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-MschwCEkZrZmNgr8a1ocdukjXzHbXl2gmkPmygJaA6k=";
+    owner = "CastXML";
+    repo = "CastXML";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-x27koa0q+rDqPmfHMf7v7KTx3bfDgqS/FkPAX5auqaw=";
   };
 
   nativeBuildInputs = [
@@ -30,21 +33,21 @@ stdenv.mkDerivation rec {
     sphinx
   ];
 
-  cmakeFlags = [
-    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
-    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
-    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
-  ];
-
   buildInputs = [
+    libclang
     libffi
     libxml2
     zlib
-    libclang
   ];
 
   propagatedBuildInputs = [
     libclang
+  ];
+
+  cmakeFlags = [
+    "-DCLANG_RESOURCE_DIR=${libclang.dev}/"
+    "-DSPHINX_HTML=${if withHTML then "ON" else "OFF"}"
+    "-DSPHINX_MAN=${if withManual then "ON" else "OFF"}"
   ];
 
   # 97% tests passed, 97 tests failed out of 2881
@@ -65,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
-}
+})

@@ -1,32 +1,55 @@
-{ lib, buildPythonPackage, fetchPypi, django-gravatar2, django_compressor
-, django-allauth, mailmanclient, django, mock
+{ lib
+, buildPythonPackage
+, fetchPypi
+
+# propagates
+, django-gravatar2
+, django-allauth
+, mailmanclient
+, pytz
+
+# tests
+, django
+, pytest-django
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.5";
+  version = "1.3.9";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "368595b3c2623edeaca5beea5f12887424c384edd6f7052cf442443075084313";
+    hash = "sha256-GpI1W0O9aJpLF/mcS23ktJDZsP69S2zQy7drOiWBnTM=";
   };
 
-  propagatedBuildInputs = [
-    django-gravatar2 django_compressor django-allauth mailmanclient
-  ];
-  checkInputs = [ django mock ];
-
-  checkPhase = ''
-    cd $NIX_BUILD_TOP/$sourceRoot
-    PYTHONPATH=.:$PYTHONPATH django-admin.py test --settings=django_mailman3.tests.settings_test
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'django>=3.2,<4.2' 'django>=3.2,<4.3'
   '';
 
-  pythonImportsCheck = [ "django_mailman3" ];
+  propagatedBuildInputs = [
+    django-allauth
+    django-gravatar2
+    mailmanclient
+    pytz
+  ];
+
+  nativeCheckInputs = [
+    django
+    pytest-django
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "django_mailman3"
+  ];
 
   meta = with lib; {
     description = "Django library for Mailman UIs";
     homepage = "https://gitlab.com/mailman/django-mailman3";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ globin peti qyliss ];
+    maintainers = with maintainers; [ globin qyliss ];
   };
 }

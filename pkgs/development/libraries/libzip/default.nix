@@ -1,6 +1,5 @@
 { lib, stdenv
 , cmake
-, fetchpatch
 , fetchurl
 , perl
 , zlib
@@ -11,24 +10,19 @@
 , xz
 , withOpenssl ? false
 , openssl
+, withZstd ? false
+, zstd
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libzip";
-  version = "1.7.3";
+  version = "1.10.1";
 
   src = fetchurl {
-    url = "https://libzip.org/download/${pname}-${version}.tar.gz";
-    sha256 = "1k5rihiz7m1ahhjzcbq759hb9crzqkgw78pkxga118y5a32pc8hf";
+    url = "https://libzip.org/download/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-lmmuXf46xbOJdTbchGaodMjPLA47H90I11snOIQpk2M=";
   };
-
-  # Remove in next release
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/nih-at/libzip/commit/351201419d79b958783c0cfc7c370243165523ac.patch";
-      sha256 = "0d93z98ki0yiaza93268cxkl35y1r7ll9f7l8sivx3nfxj2c1n8a";
-    })
-  ];
 
   outputs = [ "out" "dev" "man" ];
 
@@ -36,18 +30,26 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib ];
   buildInputs = lib.optionals withLZMA [ xz ]
     ++ lib.optionals withBzip2 [ bzip2 ]
-    ++ lib.optionals withOpenssl [ openssl ];
+    ++ lib.optionals withOpenssl [ openssl ]
+    ++ lib.optionals withZstd [ zstd ];
+
+  # Don't build the regression tests because they don't build with
+  # pkgsStatic and are not executed anyway.
+  cmakeFlags = [ "-DBUILD_REGRESS=0" ];
 
   preCheck = ''
     # regress/runtest is a generated file
     patchShebangs regress
   '';
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
+    pkgConfigModules = [ "libzip" ];
     platforms = platforms.unix;
-    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
+    changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
   };
-}
+})

@@ -1,29 +1,59 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , makeWrapper
-, alsaLib
+, pkg-config
+, libOnly ? false # whether to build only the library
+, withAlsa ? stdenv.hostPlatform.isLinux
+, alsa-lib
+, withPulse ? stdenv.hostPlatform.isLinux
+, libpulseaudio
+, withCoreAudio ? stdenv.hostPlatform.isDarwin
+, AudioUnit
+, AudioToolbox
+, withJack ? stdenv.hostPlatform.isUnix
+, jack
+, withConplay ? !stdenv.hostPlatform.isWindows
 , perl
-, withConplay ? !stdenv.targetPlatform.isWindows
 }:
 
+assert withConplay -> !libOnly;
+
 stdenv.mkDerivation rec {
-  name = "mpg123-1.26.5";
+  pname = "${lib.optionalString libOnly "lib"}mpg123";
+  version = "1.31.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mpg123/${name}.tar.bz2";
-    sha256 = "sha256-UCqX4Nk1vn432YczgCHY8wG641wohPKoPVnEtSRm7wY=";
+    url = "mirror://sourceforge/mpg123/mpg123-${version}.tar.bz2";
+    hash = "sha256-HKd9Omml/4RbegU294P+5VThBBE5prl49q/hT1gUrRo=";
   };
 
-  outputs = [ "out" ] ++ lib.optionals withConplay [ "conplay" ];
+  outputs = [ "out" "dev" "man" ] ++ lib.optional withConplay "conplay";
 
-  nativeBuildInputs = lib.optionals withConplay [ makeWrapper ];
+  nativeBuildInputs = lib.optionals (!libOnly) (
+    lib.optionals withConplay [ makeWrapper ]
+    ++ lib.optionals (withPulse || withJack) [ pkg-config ]
+  );
 
-  buildInputs = lib.optionals withConplay [ perl ]
-    ++ lib.optionals (!stdenv.isDarwin && !stdenv.targetPlatform.isWindows) [ alsaLib ];
+  buildInputs = lib.optionals (!libOnly) (
+    lib.optionals withConplay [ perl ]
+    ++ lib.optionals withAlsa [ alsa-lib ]
+    ++ lib.optionals withPulse [ libpulseaudio ]
+    ++ lib.optionals withCoreAudio [ AudioUnit AudioToolbox ]
+    ++ lib.optionals withJack [ jack ]
+  );
 
-  configureFlags = lib.optional
-    (stdenv.hostPlatform ? mpg123)
-    "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
+  configureFlags = lib.optionals (!libOnly) [
+    "--with-audio=${lib.strings.concatStringsSep "," (
+      lib.optional withJack "jack"
+      ++ lib.optional withPulse "pulse"
+      ++ lib.optional withAlsa "alsa"
+      ++ lib.optional withCoreAudio "coreaudio"
+      ++ [ "dummy" ]
+    )}"
+  ] ++ lib.optional (stdenv.hostPlatform ? mpg123) "--with-cpu=${stdenv.hostPlatform.mpg123.cpu}";
+
+  enableParallelBuilding = true;
 
   postInstall = lib.optionalString withConplay ''
     mkdir -p $conplay/bin
@@ -42,8 +72,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast console MPEG Audio Player and decoder library";
     homepage = "https://mpg123.org";
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.ftrvxmtrx ];
+    license = licenses.lgpl21Only;
+    maintainers = with maintainers; [ ftrvxmtrx ];
     platforms = platforms.all;
   };
 }

@@ -1,46 +1,60 @@
-{ stdenv, lib, fetchFromGitHub, which, ocaml, findlib, lwt_react, ssl, lwt_ssl
-, lwt_log, ocamlnet, ocaml_pcre, cryptokit, tyxml, xml-light, ipaddr
-, pgocaml, camlzip, ocaml_sqlite3
+{ lib, buildDunePackage, fetchFromGitHub, which, ocaml, lwt_react, ssl, lwt_ssl, findlib
+, bigstringaf, lwt, cstruct, mirage-crypto, zarith, mirage-crypto-ec, ptime, mirage-crypto-rng, mtime, ca-certs
+, cohttp, cohttp-lwt-unix, hmap
+, lwt_log, re, cryptokit, xml-light, ipaddr
+, camlzip
 , makeWrapper
 }:
 
-if !lib.versionAtLeast ocaml.version "4.06.1"
-then throw "ocsigenserver is not available for OCaml ${ocaml.version}"
-else
-
-let mkpath = p: n:
-  "${p}/lib/ocaml/${ocaml.version}/site-lib/${n}";
+let mkpath = p:
+  "${p}/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 in
 
-stdenv.mkDerivation rec {
-  version = "2.18.0";
+let caml_ld_library_path =
+  lib.concatMapStringsSep ":" mkpath [
+    bigstringaf lwt ssl cstruct mirage-crypto zarith mirage-crypto-ec ptime mirage-crypto-rng mtime ca-certs cryptokit re
+  ]
+; in
+
+buildDunePackage rec {
+  version = "5.1.0";
   pname = "ocsigenserver";
+
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
-    rev = version;
-    sha256 = "0c61wkq8ddy3qxb2x1jz04rz0722hk92r6jl1zvgikh74m5p5ipp";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6xO+4eYSp6rlgPT09L7cvlaz6kYYuUPRa3K/TgZmaqE=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ which ocaml findlib lwt_react pgocaml camlzip ocaml_sqlite3 ];
+  nativeBuildInputs = [ makeWrapper which ];
+  buildInputs = [ lwt_react camlzip findlib ];
 
-  propagatedBuildInputs = [ cryptokit ipaddr lwt_log lwt_ssl ocamlnet
-    ocaml_pcre tyxml xml-light
+  propagatedBuildInputs = [ cohttp cohttp-lwt-unix cryptokit hmap ipaddr lwt_log lwt_ssl
+    re xml-light
   ];
 
-  configureFlags = [ "--root $(out)" "--prefix /" ];
+  configureFlags = [ "--root $(out)" "--prefix /" "--temproot ''" ];
 
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
-  createFindlibDestdir = true;
+  postConfigure = ''
+    make -C src confs
+  '';
+
+  postInstall = ''
+    make install.files
+  '';
 
   postFixup =
   ''
   rm -rf $out/var/run
   wrapProgram $out/bin/ocsigenserver \
-    --suffix CAML_LD_LIBRARY_PATH : "${mkpath ssl "ssl"}:${mkpath ocamlnet "netsys"}:${mkpath ocamlnet "netstring"}:${mkpath ocaml_pcre "pcre"}:${mkpath ocaml_sqlite3 "sqlite3"}"
+    --suffix CAML_LD_LIBRARY_PATH : "${caml_ld_library_path}"
   '';
 
   dontPatchShebangs = true;
@@ -51,8 +65,8 @@ stdenv.mkDerivation rec {
     longDescription =''
       A full featured Web server. It implements most features of the HTTP protocol, and has a very powerful extension mechanism that make very easy to plug your own OCaml modules for generating pages.
       '';
-    license = lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    license = lib.licenses.lgpl21Only;
+    inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.gal_bolle ];
   };
 

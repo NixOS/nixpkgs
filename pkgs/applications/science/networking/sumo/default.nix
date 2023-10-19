@@ -1,17 +1,17 @@
-{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg, fox_1_6, gdal,
+{ lib, bzip2, cmake, eigen, fetchFromGitHub, ffmpeg_4, fox_1_6, gdal,
   git, gl2ps, gpp , gtest, jdk, libGL, libGLU, libX11, libjpeg,
-  libpng, libtiff, openscenegraph , proj, python3, python37Packages,
-  stdenv, swig, xercesc, xorg, zlib }:
+  libpng, libtiff, libxcrypt, openscenegraph , proj, python3,
+  python3Packages, stdenv, swig, xercesc, xorg, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.8.0";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "1w9im1zz8xnkdwmv4v11kn1xcqm889268g1fw4y2s9f6shi41mxx";
+    sha256 = "sha256-/MKhec4nhz6juTCc5dNrrDAlzldodGjili4vWkzafPM=";
     fetchSubmodules = true;
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2
     eigen
-    ffmpeg
+    ffmpeg_4
     fox_1_6
     gdal
     gl2ps
@@ -33,17 +33,18 @@ stdenv.mkDerivation rec {
     jdk
     libGL
     libGLU
-    libX11
     libjpeg
     libpng
     libtiff
+    libxcrypt
     openscenegraph
     proj
-    python37Packages.setuptools
+    python3Packages.setuptools
     xercesc
     zlib
     python3
   ] ++ (with xorg; [
+    libX11
     libXcursor
     libXext
     libXfixes

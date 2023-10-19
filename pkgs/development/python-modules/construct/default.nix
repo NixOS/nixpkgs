@@ -1,11 +1,11 @@
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, six, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel_yaml
+, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel-yaml
 , lz4, cloudpickle
 }:
 
 buildPythonPackage rec {
   pname   = "construct";
-  version = "2.10.63";
+  version = "2.10.68";
 
   disabled = pythonOlder "3.6";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0dnj815qdxrn0q6bpwsmkca2jy02gjy6d3amqg4y6gha1kc1mymv";
+    hash = "sha256-bp/YyRFP0rrBHPyhiqnn6o1iC5l61oedShZ2phGeqaw=";
   };
 
   # not an explicit dependency, but it's imported by an entrypoint
@@ -22,11 +22,9 @@ buildPythonPackage rec {
     lz4
   ];
 
-  checkInputs = [ pytestCheckHook pytest-benchmark numpy arrow ruamel_yaml cloudpickle ];
+  nativeCheckInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
-
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
   meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";

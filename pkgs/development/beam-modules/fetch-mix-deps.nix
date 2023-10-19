@@ -1,16 +1,25 @@
-{ stdenvNoCC, lib, elixir, hex, rebar, rebar3, cacert, git }:
+{ stdenvNoCC, lib, elixir, hex, rebar, rebar3, cacert, git }@inputs:
 
 { pname
 , version
-, sha256
+, hash ? ""
+, sha256 ? ""
 , src
 , mixEnv ? "prod"
 , debug ? false
 , meta ? { }
 , patches ? []
+, elixir ? inputs.elixir
+, hex ? inputs.hex.override { inherit elixir; }
 , ...
 }@attrs:
 
+let
+  hash_ =
+    if hash != "" then { outputHashAlgo = null; outputHash = hash; }
+    else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
+    else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
+in
 stdenvNoCC.mkDerivation (attrs // {
   nativeBuildInputs = [ elixir hex cacert git ];
 
@@ -43,16 +52,14 @@ stdenvNoCC.mkDerivation (attrs // {
 
   installPhase = attrs.installPhase or ''
     runHook preInstall
-    mix deps.get --only ${mixEnv}
+    mix deps.get ''${MIX_ENV:+--only $MIX_ENV}
     find "$TEMPDIR/deps" -path '*/.git/*' -a ! -name HEAD -exec rm -rf {} +
     cp -r --no-preserve=mode,ownership,timestamps $TEMPDIR/deps $out
     runHook postInstall
   '';
 
-  outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = sha256;
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   inherit meta;
-})
+} // hash_)

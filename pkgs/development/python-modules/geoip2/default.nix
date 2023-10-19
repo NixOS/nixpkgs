@@ -1,39 +1,57 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
+{ lib
 , aiohttp
+, buildPythonPackage
+, fetchPypi
 , maxminddb
 , mocket
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 , requests
 , requests-mock
-, pytestCheckHook
+, urllib3
 }:
 
 buildPythonPackage rec {
-  version = "4.1.0";
   pname = "geoip2";
+  version = "4.7.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "57d8d15de2527e0697bbef44fc16812bba709f03a07ef99297bd56c1df3b1efd";
+    hash = "sha256-O93kmU9ryRfq+rW1Hnctc3sq4AA3pbhQAfsG3Gj3ed8=";
   };
 
-  patchPhase = ''
-    substituteInPlace requirements.txt --replace "requests>=2.24.0,<3.0.0" "requests"
-  '';
+  propagatedBuildInputs = [
+    aiohttp
+    maxminddb
+    requests
+    urllib3
+  ];
 
-  propagatedBuildInputs = [ aiohttp requests maxminddb ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     mocket
     requests-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "geoip2" ];
+  pythonImportsCheck = [
+    "geoip2"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/maxmind/GeoIP2-python/pull/136
+    "TestAsyncClient"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    "test_request"
+  ];
 
   meta = with lib; {
-    description = "Python client for GeoIP2 webservice client and database reader";
+    description = "GeoIP2 webservice client and database reader";
     homepage = "https://github.com/maxmind/GeoIP2-python";
+    changelog = "https://github.com/maxmind/GeoIP2-python/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

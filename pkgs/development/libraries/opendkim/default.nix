@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libbsd, openssl, libmilter
-, autoreconfHook, perl, makeWrapper }:
+, autoreconfHook, perl, makeWrapper, unbound }:
 
 stdenv.mkDerivation rec {
   pname = "opendkim";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "trusteddomainproject";
     repo = "OpenDKIM";
-    rev = "rel-opendkim-${lib.replaceChars ["."] ["-"] version}";
+    rev = "rel-opendkim-${lib.replaceStrings ["."] ["-"] version}";
     sha256 = "0nx3in8sa6xna4vfacj8g60hfzk61jpj2ldag80xzxip9c3rd2pw";
   };
 
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     "--with-milter=${libmilter}"
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  ] ++ lib.optional stdenv.isDarwin "--with-unbound=${unbound}";
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
-  buildInputs = [ libbsd openssl libmilter perl ];
+  buildInputs = [ libbsd openssl libmilter perl ] ++ lib.optional stdenv.isDarwin unbound;
 
   postInstall = ''
     wrapProgram $out/sbin/opendkim-genkey \

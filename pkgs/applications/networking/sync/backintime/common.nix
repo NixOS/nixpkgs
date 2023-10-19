@@ -2,18 +2,18 @@
 python3, rsync, cron, openssh, sshfs-fuse, encfs }:
 
 let
-  python' = python3.withPackages (ps: with ps; [ dbus-python keyring ]);
+  python' = python3.withPackages (ps: with ps; [ dbus-python keyring packaging ]);
 
   apps = lib.makeBinPath [ openssh python' cron rsync sshfs-fuse encfs ];
 in stdenv.mkDerivation rec {
   pname = "backintime-common";
-  version = "1.2.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
     rev = "v${version}";
-    sha256 = "mBjheLY7DHs995heZmxVnDdvABkAROCjRJ4a/uJmJcg=";
+    sha256 = "sha256-cKmzq155/dCl5wZA2SE3XjfCocHxTh4Wa2IdfzSfQHg=";
   };
 
   nativeBuildInputs = [ makeWrapper gettext ];

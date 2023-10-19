@@ -2,7 +2,7 @@
 
 `pkgs.appimageTools` is a set of functions for extracting and wrapping [AppImage](https://appimage.org/) files. They are meant to be used if traditional packaging from source is infeasible, or it would take too long. To quickly run an AppImage file, `pkgs.appimage-run` can be used as well.
 
-::: warning
+::: {.warning}
 The `appimageTools` API is unstable and may be subject to backwards-incompatible changes in the future.
 :::
 
@@ -35,7 +35,7 @@ appimageTools.wrapType2 { # or wrapType1
   name = "patchwork";
   src = fetchurl {
     url = "https://github.com/ssbc/patchwork/releases/download/v3.11.4/Patchwork-3.11.4-linux-x86_64.AppImage";
-    sha256 = "1blsprpkvm0ws9b96gb36f0rbf8f5jgmw4x6dsb1kswr4ysf591s";
+    hash = "sha256-OqTitCeZ6xmWbqYTXp8sDrmVgTNjPZNW0hzUPW++mq4=";
   };
   extraPkgs = pkgs: with pkgs; [ ];
 }

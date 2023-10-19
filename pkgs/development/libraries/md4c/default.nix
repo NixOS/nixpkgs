@@ -16,13 +16,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-+LObAD5JB8Vb4Rt4hTo1Z4ispxzfFkkXA2sw6TKB7Yo=";
   };
 
+  patches = [
+    # We set CMAKE_INSTALL_LIBDIR to the absolute path in $out, so
+    # prefix and exec_prefix cannot be $out, too
+    # Use CMake's _FULL_ variables instead of `prefix` concatenation.
+    ./fix-pkgconfig.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/mity/md4c";
     description = "Markdown parser made in C";
     longDescription = ''
       MD4C is Markdown parser implementation in C, with the following features:
@@ -51,8 +57,10 @@ stdenv.mkDerivation rec {
         "Unicode"). See more details below.
       - Permissive license: MD4C is available under the MIT license.
     '';
+    homepage = "https://github.com/mity/md4c";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "md2html";
     platforms = platforms.all;
   };
 }

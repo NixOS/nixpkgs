@@ -20,15 +20,25 @@ if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-setDynamicLinker=1
 
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
+
+# NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take
+# advantage of this to avoid both recalculating it, and also repeating other
+# processing cc wrapper has already done.
+if [[ -n "${NIX_LINK_TYPE_@suffixSalt@:-}" ]]; then
+    linkType=$NIX_LINK_TYPE_@suffixSalt@
+else
+    linkType=$(checkLinkType "${params[@]}")
+fi
+
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
-        && ( -z "$NIX_IGNORE_LD_THROUGH_GCC_@suffixSalt@" || -z "${NIX_LDFLAGS_SET_@suffixSalt@:-}" ) ]]; then
+        && ( -z "$NIX_IGNORE_LD_THROUGH_GCC_@suffixSalt@" || -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ) ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
+
     while (( "$n" < "$nParams" )); do
         p=${params[n]}
         p2=${params[n+1]:-} # handle `p` being last one
@@ -40,19 +50,21 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
             n+=1; skip "$p2"
         elif [ "$p" = -dynamic-linker ] && badPath "$p2"; then
             n+=1; skip "$p2"
-        elif [ "${p:0:1}" = / ] && badPath "$p"; then
-            # We cannot skip this; barf.
-            echo "impure path \`$p' used in link" >&2
-            exit 1
+        elif [ "$p" = -syslibroot ] && [ $p2 == // ]; then
+            # When gcc is built on darwin --with-build-sysroot=/
+            # produces '-syslibroot //' linker flag. It's a no-op,
+            # which does not introduce impurities.
+            n+=1; skip "$p2"
+        elif [ "${p:0:10}" = /LIBPATH:/ ] && badPath "${p:9}"; then
+            reject "${p:9}"
+        # We need to not match LINK.EXE-style flags like
+        # /NOLOGO or /LIBPATH:/nix/store/foo
+        elif [[ $p =~ ^/[^:]*/ ]] && badPath "$p"; then
+            reject "$p"
         elif [ "${p:0:9}" = --sysroot ]; then
             # Our ld is not built with sysroot support (Can we fix that?)
             :
         else
-            if [[ "$p" = -static || "$p" = -static-pie ]]; then
-                # Using a dynamic linker for static binaries can lead to crashes.
-                # This was observed for rust binaries.
-                setDynamicLinker=0
-            fi
             rest+=("$p")
         fi
         n+=1
@@ -61,22 +73,24 @@ if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
     params=(${rest+"${rest[@]}"})
 fi
 
+
 source @out@/nix-support/add-hardening.sh
 
 extraAfter=()
 extraBefore=(${hardeningLDFlags[@]+"${hardeningLDFlags[@]}"})
 
-if [ -z "${NIX_LDFLAGS_SET_@suffixSalt@:-}" ]; then
-    extraAfter+=($NIX_LDFLAGS_@suffixSalt@)
-    extraBefore+=($NIX_LDFLAGS_BEFORE_@suffixSalt@)
+if [ -z "${NIX_LINK_TYPE_@suffixSalt@:-}" ]; then
+    extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_@suffixSalt@))
+    extraBefore+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_BEFORE_@suffixSalt@))
+
     # By adding dynamic linker to extraBefore we allow the users set their
     # own dynamic linker as NIX_LD_FLAGS will override earlier set flags
-    if [[ "$setDynamicLinker" = 1 && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
+    if [[ "$linkType" == dynamic && -n "$NIX_DYNAMIC_LINKER_@suffixSalt@" ]]; then
         extraBefore+=("-dynamic-linker" "$NIX_DYNAMIC_LINKER_@suffixSalt@")
     fi
 fi
 
-extraAfter+=($NIX_LDFLAGS_AFTER_@suffixSalt@)
+extraAfter+=($(filterRpathFlags "$linkType" $NIX_LDFLAGS_AFTER_@suffixSalt@))
 
 # These flags *must not* be pulled up to -Wl, flags, so they can't go in
 # add-flags.sh. They must always be set, so must not be disabled by
@@ -85,11 +99,6 @@ if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
     source @out@/nix-support/add-local-ldflags-before.sh
 fi
 
-
-# Specify the target emulation if nothing is passed in ("-m" overrides this
-# environment variable). Ensures we never blindly fallback on targeting the host
-# platform.
-: ${LDEMULATION:=@emulation@}
 
 # Three tasks:
 #
@@ -173,7 +182,7 @@ do
     prev="$p"
 done
 
-if [[ "$link32" = "1" && "$setDynamicLinker" = 1 && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
+if [[ "$link32" == "1" && "$linkType" == dynamic && -e "@out@/nix-support/dynamic-linker-m32" ]]; then
     # We have an alternate 32-bit linker and we're producing a 32-bit ELF, let's
     # use it.
     extraAfter+=(
@@ -183,7 +192,7 @@ if [[ "$link32" = "1" && "$setDynamicLinker" = 1 && -e "@out@/nix-support/dynami
 fi
 
 # Add all used dynamic libraries to the rpath.
-if [ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 ]; then
+if [[ "$NIX_DONT_SET_RPATH_@suffixSalt@" != 1 && "$linkType" != static-pie ]]; then
     # For each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
@@ -225,8 +234,11 @@ fi
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
+#
+# Note: `lld` interprets `--build-id` to mean `--build-id=fast`; GNU ld defaults
+# to SHA1.
 if [ "$NIX_SET_BUILD_ID_@suffixSalt@" = 1 ] && ! (( "$relocatable" )); then
-    extraAfter+=(--build-id)
+    extraAfter+=(--build-id="${NIX_BUILD_ID_STYLE:-sha1}")
 fi
 
 
@@ -243,10 +255,18 @@ fi
 
 PATH="$path_backup"
 # Old bash workaround, see above.
-@prog@ \
-    ${extraBefore+"${extraBefore[@]}"} \
-    ${params+"${params[@]}"} \
-    ${extraAfter+"${extraAfter[@]}"}
+
+if (( "${NIX_LD_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+    @prog@ @<(printf "%q\n" \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"})
+else
+    @prog@ \
+        ${extraBefore+"${extraBefore[@]}"} \
+        ${params+"${params[@]}"} \
+        ${extraAfter+"${extraAfter[@]}"}
+fi
 
 if [ -e "@out@/nix-support/post-link-hook" ]; then
     source @out@/nix-support/post-link-hook

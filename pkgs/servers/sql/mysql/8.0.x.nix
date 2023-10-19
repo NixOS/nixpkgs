@@ -1,24 +1,23 @@
 { lib, stdenv, fetchurl, bison, cmake, pkg-config
-, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd
-, numactl, perl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto
+, boost, icu, libedit, libevent, lz4, ncurses, openssl, protobuf, re2, readline, zlib, zstd, libfido2
+, numactl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
 }:
 
-let
-self = stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.0.22";
+  version = "8.0.34";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
-    sha256 = "9fd85bb243940ef8234d21384ef421a0962fd4d13406fc1420efa902115ce17a";
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
   };
-
-  patches = [
-    ./abi-check.patch
-  ];
 
   nativeBuildInputs = [ bison cmake pkg-config ]
     ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+
+  patches = [
+    ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
+  ];
 
   ## NOTE: MySQL upstream frequently twiddles the invocations of libtool. When updating, you might proactively grep for libtool references.
   postPatch = ''
@@ -27,18 +26,17 @@ self = stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
-    zstd
+    boost (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
+    zstd libfido2
   ] ++ lib.optionals stdenv.isLinux [
     numactl libtirpc
   ] ++ lib.optionals stdenv.isDarwin [
-    cctools CoreServices developer_cmds
+    cctools CoreServices developer_cmds DarwinTools
   ];
 
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
     "-DWITH_ROUTER=OFF" # It may be packaged separately.
     "-DWITH_SYSTEM_LIBS=ON"
@@ -64,10 +62,11 @@ self = stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    client = self;
-    connector-c = self;
-    server = self;
-    mysqlVersion = "8.0";
+    client = finalAttrs.finalPackage;
+    connector-c = finalAttrs.finalPackage;
+    server = finalAttrs.finalPackage;
+    mysqlVersion = lib.versions.majorMinor finalAttrs.version;
+    tests = nixosTests.mysql.mysql80;
   };
 
   meta = with lib; {
@@ -77,4 +76,4 @@ self = stdenv.mkDerivation rec {
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
   };
-}; in self
+})

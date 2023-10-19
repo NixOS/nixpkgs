@@ -1,28 +1,30 @@
 { lib
 , buildPythonPackage
-, fetchPypi
 , certifi
+, fetchPypi
+, python-dateutil
+, pythonOlder
 , six
-, dateutil
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "cloudsmith-api";
-  version = "0.54.15";
-
+  version = "2.0.7";
   format = "wheel";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "cloudsmith_api";
     inherit format version;
-    sha256 = "X72xReosUnUlj69Gq+i+izhaKZuakM9mUrRHZI5L9h0=";
+    hash = "sha256-Vw5ifMJ+gwXecYjSe8QKkq+RtrBWxx3B/LdA80ZxuxU=";
   };
 
   propagatedBuildInputs = [
     certifi
+    python-dateutil
     six
-    dateutil
     urllib3
   ];
 
@@ -37,6 +39,6 @@ buildPythonPackage rec {
     description = "Cloudsmith API Client";
     homepage = "https://github.com/cloudsmith-io/cloudsmith-api";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
   };
 }

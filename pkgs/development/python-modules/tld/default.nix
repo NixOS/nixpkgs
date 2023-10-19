@@ -1,42 +1,52 @@
 { lib
 , buildPythonPackage
-, factory_boy
+, factory-boy
 , faker
 , fetchPypi
-, pytest-cov
 , pytestCheckHook
-, six
-, tox
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "tld";
-  version = "0.12.5";
+  version = "0.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d1lbbg2qdw5jjxks0dqlf69bki5885mhj8ysvgylmrni56hjqqv";
+    hash = "sha256-k93l4cBL3xhEl26uRAcGN50h9KsjW3PAXXSD4HT7Vik=";
   };
 
-  checkInputs = [
-    factory_boy
-    faker
-    pytest-cov
+  postPatch = ''
+    sed -i "/--cov/d" pytest.ini
+  '';
+
+  nativeCheckInputs = [
     pytestCheckHook
-    tox
   ];
 
-  # these tests require network access, but disabledTestPaths doesn't work.
-  # the file needs to be `import`ed by another python test file, so it
+  checkInputs = [
+    factory-boy
+    faker
+  ];
+
+  # These tests require network access, but disabledTestPaths doesn't work.
+  # the file needs to be `import`ed by another Python test file, so it
   # can't simply be removed.
   preCheck = ''
     echo > src/tld/tests/test_commands.py
   '';
-  pythonImportsCheck = [ "tld" ];
+
+  pythonImportsCheck = [
+    "tld"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/barseghyanartur/tld";
     description = "Extracts the top level domain (TLD) from the URL given";
+    homepage = "https://github.com/barseghyanartur/tld";
+    changelog = "https://github.com/barseghyanartur/tld/blob/${version}/CHANGELOG.rst";
     # https://github.com/barseghyanartur/tld/blob/master/README.rst#license
     # MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-or-later
     license = with licenses; [ lgpl21Plus mpl11 gpl2Only ];

@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_11, libsecret }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_24, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "todoist-electron";
-  version = "0.2.4";
+  version = "8.3.3";
 
   src = fetchurl {
-    url = "https://electron-dl.todoist.com/linux/Todoist-${version}.AppImage";
-    sha256 = "1xrf2qjhq116z18qx7n1zd7mhvkb2dccaq7az4w6fs216l8q5zf2";
+    url = "https://electron-dl.todoist.com/linux/Todoist-linux-x86_64-${version}.AppImage";
+    hash = "sha256-X928hCrYVOBTEZq1hmZWgWlabtOzQrLUuptF/SJcAto=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
     cp -a ${appimageContents}/todoist.desktop $out/share/applications/${pname}.desktop
-    cp -a ${appimageContents}/usr/share/icons/hicolor/0x0/apps $out/share/icons/hicolor/512x512
+    cp -a ${appimageContents}/usr/share/icons/hicolor/512x512/apps $out/share/icons/hicolor/512x512
 
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
@@ -36,9 +36,10 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_11}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_24}/bin/electron $out/bin/todoist-electron \
       --add-flags $out/share/${pname}/resources/app.asar \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc libsecret ]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc libsecret ]}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 
   meta = with lib; {

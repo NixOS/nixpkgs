@@ -1,54 +1,63 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake,
-  mesa, libGLU, glfw,
-  libX11, libXi, libXcursor, libXrandr, libXinerama,
-  alsaSupport ? stdenv.hostPlatform.isLinux, alsaLib,
-  pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio,
-  includeEverything ? true
+{ stdenv, lib, fetchFromGitHub, cmake, fetchpatch
+, mesa, libGLU, glfw
+, libX11, libXi, libXcursor, libXrandr, libXinerama
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
+, pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
+, sharedLib ? true
+, includeEverything ? true
+, raylib-games
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "raylib";
-  version = "3.5.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "raysan5";
-    repo = pname;
-    rev = version;
-    sha256 = "0syvd5js1lbx3g4cddwwncqg95l6hb3fdz5nsh5pqy7fr6v84kwj";
+    repo = "raylib";
+    rev = finalAttrs.version;
+    hash = "sha256-Uqqzq5shDp0AgSBT5waHBNUkEu0LRj70SNOlR5R2yAM=";
   };
 
-  patches = [
-    # fixes examples not compiling in 3.5.0
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/raysan5/raylib/pull/1470.patch";
-      sha256 = "1ff5l839wl8dxwrs2bwky7kqa8kk9qmsflg31sk5vbil68dzbzg0";
-    })
-  ];
-
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    mesa libGLU glfw libX11 libXi libXcursor libXrandr libXinerama
-  ] ++ lib.optional alsaSupport alsaLib
+    mesa glfw libXi libXcursor libXrandr libXinerama
+  ] ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional pulseSupport libpulseaudio;
+  propagatedBuildInputs = [ libGLU libX11 ];
 
   # https://github.com/raysan5/raylib/wiki/CMake-Build-Options
   cmakeFlags = [
     "-DUSE_EXTERNAL_GLFW=ON"
-    "-DSHARED=ON"
     "-DBUILD_EXAMPLES=OFF"
-  ] ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON";
+    "-DCUSTOMIZE_BUILD=1"
+  ] ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON"
+    ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
+
+  passthru.tests = [ raylib-games ];
+
+  patches = [
+    # Patch version in CMakeList to 4.5.0
+    # Remove this when updating to a new revision
+    (fetchpatch {
+      url = "https://github.com/raysan5/raylib/commit/0d4db7ad7f6fd442ed165ebf8ab8b3f4033b04e7.patch";
+      hash = "sha256-RGokbQAwJAZm2FU2VNwraE3xko8E+RLLFjUfDRXeKhA=";
+    })
+  ];
 
   # fix libasound.so/libpulse.so not being found
   preFixup = ''
-    ${lib.optionalString alsaSupport "patchelf --add-needed ${alsaLib}/lib/libasound.so $out/lib/libraylib.so.${version}"}
-    ${lib.optionalString pulseSupport "patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libraylib.so.${version}"}
+    ${lib.optionalString alsaSupport "patchelf --add-needed ${alsa-lib}/lib/libasound.so $out/lib/libraylib.so.${finalAttrs.version}"}
+    ${lib.optionalString pulseSupport "patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/libraylib.so.${finalAttrs.version}"}
   '';
 
   meta = with lib; {
     description = "A simple and easy-to-use library to enjoy videogames programming";
-    homepage = "http://www.raylib.com/";
+    homepage = "https://www.raylib.com/";
     license = licenses.zlib;
     maintainers = with maintainers; [ adamlwgriffiths ];
     platforms = platforms.linux;
+    changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
   };
-}
+})

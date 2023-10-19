@@ -1,40 +1,29 @@
 { lib
 , buildPythonPackage
 , flit
-, isPy3k
-, toml
-, pytestCheckHook
-, testpath
 }:
 
 buildPythonPackage rec {
   pname = "flit-core";
-  version = "3.2.0";
+  inherit (flit) version;
   format = "pyproject";
 
   inherit (flit) src patches;
 
-  preConfigure = ''
-    cd flit_core
-  '';
+  sourceRoot = "source/flit_core";
 
-  propagatedBuildInputs = [
-    toml
-  ];
-
-  checkInputs = [
-    pytestCheckHook
-    testpath
-  ];
+  # Tests are run in the "flit" package.
+  doCheck = false;
 
   passthru.tests = {
     inherit flit;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Distribution-building parts of Flit. See flit package for more information";
-    homepage = "https://github.com/takluyver/flit";
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.fridh ];
+    homepage = "https://github.com/pypa/flit";
+    changelog = "https://github.com/pypa/flit/blob/${src.rev}/doc/history.rst";
+    license = licenses.bsd3;
+    maintainers = teams.python.members;
   };
 }

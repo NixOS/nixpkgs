@@ -1,17 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, six
+{ lib, buildPythonPackage, fetchPypi, six
 , wcwidth, pytest, mock, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "blessed";
-  version = "1.18.0";
+  version = "1.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1312879f971330a1b7f2c6341f2ae7e2cbac244bfc9d0ecfbbecd4b0293bc755";
+    hash = "sha256-LN1n+HRuBI8A30eiiA9NasvNs5kDG2BONLqPcdV4doA=";
   };
 
-  checkInputs = [ pytest mock glibcLocales ];
+  nativeCheckInputs = [ pytest mock glibcLocales ];
 
   # Default tox.ini parameters not needed
   checkPhase = ''

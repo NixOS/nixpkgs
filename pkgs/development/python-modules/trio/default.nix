@@ -1,32 +1,60 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , attrs
 , sortedcontainers
-, async_generator
+, async-generator
+, exceptiongroup
 , idna
 , outcome
-, contextvars
 , pytestCheckHook
 , pyopenssl
 , trustme
 , sniffio
 , stdenv
 , jedi
-, pylint
 , astor
 , yapf
+, coreutils
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.18.0";
-  disabled = pythonOlder "3.6";
+  version = "0.22.0";
+  format = "setuptools";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xm0bd1rrlb4l9q0nf2n1wg7xh42ljdnm4i4j0651zi73zk6m9l7";
+    hash = "sha256-zmjxxUAKR7E3xaTecsfJAb1OeiT73r/ptB3oxsBOqs8=";
   };
 
-  checkInputs = [ astor pytestCheckHook pyopenssl trustme jedi pylint yapf ];
+  propagatedBuildInputs = [
+    attrs
+    sortedcontainers
+    async-generator
+    idna
+    outcome
+    sniffio
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    exceptiongroup
+  ];
+
+  # tests are failing on Darwin
+  doCheck = !stdenv.isDarwin;
+
+  nativeCheckInputs = [
+    astor
+    jedi
+    pyopenssl
+    pytestCheckHook
+    trustme
+    yapf
+  ];
+
+  preCheck = ''
+    substituteInPlace trio/tests/test_subprocess.py \
+      --replace "/bin/sleep" "${coreutils}/bin/sleep"
+  '';
+
   # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
   disabledTests = [
     "getnameinfo"
@@ -38,17 +66,9 @@ buildPythonPackage rec {
     "fallback_when_no_hook_claims_it"
   ];
 
-  propagatedBuildInputs = [
-    attrs
-    sortedcontainers
-    async_generator
-    idna
-    outcome
-    sniffio
-  ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
-
-  # tests are failing on Darwin
-  doCheck = !stdenv.isDarwin;
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
 
   meta = {
     description = "An async/await-native I/O library for humans and snake people";

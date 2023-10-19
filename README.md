@@ -1,14 +1,19 @@
 <p align="center">
-  <a href="https://nixos.org/nixos"><img src="https://nixos.org/logo/nixos-hires.png" width="500px" alt="NixOS logo" /></a>
+  <a href="https://nixos.org#gh-light-mode-only">
+    <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/master/logo/nixos-hires.png" width="500px" alt="NixOS logo"/>
+  </a>
+  <a href="https://nixos.org#gh-dark-mode-only">
+    <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png" width="500px" alt="NixOS logo"/>
+  </a>
 </p>
 
 <p align="center">
-  <a href="https://www.codetriage.com/nixos/nixpkgs"><img src="https://www.codetriage.com/nixos/nixpkgs/badges/users.svg" alt="Code Triagers badge" /></a>
-  <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=Supporter&color=brightgreen" alt="Open Collective supporters" /></a>
+  <a href="https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md"><img src="https://img.shields.io/github/contributors-anon/NixOS/nixpkgs" alt="Contributors badge" /></a>
+  <a href="https://opencollective.com/nixos"><img src="https://opencollective.com/nixos/tiers/supporter/badge.svg?label=supporters&color=brightgreen" alt="Open Collective supporters" /></a>
 </p>
 
 [Nixpkgs](https://github.com/nixos/nixpkgs) is a collection of over
-60,000 software packages that can be installed with the
+80,000 software packages that can be installed with the
 [Nix](https://nixos.org/nix/) package manager. It also implements
 [NixOS](https://nixos.org/nixos/), a purely-functional Linux distribution.
 
@@ -46,14 +51,14 @@ Nixpkgs and NixOS are built and tested by our continuous integration
 system, [Hydra](https://hydra.nixos.org/).
 
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
-* [Continuous package builds for the NixOS 20.09 release](https://hydra.nixos.org/jobset/nixos/release-20.09)
+* [Continuous package builds for the NixOS 23.05 release](https://hydra.nixos.org/jobset/nixos/release-23.05)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
-* [Tests for the NixOS 20.09 release](https://hydra.nixos.org/job/nixos/release-20.09/tested#tabs-constituents)
+* [Tests for the NixOS 23.05 release](https://hydra.nixos.org/job/nixos/release-23.05/tested#tabs-constituents)
 
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/nix/manual/#sec-channels).
+channels](https://nixos.org/manual/nix/stable/package-management/channels.html).
 
 # Contributing
 
@@ -65,29 +70,10 @@ Linux distribution. The [GitHub Insights](https://github.com/NixOS/nixpkgs/pulse
 page gives a sense of the project activity.
 
 Community contributions are always welcome through GitHub Issues and
-Pull Requests. When pull requests are made, our tooling automation bot,
-[OfBorg](https://github.com/NixOS/ofborg) will perform various checks
-to help ensure expression quality.
-
-The *Nixpkgs maintainers* are people who have assigned themselves to
-maintain specific individual packages. We encourage people who care
-about a package to assign themselves as a maintainer. When a pull
-request is made against a package, OfBorg will notify the appropriate
-maintainer(s). The *Nixpkgs committers* are people who have been given
-permission to merge.
-
-Most contributions are based on and merged into these branches:
-
-* `master` is the main branch where all small contributions go
-* `staging` is branched from master, changes that have a big impact on
-  Hydra builds go to this branch
-* `staging-next` is branched from staging and only fixes to stabilize
-  and security fixes with a big impact on Hydra builds should be
-  contributed to this branch. This branch is merged into master when
-  deemed of sufficiently high quality
+Pull Requests.
 
 For more information about contributing to the project, please visit
-the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md).
+the [contributing page](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
 
 # Donations
 
@@ -97,7 +83,8 @@ Foundation](https://nixos.org/nixos/foundation.html). To ensure the
 continuity and expansion of the NixOS infrastructure, we are looking
 for donations to our organization.
 
-You can donate to the NixOS foundation by using Open Collective:
+You can donate to the NixOS foundation through [SEPA bank
+transfers](https://nixos.org/donate.html) or by using Open Collective:
 
 <a href="https://opencollective.com/nixos#support"><img src="https://opencollective.com/nixos/tiers/supporter.svg?width=890" /></a>
 

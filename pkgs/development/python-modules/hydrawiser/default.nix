@@ -5,7 +5,6 @@
 , pytest-cov
 , pytestCheckHook
 , pythonOlder
-, pyyaml
 , requests
 , requests-mock
 }:
@@ -24,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-cov
     pytestCheckHook

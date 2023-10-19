@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ fgaz ];
   };
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     imports = [
       ./common/x11.nix
     ];
@@ -22,13 +22,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       # Add a dummy sound card, or the program won't start
       machine.execute("modprobe snd-dummy")
 
-      machine.execute("ft2-clone &")
+      machine.execute("ft2-clone >&2 &")
 
       machine.wait_for_window(r"Fasttracker")
       machine.sleep(5)
-      # One of the few words that actually get recognized
-      if "Songlen" not in machine.get_screen_text():
-          raise Exception("Program did not start successfully")
+      machine.wait_for_text(r"(Songlen|Repstart|Time|About|Nibbles|Help)")
       machine.screenshot("screen")
     '';
 })

@@ -1,65 +1,92 @@
 { lib
-, buildPythonPackage
-, pythonOlder
 , asn1crypto
-, azure-storage-blob
-, boto3
+, buildPythonPackage
+, pythonRelaxDepsHook
 , certifi
 , cffi
+, charset-normalizer
 , fetchPypi
-, future
+, filelock
 , idna
-, ijson
-, isPy3k
+, keyring
 , oscrypto
-, pyarrow
-, pyasn1-modules
+, packaging
+, platformdirs
 , pycryptodomex
 , pyjwt
 , pyopenssl
+, pythonOlder
 , pytz
 , requests
-, six
-, urllib3
+, setuptools
+, sortedcontainers
+, tomlkit
+, typing-extensions
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.4.3";
-  disabled = pythonOlder "3.6";
+  version = "3.3.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+jAfUwaofWM5Ef1kk4AEAbBM/UES8/ZzLd4QJfkEQsM=";
+    hash = "sha256-u2ZyK9ZKvNdqarBqZCPWdLy3Kfm6ORBWl375Lzg6rbg=";
   };
 
+  # snowflake-connector-python requires arrow 10.0.1, which we don't have in
+  # nixpkgs, so we cannot build the C extensions that use it. thus, patch out
+  # cython and pyarrow from the build dependencies
+  #
+  # keep an eye on following issue for improvements to this situation:
+  #
+  #   https://github.com/snowflakedb/snowflake-connector-python/issues/1144
+  #
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"cython",' "" \
+      --replace '"pyarrow>=10.0.1,<10.1.0",' ""
+  '';
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    setuptools
+    wheel
+  ];
+
+  pythonRelaxDeps = [
+    "pyOpenSSL"
+    "charset-normalizer"
+    "cryptography"
+    "platformdirs"
+  ];
+
   propagatedBuildInputs = [
-    azure-storage-blob
     asn1crypto
-    boto3
     certifi
     cffi
-    future
+    charset-normalizer
+    filelock
     idna
-    ijson
     oscrypto
+    packaging
+    platformdirs
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
-    six
-    pyarrow
-    pyasn1-modules
-    urllib3
+    sortedcontainers
+    tomlkit
+    typing-extensions
   ];
 
-  postPatch = ''
-    # https://github.com/snowflakedb/snowflake-connector-python/issues/705
-    substituteInPlace setup.py \
-      --replace "idna>=2.5,<3" "idna" \
-      --replace "chardet>=3.0.2,<4" "chardet"
-  '';
+  passthru.optional-dependencies = {
+    secure-local-storage = [ keyring ];
+  };
 
   # Tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
@@ -71,8 +98,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/snowflakedb/snowflake-connector-python/blob/v${version}/DESCRIPTION.md";
     description = "Snowflake Connector for Python";
-    homepage = "https://www.snowflake.com/";
+    homepage = "https://github.com/snowflakedb/snowflake-connector-python";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

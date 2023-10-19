@@ -3,6 +3,7 @@
 , fetchFromSourcehut
 , pkg-config
 , scdoc
+, wayland-scanner
 , wayland
 , wayland-protocols
 , libxkbcommon
@@ -19,8 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "0l71v3fzgiiv6xkk365q1l08qvaymxd4kpaya6r2g8yzkr7i2hms";
   };
 
-  nativeBuildInputs = [ pkg-config scdoc wayland ];
-  buildInputs = [ wayland-protocols libxkbcommon ];
+  strictDeps = true;
+  # for scdoc
+  depsBuildBuild = [
+    pkg-config
+  ];
+  nativeBuildInputs = [ pkg-config scdoc wayland-scanner ];
+  buildInputs = [ wayland wayland-protocols libxkbcommon ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -28,11 +34,12 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~sircmpwn/wev";
     description = "Wayland event viewer";
     longDescription = ''
-      This is a tool for debugging events on a Wayland window, analagous to the
+      This is a tool for debugging events on a Wayland window, analogous to the
       X11 tool xev.
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
+
   };
 }

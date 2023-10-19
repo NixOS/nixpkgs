@@ -1,36 +1,47 @@
 { lib
-, aiocoap
-, awsiotpythonsdk
-, bluepy
-, buildPythonApplication
-, can
-, cmd2
-, cryptography
 , fetchFromGitLab
-, paho-mqtt
-, pyi2cflash
-, pymodbus
-, pynetdicom
-, pyparsing
-, pyserial
-, pyspiflash
-, pythonOlder
-, upnpy
-, xmltodict
-, zeroconf
+, python3
 }:
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      cmd2 = super.cmd2.overridePythonAttrs (oldAttrs: rec {
+        version = "1.5.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-cBqMmXXEq8ReXROQarFJ+Vn4EoaRBjRzI6P4msDoKmI=";
+        };
+        doCheck = false;
+      });
+    };
+  };
+in
+with py.pkgs;
 
 buildPythonApplication rec {
   pname = "expliot";
   version = "0.9.8";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitLab {
     owner = "expliot_framework";
     repo = pname;
     rev = version;
-    sha256 = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
+    hash = "sha256-7Cuj3YKKwDxP2KKueJR9ZO5Bduv+lw0Y87Rw4b0jbGY=";
   };
+
+  pythonRelaxDeps = [
+    "pymodbus"
+    "pynetdicom"
+    "cryptography"
+    "python-can"
+    "pyparsing"
+    "zeroconf"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     aiocoap
@@ -53,7 +64,10 @@ buildPythonApplication rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "expliot" ];
+
+  pythonImportsCheck = [
+    "expliot"
+  ];
 
   meta = with lib; {
     description = "IoT security testing and exploitation framework";

@@ -5,7 +5,9 @@
 buildDunePackage rec {
   pname = "ipaddr-cstruct";
 
-  inherit (ipaddr) version src useDune2 minimumOCamlVersion;
+  inherit (ipaddr) version src;
+
+  duneVersion = "3";
 
   propagatedBuildInputs = [ ipaddr cstruct ];
 

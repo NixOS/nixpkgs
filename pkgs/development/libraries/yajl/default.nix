@@ -1,15 +1,29 @@
-{ lib, stdenv, fetchurl, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, which, testers }:
 
-stdenv.mkDerivation rec {
-  name = "yajl-2.1.0";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "yajl";
+  version = "unstable-2022-04-20";
 
-  src = fetchurl {
-    url = "https://github.com/lloyd/yajl/tarball/2.1.0";
-    name = "${name}.tar.gz";
-    sha256 = "0f6yrjc05aa26wfi7lqn2gslm19m6rm81b30ksllpkappvh162ji";
+  src = fetchFromGitHub {
+    owner = "containers";
+    repo = "yajl";
+    rev = "49923ccb2143e36850bcdeb781e2bcdf5ce22f15";
+    hash = "sha256-9bMPA5FpyBp8fvG/kkT/MnhYtdqg3QzOnmDFXKwJVW0=";
   };
 
+  patches = [
+    # https://github.com/containers/yajl/pull/1
+    ./cmake-shared-static-fix.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
+
+  doCheck = true;
+  nativeCheckInputs = [ which ];
+
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
 
   meta = {
     description = "Yet Another JSON Library";
@@ -19,7 +33,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://lloyd.github.com/yajl/";
     license = lib.licenses.isc;
+    pkgConfigModules = [ "yajl" ];
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [ maggesi ];
   };
-}
+})

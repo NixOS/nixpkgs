@@ -1,17 +1,43 @@
-{ mkXfceDerivation, gtk3, libxfce4ui, vte, xfconf, pcre2, libxslt, docbook_xml_dtd_45, docbook_xsl }:
+{ lib
+, mkXfceDerivation
+, glib
+, gtk3
+, libxfce4ui
+, vte
+, xfconf
+, pcre2
+, libxslt
+, docbook_xml_dtd_45
+, docbook_xsl
+, nixosTests
+}:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "0.8.10";
+  version = "1.1.0";
 
-  sha256 = "0v58qcrdpqpd2nbwlc4ra7j9nkvfzfhb1zcp1kggbn627q86i0ql";
+  sha256 = "sha256-ilxiP1Org5/uSQOzfRgODmouH0BmK3CmCJj1kutNuII=";
 
-  nativeBuildInputs = [ libxslt docbook_xml_dtd_45 docbook_xsl ];
+  nativeBuildInputs = [
+    libxslt
+    docbook_xml_dtd_45
+    docbook_xsl
+  ];
 
-  buildInputs = [ gtk3 libxfce4ui vte xfconf pcre2 ];
+  buildInputs = [
+    glib
+    gtk3
+    libxfce4ui
+    vte
+    xfconf
+    pcre2
+  ];
 
-  meta = {
+  passthru.tests.test = nixosTests.terminal-emulators.xfce4-terminal;
+
+  meta = with lib; {
     description = "A modern terminal emulator";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

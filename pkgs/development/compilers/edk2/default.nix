@@ -1,57 +1,76 @@
-{
-  stdenv,
-  clangStdenv,
-  fetchgit,
-  fetchpatch,
-  libuuid,
-  python3,
-  iasl,
-  bc,
-  clang_9,
-  llvmPackages_9,
-  overrideCC,
-  lib,
+{ stdenv
+, clangStdenv
+, fetchFromGitHub
+, fetchpatch
+, runCommand
+, libuuid
+, python3
+, bc
+, lib
+, buildPackages
 }:
 
 let
-  pythonEnv = python3.withPackages (ps: [ps.tkinter]);
+  pythonEnv = buildPackages.python3.withPackages (ps: [ps.tkinter]);
 
 targetArch = if stdenv.isi686 then
   "IA32"
 else if stdenv.isx86_64 then
   "X64"
+else if stdenv.isAarch32 then
+  "ARM"
 else if stdenv.isAarch64 then
   "AARCH64"
 else
   throw "Unsupported architecture";
-
-buildStdenv = if stdenv.isDarwin then
-  overrideCC clangStdenv [ clang_9 llvmPackages_9.llvm llvmPackages_9.lld ]
-else
-  stdenv;
 
 buildType = if stdenv.isDarwin then
     "CLANGPDB"
   else
     "GCC5";
 
-edk2 = buildStdenv.mkDerivation {
+edk2 = stdenv.mkDerivation rec {
   pname = "edk2";
-  version = "202102";
+  version = "202308";
 
-  # submodules
-  src = fetchgit {
-    url = "https://github.com/tianocore/edk2";
+  patches = [
+    # pass targetPrefix as an env var
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/edk2/raw/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/0021-Tweak-the-tools_def-to-support-cross-compiling.patch";
+      hash = "sha256-E1/fiFNVx0aB1kOej2DJ2DlBIs9tAAcxoedym2Zhjxw=";
+    })
+  ];
+
+  srcWithVendoring = fetchFromGitHub {
+    owner = "tianocore";
+    repo = "edk2";
     rev = "edk2-stable${edk2.version}";
-    sha256 = "1292hfbqz4wyikdf6glqdy80n9zpy54gnfngqnyv05908hww6h82";
+    fetchSubmodules = true;
+    hash = "sha256-Eoi1xf/hw/Knr7n0f0rgVof7wTgrHkmvV4eJjJV1NhM=";
   };
 
-  buildInputs = [ libuuid pythonEnv ];
+  # We don't want EDK2 to keep track of OpenSSL,
+  # they're frankly bad at it.
+  src = runCommand "edk2-unvendored-src" { } ''
+    cp --no-preserve=mode -r ${srcWithVendoring} $out
+    rm -rf $out/CryptoPkg/Library/OpensslLib/openssl
+    mkdir -p $out/CryptoPkg/Library/OpensslLib/openssl
+    tar --strip-components=1 -xf ${buildPackages.openssl.src} -C $out/CryptoPkg/Library/OpensslLib/openssl
+    chmod -R +w $out/
+  '';
 
-  makeFlags = [ "-C BaseTools" ]
-    ++ lib.optional (stdenv.cc.isClang) [ "BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang" ];
+  nativeBuildInputs = [ pythonEnv ];
+  depsBuildBuild = [ buildPackages.stdenv.cc buildPackages.util-linux buildPackages.bash ];
+  strictDeps = true;
 
-  NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
+  # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
+  ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
+
+  makeFlags = [ "-C BaseTools" ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type"
+    + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
+    + lib.optionalString (stdenv.isDarwin) " -Wno-error=macro-redefined";
 
   hardeningDisable = [ "format" "fortify" ];
 
@@ -59,22 +78,35 @@ edk2 = buildStdenv.mkDerivation {
     mkdir -vp $out
     mv -v BaseTools $out
     mv -v edksetup.sh $out
+    # patchShebangs fails to see these when cross compiling
+    for i in $out/BaseTools/BinWrappers/PosixLike/*; do
+      substituteInPlace $i --replace '/usr/bin/env bash' ${buildPackages.bash}/bin/bash
+      chmod +x "$i"
+    done
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Intel EFI development kit";
-    homepage = "https://sourceforge.net/projects/edk2/";
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
   };
 
   passthru = {
-    mkDerivation = projectDscPath: attrs: buildStdenv.mkDerivation ({
+    mkDerivation = projectDscPath: attrsOrFun: stdenv.mkDerivation (finalAttrs:
+    let
+      attrs = lib.toFunction attrsOrFun finalAttrs;
+    in
+    {
       inherit (edk2) src;
 
-      buildInputs = [ bc pythonEnv ] ++ attrs.buildInputs or [];
+      depsBuildBuild = [ buildPackages.stdenv.cc ] ++ attrs.depsBuildBuild or [];
+      nativeBuildInputs = [ bc pythonEnv ] ++ attrs.nativeBuildInputs or [];
+      strictDeps = true;
+
+      ${"GCC5_${targetArch}_PREFIX"}=stdenv.cc.targetPrefix;
 
       prePatch = ''
         rm -rf BaseTools
@@ -90,7 +122,7 @@ edk2 = buildStdenv.mkDerivation {
 
       buildPhase = ''
         runHook preBuild
-        build -a ${targetArch} -b RELEASE -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
+        build -a ${targetArch} -b ${attrs.buildConfig or "RELEASE"} -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
         runHook postBuild
       '';
 
@@ -99,7 +131,7 @@ edk2 = buildStdenv.mkDerivation {
         mv -v Build/*/* $out
         runHook postInstall
       '';
-    } // removeAttrs attrs [ "buildInputs" ]);
+    } // removeAttrs attrs [ "nativeBuildInputs" "depsBuildBuild" ]);
   };
 };
 

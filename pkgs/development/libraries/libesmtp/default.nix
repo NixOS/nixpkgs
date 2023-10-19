@@ -1,18 +1,29 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, openssl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libESMTP";
-  version = "1.0.6";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "http://brianstafford.info/libesmtp/libesmtp-1.0.6.tar.bz2";
-    sha256 = "02zbniyz7qys1jmx3ghx21kxmns1wc3hmv80gp7ag7yra9f1m9nh";
+  nativeBuildInputs = [ meson ninja pkg-config ];
+  buildInputs = [ openssl ];
+
+  src = fetchFromGitHub {
+    owner = "libesmtp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1bhh8hlsl9597x0bnfl563k2c09b61qnkb9mfyqcmzlq63m1zw5y";
   };
 
   meta = with lib; {
-    homepage = "http://brianstafford.info/libesmtp/index.html";
     description = "A Library for Posting Electronic Mail";
-    license = licenses.lgpl21;
+    longDescription = ''
+      libESMTP is an SMTP client library which manages submission of electronic mail
+      via a preconfigured Mail Transport Agent (MTA) such as Exim or Postfix.
+      It implements many SMTP extensions including TLS for security
+      and PIPELINING for high performance.
+    '';
+    homepage = "https://libesmtp.github.io/";
+    license = licenses.lgpl21Plus;
   };
 }
 

@@ -1,10 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , rustPlatform
+, nixosTests
 
 , cmake
-, gzip
 , installShellFiles
 , makeWrapper
 , ncurses
@@ -15,12 +16,7 @@
 , fontconfig
 , freetype
 , libGL
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXxf86vm
-, libxcb
+, xorg
 , libxkbcommon
 , wayland
 , xdg-utils
@@ -39,34 +35,33 @@ let
     expat
     fontconfig
     freetype
-    libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXxf86vm
-    libxcb
   ] ++ lib.optionals stdenv.isLinux [
+    libGL
+    xorg.libX11
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXxf86vm
+    xorg.libxcb
     libxkbcommon
     wayland
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.8.0";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-9pQqnsLMkzhKTs7WGhf6lac/LGot6EmJQxgFBTrHA4E=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SUEI7DTgs6NYT4oiqaMBNCQ8gP1XoZjPFIKhob7tfsk=";
   };
 
-  cargoSha256 = "sha256-NtDeXS2g+5RzKHJdDrbzL5oReS42SzuEubkfZ4gbkFc=";
+  cargoHash = "sha256-iLhctiCDNpcTxoMrWwUWHBRc6X5rxSH9Jl2EDuktWmw=";
 
   nativeBuildInputs = [
     cmake
-    gzip
     installShellFiles
     makeWrapper
     ncurses
@@ -87,10 +82,12 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (!xdg-utils.meta.broken) ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
+
+  checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
 
   postInstall = (
     if stdenv.isDarwin then ''
@@ -99,14 +96,15 @@ rustPlatform.buildRustPackage rec {
       ln -s $out/bin $out/Applications/Alacritty.app/Contents/MacOS
     '' else ''
       install -D extra/linux/Alacritty.desktop -t $out/share/applications/
+      install -D extra/linux/org.alacritty.Alacritty.appdata.xml -t $out/share/appdata/
       install -D extra/logo/compat/alacritty-term.svg $out/share/icons/hicolor/scalable/apps/Alacritty.svg
 
       # patchelf generates an ELF that binutils' "strip" doesn't like:
       #    strip: not enough room for program headers, try linking with -N
       # As a workaround, strip manually before running patchelf.
-      strip -S $out/bin/alacritty
+      $STRIP -S $out/bin/alacritty
 
-      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+      patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
     ''
   ) + ''
 
@@ -116,6 +114,7 @@ rustPlatform.buildRustPackage rec {
 
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
+    gzip -c extra/alacritty-msg.man > "$out/share/man/man1/alacritty-msg.1.gz"
 
     install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
 
@@ -127,11 +126,14 @@ rustPlatform.buildRustPackage rec {
 
   dontPatchELF = true;
 
+  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
+
   meta = with lib; {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Br1ght0ne mic92 cole-h ma27 ];
+    mainProgram = "alacritty";
+    maintainers = with maintainers; [ Br1ght0ne mic92 ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };

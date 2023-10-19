@@ -23,14 +23,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftwSinglePrec libsamplerate qtbase ]
     ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") "-std=c++11";
+
   dontWrapQtApps = true;
 
   meta = with lib; {
     homepage = "https://github.com/lastfm/liblastfm";
-    repositories.git = "git://github.com/lastfm/liblastfm.git";
     description = "Official LastFM library";
     platforms = platforms.unix;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     license = licenses.gpl3;
   };
 }

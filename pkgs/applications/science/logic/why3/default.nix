@@ -1,37 +1,43 @@
-{ callPackage, fetchurl, fetchpatch, lib, stdenv
+{ callPackage, fetchurl, lib, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "why3";
-  version = "1.3.3";
+  version = "1.6.0";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/38367/why3-1.3.3.tar.gz";
-    sha256 = "1n0a2nn1gnk0zg339lh698g4wpk7m8m1vyi2yvifd5adqvk4milw";
+    url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
+    hash = "sha256-hFvM6kHScaCtcHCc6Vezl9CR7BFbiKPoTEh7kj0ZJxw=";
   };
 
+  strictDeps = true;
+
+  nativeBuildInputs = with ocamlPackages;  [
+    ocaml findlib menhir
+    # Coq Support
+    coqPackages.coq
+  ];
+
   buildInputs = with ocamlPackages; [
-    ocaml findlib ocamlgraph zarith menhir
-    # Compressed Sessions
+    ocamlgraph zarith
     # Emacs compilation of why3.el
     emacs
     # Documentation
     rubber hevea
     # GUI
-    lablgtk
+    lablgtk3-sourceview3
     # WebIDE
     js_of_ocaml js_of_ocaml-ppx
+    # S-expression output for why3pp
+    ppx_deriving ppx_sexp_conv ]
+    ++
     # Coq Support
-    coqPackages.coq coqPackages.flocq ocamlPackages.camlp5
-  ];
+    (with coqPackages; [ coq flocq ])
+  ;
 
-  propagatedBuildInputs = with ocamlPackages; [ camlzip num ];
+  propagatedBuildInputs = with ocamlPackages; [ camlzip menhirLib num re sexplib ];
 
   enableParallelBuilding = true;
-
-  postPatch = ''
-    substituteInPlace Makefile.in --replace js_of_ocaml.ppx js_of_ocaml-ppx
-  '';
 
   configureFlags = [ "--enable-verbose-make" ];
 
@@ -41,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A platform for deductive program verification";
-    homepage    = "http://why3.lri.fr/";
+    homepage    = "https://why3.lri.fr/";
     license     = licenses.lgpl21;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vbgl ];

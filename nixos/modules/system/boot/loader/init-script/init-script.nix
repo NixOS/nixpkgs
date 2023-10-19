@@ -8,6 +8,7 @@ let
     src = ./init-script-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
+    inherit (config.system.nixos) distroName;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   };
 
@@ -24,7 +25,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = ''
+        description = lib.mdDoc ''
           Some systems require a /sbin/init script which is started.
           Or having it makes starting NixOS easier.
           This applies to some kind of hosting services and user mode linux.

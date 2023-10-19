@@ -1,24 +1,43 @@
-{ buildPythonPackage, isPy3k, lib, fetchFromGitHub, setuptools_scm, toml, pytest }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, setuptools-scm
+, toml
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pure_eval";
-  version = "0.1.0";
+  version = "0.2.2";
+  format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "alexmojaki";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1d3gpc9mrmwdk6l87x7ll23vwv6l8l2iqvi63r86j7bj5s8m2ci8";
+    hash = "sha256-9N+UcgAv30s4ctgsBrOHiix4BoXhKPgxH/GOz/NIFdU=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ toml ];
+  buildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytest ];
+  propagatedBuildInputs = [
+    toml
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pure_eval"
+  ];
 
   meta = with lib; {
     description = "Safely evaluate AST nodes without side effects";

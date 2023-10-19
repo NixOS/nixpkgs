@@ -1,9 +1,8 @@
 { lib, stdenv, fetchFromGitHub, ruby, zfs }:
 
-let version = "0.3.6"; in
 stdenv.mkDerivation rec {
   pname = "zfstools";
-  inherit version;
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     sha256 = "16lvw3xbmxp2pr8nixqn7lf4504zaaxvbbdnjkv4dggwd4lsdjyg";

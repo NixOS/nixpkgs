@@ -1,7 +1,7 @@
 /*
  Test that our unbound module indeed works as most users would expect.
  There are a few settings that we must consider when modifying the test. The
- ususal use-cases for unbound are
+ usual use-cases for unbound are
    * running a recursive DNS resolver on the local machine
    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via UDP/53 & TCP/53
    * running a recursive DNS resolver on the local machine, forwarding to a local DNS server via TCP/853 (DoT)
@@ -33,7 +33,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       };
     };
 
-    cert = pkgs.runCommandNoCC "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
+    cert = pkgs.runCommand "selfSignedCerts" { buildInputs = [ pkgs.openssl ]; } ''
       openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes -subj '/CN=dns.example.local'
       mkdir -p $out
       cp key.pem cert.pem $out
@@ -74,7 +74,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         };
       };
 
-      # The resolver that knows that fowards (only) to the authoritative server
+      # The resolver that knows that forwards (only) to the authoritative server
       # and listens on UDP/53, TCP/53 & TCP/853.
       resolver = { lib, nodes, ... }: {
         imports = [ common ];
@@ -145,13 +145,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           # user that is permitted to access the unix socket
           someuser = {
             isSystemUser = true;
+            group = "someuser";
             extraGroups = [
               config.users.users.unbound.group
             ];
           };
 
           # user that is not permitted to access the unix socket
-          unauthorizeduser = { isSystemUser = true; };
+          unauthorizeduser = {
+            isSystemUser = true;
+            group = "unauthorizeduser";
+          };
+
+        };
+        users.groups = {
+          someuser = {};
+          unauthorizeduser = {};
         };
 
         # Used for testing configuration reloading

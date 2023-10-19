@@ -1,87 +1,60 @@
 { lib
-, mkDerivation
-, nix-update-script
-, fetchFromGitHub
-, substituteAll
+, stdenv
+, fetchzip
 , cmake
 , extra-cmake-modules
 , qttools
+, kwayland
 , leptonica
 , tesseract4
 , qtmultimedia
 , qtx11extras
-, qttranslations
+, wrapQtAppsHook
+, gst_all_1
+, testers
+, crow-translate
 }:
-let
-  singleapplication = fetchFromGitHub {
-    owner = "itay-grudev";
-    repo = "SingleApplication";
-    rev = "v3.2.0";
-    sha256 = "0w3z97dcqcz3bf7w6fja4smkafmx9kvhzb9px4k2nfmmyxh4yfma";
-  };
-  qtaskbarcontrol = fetchFromGitHub {
-    owner = "Skycoder42";
-    repo = "QTaskbarControl";
-    rev = "2.0.2";
-    sha256 = "0iymcvq3pv07fs9l4kh6hi1igqr7957iqndhsmg9fqkalf8nqyad";
-  };
-  qhotkey = fetchFromGitHub {
-    owner = "Skycoder42";
-    repo = "QHotkey";
-    rev = "1.4.2";
-    sha256 = "0391fkqrxqmzpvms4rk06aq05l308k6sadp6y3czq0gx2kng8mn9";
-  };
-  qonlinetranslator = fetchFromGitHub {
-    owner = "crow-translate";
-    repo = "QOnlineTranslator";
-    rev = "1.4.1";
-    sha256 = "1c6a8mdxms5vh8l7shi2kqdhafbzm50pbz6g1hhgg6qslla0vfn0";
-  };
-  circleflags = fetchFromGitHub {
-    owner = "HatScripts";
-    repo = "circle-flags";
-    rev = "v2.0.0";
-    sha256 = "1xz5b6nhcxxzalcgwnw36npap71i70s50g6b63avjgjkwz1ys5j4";
-  };
-in
-mkDerivation rec {
+
+stdenv.mkDerivation rec {
   pname = "crow-translate";
-  version = "2.8.1";
+  version = "2.11.0";
 
-  src = fetchFromGitHub {
-    owner = "crow-translate";
-    repo = "crow-translate";
-    rev = version;
-    sha256 = "sha256-fmlNUhNorV/MUdfdDXM6puAblTTa6p2slVT/EKy5THg=";
+  src = fetchzip {
+    url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}-source.tar.gz";
+    hash = "sha256-e0zfbfRNzAiNvlWO84YbMApUXXzMcZG1MckTGMZm2ik=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./dont-fetch-external-libs.patch;
-      inherit singleapplication qtaskbarcontrol qhotkey qonlinetranslator circleflags;
-    })
-    (substituteAll {
-      # See https://github.com/NixOS/nixpkgs/issues/86054
-      src = ./fix-qttranslations-path.patch;
-      inherit qttranslations;
-    })
-  ];
-
-  postPatch = "cp -r ${circleflags}/flags/* data/icons";
-
-  nativeBuildInputs = [ cmake extra-cmake-modules qttools ];
-
-  buildInputs = [ leptonica tesseract4 qtmultimedia qtx11extras ];
-
-  postInstall = ''
-    substituteInPlace $out/share/applications/io.crow_translate.CrowTranslate.desktop \
+  postPatch = ''
+    substituteInPlace data/io.crow_translate.CrowTranslate.desktop \
       --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
   '';
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    qttools
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    kwayland
+    leptonica
+    tesseract4
+    qtmultimedia
+    qtx11extras
+  ] ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+  ]);
+
+  preFixup = ''
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = crow-translate;
   };
 
   meta = with lib; {
@@ -90,5 +63,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.linux;
+    mainProgram = "crow";
   };
 }

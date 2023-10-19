@@ -3,17 +3,19 @@
 , fetchFromGitHub
 }:
 
-buildGoModule {
+buildGoModule rec {
   pname = "demoit";
-  version = "unstable-2020-06-11";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "dgageot";
     repo = "demoit";
-    rev = "5762b169e7f2fc18913874bf52323ffbb906ce84";
-    sha256 = "1jcjqr758d29h3y9ajvzhy1xmxfix5mwhylz6jwhy5nmk28bjzx9";
+    rev = "v${version}";
+    hash = "sha256-3g0k2Oau0d9tXYDtxHpUKvAQ1FnGhjRP05YVTlmgLhM=";
   };
-  vendorSha256 = null;
+
+  vendorHash = null;
+
   subPackages = [ "." ];
 
   meta = with lib; {

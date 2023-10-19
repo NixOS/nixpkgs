@@ -1,71 +1,60 @@
 { lib
-, stdenv
 , beamPackages
+, buildNpmPackage
 , fetchFromGitHub
-, glibcLocales
-, cacert
-, mkYarnModules
 , nodejs
-, fetchpatch
 , nixosTests
 }:
 
 let
   pname = "plausible";
-  version = "1.3.0";
-  name = "${pname}-${version}";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "plausible";
     repo = "analytics";
     rev = "v${version}";
-    sha256 = "03lm1f29gwwixnhgjish5bhi3m73qyp71ns2sczdnwnbhrw61zps";
+    hash = "sha256-yrTwxBguAZbfEKucUL+w49Hr6D7v9/2OjY1h27+w5WI=";
   };
 
   # TODO consider using `mix2nix` as soon as it supports git dependencies.
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "${pname}-deps";
     inherit src version;
-    sha256 = "18h3hs69nw06msvs3nnymf6p94qd3x1f4d2zawqriy9fr5fz7zx6";
-
-    # We need ecto 3.6 as this version checks whether the database exists before
-    # trying to create it. The creation attempt would always require super-user privileges
-    # and since 3.6 this isn't the case anymore.
-    patches = [ ./ecto_sql-fix.patch ];
+    hash = "sha256-CAyZLpjmw1JreK3MopqI0XsWhP+fJEMpXlww7CibSaM=";
   };
 
-  yarnDeps = mkYarnModules {
-    pname = "${pname}-yarn-deps";
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
     inherit version;
-    packageJSON = ./package.json;
-    yarnNix = ./yarn.nix;
-    yarnLock = ./yarn.lock;
-    preBuild = ''
-      mkdir -p tmp/deps
-      cp -r ${mixFodDeps}/phoenix tmp/deps/phoenix
-      cp -r ${mixFodDeps}/phoenix_html tmp/deps/phoenix_html
+    src = "${src}/assets";
+    npmDepsHash = "sha256-2t1M6RQhBjZxx36qawVUVC+ob9SvQIq5dy4HgVeY2Eo=";
+    dontNpmBuild = true;
+    installPhase = ''
+      runHook preInstall
+      cp -r . "$out"
+      runHook postInstall
     '';
-    postBuild = ''
-      echo 'module.exports = {}' > $out/node_modules/flatpickr/dist/postcss.config.js
+  };
+
+  tracker = buildNpmPackage {
+    pname = "${pname}-tracker";
+    inherit version;
+    src = "${src}/tracker";
+    npmDepsHash = "sha256-y09jVSwUrxF0nLpLqS1yQweYL+iMF6jVx0sUdQtvrpc=";
+    dontNpmBuild = true;
+    installPhase = ''
+      runHook preInstall
+      cp -r . "$out"
+      runHook postInstall
     '';
   };
 in
 beamPackages.mixRelease {
   inherit pname version src mixFodDeps;
 
-  nativeBuildInputs = [ nodejs ];
-
-  patches = [
-    # Allow socket-authentication against postgresql. Upstream PR is
-    # https://github.com/plausible/analytics/pull/1052
-    (fetchpatch {
-      url = "https://github.com/Ma27/analytics/commit/f2ee5892a6c3e1a861d69ed30cac43e05e9cd36f.patch";
-      sha256 = "sha256-JvJ7xlGw+tHtWje+jiQChVC4KTyqqdq2q+MIcOv/k1o=";
-    })
-
-    # Ensure that `tzdata` doesn't write into its store-path
-    # https://github.com/plausible/analytics/pull/1096, but rebased onto 1.3.0
-    ./tzdata-rebased.patch
+  nativeBuildInputs = [
+    nodejs
   ];
 
   passthru = {
@@ -73,9 +62,20 @@ beamPackages.mixRelease {
     updateScript = ./update.sh;
   };
 
+  postPatch = ''
+    substituteInPlace lib/plausible_release.ex --replace 'defp prepare do' 'def prepare do'
+  '';
+
+  preBuild = ''
+    rm -r assets tracker
+    cp -r ${assets} assets
+    cp -r ${tracker} tracker
+  '';
+
   postBuild = ''
-    ln -sf ${yarnDeps}/node_modules assets/node_modules
+    export NODE_OPTIONS=--openssl-legacy-provider # required for webpack compatibility with OpenSSL 3 (https://github.com/webpack/webpack/issues/14532)
     npm run deploy --prefix ./assets
+    npm run deploy --prefix ./tracker
 
     # for external task you need a workaround for the no deps check flag
     # https://github.com/phoenixframework/phoenix/issues/2690
@@ -85,8 +85,9 @@ beamPackages.mixRelease {
   meta = with lib; {
     license = licenses.agpl3Plus;
     homepage = "https://plausible.io/";
-    description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics.";
-    maintainers = with maintainers; [ ma27 ];
+    changelog = "https://github.com/plausible/analytics/blob/${src.rev}/CHANGELOG.md";
+    description = " Simple, open-source, lightweight (< 1 KB) and privacy-friendly web analytics alternative to Google Analytics";
+    maintainers = with maintainers; [ softinio ];
     platforms = platforms.unix;
   };
 }

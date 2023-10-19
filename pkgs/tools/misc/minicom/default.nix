@@ -1,18 +1,28 @@
-{ lib, stdenv, fetchgit, autoreconfHook, makeWrapper, pkg-config
-, lrzsz, ncurses, libiconv }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, autoreconfHook
+, makeWrapper
+, pkg-config
+, lrzsz
+, ncurses
+, libiconv
+, IOKit
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "minicom";
-  version = "2.7.1";
+  version = "2.9";
 
-  # The repository isn't tagged properly, so we need to use commit refs
-  src = fetchgit {
-    url    = "https://salsa.debian.org/minicom-team/minicom.git";
-    rev    = "6ea8033b6864aa35d14fb8b87e104e4f783635ce";
-    sha256 = "0j95727xni4r122dalp09963gvc1nqa18l1d4wzz8746kw5s2rrb";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "minicom-team";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-+fKvHrApDXm94LItXv+xSDIE5zD7rTY5IeNSuzQglpg=";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ ncurses ] ++ lib.optionals stdenv.isDarwin [ libiconv IOKit ];
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
 
@@ -48,6 +58,6 @@ stdenv.mkDerivation {
       download.
     '';
     maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
   };
 }

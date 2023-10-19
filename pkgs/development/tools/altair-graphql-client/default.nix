@@ -1,26 +1,25 @@
-{ lib, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
+{ lib, appimageTools, makeWrapper, fetchurl }:
 
 let
   pname = "altair";
-  version = "4.0.2";
-  name = "${pname}-v${version}";
+  version = "5.2.5";
 
   src = fetchurl {
     url = "https://github.com/imolorhe/altair/releases/download/v${version}/altair_${version}_x86_64_linux.AppImage";
-    sha256 = "sha256-HCoK+ljcTmyBZSCDe6u2x2urqrQfi3DIlXfCqGWvl3E=";
+    sha256 = "sha256-KpAfPZqDfbf3LLBhTZ/rFftGf42onJnFMvnO2jzxqmo=";
   };
 
-  appimageContents = appimageTools.extract { inherit name src; };
+  appimageContents = appimageTools.extract { inherit pname version src; };
 in
 appimageTools.wrapType2 {
-  inherit src name;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
+  inherit src pname version;
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
+
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram $out/bin/${pname} \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \

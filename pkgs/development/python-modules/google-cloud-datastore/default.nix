@@ -3,33 +3,62 @@
 , fetchPypi
 , google-api-core
 , google-cloud-core
-, libcst
-, proto-plus
-, mock
-, pytestCheckHook
-, pytest-asyncio
 , google-cloud-testutils
+, libcst
+, mock
+, proto-plus
+, protobuf
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-datastore";
-  version = "2.1.0";
+  version = "2.18.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yyk9ix1jms5q4kk76cfxzy42wzzyl5qladdswjy5l0pg6iypr8i";
+    hash = "sha256-Y7MbZ23LJ4amUNI9Mk2PiGxOFFhq/dDP5uJgpz8SRI4=";
   };
 
-  propagatedBuildInputs = [ google-api-core google-cloud-core libcst proto-plus ];
+  propagatedBuildInputs = [
+    google-api-core
+    google-cloud-core
+    proto-plus
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ google-cloud-testutils mock pytestCheckHook pytest-asyncio ];
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
+
+  nativeCheckInputs = [
+    google-cloud-testutils
+    mock
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   preCheck = ''
     # directory shadows imports
     rm -r google
-    # requires credentials
-    rm tests/system/test_system.py
   '';
+
+  disabledTestPaths = [
+    # Requires credentials
+    "tests/system/test_aggregation_query.py"
+    "tests/system/test_allocate_reserve_ids.py"
+    "tests/system/test_query.py"
+    "tests/system/test_put.py"
+    "tests/system/test_read_consistency.py"
+    "tests/system/test_transaction.py"
+  ];
 
   pythonImportsCheck = [
     "google.cloud.datastore"
@@ -40,7 +69,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Google Cloud Datastore API client library";
     homepage = "https://github.com/googleapis/python-datastore";
+    changelog = "https://github.com/googleapis/python-datastore/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

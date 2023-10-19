@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper }:
+{ lib, stdenv, fetchzip, jre, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
-  version = "5.3";
+  version = "6.2";
 
   src = fetchzip {
     url = "https://www.languagetool.org/download/${pname}-${version}.zip";
-    sha256 = "1km20ajqb65vkhkrf94zy5srcss66ix8padp7ng59pa8pj11wmi2";
+    sha256 = "sha256-I0Blp3o+NVL0b/86UTztufwKVkgO9KNXtBuUrUnbWco=";
   };
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
@@ -28,8 +28,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests.languagetool = nixosTests.languagetool;
+
   meta = with lib; {
     homepage = "https://languagetool.org";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ edwtjo ];
     platforms = jre.meta.platforms;

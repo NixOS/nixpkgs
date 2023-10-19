@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, async-timeout
 , awesomeversion
 , buildPythonPackage
 , fetchFromGitHub
@@ -12,31 +11,44 @@
 
 buildPythonPackage rec {
   pname = "pyhaversion";
-  version = "21.5.0";
+  version = "23.1.0";
+  format = "setuptools";
 
-  # Only 3.8.0 and beyond are supported
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-/F4UMFUs60o3QazfFYEWgTGHg4z5knzNWolUpk5SIeM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-HMJqZn0yzN2dP5WTRCbem1Xw8nyH2Hy7oVP4kEKHHAo=";
   };
+
+  postPatch = ''
+    # Upstream doesn't set a version for the tagged releases
+    substituteInPlace setup.py \
+      --replace "main" ${version}
+  '';
 
   propagatedBuildInputs = [
     aiohttp
-    async-timeout
     awesomeversion
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "pyhaversion" ];
+  pythonImportsCheck = [
+    "pyhaversion"
+  ];
+
+  disabledTests = [
+    # Error fetching version information from HaVersionSource.SUPERVISOR Server disconnected
+    "test_stable_version"
+    "test_etag"
+  ];
 
   meta = with lib; {
     description = "Python module to the newest version number of Home Assistant";

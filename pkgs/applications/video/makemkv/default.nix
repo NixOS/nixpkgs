@@ -3,6 +3,7 @@
 , fetchurl
 , autoPatchelfHook
 , pkg-config
+, curl
 , ffmpeg
 , openssl
 , qtbase
@@ -13,22 +14,23 @@
 }:
 
 let
-  version = "1.16.3";
+  version = "1.17.5";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    hash = "sha256-G2XceMwiFu4fWT4L3HJzDB/rD3eSX6ko6RdVw72QLzg=";
+    sha256 = "ywCcMfaWAeL2bjFZJaCa0XW60EHyfFCW17Bt1QBN8E8=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    hash = "sha256-YUGozP9B6vmWQ4WxctSbezzu+0yLJXNKQk9TwnQF8F0=";
+    sha256 = "/C9LDcUxF6tJkn2aQV+nMILRpK5H3wxOMMxHEMTC/CI=";
   };
+
 in mkDerivation {
   pname = "makemkv";
   inherit version;
@@ -37,9 +39,15 @@ in mkDerivation {
 
   sourceRoot = "makemkv-oss-${version}";
 
+  patches = [ ./r13y.patch ];
+
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ autoPatchelfHook pkg-config ];
 
   buildInputs = [ ffmpeg openssl qtbase zlib ];
+
+  runtimeDependencies = [ (lib.getLib curl) ];
 
   qtWrapperArgs =
     let
@@ -51,9 +59,15 @@ in mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    install -Dm555 -t $out/bin           out/makemkv ../makemkv-bin-${version}/bin/amd64/makemkvcon
-    install -D     -t $out/lib           out/lib{driveio,makemkv,mmbd}.so.*
-    install -D     -t $out/share/MakeMKV ../makemkv-bin-${version}/src/share/*
+    install -Dm555 -t $out/bin                              out/makemkv out/mmccextr out/mmgplsrv ../makemkv-bin-${version}/bin/amd64/makemkvcon
+    install -D     -t $out/lib                              out/lib{driveio,makemkv,mmbd}.so.*
+    install -D     -t $out/share/MakeMKV                    ../makemkv-bin-${version}/src/share/*
+    install -Dm444 -t $out/share/applications               ../makemkv-oss-${version}/makemkvgui/share/makemkv.desktop
+    install -Dm444 -t $out/share/icons/hicolor/16x16/apps   ../makemkv-oss-${version}/makemkvgui/share/icons/16x16/*
+    install -Dm444 -t $out/share/icons/hicolor/32x32/apps   ../makemkv-oss-${version}/makemkvgui/share/icons/32x32/*
+    install -Dm444 -t $out/share/icons/hicolor/64x64/apps   ../makemkv-oss-${version}/makemkvgui/share/icons/64x64/*
+    install -Dm444 -t $out/share/icons/hicolor/128x128/apps ../makemkv-oss-${version}/makemkvgui/share/icons/128x128/*
+    install -Dm444 -t $out/share/icons/hicolor/256x256/apps ../makemkv-oss-${version}/makemkvgui/share/icons/256x256/*
 
     runHook postInstall
   '';
@@ -69,9 +83,10 @@ in mkDerivation {
       can always download the latest version from makemkv.com that will reset the
       expiration date.
     '';
-    license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = [ licenses.unfree licenses.lgpl21 ];
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ danieldk titanous ];
+    maintainers = with maintainers; [ titanous ];
   };
 }

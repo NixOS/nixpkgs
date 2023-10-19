@@ -1,10 +1,8 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome";
-  meta = with lib; {
-    maintainers = teams.gnome.members;
-  };
+  meta.maintainers = lib.teams.gnome.members;
 
-  machine =
+  nodes.machine =
     { ... }:
 
     { imports = [ ./common/user-account.nix ];
@@ -23,18 +21,25 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
       services.xserver.desktopManager.gnome.enable = true;
       services.xserver.desktopManager.gnome.debug = true;
 
-      environment.systemPackages = [
-        (pkgs.makeAutostartItem {
-          name = "org.gnome.Terminal";
-          package = pkgs.gnome.gnome-terminal;
-        })
-      ];
+      systemd.user.services = {
+        "org.gnome.Shell@wayland" = {
+          serviceConfig = {
+            ExecStart = [
+              # Clear the list before overriding it.
+              ""
+              # Eval API is now internal so Shell needs to run in unsafe mode.
+              # TODO: improve test driver so that it supports openqa-like manipulation
+              # that would allow us to drop this mess.
+              "${pkgs.gnome.gnome-shell}/bin/gnome-shell --unsafe-mode"
+            ];
+          };
+        };
+      };
 
-      virtualisation.memorySize = 1024;
     };
 
   testScript = { nodes, ... }: let
-    # Keep line widths somewhat managable
+    # Keep line widths somewhat manageable
     user = nodes.machine.config.users.users.alice;
     uid = toString user.uid;
     bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";
@@ -49,10 +54,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     # False when startup is done
     startingUp = su "${gdbus} ${eval} Main.layoutManager._startingUp";
 
-    # Start gnome-terminal
-    gnomeTerminalCommand = su "${bus} gnome-terminal";
+    # Start Console
+    launchConsole = su "${bus} gapplication launch org.gnome.Console";
 
-    # Hopefully gnome-terminal's wm class
+    # Hopefully Console's wm class
     wmClass = su "${gdbus} ${eval} global.display.focus_window.wm_class";
   in ''
       with subtest("Login to GNOME with GDM"):
@@ -71,10 +76,16 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
               "${startingUp} | grep -q 'true,..false'"
           )
 
-      with subtest("Open Gnome Terminal"):
-          # correct output should be (true, '"gnome-terminal-server"')
+      with subtest("Open Console"):
+          # Close the Activities view so that Shell can correctly track the focused window.
+          machine.send_key("esc")
+
+          machine.succeed(
+              "${launchConsole}"
+          )
+          # correct output should be (true, '"org.gnome.Console"')
           machine.wait_until_succeeds(
-              "${wmClass} | grep -q 'gnome-terminal-server'"
+              "${wmClass} | grep -q 'true,...org.gnome.Console'"
           )
           machine.sleep(20)
           machine.screenshot("screen")

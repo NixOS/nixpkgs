@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     description = "Displays a short text fullscreen in an X11 window";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.fpletz ];
+    mainProgram = "sm";
     platforms = lib.platforms.unix;
   };
 }

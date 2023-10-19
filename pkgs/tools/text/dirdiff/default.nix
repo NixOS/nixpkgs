@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.1";
 
   src = fetchurl {
-    url = "https://www.samba.org/ftp/paulus/${pname}-${version}.tar.gz";
+    url = "mirror://samba/paulus/${pname}-${version}.tar.gz";
     sha256 = "0lljd8av68j70733yshzzhxjr1lm0vgmbqsm8f02g03qsma3cdyb";
   };
 
@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
           --subst-var-by tk ${tk}
     done
   '';
+
+  env = {
+    NIX_CFLAGS_COMPILE = "-DUSE_INTERP_RESULT";
+    NIX_LDFLAGS = "-ltcl";
+  };
 
   # If we don't create the directories ourselves, then 'make install' creates
   # files named 'bin' and 'lib'.
@@ -41,7 +46,7 @@ stdenv.mkDerivation rec {
       desktopName = "Dirdiff";
       genericName = "Directory Diff Viewer";
       comment = "Diff and merge directory trees";
-      categories = "Development;";
+      categories = [ "Development" ];
     })
   ];
 
@@ -54,6 +59,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.samba.org/ftp/paulus/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ khumba ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

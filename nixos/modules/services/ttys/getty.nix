@@ -6,7 +6,7 @@ let
   cfg = config.services.getty;
 
   baseArgs = [
-    "--login-program" "${pkgs.shadow}/bin/login"
+    "--login-program" "${cfg.loginProgram}"
   ] ++ optionals (cfg.autologinUser != null) [
     "--autologin" cfg.autologinUser
   ] ++ optionals (cfg.loginOptions != null) [
@@ -24,6 +24,7 @@ in
 
   imports = [
     (mkRenamedOptionModule [ "services" "mingetty" ] [ "services" "getty" ])
+    (mkRemovedOptionModule [ "services" "getty" "serialSpeed" ] ''set non-standard baudrates with `boot.kernelParams` i.e. boot.kernelParams = ["console=ttyS2,1500000"];'')
   ];
 
   options = {
@@ -33,24 +34,31 @@ in
       autologinUser = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Username of the account that will be automatically logged in at the console.
           If unspecified, a login prompt is shown as usual.
+        '';
+      };
+
+      loginProgram = mkOption {
+        type = types.path;
+        default = "${pkgs.shadow}/bin/login";
+        defaultText = literalExpression ''"''${pkgs.shadow}/bin/login"'';
+        description = lib.mdDoc ''
+          Path to the login binary executed by agetty.
         '';
       };
 
       loginOptions = mkOption {
         type = types.nullOr types.str;
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           Template for arguments to be passed to
-          <citerefentry><refentrytitle>login</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry>.
+          {manpage}`login(1)`.
 
-          See <citerefentry><refentrytitle>agetty</refentrytitle>
-          <manvolnum>1</manvolnum></citerefentry> for details,
+          See {manpage}`agetty(1)` for details,
           including security considerations.  If unspecified, agetty
-          will not be invoked with a <option>--login-options</option>
+          will not be invoked with a {option}`--login-options`
           option.
         '';
         example = "-h darkstar -- \\u";
@@ -59,7 +67,7 @@ in
       extraArgs = mkOption {
         type = types.listOf types.str;
         default = [ ];
-        description = ''
+        description = lib.mdDoc ''
           Additional arguments passed to agetty.
         '';
         example = [ "--nohostname" ];
@@ -67,7 +75,7 @@ in
 
       greetingLine = mkOption {
         type = types.str;
-        description = ''
+        description = lib.mdDoc ''
           Welcome line printed by agetty.
           The default shows current NixOS version label, machine type and tty.
         '';
@@ -76,21 +84,10 @@ in
       helpLine = mkOption {
         type = types.lines;
         default = "";
-        description = ''
+        description = lib.mdDoc ''
           Help line printed by agetty below the welcome line.
           Used by the installation CD to give some hints on
           how to proceed.
-        '';
-      };
-
-      serialSpeed = mkOption {
-        type = types.listOf types.int;
-        default = [ 115200 57600 38400 9600 ];
-        example = [ 38400 9600 ];
-        description = ''
-            Bitrates to allow for agetty's listening on serial ports. Listing more
-            bitrates gives more interoperability but at the cost of long delays
-            for getting a sync on the line.
         '';
       };
 
@@ -105,6 +102,7 @@ in
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to NixOS ${config.system.nixos.label} (\m) - \l >>>'';
+    services.getty.helpLine = mkIf (config.documentation.nixos.enable && config.documentation.doc.enable) "\nRun 'nixos-help' for the NixOS manual.";
 
     systemd.services."getty@" =
       { serviceConfig.ExecStart = [
@@ -115,10 +113,17 @@ in
       };
 
     systemd.services."serial-getty@" =
-      let speeds = concatStringsSep "," (map toString config.services.getty.serialSpeed); in
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
-          (gettyCmd "%I ${speeds} $TERM")
+          (gettyCmd "%I --keep-baud $TERM")
+        ];
+        restartIfChanged = false;
+      };
+
+    systemd.services."autovt@" =
+      { serviceConfig.ExecStart = [
+          "" # override upstream default with an empty ExecStart
+          (gettyCmd "--noclear %I $TERM")
         ];
         restartIfChanged = false;
       };
@@ -141,7 +146,7 @@ in
         enable = mkDefault config.boot.isContainer;
       };
 
-    environment.etc.issue =
+    environment.etc.issue = mkDefault
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 

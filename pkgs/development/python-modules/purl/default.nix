@@ -1,4 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, six
 , pytestCheckHook
 }:
 
@@ -10,10 +13,20 @@ buildPythonPackage rec {
     owner = "codeinthehole";
     repo = "purl";
     rev = version;
-    sha256 = "sha256-Jb3JRW/PtQ7NlO4eQ9DmTPu/sjvFTg2mztphoIF79gc=";
+    hash = "sha256-Jb3JRW/PtQ7NlO4eQ9DmTPu/sjvFTg2mztphoIF79gc=";
   };
 
-  checkInputs = [ pytestCheckHook];
+  propagatedBuildInputs = [
+    six
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "purl"
+  ];
 
   meta = with lib; {
     description = "Immutable URL class for easy URL-building and manipulation";

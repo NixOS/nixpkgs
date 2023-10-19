@@ -1,14 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, twisted, whisper, txamqp, cachetools, urllib3
+{ lib, buildPythonPackage, fetchPypi, twisted, whisper, txamqp, cachetools, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "carbon";
-  version = "1.1.7";
+  version = "1.1.10";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08ndphpcbdx2ab4f5jsn2y4l5p55h9wscbg7clhbyyh03r5hianr";
+    hash = "sha256-wTtbqRHMWBcM2iFN95yzwCf/BQ+EK0vp5MXT4mKX3lw=";
   };
 
   # Carbon-s default installation is /opt/graphite. This env variable ensures

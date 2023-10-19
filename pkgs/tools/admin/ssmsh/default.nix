@@ -1,21 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, ssmsh }:
 
 buildGoModule rec {
   pname = "ssmsh";
-  version = "1.4.5";
+  version = "1.4.8";
 
   src = fetchFromGitHub {
     owner = "bwhaley";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WZ2glv/f4LwTK/G8QdaVRIAHvgGLPLPL8xjAg/kUokQ=";
+    sha256 = "sha256-GpN+yicgFIHOaMeJJcRn55f6fQbFX12vSV089/cMsqc=";
   };
 
-  vendorSha256 = "sha256-17fmdsfOrOaySPsXofLzz0+vmiemg9MbnWhRoZ67EuQ=";
+  vendorHash = "sha256-17fmdsfOrOaySPsXofLzz0+vmiemg9MbnWhRoZ67EuQ=";
 
   doCheck = true;
 
-  buildFlagsArray = [ "-ldflags=-w -s -X main.Version=${version}" ];
+  ldflags = [ "-w" "-s" "-X main.Version=${version}" ];
+
+  passthru.tests = testers.testVersion {
+    package = ssmsh;
+    command = "ssmsh -version";
+    version = "Version ${version}";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/bwhaley/ssmsh";

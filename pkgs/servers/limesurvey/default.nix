@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
-  version = "3.23.7+201006";
+  version = "6.1.2+230606";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
-    sha256 = "19p978p0flknsg3iqlrrbr76qsk5ha2a84nxywqsvjrjvqrh5jrc";
+    hash = "sha256-a89Kdr9XV1TSCoWxYrU0j8ec7rAcIlU/bgLtRjdzqbg=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -37,10 +37,5 @@ stdenv.mkDerivation rec {
     homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;
-    knownVulnerabilities = [
-      # https://github.com/LimeSurvey/LimeSurvey/blob/3.x-LTS/docs/release_notes.txt
-      "Unauthorized access to statistics of a survey with certain permission configurations"
-      "Persistent XSS in browse response"
-    ];
   };
 }

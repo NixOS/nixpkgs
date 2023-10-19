@@ -20,7 +20,9 @@ stdenv.mkDerivation {
 
   src = script;
 
-  phases = [ "buildPhase" ];
+  dontUnpack = true;
+  dontInstall = true;
+
   buildPhase = ''
     mkdir -p $out/bin
     < $src sed "s#{{MYPATH}}#$out/bin/sendmail#" > $out/bin/sendmail
@@ -33,5 +35,6 @@ stdenv.mkDerivation {
     '';
     platforms = platforms.unix;
     maintainers = with maintainers; [ ekleog ];
+    mainProgram = "sendmail";
   };
 }

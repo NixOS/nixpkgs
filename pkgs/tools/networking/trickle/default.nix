@@ -1,10 +1,11 @@
 { lib, stdenv, fetchurl, libevent, libtirpc }:
 
 stdenv.mkDerivation rec {
-  name = "trickle-1.07";
+  pname = "trickle";
+  version = "1.07";
 
   src = fetchurl {
-    url = "https://monkey.org/~marius/trickle/${name}.tar.gz";
+    url = "https://monkey.org/~marius/trickle/trickle-${version}.tar.gz";
     sha256 = "0s1qq3k5mpcs9i7ng0l9fvr1f75abpbzfi1jaf3zpzbs1dz50dlx";
   };
 
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = [ "-levent" "-ltirpc" ];
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
 
   configureFlags = [ "--with-libevent" ];
 

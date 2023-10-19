@@ -1,17 +1,18 @@
 { fetchurl, lib, stdenv }:
 
 let
-  version = "0.24.3";
+  version = "1.5.0";
+  # nixpkgs-update: no auto update
 
   suffix = {
-    x86_64-linux  = "x86_64";
+    x86_64-linux = "x86_64";
     aarch64-linux = "aarch64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
 
   dlbin = sha256: fetchurl {
-    url    = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
+    url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
     sha256 = sha256."${stdenv.hostPlatform.system}";
   };
 
@@ -22,15 +23,15 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
   src = dlbin {
-    x86_64-linux  = "sha256-i6NMVFoLm4hQJH7RnhfC0t+0DJCINoP5b/iCv9JyRdk=";
-    aarch64-linux = "0m7xs12g97z1ipzaf7dgknf3azlah0p6bdr9i454azvzg955238b";
+    x86_64-linux = "sha256-TzNPWcLDKOv12eJ9PHckdJ7tfdlozPoXj2fbdOzHfAk=";
+    aarch64-linux = "sha256-cHNMfcoHCBw+BnWx9USny8jyvH97gXCCJW1aKvPXgCs=";
   };
 
-  configurePhase = ":";
+  dontConfigure = true;
 
-  buildPhase     = ''
-    mv firecracker-* firecracker
-    mv jailer-*      jailer
+  buildPhase = ''
+    mv release-v${version}-${suffix}/firecracker-v${version}-${suffix} firecracker
+    mv release-v${version}-${suffix}/jailer-v${version}-${suffix} jailer
     chmod +x firecracker jailer
   '';
 
@@ -48,9 +49,11 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Secure, fast, minimal micro-container virtualization";
-    homepage    = "http://firecracker-microvm.io";
-    license     = licenses.asl20;
-    platforms   = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    homepage = "http://firecracker-microvm.io";
+    changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
+    mainProgram = "firecracker";
+    license = licenses.asl20;
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ thoughtpolice endocrimes ];
   };
 }

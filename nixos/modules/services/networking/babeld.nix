@@ -40,13 +40,13 @@ in
 
     services.babeld = {
 
-      enable = mkEnableOption "the babeld network routing daemon";
+      enable = mkEnableOption (lib.mdDoc "the babeld network routing daemon");
 
       interfaceDefaults = mkOption {
         default = null;
-        description = ''
+        description = lib.mdDoc ''
           A set describing default parameters for babeld interfaces.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
+          See {manpage}`babeld(8)` for options.
         '';
         type = types.nullOr (types.attrsOf types.unspecified);
         example =
@@ -58,9 +58,9 @@ in
 
       interfaces = mkOption {
         default = {};
-        description = ''
+        description = lib.mdDoc ''
           A set describing babeld interfaces.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for options.
+          See {manpage}`babeld(8)` for options.
         '';
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
@@ -75,9 +75,9 @@ in
       extraConfig = mkOption {
         default = "";
         type = types.lines;
-        description = ''
+        description = lib.mdDoc ''
           Options that will be copied to babeld.conf.
-          See <citerefentry><refentrytitle>babeld</refentrytitle><manvolnum>8</manvolnum></citerefentry> for details.
+          See {manpage}`babeld(8)` for details.
         '';
       };
     };
@@ -104,6 +104,7 @@ in
         ExecStart = "${pkgs.babeld}/bin/babeld -c ${configFile} -I /run/babeld/babeld.pid -S /var/lib/babeld/state";
         AmbientCapabilities = [ "CAP_NET_ADMIN" ];
         CapabilityBoundingSet = [ "CAP_NET_ADMIN" ];
+        DevicePolicy = "closed";
         DynamicUser = true;
         IPAddressAllow = [ "fe80::/64" "ff00::/8" "::1/128" "127.0.0.0/8" ];
         IPAddressDeny = "any";
@@ -123,12 +124,17 @@ in
         RemoveIPC = true;
         ProtectHome = true;
         ProtectHostname = true;
+        ProtectProc = "invisible";
         PrivateMounts = true;
         PrivateTmp = true;
         PrivateDevices = true;
         PrivateUsers = false; # kernel_route(ADD): Operation not permitted
+        ProcSubset = "pid";
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged @resources"
+        ];
         UMask = "0177";
         RuntimeDirectory = "babeld";
         StateDirectory = "babeld";

@@ -7,8 +7,8 @@ let
   cfg = config.boot.initrd.network;
 
   dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
-  doDhcp = config.networking.useDHCP || dhcpInterfaces != [];
-  dhcpIfShellExpr = if config.networking.useDHCP
+  doDhcp = cfg.udhcpc.enable || dhcpInterfaces != [];
+  dhcpIfShellExpr = if config.networking.useDHCP || cfg.udhcpc.enable
                       then "$(ls /sys/class/net/ | grep -v ^lo$)"
                       else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
 
@@ -50,46 +50,60 @@ in
     boot.initrd.network.enable = mkOption {
       type = types.bool;
       default = false;
-      description = ''
+      description = lib.mdDoc ''
         Add network connectivity support to initrd. The network may be
-        configured using the <literal>ip</literal> kernel parameter,
-        as described in <link
-        xlink:href="https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt">the
-        kernel documentation</link>.  Otherwise, if
-        <option>networking.useDHCP</option> is enabled, an IP address
+        configured using the `ip` kernel parameter,
+        as described in [the kernel documentation](https://www.kernel.org/doc/Documentation/filesystems/nfs/nfsroot.txt).
+        Otherwise, if
+        {option}`networking.useDHCP` is enabled, an IP address
         is acquired using DHCP.
 
         You should add the module(s) required for your network card to
         boot.initrd.availableKernelModules.
-        <literal>lspci -v | grep -iA8 'network\|ethernet'</literal>
+        `lspci -v | grep -iA8 'network\|ethernet'`
         will tell you which.
       '';
     };
 
     boot.initrd.network.flushBeforeStage2 = mkOption {
       type = types.bool;
-      default = true;
-      description = ''
+      default = !config.boot.initrd.systemd.enable;
+      defaultText = "!config.boot.initrd.systemd.enable";
+      description = lib.mdDoc ''
         Whether to clear the configuration of the interfaces that were set up in
         the initrd right before stage 2 takes over. Stage 2 will do the regular network
         configuration based on the NixOS networking options.
+
+        The default is false when systemd is enabled in initrd,
+        because the systemd-networkd documentation suggests it.
+      '';
+    };
+
+    boot.initrd.network.udhcpc.enable = mkOption {
+      default = config.networking.useDHCP;
+      defaultText = "networking.useDHCP";
+      type = types.bool;
+      description = lib.mdDoc ''
+        Enables the udhcpc service during stage 1 of the boot process. This
+        defaults to {option}`networking.useDHCP`. Therefore, this useful if
+        useDHCP is off but the initramfs should do dhcp.
       '';
     };
 
     boot.initrd.network.udhcpc.extraArgs = mkOption {
       default = [];
       type = types.listOf types.str;
-      description = ''
-        Additional command-line arguments passed verbatim to udhcpc if
-        <option>boot.initrd.network.enable</option> and <option>networking.useDHCP</option>
-        are enabled.
+      description = lib.mdDoc ''
+        Additional command-line arguments passed verbatim to
+        udhcpc if {option}`boot.initrd.network.enable` and
+        {option}`boot.initrd.network.udhcpc.enable` are enabled.
       '';
     };
 
     boot.initrd.network.postCommands = mkOption {
       default = "";
       type = types.lines;
-      description = ''
+      description = lib.mdDoc ''
         Shell commands to be executed after stage 1 of the
         boot has initialised the network.
       '';

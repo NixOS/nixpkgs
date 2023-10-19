@@ -14,7 +14,7 @@ in {
 
   options.services.tiddlywiki = {
 
-    enable = mkEnableOption "TiddlyWiki nodejs server";
+    enable = mkEnableOption (lib.mdDoc "TiddlyWiki nodejs server");
 
     listenOptions = mkOption {
       type = types.attrs;
@@ -24,9 +24,9 @@ in {
         readers="(authenticated)";
         port = 3456;
       };
-      description = ''
-        Parameters passed to <literal>--listen</literal> command.
-        Refer to <link xlink:href="https://tiddlywiki.com/#WebServer"/>
+      description = lib.mdDoc ''
+        Parameters passed to `--listen` command.
+        Refer to <https://tiddlywiki.com/#WebServer>
         for details on supported values.
       '';
     };

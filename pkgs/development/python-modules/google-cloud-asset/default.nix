@@ -1,45 +1,56 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, grpc_google_iam_v1
+, grpc-google-iam-v1
 , google-api-core
 , google-cloud-access-context-manager
 , google-cloud-org-policy
 , google-cloud-os-config
 , google-cloud-testutils
 , libcst
+, protobuf
 , proto-plus
-, pytest
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "2.2.0";
+  version = "3.19.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05q0yaw6b553qmzylr45zin17h8mvi8yyyxhbv3cxa7f0ahviw8w";
+    hash = "sha256-Rmd01HHVOThqSwfnoIrTaMjxqHFuGcKAjwKp3hD4S5o=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"google-cloud-org-policy >= 0.1.2, < 0.2.0dev"' '"google-cloud-org-policy >= 0.1.2, < 0.2.1"'
-  '';
-
   propagatedBuildInputs = [
-    grpc_google_iam_v1
+    grpc-google-iam-v1
     google-api-core
     google-cloud-access-context-manager
     google-cloud-org-policy
     google-cloud-os-config
     libcst
     proto-plus
-  ];
+    protobuf
+  ] ++ google-api-core.optional-dependencies.grpc;
 
-  checkInputs = [ google-cloud-testutils mock pytest-asyncio pytestCheckHook ];
+  passthru.optional-dependencies = {
+    libcst = [
+      libcst
+    ];
+  };
+
+  nativeCheckInputs = [
+    google-cloud-testutils
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.cloud.asset"
@@ -53,7 +64,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python Client for Google Cloud Asset API";
     homepage = "https://github.com/googleapis/python-asset";
+    changelog = "https://github.com/googleapis/python-asset/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

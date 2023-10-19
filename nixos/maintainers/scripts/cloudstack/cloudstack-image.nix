@@ -2,8 +2,6 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 {
   imports =
     [ ../../../modules/virtualisation/cloudstack-config.nix ];

@@ -1,21 +1,25 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, installShellFiles
+}:
 
 buildGoModule rec {
   pname = "packer";
-  version = "1.7.2";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "packer";
     rev = "v${version}";
-    sha256 = "sha256-Ey1gkld7WosJgoqnNp4Lz2x3PTI+w5p+A8Cwv4+uUZw=";
+    hash = "sha256-oGEG9uGjZTpJjQBnVlffFpNc5sb7HyD/ibpnQUhtTH4=";
   };
 
-  vendorSha256 = null;
+  vendorHash = "sha256-vHVx9vFPvctWNzibfZlN7mEYngYd6q7s9gMIM0FX0Ao=";
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [ "-ldflags=-s -w" ];
+  ldflags = [ "-s" "-w" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +31,7 @@ buildGoModule rec {
     description = "A tool for creating identical machine images for multiple platforms from a single source configuration";
     homepage    = "https://www.packer.io";
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ cstrahan zimbatm ma27 ];
-    platforms   = platforms.unix;
+    maintainers = with maintainers; [ zimbatm ma27 techknowlogick qjoly ];
+    changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
   };
 }

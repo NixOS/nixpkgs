@@ -1,20 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pytestCheckHook
 , zope_interface
+, zope_testrunner
 , sphinx
 }:
 
 buildPythonPackage rec {
   pname = "repoze.sphinx.autointerface";
-  version = "0.8";
+  version = "1.0.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ef0383276ab722efb1e4a6523726262058dfd82615ccf7e5004aee3fe8ecc23";
+    hash = "sha256-SGvxQjpGlrkVPkiM750ybElv/Bbd6xSwyYh7RsYOKKE=";
   };
 
-  propagatedBuildInputs = [ zope_interface sphinx ];
+  propagatedBuildInputs = [
+    zope_interface
+    sphinx
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    zope_testrunner
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/repoze/repoze.sphinx.autointerface";

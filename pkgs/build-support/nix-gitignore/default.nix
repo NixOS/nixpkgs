@@ -12,11 +12,6 @@ with builtins;
 let
   debug = a: trace a a;
   last = l: elemAt l ((length l) - 1);
-
-  throwIfOldNix = let required = "2.0"; in
-    if compareVersions nixVersion required == -1
-    then throw "nix (v${nixVersion} =< v${required}) is too old for nix-gitignore"
-    else true;
 in rec {
   # [["good/relative/source/file" true] ["bad.tmpfile" false]] -> root -> path
   filterPattern = patterns: root:
@@ -31,7 +26,6 @@ in rec {
 
   # string -> [[regex bool]]
   gitignoreToPatterns = gitignore:
-    assert throwIfOldNix;
     let
       # ignore -> bool
       isComment = i: (match "^(#.*|$)" i) != null;
@@ -41,6 +35,9 @@ in rec {
         let split = match "^(!?)(.*)" l;
         in [(elemAt split 1) (head split == "!")];
 
+      # regex -> regex
+      handleHashesBangs = replaceStrings ["\\#" "\\!"] ["#" "!"];
+
       # ignore -> regex
       substWildcards =
         let
@@ -48,7 +45,7 @@ in rec {
           escs = "\\*?";
           splitString =
             let recurse = str : [(substring 0 1 str)] ++
-                                 (if str == "" then [] else (recurse (substring 1 (stringLength(str)) str) ));
+                                 (lib.optionals (str != "") (recurse (substring 1 (stringLength(str)) str) ));
             in str : recurse str;
           chars = s: filter (c: c != "" && !isList c) (splitString s);
           escape = s: map (c: "\\" + c) (chars s);
@@ -69,7 +66,7 @@ in rec {
       handleSlashPrefix = l:
         let
           split = (match "^(/?)(.*)" l);
-          findSlash = l: if (match ".+/.+" l) != null then "" else l;
+          findSlash = l: lib.optionalString ((match ".+/.+" l) == null) l;
           hasSlash = mapAroundCharclass findSlash l != l;
         in
           (if (elemAt split 0) == "/" || hasSlash
@@ -86,7 +83,7 @@ in rec {
       mapPat = f: l: [(f (head l)) (last l)];
     in
       map (l: # `l' for "line"
-        mapPat (l: handleSlashSuffix (handleSlashPrefix (mapAroundCharclass substWildcards l)))
+        mapPat (l: handleSlashSuffix (handleSlashPrefix (handleHashesBangs (mapAroundCharclass substWildcards l))))
         (computeNegation l))
       (filter (l: !isList l && !isComment l)
       (split "\n" gitignore));

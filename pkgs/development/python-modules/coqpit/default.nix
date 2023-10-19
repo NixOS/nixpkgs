@@ -1,28 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "coqpit";
-  version = "0.0.6.6";
+  version = "0.0.17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0wb5wf84i5h4ycm732kn4316v7schhm91s2rrklfw9sny5dqmdnh";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FY3PYd8dY5HFKkhD6kBzPt0k1eFugdqsO3yIN4oDk3E=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "coqpit"
     "coqpit.coqpit"
+  ];
+
+  # https://github.com/coqui-ai/coqpit/issues/40
+  disabledTests = lib.optionals (pythonAtLeast "3.11")[
+    "test_init_argparse_list_and_nested"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.11")[
+    "tests/test_nested_configs.py"
   ];
 
   meta = with lib; {
@@ -32,6 +42,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/coqui-ai/coqpit";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa mic92 ];
+    maintainers = teams.tts.members;
   };
 }

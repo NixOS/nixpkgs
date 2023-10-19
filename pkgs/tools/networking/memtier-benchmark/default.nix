@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "memtier-benchmark";
-  version = "1.3.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner  = "redislabs";
     repo   = "memtier_benchmark";
     rev    = "refs/tags/${version}";
-    sha256 = "0m2qnnc71qpdj8w421bxn0zxz6ddvzy7b0n19jvyncnzvk1ff0sq";
+    sha256 = "sha256-3KFBj+Cj5qO5k1hy5oSvtXdtTZIbGPJ1fhmnIeCW2s8=";
   };
 
   patchPhase = ''

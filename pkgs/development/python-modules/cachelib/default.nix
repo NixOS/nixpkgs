@@ -1,13 +1,34 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytest-xprocess
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.1.1";
+  version = "0.10.2";
+  disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "47e95a67d68c729cbad63285a790a06f0e0d27d71624c6e44c1ec3456bb4476f";
+  src = fetchFromGitHub {
+    owner = "pallets";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-2V2FvZC8jM84fZEdK9ShzFrjO8goOQsN6cnJTHDDL9E=";
   };
+
+  nativeCheckInputs = [
+    pytest-xprocess
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # requires set up local server
+    "tests/test_dynamodb_cache.py"
+  ];
+
+  pythonImportsCheck = [ "cachelib" ];
 
   meta = with lib; {
     homepage = "https://github.com/pallets/cachelib";

@@ -3,20 +3,20 @@
 }:
 let
   pname = "josm";
-  version = "17833";
+  version = "18822";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      sha256 = "sha256-i3seRVfCLXNvUkWAAPZK0XloRHuXWCNp1tqnVr7CQ7Y=";
+      hash = "sha256-pzB12lkcWGJ7sVdcfJZC2MnUowfWdElxny0pSQ5vjlw=";
     };
     macosx = fetchurl {
-      url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java16.zip";
-      sha256 = "sha256-PM/wNXqtEwalhorWHqVHWsaiGv60SFrHXZrb1Mw/QqQ=";
+      url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java17.zip";
+      hash = "sha256-MFiWbEU8C6Jvq9wkIKANQeqJh2/yC3y40ANnGEl4IF0=";
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      sha256 = "sha256-IjCFngixh2+7SifrV3Ohi1BjIOP+QSWg/QjeqbbP7aw=";
+      sha256 = "sha256-/zdOaiyuvSwdVZcnw0ghDj2I+YKpFLc12fjZUMtRtVg=";
     };
   };
 in
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
     description = "An extensible editor for OpenStreetMap";
     homepage = "https://josm.openstreetmap.de/";
     changelog = "https://josm.openstreetmap.de/wiki/Changelog";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ rycee sikmir ];
     platforms = platforms.all;

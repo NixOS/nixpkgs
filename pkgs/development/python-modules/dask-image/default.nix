@@ -1,39 +1,53 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchPypi
 , dask
-, scipy
+, fetchPypi
+, numpy
 , pims
-, scikitimage
 , pytestCheckHook
+, pythonOlder
+, scikit-image
+, scipy
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
   pname = "dask-image";
+  version = "2023.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zzxrvbm52xn7azkn74pjinlk0jkpdcyl3r5vxxy5lmjnmzlrrpy";
+    hash = "sha256-XpqJhbBSehtZQsan50Tg5X0mTiIscFjwW664HDdNBLY=";
   };
 
-  propagatedBuildInputs = [ dask scipy pims ];
-
-  prePatch = ''
-    substituteInPlace setup.cfg --replace "--flake8" ""
-  '';
-
-  checkInputs = [
-    pytestCheckHook
-    scikitimage
+  propagatedBuildInputs = [
+    dask
+    numpy
+    scipy
+    pims
   ];
 
-  pythonImportsCheck = [ "dask_image" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    scikit-image
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--flake8" ""
+  '';
+
+  pythonImportsCheck = [
+    "dask_image"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/dask/dask-image";
     description = "Distributed image processing";
+    homepage = "https://github.com/dask/dask-image";
     license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

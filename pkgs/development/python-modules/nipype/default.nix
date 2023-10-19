@@ -1,14 +1,16 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy27
+, pythonOlder
+, pythonRelaxDepsHook
 # python dependencies
 , click
-, dateutil
+, python-dateutil
 , etelemetry
 , filelock
 , funcsigs
 , future
+, looseversion
 , mock
 , networkx
 , nibabel
@@ -19,16 +21,14 @@
 , pybids
 , pydot
 , pytest
-, pytest_xdist
+, pytest-xdist
 , pytest-forked
 , rdflib
 , scipy
 , simplejson
 , traits
 , xvfbwrapper
-, pytestcov
 , codecov
-, sphinx
 # other dependencies
 , which
 , bash
@@ -40,21 +40,15 @@
 , useNeurdflib ? false
 }:
 
-let
-
- # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
- neurdflib = callPackage ./neurdflib.nix { };
-
-in
-
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.6.0";
-  disabled = isPy27;
+  version = "1.8.6";
+  disabled = pythonOlder "3.7";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bc56ce63f74c9a9a23c6edeaf77631377e8ad2bea928c898cc89527a47f101cf";
+    hash = "sha256-l3sTFej3D5QWPsB+MeVXG+g/Kt1gIxQcWgascAEm+NE=";
   };
 
   postPatch = ''
@@ -63,16 +57,19 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    sphinx
+    pythonRelaxDepsHook
   ];
+
+  pythonRelaxDeps = [ "traits" ];
 
   propagatedBuildInputs = [
     click
-    dateutil
+    python-dateutil
     etelemetry
     filelock
     funcsigs
     future
+    looseversion
     networkx
     nibabel
     numpy
@@ -80,21 +77,21 @@ buildPythonPackage rec {
     prov
     psutil
     pydot
+    rdflib
     scipy
     simplejson
     traits
     xvfbwrapper
-  ] ++ [ (if useNeurdflib then neurdflib else rdflib) ];
+  ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pybids
     codecov
     glibcLocales
     mock
     pytest
     pytest-forked
-    pytest_xdist
-    pytestcov
+    pytest-xdist
     which
   ];
 
@@ -102,7 +99,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display'
+    LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display and not test_no_et_multiproc'
   '';
   pythonImportsCheck = [ "nipype" ];
 

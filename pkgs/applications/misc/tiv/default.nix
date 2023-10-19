@@ -1,21 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, imagemagick }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, imagemagick
+}:
 
 stdenv.mkDerivation rec {
   pname = "tiv";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "stefanhaustein";
     repo = "TerminalImageViewer";
     rev = "v${version}";
-    sha256 = "17zqbwj2imk6ygyc142mw6v4fh7h4rd5vzn5wxr9gs0g8qdc6ixn";
+    sha256 = "sha256-mCgybL4af19zqECN1pBV+WnxMq2ZtlK5GDTQO3u9CK0=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ imagemagick ];
 
   makeFlags = [ "prefix=$(out)" ];
 
   preConfigure = "cd src/main/cpp";
+
+  postFixup = ''
+    wrapProgram $out/bin/tiv \
+      --prefix PATH : ${lib.makeBinPath [ imagemagick ]}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/stefanhaustein/TerminalImageViewer";

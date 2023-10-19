@@ -18,28 +18,30 @@ let
     in
     lib.concatStrings (lib.mapAttrsToList toArg args);
 
-  isPathType = x: lib.strings.isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
+  isPathType = x: lib.types.path.check x;
 
 in
 {
   options.services.self-deploy = {
-    enable = lib.mkEnableOption "self-deploy";
+    enable = lib.mkEnableOption (lib.mdDoc "self-deploy");
 
     nixFile = lib.mkOption {
       type = lib.types.path;
 
       default = "/default.nix";
 
-      description = ''
+      description = lib.mdDoc ''
         Path to nix file in repository. Leading '/' refers to root of
         git repository.
       '';
     };
 
     nixAttribute = lib.mkOption {
-      type = lib.types.str;
+      type = with lib.types; nullOr str;
 
-      description = ''
+      default = null;
+
+      description = lib.mdDoc ''
         Attribute of `nixFile` that builds the current system.
       '';
     };
@@ -49,7 +51,7 @@ in
 
       default = { };
 
-      description = ''
+      description = lib.mdDoc ''
         Arguments to `nix-build` passed as `--argstr` or `--arg` depending on
         the type.
       '';
@@ -60,7 +62,7 @@ in
 
       default = "switch";
 
-      description = ''
+      description = lib.mdDoc ''
         The `switch-to-configuration` subcommand used.
       '';
     };
@@ -68,7 +70,7 @@ in
     repository = lib.mkOption {
       type = with lib.types; oneOf [ path str ];
 
-      description = ''
+      description = lib.mdDoc ''
         The repository to fetch from. Must be properly formatted for git.
 
         If this value is set to a path (must begin with `/`) then it's
@@ -86,7 +88,7 @@ in
 
       default = null;
 
-      description = ''
+      description = lib.mdDoc ''
         Path to SSH private key used to fetch private repositories over
         SSH.
       '';
@@ -97,7 +99,7 @@ in
 
       default = "master";
 
-      description = ''
+      description = lib.mdDoc ''
         Branch to track
 
         Technically speaking any ref can be specified here, as this is
@@ -111,7 +113,7 @@ in
 
       default = "hourly";
 
-      description = ''
+      description = lib.mdDoc ''
         The schedule on which to run the `self-deploy` service. Format
         specified by `systemd.time 7`.
 
@@ -123,21 +125,26 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.self-deploy = {
-      wantedBy = [ "multi-user.target" ];
+    systemd.services.self-deploy = rec {
+      inherit (cfg) startAt;
+
+      serviceConfig.Type = "oneshot";
 
       requires = lib.mkIf (!(isPathType cfg.repository)) [ "network-online.target" ];
 
-      environment.GIT_SSH_COMMAND = lib.mkIf (!(isNull cfg.sshKeyFile))
+      after = requires;
+
+      environment.GIT_SSH_COMMAND = lib.mkIf (cfg.sshKeyFile != null)
         "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 
       restartIfChanged = false;
 
       path = with pkgs; [
         git
+        gnutar
+        gzip
         nix
-        systemd
-      ];
+      ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 
       script = ''
         if [ ! -e ${repositoryDirectory} ]; then

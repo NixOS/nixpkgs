@@ -1,21 +1,37 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
+, ipykernel
+, ipython-genutils
 , ipywidgets
 , matplotlib
-, jupyter-packaging
+, numpy
+, pillow
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.7.0";
+  version = "0.9.3";
+  format = "wheel";
+
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "f0f1f356d8cb9d4fb51bb86dbbf837c190145316cb72f66081872ebc4d6db0a1";
+    inherit pname version format;
+    hash = "sha256-0RPNVYkbr+myfvmbbdERqHvra7KuVQxAQpInIQO+gBM=";
   };
 
-  propagatedBuildInputs = [ ipywidgets matplotlib jupyter-packaging ];
+  propagatedBuildInputs = [
+    ipykernel
+    ipython-genutils
+    ipywidgets
+    matplotlib
+    numpy
+    pillow
+    traitlets
+  ];
 
   # There are no unit tests in repository
   doCheck = false;
@@ -24,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Matplotlib Jupyter Extension";
     homepage = "https://github.com/matplotlib/jupyter-matplotlib";
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [ jluttine fabiangd ];
     license = licenses.bsd3;
   };
 }

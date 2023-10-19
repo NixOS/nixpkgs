@@ -1,3 +1,7 @@
+# This derivation should be redundant, now that regular smlnj works on Darwin,
+# and is preserved only for pre-existing direct usage. New use cases should
+# just use the regular smlnj derivation.
+
 { lib, stdenv, fetchurl, cpio, rsync, xar, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -40,5 +44,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.free;
     platforms   = lib.platforms.darwin;
     maintainers = [ lib.maintainers.jwiegley ];
+    mainProgram = "sml";
   };
 }

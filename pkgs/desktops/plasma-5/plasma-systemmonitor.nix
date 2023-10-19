@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kdoctools
 , qtquickcontrols2
@@ -11,11 +10,14 @@
 , kitemviews
 , knewstuff
 , libksysguard
+, kquickcharts
+, ksystemstats
+, qqc2-desktop-style
 , qtbase
 }:
 
 mkDerivation {
-  name = "plasma-systemmonitor";
+  pname = "plasma-systemmonitor";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     qtquickcontrols2
@@ -27,5 +29,8 @@ mkDerivation {
     knewstuff
     kiconthemes
     libksysguard
+    kquickcharts
+    ksystemstats
+    qqc2-desktop-style
   ];
 }

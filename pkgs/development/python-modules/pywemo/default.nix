@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
+, hypothesis
 , ifaddr
 , lxml
 , poetry-core
@@ -14,26 +14,21 @@
 
 buildPythonPackage rec {
   pname = "pywemo";
-  version = "0.6.4";
+  version = "1.3.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "1hm1vs6m65vqar0lcjnynz0d9y9ri5s75fzhvp0yfjkcnp06gnfa";
+    rev = "refs/tags/${version}";
+    hash = "sha256-+AdNT7ClT8JkYLkwk+IVNWgXGS04WNtENOtqmbjv7nQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/pywemo/pywemo/issues/264
-      url = "https://github.com/pywemo/pywemo/commit/4fd7af8ccc7cb2412f61d5e04b79f83c9ca4753c.patch";
-      sha256 = "1x0rm5dxr0z5llmv446bx3i1wvgcfhx22zn78qblcr0m4yv3mif4";
-    })
+  nativeBuildInputs = [
+    poetry-core
   ];
-
-  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     ifaddr
@@ -42,21 +37,22 @@ buildPythonPackage rec {
     lxml
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
+    hypothesis
     pytest-vcr
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/NixOS/nixpkgs/issues/124165
-    "test_bridge_getdevicestatus"
+  pythonImportsCheck = [
+    "pywemo"
   ];
-
-  pythonImportsCheck = [ "pywemo" ];
 
   meta = with lib; {
     description = "Python module to discover and control WeMo devices";
     homepage = "https://github.com/pywemo/pywemo";
+    changelog = "https://github.com/pywemo/pywemo/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

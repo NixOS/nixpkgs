@@ -1,20 +1,34 @@
-{ lib, fetchurl, mkDerivation, cmake, pkg-config, qtbase, qtkeychain, sqlite, libsecret }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, mkDerivation
+, pkg-config
+, cmake
+, extra-cmake-modules
+, callPackage
+, qtbase
+, qtkeychain
+, wrapQtAppsHook
+, qttools
+, sqlite
+, libsecret
+}:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "owncloud-client";
-  version = "2.6.3.14058";
+  version = "4.2.0";
 
-  src = fetchurl {
-    url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
-    sha256 = "1xcklhvbyg34clm9as2rjnjfwxpwq77lmdxj6qc0w7q43viqvlz3";
+  libregraph = callPackage ./libre-graph-api-cpp-qt-client.nix { };
+
+  src = fetchFromGitHub {
+    owner = "owncloud";
+    repo = "client";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dPNVp5DxCI4ye8eFjHoLGDlf8Ap682o1UB0k2VNr2rs=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ qtbase qtkeychain sqlite ];
-
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
-  ];
+  nativeBuildInputs = [ pkg-config cmake extra-cmake-modules wrapQtAppsHook qttools ];
+  buildInputs = [ qtbase qtkeychain sqlite libsecret libregraph ];
 
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"
@@ -24,8 +38,10 @@ mkDerivation rec {
   meta = with lib; {
     description = "Synchronise your ownCloud with your computer using this desktop client";
     homepage = "https://owncloud.org";
-    maintainers = [ maintainers.qknight ];
+    maintainers = with maintainers; [ qknight hellwolf ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
     license = licenses.gpl2Plus;
+    changelog = "https://github.com/owncloud/client/releases/tag/v${version}";
   };
 }

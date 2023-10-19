@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl
 , enableStatic ? stdenv.hostPlatform.isStatic
+, writeScript
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -8,17 +9,20 @@
 # files.
 
 stdenv.mkDerivation rec {
-  name = "xz-5.2.5";
+  pname = "xz";
+  version = "5.4.4";
 
   src = fetchurl {
-    url = "https://tukaani.org/xz/${name}.tar.bz2";
-    sha256 = "1ps2i8i212n0f4xpq6clp7h13q7m1y8slqvxha9i8d0bj0qgj5si";
+    url = "https://tukaani.org/xz/xz-${version}.tar.bz2";
+    sha256 = "sha256-C2/N4aw46QQzolVvUAwGWVC5vNLWAgBu/DNHgr3+YpY=";
   };
 
+  strictDeps = true;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   configureFlags = lib.optional enableStatic "--disable-shared";
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   preCheck = ''
@@ -30,6 +34,22 @@ stdenv.mkDerivation rec {
   preConfigure = "CONFIG_SHELL=/bin/sh";
 
   postInstall = "rm -rf $out/share/doc";
+
+  passthru = {
+    updateScript = writeScript "update-xz" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '>xz-5.2.6.tar.bz2</a>'
+      # We pick first match where a stable release goes first.
+      new_version="$(curl -s https://tukaani.org/xz/ |
+          pcregrep -o1 '>xz-([0-9.]+)[.]tar[.]bz2</a>' |
+          head -n1)"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
 
   meta = with lib; {
     homepage = "https://tukaani.org/xz/";

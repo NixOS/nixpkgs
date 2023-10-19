@@ -22,6 +22,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/taviso/dbusmap";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cstrahan ];
+    maintainers = with maintainers; [ ];
   };
 }

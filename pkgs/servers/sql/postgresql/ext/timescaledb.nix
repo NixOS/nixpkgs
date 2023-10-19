@@ -1,26 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5 }:
-
-# # To enable on NixOS:
-# config.services.postgresql = {
-#   extraPlugins = [ pkgs.timescaledb ];
-#   extraConfig = "shared_preload_libraries = 'timescaledb'";
-# }
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, enableUnfree ? true }:
 
 stdenv.mkDerivation rec {
-  pname = "timescaledb";
-  version = "2.3.0";
+  pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
+  version = "2.12.1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl libkrb5 ];
 
   src = fetchFromGitHub {
-    owner  = "timescale";
-    repo   = "timescaledb";
-    rev    = "refs/tags/${version}";
-    sha256 = "03k6skl3191i5jby710xr1caq85cvzbjqmqv59mfkfbvihn2zfx2";
+    owner = "timescale";
+    repo = "timescaledb";
+    rev = version;
+    hash = "sha256-vl9DTbmRMs+2kpcCm7hY9Xd356bo2TlMzH4zWc6r8mQ=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" ]
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+    ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
     ++ lib.optionals stdenv.isDarwin [ "-DLINTER=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
@@ -39,10 +34,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
-    homepage    = "https://www.timescale.com/";
-    changelog   = "https://github.com/timescale/timescaledb/raw/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ volth marsam ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.asl20;
+    homepage = "https://www.timescale.com/";
+    changelog = "https://github.com/timescale/timescaledb/blob/${version}/CHANGELOG.md";
+    maintainers = with maintainers; [ marsam ];
+    platforms = postgresql.meta.platforms;
+    license = with licenses; if enableUnfree then tsl else asl20;
+    broken = versionOlder postgresql.version "12";
   };
 }

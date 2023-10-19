@@ -1,5 +1,6 @@
 { lib
 , aiofiles
+, async-timeout
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
@@ -7,6 +8,7 @@
 , libusb1
 , mock
 , pyasn1
+, pythonAtLeast
 , pycryptodome
 , pytestCheckHook
 , rsa
@@ -14,33 +16,43 @@
 
 buildPythonPackage rec {
   pname = "adb-shell";
-  version = "0.3.3";
+  version = "0.4.4";
+  format = "setuptools";
 
   disabled = !isPy3k;
 
-  # pypi does not contain tests, using github sources instead
   src = fetchFromGitHub {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
-    sha256 = "sha256-QVSPQk/QNnIjTgKGuIg0e58qCH91wn7e4TwgWSmOJEk=";
+    hash = "sha256-pOkFUh3SEu/ch9R1lVoQn50nufQp8oI+D4/+Ybal5CA=";
   };
 
   propagatedBuildInputs = [
-    aiofiles
     cryptography
-    libusb1
     pyasn1
     rsa
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    async = [
+      aiofiles
+      async-timeout
+    ];
+    usb = [
+      libusb1
+    ];
+  };
+
+  nativeCheckInputs = [
     mock
     pycryptodome
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
-  pythonImportsCheck = [ "adb_shell" ];
+  pythonImportsCheck = [
+    "adb_shell"
+  ];
 
   meta = with lib; {
     description = "Python implementation of ADB with shell and FileSync functionality";

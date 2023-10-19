@@ -1,54 +1,109 @@
-{ lib, stdenv, fetchurl, pkg-config
+{ stdenv
+, lib
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, fetchFromGitLab
 , python3
-, perl
-, perlPackages
+, vala
+, glib
 , gtk3
-, intltool
 , libpeas
-, libsoup
+, libsoup_3
+, libxml2
+, libsecret
+, libnotify
+, libdmapsharing
 , gnome
+, gobject-introspection
 , totem-pl-parser
+, libgudev
+, libgpod
+, libmtp
+, lirc
+, brasero
+, grilo
 , tdb
 , json-glib
 , itstool
 , wrapGAppsHook
+, desktop-file-utils
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
+, check
 }:
-let
+
+stdenv.mkDerivation rec {
   pname = "rhythmbox";
-  version = "3.4.4";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.4.7";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "142xcvw4l19jyr5i72nbnrihs953pvrrzcbijjn9dxmxszbv03pf";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "L21WwT/BpkxTT1AHiPtIKTbOVHs0PtkMZ94fK84M+n4=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    intltool perl perlPackages.XMLParser
+    meson
+    ninja
+    vala
+    glib
     itstool
     wrapGAppsHook
+    desktop-file-utils
+    gobject-introspection
   ];
 
   buildInputs = [
     python3
-    libsoup
+    libsoup_3
+    libxml2
     tdb
     json-glib
 
+    glib
     gtk3
     libpeas
     totem-pl-parser
-    gnome.adwaita-icon-theme
+    libgudev
+    libgpod
+    libmtp
+    lirc
+    brasero
+    grilo
+
+    python3.pkgs.pygobject3
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+
+    libdmapsharing # for daap support
+    libsecret
+    libnotify
   ] ++ gst_plugins;
 
-  enableParallelBuilding = true;
+  nativeCheckInputs = [
+    check
+  ];
+
+  mesonFlags = [
+    "-Ddaap=enabled"
+    "-Dtests=disabled"
+  ];
+
+  # Requires DISPLAY
+  doCheck = false;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PYTHONPATH : "${python3.pkgs.pygobject3}/${python3.sitePackages}:$out/lib/rhythmbox/plugins/"
+    )
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -60,7 +115,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
     description = "A music playing application for GNOME";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];
   };

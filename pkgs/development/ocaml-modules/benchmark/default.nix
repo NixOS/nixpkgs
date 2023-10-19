@@ -1,24 +1,17 @@
-{ stdenv, lib, fetchzip, ocaml, findlib, ocamlbuild, ocaml_pcre }:
+{ lib, fetchurl, buildDunePackage }:
 
-let version = "1.4"; in
+buildDunePackage rec {
+  pname = "benchmark";
+  version = "1.6";
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-benchmark-${version}";
-
-  src = fetchzip {
-    url = "https://github.com/Chris00/ocaml-benchmark/releases/download/${version}/benchmark-${version}.tar.gz";
-    sha256 = "16wi8ld7c3mq77ylpgbnj8qqqqimyzwxs47v06vyrwpma5pab5xa";
+  src = fetchurl {
+    url = "https://github.com/Chris00/ocaml-benchmark/releases/download/${version}/benchmark-${version}.tbz";
+    hash = "sha256-Mw19cYya/MEy52PVRYE/B6TnqCWw5tEz9CUrUfKAnPA=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_pcre ];
-
-  createFindlibDestdir = true;
-
   meta = {
-    homepage = "http://ocaml-benchmark.forge.ocamlcore.org/";
-    platforms = ocaml.meta.platforms or [];
+    homepage = "https://github.com/Chris00/ocaml-benchmark";
     description = "Benchmark running times of code";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
   };
 }

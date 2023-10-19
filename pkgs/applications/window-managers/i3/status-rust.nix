@@ -8,29 +8,32 @@
 , notmuch
 , openssl
 , ethtool
+, lm_sensors
+, iw
+, iproute2
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
-  version = "0.20.1";
+  version = "0.32.2";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "00gzm3g297s9bfp13vnb623p7dfac3g6cdhz2b3lc6l0kmnnqs1s";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CKL4XsOBo8y4k06t5E7k2HBmI4VABW4rxU6Bjl52fhs=";
   };
 
-  cargoSha256 = "1dpklyv1b9h4n4k3ar5qbzivds8r4mml76986ic8zj71fy5fxn08";
+  cargoHash = "sha256-7v5813veJPP5NVe2gFZr+iXJmK+aLajSZuhEkgsMxuY=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  buildInputs = [ dbus libpulseaudio notmuch openssl ];
+  buildInputs = [ dbus libpulseaudio notmuch openssl lm_sensors ];
 
-  cargoBuildFlags = [
-    "--features=notmuch"
-    "--features=maildir"
-    "--features=pulseaudio"
+  buildFeatures = [
+    "notmuch"
+    "maildir"
+    "pulseaudio"
   ];
 
   prePatch = ''
@@ -40,11 +43,11 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/share
-    cp -R files/* $out/share
+    cp -R examples files/* $out/share
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/i3status-rs --prefix PATH : "${ethtool}/bin"
+    wrapProgram $out/bin/i3status-rs --prefix PATH : ${lib.makeBinPath [ iproute2 ethtool iw ]}
   '';
 
   # Currently no tests are implemented, so we avoid building the package twice
@@ -53,8 +56,9 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ backuitist globin ma27 ];
+    license = licenses.gpl3Only;
+    mainProgram = "i3status-rs";
+    maintainers = with maintainers; [ backuitist globin ];
     platforms = platforms.linux;
   };
 }

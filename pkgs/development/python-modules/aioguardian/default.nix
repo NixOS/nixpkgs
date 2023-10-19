@@ -2,59 +2,81 @@
 , aiohttp
 , async-timeout
 , asyncio-dgram
-, asynctest
 , buildPythonPackage
+, docutils
 , fetchFromGitHub
-, poetry
+, fetchpatch
+, poetry-core
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
-, pythonAtLeast
+, pythonOlder
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "aioguardian";
-  version = "1.0.7";
-  disabled = pythonAtLeast "3.9";
+  version = "2023.08.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-KMhq86hcqoYloS/6VHsl+3KVEZBbN97ABrZlmEr32Z8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-/UNSAfAkOXPJQDWBZIe/AYIhx83kPCjGzZjn4oh+gfY=";
   };
 
-  format = "pyproject";
+  patches = [
+    # This patch removes references to setuptools and wheel that are no longer
+    # necessary and changes poetry to poetry-core, so that we don't need to add
+    # unnecessary nativeBuildInputs.
+    #
+    #   https://github.com/bachya/aioguardian/pull/288
+    #
+    (fetchpatch {
+      name = "clean-up-build-dependencies.patch";
+      url = "https://github.com/bachya/aioguardian/commit/ffaad4b396645f599815010995fb71ca976e761e.patch";
+      hash = "sha256-RLRbHmaR2A8MNc96WHx0L8ccyygoBUaOulAuRJkFuUM=";
+    })
+  ];
 
-  nativeBuildInputs = [ poetry ];
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     aiohttp
     async-timeout
     asyncio-dgram
+    docutils
     voluptuous
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     asyncio-dgram
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook
   ];
 
-  # Ignore the examples as they are prefixed with test_
-  pytestFlagsArray = [ "--ignore examples/" ];
-  pythonImportsCheck = [ "aioguardian" ];
+  disabledTestPaths = [
+    "examples/"
+  ];
+
+  pythonImportsCheck = [
+    "aioguardian"
+  ];
 
   meta = with lib; {
     description = " Python library to interact with Elexa Guardian devices";
     longDescription = ''
-      aioguardian is a Pytho3, asyncio-focused library for interacting with the
+      aioguardian is an asyncio-focused library for interacting with the
       Guardian line of water valves and sensors from Elexa.
     '';
     homepage = "https://github.com/bachya/aioguardian";
+    changelog = "https://github.com/bachya/aioguardian/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

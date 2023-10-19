@@ -7,14 +7,19 @@
 , pluggy
 , pytestCheckHook
 , pytest-xdist
+, pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "plugincode";
-  version = "21.1.21";
+  version = "32.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "97b5a2c96f0365c80240be103ecd86411c68b11a16f137913cbea9129c54907a";
+    hash = "sha256-QTLZOxdVJxxuImydouIET/YuvLhztelY1mqN3enzRfo=";
   };
 
   dontConfigure = true;
@@ -29,7 +34,7 @@ buildPythonPackage rec {
     pluggy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];
@@ -38,10 +43,16 @@ buildPythonPackage rec {
     "plugincode"
   ];
 
+  disabledTests = [
+    # We don't want black as an input
+    "test_skeleton_codestyle"
+  ];
+
   meta = with lib; {
-    description = "A library that provides plugin functionality for ScanCode toolkit";
+    description = "Library that provides plugin functionality for ScanCode toolkit";
     homepage = "https://github.com/nexB/plugincode";
+    changelog = "https://github.com/nexB/plugincode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

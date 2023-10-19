@@ -3,11 +3,11 @@
 , withContrib ? true }:
 
 let
-  versionPkg = "0.4.1" ;
+  versionPkg = "0.4.2";
 
   contrib = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-contrib-${versionPkg}.tgz";
-    sha256 = "184m4hz2xszhcfc6w9fw9qibhmcvgjmikwfwkb345xypr59jm93d";
+    hash = "sha256-m0hfBLsaNiLaIktcioK+ZtWUsWht3IDSJ6CzgJmS06c=";
   };
 
   postInstallContrib = lib.optionalString withContrib
@@ -31,10 +31,23 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/ats2-lang/ATS2-Postiats-gmp-${version}.tgz";
-    sha256 = "0c4nqp6yzmpj0mcpg7ibmwyqi8hjw3sza8myvy4nzq3fa6wldy5l";
+    hash = "sha256-UWgDjFojPBYgykrCrJyYvVWY+Gc5d4aRGjTWjc528AM=";
   };
 
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    sed -i 's/gcc/clang/g' utils/*/DATS/atscc_util.dats
+  '';
+
   buildInputs = [ gmp ];
+
+  # Disable parallel build, errors:
+  #  *** No rule to make target 'patscc.dats', needed by 'patscc_dats.c'.  Stop.
+  enableParallelBuilding = false;
+
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CCOMP=${stdenv.cc.targetPrefix}cc"
+  ];
 
   setupHook = with lib;
     let
@@ -51,7 +64,7 @@ stdenv.mkDerivation rec {
     description = "Functional programming language with dependent types";
     homepage    = "http://www.ats-lang.org";
     license     = licenses.gpl3Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ttuegel bbarker ];
   };
 }

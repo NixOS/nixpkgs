@@ -1,34 +1,36 @@
 { lib
 , python3
+, fetchPypi
 , enableTelemetry ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.23.0";
+  version = "1.90.0";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "0j0q6p08c3l9z0yc2cggw797k47cjh6ljpchiqgg0fh6mk32215f";
+    hash = "sha256-JXUfc37O6cTTOCTTtWE05m+GR4iDyBsmRPyXoTRxFmo=";
   };
-
-  # Tests are not included in the PyPI package
-  doCheck = false;
 
   propagatedBuildInputs = with python3.pkgs; [
     aws-lambda-builders
     aws-sam-translator
+    boto3
+    cfn-lint
     chevron
-    click
     cookiecutter
     dateparser
-    python-dateutil
     docker
     flask
-    jmespath
-    requests
+    pyopenssl
+    pyyaml
+    rich
+    ruamel-yaml
     serverlessrepo
     tomlkit
+    typing-extensions
+    tzlocal
     watchdog
   ];
 
@@ -37,18 +39,28 @@ python3.pkgs.buildPythonApplication rec {
     wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
   '';
 
-  # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
-      --replace "dateparser~=0.7" "dateparser>=0.7" \
-      --replace "docker~=4.2.0" "docker>=4.2.0" \
-      --replace "requests==2.23.0" "requests~=2.24" \
-      --replace "watchdog==0.10.3" "watchdog"
+      --replace 'PyYAML>=' 'PyYAML>=5.4.1 #' \
+      --replace "aws_lambda_builders==" "aws_lambda_builders>=" \
+      --replace 'aws-sam-translator==1.70.0' 'aws-sam-translator>=1.60.1' \
+      --replace 'boto3>=' 'boto3>=1.26.79 #' \
+      --replace 'cfn-lint~=0.77.9' 'cfn-lint~=0.73.2' \
+      --replace "cookiecutter~=" "cookiecutter>=" \
+      --replace 'docker~=6.1.0' 'docker~=6.0.1' \
+      --replace 'ruamel_yaml~=0.17.32' 'ruamel_yaml~=0.17.21' \
+      --replace 'tomlkit==0.11.8' 'tomlkit>=0.11.8' \
+      --replace 'typing_extensions~=4.4.0' 'typing_extensions~=4.4' \
+      --replace 'tzlocal==3.0' 'tzlocal>=3.0' \
+      --replace 'watchdog==' 'watchdog>=2.1.2 #'
   '';
 
+  doCheck = false;
+
   meta = with lib; {
-    homepage = "https://github.com/awslabs/aws-sam-cli";
     description = "CLI tool for local development and testing of Serverless applications";
+    homepage = "https://github.com/awslabs/aws-sam-cli";
+    changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ lo1tuma ];
   };

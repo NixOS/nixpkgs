@@ -1,30 +1,30 @@
 { lib, fetchurl, buildDunePackage
-, checkseum, bigarray-compat, optint, cmdliner
-, bigstringaf, alcotest, camlzip, base64, ctypes, fmt
+, checkseum, optint, cmdliner
+, bigstringaf, alcotest, camlzip, base64, ctypes, fmt, crowbar, rresult
+, astring, bos
 }:
 
 buildDunePackage rec {
-  version = "1.4.0";
   pname = "decompress";
+  version = "1.5.3";
 
-  minimumOCamlVersion = "4.07";
-
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-v${version}.tbz";
-    sha256 = "d1669e07446d73dd5e16f020d4a1682abcbb1b7a1e3bf19b805429636c26a19b";
+    url = "https://github.com/mirage/decompress/releases/download/v${version}/decompress-${version}.tbz";
+    hash = "sha256-+R5peL7/P8thRA0y98mcmfHoZUtPsYQIdB02A1NzrGA=";
   };
 
   buildInputs = [ cmdliner ];
-  propagatedBuildInputs = [ optint bigarray-compat checkseum ];
-  checkInputs = [ alcotest bigstringaf ctypes fmt camlzip base64 ];
+  propagatedBuildInputs = [ optint checkseum ];
+  checkInputs = [ alcotest astring bigstringaf bos ctypes fmt camlzip base64 crowbar rresult ];
   doCheck = true;
 
   meta = {
     description = "Pure OCaml implementation of Zlib";
+    homepage = "https://github.com/mirage/decompress";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    homepage = "https://github.com/mirage/decompress";
+    mainProgram = "decompress.pipe";
   };
 }

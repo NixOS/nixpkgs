@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "betterdiscordctl";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "bb010g";
     repo = "betterdiscordctl";
     rev = "v${version}";
-    sha256 = "1wys3wbcz5hq8275ia2887kr5fzz4b3gkcp56667j9k0p3k3zfac";
+    sha256 = "0p321rfcihz2779sdd6qfgpxgk5yd53d33vq5pvb50dbdgxww0bc";
   };
 
   postPatch = ''
@@ -26,10 +26,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/betterdiscordctl --version
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/bb010g/betterdiscordctl";
     description = "A utility for managing BetterDiscord on Linux";
     license = licenses.mit;
+    mainProgram = "betterdiscordctl";
     maintainers = with maintainers; [ ivar bb010g ];
     platforms = platforms.linux;
   };

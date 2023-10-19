@@ -8,21 +8,21 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-wsgi";
-  version = "0.8.2";
+  version = "0.10.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "etianen";
     repo = pname;
-    rev = version;
-    sha256 = "0wirn3xqxxgkpy5spicd7p1bkdnsrch61x2kcpdwpixmx961pq7x";
+    rev = "v${version}";
+    hash = "sha256-3Q00FidZWV1KueuHyHKQf1PsDJGOaRW6v/kBy7lzD4Q=";
   };
 
   propagatedBuildInputs = [
     aiohttp
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

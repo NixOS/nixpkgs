@@ -1,41 +1,61 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
-, cmake
 , llvmPackages
-, pkg-config
+, libffi
+, libxml2
+, CoreFoundation
+, SystemConfiguration
+, Security
+, withLLVM ? !stdenv.isDarwin
+, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "1.0.2";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
-    rev = version;
-    sha256 = "0ciia8hhkkyh6rmrxgbk3bgwjwzkcba6645wlcm0vlgk2w4i5m3z";
-    fetchSubmodules = true;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-GROw9TYKC53ECJUeYhCez8f2jImPla/lGgsP91tTGjQ=";
   };
 
-  cargoSha256 = "140bzxhsyfif99x5a1m1d45ppb6jzvy9m4xil7z1wg2pnq9k7zz8";
+  cargoHash = "sha256-JE7FDF4MWhqJbL7ZP+yzfV7/Z79x0NuQLYNwWwMjAao=";
 
-  nativeBuildInputs = [ cmake pkg-config ];
-
-  cargoBuildFlags = [
-    # cranelift+jit works everywhere, see:
-    # https://github.com/wasmerio/wasmer/blob/master/Makefile#L22
-    "--features" "cranelift,jit"
-    # must target manifest and desired output bin, otherwise output is empty
-    "--manifest-path" "lib/cli/Cargo.toml"
-    "--bin" "wasmer"
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
   ];
 
-  cargoTestFlags = [
-    "--features" "test-cranelift,test-jit"
+  buildInputs = lib.optionals withLLVM [
+    llvmPackages.llvm
+    libffi
+    libxml2
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    SystemConfiguration
+    Security
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  # check references to `compiler_features` in Makefile on update
+  buildFeatures = [
+    "cranelift"
+    "wasmer-artifact-create"
+    "static-artifact-create"
+    "wasmer-artifact-load"
+    "static-artifact-load"
+  ]
+  ++ lib.optional withLLVM "llvm"
+  ++ lib.optional withSinglepass "singlepass";
+
+  cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
+
+  env.LLVM_SYS_140_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+
+  # Tests are failing due to `Cannot allocate memory` and other reasons
+  doCheck = false;
 
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";
@@ -47,6 +67,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://wasmer.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne ];
+    maintainers = with maintainers; [ Br1ght0ne shamilton ];
   };
 }

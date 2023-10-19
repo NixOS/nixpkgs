@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchurl
 , cython
 , enum34
 , gfortran
@@ -16,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "scikits.odes";
-  version = "2.6.1";
+  version = "2.7.0";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0kbf2n16h9s35x6pavlx6sff0pqr68i0x0609z92a4vadni32n6b";
+    hash = "sha256-px4Z4UhYk3VK6MBQZoIy/MaU8XuDYC51++v3v5+XXh4=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +36,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPy3k) [ enum34 ];
 
   doCheck = true;
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   checkPhase = ''
     cd $out/${python.sitePackages}/scikits/odes/tests

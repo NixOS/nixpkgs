@@ -1,57 +1,84 @@
 { lib
+, anyio
 , buildPythonPackage
-, pythonOlder
+, certifi
 , fetchFromGitHub
 , h11
 , h2
 , pproxy
 , pytest-asyncio
+, pytest-httpbin
 , pytest-trio
 , pytestCheckHook
-, pytestcov
+, pythonOlder
 , sniffio
-, trustme
-, uvicorn
+, socksio
+# for passthru.tests
+, httpx
+, httpx-socks
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.13.0";
-  disabled = pythonOlder "3.6";
+  version = "0.17.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-KvqBVQUaF3p2oJz0tt3Bkn2JiKEHqrZ3b6I9f0JK5h8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qAoORhzBbjXxgtzTqbAxWBxrohzfwDWm5mxxrgeXt48=";
   };
 
   propagatedBuildInputs = [
+    anyio
+    certifi
     h11
-    h2
     sniffio
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    http2 = [
+      h2
+    ];
+    socks = [
+      socksio
+    ];
+  };
+
+  nativeCheckInputs = [
     pproxy
     pytest-asyncio
+    pytest-httpbin
     pytest-trio
     pytestCheckHook
-    pytestcov
-    trustme
-    uvicorn
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.socks;
+
+  pythonImportsCheck = [
+    "httpcore"
   ];
 
-  disabledTestPaths = [
-    # these tests fail during dns lookups: httpcore.ConnectError: [Errno -2] Name or service not known
-    "tests/test_threadsafety.py"
-    "tests/sync_tests/test_interfaces.py"
-    "tests/sync_tests/test_retries.py"
+  preCheck = ''
+    # remove upstreams pytest flags which cause:
+    # httpcore.ConnectError: TLS/SSL connection has been closed (EOF) (_ssl.c:997)
+    rm setup.cfg
+  '';
+
+  pytestFlagsArray = [
+    "--asyncio-mode=strict"
   ];
 
-  pythonImportsCheck = [ "httpcore" ];
+  __darwinAllowLocalNetworking = true;
+
+  passthru.tests = {
+    inherit httpx httpx-socks;
+  };
 
   meta = with lib; {
+    changelog = "https://github.com/encode/httpcore/releases/tag/${version}";
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;

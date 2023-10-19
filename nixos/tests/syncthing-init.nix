@@ -6,18 +6,17 @@ in {
   name = "syncthing-init";
   meta.maintainers = with pkgs.lib.maintainers; [ lassulus ];
 
-  machine = {
+  nodes.machine = {
     services.syncthing = {
       enable = true;
-      declarative = {
-        devices.testDevice = {
-          id = testId;
-        };
-        folders.testFolder = {
-          path = "/tmp/test";
-          devices = [ "testDevice" ];
-        };
+      settings.devices.testDevice = {
+        id = testId;
       };
+      settings.folders.testFolder = {
+        path = "/tmp/test";
+        devices = [ "testDevice" ];
+      };
+      settings.gui.user = "guiUser";
     };
   };
 
@@ -27,5 +26,6 @@ in {
 
     assert "testFolder" in config
     assert "${testId}" in config
+    assert "guiUser" in config
   '';
 })

@@ -1,17 +1,25 @@
 { version, sha256 }:
 
-{ fetchurl, python3Packages, lib }:
+{ fetchurl, python, lib }:
 
-python3Packages.buildPythonApplication rec {
+python.pkgs.buildPythonApplication rec {
   pname = "scons";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/scons/${pname}-${version}.tar.gz";
+    url =
+      if lib.versionAtLeast version "4.3.0" then
+        "mirror://sourceforge/project/scons/scons/${version}/SCons-${version}.tar.gz"
+      else
+        "mirror://sourceforge/scons/scons-${version}.tar.gz";
     inherit sha256;
   };
 
   setupHook = ./setup-hook.sh;
+
+  patches = lib.optionals (lib.versionAtLeast version "4.3.0") [
+    ./env.patch
+  ];
 
   postPatch = lib.optionalString (lib.versionAtLeast version "4.0.0") ''
     substituteInPlace setup.cfg \
@@ -28,6 +36,12 @@ python3Packages.buildPythonApplication rec {
     mkdir -p "$out/share/man/man1"
     mv "$out/"*.1 "$out/share/man/man1/"
   '';
+
+  passthru = {
+    # expose the used python version so tools using this (and extensing scos with other python modules)
+    # can use the exact same python version.
+    inherit python;
+  };
 
   meta = with lib; {
     description = "An improved, cross-platform substitute for Make";

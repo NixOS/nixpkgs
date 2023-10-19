@@ -1,10 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config, libsigcxx }:
 
-let version = "0.4"; in
-
 stdenv.mkDerivation rec {
   pname = "libpar2";
-  inherit version;
+  version = "0.4";
 
   src = fetchurl {
     url = "https://launchpad.net/libpar2/trunk/${version}/+download/${pname}-${version}.tar.gz";
@@ -19,7 +17,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   meta = {
-    homepage = "http://parchive.sourceforge.net/";
+    homepage = "https://parchive.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     description = "A library for using Parchives (parity archive volume sets)";
     platforms = lib.platforms.unix;

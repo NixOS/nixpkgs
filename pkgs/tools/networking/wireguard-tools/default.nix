@@ -7,23 +7,26 @@
 , makeWrapper
 , openresolv
 , procps
+, bash
 , wireguard-go
 }:
 
 stdenv.mkDerivation rec {
   pname = "wireguard-tools";
-  version = "1.0.20210424";
+  version = "1.0.20210914";
 
   src = fetchzip {
     url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
-    sha256 = "sha256-0aGaE4EBb4wb5g32Wugakt7w41sb97Hqqkac7qE641M=";
+    sha256 = "sha256-eGGkTVdPPTWK6iEyowW11F4ywRhd+0IXJTZCqY3OZws=";
   };
 
   outputs = [ "out" "man" ];
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ bash ];
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -38,11 +41,16 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + lib.optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ procps iproute2 iptables openresolv ]}
+      # Which firewall and resolvconf implementations to use should be determined by the
+      # environment, we provide the "default" ones as fallback.
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ procps iproute2 ]} \
+        --suffix PATH : ${lib.makeBinPath [ iptables openresolv ]}
     done
   '' + lib.optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${wireguard-go}/bin
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ wireguard-go ]}
     done
   '';
 
@@ -53,10 +61,18 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for the WireGuard secure network tunnel";
+    longDescription = ''
+      Supplies the main userspace tooling for using and configuring WireGuard tunnels, including the wg(8) and wg-quick(8) utilities.
+      - wg : the configuration utility for getting and setting the configuration of WireGuard tunnel interfaces. The interfaces
+        themselves can be added and removed using ip-link(8) and their IP addresses and routing tables can be set using ip-address(8)
+        and ip-route(8). The wg utility provides a series of sub-commands for changing WireGuard-specific aspects of WireGuard interfaces.
+      - wg-quick : an extremely simple script for easily bringing up a WireGuard interface, suitable for a few common use cases.
+    '';
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 xwvvvvwx ];
+    maintainers = with maintainers; [ ericsagnes zx2c4 globin ma27 d-xo ];
+    mainProgram = "wg";
     platforms = platforms.unix;
   };
 }

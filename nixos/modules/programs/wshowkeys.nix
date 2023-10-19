@@ -9,14 +9,19 @@ in {
 
   options = {
     programs.wshowkeys = {
-      enable = mkEnableOption ''
+      enable = mkEnableOption (lib.mdDoc ''
         wshowkeys (displays keypresses on screen on supported Wayland
         compositors). It requires root permissions to read input events, but
-        these permissions are dropped after startup'';
+        these permissions are dropped after startup'');
     };
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.wshowkeys.source = "${pkgs.wshowkeys}/bin/wshowkeys";
+    security.wrappers.wshowkeys =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.wshowkeys}/bin/wshowkeys";
+      };
   };
 }

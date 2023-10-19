@@ -2,24 +2,24 @@
 
 stdenv.mkDerivation {
   pname = "uci";
-  version = "unstable-2020-04-27";
+  version = "unstable-2023-08-10";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uci.git";
-    rev = "ec8d3233948603485e1b97384113fac9f1bab5d6";
-    sha256 = "0p765l8znvwhzhgkq7dp36w62k5rmzav59vgdqmqq1bjmlz1yyi6";
+    rev = "5781664d5087ccc4b5ab58505883231212dbedbc";
+    hash = "sha256-8MyFaZdAMh5oMPO/5QyNT+Or57eBL3mamJLblGGoF9g=";
   };
 
   hardeningDisable = [ "all" ];
-  cmakeFlags = [ "-D BUILD_LUA:BOOL=OFF" ];
+  cmakeFlags = [ "-DBUILD_LUA=OFF" ];
   buildInputs = [ libubox ];
   nativeBuildInputs = [ cmake pkg-config ];
 
   meta = with lib; {
     description = "OpenWrt Unified Configuration Interface";
     homepage = "https://git.openwrt.org/?p=project/uci.git;a=summary";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.all;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

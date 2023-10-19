@@ -1,18 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, appdirs, requests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, appdirs
+, requests
+, setuptools
+, pythonOlder
+}:
+
 buildPythonPackage rec {
   pname = "pyradios";
-  version = "0.0.22";
+  version = "2.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bgfb8vz7jybswss16pdzns0qpqfrwa9f2g8qrh1r4mig4xh2dmi";
+    hash = "sha256-Uqg/owmf2popAhyanAUIdSWpXAGCWkQja4P944BpNhc=";
   };
 
   propagatedBuildInputs = [
     appdirs
     requests
+    setuptools
   ];
 
+  # Tests and pythonImportsCheck require network access
   doCheck = false;
 
   meta = with lib; {

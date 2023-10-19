@@ -1,61 +1,71 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, llvmPackages, elfutils, bcc
+, libbpf, libbfd, libopcodes
+, cereal, asciidoctor
 , cmake, pkg-config, flex, bison
-, llvmPackages, kernel, elfutils
-, libelf, libbfd, libbpf, libopcodes, bcc
+, util-linux
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.12.1";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
-    owner  = "iovisor";
-    repo   = "bpftrace";
-    rev    = "v${version}";
-    sha256 = "sha256-DZO47AH506DBVH/AuvOF3JfpRxv/D/lmzVg8WOH9Dqo=";
+    owner = "iovisor";
+    repo  = "bpftrace";
+    rev   = "v${version}";
+    hash  = "sha256-JyMogqyntSm2IDXzsOIjcUkf2YwG2oXKpqPpdx/eMNI=";
   };
 
-  buildInputs = with llvmPackages;
-    [ llvm libclang
-      kernel elfutils libelf bcc
-      libbpf libbfd libopcodes
-    ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ]
-    # libelf is incompatible with elfutils-libelf
-    ++ lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+  buildInputs = with llvmPackages; [
+    llvm libclang
+    elfutils bcc
+    libbpf libbfd libopcodes
+    cereal asciidoctor
+  ];
 
-  # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
-  # also in theory make this an environment variable around bpftrace, but this works
-  # nicely without wrappers.
-  patchPhase = ''
-    patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/utils.cpp \
-      --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
-  '';
+  nativeBuildInputs = [
+    cmake pkg-config flex bison
+    llvmPackages.llvm.dev
+    util-linux
+  ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #
   #     https://github.com/iovisor/bpftrace/issues/161#issuecomment-453606728
   #     https://github.com/iovisor/bpftrace/pull/363
   #
-  cmakeFlags =
-    [ "-DBUILD_TESTING=FALSE"
-      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
-    ];
+  cmakeFlags = [
+    "-DBUILD_TESTING=FALSE"
+    "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
+    "-DINSTALL_TOOL_DOCS=OFF"
+    "-DUSE_SYSTEM_BPF_BCC=ON"
+  ];
 
-  # nuke the example/reference output .txt files, for the included tools,
-  # stuffed inside $out. we don't need them at all.
+
+  # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
+  # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
   postInstall = ''
-    rm -rf $out/share/bpftrace/tools/doc
+    ln -sr $out/share/bpftrace/tools/*.bt $out/bin/
+    # do not use /usr/bin/env for shipped tools
+    # If someone can get patchShebangs to work here please fix.
+    sed -i -e "1s:#!/usr/bin/env bpftrace:#!$out/bin/bpftrace:" $out/share/bpftrace/tools/*.bt
   '';
 
   outputs = [ "out" "man" ];
 
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
   meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
     homepage    = "https://github.com/iovisor/bpftrace";
+    changelog   = "https://github.com/iovisor/bpftrace/releases/tag/v${version}";
+    mainProgram = "bpftrace";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ rvl thoughtpolice ];
+    maintainers = with maintainers; [ rvl thoughtpolice martinetd mfrw ];
   };
 }

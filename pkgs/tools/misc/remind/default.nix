@@ -1,31 +1,27 @@
 { lib
-, stdenv
 , fetchurl
 , tk
 , tcllib
-, makeWrapper
+, tcl
 , tkremind ? true
 }:
 
 let
-  inherit (lib) optional optionalString;
-  tclLibraries = lib.optionals tkremind [ tcllib tk ];
-  tclLibPaths = lib.concatStringsSep " "
-    (map (p: "${p}/lib/${p.libPrefix}") tclLibraries);
+  inherit (lib) optionals optionalString;
+  tclLibraries = optionals tkremind [ tcllib tk ];
   tkremindPatch = optionalString tkremind ''
     substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"
   '';
 in
-stdenv.mkDerivation rec {
+tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "03.03.06";
+  version = "04.02.05";
 
   src = fetchurl {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    sha256 = "sha256-lpoMAXDJxwODY0/aoo25GRBYWFhE4uf11pR5/ITZX1s=";
+    sha256 = "sha256-nOEFhVwZvgUod+j/5ifllFgTS7I8+hOAeMSDlRH4+Ag=";
   };
 
-  nativeBuildInputs = optional tkremind makeWrapper;
   propagatedBuildInputs = tclLibraries;
 
   postPatch = ''
@@ -35,10 +31,6 @@ stdenv.mkDerivation rec {
       --replace "rkrphgvba(0);" "" \
       --replace "rkrphgvba(1);" ""
     ${tkremindPatch}
-  '';
-
-  postInstall = optionalString tkremind ''
-    wrapProgram $out/bin/tkremind --set TCLLIBPATH "${tclLibPaths}"
   '';
 
   meta = with lib; {

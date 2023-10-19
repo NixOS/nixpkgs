@@ -1,44 +1,41 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchurl
-, libarchive
-, p7zip
+, installShellFiles
+, testers
+, mas
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "mas";
-  version = "1.8.1";
+  version = "1.8.6";
 
   src = fetchurl {
-    url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas.pkg";
-    sha256 = "W/wgg+ETeJPoZ7MoVGH2uJzQiZMLIy3n1JYKUloc3ZU=";
+    # Use the tarball until https://github.com/mas-cli/mas/issues/452 is fixed.
+    # Even though it looks like an OS/arch specific build it is actually a universal binary.
+    url = "https://github.com/mas-cli/mas/releases/download/v${version}/mas-${version}.monterey.bottle.tar.gz";
+    sha256 = "0q4skdhymgn5xrwafyisfshx327faia682yv83mf68r61m2jl10d";
   };
 
-  nativeBuildInputs = [ libarchive p7zip ];
-
-  unpackPhase = ''
-    7z x $src
-    bsdtar -xf Payload~
-  '';
-
-  doBuild = false;
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
-    mkdir -p $out
-    cp -r ./bin $out
-    cp -r ./Frameworks $out
+    install -D './${version}/bin/mas' "$out/bin/mas"
+    installShellCompletion --cmd mas --bash './${version}/etc/bash_completion.d/mas'
   '';
 
-  postFixup = ''
-    install_name_tool -change @rpath/MasKit.framework/Versions/A/MasKit $out/Frameworks/MasKit.framework/Versions/A/MasKit $out/bin/mas
-    install_name_tool -change @rpath/Commandant.framework/Commandant $out/Frameworks/MasKit.framework/Versions/A/Frameworks/Commandant.framework/Versions/A/Commandant $out/bin/mas
-  '';
+  passthru.tests = {
+    version = testers.testVersion {
+      package = mas;
+      command = "mas version";
+    };
+  };
 
   meta = with lib; {
     description = "Mac App Store command line interface";
     homepage = "https://github.com/mas-cli/mas";
     license = licenses.mit;
-    maintainers = with maintainers; [ zachcoyle ];
-    platforms = platforms.darwin;
+    maintainers = with maintainers; [ steinybot zachcoyle ];
+    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
   };
 }

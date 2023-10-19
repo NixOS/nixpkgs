@@ -1,8 +1,9 @@
-{ pkgs, system, lib, fetchFromGitHub, dataDir ? "/var/lib/bookstack" }:
+{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/bookstack" }:
 
 let
   package = (import ./composition.nix {
-    inherit pkgs system;
+    inherit pkgs;
+    inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
   }).overrideAttrs (attrs : {
     installPhase = attrs.installPhase + ''
@@ -14,14 +15,14 @@ let
   });
 
 in package.override rec {
-  name = "bookstack";
-  version = "21.04.5";
+  pname = "bookstack";
+  version = "23.08.3";
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
-    repo = name;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0gwpa4g2xna4s3lnd970wjpr32i9cwyaixfqxhb8zbz1i9gyxjaa";
+    sha256 = "sha256-EJozYktTnruJTwnDZZ8LHp/DI/ZjwWScRTJewXJuC4k=";
   };
 
   meta = with lib; {

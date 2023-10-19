@@ -1,32 +1,39 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , pkg-config
 , meson
 , ninja
 , udev
 , glib
-, gobject-introspection
 , gnome
 , vala
+, gobject-introspection
+, fetchpatch
+, glibcLocales
+, umockdev
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgudev";
-  version = "236";
+  version = "238";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "094mgjmwgsgqrr1i0vd20ynvlkihvs3vgbmpbrhswjsrdp86j0z5";
+    url = "mirror://gnome/sources/libgudev/${lib.versions.majorMinor finalAttrs.version}/libgudev-${finalAttrs.version}.tar.xz";
+    hash = "sha256-YSZqsa/J1z28YKiyr3PpnS/f9H2ZVE0IV2Dk+mZ7XdE=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     pkg-config
-    gobject-introspection
     meson
     ninja
     vala
+    glib # for glib-mkenums needed during the build
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -34,17 +41,17 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  mesonFlags = [
-    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
-    "-Dtests=disabled"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
-    "-Dvapi=disabled"
+  checkInputs = [
+    glibcLocales
+    umockdev
   ];
+
+  doCheck = true;
+  mesonFlags = lib.optional (!finalAttrs.finalPackage.doCheck) "-Dtests=disabled";
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libgudev";
       versionPolicy = "none";
     };
   };
@@ -56,4 +63,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };
-}
+})

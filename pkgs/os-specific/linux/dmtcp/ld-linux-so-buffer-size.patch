@@ -1,11 +1,13 @@
---- dmtcp-2.5.1-src/src/util_exec.cpp	2017-09-19 13:36:22.947587034 +0200
-+++ dmtcp-2.5.1-src/src/util_exec.cpp	2017-09-19 13:36:32.221313460 +0200
-@@ -178,7 +178,7 @@
- 
- static string ld_linux_so_path(int version, bool is32bitElf = false)
+diff --git a/src/util_exec.cpp b/src/util_exec.cpp
+index 0e8a13c1..0cc99c1e 100644
+--- a/src/util_exec.cpp
++++ b/src/util_exec.cpp
+@@ -300,7 +300,7 @@ Util::elfType(const char *pathname, bool *isElf, bool *is32bitElf)
+ static string
+ ld_linux_so_path(int version, bool is32bitElf = false)
  {
 -  char buf[80];
 +  char buf[128];
+ 
  #if (defined(__x86_64__) || defined(__aarch64__)) && !defined(CONFIG_M32)
    if (is32bitElf) {
-     sprintf(buf, "/lib/ld-linux.so.%d", version);

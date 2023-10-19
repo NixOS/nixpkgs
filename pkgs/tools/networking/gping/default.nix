@@ -2,27 +2,44 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, installShellFiles
 , libiconv
+, Security
+, iputils
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gping";
-  version = "1.2.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = "gping";
-    rev = "v${version}";
-    sha256 = "sha256-lApm1JLXNjDKLj6zj25OaZDVp7lLW3qyrDsvJrudl8I=";
+    rev = "gping-v${version}";
+    hash = "sha256-ReP+s2p0X39LVvl3/QF7fsYkU+OvsQyMhyuH8v4HuVU=";
   };
 
-  cargoSha256 = "sha256-d1NjPwT3YDp1U9JWeUejpWDbJonFlt5lYbUf7p3jVT0=";
+  cargoHash = "sha256-FTiNxCoEe/iMz68F1CpJHypgrhn4WwwWowuN9I1rl6E=";
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = lib.optionals stdenv.isLinux [ iputils ];
+
+  postInstall = ''
+    installManPage gping.1
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/gping --version | grep "${version}"
+  '';
 
   meta = with lib; {
     description = "Ping, but with a graph";
     homepage = "https://github.com/orf/gping";
+    changelog = "https://github.com/orf/gping/releases/tag/gping-v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ andrew-d ];
   };

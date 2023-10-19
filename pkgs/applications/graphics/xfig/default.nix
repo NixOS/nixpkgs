@@ -1,40 +1,42 @@
 { lib
 , stdenv
 , fetchurl
-, xlibsWrapper
 , makeWrapper
+, imagemagick
 , libXpm
 , libXmu
 , libXi
 , libXp
 , Xaw3d
 , libXaw
+, libXft
 , fig2dev
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfig";
-  version = "3.2.8a";
+  version = "3.2.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
-    sha256 = "0y45i1gqg3r0aq55jk047l1hnv90kqis6ld9lppx6c5jhpmc0hxs";
+    hash = "sha256-E+2dBNG7wt7AnafvSc7sJ4OC0pD2zZJkdMLy0Bb+wvc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ imagemagick makeWrapper ];
 
   buildInputs = [
-    xlibsWrapper
     libXpm
     libXmu
     libXi
     libXp
     Xaw3d
     libXaw
+    libXft
   ];
 
   postPatch = ''
-    sed -i 's:"fig2dev":"${fig2dev}/bin/fig2dev":' src/main.c
+    substituteInPlace src/main.c --replace '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
+    substituteInPlace xfig.desktop --replace "/usr/bin/" "$out/bin/"
   '';
 
   postInstall = ''
@@ -43,11 +45,21 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/xfig \
       --set XAPPLRESDIR $out/share/X11/app-defaults
+
+    mkdir -p $out/share/icons/hicolor/{16x16,22x22,48x48,64x64}/apps
+
+    for dimension in 16x16 22x22 48x48; do
+      convert doc/html/images/xfig-logo.png -geometry $dimension\
+        $out/share/icons/hicolor/16x16/apps/xfig.png
+    done
+    install doc/html/images/xfig-logo.png \
+      $out/share/icons/hicolor/64x64/apps/xfig.png
   '';
 
   enableParallelBuilding = true;
 
   meta = with lib; {
+    changelog = "https://sourceforge.net/p/mcj/xfig/ci/${version}/tree/CHANGES";
     description = "An interactive drawing tool for X11";
     longDescription = ''
       Note that you need to have the <literal>netpbm</literal> tools

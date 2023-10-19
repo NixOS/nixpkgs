@@ -1,44 +1,58 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy27
-, six
+, packaging
 , pytest
 , pytestCheckHook
-, numpy
-, setuptools_scm
+, pythonOlder
+, setuptools
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "pytest-doctestplus";
-  version = "0.9.0";
-  disabled = isPy27; # abandoned upstream
+  version = "0.12.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6fe747418461d7b202824a3486ba8f4fa17a9bd0b1eddc743ba1d6d87f03391a";
+    hash = "sha256-epeeS+mdkRbgesBmxfANRfOHZ319d5877zDG/6jHkYE=";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
+
   buildInputs = [
     pytest
   ];
 
   propagatedBuildInputs = [
-    six
-    numpy
+    packaging
+    setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]
+    # __main__.py: error: unrecognized arguments: --remote-data
+    "test_remote_data_url"
+    "test_remote_data_float_cmp"
+    "test_remote_data_ignore_whitespace"
+    "test_remote_data_ellipsis"
+    "test_remote_data_requires"
+    "test_remote_data_ignore_warnings"
   ];
 
   meta = with lib; {
     description = "Pytest plugin with advanced doctest features";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ ];
   };
 }

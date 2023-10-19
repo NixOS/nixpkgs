@@ -2,24 +2,33 @@
 , buildPythonPackage
 , cython
 , fetchPypi
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "lupa";
-  version = "1.9";
+  version = "2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13ifv0nxbf70xg69sp49j484m8cnid7rgh8f94pgfb50dj01vqd3";
+    hash = "sha256-rT/vSGvnrd3TSf6anDk3iQYTEs+Y68UztIm+NPSEy3k=";
   };
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+  ];
 
-  pythonImportsCheck = [ "lupa" ];
+  pythonImportsCheck = [
+    "lupa"
+  ];
 
   meta = with lib; {
     description = "Lua in Python";
     homepage = "https://github.com/scoder/lupa";
+    changelog = "https://github.com/scoder/lupa/blob/lupa-${version}/CHANGES.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

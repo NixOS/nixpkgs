@@ -1,9 +1,11 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , autoreconfHook
 , dconf
 , evolution-data-server
 , gdm
+, geocode-glib_2
 , gettext
 , glib
 , gnome-desktop
@@ -12,8 +14,7 @@
 , gtk3
 , itstool
 , libgweather
-, libsoup
-, libwnck3
+, libwnck
 , libxml2
 , pkg-config
 , polkit
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-panel";
-  version = "3.40.0";
+  version = "3.47.1";
 
   outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-nxNQde3GZs8rnKkd41xnA+KxdxwQp3B0FPtlbCilmzs=";
+    hash = "sha256-2PbixllmjHffgsPdlboE/O+MQMIo4sImBfmhepFh7IM=";
   };
 
   patches = [
@@ -69,13 +70,13 @@ stdenv.mkDerivation rec {
     dconf
     evolution-data-server
     gdm
+    geocode-glib_2
     glib
     gnome-desktop
     gnome-menus
     gtk3
     libgweather
-    libsoup
-    libwnck3
+    libwnck
     polkit
     systemd
   ];

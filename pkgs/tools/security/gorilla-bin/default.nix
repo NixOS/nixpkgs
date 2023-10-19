@@ -11,7 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ patchelf makeWrapper ];
-  phases = [ "unpackPhase" "installPhase" ];
 
   unpackCmd = ''
     mkdir gorilla;
@@ -36,6 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zdia/gorilla/wiki";
     maintainers = [ lib.maintainers.namore ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2;
   };
 }

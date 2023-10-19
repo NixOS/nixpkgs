@@ -12,17 +12,20 @@ assert enablePrinting -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "xpdf";
-  version = "4.03";
+  version = "4.04";
 
   src = fetchzip {
     url = "https://dl.xpdfreader.com/xpdf-${version}.tar.gz";
-    sha256 = "09yhvmh1vxjy763nnmawynygp5bh3j4i8ixqja64j11676yl77n6";
+    hash = "sha256-ujH9KDwFRjPIKwdMg79Mab9BfA2HooY5+2PESUgnGDY=";
   };
 
   # Fix "No known features for CXX compiler", see
   # https://cmake.org/pipermail/cmake/2016-December/064733.html and the note at
   # https://cmake.org/cmake/help/v3.10/command/cmake_minimum_required.html
-  patches = lib.optional stdenv.isDarwin  ./cmake_version.patch;
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace CMakeLists.txt --replace \
+        'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.1.0)'
+    '';
 
   nativeBuildInputs =
     [ cmake ]
@@ -42,18 +45,12 @@ stdenv.mkDerivation rec {
     comment = "Views Adobe PDF files";
     icon = "xpdf";
     exec = "xpdf %f";
-    categories = "Office;";
-    terminal = "false";
+    categories = [ "Office" ];
   };
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     install -Dm644 ${desktopItem}/share/applications/xpdf.desktop -t $out/share/applications
     install -Dm644 $src/xpdf-qt/xpdf-icon.svg $out/share/pixmaps/xpdf.svg
-  '';
-
-  # wrapQtAppsHook broken on macOS (https://github.com/NixOS/nixpkgs/issues/102044)
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    wrapQtApp $out/bin/xpdf
   '';
 
   meta = with lib; {
@@ -81,6 +78,27 @@ stdenv.mkDerivation rec {
       "CVE-2019-9587: loop in PDF objects"
       "CVE-2019-9588: loop in PDF objects"
       "CVE-2019-16088: loop in PDF objects"
+      "CVE-2022-38334"
+      "CVE-2022-38928"
+      "CVE-2022-41842"
+      "CVE-2022-41843"
+      "CVE-2022-41844"
+      "CVE-2022-43071"
+      "CVE-2022-43295"
+      "CVE-2022-45586"
+      "CVE-2022-45587"
+      "CVE-2023-2662"
+      "CVE-2023-2663"
+      "CVE-2023-2664"
+      "CVE-2023-26930"
+      "CVE-2023-26931"
+      "CVE-2023-26934"
+      "CVE-2023-26935"
+      "CVE-2023-26936"
+      "CVE-2023-26937"
+      "CVE-2023-26938"
+      "CVE-2023-27655"
+      "CVE-2023-31557"
     ];
   };
 }

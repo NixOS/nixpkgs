@@ -30,10 +30,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    homepage = "https://github.com/sagemath/FlintQS";
     description = "Highly optimized multi-polynomial quadratic sieve for integer factorization";
+    homepage = "https://github.com/sagemath/FlintQS";
     license = with licenses; [ gpl2 ];
     maintainers = teams.sage.members;
+    mainProgram = "QuadraticSieve";
     platforms = platforms.all;
   };
 }

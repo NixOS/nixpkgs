@@ -1,36 +1,54 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
-, pytestrunner
-, functools32
-, six
-, w3lib
-, lxml
 , cssselect
-, isPy27
+, fetchPypi
+, jmespath
+, lxml
+, packaging
+, psutil
+, pytestCheckHook
+, pythonOlder
+, w3lib
 }:
 
 buildPythonPackage rec {
   pname = "parsel";
-  version = "1.6.0";
+  version = "1.8.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0yawf9r3r863lwxj0n89i7h3n8xjbsl5b7n6xg76r68scl5yzvvh";
+    hash = "sha256-r/KOaMmz8akB2ypOPxWNhICjhyTXMo7nUcGk4cGAHjk=";
   };
 
-  checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six w3lib lxml cssselect ] ++ lib.optionals isPy27 [ functools32 ];
-
-  checkPhase = ''
-    py.test
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
   '';
 
-  meta = with lib; {
-    homepage = "https://github.com/scrapy/parsel";
-    description = "Parsel is a library to extract data from HTML and XML using XPath and CSS selectors";
-    license = licenses.bsd3;
-  };
+  propagatedBuildInputs = [
+    cssselect
+    jmespath
+    lxml
+    packaging
+    w3lib
+  ];
 
+  nativeCheckInputs = [
+    psutil
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "parsel"
+  ];
+
+  meta = with lib; {
+    description = "Python library to extract data from HTML and XML using XPath and CSS selectors";
+    homepage = "https://github.com/scrapy/parsel";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
+  };
 }

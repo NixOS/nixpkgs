@@ -11,9 +11,10 @@
 mkXfceDerivation {
   category = "thunar-plugins";
   pname  = "thunar-archive-plugin";
-  version = "0.4.0";
+  version = "0.5.1";
+  odd-unstable = false;
 
-  sha256 = "1793zicm00fail4iknliwy2b668j239ndxhc9hy6jarvdyp08h38";
+  sha256 = "sha256-TV70IaZClIyQnMGsJEPN0VxHzZAS5F5jSTLm8VwYuwI=";
 
   nativeBuildInputs = [
     intltool
@@ -33,5 +34,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "Thunar plugin providing file context menus for archives";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -1,51 +1,60 @@
-{ lib, stdenv, fetchFromGitHub, autoconf-archive, gettext, libtool, intltool, autoconf, automake
-, glib, gtk3, gtk-doc, libgudev, pkg-config, systemd }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, glib
+, cmake
+, libxml2
+, meson
+, ninja
+, pkg-config
+, libgudev
+, systemd
+, polkit
+}:
 
 stdenv.mkDerivation rec {
   pname = "iio-sensor-proxy";
-  version = "2.8";
+  version = "3.5";
 
-  src = fetchFromGitHub {
-    owner  = "hadess";
-    repo   = pname;
-    rev    = version;
-    sha256 = "07rzm1z2p6lh4iv5pyp0p2x5805m9gsh19kcsjls3fi25p3a2c00";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "hadess";
+    repo = pname;
+    rev = version;
+    hash = "sha256-pFu+nJzj45s7yIKoLWLeiv2AT5vLf6JpdWWQ0JZfnvY=";
   };
 
-  configurePhase = ''
-    runHook preConfigure
-
-    ./autogen.sh --prefix=$out \
-      --with-udevrulesdir=$out/lib/udev/rules.d \
-      --with-systemdsystemunitdir=$out/lib/systemd/system
-
-    runHook postConfigure
+  postPatch = ''
+    # upstream meson.build currently doesn't have an option to change the default polkit dir
+    substituteInPlace data/meson.build \
+      --replace 'polkit_policy_directory' "'$out/share/polkit-1/actions'"
   '';
 
   buildInputs = [
-    glib
-    gtk3
-    gtk-doc
     libgudev
     systemd
+    polkit
   ];
 
   nativeBuildInputs = [
-    autoconf
-    autoconf-archive
-    automake
-    gettext
-    intltool
-    libtool
+    meson
+    cmake
+    glib
+    libxml2
+    ninja
     pkg-config
+  ];
+
+  mesonFlags = [
+    (lib.mesonOption "udevrulesdir" "${placeholder "out"}/lib/udev/rules.d")
+    (lib.mesonOption "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
   ];
 
   meta = with lib; {
     description = "Proxy for sending IIO sensor data to D-Bus";
-    homepage = "https://github.com/hadess/iio-sensor-proxy";
-    license = licenses.gpl3 ;
-    maintainers = with maintainers; [ peterhoeg ];
+    homepage = "https://gitlab.freedesktop.org/hadess/iio-sensor-proxy";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ _999eagle ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

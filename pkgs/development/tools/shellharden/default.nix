@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shellharden";
-  version = "4.1.2";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "anordal";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1003kgnql0z158d3rzz8s3i7s7rx9hjqqvp3li8xhzrgszvkgqk4";
+    sha256 = "sha256-yOfGMxNaaw5ub7woShDMCJNiz6FgV5IBJN87VmORLvg=";
   };
 
-  cargoSha256 = "1h4wp9xs9nq90ml2km9gd0afrzri6fbgskz6d15jqykm2fw72l88";
+  cargoSha256 = "sha256-o3CBnxEQNmvn+h/QArIkzi9xfZzIngvwHpkMT+PItY4=";
 
   postPatch = "patchShebangs moduletests/run";
 

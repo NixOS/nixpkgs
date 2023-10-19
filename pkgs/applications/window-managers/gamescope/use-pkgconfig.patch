@@ -1,0 +1,11 @@
+diff --git a/meson.build b/meson.build
+index 1311784..77043ac 100644
+--- a/meson.build
++++ b/meson.build
+@@ -6,7 +6,6 @@ project(
+   default_options: [
+     'cpp_std=c++14',
+     'warning_level=2',
+-    'force_fallback_for=wlroots,libliftoff',
+   ],
+ )

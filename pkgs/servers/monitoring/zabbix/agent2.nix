@@ -1,6 +1,6 @@
 { lib, buildGoModule, fetchurl, autoreconfHook, pkg-config, libiconv, openssl, pcre, zlib }:
 
-import ./versions.nix ({ version, sha256 }:
+import ./versions.nix ({ version, sha256, vendorHash ? throw "unsupported version ${version} for zabbix-agent2", ... }:
   buildGoModule {
     pname = "zabbix-agent2";
     inherit version;
@@ -12,7 +12,7 @@ import ./versions.nix ({ version, sha256 }:
 
     modRoot = "src/go";
 
-    vendorSha256 = "07caz0jfy0r1vb1h9mhb169wyn949z9xj0pmvyamr2d8y3k3hbyd";
+    inherit vendorHash;
 
     nativeBuildInputs = [ autoreconfHook pkg-config ];
     buildInputs = [ libiconv openssl pcre zlib ];
@@ -33,6 +33,7 @@ import ./versions.nix ({ version, sha256 }:
       ./configure \
         --prefix=${placeholder "out"} \
         --enable-agent2 \
+        --enable-ipv6 \
         --with-iconv \
         --with-libpcre \
         --with-openssl=${openssl.dev}
@@ -46,8 +47,13 @@ import ./versions.nix ({ version, sha256 }:
     '';
 
     installPhase = ''
+      mkdir -p $out/sbin
+
       install -Dm0644 src/go/conf/zabbix_agent2.conf $out/etc/zabbix_agent2.conf
       install -Dm0755 src/go/bin/zabbix_agent2 $out/bin/zabbix_agent2
+
+      # create a symlink which is compatible with the zabbixAgent module
+      ln -s $out/bin/zabbix_agent2 $out/sbin/zabbix_agentd
     '';
 
     meta = with lib; {

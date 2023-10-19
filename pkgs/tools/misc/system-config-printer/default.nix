@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, udev, intltool, pkg-config, glib, xmlto, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, udev, pkg-config, glib, xmlto, wrapGAppsHook
 , docbook_xml_dtd_412, docbook_xsl
 , libxml2, desktop-file-utils, libusb1, cups, gdk-pixbuf, pango, atk, libnotify
 , gobject-introspection, libsecret, packagekit
-, cups-filters
-, python3Packages, autoreconfHook, bash
+, cups-filters, gettext, libtool, autoconf-archive
+, python3Packages, autoreconfHook, bash, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "system-config-printer";
-  version = "1.5.12";
+  version = "1.5.18";
 
   src = fetchFromGitHub {
     owner = "openPrinting";
     repo = pname;
-    rev = version;
-    sha256 = "1a812jsd9pb02jbz9bq16qj5j6k2kw44g7s1xdqqkg7061rd7mwf";
+    rev = "v${version}";
+    sha256 = "sha256-l3HEnYycP56vZWREWkAyHmcFgtu09dy4Ds65u7eqNZk=";
   };
 
   prePatch = ''
@@ -26,34 +26,29 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./detect_serverbindir.patch
-
-    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=958104
-    # (Fixes will be included in next upstream release.)
+    # fix typeerror, remove on next release
     (fetchpatch {
-      url = "https://github.com/OpenPrinting/system-config-printer/commit/cf9903466c1a2d18a701f3b5e8c7e03483e1244d.patch";
-      sha256 = "03gpav618w50q90m2kdkgwclc7fv17m493fgjd633zfavb5kqr3n";
-    })
-    (fetchpatch {
-      url = "https://github.com/OpenPrinting/system-config-printer/commit/b9289dfe105bdb502f183f0afe7a115ecae5f2af.patch";
-      sha256 = "12w47hy3ly4phh8jcqxvdnd5sgbnbp8dnscjd7d5y2i43kxj7b23";
+      url = "https://github.com/OpenPrinting/system-config-printer/commit/399b3334d6519639cfe7f1c0457e2475b8ee5230.patch";
+      sha256 = "sha256-JCdGmZk2vRn3X1BDxOJaY3Aw8dr0ODVzi0oY20ZWfRs=";
+      excludes = [ "NEWS" ];
     })
   ];
 
   buildInputs = [
     glib udev libusb1 cups
     python3Packages.python
-    libnotify gobject-introspection gdk-pixbuf pango atk packagekit
+    libnotify gdk-pixbuf pango atk packagekit
     libsecret
   ];
 
   nativeBuildInputs = [
-    intltool pkg-config
+    pkg-config gettext libtool autoconf-archive
     xmlto libxml2 docbook_xml_dtd_412 docbook_xsl desktop-file-utils
     python3Packages.wrapPython
-    wrapGAppsHook autoreconfHook
+    wrapGAppsHook autoreconfHook gobject-introspection
   ];
 
-  pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
+  pythonPath = with python3Packages; requiredPythonModules [ pycups pycurl dbus-python pygobject3 pycairo pysmbc ];
 
   configureFlags = [
     "--with-udev-rules"

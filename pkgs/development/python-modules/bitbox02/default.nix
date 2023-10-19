@@ -1,24 +1,50 @@
-{ lib, buildPythonPackage, fetchPypi, base58, ecdsa, hidapi, noiseprotocol, protobuf, semver, typing-extensions }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, base58
+, ecdsa
+, hidapi
+, noiseprotocol
+, protobuf
+, semver
+, typing-extensions
+}:
 
 buildPythonPackage rec {
   pname = "bitbox02";
-  version = "5.3.0";
+  version = "6.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe0e8aeb9b32fd7d76bb3e9838895973a74dfd532a8fb8ac174a1a60214aee26";
+    hash = "sha256-zt4G45nJjtU2/tbYpCEgjaoA+Xtpe9g2OpQaxfMzCb8=";
   };
 
-  propagatedBuildInputs = [ base58 ecdsa hidapi noiseprotocol protobuf semver typing-extensions ];
+  propagatedBuildInputs = [
+    base58
+    ecdsa
+    hidapi
+    noiseprotocol
+    protobuf
+    semver
+    typing-extensions
+  ];
 
   # does not contain tests
   doCheck = false;
-  pythonImportsCheck = [ "bitbox02" ];
+
+  pythonImportsCheck = [
+    "bitbox02"
+  ];
 
   meta = with lib; {
     description = "Firmware code of the BitBox02 hardware wallet";
     homepage = "https://github.com/digitalbitbox/bitbox02-firmware/";
+    changelog = "https://github.com/digitalbitbox/bitbox02-firmware/blob/py-bitbox02-${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ ];
   };
 }

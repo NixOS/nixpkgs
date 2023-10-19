@@ -1,22 +1,47 @@
-{ lib, stdenv, fetchurl }:
+{ lib
+, stdenv
+, callPackage
+, fetchpatch
+, fetchurl
+, testers
 
-stdenv.mkDerivation rec {
+, cmake
+}:
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
-  version = "3.9.1";
+  version = "3.11.2";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/geos/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-fmMFB9ysncB1ZdJJom8GoVyfWwxS3SkSmg49OB1+OCo=";
+    url = "https://download.osgeo.org/geos/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-sfB3ZpSBxaPmKv/EnpbrBvKBmHpdNv2rIlIX5bgl5Mw=";
   };
 
-  enableParallelBuilding = true;
+  patches = [
+    # Pull upstream fix of `gcc-13` build failure:
+    #   https://github.com/libgeos/geos/pull/805
+    (fetchpatch {
+      name = "gcc-13.patch";
+      url = "https://github.com/libgeos/geos/commit/bea3188be44075034fd349f5bb117c943bdb7fb1.patch";
+      hash = "sha256-dQT3Hf9YJchgjon/r46TLIXXbE6C0ZnewyvfYJea4jM=";
+    })
+  ];
 
-  # https://trac.osgeo.org/geos/ticket/993
-  configureFlags = lib.optional stdenv.isAarch32 "--disable-inline";
+  nativeBuildInputs = [ cmake ];
+
+  doCheck = true;
+
+  passthru.tests = {
+    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    geos = callPackage ./tests.nix { geos = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
-    description = "C++ port of the Java Topology Suite (JTS)";
-    homepage = "https://trac.osgeo.org/geos";
+    description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
+    homepage = "https://libgeos.org";
     license = licenses.lgpl21Only;
+    maintainers = teams.geospatial.members;
+    pkgConfigModules = [ "geos" ];
+    mainProgram = "geosop";
   };
-}
+})

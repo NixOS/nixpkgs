@@ -1,22 +1,26 @@
-{ lib, stdenv, fetchurl, gettext }:
+{ lib, stdenv, fetchurl, gettext, gawk, bash }:
 
 stdenv.mkDerivation rec {
-  name = "m17n-db-1.8.0";
+  pname = "m17n-db";
+  version = "1.8.2";
 
   src = fetchurl {
-    url = "https://download.savannah.gnu.org/releases/m17n/${name}.tar.gz";
-    sha256 = "0vfw7z9i2s9np6nmx1d4dlsywm044rkaqarn7akffmb6bf1j6zv5";
+    url = "https://download.savannah.gnu.org/releases/m17n/m17n-db-${version}.tar.gz";
+    sha256 = "sha256-vHR+J9ct9YoH9DG3JdeuQJIyLbxGEUykBTgoIbK6XGk=";
   };
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
+  buildInputs = [ gettext gawk bash ];
 
-  configureFlags = lib.optional (stdenv ? glibc)
-    "--with-charmaps=${stdenv.glibc.out}/share/i18n/charmaps"
+  strictDeps = true;
+
+  configureFlags = [ "--with-charmaps=${stdenv.cc.libc}/share/i18n/charmaps" ]
   ;
 
   meta = {
     homepage = "https://www.nongnu.org/m17n/";
     description = "Multilingual text processing library (database)";
+    changelog = "https://git.savannah.nongnu.org/cgit/m17n/m17n-db.git/plain/NEWS?h=REL-${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ astsmtl ];

@@ -1,21 +1,20 @@
 { lib, stdenv, fetchurl, python3
-, libfaketime, fonttosfnt
-, bdftopcf, mkfontscale
+, bdftopcf, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "terminus-font";
-  version = "4.48"; # set here for use in URL below
+  version = "4.49.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "1bwlkj39rqbyq57v5yssayav6hzv1n11b9ml2s0dpiyfsn6rqy9l";
+    url = "mirror://sourceforge/project/${pname}/${pname}-${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    sha256 = "0yggffiplk22lgqklfmd2c0rw8gwchynjh5kz4bz8yv2h6vw2qfr";
   };
 
+  patches = [ ./SOURCE_DATE_EPOCH-for-otb.patch ];
+
   nativeBuildInputs =
-    [ python3 bdftopcf libfaketime
-      fonttosfnt mkfontscale
-    ];
+    [ python3 bdftopcf xorg.mkfontscale ];
 
   enableParallelBuilding = true;
 
@@ -24,22 +23,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'gzip'     'gzip -n'
   '';
 
-  postBuild = ''
-    # convert unicode bdf fonts to otb
-    for i in *.bdf; do
-      name=$(basename $i .bdf)
-      faketime -f "1970-01-01 00:00:01" \
-      fonttosfnt -v -o "$name.otb" "$i"
-    done
-  '';
-
-  postInstall = ''
-    # install otb fonts (for GTK applications)
-    install -m 644 -D *.otb -t "$out/share/fonts/misc";
-    mkfontdir "$out/share/fonts/misc"
-  '';
-
-  installTargets = [ "install" "fontdir" ];
+  installTargets = [ "install" "install-otb" "fontdir" ];
+  # fontdir depends on the previous two targets, but this is not known
+  # to make, so we need to disable parallelism:
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "A clean fixed width font";
@@ -55,7 +42,7 @@ stdenv.mkDerivation rec {
       16x32. The styles are normal and bold (except for 6x12), plus
       EGA/VGA-bold for 8x14 and 8x16.
     '';
-    homepage = "http://terminus-font.sourceforge.net/";
+    homepage = "https://terminus-font.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
   };

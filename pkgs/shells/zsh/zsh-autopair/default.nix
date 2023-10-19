@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h0vm2dgrmb8i2pvsgis3lshc5b0ad846836m62y8h3rdb3zmpy1";
   };
 
+  strictDeps = true;
+
   installPhase = ''
     install -D autopair.zsh $out/share/zsh/${pname}/autopair.zsh
   '';

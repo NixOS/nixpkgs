@@ -1,35 +1,45 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
-, setuptools_scm
+, setuptools-scm
 , cython
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.2.1";
+  version = "1.3.0.post4";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "ca3751e93559f0438969c46f17459d07f983281dac170c3479de56492e152855";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "fonttools";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-FMqOZ0WOorTtbdweeu9UdoUNWOPrcwc+0SK+55XxyQQ=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
     cython
   ];
 
-  # Requires pytest_runner to perform tests, which requires deprecated
-  # features of setuptools. Seems better to not run tests. This should
-  # be fixed upstream.
-  doCheck = false;
-  pythonImportsCheck = [ "pyclipper" ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pyclipper"
+  ];
 
   meta = with lib; {
     description = "Cython wrapper for clipper library";
-    homepage    = "https://github.com/fonttools/pyclipper";
-    license     = licenses.mit;
+    homepage = "https://github.com/fonttools/pyclipper";
+    license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];
   };
 }

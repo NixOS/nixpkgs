@@ -1,14 +1,12 @@
-{ lib, stdenv, cmake, fetchurl, pkg-config, jansson, zlib }:
+{ lib, stdenv, cmake, fetchurl, pkg-config, jansson, snappy, xz, zlib }:
 
-let
-  version = "1.10.2";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "avro-c";
-  inherit version;
+  version = "1.11.2";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/c/avro-c-${version}.tar.gz";
-    sha256 = "sha256-rj+zK+xKBon1Rn4JIBGS7cbo80ITTvBq1FLKhw9Wt+I=";
+    sha256 = "sha256-nx+ZqXsmcS0tQ/5+ck8Z19vdXO81R4uuRqGSDfIEV/U=";
   };
 
   postPatch = ''
@@ -17,7 +15,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ jansson zlib ];
+  buildInputs = [ jansson snappy xz zlib ];
 
   meta = with lib; {
     description = "A C library which implements parts of the Avro Specification";

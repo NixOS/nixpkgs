@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
-, dateutil
-, fetchFromGitHub
+, python-dateutil
+, fetchPypi
 , fetchpatch
 , mock
 , msgpack
@@ -16,37 +16,36 @@
 
 buildPythonPackage rec {
   pname = "influxdb";
-  version = "5.3.0";
+  version = "5.3.1";
 
-  src = fetchFromGitHub {
-    owner = "influxdata";
-    repo = "influxdb-python";
-    rev = "v${version}";
-    sha256 = "1jfkf53jcf8lcq98qc0bw5d1d0yp3558mh8l2dqc9jlsm0smigjs";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0ymjv322mv6y424fmpd70f87152w55mbwwj6i7p3sjzf0ixmxy26";
   };
+
+  postPatch = ''
+    for f in influxdb/tests/dataframe_client_test.py influxdb/tests/influxdb08/dataframe_client_test.py; do
+      substituteInPlace "$f" \
+        --replace "pandas.util.testing" "pandas.testing"
+    done
+  '';
 
   propagatedBuildInputs = [
     requests
-    dateutil
+    python-dateutil
     pytz
     six
     msgpack
   ];
 
-  checkInputs = [
+  __darwinAllowLocalNetworking = true;
+
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
     mock
     nose
     pandas
-  ];
-
-  patches = [
-    (fetchpatch {
-      # Relaxes msgpack pinning
-      url = "https://github.com/influxdata/influxdb-python/commit/cc41e290f690c4eb67f75c98fa9f027bdb6eb16b.patch";
-      sha256 = "1fb9qrq1kp24pixjwvzhdy67z3h0wnj92aj0jw0a25fd0rdxdvg4";
-    })
   ];
 
   disabledTests = [
@@ -57,6 +56,11 @@ buildPythonPackage rec {
     #   b'foo[30 chars]_one="1",column_two=1i 0\nfoo,tag_one=red,tag_[46 chars]00\n'
     "test_write_points_from_dataframe_with_nan_json"
     "test_write_points_from_dataframe_with_tags_and_nan_json"
+    # Reponse is not empty but `s = '孝'` and the JSON decoder chokes on that
+    "test_query_with_empty_result"
+    # Pandas API changes cause it to no longer infer datetimes in the expected manner
+    "test_multiquery_into_dataframe"
+    "test_multiquery_into_dataframe_dropna"
   ];
 
   pythonImportsCheck = [ "influxdb" ];

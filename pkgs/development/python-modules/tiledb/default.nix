@@ -8,27 +8,27 @@
 , numpy
 , wheel
 , isPy3k
-, setuptools_scm
+, setuptools-scm
 , psutil
 , pandas
 }:
 
 buildPythonPackage rec {
   pname = "tiledb";
-  version = "0.6.6";
+  version = "0.20.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB-Py";
-    rev = version;
-    sha256 = "0b2kn1xyf7d994kz29dpqiaf8yzvx0axw4yqi854c54pl22ddgzl";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Be83b9JVxGxPYoOfqTfVm7qAjZD7cfH5BG6tbSHXhIQ=";
   };
 
   nativeBuildInputs = [
     cython
     pybind11
-    setuptools_scm
+    setuptools-scm
   ];
 
   buildInputs = [
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     wheel # No idea why but it is listed
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     psutil
     # optional
     pandas

@@ -5,20 +5,22 @@
 , python3
 , readline
 , libxslt
+, libxcrypt
 , docbook-xsl-nons
 , docbook_xml_dtd_45
 }:
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.3";
+  version = "1.4.9";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    sha256 = "06waz0k50c7v3chd08mzp2rv7w4k4q9isbxx3vhlfpx1vy9q61f8";
+    hash = "sha256-CsImBz46LbhkjaevdEy5X1B2alL+6wAdVYsrMht0p2U=";
   };
 
   nativeBuildInputs = [
+    python3
     pkg-config
     wafHook
     libxslt
@@ -29,7 +31,15 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3
     readline # required to build python
+    libxcrypt
   ];
+
+  # otherwise the configure script fails with
+  # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  '';
 
   wafPath = "buildtools/bin/waf";
 
@@ -37,6 +47,15 @@ stdenv.mkDerivation rec {
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
+
+  postFixup = if stdenv.isDarwin
+    then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
+    else null;
+
+  # python-config from build Python gives incorrect values when cross-compiling.
+  # If python-config is not found, the build falls back to using the sysconfig
+  # module, which works correctly in all cases.
+  PYTHON_CONFIG = "/invalid";
 
   meta = with lib; {
     description = "The trivial database";

@@ -1,11 +1,12 @@
-{ lib, mkChromiumDerivation, channel, enableWideVine, ungoogled }:
-
-with lib;
+{ lib, mkChromiumDerivation
+, channel, chromiumVersionAtLeast
+, enableWideVine, ungoogled
+}:
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
-  buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
+  buildTargets = [ "run_mksnapshot_default" "chrome_sandbox" "chrome" ];
 
   outputs = ["out" "sandbox"];
 
@@ -14,8 +15,11 @@ mkChromiumDerivation (base: rec {
   installPhase = ''
     mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.so "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
+    cp -v "$buildPath/libvulkan.so.1" "$libExecPath/"
+    cp -v "$buildPath/vk_swiftshader_icd.json" "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
+    cp -v "$buildPath/chrome_crashpad_handler" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
     # Swiftshader
@@ -70,7 +74,7 @@ mkChromiumDerivation (base: rec {
 
   meta = {
     description = "An open source web browser from Google"
-      + optionalString ungoogled ", with dependencies on Google web services removed";
+      + lib.optionalString ungoogled ", with dependencies on Google web services removed";
     longDescription = ''
       Chromium is an open source web browser from Google that aims to build a
       safer, faster, and more stable way for all Internet users to experience
@@ -78,17 +82,15 @@ mkChromiumDerivation (base: rec {
       of source code for Google Chrome (which has some additional features).
     '';
     homepage = if ungoogled
-      then "https://github.com/Eloston/ungoogled-chromium"
+      then "https://github.com/ungoogled-software/ungoogled-chromium"
       else "https://www.chromium.org/";
-    maintainers = with maintainers; if ungoogled
-      then [ squalus primeos ]
-      else [ primeos thefloweringash bendlas ];
-    license = if enableWideVine then licenses.unfree else licenses.bsd3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; if ungoogled
+      then [ squalus primeos michaeladler networkexception emilylange ]
+      else [ primeos thefloweringash networkexception emilylange ];
+    license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     mainProgram = "chromium";
-    hydraPlatforms = if (channel == "stable" || channel == "ungoogled-chromium")
-      then ["aarch64-linux" "x86_64-linux"]
-      else [];
+    hydraPlatforms = lib.optionals (channel == "stable" || channel == "ungoogled-chromium") ["aarch64-linux" "x86_64-linux"];
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
   };
 })

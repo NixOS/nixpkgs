@@ -11,7 +11,16 @@ with lib;
 
     services.clickhouse = {
 
-      enable = mkEnableOption "ClickHouse database server";
+      enable = mkEnableOption (lib.mdDoc "ClickHouse database server");
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.clickhouse;
+        defaultText = lib.literalExpression "pkgs.clickhouse";
+        description = lib.mdDoc ''
+          ClickHouse package to use.
+        '';
+      };
 
     };
 
@@ -39,27 +48,34 @@ with lib;
       after = [ "network.target" ];
 
       serviceConfig = {
+        Type = "notify";
         User = "clickhouse";
         Group = "clickhouse";
         ConfigurationDirectory = "clickhouse-server";
         AmbientCapabilities = "CAP_SYS_NICE";
         StateDirectory = "clickhouse";
         LogsDirectory = "clickhouse";
-        ExecStart = "${pkgs.clickhouse}/bin/clickhouse-server --config-file=${pkgs.clickhouse}/etc/clickhouse-server/config.xml";
+        ExecStart = "${cfg.package}/bin/clickhouse-server --config-file=/etc/clickhouse-server/config.xml";
+        TimeoutStartSec = "infinity";
+      };
+
+      environment = {
+        # Switching off watchdog is very important for sd_notify to work correctly.
+        CLICKHOUSE_WATCHDOG_ENABLE = "0";
       };
     };
 
     environment.etc = {
       "clickhouse-server/config.xml" = {
-        source = "${pkgs.clickhouse}/etc/clickhouse-server/config.xml";
+        source = "${cfg.package}/etc/clickhouse-server/config.xml";
       };
 
       "clickhouse-server/users.xml" = {
-        source = "${pkgs.clickhouse}/etc/clickhouse-server/users.xml";
+        source = "${cfg.package}/etc/clickhouse-server/users.xml";
       };
     };
 
-    environment.systemPackages = [ pkgs.clickhouse ];
+    environment.systemPackages = [ cfg.package ];
 
     # startup requires a `/etc/localtime` which only if exists if `time.timeZone != null`
     time.timeZone = mkDefault "UTC";

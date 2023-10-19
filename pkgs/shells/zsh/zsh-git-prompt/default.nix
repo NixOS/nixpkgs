@@ -25,7 +25,7 @@
 # installed.
 #
 { fetchFromGitHub
-, python
+, python3
 , git
 , lib
 , haskellPackages
@@ -45,7 +45,7 @@ haskellPackages.callPackage
      prePatch = ''
         substituteInPlace zshrc.sh                       \
           --replace ':-"python"' ':-"haskell"'           \
-          --replace 'python '    '${python.interpreter} ' \
+          --replace 'python '    '${python3.interpreter} ' \
           --replace 'git '       '${git}/bin/git '
      '';
      preCompileBuildDriver = "cd src";

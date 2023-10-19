@@ -1,28 +1,66 @@
-{ lib, stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute2, ronn }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, buildPackages
+, cargo
+, lzo
+, openssl
+, pkg-config
+, ronn
+, rustc
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+let
   pname = "zerotierone";
-  version = "1.6.5";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "0dlnrb59vnxa3pjkgfqd5jil9kl6axh23v0bffi4kx8jwzpdwas8";
+    sha256 = "sha256-430wdPrSNohM3sXewusjsW3tbE7EFGISGxABZF21yRc=";
   };
 
+in stdenv.mkDerivation {
+  inherit pname version src;
+
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "jwt-0.16.0" = "sha256-P5aJnNlcLe9sBtXZzfqHdRvxNfm6DPBcfcKOVeLZxcM=";
+    };
+  };
+  postPatch = "cp ${./Cargo.lock} Cargo.lock";
+
   preConfigure = ''
+    cmp ./Cargo.lock ./zeroidc/Cargo.lock || {
+      echo 1>&2 "Please make sure that the derivation's Cargo.lock is identical to ./zeroidc/Cargo.lock!"
+      exit 1
+    }
+
     patchShebangs ./doc/build.sh
     substituteInPlace ./doc/build.sh \
       --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
     substituteInPlace ./make-linux.mk \
-      --replace 'armv5' 'armv6'
+      --replace '-march=armv6zk' "" \
+      --replace '-mcpu=arm1176jzf-s' ""
   '';
 
-
-  nativeBuildInputs = [ ronn ];
-  buildInputs = [ openssl lzo zlib iproute2 ];
+  nativeBuildInputs = [
+    pkg-config
+    ronn
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
+  buildInputs = [
+    lzo
+    openssl
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
@@ -30,27 +68,31 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkPhase = ''
+    runHook preCheck
     ./zerotier-selftest
+    runHook postCheck
   '';
 
-  installPhase = ''
-    install -Dt "$out/bin/" zerotier-one
-    ln -s $out/bin/zerotier-one $out/bin/zerotier-idtool
-    ln -s $out/bin/zerotier-one $out/bin/zerotier-cli
+  installFlags = [ "DESTDIR=$$out/upstream" ];
 
-    mkdir -p $man/share/man/man8
-    for cmd in zerotier-one.8 zerotier-cli.1 zerotier-idtool.1; do
-      cat doc/$cmd | gzip -9n > $man/share/man/man8/$cmd.gz
-    done
+  postInstall = ''
+    mv $out/upstream/usr/sbin $out/bin
+
+    mkdir -p $man/share
+    mv $out/upstream/usr/share/man $man/share/man
+
+    rm -rf $out/upstream
   '';
 
   outputs = [ "out" "man" ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

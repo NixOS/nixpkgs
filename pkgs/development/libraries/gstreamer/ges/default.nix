@@ -12,26 +12,23 @@
 , flex
 , gettext
 , gobject-introspection
+# Checks meson.is_cross_build(), so even canExecute isn't enough.
+, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
-  version = "1.18.4";
+  version = "1.22.5";
 
   outputs = [
     "out"
     "dev"
-    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
   ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "010xg960qsh5dwmf0y9l1q13h0cymmrgapzla2zsw66ylxqbi1s6";
+    hash = "sha256-vM3TvWHYaCmxbODiBtthsz95SsF5JCP558xl110aMbU=";
   };
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
 
   nativeBuildInputs = [
     meson
@@ -39,17 +36,17 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     gobject-introspection
-    gst-devtools
     python3
     flex
-
-    # documentation
-    # TODO add hotdoc here
+  ] ++ lib.optionals enableDocumentation [
+    hotdoc
   ];
 
   buildInputs = [
     bash-completion
     libxml2
+    gst-devtools
+    python3
   ];
 
   propagatedBuildInputs = [
@@ -58,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+    (lib.mesonEnable "doc" enableDocumentation)
   ];
 
   postPatch = ''
@@ -71,5 +68,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ lilyinstarlight ];
   };
 }

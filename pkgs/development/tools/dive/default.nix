@@ -1,30 +1,46 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, gpgme, lvm2 }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, fetchpatch
+, pkg-config
+, btrfs-progs
+, gpgme
+, lvm2
+}:
 
 buildGoModule rec {
   pname = "dive";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
-    repo = pname;
+    repo = "dive";
     rev = "v${version}";
-    sha256 = "sha256-1pmw8pUlek5FlI1oAuvLSqDow7hw5rw86DRDZ7pFAmA=";
+    hash = "sha256-9REthyb+bzsb7NBXkU9XyUZJFQHHrV1cG4//lTLgTgw=";
   };
 
-  vendorSha256 = "sha256-0gJ3dAPoilh3IWkuesy8geNsuI1T0DN64XvInc9LvlM=";
+  patches = [
+    # fixes: unsafe.Slice requires go1.17 or later (-lang was set to go1.16; check go.mod)
+    # https://github.com/wagoodman/dive/pull/461
+    (fetchpatch {
+      url = "https://github.com/wagoodman/dive/commit/555555d777f961ad0a2d1bb843e87f434d731dba.patch";
+      hash = "sha256-tPSgvENiVgrlQSkT7LbQPRYhkkaYQeWRJ0P4bA3XOiI=";
+    })
+  ];
 
-  doCheck = false;
+  vendorHash = "sha256-6KIbTrkvdugsUKdFBqtPUFzs/6h2xslLFpr6S2nSBiY=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];
 
-  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     description = "A tool for exploring each layer in a docker image";
     homepage = "https://github.com/wagoodman/dive";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam spacekookie SuperSandro2000 ];
+    maintainers = with maintainers; [ marsam SuperSandro2000 ];
   };
 }

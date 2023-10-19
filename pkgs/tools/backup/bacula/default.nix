@@ -4,12 +4,18 @@
 
 stdenv.mkDerivation rec {
   pname = "bacula";
-  version = "11.0.3";
+  version = "13.0.3";
 
   src = fetchurl {
     url    = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
-    sha256 = "sha256-AVh3NPdJD8t3N4AbLh/hsflHB7s/sLcbNnE8eqsDkjw=";
+    sha256 = "sha256-CUnDK+EJBYXojkwB2CgALodgMTbYfFmKKd/0K7PtKkA=";
   };
+
+  # libtool.m4 only matches macOS 10.*
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    substituteInPlace configure \
+      --replace "10.*)" "*)"
+  '';
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

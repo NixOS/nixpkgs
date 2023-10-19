@@ -1,15 +1,15 @@
-{ haskellPackages, mkDerivation, fetchFromGitHub, lib
+{ haskellPackages, mkDerivation, fetchFromGitHub, fetchpatch, lib, stdenv
 # the following are non-haskell dependencies
-, makeWrapper, which, maude, graphviz
+, makeWrapper, which, maude, graphviz, glibcLocales
 }:
 
 let
-  version = "1.6.0";
+  version = "1.8.0";
   src = fetchFromGitHub {
     owner  = "tamarin-prover";
     repo   = "tamarin-prover";
     rev    = version;
-    sha256 = "1pl3kz7gyw9g6s4x5j90z4snd10vq6296g3ajlr8d4n53p3c9i3w";
+    sha256 = "sha256-ujnaUdbjqajmkphOS4Fs4QBCRGX4JZkQ2p1X2jripww=";
   };
 
   # tamarin has its own dependencies, but they're kept inside the repo,
@@ -21,6 +21,7 @@ let
     homepage    = "https://tamarin-prover.github.io";
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
+    hydraPlatforms = lib.platforms.linux; # maude is broken on darwin
   };
 
   # tamarin use symlinks to the LICENSE and Setup.hs files, so for these sublibraries
@@ -50,6 +51,7 @@ let
     doHaddock = false; # broken
     libraryHaskellDepends = (with haskellPackages; [
       aeson aeson-pretty parallel uniplate
+      regex-pcre-builtin regex-posix split
     ]) ++ [ tamarin-prover-utils tamarin-prover-term ];
   });
 
@@ -61,10 +63,37 @@ let
     ]) ++ [ tamarin-prover-theory ];
   });
 
+  tamarin-prover-accountability = mkDerivation (common "tamarin-prover-accountability" (src + "/lib/accountability") // {
+    postPatch = "cp --remove-destination ${src}/LICENSE .";
+    doHaddock = false; # broken
+    libraryHaskellDepends = (with haskellPackages; [
+      raw-strings-qq
+    ]) ++ [
+      tamarin-prover-utils
+      tamarin-prover-term
+      tamarin-prover-theory
+    ];
+  });
+
+  tamarin-prover-export = mkDerivation (common "tamarin-prover-export" (src + "/lib/export") // {
+    postPatch = "cp --remove-destination ${src}/LICENSE .";
+    doHaddock = false; # broken
+    libraryHaskellDepends = (with haskellPackages; [
+      HStringTemplate
+    ]) ++ [
+      tamarin-prover-utils
+      tamarin-prover-term
+      tamarin-prover-theory
+      tamarin-prover-sapic
+    ];
+  });
+
 in
 mkDerivation (common "tamarin-prover" src // {
   isLibrary = false;
   isExecutable = true;
+
+  patches = [ ];
 
   # strip out unneeded deps manually
   doHaddock = false;
@@ -75,25 +104,30 @@ mkDerivation (common "tamarin-prover" src // {
   executableToolDepends = [ makeWrapper which maude graphviz ];
   postInstall = ''
     wrapProgram $out/bin/tamarin-prover \
+  '' + lib.optionalString stdenv.isLinux ''
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+  '' + ''
       --prefix PATH : ${lib.makeBinPath [ which maude graphviz ]}
     # so that the package can be used as a vim plugin to install syntax coloration
     install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim
     install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/tamarin-prover $out/share/nvim/site
+    # Emacs SPTHY major mode
+    install -Dt $out/share/emacs/site-lisp etc/spthy-mode.el
   '';
 
   checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";
 
   executableHaskellDepends = (with haskellPackages; [
     binary-instances binary-orphans blaze-html conduit file-embed
-    gitrev http-types lifted-base monad-control monad-unlift
+    gitrev http-types lifted-base monad-control
     resourcet shakespeare threads wai warp yesod-core yesod-static
   ]) ++ [ tamarin-prover-utils
           tamarin-prover-sapic
+          tamarin-prover-accountability
+          tamarin-prover-export
           tamarin-prover-term
           tamarin-prover-theory
         ];
-
-  # tamarin-prover 1.6 is incompatible with maude 3.1.
-  hydraPlatforms = lib.platforms.none;
-  broken = true;
 })

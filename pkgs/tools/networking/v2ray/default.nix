@@ -1,89 +1,61 @@
-{ lib, fetchFromGitHub, fetchurl, linkFarm, buildGoModule, runCommand, makeWrapper, nixosTests
-, assetOverrides ? {}
+{ lib, fetchFromGitHub, symlinkJoin, buildGoModule, makeWrapper, nixosTests
+, nix-update-script
+, v2ray-geoip, v2ray-domain-list-community
+, assets ? [ v2ray-geoip v2ray-domain-list-community ]
 }:
 
-let
-  version = "4.39.2";
+buildGoModule rec {
+  pname = "v2ray-core";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    sha256 = "0rgwxsix2qy5w44s2ramalsn1bqznj2yra8bakcms8yl9yh0gbvd";
+    hash = "sha256-gdDV5Cd/DjEqSiOF7j5a8QLtdJiFeNCnHoA4XD+yiGA=";
   };
 
-  vendorSha256 = "sha256-1LEKg9kyF4QBrzLP5TyKmFLPBprJRNqGxtkAI1mHx4Y=";
+  # `nix-update` doesn't support `vendorHash` yet.
+  # https://github.com/Mic92/nix-update/pull/95
+  vendorHash = "sha256-uq0v14cRGmstJabrERsa+vFRX6Bg8+5CU6iV8swrL/I=";
 
-  assets = {
-    # MIT licensed
-    "geoip.dat" = let
-      geoipRev = "202105270041";
-      geoipSha256 = "0g67lggc41himpnbbghm4xlnbv4dl2fyidxplh3pl6ajqb4wxwd5";
-    in fetchurl {
-      url = "https://github.com/v2fly/geoip/releases/download/${geoipRev}/geoip.dat";
-      sha256 = geoipSha256;
-    };
+  ldflags = [ "-s" "-w" "-buildid=" ];
 
-    # MIT licensed
-    "geosite.dat" = let
-      geositeRev = "20210527065138";
-      geositeSha256 = "1335zyc5zrwws46ldv0sqn51kpkfwfksbfw6hd53fakz0whxki0g";
-    in fetchurl {
-      url = "https://github.com/v2fly/domain-list-community/releases/download/${geositeRev}/dlc.dat";
-      sha256 = geositeSha256;
-    };
-
-  } // assetOverrides;
-
-  assetsDrv = linkFarm "v2ray-assets" (lib.mapAttrsToList (name: path: {
-    inherit name path;
-  }) assets);
-
-  core = buildGoModule rec {
-    pname = "v2ray-core";
-    inherit version src;
-
-    inherit vendorSha256;
-
-    doCheck = false;
-
-    buildPhase = ''
-      buildFlagsArray=(-v -p $NIX_BUILD_CORES -ldflags="-s -w")
-      runHook preBuild
-      go build "''${buildFlagsArray[@]}" -o v2ray ./main
-      go build "''${buildFlagsArray[@]}" -o v2ctl -tags confonly ./infra/control/main
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      install -Dm755 v2ray v2ctl -t $out/bin
-    '';
-
-    meta = {
-      homepage = "https://www.v2fly.org/en_US/";
-      description = "A platform for building proxies to bypass network restrictions";
-      license = with lib.licenses; [ mit ];
-      maintainers = with lib.maintainers; [ servalcatty ];
-    };
-  };
-
-in runCommand "v2ray-${version}" {
-  inherit src version;
-  inherit (core) meta;
+  subPackages = [ "main" ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  passthru = {
-    inherit core;
-    updateScript = ./update.sh;
-    tests = {
-      simple-vmess-proxy-test = nixosTests.v2ray;
-    };
+  installPhase = ''
+    runHook preInstall
+    install -Dm555 "$GOPATH"/bin/main $out/bin/v2ray
+    install -Dm444 release/config/systemd/system/v2ray{,@}.service -t $out/lib/systemd/system
+    install -Dm444 release/config/*.json -t $out/etc/v2ray
+    runHook postInstall
+  '';
+
+  assetsDrv = symlinkJoin {
+    name = "v2ray-assets";
+    paths = assets;
   };
 
-} ''
-  for file in ${core}/bin/*; do
-    makeWrapper "$file" "$out/bin/$(basename "$file")" \
-      --set-default V2RAY_LOCATION_ASSET ${assetsDrv}
-  done
-''
+  postFixup = ''
+    wrapProgram $out/bin/v2ray \
+      --suffix XDG_DATA_DIRS : $assetsDrv/share
+    substituteInPlace $out/lib/systemd/system/*.service \
+      --replace User=nobody DynamicUser=yes \
+      --replace /usr/local/bin/ $out/bin/ \
+      --replace /usr/local/etc/ /etc/
+  '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.simple-vmess-proxy-test = nixosTests.v2ray;
+  };
+
+  meta = {
+    homepage = "https://www.v2fly.org/en_US/";
+    description = "A platform for building proxies to bypass network restrictions";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ servalcatty ];
+  };
+}

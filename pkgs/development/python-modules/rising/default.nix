@@ -1,33 +1,52 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
-, pytestcov
+, pythonRelaxDepsHook
 , dill
+, lightning-utilities
 , numpy
-, pytorch
+, torch
 , threadpoolctl
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "rising";
-  version = "0.2.0post0";
-
-  disabled = isPy27;
+  version = "0.3.0";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "PhoenixDL";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0fb9894ppcp18wc2dhhjizj8ja53gbv9wpql4mixxxdz8z2bn33c";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 
-  propagatedBuildInputs = [ numpy pytorch threadpoolctl tqdm ];
-  checkInputs = [ dill pytestcov pytestCheckHook ];
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
-  disabledTests = [ "test_affine" ];  # deprecated division operator '/'
+  pythonRelaxDeps = [ "lightning-utilities" ];
+
+  propagatedBuildInputs = [
+    lightning-utilities numpy torch threadpoolctl tqdm
+  ];
+  nativeCheckInputs = [ dill pytestCheckHook ];
+  disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
+    "test_progressive_resize_integration"
+  ];
+
+  pythonImportsCheck = [
+    "rising"
+    "rising.loading"
+    "rising.ops"
+    "rising.random"
+    "rising.transforms"
+    "rising.transforms.functional"
+    "rising.utils"
+  ];
 
   meta = {
     description = "High-performance data loading and augmentation library in PyTorch";

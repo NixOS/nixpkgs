@@ -1,45 +1,77 @@
 { lib
 , buildPythonPackage
 , duckdb
+, fsspec
+, google-cloud-storage
 , numpy
+, openssl
 , pandas
+, psutil
 , pybind11
-, setuptools_scm
-, pytestrunner
+, setuptools-scm
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname = "duckdb";
-  inherit (duckdb) version src;
+  inherit (duckdb) pname version src patches;
+  format = "setuptools";
 
-  # build attempts to use git to figure out its own version. don't want to add
-  # the dependency for something pointless.
   postPatch = ''
-    substituteInPlace scripts/package_build.py --replace \
-      "'git'" "'false'"
+    # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
+    cd tools/pythonpkg
+
+    # 1. let nix control build cores
+    # 2. unconstrain setuptools_scm version
+    substituteInPlace setup.py \
+      --replace "multiprocessing.cpu_count()" "$NIX_BUILD_CORES"
+
+    # avoid dependency on mypy
+    rm tests/stubs/test_stubs.py
   '';
 
-  postConfigure = ''
-    cd tools/pythonpkg
-    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
-  '';
+  BUILD_HTTPFS = 1;
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     pybind11
-    setuptools_scm
-    pytestrunner
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [ numpy pandas ];
+  buildInputs = [ openssl ];
 
-  checkInputs = [ pytestCheckHook ];
-  pythonImportsCheck = [ "duckdb" ];
+  propagatedBuildInputs = [
+    numpy
+    pandas
+  ];
+
+  nativeCheckInputs = [
+    fsspec
+    google-cloud-storage
+    psutil
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # tries to make http request
+    "test_install_non_existent_extension"
+  ];
+
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
+  setupPyBuildFlags = [
+    "--inplace"
+  ];
+
+  pythonImportsCheck = [
+    "duckdb"
+  ];
 
   meta = with lib; {
-    description = "DuckDB is an embeddable SQL OLAP Database Management System";
-    homepage = "https://pypi.python.org/pypi/duckdb";
+    description = "Python binding for DuckDB";
+    homepage = "https://duckdb.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ cpcloud ];
   };
 }

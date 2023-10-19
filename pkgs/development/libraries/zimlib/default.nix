@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchzip
 , meson, ninja, pkg-config
 , python3
 , icu
@@ -11,13 +11,19 @@
 
 stdenv.mkDerivation rec {
   pname = "zimlib";
-  version = "6.3.0";
+  version = "8.2.0";
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "libzim";
     rev = version;
-    sha256 = "0iy0f1clhihq277x218ccx3mszgpr3h9l0by48b9ykr115nffw3s";
+    sha256 = "sha256-ab7UUF+I0/xaGChvdjylEQRHLOjmtg/wk+/JEGehGLE=";
+  };
+
+  testData = fetchzip rec {
+    passthru.version = "0.4";
+    url = "https://github.com/openzim/zim-testing-suite/releases/download/v${passthru.version}/zim-testing-suite-${passthru.version}.tar.gz";
+    sha256 = "sha256-2eJqmvs/GrvOD/pq8dTubaiO9ZpW2WqTNQByv354Z0w=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +45,9 @@ stdenv.mkDerivation rec {
     patchShebangs scripts
   '';
 
-  checkInputs = [
+  mesonFlags = [  "-Dtest_data_dir=${testData}" ];
+
+  nativeCheckInputs = [
     gtest
   ];
 
@@ -49,7 +57,7 @@ stdenv.mkDerivation rec {
     description = "Library for reading and writing ZIM files";
     homepage =  "https://www.openzim.org/wiki/Zimlib";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ajs124 ];
+    maintainers = with maintainers; [ greg ];
     platforms = platforms.linux;
   };
 }

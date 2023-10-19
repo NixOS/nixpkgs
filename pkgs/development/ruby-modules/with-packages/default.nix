@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, buildRubyGem, ruby, gemConfig, makeWrapper }:
+{ stdenv, lib, buildEnv, buildRubyGem, ruby, gemConfig, makeBinaryWrapper }:
 
 /*
 Example usage:
@@ -43,7 +43,7 @@ let
 
       wrappedRuby = stdenv.mkDerivation {
         name = "wrapped-${ruby.name}";
-        nativeBuildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeBinaryWrapper ];
         buildCommand = ''
           mkdir -p $out/bin
           for i in ${ruby}/bin/*; do
@@ -54,10 +54,10 @@ let
 
     in stdenv.mkDerivation {
       name = "${ruby.name}-with-packages";
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeBinaryWrapper ];
       buildInputs = [ selected ruby ];
 
-      unpackPhase = ":";
+      dontUnpack = true;
 
       installPhase = ''
         for i in ${ruby}/bin/* ${gemEnv}/bin/*; do

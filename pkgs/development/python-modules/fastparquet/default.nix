@@ -1,24 +1,90 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numba, numpy, pandas, pytestrunner
-, thrift, pytestCheckHook, python-snappy, lz4, zstandard, zstd }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, cython
+, oldest-supported-numpy
+, setuptools
+, setuptools-scm
+, numpy
+, pandas
+, cramjam
+, fsspec
+, thrift
+, python-lzo
+, pytestCheckHook
+, pythonOlder
+, packaging
+, wheel
+}:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.5.0";
+  version = "2023.7.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "17i091kky34m2xivk29fqsyxxxa7v4352n79w01n7ni93za6wana";
+    hash = "sha256-pJ0zK0upEV7TyuNMIcozugkwBlYpK/Dg6BdB0kBpn9k=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
-  propagatedBuildInputs = [ numba numpy pandas thrift ];
-  checkInputs = [ pytestCheckHook python-snappy lz4 zstandard zstd ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # E   ModuleNotFoundError: No module named 'fastparquet.speedups'
-  doCheck = false;
-  pythonImportsCheck = [ "fastparquet" ];
+  nativeBuildInputs = [
+    cython
+    oldest-supported-numpy
+    setuptools
+    setuptools-scm
+    wheel
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"pytest-runner"' ""
+
+    sed -i \
+      -e "/pytest-runner/d" \
+      -e '/"git", "status"/d' setup.py
+  '';
+
+  propagatedBuildInputs = [
+    cramjam
+    fsspec
+    numpy
+    pandas
+    thrift
+    packaging
+  ];
+
+  passthru.optional-dependencies = {
+    lzo = [
+      python-lzo
+    ];
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  # Workaround https://github.com/NixOS/nixpkgs/issues/123561
+  preCheck = ''
+    mv fastparquet/test .
+    rm -r fastparquet
+    fastparquet_test="$out"/${python.sitePackages}/fastparquet/test
+    ln -s `pwd`/test "$fastparquet_test"
+  '';
+
+  postCheck = ''
+    rm "$fastparquet_test"
+  '';
+
+  pythonImportsCheck = [
+    "fastparquet"
+  ];
 
   meta = with lib; {
     description = "A python implementation of the parquet format";

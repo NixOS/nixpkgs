@@ -1,31 +1,41 @@
 { lib, stdenv, fetchFromGitLab, cmake, gfortran, perl }:
 
-let
-  version = "5.1.4";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "libxc";
-  inherit version;
+  version = "6.2.2";
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
-    sha256 = "0rs6v72zz3jr22r29zxxdk8wdsfv6wid6cx2661974z09dbvbr1f";
+    hash = "sha256-JYhuyW95I7Q0edLIe7H//+ej5vh6MdAGxXjmNxDMuhQ=";
   };
 
-  buildInputs = [ gfortran ];
-  nativeBuildInputs = [ perl cmake ];
+  # Timeout increase has already been included upstream in master.
+  # Check upon updates if this can be removed.
+  postPatch = ''
+    substituteInPlace testsuite/CMakeLists.txt \
+        --replace "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
+  '';
+
+  outputs = [ "out" "dev" ];
+
+  nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''
     patchShebangs ./
   '';
 
-  cmakeFlags = [ "-DENABLE_FORTRAN=ON" "-DBUILD_SHARED_LIBS=ON" ];
-
-  preCheck = ''
-    export LD_LIBRARY_PATH=$(pwd)
-  '';
+  cmakeFlags = [
+    "-DENABLE_FORTRAN=ON"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DENABLE_XHOST=OFF"
+    # Force compilation of higher derivatives
+    "-DDISABLE_VXC=0"
+    "-DDISABLE_FXC=0"
+    "-DDISABLE_KXC=0"
+    "-DDISABLE_LXC=0"
+  ];
 
   doCheck = true;
 
@@ -33,7 +43,7 @@ in stdenv.mkDerivation {
     description = "Library of exchange-correlation functionals for density-functional theory";
     homepage = "https://www.tddft.org/programs/Libxc/";
     license = licenses.mpl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ markuskowa ];
   };
 }

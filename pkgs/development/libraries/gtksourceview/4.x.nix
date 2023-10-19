@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -20,17 +19,20 @@
 , dbus
 , xvfb-run
 , shared-mime-info
+, testers
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
-  version = "4.8.1";
+  version = "4.8.4";
 
   outputs = [ "out" "dev" ];
 
-  src = fetchurl {
+  src = let
+    inherit (finalAttrs) pname version;
+  in fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0WPXG1/K+8Wx7sbdhB7b283dOnURzV/c/9hri7/mmsE=";
+    sha256 = "fsnRj7KD0fhKOj7/O3pysJoQycAGWXs/uru1lYQgqH0=";
   };
 
   patches = [
@@ -38,13 +40,6 @@ stdenv.mkDerivation rec {
     # but not from its own datadr (it assumes it will be in XDG_DATA_DIRS).
     # Since this is not generally true with Nix, let’s add $out/share unconditionally.
     ./4.x-nix_share_path.patch
-
-    # fixes intermittent "gtksourceview-gresources.h: no such file" errors
-    (fetchpatch {
-      name = "ensure-access-to-resources-in-corelib-build.patch";
-      url = "https://gitlab.gnome.org/GNOME/gtksourceview/-/commit/9bea9d1c4a56310701717bb106c52a5324ee392a.patch";
-      sha256 = "sha256-rSB6lOFEyz58HfOSj7ZM48/tHxhqbtWWbh60JuySAZ0=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -73,19 +68,28 @@ stdenv.mkDerivation rec {
     shared-mime-info
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     xvfb-run
     dbus
   ];
 
-  doCheck = stdenv.isLinux;
+  postPatch = ''
+    # https://gitlab.gnome.org/GNOME/gtksourceview/-/merge_requests/295
+    # build: drop unnecessary vapigen check
+    substituteInPlace meson.build \
+      --replace "if generate_vapi" "if false"
+  '';
+
+  # Broken by PCRE 2 bump in GLib.
+  # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/283
+  doCheck = false;
 
   checkPhase = ''
     runHook preCheck
 
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      --config-file=${dbus}/share/dbus-1/session.conf \
       meson test --no-rebuild --print-errorlogs
 
     runHook postCheck
@@ -96,14 +100,18 @@ stdenv.mkDerivation rec {
       packageName = "gtksourceview";
       attrPath = "gtksourceview4";
       versionPolicy = "odd-unstable";
+      freeze = true;
     };
   };
+
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
     description = "Source code editing widget for GTK";
     homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    pkgConfigModules = [ "gtksourceview-4" ];
     platforms = platforms.unix;
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
   };
-}
+})

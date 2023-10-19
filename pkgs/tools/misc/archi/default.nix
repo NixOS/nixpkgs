@@ -5,6 +5,8 @@
 , makeWrapper
 , jdk
 , libsecret
+, webkitgtk
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -30,9 +32,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
     makeWrapper
-  ];
+    wrapGAppsHook
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -44,6 +46,7 @@ stdenv.mkDerivation rec {
 
         install -D -m755 Archi $out/libexec/Archi
         makeWrapper $out/libexec/Archi $out/bin/Archi \
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ webkitgtk ])} \
           --prefix PATH : ${jdk}/bin
       ''
     else
@@ -59,8 +62,9 @@ stdenv.mkDerivation rec {
       models and sketches.
     '';
     homepage = "https://www.archimatetool.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ earldouglas SuperSandro2000 ];
+    maintainers = with maintainers; [ earldouglas ];
   };
 }

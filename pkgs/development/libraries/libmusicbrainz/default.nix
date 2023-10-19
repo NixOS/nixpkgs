@@ -1,15 +1,21 @@
 { lib, stdenv, fetchurl, cmake, neon, libdiscid }:
 
 stdenv.mkDerivation rec {
-  name = "libmusicbrainz-3.0.3";
+  pname = "libmusicbrainz";
+  version = "3.0.3";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ neon libdiscid ];
 
   src = fetchurl {
-    url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/${name}.tar.gz";
+    url = "ftp://ftp.musicbrainz.org/pub/musicbrainz/${pname}-${version}.tar.gz";
     sha256 = "1i9qly13bwwmgj68vma766hgvsd1m75236haqsp9zgh5znlmkm3z";
   };
+
+  patches = [
+    # Fix spacing around string literal for modern clang
+    ./v3-darwin.patch
+  ];
 
   meta = with lib; {
     homepage = "http://musicbrainz.org/doc/libmusicbrainz";

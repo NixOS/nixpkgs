@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://github.com/jpcima/stone-phaser";
     description = "A classic analog phaser effect, made with DPF and Faust";
     maintainers = [ maintainers.magnetophon ];

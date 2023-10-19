@@ -10,13 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pynetbox";
-  version = "6.1.2";
+  version = "7.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0di07rny3gqdfb0rf7hm3x03rpn7rydpv3lrl7cak2ccpqm0wzhl";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-rYqwZIqcNeSpXsICL8WGLJ3Tcnwnnm6gvRBEJ/5iE/Q=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/netbox-community/pynetbox/releases/tag/v${version}";
     description = "API client library for Netbox";
     homepage = "https://github.com/netbox-community/pynetbox";
     license = licenses.asl20;

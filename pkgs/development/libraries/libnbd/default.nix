@@ -6,16 +6,17 @@
 , perl
 , libxml2
 , fuse
+, fuse3
 , gnutls
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
-  version = "1.7.7";
+  version = "1.18.0";
 
   src = fetchurl {
-    url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-development/${pname}-${version}.tar.gz";
-    hash = "sha256-fNeu1qx+EbKitv2I8nJAmGMF5jxN2RZGPR/LJYnOjG8=";
+    url = "https://download.libguestfs.org/libnbd/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
+    hash = "sha256-srJyd32eCIthoncvM9JQEKCWEOZxxc3YntaV4Ay8kZ8=";
   };
 
   nativeBuildInputs = [
@@ -23,8 +24,10 @@ stdenv.mkDerivation rec {
     pkg-config
     perl
   ];
+
   buildInputs = [
     fuse
+    fuse3
     gnutls
     libxml2
   ];
@@ -54,7 +57,6 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux;
   };
 }
-# TODO: NBD URI support apparently is not enabled
 # TODO: package the 1.6-stable version too
 # TODO: git version needs ocaml
 # TODO: bindings for go, ocaml and python

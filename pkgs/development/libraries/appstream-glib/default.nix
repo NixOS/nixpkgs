@@ -14,7 +14,7 @@
 , gtk3
 , json-glib
 , libarchive
-, libsoup
+, curl
 , libuuid
 , libxslt
 , meson
@@ -23,7 +23,8 @@
 , pngquant
 }:
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.7.18";
+  pname = "appstream-glib";
+  version = "0.8.2";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
   outputBin = "dev";
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
-    rev = lib.replaceStrings [ "." "-" ] [ "_" "_" ] name;
-    sha256 = "12s7d3nqjs1fldnppbg2mkjg4280f3h8yzj3q1hiz3chh1w0vjbx";
+    rev = "${lib.replaceStrings ["-"] ["_"] pname}_${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "sha256-3QFiOJ38talA0GGL++n+DaA/AN7l4LOZQ7BJV6o8ius=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
     gtk3
     json-glib
     libarchive
-    libsoup
+    curl
     libuuid
   ];
 

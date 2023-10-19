@@ -3,20 +3,28 @@
 , fetchFromGitHub
 , pkg-config
 
-, gtk3
+, bzip2
 , curl
+, fribidi
+, gtk3
+, iconv
+, libcpuid
+, libjpeg
+, libpng
+, libwebp
 , libxml2
+, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "smooth";
-  version = "0.9.6";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "enzo1982";
     repo = "smooth";
     rev = "v${version}";
-    sha256 = "05j5gk6kz2089x8bcq2l0kjspfiiymxn69jcxl4dh9lw96blbadr";
+    sha256 = "sha256-J2Do1iAbE1GBC8co/4nxOzeGJQiPRc+21fgMDpzKX+A=";
   };
 
   nativeBuildInputs = [
@@ -25,12 +33,21 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=$(out)"
+    "config=systemlibbz2,systemlibcpuid,systemlibcurl,systemlibfribidi,systemlibiconv,systemlibjpeg,systemlibpng,systemlibwebp,systemlibxml2,systemzlib"
   ];
 
   buildInputs = [
-    gtk3
+    bzip2
     curl
+    fribidi
+    gtk3
+    iconv
+    libcpuid
+    libjpeg
+    libpng
+    libwebp
     libxml2
+    zlib
   ];
 
   meta = with lib; {

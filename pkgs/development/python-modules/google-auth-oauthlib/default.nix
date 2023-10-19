@@ -6,35 +6,46 @@
 , mock
 , pytestCheckHook
 , google-auth
-, requests_oauthlib
+, requests-oauthlib
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-oauthlib";
-  version = "0.4.4";
+  version = "1.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CYMsbnUDL5OBjt8a/+R0YSHWQMYlpb75tclq9nbpju4=";
+    hash = "sha256-43UGSWSCC0ciGn4bfuH9dwUbYyPD+ePhl4X3irZ+z8U=";
   };
 
   propagatedBuildInputs = [
     google-auth
-    requests_oauthlib
+    requests-oauthlib
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     click
     mock
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_run_local_server" ];
+  disabledTests = lib.optionals stdenv.isDarwin [
+    # This test fails if the hostname is not associated with an IP (e.g., in `/etc/hosts`).
+    "test_run_local_server_bind_addr"
+  ];
+
+  pythonImportsCheck = [
+    "google_auth_oauthlib"
+  ];
 
   meta = with lib; {
     description = "Google Authentication Library: oauthlib integration";
     homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-oauthlib";
     license = licenses.asl20;
-    maintainers = with maintainers; [ SuperSandro2000 terlar ];
+    maintainers = with maintainers; [ terlar ];
   };
 }

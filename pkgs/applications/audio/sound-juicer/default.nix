@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sound-juicer";
-  version = "3.38.0";
+  version = "3.40.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "08d5d81rz9sj3m5paw8fwbgxmhlbr7bcjdzpmzj832qvg8smydxf";
+    sha256 = "LuiCdEORvrTG1koPaCX7dlUQtwbsK3BL+0LkKvquHeY=";
   };
 
   nativeBuildInputs = [

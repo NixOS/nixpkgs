@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, flit
 , click
 , cryptography
 , ecdsa
@@ -12,23 +13,23 @@
 , requests
 }:
 
- buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "solo-python";
-  version = "0.0.30";
-  format = "flit";
-  disabled = pythonOlder "3.6"; # only python>=3.6 is supported
+  version = "0.1.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = pname;
     rev = version;
-    sha256 = "1i9kybp08qfcdx6m4wl7ij40y1v17mvvhcdg7zglwfakblf69w41";
+    hash = "sha256-XVPYr7JwxeZfZ68+vQ7a7MNiAfJ2bvMbM3R1ryVJ+OU=";
   };
 
-  # replaced pinned fido, with unrestricted fido version
-  patchPhase = ''
-    sed -i '/fido2/c\"fido2",' pyproject.toml
-  '';
+  nativeBuildInputs = [
+    flit
+  ];
 
   propagatedBuildInputs = [
     click
@@ -41,12 +42,10 @@
     requests
   ];
 
-  # allow for writable directory for darwin
   preBuild = ''
     export HOME=$TMPDIR
   '';
 
-  # repo doesn't contain tests, ensure imports aren't broken
   pythonImportsCheck = [
     "solo"
     "solo.cli"
@@ -56,9 +55,12 @@
   ];
 
   meta = with lib; {
-    description = "Python tool and library for SoloKeys";
-    homepage = "https://github.com/solokeys/solo-python";
+    description = "Python tool and library for SoloKeys Solo 1";
+    homepage = "https://github.com/solokeys/solo1-cli";
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ asl20 mit ];
+    # not compatible with fido2 >= 1.0.0
+    # https://github.com/solokeys/solo1-cli/issues/157
+    broken = versionAtLeast fido2.version "1.0.0";
   };
 }

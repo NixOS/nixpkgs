@@ -8,6 +8,7 @@
 , pkg-config
 , python3
 , SDL2
+, bluez
 , dbus
 , eigen
 , ffmpeg
@@ -18,6 +19,7 @@
 , libXau
 , libXdmcp
 , libXrandr
+, libbsd
 , libffi
 , libjpeg
 # , librealsense
@@ -27,13 +29,17 @@
 , libuvc
 , libv4l
 , libxcb
+, onnxruntime
 , opencv4
 , openhmd
+, openvr
 , udev
 , vulkan-headers
 , vulkan-loader
 , wayland
 , wayland-protocols
+, wayland-scanner
+, libdrm
 , zlib
 # Set as 'false' to build monado without service support, i.e. allow VR
 # applications linking against libopenxr_monado.so to use OpenXR standalone
@@ -44,14 +50,14 @@
 
 stdenv.mkDerivation rec {
   pname = "monado";
-  version = "21.0.0";
+  version = "unstable-2023-08-22";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "07zxs96i3prjqww1f68496cl2xxqaidx32lpfyy0pn5am4c297zc";
+    owner = "monado";
+    repo = "monado";
+    rev = "4cc68f07c0f3c2fee57b01dde28a02e314d3bee6";
+    sha256 = "sha256-VibdOSA/b4RmwwwXrwhivuiukNK10YazYF/p+YnqRZ8=";
   };
 
   nativeBuildInputs = [
@@ -64,10 +70,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
+    "-DXRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH=ON"
   ];
 
   buildInputs = [
     SDL2
+    bluez
     dbus
     eigen
     ffmpeg
@@ -78,6 +86,7 @@ stdenv.mkDerivation rec {
     libXau
     libXdmcp
     libXrandr
+    libbsd
     libjpeg
     libffi
     # librealsense.dev - see below
@@ -87,15 +96,26 @@ stdenv.mkDerivation rec {
     libuvc
     libv4l
     libxcb
+    onnxruntime
     opencv4
     openhmd
+    openvr
     udev
     vulkan-headers
     vulkan-loader
     wayland
+    wayland-scanner
     wayland-protocols
+    libdrm
     zlib
   ];
+
+  # known disabled drivers:
+  #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core
+  #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR
+  #  - DRIVER_REALSENSE - see below
+  #  - DRIVER_SIMULAVR - needs realsense
+  #  - DRIVER_ULV2 - needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html
 
   # realsense is disabled, the build ends with the following error:
   #
@@ -112,11 +132,20 @@ stdenv.mkDerivation rec {
     export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
+  patches = [
+    # We don't have $HOME/.steam when building
+    ./force-enable-steamvr_lh.patch
+
+    # A recent (as of August 2023) SteamVR Beta has upgraded a driver interface which is incompatible with Monado
+    ./steamvr_lh-use-old-interface.patch
+  ];
+
   meta = with lib; {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";
     license = licenses.boost;
     maintainers = with maintainers; [ expipiplus1 prusnak ];
     platforms = platforms.linux;
+    mainProgram = "monado-cli";
   };
 }

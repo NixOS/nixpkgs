@@ -1,0 +1,3 @@
+[Thumbnailer Entry]
+Exec=@out@/bin/exe-thumbnailer -v -s %s %i %o
+MimeType=application/x-ms-dos-executable;application/x-dosexec;application/x-msdownload

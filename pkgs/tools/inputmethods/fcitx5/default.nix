@@ -1,11 +1,12 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
 , cairo
-, cldr-emoji-annotation
 , pango
 , fribidi
 , fmt
@@ -31,27 +32,28 @@
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
+, nixosTests
 }:
 let
   enDictVer = "20121020";
   enDict = fetchurl {
     url = "https://download.fcitx-im.org/data/en_dict-${enDictVer}.tar.gz";
-    sha256 = "1svcb97sq7nrywp5f2ws57cqvlic8j6p811d9ngflplj8xw5sjn4";
+    hash = "sha256-xEpdeEeSXuqeTS0EdI1ELNKN2SmaC1cu99kerE9abOs=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
-  version = "5.0.4";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "fcitx";
-    repo = "fcitx5";
+    repo = pname;
     rev = version;
-    sha256 = "sha256-2KGdR1m70Qatidzf/DZuFK3lc1t8z7sxjyhaxuc0Tqg=";
+    hash = "sha256-R8stzpfQttBZFFSu8ikUz/2eL+b98/X672uVFsha9H0=";
   };
 
   prePatch = ''
-    ln -s ${enDict} src/modules/spell/dict/$(stripHash ${enDict})
+    ln -s ${enDict} src/modules/spell/$(stripHash ${enDict})
   '';
 
   nativeBuildInputs = [
@@ -73,7 +75,6 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     wayland
     wayland-protocols
-    cldr-emoji-annotation
     json_c
     libGL
     libevent
@@ -90,7 +91,12 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
-  passthru.updateScript = ./update.py;
+  passthru = {
+    updateScript = ./update.py;
+    tests = {
+      inherit (nixosTests) fcitx5;
+    };
+  };
 
   meta = with lib; {
     description = "Next generation of fcitx";

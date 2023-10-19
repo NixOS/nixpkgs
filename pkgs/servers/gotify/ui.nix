@@ -1,25 +1,47 @@
-{ yarn2nix-moretea
+{ stdenv
+, yarn
+, fixup_yarn_lock
+, nodejs-slim
 , fetchFromGitHub
+, fetchYarnDeps
+, gotify-server
 }:
 
-yarn2nix-moretea.mkYarnPackage rec {
-  name = "gotify-ui";
+stdenv.mkDerivation rec {
+  pname = "gotify-ui";
+  inherit (gotify-server) version;
 
-  packageJSON = ./package.json;
-  yarnNix = ./yarndeps.nix;
+  src = gotify-server.src + "/ui";
 
-  version = import ./version.nix;
-
-  src_all = fetchFromGitHub {
-    owner = "gotify";
-    repo = "server";
-    rev = "v${version}";
-    sha256 = import ./source-sha.nix;
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-ejHzo6NHCMlNiYePWvfMY9Blb58pj3UQ5PFI0V84flI=";
   };
-  src = "${src_all}/ui";
 
-  buildPhase = ''
-    yarn build
+  nativeBuildInputs = [ yarn fixup_yarn_lock nodejs-slim ];
+
+  postPatch = ''
+    export HOME=$NIX_BUILD_TOP/fake_home
+    yarn config --offline set yarn-offline-mirror $offlineCache
+    fixup_yarn_lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
   '';
 
+  buildPhase = ''
+    runHook preBuild
+
+    export NODE_OPTIONS=--openssl-legacy-provider
+    yarn --offline build
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mv build $out
+
+    runHook postInstall
+  '';
 }

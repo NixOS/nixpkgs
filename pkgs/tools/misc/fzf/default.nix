@@ -1,26 +1,51 @@
-{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, perl }:
+{ stdenv
+, lib
+, buildGoModule
+, fetchFromGitHub
+, writeShellScriptBin
+, runtimeShell
+, installShellFiles
+, bc
+, ncurses
+, perl
+, glibcLocales
+, testers
+, fzf
+}:
 
+let
+  # on Linux, wrap perl in the bash completion scripts with the glibc locales,
+  # so that using the shell completion (ctrl+r, etc) doesn't result in ugly
+  # warnings on non-nixos machines
+  ourPerl = if !stdenv.isLinux then perl else (
+    writeShellScriptBin "perl" ''
+      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+      exec ${perl}/bin/perl "$@"
+    '');
+in
 buildGoModule rec {
   pname = "fzf";
-  version = "0.27.2";
+  version = "0.43.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "sha256-JWTyZRZrW1mFy91D+eZL6iYV0CcNxJUT4JA0hrBKZZU=";
+    hash = "sha256-5voAO3vHygSo7rl9ELdb9BwMNFVZdjEe7x8foyi+a6s=";
   };
 
-  vendorSha256 = "sha256-FKDCIotyra/TZ48wbpzudJZ2aI2pn+ZR4EoZ+9+19Mw=";
+  vendorHash = "sha256-cv8KUXPRXufvbaZlvf/DeFfQCzu7MAlikRVPHWlakx0=";
+
+  CGO_ENABLED = 0;
 
   outputs = [ "out" "man" ];
 
-  fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ ncurses ];
 
-  buildFlagsArray = [
-    "-ldflags=-s -w -X main.version=${version} -X main.revision=${src.rev}"
+  ldflags = [
+    "-s" "-w" "-X main.version=${version} -X main.revision=${src.rev}"
   ];
 
   # The vim plugin expects a relative path to the binary; patch it to abspath.
@@ -34,28 +59,28 @@ buildGoModule rec {
 
     # Has a sneaky dependency on perl
     # Include first args to make sure we're patching the right thing
-    substituteInPlace shell/key-bindings.zsh \
-      --replace " perl -ne " " ${perl}/bin/perl -ne "
     substituteInPlace shell/key-bindings.bash \
-      --replace " perl -n " " ${perl}/bin/perl -n "
-  '';
-
-  preInstall = ''
-    mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
-    cp shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    cp ${fishHook} $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+      --replace " perl -n " " ${ourPerl}/bin/perl -n "
+    # fzf-tmux depends on bc
+   substituteInPlace bin/fzf-tmux \
+     --replace "bc" "${bc}/bin/bc"
   '';
 
   postInstall = ''
-    cp bin/fzf-tmux $out/bin
+    install bin/fzf-tmux $out/bin
 
-    mkdir -p $man/share/man
-    cp -r man/man1 $man/share/man
+    installManPage man/man1/fzf.1 man/man1/fzf-tmux.1
 
-    mkdir -p $out/share/vim-plugins/${pname}
-    cp -r plugin $out/share/vim-plugins/${pname}
+    install -D plugin/* -t $out/share/vim-plugins/${pname}/plugin
+    mkdir -p $out/share/nvim
+    ln -s $out/share/vim-plugins/${pname} $out/share/nvim/site
 
-    cp -R shell $out/share/fzf
+    # Install shell integrations
+    install -D shell/* -t $out/share/fzf/
+    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    mkdir -p $out/share/fish/vendor_conf.d
+    echo fzf_key_bindings > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell
@@ -65,6 +90,10 @@ buildGoModule rec {
     chmod +x $out/bin/fzf-share
   '';
 
+  passthru.tests.version = testers.testVersion {
+    package = fzf;
+  };
+
   meta = with lib; {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
@@ -72,5 +101,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ Br1ght0ne ma27 zowoq ];
     platforms = platforms.unix;
     changelog = "https://github.com/junegunn/fzf/blob/${version}/CHANGELOG.md";
+    mainProgram = "fzf";
   };
 }

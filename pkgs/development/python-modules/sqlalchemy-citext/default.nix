@@ -3,7 +3,6 @@
 , fetchPypi
 , psycopg2
 , sqlalchemy
-, python
 }:
 
 buildPythonPackage rec {
@@ -31,6 +30,6 @@ buildPythonPackage rec {
     description = "A sqlalchemy plugin that allows postgres use of CITEXT";
     homepage = "https://github.com/mahmoudimus/sqlalchemy-citext";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = [ ];
   };
 }

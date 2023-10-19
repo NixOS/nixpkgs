@@ -1,24 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, numpy }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, pytestCheckHook
+, pythonOlder
+, numpy
+, lxml
+}:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "3.9.10";
+  version = "4.0.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ed243bc818f7a9a021d8dd39f69ae7ed366dfd9582b13d686e1b1e8c8326bcf";
+    hash = "sha256-zPGD9VdMMSdThd/IV2wLF4NA1lZQy9a0SOyOkUGHK7c=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ numpy ];
 
-  # tests are not included in pypi distributions and would require lots of
-  # optional dependencies
-  doCheck = false;
+  nativeCheckInputs = [ lxml pytestCheckHook ];
+
+  disabledTests = [
+    # requires loading models which aren't part of the Pypi tarball
+    "test_load"
+  ];
+
+  pytestFlagsArray = [ "tests/test_minimal.py" ];
+
+  pythonImportsCheck = [ "trimesh" ];
 
   meta = with lib; {
-    description = "Python library for loading and using triangular meshes.";
+    description = "Python library for loading and using triangular meshes";
     homepage = "https://trimsh.org/";
+    changelog = "https://github.com/mikedh/trimesh/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ gebner ];
+    maintainers = with maintainers; [ gebner pbsds ];
   };
 }

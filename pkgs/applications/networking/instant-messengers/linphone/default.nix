@@ -1,58 +1,39 @@
-{ bcg729
-, bctoolbox
-, bcunit
+{ bctoolbox
 , belcard
 , belle-sip
 , belr
-, bzrtp
-, cairo
 , cmake
-, cyrus_sasl
 , fetchFromGitLab
-, fetchurl
-, ffmpeg
-, gdk-pixbuf
-, glib
-, gnused
-, graphviz
-, gtk2
-, intltool
 , lib
-, libexosip
 , liblinphone
-, libmatroska
-, libnotify
-, libosip
-, libsoup
-, libupnp
-, libX11
-, libxml2
-, makeWrapper
-, mbedtls
 , mediastreamer
 , mediastreamer-openh264
-, minizip2
+, minizip-ng
 , mkDerivation
-, openldap
-, ortp
-, pango
-, pkg-config
-, python
-, qtbase
 , qtgraphicaleffects
 , qtquickcontrols2
-, qttranslations
-, readline
-, speex
-, sqlite
-
-, udev
-, zlib
+, qttools
 }:
+
+# How to update Linphone? (The Qt desktop app)
+#
+# Belledonne Communications (BC), the company making Linphone, has split the
+# project into several sub-projects that they maintain, plus some third-party
+# dependencies that they also extend with commits of their own, specific to
+# Linphone and not (yet?) upstreamed.
+#
+# All of this is organised in a Software Development Kit (SDK) meta-repository
+# with git submodules to pin all those repositories into a coherent whole.
+#
+# The Linphone Qt desktop app uses this SDK as submodule as well.
+#
+# So, in order to update the desktop app to a new release, one has to follow
+# the submodule chain and update the corresponding derivations here, in nixpkgs,
+# with the corresponding version number (or commit hash)
 
 mkDerivation rec {
   pname = "linphone-desktop";
-  version = "4.2.5";
+  version = "5.0.16";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -60,78 +41,51 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1gq4l9p21rbrcksa7fbkzn9fzbbynqmn6ni6lhnvzk359sb1xvbz";
+    hash = "sha256-zS0JyK+HGiHY7tPdl3RK6fJJOUS+fKM1u3npNxDAAYE=";
   };
 
   patches = [
     ./do-not-build-linphone-sdk.patch
     ./remove-bc_compute_full_version-usage.patch
+    ./no-store-path-in-autostart.patch
   ];
 
   # See: https://gitlab.linphone.org/BC/public/linphone-desktop/issues/21
   postPatch = ''
     echo "project(linphoneqt VERSION ${version})" >linphone-app/linphoneqt_version.cmake
     substituteInPlace linphone-app/src/app/AppController.cpp \
-      --replace "LINPHONE_QT_GIT_VERSION" "\"${version}\""
+      --replace "APPLICATION_SEMVER" "\"${version}\""
   '';
 
   # TODO: After linphone-desktop and liblinphone split into separate packages,
   # there might be some build inputs here that aren't needed for
   # linphone-desktop.
   buildInputs = [
-    bcg729
+    # Made by BC
     bctoolbox
     belcard
     belle-sip
     belr
-    bzrtp
-    cairo
-    cyrus_sasl
-    ffmpeg
-    gdk-pixbuf
-    glib
-    gtk2
-    libX11
-    libexosip
     liblinphone
-    libmatroska
-    libnotify
-    libosip
-    libsoup
-    libupnp
-    libxml2
-    mbedtls
     mediastreamer
     mediastreamer-openh264
-    minizip2
-    openldap
-    ortp
-    pango
-    qtbase
+
+    minizip-ng
     qtgraphicaleffects
     qtquickcontrols2
-    qttranslations
-    readline
-    speex
-    sqlite
-    udev
-    zlib
   ];
 
   nativeBuildInputs = [
-    bcunit
     cmake
-    gnused
-    graphviz
-    intltool
-    makeWrapper
-    pkg-config
+    qttools
   ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-    "-DMINIZIP_INCLUDE_DIRS=${minizip2}/include"
+    "-DMINIZIP_INCLUDE_DIRS=${minizip-ng}/include"
     "-DMINIZIP_LIBRARIES=minizip"
+
+    # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
+    "-DCMAKE_SKIP_BUILD_RPATH=ON"
   ];
 
   # The default install phase fails because the paths are somehow messed up in
@@ -163,18 +117,25 @@ mkDerivation rec {
   # Linphone will randomly crash when it tries to access those files. Then,
   # those just need to be copied manually below.
   installPhase = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/lib
     cp linphone-app/linphone $out/bin/
+    cp linphone-app/libapp-plugin.so $out/lib/
+    mkdir -p $out/lib/mediastreamer/plugins
+    ln -s ${mediastreamer-openh264}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
+    ln -s ${mediastreamer}/lib/mediastreamer/plugins/* $out/lib/mediastreamer/plugins/
     wrapProgram $out/bin/linphone \
       --set MEDIASTREAMER_PLUGINS_DIR \
-            ${mediastreamer-openh264}/lib/mediastreamer/plugins
+            $out/lib/mediastreamer/plugins
     mkdir -p $out/share/applications
     cp linphone-app/linphone.desktop $out/share/applications/
-    cp -r ../linphone-app/assets/icons $out/share/
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp ../linphone-app/assets/images/linphone_logo.svg $out/share/icons/hicolor/scalable/apps/linphone.svg
     mkdir -p $out/share/belr/grammars
     ln -s ${liblinphone}/share/belr/grammars/* $out/share/belr/grammars/
+    ln -s ${belle-sip}/share/belr/grammars/* $out/share/belr/grammars/
     mkdir -p $out/share/linphone
     ln -s ${liblinphone}/share/linphone/* $out/share/linphone/
+    ln -s ${liblinphone}/share/sounds $out/share/sounds
   '';
 
   meta = with lib; {

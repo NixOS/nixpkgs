@@ -1,29 +1,40 @@
-{ lib, stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib, installShellFiles }:
 
 stdenv.mkDerivation rec {
-  name = "pngcheck-3.0.2";
+  pname = "pngcheck";
+  version = "3.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/png-mng/${name}.tar.gz";
+    url = "mirror://sourceforge/png-mng/pngcheck-${version}.tar.gz";
     sha256 = "sha256-DX4mLyQRb93yhHqM61yS2fXybvtC6f/2PsK7dnYTHKc=";
   };
 
   hardeningDisable = [ "format" ];
 
+  postPatch = ''
+    substituteInPlace $makefile \
+      --replace "gcc" "$CC"
+  '';
+
   makefile = "Makefile.unx";
   makeFlags = [ "ZPATH=${zlib.static}/lib" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ zlib ];
 
   installPhase = ''
-    mkdir -p $out/bin/
-    cp pngcheck $out/bin/pngcheck
+    runHook preInstall
+    install -Dm555 -t $out/bin/ pngcheck
+    installManPage $pname.1
+    runHook postInstall
   '';
 
-  meta = {
-    homepage = "http://pmt.sourceforge.net/pngcrush";
+  meta = with lib; {
+    homepage = "https://pmt.sourceforge.net/pngcrush";
     description = "Verifies the integrity of PNG, JNG and MNG files";
-    license = lib.licenses.free;
-    platforms = with lib.platforms; linux;
+    license = licenses.free;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ starcraft66 ];
   };
 }

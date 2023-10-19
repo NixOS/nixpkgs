@@ -1,46 +1,74 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
+, cython
+, async-timeout
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ifaddr
+, poetry-core
+, pytest-asyncio
+, pytest-timeout
 , pythonOlder
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.31.0";
-  disabled = pythonOlder "3.6";
+  version = "0.115.2";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-U6GAJIRxxvgb0f/8vOA+2T19jq8QkFyRIaweqZbRmEQ=";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "jstasiak";
+    repo = "python-zeroconf";
+    rev = "refs/tags/${version}";
+    hash = "sha256-qLJWOZyWyLx5orDbvVSluA+zFvHN2393hyVC3ty87ug=";
   };
 
-  propagatedBuildInputs = [ ifaddr ];
+  nativeBuildInputs = [
+    cython
+    poetry-core
+    setuptools
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  propagatedBuildInputs = [
+    ifaddr
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ];
 
-  pytestFlagsArray = [ "zeroconf/test.py" ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    sed -i '/addopts/d' pyproject.toml
+  '';
 
   disabledTests = [
-    # disable tests that expect some sort of networking in the build container
+    # OSError: [Errno 19] No such device
     "test_close_multiple_times"
-    "test_launch_and_close"
-    "test_launch_and_close_v4_v6"
-    "test_launch_and_close_v6_only"
     "test_integration_with_listener_ipv6"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_lots_of_names"
+    "test_launch_and_close"
+    "test_launch_and_close_context_manager"
+    "test_launch_and_close_v4_v6"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [ "zeroconf" ];
+  pythonImportsCheck = [
+    "zeroconf"
+    "zeroconf.asyncio"
+  ];
 
   meta = with lib; {
+    changelog = "https://github.com/python-zeroconf/python-zeroconf/releases/tag/${version}";
     description = "Python implementation of multicast DNS service discovery";
-    homepage = "https://github.com/jstasiak/python-zeroconf";
+    homepage = "https://github.com/python-zeroconf/python-zeroconf";
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };

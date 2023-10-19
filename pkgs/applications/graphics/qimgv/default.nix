@@ -1,7 +1,6 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
-, fetchpatch
 
 , cmake
 , pkg-config
@@ -16,13 +15,13 @@
 
 mkDerivation rec {
   pname = "qimgv";
-  version = "0.9.1";
+  version = "1.0.3-alpha";
 
   src = fetchFromGitHub {
     owner = "easymodo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0b2hddps969gjim2r9a22zaxmnzp600av2zz6icq66ksfrx1rpac";
+    sha256 = "sha256-fHMSo8zlOl9Lt8nYwClUzON4TPB9Ogwven+TidsesxY=";
   };
 
   nativeBuildInputs = [

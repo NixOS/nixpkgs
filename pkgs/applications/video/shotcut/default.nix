@@ -1,6 +1,5 @@
 { lib
 , fetchFromGitHub
-, fetchpatch
 , mkDerivation
 , SDL2
 , frei0r
@@ -17,24 +16,22 @@
 , qtgraphicaleffects
 , qmake
 , qttools
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 }:
 
 assert lib.versionAtLeast mlt.version "6.24.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "21.03.21";
+  version = "21.09.20";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "UdeHbNkJ0U9FeTmpbcU4JxiyIHkrlC8ErhtY6zdCZEk=";
+    sha256 = "1y46n5gmlayfl46l0vhg5g5dbbc0sg909mxb68sia0clkaas8xrh";
   };
 
-  enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
     SDL2
@@ -50,7 +47,7 @@ mkDerivation rec {
     qtgraphicaleffects
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
+  env.NIX_CFLAGS_COMPILE = "-I${mlt.dev}/include/mlt++ -I${mlt.dev}/include/mlt";
   qmakeFlags = [
     "QMAKE_LRELEASE=${lib.getDev qttools}/bin/lrelease"
     "SHOTCUT_VERSION=${version}"
@@ -58,7 +55,7 @@ mkDerivation rec {
   ];
 
   prePatch = ''
-    sed 's_shotcutPath, "melt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
+    sed 's_shotcutPath, "melt[^"]*"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
     sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
     sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
     NICE=$(type -P nice)
@@ -77,9 +74,7 @@ mkDerivation rec {
     cp -r src/qml $out/share/shotcut/
   '';
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+  passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
@@ -95,7 +90,7 @@ mkDerivation rec {
       please use the official build from shotcut.org instead.
     '';
     homepage = "https://shotcut.org";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;
   };

@@ -1,15 +1,12 @@
 { coreutils
-, ebtables
 , fetchurl
 , gnugrep
 , gnused
 , iproute2
-, ipset
 , iptables
 , perl
 , perlPackages
 , lib, stdenv
-, tree
 , util-linux
 }:
 let
@@ -17,8 +14,6 @@ let
            [ "${coreutils}/bin"
              "${iproute2}/bin"
              "${iptables}/bin"
-             "${ipset}/bin"
-             "${ebtables}/bin"
              "${util-linux}/bin"
              "${gnugrep}/bin"
              "${gnused}/bin"
@@ -47,9 +42,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     coreutils
     iproute2
-    ipset
     iptables
-    ebtables
     util-linux
     gnugrep
     gnused

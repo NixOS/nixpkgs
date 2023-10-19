@@ -1,43 +1,46 @@
 { lib
+, stdenvNoCC
 , fetchurl
 , symlinkJoin
 }:
 
 let
-  version = "12.1";
+  version = "15.0";
 
-  fetchData = { file, sha256 }: fetchurl {
-    url = "https://www.unicode.org/Public/emoji/${version}/${file}";
-    inherit sha256;
-    downloadToTemp = true;
-    recursiveHash = true;
-    postFetch = ''
+  fetchData = { suffix, hash }: stdenvNoCC.mkDerivation {
+    pname = "unicode-emoji-${suffix}";
+    inherit version;
+
+    src = fetchurl {
+      url = "https://www.unicode.org/Public/emoji/${version}/emoji-${suffix}.txt";
+      inherit hash;
+    };
+
+    dontUnpack = true;
+
+    installPhase = ''
+      runHook preInstall
+
       installDir="$out/share/unicode/emoji"
       mkdir -p "$installDir"
-      mv "$downloadedFile" "$installDir/${file}"
+      cp "$src" "$installDir/emoji-${suffix}.txt"
+
+      runHook postInstall
     '';
   };
 
   srcs = {
-    emoji-data = fetchData {
-      file = "emoji-data.txt";
-      sha256 = "17gfm5a28lsymx36prbjy2g0b27gf3rcgggy0yxdshbxwf6zpf9k";
-    };
     emoji-sequences = fetchData {
-      file = "emoji-sequences.txt";
-      sha256 = "1fckw5hfyvz5jfp2jczzx8qcs79vf0zyq0z2942230j99arq70vc";
+      suffix = "sequences";
+      hash = "sha256-XCIi2KQy2JagMaaML1SwT79HsPzi5phT8euKPpRetW0=";
     };
     emoji-test = fetchData {
-      file = "emoji-test.txt";
-      sha256 = "0w29lva7gp9g9lf7bz1i24qdalvf440bcq8npsbwr3cpp7na95kh";
-    };
-    emoji-variation-sequences = fetchData {
-      file = "emoji-variation-sequences.txt";
-      sha256 = "0akpib3cinr8xcs045hda5wnpfj6qfdjlkzmq5vgdc50gyhrd2z3";
+      suffix = "test";
+      hash = "sha256-hEXyOsg4jglr4Z0CYuFPzv+Fb/Ugk/I1bciUhfGoU9s=";
     };
     emoji-zwj-sequences = fetchData {
-      file = "emoji-zwj-sequences.txt";
-      sha256 = "0s2mvy1nr2v1x0rr1fxlsv8ly1vyf9978rb4hwry5vnr678ls522";
+      suffix = "zwj-sequences";
+      hash = "sha256-/jV/kRe3dGZ2Bjdl1YcTft+bJZA6eSvVSTW/CFZ5EYI=";
     };
   };
 in

@@ -1,15 +1,20 @@
 { lib
 , stdenv
-, fetchurl
+, fetchfossil
+, tcl
+
+, enableTcl ? true
 }:
 
 stdenv.mkDerivation {
   pname = "pikchr";
-  version = "unstable-2021-04-07";
+  # To update, use the last check-in in https://pikchr.org/home/timeline?r=trunk
+  version = "unstable-2023-08-30";
 
-  src = fetchurl {
-    url = "https://pikchr.org/home/tarball/90b6d5b4a3834ff0/pikchr.tar.gz";
-    sha256 = "1cqpnljy12gl82rcbb7mwhgv9szcliwkbwwh67hzdv020h1scxym";
+  src = fetchfossil {
+    url = "https://pikchr.org/home";
+    rev = "d6f80b1ab30654d5";
+    sha256 = "sha256-GEH1qFiMYmNFJnZzLG5rxpl+F7OSRMoVcdo94+mvrlY=";
   };
 
   # can't open generated html files
@@ -17,16 +22,28 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace open "test -f"
   '';
 
+  nativeBuildInputs = lib.optional enableTcl tcl.tclPackageHook;
+
+  buildInputs = lib.optional enableTcl tcl;
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+  buildFlags = [ "pikchr" ] ++ lib.optional enableTcl "piktcl";
+
   installPhase = ''
+    runHook preInstall
     install -Dm755 pikchr $out/bin/pikchr
     install -Dm755 pikchr.out $out/lib/pikchr.o
     install -Dm644 pikchr.h $out/include/pikchr.h
+  '' + lib.optionalString enableTcl ''
+    cp -r piktcl $out/lib/piktcl
+  '' + ''
+    runHook postInstall
   '';
 
+  dontWrapTclBinaries = true;
+
   doCheck = true;
-  checkTarget = "test";
 
   meta = with lib; {
     description = "A PIC-like markup language for diagrams in technical documentation";
@@ -34,5 +51,6 @@ stdenv.mkDerivation {
     license = licenses.bsd0;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    mainProgram = "pikchr";
   };
 }

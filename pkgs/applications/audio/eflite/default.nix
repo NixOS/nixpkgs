@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, flite, alsaLib, debug ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, flite, alsa-lib, debug ? false }:
 
 stdenv.mkDerivation rec {
   pname = "eflite";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "088p9w816s02s64grfs28gai3lnibzdjb9d1jwxzr8smbs2qbbci";
   };
 
-  buildInputs = [ flite alsaLib ];
+  buildInputs = [ flite alsa-lib ];
 
   configureFlags = [
     "flite_dir=${flite}"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   CFLAGS = lib.optionalString debug " -DDEBUG=2";
 
   meta = {
-    homepage = "http://eflite.sourceforge.net";
+    homepage = "https://eflite.sourceforge.net";
     description = "Speech server for screen readers";
     longDescription = ''
       EFlite is a speech server for Emacspeak and other screen
