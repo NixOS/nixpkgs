@@ -117,36 +117,39 @@ let
     inherit (upstream-info.deps.ungoogled-patches) rev sha256;
   };
 
+  recompressTarball = { version, sha256 ? "" }: fetchzip {
+    name = "chromium-${version}.tar.zstd";
+    url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
+    inherit sha256;
+
+    nativeBuildInputs = [ zstd ];
+
+    postFetch = ''
+      echo removing unused code from tarball to stay under hydra limit
+      rm -r $out/third_party/{rust-src,llvm}
+
+      echo moving remains out of \$out
+      mv $out source
+
+      echo recompressing final contents into new tarball
+      # try to make a deterministic tarball
+      tar \
+        --use-compress-program "zstd -T$NIX_BUILD_CORES" \
+        --sort name \
+        --mtime 1970-01-01 \
+        --owner=root --group=root \
+        --numeric-owner --mode=go=rX,u+rw,a-s \
+        -cf $out source
+    '';
+  };
+
+
   base = rec {
     pname = "${packageName}-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
-    src = fetchzip {
-      name = "chromium-${version}.tar.zstd";
-      url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-      inherit (upstream-info) sha256;
-
-      nativeBuildInputs = [ zstd ];
-
-      postFetch = ''
-        echo removing unused code from tarball to stay under hydra limit
-        rm -r $out/third_party/{rust-src,llvm}
-
-        echo moving remains out of \$out
-        mv $out source
-
-        echo recompressing final contents into new tarball
-        # try to make a deterministic tarball
-        tar \
-          --use-compress-program "zstd -T$NIX_BUILD_CORES" \
-          --sort name \
-          --mtime 1970-01-01 \
-          --owner=root --group=root \
-          --numeric-owner --mode=go=rX,u+rw,a-s \
-          -cf $out source
-      '';
-    };
+    src = recompressTarball { inherit version; inherit (upstream-info) sha256; };
 
     nativeBuildInputs = [
       ninja pkg-config
@@ -402,6 +405,7 @@ let
       chromiumDeps = {
         gn = gnChromium;
       };
+      inherit recompressTarball;
     };
   }
   # overwrite `version` with the exact same `version` from the same source,

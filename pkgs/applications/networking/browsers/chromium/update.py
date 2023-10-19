@@ -21,12 +21,11 @@ from urllib.request import urlopen
 
 RELEASES_URL = 'https://versionhistory.googleapis.com/v1/chrome/platforms/linux/channels/all/versions/all/releases'
 DEB_URL = 'https://dl.google.com/linux/chrome/deb/pool/main/g'
-BUCKET_URL = 'https://commondatastorage.googleapis.com/chromium-browser-official'
 
 PIN_PATH = dirname(abspath(__file__)) + '/upstream-info.nix'
 UNGOOGLED_FLAGS_PATH = dirname(abspath(__file__)) + '/ungoogled-flags.toml'
 COMMIT_MESSAGE_SCRIPT = dirname(abspath(__file__)) + '/get-commit-message.py'
-
+NIXPKGS_PATH = subprocess.check_output(["git", "rev-parse", "--show-toplevel"], cwd=dirname(PIN_PATH)).strip()
 
 def load_as_json(path):
     """Loads the given nix file as JSON."""
@@ -40,6 +39,23 @@ def save_dict_as_nix(path, input):
     formatted = subprocess.check_output(['nixfmt'], input=nix)
     with open(path, 'w') as out:
         out.write(formatted.decode())
+
+def prefetch_src_sri_hash(attr_path, version):
+    """Prefetches the fixed-output-derivation source tarball and returns its SRI-Hash."""
+    print(f'nix-build (FOD prefetch) {attr_path} {version}')
+    out = subprocess.run(
+        ["nix-build", "--expr", f'(import ./. {{}}).{attr_path}.browser.passthru.recompressTarball {{ version = "{version}"; }}'],
+        cwd=NIXPKGS_PATH,
+        stderr=subprocess.PIPE
+    ).stderr.decode()
+
+    for line in iter(out.split("\n")):
+        match = re.match(r"\s+got:\s+(.+)$", line)
+        if match:
+            print(f'Hash: {match.group(1)}')
+            return match.group(1)
+    print(f'{out}\n\nError: Expected hash in nix-build stderr output.', file=sys.stderr)
+    sys.exit(1)
 
 def nix_prefetch_url(url, algo='sha256'):
     """Prefetches the content of the given URL."""
@@ -201,7 +217,10 @@ with urlopen(RELEASES_URL) as resp:
             google_chrome_suffix = channel_name
 
         try:
-            channel['sha256'] = nix_prefetch_url(f'{BUCKET_URL}/chromium-{release["version"]}.tar.xz')
+            channel['sha256'] = prefetch_src_sri_hash(
+                channel_name_to_attr_name(channel_name),
+                release["version"]
+            )
             channel['sha256bin64'] = nix_prefetch_url(
                 f'{DEB_URL}/google-chrome-{google_chrome_suffix}/' +
                 f'google-chrome-{google_chrome_suffix}_{release["version"]}-1_amd64.deb')
