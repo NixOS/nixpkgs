@@ -1,0 +1,118 @@
+diff --git a/Makefile.in b/Makefile.in
+index 06a9398e1..3f788feaf 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -869,7 +869,7 @@ BASE_FLAGS_TO_PASS = \
+ 	"STAGE1_LANGUAGES=$(STAGE1_LANGUAGES)" \
+ 	"GNATBIND=$(GNATBIND)" \
+ 	"GNATMAKE=$(GNATMAKE)" \
+-	"GDC=$(GDC)" \
++	"`echo 'GDC=$(GDC)' | sed -e 's/-idirafter [^ ]*//g'`" \
+ 	"GDCFLAGS=$(GDCFLAGS)" \
+ 	"AR_FOR_TARGET=$(AR_FOR_TARGET)" \
+ 	"AS_FOR_TARGET=$(AS_FOR_TARGET)" \
+@@ -883,7 +883,7 @@ BASE_FLAGS_TO_PASS = \
+ 	"GFORTRAN_FOR_TARGET=$(GFORTRAN_FOR_TARGET)" \
+ 	"GOC_FOR_TARGET=$(GOC_FOR_TARGET)" \
+ 	"GOCFLAGS_FOR_TARGET=$(GOCFLAGS_FOR_TARGET)" \
+-	"GDC_FOR_TARGET=$(GDC_FOR_TARGET)" \
++	"`echo 'GDC_FOR_TARGET=$(GDC_FOR_TARGET)' | sed -e 's/-idirafter [^ ]*//g'`" \
+ 	"GDCFLAGS_FOR_TARGET=$(GDCFLAGS_FOR_TARGET)" \
+ 	"GM2_FOR_TARGET=$(GM2_FOR_TARGET)" \
+ 	"GM2FLAGS_FOR_TARGET=$(GM2FLAGS_FOR_TARGET)" \
+@@ -959,7 +959,7 @@ EXTRA_HOST_FLAGS = \
+ 	'DSYMUTIL=$(DSYMUTIL)' \
+ 	'GFORTRAN=$(GFORTRAN)' \
+ 	'GOC=$(GOC)' \
+-	'GDC=$(GDC)' \
++	"`echo 'GDC=$(GDC)' | sed -e 's/-idirafter [^ ]*//g'`" \
+ 	'GM2=$(GM2)' \
+ 	'LD=$(LD)' \
+ 	'LIPO=$(LIPO)' \
+@@ -1040,8 +1040,11 @@ EXTRA_TARGET_FLAGS = \
+ 	'STAGE1_LDFLAGS=$$(POSTSTAGE1_LDFLAGS)' \
+ 	'STAGE1_LIBS=$$(POSTSTAGE1_LIBS)' \
+ 	"TFLAGS=$$TFLAGS"
++EXTRA_TARGET_FLAGS_D = \
++	"`echo $(EXTRA_TARGET_FLAGS) | sed -e 's/-idirafter [^ ]*//g'`"
+ 
+ TARGET_FLAGS_TO_PASS = $(BASE_FLAGS_TO_PASS) $(EXTRA_TARGET_FLAGS)
++TARGET_FLAGS_TO_PASS_D = $(BASE_FLAGS_TO_PASS) $(EXTRA_TARGET_FLAGS_D)
+ 
+ # Flags to pass down to gcc.  gcc builds a library, libgcc.a, so it
+ # unfortunately needs the native compiler and the target ar and
+@@ -53638,7 +53641,7 @@ check-target-libphobos:
+ 	s=`cd $(srcdir); ${PWD_COMMAND}`; export s; \
+ 	$(NORMAL_TARGET_EXPORTS) \
+ 	(cd $(TARGET_SUBDIR)/libphobos && \
+-	  $(MAKE) $(TARGET_FLAGS_TO_PASS)   check)
++	  $(MAKE) $(TARGET_FLAGS_TO_PASS_D)   check)
+ 
+ @endif target-libphobos
+ 
+@@ -53653,7 +53656,7 @@ install-target-libphobos: installdirs
+ 	s=`cd $(srcdir); ${PWD_COMMAND}`; export s; \
+ 	$(NORMAL_TARGET_EXPORTS) \
+ 	(cd $(TARGET_SUBDIR)/libphobos && \
+-	  $(MAKE) $(TARGET_FLAGS_TO_PASS)  install)
++	  $(MAKE) $(TARGET_FLAGS_TO_PASS_D)  install)
+ 
+ @endif target-libphobos
+ 
+@@ -53668,7 +53671,7 @@ install-strip-target-libphobos: installdirs
+ 	s=`cd $(srcdir); ${PWD_COMMAND}`; export s; \
+ 	$(NORMAL_TARGET_EXPORTS) \
+ 	(cd $(TARGET_SUBDIR)/libphobos && \
+-	  $(MAKE) $(TARGET_FLAGS_TO_PASS)  install-strip)
++	  $(MAKE) $(TARGET_FLAGS_TO_PASS_D)  install-strip)
+ 
+ @endif target-libphobos
+ 
+diff --git a/Makefile.tpl b/Makefile.tpl
+index dfbd74b68..0d065ab34 100644
+--- a/Makefile.tpl
++++ b/Makefile.tpl
+@@ -797,8 +797,11 @@ EXTRA_TARGET_FLAGS = \
+ 	'STAGE1_LDFLAGS=$$(POSTSTAGE1_LDFLAGS)' \
+ 	'STAGE1_LIBS=$$(POSTSTAGE1_LIBS)' \
+ 	"TFLAGS=$$TFLAGS"
++EXTRA_TARGET_FLAGS_D = \
++	"`echo $(EXTRA_TARGET_FLAGS) | sed -e 's/-idirafter [^ ]*//g'`"
+ 
+ TARGET_FLAGS_TO_PASS = $(BASE_FLAGS_TO_PASS) $(EXTRA_TARGET_FLAGS)
++TARGET_FLAGS_TO_PASS_D = $(BASE_FLAGS_TO_PASS) $(EXTRA_TARGET_FLAGS_D)
+ 
+ # Flags to pass down to gcc.  gcc builds a library, libgcc.a, so it
+ # unfortunately needs the native compiler and the target ar and
+diff --git a/libphobos/Makefile.in b/libphobos/Makefile.in
+index 8d62c31da..c34d7072b 100644
+--- a/libphobos/Makefile.in
++++ b/libphobos/Makefile.in
+@@ -376,6 +376,7 @@ AM_MAKEFLAGS = \
+ 	"LIBCFLAGS=$(LIBCFLAGS)" \
+ 	"LIBCFLAGS_FOR_TARGET=$(LIBCFLAGS_FOR_TARGET)" \
+ 	"MAKE=$(MAKE)" \
++	"`echo 'MAKEFLAGS=$(MAKEFLAGS)' | sed -e 's/-j[0-9]+/-j1/'`" \
+ 	"MAKEINFO=$(MAKEINFO) $(MAKEINFOFLAGS)" \
+ 	"PICFLAG=$(PICFLAG)" \
+ 	"PICFLAG_FOR_TARGET=$(PICFLAG_FOR_TARGET)" \
+@@ -705,6 +706,7 @@ uninstall-am:
+ 
+ .PRECIOUS: Makefile
+ 
++.NOTPARALLEL:
+ 
+ # GNU Make needs to see an explicit $(MAKE) variable in the command it
+ # runs to enable its job server during parallel builds.  Hence the
+diff --git a/libphobos/configure b/libphobos/configure
+index 925c53c5f..b4bbde11a 100755
+--- a/libphobos/configure
++++ b/libphobos/configure
+@@ -5138,6 +5138,7 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ ac_compiler_gnu=$ac_cv_c_compiler_gnu
+ 
++GDC=`$as_echo "$GDC" | sed -e 's/-idirafter [^ ]*//g'`
+ 
+ ac_ext=d
+ ac_compile='$GDC -c $GDCFLAGS conftest.$ac_ext >&5'

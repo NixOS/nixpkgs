@@ -74,7 +74,7 @@ in
 ++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
 ++ optional atLeast7 ./ppc-musl.patch
 ++ optional is12 ./12/lambda-ICE-PR109241.patch # backport ICE fix on ccache code
-++ optional (atLeast9 && langD) ./libphobos.patch
+++ optional (atLeast9 && langD) (if atLeast13 then ./gcc-13-libphobos.patch else ./libphobos.patch)
 
 
 

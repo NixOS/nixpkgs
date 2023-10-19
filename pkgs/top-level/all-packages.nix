@@ -16245,15 +16245,34 @@ with pkgs;
   gcc-arm-embedded-12 = callPackage ../development/compilers/gcc-arm-embedded/12 { };
   gcc-arm-embedded = gcc-arm-embedded-12;
 
-  # It would be better to match the default gcc so that there are no linking errors
-  # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
-  gdc = gdc11;
+  # Has to match the default gcc so that there are no linking errors when
+  # using C/C++ libraries in D packages
+  gdc = gdc13;
   gdc11 = wrapCC (gcc11.cc.override {
     name = "gdc";
-    langCC = false;
-    langC = false;
+    langCC = true; # required to bootstrap newer gdc
+    langC = true;
     langD = true;
     profiledCompiler = false;
+    gdc = null; # gdc>=12 requires gdc to bootstrap
+  });
+
+  gdc12 = wrapCC (gcc12.cc.override {
+    name = "gdc";
+    langCC = true;
+    langC = true;
+    langD = true;
+    profiledCompiler = false;
+    gdc = gdc11; # gdc>=12 requires gdc to bootstrap
+  });
+
+  gdc13 = wrapCC (gcc13.cc.override {
+    name = "gdc";
+    langCC = true;
+    langC = true;
+    langD = true;
+    profiledCompiler = false;
+    gdc = gdc11; # gdc>=12 requires gdc to bootstrap
   });
 
   gforth = callPackage ../development/compilers/gforth { };
@@ -38442,7 +38461,9 @@ with pkgs;
 
   tinyfugue = callPackage ../games/tinyfugue { };
 
-  titanion = callPackage ../games/titanion { };
+  titanion = callPackage ../games/titanion {
+    gdc = gdc11;
+  };
 
   tome2 = callPackage ../games/tome2 { };
 
@@ -38452,13 +38473,17 @@ with pkgs;
     SDL2_image = SDL2_image_2_0_5;
   };
 
-  torus-trooper = callPackage ../games/torus-trooper { };
+  torus-trooper = callPackage ../games/torus-trooper {
+    gdc = gdc11;
+  };
 
   trackballs = callPackage ../games/trackballs { };
 
   try = callPackage ../tools/admin/try { };
 
-  tumiki-fighters = callPackage ../games/tumiki-fighters { };
+  tumiki-fighters = callPackage ../games/tumiki-fighters {
+    gdc = gdc11;
+  };
 
   tuxpaint = callPackage ../games/tuxpaint { };
 

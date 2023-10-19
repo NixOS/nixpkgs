@@ -30,6 +30,7 @@
 , javaAwtGtk ? false
 , langAda ? false
 , langGo ? false
+, langD ? false, gdc ? null
 , withoutTargetLibc ? null
 , threadsCross ? null
 }:
@@ -52,6 +53,7 @@ in
   ++ optionals javaAwtGtk [ pkg-config ]
   ++ optionals (with stdenv.targetPlatform; isVc4 || isRedox && flex != null) [ flex ]
   ++ optionals langAda [ gnat-bootstrap ]
+  ++ optionals (langD && lib.versionAtLeast version "12") [ gdc ]
   # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
   # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
   ++ optionals buildPlatform.isDarwin [ gnused ]
