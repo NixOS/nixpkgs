@@ -164,6 +164,8 @@ let self = rec {
 
   routing = callPackage ../applications/video/kodi/addons/routing { };
 
+  sendtokodi = callPackage ../applications/video/kodi/addons/sendtokodi { };
+
   signals = callPackage ../applications/video/kodi/addons/signals { };
 
   simplejson = callPackage ../applications/video/kodi/addons/simplejson { };
