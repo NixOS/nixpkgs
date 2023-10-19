@@ -115,8 +115,7 @@ in {
     environment.systemPackages = [ cfg.package ]
                                  ++ lib.optional cfg.jack.enable jack-libs;
 
-    systemd.packages = [ cfg.package ]
-                       ++ lib.optional cfg.pulse.enable cfg.package.pulse;
+    systemd.packages = [ cfg.package ];
 
     # PipeWire depends on DBUS but doesn't list it. Without this booting
     # into a terminal results in the service crashing with an error.
@@ -140,14 +139,14 @@ in {
     environment.etc."alsa/conf.d/49-pipewire-modules.conf" = mkIf cfg.alsa.enable {
       text = ''
         pcm_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
+          libs.native = ${cfg.package}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;
           ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire}/lib/alsa-lib/libasound_module_pcm_pipewire.so ;"}
         }
         ctl_type.pipewire {
-          libs.native = ${cfg.package.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
+          libs.native = ${cfg.package}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;
           ${optionalString enable32BitAlsaPlugins
-            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire.lib}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
+            "libs.32Bit = ${pkgs.pkgsi686Linux.pipewire}/lib/alsa-lib/libasound_module_ctl_pipewire.so ;"}
         }
       '';
     };
