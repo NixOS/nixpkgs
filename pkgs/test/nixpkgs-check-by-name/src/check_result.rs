@@ -8,6 +8,9 @@ use std::io;
 use std::path::PathBuf;
 
 pub enum CheckError {
+    PackageNonDir {
+        relative_package_dir: PathBuf,
+    },
     CaseSensitiveDuplicate {
         relative_shard_path: PathBuf,
         first: OsString,
@@ -89,6 +92,12 @@ impl CheckError {
 impl fmt::Display for CheckError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
+            CheckError::PackageNonDir { relative_package_dir } =>
+                write!(
+                    f,
+                    "{}: This path is a file, but it should be a directory.",
+                    relative_package_dir.display(),
+                ),
             CheckError::CaseSensitiveDuplicate { relative_shard_path, first, second } =>
                 write!(
                     f,

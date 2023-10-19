@@ -105,69 +105,72 @@ impl Nixpkgs {
                 let relative_package_dir =
                     PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}/{package_name}"));
 
-                if !package_path.is_dir() {
-                    error_writer.write(&format!(
-                        "{}: This path is a file, but it should be a directory.",
-                        relative_package_dir.display(),
-                    ))?;
-                    continue;
-                }
-
-                let package_name_valid = PACKAGE_NAME_REGEX.is_match(&package_name);
-                let name_check_result = if !package_name_valid {
-                    CheckError::InvalidPackageName {
+                let check_result = if !package_path.is_dir() {
+                    CheckError::PackageNonDir {
                         relative_package_dir: relative_package_dir.clone(),
-                        package_name: package_name.clone(),
                     }
                     .into_result()
                 } else {
-                    pass(())
-                };
-
-                let correct_relative_package_dir = Nixpkgs::relative_dir_for_package(&package_name);
-                let shard_check_result = if relative_package_dir != correct_relative_package_dir {
-                    // Only show this error if we have a valid shard and package name
-                    // Because if one of those is wrong, you should fix that first
-                    if shard_name_valid && package_name_valid {
-                        CheckError::IncorrectShard {
+                    let package_name_valid = PACKAGE_NAME_REGEX.is_match(&package_name);
+                    let name_check_result = if !package_name_valid {
+                        CheckError::InvalidPackageName {
                             relative_package_dir: relative_package_dir.clone(),
-                            correct_relative_package_dir: correct_relative_package_dir.clone(),
+                            package_name: package_name.clone(),
                         }
                         .into_result()
                     } else {
                         pass(())
-                    }
-                } else {
-                    pass(())
-                };
+                    };
 
-                let package_nix_path = package_path.join(PACKAGE_NIX_FILENAME);
-                let package_nix_check_result = if !package_nix_path.exists() {
-                    CheckError::PackageNixNonExistent {
-                        relative_package_dir: relative_package_dir.clone(),
-                    }
-                    .into_result()
-                } else if package_nix_path.is_dir() {
-                    CheckError::PackageNixDir {
-                        relative_package_dir: relative_package_dir.clone(),
-                    }
-                    .into_result()
-                } else {
-                    pass(())
-                };
+                    let correct_relative_package_dir =
+                        Nixpkgs::relative_dir_for_package(&package_name);
+                    let shard_check_result = if relative_package_dir != correct_relative_package_dir
+                    {
+                        // Only show this error if we have a valid shard and package name
+                        // Because if one of those is wrong, you should fix that first
+                        if shard_name_valid && package_name_valid {
+                            CheckError::IncorrectShard {
+                                relative_package_dir: relative_package_dir.clone(),
+                                correct_relative_package_dir: correct_relative_package_dir.clone(),
+                            }
+                            .into_result()
+                        } else {
+                            pass(())
+                        }
+                    } else {
+                        pass(())
+                    };
 
-                let check_result = flatten_check_results(
-                    [
-                        name_check_result,
-                        shard_check_result,
-                        package_nix_check_result,
-                    ],
-                    |_| (),
-                );
+                    let package_nix_path = package_path.join(PACKAGE_NIX_FILENAME);
+                    let package_nix_check_result = if !package_nix_path.exists() {
+                        CheckError::PackageNixNonExistent {
+                            relative_package_dir: relative_package_dir.clone(),
+                        }
+                        .into_result()
+                    } else if package_nix_path.is_dir() {
+                        CheckError::PackageNixDir {
+                            relative_package_dir: relative_package_dir.clone(),
+                        }
+                        .into_result()
+                    } else {
+                        pass(())
+                    };
+
+                    let check_result = flatten_check_results(
+                        [
+                            name_check_result,
+                            shard_check_result,
+                            package_nix_check_result,
+                        ],
+                        |_| (),
+                    );
+
+                    package_names.push(package_name.clone());
+
+                    check_result
+                };
 
                 write_check_result(error_writer, check_result)?;
-
-                package_names.push(package_name.clone());
             }
         }
 
