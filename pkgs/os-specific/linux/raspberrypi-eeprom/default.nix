@@ -54,6 +54,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 EEPROMs";
     homepage = "https://www.raspberrypi.org/documentation/hardware/raspberrypi/booteeprom.md";
     license = with licenses; [ bsd3 unfreeRedistributableFirmware ];
-    maintainers = with maintainers; [ das_j ];
+    maintainers = with maintainers; [ das_j Luflosi ];
   };
 }
