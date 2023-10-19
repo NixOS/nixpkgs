@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, options, ... }:
 
 let
   keysDirectory = "/var/keys";
@@ -163,8 +163,14 @@ in
 
       in
       script.overrideAttrs (old: {
+        pos = __curPos; # sets meta.position to point here; see script binding above for package definition
         meta = (old.meta or { }) // {
           platforms = lib.platforms.darwin;
+        };
+        passthru = (old.passthru or { }) // {
+          # Let users in the repl inspect the config
+          nixosConfig = config;
+          nixosOptions = options;
         };
       });
 
