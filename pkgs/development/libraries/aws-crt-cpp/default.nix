@@ -17,15 +17,15 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
-  version = "0.20.3";
+  version = "0.24.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-crt-cpp";
-    rev = "v${version}";
-    sha256 = "sha256-70AchkuhuyumwpBYaj9mOVPJ8+6VSLTLtr3ghwqG3wM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WbmesItKaOisOCP6bWGSrEz7OvmofgXTti2XyjYe2yM=";
   };
 
   patches = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C++ wrapper around the aws-c-* libraries";
     homepage = "https://github.com/awslabs/aws-crt-cpp";
+    changelog = "https://github.com/awslabs/aws-crt-cpp/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ r-burns ];
