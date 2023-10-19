@@ -13,6 +13,7 @@ serde = { version = "1.0.185", features = ["derive"] }
 anyhow = "1.0"
 lazy_static = "1.4.0"
 colored = "2.0.4"
+itertools = "0.11.0"
 
 [dev-dependencies]
 temp-env = "0.3.5"
