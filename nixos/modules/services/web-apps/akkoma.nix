@@ -282,11 +282,11 @@ let
         AKKOMA_CONFIG_PATH="$RUNTIME_DIRECTORY/config.exs" \
         ERL_EPMD_ADDRESS="${cfg.dist.address}" \
         ERL_EPMD_PORT="${toString cfg.dist.epmdPort}" \
-        ERL_FLAGS="${concatStringsSep " " [
-          "-kernel inet_dist_use_interface '${erlAddr cfg.dist.address}'"
-          "-kernel inet_dist_listen_min ${toString cfg.dist.portMin}"
-          "-kernel inet_dist_listen_max ${toString cfg.dist.portMax}"
-        ]}" \
+        ERL_FLAGS=${lib.escapeShellArg (lib.escapeShellArgs ([
+          "-kernel" "inet_dist_use_interface" (erlAddr cfg.dist.address)
+          "-kernel" "inet_dist_listen_min" (toString cfg.dist.portMin)
+          "-kernel" "inet_dist_listen_max" (toString cfg.dist.portMax)
+        ] ++ cfg.dist.extraFlags))} \
         RELEASE_COOKIE="$(<"$RUNTIME_DIRECTORY/cookie")" \
         RELEASE_NAME="akkoma" \
           exec "${cfg.package}/bin/$(basename "$0")" "$@"
@@ -551,6 +551,13 @@ in {
           type = types.port;
           default = 4369;
           description = mdDoc "TCP port to bind Erlang Port Mapper Daemon to.";
+        };
+
+        extraFlags = mkOption {
+          type = with types; listOf str;
+          default = [ ];
+          description = mdDoc "Extra flags to pass to Erlang";
+          example = [ "+sbwt" "none" "+sbwtdcpu" "none" "+sbwtdio" "none" ];
         };
 
         portMin = mkOption {
