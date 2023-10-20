@@ -25,10 +25,6 @@ let
   bootstrapTools = runCommand "tinygo-bootstap-tools" { } ''
     mkdir -p $out
     ln -s ${lib.getBin clang.cc}/bin/clang $out/clang-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/ld.lld $out/ld.lld-${llvmMajor}
-    ln -s ${lib.getBin lld}/bin/wasm-ld $out/wasm-ld-${llvmMajor}
-    # GDB upstream does not support ARM darwin
-    ${lib.optionalString (!(stdenv.isDarwin && stdenv.isAarch64)) "ln -s ${gdb}/bin/gdb $out/gdb-multiarch" }
   '';
 in
 
@@ -51,7 +47,7 @@ buildGoModule rec {
   ];
 
   nativeCheckInputs = [ binaryen ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper lld ];
   buildInputs = [ llvm clang.cc ]
     ++ lib.optionals stdenv.isDarwin [ xar ];
 
@@ -105,13 +101,17 @@ buildGoModule rec {
     make ''${tinygoTests[@]} TINYGO="$(pwd)/build/tinygo" MD5SUM=md5sum XTENSA=0
   '';
 
+  # GDB upstream does not support ARM darwin
+  runtimeDeps = [ go clang.cc lld avrdude openocd binaryen ]
+    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [ gdb ];
+
   installPhase = ''
     runHook preInstall
 
     make build/release
 
     wrapProgram $out/bin/tinygo \
-      --prefix PATH : ${lib.makeBinPath [ go avrdude openocd binaryen ]}:${bootstrapTools}
+      --prefix PATH : ${lib.makeBinPath runtimeDeps }
 
     runHook postInstall
   '';
