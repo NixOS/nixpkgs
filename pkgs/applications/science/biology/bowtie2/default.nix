@@ -6,6 +6,8 @@
 , python3
 , tbb
 , zlib
+, runCommand
+, bowtie2
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +35,20 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ tbb zlib python3 perl ];
 
   cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86) ["-DCMAKE_CXX_FLAGS=-I${finalAttrs.src}/third_party"];
+
+  # ctest fails because of missing dependencies between tests
+  doCheck = false;
+
+  passthru.tests = {
+    ctest = runCommand "${finalAttrs.pname}-test" { } ''
+      mkdir $out
+      ${lib.getExe bowtie2} -x ${finalAttrs.src}/example/index/lambda_virus ${finalAttrs.src}/example/reads/longreads.fq -u 10
+      ${bowtie2}/bin/bowtie2-build-s -c GGGCGGCGACCTCGCGGGTTTTCGCTA $out/small
+      ${bowtie2}/bin/bowtie2-inspect-s $out/small
+      ${bowtie2}/bin/bowtie2-build-l -c GGGCGGCGACCTCGCGGGTTTTCGCTA $out/large
+      ${bowtie2}/bin/bowtie2-inspect-l $out/large
+    '';
+  };
 
   meta = with lib; {
     description = "An ultrafast and memory-efficient tool for aligning sequencing reads to long reference sequences";
