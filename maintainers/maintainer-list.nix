@@ -16273,12 +16273,6 @@
     githubId = 158321;
     name = "Stewart Mackenzie";
   };
-  skeidel = {
-    email = "svenkeidel@gmail.com";
-    github = "svenkeidel";
-    githubId = 266500;
-    name = "Sven Keidel";
-  };
   skykanin = {
     github = "skykanin";
     githubId = 3789764;
