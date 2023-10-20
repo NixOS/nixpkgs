@@ -2776,6 +2776,8 @@ self: super: with self; {
 
   diffsync = callPackage ../development/python-modules/diffsync { };
 
+  diffusers = callPackage ../development/python-modules/diffusers { };
+
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
