@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${jre}/bin
 
     cat <<EOF >> $out/opt/flink/conf/flink-conf.yaml
-    env.java.home: ${jre}"
+    env.java.home: ${jre}
     env.log.dir: /tmp/flink-logs
     EOF
   '';
