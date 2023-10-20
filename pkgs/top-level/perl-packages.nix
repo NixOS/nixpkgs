@@ -8030,7 +8030,7 @@ with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-DistManifest-2.000006.tar.gz";
       hash = "sha256-Wj2kW/yYzjhf7X3BZTp4kGEfC57xVsABOueFdPiWYH0=";
     };
-    buildInputs = [ TestDeep TestDistManifest TestOutput ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestDistManifest TestOutput ];
     propagatedBuildInputs = [ DistZilla ];
     meta = {
       description = "Author test that validates a package MANIFEST";
