@@ -201,6 +201,21 @@ stdenv.mkDerivation rec {
     # it only produces an empty json object `{ }`.
     ./serialize_nulls.patch
 
+    # Bazel integrates with apple IOKit to inhibit and track system sleep.
+    # Inside the darwin sandbox, these API calls are blocked, and bazel
+    # crashes. It seems possible to allow these APIs inside the sandbox, but it
+    # feels simpler to patch bazel not to use it at all. So our bazel is
+    # incapable of preventing system sleep, which is a small price to pay to
+    # guarantee that it will always run in any nix context.
+    #
+    # If you want to investigate the sandbox profile path,
+    # IORegisterForSystemPower can be allowed with
+    #
+    #     propagatedSandboxProfile = ''
+    #       (allow iokit-open (iokit-user-client-class "RootDomainUserClient"))
+    #     '';
+    #
+    # I do not know yet how to allow IOPMAssertion{CreateWithName,Release}
     ./darwin_sleep.patch
 
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
@@ -258,26 +273,10 @@ stdenv.mkDerivation rec {
     inherit Foundation bazel_self distDir repoCache runJdk;
   };
 
-  src_for_updater = stdenv.mkDerivation rec {
-    name = "updater-sources";
-    inherit src;
-    nativeBuildInputs = [ unzip ];
-    inherit sourceRoot;
-    installPhase = ''
-      runHook preInstall
-
-      cp -r . "$out"
-
-      runHook postInstall
-    '';
-  };
+  passthru.updater = throw "TODO";
 
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
-  # XXX: For IORegisterForSystemPower
-  # propagatedSandboxProfile = ''
-  #   (allow iokit-open (iokit-user-client-class "RootDomainUserClient"))
-  # '';
 
   postPatch =
     let
