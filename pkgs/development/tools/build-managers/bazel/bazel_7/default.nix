@@ -9,6 +9,7 @@
 , runCommandCC
 , makeWrapper
 , recurseIntoAttrs
+, newScope
   # this package (through the fixpoint glass)
 , bazel_self
 , lr
@@ -352,9 +353,9 @@ stdenv.mkDerivation rec {
         hash = "sha256-DaPKp7Sn5uvfZRjdDx6grot3g3B7trqCyL0TRIdwg98=";
       };
 
-      callBazelTest = lib.callPackageWith {
-        inherit runLocal bazelTest bazel-examples lib writeText darwin runtimeShell stdenv writeScript jdk11_headless openjdk8 fetchFromGitHub fetchurl ripgrep unzip jdk17_headless Foundation;
-        inherit distDir;
+      callBazelTest = newScope {
+        inherit runLocal bazelTest bazel-examples distDir;
+        inherit Foundation;
         extraBazelArgs = ''
           --repository_cache=${repoCache} \
           --repo_env=JAVA_HOME=${runJdk}${if isDarwin then "/zulu-17.jdk/Contents/Home" else "/lib/openjdk"} \
