@@ -7,7 +7,6 @@
 , llvmPackages
 , go
 , xar
-, wasi-libc
 , binaryen
 , avrdude
 , gdb
@@ -66,12 +65,6 @@ buildGoModule rec {
   stripDebugList = [ "bin" ];
 
   postPatch = ''
-    # Copy wasi-libc, symlink seems not working
-    rm -rf lib/wasi-libc/*
-    mkdir -p lib/wasi-libc/sysroot/lib/wasm32-wasi lib/wasi-libc/sysroot/include
-    cp -a ${wasi-libc}/lib/* lib/wasi-libc/sysroot/lib/wasm32-wasi/
-    cp -a ${wasi-libc.dev}/include/* lib/wasi-libc/sysroot/include/
-
     # Borrow compiler-rt builtins from our source
     # See https://github.com/tinygo-org/tinygo/pull/2471
     mkdir -p lib/compiler-rt-builtins
@@ -91,6 +84,14 @@ buildGoModule rec {
     # Move binary
     mkdir -p build
     mv $GOPATH/bin/tinygo build/tinygo
+
+    # Build our own custom wasi-libc.
+    # This is necessary because we modify the build a bit for our needs (disable
+    # heap, enable debug symbols, etc).
+    make wasi-libc \
+      CLANG="${lib.getBin clang.cc}/bin/clang -resource-dir ${clang.cc.lib}/lib/clang/${llvmMajor}" \
+      LLVM_AR=${lib.getBin llvm}/bin/llvm-ar \
+      LLVM_NM=${lib.getBin llvm}/bin/llvm-nm
 
     make gen-device -j $NIX_BUILD_CORES
 
@@ -115,8 +116,6 @@ buildGoModule rec {
 
     runHook postInstall
   '';
-
-  disallowedReferences = [ wasi-libc ];
 
   meta = with lib; {
     homepage = "https://tinygo.org/";

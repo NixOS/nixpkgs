@@ -17209,7 +17209,6 @@ with pkgs;
 
   tinygo = callPackage ../development/compilers/tinygo {
     llvmPackages = llvmPackages_17;
-    wasi-libc = pkgsCross.wasi32.wasilibc;
   };
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
