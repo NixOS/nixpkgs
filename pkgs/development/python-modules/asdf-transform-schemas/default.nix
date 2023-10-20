@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "asdf-transform-schemas";
   version = "0.4.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -40,6 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "ASDF schemas for validating transform tags";
     homepage = "https://github.com/asdf-format/asdf-transform-schemas";
+    changelog = "https://github.com/asdf-format/asdf-transform-schemas/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };
