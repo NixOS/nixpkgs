@@ -59,8 +59,7 @@ rec {
      injects `override` attribute which can be used to override arguments of
      the function.
 
-     Please refer to "Nixpkgs Contributors Guide" section
-     "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
+     Please refer to  documentation on [`<pkg>.overrideDerivation`](#sec-pkg-overrideDerivation) to learn about `overrideDerivation` and caveats
      related to its use.
 
      Example:
