@@ -129,9 +129,13 @@ in {
     systemd.user.sockets.pipewire.enable = !cfg.systemWide;
     systemd.user.services.pipewire.enable = !cfg.systemWide;
 
+    # Mask pw-pulse if it's not wanted
+    systemd.user.services.pipewire-pulse.enable = cfg.pulse.enable;
+    systemd.user.sockets.pipewire-pulse.enable = cfg.pulse.enable;
+
     systemd.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
     systemd.user.sockets.pipewire.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
-    systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf (cfg.socketActivation && cfg.pulse.enable) ["sockets.target"];
+    systemd.user.sockets.pipewire-pulse.wantedBy = lib.mkIf cfg.socketActivation [ "sockets.target" ];
 
     services.udev.packages = [ cfg.package ];
 
