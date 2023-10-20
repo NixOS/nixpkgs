@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "toonapi";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-toonapi";
     rev = "v${version}";
-    sha256 = "10jh6p0ww51cb9f8amd9jq3lmvby6n2k08qwcr2n8ijbbgyp0ibf";
+    sha256 = "sha256-RaN9ppqJbTik1/vNX0/YLoBawrqjyQWU6+FLTspIxug=";
   };
 
   propagatedBuildInputs = [
