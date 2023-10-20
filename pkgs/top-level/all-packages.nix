@@ -28890,6 +28890,8 @@ with pkgs;
     ubootQemuArm
     ubootQemuRiscv64Smode
     ubootQemuX86
+    ubootQemuX8664
+    securebootUbootQemuX8664
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit

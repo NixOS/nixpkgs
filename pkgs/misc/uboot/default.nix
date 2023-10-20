@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , bc
+, perl
 , bison
 , dtc
 , fetchFromGitHub
@@ -15,6 +16,7 @@
 , openssl
 , swig
 , which
+, python3
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH6
 , armTrustedFirmwareAllwinnerH616
@@ -34,8 +36,10 @@ let
     version ? null
   , src ? null
   , filesToInstall
+  , pythonScriptsToInstall ? { }
   , installDir ? "$out"
   , defconfig
+  , efiVariableSeed ? null
   , extraConfig ? ""
   , extraPatches ? []
   , extraMakeFlags ? []
@@ -49,9 +53,16 @@ let
 
     patches = [
       ./0001-configs-rpi-allow-for-bigger-kernels.patch
+      # https://lists.denx.de/pipermail/u-boot/2023-September/530643.html
+      # Fix zboot with initrds
+      ./extlinux-zboot.patch
     ] ++ extraPatches;
 
     postPatch = ''
+      ${lib.concatMapStrings (script: ''
+        substituteInPlace ${script} \
+        --replace "#!/usr/bin/env python3" "#!${pythonScriptsToInstall.${script}}/bin/python3"
+      '') (builtins.attrNames pythonScriptsToInstall)}
       patchShebangs tools
       patchShebangs arch/arm/mach-rockchip
     '';
@@ -71,6 +82,7 @@ let
       ]))
       swig
       which # for scripts/dtc-version.sh
+      perl # for OID registry built in lib/Makefile
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -97,6 +109,10 @@ let
       make ${defconfig}
 
       cat $extraConfigPath >> .config
+      ${lib.optionalString (efiVariableSeed != null) ''
+        echo "CONFIG_EFI_VARIABLES_PRESEED=y" >> .config
+        cp ${efiVariableSeed} ubootefi.var
+      ''}
 
       runHook postConfigure
     '';
@@ -105,12 +121,12 @@ let
       runHook preInstall
 
       mkdir -p ${installDir}
-      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
+      cp ${lib.concatStringsSep " " (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)} ${installDir}
 
       mkdir -p "$out/nix-support"
       ${lib.concatMapStrings (file: ''
         echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
-      '') filesToInstall}
+      '') (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)}
 
       runHook postInstall
     '';
@@ -123,7 +139,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]));
+  } // removeAttrs args [ "extraMeta" "pythonScriptsToInstall" ]));
 in {
   inherit buildUBoot;
 
@@ -147,6 +163,10 @@ in {
       "tools/mkenvimage"
       "tools/mkimage"
     ];
+
+    pythonScriptsToInstall = {
+      "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
+    };
   };
 
   ubootA20OlinuxinoLime = buildUBoot {
@@ -436,9 +456,55 @@ in {
       CONFIG_USB_EHCI_HCD=y
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
+      CONFIG_EFI_SECURE_BOOT=y
+      CONFIG_CMD_EFIDEBUG=y
+      CONFIG_X86_RUN_64BIT=y
+      CONFIG_SPL_BSS_MAX_SIZE=0x100000
     '';
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
+    passthru.firmware = "u-boot.rom";
+  };
+
+  ubootQemuX8664 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+      CONFIG_EFI_SECURE_BOOT=y
+      CONFIG_CMD_EFIDEBUG=y
+      CONFIG_BOOTSTD_FULL=y
+      CONFIG_BOOTMETH_GLOBAL=y
+      CONFIG_BOOTSTD_BOOTCOMMAND=y
+      CONFIG_BOOTMETH_EXTLINUX=y
+      CONFIG_BOOTMETH_DISTRO=y
+    '';
+    extraMeta.platforms = [ "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+    passthru.firmware = "u-boot.rom";
+  };
+
+  securebootUbootQemuX8664 = buildUBoot {
+    defconfig = "qemu-x86_64_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+      CONFIG_EFI_SECURE_BOOT=y
+      CONFIG_CMD_EFIDEBUG=y
+      CONFIG_EFI_VARIABLE_FILE_STORE=y
+      CONFIG_BOOTSTD_FULL=y
+      CONFIG_BOOTMETH_GLOBAL=y
+      CONFIG_BOOTSTD_BOOTCOMMAND=y
+      CONFIG_BOOTMETH_EXTLINUX=y
+      CONFIG_BOOTMETH_DISTRO=y
+    '';
+    extraMeta.platforms = [ "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
+    passthru.firmware = "u-boot.rom";
   };
 
   ubootRaspberryPi = buildUBoot {

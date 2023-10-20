@@ -827,6 +827,26 @@ in
           '';
         };
 
+    virtualisation.firmware =
+      mkOption {
+        type = types.enum [ "seabios" "ovmf" "uboot" "custom-bios" ];
+        default = "seabios";
+        description =
+          lib.mdDoc ''
+            Firmware used by QEMU during runtime.
+
+            If you want legacy BIOS, use SeaBIOS.
+            If you want "vanilla UEFI", aim for OVMF (Open Virtual Machine Framework) from EDK2/TianoCore.
+            If you want embedded firmware, aim for U-Boot which can also support UEFI.
+            If you have a custom BIOS, you can use the bios option to provide the binary.
+
+            By default:
+
+            - under UEFI, you will have OVMF,
+            - otherwise you will get the QEMU built-in SeaBIOS.
+            '';
+      };
+
     virtualisation.efi = {
       OVMF = mkOption {
         type = types.package;
@@ -860,6 +880,39 @@ in
             Defaults to OVMF.
           '';
       };
+    };
+
+    virtualisation.uboot = {
+      package = mkOption {
+        type = types.package;
+        default = pkgs.ubootQemuX8664;
+        description = lib.mdDoc "U-Boot firmware package, defaults to QEMU x86_64 one";
+      };
+
+      firmware = mkOption {
+        type = types.str;
+        default = cfg.uboot.package.firmware;
+        example = "u-boot.rom";
+        defaultText = literalExpression "cfg.uboot.package.firmware";
+        description =
+          lib.mdDoc ''
+            Firmware binary for U-Boot, defaults to the name declared by the package.
+            '';
+        };
+
+        efiVariableSeed = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+          example = "./uefivar.bin";
+          description =
+            lib.mdDoc ''
+              This is a seed variable file for UEFI variables loaded by U-Boot.
+              This can be used to bootstrap Secure Boot keys for example.
+
+              The format is a U-Boot specific one which can be assembled via
+              U-Boot tools' efivar.py tool.
+            '';
+        };
     };
 
     virtualisation.useDefaultFilesystems =
@@ -948,6 +1001,17 @@ in
 
                 If you have a more advanced usecase, please open an issue or a pull request.
               '';
+          }
+          {
+            assertion = cfg.bios != null -> cfg.firmware == "custom-bios";
+            message =
+              ''
+                You specified a BIOS without specifying `virtualisation.firmware`
+                to be `custom-bios`.
+
+                This is necessary as we make no assumption on what is the BIOS
+                and feed it to QEMU directly.
+                '';
           }
         ];
 
@@ -1088,13 +1152,23 @@ in
         "-initrd ${cfg.directBoot.initrd}"
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
-      (mkIf cfg.useEFIBoot [
+      (mkIf (cfg.useEFIBoot && cfg.firmware == "ovmf") [
         "-drive if=pflash,format=raw,unit=0,readonly=on,file=${cfg.efi.firmware}"
         "-drive if=pflash,format=raw,unit=1,readonly=off,file=$NIX_EFI_VARS"
       ])
       (mkIf (cfg.bios != null) [
         "-bios ${cfg.bios}/bios.bin"
       ])
+      (mkIf (cfg.firmware == "uboot") (
+        let
+          ubootPackage = if cfg.uboot.efiVariableSeed != null then cfg.uboot.package.override {
+            inherit (cfg.uboot) efiVariableSeed;
+          } else cfg.uboot.package;
+        in
+        [
+        "-bios ${ubootPackage}/${cfg.uboot.firmware}"
+        ]
+      ))
       (mkIf (!cfg.graphics) [
         "-nographic"
       ])
