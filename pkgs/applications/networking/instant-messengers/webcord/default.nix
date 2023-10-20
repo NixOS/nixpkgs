@@ -88,7 +88,7 @@ buildNpmPackage rec {
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "webcord";
-    maintainers = with lib.maintainers; [ huantian ];
+    maintainers = with lib.maintainers; [ eclairevoyant huantian ];
     platforms = lib.platforms.linux;
   };
 }
