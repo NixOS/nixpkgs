@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromRepoOrCz
 , autoreconfHook
+, callPackage
 , pkg-config
 , imagemagick
 , libX11
@@ -61,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-webp"
     "--with-x"
   ];
+
+  passthru = {
+    dockapps = callPackage ./dockapps { };
+  };
 
   meta = {
     homepage = "http://windowmaker.org/";

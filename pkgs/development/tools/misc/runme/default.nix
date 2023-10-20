@@ -12,7 +12,7 @@
 
 buildGo121Module rec {
   pname = "runme";
-  version = "1.7.7";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "stateful";

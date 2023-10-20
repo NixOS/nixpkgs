@@ -5,7 +5,6 @@
 , click
 , configparser
 , fetchFromGitHub
-, fetchpatch
 , fido2
 , lxml
 , poetry-core
@@ -20,9 +19,9 @@
 buildPythonPackage rec {
   pname = "aws-adfs";
   version = "2.8.2";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "venth";
@@ -63,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
+    changelog = "https://github.com/venth/aws-adfs/releases/tag/v${version}";
     license = licenses.psfl;
     maintainers = with maintainers; [ bhipple ];
   };
