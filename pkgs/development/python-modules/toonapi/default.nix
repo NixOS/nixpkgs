@@ -30,6 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python client for the Quby ToonAPI";
     homepage = "https://github.com/frenck/python-toonapi";
+    changelog = "https://github.com/frenck/python-toonapi/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
