@@ -10732,7 +10732,29 @@ with self; {
 
     meta = {
       description = "Perl interface to the GraphViz graphing tool";
-      license = with lib.licenses; [artistic2 ];
+      license = with lib.licenses; [ artistic2 ];
+    };
+  };
+
+  GraphViz2 = buildPerlPackage {
+    pname = "GraphViz2";
+    version = "2.67";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ET/ETJ/GraphViz2-2.67.tar.gz";
+      hash = "sha256-h8hcbt/86k+W5rSAD2+VEq6rGeuNOzSDAachMxvLhYA=";
+    };
+
+    # XXX: It'd be nicer if `GraphViz.pm' could record the path to graphviz.
+    buildInputs = [ pkgs.graphviz TestPod Moo IPCRun3 TypeTiny TestSnapshot Graph ];
+    propagatedBuildInputs = [ FileWhich IPCRun ParseRecDescent XMLTwig XMLXPath DataSectionSimple ];
+
+    # needed for fontconfig tests
+    HOME = "/build";
+    FONTCONFIG_PATH = "${lib.getOutput "out" pkgs.fontconfig}/etc/fonts";
+
+    meta = {
+      description = "Perl interface to the GraphViz graphing tool";
+      license = with lib.licenses; [ artistic2 ];
     };
   };
 
