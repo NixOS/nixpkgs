@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tecoc";
-  version = "unstable-2023-04-21";
+  version = "unstable-2023-06-21";
 
   src = fetchFromGitHub {
     owner = "blakemcbride";
     repo = "TECOC";
-    rev = "021d1d15242b9d6c84d70c9ffcf1871793898f0a";
-    hash = "sha256-VGIO+uiAZkdzLYmJztmnKTS4HDIVow4AimaneHj7E1M=";
+    rev = "b4a96395a18c7e64ccaef0e25fdde3b7ef33ac4b";
+    hash = "sha256-KTOGsTtxJh2sneU2VoDNUHcL3m8zt+3rBZTDvK1n02A=";
   };
 
   buildInputs = [ ncurses ];
