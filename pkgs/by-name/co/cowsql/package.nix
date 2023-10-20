@@ -39,9 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "dev" "out" ];
 
   passthru = {
-    tests = {
-      inherit incus;
-    };
+    inherit (incus) tests;
 
     updateScript = gitUpdater {
       rev-prefix = "v";
