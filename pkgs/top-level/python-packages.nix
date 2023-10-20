@@ -3794,6 +3794,8 @@ self: super: with self; {
 
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
+  fastf1 = callPackage ../development/python-modules/fastf1 { };
+
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastjet = toPythonModule (pkgs.fastjet.override {
@@ -13821,6 +13823,8 @@ self: super: with self; {
 
   thumborPexif = callPackage ../development/python-modules/thumborpexif { };
 
+  timple = callPackage ../development/python-modules/timple { };
+
   tkinter = callPackage ../development/python-modules/tkinter {
     py = python.override { x11Support=true; };
   };
@@ -15660,6 +15664,8 @@ self: super: with self; {
   xdg-base-dirs = callPackage ../development/python-modules/xdg-base-dirs { };
 
   xdis = callPackage ../development/python-modules/xdis { };
+
+  xdoctest = callPackage ../development/python-modules/xdoctest { };
 
   xdot = callPackage ../development/python-modules/xdot {
     inherit (pkgs) graphviz;

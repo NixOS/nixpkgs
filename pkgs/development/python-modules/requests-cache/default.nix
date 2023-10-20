@@ -1,32 +1,34 @@
 { lib
-, appdirs
 , attrs
-, buildPythonPackage
-, bson
 , boto3
 , botocore
+, bson
+, buildPythonPackage
 , cattrs
-, exceptiongroup
 , fetchFromGitHub
 , itsdangerous
+, platformdirs
 , poetry-core
 , pymongo
+, pytest-httpbin
 , pytestCheckHook
 , pythonOlder
 , pyyaml
 , redis
 , requests
 , requests-mock
+, responses
 , rich
+, time-machine
 , timeout-decorator
 , ujson
-, urllib3
 , url-normalize
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.9.8";
+  version = "1.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +37,7 @@ buildPythonPackage rec {
     owner = "requests-cache";
     repo = "requests-cache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xbzbwz80xY8IDPDhZEUhmmiCFJZvSQMQ6EmE4EL7QGo=";
+    hash = "sha256-kJqy7aK67JFtmsrwMtze/wTM9qch9YYj2eUzGJRJreQ=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +45,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    appdirs
     attrs
     cattrs
-    exceptiongroup
+    platformdirs
     requests
     urllib3
     url-normalize
@@ -57,7 +58,7 @@ buildPythonPackage rec {
       boto3
       botocore
     ];
-    mongodbo = [
+    mongodb = [
       pymongo
     ];
     redis = [
@@ -77,27 +78,34 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  checkInputs = [
+    # https://requests-cache.readthedocs.io/en/stable/project_info/contributing.html#integration-test-alternatives
+    pytest-httpbin
     requests-mock
+    responses
     rich
     timeout-decorator
-  ]
-  ++ passthru.optional-dependencies.json
-  ++ passthru.optional-dependencies.security;
+    time-machine
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
+    # https://requests-cache.readthedocs.io/en/stable/project_info/contributing.html#integration-test-alternatives
+    export USE_PYTEST_HTTPBIN=true;
   '';
 
-  pytestFlagsArray = [
-    # Integration tests require local DBs
-    "tests/unit"
+  disabledTests = [
+    "test_use_temp"
   ];
 
-  disabledTests = [
-    # Tests are flaky in the sandbox
-    "test_remove_expired_responses"
+  disabledTestPaths = [
+    # Integration tests require local DBs
+    "tests/integration/test_dynamodb.py"
+    "tests/integration/test_mongodb.py"
+    "tests/integration/test_redis.py"
+    "tests/integration/test_upgrade.py"
   ];
 
   pythonImportsCheck = [
