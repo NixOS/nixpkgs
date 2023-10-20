@@ -13635,6 +13635,14 @@
     githubId = 152312;
     name = "Periklis Tsirakidis";
   };
+
+  perigord = {
+    name = "Perigord";
+    email = "perigordtruffle7318@gmmail.com";
+    github = "Trouble-Truffle";
+    githubId = 90542764;
+  };
+
   petercommand = {
     email = "petercommand@gmail.com";
     github = "petercommand";
