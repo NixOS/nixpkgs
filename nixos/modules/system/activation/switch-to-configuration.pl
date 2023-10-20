@@ -599,7 +599,9 @@ while (my ($unit, $state) = each(%{$active_cur})) {
                     $units_to_start{$unit} = 1;
                     record_unit($start_list_file, $unit);
                     # Don't spam the user with target units that always get started.
-                    $units_to_filter{$unit} = 1;
+                    if (($ENV{"STC_DISPLAY_ALL_UNITS"} // "") ne "1") {
+                        $units_to_filter{$unit} = 1;
+                    }
                 }
             }
 
