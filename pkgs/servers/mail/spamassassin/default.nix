@@ -52,6 +52,9 @@ perlPackages.buildPerlPackage rec {
     export HOME=$NIX_BUILD_TOP/home
     mkdir -p $HOME
     mkdir t/log  # pre-create to avoid race conditions
+
+    # https://bz.apache.org/SpamAssassin/show_bug.cgi?id=8068
+    checkFlagsArray+=(TEST_FILES='$(shell find t -name *.t -not -name spamd_ssl_accept_fail.t)')
   '';
 
   postInstall = ''
