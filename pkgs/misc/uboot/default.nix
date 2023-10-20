@@ -61,6 +61,15 @@ let
         url = "https://patchwork.ozlabs.org/project/uboot/patch/20230504134255.8510-4-thomas.mittelstaedt@de.bosch.com/raw/";
         hash = "sha256-TBAA6J+NWQ/GHzNVE8HElruOWnkiy3LI5o0bG6YiepI=";
       })
+
+      # can be dropped after we update from 2023.10
+      # commit e824d0d0c219
+      # https://patchwork.ozlabs.org/project/uboot/patch/20230923205017.1754340-1-sjg@chromium.org/
+      (fetchpatch {
+        name = "bootstd-Scan-all-bootdevs-in-a-boot_targets-entry.patch";
+        url = "https://patchwork.ozlabs.org/project/uboot/patch/20230923205017.1754340-1-sjg@chromium.org/raw/";
+        hash = "sha256-WBVhWrcvc4sT2bHZ8dPlymmdAcDcmKsDwFBc4dANw1Q=";
+      })
     ] ++ extraPatches;
 
     postPatch = ''
