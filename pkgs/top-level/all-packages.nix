@@ -28322,7 +28322,9 @@ with pkgs;
     checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
   minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
-  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix { };
+  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix {
+    inherit (stdenv) hostPlatform;
+  };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
