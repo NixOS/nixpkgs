@@ -17208,7 +17208,7 @@ with pkgs;
   tinycc = darwin.apple_sdk_11_0.callPackage ../development/compilers/tinycc { };
 
   tinygo = callPackage ../development/compilers/tinygo {
-    llvmPackages = llvmPackages_16;
+    llvmPackages = llvmPackages_17;
     wasi-libc = pkgsCross.wasi32.wasilibc;
   };
 
