@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, libGL
 , libinput
 , libxkbcommon
 , mesa
@@ -22,6 +23,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-zSq6YBlm6gJXGlF9xZ8gWSTMewdNqrJzwP58a0x8QIU=";
 
   buildInputs = [
+    libGL
     libxkbcommon
     mesa
     pango
