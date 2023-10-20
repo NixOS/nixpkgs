@@ -2,6 +2,8 @@
 , mkXfceDerivation
 , glib
 , gtk3
+, gtk-layer-shell
+, libX11
 , libxfce4ui
 , vte
 , xfconf
@@ -15,9 +17,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "1.1.0";
+  version = "1.1.1";
+  odd-unstable = false;
 
-  sha256 = "sha256-ilxiP1Org5/uSQOzfRgODmouH0BmK3CmCJj1kutNuII=";
+  sha256 = "sha256-LDfZTZ2EaboIYz+xQNC2NKpJiN8qqfead2XzpKVpL6c=";
 
   nativeBuildInputs = [
     libxslt
@@ -28,6 +31,8 @@ mkXfceDerivation {
   buildInputs = [
     glib
     gtk3
+    gtk-layer-shell
+    libX11
     libxfce4ui
     vte
     xfconf
