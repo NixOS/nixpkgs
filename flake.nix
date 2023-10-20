@@ -9,16 +9,8 @@
         nixpkgs = self;
       };
 
+      libVersionInfoOverlay = import ./lib/__flake-version-info.nix self;
       lib = (import ./lib).extend libVersionInfoOverlay;
-
-      libVersionInfoOverlay = finalLib: prevLib: {
-        trivial = prevLib.trivial // {
-          versionSuffix =
-            ".${finalLib.substring 0 8 (self.lastModifiedDate or self.lastModified or "19700101")}.${self.shortRev or "dirty"}";
-          version = finalLib.trivial.release + finalLib.trivial.versionSuffix;
-          revisionWithDefault = default: self.rev or default;
-        };
-      };
 
       forAllSystems = lib.genAttrs lib.systems.flakeExposed;
     in
