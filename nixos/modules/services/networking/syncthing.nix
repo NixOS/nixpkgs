@@ -287,6 +287,15 @@ in {
                     '';
                   };
 
+                  introducer = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = mdDoc ''
+                    Automatically add new devices connected to this device.
+                    See <https://docs.syncthing.net/users/introducer.html>.
+                  '';
+                  };
+
                 };
               }));
             };
