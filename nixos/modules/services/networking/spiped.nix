@@ -64,9 +64,10 @@ in
                 description = lib.mdDoc ''
                   Name of a file containing the spiped key. As the
                   daemon runs as the `spiped` user, the
-                  key file must be somewhere owned by that user. By
-                  default, we recommend putting the keys for any spipe
-                  services in `/var/lib/spiped`.
+                  key file must be somewhere owned by that user. To
+                  securely manage within your configuration, rather
+                  than referencing static files, consider a tool such
+                  as agenix or sops-nix.
                 '';
               };
 
@@ -188,17 +189,9 @@ in
         PermissionsStartOnly = true;
       };
 
-      preStart  = ''
-        cd /var/lib/spiped
-        chmod -R 0660 *
-        chown -R spiped:spiped *
-      '';
       scriptArgs = "%i";
       script = "exec ${pkgs.spiped}/bin/spiped -F `cat /etc/spiped/$1.spec`";
     };
-
-    system.activationScripts.spiped = optionalString (cfg.config != {})
-      "mkdir -p /var/lib/spiped";
 
     # Setup spiped config files
     environment.etc = mapAttrs' (name: cfg: nameValuePair "spiped/${name}.spec"
