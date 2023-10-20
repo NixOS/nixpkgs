@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ lv2 ];
   dontAddWafCrossFlags = true;
 
+  preInstall = ''
+    substituteInPlace bindings/python/lilv.py --replace liblilv-0 "$out"/lib/liblilv-0
+  '';
+
   passthru.tests = {
     inherit pipewire;
   };
