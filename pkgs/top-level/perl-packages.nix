@@ -8171,7 +8171,7 @@ with self; {
       url = "mirror://cpan/authors/id/E/ET/ETHER/Dist-Zilla-Plugin-Test-UnusedVars-2.001001.tar.gz";
       hash = "sha256-df7W0NzCv0B/8nrJ4W7yFTRnFEuYbPovmPhpuqWNdkc=";
     };
-    buildInputs = [ TestDeep TestOutput TestVars ];
+    buildInputs = [ ModuleBuildTiny TestDeep TestOutput TestVars ];
     propagatedBuildInputs = [ DistZilla ];
     meta = {
       description = "Release tests for unused variables";
