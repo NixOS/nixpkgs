@@ -1,5 +1,4 @@
 use crate::utils::PACKAGE_NIX_FILENAME;
-use crate::ErrorWriter;
 use itertools::concat;
 use itertools::{Either, Itertools};
 use rnix::parser::ParseError;
@@ -222,21 +221,6 @@ impl fmt::Display for CheckError {
                     text,
                 ),
         }
-    }
-}
-
-pub fn write_check_result<A, W: io::Write>(
-    error_writer: &mut ErrorWriter<W>,
-    check_result: CheckResult<A>,
-) -> anyhow::Result<Option<A>> {
-    match check_result? {
-        Either::Left(errors) => {
-            for error in errors {
-                error_writer.write(&error.to_string())?
-            }
-            Ok(None)
-        }
-        Either::Right(value) => Ok(Some(value)),
     }
 }
 

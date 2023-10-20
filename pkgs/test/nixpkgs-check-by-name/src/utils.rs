@@ -1,5 +1,4 @@
 use anyhow::Context;
-use colored::Colorize;
 use std::fs;
 use std::io;
 use std::path::Path;
@@ -48,28 +47,5 @@ impl LineIndex {
             Ok(x) => x + 1,
             Err(x) => x + 1,
         }
-    }
-}
-
-/// A small wrapper around a generic io::Write specifically for errors:
-/// - Print everything in red to signal it's an error
-/// - Keep track of whether anything was printed at all, so that
-///   it can be queried whether any errors were encountered at all
-pub struct ErrorWriter<W> {
-    pub writer: W,
-    pub empty: bool,
-}
-
-impl<W: io::Write> ErrorWriter<W> {
-    pub fn new(writer: W) -> ErrorWriter<W> {
-        ErrorWriter {
-            writer,
-            empty: true,
-        }
-    }
-
-    pub fn write(&mut self, string: &str) -> io::Result<()> {
-        self.empty = false;
-        writeln!(self.writer, "{}", string.red())
     }
 }

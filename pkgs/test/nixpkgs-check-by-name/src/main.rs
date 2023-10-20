@@ -6,13 +6,14 @@ mod utils;
 
 use crate::structure::check_structure;
 use anyhow::Context;
-use check_result::write_check_result;
+use check_result::pass;
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
+use itertools::Either;
+use itertools::Either::{Left, Right};
 use std::io;
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
-use utils::ErrorWriter;
 
 /// Program to check the validity of pkgs/by-name
 #[derive(Parser, Debug)]
@@ -78,26 +79,32 @@ pub fn check_nixpkgs<W: io::Write>(
         nixpkgs_path.display()
     ))?;
 
-    // Wraps the error_writer to print everything in red, and tracks whether anything was printed
-    // at all. Later used to figure out if the structure was valid or not.
-    let mut error_writer = ErrorWriter::new(error_writer);
-
-    if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
+    let check_result = if !nixpkgs_path.join(utils::BASE_SUBPATH).exists() {
         eprintln!(
             "Given Nixpkgs path does not contain a {} subdirectory, no check necessary.",
             utils::BASE_SUBPATH
         );
+        pass(())
     } else {
-        let check_result = check_structure(&nixpkgs_path);
-
-        if let Some(package_names) = write_check_result(&mut error_writer, check_result)? {
+        match check_structure(&nixpkgs_path)? {
+            Left(errors) => Ok(Left(errors)),
+            Right(package_names) =>
             // Only if we could successfully parse the structure, we do the evaluation checks
-            let check_result =
-                eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths);
-            write_check_result(&mut error_writer, check_result)?;
+            {
+                eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths)
+            }
         }
+    };
+
+    match check_result? {
+        Either::Left(errors) => {
+            for error in errors {
+                writeln!(error_writer, "{}", error.to_string().red())?
+            }
+            Ok(false)
+        }
+        Either::Right(_) => Ok(true),
     }
-    Ok(error_writer.empty)
 }
 
 #[cfg(test)]
