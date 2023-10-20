@@ -177,6 +177,7 @@ in
     ++ lib.optionals supportsLinuxDesktop [ glib wrapGAppsHook ];
 
   passthru = flutter.passthru // {
+    inherit (flutter) version;
     unwrapped = flutter;
     inherit engineArtifacts;
   };
