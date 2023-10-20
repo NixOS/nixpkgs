@@ -90,9 +90,10 @@ pub fn check_nixpkgs<W: io::Write>(
     } else {
         let check_result = check_structure(&nixpkgs_path);
 
-        if let Some(nixpkgs) = write_check_result(&mut error_writer, check_result)? {
+        if let Some(package_names) = write_check_result(&mut error_writer, check_result)? {
             // Only if we could successfully parse the structure, we do the evaluation checks
-            let check_result = eval::check_values(version, &nixpkgs, eval_accessible_paths);
+            let check_result =
+                eval::check_values(version, &nixpkgs_path, package_names, eval_accessible_paths);
             write_check_result(&mut error_writer, check_result)?;
         }
     }

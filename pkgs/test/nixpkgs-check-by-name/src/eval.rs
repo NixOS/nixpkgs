@@ -41,7 +41,8 @@ const EXPR: &str = include_str!("eval.nix");
 /// See the `eval.nix` file for how this is achieved on the Nix side
 pub fn check_values(
     version: Version,
-    nixpkgs: &structure::Nixpkgs,
+    nixpkgs_path: &Path,
+    package_names: Vec<String>,
     eval_accessible_paths: Vec<&Path>,
 ) -> CheckResult<()> {
     // Write the list of packages we need to check into a temporary JSON file.
@@ -53,7 +54,7 @@ pub fn check_values(
     // entry is needed.
     let attrs_file_path = attrs_file.path().canonicalize()?;
 
-    serde_json::to_writer(&attrs_file, &nixpkgs.package_names).context(format!(
+    serde_json::to_writer(&attrs_file, &package_names).context(format!(
         "Failed to serialise the package names to the temporary path {}",
         attrs_file_path.display()
     ))?;
@@ -85,9 +86,9 @@ pub fn check_values(
         .arg(&attrs_file_path)
         // Same for the nixpkgs to test
         .args(["--arg", "nixpkgsPath"])
-        .arg(&nixpkgs.path)
+        .arg(nixpkgs_path)
         .arg("-I")
-        .arg(&nixpkgs.path);
+        .arg(nixpkgs_path);
 
     // Also add extra paths that need to be accessible
     for path in eval_accessible_paths {
@@ -109,9 +110,9 @@ pub fn check_values(
             String::from_utf8_lossy(&result.stdout)
         ))?;
 
-    let check_results = nixpkgs.package_names.iter().map(|package_name| {
-        let relative_package_file = structure::Nixpkgs::relative_file_for_package(package_name);
-        let absolute_package_file = nixpkgs.path.join(&relative_package_file);
+    let check_results = package_names.iter().map(|package_name| {
+        let relative_package_file = structure::relative_file_for_package(package_name);
+        let absolute_package_file = nixpkgs_path.join(&relative_package_file);
 
         if let Some(attribute_info) = actual_files.get(package_name) {
             let valid = match &attribute_info.variant {

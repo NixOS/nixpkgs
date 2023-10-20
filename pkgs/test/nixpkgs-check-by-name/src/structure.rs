@@ -13,38 +13,27 @@ lazy_static! {
     static ref PACKAGE_NAME_REGEX: Regex = Regex::new(r"^[a-zA-Z0-9_-]+$").unwrap();
 }
 
-/// Contains information about the structure of the pkgs/by-name directory of a Nixpkgs
-pub struct Nixpkgs {
-    /// The path to nixpkgs
-    pub path: PathBuf,
-    /// The names of all packages declared in pkgs/by-name
-    pub package_names: Vec<String>,
+// Some utility functions for the basic structure
+
+pub fn shard_for_package(package_name: &str) -> String {
+    package_name.to_lowercase().chars().take(2).collect()
 }
 
-impl Nixpkgs {
-    // Some utility functions for the basic structure
+pub fn relative_dir_for_shard(shard_name: &str) -> PathBuf {
+    PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}"))
+}
 
-    pub fn shard_for_package(package_name: &str) -> String {
-        package_name.to_lowercase().chars().take(2).collect()
-    }
+pub fn relative_dir_for_package(package_name: &str) -> PathBuf {
+    relative_dir_for_shard(&shard_for_package(package_name)).join(package_name)
+}
 
-    pub fn relative_dir_for_shard(shard_name: &str) -> PathBuf {
-        PathBuf::from(format!("{BASE_SUBPATH}/{shard_name}"))
-    }
-
-    pub fn relative_dir_for_package(package_name: &str) -> PathBuf {
-        Nixpkgs::relative_dir_for_shard(&Nixpkgs::shard_for_package(package_name))
-            .join(package_name)
-    }
-
-    pub fn relative_file_for_package(package_name: &str) -> PathBuf {
-        Nixpkgs::relative_dir_for_package(package_name).join(PACKAGE_NIX_FILENAME)
-    }
+pub fn relative_file_for_package(package_name: &str) -> PathBuf {
+    relative_dir_for_package(package_name).join(PACKAGE_NIX_FILENAME)
 }
 
 /// Read the structure of a Nixpkgs directory, displaying errors on the writer.
 /// May return early with I/O errors.
-pub fn check_structure(path: &Path) -> CheckResult<Nixpkgs> {
+pub fn check_structure(path: &Path) -> CheckResult<Vec<String>> {
     let base_dir = path.join(BASE_SUBPATH);
 
     let check_results = utils::read_dir_sorted(&base_dir)?
@@ -52,7 +41,7 @@ pub fn check_structure(path: &Path) -> CheckResult<Nixpkgs> {
         .map(|shard_entry| {
             let shard_path = shard_entry.path();
             let shard_name = shard_entry.file_name().to_string_lossy().into_owned();
-            let relative_shard_path = Nixpkgs::relative_dir_for_shard(&shard_name);
+            let relative_shard_path = relative_dir_for_shard(&shard_name);
 
             if shard_name == "README.md" {
                 // README.md is allowed to be a file and not checked
@@ -120,8 +109,7 @@ pub fn check_structure(path: &Path) -> CheckResult<Nixpkgs> {
                             pass(())
                         };
 
-                        let correct_relative_package_dir =
-                            Nixpkgs::relative_dir_for_package(&package_name);
+                        let correct_relative_package_dir = relative_dir_for_package(&package_name);
                         let shard_check_result =
                             if relative_package_dir != correct_relative_package_dir {
                                 // Only show this error if we have a valid shard and package name
@@ -176,8 +164,7 @@ pub fn check_structure(path: &Path) -> CheckResult<Nixpkgs> {
             }
         });
 
-    flatten_check_results(check_results, |x| Nixpkgs {
-        path: path.to_owned(),
-        package_names: x.into_iter().flatten().collect::<Vec<_>>(),
+    flatten_check_results(check_results, |x| {
+        x.into_iter().flatten().collect::<Vec<_>>()
     })
 }
