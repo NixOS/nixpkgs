@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
   # Use upstream's example data to run a couple of queries to ensure the dependencies
   # for all of the adapters are available.
   installCheckPhase = ''
+    runHook preInstallCheck
+
     set -e
     export PATH="$PATH:$out/bin"
 
@@ -42,6 +44,8 @@ rustPlatform.buildRustPackage rec {
       echo "ERROR: test2 failed! Could not find the word 'crate' in the screenshot."
       exit 1
     fi
+
+    runHook postInstallCheck
   '';
 
   doInstallCheck = true;

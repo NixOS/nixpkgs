@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
   postPatch = "substituteInPlace Makefile --replace gcc cc";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/man/man8
     gzip arpoison.8
     cp arpoison $out/bin
     cp arpoison.8.gz $out/share/man/man8
+
+    runHook postInstall
   '';
 
   meta = with lib; {

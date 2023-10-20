@@ -31,14 +31,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   checkPhase = ''
+    runHook preCheck
+
     pushd test
     ./shared-spec.sh
     ./stack-spec.sh
     popd
+
+    runHook postCheck
   '';
-  installPhase=''
+  installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     cp -r . $out
+
+    runHook postInstall
   '';
   postFixup = ''
     pushd $out

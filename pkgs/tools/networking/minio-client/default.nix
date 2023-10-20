@@ -16,14 +16,22 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i "s/Version.*/Version = \"${version}\"/g" cmd/build-constants.go
     sed -i "s/ReleaseTag.*/ReleaseTag = \"RELEASE.${version}\"/g" cmd/build-constants.go
     sed -i "s/CommitID.*/CommitID = \"${src.rev}\"/g" cmd/build-constants.go
+
+    runHook postPatch
   '';
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/mc --version | grep ${version} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   passthru.tests.minio = nixosTests.minio;

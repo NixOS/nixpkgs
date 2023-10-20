@@ -24,13 +24,25 @@ stdenv.mkDerivation rec {
   '';
 
   configurePhase = ''
+    runHook preConfigure
+
     echo "$NIX_CC/bin/cc $NIX_CFLAGS_COMPILE"   >src/conf-cc
     echo "$NIX_CC/bin/cc -s"                    >src/conf-ld
+
+    runHook postConfigure
   '';
 
-  buildPhase = "package/compile";
+  buildPhase = ''
+    runHook preBuild
+
+    package/compile
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv command"/"* $out/bin
 
@@ -41,9 +53,17 @@ stdenv.mkDerivation rec {
 
     mkdir -p $doc/share/doc/socklog/html
     mv doc/*.html $doc/share/doc/socklog/html/
+
+    runHook postInstall
   '';
 
-  checkPhase = "package/check";
+  checkPhase = ''
+    runHook preCheck
+
+    package/check
+
+    runHook postCheck
+  '';
 
   doCheck = true;
 

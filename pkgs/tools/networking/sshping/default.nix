@@ -14,11 +14,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ libssh ];
 
   buildPhase = ''
+      runHook preBuild
+
       $CXX -Wall -I ext/ -o bin/sshping src/sshping.cxx -lssh
+
+      runHook postBuild
     '';
 
   installPhase = ''
+      runHook preInstall
+
       install -Dm755 bin/sshping $out/bin/sshping
+
+      runHook postInstall
     '';
 
   meta = with lib; {

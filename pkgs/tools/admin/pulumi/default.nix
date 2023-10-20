@@ -85,7 +85,11 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     PULUMI_SKIP_UPDATE_CHECK=1 $out/bin/pulumi version | grep v${version} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   postInstall = ''

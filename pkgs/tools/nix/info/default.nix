@@ -31,12 +31,20 @@ stdenv.mkDerivation {
   buildInputs = [ bash ];
 
   checkPhase = ''
+    runHook preCheck
+
     shellcheck ./nix-info
+
+    runHook postCheck
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ./nix-info $out/bin/nix-info
+
+    runHook postInstall
   '';
 
   preferLocalBuild = true;

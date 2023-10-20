@@ -12,10 +12,14 @@ stdenv.mkDerivation {
   dontBuild = true;
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp $src/jsawk $out/bin/
     wrapProgram $out/bin/jsawk \
       --prefix PATH : "${spidermonkey_102}/bin"
+
+    runHook postInstall
   '';
 
   meta = {

@@ -16,7 +16,11 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D wgg.sh $out/bin/wgg
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -89,6 +89,8 @@ HERE
 
     nativeBuildInputs = [ gradle perl ] ++ lib.optional stdenv.isDarwin xcbuild;
     buildPhase = ''
+      runHook preBuild
+
       export HOME="$NIX_BUILD_TOP/home"
       mkdir -p "$HOME"
       export JAVA_TOOL_OPTIONS="-Duser.home='$HOME'"
@@ -99,13 +101,19 @@ HERE
 
       # Then, fetch the maven dependencies.
       gradle --no-daemon --info -Dorg.gradle.java.home=${openjdk17} resolveDependencies
+
+      runHook postBuild
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
+      runHook preInstall
+
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/maven/$x/$3/$4/$5" #e' \
         | sh
       cp -r dependencies $out/dependencies
+
+      runHook postInstall
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";

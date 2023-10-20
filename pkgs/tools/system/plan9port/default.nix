@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/9 rc -c 'echo rc is working.'
 
     # 9l can find and use its libs
@@ -102,6 +104,8 @@ stdenv.mkDerivation rec {
     $out/bin/9 9c -o test.o test.c
     $out/bin/9 9l -o test test.o
     ./test
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

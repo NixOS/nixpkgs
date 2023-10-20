@@ -32,8 +32,12 @@ in stdenv.mkDerivation rec {
     ++ [ target ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/shim
     install -m 644 ${target} $out/share/shim/
+
+    runHook postInstall
   '';
 
   passthru = {

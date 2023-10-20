@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ luajit openssl zlib ];
 
   patchPhase = ''
+    runHook prePatch
+
     rm -rf deps/luajit && mkdir deps/luajit
 
     substituteInPlace ./Makefile \
@@ -24,12 +26,18 @@ stdenv.mkDerivation rec {
 
     substituteInPlace ./src/script.c \
       --replace 'struct luaL_reg ' 'struct luaL_Reg '
+
+    runHook postPatch
   '';
 
   dontConfigure = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv ./wrk $out/bin/wrk2
+
+    runHook postInstall
   '';
 
   meta = {

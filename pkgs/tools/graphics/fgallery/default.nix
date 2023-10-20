@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
     mkdir -p "$out/share/fgallery"
 
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
         --set PERL5LIB "$PERL5LIB" \
         --set PATH "${lib.makeBinPath
                      [ coreutils zip imagemagick pngcrush lcms2 facedetect fbida ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

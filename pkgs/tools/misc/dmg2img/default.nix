@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p0" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D dmg2img $out/bin/dmg2img
     install -D vfdecrypt $out/bin/vfdecrypt
+
+    runHook postInstall
   '';
 
   meta = {

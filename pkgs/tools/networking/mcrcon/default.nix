@@ -12,11 +12,19 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     $CC mcrcon.c -o mcrcon
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm 755 mcrcon $out/bin/mcrcon
+
+    runHook postInstall
   '';
 
   meta = {

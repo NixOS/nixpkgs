@@ -22,9 +22,13 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     # Removing integration tests
     rm tests/t{4,5,6}_*
     pytest tests
+
+    runHook postCheck
   '';
 
   meta = with lib; {

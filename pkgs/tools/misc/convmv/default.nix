@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
     makeFlags="PREFIX=$out"
   '';
 
-  patchPhase=''
+  patchPhase = ''
+    runHook prePatch
+
     tar -xf testsuite.tar
     patchShebangs .
+
+    runHook postPatch
   '';
 
   doCheck = true;

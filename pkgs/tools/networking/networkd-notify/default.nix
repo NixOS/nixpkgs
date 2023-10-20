@@ -26,17 +26,25 @@ buildPythonApplication rec {
   ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i \
       -e '/^NETWORKCTL = /c\NETWORKCTL = ["${systemd}/bin/networkctl"]' \
       -e '/^IWCONFIG = /c\IWCONFIG = ["${wirelesstools}/bin/iwconfig"]' \
       networkd-notify
+
+    runHook postPatch
   '';
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -D networkd-notify -t "$out/bin/"
     install -D -m0644 networkd-notify.desktop -t "$out/share/applications/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

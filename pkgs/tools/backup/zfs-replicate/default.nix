@@ -29,7 +29,11 @@ buildPythonApplication rec {
   doCheck = true;
 
   checkPhase = ''
+    runHook preCheck
+
     pytest --doctest-modules
+
+    runHook postCheck
   '';
 
   meta = with lib; {

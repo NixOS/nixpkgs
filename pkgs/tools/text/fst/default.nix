@@ -21,12 +21,16 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     csv="$(mktemp)"
     fst="$(mktemp)"
     printf "abc,1\nabcd,1" > "$csv"
     $out/bin/fst map "$csv" "$fst" --force
     $out/bin/fst fuzzy "$fst" 'abc'
     $out/bin/fst --help > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

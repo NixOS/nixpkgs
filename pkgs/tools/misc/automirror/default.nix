@@ -11,7 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1syyf7dcm8fbyw31cpgmacg80h7pg036dayaaf0svvdsk0hqlsch";
   };
 
-  patchPhase = "sed -i s#/usr##g Makefile";
+  patchPhase = ''
+    runHook prePatch
+
+    sed -i s#/usr##g Makefile
+
+    runHook postPatch
+  '';
 
   buildInputs = [ git ronn ];
 

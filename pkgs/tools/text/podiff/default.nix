@@ -10,9 +10,13 @@ stdenv.mkDerivation {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     sed "s#PREFIX=/usr#PREFIX=$out#g" -i Makefile
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
+
+    runHook postPatch
   '';
 
   meta = with lib; {

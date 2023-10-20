@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   makeTargets = [ "man" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -m 755 -D zfs-prune-snapshots $out/bin/zfs-prune-snapshots
     install -m 644 -D man/zfs-prune-snapshots.1 $out/share/man/man1/zfs-prune-snapshots.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

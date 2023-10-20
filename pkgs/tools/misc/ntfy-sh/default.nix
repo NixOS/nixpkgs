@@ -26,10 +26,14 @@ buildGoModule rec {
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mv build/index.html build/app.html
       rm build/config.js
       mkdir -p $out
       mv build/ $out/site
+
+      runHook postInstall
     '';
   };
 

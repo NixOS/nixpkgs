@@ -42,12 +42,18 @@ buildGoModule rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     make browserpass
+
+    runHook postBuild
   '';
 
   checkTarget = "test";
 
   installPhase = ''
+    runHook preInstall
+
     make install
 
     wrapProgram $out/bin/browserpass \
@@ -56,6 +62,8 @@ buildGoModule rec {
     # This path is used by our firefox wrapper for finding native messaging hosts
     mkdir -p $out/lib/mozilla/native-messaging-hosts
     ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {

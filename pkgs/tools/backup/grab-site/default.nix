@@ -45,8 +45,12 @@ with python.pkgs; buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     export PATH=$PATH:$out/bin
     bash ./tests/offline-tests
+
+    runHook postCheck
   '';
 
   meta = with lib; {

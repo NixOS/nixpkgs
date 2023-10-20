@@ -17,7 +17,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/simp_le --test
+
+    runHook postCheck
   '';
 
   propagatedBuildInputs = with python3Packages; [ acme setuptools-scm josepy idna ];

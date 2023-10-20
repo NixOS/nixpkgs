@@ -42,7 +42,11 @@ buildGoModule rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/aws-vault --version 2>&1 | grep ${version} > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
   buildFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv "$out/bin"
     mkdir -pv "$out/share/man/man1"
     make DESTDIR="$out" BINDIR="$out/bin" PREFIX="" install
     make DESTDIR="$out" MANPATH="$out/share/man" PREFIX="" install.man
+
+    runHook postInstall
   '';
 
   meta = with lib; {

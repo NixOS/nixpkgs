@@ -29,6 +29,8 @@ let
     nativeBuildInputs = [ gradle jdk perl ];
 
     buildPhase = ''
+      runHook preBuild
+
       export GRADLE_USER_HOME=$(mktemp -d)
       export JADX_VERSION=${version}
       gradle --no-daemon jar
@@ -40,11 +42,15 @@ let
       substituteInPlace build.gradle \
         --replace 'org.jetbrains:annotations:23.0.0' 'org.jetbrains:annotations:22.0.0'
       gradle --no-daemon jar
+
+      runHook postBuild
     '';
 
     # Mavenize dependency paths
     # e.g. org.codehaus.groovy/groovy/2.4.0/{hash}/groovy-2.4.0.jar -> org/codehaus/groovy/groovy/2.4.0/groovy-2.4.0.jar
     installPhase = ''
+      runHook preInstall
+
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
@@ -52,6 +58,8 @@ let
       # Work around okio-2.10.0 bug, fixed in 3.0. Remove "-jvm" from filename.
       # https://github.com/square/okio/issues/954
       mv $out/com/squareup/okio/okio/2.10.0/okio{-jvm,}-2.10.0.jar
+
+      runHook postInstall
     '';
 
     outputHashMode = "recursive";

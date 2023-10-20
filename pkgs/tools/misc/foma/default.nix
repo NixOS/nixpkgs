@@ -26,8 +26,12 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace Makefile \
       --replace '-ltermcap' ' '
+
+    runHook postPatch
   '';
 
   meta = with lib; {

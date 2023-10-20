@@ -12,6 +12,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     # requirement checks are unnecessary at runtime
     echo > requirements.txt
 
@@ -20,12 +22,20 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace gitfs/mounter.py --replace \
       'from pygit2.remote import RemoteCallbacks' \
       'from pygit2 import RemoteCallbacks'
+
+    runHook postPatch
   '';
 
   nativeCheckInputs = with python3Packages; [ pytest pytest-cov mock ];
   propagatedBuildInputs = with python3Packages; [ atomiclong fusepy pygit2 six ];
 
-  checkPhase = "py.test";
+  checkPhase = ''
+    runHook preCheck
+
+    py.test
+
+    runHook postCheck
+  '';
   doCheck = false;
 
   meta = {

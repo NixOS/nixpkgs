@@ -79,7 +79,11 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/broot --version | grep "${version}"
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

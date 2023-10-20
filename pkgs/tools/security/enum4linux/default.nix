@@ -31,11 +31,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp enum4linux.pl $out/bin/enum4linux
 
     wrapProgram $out/bin/enum4linux \
       --prefix PATH : ${lib.makeBinPath [ samba openldap ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

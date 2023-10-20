@@ -128,6 +128,8 @@ in buildNpmPackage' rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir $out
 
     pushd apps/desktop/dist/linux-unpacked
@@ -151,6 +153,8 @@ in buildNpmPackage' rec {
       cp "$icon" "$dir"/${icon}.png
     done
     popd
+
+    runHook postInstall
   '';
 
   meta = {

@@ -14,8 +14,12 @@ stdenv.mkDerivation {
     glib procps libxml2
   ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv dbus-map $out/bin
+
+    runHook postInstall
   '';
   meta = with lib; {
     description = "Simple utility for enumerating D-Bus endpoints, an nmap for D-Bus";

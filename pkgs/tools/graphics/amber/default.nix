@@ -86,7 +86,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin amber image_diff
+
+    runHook postInstall
   '';
 
   meta = with lib; {

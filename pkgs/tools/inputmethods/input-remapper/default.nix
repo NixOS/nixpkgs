@@ -67,6 +67,8 @@ in
   # To allow tests which access the system and session DBUS to run, we start a dbus session
   # and bind it to both the system and session buses
   installCheckPhase = ''
+    runHook preInstallCheck
+
     echo "<busconfig>
       <type>session</type>
       <listen>unix:tmpdir=$TMPDIR</listen>
@@ -86,6 +88,8 @@ in
       DBUS_SYSTEM_BUS_ADDRESS=unix:path=/build/system_bus_socket \
       ${dbus}/bin/dbus-run-session --config-file dbus.cfg \
       python tests/test.py --start-dir unit
+
+    runHook postInstallCheck
   '';
 
   # Nixpkgs 15.9.4.3. When using wrapGAppsHook with special derivers you can end up with double wrapped binaries.

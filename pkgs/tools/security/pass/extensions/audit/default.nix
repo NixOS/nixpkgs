@@ -35,7 +35,11 @@ in stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
   nativeCheckInputs = [ pythonPackages.green pass gnupg ];
   checkPhase = ''
+    runHook preCheck
+
     ${pythonEnv}/bin/python3 setup.py green -q
+
+    runHook postCheck
   '';
 
   installFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];

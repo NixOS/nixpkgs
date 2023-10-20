@@ -22,11 +22,22 @@ stdenv.mkDerivation rec {
     sha256 = sha_table.${stdenv.system} or throwSystem;
   };
 
-  unpackPhase = "unpackFile $src ; export sourceRoot=.";
+  unpackPhase = ''
+    runHook preUnpack
+
+    unpackFile $src
+    export sourceRoot=."
+
+    runHook postUnpack
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp streaming_extractor_music $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

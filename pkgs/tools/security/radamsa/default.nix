@@ -20,12 +20,16 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace ./tests/bd.sh  \
       --replace "/bin/echo" echo
 
     ln -s ${owl} ol.c.gz
 
     patchShebangs tests
+
+    runHook postPatch
   '';
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "BINDIR=" ];

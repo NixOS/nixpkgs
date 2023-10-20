@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     make EPSTOOL_ROOT=$out install
+
+    runHook postInstall
   '';
 
   meta = with lib; {

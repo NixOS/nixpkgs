@@ -30,9 +30,13 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = ''
+    runHook preCheck
+
     # gawk and coreutils are part of stdenv but will not
     # necessarily be in PATH at runtime.
     sh -c 'unset PATH; printf hello | ./txt2man'
+
+    runHook postCheck
   '';
 
   meta = with lib; {

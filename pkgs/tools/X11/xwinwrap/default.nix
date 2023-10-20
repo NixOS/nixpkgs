@@ -23,8 +23,12 @@ stdenv.mkDerivation rec {
   '' else throw "xwinwrap is not supported on ${stdenv.hostPlatform.system}";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv */xwinwrap $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

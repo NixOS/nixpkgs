@@ -15,6 +15,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-dtvP930ChiDRT60xq6xBDU6k+zHnkrAkxkKz2FxlzRs=";
   };
 
+  patchPhase = ''
+    runHook prePatch
+
+    substituteInPlace ./resources/wdisplays.desktop.in --replace "@app_id@" "wdisplays"
+
+    runHook postPatch
+  '';
+
   meta = with lib; {
     description = "A graphical application for configuring displays in Wayland compositors";
     homepage = "https://github.com/luispabon/wdisplays";

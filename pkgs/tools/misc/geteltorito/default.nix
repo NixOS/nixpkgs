@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
 
   unpackCmd = "";
   dontBuild = true;
-  configurePhase = "";
+  dontConfigure = true;
   installPhase = ''
+    runHook preInstall
+
     # reformat README to ronn markdown
     cat > README.new <<EOF
     geteltorito -- ${meta.description}
@@ -36,6 +38,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/man/man1
     ronn --roff README.new --pipe > $out/man/man1/geteltorito.1
     install -vD geteltorito $out/bin/geteltorito
+
+    runHook postInstall
   '';
 
   meta = with lib; {

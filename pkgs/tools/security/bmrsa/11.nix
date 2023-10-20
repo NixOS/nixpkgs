@@ -12,12 +12,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir bmrsa
     cd bmrsa
     unzip ${src}
     sed -e 's/gcc/g++/' -i Makefile
     mkdir -p $out/bin
     echo -e 'install:\n\tcp bmrsa '$out'/bin' >> Makefile
+
+    runHook postUnpack
   '';
 
   meta = with lib; {

@@ -68,8 +68,16 @@ let
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [dpkg];
 
-    unpackPhase = "dpkg -X $src .";
-    installPhase=''
+    unpackPhase = ''
+      runHook preUnpack
+
+      dpkg -X $src .
+
+      runHook postUnpack
+    '';
+    installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/bin
       cp -r opt/enpass/*  $out/bin
       cp -r usr/* $out
@@ -88,6 +96,8 @@ let
         --prefix PATH : ${lsof}/bin \
         --unset QML2_IMPORT_PATH \
         --unset QT_PLUGIN_PATH
+
+      runHook postInstall
     '';
   };
   updater = {

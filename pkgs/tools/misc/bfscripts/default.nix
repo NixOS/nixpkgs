@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     ${lib.concatStringsSep "\n" (map (b: "install -D ${b} $out/bin/${b}") binaries)}
+
+    runHook postInstall
   '';
 
   meta = with lib;

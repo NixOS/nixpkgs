@@ -33,10 +33,16 @@ stdenv.mkDerivation {
   outputs = ["out" "man"];
 
   buildPhase = ''
+    runHook preBuild
+
     PLUGINS=$out/lib/midimonster make all
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     PREFIX=$out make install
 
     mkdir -p "$man/share/man/man1"
@@ -44,6 +50,8 @@ stdenv.mkDerivation {
 
     mkdir -p "$out/share/icons/hicolor/scalable/apps"
     cp assets/MIDIMonster.svg "$out/share/icons/hicolor/scalable/apps/"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

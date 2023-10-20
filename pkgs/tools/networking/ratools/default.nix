@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "-C" "src" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -vD bin/* -t $out/bin
     install -vD man/* -t $out/share/man/man8
+
+    runHook postInstall
   '';
 
   meta = with lib; {

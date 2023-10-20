@@ -13,7 +13,11 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ rich prompt-toolkit requests pygments pyyaml more-itertools ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/piston --help > /dev/null
+
+    runHook postCheck
   '';
 
   nativeBuildInputs = with python3Packages; [

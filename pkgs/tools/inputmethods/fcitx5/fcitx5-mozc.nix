@@ -67,6 +67,8 @@ in clangStdenv.mkDerivation {
 
   # Copied from https://github.com/archlinux/svntogit-community/blob/packages/fcitx5-mozc/trunk/PKGBUILD
   configurePhase = ''
+    runHook preConfigure
+
     cd src
     export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 use_libabseil=1"
 
@@ -81,6 +83,8 @@ in clangStdenv.mkDerivation {
 
     # run gyp
     python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

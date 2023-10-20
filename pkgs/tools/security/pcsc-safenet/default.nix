@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     dpkg-deb -x "$src/$debName" .
+
+    runHook postUnpack
   '';
 
   buildInputs = [
@@ -46,6 +50,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mv usr/* .
 
     mkdir -p pcsc/drivers
@@ -76,6 +82,8 @@ stdenv.mkDerivation rec {
     ) || exit
 
     ln -sf ${lib.getLib openssl_1_1}/lib/libcrypto.so $out/lib/libcrypto.so.1.1.0
+
+    runHook postInstall
   '';
 
   dontAutoPatchelf = true;

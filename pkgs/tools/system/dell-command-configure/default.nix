@@ -36,14 +36,22 @@ let
     nativeBuildInputs = [ dpkg ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       tar -xzf ${src}
       dpkg-deb -x command-configure_${version}.ubuntu20_amd64.deb command-configure
       dpkg-deb -x srvadmin-hapi_9.5.0_amd64.deb srvadmin-hapi
+
+      runHook postUnpack
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir $out
       cp -r . $out
+
+      runHook postInstall
     '';
   };
 

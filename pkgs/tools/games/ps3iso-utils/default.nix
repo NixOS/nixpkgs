@@ -15,14 +15,22 @@ stdenv.mkDerivation {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     mkdir -p bin/
     find . -type f -name "*.c" -exec \
     sh -c 'OFILE=`basename "{}" ".c"` && $CC "{}" -o bin/"$OFILE"' \;
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp bin/* $out/bin
+
+    runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };

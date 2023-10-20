@@ -42,7 +42,13 @@ python3Packages.buildPythonApplication rec {
 
   postBuild = "make -C doc";
 
-  checkPhase = "py.test src/vulnix";
+  checkPhase = ''
+    runHook preCheck
+
+    py.test src/vulnix
+
+    runHook postCheck
+  '';
 
   postInstall = ''
     install -D -t $doc/share/doc/vulnix README.rst CHANGES.rst

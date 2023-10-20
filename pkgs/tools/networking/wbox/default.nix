@@ -5,7 +5,11 @@ stdenv.mkDerivation rec {
   version = "5";
 
   installPhase = ''
+    runHook preInstall
+
     install -vD wbox "$out/bin/wbox"
+
+    runHook postInstall
   '';
 
   src = fetchurl {

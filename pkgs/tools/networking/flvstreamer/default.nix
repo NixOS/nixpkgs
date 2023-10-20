@@ -10,15 +10,23 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     make CC=${stdenv.cc.targetPrefix}cc posix
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp flvstreamer $out/bin
     cp streams $out/bin
     cp rtmpsrv $out/bin
     cp rtmpsuck $out/bin
+
+    runHook postInstall
   '';
 
   meta = {

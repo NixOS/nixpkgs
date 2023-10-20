@@ -19,11 +19,15 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   patchPhase = ''
+    runHook prePatch
+
     # remove broken symlink
     rm bin/qtextasdata.py
 
     # not considered good practice pinning in install_requires
     substituteInPlace setup.py --replace 'six==' 'six>='
+
+    runHook postPatch
   '';
 
   meta = with lib; {

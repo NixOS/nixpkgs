@@ -29,8 +29,12 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -v src/zkfuse $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -45,12 +45,16 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     if [[ "$("$out/bin/${pname}" --version)" == "${version}" ]]; then
       echo '${pname} smoke check passed'
     else
       echo '${pname} smoke check failed'
       return 1
     fi
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

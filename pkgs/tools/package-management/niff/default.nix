@@ -21,8 +21,12 @@ in stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp niff $out/bin/niff
+
+    runHook postInstall
   '';
 
   meta = {

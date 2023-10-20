@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -pv $out/bin
     cp nix-universal-prefetch $out/bin/nix-universal-prefetch
     substituteInPlace "$out/bin/nix-universal-prefetch" \
       --replace "/usr/bin/env nix-shell" "${ruby}/bin/ruby"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

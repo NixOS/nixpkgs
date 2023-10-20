@@ -11,8 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXaw ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp autocutsel $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {

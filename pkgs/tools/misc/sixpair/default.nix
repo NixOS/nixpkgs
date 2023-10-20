@@ -14,16 +14,28 @@ stdenv.mkDerivation {
   buildInputs = [ libusb-compat-0_1 ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     cp $src sixpair.c
+
+    runHook postUnpack
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     cc -o sixpair sixpair.c -lusb
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp sixpair $out/bin/sixpair
+
+    runHook postInstall
   '';
 
   meta = {

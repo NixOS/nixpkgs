@@ -37,8 +37,12 @@ stdenv.mkDerivation rec {
   preConfigure = "./bootstrap.sh";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/bin
     cp -a src/rshim "$out"/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

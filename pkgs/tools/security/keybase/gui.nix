@@ -66,11 +66,17 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     ar xf $src
     tar xf data.tar.xz
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv usr/share $out/share
     mv opt/keybase $out/share/
@@ -104,6 +110,8 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/share/applications/keybase.desktop \
       --replace run_keybase $out/bin/keybase-gui
+
+    runHook postInstall
   '';
 
   meta = with lib; {

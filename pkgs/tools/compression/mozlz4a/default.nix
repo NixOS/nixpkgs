@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ python3 python3.pkgs.lz4 ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin" "$out/${python3.sitePackages}/"
     cp "${src}" "$out/${python3.sitePackages}/mozlz4a.py"
 
@@ -26,6 +28,8 @@ stdenv.mkDerivation rec {
     echo "export PYTHONPATH='$PYTHONPATH'" >> "$out/bin/mozlz4a"
     echo "'${python3}/bin/python' '$out/${python3.sitePackages}/mozlz4a.py' \"\$@\"" >> "$out/bin/mozlz4a"
     chmod a+x "$out/bin/mozlz4a"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

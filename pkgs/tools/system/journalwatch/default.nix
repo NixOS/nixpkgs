@@ -22,7 +22,11 @@ buildPythonPackage rec {
   doCheck = true;
   nativeCheckInputs = [ pytest ];
   checkPhase = ''
+    runHook preCheck
+
     pytest
+
+    runHook postCheck
   '';
 
   propagatedBuildInputs = [

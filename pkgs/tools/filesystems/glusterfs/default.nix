@@ -174,6 +174,8 @@ in stdenv.mkDerivation rec {
   PYTHONHASHSEED = 0;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     # Tests that the above programs work without import errors.
     # For testing it manually in a shell you may want to substitute `$out` with `$(dirname $(readlink -f $(which gluster)))/../`.
     $out/bin/glusterd --help
@@ -191,6 +193,8 @@ in stdenv.mkDerivation rec {
 
     # this gets falsely loaded as module by glusterfind
     rm -r $out/bin/conf.py
+
+    runHook postInstallCheck
   '';
 
   passthru.tests = {

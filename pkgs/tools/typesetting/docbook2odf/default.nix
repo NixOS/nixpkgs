@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ perlPackages.perl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin/"
     mkdir -p "$out/share/docbook2odf/"
     mkdir -p "$out/share/doc/docbook2odf/"
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/docbook2odf" \
       --prefix PATH : "${lib.makeBinPath [ zip libxslt ]}" \
       --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.ImageMagick ]}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

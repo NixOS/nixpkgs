@@ -26,7 +26,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/nvitop --help
+
+    runHook postCheck
   '';
 
   meta = with lib; {

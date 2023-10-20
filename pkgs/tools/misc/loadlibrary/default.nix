@@ -17,8 +17,12 @@ stdenv_32bit.mkDerivation rec {
   buildInputs = [ cabextract readline ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin/
     cp mpclient $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

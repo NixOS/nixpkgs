@@ -43,8 +43,12 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-maintainer-mode" "--disable-ncurses" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     mv macosx/pinentry-mac.app $out/Applications
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;

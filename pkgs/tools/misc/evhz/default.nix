@@ -14,11 +14,21 @@ stdenv.mkDerivation {
     hash = "sha256-lC0CeN9YVhkSiooC59Dbom811jHvPDQcYl+KADUwVdQ=";
   };
 
-  buildPhase = "gcc -o evhz evhz.c";
+  buildPhase = ''
+    runHook preBuild
+
+    gcc -o evhz evhz.c
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv evhz $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

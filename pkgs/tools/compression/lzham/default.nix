@@ -14,8 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ../bin_linux/lzhamtest $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

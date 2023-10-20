@@ -17,7 +17,11 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-go9eYGCZmbwRArHVTVa6mxL+kjvBcrLxKw2iVv0a5hY=";
 
   buildPhase = ''
+    runHook preBuild
+
     npm run bump
+
+    runHook postBuild
   '';
 
   meta = with lib; {

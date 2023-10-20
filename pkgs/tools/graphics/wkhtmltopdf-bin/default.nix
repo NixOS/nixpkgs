@@ -25,9 +25,13 @@ let
     nativeBuildInputs = [ xar cpio ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       xar -xf $src
       zcat Payload | cpio -i
       tar -xf usr/local/share/wkhtmltox-installer/wkhtmltox.tar.gz
+
+      runHook postUnpack
     '';
 
     installPhase = ''
@@ -61,7 +65,13 @@ let
       (lib.getLib libpng)
     ];
 
-    unpackPhase = "tar -xf $src";
+    unpackPhase = ''
+      runHook preUnpack
+
+      tar -xf $src
+
+      runHook postUnpack
+    '';
 
     installPhase = ''
       runHook preInstall
@@ -79,7 +89,11 @@ stdenv.mkDerivation ({
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/wkhtmltopdf --version
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

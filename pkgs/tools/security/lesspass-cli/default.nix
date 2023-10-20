@@ -26,8 +26,12 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [ pytest mock pexpect ];
   checkPhase = ''
+    runHook preCheck
+
     mv lesspass lesspass.hidden  # ensure we're testing against *installed* package
     pytest tests
+
+    runHook postCheck
   '';
 
   meta = with lib; {

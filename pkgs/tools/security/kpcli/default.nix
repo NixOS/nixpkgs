@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     cp ${src} $out/share/kpcli.pl
     chmod +x $out/share/kpcli.pl
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
       "${with perlPackages; makePerlPath ([
          CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
       ] ++ lib.optional stdenv.isDarwin MacPasteboard)}"
+
+    runHook postInstall
   '';
 
 

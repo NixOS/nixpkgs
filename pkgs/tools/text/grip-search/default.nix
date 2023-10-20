@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace src/general/config.h --replace "CUSTOM-BUILD" "${version}"
+
+    runHook postPatch
   '';
 
   meta = with lib; {

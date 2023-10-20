@@ -20,9 +20,13 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 $src/er-patcher $out/bin/er-patcher
     patchShebangs $out/bin/er-patcher
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -16,10 +16,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ openconnect qtwebsockets qtwebengine qtkeychain ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace GPService/gpservice.h \
       --replace /usr/local/bin/openconnect ${openconnect}/bin/openconnect;
     substituteInPlace GPService/CMakeLists.txt \
       --replace /etc/gpservice $out/etc/gpservice;
+
+    runHook postPatch
   '';
 
   meta = with lib; {

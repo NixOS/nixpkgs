@@ -36,12 +36,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ glib hicolor-icon-theme ];
 
   unpackPhase = ''
+    runHook preUnpack
+
     mkdir pkg
     dpkg-deb -x $src pkg
     sourceRoot=pkg
+
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv opt $out
 
@@ -60,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
       $out/opt/StarUML/staruml
 
     ln -s $out/opt/StarUML/staruml $out/bin/staruml
+
+    runHook postInstall
   '';
 
   preFixup = ''

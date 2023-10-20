@@ -31,6 +31,8 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm744 src/hostsblock.sh $out/bin/hostsblock
     install -Dm744 src/hostsblock-urlcheck.sh $out/bin/hostsblock-urlcheck
@@ -60,6 +62,8 @@ stdenv.mkDerivation {
     mkdir -p $out/share/dbus-1/system-services
     install -Dm644 systemd/hostsblock.service $out/share/dbus-1/system-services
     install -Dm644 systemd/hostsblock.timer $out/share/dbus-1/system-services
+
+    runHook postInstall
   '';
 
   meta = with lib; {

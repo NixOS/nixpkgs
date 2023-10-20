@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildPhase = ''
+    runHook preBuild
+
     echo "en
 
 agent
@@ -32,6 +34,8 @@ yes
 
 
 "   | ./install.sh
+
+    runHook postBuild
   '';
 
   meta = with lib; {

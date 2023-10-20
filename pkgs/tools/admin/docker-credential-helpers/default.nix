@@ -34,7 +34,11 @@ buildGoModule rec {
     '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 -t $out/bin bin/docker-credential-*
+
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {

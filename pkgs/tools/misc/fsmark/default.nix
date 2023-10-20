@@ -10,12 +10,20 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i Makefile -e 's/-static //'
+
+    runHook postPatch
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp fs_mark $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

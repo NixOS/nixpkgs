@@ -42,6 +42,8 @@ perlPackages.buildPerlPackage rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir "$out"
     mv wwwroot "$out/wwwroot"
     rm -r "$out/wwwroot/classes/src/"
@@ -55,6 +57,8 @@ perlPackages.buildPerlPackage rec {
     mkdir -p "$doc/share/doc"
     mv README.md docs/
     mv docs "$doc/share/doc/awstats"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

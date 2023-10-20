@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     PREFIX=\"\" DESTDIR=$out make install
     substituteInPlace $out/bin/profile-sync-daemon \
       --replace "/usr/" "$out/" \
@@ -21,6 +23,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/psd-overlay-helper \
       --replace "PATH=/usr/bin:/bin" "PATH=${util-linux.bin}/bin:${coreutils}/bin" \
       --replace "sudo " "/run/wrappers/bin/sudo "
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m444 -t $out/rules ${src}/rules/*.conf
     install -D -m444 -t $out/rules ${src}/rules/*.data
     install -D -m444 -t $out/share/doc/modsecurity-crs ${src}/*.md
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
     Include $out/rules/*.conf
     IncludeOptional /etc/modsecurity/crs/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
     EOF
+
+    runHook postInstall
   '';
 
   meta = with lib; {

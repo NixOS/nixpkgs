@@ -48,6 +48,8 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = [ "-lcrypto" ];
 
   patchPhase = ''
+    runHook prePatch
+
     patchShebangs \
       build.sh \
       tests/test.sh \
@@ -57,6 +59,8 @@ in stdenv.mkDerivation rec {
       tests/downloadTests.sh \
       tests/zorbajsoniq.sh \
       tests/zorbajsoniq/download.sh
+
+    runHook postPatch
   '';
 
   preBuildPhase = ''
@@ -75,14 +79,22 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin" "$out/share/man/man1"
     cp meta/xidel.1 "$out/share/man/man1/"
     cp xidel "$out/bin/"
+
+    runHook postInstall
   '';
 
   # disabled, because tests require network
   checkPhase = ''
+    runHook preCheck
+
     ./tests/tests.sh
+
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optional (stdenv.system == "x86_64-darwin") memstreamHook;
 
   installPhase = ''
+    runHook preInstall
+
     install -vD hyx $out/bin/hyx
+
+    runHook postInstall
   '';
 
   meta = with lib; {

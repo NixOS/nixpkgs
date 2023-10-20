@@ -42,12 +42,20 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildPhase = ''
+    runHook preBuild
+
     make -C gwnum -f ${gwnum}
     make -C ${srcDir}
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm555 -t $out/bin ${srcDir}/mprime
+
+    runHook postInstall
   '';
 
   meta = with lib; {

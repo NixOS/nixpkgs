@@ -12,12 +12,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -p djvu2pdf $out/bin
     wrapProgram $out/bin/djvu2pdf --prefix PATH : ${lib.makeBinPath [ ghostscript djvulibre which ]}
 
     mkdir -p $out/man/man1
     cp -p djvu2pdf.1.gz $out/man/man1
+
+    runHook postInstall
   '';
 
   meta = {

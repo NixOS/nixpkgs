@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace Makefile \
       --replace 'which' 'ls' \
       --replace 'grim' "${grim}/bin/grim" \
@@ -33,6 +35,8 @@ stdenv.mkDerivation rec {
       --replace 'convert' "${imagemagick}/bin/convert" \
       --replace 'zenity' "${gnome.zenity}/bin/zenity" \
       --replace 'wl-copy' "${wl-clipboard}/bin/wl-copy"
+
+    runHook postPatch
   '';
 
   installFlags = [

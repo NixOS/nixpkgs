@@ -38,12 +38,16 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     file="$(mktemp)"
     echo "abc\nbcd\ncde" > "$file"
     $out/bin/rg -N 'bcd' "$file"
     $out/bin/rg -N 'cd' "$file"
   '' + lib.optionalString withPCRE2 ''
     echo '(a(aa)aa)' | $out/bin/rg -P '\((a*|(?R))*\)'
+  '' + ''
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

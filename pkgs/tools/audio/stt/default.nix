@@ -22,11 +22,15 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D stt $out/bin/stt
     install -D coqui-stt.h $out/include/coqui-stt.h
     install -D libkenlm.so $out/lib/libkenlm.so
     install -D libsox.so.3 $out/lib/libsox.so.3
     install -D libstt.so $out/lib/libstt.so
+
+    runHook postInstall
   '';
 
   meta = with lib; {

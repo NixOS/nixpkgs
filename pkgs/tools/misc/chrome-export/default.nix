@@ -17,14 +17,22 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp export-chrome-bookmarks export-chrome-history $out/bin
     mkdir -p $out/share/man/man1
     cp man_pages/*.1 $out/share/man/man1
+
+    runHook postInstall
   '';
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     bash test/run_tests $out/bin
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

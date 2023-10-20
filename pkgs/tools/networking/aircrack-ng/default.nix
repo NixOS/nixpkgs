@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpcap openssl zlib libnl iw ethtool pciutils ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -e 's@/usr/local/bin@'${wirelesstools}@ -i lib/osdep/linux.c
+
+    runHook postPatch
   '';
 
   postFixup = ''

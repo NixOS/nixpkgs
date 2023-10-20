@@ -15,11 +15,21 @@ stdenv.mkDerivation {
 
   buildInputs = [ libsodium ];
 
-  buildPhase = "bash build.sh";
+  buildPhase = ''
+    runHook preBuild
+
+    bash build.sh
+
+    runHook postBuild
+  '';
 
   installPhase = ''
+    runHook preInstall
+
     rm out/quicktun*tgz
     install -vD out/quicktun* -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

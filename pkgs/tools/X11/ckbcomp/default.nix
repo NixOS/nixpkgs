@@ -15,15 +15,23 @@ stdenv.mkDerivation rec {
   buildInputs = [ perl ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace Keyboard/ckbcomp --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
     substituteInPlace Keyboard/ckbcomp --replace "rules = 'xorg'" "rules = 'base'"
+
+    runHook postPatch
   '';
 
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0555 -t $out/bin Keyboard/ckbcomp
     install -Dm0444 -t $out/share/man/man1 man/ckbcomp.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

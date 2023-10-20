@@ -20,18 +20,30 @@ buildGoModule rec {
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
+    runHook preBuild
+
     make BASH_PATH=$BASH_PATH
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     make install PREFIX=$out
+
+    runHook postInstall
   '';
 
   nativeCheckInputs = [ fish zsh ];
 
   checkPhase = ''
+    runHook preCheck
+
     export HOME=$(mktemp -d)
     make test-go test-bash test-fish test-zsh
+
+    runHook postCheck
   '';
 
   meta = with lib; {

@@ -20,10 +20,14 @@ stdenv.mkDerivation {
   buildInputs = [ gawk trousers cryptsetup openssl ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     make install DESTDIR=$out
     mv $out/$out/sbin $out/bin
     rm -r $out/nix
+
+    runHook postInstall
   '';
 
   meta = with lib; {

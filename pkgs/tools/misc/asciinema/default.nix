@@ -31,7 +31,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     LC_ALL=en_US.UTF-8 nosetests -v tests/config_test.py
+
+    runHook postCheck
   '';
 
   meta = {

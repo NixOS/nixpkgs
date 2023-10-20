@@ -33,7 +33,11 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/gping --version | grep "${version}"
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

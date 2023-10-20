@@ -84,7 +84,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     trial --rterrors allmydata
+
+    runHook postCheck
   '';
 
   meta = with lib; {

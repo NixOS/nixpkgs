@@ -13,7 +13,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  patchPhase = ''sed -i "s,/sbin/route,${nettools}/bin/route," src/tun.c'';
+  patchPhase = ''
+    runHook prePatch
+
+    sed -i "s,/sbin/route,${nettools}/bin/route," src/tun.c
+
+    runHook postPatch
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-DIFCONFIGPATH=\"${nettools}/bin/\"";
 

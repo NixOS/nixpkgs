@@ -19,9 +19,13 @@ stdenv.mkDerivation {
 
   # Do not hardcode PATH to ${ecryptfs} as we need the script to invoke executables from /run/wrappers/bin
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/libexec
     cp $src $out/libexec/ecryptfs-helper.py
     makeWrapper "${python2.interpreter}" "$out/bin/ecryptfs-helper" --add-flags "$out/libexec/ecryptfs-helper.py"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -14,11 +14,15 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 src/capture.sh $out/bin/capture
 
     patchShebangs $out/bin/capture
     wrapProgram $out/bin/capture \
       --prefix PATH : '${lib.makeBinPath [ slop ffmpeg ]}'
+
+    runHook postInstall
   '';
 
   meta = with lib; {

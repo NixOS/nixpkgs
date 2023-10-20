@@ -35,7 +35,13 @@ stdenv.mkDerivation rec {
     install_name_tool -change libwkhtmltox.0.dylib $out/lib/libwkhtmltox.0.dylib $out/bin/wkhtmltoimage
   '';
 
-  configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
+  configurePhase = ''
+    runHook preConfigure
+
+    qmake wkhtmltopdf.pro INSTALLBASE=$out
+
+    runHook postConfigure
+  '';
 
   enableParallelBuilding = true;
 

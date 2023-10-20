@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D mlxbf-bootctl $out/bin/mlxbf-bootctl
+
+    runHook postInstall
   '';
 
   meta = with lib; {

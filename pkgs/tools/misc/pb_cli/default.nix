@@ -23,11 +23,15 @@ stdenv.mkDerivation rec {
                          ++ lib.optional clipboard xclip;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 src/pb.sh $out/bin/pb
 
     patchShebangs $out/bin/pb
     wrapProgram $out/bin/pb \
       --prefix PATH : '${lib.makeBinPath liveDeps}'
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     install -D -m 0755 cutter $out/bin/tcp-cutter
+
+    runHook postInstall
   '';
 
   meta = with lib; {

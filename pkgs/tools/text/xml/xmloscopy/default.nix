@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
+    runHook preInstall
+
     sed -i "s/hard to say/v${version}/" ./xmloscopy
     type -P shellcheck && shellcheck ./xmloscopy
     chmod +x ./xmloscopy
@@ -41,6 +43,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xmloscopy \
       --set RNG "${docbook5}/xml/rng/docbook/docbook.rng" \
       --set PATH "${spath}"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

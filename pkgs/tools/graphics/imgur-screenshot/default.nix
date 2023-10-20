@@ -15,8 +15,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 imgur-screenshot $out/bin/imgur-screenshot
     wrapProgram $out/bin/imgur-screenshot --prefix PATH ':' ${deps}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -23,9 +23,13 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [ packaging ];
 
   buildPhase = ''
+    runHook preBuild
+
     substituteInPlace autorandr.py \
       --replace 'os.popen("xrandr' 'os.popen("${xrandr}/bin/xrandr' \
       --replace '["xrandr"]' '["${xrandr}/bin/xrandr"]'
+
+    runHook postBuild
   '';
 
   patches = [ ./0001-don-t-use-sys.executable.patch ];

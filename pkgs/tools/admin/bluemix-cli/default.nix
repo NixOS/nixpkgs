@@ -20,12 +20,16 @@ stdenv.mkDerivation rec {
     ;
 
   installPhase = ''
+    runHook preInstall
+
     install -m755 -D -t $out/bin bin/ibmcloud bin/ibmcloud-analytics
     install -m755 -D -t $out/bin/cfcli bin/cfcli/cf
     ln -sv $out/bin/ibmcloud $out/bin/bx
     ln -sv $out/bin/ibmcloud $out/bin/bluemix
     install -D -t "$out/share/bash-completion/completions" bx/bash_autocomplete
     install -D -t "$out/share/zsh/site-functions" bx/zsh_autocomplete
+
+    runHook postInstall
   '';
 
   meta = with lib; {

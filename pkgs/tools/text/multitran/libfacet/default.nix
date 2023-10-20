@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmtsupport ];
 
   patchPhase = ''
+    runHook prePatch
+
     sed -i -e 's@\$(DESTDIR)/usr@'$out'@' \
       -e 's@/usr/include/mt/support@${libmtsupport}/include/mt/support@' \
       src/Makefile;
+
+    runHook postPatch
   '';
 
   meta = {

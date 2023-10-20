@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
 
   # Inspired by PKGBUILD of https://www.archlinux.org/packages/community/x86_64/hfsprogs/
   installPhase = ''
+    runHook preInstall
+
     # Create required package directories
     install -m 755 -d "$out/bin"
     install -m 755 -d "$out/share/hfsprogs"
@@ -48,6 +50,8 @@ stdenv.mkDerivation rec {
     # Copy man pages
     install -m 644 "newfs_hfs.tproj/newfs_hfs.8" "$out/share/man/man8/mkfs.hfsplus.8"
     install -m 644 "fsck_hfs.tproj/fsck_hfs.8" "$out/share/man/man8/fsck.hfsplus.8"
+
+    runHook postInstall
   '';
 
   meta = {

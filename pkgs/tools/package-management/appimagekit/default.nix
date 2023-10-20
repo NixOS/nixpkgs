@@ -57,9 +57,13 @@ let
 
     # only static libs and header files
     installPhase = ''
+      runHook preInstall
+
       mkdir -p $out/lib $out/include
       cp -v ./.libs/*.a $out/lib
       cp -v ./*.h $out/include
+
+      runHook postInstall
     '';
   };
 

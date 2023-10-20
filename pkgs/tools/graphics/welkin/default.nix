@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,share}
     cp -R . $out/share
     cp $out/share/welkin.sh $out/bin/welkin
@@ -23,6 +25,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/welkin \
       --set JAVA_HOME ${jre}
     chmod a+x $out/bin/welkin
+
+    runHook postInstall
   '';
 
   meta = {

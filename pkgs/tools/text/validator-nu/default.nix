@@ -27,12 +27,20 @@ let
     nativeBuildInputs = [ git jdk_headless python3 python3.pkgs.certifi ];
 
     buildPhase = ''
+      runHook preBuild
+
       python checker.py dldeps
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+
       mkdir "$out"
       mv dependencies extras "$out"
+
+      runHook postInstall
     '';
 
     outputHashMode = "recursive";

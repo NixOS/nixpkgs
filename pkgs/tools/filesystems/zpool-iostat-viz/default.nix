@@ -27,9 +27,13 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     wrapPythonPrograms
     install -D zpool-iostat-viz $out/bin/zpool-iostat-viz
     installManPage zpool-iostat-viz.1
+
+    runHook postInstall
   '';
 
   meta = with lib; {

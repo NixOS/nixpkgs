@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   installPhase = ''
+    runHook preInstall
+
     install -D -t $out/bin eschalot worgen
+
+    runHook postInstall
   '';
 
   meta = with lib; {

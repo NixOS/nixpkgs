@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     sed 's/-o root -g root//' -i Makefile
+
+    runHook postPatch
   '';
 
   preConfigure = ''

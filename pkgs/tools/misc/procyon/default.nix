@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/share/procyon
     cp $src $out/share/procyon/procyon-decompiler.jar
 
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
     exec ${jre_headless}/bin/java -jar $out/share/procyon/procyon-decompiler.jar "\$@"
     EOF
     chmod +x $out/bin/procyon
+
+    runHook postInstall
   '';
 
   meta = with lib; {

@@ -13,17 +13,25 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  buildPhase = "
+  buildPhase = ''
+    runHook preBuild
+
     $CC src/xdemos/{glxinfo.c,glinfo_common.c} -o glxinfo -lGL -lX11
     $CC src/xdemos/glxgears.c -o glxgears -lGL -lX11 -lm
     $CC src/egl/opengles2/es2_info.c -o es2_info -lEGL -lGLESv2 -lX11
     $CC src/egl/opengles2/es2gears.c src/egl/eglut/{eglut.c,eglut_x11.c} -o es2gears -Isrc/egl/eglut -lEGL -lGLESv2 -lX11 -lm
     $CC src/egl/opengl/eglinfo.c -o eglinfo -lEGL -lGLESv2 -lX11
-  ";
 
-  installPhase = "
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
     install -Dm 555 -t $out/bin glx{info,gears} es2{_info,gears} eglinfo
-  ";
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Test utilities for OpenGL";

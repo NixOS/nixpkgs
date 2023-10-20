@@ -14,9 +14,13 @@ python3Packages.buildPythonApplication rec {
   };
 
   patchPhase = ''
+    runHook prePatch
+
     mkdir -p ${pname}
     substituteInPlace setup.py \
       --replace "'scripts': []" "'scripts': { '${pname}.py' }"
+
+    runHook postPatch
   '';
 
   propagatedBuildInputs = with python3Packages; [

@@ -28,11 +28,17 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./i2p.patch ];
 
   buildPhase = ''
+    runHook preBuild
+
     export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF8"
     ant preppkg-linux-only
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     set -B
     mkdir -p $out/{bin,share}
     cp -r pkg-temp/* $out
@@ -55,6 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/man $out/share/
     chmod +x $out/bin/* $out/i2psvc
     rm $out/{osid,postinstall.sh,INSTALL-headless.txt}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

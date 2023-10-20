@@ -8,8 +8,20 @@ stdenv.mkDerivation {
   buildInputs = [ libxcrypt ];
 
   inherit (whois) preConfigure;
-  buildPhase = "make mkpasswd";
-  installPhase = "make install-mkpasswd";
+  buildPhase = ''
+    runHook preBuild
+
+    make mkpasswd
+
+    runHook postBuild
+  '';
+  installPhase = ''
+    runHook preInstall
+
+    make install-mkpasswd
+
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://packages.qa.debian.org/w/whois.html";

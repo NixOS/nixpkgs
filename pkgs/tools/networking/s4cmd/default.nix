@@ -14,8 +14,12 @@ python3Packages.buildPythonApplication rec {
   # The upstream package tries to install some bash shell completion scripts in /etc.
   # Setuptools is bugged and doesn't handle --prefix properly: https://github.com/pypa/setuptools/issues/130
   patchPhase = ''
+    runHook prePatch
+
     sed -i '/ data_files=/d' setup.py
     sed -i 's|os.chmod("/etc.*|pass|' setup.py
+
+    runHook postPatch
   '';
 
   # Replace upstream's s4cmd wrapper script with the built-in Nix wrapper

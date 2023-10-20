@@ -15,8 +15,12 @@ in stdenv.mkDerivation {
   dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     ln -s ${papertrail-env}/bin/papertrail $out/bin/papertrail
+
+    runHook postInstall
   '';
 
   passthru.updateScript = bundlerUpdateScript "papertrail";

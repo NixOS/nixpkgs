@@ -24,7 +24,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     nosetests -v yrd
+
+    runHook postCheck
   '';
 
   meta = with lib; {

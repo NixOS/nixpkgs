@@ -25,8 +25,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     mv rpl $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

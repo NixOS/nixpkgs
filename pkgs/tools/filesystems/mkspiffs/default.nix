@@ -18,8 +18,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ git ];
   buildFlags = [ "dist" ];
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp mkspiffs $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

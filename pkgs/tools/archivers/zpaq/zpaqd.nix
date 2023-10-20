@@ -19,16 +19,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
 
   buildPhase = ''
+    runHook preBuild
+
     $CXX ${compileFlags} -fPIC --shared libzpaq.cpp -o libzpaq.so
     $CXX ${compileFlags} -L. -L"$out/lib" -lzpaq zpaqd.cpp -o zpaqd
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,include,lib,share/doc/zpaq}
     cp libzpaq.so "$out/lib"
     cp zpaqd "$out/bin"
     cp libzpaq.h "$out/include"
     cp readme_zpaqd.txt "$out/share/doc/zpaq"
+
+    runHook postInstall
   '';
 
   meta = with lib; {

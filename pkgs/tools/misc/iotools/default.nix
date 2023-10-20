@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "DEBUG=0" "STATIC=0" ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 iotools -t $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

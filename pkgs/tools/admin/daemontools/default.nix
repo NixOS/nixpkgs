@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ installShellFiles ];
 
   configurePhase = ''
+    runHook preConfigure
+
     cd daemontools-${version}
 
     sed -ie '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
@@ -32,13 +34,21 @@ stdenv.mkDerivation rec {
     sed -ie "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
 
     cat ${glibc.dev}/include/errno.h
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     package/compile
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     for cmd in $(cat package/commands); do
       install -Dm755 "command/$cmd" "$out/bin/$cmd"
     done
@@ -50,6 +60,8 @@ stdenv.mkDerivation rec {
     sed -i "s_/command/__"                    "$out/bin/svscanboot"
     sed -i "s_/service_/var/service_g"        "$out/bin/svscanboot"
     sed -i "s_^PATH=.*_PATH=$out/bin:\$PATH_" "$out/bin/svscanboot"
+
+    runHook postInstall
   '';
 
   # Keep README.man in the man output (see _multioutDocs())

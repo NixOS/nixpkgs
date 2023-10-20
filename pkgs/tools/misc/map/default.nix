@@ -20,7 +20,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  checkPhase = "./test/tests.sh";
+  checkPhase = ''
+    runHook preCheck
+
+    ./test/tests.sh
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Map lines from stdin to commands";

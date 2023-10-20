@@ -14,12 +14,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/etc
 
     cp automysqlbackup $out/bin/
     cp automysqlbackup.conf $out/etc/
 
     wrapProgram $out/bin/automysqlbackup --prefix PATH : ${lib.makeBinPath [ mariadb mailutils pbzip2 pigz bzip2 gzip ]}
+
+    runHook postInstall
   '';
 
   meta = with lib; {

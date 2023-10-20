@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   inherit jre;
   dontUnpack = true;
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/lib/java" "$out/bin"
     cp "${core_jar}" "${javase_jar}" "$out/lib/java"
     substituteAll "${./java-zxing.sh}" "$out/bin/java-zxing"
@@ -22,6 +24,8 @@ stdenv.mkDerivation rec {
     substituteAll "${./zxing.sh}" "$out/bin/zxing"
     chmod a+x "$out/bin"/*
     cd "$out/lib/java"; for i in *.jar; do mv "$i" "''${i#*-}"; done
+
+    runHook postInstall
   '';
   meta = {
     description = "1D and 2D code reading library";

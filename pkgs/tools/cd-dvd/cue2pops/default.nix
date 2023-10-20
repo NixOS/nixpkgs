@@ -19,8 +19,12 @@ stdenv.mkDerivation {
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
+    runHook preInstall
+
     install --directory --mode=755 $out/bin
     install --mode=755 cue2pops $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

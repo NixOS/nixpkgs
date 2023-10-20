@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 biblatex_check.py $out/bin/biblatex-check
+
+    runHook postInstall
   '';
 
   meta = with lib; {

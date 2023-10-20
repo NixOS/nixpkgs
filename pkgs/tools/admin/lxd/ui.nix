@@ -22,11 +22,19 @@ mkYarnPackage rec {
   };
 
   buildPhase = ''
+    runHook preBuild
+
     yarn --offline build
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     cp -rv deps/lxd-ui/build/ui/ $out
+
+    runHook postInstall
   '';
 
   doDist = false;

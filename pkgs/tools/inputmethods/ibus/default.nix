@@ -160,7 +160,11 @@ stdenv.mkDerivation rec {
   doCheck = false; # requires X11 daemon
   doInstallCheck = true;
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/ibus version
+
+    runHook postInstallCheck
   '';
 
   postInstall = ''

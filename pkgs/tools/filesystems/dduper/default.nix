@@ -32,12 +32,20 @@ stdenv.mkDerivation rec {
   ];
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace ./dduper --replace "/usr/sbin/btrfs.static" "${btrfsProgsPatched}/bin/btrfs"
+
+    runHook postPatch
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m755 ./dduper $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

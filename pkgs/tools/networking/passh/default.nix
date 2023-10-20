@@ -12,8 +12,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp ${finalAttrs.pname} $out/bin
+
+    runHook postInstall
   '';
 
   meta = with lib; {

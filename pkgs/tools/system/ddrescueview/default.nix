@@ -17,14 +17,22 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
   buildPhase = ''
+    runHook preBuild
+
     lazbuild --lazarusdir=${lazarus}/share/lazarus ddrescueview.lpi
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dt $out/bin ddrescueview
     cd ../resources/linux
     mkdir -p "$out/share"
     cp -ar applications icons man $out/share
+
+    runHook postInstall
   '';
 
   meta = with lib; {

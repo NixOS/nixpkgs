@@ -12,7 +12,11 @@ python3Packages.buildPythonApplication rec {
   };
 
   checkPhase = ''
+    runHook preCheck
+
     $out/bin/sftpman help
+
+    runHook postCheck
   '';
 
   meta = with lib; {

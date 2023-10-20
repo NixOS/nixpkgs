@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
   passAsFile = [ "extraConfig" ];
 
   configurePhase = ''
+    runHook preConfigure
+
     make ${if enableMinimal then
       "allnoconfig"
     else
@@ -53,6 +55,8 @@ stdenv.mkDerivation rec {
     mv .config- .config
 
     make oldconfig
+
+    runHook postConfigure
   '';
 
   makeFlags = [ "PREFIX=$(out)/bin" ] ++ optionals enableStatic [ "LDFLAGS=--static" ];

@@ -21,7 +21,11 @@ buildGoModule {
   doInstallCheck = true;
 
   installCheckPhase = ''
+    runHook preInstallCheck
+
     $out/bin/yajsv -v > /dev/null
+
+    runHook postInstallCheck
   '';
 
   meta = {

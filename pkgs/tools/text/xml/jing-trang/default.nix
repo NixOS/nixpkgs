@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
   preBuild = "ant";
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out"/{share/java,bin}
     cp ./build/*.jar ./lib/resolver.jar "$out/share/java/"
 
@@ -35,10 +37,18 @@ stdenv.mkDerivation rec {
     done
 
     chmod +x "$out"/bin/*
+
+    runHook postInstall
   '';
 
   doCheck = true;
-  checkPhase = "ant test";
+  checkPhase = ''
+    runHook preCheck
+
+    ant test
+
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "A RELAX NG validator in Java";

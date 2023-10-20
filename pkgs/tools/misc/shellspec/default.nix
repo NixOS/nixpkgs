@@ -16,8 +16,12 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   checkPhase = ''
+    runHook preCheck
+
     ./shellspec --no-banner --task fixture:stat:prepare
     ./shellspec --no-banner spec --jobs "$(nproc)"
+
+    runHook postCheck
   '';
 
   # "Building" the script happens in Docker

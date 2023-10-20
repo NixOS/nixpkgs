@@ -17,8 +17,12 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -a rofi-systemd $out/bin/rofi-systemd
+
+    runHook postInstall
   '';
 
   wrapperPath = with lib; makeBinPath [
@@ -31,9 +35,13 @@ stdenv.mkDerivation rec {
   ];
 
   fixupPhase = ''
+    runHook preFixup
+
     patchShebangs $out/bin
 
     wrapProgram $out/bin/rofi-systemd --prefix PATH : "${wrapperPath}"
+
+    runHook postFixup
   '';
 
   meta = {

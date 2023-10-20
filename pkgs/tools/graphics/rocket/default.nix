@@ -17,8 +17,12 @@ mkDerivation {
   dontConfigure = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp -r editor/editor $out/bin/
+
+    runHook postInstall
   '';
 
   meta = with lib; {
