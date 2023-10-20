@@ -38877,6 +38877,8 @@ with pkgs;
 
   bftools = callPackage ../applications/science/biology/bftools { };
 
+  bioawk = callPackage ../applications/science/biology/bioawk { };
+
   blast = callPackage ../applications/science/biology/blast {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
