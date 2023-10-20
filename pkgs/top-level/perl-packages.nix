@@ -98,7 +98,7 @@ with self; {
       hash = "sha256-6nyqFPdX3ggzEO0suimGYd3Mpd7gbsjxgEPqYlp53yA=";
     };
 
-    outputs = ["out" "man"];
+    outputs = [ "out" "man" ];
 
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ FileNext ];
@@ -9222,7 +9222,7 @@ with self; {
     propagatedBuildInputs = [ ModulePluggable Moo TypeTiny namespaceautoclean ];
     meta = {
       description = "Watch for changes to files, cross-platform style";
-      license = with lib.licenses; [artistic2 ];
+      license = with lib.licenses; [ artistic2 ];
     };
   };
 
