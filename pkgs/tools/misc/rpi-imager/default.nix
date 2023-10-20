@@ -76,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/raspberrypi/rpi-imager/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/raspberrypi/rpi-imager/";
     license = licenses.asl20;
+    mainProgram = "rpi-imager";
     maintainers = with maintainers; [ ymarkus anthonyroussel ];
     platforms = platforms.all;
     # does not build on darwin
