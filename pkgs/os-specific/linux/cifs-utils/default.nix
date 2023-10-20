@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, autoreconfHook, docutils, pkg-config
-, libkrb5, keyutils, pam, talloc, python3 }:
+, libkrb5, keyutils, pam, talloc, python3, samba }:
 
 stdenv.mkDerivation rec {
   pname = "cifs-utils";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook docutils pkg-config ];
 
-  buildInputs = [ libkrb5 keyutils pam talloc python3 ];
+  buildInputs = [ libkrb5 keyutils pam talloc python3 samba ];
 
   configureFlags = [ "ROOTSBINDIR=$(out)/sbin" ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # AC_FUNC_MALLOC is broken on cross builds.
