@@ -31,14 +31,16 @@ composerRepositoryConfigureHook() {
         cp composer.lock $out/
 
         echo
-        echo 'No composer.lock file found, consider adding one to your repository to ensure reproducible builds.'
-        echo "In the meantime, a composer.lock file has been generated for you in $out/composer.lock"
+        echo -e "\e[31mERROR: No composer.lock found\e[0m"
         echo
-        echo 'To fix the issue:'
-        echo "1. Copy the composer.lock file from $out/composer.lock to the project's source:"
-        echo "  cp $out/composer.lock <path>"
-        echo '2. Add the composerLock attribute, pointing to the copied composer.lock file:'
-        echo '  composerLock = ./composer.lock;'
+        echo -e '\e[31mNo composer.lock file found, consider adding one to your repository to ensure reproducible builds.\e[0m'
+        echo -e "\e[31mIn the meantime, a composer.lock file has been generated for you in $out/composer.lock\e[0m"
+        echo
+        echo -e '\e[31mTo fix the issue:\e[0m'
+        echo -e "\e[31m1. Copy the composer.lock file from $out/composer.lock to the project's source:\e[0m"
+        echo -e "\e[31m  cp $out/composer.lock <path>\e[0m"
+        echo -e '\e[31m2. Add the composerLock attribute, pointing to the copied composer.lock file:\e[0m'
+        echo -e '\e[31m  composerLock = ./composer.lock;\e[0m'
         echo
 
         exit 1
