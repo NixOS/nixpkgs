@@ -260,7 +260,7 @@ in {
       };
 
       serve = {
-        enable = mkEnableOption (lib.mdDoc "Automatic nginx and uwsgi setup for mailman-web");
+        enable = mkEnableOption (lib.mdDoc "automatic nginx and uwsgi setup for mailman-web");
 
         virtualRoot = mkOption {
           default = "/";

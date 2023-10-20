@@ -22283,6 +22283,9 @@ with pkgs;
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
+  rust-jemalloc-sys = callPackage ../development/libraries/jemalloc/rust.nix { };
+  rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
+
   jose = callPackage ../development/libraries/jose { };
 
   jpcre2 = callPackage ../development/libraries/jpcre2 { };

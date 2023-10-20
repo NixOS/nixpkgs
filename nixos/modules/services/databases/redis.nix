@@ -75,7 +75,7 @@ in {
               Note that the NixOS module for Redis disables kernel support
               for Transparent Huge Pages (THP),
               because this features causes major performance problems for Redis,
-              e.g. (https://redis.io/topics/latency).
+              e.g. (https://redis.io/topics/latency)
             '');
 
             user = mkOption {

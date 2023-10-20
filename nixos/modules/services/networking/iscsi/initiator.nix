@@ -7,7 +7,7 @@ in
     enable = mkEnableOption (lib.mdDoc "the openiscsi iscsi daemon");
     enableAutoLoginOut = mkEnableOption (lib.mdDoc ''
       automatic login and logout of all automatic targets.
-      You probably do not want this.
+      You probably do not want this
     '');
     discoverPortal = mkOption {
       type = nullOr str;

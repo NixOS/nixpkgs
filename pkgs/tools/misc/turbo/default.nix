@@ -12,6 +12,7 @@
 , openssl
 , extra-cmake-modules
 , fontconfig
+, rust-jemalloc-sys
 , testers
 , turbo
 , nix-update-script
@@ -149,6 +150,7 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     openssl
     fontconfig
+    rust-jemalloc-sys
   ] ++ lib.optionals stdenv.isDarwin [
       IOKit
       CoreServices

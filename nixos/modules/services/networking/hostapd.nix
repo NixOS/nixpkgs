@@ -116,10 +116,10 @@ in {
   options = {
     services.hostapd = {
       enable = mkEnableOption (mdDoc ''
-        Whether to enable hostapd. hostapd is a user space daemon for access point and
+        hostapd, a user space daemon for access point and
         authentication servers. It implements IEEE 802.11 access point management,
         IEEE 802.1X/WPA/WPA2/EAP Authenticators, RADIUS client, EAP server, and RADIUS
-        authentication server.
+        authentication server
       '');
 
       package = mkPackageOption pkgs "hostapd" {};

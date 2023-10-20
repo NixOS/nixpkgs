@@ -12048,8 +12048,6 @@ self: super: with self; {
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
-  recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
-
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
 
   recline = callPackage ../development/python-modules/recline { };
