@@ -2,6 +2,7 @@
 , fetchCrate
 , rustPlatform
 , pkg-config
+, installShellFiles
 , openssl
 , dbus
 , sqlite
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs = [
@@ -31,6 +33,13 @@ rustPlatform.buildRustPackage rec {
     dbus
     sqlite
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+
+  postInstall = ''
+    installShellCompletion --cmd leetcode \
+      --bash <($out/bin/leetcode completions bash) \
+      --fish <($out/bin/leetcode completions fish) \
+      --zsh <($out/bin/leetcode completions zsh)
+  '';
 
   passthru.tests = testers.testVersion {
     package = leetcode-cli;

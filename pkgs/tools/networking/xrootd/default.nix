@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , cmake
 , cppunit
+, makeWrapper
 , pkg-config
 , curl
 , fuse
@@ -24,6 +25,9 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+
+  __structuredAttrs = true;
+
   pname = "xrootd";
   version = "5.5.5";
 
@@ -55,6 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
+    makeWrapper
     pkg-config
   ];
 
@@ -101,7 +106,18 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_TESTS=TRUE"
   ];
 
-  postFixup = lib.optionalString (externalEtc != null) ''
+  makeWrapperArgs = [
+    # Workaround the library-not-found issue
+    # happening to binaries compiled with xrootd libraries.
+    # See #169677
+    "--prefix" "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH" ":" "${placeholder "out"}/lib"
+  ];
+
+  postFixup = ''
+    while IFS= read -r FILE; do
+      wrapProgram "$FILE" "''${makeWrapperArgs[@]}"
+    done < <(find "$bin/bin" -mindepth 1 -maxdepth 1 -type f,l -perm -a+x)
+  '' + lib.optionalString (externalEtc != null) ''
     mv "$out"/etc{,.orig}
     ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
   '';
