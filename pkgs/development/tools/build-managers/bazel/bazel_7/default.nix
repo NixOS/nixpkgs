@@ -208,6 +208,10 @@ stdenv.mkDerivation rec {
     # incapable of preventing system sleep, which is a small price to pay to
     # guarantee that it will always run in any nix context.
     #
+    # See also ./bazel_darwin_sandbox.patch in bazel_5. That patch uses
+    # NIX_BUILD_TOP env var to conditionnally disable sleep features inside the
+    # sandbox. Oddly, bazel_6 does not need that patch :-/.
+    #
     # If you want to investigate the sandbox profile path,
     # IORegisterForSystemPower can be allowed with
     #
@@ -224,6 +228,7 @@ stdenv.mkDerivation rec {
     ../trim-last-argument-to-gcc-if-empty.patch
 
     # XXX: This seems merged / not a real problem. See PR.
+    # TODO: Remove when protobuf tests confirm it is not needed.
     # `java_proto_library` ignores `strict_proto_deps`
     # https://github.com/bazelbuild/bazel/pull/16146
     # ./strict_proto_deps.patch
@@ -261,26 +266,16 @@ stdenv.mkDerivation rec {
       src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
-  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
+  ]
+  # See enableNixHacks argument above.
+  ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
-
-  # Additional tests that check bazel’s functionality. Execute
-  #
-  #     nix-build . -A bazel_7.tests
-  #
-  # in the nixpkgs checkout root to exercise them locally.
-  passthru.tests = callPackage ./tests.nix {
-    inherit Foundation bazel_self distDir repoCache runJdk;
-  };
-
-  passthru.updater = throw "TODO";
 
   # Bazel starts a local server and needs to bind a local address.
   __darwinAllowLocalNetworking = true;
 
   postPatch =
     let
-
       darwinPatches = ''
         bazelLinkFlags () {
           eval set -- "$NIX_LDFLAGS"
@@ -376,20 +371,10 @@ stdenv.mkDerivation rec {
           -e 's!/bin/bash!${bash}/bin/bash!g' \
           -e 's!shasum -a 256!sha256sum!g'
 
-        ${bazelNixFlagsScript} > .bazelrc.nix
-        # export BAZELRC=$PWD/.bazelrc.nix
-        # export BAZEL_BOOTSTRAP_STARTUP_OPTIONS=""
-        # export DIST_BAZEL_ARGS=
-        #export EXTRA_BAZEL_ARGS="--rc_source=$PWD/.bazelrc.nix --announce_rc"
-
         # Add compile options to command line.
         # XXX: It would suit a bazelrc file better, but I found no way to pass it.
         #      It seems it is always ignored.
         #      Passing EXTRA_BAZEL_ARGS is tricky due to quoting.
-
-        #which javac
-        #printenv JAVA_HOME
-        #exit 0
 
         sedVerbose compile.sh \
           -e "/bazel_build /a\  --copt=\"$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt=\"/g')\" \\\\" \
@@ -409,12 +394,6 @@ stdenv.mkDerivation rec {
           -e "/bazel_build /a\  --extra_toolchains=@local_jdk//:all \\\\" \
           -e "/bazel_build /a\  --toolchain_resolution_debug=@bazel_tools//tools/jdk:runtime_toolchain_type \\\\" \
           -e "/bazel_build /a\  --sandbox_debug --verbose_failures \\\\" \
-        ${lib.optionalString isDarwin ''
-          -e "/bazel_build /a\  --cpu=${({aarch64-darwin = "darwin_arm64"; x86_64-darwin = "darwin_x86_64";}.${stdenv.hostPlatform.system})} \\\\" \''
-        }
-
-          #-e "/bazel_build /a\  --spawn_strategy=standalone \\\\" \
-
 
         # Also build parser_deploy.jar with bootstrap bazel
         # TODO: Turn into a proper patch
@@ -448,8 +427,7 @@ stdenv.mkDerivation rec {
         patchShebangs . >/dev/null
       '';
     in
-    lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
-    + genericPatches;
+    lib.optionalString isDarwin darwinPatches + genericPatches;
 
   buildInputs = [ buildJdk ] ++ defaultShellUtils;
 
@@ -528,10 +506,10 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
 
-    # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
-    # if it can’t find something in tools, it calls $out/bin/bazel-{version}-{os_arch}
-    # The binary _must_ exist with this naming if your project contains a .bazelversion
-    # file.
+    # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel if
+    # it can’t find something in tools, it calls
+    # $out/bin/bazel-{version}-{os_arch} The binary _must_ exist with this
+    # naming if your project contains a .bazelversion file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
     wrapProgram $out/bin/bazel $wrapperfile --suffix PATH : ${defaultShellPath}
     mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
@@ -616,6 +594,18 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   dontPatchELF = true;
 
-  passthru.repoCache = repoCache;
-  passthru.distDir = distDir;
+  passthru = {
+    # Additional tests that check bazel’s functionality. Execute
+    #
+    #     nix-build . -A bazel_7.tests
+    #
+    # in the nixpkgs checkout root to exercise them locally.
+    tests = callPackage ./tests.nix {
+      inherit Foundation bazel_self distDir repoCache runJdk;
+    };
+
+    updater = throw "TODO";
+
+    inherit distDir repoCache;
+  };
 }

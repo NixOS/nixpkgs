@@ -1,9 +1,3 @@
-commit c5cbdf1fcfb96299aaef7fb9909c2cc30b126568
-Author: Guillaume Maudoux <guillaume.maudoux@tweag.io>
-Date:   Fri Oct 6 15:06:00 2023 +0200
-
-    strict_proto_deps.patch
-
 diff --git a/src/main/starlark/builtins_bzl/common/java/proto/java_proto_library.bzl b/src/main/starlark/builtins_bzl/common/java/proto/java_proto_library.bzl
 index e2118aabea..6a33f03472 100644
 --- a/src/main/starlark/builtins_bzl/common/java/proto/java_proto_library.bzl
