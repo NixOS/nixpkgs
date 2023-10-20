@@ -1,23 +1,13 @@
 { lib
-, argcomplete
-, buildPythonPackage
 , fetchFromGitHub
-, hatchling
-, importlib-metadata
-, packaging
-, pip
-, platformdirs
-, pytestCheckHook
-, pythonOlder
-, userpath
+, installShellFiles
+, python3
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pipx";
   version = "1.2.0";
   format = "pyproject";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pipxproject";
@@ -26,20 +16,27 @@ buildPythonPackage rec {
     hash = "sha256-lm/Q+8nNubhaUR1pUbSIoD4DEUEkK+pQvvUdWNquW4Q=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pythonForBuild.pkgs; [
+    argcomplete
     hatchling
+    installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     argcomplete
     packaging
     platformdirs
     userpath
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    importlib-metadata
   ];
 
-  nativeCheckInputs = [
+  postInstall = ''
+    installShellCompletion --cmd pipx \
+      --bash <(register-python-argcomplete --shell bash pipx) \
+      --fish <(register-python-argcomplete --shell fish pipx) \
+      --zsh <(register-python-argcomplete --shell zsh pipx)
+  '';
+
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
 
@@ -80,6 +77,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pipxproject/pipx";
     changelog = "https://github.com/pypa/pipx/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+    mainProgram = "pipx";
     maintainers = with maintainers; [ yshym ];
   };
 }
