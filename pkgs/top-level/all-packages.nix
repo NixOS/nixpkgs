@@ -42116,4 +42116,6 @@ with pkgs;
   };
 
   code-maat = callPackage ../development/tools/code-maat {};
+
+  standard = callPackage ../development/tools/standard { };
 }
