@@ -13230,8 +13230,6 @@ self: super: with self; {
 
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
 
-  sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
-
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
 
   sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
