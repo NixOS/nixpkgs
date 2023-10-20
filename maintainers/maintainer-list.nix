@@ -10828,6 +10828,12 @@
     githubId = 29855073;
     name = "Michael Colicchia";
   };
+  massimogengarelli = {
+    email = "massimo.gengarelli@gmail.com";
+    github = "massix";
+    githubId = 585424;
+    name = "Massimo Gengarelli";
+  };
   matejc = {
     email = "cotman.matej@gmail.com";
     github = "matejc";
