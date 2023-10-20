@@ -7244,7 +7244,11 @@ with pkgs;
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
   coreutils =  callPackage ../tools/misc/coreutils { };
-  coreutils-full = coreutils.override { minimal = false; };
+
+  # The coreutils above are built with dependencies from
+  # bootstrapping. We cannot override it here, because that pulls in
+  # openssl from the previous stage as well.
+  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
