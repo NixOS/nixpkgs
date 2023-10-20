@@ -39,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SLmxv8opN7z4V07S9kLGo8HG7Ql62iZQLtf3zGemwA8=";
   };
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [ "bin" "out" "dev" "man" ]
+  ++ lib.optional (externalEtc != null) "etc";
 
   passthru.fetchxrd = callPackage ./fetchxrd.nix { xrootd = finalAttrs.finalPackage; };
   passthru.tests =
@@ -118,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       wrapProgram "$FILE" "''${makeWrapperArgs[@]}"
     done < <(find "$bin/bin" -mindepth 1 -maxdepth 1 -type f,l -perm -a+x)
   '' + lib.optionalString (externalEtc != null) ''
-    mv "$out"/etc{,.orig}
+    moveToOutput etc "$etc"
     ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
   '';
 
