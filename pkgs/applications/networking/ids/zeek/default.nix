@@ -22,6 +22,7 @@
 
 let
   broker = callPackage ./broker { };
+  python = python3.withPackages (p: [ p.gitpython p.semantic-version ]);
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     cmake
     file
     flex
-    python3
+    python
   ];
 
   buildInputs = [
@@ -56,11 +57,11 @@ stdenv.mkDerivation rec {
     openssl
     swig
     zlib
+    python
   ] ++ lib.optionals stdenv.isLinux [
     libkqueue
   ] ++ lib.optionals stdenv.isDarwin [
     gettext
-    python3
   ];
 
   postPatch = ''
