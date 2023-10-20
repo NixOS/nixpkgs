@@ -1,9 +1,3 @@
-commit bb831fbf02535a3372f5c74dc49e668a2507efeb
-Author: Guillaume Maudoux <guillaume.maudoux@tweag.io>
-Date:   Fri Oct 6 15:06:35 2023 +0200
-
-    no-arc.patch
-
 diff --git a/tools/osx/BUILD b/tools/osx/BUILD
 index 0358fb0ffe..baae1bf65b 100644
 --- a/tools/osx/BUILD

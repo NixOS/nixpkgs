@@ -1,9 +1,3 @@
-commit d2b4b1d748ec4fa302036b514377da4c4618177a
-Author: Guillaume Maudoux <guillaume.maudoux@tweag.io>
-Date:   Fri Oct 6 15:05:20 2023 +0200
-
-    trim-last-argument-to-gcc-if-empty.patch
-
 diff --git a/tools/cpp/osx_cc_wrapper.sh.tpl b/tools/cpp/osx_cc_wrapper.sh.tpl
 index 8264090c29..b7b9e8537a 100644
 --- a/tools/cpp/osx_cc_wrapper.sh.tpl

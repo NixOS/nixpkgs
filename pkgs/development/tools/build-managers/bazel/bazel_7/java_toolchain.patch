@@ -1,9 +1,3 @@
-commit ef1f5586d3c7fb426af1df6ba650bbad98a5a78a
-Author: Guillaume Maudoux <guillaume.maudoux@tweag.io>
-Date:   Fri Oct 6 15:03:28 2023 +0200
-
-    java_toolchain.patch
-
 diff --git a/tools/jdk/BUILD.tools b/tools/jdk/BUILD.tools
 index a8af76e90c..af2540f838 100644
 --- a/tools/jdk/BUILD.tools
