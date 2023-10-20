@@ -14,7 +14,7 @@ in appimageTools.wrapAppImage rec {
     };
   };
 
-  multiPkgs = null;
+  multiArch = false;
   extraPkgs = p: (appimageTools.defaultFhsEnvArgs.multiPkgs p) ++ [
     p.glib
   ];
