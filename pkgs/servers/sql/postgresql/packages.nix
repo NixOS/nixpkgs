@@ -83,5 +83,7 @@ self: super: {
 
     rum = super.callPackage ./ext/rum.nix { };
 
+    tsja = super.callPackage ./ext/tsja.nix { };
+
     wal2json = super.callPackage ./ext/wal2json.nix { };
 }
