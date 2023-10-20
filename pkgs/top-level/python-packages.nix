@@ -3964,6 +3964,8 @@ self: super: with self; {
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
+  flask-debugtoolbar = callPackage ../development/python-modules/flask-debugtoolbar { };
+
   flask-elastic = callPackage ../development/python-modules/flask-elastic { };
 
   flask-expects-json = callPackage ../development/python-modules/flask-expects-json { };
