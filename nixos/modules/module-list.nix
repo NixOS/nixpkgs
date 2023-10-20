@@ -163,6 +163,7 @@
   ./programs/dconf.nix
   ./programs/digitalbitbox/default.nix
   ./programs/direnv.nix
+  ./programs/distrobox.nix
   ./programs/dmrconfig.nix
   ./programs/droidcam.nix
   ./programs/ecryptfs.nix
