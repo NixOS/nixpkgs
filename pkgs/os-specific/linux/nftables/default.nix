@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withXtables "--with-xtables";
 
   passthru.tests = {
-    inherit (nixosTests) firewall-nftables lxd-nftables;
+    inherit (nixosTests) firewall-nftables;
+    lxd-nftables = nixosTests.lxd.nftables;
     nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
   };
 
