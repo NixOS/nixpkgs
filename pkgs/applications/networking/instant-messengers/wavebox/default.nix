@@ -4,6 +4,7 @@
 , gtk3
 , gtk4
 , libnotify
+, copyDesktopItems
 , makeDesktopItem
 , makeWrapper
 , mesa
@@ -17,26 +18,13 @@
 , xorg
 }:
 
-let
-  version = "10.117.21-2";
-  desktopItem = makeDesktopItem rec {
-    name = "Wavebox";
-    exec = "wavebox";
-    icon = "wavebox";
-    desktopName = name;
-    genericName = name;
-    categories = [ "Network" "WebBrowser" ];
-  };
-
-  tarball = "Wavebox_${version}.tar.gz";
-
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wavebox";
-  inherit version;
+  version = "10.118.5-2";
+
   src = fetchurl {
-    url = "https://download.wavebox.app/stable/linux/tar/${tarball}";
-    sha256 = "1g2mf3xmcaz3y6vwa65r4ccw71ddqj1cn12p0k1f1xawfl74kc5c";
+    url = "https://download.wavebox.app/stable/linux/tar/Wavebox_${version}.tar.gz";
+    sha256 = "sha256-TxMl8pdycCMY6NFi5MSLZg0p/+KmuAPQOm370bPMm/0=";
   };
 
   # don't remove runtime deps
@@ -44,7 +32,7 @@ stdenv.mkDerivation {
   # ignore optional Qt 6 shim
   autoPatchelfIgnoreMissingDeps = [ "libQt6Widgets.so.6" "libQt6Gui.so.6" "libQt6Core.so.6" ];
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper qt5.wrapQtAppsHook copyDesktopItems ];
 
   buildInputs = with xorg; [
     libXdmcp
@@ -64,14 +52,28 @@ stdenv.mkDerivation {
 
   runtimeDependencies = [ (lib.getLib udev) libnotify gtk4 ];
 
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "Wavebox";
+      exec = "wavebox";
+      icon = "wavebox";
+      desktopName = name;
+      genericName = name;
+      categories = [ "Network" "WebBrowser" ];
+    })
+  ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin $out/opt/wavebox
     cp -r * $out/opt/wavebox
 
-    # provide desktop item and icon
-    mkdir -p $out/share/applications $out/share/icons/hicolor/128x128/apps
-    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    # provide icon for desktop item
+    mkdir -p $out/share/icons/hicolor/128x128/apps
     ln -s $out/opt/wavebox/product_logo_128.png $out/share/icons/hicolor/128x128/apps/wavebox.png
+
+    runHook postInstall
   '';
 
   postFixup = ''
