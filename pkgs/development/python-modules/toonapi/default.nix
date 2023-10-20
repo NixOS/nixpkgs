@@ -3,18 +3,22 @@
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "toonapi";
   version = "0.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-toonapi";
-    rev = "v${version}";
-    sha256 = "sha256-RaN9ppqJbTik1/vNX0/YLoBawrqjyQWU6+FLTspIxug=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-RaN9ppqJbTik1/vNX0/YLoBawrqjyQWU6+FLTspIxug=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +29,10 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "toonapi" ];
+
+  pythonImportsCheck = [
+    "toonapi"
+  ];
 
   meta = with lib; {
     description = "Python client for the Quby ToonAPI";
