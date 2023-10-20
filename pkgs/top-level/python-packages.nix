@@ -8366,7 +8366,7 @@ self: super: with self; {
   };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
-    protobuf = protobuf3;
+    inherit (pkgs) protobuf;
   };
 
   onnxmltools = callPackage ../development/python-modules/onnxmltools { };
@@ -12047,8 +12047,6 @@ self: super: with self; {
   reactivex = callPackage ../development/python-modules/reactivex { };
 
   rebulk = callPackage ../development/python-modules/rebulk { };
-
-  recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
 

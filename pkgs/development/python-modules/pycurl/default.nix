@@ -66,6 +66,12 @@ buildPythonPackage rec {
     "test_ssl_in_static_libs"
     # tests that require curl with http3Support
     "test_http_version_3"
+    # https://github.com/pycurl/pycurl/issues/819
+    "test_multi_socket_select"
+    # https://github.com/pycurl/pycurl/issues/729
+    "test_multi_socket_action"
+    # https://github.com/pycurl/pycurl/issues/822
+    "test_request_with_verifypeer"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # Fatal Python error: Segmentation fault
     "cadata_test"

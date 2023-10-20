@@ -4,12 +4,13 @@
 , buildPythonPackage
 , llvmPackages
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pygccxml";
   version = "2.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,6 +20,10 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-rw99afv68c92LWmKUErB1y0Cts69UEpI0GCxSMvD+B8=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   buildInputs = [
     castxml

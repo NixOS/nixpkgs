@@ -22292,6 +22292,9 @@ with pkgs;
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
 
+  rust-jemalloc-sys = callPackage ../development/libraries/jemalloc/rust.nix { };
+  rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
+
   jose = callPackage ../development/libraries/jose { };
 
   jpcre2 = callPackage ../development/libraries/jpcre2 { };
@@ -26627,7 +26630,9 @@ with pkgs;
 
   mackerel-agent = callPackage ../servers/monitoring/mackerel-agent { };
 
-  mailmanPackages = callPackage ../servers/mail/mailman { };
+  mailmanPackages = callPackage ../servers/mail/mailman {
+    python3 = python310;
+  };
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 

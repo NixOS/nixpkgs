@@ -2,6 +2,7 @@
 , lib
 , protobuf
 , rocksdb
+, rust-jemalloc-sys-unprefixed
 , rustPlatform
 , rustc-wasm32
 , stdenv
@@ -60,7 +61,9 @@ rustPlatform.buildRustPackage rec {
     rustc-wasm32.llvmPackages.lld
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = [
+    rust-jemalloc-sys-unprefixed
+  ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   # NOTE: we need to force lld otherwise rust-lld is not found for wasm32 target
   CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";

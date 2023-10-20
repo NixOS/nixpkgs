@@ -786,8 +786,11 @@ def update_plugins(editor: Editor, args):
     autocommit = not args.no_commit
 
     if autocommit:
+        from datetime import date
         editor.nixpkgs_repo = git.Repo(editor.root, search_parent_directories=True)
-        commit(editor.nixpkgs_repo, f"{editor.attr_path}: update", [args.outfile])
+        updated = date.today().strftime('%m-%d-%Y')
+
+        commit(editor.nixpkgs_repo, f"{editor.attr_path}: updated the {updated}", [args.outfile])
 
     if redirects:
         update()

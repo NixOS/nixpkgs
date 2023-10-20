@@ -110,6 +110,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/sagemath/sage/commit/d88bc3815c0901bfdeaa3e4a31107c084199f614.diff";
       sha256 = "sha256-dXaEwk2wXxmx02sCw4Vu9mF0ZrydhFD4LRwNAiQsPgM=";
     })
+
+    # https://github.com/sagemath/sage/pull/36279, landed in 10.2.beta4
+    (fetchpatch {
+       name = "matplotlib-3.8-upgrade.patch";
+       url = "https://github.com/sagemath/sage/commit/0fcf88935908440930c5f79202155aca4ad57518.diff";
+       sha256 = "sha256-mvqAHaTCXsxPv901L8HSTnrfghfXYdq0wfLoP/cYQZI=";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

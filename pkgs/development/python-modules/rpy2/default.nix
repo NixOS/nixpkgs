@@ -81,6 +81,10 @@ buildPythonPackage rec {
 
     doCheck = !stdenv.isDarwin;
 
+    # newlines in environment variables are a problem due to
+    # https://github.com/rpy2/rpy2/issues/1066
+    preCheck = "unset postPatch";
+
     nativeCheckInputs = [
       pytestCheckHook
     ];
