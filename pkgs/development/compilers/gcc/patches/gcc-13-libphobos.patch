@@ -116,3 +116,15 @@ index 925c53c5f..b4bbde11a 100755
  
  ac_ext=d
  ac_compile='$GDC -c $GDCFLAGS conftest.$ac_ext >&5'
+diff --git a/libphobos/libdruntime/Makefile.in b/libphobos/libdruntime/Makefile.in
+index 797d6435a..ec5776f93 100644
+--- a/libphobos/libdruntime/Makefile.in
++++ b/libphobos/libdruntime/Makefile.in
+@@ -2488,6 +2488,7 @@ uninstall-am: uninstall-toolexeclibDATA \
+ 
+ .PRECIOUS: Makefile
+ 
++.NOTPARALLEL:
+ 
+ # Compile D into normal object files
+ .d.o:
