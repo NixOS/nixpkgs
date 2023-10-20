@@ -26,7 +26,7 @@ let
   };
 
   pname = "qutebrowser";
-  version = "3.0.0";
+  version = "3.0.2";
 in
 
 assert withMediaPlayback -> gst_all_1 != null;
@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication {
   inherit pname version;
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-Oer0p/DwUfOejUCgSCSkMvLLAjNyJx51qgN7bcQQ2Pw=";
+    hash = "sha256-pRiT3koSNRmvuDcjuc7SstmPTKUoUnjIHpvdqR7VvFE=";
   };
 
   # Needs tox
