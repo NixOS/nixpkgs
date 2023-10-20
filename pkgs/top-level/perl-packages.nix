@@ -19440,10 +19440,10 @@ with self; {
 
   Paranoid = buildPerlPackage {
     pname = "Paranoid";
-    version = "2.07";
+    version = "2.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/C/CO/CORLISS/Paranoid/Paranoid-2.07.tar.gz";
-      hash = "sha256-tVz9jG1fGB4hjv0BL3EaUM0U5NvIgEZQuVR3F49Dt/w=";
+      url = "mirror://cpan/authors/id/C/CO/CORLISS/Paranoid/Paranoid-2.10.tar.gz";
+      hash = "sha256-vvS25l1cmk72C8qjF0hvOg0jm/2rRQqnEgLCl5i4dSk=";
     };
     patches = [ ../development/perl-modules/Paranoid-blessed-path.patch ];
     preConfigure = ''
