@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , gitUpdater
+, nixosTests
 , testers
 , accountsservice
 , cmake
@@ -122,7 +123,10 @@ stdenv.mkDerivation (finalAttrs: {
     ayatana-indicators = [
       "ayatana-indicator-messages"
     ];
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      vm = nixosTests.ayatana-indicators;
+    };
     updateScript = gitUpdater { };
   };
 
