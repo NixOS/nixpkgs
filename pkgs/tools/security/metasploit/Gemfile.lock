@@ -1,12 +1,12 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 40ba61c644b1529ec4493ecb59dd5a8e4b3f16c1
-  ref: refs/tags/6.3.37
+  revision: 77fb7ae14f17fd7f4851bca87e0c28c704797591
+  ref: refs/tags/6.3.39
   specs:
-    metasploit-framework (6.3.37)
-      actionpack (~> 7.0)
-      activerecord (~> 7.0)
-      activesupport (~> 7.0)
+    metasploit-framework (6.3.39)
+      actionpack (~> 7.0.0)
+      activerecord (~> 7.0.0)
+      activesupport (~> 7.0.0)
       aws-sdk-ec2
       aws-sdk-ec2instanceconnect
       aws-sdk-iam
@@ -28,14 +28,14 @@ GIT
       filesize
       hrr_rb_ssh-ed25519
       http-cookie
-      irb
+      irb (~> 1.7.4)
       jsobfu
       json
       metasm
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.154)
+      metasploit-payloads (= 2.0.156)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.26)
       mqtt
@@ -252,7 +252,7 @@ GEM
       activemodel (~> 7.0)
       activesupport (~> 7.0)
       railties (~> 7.0)
-    metasploit-payloads (2.0.154)
+    metasploit-payloads (2.0.156)
     metasploit_data_models (6.0.2)
       activerecord (~> 7.0)
       activesupport (~> 7.0)
