@@ -11,6 +11,7 @@
 , udev
 , installShellFiles
 , nix-update-script
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -79,6 +80,8 @@ buildGoModule rec {
   '';
 
   passthru = {
+    tests.incus = nixosTests.incus;
+
     updateScript = nix-update-script {
        extraArgs = [
         "-vr" "incus-\(.*\)"
