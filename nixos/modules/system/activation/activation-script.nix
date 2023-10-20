@@ -59,6 +59,10 @@ let
       mkdir -p /nix/var/nix/gcroots
       ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
 
+      # Write a state file for nixos-activation-scripts-status.service
+      mkdir -p /run/nixos/activation-scripts
+      echo "$_status" >/run/nixos/activation-scripts/exit_status
+
       exit $_status
     '';
 
@@ -281,6 +285,17 @@ in
         }
         source ${config.system.build.earlyMountScript}
       '';
+
+    # A service that propagates the exit code of the activation scripts so that
+    # `systemctl --failed` shows if any of them failed.
+    systemd.services.nixos-activation-scripts-status = {
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        exit_status="$(cat /run/nixos/activation-scripts/exit_status)"
+        echo "NixOS activation scripts finished with exit code $exit_status"
+        exit "$exit_status"
+      '';
+    };
 
     systemd.user = {
       services.nixos-activation = {
