@@ -307,12 +307,13 @@ stdenv.mkDerivation rec {
           ''
             # Bazel needs a real home for self-extraction and internal cache
             export HOME=$(mktemp -d)
-            export USER=$(basename $HOME)
 
             ${# Concurrent bazel invocations have the same workspace path.
-              # On darwin, for some reason, it means they accessing and corrupting the same execroot.
+              # On darwin, for some reason, it means they access and corrupt the same execroot.
               # Having a different workspace path ensures we use different execroots.
+              # A different user seems to be enough for a different bazel cache root.
               lib.optionalString isDarwin ''
+                export USER=$(basename $HOME)
                 # cd $(mktemp --tmpdir=. -d)
               ''
             }
