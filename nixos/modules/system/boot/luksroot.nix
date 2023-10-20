@@ -949,9 +949,6 @@ in
           message = "boot.initrd.luks.devices.<name>.keyFileTimeout is only supported for systemd initrd";
         }
 
-        { assertion = config.boot.initrd.systemd.enable -> all (dev: !dev.fallbackToPassword) (attrValues luks.devices);
-          message = "boot.initrd.luks.devices.<name>.fallbackToPassword is implied by systemd stage 1.";
-        }
         { assertion = config.boot.initrd.systemd.enable -> all (dev: dev.preLVM) (attrValues luks.devices);
           message = "boot.initrd.luks.devices.<name>.preLVM is not used by systemd stage 1.";
         }
