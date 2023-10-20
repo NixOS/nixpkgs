@@ -10236,10 +10236,10 @@ with self; {
 
   GDGraph = buildPerlPackage {
     pname = "GDGraph";
-    version = "1.54";
+    version = "1.56";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RU/RUZ/GDGraph-1.54.tar.gz";
-      hash = "sha256-uW9cELZWwX0Wq2Whd3yQgpewKNO2gV9tVLIzfwBr+k8=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/GDGraph-1.56.tar.gz";
+      hash = "sha256-b0nMTlkBVIDbnJtrGK/YxQvjCIZoe2lBFRPQbziXERM=";
     };
     propagatedBuildInputs = [ GDText ];
     buildInputs = [ CaptureTiny TestException ];
