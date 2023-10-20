@@ -4,7 +4,6 @@
 , asgiref
 , httpx
 , pdm-backend
-, pdm-pep517
 , pytest-asyncio
 , pytestCheckHook
 }:
@@ -21,7 +20,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pdm-backend
-    pdm-pep517
   ];
 
   nativeCheckInputs = [
