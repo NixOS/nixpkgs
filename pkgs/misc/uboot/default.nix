@@ -50,6 +50,15 @@ let
     patches = [
       # NixOS and 32-bit specific
       ./0001-rpi.env-allow-for-bigger-kernels.patch
+
+      # can be dropped after we update from 2023.10
+      # commit 1a075d4e0de7
+      # https://patchwork.ozlabs.org/project/uboot/patch/20230504134255.8510-4-thomas.mittelstaedt@de.bosch.com/
+      (fetchpatch {
+        name = "x86-pxeboot-bugfix-Set-variable-for-size-of-initrd.patch";
+        url = "https://patchwork.ozlabs.org/project/uboot/patch/20230504134255.8510-4-thomas.mittelstaedt@de.bosch.com/raw/";
+        hash = "sha256-TBAA6J+NWQ/GHzNVE8HElruOWnkiy3LI5o0bG6YiepI=";
+      })
     ] ++ extraPatches;
 
     postPatch = ''
