@@ -22082,10 +22082,10 @@ with self; {
 
   SoftwareLicense = buildPerlPackage {
     pname = "Software-License";
-    version = "0.103014";
+    version = "0.104004";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Software-License-0.103014.tar.gz";
-      hash = "sha256-60XqYC11AGaDeJ+7pXoBwKH3A3Nx3pXqVLkVd1NdF4k=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Software-License-0.104004.tar.gz";
+      hash = "sha256-of2iTsh3UhmAlzgPuTAMFLV0gmJwzFgNr3UONYX8Jww=";
     };
     buildInputs = [ TryTiny ];
     propagatedBuildInputs = [ DataSection TextTemplate ];
