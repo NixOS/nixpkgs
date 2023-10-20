@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wttrbar";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "wttrbar";
     rev = version;
-    hash = "sha256-gtwS7e28vVIF1OfaAktNlI7Lml5K+/MXVxJo8+knIsg=";
+    hash = "sha256-ou0hcxSq2vCHQzRiv6cuXIsFhfzVtCuPphhCbJr/reU=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Security ];
 
-  cargoHash = "sha256-G1687/blL2U+lRGAM6QCwMJRptrku4qW8vG3TmLK+hk=";
+  cargoHash = "sha256-6XId9vZGrWQX8cuX0d9eEHCoNXD3CyvMQsMP7M+VdTQ=";
 
   meta = {
     description = "A simple but detailed weather indicator for Waybar using wttr.in";
