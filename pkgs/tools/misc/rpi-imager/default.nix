@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , wrapQtAppsHook
 , cmake
+, pkg-config
 , util-linux
 , curl
 , libarchive
@@ -12,23 +13,25 @@
 , qttools
 , qtquickcontrols2
 , qtgraphicaleffects
+, xz
 , nix-update-script
 , enableTelemetry ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpi-imager";
-  version = "1.7.5";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-yB+H1zWL40KzxOrBuvg7nBC3zmWilsOgOW7ndiDWuDA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-drHiZ0eYYvJg6/v3oEozGAbBKm1KLpec+kYZWwpT9yM=";
   };
 
   nativeBuildInputs = [
     cmake
+    pkg-config
     util-linux
     wrapQtAppsHook
   ];
@@ -48,6 +51,7 @@ stdenv.mkDerivation rec {
     qttools
     qtquickcontrols2
     qtgraphicaleffects
+    xz
   ];
 
   sourceRoot = "${src.name}/src";
