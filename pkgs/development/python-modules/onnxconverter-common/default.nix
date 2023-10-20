@@ -5,6 +5,7 @@
 , packaging
 , protobuf
 , onnx
+, pythonRelaxDepsHook
 , unittestCheckHook
 , onnxruntime
 }:
@@ -24,9 +25,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+    onnx
     packaging
     protobuf
-    onnx
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "protobuf"
   ];
 
   nativeCheckInputs = [

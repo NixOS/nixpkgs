@@ -35,7 +35,10 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [ "scikit-learn" ];
+  pythonRelaxDeps = [
+    "protobuf"
+    "scikit-learn"
+  ];
 
   nativeCheckInputs = [
     onnxruntime
