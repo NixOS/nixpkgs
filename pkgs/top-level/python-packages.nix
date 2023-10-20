@@ -4741,6 +4741,8 @@ self: super: with self; {
 
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
+  govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
+
   goveelights = callPackage ../development/python-modules/goveelights { };
 
   gpapi = callPackage ../development/python-modules/gpapi { };
