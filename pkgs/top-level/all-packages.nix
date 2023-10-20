@@ -16255,6 +16255,9 @@ with pkgs;
     langD = true;
     profiledCompiler = false;
     gdc = null; # gdc>=12 requires gdc to bootstrap
+  } // {
+    # GDC doesn't support aarch64-darwin yet
+    meta.broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   });
 
   gdc12 = wrapCC (gcc12.cc.override {
@@ -16264,6 +16267,16 @@ with pkgs;
     langD = true;
     profiledCompiler = false;
     gdc = gdc11; # gdc>=12 requires gdc to bootstrap
+    stdenv =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+         && stdenv.buildPlatform.isDarwin
+         && stdenv.buildPlatform.isx86_64
+      then overrideCC stdenv gdc11
+      else stdenv;
+  } // {
+    # GDC doesn't support aarch64-darwin yet
+    meta.broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   });
 
   gdc13 = wrapCC (gcc13.cc.override {
@@ -16273,6 +16286,16 @@ with pkgs;
     langD = true;
     profiledCompiler = false;
     gdc = gdc11; # gdc>=12 requires gdc to bootstrap
+    stdenv =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+         && stdenv.buildPlatform.isDarwin
+         && stdenv.buildPlatform.isx86_64
+      then overrideCC stdenv gdc11
+      else stdenv;
+  } // {
+    # GDC doesn't support aarch64-darwin yet
+    meta.broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   });
 
   gforth = callPackage ../development/compilers/gforth { };

@@ -126,6 +126,9 @@ in
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
 
+# Fix detection of bootstrap compiler GDC support (cctools as) on Nix Darwin
+++ optional (atLeast12 && stdenv.isDarwin && langD) ./gdc-cctools-as-detection-configure.patch
+
 # Use absolute path in GNAT dylib install names on Darwin
 ++ optional (atLeast12 && stdenv.isDarwin && langAda) ./gnat-darwin-dylib-install-name.patch
 
