@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "envisage";
   version = "7.0.3";
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -22,15 +22,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-97GviL86j/8qmsbja7SN6pkp4/YSIEz+lK7WKwMWyeM=";
   };
-
-  patches = [
-    # TODO: remove on next release
-    (fetchpatch {
-      name = "fix-mistake-in-menu-group-specification.patch";
-      url = "https://github.com/enthought/envisage/commit/f23ea3864a5f6ffca665d47dec755992e062029b.patch";
-      hash = "sha256-l4CWB4jRkSmoTDoV8CtP2w87Io2cLINKfOSaSPy7cXE=";
-    })
-  ];
 
   # for the optional dependency ipykernel, only versions < 6 are
   # supported, so it's not included in the tests, and not propagated

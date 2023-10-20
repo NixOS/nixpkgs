@@ -7244,7 +7244,11 @@ with pkgs;
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
   coreutils =  callPackage ../tools/misc/coreutils { };
-  coreutils-full = coreutils.override { minimal = false; };
+
+  # The coreutils above are built with dependencies from
+  # bootstrapping. We cannot override it here, because that pulls in
+  # openssl from the previous stage as well.
+  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
@@ -10304,10 +10308,14 @@ with pkgs;
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
   corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
 
+  nodejs_21 = callPackage ../development/web/nodejs/v21.nix { };
+  nodejs-slim_21 = callPackage ../development/web/nodejs/v21.nix { enableNpm = false; };
+  corepack_21 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_21; });
+
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_20;
-  nodejs-slim_latest = nodejs-slim_20;
-  corepack_latest = hiPrio corepack_20;
+  nodejs_latest = nodejs_21;
+  nodejs-slim_latest = nodejs-slim_21;
+  corepack_latest = hiPrio corepack_21;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -38893,6 +38901,8 @@ with pkgs;
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
   bftools = callPackage ../applications/science/biology/bftools { };
+
+  bioawk = callPackage ../applications/science/biology/bioawk { };
 
   blast = callPackage ../applications/science/biology/blast {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;

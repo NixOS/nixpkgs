@@ -1,19 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, nix-update-script
+, runCommand
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "janet";
-  version = "1.31.0";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Dj2fj1dsdAMl/H0vNKTf9qjPB4GVRpgWPVR+PuZWZMc=";
+    repo = "janet";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-24d9N59pTfQATWmAZN4dAFT8RTTlUlBPKokcQ/Fd2No=";
   };
 
   postPatch = ''
     substituteInPlace janet.1 \
       --replace /usr/local/ $out/
+  '' + lib.optionalString stdenv.isDarwin ''
+    # error: Socket is not connected
+    substituteInPlace meson.build \
+      --replace "'test/suite-ev.janet'," ""
   '';
 
   nativeBuildInputs = [ meson ninja ];
@@ -29,6 +40,21 @@ stdenv.mkDerivation rec {
     $out/bin/janet -e '(+ 1 2 3)'
   '';
 
+  passthru = {
+    tests.run = runCommand "janet-test-run" {
+      nativeBuildInputs = [finalAttrs.finalPackage];
+    } ''
+      echo "(+ 1 2 3)" | janet | tail -n 1 > arithmeticTest.txt;
+      diff -U3 --color=auto <(cat arithmeticTest.txt) <(echo "6");
+
+      echo "(print \"Hello, World!\")" | janet | tail -n 2 > ioTest.txt;
+      diff -U3 --color=auto <(cat ioTest.txt) <(echo -e "Hello, World!\nnil");
+
+      touch $out;
+    '';
+    updateScript = nix-update-script {};
+  };
+
   meta = with lib; {
     description = "Janet programming language";
     homepage = "https://janet-lang.org/";
@@ -36,4 +62,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ andrewchambers peterhoeg ];
     platforms = platforms.all;
   };
-}
+})

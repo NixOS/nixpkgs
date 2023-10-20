@@ -4996,11 +4996,12 @@ with self; {
 
   CryptPassphrase = buildPerlPackage {
     pname = "Crypt-Passphrase";
-    version = "0.003";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.003.tar.gz";
-      hash = "sha256-aFqgkPgXmobWiWISzPjM/eennM6FcZm7FOInehDSQK0=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.016.tar.gz";
+      hash = "sha256-TOtPi1SsM/PYHJq0euTPoejDbzhJ76ghcDycMH46T8c=";
     };
+    propagatedBuildInputs = [ CryptURandom ];
     meta = {
       description = "A module for managing passwords in a cryptographically agile manner";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -16201,12 +16202,12 @@ with self; {
 
   MojoliciousPluginOpenAPI = buildPerlPackage {
     pname = "Mojolicious-Plugin-OpenAPI";
-    version = "5.05";
+    version = "5.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-5.05.tar.gz";
-      hash = "sha256-xH+I0c434/YT9uizV9grenEEX/wKSXOVUS67zahlYV0=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-5.09.tar.gz";
+      hash = "sha256-BIJdfOIe20G80Ujrz6Gu+Ek258QOhKOdvyeGcdSaMQY=";
     };
-    propagatedBuildInputs = [ JSONValidator ];
+    propagatedBuildInputs = [ JSONValidator Mojolicious ];
     meta = {
       description = "OpenAPI / Swagger plugin for Mojolicious";
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-openapi";

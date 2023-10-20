@@ -2734,6 +2734,8 @@ self: super: with self; {
 
   derpconf = callPackage ../development/python-modules/derpconf { };
 
+  desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
+
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
@@ -8522,7 +8524,7 @@ self: super: with self; {
 
   opower = callPackage ../development/python-modules/opower { };
 
-  opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
+  opsdroid-get-image-size = callPackage ../development/python-modules/opsdroid-get-image-size { };
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
@@ -13244,8 +13246,6 @@ self: super: with self; {
 
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
 
-  sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
-
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
 
   sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
@@ -15985,7 +15985,7 @@ self: super: with self; {
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 
-  zope_lifecycleevent = callPackage ../development/python-modules/zope_lifecycleevent { };
+  zope-lifecycleevent = callPackage ../development/python-modules/zope-lifecycleevent { };
 
   zope_location = callPackage ../development/python-modules/zope_location { };
 
