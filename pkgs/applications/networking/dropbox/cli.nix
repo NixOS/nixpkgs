@@ -66,6 +66,8 @@ stdenv.mkDerivation {
     homepage = "https://www.dropbox.com";
     description = "Command line client for the dropbox daemon";
     license = lib.licenses.gpl3Plus;
+    mainProgram = "dropbox";
+    maintainers = with lib.maintainers; [ eclairevoyant ];
     # NOTE: Dropbox itself only works on linux, so this is ok.
     platforms = lib.platforms.linux;
   };
