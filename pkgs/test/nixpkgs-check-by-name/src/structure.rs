@@ -1,6 +1,7 @@
 use crate::check_result::{
     flatten_check_results, pass, sequence_check_results, CheckError, CheckResult,
 };
+use crate::references;
 use crate::utils;
 use crate::utils::{BASE_SUBPATH, PACKAGE_NIX_FILENAME};
 use lazy_static::lazy_static;
@@ -154,11 +155,17 @@ pub fn check_structure(path: &Path) -> CheckResult<Nixpkgs> {
                             pass(())
                         };
 
+                        let reference_check_result = references::check_references(
+                            &relative_package_dir,
+                            &path.join(&relative_package_dir),
+                        );
+
                         flatten_check_results(
                             [
                                 name_check_result,
                                 shard_check_result,
                                 package_nix_check_result,
+                                reference_check_result,
                             ],
                             |_| package_name.clone(),
                         )

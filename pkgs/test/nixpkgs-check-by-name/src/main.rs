@@ -6,7 +6,7 @@ mod utils;
 
 use crate::structure::check_structure;
 use anyhow::Context;
-use check_result::{flatten_check_results, write_check_result};
+use check_result::write_check_result;
 use clap::{Parser, ValueEnum};
 use colored::Colorize;
 use std::io;
@@ -91,14 +91,8 @@ pub fn check_nixpkgs<W: io::Write>(
         let check_result = check_structure(&nixpkgs_path);
 
         if let Some(nixpkgs) = write_check_result(&mut error_writer, check_result)? {
-            // Only if we could successfully parse the structure, we do the semantic checks
-            let check_result = flatten_check_results(
-                [
-                    eval::check_values(version, &nixpkgs, eval_accessible_paths),
-                    references::check_references(&nixpkgs),
-                ],
-                |_| (),
-            );
+            // Only if we could successfully parse the structure, we do the evaluation checks
+            let check_result = eval::check_values(version, &nixpkgs, eval_accessible_paths);
             write_check_result(&mut error_writer, check_result)?;
         }
     }

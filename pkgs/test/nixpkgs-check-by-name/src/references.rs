@@ -1,5 +1,4 @@
 use crate::check_result::{flatten_check_results, pass, CheckError, CheckResult};
-use crate::structure::Nixpkgs;
 use crate::utils;
 use crate::utils::LineIndex;
 
@@ -19,23 +18,21 @@ struct PackageContext<'a> {
 
 /// Check that every package directory in pkgs/by-name doesn't link to outside that directory.
 /// Both symlinks and Nix path expressions are checked.
-pub fn check_references(nixpkgs: &Nixpkgs) -> CheckResult<()> {
-    // Check the directories for each package separately
-    let check_results = nixpkgs.package_names.iter().map(|package_name| {
-        let relative_package_dir = Nixpkgs::relative_dir_for_package(package_name);
-        let context = PackageContext {
-            relative_package_dir: &relative_package_dir,
-            absolute_package_dir: &nixpkgs.path.join(&relative_package_dir),
-        };
+pub fn check_references(
+    relative_package_dir: &Path,
+    absolute_package_dir: &Path,
+) -> CheckResult<()> {
+    let context = PackageContext {
+        relative_package_dir: &relative_package_dir.to_path_buf(),
+        absolute_package_dir: &absolute_package_dir.to_path_buf(),
+    };
 
-        // The empty argument here is the subpath under the package directory to check
-        // An empty one means the package directory itself
-        check_path(&context, Path::new("")).context(format!(
-            "While checking the references in package directory {}",
-            relative_package_dir.display()
-        ))
-    });
-    flatten_check_results(check_results, |_| ())
+    // The empty argument here is the subpath under the package directory to check
+    // An empty one means the package directory itself
+    check_path(&context, Path::new("")).context(format!(
+        "While checking the references in package directory {}",
+        relative_package_dir.display()
+    ))
 }
 
 /// Checks for a specific path to not have references outside
