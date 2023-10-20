@@ -15577,6 +15577,8 @@ with pkgs;
 
   bfc = callPackage ../development/compilers/bfc { };
 
+  bigeye-cli = callPackage ../tools/admin/bigeye-cli { };
+
   bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen {
