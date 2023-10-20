@@ -463,7 +463,8 @@ in
 
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = true;
+      default = config.containers != { };
+      defaultText = lib.literalExpression "config.containers != { }";
       description = lib.mdDoc ''
         Whether to enable support for NixOS containers. Defaults to true
         (at no cost if containers are not actually used).
