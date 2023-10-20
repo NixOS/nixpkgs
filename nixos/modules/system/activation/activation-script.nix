@@ -55,10 +55,6 @@ let
       # used as a garbage collection root.
       ln -sfn "$(readlink -f "$systemConfig")" /run/current-system
 
-      # Prevent the current configuration from being garbage-collected.
-      mkdir -p /nix/var/nix/gcroots
-      ln -sfn /run/current-system /nix/var/nix/gcroots/current-system
-
       exit $_status
     '';
 
@@ -237,6 +233,9 @@ in
     system.activationScripts.specialfs = ""; # obsolete
 
     systemd.tmpfiles.rules = [
+      # Prevent the current configuration from being garbage-collected.
+      "d /nix/var/nix/gcroots -"
+      "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
       "D /var/empty 0555 root root -"
       "h /var/empty - - - - +i"
     ];
