@@ -1,0 +1,20 @@
+FLUTTER_HOME should the output path of the wrapped and linked flutter in nix store.
+
+diff --git a/bin/internal/shared.sh b/bin/internal/shared.sh
+index 3532c23114..8e3e97172e 100644
+--- a/bin/internal/shared.sh
++++ b/bin/internal/shared.sh
+@@ -182,7 +182,11 @@ function upgrade_flutter () (
+ # and `//bin/dart`). PROG_NAME and BIN_DIR should already be set by those
+ # entrypoints.
+ function shared::execute() {
+-  export FLUTTER_ROOT="$(cd "${BIN_DIR}/.." ; pwd -P)"
++  if [[ -z $FLUTTER_HOME ]]; then
++    export FLUTTER_ROOT="$(cd "${BIN_DIR}/.." ; pwd -P)"
++  else
++    export FLUTTER_ROOT=$FLUTTER_HOME
++  fi
+
+   # If present, run the bootstrap script first
+   BOOTSTRAP_PATH="$FLUTTER_ROOT/bin/internal/bootstrap.sh"
+com

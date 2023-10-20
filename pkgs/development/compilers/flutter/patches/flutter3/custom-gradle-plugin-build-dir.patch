@@ -1,0 +1,12 @@
+Force gradle to build the plugin in a different directory specified by FLUTTER_GRADLE_PLUGIN_BUILDDIR
+
+diff --git a/packages/flutter_tools/gradle/build.gradle.kts b/packages/flutter_tools/gradle/build.gradle.kts
+index 289693f9a4..f9b9a46de7 100644
+--- a/packages/flutter_tools/gradle/build.gradle.kts
++++ b/packages/flutter_tools/gradle/build.gradle.kts
+@@ -32,3 +32,5 @@ dependencies {
+     //  * AGP version in buildscript block in packages/flutter_tools/gradle/src/main/flutter.groovy
+     compileOnly("com.android.tools.build:gradle:7.3.0")
+ }
++
++buildDir = File(System.getenv("FLUTTER_GRADLE_PLUGIN_BUILDDIR"))

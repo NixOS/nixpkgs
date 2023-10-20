@@ -83,6 +83,11 @@ let
         cp -r . $out
         ln -sf ${dart} $out/bin/cache/dart-sdk
 
+        # Dart VSCode plugin specifically look for the following file in: 
+        # ${dart}/bin/snapshots/analysis_server.dart.snapshot
+        # https://github.com/Dart-Code/Dart-Code/blob/9d852c8a6a2ac1aa99c7b5e8e9b60840329e4f3c/src/extension/sdk/utils.ts#L507
+        ln -sf $out/bin/cache/dart-sdk/bin/snapshots $out/bin/snapshots
+
         runHook postInstall
       '';
 
