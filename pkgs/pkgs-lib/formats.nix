@@ -1,4 +1,9 @@
 { lib, pkgs }:
+let
+  # Utility function to add a given prefix for each line of a comment string,
+  # for languages that don't have actual multi-line comments.
+  addCommentPrefix = prefix: comment: lib.concatLines (map (l: "${prefix} ${l}") (lib.splitString "\n" comment));
+in
 rec {
 
   /*
@@ -34,7 +39,7 @@ rec {
   inherit (import ./formats/java-properties/default.nix { inherit lib pkgs; })
     javaProperties;
 
-  json = {}: {
+  json = { ... }: {
 
     type = with lib.types; let
       valueType = nullOr (oneOf [
@@ -60,14 +65,20 @@ rec {
 
   };
 
-  yaml = {}: {
+  yaml = {
+    comment ? "Generated with Nix",
+    ...
+  }: {
 
-    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
+    generate = let
+      addComment = lib.optionalString (comment != null) "echo ${lib.escapeShellArg (addCommentPrefix "#" comment)} > $out";
+    in name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
       nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
     } ''
-      json2yaml "$valuePath" "$out"
+      ${addComment}
+      json2yaml "$valuePath" - >> $out
     '') {};
 
     type = with lib.types; let
@@ -87,6 +98,7 @@ rec {
   };
 
   ini = {
+    comment ? "Generated with Nix",
     # Represents lists as duplicate keys
     listsAsDuplicateKeys ? false,
     # Alternative to listsAsDuplicateKeys, converts list to non-list
@@ -131,11 +143,15 @@ rec {
               if lib.isList val then listToValue val else val
             )) value
           else value;
-      in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
+        addComment = lib.optionalString (comment != null) "${(addCommentPrefix "#" comment)}\n";
+      in pkgs.writeText name (
+        addComment + (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue)
+      );
 
   };
 
   keyValue = {
+    comment ? "Generated with Nix",
     # Represents lists as duplicate keys
     listsAsDuplicateKeys ? false,
     # Alternative to listsAsDuplicateKeys, converts list to non-list
@@ -180,11 +196,18 @@ rec {
               if lib.isList val then listToValue val else val
             ) value
           else value;
-      in pkgs.writeText name (lib.generators.toKeyValue (removeAttrs args ["listToValue"]) transformedValue);
+        addComment = lib.optionalString (comment != null) "${(addCommentPrefix "#" comment)}\n";
+      in pkgs.writeText name (
+        addComment + (lib.generators.toKeyValue (removeAttrs args ["listToValue"]) transformedValue)
+      );
 
   };
 
-  gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
+  gitIni = {
+    comment ? "Generated with Nix",
+    listsAsDuplicateKeys ? false,
+    ...
+  }@args: {
 
     type = with lib.types; let
 
@@ -192,10 +215,15 @@ rec {
 
     in attrsOf (attrsOf (either iniAtom (attrsOf iniAtom)));
 
-    generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
+    generate = let
+      addComment = lib.optionalString (comment != null) "${(addCommentPrefix "#" comment)}\n";
+    in name: value: pkgs.writeText name (addComment + (lib.generators.toGitINI value));
   };
 
-  toml = {}: json {} // {
+  toml = {
+    comment ? "Generated with Nix",
+    ...
+  }: json {} // {
     type = with lib.types; let
       valueType = oneOf [
         bool
@@ -210,12 +238,15 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
+    generate = let
+      addComment = lib.optionalString (comment != null) "echo ${lib.escapeShellArg (addCommentPrefix "#" comment)} > $out";
+    in name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
       nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
     } ''
-      json2toml "$valuePath" "$out"
+      ${addComment}
+      json2toml "$valuePath" - >> $out
     '') {};
 
   };
@@ -252,7 +283,11 @@ rec {
     [List]: <https://hexdocs.pm/elixir/List.html>
     [Tuple]: <https://hexdocs.pm/elixir/Tuple.html>
   */
-  elixirConf = { elixir ? pkgs.elixir }:
+  elixirConf = {
+    comment ? "Generated with Nix",
+    elixir ? pkgs.elixir,
+    ...
+  }:
     with lib; let
       toElixir = value: with builtins;
         if value == null then "nil" else
@@ -302,7 +337,9 @@ rec {
             "config ${rootKey}, ${key}, ${toElixir value}";
           keyConfigs = rootKey: values: mapAttrsToList (keyConfig rootKey) values;
           rootConfigs = flatten (mapAttrsToList keyConfigs values);
+          addComment = lib.optionalString (comment != null) "${(addCommentPrefix "#" comment)}\n";
         in
+        addComment +
         ''
           import Config
 

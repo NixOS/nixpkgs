@@ -36,7 +36,7 @@ let
 in runBuildTests {
 
   testJsonAtoms = {
-    drv = evalFormat formats.json {} {
+    drv = evalFormat formats.json { comment = throw "The JSON generator should not evaluate a comment attribute."; } {
       null = null;
       false = false;
       true = true;
@@ -79,6 +79,8 @@ in runBuildTests {
       path = ./formats.nix;
     };
     expected = ''
+      # Generated with Nix
+
       attrs:
         foo: null
       'false': false
@@ -103,6 +105,8 @@ in runBuildTests {
       };
     };
     expected = ''
+      # Generated with Nix
+
       [foo]
       bool=true
       float=3.141000
@@ -120,6 +124,8 @@ in runBuildTests {
       };
     };
     expected = ''
+      # Generated with Nix
+
       [foo]
       bar=null
       bar=true
@@ -140,6 +146,8 @@ in runBuildTests {
       };
     };
     expected = ''
+      # Generated with Nix
+
       [foo]
       bar=null, true, test, 1.200000, 10
       baz=false
@@ -155,6 +163,8 @@ in runBuildTests {
       str = "string";
     };
     expected = ''
+      # Generated with Nix
+
       bool=true
       float=3.141000
       int=10
@@ -169,6 +179,8 @@ in runBuildTests {
       qux = "qux";
     };
     expected = ''
+      # Generated with Nix
+
       bar=null
       bar=true
       bar=test
@@ -186,6 +198,8 @@ in runBuildTests {
       qux = "qux";
     };
     expected = ''
+      # Generated with Nix
+
       bar=null, true, test, 1.200000, 10
       baz=false
       qux=qux
@@ -204,6 +218,8 @@ in runBuildTests {
       level1.level2.level3.level4 = "deep";
     };
     expected = ''
+      # Generated with Nix
+
       false = false
       float = 3.141
       int = 10
@@ -248,6 +264,18 @@ in runBuildTests {
       tautologies = true
       \u00fctf\ 8 = d\u00fbh
       \u0627\u0644\u062c\u0628\u0631 = \u0623\u0643\u062b\u0631 \u0645\u0646 \u0645\u062c\u0631\u062f \u0623\u0631\u0642\u0627\u0645
+    '';
+  };
+
+  testMultiLineYamlComment = {
+    drv = evalFormat formats.yaml { comment = "One line\nAnother line"; } {
+      foo = "bar";
+    };
+    expected = ''
+      # One line
+      # Another line
+
+      foo: bar
     '';
   };
 }
