@@ -8366,7 +8366,7 @@ self: super: with self; {
   };
 
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
-    protobuf = protobuf3;
+    inherit (pkgs) protobuf;
   };
 
   onnxmltools = callPackage ../development/python-modules/onnxmltools { };

@@ -29,6 +29,10 @@ buildPythonPackage rec {
     onnx
   ];
 
+  pythonImportsCheck = [
+    "onnxconverter_common"
+  ];
+
   nativeCheckInputs = [
     onnxruntime
     unittestCheckHook
