@@ -41488,8 +41488,6 @@ with pkgs;
 
   xbps = callPackage ../tools/package-management/xbps { };
 
-  zkg = callPackage ../tools/package-management/zkg { };
-
   xcftools = callPackage ../tools/graphics/xcftools { };
 
   xhyve = callPackage ../applications/virtualization/xhyve {
