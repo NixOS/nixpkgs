@@ -2631,10 +2631,10 @@
         "deps": {
             "src/electron": {
                 "fetcher": "fetchFromGitHub",
-                "hash": "sha256-Yo/ZvOLOPIktV5gzZK80LKVZb3xMXrzGkdQw9u4djoI=",
+                "hash": "sha256-j+j4tVxQaGG4PKzPfPN1V1pdkKd/GFz+g+bW28H30cw=",
                 "owner": "electron",
                 "repo": "electron",
-                "rev": "v25.9.1"
+                "rev": "v25.9.3"
             },
             "src": {
                 "fetcher": "fetchFromGitiles",
@@ -3429,7 +3429,7 @@
                 "rev": "78d3966b3c331292ea29ec38661b25df0a245948"
             }
         },
-        "version": "25.9.1",
+        "version": "25.9.3",
         "modules": "116",
         "chrome": "114.0.5735.289",
         "node": "18.15.0",
