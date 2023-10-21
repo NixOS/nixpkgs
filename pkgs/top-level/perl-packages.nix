@@ -19616,6 +19616,7 @@ with self; {
     meta = {
       description = "Objected-oriented Perl interface to ImageMagick. Use it to read, manipulate, or write an image or image sequence from within a Perl script";
       license = with lib.licenses; [ imagemagick ];
+      broken = true; # tests fail
     };
   };
 
