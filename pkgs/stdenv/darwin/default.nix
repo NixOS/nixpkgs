@@ -1047,9 +1047,9 @@ in
 
     overrides = self: super: {
       inherit (prevStage) ccWrapperStdenv
-        autoconf automake bash bison cmake cmakeMinimal cpio cyrus_sasl db expat flex groff
-        libedit libtool m4 ninja openldap openssh patchutils pbzx perl pkg-config python3
-        python3Minimal scons serf sqlite subversion sysctl texinfo unzip which
+        autoconf automake bash bison cmake cmakeMinimal cyrus_sasl db expat flex groff
+        libedit libtool m4 ninja openldap openssh patchutils perl pkg-config python3 scons
+        serf sqlite subversion sysctl texinfo unzip which
 
         # CF dependencies - don’t rebuild them.
         icu
@@ -1057,10 +1057,39 @@ in
         # LLVM dependencies - don’t rebuild them.
         libffi libiconv libxml2 ncurses zlib;
 
+      # These overrides are required to break an infinite recursion. curl depends on Darwin
+      # frameworks, but those frameworks require these dependencies to build, which
+      # depend on curl indirectly.
+      cpio = super.cpio.override {
+        inherit (prevStage) fetchurl;
+      };
+
+      libyaml = super.libyaml.override {
+        inherit (prevStage) fetchFromGitHub;
+      };
+
+      pbzx = super.pbzx.override {
+        inherit (prevStage) fetchFromGitHub;
+      };
+
+      python3Minimal = super.python3Minimal.override {
+        inherit (prevStage) fetchurl;
+      };
+
+      xar = super.xar.override {
+        inherit (prevStage) fetchurl;
+      };
+
       darwin = super.darwin.overrideScope (selfDarwin: superDarwin: {
         inherit (prevStage.darwin) dyld CF Libsystem darwin-stubs
           # CF dependencies - don’t rebuild them.
           libobjc objc4;
+
+        # rewrite-tbd is also needed to build Darwin frameworks, so it’s built using the
+        # previous stage’s fetchFromGitHub to avoid an infinite recursion (same as above).
+        rewrite-tbd = superDarwin.rewrite-tbd.override {
+          inherit (prevStage) fetchFromGitHub;
+        };
 
         signingUtils = superDarwin.signingUtils.override {
           inherit (selfDarwin) sigtool;
@@ -1158,9 +1187,10 @@ in
   (prevStage:
     # previous stage4 stdenv:
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage; [
-      bash binutils-unwrapped brotli bzip2 curl diffutils ed file findutils gawk gettext gmp
-      gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libkrb5 libssh2
-      libunistring libxml2 ncurses nghttp2 openbsm openpam openssl patch pcre xz zlib zstd
+      bash binutils-unwrapped brotli bzip2 cpio curl diffutils ed file findutils gawk
+      gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libkrb5
+      libssh2 libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch
+      pbzx pcre python3Minimal xar xz zlib zstd
     ]);
 
     assert lib.all isBuiltByNixpkgsCompiler (with prevStage.darwin; [
@@ -1176,9 +1206,9 @@ in
     ]);
 
     assert lib.all isBuiltByBootstrapFilesCompiler (with prevStage; [
-      autoconf automake bison cmake cmakeMinimal cpio cyrus_sasl db expat flex groff libedit
-      libtool m4 ninja openldap openssh patchutils pbzx perl pkg-config.pkg-config python3
-      python3Minimal scons serf sqlite subversion sysctl.provider texinfo unzip which
+      autoconf automake bison cmake cmakeMinimal cyrus_sasl db expat flex groff libedit
+      libtool m4 ninja openldap openssh patchutils perl pkg-config.pkg-config python3 scons
+      serf sqlite subversion sysctl.provider texinfo unzip which
     ]);
 
     assert prevStage.darwin.cctools == prevStage.darwin.cctools-llvm;
@@ -1307,14 +1337,14 @@ in
 
       overrides = self: super: {
         inherit (prevStage)
-          bash binutils brotli bzip2 coreutils curl diffutils ed file findutils gawk gettext
-          gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libssh2
-          libunistring libxml2 ncurses nghttp2 openbsm openpam openssl patch pcre xz zlib
-          zstd;
+          bash binutils brotli bzip2 coreutils cpio curl diffutils ed file findutils gawk
+          gettext gmp gnugrep gnumake gnused gnutar gzip icu libffi libiconv libidn2 libssh2
+          libunistring libxml2 libyaml ncurses nghttp2 openbsm openpam openssl patch pbzx
+          pcre python3Minimal xar xz zlib zstd;
 
         darwin = super.darwin.overrideScope (_: _: {
           inherit (prevStage.darwin)
-            CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi xnu;
+            CF ICU Libsystem darwin-stubs dyld locale libobjc libtapi rewrite-tbd xnu;
         } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
           inherit (prevStage.darwin) binutils binutils-unwrapped cctools-llvm cctools-port;
         });
