@@ -9662,6 +9662,8 @@ self: super: with self; {
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
 
+  py-swagger-ui = callPackage ../development/python-modules/py-swagger-ui { };
+
   py-zabbix = callPackage ../development/python-modules/py-zabbix { };
 
   py17track = callPackage ../development/python-modules/py17track { };
