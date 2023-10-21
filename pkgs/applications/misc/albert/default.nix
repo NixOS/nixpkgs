@@ -10,6 +10,7 @@
 , qtscxml
 , qtsvg
 , qtdeclarative
+, qtwayland
 , qt5compat
 , wrapQtAppsHook
 , nix-update-script
@@ -42,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtscxml
     qtsvg
     qtdeclarative
+    qtwayland
     qt5compat
   ] ++ (with python3Packages; [ python pybind11 ]);
 

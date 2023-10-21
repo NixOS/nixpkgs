@@ -4,27 +4,22 @@
 , cmake
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argagg";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "vietjtnguyen";
-    repo = pname;
-    rev = version;
-    hash = "sha256-MCtlAPfwdJpgfS8IH+zlcgaaxZ5AsP4hJvbZAFtOa4o=";
+    repo = "argagg";
+    rev = finalAttrs.version;
+    hash = "sha256-G0PzoKpUyb1MaziLvHgasq98jPODUu4EgPzywRjuIN8=";
   };
-
-  patches = [
-    # Fix compilation of macro catch statement
-    ./0001-catch.diff
-  ];
 
   nativeBuildInputs = [
     cmake
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vietjtnguyen/argagg";
     description = "Argument Aggregator";
     longDescription = ''
@@ -38,9 +33,9 @@ stdenv.mkDerivation rec {
       types until you access them, so the result structures end up just being
       pointers into the original command line argument C-strings.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
   };
-}
+})
