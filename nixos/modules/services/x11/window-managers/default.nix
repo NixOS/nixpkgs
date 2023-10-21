@@ -12,6 +12,7 @@ in
     ./afterstep.nix
     ./berry.nix
     ./bspwm.nix
+    ./cardboard.nix
     ./cwm.nix
     ./clfswm.nix
     ./dk.nix
