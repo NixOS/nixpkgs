@@ -7225,6 +7225,7 @@
   };
   hubble = {
     name = "Hubble the Wolverine";
+    email = "hubblethewolverine@gmail.com";
     matrix = "@hubofeverything:bark.lgbt";
     github = "the-furry-hubofeverything";
     githubId = 53921912;
