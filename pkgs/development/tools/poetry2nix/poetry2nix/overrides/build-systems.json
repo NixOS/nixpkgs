@@ -2732,6 +2732,9 @@
   "certbot-dns-inwx": [
     "setuptools"
   ],
+  "certbot-dns-ovh": [
+    "setuptools"
+  ],
   "certbot-dns-rfc2136": [
     "setuptools"
   ],

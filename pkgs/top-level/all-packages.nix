@@ -2112,7 +2112,10 @@ with pkgs;
 
   xpaste = callPackage ../tools/text/xpaste { };
 
-  xrootd = callPackage ../tools/networking/xrootd { };
+  xrootd = callPackage ../tools/networking/xrootd {
+    # Workaround systemd static build breakage
+    systemd = if systemd.meta.broken then null else systemd;
+  };
 
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
@@ -7241,7 +7244,11 @@ with pkgs;
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
   coreutils =  callPackage ../tools/misc/coreutils { };
-  coreutils-full = coreutils.override { minimal = false; };
+
+  # The coreutils above are built with dependencies from
+  # bootstrapping. We cannot override it here, because that pulls in
+  # openssl from the previous stage as well.
+  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
   coreutils-prefixed = coreutils.override { withPrefix = true; singleBinary = false; };
 
   corkscrew = callPackage ../tools/networking/corkscrew { };
@@ -7417,6 +7424,8 @@ with pkgs;
   ddcui = libsForQt5.callPackage ../applications/misc/ddcui { };
 
   ddcutil = callPackage ../tools/misc/ddcutil { };
+
+  ddclient = callPackage ../tools/networking/ddclient { };
 
   dd_rescue = callPackage ../tools/system/dd_rescue { };
 
@@ -10301,10 +10310,14 @@ with pkgs;
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { enableNpm = false; };
   corepack_20 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_20; });
 
+  nodejs_21 = callPackage ../development/web/nodejs/v21.nix { };
+  nodejs-slim_21 = callPackage ../development/web/nodejs/v21.nix { enableNpm = false; };
+  corepack_21 = hiPrio (callPackage ../development/web/nodejs/corepack.nix { nodejs = nodejs_21; });
+
   # Update this when adding the newest nodejs major version!
-  nodejs_latest = nodejs_20;
-  nodejs-slim_latest = nodejs-slim_20;
-  corepack_latest = hiPrio corepack_20;
+  nodejs_latest = nodejs_21;
+  nodejs-slim_latest = nodejs-slim_21;
+  corepack_latest = hiPrio corepack_21;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
@@ -20829,6 +20842,8 @@ with pkgs;
 
   certbot-full = certbot.withPlugins (cp: with cp; [
     certbot-dns-cloudflare
+    certbot-dns-google
+    certbot-dns-ovh
     certbot-dns-rfc2136
     certbot-dns-route53
   ]);
@@ -22271,6 +22286,9 @@ with pkgs;
   jefferson = callPackage ../tools/filesystems/jefferson { };
 
   jemalloc = callPackage ../development/libraries/jemalloc { };
+
+  rust-jemalloc-sys = callPackage ../development/libraries/jemalloc/rust.nix { };
+  rust-jemalloc-sys-unprefixed = rust-jemalloc-sys.override { unprefixed = true; };
 
   jose = callPackage ../development/libraries/jose { };
 
@@ -27557,6 +27575,8 @@ with pkgs;
 
   ### SERVERS / GEOSPATIAL
 
+  fit-trackee = callPackage ../servers/geospatial/fit-trackee { };
+
   geoserver = callPackage ../servers/geospatial/geoserver { };
 
   mapcache = callPackage ../servers/geospatial/mapcache { };
@@ -28302,7 +28322,9 @@ with pkgs;
     checkMeta = callPackage ../stdenv/generic/check-meta.nix { };
   });
   minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
-  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix { };
+  make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix {
+    inherit (stdenv) hostPlatform;
+  };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
@@ -28427,7 +28449,9 @@ with pkgs;
 
   golint = callPackage ../development/tools/golint { };
 
-  golangci-lint = callPackage ../development/tools/golangci-lint { };
+  golangci-lint = callPackage ../development/tools/golangci-lint {
+    buildGoModule = buildGo121Module;
+  };
 
   golangci-lint-langserver = callPackage ../development/tools/golangci-lint-langserver { };
 
@@ -36483,7 +36507,7 @@ with pkgs;
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
-  dockapps = callPackage ../by-name/wi/windowmaker/dockapps { };
+  inherit (windowmaker) dockapps;
 
   wily = callPackage ../applications/editors/wily { };
 
@@ -38871,6 +38895,8 @@ with pkgs;
   bcftools = callPackage ../applications/science/biology/bcftools { };
 
   bftools = callPackage ../applications/science/biology/bftools { };
+
+  bioawk = callPackage ../applications/science/biology/bioawk { };
 
   blast = callPackage ../applications/science/biology/blast {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;

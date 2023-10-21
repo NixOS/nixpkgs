@@ -1876,11 +1876,13 @@ self: super: with self; {
 
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
 
+  certbot-dns-google = callPackage ../development/python-modules/certbot-dns-google { };
+
   certbot-dns-inwx = callPackage ../development/python-modules/certbot-dns-inwx { };
 
-  certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };
+  certbot-dns-ovh = callPackage ../development/python-modules/certbot-dns-ovh { };
 
-  certbot-dns-google = callPackage ../development/python-modules/certbot-dns-google { };
+  certbot-dns-rfc2136 = callPackage ../development/python-modules/certbot-dns-rfc2136 { };
 
   certbot-dns-route53 = callPackage ../development/python-modules/certbot-dns-route53 { };
 
@@ -2730,6 +2732,8 @@ self: super: with self; {
 
   derpconf = callPackage ../development/python-modules/derpconf { };
 
+  desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
+
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
@@ -3266,6 +3270,8 @@ self: super: with self; {
   draftjs-exporter = callPackage ../development/python-modules/draftjs-exporter { };
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
+
+  dramatiq = callPackage ../development/python-modules/dramatiq { };
 
   drawille = callPackage ../development/python-modules/drawille { };
 
@@ -3963,6 +3969,8 @@ self: super: with self; {
   flask-compress = callPackage ../development/python-modules/flask-compress { };
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
+
+  flask-dramatiq = callPackage ../development/python-modules/flask-dramatiq { };
 
   flask-elastic = callPackage ../development/python-modules/flask-elastic { };
 
@@ -8510,7 +8518,7 @@ self: super: with self; {
 
   opower = callPackage ../development/python-modules/opower { };
 
-  opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
+  opsdroid-get-image-size = callPackage ../development/python-modules/opsdroid-get-image-size { };
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
@@ -8845,6 +8853,8 @@ self: super: with self; {
   perfplot = callPackage ../development/python-modules/perfplot { };
 
   periodictable = callPackage ../development/python-modules/periodictable { };
+
+  periodiq = callPackage ../development/python-modules/periodiq { };
 
   permissionedforms = callPackage ../development/python-modules/permissionedforms { };
 
@@ -12026,8 +12036,6 @@ self: super: with self; {
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
-  recaptcha_client = callPackage ../development/python-modules/recaptcha_client { };
-
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
 
   recline = callPackage ../development/python-modules/recline { };
@@ -13222,8 +13230,6 @@ self: super: with self; {
 
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
 
-  sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
-
   sphinx-rtd-theme = callPackage ../development/python-modules/sphinx-rtd-theme { };
 
   sphinx-serve = callPackage ../development/python-modules/sphinx-serve { };
@@ -13341,6 +13347,8 @@ self: super: with self; {
   stashy = callPackage ../development/python-modules/stashy { };
 
   static3 = callPackage ../development/python-modules/static3 { };
+
+  staticmap = callPackage ../development/python-modules/staticmap { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
 
@@ -15421,6 +15429,8 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  watchdog-gevent = callPackage ../development/python-modules/watchdog-gevent { };
+
   watchfiles = callPackage ../development/python-modules/watchfiles {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -15959,7 +15969,7 @@ self: super: with self; {
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 
-  zope_lifecycleevent = callPackage ../development/python-modules/zope_lifecycleevent { };
+  zope-lifecycleevent = callPackage ../development/python-modules/zope-lifecycleevent { };
 
   zope_location = callPackage ../development/python-modules/zope_location { };
 

@@ -272,18 +272,18 @@ in
     };
 
     faxcron.enable.spoolInit = mkEnableOption (lib.mdDoc ''
-      Purge old files from the spooling area with
+      purging old files from the spooling area with
       {file}`faxcron`
-      each time the spooling area is initialized.
+      each time the spooling area is initialized
     '');
     faxcron.enable.frequency = mkOption {
       type = nullOr nonEmptyStr;
       default = null;
       example = "daily";
       description = lib.mdDoc ''
-        Purge old files from the spooling area with
+        purging old files from the spooling area with
         {file}`faxcron` with the given frequency
-        (see systemd.time(7)).
+        (see systemd.time(7))
       '';
     };
     faxcron.infoDays = mkOption {

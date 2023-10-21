@@ -6,6 +6,7 @@
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+, rust-jemalloc-sys
 , darwin
 }:
 let
@@ -49,7 +50,9 @@ buildPythonPackage {
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = [
+    rust-jemalloc-sys
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];

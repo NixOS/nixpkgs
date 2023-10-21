@@ -1,14 +1,23 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools
 }:
 
 buildPythonPackage rec {
-  pname = "opsdroid_get_image_size";
+  pname = "opsdroid-get-image-size";
   version = "0.2.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "124j2xvfxv09q42qfb8nqlcn55y7f09iayrix3yfyrs2qyzav78a";
+    pname = "opsdroid_get_image_size";
+    inherit version;
+    hash = "sha256-Cp2tvsdCZ+/86DF7FRNwx5diGcUWLYcFwQns7nYXkog=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   # test data not included on pypi
   doCheck = false;

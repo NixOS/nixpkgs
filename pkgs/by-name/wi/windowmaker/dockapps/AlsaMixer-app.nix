@@ -1,38 +1,47 @@
-{ lib, stdenv, dockapps-sources, pkg-config, libX11, libXpm, libXext, alsa-lib }:
+{ lib
+, stdenv
+, alsa-lib
+, dockapps-sources
+, libX11
+, libXext
+, libXpm
+, pkg-config
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "AlsaMixer.app";
-  version = "0.2.1";
 
-  src = dockapps-sources;
+  inherit (dockapps-sources) version src;
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libXpm libXext alsa-lib ];
+  sourceRoot = "${finalAttrs.src.name}/AlsaMixer.app";
 
-  setSourceRoot = ''
-    export sourceRoot=$(echo */${pname})
-  '';
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    alsa-lib
+    libX11
+    libXpm
+    libXext
+  ];
+
+  hardeningDisable = [ "fortify" ];
 
   dontConfigure = true;
 
-  preInstall = ''
-    install -d ${placeholder "out"}/bin
-  '';
-
   installPhase = ''
     runHook preInstall
-    install -t ${placeholder "out"}/bin AlsaMixer.app
+    install -D -t ${placeholder "out"}/bin/ AlsaMixer.app
+    pushd ${placeholder "out"}/bin
+    ln -vs AlsaMixer.app AlsaMixer
     runHook postInstall
   '';
 
-  postInstall = ''
-    ln -s ${placeholder "out"}/bin/AlsaMixer.app ${placeholder "out"}/bin/AlsaMixer
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Alsa mixer application for Windowmaker";
     homepage = "https://www.dockapps.net/alsamixerapp";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.bstrik ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ ];
   };
-}
+})

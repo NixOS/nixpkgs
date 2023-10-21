@@ -4947,6 +4947,26 @@ with self; {
     };
   };
 
+  CryptHSXKPasswd = buildPerlPackage {
+    pname = "Crypt-HSXKPasswd";
+    version = "3.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BA/BARTB/Crypt-HSXKPasswd-v3.6.tar.gz";
+      hash = "sha256-lZ3MX58BG/ALha0i31ZrerK/XqHTYrDeD7WuKfvEWLM=";
+    };
+    buildInputs = [ Clone DateTime FileHomeDir FileShare FileShareDir GetoptLong JSON ListMoreUtils MathRound Readonly TextUnidecode TypeTiny ];
+    meta = {
+      description = "A secure memorable password generator";
+      homepage = "http://www.bartb.ie/hsxkpasswd";
+      license = with lib.licenses; [ bsd2 ];
+      maintainers = [ maintainers.dannixon ];
+      mainProgram = "hsxkpasswd";
+    };
+    # Two tests fail as a result of https://github.com/bbusschots/hsxkpasswd/issues/42
+    # (also see https://github.com/bbusschots/hsxkpasswd/issues/43)
+    doCheck = false;
+  };
+
   CryptIDEA = buildPerlPackage {
     pname = "Crypt-IDEA";
     version = "1.10";
@@ -4976,11 +4996,12 @@ with self; {
 
   CryptPassphrase = buildPerlPackage {
     pname = "Crypt-Passphrase";
-    version = "0.003";
+    version = "0.016";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.003.tar.gz";
-      hash = "sha256-aFqgkPgXmobWiWISzPjM/eennM6FcZm7FOInehDSQK0=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-0.016.tar.gz";
+      hash = "sha256-TOtPi1SsM/PYHJq0euTPoejDbzhJ76ghcDycMH46T8c=";
     };
+    propagatedBuildInputs = [ CryptURandom ];
     meta = {
       description = "A module for managing passwords in a cryptographically agile manner";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
@@ -5003,12 +5024,12 @@ with self; {
 
   CryptPassphraseBcrypt = buildPerlPackage {
     pname = "Crypt-Passphrase-Bcrypt";
-    version = "0.001";
+    version = "0.007";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.001.tar.gz";
-      hash = "sha256-M44nA4RH/eAjznyaC1dPR+4zeQRKDAgxrJRx8UMNxMU=";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/Crypt-Passphrase-Bcrypt-0.007.tar.gz";
+      hash = "sha256-/k1NHTm9TxODQaJZUFzhE3EnCnZ8nndH90H7dGH9sA8=";
     };
-    propagatedBuildInputs = [ CryptEksblowfish CryptPassphrase ];
+    propagatedBuildInputs = [ CryptBcrypt CryptPassphrase ];
     meta = {
       description = "A bcrypt encoder for Crypt::Passphrase";
       homepage = "https://github.com/Leont/crypt-passphrase-bcrypt";
@@ -16181,12 +16202,12 @@ with self; {
 
   MojoliciousPluginOpenAPI = buildPerlPackage {
     pname = "Mojolicious-Plugin-OpenAPI";
-    version = "5.05";
+    version = "5.09";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-5.05.tar.gz";
-      hash = "sha256-xH+I0c434/YT9uizV9grenEEX/wKSXOVUS67zahlYV0=";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-5.09.tar.gz";
+      hash = "sha256-BIJdfOIe20G80Ujrz6Gu+Ek258QOhKOdvyeGcdSaMQY=";
     };
-    propagatedBuildInputs = [ JSONValidator ];
+    propagatedBuildInputs = [ JSONValidator Mojolicious ];
     meta = {
       description = "OpenAPI / Swagger plugin for Mojolicious";
       homepage = "https://github.com/jhthorsen/mojolicious-plugin-openapi";

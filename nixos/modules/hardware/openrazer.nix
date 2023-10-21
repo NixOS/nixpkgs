@@ -50,7 +50,7 @@ in
   options = {
     hardware.openrazer = {
       enable = mkEnableOption (lib.mdDoc ''
-        OpenRazer drivers and userspace daemon.
+        OpenRazer drivers and userspace daemon
       '');
 
       verboseLogging = mkOption {

@@ -1,6 +1,6 @@
 {
   "name": "lemmy-ui",
-  "version": "0.18.4",
+  "version": "0.18.5",
   "description": "An isomorphic UI for lemmy",
   "repository": "https://github.com/LemmyNet/lemmy-ui",
   "license": "AGPL-3.0",

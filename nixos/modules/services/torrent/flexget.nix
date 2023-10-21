@@ -14,7 +14,7 @@ let
 in {
   options = {
     services.flexget = {
-      enable = mkEnableOption (lib.mdDoc "Run FlexGet Daemon");
+      enable = mkEnableOption (lib.mdDoc "FlexGet daemon");
 
       package = mkPackageOptionMD pkgs "flexget" {};
 
