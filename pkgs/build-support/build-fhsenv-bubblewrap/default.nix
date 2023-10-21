@@ -27,11 +27,22 @@
 , ...
 } @ args:
 
+assert (pname != null || name != null);
 assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
 
 with builtins;
 let
-  pname = if args ? name && args.name != null then args.name else args.pname;
+  pnameAndVersion =
+  if args ? pname && args.pname != null then {
+    inherit (args) pname;
+    version = args.version or null;
+  } else {
+    pname = lib.getName args.name;
+    version = let versionFromName = lib.getVersion args.name;
+              in if versionFromName == "" then null else versionFromName;
+  };
+  pname = pnameAndVersion.pname;
+  version = pnameAndVersion.version;
   versionStr = lib.optionalString (version != null) ("-" + version);
   name = pname + versionStr;
 
@@ -239,7 +250,7 @@ in runCommandLocal name {
   };
 } ''
   mkdir -p $out/bin
-  ln -s ${bin} $out/bin/${pname}
+  ln -s ${bin} $out/bin/${name}
 
   ${extraInstallCommands}
 ''
