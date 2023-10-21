@@ -27,10 +27,11 @@ import ./make-test-python.nix (
               wantedBy = [ "default.target" ];
               serviceConfig.ExecStart = "${pkgs.maestral}/bin/maestral start --foreground";
             };
+            users.users.alice.linger = true;
           };
 
         gui =
-          { ... }:
+          { config, ... }:
           common {
             services.xserver = {
               enable = true;
@@ -43,7 +44,7 @@ import ./make-test-python.nix (
               defaultSession = "plasma";
               autoLogin = {
                 enable = true;
-                user = "alice";
+                user = config.users.users.alice.name;
               };
             };
 
@@ -67,9 +68,7 @@ import ./make-test-python.nix (
         start_all()
 
         with subtest("CLI"):
-          # we need SOME way to give the user an active login session
-          cli.execute("loginctl enable-linger ${user.name}")
-          cli.systemctl("start user@${toString user.uid}")
+          cli.wait_for_unit("user@${toString user.uid}")
           cli.wait_for_unit("maestral.service", "${user.name}")
 
         with subtest("GUI"):

@@ -9,25 +9,26 @@ import ./make-test-python.nix (
       { pkgs, ... }:
       {
         services.jotta-cli.enable = true;
+        users.users.alice.linger = true;
         imports = [ ./common/user-account.nix ];
       };
 
     testScript =
       { nodes, ... }:
       let
-        uid = toString nodes.machine.users.users.alice.uid;
+        user = nodes.machine.users.users.alice;
+        runtimeUID = "$(id -u ${user.name})";
       in
       ''
         machine.start()
 
-        machine.succeed("loginctl enable-linger alice")
-        machine.wait_for_unit("user@${uid}.service")
+        machine.wait_for_unit("user@${runtimeUID}.service")
 
-        machine.wait_for_unit("jottad.service", "alice")
-        machine.wait_for_open_unix_socket("/run/user/${uid}/jottad/jottad.socket")
+        machine.wait_for_unit("jottad.service", "${user.name}")
+        machine.wait_for_open_unix_socket("/run/user/${runtimeUID}/jottad/jottad.socket")
 
         # "jotta-cli version" should fail if jotta-cli cannot connect to jottad
-        machine.succeed('XDG_RUNTIME_DIR=/run/user/${uid} su alice -c "jotta-cli version"')
+        machine.succeed('XDG_RUNTIME_DIR=/run/user/${runtimeUID} su ${user.name} -c "jotta-cli version"')
       '';
   }
 )
