@@ -2714,6 +2714,12 @@
     github = "cadkin";
     githubId = 34077838;
   };
+  cafehaine = {
+    email = "kilian.guillaume@gmail.com";
+    name = "Kilian \"CaféHaine\" GUILLAUME";
+    github = "cafehaine";
+    githubId = "11913365";
+  };
   cafkafk = {
     email = "christina@cafkafk.com";
     matrix = "@cafkafk:nixos.dev";
