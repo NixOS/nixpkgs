@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "core-symbolication";
-  version = "unstable-2018-04-08";
+  version = "unstable-2018-06-17";
 
   src = fetchFromGitHub {
     repo = "CoreSymbolication";
     owner = "matthewbauer";
-    rev = "671fcb66c82eac1827f3f53dc4cc4e9b1b94da0a";
-    hash = "sha256-0qpw46gwgjxiwqqjxksb8yghp2q8dwad6hzaf4zl82xpvk9n5ahj";
+    rev = "24c87c23664b3ee05dc7a5a87d647ae476a680e4";
+    hash = "sha256-PzvLq94eNhP0+rLwGMKcMzxuD6MlrNI7iT/eV0obtSE=";
   };
 
   makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" ];
