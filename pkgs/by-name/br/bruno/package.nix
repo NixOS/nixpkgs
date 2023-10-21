@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bruno";
-  version = "0.17.0";
+  version = "0.26.0";
 
   src = fetchurl {
     url = "https://github.com/usebruno/bruno/releases/download/v${version}/bruno_${version}_amd64_linux.deb";
-    hash = "sha256-4FF9SEgWuIPQSarOBTaEvgdgRTkR1caRYr/bjfFmTLE=";
+    hash = "sha256-BFjxqNmcfUVEW1f5pahK1vMwVF+1Gk9fbQ9F1Eh0Ip4=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
