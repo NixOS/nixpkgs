@@ -3267,8 +3267,6 @@ with pkgs;
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
 
-  argtable = callPackage ../development/libraries/argtable { };
-
   arguments = callPackage ../development/libraries/arguments { };
 
   argus = callPackage ../tools/networking/argus { };
