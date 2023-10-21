@@ -12,6 +12,6 @@ buildDartApplication rec {
   };
 
   pubspecLockFile = ./pubspec.lock;
-
+  depsListFile = ./deps.json;
   vendorHash = "16z3paq1nxlnzs20qlljnwa2ff6xfhdqzcq8d8izkl7w1j4hyxgn";
 }
