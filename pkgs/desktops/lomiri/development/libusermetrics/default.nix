@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libusermetrics";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libusermetrics";
     rev = finalAttrs.version;
-    hash = "sha256-yO9wZcXJBKt1HZ1GKoQ1flqYuwW9PlXiWLE3bl21PSQ=";
+    hash = "sha256-YRBPjRUfksp3b6/RsQWRAV0mv7NP1ikS/0e7ieOMOq8=";
   };
 
   outputs = [
@@ -98,15 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  checkPhase = ''
-    runHook preCheck
-
-    export QT_PLUGIN_PATH=${lib.getBin qtbase}/lib/qt-${qtbase.version}/plugins/
-    export QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/lib/qt-${qtbase.version}/qml/
-    dbus-run-session --config-file=${dbus}/share/dbus-1/session.conf -- \
-      make test "''${enableParallelChecking:+-j $NIX_BUILD_CORES}"
-
-    runHook postCheck
+  preCheck = ''
+    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    export QML2_IMPORT_PATH=${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}
   '';
 
   passthru = {
