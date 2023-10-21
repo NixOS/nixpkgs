@@ -164,12 +164,11 @@ in
           for instructions.
         '';
       }
-
-      {
-        assertion = config.boot.initrd.systemd.enable -> cfg.shell == null;
-        message = "systemd stage 1 does not support boot.initrd.network.ssh.shell";
-      }
     ];
+
+    warnings = lib.optional (config.boot.initrd.systemd.enable -> cfg.shell != null) ''
+      Please set 'boot.initrd.systemd.users.root.shell' instead of 'boot.initrd.network.ssh.shell'
+    '';
 
     boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       copy_bin_and_libs ${package}/bin/sshd
@@ -234,6 +233,8 @@ in
     boot.initrd.systemd = mkIf config.boot.initrd.systemd.enable {
       users.sshd = { uid = 1; group = "sshd"; };
       groups.sshd = { gid = 1; };
+
+      users.root.shell = mkIf (config.boot.initrd.network.ssh.shell != null) config.boot.initrd.network.ssh.shell;
 
       contents."/etc/ssh/authorized_keys.d/root".text =
         concatStringsSep "\n" config.boot.initrd.network.ssh.authorizedKeys;
