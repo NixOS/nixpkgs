@@ -16,6 +16,7 @@ cyrussasl,https://github.com/JorjBauer/lua-cyrussasl.git,,,,,
 digestif,https://github.com/astoff/digestif.git,,,0.2-1,5.3,
 dkjson,,,,,,
 fennel,,,,,,misterio77
+ferris.nvim,,,,,,mrcjkb
 fifo,,,,,,
 fluent,,,,,,alerque
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,5.1,
