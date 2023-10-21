@@ -27,44 +27,49 @@
 }:
 
 let
-  # cereal.wrap
-  cereal-wrap = fetchurl {
-    name = "cereal-1.3.0.tar.gz";
-    url = "https://github.com/USCiLab/cereal/archive/v1.3.0.tar.gz";
-    hash = "sha256-Mp6j4xMLAmwDpKzFDhaOfa/05uZhvGp9/sDXe1cIUdU=";
-  };
-  cereal-wrapdb = fetchurl {
-    name = "cereal-1.3.0-1-wrap.zip";
-    url = "https://wrapdb.mesonbuild.com/v1/projects/cereal/1.3.0/1/get_zip";
-    hash = "sha256-QYck5UT7fPLqtLDb1iOSX4Hnnns48Jj23Ae/LCfLSKY=";
-  };
+  allSources = {
+    # cereal.wrap
+    cereal-wrap = fetchurl {
+      name = "cereal-1.3.0.tar.gz";
+      url = "https://github.com/USCiLab/cereal/archive/v1.3.0.tar.gz";
+      hash = "sha256-Mp6j4xMLAmwDpKzFDhaOfa/05uZhvGp9/sDXe1cIUdU=";
+    };
+    cereal-wrapdb = fetchurl {
+      name = "cereal-1.3.0-1-wrap.zip";
+      url = "https://wrapdb.mesonbuild.com/v1/projects/cereal/1.3.0/1/get_zip";
+      hash = "sha256-QYck5UT7fPLqtLDb1iOSX4Hnnns48Jj23Ae/LCfLSKY=";
+    };
 
-  # expected.wrap
-  expected-wrap = fetchgit {
-    name = "expected";
-    url = "https://gitlab.com/cardboardwm/expected";
-    rev = "0ee13cb2b058809aa9708c45ca18d494e72a759e";
-    sha256 = "sha256-gYr4/pjuLlr3k6Jcrg2/SzJLtbgyA+ZN2oMHkHXANDo=";
-  };
+    # expected.wrap
+    expected-wrap = fetchgit {
+      name = "expected";
+      url = "https://gitlab.com/cardboardwm/expected";
+      rev = "0ee13cb2b058809aa9708c45ca18d494e72a759e";
+      sha256 = "sha256-gYr4/pjuLlr3k6Jcrg2/SzJLtbgyA+ZN2oMHkHXANDo=";
+    };
 
-  # wlroots.wrap
-  wlroots-wrap = fetchgit {
-    name = "wlroots";
-    url = "https://github.com/swaywm/wlroots";
-    rev = "0.12.0";
-    sha256 = "sha256-1rE3D+kQprjcjobc95/mQkUa5y1noY0MdoYJ/SpFQwY=";
+    # wlroots.wrap
+    wlroots-wrap = fetchgit {
+      name = "wlroots";
+      url = "https://github.com/swaywm/wlroots";
+      rev = "0.12.0";
+      sha256 = "sha256-1rE3D+kQprjcjobc95/mQkUa5y1noY0MdoYJ/SpFQwY=";
+    };
+
+    # the source itself
+    cardboard = fetchFromGitLab {
+      owner = "cardboardwm";
+      repo = "cardboard";
+      rev = "b54758d85164fb19468f5ca52588ebea576cd027";
+      hash = "sha256-Kn5NyQSDyX7/nn2bKZPnsuepkoppi5XIkdu7IDy5r4w=";
+    };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cardboard";
-  version = "unstable=2021-05-10";
+  version = "unstable-2021-05-10";
 
-  src = fetchFromGitLab {
-    owner = "cardboardwm";
-    repo = "cardboard";
-    rev = "b54758d85164fb19468f5ca52588ebea576cd027";
-    hash = "sha256-Kn5NyQSDyX7/nn2bKZPnsuepkoppi5XIkdu7IDy5r4w=";
-  };
+  src = allSources.cardboard;
 
   nativeBuildInputs = [
     meson
@@ -95,23 +100,25 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     pushd subprojects
-    tar xvf ${cereal-wrap}
-    unzip ${cereal-wrapdb}
-    cp -r ${expected-wrap} ${expected-wrap.name}
-    cp -r ${wlroots-wrap} ${wlroots-wrap.name}
+    tar xvf ${allSources.cereal-wrap}
+    unzip ${allSources.cereal-wrapdb}
+    cp -r ${allSources.expected-wrap} ${allSources.expected-wrap.name}
+    cp -r ${allSources.wlroots-wrap} ${allSources.wlroots-wrap.name}
     popd
 
-    sed '1i#include <functional>' -i cardboard/ViewAnimation.h # gcc12
+    # gcc12
+    sed '1i#include <functional>' -i cardboard/ViewAnimation.h
   '';
 
   # "Inherited" from Nixpkgs expression for wlroots
   mesonFlags = [
-    "-Dman=true"
-    "-Dwlroots:logind-provider=systemd"
-    "-Dwlroots:libseat=disabled"
+    (lib.mesonBool "man" true)
+    (lib.mesonOption "wlroots:logind-provider" "systemd")
+    (lib.mesonEnable "wlroots:libseat" false)
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ]; # gcc12
+ # gcc12
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ];
 
   meta = {
     homepage = "https://gitlab.com/cardboardwm/cardboard";
@@ -119,9 +126,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
-    knownVulnerabilities = [
-      "CVE-2020-11104 (inherited from cereal 1.3.0)"
-      "CVE-2020-11105 (inherited from cereal 1.3.0)"
-    ];
   };
 }
