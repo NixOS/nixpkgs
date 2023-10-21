@@ -25,6 +25,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "chip.clusters"
+    "chip.clusters.ClusterObjects"
+    "chip.tlv"
   ];
 
   doCheck = false; # no tests
